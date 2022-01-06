@@ -2,203 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB14B485E44
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18BE485E49
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344469AbiAFB4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 20:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S1344482AbiAFB5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 20:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344457AbiAFB4s (ORCPT
+        with ESMTP id S1344461AbiAFB5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 20:56:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74785C061245;
-        Wed,  5 Jan 2022 17:56:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F4E161A24;
-        Thu,  6 Jan 2022 01:56:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E938C36AE3;
-        Thu,  6 Jan 2022 01:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641434207;
-        bh=wAZAhYwocZjEHT8DxarYT4lHarDdUv1uzk//oJPIUvI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m1rj2vEu8/hsfnBoQjbtM0SnF2g0fGTIlAaEbz13Vc1Nf5EdcUpLRo7gvr14vMcF3
-         Ev7KtNFJlfD9wg0eY/cB5dEyas//OBdnrTpmlltasrHGGwjaB3U9YQacYyr5cjDJlj
-         QnckNKZy1vpny6CTZfNwY0Oc2Jsr++wpjIsXBipeAwK3llUNsJ3uf3t2ftorv08PGx
-         4q1lCQYj+13t8ac+J2FGfRfv5w9SG6NnabYmNL1AEr9C3niyHMLjiaORS6wt7p3aFA
-         3yiVrZMu0KYKjw7hi3Tvg2cPKeJY8dslXvKidHDo9M94G7OFXHODUdWVbIgZYm/Y2p
-         K/EJ4kb3y/kqA==
-Date:   Thu, 6 Jan 2022 10:56:39 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     chenzechuan <chenzechuan1@huawei.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@redhat.com>,
-        <namhyung@kernel.org>, <Jianlin.Lv@arm.com>,
-        <ravi.bangoria@linux.ibm.com>, <yao.jin@linux.intel.com>,
-        <yangjihong1@huawei.com>, <mpe@ellerman.id.au>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <qiuxi1@huawei.com>, <wangbing6@huawei.com>
-Subject: Re: [PATCH] powerpc/perf: fix ppc64 perf probe add events failed
-Message-Id: <20220106105639.cd19b55545fad02140b9da07@kernel.org>
-In-Reply-To: <8ad8db22-e9af-7e0a-2e39-da99a4a0539a@huawei.com>
-References: <20211228111338.218602-1-chenzechuan1@huawei.com>
-        <YdG9CSk9ayoVmBhz@kernel.org>
-        <8ad8db22-e9af-7e0a-2e39-da99a4a0539a@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Wed, 5 Jan 2022 20:57:36 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8BBC061245;
+        Wed,  5 Jan 2022 17:57:36 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id g2so1241450pgo.9;
+        Wed, 05 Jan 2022 17:57:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/Z9qkHqYLIA/7ijai38ZX5F2EkiB7fJkOdc4W8a8iM0=;
+        b=bLlOFMicadL6IIK8tdMi9ohEQIcVhCzhFBCQzsk3g0Zu7MrBRPEyE1UkzQLCWZF+03
+         agN5BAouCf1EOG9uv1ysvKSL1dfO8eE+XGVe/pHxp/LWLANXoqkJsA2o6VKhhi98b8UQ
+         Z6CKTzb1IisfCLpGDuYi++SDkKMQwRia1RiKdkuHFfcIH/dNQt750D2UvwjHOLG3wooS
+         qUXxzt/d9XJXMbt0HLdAqV1DfW1KbkTPCMKRxQXECHmOHWyIYito1GmEBTRmnIcCyCCN
+         V1dcBKz/1zvY53H41G5B3yaovkdLgYlFk6TNF3oCgpv9slkD+vWcIHTKmXj8n25ppH1b
+         1SPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/Z9qkHqYLIA/7ijai38ZX5F2EkiB7fJkOdc4W8a8iM0=;
+        b=KOpSP3PdKQaP3sngT0o2lg0adOWhsooqfdA0Ug34bI23Z4Y9tVKnUwv2kDQ0cBiEL6
+         yqnY/NoZp5GfMNpVY/f3omKLD+Jwd0O+Jw8Ctr/M5U3G1SQcG5ek1nRI2y+wOvAqbuFS
+         NK9exMLgeozsoRHvoeFudbjgdH7BRjRtOuXrxHrXzvRU7SJ+6glN3RjVl+74PTLdVoXA
+         SSr5uLcW6+syEyl7OJGFAY57vvRHtlrIdqLTM5LtIFI6X6FXT+bc+w6Oe7iGC4ivRU5k
+         Rm4bM+BIDzHQ72TGKrDckKGmDSG8LYyiSX9FWnhluYCUE5lzgOh0j1hljA3ITqJn8KoM
+         s6fw==
+X-Gm-Message-State: AOAM531QHlQoJPDfJJuB4dgUZ1YSDC2PAQUKpV1Ai/kyQr4o+Kdzc3PB
+        KLiDDLje2CERRHHAst1T6bg=
+X-Google-Smtp-Source: ABdhPJyKVbqv3npeYD/Egv3KQ9GF0CljKqtvssIQuF5fiKblg85xkAcSb9tcJqQYZ+jcRt8+8YNOYg==
+X-Received: by 2002:a05:6a00:3001:b0:4bb:ea7d:6c48 with SMTP id ay1-20020a056a00300100b004bbea7d6c48mr45188110pfb.51.1641434255727;
+        Wed, 05 Jan 2022 17:57:35 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id g21sm330910pfc.75.2022.01.05.17.57.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 17:57:35 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org, edumazet@google.com
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v4 net-next 0/3] net: bpf: handle return value of post_bind{4,6} and add selftests for it
+Date:   Thu,  6 Jan 2022 09:57:18 +0800
+Message-Id: <20220106015721.3038819-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 10:56:46 +0800
-chenzechuan <chenzechuan1@huawei.com> wrote:
+From: Menglong Dong <imagedong@tencent.com>
 
-> 
-> 在 2022/1/2 22:56, Arnaldo Carvalho de Melo 写道:
-> > Em Tue, Dec 28, 2021 at 07:13:38PM +0800, Zechuan Chen escreveu:
-> >> Because of commit bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup
-> >> across powerpc ABIv1 and ABIv2"), in ppc64 ABIv1, our perf command
-> >> eliminates the need to use the prefix "." at the symbol name. But when
-> >> the command "perf probe -a schedule" is executed on ppc64 ABIv1, it
-> >> obtains two symbol address information through /proc/kallsyms, for example:
-> >>
-> >> cat /proc/kallsyms | grep -w schedule
-> >> c000000000657020 T .schedule
-> >> c000000000d4fdb8 D schedule
-> >>
-> >> The symbol "D schedule" is not a function symbol, and perf will print:
-> >> "p:probe/schedule _text+13958584"Failed to write event: Invalid argument
-> >>
-> >> Therefore, when searching symbols from map and adding probe point for
-> >> them, a symbol type check is added. If the type of symbol is not a
-> >> function, skip it.
-> >>
-> >> Fixes: bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup across powerpc ABIv1 and ABIv2")
-> >>
-> >> Signed-off-by: Zechuan Chen <chenzechuan1@huawei.com>
-> >> ---
-> >>   tools/perf/util/probe-event.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-> >> index b2a02c9ab8ea..a834918a0a0d 100644
-> >> --- a/tools/perf/util/probe-event.c
-> >> +++ b/tools/perf/util/probe-event.c
-> >> @@ -3083,6 +3083,9 @@ static int find_probe_trace_events_from_map(struct perf_probe_event *pev,
-> >>   	for (j = 0; j < num_matched_functions; j++) {
-> >>   		sym = syms[j];
-> >>   
-> >> +		if (sym->type != STT_FUNC)
-> >> +			continue;
-> >> +
-> > Humm, shouldn't this be handled by find_probe_functions(), i.e. it
-> > shoudn't return data symbols, right? Otherwise other places using this
-> > function may malfunction as well?
-> >
-> > Naveen? Masami?
-> >
-> > - Arnaldo
-> 
-> Re：Thanks for your review. You are right.
->      1. Only function symbols should be returned here, not function descriptors.
->         I've moved the modification into function "find_probe_functions()",
->         and the new patch is added at the end of this email. I've re-tested it on my environment.
->         Please review it again, thanks.
-> 
->      2. Function find_probe_functions only use in "perf probe".
->         Malfunction exist for all export functions, another example:
-> 
->      cat /proc/kallsyms | grep -w sys_fork
->      c000000000058100 T .sys_fork
->      c000000000d485e0 D sys_fork
-> 
->      perf probe -a sys_fork -v
->      No kprobe blacklist support, ignored
->      Looking at the vmlinux_path (8 entries long)
->      symsrc__init: cannot get elf header.
->      Could not open debuginfo. Try to use symbols.
->      Looking at the vmlinux_path (8 entries long)
->      symsrc__init: cannot get elf header.
->      Using /proc/kcore for kernel data
->      Using /proc/kallsyms for symbols
->      Opening /sys/kernel/tracing//kprobe_events write=1
->      Opening /sys/kernel/tracing//README write=0
->      Writing event: p:probe/sys_fork _text+360704
->      Writing event: p:probe/sys_fork _text+13927904
->      Failed to write event: Invalid argument
->        Error: Failed to add events. Reason: Invalid argument (Code: -22)
-> 
-> >>   		/* There can be duplicated symbols in the map */
-> >>   		for (i = 0; i < j; i++)
-> >>   			if (sym->start == syms[i]->start) {
-> >> -- 
-> >> 2.12.3
-> > .
-> 
->  From 8d8f5de99d16e6aa8179ecbc33c0692fc887e2af Mon Sep 17 00:00:00 2001
-> From: Zechuan Chen <chenzechuan1@huawei.com>
-> Date: Mon, 27 Dec 2021 09:55:11 +0800
-> Subject: [PATCH] powerpc/perf: fix ppc64 perf probe add events failed
-> 
-> Because of commit bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup
-> across powerpc ABIv1 and ABIv2"), in ppc64 ABIv1, our perf command
-> eliminates the need to use the prefix "." at the symbol name. But when
-> the command "perf probe -a schedule" is executed on ppc64 ABIv1, it
-> obtains two symbol address information through /proc/kallsyms, for example:
-> 
-> cat /proc/kallsyms | grep -w schedule
-> c000000000657020 T .schedule
-> c000000000d4fdb8 D schedule
-> 
-> The symbol "D schedule" is not a function symbol, and perf will print:
-> "p:probe/schedule _text+13958584"Failed to write event: Invalid argument
-> 
-> Therefore, when searching symbols from map and adding probe point for
-> them, a symbol type check is added. If the type of symbol is not a
-> function, skip it.
+The return value of BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND() in
+__inet_bind() is not handled properly. While the return value
+is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
+exit:
+exit:
 
-OK, this looks good to me. I forgot to check the sym->type :(
+        err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+        if (err) {
+                inet->inet_saddr = inet->inet_rcv_saddr = 0;
+                goto out_release_sock;
+        }
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Let's take UDP for example and see what will happen. For UDP
+socket, it will be added to 'udp_prot.h.udp_table->hash' and
+'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
+called success. If 'inet->inet_rcv_saddr' is specified here,
+then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
+to (because inet_saddr is changed to 0), and UDP packet received
+will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
+specified here, the sock will work fine, as it can receive packet
+properly, which is wired, as the 'bind()' is already failed.
 
-Thank you!
+To undo the get_port() operation, introduce the 'put_port' field
+for 'struct proto'. For TCP proto, it is inet_put_port(); For UDP
+proto, it is udp_lib_unhash(); For icmp proto, it is
+ping_unhash().
 
-> 
-> Fixes: bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup across 
-> powerpc ABIv1 and ABIv2")
-> 
-> Signed-off-by: Zechuan Chen <chenzechuan1@huawei.com>
-> ---
->   tools/perf/util/probe-event.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-> index b2a02c9ab8ea..4bd6f438d73c 100644
-> --- a/tools/perf/util/probe-event.c
-> +++ b/tools/perf/util/probe-event.c
-> @@ -2959,6 +2959,9 @@ static int find_probe_functions(struct map *map, 
-> char *name,
->                  cut_version = false;
-> 
->          map__for_each_symbol(map, sym, tmp) {
-> +               if (sym->type != STT_FUNC)
-> +                       continue;
-> +
->                  norm = arch__normalize_symbol_name(sym->name);
->                  if (!norm)
->                          continue;
-> --
-> 2.12.3
-> 
+Therefore, after sys_bind() fail caused by
+BPF_CGROUP_RUN_PROG_INET4_POST_BIND(), it will be unbinded, which
+means that it can try to be binded to another port.
 
+The second patch is the selftests for this modification.
+
+The third patch use C99 initializers in test_sock.c.
+
+Changes since v3:
+- add the third patch which use C99 initializers in test_sock.c
+
+Changes since v2:
+- NULL check for sk->sk_prot->put_port
+
+Changes since v1:
+- introduce 'put_port' field for 'struct proto'
+- add selftests for it
+
+
+Menglong Dong (3):
+  net: bpf: handle return value of 
+    BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
+  bpf: selftests: add bind retry for post_bind{4, 6}
+  bpf: selftests: use C99 initializers in test_sock.c
+
+ include/net/sock.h                      |   1 +
+ net/ipv4/af_inet.c                      |   2 +
+ net/ipv4/ping.c                         |   1 +
+ net/ipv4/tcp_ipv4.c                     |   1 +
+ net/ipv4/udp.c                          |   1 +
+ net/ipv6/af_inet6.c                     |   2 +
+ net/ipv6/ping.c                         |   1 +
+ net/ipv6/tcp_ipv6.c                     |   1 +
+ net/ipv6/udp.c                          |   1 +
+ tools/testing/selftests/bpf/test_sock.c | 370 ++++++++++++++----------
+ 10 files changed, 233 insertions(+), 148 deletions(-)
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.27.0
+

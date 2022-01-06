@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D604C486164
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067F3486169
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiAFIZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:25:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S236602AbiAFIZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236591AbiAFIY6 (ORCPT
+        with ESMTP id S236581AbiAFIZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:24:58 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF65BC061212
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 00:24:57 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id e5so1235599wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:24:57 -0800 (PST)
+        Thu, 6 Jan 2022 03:25:27 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9CCC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 00:25:27 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id c6so3253650ybk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:25:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=18Hu6pHHT8+wZmsysRD7OPc1d8jjkREA01CkZ/k2MYA=;
-        b=r0aiCYND3F+tbMUHcd7XhNoB3Mw/LTUGw0E9YDG0Q1zIruDQYML+d4J588HgU74/Jn
-         jRu9exVOo2yY8ny8OC49x4fqLBbTmS945tf3JSHSKgnJkOpY/Zh2oiykVTE0n9hvhMqt
-         1zwj8pixwWVV/p6oE8CPwlDOfx/oBTrj8n6iOOJ1wKjcYj1JqjT0cvkoWy7klZne76bJ
-         Jmct9SiASlC6NXzUbzxHul1eL6Y5xKD2gCv+2BHyDPl/1ayiO+On/BubZ+c9sKIVhXm+
-         Tr6oXZDxRTRbsLkUpOZ1qPLHAe0aXbrH/fWj/qQIMDNDoWhWlX5GpxyGM/2cM6yRP1VP
-         yEpQ==
+        bh=CVfZvVXQxByQSLbmPIaWDydWXmtBJuvjNsIi28C4K4Y=;
+        b=rB4DZRKRTdC4hDg682cFL8qOGPL0OIpqVIyibmQKdJUxbHnvR3A0pwYNydWI6t9L2P
+         om05ORGVCXNTEiXRFV3Wk4wQGOpn04OTfbprbaH93zBM1o4ign28+X/y/RSuVHuHqcqi
+         Idzeq6r6qgBJnsDF5ipKRjHDD7mk3sK+jELb6PO5j6F8YZibRaT3wSOyxagEkOjvhDW8
+         EvQFd7YfW94iOIN6D48JkmgviFcQLHZyV2mh2ShMi5WPVzuQEjSwHDJDbXiOr/43LsjK
+         7X7y8nmB38xvrNqg+M0LQS2lY21qNvKjmP/KiW7bTd5GjbMgPawpcryFY6TOKbsOvWlM
+         mglw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=18Hu6pHHT8+wZmsysRD7OPc1d8jjkREA01CkZ/k2MYA=;
-        b=YaBiKXF6sv4bxc7QUYsA/mReCsmCM5NuCJKxfsrNqUPUCbVcWbuem2ruHk1UATDpMj
-         NfwJ94Y2AArUk5doaJFQ8H90KeGytz28bElMgeqvBJTpHkSDXNak8DmZ9/3t+RfOxpHW
-         BFMm5B1DEsCKwB5Zs64pWhnZ63DaqzIKocL59hagIc0JPr3vJtBqDN0xxYOPiXFJXxkQ
-         /iDtheKe0nJ6aYqUmuSL9ApAusZtIm2cJlavsMLM8o8EkkrOJIT8HUnExZ44z3F8vC1c
-         jUR5ERT188afqvWh/GSg98VcFoecODMolxMYE/PSFKt5sNTUgzdm8gGAwrXQ7oZgs9H9
-         lXMg==
-X-Gm-Message-State: AOAM533sE+yGHH8lEJeidSC1uHVvCaTU4P9+FSBDELvbWDXrGu1WghlL
-        JtpgyDf3+Qo+vfmKkb0iqZPoOUTogJY9Ehp6kyw8XQ==
-X-Google-Smtp-Source: ABdhPJwypdPCTyuWbVbVQiwnWTjO+ZwD0lE2C7hOstG24vnO0DT7pW9BbGPMqwZce4soAaiPqm+KjnxsUIsriXFUAvY=
-X-Received: by 2002:a05:600c:1da5:: with SMTP id p37mr6170286wms.59.1641457496207;
- Thu, 06 Jan 2022 00:24:56 -0800 (PST)
+        bh=CVfZvVXQxByQSLbmPIaWDydWXmtBJuvjNsIi28C4K4Y=;
+        b=M1BQqWCrAEEJ0wDbvgq+LFXjMRzeFJLLljHRBuRGrf9A5a/JbwNaIrBil8UZP0+0E/
+         ITFiNsJkaUyI1eRFtBjzROQoRE5DVpwTEvWECriufqMNJ5Izw1XztCOYQv9eRJ0KKklo
+         FUJlTqg+mfOpdxJnUuUOdOpQuCQ0oRhCOXTzKi7kwGsEdDLJMK/n5LgDnw8KP2uDX6W5
+         kLTroBtBVdJru8FfrT8Yb6tG7mBtxMk3TkPWwuJJT0t/dx255k+3kJ9B07dage029aNi
+         YqZGxhWTi8MMA2L12PUcb6B4uAlGi3qT5o/x59s7PNB18OrwDyqY0UmQhlrVv+UZk8s+
+         eLVw==
+X-Gm-Message-State: AOAM5316CZYpAOtGi6Q2gwlYJZUOvdAHI83pT+PqiECBZT9XBAq48d2Z
+        BNaIUiOWWstl85RShv4+vptstZ7O8x/6qFp9lUB0Xqzm46ynew==
+X-Google-Smtp-Source: ABdhPJzwFpp3lIYB6mI2+0ckTXC3zK8hj0VfIUOZdI1x7S1ukZvIOyFNl34N1s5SlZY3PmdKEksH2X0qwQwPPVGszxI=
+X-Received: by 2002:a25:2342:: with SMTP id j63mr55904255ybj.293.1641457526399;
+ Thu, 06 Jan 2022 00:25:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20220103133759.103814-1-anup@brainfault.org> <CAOnJCUJkVT9W6X+oe1CHjnHLUFs11Z_3qeXnats9pUcxCUiDPw@mail.gmail.com>
-In-Reply-To: <CAOnJCUJkVT9W6X+oe1CHjnHLUFs11Z_3qeXnats9pUcxCUiDPw@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 6 Jan 2022 13:54:43 +0530
-Message-ID: <CAAhSdy0CTwQn3PJER2H3snYA0D9y9f=nN3PCGxvVH_n7zFdZQA@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update Anup's email address
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>
+References: <20220104003722.73982-1-ivan@cloudflare.com> <20220103164443.53b7b8d5@hermes.local>
+ <CANn89i+bLN4=mHxQoWg88_MTaFRkn9FAeCy9dn3b9W+x=jowRQ@mail.gmail.com> <CABWYdi2oapjDMSJb+8T7BXMM6h+ftCQCSpPPePXaS3MyS4hD+w@mail.gmail.com>
+In-Reply-To: <CABWYdi2oapjDMSJb+8T7BXMM6h+ftCQCSpPPePXaS3MyS4hD+w@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 6 Jan 2022 00:25:15 -0800
+Message-ID: <CANn89i+9cOC4Ftnh2q7SZ+iP7-qe2jkFW3NtvFGzXLxoGUOsiA@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: note that tcp_rmem[1] has a limited range
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 1:37 AM Atish Patra <atishp@atishpatra.org> wrote:
+On Wed, Jan 5, 2022 at 8:20 PM Ivan Babrou <ivan@cloudflare.com> wrote:
 >
-> On Mon, Jan 3, 2022 at 5:38 AM Anup Patel <anup@brainfault.org> wrote:
-> >
-> > I am no longer work at Western Digital so update my email address to
-> > personal one and add entries to .mailmap as well.
-> >
-> > Signed-off-by: Anup Patel <anup@brainfault.org>
-> > ---
-> >  .mailmap    | 1 +
-> >  MAINTAINERS | 2 +-
-> >  2 files changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/.mailmap b/.mailmap
-> > index e951cf1b1730..f5d327f0c4be 100644
-> > --- a/.mailmap
-> > +++ b/.mailmap
-> > @@ -46,6 +46,7 @@ Andy Adamson <andros@citi.umich.edu>
-> >  Antoine Tenart <atenart@kernel.org> <antoine.tenart@bootlin.com>
-> >  Antoine Tenart <atenart@kernel.org> <antoine.tenart@free-electrons.com>
-> >  Antonio Ospite <ao2@ao2.it> <ao2@amarulasolutions.com>
-> > +Anup Patel <anup@brainfault.org> <anup.patel@wdc.com>
-> >  Archit Taneja <archit@ti.com>
-> >  Ard Biesheuvel <ardb@kernel.org> <ard.biesheuvel@linaro.org>
-> >  Arnaud Patard <arnaud.patard@rtp-net.org>
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 3e8241451b49..aa7769f8c779 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -10443,7 +10443,7 @@ F:      arch/powerpc/kernel/kvm*
-> >  F:     arch/powerpc/kvm/
-> >
-> >  KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)
-> > -M:     Anup Patel <anup.patel@wdc.com>
-> > +M:     Anup Patel <anup@brainfault.org>
-> >  R:     Atish Patra <atishp@atishpatra.org>
-> >  L:     kvm@vger.kernel.org
-> >  L:     kvm-riscv@lists.infradead.org
-> > --
-> > 2.25.1
-> >
+> On Tue, Jan 4, 2022 at 12:33 AM Eric Dumazet <edumazet@google.com> wrote:
+> > I guess you have to define what is the initial window.
 >
-> Acked-by: Atish Patra <atishp@rivosinc.com>
+> What I mean here is the first window after scaling is allowed, so the
+> one that appears in the first non-SYN ACK.
+>
+> > There seems to be a confusion between rcv_ssthresh and sk_rcvbuf
+> >
+> > If you want to document what is rcv_ssthresh and how it relates to sk_rcvbuf,
+> > you probably need more than few lines in Documentation/networking/ip-sysctl.rst
+>
+> I can't say I fully understand how buffer sizes grow and how
+> rcv_ssthresh and sk_rcvbuf interact to document this properly.
+>
+> All I want is to document the fact that no matter what you punch into
+> sysctls, you'll end up with an initial scaled window (defined above)
+> that's no higher than 64k. Let me know if this is incorrect and if
+> there's a way we can put this into words without going into too much
+> detail.
 
-I have queued this patch for 5.17
+Just to clarify, normal TCP 3WHS has a final ACK packet, where window
+scaling is enabled.
 
-Thanks,
-Anup
+You describe a possible issue of passive connections.
+Most of the time, servers want some kind of control before allowing a
+remote peer to send MB of payload in the first round trip.
+
+However, a typical connection starts with IW10 (rfc 6928), and
+standard TCP congestion
+control would implement Slow Start, doubling the payload at every round trip,
+so this is not an issue.
+
+If you want to enable bigger than 65535 RWIN for passive connections,
+this would violate standards and should be discussed first at IETF.
+
+If you want to enable bigger than 65535 RWIN for passive connections
+in a controlled environment, I suggest using an eBPF program to do so.
+
 
 >
+> > Please do not. We set this sysctl to 0.5 MB
+> > DRS is known to have quantization artifacts.
 >
-> --
-> Regards,
-> Atish
+> Where can I read more about the quantization artifacts you mentioned?
+
+DRS is implemented in tcp_rcv_space_adjust()/tcp_rcv_rtt_update(),
+you can look at git history to get plenty of details.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=c3916ad9320eed8eacd7c0b2cf7f881efceda892

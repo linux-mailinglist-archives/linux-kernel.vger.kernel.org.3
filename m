@@ -2,185 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6967486886
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2115486882
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241811AbiAFRbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S241859AbiAFRbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241843AbiAFRbl (ORCPT
+        with ESMTP id S241811AbiAFRbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:31:41 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D1DC0611FD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:31:41 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id o17so3016842qtk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:31:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TDDnwGKq7j79QqZXmn72oSVxIDOX3iu+00Xl+MNaV1M=;
-        b=XEPnHUwAT8QfIVWdTQDeLIf0QFldNQzXv8Aj/4H2jwwTm5FXsyYf3UDL95WfEZnzAW
-         NotmkqxYEvKgInwT0FOz+qMYeXdppmhnUYU4/P5bgTvHxkO/NRNMsXGROf5kifi9BviF
-         4jvf8Z0FbZGB7bC2oIirK/EVZuCFxszao0tcMHu8d9S60gPskTnftUhi5xyip+YTMtSV
-         EiAIRGy6wGwXT/cJ5nlfTHu9IGTYUyW81AcTO45PoyM/Il0gopuSHawxh+5e2kK76R2R
-         d/WH6W3e8i/D258Iq3dWMJZs3vM3Q/M+HuH4Hs7SwDhvdZiXvWBYxFFqgaT9vjZZA9Th
-         7GEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TDDnwGKq7j79QqZXmn72oSVxIDOX3iu+00Xl+MNaV1M=;
-        b=zR3n7vrkZs9+ig6oGUNU2bwhFclIdoUrXyQn54TVgtGcNkt6E47dWerlf2qhdR15de
-         hSmyyyPkDIegkOb+HNBcX/2EooshaJAEiL4xdywMU1wKpU189IgNPCjnlM2FDMYLMjEm
-         c7uGVEh2NafJBF7lf012EFehMdy4tt0xcgqaOz4DmZKUmCjyVe/REjnZY1ARkTTADFLq
-         8PBN7/8S8lJJnjGY83bgYKPqK8ty6gVvkrN98oQhwWBuGODfeNTP8dnBYb6f/clHaTQX
-         j/f3xWODFJgidXoc1n9cp/jhD+Wcicw7ZfZk7HEei8vAE6DfP+DXY2b/GLKCzpt9Bp/G
-         NAVw==
-X-Gm-Message-State: AOAM533Z2q+BSdmFFeWnglr8hih7/fz8yIFFH6XjGIfg+wx5z2FiM/BY
-        S2lAJXSutAr/E7ZoSzzGwF2t4Q==
-X-Google-Smtp-Source: ABdhPJxDcpuylfy5ph9maf/00Exbhb7Ol9pBq9qIkLWae1lonkx08SVnpHHQ9GDFP+sUQCxF4nl/UA==
-X-Received: by 2002:a05:622a:1743:: with SMTP id l3mr50383523qtk.98.1641490300756;
-        Thu, 06 Jan 2022 09:31:40 -0800 (PST)
-Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id i21sm2126536qti.31.2022.01.06.09.31.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:31:40 -0800 (PST)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Patch v3 1/3] thermal: qcom: lmh: Add support for sm8150
-Date:   Thu,  6 Jan 2022 12:31:36 -0500
-Message-Id: <20220106173138.411097-2-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220106173138.411097-1-thara.gopinath@linaro.org>
-References: <20220106173138.411097-1-thara.gopinath@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 6 Jan 2022 12:31:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2A9C061245;
+        Thu,  6 Jan 2022 09:31:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D41C961D3C;
+        Thu,  6 Jan 2022 17:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E81EC36AEB;
+        Thu,  6 Jan 2022 17:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641490299;
+        bh=Vpb/tleuQ8bUWlWWTmuzP4ZG+naSurYxE7Y2VV6VqbM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L37roIGYDMmD7/iXbXDXZ5aa5f6f0u+i+mneCsC/UqA5yPIjeofvrFXGcXRY3SsTm
+         PnA60uOdQsCbcX3QDpmlnM2R7vYqwRi07rFotkZrXm78LBFKonA7/V3N8hzXB1Nx9e
+         P98K0+LH6LdugozkKlWheSZ4CYvZD+52CtsZBM+M6BK1CuDkmDTAw5YyHQRrelJfwY
+         gNd4AyBLCqh1MzVX5SLMxBS59qzJmh3VeWfn5s5Ns2H0sxrZKFC9N0eYb57ocxgmnM
+         iu09pN0RWEQmvUwArk2gQ7aEYL8SFS5P4Mkc5GpSnFg6kPmidbXG11zPS06HnOslxn
+         DGJGUxU7UZ2Lg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n5Wbx-00GOhn-A0; Thu, 06 Jan 2022 17:31:37 +0000
+Date:   Thu, 06 Jan 2022 17:31:36 +0000
+Message-ID: <874k6gvkhz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 10/11] PCI: mvebu: Implement support for legacy INTx interrupts
+In-Reply-To: <20220106182044.3ff0828c@thinkpad>
+References: <20220105150239.9628-1-pali@kernel.org>
+        <20220105150239.9628-11-pali@kernel.org>
+        <87bl0ovq7f.wl-maz@kernel.org>
+        <20220106154447.aie6taiuvav5wu6y@pali>
+        <878rvsvoyo.wl-maz@kernel.org>
+        <20220106162047.vqykmygs75eimfgy@pali>
+        <877dbcvngf.wl-maz@kernel.org>
+        <20220106182044.3ff0828c@thinkpad>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kabel@kernel.org, pali@kernel.org, lorenzo.pieralisi@arm.com, bhelgaas@google.com, robh+dt@kernel.org, thomas.petazzoni@bootlin.com, kw@linux.com, rmk+kernel@armlinux.org.uk, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible to support LMh for sm8150 SoC.
-sm8150 does not require explicit enabling for various LMh subsystems.
-Add a variable indicating the same as match data which is set for sdm845.
-Execute the piece of code enabling various LMh subsystems only if
-enable algorithm match data is present.
+On Thu, 06 Jan 2022 17:20:44 +0000,
+Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+>=20
+> On Thu, 06 Jan 2022 16:27:44 +0000
+> Marc Zyngier <maz@kernel.org> wrote:
+> > You are completely missing my point. I'm talking about data
+> > structures, you're talking about interrupts. You have this:
+> >=20
+> > struct mvebu_pcie_port {
+> >        // Tons of stuff
+> >        struct irq_chip intx_chip;
+> > };
+> >=20
+> > What I want you to do is:
+> >=20
+> > struct mvebu_pcie_port {
+> >        // Tons of stuff
+> > };
+> >=20
+> > static struct irq_chip intx_chip =3D {
+> > 	.name		=3D "INTx",
+> > 	.irq_mask	=3D mvebu_pcie_intx_irq_mask,
+> > 	.irq_unmask	=3D mvebu_pcie_intx_irq_unmask;
+> > };
+> >=20
+> > That's it. No more, no less.
+> >=20
+> > 	M.
+> >=20
+>=20
+> Hmm, but struct irq_chip contains a dynamic member,
+>   struct device *parent_device;
+> Isn't that used? Or are you planning to kill it?
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
----
+Indeed, and I am definitely planning to kill it. This is the wrong
+place for this stuff, and I want it gone. There are thankfully very
+few users of this misfeature.
 
-v2->v3:
-	- use of_device_get_match_data to get the data from match table
-	  rather than using of_match_device and subsequent ->data, as per
-	  Bjorn's review comments.
-	- Minor fixes as per Bjorn's review comments.
+	M.
 
-v1->v2:
-	- Added LMH_ENABLE_ALGOS of_device_id match data to indicate
-	  whether LMh subsytems need explicit enabling or not.
- drivers/thermal/qcom/lmh.c | 62 +++++++++++++++++++++-----------------
- 1 file changed, 35 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index eafa7526eb8b..c7f91cbdccc7 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -28,6 +28,8 @@
- 
- #define LMH_REG_DCVS_INTR_CLR		0x8
- 
-+#define LMH_ENABLE_ALGOS		1
-+
- struct lmh_hw_data {
- 	void __iomem *base;
- 	struct irq_domain *domain;
-@@ -90,6 +92,7 @@ static int lmh_probe(struct platform_device *pdev)
- 	struct device_node *cpu_node;
- 	struct lmh_hw_data *lmh_data;
- 	int temp_low, temp_high, temp_arm, cpu_id, ret;
-+	unsigned int enable_alg;
- 	u32 node_id;
- 
- 	lmh_data = devm_kzalloc(dev, sizeof(*lmh_data), GFP_KERNEL);
-@@ -141,32 +144,36 @@ static int lmh_probe(struct platform_device *pdev)
- 	if (!qcom_scm_lmh_dcvsh_available())
- 		return -EINVAL;
- 
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
--				 LMH_NODE_DCVS, node_id, 0);
--	if (ret)
--		dev_err(dev, "Error %d enabling current subfunction\n", ret);
--
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
--				 LMH_NODE_DCVS, node_id, 0);
--	if (ret)
--		dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
--
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
--				 LMH_NODE_DCVS, node_id, 0);
--	if (ret)
--		dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
--
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
--				 LMH_NODE_DCVS, node_id, 0);
--	if (ret) {
--		dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
--		return ret;
--	}
--
--	ret = qcom_scm_lmh_profile_change(0x1);
--	if (ret) {
--		dev_err(dev, "Error %d changing profile\n", ret);
--		return ret;
-+	enable_alg = (uintptr_t)of_device_get_match_data(dev);
-+
-+	if (enable_alg) {
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
-+					 LMH_NODE_DCVS, node_id, 0);
-+		if (ret)
-+			dev_err(dev, "Error %d enabling current subfunction\n", ret);
-+
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
-+					 LMH_NODE_DCVS, node_id, 0);
-+		if (ret)
-+			dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
-+
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
-+					 LMH_NODE_DCVS, node_id, 0);
-+		if (ret)
-+			dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
-+
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
-+					 LMH_NODE_DCVS, node_id, 0);
-+		if (ret) {
-+			dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
-+			return ret;
-+		}
-+
-+		ret = qcom_scm_lmh_profile_change(0x1);
-+		if (ret) {
-+			dev_err(dev, "Error %d changing profile\n", ret);
-+			return ret;
-+		}
- 	}
- 
- 	/* Set default thermal trips */
-@@ -213,7 +220,8 @@ static int lmh_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id lmh_table[] = {
--	{ .compatible = "qcom,sdm845-lmh", },
-+	{ .compatible = "qcom,sdm845-lmh", .data = (void *)LMH_ENABLE_ALGOS},
-+	{ .compatible = "qcom,sm8150-lmh", },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, lmh_table);
--- 
-2.25.1
-
+--=20
+Without deviation from the norm, progress is not possible.

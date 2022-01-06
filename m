@@ -2,106 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EA5486D85
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05057486D8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245374AbiAFXGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:06:45 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:38989 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245283AbiAFXGo (ORCPT
+        id S245394AbiAFXJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234795AbiAFXJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:06:44 -0500
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MNOZO-1mlBJg2TjG-00Op6C; Fri, 07 Jan 2022 00:06:42 +0100
-Received: by mail-wr1-f42.google.com with SMTP id i22so7644605wrb.13;
-        Thu, 06 Jan 2022 15:06:42 -0800 (PST)
-X-Gm-Message-State: AOAM532NV0tP2YTklhpGRTZuGjMsAKOxqGOJhAFeulsNFcojQlOuN6uA
-        UNJzePoyg5UWA3iErYQLl2jJA0t7EGlEtBXtXTs=
-X-Google-Smtp-Source: ABdhPJzMj6xVjmpcWy7uxAm1SDGENlV1LdeAPWTqBhyWgP/ta3nPzaU9HiVSHY5IhZUe4kUZxh+mOC7tbMBL6EE76QE=
-X-Received: by 2002:a05:6000:16c7:: with SMTP id h7mr4945147wrf.317.1641510402182;
- Thu, 06 Jan 2022 15:06:42 -0800 (PST)
+        Thu, 6 Jan 2022 18:09:36 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7909BC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:09:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVMW130qnz4xts;
+        Fri,  7 Jan 2022 10:09:33 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1641510573;
+        bh=B+bWhhgzDSj+fEAQVcMQLTtKkWLuJI8V8ABaSomc3R0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=eaYopRoHSCly3KuF1RT//gnvMY/nRhG9qGnvHOkbkpX7NPp5Xxe0QcnEwTKkzN2Wb
+         ODNKaaPw4toaKi0gfn4+x1NuQklg4fDWzSzBgQS/IGBmHBmZfjp7XfLkLgwUWvlLW4
+         XkWM+3p9ajCtUQaKZ+q+do3N0kOLvmEX4SNu+TdhifWylLLmcwMmuenroD09gQoE7g
+         2B91JXTz63WNhPGFFYNGl3XE1Tgr1TlS5vKqsdFgEcnIJlHBwnqiJob7VtintImJ28
+         izl6Ejt73W3dUop4dWdtufMHjsVWCHprr0x4/KFRMehDZIh6WF3yAD3xXPnL+X9BkX
+         rAun794XQgv/w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     Nathan Lynch <nathanl@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v4] powerpc/pseries: read the lpar name from the firmware
+In-Reply-To: <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
+References: <20211207171109.22793-1-ldufour@linux.ibm.com>
+ <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
+Date:   Fri, 07 Jan 2022 10:09:32 +1100
+Message-ID: <87h7ag31hv.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <4a0a48fb682d13e6861f604d3cad3424672bee1f.1641500561.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <4a0a48fb682d13e6861f604d3cad3424672bee1f.1641500561.git.christophe.jaillet@wanadoo.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 6 Jan 2022 18:06:35 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
-Message-ID: <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
-Subject: Re: [PATCH 03/16] fpga: dfl: pci: Remove usage of the deprecated
- "pci-dma-compat.h" API
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, hao.wu@intel.com,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:jb3UUKeC73QXXLHG6BGQK8zdK3TrNekO/paL5Gh4SeHc4NGIos3
- ryzMcNHxpv7ykEcQy5/ZA2KuW3oCMi/4ZTgpW9dVGfeL0z4dkBGnSEJ285wJ3y1rZ3+aCUN
- +rsS0RFP9od8SF42ciHjtvWZMwcri5B/1hfCtZ287wfBtycFWXNPBPoL7SayC5pOeQLbx8v
- JXvPFkt1IMCScMd0chXgw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uxzSQ5etFBE=:9uEF7FH/8Bb3K5B7Tprhtt
- 12fQ8+4kljbKzuh0VlrgRfqbf6LkP22HAZBECy7+gPeeAX1aP7xBpeVKE+DBfUGqjeKtwVVB8
- 7oBa7hjUNpvEgBKvqr2tqCmkesYccqG+gzR6PRfIXIMNpOQJVmo6Frt4T1BjqvC1KLRzUFaCn
- +UHcBXuw7VNS8Tm1T5gDgf+wpary3hEQOyZxcW5hpG7K00FFenWJgOGKVhg59Qh5X1hwBEM5e
- AWhL3+loBHHs4YiUOThY5Nrg2H0W8FplBX+cYAwNYOyEOrc8kokDNBPIFcYJpfaOCpG4g4lCg
- BK8j4V7jGlts9FNLbNBc20Kqje9pMA0Pk1oHB2k+T0AgMAEitT8deGtr6nZVtikghsZjiHtvl
- 66jaim20iVv1CvaPWZbXwsqoJP0e8zTZaKFQPlPyAZ+t9F3hcYiS1pM10id6b8X9dCObUEL/+
- GIxKpyUfGjNN4g9nDhjRahlh5y6txa+moCSAxSyL0eoiKuRMb/3AaXrIE6SNwJUFVe80bajuk
- yR1wRZ6GGGw/0tVvmORHd2OfWkMhM5zI3lII+FnI1h8AWhGX7MqByu8E7rmqSTiFWVpRY5bnD
- Tqn7Vo/L4WnwgEjCBvS7vhHbAtHLhaSiGuY6Qbfx8e8Wf7A5XyYyKWtn47TzqFcQaWiQl2zxZ
- JrBQBKdUX0Lp3OXlQJuJ4mBPElxIEPtiZqusARzQh17UmmVM6vQxDyOaWpuaZkeHVjgw=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:49 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+Laurent Dufour <ldufour@linux.ibm.com> writes:
+> Happy New Year, Michael!
 >
-> In [1], Christoph Hellwig has proposed to remove the wrappers in
-> include/linux/pci-dma-compat.h.
->
-> Some reasons why this API should be removed have been given by Julia
-> Lawall in [2].
->
-> A coccinelle script has been used to perform the needed transformation.
-> It can be found in [3].
->
->
-> It has been hand modified to use 'dma_set_mask_and_coherent()' instead of
-> 'pci_set_dma_mask()/pci_set_consistent_dma_mask()' when applicable.
-> This is less verbose.
->
-> The explicit 'ret = -EIO;' has been removed because
-> 'dma_set_mask_and_coherent()' returns 0 or -EIO, so its return code can be
-> used directly.
->
->
-> [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
-> [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
-> [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> Do you consider taking that patch soon?
 
-This is a correct conversion of the driver, but I'd prefer to keep this separate
-from the pci-dma-compat series.
+I did but I was hoping you and Nathan could come to an agreement.
 
-> +       ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
-> +       if (ret)
-> +               ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
-> +       if (ret) {
->                 dev_err(&pcidev->dev, "No suitable DMA support available.\n");
->                 goto disable_error_report_exit;
+Looks like you did while I was sleeping, perfect :)
 
-The code looks a bit suspicous, both the old and the new version. If the device
-ends up on a bus that can only do 32-bit DMA, shouldn't it remember this and
-make sure it only does GFP_DMA32 allocations for buffers that are passed to
-the device?
+I'll pick up v5.
 
-        Arnd
+cheers
+
+
+> On 07/12/2021, 18:11:09, Laurent Dufour wrote:
+>> The LPAR name may be changed after the LPAR has been started in the HMC.
+>> In that case lparstat command is not reporting the updated value because it
+>> reads it from the device tree which is read at boot time.
+>> 
+>> However this value could be read from RTAS.
+>> 
+>> Adding this value in the /proc/powerpc/lparcfg output allows to read the
+>> updated value.
+>> 
+>> Cc: Nathan Lynch <nathanl@linux.ibm.com>
+>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+>> ---
+>> v4:
+>>  address Nathan's new comments limiting size of the buffer.
+>> v3:
+>>  address Michael's comments.
+>> v2:
+>>  address Nathan's comments.
+>>  change title to partition_name aligning with existing partition_id
+>> ---
+>>  arch/powerpc/platforms/pseries/lparcfg.c | 54 ++++++++++++++++++++++++
+>>  1 file changed, 54 insertions(+)
+>> 
+>> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
+>> index f71eac74ea92..058d9a5fe545 100644
+>> --- a/arch/powerpc/platforms/pseries/lparcfg.c
+>> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
+>> @@ -311,6 +311,59 @@ static void parse_mpp_x_data(struct seq_file *m)
+>>  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
+>>  }
+>>  
+>> +/*
+>> + * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
+>> + * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
+>> + */
+>> +#define SPLPAR_LPAR_NAME_TOKEN	55
+>> +#define GET_SYS_PARM_BUF_SIZE	4002
+>> +#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
+>> +#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
+>> +#endif
+>> +static void read_lpar_name(struct seq_file *m)
+>> +{
+>> +	int rc, len, token;
+>> +	union {
+>> +		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
+>> +		struct {
+>> +			__be16 len;
+>> +			char name[GET_SYS_PARM_BUF_SIZE-2];
+>> +		};
+>> +	} *local_buffer;
+>> +
+>> +	token = rtas_token("ibm,get-system-parameter");
+>> +	if (token == RTAS_UNKNOWN_SERVICE)
+>> +		return;
+>> +
+>> +	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
+>> +	if (!local_buffer)
+>> +		return;
+>> +
+>> +	do {
+>> +		spin_lock(&rtas_data_buf_lock);
+>> +		memset(rtas_data_buf, 0, sizeof(*local_buffer));
+>> +		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
+>> +			       __pa(rtas_data_buf), sizeof(*local_buffer));
+>> +		if (!rc)
+>> +			memcpy(local_buffer->raw_buffer, rtas_data_buf,
+>> +			       sizeof(local_buffer->raw_buffer));
+>> +		spin_unlock(&rtas_data_buf_lock);
+>> +	} while (rtas_busy_delay(rc));
+>> +
+>> +	if (!rc) {
+>> +		/* Force end of string */
+>> +		len = min((int) be16_to_cpu(local_buffer->len),
+>> +			  (int) sizeof(local_buffer->name)-1);
+>> +		local_buffer->name[len] = '\0';
+>> +
+>> +		seq_printf(m, "partition_name=%s\n", local_buffer->name);
+>> +	} else
+>> +		pr_err_once("Error calling get-system-parameter (0x%x)\n", rc);
+>> +
+>> +	kfree(local_buffer);
+>> +}
+>> +
+>> +
+>>  #define SPLPAR_CHARACTERISTICS_TOKEN 20
+>>  #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
+>>  
+>> @@ -496,6 +549,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
+>>  
+>>  	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
+>>  		/* this call handles the ibm,get-system-parameter contents */
+>> +		read_lpar_name(m);
+>>  		parse_system_parameter_string(m);
+>>  		parse_ppp_data(m);
+>>  		parse_mpp_data(m);

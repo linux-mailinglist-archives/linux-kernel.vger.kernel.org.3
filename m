@@ -2,130 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BC9486BF3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F42486C00
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244273AbiAFVdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244271AbiAFVdc (ORCPT
+        id S244323AbiAFViM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:38:12 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41536 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244184AbiAFViJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:33:32 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09149C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:33:32 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id ie13so3550239pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=WuKRGo9ecKyj+0SJ1Lg32Xx/ZEzcZuPmTJpgDjcU7uY=;
-        b=AhRuXFF2ulHp/rvfG1I45ArchYIMXBwQfjay6KahHpQaAneqhy7iGqzYTfDEMB5wKc
-         A8VmTa3Ix3Rzd1IaR20QG5S3yoTSnvgfJnTiFfL++7ziPLnM4ptRvE3MThwuZqoA08cB
-         0ksjMdSB4B5ueb9BZLaQmzqh/3QxQF4a8j9MosJluV3/OOHaDxjTg9eGjmKjJOFMT4H3
-         EiOUXptQrtjvD9x2/+29Vm+v873oz1nokdmIEdg9LNK3KjyBmL/pnF55IxP7QdMWHbyN
-         2MxaBo4mox0G1Mbr/eUNIY4ylgmodkLBjLj7PCn6OmYCrskG74mFWuVwNagpqTIR7a22
-         0IVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=WuKRGo9ecKyj+0SJ1Lg32Xx/ZEzcZuPmTJpgDjcU7uY=;
-        b=UdV5h4ls/JAg2Y+94f5YjZCZdrxfsoMqmNHWpyaapQabAe/xAd0ePtLNJ4P1yxzajZ
-         s0NZTOWOGtDk7DWCdPSknAVl6oRKGml6k4yGchZtr4LkgDBBu1c0l6bUGlW/g8PKQ/sP
-         z9gRdEOdKsw49oF7Cc0g7xf5nQVeEup+O+ioCqtyebDgPKc6pGtiTwN7xx0ehZKAvpJ+
-         YL28w0D25jcRqN5rN0Tu7g4Y7RL1wEhMnyiDYf3M6ovrk48hOp+oaiZk/9WsppcB2TEP
-         EHErp+EYO1UNLjWuas079//FiJbtLc9nGAY5fSqcxejXnJoTUF5p4hrbNOd2JuJ5iFZ6
-         2ZwQ==
-X-Gm-Message-State: AOAM531O4SFD5uno9hahvpDTZXrFA7H0+Q2FDZaBYsxZEsqEWaq8eg49
-        q2dNapJVjAZY4x8Ty1ahbk5h6hATXho3mw1e
-X-Google-Smtp-Source: ABdhPJxAkBpesp/+H7KaHoCKMNePmUsNKQ1ND3NiASQkIa2G2NvKPPF+Yz0sLtdNLD+Ok4OKSQzYRQ==
-X-Received: by 2002:a17:902:6b02:b0:149:9c7d:3ae7 with SMTP id o2-20020a1709026b0200b001499c7d3ae7mr37369260plk.51.1641504811598;
-        Thu, 06 Jan 2022 13:33:31 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id s12sm3683830pfg.148.2022.01.06.13.33.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 13:33:31 -0800 (PST)
-Date:   Fri, 7 Jan 2022 10:33:25 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
-        realwakka@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: pi433: move get version func to where all other
- functions are
-Message-ID: <20220106213325.GA10767@mail.google.com>
+        Thu, 6 Jan 2022 16:38:09 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 206KnD6G002692;
+        Thu, 6 Jan 2022 21:38:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=DVTcEGvVPaPwh/cgYis91HUiyWmHrs7FOPdawLqiPJw=;
+ b=Vrul6YcxD2azU7BnLQSEfit/f4RkXiUnMb4XlgkbnDySMjCn8TEZIgwnkFCej3XEBMft
+ wn6s193jY3x9Jnb0eOKo3OZruU4j/BildmeVwHG1iCIFbgRGTXJ1UtozZEYp2hYgbaxO
+ kyMMiPReFw94ADOUlsltDzwqoRXe+wW1OPlc3ujCC5g+Ty224mgGDEkh6SoF3hBwFsRV
+ aG+5U++hgoh6LJ4BrCe85dSryp6tNdH47RxK7qA/hbBq1U9V4rmBanyZJwB7Fw48sVTh
+ WQ+nX7Coq6sUA/vLU6tDbvvWqmUmZUPTVAJnxpRiNEf2aJfMPZObEAARBI3D/FV5p5Rb Yg== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3de59suk09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 21:38:05 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 206LbMHh015635;
+        Thu, 6 Jan 2022 21:38:04 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma03dal.us.ibm.com with ESMTP id 3de4xf53jd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 21:38:04 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 206Lc3rt10158744
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jan 2022 21:38:03 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A84052805E;
+        Thu,  6 Jan 2022 21:38:03 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 200BF2805A;
+        Thu,  6 Jan 2022 21:38:03 +0000 (GMT)
+Received: from oc6857751186.ibm.com (unknown [9.160.94.20])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jan 2022 21:38:02 +0000 (GMT)
+Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
+To:     Laurent Dufour <ldufour@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Nathan Lynch <nathanl@linux.ibm.com>
+References: <20220106161339.74656-1-ldufour@linux.ibm.com>
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+Message-ID: <c26f2961-dd19-b888-b601-af5ade74c140@linux.ibm.com>
+Date:   Thu, 6 Jan 2022 13:38:02 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106201430.GA3416@mail.google.com>
+In-Reply-To: <20220106161339.74656-1-ldufour@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NTw7RqtOZHEoeoQYlW1KHZDh51Y5vabQ
+X-Proofpoint-ORIG-GUID: NTw7RqtOZHEoeoQYlW1KHZDh51Y5vabQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-06_09,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201060135
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As a convention for the pi433 driver, all routines that deals with the
-rf69 chip are defined in the rf69.c file. There was an exception in
-which the uC version verification was being done directly elsewhere.
-While at it, the Version Register hardcoded value was replaced with a
-pre-existing constant in the driver.
+On 1/6/22 8:13 AM, Laurent Dufour wrote:
+> The LPAR name may be changed after the LPAR has been started in the HMC.
+> In that case lparstat command is not reporting the updated value because it
+> reads it from the device tree which is read at boot time.
+> 
+> However this value could be read from RTAS.
+> 
+> Adding this value in the /proc/powerpc/lparcfg output allows to read the
+> updated value.
+> 
+> However the hypervisor, like Qemu/KVM, may not support this RTAS
+> parameter. In that case the value reported in lparcfg is read from the
+> device tree and so is not updated accordingly.
+> 
+> Cc: Nathan Lynch <nathanl@linux.ibm.com>
+> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
 
-This patch adds rf69_get_version function to rf69.c
+My only nit would be that in general for consistency with other function names
+_RTAS_ and _DT_ should be lowercase. Seeing as they are statically scoped within
+lparcfg.c maybe its ok. Otherwise,
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-v2: function names where altered to match suggestions given during code
-review. Requester: Sidong Yang
-v1: https://lore.kernel.org/lkml/20220106093110.GA20011@mail.google.com/
----
- drivers/staging/pi433/pi433_if.c | 4 +---
- drivers/staging/pi433/rf69.c     | 5 +++++
- drivers/staging/pi433/rf69.h     | 1 +
- 3 files changed, 7 insertions(+), 3 deletions(-)
+Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index 68c09fa016ed..1372361d56e1 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -1116,9 +1116,7 @@ static int pi433_probe(struct spi_device *spi)
- 		spi->mode, spi->bits_per_word, spi->max_speed_hz);
- 
- 	/* Ping the chip by reading the version register */
--	retval = spi_w8r8(spi, 0x10);
--	if (retval < 0)
--		return retval;
-+	retval = rf69_get_version(spi);
- 
- 	switch (retval) {
- 	case 0x24:
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index d64df072d8e8..ee8c81d164e1 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -102,6 +102,11 @@ static inline int rf69_read_mod_write(struct spi_device *spi, u8 reg,
- 
- /*-------------------------------------------------------------------------*/
- 
-+int rf69_get_version(struct spi_device *spi)
-+{
-+	return rf69_read_reg(spi, REG_VERSION);
-+}
-+
- int rf69_set_mode(struct spi_device *spi, enum mode mode)
- {
- 	static const u8 mode_map[] = {
-diff --git a/drivers/staging/pi433/rf69.h b/drivers/staging/pi433/rf69.h
-index b648ba5fff89..c25942f142a6 100644
---- a/drivers/staging/pi433/rf69.h
-+++ b/drivers/staging/pi433/rf69.h
-@@ -17,6 +17,7 @@
- #define FIFO_SIZE	66		/* bytes */
- #define FIFO_THRESHOLD	15		/* bytes */
- 
-+int rf69_get_version(struct spi_device *spi);
- int rf69_set_mode(struct spi_device *spi, enum mode mode);
- int rf69_set_data_mode(struct spi_device *spi, u8 data_mode);
- int rf69_set_modulation(struct spi_device *spi, enum modulation modulation);
--- 
-2.25.4
+> ---
+> v5:
+>  fallback to the device tree value if RTAS is not providing the value.
+> v4:
+>  address Nathan's new comments limiting size of the buffer.
+> v3:
+>  address Michael's comments.
+> v2:
+>  address Nathan's comments.
+>  change title to partition_name aligning with existing partition_id
+> ---
+>  arch/powerpc/platforms/pseries/lparcfg.c | 93 ++++++++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+> 
+> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
+> index c7940fcfc911..8ca08fc306e7 100644
+> --- a/arch/powerpc/platforms/pseries/lparcfg.c
+> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
+> @@ -311,6 +311,98 @@ static void parse_mpp_x_data(struct seq_file *m)
+>  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
+>  }
+>  
+> +/*
+> + * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
+> + * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
+> + */
+> +#define SPLPAR_LPAR_NAME_TOKEN	55
+> +#define GET_SYS_PARM_BUF_SIZE	4002
+> +#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
+> +#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
+> +#endif
+> +
+> +/**
+> + * Read the lpar name using the RTAS ibm,get-system-parameter call.
+> + *
+> + * The name read through this call is updated if changes are made by the end
+> + * user on the hypervisor side.
+> + *
+> + * Some hypervisor (like Qemu) may not provide this value. In that case, a non
+> + * null value is returned.
+> + */
+> +static int read_RTAS_lpar_name(struct seq_file *m)
+> +{
+> +	int rc, len, token;
+> +	union {
+> +		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
+> +		struct {
+> +			__be16 len;
+> +			char name[GET_SYS_PARM_BUF_SIZE-2];
+> +		};
+> +	} *local_buffer;
+> +
+> +	token = rtas_token("ibm,get-system-parameter");
+> +	if (token == RTAS_UNKNOWN_SERVICE)
+> +		return -EINVAL;
+> +
+> +	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
+> +	if (!local_buffer)
+> +		return -ENOMEM;
+> +
+> +	do {
+> +		spin_lock(&rtas_data_buf_lock);
+> +		memset(rtas_data_buf, 0, sizeof(*local_buffer));
+> +		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
+> +			       __pa(rtas_data_buf), sizeof(*local_buffer));
+> +		if (!rc)
+> +			memcpy(local_buffer->raw_buffer, rtas_data_buf,
+> +			       sizeof(local_buffer->raw_buffer));
+> +		spin_unlock(&rtas_data_buf_lock);
+> +	} while (rtas_busy_delay(rc));
+> +
+> +	if (!rc) {
+> +		/* Force end of string */
+> +		len = min((int) be16_to_cpu(local_buffer->len),
+> +			  (int) sizeof(local_buffer->name)-1);
+> +		local_buffer->name[len] = '\0';
+> +
+> +		seq_printf(m, "partition_name=%s\n", local_buffer->name);
+> +	} else
+> +		rc = -ENODATA;
+> +
+> +	kfree(local_buffer);
+> +	return rc;
+> +}
+> +
+> +/**
+> + * Read the LPAR name from the Device Tree.
+> + *
+> + * The value read in the DT is not updated if the end-user is touching the LPAR
+> + * name on the hypervisor side.
+> + */
+> +static int read_DT_lpar_name(struct seq_file *m)
+> +{
+> +	struct device_node *rootdn;
+> +	const char *name;
+> +
+> +	rootdn = of_find_node_by_path("/");
+> +	if (!rootdn)
+> +		return -ENOENT;
+> +
+> +	name = of_get_property(rootdn, "ibm,partition-name", NULL);
+> +	if (!name)
+> +		return -ENOENT;
+> +
+> +	seq_printf(m, "partition_name=%s\n", name);
+> +	return 0;
+> +}
+> +
+> +static void read_lpar_name(struct seq_file *m)
+> +{
+> +	if (read_RTAS_lpar_name(m) && read_DT_lpar_name(m))
+> +		pr_err_once("Error can't get the LPAR name");
+> +}
+> +
+>  #define SPLPAR_CHARACTERISTICS_TOKEN 20
+>  #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
+>  
+> @@ -496,6 +588,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
+>  
+>  	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
+>  		/* this call handles the ibm,get-system-parameter contents */
+> +		read_lpar_name(m);
+>  		parse_system_parameter_string(m);
+>  		parse_ppp_data(m);
+>  		parse_mpp_data(m);
+> 
 

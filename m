@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B76486C49
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93BE486C6D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244578AbiAFVqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S244891AbiAFVqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244442AbiAFVqI (ORCPT
+        with ESMTP id S244452AbiAFVqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:46:08 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4213C034003
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:46:07 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q14so3416127plx.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:46:07 -0800 (PST)
+        Thu, 6 Jan 2022 16:46:09 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D17BC034004
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:46:09 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id q3so3582256pfs.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:46:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MLFo5uJ88/q78BTGkhEJmKSkKMysd8HwfQglPXTN2wU=;
-        b=nglDE8QY9t5hdSAJx4+V4q37ClBOabpxxFLIHDIl6b0J46Y4aM7i5LRT8JyqwRd/GR
-         /dlRGYshMif/788W7Cbe1ePX91QrDYEuSqLmhtUQ/Rn7UEuXvBeE28dA6qmUpch4oWe1
-         /663ZKSP2KxNRXEUAPmX2A93rjrDVp/KOHSKI=
+        bh=QdKC3RDnWMeVhqBKuTAcfq/eZBHYEe2Kb+X7ix5SdpY=;
+        b=IcaBfWVygHDNB6C8LkFxsWDgsRiQvHr6RF8HBCSc8kKeIzuGmKt6X6QMGLS4D8+pBO
+         irbkBZrK9VdODT76096dKX1fUVhxrt6DZfbKHR2KJbI2wpIcsg4+hotoJ66bXLb8rWfq
+         QM+viogiXHi5P8VefoPXVvE8N/Cic8ZmjsZKc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MLFo5uJ88/q78BTGkhEJmKSkKMysd8HwfQglPXTN2wU=;
-        b=daKYVm6iltyabQbuggaq3hWwMLWuv3U57pwn+M6fnwvbh8i8bc9d3Si8pogzHrikyn
-         /T3HI0zjMw6Zvpjb+xAWLxE5xhzy+/+eZHsFzczeebSfaVJemwjQ9DK/7Qabd1Q0gxH1
-         UM5UKfR9J5078lBpItUBoEaH0H3UbydCVszGTOfUDorlNrqvIfolBlE6OxnlvzPYhEIa
-         SuMP2VCV+w+IgQzv/1fqx6aeul/IyEkDlX0n8ekZdKJbYfEU/rC5iIaxaXagqEwKNcbs
-         vbsyiIjwgQn05AMIAJ9IGEvc/8KxJ7/zDeSv7DLTHf58srt1jzrRfk1RW1w4PaI/DiC/
-         qQ6A==
-X-Gm-Message-State: AOAM533YF16dcf3uIPC5oM8Pw51sbSHUWjuk4d285ulVDcL+TFydIEUt
-        XGlxQSTliortnJgt4O14kPR5kYxNHs+hUQ==
-X-Google-Smtp-Source: ABdhPJxKPNiQbLhCjMWfO6s24aaY/aGv9aYyqnVU0SdXtFDVXaiu2l9rIuGYklh4MYLASJomWl2L2Q==
-X-Received: by 2002:a17:90b:3ece:: with SMTP id rm14mr12322633pjb.6.1641505567437;
-        Thu, 06 Jan 2022 13:46:07 -0800 (PST)
+        bh=QdKC3RDnWMeVhqBKuTAcfq/eZBHYEe2Kb+X7ix5SdpY=;
+        b=3pSoo413tGVUG/ege2OGO/jqJdWK0HgIX9GxhSFKxB+ZXwmrmtHtwe2++h/Ke+wBSW
+         UVYRn9qb/Vvcbp1MG68Dk+TZ6ZlX19f/0qO+j854+ojFJXcVFB+F37etLh0P2H6kyjL6
+         8zf8iBqg2q0+w+thV9GhUcpPnSoF0aqfgpHIM0x4zG9O0/wj4ZFCiteHiqIHBYMZcIK/
+         9ggYhDVAH7EspdtzzMMmkRHdOlv6O9KZqqYH8OiW+i7X+8VczIF/6xfkSjkQA277fn/e
+         9Gowp2rooEwMJAfF0NrHRMm73VjZy1MLsAWU8xlfARzxl8K1BZYh6foeLmca+P6Bygxy
+         1bpA==
+X-Gm-Message-State: AOAM531NECTazkOKbdw2Irqpw8o1z9G8kHJv5UIrP4KGDvwkwvcm7Jf2
+        7gwwueOB3bxN3cAgLyz0OluKSA==
+X-Google-Smtp-Source: ABdhPJxWvdamkm9BbUfP5bbx8cClxJTqWYMaUw5Takg8Yhy/ubQOstHCKsaqxVAG6NtjkwEGXyIWHw==
+X-Received: by 2002:a65:5589:: with SMTP id j9mr54673150pgs.119.1641505568659;
+        Thu, 06 Jan 2022 13:46:08 -0800 (PST)
 Received: from smtp.gmail.com ([2620:15c:202:201:1ebe:a8fd:f9b0:7e85])
-        by smtp.gmail.com with ESMTPSA id 10sm3539960pfm.56.2022.01.06.13.46.06
+        by smtp.gmail.com with ESMTPSA id 10sm3539960pfm.56.2022.01.06.13.46.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 13:46:07 -0800 (PST)
+        Thu, 06 Jan 2022 13:46:08 -0800 (PST)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Douglas Anderson <dianders@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        James Qian Wang <james.qian.wang@arm.com>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Rob Clark <robdclark@gmail.com>,
         Russell King <rmk+kernel@arm.linux.org.uk>,
         Saravana Kannan <saravanak@google.com>
-Subject: [PATCH v5 06/32] drm/msm: Migrate to aggregate driver
-Date:   Thu,  6 Jan 2022 13:45:29 -0800
-Message-Id: <20220106214556.2461363-7-swboyd@chromium.org>
+Subject: [PATCH v5 07/32] drm/komeda: Migrate to aggregate driver
+Date:   Thu,  6 Jan 2022 13:45:30 -0800
+Message-Id: <20220106214556.2461363-8-swboyd@chromium.org>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 In-Reply-To: <20220106214556.2461363-1-swboyd@chromium.org>
 References: <20220106214556.2461363-1-swboyd@chromium.org>
@@ -67,57 +68,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device lists are poorly ordered when the component device code is
-used. This is because component_master_add_with_match() returns 0
-regardless of component devices calling component_add() first. It can
-really only fail if an allocation fails, in which case everything is
-going bad and we're out of memory. The driver that registers the
-aggregate driver, can succeed at probe and put the attached device on
-the DPM lists before any of the component devices are probed and put on
-the lists.
+Use an aggregate driver instead of component ops so that we can get
+proper driver probe ordering of the aggregate device with respect to all
+the component devices that make up the aggregate device.
 
-Within the component device framework this usually isn't that bad
-because the real driver work is done at bind time via
-component{,master}_ops::bind(). It becomes a problem when the driver
-core, or host driver, wants to operate on the component device outside
-of the bind/unbind functions, e.g. via 'remove' or 'shutdown'. The
-driver core doesn't understand the relationship between the host device
-and the component devices and could possibly try to operate on component
-devices when they're already removed from the system or shut down.
-
-Normally, device links or probe defer would reorder the lists and put
-devices that depend on other devices in the lists at the correct
-location, but with component devices this doesn't happen because this
-information isn't expressed anywhere. Drivers simply succeed at
-registering their component or the aggregate driver with the component
-framework and wait for their bind() callback to be called once the other
-components are ready. In summary, the drivers that make up the aggregate
-driver can probe in any order.
-
-This ordering problem becomes fairly obvious when shutting down the
-device with a DSI controller connected to a DSI bridge that is
-controlled via i2c. In this case, the msm display driver wants to tear
-down the display pipeline on shutdown via msm_pdev_shutdown() by calling
-drm_atomic_helper_shutdown(), and it can't do that unless the whole
-display chain is still probed and active in the system. When a display
-bridge is on i2c, the i2c device for the bridge will be created whenever
-the i2c controller probes, which could be before or after the msm
-display driver probes. If the i2c controller probes after the display
-driver, then the i2c controller will be shutdown before the display
-controller during system wide shutdown and thus i2c transactions will
-stop working before the display pipeline is shut down. This means we'll
-have the display bridge trying to access an i2c bus that's shut down
-because drm_atomic_helper_shutdown() is trying to disable the bridge
-after the bridge is off.
-
-The solution is to make the aggregate driver into a real struct driver
-that is bound to a device when the other component devices have all
-probed. Now that the component driver code is a proper bus, we can
-simply register an aggregate driver with that bus via
-component_aggregate_register() and then attach the shutdown hook to that
-driver to be sure that the shutdown for the display pipeline is called
-before any of the component device driver shutdown hooks are called.
-
+Cc: James Qian Wang (Arm Technology China) <james.qian.wang@arm.com>
 Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Rob Clark <robdclark@gmail.com>
@@ -125,98 +80,67 @@ Cc: Russell King <rmk+kernel@arm.linux.org.uk>
 Cc: Saravana Kannan <saravanak@google.com>
 Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- drivers/gpu/drm/msm/msm_drv.c | 46 +++++++++++++++++++----------------
- 1 file changed, 25 insertions(+), 21 deletions(-)
+ .../gpu/drm/arm/display/komeda/komeda_drv.c   | 20 ++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 7936e8d498dd..f6e9b0d318f5 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -1360,19 +1360,35 @@ static int add_gpu_components(struct device *dev,
- 	return 0;
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+index e7933930a657..0463386a6ed2 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+@@ -25,8 +25,9 @@ struct komeda_dev *dev_to_mdev(struct device *dev)
+ 	return mdrv ? mdrv->mdev : NULL;
  }
  
--static int msm_drm_bind(struct device *dev)
-+static int msm_drm_bind(struct aggregate_device *adev)
+-static void komeda_unbind(struct device *dev)
++static void komeda_unbind(struct aggregate_device *adev)
  {
--	return msm_drm_init(dev, &msm_driver);
-+	return msm_drm_init(adev->parent, &msm_driver);
++	struct device *dev = adev->parent;
+ 	struct komeda_drv *mdrv = dev_get_drvdata(dev);
+ 
+ 	if (!mdrv)
+@@ -45,8 +46,9 @@ static void komeda_unbind(struct device *dev)
+ 	devm_kfree(dev, mdrv);
  }
  
--static void msm_drm_unbind(struct device *dev)
-+static void msm_drm_unbind(struct aggregate_device *adev)
+-static int komeda_bind(struct device *dev)
++static int komeda_bind(struct aggregate_device *adev)
  {
--	msm_drm_uninit(dev);
-+	msm_drm_uninit(adev->parent);
-+}
-+
-+static void msm_drm_shutdown(struct aggregate_device *adev)
-+{
-+	struct drm_device *drm = platform_get_drvdata(to_platform_device(adev->parent));
-+	struct msm_drm_private *priv = drm ? drm->dev_private : NULL;
-+
-+	if (!priv || !priv->kms)
-+		return;
-+
-+	drm_atomic_helper_shutdown(drm);
++	struct device *dev = adev->parent;
+ 	struct komeda_drv *mdrv;
+ 	int err;
+ 
+@@ -87,9 +89,13 @@ static int komeda_bind(struct device *dev)
+ 	return err;
  }
  
--static const struct component_master_ops msm_drm_ops = {
--	.bind = msm_drm_bind,
--	.unbind = msm_drm_unbind,
-+static struct aggregate_driver msm_drm_aggregate_driver = {
-+	.probe = msm_drm_bind,
-+	.remove = msm_drm_unbind,
-+	.shutdown = msm_drm_shutdown,
+-static const struct component_master_ops komeda_master_ops = {
+-	.bind	= komeda_bind,
+-	.unbind	= komeda_unbind,
++static struct aggregate_driver komeda_aggregate_driver = {
++	.probe	= komeda_bind,
++	.remove	= komeda_unbind,
 +	.driver = {
-+		.name	= "msm_drm",
-+		.owner	= THIS_MODULE,
++		.name  = "komeda_drm",
++		.owner = THIS_MODULE,
 +	},
  };
  
- /*
-@@ -1401,7 +1417,7 @@ static int msm_pdev_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto fail;
+ static int compare_of(struct device *dev, void *data)
+@@ -129,12 +135,12 @@ static int komeda_platform_probe(struct platform_device *pdev)
+ 		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 1);
+ 	}
  
--	ret = component_master_add_with_match(&pdev->dev, &msm_drm_ops, match);
-+	ret = component_aggregate_register(&pdev->dev, &msm_drm_aggregate_driver, match);
- 	if (ret)
- 		goto fail;
+-	return component_master_add_with_match(dev, &komeda_master_ops, match);
++	return component_aggregate_register(dev, &komeda_aggregate_driver, match);
+ }
  
-@@ -1414,23 +1430,12 @@ static int msm_pdev_probe(struct platform_device *pdev)
- 
- static int msm_pdev_remove(struct platform_device *pdev)
+ static int komeda_platform_remove(struct platform_device *pdev)
  {
--	component_master_del(&pdev->dev, &msm_drm_ops);
-+	component_aggregate_unregister(&pdev->dev, &msm_drm_aggregate_driver);
- 	of_platform_depopulate(&pdev->dev);
- 
+-	component_master_del(&pdev->dev, &komeda_master_ops);
++	component_aggregate_unregister(&pdev->dev, &komeda_aggregate_driver);
  	return 0;
  }
  
--static void msm_pdev_shutdown(struct platform_device *pdev)
--{
--	struct drm_device *drm = platform_get_drvdata(pdev);
--	struct msm_drm_private *priv = drm ? drm->dev_private : NULL;
--
--	if (!priv || !priv->kms)
--		return;
--
--	drm_atomic_helper_shutdown(drm);
--}
--
- static const struct of_device_id dt_match[] = {
- 	{ .compatible = "qcom,mdp4", .data = (void *)KMS_MDP4 },
- 	{ .compatible = "qcom,mdss", .data = (void *)KMS_MDP5 },
-@@ -1446,7 +1451,6 @@ MODULE_DEVICE_TABLE(of, dt_match);
- static struct platform_driver msm_platform_driver = {
- 	.probe      = msm_pdev_probe,
- 	.remove     = msm_pdev_remove,
--	.shutdown   = msm_pdev_shutdown,
- 	.driver     = {
- 		.name   = "msm",
- 		.of_match_table = dt_match,
 -- 
 https://chromeos.dev
 

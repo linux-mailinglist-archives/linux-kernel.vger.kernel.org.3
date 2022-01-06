@@ -2,229 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F42486C00
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC31F486BFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244323AbiAFViM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:38:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41536 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244184AbiAFViJ (ORCPT
+        id S244311AbiAFViI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:38:08 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44025 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244184AbiAFViH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:38:09 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 206KnD6G002692;
-        Thu, 6 Jan 2022 21:38:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=DVTcEGvVPaPwh/cgYis91HUiyWmHrs7FOPdawLqiPJw=;
- b=Vrul6YcxD2azU7BnLQSEfit/f4RkXiUnMb4XlgkbnDySMjCn8TEZIgwnkFCej3XEBMft
- wn6s193jY3x9Jnb0eOKo3OZruU4j/BildmeVwHG1iCIFbgRGTXJ1UtozZEYp2hYgbaxO
- kyMMiPReFw94ADOUlsltDzwqoRXe+wW1OPlc3ujCC5g+Ty224mgGDEkh6SoF3hBwFsRV
- aG+5U++hgoh6LJ4BrCe85dSryp6tNdH47RxK7qA/hbBq1U9V4rmBanyZJwB7Fw48sVTh
- WQ+nX7Coq6sUA/vLU6tDbvvWqmUmZUPTVAJnxpRiNEf2aJfMPZObEAARBI3D/FV5p5Rb Yg== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3de59suk09-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 21:38:05 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 206LbMHh015635;
-        Thu, 6 Jan 2022 21:38:04 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03dal.us.ibm.com with ESMTP id 3de4xf53jd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 21:38:04 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 206Lc3rt10158744
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jan 2022 21:38:03 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A84052805E;
-        Thu,  6 Jan 2022 21:38:03 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 200BF2805A;
-        Thu,  6 Jan 2022 21:38:03 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.160.94.20])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Jan 2022 21:38:02 +0000 (GMT)
-Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
-To:     Laurent Dufour <ldufour@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Nathan Lynch <nathanl@linux.ibm.com>
-References: <20220106161339.74656-1-ldufour@linux.ibm.com>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <c26f2961-dd19-b888-b601-af5ade74c140@linux.ibm.com>
-Date:   Thu, 6 Jan 2022 13:38:02 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 6 Jan 2022 16:38:07 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVKTT2TzMz4xgr;
+        Fri,  7 Jan 2022 08:38:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641505085;
+        bh=LBRvWTccl8jI75VNSII6S0Rplpj5gw0rHL4akA6JVT4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oWCqrY/3iyyY44/JffkDRuCkwN1S1FML2ZZf5oFWqPVsb6wMjxOGDFfqghHgZj5QW
+         zWl8ybAc5rzsS5hYiF/xwo83JxA0leAkFkzIvrzjGT4Gz8arbgxwjPy+47+T1NKfjo
+         WDG7pdRg0Jfu5aBN2vdJ3U6Wm9cvHH1k08m75WTokrhMALQLR+EmQRLsEF4BdxLC3c
+         SV7z0e+hf7uME/bx/GJu4SgzUDe1NJIIitLxp+0emGxWZHaX9xsuZLWTFcKSwbDGF1
+         ll8wfM0OdxZkbj6wrhKi/8DOUNo6JC8KTRH1c/0iujvEMpeAtRvhhsd3rYqJ5urThh
+         klkYlC36mONSQ==
+Date:   Fri, 7 Jan 2022 08:38:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the tpmdd tree
+Message-ID: <20220107083804.1a053153@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220106161339.74656-1-ldufour@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NTw7RqtOZHEoeoQYlW1KHZDh51Y5vabQ
-X-Proofpoint-ORIG-GUID: NTw7RqtOZHEoeoQYlW1KHZDh51Y5vabQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-06_09,2022-01-06_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201060135
+Content-Type: multipart/signed; boundary="Sig_/D.e3_K/jTCzNcQIBSmMr97l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/22 8:13 AM, Laurent Dufour wrote:
-> The LPAR name may be changed after the LPAR has been started in the HMC.
-> In that case lparstat command is not reporting the updated value because it
-> reads it from the device tree which is read at boot time.
-> 
-> However this value could be read from RTAS.
-> 
-> Adding this value in the /proc/powerpc/lparcfg output allows to read the
-> updated value.
-> 
-> However the hypervisor, like Qemu/KVM, may not support this RTAS
-> parameter. In that case the value reported in lparcfg is read from the
-> device tree and so is not updated accordingly.
-> 
-> Cc: Nathan Lynch <nathanl@linux.ibm.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+--Sig_/D.e3_K/jTCzNcQIBSmMr97l
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My only nit would be that in general for consistency with other function names
-_RTAS_ and _DT_ should be lowercase. Seeing as they are statically scoped within
-lparcfg.c maybe its ok. Otherwise,
+Hi all,
 
-Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Commit
 
-> ---
-> v5:
->  fallback to the device tree value if RTAS is not providing the value.
-> v4:
->  address Nathan's new comments limiting size of the buffer.
-> v3:
->  address Michael's comments.
-> v2:
->  address Nathan's comments.
->  change title to partition_name aligning with existing partition_id
-> ---
->  arch/powerpc/platforms/pseries/lparcfg.c | 93 ++++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
-> 
-> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
-> index c7940fcfc911..8ca08fc306e7 100644
-> --- a/arch/powerpc/platforms/pseries/lparcfg.c
-> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
-> @@ -311,6 +311,98 @@ static void parse_mpp_x_data(struct seq_file *m)
->  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
->  }
->  
-> +/*
-> + * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
-> + * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
-> + */
-> +#define SPLPAR_LPAR_NAME_TOKEN	55
-> +#define GET_SYS_PARM_BUF_SIZE	4002
-> +#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
-> +#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
-> +#endif
-> +
-> +/**
-> + * Read the lpar name using the RTAS ibm,get-system-parameter call.
-> + *
-> + * The name read through this call is updated if changes are made by the end
-> + * user on the hypervisor side.
-> + *
-> + * Some hypervisor (like Qemu) may not provide this value. In that case, a non
-> + * null value is returned.
-> + */
-> +static int read_RTAS_lpar_name(struct seq_file *m)
-> +{
-> +	int rc, len, token;
-> +	union {
-> +		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
-> +		struct {
-> +			__be16 len;
-> +			char name[GET_SYS_PARM_BUF_SIZE-2];
-> +		};
-> +	} *local_buffer;
-> +
-> +	token = rtas_token("ibm,get-system-parameter");
-> +	if (token == RTAS_UNKNOWN_SERVICE)
-> +		return -EINVAL;
-> +
-> +	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
-> +	if (!local_buffer)
-> +		return -ENOMEM;
-> +
-> +	do {
-> +		spin_lock(&rtas_data_buf_lock);
-> +		memset(rtas_data_buf, 0, sizeof(*local_buffer));
-> +		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
-> +			       __pa(rtas_data_buf), sizeof(*local_buffer));
-> +		if (!rc)
-> +			memcpy(local_buffer->raw_buffer, rtas_data_buf,
-> +			       sizeof(local_buffer->raw_buffer));
-> +		spin_unlock(&rtas_data_buf_lock);
-> +	} while (rtas_busy_delay(rc));
-> +
-> +	if (!rc) {
-> +		/* Force end of string */
-> +		len = min((int) be16_to_cpu(local_buffer->len),
-> +			  (int) sizeof(local_buffer->name)-1);
-> +		local_buffer->name[len] = '\0';
-> +
-> +		seq_printf(m, "partition_name=%s\n", local_buffer->name);
-> +	} else
-> +		rc = -ENODATA;
-> +
-> +	kfree(local_buffer);
-> +	return rc;
-> +}
-> +
-> +/**
-> + * Read the LPAR name from the Device Tree.
-> + *
-> + * The value read in the DT is not updated if the end-user is touching the LPAR
-> + * name on the hypervisor side.
-> + */
-> +static int read_DT_lpar_name(struct seq_file *m)
-> +{
-> +	struct device_node *rootdn;
-> +	const char *name;
-> +
-> +	rootdn = of_find_node_by_path("/");
-> +	if (!rootdn)
-> +		return -ENOENT;
-> +
-> +	name = of_get_property(rootdn, "ibm,partition-name", NULL);
-> +	if (!name)
-> +		return -ENOENT;
-> +
-> +	seq_printf(m, "partition_name=%s\n", name);
-> +	return 0;
-> +}
-> +
-> +static void read_lpar_name(struct seq_file *m)
-> +{
-> +	if (read_RTAS_lpar_name(m) && read_DT_lpar_name(m))
-> +		pr_err_once("Error can't get the LPAR name");
-> +}
-> +
->  #define SPLPAR_CHARACTERISTICS_TOKEN 20
->  #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
->  
-> @@ -496,6 +588,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
->  
->  	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
->  		/* this call handles the ibm,get-system-parameter contents */
-> +		read_lpar_name(m);
->  		parse_system_parameter_string(m);
->  		parse_ppp_data(m);
->  		parse_mpp_data(m);
-> 
+  1268950cc152 ("tools/certs: Add print-cert-tbs-hash.sh")
 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/D.e3_K/jTCzNcQIBSmMr97l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXYTwACgkQAVBC80lX
+0GytnQf+IQjWXj7QiKzaWu67CQfcRu1cW9T4Nnvh2MufMgQLgdo9vzWJOha9EA6t
+tEVWlsBU1i5Fm9MOZxzRGyjk8D/hu20iCAYOBhj6aD8ggDuptU5gHrswQoM6sIUI
+JCYLGYjD4weLl7OiuiJgqSUbLZZ7XnU817NU9i3z7B0exuThY/fHRH/zb7fFD98B
+26Sgu3WMoJDwmVMI5EDS5B21aNR0lKV44T6PskPt/uPx0GchJCzU8BeuDU+RS10x
+7d+7gd/T7cyRBQRtjSw5Hk78KHiLS3+52OZiiuy6Rxftb+K1EoBweu6FLxWTxi1y
+t7Rxi7ejODZFJs18W3fvoTgyqc2G7g==
+=X16j
+-----END PGP SIGNATURE-----
+
+--Sig_/D.e3_K/jTCzNcQIBSmMr97l--

@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96919486DCE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E05D486DD5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245577AbiAFXdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:33:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57442 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245495AbiAFXc5 (ORCPT
+        id S245603AbiAFXfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245544AbiAFXfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:32:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A58B361E85;
-        Thu,  6 Jan 2022 23:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FB8C36AE0;
-        Thu,  6 Jan 2022 23:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641511976;
-        bh=rL3mJhFcwsAPvSpaRtRP4ONHUtXAnLRH1GqGfnhGt3E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UZnsn9jgrTafa4VvQpKHdcRBJqDAJTC2BUIlscUTBL+tdGGQy3YEkzPDmxZhvPbrP
-         muwEMoxmqFxYBfI4GzZb4aGIPMVmVZ64GqU9McThr4INONhGp6HvEC0aJZ44LvCcYL
-         9GkeWX7TqGbRVTuwfKlZkq9mQGp81XwpnONGeINjqY4tcgPAAKID+RIAhKpUcdpqD3
-         IOuBtogkWtXbitIkvGQmOYo1U19BRPyhp7xuamrYKir5K/JdBkx3JaAHuEZJkxESuQ
-         6ePZ0pkaSnJEcqCWVGrm34vbDDX/5+fj8cFJbtPUu4x5lxzt2ZPH0MloIBiIP4dTUW
-         XJTFoJAyOx2Sw==
-Date:   Fri, 7 Jan 2022 08:32:52 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        Thu, 6 Jan 2022 18:35:11 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F054C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:35:11 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id a129so4904843oif.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 15:35:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k+AXXTXFi1cWIEwtg73aFjj3MfoRkcbinIzxQo9/DOY=;
+        b=MA3EeJeLnwvymvy4Qt2JImgfM9yMQRPtdNStEtT6cC0NkKPGG9e/Ypj4Qb0xB5+rjw
+         T+sGqYHDW3hl92IIENMquMHcDvtkepaFQYhj4YDOQCO+j4SeJzH84VSpGaQCb1nQqLOA
+         UKoGOUWX+fT2oul0+uBLhfJyNFNDGBv5F62y1KXAk8XO3HRvk6MjnapTSXT+946MLe0b
+         gAv1QqG3X0Qsgb8p5HpGcJFtDbE2gSs+lC327/XZiomVQrofHFofOy5v6MZiRgI4PmP8
+         Kkvra88lb8vS+GG5s5W4EGcP2LSMUn4Udj/QxwD3beLSLE2lqHPAM3T7WvmXjTZPRyJH
+         EZdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k+AXXTXFi1cWIEwtg73aFjj3MfoRkcbinIzxQo9/DOY=;
+        b=21TVhXf1FNQC+pctLm2iO+1nY7TndHXXBNa2G7rgRFsqHKhwbWtQB9i/4VYsvlPj7B
+         WI5gRYrqFbU46mlppVc7ZLKPOVBbeB0lQ/XZCPwcxGHbT4YQJIptd8vGHkvVJxolVt6I
+         Uw9ZPAFja9HlIG44ovQDn+EmngNiMNP1QrAWyXVgVL+uVFWREShVguy93cpPEbS5aelx
+         Xul95Pm79ilhWP51HU5VWCvfI7y5cGWq5G9FXmN+VcX8L/o99fL7/rrQRpyLbSqk2dyx
+         qc5DLKrlHoRHV2fPCXGGQTie6dthHWl9isUUjVuVTv5I+Aov79Fv1wRBO2O75Q7Wog7n
+         +Y1w==
+X-Gm-Message-State: AOAM531FrHBofdrQYCKguFF5A1T9v/DxuTI107LoXxH+pC34R21TomY4
+        4agNYVo/BNEmTYEISenwZsU2xw==
+X-Google-Smtp-Source: ABdhPJwaRRGMTpfWmpeUEfMfF32qW3dxW25CH6zMJn7uOynq8j1EabTLXGE8CMUDX9UanXZZj4eytw==
+X-Received: by 2002:aca:1811:: with SMTP id h17mr7451667oih.178.1641512110515;
+        Thu, 06 Jan 2022 15:35:10 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id h14sm633673ots.48.2022.01.06.15.35.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 15:35:10 -0800 (PST)
+Date:   Thu, 6 Jan 2022 15:35:59 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        daniel.lezcano@linaro.org
+Cc:     agross@kernel.org, rafael@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] user_events: Validate user payloads for size
- and null termination
-Message-Id: <20220107083252.0da5237af9c5d041a3850dc6@kernel.org>
-In-Reply-To: <20220103185308.GA15522@kbox>
-References: <20211216173511.10390-1-beaub@linux.microsoft.com>
-        <20211216173511.10390-12-beaub@linux.microsoft.com>
-        <20211223090822.a14244522fef64b4b4398fe0@kernel.org>
-        <20220103185308.GA15522@kbox>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: [Patch v3 2/3] arm64: dts: qcom: sm8150: Add support for LMh node
+Message-ID: <Ydd839Wu1Gm4bWpm@ripper>
+References: <20220106173138.411097-1-thara.gopinath@linaro.org>
+ <20220106173138.411097-3-thara.gopinath@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106173138.411097-3-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Beau,
+On Thu 06 Jan 09:31 PST 2022, Thara Gopinath wrote:
 
-On Mon, 3 Jan 2022 10:53:08 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
-
-[...]
-> > >  typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
-> > > -				   void *tpdata);
-> > > +				   void *tpdata, bool *faulted);
-> > 
-> > Why don't you just return "int" value? ;-)
-> > 
+> Add LMh nodes for cpu cluster0 and cpu cluster1 for sm8150 SoC.
 > 
-> There can be more than one callback attached per-probe, and in all cases
-> where a return value is needed is for a faulted (or would have faulted)
-> case. This allows less branches when data is being traced/logged as the
-> return value does not need to be checked (nor should it short circuit
-> other probes that are attached).
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 
-Would you mean overwriting the 'faulted' ? If so, you can do something like
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-faulted = 0;
-for_each_user_event_func(user_event_func) {
-	faulted |= user_event_func();
-}
-if (faulted)
-  ...
+Daniel, will you please apply patch 1 and 3 through your tree and I can
+take this through the qcom dts tree.
 
-But I think if one user_event_func() fails to access the user data,
-other funcs also fail. In this case, it is faster to skip others than
-repeating faults.
+Thanks,
+Bjorn
 
-[...]
-> > > @@ -555,19 +648,25 @@ static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
-> > >  		return;
-> > >  
-> > >  	/* Allocates and fills trace_entry, + 1 of this is data payload */
-> > > -	entry = trace_event_buffer_reserve(&event_buffer, file,
-> > > -					   sizeof(*entry) + i->count);
-> > > +	entry = trace_event_buffer_reserve(&event_buffer, file, size);
-> > >  
-> > >  	if (unlikely(!entry))
-> > >  		return;
-> > >  
-> > > -	if (unlikely(!copy_nofault(entry + 1, i->count, i))) {
-> > > -		__trace_event_discard_commit(event_buffer.buffer,
-> > > -					     event_buffer.event);
-> > > -		return;
-> > > -	}
-> > > +	if (unlikely(!copy_nofault(entry + 1, i->count, i)))
-> > > +		goto discard;
-> > 
-> > OK, this is a fault error.
-> > 
-> > > +
-> > > +	if (!list_empty(&user->validators) &&
-> > > +	    unlikely(user_event_validate(user, entry, size)))
-> > > +		goto discard;
-> > 
-> > But this maybe an invalid parameter error.
-> > 
+> ---
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 > 
-> Yes, but it has to be an invalid parameter that would have caused a
-> possible fault in a worse place. In my mind, I still treat it as a fault
-> case whether the user did it intentionally or not :)
-
-OK, I got it.
-
-Thank you,
-
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index 81b4ff2cc4cd..e755d7ab78dd 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -3650,6 +3650,30 @@ cpufreq_hw: cpufreq@18323000 {
+>  			#freq-domain-cells = <1>;
+>  		};
+>  
+> +		lmh_cluster1: lmh@18350800 {
+> +			compatible = "qcom,sm8150-lmh";
+> +			reg = <0 0x18350800 0 0x400>;
+> +			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> +			cpus = <&CPU4>;
+> +			qcom,lmh-temp-arm-millicelsius = <60000>;
+> +			qcom,lmh-temp-low-millicelsius = <84500>;
+> +			qcom,lmh-temp-high-millicelsius = <85000>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +		};
+> +
+> +		lmh_cluster0: lmh@18358800 {
+> +			compatible = "qcom,sm8150-lmh";
+> +			reg = <0 0x18358800 0 0x400>;
+> +			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> +			cpus = <&CPU0>;
+> +			qcom,lmh-temp-arm-millicelsius = <60000>;
+> +			qcom,lmh-temp-low-millicelsius = <84500>;
+> +			qcom,lmh-temp-high-millicelsius = <85000>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +		};
+> +
+>  		wifi: wifi@18800000 {
+>  			compatible = "qcom,wcn3990-wifi";
+>  			reg = <0 0x18800000 0 0x800000>;
+> -- 
+> 2.25.1
 > 
-> Thanks,
-> -Beau
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

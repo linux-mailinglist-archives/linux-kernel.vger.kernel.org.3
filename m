@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE5A485E67
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE5D485E6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344585AbiAFCDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 21:03:13 -0500
-Received: from mga02.intel.com ([134.134.136.20]:57012 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344582AbiAFCDF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 21:03:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641434585; x=1672970585;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5DZFzriPP1VDbGGyAdL6nk60CNLgZxX2BcJp9/5+VuI=;
-  b=gD0XxBtS9LN8UcdtdjB3AMlz4bKj0osBxN033JLxPjijugjfbpKQ2Nkp
-   5eukn1WY02PcEPy8UZp4WRWFlArEQKBj3oBcmpI2tui9EfStB6Z2GdARx
-   g7assHkY3ffJmbiNV6SVXn2cbSTyW31O8fcqNx4Pi1+C/8r95GVWk8fYN
-   a3YT5FR50ZXzeSE59ePnmeEe1zFUsHDzfcc7gKNqVodbd75IZwbAFn1iI
-   LgctzgS5Uhj08mYZpwQqtHwt0tiLL8RNLc1itaAQGpy8jjEyqlTNqc7Fl
-   Xo0pDoepP/UQ3oOS/KANgXbvpGKITUuowYo27e+sWaOR6KEDdxZi8uAMP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229896842"
-X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="229896842"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 18:03:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="668300261"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Jan 2022 18:03:02 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5I7J-000HEt-TJ; Thu, 06 Jan 2022 02:03:01 +0000
-Date:   Thu, 6 Jan 2022 10:02:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bigeasy-staging:memcg 5/5] mm/memcontrol.c:2133:2: warning:
- #warning Optimisation in place
-Message-ID: <202201060957.kIjdfilS-lkp@intel.com>
+        id S1344598AbiAFCHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 21:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344590AbiAFCHM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 21:07:12 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79420C061212
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:07:12 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id j185so1690688oif.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 18:07:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=N8EyGGSmrvvI6zU1aQmKy8o54cZnNfEr69UiGzAV5Xg=;
+        b=NxFVhNfzmEq5RCDmuy44ry2eINp5RIBA/UI9lnUXVtNeRh1g4inZSBQgJsaOiHkpuZ
+         M8H0h59pBbxHadQ2QoWie5KzIFcXOp4pq8Fe+9w4RMK8jtEGvk+ZQ+f64XTDbv5wcr+Q
+         op3ubfY18FPsSkmWAWki/KrbF3BFhxuvFOAu0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=N8EyGGSmrvvI6zU1aQmKy8o54cZnNfEr69UiGzAV5Xg=;
+        b=2yGjTj+Qlb2LgRv6Jq69JsTlugW/G893mNG1F90gv9NsA03ekLFz8Q88ZB5zifzP+H
+         zzYO5vpfiQVf9TrEHBvQK3RrzDWe5DNSZycO7VRzqagZwOMZ+plh8IBvEYo/7Pu2j3Ka
+         q+qE4vbktmsYq/bcpmdNiN6F/nDQ1XC1fZ8mM/KYwwz0ZfxrLq3+bD7SPp/lGotHAWfy
+         6jrXKe444JrDIM6fbk8HAWeuWRqeYzCsfjWyNp1AIg3sDj09uf83kjLPFZ5GbUVYiGrC
+         eRgg8977OOD7X1xxRHyoeMCv8C4+q3P60GdVWa/qdHsGtU5aOQKSt6SoSn4gaUP/hiK9
+         3qUg==
+X-Gm-Message-State: AOAM530Oqr91SHW5u40gw501nBndieT7G4MShBvwLYXdsAB1vB6NJYT8
+        BSURpShVToDysjbiwYSoWJDJGLc/68Kf+omFlj+Gfw==
+X-Google-Smtp-Source: ABdhPJwMibIsFOJg1O7S6ixK9lYcwLkrgBiGvGU8C/v/R7joI0S4Kl3kddaxfXVhULAlQHivvDuZi7OlcYqOesAmHjQ=
+X-Received: by 2002:aca:a953:: with SMTP id s80mr4711191oie.164.1641434831728;
+ Wed, 05 Jan 2022 18:07:11 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 5 Jan 2022 18:07:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1640856276-14697-2-git-send-email-quic_rajeevny@quicinc.com>
+References: <1640856276-14697-1-git-send-email-quic_rajeevny@quicinc.com> <1640856276-14697-2-git-send-email-quic_rajeevny@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 5 Jan 2022 18:07:11 -0800
+Message-ID: <CAE-0n52xCvmFe4O9LfoHe7zSaWGH2dF2GGhROr60tb-DV=V8Sg@mail.gmail.com>
+Subject: Re: [v1 1/2] dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
+To:     Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
+        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
+        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
+        jonathan@marek.ca, dmitry.baryshkov@linaro.org, airlied@linux.ie,
+        daniel@ffwll.ch
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/staging.git memcg
-head:   47e47279015085e921d201c2d7f46f138c55d6f0
-commit: 47e47279015085e921d201c2d7f46f138c55d6f0 [5/5] memcg: Kind of micro benchmark.
-config: m68k-randconfig-r014-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060957.kIjdfilS-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/staging.git/commit/?id=47e47279015085e921d201c2d7f46f138c55d6f0
-        git remote add bigeasy-staging https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/staging.git
-        git fetch --no-tags bigeasy-staging memcg
-        git checkout 47e47279015085e921d201c2d7f46f138c55d6f0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+Quoting Rajeev Nandan (2021-12-30 01:24:35)
+> Add 10nm dsi phy tuning properties for phy drive strength and
+> phy drive level adjustemnt.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+s/adjustemnt/adjustment/
 
-All warnings (new ones prefixed by >>):
+Please add the details about parasitics and eye shape tuning to this
+commit text.
 
->> mm/memcontrol.c:2133:2: warning: #warning Optimisation in place [-Wcpp]
-    2133 | #warning Optimisation in place
-         |  ^~~~~~~
+>
+> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
+> ---
+>  .../devicetree/bindings/display/msm/dsi-phy-10nm.yaml | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+> index 4399715..9406982 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+> @@ -35,6 +35,18 @@ properties:
+>        Connected to DSI0_MIPI_DSI_PLL_VDDA0P9 pin for sc7180 target and
+>        connected to VDDA_MIPI_DSI_0_PLL_0P9 pin for sdm845 target
+>
+> +  phy-drive-strength-cfg:
+> +    type: array
+> +    description:
+> +      Register values of DSIPHY_RESCODE_OFFSET_TOP and DSIPHY_RESCODE_OFFSET_BOT
+> +      for all five lanes to adjust the phy drive strength.
+> +
+> +  phy-drive-level-cfg:
+> +    type: array
+> +    description:
+> +      Register values of DSIPHY_RESCODE_OFFSET_TOP for all five lanes to adjust
+> +      phy drive level/amplitude.
 
+It would be better to put human understandable values into DT here. This
+looks like a black box to anyone outside of qcom, so they won't know how
+to tune or set these register values.
 
-vim +2133 mm/memcontrol.c
+At least for phy-drive-level-cfg it sounds like it could be some sort of
+property that is a u32 array of 5 elements for each lane indicating some
+sort of amplitude, i.e.
 
-  2126	
-  2127	struct memcg_stock_pcp {
-  2128		/* Protects memcg_stock_pcp */
-  2129		local_lock_t stock_lock;
-  2130		struct mem_cgroup *cached; /* this never be root cgroup */
-  2131		unsigned int nr_pages;
-  2132	#ifndef DO_NO_OPTIMISATION
-> 2133	#warning Optimisation in place
-  2134		/* Protects only task_obj */
-  2135		local_lock_t task_obj_lock;
-  2136		struct obj_stock task_obj;
-  2137	#endif
-  2138		struct obj_stock irq_obj;
-  2139	
-  2140		struct work_struct work;
-  2141		unsigned long flags;
-  2142	#define FLUSHING_CACHED_CHARGE	0
-  2143	};
-  2144	static DEFINE_PER_CPU(struct memcg_stock_pcp, memcg_stock) = {
-  2145		.stock_lock = INIT_LOCAL_LOCK(stock_lock),
-  2146	#ifndef DO_NO_OPTIMISATION
-  2147		.task_obj_lock = INIT_LOCAL_LOCK(task_obj_lock),
-  2148	#endif
-  2149	};
-  2150	static DEFINE_MUTEX(percpu_charge_mutex);
-  2151	
+	phy-max-amplitudes = <0 1 2 3 4>;
+	phy-min-amplitudes = <0 1 2 3 4>;
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+where each index corresponds to a particular lane. Then the driver can
+parse the amplitude and convert it into some sort of register value.

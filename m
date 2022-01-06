@@ -2,109 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A39486ADD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF96D486AEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243549AbiAFUFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S243582AbiAFUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiAFUFX (ORCPT
+        with ESMTP id S230045AbiAFUMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:05:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B368C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:05:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 578D5B82374
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:05:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5D3C36AE3;
-        Thu,  6 Jan 2022 20:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641499520;
-        bh=bJerYigQ9mJ4v8UePSEWT2XKDjzSacNuUl+qXV6qQgM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ME7YiTKTuTrRuoHeBambD1mrAKdTQbbMyrSFk55Wa+61/0jOQB1pE/bk0ne20jdKw
-         CQpohYQfvW6Q5IrBNPvIYxnBiBnCIvZ9IDsYisFCeNiCd8WnxUUFbB+4soQR6P9TbL
-         vJSkEbuWnbZt3AoMxKB0gJf/NZszdGID34O9sg6n/uCRngWKdmvmNrpgcb+JDuOkOy
-         yau6RqLmeNzdQHUWg/PwhcLdK41dVc3CSiBAPABR78oLySYkCgm5tU7KE+xs8i0xbt
-         02NFFyPBj9IaxcR3jNROsMbTlLeTnpNhsxdl3nT3+P40X+BdLeT4zmbS4xUNgiAT1/
-         J48xNgfq+SAzA==
-Date:   Thu, 6 Jan 2022 20:05:15 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-Message-ID: <YddLe8cCvj5fVBTQ@sirena.org.uk>
-References: <20220106175019.3116389-1-festevam@gmail.com>
- <Ydc2EHf5f12w4YcW@sirena.org.uk>
- <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
+        Thu, 6 Jan 2022 15:12:36 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC504C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:12:35 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id w80so5303562oie.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:12:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vROeKx05r5S8zq2+fHHm+ECFUEqfMQWtVJfxmmZ8/Ww=;
+        b=IwOxf8ihHeWh8Vk/JhKknys2TRVe23Nw7HM/81myIZiIRt+jJvpoy0BA/upwdcBAl1
+         kEy65Evp0YMT8DcxieVwNBTYnb8LjpjnLrBmV6PL1WhT1sgXwWUiAGR8LpreT5W4U7/o
+         hgpNgWq1JWBZxKb/lJ1ECeuxGk0y13t6uUAN+h2XAa+QWHIz3DMFVhcITAFXv85j0VeS
+         408fSoxy2n+K4RjuRb43CvXO2Btl4Jf09YOZG+coa9ZhfJoKj+vO+7rjByazryTShDTh
+         kJ9msuEmKX52Cm8vClodZ0cuYc9gyWAg6UHYP1rgHYpUGOxCji7HKp/xvsbPl1QlMc6/
+         9+EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vROeKx05r5S8zq2+fHHm+ECFUEqfMQWtVJfxmmZ8/Ww=;
+        b=Fziqu9i8CiZN+5u2gvv0LL42PahjtcRJFxFB7lJC8bgJfDTQS1to06u1vHN4Okq1B4
+         aeJbP4c/hDB/WcOiDqyVK/DurzejyUGsPqxfE8FXeqAOqKsJjdzVAojtcIAeAi/NT3PN
+         KwvDTfYF4EXu1JR1+5wnzGcrSFLnR6eGRW+vrMcCfE6rt9RTdd4QQx06xxHE+BlHawmf
+         7/cNzZ77OL7zrQIvojBLRtv32bfG0sCyMESfAyDQXnn4GAKLUt0XYs6Ls2K3bIigIFIN
+         NdIJAJUT4LmLI78bJqV/Cbe6fghkfOXhTn8BPG5oT5Acysw15F2IngD8hyYaUJWcByvq
+         6Z7A==
+X-Gm-Message-State: AOAM530gMNFG0ajAA3PIScxnK7x7AvHyUgKVK+OfVKWWTEcJ6x57sMVj
+        pIjTqv61SdO8KQVo9mkUTfT8iNPl2zNxvX8NQovaxQ==
+X-Google-Smtp-Source: ABdhPJxJ/MNcLpd6cu3C+bOIgnNNw2Mi1QOlfdVP1bmKYZXU3eundgFPCP8MKIkL04TZL9XRZB087Sxf1sixo2k3q8c=
+X-Received: by 2002:a05:6808:1b22:: with SMTP id bx34mr5205268oib.68.1641499955018;
+ Thu, 06 Jan 2022 12:12:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RVSDFDYmBYl7Sb1s"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
-X-Cookie: I think we're in trouble.
+References: <20220106032118.34459-1-likexu@tencent.com> <YdcwXIANeB3fOWOI@google.com>
+In-Reply-To: <YdcwXIANeB3fOWOI@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 6 Jan 2022 12:12:23 -0800
+Message-ID: <CALMp9eSv7ZQmVsb49iPbw0gkJhYgKPGsFuw6UtEeNZ3FsBwRwA@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86/pmu: Make top-down.slots event unavailable in
+ supported leaf
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 6, 2022 at 10:09 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Jan 06, 2022, Like Xu wrote:
+> > From: Like Xu <likexu@tencent.com>
+> >
+> > When we choose to disable the fourth fixed counter TOPDOWN.SLOTS,
+> > we also need to comply with the specification and set 0AH.EBX.[bit 7]
+> > to 1 if the guest (e.g. on the ICX) has a value of 0AH.EAX[31:24] > 7.
+> >
+> > Fixes: 2e8cd7a3b8287 ("kvm: x86: limit the maximum number of vPMU fixed counters to 3")
+> > Signed-off-by: Like Xu <likexu@tencent.com>
+> > ---
+> > v1 -> v2 Changelog:
+> > - Make it simpler to keep forward compatibility; (Sean)
+> > - Wrap related comment at ~80 chars; (Sean)
+> >
+> > Previous:
+> > https://lore.kernel.org/kvm/20220105050711.67280-1-likexu@tencent.com/
+> >
+> >  arch/x86/kvm/cpuid.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> > index 0b920e12bb6d..4fe17a537084 100644
+> > --- a/arch/x86/kvm/cpuid.c
+> > +++ b/arch/x86/kvm/cpuid.c
+> > @@ -782,6 +782,18 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+> >               eax.split.mask_length = cap.events_mask_len;
+> >
+> >               edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
+> > +
+> > +             /*
+> > +              * The 8th Intel architectural event (Topdown Slots) will be supported
+>
+> Nit, the "8th" part is unnecessary information.
+>
+> > +              * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
+> > +              *
+> > +              * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
+> > +              * to make this event unavailable in a consistent way.
+> > +              */
+>
+> This comment is now slightly stale.  It also doesn't say why the event is made
+> unavailable.
+>
+> > +             if (edx.split.num_counters_fixed < 4 &&
+>
+> Rereading the changelog and the changelog of the Fixed commit, I don't think KVM
+> should bother checking num_counters_fixed.  IIUC, cap.events_mask[7] should already
+> be '1' if there are less than 4 fixed counters in hardware, but at the same time
+> there's no harm in being a bit overzealous.  That would help simplifiy the comment
+> as there's no need to explain why num_counters_fixed is checked, e.g. the fact that
+> Topdown Slots uses the 4th fixed counter is irrelevant with respect to the legality
+> of setting EBX[7]=1 to hide an unsupported event.
 
---RVSDFDYmBYl7Sb1s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I was under the impression that the CPUID.0AH:EBX bits were
+independent of the fixed counters. That is, if CPUID.0AH:EAX[31:24] >
+7 and CPUID.0AH:EBX[7] is clear, then one should be able to program a
+general purpose counter with event selector A4H and umask 01H,
+regardless of whether or not fixed counter 4 exists.
 
-On Thu, Jan 06, 2022 at 04:27:32PM -0300, Fabio Estevam wrote:
-> On Thu, Jan 6, 2022 at 3:33 PM Mark Brown <broonie@kernel.org> wrote:
-
-> > OK, but what's the logic here?  The name is getting thrown away here but
-
-> I did more debugging and this is what I found:
-> The 'debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent
-> 'regmap' already present!' message
-> happens since commit cffa4b2122f5 ("regmap: debugfs: Fix a memory leak
-> when calling regmap_attach_dev").
-
-Sure, but that just means that the bug with not cleaning up the
-directory predates that. =20
-
-> # mount -t debugfs none /sys/kernel/debug/
-> # cat /sys/kernel/debug/regmap/dummy-iomuxc-gpr@20e0000/registers
-> 00: 00000000
-> 04: 48611005
-
-What happens if the underlying regmap gets freed for some reason?  It
-now only remembers the new name, not this old one, so it'll only know to
-clean up the old name.
-
-> As shown above, I don't see the '
-> /sys/kernel/debug/regmap/20e0000.pinctrl-gpr' directory being created,
-> so there is nothing to clean.
-
-Creating that file is the behaviour you are demanding...
-
-> Where exactly would you like me to call regmap_debugfs_exit()?
-
-Before we try to reinitialise debugfs for the new name seems like the
-obvious place.
-
---RVSDFDYmBYl7Sb1s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHXS3oACgkQJNaLcl1U
-h9ATYwf8Db5lDzaIwmKNmkTn+zVQcLSBvpx1f2AJ42sMfHLnFshQ2kx+faUvMERf
-NxQOFW00YOzpwh38myBV9ljQKTyzHQGuO4c5d5EuUIJePwZmMlXuMUofsbvRCU6+
-9LsmtEVpAfXt0PR1UYLe72DucQz+k0iA6Amo856z0qCiFJOELosNZN5oqEFnQ6q0
-7IBEKleQNka/Ke8orAA224i5RCuE5NHJ/WuWSzyo9fJu+Nsp+wLFuKnCQAGo802Z
-i94dnkNj0FgUCtJWHgS0Mtk7JTy38rbGwgGTelwGdX74XDi81QwUUHTfs2oYvWbY
-k1DbV0ECg4D+K2cwEu69D6mHqYswxw==
-=FmYQ
------END PGP SIGNATURE-----
-
---RVSDFDYmBYl7Sb1s--
+>
+>                 /*
+>                  * Hide Intel's Topdown Slots architectural event, it's not yet
+>                  * supported by KVM.
+>                  */
+>                 if (eax.split.mask_length > 7)
+>                         cap.events_mask |= BIT_ULL(7);
+>
+> > +                 eax.split.mask_length > 7)
+> > +                     cap.events_mask |= BIT_ULL(7);
+> > +
+> >               edx.split.bit_width_fixed = cap.bit_width_fixed;
+> >               if (cap.version)
+> >                       edx.split.anythread_deprecated = 1;
+> > --
+> > 2.33.1
+> >

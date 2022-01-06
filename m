@@ -2,86 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E68BB486952
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19927486954
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242489AbiAFSAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:00:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52790 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242478AbiAFSAa (ORCPT
+        id S242509AbiAFSBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242493AbiAFSBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:00:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CA7761CF7;
-        Thu,  6 Jan 2022 18:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992D8C36AEB;
-        Thu,  6 Jan 2022 18:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641492028;
-        bh=DYydbgnS2Q5LXHtJFrES1pqwbao4Pez939AcN9KBnvw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=EOsILy3tM+xI/hjivi2NyurzDUrBiXloFSZzBXiTaFxplMSJHHuDMSw/uveKJpPko
-         xjglSC2viJAaYds5RhVnMvlQi7OtPw91HxCXBINDMvmOyXmKm9OuBe0RMU4El8CPcs
-         aZJS+/6iNnuhH2bqTohmg8FJXELmIs30dp76K1eOAVtk4kdA60kk0nAWbP1sD6ayvM
-         4XwHnnprTyOy+QtE3YtAMpyGLvuIud1axMj4fnNUzmjMQ6E7U+nxwL4vSKykxHf+E6
-         qknivFyA+YuMfvPPyLbpbW4q/MSHCr4JSWIKIVHjKnSkuzkLlfvOKSlLrvJBMA2QNA
-         AEUBfAQuLA//Q==
-Date:   Thu, 6 Jan 2022 12:00:26 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Ray Jui <ray.jui@broadcom.com>,
-        Roman Bacik <roman.bacik@broadcom.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
-Message-ID: <20220106180026.GA295674@bhelgaas>
+        Thu, 6 Jan 2022 13:01:20 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CCDC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:01:20 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so842066ooj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yd72dqLGjywYZ5iurvaOMSLfaNBW11uoIMA6hBdzT+w=;
+        b=Ix3i8LiyqKdcPsMVObpv10gDeddenlWw1CHrRBunNHwQS5LCbLhaXIl8WaWSMYlGUY
+         dC5EQeiJ/7xdSOF9JcQVBOYNnzBJuLAZWmZfWv5JGSzgXRniyow7HEWeRQu10Txkuanz
+         17spWXZt+ul01MTwowzgzrkQ6RRcpS5SXUYaUSWmDSj32G4GB8ZD/Zv6+sCnu5bXyPcC
+         vDmOgnHBW3YCC9egG/Str4FgSdAhWcQkPG0mDBPiCJvRDkvoFskfhbNqm+YkRxWqi6B9
+         pEUj9CcSQwFyufZuyld70+9awo1aSY+frJfP8NL+fV44qXsTcnQH6Dr0payE780n1Ds9
+         7TcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yd72dqLGjywYZ5iurvaOMSLfaNBW11uoIMA6hBdzT+w=;
+        b=u7dXkcT7plo34mUGVDzU+qJHiT9drNajEsczHsjvIyezsVymUR2rQd9XY3UMWwZVFq
+         poKJpYqiZ5YnjePFx2/55bNJTwID6pjTkNMLNzMipDIjaDZXRttQHm4aIfjr5mw/5UIq
+         f+Q0nN9IuJbyF076sUf4iCAU//Wyo0Riw8MKJLdSInLuFwohNYunM9pQLFPXlTwROC0v
+         YAATk+hR9CQxkVGoH6bL5Q7p4+IAwjiAFN4Ifs7mq83tG9afx79fKIh7JyiJwHm+fxNE
+         k1EyA5kTgZOri3JFwy26cdVBzIfPCYfac5rFMIHn8tAIWLtQl233n3shG9GGtOGFgA9L
+         6tfQ==
+X-Gm-Message-State: AOAM530XGhWQXWONqlUS6B9+IjVCh8CPZHgpD0ETObcO4sNGSO09rv/6
+        EZZ2g/QhSsqN65fs5bhfSRQbHUQquvh7Fbr+/hj35w==
+X-Google-Smtp-Source: ABdhPJyruBzm9/8La0+52GslZWVrbis9fZrQAm0L5We+2hwsH+ZB9RbSZIde7gM5agGitMuOTFOyk37AI17MI50O+vg=
+X-Received: by 2002:a4a:ac0a:: with SMTP id p10mr37659104oon.96.1641492078304;
+ Thu, 06 Jan 2022 10:01:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220105181306.mkratasqg36tjf4e@pali>
+References: <20211222133428.59977-1-likexu@tencent.com> <CALMp9eTgO4XuNHwuxWahZc7jQqZ10DchW8xXvecBH2ovGPLU9g@mail.gmail.com>
+ <d3a9a73f-cdc2-bce0-55e6-e4c9f5c237de@gmail.com> <CALMp9eTm7R-69p3z9P37yXmD6QpzJhEJO564czqHQtDdCRK-SQ@mail.gmail.com>
+ <CALMp9eTVjKztZC_11-DZo4MFhpxoVa31=p7Am2LYnEPuYBV8aw@mail.gmail.com>
+ <22776732-0698-c61b-78d9-70db7f1b907d@gmail.com> <CALMp9eQQ7SvDNy3iKSrRTn9QUR9h1M-tSnuYO0Y4_-+bgV72sg@mail.gmail.com>
+ <bf7fc07f-d49c-1c73-9a31-03585e99ff09@gmail.com> <CALMp9eQmO1zS9urH_B8DeoLp30P7Yxxp9qMwavjmoyt_BSC23A@mail.gmail.com>
+ <212cea42-e445-d6f2-2730-88ccaa65b2cb@gmail.com>
+In-Reply-To: <212cea42-e445-d6f2-2730-88ccaa65b2cb@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 6 Jan 2022 10:01:07 -0800
+Message-ID: <CALMp9eQck0dPHU9qyY-kDE+mQWK4PUuhpkEFW7PH5BbCaptJ+g@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: X86: Emulate APERF/MPERF to report actual vCPU frequency
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <likexu@tencent.com>,
+        Dongli Cao <caodongli@kingsoft.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "Thomas Gleixner (kernel-recipes.org)" <tglx@linutronix.de>,
+        "Borislav Petkov (kernel-recipes.org)" <bp@alien8.de>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 07:13:06PM +0100, Pali Rohár wrote:
-> On Wednesday 05 January 2022 09:51:48 Ray Jui wrote:
-> > On 1/5/2022 1:35 AM, Pali Rohár wrote:
+On Wed, Jan 5, 2022 at 7:29 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> On 6/1/2022 6:51 am, Jim Mattson wrote:
+> > On Thu, Dec 30, 2021 at 11:48 PM Like Xu <like.xu.linux@gmail.com> wrote:
+> >>
+> >> On 31/12/2021 9:29 am, Jim Mattson wrote:
+> >
+> >>> At sched-in:
+> >>> 1. Save host APERF/MPERF values from the MSRs.
+> >>> 2. Load the "current" guest APERF/MPERF values into the MSRs (if the
+> >>> vCPU configuration allows for unintercepted reads).
+> >>>
+> >>> At sched-out:
+> >>> 1. Calculate the guest APERF/MPERF deltas for use in step 3.
+> >>> 2. Save the "current" guest APERF/MPERF values.
+> >>> 3. "Restore" the host APERF/MPERF values, but add in the deltas from step 1.
+> >>>
+> >>> Without any writes to IA32_MPERF, I would expect these MSRs to be
+> >>> synchronized across all logical processors, and the proposal above
+> >>> would break that synchronization.
+> >
+> > I am learning more about IA32_APERF and IA32_MPERF this year. :-)
+>
+> Uh, thanks for your attention.
+>
+> >
+> > My worry above is unfounded. These MSRs only increment in C0, so they
+> > are not likely to be synchronized.
+> >
+> > This also raises another issue with your original fast-path
+> > implementation: the host MSRs will continue to count while the guest
+> > is halted. However, the guest MSRs should not count while the guest is
+> > halted.
+> >
+>
+> The emulation based on guest TSC semantics w/ low precision may work it out.
+> TBH, I still haven't given up on the idea of a pass-through approach.
 
-> > 2. I suppose 'PCI_CLASS_BRIDGE_PCI_NORMAL' is defined in some common PCI
-> > header in a separate patch as described in the commit message. Then how
-> > come these patches are not constructed with a patch series?
-> 
-> Yes, PCI_CLASS_BRIDGE_PCI_NORMAL is a new constant for common pci header
-> file defined in patch linked in commit message.
-> https://lore.kernel.org/linux-pci/20211220145140.31898-1-pali@kernel.org/
-> 
-> Originally I included this change in v1 of linked patch in December but
-> I realized that it does not match standard PCI config space (different
-> offset 0x43c vs 0x08 and also different shift 0x8 vs 0x0) and probably
-> there is something either incorrect or really non-standard. So later in
-> December I dropped iproc_pcie_check_link() change in v2 of the linked
-> patch where is introduced PCI_CLASS_BRIDGE_PCI_NORMAL and now sent new
-> change for iproc_pcie_check_link() separately.
-> 
-> Technically, linked patch in commit message is just extracting code into
-> the common macros without any functional changed. But change in this
-> iproc_pcie_check_link() has also functional change as now also lower 8
-> bits of class code are changed. So in my opinion this patch should be
-> really separate of linked patch.
-> 
-> I hope that Lorenzo and Bjorn take patches in correct order...
-
-If patches are not sent together in a series, you can't assume
-anything about the order they'll be applied in.  Adding a note about
-"this patch depends patch X" helps a little but adds a fair amount of
-friction to the process.
-
-Bjorn
+I believe that pass-through can work for IA32_APERF. It can also work
+for IA32_MPERF on AMD hosts or when the TSC multiplier is 1 on Intel
+hosts. However, I also believe that it requires KVM to load the
+hardware MSRs with the guest's values prior to VM-entry, and to update
+the hardware MSRs with newly calculated host values before any other
+consumers on the host may read them.

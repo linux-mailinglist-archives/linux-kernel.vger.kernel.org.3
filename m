@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F542486CD5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D92486CDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244714AbiAFVxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:53:14 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:57699 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239651AbiAFVxO (ORCPT
+        id S244784AbiAFVxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:53:52 -0500
+Received: from mail.netfilter.org ([217.70.188.207]:36242 "EHLO
+        mail.netfilter.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239651AbiAFVxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:53:14 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 5ah6ntWE22lVY5ah6nSlb3; Thu, 06 Jan 2022 22:53:12 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 06 Jan 2022 22:53:12 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 09/16] media: v4l2-pci-skeleton: Remove usage of the deprecated "pci-dma-compat.h" API
-Date:   Thu,  6 Jan 2022 22:53:11 +0100
-Message-Id: <4c35f397720fccb6c9166fa85fa25475b0659a6a.1641500561.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+        Thu, 6 Jan 2022 16:53:51 -0500
+Received: from netfilter.org (unknown [78.30.32.163])
+        by mail.netfilter.org (Postfix) with ESMTPSA id B2EEE64287;
+        Thu,  6 Jan 2022 22:51:02 +0100 (CET)
+Date:   Thu, 6 Jan 2022 22:53:45 +0100
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     zhang kai <zhangkaiheb@126.com>
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] netfilter: seqadj: check seq offset before update
+Message-ID: <Yddk6YFEJ/FOWYT3@salvia>
+References: <20211224023713.9260-1-zhangkaiheb@126.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211224023713.9260-1-zhangkaiheb@126.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In [1], Christoph Hellwig has proposed to remove the wrappers in
-include/linux/pci-dma-compat.h.
+On Fri, Dec 24, 2021 at 10:37:13AM +0800, zhang kai wrote:
+> if seq/ack offset is zero, don't update
 
-Some reasons why this API should be removed have been given by Julia
-Lawall in [2].
+Please, provide more details: explain the scenario that triggers and
+seq/ack offset adjustment of zero, describe the scenario that triggers
+the bug, etc.
 
-A coccinelle script has been used to perform the needed transformation.
-It can be found in [3].
-
-[1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
-[2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
-[3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- samples/v4l/v4l2-pci-skeleton.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
-index 3fa6582b4a68..6311b7465220 100644
---- a/samples/v4l/v4l2-pci-skeleton.c
-+++ b/samples/v4l/v4l2-pci-skeleton.c
-@@ -766,7 +766,7 @@ static int skeleton_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	ret = pci_enable_device(pdev);
- 	if (ret)
- 		return ret;
--	ret = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
-+	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
- 	if (ret) {
- 		dev_err(&pdev->dev, "no suitable DMA available.\n");
- 		goto disable_pci;
--- 
-2.32.0
-
+> Signed-off-by: zhang kai <zhangkaiheb@126.com>
+> ---
+>  net/netfilter/nf_conntrack_seqadj.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/netfilter/nf_conntrack_seqadj.c b/net/netfilter/nf_conntrack_seqadj.c
+> index 3066449f8bd8..d35e272a2e36 100644
+> --- a/net/netfilter/nf_conntrack_seqadj.c
+> +++ b/net/netfilter/nf_conntrack_seqadj.c
+> @@ -186,11 +186,13 @@ int nf_ct_seq_adjust(struct sk_buff *skb,
+>  	else
+>  		seqoff = this_way->offset_before;
+>  
+> -	newseq = htonl(ntohl(tcph->seq) + seqoff);
+> -	inet_proto_csum_replace4(&tcph->check, skb, tcph->seq, newseq, false);
+> -	pr_debug("Adjusting sequence number from %u->%u\n",
+> -		 ntohl(tcph->seq), ntohl(newseq));
+> -	tcph->seq = newseq;
+> +	if (seqoff) {
+> +		newseq = htonl(ntohl(tcph->seq) + seqoff);
+> +		inet_proto_csum_replace4(&tcph->check, skb, tcph->seq, newseq, false);
+> +		pr_debug("Adjusting sequence number from %u->%u\n",
+> +			 ntohl(tcph->seq), ntohl(newseq));
+> +		tcph->seq = newseq;
+> +	}
+>  
+>  	if (!tcph->ack)
+>  		goto out;
+> @@ -201,6 +203,9 @@ int nf_ct_seq_adjust(struct sk_buff *skb,
+>  	else
+>  		ackoff = other_way->offset_before;
+>  
+> +	if (!ackoff)
+> +		goto out;
+> +
+>  	newack = htonl(ntohl(tcph->ack_seq) - ackoff);
+>  	inet_proto_csum_replace4(&tcph->check, skb, tcph->ack_seq, newack,
+>  				 false);
+> -- 
+> 2.17.1
+> 

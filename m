@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DF3486E12
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC4C486E13
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343531AbiAFXw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S1343543AbiAFXxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245661AbiAFXwz (ORCPT
+        with ESMTP id S245661AbiAFXxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:52:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CAC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:52:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECF6361DA3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 23:52:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 632B4C36AE0;
-        Thu,  6 Jan 2022 23:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641513174;
-        bh=1P9rbQ7ckjdDra6B6VUQvGOc6Qllb1PtOtTkRYELTCk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=aZlrcdHkrNCAqg1fBeI3Q1Bdi1vXJDvOxo0tJ4mTpqMRn8AQrDUya8Nzi9wEdlI/y
-         TM3Pp5nje+g5n+IsnBmig1T0SMTH99679Dv7wvc0YXEPFomnPPqhxSaDucrQv7j4fB
-         9YXxbFhV+e5Cxrls1RtqyHojRREPHJNP7S7BIGzqn8IzFYcRTz4F8ourKlWMF4r6Ze
-         i26tOwnXTJxtduVYAKPVpkDCGwtlPDazIG6bwT0D2tBCqzeHp1pyBFv5dE41UzzIZw
-         CTiNPF1vBnDIv1P34cjnZ9upFPJSmVAX7xTwg/f02eMfs1B8LeqX5iYgqyZjIyXspr
-         hYiM5d+maarZA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52263F79403;
-        Thu,  6 Jan 2022 23:52:54 +0000 (UTC)
-Subject: Re: [GIT PULL] tracing: Minor fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220106155842.57b7b4f3@gandalf.local.home>
-References: <20220106155842.57b7b4f3@gandalf.local.home>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220106155842.57b7b4f3@gandalf.local.home>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc8
-X-PR-Tracked-Commit-Id: f28439db470cca8b6b082239314e9fd10bd39034
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b2b436ec0205abde78ef8fd438758125ffbb0fec
-Message-Id: <164151317432.22138.1760896661865573376.pr-tracker-bot@kernel.org>
-Date:   Thu, 06 Jan 2022 23:52:54 +0000
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+        Thu, 6 Jan 2022 18:53:23 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D48C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:53:22 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id m21so15798832edc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 15:53:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=rM0V1t6rz7Wn3aVnr1iKuSTWQEuTbhBaKLndJKmrd4w=;
+        b=Bp9y/kjxZY09njGXz0TEkwYO+BY+WHdctFdpJOhuitcZQEte49WDbCh1S8558si+x7
+         m7ZFnJEGt91tLypw7LhGzax+vkz0DwhKKCbq2TYAMslMQ4rnioNMUa1xoBSbXQzc4/T8
+         M+ZEy/tBQxiV279+pymaPkKSzNPB/6h/CWaewQuSMcy6FGrie8UQXOnfedasdMY+dHnj
+         FRHYj1X7HhW4a93FIt4PhOHc0ry1Z+zLSsGwfno6COxyr1ocGsBqaYbqqaI7loOvlIx8
+         ncep7janW/KYkuW1Ae7st80VzLhV9wxmoAnZpog1TjU1+pD0+w6TO6kVYnanE/kVknTz
+         k2tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=rM0V1t6rz7Wn3aVnr1iKuSTWQEuTbhBaKLndJKmrd4w=;
+        b=iZTTMz8QLw26WytZqQmfSP2TWxDKUKKTdkzV6xPPQuUFOaFass+Yl7Bostl1KUqM+d
+         D4s5mbMR+CMmsCrnOuonbeVzN0yXaa6W3x72WhiCckRJj2xo5H8Qq5sEGCJEBk63jMFM
+         fWe0fuUs8fQ5HzYq9ek2kypO9j4yxrmVBSwXEVdAwctBAdO36HD2DeVGOwN0liBjUO3y
+         MGPO100bb173RLqtp0eTBr1lUK0kmGk8SbU/CxmAD2QG2otn0lveWVU0wYNO/TjlGyuk
+         KiASgDdtKgQv7PU7GBHzrzek+GrMrJk3HZh1bzBt3CCaFQjWN5hfUnTm3YUoqS5HgdN/
+         9yjw==
+X-Gm-Message-State: AOAM530799VIaIGXfKzt01W6GTzX/6o8q8Jc/Tjgy4wR8oiqs3ATvOHK
+        He1TRAjtmiAhE6q04zBgns8=
+X-Google-Smtp-Source: ABdhPJwn7vOhfQnMXUaWykjHmlcBqa/7J6Cz04OfxhkAYTInn1U65teaR1f09pm0CtdMctxB3HYMzg==
+X-Received: by 2002:a17:907:2d0c:: with SMTP id gs12mr48055621ejc.100.1641513201560;
+        Thu, 06 Jan 2022 15:53:21 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id nd36sm880354ejc.196.2022.01.06.15.53.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 06 Jan 2022 15:53:21 -0800 (PST)
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     peterz@infradead.org, akpm@linux-foundation.org, vbabka@suse.cz,
+        willy@infradead.org, will@kernel.org, linyunsheng@huawei.com,
+        richard.weiyang@gmail.com, aarcange@redhat.com,
+        feng.tang@intel.com, ebiederm@xmission.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: remove offset check on page->compound_head and folio->lru
+Date:   Thu,  6 Jan 2022 23:52:54 +0000
+Message-Id: <20220106235254.19190-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 6 Jan 2022 15:58:42 -0500:
+FOLIO_MATCH() is used to make sure struct page and folio has identical
+layout for the first several words.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc8
+The comparison of offset between page->compound_head and folio->lru is
+more like an internal check in struct page.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b2b436ec0205abde78ef8fd438758125ffbb0fec
+This patch just removes it.
 
-Thank you!
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ include/linux/mm_types.h | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 0a2de709fe40..087d6768bc78 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -289,7 +289,6 @@ static_assert(sizeof(struct page) == sizeof(struct folio));
+ FOLIO_MATCH(flags, flags);
+ FOLIO_MATCH(lru, lru);
+ FOLIO_MATCH(mapping, mapping);
+-FOLIO_MATCH(compound_head, lru);
+ FOLIO_MATCH(index, index);
+ FOLIO_MATCH(private, private);
+ FOLIO_MATCH(_mapcount, _mapcount);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.33.1
+

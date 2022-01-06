@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFF6486A53
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C58486A57
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243200AbiAFTH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:07:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50532 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243176AbiAFTH4 (ORCPT
+        id S243213AbiAFTKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232488AbiAFTKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:07:56 -0500
+        Thu, 6 Jan 2022 14:10:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5708CC061245;
+        Thu,  6 Jan 2022 11:10:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FA9B61DCC;
-        Thu,  6 Jan 2022 19:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4769CC36AE3;
-        Thu,  6 Jan 2022 19:07:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F00FB8216A;
+        Thu,  6 Jan 2022 19:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E84AC36AEB;
+        Thu,  6 Jan 2022 19:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641496075;
-        bh=kYsnHLd5E6KKw7BnoFj5rY3K+fJjMRRny/vJXZPvvhA=;
+        s=k20201202; t=1641496248;
+        bh=dJ08G+MJqdgy37E8iW0zvCedqHmZwB/EW5VaXH8w/qY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JESODrkwBRKPn9MYbApiqpHS66izlfhExHLGa0jjMaCUVMr36af1keiJzGYS0DaDa
-         owDCPy/1XyLomE5Hz10FWjo0iA0CTyFcK2aBS9nZNg1Id0kJy5h7iEqETIBhKp2/Hl
-         85rDU4XsH6ket5BtOrqUQwSBqDoEwhnWe5rbYJ/RFF4ZBou9WE3LlbWd1TvmAaFxHf
-         rCXdUR7LGg792eWZWwL8A0uqBByZEnh5/Grnn2dWTji9/sDBYklvtxDJlD4WSSIOOd
-         nRtoKEVhdqbWDr8dkn86ICh142P8IrIvLgZXf4n3OTxr0GSIK59rAEldvn8kcYm+8L
-         BejV6N3M/PmHA==
-Date:   Thu, 6 Jan 2022 21:07:50 +0200
+        b=bgvmzaOTXwwxXsQeqT43AruCcX/MMdiQxWu2QePcsAi4ObAdQjP/37yWInMVKPrNd
+         6PDkVM4F24lVbI0KuQ5uk6kO6vYJyNouUnsMdHEK8vlyPBz4PL50r7pO5taYmGHQ3g
+         cN987Fyby6e8t9mbx2TqZWfRTnHnze+qOD/E20IYb6DRWXvqNmT/vmaOdETVIbsElb
+         MFKVMrIO/0F1kNnWgQuzoP+vaZeuA0+AJirS46SZnvEX+sQqhmfy9WmAbMCuOdQ5CU
+         sxaVooPl6v4dnVRT/aMbboSaI8wHTJQQVOTMWm5HBcO8kjhkPHExdvtVI6vOVOooHX
+         vDPOt8SLwM8NQ==
+Date:   Thu, 6 Jan 2022 21:10:44 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the tpmdd tree
-Message-ID: <Ydc+BkheAdEW5qI5@iki.fi>
-References: <20220104083224.3e23e7e2@canb.auug.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Zaborowski <andrew.zaborowski@intel.com>
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER updates for v5.17
+Message-ID: <Ydc+tDVZ7vv1SYm4@iki.fi>
+References: <YcvI8Uki51C2aMqe@iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104083224.3e23e7e2@canb.auug.org.au>
+In-Reply-To: <YcvI8Uki51C2aMqe@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 08:32:24AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Wed, Dec 29, 2021 at 04:33:21AM +0200, Jarkko Sakkinen wrote:
+> Hi,
 > 
-> In commit
-> 
->   8ca8e009e216 ("tpm: fix potential NULL pointer access in tpm_del_char_device")
-> 
-> Fixes tag
-> 
->   Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and
-> 
-> has these problem(s):
-> 
->   - Subject has leading but no trailing quotes
-> 
-> Presumably you meant
-> 
-> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
-> 
-> Please do not truncate or split these tag lines.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> Other than bug fixes for TPM, includes a patch for asymmetric keys to allow
+> to look up and verify with self-signed certificates (keys without so called
+> Authority Key Identifier (AKID)) using a new "dn:" prefix in the query.
 
-Hi, I fixed this in my tree, and send updated to PR to Linus. Thank you.
+I'll send updated PR. There was a truncated fixes tag in
+"tpm: fix potential NULL pointer access in tpm_del_char_device".
 
 BR,
 Jarkko

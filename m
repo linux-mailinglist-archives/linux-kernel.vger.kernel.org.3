@@ -2,183 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3430B486470
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63907486475
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbiAFMgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S238935AbiAFMhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238831AbiAFMgp (ORCPT
+        with ESMTP id S238923AbiAFMhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:36:45 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2E1C061245;
-        Thu,  6 Jan 2022 04:36:45 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id gp5so2393240pjb.0;
-        Thu, 06 Jan 2022 04:36:45 -0800 (PST)
+        Thu, 6 Jan 2022 07:37:22 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF0C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:37:22 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso8381151pje.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:37:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:organization:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=NoGjPaQivsMsvPLvpJIAFIB5+lRj8RKV5+GIsw37iRc=;
-        b=RTnJPDeSUzJA4TjwTadXWyZtBQPrUHjSNnz0aRyI6m5NQvIjelMPdMw8yqvxMLnKN6
-         MQ99ExAMl9er0lOZ/1qTBqlILm0QL/Y+mU5fTeDflfPuCMbkrbmK01D1OQ+f4Bi94whI
-         RKkw+8QKOKJDAxts3ugakKuqXFuOeO2tENuEHSweXO8bNmTJGF3YPMdWBgmcZoXIVO8H
-         p+JqPvfiaapbr/0DZDaWAJCzKofX+wee04N+j4rlDlCi1M5EmDLryuyfs6vwqSaobH0a
-         S88KXQIePJZfBcTT0BqAM33p+4uM4aHDQexe187a8SThwd9tydx2GG/1QNydchxWJRa+
-         0oJQ==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=1/c2URoDFnIklZqHtR1tpJeTQO8/FdysKzUXb65IMB0=;
+        b=JW48fkvlcrWBGX9Xk9c64lUJcXF4aq/QimJZiSTHBTX1c+5TP1dU8L7KZxIvupLksE
+         MP15lCETlX/6QNElIm10bIpPjlA7H06b7JZv51o7INCNKomz9Prj2enx1xr+xjTUihrm
+         8eaped5P9quBBaPWlvSLBffIpU+JamXZUqC6Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=NoGjPaQivsMsvPLvpJIAFIB5+lRj8RKV5+GIsw37iRc=;
-        b=CZpvC27rkjVCp4Q54rzSn3cJGpZiaFUk3DhhontiElds2JvTxFaJ5Tum18air9FB/7
-         b6VGUSjGfWFgZq644h6bQdrqo0xjbfAiWloxWPGhA0x/MFL5czhgspGA6A04VIBoEhzX
-         b/UrlRv9K3cUZmx8AloToCe8fCW2wickgOT+X9s6p0G0JdcGTZK1EjkD4Mm1uErzFQh1
-         pOm5MRijv0xbgy6E/2YeU1UJU2k6c7FH53bHE4QTvr2hUJQIfE1hXt/6UXArEoKg6Nf6
-         L2TF2wH52PyPbm/9G0qPlIfUsoOkIph1OM8H+rWSVEdD/KL18/sWXxlGFHjpFLmrCb8l
-         scDQ==
-X-Gm-Message-State: AOAM5308DmDmu4LVExpGUoDaMygyN80X5DIhm/bFi7n+uU0ne08i93MF
-        J4TloSrNgSQj6Vp2aWbgGF0=
-X-Google-Smtp-Source: ABdhPJyN0tM8perJ1u9smSoj//wHs3VS/4LED4KAS+D5h3tR1/0Y/LHJ6ZY3McvK2Ws9EhttI+uNkQ==
-X-Received: by 2002:a17:90b:1a92:: with SMTP id ng18mr9789966pjb.238.1641472604715;
-        Thu, 06 Jan 2022 04:36:44 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id m16sm2914161pfk.32.2022.01.06.04.36.42
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=1/c2URoDFnIklZqHtR1tpJeTQO8/FdysKzUXb65IMB0=;
+        b=5zJHNHTUg1DhRT15dTwzJRvSCn7lLGDOnfai0XyEEBovU218ut3hi4wQD1oOXkH7cq
+         8HN+5zqDR/KosX227VbD8a3yqOD1AIKo1XMjUoZIcYIyPy0hjGu7m0T8g9aTjlQa+O4+
+         GYovQ12RuAGgEPWcIetW3HRsebhWxz7LvbQU6HZzZYR/hTVHogIM1TLPL2oe3Zihaf4M
+         ZMc93/Ne7CaPkoIfXqeRhku/BnVT++H64c8s+PfovpoF89ILRUadWJ5/P5/vOeZZRgJ0
+         c9bNe2/biW+Mkh9SoCv9cuDtjiqqBadJrvnDFCoccgiG0CD0GMrWp9P0WjBxr9FPZHlA
+         2CEg==
+X-Gm-Message-State: AOAM532JYu+w4GWftdhJQDjIuVKYO1X6qiIsVXZEcA49ecXmPb0kecz9
+        z8HgbGZavSHRt9XlDaDo/a/Lfw==
+X-Google-Smtp-Source: ABdhPJwUvuDg/GlVO/nYV2qck27f6jzXfGtqzuc/w6pNYyNbCSjeqKhdYsDx6DNPcHglp9D/t+K+VA==
+X-Received: by 2002:a17:903:234a:b0:148:a94a:7e3c with SMTP id c10-20020a170903234a00b00148a94a7e3cmr59304992plh.121.1641472641672;
+        Thu, 06 Jan 2022 04:37:21 -0800 (PST)
+Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id y11sm2395995pfn.7.2022.01.06.04.37.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 04:36:44 -0800 (PST)
-Message-ID: <9e01f081-f6c5-5597-6898-a043346063b6@gmail.com>
-Date:   Thu, 6 Jan 2022 20:36:35 +0800
+        Thu, 06 Jan 2022 04:37:21 -0800 (PST)
+Message-ID: <3dfb1a06-4474-4614-08e5-b09f0977e03c@broadcom.com>
+Date:   Thu, 6 Jan 2022 13:37:12 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Content-Language: en-US
-To:     "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org)" 
-        <pbonzini@redhat.com>, Jietao Xiao <shawtao1125@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org
-References: <20220102082207.10485-1-shawtao1125@gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-Subject: Re: [PATCH] KVM:x86: Let kvm-pit thread inherit the cgroups of the
- calling process
-In-Reply-To: <20220102082207.10485-1-shawtao1125@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 07/35] brcmfmac: pcie: Read Apple OTP information
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-8-marcan@marcan.st>
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <20220104072658.69756-8-marcan@marcan.st>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000bb82cd05d4e9217d"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/2022 4:22 pm, Jietao Xiao wrote:
-> Qemu-kvm will create several kernel threads for each VM including
-> kvm-nx-lpage-re, vhost, and so on. Both of them properly inherit
-> the cgroups of the calling process,so they are easy to attach to
-> the VMM process's cgroups.
+--000000000000bb82cd05d4e9217d
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 1/4/2022 8:26 AM, Hector Martin wrote:
+> On Apple platforms, the One Time Programmable ROM in the Broadcom chips
+> contains information about the specific board design (module, vendor,
+> version) that is required to select the correct NVRAM file. Parse this
+> OTP ROM and extract the required strings.
 > 
-> Kubernetes has a feature Pod Overhead for accounting for the resources
-> consumed by the Pod infrastructure(e.g overhead brought by qemu-kvm),
-> and sandbox container runtime usually creates a sandbox or sandbox
-> overhead cgroup for this feature. By just simply adding the runtime or
-> the VMM process to the sandbox's cgroup, vhost and kvm-nx-lpage-re thread
-> can successfully attach to the sanbox's cgroup but kvm-pit thread cannot.
+> Note that the user OTP offset/size is per-chip. This patch does not add
+> any chips yet.
 
-Emm, it seems to be true for kvm-pit kthread.
-
-> Besides, in some scenarios, kvm-pit thread can bring some CPU overhead.
-> So it's better to let the kvm-pit inherit the cgroups of the calling
-> userspace process.
-
-As a side note, there is about ~3% overhead in the firecracker scenario.
-
-> 
-> By queuing the attach cgroup work as the first work after the creation
-> of the kvm-pit worker thread, the worker thread can successfully attach
-> to the callings process's cgroups.
-> 
-> Signed-off-by: Jietao Xiao <shawtao1125@gmail.com>
+Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->   arch/x86/kvm/i8254.c | 32 ++++++++++++++++++++++++++++++++
->   1 file changed, 32 insertions(+)
+>   .../broadcom/brcm80211/brcmfmac/pcie.c        | 219 ++++++++++++++++++
+>   include/linux/bcma/bcma_driver_chipcommon.h   |   1 +
+>   2 files changed, 220 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/i8254.c b/arch/x86/kvm/i8254.c
-> index 0b65a764ed3a..c8dcfd6a9ed4 100644
-> --- a/arch/x86/kvm/i8254.c
-> +++ b/arch/x86/kvm/i8254.c
-> @@ -34,6 +34,7 @@
->   
->   #include <linux/kvm_host.h>
->   #include <linux/slab.h>
-> +#include <linux/cgroup.h>
->   
->   #include "ioapic.h"
->   #include "irq.h"
-> @@ -647,6 +648,32 @@ static void pit_mask_notifer(struct kvm_irq_mask_notifier *kimn, bool mask)
->   		kvm_pit_reset_reinject(pit);
->   }
->   
-> +struct pit_attach_cgroups_struct {
-> +	struct kthread_work work;
-> +	struct task_struct *owner;
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index a52a6f8081eb..74c9a4f74813 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+
+[...]
+
+> +static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
+> +{
+> +	const struct pci_dev *pdev = devinfo->pdev;
+> +	struct brcmf_bus *bus = dev_get_drvdata(&pdev->dev);
+> +	u32 coreid, base, words, idx, sromctl;
+> +	u16 *otp;
+> +	struct brcmf_core *core;
 > +	int ret;
-> +};
 > +
-> +static void pit_attach_cgroups_work(struct kthread_work *work)
-> +{
-> +	struct pit_attach_cgroups_struct *attach;
+> +	switch (devinfo->ci->chip) {
+> +	default:
+> +		/* OTP not supported on this chip */
+> +		return 0;
+> +	}
+
+Does not seem this code is put to work yet. Will dive into it later on.
+
+> +	core = brcmf_chip_get_core(devinfo->ci, coreid);
+> +	if (!core) {
+> +		brcmf_err(bus, "No OTP core\n");
+> +		return -ENODEV;
+> +	}
 > +
-> +	attach = container_of(work, struct pit_attach_cgroups_struct, work);
-> +	attach->ret = cgroup_attach_task_all(attach->owner, current);
+> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
+> +		/* Chips with OTP accessed via ChipCommon need additional
+> +		 * handling to access the OTP
+> +		 */
+> +		brcmf_pcie_select_core(devinfo, coreid);
+> +		sromctl = READCC32(devinfo, sromcontrol);
+> +
+> +		if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
+> +			/* Chip lacks OTP, try without it... */
+> +			brcmf_err(bus,
+> +				  "OTP unavailable, using default firmware\n");
+> +			return 0;
+> +		}
+> +
+> +		/* Map OTP to shadow area */
+> +		WRITECC32(devinfo, sromcontrol,
+> +			  sromctl | BCMA_CC_SROM_CONTROL_OTPSEL);
+> +	}
+> +
+> +	otp = kzalloc(sizeof(u16) * words, GFP_KERNEL);
+> +
+> +	/* Map bus window to SROM/OTP shadow area in core */
+> +	base = brcmf_pcie_buscore_prep_addr(devinfo->pdev, base + core->base);
 
-This cgroup_v1 interface is also called by the vhost_attach_cgroups_work(),
-as well as the kvm_vm_worker_thread() in the KVM context.
+I guess this changes the bar window...
 
-This part of the code may be a bit redundant as the number of kthreads increases.
+> +	brcmf_dbg(PCIE, "OTP data:\n");
+> +	for (idx = 0; idx < words; idx++) {
+> +		otp[idx] = brcmf_pcie_read_reg16(devinfo, base + 2 * idx);
+> +		brcmf_dbg(PCIE, "[%8x] 0x%04x\n", base + 2 * idx, otp[idx]);
+> +	}
+> +
+> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
+> +		brcmf_pcie_select_core(devinfo, coreid);
 
+... which is why you need to reselect the core. Otherwise it makes no 
+sense to me.
+
+> +		WRITECC32(devinfo, sromcontrol, sromctl);
+> +	}
+> +
+> +	ret = brcmf_pcie_parse_otp(devinfo, (u8 *)otp, 2 * words);
+> +	kfree(otp);
+> +
+> +	return ret;
 > +}
-> +
-> +
-> +static int pit_attach_cgroups(struct kvm_pit *pit)
-> +{
-> +	struct pit_attach_cgroups_struct attach;
-> +
-> +	attach.owner = current;
-> +	kthread_init_work(&attach.work, pit_attach_cgroups_work);
-> +	kthread_queue_work(pit->worker, &attach.work);
-> +	kthread_flush_work(&attach.work);
-> +	return attach.ret;
-> +}
-> +
->   static const struct kvm_io_device_ops pit_dev_ops = {
->   	.read     = pit_ioport_read,
->   	.write    = pit_ioport_write,
-> @@ -683,6 +710,10 @@ struct kvm_pit *kvm_create_pit(struct kvm *kvm, u32 flags)
->   	if (IS_ERR(pit->worker))
->   		goto fail_kthread;
 
-I wonder if we could unify the kthread_create method for both vhost and kvm-pit
-so that all kthreds from kvm_arch_vm agent could share the cgroup_attach_task_all()
-code base and more stuff like set_user_nice().
+--000000000000bb82cd05d4e9217d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
->   
-> +	ret = pit_attach_cgroups(pit);
-> +	if (ret < 0)
-> +		goto fail_attach_cgroups;
-> +
->   	kthread_init_work(&pit->expired, pit_do_work);
->   
->   	pit->kvm = kvm;
-> @@ -723,6 +754,7 @@ struct kvm_pit *kvm_create_pit(struct kvm *kvm, u32 flags)
->   fail_register_pit:
->   	mutex_unlock(&kvm->slots_lock);
->   	kvm_pit_set_reinject(pit, false);
-> +fail_attach_cgroups:
->   	kthread_destroy_worker(pit->worker);
-
-If it fails, could we keep it at least alive and functional ?
-
->   fail_kthread:
->   	kvm_free_irq_source_id(kvm, pit->irq_source_id);
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAwCLuTWPDd6sJ1aedc
+3QzshqKorWL5BuFxaC4OsLLOHDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMDYxMjM3MjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAXVT2jdlmW5hTCUkLIwngMADNcY8TQ11Gw5f
+54RhV1LapqTigM4h+HZFZ8EDRyjUhIgMKnEQw8BH1m24dj3mGyhXZNHSIU//h3QBtbbyvAUFrq7m
+E7q9QsWH0iRYHwy3B6tp1c25uODSzM5vI/gm7I0ofhZFUV70UK4cyg4T9QgkVWYiD9cw4tNutUiB
+D1wcAwKsE4hb7dlxh4dcX1CY1LXqmXqTjkMqQ5m7Iov8vykJ2EXbE43OsVtnT/XA3ueCAthVrtsz
++s2Z+cFZcEJ0lWbvlltUBIBIlfCOffnC10UqFvFfmm7atHeEVTLIcQ3pzh5yI6YqRvTvCZvuitMb
+Vg==
+--000000000000bb82cd05d4e9217d--

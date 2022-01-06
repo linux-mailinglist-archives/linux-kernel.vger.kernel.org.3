@@ -2,161 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B13486151
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60C3486193
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbiAFIPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:15:11 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:34176 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236013AbiAFIPJ (ORCPT
+        id S236844AbiAFInu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbiAFInt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:15:09 -0500
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2067Xo2o012787;
-        Thu, 6 Jan 2022 08:14:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=dEgod9P118+sZBItOAP1adXVuQnrIHkqp8/lyG7is3k=;
- b=bxR2QKNx0jxgCVBkRS3lfP5xtkHD5yeJVtHQ1HXXHFT6aYmr3MmhRg3iJ9afPcCBB1EW
- Stp3TdX5aZOCEmOOFJOCo4LYpYNrdZfvfXVz3EFKWEcu13g74BkPhyAMARXi13NFHaNS
- cHYMOEZzydTRL96feQ7WaKJRFB3aa+RgdYzxctrbpsFaUPfIpahahScCYcDXqyC9V7P1
- hD0pmv+UEPiYYCBic9Q65Cu9ONgMC/sa+0QJRg1TME+I1ZFjI8079bXle0Z/xmsCvdOi
- Gu9dOLqTscvIuuKyxK/p7b8s5NpnA/FroQzNHFvGWtzC+JhrALuUy4CcZtf3TWyMrJl1 ng== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ddmpjryf4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jan 2022 08:14:43 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20685K9o176477;
-        Thu, 6 Jan 2022 08:14:42 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by userp3020.oracle.com with ESMTP id 3ddmq6bfp5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jan 2022 08:14:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QzVAdv6XpYsGFRrVPrwhpAtKuBY3vHBNPgBMgpJn6gwKkP6XTS+ybI/nGMCmHSPZXjYvAf/tiQfHP6Wn9Bl07UQnJS9ClYOwGeDlRxbSmN2FJOshScirPxyv3HBD+UrMBvK8Y6TCYw8Cmj9Ho9ySWDUF+BaeNNMZ+91e/4Ms+HfjeFHie2o7msmKwNIeJhGrnzLIZyWAKy89uCybljT7GSwqYGNhgMayTr2QWE+GAWlOd0ofotHLzfWHa1wbsI34DsIngdxg5rqw5+5KCNzsgi0MdcQyEZvxYoyBJFQptWvxrbs7Zh5LqxrtPYDs/uU8Mrx8fwRzrm5LelbFo9caGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dEgod9P118+sZBItOAP1adXVuQnrIHkqp8/lyG7is3k=;
- b=GzQqkNZfVXkuoU/jj7MNGiYLUik9+lmF17SR/zZmyKYOupKzeDImURDBCcWPjWhmJKz2GXaw9Afpj23UkYrkrHWJBBRCPJyGJxPC1/XZr/WVlzYZoDcz2qc2uXIvcFdEmhCQYiJGDjei/uD3gaMcISQsoTawNFdfu8A0nnUhPelhKUZIDCgvWs5L7Q3nKtrx9yZ3KxNGBlQOdccy8AyAU2Bqbl/CO42wwdGZlz3t+flNA5Oa9cX/qbzsNuKWgDdYQV11ag0J5EjCYX8+wOFkfqQ5noSYOBS9icgbQhfz4r0zC/N0v/5sMfxAVMXH+y3j5TinsOmvUDBWK0jiQ5CMzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 6 Jan 2022 03:43:49 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5983DC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 00:43:49 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id w20so3326660wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:43:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dEgod9P118+sZBItOAP1adXVuQnrIHkqp8/lyG7is3k=;
- b=ILwAbvbK/EhqDYzHKNpxAa1AAKD7wE/GPNjKLjnHGLNMAu/+6Lk6gxw48XBxMZeEKyBB2RlQ5eUzSXEYCyRJhg6Bfoe/IEjNwfYx51FnG0ZNxVbP4B9s+k0TQbN+g4REu1RCQWWGc8cUBXfA+5ivyhlC41qHhhK3hhi4NrDdst4=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO1PR10MB4513.namprd10.prod.outlook.com
- (2603:10b6:303:93::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.16; Thu, 6 Jan
- 2022 08:14:41 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b889:5c86:23c0:82b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b889:5c86:23c0:82b8%4]) with mapi id 15.20.4844.016; Thu, 6 Jan 2022
- 08:14:40 +0000
-Date:   Thu, 6 Jan 2022 11:14:19 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>, jk@ozlabs.org,
-        joel@jms.id.au, alistair@popple.id.au, eajames@linux.ibm.com,
-        andrew@aj.id.au, linux-fsi@lists.ozlabs.org,
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=pIDlf07KfcsY6fe92f2PW6IjMqStOr5iLkGsE/MalFo=;
+        b=UWnOW9TVfVMoRUpP+shOxrRc3ANSL8O0sHx88JAVv909hRf/D3FfGj474ecvfCFUg1
+         4lclyCEe/hTfeoGPemkm/SntJMczPGTpiXtod8zwhhg8q7K5BP4s6ZNlq/KBqYKG7j9n
+         WgFSwZpxuAlqE28oVRVtMtrkBkMmfwZllgNAW07gcbkgx6X/wF7SSQoFMNZeZkMX8XoN
+         pRY6R7rpRTv9pEST7vRNsrEjgrKCLTbxLSE4f33u01Ku2v4jD4QyxFmR6UWHl1p9ZVjy
+         YmSsB+oFGIqD+iggnDqxnnq7lvhcltlvrkj377NrVleNDnIcA9RF+wquSCiFkXpuOA9a
+         tTCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=pIDlf07KfcsY6fe92f2PW6IjMqStOr5iLkGsE/MalFo=;
+        b=r6FZh0tTHQOgnwfS9lyc8TJdUcHvOm/+DNoeJYXnQYKJrfYYUPiGrGScymlhgxqvka
+         yITEfm9CcHegpQIB7M0OyN57PGhAU3N1WGRtd5h/C3rbN5yihRjL/rPbBZe3vtDCIUcE
+         1jZq5H/LbhpVXnk7zq4cl2S7lDK/chDd2BPV2tZQ89WLs1WiCyq5b2qaC6ovMHrrxf4D
+         yD4jTHqe43yQDoinJj7QAOZmch5ffQHlHY9CF+9zxrTchYeGy03Nc9sxUG9/CFkXD+HT
+         CLM/IiGBhsTQw/O5C2rBs9uZhftGFV/RfLMo/Y/u4CVexZTVrEYI4F/43syt4JjsBDDr
+         XDgQ==
+X-Gm-Message-State: AOAM532grX9sZop+X93thCJSKugeQjjDxgjEOEDnC5K5g2/8VK7uwp/J
+        fFX3cvL2m/taFzYilwXJ8kvmIw==
+X-Google-Smtp-Source: ABdhPJz/5rNQJd6iDMvvX1sX8yjw7k+rLwrID0+eMTfmAZxiGvDh2aM9RpJSY3eBbcMEPGKD5HBHCg==
+X-Received: by 2002:a5d:4c4a:: with SMTP id n10mr51048842wrt.100.1641458627896;
+        Thu, 06 Jan 2022 00:43:47 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id o3sm1594273wry.98.2022.01.06.00.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 00:43:47 -0800 (PST)
+References: <20220106032504.23310-1-liang.yang@amlogic.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-mtd@lists.infradead.org
+Cc:     Richard Weinberger <richard@nod.at>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] fsi: Aspeed: Fix a potential double free
-Message-ID: <20220106081418.GH7674@kadam>
-References: <2cafa0607ca171ebd00ac6c7e073b46808e24f00.1640537669.git.christophe.jaillet@wanadoo.fr>
- <YcldM9sgYdjMYMtH@kroah.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcldM9sgYdjMYMtH@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0072.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::23)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: meson: fix the clock after discarding
+ sd_emmc_c_clkc
+Date:   Thu, 06 Jan 2022 09:16:44 +0100
+In-reply-to: <20220106032504.23310-1-liang.yang@amlogic.com>
+Message-ID: <1jfsq1z22l.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 35de76de-fbe5-4890-cf80-08d9d0ec9687
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4513:EE_
-X-Microsoft-Antispam-PRVS: <CO1PR10MB4513AB4FB27C95B5DA45DF968E4C9@CO1PR10MB4513.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1247;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rMoHIRpWH5PDOZVpuFOvifDa5vi+SHppAdvcfIFFVer9Rcs/JQLHFPtGCNdz/hN/nPx8pNpdUHd0ANG61X9U42ozoWwQVQ9sGU1lg7c/ZshKlfDUr7DowyBkE2AGEpqNzILQ8OM49bUDtsbT99cSqZpCm4teofRrrJY8tY40OCxZPiayK6bGaSwKctSGfkJ3/8TLaScvwT5CIsaNIk2WyJY+zkIueurS39/dWc7PaXcGjIurolvqjC1WpjLCIvjlKjbwxeE9Qpf8Q2GWBV+3MXG7fx3vVNDDpGxyMt0DmcCxQGLGFdTDgZ91zhlui/M1ZPWd1QH9KIHsN/ZgXZrfzRpn6nexwksEwSwuH/8alZhfyCIjtsg3pMjBY3b0Afc0bYI8GI4iDs1BYP20Vz9r9hqCO1IqF1dKirnazhNEYG6eWluW3DVsUgKLEHBMSseoXvS/gOOyNc3ErLsm2202xZr4lHlqVH1kgEuu7F6Yd07XnZRsQGRBTxlVWAJsUQu57LfeezzvITKAVmQJuNXq9w/bU2DcbAtc0kD9LG49OuIJx73fQ8tg8tqBWcCLUwGNyccI2YfvLASCkMeSVMr8mApFZlxTAoAmbkVH954A1yBzFpLsltna0IxyLJM/oQFfsY5FI85y7ltWnfDu5TfxeKImwK9UOLe5aPICrj3uUqE57ZxbQe/+6dLPsPcG4FyBK3joTyXkrU5y9a8keya1Uw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(38350700002)(316002)(86362001)(8936002)(6916009)(26005)(66946007)(6666004)(6506007)(7416002)(1076003)(186003)(66556008)(6486002)(33716001)(9686003)(83380400001)(5660300002)(66476007)(8676002)(2906002)(4326008)(33656002)(6512007)(508600001)(44832011)(52116002)(4744005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r0hCIJk28JXEHINSASrHfAg3uR4D4G9ixHpU5taepAe0RO2/R29XXsS4klaL?=
- =?us-ascii?Q?UuYhaZY3eZRw07critnR4ivpNkhd/Jgz5qzU2eT1YfHQNiBHx8zGvrM4KIlz?=
- =?us-ascii?Q?T+wxnAW3hteo2tnKXMHAVUw+gU1QG26NGB6H2bSeX+mQonFruElojsivq8mB?=
- =?us-ascii?Q?FCiKv62d1inW9Y+0ocQOUSqP3kKRGwPF01yFsFlQMYXWPMMe6owkrT15oFpQ?=
- =?us-ascii?Q?KlkDxD4mn3YJi/Rwq+cLDC/YEfknfynr92snwWXDCgvR1wdO9l3NpXDxlgA4?=
- =?us-ascii?Q?1cFkOaLwQ8X5c6+o75ZVbT60r/8bsCj9XMJvJKOX+tSSY1GW7yNf1dMs50b3?=
- =?us-ascii?Q?PukcWlw1lQYrZxCn+yG7pia2vk8qYoVc6Y46efVkee7aD9xKFTBLkUvQxM90?=
- =?us-ascii?Q?UGWMfXAMdGKwKsnjJhPrs4BnU8qTOqXVdNiJq6G2XikcuWlJJbGPZ9AT4iDg?=
- =?us-ascii?Q?AAk8XBCrS4oH2vQFQbijWGGe3Vovrl4F0V2LbQxtcVBjXqdFWMjxSPvGIB0e?=
- =?us-ascii?Q?31VNSudBNVkcQ5P25b+T3pb7kA4/qylMbGIFDEOlF9vIn+QlBDHZds+ju1Yq?=
- =?us-ascii?Q?NlCMJX8ymUHhYQJpGfjAJk4VSe2TKCJ7hmIaxO3jYKmUvCE/0tqORlNDoBMl?=
- =?us-ascii?Q?L9IcYcF9L/kuaspzmyz7CxAF8+arItTKKnNjg3hSZe43zIOS5PXc1jM5/tCV?=
- =?us-ascii?Q?d1bbHGKVhVW4+BXG1daAnvnntdYjVVZKtamDV2Tehnnl+AKyuAfd40ySzYwD?=
- =?us-ascii?Q?SyBO3ltClxkAV2JUVD3hoBC26UT1t6CRqhksiBwshQE28vJa7Kf4qYaNmKdW?=
- =?us-ascii?Q?cjBBexjrh63pnqMcNa6OMvJhKJ/1QU9Llzx4mq1/vVLoIWH0CPbefI66WFPk?=
- =?us-ascii?Q?dLlaaKc32W+2u0HMK3xESotH9vVJgCytBIj0SkZitLIgvxXzrNTbE6EvLKy0?=
- =?us-ascii?Q?pcnQ/l4/5Qu42nt8ecJ4cOFIalypeCJN2JIq8RMN0V42x4Y1ZnoNEMDOD6hI?=
- =?us-ascii?Q?XxndfDwo32SXY0SCnL5lmpg8TMS9t1YEADedImXe7vaxVHIwJaNmCk2Bvxm6?=
- =?us-ascii?Q?Itsq37uNLEMwb4lapTx65gymdGRHzO5tjC/R+4Z+3S0oW2WkO/FC3cwTV0qp?=
- =?us-ascii?Q?DyRh3hnJMtDyp6uZAM3Akq+vngeFelbqX2HIX6Cs97RhvJtYSHa+WenJ8dFh?=
- =?us-ascii?Q?o8K2kYdrwcBbtZ2xM9EaCyJ1peEvnfpvEW7vejP4X31naymhryCug9vjrI0f?=
- =?us-ascii?Q?5RWM3AiztKWKtvc34WxZMEwF/FaC0D2y49/+XH7bRnEMdbKK6OOvdZ0qy1XY?=
- =?us-ascii?Q?7V2FqijcOioWf+bi8UGF0RMOw/fbYYsNNjoOB+x6MGw16uKcqUeNZhMLLBuV?=
- =?us-ascii?Q?VMNSruFSnCfRDiYP6+oaBo3y0zzpUcNO27pyGGZFHCxSw2A6h3PRyNaYLSDP?=
- =?us-ascii?Q?zkPXZdaOtM498aLFT0QjNwmhGAFxlmKasPwcXiZfI1G+B4mqY411AgX+5n3g?=
- =?us-ascii?Q?ovACLrzKj/RA2qODI0ukqDmhHUNrSyjiCrUktIMwVglHsOp+fkfMALqZiifw?=
- =?us-ascii?Q?h3O9a8BHLic2uO4f2KccMpoYcS0Pqxu/p6+4YcEKGW5CZigg+tXYR3/GARr7?=
- =?us-ascii?Q?gYulADjrvy185iqtZtyuhZqvNTrqTjfOGaFf4FdbLKe2OmUmRAyqlPI4t3vx?=
- =?us-ascii?Q?RvjHORx3LMI6oj+GORqw9H0pn0Y=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35de76de-fbe5-4890-cf80-08d9d0ec9687
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 08:14:40.8321
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HxAbp64vz1xqaD3tiYXRJJ6xeUvzsfwOiuNhtPDAub2iAMUkfErIm/N+qcAnVkgFqpZqYwEvAG77bDl3K7PPDMpxf8yQz2QSwCQu/Hu54yw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4513
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10218 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 spamscore=0
- suspectscore=0 mlxlogscore=855 phishscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2112160000
- definitions=main-2201060056
-X-Proofpoint-ORIG-GUID: Hhf9NE4mws_pnWKgGhB6jpJ8PAv9bSc1
-X-Proofpoint-GUID: Hhf9NE4mws_pnWKgGhB6jpJ8PAv9bSc1
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 07:29:07AM +0100, Greg KH wrote:
-> On Sun, Dec 26, 2021 at 05:56:02PM +0100, Christophe JAILLET wrote:
-> > 'aspeed' is a devm_alloc'ed, so there is no need to free it explicitly or
-> > there will be a double free().
-> 
-> A struct device can never be devm_alloced for obvious reasons.  Perhaps
-> that is the real problem here?
-> 
 
-I don't understand how "aspeed" is a struct device.
+On Thu 06 Jan 2022 at 11:25, Liang Yang <liang.yang@amlogic.com> wrote:
 
-I've been working on understanding device managed memory recently for
-Smatch.  It's really complicated.  There are a bunch of rules/heuristics
-that I'm slowly creating to generate new warnings but I'm a long way
-from understanding it well myself.
+> Because EMMC and NAND have the same control clock register, so we
+> implement a 'sd_emmc_c_clkc'. Previously DTS is defined as below:
+>
+> 	sd_emmc_c_clkc: mmc@7000 {
+> 		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
+> 		reg = <0x0 0x7000 0x0 0x800>;
+> 	};
+>
+> 	nand-controller@7800 {
+> 		......
+>
+> 		clocks = <&clkc CLKID_SD_EMMC_C>,
+> 			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
+> 			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
+> 			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
+> 		clock-names = "core", "device", "rx", "tx";
+> 		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
+>
+> 		......
+> 	}
+>
+> but in fact, above implementation is rejected. so now registering
+> a nand_divider.
 
-regards,
-dan carpenter
+Can you give a bit of context ? a link to the discussion rejecting this
+
+As far as remember, things were getting done for A1 and stopped before
+clock part was finished. I'm saying the change is wrong, just that a
+discussion is needed before a decision is made.
+
+>
+> Change-Id: Ibeb4c7ff886f5886aac4d6c664d7bbd1b1bcb997
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>  drivers/mtd/nand/raw/meson_nand.c | 88 +++++++++++++++++--------------
+>  1 file changed, 49 insertions(+), 39 deletions(-)
+>
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+> index ac3be92872d0..4472363059c2 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * Amlogic Meson Nand Flash Controller Driver
+>   *
+> - * Copyright (c) 2018 Amlogic, inc.
+> + * Copyright (c) 2018-2021 Amlogic, inc.
+>   * Author: Liang Yang <liang.yang@amlogic.com>
+>   */
+>  
+> @@ -10,6 +10,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/mtd/rawnand.h>
+>  #include <linux/mtd/mtd.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -55,6 +56,7 @@
+>  #define NFC_REG_VER		0x38
+>  
+>  #define NFC_RB_IRQ_EN		BIT(21)
+> +#define NFC_CMD_FIFO_RESET	BIT(31)
+>  
+>  #define CMDRWGEN(cmd_dir, ran, bch, short_mode, page_size, pages)	\
+>  	(								\
+> @@ -104,6 +106,9 @@
+>  
+>  #define PER_INFO_BYTE		8
+>  
+> +#define CLK_DIV_SHIFT		0
+> +#define CLK_DIV_WIDTH		6
+> +
+>  struct meson_nfc_nand_chip {
+>  	struct list_head node;
+>  	struct nand_chip nand;
+> @@ -151,15 +156,15 @@ struct meson_nfc {
+>  	struct nand_controller controller;
+>  	struct clk *core_clk;
+>  	struct clk *device_clk;
+> -	struct clk *phase_tx;
+> -	struct clk *phase_rx;
+
+I would have been nice to explain why these clock are no longer
+required, in the change description maybe ?
+
+> +	struct clk *nand_clk;
+> +	struct clk_divider nand_divider;
+>  
+>  	unsigned long clk_rate;
+>  	u32 bus_timing;
+>  
+>  	struct device *dev;
+>  	void __iomem *reg_base;
+> -	struct regmap *reg_clk;
+> +	void __iomem *reg_clk;
+>  	struct completion completion;
+>  	struct list_head chips;
+>  	const struct meson_nfc_data *data;
+> @@ -406,12 +411,14 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>  	cmd = NFC_CMD_RB | NFC_CMD_RB_INT
+>  		| nfc->param.chip_select | nfc->timing.tbers_max;
+>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> -
+> +	meson_nfc_drain_cmd(nfc);
+
+is this clock related ?
+
+>  	ret = wait_for_completion_timeout(&nfc->completion,
+>  					  msecs_to_jiffies(timeout_ms));
+>  	if (ret == 0)
+>  		ret = -1;
+>  
+> +	/* reset command fifo to avoid lock */
+> +	writel(NFC_CMD_FIFO_RESET, nfc->reg_base + NFC_REG_CMD);
+
+Again, not seem to be clock related - does not belong in this patch
+
+>  	return ret;
+>  }
+>  
+> @@ -988,8 +995,9 @@ static const struct mtd_ooblayout_ops meson_ooblayout_ops = {
+>  static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  {
+>  	int ret;
+> +	struct clk_init_data init = {0};
+> +	const char *fix_div2_pll_name[1];
+>  
+> -	/* request core clock */
+
+Why is the comment bothering you ?
+
+>  	nfc->core_clk = devm_clk_get(nfc->dev, "core");
+>  	if (IS_ERR(nfc->core_clk)) {
+>  		dev_err(nfc->dev, "failed to get core clock\n");
+> @@ -1002,21 +1010,25 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  		return PTR_ERR(nfc->device_clk);
+>  	}
+>  
+> -	nfc->phase_tx = devm_clk_get(nfc->dev, "tx");
+> -	if (IS_ERR(nfc->phase_tx)) {
+> -		dev_err(nfc->dev, "failed to get TX clk\n");
+> -		return PTR_ERR(nfc->phase_tx);
+> -	}
+> -
+> -	nfc->phase_rx = devm_clk_get(nfc->dev, "rx");
+> -	if (IS_ERR(nfc->phase_rx)) {
+> -		dev_err(nfc->dev, "failed to get RX clk\n");
+> -		return PTR_ERR(nfc->phase_rx);
+> -	}
+> +	init.name = devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
+> +	init.ops = &clk_divider_ops;
+> +	fix_div2_pll_name[0] = __clk_get_name(nfc->device_clk);
+
+You should be using "fw_name" so CCF looks a DT directly, instead of this
+
+> +	init.parent_names = fix_div2_pll_name;
+> +	init.num_parents = 1;
+> +	nfc->nand_divider.reg = nfc->reg_clk;
+> +	nfc->nand_divider.shift = CLK_DIV_SHIFT;
+> +	nfc->nand_divider.width = CLK_DIV_WIDTH;
+> +	nfc->nand_divider.hw.init = &init;
+> +	nfc->nand_divider.flags = CLK_DIVIDER_ONE_BASED |
+> +				  CLK_DIVIDER_ROUND_CLOSEST |
+> +          			  CLK_DIVIDER_ALLOW_ZERO;
+> +
+> +	nfc->nand_clk = devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
+> +	if (IS_ERR(nfc->nand_clk))
+> +		return PTR_ERR(nfc->nand_clk);
+>  
+>  	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
+> -	regmap_update_bits(nfc->reg_clk,
+> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
+> +	writel(CLK_SELECT_NAND | readl(nfc->reg_clk), nfc->reg_clk);
+>  
+>  	ret = clk_prepare_enable(nfc->core_clk);
+>  	if (ret) {
+> @@ -1030,29 +1042,21 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  		goto err_device_clk;
+>  	}
+>  
+> -	ret = clk_prepare_enable(nfc->phase_tx);
+> +	ret = clk_prepare_enable(nfc->nand_clk);
+>  	if (ret) {
+> -		dev_err(nfc->dev, "failed to enable TX clock\n");
+> -		goto err_phase_tx;
+> -	}
+> -
+> -	ret = clk_prepare_enable(nfc->phase_rx);
+> -	if (ret) {
+> -		dev_err(nfc->dev, "failed to enable RX clock\n");
+> -		goto err_phase_rx;
+> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
+> +		goto err_nand_clk;
+>  	}
+>  
+>  	ret = clk_set_rate(nfc->device_clk, 24000000);
+>  	if (ret)
+> -		goto err_disable_rx;
+> +		goto err_disable_clk;
+>  
+>  	return 0;
+>  
+> -err_disable_rx:
+> -	clk_disable_unprepare(nfc->phase_rx);
+> -err_phase_rx:
+> -	clk_disable_unprepare(nfc->phase_tx);
+> -err_phase_tx:
+> +err_disable_clk:
+> +	clk_disable_unprepare(nfc->nand_clk);
+> +err_nand_clk:
+>  	clk_disable_unprepare(nfc->device_clk);
+>  err_device_clk:
+>  	clk_disable_unprepare(nfc->core_clk);
+> @@ -1061,8 +1065,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  
+>  static void meson_nfc_disable_clk(struct meson_nfc *nfc)
+>  {
+> -	clk_disable_unprepare(nfc->phase_rx);
+> -	clk_disable_unprepare(nfc->phase_tx);
+> +	clk_disable_unprepare(nfc->nand_clk);
+>  	clk_disable_unprepare(nfc->device_clk);
+>  	clk_disable_unprepare(nfc->core_clk);
+>  }
+> @@ -1375,6 +1378,7 @@ static int meson_nfc_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct meson_nfc *nfc;
+>  	struct resource *res;
+> +	u32 ext_clk_reg;
+>  	int ret, irq;
+>  
+>  	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
+> @@ -1396,9 +1400,15 @@ static int meson_nfc_probe(struct platform_device *pdev)
+>  	if (IS_ERR(nfc->reg_base))
+>  		return PTR_ERR(nfc->reg_base);
+>  
+> -	nfc->reg_clk =
+> -		syscon_regmap_lookup_by_phandle(dev->of_node,
+> -						"amlogic,mmc-syscon");
+> +	ret = of_property_read_u32(pdev->dev.of_node,
+> +				   "sd_emmc_c_clkc",
+> +				   &ext_clk_reg);
+> +	if (ret) {
+> +		dev_err(dev, "failed to get NAND external clock register\n");
+> +		return ret;
+> +	}
+> +
+> +	nfc->reg_clk = devm_ioremap(&pdev->dev, ext_clk_reg, sizeof(int));
+
+That's how you should get a register region.
+If you want an example of a device claiming several region on amlogic,
+have a look at the pinctrl driver. 
+
+>  	if (IS_ERR(nfc->reg_clk)) {
+>  		dev_err(dev, "Failed to lookup clock base\n");
+>  		return PTR_ERR(nfc->reg_clk);
 

@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79454485EDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBB0485EDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344894AbiAFChv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 21:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S1344892AbiAFCi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 21:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344884AbiAFChj (ORCPT
+        with ESMTP id S231967AbiAFCiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 21:37:39 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D46CC061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:37:39 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id 205so1373166pfu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 18:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=egvZCbNF81D4jXVxm61f4vyRV9IHo60P+3/hLtcUbE4=;
-        b=jOc/KL0zSz2kdl12cGK0gMcDlrrOQ3pW4BEWkFXJJ8h5dbq9xq7S/yRaJAns2ZvNtS
-         V6UKU48JGzRv783SUVXZVXVWqA8biMoY3GZ6UiQbooSJLdvfnRFHctKHdi3J2vGSh5FA
-         yKAcQkB68czEXjG9XcY1IjuaBaDMXXRgwPsyv4vAUAVlv4vhnFzonMM9Tt4uW4C2PBXe
-         tnq2jogG/v3QawLXtCPcpVWYtFXjDOUfIJq+q50zPQknQbOjDuuWwLaqSxMEcS+sHokU
-         b5+WUwMsz7rtmZpJ5z8VndBoSOn+y7v7aoz72p+nGPIcvrvJGgoheNJaBYPJIgLP8Xae
-         GK6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=egvZCbNF81D4jXVxm61f4vyRV9IHo60P+3/hLtcUbE4=;
-        b=ASXAOBCf5LgflN3E5uuAZO+BBIGnOvCBAVjAi1DZMFEDt2MhHxttbX9+m62WllHfPT
-         St1YLrGQKbWmNiRyBzFAUDJz9imEigakEF1uWfryT8iqXFoSu0Va+A1RATyI52fAaeZg
-         +lOG4vNjZhDhO8Tomiz2suyBQD+we9HikUgqMkU9+dZAA7l+tai37qSArMYXekMaeXY1
-         n61N2/6W7te2riThsJvw778kK4KRSDcO6qUU99G70LJ9HuWGdwwuzBDubeld7djLWLiH
-         3hwwrc/dvgVbGJVVesxrbJTi28D4hfAT8fSJJRCSI26FU1d5ZOshA2C9OxC+8htUnhRv
-         GN4Q==
-X-Gm-Message-State: AOAM530vbb9qwEBSbEogBdiWC0CTk7UC7O9wjGPsWVJ1tpFGMLcjx0Zj
-        rQM4Y2tmjSbkEgpJusMjQb8=
-X-Google-Smtp-Source: ABdhPJybA7gaMPPtTcoI6DXlaCSAnzfyMyQyG31rcVoEbqT+9kFMO0T9OlJNspNUZiQin0ZZ17Ux2w==
-X-Received: by 2002:a63:4f22:: with SMTP id d34mr50255121pgb.12.1641436658856;
-        Wed, 05 Jan 2022 18:37:38 -0800 (PST)
-Received: from szeter.. ([2001:8004:44e0:acae:b2b7:5ce1:129d:48de])
-        by smtp.gmail.com with ESMTPSA id ot7sm4575514pjb.12.2022.01.05.18.37.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 18:37:38 -0800 (PST)
-From:   Samuel Zeter <samuelzeter@gmail.com>
-Cc:     samuelzeter@gmail.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 2/2] arch/x86/tools/objdump_reformat.awk: Allow for spaces
-Date:   Thu,  6 Jan 2022 13:36:05 +1100
-Message-Id: <20220106023606.283953-3-samuelzeter@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220106023606.283953-1-samuelzeter@gmail.com>
-References: <20220106023606.283953-1-samuelzeter@gmail.com>
+        Wed, 5 Jan 2022 21:38:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EC6C061245;
+        Wed,  5 Jan 2022 18:38:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=IoUlGEH/xqrV07najlhYyl2fC5yKIy9uFAiZQwDiAD4=; b=bH8zsFsvZVmlTk7euNsOfQBiQy
+        TQG3pk1XOSzYDEkc/ki9qtzAVIbGUWlaDz6Guy056ifz2+S4b9EvsiGgVeHzDk2rXHOJicCR9Fykk
+        m0mbNZX5slU0SGxqmbPvJnjsrmKUxp/z0XUro94iOFwFGX69JSqqVO07MOJT5U3SxUejjO3lNgHOF
+        6RZ8gdfKASIPL1KtKQ9VLKljlOdtgwO1sIzuUDM/udldJC09Tny1xFFSPWFhoemZ5lcVf+raH36Nh
+        453Vs1AcAZSjN/t7jSR74ynziDELJ9m7sUg9hmSpP1vPDVOrTcj6rAXPiIfFlvNCJ8azuxUoEaICv
+        vQC4Z+mA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5Ifv-00F5zd-GZ; Thu, 06 Jan 2022 02:38:47 +0000
+Message-ID: <8b423739-abe6-7e48-1a20-149ae56df108@infradead.org>
+Date:   Wed, 5 Jan 2022 18:38:42 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [next] mm/shmem.c:3993:5: error: conflicting types for
+ 'shmem_unuse'; have 'int(unsigned int, long unsigned int *)'
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Juergen Gross <jgross@suse.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        lkft-triage@lists.linaro.org
+References: <CA+G9fYvXfD3wS8eJV6A6GygqhJb3AUF9OROQAkBRRTN+thVo-g@mail.gmail.com>
+ <YdXYHP5gPMRzmv0B@casper.infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YdXYHP5gPMRzmv0B@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-objdump and llvm-objdump have differing output formats. Specifically,
-objump will format its output as: address:<tab>hex, whereas
-llvm-objdump displays its output as address:<space>hex.
 
-objdump_reformat.awk incorrectly handles this discrepancy due to
-the unexpected space and as a result insn_decoder_test fails, as
- its input is garbled.
 
-This patch ensures that the instruction line being tokenized can
-support either a space and colon, or tab delimiter.
+On 1/5/22 09:40, Matthew Wilcox wrote:
+> On Wed, Jan 05, 2022 at 08:01:19PM +0530, Naresh Kamboju wrote:
+>> mm/shmem.c:3993:5: error: conflicting types for 'shmem_unuse'; have
+>> 'int(unsigned int,  long unsigned int *)'
+>>  3993 | int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
+>>       |     ^~~~~~~~~~~
+>> In file included from include/linux/khugepaged.h:6,
+>>                  from mm/shmem.c:37:
+>> include/linux/shmem_fs.h:86:5: note: previous declaration of
+>> 'shmem_unuse' with type 'int(unsigned int)'
+>>    86 | int shmem_unuse(unsigned int type);
+>>       |     ^~~~~~~~~~~
+> 
+> This is "mm: simplify try_to_unuse" in akpm's tree.
+> 
+> It needs a fix that looks something like this:
 
-Signed-off-by: Samuel Zeter <samuelzeter@gmail.com>
----
- arch/x86/tools/objdump_reformat.awk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-diff --git a/arch/x86/tools/objdump_reformat.awk b/arch/x86/tools/objdump_reformat.awk
-index 276e572a6f60..a4120d907277 100644
---- a/arch/x86/tools/objdump_reformat.awk
-+++ b/arch/x86/tools/objdump_reformat.awk
-@@ -22,7 +22,7 @@ BEGIN {
- }
- 
- /^ *[0-9a-f]+:/ {
--	if (split($0, field, "\t") < 3) {
-+	if (split($0, field, /: |\t/) < 3) {
- 		# This is a continuation of the same insn.
- 		prev_hex = prev_hex field[2]
- 	} else {
+thanks.
+
+> 
+> +++ b/mm/shmem.c
+> @@ -3990,7 +3990,7 @@ int __init shmem_init(void)
+>         return 0;
+>  }
+> 
+> -int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
+> +int shmem_unuse(unsigned int type)
+>  {
+>         return 0;
+>  }
+> 
+
 -- 
-2.32.0
-
+~Randy

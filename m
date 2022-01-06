@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22E7486CB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C852486CB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244435AbiAFVtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:49:24 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:50325 "EHLO
+        id S244458AbiAFVuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:50:13 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:58069 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiAFVtX (ORCPT
+        with ESMTP id S244453AbiAFVuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:49:23 -0500
+        Thu, 6 Jan 2022 16:50:12 -0500
 Received: from pop-os.home ([90.11.185.88])
         by smtp.orange.fr with ESMTPA
-        id 5adNntUw72lVY5adNnSlIt; Thu, 06 Jan 2022 22:49:22 +0100
+        id 5aeAntVBq2lVY5aeBnSlMk; Thu, 06 Jan 2022 22:50:11 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 06 Jan 2022 22:49:22 +0100
+X-ME-Date: Thu, 06 Jan 2022 22:50:11 +0100
 X-ME-IP: 90.11.185.88
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
-        hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        awalls@md.metrocast.net, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 03/16] fpga: dfl: pci: Remove usage of the deprecated "pci-dma-compat.h" API
-Date:   Thu,  6 Jan 2022 22:49:20 +0100
-Message-Id: <4a0a48fb682d13e6861f604d3cad3424672bee1f.1641500561.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 04/16] media: Remove usage of the deprecated "pci-dma-compat.h" API
+Date:   Thu,  6 Jan 2022 22:50:07 +0100
+Message-Id: <e89f4b29b9f7e0c711a3ccc16a009f49f416e1fc.1641500561.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
@@ -47,61 +46,134 @@ Lawall in [2].
 A coccinelle script has been used to perform the needed transformation.
 It can be found in [3].
 
-
-It has been hand modified to use 'dma_set_mask_and_coherent()' instead of
-'pci_set_dma_mask()/pci_set_consistent_dma_mask()' when applicable.
-This is less verbose.
-
-The explicit 'ret = -EIO;' has been removed because
-'dma_set_mask_and_coherent()' returns 0 or -EIO, so its return code can be
-used directly.
-
-
 [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
 [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
 [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 ---
-Reviewed in: https://lore.kernel.org/kernel-janitors/20210823025635.GA620145@yilunxu-OptiPlex-7050/
----
- drivers/fpga/dfl-pci.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ drivers/media/pci/cx18/cx18-queue.h |  6 +++---
+ drivers/media/pci/ivtv/ivtv-queue.h | 25 ++++++++++++++-----------
+ drivers/media/pci/ivtv/ivtv-udma.h  |  8 ++++----
+ 3 files changed, 21 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index 4d68719e608f..96a11084bef4 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -15,6 +15,7 @@
-  */
+diff --git a/drivers/media/pci/cx18/cx18-queue.h b/drivers/media/pci/cx18/cx18-queue.h
+index e0a34bd6539e..26f2097c0496 100644
+--- a/drivers/media/pci/cx18/cx18-queue.h
++++ b/drivers/media/pci/cx18/cx18-queue.h
+@@ -15,15 +15,15 @@
+ static inline void cx18_buf_sync_for_cpu(struct cx18_stream *s,
+ 	struct cx18_buffer *buf)
+ {
+-	pci_dma_sync_single_for_cpu(s->cx->pci_dev, buf->dma_handle,
++	dma_sync_single_for_cpu(&s->cx->pci_dev->dev, buf->dma_handle,
+ 				s->buf_size, s->dma);
+ }
  
- #include <linux/pci.h>
-+#include <linux/dma-mapping.h>
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -354,16 +355,10 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+ static inline void cx18_buf_sync_for_device(struct cx18_stream *s,
+ 	struct cx18_buffer *buf)
+ {
+-	pci_dma_sync_single_for_device(s->cx->pci_dev, buf->dma_handle,
+-				s->buf_size, s->dma);
++	dma_sync_single_for_device(&s->cx->pci_dev->dev, buf->dma_handle,
++				   s->buf_size, s->dma);
+ }
  
- 	pci_set_master(pcidev);
+ void _cx18_mdl_sync_for_device(struct cx18_stream *s, struct cx18_mdl *mdl);
+diff --git a/drivers/media/pci/ivtv/ivtv-queue.h b/drivers/media/pci/ivtv/ivtv-queue.h
+index 586b0bf63c26..b8fc2669a358 100644
+--- a/drivers/media/pci/ivtv/ivtv-queue.h
++++ b/drivers/media/pci/ivtv/ivtv-queue.h
+@@ -17,20 +17,20 @@
  
--	if (!pci_set_dma_mask(pcidev, DMA_BIT_MASK(64))) {
--		ret = pci_set_consistent_dma_mask(pcidev, DMA_BIT_MASK(64));
--		if (ret)
--			goto disable_error_report_exit;
--	} else if (!pci_set_dma_mask(pcidev, DMA_BIT_MASK(32))) {
--		ret = pci_set_consistent_dma_mask(pcidev, DMA_BIT_MASK(32));
--		if (ret)
--			goto disable_error_report_exit;
--	} else {
--		ret = -EIO;
-+	ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
-+	if (ret)
-+		ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
-+	if (ret) {
- 		dev_err(&pcidev->dev, "No suitable DMA support available.\n");
- 		goto disable_error_report_exit;
- 	}
+ static inline int ivtv_might_use_pio(struct ivtv_stream *s)
+ {
+-	return s->dma == PCI_DMA_NONE || (SLICED_VBI_PIO && s->type == IVTV_ENC_STREAM_TYPE_VBI);
++	return s->dma == DMA_NONE || (SLICED_VBI_PIO && s->type == IVTV_ENC_STREAM_TYPE_VBI);
+ }
+ 
+ static inline int ivtv_use_pio(struct ivtv_stream *s)
+ {
+ 	struct ivtv *itv = s->itv;
+ 
+-	return s->dma == PCI_DMA_NONE ||
++	return s->dma == DMA_NONE ||
+ 	    (SLICED_VBI_PIO && s->type == IVTV_ENC_STREAM_TYPE_VBI && itv->vbi.sliced_in->service_set);
+ }
+ 
+ static inline int ivtv_might_use_dma(struct ivtv_stream *s)
+ {
+-	return s->dma != PCI_DMA_NONE;
++	return s->dma != DMA_NONE;
+ }
+ 
+ static inline int ivtv_use_dma(struct ivtv_stream *s)
+@@ -41,15 +41,16 @@ static inline int ivtv_use_dma(struct ivtv_stream *s)
+ static inline void ivtv_buf_sync_for_cpu(struct ivtv_stream *s, struct ivtv_buffer *buf)
+ {
+ 	if (ivtv_use_dma(s))
+-		pci_dma_sync_single_for_cpu(s->itv->pdev, buf->dma_handle,
+-				s->buf_size + 256, s->dma);
++		dma_sync_single_for_cpu(&s->itv->pdev->dev, buf->dma_handle,
++					s->buf_size + 256, s->dma);
+ }
+ 
+ static inline void ivtv_buf_sync_for_device(struct ivtv_stream *s, struct ivtv_buffer *buf)
+ {
+ 	if (ivtv_use_dma(s))
+-		pci_dma_sync_single_for_device(s->itv->pdev, buf->dma_handle,
+-				s->buf_size + 256, s->dma);
++		dma_sync_single_for_device(&s->itv->pdev->dev,
++					   buf->dma_handle, s->buf_size + 256,
++					   s->dma);
+ }
+ 
+ int ivtv_buf_copy_from_user(struct ivtv_stream *s, struct ivtv_buffer *buf, const char __user *src, int copybytes);
+@@ -70,15 +71,17 @@ void ivtv_stream_free(struct ivtv_stream *s);
+ static inline void ivtv_stream_sync_for_cpu(struct ivtv_stream *s)
+ {
+ 	if (ivtv_use_dma(s))
+-		pci_dma_sync_single_for_cpu(s->itv->pdev, s->sg_handle,
+-			sizeof(struct ivtv_sg_element), PCI_DMA_TODEVICE);
++		dma_sync_single_for_cpu(&s->itv->pdev->dev, s->sg_handle,
++					sizeof(struct ivtv_sg_element),
++					DMA_TO_DEVICE);
+ }
+ 
+ static inline void ivtv_stream_sync_for_device(struct ivtv_stream *s)
+ {
+ 	if (ivtv_use_dma(s))
+-		pci_dma_sync_single_for_device(s->itv->pdev, s->sg_handle,
+-			sizeof(struct ivtv_sg_element), PCI_DMA_TODEVICE);
++		dma_sync_single_for_device(&s->itv->pdev->dev, s->sg_handle,
++					   sizeof(struct ivtv_sg_element),
++					   DMA_TO_DEVICE);
+ }
+ 
+ #endif
+diff --git a/drivers/media/pci/ivtv/ivtv-udma.h b/drivers/media/pci/ivtv/ivtv-udma.h
+index 0eef104e03b9..12b9426b2db2 100644
+--- a/drivers/media/pci/ivtv/ivtv-udma.h
++++ b/drivers/media/pci/ivtv/ivtv-udma.h
+@@ -23,14 +23,14 @@ void ivtv_udma_start(struct ivtv *itv);
+ 
+ static inline void ivtv_udma_sync_for_device(struct ivtv *itv)
+ {
+-	pci_dma_sync_single_for_device(itv->pdev, itv->udma.SG_handle,
+-		sizeof(itv->udma.SGarray), PCI_DMA_TODEVICE);
++	dma_sync_single_for_device(&itv->pdev->dev, itv->udma.SG_handle,
++				   sizeof(itv->udma.SGarray), DMA_TO_DEVICE);
+ }
+ 
+ static inline void ivtv_udma_sync_for_cpu(struct ivtv *itv)
+ {
+-	pci_dma_sync_single_for_cpu(itv->pdev, itv->udma.SG_handle,
+-		sizeof(itv->udma.SGarray), PCI_DMA_TODEVICE);
++	dma_sync_single_for_cpu(&itv->pdev->dev, itv->udma.SG_handle,
++				sizeof(itv->udma.SGarray), DMA_TO_DEVICE);
+ }
+ 
+ #endif
 -- 
 2.32.0
 

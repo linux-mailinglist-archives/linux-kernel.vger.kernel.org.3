@@ -2,176 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBE6486465
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBB1486468
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238841AbiAFMcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbiAFMcR (ORCPT
+        id S238857AbiAFMeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:34:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59330 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238831AbiAFMeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:32:17 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECDBC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:32:17 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so8315460pjj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:32:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LbbHJnfFJa635LNHtwNypapWioSFVlnQx2kyNjrWm4E=;
-        b=KYqP0kcBUcSvlLhrut8dRrSJSxD8FmuH7R45O2CUoeGPv2NiyDA0WaiIOCpAN7+wVL
-         VMe0E5jd2sZ8I9+hvCFk+c4r4iXK5hDPdy3J7kO5xODJSdROF2rBeTJMOUUsOYqHZa3a
-         8zK+IYr2XjfyO50kZiuVc3i2WwdkMMGsWZLJY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LbbHJnfFJa635LNHtwNypapWioSFVlnQx2kyNjrWm4E=;
-        b=KptC+s+hJGCZxmwdZy40VCm38boo3kWOaG0Ap8FX9DnB2JdS7CLeZOuPqGYF24UYy2
-         9rEvjarE7KACTM9WaEAClaMWakph3wS0D6BNgxeTvGOwtdR+r1Czrl8/DkMXhVBFaZ9m
-         ASzif12KPyGDnmWmIVCERtO6rld6S1neB8FY1lG5uFgvb3G7fBJTQPf+4BSplttak3ad
-         G0+SwdTUmatmqa9bg4qU16nYKuKO67pQYSCEJM46hv59shT0+k9BPBP6pqGmd7JCTPEa
-         O7lPIGJIoOuKDYJRe7stY1nxdmRR8sjjR5uQv9W+NJfG+sYllLHL7qwkiAcMwzSUrcif
-         u3yg==
-X-Gm-Message-State: AOAM531tQSNioHOoqLqGa8c6RiPu4bM9j8hZSeSK1fWORD4/jFpP1vdq
-        dr7rn++1GA8xj2+c6DzFhMxHcD1QVKv2XrPbQOQz7Q==
-X-Google-Smtp-Source: ABdhPJzpBs//uHxEy1Y6b9A1PBKSNp3traSjdndLPLblh1LSQ2ada4lXL+T31sAFhrndnbnvRzwLzHK/3C1CVCMiBcE=
-X-Received: by 2002:a17:90a:7e81:: with SMTP id j1mr6817950pjl.14.1641472336853;
- Thu, 06 Jan 2022 04:32:16 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+wXwBRbLq6SW39qCD8GNG98YD5BJR2MFXmJV2zU1xwFjC-V0A@mail.gmail.com>
- <CANn89iLbKNkB9bzkA2nk+d2c6rq40-6-h9LXAVFCkub=T4BGsQ@mail.gmail.com>
-In-Reply-To: <CANn89iLbKNkB9bzkA2nk+d2c6rq40-6-h9LXAVFCkub=T4BGsQ@mail.gmail.com>
-From:   Daniel Dao <dqminh@cloudflare.com>
-Date:   Thu, 6 Jan 2022 12:32:06 +0000
-Message-ID: <CA+wXwBTQtzgsErFZZEUbEq=JMhdq-fF2OXJ7ztnnq6hPXs_L3Q@mail.gmail.com>
-Subject: Re: Expensive tcp_collapse with high tcp_rmem limit
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Marek Majkowski <marek@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 6 Jan 2022 07:34:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 562A0B820FE;
+        Thu,  6 Jan 2022 12:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E0EC36AE3;
+        Thu,  6 Jan 2022 12:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641472449;
+        bh=H3/oyDBBgWPKLO8CaUCJpearAqZDBAp1Vt3uxT0jstA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WpOhmVExFRd9TtS76TLmyEeCT3clh/SAM6IMNIjPcbxI8h2MqHrBQQNHvKcB5Vr3w
+         AoA+qaCOoDSeGN3YO0rc4kNEgmvP05OEmr1LHaxjMzc07oiTU4ysV8LZ33eALV/DF2
+         RnEOxOx4wm7fULhd+Jfj6SxrIjmtX+ZMEa1RIpUlEFjyjf0HdjoUdJH5rFMWrLDhWj
+         XeY5fH4HNhgw2M574lWisouMFBJHn1IANjunRTPI9Zzrq4AZesFNYRWp2lL9ZcDB0K
+         dYkoWAgLa2a45o6uViqHD83RlE7A5rz2/LGLMtMsVECxkHF3059CSP+3x298CZnX2c
+         PhkG+YH9TgwjQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     ojeda@kernel.org
+Cc:     alex.gaynor@gmail.com, wedsonaf@google.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH] init/Kconfig: Specify the interpreter for rust-version.sh
+Date:   Thu,  6 Jan 2022 12:33:57 +0000
+Message-Id: <20220106123357.16220-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 1:38 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Wed, Jan 5, 2022 at 4:15 AM Daniel Dao <dqminh@cloudflare.com> wrote:
-> >
-> > Hello,
-> >
-> > We are looking at increasing the maximum value of TCP receive buffer in order
-> > to take better advantage of high BDP links. For historical reasons (
-> > https://blog.cloudflare.com/the-story-of-one-latency-spike/), this was set to
-> > a lower than default value.
-> >
-> > We are still occasionally seeing long time spent in tcp_collapse, and the time
-> > seems to be proportional with max rmem. For example, with net.ipv4.tcp_rmem = 8192 2097152 16777216,
-> > we observe tcp_collapse latency with the following bpftrace command:
-> >
->
-> I suggest you add more traces, like the payload/truesize ratio when
-> these events happen.
-> and tp->rcv_ssthresh, sk->sk_rcvbuf
->
-> TCP stack by default assumes a conservative [1] payload/truesize ratio of 50%
+Some common tools like 'diff' don't support permissions of the files.
+Due to that, 'rust-version.sh' in some trees including '-mm' result in
+having no execution permission, and therefore build fails like below:
 
-I forgot to add that for this experiment we also set tcp_adv_win_scale
-= -2 to see if it
-reduces the chance of triggering tcp_collapse
+    $ make O=../linux.out/ olddefconfig
+    make[1]: Entering directory 'linux.out'
+      GEN     Makefile
+    sh: 1: linux/scripts/rust-version.sh: Permission denied
+    init/Kconfig:71: syntax error
+    init/Kconfig:70: invalid statement
+    linux/scripts/kconfig/Makefile:77: recipe for target 'olddefconfig' failed
+    make[2]: *** [olddefconfig] Error 1
+    linux/Makefile:666: recipe for target 'olddefconfig' failed
+    make[1]: *** [olddefconfig] Error 2
+    make[1]: Leaving directory 'linux.out'
+    Makefile:226: recipe for target '__sub-make' failed
+    make: *** [__sub-make] Error 2
 
->
-> Meaning that a 16MB sk->rcvbuf would translate to a TCP RWIN of 8MB.
->
-> I suspect that you use XDP, and standard MTU=1500.
-> Drivers in XDP mode use one page (4096 bytes on x86) per incoming frame.
-> In this case, the ratio is ~1428/4096 = 35%
->
-> This is one of the reason we switched to a 4K MTU at Google, because we
-> have an effective ratio close to 100% (even if XDP was used)
->
-> [1] The 50% ratio of TCP is defeated with small MSS, and malicious traffic.
+It's not a big deal, but not so fun.  This commit fixes the issue by
+specifying the interpreter for 'rust-version.sh' in the Kconfig file.
 
-I updated the bpftrace script to get data on len/truesize on collapsed skb
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ init/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  kprobe:tcp_collapse {
-    $sk = (struct sock *) arg0;
-    $tp = (struct tcp_sock *) arg0;
-    printf("tid %d: rmem_alloc=%ld sk_rcvbuf=%ld rcv_ssthresh=%ld\n", tid,
-        $sk->sk_backlog.rmem_alloc.counter, $sk->sk_rcvbuf, $tp->rcv_ssthresh);
-    printf("tid %d: advmss=%ld wclamp=%ld rcv_wnd=%ld\n", tid, $tp->advmss,
-        $tp->window_clamp, $tp->rcv_wnd);
-    @start[tid] = nsecs;
-  }
+diff --git a/init/Kconfig b/init/Kconfig
+index cd23faa163d1..97ab35692d46 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -67,7 +67,7 @@ config HAS_RUST
+ config RUSTC_VERSION
+ 	depends on HAS_RUST
+ 	int
+-	default $(shell,$(srctree)/scripts/rust-version.sh $(RUSTC))
++	default $(shell,/bin/sh $(srctree)/scripts/rust-version.sh $(RUSTC))
+ 
+ config CC_CAN_LINK
+ 	bool
+-- 
+2.17.1
 
-  kretprobe:tcp_collapse /@start[tid] != 0/ {
-    $us = (nsecs - @start[tid])/1000;
-    @us = hist($us);
-    printf("tid %d: %ld us\n", tid, $us);
-    delete(@start[tid]);
-  }
-
-  kprobe:tcp_collapse_one {
-    $skb = (struct sk_buff *) arg1;
-    printf("tid %d: s=%ld len=%ld truesize=%ld\n", tid, sizeof(struct
-sk_buff), $skb->len, $skb->truesize);
-  }
-
-  interval:s:6000 { exit(); }
-
-Here is the output:
-
-  tid 0: rmem_alloc=16780416 sk_rcvbuf=16777216 rcv_ssthresh=2920
-  tid 0: advmss=1460 wclamp=4194304 rcv_wnd=450560
-  tid 0: len=3316 truesize=15808
-  tid 0: len=4106 truesize=16640
-  tid 0: len=3967 truesize=16512
-  tid 0: len=2988 truesize=15488
-  ...
-  tid 0: len=5279 truesize=17664
-  tid 0: len=425 truesize=2048
-  tid 0: 17176 us
-
-The skb looks indeed bloated (len=3316, truesize=15808), so collapsing
-definitely
-helps. It just took a long time to go through thousands of 16KB skb
-
->
->
-> >   bpftrace -e 'kprobe:tcp_collapse { @start[tid] = nsecs; } kretprobe:tcp_collapse /@start[tid] != 0/ { $us = (nsecs - @start[tid])/1000; @us = hist($us); delete(@start[tid]); printf("%ld us\n", $us);} interval:s:6000 { exit(); }'
-> >   Attaching 3 probes...
-> >   15496 us
-> >   14301 us
-> >   12248 us
-> >   @us:
-> >   [8K, 16K)              3 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> >
-> > Spending up to 16ms with 16MiB maximum receive buffer seems high.  Are there any
-> > recommendations on possible approaches to reduce the tcp_collapse latency ?
-> > Would clamping the duration of a tcp_collapse call be reasonable, since we only
-> > need to spend enough time to free space to queue the required skb ?
->
-> It depends if the incoming skb is queued in in-order queue or
-> out-of-order queue.
-> For out-of-orders, we have a strategy in tcp_prune_ofo_queue() which
-> should work reasonably well after commit
-> 72cd43ba64fc17 tcp: free batches of packets in tcp_prune_ofo_queue()
->
-> Given the nature of tcp_collapse(), limiting it to even 1ms of processing time
-> would still allow for malicious traffic to hurt you quite a lot.
-
-I don't yet understand why we have cases of bloated skbs. But it seems
-like adapting the
-batch prune strategy in tcp_prune_ofo_queue() to tcp_collapse makes sense to me.
-
-I think every collapsed skb saves us truesize - len (?), and we can
-set goal to free up 12.5% of sk_rcvbuf
-same as tcp_prune_ofo_queue()

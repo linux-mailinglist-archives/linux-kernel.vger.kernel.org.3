@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254A2486BB2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5F5486BB4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244151AbiAFVNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244039AbiAFVNd (ORCPT
+        id S244165AbiAFVNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:13:52 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52950 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244039AbiAFVNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:13:33 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F66C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:13:32 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id a18so13333421edj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7Uo3zrvjs6l5Jch3xWP8LMBVP8GHSaGKJV7WhF6qa1w=;
-        b=bEcm+18jIgP7S0xmkuW/1Q15uSKoVSBzIXjUF8iFJdQC/7AfjIZTaomrGFrd3XI12w
-         a3BKwczI6UNtMWCLe8xw5+hpKmZ1aVeUzUOJ8shZtPWcgDF/eREJLs5OoqDb9MTX7rMv
-         BsqNN08ybKlO2ULIQJih+DEsdoiYdx8JrnBkHQh7HFdhiz4ff9yYYCz3dj8KFhBbmoXT
-         8buZPkVFvsAicnNCQS5d5Omqy8EE6iPMTdZZw/65u67tG75iNGz5OdJX3SIF+KsH6Vpu
-         aBuvbgAhNC3RC2H0EdfjsYnLaX413L8Iq0rHoiMHJUcC5vhO8wIy6sQ3MQDWivvXSjk7
-         KXqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7Uo3zrvjs6l5Jch3xWP8LMBVP8GHSaGKJV7WhF6qa1w=;
-        b=eUG5q/L/cNpwfGrBwp1pD/EIZ1YLqRgzxD2vnuBhOpEmx3FjcrOkKBwP8xyAmMxfaf
-         zzmdL93N4YLmTJWZ0mdQTYTma4DP/7Y1aCdGgdXnnvTycGV4KXB6NZlR7EW2/FrYfLFe
-         0YXnAJ6qOvz2kdM0xwFMQvtCkujYMqfbXt8uwQjGgtiOBKYVBH+pnI/xr1jTx3LMy20C
-         Y7ssWdMu/s4FKIEcu8rV2bPSGc4MqoOgDxQMEQDiHjPzBDBHCVJhmJYi28H4QYtUcnJs
-         fQgkOGDcRYfXUotb54BGxIOJWtRqcFQcsOgvWQST2arL3yV/yxD93XE22g0KyS1BK2Ya
-         bhjw==
-X-Gm-Message-State: AOAM530PpAp8qa29u97u4EyyQZpmJsJ3UFI13bkx6+RaiCwuXzIlPX8F
-        ZDOWCo5GCH/1KcSD6EuCrvC5RVSNSnJUOQrWy4MIDXNO
-X-Google-Smtp-Source: ABdhPJwW0I2gFdo2lb3NgI3Cc2FFm64EQc4xUiosUseOqyYcf/X4k18twKL06XkaAfi/v6V4zRL2uwTdcoI0Gs/HtXg=
-X-Received: by 2002:a17:906:5948:: with SMTP id g8mr47408005ejr.4.1641503610850;
- Thu, 06 Jan 2022 13:13:30 -0800 (PST)
+        Thu, 6 Jan 2022 16:13:51 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 206IVb3g017615;
+        Thu, 6 Jan 2022 21:13:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=KuEOMtUyfPPM9MezCJTSQ3xStJ2buUjqJB18gGW8+Z4=;
+ b=CutrWWLqC0wenAD7aTQK9y5IWQ7WPi5gXR13bEihGS2oyiHRHz8X3ftIuNTW14GzkOxg
+ SaQlGRfx8JQFPNwFUcBaN7OVnsNNGV+Gz+3/g58ByAXcGUgouo55ZAAKuL/TLxkqWRiq
+ BwV2F5XBZBuQjj9b6BvcjDdx5RY5F+KyJD0V17jGW/v/4NtLLeNXHU8+550W/+5boEP6
+ gZynsbX12AmTO1OlQ2bwBq+Avd2tBBaF11pnW+YX6h5t0pmip+y/YcP+gWZJqHGWKmxs
+ DwJUthbbm0tl/J1WPdhypyBrWCDvB/v5RbBs4jnxKRdjLRw7CINSv7ePEmY6kTi8I06+ 7g== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3de5sfjmsd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 21:13:47 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 206L4jKK021871;
+        Thu, 6 Jan 2022 21:13:46 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02dal.us.ibm.com with ESMTP id 3de5r9km6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 21:13:46 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 206LDjDa28770704
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jan 2022 21:13:45 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FC116A054;
+        Thu,  6 Jan 2022 21:13:45 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2586C6A04D;
+        Thu,  6 Jan 2022 21:13:45 +0000 (GMT)
+Received: from localhost (unknown [9.160.191.186])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jan 2022 21:13:44 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     tyreld@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
+In-Reply-To: <20220106161339.74656-1-ldufour@linux.ibm.com>
+References: <20220106161339.74656-1-ldufour@linux.ibm.com>
+Date:   Thu, 06 Jan 2022 15:13:44 -0600
+Message-ID: <878rvsva7r.fsf@li-e15d104c-2135-11b2-a85c-d7ef17e56be6.ibm.com>
 MIME-Version: 1.0
-References: <20220106175019.3116389-1-festevam@gmail.com> <Ydc2EHf5f12w4YcW@sirena.org.uk>
- <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com> <YddLe8cCvj5fVBTQ@sirena.org.uk>
-In-Reply-To: <YddLe8cCvj5fVBTQ@sirena.org.uk>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 6 Jan 2022 18:13:19 -0300
-Message-ID: <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
-Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MauGligxdyA9gUZfrr9DY5zagpl3FgWe
+X-Proofpoint-GUID: MauGligxdyA9gUZfrr9DY5zagpl3FgWe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-06_09,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 spamscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201060133
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On Thu, Jan 6, 2022 at 5:05 PM Mark Brown <broonie@kernel.org> wrote:
-
-> > Where exactly would you like me to call regmap_debugfs_exit()?
+Laurent Dufour <ldufour@linux.ibm.com> writes:
+> The LPAR name may be changed after the LPAR has been started in the HMC.
+> In that case lparstat command is not reporting the updated value because it
+> reads it from the device tree which is read at boot time.
 >
-> Before we try to reinitialise debugfs for the new name seems like the
-> obvious place.
+> However this value could be read from RTAS.
+>
+> Adding this value in the /proc/powerpc/lparcfg output allows to read the
+> updated value.
+>
+> However the hypervisor, like Qemu/KVM, may not support this RTAS
+> parameter. In that case the value reported in lparcfg is read from the
+> device tree and so is not updated accordingly.
+>
+> Cc: Nathan Lynch <nathanl@linux.ibm.com>
+> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+> ---
+> v5:
+>  fallback to the device tree value if RTAS is not providing the value.
+> v4:
+>  address Nathan's new comments limiting size of the buffer.
+> v3:
+>  address Michael's comments.
+> v2:
+>  address Nathan's comments.
+>  change title to partition_name aligning with existing partition_id
 
-I am afraid I am not enough familiar with regmap to fix this problem.
+Thanks Laurent.
 
-If you could please submit a patch, I will be glad to test it.
-
-Thanks
+Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>

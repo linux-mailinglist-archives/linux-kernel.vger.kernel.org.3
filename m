@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4F5486191
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5869548618F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbiAFImp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:42:45 -0500
-Received: from mga12.intel.com ([192.55.52.136]:41317 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236880AbiAFImm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S236892AbiAFImm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 6 Jan 2022 03:42:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641458562; x=1672994562;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sM6TJCgT/V+yPkhx/XfyARE+SklzEJnXQgkZSxob+5M=;
-  b=Vmj4HOgl4Mer0ALKoutHEoY+sHvk65d70bIaLYYs11OcwbkEMHU7w/YQ
-   jNFBvBzREck/WN7GODzXdD7z5KdRzWQRJelwRSYZZ53VQvk+G/ETMBbIM
-   /DHVrrNOLlU0faQ0GDisMy7QakyK6nDCQbGbqPwN5+LMtItCXSoYhATVQ
-   fuGdUhVTFGPwXDCQ0/McCcPz+FDTKib4nFJ5AhtK9GfRw6ptGwgke0dCE
-   /aMWNVsH9sCCnhVe6MG36wr18IIN2E2tRl6PpHHzCqYrHzDvNDHHNf0ea
-   I+WyiEoNFPEpyiB2VkXbQcQN9fOc7cwnEWQEqGwuYO4EK9nHwyD5YSn0s
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="222616209"
-X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="222616209"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 00:42:40 -0800
-X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="513334267"
-Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.186])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 00:42:37 -0800
-Date:   Thu, 6 Jan 2022 16:42:07 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rafael@kernel.org, lenb@kernel.org
-Subject: Re: [PATCH -next] ACPI: pfr_update: Fix return value check in
- pfru_write()
-Message-ID: <20220106084207.GA865257@chenyu-desktop>
-References: <20220106075448.3215141-1-yangyingliang@huawei.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236839AbiAFImc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 03:42:32 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51ABC061245;
+        Thu,  6 Jan 2022 00:42:31 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id u20so1929139pfi.12;
+        Thu, 06 Jan 2022 00:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yt0rtZoVf/LFU96gxwDi5D6C9OB9ceL1t7u8+Oncfhg=;
+        b=XNb74cgNPAWvdk2PghjCprJe0xxYmSb0Ayh8CJ46Tro1mzO6k22rEpFuPHtTM7N9G7
+         GinjHvictuSMtNiPpvZjG+YtIY6ZMqchNfmyFqdxVqM2mCuyNwmYV0ei4gYDbhbzBel4
+         nDvKCiWpew53QXCEznn1oaY3yJkD7JIzVRqtivRcVlAElDi2B5r/8OE7lqv85qavUM96
+         FHXEqQxg+9Wrx/ECeInAxD3Lvgk+SQVrQ5eILQCyfzud6FxLHKWQRQJV6fEjyTkxqQy8
+         kg04OuG3P5UZO3Jm35wIGvjCJRoq8wWlISvxQUHC4ED6yZkmEmUJYi5smefHDszg49tT
+         Jk7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yt0rtZoVf/LFU96gxwDi5D6C9OB9ceL1t7u8+Oncfhg=;
+        b=MJm/yjFskb3SJiLxVvMLoGH9af19dFiMeapDns5JGJAS/B1hJc3TIx+AbyrL1XwJta
+         CZPaGxP8RuiO7LbJ9nXEUjVFFiFOn2k975M0fZkmtS0Pr4mnBuaqdCOMxJ/SOd1gz8JJ
+         tmCGUlYZDHReDb6bwfRgfKRhpCNavX4ppcjMGAjXTVz6isqVyf1s34YcrVmcuLKLSXIP
+         J+n3jdggNBDOl0/Y5OR4tcNh+01Mm/UX5KpUuMpPGLkf5rPe8KnZP8pj7nCdwBgIg+6D
+         ec7vtYmncDIQ6zziojyZJhqYlq81yWAr0lZEY1T82cpyPnk/BrmQ4cEdJoF0BTn27EIu
+         INVQ==
+X-Gm-Message-State: AOAM532/3+wgbGwr1u+0Sge3G/0BcARLDUmxcxBpADwS/vusmBlILpSu
+        K18tqDgIA/8K2ob4uMU4Efg=
+X-Google-Smtp-Source: ABdhPJxiL4Id4MVmdReZ96UdALca1Yhtw4nImcfjBO2n/RsuyBNfCPuGMPqyd87/59K92lRspbn//g==
+X-Received: by 2002:a63:b245:: with SMTP id t5mr5981223pgo.231.1641458551416;
+        Thu, 06 Jan 2022 00:42:31 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.151])
+        by smtp.googlemail.com with ESMTPSA id mu2sm1696200pjb.43.2022.01.06.00.42.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 00:42:31 -0800 (PST)
+From:   Qinghua Jin <qhjin.dev@gmail.com>
+Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: ti_am335x_tsc: Fix typo
+Date:   Thu,  6 Jan 2022 16:42:14 +0800
+Message-Id: <20220106084215.355295-1-qhjin.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106075448.3215141-1-yangyingliang@huawei.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 03:54:48PM +0800, Yang Yingliang wrote:
-> In case of error, memremap() returns NULL pointer not
-> ERR_PTR(). The IS_ERR() test in the return value check
-> should be replaced with NULL test.
-> 
-> Fixes: 0db89fa243e5 ("ACPI: Introduce Platform Firmware Runtime Update device driver")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/acpi/pfr_update.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/acpi/pfr_update.c b/drivers/acpi/pfr_update.c
-> index 149b5b2530b9..6bb0b778b5da 100644
-> --- a/drivers/acpi/pfr_update.c
-> +++ b/drivers/acpi/pfr_update.c
-> @@ -460,8 +460,8 @@ static ssize_t pfru_write(struct file *file, const char __user *buf,
->  	/* map the communication buffer */
->  	phy_addr = (phys_addr_t)((buf_info.addr_hi << 32) | buf_info.addr_lo);
->  	buf_ptr = memremap(phy_addr, buf_info.buf_size, MEMREMAP_WB);
-> -	if (IS_ERR(buf_ptr))
-> -		return PTR_ERR(buf_ptr);
-> +	if (!buf_ptr)
-> +		return -ENOMEM;
->  
->  	if (!copy_from_iter_full(buf_ptr, len, &iter)) {
->  		ret = -EINVAL;
-> -- 
-> 2.25.1
->
-Acked-by: Chen Yu <yu.c.chen@intel.com>
+change 'postion' to 'position'
 
-thanks,
-Chenyu
+Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
+---
+ drivers/input/touchscreen/ti_am335x_tsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/input/touchscreen/ti_am335x_tsc.c b/drivers/input/touchscreen/ti_am335x_tsc.c
+index 83e685557a19..d77555e0571e 100644
+--- a/drivers/input/touchscreen/ti_am335x_tsc.c
++++ b/drivers/input/touchscreen/ti_am335x_tsc.c
+@@ -310,7 +310,7 @@ static irqreturn_t titsc_irq(int irq, void *dev)
+ 			/*
+ 			 * Calculate pressure using formula
+ 			 * Resistance(touch) = x plate resistance *
+-			 * x postion/4096 * ((z2 / z1) - 1)
++			 * x position/4096 * ((z2 / z1) - 1)
+ 			 */
+ 			z = z1 - z2;
+ 			z *= x;
+-- 
+2.30.2
+

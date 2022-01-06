@@ -2,99 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5EC48653C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE48C486534
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239490AbiAFNXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:23:06 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46372 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239337AbiAFNXE (ORCPT
+        id S239486AbiAFNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:21:37 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41972 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239484AbiAFNV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:23:04 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20683sij011437;
-        Thu, 6 Jan 2022 14:22:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=GXNow/WGCNS6VVfniMqNqO7XFYKxdCU9IcX7ReUi5Ig=;
- b=7WCqrJph1nk6Rds7gdVixNTL61WhNlAQ+8j0n33ji7P9yRQ8jqTl/WVDzJknzvC5riLT
- JzVrzPGjIPLFWEnfNKS4ECYgbbxalb0pEOnU0OaVhlG0tsnC0m5hFk5Uwi1gzB44IFWE
- pRL0lVNYuC9MacEMHVlykogS2pD2qDrhCc+cGfhO9Xx+DaWmztDPA0w6WVliG0GO5kUm
- rbHRnGFxU9hBwJwY31QTf1OVcI/MD9lqT1tugu4p9hkN6GXXiWGpPPT08mhxY4PAgJZH
- pij525yUn4f20kraWJ2hYGqqxaKi5SvJJAzeyteu2hiQYxxM7i10ymHvMz9M3E0Rk9GJ vg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ddmqubbfb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 14:22:50 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9766B10002A;
-        Thu,  6 Jan 2022 14:22:49 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8C5C924DE9D;
-        Thu,  6 Jan 2022 14:22:49 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 6 Jan 2022 14:22:49
- +0100
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>
-Subject: spi: stm32-qspi: Update spi registering
-Date:   Thu, 6 Jan 2022 14:20:52 +0100
-Message-ID: <20220106132052.7227-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 6 Jan 2022 08:21:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8AB361BFA;
+        Thu,  6 Jan 2022 13:21:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9B2C36AE3;
+        Thu,  6 Jan 2022 13:21:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641475287;
+        bh=6j1fMUfutZuB78M/WJhvLhM7/vnCc0zb00rLQdybbFM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=C1yg/Sd2ig7ay28/kpRTe88LFzKTknzA3/+FGMIr//vBX4AqbsMFlXw2SlgcJ/uRJ
+         UH1inmzzYZXVx4V1X8N18aXH7RYLr1ZUzM+zSbtn7I/CSkeImK0HiOGsGVduWTNQxr
+         bLVvk//TTBDXDvnmHMQQO/tRgeGtxCgs0Op4SDIEBc7EFKygVD8TGmGZlj+/P98GI4
+         I5p74UbV7lJA3QbPyqRAq6uMWmZWLVbI2is6cF6DOBXVfa7LOOxfJXPl9A0nY2RvCz
+         HpaWUyPkhZBF5F8CFuShTvHT8E1e2tks5T+BiUNzqev+Z6IpDXi8OguVwYBr/ehxrV
+         6O0J2n0C1lBNA==
+Date:   Thu, 6 Jan 2022 14:21:24 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: address kernel-doc warnings
+In-Reply-To: <20211216092157.26912-1-lukas.bulwahn@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2201061421170.16505@cbobk.fhfr.pm>
+References: <20211216092157.26912-1-lukas.bulwahn@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-06_05,2022-01-06_01,2021-12-02_01
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Thu, 16 Dec 2021, Lukas Bulwahn wrote:
 
-Replace devm_spi_register_master() by spi_register_master() to ensure
-that spi sub-nodes are unregistered in the correct order when qspi driver
-is removed.
-This issue was put in evidence using kernel v5.11 and later
-with a spi-nor which supports the software reset feature introduced
-by commit d73ee7534cc5 ("mtd: spi-nor: core: perform a Soft Reset on shutdown")
+> The command ./scripts/kernel-doc -none include/linux/hid.h reports:
+> 
+>   include/linux/hid.h:818: warning: cannot understand function prototype: 'struct hid_ll_driver '
+>   include/linux/hid.h:1135: warning: expecting prototype for hid_may_wakeup(). Prototype was for hid_hw_may_wakeup() instead
+> 
+> Address those kernel-doc warnings.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-stm32-qspi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Applied, thanks Lukas.
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 514337c86d2c..db005443aa7c 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_noresume(dev);
- 
--	ret = devm_spi_register_master(dev, ctrl);
-+	ret = spi_register_master(ctrl);
- 	if (ret)
- 		goto err_pm_runtime_free;
- 
-@@ -817,6 +817,7 @@ static int stm32_qspi_remove(struct platform_device *pdev)
- 	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
- 
- 	pm_runtime_get_sync(qspi->dev);
-+	spi_unregister_master(qspi->ctrl);
- 	/* disable qspi */
- 	writel_relaxed(0, qspi->io_base + QSPI_CR);
- 	stm32_qspi_dma_free(qspi);
 -- 
-2.17.1
+Jiri Kosina
+SUSE Labs
 

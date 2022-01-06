@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EDA4862AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175444862B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237769AbiAFKGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S237616AbiAFKJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 05:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiAFKGH (ORCPT
+        with ESMTP id S236858AbiAFKJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:06:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3BFC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 02:06:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E09B461B03
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:06:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBECC36AE5;
-        Thu,  6 Jan 2022 10:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641463566;
-        bh=8nuZJdgxn1jRjGA9kZq2AtHcuknA2FUCLi9EQ8UbdD8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QrwbyXiGK2d36Hj18vvsWy0B1RcZ0wHzl8ZMKuJlEREnqnJyqIvwcMue10VlhO10e
-         JoqINwTGFO82hGqIrLd+jDfegQ2KqVCmgVbkysTZB73ZGnWIcs1FRIUxCjMMhIb0OO
-         gBDN5lZkb88sTqoJpCw4S5MmDONe2834El72exl+5EevumuCLr30d1eaqaRVSU2H05
-         6BT8qE+NW8DYsWs2muoeXlbhgcLFKvaXzxsXK8SzVEApjVNExrzRlQ0yNjrFEhOfsg
-         1wiMQlhQpP5hlsYEPWUkFd+Ffjc30YLdYmp6FcOaeheoCryVapBvxkTrPbjARMPeGl
-         OFLmcpFvXHS1A==
-Date:   Thu, 6 Jan 2022 11:05:58 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Gwendal Grignou <gwendal@chromium.org>
-Cc:     Dmitry Torokhov <dtor@chromium.org>, bleung@chromium.org,
-        groeck@chromium.org, myungjoo.ham@samsung.com,
-        cw00.choi@samsung.com, benjamin.tissoires@redhat.com,
-        jic23@kernel.org, hverkuil-cisco@xs4all.nl, lee.jones@linaro.org,
-        pmalani@chromium.org, sre@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lgirdwood@gmail.com,
-        a.zummo@towertech.it, cychiang@chromium.org, perex@perex.cz,
-        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH 00/17] Add export symbol namespace PL_CHROMEOS
-Message-ID: <20220106110558.49dd6f26@coco.lan>
-In-Reply-To: <CAPUE2uu3FPvxHHGYGbckxR=QmWt3=KwFk3DYoqBSmaQd+AO0QA@mail.gmail.com>
-References: <20220105220653.122451-1-gwendal@chromium.org>
-        <CAE_wzQ_DTnrU9QbADZuNyt4fszAiTwa04D9muC-xE_S3MM9eGQ@mail.gmail.com>
-        <CAPUE2uu3FPvxHHGYGbckxR=QmWt3=KwFk3DYoqBSmaQd+AO0QA@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Thu, 6 Jan 2022 05:09:22 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B8EC061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 02:09:21 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id o185so5820887ybo.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 02:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=xVn1wMxF612KR4qd3v/+ZpMRoNnQHSmut43e76ryAy0=;
+        b=ITSjOINvJbz26cSYFmAJMgjh4BRfFhbRo6wnwy0w0oE9bLf+0Y2t4VJqDY8S3TZxNS
+         b8sJa7FA2RctFBONM7abZ6GuQ1ycd8lspdoyzuqWJplZYmksStuzrrUslLTN5S25KFtr
+         nq1ZBnDqaKYx8p48IzPaRC7vqJfa3wYXIRUpl2VppdcvoEuG94LeC+TdL4G5OzFCAiYC
+         nTtuwmfVXH3+c1fy2EvQtpoPX60Lwa6nHOcbUkYcQ6+0le90Wfn/gebH7m37gR98THSl
+         0wc77C2e+aWYYvIT2gtJt7Yh1T+Zh3bJJupjfdasvUi/GJESiR6Uh45x1dVnymDr6+ck
+         S7Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=xVn1wMxF612KR4qd3v/+ZpMRoNnQHSmut43e76ryAy0=;
+        b=Ha4PLgTopxmxdYYXOp2JP56Ajhq4iba5rhQpVV8GuTR0DcTK4UrsTGI+w++yT4E8T9
+         6AVG1aRlLgjoMnacTjP3XYBvvnFPw1UiHFH1o3J93ex/NiHbH6GGCRAJb3pMsls9RkhI
+         3YhsF3tAFOxuS3fLTG6Pu1bYAvvcZJQMUojsX8Bshr9s/jvTmNBeRJWiOagwa3XdYR+4
+         FV4DzJoMpaUhyaaqpSG2sE0kioQE8gAimlqAT7ZKU/Z2iO+ORd7x8nCLkbqMNaiqOFzx
+         zdLIGt5+i+m6gqdZA8vqrGyhh2wBgR1OmJdeMxzZHwcZMBA6q7GTRZ2Md69DDcOzHYuz
+         /auQ==
+X-Gm-Message-State: AOAM532HobucOyakpZKY7HAuGgcV9/RTuSLwsxS0dRNO9WebZ0yDwlGP
+        8Rl242c4TpGTPaKFzpETJhCRJHHV/TEtLGxnMlF+32XSh4jOpg==
+X-Google-Smtp-Source: ABdhPJyafnvQkHJQjBbud1GeweU7pR4nWug53MC0s3SnkvN9veseeb871oyKcvVs1bCnP7grujMZwj/vGB9np4QEeN0=
+X-Received: by 2002:a25:73c7:: with SMTP id o190mr23466905ybc.108.1641463760658;
+ Thu, 06 Jan 2022 02:09:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 6 Jan 2022 15:39:09 +0530
+Message-ID: <CA+G9fYtaoxVF-bL40kt=FKcjjaLUnS+h8hNf=wQv_dKKWn_MNQ@mail.gmail.com>
+Subject: txtimestamp.c:164:29: warning: format '0' expects argument of type
+ 'long unsigned int', but argument 3 has type 'int64_t' {aka 'long long int'} [-Wformat=]
+To:     linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yangbo Lu <yangbo.lu@nxp.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jian Yang <jianyang@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, 5 Jan 2022 20:26:36 -0800
-Gwendal Grignou <gwendal@chromium.org> escreveu:
+While building selftests the following warnings were noticed for arm
+architecture on Linux stable v5.15.13 kernel and also on Linus's tree.
 
-> On Wed, Jan 5, 2022 at 2:58 PM Dmitry Torokhov <dtor@chromium.org> wrote:
-> >
-> > Hi Gwendal,
-> >
-> > On Wed, Jan 5, 2022 at 2:07 PM Gwendal Grignou <gwendal@chromium.org> wrote:  
-> > >
-> > > Add a symbol namespace for functions exported by the plaform chromeos
-> > > subsystem.  
-> >
-> > It would be great to explain why this is needed/desirable. What are
-> > the benefits of introducing this namespace? What problem are you
-> > trying to solve?  
-> The issue came when reviewing an iio sensor
-> (https://www.spinics.net/lists/linux-iio/msg66280.html). I wanted to
-> be ahead of the curve (for once).
+arm-linux-gnueabihf-gcc -Wall -Wl,--no-as-needed -O2 -g
+-I../../../../usr/include/    txtimestamp.c  -o
+/home/tuxbuild/.cache/tuxmake/builds/current/kselftest/net/txtimestamp
+txtimestamp.c: In function 'validate_timestamp':
+txtimestamp.c:164:29: warning: format '0' expects argument of type
+'long unsigned int', but argument 3 has type 'int64_t' {aka 'long long
+int'} [-Wformat=]
+  164 |   fprintf(stderr, "ERROR: 0 us expected between 0 and 0\n",
+      |                           ~~^
+      |                             |
+      |                             long unsigned int
+      |                           0
+  165 |     cur64 - start64, min_delay, max_delay);
+      |     ~~~~~~~~~~~~~~~
+      |           |
+      |           int64_t {aka long long int}
+txtimestamp.c: In function '__print_ts_delta_formatted':
+txtimestamp.c:173:22: warning: format '0' expects argument of type
+'long unsigned int', but argument 3 has type 'int64_t' {aka 'long long
+int'} [-Wformat=]
+  173 |   fprintf(stderr, "0 ns", ts_delta);
+      |                    ~~^      ~~~~~~~~
+      |                      |      |
+      |                      |      int64_t {aka long long int}
+      |                      long unsigned int
+      |                    0
+txtimestamp.c:175:22: warning: format '0' expects argument of type
+'long unsigned int', but argument 3 has type 'int64_t' {aka 'long long
+int'} [-Wformat=]
+  175 |   fprintf(stderr, "0 us", ts_delta / NSEC_PER_USEC);
+      |                    ~~^
+      |                      |
+      |                      long unsigned int
+      |                    0
 
-Patch 01 should clearly document the reason why this is needed.
-Yet, see below.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-While I see value on using namespaces, we should have extra care when
-this is used for kAPIs designed for a product/system. I mean, what
-prevents that the affected drivers won't support some day different
-non-ChromeOS products? We have a media driver originally written to 
-work with the One Laptop Per Children hardware, that used some
-product-specific kAPIs, that were extended a couple years later to
-cover different types of hardware.
+build link:
+https://builds.tuxbuild.com/23HFntxpqyCx0RbiuadfGZ36Kym/
 
-What happens if some day, a driver introduced to be used on a ChromeOS
-hardware would also be used by a non-ChromeOS hardware? This could
-become messy as times goes by.
+metadata:
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+  git commit: 734eb1fd2073f503f5c6b44f1c0d453ca6986b84
+  git describe: v5.15.13
+  toolchain: gcc-11
+  kernel-config: https://builds.tuxbuild.com/23HFntxpqyCx0RbiuadfGZ36Kym/config
 
-Instead, IMO, it would make sense to have per-subsystem namespaces.
-So, for instance, placing iio under an IIO-specific namespace
-(and the same for other subsystems) makes more sense on my
-eyes, as the namespace boundary will be clearer, and an IIO driver
-will always be IIO, no matter on what hardware such driver would
-be used.
 
-Thanks,
-Mauro
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch arm --toolchain gcc-10 \
+ --kconfig https://builds.tuxbuild.com/23HFntxpqyCx0RbiuadfGZ36Kym/config \
+  dtbs dtbs-legacy headers kernel kselftest kselftest-merge modules
+
+--
+Linaro LKFT
+https://lkft.linaro.org

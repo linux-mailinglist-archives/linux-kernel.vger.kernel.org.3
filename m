@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E03E9486308
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390F648630A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiAFKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238041AbiAFKiV (ORCPT
+        id S238047AbiAFKkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 05:40:23 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:46389 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237909AbiAFKkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:38:21 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB24CC061201;
-        Thu,  6 Jan 2022 02:38:20 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id bm14so7749256edb.5;
-        Thu, 06 Jan 2022 02:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8QiEGlS9RbAHPZPertJp45WitjJJ2azSVWAFrREGn0k=;
-        b=d8X7dfI+kipLtVbO/9QyKBfgdO8r26tupBM27TUd9IYRN0jnLL3AXHJRJzllfePkTb
-         NOGG6mOyzv06fnPaNv33PW3XX94bWtUohlh0QiTiK3bxVGHwEcFXOY2q6Xm0B9bEq5Rf
-         C9y+RMv2JO8l/mW92Eo3k7Ih7Vde7um9jg8Z4zdo6tAACKI7MZK/cZCGt0ANLfiCHBka
-         Gp46x/WgxUnkfPlQcHJScFMrzNv+++C/bvZ+0S207peq1IdOsMRbWRgZASSb0pmvdDq4
-         5u0y6XOL3OtDwcIVy7qgb5qma/ouuXauvnyPMa8T4+yNKnKi9ghBG8XkyYpC3n76EGx6
-         /enQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8QiEGlS9RbAHPZPertJp45WitjJJ2azSVWAFrREGn0k=;
-        b=wghK8A068EOPy9YuyJvSedZ7w2hTXzQErGwzuw7AGajMLYLfEToNwbDEPljSlbEanU
-         iR4AsS0CdA0dYPdKdDkjBcx9QGn8oVR7dmgWbqVE5jmDWuQ0qsH2QcBWyV7uVFemHIh8
-         ULT5iAavefZz347H1LWTCFXS2wDypTSF887Oh5IwHWLavSKbQb6qYOvGGXEZNQsnlVEI
-         ebuu8G5pFNFvSxJ3kI0BRRZIO+V8u1cZMSaTC6Tk5UF0CWA/kW29KIZ9E2v8DojG8wXf
-         1XJQ39QDHgGlAka9YI/0nGaQeNw/jTysUW9k3QpPXVbNC/fvyrWvmCxJWjHz8zF63Liv
-         Gdyw==
-X-Gm-Message-State: AOAM532skVgaMopQDbkGf/OP4c5o6aCPawXOwtbTmFSLvOOgtKtki3fj
-        dIcg6p6NpQuaS5/l4LLqMpeZd8K1/x0rpSJA1m4=
-X-Google-Smtp-Source: ABdhPJwxnzUBodto09qprmOrgp3b2tSvw7CTQdMvRlHLszbjpSJi5DLiwMBnMQE49zj6kp8XGKeMNfY68Stb6DeZb4E=
-X-Received: by 2002:aa7:d547:: with SMTP id u7mr56510856edr.76.1641465498879;
- Thu, 06 Jan 2022 02:38:18 -0800 (PST)
-MIME-Version: 1.0
-References: <1641368602-20401-1-git-send-email-hongxing.zhu@nxp.com>
- <1641368602-20401-6-git-send-email-hongxing.zhu@nxp.com> <CAOMZO5AqgOOo3+r3yQSsfaNxW9eHXhCi=m+mqR=sf=K6dXA8tw@mail.gmail.com>
- <AS8PR04MB867662FF5FC56A7613D509CC8C4C9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-In-Reply-To: <AS8PR04MB867662FF5FC56A7613D509CC8C4C9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 6 Jan 2022 07:38:07 -0300
-Message-ID: <CAOMZO5BY7BYQKqEgwj2XA-B-oCHbb2LFG8Zq1e4ca=sTb4=ceA@mail.gmail.com>
-Subject: Re: [PATCH v5 5/6] PCI: imx6: Fix the regulator dump when link never
- came up
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 6 Jan 2022 05:40:22 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V15yZ6T_1641465619;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V15yZ6T_1641465619)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 06 Jan 2022 18:40:20 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     dan.carpenter@oracle.com, baolin.wang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/damon: Remove redundant page validation
+Date:   Thu,  6 Jan 2022 18:40:11 +0800
+Message-Id: <cd28052e89166d4ab90e360cce3421748076a0fc.1641465458.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
+It will never get a NULL page by pte_page(), thus remove the redundant
+page validation to fix below Smatch static checker warning.
 
-On Thu, Jan 6, 2022 at 12:49 AM Hongxing Zhu <hongxing.zhu@nxp.com> wrote:
+mm/damon/vaddr.c:405 damon_hugetlb_mkold()
+warn: 'page' can't be NULL.
 
-> How about continue proceed your previous fix firstly?
-> https://patchwork.kernel.org/project/linux-pci/patch/20211104000202.4028036-1-festevam@gmail.com/
-> Then, I clean up the fix patch, and re-send my series later.
-> Because that I still want to save power consumption as much as possible
->  when link is down.
-> BTW, please remove the timestamp in your patch if you agree this method,
-> and resend your patch.
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ mm/damon/vaddr.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Sure, this sounds good. I have just sent a v2.
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 89b6468d..8a52e00 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -402,9 +402,6 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+ 	pte_t entry = huge_ptep_get(pte);
+ 	struct page *page = pte_page(entry);
+ 
+-	if (!page)
+-		return;
+-
+ 	get_page(page);
+ 
+ 	if (pte_young(entry)) {
+@@ -564,9 +561,6 @@ static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
+ 		goto out;
+ 
+ 	page = pte_page(entry);
+-	if (!page)
+-		goto out;
+-
+ 	get_page(page);
+ 
+ 	if (pte_young(entry) || !page_is_idle(page) ||
+-- 
+1.8.3.1
 
-Thanks

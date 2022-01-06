@@ -2,197 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17A0486A2D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDCC486A30
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243047AbiAFSwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S243061AbiAFSxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242979AbiAFSwU (ORCPT
+        with ESMTP id S242979AbiAFSxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:52:20 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA1C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:52:20 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id y130so10087539ybe.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:52:20 -0800 (PST)
+        Thu, 6 Jan 2022 13:53:13 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EFDC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:53:13 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id v25so3382128pge.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:53:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IUMU++ei66mMLikIsKIpji8u8kZ4EgkMdb8bw4IJi7M=;
-        b=tlN1qiT6Gf7LMzx8uZWwlCdeVUjgWHsn/rdMQ4OqiXOatO4j4I65aIsPQWrsbQTXMm
-         VeyfzJwosM1D+4w/MrZOHodbr3H9qkQT/F8l/Pqc3NmqPJIKJ2uNSU+CntMOE5qTk2sx
-         llCVdJv7PCutgMiWYji8xcelfaYiLS0PRX2GroQQIQtKmUyEmqQjQ8a6xaIRdpMuzFoB
-         wa57qrmLP5ZD1AyqQrJyPbI6JW6KwyAANnuMwPbUivv/3GNF5g99VC7t+9PFavwPJgkk
-         mgFD/Bj1spwxDllZuEIkeROgRSJj5kZAmViRYH27olKLFqsNwO3qp5uRrPPrfn3Y69W9
-         Cn3w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JNS0S6ws0b44uRH/I7fHJUlSoq/HfDftbNx1kWhJBDY=;
+        b=C3J72x1eujONqwRMfNpCgBraDBl5F0HTlrDwkyG9dAbOZ7scJAuWZffpVhejkYf9VR
+         UpQcWhRIQvduHeJONSD+e14UoZ1WCvIASeYtusK3tPaLvANNBhuKDj0+VLoiPOgMlUuS
+         qMshNcLU4baJG+xltNXFhjexyYyFdSfmjZXK+baX7VfgBWvpl0SYtxi8eLu1vtERU6xa
+         UG87F3wqoLKtmV46VMsRz7X9SfLMLWadperyd5xdGjJ9QcEXxArShoCdFLIrADyv0UKt
+         EQyMtYvu5ggCGiYshY2JTv9iwRhQhbTAmLgf9enVLS/L6Ttk6Gc2EzDmrDpbRa30OZwM
+         UahA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IUMU++ei66mMLikIsKIpji8u8kZ4EgkMdb8bw4IJi7M=;
-        b=2pJl8iUvq+WFPrMcVn4bw4LBMCXIQYwwW3U3Zudip3J1MWs76TYLRFU/w06/79Sp7F
-         3zybF3BjkMUDLZ2AjPTPiCdTec8EdnxctHcJFU4GRX0msVtwhFx8nGvY7+bJqcwTTrR+
-         SsGNtlyEI5ssSOJg6PVerflMYMiuG7AJ07ylsQAIwNftWFA55xryK64pB+2+yNkdIMCr
-         C4YrshlV+/HyLjmJxavrGg+Kzczx51SfR5vtGDEu0n8yH7uY/DkjQIa3g0lwliXrEJ5+
-         0jcq52awokMXYthqTfhbPSLrAPDWCaSCnElSyAnVZIPA63aD4h4gmTgsvyi5ukdmY8FK
-         IqjA==
-X-Gm-Message-State: AOAM53000xyl3PIYKsgV1uSTuy/CfXjRcwXlMHdCv9xLkjAl4vDM/mnq
-        51h6Lc1JtibSUc8LumMBMipr6O9+6d74kpFrPu0P2A==
-X-Google-Smtp-Source: ABdhPJxS/EeBveDnUKjywJlxJMuNY1qYF6W0NzTjTkcduiGAwx5CMNjJFhQir1DyoVTfzpmGzz9X/HlHByvvv8gIUHU=
-X-Received: by 2002:a25:af14:: with SMTP id a20mr81702404ybh.753.1641495138938;
- Thu, 06 Jan 2022 10:52:18 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JNS0S6ws0b44uRH/I7fHJUlSoq/HfDftbNx1kWhJBDY=;
+        b=4MrZMNRk6wssFJnUdC1JtcissWb2M/g8X2OA48lEpTUlEFwqvI2HMoKRlikBJDGXiD
+         nemjbiW9LHCi0PrIRpnt0f7JpsRTt2a+/sh6HwiCIxO+175wJtv7ZP+6DUgwzXjN0Z7u
+         nv9NSNLP2edOJ1SxberuyyUa19FfWB8KlQ0R+IO2vfsvnTgsm7rb+CcYehBQsxFfW+td
+         AJ2JOYMt2z7hWSbYlQOQLvsScFb8p/xoIwwC0Opwr1A4nhbJqKRWls7v1G7AmAGrpUJD
+         eqRst86jKpW+hO7uRcCcBD4STD5fgUKGcg6vDaVafJqDtKvD3XIgrYNOzTYtrZIcPUC6
+         jXZA==
+X-Gm-Message-State: AOAM530190SJ2kHxrROj1/Di13OH3AWBnCFzn1liUM/eGMm9IT9X9/S4
+        L51cTfWYcNoNQ/xD9Uwq5hV3ZQ==
+X-Google-Smtp-Source: ABdhPJy6rQHSiSMgrDLVkpo3O/ViA2YSigATsKEr+J9KyotV6Ig/DgyVJF2M7sByf/cSlIP2E9VC6g==
+X-Received: by 2002:a63:6ecf:: with SMTP id j198mr43522960pgc.287.1641495193133;
+        Thu, 06 Jan 2022 10:53:13 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id c10sm127881pfl.200.2022.01.06.10.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:53:11 -0800 (PST)
+Date:   Thu, 6 Jan 2022 11:53:09 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [RFC PATCH v2 4/6] remoteproc: virtio: Create platform device
+ for the remoteproc_virtio
+Message-ID: <20220106185309.GC642186@p14s>
+References: <20211222082349.30378-1-arnaud.pouliquen@foss.st.com>
+ <20211222082349.30378-5-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-References: <CA+wXwBRbLq6SW39qCD8GNG98YD5BJR2MFXmJV2zU1xwFjC-V0A@mail.gmail.com>
- <CANn89iLbKNkB9bzkA2nk+d2c6rq40-6-h9LXAVFCkub=T4BGsQ@mail.gmail.com> <CA+wXwBTQtzgsErFZZEUbEq=JMhdq-fF2OXJ7ztnnq6hPXs_L3Q@mail.gmail.com>
-In-Reply-To: <CA+wXwBTQtzgsErFZZEUbEq=JMhdq-fF2OXJ7ztnnq6hPXs_L3Q@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 6 Jan 2022 10:52:07 -0800
-Message-ID: <CANn89iKTw5aZ0GvybkO=3B17HkGRmFKcqz9FqJFuo5r--=afOA@mail.gmail.com>
-Subject: Re: Expensive tcp_collapse with high tcp_rmem limit
-To:     Daniel Dao <dqminh@cloudflare.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Marek Majkowski <marek@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222082349.30378-5-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:32 AM Daniel Dao <dqminh@cloudflare.com> wrote:
->
-> On Wed, Jan 5, 2022 at 1:38 PM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > On Wed, Jan 5, 2022 at 4:15 AM Daniel Dao <dqminh@cloudflare.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > We are looking at increasing the maximum value of TCP receive buffer in order
-> > > to take better advantage of high BDP links. For historical reasons (
-> > > https://blog.cloudflare.com/the-story-of-one-latency-spike/), this was set to
-> > > a lower than default value.
-> > >
-> > > We are still occasionally seeing long time spent in tcp_collapse, and the time
-> > > seems to be proportional with max rmem. For example, with net.ipv4.tcp_rmem = 8192 2097152 16777216,
-> > > we observe tcp_collapse latency with the following bpftrace command:
-> > >
-> >
-> > I suggest you add more traces, like the payload/truesize ratio when
-> > these events happen.
-> > and tp->rcv_ssthresh, sk->sk_rcvbuf
-> >
-> > TCP stack by default assumes a conservative [1] payload/truesize ratio of 50%
->
-> I forgot to add that for this experiment we also set tcp_adv_win_scale
-> = -2 to see if it
-> reduces the chance of triggering tcp_collapse
->
-> >
-> > Meaning that a 16MB sk->rcvbuf would translate to a TCP RWIN of 8MB.
-> >
-> > I suspect that you use XDP, and standard MTU=1500.
-> > Drivers in XDP mode use one page (4096 bytes on x86) per incoming frame.
-> > In this case, the ratio is ~1428/4096 = 35%
-> >
-> > This is one of the reason we switched to a 4K MTU at Google, because we
-> > have an effective ratio close to 100% (even if XDP was used)
-> >
-> > [1] The 50% ratio of TCP is defeated with small MSS, and malicious traffic.
->
-> I updated the bpftrace script to get data on len/truesize on collapsed skb
->
->   kprobe:tcp_collapse {
->     $sk = (struct sock *) arg0;
->     $tp = (struct tcp_sock *) arg0;
->     printf("tid %d: rmem_alloc=%ld sk_rcvbuf=%ld rcv_ssthresh=%ld\n", tid,
->         $sk->sk_backlog.rmem_alloc.counter, $sk->sk_rcvbuf, $tp->rcv_ssthresh);
->     printf("tid %d: advmss=%ld wclamp=%ld rcv_wnd=%ld\n", tid, $tp->advmss,
->         $tp->window_clamp, $tp->rcv_wnd);
->     @start[tid] = nsecs;
->   }
->
->   kretprobe:tcp_collapse /@start[tid] != 0/ {
->     $us = (nsecs - @start[tid])/1000;
->     @us = hist($us);
->     printf("tid %d: %ld us\n", tid, $us);
->     delete(@start[tid]);
->   }
->
->   kprobe:tcp_collapse_one {
->     $skb = (struct sk_buff *) arg1;
->     printf("tid %d: s=%ld len=%ld truesize=%ld\n", tid, sizeof(struct
-> sk_buff), $skb->len, $skb->truesize);
->   }
->
->   interval:s:6000 { exit(); }
->
-> Here is the output:
->
->   tid 0: rmem_alloc=16780416 sk_rcvbuf=16777216 rcv_ssthresh=2920
->   tid 0: advmss=1460 wclamp=4194304 rcv_wnd=450560
->   tid 0: len=3316 truesize=15808
->   tid 0: len=4106 truesize=16640
->   tid 0: len=3967 truesize=16512
->   tid 0: len=2988 truesize=15488
+On Wed, Dec 22, 2021 at 09:23:47AM +0100, Arnaud Pouliquen wrote:
+> Define a platform driver to prepare for the management of
+> remoteproc virtio devices as platform devices.
+> 
+> The platform device allows to pass rproc_vdev_data platform data to
+> specify properties that are stored in the rproc_vdev structure.
+> 
+> Such approach will allow to preserve legacy remoteproc virtio device
+> creation but also to probe the device using device tree mechanism.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+> Update vs previous revision:
+>   - Fix commit and rename rproc_vdev_data to rproc_vdev_pdata
+> ---
+>  drivers/remoteproc/remoteproc_internal.h |  6 +++
+>  drivers/remoteproc/remoteproc_virtio.c   | 65 ++++++++++++++++++++++++
+>  include/linux/remoteproc.h               |  2 +
+>  3 files changed, 73 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index e9e9a551a8c2..6f511c50a15d 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -24,6 +24,12 @@ struct rproc_debug_trace {
+>  	struct rproc_mem_entry trace_mem;
+>  };
+>  
+> +struct rproc_vdev_pdata {
+> +	u32 rsc_offset;
+> +	unsigned int id;
+> +	unsigned int index;
+> +};
+> +
+>  /* from remoteproc_core.c */
+>  void rproc_release(struct kref *kref);
+>  int rproc_of_parse_firmware(struct device *dev, int index,
+> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+> index 51d415744fc6..5f8005caeb6e 100644
+> --- a/drivers/remoteproc/remoteproc_virtio.c
+> +++ b/drivers/remoteproc/remoteproc_virtio.c
+> @@ -4,6 +4,7 @@
+>   *
+>   * Copyright (C) 2011 Texas Instruments, Inc.
+>   * Copyright (C) 2011 Google, Inc.
+> + * Copyright (C) 2021 STMicroelectronics
+>   *
+>   * Ohad Ben-Cohen <ohad@wizery.com>
+>   * Brian Swetland <swetland@google.com>
+> @@ -13,6 +14,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/export.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/virtio.h>
+> @@ -575,3 +577,66 @@ void rproc_vdev_release(struct kref *ref)
+>  
+>  	rproc_rvdev_remove_device(rvdev);
+>  }
+> +
+> +static int rproc_virtio_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct rproc_vdev_pdata *vdev_data = dev->platform_data;
+> +	struct rproc_vdev *rvdev;
+> +	struct rproc *rproc;
+> +
+> +	if (!vdev_data)
+> +		return -EINVAL;
+> +
+> +	rvdev = devm_kzalloc(dev, sizeof(*rvdev), GFP_KERNEL);
+> +	if (!rvdev)
+> +		return -ENOMEM;
+> +
+> +	rproc = container_of(dev->parent, struct rproc, dev);
+> +
+> +	rvdev->rsc_offset = vdev_data->rsc_offset;
+> +	rvdev->id = vdev_data->id;
+> +	rvdev->index = vdev_data->index;
+> +
+> +	rvdev->pdev = pdev;
+> +	rvdev->rproc = rproc;
+> +
+> +	platform_set_drvdata(pdev, rvdev);
+> +
+> +	return rproc_rvdev_add_device(rvdev);
+> +}
+> +
+> +static int rproc_virtio_remove(struct platform_device *pdev)
+> +{
+> +	struct rproc_vdev *rvdev = dev_get_drvdata(&pdev->dev);
+> +	struct rproc *rproc = rvdev->rproc;
+> +	struct rproc_vring *rvring;
+> +	int id;
+> +
+> +	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
+> +		rvring = &rvdev->vring[id];
+> +		rproc_free_vring(rvring);
+> +	}
+> +
+> +	rproc_remove_subdev(rproc, &rvdev->subdev);
+> +	rproc_unregister_rvdev(rvdev);
+> +	dev_dbg(&pdev->dev, "virtio dev %d removed\n",  rvdev->index);
+> +
 
-Ouch.
-What kind of NIC driver is used on your host ?
+Function rproc_virtio_remove() doesn't do the opposite of rproc_virtio_probe(),
+making it hard for people to wrap their head around what is happening.  This may
+get cleaned up as part of the error path problem we already talked about...  If not
+this is something to improve one.
 
->   ...
->   tid 0: len=5279 truesize=17664
->   tid 0: len=425 truesize=2048
->   tid 0: 17176 us
->
-> The skb looks indeed bloated (len=3316, truesize=15808), so collapsing
-> definitely
-> helps. It just took a long time to go through thousands of 16KB skb
->
-> >
-> >
-> > >   bpftrace -e 'kprobe:tcp_collapse { @start[tid] = nsecs; } kretprobe:tcp_collapse /@start[tid] != 0/ { $us = (nsecs - @start[tid])/1000; @us = hist($us); delete(@start[tid]); printf("%ld us\n", $us);} interval:s:6000 { exit(); }'
-> > >   Attaching 3 probes...
-> > >   15496 us
-> > >   14301 us
-> > >   12248 us
-> > >   @us:
-> > >   [8K, 16K)              3 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> > >
-> > > Spending up to 16ms with 16MiB maximum receive buffer seems high.  Are there any
-> > > recommendations on possible approaches to reduce the tcp_collapse latency ?
-> > > Would clamping the duration of a tcp_collapse call be reasonable, since we only
-> > > need to spend enough time to free space to queue the required skb ?
-> >
-> > It depends if the incoming skb is queued in in-order queue or
-> > out-of-order queue.
-> > For out-of-orders, we have a strategy in tcp_prune_ofo_queue() which
-> > should work reasonably well after commit
-> > 72cd43ba64fc17 tcp: free batches of packets in tcp_prune_ofo_queue()
-> >
-> > Given the nature of tcp_collapse(), limiting it to even 1ms of processing time
-> > would still allow for malicious traffic to hurt you quite a lot.
->
-> I don't yet understand why we have cases of bloated skbs. But it seems
-> like adapting the
-> batch prune strategy in tcp_prune_ofo_queue() to tcp_collapse makes sense to me.
->
+I am done reviewing this set.
 
-Except that you would still have to parse the linear list.
+Thanks,
+Mathieu
 
-> I think every collapsed skb saves us truesize - len (?), and we can
-> set goal to free up 12.5% of sk_rcvbuf
-> same as tcp_prune_ofo_queue()
-
-I think that you should first look if you are under some kind of attack [1]
-
-Eventually you would still have to make room, involving expensive copies.
-
-12% of 16MB is still a lot of memory to copy.
-
-[1] Detecting an attack signature could allow you to zap the socket
-and save ~16MB of memory per flow.
+> +	return 0;
+> +}
+> +
+> +/* Platform driver */
+> +static const struct of_device_id rproc_virtio_match[] = {
+> +	{ .compatible = "rproc-virtio", },
+> +	{},
+> +};
+> +
+> +static struct platform_driver rproc_virtio_driver = {
+> +	.probe		= rproc_virtio_probe,
+> +	.remove		= rproc_virtio_remove,
+> +	.driver		= {
+> +		.name	= "rproc-virtio",
+> +		.of_match_table	= rproc_virtio_match,
+> +	},
+> +};
+> +builtin_platform_driver(rproc_virtio_driver);
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index e0600e1e5c17..542a3d4664f2 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -616,6 +616,7 @@ struct rproc_vring {
+>   * struct rproc_vdev - remoteproc state for a supported virtio device
+>   * @refcount: reference counter for the vdev and vring allocations
+>   * @subdev: handle for registering the vdev as a rproc subdevice
+> + * @pdev: remoteproc virtio platform device
+>   * @dev: device struct used for reference count semantics
+>   * @id: virtio device id (as in virtio_ids.h)
+>   * @node: list node
+> @@ -628,6 +629,7 @@ struct rproc_vdev {
+>  	struct kref refcount;
+>  
+>  	struct rproc_subdev subdev;
+> +	struct platform_device *pdev;
+>  	struct device dev;
+>  
+>  	unsigned int id;
+> -- 
+> 2.17.1
+> 

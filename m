@@ -2,160 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FF0486A37
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2647486A3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243107AbiAFSzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:55:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46242 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243061AbiAFSzl (ORCPT
+        id S243114AbiAFTAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243089AbiAFTAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:55:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F22DA61DC2;
-        Thu,  6 Jan 2022 18:55:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68643C36AEB;
-        Thu,  6 Jan 2022 18:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641495340;
-        bh=hUSBuncfdYSMo8JYah8e80uOyS1OIGFpsNc2vV+EOuo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OXdd6Z0116/9Sx5fcHmCnUWOjkYlE+rfSgQ3/vq1G42Pmvu6g/SJF6ELx2+huB91g
-         XoLKXn4Zc3hhOAkggWalI25A2HrPo+LLy+ZzK/ci6L9axJqtZOGneYNF/3tT4Vsuxv
-         rJ1HnD34j7hq4+z1XNHWUltg8nO7EULrVBqsbSlgTw4HL8n2tpnaEOEoQBUII5gGlE
-         uqj93jY/Pkk7BwhUE/CtCGmVBlHbsFBDcD4/SpKcTrzpe6j6WtsePgFm8qY5aCOOM6
-         uWxalChD6rY1aOhnzsJqcHl7AMFlUckyr3t70wGuYuF4wOkVlzoVMki3IB9vClXEIR
-         MiFwHRj8lOEKg==
-Received: by mail-ed1-f50.google.com with SMTP id q25so4451865edb.2;
-        Thu, 06 Jan 2022 10:55:40 -0800 (PST)
-X-Gm-Message-State: AOAM53134R4b6+evWffGty7j5HUqV1a5SaQprjBoSkgMmU1Z6SF2W+VS
-        icmQO4foSS4IpFHfxpJpXPwIcz7V57ZkdwIIxQ==
-X-Google-Smtp-Source: ABdhPJw9WxLjYgVOSm32VR2+V+3X6pv+18TJ2gujjOSgM+fLMn8xkbFnouhimP1Rqm6xeCbe28L+fy93zOCBGcPfc30=
-X-Received: by 2002:aa7:d5c7:: with SMTP id d7mr2854351eds.280.1641495338714;
- Thu, 06 Jan 2022 10:55:38 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1641354285.git.tonyhuang.sunplus@gmail.com> <1d946b61174adf4216c79728d56dcc1eb8a86b38.1641354285.git.tonyhuang.sunplus@gmail.com>
-In-Reply-To: <1d946b61174adf4216c79728d56dcc1eb8a86b38.1641354285.git.tonyhuang.sunplus@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 6 Jan 2022 12:55:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLtP+2BaHUxTpYUBtCY13UHY8hs677PPBtZD20Vdwq65g@mail.gmail.com>
-Message-ID: <CAL_JsqLtP+2BaHUxTpYUBtCY13UHY8hs677PPBtZD20Vdwq65g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
-To:     Tony Huang <tonyhuang.sunplus@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 6 Jan 2022 14:00:36 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6BBC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 11:00:35 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id r17so6698094wrc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 11:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=GApfuZwSa5gLOrIFUv10Q+jwtcI8XokWaaN8Migozt0=;
+        b=dMDoD0wS6wkdT73t6n4lqSz7LXjMF7Q7BT7h93ZCspVO/J4lDUWaVkxIcFoC6OgoAi
+         LigYS4Jq37nDgH+w6B2NbBsSIW/LRqSOgz3qzzuUNNFblYlo+kRARb4jMBBU6VsLoH7M
+         Xrx0oX0t/8P4UoP8nvMb4Zk9NY0cTouVYAGe3BmCcHf2ybJ3mEjE7jYsIQSmsCGlz4b2
+         8/RMbC9xojPbfPWnXb8ILLkhXAJcFy6Z2WmlrJRIlADOrDfEbjZvYaR/DKU+x3DdU6xO
+         vmMPZiNxd82uy+v/u5C3BINmzXCV4HBEwmv5mIDEmzIajBbjxdo+2xXDkD84XKvr6f0T
+         pBRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=GApfuZwSa5gLOrIFUv10Q+jwtcI8XokWaaN8Migozt0=;
+        b=ISUHGhg1mWAWKP8s/TNaiZwiKGrdFw8w5laofBTNAaMo/FjGhGWW1iSpDywaNUW92I
+         YcN+Ly0cjTSq5fH5TfjynAdKI5UUNGTHIbydn5+nUB5G7pNDxyBO4V0ObA/SinxC4fVa
+         PdvBQfEsU/ueFixnAzGQ+x4N3SmO36o/OoE++Xu19OGFnUTAA8b+mHBjziUwxB0PvzhG
+         cpdiKXhqWFqpHlV/o+PifP08PUgvCZRCaPbvLbsRJlnND1xs4dahFKxfVtWrfz4+q7Z/
+         PMZYaXzXuCqQGenyZ/4d3XZ0Rii3PVEQ/BzzzgYzQfa044GDKrU4474sresSjGzAjGSm
+         wrKQ==
+X-Gm-Message-State: AOAM531ecJHScen9uVYCFYo+BX7tt9ZHxQMT3b4xt4xuA7/6osH6sy/a
+        nHmtkekZtpA3hC9xLvhA+eo=
+X-Google-Smtp-Source: ABdhPJzRBPgEFjde8rkHAuo7tRsgCjXw/CujtSuspjwJoOEksMbs2rdDHQQmiMDdOjSh4GHnkx1B0Q==
+X-Received: by 2002:a5d:4a8e:: with SMTP id o14mr50283333wrq.441.1641495634341;
+        Thu, 06 Jan 2022 11:00:34 -0800 (PST)
+Received: from localhost.localdomain (37.212.broadband9.iol.cz. [90.176.212.37])
+        by smtp.gmail.com with ESMTPSA id n41sm6835638wms.32.2022.01.06.11.00.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jan 2022 11:00:33 -0800 (PST)
+From:   Jiri Vanek <jirivanek1@gmail.com>
+To:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>
+Cc:     Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Vinay Simha B N <simhavcs@gmail.com>,
+        Jiri Vanek <jirivanek1@gmail.com>
+Subject: [PATCH v2] drm/bridge/tc358775: Fix for dual-link LVDS
+Date:   Thu,  6 Jan 2022 20:00:27 +0100
+Message-Id: <20220106190027.1498-1-jirivanek1@gmail.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20211110220050.2854-1-jirivanek1@gmail.com>
+References: <20211110220050.2854-1-jirivanek1@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 11:20 PM Tony Huang <tonyhuang.sunplus@gmail.com> wrote:
->
-> Add mmc yaml file for Sunplus SP7021
+Fixed wrong register shift for single/dual link LVDS output.
 
-There's a typo in the DT list address. Please resend so checks run.
-Looks fine otherwise.
+Tested-by: Jiri Vanek <jirivanek1@gmail.com>
+Signed-off-by: Jiri Vanek <jirivanek1@gmail.com>
 
->
-> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
-> ---
-> Changes in v2:
->  - Modify maintainers e-mail address.
->
->  .../devicetree/bindings/mmc/sunplus-mmc.yaml       | 60 ++++++++++++++++++++++
->  MAINTAINERS                                        |  5 ++
->  2 files changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
->
-> diff --git a/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml b/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
-> new file mode 100644
-> index 0000000..1c39af2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Ltd. Co. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/sunplus-mmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: sunplus MMC controller
-> +
-> +allOf:
-> +  - $ref: "mmc-controller.yaml"
-> +
-> +maintainers:
-> +  - Tony Huang <tonyhuang.sunplus@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: sunplus,sp7021-emmc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    mmc0: mmc@9c003b00 {
-> +        compatible = "sunplus,sp7021-emmc";
-> +        reg = <0x9c003b00 0x180>;
-> +        interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&clkc 0x4e>;
-> +        resets = <&rstc 0x3e>;
-> +        bus-width = <8>;
-> +        max-frequency = <52000000>;
-> +        non-removable;
-> +        disable-wp;
-> +        cap-mmc-highspeed;
-> +        mmc-ddr-3_3v;
-> +        no-sdio;
-> +        no-sd;
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fb18ce7..01ed57a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18242,6 +18242,11 @@ L:     netdev@vger.kernel.org
->  S:     Maintained
->  F:     drivers/net/ethernet/dlink/sundance.c
->
-> +SUNPLUS MMC DRIVER
-> +M:     Tony Huang <tonyhuang.sunplus@gmail.com>
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/mmcc/sunplu-mmc.yaml
-> +
->  SUPERH
->  M:     Yoshinori Sato <ysato@users.sourceforge.jp>
->  M:     Rich Felker <dalias@libc.org>
-> --
-> 2.7.4
->
+---
+v1:
+* Initial version
+
+v2:
+* Tested-by tag added
+
+---
+ drivers/gpu/drm/bridge/tc358775.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/bridge/tc358775.c
+index 2272adcc5b4a..1d6ec1baeff2 100644
+--- a/drivers/gpu/drm/bridge/tc358775.c
++++ b/drivers/gpu/drm/bridge/tc358775.c
+@@ -241,7 +241,7 @@ static inline u32 TC358775_LVCFG_PCLKDIV(uint32_t val)
+ }
+ 
+ #define TC358775_LVCFG_LVDLINK__MASK                         0x00000002
+-#define TC358775_LVCFG_LVDLINK__SHIFT                        0
++#define TC358775_LVCFG_LVDLINK__SHIFT                        1
+ static inline u32 TC358775_LVCFG_LVDLINK(uint32_t val)
+ {
+ 	return ((val) << TC358775_LVCFG_LVDLINK__SHIFT) &
+-- 
+2.30.2
+

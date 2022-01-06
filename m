@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9A148650D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3B748650E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239381AbiAFNPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiAFNPR (ORCPT
+        id S239405AbiAFNQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:16:19 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:59496 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231216AbiAFNQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:15:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4487BC061245;
-        Thu,  6 Jan 2022 05:15:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D66C461BD2;
-        Thu,  6 Jan 2022 13:15:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBABEC36AE3;
-        Thu,  6 Jan 2022 13:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641474916;
-        bh=jJuZnBNY3VweJkt7d7QGEjPQe1xnlJdkpSQPidh7e6M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Tgsjrl3ezvw+VaWga/G8csXy1YvAFLzNgen3wd8zGH7UzTFqZhLGBy+cRf56QIRxe
-         jo1jrW04yYwM45XA2ZI3pGmeokBC0Wl1SqtsXuWIqheV1s3BvMJ98QHMifN86Abzo5
-         2oF2vgZu0oroAbLRspRr/UkB82XIFWsJZMhRXYKSdYNmjGLLD17/w9C7KJcuz1lY/D
-         hufb5/ODDqxvz6XUzD6hiuGu3W+WQp1E5YWA6HFRpCzo7BvL6Lbqjdra3EHsiYHglf
-         qhtG1FtN5dyC2rXieTZenFsoa0K4k0KLVOvng6N3N6m+FN6XPvj3tSLw54S0LFtFYJ
-         xg1Dq6WC0mAmQ==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
-Subject: [PATCH rdma-rc] RDMA/cma: Clear all multicast request fields
-Date:   Thu,  6 Jan 2022 15:15:07 +0200
-Message-Id: <1876bacbbcb6f82af3948e5c37a09da6ea3fcae5.1641474841.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 6 Jan 2022 08:16:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641474978; x=1673010978;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IYrdrJWcfkX8IFQj3tKNNLyxg7v2rQIq/226C5qZ1EQ=;
+  b=zY52YD/SjyUDF/s0StiOlgE9P4WAxAZyPdyUDBkJx9uvh0rHCkr4iQzX
+   1Hb26JJShfzQ/Ocbg0CcrBRwr+uxQn7QEcFe4/GX32BJpYl2X/wuGUrB7
+   OkjA2lEisG09sZ6wLMmnWpe0XRxaB8ze9VXqbZhdLrL0TcwG9Ptpg/RDf
+   d5DvAVrNI592yYx+ShnVVs5zvKeh6i4oQfmSaUlFqVLogFNy3EYIr+VqT
+   jMGaChFc0FLqDlYgu3ieFPzTI5pgLCrPXnMCc+J+8flh4cfi34llu0wuQ
+   g6d09/nnlOt9R4R73cWPxxzeeKsG+dXQnCe8CzuOh/jJKupXRAwd+sIqp
+   g==;
+IronPort-SDR: UpvhNephNHdpHHP+cmFVmdv6qEVcaOTmb9LFOitOUHJj0DVTf09mxyqJUBJgReKreZewIWnJ0J
+ w/5JZSjK5+NjQz+ybTMR69PmCExf3Ri1Q445Ii1YDZ2UE4UQ8vqWS2uZjN254IkSY2wTmjcwmn
+ Kn6zMbjjwjVi+9A9B0tDq/W/+1x/5cmRNPhKd71lr/D6b2573vYHRQfCmOwghPynMDFRWqwDe2
+ ZRV4o9QqN4zXUhwwLW/8uMU6PtLdkBsJtnyxmHSzUNQNf5EnzKXDzQHaXLYq0jwv7Bs+1gBfjV
+ +wpWWhs2CKEAxpaGKAmuSsey
+X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
+   d="scan'208";a="149326896"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jan 2022 06:16:18 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 6 Jan 2022 06:16:17 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 6 Jan 2022 06:16:16 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <miquel.raynal@bootlin.com>
+CC:     <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH 1/2] mtd: rawnand: Remove of_get_nand_on_flash_bbt() wrapper
+Date:   Thu, 6 Jan 2022 15:16:09 +0200
+Message-ID: <20220106131610.225661-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+Remove the wrapper as it hides for no reason what we really want: find an
+of_property. Removing the wrapper makes the code easier to read.
 
-The ib->rec.qkey field is accessed without being initialized.
-Clear the ib_sa_multicast struct to fix the following syzkaller error/.
-
-=====================================================
-BUG: KMSAN: uninit-value in cma_set_qkey drivers/infiniband/core/cma.c:510 [inline]
-BUG: KMSAN: uninit-value in cma_make_mc_event+0xb73/0xe00 drivers/infiniband/core/cma.c:4570
- cma_set_qkey drivers/infiniband/core/cma.c:510 [inline]
- cma_make_mc_event+0xb73/0xe00 drivers/infiniband/core/cma.c:4570
- cma_iboe_join_multicast drivers/infiniband/core/cma.c:4782 [inline]
- rdma_join_multicast+0x2b83/0x30a0 drivers/infiniband/core/cma.c:4814
- ucma_process_join+0xa76/0xf60 drivers/infiniband/core/ucma.c:1479
- ucma_join_multicast+0x1e3/0x250 drivers/infiniband/core/ucma.c:1546
- ucma_write+0x639/0x6d0 drivers/infiniband/core/ucma.c:1732
- vfs_write+0x8ce/0x2030 fs/read_write.c:588
- ksys_write+0x28c/0x520 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Local variable ib.i created at:
- cma_iboe_join_multicast drivers/infiniband/core/cma.c:4737 [inline]
- rdma_join_multicast+0x586/0x30a0 drivers/infiniband/core/cma.c:4814
- ucma_process_join+0xa76/0xf60 drivers/infiniband/core/ucma.c:1479
-
-CPU: 0 PID: 29874 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
-
-Fixes: b5de0c60cc30 ("RDMA/cma: Fix use after free race in roce multicast join")
-Reported-by: syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 ---
- drivers/infiniband/core/cma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mtd/nand/raw/nand_base.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 69c9a12dd14e..9c53e1e7de50 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -4737,7 +4737,7 @@ static int cma_iboe_join_multicast(struct rdma_id_private *id_priv,
- 	int err = 0;
- 	struct sockaddr *addr = (struct sockaddr *)&mc->addr;
- 	struct net_device *ndev = NULL;
--	struct ib_sa_multicast ib;
-+	struct ib_sa_multicast ib = {};
- 	enum ib_gid_type gid_type;
- 	bool send_only;
+diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
+index 113a2e9f43b1..b8e7f1aae032 100644
+--- a/drivers/mtd/nand/raw/nand_base.c
++++ b/drivers/mtd/nand/raw/nand_base.c
+@@ -5287,11 +5287,6 @@ static int of_get_nand_bus_width(struct device_node *np)
+ 	}
+ }
  
+-static bool of_get_nand_on_flash_bbt(struct device_node *np)
+-{
+-	return of_property_read_bool(np, "nand-on-flash-bbt");
+-}
+-
+ static int of_get_nand_secure_regions(struct nand_chip *chip)
+ {
+ 	struct device_node *dn = nand_get_flash_node(chip);
+@@ -5375,7 +5370,7 @@ static int rawnand_dt_init(struct nand_chip *chip)
+ 	if (of_property_read_bool(dn, "nand-is-boot-medium"))
+ 		chip->options |= NAND_IS_BOOT_MEDIUM;
+ 
+-	if (of_get_nand_on_flash_bbt(dn))
++	if (of_property_read_bool(dn, "nand-on-flash-bbt"))
+ 		chip->bbt_options |= NAND_BBT_USE_FLASH;
+ 
+ 	of_get_nand_ecc_user_config(nand);
 -- 
-2.33.1
+2.25.1
 

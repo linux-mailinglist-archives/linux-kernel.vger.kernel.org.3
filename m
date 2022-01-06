@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63699485F44
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BD8485F50
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiAFDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 22:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiAFDff (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 22:35:35 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1681C061212
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 19:35:34 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id w13so3590625ybs.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 19:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VhCtBh9G+9Rq3UzhrUmX4qOWZGDQBagUdx1KxmXNCUU=;
-        b=Unx7MsOTF3iBIkzcDjUGc/Hwk1xF3imXeLxXvHDk3YAGS/3Q1gvF0MmE2Gz+qlqSKf
-         UimyQLdx13fXmvEnS7nvvLDfUXqbqkKPQuyb/StgtYIogr5z2y37q7eN3BK68GOoP7D0
-         BQTDY1+UtpFGDwOWQ2Y79VEfk1Po8m3bCB6Qq0RSduk0Bpn4kk0uYvPEpfYe/FMbW+oQ
-         yKI14c1UJXhWmMFMLGm/yldfRNvJD3aJaYaDonTthjth8433U+wEco2cmgNjPb1lLk+D
-         FU0xnMSpGtIqeZZ2VJbilITNZvItjLMKlMIpid+Xvf+25diKXAEYiFKMoBym3Iwqhcta
-         iCdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VhCtBh9G+9Rq3UzhrUmX4qOWZGDQBagUdx1KxmXNCUU=;
-        b=sd6a0Idb/V5Evd8fhHgK+pF2TOt85tYqzOjxM/46SHAM7RMxS6yc2x/cML3uxxI5Ec
-         gfpepHJt8K39mmVldnPR4LcfVCaq7jriWOgw/m++S4ZP4UEaLBHG+Ftijzf22ibd/0dO
-         GL+T1bOSXfE75RRIxoEuZujjoVP6g4k7ZTeOzlXGuz+csKODFXJPfB4raH1+XBTe0+DI
-         6Hd0nihku6h0BgPlGy6NNnenA1jRGUA9eARpSB4S6Hunyt7+9JP/e0vWS2s/MCrm9eBN
-         o/bz6c1CuhgKaFOrUM1FlWfmXv/3kwnEAVWYIZNZBRaIjSO3Y2OpO/dg6dfbx4Qi/x8F
-         rnbw==
-X-Gm-Message-State: AOAM532TmvA+zk9Wp+dDVW68dCsIbHi+sVvMsdaa9VfNby7Aj3XKhCDT
-        5M8TgF1aFGxe8oH4rdXe2qdwnQD5p+cd8cgVrMu8nQ==
-X-Google-Smtp-Source: ABdhPJxLB871qfyaC0YcbeoW0XO6II0Pr+i3wgfkb5I1MNAgQRDDpwl/ZkNrhj0iJGor2gwCYyskjboIbezk1yYDgxI=
-X-Received: by 2002:a25:3890:: with SMTP id f138mr63404636yba.703.1641440134052;
- Wed, 05 Jan 2022 19:35:34 -0800 (PST)
+        id S231233AbiAFDoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 22:44:16 -0500
+Received: from mga11.intel.com ([192.55.52.93]:14946 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230214AbiAFDoL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 22:44:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641440651; x=1672976651;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=izTXx3R6T91KwPw+mhLreSSPy1JtAl4lGGpkT1QKBWE=;
+  b=EGzFvJZKZ53/2mUyn37cDQ3cAf5jbhD7cvZTygyjDPsXoRtiyfKFHZMT
+   TG8niEaEfIB8qoybR2u0ZaBfXFpLoXrcCGQrSmkPB9MKnjBa4HAuxuuPC
+   NiB9/1iqnHQCnk0A4EktWoT+wiE2N7z7Pg1QFPTOrApoQnHn1G56fbc/v
+   jJiCJ/s8nJFhTt2cTAoYvO61QW7c96L2zuKZRFElj5L1IKTsn1JDDr5iB
+   5dzIo4OxCJGtjItvvcotpksn69StbOeTarN2BHMDFSbQJHdM1MdlKiGGH
+   tjeUo/48AIbfx4lL79YPSIcz4HgqQocM6y/P1hdreLQadRGgNXbCRW4L4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="240129754"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="240129754"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 19:44:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="526814111"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 05 Jan 2022 19:44:03 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 01/14] iommu: Add dma ownership management interfaces
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>
+References: <20220104164100.GA101735@bhelgaas>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <5a2fdbe2-da57-eac4-f115-c5f434080b36@linux.intel.com>
+Date:   Thu, 6 Jan 2022 11:43:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-14-songmuchun@bytedance.com> <20220105170348.GA21070@blackbody.suse.cz>
-In-Reply-To: <20220105170348.GA21070@blackbody.suse.cz>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 6 Jan 2022 11:34:58 +0800
-Message-ID: <CAMZfGtWhYOFCKtFoHB7vsKmpEdj9F-axkba6p9EpuPUp3BK-ag@mail.gmail.com>
-Subject: Re: [PATCH v5 13/16] mm: memcontrol: reuse memory cgroup ID for kmem ID
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mika.penttila@nextfour.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220104164100.GA101735@bhelgaas>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 1:03 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
->
-> On Mon, Dec 20, 2021 at 04:56:46PM +0800, Muchun Song <songmuchun@bytedan=
-ce.com> wrote:
-> > There are two idrs being used by memory cgroup, one is for kmem ID,
-> > another is for memory cgroup ID. The maximum ID of both is 64Ki.
-> > Both of them can limit the total number of memory cgroups.
-> > Actually, we can reuse memory cgroup ID for kmem ID to simplify the
-> > code.
->
-> An interesting improvement.
->
-> I'm a bit dense -- what's the purpose the MEM_CGROUP_ID_DIFF offset?
+Hi Bjorn,
 
-Hi Michal and Mika,
+On 1/5/22 12:41 AM, Bjorn Helgaas wrote:
+>>> This adds dma ownership management in iommu core and exposes several
+>>> interfaces for the device drivers and the device userspace assignment
+>>> framework (i.e. vfio), so that any conflict between user and kernel
+>>> controlled DMA could be detected at the beginning.
+> Maybe I'm missing the point because I don't know what "conflict
+> between user and kernel controlled DMA" is.  Are you talking about
+> both userspace and the kernel programming the same device to do DMA?
 
-MEM_CGROUP_ID_DIFF is introduced to be consistent with before
-that kmem ID starts with -1 and has no holes. Actually, it can be dropped
-and make memcg->kmemcg_id equal to memcg->id.id directly.
+It's about both userspace and kernel programming different devices
+belonging to a same iommu group to do DMA. For example, PCI device A and
+B sit in a some iommu group. Userspace programs device A for DMA and a
+kernel driver programs device B. Userspace may intentionally or
+unintentionally program device A to access and change device B's MMIO
+with P2P DMA transactions which cause the kernel driver for device B
+result in an inconsistent state.
 
-> Couldn't this deduplication be extended to only use mem_cgroup.id.id
-> instead of mem_cgroup.kmemcg_id? (With a boolean telling whether kmem
-> accounting is active.)
->
+This may not be all, just an example.
 
-Not easy to completely remove memcg->kmemcg_id since this filed
-will be used to sync list_lru reparenting which will change
-memcg->kmemcg_id to its parent's kmem ID (more details refers to
-memcg_drain_all_list_lrus() in patch 10 of this series).
+Best regards,
+baolu
 
-Thanks.

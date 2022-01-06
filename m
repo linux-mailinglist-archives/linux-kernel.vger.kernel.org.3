@@ -2,302 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D510B4868B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D524868B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241961AbiAFReZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:34:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S242003AbiAFRem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241910AbiAFReY (ORCPT
+        with ESMTP id S241991AbiAFRe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:34:24 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01489C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:34:24 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id k18so6184994wrg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:34:23 -0800 (PST)
+        Thu, 6 Jan 2022 12:34:29 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47F7C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:34:28 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id r15so5720955uao.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:34:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JalXs1SUuXVQQVLwIaQtmRZLi1BohZR8fOLhkJS63Tw=;
-        b=MR4STbvXS+3rXyp82H98sp3EO4ZUq27df1Qn/BrvWYiSAeU6jegL0zloXPH8yU4mhI
-         lqFEB/akq+MXtN2Cm9qp+F+4uLhTtRKiiL0tEnfSTf2JV5ce4QgJ0i2koEh+WqCEzN4f
-         M3zvh0njgV6KocfAMVbApiSqAguzHJkpXJDGRsQ7gOinjxaqVDwqYL7Q2IvN6Fh09y2x
-         +HYWJvH/PlGcPsWMDUIPQWU6yOIu5Yv6TQsZX3DAW3N+tcqxKGukbOhhmOQu5a1oeU0P
-         OjiNHDLE+olhwx5xnRzR6/C87qigFr8dlWCkLtJFTDsBKaMuMDbzMqmYOL0pMc2LhR7/
-         St3A==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M0laZ74wUIghIpO5Dyzu0jeMZa+nQlHTvOE9+q9E46g=;
+        b=lAKKOXyUXSSHJvWfq0Jm9SDxl3Pk/VJh/paddV907+8ir02mVAJN8iV5D8MnyaqzcK
+         zuDSRLsgMYp0oTERaKpE36kxjtOlce+XBhvITqrHGqHXOueu9USkplmejBMXVTNI3q5T
+         u/7/H3R2zglNRS2sFusA3/fIxwuzX2ToqQwNeR5az8MS+BaFtB1ghNdV+eYUPAsAaOp9
+         0HRpjCpyVsXAkmuDmfAMfaWYUZd2J07n9J65puIhNduT0yhXET5skPXeUAP9BmwHoFP9
+         pdnLDOF9noxllMIRSi9IAX4lCFDsDGQC53u50zRPngZNqcMDedYaohOisn5DsGuXBPV9
+         SCWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JalXs1SUuXVQQVLwIaQtmRZLi1BohZR8fOLhkJS63Tw=;
-        b=6eRu3wvFAAfhv1YHXkt2VBW+qTI/cSXDM0uy8hZn+3FMLCHMLAfwDmhbi3lNSCm6jb
-         EowN7P8dK1VvOj34JKcBebaKRj22RuZzBSCuP8ixrIvY5oIZLX6cc4ikQOkCxwTiwrXe
-         U1uSSlxlVufPlgbHWF0tVHf4Q0jlhcpeXhYHWd6DWJyvolTlEzCDERyVRA3TjaPsOnZd
-         9+j9rmoxH6mg/57DzHzjF/fno/2cE8fEbEEdLFAT7iomqLiJlLT2DC7Sbtrg0/hipUch
-         ERpxZshkUfB6httnL9wKS8hNzII9aOP5FB+rXyIjwEhlHxhFBEjE36Ul9k3OQ8tA2hnn
-         9jIQ==
-X-Gm-Message-State: AOAM532iuq7psC6s/QkM0nQ+/95UwIa/edkQvEOG1m7TOHEP1lMU1fIh
-        6AzWjz5mMi40XVrwq9Mj1hGREw==
-X-Google-Smtp-Source: ABdhPJx9iYStpt8aY2s+c1BpyXLIHS9zyXbLIJ3SrCw6EPPUlNmVdtoiDIy7wHPmnHzyEKWL/Ok+kw==
-X-Received: by 2002:adf:dc92:: with SMTP id r18mr51298550wrj.584.1641490462372;
-        Thu, 06 Jan 2022 09:34:22 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:209:800e:fc7:4177:c8b2])
-        by smtp.gmail.com with ESMTPSA id o11sm6424030wmq.15.2022.01.06.09.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:34:21 -0800 (PST)
-Date:   Thu, 6 Jan 2022 17:34:16 +0000
-From:   David Brazdil <dbrazdil@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wedson Almeida Filho <wedsonaf@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] misc: open-dice: Add driver to expose DICE data
- to userspace
-Message-ID: <YdcoGGg9bDbQh0ll@google.com>
-References: <20211221174502.63891-1-dbrazdil@google.com>
- <20211221174502.63891-3-dbrazdil@google.com>
- <YdXM44q07C5iQydu@google.com>
- <YdbJgf+IWnlCHQA7@google.com>
- <YdbSi+ANXw1JRkUj@kroah.com>
- <Ydch333UxlCKO8Wa@google.com>
- <Ydcl3XjGhVh33Txi@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M0laZ74wUIghIpO5Dyzu0jeMZa+nQlHTvOE9+q9E46g=;
+        b=OnGCBCBfTCdSA8ryP/kI2vGf+O9EjiY2mHRlLymHa+9y3KG4jpRtUAkhP8lfppjYrs
+         tsk/mun/w4TjLsUfW5A9EJDZ/MHm54IbmYhMoTCjJXzVec9JHLEWy14vwJL7YKTlRMQi
+         gqMoX+kgtjU26ekjl73BsJiYvirvmZspkk/ablcByzPYTL86Z/drDBs1j8sU27omQr1p
+         qRmU2oxWfxxbEkbKo4f/XedZaL+TCdE9XwJ54QPvSAjhZxUFDS9qxRbpOlSFO78DXBmR
+         PAQwZYKDQkzI0CchVlIcjco1g8tpLHuFrpnHhhTAdxFOl33CdKvfxfarEpJkQqJaZvLw
+         LroA==
+X-Gm-Message-State: AOAM530alL588RWWAP1fOwKHkypbWoUXaHcMU7PYjHlClaYdH/RVju82
+        Cw5+umtwHGjXb8PwJjy/9ApJgq5zlLY/Z3NeW8XrDal7/Zu3YQ==
+X-Google-Smtp-Source: ABdhPJzHe+G7N6/Mcc3ORZTNNUervPhPoAEh/CAtde9g2FU8QogcnIWRhdCiU7h6ZY+0L9d1Dx52EGV5WWiDxytzkyg=
+X-Received: by 2002:ab0:376c:: with SMTP id o12mr6994680uat.2.1641490467892;
+ Thu, 06 Jan 2022 09:34:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydcl3XjGhVh33Txi@kroah.com>
+References: <1635858706-27320-1-git-send-email-jianhua.ljh@gmail.com>
+ <1635858706-27320-2-git-send-email-jianhua.ljh@gmail.com> <20211217164019.7d5d9848f350fef4f709c62f@kernel.org>
+In-Reply-To: <20211217164019.7d5d9848f350fef4f709c62f@kernel.org>
+From:   Jianhua Liu <jianhua.ljh@gmail.com>
+Date:   Fri, 7 Jan 2022 01:34:16 +0800
+Message-ID: <CAAgTQPXi_cmi27upcLHgen3PotOtcu64oAxjYp559g6fYgkCvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] arm64: kprobes: add support for KPROBES_ON_FTRACE
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        orson.zhai@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 06:24:45PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Jan 06, 2022 at 05:07:43PM +0000, David Brazdil wrote:
-> > Hi Greg,
-> > 
-> > On Thu, Jan 06, 2022 at 12:29:15PM +0100, Greg Kroah-Hartman wrote:
-> > > On Thu, Jan 06, 2022 at 10:50:41AM +0000, David Brazdil wrote:
-> > > > Hi Wedson,
-> > > > 
-> > > > On Wed, Jan 05, 2022 at 04:52:51PM +0000, Wedson Almeida Filho wrote:
-> > > > > On Tue, Dec 21, 2021 at 05:45:02PM +0000, David Brazdil wrote:
-> > > > > > Open Profile for DICE is an open protocol for measured boot compatible
-> > > > > > with the Trusted Computing Group's Device Identifier Composition
-> > > > > > Engine (DICE) specification. The generated Compound Device Identifier
-> > > > > > (CDI) certificates represent the hardware/software combination measured
-> > > > > > by DICE, and can be used for remote attestation and sealing.
-> > > > > > 
-> > > > > > Add a driver that exposes reserved memory regions populated by firmware
-> > > > > > with DICE CDIs and exposes them to userspace via a character device.
-> > > > > > 
-> > > > > > Userspace obtains the memory region's size from read() and calls mmap()
-> > > > > > to create a mapping of the memory region in its address space. The
-> > > > > > mapping is not allowed to be write+shared, giving userspace a guarantee
-> > > > > > that the data were not overwritten by another process.
-> > > > > > 
-> > > > > > Userspace can also call write(), which triggers a wipe of the DICE data
-> > > > > > by the driver. Because both the kernel and userspace mappings use
-> > > > > > write-combine semantics, all clients observe the memory as zeroed after
-> > > > > > the syscall has returned.
-> > > > > > 
-> > > > > > Cc: Andrew Scull <ascull@google.com>
-> > > > > > Cc: Will Deacon <will@kernel.org>
-> > > > > > Signed-off-by: David Brazdil <dbrazdil@google.com>
-> > > > > > ---
-> > > > > >  drivers/misc/Kconfig     |  12 +++
-> > > > > >  drivers/misc/Makefile    |   1 +
-> > > > > >  drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
-> > > > > >  drivers/of/platform.c    |   1 +
-> > > > > >  4 files changed, 202 insertions(+)
-> > > > > >  create mode 100644 drivers/misc/open-dice.c
-> > > > > > 
-> > > > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> > > > > > index 0f5a49fc7c9e..a2b26426efba 100644
-> > > > > > --- a/drivers/misc/Kconfig
-> > > > > > +++ b/drivers/misc/Kconfig
-> > > > > > @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
-> > > > > >  	  switching between the dual-role USB-C port and the USB-A host ports
-> > > > > >  	  using only one USB controller.
-> > > > > >  
-> > > > > > +config OPEN_DICE
-> > > > > > +	tristate "Open Profile for DICE driver"
-> > > > > > +	depends on OF_RESERVED_MEM
-> > > > > > +	help
-> > > > > > +	  This driver exposes a DICE reserved memory region to userspace via
-> > > > > > +	  a character device. The memory region contains Compound Device
-> > > > > > +	  Identifiers (CDIs) generated by firmware as an output of DICE
-> > > > > > +	  measured boot flow. Userspace can use CDIs for remote attestation
-> > > > > > +	  and sealing.
-> > > > > > +
-> > > > > > +	  If unsure, say N.
-> > > > > > +
-> > > > > >  source "drivers/misc/c2port/Kconfig"
-> > > > > >  source "drivers/misc/eeprom/Kconfig"
-> > > > > >  source "drivers/misc/cb710/Kconfig"
-> > > > > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> > > > > > index a086197af544..70e800e9127f 100644
-> > > > > > --- a/drivers/misc/Makefile
-> > > > > > +++ b/drivers/misc/Makefile
-> > > > > > @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
-> > > > > >  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
-> > > > > >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
-> > > > > >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
-> > > > > > +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> > > > > > diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..f1819f951173
-> > > > > > --- /dev/null
-> > > > > > +++ b/drivers/misc/open-dice.c
-> > > > > > @@ -0,0 +1,188 @@
-> > > > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > > > +/*
-> > > > > > + * Copyright (C) 2021 - Google LLC
-> > > > > > + * Author: David Brazdil <dbrazdil@google.com>
-> > > > > > + *
-> > > > > > + * Driver for Open Profile for DICE.
-> > > > > > + *
-> > > > > > + * This driver takes ownership of a reserved memory region containing data
-> > > > > > + * generated by the Open Profile for DICE measured boot protocol. The memory
-> > > > > > + * contents are not interpreted by the kernel but can be mapped into a userspace
-> > > > > > + * process via a misc device. Userspace can also request a wipe of the memory.
-> > > > > > + *
-> > > > > > + * Userspace can access the data with (w/o error handling):
-> > > > > > + *
-> > > > > > + *     fd = open("/dev/open-dice0", O_RDWR);
-> > > > > > + *     read(fd, &size, sizeof(unsigned long));
-> > > > > > + *     data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
-> > > > > > + *     write(fd, NULL, 0); // wipe
-> > > > > > + *     close(fd);
-> > > > > > + */
-> > > > > > +
-> > > > > > +#include <linux/io.h>
-> > > > > > +#include <linux/miscdevice.h>
-> > > > > > +#include <linux/mm.h>
-> > > > > > +#include <linux/module.h>
-> > > > > > +#include <linux/of_reserved_mem.h>
-> > > > > > +#include <linux/platform_device.h>
-> > > > > > +
-> > > > > > +#define DRIVER_NAME "open-dice"
-> > > > > > +
-> > > > > > +struct open_dice_drvdata {
-> > > > > > +	spinlock_t lock;
-> > > > > > +	char name[16];
-> > > > > > +	struct reserved_mem *rmem;
-> > > > > > +	struct miscdevice misc;
-> > > > > > +};
-> > > > > > +
-> > > > > > +static inline struct open_dice_drvdata *to_open_dice_drvdata(struct file *filp)
-> > > > > > +{
-> > > > > > +	return container_of(filp->private_data, struct open_dice_drvdata, misc);
-> > > > > > +}
-> > > > > > +
-> > > > > > +static int open_dice_wipe(struct open_dice_drvdata *drvdata)
-> > > > > > +{
-> > > > > > +	void *kaddr;
-> > > > > > +
-> > > > > > +	spin_lock(&drvdata->lock);
-> > > > > > +	kaddr = devm_memremap(drvdata->misc.this_device, drvdata->rmem->base,
-> > > > > > +			      drvdata->rmem->size, MEMREMAP_WC);
-> > > > > > +	if (IS_ERR(kaddr)) {
-> > > > > > +		spin_unlock(&drvdata->lock);
-> > > > > > +		return PTR_ERR(kaddr);
-> > > > > > +	}
-> > > > > > +
-> > > > > > +	memset(kaddr, 0, drvdata->rmem->size);
-> > > > > > +	devm_memunmap(drvdata->misc.this_device, kaddr);
-> > > > > > +	spin_unlock(&drvdata->lock);
-> > > > > > +	return 0;
-> > > > > > +}
-> > > > > > +
-> > > > > > +/*
-> > > > > > + * Copies the size of the reserved memory region to the user-provided buffer.
-> > > > > > + */
-> > > > > > +static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
-> > > > > > +			      loff_t *off)
-> > > > > > +{
-> > > > > > +	unsigned long val = to_open_dice_drvdata(filp)->rmem->size;
-> > > > > 
-> > > > > There's a UAF issue here (and in all file operations that call
-> > > > > to_open_dice_drvdata) when the platform device in unbounded from the driver
-> > > > > while userspace has an instance of the misc device open: after open_dice_remove
-> > > > > is called, all managed resources are freed (which includes this
-> > > > > open_dice_drvdata allocation).
-> > > > > 
-> > > > > No new miscdev files can be created, but the existing ones continue to exist
-> > > > > with a now dangling pointer stored in private_data. So read/write/mmap syscalls
-> > > > > from userspace will lead to dereferencing this dangling pointer.
-> > > > 
-> > > > Please correct me if I'm wrong, but I don't think this can happen
-> > > > without tainting the kernel.
-> > > > 
-> > > > To call open_dice_remove, we have to remove the module. And any process
-> > > > holding an FD of the misc device will increase the module's refcounter,
-> > > > which is zero-checked in SYS_delete_module. The only way to get past
-> > > > that check is by compiling the kernel with CONFIG_MODULE_FORCE_UNLOAD,
-> > > > which changes the implementation of try_force_unload (kernel/module.c)
-> > > > and adds taint. Otherwise SYS_delete_module returns an error.
-> > > > 
-> > > > Unless there is another way how to trigger this situation, I think the
-> > > > existing protection is sufficient. The user cannot force the removal of
-> > > > the module without agreeing to the consequences.
-> > > 
-> > > You can remove the driver from the device by writing to the "unbind"
-> > > file in sysfs for this driver.
-> > > 
-> > > Otherwise, yes, you are correct, you can not remove the module from the
-> > > system if the file is open, but that does not prevent the driver from
-> > > being unbound from the device.
-> > > 
-> > > Yes, it is rare, and only able to be done by root, and even then is
-> > > something that many drivers fail at.  But for new ones, when we notice
-> > > it, it should be fixed up before merging just to prevent any future
-> > > problems.
-> > 
-> > Ah, I see. I'd opt for just setting 'suppress_bind_attrs=true' to
-> > prevent that, unless you think unbinding needs to be supported. I don't
-> > see a use for that on our side and would prefer to keep the code simple.
-> 
-> No objection from me, that solves it easily :)
-> 
-> > > > > > +	/* Create write-combine mapping so all clients observe a wipe. */
-> > > > > > +	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-> > > > > > +	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
-> > > > > > +	return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
-> > > > > > +}
-> > > > > 
-> > > > > Is there a reason for mapping this memory instead of, say, copying it to
-> > > > > userspace via read?
-> > > > 
-> > > > The data should be treated as secret, so the idea is that avoiding
-> > > > reading it in the kernel means we don't need to worry about it leakage
-> > > > via the stack, etc. The reason for this is that the DICE derivation
-> > > > chain may continue in userspace, so we want to minimize the chance of
-> > > > a child process getting the parent secret from the kernel.
-> > > 
-> > > The kernel stack is already secret, this should not be an issue.  And
-> > > even then, you can always erase it before the call returns to ensure
-> > > that it does not stick around, like many crypto functions do.
-> > 
-> > I can rewrite it and memzero_explicit the memory if you or Wedson feel
-> > strongly about this, but I actually really like mmap() because it avoids
-> > the need for dealing with that.
-> 
-> I think if we remove the ability for userspace to unbind the device from
-> the driver with the file handle open like above, all should be ok to
-> keep this as a mmap thing.
-> 
-> Wedson, any objection?
-> 
-> David, I pointed Wedson as this driver as an example of maybe something
-> that might be possible to write in Rust instead, which is why he looked
-> at it.  I don't recommend doing that just now, but we are feeling out
-> what types of drivers would be good examples in that language.
+On Fri, Dec 17, 2021 at 3:40 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi,
+>
+> On Tue,  2 Nov 2021 21:11:46 +0800
+> Janet Liu <jianhua.ljh@gmail.com> wrote:
+>
+> > From: Janet Liu <janet.liu@unisoc.com>
+> >
+> > This patch allow kprobes on ftrace call sites. This optimization
+> > avoids use of a trap with regular kprobes.
+> >
+> > This depends on HAVE_DYNAMIC_FTRACE_WITH_REGS which depends on
+> > "patchable-function-entry" options which is only implemented with newer
+> > toolchains.
+> >
+> > Signed-off-by: Janet Liu <janet.liu@unisoc.com>
+> > ---
+> >  arch/arm64/Kconfig                 |  1 +
+> >  arch/arm64/kernel/probes/Makefile  |  1 +
+> >  arch/arm64/kernel/probes/ftrace.c  | 73 ++++++++++++++++++++++++++++++
+> >  arch/arm64/kernel/probes/kprobes.c | 27 +++++++++++
+> >  4 files changed, 102 insertions(+)
+> >  create mode 100644 arch/arm64/kernel/probes/ftrace.c
+> >
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 339130712093..f59005608976 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -200,6 +200,7 @@ config ARM64
+> >       select HAVE_SYSCALL_TRACEPOINTS
+> >       select HAVE_KPROBES
+> >       select HAVE_OPTPROBES
+> > +     select HAVE_KPROBES_ON_FTRACE
+> >       select HAVE_KRETPROBES
+> >       select HAVE_GENERIC_VDSO
+> >       select IOMMU_DMA if IOMMU_SUPPORT
+> > diff --git a/arch/arm64/kernel/probes/Makefile b/arch/arm64/kernel/probes/Makefile
+> > index c77c92ac95fd..d9b204f4795a 100644
+> > --- a/arch/arm64/kernel/probes/Makefile
+> > +++ b/arch/arm64/kernel/probes/Makefile
+> > @@ -3,5 +3,6 @@ obj-$(CONFIG_KPROBES)         += kprobes.o decode-insn.o      \
+> >                                  kprobes_trampoline.o         \
+> >                                  simulate-insn.o
+> >  obj-$(CONFIG_OPTPROBES)      += opt.o opt_head.o
+> > +obj-$(CONFIG_KPROBES_ON_FTRACE) += ftrace.o
+> >  obj-$(CONFIG_UPROBES)                += uprobes.o decode-insn.o      \
+> >                                  simulate-insn.o
+> > diff --git a/arch/arm64/kernel/probes/ftrace.c b/arch/arm64/kernel/probes/ftrace.c
+> > new file mode 100644
+> > index 000000000000..46ea92eb552f
+> > --- /dev/null
+> > +++ b/arch/arm64/kernel/probes/ftrace.c
+> > @@ -0,0 +1,73 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +//
+> > +// Dynamic Ftrace based Kprobes Optimization
+> > +//
+> > +// Copyright (C) 2021, Unisoc Inc.
+> > +// Author: Janet Liu <janet.liu@unisoc.com>
+> > +#include <linux/kprobes.h>
+> > +#include <linux/ptrace.h>
+> > +#include <linux/hardirq.h>
+> > +#include <linux/preempt.h>
+> > +#include <linux/ftrace.h>
+> > +
+> > +
+> > +/* Ftrace callback handler for kprobes*/
+> > +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> > +                        struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> > +{
+> > +     struct kprobe *p;
+> > +     struct kprobe_ctlblk *kcb;
+> > +     struct pt_regs *regs = ftrace_get_regs(fregs);
+> > +     int bit;
+> > +
+> > +     bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> > +     if (bit < 0)
+> > +             return;
+> > +
+> > +     preempt_disable_notrace();
+>
+> This already has been done in ftrace side.
 
-Wedson already reached out to me about that. 100% agree that this is a
-good candidate and happy to help test it if needed. Thanks for making
-the connection, Greg.
+Hi Masami,
+
+Got it by reading code, will fix this.
+
+>
+> > +     p = get_kprobe((kprobe_opcode_t *)ip);
+> > +     if (unlikely(!p) || kprobe_disabled(p))
+> > +             goto end;
+> > +
+> > +     kcb = get_kprobe_ctlblk();
+> > +     if (kprobe_running()) {
+> > +             kprobes_inc_nmissed_count(p);
+> > +     } else {
+> > +             unsigned long orig_ip = instruction_pointer(regs);
+> > +
+> > +             instruction_pointer_set(regs, ip);
+>
+> The 'ip' is the address of the 'bl' instruction, which must be
+> p->addr + AARCH64_INSN_SIZE * 2. But this is a bit strange.
+>
+> On aarch64, if the user probe callback is called from breakpoint handler,
+> regs->pc == kp->addr. But in this case, it is not the same.
+>
+> So, what about this?
+>
+>  instruction_pointer_set(regs, ip - AARCH64_INSN_SIZE);
+>
+
+I got what you said.
+
+But p->addr is changed when KPROBES_ON_FTRACE enable.
+I implemented kprobe_lookup_name for arm64 to do the change in this patch.
+because kernel/kprobe.c:check_ftrace_location check,
+if p->addr != ftrace_addr, don't kprobe on ftrace entry.
+so p->addr is equal to ftrace addr(the second nop), is equal to 'ip'.
+here should be instruction_pointer_set(regs, ip);
+
+> > +
+> > +             __this_cpu_write(current_kprobe, p);
+> > +             kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > +             if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> > +                     /*
+> > +                      *Emulate singlestep (and also recover regs->pc)
+> > +                      *as if there is a nop
+> > +                      */
+> > +                     instruction_pointer_set(regs,
+> > +                                     (unsigned long)p->addr + MCOUNT_INSN_SIZE);
+>
+> And then, this will be
+>
+>                         instruction_pointer_set(regs,
+>                                         (unsigned long)p->addr + AARCH64_INSN_SIZE * 2);
+>
+> So basically, kprobes on ftrace will skips 2 NOP instructions (the compiler installed
+> 2 nops) and call post handler. This means we have a virtual big NOP instruction there.
+>
+Ditto, skip two nop instructions should
+instruction_pointer_set(regs,
+                        (unsigned long)p->addr + AARCH64_INSN_SIZE);
+
+
+> > +                     if (unlikely(p->post_handler)) {
+> > +                             kcb->kprobe_status = KPROBE_HIT_SSDONE;
+> > +                             p->post_handler(p, regs, 0);
+> > +                     }
+> > +                     instruction_pointer_set(regs, orig_ip);
+> > +             }
+> > +
+> > +             /*
+> > +              * If pre_handler returns !0,it changes regs->pc. We have to
+> > +              * skip emulating post_handler.
+> > +              */
+> > +             __this_cpu_write(current_kprobe, NULL);
+> > +     }
+> > +end:
+> > +     preempt_enable_notrace();
+> > +     ftrace_test_recursion_unlock(bit);
+> > +}
+> > +NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+> > +
+> > +int arch_prepare_kprobe_ftrace(struct kprobe *p)
+> > +{
+> > +     p->ainsn.api.insn = NULL;
+> > +     p->ainsn.api.restore = 0;
+> > +     return 0;
+> > +}
+> > diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
+> > index 6dbcc89f6662..3d371d3e4dfa 100644
+> > --- a/arch/arm64/kernel/probes/kprobes.c
+> > +++ b/arch/arm64/kernel/probes/kprobes.c
+> > @@ -417,6 +417,33 @@ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+> >       return 0;
+> >  }
+> >
+> > +kprobe_opcode_t __kprobes *kprobe_lookup_name(const char *name, unsigned int offset)
+> > +{
+> > +     kprobe_opcode_t *addr;
+> > +
+> > +     addr = (kprobe_opcode_t *)kallsyms_lookup_name(name);
+> > +#ifdef CONFIG_KPROBES_ON_FTRACE
+> > +     if (addr && !offset) {
+> > +             unsigned long faddr;
+> > +
+> > +             faddr = ftrace_location_range((unsigned long)addr,
+> > +                                           (unsigned long)addr + 8);
+>
+> this '8' must be (AARCH64_INSN_SIZE * 2). And here you may need to add
+> a comment why search the 2 instructions. (it is because arm64 uses
+> -fpatchable-function-entry=2.)
+>
+Got it , will fix it.
+> > +             if (faddr)
+> > +                     addr = (kprobe_opcode_t *)faddr;
+> > +     }
+This change the p->addr to ftrace_addr.
+
+> > +#endif
+> > +     return addr;
+> > +}
+> > +
+> > +bool __kprobes arch_kprobe_on_func_entry(unsigned long offset)
+> > +{
+> > +#ifdef CONFIG_KPROBES_ON_FTRACE
+> > +     return offset <= 8;
+>
+> Ditto.
+Got it, will add comment.
+
+Thanks
+
+Jianhua
+>
+> > +#else
+> > +     return !offset;
+> > +#endif
+> > +}
+> > +
+> >  int __init arch_init_kprobes(void)
+> >  {
+> >       register_kernel_break_hook(&kprobes_break_hook);
+> > --
+> > 2.25.1
+> >
+>
+> Thank you,
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>

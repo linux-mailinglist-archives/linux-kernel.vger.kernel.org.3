@@ -2,63 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424EF485D3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEDE485D3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343856AbiAFAeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 19:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
+        id S1343860AbiAFAfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 19:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343830AbiAFAeN (ORCPT
+        with ESMTP id S1343846AbiAFAf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 19:34:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70380C061245;
-        Wed,  5 Jan 2022 16:34:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10D216193C;
-        Thu,  6 Jan 2022 00:34:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E81C36AE9;
-        Thu,  6 Jan 2022 00:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641429251;
-        bh=jMICUvfWqDl6yU+e1z03F+e1bc2tGxcy1cr8nmpYT9s=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=V7sw9/ItzULOjdm7rsvyOr+0aqNy0gBiS2gW2BvNiAbEwpXBTUJc5gFgRVeLTdYfF
-         GaTJ/J1S4cagCkxUS8Y8X6UWWLZ+td6NUyTHHbdhyB3E11GsFQjpHpe61kW8ji+3iY
-         eFVqSFfIOkR1VgrnE8jfx9/sRR3CgZepKrTj03RxgslpyLGzHYeWz7IurSx2h4Pr0e
-         7G7g8aeFqqRuoXhGTaNflOkBjoUCs36DB2z0Dg4675TGIW7KvUnCvOd166zAnpeRB7
-         UZbaJnqWRp9nGAmyjf2zQAgLjNBgejNCci4qCj3LM/YbLc63ojF7ahB2bS4cyBAS8T
-         WEQvDRANotLKA==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 5 Jan 2022 19:35:28 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028C3C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 16:35:28 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so1148224pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 16:35:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/dgM38nH9o8fmC3S1YCg/YggFGRsvCmKnoOuH6xTuns=;
+        b=jMNnnvuhcFeDCUsNA7IB1tnGTpFJSji9ve2cvca3TgSTVw56PL212pUZZ0f1ZJWsi2
+         P4r3DTaEIWY/w3httxSjFDuE676yxI+u+qx7i84IDeHAPeHBAFYtT07Gb95cscCreEIS
+         hjB/Q6/jgvmEG+dAXiQC55RCJWVwfwSVRVIOarQHwBscvDazT6+RHr3cSzaicgPsa6AZ
+         ollu+uoV1dMv/XwEeaO0asU1xn7cApC0nrxZgTjzp4IqgDH8NKOBOJxujLKsl6+JpvKU
+         x9P8e/63s4SE3p+Pb06/n7wB4RV851ELzlaLb/AYRr5rWX5dwA/k0g4PjVeR3Lvbpvaf
+         sNAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/dgM38nH9o8fmC3S1YCg/YggFGRsvCmKnoOuH6xTuns=;
+        b=yeR9aDFMKCWKPFiYNF/7D/0LI2lWd8L0eQ6XbqZ/y0nygTz3VsJ3MSF7ZkrqBmRODm
+         VodETr0sUBRrd7FCSqpyOkzzWeLa4Bbu2lh3BWN1sWTmmuo/YBJ1eTQkC2hVVOygnDo2
+         8DGGRwcoTew8xbb3toWt4nd8/2SHAAUTTrgPZfh67AipsGZOvX/1zCFLP07eJ7FdrzNS
+         JpRjCAXivlPQUHF77o7dx+Yy1qt+4NTUnM4UytUzaG+gTrfR+90HqJ2T5d7yLXR0a2kS
+         smFBBH4jWC5mNornMmVfarMaGFHrHHlUIc/C9r8x4Ga64zUYNSwVCGr+ogRVrg/FQgUE
+         9JgQ==
+X-Gm-Message-State: AOAM533ovNvCE6O0aUv7CPthT+h5NWRvS2n+8z5UKQhF0dk8XYhRMIWY
+        njbZnHmNpZ3dw1G0B0wVwVZppw==
+X-Google-Smtp-Source: ABdhPJwI1M2o+qP77Lv7sMzLsdslDVY8qUMAFpBAjlHNE6ysmF/7QU6sZglf/IKSQbkkV15BO6eKCg==
+X-Received: by 2002:a17:90b:3809:: with SMTP id mq9mr7062172pjb.245.1641429327593;
+        Wed, 05 Jan 2022 16:35:27 -0800 (PST)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id s8sm243085pfu.58.2022.01.05.16.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 16:35:27 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1n5GkX-00CDig-JJ; Wed, 05 Jan 2022 20:35:25 -0400
+Date:   Wed, 5 Jan 2022 20:35:25 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Tom Talpey <tom@talpey.com>
+Cc:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liweihang@huawei.com" <liweihang@huawei.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
+ in responder side
+Message-ID: <20220106003525.GT6467@ziepe.ca>
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
+ <9f97d902-aad5-db0f-f2dc-badf913777c4@talpey.com>
+ <fd561077-358e-e38d-a7d0-5c61593eff6a@fujitsu.com>
+ <17122432-1d05-7a88-5d06-840cd69e57e9@talpey.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211227133558.135185-2-krzysztof.kozlowski@canonical.com>
-References: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com> <20211227133558.135185-2-krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH 08/19] dt-bindings: clock: intel,stratix10: convert to dtschema
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
-Date:   Wed, 05 Jan 2022 16:34:10 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220106003411.66E81C36AE9@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17122432-1d05-7a88-5d06-840cd69e57e9@talpey.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2021-12-27 05:35:47)
-> Convert the Intel Stratix 10 clock controller bindings to DT schema forma=
-t.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+On Thu, Dec 30, 2021 at 09:32:06PM -0500, Tom Talpey wrote:
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+> The global visibility is oriented toward supporting distributed
+> shared memory workloads, or publish/subscribe on high scale systems.
+> It's mainly about ensuring that all devices and CPUs see the data,
+> something ordinary RDMA Write does not guarantee. This often means
+> flushing write pipelines, possibly followed by invalidating caches.
+
+Isn't that what that new ATOMIC_WRITE does? Why do I need to flush if
+ATOMIC WRITE was specified as a release? All I need to do is acquire
+on the ATOMIC_WRITE site and I'm good?
+
+So what does FLUSH do here, and how does a CPU 'acquire' against this
+kind of flush? The flush doesn't imply any ordering right, so how is
+it useful on its own?
+
+The write to persistance aspect I understand, but this notion of
+global viability seems peculiar.
+
+> Well, higher level wrappers may signal errors, for example if they're
+> not available or unreliable, and you will need to handle them. Also,
+> they may block. Is that ok in this context?
+
+I'm not sure we have any other tools here beyond a release barrier
+like wmb() or the special pmem cache flush. Neither are blocking or
+can fail.
+
+In pmem systems storage failure is handled via the memory failure
+stuff asynchronously.
+
+Jason

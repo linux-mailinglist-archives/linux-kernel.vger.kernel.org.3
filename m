@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33046486669
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B0648666B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240300AbiAFPAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S240303AbiAFPAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240273AbiAFPAD (ORCPT
+        with ESMTP id S240274AbiAFPAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:00:03 -0500
+        Thu, 6 Jan 2022 10:00:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8BDC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 07:00:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1A7C061201;
+        Thu,  6 Jan 2022 07:00:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C770B82229
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:00:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBDDC36AED;
-        Thu,  6 Jan 2022 15:00:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B223B8222B;
+        Thu,  6 Jan 2022 15:00:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36792C36AF4;
+        Thu,  6 Jan 2022 15:00:01 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1n5UFE-000sLs-5B;
+        id 1n5UFE-000sMR-BB;
         Thu, 06 Jan 2022 10:00:00 -0500
-Message-ID: <20220106150000.000909083@goodmis.org>
+Message-ID: <20220106150000.180196154@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 06 Jan 2022 09:57:17 -0500
+Date:   Thu, 06 Jan 2022 09:57:18 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: [for-linus][PATCH 1/3] ftrace/samples: Add missing prototypes direct functions
+        stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: [for-linus][PATCH 2/3] tracing: Fix check for trace_percpu_buffer validity in
+ get_trace_buf()
 References: <20220106145716.663267282@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -43,94 +44,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Olsa <jolsa@redhat.com>
+From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
 
-There's another compilation fail (first here [1]) reported by kernel
-test robot for W=1 clang build:
+With the new osnoise tracer, we are seeing the below splat:
+    Kernel attempted to read user page (c7d880000) - exploit attempt? (uid: 0)
+    BUG: Unable to handle kernel data access on read at 0xc7d880000
+    Faulting instruction address: 0xc0000000002ffa10
+    Oops: Kernel access of bad area, sig: 11 [#1]
+    LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+    ...
+    NIP [c0000000002ffa10] __trace_array_vprintk.part.0+0x70/0x2f0
+    LR [c0000000002ff9fc] __trace_array_vprintk.part.0+0x5c/0x2f0
+    Call Trace:
+    [c0000008bdd73b80] [c0000000001c49cc] put_prev_task_fair+0x3c/0x60 (unreliable)
+    [c0000008bdd73be0] [c000000000301430] trace_array_printk_buf+0x70/0x90
+    [c0000008bdd73c00] [c0000000003178b0] trace_sched_switch_callback+0x250/0x290
+    [c0000008bdd73c90] [c000000000e70d60] __schedule+0x410/0x710
+    [c0000008bdd73d40] [c000000000e710c0] schedule+0x60/0x130
+    [c0000008bdd73d70] [c000000000030614] interrupt_exit_user_prepare_main+0x264/0x270
+    [c0000008bdd73de0] [c000000000030a70] syscall_exit_prepare+0x150/0x180
+    [c0000008bdd73e10] [c00000000000c174] system_call_vectored_common+0xf4/0x278
 
-  >> samples/ftrace/ftrace-direct-multi-modify.c:7:6: warning: no previous
-  prototype for function 'my_direct_func1' [-Wmissing-prototypes]
-     void my_direct_func1(unsigned long ip)
+osnoise tracer on ppc64le is triggering osnoise_taint() for negative
+duration in get_int_safe_duration() called from
+trace_sched_switch_callback()->thread_exit().
 
-Direct functions in ftrace direct sample modules need to have prototypes
-defined. They are already global in order to be visible for the inline
-assembly, so there's no problem.
+The problem though is that the check for a valid trace_percpu_buffer is
+incorrect in get_trace_buf(). The check is being done after calculating
+the pointer for the current cpu, rather than on the main percpu pointer.
+Fix the check to be against trace_percpu_buffer.
 
-The kernel test robot reported just error for ftrace-direct-multi-modify,
-but I got same errors also for the rest of the modules touched by this patch.
+Link: https://lkml.kernel.org/r/a920e4272e0b0635cf20c444707cbce1b2c8973d.1640255304.git.naveen.n.rao@linux.vnet.ibm.com
 
-[1] 67d4f6e3bf5d ftrace/samples: Add missing prototype for my_direct_func
-
-Link: https://lkml.kernel.org/r/20211219135317.212430-1-jolsa@kernel.org
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e1067a07cfbc ("ftrace/samples: Add module to test multi direct modify interface")
-Fixes: ae0cc3b7e7f5 ("ftrace/samples: Add a sample module that implements modify_ftrace_direct()")
-Fixes: 156473a0ff4f ("ftrace: Add another example of register_ftrace_direct() use case")
-Fixes: b06457c83af6 ("ftrace: Add sample module that uses register_ftrace_direct()")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: e2ace001176dc9 ("tracing: Choose static tp_printk buffer by explicit nesting count")
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 ---
- samples/ftrace/ftrace-direct-modify.c       | 3 +++
- samples/ftrace/ftrace-direct-multi-modify.c | 3 +++
- samples/ftrace/ftrace-direct-too.c          | 3 +++
- samples/ftrace/ftrace-direct.c              | 2 ++
- 4 files changed, 11 insertions(+)
+ kernel/trace/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-index 690e4a9ff333..2877cb053a82 100644
---- a/samples/ftrace/ftrace-direct-modify.c
-+++ b/samples/ftrace/ftrace-direct-modify.c
-@@ -4,6 +4,9 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
- 
-+extern void my_direct_func1(void);
-+extern void my_direct_func2(void);
-+
- void my_direct_func1(void)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 88de94da596b..e1f55851e53f 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3217,7 +3217,7 @@ static char *get_trace_buf(void)
  {
- 	trace_printk("my direct func1\n");
-diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-index 91bc42a7adb9..6f43a39decd0 100644
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -4,6 +4,9 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
+ 	struct trace_buffer_struct *buffer = this_cpu_ptr(trace_percpu_buffer);
  
-+extern void my_direct_func1(unsigned long ip);
-+extern void my_direct_func2(unsigned long ip);
-+
- void my_direct_func1(unsigned long ip)
- {
- 	trace_printk("my direct func1 ip %lx\n", ip);
-diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-index 6e0de725bf22..b97e5ed46233 100644
---- a/samples/ftrace/ftrace-direct-too.c
-+++ b/samples/ftrace/ftrace-direct-too.c
-@@ -5,6 +5,9 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
+-	if (!buffer || buffer->nesting >= 4)
++	if (!trace_percpu_buffer || buffer->nesting >= 4)
+ 		return NULL;
  
-+extern void my_direct_func(struct vm_area_struct *vma,
-+			   unsigned long address, unsigned int flags);
-+
- void my_direct_func(struct vm_area_struct *vma,
- 			unsigned long address, unsigned int flags)
- {
-diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-index a30aa42ec76a..c918b13edb49 100644
---- a/samples/ftrace/ftrace-direct.c
-+++ b/samples/ftrace/ftrace-direct.c
-@@ -5,6 +5,8 @@
- #include <linux/ftrace.h>
- #include <asm/asm-offsets.h>
- 
-+extern void my_direct_func(struct task_struct *p);
-+
- void my_direct_func(struct task_struct *p)
- {
- 	trace_printk("waking up %s-%d\n", p->comm, p->pid);
+ 	buffer->nesting++;
 -- 
 2.33.0

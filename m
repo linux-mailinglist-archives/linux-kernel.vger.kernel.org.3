@@ -2,143 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF96D486AEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC20486AEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243582AbiAFUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S243597AbiAFUNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiAFUMg (ORCPT
+        with ESMTP id S230045AbiAFUNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:12:36 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC504C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:12:35 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id w80so5303562oie.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vROeKx05r5S8zq2+fHHm+ECFUEqfMQWtVJfxmmZ8/Ww=;
-        b=IwOxf8ihHeWh8Vk/JhKknys2TRVe23Nw7HM/81myIZiIRt+jJvpoy0BA/upwdcBAl1
-         kEy65Evp0YMT8DcxieVwNBTYnb8LjpjnLrBmV6PL1WhT1sgXwWUiAGR8LpreT5W4U7/o
-         hgpNgWq1JWBZxKb/lJ1ECeuxGk0y13t6uUAN+h2XAa+QWHIz3DMFVhcITAFXv85j0VeS
-         408fSoxy2n+K4RjuRb43CvXO2Btl4Jf09YOZG+coa9ZhfJoKj+vO+7rjByazryTShDTh
-         kJ9msuEmKX52Cm8vClodZ0cuYc9gyWAg6UHYP1rgHYpUGOxCji7HKp/xvsbPl1QlMc6/
-         9+EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vROeKx05r5S8zq2+fHHm+ECFUEqfMQWtVJfxmmZ8/Ww=;
-        b=Fziqu9i8CiZN+5u2gvv0LL42PahjtcRJFxFB7lJC8bgJfDTQS1to06u1vHN4Okq1B4
-         aeJbP4c/hDB/WcOiDqyVK/DurzejyUGsPqxfE8FXeqAOqKsJjdzVAojtcIAeAi/NT3PN
-         KwvDTfYF4EXu1JR1+5wnzGcrSFLnR6eGRW+vrMcCfE6rt9RTdd4QQx06xxHE+BlHawmf
-         7/cNzZ77OL7zrQIvojBLRtv32bfG0sCyMESfAyDQXnn4GAKLUt0XYs6Ls2K3bIigIFIN
-         NdIJAJUT4LmLI78bJqV/Cbe6fghkfOXhTn8BPG5oT5Acysw15F2IngD8hyYaUJWcByvq
-         6Z7A==
-X-Gm-Message-State: AOAM530gMNFG0ajAA3PIScxnK7x7AvHyUgKVK+OfVKWWTEcJ6x57sMVj
-        pIjTqv61SdO8KQVo9mkUTfT8iNPl2zNxvX8NQovaxQ==
-X-Google-Smtp-Source: ABdhPJxJ/MNcLpd6cu3C+bOIgnNNw2Mi1QOlfdVP1bmKYZXU3eundgFPCP8MKIkL04TZL9XRZB087Sxf1sixo2k3q8c=
-X-Received: by 2002:a05:6808:1b22:: with SMTP id bx34mr5205268oib.68.1641499955018;
- Thu, 06 Jan 2022 12:12:35 -0800 (PST)
+        Thu, 6 Jan 2022 15:13:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6DEC061245;
+        Thu,  6 Jan 2022 12:13:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9EE361D59;
+        Thu,  6 Jan 2022 20:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FCD6C36AE3;
+        Thu,  6 Jan 2022 20:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641500000;
+        bh=Sa5hK/3fl6EtdenwmTSUJ7FMQ9CLdnRum0y0IkXl1Mo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mpout7Ni8/Br/FiEA1BOnR39ReQL6WFU9Cp3SgxASfIfOznZwMWIZ2OkfuZIZRr4R
+         dXQr2oiGUl9No0Wu6dtWK1+OFPQzaaXVh0zemYV4278ZoSrfF9xBmw8bCV36YOEzwC
+         l9KWXCbGBhi87q0l2xqSpB30ELVWAF3146se18eTw3knzqaY3mPYd22jNulJb50U6+
+         hOCy10lq6f4dwvCqk+d9u7rBF0It2eMhHW7Ve1gBTh/tqrWBwJrxFSXutMvCipqxrP
+         reEO1oM3T0HAZZp9ZtVsMqQ8NIQSWpV6bgniQ9Re8LsDwg/8Tur8Shx2bmJ33AU4ee
+         7qdOD5GvYbj9g==
+Date:   Thu, 6 Jan 2022 21:13:16 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Robert Schlabbach" <Robert.Schlabbach@gmx.net>,
+        Antti Palosaari <crope@iki.fi>, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: si6157: fix a tune regression for 6.1MHz
+Message-ID: <20220106211316.4025661b@coco.lan>
+In-Reply-To: <71025d9c4f8d37f23cf080ee69e1d583bf320e3e.1641498239.git.mchehab@kernel.org>
+References: <trinity-59d726d3-993c-43c9-9e44-5be5cdfae74d-1641493525223@3c-app-gmx-bap38>
+        <71025d9c4f8d37f23cf080ee69e1d583bf320e3e.1641498239.git.mchehab@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220106032118.34459-1-likexu@tencent.com> <YdcwXIANeB3fOWOI@google.com>
-In-Reply-To: <YdcwXIANeB3fOWOI@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 6 Jan 2022 12:12:23 -0800
-Message-ID: <CALMp9eSv7ZQmVsb49iPbw0gkJhYgKPGsFuw6UtEeNZ3FsBwRwA@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: x86/pmu: Make top-down.slots event unavailable in
- supported leaf
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 10:09 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Jan 06, 2022, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
-> >
-> > When we choose to disable the fourth fixed counter TOPDOWN.SLOTS,
-> > we also need to comply with the specification and set 0AH.EBX.[bit 7]
-> > to 1 if the guest (e.g. on the ICX) has a value of 0AH.EAX[31:24] > 7.
-> >
-> > Fixes: 2e8cd7a3b8287 ("kvm: x86: limit the maximum number of vPMU fixed counters to 3")
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > ---
-> > v1 -> v2 Changelog:
-> > - Make it simpler to keep forward compatibility; (Sean)
-> > - Wrap related comment at ~80 chars; (Sean)
-> >
-> > Previous:
-> > https://lore.kernel.org/kvm/20220105050711.67280-1-likexu@tencent.com/
-> >
-> >  arch/x86/kvm/cpuid.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > index 0b920e12bb6d..4fe17a537084 100644
-> > --- a/arch/x86/kvm/cpuid.c
-> > +++ b/arch/x86/kvm/cpuid.c
-> > @@ -782,6 +782,18 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
-> >               eax.split.mask_length = cap.events_mask_len;
-> >
-> >               edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
-> > +
-> > +             /*
-> > +              * The 8th Intel architectural event (Topdown Slots) will be supported
->
-> Nit, the "8th" part is unnecessary information.
->
-> > +              * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
-> > +              *
-> > +              * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
-> > +              * to make this event unavailable in a consistent way.
-> > +              */
->
-> This comment is now slightly stale.  It also doesn't say why the event is made
-> unavailable.
->
-> > +             if (edx.split.num_counters_fixed < 4 &&
->
-> Rereading the changelog and the changelog of the Fixed commit, I don't think KVM
-> should bother checking num_counters_fixed.  IIUC, cap.events_mask[7] should already
-> be '1' if there are less than 4 fixed counters in hardware, but at the same time
-> there's no harm in being a bit overzealous.  That would help simplifiy the comment
-> as there's no need to explain why num_counters_fixed is checked, e.g. the fact that
-> Topdown Slots uses the 4th fixed counter is irrelevant with respect to the legality
-> of setting EBX[7]=1 to hide an unsupported event.
+Em Thu,  6 Jan 2022 20:44:29 +0100
+Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
 
-I was under the impression that the CPUID.0AH:EBX bits were
-independent of the fixed counters. That is, if CPUID.0AH:EAX[31:24] >
-7 and CPUID.0AH:EBX[7] is clear, then one should be able to program a
-general purpose counter with event selector A4H and umask 01H,
-regardless of whether or not fixed counter 4 exists.
+> The patch which added support for 1.7MHz and 6.1 MHz has
+> two issues: there's a missing else for 1.7 and the value
+> for 6.1 MHz filter is decimal 10 (0x0a).
+> 
+> Fix those.
 
->
->                 /*
->                  * Hide Intel's Topdown Slots architectural event, it's not yet
->                  * supported by KVM.
->                  */
->                 if (eax.split.mask_length > 7)
->                         cap.events_mask |= BIT_ULL(7);
->
-> > +                 eax.split.mask_length > 7)
-> > +                     cap.events_mask |= BIT_ULL(7);
-> > +
-> >               edx.split.bit_width_fixed = cap.bit_width_fixed;
-> >               if (cap.version)
-> >                       edx.split.anythread_deprecated = 1;
-> > --
-> > 2.33.1
-> >
+Please ignore this one. I was too quick writing it: it doesn't
+address all reported issues.
+
+Regards,
+Mauro

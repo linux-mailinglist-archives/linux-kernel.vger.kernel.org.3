@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F252C4869BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F3E4869B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242748AbiAFSZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:25:32 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:35630 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242733AbiAFSZa (ORCPT
+        id S242723AbiAFSZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240698AbiAFSZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:25:30 -0500
-Received: by mail-oi1-f170.google.com with SMTP id s127so4942819oig.2;
-        Thu, 06 Jan 2022 10:25:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cF7NOXX0VCxREtaDxxcjv4QjL9Wd5MC7Ra3H6nrdF+Q=;
-        b=4GQhrBv0Vv8o31hoG2ragc4hC/myINIowC5fFJI1O/SeXjtRhkNYV9Va2ZdDRoT1ra
-         MuCHhR2pifF/Vs76eAA7qp2aK6m4BJ4jhv37PNKkwxydDsY5r9Tp2SQg8wxkhNrkDb1y
-         044SRJ2kipmNQgTRUPR/LCgbodVfJTEKJ+qNjq8yNBm2rtS/VOJQalbas989YXfHPgUy
-         UN9V+mb97In6U9TmuNJpY/9fZDZb//kmloQdEzqARYbF0EXu+bWKS48GOry+XJD8+ajA
-         mS2bgp6Kn46uAXHaIEsTOm6AItaF2xfcn7mUTFeduFAryYlb7zGDOcA/bM9R8/7b17RX
-         08Rg==
-X-Gm-Message-State: AOAM531XBCizEJNRaGwk1/3tMQFKY5WGa8Hz+9T24E4DBr29N4hKQldB
-        N9k3RYqC4Vi013zrTbMIKCzzW6nFwA==
-X-Google-Smtp-Source: ABdhPJwHKljtbw4ST1iRI0MgRmPXUWUCv2jaJpK16yDsCDmvGPMgVOe4pZe1zQTLwFkxzyBK9SArBw==
-X-Received: by 2002:aca:4385:: with SMTP id q127mr6763971oia.39.1641493529683;
-        Thu, 06 Jan 2022 10:25:29 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 10:25:29 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 6 Jan 2022 13:25:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46208C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:25:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3CBF61D69
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB0BC36AEB;
+        Thu,  6 Jan 2022 18:25:11 +0000 (UTC)
+Date:   Thu, 6 Jan 2022 13:25:10 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: dma-controller: Split interrupt fields in example
-Date:   Thu,  6 Jan 2022 12:25:10 -0600
-Message-Id: <20220106182518.1435497-2-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+Subject: Re: [PATCH 0/2] MAINTAINERS: Update information about printk git
+ tree
+Message-ID: <20220106132510.0a460fed@gandalf.local.home>
+In-Reply-To: <20220105094157.26216-1-pmladek@suse.com>
+References: <20220105094157.26216-1-pmladek@suse.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Best practice for multi-cell property values is to bracket each multi-cell
-value.
+On Wed,  5 Jan 2022 10:41:55 +0100
+Petr Mladek <pmladek@suse.com> wrote:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/dma/dma-controller.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> I have noticed one outdated and one missing link to the printk git tree.
+> I am not sure if it is worth sending for review and having two patches.
+> I just want to avoid possible complains ;-)
+> 
+> Petr Mladek (2):
+>   MAINTAINERS/vsprintf: Update link to printk git tree
+>   MAINTAIERS/printk: Add link to printk git
+> 
+>  MAINTAINERS | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-diff --git a/Documentation/devicetree/bindings/dma/dma-controller.yaml b/Documentation/devicetree/bindings/dma/dma-controller.yaml
-index 0043b91da95e..6d3727267fa8 100644
---- a/Documentation/devicetree/bindings/dma/dma-controller.yaml
-+++ b/Documentation/devicetree/bindings/dma/dma-controller.yaml
-@@ -24,10 +24,10 @@ examples:
-     dma: dma-controller@48000000 {
-         compatible = "ti,omap-sdma";
-         reg = <0x48000000 0x1000>;
--        interrupts = <0 12 0x4
--                      0 13 0x4
--                      0 14 0x4
--                      0 15 0x4>;
-+        interrupts = <0 12 0x4>,
-+                     <0 13 0x4>,
-+                     <0 14 0x4>,
-+                     <0 15 0x4>;
-         #dma-cells = <1>;
-         dma-channels = <32>;
-         dma-requests = <127>;
--- 
-2.32.0
+Acked-by: Steven Rostedt <rostedt@goodmis.org>
 
+for both patches.
+
+Thanks Petr,
+
+-- Steve

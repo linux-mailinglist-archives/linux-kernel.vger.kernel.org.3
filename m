@@ -2,59 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0591048648C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BD448648E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239009AbiAFMqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:46:46 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:54380 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238901AbiAFMqp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:46:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=sb5puHWrCBvPHq+ETTuUx1fhkZYhyUxCv8saF9jxTbk=; b=wzrUKkcdWONH11pxB5CtDOKnoc
-        go1Euvv5rNqrgnRjhUHLI9vh8vpwuV0mdMgQxVO4pu+kc9iNBZcbXqdW5g+Ui6++lQ/82QIySmV0V
-        FluVH8QZLuWquQAScCHMcOYH33sV3dKv67gPkJJM+M5sGpXhz3Al4uaBOyEBvtvYGllM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n5SA0-000eXn-3X; Thu, 06 Jan 2022 13:46:28 +0100
-Date:   Thu, 6 Jan 2022 13:46:28 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     hkallweit1@gmail.com, kuba@kernel.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled
- code in modules.alias
-Message-ID: <YdbkpPDMkzqYzyg7@lunn.ch>
-References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
- <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
- <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk>
- <YabEHd+Z5SPAhAT5@lunn.ch>
- <f91f4fff-8bdf-663b-68f5-b8ccbd0c187a@loongson.cn>
- <257a0fbf-941e-2d9e-50b4-6e34d7061405@loongson.cn>
- <ba055ee6-9d81-3088-f395-8e4e1d9ba136@loongson.cn>
- <5838a64c-5d0a-60a1-c699-727bff1cc715@loongson.cn>
+        id S239025AbiAFMqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:46:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32365 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239012AbiAFMqr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 07:46:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641473206;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QIcy/hKgWsl8HLsYFT8VKTJz9iU+YZ837pHBIwXvv1Q=;
+        b=IhKCWiVxKmma4hx7vqrpgPZKqQEgMlj0ozvKJe1VJnjX1UKqK4Vo1Eb3Q3VBdB29U53/dL
+        guRtLa6WXqXbsn/BhSr2Xi+y3+B+TMzJ8pd95v797/h0PURVRwYIPEfxMbxrvE9GLMM1o4
+        MmLb/c1sb9eBxA1lvZm9atUNeX5H+Bo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-56-5Q5Kid_tMxGfbsHzbmaxTQ-1; Thu, 06 Jan 2022 07:46:45 -0500
+X-MC-Unique: 5Q5Kid_tMxGfbsHzbmaxTQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h12-20020adfa4cc000000b001a22dceda69so1202470wrb.16
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:46:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QIcy/hKgWsl8HLsYFT8VKTJz9iU+YZ837pHBIwXvv1Q=;
+        b=xskPsQoIaQDpQ+Vn5zo9bk5ySmfkyoVGiDjG+t7RSzgV8ddHFxSJA/5xkvdkDupIkb
+         cQE4ol0UvTanvC5gtwDo4zkIcUtAWWPCTYsJymfGwA0U58/H1I6R7/FsU4aouHZpfu4G
+         4w8zaRO6OlTxWYj2XvOmoVzl1jnGFDFZ4X20E/d/yX+vlGL8muNG/FTlgy+wiTOnLeed
+         2ry3luNVBWkxThvVC1+z7BJ3l+EGqxHB8lk0Y/QlBIABfTdeVZYQmG02BrTNiMcMLF5Y
+         OHQKw7QUriUM4XTy82Cj2NVr+PVeOB6IxmtEZFn9VZ+qKZNcY6tklBSO5ei4POSkgIU9
+         g2vQ==
+X-Gm-Message-State: AOAM532ys8Ix0b4Asmxm2176hT35l+LmCLl67dwjKafIJGkEmDPLWHtv
+        zIwLu3j1Dl5ODrdLrlEr0KvbCZiBlqebEIvhn4ccOEkChnbxHA+N27oay9vqbbF5qKkKer18TQ6
+        M4RzKwlIKd5vrQ2JbPkFp/870
+X-Received: by 2002:a05:600c:1e05:: with SMTP id ay5mr6993338wmb.131.1641473204126;
+        Thu, 06 Jan 2022 04:46:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxIetGTra+THB/8z93McN+42aVUsQxDpvJa2rz7fYmmyJpcjeJUiqxg8dTKkWQkvBsgXuZRAA==
+X-Received: by 2002:a05:600c:1e05:: with SMTP id ay5mr6993312wmb.131.1641473203945;
+        Thu, 06 Jan 2022 04:46:43 -0800 (PST)
+Received: from redhat.com ([2a03:c5c0:207e:991b:6857:5652:b903:a63b])
+        by smtp.gmail.com with ESMTPSA id g12sm2308053wrd.71.2022.01.06.04.46.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 04:46:43 -0800 (PST)
+Date:   Thu, 6 Jan 2022 07:46:37 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 26/43] kmsan: virtio: check/unpoison scatterlist in
+ vring_map_one_sg()
+Message-ID: <20220106074032-mutt-send-email-mst@kernel.org>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-27-glider@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5838a64c-5d0a-60a1-c699-727bff1cc715@loongson.cn>
+In-Reply-To: <20211214162050.660953-27-glider@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi phy maintainer,
+On Tue, Dec 14, 2021 at 05:20:33PM +0100, Alexander Potapenko wrote:
+> If vring doesn't use the DMA API, KMSAN is unable to tell whether the
+> memory is initialized by hardware. Explicitly call kmsan_handle_dma()
+> from vring_map_one_sg() in this case to prevent false positives.
 > 
-> What's your viewpoint?
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-Russell is a PHY Maintainer.
+OK I guess
 
-I suggest you stop arguing with him. Test what Russell proposes, and
-let him know if it solves the problem you were seeing.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-	Andrew
+IIUC this depends on the rest of the patchset, so feel free to
+merge.
+
+> ---
+> Link: https://linux-review.googlesource.com/id/I211533ecb86a66624e151551f83ddd749536b3af
+> ---
+>  drivers/virtio/virtio_ring.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 6d2614e34470f..bf4d5b331e99d 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/module.h>
+>  #include <linux/hrtimer.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/kmsan-checks.h>
+>  #include <linux/spinlock.h>
+>  #include <xen/xen.h>
+>  
+> @@ -331,8 +332,15 @@ static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
+>  				   struct scatterlist *sg,
+>  				   enum dma_data_direction direction)
+>  {
+> -	if (!vq->use_dma_api)
+> +	if (!vq->use_dma_api) {
+> +		/*
+> +		 * If DMA is not used, KMSAN doesn't know that the scatterlist
+> +		 * is initialized by the hardware. Explicitly check/unpoison it
+> +		 * depending on the direction.
+> +		 */
+> +		kmsan_handle_dma(sg_page(sg), sg->offset, sg->length, direction);
+>  		return (dma_addr_t)sg_phys(sg);
+> +	}
+>  
+>  	/*
+>  	 * We can't use dma_map_sg, because we don't use scatterlists in
+> -- 
+> 2.34.1.173.g76aa8bc2d0-goog
+

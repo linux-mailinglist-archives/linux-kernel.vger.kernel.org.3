@@ -2,245 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3E2486815
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2647448681C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241516AbiAFRES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:04:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53274 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241500AbiAFRER (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:04:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06054B82298;
-        Thu,  6 Jan 2022 17:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CAA3C36AE3;
-        Thu,  6 Jan 2022 17:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641488654;
-        bh=OfsFRMXkW6wyAm27mg3yHrw/CY6UA9QwJwGwK1qoOOU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=M5JmIJFm5CVqYZvQb5iNNtPZwRbdgYkSGpOklZBzh2W69iylExR2mhD2+bHGXhjQf
-         sSGke+rdClH2pHLi3SnWqi0DvxDWx5dfPNbYyVU/rCc2tvy6lCfSI3ejbigHfNCDqr
-         hw7+bCxHL05rSCeqMTS15KL/oYsyHDwDfPY8X6glV9cKvX1ml9aIzEDNu/nC413X4t
-         Wv348pOqGAnX3JvwypwHsiExpVQbZr2JGP12PNR5cCCrrN10uiMQF+z68d2DfsBECG
-         LUVMgfyB+aVBGactk/YK5rIcOF6sittIwSfWCDlVwcBoXCJ5o+uVxcoTIRXYwJLSPQ
-         8+iJwtxFsShEA==
-Message-ID: <88d7f8970dcc0fd0ead891b1f42f160b8d17d60e.camel@kernel.org>
-Subject: Re: [PATCH v4 38/68] vfs, cachefiles: Mark a backing file in use
- with an inode flag
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 06 Jan 2022 12:04:12 -0500
-In-Reply-To: <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk>
-References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-         <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        id S241529AbiAFRFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:05:33 -0500
+Received: from mail-vi1eur05on2068.outbound.protection.outlook.com ([40.107.21.68]:32001
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241500AbiAFRFc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 12:05:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PDUo79cgsXepSAn245CRqjgsnq0TfnQ24akhIHLv9fF4c8GJhp2L3ysmVdVJMa3DCgahotLqOx+HD3QjFB1HgiwzSeiqP6Wu5LcivMdMaiuBk2xVQRV2ngzDd/8wpdhORxR4It8IxI+qXT08kZpZhc4bmDsIPOF3cjhBGLHzACba5OnjVLykgB7teRzXxoAgGc5bD9NhcR7XpQTybQyseM7M14wySajXImJHsC/J/azg3Pe4eeXNfi+jVMnvIq81EONGN5+vT7ImNjD30Sja90XINDjoNU3Ykf3EbAwpMKviBjAo9geFEcO+KNRGjFQNlL+kyTXfVfoLaHBeN+1u2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YJlQ4TwtkBOvPoo8CqHSIK/DDe0dj1kj2qMVke8z79s=;
+ b=XWh/1oI0n1CoPL9b/vIWbBIYrgE68q9yOA97iQ28W+rURH3TXgdSlPPs0D/B/xIQbX1fSt63snrbkcxTzTGhiSxU6zK11VPWt32rft22NbaSDHr6vGoFyvBzaiS4I5U1e8hulBQZ4+yDEPekxX1jbOCDsrs2IIwtXAEWyYVvNaYumSssovRQr+1d3eicvNENHzb0+uWcS7aZVjCPZh42LAEBX2by7jd26rVT4r/jWdWfRGjbFp1Uj0JljtiCbEIreVEw7tDXfPkYDDpUidasAf/hrxYZnmwSzboLs96f+pBiyxpfgAmz5LFcGXByd57U7rFU52g6Nqiz+Bwp6l6jlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YJlQ4TwtkBOvPoo8CqHSIK/DDe0dj1kj2qMVke8z79s=;
+ b=K9Yjgk2P+Xcn3IL7V0RUmgCBVyh/5+N1NpzJfTGDlby+Op2XulnGu59sL9qyxMMDsSEtkIExPYy+SR1SD4+OKBkErP8FG5uh4ulqcJqjTVVoS9r2Mv9DkzgZWRxYe3V/4auLlbecttHGzI/wioijnunZ9O+S6WqjRt3wIIdRBk4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by VI1PR0402MB3837.eurprd04.prod.outlook.com (2603:10a6:803:25::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Thu, 6 Jan
+ 2022 17:05:29 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841%6]) with mapi id 15.20.4844.016; Thu, 6 Jan 2022
+ 17:05:28 +0000
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v3] interconnect: imx: Add imx_icc_get_bw function to set initial avg and peak
+Date:   Thu,  6 Jan 2022 19:05:01 +0200
+Message-Id: <20220106170501.3513423-1-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR07CA0209.eurprd07.prod.outlook.com
+ (2603:10a6:802:3f::33) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c622fc56-1c1f-45fb-dbad-08d9d136bce3
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3837:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0402MB3837F9C992671423BCCDC30DF64C9@VI1PR0402MB3837.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9/pU46+TeJWeYQc2ftWPVgoeLQs4GEGCwqoQvtRcvmYSebo5G/CZ3KHoY9P+mV1szju+lor/0BUZw/mqvA9WSIPqB6ucdJFZLZdhghA1KU9rLBNsJeuMSh4pLtTMDYoUr12xkyBuhf6w+oiw8KOaAl8Vchq4ufZwsJpO9tyCGETd8Jcen4YOGoNWkNXKaDlpdP5lP19O0IiPff+wl42SQBivnzj6w8uCqzveXahuRlN5uLMqOBKC+nOBhXFEl+ntePzQNIAseuKscR5Hg3RgjRPYb+MEVW3rkO1cR8H8C3A0REPOCyKYCJ3MKyvCg/YbIUrOfvFlzA4ENQhWLDQ1Wqj97OdO08hUZmPSgZEsWydDvu7pKrKJUKZ6xiozppLGCNqfIAY72ygvw2A3Mv5Znez6x5IVk8DXzTzWJlk6TJaoqEa/4o9bZnPBn0uJ3C1POfxZZFzFwOcpejeeTnJwCgoeEZ0TkdELcnb3gBS3pDIXyrWxSLOEArY7MV+PAgFlYeVyxj4er059MUCLsQBHCSffG7IM9i+Zf//czNYUolHbR5rftAxmzIcUS4lLfdjTDl9K55PJ29Rrgb/ZI7fkXwhyr6QsAF/s+KuhZSm0lc/LuTMur92FnfyKoNEFVq8h/h6+YCP52fdSYwN2fV5gRYZpbv3LpEeIerajA6lK++an6HqfmdnfKihhNX3g3AfSznhnDWpq4Gd5xxCoaglEtw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(6506007)(8936002)(52116002)(110136005)(54906003)(26005)(6512007)(508600001)(2906002)(2616005)(6486002)(4326008)(6666004)(1076003)(186003)(66946007)(86362001)(66556008)(44832011)(66476007)(5660300002)(316002)(36756003)(38100700002)(38350700002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fTwHRHAjRY3P9KwJhYNeHGxJCC0r5CvibuA/pO81d7u4qifJP26EBRyUtWaL?=
+ =?us-ascii?Q?iGCF44z420F8wjgZLaZay8E3NGLdDPQlBkspizMtTU7PDBDFaeiMoHXVrQnN?=
+ =?us-ascii?Q?KGShbo9gqzqfGne8+C943LI1AI4Exxv50gBgNxiBZGVgjwX2QG+A5h4bLxIY?=
+ =?us-ascii?Q?CSFFqR79xPqEVWkC7ITCgo++9tpb/nGJX3PCo4G85Kr4npL/HgRBdFuqEeeR?=
+ =?us-ascii?Q?D/vh2MsT7HKzffNTuNsyuu2xcQASJ4WXa6QNfD3mGZ79XDkjEMqg/V2k+Ko6?=
+ =?us-ascii?Q?HamYgPzOUeb0h5yVePikOjK0aBmWc+Fsco2T+kyJQ6rQa8dbUe7LK7vAPgEM?=
+ =?us-ascii?Q?F9Ma84UA3pP/lg9ACt8vuMRO1Gwk/L9sbfZ4qdTZtL2qBVm2U+VBDXtkPVVt?=
+ =?us-ascii?Q?dPanqHu9V/pKWcryUCihgy1QaDdH8LgOnbnSzAGq/z2zcOir7eBfOjuohs7/?=
+ =?us-ascii?Q?nZTPwBTj3Q2ze4PIfd1I+rJIHBBBNKLHQW8QSHA7VMasYj0LKfQKF1FCNgla?=
+ =?us-ascii?Q?h0Z7G0yoqPw/yuuf9ul06+qRpXE9qF/7u5lypofYspIHvCi+8LksE3CN2gH+?=
+ =?us-ascii?Q?Sz/RalnwMSZZF2/sA1pJup3QfwLWr1vV7WgS0s/AiZBdRKyYERAQRLbJ4nUz?=
+ =?us-ascii?Q?NTigSwbFrwSIBlcAFwG4Zblt5gxtxct5lSCfinS88PdMjH98fMD6lA6vqW8U?=
+ =?us-ascii?Q?dwuh43fwQQx3Th+DfGU4KxmflniVjTPclrMY3dKnbDo3UioECfLf5Xik04Hb?=
+ =?us-ascii?Q?wFQqO3DIe6sUCva7Zsq4oHhiu5Wt1X9ymHh8R+LqHzKQUPzU5GxqvisPBENI?=
+ =?us-ascii?Q?ym+PsbmdAjjumQ0HMGSC9yFuWYdm5XSdkbrHFd7G90aCUQGcaAx7+FrF8CWB?=
+ =?us-ascii?Q?gwJzLWmha2Tl7S/7aaWzEV8MChshrxXXI/TzfY/xgVI+ihKPXlfFiPBTUIBT?=
+ =?us-ascii?Q?yBWgOtXHAj9YZUUeqgaptUa16ihpcgXeNRLlg6/aCkEqkXGB/JvibEJnAxG5?=
+ =?us-ascii?Q?E4oiOaXeFYwqBkzXrP1Z+1GaCyeGpkxyf+eIkz9W8F36CpqHgnUXgn4YHUBN?=
+ =?us-ascii?Q?/iM3mrCuxe1s8b1reZ5o+nYDdjf3TTAPwzx2wnN/DWdFCD+GmvujPJC7FmgF?=
+ =?us-ascii?Q?EtM4kxXHiU14q6+Npm3EJMT+yiXO4o2roP288lRpRRnuCNI6FsJBpdVEFz5q?=
+ =?us-ascii?Q?M1qf/dA+sEaCxn/45emiwAryeXiBsw6FULUHTmWQgZK1mdjkGgfY6b7Qf7qm?=
+ =?us-ascii?Q?+x5QHgkeZj1JuXzfnCDns0l51XTbyf5nG9iYsav5BF0/1fqAo+QBqrvnw7VB?=
+ =?us-ascii?Q?w8F+tMy8PckbyixG0BJB3/zWXOpo41uNmiaupQCf2/e/Luu5fvf8hzdDpTGR?=
+ =?us-ascii?Q?X6J7eKGTR7Hud8aqiL2hzSIx083KmNwwNX6gpmWuDj/7Y7HZjQCfZsxsw2uk?=
+ =?us-ascii?Q?MORWYkqJz5zZPtZBzOaf0l73KlL8GZsJsIkfgKMn7m8pW8zmbSF0xfrXUQPo?=
+ =?us-ascii?Q?ZrmvNJYvFiBzz1mrPPTGBlRR6b2f6MgfH+G0jm8OVESs4FkdWPBw8h1Oupke?=
+ =?us-ascii?Q?s3IR1q+Xpd5mROcFfUm4Bp9dX5O5jR4GT4QNDapAMdhM5oIhoNpB63RPRQfg?=
+ =?us-ascii?Q?WXnIrKYUZMYKezIwqf1npKQ=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c622fc56-1c1f-45fb-dbad-08d9d136bce3
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 17:05:27.8633
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 41YVffF6kZvxgRaiBImH/rKI+MBcY3i59o6SLSRNEGSCX4yzSNJEhwls2ZqtJ+dHERWDJUHyRuC/rqgTj3pPiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3837
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-22 at 23:23 +0000, David Howells wrote:
-> Use an inode flag, S_KERNEL_FILE, to mark that a backing file is in use by
-> the kernel to prevent cachefiles or other kernel services from interfering
-> with that file.
-> 
-> Alter rmdir to reject attempts to remove a directory marked with this flag.
-> This is used by cachefiles to prevent cachefilesd from removing them.
-> 
-> Using S_SWAPFILE instead isn't really viable as that has other effects in
-> the I/O paths.
-> 
-> Changes
-> =======
-> ver #3:
->  - Check for the object pointer being NULL in the tracepoints rather than
->    the caller.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
-> Link: https://lore.kernel.org/r/163819630256.215744.4815885535039369574.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/163906931596.143852.8642051223094013028.stgit@warthog.procyon.org.uk/ # v2
-> Link: https://lore.kernel.org/r/163967141000.1823006.12920680657559677789.stgit@warthog.procyon.org.uk/ # v3
-> ---
-> 
->  fs/cachefiles/Makefile            |    1 +
->  fs/cachefiles/namei.c             |   43 +++++++++++++++++++++++++++++++++++++
->  fs/namei.c                        |    3 ++-
->  include/linux/fs.h                |    1 +
->  include/trace/events/cachefiles.h |   42 ++++++++++++++++++++++++++++++++++++
->  5 files changed, 89 insertions(+), 1 deletion(-)
->  create mode 100644 fs/cachefiles/namei.c
-> 
-> diff --git a/fs/cachefiles/Makefile b/fs/cachefiles/Makefile
-> index 463e3d608b75..e0b092ca077f 100644
-> --- a/fs/cachefiles/Makefile
-> +++ b/fs/cachefiles/Makefile
-> @@ -7,6 +7,7 @@ cachefiles-y := \
->  	cache.o \
->  	daemon.o \
->  	main.o \
-> +	namei.o \
->  	security.o
->  
->  cachefiles-$(CONFIG_CACHEFILES_ERROR_INJECTION) += error_inject.o
-> diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
-> new file mode 100644
-> index 000000000000..913f83f1c900
-> --- /dev/null
-> +++ b/fs/cachefiles/namei.c
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/* CacheFiles path walking and related routines
-> + *
-> + * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-> + * Written by David Howells (dhowells@redhat.com)
-> + */
-> +
-> +#include <linux/fs.h>
-> +#include "internal.h"
-> +
-> +/*
-> + * Mark the backing file as being a cache file if it's not already in use.  The
-> + * mark tells the culling request command that it's not allowed to cull the
-> + * file or directory.  The caller must hold the inode lock.
-> + */
-> +static bool __cachefiles_mark_inode_in_use(struct cachefiles_object *object,
-> +					   struct dentry *dentry)
-> +{
-> +	struct inode *inode = d_backing_inode(dentry);
-> +	bool can_use = false;
-> +
-> +	if (!(inode->i_flags & S_KERNEL_FILE)) {
+Set the initial avg and peak to 0 in order to avoid setting them to
+INT_MAX by the interconnect core.
 
-nit: most of the other S_* flags have a corresponding IS_* macro. Should
-this be:
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+---
 
-    IS_KERNEL_FILE(inode)
+Changes since v2:
+ * sent as a separate patch
+ * dropped the imx_icc_aggregate
 
-?
+ drivers/interconnect/imx/imx.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> +		inode->i_flags |= S_KERNEL_FILE;
-> +		trace_cachefiles_mark_active(object, inode);
-> +		can_use = true;
-> +	} else {
-> +		pr_notice("cachefiles: Inode already in use: %pd\n", dentry);
-> +	}
-> +
-> +	return can_use;
-> +}
-> +
-> +/*
-> + * Unmark a backing inode.  The caller must hold the inode lock.
-> + */
-> +static void __cachefiles_unmark_inode_in_use(struct cachefiles_object *object,
-> +					     struct dentry *dentry)
-> +{
-> +	struct inode *inode = d_backing_inode(dentry);
-> +
-> +	inode->i_flags &= ~S_KERNEL_FILE;
-> +	trace_cachefiles_mark_inactive(object, inode);
-> +}
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 1f9d2187c765..d81f04f8d818 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -3958,7 +3958,8 @@ int vfs_rmdir(struct user_namespace *mnt_userns, struct inode *dir,
->  	inode_lock(dentry->d_inode);
->  
->  	error = -EBUSY;
-> -	if (is_local_mountpoint(dentry))
-> +	if (is_local_mountpoint(dentry) ||
-> +	    (dentry->d_inode->i_flags & S_KERNEL_FILE))
->  		goto out;
->  
->  	error = security_inode_rmdir(dir, dentry);
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 2c0b8e77d9ab..bcf1ca430139 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -2249,6 +2249,7 @@ struct super_operations {
->  #define S_ENCRYPTED	(1 << 14) /* Encrypted file (using fs/crypto/) */
->  #define S_CASEFOLD	(1 << 15) /* Casefolded file */
->  #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
-> +#define S_KERNEL_FILE	(1 << 17) /* File is in use by the kernel (eg. fs/cachefiles) */
->  
->  /*
->   * Note that nosuid etc flags are inode-specific: setting some file-system
-> diff --git a/include/trace/events/cachefiles.h b/include/trace/events/cachefiles.h
-> index 9bd5a8a60801..6331cd29880d 100644
-> --- a/include/trace/events/cachefiles.h
-> +++ b/include/trace/events/cachefiles.h
-> @@ -83,6 +83,48 @@ cachefiles_error_traces;
->  #define E_(a, b)	{ a, b }
->  
->  
-> +TRACE_EVENT(cachefiles_mark_active,
-> +	    TP_PROTO(struct cachefiles_object *obj,
-> +		     struct inode *inode),
-> +
-> +	    TP_ARGS(obj, inode),
-> +
-> +	    /* Note that obj may be NULL */
-> +	    TP_STRUCT__entry(
-> +		    __field(unsigned int,		obj		)
-> +		    __field(ino_t,			inode		)
-> +			     ),
-> +
-> +	    TP_fast_assign(
-> +		    __entry->obj	= obj ? obj->debug_id : 0;
-> +		    __entry->inode	= inode->i_ino;
-> +			   ),
-> +
-> +	    TP_printk("o=%08x i=%lx",
-> +		      __entry->obj, __entry->inode)
-> +	    );
-> +
-> +TRACE_EVENT(cachefiles_mark_inactive,
-> +	    TP_PROTO(struct cachefiles_object *obj,
-> +		     struct inode *inode),
-> +
-> +	    TP_ARGS(obj, inode),
-> +
-> +	    /* Note that obj may be NULL */
-> +	    TP_STRUCT__entry(
-> +		    __field(unsigned int,		obj		)
-> +		    __field(ino_t,			inode		)
-> +			     ),
-> +
-> +	    TP_fast_assign(
-> +		    __entry->obj	= obj ? obj->debug_id : 0;
-> +		    __entry->inode	= inode->i_ino;
-> +			   ),
-> +
-> +	    TP_printk("o=%08x i=%lx",
-> +		      __entry->obj, __entry->inode)
-> +	    );
-> +
->  TRACE_EVENT(cachefiles_vfs_error,
->  	    TP_PROTO(struct cachefiles_object *obj, struct inode *backer,
->  		     int error, enum cachefiles_error_trace where),
-> 
-> 
-
+diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
+index d5b36c478911..734807d8ccca 100644
+--- a/drivers/interconnect/imx/imx.c
++++ b/drivers/interconnect/imx/imx.c
+@@ -25,6 +25,14 @@ struct imx_icc_node {
+ 	struct dev_pm_qos_request qos_req;
+ };
+ 
++static int imx_icc_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
++{
++	*avg = 0;
++	*peak = 0;
++
++	return 0;
++}
++
+ static int imx_icc_node_set(struct icc_node *node)
+ {
+ 	struct device *dev = node->provider->dev;
+@@ -233,6 +241,7 @@ int imx_icc_register(struct platform_device *pdev,
+ 	if (!provider)
+ 		return -ENOMEM;
+ 	provider->set = imx_icc_set;
++	provider->get_bw = imx_icc_get_bw;
+ 	provider->aggregate = icc_std_aggregate;
+ 	provider->xlate = of_icc_xlate_onecell;
+ 	provider->data = data;
 -- 
-Jeff Layton <jlayton@kernel.org>
+2.31.1
+

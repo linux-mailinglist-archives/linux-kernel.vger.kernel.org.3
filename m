@@ -2,140 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6224867BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D33824867BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241289AbiAFQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiAFQca (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:32:30 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95171C061245;
-        Thu,  6 Jan 2022 08:32:30 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so9227405pjd.1;
-        Thu, 06 Jan 2022 08:32:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kMqP5DUrb/FAT7MeAYvxaJ3PDFZQ/9iFD97ycYbpY3w=;
-        b=SbxvszxmEkR5o/vuM3SIOGno9fRLHzd1ao6VAMPym8DUs2HbF+9nN2w9ZyN1pl7MFf
-         1GropGXfAe6oLxqaCmJmJJR0PIOXIs9r0+ybK5J9nCYA36glhKlzjG+ex10ftNNphrWK
-         zeIxoJHI9lZmbpNYGma/z+1lVMMkDVcc7Dz94y46DaepmmfgDo2XEA3X9e57M4ZmjW6Q
-         Qmt94XXBEho1FIpap+KBIN4yQO3LuguHsP/tk2EZ9rv4FHiplLP3sG2rrsLpWKRG8l5N
-         WEobYnzb2l9phlg/UmmP5vYTgmpMK0/gkaTpwGjuUO17P+Au1kiWLVbI3YKIvA049oOR
-         PeQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kMqP5DUrb/FAT7MeAYvxaJ3PDFZQ/9iFD97ycYbpY3w=;
-        b=K73fcoXOeJmaW2L8ENKTmbWGKpDItBEEO+tp6nVcZLMJMv6MmMCyo4fCjqRvvLHLZ6
-         lfJzT/IWjtclwZLHqMRSqzbLU7VAxyVfj7Nz3M30bu2uF47dPZu6Tcp0TRX+hiz2DSzP
-         133LERLOg+bcVdO/T6XcD+6wa8SMe36Lqe915gNiLuPRnv6X786Bf2by1Ml+LOc4xabu
-         K1rbO7z6wL7efFV7+ra3VRGcM7+1Gdz/9wLaeC+G4h0aKfD0saicicu5u93ChGBoVGyr
-         B8gv0mJBIunWqPJLXvJshaeA00gNcMNm3fLRRLkp+kmnC6vqrg95h1739eUKtpu4hdUW
-         8MkA==
-X-Gm-Message-State: AOAM532emcM+C7CsgqCxNJEFWz9n9/z9w+D5mVLI/TCkmaI2qp4nbYg4
-        U5DTdFNIOgKijSNKq85Oqqq488jjeg9/VfZWSQI=
-X-Google-Smtp-Source: ABdhPJxHk4+FJEzOOWKpDqO9+LXypuP8eFgev5ToUUXb5mS8bVuvbibHMRkWyz/Rerpju51XjyJnKqWVsmy99UOTVEY=
-X-Received: by 2002:a17:902:6502:b0:149:1162:f0b5 with SMTP id
- b2-20020a170902650200b001491162f0b5mr58474182plk.126.1641486750040; Thu, 06
- Jan 2022 08:32:30 -0800 (PST)
+        id S241300AbiAFQd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:33:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:56406 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230168AbiAFQd6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:33:58 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A70E1042;
+        Thu,  6 Jan 2022 08:33:57 -0800 (PST)
+Received: from [10.57.37.41] (unknown [10.57.37.41])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC33C3F5A1;
+        Thu,  6 Jan 2022 08:33:54 -0800 (PST)
+Message-ID: <3e8c7fb6-97aa-f84e-e594-b6eb2cb674e4@arm.com>
+Date:   Thu, 6 Jan 2022 16:33:20 +0000
 MIME-Version: 1.0
-References: <20220104080943.113249-1-jolsa@kernel.org> <20220104080943.113249-9-jolsa@kernel.org>
- <CAEf4BzZ7s=Pp+2xY3qKX9u6KrPdGW9NNfoiep7nGW+=_s=JJJA@mail.gmail.com> <YdarSovbcmoY9lI6@krava>
-In-Reply-To: <YdarSovbcmoY9lI6@krava>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 6 Jan 2022 08:32:18 -0800
-Message-ID: <CAADnVQJdgt41wprEmCdEgpQMii-AHm9ZesZX6gypNuTefntmEA@mail.gmail.com>
-Subject: Re: [PATCH 08/13] bpf: Add kprobe link for attaching raw kprobes
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+ <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
+ <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
+ <d91a1b98-2c2b-a961-543f-d540b3c7a146@arm.com>
+ <0a14914c-063d-f9ae-be49-ae9cc6aa7ff1@huawei.com>
+From:   Andrew Kilroy <andrew.kilroy@arm.com>
+In-Reply-To: <0a14914c-063d-f9ae-be49-ae9cc6aa7ff1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Wed, Jan 05, 2022 at 08:30:56PM -0800, Andrii Nakryiko wrote:
-> > On Tue, Jan 4, 2022 at 12:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > Adding new link type BPF_LINK_TYPE_KPROBE to attach kprobes
-> > > directly through register_kprobe/kretprobe API.
-> > >
-> > > Adding new attach type BPF_TRACE_RAW_KPROBE that enables
-> > > such link for kprobe program.
-> > >
-> > > The new link allows to create multiple kprobes link by using
-> > > new link_create interface:
-> > >
-> > >   struct {
-> > >     __aligned_u64   addrs;
-> > >     __u32           cnt;
-> > >     __u64           bpf_cookie;
-> >
-> > I'm afraid bpf_cookie has to be different for each addr, otherwise
-> > it's severely limiting. So it would be an array of cookies alongside
-> > an array of addresses
->
-> ok
->
-> >
-> > >   } kprobe;
-> > >
-> > > Plus new flag BPF_F_KPROBE_RETURN for link_create.flags to
-> > > create return probe.
-> > >
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  include/linux/bpf_types.h      |   1 +
-> > >  include/uapi/linux/bpf.h       |  12 +++
-> > >  kernel/bpf/syscall.c           | 191 ++++++++++++++++++++++++++++++++-
-> > >  tools/include/uapi/linux/bpf.h |  12 +++
-> > >  4 files changed, 211 insertions(+), 5 deletions(-)
-> > >
-> >
-> > [...]
-> >
-> > > @@ -1111,6 +1113,11 @@ enum bpf_link_type {
-> > >   */
-> > >  #define BPF_F_SLEEPABLE                (1U << 4)
-> > >
-> > > +/* link_create flags used in LINK_CREATE command for BPF_TRACE_RAW_KPROBE
-> > > + * attach type.
-> > > + */
-> > > +#define BPF_F_KPROBE_RETURN    (1U << 0)
-> > > +
-> >
-> > we have plenty of flexibility to have per-link type fields, so why not
-> > add `bool is_retprobe` next to addrs and cnt?
->
-> well I thought if I do that, people would suggest to use the empty
-> flags field instead ;-)
->
-> we can move it there as you suggest, but I wonder it's good idea to
-> use bool in uapi headers, because the bool size definition is vague
 
-Good point. No 'bool' please.
-grep bool include/uapi/linux/
-Only gives openvswitch.h and it's guarded by ifdef KERNEL
-So not a single uapi header has bool in it.
+
+On 15/12/2021 12:53, John Garry wrote:
+>>> In addition we could also add a --topdown arg to force using JSON 
+>>> metricgroups.
+>>>
+>>
+>> What arg do think would be supplied?
+> 
+> something like -json or -metricgroup, meaning "Use pmu-events metric 
+> events to calculate topdown results rather than kernel CPU PMU events. 
+> This is default fallback if the kernel CPU PMU does not support topdown 
+> events"
+> 
+
+John,
+
+Andi requested that the json metrics be disabled on x86 in
+
+ 
+https://lore.kernel.org/linux-perf-users/12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com/#t
+
+If we do that, do you still think the --topdown=<arg>  modification is 
+needed?  I guess it would have to report an error if someone requests 
+--topdown=json-metrics on x86.
+
+Thanks,
+Andrew
+

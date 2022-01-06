@@ -2,196 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F51A48678A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9429B48678F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241186AbiAFQVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:21:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37972 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241154AbiAFQVD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:21:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S241165AbiAFQXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:23:05 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:38200 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241113AbiAFQXE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:23:04 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 523EAB82293;
-        Thu,  6 Jan 2022 16:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC0DC36AEB;
-        Thu,  6 Jan 2022 16:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641486059;
-        bh=+eu0kFS5XuECOf38/1qOb3kYT6FMacBFZqWduz0+JaA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QQxVbOuDAyqEEdJWiTrDtvzwG7bjz4d5kmj08f9Rd/17nSlrIgtMEO/xCK2KHFS5U
-         wd4RlZ9rXyZQX3UwecojYbZGSF62eIlOWNoEfcInxlYwbGeP0e+Fcpy9RUxZQl5o/y
-         zu66aTxlMYgtTw1w6O4xGA8LMSHtuOtH2IM3IvkwSrJNiL5faP5NoUm6yRyGA53d1a
-         UTvsA/AomGGHkcctJ49LmPd9vEc9TWH05OpnfHNT8lQ2Ct8o2+bp+AUp2uTJ+xSskS
-         2U2SwNCaG/hW5PwvlDRvE6EmtTBZyyzObR0KzL9bogebqWYtlppfVdAECplJimvHyU
-         n12jBhUb3VcPw==
-Date:   Thu, 6 Jan 2022 10:20:58 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Bruno =?iso-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>
-Subject: Re: [PATCH v8 04/10] vgaarb: Move framebuffer detection to
- ADD_DEVICE path
-Message-ID: <20220106162058.GA284940@bhelgaas>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AA8C01EC01B7;
+        Thu,  6 Jan 2022 17:22:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641486178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=h6YuYIy4qcaO/MGkQsefP3agMS1G0w2fptdzhSDRDRs=;
+        b=d3yhd+T7AyXbGMUkLegGU0B807PMTThQN6H6mg6xhmzvM8OrcEYliQekclOwWqPliHZ1B9
+        8ky13olLLtXegUnU/jwAwF5oeFLdqJPpUkFYH6S9rDfAJaTRVkJ7SOUwig1asNctBacq1u
+        MA9bHW/H1EwTb/5VUjV9ilsfVkk95mo=
+Date:   Thu, 6 Jan 2022 17:23:01 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Huang Rui <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        kernel test robot <lkp@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 2/2] x86, sched: Fix the undefined reference building
+ error of init_freq_invariance_cppc
+Message-ID: <YdcWy0wSKSO3nzbU@zn.tnic>
+References: <20220106074306.2712090-1-ray.huang@amd.com>
+ <20220106074306.2712090-2-ray.huang@amd.com>
+ <Ydbdq6lXPKFG98MY@zn.tnic>
+ <Ydb+rHXsXqxzmR0V@amd.com>
+ <YdcC2JK7sOFs292B@amd.com>
+ <YdcQz7VQEbA+K73X@zn.tnic>
+ <CAJZ5v0hNoQmjBCYvLKaR3__6H1xe_+ySHHphjSRjvnXApsK5cQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H4BTAKdRwv+Wq7QRfMQRajQYzz3CqjvoGTrKujn47F3Yg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hNoQmjBCYvLKaR3__6H1xe_+ySHHphjSRjvnXApsK5cQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 02:44:42PM +0800, Huacai Chen wrote:
-> On Thu, Jan 6, 2022 at 8:07 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > Previously we selected a device that owns the boot framebuffer as the
-> > default device in vga_arb_select_default_device().  This was only done in
-> > the vga_arb_device_init() subsys_initcall, so devices enumerated later,
-> > e.g., by pcibios_init(), were not eligible.
-> >
-> > Fix this by moving the framebuffer device selection from
-> > vga_arb_select_default_device() to vga_arbiter_add_pci_device(), which is
-> > called after every PCI device is enumerated, either by the
-> > vga_arb_device_init() subsys_initcall or as an ADD_DEVICE notifier.
-> >
-> > Note that if vga_arb_select_default_device() found a device owning the boot
-> > framebuffer, it unconditionally set it to be the default VGA device, and no
-> > subsequent device could replace it.
-> >
-> > Link: https://lore.kernel.org/r/20211015061512.2941859-7-chenhuacai@loongson.cn
-> > Based-on-patch-by: Huacai Chen <chenhuacai@loongson.cn>
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Cc: Bruno Prémont <bonbons@linux-vserver.org>
-> > ---
-> >  drivers/gpu/vga/vgaarb.c | 37 +++++++++++++++++--------------------
-> >  1 file changed, 17 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/drivers/gpu/vga/vgaarb.c b/drivers/gpu/vga/vgaarb.c
-> > index b0ae0f177c6f..aefa4f406f7d 100644
-> > --- a/drivers/gpu/vga/vgaarb.c
-> > +++ b/drivers/gpu/vga/vgaarb.c
-> > @@ -72,6 +72,7 @@ struct vga_device {
-> >         unsigned int io_norm_cnt;       /* normal IO count */
-> >         unsigned int mem_norm_cnt;      /* normal MEM count */
-> >         bool bridge_has_one_vga;
-> > +       bool is_framebuffer;    /* BAR covers firmware framebuffer */
-> >         unsigned int (*set_decode)(struct pci_dev *pdev, bool decode);
-> >  };
-> >
-> > @@ -565,10 +566,9 @@ void vga_put(struct pci_dev *pdev, unsigned int rsrc)
-> >  }
-> >  EXPORT_SYMBOL(vga_put);
-> >
-> > -static void __init vga_select_framebuffer_device(struct pci_dev *pdev)
-> > +static bool vga_is_framebuffer_device(struct pci_dev *pdev)
-> >  {
-> >  #if defined(CONFIG_X86) || defined(CONFIG_IA64)
-> > -       struct device *dev = &pdev->dev;
-> >         u64 base = screen_info.lfb_base;
-> >         u64 size = screen_info.lfb_size;
-> >         u64 limit;
-> > @@ -583,15 +583,6 @@ static void __init vga_select_framebuffer_device(struct pci_dev *pdev)
-> >
-> >         limit = base + size;
-> >
-> > -       /*
-> > -        * Override vga_arbiter_add_pci_device()'s I/O based detection
-> > -        * as it may take the wrong device (e.g. on Apple system under
-> > -        * EFI).
-> > -        *
-> > -        * Select the device owning the boot framebuffer if there is
-> > -        * one.
-> > -        */
-> > -
-> >         /* Does firmware framebuffer belong to us? */
-> >         for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
-> >                 flags = pci_resource_flags(pdev, i);
-> > @@ -608,13 +599,10 @@ static void __init vga_select_framebuffer_device(struct pci_dev *pdev)
-> >                 if (base < start || limit >= end)
-> >                         continue;
-> >
-> > -               if (!vga_default_device())
-> > -                       vgaarb_info(dev, "setting as boot device\n");
-> > -               else if (pdev != vga_default_device())
-> > -                       vgaarb_info(dev, "overriding boot device\n");
-> > -               vga_set_default_device(pdev);
-> > +               return true;
-> >         }
-> >  #endif
-> > +       return false;
-> >  }
-> >
-> >  static bool vga_arb_integrated_gpu(struct device *dev)
-> > @@ -635,6 +623,7 @@ static bool vga_arb_integrated_gpu(struct device *dev)
-> >  static bool vga_is_boot_device(struct vga_device *vgadev)
-> >  {
-> >         struct vga_device *boot_vga = vgadev_find(vga_default_device());
-> > +       struct pci_dev *pdev = vgadev->pdev;
-> >
-> >         /*
-> >          * We select the default VGA device in this order:
-> > @@ -645,6 +634,18 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
-> >          *   Other device (see vga_arb_select_default_device())
-> >          */
-> >
-> > +       /*
-> > +        * We always prefer a firmware framebuffer, so if we've already
-> > +        * found one, there's no need to consider vgadev.
-> > +        */
-> > +       if (boot_vga && boot_vga->is_framebuffer)
-> > +               return false;
-> > +
-> > +       if (vga_is_framebuffer_device(pdev)) {
-> > +               vgadev->is_framebuffer = true;
-> > +               return true;
-> > +       }
-> Maybe it is better to rename vga_is_framebuffer_device() to
-> vga_is_firmware_device() and rename is_framebuffer to
-> is_fw_framebuffer?
+On Thu, Jan 06, 2022 at 05:12:51PM +0100, Rafael J. Wysocki wrote:
+> And why can't it be a real use case?
 
-That's a great point, thanks!
+You mean there's someone out there running SMP=n kernels on current
+hardware which has CPPC too? Yeah, right.
 
-The "framebuffer" term is way too generic.  *All* VGA devices have a
-framebuffer, so it adds no information.  This is really about finding
-the device that was used by firmware.
+> The honest answer is that we don't know.
+>
+> Moreover, AFAICS the requisite #ifdeffery is there already and  the
+> problem is that the init_freq_invariance_cppc() defined in smpboot.c
+> is not exported to modules and the CPPC code is modular in this build.
 
-I renamed:
+Yah, I saw that. And that's why I'm saying CPPC should depend on SMP -
+because it needs that functionality which is defined there.
 
-  vga_is_framebuffer_device() -> vga_is_firmware_default()
-  vga_device.is_framebuffer   -> vga_device.is_firmware_default
+But if you really wanna support SMP=n, I don't care that much to debate
+this more - I just think it is silly.
 
-I updated my local branch and pushed it to:
-https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/vga
-with head 0f4caffa1297 ("vgaarb: Replace full MIT license text with
-SPDX identifier").
+-- 
+Regards/Gruss,
+    Boris.
 
-I don't maintain drivers/gpu/vga/vgaarb.c, so this branch is just for
-reference.  It'll ultimately be up to the DRM folks to handle this.
-
-I'll wait for any other comments or testing reports before reposting.
-
-> >         /*
-> >          * A legacy VGA device has MEM and IO enabled and any bridges
-> >          * leading to it have PCI_BRIDGE_CTL_VGA enabled so the legacy
-> > @@ -1531,10 +1532,6 @@ static void __init vga_arb_select_default_device(void)
-> >         struct pci_dev *pdev, *found = NULL;
-> >         struct vga_device *vgadev;
-> >
-> > -       list_for_each_entry(vgadev, &vga_list, list) {
-> > -               vga_select_framebuffer_device(vgadev->pdev);
-> > -       }
-> > -
-> >         if (!vga_default_device()) {
-> >                 list_for_each_entry_reverse(vgadev, &vga_list, list) {
-> >                         struct device *dev = &vgadev->pdev->dev;
-> > --
-> > 2.25.1
-> >
+https://people.kernel.org/tglx/notes-about-netiquette

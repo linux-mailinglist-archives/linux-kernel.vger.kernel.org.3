@@ -2,99 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B03486B0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5D0486B0D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243697AbiAFUYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243662AbiAFUYc (ORCPT
+        id S243720AbiAFUZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:25:17 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:42304 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243662AbiAFUZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:24:32 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D9CC061212
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:24:32 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id m4so3040281ilf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1hwwvjlhtkCgnYzKELSHOhx4GC796dq3UFrZuDKUjZw=;
-        b=pjeWTfqAAFn0D70nVe2H8jxZ56DPQQM86g1itSPNeUWz0Df2BWfBY2oSYu3YeKIbpf
-         feXVe/PqKsxq+OmDKcwNK5HNjhEgvGGDSpQD8UKTVmvvBE9gFTvufl0oFWxHiN94cZ1E
-         NHxtLrx3cyPsG4Re3rh5WX0osECP0cWJTpyC1DOdxUEbCueEoJG0zgPta22rWR8+bHwo
-         nCthVCGSANxLMbHt6sTLddyqzYrkW8UrZWiPk+NNFFu+W1AmM50LOqk+SpAoZt8gn/2H
-         xHaTQeju4IED99/3Jel58xaJn32WAeCrGthgnUc2Pd6BjhYWOenTFQ5L5Ce4dSgyiNRY
-         rf3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1hwwvjlhtkCgnYzKELSHOhx4GC796dq3UFrZuDKUjZw=;
-        b=sgmjufa3bUGK9GTvqqNagRUBBtMOI53PLhqQ52Bb42/ll2hPwdHSBs1st/cUFgvuUN
-         hLH+QcYHNj0qPJ5uJXkih0DPIgQjXPlASTlT0EmGIAw4dpXyiIX5G9gI2EfkoEP8+BMc
-         Nv2/rJ2HzeDcsiaxYBYqnn2EdQKRGyqjKG543kK2F6AvVT1ZHvUXTRt7q8u2VTwGsxBH
-         /Zd3ljPCD9wZ6uNZIio9Hwb94ZmJcIVJACyQjdzM54mcXynKfK2xJaUtCcT4Y8Jiff5g
-         ygaAvzh0+vNDsGbMHEY13owA+gtMtW67a64LU9Hnb03l9WB5BRUFKCaWo1lslaBK8aGd
-         HaJg==
-X-Gm-Message-State: AOAM532tBM4A4uRBrpex8YfGHQt9t8PU23guyC7A39GaAsnOaIZG9WWI
-        K+ZvRJtQ+RULN/yhr6fI7dB+zHHAw6xR4IGEIo8nCg==
-X-Google-Smtp-Source: ABdhPJyQRHDqkZiMGNUXLizaclzFo6BOctys0w1THIbnIioQgwHfzgOf6Sh8VTpnDMkncqh8Z3v4x/MxVtKxkvvwFxs=
-X-Received: by 2002:a05:6e02:170c:: with SMTP id u12mr28684525ill.53.1641500671458;
- Thu, 06 Jan 2022 12:24:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20220106072627.476524-1-irogers@google.com> <YddC+lzAO1Urj0TF@kernel.org>
- <YddDcqxtDrPDSAVi@kernel.org>
-In-Reply-To: <YddDcqxtDrPDSAVi@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 6 Jan 2022 12:24:18 -0800
-Message-ID: <CAP-5=fWNfB6g0Bk2zPH3yYuvcDQG7TGQ7DBsnkTc3pZF0jKoHA@mail.gmail.com>
-Subject: Re: [PATCH] perf build: Lower the priority of tools/lib includes
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        torvalds@linux-foundation.org, eranian@google.com
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 6 Jan 2022 15:25:07 -0500
+Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 3B6A8CECDD;
+        Thu,  6 Jan 2022 21:25:06 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH] Bluetooth: btusb: Add support for Foxconn QCA 0xe0d0
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20211227102950.17968-1-aaron.ma@canonical.com>
+Date:   Thu, 6 Jan 2022 21:25:05 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        matthias.bgg@gmail.com, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <96661839-37A4-437D-9362-1FCC41CDAD0C@holtmann.org>
+References: <20211227102950.17968-1-aaron.ma@canonical.com>
+To:     Aaron Ma <aaron.ma@canonical.com>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 11:31 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Thu, Jan 06, 2022 at 04:28:58PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Wed, Jan 05, 2022 at 11:26:27PM -0800, Ian Rogers escreveu:
-> > > tools/lib has a 1.1.0 copy of libtraceevent. If a newer system
-> > > version is installed then its headers will go in /usr/include. As -I has
-> > > priority over system headers the 1.1.0 version gets used in preference
-> > > to the system one, which isn't what is wanted. To make the behavior
-> > > match expectations use -idirafter so that any system headers have priority
-> > > over the tools/lib version.
-> > >
-> > > Fixes: 08efcb4a638d ("libtraceevent: Increase libtraceevent logging when verbose")
-> >
-> > Hi,
-> >
-> >       You forgot to add your Signed-off-by:, I'm adding it as you
-> > usually provide it, ok?
->
-> Also adding:
->
-> Reported-by: Jiri Slaby <jirislaby@kernel.org>
->
-> - Arnaldo
+Hi Aaron,
 
-Thanks Arnaldo! Both good with me.
+> Add an ID of Qualcomm Bluetooth SoC WCN6855.
+> 
+> T:  Bus=05 Lev=01 Prnt=01 Port=03 Cnt=02 Dev#=  4 Spd=12   MxCh= 0
+> D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=0489 ProdID=e0d0 Rev= 0.01
+> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> I:  If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> I:* If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+> 
+> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+> ---
+> drivers/bluetooth/btusb.c | 3 +++
+> 1 file changed, 3 insertions(+)
 
-Ian
+the patch does not apply to bluetooth-next tree.
+
+Regards
+
+Marcel
+

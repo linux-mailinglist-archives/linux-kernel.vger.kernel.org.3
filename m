@@ -2,95 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4F4486548
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1EE48654C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbiAFN2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:28:04 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:54438 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230323AbiAFN2D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:28:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Dc13GhzV7GMpFHXLCvgCedftWg7T/tGeHO9kPVdise8=; b=naWyluOJhBleVVZMCq3CJ3uvEk
-        GkFmtvQdmb2RyZPhH1q4YsoRZbcasi2b1ojlATohPQHSvnYRALJGJpS79zr6FuD15LJGB7ElQTz1M
-        PXanW1Pbc0zm0RDnzRV1+b0VUL4LbiI3El0+2C2O6LsU30KDWQElrZWgUJLy0o/O58GU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n5So9-000eji-G1; Thu, 06 Jan 2022 14:27:57 +0100
-Date:   Thu, 6 Jan 2022 14:27:57 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
- address
-Message-ID: <YdbuXbtc64+Knbhm@lunn.ch>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
- <YdXVoNFB/Asq6bc/@lunn.ch>
- <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com>
- <YdYbZne6pBZzxSxA@lunn.ch>
- <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
+        id S239590AbiAFNb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:31:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48112 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230323AbiAFNbz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 08:31:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B1A261BF5
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:31:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D942C36AE5;
+        Thu,  6 Jan 2022 13:31:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641475914;
+        bh=OZjItfWzgrYcIfF0sJ+mwadsUO8MC4PRJXOXjQa54KQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pqNkByMdXPvKiscJhbY+E0GlsAcMWZSXqeGoOwthU7VOPWWD1tqx1P0UptZvYXiCp
+         8lTYzNOEzD/Xnj+X0AZCJBvZ2nMaxX6T3rSoCPzAot8GW4kyQQJgzxkiyvfU3kH05v
+         64CkikjFwM6HQDjek3jBdqd4oNy1NAB4OHauvFwo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH] kobject: kobj_type: remove default_attrs
+Date:   Thu,  6 Jan 2022 14:31:51 +0100
+Message-Id: <20220106133151.607703-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3724; h=from:subject; bh=OZjItfWzgrYcIfF0sJ+mwadsUO8MC4PRJXOXjQa54KQ=; b=owGbwMvMwCRo6H6F97bub03G02pJDInX3rv+64xOmXKt3W66/Kc4d8PbXznyQ0LnPj14PZSNe60o 6x63jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIFi6GeUrMAQrhD19dYdJRNTbbdX zy2j1pdxnmxwbd/73xlXvaudXhIT3fpf0bZ58MAAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Can udev in current form really handle the MAC race? Unless there's a
-> new uevent right before ndo_open() so udev can decide which MAC to
-> assign? Even with that, the race can still happen...
+Now that all in-kernel users of default_attrs for the kobj_type are gone
+and converted to properly use the default_groups pointer instead, it can
+be safely removed.
 
-There will always be a race, since the kernel can start using the
-interface before register_netdev() has even finished, before user
-space is running. Take a look at how NFS root works.
+There is one standard way to create sysfs files in a kobj_type, and not
+two like before, causing confusion as to which should be used.
 
-But in general, you can change the MAC address at any time. Some MAC
-drivers will return -EBUSY if the interface is up, but that is
-generally artificial. After a change of MAC address ARP will time out
-after a while and the link peers will get the new MAC address.
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+Note, this can only be applied after all of the "use default_groups in
+kobj_type" patches that have been sent to lkml over the past week or so
+are applied to the tree.  I'll keep it in a branch for now for 0-day
+build testing, but will only queue it up probably after 5.17-rc1 or
+later after everything is fixed up.  Posting it here for review and
+archival purposes.
 
-> 
-> So what if we keep the existing behavior (i.e. copy MAC from ACPI),
-> and let userspace daemon like NetworkManager to give the second NIC
-> (r8152 in this case) a random MAC if the main NIC (I219 in this case)
-> is already in use? Considering the userspace daemon has the all the
-> information required and it's the policy maker here.
+ fs/sysfs/file.c         | 13 -------------
+ include/linux/kobject.h |  1 -
+ lib/kobject.c           | 32 --------------------------------
+ 3 files changed, 46 deletions(-)
 
-You should be thinking of this in more general terms. You want to
-design a system that will work for any vendors laptop and dock.
+diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
+index 42dcf96881b6..a12ac0356c69 100644
+--- a/fs/sysfs/file.c
++++ b/fs/sysfs/file.c
+@@ -703,19 +703,6 @@ int sysfs_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid)
+ 
+ 	ktype = get_ktype(kobj);
+ 	if (ktype) {
+-		struct attribute **kattr;
+-
+-		/*
+-		 * Change owner of the default attributes associated with the
+-		 * ktype of @kobj.
+-		 */
+-		for (kattr = ktype->default_attrs; kattr && *kattr; kattr++) {
+-			error = sysfs_file_change_owner(kobj, (*kattr)->name,
+-							kuid, kgid);
+-			if (error)
+-				return error;
+-		}
+-
+ 		/*
+ 		 * Change owner of the default groups associated with the
+ 		 * ktype of @kobj.
+diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+index c7b47399b36a..57fb972fea05 100644
+--- a/include/linux/kobject.h
++++ b/include/linux/kobject.h
+@@ -120,7 +120,6 @@ extern char *kobject_get_path(struct kobject *kobj, gfp_t flag);
+ struct kobj_type {
+ 	void (*release)(struct kobject *kobj);
+ 	const struct sysfs_ops *sysfs_ops;
+-	struct attribute **default_attrs;	/* use default_groups instead */
+ 	const struct attribute_group **default_groups;
+ 	const struct kobj_ns_type_operations *(*child_ns_type)(struct kobject *kobj);
+ 	const void *(*namespace)(struct kobject *kobj);
+diff --git a/lib/kobject.c b/lib/kobject.c
+index 56fa037501b5..5f0e71ab292c 100644
+--- a/lib/kobject.c
++++ b/lib/kobject.c
+@@ -54,32 +54,6 @@ void kobject_get_ownership(struct kobject *kobj, kuid_t *uid, kgid_t *gid)
+ 		kobj->ktype->get_ownership(kobj, uid, gid);
+ }
+ 
+-/*
+- * populate_dir - populate directory with attributes.
+- * @kobj: object we're working on.
+- *
+- * Most subsystems have a set of default attributes that are associated
+- * with an object that registers with them.  This is a helper called during
+- * object registration that loops through the default attributes of the
+- * subsystem and creates attributes files for them in sysfs.
+- */
+-static int populate_dir(struct kobject *kobj)
+-{
+-	const struct kobj_type *t = get_ktype(kobj);
+-	struct attribute *attr;
+-	int error = 0;
+-	int i;
+-
+-	if (t && t->default_attrs) {
+-		for (i = 0; (attr = t->default_attrs[i]) != NULL; i++) {
+-			error = sysfs_create_file(kobj, attr);
+-			if (error)
+-				break;
+-		}
+-	}
+-	return error;
+-}
+-
+ static int create_dir(struct kobject *kobj)
+ {
+ 	const struct kobj_type *ktype = get_ktype(kobj);
+@@ -90,12 +64,6 @@ static int create_dir(struct kobject *kobj)
+ 	if (error)
+ 		return error;
+ 
+-	error = populate_dir(kobj);
+-	if (error) {
+-		sysfs_remove_dir(kobj);
+-		return error;
+-	}
+-
+ 	if (ktype) {
+ 		error = sysfs_create_groups(kobj, ktype->default_groups);
+ 		if (error) {
+-- 
+2.34.1
 
-You need to describe the two interfaces using some sort of bus
-address, be it PCIe, USB, or a platform device address as used by
-device tree etc.
-
-Let the kernel do whatever it wants with MAC addresses for these two
-interfaces. The only requirement you have is that the laptop internal
-interface gets the vendor allocated MAC address, and that the dock get
-some sort of MAC address, even if it is random.
-
-On device creation, udev can check if it now has both interfaces? If
-the internal interface is up, it is probably in use. Otherwise, take
-its MAC address and assign it to the dock interface, and give the
-internal interface a random MAC address, just in case.
-
-You probably need to delay NetworkManager, systemd-networkkd,
-/etc/network/interfaces etc, so that they don't do anything until
-after udevd has settled, indicating all devices have probably been
-found.
-
-I suspect you will never get a 100% robust design, but you can
-probably get it working enough for the cleaning staff and the CEO, who
-have very simple setups. Power users are going to find all the corner
-cases and will want to disable the udev rule.
-
-     Andrew

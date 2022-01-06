@@ -2,147 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7590D48655E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED0448656C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbiAFNkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiAFNkM (ORCPT
+        id S239648AbiAFNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:42:29 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4354 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230323AbiAFNmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:40:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14C3C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 05:40:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC4C61A5C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF45C36AED;
-        Thu,  6 Jan 2022 13:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641476410;
-        bh=q3ly8S7aPFPJldotITryq9m6fn3xnLYDfxH/laFyipk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qTBRnxB6vmr+jRBvWvXXawGsiw9XHAr4e1ZIoy/WufoQAnloudhQO0v7561WI8ZUS
-         adbtFoIPjzZJ0vt1HcH666JebTTJouu1VlNVbD3OOrO9L34BkW2PIkbjh2I+ly8ktW
-         iTSG+wmZreJ44tkBt4zpJ25jMlL++UBs/kiJUzJfJ0bupGkhGt3FMmy5CLRaup8u7z
-         zeiVcaRAJZsSea8NXim17GwT8u778vv/bLuZVELUFg8jFEfAsJ7kP8DRsIgiLbuYKB
-         pVfSrM7nPiqTgsJ/DGiEPmvGR1rOPCfXfoWOtAjwZrNMm46OUAK7AEkOQbIqILRdHy
-         yQkgBAM81wqNw==
-Date:   Thu, 6 Jan 2022 14:40:07 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     luanshi <zhangliguang@linux.alibaba.com>
-Cc:     Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: tick/sched: iowait_sleeptime resides in tick_cpu_sched structure
- is a negative value
-Message-ID: <20220106134007.GA1313863@lothringen>
-References: <074a28e8-3794-5fee-f2ab-f08787149481@linux.alibaba.com>
+        Thu, 6 Jan 2022 08:42:24 -0500
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JV6sf4pLnz67Vhh;
+        Thu,  6 Jan 2022 21:39:50 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 14:42:22 +0100
+Received: from localhost (10.47.27.61) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
+ 2022 13:42:21 +0000
+Date:   Thu, 6 Jan 2022 13:42:23 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter Clausen" <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 6/6] iio: pressure: bmp280: Use new PM macros
+Message-ID: <20220106134223.00006a9f@Huawei.com>
+In-Reply-To: <20220105182939.106885-7-paul@crapouillou.net>
+References: <20220105182939.106885-1-paul@crapouillou.net>
+        <20220105182939.106885-7-paul@crapouillou.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <074a28e8-3794-5fee-f2ab-f08787149481@linux.alibaba.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.61]
+X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:14:02PM +0800, luanshi wrote:
-> Hi All,
-> 
-> We encounted a hardlockup problem on ARM server, after some debug found
-> that:
-> 
-> PID: 0      TASK: ffff0400064de300  CPU: 126  COMMAND: "swapper/126"
->  #0 [ffff8000250f3c90] __crash_kexec at ffff80001013a064
->  #1 [ffff8000250f3e30] panic at ffff800010afd028
->  #2 [ffff8000250f3f10] nmi_panic at ffff80001004a9e0
->  #3 [ffff8000250f3f20] watchdog_hardlockup_check at ffff80001017b7f0
->  #4 [ffff8000250f3f40] sdei_watchdog_callback at ffff80001003c9a4
->  #5 [ffff8000250f3f50] sdei_event_handler at ffff8000108816b8
->  #6 [ffff8000250f3f80] _sdei_handler at ffff800010b1c2e4
->  #7 [ffff8000250f3fd0] __sdei_handler at ffff800010b139b0
->  #8 [ffff8000250f3ff0] __sdei_asm_handler at ffff800010014c18
-> --- <IRQ stack> ---
->  #9 [ffff800013973f10] __cpu_do_idle at ffff800010b13764
-> #10 [ffff800013973f20] arch_cpu_idle at ffff800010b137ec
-> #11 [ffff800013973f30] default_idle_call at ffff800010b1b5cc
-> #12 [ffff800013973f50] cpuidle_idle_call at ffff80001009648c
-> #13 [ffff800013973f90] do_idle at ffff8000100965b0
-> #14 [ffff800013973fc0] cpu_startup_entry at ffff8000100967d4
-> #15 [ffff800013973fe0] secondary_start_kernel at ffff800010026bb0
-> 
-> 
-> per_cpu(tick_cpu_sched, 126) = $1 = {
->   sched_timer = {
->     node = {
->       node = {
->         __rb_parent_color = 18446603337117384112,
->         rb_right = 0x0,
->         rb_left = 0x0
->       },
->       expires = 6108564000000
->     },
->     _softexpires = 6108564000000,
->     function = 0xffff800010122ec0 <tick_sched_timer>,
->     base = 0xffff04473bbcc780,
->     state = 1 '\001',
->     is_rel = 0 '\000',
->     is_soft = 0 '\000',
->     is_hard = 1 '\001'
->   },
->   check_clocks = 0,
->   nohz_mode = NOHZ_MODE_INACTIVE,
->   inidle = 1,
->   tick_stopped = 0,
->   idle_active = 1,
->   do_timer_last = 0,
->   got_idle_tick = 1,
->   last_tick = 0,
->   next_tick = 0,
->   idle_jiffies = 0,
->   idle_calls = 0,
->   idle_sleeps = 0,
->   idle_entrytime = 5012087709249,
->   idle_waketime = 0,
->   idle_exittime = 0,
->   idle_sleeptime = 4936136669951,
->   iowait_sleeptime = -1942739704,
->   last_jiffies = 0,
->   timer_expires = 0,
->   timer_expires_base = 0,
->   next_timer = 0,
->   idle_expires = 0,
->   tick_dep_mask = {
->     counter = 0
->   }
-> }
-> 
-> iowait_sleeptime = -1942739704,
-> ----------
-> iowait_sleeptime is monotonically increasing, under what circumstances iowait_sleeptime
-> can be a negative value?
-> 
-> For detailed information:
-> https://bugzilla.kernel.org/show_bug.cgi?id=215458
-> 
-> 
-> Can you give me some suggestions for debugging.
+On Wed, 5 Jan 2022 18:29:39 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-Some racy updates can happen if cpufreq or "cat /proc/stat" do concurrent
-updates. But for that nohz needs to be running and I see your CPU clock has
-NOHZ_MODE_INACTIVE. Perhaps it's only for that CPU though.
+> Use the new EXPORT_RUNTIME_DEV_PM_OPS() macro. It allows the underlying
+> dev_pm_ops struct as well as the suspend/resume callbacks to be detected
+> as dead code in the case where CONFIG_PM is disabled, without having to
+> wrap everything inside #ifdef CONFIG_PM guards.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-What is the value of tick_nohz_active in your dump?
+Thanks
 
+> ---
+> 
+> Notes:
+>     v2: New patch
+> 
+>  drivers/iio/pressure/bmp280-core.c | 11 ++---------
+>  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
+>  drivers/iio/pressure/bmp280-spi.c  |  2 +-
+>  3 files changed, 4 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+> index 6b7da40f99c8..bf8167f43c56 100644
+> --- a/drivers/iio/pressure/bmp280-core.c
+> +++ b/drivers/iio/pressure/bmp280-core.c
+> @@ -1138,7 +1138,6 @@ int bmp280_common_probe(struct device *dev,
+>  }
+>  EXPORT_SYMBOL(bmp280_common_probe);
+>  
+> -#ifdef CONFIG_PM
+>  static int bmp280_runtime_suspend(struct device *dev)
+>  {
+>  	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> @@ -1159,15 +1158,9 @@ static int bmp280_runtime_resume(struct device *dev)
+>  	usleep_range(data->start_up_time, data->start_up_time + 100);
+>  	return data->chip_info->chip_config(data);
+>  }
+> -#endif /* CONFIG_PM */
+>  
+> -const struct dev_pm_ops bmp280_dev_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> -				pm_runtime_force_resume)
+> -	SET_RUNTIME_PM_OPS(bmp280_runtime_suspend,
+> -			   bmp280_runtime_resume, NULL)
+> -};
+> -EXPORT_SYMBOL(bmp280_dev_pm_ops);
+> +EXPORT_RUNTIME_DEV_PM_OPS(bmp280_dev_pm_ops, bmp280_runtime_suspend,
+> +			  bmp280_runtime_resume, NULL);
+>  
+>  MODULE_AUTHOR("Vlad Dogaru <vlad.dogaru@intel.com>");
+>  MODULE_DESCRIPTION("Driver for Bosch Sensortec BMP180/BMP280 pressure and temperature sensor");
+> diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
+> index 8b03ea15c0d0..35045bd92846 100644
+> --- a/drivers/iio/pressure/bmp280-i2c.c
+> +++ b/drivers/iio/pressure/bmp280-i2c.c
+> @@ -58,7 +58,7 @@ static struct i2c_driver bmp280_i2c_driver = {
+>  	.driver = {
+>  		.name	= "bmp280",
+>  		.of_match_table = bmp280_of_i2c_match,
+> -		.pm = &bmp280_dev_pm_ops,
+> +		.pm = pm_ptr(&bmp280_dev_pm_ops),
+>  	},
+>  	.probe		= bmp280_i2c_probe,
+>  	.id_table	= bmp280_i2c_id,
+> diff --git a/drivers/iio/pressure/bmp280-spi.c b/drivers/iio/pressure/bmp280-spi.c
+> index 625b86878ad8..41f6cc56d229 100644
+> --- a/drivers/iio/pressure/bmp280-spi.c
+> +++ b/drivers/iio/pressure/bmp280-spi.c
+> @@ -109,7 +109,7 @@ static struct spi_driver bmp280_spi_driver = {
+>  	.driver = {
+>  		.name = "bmp280",
+>  		.of_match_table = bmp280_of_spi_match,
+> -		.pm = &bmp280_dev_pm_ops,
+> +		.pm = pm_ptr(&bmp280_dev_pm_ops),
+>  	},
+>  	.id_table = bmp280_spi_id,
+>  	.probe = bmp280_spi_probe,
 
-> 
-> 
-> 
-> Thanks,
-> Liguang
-> 

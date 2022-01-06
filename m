@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FF948670A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D664148670D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbiAFPsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:48:20 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:34807 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiAFPsS (ORCPT
+        id S240675AbiAFPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:49:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53588 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230138AbiAFPtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:48:18 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 6 Jan 2022 10:49:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JV9jr2dlZz4xd4;
-        Fri,  7 Jan 2022 02:48:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641484097;
-        bh=xfms9TANy3Zz+RR0S26Hb+XnMo+yJLO3B83lLSXF9Po=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Mvuz6UaUep/VQ6SGssMg2tmeCZfa27A0bYOwo2MdhnZo0Em58wG46r34KsFSiioAA
-         QutN9797xhTedfg8AVht0GGNjgucoQtXVxKmrYN9hR2/FWwByenHQIpqEYVTrlcK1R
-         S7GbLfKkvmQIADoZ6AgZKyGtBSuKpcBXjHS8zp9F+jrFs8YuDLtYD0fltqD839pBPo
-         w6dQ5gH3/pPmbGjVEUzKqTS4+c1gfjytvTQObcqVV7HaSrI5DnJVJTg+iLoNOysdhP
-         M8QJZOU7a1+00s1dS3ukomTmv4enuoQfJrs971x8ySDBvGe+KUnCdCnUA8HvCRDLig
-         FcVfZEn52/ajw==
-Date:   Fri, 7 Jan 2022 02:48:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the usb tree
-Message-ID: <20220107024815.15dc7e04@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X9PCbToV=6m/CZMN1np9f.5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A32A61B08
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B991C36AE3;
+        Thu,  6 Jan 2022 15:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641484157;
+        bh=klQiBMSapQfM8vUCVTudBLqokTRfQL5g48tm5AURL0E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bgtN6KaGr7AYli1FkGfkJhdk/t0AeZMRxbPcZM6IySqbw/e/piZjcF/KYvvlbRSYp
+         lToPwDHcrPtZa8JiNlVX29mivqLbRVrBNb7FBpnvnbMIWgKSs26eZ14AJsK+4+STXD
+         RjupsMeNyBXqWPZKrAhuQ0yzIahRVPuafLqL+jeUUYuSyO3XlATjobda/5ZSC34byQ
+         kW05SCf7y1Oe3K/naa9c98jazXvRAM6nrOFbkgErCyE4VtgGwAJefMNZlEJX+O11Nb
+         2M4Io2Ypehs3PvFo0FwMJ4ROm25cXTBCM5NqlsVXmGqWyN741dsC789Q+8HTn4swF0
+         KkxgiplxB9/pQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n5V0t-00GNgV-TO; Thu, 06 Jan 2022 15:49:16 +0000
+Date:   Thu, 06 Jan 2022 15:49:15 +0000
+Message-ID: <87a6g8vp8k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>
+Subject: Re: PCI MSI issue for maxcpus=1
+In-Reply-To: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: john.garry@huawei.com, tglx@linutronix.de, chenxiang66@hisilicon.com, shameerali.kolothum.thodi@huawei.com, linux-kernel@vger.kernel.org, liuqi115@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/X9PCbToV=6m/CZMN1np9f.5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi John,
 
-Hi all,
+On Wed, 05 Jan 2022 11:23:47 +0000,
+John Garry <john.garry@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> Just a heads up, I noticed that commit 4c457e8cb75e ("genirq/msi:
+> Activate Multi-MSI early when MSI_FLAG_ACTIVATE_EARLY is set") is
+> causing an issue on our arm64 D06 board where the SAS driver probe
+> fails for maxcpus=1.
+> 
+> This seems different to issue [0].
+> 
+> So it's the driver call to pci_alloc_irq_vectors_affinity() which
+> errors [1]:
+> 
+> [    9.619070] hisi_sas_v3_hw: probe of 0000:74:02.0 failed with error -2
 
-After merging the usb tree, today's linux-next build (htmldocs) produced
-this warning:
+Can you log what error is returned from pci_alloc_irq_vectors_affinity()?
 
-Documentation/ABI/testing/configfs-usb-gadget-uac2:2: WARNIN
-G: Malformed table.
-Text in column margin in table line 27.
+> Some details:
+> - device supports 32 MSI
+> - min and max msi for that function is 17 and 32, respect.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-c_chmask                capture channel mask
-c_srate                 capture sampling rate
-c_ssize                 capture sample size (bytes)
-c_sync                  capture synchronization type
-                        (async/adaptive)
-c_mute_present          capture mute control enable
-c_volume_present        capture volume control enable
-c_volume_min            capture volume control min value
-                        (in 1/256 dB)
-c_volume_max            capture volume control max value
-                        (in 1/256 dB)
-c_volume_res            capture volume control resolution
-                        (in 1/256 dB)
-fb_max                  maximum extra bandwidth in async mode
-p_chmask                playback channel mask
-p_srate                 playback sampling rate
-p_ssize                 playback sample size (bytes)
-p_mute_present          playback mute control enable
-p_volume_present        playback volume control enable
-_volume_present        playback volume control enable
-p_volume_min            playback volume control min value
-                        (in 1/256 dB)
-p_volume_max            playback volume control max value
-                        (in 1/256 dB)
-p_volume_res            playback volume control resolution
-                        (in 1/256 dB)
-req_number      the number of pre-allocated requests for both capture
-                        and playback
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+This 17 is a bit odd, owing to the fact that MultiMSI can only deal
+with powers of 2. You will always allocate 32 in this case. Not sure
+why that'd cause an issue though. Unless...
 
-Introduced by commit
+> - affd pre and post are 16 and 0, respect.
+> 
+> I haven't checked to see what the issue is yet and I think that the
+> pci_alloc_irq_vectors_affinity() usage is ok...
 
-  e3088ebc1b97 ("docs: ABI: added missing num_requests param to UAC2")
+... we really end-up with desc->nvec_used == 32 and try to activate
+past vector 17 (which is likely to fail). Could you please check this?
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks,
 
---Sig_/X9PCbToV=6m/CZMN1np9f.5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+	M.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXDz8ACgkQAVBC80lX
-0Gw/bgf+Kjwnv2dYJhdrviryBJJ4yXFlddJSjBRIR9BbWUUBD08PCw4qSg5OYnPv
-IsnoLF+O+tAwMYq4BIrVw29FckwG+fozjGJGtEfqxAD77phv7mYSVaLofTqNwaTv
-JFu7r9cetXWeZl6Fd4ZDtyi9MpKqrJz5gCWeE/VyQZJXVH+O+lzk6DP3SMx0Xuhv
-w46UD8aIWYNmrXZ17TEDZanO0i7zUGq7dwM/CT1vrVs5HjCiYQLiU1Vm1/F3dnM0
-2f4WjkbbmkbQ//GSMQDsUdbrRqVwN8ayq4wterl4TXI22MAI7ulrRUpDjYLljGjO
-TP+u3nwc+ojF7at+1hmKX0eARAHYxg==
-=TkpT
------END PGP SIGNATURE-----
-
---Sig_/X9PCbToV=6m/CZMN1np9f.5--
+-- 
+Without deviation from the norm, progress is not possible.

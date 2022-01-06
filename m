@@ -2,85 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2733A486B58
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95361486B62
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243919AbiAFUnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:43:15 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:31129 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232673AbiAFUnO (ORCPT
+        id S243952AbiAFUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:46:48 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:47201 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243919AbiAFUqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:43:14 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AbZvM1KPbd/+/7GPvrR20lsFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdVa93Tom12cCmjQZUT/Xbq7eMDP3etl2YYi/oEwE78TVm99gGjLY11k9FiMQ8?=
- =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMmjfjQGOKmYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFCtq?=
- =?us-ascii?q?piLf2dCXmQJaCYE7Q2jwPAfHk20cZzsAx+v9T2P40a1pTijzPm9luwdFJnZ22U?=
- =?us-ascii?q?wYgeKPW8AgYe0AES3EhbPQYkFPACT3l2SCJ9GXdaXrqwutnFwcuNIsU4PtpCG1?=
- =?us-ascii?q?H3fgZLi0dKBGFm++yhrm8T4FEjdk5Ns7pMZkSqFl6zCrUEO5gR53fK43Q7NFR0?=
- =?us-ascii?q?TMYhc1UG/vaIc0DZlJHaBnGaTVMN00RBZZ4m/2n7lHhcidVs1LTprcy6nL7yA1?=
- =?us-ascii?q?32aLqdt3PdbSiQcRTg1bdvmfu4Wv0GFcZOcaZxD7D9Wij7sfLnCXmSMcRGae++?=
- =?us-ascii?q?/pCnlKe3CoQBQcQWF/9puO24ma7WtRQLGQO9yYupLR0/0uuJvHlUgG1umysvxg?=
- =?us-ascii?q?SQdNcHuQ2rgaXxcL84RuDBy4AQzpFafQ8ucM2TCBs3ViM9/v3BDpkvbuJD32A9?=
- =?us-ascii?q?6uIqi+aPSkTJHUFIygeQmM4D3PLyG0opkuQFZA6Svfz0I2zSWy22T2U6jMwnfM?=
- =?us-ascii?q?VgNJj6klyxnif6xrEm3QDZl9dCt3rY1+Y?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A2+TO7a+zKkcN+MigXfZuk+C7I+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCY+TiX2ra6TdZggviMc9gx/ZJhQo7290cC7KBvhHPVOjbX5U43CYOCfgg?=
- =?us-ascii?q?uVEL0=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,267,1635199200"; 
-   d="scan'208";a="14087916"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 21:43:13 +0100
-Date:   Thu, 6 Jan 2022 21:43:12 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <1b2be990d5c31f62d9ce33aa2eb2530708d5607a.camel@linux.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2201062141290.3098@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>  <alpine.DEB.2.22.394.2112291012030.24929@hadrien>  <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>  <alpine.DEB.2.22.394.2112301840360.15550@hadrien> 
- <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>  <alpine.DEB.2.22.394.2112301919240.15550@hadrien>  <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>  <alpine.DEB.2.22.394.2112301942360.15550@hadrien> 
- <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>  <alpine.DEB.2.22.394.2201031922110.3020@hadrien>  <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>  <alpine.DEB.2.22.394.2201032110590.3020@hadrien> 
- <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>  <alpine.DEB.2.22.394.2201041643520.3020@hadrien>  <CAJZ5v0i9Rh0Cm3Mbu3N8w6UmgJEnmThk4znWVcp9qeroabjsNw@mail.gmail.com>  <alpine.DEB.2.22.394.2201052107280.48852@hadrien>  <87a6g9rbje.fsf@riseup.net>
-  <alpine.DEB.2.22.394.2201062044340.3098@hadrien> <1b2be990d5c31f62d9ce33aa2eb2530708d5607a.camel@linux.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 6 Jan 2022 15:46:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641502007; x=1673038007;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=OVjfgTPsU90JleNOuXTplCawmPMZLSFg76Is1FvE+d4=;
+  b=qwtKUPgDN3kxSH+KzlK6g0rPBHKOb7bVneEurqSV7FmE6yiBK6YuGbXt
+   UfMALIvhuQirkUBPt0MwRgeaQg9AFig7Ey15Mr/8Ziw6g2EHbnsV+Fbg8
+   YphCZTVW+FLOVg5LpzN3eQPotUssDXbC7no01nP6DssHnTwDbiKb8+eI5
+   s=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Jan 2022 12:46:47 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 12:46:45 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 12:46:45 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 12:44:32 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4] drm/msm/dp:  populate connector of struct  dp_panel
+Date:   Thu, 6 Jan 2022 12:44:22 -0800
+Message-ID: <1641501862-17499-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > All the turbostat output and graphs I have sent recently were just
-> > for
-> > continuous spinning:
-> >
-> > for(;;);
-> >
-> > Now I am trying running for the percentage of the time corresponding
-> > to
-> > 10 / P for pstate P (ie 0.5 of the time for pstate 20), and then
-> > sleeping,
-> > to see whether one can just add the sleeping power consumption of the
-> > machine to compute the efficiency as Rafael suggested.
-> >
-> Before doing comparison try freezing uncore.
->
-> wrmsr -a 0x620 0x0808
->
-> to Freeze uncore at 800MHz. Any other value is fine.
+DP CTS test case 4.2.2.6 has valid edid with bad checksum on purpose
+and expect DP source return correct checksum. During drm edid read,
+correct edid checksum is calculated and stored at
+connector::real_edid_checksum.
 
-Thanks for the suggestion.  What is the impact of this?
+The problem is struct dp_panel::connector never be assigned, instead the
+connector is stored in struct msm_dp::connector. When we run compliance
+testing test case 4.2.2.6 dp_panel_handle_sink_request() won't have a valid
+edid set in struct dp_panel::edid so we'll try to use the connectors
+real_edid_checksum and hit a NULL pointer dereference error because the
+connector pointer is never assigned.
 
-julia
+Changes in V2:
+-- populate panel connector at msm_dp_modeset_init() instead of at dp_panel_read_sink_caps()
+
+Changes in V3:
+-- remove unhelpful kernel crash trace commit text
+-- remove renaming dp_display parameter to dp
+
+Changes in V4:
+-- add more details to commit text
+
+Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
+Signee-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 3449d3f..40a059d 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1499,6 +1499,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 			struct drm_encoder *encoder)
+ {
+ 	struct msm_drm_private *priv;
++	struct dp_display_private *dp_priv;
+ 	int ret;
+ 
+ 	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
+@@ -1507,6 +1508,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	priv = dev->dev_private;
+ 	dp_display->drm_dev = dev;
+ 
++	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
++
+ 	ret = dp_display_request_irq(dp_display);
+ 	if (ret) {
+ 		DRM_ERROR("request_irq failed, ret=%d\n", ret);
+@@ -1524,6 +1527,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 		return ret;
+ 	}
+ 
++	dp_priv->panel->connector = dp_display->connector;
++
+ 	priv->connectors[priv->num_connectors++] = dp_display->connector;
+ 	return 0;
+ }
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

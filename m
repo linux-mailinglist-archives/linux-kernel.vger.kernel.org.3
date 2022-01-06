@@ -2,259 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6CE486960
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CD1486965
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242555AbiAFSHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S242564AbiAFSJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242003AbiAFSHD (ORCPT
+        with ESMTP id S232609AbiAFSJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:07:03 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8D2C061245;
-        Thu,  6 Jan 2022 10:07:03 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so4004356otg.2;
-        Thu, 06 Jan 2022 10:07:03 -0800 (PST)
+        Thu, 6 Jan 2022 13:09:37 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC7BC061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:09:37 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id n16so3046392plc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:09:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=kIN2rJ0QveAJsz4ovJWUBi8fFD9lV5F+WhARVVzNc4s=;
-        b=SjUkBtQP7PinEH0y4uRuE2E/A70KeOuHWX+NqToUwMOrAaNiIAs4rr1Xjjp04OwuXG
-         LO61GvSB2TWniKkm/OXDp+NSSxfpsY7RkxiH/qaZDn8tUFMv++GTjZ4NXZe8CFFMX73D
-         i86EDccL2P+Ob7jyuQ09Hbii4zsccH+iSvHHw8gvTTbUGxGMRxKvgMKAz2TEPLeX5ekI
-         BreQivNrdtJsLyA/XtHg8Oc6cy/fTv3x6KBc257yQUPvZF6FOQ+p9uo5Hs86K9yoHRl1
-         iktKbNSPGhLEM7OwvjBb2EdAVvX0cl6SABWFWAbZ7LNuGWtdurNUIg+QPGDy7fCu/Mw9
-         3KGQ==
+        bh=2N5PsN4yRBv182yZ587F2v21F6mIINdXvLaeARO6uyM=;
+        b=TUqmPBLA6ycP01HdBSbz6azNMU2nPE3QbDiI1CmHqGDm4c/hRtVJA/jYvC9W/6Qxsk
+         L7EkckDD59MYtfzrQ4gYmLzSchMBwA5oonJTyogozcLAzSt2zo5Oc9wxMjizxWpEZ/JH
+         Lxjk8/cafgPzuF5pD4nxjh7EBVTYsFUwW3zrbXJS6ENGcN5MCC0voweGwG97mABPgVYY
+         UN1kR/Rl95BkdmhJ0mCczsTEJF6a4hukxWo4rmWRL9c9yXxv3kwf5ktlOxAxdxFSO3DF
+         ea5PhjJyEnlps6QZdsTR7qUMpuucG09JYoRtd9j3Ne3YyvBAdfVvxUX8b6+dnXjUDgP5
+         qFMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kIN2rJ0QveAJsz4ovJWUBi8fFD9lV5F+WhARVVzNc4s=;
-        b=5s/ZmjbG+vIjMIrPo2QSRVxH0BL4SAZj4Mb+dSAc34YVKvs4E4yhnH1YV2O/G8Ssi5
-         12Zvzfj2adIy9QQ5TWrzdMGZzH0d4IydTYIjgqbF+r2jrqxvuENX51ZiDPvy7kKwlRSP
-         An/T9fQwcMm22qypQgUIm5CntHv03yhPeG9Ctav11axbRgr8S+2TjTAeQZhMadSbLqrW
-         f308ntK0tqC8AE06OwT3QuRlSPtSbh4KOJLEXQ3f3zh2HxFJ+0cioPv6yMAZ2JSapwbv
-         TD3YMSWcyVeRChUjq5KLUsLN+sOag98O6lfs49GbDXRHyvak6meS3ocmWTem8qtr+QqY
-         eQTw==
-X-Gm-Message-State: AOAM533RW7wTOT4G+3MNac4jaPXBvZ/aCe+ULtEEcQPCRdUbKHJCWZCz
-        rhDlftlrQRK94fng6ZoQXR1Bv8GKOgo=
-X-Google-Smtp-Source: ABdhPJyfbrXOSFfWk7eeVbsUO3bPcLYPJdDJB0V/fROvvg3TBgITIeefRqHjYkEMB0Z1+RKHQy0cCg==
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr44075687otu.254.1641492422373;
-        Thu, 06 Jan 2022 10:07:02 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j13sm503933oil.42.2022.01.06.10.07.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2N5PsN4yRBv182yZ587F2v21F6mIINdXvLaeARO6uyM=;
+        b=oyy7MQueT6TTEbhnSDTn5XTHXGI8Q0Z/KkGk8UjCMEtGteDp6U3Uriy2higIBiSn/G
+         CoQJTP3BEfzjND3/lXv0cGcocZcaxyf3z3lMwOTvHm3XRpKmIWuC24yqT/4WRjNxhYH/
+         qcN7KA1S21xvcNyLCxjgx9RuLhC0+9lKeyfw9mG4Tegjv2D2TnpCI6V99hd7D49aFs2o
+         PJFdx94YD0DCp2kgmuRktnecsDD9unAvoVr1wk1aLXYpwQT4KEHjWAFoclM0wPpzEuvo
+         pmvnp27WarPT0/z9UFcOseWW8IkU7aDjoQQACRbESxarGuyF/7fJJ7zvoaDuN0ySppGP
+         Ztow==
+X-Gm-Message-State: AOAM533ljoZzp1q8GGVNyTG3soA06VtzmCHB7wPBNRX/DTMwk5xtLZ0U
+        BF6/nqDagCSbB3xQZAnFzqBwGg==
+X-Google-Smtp-Source: ABdhPJw8atVMtICb9c1YLZCpBibCoH+yi3yhmDOixHPJtX9JF743KsJ0NSzm3tTbFYtITDXckMq7kw==
+X-Received: by 2002:a17:902:aa95:b0:149:7c20:bb6f with SMTP id d21-20020a170902aa9500b001497c20bb6fmr48758743plr.170.1641492575874;
+        Thu, 06 Jan 2022 10:09:35 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m14sm3309040pfk.3.2022.01.06.10.09.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 10:07:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 6 Jan 2022 10:07:00 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     linux-watchdog@vger.kernel.org, rrichter@amd.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        ssg.sos.patches@amd.com, sudheesh.mavila@amd.com
-Subject: Re: [PATCH v2 3/4] Watchdog: sp5100_tco: Add EFCH SMBus controller
- initialization using MMIO
-Message-ID: <20220106180700.GA4187021@roeck-us.net>
-References: <20211103161521.43447-1-terry.bowman@amd.com>
- <20211103161521.43447-4-terry.bowman@amd.com>
+        Thu, 06 Jan 2022 10:09:35 -0800 (PST)
+Date:   Thu, 6 Jan 2022 18:09:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: x86/pmu: Make top-down.slots event unavailable
+ in supported leaf
+Message-ID: <YdcwXIANeB3fOWOI@google.com>
+References: <20220106032118.34459-1-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211103161521.43447-4-terry.bowman@amd.com>
+In-Reply-To: <20220106032118.34459-1-likexu@tencent.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 11:15:20AM -0500, Terry Bowman wrote:
-> cd6h/cd7h port I/O can be disabled on recent AMD hardware. Read accesses to
-> disabled cd6h/cd7h port I/O will return F's and written data is dropped.
+On Thu, Jan 06, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> The recommended workaround to handle disabled cd6h/cd7h port I/O is
-> replacing port I/O with MMIO accesses. The MMIO access method has been
-> available since at least SMBus controllers using PCI revision 0x59.
+> When we choose to disable the fourth fixed counter TOPDOWN.SLOTS,
+> we also need to comply with the specification and set 0AH.EBX.[bit 7]
+> to 1 if the guest (e.g. on the ICX) has a value of 0AH.EAX[31:24] > 7.
 > 
-> The EFCH MMIO path is enabled in later patch.
-> 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> To: linux-watchdog@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Robert Richter <rrichter@amd.com>
+> Fixes: 2e8cd7a3b8287 ("kvm: x86: limit the maximum number of vPMU fixed counters to 3")
+> Signed-off-by: Like Xu <likexu@tencent.com>
 > ---
->  drivers/watchdog/sp5100_tco.c | 104 +++++++++++++++++++++++++++++++++-
->  drivers/watchdog/sp5100_tco.h |   6 ++
->  2 files changed, 109 insertions(+), 1 deletion(-)
+> v1 -> v2 Changelog:
+> - Make it simpler to keep forward compatibility; (Sean)
+> - Wrap related comment at ~80 chars; (Sean)
 > 
-> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-> index 80ae42ae7aaa..4777e672a8ad 100644
-> --- a/drivers/watchdog/sp5100_tco.c
-> +++ b/drivers/watchdog/sp5100_tco.c
-> @@ -48,12 +48,14 @@
->  /* internal variables */
+> Previous:
+> https://lore.kernel.org/kvm/20220105050711.67280-1-likexu@tencent.com/
+> 
+>  arch/x86/kvm/cpuid.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 0b920e12bb6d..4fe17a537084 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -782,6 +782,18 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>  		eax.split.mask_length = cap.events_mask_len;
 >  
->  enum tco_reg_layout {
-> -	sp5100, sb800, efch
-> +	sp5100, sb800, efch, efch_mmio
->  };
->  
->  struct sp5100_tco {
->  	struct watchdog_device wdd;
->  	void __iomem *tcobase;
-> +	void __iomem *addr;
-> +	struct resource *res;
->  	enum tco_reg_layout tco_reg_layout;
->  };
->  
-> @@ -161,6 +163,59 @@ static void sp5100_tco_update_pm_reg8(u8 index, u8 reset, u8 set)
->  	outb(val, SP5100_IO_PM_DATA_REG);
->  }
->  
-> +static int sp5100_request_region_mmio(struct device *dev,
-> +				      struct watchdog_device *wdd)
-> +{
-> +	struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-> +	struct resource *res;
-> +	void __iomem *addr;
+>  		edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
 > +
-> +	res = request_mem_region(EFCH_PM_ACPI_MMIO_PM_ADDR,
-> +				 EFCH_PM_ACPI_MMIO_PM_SIZE,
-> +				 "sp5100_tco");
-> +
-> +	if (!res) {
-> +		dev_err(dev,
-> +			"SMB base address memory region 0x%x already in use.\n",
-> +			EFCH_PM_ACPI_MMIO_PM_ADDR);
-> +		return -EBUSY;
-> +	}
-> +
-> +	addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR,
-> +		       EFCH_PM_ACPI_MMIO_PM_SIZE);
-> +	if (!addr) {
-> +		release_resource(res);
-> +		dev_err(dev, "SMB base address mapping failed.\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	tco->res = res;
-> +	tco->addr = addr;
-> +	return 0;
-> +}
-> +
-> +static void sp5100_release_region_mmio(struct sp5100_tco *tco)
-> +{
-> +	iounmap(tco->addr);
-> +	release_resource(tco->res);
-> +}
-> +
-> +static u8 efch_read_pm_reg8(struct sp5100_tco *tco, u8 index)
-> +{
-> +	return readb(tco->addr + index);
-> +}
-> +
-> +static void efch_update_pm_reg8(struct sp5100_tco *tco,
-> +				u8 index, u8 reset, u8 set)
-> +{
-> +	u8 val;
-> +
-> +	val = readb(tco->addr + index);
-> +	val &= reset;
-> +	val |= set;
-> +	writeb(val, tco->addr + index);
-> +}
-> +
->  static void tco_timer_enable(struct sp5100_tco *tco)
->  {
->  	u32 val;
-> @@ -201,6 +256,12 @@ static void tco_timer_enable(struct sp5100_tco *tco)
->  					  ~EFCH_PM_WATCHDOG_DISABLE,
->  					  EFCH_PM_DECODEEN_SECOND_RES);
->  		break;
-> +	case efch_mmio:
-> +		/* Set the Watchdog timer resolution to 1 sec and enable */
-> +		efch_update_pm_reg8(tco, EFCH_PM_DECODEEN3,
-> +				    ~EFCH_PM_WATCHDOG_DISABLE,
-> +				    EFCH_PM_DECODEEN_SECOND_RES);
-> +		break;
->  	}
->  }
->  
-> @@ -313,6 +374,44 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
->  	return 0;
->  }
->  
-> +static int sp5100_tco_setupdevice_mmio(struct device *dev,
-> +				       struct watchdog_device *wdd)
-> +{
-> +	struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-> +	const char *dev_name = SB800_DEVNAME;
-> +	u32 mmio_addr = 0, alt_mmio_addr = 0;
-> +	int ret;
-> +
-> +	ret = sp5100_request_region_mmio(dev, wdd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Determine MMIO base address */
-> +	if (!(efch_read_pm_reg8(tco, EFCH_PM_DECODEEN) &
-> +	      EFCH_PM_DECODEEN_WDT_TMREN)) {
-> +		efch_update_pm_reg8(tco, EFCH_PM_DECODEEN,
-> +				    0xff,
-> +				    EFCH_PM_DECODEEN_WDT_TMREN);
-> +	}
-> +
-> +	if (efch_read_pm_reg8(tco, EFCH_PM_DECODEEN) &
-> +	    EFCH_PM_DECODEEN_WDT_TMREN)
-> +		mmio_addr = EFCH_PM_WDT_ADDR;
-> +
-> +	/* Determine alternate MMIO base address */
-> +	if (efch_read_pm_reg8(tco, EFCH_PM_ISACONTROL) &
-> +	    EFCH_PM_ISACONTROL_MMIOEN)
-> +		alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
-> +			EFCH_PM_ACPI_MMIO_WDT_OFFSET;
-> +
-> +	ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
-> +	if (!ret)
-> +		ret = sp5100_tco_timer_init(tco);
-> +
-> +	sp5100_release_region_mmio(tco);
-> +	return ret;
-> +}
-> +
->  static int sp5100_tco_setupdevice(struct device *dev,
->  				  struct watchdog_device *wdd)
->  {
-> @@ -322,6 +421,9 @@ static int sp5100_tco_setupdevice(struct device *dev,
->  	u32 alt_mmio_addr = 0;
->  	int ret;
->  
-> +	if (tco->tco_reg_layout == efch_mmio)
-> +		return sp5100_tco_setupdevice_mmio(dev, wdd);
-> +
->  	/* Request the IO ports used by this driver */
->  	if (!request_muxed_region(SP5100_IO_PM_INDEX_REG,
->  				  SP5100_PM_IOPORTS_SIZE, "sp5100_tco")) {
-> diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
-> index adf015aa4126..73f179a1d6e5 100644
-> --- a/drivers/watchdog/sp5100_tco.h
-> +++ b/drivers/watchdog/sp5100_tco.h
-> @@ -83,3 +83,9 @@
->  
->  #define EFCH_PM_ACPI_MMIO_ADDR		0xfed80000
->  #define EFCH_PM_ACPI_MMIO_WDT_OFFSET	0x00000b00
-> +#define EFCH_PM_ACPI_MMIO_PM_OFFSET	0x00000300
-> +
-> +#define EFCH_PM_ACPI_MMIO_PM_ADDR	(EFCH_PM_ACPI_MMIO_ADDR +	\
-> +					 EFCH_PM_ACPI_MMIO_PM_OFFSET)
-> +#define EFCH_PM_ACPI_MMIO_PM_SIZE       8
-> +
+> +		/*
+> +		 * The 8th Intel architectural event (Topdown Slots) will be supported
 
-git complains about an empty line at the end of file when
-applying this patch.
+Nit, the "8th" part is unnecessary information.  
 
-Guenter
+> +		 * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
+> +		 *
+> +		 * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
+> +		 * to make this event unavailable in a consistent way.
+> +		 */
+
+This comment is now slightly stale.  It also doesn't say why the event is made
+unavailable.
+
+> +		if (edx.split.num_counters_fixed < 4 &&
+
+Rereading the changelog and the changelog of the Fixed commit, I don't think KVM
+should bother checking num_counters_fixed.  IIUC, cap.events_mask[7] should already
+be '1' if there are less than 4 fixed counters in hardware, but at the same time
+there's no harm in being a bit overzealous.  That would help simplifiy the comment
+as there's no need to explain why num_counters_fixed is checked, e.g. the fact that
+Topdown Slots uses the 4th fixed counter is irrelevant with respect to the legality
+of setting EBX[7]=1 to hide an unsupported event.
+
+		/*
+		 * Hide Intel's Topdown Slots architectural event, it's not yet
+		 * supported by KVM.
+		 */
+		if (eax.split.mask_length > 7)
+			cap.events_mask |= BIT_ULL(7);
+
+> +		    eax.split.mask_length > 7)
+> +			cap.events_mask |= BIT_ULL(7);
+> +
+>  		edx.split.bit_width_fixed = cap.bit_width_fixed;
+>  		if (cap.version)
+>  			edx.split.anythread_deprecated = 1;
+> -- 
+> 2.33.1
+> 

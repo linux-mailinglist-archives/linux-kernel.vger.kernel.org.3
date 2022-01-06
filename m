@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287124869CA
+	by mail.lfdr.de (Postfix) with ESMTP id EB82B4869CC
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242739AbiAFSZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:25:39 -0500
-Received: from mail-oo1-f42.google.com ([209.85.161.42]:39429 "EHLO
-        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242771AbiAFSZe (ORCPT
+        id S242856AbiAFSZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:25:41 -0500
+Received: from mail-oo1-f52.google.com ([209.85.161.52]:36513 "EHLO
+        mail-oo1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242786AbiAFSZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:25:34 -0500
-Received: by mail-oo1-f42.google.com with SMTP id t13-20020a4a760d000000b002dab4d502dfso864969ooc.6;
-        Thu, 06 Jan 2022 10:25:34 -0800 (PST)
+        Thu, 6 Jan 2022 13:25:35 -0500
+Received: by mail-oo1-f52.google.com with SMTP id k15-20020a4a850f000000b002dc3cdb0256so448146ooh.3;
+        Thu, 06 Jan 2022 10:25:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bI7eobDSewS2Qd+lbfRTD/gtkMkysWS1nWdoyRyM1q4=;
-        b=Cpln5nlcYIi7fgk/fZ3ubsrModn5mFfdNVulECq3G9yVMMNWYx7aX6dv0lBO0Ne7M0
-         VQtFlnnwBgPCZ5lPxwB2rEyU0wvw45MGB7CS1nKetGfx6J3QERtfyzafURR029q+qVVc
-         /ULXjuWUGYW1q2S93HOgYIvm/DZye62m5TR35ub6xaz05JA6lVntAdSEz6LGatvBKbfS
-         O2Uqpb0/5bSEOaBg/NbTFzzRr7CakHQfDUzHgoCFe8482+JkZJo0ZY+Y/oEbpJP988+0
-         JJuKqrCkjODYL2iHMS/ghQu4QMO4Hv/gHRzBWW3FKh2YJ1fExzDAvmeZ8w7W4ahXbGxa
-         3SmQ==
-X-Gm-Message-State: AOAM532sysJlRs1BbSiT9Subq7pYyK3EN/mahzcEn4Z/iermwlQrI4Ie
-        ENdQeBD5lp8H4Wn4MGy7qE2d+JKuOA==
-X-Google-Smtp-Source: ABdhPJwcLUypC9NTs2U4zWC3D8yMwCErfVX7jBkeuwLiiNOX4ZGKYs3h3IsWsn/EGiyZmJloSEcEKw==
-X-Received: by 2002:a4a:2a1b:: with SMTP id k27mr38264788oof.97.1641493533731;
-        Thu, 06 Jan 2022 10:25:33 -0800 (PST)
+        bh=fiswExMz6XFGwtuBLNXXr8Y61t2eLKYq11RSjSYGFgI=;
+        b=Gd/H38f/3UqJXiwoHcBsgrqqq4zm3keBeAlaXw8gmXASHW8N49b87od4eO4LrjTNlx
+         PrtNGclheQ6J7+VeNh36PyjFXWzjq5GDE+9+w3Rrs1OB7LlOLELpanSa48JHKDmn6PiH
+         Oxqk1zeKV+3Pd7rIw8/6vdmyIXWQgwIBsxe+0VScAUOFam2v29eKGvoiYuqorx4aZaHd
+         AfR7mkaqnIZc1Nfi0ykkaN5jEvX73OJ2NRWM94SvwxOj1OUsPitjH77QqUKEc+PVd2ZY
+         Ni/T6tMPnTwsSKhDw5U2OUfqTzdu8u+kuBIJdrlU1DNB4yveoKb/XDG2+3U+ewVl3UCC
+         wvLQ==
+X-Gm-Message-State: AOAM5300oVzo6msdNLkuKcisIhTdWrPFlma0oheymU4Azs9gOGNbnhzK
+        CFaPS68ei7Ly+aa1RaPQYQ==
+X-Google-Smtp-Source: ABdhPJwB9iT6Wzc4bAEqj5n+FhrYY/F4LxNj/hGK1fvAB2ejuvOQ7IDy/GkuKITHAGLet0tK5Citsw==
+X-Received: by 2002:a4a:7c85:: with SMTP id v127mr38877986ooc.79.1641493534925;
+        Thu, 06 Jan 2022 10:25:34 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.32
+        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 10:25:33 -0800 (PST)
+        Thu, 06 Jan 2022 10:25:34 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     Marc Zyngier <marc.zyngier@arm.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: interrupt-controller: arm,gic-v3: Fix 'interrupts'
-Date:   Thu,  6 Jan 2022 12:25:13 -0600
-Message-Id: <20220106182518.1435497-5-robh@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: mmc: arm,pl18x: Make each example a separate entry
+Date:   Thu,  6 Jan 2022 12:25:14 -0600
+Message-Id: <20220106182518.1435497-6-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,36 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 2nd example has an interrupts cells size of 4, but the 'interrupts'
-property has 3 cells. The example should also be separate since the cell
-size differs in each example.
+Each independent example should be a separate entry. This and dropping
+'interrupt-parent' allows for 'interrupts' to have different cell sizes.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml   | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-index c84f9fe7f254..cfb3ec27bd2b 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-@@ -239,6 +239,7 @@ examples:
-       };
+diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+index 47595cb483be..2a64cffbe6ad 100644
+--- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
++++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+@@ -167,6 +167,9 @@ examples:
+       clock-names = "mclk", "apb_pclk";
      };
  
 +  - |
-     interrupt-controller@2c010000 {
-       compatible = "arm,gic-v3";
-       #interrupt-cells = <4>;
-@@ -254,7 +255,7 @@ examples:
-             <0x2c040000 0x2000>,  // GICC
-             <0x2c060000 0x2000>,  // GICH
-             <0x2c080000 0x2000>;  // GICV
--      interrupts = <1 9 4>;
-+      interrupts = <1 9 4 0>;
++    #include <dt-bindings/interrupt-controller/irq.h>
++
+     mmc@80126000 {
+       compatible = "arm,pl18x", "arm,primecell";
+       reg = <0x80126000 0x1000>;
+@@ -188,12 +191,12 @@ examples:
+       vqmmc-supply = <&vmmci>;
+     };
  
-       msi-controller@2c200000 {
-         compatible = "arm,gic-v3-its";
++  - |
+     mmc@101f6000 {
+       compatible = "arm,pl18x", "arm,primecell";
+       reg = <0x101f6000 0x1000>;
+       clocks = <&sdiclk>, <&pclksdi>;
+       clock-names = "mclk", "apb_pclk";
+-      interrupt-parent = <&vica>;
+       interrupts = <22>;
+       max-frequency = <400000>;
+       bus-width = <4>;
+@@ -208,6 +211,7 @@ examples:
+       vmmc-supply = <&vmmc_regulator>;
+     };
+ 
++  - |
+     mmc@52007000 {
+       compatible = "arm,pl18x", "arm,primecell";
+       arm,primecell-periphid = <0x10153180>;
 -- 
 2.32.0
 

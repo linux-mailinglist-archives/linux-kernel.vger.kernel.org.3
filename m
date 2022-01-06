@@ -2,102 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCB8486764
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C74486767
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241005AbiAFQJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240958AbiAFQJj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:09:39 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D31CC061245;
-        Thu,  6 Jan 2022 08:09:39 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso1787077pjo.5;
-        Thu, 06 Jan 2022 08:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fC0CiGsNq+HCwmp3jjwL9PAFJwUiw3GqDWvVqeNxRBM=;
-        b=mk1AZ7M/s26oyznwaeHtpA3mIhB7kSBVZRL4LG8ZHURkcpD6U/XeBe44HpRPeVqsuJ
-         ngNfYR4DEYASBuToJJxdcathKbMyyb0WjIZ0BXzRDfOOtYAdKlSTYfGJ+vQKT6NkhNh2
-         xIf3vbHGy7zgB4dXUKJl8yzwdkXJ7EUESncfJbeANkUb930ApMhT2ljuoT5r0xlJL2GH
-         cjQ1rxlaApuD+6HeInyd5rLNMnoqVKxsnWWq6bkwVDRtnZ3khQvw2nT1aWCrwjfH+fGT
-         7mfizu84Bd14wcoKUJsJOs2Z8Y3a9yMd5faOZXEpdsb40g9LoX1pSRiZI+qgjf6I+EiB
-         nVhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fC0CiGsNq+HCwmp3jjwL9PAFJwUiw3GqDWvVqeNxRBM=;
-        b=MVPndLvsT2jbVzNCM17k5IEQCIfJ7mJU90GL7hfTGkkC+mnBQVghALZCLBmjGLvi6b
-         ElCSji2MkxiBa/DgNXG8v9N8u1awgRI5gzm7avJEaJ9HoKRVXDLyulGCCRshgKg0UcVb
-         35TeLiult1sG7EGoppjlN58P9cktZUopO4EWTsOYWv4fW6kQvRKYC6rp8arO8e3/aBKA
-         fZEn3oikabFMss/542Jwwk17z1gvb2H0GJtGd053Tlk3lsJ9a8dERmJCi6Mi+k0vrfBn
-         l0rcpS/VsRaLnIBZq+QjpE7fM8+Ho0USLWYTHj9Jl/i6yU0nQr6R5G0gFK6BXIlREMUV
-         anYA==
-X-Gm-Message-State: AOAM530Wspv6w3N06IRyxWP7oQRb+XuhZkoORExsD6hxc23slR9J6Xg8
-        /sNOgzu3yz5QlX/37flGIctFY7bE6sU=
-X-Google-Smtp-Source: ABdhPJyRomRCzjYTTxc0qd4FSDF70Tm7FxgsUtIlOnnnxBWPEHwG0fA80Mep8+HUo5q/1XX/q1DUaQ==
-X-Received: by 2002:a17:90a:e7d2:: with SMTP id kb18mr10858620pjb.111.1641485378437;
-        Thu, 06 Jan 2022 08:09:38 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id m68sm2381710pga.30.2022.01.06.08.09.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 08:09:37 -0800 (PST)
-Subject: Re: [PATCH v11 3/7] dt-bindings: PCI: Add bindings for Brcmstb EP
- voltage regulators
-To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220106160332.2143-1-jim2101024@gmail.com>
- <20220106160332.2143-4-jim2101024@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <990faca8-a366-c66a-85fa-6ec9361f6b67@gmail.com>
-Date:   Thu, 6 Jan 2022 08:09:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S241013AbiAFQK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:10:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:56048 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240960AbiAFQK1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:10:27 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B7A313D5;
+        Thu,  6 Jan 2022 08:10:26 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.10.56])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 930153F5A1;
+        Thu,  6 Jan 2022 08:10:24 -0800 (PST)
+Date:   Thu, 6 Jan 2022 16:10:20 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 02/10] arm64: Rename unwinder functions
+Message-ID: <YdcUbJoz9LwDboGJ@FVFF77S0Q05N>
+References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
+ <20220103165212.9303-1-madvenka@linux.microsoft.com>
+ <20220103165212.9303-3-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <20220106160332.2143-4-jim2101024@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103165212.9303-3-madvenka@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/22 8:03 AM, Jim Quinlan wrote:
-> Add bindings for Brcmstb EP voltage regulators.  A new mechanism is to be
-> added to the Linux PCI subsystem that will allocate and turn on/off
-> regulators.  These are standard regulators -- vpcie12v, vpcie3v3, and
-> vpcie3v3aux -- placed in the DT in the bridge node under the host bridge
-> device.
+On Mon, Jan 03, 2022 at 10:52:04AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 > 
-> The use of a regulator property in the pcie EP subnode such as
-> "vpcie12v-supply" depends on a pending pullreq to the pci-bus.yaml
-> file at
+> Rename unwinder functions for consistency and better naming.
 > 
-> https://github.com/devicetree-org/dt-schema/pull/63
+> 	- Rename start_backtrace() to unwind_init().
+> 	- Rename unwind_frame() to unwind_next().
+> 	- Rename walk_stackframe() to unwind().
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+For consistency, to replace my prior Acked-by:
+
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
+> ---
+>  arch/arm64/kernel/stacktrace.c | 32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 5f5bb35b7b41..b980d96dccfc 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -33,8 +33,8 @@
+>   */
+>  
+>  
+> -static void start_backtrace(struct stackframe *frame, unsigned long fp,
+> -			    unsigned long pc)
+> +static void unwind_init(struct stackframe *frame, unsigned long fp,
+> +			unsigned long pc)
+>  {
+>  	frame->fp = fp;
+>  	frame->pc = pc;
+> @@ -45,7 +45,7 @@ static void start_backtrace(struct stackframe *frame, unsigned long fp,
+>  	/*
+>  	 * Prime the first unwind.
+>  	 *
+> -	 * In unwind_frame() we'll check that the FP points to a valid stack,
+> +	 * In unwind_next() we'll check that the FP points to a valid stack,
+>  	 * which can't be STACK_TYPE_UNKNOWN, and the first unwind will be
+>  	 * treated as a transition to whichever stack that happens to be. The
+>  	 * prev_fp value won't be used, but we set it to 0 such that it is
+> @@ -63,8 +63,8 @@ static void start_backtrace(struct stackframe *frame, unsigned long fp,
+>   * records (e.g. a cycle), determined based on the location and fp value of A
+>   * and the location (but not the fp value) of B.
+>   */
+> -static int notrace unwind_frame(struct task_struct *tsk,
+> -				struct stackframe *frame)
+> +static int notrace unwind_next(struct task_struct *tsk,
+> +			       struct stackframe *frame)
+>  {
+>  	unsigned long fp = frame->fp;
+>  	struct stack_info info;
+> @@ -104,7 +104,7 @@ static int notrace unwind_frame(struct task_struct *tsk,
+>  
+>  	/*
+>  	 * Record this frame record's values and location. The prev_fp and
+> -	 * prev_type are only meaningful to the next unwind_frame() invocation.
+> +	 * prev_type are only meaningful to the next unwind_next() invocation.
+>  	 */
+>  	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
+>  	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
+> @@ -137,23 +137,23 @@ static int notrace unwind_frame(struct task_struct *tsk,
+>  
+>  	return 0;
+>  }
+> -NOKPROBE_SYMBOL(unwind_frame);
+> +NOKPROBE_SYMBOL(unwind_next);
+>  
+> -static void notrace walk_stackframe(struct task_struct *tsk,
+> -				    struct stackframe *frame,
+> -				    bool (*fn)(void *, unsigned long), void *data)
+> +static void notrace unwind(struct task_struct *tsk,
+> +			   struct stackframe *frame,
+> +			   bool (*fn)(void *, unsigned long), void *data)
+>  {
+>  	while (1) {
+>  		int ret;
+>  
+>  		if (!fn(data, frame->pc))
+>  			break;
+> -		ret = unwind_frame(tsk, frame);
+> +		ret = unwind_next(tsk, frame);
+>  		if (ret < 0)
+>  			break;
+>  	}
+>  }
+> -NOKPROBE_SYMBOL(walk_stackframe);
+> +NOKPROBE_SYMBOL(unwind);
+>  
+>  static bool dump_backtrace_entry(void *arg, unsigned long where)
+>  {
+> @@ -195,14 +195,14 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  	struct stackframe frame;
+>  
+>  	if (regs)
+> -		start_backtrace(&frame, regs->regs[29], regs->pc);
+> +		unwind_init(&frame, regs->regs[29], regs->pc);
+>  	else if (task == current)
+> -		start_backtrace(&frame,
+> +		unwind_init(&frame,
+>  				(unsigned long)__builtin_frame_address(1),
+>  				(unsigned long)__builtin_return_address(0));
+>  	else
+> -		start_backtrace(&frame, thread_saved_fp(task),
+> +		unwind_init(&frame, thread_saved_fp(task),
+>  				thread_saved_pc(task));
+>  
+> -	walk_stackframe(task, &frame, consume_entry, cookie);
+> +	unwind(task, &frame, consume_entry, cookie);
+>  }
+> -- 
+> 2.25.1
+> 

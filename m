@@ -2,238 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1574862D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCCE4862D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237834AbiAFKTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S237838AbiAFKT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 05:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiAFKTt (ORCPT
+        with ESMTP id S237841AbiAFKT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:19:49 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01457C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 02:19:49 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id f5so2160035pgk.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 02:19:48 -0800 (PST)
+        Thu, 6 Jan 2022 05:19:56 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B75C061212
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 02:19:55 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id s15so2138804pfk.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 02:19:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=qrUiVp66UaC0fzwGeqUSSM59awV1/I5knr8G05XRj7U=;
-        b=eSNtLKePt6N1p7z3fhMxNJbqLnJ4f5W6yjfU7vcpkvBNzQzEJ1QFZTak8+QmbA+Ix2
-         yP07YYyLZcAjAPqrMKXRpC+nOjKqgdnBjzAGye6TFMYDQLgRFbVpcOJljYEfkYZqQ9P8
-         KCoE2M0ZaZKagylNmGQ65qo/k1Leq7sxsq2Jk=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H3j3OBM8zalTDzIk5cZKKGbGfOPu4uEf9KmgtZeTqBw=;
+        b=j3AIMULN87EQ8JeCbKonwMvBB8mnMshBTr357TwGdx6h+wKLPVBElr4UlP5GlpJVxh
+         1x0jWASYLFuE5lHfCDiXCE+5hNZZgyPOvACz0umqZicetVOE2CzP4R+ujDPHxTnzpOP2
+         fHHS+n/cNX6xDu0uWmQ0XKC24yxH+Kbd58w0wGxBJI57AYho1tDK1GcRKayZUlbWcmo5
+         8mjThdFXD5DSznaB6Xe3e4RiMBfnXLg8a2oiqckYkvgrmqFvx0ANf7PzrBRdMEGjmqVM
+         keMSj9CoZNrI4paLNnP7VYcH1k8Ny1D+zLpr4Yu1I9KCh2r/LGURj0Qaad7cvaCR0hgs
+         wYww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=qrUiVp66UaC0fzwGeqUSSM59awV1/I5knr8G05XRj7U=;
-        b=jGCXbQrTP7ab9HgdoQjUfCAbM/TBwBEICBGjP9HF1nXuPqtCh1yAZjqbTN394ldtf8
-         +G4ke7iWd5iz9vafJlZotoQWYaUMRn2JbhPDp0NT9cNHp5lZ/w/rfLzUE+S0pyy97Eog
-         7xSRIfuJvoBGmK4s3ey6lofJF9dCYzK8zfQLb7mHt7FJLuDYiev4MKd+wljVIL6xHCmY
-         f/UAj1QFNAMKTrscSBqafjWM/yRBmZlLqXhAkV/KC7pTIRIcdsHCcFEdxSUFOGkVW7qs
-         lr0k7LvBTaig+qW+9IH3+BE6ND7d5HuHfYBFxZe1BRHb86OuE4sQ7S9BNbOuy0myg59X
-         LaTg==
-X-Gm-Message-State: AOAM530BaafUDhHDXPA+x3MTbErKUBRuooHOEFXl6vbkcLJQwgZmARtl
-        M3E8uVq5g3TvbDFlCFp4ricEkQ==
-X-Google-Smtp-Source: ABdhPJzaIwbSUzfGeaBNzaAy0Ao78nCs1pWvv5LGZyfKb8/eU32lEDlbDuzF+xmGUNIQU8qexaqLXw==
-X-Received: by 2002:a05:6a00:1349:b0:4ba:fd72:64da with SMTP id k9-20020a056a00134900b004bafd7264damr60159868pfu.69.1641464388363;
-        Thu, 06 Jan 2022 02:19:48 -0800 (PST)
-Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id k10sm1851604pfi.52.2022.01.06.02.19.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 02:19:47 -0800 (PST)
-Message-ID: <955f3b68-f1aa-767c-2539-7b8362372a60@broadcom.com>
-Date:   Thu, 6 Jan 2022 11:19:38 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H3j3OBM8zalTDzIk5cZKKGbGfOPu4uEf9KmgtZeTqBw=;
+        b=jy9A8dqxtolhB/gsS4nhyI312xrlbv/ktGjy5HDktO5RzJfZWR1vCaYcuXtGkwZ09t
+         pZQMDW+f8sXoymEhVgZdpUdvBv7M1aUlnGpDvlSBmcV7HtUSv+q/slS+vMPSaD2er+FE
+         qDCtbyTpTqolOl7ZrfbYx+Eo/iY66vjKJeFsAZ2QRUoUdovg7FTP1bAPDBwquZbt5p9V
+         iO2emKvG9C8cs1A35ptFhJ4HeRfxBSWrWXpfqqNA1cDWkrmFSFjpUtX1sPQprm2KN8d7
+         Sg/Iy+qMUbTw54OvHWK0G+lVKZrs7J/tPaG4S898mcvjyPGk1me0+8soOQEc5Q9iwbB/
+         h9Gw==
+X-Gm-Message-State: AOAM530awYnc1r2pu2B9Yudgpt5Prg+KfeybkU7jxy/C74PypzBRNMjb
+        lhgCskrSA99t9pJfa+PlXGI=
+X-Google-Smtp-Source: ABdhPJx7S0Pqw2sMVIPTNFhfAVp8sEM3Cn1nW7X2eXcb8p6RbxBSAlw7+xP64R0nGQGMEUSr8JjT5A==
+X-Received: by 2002:a63:3101:: with SMTP id x1mr52105577pgx.113.1641464395244;
+        Thu, 06 Jan 2022 02:19:55 -0800 (PST)
+Received: from realwakka ([59.12.165.26])
+        by smtp.gmail.com with ESMTPSA id q17sm2133922pfj.119.2022.01.06.02.19.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 02:19:55 -0800 (PST)
+Date:   Thu, 6 Jan 2022 10:19:46 +0000
+From:   Sidong Yang <realwakka@gmail.com>
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: pi433: move get version func to where all other
+ functions are
+Message-ID: <20220106101946.GA23794@realwakka>
+References: <20220106093110.GA20011@mail.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 03/35] brcmfmac: firmware: Handle per-board clm_blob
- files
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-4-marcan@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <20220104072658.69756-4-marcan@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cd6e0605d4e735f6"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106093110.GA20011@mail.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000cd6e0605d4e735f6
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Thu, Jan 06, 2022 at 10:31:10PM +1300, Paulo Miguel Almeida wrote:
 
-On 1/4/2022 8:26 AM, Hector Martin wrote:
-> Teach brcm_alt_fw_paths to correctly split off variable length
-> extensions, and enable alt firmware lookups for the CLM blob firmware
-> requests.
+
+> As a convention for the pi433 driver, all routines that deals with the
+> rf69 chip are defined in the rf69.c file. There was an exception in
+> which the uC version verification was being done directly elsewhere.
+> While at it, the Version Register hardcoded value was replaced with a
+> pre-existing constant in the driver.
 > 
-> Apple platforms have per-board CLM blob files.
+> This patch adds rf69_get_chip_version function to rf69.c
+> 
+> Additionally, the patch below must be applied first as it was sent
+> before and touches the same file.
+> https://lore.kernel.org/lkml/20220103222334.GA6814@mail.google.com/
+> 
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 
-Are you sure? I am not involved in development for Apple platforms, but 
-in general we build a CLM blob specific for a chip revision. As always 
-with the blobs they are created at a certain point in time and that is 
-mostly why you need another one for a newer platform. Apple tends to do 
-things a bit different so you could be right though. Anyway, despite my 
-doubts on this it does not change the need for per-board firmware files.
+Hi, Paulo. 
+Thanks for a patch.
 
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+I think it's good overall. But I have some opinion below.
+
 > ---
->   .../broadcom/brcm80211/brcmfmac/firmware.c       | 16 ++++++++--------
->   1 file changed, 8 insertions(+), 8 deletions(-)
+>  drivers/staging/pi433/pi433_if.c | 4 +---
+>  drivers/staging/pi433/rf69.c     | 8 ++++++++
+>  drivers/staging/pi433/rf69.h     | 1 +
+>  3 files changed, 10 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
-> index 0eb13e5df517..0497b721136a 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
-> @@ -595,16 +595,16 @@ static int brcmf_fw_complete_request(const struct firmware *fw,
->   static char *brcm_alt_fw_path(const char *path, const char *board_type)
->   {
->   	char alt_path[BRCMF_FW_NAME_LEN];
-> -	char suffix[5];
-> +	const char *suffix;
->   
-> -	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
-> -	/* At least one character + suffix */
-> -	if (strlen(alt_path) < 5)
-> +	suffix = strrchr(path, '.');
-> +	if (!suffix || suffix == path)
->   		return NULL;
->   
-> -	/* strip .txt or .bin at the end */
-> -	strscpy(suffix, alt_path + strlen(alt_path) - 4, 5);
-> -	alt_path[strlen(alt_path) - 4] = 0;
-> +	/* strip extension at the end */
-> +	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
-> +	alt_path[suffix - path] = 0;
+> diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+> index 29bd37669059..a19afda5b188 100644
+> --- a/drivers/staging/pi433/pi433_if.c
+> +++ b/drivers/staging/pi433/pi433_if.c
+> @@ -1116,9 +1116,7 @@ static int pi433_probe(struct spi_device *spi)
+>  		spi->mode, spi->bits_per_word, spi->max_speed_hz);
+>  
+>  	/* Ping the chip by reading the version register */
+> -	retval = spi_w8r8(spi, 0x10);
+> -	if (retval < 0)
+> -		return retval;
+> +	retval = rf69_get_chip_version(spi);
+>  
+>  	switch (retval) {
+>  	case 0x24:
+> diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+> index d64df072d8e8..1516012f9bb7 100644
+> --- a/drivers/staging/pi433/rf69.c
+> +++ b/drivers/staging/pi433/rf69.c
+> @@ -102,6 +102,14 @@ static inline int rf69_read_mod_write(struct spi_device *spi, u8 reg,
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> +int rf69_get_chip_version(struct spi_device *spi)
+> +{
+> +	int retval;
 > +
->   	strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
->   	strlcat(alt_path, board_type, BRCMF_FW_NAME_LEN);
->   	strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
-> @@ -619,7 +619,7 @@ static int brcmf_fw_request_firmware(const struct firmware **fw,
->   	int ret;
->   
->   	/* Files can be board-specific, first try a board-specific path */
-> -	if (cur->type == BRCMF_FW_TYPE_NVRAM && fwctx->req->board_type) {
-> +	if (fwctx->req->board_type) {
->   		char *alt_path;
->   
->   		alt_path = brcm_alt_fw_path(cur->path, fwctx->req->board_type);
+> +	retval = rf69_read_reg(spi, REG_VERSION);
+> +	return retval;
+> +}
+> +
+If we don't modify retval, why don't we just return directly without
+retval?
 
-So all firmware files are attempted with board-specific path now.
+>  int rf69_set_mode(struct spi_device *spi, enum mode mode)
+>  {
+>  	static const u8 mode_map[] = {
+> diff --git a/drivers/staging/pi433/rf69.h b/drivers/staging/pi433/rf69.h
+> index b648ba5fff89..ca9b75267840 100644
+> --- a/drivers/staging/pi433/rf69.h
+> +++ b/drivers/staging/pi433/rf69.h
+> @@ -17,6 +17,7 @@
+>  #define FIFO_SIZE	66		/* bytes */
+>  #define FIFO_THRESHOLD	15		/* bytes */
+>  
+> +int rf69_get_chip_version(struct spi_device *spi);
+IMHO, I think that we don't need to include 'chip'. Because all other
+functions in this code don't have 'chip' in function name. and version
+code seems to be more accurate representation.
 
---000000000000cd6e0605d4e735f6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCojDaRSiiEJ9alzVae
-d6iGjmZAhiJafJ0IOPslQlHrXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMDYxMDE5NDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAfFPmQ10lJQhlDWnHgAcOexKGE6P4v5tOhBuc
-EWWk5e4LEbz9yGYWgan5UAg9gQPxGoHUiHM2Jfy6GDtfUBrTKqtWD/V1Tvd35IWHPpzkaOBJ4AFp
-wczhpqHgWovOfA8FksBxaePxs3P9oBDwlM6jONauEvlGTAcVUJfVfoopMwvKlrDxMpN7jfWB5hF2
-ElMK3STSy1rRMFCp4gIUrwMP/Yje2UsTXfB5E7m1wN4TElyt9cgKNI/1liKf/8w1gc12E4k6T0fd
-tvFeBMLTdhosDww2WvhMct+rUmreTIyA95xhHwZoOiq06dTjD9tUvP3Bnbrt+ueph5bWdaimOObw
-5g==
---000000000000cd6e0605d4e735f6--
+>  int rf69_set_mode(struct spi_device *spi, enum mode mode);
+>  int rf69_set_data_mode(struct spi_device *spi, u8 data_mode);
+>  int rf69_set_modulation(struct spi_device *spi, enum modulation modulation);
+> -- 
+> 2.25.4
+> 

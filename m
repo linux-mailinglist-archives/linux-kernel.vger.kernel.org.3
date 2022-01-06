@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45CB4865D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18BA4865DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239961AbiAFOMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 09:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S239993AbiAFONm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 09:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239705AbiAFOMj (ORCPT
+        with ESMTP id S239752AbiAFONl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 09:12:39 -0500
+        Thu, 6 Jan 2022 09:13:41 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADB0C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 06:12:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C62C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 06:13:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FAAD61B04
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6D22C36AE0;
-        Thu,  6 Jan 2022 14:12:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A270561A32
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D5BFC36AE0;
+        Thu,  6 Jan 2022 14:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641478358;
-        bh=S/619fxc8rw0lpO5vyMU+8P9KRO/68r1eyUO9y6srEc=;
+        s=korg; t=1641478420;
+        bh=veutsRFUwa9z/eJAKuABD/dWPy10kh8Exy8k3RIMy6g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PPpxy+IdDvDtUAUERUUgduAyBlIm09+80Rj0g1kfg3ODhZHP44zFbBiItcG+CDaXw
-         +i+P8ige8rbQ4mlUnvRfEYS7jnWObchSJ2Yht6wsIio0ZX0whgPyZWHL2JBsXPKNEP
-         por6NNWWmaDOuM9hL3KFSlf3RiLI9ayCYDctKIHM=
-Date:   Thu, 6 Jan 2022 15:12:35 +0100
+        b=uLpui3QCqtcs/STyGWN1L7c5fIy8N6Dh3ai+Xd0ChVi9njNNqNysXlIwbCAuwiI6o
+         vS6FSWqkdq1XQaP6ryz/BusKu17Z+xBCm8+NdXk6fSMr6qa5U3SuvzepA1OE5uWxU3
+         ZK5b78rKsljGCKwc1ZhUd491z1PMqnsS1lVEvVHM=
+Date:   Thu, 6 Jan 2022 15:13:37 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 Cc:     linuxfancy@googlegroups.com,
@@ -42,77 +42,49 @@ Cc:     linuxfancy@googlegroups.com,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Saurav Girepunje <saurav.girepunje@gmail.com>,
         Ivan Safonov <insafonov@gmail.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/56] staging: r8188eu: add parenthesis to macro SetToDs
-Message-ID: <Ydb40xesTGFftdol@kroah.com>
+Subject: Re: [PATCH 02/56] staging: r8188eu: rename camelcase SetToDs to
+ set_to_ds
+Message-ID: <Ydb5EYA0EWRJTjVB@kroah.com>
 References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
- <20220103190326.363960-2-alb3rt0.m3rciai@gmail.com>
+ <20220103190326.363960-3-alb3rt0.m3rciai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220103190326.363960-2-alb3rt0.m3rciai@gmail.com>
+In-Reply-To: <20220103190326.363960-3-alb3rt0.m3rciai@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 08:01:36PM +0100, Alberto Merciai wrote:
-> Enclose in parenthesis complex macro SetToDs
-
-Why?
-
-You are saying what you are doing (which is easy to see by looking at
-the patch itself), but not _why_ you are doing this.  Please read the
-documentation in the kernel source tree for how to write a good kernel
-commit message.  It is in the section entitled "The canonical patch
-format" in the kernel file, Documentation/SubmittingPatches.
-
+On Mon, Jan 03, 2022 at 08:01:37PM +0100, Alberto Merciai wrote:
+> Rename camel case macro SetToDs into set_to_ds.
+> 
 > Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 > ---
->  drivers/staging/r8188eu/include/wifi.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/staging/r8188eu/core/rtw_mlme_ext.c | 4 ++--
+>  drivers/staging/r8188eu/core/rtw_xmit.c     | 2 +-
+>  drivers/staging/r8188eu/hal/rtl8188e_cmd.c  | 2 +-
+>  drivers/staging/r8188eu/include/wifi.h      | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-> index 7cbc7015e90f..f16e9f44babe 100644
-> --- a/drivers/staging/r8188eu/include/wifi.h
-> +++ b/drivers/staging/r8188eu/include/wifi.h
-> @@ -164,7 +164,7 @@ enum WIFI_REG_DOMAIN {
->  #define _ORDER_		BIT(15)
->  
->  #define SetToDs(pbuf)	\
-> -	*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_)
-> +	(*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_))
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> index 0aa958f20cd6..6c784134d957 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> @@ -5409,7 +5409,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
+>  	if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE)
+>  		SetFrDs(fctrl);
+>  	else if ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE)
+> -		SetToDs(fctrl);
+> +		set_to_ds(fctrl);
 
-The cast here should not be happening as odds are it hides other endian
-issues.
+This patch will not be needed at all if you take my advice from patch
+01.
 
-Also the name is horrid, but really, the lack of () is is fine as-is as
-it is used as a "function call" in the driver.  Wrapping it in () does
-nothing to it at all from what I can tell so this change isn't even
-helping :(
-
-Why not fix this up properly by replacing the places where it is called
-with the code here instead?
-
-For example, these lines:
-	else if ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE)
-		SetToDs(fctrl);
-would be:
-	else if ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE)
-		fctrl |= cpu_to_le16(_TO_DS_);
-
-Isn't that now much more readable and easier to understand what is
-happening here?
-
-Then there's the crazyness of a bit field being called "_TO_DS_", but
-that can be cleaned up later...
-
-I hate to reject patch 1 of a 50+ patch series, but next time try
-sending smaller series so that you don't have to redo a bunch of work
-like now has to happen here (the same comments apply to your other ()
-patches in this series.)
+The goal is to make readable code, not just rename things to pass a perl
+script's suggestions :)
 
 thanks,
 

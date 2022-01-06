@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F72C485D16
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A576485D18
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343719AbiAFAYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 19:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S1343743AbiAFAZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 19:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343703AbiAFAXR (ORCPT
+        with ESMTP id S1343760AbiAFAXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 19:23:17 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36AFC034003;
-        Wed,  5 Jan 2022 16:23:16 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c126-20020a1c9a84000000b00346f9ebee43so278649wme.4;
-        Wed, 05 Jan 2022 16:23:16 -0800 (PST)
+        Wed, 5 Jan 2022 19:23:55 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E7C034009
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 16:23:53 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id c4so824143iln.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 16:23:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LtbJ7TD9znxzhf98x0PHy/SqzW7ZVDB+4Aleb2LR+tc=;
-        b=hm8//BPPbFhrIDzJYowb5oFbAdkOAQqY0Drc1KsxzS8Vuca6ZQ4YoCiHHlOXdoi/PY
-         CXAuEcjbHoYriLebucFP1lHBz/nldh8amCJIAO+4iZYBkS9CKyopNWWovCj/L2sZTqxZ
-         V/O+WtrL/K+4A6QvMZEscSkTY+NnZUSptQqk/hGPJ8fc1zbSsJve8zEWFNYeXVVjKHcy
-         10tyeKZbgazhtRf8/x46KcJM4Ww3tVliwKGm1bVwvXDQY/CGxV2iA7hvxbjmo/7wJxeI
-         mh7mpSD85dHYkCp73haOpCzQhOHPF8oVzZ0ZNUWpSRz8x4qe0yzyYoHRVbJRUcvrpFrI
-         r1ag==
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=cWmrJPJ0MvmK8YxK5PKxGmy6rgAFhqWT5bfVzAqhgig=;
+        b=GSLAeV7ct3Cl8UbCnOZv/YlpSZ+KTu9jGq0/4lz1kKyi/H0HHlFtfrus/gy+ZXD7ES
+         xWDsKmKkL2lygd97OcQO/BV2+uQQurQcuXsUhadiQ92frLdq8EV/xRoM0Cz1lWpTiNSC
+         DWHe4YwGA6a8ymhr1BwcQZeP7DDPuj0Ny69bQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LtbJ7TD9znxzhf98x0PHy/SqzW7ZVDB+4Aleb2LR+tc=;
-        b=I5sFcQUAs/FAP5d4NidRH119G9ncVC1yllj1EC66NJRIGI5ikID40NVgPbi8XtToP6
-         ByuX1T2z2Qi9Xz3ZpQ3VPfw1ZLlZDhKSN11khHaAbzlE8/b/9XjzVqzoYhmRQzVTiBrk
-         EU8l5MPPi+y7lI21H7CeyFkRCtFyWquLrwbxkaHriX6PdhlCKFWK4pxOboB13lFXR0V0
-         PldhombY39HVGyB/9/c8xjB7H2K1tnExZWxq+Z9WppeIxVVJuOgbRmj6JbJONDxDqFSL
-         OZ+fy1pbVzW5JXeN8dSp0e2zfNTzJNOAab6tL+GqGY5k99k8Pa+pnPUYTKUfp7eaNC07
-         zG4w==
-X-Gm-Message-State: AOAM531/Z3HlV0fq24TNpxVQ2CnXvlU9Eafkrru2z/HbxAg0d66pcEfS
-        pJIUh7GyjiLwIS3WeA1f76rQFQrtCOflXsPjzPek4q99udA=
-X-Google-Smtp-Source: ABdhPJxwVU92PbeiEsPXmYrPJ+CTjuJsI2k8EV3VJh4/qbdXFirVB51FerExeLPe1Oj+yyb9zEpWh8SsJv9A1SN2BzM=
-X-Received: by 2002:a1c:ed01:: with SMTP id l1mr4906259wmh.185.1641428595576;
- Wed, 05 Jan 2022 16:23:15 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=cWmrJPJ0MvmK8YxK5PKxGmy6rgAFhqWT5bfVzAqhgig=;
+        b=pNICmnRiYboeR1y1AR3QtdiuCb64vCdMIJYeLDnpw4KQOqo5gf2E/O7239rFHVzEqJ
+         ED7PfgiLOxMAUejAvO7WuKCyDrbJ2kxkj5T0piL95UrKruzfrgJYOQCp472C0Jl5caBS
+         pgRsFo4yAsM9NY1WVSCFRAKMj5/2tR8mE+nuPy5qUAGV0zqZQzbhHZeYSdi6o3fScKfB
+         bp6HKoDS7MABTZcAJrX/bCGLJIZKhrBOCKiAFVUlerIfmnIlcpJX6Lim1wkOxtYqt4/6
+         yW9e7Je0fVz2N5swg4mLpWeiRaiTZ46zKZSfZK4bi82PMjQRgNLQIPzIm0vrJlZs4qUf
+         SURg==
+X-Gm-Message-State: AOAM530NjttqJaVsy/kh6IO8vxcDl1TZtUZzaQYmwUcnw6EJ8hFPbmbg
+        q3wxeC9ubNRLF1JN63yPEFBZ5g==
+X-Google-Smtp-Source: ABdhPJz0CNxnXr43ULF4S3QBlzgIEnc22wgp8za6in1ONKt9zwDj3U4mfXlX9BW+REUtBUpjLnuVgg==
+X-Received: by 2002:a92:d58b:: with SMTP id a11mr2719025iln.315.1641428633275;
+        Wed, 05 Jan 2022 16:23:53 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id p16sm329708iov.3.2022.01.05.16.23.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 16:23:52 -0800 (PST)
+Message-ID: <c6b60b30-5a9f-134b-b1fb-b84704a3ccb2@ieee.org>
+Date:   Wed, 5 Jan 2022 18:23:52 -0600
 MIME-Version: 1.0
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
- <20211222155743.256280-18-miquel.raynal@bootlin.com> <CAB_54W7o5b7a-2Gg5ZnzPj3o4Yw9FOAxJfykrA=LtpVf9naAng@mail.gmail.com>
- <SN6PR08MB4464D7124FCB5D0801D26B94E0459@SN6PR08MB4464.namprd08.prod.outlook.com>
- <CAB_54W6ikdGe=ZYqOsMgBdb9KBtfAphkBeu4LLp6S4R47ZDHgA@mail.gmail.com> <20220105094849.0c7e9b65@xps13>
-In-Reply-To: <20220105094849.0c7e9b65@xps13>
-From:   Alexander Aring <alex.aring@gmail.com>
-Date:   Wed, 5 Jan 2022 19:23:04 -0500
-Message-ID: <CAB_54W4Z1KgT+Cx0SXptvkwYK76wDOFTueFUFF4e7G_ABP7kkA@mail.gmail.com>
-Subject: Re: [net-next 17/18] net: mac802154: Let drivers provide their own
- beacons implementation
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     David Girault <David.Girault@qorvo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        Romuald Despres <Romuald.Despres@qorvo.com>,
-        Frederic Blain <Frederic.Blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+From:   Alex Elder <elder@ieee.org>
+Subject: Re: [PATCH 04/20] bus: mhi: Cleanup the register definitions used in
+ headers
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        skananth@codeaurora.org, vpernami@codeaurora.org,
+        vbadigan@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211202113553.238011-1-manivannan.sadhasivam@linaro.org>
+ <20211202113553.238011-5-manivannan.sadhasivam@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20211202113553.238011-5-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 12/2/21 5:35 AM, Manivannan Sadhasivam wrote:
+> Cleanup includes:
+> 
+> 1. Moving the MHI register bit definitions to common.h header (only the
+>     register offsets differ between host and ep not the bit definitions)
 
-On Wed, 5 Jan 2022 at 03:48, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
->
-> Hi Alexander,
->
-> alex.aring@gmail.com wrote on Thu, 30 Dec 2021 14:48:41 -0500:
->
-> > Hi,
-> >
-> > On Thu, 30 Dec 2021 at 12:00, David Girault <David.Girault@qorvo.com> wrote:
-> > >
-> > > Hi Alexander,
-> > >
-> > > At Qorvo, we have developped a SoftMAC driver for our DW3000 chip that will benefit such API.
-> > >
-> > Do you want to bring this driver upstream as well? Currently those
-> > callbacks will be introduced but no user is there.
->
-> I think so far the upstream fate of the DW3000 driver has not been ruled
-> out so let's assume it won't be upstreamed (at least not fully), that's
-> also why we decided to begin with the hwsim driver.
->
+The register offsets do differ, but the group of registers for the host
+differs from the group of registers for the endpoint by a fixed amount.
+(MHIREGLEN = 0x0000 for host, or 0x100 for endpoint; CRCBAP_LOWER is
+0x0068 for host, 0x0168 for endpoint.)
 
-ok.
+In other words, can you instead use the same symbolic offsets, but
+have the endpoint add 0x0100 to them all?  It would make the fact
+that they're both referencing the same basic in-memory structure
+more obvious.
 
-> However, when designing this series, it appeared quite clear that any
-> hardMAC driver would need this type of interface. The content of the
-> interface, I agree, could be further discussed and even edited, but the
-> main idea of giving the information to the phy driver about what is
-> happening regarding eg. scan operations or beacon frames, might make
-> sense regardless of the current users, no?
->
+> 2. Using the GENMASK macro for masks
+> 3. Removing brackets for single values
+> 4. Using lowercase for hex values
 
-A HardMAC driver does not use this driver interface... but there
-exists a SoftMAC driver for a HardMAC transceiver. This driver
-currently works because we use dataframes only... It will not support
-scanning currently and somehow we should make iit not available for
-drivers like that and for drivers which don't set symbol duration.
-They need to be fixed.
+Yay!!! For all three of the above.
 
-> This being said, if other people decide to upstream a hardMAC driver
-> and need these hooks to behave a little bit differently, it's their
-> right to tweak them and that would also be part of the game.
->
-> Although we might not need these hooks in a near future at all if we
-> move to the filtering modes, because the promiscuous call with the
-> specific level might indicate to the device how it should configure
-> itself already.
->
+More below.
 
-My concern is that somebody else might want to remove those callbacks
-because they are not used.
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/bus/mhi/common.h        | 129 ++++++++++++---
+>   drivers/bus/mhi/host/internal.h | 282 +++++++++++---------------------
+>   2 files changed, 207 insertions(+), 204 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/common.h b/drivers/bus/mhi/common.h
+> index 2ea438205617..c1272d61e54e 100644
+> --- a/drivers/bus/mhi/common.h
+> +++ b/drivers/bus/mhi/common.h
+> @@ -9,32 +9,123 @@
+>   
+>   #include <linux/mhi.h>
+>   
+> +/* MHI register bits */
+> +#define MHIREGLEN_MHIREGLEN_MASK		GENMASK(31, 0)
+> +#define MHIREGLEN_MHIREGLEN_SHIFT		0
 
-- Alex
+Again, please eliminate all _SHIFT definitions where they define
+the low bit position of a mask.
+
+Maybe you can add some underscores for readability?
+
+Even if you don't do that, you could add a comment here or there to
+explain what certain abbreviations stand for, to make it easier to
+understand.  E.g., CHDB = channel doorbell, CCA = channel context
+array, BAP = base address pointer.
+
+					-Alex
+
+
+> +#define MHIVER_MHIVER_MASK			GENMASK(31, 0)
+> +#define MHIVER_MHIVER_SHIFT			0
+> +
+> +#define MHICFG_NHWER_MASK			GENMASK(31, 24)
+> +#define MHICFG_NHWER_SHIFT			24
+> +#define MHICFG_NER_MASK				GENMASK(23, 16)
+> +#define MHICFG_NER_SHIFT			16
+> +#define MHICFG_NHWCH_MASK			GENMASK(15, 8)
+> +#define MHICFG_NHWCH_SHIFT			8
+> +#define MHICFG_NCH_MASK				GENMASK(7, 0)
+> +#define MHICFG_NCH_SHIFT			0
+
+. . .

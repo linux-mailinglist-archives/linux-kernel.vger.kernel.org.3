@@ -2,110 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C05F6486696
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7CC4866A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240406AbiAFPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240346AbiAFPOZ (ORCPT
+        id S240421AbiAFPUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:20:11 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:63968 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240393AbiAFPUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:14:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AF2C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 07:14:25 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n5UT6-0006jK-MO; Thu, 06 Jan 2022 16:14:20 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n5UT6-008oNH-6w; Thu, 06 Jan 2022 16:14:19 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n5UT5-0005yt-63; Thu, 06 Jan 2022 16:14:19 +0100
-Date:   Thu, 6 Jan 2022 16:13:55 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     linux-iio@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v3 00/23] counter: cleanups and device lifetime fixes
-Message-ID: <20220106151355.d4ogjpo3y5qnkrgs@pengutronix.de>
-References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
- <YdWOkn2Gtd7FSYmR@shinobu>
+        Thu, 6 Jan 2022 10:20:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641482410; x=1673018410;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VdhC7mh1p8Y8MIPqArIrmPlsIZq0Rjq9uAm2FjmLFsw=;
+  b=GXuVoPMnTTPrrvzgbxe8Z1Rgf7HgXuN9mqz9Nr4AE5dvG4CHf3c3fiC3
+   Lkmlljv6KcIJUFzOCTFAusgQn9uyEspluMzmXrMJNiOaY084lzJw/t4XJ
+   ReVcwvrnf94Ys7bG72203ykgBq2No/l2/KllOGs0zjjrr5a3olFRYVWam
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 07:20:10 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 07:20:10 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 07:20:09 -0800
+Received: from [10.50.52.105] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 6 Jan 2022
+ 07:20:04 -0800
+Message-ID: <705c280b-bced-476d-8e21-1a5afbf3d2f3@quicinc.com>
+Date:   Thu, 6 Jan 2022 20:50:00 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jxec66yc4jlaswjp"
-Content-Disposition: inline
-In-Reply-To: <YdWOkn2Gtd7FSYmR@shinobu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V6 0/7] Add driver support for Data Capture and Compare
+ Engine(DCC) for SM8150,SC7280,SC7180,SDM845
+Content-Language: en-CA
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <saiprakash.ranjan@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>, <vkoul@kernel.org>
+References: <cover.1628617260.git.schowdhu@codeaurora.org>
+ <396edd95-4f38-6830-99da-11e73d62a0cf@linaro.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <396edd95-4f38-6830-99da-11e73d62a0cf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---jxec66yc4jlaswjp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/16/2021 9:18 PM, Thara Gopinath wrote:
+>
+>
+> On 8/10/21 1:54 PM, Souradeep Chowdhury wrote:
+>> DCC(Data Capture and Compare) is a DMA engine designed for debugging 
+>> purposes.In case of a system
+>> crash or manual software triggers by the user the DCC hardware stores 
+>> the value at the register
+>> addresses which can be used for debugging purposes.The DCC driver 
+>> provides the user with sysfs
+>> interface to configure the register addresses.The options that the 
+>> DCC hardware provides include
+>> reading from registers,writing to registers,first reading and then 
+>> writing to registers and looping
+>> through the values of the same register.
+>>
+>> In certain cases a register write needs to be executed for accessing 
+>> the rest of the registers,
+>> also the user might want to record the changing values of a register 
+>> with time for which he has the
+>> option to use the loop feature.
+>
+> Hello Souradeep,
+>
+> First of all, I think this is very a useful feature to have. I have 
+> some generic design related queries/comments on driver and the 
+> interface exposed to the user space. Also, I do not understand the h/w 
+> well here, so feel free to correct me if I am wrong.
+>
+> 1. Linked list looks like a very internal feature to the h/w. It 
+> really is not an info that user should be aware of. I tried reading 
+> the code a bit. IUC, every time a s/w trigger is issued the configs in 
+> all the enabled linked lists are executed. The final ram dump that you 
+> get from /dev/dcc_sram is a dump of contents from all the enabled 
+> list? Is this understanding correct ? And we are talking of at-most 4 
+> linked list?
+> If yes, I think it might be better to have a folder per linked list 
+> with config, config_write etc. Also if possible it will be better to 
+> dump the results to a file in the specific folder instead of reading 
+> from /dev/dcc_sram.
+> If no, there is no real need for user to know the linked list, right? 
+> Choosing of linked list can be done by kernel driver in this case with 
+> no input needed from user.
+>
+> 2. Now to the sysfs interface itself, I know lot of thought has gone 
+> into sysfs vs debugfs considerations. But, have you considered using 
+> netlink interface instead of sysfs. Netlink interface is used for 
+> asynchronous communication between kernel and user space. In case of 
+> DCC, the communication appears to be asynchronous, where in user asks 
+> the kernel to capture some info and kernel can indicate back to user 
+> when the info is captured. Also the entire mess surrounding echoing 
+> addr / value / offset repeatedly into a sysfs entry can be avoided 
+> using netlink interface.
+>
+Hello Thara,
 
-On Wed, Jan 05, 2022 at 09:26:58PM +0900, William Breathitt Gray wrote:
-> On Wed, Dec 29, 2021 at 04:44:18PM +0100, Uwe Kleine-K=F6nig wrote:
-> >  - I think intel-qep.c makes the counter unfunctional in
-> >    intel_qep_remove before the counter is unregistered.
->=20
-> Hello Uwe,
->=20
-> Would you elaborate some more on this? I think intel_qep_remove() is
-> only called after the counter is unregistered because the struct
-> counter_device parent is set to &pci->dev in intel_qep_probe(). Am I
-> misunderstanding the removal path?
+Thanks for your review comments. Following are some points from my end
 
-If the counter device is unbound (e.g. via sysfs), the following calls
-are made:
 
-	intel_qep_remove() (stopping the hardware?)
-	devm_counter_release (devm callback of devm_counter_register or ..._add)
-	then the release callbacks of the earlier devm functions
+1) Each linked list represent a particular block of memory in DCC_SRAM 
+which is preserved for that particular list. That is why offset 
+calculation is done on the driver based on the linked list chosen by the 
+user.
 
-My concern is, that in the timeslot between intel_qep_remove() and
-devm_counter_release() the device looks like a functional device and
-might be queried/reconfigured/... while the hardware is already dead.
+     This choice needs to be made by the user since the number for the 
+linked list chosen is specific to the registers used to debug a 
+particular component.  Also we are giving the user flexibility to 
+configure multiple
 
-It's probably not a big issue (unless for example reading the counter
-this race window makes the hardware hang?), but it's at least ugly.
-Maybe the worst effect is that a counter value is missed (which is OK at
-unregister time). Still it would be nicer to first take down the counter
-device and only then stop the hardware.
+     linked lists at one go so that even if we don't have a separate 
+folder for it , the dumps are collected as a separate list of registers. 
+Also there are certain curr_list values which may be supported by the dcc
 
-Best regards
-Uwe
+     hardware but may not be accessible to the user and so the choice 
+cannot be made arbitrarily from the driver.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---jxec66yc4jlaswjp
-Content-Type: application/pgp-signature; name="signature.asc"
+2) From opensource, I can see that Netlink has been used in most of the 
+cases where we need to notify stats to the user by taking the advantage 
+of asynchronous communication. In this case, that requirement is not
 
------BEGIN PGP SIGNATURE-----
+     there since it is mostly one way communication from user to kernel. 
+Also since this is used for debugging purposes perhaps sysfs adds more 
+reliability than Netlink. In case of Netlink we have the additional
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHXByoACgkQwfwUeK3K
-7AlBJgf+Nbzmm7XXPcWM7auKes2hySGGhU5UfmlLbmulrmatVNuSO4r+4ucNP7Mk
-ffadE0d0xjCEw0e83P1Oae89yVEVCjRElgJWgqUMTKHDnL30agDSdP5NaHfOt8kB
-UjNBA91Yb1ksnhMkZTai8D8rLgqkrnqHU+ehr+V1p5PRL9IwSeQYUobRADJxGaqG
-Rd/iyKeeZA+ZLu4DCsOWY9wAuxrJXM91mKyMlkv+/MFbi3k3ljYppm4ndpfJbqU6
-dMTsIRa1dHVdLbh0CgXnBq/oI1qJIXPf2TcC9v5VGnEE50yI894djMAqtdQJpP20
-KOhu/emXrsuMxQGCCvdxk/mIlJur0Q==
-=4L9X
------END PGP SIGNATURE-----
+      overhead of dealing with socket calls. Let me know otherwise.
 
---jxec66yc4jlaswjp--
+
+Thanks,
+
+Souradeep
+
+
+
+
+

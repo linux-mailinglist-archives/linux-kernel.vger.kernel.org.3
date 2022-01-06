@@ -2,352 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3E14867A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1F04867A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241220AbiAFQ1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:27:48 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:48506 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241130AbiAFQ1r (ORCPT
+        id S241250AbiAFQ14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241226AbiAFQ1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:27:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Ffi4OVxuXbWWBnuJPOpg4V8HSkXdxU2ejGHKL7qeiGc=; b=ZNwbBVHhSPVSNWUDBobDawL/Vi
-        OKdlQC7Gni42TEu/uw4uzrbLRea1fjdhZn9vtthlut9y7zo7KWwJV8Ghpqmuv+WeClOiJLn72o7Rg
-        ppRpMbTuHcWC/q8nJC1iJlSjjqz1533oUlHLKfiXfATxOCeqkouqOa3MaRIaVxgQ7UBQTQSduhx69
-        ZZFf0a6nhpDqd7V+LozGVt4jOCisOpCyWU6LD4mfq8m2ePL08obEwKbLJuj+FbqSsuoBKKUqKuzmi
-        qXbY38E3Ro/LM8e8VeBT//alrTWPsUgEBufT0P8nuKslF2Xevzu45AK0EHT/9p5u+0Re9/XWboSO8
-        77V914SQ==;
-Received: from [179.113.53.20] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1n5Vc6-00032F-D3; Thu, 06 Jan 2022 17:27:43 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com
-Cc:     linux-doc@vger.kernel.org, bhe@redhat.com, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, gpiccoli@igalia.com, kernel@gpiccoli.net
-Subject: [PATCH] notifier/panic: Introduce panic_notifier_filter
-Date:   Thu,  6 Jan 2022 13:27:10 -0300
-Message-Id: <20220106162710.97544-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 6 Jan 2022 11:27:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D836BC061245;
+        Thu,  6 Jan 2022 08:27:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9201CB82295;
+        Thu,  6 Jan 2022 16:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23D63C36AEB;
+        Thu,  6 Jan 2022 16:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641486467;
+        bh=k2zDKR7HVZqgDJoRzwQ+fwXeBgpmIl0hRM0018L7Ccc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UdjxTnc/lru+ZrGJ7DIhSwYusrtzOxwwp+IUVU3R3Hl66WEV5Ogs3hvpZtmNOs0ts
+         O6R49AXdZv7cH99isBGBYa4UeZSErXvxbF6/osO0ycElY0iHvINvodw0396nj69t41
+         t0zysYUXb5SCgIvVOAo7lgBN3fB0ifYnPRDUfuR96Gb7bTE4yoTSHPAYkXC1lpV4SZ
+         wTumHl81DH7rcFzAg55W7eb1r08nmKCbsQOaSfMyu/oNNKPNA2IpHXL0c4+VzXY6Ky
+         3CfPBZoQtnGcJiieYDFBG0d6ZpqGlEGErQdKhkKwiOkFtBxLlUczGkb3jwdcrpSaFZ
+         biIbXdRaZIfRA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n5Vc9-00GO89-6j; Thu, 06 Jan 2022 16:27:45 +0000
+Date:   Thu, 06 Jan 2022 16:27:44 +0000
+Message-ID: <877dbcvngf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 10/11] PCI: mvebu: Implement support for legacy INTx interrupts
+In-Reply-To: <20220106162047.vqykmygs75eimfgy@pali>
+References: <20220105150239.9628-1-pali@kernel.org>
+        <20220105150239.9628-11-pali@kernel.org>
+        <87bl0ovq7f.wl-maz@kernel.org>
+        <20220106154447.aie6taiuvav5wu6y@pali>
+        <878rvsvoyo.wl-maz@kernel.org>
+        <20220106162047.vqykmygs75eimfgy@pali>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pali@kernel.org, lorenzo.pieralisi@arm.com, bhelgaas@google.com, robh+dt@kernel.org, thomas.petazzoni@bootlin.com, kw@linux.com, kabel@kernel.org, rmk+kernel@armlinux.org.uk, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel notifier infrastructure allows function callbacks to be
-added in multiple lists, which are then called in the proper time,
-like in a reboot or panic event. The panic_notifier_list specifically
-contains the callbacks that are executed during a panic event. As any
-other notifier list, the panic one has no filtering and all functions
-previously registered are executed.
+On Thu, 06 Jan 2022 16:20:47 +0000,
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>=20
+> On Thursday 06 January 2022 15:55:11 Marc Zyngier wrote:
+> > On Thu, 06 Jan 2022 15:44:47 +0000,
+> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >=20
+> > > On Thursday 06 January 2022 15:28:20 Marc Zyngier wrote:
+> > > > On Wed, 05 Jan 2022 15:02:38 +0000,
+> > > > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > > > >=20
+> > > > > This adds support for legacy INTx interrupts received from other =
+PCIe
+> > > > > devices and which are reported by a new INTx irq chip.
+> > > > >=20
+> > > > > With this change, kernel can distinguish between INTA, INTB, INTC=
+ and INTD
+> > > > > interrupts.
+> > > > >=20
+> > > > > Note that for this support, device tree files has to be properly =
+adjusted
+> > > > > to provide "interrupts" or "interrupts-extended" property with in=
+tx
+> > > > > interrupt source, "interrupt-names" property with "intx" string a=
+nd also
+> > > > > 'interrupt-controller' subnode must be defined.
+> > > > >=20
+> > > > > If device tree files do not provide these nodes then driver would=
+ work as
+> > > > > before.
+> > > > >=20
+> > > > > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> > > > > ---
+> > > > >  drivers/pci/controller/pci-mvebu.c | 182 +++++++++++++++++++++++=
+++++--
+> > > > >  1 file changed, 174 insertions(+), 8 deletions(-)
+> > > > >=20
+> > > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/con=
+troller/pci-mvebu.c
+> > > > > index 1e90ab888075..04bcdd7b7a6d 100644
+> > > > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > > > @@ -54,9 +54,10 @@
+> > > > >  	 PCIE_CONF_ADDR_EN)
+> > > > >  #define PCIE_CONF_DATA_OFF	0x18fc
+> > > > >  #define PCIE_INT_CAUSE_OFF	0x1900
+> > > > > +#define PCIE_INT_UNMASK_OFF	0x1910
+> > > > > +#define  PCIE_INT_INTX(i)		BIT(24+i)
+> > > > >  #define  PCIE_INT_PM_PME		BIT(28)
+> > > > > -#define PCIE_MASK_OFF		0x1910
+> > > > > -#define  PCIE_MASK_ENABLE_INTS          0x0f000000
+> > > > > +#define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
+> > > > >  #define PCIE_CTRL_OFF		0x1a00
+> > > > >  #define  PCIE_CTRL_X1_MODE		0x0001
+> > > > >  #define  PCIE_CTRL_RC_MODE		BIT(1)
+> > > > > @@ -110,6 +111,10 @@ struct mvebu_pcie_port {
+> > > > >  	struct mvebu_pcie_window iowin;
+> > > > >  	u32 saved_pcie_stat;
+> > > > >  	struct resource regs;
+> > > > > +	struct irq_domain *intx_irq_domain;
+> > > > > +	struct irq_chip intx_irq_chip;
+> > > >=20
+> > > > Why is this structure per port? It really should be global. Printing
+> > > > the port number in the name isn't enough of a reason.
+> > >=20
+> > > Because each port has its own independent set of INTA-INTD
+> > > interrupts.
+> >=20
+> > That doesn't warrant a copy of an irq_chip structure that contains the
+> > exact same callbacks, and only differs by *a string*. And the use of
+> > this string is only to end-up in /proc/interrupts, which is totally
+> > pointless.
+> >=20
+> > >=20
+> > > > > +	raw_spinlock_t irq_lock;
+> > > > > +	int intx_irq;
+> > > > >  };
+> > > > > =20
+> > > > >  static inline void mvebu_writel(struct mvebu_pcie_port *port, u3=
+2 val, u32 reg)
+> > > > > @@ -235,7 +240,7 @@ static void mvebu_pcie_setup_wins(struct mveb=
+u_pcie_port *port)
+> > > > > =20
+> > > > >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > > >  {
+> > > > > -	u32 ctrl, lnkcap, cmd, dev_rev, mask;
+> > > > > +	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
+> > > > > =20
+> > > > >  	/* Setup PCIe controller to Root Complex mode. */
+> > > > >  	ctrl =3D mvebu_readl(port, PCIE_CTRL_OFF);
+> > > > > @@ -288,10 +293,30 @@ static void mvebu_pcie_setup_hw(struct mveb=
+u_pcie_port *port)
+> > > > >  	/* Point PCIe unit MBUS decode windows to DRAM space. */
+> > > > >  	mvebu_pcie_setup_wins(port);
+> > > > > =20
+> > > > > -	/* Enable interrupt lines A-D. */
+> > > > > -	mask =3D mvebu_readl(port, PCIE_MASK_OFF);
+> > > > > -	mask |=3D PCIE_MASK_ENABLE_INTS;
+> > > > > -	mvebu_writel(port, mask, PCIE_MASK_OFF);
+> > > > > +	/* Mask all interrupt sources. */
+> > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
+> > > > > +
+> > > > > +	/* Clear all interrupt causes. */
+> > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > > > > +
+> > > > > +	if (port->intx_irq <=3D 0) {
+> > > > > +		/*
+> > > > > +		 * When neither "summary" interrupt, nor "intx" interrupt was
+> > > > > +		 * specified in DT then unmask all legacy INTx interrupts as in
+> > > > > +		 * this case driver does not provide a way for masking and
+> > > > > +		 * unmasking of individual legacy INTx interrupts. In this case
+> > > > > +		 * all interrupts, including legacy INTx are reported via one
+> > > > > +		 * shared GIC source and therefore kernel cannot distinguish
+> > > > > +		 * which individual legacy INTx was triggered. These interrupts
+> > > > > +		 * are shared, so it should not cause any issue. Just
+> > > > > +		 * performance penalty as every PCIe interrupt handler needs to
+> > > > > +		 * be called when some interrupt is triggered.
+> > > > > +		 */
+> > > > > +		unmask =3D mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > > > > +		unmask |=3D PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
+> > > > > +			  PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
+> > > > > +		mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
+> > > >=20
+> > > > Maybe worth printing a warning here, so that the user knows they are
+> > > > on thin ice.
+> > >=20
+> > > Ok. I can add it here. Anyway, this is default current state without
+> > > this patch.
+> > >=20
+> > > > > +	}
+> > > > >  }
+> > > > > =20
+> > > > >  static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu=
+_pcie *pcie,
+> > > > > @@ -924,6 +949,109 @@ static struct pci_ops mvebu_pcie_ops =3D {
+> > > > >  	.write =3D mvebu_pcie_wr_conf,
+> > > > >  };
+> > > > > =20
+> > > > > +static void mvebu_pcie_intx_irq_mask(struct irq_data *d)
+> > > > > +{
+> > > > > +	struct mvebu_pcie_port *port =3D d->domain->host_data;
+> > > > > +	irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+> > > > > +	unsigned long flags;
+> > > > > +	u32 unmask;
+> > > > > +
+> > > > > +	raw_spin_lock_irqsave(&port->irq_lock, flags);
+> > > > > +	unmask =3D mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > > > > +	unmask &=3D ~PCIE_INT_INTX(hwirq);
+> > > > > +	mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
+> > > > > +	raw_spin_unlock_irqrestore(&port->irq_lock, flags);
+> > > > > +}
+> > > > > +
+> > > > > +static void mvebu_pcie_intx_irq_unmask(struct irq_data *d)
+> > > > > +{
+> > > > > +	struct mvebu_pcie_port *port =3D d->domain->host_data;
+> > > > > +	irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+> > > > > +	unsigned long flags;
+> > > > > +	u32 unmask;
+> > > > > +
+> > > > > +	raw_spin_lock_irqsave(&port->irq_lock, flags);
+> > > > > +	unmask =3D mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > > > > +	unmask |=3D PCIE_INT_INTX(hwirq);
+> > > > > +	mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
+> > > > > +	raw_spin_unlock_irqrestore(&port->irq_lock, flags);
+> > > > > +}
+> > > > > +
+> > > > > +static int mvebu_pcie_intx_irq_map(struct irq_domain *h,
+> > > > > +				   unsigned int virq, irq_hw_number_t hwirq)
+> > > > > +{
+> > > > > +	struct mvebu_pcie_port *port =3D h->host_data;
+> > > > > +
+> > > > > +	irq_set_status_flags(virq, IRQ_LEVEL);
+> > > > > +	irq_set_chip_and_handler(virq, &port->intx_irq_chip, handle_lev=
+el_irq);
+> > > > > +	irq_set_chip_data(virq, port);
+> > > > > +
+> > > > > +	return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static const struct irq_domain_ops mvebu_pcie_intx_irq_domain_op=
+s =3D {
+> > > > > +	.map =3D mvebu_pcie_intx_irq_map,
+> > > > > +	.xlate =3D irq_domain_xlate_onecell,
+> > > > > +};
+> > > > > +
+> > > > > +static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *po=
+rt)
+> > > > > +{
+> > > > > +	struct device *dev =3D &port->pcie->pdev->dev;
+> > > > > +	struct device_node *pcie_intc_node;
+> > > > > +
+> > > > > +	raw_spin_lock_init(&port->irq_lock);
+> > > > > +
+> > > > > +	port->intx_irq_chip.name =3D devm_kasprintf(dev, GFP_KERNEL,
+> > > > > +						  "mvebu-%s-INTx",
+> > > > > +						  port->name);
+> > > >=20
+> > > > That's exactly what I really don't want to see. It prevents sharing=
+ of
+> > > > the irq_chip structure, and gets in the way of making it const in t=
+he
+> > > > future. Yes, I know that some drivers do that. I can't fix those,
+> > > > because /proc/interrupts is ABI. But I really don't want to see more
+> > > > of these.
+> > >=20
+> > > Well, I do not understand why it should be shared and with who. HW ha=
+s N
+> > > independent IRQ chips for legacy interrupts. And each one will be
+> > > specified in DT per HW layout / design.
+> >=20
+> > If you have multiple ports, all the ports can share the irq_chip
+> > structure. Actually scratch that. They *MUST* share the structure. The
+> > only reason you're not sharing it is to be able to print this useless
+> > string in /proc/interrupts.
+>=20
+> What is the point of sharing one irq chip if HW has N independent irq
+> chips (for legacy interrupts)? I do not catch it yet. And I do not care
+> here for /proc/interrupts, so also I have not caught what do you mean be
+> last sentence with "the only reason".
+>=20
+> And I still do not see how it could even work to have just one irq chip
+> and one irq domain as each irq domain needs to know to which port it
+> belongs, so it can mask/unmask interrupts from correct port. Also
+> initialization of domain is taking DT node and for each port it is
+> different.
+>=20
+> So I'm somehow confused here...
+>=20
+> The improvement in this patch is to be able to mask INTA interrupts on
+> port 1 and let INTA interrupts unmasked on port 2 if there drivers are
+> interested only for interrupts from device connected to port 2.
+>=20
+> And if all interrupts are going to be shared (again) then it does not
+> solve any problem.
 
-The kdump infrastructure, on the other hand, enables users to set
-a crash kernel that is kexec'ed in a panic event, and vmcore/logs
-are collected in such crash kernel. When kdump is set, by default
-the panic notifiers are ignored - the kexec jumps to the crash kernel
-before the list is checked and callbacks executed.
+You are completely missing my point. I'm talking about data
+structures, you're talking about interrupts. You have this:
 
-There are some cases though in which kdump users might want to
-allow panic notifier callbacks to execute _before_ the kexec to
-the crash kernel, for a variety of reasons - for example, users
-may think kexec is very prone to fail and want to give a chance
-to kmsg dumpers to run (and save logs using pstore), or maybe
-some panic notifier is required to properly quiesce some hardware
-that must be used to the crash kernel. For these cases, we have
-the kernel parameter "crash_kexec_post_notifiers".
+struct mvebu_pcie_port {
+       // Tons of stuff
+       struct irq_chip intx_chip;
+};
 
-But there's a problem: currently it's an "all-or-nothing" situation,
-the kdump user choice is either to execute all panic notifiers or
-none of them. Given that panic notifiers may increase the risk of a
-kdump failure, this is a tough decision and may affect the debug of
-hard to reproduce bugs, if for some reason the user choice is to
-enable panic notifiers, but kdump then fails.
+What I want you to do is:
 
-So, this patch aims to ease this decision: we hereby introduce a filter
-for the panic notifier list, in which users may select specifically
-which callbacks they wish to run, allowing a safer kdump. The allowlist
-should be provided using the parameter "panic_notifier_filter=a,b,..."
-where a, b are valid callback names. Invalid symbols are discarded.
+struct mvebu_pcie_port {
+       // Tons of stuff
+};
 
-Currently up to 16 symbols may be passed in this list, we consider
-that this numbers allows enough flexibility (and no matter what
-architecture is used, at most 30 panic callbacks are registered).
-In an experiment using a qemu x86 virtual machine, by default only
-six callbacks are registered in the panic notifier list.
-Once a valid callback name is provided in the list, such function
-is allowed to be registered/unregistered in the panic_notifier_list;
-all other panic callbacks are ignored. Notice that this filter is
-only for the panic notifiers and has no effect in the other notifiers.
+static struct irq_chip intx_chip =3D {
+	.name		=3D "INTx",
+	.irq_mask	=3D mvebu_pcie_intx_irq_mask,
+	.irq_unmask	=3D mvebu_pcie_intx_irq_unmask;
+};
 
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
+That's it. No more, no less.
 
-Hi folks, thanks in advance for reviews/suggestions! Some design
-decisions are worth to mention:
+	M.
 
-(a) I've played first with a list approach instead of a static
-array, but noticed that..it'd require relying in memblock allocs,
-since we need to set the filter pretty early in boot process. So,
-decided to abandon that - a small array is cheap and much easier to
-implement.
-
-(b) The size of the array: I've counted < 30 panic notifiers for
-any architecture, and in my experiment only six are registered by
-default, in a qemu x86 guest. Also, doesn't make sense for the
-filter users to add a bunch of callbacks to the list, or else
-why are they using the filter in first place? So 16 seems a
-good trade-off.
-
-(c) Allowlist vs. denylist: this is something to consider. My
-approach is that functions listed in the filter are *allowed*
-to execute in the panic notifier, because this seems to me
-the most appropriate use case - kdump users might want one or 2
-callbacks to execute, and block all the other in a denylist
-seems bummer. But I'm open to ideas, of course, if the denylist
-approach seems more reasonable.
-
-(d) I've also tested __setup() instead of early_param(), but
-seems we don't catch all notifiers by then, so decided to set
-the filter really early.
-
-(e) Finally, an alternative would be to check the filter during
-the notifier call chain, but I thought it is simple and likely
-less invasive to just prevent registering the disallowed functions.
-
-Cheers,
-
-Guilherme
-
-
- .../admin-guide/kernel-parameters.txt         | 14 +++++-
- include/linux/panic_notifier.h                | 10 +++++
- kernel/notifier.c                             | 42 +++++++++++++++++-
- kernel/panic.c                                | 44 +++++++++++++++++++
- 4 files changed, 107 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 2fba82431efb..2dc4e98823ae 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3727,13 +3727,25 @@
- 	panic_on_warn	panic() instead of WARN().  Useful to cause kdump
- 			on a WARN().
- 
-+	panic_notifier_filter=[function-list]
-+			Limit the functions registered by the panic notifier
-+			infrastructure. This allowlist is composed by function
-+			names, comma separated (invalid symbols are filtered
-+			out). Such functionality is useful for kdump users
-+			that set "crash_kexec_post_notifiers" in order to
-+			execute	panic notifiers, but at the same time wish to
-+			have just a subset of notifiers, not all of them. The
-+			list of functions is limited to 16 entries currently.
-+
- 	crash_kexec_post_notifiers
- 			Run kdump after running panic-notifiers and dumping
- 			kmsg. This only for the users who doubt kdump always
- 			succeeds in any situation.
- 			Note that this also increases risks of kdump failure,
- 			because some panic notifiers can make the crashed
--			kernel more unstable.
-+			kernel more unstable. See the "panic_notifier_filter"
-+			parameter to have more control of which notifiers to
-+			execute.
- 
- 	parkbd.port=	[HW] Parallel port number the keyboard adapter is
- 			connected to, default is 0.
-diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
-index 41e32483d7a7..c84b31c342fd 100644
---- a/include/linux/panic_notifier.h
-+++ b/include/linux/panic_notifier.h
-@@ -5,6 +5,16 @@
- #include <linux/notifier.h>
- #include <linux/types.h>
- 
-+/*
-+ * The panic notifier filter infrastructure - each array element holds a
-+ * function address, to be checked against panic_notifier register/unregister
-+ * operations; these functions are allowed to be registered in the panic
-+ * notifier list. This setting is useful for kdump, since users may want
-+ * some panic notifiers to execute, but not all of them.
-+ */
-+extern unsigned int panic_nf_functions[];
-+extern long panic_nf_count;
-+
- extern struct atomic_notifier_head panic_notifier_list;
- 
- extern bool crash_kexec_post_notifiers;
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index b8251dc0bc0f..04cb9e956058 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/panic_notifier.h>
- #include <linux/kdebug.h>
- #include <linux/kprobes.h>
- #include <linux/export.h>
-@@ -127,12 +128,34 @@ static int notifier_call_chain_robust(struct notifier_block **nl,
-  *	use a spinlock, and call_chain is synchronized by RCU (no locks).
-  */
- 
-+/*
-+ * The following helper is part of the panic notifier filter infrastructure;
-+ * users can filter what functions they wish to allow being registered in the
-+ * notifier system, restricted to the panic notifier. This is useful for kdump
-+ * for example, when some notifiers are relevant but running all of them imposes
-+ * risks to the kdump kernel reliability.
-+ */
-+static bool is_panic_notifier_filtered(struct notifier_block *n)
-+{
-+	int i;
-+
-+	for (i = 0; i < panic_nf_count; i++) {
-+		if ((unsigned long)(n->notifier_call) == panic_nf_functions[i])
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- /**
-  *	atomic_notifier_chain_register - Add notifier to an atomic notifier chain
-  *	@nh: Pointer to head of the atomic notifier chain
-  *	@n: New entry in notifier chain
-  *
-  *	Adds a notifier to an atomic notifier chain.
-+ *	If "panic_notifier_filter" is provided, we hereby filter the
-+ *	panic_notifier_list and only allow registering the functions
-+ *	that are present in the filter.
-  *
-  *	Currently always returns zero.
-  */
-@@ -140,10 +163,16 @@ int atomic_notifier_chain_register(struct atomic_notifier_head *nh,
- 		struct notifier_block *n)
- {
- 	unsigned long flags;
--	int ret;
-+	int ret = 0;
- 
- 	spin_lock_irqsave(&nh->lock, flags);
-+	if (unlikely(panic_nf_count) && nh == &panic_notifier_list)
-+		if (!is_panic_notifier_filtered(n))
-+			goto panic_filtered_out;
-+
- 	ret = notifier_chain_register(&nh->head, n);
-+
-+panic_filtered_out:
- 	spin_unlock_irqrestore(&nh->lock, flags);
- 	return ret;
- }
-@@ -155,6 +184,9 @@ EXPORT_SYMBOL_GPL(atomic_notifier_chain_register);
-  *	@n: Entry to remove from notifier chain
-  *
-  *	Removes a notifier from an atomic notifier chain.
-+ *	If "panic_notifier_filter" is provided, we hereby filter the
-+ *	panic_notifier_list and only allow unregistering the functions
-+ *	that are present in the filter.
-  *
-  *	Returns zero on success or %-ENOENT on failure.
-  */
-@@ -162,10 +194,16 @@ int atomic_notifier_chain_unregister(struct atomic_notifier_head *nh,
- 		struct notifier_block *n)
- {
- 	unsigned long flags;
--	int ret;
-+	int ret = 0;
- 
- 	spin_lock_irqsave(&nh->lock, flags);
-+	if (unlikely(panic_nf_count) && nh == &panic_notifier_list)
-+		if (!is_panic_notifier_filtered(n))
-+			goto panic_filtered_out;
-+
- 	ret = notifier_chain_unregister(&nh->head, n);
-+
-+panic_filtered_out:
- 	spin_unlock_irqrestore(&nh->lock, flags);
- 	synchronize_rcu();
- 	return ret;
-diff --git a/kernel/panic.c b/kernel/panic.c
-index cefd7d82366f..c23fa2012be1 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -31,6 +31,7 @@
- #include <linux/console.h>
- #include <linux/bug.h>
- #include <linux/ratelimit.h>
-+#include <linux/kallsyms.h>
- #include <linux/debugfs.h>
- #include <asm/sections.h>
- 
-@@ -67,6 +68,16 @@ EXPORT_SYMBOL_GPL(panic_timeout);
- #define PANIC_PRINT_ALL_PRINTK_MSG	0x00000020
- unsigned long panic_print;
- 
-+/*
-+ * Kernel has currently < 30 panic handlers no matter the arch,
-+ * based on some code counting; so 16 items seems a good amount;
-+ * users that are filtering panic notifiers shouldn't add all
-+ * of them in theory, that doesn't make sense...
-+ */
-+#define	PANIC_NF_MAX	16
-+unsigned long panic_nf_functions[PANIC_NF_MAX];
-+int panic_nf_count;
-+
- ATOMIC_NOTIFIER_HEAD(panic_notifier_list);
- 
- EXPORT_SYMBOL(panic_notifier_list);
-@@ -146,6 +157,39 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
- }
- EXPORT_SYMBOL(nmi_panic);
- 
-+static int __init panic_notifier_filter_setup(char *buf)
-+{
-+	char *func;
-+	unsigned long addr;
-+
-+	if (!buf)
-+		return -EINVAL;
-+
-+	while (buf) {
-+		func = strsep(&buf, ",");
-+		addr = kallsyms_lookup_name(func);
-+
-+		if (!addr) {
-+			pr_info("panic_notifier_filter: invalid symbol %s\n", func);
-+			continue;
-+		}
-+
-+		if (panic_nf_count < PANIC_NF_MAX) {
-+			panic_nf_functions[panic_nf_count] = addr;
-+			panic_nf_count++;
-+			pr_debug("panic_notifier_filter: added symbol %s\n", func);
-+		} else {
-+			pr_warn("panic_notifier_filter: exceeded maximum notifiers (%d), aborting\n",
-+				PANIC_NF_MAX);
-+			panic_nf_count = 0;
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+early_param("panic_notifier_filter", panic_notifier_filter_setup);
-+
- static void panic_print_sys_info(void)
- {
- 	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
--- 
-2.34.1
-
+--=20
+Without deviation from the norm, progress is not possible.

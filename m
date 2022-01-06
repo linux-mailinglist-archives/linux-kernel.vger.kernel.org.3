@@ -2,243 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A78486BE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8124486BE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244236AbiAFV2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244230AbiAFV2B (ORCPT
+        id S244251AbiAFV3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:29:10 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:41950 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244230AbiAFV3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:28:01 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B638BC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:28:00 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id x6so4682870iol.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eWXKe6ofHR5YtEe8ndfEgo9MmkCiJN00xcKWgTh/Pis=;
-        b=BolcB8rWOsXln3zfSDdLRY0wY8sV7BCnJsuEW8CPCdM9aJ6RY9bTUa8knlVhmhYUt8
-         NEQrSyQs08aIzjvdat/3newfT1mEmXsSrMZ6su0ICLx4aHSXiSB9u5zf9PRWihodxYV1
-         +2iaeoZ1G7VaxI33AnURMolAn4S88Z0iu4FxK3d5Ek2Ky0bLhUCRMhP90iUt2NJLQmvJ
-         o/cj5d3ivi9oK5yB5Z2Khq/l3hecz3coEcCOQxJfOszbMtlE3lYaweDMqpvIrxz7CeR8
-         SLqCx+lmvrPt7RklREA3WFFi82Hak/gqh8NlDgUoL7QpkiwnJ2XOUckhKwtKkR+PEPpL
-         pZUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eWXKe6ofHR5YtEe8ndfEgo9MmkCiJN00xcKWgTh/Pis=;
-        b=IdCMNw5W1giXYM+0FqhOdmC5e4WC8Wi9wfOjFZLKyj4vCgImnsRF9bshXExomPB1o4
-         rbIPwMNND2ADqFxGf961bK8AWqXvwXJ0M7rSLg3qvCxea3ct65SaKaMkbfn6HShUuaP0
-         fs8gt4PlzmMbdBnS80vA9zp79zD41yJXSoMpQbPeHYXIhWsEFrDCfc6jZQfcUwoQuDQZ
-         o0oyoWTHGWTBfg/hoDhvn9uwDoQejY0yAwMLScErJjytwXL6q4KmPQtFo+WxDNTsPVbj
-         Vij2CLKpyq8UY8mNCe1GK7vj3EdMnnXtJ3WnD/EEyjhx6DpgEis+F4X+7ALRSTe5p29P
-         JHuA==
-X-Gm-Message-State: AOAM531WiBlDheSMZQ8dC8UbEB25z6xLm7iyV/St5T6mPeTN/jcIU4A3
-        1/o0rBhXzyaWYDCNWqDghur5ZA==
-X-Google-Smtp-Source: ABdhPJz3ylKxooCGfJpO0rKP+86X+4pj60biR0zjBJEL77j+Y9m/Z8ljRDcrsoM24gj56IOBzSZTYw==
-X-Received: by 2002:a05:6602:2f0e:: with SMTP id q14mr4472905iow.75.1641504479938;
-        Thu, 06 Jan 2022 13:27:59 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:2e0a:5e5e:fac:e07b])
-        by smtp.gmail.com with ESMTPSA id o1sm1656628ilj.41.2022.01.06.13.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 13:27:56 -0800 (PST)
-Date:   Thu, 6 Jan 2022 14:27:52 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Ydde2F4Oi0wKx//y@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <YdcTkrl84Xzg2dSz@dhcp22.suse.cz>
+        Thu, 6 Jan 2022 16:29:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=+FS/CIW9nKl1rDpghmGwqo7vYKNqgYGmnqPCmUnvgKY=; b=kNRAYPqiTcTrMarGKxz8p4keKh
+        EiAIliV6wpXkxBX/Pjuz3O0NOigcPwO+VThqUD+JFTTuXyZ3PSD94rkV7ZVtFDGOKjU5qV/0CVcHY
+        Y9JaLbIl6nZV0uusiZkClUhKWNHP9QoMuwyki/lNfbvQbK9MZYSKRW0AUr5ysGcopoVz/XaLlVqzz
+        7hH6CNfttQWHXbJCzj3Ux631y/HDHyogKUg0k9KZMJvNEX6u0gVGowDQdAyqqbtDI1mh5VT/18/t7
+        ctQfL3yNGWgq7ck6dwApLjGOT4I6IkWouuC44A658pELbF5rmK1UPMB/HsjXfpwqo+ueH8tDQ6AfB
+        r+wPfTrQ==;
+Received: from [179.113.53.20] (helo=localhost)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1n5aJh-000Bot-3H; Thu, 06 Jan 2022 22:29:01 +0100
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Cc:     gpiccoli@igalia.com, kernel@gpiccoli.net, pmladek@suse.com,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+Subject: [PATCH V2] panic: Move panic_print before kmsg dumpers
+Date:   Thu,  6 Jan 2022 18:28:35 -0300
+Message-Id: <20220106212835.119409-1-gpiccoli@igalia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdcTkrl84Xzg2dSz@dhcp22.suse.cz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:06:42PM +0100, Michal Hocko wrote:
-> I am still reading through the series. It is a lot of code and quite
-> hard to wrap ones head around so these are mostly random things I have
-> run into. More will likely follow up.
-> 
-> On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> [...]
-> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> > index aba18cd101db..028afdb81c10 100644
-> > --- a/include/linux/memcontrol.h
-> > +++ b/include/linux/memcontrol.h
-> > @@ -1393,18 +1393,24 @@ mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
-> >  
-> >  static inline void lock_page_memcg(struct page *page)
-> >  {
-> > +	/* to match folio_memcg_rcu() */
-> > +	rcu_read_lock();
-> >  }
-> >  
-> >  static inline void unlock_page_memcg(struct page *page)
-> >  {
-> > +	rcu_read_unlock();
-> >  }
-> >  
-> >  static inline void folio_memcg_lock(struct folio *folio)
-> >  {
-> > +	/* to match folio_memcg_rcu() */
-> > +	rcu_read_lock();
-> >  }
-> >  
-> >  static inline void folio_memcg_unlock(struct folio *folio)
-> >  {
-> > +	rcu_read_unlock();
-> >  }
-> 
-> This should go into a separate patch and merge it independently. I
-> haven't really realized that !MEMCG configuration has a different
-> locking scopes.
+The panic_print setting allows users to collect more information in a
+panic event, like memory stats, tasks, CPUs backtraces, etc.
+This is a pretty interesting debug mechanism, but currently the print
+event happens *after* kmsg_dump(), meaning that pstore, for example,
+cannot collect a dmesg with the panic_print information.
 
-Considered it done.
+This patch changes that in 2 ways:
 
-> > diff --git a/include/linux/oom.h b/include/linux/oom.h
-> > index 2db9a1432511..9c7a4fae0661 100644
-> > --- a/include/linux/oom.h
-> > +++ b/include/linux/oom.h
-> > @@ -57,6 +57,22 @@ struct oom_control {
-> >  extern struct mutex oom_lock;
-> >  extern struct mutex oom_adj_mutex;
-> >  
-> > +#ifdef CONFIG_MMU
-> > +extern struct task_struct *oom_reaper_list;
-> > +extern struct wait_queue_head oom_reaper_wait;
-> > +
-> > +static inline bool oom_reaping_in_progress(void)
-> > +{
-> > +	/* a racy check can be used to reduce the chance of overkilling */
-> > +	return READ_ONCE(oom_reaper_list) || !waitqueue_active(&oom_reaper_wait);
-> > +}
-> > +#else
-> > +static inline bool oom_reaping_in_progress(void)
-> > +{
-> > +	return false;
-> > +}
-> > +#endif
-> 
-> I do not like this. These are internal oom reaper's and no code should
-> really make any decisions based on that. oom_reaping_in_progress is not
-> telling much anyway.
+(a) First, after a good discussion with Petr in the mailing-list[0],
+he noticed that one specific setting of panic_print (the console replay,
+bit 5) should not be executed before console proper flushing; hence we
+hereby split the panic_print_sys_info() function in upper and lower
+portions: if the parameter "after_kmsg_dumpers" is passed, only bit 5
+(the console replay thing) is evaluated and the function returns - this
+is the lower portion. Otherwise all other bits are checked and the
+function prints the user required information; this is the upper/earlier
+mode.
 
-There is a perfectly legitimate reason for this.
+(b) With the above change, we can safely insert a panic_print_sys_info()
+call up some lines, in order kmsg_dump() accounts this new information
+and exposes it through pstore or other kmsg dumpers. Notice that this
+new earlier call doesn't set "after_kmsg_dumpers" so we print the
+information set by user in panic_print, except the console replay that,
+if set, will be executed after the console flushing.
 
-If there is already a oom kill victim and the oom reaper is making
-progress, the system may still be under memory pressure until the oom
-reaping is done. The page reclaim has two choices in this transient
-state: kill more processes or keep reclaiming (a few more) hot pages.
+In the first version of this patch we discussed the risks in the
+mailing-list[0], and seems this approach is the least terrible,
+despite still having risks of polluting the log with the bulk of
+information that panic_print may bring, losing older messages.
+In order to attenuate that, we've added a warning in the
+kernel-parameters.txt so users enabling this mechanism consider
+to increase the log buffer size via "log_buf_len" as well.
 
-The first choice, AKA overkilling, is generally a bad one. The oom
-reaper is single threaded and it can't go faster with additional
-victims. Additional processes are sacrificed for nothing -- this is
-an overcorrection of a system that tries to strike a balance between
-the tendencies to release memory pressure and to improve memory
-utilization.
+[0] https://lore.kernel.org/lkml/20211230161828.121858-1-gpiccoli@igalia.com
 
-> This is a global queue for oom reaper that can
-> contain oom victims from different oom scopes (e.g. global OOM, memcg
-> OOM or memory policy OOM).
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+---
 
-True, but this is a wrong reason to make the conclusion below. Oom
-kill scopes do NOT matter; only the pool the freed memory goes into
-does. And there is only one global pool free pages.
 
-> Your lru_gen_age_node uses this to decide whether to trigger
-> out_of_memory and that is clearly wrong for the above reasons.
+V2:
+- Rebased to linux-next (20220106), since there are patches
+on linux-next touching this portion of code.
 
-I hope my explanation above is clear enough. There is nothing wrong
-with the purpose and the usage of oom_reaping_in_progress(), and it
-has been well tested in the Arch Linux Zen kernel.
+- Better document the risks of panic_print and suggest users
+to increase log buffer size with log_buf_len when using it.
 
-Without it, overkills can be easily reproduced by the following simple
-script. That is additional oom kills happen to processes other than
-"tail".
+- "Split" panic_print_sys_info() in order to execute the info
+collection in the upper part (allowing kmsg dumpers to save
+that information) and the console replay in the lower part,
+after the console flush.
 
-  # enable zram
-  while true;
-  do
-      tail /dev/zero
-  done
+Petr, thanks a lot for your review and suggestions!
+This is my idea as I've mentioned in the V1 thread, but if you
+think the parameter is better, i.e, decouple the console replay
+from panic_print, let me know and I can rework - your choice.
+I just wanted to avoid adding  yet another kernel parameter,
+since it's not strictly needed heh
 
-> out_of_memory is designed to skip over any action if there is an oom
-> victim pending from the oom domain (have a look at oom_evaluate_task).
+Cheers!
 
-Where exactly? Point me to the code please.
 
-I don't see such a logic inside out_of_memory() or
-oom_evaluate_task(). Currently the only thing that could remotely
-prevent overkills is oom_lock. But it's inadequate.
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+ kernel/panic.c                                  | 15 ++++++++++-----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
-This is the entire pipeline:
-low on memory -> out_of_memory() -> oom_reaper() -> free memory
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a069d8fe2fee..0f5cbe141bfd 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3727,6 +3727,10 @@
+ 			bit 4: print ftrace buffer
+ 			bit 5: print all printk messages in buffer
+ 			bit 6: print all CPUs backtrace (if available in the arch)
++			*Be aware* that this option may print a _lot_ of lines,
++			so there are risks of losing older messages in the log.
++			Use this option carefully, maybe worth to setup a
++			bigger log buffer with "log_buf_len" along with this.
+ 
+ 	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
+ 			Format: <hex>[,nousertaint]
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 41ecf9ab824a..fc055a91c103 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -148,10 +148,13 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
+ }
+ EXPORT_SYMBOL(nmi_panic);
+ 
+-static void panic_print_sys_info(void)
++static void panic_print_sys_info(bool after_kmsg_dumpers)
+ {
+-	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
+-		console_flush_on_panic(CONSOLE_REPLAY_ALL);
++	if (after_kmsg_dumpers) {
++		if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
++			console_flush_on_panic(CONSOLE_REPLAY_ALL);
++		return;
++	}
+ 
+ 	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
+ 		trigger_all_cpu_backtrace();
+@@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
+ 	 * show some extra information on kernel log if it was set...
+ 	 */
+ 	if (kexec_crash_loaded())
+-		panic_print_sys_info();
++		panic_print_sys_info(false);
+ 
+ 	/*
+ 	 * If we have crashed and we have a crash kernel loaded let it handle
+@@ -283,6 +286,8 @@ void panic(const char *fmt, ...)
+ 	 */
+ 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+ 
++	panic_print_sys_info(false);
++
+ 	kmsg_dump(KMSG_DUMP_PANIC);
+ 
+ 	/*
+@@ -313,7 +318,7 @@ void panic(const char *fmt, ...)
+ 	debug_locks_off();
+ 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+ 
+-	panic_print_sys_info();
++	panic_print_sys_info(true);
+ 
+ 	if (!panic_blink)
+ 		panic_blink = no_blink;
+-- 
+2.34.1
 
-To avoid overkills, we need to consider the later half of it too.
-oom_reaping_in_progress() is exactly for this purpose.
-
-> > +static bool age_lruvec(struct lruvec *lruvec, struct scan_control *sc,
-> > +		       unsigned long min_ttl)
-> > +{
-> > +	bool need_aging;
-> > +	long nr_to_scan;
-> > +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-> > +	int swappiness = get_swappiness(memcg);
-> > +	DEFINE_MAX_SEQ(lruvec);
-> > +	DEFINE_MIN_SEQ(lruvec);
-> > +
-> > +	if (mem_cgroup_below_min(memcg))
-> > +		return false;
-> 
-> mem_cgroup_below_min requires effective values to be calculated for the
-> reclaimed hierarchy. Have a look at mem_cgroup_calculate_protection
-
-I always keep that in mind, and age_lruvec() is called *after*
-mem_cgroup_calculate_protection():
-
-  balance_pgdat()
-    memcgs_need_aging = 0
-    do {
-      lru_gen_age_node()
-        if (!memcgs_need_aging) {
-            memcgs_need_aging = 1
-            return
-        }
-        age_lruvec()
-
-      shrink_node_memcgs()
-        mem_cgroup_calculate_protection()
-        lru_gen_shrink_lruvec()
-          if ...
-            memcgs_need_aging = 0
-    } while ...

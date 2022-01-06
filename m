@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D704868FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85BB486905
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242281AbiAFRoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:44:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41761 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242267AbiAFRoQ (ORCPT
+        id S242285AbiAFRpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:45:44 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4361 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242161AbiAFRpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:44:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641491056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zpIRZHdll9Kvd0nCHQ+ZsJmW/V2ZBc2nIIWedRx6PP0=;
-        b=A/AeOw5niLNTbuKM+hfaiCzFFnaHOAepD9oXyYsY9evyJc7mbVPV8V1UM2jzVE0h5nOJe7
-        WfcfWR6B3e+hkdyyQ6OqNGjaCTbgml4HUVMpqOo3JCwHhXIvtk7t9V2gkcxOQ51uUfaZny
-        3bWqTAmPyDspRgNF0NcoVQpsuN5/bDk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-Bg1iYB-BPxuii1R-44xhhw-1; Thu, 06 Jan 2022 12:44:10 -0500
-X-MC-Unique: Bg1iYB-BPxuii1R-44xhhw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EF87190A7A0;
-        Thu,  6 Jan 2022 17:44:08 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E22B777479;
-        Thu,  6 Jan 2022 17:44:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <568749bd7cc02908ecf6f3d6a611b6f9cf5c4afd.camel@kernel.org>
-References: <568749bd7cc02908ecf6f3d6a611b6f9cf5c4afd.camel@kernel.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021543872.640689.14370017789605073222.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 40/68] cachefiles: Implement cache registration and withdrawal
+        Thu, 6 Jan 2022 12:45:43 -0500
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVDFV64LGz67PH4;
+        Fri,  7 Jan 2022 01:42:22 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 18:45:40 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
+ 2022 17:45:39 +0000
+Subject: Re: [RFC 00/32] Kconfig: Introduce HAS_IOPORT and LEGACY_PCI options
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-csky@vger.kernel.org>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <00c5a9e2-1876-e8d1-68f3-2be6d3bd38cb@huawei.com>
+Date:   Thu, 6 Jan 2022 17:45:24 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2856723.1641491044.1@warthog.procyon.org.uk>
-Date:   Thu, 06 Jan 2022 17:44:04 +0000
-Message-ID: <2856724.1641491044@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
+Hi Niklas,
 
-> > +	/* check parameters */
-> > +	ret = -EOPNOTSUPP;
-> > +	if (d_is_negative(root) ||
-> > +	    !d_backing_inode(root)->i_op->lookup ||
-> > +	    !d_backing_inode(root)->i_op->mkdir ||
-> > +	    !(d_backing_inode(root)->i_opflags & IOP_XATTR) ||
-> > +	    !root->d_sb->s_op->statfs ||
-> > +	    !root->d_sb->s_op->sync_fs ||
-> > +	    root->d_sb->s_blocksize > PAGE_SIZE)
-> > +		goto error_unsupported;
-> > +
+On 27/12/2021 16:42, Niklas Schnelle wrote:
+> I performed the following testing:
 > 
-> That's quite a collection of tests.
-> 
-> Most are obvious, but some comments explaining the need for others would
-> not be a bad thing. In particular, why is s_blocksize > PAGE_SIZE
-> unsupported?
+> - On s390 this series on top of v5.16-rc7 builds with allyesconfig i.e. the
+>    HAS_IOPORT=n case.
 
-It can't do page-sized DIO requests to a filesystem with a block size larger
-than a page.  In the future I can work around that in conjunction with
-netfslib by expanding read and write sizes.
+Are you sure that allyesconfig gives HAS_IOPORT=n? Indeed I see no 
+mechanism is always disallow HAS_IOPORT for s390 (which I think we would 
+want).
 
-> Also, should you vet whether the fs supports i_op->tmpfile here ?
+> It also builds with defconfig and the resulting kernel
+>    appears fully functional including tests with PCI devices.
 
-That's a good idea.
+Thanks,
+Johnw
 
-David
 

@@ -2,165 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4564865B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98054865BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239914AbiAFOAl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 09:00:41 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:51585 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239872AbiAFOA1 (ORCPT
+        id S239854AbiAFOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 09:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239827AbiAFOBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 09:00:27 -0500
-Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 698C3CECD5;
-        Thu,  6 Jan 2022 15:00:25 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v4 1/3] Bluetooth: mt7921s: Support wake on bluetooth
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <91dfa736b7629cdb94bd2029f05717eeae77b07d.1640334021.git.sean.wang@kernel.org>
-Date:   Thu, 6 Jan 2022 15:00:24 +0100
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
-        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <F4F5EE39-6EEF-446D-ABD3-C02280BCE849@holtmann.org>
-References: <91dfa736b7629cdb94bd2029f05717eeae77b07d.1640334021.git.sean.wang@kernel.org>
-To:     Sean Wang <sean.wang@mediatek.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        Thu, 6 Jan 2022 09:01:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F339DC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 06:01:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E37A61C3D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B99C36AE3;
+        Thu,  6 Jan 2022 14:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641477708;
+        bh=LnhcNm2woC798UYuUxRQnM+UQkBAfsqI/F0kZU392K4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLzUFTW3qiEI4/gtlhZxkE3ALcpStfnFvDFyLab7sjbb77kWohSZ3VqifA28Ztfkm
+         jKkdVAOI6zNuFwASw/6NbmrGGlO9rAy+95kFzISKA3FDxe5j2gecx99Z8w4/RKlXmA
+         kNtYk3dPxr/lH07D7DWHOqv88f+9w39M2sJ1iwl8=
+Date:   Thu, 6 Jan 2022 15:01:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     knv418@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: kpc2000: kpc2000_spi: Check for null pointer
+ after calling devm_ioremap
+Message-ID: <Ydb2SLUZ25skxLZd@kroah.com>
+References: <20220106092257.2738018-1-jiasheng@iscas.ac.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106092257.2738018-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-> Enable wake on bluetooth on mt7921s that can be supported since the
-> firmware with version 20211129211059 was added, and the patch would
-> not cause any harm even when the old firmware is applied.
+On Thu, Jan 06, 2022 at 05:22:57PM +0800, Jiasheng Jiang wrote:
+> As the possible failure of the allocation, the devm_ioremap() may return
+> NULL pointer.
+> Then the kpspi->base is assigned to cs->base in kp_spi_setup() and used
+> in kp_spi_read_reg() and kp_spi_write_reg().
+> Therefore, it should be better to add the sanity check and return error
+> in order to avoid the dereference of the NULL pointer.
 > 
-> The patch was tested by setting up an HID or HOGP profile to connect a
-> Bluetooth keyboard and mouse, then putting the system to suspend, then
-> trying to wake up the system by moving the Bluetooth keyboard or mouse,
-> and then checking if the system can wake up and be brought back to
-> the normal state.
-> 
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
+> Fixes: 677b993a5749 ("staging: kpc2000: kpc_spi: use devm_* API to manage mapped I/O space")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > ---
-> v2: refine the git message
-> v3:
->    1. fit to single line as possible
->    2. move the skb variable into local scope
->    3. free skb after calling __hci_cmd_sync
->    4. make bt_awake as const struct btmtk_wakeon
-> v4: 1. drop __func__ in error messages
->    2. make hdev->wakeup assignment aligned to hdev->send
-> ---
-> drivers/bluetooth/btmtk.h     |  8 ++++++++
-> drivers/bluetooth/btmtksdio.c | 33 ++++++++++++++++++++++++++++++++-
-> 2 files changed, 40 insertions(+), 1 deletion(-)
+>  drivers/staging/kpc2000/kpc2000_spi.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 6e7b0c7567c0..2be1d2680ad8 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
-> 	u8 time_compensation;
-> } __packed;
-> 
-> +struct btmtk_wakeon {
-> +	u8 mode;
-> +	u8 gpo;
-> +	u8 active_high;
-> +	__le16 enable_delay;
-> +	__le16 wakeup_delay;
-> +} __packed;
-> +
-> struct btmtk_hci_wmt_params {
-> 	u8 op;
-> 	u8 flag;
-> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index b5ea8d3bffaa..89bd70651e9e 100644
-> --- a/drivers/bluetooth/btmtksdio.c
-> +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -958,6 +958,32 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
-> 	return 0;
-> }
-> 
-> +static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
-> +{
-> +	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
-> +	bool may_wakeup = device_may_wakeup(bdev->dev);
-> +	const struct btmtk_wakeon bt_awake = {
-> +		.mode = 0x1,
-> +		.gpo = 0,
-> +		.active_high = 0x1,
-> +		.enable_delay = cpu_to_le16(0xc80),
-> +		.wakeup_delay = cpu_to_le16(0x20)
-
-so we normally add the , at the end here as well. That means extending the sturct requires one less line to change.
-
-> +	};
-> +
-> +	if (may_wakeup && bdev->data->chipid == 0x7921) {
-> +		struct sk_buff *skb;
-> +
-> +		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
-> +				      &bt_awake, HCI_CMD_TIMEOUT);
-> +		if (IS_ERR(skb))
-> +			may_wakeup = false;
-> +
-> +		kfree_skb(skb);
+> diff --git a/drivers/staging/kpc2000/kpc2000_spi.c b/drivers/staging/kpc2000/kpc2000_spi.c
+> index 16ca18b8aa15..ead4aa0c988c 100644
+> --- a/drivers/staging/kpc2000/kpc2000_spi.c
+> +++ b/drivers/staging/kpc2000/kpc2000_spi.c
+> @@ -466,6 +466,10 @@ kp_spi_probe(struct platform_device *pldev)
+>  
+>  	kpspi->base = devm_ioremap(&pldev->dev, r->start,
+>  				   resource_size(r));
+> +	if (!kpspi->base) {
+> +		status = -ENOMEM;
+> +		goto free_master;
 > +	}
-> +
-> +	return may_wakeup;
-> +}
-> +
-> static int btmtksdio_probe(struct sdio_func *func,
-> 			   const struct sdio_device_id *id)
-> {
-> @@ -998,6 +1024,7 @@ static int btmtksdio_probe(struct sdio_func *func,
-> 	hdev->shutdown = btmtksdio_shutdown;
-> 	hdev->send     = btmtksdio_send_frame;
-> 	hdev->set_bdaddr = btmtk_set_bdaddr;
-> +	hdev->wakeup   = btmtk_sdio_wakeup;
-
-Just move this one after ->send.
-
+>  
+>  	status = spi_register_master(master);
+>  	if (status < 0) {
+> -- 
+> 2.25.1
 > 
-> 	SET_HCIDEV_DEV(hdev, &func->dev);
-> 
-> @@ -1032,7 +1059,11 @@ static int btmtksdio_probe(struct sdio_func *func,
-> 	 */
-> 	pm_runtime_put_noidle(bdev->dev);
-> 
-> -	return 0;
-> +	err = device_init_wakeup(bdev->dev, true);
-> +	if (err)
-> +		bt_dev_err(hdev, "failed to init_wakeup");
-
-Don’t use function names in the error message. Make it descriptive.
-
-> +
-> +	return err;
-> }
 > 
 
-Regards
 
-Marcel
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch did not apply to any known trees that Greg is in control
+  of.  Possibly this is because you made it against Linus's tree, not
+  the linux-next tree, which is where all of the development for the
+  next version of the kernel is at.  Please refresh your patch against
+  the linux-next tree, or even better yet, the development tree
+  specified in the MAINTAINERS file for the subsystem you are submitting
+  a patch for, and resend it.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

@@ -2,127 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D817E486505
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BE348650B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239404AbiAFNNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:13:08 -0500
-Received: from marcansoft.com ([212.63.210.85]:59596 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238990AbiAFNNH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:13:07 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        id S239408AbiAFNOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:14:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47160 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231216AbiAFNOd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 08:14:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 6B6A841F5D;
-        Thu,  6 Jan 2022 13:12:58 +0000 (UTC)
-Subject: Re: [PATCH v2 09/35] brcmfmac: pcie: Perform firmware selection for
- Apple platforms
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-10-marcan@marcan.st>
- <CAHp75VeN=RkBHnNkQB7_WwjtKuk9OP=utZp+tMf18VF2=CogkA@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <f4dfbb6b-b635-e9b3-5e5b-8527cf1e4f60@marcan.st>
-Date:   Thu, 6 Jan 2022 22:12:56 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B653B82120;
+        Thu,  6 Jan 2022 13:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B14C36AE3;
+        Thu,  6 Jan 2022 13:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641474871;
+        bh=lYLBPgK4zRcMauDvyn9MdGvG6s2G8AWEPpFOQqHi4xs=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=eUsyh32dgTA4mL0V0kj/FxINolMYVMPGzBqtneqf/oqOhACpWBGXnOwkxHJmA2TRH
+         FJ2lxjrxyi4K/PICsg7nDI6vDto1OhTbug4uLCwFVeJWS3k9t89b29ZrXYCoYoa9H0
+         ZM9O9yGzbsPY86SpujsNfkp1L7r0/nqjmpUpN6env/Dv/7Z8Nd/EIi4a7U6JtSsEbl
+         wz6jiubO2AHIhohQ4w5tfOJZM7MwJ3pJBQmrNmDsFplchXXlZa8HRWIVaRFoM1qMOd
+         bZ4f54znAmO41lANnFUGF/RLPBT3+7dyOuqNSd4obqeDgXKq3ptmeka/ONNEJRhPbM
+         HFwP8m7WuZ9Wg==
+Date:   Thu, 6 Jan 2022 14:14:28 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spbnick@gmail.com
+Subject: Re: [PATCH 0/4] HID: hid-uclogic-params: Fix NULL pointer
+ dereferences
+In-Reply-To: <20220105172915.131091-1-jose.exposito89@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2201061414140.16505@cbobk.fhfr.pm>
+References: <20220105172915.131091-1-jose.exposito89@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VeN=RkBHnNkQB7_WwjtKuk9OP=utZp+tMf18VF2=CogkA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2022 23.24, Andy Shevchenko wrote:
-> On Tue, Jan 4, 2022 at 9:28 AM Hector Martin <marcan@marcan.st> wrote:
+On Wed, 5 Jan 2022, José Expósito wrote:
 
->> +               /* Example: apple,shikoku-RASP-m-6.11-X3 */
->> +               len = (strlen(devinfo->settings->board_type) + 1 +
->> +                      strlen(devinfo->otp.module) + 1 +
->> +                      strlen(devinfo->otp.vendor) + 1 +
->> +                      strlen(devinfo->otp.version) + 1 +
->> +                      strlen(devinfo->settings->antenna_sku) + 1);
+> Hi everyone,
 > 
-> NIH devm_kasprrintf() ?
-
-This one builds it incrementally, but you're right, kasprintf is
-probably more readable here and fewer lines even though it'll duplicate
-all the previous argument references for each pattern. I'll redo it with
-devm_kasprintf().
-
+> This series fixes 4 possible NULL pointer dereference errors
+> present in hid-uclogic-params.c found by Coverity.
 > 
->> +               /* apple,shikoku */
->> +               fwreq->board_types[5] = devinfo->settings->board_type;
->> +
->> +               buf = devm_kzalloc(&devinfo->pdev->dev, len, GFP_KERNEL);
->> +
->> +               strscpy(buf, devinfo->settings->board_type, len);
->> +               strlcat(buf, "-", len);
->> +               strlcat(buf, devinfo->settings->antenna_sku, len);
->> +               /* apple,shikoku-X3 */
->> +               fwreq->board_types[4] = devm_kstrdup(&devinfo->pdev->dev, buf,
->> +                                                    GFP_KERNEL);
->> +
->> +               strscpy(buf, devinfo->settings->board_type, len);
->> +               strlcat(buf, "-", len);
->> +               strlcat(buf, devinfo->otp.module, len);
->> +               /* apple,shikoku-RASP */
->> +               fwreq->board_types[3] = devm_kstrdup(&devinfo->pdev->dev, buf,
->> +                                                    GFP_KERNEL);
->> +
->> +               strlcat(buf, "-", len);
->> +               strlcat(buf, devinfo->otp.vendor, len);
->> +               /* apple,shikoku-RASP-m */
->> +               fwreq->board_types[2] = devm_kstrdup(&devinfo->pdev->dev, buf,
->> +                                                    GFP_KERNEL);
->> +
->> +               strlcat(buf, "-", len);
->> +               strlcat(buf, devinfo->otp.version, len);
->> +               /* apple,shikoku-RASP-m-6.11 */
->> +               fwreq->board_types[1] = devm_kstrdup(&devinfo->pdev->dev, buf,
->> +                                                    GFP_KERNEL);
->> +
->> +               strlcat(buf, "-", len);
->> +               strlcat(buf, devinfo->settings->antenna_sku, len);
->> +               /* apple,shikoku-RASP-m-6.11-X3 */
->> +               fwreq->board_types[0] = buf;
+> Even though the fixes are small and very similar I made them
+> in 4 patches to include the Coverity ID on each of them and
+> make Coverity happy.
 > 
+> I didn't find any code calling the functions with invalid
+> params, but since the check is there, it's better to make sure
+> that it's doing its job.
 
+Thanks, I've queued the series.
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Jiri Kosina
+SUSE Labs
+

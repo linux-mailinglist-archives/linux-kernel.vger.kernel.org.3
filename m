@@ -2,151 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE7E485E61
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A1D485E64
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344567AbiAFCAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 21:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344555AbiAFCAO (ORCPT
+        id S1344569AbiAFCBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 21:01:45 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:45746 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344518AbiAFCBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 21:00:14 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB18DC061245;
-        Wed,  5 Jan 2022 18:00:13 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id q14so1455093plx.4;
-        Wed, 05 Jan 2022 18:00:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4XiU3DBBBdtI9LoTZW+DPMRG7ojDY/j0JWWI8IOcxhQ=;
-        b=f0eCT5qfLiKgZKOvPMSYCy4gzpv5BZ98sYIBmXjgj8ZHREigT3U3Ow7qKUyEv3TmGg
-         a9yE40II91EBnjbyu09EVYPwvP0wXyJqiD4h2k7ax1JQbAPbIpssshnMg10junWoLsss
-         S0Be9DnShE2aC8T2hzsUuMzq9LbfuKIxBB+kiV3RuPd0vjGier4DGo9gBf1OkvLPblwd
-         2nx4IptkRwExqY3BJRyLYASjJ33KBELu3irdQa8Dha+ANwd0Pl4RUZ5hADAxTannb/1e
-         XWh5Dm0WFJSKhmFlrjO+6aYenbtkNrU8NtZGEQCQgDx5v1U+dTMkqnfzs/e1tHpElsRt
-         bgCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4XiU3DBBBdtI9LoTZW+DPMRG7ojDY/j0JWWI8IOcxhQ=;
-        b=hfkFMGC7RbRsLBrVNL/3c3J9ScznFoCWbQLL/FRiWf37wGYJdQ/cT8UavD84T8XkLv
-         zFi/p0dFG2KWgDO9wbClhD2YAwRUfzwbQVqM5V2Y+1vNjmWa8NJCOgtIo7v52AwG/2lL
-         QjG9MeV32XW+b+pV0RMHoawqViLdxYL07Cy8ty+lSQWnC1EiRyh0z95qEWQjT7whF6ae
-         N4ExGSt/Pxgdd3qWkDFWQn97rQO9Norr0dV3vFuiwyqYbTtBAwiCdW+aqJ7un2CpFWGi
-         LTHnfrinjoBLVKAuBwR3LsPJm1gerojvwl9zhzkMw67bSYB6CUQKHZU+wq9rej+zJ1xS
-         v00A==
-X-Gm-Message-State: AOAM530tcSXh6F6Gij6leSrIpunoVmsCQrDKIKxhtX/u+S0cvS7Xo7Ok
-        DolIMQbrFvE3dZQamtdgKg4=
-X-Google-Smtp-Source: ABdhPJwMnXcUWGTDjYob15XFZ8DowbM6D/nkeb20M3ljhhRkYX6k7GZHkhOK89tMfn9RACIsrOC1+Q==
-X-Received: by 2002:a17:90a:d510:: with SMTP id t16mr7492468pju.84.1641434413375;
-        Wed, 05 Jan 2022 18:00:13 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id v10sm834263pjs.8.2022.01.05.18.00.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 18:00:13 -0800 (PST)
-Subject: Re: [PATCH v2] scripts: sphinx-pre-install: Fix ctex support on
- Debian
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <84f90b41-7a18-d83c-8739-1d394175f74a@gmail.com>
- <63882425609a2820fac78f5e94620abeb7ed5f6f.1641429634.git.mchehab@kernel.org>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <15aa5e03-8aac-af55-badc-b905ca91f281@gmail.com>
-Date:   Thu, 6 Jan 2022 11:00:08 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 5 Jan 2022 21:01:44 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V13mZFO_1641434499;
+Received: from 192.168.2.97(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0V13mZFO_1641434499)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 06 Jan 2022 10:01:40 +0800
+Message-ID: <dc8f2508-35ac-0dee-2465-4b5a8e3879ca@linux.alibaba.com>
+Date:   Thu, 6 Jan 2022 10:01:39 +0800
 MIME-Version: 1.0
-In-Reply-To: <63882425609a2820fac78f5e94620abeb7ed5f6f.1641429634.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [RFC PATCH 5/6] KVM: X86: Alloc pae_root shadow page
 Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+References: <20211210092508.7185-1-jiangshanlai@gmail.com>
+ <20211210092508.7185-6-jiangshanlai@gmail.com> <YdTCKoTgI5IgOvln@google.com>
+ <CAJhGHyAOyR6yGdyxsKydt_+HboGjxc-psbbSCqsrBo4WgUgQsQ@mail.gmail.com>
+ <YdXLNEwCY8cqV7KS@google.com>
+From:   Lai Jiangshan <laijs@linux.alibaba.com>
+In-Reply-To: <YdXLNEwCY8cqV7KS@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  6 Jan 2022 01:41:02 +0100, Mauro Carvalho Chehab wrote:
-> The name of the package with ctexhook.sty is different on
-> Debian/Ubuntu.
+
+
+On 2022/1/6 00:45, Sean Christopherson wrote:
+> On Wed, Jan 05, 2022, Lai Jiangshan wrote:
+>> On Wed, Jan 5, 2022 at 5:54 AM Sean Christopherson <seanjc@google.com> wrote:
+>>
+>>>>
+>>>> default_pae_pdpte is needed because the cpu expect PAE pdptes are
+>>>> present when VMenter.
+>>>
+>>> That's incorrect.  Neither Intel nor AMD require PDPTEs to be present.  Not present
+>>> is perfectly ok, present with reserved bits is what's not allowed.
+>>>
+>>> Intel SDM:
+>>>    A VM entry that checks the validity of the PDPTEs uses the same checks that are
+>>>    used when CR3 is loaded with MOV to CR3 when PAE paging is in use[7].  If MOV to CR3
+>>>    would cause a general-protection exception due to the PDPTEs that would be loaded
+>>>    (e.g., because a reserved bit is set), the VM entry fails.
+>>>
+>>>    7. This implies that (1) bits 11:9 in each PDPTE are ignored; and (2) if bit 0
+>>>       (present) is clear in one of the PDPTEs, bits 63:1 of that PDPTE are ignored.
+>>
+>> But in practice, the VM entry fails if the present bit is not set in the
+>> PDPTE for the linear address being accessed (when EPT enabled at least).  The
+>> host kvm complains and dumps the vmcs state.
 > 
-> Reported-by: Akira Yokosawa <akiyks@gmail.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> That doesn't make any sense.  If EPT is enabled, KVM should never use a pae_root.
+> The vmcs.GUEST_PDPTRn fields are in play, but those shouldn't derive from KVM's
+> shadow page tables.
 
-Tested-by: Akira Yokosawa <akiyks@gmail.com>
+Oh, I wrote the negative what I want to say again when I try to emphasis
+something after I wrote a sentence and modified it several times.
 
-> ---
->  scripts/sphinx-pre-install | 3 +++
->  1 file changed, 3 insertions(+)
+I wanted to mean "EPT not enabled" when vmx.
+
+The VM entry fails when the guest is in very early stage when booting which
+might be still in real mode.
+
+VMEXIT: intr_info=00000000 errorcode=0000000 ilen=00000000
+reason=80000021 qualification=0000000000000002
+
+IDTVectoring: info=00000000 errorcode=00000000
+
 > 
-> diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
-> index 46aaab414098..f126ecbb0494 100755
-> --- a/scripts/sphinx-pre-install
-> +++ b/scripts/sphinx-pre-install
-> @@ -370,6 +370,9 @@ sub give_debian_hints()
->  	);
->  
->  	if ($pdf) {
-> +		check_missing_file(["/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty"],
-> +				   "texlive-lang-chinese", 2);
-> +
->  		check_missing_file(["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"],
->  				   "fonts-dejavu", 2);
->  
-> -- 
-> 2.33.1
+> And I doubt there is a VMX ucode bug at play, as KVM currently uses '0' in its
+> shadow page tables for not-present PDPTEs.
+> 
+> If you can post/provide the patches that lead to VM-Fail, I'd be happy to help
+> debug.
 
-So are you planing to add similar checks incrementally for the
-other distros ?
+If you can try this patchset, you can just set the default_pae_pdpte to 0 to test
+it.
 
-There are two things I'd like to mention.
+If you can't try this patchset, the mmu->pae_root can be possible to be modified
+to test it.
 
-First, on Debian buster, Ubuntu Bionic, and Ubuntu Focal,
-xeCJK.sty are younger then v3.8.3 and ctexhook.sty is not necessary.
-As texlive-lang-chinese is a fairly large package, it would be better
-not to require the unnecessary package.
+I guess the vmx fails to translate %rip when VMentry in this case.
 
-The new dependency can be checked by:
 
-    $ grep ctex `kpsewhich xeCJK.sty`
 
-If there is no hit, no need of ctexhook.sty.
-
-It would be nice if the check can be made conditional.
-But it would not be possible to check before you have xeCJK.sty
-on your system.
-
-Hmm??
-
-Second, on CentOS stream8, texlive-ctex is not available.
-Following is the error from "dnf install":
-
-    $ sudo dnf install texlive-ctex
-    Last metadata expiration check: 0:00:35 ago on Thu Jan  6 01:43:50 2022.
-    No match for argument: texlive-ctex
-    Error: Unable to find a match: texlive-ctex
-
-xeCJK.sty there is also younger then v3.8.3.
-
-So again, if the check of ctexhook.sty could be made conditional,
-we would be able to list CentOS stream8 (or RHEL 8) as capable
-of "make pdfdocs".
-
-Longer term (for CentOS stream9 or RHEL 9), we might need to ask
-EPEL maintainers to add texlive-ctex.
-
-Thoughts?
-
-List of xeCJK.sty version:
-
-    Debian buster   v3.7.1
-    Ubuntu Bionic   v3.6.1
-    Ubuntu Focal    v3.8.1
-    CentOS stream8  v3.5.0
-
-        Thanks, Akira

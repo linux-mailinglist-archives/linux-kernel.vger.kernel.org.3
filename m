@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5941487DC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A03487DC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiAGUaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 15:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        id S229897AbiAGUbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 15:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiAGUaX (ORCPT
+        with ESMTP id S229542AbiAGUbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 15:30:23 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D5CC061574;
-        Fri,  7 Jan 2022 12:30:23 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id f138so7083727qke.10;
-        Fri, 07 Jan 2022 12:30:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oxt0eIg8WOWqzr1Wvc47sjlkwjKTbcvz5tPDW7K7PCA=;
-        b=IC0xjhYbX1gOQUeYk7rtmhxNJqpKK+philqpK33mH8DO0/XvRQkrpv07e7K+FPtA2v
-         HnfVxv++xKqy3M9yhwZDDhjgkrdf2Vy5gNl8M7E794sTHybHNDJm64FyS80nO7P/mEay
-         bc4byRmxhBM6onwLq2jEmbSuZOADMH1sh94Y/dxskNgXSiriKoYX2ZTL2z/KkMb+B0lD
-         N22AjRA6wvkzMDURl/Y1Q20JRTQ2Wy73f7hSPzS6F09olEc9Jg9Krf2idodP3n160eee
-         xJXFrnIfYkroFOMTAneC7bOFkA7OWASpRcppDqtGhHTasnnInI9pqQ6TkqkM9qMuMyv7
-         n2Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oxt0eIg8WOWqzr1Wvc47sjlkwjKTbcvz5tPDW7K7PCA=;
-        b=Z7HdCBKWDvuCDSGVo6+geUMIxn8Ibx6EwIEapE1HY3W+q7pN7lqV8Kf5Gxj4WC4D/K
-         Sv5yY1tLVSMen7N8+Gn5I8VQTGOUaSEb6AgE++OCNaE01CjuWqfEva2uhqhXIE+ZGEBi
-         0/5Oq4J5tIhlszSbMBNBjgmU6X9somCPCpoZn4JqqFBYEb+Y8phv0sDiGf0DxoXR72td
-         8pwK99zGBMmdY78oUCnn+F+Uvc+g9L5S5Dkr6JwE9/CZuZ/okukx8YfaAAHzPMxxDdyn
-         N03TzqC61nbsAiFQcHNa5PQf9Y8p80khgSFF+UeR6NueIY9u+iI9PXSOK1//XIY6C7pQ
-         qtvQ==
-X-Gm-Message-State: AOAM531kcwjiUwCybeM0oNZ3o6Yxds1wtP8TtUDfdAurwvD19Ji/0ebV
-        Ci61aQkHKUkdIhhpIXz6zXKfPZVi0Q6Cn8KtI/0=
-X-Google-Smtp-Source: ABdhPJxE37D0HmQ9b7ptTsWBM7YaFKJB5tVsmVXKQaLYYefU294E+/O4E/doEllwWdUc6slrSFJj0brYVxbToj+11fg=
-X-Received: by 2002:a05:620a:4588:: with SMTP id bp8mr2281407qkb.556.1641587422294;
- Fri, 07 Jan 2022 12:30:22 -0800 (PST)
+        Fri, 7 Jan 2022 15:31:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A4EC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 12:31:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F307F61FF8
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 20:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EAB7C36AE9;
+        Fri,  7 Jan 2022 20:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641587498;
+        bh=/wpuMD9OOisNRGFRlhHHAAK0F5/sZOZI14kx6dDgZTs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sgf9+oXD4ttp5o28HWx876LOlj5mxppFZ/xDFZxCWf7ew8ciekbD/hPiQK/HkoBmM
+         QyyxsbcBGSKRhTdYiNKzZ68MZtWdetxYmEAd9I87xjtJ+jVkRe1tmQQUJdAjFxpNoQ
+         EZaO/CfAPeBzkeaEezxZnrDyPgM9zxVAgwdWEH8pjjERXIx8+Aw9fJdW7uV+M9Dyyf
+         wLWbpkp5tJDMulFMQsVInjQY3g45pBkBBXvo6cjJfEUWISwqUrv+BdJBqpqhZEDOPl
+         x27F2jzEouSeHxvM+rVAH0UoqxxJxBHyUUnPqgS2MngUqz0FUL2xiJAHlNR2EM4H0Y
+         1ERaOtOYjdsdQ==
+Date:   Fri, 7 Jan 2022 21:31:35 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Song Liu <songliubraving@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Special regressions report for the pending 5.16 release
+Message-ID: <YdijJ5G0LIzoz0fU@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Song Liu <songliubraving@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <7cd73147-2170-a0cd-c64e-ded4bef645b0@leemhuis.info>
 MIME-Version: 1.0
-References: <20220106024518.8161-1-yinxin.x@bytedance.com> <20220106024518.8161-3-yinxin.x@bytedance.com>
-In-Reply-To: <20220106024518.8161-3-yinxin.x@bytedance.com>
-From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
-Date:   Fri, 7 Jan 2022 12:30:11 -0800
-Message-ID: <CAD+ocbzTrYxtt6SBmzGBK3QvP+-oAtKwy4AfpPP7V-RQCgxfiA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ext4: modify the logic of ext4_mb_new_blocks_simple
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gD7LRmKZFfRlZ0hV"
+Content-Disposition: inline
+In-Reply-To: <7cd73147-2170-a0cd-c64e-ded4bef645b0@leemhuis.info>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good to me.
 
-Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+--gD7LRmKZFfRlZ0hV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 5, 2022 at 6:45 PM Xin Yin <yinxin.x@bytedance.com> wrote:
->
-> for now in ext4_mb_new_blocks_simple, if we found a block which
-> should be excluded then will switch to next group, this may
-> probably cause 'group' run out of range.
->
-> change to check next block in the same group when get a block should
-> be excluded. Also change the searche range to EXT4_CLUSTERS_PER_GROUP
-> and add error checking.
->
-> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-> ---
->  fs/ext4/mballoc.c | 26 +++++++++++++++++---------
->  1 file changed, 17 insertions(+), 9 deletions(-)
->
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 215b7068f548..31a00b473f3e 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -5757,7 +5757,8 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
->         struct super_block *sb = ar->inode->i_sb;
->         ext4_group_t group;
->         ext4_grpblk_t blkoff;
-> -       int i = sb->s_blocksize;
-> +       ext4_grpblk_t max = EXT4_CLUSTERS_PER_GROUP(sb);
-> +       ext4_grpblk_t i = 0;
->         ext4_fsblk_t goal, block;
->         struct ext4_super_block *es = EXT4_SB(sb)->s_es;
->
-> @@ -5779,19 +5780,26 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
->                 ext4_get_group_no_and_offset(sb,
->                         max(ext4_group_first_block_no(sb, group), goal),
->                         NULL, &blkoff);
-> -               i = mb_find_next_zero_bit(bitmap_bh->b_data, sb->s_blocksize,
-> +               while (1) {
-> +                       i = mb_find_next_zero_bit(bitmap_bh->b_data, max,
->                                                 blkoff);
-> +                       if (i >= max)
-> +                               break;
-> +                       if (ext4_fc_replay_check_excluded(sb,
-> +                               ext4_group_first_block_no(sb, group) + i)) {
-> +                               blkoff = i + 1;
-> +                       } else
-> +                               break;
-> +               }
->                 brelse(bitmap_bh);
-> -               if (i >= sb->s_blocksize)
-> -                       continue;
-> -               if (ext4_fc_replay_check_excluded(sb,
-> -                       ext4_group_first_block_no(sb, group) + i))
-> -                       continue;
-> -               break;
-> +               if (i < max)
-> +                       break;
->         }
->
-> -       if (group >= ext4_get_groups_count(sb) && i >= sb->s_blocksize)
-> +       if (group >= ext4_get_groups_count(sb) || i >= max) {
-> +               *errp = -ENOSPC;
->                 return 0;
-> +       }
->
->         block = ext4_group_first_block_no(sb, group) + i;
->         ext4_mb_mark_bb(sb, block, 1, 1);
-> --
-> 2.20.1
->
+
+> * There is an open regression "Applications that need amdgpu doesn't run
+> after waking up from suspend":
+>=20
+> https://lore.kernel.org/all/1295184560.182511.1639075777725@mail.yahoo.co=
+m/
+>=20
+> Wolfram (CCed) plans to revert a i2c commit to fix it, but I'm not sure
+> if he plans to send in onwards for 5.16 (or if that would be a good idea
+> at all):
+>=20
+> https://lore.kernel.org/lkml/20220106122452.18719-1-wsa@kernel.org/
+
+I'll send a pull request tomorrow.
+
+
+--gD7LRmKZFfRlZ0hV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHYoycACgkQFA3kzBSg
+KbZTjw//Y9avqqKlpNG1bUO59LdpXav6oQg6LfjrAotnALltaBXvZY3zVwRdMNCE
+pxoOrVa6b3ItT6IgdMSQu75l0/cOV0OZlOeC5+mCi75ixTXcNxIc8N+ewIvOmUTv
+ttK2wHDsdbHtqhY/mj6DRzLq/afLW/+PTBkWeKkgWgGQHHa58TWoRGJVrg9IimV1
+ONZTYiiPlg4VHA39b/lcxCA1S20ucssJmyj76S/1vj2qRC5qORmspN2ToOOV1oWp
+7VJoFEXCQp+GAvQqG4Z2Nc7uSVroHLbbC97xSiHY3U2TL8brcHiztzsKF8Yyxbws
+pdkuS2q6ux06LCrI2UuC9E6kuLi2VU7Xo7q6t24jv6vtkhte6wxRknAmf1oAM8Mm
+D9rQm5zvPOWaaO9Aiq4gGuRPEtpaluOYm04SM3jE3CcUu5wr0Jm6oDUgOMRQ7ZxL
+Ndj0nt+9r99pea/BRwKbWpjcrqS87Rwh1iJw1/R62hg2CB3OmQTF/9Fpynm6nWaB
+wi2+k42xcH1Bl8nWWXC2LOaRJmcY7hHzMKF444jQFeaFsRBzRpK1/7crBJrsnecf
+SLnDBPUqjOajyujY6jqVESzRnlqF8b6eN3eYxwwG4u71RjzKJEMOomG6Fyo3R8tr
+tqeVHs2IHK6xYcXCch7tN3tI+3fqqMzLMyZyUlS7WTRCpti4Gxg=
+=DlEs
+-----END PGP SIGNATURE-----
+
+--gD7LRmKZFfRlZ0hV--

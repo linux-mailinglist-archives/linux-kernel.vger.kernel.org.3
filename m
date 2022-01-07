@@ -2,220 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA778487AB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB85487AB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348319AbiAGQsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:48:53 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:56550 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiAGQsw (ORCPT
+        id S1348351AbiAGQtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:49:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29743 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348343AbiAGQs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:48:52 -0500
-Date:   Fri, 07 Jan 2022 16:48:49 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641574130;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Fri, 7 Jan 2022 11:48:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641574139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OCY4EAlKlYnLHXZBeKTj2/unpIMOBS4Pq6lUTcCYIl0=;
-        b=rjBUoHDWalCGCjsf/UiUfB1ag84oZ5RNdGsxQskE0kzBe/ZhVEOgjBt3MxiddhU+sDhoox
-        BDmtCiBcKZ0qRcrWTOOIJyTToHlxnkbI7wrcEKCMRUbC/JIdGSoLrH2c+iZ2HXiOhMWSht
-        262sTU9IVx7/WW/XIuhvlCIkfU6JReJfzP8MSUdnVYSXWL3KCZXiFnevO7PwhpLIiUG3In
-        M9+g48d/uZReh5t2QHniSeCE/x/REMtaPAoH9GSRokRBpzAi/AZY/dinqu/liYZlPfUHDZ
-        qAbKmHH4n4euwgKfl4hWmRO3NnCZ4hSsBqUgKfVAjbrz694QETctQo2lKQo62g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641574130;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OCY4EAlKlYnLHXZBeKTj2/unpIMOBS4Pq6lUTcCYIl0=;
-        b=6hGRLEEvyoOkhGhpiO952XR1I70VjKnq5gzb66euGUzvkqJpAFFCHRy0YXv7nIKRG8n33X
-        ooq+GmwiXsRMH/Cw==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sgx] x86/sgx: Fix NULL pointer dereference on non-SGX systems
-Cc:     linux-sgx@vger.kernel.org, x86@kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220104171527.5E8416A8@davehans-spike.ostc.intel.com>
-References: <20220104171527.5E8416A8@davehans-spike.ostc.intel.com>
+        bh=Pe8Sm++2ldV2D4FESGtTZqyhOkRzo4sYNja8DFQQ4Ws=;
+        b=XyniP/gh/Pj6zvqWbABjDKAaXVcGnh6VRaGuxfuhm14roD05agaLn8jBX1LS4sNP/WPQOC
+        8hfQTDmAwskS3Ysca7rssxzKk6+LMolqHfbOWeH5QhI3Lw8HC1EVoIeKJIUb8wfcEPDQZ6
+        o5tUySTGtNQPar2rQ4B8ZADyqorkWPg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-284-pvKGj5aBP3KifWuhLaUxQQ-1; Fri, 07 Jan 2022 11:48:58 -0500
+X-MC-Unique: pvKGj5aBP3KifWuhLaUxQQ-1
+Received: by mail-ed1-f69.google.com with SMTP id x19-20020a05640226d300b003f8b80f5729so5078008edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:48:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Pe8Sm++2ldV2D4FESGtTZqyhOkRzo4sYNja8DFQQ4Ws=;
+        b=expGEuZiBuWPIRG8+4wH1lO4WU4pEf/0WCEETHntpFfk3oTooroC6LTiHoh6EDIyoD
+         B2FCUCHbsP4DVYKHKV9iSdOsq1hpAQu+PRm3wiZUajyG82ZuHgkx79OnXlSNUzvRMJHV
+         /nyZMeyR7cdlCnRuWCvJOL666abpMUUNpq3hgnxik2FPM8cTNcsQ8KLS9hl/exLxm3FQ
+         a8dJxtLvcHHBaEvzHsmgT0rcN5iu0esJt2rhaY+aXfWacWpgK/3v3DN7ckw/IuS8cJaw
+         hFhn7KeuDiDMqLHqBm+gvRqWf8dN8xSlqEn3KuPUvi6iSows+iXjNN854kf29PnIiWDB
+         hklg==
+X-Gm-Message-State: AOAM533l1NDFmfUtLufQh2A3YCpNaEQUlt7gcdZ3V99cuk0sdjBV1XA7
+        IxQcuiZy9PEd3tVhJEUudaaSTSiEtpLUqQbL/vo4GvH5LOg7TMYr6H9ACNzQfbOuvXrtcBF8yiW
+        jrWDOWevcnrZSpPoFN8effi/w
+X-Received: by 2002:a05:6402:160d:: with SMTP id f13mr7452084edv.247.1641574136882;
+        Fri, 07 Jan 2022 08:48:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzw9GmYU/PvuyJWTylj1DpMTk+X9aHstLHorYT7pdYL7AK0d+kGMLgm3nZMVGs4NnICyCkBzA==
+X-Received: by 2002:a05:6402:160d:: with SMTP id f13mr7452068edv.247.1641574136694;
+        Fri, 07 Jan 2022 08:48:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id z22sm2330165edd.68.2022.01.07.08.48.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 08:48:56 -0800 (PST)
+Message-ID: <80dc4ee6-9401-a86b-f090-981abeb64354@redhat.com>
+Date:   Fri, 7 Jan 2022 17:48:55 +0100
 MIME-Version: 1.0
-Message-ID: <164157412947.16921.14651280675483708212.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] KVM: x86/pmu: Fix available_event_types check for
+ REF_CPU_CYCLES event
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220105051509.69437-1-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220105051509.69437-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sgx branch of tip:
+On 1/5/22 06:15, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> According to CPUID 0x0A.EBX bit vector, the event [7] should be the
+> unrealized event "Topdown Slots" instead of the *kernel* generalized
+> common hardware event "REF_CPU_CYCLES", so we need to skip the cpuid
+> unavaliblity check in the intel_pmc_perf_hw_id() for the last
+> REF_CPU_CYCLES event and update the confusing comment.
+> 
+> If the event is marked as unavailable in the Intel guest CPUID
+> 0AH.EBX leaf, we need to avoid any perf_event creation, whether
+> it's a gp or fixed counter. To distinguish whether it is a rejected
+> event or an event that needs to be programmed with PERF_TYPE_RAW type,
+> a new special returned value of "PERF_COUNT_HW_MAX + 1" is introduced.
+> 
+> Fixes: 62079d8a43128 ("KVM: PMU: add proper support for fixed counter 2")
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+> v1 -> v2 Changelog:
+> - Refine comment based on commit c1d6f42f1a42;
+> - Squash the idea "avoid event creation for rejected hw_config" into this commit;
+> - Squash the idea "PERF_COUNT_HW_MAX + 1" into this commit;
+> 
+> Previous:
+> https://lore.kernel.org/kvm/20211112095139.21775-3-likexu@tencent.com/
+> 
+>   arch/x86/kvm/pmu.c           |  3 +++
+>   arch/x86/kvm/vmx/pmu_intel.c | 18 ++++++++++++------
+>   2 files changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 8abdadb7e22a..e632693a2266 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -109,6 +109,9 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>   		.config = config,
+>   	};
+>   
+> +	if (type == PERF_TYPE_HARDWARE && config >= PERF_COUNT_HW_MAX)
+> +		return;
+> +
+>   	attr.sample_period = get_sample_period(pmc, pmc->counter);
+>   
+>   	if (in_tx)
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 5e0ac57d6d1b..ffccfd9823c0 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -21,7 +21,6 @@
+>   #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - MSR_IA32_PERFCTR0)
+>   
+>   static struct kvm_event_hw_type_mapping intel_arch_events[] = {
+> -	/* Index must match CPUID 0x0A.EBX bit vector */
+>   	[0] = { 0x3c, 0x00, PERF_COUNT_HW_CPU_CYCLES },
+>   	[1] = { 0xc0, 0x00, PERF_COUNT_HW_INSTRUCTIONS },
+>   	[2] = { 0x3c, 0x01, PERF_COUNT_HW_BUS_CYCLES  },
+> @@ -29,6 +28,7 @@ static struct kvm_event_hw_type_mapping intel_arch_events[] = {
+>   	[4] = { 0x2e, 0x41, PERF_COUNT_HW_CACHE_MISSES },
+>   	[5] = { 0xc4, 0x00, PERF_COUNT_HW_BRANCH_INSTRUCTIONS },
+>   	[6] = { 0xc5, 0x00, PERF_COUNT_HW_BRANCH_MISSES },
+> +	/* The above index must match CPUID 0x0A.EBX bit vector */
+>   	[7] = { 0x00, 0x03, PERF_COUNT_HW_REF_CPU_CYCLES },
+>   };
+>   
+> @@ -75,11 +75,17 @@ static unsigned int intel_pmc_perf_hw_id(struct kvm_pmc *pmc)
+>   	u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+>   	int i;
+>   
+> -	for (i = 0; i < ARRAY_SIZE(intel_arch_events); i++)
+> -		if (intel_arch_events[i].eventsel == event_select &&
+> -		    intel_arch_events[i].unit_mask == unit_mask &&
+> -		    (pmc_is_fixed(pmc) || pmu->available_event_types & (1 << i)))
+> -			break;
+> +	for (i = 0; i < ARRAY_SIZE(intel_arch_events); i++) {
+> +		if (intel_arch_events[i].eventsel != event_select ||
+> +		    intel_arch_events[i].unit_mask != unit_mask)
+> +			continue;
+> +
+> +		/* disable event that reported as not present by cpuid */
+> +		if ((i < 7) && !(pmu->available_event_types & (1 << i)))
+> +			return PERF_COUNT_HW_MAX + 1;
+> +
+> +		break;
+> +	}
+>   
+>   	if (i == ARRAY_SIZE(intel_arch_events))
+>   		return PERF_COUNT_HW_MAX;
 
-Commit-ID:     cebb880030045059e55d21cbe049cdfa18d3990d
-Gitweb:        https://git.kernel.org/tip/cebb880030045059e55d21cbe049cdfa18d3990d
-Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Tue, 04 Jan 2022 09:15:27 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Fri, 07 Jan 2022 08:42:33 -08:00
+Queued, thanks.
 
-x86/sgx: Fix NULL pointer dereference on non-SGX systems
+Paolo
 
-== Problem ==
-
-Nathan Chancellor reported an oops when aceessing the
-'sgx_total_bytes' sysfs file:
-
-	https://lore.kernel.org/all/YbzhBrimHGGpddDM@archlinux-ax161/
-
-The sysfs output code accesses the sgx_numa_nodes[] array
-unconditionally.  However, this array is allocated during SGX
-initialization, which only occurs on systems where SGX is
-supported.
-
-If the sysfs file is accessed on systems without SGX support,
-sgx_numa_nodes[] is NULL and an oops occurs.
-
-== Solution ==
-
-To fix this, hide the entire nodeX/x86/ attribute group on
-systems without SGX support using the ->is_visible attribute
-group callback.
-
-Unfortunately, SGX is initialized via a device_initcall() which
-occurs _after_ the ->is_visible() callback.  Instead of moving
-SGX initialization earlier, call sysfs_update_group() during
-SGX initialization to update the group visiblility.
-
-This update requires moving the SGX sysfs code earlier in
-sgx/main.c.  There are no code changes other than the addition of
-arch_update_sysfs_visibility() and a minor whitespace fixup to
-arch_node_attr_is_visible() which checkpatch caught.
-
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-sgx@vger.kernel.org
-Cc: x86@kernel.org
-Fixes: 50468e431335 ("x86/sgx: Add an attribute for the amount of SGX memory in a NUMA node")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-Link: https://lkml.kernel.org/r/20220104171527.5E8416A8@davehans-spike.ostc.intel.com
----
- arch/x86/kernel/cpu/sgx/main.c | 65 +++++++++++++++++++++++----------
- 1 file changed, 47 insertions(+), 18 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 2857a49..4b41efc 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -6,11 +6,13 @@
- #include <linux/highmem.h>
- #include <linux/kthread.h>
- #include <linux/miscdevice.h>
-+#include <linux/node.h>
- #include <linux/pagemap.h>
- #include <linux/ratelimit.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/signal.h>
- #include <linux/slab.h>
-+#include <linux/sysfs.h>
- #include <asm/sgx.h>
- #include "driver.h"
- #include "encl.h"
-@@ -780,6 +782,48 @@ static inline u64 __init sgx_calc_section_metric(u64 low, u64 high)
- 	       ((high & GENMASK_ULL(19, 0)) << 32);
- }
- 
-+#ifdef CONFIG_NUMA
-+static ssize_t sgx_total_bytes_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%lu\n", sgx_numa_nodes[dev->id].size);
-+}
-+static DEVICE_ATTR_RO(sgx_total_bytes);
-+
-+static umode_t arch_node_attr_is_visible(struct kobject *kobj,
-+		struct attribute *attr, int idx)
-+{
-+	/* Make all x86/ attributes invisible when SGX is not initialized: */
-+	if (nodes_empty(sgx_numa_mask))
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
-+static struct attribute *arch_node_dev_attrs[] = {
-+	&dev_attr_sgx_total_bytes.attr,
-+	NULL,
-+};
-+
-+const struct attribute_group arch_node_dev_group = {
-+	.name = "x86",
-+	.attrs = arch_node_dev_attrs,
-+	.is_visible = arch_node_attr_is_visible,
-+};
-+
-+static void __init arch_update_sysfs_visibility(int nid)
-+{
-+	struct node *node = node_devices[nid];
-+	int ret;
-+
-+	ret = sysfs_update_group(&node->dev.kobj, &arch_node_dev_group);
-+
-+	if (ret)
-+		pr_err("sysfs update failed (%d), files may be invisible", ret);
-+}
-+#else /* !CONFIG_NUMA */
-+static void __init arch_update_sysfs_visibility(int nid) {}
-+#endif
-+
- static bool __init sgx_page_cache_init(void)
- {
- 	u32 eax, ebx, ecx, edx, type;
-@@ -826,6 +870,9 @@ static bool __init sgx_page_cache_init(void)
- 			INIT_LIST_HEAD(&sgx_numa_nodes[nid].sgx_poison_page_list);
- 			node_set(nid, sgx_numa_mask);
- 			sgx_numa_nodes[nid].size = 0;
-+
-+			/* Make SGX-specific node sysfs files visible: */
-+			arch_update_sysfs_visibility(nid);
- 		}
- 
- 		sgx_epc_sections[i].node =  &sgx_numa_nodes[nid];
-@@ -903,24 +950,6 @@ int sgx_set_attribute(unsigned long *allowed_attributes,
- }
- EXPORT_SYMBOL_GPL(sgx_set_attribute);
- 
--#ifdef CONFIG_NUMA
--static ssize_t sgx_total_bytes_show(struct device *dev, struct device_attribute *attr, char *buf)
--{
--	return sysfs_emit(buf, "%lu\n", sgx_numa_nodes[dev->id].size);
--}
--static DEVICE_ATTR_RO(sgx_total_bytes);
--
--static struct attribute *arch_node_dev_attrs[] = {
--	&dev_attr_sgx_total_bytes.attr,
--	NULL,
--};
--
--const struct attribute_group arch_node_dev_group = {
--	.name = "x86",
--	.attrs = arch_node_dev_attrs,
--};
--#endif /* CONFIG_NUMA */
--
- static int __init sgx_init(void)
- {
- 	int ret;

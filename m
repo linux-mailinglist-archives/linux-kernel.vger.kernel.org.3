@@ -2,128 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7222048743E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D94E487439
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346126AbiAGIrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:47:11 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31146 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiAGIrI (ORCPT
+        id S1346029AbiAGImh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 03:42:37 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:60462 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236390AbiAGImf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:47:08 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JVcGQ0Dxszbbjf;
-        Fri,  7 Jan 2022 16:44:30 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Fri, 7 Jan 2022 16:47:07 +0800
-From:   chenxiang <chenxiang66@hisilicon.com>
-To:     <linux@armlinux.org.uk>, <vkoul@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [RFC PATCH] ACPI / amba: Skip creating amba device when associated cpu is not online
-Date:   Fri, 7 Jan 2022 16:41:46 +0800
-Message-ID: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
+        Fri, 7 Jan 2022 03:42:35 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 2078gC4z9031079, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 2078gC4z9031079
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 7 Jan 2022 16:42:12 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 7 Jan 2022 16:42:12 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 7 Jan 2022 00:42:12 -0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Fri, 7 Jan 2022 16:42:12 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: RE: [PATCH 3/9] rtw88: Move rtw_update_sta_info() out of rtw_ra_mask_info_update_iter()
+Thread-Topic: [PATCH 3/9] rtw88: Move rtw_update_sta_info() out of
+ rtw_ra_mask_info_update_iter()
+Thread-Index: AQHX/DAKvkoPg4jC/0epBaMSmZ/kxKxXS7/A
+Date:   Fri, 7 Jan 2022 08:42:11 +0000
+Message-ID: <1e9ed12ac55e42beb2197524c524e69f@realtek.com>
+References: <20211228211501.468981-1-martin.blumenstingl@googlemail.com>
+ <20211228211501.468981-4-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20211228211501.468981-4-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/7_=3F=3F_06:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
 
-If not up all the cpus with command line "maxcpus=x", system will be
-blocked.
-We find that some amba devices such as ETM devices, are associated with
-special cpus, and if the cpu is not up, the register of associated device
-is not allowed to access. BIOS reports all the ETM device nodes and a
-amba device is created for every ETM device, so even if one cpu is not up,
-the amba device will still be created for the associated device, and also
-the register of device (pid and cid) will be accessed when adding amba
-device which will cause the issue.
-To fix it, skip creating amba device if it is associated with a cpu which
-is not online.
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Wednesday, December 29, 2021 5:15 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: tony0620emma@gmail.com; kvalo@codeaurora.org; johannes@sipsolutions.net; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Neo Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
+> Pkshih <pkshih@realtek.com>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH 3/9] rtw88: Move rtw_update_sta_info() out of rtw_ra_mask_info_update_iter()
+> 
+> rtw_update_sta_info() internally access some registers while being
+> called unter an atomic lock acquired by rtw_iterate_vifs_atomic(). Move
+> rtw_update_sta_info() call out of (rtw_ra_mask_info_update_iter) in
+> preparation for SDIO support where register access may sleep.
+> 
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> v1 -> v2:
+> - this patch is new in v2
+> - keep rtw_iterate_vifs_atomic() to prevent deadlocks as Johannes
+>   suggested. Keep track of all relevant stations inside
+>   rtw_ra_mask_info_update_iter() and the iter-data and then call
+>   rtw_update_sta_info() while held under rtwdev->mutex instead
+> 
+>  drivers/net/wireless/realtek/rtw88/mac80211.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw88/mac80211.c
+> b/drivers/net/wireless/realtek/rtw88/mac80211.c
+> index ae7d97de5fdf..3bd12354a8a1 100644
+> --- a/drivers/net/wireless/realtek/rtw88/mac80211.c
+> +++ b/drivers/net/wireless/realtek/rtw88/mac80211.c
 
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- drivers/acpi/acpi_amba.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+[...]
 
-diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
-index ab8a4e0191b1..2369198f734b 100644
---- a/drivers/acpi/acpi_amba.c
-+++ b/drivers/acpi/acpi_amba.c
-@@ -16,6 +16,7 @@
- #include <linux/ioport.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <acpi/processor.h>
- 
- #include "internal.h"
- 
-@@ -45,6 +46,35 @@ static void amba_register_dummy_clk(void)
- 	clk_register_clkdev(amba_dummy_clk, "apb_pclk", NULL);
- }
- 
-+static int acpi_handle_to_cpuid(acpi_handle handle)
-+{
-+	int cpu = -1;
-+	struct acpi_processor *pr;
-+
-+	for_each_possible_cpu(cpu) {
-+		pr = per_cpu(processors, cpu);
-+		if (pr && pr->handle == handle)
-+			break;
-+	}
-+
-+	return cpu;
-+}
-+
-+static int acpi_dev_get_cpu(struct acpi_device *adev)
-+{
-+	acpi_handle cpu_handle;
-+	acpi_status status;
-+	int cpu;
-+
-+	status = acpi_get_parent(adev->handle, &cpu_handle);
-+	if (ACPI_FAILURE(status))
-+		return -1;
-+	cpu = acpi_handle_to_cpuid(cpu_handle);
-+	if (cpu >= nr_cpu_ids)
-+		return -1;
-+	return cpu;
-+}
-+
- static int amba_handler_attach(struct acpi_device *adev,
- 				const struct acpi_device_id *id)
+> @@ -699,11 +702,20 @@ static void rtw_ra_mask_info_update(struct rtw_dev *rtwdev,
+>  				    const struct cfg80211_bitrate_mask *mask)
+>  {
+>  	struct rtw_iter_bitrate_mask_data br_data;
+> +	unsigned int i;
+> +
+> +	mutex_lock(&rtwdev->mutex);
+
+I think this lock is used to protect br_data.si[i], right?
+
+And, I prefer to move mutex lock to caller, like:
+
+@@ -734,7 +734,9 @@ static int rtw_ops_set_bitrate_mask(struct ieee80211_hw *hw,
  {
-@@ -54,11 +84,17 @@ static int amba_handler_attach(struct acpi_device *adev,
- 	bool address_found = false;
- 	int irq_no = 0;
- 	int ret;
-+	int cpu;
- 
- 	/* If the ACPI node already has a physical device attached, skip it. */
- 	if (adev->physical_node_count)
- 		return 0;
- 
-+	/* If the cpu associated with the device is not online, skip it. */
-+	cpu = acpi_dev_get_cpu(adev);
-+	if (cpu >= 0 && !cpu_online(cpu))
-+		return 0;
-+
- 	dev = amba_device_alloc(dev_name(&adev->dev), 0, 0);
- 	if (!dev) {
- 		dev_err(&adev->dev, "%s(): amba_device_alloc() failed\n",
--- 
-2.33.0
+        struct rtw_dev *rtwdev = hw->priv;
+
++       mutex_lock(&rtwdev->mutex);
+        rtw_ra_mask_info_update(rtwdev, vif, mask);
++       mutex_unlock(&rtwdev->mutex);
+
+        return 0;
+ }
+
+> 
+>  	br_data.rtwdev = rtwdev;
+>  	br_data.vif = vif;
+>  	br_data.mask = mask;
+> +	br_data.num_si = 0;
+>  	rtw_iterate_stas_atomic(rtwdev, rtw_ra_mask_info_update_iter, &br_data);
+> +
+> +	for (i = 0; i < br_data.num_si; i++)
+> +		rtw_update_sta_info(rtwdev, br_data.si[i]);
+> +
+> +	mutex_unlock(&rtwdev->mutex);
+>  }
+> 
+
+--
+Ping-Ke
+
 

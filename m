@@ -2,103 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D87AA487683
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A972E487688
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347137AbiAGLas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:30:48 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:32936 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347122AbiAGLar (ORCPT
+        id S237902AbiAGLbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:31:36 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:39014 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232117AbiAGLbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:30:47 -0500
+        Fri, 7 Jan 2022 06:31:32 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9B9231F39C;
-        Fri,  7 Jan 2022 11:30:45 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5A132210E7;
+        Fri,  7 Jan 2022 11:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641555045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1641555091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vJhik6LFSJicwsxIlirfCl9thREw5gsr+9bfWtUz9go=;
-        b=nrYSBz1j0jKy2VhsPPyoJH6CkG1DaEJo9QIYY0UYRx87xzTcM90pai+2vHEEbYQoajtoNs
-        LezpLxGkF4mHbX8H/HOGHSE7xc5zouxOtWqMKSU1juWKr9Gxmb6WKqqAhT0ZZGiWqco03c
-        +AZVX8dSV93lyOelPs5L1VStTbVL6cg=
+        bh=6ZjHiAsPPaO++z4L8pxYEGbs90oQXthjx6sCL5hyEBU=;
+        b=b2wMNFDsMFnPwCDeJRTXZL7riiTGsB41hyCGyThb+AuKE8jzQGLN60JL00WYQxCWqninc5
+        g5Z4q/VYuHQo06q3vf8Awm392uzUhai4hOHD8k7EOonAk9pXx5R8bRBljPME7xaGSEATDW
+        o7v/R7X0q0x3H3hIIsMLwAWeRIZ5/yI=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7630013CCC;
-        Fri,  7 Jan 2022 11:30:45 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA4AF13CCC;
+        Fri,  7 Jan 2022 11:31:30 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id wphSG2Uk2GGfJAAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 07 Jan 2022 11:30:45 +0000
-Subject: Re: [PATCH] xen/x86: obtain upper 32 bits of video frame buffer
- address for Dom0
-To:     Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <a3df8bf3-d044-b7bb-3383-cd5239d6d4af@suse.com>
+        id nFSoL5Ik2GH4JAAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 07 Jan 2022 11:31:30 +0000
+Subject: Re: [PATCH V4 0/6] xen: Add support of extended regions (safe ranges)
+ on Arm
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
+        xen-devel@lists.xenproject.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Julien Grall <julien@xen.org>,
+        Bertrand Marquis <bertrand.marquis@arm.com>,
+        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
+        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>
+References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
 From:   Juergen Gross <jgross@suse.com>
-Message-ID: <8a908346-4cae-3c28-dcae-770f1f0e6113@suse.com>
-Date:   Fri, 7 Jan 2022 12:30:39 +0100
+Message-ID: <d594a183-c7be-5fff-da7a-e4c1e707b83c@suse.com>
+Date:   Fri, 7 Jan 2022 12:31:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <a3df8bf3-d044-b7bb-3383-cd5239d6d4af@suse.com>
+In-Reply-To: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="iSA2hBdq8cBvlqR3jSheE2MhvEbZLm90x"
+ boundary="zxl7OBpx57u7dBEPjP24KfQ9qSnYGWYGc"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---iSA2hBdq8cBvlqR3jSheE2MhvEbZLm90x
-Content-Type: multipart/mixed; boundary="NAWW3BGB6dHLfaBlRfgkpbsoqemyNXU41";
+--zxl7OBpx57u7dBEPjP24KfQ9qSnYGWYGc
+Content-Type: multipart/mixed; boundary="bYQWwZXVskXxny1ZB8gcdtLP4a0dOoygv";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: Jan Beulich <jbeulich@suse.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
- lkml <linux-kernel@vger.kernel.org>
-Message-ID: <8a908346-4cae-3c28-dcae-770f1f0e6113@suse.com>
-Subject: Re: [PATCH] xen/x86: obtain upper 32 bits of video frame buffer
- address for Dom0
-References: <a3df8bf3-d044-b7bb-3383-cd5239d6d4af@suse.com>
-In-Reply-To: <a3df8bf3-d044-b7bb-3383-cd5239d6d4af@suse.com>
+To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
+ xen-devel@lists.xenproject.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Russell King <linux@armlinux.org.uk>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, Julien Grall <julien@xen.org>,
+ Bertrand Marquis <bertrand.marquis@arm.com>, Wei Chen <Wei.Chen@arm.com>,
+ Henry Wang <Henry.Wang@arm.com>, Kaly Xin <Kaly.Xin@arm.com>,
+ Jiamei Xie <Jiamei.Xie@arm.com>
+Message-ID: <d594a183-c7be-5fff-da7a-e4c1e707b83c@suse.com>
+Subject: Re: [PATCH V4 0/6] xen: Add support of extended regions (safe ranges)
+ on Arm
+References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+In-Reply-To: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
 
---NAWW3BGB6dHLfaBlRfgkpbsoqemyNXU41
+--bYQWwZXVskXxny1ZB8gcdtLP4a0dOoygv
 Content-Type: multipart/mixed;
- boundary="------------29768CACBD4D28279FAA3CEC"
+ boundary="------------FE9D85ECD2D104C4DCB635EC"
 Content-Language: en-US
 
 This is a multi-part message in MIME format.
---------------29768CACBD4D28279FAA3CEC
+--------------FE9D85ECD2D104C4DCB635EC
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-On 04.01.22 09:46, Jan Beulich wrote:
-> The hypervisor has been supplying this information for a couple of majo=
-r
-> releases. Make use of it. The need to set a flag in the capabilities
-> field also points out that the prior setting of that field from the
-> hypervisor interface's gbl_caps one was wrong, so that code gets delete=
-d
-> (there's also no equivalent of this in native boot code).
+On 09.12.21 21:05, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 >=20
-> Signed-off-by: Jan Beulich <jbeulich@suse.com>
+> Hello all.
+>=20
+> You can find the RFC-V3 patch series at [1],[2] and [3].
+>=20
+> The corresponding Xen support (for both Dom0 and DomU) is already commi=
+tted and
+> is available in mainline Xen since the following commit:
+> 57f87857dc2de452a796d6bad4f476510efd2aba libxl/arm: Add handling of ext=
+ended regions for DomU
+>=20
+> The extended region (safe range) is a region of guest physical address =
+space
+> which is unused and could be safely used to create grant/foreign mappin=
+gs instead
+> of ballooning out real RAM pages to obtain a physical address space for=
+ creating
+> these mappings (which simply results in wasting domain memory and shatt=
+ering super
+> pages in P2M table).
+>=20
+> The problem is that we cannot follow Linux advise which memory ranges a=
+re unused
+> on Arm as there might be some identity mappings in P2M table (stage 2) =
+the guest is not
+> aware of or not all device I/O regions might be known (registered) by t=
+he time the guest
+> starts creating grant/foreign mappings. This is why we need some hints =
+from the hypervisor
+> which knows all details in advance to be able to choose extended region=
+s (which won't
+> clash with other resources).
+>=20
+> The extended regions are chosen at the domain creation time and adverti=
+sed to it via
+> "reg" property under hypervisor node in the guest device-tree [4]. As r=
+egion 0 is reserved
+> for grant table space (always present), the indexes for extended region=
+s are 1...N.
+> No device tree bindings update is needed, guest infers the presence of =
+extended regions
+> from the number of regions in "reg" property.
+>=20
+> Please note the following:
+> - The ACPI case is not covered for now
+> - patch series was created in a way to retain existing behavior on x86
+>=20
+> The patch series is based on v5.16-rc3 and also available at [5], it wa=
+s fully
+> tested on Arm64 and only compile tested on x86.
+>=20
+> [1] https://lore.kernel.org/all/1627490656-1267-1-git-send-email-olekst=
+ysh@gmail.com/
+>      https://lore.kernel.org/all/1627490656-1267-2-git-send-email-oleks=
+tysh@gmail.com/
+> [2] https://lore.kernel.org/all/1635264312-3796-1-git-send-email-olekst=
+ysh@gmail.com/
+> [3] https://lore.kernel.org/all/1637787223-21129-1-git-send-email-oleks=
+tysh@gmail.com/
+> [4] https://xenbits.xen.org/gitweb/?p=3Dxen.git;a=3Dblob_plain;f=3Ddocs=
+/misc/arm/device-tree/guest.txt;hb=3Drefs/heads/master
+> [5] https://github.com/otyshchenko1/linux/commits/map_opt_ml7
+>=20
+> Oleksandr Tyshchenko (6):
+>    xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list=
+()
+>    arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT
+>    xen/balloon: Bring alloc(free)_xenballooned_pages helpers back
+>    xen/unpopulated-alloc: Add mechanism to use Xen resource
+>    arm/xen: Read extended regions from DT and init Xen resource
+>    dt-bindings: xen: Clarify "reg" purpose
+>=20
+>   Documentation/devicetree/bindings/arm/xen.txt |  14 +--
+>   arch/arm/xen/enlighten.c                      | 132 +++++++++++++++++=
++++++++--
+>   drivers/xen/Kconfig                           |   2 +-
+>   drivers/xen/balloon.c                         |  20 ++--
+>   drivers/xen/unpopulated-alloc.c               |  87 ++++++++++++++++-=
 
-Pushed to xen/tip.git for-linus-5.17
+>   include/xen/balloon.h                         |   3 +
+>   include/xen/xen.h                             |  16 ++++
+>   7 files changed, 245 insertions(+), 29 deletions(-)
+>=20
+
+Series pushed to xen/tip.git for-linus-5.17
 
 
 Juergen
 
---------------29768CACBD4D28279FAA3CEC
+--------------FE9D85ECD2D104C4DCB635EC
 Content-Type: application/pgp-keys;
  name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Transfer-Encoding: quoted-printable
@@ -190,24 +278,24 @@ ZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------29768CACBD4D28279FAA3CEC--
+--------------FE9D85ECD2D104C4DCB635EC--
 
---NAWW3BGB6dHLfaBlRfgkpbsoqemyNXU41--
+--bYQWwZXVskXxny1ZB8gcdtLP4a0dOoygv--
 
---iSA2hBdq8cBvlqR3jSheE2MhvEbZLm90x
+--zxl7OBpx57u7dBEPjP24KfQ9qSnYGWYGc
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB4BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmHYJF8FAwAAAAAACgkQsN6d1ii/Ey8Z
-WQf4qYFkCw4CQ6pkNF+2vf++do/f6+yo6vvwRsRhmXTlHoeuEu6Uh53RVgRKsbPX/0qjRH52ywf5
-vJzbnJTuK+IGv3uHc0PLiBMpROPi7UalfT5Jhyl7vjnbgxXuLXy+45EWHhXEoC1tG+kh8RQqEYXd
-uis/BVDUS6wKSZepB+8VfkvQfLkmQS87n1XiIccwhY1wnEGDQDgSQmHBcyj0weYQBZUN5e7nXoZ+
-wMBaqATdECZlt3E8jOvjlucNJCSfyQlH8xTu4FFVhneRK1uvLrDRLwPq4Q35aQnyYNcfZDXfUK2b
-BmcxRPoruUxJZ8IpZbn8ffyjc1Vj/YnWXeSTO1u+
-=NU3i
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmHYJJIFAwAAAAAACgkQsN6d1ii/Ey/B
+fggAguLLO4r4bqWIPJQiFCMQLiM8URWp6RPvi7mzKA5PhOFxx7xnRJT9ocXuoUt+p/PS200k6HuH
+OZFN+KDehNmtXK8PtJE+P3/fmCe72Lfl65WOmDtw47JfCgjkUmp4v2aiFL6J0dGxSA8m4NiJkPRt
+In/e1ziRq0R318pQm+xzR9S+MLt+Pv749iKSK6ZGS/arXiqFlQ1+iDzcxT2WWS9pwt9aGiHebej1
+c2Ybn6RyScqC8ObSU5JotE2llvexMQIm5EmABVskoIj/gT8KQNrhIlQxGqOXtOomi2dn4gyPUjdL
+fRBjD83ay8OW+7b6cNtAN2T+jb9w3S0tcCPNkeTs1A==
+=OH9o
 -----END PGP SIGNATURE-----
 
---iSA2hBdq8cBvlqR3jSheE2MhvEbZLm90x--
+--zxl7OBpx57u7dBEPjP24KfQ9qSnYGWYGc--

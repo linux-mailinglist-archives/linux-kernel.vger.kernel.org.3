@@ -2,92 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C451487C35
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A454487C3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241197AbiAGSas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:30:48 -0500
-Received: from mx-out.tlen.pl ([193.222.135.158]:53201 "EHLO mx-out.tlen.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241055AbiAGSas (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:30:48 -0500
-Received: (wp-smtpd smtp.tlen.pl 34295 invoked from network); 7 Jan 2022 19:30:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1641580245; bh=SWiAconY7zgizwjw07HhTiVctBWou/ptYNxMtMPUvvs=;
-          h=From:To:Cc:Subject;
-          b=ELTGkzekRhYVr6r9MfO9oCMxDA4T288lkA7VTGu8ZQFwGvJfsjVga5gAdUdSzCiIW
-           QlWUmrww1NY7vYquweYU6IPivasAy/gFGb5YxDyq7W1SQzP/JwuZY/Jzhm1gJpFHjP
-           viG/atwCp5fV2VHTUj6jg2RNik9io4ja+nmlLmew=
-Received: from aafo3.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.144.3])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-rtc@vger.kernel.org>; 7 Jan 2022 19:30:45 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc-cmos: replace obsolete comments
-Date:   Fri,  7 Jan 2022 19:30:29 +0100
-Message-Id: <20220107183029.486207-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
+        id S1348802AbiAGScr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:32:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240556AbiAGScq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 13:32:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF6C061574;
+        Fri,  7 Jan 2022 10:32:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8443DB82706;
+        Fri,  7 Jan 2022 18:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD57C36AE0;
+        Fri,  7 Jan 2022 18:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641580363;
+        bh=nO9Ewa73KnTnGP0YVJMQNv1b2ECj6Hnb9BCpFdSf10E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qod/10t0ufjlkIkJE1gCZybiKKKB5HPZrNKtj7Z9Ho54gR5IkNtN16mdGmiRJr6PE
+         NImtYUppyO3+VAx6AkQV/9SHDpWTI5+W+tB9WjHy2AHOuL3uiZv5X52p333GEshHMh
+         IfJ4y6ek0UFzJjd+kNyqqqCIN1wXrVGGoUp+h4O3eihut++lJtlHsaAkUGGUpq/RHS
+         RyefQF53DjVYIl8pCyPekxLo6E2ctVhTCt/UQwnts40v1IPsmIs+an73fgoXDkxOYZ
+         VpYc8pigJc6S6hZZjpprEsTvzwA1fk3bJ82c7uSsx7zMpsVaV7vuHDgDKxSvOfXNG6
+         nUl6uElH8vFYg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4B62240B92; Fri,  7 Jan 2022 15:32:40 -0300 (-03)
+Date:   Fri, 7 Jan 2022 15:32:40 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: perf build broken seemingly due to libbpf changes, checking...
+Message-ID: <YdiHSF6CGBoswQ1G@kernel.org>
+References: <YddEVgNKBJiqcV6Y@kernel.org>
+ <YddGjjmlMZzxUZbN@kernel.org>
+ <YddHmYhvtVvgqZb/@kernel.org>
+ <CAP-5=fU2QAr9BMHqm9i6uDKPaUFsY2EAqt+oO1AO8ovBXCh5xQ@mail.gmail.com>
+ <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
+ <CAP-5=fUN+XqrSmwqab9DyGtvpZ7iZkfnUNwBfK1CDA_iX+aF0Q@mail.gmail.com>
+ <CAP-5=fVE5eo9TSX3rrGb-=DETeYvXtG0AqhpGwjnP6nr8pKrqg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 6964a5c64c8ae93e48457f54cf352c5c
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [gYNU]                               
+In-Reply-To: <CAP-5=fVE5eo9TSX3rrGb-=DETeYvXtG0AqhpGwjnP6nr8pKrqg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comments in cmos_read_alarm() and cmos_set_alarm() do not apply to
-current code, replace them.
+Em Thu, Jan 06, 2022 at 07:30:34PM -0800, Ian Rogers escreveu:
+> On Thu, Jan 6, 2022 at 2:04 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Thu, Jan 6, 2022 at 1:44 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Thu, Jan 6, 2022 at 1:42 PM Ian Rogers <irogers@google.com> wrote:
+> > > >
+> > > > On Thu, Jan 6, 2022 at 11:48 AM Arnaldo Carvalho de Melo
+> > > > <acme@kernel.org> wrote:
+> > > > >
+> > > > > Em Thu, Jan 06, 2022 at 04:44:14PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > > Em Thu, Jan 06, 2022 at 04:34:46PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > > > > After merging torvalds/master to perf/urgent I'm getting this:
+> > > > > > >
+> > > > > > > util/bpf-event.c:25:21: error: no previous prototype for ‘btf__load_from_kernel_by_id’ [-Werror=missing-prototypes]
+> > > > > > >    25 | struct btf * __weak btf__load_from_kernel_by_id(__u32 id)
+> > > > > > >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > util/bpf-event.c:37:1: error: no previous prototype for ‘bpf_object__next_program’ [-Werror=missing-prototypes]
+> > > > > > >    37 | bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
+> > > > > > >       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > util/bpf-event.c:46:1: error: no previous prototype for ‘bpf_object__next_map’ [-Werror=missing-prototypes]
+> > > > > > >    46 | bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
+> > > > > > >       | ^~~~~~~~~~~~~~~~~~~~
+> > > > > > > util/bpf-event.c:55:1: error: no previous prototype for ‘btf__raw_data’ [-Werror=missing-prototypes]
+> > > > > > >    55 | btf__raw_data(const struct btf *btf_ro, __u32 *size)
+> > > > > > >       | ^~~~~~~~~~~~~
+> > > > > > > cc1: all warnings being treated as errors
+> > > > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf-event.o] Error 1
+> > > > > > > make[4]: *** Waiting for unfinished jobs....
+> > > > > > > util/bpf_counter.c: In function ‘bpf_target_prog_name’:
+> > > > > > > util/bpf_counter.c:82:15: error: implicit declaration of function ‘btf__load_from_kernel_by_id’ [-Werror=implicit-function-declaration]
+> > > > > > >    82 |         btf = btf__load_from_kernel_by_id(info_linear->info.btf_id);
+> > > > > > >       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > util/bpf_counter.c:82:13: error: assignment to ‘struct btf *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
+> > > > > > >    82 |         btf = btf__load_from_kernel_by_id(info_linear->info.btf_id);
+> > > > > > >       |             ^
+> > > > > > > cc1: all warnings being treated as errors
+> > > > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf_counter.o] Error 1
+> > > > > > >
+> > > > > > > I'm checking now...
+> > > > > > >
+> > > > > > > BTW I test perf builds with:
+> > > > > > >
+> > > > > > > make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin && git status && perf test python
+> > > > > >
+> > > > > > Nevermind, this was due to a patch by Ian Rogers I was testing,
+> > > > > > bisecting get up to the last patch, since I had merged torvalds/master
+> > > > > > today it got me to a wrong correlation, sorry for the disturbance.
+> > > > > >
+> > > > > > For reference, this is the patch:
+> > > > > >
+> > > > > > http://lore.kernel.org/lkml/20220106072627.476524-1-irogers@google.com
+> > > > >
+> > > > > Ian, I have libbpf-devel installed:
+> > > > >
+> > > > > ⬢[acme@toolbox perf]$ rpm -qa | grep libbpf
+> > > > > libbpf-0.4.0-1.fc34.x86_64
+> > > > > libbpf-devel-0.4.0-1.fc34.x86_64
+> > > > > ⬢[acme@toolbox perf]$
+> > > > >
+> > > > > But I'm not using LIBBPF_DYNAMIC=1, so you can't just give precedence to
+> > > > > system headers for all of the homies in tools/lib/.
+> > > > >
+> > > > > I bet that if I remove the libbpf-devel package it works, yeah, just
+> > > > > tested. So we need to make those overrides dependent on using
+> > > > > LIBBPF_DYNAMIC=1, LIBTRACEEVENT_DYNAMIC=1, etc and avoid the big hammer
+> > > > > that is -Itools/lib/, using a more finegrained approach, right?
+> > > >
+> > > > Ugh, this is messy. The -I for tools/lib is overloaded and being used
+> > > > in tools/perf/util/bpf-event.c so that bpf/bpf.h, bpf/btf.h and
+> > >
+> > > can you do `make install` for libbpf instead and have it install
+> > > headers into a dedicated target directory which can be added into -I
+> > > search path. Quentin did this for all the other libbpf users in kernel
+> > > tree (bpftool, resolve_btfids, etc) and it works great.
+> >
+> > This sounds good to me, and being able to borrow code from bpftool
+> > should make writing it is straightforward. I'll try to find time to do
+> > a patch, but I don't mind someone getting there before me :-)
+> 
+> So tools/lib also provides subcmd, symbol and api. These will need
+> Makefiles to allow an install and likely the header file structure
+> altering. This seems like too big a fix for the next 5.16rc, wdyt?
 
-These comments were added in
-commit fbb974ba693b ("rtc: cmos: Do not export alarm rtc_ops when we do not support alarms")
-which introduced a separate struct rtc_class_ops, which was used when
-the device did not support RTC alarms. The functions cmos_read_alarm()
-and cmos_set_alarm() were called not only from the rtc_op struct, but
-also explicitly, so they had to independently check for RTC alarm
-support.
+Right, I think the best thing is to revert the patch Jiri pointed out,
+right?
 
-The separate rtc_class_ops structure was later removed in
-        commit 30f5bd537fdb ("rtc: cmos: remove cmos_rtc_ops_no_alarm")
-but the comments remained and now are obsolete.
-
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
-
-This patch applies cleanly on rtc-next.
-
- drivers/rtc/rtc-cmos.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 7c006c2b125f..cd82eff2630a 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -290,7 +290,7 @@ static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 		.time = &t->time,
- 	};
- 
--	/* This not only a rtc_op, but also called directly */
-+	/* Fail if the RTC alarm is not supported */
- 	if (!is_valid_irq(cmos->irq))
- 		return -EIO;
- 
-@@ -523,7 +523,7 @@ static int cmos_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	unsigned char rtc_control;
- 	int ret;
- 
--	/* This not only a rtc_op, but also called directly */
-+	/* Fail if the RTC alarm is not supported */
- 	if (!is_valid_irq(cmos->irq))
- 		return -EIO;
- 
--- 
-2.25.1
-
+- Arnaldo

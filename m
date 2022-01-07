@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D7E487326
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80A2487328
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbiAGGhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:37:34 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:51454 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiAGGhc (ORCPT
+        id S233258AbiAGGlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 01:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231269AbiAGGlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:37:32 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 30CE121117;
-        Fri,  7 Jan 2022 06:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641537451; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vIQjcAIlZIBanVtOIP65zLGslt4nQ94ZBtMBJM1KnBg=;
-        b=Nt/gVl/PR8oGMBsVx7ETqvvijQ2sj3ZcUigBVm7c4nDgAonMZPnepg5ZbPBBFutCv+TRb8
-        bDvPmWNoMSzvA2wI1kwyY27db7ohXyuBaA0OsRiwyShaiOy7Nwg9ZILhKJhROhmWMfuqy9
-        QjaHPPnvWUP/d4gu7cXvfiTz+e5U0BY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641537451;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vIQjcAIlZIBanVtOIP65zLGslt4nQ94ZBtMBJM1KnBg=;
-        b=uBWkCLFm1ckuD5XriBHye1lbxZ2qtjiDG0BLtdKG3QM7iNhBFpS9GDJF/I99taQz/u7Bz6
-        s7eHIXHUi795HjBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A940C13CA2;
-        Fri,  7 Jan 2022 06:37:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id p0OoJ6rf12HWEwAAMHmgww
-        (envelope-from <nstange@suse.de>); Fri, 07 Jan 2022 06:37:30 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Stephan Mueller <smueller@chronox.de>,
-        Nicolai Stange <nstange@suse.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com
-Subject: Re: [PATCH v2 03/18] crypto: dh - optimize domain parameter serialization for well-known groups
-In-Reply-To: <YdepEhTI/LB9wdJr@gondor.apana.org.au> (Herbert Xu's message of
-        "Fri, 7 Jan 2022 13:44:34 +1100")
-References: <20211209090358.28231-1-nstange@suse.de> <87r1a7thy0.fsf@suse.de>
-        <YcvEkfS4cONDXXB9@gondor.apana.org.au>
-        <2468270.qO8rWLYou6@tauon.chronox.de>
-        <YdepEhTI/LB9wdJr@gondor.apana.org.au>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
-Date:   Fri, 07 Jan 2022 07:37:30 +0100
-Message-ID: <87lezs3vbp.fsf@suse.de>
+        Fri, 7 Jan 2022 01:41:02 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5293C061245;
+        Thu,  6 Jan 2022 22:41:01 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id o185so1110239ybc.12;
+        Thu, 06 Jan 2022 22:41:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uft5SNmCUYH/4LsuZcNHSZqtW5wt4J0g/joxJK/IOOc=;
+        b=BYcBYUWKdfwX2cIp/9B3Lh+01mGBKcOL6zrXIuF74WaMVm6jXkQAVk/sTP/DjUb3XR
+         oHOlupyFT4PDvH09jEFQ0xp/buGhbo+HDqenSlYPyis/yuI917iu+xNZ7joeBlC4xoXs
+         QKuHWLiy8RdGBRgTwzwkh6fsOQ74Jhc5WvnNImcPcZOfvxarl8wyG1oonhWCepZWPZmP
+         xsYOv7N3k6wuuQ0igqdpFW5zbwWIwe//hVhYuCTZKwn9uHuQlBv6uKcAuVs4VeM6Opze
+         nAh+o5B15QdYtDx/+zA9poaRTJ32i5uVxYjYJPTnc69XjKZHcBeornANNuPIQ+ZzwAR0
+         SaCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uft5SNmCUYH/4LsuZcNHSZqtW5wt4J0g/joxJK/IOOc=;
+        b=xQ6LdV9tTA+ANXd8hu/Zuk4+GVZzIVtx/6A3IpktCh+7FLgGsm2MdPg9viqAQUXyCH
+         vV5sSr8Ex+T1dW01x9+nD8cIqmpCLhGAn7b83JlO0SSh5/o+oVy7mftCaDf2r/jziVvw
+         l9dT6vXBNq1NamYzLjxUh48Z/K4bBvatayivIL7S57ERD9bV3gTzXZxViAAjiwaVq6jV
+         sEqm9Ix5PWagj9ADmOqQyHpqMgAFmOsYT7c6JSo3ZUXtf/yR7hfqG+x2+QWua76UHPsC
+         qRj5QlRAHwFemDHzv3jjyU85y/mZmo6gqB0u3sUxTMDSYxen09A/+iSmXZVmWzcNKT93
+         pwXw==
+X-Gm-Message-State: AOAM533WhjY7Q3KPtRXcpQb+bOLZw41zFRMgPRMH1eqnMDiFXc5DkKEg
+        immTzDaZnw/5H7W/xsPoWcZCpPHfK1x+Qp5LNVE=
+X-Google-Smtp-Source: ABdhPJx999Drhi+3awoScOG1JFjBCWxkktxoQrLaxkoATFE7C2HzJ2Gr61gd1O06Yvbc85LPaG2bBWvj7JfRpXr2p3o=
+X-Received: by 2002:a25:2cd0:: with SMTP id s199mr66404026ybs.234.1641537661030;
+ Thu, 06 Jan 2022 22:41:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220106232513.143014-1-akirakawata1@gmail.com>
+In-Reply-To: <20220106232513.143014-1-akirakawata1@gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 7 Jan 2022 07:40:50 +0100
+Message-ID: <CAKXUXMwzULZHmfx5T74cjG++gd8mFKVOR7Z4aS8RabKnXWGOdQ@mail.gmail.com>
+Subject: Re: [PATCH v4 RESEND 0/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+To:     Akira Kawata <akirakawata1@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herbert Xu <herbert@gondor.apana.org.au> writes:
-
-> On Thu, Jan 06, 2022 at 03:30:04PM +0100, Stephan Mueller wrote:
->>
->> This means in FIPS mode, invoking the algo of "dh" should not be possibl=
-e.=20
->> Yet, on the other hand, we cannot mark "dh" as fips_allowed =3D=3D 0 as =
-the=20
->> templates would not be able to instantiate them.
+On Fri, Jan 7, 2022 at 12:25 AM Akira Kawata <akirakawata1@gmail.com> wrote:
 >
-> Right, we have exactly the same problem with sha1 where sha1
-> per se should be not be allowed in FIPS mode but hmac(sha1)
-> should be.
+>  These patches fix a bug in AT_PHDR calculation.
 >
->> Therefore, I think we should mark "dh" as CRYPTO_ALG_INTERNAL if in FIPS=
- mode.=20
-> I think the annotation should be added to testmgr.c.  We could
-> mark dh and sha1 as not fips_allowed but allowed as the parameter
-> of a template.  This could then be represented in the crypto_alg
-> object by a new flag.
+>  We cannot calculate AT_PHDR as the sum of load_addr and exec->e_phoff.
+>  This is because exec->e_phoff is the offset of PHDRs in the file and the
+>  address of PHDRs in the memory may differ from it. These patches fix the
+>  bug by calculating the address of program headers from PT_LOADs
+>  directly.
 >
-> This flag could then be set automatically in crypto_grab_* to
-> allow them to be picked up automatically for templates.
+>  Sorry for my latency.
 >
-> I'm already writing this up for sha1 anyway so let me polish it
-> off and I'll post it soon which you can then reuse it for dh.
+>  Changes in v4
+>  - Reflecting comments from Lukas, add a refactoring commit.
+>
 
-Perfect, this will solve my problem with how to handle "dh"
-vs. fips_enabled quite nicely.
+Thanks for removing the dead store with your refactoring as a small
+stylistic change, but I really think that Kees Cook's comment that you
+simply removed an important feature is much more important to address.
+There was no reply to that and it seems that Kees hypothesis that the
+feature has been removed, was not questioned by anyone.
 
-Many thanks!
+Lukas
 
-Nicolai
-
---=20
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
-ermany
-(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev
+>  Changes in v3:
+>  - Fix a reported bug from kernel test robot.
+>
+>  Changes in v2:
+>  - Remove unused load_addr from create_elf_tables.
+>  - Improve the commit message. *** SUBJECT HERE ***
+>
+> Akira Kawata (2):
+>   fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
+>   fs/binfmt_elf: Refactor load_elf_binary function
+>
+>  fs/binfmt_elf.c | 36 +++++++++++++++++++++---------------
+>  1 file changed, 21 insertions(+), 15 deletions(-)
+>
+>
+> base-commit: 4eee8d0b64ecc3231040fa68ba750317ffca5c52
+> --
+> 2.25.1
+>

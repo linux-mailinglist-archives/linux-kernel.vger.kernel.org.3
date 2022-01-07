@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE930487E78
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094F7487E82
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiAGVtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S230142AbiAGVur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiAGVtb (ORCPT
+        with ESMTP id S229949AbiAGVuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:49:31 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A26C061574;
-        Fri,  7 Jan 2022 13:49:31 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id w16so26983047edc.11;
-        Fri, 07 Jan 2022 13:49:31 -0800 (PST)
+        Fri, 7 Jan 2022 16:50:46 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA18CC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:50:45 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id v123so4834091wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:50:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RspMXkYZE1kXoxKwa/CQSP2jEqRzQTcawQLJqDscxlg=;
-        b=R1XA8DfuHUoxCJkTUnHLbyYiYvdnLaOBBTlAZ6Dh4nUcYp2IiagXePViXx8AY/72uy
-         0yci5zKEOcNzLCfdiKTq6WxezE01NHmPWnaMr4rExaULelt6KxMzbulXkAzms3oCI/FZ
-         22s0Vi+nWE9wW0aG1F65MLCPhIHCAgsq9gQRSAGtVdjkaujIuoR8n7R7WWZ0flG+tXx5
-         lhMFkiXih/weusYfhzQSy/Y57BSflT+gKx1oYMvy+YqFQKe8wdyrhIN/qAa2uI2sWw8t
-         AtoP+r9gNPYeBDxN7F6fmTrHkzmWFH7MoTsCosx4r4NupxdMpHNbkmh3LBYJaoZVMZOX
-         VWtw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wQnTAOzqfnEo9STtUG3p3gnrWCeSeGnMweWxCdq98J4=;
+        b=l3aYK2qsZES/UMTB5Dj5xMSWSGdqQggwJ3aZCUV0OcmD2G1e7ZquqML2OsMOl9sbU+
+         uUaoRUQ65f9Kt72KdVV5Fk4ItZ+gf0MzCs32xgmiAakVK+eulsGry8sKqhqgi6FdBMjF
+         PJy0i6/1ygrYUbixHPb9dBtPrNYa9K/hYTf2RUqOmKgX3f9zkFIv2YSjAqvG5/vSRIIf
+         PwOlKo8ccAEtWHD4FyHPijdz67t5nYevsDzcNfhptq0k/WcV7WLIzBoPmLqYylX/MIm0
+         w+7xv1NZUaT/uVIf/RJL60VAngX3Sc0TRtCcogE5SvLfsXa8NPaKeqwvMCbJfr35CljX
+         1n6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RspMXkYZE1kXoxKwa/CQSP2jEqRzQTcawQLJqDscxlg=;
-        b=t/0h4ImazvFcdgO7q4lECFb04zSMaYEBijxBUGC7mpFJmC3pdoLAyggtcPpCdxKwQT
-         KeCE9lPw9JcV4DNu1AgfqKNbfRC+S/hjVP99J/kLFzTRS20e4GNiAVWq2AvNb9gT+uSo
-         zZ4EN8ZVYu/ULru4ZmGazXtbW5SfhR56YyCqLbEuVGNkNMhRHWcdHbeSX2Q3vKQ3lnQ+
-         hB7dM+6msK8w4MM0RXh7CWGfzdWWCiAyKHW1ZU3fvzYVv/+mHhfGSL1vpv98MudpAlkT
-         m9io2T22LnuNpjHXHGGtNUszEay186pjt3JlJzA95Qp22E9xUuWqegwneFpRL3oKkiNI
-         gVHQ==
-X-Gm-Message-State: AOAM533J6Dbdal9/htBnRJgOi1tIBp1x0nGRo76lFYGID5qS7T0ad4Y+
-        vuSm4QV2ZCm1UfvDgR3BaUlzNX1RngRJIS2CtCs=
-X-Google-Smtp-Source: ABdhPJxGAYMn4vkFzj+A8Ph9piejFUJ8XYBCn0XzxZQSSs48CD95us9gT+qmVwBRo0lcJI8Y6wa8jpIPLNZoyVXux8o=
-X-Received: by 2002:a17:906:f46:: with SMTP id h6mr22234747ejj.281.1641592169540;
- Fri, 07 Jan 2022 13:49:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wQnTAOzqfnEo9STtUG3p3gnrWCeSeGnMweWxCdq98J4=;
+        b=epBKUfczMUFjQVD+jOKMMi65w+hIu5Mq0CbTuN4+LQPviEyqt6ELmANorXlZvFrORL
+         7b9Bys2VQciXfasIeHUN1DPmjusnNgZmU4bJ383rqfABC5CtG4h26Fa7oEiN91z0jfsC
+         rjex0vbBKHO9t49gDntrbqAOO6c27MVKi99Cmx8sQJ/bg5zLyQMEuTAu10VbEEbSZBra
+         jlfZT2DL3UEL/QQ8cF4ABKh25ElbOmh9/tHWmlczx7KQuTXj6P7KUOwHsvANhJb1uJ6L
+         oqwu9fY0qhNYaX3ijzcNkyFve6nohGCOTpo+p9lCcBeQgDv2oQHRJMdQpE7HFLHboiwf
+         S8wQ==
+X-Gm-Message-State: AOAM530wzo76Noe0d3DiC0HvqZho6+5ONtr3UitX2DUqHn5/07OlsXMX
+        DoDimM0LYN+EtYzG+VFKKN8=
+X-Google-Smtp-Source: ABdhPJz9FjU6RPQHxLJMyrC3sBYKcJwGoUxuDVqAat1O6y7hObS2LOthMSza8UlzN1X+k02m4SmHvA==
+X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr12546723wmq.21.1641592244312;
+        Fri, 07 Jan 2022 13:50:44 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8108:96c0:3b88::51e2])
+        by smtp.gmail.com with ESMTPSA id k14sm1729161wrn.59.2022.01.07.13.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 13:50:44 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/6] staging: r8188eu: clean up GetHwReg8188EU()
+Date:   Fri,  7 Jan 2022 22:50:27 +0100
+Message-Id: <20220107215033.12257-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211228211501.468981-1-martin.blumenstingl@googlemail.com> <daba93973e5945f8bf611ce4c33c82e7@realtek.com>
-In-Reply-To: <daba93973e5945f8bf611ce4c33c82e7@realtek.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 7 Jan 2022 22:49:18 +0100
-Message-ID: <CAFBinCCnvDqC2HhUh6o-WSOaB-McdAmYznQd6t88ZNR0WrvOfA@mail.gmail.com>
-Subject: Re: [PATCH 0/9] rtw88: prepare locking for SDIO support
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ping-Ke,
+This series removes unused cases from GetHwReg8188EU(). Some of the
+cases are also unused in SetHwReg8188EU() and removed there as well.
 
-On Fri, Jan 7, 2022 at 10:19 AM Pkshih <pkshih@realtek.com> wrote:
->
->
-> > -----Original Message-----
-> > From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > Sent: Wednesday, December 29, 2021 5:15 AM
-> > To: linux-wireless@vger.kernel.org
-> > Cc: tony0620emma@gmail.com; kvalo@codeaurora.org; johannes@sipsolutions.net; netdev@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; Neo Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> > Pkshih <pkshih@realtek.com>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > Subject: [PATCH 0/9] rtw88: prepare locking for SDIO support
-> >
-> > Hello rtw88 and mac80211 maintainers/contributors,
-> >
-> > there is an ongoing effort where Jernej and I are working on adding
-> > SDIO support to the rtw88 driver [0].
-> > The hardware we use at the moment is RTL8822BS and RTL8822CS.
-> > We are at a point where scanning, assoc etc. works (though it's not
-> > fast yet, in my tests I got ~6Mbit/s in either direction).
->
-> Could I know if you have improvement of this throughput issue?
-Yes, in the meantime we have made some performance improvements.
-Currently the throughput numbers are approx.:
-TX: 30Mbit/s
-RX: 20Mbit/s
+Tested on x86_64 with Inter-Tech DMG-02.
 
-I have seen RX and TX throughputs of up to 50Mbit/s on my RTL8822CS,
-but I cannot reliably reproduce this (meaning: if I don't touch my
-board and run the same iperf3 test again then in one run it may
-achieve 50Mbit/s, but in the next run only 25Mbit/s).
-In other words: throughput is much better than what we started with in
-summer, but I think it can be improved further.
+Michael Straube (6):
+  staging: r8188eu: remove HW_VAR_BASIC_RATE from GetHwReg8188EU()
+  staging: r8188eu: remove HW_VAR_TXPAUSE
+  staging: r8188eu: remove HW_VAR_CURRENT_ANTENNA from GetHwReg8188EU()
+  staging: r8188eu: remove HW_VAR_EFUSE_BYTES from GetHwReg8188EU()
+  staging: r8188eu: EfuseUsedBytes is set but never used
+  staging: r8188eu: remove HW_VAR_APFM_ON_MAC
 
-> I have done simple test of this patchset on RTL8822CE, and it works
-> well. But, I think I don't test all flows yet, so I will do more
-> test that will take a while. After that, I can give a Tested-by tag.
-I also got feedback off-list from a user who used the patches from
-this series on top of the out-of-tree rtw88-usb driver. These patches
-fix one "scheduling while atomic" issue for him as well.
-Maybe you can do your extensive tests after I sent v3 of this series?
-Also thanks for offering to test this, I don't have any Realtek PCIe
-wifi, so I am unable to verify I broke anything myself.
+ .../staging/r8188eu/hal/rtl8188e_hal_init.c   |  3 ---
+ drivers/staging/r8188eu/hal/usb_halinit.c     | 25 -------------------
+ drivers/staging/r8188eu/include/hal_intf.h    |  5 ----
+ .../staging/r8188eu/include/rtl8188e_hal.h    |  2 --
+ 4 files changed, 35 deletions(-)
 
+-- 
+2.34.1
 
-Best regards,
-Martin

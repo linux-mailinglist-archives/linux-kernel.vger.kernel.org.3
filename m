@@ -2,171 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C31F487895
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2FA4878A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiAGNyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238992AbiAGNyd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:54:33 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1420AC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:54:33 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id be32so8240415oib.11
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YGqOgKFnGJz28p+OQa8FIlCc2oy0neN/zp9RS60zfPI=;
-        b=jWKSfBEn9ok2HZUeR+w6zEdF7KlqnV9ecDNZmFU56q9i6pZhqsiGI4wo9PAa8IkvLw
-         l6/CxhreIEzcnz6RYIOsspnD09k+sWkh3IzXye80wspUZlMEXkYv/fLtcl+35oewdfub
-         NAC3GNNUKd/F1dztRnWm8M+U0xATDpJzR9PJS3yjQDRPsbEg8Zu/zp/8ctP9v9izitsi
-         FwBEAr3iKspMBkRw7Vqe9UWRomDM0GSYiMKquYnvuxiDaMW+6iFMfepnOCt3NSBecciJ
-         tCm3ckCcsJSVaDBmmSwY9f3oCOzPcO8u6ym2jt6BlhpYfxETskpPSN66C2ho92iyjeuZ
-         1dZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YGqOgKFnGJz28p+OQa8FIlCc2oy0neN/zp9RS60zfPI=;
-        b=YPetBU+KR4Lhu132X3qf4vKZtNNeo77WwN2uAr8i2i+aXYGXST09nAQPmfvmuo62a4
-         vmpJoUFbrk+j9yNCaNJvZ27nqCkoXpjgiIpIxBDGv6zQal1Bc3wF5DTE7whv5cfluBy1
-         Tchw5zNZGipaZFUzfY0KozZzzEJV794H2Uz7TdxBUPuOufVCXVXbJX03VWxX+YwE+sx8
-         S5CeeUsTvTQoqnh308XPbnD171hOqCcXY2M8G+UMQ3MYvkQwHSpMH6on/5ji5AuvOGgm
-         CrRwOQWmtNhgH/HxqBgfeSyDrmhF5FB6AiKB5HpzzAsQ3F4tKszivji/y/+iffYOvpf2
-         lBOw==
-X-Gm-Message-State: AOAM532QBB5G7OZWY15NOlmVb8/EHpAqdAPrQ5kiXO7hhm2DK5ydYXNl
-        a5k7/tLPlsqvDYKYLd2nFyqakawA6WVA/5ZmmrnW+w==
-X-Google-Smtp-Source: ABdhPJwdSDeEyuNMn6xzl7TFHAJyAsBV1CxPZXt4r7CFmM/gxUg7EJ77kn/TFWbdL5Tz3o4LdT55DWBC21J/LQQlcM4=
-X-Received: by 2002:aca:b843:: with SMTP id i64mr9973885oif.109.1641563672135;
- Fri, 07 Jan 2022 05:54:32 -0800 (PST)
+        id S1347757AbiAGN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:59:14 -0500
+Received: from mail-bo1ind01olkn0140.outbound.protection.outlook.com ([104.47.101.140]:16960
+        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347748AbiAGN7N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:59:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cs6yXFpTDmdwbhGABTInbR/ygeiLhC/Kefmd6Rp+lNlVz6tPM23P6cEDnAkIc4xN9eljEVKpsour4W+EJ4iS6hypnrFRuSCo0G1ifGQbzbnzbddY5KOx5OdteF1KplkJ6JbCfZE9WjmT9KscB0qDhGmVc+TYlL13/OfnOKSuAvo2X746SqN4LnVAo7h1Ave8rIJaQCTFJmb2JMv4M7Zm1uuk0Kpxf6ySynQwC0RJLVNlDWHB8WarxT3Lc5YFqTp2AYWBxEjxOT9/sieGelB7xBpBOWlHrL32OOITPJK1gRmzfl+rxUT/w6ASy9nFSJCrotkIW2duccsLr8Jcfc+lMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ynS6hFPuQBTyD4WcFX36jV5I/U3ms4nc1dISdjU9xCA=;
+ b=Q4PEk9+SrllkRRIkKhq91Cn+jPu6P+PKDHsSM5RjGZzAl5JrRLQS0V6zTfp0+Jssyuf/rf3sZlyTk9a1mnxR6f824V/HtFaZd28n4pUyd43kTWiMlqUhu7xm04fXFC/kXoTzvHngVF51dVPjpRx89K5xObgQPbzh2TAfb1IXc+/73Wn9pdnyIYdYNGdLCfwBmgXE0yvEAt50jOlVeVqXU8agG63GrGzJ+qwdZvkadrFsU00GdzvbfvEVzKmwt2jZvP2iblnCmRndEuA8srV1+0cJ9tAybwD7DU1ld6//3+1Fg+DltlphlD3gTfAs3Uu4sp1f4Zoc6ZNEujaAeK1W6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ynS6hFPuQBTyD4WcFX36jV5I/U3ms4nc1dISdjU9xCA=;
+ b=syq7H5EoadBj3dT/wNxv6fMowk0dkChc6Tb/5LDNDKHdpHF0kMxFDkZWCvH+VFyrnVrSX0k1Pn9pIjYlaDfDHAiOqVKeT0xlyaKmgDx1N6j8pncBVB6Q7OXEOzrUwB/H1lPDXSa3zXzL2OIpvQOoavKE1W0C7hNGf5omjICPK/d+6s57ZQVT5laHU/tvwv1udeXoDtdrRmW8GzcSZJKYRom+Eze6P9KleF2PN2P8WUqFuP3or1EjD0loXyJlKFnjcpRhm2Ld+Tu1ut9pTOXn5ihXQM+Am7lMs+NZ6z7HIPc6X8Ywz0VOkz4QSpTXzarQQtDAEpMpUFt2DLhiqGA3mg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.10; Fri, 7 Jan
+ 2022 13:59:09 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4867.010; Fri, 7 Jan 2022
+ 13:59:09 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+CC:     "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/i915: Discard large BIOS framebuffers causing display
+ corruption.
+Thread-Topic: [PATCH] drm/i915: Discard large BIOS framebuffers causing
+ display corruption.
+Thread-Index: AQHYA869ks2A2KJEhUK+YmC3LMjOOQ==
+Date:   Fri, 7 Jan 2022 13:59:09 +0000
+Message-ID: <46AB6A6B-5DF3-4CD2-8CF6-0AD57634ADB7@live.com>
+References: <7F167771-2D0A-40AD-8162-645E7EE2B9A0@outlook.com>
+ <87sftzlnkp.fsf@intel.com>
+In-Reply-To: <87sftzlnkp.fsf@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [gFelZWzTzeFUAYIvIajvz6CyTuEC0a3Fl8NDIBU6g9bsE+vvqqNbWSQqeDxDivuO]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 27f3b5c4-fb82-4a96-47da-08d9d1e5e081
+x-ms-traffictypediagnostic: PNZPR01MB4415:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nkDlpdNXQd9jFB8LR1Aks/aidO/E1LU7R3SuLGunB3ik890jciuNgG26Sb0vBy/LLlWgC7FgP5WvvYvnf87AdDnNE+P7wF2/L6iHmDppM1Hx2whuasUmeYSUFgRWVfcgLwZZgzBZgMy9BK3Frr9W7onF4K42Bmxnmym0c1pW0Z6WaoitYgowS6hXy1Hiz/LPPoY4dTWofkXX3fMRachtm+fWNRYDP+cQntlw/hkULoc2PTf6JtA/cVubb/5Yj3wJqpuAlzdf6fDsgsF+oxTMQ5chOawzH7Q9wmUpm2iJozbWxCsv13tFGpsdUzPPV739Ic/bhOwMS+Qb5GdH9/BiTqrTO9y2/bNSNCrZuO07A571QDUOABaCIR9CTAP0Wbpd9wDWtj+1b2p+11dQCe5gx5lJwt2dBl69cO5R84qp2C9Y4J8S2M8A5VLdAOglvfhRscegNefvCgOCR/B7MKNoHOg0GHXAddPhxRUSPg2g0eSfo88qj8vBM1BWFPnWUYQX4F8P9aWg4L1xO4cdX5oAkSbspWXGAFDdVKAIA8ZhjNduDB/PdT6qPWuyfZBpR7aHOulvgkr3UN9qy0IfQnKJOg==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UVZwdEU1b1g5THhvMzMzQXJCeEJ4TytCZTdkYTZOU2VzSlNGTFRxejlwK1ox?=
+ =?utf-8?B?cmU2NTVkZjh0NXp1eTVCQ0NnWlRVcW9IODkwNWxQaHdqdXFPOUlFVHZ3N1hn?=
+ =?utf-8?B?cTVuaEZyQ0JiSVNpb0xheUxsRkd0SENWS1NtZ084blhYQUlISWM3a04rNGl4?=
+ =?utf-8?B?QVF5bFRHdUU2bktrSE1CRWY0ZndqMWovd3ZuaVRtV2dqR0JKQWNpcklLcXk1?=
+ =?utf-8?B?cjBndy9DcEZWTnBmWVp5VkhLbytjV05Ra1NZMlF4NVNiMUovcHk4L0FFVzky?=
+ =?utf-8?B?TGljQzU1MGtvYnNqRXY4WGgwcWU0UUw5cHd0VkMydTlSdGdaN0p4anNBS2FS?=
+ =?utf-8?B?VTNGQks4UFNOcE84eHFQOHRaaGxSajdGZlNBZzhURnFkSmg0M1VOUi95NDdI?=
+ =?utf-8?B?cWpaa3I3TTJnTk5IQ0Ivc2xtTytmQmxhbFI1emZoNWI3aFp4b0x5WUFWb0xk?=
+ =?utf-8?B?d2VLSlhsdzJwbWNWVWxZdDB5SDI3aFdtaWlqNTdJTW11Mkw0QUpobFdERllM?=
+ =?utf-8?B?NGdjTlRLOUh1NHdpc2JXM0o2MU1vZC9vbklGQWs3VjNMWUpoc0kwS3RhZCtK?=
+ =?utf-8?B?dktCV0JYWnZsQUpsaHFIV2dibTFKQ25ScjlhZXhFdXcxQm9UZVgrOGFKSjlB?=
+ =?utf-8?B?ZlVTWGdiaEZmejNYbTBRRFJ6YkVSbDRJekovUnNWUW10MWJoWmdIMmhNMzNP?=
+ =?utf-8?B?R0hvTHljL3NncHY4eGdyd0IwSmlNWGZ1RDJsQSszdDZWaUgyL0hQTEpOZEsy?=
+ =?utf-8?B?dVhGZ0VGMzkwUnB4WjRFWjg3OEhEK1FjUGJsUmxaeTQzZ2E5WC9mVENoaXRJ?=
+ =?utf-8?B?N0NjcGxVZ2UyMkVkSTNkTENVcDFpR0diWjJyNGhXQUhYbGxVZnNWNGVjWE8x?=
+ =?utf-8?B?Vk9GTUtBYUtvZFFIVXBJeHJ2b2JJTk9Na21lZUJRazlOT3ZGd1JMbC8vdEk1?=
+ =?utf-8?B?bXZmaTlFdW5pZFVzN2Z5Q3VCZ0dNclIyR1BRTGtOZzFEeS9nNHVmeVV1R3RT?=
+ =?utf-8?B?c09tVlVWbXFueEtxQWY4NXllREtmemN3VEgrUitPZDZEOTlJUzc1WUJEMGp4?=
+ =?utf-8?B?b0ZyUjdPU3hLRmU2TlhMZFZITGlZOE9kUm9GTXA4akdrR0pUT2RrTlpiVnRw?=
+ =?utf-8?B?M29abGZoaVB4VmxxZktJMlZ5M2tqZ2xxWkJseCt2QUk5ekRhSHQ0QlVONzNa?=
+ =?utf-8?B?TWdPQjdYRjRpR05SMGV1Vk1FRWVqeVl1dllVRGVWRHBGRXlxQmFwUlF3NTVF?=
+ =?utf-8?B?L09OdXB1MnB5ZGNOUXpzMlhETHZjU3VRNGlQeUkwcTYyWGFtdGdFYU1qcmo5?=
+ =?utf-8?B?aDlpUmtZd0lnQTBDZndXWVBkL1FpWXVLVFFVYW90ajR5ZGZzQjN4Y2V5aUR4?=
+ =?utf-8?B?QVJ2YVZ4NW9vaGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3E47E5EFCE29954A846DD3E7E0C33E99@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <00000000000004591305d4bebf11@google.com> <20220105155036.1ee64ea3a4322085b6fbb431@linux-foundation.org>
-In-Reply-To: <20220105155036.1ee64ea3a4322085b6fbb431@linux-foundation.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 7 Jan 2022 14:54:20 +0100
-Message-ID: <CACT4Y+Z1RGApGaxnPEFPees5RUNfYzy0VgaRxddGCJbEpTm1Dw@mail.gmail.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in mpol_rebind_task (2)
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>,
-        glider@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27f3b5c4-fb82-4a96-47da-08d9d1e5e081
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jan 2022 13:59:09.3253
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4415
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 at 00:50, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 04 Jan 2022 02:03:17 -0800 syzbot <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com> wrote:
->
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-> > git tree:       https://github.com/google/kmsan.git master
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=112b8f7db00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=217f792c92599518a2ab
-> > compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13366ea5b00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14526cb3b00000
->
-> Thanks.  I don't get it.
->
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com
-> >
-> > =====================================================
-> > BUG: KMSAN: uninit-value in mpol_rebind_policy mm/mempolicy.c:352 [inline]
-> > BUG: KMSAN: uninit-value in mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
-> >  mpol_rebind_policy mm/mempolicy.c:352 [inline]
->
-> Appears to be
->
->         if (!mpol_store_user_nodemask(pol) &&
->
-> But if so, why didn't it also report
->
->         mpol_store_user_nodemask mm/mempolicy.c:184 [inline]
->
-> which is where the
->
->         return pol->flags & MPOL_MODE_FLAGS;
->
-> actually happened?
-
-Hi Andrew,
-
-KMSAN doesn't just flag loads of non-stored to variables. It tracks
-propagation of uninit values of memory and registers and flags only
-"uses" of uninit values. Where uses are roughly when uninits affect
-control flow, are part of dereferenced pointers or sink to user-space.
-The problem is that real code tends to load, stores and even do
-computations on uninit values (or partially uninit values) a lot.
-Think of bitfields, alignment paddings, or just tricky structured
-code.
-
-That's why:
-return pol->flags & MPOL_MODE_FLAGS;
-is not yet flagged, it just marks the result as uninit.
-
-
-
-> >  mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
-> >  cpuset_change_task_nodemask kernel/cgroup/cpuset.c:1711 [inline]
-> >  cpuset_attach+0x787/0x15e0 kernel/cgroup/cpuset.c:2278
-> >  cgroup_migrate_execute+0x1023/0x1d20 kernel/cgroup/cgroup.c:2515
-> >  cgroup_migrate kernel/cgroup/cgroup.c:2771 [inline]
-> >  cgroup_attach_task+0x540/0x8b0 kernel/cgroup/cgroup.c:2804
-> >  __cgroup1_procs_write+0x5cc/0x7a0 kernel/cgroup/cgroup-v1.c:520
-> >  cgroup1_tasks_write+0x94/0xb0 kernel/cgroup/cgroup-v1.c:539
-> >  cgroup_file_write+0x4c2/0x9e0 kernel/cgroup/cgroup.c:3852
-> >  kernfs_fop_write_iter+0x66a/0x9f0 fs/kernfs/file.c:296
-> >  call_write_iter include/linux/fs.h:2162 [inline]
-> >  new_sync_write fs/read_write.c:503 [inline]
-> >  vfs_write+0x1318/0x2030 fs/read_write.c:590
-> >  ksys_write+0x28b/0x510 fs/read_write.c:643
-> >  __do_sys_write fs/read_write.c:655 [inline]
-> >  __se_sys_write fs/read_write.c:652 [inline]
-> >  __x64_sys_write+0xdb/0x120 fs/read_write.c:652
-> >  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
-> >  do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > Uninit was created at:
-> >  slab_post_alloc_hook mm/slab.h:524 [inline]
-> >  slab_alloc_node mm/slub.c:3251 [inline]
-> >  slab_alloc mm/slub.c:3259 [inline]
-> >  kmem_cache_alloc+0x902/0x11c0 mm/slub.c:3264
-> >  mpol_new mm/mempolicy.c:293 [inline]
->
-> But mpol_new() does
->
->         policy->flags = flags;
-
-I suspect the tool points at nodes field (but line 352 rather than 353
-because the && that produces the final uninit value used for control
-flow in on 352).
-
-Is it possible that flags contain MPOL_MODE_FLAGS, but mode is
-MPOL_LOCAL so that nodes are not set or something along these lines?
-
-
-> >  do_set_mempolicy+0x421/0xb70 mm/mempolicy.c:853
-> >  kernel_set_mempolicy mm/mempolicy.c:1504 [inline]
-> >  __do_sys_set_mempolicy mm/mempolicy.c:1510 [inline]
-> >  __se_sys_set_mempolicy+0x44c/0xb60 mm/mempolicy.c:1507
-> >  __x64_sys_set_mempolicy+0xd8/0x110 mm/mempolicy.c:1507
-> >  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
-> >  do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > CPU: 1 PID: 3479 Comm: syz-executor124 Not tainted 5.16.0-rc5-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > =====================================================
+DQoNCj4gT24gMDctSmFuLTIwMjIsIGF0IDY6MTcgUE0sIEphbmkgTmlrdWxhIDxqYW5pLm5pa3Vs
+YUBsaW51eC5pbnRlbC5jb20+IHdyb3RlOg0KPiANCj4gT24gRnJpLCAwNyBKYW4gMjAyMiwgQXNo
+aXNoIEFyb3JhIDxhc2hpc2hhcm9yYS5saW51eEBvdXRsb29rLmNvbT4gd3JvdGU6DQo+PiBGcm9t
+OiBBc2hpc2ggQXJvcmEgPGFzaGlzaGFyb3JhLmxpbnV4QG91dGxvb2suY29tPg0KPj4gDQo+PiBP
+biBjZXJ0YWluIDRrIHBhbmVscywgdGhlIEJJT1MgZnJhbWVidWZmZXIgaXMgbGFyZ2VyIHRoYW4g
+d2hhdCBwYW5lbA0KPj4gcmVxdWlyZXMgY2F1c2luZyBkaXNwbGF5IGNvcnJ1cHRpb24uIEludHJv
+ZHVjZSBhIGNoZWNrIGZvciB0aGUgc2FtZS4NCj4gDQo+IFRoaXMgaXMgcXVpdGUgdGhpbiBvbiBk
+ZXRhaWxzLiBJcyB0aGVyZSBhIGJ1ZyByZXBvcnQ/DQpObyBidWcgcmVwb3J0LCBidXQgYW4gaXNz
+dWUgSSBhbSBmYWNpbmcgbXlzZWxmLiBUaGlzIHBhdGNoIHNlZW1zIHRvIGZpeCBpdC4NCj4gDQo+
+IE1vcmVvdmVyLCBpZiB0aGlzIGlzIHdoYXQgd2Ugd2FudCwgdGhpcyBzaG91bGQgYmUgY29tYmlu
+ZWQgd2l0aCB0aGUNCj4gY29uZGl0aW9ucyB0aGF0IGZvbGxvdyByZXN1bHRpbmcgaW4gYSAiIT0i
+IGNoZWNrIGluc3RlYWQgb2Ygc2VwYXJhdGUgIjwiDQo+IGFuZCAiPuKAnS4NClNlbmRpbmcgYSB2
+ZXJzaW9uIDINCj4gDQo+IEJSLA0KPiBKYW5pLg0KPiANCj4gDQo+IA0KPj4gDQo+PiBTaWduZWQt
+b2ZmLWJ5OiBBc2hpc2ggQXJvcmEgPGFzaGlzaGFyb3JhLmxpbnV4QG91dGxvb2suY29tPg0KPj4g
+LS0tDQo+PiBkcml2ZXJzL2dwdS9kcm0vaTkxNS9kaXNwbGF5L2ludGVsX2ZiZGV2LmMgfCAxMSAr
+KysrKysrKysrKw0KPj4gMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKykNCj4+IA0KPj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9pOTE1L2Rpc3BsYXkvaW50ZWxfZmJkZXYuYyBi
+L2RyaXZlcnMvZ3B1L2RybS9pOTE1L2Rpc3BsYXkvaW50ZWxfZmJkZXYuYw0KPj4gaW5kZXggYWRj
+M2E4MWJlLi5mOTk1MmUxZjggMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vaTkxNS9k
+aXNwbGF5L2ludGVsX2ZiZGV2LmMNCj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9pOTE1L2Rpc3Bs
+YXkvaW50ZWxfZmJkZXYuYw0KPj4gQEAgLTE5Myw2ICsxOTMsMTcgQEAgc3RhdGljIGludCBpbnRl
+bGZiX2NyZWF0ZShzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqaGVscGVyLA0KPj4gCXN0cnVjdCBkcm1f
+aTkxNV9nZW1fb2JqZWN0ICpvYmo7DQo+PiAJaW50IHJldDsNCj4+IA0KPj4gKwlpZiAoaW50ZWxf
+ZmIgJiYNCj4+ICsJICAgIChzaXplcy0+ZmJfd2lkdGggPCBpbnRlbF9mYi0+YmFzZS53aWR0aCB8
+fA0KPj4gKwkgICAgIHNpemVzLT5mYl9oZWlnaHQgPCBpbnRlbF9mYi0+YmFzZS5oZWlnaHQpKSB7
+DQo+PiArCQlkcm1fZGJnX2ttcygmZGV2X3ByaXYtPmRybSwNCj4+ICsJCQkgICAgIkJJT1MgZmIg
+dG9vIGxhcmdlICglZHglZCksIHdlIHJlcXVpcmUgKCVkeCVkKSwiDQo+PiArCQkJICAgICIgcmVs
+ZWFzaW5nIGl0XG4iLA0KPj4gKwkJCSAgICBpbnRlbF9mYi0+YmFzZS53aWR0aCwgaW50ZWxfZmIt
+PmJhc2UuaGVpZ2h0LA0KPj4gKwkJCSAgICBzaXplcy0+ZmJfd2lkdGgsIHNpemVzLT5mYl9oZWln
+aHQpOw0KPj4gKwkJZHJtX2ZyYW1lYnVmZmVyX3B1dCgmaW50ZWxfZmItPmJhc2UpOw0KPj4gKwkJ
+aW50ZWxfZmIgPSBpZmJkZXYtPmZiID0gTlVMTDsNCj4+ICsJfQ0KPj4gCWlmIChpbnRlbF9mYiAm
+Jg0KPj4gCSAgICAoc2l6ZXMtPmZiX3dpZHRoID4gaW50ZWxfZmItPmJhc2Uud2lkdGggfHwNCj4+
+IAkgICAgIHNpemVzLT5mYl9oZWlnaHQgPiBpbnRlbF9mYi0+YmFzZS5oZWlnaHQpKSB7DQo+IA0K
+PiAtLSANCj4gSmFuaSBOaWt1bGEsIEludGVsIE9wZW4gU291cmNlIEdyYXBoaWNzIENlbnRlcg0K
+DQo=

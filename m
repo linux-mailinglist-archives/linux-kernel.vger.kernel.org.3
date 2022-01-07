@@ -2,179 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 990CB4871B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1934871B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346048AbiAGENm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 23:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346021AbiAGENl (ORCPT
+        id S1346056AbiAGEOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 23:14:18 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:32810
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346050AbiAGEOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 23:13:41 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7EDC061245;
-        Thu,  6 Jan 2022 20:13:41 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id iy13so4157298pjb.5;
-        Thu, 06 Jan 2022 20:13:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:organization:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=7HdhZW4JHX1aq2bQ3td3W2kojz45Mlhv/2YfJEHlrjY=;
-        b=RrnoHvikMiCIKePOSsW14Yh2tzPZ7DGnDv3Pmo+jJd6Zj4To8Z0lDfWz+9L6NhfD+H
-         SycnLgBmIgFVeHUyhY/qgPq6UC6OmN9usLXj0A26s5XPr5o7ycBZGqTHDGml3wCQrkl7
-         aHLkxokDVmctmwC5oqxtNlYpAkfJw2q+NwL5CcS9ZQgInzulWVT64MSnzo/TvTlQMecd
-         P2sEfAP9IOUJDTX7/C9uP8MS3xRBwxl1X39RlUj4oKLRvGYh1Ec0tk4j+aM6hi+tAuno
-         TsGH6Ungh3YFKsRkUqF3NTT7b4mlc0CuN9lf26MpONNjb40XIXYhZWRKJgSTQTfZ4sM6
-         GR6A==
+        Thu, 6 Jan 2022 23:14:17 -0500
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 573E3402E0
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 04:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641528856;
+        bh=KN7zr37vFNHmq3As7p02jWEskyOVas7n+GBnbQV3xBM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=awUOQMhmILl0gi0nl++vBSWNn7L/FF/zmmZbWfFtelGWUlvVXnL34GPvMPvyoyXW1
+         zBe5eT5hjxK8AQPqfg1T4wKsOBZxc2CSYFWW971qZtwsJKxeLcS6IfC/tivhDP+AVK
+         aqW0bpNJGd9TBdLu+oZscNUFrtzGBZicJvBE7k0BQN6ZMEU6+1ie7h6JamqyZ8rMSL
+         rCf7ZCELtNnOnA3NvhdIG+U7i59/tKX7O+5Wma4KvSVHreDYJfUeo/y1d4SdZoM66l
+         DItdHK2mJHJFpJL+girBQgK69/9Ixm7zJ+P8M7UuTX9rol5G4OGwHKYLNMF7DMejH7
+         K31ZiKpYRM+bQ==
+Received: by mail-oo1-f72.google.com with SMTP id r2-20020a4a3702000000b002daa363a4faso2785996oor.17
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 20:14:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=7HdhZW4JHX1aq2bQ3td3W2kojz45Mlhv/2YfJEHlrjY=;
-        b=ML2q1NtDPUZPyPspR3e+PQz7/CRPuK6t6ls4tMPTtwbudoqaH3k7rdFDAl9dAi9QhC
-         BgMjc7mG/d9edW0iSqFp1DhUmyyIQ9qlWf1G3CFV/X3fciubhSkJyvHZSJMqDVG/EJZ0
-         zmV5VQdhk5h69EtpLk5ou+YY4dGUyJXlGbNzM36GLah2EwdnYC6hE4xRgLnIS1QOXnCS
-         NtDZvkMqvpdilF+F2TlJht3gomeHVMIel+bc1fmGEjC2Gyx7YYsxQyMfBqyzHghHCWSa
-         THpfMoTuxk09a58JCSfWSv87S/NrU7h/5CxgtCDzM82Gz4zaMfzndi7/5VNv9fRpmE+j
-         DetA==
-X-Gm-Message-State: AOAM533om/sbWq1Y9dSj6RbtYn5K2vexTtRslPwK/AmKx+eV1797qsr9
-        68zbbRy+6fr8J6vGTvnxCPX/hrQ8fFRQL0/GjEo=
-X-Google-Smtp-Source: ABdhPJxUAWSOqK1ver/X0LzPVIcjSWAjsbTEvhmIIVdJ5kXb5RydEvGY+XsWMXkv4wGKDy3Jy32S1A==
-X-Received: by 2002:a17:902:a60e:b0:14a:766:a8a0 with SMTP id u14-20020a170902a60e00b0014a0766a8a0mr1011609plq.60.1641528821082;
-        Thu, 06 Jan 2022 20:13:41 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u35sm4060357pfg.157.2022.01.06.20.13.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 20:13:40 -0800 (PST)
-Message-ID: <14821790-f8e5-0de0-183d-20c6feaed274@gmail.com>
-Date:   Fri, 7 Jan 2022 12:13:29 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KN7zr37vFNHmq3As7p02jWEskyOVas7n+GBnbQV3xBM=;
+        b=mQDPAWh1M3zR5+KZErNcDujGJW2KSy4vKIWVV5tHPv4WO9/7OAW4OK46il1f2hYOVi
+         bZMKkmGTYRrRwI9A2d0l+D6ZysFYi5QhPjaUK54sWVajA/u6wOnumAf/5+5GVgas2fH6
+         v/TqjNcZxuDBf+OdLRjCSQav9q7JpeJ6jfDDCopKBtbryiOYw/WWqE+lr5rBGdSHe/MK
+         WBRhX7cX+mKMNlbCSAzgwKKFSo9GO4dBwrt5o3B8yQ2MGvAwsolcbMc3T/FCbrdclvnL
+         qu+X9zMKltnONKt4LtG1bZmyrBDLhmlzK+vf2mhohtr0p8a1aZ/wPwiwbo4M2rlgbhBV
+         tUyQ==
+X-Gm-Message-State: AOAM533uasCqkQ1TCkoCHKk5LrHZoBlfuf165GYWYkWBj+ybuRJUkfmr
+        q8d1kON1KeUg6DiAo9inZRMSfaRD4hCSkd0KFgffwiny0s26WQIYP3Nk6n81R7a5BZiEpSuTr7v
+        Y8oD2CKPkPFrlMPeG8tCBYy0E8mtMxBYZ9fhozZR3+3eTc741hHB6OjFqqw==
+X-Received: by 2002:a9d:6e8d:: with SMTP id a13mr3325111otr.269.1641528854878;
+        Thu, 06 Jan 2022 20:14:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwXyFaB7Xi1kpQZoP4YuMgov2PjKuP7iY/5uQwXAbieQMuxBCtvmJXJocnDAGSO2UZ5hq8oOuPWkcbUdahDf4o=
+X-Received: by 2002:a9d:6e8d:: with SMTP id a13mr3325099otr.269.1641528854653;
+ Thu, 06 Jan 2022 20:14:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220106032118.34459-1-likexu@tencent.com>
- <YdcwXIANeB3fOWOI@google.com>
- <CALMp9eSv7ZQmVsb49iPbw0gkJhYgKPGsFuw6UtEeNZ3FsBwRwA@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-Subject: Re: [DROP PATCH v2] KVM: x86/pmu: Make top-down.slots event
- unavailable in supported leaf
-In-Reply-To: <CALMp9eSv7ZQmVsb49iPbw0gkJhYgKPGsFuw6UtEeNZ3FsBwRwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220106041257.927664-1-kai.heng.feng@canonical.com> <CAHp75VdxV+4_yxJv1H1MZPpu02e2gHUkP55dduUqN7QJ2j6aGg@mail.gmail.com>
+In-Reply-To: <CAHp75VdxV+4_yxJv1H1MZPpu02e2gHUkP55dduUqN7QJ2j6aGg@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 7 Jan 2022 12:14:03 +0800
+Message-ID: <CAAd53p4nUDtuVmkFCqv2R1KEvGYQyLu+ibxJOsoUZs-SM6LuHw@mail.gmail.com>
+Subject: Re: [PATCH v2] iio: humidity: hdc100x: Add ACPI HID table
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/2022 4:12 am, Jim Mattson wrote:
-> On Thu, Jan 6, 2022 at 10:09 AM Sean Christopherson <seanjc@google.com> wrote:
->>
->> On Thu, Jan 06, 2022, Like Xu wrote:
->>> From: Like Xu <likexu@tencent.com>
->>>
->>> When we choose to disable the fourth fixed counter TOPDOWN.SLOTS,
->>> we also need to comply with the specification and set 0AH.EBX.[bit 7]
->>> to 1 if the guest (e.g. on the ICX) has a value of 0AH.EAX[31:24] > 7.
->>>
->>> Fixes: 2e8cd7a3b8287 ("kvm: x86: limit the maximum number of vPMU fixed counters to 3")
->>> Signed-off-by: Like Xu <likexu@tencent.com>
->>> ---
->>> v1 -> v2 Changelog:
->>> - Make it simpler to keep forward compatibility; (Sean)
->>> - Wrap related comment at ~80 chars; (Sean)
->>>
->>> Previous:
->>> https://lore.kernel.org/kvm/20220105050711.67280-1-likexu@tencent.com/
->>>
->>>   arch/x86/kvm/cpuid.c | 12 ++++++++++++
->>>   1 file changed, 12 insertions(+)
->>>
->>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->>> index 0b920e12bb6d..4fe17a537084 100644
->>> --- a/arch/x86/kvm/cpuid.c
->>> +++ b/arch/x86/kvm/cpuid.c
->>> @@ -782,6 +782,18 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>>                eax.split.mask_length = cap.events_mask_len;
->>>
->>>                edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
->>> +
->>> +             /*
->>> +              * The 8th Intel architectural event (Topdown Slots) will be supported
->>
->> Nit, the "8th" part is unnecessary information.
->>
->>> +              * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
->>> +              *
->>> +              * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
->>> +              * to make this event unavailable in a consistent way.
->>> +              */
->>
->> This comment is now slightly stale.  It also doesn't say why the event is made
->> unavailable.
->>
->>> +             if (edx.split.num_counters_fixed < 4 &&
->>
->> Rereading the changelog and the changelog of the Fixed commit, I don't think KVM
->> should bother checking num_counters_fixed.  IIUC, cap.events_mask[7] should already
->> be '1' if there are less than 4 fixed counters in hardware, but at the same time
->> there's no harm in being a bit overzealous.  That would help simplifiy the comment
->> as there's no need to explain why num_counters_fixed is checked, e.g. the fact that
->> Topdown Slots uses the 4th fixed counter is irrelevant with respect to the legality
->> of setting EBX[7]=1 to hide an unsupported event.
-> 
-> I was under the impression that the CPUID.0AH:EBX bits were
-> independent of the fixed counters. That is, if CPUID.0AH:EAX[31:24] >
-> 7 and CPUID.0AH:EBX[7] is clear, then one should be able to program a
-> general purpose counter with event selector A4H and umask 01H,
-> regardless of whether or not fixed counter 4 exists.
+On Thu, Jan 6, 2022 at 10:33 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Jan 6, 2022 at 6:13 AM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> >
+> > x86 boards may use ACPI HID "TXN1010" to for hdc100x device.
+>
+> to for --> for the
 
-The impression stepped on my toes. This patch is pointless and magnifies my 
-clumsiness.
+Will correct it.
 
-Now the self-contradiction comes to the CLX and older platforms,
+>
+> > So add an ACPI match table for that accordingly.
+>
+> ...
+>
+> >  - Change the ID to follow ACPI Spec
+>
+> Is there any evidence Texas Instrument allocated this ID, or you just
+> created it yourself?
+> Please, add an excerpt from email from them to confirm this.
 
-	0xA. EAX. Bits 31 - 24: Length of EBX bit vector to enumerate architectural
-	performance monitoring events. Architectural event x is supported
-	if EBX[x]=0 && EAX[31:24]>x.
+Sure, let me ask our customer to provide the excerpt.
 
-however actually for CLX, its CPUID.0xA.EBX[7] = 0 && EAX[31:24] = 0x7 and
-we can do exactly the following on a CLX without fixed ctr3
+>
+> ...
+>
+> > +static const struct acpi_device_id __maybe_unused hdc100x_acpi_match[] = {
+> > +       { "TXN1010" },
+>
+> > +       { },
+>
+> No comma is needed.
 
-	$ perf stat -e cpu/event=0xa4,umask=0x01/ ls
-  	Performance counter stats for 'ls':
-          	2,448,185      cpu/event=0xa4,umask=0x01/
+Got it.
 
-So in the context of Intel, we have a performance event that can share the
-architectural encoding, but it is not an architectural-defined event.
+>
+> > +};
+>
+> > +
+>
+> No blank line is needed.
 
-This is strange, did I miss something somewhere ?
+Will update.
 
-> 
->>
->>                  /*
->>                   * Hide Intel's Topdown Slots architectural event, it's not yet
->>                   * supported by KVM.
->>                   */
->>                  if (eax.split.mask_length > 7)
->>                          cap.events_mask |= BIT_ULL(7);
->>
->>> +                 eax.split.mask_length > 7)
->>> +                     cap.events_mask |= BIT_ULL(7);
->>> +
->>>                edx.split.bit_width_fixed = cap.bit_width_fixed;
->>>                if (cap.version)
->>>                        edx.split.anythread_deprecated = 1;
->>> --
->>> 2.33.1
->>>
+>
+> > +MODULE_DEVICE_TABLE(acpi, hdc100x_acpi_match);
+>
+> ...
+>
+> > +               .acpi_match_table = ACPI_PTR(hdc100x_acpi_match),
+>
+> It's the wrong usage of ACPI_PTR().
+
+Can you please explain a bit more?
+
+ACPI_PTR() turns the value to NULL when ACPI is not enabled, seems to
+be correct?
+Not to mention most other drivers also use ACPI_PTR() for acpi_match_table.
+
+>
+> >         },
+>
+> All the comments are applicable to all your patches. Some of them I
+> already commented on and even kbuild bot has sent you a complaint.
+
+That one should be solved by adding __maybe_unused to acpi_device_id array.
+
+Kai-Heng
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko

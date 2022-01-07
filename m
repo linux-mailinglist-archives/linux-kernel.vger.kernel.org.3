@@ -2,143 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B9148735F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC27748736B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234751AbiAGHMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 02:12:34 -0500
-Received: from marcansoft.com ([212.63.210.85]:46420 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234476AbiAGHMc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 02:12:32 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S234900AbiAGHQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 02:16:16 -0500
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:44954 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234869AbiAGHQK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 02:16:10 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4JVZJQ0lDQz9vBqf
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:16:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id enzsbKK0Fnge for <linux-kernel@vger.kernel.org>;
+        Fri,  7 Jan 2022 01:16:05 -0600 (CST)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 467BE41EE3;
-        Fri,  7 Jan 2022 07:12:20 +0000 (UTC)
-Message-ID: <24cccdf8-97d3-06c8-e8c8-55e2893c2ba7@marcan.st>
-Date:   Fri, 7 Jan 2022 16:12:18 +0900
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4JVZJP5hm0z9vBqS
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:16:05 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4JVZJP5hm0z9vBqS
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4JVZJP5hm0z9vBqS
+Received: by mail-pj1-f70.google.com with SMTP id u13-20020a17090a450d00b001b1e6726fccso6903849pjg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 23:16:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ELnOV+pqN3Q849i1gjcMqbhQoOoZ3JshEPwLhOy8cck=;
+        b=mJxhOVfjZBehnoX6XE2Z/Tk9hdqEvKerQgy0/Y7QTIC1vfVSCTLGGLlMFPU10PzKWx
+         Z348s5Qt9exYQtMcHlHNMCkwCUuefjMCGs/RokePMcefE+Gmr7VlKPH1Gl/ppg3P/ZWh
+         Ys2I1e8qDg4m2XomsTw1cReGKqTM344DLmHpywnVtyL/jJqb0O6nZHYgcbd8UvFcjooN
+         lxBNl8NWRAQBQ9yW1+mA5wD7mlyp6Twg+3qjO2HBy7fSIx1lJaOwDpeeu5RKFJqfj3Tu
+         JRG1XTTg9Poo7y+gd0EvxSBNNzaOcGgMzoRHWtS+j6BoKV0oe9o8NF5QxD4wHr3QOqHc
+         Upbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ELnOV+pqN3Q849i1gjcMqbhQoOoZ3JshEPwLhOy8cck=;
+        b=d/+3pvh0oqEiTBrvSAbJ+kBpMIsb1IKZRElykAKWeJ7t6/LBSGdQnOr81G/05k64Mp
+         jD7WPQcV0iqfy77iejsSmMCXa4qp5W8ISseQMCYK+/Glor9u/pSkl827zxg9x7AvaSB1
+         hHQMn8wncl2qNZHWPAfyMbXZRRZdI/YNEySXx5Va7O+gsuYxzCdOGdbbf1hRhbsprTnR
+         vA21jQF7137DMKyNw+4q8C+YRrLiIsIuiV3b7oE3/WedbRraDVOfSOViaL+Cuz7HmQLJ
+         s0ks9EXFUVmjgrI963jU8Hv1HwXVXUQxrIl6emZpMctRh25ci+qKBAi0Cdon6RZctBeV
+         IpSg==
+X-Gm-Message-State: AOAM533bOIcKRbMqsB/HOpQ+zOueVOp7agWiKxgdZiPg7fa22ztzhHrD
+        0SDRiw1+fqBZ2BQIk2iHJayNh7k1OqjbN3wnaFF7qPA3LZliFnl5+6XH9NmZBVCNh1ajv4Ev0nK
+        vyUNPOdN/3z6zwOH0+xUEEHvDgDAD
+X-Received: by 2002:a17:902:9a8b:b0:149:be04:40ab with SMTP id w11-20020a1709029a8b00b00149be0440abmr20920531plp.159.1641539765008;
+        Thu, 06 Jan 2022 23:16:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz7gMdE/ph8tXBMDEFca35lW/JrFzxfmNdJW8h7RtU3TZ5eZ+Z2+2GbsLNhys+UQCEcL/AZ5w==
+X-Received: by 2002:a17:902:9a8b:b0:149:be04:40ab with SMTP id w11-20020a1709029a8b00b00149be0440abmr20920524plp.159.1641539764788;
+        Thu, 06 Jan 2022 23:16:04 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.60.247])
+        by smtp.gmail.com with ESMTPSA id t25sm3569658pgv.9.2022.01.06.23.16.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 23:16:04 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Akshu Agrawal <akshu.agrawal@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] clk: x86: Fix a wild pointer dereference in fch_clk_probe()
+Date:   Fri,  7 Jan 2022 15:15:58 +0800
+Message-Id: <20220107071559.65843-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220107015744.22C22C36AE3@smtp.kernel.org>
+References: <20220107015744.22C22C36AE3@smtp.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 06/35] brcmfmac: firmware: Support passing in multiple
- board_types
-Content-Language: en-US
-To:     Arend Van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-7-marcan@marcan.st>
- <911f7e95-7d6a-1c7f-c8de-0d4e0c7b7238@broadcom.com>
- <25eaec8a-337e-78b7-1bc3-7224a0218501@marcan.st>
- <17e332f6860.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <17e332f6860.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/07 15:17, Arend Van Spriel wrote:
-> On January 7, 2022 5:02:13 AM Hector Martin <marcan@marcan.st> wrote:
-> 
->> On 2022/01/06 21:16, Arend van Spriel wrote:
->>> On 1/4/2022 8:26 AM, Hector Martin wrote:
->>>> In order to make use of the multiple alt_path functionality, change
->>>> board_type to an array. Bus drivers can pass in a NULL-terminated list
->>>> of board type strings to try for the firmware fetch.
->>>
->>> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
->>>> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->>>> Signed-off-by: Hector Martin <marcan@marcan.st>
->>>> ---
->>>> .../broadcom/brcm80211/brcmfmac/firmware.c    | 35 ++++++++++++-------
->>>> .../broadcom/brcm80211/brcmfmac/firmware.h    |  2 +-
->>>> .../broadcom/brcm80211/brcmfmac/pcie.c        |  4 ++-
->>>> .../broadcom/brcm80211/brcmfmac/sdio.c        |  2 +-
->>>> 4 files changed, 27 insertions(+), 16 deletions(-)
->>>>
->>>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c 
->>>> b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
->>>> index 7570dbf22cdd..054ea3ed133e 100644
->>>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
->>>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
->>>> @@ -594,28 +594,39 @@ static int brcmf_fw_complete_request(const struct 
->>>> firmware *fw,
->>>> return (cur->flags & BRCMF_FW_REQF_OPTIONAL) ? 0 : ret;
->>>> }
->>>>
->>>> -static int brcm_alt_fw_paths(const char *path, const char *board_type,
->>>> +static int brcm_alt_fw_paths(const char *path, struct brcmf_fw *fwctx,
->>>>   const char *alt_paths[BRCMF_FW_MAX_ALT_PATHS])
->>>> {
->>>> + const char **board_types = fwctx->req->board_types;
->>>> + unsigned int i;
->>>> char alt_path[BRCMF_FW_NAME_LEN];
->>>> const char *suffix;
->>>
->>> [...]
->>>
->>>> + for (i = 0; i < BRCMF_FW_MAX_ALT_PATHS; i++) {
->>>> + if (!board_types[i])
->>>> +    break;
->>>>
->>>> - strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
->>>> - strlcat(alt_path, board_type, BRCMF_FW_NAME_LEN);
->>>> - strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
->>>> + /* strip extension at the end */
->>>> + strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
->>>> + alt_path[suffix - path] = 0;
->>>>
->>>> - alt_paths[0] = kstrdup(alt_path, GFP_KERNEL);
->>>> + strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
->>>> + strlcat(alt_path, board_types[i], BRCMF_FW_NAME_LEN);
->>>> + strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
->>>> +
->>>> + alt_paths[i] = kstrdup(alt_path, GFP_KERNEL);
->>>> + brcmf_dbg(TRACE, "FW alt path: %s\n", alt_paths[i]);
->>>
->>> Could use alt_path in the debug print thus avoiding additional array
->>> access (working hard to find those nits to pick ;-) ).
->>
->> So you're saying my code is so good you have to resort to nits on this
->> level to make it clear you read it, right? ;-)
-> 
-> Don't read too much into this :-p Actually never liked the alt_path 
-> approach, but didn't come up with a better solution.
+In fch_clk_probe(), the return value of clk_hw_register_mux() is
+assigned to hws[ST_CLK_MUX] and there is a dereference of it in
+fch_clk_probe(), which could lead to a wild pointer dereference on
+failure of clk_hw_register_mux().
 
-Yeah, it's not the prettiest approach. I redid this part of the patchset
-for v3 though, as I mentioned to Dmitry. Now I just iterate over
-board_types, which ends up being a lot cleaner as far as the changes
-required.
+Fix this bug by adding a check of hws[ST_CLK_MUX].
 
+This bug was found by a static analyzer.
+
+Builds with CONFIG_X86_AMD_PLATFORM_DEVICE=y show no new warnings, and
+our static analyzer no longer warns about this code.
+
+Fixes: 19fe87fd854a ("clk: x86: Support RV architecture")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+--- 
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths
+and confirms that the inconsistent operations are not recovered in 
+the current function or the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Changes in v2:
+  -  Add error check to every register function calls.
+  -  Add error handling logic to every error path.
+  -  Turn clk_hw_register_mux to devm_clk_hw_register_mux.
+  -  Add error check of clk_set_parent().
+
+ drivers/clk/x86/clk-fch.c | 53 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/clk/x86/clk-fch.c b/drivers/clk/x86/clk-fch.c
+index 8f7c5142b0f0..47754761b19c 100644
+--- a/drivers/clk/x86/clk-fch.c
++++ b/drivers/clk/x86/clk-fch.c
+@@ -36,6 +36,7 @@ static struct clk_hw *hws[ST_MAX_CLKS];
+ static int fch_clk_probe(struct platform_device *pdev)
+ {
+ 	struct fch_clk_data *fch_data;
++	int ret;
+ 
+ 	fch_data = dev_get_platdata(&pdev->dev);
+ 	if (!fch_data || !fch_data->base)
+@@ -44,35 +45,79 @@ static int fch_clk_probe(struct platform_device *pdev)
+ 	if (!fch_data->is_rv) {
+ 		hws[ST_CLK_48M] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
+ 			NULL, 0, 48000000);
++		if (IS_ERR(hws[ST_CLK_48M]))
++			return PTR_ERR(hws[ST_CLK_48M]);
++
+ 		hws[ST_CLK_25M] = clk_hw_register_fixed_rate(NULL, "clk25MHz",
+ 			NULL, 0, 25000000);
++		if (IS_ERR(hws[ST_CLK_25M])) {
++			ret = PTR_ERR(hws[ST_CLK_25M]);
++			goto err_st_clk_25m;
++		}
+ 
+-		hws[ST_CLK_MUX] = clk_hw_register_mux(NULL, "oscout1_mux",
++		hws[ST_CLK_MUX] = devm_clk_hw_register_mux(NULL, "oscout1_mux",
+ 			clk_oscout1_parents, ARRAY_SIZE(clk_oscout1_parents),
+ 			0, fch_data->base + CLKDRVSTR2, OSCOUT1CLK25MHZ, 3, 0,
+ 			NULL);
++		if (IS_ERR(hws[ST_CLK_MUX])) {
++			ret = PTR_ERR(hws[ST_CLK_MUX]);
++			goto err_st_clk_mux;
++		}
+ 
+-		clk_set_parent(hws[ST_CLK_MUX]->clk, hws[ST_CLK_48M]->clk);
++		ret = clk_set_parent(hws[ST_CLK_MUX]->clk, hws[ST_CLK_48M]->clk);
++		if (ret)
++			goto err_clk_set_parent;
+ 
+ 		hws[ST_CLK_GATE] = clk_hw_register_gate(NULL, "oscout1",
+ 			"oscout1_mux", 0, fch_data->base + MISCCLKCNTL1,
+ 			OSCCLKENB, CLK_GATE_SET_TO_DISABLE, NULL);
++		if (IS_ERR(hws[ST_CLK_GATE])) {
++			ret = PTR_ERR(hws[ST_CLK_GATE]);
++			goto err_st_clk_gate;
++		}
+ 
+-		devm_clk_hw_register_clkdev(&pdev->dev, hws[ST_CLK_GATE],
++		ret = devm_clk_hw_register_clkdev(&pdev->dev, hws[ST_CLK_GATE],
+ 			"oscout1", NULL);
++		if (ret)
++			goto err_register_st_clk_gate;
+ 	} else {
+ 		hws[RV_CLK_48M] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
+ 			NULL, 0, 48000000);
++		if (IS_ERR(hws[RV_CLK_48M]))
++			return PTR_ERR(hws[RV_CLK_48M]);
+ 
+ 		hws[RV_CLK_GATE] = clk_hw_register_gate(NULL, "oscout1",
+ 			"clk48MHz", 0, fch_data->base + MISCCLKCNTL1,
+ 			OSCCLKENB, CLK_GATE_SET_TO_DISABLE, NULL);
++		if (IS_ERR(hws[RV_CLK_GATE])) {
++			ret = PTR_ERR(hws[RV_CLK_GATE]);
++			goto err_rv_clk_gate;
++		}
+ 
+-		devm_clk_hw_register_clkdev(&pdev->dev, hws[RV_CLK_GATE],
++		ret = devm_clk_hw_register_clkdev(&pdev->dev, hws[RV_CLK_GATE],
+ 			"oscout1", NULL);
++		if (ret)
++			goto err_register_rv_clk_gate;
+ 	}
+ 
+ 	return 0;
++
++err_register_st_clk_gate:
++	clk_hw_unregister_gate(hws[ST_CLK_GATE]);
++err_st_clk_gate:
++err_clk_set_parent:
++	clk_hw_unregister_mux(hws[ST_CLK_MUX]);
++err_st_clk_mux:
++	clk_hw_unregister_fixed_rate(hws[ST_CLK_25M]);
++err_st_clk_25m:
++	clk_hw_unregister_fixed_rate(hws[ST_CLK_48M]);
++	return ret;
++
++err_register_rv_clk_gate:
++	clk_hw_unregister_gate(hws[RV_CLK_GATE]);
++err_rv_clk_gate:
++	clk_hw_unregister_fixed_rate(hws[RV_CLK_48M]);
++	return ret;
+ }
+ 
+ static int fch_clk_remove(struct platform_device *pdev)
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.25.1
+

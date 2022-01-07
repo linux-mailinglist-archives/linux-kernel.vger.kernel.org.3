@@ -2,370 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCC64876CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3644876D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347243AbiAGLu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:50:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35262 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347221AbiAGLu6 (ORCPT
+        id S1347256AbiAGLwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:52:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57684 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1347204AbiAGLwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:50:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A186B825E5;
-        Fri,  7 Jan 2022 11:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2115C36AE5;
-        Fri,  7 Jan 2022 11:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641556256;
-        bh=tlSofhkr2jzdAYuwsla28s0MjyMWwGKIHX80B/VQRrM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XNWfyA+aLJEC6aM3jDiOTBffhJ0zbs0inYpMsvPonLfCnM947+z6kMNhixvYvA8t3
-         qLQxL9wWU7KuuR2m+D7Y3sZqME7ExvyezzgQ92Trad+bXjQLg55wIS5qMascwn+W51
-         tO2/fTSx2tgL9ILo4IOZmK6rEIdHTDQYpPTWSrK/OUvVCLGjVyPlUTphT5gTRGuRdN
-         zWZklTXgjpqCy1KKz5DUW6kPrhJ+SHEJnyOTMOJI98haCuBwTbSMqPzHvthsY5LDuu
-         8yZW/ykqTzcx0wmM9vbCumnpYaENQRNh8+YHAgMMCxYTSFUswl76gJU5Et4yhNUUkl
-         WKXg/8+TUyaMw==
-Received: by pali.im (Postfix)
-        id 44ABDB22; Fri,  7 Jan 2022 12:50:53 +0100 (CET)
-Date:   Fri, 7 Jan 2022 12:50:53 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/11] PCI: mvebu: Implement support for legacy INTx
- interrupts
-Message-ID: <20220107115053.k5d2uv7yrftrpcez@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220105150239.9628-11-pali@kernel.org>
- <87bl0ovq7f.wl-maz@kernel.org>
- <20220106154447.aie6taiuvav5wu6y@pali>
- <878rvsvoyo.wl-maz@kernel.org>
- <20220106162047.vqykmygs75eimfgy@pali>
- <877dbcvngf.wl-maz@kernel.org>
- <20220106182044.3ff0828c@thinkpad>
- <874k6gvkhz.wl-maz@kernel.org>
+        Fri, 7 Jan 2022 06:52:06 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 207AcbK7011446;
+        Fri, 7 Jan 2022 11:51:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zN9hBf5/b8hYf+c4edxKBImj472NvKS4LOJuAwc0DvY=;
+ b=UJ+T/jGZ6Q77u2n9YNk8oIKWyeGq2RJZ23x+ky1n4jeCMfDy5I4abNAOf608qs25vnc6
+ j4y5KU9/LV5oMKrz8sPDRMLEz+kcSAsmuxEJLWlCh/x+fSCoZ3R0b1nFq8dBsu5xveDc
+ XlFg2T0heyHpIuBvYnsw+scCeFfk4qkl5hoPqpcBh9rq/PPuM4J8zd9TozVyl2z0y8vx
+ +x6o2+fnpAzb/OZVm3ou6D9mlcIx56PVAb/JnpzqitZY0haRNX5BmXV+jyRYbr2X3qAM
+ VUxiQArd+1UAaz4Vg12oVZ+bNRJ2xypOak6WMlr6gTN1bZkRfSyM/EfvGsnbvoELgZLr rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4whr174-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 11:51:25 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 207BU69A022708;
+        Fri, 7 Jan 2022 11:51:25 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4whr16n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 11:51:24 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 207Bkmdv024963;
+        Fri, 7 Jan 2022 11:51:23 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3de4y2njcn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 11:51:23 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 207BpKPD34734338
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jan 2022 11:51:20 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5955A4051;
+        Fri,  7 Jan 2022 11:51:20 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 332E7A404D;
+        Fri,  7 Jan 2022 11:51:20 +0000 (GMT)
+Received: from localhost (unknown [9.43.90.227])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jan 2022 11:51:19 +0000 (GMT)
+Date:   Fri, 07 Jan 2022 17:21:19 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH v2 8/8] powerpc/bpf: Reallocate BPF registers to volatile
+ registers when possible on PPC32
+To:     andrii@kernel.org, ast@kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@chromium.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, sandipan@linux.ibm.com,
+        songliubraving@fb.com, yhs@fb.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org
+References: <cover.1616430991.git.christophe.leroy@csgroup.eu>
+        <b94562d7d2bb21aec89de0c40bb3cd91054b65a2.1616430991.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <b94562d7d2bb21aec89de0c40bb3cd91054b65a2.1616430991.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <874k6gvkhz.wl-maz@kernel.org>
-User-Agent: NeoMutt/20180716
+User-Agent: astroid/v0.16-1-g4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1641556157.ms6rd82ggh.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: S78ijfzqiXBSNKzrbMvcxNOETxg8mHnP
+X-Proofpoint-ORIG-GUID: DuApjOv2WQaYAnZrm_G8vRjmt5RC5w9p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-07_04,2022-01-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201070078
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 06 January 2022 17:31:36 Marc Zyngier wrote:
-> On Thu, 06 Jan 2022 17:20:44 +0000,
-> Marek Behún <kabel@kernel.org> wrote:
-> > 
-> > On Thu, 06 Jan 2022 16:27:44 +0000
-> > Marc Zyngier <maz@kernel.org> wrote:
-> > > You are completely missing my point. I'm talking about data
-> > > structures, you're talking about interrupts. You have this:
-> > > 
-> > > struct mvebu_pcie_port {
-> > >        // Tons of stuff
-> > >        struct irq_chip intx_chip;
-> > > };
-> > > 
-> > > What I want you to do is:
-> > > 
-> > > struct mvebu_pcie_port {
-> > >        // Tons of stuff
-> > > };
-> > > 
-> > > static struct irq_chip intx_chip = {
-> > > 	.name		= "INTx",
-> > > 	.irq_mask	= mvebu_pcie_intx_irq_mask,
-> > > 	.irq_unmask	= mvebu_pcie_intx_irq_unmask;
-> > > };
-> > > 
-> > > That's it. No more, no less.
-> > > 
-> > > 	M.
-> > > 
-> > 
-> > Hmm, but struct irq_chip contains a dynamic member,
-> >   struct device *parent_device;
-> > Isn't that used? Or are you planning to kill it?
-> 
-> Indeed, and I am definitely planning to kill it. This is the wrong
-> place for this stuff, and I want it gone. There are thankfully very
-> few users of this misfeature.
+Christophe Leroy wrote:
+> When the BPF routine doesn't call any function, the non volatile
+> registers can be reallocated to volatile registers in order to
+> avoid having to save them/restore on the stack.
+>=20
+> Before this patch, the test #359 ADD default X is:
+>=20
+>    0:	7c 64 1b 78 	mr      r4,r3
+>    4:	38 60 00 00 	li      r3,0
+>    8:	94 21 ff b0 	stwu    r1,-80(r1)
+>    c:	60 00 00 00 	nop
+>   10:	92 e1 00 2c 	stw     r23,44(r1)
+>   14:	93 01 00 30 	stw     r24,48(r1)
+>   18:	93 21 00 34 	stw     r25,52(r1)
+>   1c:	93 41 00 38 	stw     r26,56(r1)
+>   20:	39 80 00 00 	li      r12,0
+>   24:	39 60 00 00 	li      r11,0
+>   28:	3b 40 00 00 	li      r26,0
+>   2c:	3b 20 00 00 	li      r25,0
+>   30:	7c 98 23 78 	mr      r24,r4
+>   34:	7c 77 1b 78 	mr      r23,r3
+>   38:	39 80 00 42 	li      r12,66
+>   3c:	39 60 00 00 	li      r11,0
+>   40:	7d 8c d2 14 	add     r12,r12,r26
+>   44:	39 60 00 00 	li      r11,0
+>   48:	7d 83 63 78 	mr      r3,r12
+>   4c:	82 e1 00 2c 	lwz     r23,44(r1)
+>   50:	83 01 00 30 	lwz     r24,48(r1)
+>   54:	83 21 00 34 	lwz     r25,52(r1)
+>   58:	83 41 00 38 	lwz     r26,56(r1)
+>   5c:	38 21 00 50 	addi    r1,r1,80
+>   60:	4e 80 00 20 	blr
+>=20
+> After this patch, the same test has become:
+>=20
+>    0:	7c 64 1b 78 	mr      r4,r3
+>    4:	38 60 00 00 	li      r3,0
+>    8:	94 21 ff b0 	stwu    r1,-80(r1)
+>    c:	60 00 00 00 	nop
+>   10:	39 80 00 00 	li      r12,0
+>   14:	39 60 00 00 	li      r11,0
+>   18:	39 00 00 00 	li      r8,0
+>   1c:	38 e0 00 00 	li      r7,0
+>   20:	7c 86 23 78 	mr      r6,r4
+>   24:	7c 65 1b 78 	mr      r5,r3
+>   28:	39 80 00 42 	li      r12,66
+>   2c:	39 60 00 00 	li      r11,0
+>   30:	7d 8c 42 14 	add     r12,r12,r8
+>   34:	39 60 00 00 	li      r11,0
+>   38:	7d 83 63 78 	mr      r3,r12
+>   3c:	38 21 00 50 	addi    r1,r1,80
+>   40:	4e 80 00 20 	blr
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/net/bpf_jit.h        | 16 ++++++++++++++++
+>  arch/powerpc/net/bpf_jit64.h      |  2 +-
+>  arch/powerpc/net/bpf_jit_comp.c   |  2 ++
+>  arch/powerpc/net/bpf_jit_comp32.c | 30 ++++++++++++++++++++++++++++--
+>  arch/powerpc/net/bpf_jit_comp64.c |  4 ++++
+>  5 files changed, 51 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index a45b8266355d..776abef4d2a0 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -116,6 +116,15 @@ static inline bool is_nearbranch(int offset)
+>  #define SEEN_STACK	0x40000000 /* uses BPF stack */
+>  #define SEEN_TAILCALL	0x80000000 /* uses tail calls */
+> =20
+> +#define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
+> +#define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
+> +
+> +#ifdef CONFIG_PPC64
+> +extern const int b2p[MAX_BPF_JIT_REG + 2];
+> +#else
+> +extern const int b2p[MAX_BPF_JIT_REG + 1];
+> +#endif
+> +
+>  struct codegen_context {
+>  	/*
+>  	 * This is used to track register usage as well
+> @@ -129,6 +138,7 @@ struct codegen_context {
+>  	unsigned int seen;
+>  	unsigned int idx;
+>  	unsigned int stack_size;
+> +	int b2p[ARRAY_SIZE(b2p)];
+>  };
+> =20
+>  static inline void bpf_flush_icache(void *start, void *end)
+> @@ -147,11 +157,17 @@ static inline void bpf_set_seen_register(struct cod=
+egen_context *ctx, int i)
+>  	ctx->seen |=3D 1 << (31 - i);
+>  }
+> =20
+> +static inline void bpf_clear_seen_register(struct codegen_context *ctx, =
+int i)
+> +{
+> +	ctx->seen &=3D ~(1 << (31 - i));
+> +}
+> +
+>  void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx,=
+ u64 func);
+>  int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_c=
+ontext *ctx,
+>  		       u32 *addrs, bool extra_pass);
+>  void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
+>  void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+> +void bpf_jit_realloc_regs(struct codegen_context *ctx);
+> =20
+>  #endif
+> =20
+> diff --git a/arch/powerpc/net/bpf_jit64.h b/arch/powerpc/net/bpf_jit64.h
+> index b05f2e67bba1..7b713edfa7e2 100644
+> --- a/arch/powerpc/net/bpf_jit64.h
+> +++ b/arch/powerpc/net/bpf_jit64.h
+> @@ -39,7 +39,7 @@
+>  #define TMP_REG_2	(MAX_BPF_JIT_REG + 1)
+> =20
+>  /* BPF to ppc register mappings */
+> -static const int b2p[] =3D {
+> +const int b2p[MAX_BPF_JIT_REG + 2] =3D {
+>  	/* function return value */
+>  	[BPF_REG_0] =3D 8,
+>  	/* function arguments */
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
+omp.c
+> index efac89964873..798ac4350a82 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -143,6 +143,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog =
+*fp)
+>  	}
+> =20
+>  	memset(&cgctx, 0, sizeof(struct codegen_context));
+> +	memcpy(cgctx.b2p, b2p, sizeof(cgctx.b2p));
+> =20
+>  	/* Make sure that the stack is quadword aligned. */
+>  	cgctx.stack_size =3D round_up(fp->aux->stack_depth, 16);
+> @@ -167,6 +168,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog =
+*fp)
+>  		}
+>  	}
+> =20
+> +	bpf_jit_realloc_regs(&cgctx);
+>  	/*
+>  	 * Pretend to build prologue, given the features we've seen.  This will
+>  	 * update ctgtx.idx as it pretends to output instructions, then we can
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit=
+_comp32.c
+> index 29ce802d7534..003843273b43 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -37,7 +37,7 @@
+>  #define TMP_REG	(MAX_BPF_JIT_REG + 0)
+> =20
+>  /* BPF to ppc register mappings */
+> -static const int b2p[] =3D {
+> +const int b2p[MAX_BPF_JIT_REG + 1] =3D {
+>  	/* function return value */
+>  	[BPF_REG_0] =3D 12,
+>  	/* function arguments */
+> @@ -60,7 +60,7 @@ static const int b2p[] =3D {
+> =20
+>  static int bpf_to_ppc(struct codegen_context *ctx, int reg)
+>  {
+> -	return b2p[reg];
+> +	return ctx->b2p[reg];
+>  }
+> =20
+>  /* PPC NVR range -- update this if we ever use NVRs below r17 */
+> @@ -77,6 +77,32 @@ static int bpf_jit_stack_offsetof(struct codegen_conte=
+xt *ctx, int reg)
+>  	return BPF_PPC_STACKFRAME(ctx) - 4;
+>  }
+> =20
+> +void bpf_jit_realloc_regs(struct codegen_context *ctx)
+> +{
+> +	if (ctx->seen & SEEN_FUNC)
+> +		return;
 
-Ok, so what about this change?
+Can't you remap BPF_REG_5, BPF_REG_AX and TMP_REG regardless of=20
+SEEN_FUNC?
 
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index 1e90ab888075..5c816338a569 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -54,9 +54,10 @@
- 	 PCIE_CONF_ADDR_EN)
- #define PCIE_CONF_DATA_OFF	0x18fc
- #define PCIE_INT_CAUSE_OFF	0x1900
-+#define PCIE_INT_UNMASK_OFF	0x1910
-+#define  PCIE_INT_INTX(i)		BIT(24+i)
- #define  PCIE_INT_PM_PME		BIT(28)
--#define PCIE_MASK_OFF		0x1910
--#define  PCIE_MASK_ENABLE_INTS          0x0f000000
-+#define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
- #define PCIE_CTRL_OFF		0x1a00
- #define  PCIE_CTRL_X1_MODE		0x0001
- #define  PCIE_CTRL_RC_MODE		BIT(1)
-@@ -110,6 +111,9 @@ struct mvebu_pcie_port {
- 	struct mvebu_pcie_window iowin;
- 	u32 saved_pcie_stat;
- 	struct resource regs;
-+	struct irq_domain *intx_irq_domain;
-+	raw_spinlock_t irq_lock;
-+	int intx_irq;
- };
- 
- static inline void mvebu_writel(struct mvebu_pcie_port *port, u32 val, u32 reg)
-@@ -235,7 +239,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
- 
- static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
- {
--	u32 ctrl, lnkcap, cmd, dev_rev, mask;
-+	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
- 
- 	/* Setup PCIe controller to Root Complex mode. */
- 	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-@@ -288,10 +292,30 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
- 	/* Point PCIe unit MBUS decode windows to DRAM space. */
- 	mvebu_pcie_setup_wins(port);
- 
--	/* Enable interrupt lines A-D. */
--	mask = mvebu_readl(port, PCIE_MASK_OFF);
--	mask |= PCIE_MASK_ENABLE_INTS;
--	mvebu_writel(port, mask, PCIE_MASK_OFF);
-+	/* Mask all interrupt sources. */
-+	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
-+
-+	/* Clear all interrupt causes. */
-+	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
-+
-+	if (port->intx_irq <= 0) {
-+		/*
-+		 * When neither "summary" interrupt, nor "intx" interrupt was
-+		 * specified in DT then unmask all legacy INTx interrupts as in
-+		 * this case driver does not provide a way for masking and
-+		 * unmasking of individual legacy INTx interrupts. In this case
-+		 * all interrupts, including legacy INTx are reported via one
-+		 * shared GIC source and therefore kernel cannot distinguish
-+		 * which individual legacy INTx was triggered. These interrupts
-+		 * are shared, so it should not cause any issue. Just
-+		 * performance penalty as every PCIe interrupt handler needs to
-+		 * be called when some interrupt is triggered.
-+		 */
-+		unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-+		unmask |= PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
-+			  PCIE_INT_INTX(2) | PCIE_INT_INTX(3);
-+		mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-+	}
- }
- 
- static struct mvebu_pcie_port *mvebu_pcie_find_port(struct mvebu_pcie *pcie,
-@@ -924,6 +948,108 @@ static struct pci_ops mvebu_pcie_ops = {
- 	.write = mvebu_pcie_wr_conf,
- };
- 
-+static void mvebu_pcie_intx_irq_mask(struct irq_data *d)
-+{
-+	struct mvebu_pcie_port *port = d->domain->host_data;
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
-+	unsigned long flags;
-+	u32 unmask;
-+
-+	raw_spin_lock_irqsave(&port->irq_lock, flags);
-+	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-+	unmask &= ~PCIE_INT_INTX(hwirq);
-+	mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-+	raw_spin_unlock_irqrestore(&port->irq_lock, flags);
-+}
-+
-+static void mvebu_pcie_intx_irq_unmask(struct irq_data *d)
-+{
-+	struct mvebu_pcie_port *port = d->domain->host_data;
-+	irq_hw_number_t hwirq = irqd_to_hwirq(d);
-+	unsigned long flags;
-+	u32 unmask;
-+
-+	raw_spin_lock_irqsave(&port->irq_lock, flags);
-+	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-+	unmask |= PCIE_INT_INTX(hwirq);
-+	mvebu_writel(port, unmask, PCIE_INT_UNMASK_OFF);
-+	raw_spin_unlock_irqrestore(&port->irq_lock, flags);
-+}
-+
-+static struct irq_chip intx_irq_chip = {
-+	.name = "mvebu-INTx",
-+	.irq_mask = mvebu_pcie_intx_irq_mask,
-+	.irq_unmask = mvebu_pcie_intx_irq_unmask,
-+};
-+
-+static int mvebu_pcie_intx_irq_map(struct irq_domain *h,
-+				   unsigned int virq, irq_hw_number_t hwirq)
-+{
-+	struct mvebu_pcie_port *port = h->host_data;
-+
-+	irq_set_status_flags(virq, IRQ_LEVEL);
-+	irq_set_chip_and_handler(virq, &intx_irq_chip, handle_level_irq);
-+	irq_set_chip_data(virq, port);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops mvebu_pcie_intx_irq_domain_ops = {
-+	.map = mvebu_pcie_intx_irq_map,
-+	.xlate = irq_domain_xlate_onecell,
-+};
-+
-+static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
-+{
-+	struct device *dev = &port->pcie->pdev->dev;
-+	struct device_node *pcie_intc_node;
-+
-+	raw_spin_lock_init(&port->irq_lock);
-+
-+	pcie_intc_node = of_get_next_child(port->dn, NULL);
-+	if (!pcie_intc_node) {
-+		dev_err(dev, "No PCIe Intc node found for %s\n", port->name);
-+		return -ENODEV;
-+	}
-+
-+	port->intx_irq_domain = irq_domain_add_linear(pcie_intc_node, PCI_NUM_INTX,
-+						      &mvebu_pcie_intx_irq_domain_ops,
-+						      port);
-+	of_node_put(pcie_intc_node);
-+	if (!port->intx_irq_domain) {
-+		dev_err(dev, "Failed to get INTx IRQ domain for %s\n", port->name);
-+		return -ENOMEM;
-+	}
-+
-+	return 0;
-+}
-+
-+static void mvebu_pcie_irq_handler(struct irq_desc *desc)
-+{
-+	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+	struct device *dev = &port->pcie->pdev->dev;
-+	u32 cause, unmask, status;
-+	int i;
-+
-+	chained_irq_enter(chip, desc);
-+
-+	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
-+	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-+	status = cause & unmask;
-+
-+	/* Process legacy INTx interrupts */
-+	for (i = 0; i < PCI_NUM_INTX; i++) {
-+		if (!(status & PCIE_INT_INTX(i)))
-+			continue;
-+
-+		if (generic_handle_domain_irq(port->intx_irq_domain, i) == -EINVAL)
-+			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
-+	}
-+
-+	chained_irq_exit(chip, desc);
-+}
-+
- static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
- {
- 	/* Interrupt support on mvebu emulated bridges is not implemented yet */
-@@ -1121,6 +1247,21 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
- 		port->io_attr = -1;
- 	}
- 
-+	/*
-+	 * Old DT bindings do not contain "intx" interrupt
-+	 * so do not fail probing driver when interrupt does not exist.
-+	 */
-+	port->intx_irq = of_irq_get_byname(child, "intx");
-+	if (port->intx_irq == -EPROBE_DEFER) {
-+		ret = port->intx_irq;
-+		goto err;
-+	}
-+	if (port->intx_irq <= 0) {
-+		dev_warn(dev, "%s: legacy INTx interrupts cannot be masked individually, "
-+			      "%pOF does not contain intx interrupt\n",
-+			 port->name, child);
-+	}
-+
- 	reset_gpio = of_get_named_gpio_flags(child, "reset-gpios", 0, &flags);
- 	if (reset_gpio == -EPROBE_DEFER) {
- 		ret = reset_gpio;
-@@ -1317,6 +1458,7 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
- 
- 	for (i = 0; i < pcie->nports; i++) {
- 		struct mvebu_pcie_port *port = &pcie->ports[i];
-+		int irq = port->intx_irq;
- 
- 		child = port->dn;
- 		if (!child)
-@@ -1344,6 +1486,22 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
- 			continue;
- 		}
- 
-+		if (irq > 0) {
-+			ret = mvebu_pcie_init_irq_domain(port);
-+			if (ret) {
-+				dev_err(dev, "%s: cannot init irq domain\n",
-+					port->name);
-+				pci_bridge_emul_cleanup(&port->bridge);
-+				devm_iounmap(dev, port->base);
-+				port->base = NULL;
-+				mvebu_pcie_powerdown(port);
-+				continue;
-+			}
-+			irq_set_chained_handler_and_data(irq,
-+							 mvebu_pcie_irq_handler,
-+							 port);
-+		}
-+
- 		/*
- 		 * PCIe topology exported by mvebu hw is quite complicated. In
- 		 * reality has something like N fully independent host bridges
-@@ -1448,6 +1606,7 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
- 
- 	for (i = 0; i < pcie->nports; i++) {
- 		struct mvebu_pcie_port *port = &pcie->ports[i];
-+		int irq = port->intx_irq;
- 
- 		if (!port->base)
- 			continue;
-@@ -1458,7 +1617,17 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
- 		mvebu_writel(port, cmd, PCIE_CMD_OFF);
- 
- 		/* Mask all interrupt sources. */
--		mvebu_writel(port, 0, PCIE_MASK_OFF);
-+		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
-+
-+		/* Clear all interrupt causes. */
-+		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
-+
-+		/* Remove IRQ domains. */
-+		if (port->intx_irq_domain)
-+			irq_domain_remove(port->intx_irq_domain);
-+
-+		if (irq > 0)
-+			irq_set_chained_handler_and_data(irq, NULL, NULL);
- 
- 		/* Free config space for emulated root bridge. */
- 		pci_bridge_emul_cleanup(&port->bridge);
--- 
-2.20.1
+- Naveen
 

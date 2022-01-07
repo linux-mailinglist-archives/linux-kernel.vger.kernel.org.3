@@ -2,406 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701EA487427
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAE148742F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345983AbiAGIdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S1346029AbiAGIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbiAGIdu (ORCPT
+        with ESMTP id S236321AbiAGIg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:33:50 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1150C061245;
-        Fri,  7 Jan 2022 00:33:50 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 205so4685814pfu.0;
-        Fri, 07 Jan 2022 00:33:50 -0800 (PST)
+        Fri, 7 Jan 2022 03:36:28 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C71C0611FD
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 00:36:28 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id r4so12995146lfe.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 00:36:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2CeQfauMdUXmKOMOuK6I4lQHEIz0dx7w2UsHkNa4A8Q=;
-        b=b+9vQmWEnkOUZKO2v2v4MhjX5Po/KUcTNVNgzNeHSNCMd46eQ3KIgMNTQHYovaR1BV
-         jaeDG4OozYn2u1ufwQOeMolEFPJnqJ6GJfCL+RRBjBCDf9xuFlAx9BFfedzYEGD9Nw4Y
-         EnXz41+KQhXKGNFGEgezCX04IAVL2PVbHLVr95MUP8GVTU6JF+F2Ax4tOsHvA7HNCA2j
-         zjvjHPlftFznwmCD2iCwcs/2S7cXk4zdUVz7VTsTBvzWbi1216jeg2FabSW33KDpeYXB
-         zHTYG6argcX/8GFOylgYvm8Sfr7WQD9EuflTZiWwjFaX/QW4jXMXPmtZFW8U7PKYFnbx
-         0d5w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vVZIGQpO4cybh1F58lhYGN2Aw4cqAqidnu7imo4TqmI=;
+        b=MvBUt7zxF6L9tiAjAJSe8pmrMblL38mDhm8malfZ8P1fhgvpXTOOytqAIF+ZQjKpug
+         wbY6KUOhe7lxpObroPJ3GhjVyqU4ymJhTz52SozEvjF3yrVcy/a8wGe8DaoVrZdQNkUO
+         3EMJ5mfIe7R+TPG/WY78MQ3F8qddVYDdYgEZ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2CeQfauMdUXmKOMOuK6I4lQHEIz0dx7w2UsHkNa4A8Q=;
-        b=BayPfm9ZpnWK0QZRV3bbliuLKpLfWcnLGmo1TQCbFIY2TSr2aNzNjPzQ8zALeU9aKf
-         exoQuuPZrCVP4BAQvGenaXPK5qA0jW+3RT9olYWbWRwZUTJvOTo9iSq8n6Mfv0U8+dOH
-         EMMwzfYzGNdn91gd77CKoozEh17fX6LHeBU7I6VzHFL1NTL6tDt+Hs9y6JM1tv6z1TZ0
-         JwYzKNF6FePuDYPXDShsqtzbSHig+ODQT1+/l8eLQKk3Ou1GEMN6I7Wu5xF88Mh8QnX7
-         1Os82MLEOJzY7JG1R43bCRQ6Ll3pUHatstZekdn7+HRaXAAT+tNapJ0bEixeZf5mUU5t
-         jK7A==
-X-Gm-Message-State: AOAM532mO0CzrFUXeiCoctBqG0s49iPriY3ls9zPd+xmViyqjLOE3+JH
-        5p0ROTlZXPMbQv3HyLJGWYrqqWPt5sU=
-X-Google-Smtp-Source: ABdhPJzjJkaa6TyZQekKo8cWjieVHdcbRwScC6H+cuytx+RFk3t1aFUwwrEwwYhAaQ3HbFg+941hfA==
-X-Received: by 2002:a65:6a84:: with SMTP id q4mr774461pgu.303.1641544430159;
-        Fri, 07 Jan 2022 00:33:50 -0800 (PST)
-Received: from [192.168.1.87] ([122.172.37.80])
-        by smtp.gmail.com with ESMTPSA id h7sm5184908pfv.35.2022.01.07.00.33.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 00:33:49 -0800 (PST)
-Message-ID: <778df8ea-f8c6-d586-5c9c-42329da0e40d@gmail.com>
-Date:   Fri, 7 Jan 2022 14:03:44 +0530
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vVZIGQpO4cybh1F58lhYGN2Aw4cqAqidnu7imo4TqmI=;
+        b=v8mW0Q6yzF1T43lxOrZ6Z69tMTy/2Nl09VvZHhUiLWl7VqgufIqbhIMmBePcFuQlfm
+         4AH0I4sXFz8GbUD87MxNkAr6rMtqa/v0p5Vkg0uJYU/lhUh8OO9+jL/RXx/BHaAE7I2X
+         zkGmGQbBwdzOHjwIk+joU6e9vISaBXAv4pueR0ujTuuCnKSqPz52wEX371q9kP3LGXlD
+         BTLRd3ChzBDkO6QQV8vjAbxvSX+Hsg2ia7/V4d5tMT8GrNnSYNbA6L0+iCVCmwauGmST
+         InYEa2l+p4MF3sRzWswJS3I+7X8/0psQsOHA/SpZk5PZSsTZ8Wm8YwuY2sDGmTnkPDDX
+         5KRQ==
+X-Gm-Message-State: AOAM5302gnzzWHXR/fOYXvSM/6008v43Uf7UAmlCx8LjbzuwBYAMisw3
+        L+6sCNlTRL7m+bgoiMU68jIOPmp5jbEgsZEu9Kf8ccZGUEo=
+X-Google-Smtp-Source: ABdhPJwbMO3nPmHq3UYiC04tI8XJ/H2V1ImVa9SFgE0UWTCDPzZftmUWkNrOf6I+UA8AnpJK6C/hSqiXE+zr1pMseBI=
+X-Received: by 2002:a2e:2a84:: with SMTP id q126mr47333341ljq.457.1641544586649;
+ Fri, 07 Jan 2022 00:36:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [RFC PATCH v3 3/3] io_uring: Add `sendto(2)` and `recvfrom(2)`
- support
-Content-Language: en-US
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nugra <richiisei@gmail.com>,
-        Ammar Faizi <ammarfaizi2@gmail.com>
-References: <20211230115057.139187-3-ammar.faizi@intel.com>
- <20211230173126.174350-1-ammar.faizi@intel.com>
- <20211230173126.174350-4-ammar.faizi@intel.com>
- <597c1bfc-f8ab-d513-4916-dbd93b05e66a@gmail.com>
- <20220106203850.1133211-1-ammarfaizi2@gnuweeb.org>
-From:   Praveen Kumar <kpraveen.lkml@gmail.com>
-In-Reply-To: <20220106203850.1133211-1-ammarfaizi2@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
+ <20211220121825.6446-5-tinghan.shen@mediatek.com> <CAGXv+5GaFikojqYYv0TfQsz3NSqn7QPmTWyCJY8V2g8UYoV4OA@mail.gmail.com>
+ <18c342b20ccac520eabe8019562432030ddfe017.camel@mediatek.com>
+In-Reply-To: <18c342b20ccac520eabe8019562432030ddfe017.camel@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 7 Jan 2022 16:36:15 +0800
+Message-ID: <CAGXv+5G45UP=kvk8UOiFWYfdWgdjboL-UfkBbfPuEmQpwKMNHQ@mail.gmail.com>
+Subject: Re: [PATCH v7 4/4] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     robh+dt@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, broonie@kernel.org,
+        bgolaszewski@baylibre.com, sean.wang@mediatek.com,
+        bayi.cheng@mediatek.com, gch981213@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Seiya Wang <seiya.wang@mediatek.com>, chunfeng.yun@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-01-2022 02:08, Ammar Faizi wrote:
-> 
-> On Thu, 6 Jan 2022 at 23:01:59 +0530, Praveen Kumar <kpraveen.lkml@gmail.com> wrote:
->> On 30-12-2021 23:22, Ammar Faizi wrote:
->>> This adds sendto(2) and recvfrom(2) support for io_uring.
->>>
->>> New opcodes:
->>>   IORING_OP_SENDTO
->>>   IORING_OP_RECVFROM
->>>
->>> Cc: Nugra <richiisei@gmail.com>
->>> Tested-by: Nugra <richiisei@gmail.com>
->>> Link: https://github.com/axboe/liburing/issues/397
->>> Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
->>> ---
->>>
->>> v3:
->>>   - Fix build error when CONFIG_NET is undefined should be done in
->>>     the first patch, not this patch.
->>>
->>>   - Add Tested-by tag from Nugra.
->>>
->>> v2:
->>>   - In `io_recvfrom()`, mark the error check of `move_addr_to_user()`
->>>     call as unlikely.
->>>
->>>   - Fix build error when CONFIG_NET is undefined.
->>>
->>>   - Added Nugra to CC list (tester).
->>> ---
->>>  fs/io_uring.c                 | 80 +++++++++++++++++++++++++++++++++--
->>>  include/uapi/linux/io_uring.h |  2 +
->>>  2 files changed, 78 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/fs/io_uring.c b/fs/io_uring.c
->>> index 7adcb591398f..3726958f8f58 100644
->>> --- a/fs/io_uring.c
->>> +++ b/fs/io_uring.c
->>> @@ -575,7 +575,15 @@ struct io_sr_msg {
->>>  	union {
->>>  		struct compat_msghdr __user	*umsg_compat;
->>>  		struct user_msghdr __user	*umsg;
->>> -		void __user			*buf;
->>> +
->>> +		struct {
->>> +			void __user		*buf;
->>> +			struct sockaddr __user	*addr;
->>> +			union {
->>> +				int		sendto_addr_len;
->>> +				int __user	*recvfrom_addr_len;
->>> +			};
->>> +		};
->>>  	};
->>>  	int				msg_flags;
->>>  	int				bgid;
->>> @@ -1133,6 +1141,19 @@ static const struct io_op_def io_op_defs[] = {
->>>  		.needs_file = 1
->>>  	},
->>>  	[IORING_OP_GETXATTR] = {},
->>> +	[IORING_OP_SENDTO] = {
->>> +		.needs_file		= 1,
->>> +		.unbound_nonreg_file	= 1,
->>> +		.pollout		= 1,
->>> +		.audit_skip		= 1,
->>> +	},
->>> +	[IORING_OP_RECVFROM] = {
->>> +		.needs_file		= 1,
->>> +		.unbound_nonreg_file	= 1,
->>> +		.pollin			= 1,
->>> +		.buffer_select		= 1,
->>> +		.audit_skip		= 1,
->>> +	},
->>>  };
->>>  
->>>  /* requests with any of those set should undergo io_disarm_next() */
->>> @@ -5216,12 +5237,24 @@ static int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>  	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
->>>  		return -EINVAL;
->>>  
->>> +	/*
->>> +	 * For IORING_OP_SEND{,TO}, the assignment to @sr->umsg
->>> +	 * is equivalent to an assignment to @sr->buf.
->>> +	 */
->>>  	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
->>> +
->>>  	sr->len = READ_ONCE(sqe->len);
->>>  	sr->msg_flags = READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL;
->>>  	if (sr->msg_flags & MSG_DONTWAIT)
->>>  		req->flags |= REQ_F_NOWAIT;
->>>  
->>> +	if (req->opcode == IORING_OP_SENDTO) {
->>> +		sr->addr = u64_to_user_ptr(READ_ONCE(sqe->addr2));
->>> +		sr->sendto_addr_len = READ_ONCE(sqe->addr3);
->>> +	} else {
->>> +		sr->addr = (struct sockaddr __user *) NULL;
->>
->> Let's have sendto_addr_len  = 0  
-> 
-> Will do in the RFC v5.
-> 
->>
->>> +	}
->>> +
->>>  #ifdef CONFIG_COMPAT
->>>  	if (req->ctx->compat)
->>>  		sr->msg_flags |= MSG_CMSG_COMPAT;
->>> @@ -5275,6 +5308,7 @@ static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
->>>  
->>>  static int io_sendto(struct io_kiocb *req, unsigned int issue_flags)
->>>  {
->>> +	struct sockaddr_storage address;
->>>  	struct io_sr_msg *sr = &req->sr_msg;
->>>  	struct msghdr msg;
->>>  	struct iovec iov;
->>> @@ -5291,10 +5325,20 @@ static int io_sendto(struct io_kiocb *req, unsigned int issue_flags)
->>>  	if (unlikely(ret))
->>>  		return ret;
->>>  
->>> -	msg.msg_name = NULL;
->>> +
->>>  	msg.msg_control = NULL;
->>>  	msg.msg_controllen = 0;
->>> -	msg.msg_namelen = 0;
->>> +	if (sr->addr) {
->>> +		ret = move_addr_to_kernel(sr->addr, sr->sendto_addr_len,
->>> +					  &address);
->>> +		if (unlikely(ret < 0))
->>> +			goto fail;
->>> +		msg.msg_name = (struct sockaddr *) &address;
->>> +		msg.msg_namelen = sr->sendto_addr_len;
->>> +	} else {
->>> +		msg.msg_name = NULL;
->>> +		msg.msg_namelen = 0;
->>> +	}
->>>  
->>>  	flags = req->sr_msg.msg_flags;
->>>  	if (issue_flags & IO_URING_F_NONBLOCK)
->>> @@ -5309,6 +5353,7 @@ static int io_sendto(struct io_kiocb *req, unsigned int issue_flags)
->>>  			return -EAGAIN;
->>>  		if (ret == -ERESTARTSYS)
->>>  			ret = -EINTR;
->>> +	fail:
->>>  		req_set_fail(req);
->>
->> I think there is a problem with "fail" goto statement. Not getting
->> full clarity on this change. With latest kernel, I see
->> req_set_fail(req) inside if check, which I don't see here. Can you
->> please resend the patch on latest kernel version. Thanks.
-> 
-> I will send the v5 on top of "for-next" branch in Jens' tree soon.
-> 
-> That is already inside an "if check" anyway. We go to that label when
-> the move_addr_to_kernel() fails (most of the time it is -EFAULT or
-> -EINVAL).
-> 
-> That part looks like this (note the if check before the goto):
-> ----------------------------------------------------------------------
-> 	msg.msg_control = NULL;
-> 	msg.msg_controllen = 0;
-> 	if (sr->addr) {
-> 		ret = move_addr_to_kernel(sr->addr, sr->sendto_addr_len,
-> 					  &address);
-> 		if (unlikely(ret < 0))
-> 			goto fail;
-> 		msg.msg_name = (struct sockaddr *) &address;
-> 		msg.msg_namelen = sr->sendto_addr_len;
-> 	} else {
-> 		msg.msg_name = NULL;
-> 		msg.msg_namelen = 0;
-> 	}
-> 
-> 	flags = req->sr_msg.msg_flags;
-> 	if (issue_flags & IO_URING_F_NONBLOCK)
-> 		flags |= MSG_DONTWAIT;
-> 	if (flags & MSG_WAITALL)
-> 		min_ret = iov_iter_count(&msg.msg_iter);
-> 
-> 	msg.msg_flags = flags;
-> 	ret = sock_sendmsg(sock, &msg);
-> 	if (ret < min_ret) {
-> 		if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
-> 			return -EAGAIN;
-> 		if (ret == -ERESTARTSYS)
-> 			ret = -EINTR;
-> 	fail:
+On Thu, Jan 6, 2022 at 7:15 PM Tinghan Shen <tinghan.shen@mediatek.com> wro=
+te:
+> On Thu, 2021-12-23 at 17:59 +0800, Chen-Yu Tsai wrote:
+> > On Mon, Dec 20, 2021 at 8:20 PM Tinghan Shen <tinghan.shen@mediatek.com=
+> wrote:
 
-Thanks for sending this. IMO this goto label should be just before the "if (ret < min_ret)" statement.
+[...]
 
-> 		req_set_fail(req);
-> 	}
-> 	__io_req_complete(req, issue_flags, ret, 0);
-> 	return 0;
-> ----------------------------------------------------------------------
-> 
->>>  	}
->>>  	__io_req_complete(req, issue_flags, ret, 0);
->>> @@ -5427,13 +5472,25 @@ static int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>  	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
->>>  		return -EINVAL;
->>>  
->>> +	/*
->>> +	 * For IORING_OP_RECV{,FROM}, the assignment to @sr->umsg
->>> +	 * is equivalent to an assignment to @sr->buf.
->>> +	 */
->>>  	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
->>> +
->>>  	sr->len = READ_ONCE(sqe->len);
->>>  	sr->bgid = READ_ONCE(sqe->buf_group);
->>>  	sr->msg_flags = READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL;
->>>  	if (sr->msg_flags & MSG_DONTWAIT)
->>>  		req->flags |= REQ_F_NOWAIT;
->>>  
->>> +	if (req->opcode == IORING_OP_RECVFROM) {
->>> +		sr->addr = u64_to_user_ptr(READ_ONCE(sqe->addr2));
->>> +		sr->recvfrom_addr_len = u64_to_user_ptr(READ_ONCE(sqe->addr3));
->>> +	} else {
->>> +		sr->addr = (struct sockaddr __user *) NULL;
->>
->> I think recvfrom_addr_len should also be pointed to NULL, instead of
->> garbage for this case.
-> 
-> Will do in the RFC v5.
-> 
->>
->>> +	}
->>> +
->>>  #ifdef CONFIG_COMPAT
->>>  	if (req->ctx->compat)
->>>  		sr->msg_flags |= MSG_CMSG_COMPAT;
->>> @@ -5509,6 +5566,7 @@ static int io_recvfrom(struct io_kiocb *req, unsigned int issue_flags)
->>>  	struct iovec iov;
->>>  	unsigned flags;
->>>  	int ret, min_ret = 0;
->>> +	struct sockaddr_storage address;
->>>  	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
->>>  
->>>  	sock = sock_from_file(req->file);
->>> @@ -5526,7 +5584,7 @@ static int io_recvfrom(struct io_kiocb *req, unsigned int issue_flags)
->>>  	if (unlikely(ret))
->>>  		goto out_free;
->>>  
->>> -	msg.msg_name = NULL;
->>> +	msg.msg_name = sr->addr ? (struct sockaddr *) &address : NULL;
->>>  	msg.msg_control = NULL;
->>>  	msg.msg_controllen = 0;
->>>  	msg.msg_namelen = 0;
->>
->> I think namelen should also be updated ?
-> 
-> It doesn't have to be updated. From net/socket.c there is a comment
-> like this:
-> 
-> 	/* We assume all kernel code knows the size of sockaddr_storage */
-> 	msg.msg_namelen = 0;
-> 
-> Full __sys_recvfrom() source code, see here:
-> https://github.com/torvalds/linux/blob/v5.16-rc8/net/socket.c#L2085-L2088
-> 
-> I will add the same comment in next series to clarify this one.
-> 
->>
->>> @@ -5540,6 +5598,16 @@ static int io_recvfrom(struct io_kiocb *req, unsigned int issue_flags)
->>>  		min_ret = iov_iter_count(&msg.msg_iter);
->>>  
->>>  	ret = sock_recvmsg(sock, &msg, flags);
->>> +
->>> +	if (ret >= 0 && sr->addr != NULL) {
->>> +		int tmp;
->>> +
->>> +		tmp = move_addr_to_user(&address, msg.msg_namelen, sr->addr,
->>> +					sr->recvfrom_addr_len);
->>> +		if (unlikely(tmp < 0))
->>> +			ret = tmp;
->>> +	}
->>> +
->>>  out_free:
->>>  	if (ret < min_ret) {
->>>  		if (ret == -EAGAIN && force_nonblock)
->>> @@ -6778,9 +6846,11 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>  	case IORING_OP_SYNC_FILE_RANGE:
->>>  		return io_sfr_prep(req, sqe);
->>>  	case IORING_OP_SENDMSG:
->>> +	case IORING_OP_SENDTO:
->>>  	case IORING_OP_SEND:
->>>  		return io_sendmsg_prep(req, sqe);
->>>  	case IORING_OP_RECVMSG:
->>> +	case IORING_OP_RECVFROM:
->>>  	case IORING_OP_RECV:
->>>  		return io_recvmsg_prep(req, sqe);
->>>  	case IORING_OP_CONNECT:
->>> @@ -7060,12 +7130,14 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
->>>  	case IORING_OP_SENDMSG:
->>>  		ret = io_sendmsg(req, issue_flags);
->>>  		break;
->>> +	case IORING_OP_SENDTO:
->>>  	case IORING_OP_SEND:
->>>  		ret = io_sendto(req, issue_flags);
->>>  		break;
->>>  	case IORING_OP_RECVMSG:
->>>  		ret = io_recvmsg(req, issue_flags);
->>>  		break;
->>> +	case IORING_OP_RECVFROM:
->>>  	case IORING_OP_RECV:
->>>  		ret = io_recvfrom(req, issue_flags);
->>>  		break;
->>> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
->>> index efc7ac9b3a6b..a360069d1e8e 100644
->>> --- a/include/uapi/linux/io_uring.h
->>> +++ b/include/uapi/linux/io_uring.h
->>> @@ -150,6 +150,8 @@ enum {
->>>  	IORING_OP_SETXATTR,
->>>  	IORING_OP_FGETXATTR,
->>>  	IORING_OP_GETXATTR,
->>> +	IORING_OP_SENDTO,
->>> +	IORING_OP_RECVFROM,
->>>  
->>>  	/* this goes last, obviously */
->>>  	IORING_OP_LAST,
->>
->>
->> Regards,
->>
->> ~Praveen.
->>
-> 
-> Thanks for the review. I will send the RFC v5 soon.
-> 
+> > [...]
+> >
+> > > +               xhci0: usb@11200000 {
+> > > +                       compatible =3D "mediatek,mt8195-xhci",
+> > > +                                    "mediatek,mtk-xhci";
+> > > +                       reg =3D <0 0x11200000 0 0x1000>,
+> > > +                             <0 0x11203e00 0 0x0100>;
+> > > +                       reg-names =3D "mac", "ippc";
+> > > +                       interrupts =3D <GIC_SPI 129
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +                       phys =3D <&u2port0 PHY_TYPE_USB2>,
+> > > +                              <&u3port0 PHY_TYPE_USB3>;
+> > > +                       assigned-clocks =3D <&topckgen
+> > > CLK_TOP_USB_TOP>,
+> > > +                                         <&topckgen
+> > > CLK_TOP_SSUSB_XHCI>;
+> > > +                       assigned-clock-parents =3D <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>,
+> > > +                                                <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>;
+> > > +                       clocks =3D <&infracfg_ao CLK_INFRA_AO_SSUSB>,
+> > > +                                <&infracfg_ao
+> > > CLK_INFRA_AO_SSUSB_XHCI>,
+> > > +                                <&topckgen CLK_TOP_SSUSB_REF>,
+> > > +                                <&apmixedsys CLK_APMIXED_USB1PLL>;
+> > > +                       clock-names =3D "sys_ck", "xhci_ck",
+> > > "ref_ck", "mcu_ck";
+> >
+> > The binding for this needs to be fixed. It expects clocks in the
+> > order
+> > specified in the binding, and this doesn't match.
+>
+> ok
+>
+> > Also, "dma_ck" is missing
+> > and will likely cause warnings to be generated.
+>
+> only sys_ck is required, others are optional as described in binding
 
+I understand, but the bindings language is somewhat limited and right now
+is written in a way that if "dma_ck" is missing it would fail the DT
+bindings check.
+
+> >
+> > This goes for all the xhci device nodes.
+> >
+> > > +                       status =3D "disabled";
+> > > +               };
+> > > +
+> > > +               mmc0: mmc@11230000 {
+> > > +                       compatible =3D "mediatek,mt8195-mmc",
+> > > +                                    "mediatek,mt8183-mmc";
+> > > +                       reg =3D <0 0x11230000 0 0x10000>,
+> > > +                             <0 0x11f50000 0 0x1000>;
+> >
+> > The binding only allows one entry. Please fix the binding first.
+> > This was added with MT8183, and the fix should list the relavent
+> > commit.
+> >
+> > > +                       interrupts =3D <GIC_SPI 131
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +                       clocks =3D <&topckgen CLK_TOP_MSDC50_0>,
+> > > +                                <&infracfg_ao CLK_INFRA_AO_MSDC0>,
+> > > +                                <&infracfg_ao
+> > > CLK_INFRA_AO_MSDC0_SRC>;
+> > > +                       clock-names =3D "source", "hclk",
+> > > "source_cg";
+> > > +                       status =3D "disabled";
+> > > +               };
+> > > +
+> >
+> > [...]
+> >
+> > > +
+> > > +               xhci1: usb@11290000 {
+> > > +                       compatible =3D "mediatek,mt8195-xhci",
+> > > +                                    "mediatek,mtk-xhci";
+> > > +                       reg =3D <0 0x11290000 0 0x1000>,
+> > > +                             <0 0x11293e00 0 0x0100>;
+> > > +                       reg-names =3D "mac", "ippc";
+> > > +                       interrupts =3D <GIC_SPI 530
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +                       phys =3D <&u2port1 PHY_TYPE_USB2>;
+> >
+> > Shouldn't there be a USB3 phy?
+>
+> currently only enable usb2, usb3 phy is used by pcie.
+
+Got it.
+
+> >
+> > > +                       assigned-clocks =3D <&topckgen
+> > > CLK_TOP_USB_TOP_1P>,
+> > > +                                         <&topckgen
+> > > CLK_TOP_SSUSB_XHCI_1P>;
+> > > +                       assigned-clock-parents =3D <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>,
+> > > +                                                <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>;
+> > > +                       clocks =3D <&pericfg_ao
+> > > CLK_PERI_AO_SSUSB_1P_BUS>,
+> > > +                                <&topckgen CLK_TOP_SSUSB_P1_REF>,
+> > > +                                <&pericfg_ao
+> > > CLK_PERI_AO_SSUSB_1P_XHCI>,
+> > > +                                <&apmixedsys CLK_APMIXED_USB1PLL>;
+> > > +                       clock-names =3D "sys_ck", "ref_ck",
+> > > "xhci_ck", "mcu_ck";
+> > > +                       status =3D "disabled";
+> > > +               };
+> > > +
+> > > +               xhci2: usb@112a0000 {
+> > > +                       compatible =3D "mediatek,mt8195-xhci",
+> > > +                                    "mediatek,mtk-xhci";
+> > > +                       reg =3D <0 0x112a0000 0 0x1000>,
+> > > +                             <0 0x112a3e00 0 0x0100>;
+> > > +                       reg-names =3D "mac", "ippc";
+> > > +                       interrupts =3D <GIC_SPI 533
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +                       phys =3D <&u2port2 PHY_TYPE_USB2>;
+> > > +                       assigned-clocks =3D <&topckgen
+> > > CLK_TOP_USB_TOP_2P>,
+> > > +                                         <&topckgen
+> > > CLK_TOP_SSUSB_XHCI_2P>;
+> > > +                       assigned-clock-parents =3D <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>,
+> > > +                                                <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>;
+> > > +                       clocks =3D <&pericfg_ao
+> > > CLK_PERI_AO_SSUSB_2P_BUS>,
+> > > +                                <&topckgen CLK_TOP_SSUSB_P2_REF>,
+> > > +                                <&pericfg_ao
+> > > CLK_PERI_AO_SSUSB_2P_XHCI>;
+> > > +                       clock-names =3D "sys_ck", "ref_ck",
+> > > "xhci_ck";
+> > > +                       status =3D "disabled";
+> > > +               };
+> > > +
+> > > +               xhci3: usb@112b0000 {
+> > > +                       compatible =3D "mediatek,mt8195-xhci",
+> > > +                                    "mediatek,mtk-xhci";
+> > > +                       reg =3D <0 0x112b0000 0 0x1000>,
+> > > +                             <0 0x112b3e00 0 0x0100>;
+> > > +                       reg-names =3D "mac", "ippc";
+> > > +                       interrupts =3D <GIC_SPI 536
+> > > IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +                       phys =3D <&u2port3 PHY_TYPE_USB2>;
+> > > +                       assigned-clocks =3D <&topckgen
+> > > CLK_TOP_USB_TOP_3P>,
+> > > +                                         <&topckgen
+> > > CLK_TOP_SSUSB_XHCI_3P>;
+> > > +                       assigned-clock-parents =3D <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>,
+> > > +                                                <&topckgen
+> > > CLK_TOP_UNIVPLL_D5_D4>;
+> > > +                       clocks =3D <&pericfg_ao
+> > > CLK_PERI_AO_SSUSB_3P_BUS>,
+> > > +                                <&pericfg_ao
+> > > CLK_PERI_AO_SSUSB_3P_XHCI>,
+> > > +                                <&topckgen CLK_TOP_SSUSB_P3_REF>;
+> > > +                       clock-names =3D "sys_ck", "xhci_ck",
+> > > "ref_ck";
+> > > +                       usb2-lpm-disable;
+> >
+> > Could you explain why this is needed only for this controller?
+>
+> This controller is fixed with a BT, there is something issue when
+> enable usb2 lpm, so just disabled tmp.
+
+Please add a comment explaining things.
+
+> > > +                       status =3D "disabled";
+> > > +               };
+> > > +
+> > > +               u3phy2: t-phy@11c40000 {
+> >
+> > Just "phy" for the node name. (Or maybe "serdes".) t-phy is not
+> > generic.
+>
+> following t-phy=E2=80=99s dt-binding.
+> here using t-phy is to avoid dt-check warning, because it has some sub-
+> phys.
+
+I see. t-phy it is, then.
+
+> > > +                       compatible =3D "mediatek,mt8195-tphy",
+> > > "mediatek,generic-tphy-v3";
+> > > +                       #address-cells =3D <1>;
+> > > +                       #size-cells =3D <1>;
+> > > +                       ranges =3D <0 0 0x11c40000 0x700>;
+> > > +                       status =3D "disabled";
+> > > +
+> > > +                       u2port2: usb-phy@0 {
+> > > +                               reg =3D <0x0 0x700>;
+> > > +                               clocks =3D <&topckgen
+> > > CLK_TOP_SSUSB_PHY_P2_REF>;
+> > > +                               clock-names =3D "ref";
+> > > +                               #phy-cells =3D <1>;
+> > > +                       };
+> > > +               };
+> > > +
+> >
+> > [...]
+> >
+> > > +               ufsphy: ufs-phy@11fa0000 {
+> >
+> > I would have preferred "phy" for the device node, but this seems
+> > already
+> > defined in the binding.
+> >
+> > This IP block is not listed in the datasheet I have, so I am unable
+> > to
+> > verify the properties listed here.
+> >
+> > > +                       compatible =3D "mediatek,mt8195-ufsphy",
+> > > "mediatek,mt8183-ufsphy";
+> > > +                       reg =3D <0 0x11fa0000 0 0xc000>;
+> > > +                       clocks =3D <&clk26m>, <&clk26m>;
+> > > +                       clock-names =3D "unipro", "mp";
+> > > +                       #phy-cells =3D <0>;
+> > > +                       status =3D "disabled";
+> > > +               };
+> > > +
+> >
+> > Most of the issues I raised in this version were issues with things
+> > not
+> > matching the bindings. Please apply your patches on -next and run
+> > `make dtbs_check`.
+>
+> ok. I'll apply comments at next version. Thank you.
+>
+> >
+> >
+> > ChenYu
+>

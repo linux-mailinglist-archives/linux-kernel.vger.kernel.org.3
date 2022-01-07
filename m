@@ -2,184 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5401C487868
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BB6487871
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347644AbiAGNo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
+        id S1347653AbiAGNpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbiAGNoW (ORCPT
+        with ESMTP id S1347641AbiAGNpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:44:22 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C940C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:44:22 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id y130so16826094ybe.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:44:22 -0800 (PST)
+        Fri, 7 Jan 2022 08:45:53 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CDDC061574;
+        Fri,  7 Jan 2022 05:45:53 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id iy13so5243803pjb.5;
+        Fri, 07 Jan 2022 05:45:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cShoU76vrbE0mQ8bMH8Dhj79NbR2cnrdoCS7NmG1tqk=;
-        b=dm3TPOKjEpcXX2HP4tlgHyCVDjM7Q4pKjcoe4YloY8UhVRkPfB8PgNfZg/OWREQmqd
-         LEzLYkLvLtoPU5HZlGKkOhUtpCzLcNdEQDUilT7iMuWnjLToxQxqvH4EJCF62umcVqiG
-         w2j1vG81y5hKKJBVaooqQsU01jY6hanXeK72PnIIqmxgk06Wwd1oZmd1CWfq3pl00cht
-         6LQ6xMK3jIGNrVzaargYENIfHfEWEoSVZkVFI/v5m1ksOWmWG13ZD2Yck3Zi3YIWYE/c
-         B+rLblSImExoo1VLH/u0F5gwN28/V9qgJFH05sPEjLCLzJOGQVfN5LEWsiiRL/JojDv6
-         Nt+A==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=i+lccBWZs92uwFfTHiY+C7P7w5QeQD6HvfPbWszHYKA=;
+        b=WB3POu3MvaFnI14GT7AEAhJA/EAkXen3J6K8rXO3cqKNeQkXI9mDdbPRNyD1fhY/QK
+         mtQWQ6U+2TGtgvsWxlCwm/3PcnfLxpEjCm/EKgBhhvJrO32HKufu6u6QAKs4zmgzQBSZ
+         7t47bObKphlzgKBH126EHAk3y9nruMzegPyh1Leze8Sve6MGC/2Rd8dg1v0WGuRAyge0
+         wTJiPEeXWSJw7Jbv3IR7gaOND9MhQPwp1JZ1yWO2OTcVQN1It7q1dGkUvKR1Zna5ziQO
+         3p7rSTKmCZUCzNyxXc7dv3hhKCj/puhMyyHsu7+zpzYVFB90hXX86d/OMAPuRFIbLcvM
+         EiJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cShoU76vrbE0mQ8bMH8Dhj79NbR2cnrdoCS7NmG1tqk=;
-        b=7JyTth6KGOcL16Y4HMwtc+9WMuWiMDumq8OH4GErMfJGBTMb/JBj+eNCisida8pP7S
-         z1DMMwHhwVsPTZcUTfO5ocPBvfaVVMzcApyrdzpoPrNXE/Lga17v5862vxbd1vO/eFMJ
-         b7CCVk546RG93BmuDMinC8SaxYBJ9bRc9wvUp4P3anD2hCEXtm6b0OmdswGOcUD/idG7
-         4TfRms329xr6aaNM/wNQwDLAq22dDaqaLM5GhdIj6kX2SQvJz7o283UyDnEJhXVczQuB
-         jE6MI9wMxAxFyAXH2pBpCY8sfL1+hW9/u7DnOVNDcEw2hFcjXOPiDn9s1Ug7589IMr+I
-         geTg==
-X-Gm-Message-State: AOAM530AWGksKR65b/i8SgzpR2Z6o/dr53imh2KkRCP2QftriU62eZI/
-        H2nskvK+jsaiNICLoXQv46kbYUbCRXubvOmSr0wioqKaN3nAVw==
-X-Google-Smtp-Source: ABdhPJyfEqvU6xnJsvTMPjXvjABY9UNAgoQdbxjwoYCNPCdd/98CB6eh73UsYhZ9Z2uSQFrYJxqKkDmq1CR0ucerCdE=
-X-Received: by 2002:a25:8b8f:: with SMTP id j15mr79841190ybl.585.1641563061275;
- Fri, 07 Jan 2022 05:44:21 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=i+lccBWZs92uwFfTHiY+C7P7w5QeQD6HvfPbWszHYKA=;
+        b=M1vnVxzJiA3BoNi0Pn9ICSz/5/4qcBNfdcfsk8mHwTJt7z9h7Ipi6WNqS00Dl+08PH
+         51+Qbzje1nK/T/xR38Yaw3N1UY1eCNFT/oVoOU271EnS6gadM6U4YEhOOFtqJARY4ta8
+         dKdTnJxLLOiSV4r/HSqs/Iv0A8hksABbbjFN1OxFNGv1RqX4ZvbX3jc97XBYYoo6YfXH
+         uPw41DDC+iaQmvCxAVtfmuTsDx24xQk7D0fFPRMepFqRA9vAGHvfXzJ/3ovRDgfWoWHU
+         J6RPlPcTLlK5oMJLW8VIL2ZHHj7adYO6HbsMkXt0D2GAmaLZrlokQMxs3oUW0++OFteP
+         69Rw==
+X-Gm-Message-State: AOAM533zgBuWNesIau2k/oPcNXnQOrPWb4wYBFaixbaTxDeCXQXGHmVD
+        GhCa0Q2aau2s9oloQUrU5Jo=
+X-Google-Smtp-Source: ABdhPJzN3koh93SG9baH8JM1gF3tNPNzQNNPHi3o3DE2ULeT07sBlCdaPY/yvvCkBZLgGgUAzCQ7iQ==
+X-Received: by 2002:a17:903:22c2:b0:148:fcc0:aae8 with SMTP id y2-20020a17090322c200b00148fcc0aae8mr64042522plg.148.1641563152990;
+        Fri, 07 Jan 2022 05:45:52 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id e30sm4566471pgb.10.2022.01.07.05.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 05:45:52 -0800 (PST)
+Subject: Re: [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to PDF
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <e545803a-8f09-f0e7-4ca0-16b673ef1796@gmail.com>
+Date:   Fri, 7 Jan 2022 22:45:47 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
- <YdcUttZWaqYQpR1K@grain> <CAOuPNLifYFPU4Gt2+1sOSsYNNLQq7U2aGVaYknrhaMc-CVx8vg@mail.gmail.com>
- <Ydcmk+WaBWKlLkAw@grain> <20220107120451.z2eqru2tm5mlhla3@wittgenstein>
-In-Reply-To: <20220107120451.z2eqru2tm5mlhla3@wittgenstein>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Fri, 7 Jan 2022 19:14:10 +0530
-Message-ID: <CAOuPNLiJZu_HJQ+Hf5BJOgmT+v7DT96VLkiXrfx0MJQrkD3rSw@mail.gmail.com>
-Subject: Re: [PATCH] sysinfo: include availram field in sysinfo struct
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Cyrill Gorcunov <gorcunov@gmail.com>,
-        Pintu Kumar <quic_pintu@quicinc.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>, ebiederm@xmission.com,
-        sfr@canb.auug.org.au, legion@kernel.org, sashal@kernel.org,
-        chris.hyser@oracle.com, ccross@google.com, pcc@google.com,
-        dave@stgolabs.net, caoxiaofeng@yulong.com, david@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 at 17:35, Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
->
-> On Thu, Jan 06, 2022 at 08:27:47PM +0300, Cyrill Gorcunov wrote:
-> > On Thu, Jan 06, 2022 at 10:19:55PM +0530, Pintu Agarwal wrote:
-> > > > > diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
-> > > > > index 435d5c2..6e77e90 100644
-> > > > > --- a/include/uapi/linux/sysinfo.h
-> > > > > +++ b/include/uapi/linux/sysinfo.h
-> > > > > @@ -12,6 +12,7 @@ struct sysinfo {
-> > > > >       __kernel_ulong_t freeram;       /* Available memory size */
-> > > > >       __kernel_ulong_t sharedram;     /* Amount of shared memory */
-> > > > >       __kernel_ulong_t bufferram;     /* Memory used by buffers */
-> > > > > +     __kernel_ulong_t availram;      /* Memory available for allocation */
-> > > > >       __kernel_ulong_t totalswap;     /* Total swap space size */
-> > > > >       __kernel_ulong_t freeswap;      /* swap space still available */
-> > > > >       __u16 procs;                    /* Number of current processes */
-> > > >
-> > > > Hi! Sorry, but I don't understand -- the sysinfo structure seems to
-> > > > be part of user API, no? Don't we break it up here?
-> > >
-> > > Yes, the corresponding user space header /usr/include/linux/sysinfo.h
-> > > also needs to be updated.
-> > > When we generate the kernel header it will be updated automatically.
-> >
-> > Wait. The userspace may pass old structure here, and in result we
-> > return incorrect layout which won't match old one, no? Old binary
-> > code has no clue about this header update.
->
-> Yes, that won't work as done.
->
-> If we want to do this it needs to be done at the end of the struct right
-> before the padding field and the newly added field substracted from the
-> padding. (Not the preferred way to do it these days for new structs.)
->
-> A new kernel can then pass in the struct with the newly added field and
-> an old kernel can just fill the struct in as usual. New kernel will
-> update the field with the correct value.
->
-> But there's a catch depending on the type of value.
-> The problem with these types of extensions is that you'll often need
-> indicators to and from the kernel whether the extension is supported.
->
-> Consider an extension where 0 is a valid value meaning "this resource is
-> completely used". Since the kernel and userspace always agree on the
-> size of the struct the kernel will zero the whole struct. So if in your
-> newly added field 0 is a valid value you can't differentiate between 0
-> as a valid value indicating that your resource isn't available and 0 as
-> the kernel not supporting your extension.
->
-> Other APIs solve this and similar problems by having a request mask and
-> a return mask.  Userspace fills in what values it wants reported in the
-> request mask and kernel sets the supported flags in the return mask.
-> This way you can differentiate between the two (see statx).
->
-> If the 0 example is not a concern or acceptable for userspace it's
-> probably fine. But you need to document that having 0 returned can mean
-> both things.
->
-> Or, you select a value different from 0 (-1?) that you can use to
-> indicate to userspace that the resource is used up so 0 can just mean
-> "kernel doesn't support this extension".
+On Wed, 29 Dec 2021 20:42:00 +0900, Akira Yokosawa wrote:
+> This patch set improves conversions of DOT -> PDF and SVG -> PDF
+> for PDF docs.
 
-Thanks all for your inputs.
-As Eric suggested in other thread (pasting here for reference):
-{
-> Before the padding and you should reduce the size of the padding by the
-> size of your new field.
+Gentle ping.
 
->> Also, I could not understand what this is for ?
->> Do we need to update this since sture is changed ?
+Mauro, any comments?
 
-> In general padding like that is so new fields can be added.  The
-> comment about libc5 makes me a wonder a bit, but I expect libc5 just
-> added the padding in it's copy of the structure that it exported to
-> userspace many many years ago so that new fields could be added.
+> 
+> * DOT -> PDF conversion
+> 
+> Current scheme uses "dot -Tpdf" (of graphviz).
+> 
+> Cons:
+>   - openSUSE's dot(1) does not support -Tpdf.
+>   - Other distro's dot(1) generates PDFs with unnecessarily wide
+>     margins for inclusion into LaTeX docs.
+> 
+> Patch 1/4 changes the route to the following two steps:
+> 
+>   1. DOT -> SVG by "dot -Tsvg"
+>   2. SVG -> PDF by "rsvg-convert -f pdf" with fallback to convert(1)
+> 
+> Pros:
+>   - Improved portability across distros
+>   - Less space around graphs in final PDF documents
+> 
+> Con:
+>   - On systems without rsvg-convert, generated PDF will be of raster
+>     image.
+> 
+> Patch 2/4 avoids raster-image PDF by using "dot -Tpdf" on systems where
+> the option is available.
+> 
+> * SVG -> PDF conversion
+> 
+> Current scheme uses convert(1) (of ImageMagick)
 
-> Eric
-}
+I was not aware of security concerns regarding ImageMagick until
+Christoph brought them up in another thread [1].
 
-I made the changes like below and this seems to work even with older user space.
-I mean earlier, when I ran "free" command it was giving "stack
-smashing..." error,
-but now the "free" command (which comes as part of busybox) works fine
-even without recompiling with the updated header.
+[1]: https://lore.kernel.org/linux-doc/20220104131952.GA21933@lst.de/
 
-These are the header changes for quick look:
-{{{
-diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
-index 6e77e90..fe84c6a 100644
---- a/include/uapi/linux/sysinfo.h
-+++ b/include/uapi/linux/sysinfo.h
-@@ -12,7 +12,6 @@ struct sysinfo {
-        __kernel_ulong_t freeram;       /* Available memory size */
-        __kernel_ulong_t sharedram;     /* Amount of shared memory */
-        __kernel_ulong_t bufferram;     /* Memory used by buffers */
--       __kernel_ulong_t availram;      /* Memory available for allocation */
-        __kernel_ulong_t totalswap;     /* Total swap space size */
-        __kernel_ulong_t freeswap;      /* swap space still available */
-        __u16 procs;                    /* Number of current processes */
-@@ -20,7 +19,8 @@ struct sysinfo {
-        __kernel_ulong_t totalhigh;     /* Total high memory size */
-        __kernel_ulong_t freehigh;      /* Available high memory size */
-        __u32 mem_unit;                 /* Memory unit size in bytes */
--       char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /*
-Padding: libc5 uses this.. */
-+       __kernel_ulong_t availram;      /* Memory available for allocation */
-+       char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /*
-Padding: libc5 uses this.. */
- };
-}}}
+Now I can add another Con as bellow.
 
-If this is fine, I will push the new patch set.
+> 
+> Cons:
+    - ImageMagick is not allowed to read/write PDF by default under
+      Debian/Ubuntu and Gentoo systems.  The policy is a band-aide
+      fix to its security issues.
+>   - Generated PDFs are of raster image.  Some of them look blurry.
+>   - Raster images tend to be large in size.
+>   - convert(1) delegates SVG decoding to rsvg-convert(1).
+>     It doesn't cover full range of Inkscape-specific SVG features
+>     and fails to convert some of SVG figures properly.
 
-Thanks,
-Pintu
+        Thanks, Akira
+
+> 
+> Improper conversions are observed with SVGs listed below (incomplete,
+> conversion quality depends on the version of rsvg-convert):
+>   - Documentation/userspace-api/media/v4l/selection.svg
+>   - Documentation/userspace-api/media/v4l/vbi_525.svg
+>   - Documentation/userspace-api/media/v4l/vbi_625.svg
+>   - Documentation/userspace-api/media/v4l/vbi_hsync.svg
+>   - Documentation/admin-guide/blockdev/drbd/DRBD-8.3-data-packets.svg
+>   - Documentation/admin-guide/blockdev/drbd/DRBD-data-packages.svg
+> 
+> If you have Inkscape installed as well, convert(1) delegates SVG
+> decoding to inkscape(1) rather than to rsvg-convert(1) and SVGs listed
+> above can be rendered properly.
+> 
+> So if Inkscape is required for converting those SVGs properly, why not
+> use it directly in the first place?
+> 
+> Patches 3/4 and 4/4 add code to utilize inkscape(1) for SVG -> PDF
+> conversion when it is available.  They don't modify any existing
+> requirements for kernel-doc.
+> 
+> Patch 3/4 adds the alternative route of SVG -> PDF conversion by
+> inkscape(1).
+> Patch 4/4 delegates warning messages from inkscape(1) to kernellog.verbose
+> as they are likely harmless in command-line uses.
+> 
+> Pros:
+>   - Generated PDFs are of vector graphics.
+>   - Vector graphics tends to be smaller in size and looks nicer when
+>     zoomed in.
+>   - SVGs drawn by Inkscape are fully supported.
+> 
+> On systems without Inkscape, no regression is expected by these two
+> patches.
+> 
+> Changes since v1 (as of Patch 5/3) [1]:
+> 
+> - Reorder and merge patches to reduce/eliminate regression windows of
+>   raster-image PDF and stderr redirection.
+>     v1        v2
+>     1/3       1/4
+>     4/3       2/4
+>     2/3       3/4
+>     3/3+5/3   4/4
+> 
+> - Massage kernellog.verbose/warn messages. They now show command(s)
+>   used in DOT -> PDF conversion.
+> 
+> - Pass actual exit code of inkscape(1) to kernellog.warn.
+> 
+> FWIW, diff of v1 vs. v2 follows:
+> 
+> --------------------------------------------------------------
+[...]
+

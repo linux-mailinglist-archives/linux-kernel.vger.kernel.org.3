@@ -2,92 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB6D4875ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A834875EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237817AbiAGKxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:53:53 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53544 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232217AbiAGKxx (ORCPT
+        id S237911AbiAGKyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:54:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40060 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237836AbiAGKyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:53:53 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 207A0kPj014394;
-        Fri, 7 Jan 2022 10:53:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2021-07-09; bh=jMR9O+FM9qEWJpGAyuSKDdDsmxJsR9AVCqr0pHidOwo=;
- b=NhRSszZexyZmoHbLxUWBaCRi/zXrjPkJDCzF9xzokULus7+PwdbAizZnv7GdXWYjK9Zb
- XPZd94WpmNxRQFgHNI/uQQv4xIV1kdHHlwncerqWuyxpONHViKhZVnQ3O991pALkIiEg
- 30DNatthZKdNqJx+/DC8pYaVU0FxPvYcV4Gwz+bQ8cO8xAV01Hm7LNn7FLMB/XJB9q9c
- JpTGZvuG84+5oqdzTHnwxYDUNFgCJMaGaIUk0IefGRQt1m9r7mX6izWdqb8c2vcObHrG
- UzsNS1EJ1RliiNM5YVtsivkw0NPg0ERM2+DKr3/BDNeLImc4y8szGAPmER2uPnV8kxde Kw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3de4v8hrav-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jan 2022 10:53:49 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 207AVeaS127051;
-        Fri, 7 Jan 2022 10:53:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3de4vngpdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jan 2022 10:53:48 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 207AnTKY192863;
-        Fri, 7 Jan 2022 10:53:47 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
-        by userp3020.oracle.com with ESMTP id 3de4vngpdk-1;
-        Fri, 07 Jan 2022 10:53:47 +0000
-From:   Aayush Agarwal <aayush.a.agarwal@oracle.com>
-Cc:     aayush.a.agarwal@oracle.com, stable@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4.14] phonet: refcount leak in pep_sock_accep
-Date:   Fri,  7 Jan 2022 02:53:32 -0800
-Message-Id: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 7 Jan 2022 05:54:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24C18B82564
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 10:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1FC0C36AE9;
+        Fri,  7 Jan 2022 10:53:57 +0000 (UTC)
+Date:   Fri, 7 Jan 2022 10:53:54 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jianyong Wu <Jianyong.Wu@arm.com>
+Cc:     "will@kernel.org" <will@kernel.org>,
+        Anshuman Khandual <Anshuman.Khandual@arm.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "gshan@redhat.com" <gshan@redhat.com>,
+        Justin He <Justin.He@arm.com>, nd <nd@arm.com>
+Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
+ mapping
+Message-ID: <YdgbwpECTXGCJZ/0@arm.com>
+References: <20211216082812.165387-1-jianyong.wu@arm.com>
+ <YdXdjcJ7jbnkFsqp@arm.com>
+ <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <YdcRLohx777jzWah@arm.com>
+ <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 32QdoMVOwQVHfzppnChfzo1Q79XUlUxF
-X-Proofpoint-GUID: 32QdoMVOwQVHfzppnChfzo1Q79XUlUxF
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+On Fri, Jan 07, 2022 at 09:10:57AM +0000, Jianyong Wu wrote:
+> I roughly find the root cause.
+>  alloc_init_pud will be called at the very beginning of kernel boot in
+>  create_mapping_noalloc where no memory allocator is initialized. But
+>  lockdep check may need allocate memory. So, kernel take exception
+>  when acquire lock.(I have not found the exact code that cause this
+>  issue) that's say we may not be able to use a lock so early.
 
-commit bcd0f9335332 ("phonet: refcount leak in pep_sock_accep")
-upstream.
+I couldn't find an slab or page allocation place either. It would be
+nice to get to the root cause rather than just avoiding the mutex on the
+early boot path.
 
-sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
-invoked in subsequent failure branches(pep_accept_conn() != 0).
-
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20211209082839.33985-1-hbh25y@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Aayush Agarwal <aayush.a.agarwal@oracle.com>
----
- net/phonet/pep.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/phonet/pep.c b/net/phonet/pep.c
-index b0d958cd1823..4c4a8a42ee88 100644
---- a/net/phonet/pep.c
-+++ b/net/phonet/pep.c
-@@ -881,6 +881,7 @@ static struct sock *pep_sock_accept(struct sock *sk, int flags, int *errp,
- 
- 	err = pep_accept_conn(newsk, skb);
- 	if (err) {
-+		__sock_put(sk);
- 		sock_put(newsk);
- 		newsk = NULL;
- 		goto drop;
 -- 
-2.27.0
-
+Catalin

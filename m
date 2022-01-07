@@ -2,147 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE82486E32
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D3F486E37
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343654AbiAFX7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:59:41 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:18924 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343641AbiAFX7k (ORCPT
+        id S1343678AbiAGAA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:00:27 -0500
+Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:44518
+        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232801AbiAGAA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:59:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1641513580; x=1673049580;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CGRxrRXJyLQDHZtwUobuOfhQN8/+ZhzK98hmu5M2wss=;
-  b=FdLv0DT7iGubxar/aOuWbjUSDjQRFIVkzJbV8HaA+nqmGrP4JQqSUJVS
-   gSNWM9/50Rlb/0e60ZsF63UR0b7Axsn45lBzHjUjLaFw3euxQZyssQkHX
-   UEe4kvEKnQ7Rpg70a2FpYigfb/203yysO7VbJWp4bUReuHaRnf0jIiUCk
-   RCn5pfoom9FMDjhyJ7OFNg0a9wUI0O+W19I1cF69EfMtWbXY69FaDnA2w
-   YvMYgM4sUCkisxChLCarFe38f/eqKVGttRDruzHhrSOhBK2h1o7j8/8kh
-   Pyf4E7GESLrBsGbgJ8/b3NnNnk6+rTDc1FVF/2GrismdURYxArAniJykK
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,268,1635177600"; 
-   d="scan'208";a="190901260"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Jan 2022 07:59:40 +0800
-IronPort-SDR: iUrroAufPJTm6jgyKVRAp+IP9Bv4kULWaMFyKB8u5CRxca9peeTwlUBiPPzm4lFWcltF6iuqU0
- lLbhlSo9iUqK6vOBwtix8oXPKjyJj2R3x+IdMbQ7EFjZ6oNB62xw1MvMuhCK5ejmbdXUE9Qv71
- Rt41zKz9MEfpF4N5BqmRu1HsLlPEVEdIFqolxniCe7K8+ZHPShi7GcI6WjGqrNtkMmfssu13i9
- hf4ieD9a8nHEpY8B31kBG6Y3xi1G/yMq3pzD/xmkgWs9CVY73HSqqmSJxVa1CWGesFuuaAVOBQ
- PZlewFTSCuNNJ2UkCeKNW85s
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 15:33:28 -0800
-IronPort-SDR: V2EHXLDg8xvDZsOr3/A6NTHDzsVIw4k4B5zLJIHfj9aPayk4d8D7ovXtEy1vC7PUa64WT38/Xr
- gsOlWo+98lMUquviJxQANLlE9pBrSJXQDchoRzkPfdCY8Kw1m+fjTmLb0npht+dOhDbAlDsHjZ
- 6ArS0GlsHrmUHbWo+7CNVhn0e2FD/1ezBckz8IyecNSgGp6NYXGA4vQ0IVFYjgTqta6ZdMvomE
- QWnKdg34DVvYB2jJqO8f4Mkogb/YiV19p8O0ElGa0frQulPXE1+7A/pKeLWFld6AnfsGNyIQbN
- XyQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 15:59:40 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JVNcq2kDmz1VSkd
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:59:39 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1641513578; x=1644105579; bh=CGRxrRXJyLQDHZtwUobuOfhQN8/+ZhzK98h
-        mu5M2wss=; b=J58rzMQ3yq+u4f0FtWPAfw4k9B2pIlitFh0RkxggEp21gHqfEXQ
-        jiK6TaaOoYj9vdaJ/6ndIdv3GUtZGWEKaHTRxB764nYqqLFsChF93r/hfelzppuf
-        KTfokToP13Z4KzM0yLQq5wS8gL8QAId+oGMOfhDfd634wdrnOE86uo95w5gzkkDB
-        g2hS8ejvrASszcrYmeC8nrHZdX+n8Tvxfw6K2sT6WVrqdeKqvgyoTU5aJa8rZjiG
-        e9FMZ90wTWkr+ayV/afVDWSiUT71NyXjMoGGSkHcn/aeH6V284dpg0gPX5JILtp+
-        nzbCl4T954/WEc1BLwuuV1iZfxV3IxQ77+g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TzQV8Z3ZbBOH for <linux-kernel@vger.kernel.org>;
-        Thu,  6 Jan 2022 15:59:38 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JVNcn0L0Vz1VSkV;
-        Thu,  6 Jan 2022 15:59:36 -0800 (PST)
-Message-ID: <31ff2ee7-3e49-70bd-3f37-702d4e6c85a5@opensource.wdc.com>
-Date:   Fri, 7 Jan 2022 08:59:35 +0900
+        Thu, 6 Jan 2022 19:00:26 -0500
+Received: from integral2.. (unknown [36.68.70.227])
+        by gnuweeb.org (Postfix) with ESMTPSA id 4A52AC1645;
+        Fri,  7 Jan 2022 00:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
+        s=default; t=1641513622;
+        bh=U98ugxZLlMOKIunZ2C2GpMLa0XORGQZbIFew5+TljBI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OYfwA+ei3bBqTe3uCT6Ux2Y9TsBdz4qV0cajnNKxhPDzbEwNk8g9Lpn8eIElHBhMx
+         89af13zpyFMY8tnAZVyiO3NCtRwRMRpcdrvbNIegys77Vobu+aiA6JKEmgAV1iszQP
+         DTYYKcH9ESokk/I5PqWXokUZSK6uIEy/OX0C4rAuDSJ9wMDUM4Qb/p8M4Fpsn8BmAV
+         Skb6fXd7hmfBhAjdh450J87VsR0x1oe2k7kZK8YTxV6hyjviRX2a9hGz6V3rVSg+qQ
+         Q2o5PWDOFNV5Ds/Bjzzfb4ykRa3sNJfC386e5Mz2QyWn1yoiPWvRxP6Z6eNRx9nHgZ
+         TmoasFHDMoGQQ==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        netdev Mailing List <netdev@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Nugra <richiisei@gmail.com>,
+        Praveen Kumar <kpraveen.lkml@gmail.com>,
+        Ammar Faizi <ammarfaizi2@gmail.com>
+Subject: [RFC PATCH v4 0/3] Add sendto(2) and recvfrom(2) support for io_uring
+Date:   Fri,  7 Jan 2022 07:00:02 +0700
+Message-Id: <20220107000006.1194026-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH RFT] scsi: pm8001: Fix FW crash for maxcpus=1
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, Ajish.Koshy@microchip.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        jinpu.wang@cloud.ionos.com, Viswas.G@microchip.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vishakhavc@google.com, ipylypiv@google.com,
-        Ruksar.devadi@microchip.com,
-        Vasanthalakshmi.Tharmarajan@microchip.com
-References: <1641320780-81620-1-git-send-email-john.garry@huawei.com>
- <d2d3c903-fb91-e218-9e0a-aeb2ff9e401a@opensource.wdc.com>
- <2746563e-28ce-b328-3494-f91ace1599f1@huawei.com>
- <PH0PR11MB5112F9E9BB9F029DB9A67739EC4C9@PH0PR11MB5112.namprd11.prod.outlook.com>
- <c19c2b0b-d502-b393-db8a-cb5c57c00feb@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <c19c2b0b-d502-b393-db8a-cb5c57c00feb@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/07 0:32, John Garry wrote:
-> On 06/01/2022 13:03, Ajish.Koshy@microchip.com wrote:
->>>   only a specific vector and, also, why we check at all in
->>> an interrupt handler.
->> Here is my initial understanding so far based on the code
->> and data sheet
->>
->> 1. Controller has the capability to communicate
->> to the host about fatal error condition via configured
->> interrupt vector MSI/MSI-X.
->> 2. This capability is achieved by setting two fields
->>   a. Enable Controller Fatal error notification
->>      Dowrd 0x1C, Bit[0].
->>      1 - Enable; 0 - Disable
->>      Code: pm8001_ha->main_cfg_tbl.pm80xx_tbl.
->>      fatal_err_interrupt = 0x01;
->>   b. Fatal Error Interrupt Vector Dword 0x1C, bit[15:8]
->>      This parameter configures which interrupt vector
->>      is used to notify the host of the fatal error.
->>      Code: /* Update Fatal error interrupt vector */
->>      pm8001_ha->main_cfg_tbl.pm80xx_tbl.
->>      fatal_err_interrupt |=
->>      ((pm8001_ha->max_q_num - 1) << 8);
->>
->> Probably this will be the reason why we check
->> the vector in process_oq() for processing
->> controller fatal error
->>
->> if (vec == (pm8001_ha->max_q_num - 1)) {
->>   
->> Please do let me know if it helped in clarification.
->>
-> 
-> Sounds reasonable. And we only discover the issue for 8008/8009 now as 
-> we have that (pm8001_ha->max_q_num - 1) vector being used for standard IO.
-> 
-> So let me know of any other issue, otherwise I'll send a v2 with the 
-> coding style fixup.
+Hello,
 
-And maybe add comments about the above so that the information does not get lost ?
-
-> 
-> Thanks,
-> John
+This RFC patchset adds sendto(2) and recvfrom(2) support for io_uring.
+It also addresses an issue in the liburing GitHub repository [1].
 
 
+## Motivations
+1) By using `sendto()` and `recvfrom()` we can make the submission
+   simpler compared to always using `sendmsg()` and `recvmsg()` from
+   the userspace.
+
+2) There is a historical patch that tried to add the same
+   functionality, but did not end up being applied. [2]
+
+On Tue, 7 Jul 2020 12:29:18 -0600, Jens Axboe <axboe@kernel.dk> wrote:
+> In a private conversation with the author, a good point was brought
+> up that the sendto/recvfrom do not require an allocation of an async
+> context, if we need to defer or go async with the request. I think
+> that's a major win, to be honest. There are other benefits as well
+> (like shorter path), but to me, the async less part is nice and will
+> reduce overhead
+
+
+## Changes summary
+There are 3 patches in this series.
+
+PATCH 1/3 renames io_recv to io_recvfrom and io_send to io_sendto.
+Note that:
+
+    send(sockfd, buf, len, flags);
+
+  is equivalent to
+
+    sendto(sockfd, buf, len, flags, NULL, 0);
+
+  and
+
+    recv(sockfd, buf, len, flags);
+
+  is equivalent to
+
+    recvfrom(sockfd, buf, len, flags, NULL, NULL);
+
+So it is saner to have `send` and `recv` directed to `sendto` and
+`recvfrom` instead of the opposite with respect to the name.
+
+PATCH 2/3 makes `move_addr_to_user()` be a non static function. This
+function lives in net/socket.c, we need to call this from io_uring
+to add `recvfrom()` support for io_uring. Added net files maintainers
+to the CC list.
+
+PATCH 3/3 adds `sendto(2)` and `recvfrom(2)` support for io_uring.
+Added two new opcodes: IORING_OP_SENDTO and IORING_OP_RECVFROM.
+
+
+## How to test
+This patchset is based on "for-next" branch in Jens' tree commit:
+
+  c1537fd063e2f1dbd96d8f68b405a66297ee306f ("Merge branch 'for-5.17/drivers' into for-next")
+
+It is also available in the Git repository at:
+
+  https://github.com/ammarfaizi2/linux-block.git ammarfaizi2/linux-block/io_uring-recvfrom-sendto.v4
+
+Test with liburing (added the liburing support, docs, and test program),
+the liburing support is based on liburing "master" branch commit:
+
+  918d8061ffdfdf253806a1e8e141c71644e678bd ("Remove getdents support")
+
+It is available in the Git repository at:
+
+  https://github.com/ammarfaizi2/liburing.git sendto-recvfrom.v2
+
+Please review and comment.
+
+---
+
+RFC v4 (this patchset):
+  - Rebase the work (sync with "for-next" branch in Jens' tree).
+
+  - Remove Tested-by tag from Nugra as we have changes.
+
+  - (Address Praveen's comment) Zero `sendto_addr_len` and
+    `recvfrom_addr_len` on prep when the `req->opcode` is not
+    `IORING_OP_{SENDTO,RECVFROM}`.
+
+RFC v3:
+  - Fix build error when CONFIG_NET is undefined for PATCH 1/3. I
+    tried to fix it in PATCH 3/3, but it should be fixed in PATCH 1/3,
+    otherwise it breaks the build in PATCH 1/3.
+
+  - Added `io_uring_prep_{sendto,recvfrom}` docs to the liburing.
+
+RFC v2:
+  - Rebase the work, now this patchset is based on commit
+    bb3294e22482db4b7ec ("Merge branch 'for-5.17/drivers' into
+    for-next").
+
+  - In `io_recvfrom()`, mark the error check of `move_addr_to_user()`
+    call as unlikely.
+
+  - Fix build error when CONFIG_NET is undefined.
+
+  - Update liburing test (the branch is still the same, just force
+    pushed).
+
+  - Added Nugra to CC list (tester).
+
+---
+RFC v3: https://lore.kernel.org/io-uring/20211230013154.102910-1-ammar.faizi@intel.com/
+RFC v2: https://lore.kernel.org/io-uring/20211230114846.137954-1-ammar.faizi@intel.com/
+RFC v1: https://lore.kernel.org/io-uring/20211230173126.174350-1-ammar.faizi@intel.com/
+Link: https://github.com/axboe/liburing/issues/397 [1]
+Link: https://lore.kernel.org/io-uring/a2399c89-2c45-375c-7395-b5caf556ec3d@kernel.dk/ [2]
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+Ammar Faizi (3):
+  io_uring: Rename `io_{send,recv}` to `io_{sendto,recvfrom}`
+  net: Make `move_addr_to_user()` be a non static function
+  io_uring: Add `sendto(2)` and `recvfrom(2)` support
+
+ fs/io_uring.c                 | 94 +++++++++++++++++++++++++++++++----
+ include/linux/socket.h        |  2 +
+ include/uapi/linux/io_uring.h |  5 +-
+ net/socket.c                  |  4 +-
+ 4 files changed, 92 insertions(+), 13 deletions(-)
+
+
+base-commit: c1537fd063e2f1dbd96d8f68b405a66297ee306f
 -- 
-Damien Le Moal
-Western Digital Research
+2.32.0
+

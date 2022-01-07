@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03336487E53
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36364487E5B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiAGVd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiAGVd5 (ORCPT
+        id S230051AbiAGVgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:36:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47888 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230002AbiAGVgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:33:57 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0834C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:33:56 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id w16so26861852edc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:33:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cl6ubDfyPf0bsIiZ+HAM7SA17QVqusHqEuiF6QMZ3Bg=;
-        b=ABAD+YAbdjT5EUrLXHFKr67FkiWrHrUpU/iOotM2olGVkDHQ6usGgHURcWEsKJwSy9
-         bvVZRAAiTAk3xiGj0rwDL82GmvRo8ER6JA/LIIUPdLunGOe30u2hBhVJDsCUO4Z4lGxN
-         FbcJvMpH6iFpxiyPev64kNMEdeZrd2uZ+nvjQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cl6ubDfyPf0bsIiZ+HAM7SA17QVqusHqEuiF6QMZ3Bg=;
-        b=7eK74eK2X5Ysn1aiK9L7LKycDTsdyyOlq7YHd6/XtFrZ3r3FK5PC/Uh/xB1QhdkiVK
-         Cha/a+TC/yRlnbyHZIrqpQxB05VAyezUai97rF1e/Rj1M9C3YyQXrruC3Qa/mkCdsuBp
-         UP56uyd8gZiTBKFf5JAJ5qOEWyYyzUXFuiSg2OhwpkO056MRFxYmcqLQ+wLgRpX+2fWR
-         s4RO+GPm8btNT8HdAbBwD6QmTSzcBkrlXieQxq54BPeZGlYpN1NGF+3Ey78e7LXP+WMn
-         3SXG+3K0NujOo924KjJcBWOYL3hgyX4g8IzEqttMFuOab4vM02y5PY98HvhMRZP3UbSP
-         rNxQ==
-X-Gm-Message-State: AOAM530buQKp5VXuVTz+/lQ4JzPCm6Xc4aVgW7ivn9SrDCAB7t1nIhsx
-        xTirE17f3LgywCIPy9qDulK2KuP8ujpZj7Ptlsc=
-X-Google-Smtp-Source: ABdhPJydE28PBnPZjrGe/lMN8DKZPCLS+bqzixM225qPRyF7CWQl8YGdJui1h2D8PyigSXclmKprDA==
-X-Received: by 2002:a17:906:4c1:: with SMTP id g1mr3503268eja.148.1641591235269;
-        Fri, 07 Jan 2022 13:33:55 -0800 (PST)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id qa30sm1719430ejc.54.2022.01.07.13.33.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 13:33:54 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id q8so13372089wra.12
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:33:53 -0800 (PST)
-X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr55413119wrx.193.1641591233488;
- Fri, 07 Jan 2022 13:33:53 -0800 (PST)
+        Fri, 7 Jan 2022 16:36:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6CA76201E;
+        Fri,  7 Jan 2022 21:36:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D8FC36AE9;
+        Fri,  7 Jan 2022 21:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641591373;
+        bh=j5HsOLNVGqvbLwGLGzH8tyxrFSkvHryzBUNEAa7ADyk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=In9yUjCOAz4yBAFFwZiTIGL9H8CrbBUhXsbbAFgLnV9HfbQpjtzPVEuavbStBXlug
+         AiDMsvd9ZuyXr6Wnabxhz1DwlZZ/rznzTjgegpXW8diQtA8TavGKIRDOO8Ic8BI5pe
+         UM4Lx4PRk05o4MDn2Ac2UkKcWX6ajl+yuZnjmQ6C9F3VXd/lVQnyu9GoBIkT5/S15b
+         EK1Tl51s0s8CqcaQ4cCk8vELSVvNCSICkYlhW4llbBHKKiJM5V3GZG4pftfdZw9diU
+         ov+XUmhk5mo4GtoTnm/8QNVS21+GVLD+EmHmNp11Nsa8K8oNe3Lc0QCJ3U3f+Mut1D
+         RzBzUe5F38UeA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E3E615C08AA; Fri,  7 Jan 2022 13:36:12 -0800 (PST)
+Date:   Fri, 7 Jan 2022 13:36:12 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Yu Kuai <yukuai3@huawei.com>, hch@infradead.org,
+        axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH v5 2/2] block: cancel all throttled bios in del_gendisk()
+Message-ID: <20220107213612.GQ4202@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211210083143.3181535-1-yukuai3@huawei.com>
+ <20211210083143.3181535-3-yukuai3@huawei.com>
+ <20220107150519.GA26824@blackbody.suse.cz>
+ <YdiuN9kv5OvE/Rtf@slm.duckdns.org>
 MIME-Version: 1.0
-References: <7cd73147-2170-a0cd-c64e-ded4bef645b0@leemhuis.info>
-In-Reply-To: <7cd73147-2170-a0cd-c64e-ded4bef645b0@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Jan 2022 13:33:37 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wizbxtkFsWgR6v_24ksFE3ur6RHNg=X_PR5E5AM2XvC7w@mail.gmail.com>
-Message-ID: <CAHk-=wizbxtkFsWgR6v_24ksFE3ur6RHNg=X_PR5E5AM2XvC7w@mail.gmail.com>
-Subject: Re: Special regressions report for the pending 5.16 release
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Song Liu <songliubraving@fb.com>, Jens Axboe <axboe@kernel.dk>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdiuN9kv5OvE/Rtf@slm.duckdns.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 2:59 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->
-> [PATCH] md/raid1: fix missing bitmap update w/o WriteMostly devices
+On Fri, Jan 07, 2022 at 11:18:47AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Fri, Jan 07, 2022 at 04:05:19PM +0100, Michal Koutný wrote:
+> > On Fri, Dec 10, 2021 at 04:31:43PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
+> > > +	 * queue_lock is held, rcu lock is not needed here.
+> > > +	 */
+> > > +	blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg)
+> > > +		tg_drain_bios(&blkg_to_tg(blkg)->service_queue);
+> > 
+> > FTR, I acknowledge this can work due to RCU peculiarities, however, I
+> > don't understand why is it preferred against more robust explict
+> > rcu_read_lock().
+> > 
+> > (All in all, this isn't a deal breaker and I'm not confident evaluating
+> > the rest of the patch.)
+> 
+> Cc'ing Paul for RCU. Paul, this nit is around whether or not to use
+> rcu_read_lock() in an irq disabled section. I can see both sides of the
+> arguments - it's weird to put in an extra rcu_read_lock() when technically
+> unnecessary but it's also nice to have something explicit and structured to
+> mark parts which require RCU protection. Putting in a comment is okay but
+> consistency is difficult to achieve that way.
+> 
+> Maybe all these are unnecessary as lockdep would be able to catch them
+> anyway, or maybe we'd want something to explicitly mark RCU protected
+> sections. I don't know but whichever way, I think we need to establish a
+> convention.
 
-Merged.
+The easiest thing to do is to use rcu_dereference_sched() instead of
+rcu_dereference().  This will cause lockdep to insist on preemption
+(for example, interrupts) being disabled.
 
-> Wolfram (CCed) plans to revert a i2c commit to fix it, but I'm not sure
-> if he plans to send in onwards for 5.16 (or if that would be a good idea
-> at all):
+Or is this a case where a function containing rcu_dereference() is invoked
+with interrupts disabled from some call sites and under rcu_read_lock()
+protection from other call sites?  In this case, it is usually best to
+include that redundant rcu_read_lock() [1].
 
-So apparently I'm getting the pull tomorrow.
+							Thanx, Paul
 
-> * There are suspend and resume problems related to amdgpu:
+[1]	If you are a glutton for punishment, or if you would otherwise
+	have to add a cubic goatskin of rcu_read_lock() calls, you
+	could instead write this priceless gem in place of the calls to
+	rcu_dereference() in that common function:
 
-Fix merged (and tested at least on my system).
+	p = rcu_dereference_check(ptr, rcu_read_lock_sched_held());
 
-          Linus
+	This would cause lockdep to be happy with either rcu_read_lock()
+	or preemption being disabled.
+
+	This is more precise, and would be preferable in some cases,
+	for example, if there were lots of hotpath callsites with
+	interrupts disabled.  "Do we add 25 pairs of rcu_read_lock()
+	and rcu_read_unlock()?	Or do we add just the one ugly
+	rcu_dereference_check()?"

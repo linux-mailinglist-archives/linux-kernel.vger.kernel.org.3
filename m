@@ -2,60 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5931048716D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0B6487171
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiAGDrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S230254AbiAGDsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 22:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiAGDrW (ORCPT
+        with ESMTP id S229938AbiAGDsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:47:22 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A8C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 19:47:22 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id r6so4314604qvr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 19:47:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5F8lMBmC+Nok/5F2Ab8lEIhaSUPAGb450L+uK4sWz2A=;
-        b=p6xt6ZESiP7fhI082FRtQDjG+IYG6QkiqSLE9SaK5lwNb4BsF7xmJGIaK9+ZFKCz/r
-         wXtJ8QpYok6Ju7PDxAwlWMQG+wVmwf4zg3cAQX+DB2IUPv4fValkweq2izjpLHtoqXZF
-         9Dqli3Of9OMUmt0hX1NQv8fwT/G3hzs5m1whnPihc/JrGUVbui1xR561/vbTLXnRNL7q
-         jila7xLOoF596IkrnacZl7/mtLFbsOEcxa6DsYvJ/Y7q3q88kKCOCXk6Sb1++W65pytv
-         8VBVxNq6vYpiauZWkuFeNZgtUI4AU8vnByqqEOaE87R+cutEZsPoKtplq0gdUHA2czBK
-         5kVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5F8lMBmC+Nok/5F2Ab8lEIhaSUPAGb450L+uK4sWz2A=;
-        b=pNOSBKAjSft4AzOh4OF2cVcYrxCz1U1K+mHtIfXfy5oXLoWhT0tmcSMGOpWthA3DGr
-         AepUknDwykCRs3iWaCDYK1KS3n8fb9a2/Cp8oiUYpXdCdybOFpbzWTvEC0E12wjcOFuH
-         NHQ7CzQMKocRztvSwQ334ZxDTlnHsQo/TntkKgXzmgZzgqoTYtVOsPjSWhbc8B0c5mR7
-         1DW3j1ufs4FcNnbtdcES1Y1IlADSOqP6DalJHWbKLULilWytg/Ztoh2Q+cxmqHd+WNam
-         8qZMsZ698F3Y21xWAwAm4vtPsqk21+63ZJ7AIUbJAneHvYruQwwrnnlQ/RahpUzu0qgG
-         oGSw==
-X-Gm-Message-State: AOAM532c0KNWyEVlFauvrxWjRAxIgBQvxw51uHWvzkR82001zt5N7mws
-        XWl8bk2aR3Hui9hcNyWAGMxeFiA9nTZIUfDcwRs=
-X-Google-Smtp-Source: ABdhPJxbCKW4fTpVnX2CQvf9RgErNXW1jwP4z7SknLbQ8Cc9Yo+wV5VNXoMrHTDT6nrY6l5JMWZVPP3ed7loEUw8xy4=
-X-Received: by 2002:a05:6214:4118:: with SMTP id kc24mr55862932qvb.118.1641527241158;
- Thu, 06 Jan 2022 19:47:21 -0800 (PST)
+        Thu, 6 Jan 2022 22:48:19 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11802C061245;
+        Thu,  6 Jan 2022 19:48:19 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5gEj-000GL6-71; Fri, 07 Jan 2022 03:48:17 +0000
+Date:   Fri, 7 Jan 2022 03:48:17 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>, linux-api@vger.kernel.org
+Subject: Re: [PATCH 01/17] exit: Remove profile_task_exit & profile_munmap
+Message-ID: <Yde4AcAxTziaVies@zeniv-ca.linux.org.uk>
+References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+ <20220103213312.9144-1-ebiederm@xmission.com>
 MIME-Version: 1.0
-Received: by 2002:a05:622a:1113:0:0:0:0 with HTTP; Thu, 6 Jan 2022 19:47:20
- -0800 (PST)
-Reply-To: ericopokueric3@gmail.com
-From:   Eric Opokue <egojohn32@gmail.com>
-Date:   Fri, 7 Jan 2022 05:47:20 +0200
-Message-ID: <CAGacM92fW7+Mf+VfO=vaZ2ZEKj7Lff8hRDzpxfc_daQqO1wT0w@mail.gmail.com>
-Subject: Happy new mornth
-To:     ericopokueric3@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103213312.9144-1-ebiederm@xmission.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello dear, my name is Mr. Eric Opoku, I have a business proposal can
-i trust you?
+On Mon, Jan 03, 2022 at 03:32:56PM -0600, Eric W. Biederman wrote:
+> When I say remove I mean remove.  All profile_task_exit and
+> profile_munmap do is call a blocking notifier chain.  The helpers
+> profile_task_register and profile_task_unregister are not called
+> anywhere in the tree.  Which means this is all dead code.
+> 
+> So remove the dead code and make it easier to read do_exit.
+
+How about doing the same to profile_handoff_task() and
+task_handoff_register()/task_handoff_unregister(),
+while we are at it?  Combined diff would be this:
+
+diff --git a/include/linux/profile.h b/include/linux/profile.h
+index fd18ca96f5574..6aa64730298a0 100644
+--- a/include/linux/profile.h
++++ b/include/linux/profile.h
+@@ -31,11 +31,6 @@ static inline int create_proc_profile(void)
+ }
+ #endif
+ 
+-enum profile_type {
+-	PROFILE_TASK_EXIT,
+-	PROFILE_MUNMAP
+-};
+-
+ #ifdef CONFIG_PROFILING
+ 
+ extern int prof_on __read_mostly;
+@@ -63,26 +58,6 @@ static inline void profile_hit(int type, void *ip)
+ 		profile_hits(type, ip, 1);
+ }
+ 
+-struct task_struct;
+-struct mm_struct;
+-
+-/* task is in do_exit() */
+-void profile_task_exit(struct task_struct * task);
+-
+-/* task is dead, free task struct ? Returns 1 if
+- * the task was taken, 0 if the task should be freed.
+- */
+-int profile_handoff_task(struct task_struct * task);
+-
+-/* sys_munmap */
+-void profile_munmap(unsigned long addr);
+-
+-int task_handoff_register(struct notifier_block * n);
+-int task_handoff_unregister(struct notifier_block * n);
+-
+-int profile_event_register(enum profile_type, struct notifier_block * n);
+-int profile_event_unregister(enum profile_type, struct notifier_block * n);
+-
+ #else
+ 
+ #define prof_on 0
+@@ -107,30 +82,6 @@ static inline void profile_hit(int type, void *ip)
+ 	return;
+ }
+ 
+-static inline int task_handoff_register(struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int task_handoff_unregister(struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int profile_event_register(enum profile_type t, struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int profile_event_unregister(enum profile_type t, struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-#define profile_task_exit(a) do { } while (0)
+-#define profile_handoff_task(a) (0)
+-#define profile_munmap(a) do { } while (0)
+-
+ #endif /* CONFIG_PROFILING */
+ 
+ #endif /* _LINUX_PROFILE_H */
+diff --git a/kernel/exit.c b/kernel/exit.c
+index f702a6a63686e..5086a5e9d02de 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -765,7 +765,6 @@ void __noreturn do_exit(long code)
+ 		preempt_count_set(PREEMPT_ENABLED);
+ 	}
+ 
+-	profile_task_exit(tsk);
+ 	kcov_task_exit(tsk);
+ 
+ 	coredump_task_exit(tsk);
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 3244cc56b697d..496c0b6c8cb83 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -754,9 +754,7 @@ void __put_task_struct(struct task_struct *tsk)
+ 	delayacct_tsk_free(tsk);
+ 	put_signal_struct(tsk->signal);
+ 	sched_core_free(tsk);
+-
+-	if (!profile_handoff_task(tsk))
+-		free_task(tsk);
++	free_task(tsk);
+ }
+ EXPORT_SYMBOL_GPL(__put_task_struct);
+ 
+diff --git a/kernel/profile.c b/kernel/profile.c
+index eb9c7f0f5ac52..37640a0bd8a3c 100644
+--- a/kernel/profile.c
++++ b/kernel/profile.c
+@@ -133,79 +133,6 @@ int __ref profile_init(void)
+ 	return -ENOMEM;
+ }
+ 
+-/* Profile event notifications */
+-
+-static BLOCKING_NOTIFIER_HEAD(task_exit_notifier);
+-static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
+-static BLOCKING_NOTIFIER_HEAD(munmap_notifier);
+-
+-void profile_task_exit(struct task_struct *task)
+-{
+-	blocking_notifier_call_chain(&task_exit_notifier, 0, task);
+-}
+-
+-int profile_handoff_task(struct task_struct *task)
+-{
+-	int ret;
+-	ret = atomic_notifier_call_chain(&task_free_notifier, 0, task);
+-	return (ret == NOTIFY_OK) ? 1 : 0;
+-}
+-
+-void profile_munmap(unsigned long addr)
+-{
+-	blocking_notifier_call_chain(&munmap_notifier, 0, (void *)addr);
+-}
+-
+-int task_handoff_register(struct notifier_block *n)
+-{
+-	return atomic_notifier_chain_register(&task_free_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(task_handoff_register);
+-
+-int task_handoff_unregister(struct notifier_block *n)
+-{
+-	return atomic_notifier_chain_unregister(&task_free_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(task_handoff_unregister);
+-
+-int profile_event_register(enum profile_type type, struct notifier_block *n)
+-{
+-	int err = -EINVAL;
+-
+-	switch (type) {
+-	case PROFILE_TASK_EXIT:
+-		err = blocking_notifier_chain_register(
+-				&task_exit_notifier, n);
+-		break;
+-	case PROFILE_MUNMAP:
+-		err = blocking_notifier_chain_register(
+-				&munmap_notifier, n);
+-		break;
+-	}
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(profile_event_register);
+-
+-int profile_event_unregister(enum profile_type type, struct notifier_block *n)
+-{
+-	int err = -EINVAL;
+-
+-	switch (type) {
+-	case PROFILE_TASK_EXIT:
+-		err = blocking_notifier_chain_unregister(
+-				&task_exit_notifier, n);
+-		break;
+-	case PROFILE_MUNMAP:
+-		err = blocking_notifier_chain_unregister(
+-				&munmap_notifier, n);
+-		break;
+-	}
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(profile_event_unregister);
+-
+ #if defined(CONFIG_SMP) && defined(CONFIG_PROC_FS)
+ /*
+  * Each cpu has a pair of open-addressed hashtables for pending
+diff --git a/mm/mmap.c b/mm/mmap.c
+index bfb0ea164a90a..70318c2a47c39 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2928,7 +2928,6 @@ EXPORT_SYMBOL(vm_munmap);
+ SYSCALL_DEFINE2(munmap, unsigned long, addr, size_t, len)
+ {
+ 	addr = untagged_addr(addr);
+-	profile_munmap(addr);
+ 	return __vm_munmap(addr, len, true);
+ }
+ 

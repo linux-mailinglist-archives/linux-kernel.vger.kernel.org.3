@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C992486F57
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25C9486FFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344997AbiAGBAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:00:43 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:33739 "EHLO
+        id S1345298AbiAGB7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:59:44 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:41501 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbiAGBAn (ORCPT
+        with ESMTP id S1344533AbiAGB7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 20:00:43 -0500
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MD9jV-1nECKG2wcL-0097oP; Fri, 07 Jan 2022 02:00:41 +0100
-Received: by mail-wr1-f47.google.com with SMTP id r10so374715wrc.3;
-        Thu, 06 Jan 2022 17:00:41 -0800 (PST)
-X-Gm-Message-State: AOAM5335hx53U5HKfOMs7M8K3+PYufMuAtr0DC2nSITkFCuZIOAbc+T/
-        o3FOM69vDjCVNXG6i3xVgS3UPbHWGqItzuAlFsQ=
-X-Google-Smtp-Source: ABdhPJy+QxLYZAEh0tcKnUCPWH2awGby0oPIVh1+zunkAi9c20kfhXGBzIRZmpUDYW3Yto6/u5ecQOGKYn9Oed0f9pA=
-X-Received: by 2002:a5d:4651:: with SMTP id j17mr5394152wrs.219.1641517241345;
- Thu, 06 Jan 2022 17:00:41 -0800 (PST)
+        Thu, 6 Jan 2022 20:59:39 -0500
+Received: from mail-ed1-f43.google.com ([209.85.208.43]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MOiLp-1mjy1m0Wit-00QFQI; Fri, 07 Jan 2022 02:59:37 +0100
+Received: by mail-ed1-f43.google.com with SMTP id j6so16310142edw.12;
+        Thu, 06 Jan 2022 17:59:37 -0800 (PST)
+X-Gm-Message-State: AOAM533wA5LJufOXRwkZBzeRLhNbm2eD7rqzc+Xz3rnBJi+P9t2VYdKM
+        1mDn2kVfXPO2OXbzUjTurxxQodFCK6VUrcAhm+0=
+X-Google-Smtp-Source: ABdhPJwNPusolPWQ0Dfm+FkLfh1W+9s6XBF4mIXZxjKoC1VGJSGdyFfgj8EhVdC8IWm5RZdDWKdfuddYhSIOwhhZCO4=
+X-Received: by 2002:a05:6000:16c7:: with SMTP id h7mr5177836wrf.317.1641517284064;
+ Thu, 06 Jan 2022 17:01:24 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <bdcc562c16d2551d6eb87baf557813330de45127.1641500561.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <bdcc562c16d2551d6eb87baf557813330de45127.1641500561.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <4c35f397720fccb6c9166fa85fa25475b0659a6a.1641500561.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <4c35f397720fccb6c9166fa85fa25475b0659a6a.1641500561.git.christophe.jaillet@wanadoo.fr>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 6 Jan 2022 20:00:38 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a1c_jOKX6EQihRY2TmjxMOkXDXDgdv4rUf_6e52+3o2Ag@mail.gmail.com>
-Message-ID: <CAK8P3a1c_jOKX6EQihRY2TmjxMOkXDXDgdv4rUf_6e52+3o2Ag@mail.gmail.com>
-Subject: Re: [PATCH 08/16] rapidio/tsi721: Remove usage of the deprecated
- "pci-dma-compat.h" API
+Date:   Thu, 6 Jan 2022 20:01:21 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a1sESb9CYs+N=rYs3=6Sq_CZHsKB0jXgT1n9XC7O9x_gA@mail.gmail.com>
+Message-ID: <CAK8P3a1sESb9CYs+N=rYs3=6Sq_CZHsKB0jXgT1n9XC7O9x_gA@mail.gmail.com>
+Subject: Re: [PATCH 09/16] media: v4l2-pci-skeleton: Remove usage of the
+ deprecated "pci-dma-compat.h" API
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Christoph Hellwig <hch@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alex Bounine <alex.bou9@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         kernel-janitors <kernel-janitors@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:b3f3bLRba7qTq2kT4lU5/vMkdzInvzsiOS8Ar7cIyd0kXMIzeyX
- efKjS9bsSSCCOcf4J3uqygkcj8pkEXPyMRkWQ6CZS3kH0oDtPOWAylHHC+8YCy3Wvpf+TX6
- YYM27lOVp0cpL2YRCJwh1gZgsh/v15NsmisFlM5tY57wXhizOpWYcaCcFBAz9q8v03vbCYo
- zHLBxLhmYwO+Kng305Y+g==
+X-Provags-ID: V03:K1:8oDH2q8ZcRAZYzpoxlwrzszTCFuRww0c7gPSMUEWwZ7ZseQZpY+
+ Bd54+PKN4HMm01RUjpSFgt22EY7EkvcEAZIsHvjpqCDvEfKXJ+QksZZ4iPZb9cwobXwjJl0
+ atlqcCTZrIXdy/ftSYpduzwbE/QVG/uNgABuC1WnhOuAV5fG1QGOfmvduqMMt+mm1O3i3MX
+ 8PmTXBNyQClB7J1/cYlsw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nfYHcHTz8G8=:hLei3higSeMShsAvGcmrmn
- NQSKlIdE0l31lqiqvaBvJdbjQOKj0//9HUenyYvKtCj1FP9BWJ8JeWz4jg4U2Iolg8nf0609j
- vrq46QV8CvSsTeV7D+VgPOc7rxva2O8VrEOJqCCVaHV60/YrkC9VoEP+qQ//MAbyG/X/GTU04
- ekobFh02Nzt/OXcaVKRapLbBpMBKoEKvElA4TGOb0fPYRh7lKEjb5cV8N19+9y8ndQC8nlRIS
- oEhJixWW0BGGLbbofYXJoPEeu45KiJuoGzeY4cUeJA/jNMacFsbBibp1fjTosKt+VYwKXiN/0
- hqyslI7Q1+2YwdxKv6ebr3RSoC8GVLrFXydvYKoGBt/VyJ26Q9/DHK6z5hIEhcIRpEyAuHfsQ
- /VaNEN9N4XEHtbuEsr7S+NOljHXH81/gvuWP5cIgeverFv1ZUwTPyzo7Ob2bPSQK31TvtXd8w
- glHhQvW73lgV2DZT9om0tiGuQfJust0RJdnrxQZpEqk9a3ktQ4Zew9Fa1/8Th458vwSZ079QH
- lksQDohOQQ3zZ17zoqWJ9DUXnqPl/uib736qDTg18UaXqsX2Mm2l2gmtVDZgM4p9xuYB1f/Mb
- OK5N7pBeGaHLcRFmnexLFYtKdb4xHYSR9wu1zrmTsdGHfQ64O7YXBn2aWRiWNnWj0MoS4de6i
- PKlev0mSQvse3R8r+r4p4GG35PH8z5QVzkYSxRVPwRYgwyXsWkWUHe5s1aq4+K6BzUhS5HR8U
- gf0WluQppmSi3UocShZDh7Kg/563hdw6oeq8Zyx6BNChJJJ/hj28O+mi/WjCGPhuf+17U+Gfi
- 5oCBcBrIAxjkFYeEZLzh9zZ5+g9OMqDlszqGbJ/GSV+nao8HbM=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:L/dDlk68fws=:Yz0m+Bpi8dsgdSUM57PaXv
+ A1zljUGqyfjnFfsSNtWSu84FaVEv2I3IToPQ8One9WT9n2wsUHjh4Y44nEXoHWp5OjdbIY5og
+ yoDXjc/4rTpfR7kxUhMr6vSc10Vy6OFAmYs/mCH+k4JiHTHNXkHPYoby1aD0JC1VlZCjRsvUM
+ dwojnHZ7V4iAArtYmL3fMApzS9kkOB4SF2o/x1JVzSVzMLB+pedzBAQfWDBIV8N13UpxQzhGd
+ IrcckBK/GSnbfRNJbCc/emWJ2iTqYarfkfn+SQ9ihYvXw58x5/dP8TYVE+dqCVd6SfeG52VA6
+ 4uHquQJwL4cyMGipsaTHOTN9Yd+HRWlvudHmyMap0FSJMNJGTnkVqD8L4X+DqoSxwJbndy4sZ
+ Y/UN4+gj8BLkEyYF2rW7DDTedaX3WCQsW9VIrDPfjQb3qnfUWR56aLQCGkoQDkmhQZRTOlgWe
+ deuH6GPFtupdbJg4KxGeMeP6E/x1dVAesRa/6+Ua8mJgm3cvMfVv5B4Yn+3159QAIBc8RMDLC
+ l/6Gs6nFtTYsMw1tJxhy716Zf0MxWoMmpCEzbrIOEHYHAJeivkEymkAjTem5il+xZ/+4Olwhm
+ 2p6HpP2mdErESUeyTuLo3uY83sJYMIaZhg1baSaLpQ7MLfEPTFF6b5/+v7YW9CqbTSbwYMwna
+ tAk2kyV9OwuNK0DgkfFG3exa+slSv56xrEyWhY86q7nuvvQvvD/uj/he0OesPJlduGXBYO66N
+ yuSIiIdUISsdXcGICaRMqzbWcFPXxlyI4u55tzHg/RTRM8xy+dPsoZEiCukDllPBoB9W0gEXO
+ cmrWwjwtL6+8GcTqW/pTeMh3en9MpRRcT1/imwD48AH2W4RVyw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:52 PM Christophe JAILLET
+On Thu, Jan 6, 2022 at 4:53 PM Christophe JAILLET
 <christophe.jaillet@wanadoo.fr> wrote:
 >
 > In [1], Christoph Hellwig has proposed to remove the wrappers in

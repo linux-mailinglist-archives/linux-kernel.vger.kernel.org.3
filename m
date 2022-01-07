@@ -2,181 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D04487B1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B95A487B24
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348508AbiAGRMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239660AbiAGRMi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:12:38 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76AAC061574;
-        Fri,  7 Jan 2022 09:12:37 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id w80so9018666oie.9;
-        Fri, 07 Jan 2022 09:12:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=meWJzKr/lTzDUp9/XTgznWUNAOJF/DX7ONGAL+XEdDE=;
-        b=CebyNuSFAISoL8GLFOIls5ab12rksmV+sCFCD2dYzRH9UPGxInpCbjflUw1Puh7lNq
-         JBvUWRNLJtK+iJcset2E2nK83KhszuXRmJ0bb0pv/6ul1yte/sr+oaMqjmeINlLIVbfJ
-         a6yz7kZn61u6NIuNHLxe/H/CJhMnB86/+xa61p133dStn2B+5jsdtxb33+a+w9iqsxe/
-         PzIsmytcRlDCDaEQvDs3SDzyQic7/h6hPHJ1KgXDzhQ12p5X44VpFsIuGOOI5pMHAWZp
-         zsJyE99ROU/KuXzH/h3S8MG+T10WKPfFUpYoW9q/Cv9pWACK3U0HPLA/tvoXClkMdRjT
-         lN+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=meWJzKr/lTzDUp9/XTgznWUNAOJF/DX7ONGAL+XEdDE=;
-        b=yQPhNDwMxsPRk2zqKT1eQ4xHyXybCeDZWXDwqsoL0NDJyRCXZFETqDwA3/yjjWxW7k
-         Uw3QDKU3XeRLW8NjYNh3PWapP5Z8QGE7CzGTvRqhkeoRSsnWf1KxsUTAbBFQB3GFHBga
-         TU/wdLkn7LC0bxj/BmqbdMgxF00lLajB/oou8qg2BUhXLWHF6n7OsGBLj/CJNHV4uUZO
-         Zf6Gjf95ICXtV9TnlOUEZsbowlMRmAGKizwr7w6e/XISQyhOVRfenyrLN4sHyRb9NwbY
-         S1FTqERq2G0RaxI/aP/DHSVLULOM0/DKOoAeemuICP9H/2XO94xgJw0bPdDPBSFvkYxn
-         rpLQ==
-X-Gm-Message-State: AOAM531mKlqCe3kA8mR70J6QGvsnw4oX2WwgnrHitgZnjgJ3dAZ9RQJX
-        oS/PFfaqLbku7STTduI2wuv+bjaA6+U=
-X-Google-Smtp-Source: ABdhPJw7YvIfoiY0y4PDfRlT5fALUBVcjFRb/Fp6PiEruD1lC365sWjUSQW/TcqkK4BEd0fXsDK5UQ==
-X-Received: by 2002:a05:6808:d4d:: with SMTP id w13mr10379078oik.85.1641575555698;
-        Fri, 07 Jan 2022 09:12:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t17sm968120otc.17.2022.01.07.09.12.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 09:12:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wim@linux-watchdog.org, ssg.sos.patches@amd.com,
-        sudheesh.mavila@amd.com,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>
-References: <20211103161521.43447-1-terry.bowman@amd.com>
- <20211103161521.43447-4-terry.bowman@amd.com>
- <20220106181809.GA240027@roeck-us.net>
- <9afabe55-6429-2284-cafd-d59ce481f067@amd.com>
- <YdgeU2p+i5hN1XCU@rric.localdomain>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 3/4] Watchdog: sp5100_tco: Add EFCH SMBus controller
- initialization using MMIO
-Message-ID: <ac8e1173-3002-54f1-0264-6f0cdf26c475@roeck-us.net>
-Date:   Fri, 7 Jan 2022 09:12:32 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1348523AbiAGROI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:14:08 -0500
+Received: from mga14.intel.com ([192.55.52.115]:40437 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348477AbiAGROH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 12:14:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641575647; x=1673111647;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5S8HMRuD2QZPFSULfx9qRH9Uh7G6jQZF8OyxPNfQmrc=;
+  b=mP2MOb8LDTT4hlrPPH0XpjHyGs4XMlSdbXfeNYD+TB0Hu3hrI0TnohMb
+   QomlkA1PlZT3hXgW4mC27NHpotQP+V36uiORulwWmNhqitxPjXJzaAjm2
+   0TWQrBzFrhdrqW77rRALCz2ZCNsRDo76r+mk/o1aaxOkBrjsRGACppP31
+   QBHkdh5TYdd5p6ltxm//joM4WBnWoZT7H8qV6cQleEcqgAKalzfPqGYt5
+   659+I1u88dyli7hWyCJ20hcA40RkdCA5/nva8klNKovcQc3Fw8esuHiK1
+   Q/C/3WfwXoJc6pIRp4Ole/GY2zsoY0Jx8YKW4uuuVYZsTf5quVOC7oFmv
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="243099887"
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="243099887"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 09:14:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="689847429"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Jan 2022 09:13:05 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5snY-000Isx-IL; Fri, 07 Jan 2022 17:13:04 +0000
+Date:   Sat, 8 Jan 2022 01:12:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [l1k:rs485_fixes 10/10] drivers/tty/serial/8250/8250_omap.c:1450:40:
+ error: incompatible type for argument 1 of 'serial_in'
+Message-ID: <202201080120.oOHk60a4-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YdgeU2p+i5hN1XCU@rric.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/22 3:05 AM, Robert Richter wrote:
-> On 06.01.22 13:07:11, Terry Bowman wrote:
->> On 1/6/22 12:18 PM, Guenter Roeck wrote:
->>> On Wed, Nov 03, 2021 at 11:15:20AM -0500, Terry Bowman wrote:
-> 
->>>> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
->>>> index 80ae42ae7aaa..4777e672a8ad 100644
->>>> --- a/drivers/watchdog/sp5100_tco.c
->>>> +++ b/drivers/watchdog/sp5100_tco.c
->>>> @@ -48,12 +48,14 @@
->>>>   /* internal variables */
->>>>   
->>>>   enum tco_reg_layout {
->>>> -	sp5100, sb800, efch
->>>> +	sp5100, sb800, efch, efch_mmio
->>>>   };
->>>>   
->>>>   struct sp5100_tco {
->>>>   	struct watchdog_device wdd;
->>>>   	void __iomem *tcobase;
->>>> +	void __iomem *addr;
->>>> +	struct resource *res;
->>>
->>> I must admit that I really don't like this code. Both res and
->>> addr are only used during initialization, yet their presence suggests
->>> runtime usage. Any chance to reqork this to not require those variables ?
-> 
-> We did that in an earlier version, see struct efch_cfg of:
-> 
->   https://patchwork.kernel.org/project/linux-watchdog/patch/20210813213216.54780-1-Terry.Bowman@amd.com/
-> 
-> The motivation of it was the same as you suggested to only use it
-> during init.
-> 
-> Having it in struct sp5100_tco made things simpler esp. in the
-> definition of the function interfaces where those new members are
-> used.
-> 
+tree:   https://github.com/l1k/linux rs485_fixes
+head:   01e60137e91a8d400ecde3438328c168a3804820
+commit: 01e60137e91a8d400ecde3438328c168a3804820 [10/10] serial: 8250: 8250_omap: Support native rs485
+config: arc-randconfig-r013-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080120.oOHk60a4-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/l1k/linux/commit/01e60137e91a8d400ecde3438328c168a3804820
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k rs485_fixes
+        git checkout 01e60137e91a8d400ecde3438328c168a3804820
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/tty/serial/8250/
 
-'res' is only used in the context of sp5100_request_region_mmio()
-and sp5100_release_region_mmio(), and both are called from
-sp5100_tco_setupdevice_mmio(). I do not see a need for carrying it around
-anywhere else, including efch_read_pm_reg8() and efch_update_pm_reg8().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-efch_read_pm_reg8() is only called from sp5100_tco_setupdevice_mmio(),
-and it only uses struct sp5100_tco *tco to get the address. I don't see
-why the address can not be passed to it directly.
+All errors (new ones prefixed by >>):
 
-efch_update_pm_reg8() also uses tco only to get the address. Again, passing
-it instead of a pointer to sp5100_tco *tco would easily be possible.
+   drivers/tty/serial/8250/8250_omap.c: In function 'omap8250_probe':
+>> drivers/tty/serial/8250/8250_omap.c:1450:40: error: incompatible type for argument 1 of 'serial_in'
+    1450 |                 priv->mdr3 = serial_in(up, UART_OMAP_MDR3);
+         |                                        ^~
+         |                                        |
+         |                                        struct uart_8250_port
+   In file included from drivers/tty/serial/8250/8250_omap.c:32:
+   drivers/tty/serial/8250/8250.h:113:52: note: expected 'struct uart_8250_port *' but argument is of type 'struct uart_8250_port'
+     113 | static inline int serial_in(struct uart_8250_port *up, int offset)
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~^~
 
-efch_update_pm_reg8() is only called fromm sp5100_tco_setupdevice_mmio(),
-where the change would be easy. It is also called from tco_timer_enable(),
-which in turn is called from sp5100_tco_timer_init(). This, again, is called
-from sp5100_tco_setupdevice_mmio(). Since the first operation in
-sp5100_tco_timer_init() is to call tco_timer_enable() and that function
-does nothing but calling efch_update_pm_reg8(), it would easily be possible
-to pull out that code from tco_timer_enable() and move it into
-sp5100_tco_setupdevice_mmio().
 
-So, no, I neither see the need for having the information in struct
-sp5100_tco nor for keeping it in its own structure. If you'd merge
-sp5100_request_region_mmio() and sp5100_release_region_mmio() into
-sp5100_tco_setupdevice_mmio() you would not even need any pointers
-to pass the values from sp5100_request_region_mmio(). Otherwise you
-could have sp5100_request_region_mmio() return a pointer to res or
-an ERR_PTR, and pass the address as pointer parameter.
+vim +/serial_in +1450 drivers/tty/serial/8250/8250_omap.c
 
-Guenter
+  1341	
+  1342	static int omap8250_probe(struct platform_device *pdev)
+  1343	{
+  1344		struct device_node *np = pdev->dev.of_node;
+  1345		struct omap8250_priv *priv;
+  1346		const struct omap8250_platdata *pdata;
+  1347		struct uart_8250_port up;
+  1348		struct resource *regs;
+  1349		void __iomem *membase;
+  1350		int irq, ret;
+  1351	
+  1352		irq = platform_get_irq(pdev, 0);
+  1353		if (irq < 0)
+  1354			return irq;
+  1355	
+  1356		regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+  1357		if (!regs) {
+  1358			dev_err(&pdev->dev, "missing registers\n");
+  1359			return -EINVAL;
+  1360		}
+  1361	
+  1362		priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+  1363		if (!priv)
+  1364			return -ENOMEM;
+  1365	
+  1366		membase = devm_ioremap(&pdev->dev, regs->start,
+  1367					       resource_size(regs));
+  1368		if (!membase)
+  1369			return -ENODEV;
+  1370	
+  1371		memset(&up, 0, sizeof(up));
+  1372		up.port.dev = &pdev->dev;
+  1373		up.port.mapbase = regs->start;
+  1374		up.port.membase = membase;
+  1375		up.port.irq = irq;
+  1376		/*
+  1377		 * It claims to be 16C750 compatible however it is a little different.
+  1378		 * It has EFR and has no FCR7_64byte bit. The AFE (which it claims to
+  1379		 * have) is enabled via EFR instead of MCR. The type is set here 8250
+  1380		 * just to get things going. UNKNOWN does not work for a few reasons and
+  1381		 * we don't need our own type since we don't use 8250's set_termios()
+  1382		 * or pm callback.
+  1383		 */
+  1384		up.port.type = PORT_8250;
+  1385		up.port.iotype = UPIO_MEM;
+  1386		up.port.flags = UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_SOFT_FLOW |
+  1387			UPF_HARD_FLOW;
+  1388		up.port.private_data = priv;
+  1389	
+  1390		up.port.regshift = 2;
+  1391		up.port.fifosize = 64;
+  1392		up.tx_loadsz = 64;
+  1393		up.capabilities = UART_CAP_FIFO;
+  1394	#ifdef CONFIG_PM
+  1395		/*
+  1396		 * Runtime PM is mostly transparent. However to do it right we need to a
+  1397		 * TX empty interrupt before we can put the device to auto idle. So if
+  1398		 * PM is not enabled we don't add that flag and can spare that one extra
+  1399		 * interrupt in the TX path.
+  1400		 */
+  1401		up.capabilities |= UART_CAP_RPM;
+  1402	#endif
+  1403		up.port.set_termios = omap_8250_set_termios;
+  1404		up.port.set_mctrl = omap8250_set_mctrl;
+  1405		up.port.pm = omap_8250_pm;
+  1406		up.port.startup = omap_8250_startup;
+  1407		up.port.shutdown = omap_8250_shutdown;
+  1408		up.port.throttle = omap_8250_throttle;
+  1409		up.port.unthrottle = omap_8250_unthrottle;
+  1410		up.port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
+  1411	
+  1412		ret = of_alias_get_id(np, "serial");
+  1413		if (ret < 0) {
+  1414			dev_err(&pdev->dev, "failed to get alias\n");
+  1415			return ret;
+  1416		}
+  1417		up.port.line = ret;
+  1418	
+  1419		if (of_property_read_u32(np, "clock-frequency", &up.port.uartclk)) {
+  1420			struct clk *clk;
+  1421	
+  1422			clk = devm_clk_get(&pdev->dev, NULL);
+  1423			if (IS_ERR(clk)) {
+  1424				if (PTR_ERR(clk) == -EPROBE_DEFER)
+  1425					return -EPROBE_DEFER;
+  1426			} else {
+  1427				up.port.uartclk = clk_get_rate(clk);
+  1428			}
+  1429		}
+  1430	
+  1431		if (of_property_read_u32(np, "overrun-throttle-ms",
+  1432					 &up.overrun_backoff_time_ms) != 0)
+  1433			up.overrun_backoff_time_ms = 0;
+  1434	
+  1435		priv->wakeirq = irq_of_parse_and_map(np, 1);
+  1436	
+  1437		pdata = of_device_get_match_data(&pdev->dev);
+  1438		if (pdata)
+  1439			priv->habit |= pdata->habit;
+  1440	
+  1441		if (!up.port.uartclk) {
+  1442			up.port.uartclk = DEFAULT_CLK_SPEED;
+  1443			dev_warn(&pdev->dev,
+  1444				 "No clock speed specified: using default: %d\n",
+  1445				 DEFAULT_CLK_SPEED);
+  1446		}
+  1447	
+  1448		if (priv->habit & UART_HAS_NATIVE_RS485) {
+  1449			up.port.rs485_config = omap8250_rs485_config;
+> 1450			priv->mdr3 = serial_in(up, UART_OMAP_MDR3);
+  1451		} else {
+  1452			up.port.rs485_config = serial8250_em485_config;
+  1453			up.rs485_start_tx = serial8250_em485_start_tx;
+  1454			up.rs485_stop_tx = serial8250_em485_stop_tx;
+  1455		}
+  1456	
+  1457		priv->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
+  1458		priv->calc_latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
+  1459		cpu_latency_qos_add_request(&priv->pm_qos_request, priv->latency);
+  1460		INIT_WORK(&priv->qos_work, omap8250_uart_qos_work);
+  1461	
+  1462		spin_lock_init(&priv->rx_dma_lock);
+  1463	
+  1464		device_init_wakeup(&pdev->dev, true);
+  1465		pm_runtime_enable(&pdev->dev);
+  1466		pm_runtime_use_autosuspend(&pdev->dev);
+  1467	
+  1468		/*
+  1469		 * Disable runtime PM until autosuspend delay unless specifically
+  1470		 * enabled by the user via sysfs. This is the historic way to
+  1471		 * prevent an unsafe default policy with lossy characters on wake-up.
+  1472		 * For serdev devices this is not needed, the policy can be managed by
+  1473		 * the serdev driver.
+  1474		 */
+  1475		if (!of_get_available_child_count(pdev->dev.of_node))
+  1476			pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
+  1477	
+  1478		pm_runtime_irq_safe(&pdev->dev);
+  1479	
+  1480		pm_runtime_get_sync(&pdev->dev);
+  1481	
+  1482		omap_serial_fill_features_erratas(&up, priv);
+  1483		up.port.handle_irq = omap8250_no_handle_irq;
+  1484		priv->rx_trigger = RX_TRIGGER;
+  1485		priv->tx_trigger = TX_TRIGGER;
+  1486	#ifdef CONFIG_SERIAL_8250_DMA
+  1487		/*
+  1488		 * Oh DMA support. If there are no DMA properties in the DT then
+  1489		 * we will fall back to a generic DMA channel which does not
+  1490		 * really work here. To ensure that we do not get a generic DMA
+  1491		 * channel assigned, we have the the_no_dma_filter_fn() here.
+  1492		 * To avoid "failed to request DMA" messages we check for DMA
+  1493		 * properties in DT.
+  1494		 */
+  1495		ret = of_property_count_strings(np, "dma-names");
+  1496		if (ret == 2) {
+  1497			struct omap8250_dma_params *dma_params = NULL;
+  1498	
+  1499			up.dma = &priv->omap8250_dma;
+  1500			up.dma->fn = the_no_dma_filter_fn;
+  1501			up.dma->tx_dma = omap_8250_tx_dma;
+  1502			up.dma->rx_dma = omap_8250_rx_dma;
+  1503			if (pdata)
+  1504				dma_params = pdata->dma_params;
+  1505	
+  1506			if (dma_params) {
+  1507				up.dma->rx_size = dma_params->rx_size;
+  1508				up.dma->rxconf.src_maxburst = dma_params->rx_trigger;
+  1509				up.dma->txconf.dst_maxburst = dma_params->tx_trigger;
+  1510				priv->rx_trigger = dma_params->rx_trigger;
+  1511				priv->tx_trigger = dma_params->tx_trigger;
+  1512			} else {
+  1513				up.dma->rx_size = RX_TRIGGER;
+  1514				up.dma->rxconf.src_maxburst = RX_TRIGGER;
+  1515				up.dma->txconf.dst_maxburst = TX_TRIGGER;
+  1516			}
+  1517		}
+  1518	#endif
+  1519		ret = serial8250_register_8250_port(&up);
+  1520		if (ret < 0) {
+  1521			dev_err(&pdev->dev, "unable to register 8250 port\n");
+  1522			goto err;
+  1523		}
+  1524		priv->line = ret;
+  1525		platform_set_drvdata(pdev, priv);
+  1526		pm_runtime_mark_last_busy(&pdev->dev);
+  1527		pm_runtime_put_autosuspend(&pdev->dev);
+  1528		return 0;
+  1529	err:
+  1530		pm_runtime_dont_use_autosuspend(&pdev->dev);
+  1531		pm_runtime_put_sync(&pdev->dev);
+  1532		pm_runtime_disable(&pdev->dev);
+  1533		return ret;
+  1534	}
+  1535	
 
-> If that init vars are no longer in struct sp5100_tco then callers of
-> efch_read_pm_reg8() and efch_update_pm_reg8() will need to carry a
-> pointer to them. To avoid this I see those options:
-> 
-> 1) Implement them as global (or a single global struct) and possibly
-> protect it by a mutex. There is only a single device anyway and we
-> wouldn't need a protection.
-> 
-> 2) Have an own mmio implementation of tco_timer_enable() and/or
-> sp5100_tco_timer_init().
-> 
->> Yes, v3 will include refactoring to remove 'res' and 'addr'. I will also
->> correct the trailing newline you mentioned in an earlier email.
->>
->> Regards,
->> Terry
->>
->>>>   	enum tco_reg_layout tco_reg_layout;
-> 
-> While at it, tco_reg_layout is also only used during initialization
-> and can be moved there too. This would raise option 3:
-> 
-> 3) Add a pointer of struct sp5100_tco to struct efch_cfg and use that
-> struct instead in init funtions only. But that causes the most rework
-> (which would be ok to me).
-> 
-> Going with 3) looks the cleanest way, I would try that. But all
-> options have its advantages.
-> 
-> -Robert
-> 
->>>>   };
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

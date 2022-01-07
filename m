@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B991487796
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BE348779F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiAGM0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S231728AbiAGMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbiAGM0S (ORCPT
+        with ESMTP id S229624AbiAGMcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:26:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF65C061245;
-        Fri,  7 Jan 2022 04:26:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD2B61E29;
-        Fri,  7 Jan 2022 12:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C611CC36AE0;
-        Fri,  7 Jan 2022 12:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641558377;
-        bh=aKwLmZO6B2wjO3JzQbIVujH9UXKt1lKP5lgh1sDezbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bu97ErzTXbk7b3/b+UXvRAveEch1CwAFM1AS6DcOQY4z6AcAiPQ3VEB3fj6v4g4Ch
-         fsE+HTAKyw81pppXnew33TYXVRiGRoMKQ+7BqjHf34+IzvBu9Ndf4WvjqgQ/ErL0wz
-         BS8H3cpO8y8tQ8m48L+/m3LEiceRLt0niGRCadEaVD9DHyA/YOVMPsfqvHlIhU1yD9
-         zH4MlfjF2Ld23DjTk9adZ1idXWL+NpfRmlXK6u3CB6I5clC+ODOINS8vP33nUh7gX3
-         Y9hcg9xnySXwJpnLJsx9/zbuii9CZpSU6/CSrZF+szuZEJYdht/rI+pfC0lF3jGAeH
-         k2QaZ3gdBmRnQ==
-Date:   Fri, 7 Jan 2022 14:26:12 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/25] x86/sgx: Move PTE zap code to separate function
-Message-ID: <YdgxZFvjrPQN2D8S@iki.fi>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <bd228c90c139437bb4fcc4b7b99063bfd3eb1439.1638381245.git.reinette.chatre@intel.com>
- <Yavy5JTYAkdZjnK2@iki.fi>
- <66151f3a-0e32-fc57-cb54-5b714588389b@intel.com>
- <917c53ff755d9a20e1f4bcb48c70add8364d1065.camel@kernel.org>
- <192e252a-653f-2221-73dd-99894c134a37@intel.com>
- <YcsleU6ExUbpN51r@iki.fi>
- <cf654da2-00b3-0c3c-57ad-bb669e60de92@intel.com>
+        Fri, 7 Jan 2022 07:32:21 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0437C061245;
+        Fri,  7 Jan 2022 04:32:21 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id h1so4767899pls.11;
+        Fri, 07 Jan 2022 04:32:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aX15vcXEfaENKROZ/2of0+4S5a/GCCCjcMiAL2bj5pI=;
+        b=njkBeIobxW6KB+Q6BlkJ1uXIYPRHhtIHmo69a0G5LngTBikhFI/KR/nP1YQcUBm8bg
+         jMkIrWHjl5X/hzEQMvfClaiO6A8xPnoWd2edU8kjXnS/kJMZZxA+jmjC4W+vCz+Injpu
+         NMGxDJWltE/N28HNkrMh0jsCUM8JYZOr8Uo36L/GoAEOvR9VnT2vqUvQETX50q8hQaTf
+         MjxIOr5PR3/Q/GSuU+kzSAbOl+qmsBWpeMFD0/2l8r10bF0+T37hKRdpDaqQS6w4LCoS
+         WvCGjoIIeS2BMKgDKrzNCQ6ln/XOWzXPf6YCubkXnfXKE4U+H6RhavvA4l/nJ8ggl15M
+         zGHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aX15vcXEfaENKROZ/2of0+4S5a/GCCCjcMiAL2bj5pI=;
+        b=oiX+n2mhBg1KsLB/TVh1x8OnKXQXKyWZAM3NbXlTPGZvCzdgbdojf1nNx89DFTVbf9
+         PULP0xjiloHdhTVvrsOqrle2xTmMlPipaPYDJipkNu+HJfz3GMFudFdJyIZqXphobKRA
+         8jnLQiAtrhHipsZ5Mz4g3a2LmNd9scHvcwTtWWK8NPOpkoLdhssNpUJAkLSVdhHFl35i
+         ogXU3LjbOQ4ek/E7K2WweFJOf5syaDHdSCi6cgkfQ5fZaNSdZgUwsVJ5dTHfq9aA9Aln
+         58D/g2koDBEQA/m+VOKCqUd8rvsLM3N8o/TrLZzQ5MeC4tUJ0irQYSF/G7UqgTgX4ZxX
+         QCsA==
+X-Gm-Message-State: AOAM530METK7oc1WJWoKdNuqOsU01yCduzTt49m/LMdhvvy5E+H2DXkN
+        JNb2801zzBNesFdxhfBNg0M=
+X-Google-Smtp-Source: ABdhPJwYdHiMRO98i2rLiFl9Ft0Ya+T45NVrvwXwIMql0uKuhSCsZaTxgRSImDtnMnRi9h1gyG/JBw==
+X-Received: by 2002:a17:90a:c68a:: with SMTP id n10mr1876007pjt.144.1641558741157;
+        Fri, 07 Jan 2022 04:32:21 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id t126sm4595721pgc.61.2022.01.07.04.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 04:32:20 -0800 (PST)
+Date:   Fri, 7 Jan 2022 21:32:18 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Gabriel L. Somlo" <gsomlo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Kamil Rakoczy <krakoczy@antmicro.com>,
+        mdudek@internships.antmicro.com,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Joel Stanley <joel@jms.id.au>, david.abdurachmanov@sifive.com,
+        Florent Kermarrec <florent@enjoy-digital.fr>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v6 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+Message-ID: <Ydgy0mCMJFkZqWAb@antec>
+References: <20220106174803.1773876-1-gsomlo@gmail.com>
+ <20220106174803.1773876-4-gsomlo@gmail.com>
+ <CAHp75Ve_jWmo3+Es0G5SyMpcdC_=hWfxHoa866Difd+X3F0uxg@mail.gmail.com>
+ <YddyMI7hJE7u0jQ/@errol.ini.cmu.edu>
+ <CAMuHMdX2ujViu9GivVHtgAqC6AdiL3CvdJM58pVteJe9KdvdqQ@mail.gmail.com>
+ <YdgSG7t2eG9YzkaG@antec>
+ <CAHp75VdjP4jmUQHUV=eF2Ot+s=3==ZqUS7BFxMoPDw=NkCBm6Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf654da2-00b3-0c3c-57ad-bb669e60de92@intel.com>
+In-Reply-To: <CAHp75VdjP4jmUQHUV=eF2Ot+s=3==ZqUS7BFxMoPDw=NkCBm6Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 09:46:35AM -0800, Reinette Chatre wrote:
-> Hi Jarkko,
+On Fri, Jan 07, 2022 at 12:24:23PM +0200, Andy Shevchenko wrote:
+> On Fri, Jan 7, 2022 at 12:12 PM Stafford Horne <shorne@gmail.com> wrote:
+> > On Fri, Jan 07, 2022 at 10:36:12AM +0100, Geert Uytterhoeven wrote:
+> > > On Thu, Jan 6, 2022 at 11:50 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
 > 
-> On 12/28/2021 6:55 AM, Jarkko Sakkinen wrote:
-> > On Mon, Dec 13, 2021 at 02:11:26PM -0800, Reinette Chatre wrote:
-> >> Hi Jarkko,
-> >>
-> >> On 12/10/2021 11:52 PM, Jarkko Sakkinen wrote:
-> >>> On Mon, 2021-12-06 at 13:30 -0800, Reinette Chatre wrote:
-> >>>> Hi Jarkko,
-> >>>>
-> >>>> On 12/4/2021 2:59 PM, Jarkko Sakkinen wrote:
-> >>>>> On Wed, Dec 01, 2021 at 11:23:05AM -0800, Reinette Chatre wrote:
-> >>>>>> The SGX reclaimer removes page table entries pointing to pages that are
-> >>>>>> moved to swap. SGX2 enables changes to pages belonging to an initialized
-> >>>>>> enclave, for example changing page permissions. Supporting SGX2 requires
-> >>>>>> this ability to remove page table entries that is available in the
-> >>>>>> SGX reclaimer code.
-> >>>>>
-> >>>>> Missing: why SGX2 requirest this?
-> >>>>
-> >>>> The above paragraph states that SGX2 needs to remove page table entries
-> >>>> because it modifies page permissions. Could you please elaborate what is
-> >>>> missing?
-> >>>
-> >>> It does not say why SGX2 requires an ability to remove page table entries.
-> >>
-> >> Are you saying that modification of EPCM page permissions is not a reason to
-> >> remove page table entries pointing to those pages?
-> > 
-> > So you have:
-> > 
-> > "Supporting SGX2 requires this ability to remove page table entries that is
-> > available in the SGX reclaimer code"
-> > 
-> > Just write down where you need this ability (briefly).
+> ...
 > 
-> Will do. I will expand the current permission changing text and also add the need
-> for this ability when regular pages are changed to TCS pages. TCS pages may not
-> be accessed by enclave code so when a regular page becomes a TCS page any page
-> table entries pointing to it should be removed.
+> > > Many (most?) blurbs do mention the module name.
+> >
+> > I was doubting this as well, but I searched and its true.  The text 'module will
+> > be called' shows up many times, there is also different text.
+> >
+> >  $ grep -r 'module will be called' drivers/ | wc
+> >    1347    9023   9086
+> >
+> >  $ grep -r 'tristate \"' drivers/ | wc
+> >    7169   47486  521795
+> 
+> Just a side note: `git grep ...` is much faster in the Git trees.
 
-Thank you, sounds good.
+Yes, it is quite a lot faster, I always wondered why one would use it rather
+than just grep.  Thanks for the tip.
 
-BR,
-Jarkko
+    < shorne@antec ~/work/linux > time grep -r 'module will be called' drivers/ >/dev/null
+
+    real    0m0.338s
+    user    0m0.220s
+    sys     0m0.113s
+
+    < shorne@antec ~/work/linux > time git grep 'module will be called' -- drivers/ >/dev/null
+
+    real    0m0.153s
+    user    0m0.205s
+    sys     0m0.659s
+
+
+> And for this particular case I dare to advertise a script I wrote [1]
+> to help with recursive searches.
+> 
+> [1]: https://github.com/andy-shev/home-bin-tools/blob/master/gl4func.sh
+
+Neat script.
+
+> > So maybe >10% have module name in the blurb.  Example:
+> >
+> >           To compile this driver as a module, choose M here: the
+> >           module will be called tifm_sd.
+> 
+> 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko

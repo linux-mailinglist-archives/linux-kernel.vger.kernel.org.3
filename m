@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C621E487CCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3370487CC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiAGTGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 14:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S231949AbiAGTEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 14:04:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiAGTEl (ORCPT
+        with ESMTP id S229532AbiAGTEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 14:04:41 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C982BC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 11:04:40 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Fri, 7 Jan 2022 14:04:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3700C061574;
+        Fri,  7 Jan 2022 11:04:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B21291EC0464;
-        Fri,  7 Jan 2022 20:04:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641582274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=j2Ys9WzxqcLdk3uO6iVdMdmZ3zgyVkKQmNj4ZKYY9HQ=;
-        b=GTyM5CJpu4t/5K3tu4woRUVpkdIhXbI6habGouLj7VQQIkKjgwHiOIdRaToo61h2tSMS2m
-        qwsgqZ1vqZR1U1gu4emCOik1IzUEBkvKKIZO88ZtLgvVhUHL4DCLdphMGA9U/sFEC/Tt0O
-        1jdmVmq1LgKbCra7eRXk75PNru21jeg=
-Date:   Fri, 7 Jan 2022 20:04:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/26] x86/tdx: Handle in-kernel MMIO
-Message-ID: <YdiOxFaZCTBFQdQA@zn.tnic>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-9-kirill.shutemov@linux.intel.com>
- <YdV1BpMiAUGrwASv@zn.tnic>
- <20220105154311.bocij4mwbga4t2hb@box.shutemov.name>
- <YdhEQTnm+XMxoDPW@zn.tnic>
- <20220107174926.rh35qcyhu6u2tkzw@box.shutemov.name>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B476AB826D7;
+        Fri,  7 Jan 2022 19:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B472C36AF7;
+        Fri,  7 Jan 2022 19:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641582290;
+        bh=nNx8Ez8RuJzMEX0m/nrXYhE49DyWxePNuMQ+s2d9OD0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m5gR7RqmffLGvhknYYWgFF3VAibsPeF8pQrWF6J3+O0Kwz6qm6XXlJkcskjX1N4Q5
+         /jKuE1HIfpPOcj538lEcF7XofVhmgV9bZnspFkZYIqt25o+CBtAuYTuwK07E4O4Eao
+         IgV8kJKtof1HzpHJ448rDdWmv4pdIolVmAbycc8M+57w03HK8IHG//VGh/BuFQeuW1
+         UYeWn8ZQhIBB0Nowg+kYaTHNYL/q61abrwLil2XugJ5CHdaYnlk0M5sBTabv0yV3fb
+         wihs/R7/mPeK7wvKs32NSOyaxq+xdF+lXIsK6Ny4Tee9ezGd6ggzhvCI8qQQxa20qw
+         Innkz7FsgnU5g==
+Received: by mail-ed1-f48.google.com with SMTP id u25so25766680edf.1;
+        Fri, 07 Jan 2022 11:04:50 -0800 (PST)
+X-Gm-Message-State: AOAM530KrgBE2f92QdT2Ea7Yzt3zwGlt6mj6RrKP18ficABe++9EAWJh
+        LidLXd1Brzm5BJ+bFXgB/0k1oCFgh2+7OWOaMQ==
+X-Google-Smtp-Source: ABdhPJw+wXf/3puw/6oK452xH+IpOasvCo6eBekERmd/axjyL/WBlDh/+JCf89iqY3bdCvCGkFWJtxidbbj8CqZW4bY=
+X-Received: by 2002:aa7:ce88:: with SMTP id y8mr5876517edv.303.1641582288710;
+ Fri, 07 Jan 2022 11:04:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220107174926.rh35qcyhu6u2tkzw@box.shutemov.name>
+References: <20220107115345.9075-1-tinghan.shen@mediatek.com> <20220107115345.9075-3-tinghan.shen@mediatek.com>
+In-Reply-To: <20220107115345.9075-3-tinghan.shen@mediatek.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 7 Jan 2022 13:04:37 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKctALMWbNytCP7TGKEcCaoOVpm4eHQ3PUHDy2AKrwfmg@mail.gmail.com>
+Message-ID: <CAL_JsqKctALMWbNytCP7TGKEcCaoOVpm4eHQ3PUHDy2AKrwfmg@mail.gmail.com>
+Subject: Re: [PATCH v8 2/4] dt-bindings: arm: cpus: Add cortex-a78 compatible
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 08:49:26PM +0300, Kirill A. Shutemov wrote:
-> To emulate an instruction the emulator needs two things:
-> 
->   - R/W access to the register file to read/modify instruction arguments
->     and see RIP of the faulted instruction.
-> 
->   - Read access to memory where instruction is placed to see what to
->     emualte. In this case it is guest kernel text.
-> 
-> Both of them are not available to VMM in TDX environment:
-> 
->   - Register file is never exposed to VMM. When a TD exits to the module,
->     it saves registers into the state-save area allocated for that TD.
->     The module then scrubs these registers before returning execution
->     control to the VMM, to help prevent leakage of TD state.
-> 
->   - Memory is encrypted TD-private key. The CPU disallows software other
->     than the TDX module and TDs from making memory accesses using the
->     private key.
+On Fri, Jan 7, 2022 at 5:54 AM Tinghan Shen <tinghan.shen@mediatek.com> wrote:
+>
+> Add ARM cpu type cortex-a78.
+>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/arm/cpus.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Thanks, that's very helpful info. It would be nice to have it in the
-commit message.
+I already have a patch for this pending for 5.17.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Rob

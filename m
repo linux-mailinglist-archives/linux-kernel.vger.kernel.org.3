@@ -2,72 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E33ED4876C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECAA4876C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347218AbiAGLsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:48:32 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:39028 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1347196AbiAGLsa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:48:30 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAnLZ12KNhhNbz4BQ--.12135S2;
-        Fri, 07 Jan 2022 19:48:06 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     David.Laight@ACULAB.COM, damien.lemoal@opensource.wdc.com,
-        davem@davemloft.net
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH v2] ide: Check for null pointer after calling devm_ioremap
-Date:   Fri,  7 Jan 2022 19:47:58 +0800
-Message-Id: <20220107114758.4057401-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1347226AbiAGLty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238042AbiAGLtx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 06:49:53 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800F7C061245;
+        Fri,  7 Jan 2022 03:49:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=DBw/yxgkvw2Kf7vhLp4FcogOKyh2cchQam1f9G18PGg=; b=kOuwZ
+        rWvV2p2OgeZwCFNQJQPxkmu8WhWcubSfQ8KVtEvseu4O+GGl9oAREjqYzlyyst3Kh90lU9rLaHXnS
+        4/KUhbupU/eCvM/D2g3rcsAniIW6Sn3PIP668vEKtGe/4TGOjKiXJdbjUXh5TWChfDggeqqwcK6Nb
+        qr9S7qR1R42trU2lSwn9O2j+IeWufNwyowxUmbFgZDJohdoPrluKl0/x9nAdv4r9Y1dM2f8QzFRQJ
+        rCB7MogGTsyUrIpzr/53asHuCoH5GEf/mPgI0qbejILaMULHipUO6tW0vtaq93GxtXWJELaxUk0By
+        QzPReYW1OI7TQGTNXdnVfVbDTcPug==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1n5nki-0006Nq-5S; Fri, 07 Jan 2022 11:49:48 +0000
+Date:   Fri, 7 Jan 2022 11:49:46 +0000
+From:   John Keeping <john@metanate.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RT] BUG in sched/cpupri.c
+Message-ID: <Ydgo2lENzywieaZL@donbot>
+References: <Yb3vXx3DcqVOi+EA@donbot>
+ <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
+ <87zgou6iq1.mognet@arm.com>
+ <20211221164528.3c84543f.john@metanate.com>
+ <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
+ <87r1a4775a.mognet@arm.com>
+ <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAnLZ12KNhhNbz4BQ--.12135S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gry7AryUAw1xAFWDGr4rXwb_yoW3Jrc_C3
-        93ZanrWrZ0yr17JwsrGw12vrW2yF4rWrZxtrZ8twsxXr9rurnrGryY9wsYva1xW3s2vrn3
-        uFsxZayakw1jkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4kMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU0PEfUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 05:28:59PM +0800, David Laight wrote:
-> That !!alt_base doesn't look right.
-> Without looking at the rest of the code maybe:
-> 	if (!base && !alt_base)
-> may be correct.
+On Fri, Jan 07, 2022 at 11:46:45AM +0100, Dietmar Eggemann wrote:
+> On 22/12/2021 20:48, Valentin Schneider wrote:
+> >  /*
+> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> > index ef8228d19382..8f3e3a1367b6 100644
+> > --- a/kernel/sched/rt.c
+> > +++ b/kernel/sched/rt.c
+> > @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+> >  	if (!next_task)
+> >  		return 0;
+> >  
+> > +	/*
+> > +	 * It's possible that the next_task slipped in of higher priority than
+> > +	 * current, or current has *just* changed priority.  If that's the case
+> > +	 * just reschedule current.
+> > +	 */
+> > +	if (unlikely(next_task->prio < rq->curr->prio)) {
+> > +		resched_curr(rq);
+> > +		return 0;
+> > +	}
+> 
+> IMHO, that's the bit which prevents the BUG.
+> 
+> But this would also prevent the case in which rq->curr is an RT task
+> with lower prio than next_task.
+> 
+> Also `rq->curr = migration/X` goes still though which is somehow fine
+> since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
+> 
+> And DL tasks (like sugov:X go through and they can have
+> task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
+> freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
+> can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
+> by coincidence.
+> 
+> So maybe something like this:
 
-Thanks, that's my fault.
-I will correct it.
+Do you mean to replace just the one hunk from Valentin's patch with the
+change below (keeping the rest), or are you saying that only the change
+below is needed?
 
-> It also rather makes me wonder about the actual failure return value.
-> If devm_ioport_map() returns a 'port number' for inb()/outb() then
-> zero is technically a valid value!
-
-That's not right.
-The devm_ioport_map() returns NULL if fails and returns non-NULL
-pointer if success.
-And also we can find in `drivers/ata/pata_platform.c` that it also
-use the same way to check the return value from devm_ioport_map().
-
-I will submit a new version to correct my code.
-
-Sincerely thanks,
-Jiang
-
+> @ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
+>                 if (!pull || rq->push_busy)
+>                         return 0;
+> 
+> +               if (rq->curr->sched_class != &rt_sched_class) {
+> +                       resched_curr(rq);
+> +                       return 0;
+> +               }
+> +
+>                 cpu = find_lowest_rq(rq->curr);
+> 
+> [...]

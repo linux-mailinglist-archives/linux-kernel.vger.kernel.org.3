@@ -2,181 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29DC487402
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A43F487407
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236161AbiAGIQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:16:13 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45384
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235696AbiAGIQM (ORCPT
+        id S236346AbiAGIR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:17:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:54684 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235696AbiAGIR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:16:12 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 7 Jan 2022 03:17:56 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A368121114;
+        Fri,  7 Jan 2022 08:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641543475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fBWoZvne85rEbRlJqY2EZN7RAnPgn5jVLOkXhqM7y5I=;
+        b=aSGVh24xTxv2XTH1fwG3zQLbHEK62BfATWkGN6eFhMcGSGaU7IYL45hmLExdtJf5Ujcb3/
+        fsaL0c+le7G8p/NFo5WiPKKUGtyvWzEyi2Smom3zcHKbpYQ1UcDu8ftfxZBrXzOcAI9oMQ
+        HG9fpwq+cMZW402bNgdYiDVcRVJE3Ec=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 59FD04001A
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:16:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641543371;
-        bh=0ETHx7IxO/XI5yIDbHt0JLKs0xDRg+pSbg1JFz236sQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=UEiwGjJnrmfiPlQgvsiLZ/nmhRXsS5MKQ0gs05CwnFmWZavr7qkZzLRo2eXBOfhLL
-         3cCmI+fl3vFk5nM41Na0z7vL4hdv6NdkohlEUUmiAc4xE/m4iYWCDI0tqOQo6Q7zGL
-         PtQKQXkFLtxz6ocI9RFUXB8F/9iSrekepahIzsM38A6xo2LIm9a8BLcaNeB6J1kjpt
-         adxIOlJcYbBTNFuKNF8C9K7nwUHczlhAeNYVx2m7jttSofSg3dZvlEYYx9q3IR/ufO
-         WvCFgeD9qzZBE8eBuMuSUJE3SH8BlAP2YYvLtqDkAsghvf7vLItyyWPBUL5mqPBw7X
-         Kru3Ca4rx9cdQ==
-Received: by mail-ed1-f69.google.com with SMTP id q15-20020a056402518f00b003f87abf9c37so4025837edd.15
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 00:16:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0ETHx7IxO/XI5yIDbHt0JLKs0xDRg+pSbg1JFz236sQ=;
-        b=PGGXVWf44V3y63N+f0M5+/F94xAMzOsUGye8wFTfNxElvE/YaKmhzQUdpB7g2K4acL
-         9Vx16CD6dCn2DgquUWvKah1KJrLOlvpAqqxRwZaQa0QW9ANxsjHK1Kv28Za7JQGK1VhO
-         Waqmm8FNshrqD8HubH6VN6zK/9c7aJVm9vI9XRo5VvwxKioKispB6kFf7+nYMckbtfFE
-         F7GfB4g8qtPw+37CDFN9IJzOia1LH9ExZSufXvn2w3eUtV6RqWaSWNw57W4hRgK6SVAs
-         /cx36Dr6gg0/s0aKrF4fLOuoDLSvovkuaZ+f14qPmkynUAYb9j5WblCHFhr6GRLSGLNy
-         B+7g==
-X-Gm-Message-State: AOAM530URVduqbh3rmsHPpMU1/8E9rI5LOTYH1z3Rl6+hyJBrpQNcr5Y
-        PJ2aX/zDX7t32zfOHSH7mR7oXRimR0JuNGzUoZGCS98Sld6rbZxul8WvAS14PcuHxDqEIwbjFWR
-        VRMXhEd9tyAxb2ersdguS4rABuIibz4eWYuf48ckWXw==
-X-Received: by 2002:a17:906:4556:: with SMTP id s22mr49094537ejq.321.1641543370845;
-        Fri, 07 Jan 2022 00:16:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzxJAm9A5L/ysD8uvohTI87Y9b3PV1DnZGH/7gSFBXzSBxRB+4tVyd7e8dsIFzgTftrZrj+Gw==
-X-Received: by 2002:a17:906:4556:: with SMTP id s22mr49094525ejq.321.1641543370622;
-        Fri, 07 Jan 2022 00:16:10 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 2sm223915ejt.224.2022.01.07.00.16.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 00:16:10 -0800 (PST)
-Message-ID: <06320ea8-9297-1e90-dafd-978f73c22fff@canonical.com>
-Date:   Fri, 7 Jan 2022 09:16:09 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 6F255A3B85;
+        Fri,  7 Jan 2022 08:17:55 +0000 (UTC)
+Date:   Fri, 7 Jan 2022 09:17:52 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     void@manifault.com, live-patching@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
+        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com
+Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
+Message-ID: <Ydf3MBet/B+lUdRv@alley>
+References: <20211229215646.830451-1-void@manifault.com>
+ <CAPhsuW5PL1w_72Hrbsp2b3jA-SGyzv5oLfgybkq=s8J5KL6kmw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: Exynos850 and ExynosAuto v9 pinctrl wakeup muxed interrupt
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Chanho Park <chanho61.park@samsung.com>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>
-References: <3c0087a9-5c3b-d665-136e-6110a0482775@canonical.com>
- <CAPLW+4nrPKA66GrF4XukyHWHJ=wBycjyK3ZPLCofEFe-VJ9wWg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAPLW+4nrPKA66GrF4XukyHWHJ=wBycjyK3ZPLCofEFe-VJ9wWg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW5PL1w_72Hrbsp2b3jA-SGyzv5oLfgybkq=s8J5KL6kmw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 21:59, Sam Protsenko wrote:
-> On Thu, 30 Dec 2021 at 21:34, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> Hi Chanho and Sam,
->>
->> I am slowly finishing dtschema for Samsung pinctrl drivers [1] and I
->> noticed that Exynos850 and Auto v9 do not define interrupt in pinctrl
->> node with: wakeup-interrupt-controller. This is an interrupt muxing
->> several external wakeup interrupts, e.g. EINT16 - EINT31.
->>
->> For Exynos5433 this looks like:
->> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/exynos/exynos5433.dtsi#L857
->>
->> Missing muxed interrupt for Exynos850 and Autov9 might be fine, although
->> you should see in dmesg error log like:
->>     "irq number for muxed EINTs not found"
->>
->> Can you check that your wakeup-interrupt-controller is properly defined
->> in DTSI? If yes, I will need to include such differences in the dtschema.
->>
+On Thu 2022-01-06 16:21:18, Song Liu wrote:
+> On Wed, Dec 29, 2021 at 1:57 PM David Vernet <void@manifault.com> wrote:
+> >
+> > When initializing a 'struct klp_object' in klp_init_object_loaded(), and
+> > performing relocations in klp_resolve_symbols(), klp_find_object_symbol()
+> > is invoked to look up the address of a symbol in an already-loaded module
+> > (or vmlinux). This, in turn, calls kallsyms_on_each_symbol() or
+> > module_kallsyms_on_each_symbol() to find the address of the symbol that is
+> > being patched.
+> >
+> > It turns out that symbol lookups often take up the most CPU time when
+> > enabling and disabling a patch, and may hog the CPU and cause other tasks
+> > on that CPU's runqueue to starve -- even in paths where interrupts are
+> > enabled.  For example, under certain workloads, enabling a KLP patch with
+> > many objects or functions may cause ksoftirqd to be starved, and thus for
+> > interrupts to be backlogged and delayed. This may end up causing TCP
+> > retransmits on the host where the KLP patch is being applied, and in
+> > general, may cause any interrupts serviced by softirqd to be delayed while
+> > the patch is being applied.
+> >
+> > So as to ensure that kallsyms_on_each_symbol() does not end up hogging the
+> > CPU, this patch adds a call to cond_resched() in kallsyms_on_each_symbol()
+> > and module_kallsyms_on_each_symbol(), which are invoked when doing a symbol
+> > lookup in vmlinux and a module respectively.  Without this patch, if a
+> > live-patch is applied on a 36-core Intel host with heavy TCP traffic, a
+> > ~10x spike is observed in TCP retransmits while the patch is being applied.
+> > Additionally, collecting sched events with perf indicates that ksoftirqd is
+> > awakened ~1.3 seconds before it's eventually scheduled.  With the patch, no
+> > increase in TCP retransmit events is observed, and ksoftirqd is scheduled
+> > shortly after it's awakened.
+> >
+> > Signed-off-by: David Vernet <void@manifault.com>
 > 
-> In case of Exynos850, no muxed interrupts exist for wakeup GPIO
-> domains. Basically, "pinctrl_alive" and "pinctrl_cmgp" domains are
-> wake-up capable, and they have dedicated interrupt for each particular
-> GPIO pin. All those interrupts are defined in exynos850-pinctrl.dtsi
-> file, in next nodes:
->   - pinctrl_alive: gpa0..gpa4 (interrupt numbers 1..36)
->   - pinctrl_cmgp: gpm0..gpm7 (interrupt numbers 39..46)
+> Acked-by: Song Liu <song@kernel.org>
 > 
-> All mentioned interrupts are wakeup interrupts, and there are no muxed
-> ones. So it seems like it's not possible to specify "interrupts"
-> property in pinctrl nodes with wakeup-interrupt-controller. The PM is
-> not enabled in Exynos850 platform yet, so I can't really test if
-> interrupts I mentioned are able to wake up the system.
+> PS: Do we observe livepatch takes a longer time to load after this change?
+> (I believe longer time shouldn't be a problem at all. Just curious.)
 
-Thanks for confirming, I'll adjust the schema.
+It should depend on the load of the system and the number of patched
+symbols. The module is typically loaded with a normal priority
+process.
 
-> 
-> After adding this patch ("arm64: dts: exynos: Add missing gpm6 and
-> gpm7 nodes to Exynos850"), I can't see this error message anymore:
-> 
->     samsung-pinctrl 11c30000.pinctrl: irq number for muxed EINTs not found
-> 
-> That's because exynos_eint_wkup_init() function exits in this check:
-> 
->     if (!muxed_banks) {
->         of_node_put(wkup_np);
->         return 0;
->     }
-> 
-> But I actually can see another error message, printed in
-> exynos_eint_gpio_init() function (for wake-up capable pinctrl nodes,
-> because those nodes don't have "interrupts" property now -- you
-> removed those in your patch):
-> 
->     samsung-pinctrl 11850000.pinctrl: irq number not available
->     samsung-pinctrl 11c30000.pinctrl: irq number not available
-> 
-> which in turn leads to exynos_eint_gpio_init() function to exit with
-> -EINVAL code in the very beginning, and I'm not sure if it's ok? As I
-> said, those errors only appear after your patch ("arm64: dts: exynos:
-> drop incorrectly placed wakeup interrupts in Exynos850").
+The commit message talks about 1.3 seconds delay of ksoftirq. In
+principle, the change caused that this 1.3 sec of a single CPU time
+was interleaved with other scheduled tasks on the same CPU. I would
+expect that it prolonged the load just by a couple of seconds in
+the described use case.
 
-Yeah, I replied to this next to my patch. I think my patch was not
-correct and you need one - exactly one - interrupt for regular GPIO
-interrupts.
+Note that the change has effect only with voluntary scheduling.
+Well, it is typically used on servers where the livepatching
+makes sense.
 
-> 
-> It raises next questions, which I'm trying to think over right now.
-> Krzysztof, please let me know if you already have answers to those:
-> 
-> 1. Regarding "wakeup-interrupt-controller" node (and
-> exynos_eint_wkup_init() function): is it ok to not have "interrupts"
-> property in there? Would corresponding interrupts specified in child
-> nodes (gpa0..gpa4) function as wake-up interrupts in this case? Or
-> pinctrl driver should be reworked somehow?
-
-Yes, it should be fine. The message should be changed from error to info
-or even debug, maybe depending on SoC-type (so define in struct
-samsung_pin_ctrl whether exynos_eint_wkup_init expects muxed wake-ip
-interrupts).
-
-> 
-> 2. Regarding missing interrupts in pinctrl nodes (and corresponding
-> error in exynos_eint_gpio_init() function): should it be reworked in
-> some way for Exynos850? Error message seems invalid in Exynos850 case,
-> and I'm not even sure if it's ok exynos_eint_gpio_init() fails. Should
-> it be modified to work that error around, in case of Exynos850?
-> 
-> All other pinctrl nodes have a muxed interrupt (except pinctrl_aud,
-> but that's probably fine).
-
-The error message is valid - correctly points to wrong configuration.
-All pinctrl nodes should have one interrupt, if they have GPIOs capable
-of interrupt as a function (usually 0xf as GPIO CON register). Why
-pinctrl_aud does not have it? Maybe the function EXT_INT (0xf) is not
-available for its pins?
-
-Best regards,
-Krzysztof
+Best Regards,
+Petr

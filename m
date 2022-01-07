@@ -2,79 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A083487849
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB20487853
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238880AbiAGNiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238475AbiAGNiR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:38:17 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA2DC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:38:16 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x7so15610434lfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:38:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=pvHAwTKRl884ufywj4q2OPKqFSh3zvRZclGCMo1cJeM=;
-        b=LB0TTy6OkeBxt10pp4RfFMEXfuprvQ1MYdw7TQVd2NXfQqWpxw+6vTUSiP8eBr1Z+w
-         RwsPwFAWMoy0BhJ+3Fc7AN25kcs6nFfpTLRwytiupCePH+csnyprWUC+ki2UCD2t0U1n
-         qjkB7p6+KF46HLLi96+l0W81xvKxZNCiKuKDcH4mUEh5PrbcxzsQu2vvQsQl2cyThNKH
-         fDZ3lpHei+5gxC1Chh9alH9EJ4JGF+jHirMe1IQYdNeg/mE7+4xxocdAqsB7M0GV6FpR
-         nG5rgxxJqUaVFVd/FQZOxjmXoQuBNDXm6bZ9PY2RSGCGvb1UyGJXqZPpJXXJMbvDyXzl
-         GeFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=pvHAwTKRl884ufywj4q2OPKqFSh3zvRZclGCMo1cJeM=;
-        b=tmq2OgdCRptVlbS6sZwq8c06jyGk+cdap3PeX9dOZQviCNdT8cvrKtykknSn+MsW0r
-         0BS4Iksu3N+quOubORlQerXnN4MyKHXQ6lnh9dj/CiDMR4DJInS2OPtEmZbI0TcUHI65
-         RkmqOvuEGtsV0pJkzbHBA1gODVz7cNechw1KMYQa5vFxBavTMQ4GBfYzGKju4bC/7bCk
-         jgTdZAA1/IeidFZdhmQEuiyBzvmHIYufwMPfim3+0UvXXMAsBcWCj4etZb6lMvfKUs8k
-         XP+Z8hfdbcAi1CxuwmTFRNnLcz1ExPBFWlFFqkz+Bccy9TeIwcNPi+3mXDWT1Alp61vo
-         2NrA==
-X-Gm-Message-State: AOAM531R2DfTCBjeZrkRGfhnJK3BxJZ8IX7NAb8/lLXycdMuCNMcuWeW
-        H5Ax0MqAwgBu9/HbiO8JAKQx4Axtn4rCmXttZAA=
-X-Google-Smtp-Source: ABdhPJwQpj/wOxNg3ARTmxkoXvbmJ4ojiQ5oxAOJObSyO02m+0jMSq1JoCuDIsMak1x0f9YxpVp2SLh35btAmaI4NG0=
-X-Received: by 2002:a2e:81c5:: with SMTP id s5mr47952908ljg.77.1641562694996;
- Fri, 07 Jan 2022 05:38:14 -0800 (PST)
+        id S1347615AbiAGNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:39:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:40742 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347554AbiAGNjr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:39:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5301A13A1;
+        Fri,  7 Jan 2022 05:39:47 -0800 (PST)
+Received: from [10.57.9.122] (unknown [10.57.9.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1DE463F774;
+        Fri,  7 Jan 2022 05:39:45 -0800 (PST)
+Subject: Re: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, amitk@kernel.org,
+        Chetankumar Mistry <chetan.mistry@arm.com>,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org
+References: <20211217184907.2103677-1-chetan.mistry@arm.com>
+ <23c3480a-c46b-f049-5758-d11124367190@arm.com>
+ <1b6047eb-2f14-ddde-4712-145a26dc8aa5@linaro.org>
+ <42e8c75e-3827-3950-0705-4670ec1c904e@arm.com>
+ <0e9eb5a9-733c-cf4d-a8c9-e13b5258dce5@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <120bdfda-92b9-d098-d298-e319be158417@arm.com>
+Date:   Fri, 7 Jan 2022 13:39:44 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Received: by 2002:a05:6520:4d04:b0:18f:63f7:c8a8 with HTTP; Fri, 7 Jan 2022
- 05:38:14 -0800 (PST)
-Reply-To: gb528796@gmail.com
-From:   george brown <gh727530@gmail.com>
-Date:   Fri, 7 Jan 2022 14:38:14 +0100
-Message-ID: <CACXbO7dM6S7JnP6nwGgk5SQA_8WjwnetP4mzg6vv_Bb6Mhc+5A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <0e9eb5a9-733c-cf4d-a8c9-e13b5258dce5@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo
 
-Mein Name ist George Brown. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
-dir anbieten
-der n=C3=A4chste Angeh=C3=B6rige meines Klienten. Sie erben die Summe von (=
-8,5
-Millionen US-Dollar)
-Dollar, die mein Mandant vor seinem Tod auf der Bank hinterlie=C3=9F.
 
-Mein Mandant ist ein B=C3=BCrger Ihres Landes, der mit seiner Frau bei
-einem Autounfall ums Leben gekommen ist
-und einziger Sohn. Ich habe Anspruch auf 50 % des Gesamtfonds, w=C3=A4hrend
-50 % dazu berechtigt sind
-sein f=C3=BCr dich.
-Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere Details:
-gb528796@gmail.com
+On 1/7/22 11:52 AM, Daniel Lezcano wrote:
+> On 06/01/2022 14:16, Lukasz Luba wrote:
+>>
+>> Thank you for fast response!
+>>
+>> On 1/6/22 12:16 PM, Daniel Lezcano wrote:
+>>>
+>>> Hi Lukasz,
+>>>
+>>> On 06/01/2022 12:54, Lukasz Luba wrote:
+>>>> Hi Daniel,
+>>>>
+>>>> Could you have a look at this, please?
+>>>
+>>> Yes, I had a quick look at the code and went to the algorithm
+>>> description.
+>>>
+>>> Still digesting ...
+>>>
+>>>> On 12/17/21 6:49 PM, Chetankumar Mistry wrote:
+>>>>> Implement the Ziegler-Nichols Heuristic algorithm to better
+>>>>> estimate the PID Coefficients for a running platform.
+>>>>> The values are tuned to minimuse the amount of overshoot in
+>>>>> the temperature of the platform and subsequently minimise
+>>>>> the number of switches for cdev states.
+>>>>>
+>>>>> Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
+>>>>
+>>>>
+>>>> This is the continuation of the previous idea to have
+>>>> better k_* values. You might remember this conversation [1].
+>>>>
+>>>> I've spent some time researching papers how and what can be done
+>>>> in this field and if possible to plumb in to the kernel.
+>>>> We had internal discussions (~2017) of one method fuzzy-logic that I
+>>>> found back then, but died at the begging not fitting into this
+>>>> IPA kernel specific environment and user-space. Your suggestion with
+>>>> observing undershooting and overshooting results sparked better idea.
+>>>> I thought it's worth to invest in it but I didn't have
+>>>> time. We are lucky, Chetan was designated to help me and
+>>>> experiment/implement/test these ideas and here is the patch set.
+>>>>
+>>>> He's chosen the Ziegler-Nichols method, which shows really
+>>>> good results in benchmarks (Geekbench and GFXbench on hikey960 Android).
+>>>> The improved performance in Geekbench is ~10% (vs. old IPA).
+>>>
+>>> +10% perf improvements sounds great. What about the temperature
+>>> mitigation (temp avg + stddev) ?
+>>
+>> Chetan would respond about that with the link to the .html file.
+>> We just have to create an official public server space for it.
+>> I hope till Monday evening we would get something.
+>>
+>>>
+>>>> The main question from our side is the sysfs interface
+>>>> which we could be used to trigger this algorithm for
+>>>> better coefficients estimations.
+>>>> We ask user to echo to some sysfs files in thermal zone
+>>>> and start his/her workload. This new IPA 'learns' the system
+>>>> utilization and reaction in temperature. After a few rounds,
+>>>> we get better fitted coefficients.
+>>>> If you need more background about the code or mechanisms, or tests,
+>>>> I'm sure Chetan is happy to provide you those.
+>>>
+>>> I'm worried about the complexity of the algorithm and the overhead
+>>> implied.
+>>>
+>>> The k_* factors are tied with the system and the thermal setup (fan,
+>>> heatsink, processor, opp, ...). So IIUC when the factors are found, they
+>>> should not change and could be part of the system setup.
+>>
+>> True, they are found and will be fixed for that board.
+>>
+>>>
+>>> Would the algorithm fit better in a separate userspace kernel tooling?
+>>> So we can run it once and find the k_* for a board.
+>>
+>> We wanted to be part of IPA in kernel because:
+>> - the logic needs access to internals of IPA
+>> - it would be easy accessible for all distros out-of-box
+>> - no additional maintenance and keeping in sync two codes, especially
+>>    those in some packages for user-space
+> 
+> Sorry, I'm not convinced :/
+> 
+> AFAICT, the temperature and the sampling rate should be enough
+> information to find out the k_*
 
-Vielen Dank im Voraus,
-Herr George Brown,
+We are allowing to overshoot the temperature by not capping the
+power actors, but we have a safety net to not overshoot too much.
+It's internal decision insdie IPA. Userspace would have to
+re-implement whole IPA logic and take control over cooling
+device states - which would contradict the decision from IPA
+controlling the same thermal zone. The finding of coefficients
+is by testing many values while running. The post processing
+of the data (temp., power requests, frequency, etc) won't tell us
+the the limits. We have to check them. That means the user-space tool
+would have to re-implement major part of IPA, but also somehow
+get the CPUs utilization, then use the obsolete user-space
+governor API to experiment with them.
+
+> 
+> IMO, an userspace tool in ./tools/thermal/ipa is the right place
+> 
+> So if you give the tooling to the SoC vendor via the thermal ones, with
+> a file containing the temp + timestamp, they should be able to find the
+> k_* and setup their boards.
+
+This feature is aimed for every user of the device, even w/o
+expert knowledge in thermal/power. If vendor or OEM didn't
+support properly the board, users could do this and they don't
+have to be restricted (IMO).
+Apart from that, I see vendors are rather interested in investing
+in their proprietary solutions, not willing to share know-how
+in open source power/thermal mechanisms. Then user is restricted
+IMO in using the board. This might block e.g. research of some
+PhD students, who have good ideas, but the restrictions of the platform
+prevent them or cause the behavior of the board that they cannot
+control. I would like to enable everyone to use fully the potential
+of the HW/SW - even end-user.
+
+> 
+> Actually my opinion is the kernel should not handle everything and the
+> SoC vendor should at least do some work to setup their system. If they
+> are able to find out the sustainable power, they can do the same for the
+> right coefficients.
+
+Ideally, yes, I would also like to see that. As you said a few months
+ago during review of my former patches, a lot of this 'sustainable
+power' entries in DT are Linaro contribution. I wish vendors also
+contribute, but c'est la vie.
+
+> 
+>>> Additionally, the values can be stored in the Documentation for
+>>> different board and a documentation on how to use the tool.
+>>>
+>>> Then up to the SoC vendor to setup the k_* in sysfs, so no need to
+>>> change any interface.
+>>
+>> It wouldn't be for SoC vendor, but up to the OEM or board designer,
+>> because the same SoC might have different thermal headroom thanks
+>> to better cooling or bigger PCB, etc.
+> 
+> Right, s/SoC vendor/SoC platform/
+> 
+>> I agree that these optimized k_* values might be shared in the kernel.
+>> Ideally I would see them in the board's DT file, in the thermal zone,
+>> but I'm afraid they are not 'Device description' so don't fit into DT
+>> scope. They are rather optimizations of pure kernel mechanism.
+>>
+>> where would be a good place for it? Maybe a new IPA Documentation/
+>> sub-directory?
+> 
+> You can improve the documentation in:
+> 
+> Documentation/driver-api/thermal/power_allocator.rst
+> 
+> And if we agree on a tools/thermal/ipa, the documentation with examples
+> and some SoC reference can be put there also
+> 
+>>>> If you are interested in those analyses we can find a way to share a>
+>>>> .html file with the results from LISA notebook.
+>>>
+>>> Yes,
+>>
+>> Sure thing, let me arrange that.
+> 
+> 

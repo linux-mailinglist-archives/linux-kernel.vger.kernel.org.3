@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF348792E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD42487931
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239543AbiAGOo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:44:29 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:59852 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230012AbiAGOo2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:44:28 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAH3aW2Udhh42H7BQ--.18277S2;
-        Fri, 07 Jan 2022 22:44:06 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] thermal/int340x_thermal: Check for null pointer after calling kmemdup
-Date:   Fri,  7 Jan 2022 22:44:05 +0800
-Message-Id: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1347842AbiAGOo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:44:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:58138 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347793AbiAGOo4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 09:44:56 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id EFB46212C7;
+        Fri,  7 Jan 2022 14:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641566694; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+izeRbXwrcTs43CEeqEXv+4wDW5wqLoC+ZvbrCEav4=;
+        b=m3hga6iQl2WdcE2aPXfiLHIDIlm90X2+/UUEe5oBUxt1WKdURAf4jx8f7kkkPymSP1I+ad
+        kF55jxo7kAuCghJXeVUMqfESh/pQi0j8mDLAFcbEqvmoARN0dSUHtvsk1sQTwYYomJICL5
+        S6BjW+1PsU9wseHfa5980DYfHTG8dr4=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3EA46A3B88;
+        Fri,  7 Jan 2022 14:44:54 +0000 (UTC)
+Date:   Fri, 7 Jan 2022 15:44:50 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <YdhR4vWdWksBALtM@dhcp22.suse.cz>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAH3aW2Udhh42H7BQ--.18277S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF4rAr4UKF43Xw48tF45trb_yoW8AFWDpF
-        WFgr1UJrs5WF1xWwnrArn8XayDCF4vga4UuF4FkayYy3ZxCFWSqFyFyF1Fyry0kr17t3Wj
-        y345tF4xZryDJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
-        6r1DMxkIecxEwVAFwVW5XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
-        87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfU8D73DUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104202227.2903605-7-yuzhao@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the allocation, kmemdup() may return NULL
-pointer.
-Then the 'bin_attr_data_vault.private' will be NULL pointer but the
-'bin_attr_data_vault.size' is not 0.
-Therefore, it should be better to check the return value of kmemdup() to
-avoid the wrong size.
+On Tue 04-01-22 13:22:25, Yu Zhao wrote:
+[...]
+> +static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
+> +{
+> +	static const struct mm_walk_ops mm_walk_ops = {
+> +		.test_walk = should_skip_vma,
+> +		.p4d_entry = walk_pud_range,
+> +	};
+> +
+> +	int err;
+> +#ifdef CONFIG_MEMCG
+> +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+> +#endif
+> +
+> +	walk->next_addr = FIRST_USER_ADDRESS;
+> +
+> +	do {
+> +		unsigned long start = walk->next_addr;
+> +		unsigned long end = mm->highest_vm_end;
+> +
+> +		err = -EBUSY;
+> +
+> +		rcu_read_lock();
+> +#ifdef CONFIG_MEMCG
+> +		if (memcg && atomic_read(&memcg->moving_account))
+> +			goto contended;
+> +#endif
+> +		if (!mmap_read_trylock(mm))
+> +			goto contended;
 
-Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog
+Have you evaluated the behavior under mmap_sem contention? I mean what
+would be an effect of some mms being excluded from the walk? This path
+is called from direct reclaim and we do allocate with exclusive mmap_sem
+IIRC and the trylock can fail in a presence of pending writer if I am
+not mistaken so even the read lock holder (e.g. an allocation from the #PF)
+can bypass the walk.
 
-v1 -> v2
-
-* Change 1. Use out_kfree to simplify the code.
----
- .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 19926beeb3b7..f869aeb087d3 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -457,17 +457,21 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
- 
- 	obj = buffer.pointer;
- 	if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
--	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
--		kfree(buffer.pointer);
--		return;
--	}
-+	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER)
-+		goto out_kfree;
- 
- 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
- 				   obj->package.elements[0].buffer.length,
- 				   GFP_KERNEL);
-+	if (!priv->data_vault)
-+		goto out_kfree;
-+
- 	bin_attr_data_vault.private = priv->data_vault;
- 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
- 	kfree(buffer.pointer);
-+
-+out_kfree:
-+	kfree(buffer.pointer);
- }
- 
- static int int3400_thermal_probe(struct platform_device *pdev)
+Or is this considered statistically insignificant thus a theoretical
+problem?
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs

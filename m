@@ -2,170 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB85487AB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F7E487AB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348351AbiAGQtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:49:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29743 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348343AbiAGQs7 (ORCPT
+        id S1348346AbiAGQta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348332AbiAGQtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:48:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641574139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pe8Sm++2ldV2D4FESGtTZqyhOkRzo4sYNja8DFQQ4Ws=;
-        b=XyniP/gh/Pj6zvqWbABjDKAaXVcGnh6VRaGuxfuhm14roD05agaLn8jBX1LS4sNP/WPQOC
-        8hfQTDmAwskS3Ysca7rssxzKk6+LMolqHfbOWeH5QhI3Lw8HC1EVoIeKJIUb8wfcEPDQZ6
-        o5tUySTGtNQPar2rQ4B8ZADyqorkWPg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-284-pvKGj5aBP3KifWuhLaUxQQ-1; Fri, 07 Jan 2022 11:48:58 -0500
-X-MC-Unique: pvKGj5aBP3KifWuhLaUxQQ-1
-Received: by mail-ed1-f69.google.com with SMTP id x19-20020a05640226d300b003f8b80f5729so5078008edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:48:57 -0800 (PST)
+        Fri, 7 Jan 2022 11:49:25 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4750DC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:49:25 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id v11so5638376pfu.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZL1IIh8N/t+BHnGrZngRI4Wu6PnsS/ETq8DSWtn9LP4=;
+        b=lDsXRzHX0unihRR38tpYXG3DBR5q6h2qwjl3lyjgNQJfWFRlIO/oVy35ifLLPTvBI7
+         W4Tg5Esz1Nx5Z4HrkQ7wDiKw2HOG0SNYDJ4U3pNbtyEYAZyhZNvhZjq4hcJZRn9tbKB5
+         9HRC1pgUllGCrOR1XHry7tj/NXmSn8GbnmsxQTuPTeT4FNAIUu37lBo8A9ueglsRZ/Nl
+         03uCT1mQtpQ4/Du8E6umy/2IPKW+WCagwtD9ws4wHg+gPA8RN0nPdtCfn08bhenyCSfQ
+         /e1+KymevWezVqY+KBCozHepPRhZyJPoSGCyIb3ZFFbZOdOwx3BQA4V7pAK4SkaVWAML
+         U0ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Pe8Sm++2ldV2D4FESGtTZqyhOkRzo4sYNja8DFQQ4Ws=;
-        b=expGEuZiBuWPIRG8+4wH1lO4WU4pEf/0WCEETHntpFfk3oTooroC6LTiHoh6EDIyoD
-         B2FCUCHbsP4DVYKHKV9iSdOsq1hpAQu+PRm3wiZUajyG82ZuHgkx79OnXlSNUzvRMJHV
-         /nyZMeyR7cdlCnRuWCvJOL666abpMUUNpq3hgnxik2FPM8cTNcsQ8KLS9hl/exLxm3FQ
-         a8dJxtLvcHHBaEvzHsmgT0rcN5iu0esJt2rhaY+aXfWacWpgK/3v3DN7ckw/IuS8cJaw
-         hFhn7KeuDiDMqLHqBm+gvRqWf8dN8xSlqEn3KuPUvi6iSows+iXjNN854kf29PnIiWDB
-         hklg==
-X-Gm-Message-State: AOAM533l1NDFmfUtLufQh2A3YCpNaEQUlt7gcdZ3V99cuk0sdjBV1XA7
-        IxQcuiZy9PEd3tVhJEUudaaSTSiEtpLUqQbL/vo4GvH5LOg7TMYr6H9ACNzQfbOuvXrtcBF8yiW
-        jrWDOWevcnrZSpPoFN8effi/w
-X-Received: by 2002:a05:6402:160d:: with SMTP id f13mr7452084edv.247.1641574136882;
-        Fri, 07 Jan 2022 08:48:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzw9GmYU/PvuyJWTylj1DpMTk+X9aHstLHorYT7pdYL7AK0d+kGMLgm3nZMVGs4NnICyCkBzA==
-X-Received: by 2002:a05:6402:160d:: with SMTP id f13mr7452068edv.247.1641574136694;
-        Fri, 07 Jan 2022 08:48:56 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id z22sm2330165edd.68.2022.01.07.08.48.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 08:48:56 -0800 (PST)
-Message-ID: <80dc4ee6-9401-a86b-f090-981abeb64354@redhat.com>
-Date:   Fri, 7 Jan 2022 17:48:55 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZL1IIh8N/t+BHnGrZngRI4Wu6PnsS/ETq8DSWtn9LP4=;
+        b=P6lWOKZwbhtyK0ialXRCwBwA7Egvcgz0rNOiWr55yzfGX9InKdORL/N8QUDm3g/oVf
+         gVt+YTFPxNoBTHT7TrIqJONHv8UbfdZ0nMlamdKYclr1y+P8dwlWXMlebPu4AspGbMqC
+         RpWdnnHsamUp2Gqws19a8HsmMA94roOMj7U+K+Sy0qF11aBxjZg2hSXr31MdZHe8kt+s
+         BbFOG+Bf08uLyveVOdNe/THCg3TzM7Sac2glrkghgrjlCk9Su02ceLg3Sm/gH/ebiJk6
+         hX5sRPF3qqNW4BakUGLpkT8qMQG9EICnvIprxKP6p/VJhFNNdCE34RZ+JTTawQW9kiKD
+         wIYA==
+X-Gm-Message-State: AOAM533Rr7oCWChISvHfZW04YOfV0TMd6fePeMmCJlmWNmaUI0cPvgw3
+        lnQ2X5oDbhPY23CPYGRLKD2hA2e1dUJGMarHwJGqIA==
+X-Google-Smtp-Source: ABdhPJwKGOGLxY2N6H+C08ShsFe8lUGDHnLP2XOgjBuMBWnlTkNVzmG7RqGrOD4ylj9vZ/VhKTvpCxGk9u3qYdu2EQ4=
+X-Received: by 2002:a63:414:: with SMTP id 20mr56480887pge.178.1641574164830;
+ Fri, 07 Jan 2022 08:49:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] KVM: x86/pmu: Fix available_event_types check for
- REF_CPU_CYCLES event
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220105051509.69437-1-likexu@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220105051509.69437-1-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220106100127.1862702-1-xji@analogixsemi.com> <20220106100127.1862702-2-xji@analogixsemi.com>
+In-Reply-To: <20220106100127.1862702-2-xji@analogixsemi.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Fri, 7 Jan 2022 17:49:13 +0100
+Message-ID: <CAG3jFyvPD075x_N1V_S39NvMUUNkSbBUQrO65naGJG_kzniDwQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] drm/bridge: anx7625: add HDCP support
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     andrzej.hajda@intel.com, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, bliang@analogixsemi.com,
+        qwen@analogixsemi.com, kernel test robot <lkp@intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/22 06:15, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> According to CPUID 0x0A.EBX bit vector, the event [7] should be the
-> unrealized event "Topdown Slots" instead of the *kernel* generalized
-> common hardware event "REF_CPU_CYCLES", so we need to skip the cpuid
-> unavaliblity check in the intel_pmc_perf_hw_id() for the last
-> REF_CPU_CYCLES event and update the confusing comment.
-> 
-> If the event is marked as unavailable in the Intel guest CPUID
-> 0AH.EBX leaf, we need to avoid any perf_event creation, whether
-> it's a gp or fixed counter. To distinguish whether it is a rejected
-> event or an event that needs to be programmed with PERF_TYPE_RAW type,
-> a new special returned value of "PERF_COUNT_HW_MAX + 1" is introduced.
-> 
-> Fixes: 62079d8a43128 ("KVM: PMU: add proper support for fixed counter 2")
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
-> v1 -> v2 Changelog:
-> - Refine comment based on commit c1d6f42f1a42;
-> - Squash the idea "avoid event creation for rejected hw_config" into this commit;
-> - Squash the idea "PERF_COUNT_HW_MAX + 1" into this commit;
-> 
-> Previous:
-> https://lore.kernel.org/kvm/20211112095139.21775-3-likexu@tencent.com/
-> 
->   arch/x86/kvm/pmu.c           |  3 +++
->   arch/x86/kvm/vmx/pmu_intel.c | 18 ++++++++++++------
->   2 files changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 8abdadb7e22a..e632693a2266 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -109,6 +109,9 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
->   		.config = config,
->   	};
->   
-> +	if (type == PERF_TYPE_HARDWARE && config >= PERF_COUNT_HW_MAX)
-> +		return;
-> +
->   	attr.sample_period = get_sample_period(pmc, pmc->counter);
->   
->   	if (in_tx)
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index 5e0ac57d6d1b..ffccfd9823c0 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -21,7 +21,6 @@
->   #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - MSR_IA32_PERFCTR0)
->   
->   static struct kvm_event_hw_type_mapping intel_arch_events[] = {
-> -	/* Index must match CPUID 0x0A.EBX bit vector */
->   	[0] = { 0x3c, 0x00, PERF_COUNT_HW_CPU_CYCLES },
->   	[1] = { 0xc0, 0x00, PERF_COUNT_HW_INSTRUCTIONS },
->   	[2] = { 0x3c, 0x01, PERF_COUNT_HW_BUS_CYCLES  },
-> @@ -29,6 +28,7 @@ static struct kvm_event_hw_type_mapping intel_arch_events[] = {
->   	[4] = { 0x2e, 0x41, PERF_COUNT_HW_CACHE_MISSES },
->   	[5] = { 0xc4, 0x00, PERF_COUNT_HW_BRANCH_INSTRUCTIONS },
->   	[6] = { 0xc5, 0x00, PERF_COUNT_HW_BRANCH_MISSES },
-> +	/* The above index must match CPUID 0x0A.EBX bit vector */
->   	[7] = { 0x00, 0x03, PERF_COUNT_HW_REF_CPU_CYCLES },
->   };
->   
-> @@ -75,11 +75,17 @@ static unsigned int intel_pmc_perf_hw_id(struct kvm_pmc *pmc)
->   	u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
->   	int i;
->   
-> -	for (i = 0; i < ARRAY_SIZE(intel_arch_events); i++)
-> -		if (intel_arch_events[i].eventsel == event_select &&
-> -		    intel_arch_events[i].unit_mask == unit_mask &&
-> -		    (pmc_is_fixed(pmc) || pmu->available_event_types & (1 << i)))
-> -			break;
-> +	for (i = 0; i < ARRAY_SIZE(intel_arch_events); i++) {
-> +		if (intel_arch_events[i].eventsel != event_select ||
-> +		    intel_arch_events[i].unit_mask != unit_mask)
-> +			continue;
-> +
-> +		/* disable event that reported as not present by cpuid */
-> +		if ((i < 7) && !(pmu->available_event_types & (1 << i)))
-> +			return PERF_COUNT_HW_MAX + 1;
-> +
-> +		break;
-> +	}
->   
->   	if (i == ARRAY_SIZE(intel_arch_events))
->   		return PERF_COUNT_HW_MAX;
-
-Queued, thanks.
-
-Paolo
-
+This series and this patch looks good to me. I'll hold off a few days
+before merging this in order to give Andrzej some time to have a
+second look.

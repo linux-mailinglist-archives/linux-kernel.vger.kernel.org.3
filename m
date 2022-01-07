@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F94B48764E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7A748765B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347018AbiAGLPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiAGLPX (ORCPT
+        id S1347038AbiAGLUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:20:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50755 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237564AbiAGLUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:15:23 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064A7C061245
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 03:15:23 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bp20so14336375lfb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 03:15:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sEQUWH9+nKsbSRBifAxPqas320XSmelj+qMN3565rLM=;
-        b=FXQotnz+fUgxzX1zUd3uGAMbEY4zNBz/nechr9w9/T4JpGKUEcp4sBwpPkuHnY9qUV
-         aYjLjO7sTq1lkLnv61q9wwNk0kyfLcVakc5Bc9yOD2tJyixlFVMHgB+JtuRYBLuAG9Jx
-         IYxNx+3r74nLzA7LYuU9ZXsAO8JGrj/feWGGI4W/OjlmyRwcY6IQG+ZiotYtODHzYykp
-         jEiDS9RLfcQopS8daxshyhNQPfh6ojIFR6JQ6fU0/zAwxS1W4FBHf1uCRBi7OPg2TZ7f
-         l6I+c3GRRdV6W0etHxl7v9g9q+QQTqsK7tZTxfmgoG/i+HzoSikktjKxa9LMcUaSRLZ5
-         LFGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sEQUWH9+nKsbSRBifAxPqas320XSmelj+qMN3565rLM=;
-        b=Fpvt7+45nlhAxXVWgfbtPLVk2d7nn6wXe3ZZtoKxzXOE53UkyPYWbDvraBoBGW+11F
-         SAdcrg/VlSH5Ru1xW1fe1h+reDIcVfSE68X+3gYYh4iNKwMFh9dwfbM2kdUydrt2V1u0
-         SJ4aQYC/xojLDeHvO7grct1OlGBCUcX8VtazUbQKSBZij8CyBTsPFXBioL3XZ96Tbhoj
-         BkdnSrsUv1KBe1UGnpmyXCQz3z+GL0HcJuqz58JzNdCFDoUQb16iQaGsh1yiBzerUNXE
-         bsoxwu9svQsDkjt1vNlunLOTLEyAeWnJ0gDtecKe+JFsTDmHabmzJmYPNCdv6TwVeRhd
-         FXpw==
-X-Gm-Message-State: AOAM531IeGOFOc6pP2lm39NDNu1CfXU7VOsP0PxoHMsYYZkj9M8SXHjR
-        u//BrI9v7ASGd0yJAQjgAVg=
-X-Google-Smtp-Source: ABdhPJxIcgwo9lOVSrBRjkS41885ithJPKjhvhDFlSQ4rNqGOzo5YBEPtbFEnM6vF5DNUhvCelM7tA==
-X-Received: by 2002:a05:6512:3f8f:: with SMTP id x15mr26125125lfa.90.1641554121255;
-        Fri, 07 Jan 2022 03:15:21 -0800 (PST)
-Received: from [192.168.1.11] ([217.117.245.67])
-        by smtp.gmail.com with ESMTPSA id y2sm569029ljp.20.2022.01.07.03.15.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 03:15:20 -0800 (PST)
-Message-ID: <ca0548c0-b36c-98dc-3e49-b629b3d3fb6a@gmail.com>
-Date:   Fri, 7 Jan 2022 14:15:19 +0300
+        Fri, 7 Jan 2022 06:20:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641554410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PswEpjxzjKrjXqvo3ZcUyyPMxbfB05nP29oDsBh+1Z4=;
+        b=eWQTp6Q13mSAOX6PaKFdHy60fT/eKLLiJ8X6RK5aRWSPkQEvMsO0QXfaCXcJkvWGzaQ1Bf
+        BUM82Ms4hAD4PNOTIUkP0rJkThjV5kmlJwMTql0Nts/VXrnrWCf3pl7WvbqalDq6HFMWUS
+        G4lWbvmgfxj35poWU0A535qwB5Lqs5E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-_zFRiW7tPMu4lwviEKOwRQ-1; Fri, 07 Jan 2022 06:20:07 -0500
+X-MC-Unique: _zFRiW7tPMu4lwviEKOwRQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1CF571800D50;
+        Fri,  7 Jan 2022 11:20:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D1597E23A;
+        Fri,  7 Jan 2022 11:19:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1e102cc81aaf71df2b7f5ae906b79c188a34a111.camel@kernel.org>
+References: <1e102cc81aaf71df2b7f5ae906b79c188a34a111.camel@kernel.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021549223.640689.14762875188193982341.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 44/68] cachefiles: Implement key to filename encoding
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 03/19] staging: r8188eu: release_firmware is not called if
- allocation fails
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220107103620.15648-1-straube.linux@gmail.com>
- <20220107103620.15648-4-straube.linux@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220107103620.15648-4-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3149373.1641554392.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 07 Jan 2022 11:19:52 +0000
+Message-ID: <3149374.1641554392@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Jeff Layton <jlayton@kernel.org> wrote:
 
-On 1/7/22 13:36, Michael Straube wrote:
-> In function load_firmware() release_firmware() is not called if the
-> allocation of pFirmware->szFwBuffer fails or if fw->size is greater
-> than FW_8188E_SIZE.
-> 
-> Move the call to release_firmware() to the exit label at the end of
-> the function to fix this.
-> 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
->   drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> index dc41682fd8d6..cfafbb6c42f7 100644
-> --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> @@ -538,10 +538,10 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
->   	}
->   	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
->   	pFirmware->ulFwLength = fw->size;
-> -	release_firmware(fw);
->   	dev_dbg(device, "!bUsedWoWLANFw, FmrmwareLen:%d+\n", pFirmware->ulFwLength);
->   
->   Exit:
-> +	release_firmware(fw);
->   	return rtStatus;
->   }
->   
+> Since most cookies are fairly small, is there any real benefit to
+> optimizing for length here? How much inflation are we talking about?
 
+Taking AFS as an example, a vnode is represented at the file level by two
+numbers: a 32-bit or 96-bit file ID and a 32-bit uniquifier.  If it's a 96=
+-bit
+file ID, a lot of the time, the upper 64-bits will be zero, so we're talki=
+ng
+something like:
 
-This patch looks like a bug fix and it should go to stable kernels as 
-well. The problem is this patch is made on top of 2 previous clean up 
-patches, so it can't go to stable as is.
+	S421d4,1f07f34,,
 
-I think, the less painful way is to move this patch on the first place 
-in this series. On the other hand you can just resend this one separately.
+instead of:
 
+	S000421d401f07f340000000000000000
 
-Or, maybe, Greg knows some magic that will help here, we can wait him 
-before you resend 20 patch series :)
+or:
 
-If you will somehow resend, please, add following tag:
+	E0AAQh1AHwfzQAAAAAAAAAAA=3D=3D
 
-Fixes: 8cd574e6af54 ("staging: r8188eu: introduce new hal dir for 
-RTL8188eu driver")
+The first makes for a more readable name in the cache.  The real fun is wi=
+th
+NFS, where the name can be very long.  For one that's just 5 words in leng=
+th:
 
+	T81010001,1,20153e2,,a906194b
 
-Thanks for you clean up work on this driver!
+instead of:
 
+	T8101000100000001020153e200000000a906194b
 
-With regards,
-Pavel Skripkin
+or:
+
+	E0gQEAAQAAAAECAVPiAAAAAKkGGUs=3D
+
+(The letter on the front represents the encoding scheme; in the base64 enc=
+oding
+the second digit indicates the amount of padding).
+
+I don't know how much difference it makes to the backing filesystem's
+directory packing - and it may depend on the particular filesystem.
+
+David
+

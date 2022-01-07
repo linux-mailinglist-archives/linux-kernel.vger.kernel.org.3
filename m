@@ -2,116 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AD7487AEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D48487AF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348407AbiAGREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:04:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47179 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240301AbiAGREN (ORCPT
+        id S1348420AbiAGRGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240263AbiAGRGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:04:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641575053;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yQ2sKCfCcZU2Bxbu6F8PHdSva7fA8R5kZpvDr4zlGGo=;
-        b=fqwfmzPL4dGiAprBAr6YL2gLSRfo0pUxJW5aj5RJpsdl1OaXHq52EIuwnfg+MO2nBBxEZr
-        j1dc7rcG+DOy/1BsBja5He9ttpbraBxUKSg6CiCu0JvFqdm6sCDDf6+lXJUG3m/08qxcal
-        s3JGxpPdMGfcPA81nHdoKqsymoiEGoo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-640--mWS7ihHOc6kCRfUJhI4CQ-1; Fri, 07 Jan 2022 12:04:12 -0500
-X-MC-Unique: -mWS7ihHOc6kCRfUJhI4CQ-1
-Received: by mail-ed1-f72.google.com with SMTP id h6-20020a056402280600b003f9967993aeso5160005ede.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:04:12 -0800 (PST)
+        Fri, 7 Jan 2022 12:06:23 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58897C061574;
+        Fri,  7 Jan 2022 09:06:23 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id f138so6494813qke.10;
+        Fri, 07 Jan 2022 09:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vhFmJZMNdX/dh2pbiMJ3MLnLQNuvASTgo73CFwenSRw=;
+        b=OFzvQ7xUNaUcR6Qbs1vRoxp+3tMQHkEJqryKBCATX0HtAX3woCePSwYEmOjsC4AMts
+         0mnpWXD20GdxcfbAwmfvo9YrBgBNS4X0Hr3HlKBjDSAtqQj3G6kczMhTffkF8KAJywKg
+         Ld5x6Fq1NliRcw35Sjy4WtrX5nNGEJWOnIZcsQWfsUUNmfeqQ5xl10BQACC5UyzbabTK
+         W64BRFT39jRbnGL74U5UO6kje/oH8bXwvh06azRRR84uPJAzgUmvVc+tLLIX0KTbq3yi
+         9e6w2IazDGIs7DjvL+/1h+ZOe0cI9Xa7mqPY9mnYW01bMIWFA0+Q9HCHonJMcAPRWVGe
+         NRfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yQ2sKCfCcZU2Bxbu6F8PHdSva7fA8R5kZpvDr4zlGGo=;
-        b=ms7jcKWNBwXIL44MrSmIjVgktFudHKBhqhx6tc7FPd6XsLoRPKEDO3nroOtDLfowQu
-         xml3g3o/b5jj+nhaGTOikrdP9AHGzWaY9zSKOtc1LHpyxbQc7sj2yprsF+njR+QiLQP8
-         pltAdMxt5ObV3/RNa9XvZGEnvDITV7vCKLnTvCZKfzprZ/5VRfaJFkzJbCYIjLNRmRM9
-         JJ4iUZ2qVyaRdPUVr13tb+QS+aKIPCSmjHjber8mraonxfEkmiSuGIIOzuf9Wnpr72mK
-         0ebYWOlzoJ9p4HTWmdeaZHzOKNGVO70/sgU1KRO5NHggL6ryiYvvCwQpBJnDV51SrYD+
-         KF2w==
-X-Gm-Message-State: AOAM532GagTgOf8y1F9CZivBGba4yfDkKAE1lD23Z01kh3Chz20ELR3M
-        AR3p8gphENmMkgq3LfmEtPUeurhR8S53LuaBjAq8A5hcsnr+7N8zg7rw/apDtjkoKBsavCesWlA
-        pnhshYuyYYIsVZ9IXlC62lmnY
-X-Received: by 2002:a17:906:c14f:: with SMTP id dp15mr53895101ejc.267.1641575051122;
-        Fri, 07 Jan 2022 09:04:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwxiOmqafaff21rmaGP9L/GaY7kp3AdC2ZyQUvS3e0/4WFekTuNB6HGGiXRl6CWI39JR+XUKw==
-X-Received: by 2002:a17:906:c14f:: with SMTP id dp15mr53895091ejc.267.1641575050958;
-        Fri, 07 Jan 2022 09:04:10 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id p4sm1559114eju.98.2022.01.07.09.04.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 09:04:10 -0800 (PST)
-Message-ID: <f070a443-9763-a62f-38ef-3398fa942465@redhat.com>
-Date:   Fri, 7 Jan 2022 18:04:09 +0100
+        bh=vhFmJZMNdX/dh2pbiMJ3MLnLQNuvASTgo73CFwenSRw=;
+        b=Ax05T2Vv/0k/OCfyPnJggVgV4p5FeaCdKQx+Hh32LRQkpouHrJl8c1xoI1z6naEpyW
+         xAD/EJngjp7G/4Bx2VfjB/wDAK4wDSMrIBRADz/DdUdqNZrSRLUPBpF6R8/3G+mKX/m4
+         ubjswKK74j1kDauw8oOsPVrJggnOVrqDD5wKuZ17mu9afQF7r+fao9ZsH2x34dEwocnF
+         +W+ythRb62mnmjG8/eWfZSRkJm2KZ1TrJRBP4wd+Q5UzOO1Rd1yUKqudGWG5zM62zE3w
+         BOm7zh53uGLAlxhyufyJae+4hacFYHSjUT7s1KxBz3oh2VmASuGb7xnv543NbJz/I4iu
+         gyyw==
+X-Gm-Message-State: AOAM530xY52wLXt3PZh/lwgGWfosDp5u+4vdC2HP6n4fi9L/r6m5leTP
+        m8eXYAOS8aTLMeo57hhcnQk1ZRfQL6wJqg==
+X-Google-Smtp-Source: ABdhPJxfsLGF5F1Cvp86Ws+xktVODYz9MY+aebsJxFIeg2vf07ohHK2IUc82voHlNqrLB+M3a3qApw==
+X-Received: by 2002:a05:620a:1727:: with SMTP id az39mr1402820qkb.93.1641575182127;
+        Fri, 07 Jan 2022 09:06:22 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id d9sm3961085qkn.131.2022.01.07.09.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 09:06:21 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
+        shorne@gmail.com, geert@linux-m68k.org,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        rdunlap@infradead.org, andy.shevchenko@gmail.com
+Subject: [PATCH v7 0/3] mmc: Add LiteSDCard mmc driver
+Date:   Fri,  7 Jan 2022 12:06:13 -0500
+Message-Id: <20220107170616.2041589-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] KVM: x86: Check for rmaps allocation
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Nikunj A Dadhania <nikunj@amd.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vasant.hegde@amd.com,
-        brijesh.singh@amd.com
-References: <20220105040337.4234-1-nikunj@amd.com>
- <YdVfvp2Pw6JUR61K@xz-m1.local> <Ydhx1qguxVZxOGfo@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ydhx1qguxVZxOGfo@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/22 18:01, Sean Christopherson wrote:
-> On Wed, Jan 05, 2022, Peter Xu wrote:
->> On Wed, Jan 05, 2022 at 09:33:37AM +0530, Nikunj A Dadhania wrote:
->>> With TDP MMU being the default now, access to mmu_rmaps_stat debugfs
->>> file causes following oops:
->>>
->>> BUG: kernel NULL pointer dereference, address: 0000000000000000
->>> PGD 0 P4D 0
->>> Oops: 0000 [#1] PREEMPT SMP NOPTI
->>> CPU: 7 PID: 3185 Comm: cat Not tainted 5.16.0-rc4+ #204
->>> RIP: 0010:pte_list_count+0x6/0x40
->>>   Call Trace:
->>>    <TASK>
->>>    ? kvm_mmu_rmaps_stat_show+0x15e/0x320
->>>    seq_read_iter+0x126/0x4b0
->>>    ? aa_file_perm+0x124/0x490
->>>    seq_read+0xf5/0x140
->>>    full_proxy_read+0x5c/0x80
->>>    vfs_read+0x9f/0x1a0
->>>    ksys_read+0x67/0xe0
->>>    __x64_sys_read+0x19/0x20
->>>    do_syscall_64+0x3b/0xc0
->>>    entry_SYSCALL_64_after_hwframe+0x44/0xae
->>>   RIP: 0033:0x7fca6fc13912
->>>
->>> Return early when rmaps are not present.
->>>
->>> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
->>> Tested-by: Vasant Hegde <vasant.hegde@amd.com>
->>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
->>> ---
-> 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> 
+Add support for the LiteX SD-Card device, LiteSDCard.
 
-Queued, thanks.
+LiteSDCard is a simple SD-Card interface available as part of the LiteX
+environment, used with various RISC-V and other FPGA based SoCs.
 
-Paolo
+New in v7:
+
+drivers/mmc/host/Kconfig:
+  - added module name in LiteSDCard Kconfig entry
+
+drivers/mmc/host/litex_mmc.c:
+  - fixed comment formatting, ordering, and capitalization throughout
+    the entire file
+  - sorted header #include statements
+  - removed redundant parantheses in readx_poll_timeout() condition
+  - explicit handling of readx_poll_timeout() timeout scenarios
+  - dev_err() used in litex_mmc_sdcard_wait_done()
+  - use memcpy_fromio() to grab command response
+  - no need to apply 0xffff mask to a 32-bit value right-shifted by 16
+    (host->resp[3])
+  - use clamp() instead of min(max(...)...)
+  - reworked platform_get_irq_optional() error handling logic
+  - no need to explicitly zero host->irq, kzalloc() does that already
+  - added missing free_irq() in litex_mmc_probe() error path
+  - reordered calls inside litex_mmc_remove() (calling mmc_free_host()
+    before free_irq()
+
+>New in v6:
+>
+>drivers/mmc/host/litex_mmc.c:
+>  - fix handling of deferred probe vs. platform_get_irq_optional()
+>  - don't #ifdef dma_set_mask_and_coherent(), since it automatically
+>    does the right thing on both 32- and 64-bit DMA capable arches
+>  - remove MMC_CAP2_FULL_PWR_CYCLE, add MMC_CAP2_NO_MMC to list of
+>    hardcoded capabilities during litex_mmc_probe()
+>  - hardcode mmc->ocr_avail to the full 2.7-3.6V range allowed by the
+>    SDCard spec (the LiteSDCard device doesn't accept software
+>    configuration)
+>
+>>New in v5:
+>>
+>>MAINTAINERS:
+>>
+>>  - picked up a/b Mateusz
+>>
+>>Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>
+>>  - picked up r/b Rob, Joel
+>>
+>>drivers/mmc/host/litex_mmc.c:
+>>
+>>  - shorten #define constant names (cosmetic, make them less unwieldy)
+>>  - picked up r/b Joel
+>>
+>>>New in v4:
+>>>
+>>>Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>>
+>>>  - fixed `dt_binding_check` errors uncovered by Rob's script
+>>>
+>>>drivers/mmc/host/litex_mmc.c:
+>>>
+>>>  - struct litex_mmc_host fields re-ordered so that `pahole` reports
+>>>    no holes in either 32- or 64-bit builds
+>>>  - litex_mmc_set_bus_width() now encapsulates check for
+>>>    host->is_bus_width_set
+>>>  - litex_mmc_request() - factor out dma data setup into separate
+>>>    helper function: litex_mmc_do_dma()
+>>>
+>>>>New in v3:
+>>>>
+>>>>  MAINTAINERS:
+>>>>
+>>>>  - picked up acked-by Joel
+>>>>  - added listing for liteeth driver
+>>>>  - added Joel as additional co-maintainer (thanks!)
+>>>>
+>>>>  Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>>>
+>>>>  - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
+>>>>    bindings document (please let me know if that was premature, and
+>>>>    happy to take further review if needed :)
+>>>>  - add dedicated DT property for source clock frequency
+>>>>
+>>>>  drivers/mmc/host/litex_mmc.c:
+>>>>
+>>>>  - fixed function signature (no line split), and naming (litex_mmc_*)
+>>>>  - more informative MODULE_AUTHOR() entries
+>>>>    - also added matching "Copyright" entries in file header
+>>>>  - fixed description in Kconfig
+>>>>  - fixed DT documentation
+>>>>  - removed magic constants
+>>>>  - removed litex_map_status(), have sdcard_wait_done() return *real*
+>>>>    error codes directly instead.
+>>>>  - streamlined litex_mmc_reponse_len()
+>>>>  - call litex_mmc_set_bus_width() only once, and ensure it returns
+>>>>    correct error code(s)
+>>>>  - use readx_poll_timeout() -- more concise -- instead of
+>>>>    read_poll_timeout()
+>>>>  - use dev_err() in litex_mmc_send_cmd() (instead of pr_err())
+>>>>  - litex_mmc_setclk() will update host->clock before returning
+>>>>  - separate irq initialization into its own function,
+>>>>    litex_mmc_irq_init()
+>>>>  - document rationale for f_min, f_max
+>>>>  - use dmam_alloc_coherent(), which simplifies cleanup significantly
+>>>>  - large `if (data) { ... }` block in litex_mmc_request() left as-is,
+>>>>    there are too many variables shared with the rest of the parent
+>>>>    function body to easily separate (e.g., `len`, `transfer`, `direct`).
+>>>>    If this is indeed a blocker, I can take another shot at refactoring
+>>>>    it in a future revision!
+>>>>  - bump dma_set_mask_and_coherent() to 64-bits on suitable
+>>>>    architectures
+>>>>  - clock source picked up from dedicated DT clock reference property
+>>>>  - remove gpio card-detect logic (needs testing and a dt binding
+>>>>    example before being eligible for upstream inclusion)
+>>>>
+>>>>> New in v2:
+>>>>>   - reword info message in litex_set_clk()
+>>>>>   - streamline code in litex_map_status()
+>>>>>   - fix typos in Kconfig (thanks Randy Dunlap <rdunlap@infradead.org>)
+>>>>>   - improvements suggested by Stafford Horne <shorne@gmail.com>
+>>>>>     - allow COMPILE_TEST in Kconfig
+>>>>>     - use read_poll_timeout() when waiting for cmd/data/DMA
+>>>>>       xfer completion
+>>>>>   - include interrupt.h (thanks kernel test robot <lkp@intel.com>)
+
+Gabriel Somlo (3):
+  MAINTAINERS: co-maintain LiteX platform
+  dt-bindings: mmc: Add bindings for LiteSDCard
+  mmc: Add driver for LiteX's LiteSDCard interface
+
+ .../devicetree/bindings/mmc/litex,mmc.yaml    |  72 ++
+ MAINTAINERS                                   |   9 +-
+ drivers/mmc/host/Kconfig                      |  10 +
+ drivers/mmc/host/Makefile                     |   1 +
+ drivers/mmc/host/litex_mmc.c                  | 670 ++++++++++++++++++
+ 5 files changed, 760 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+ create mode 100644 drivers/mmc/host/litex_mmc.c
+
+-- 
+2.31.1
 

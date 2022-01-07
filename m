@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5D548732E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7632E487332
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbiAGGs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S232991AbiAGGwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 01:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiAGGs6 (ORCPT
+        with ESMTP id S229729AbiAGGwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:48:58 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFD7C061245;
-        Thu,  6 Jan 2022 22:48:58 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id v186so4834526ybg.1;
-        Thu, 06 Jan 2022 22:48:58 -0800 (PST)
+        Fri, 7 Jan 2022 01:52:18 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E3FC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 22:52:18 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id f8so4703210pgf.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 22:52:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=xvjeU1BShYSYz/89CGB0rffOY9I8zC/Z7LnpWXix7ZQ=;
-        b=QCbfbH0REo6BsoynxMo9CcmCJS+sHju5s2LBER+hoAWRJIzehIJNwOWdjkHuuxr+aC
-         Y4H4VNugVVng1suxU1Ot1hlgcMca5otCSngiM8wasieuWDhcEflcR6f/q7Ibpdyyniv0
-         y6aAa1m2T9dvOBXB98xSkJ57B1JOqRmt4q/QiLsKcSjbP9+tE/AF4Ej/PCny+53D3shs
-         7Xb8cOiI2dEQKq0/GAwwnGuaZdHOW3K91/dzk5YEofMkXqdc02tQyUH9VUDQyGBa8p+3
-         vFS9FdYAFK7PA3XUGI/qPdMLYmgcyNaB4nwTxD3Tu3Dj5u5ItN+GvaicJOaQcTDrqAIJ
-         G6QQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R1MbqjjHlpwAkbujyAZzAl4HorX8RJtW6RCBhq0VRmY=;
+        b=YGZ+fwK7uqgnP0cbS69isHiEPZLNAEUtfGVRtBCLnZ5PLeTKmf6u3zi1tDvyhu8GAQ
+         6n9orQGMOmMPhW0HXwEZeIc+Anb2vxbXdrNIlWYJabmqm7X4v1WGQLGsi/4I9HCM7hdi
+         GQhd6gsSYJd5w/MV1lpxTdSLbonKNKQDrw2Su3mQmODioS10xcI8yoteiU84uD7niwEr
+         sZf0CqAEZzZWj3R1iNXNoAzlAxMouhS73dSJ/mUHOPNkdTpcmz2MW8qiregTvN1Lt6Mb
+         n5h82aaGl997KWtEtv7b65/DE7Rg09jh2cif807kcbKgEIHV5zai3X3DueheuOuxJjFn
+         gnng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=xvjeU1BShYSYz/89CGB0rffOY9I8zC/Z7LnpWXix7ZQ=;
-        b=2+BJClQHaVXWVApCYx+vO+cQw22qvjx2NLX7FOGV2fUz36PWtiOz3Ti2L1b/BtFwod
-         +/iNcTFBbuuHtdi9OXjsZCXjoKwUGzi0tcZ1ZdK3soXyffuz49HCZPeoRNdfFOMAkH1g
-         RkzDlO193AReavsLkBt/feCacMDOf67MZBD4lCd1kfMsnYomhHTCsGWjLHyoYLln3heQ
-         azLX8dV8nwZ7wq4zlU/K4I0mzwRbLHL7AmiXJLjSsemjwSep1F+JW3RIY0/cjnGTYssC
-         kRSpW0GZSTM3YXnEfth3HYnKcW8UVYX+Z/2fR8tVlzDs1hZjJv78BPo8C4bt5d/p+Xk3
-         4LGQ==
-X-Gm-Message-State: AOAM533iGhtnREMAJzoG+vu7VlGWYuwRLCjVUE/fozwksGyznv/dA4VS
-        svwAf4YBNZ6g7gp/CaDbQgxaH7I9983+ZrQuEqc=
-X-Google-Smtp-Source: ABdhPJyVkUz1WXHCJYUMiLbKmjoV9D+XLsb67McUjTdtzRqhzdOv3dUmUuqlZ4Xu3O4eau74nnukMIzrJ/MIGvVbT+g=
-X-Received: by 2002:a25:4002:: with SMTP id n2mr34172341yba.547.1641538137340;
- Thu, 06 Jan 2022 22:48:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R1MbqjjHlpwAkbujyAZzAl4HorX8RJtW6RCBhq0VRmY=;
+        b=W48lKJ3wTl1500nG1RnrMwjE3fPCHNI5UOEelswlMSPfUjN7d8OfdV4/THXB+1E/KW
+         YZQ5U/egYwteg++pPJqbXr/6OAvdY+Q7BAk+OG8asewKnMd6w6+urwd0LyoIrdbzTPNz
+         9wwtawLBUz+f9/pQwgnZs5xtHbhqVDGpm6gTmwnbTRwOlZRb5fu3zpA1aDJeu0h3X8LY
+         wFm7h3KKxJnIhv2vKnPh+Wq6HJ6M3sOn5/8kFJxQaxoGo225sUacYrzQNzRVPvqdrng+
+         lfkKQ9WDwkBAIpDQt11UUQoIcej50WVgyIHmb8Wc+knGPeCxHuajwK542EgLdoa6Xr+n
+         +shg==
+X-Gm-Message-State: AOAM532qrUGYbFXrlGSOmDaClKl3mX2bPIcEcW8dvE0aen/uTbJL1b/e
+        ONo5wUGTt+4Th+aXU8ngJvo=
+X-Google-Smtp-Source: ABdhPJySAFJK6FIQ6td62XvHq169EysjllUEfbwhF5Wjwe6eFzSfyCJUAsyXZAyybo1q4XAiC2E60A==
+X-Received: by 2002:a05:6a00:892:b0:4ba:12d5:1d4 with SMTP id q18-20020a056a00089200b004ba12d501d4mr64311542pfj.46.1641538338089;
+        Thu, 06 Jan 2022 22:52:18 -0800 (PST)
+Received: from nlap2 ([171.78.146.184])
+        by smtp.gmail.com with ESMTPSA id g9sm4688248pfj.123.2022.01.06.22.52.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 22:52:17 -0800 (PST)
+Date:   Fri, 7 Jan 2022 12:22:10 +0530
+From:   Abdun Nihaal <abdun.nihaal@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] staging: r8188eu: change functions to return void
+Message-ID: <20220107065210.7utcwjenvcspydyk@nlap2>
+References: <cover.1641490034.git.abdun.nihaal@gmail.com>
+ <9db6b08837bd6354c8e07a4b1c4bca662091f945.1641490034.git.abdun.nihaal@gmail.com>
+ <Ydct2sBt6aB+MChS@kroah.com>
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 7 Jan 2022 07:48:46 +0100
-Message-ID: <CAKXUXMzZkQvHJ35nwVhcJe+DrtEXGw+eKGVD04=xRJkVUC2sPA@mail.gmail.com>
-Subject: Observation of a memory leak with commit 314001f0bf92 ("af_unix: Add
- OOB support")
-To:     Rao Shoaib <rao.shoaib@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydct2sBt6aB+MChS@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rao and David,
+Hello Greg,
 
+On Thu, Jan 06, 2022 at 06:58:50PM +0100, Greg KH wrote:
+> On Thu, Jan 06, 2022 at 11:11:52PM +0530, Abdun Nihaal wrote:
+> > Some functions in ioctl_linux.c always returns 0 and their return values
+> > are never used. Change return type of such functions to void.
+> > 
+> > While at it, align function arguments with open parenthesis to fix
+> > checkpatch checks.
+> > 
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
+> 
+> Are you sure that checkpatch allowed this change?
 
-In our syzkaller instance running on linux-next,
-https://elisa-builder-00.iol.unh.edu/syzkaller-next/, we have been
-observing a memory leak in prepare_creds,
-https://elisa-builder-00.iol.unh.edu/syzkaller-next/report?id=1dcac8539d69ad9eb94ab2c8c0d99c11a0b516a3,
-for quite some time.
+Yes, I ran checkpatch on both the patches and found no errors, warnings
+or checks. Is there something that needs to be fixed?
 
-It is reproducible on v5.15-rc1, v5.15, v5.16-rc8 and next-20220104.
-So, it is in mainline, was released and has not been fixed in
-linux-next yet.
-
-As syzkaller also provides a reproducer, we bisected this memory leak
-to be introduced with  commit 314001f0bf92 ("af_unix: Add OOB
-support").
-
-We also tested that reverting this commit on torvalds' current tree
-made the memory leak with the reproducer go away.
-
-Could you please have a look how your commit introduces this memory
-leak? We will gladly support testing your fix in case help is needed.
-
-
-Best regards,
-
-Lukas
+Regards,
+Abdun Nihaal

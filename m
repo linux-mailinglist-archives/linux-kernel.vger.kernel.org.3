@@ -2,118 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DBA486FF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48CA486FF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344580AbiAGByn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:54:43 -0500
-Received: from mga05.intel.com ([192.55.52.43]:36250 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344533AbiAGBym (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 20:54:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641520482; x=1673056482;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Jt8G5RvicmESM2ejSPAMQP973KFNwwweQUosaDpYZ+Y=;
-  b=icHVwR+Bx3qfGy28JP7zxYLqxQK75AAZipFoinDX4WewSRCoHtWRV4W0
-   6i4it/3shDLcHYtn59uz/vWvgV2vOqCBuB4zbHSzSFAJOMjESQu3fr5W1
-   I7bg33PJjTmryfnmLgE+zcTp4QbIOmYvpM6wfHG/MPbpb2UopJN/Bvsm/
-   aaJh1zYKYmBXeRjvzoe6rarbLSAkeqo/tskdhv2Y8hIF79S81OphlEGWA
-   Fuq9CNwsgKuNkUNhEuMpNsknUvGRI7zbxyuUErqiz3mIU6d6a0150sJda
-   tSyIIpBbIH7tXlmeeBANak3Omt/6SX6ZtWE1GiuLC1uDhw3fgA8ad8EXj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="329131118"
-X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
-   d="scan'208";a="329131118"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 17:54:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
-   d="scan'208";a="527209969"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 06 Jan 2022 17:54:34 -0800
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/14] PCI: portdrv: Suppress kernel DMA ownership
- auto-claiming
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20220106183224.GA298861@bhelgaas>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <1545319f-130e-3750-ea00-082a12b73852@linux.intel.com>
-Date:   Fri, 7 Jan 2022 09:53:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1344636AbiAGB7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:59:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48318 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344533AbiAGB67 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 20:58:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7140F61D99;
+        Fri,  7 Jan 2022 01:58:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE163C36AE0;
+        Fri,  7 Jan 2022 01:58:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641520738;
+        bh=8Ijx8ZyT8dEygn6iwCg9DUdEOIDqEPhPd7GJ7L9oovs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=VSGZO9QSmdLy8TfiZ8boLxqj5oYpOFFJUbz91drbiv1mpvx7U6QvJ0+gkmTEwMs56
+         oSng3x1Ecy1w20+KnryDPl+1+2I42URILz4wbB8NeYk0W2xVPBA3RnHayrIPwLKRtD
+         GQg8ss4qtBcZUas9kxN7p0UHmC/DGzTyu2npj6BXsxykFB9NQeaHsaR/wj5uKlKd6d
+         IXwEuMmewFpJGw+InK2IKf6Ck0ViTN6QcWvb8C96tFqI3SpG4sSUwUkSUH/U/WzWHN
+         zKp61+XEdmXzAyZZaCErdTZKW6fe4a68boit34JiOxuer8sMR1fp36RUFmVnCehCMv
+         khk3288hubWrg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220106183224.GA298861@bhelgaas>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211212180527.1641362-2-AjitKumar.Pandey@amd.com>
+References: <20211212180527.1641362-1-AjitKumar.Pandey@amd.com> <20211212180527.1641362-2-AjitKumar.Pandey@amd.com>
+Subject: Re: [PATCH v5 1/5] x86: clk: clk-fch: Add support for newer family of AMD's SOC
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Vijendar.Mukunda@amd.com, Alexander.Deucher@amd.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>
+To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        linux-clk@vger.kernel.org
+Date:   Thu, 06 Jan 2022 17:58:57 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20220107015858.BE163C36AE0@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/22 2:32 AM, Bjorn Helgaas wrote:
-> On Thu, Jan 06, 2022 at 12:12:35PM +0800, Lu Baolu wrote:
->> On 1/5/22 1:06 AM, Bjorn Helgaas wrote:
->>> On Tue, Jan 04, 2022 at 09:56:39AM +0800, Lu Baolu wrote:
->>>> If a switch lacks ACS P2P Request Redirect, a device below the switch can
->>>> bypass the IOMMU and DMA directly to other devices below the switch, so
->>>> all the downstream devices must be in the same IOMMU group as the switch
->>>> itself.
->>> Help me think through what's going on here.  IIUC, we put devices in
->>> the same IOMMU group when they can interfere with each other in any
->>> way (DMA, config access, etc).
->>>
->>> (We said "DMA" above, but I guess this would also apply to config
->>> requests, right?)
->>
->> I am not sure whether devices could interfere each other through config
->> space access. The IOMMU hardware only protects and isolates DMA
->> accesses, so that userspace could control DMA directly. The config
->> accesses will always be intercepted by VFIO. Hence, I don't see a
->> problem.
-> 
-> I was wondering about config accesses generated by an endpoint, e.g.,
-> an endpoint doing config writes to a peer or the upstream bridge.
-> 
-> But I think that is prohibited by spec - PCIe r5.0, sec 7.3.3, says
-> "Propagation of Configuration Requests from Downstream to Upstream as
-> well as peer-to-peer are not supported" and "Configuration Requests
-> are initiated only by the Host Bridge, including those passed through
-> the SFI CAM mechanism."
+Quoting Ajit Kumar Pandey (2021-12-12 10:05:23)
+> FCH controller clock configuration slightly differs across AMD's
+> SOC architectures. Newer family of SOC only support a 48MHz fix
+> clock while stoney SOC family has a clk_mux to choose 48MHz and
+> 25 MHz clk. At present fixed clk support is only enabled for RV
+> architecture using "is-rv" device property initialized from boot
+> loader. This limit 48MHz fixed clock gate support to RV platform
+> unless we add similar device property in boot loader for other
+> architectures.
+>=20
+> Add pci_device_id table with Stoney platform id and replace "is-rv"
+> device property check with pci id match to add clk mux support with
+> 25MHz and 48MHz clk support based on clk mux selection. This enable
+> 48Mhz fixed fch clock support by default on all newer SOC's except
+> stoney. Also replace RV with FIXED as a generic naming conventions
+> across all platforms and changed module description.
+>=20
+> Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+> Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
+> ---
 
-That's clear. Thank you for the clarification.
-
-> 
-> Bjorn
-> 
-
-Best regards,
-baolu
+Applied to clk-next

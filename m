@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87932486F35
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D337486F39
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344133AbiAGA4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:56:23 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:48417 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiAGA4W (ORCPT
+        id S1344266AbiAGA46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230133AbiAGA45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:56:22 -0500
-Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M1q8m-1n7pPg1q5A-002ChG; Fri, 07 Jan 2022 01:56:20 +0100
-Received: by mail-wm1-f48.google.com with SMTP id v123so2947397wme.2;
-        Thu, 06 Jan 2022 16:56:20 -0800 (PST)
-X-Gm-Message-State: AOAM530jfekjigejhTLDOXluhtt0COCPQYc0Mu5p4f5MX/mAAMyVJw4G
-        EbAl9VUt9lPA/smHFJbbdnC06udKN5Egu2jactE=
-X-Google-Smtp-Source: ABdhPJxjN0PpAY15g3YezZc1097ikKMl8cojBSZBTSHIZod49CbqSEfCpIHQ97t2EibZ/TdiK8l3W1GIDlIfyiK2eos=
-X-Received: by 2002:a7b:c448:: with SMTP id l8mr8889792wmi.173.1641516980036;
- Thu, 06 Jan 2022 16:56:20 -0800 (PST)
+        Thu, 6 Jan 2022 19:56:57 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B81C061245;
+        Thu,  6 Jan 2022 16:56:56 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id z30so559357pge.4;
+        Thu, 06 Jan 2022 16:56:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uMXLFosFcOPnqBCXyW3ou3WsEkK2Jt5B5KOIU+ZiGjo=;
+        b=HY4MDnfHnH1FSfwxEYfvyFHzygyUTcL7uLz8N+p5bzibRbSBx+GAIuZ8nd4l6mG1f+
+         WAACkXbTWfBQldkidOw0KFrYGhJNninO9z5X5dGSZtU9XHp55GYmSnCLPH2G3WF8jnkq
+         qQSvXUiFJdYJ0KB3RfWExyIGmKBIRVLWM+owOCNIAJneRgkO/ZU6uh/Ce0Nwmw9mBd+y
+         AeKvXFZxym6e4OcgJsSslfQjGT7CDIdFPChoxVtgZRD5OSnuM9jwzDC+VsStGcFeGezU
+         Uz+3SlbeMwklQerUWH2J0t6iSBMJQZr3ypkyqoFbSrkd0/PPpd9svnG6xSLngtnVSlc2
+         hDww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uMXLFosFcOPnqBCXyW3ou3WsEkK2Jt5B5KOIU+ZiGjo=;
+        b=H2gmqyBB9TIiqIZC4q9/KO9juDVU+nYR9e9YOepbPlB5Dl3I6GQqGR5oUOqQxg3G73
+         W59WmvpYTqqQyA26FfHOeQhP4pSqaPrkfEtkLFmX0VmJ1GJomb71Wq7sw6rH58e3xDVo
+         LdyDCA0BRtcqjqY3rI9WebbotD+AvMUUzlqWXk5V6mjlvpfG4H+hUwwday9KNDZrCD8o
+         gZBIL/8vxs1208lmX2/Bf1E1Kpx2o6+l+LvCKgjCNylojIr0vFSwAFgTFGwXcZRImlyj
+         lN7FKQFue0kkUv0usJHLb8cOtXrIU+rjtcD/cV22hRSTiCvh7BDXWolANfi/zPPsoKcr
+         DQ6g==
+X-Gm-Message-State: AOAM530riIZ/sMGEwXmaDbDJY1TU83NA5pTer4HiMz2FHTME1DxEtm/l
+        cNjX2bhMHisRFfBcWJuLQkbtMGpuXvLZLopZzU0=
+X-Google-Smtp-Source: ABdhPJyStCRrCyOg1AqLK7/yPv4PQhWye7FYWRV+XtcsXNpTI0p6T7PzG9+39q9Vk00MLMuYf0phF733PraMX/fG0Gw=
+X-Received: by 2002:aa7:8c59:0:b0:4bc:9dd2:6c12 with SMTP id
+ e25-20020aa78c59000000b004bc9dd26c12mr23062631pfd.59.1641517016438; Thu, 06
+ Jan 2022 16:56:56 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <b88f25f3d07be92dd75494dc129a85619afb1366.1641500561.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <b88f25f3d07be92dd75494dc129a85619afb1366.1641500561.git.christophe.jaillet@wanadoo.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 6 Jan 2022 19:56:17 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a2J_QZtqq8_y8hwSo4T_Dh_4f_WXy9osomHeBND3-abgA@mail.gmail.com>
-Message-ID: <CAK8P3a2J_QZtqq8_y8hwSo4T_Dh_4f_WXy9osomHeBND3-abgA@mail.gmail.com>
-Subject: Re: [PATCH 07/16] dmaengine: pch_dma: Remove usage of the deprecated
- "pci-dma-compat.h" API
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
+References: <20220105030345.3255846-1-jevburton.kernel@gmail.com> <20220105030345.3255846-3-jevburton.kernel@gmail.com>
+In-Reply-To: <20220105030345.3255846-3-jevburton.kernel@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 6 Jan 2022 16:56:45 -0800
+Message-ID: <CAADnVQK+kB=9hdNUa_=6637ff_q46avnjoQOsUS8vRVVoUeHLQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/3] bpf: Add selftests
+To:     Joe Burton <jevburton.kernel@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Petar Penkov <ppenkov@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Joe Burton <jevburton@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NPDhkDyPz7/evS+qLJycWeh+LpmULWxQY7o4Jp3SxxD1PjmJZLY
- 6S4QR+5s7Dtm9IZnM0Zd2i5LM17wL0S4VgSYfbW67Bt9JvZjq71G/Cv6W/mHusq6HakCcxj
- 8O7QmB6hA5R3qXuO4CzhdbNuQ9u7xqBj1aTgjxzj1bVn9c/oSHiiqXOU/ldhXY1pt5CP1NL
- 6moalj1gusVCwxdjgiSjQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fiSYhjP+vKg=:xbR1Oo53gAwr8ZBYJ4wl+c
- NmOcrgTn3ywwvGp1R0fuhWyCFlpAgOOnTZ+GUHYtowcsqGBhKa5sMKFH1twNv+ewrQ5+X0CFb
- WBUzqk3gbamXwDkGlrvGfPsaptHIOlMEIwEEYfVnAlENamqBK7AE5Zm/AZhyOTd8y4x2BQSxa
- ZZt3wuCYJb3RAO7piNswIiFnZCMYSm6ry1WwjAUrObLQq/f8KyJncsyS3axB6YgHgQUL+B0cS
- pYSbYBsjbnVv/MoBayanll5urDHKgxbrRSz9acTTZ6SZ0uGEcJhddlYhpFPMatZEdruxCZNUv
- UpdSkn7u7uVuMsFzsi1uXG+qRdzKoxODK2yZLFUJ60cgIuPP3j2CKMitaxR76PlcGFetM31QB
- JmycpSDSoKLPmT0YKW6UbwVl6cOblCdn7X21C3WNaLcHwGqw4bhXbDeCmUj9RhzALTmYb/ayJ
- DBxOA396fK4h2YycYT+bf1orPCyX0GEsTIH2w/6/4sWW7aCdBUsSc8d5O2B0wlxoTA62N2V86
- KzShcmHbB05F6gFxf9xpOgZi6XibdAoqNBXLez3alqfydAeBoKYhSouAAW6HNKTwEHUsmmNdD
- 3Wy8PO4E4zt4xGzLeAI4Wcihj+rlOjS2N/2UI2VmJgzxFT90TpyGKg6EAXR0Q3bErFAlQC+2s
- bqwhwMt5QHY5KcIC36kZhIR/M0Y/26YsxgigiRoDK6CP+bTxcQoAUGgxfGXzuXH6NwIhLozzz
- LLm027DEDZjWZpuB17g02D+cA/1y+3uuWuJ85Pz2SAJR7wnHwJAX7fF+4jN83P1IANfEsWpNi
- vSh24IcZvJAl1uxZaFlwxI7WCOp8WsNY/fBtqa3HLtNhi//pbI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:52 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> In [1], Christoph Hellwig has proposed to remove the wrappers in
-> include/linux/pci-dma-compat.h.
->
-> Some reasons why this API should be removed have been given by Julia
-> Lawall in [2].
->
-> A coccinelle script has been used to perform the needed transformation.
-> It can be found in [3].
->
-> [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
-> [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
-> [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Tue, Jan 4, 2022 at 7:03 PM Joe Burton <jevburton.kernel@gmail.com> wrote:
+> +
+> +enum BoolOrErr {
+> +       TRUE = 0,
+> +       FALSE = 1,
+> +       ERROR = 2,
+> +};
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+No camel style in the kernel please.
 
-Vinod, can you apply this one to the dmaengine tree? It has no other
-dependencies.
+> +++ b/tools/testing/selftests/bpf/progs/bpf_map_trace_common.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright (c) 2022 Google */
+> +#pragma once
+
+Didn't you say that pragma once was removed?
+
+> +
+> +enum MapAccessLocations {
+
+here and other places.

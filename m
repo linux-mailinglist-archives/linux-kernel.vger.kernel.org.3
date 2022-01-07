@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85884487F47
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCF7487F4C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiAGXQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 18:16:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41164 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiAGXQV (ORCPT
+        id S231437AbiAGXSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 18:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229560AbiAGXSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 18:16:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E253B8278F;
-        Fri,  7 Jan 2022 23:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6282C36AE9;
-        Fri,  7 Jan 2022 23:16:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641597379;
-        bh=SNR9q17r/H0e04aw9e89ZvRUdghwriL3CG6dv9CdeqE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=mVBC6/mn4oeY/RScJWRT6MxWvI8neNupySllFKNZo7EJg5BHW41rLR9XhCNNMZf0V
-         8NvYmqzFh46mFXreRWKpe+eFuI9EF8nOTppsAkdWWe9Kxqju1o90UwNxJxtPk9Os8/
-         6nR04R544JGsEYLYQJxWEySS6C3B2wb1c6iALYuyIeKrzNWVM0qrs6wnlbUuVBPESC
-         9ocEMUlyVWuqw8rjbB0+HpEtcJROngQoxVvwmPK2+lmlP8Bd8I0WWdDUhdTzbNAUB5
-         B6j1e1Nr17QlE7elC3+wIK/ppUyCNVLdGRU1i0JCZsl9fP6fkNAnof6K79cqjLQ/EI
-         KbFDR+pla30TQ==
-Date:   Fri, 7 Jan 2022 17:16:17 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Fri, 7 Jan 2022 18:18:17 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6657C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 15:18:17 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id h1so6120144pls.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 15:18:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yaoLqv5jRYvwceeR5DSPvo5ncAgq+xEgxFxHcI2Knk8=;
+        b=HWhgHw3ZS8xY+JgACdrlsFANWeCOv/rM1m6Nc5MLehoXVnpOlJlo2XtXyeMTcknEZG
+         ZNPFe+O47dfU4oxk9JDQdJkIHRV/iCPfuvX6Abkqwof2T9DYCpUoxCk4gC6FlEWcpOA9
+         MbXQ6ZurU18pgPUPKhHh6P1OczKpFUfvcQ3D3lVuF8EZ4i4Sv0twSgB6Kz5VBvIr9RNu
+         /9uQS4EtXUPqSrsdCK4kmOi96ejUcyw60Zn8RzPq8b3S41r3Gbz98OfcRRJKnKKLU5RR
+         YBwGhlcgWj2pOce8MUMs2jbhZM4frWKyNMVSCyvc/RtYZQHBcCGa7mylUhhqCDzpuqIq
+         RU0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yaoLqv5jRYvwceeR5DSPvo5ncAgq+xEgxFxHcI2Knk8=;
+        b=bHRbNpc0JwZd2Fk8i6hSG7DeNxAGl9fjYEcef3Zfle1zuXy4+02KogHpv2wdHuej1G
+         UD8yP1OV5AXPNTC6NDfMDyiKM0vN5oWu8Hsff9ywkCLD3AEVoev7+yDZhtr5v7rNS51o
+         WcClLTu0HbE/fub7lw27jBlG4E6I6hsyuEgYSxdfEzNTYRtE0EJTHZ5ZHZOy3pfnAnVi
+         Ajqk7/GzniZYKFjGFBNthY3/ExNsiaKAMYTiZD6ZB/VKqLYfmCU5sD8JTDuG1B62Zv/R
+         IdQzF3BWX9+la6ESbLNytYfLbAAwqCX0pVgTTUvvUbyQqpI/D3N1bkevlcm0I7IFCqXS
+         D/Tw==
+X-Gm-Message-State: AOAM532u0pEq7SOsm3sVy8pvkcDqJcJ5+tubsSA09uavknFJ9c7DVoMd
+        qBQrscxh9Zs5S7FBGOwshaPK1A==
+X-Google-Smtp-Source: ABdhPJxWzsZpPEniI/bjv14ONAp64VKU7JxHfh//mJ9FcB6M6YOdo0bUa6suDqExYlgub8MsNm5IWg==
+X-Received: by 2002:a17:902:bc88:b0:149:2032:6bcf with SMTP id bb8-20020a170902bc8800b0014920326bcfmr64767891plb.44.1641597497025;
+        Fri, 07 Jan 2022 15:18:17 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g10sm3697pjs.1.2022.01.07.15.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 15:18:16 -0800 (PST)
+Date:   Fri, 7 Jan 2022 23:18:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/15] PCI: mvebu: Propagate errors when updating
- PCI_IO_BASE and PCI_MEM_BASE registers
-Message-ID: <20220107231617.GA425878@bhelgaas>
+Subject: Re: [PATCH v2 5/5] KVM: nVMX: Allow VMREAD when Enlightened VMCS is
+ in use
+Message-ID: <YdjKNcTcd2rFaA27@google.com>
+References: <20220107102859.1471362-1-vkuznets@redhat.com>
+ <20220107102859.1471362-6-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220107222826.cv2bzywwayjwzy3c@pali>
+In-Reply-To: <20220107102859.1471362-6-vkuznets@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:28:26PM +0100, Pali Rohár wrote:
-> On Friday 07 January 2022 15:55:04 Bjorn Helgaas wrote:
-> > On Thu, Nov 25, 2021 at 01:45:58PM +0100, Pali Rohár wrote:
-> > > Properly propagate failure from mvebu_pcie_add_windows() function back to
-> > > the caller mvebu_pci_bridge_emul_base_conf_write() and correctly updates
-> > > PCI_IO_BASE, PCI_MEM_BASE and PCI_IO_BASE_UPPER16 registers on error.
-> > > On error set base value higher than limit value which indicates that
-> > > address range is disabled. 
-> > 
-> > Does the spec say that if software programs something invalid,
-> > hardware should proactively set the base and limit registers to
-> > disable the window?
+On Fri, Jan 07, 2022, Vitaly Kuznetsov wrote:
+> Hyper-V TLFS explicitly forbids VMREAD and VMWRITE instructions when
+> Enlightened VMCS interface is in use:
 > 
-> No. But this patch address something totally different. Software can do
-> fully valid operation, e.g. try to set forwarding memory window as large
-> as possible. But because this driver "emulates" pci bridge by calling
-> software/kernel function (mvebu_pcie_add_windows), some operations which
-> in real HW cannot happen, are possible in software.
+> "Any VMREAD or VMWRITE instructions while an enlightened VMCS is
+> active is unsupported and can result in unexpected behavior.""
 > 
-> For example there are limitations in sizes of forwarding memory windows,
-> because it is done by mvebu-mbus driver, which is responsible for
-> configuring mapping and forwarding of PCIe I/O and MEM windows. And due
-> to Marvell HW, there are restrictions which are not in PCIe HW.
+> Windows 11 + WSL2 seems to ignore this, attempts to VMREAD VMCS field
+> 0x4404 ("VM-exit interruption information") are observed. Failing
+> these attempts with nested_vmx_failInvalid() makes such guests
+> unbootable.
 > 
-> Currently if such error happens, obviously kernel is not able to set
-> PCIe windows and it just print warnings to dmesg. Trying to access these
-> windows would result in the worst case in crashes.
+> Microsoft confirms this is a Hyper-V bug and claims that it'll get fixed
+> eventually but for the time being we need a workaround. (Temporary) allow
+> VMREAD to get data from the currently loaded Enlightened VMCS.
 > 
-> With this change when mvebu_pcie_add_windows() function fails then into
-> emulated config space is put information that particular forwarding
-> window is disabled. I think that it is better to indicate it in config
-> space what is the current "reality" of hardware configuration. If window
-> is disabled in real-HW (meaning in mvebu-mbus driver) then show it also
-> in emulated config space of pci bridge.
+> Note: VMWRITE instructions remain forbidden, it is not clear how to
+> handle them properly and hopefully won't ever be needed.
 > 
-> Do you have better idea what should emulated pci bridge do, if software
-> try to set fully valid configuration of forwarding window, but it is not
-> possible to achieve it (even compliant PCI bridge must be able to do
-> it)?
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
 
-On an ACPI system, the host bridge window sizes are constrained by the
-host bridge _CRS method.  I assume there's a similar constraint in DT.
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-Is the fact that mvebu_pcie_add_windows() can fail a symptom of a DT
-that describes more available space than mvebu-bus can map?
+> +		/*
+> +		 * Hyper-V TLFS (as of 6.0b) explicitly states, that while an
+> +		 * enlightened VMCS is active VMREAD/VMWRITE instructions are
+> +		 * unsupported. Unfortunately, certain versions of Windows 11
+> +		 * don't comply with this requirement which is not enforced in
+> +		 * genuine Hyper-V so KVM has implement a workaround allowing to
 
-> > I'm not sure I've seen hardware that does this, and it seems ... maybe
-> > a little aggressive.
-> > 
-> > What happens if software writes the base and limit in the wrong order,
-> > so the window is invalid after the first write but valid after the
-> > second?  That actually sounds like it could be a sensible strategy to
-> > prevent a partially-configured window from being active.
+Nit, missing a "to".  But rather say what KVM "has" to do, maybe this?
+
+		 * genuine Hyper-V.  Allow VMREAD from an enlightened VMCS as a
+		 * workaround, as misbehaving guests will panic on VM-Fail.
+
+> +		 * read from enlightened VMCS with VMREAD.
+> +		 * Note, enlightened VMCS is incompatible with shadow VMCS so
+> +		 * all VMREADs from L2 should go to L1.
+> +		 */
+> +		if (WARN_ON_ONCE(is_guest_mode(vcpu)))
+> +			return nested_vmx_failInvalid(vcpu);
+>  
+> -	/* Read the field, zero-extended to a u64 value */
+> -	value = vmcs12_read_any(vmcs12, field, offset);
+> +		offset = evmcs_field_offset(field, NULL);
+> +		if (offset < 0)
+> +			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
+> +
+> +		/* Read the field, zero-extended to a u64 value */
+> +		value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
+> +	}
+>  
+>  	/*
+>  	 * Now copy part of this value to register or memory, as requested.
+> -- 
+> 2.33.1
 > 
-> Invalid window (limit < base) means that window is disabled. And
-> pci-mvebu.c in its callbacks from pci-bridge-emul.c should correctly
-> handle it and propagates information about disablement to mvebu-mbus
-> driver.
-> 
-> After window is valid again (limit > base) then pci-mvebu.c call
-> mvebu-mbus to setup new mapping.
-
-Not sure I'm understanding the code correctly.  Here's the sort of
-thing I'm worried about, but maybe this is actually impossible:
-
-Let's say software writes (0x00, 0xff) to the I/O (base, limit), which
-describes the [io 0x0000-0xffff] window.  If mvebu-mbus can't handle
-that, it looks like you set the (base, limit) to (0xf0, 0x0f), which
-would describe [io 0xf000-0x0fff], which is invalid.
-
-The software writes 0x40 to the limit, so now we have (0xf0, 0x40), or
-[io 0xf000-0x40ff].  That's still invalid, but software thinks the
-0x00 it wrote to the base is still there.
-
-Bjorn

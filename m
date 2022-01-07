@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5008487491
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A14487499
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346416AbiAGJP6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 04:15:58 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:38316 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346393AbiAGJP5 (ORCPT
+        id S236635AbiAGJTm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 04:19:42 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:36423 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236298AbiAGJTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 04:15:57 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-283-imPCMXOvPNuWtN3LA9tbww-1; Fri, 07 Jan 2022 09:15:55 +0000
-X-MC-Unique: imPCMXOvPNuWtN3LA9tbww-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Fri, 7 Jan 2022 09:15:54 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Fri, 7 Jan 2022 09:15:54 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'cgel.zte@gmail.com'" <cgel.zte@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Fri, 7 Jan 2022 04:19:41 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 2079JQf14008073, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 2079JQf14008073
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 7 Jan 2022 17:19:26 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 7 Jan 2022 17:19:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 7 Jan 2022 17:19:25 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Fri, 7 Jan 2022 17:19:25 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: RE: [PATCH] mm/page_alloc.c: Use div64_ul instead of do_div
-Thread-Topic: [PATCH] mm/page_alloc.c: Use div64_ul instead of do_div
-Thread-Index: AQHYA2zM76VKweVeN0S3fxclkHxO96xXRvoA
-Date:   Fri, 7 Jan 2022 09:15:54 +0000
-Message-ID: <665a758a3bd5421ea7cf9c01d154f718@AcuMS.aculab.com>
-References: <20220107021751.621522-1-deng.changcheng@zte.com.cn>
-In-Reply-To: <20220107021751.621522-1-deng.changcheng@zte.com.cn>
-Accept-Language: en-GB, en-US
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: RE: [PATCH 0/9] rtw88: prepare locking for SDIO support
+Thread-Topic: [PATCH 0/9] rtw88: prepare locking for SDIO support
+Thread-Index: AQHX/DAWPbJm+q1QhEWX1RQxGTv+PKxXT6ng
+Date:   Fri, 7 Jan 2022 09:19:25 +0000
+Message-ID: <daba93973e5945f8bf611ce4c33c82e7@realtek.com>
+References: <20211228211501.468981-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20211228211501.468981-1-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/1/7_=3F=3F_07:17:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: cgel.zte@gmail.com
-> Sent: 07 January 2022 02:18
-> 
-> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-> to avoid a possible truncation.
 
-You really need to check the domain of the divisor, not its type.
-Just because the type is 64 bits doesn't mean that the value can be
-anywhere near even 32 bits.
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Wednesday, December 29, 2021 5:15 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: tony0620emma@gmail.com; kvalo@codeaurora.org; johannes@sipsolutions.net; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Neo Jou <neojou@gmail.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
+> Pkshih <pkshih@realtek.com>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH 0/9] rtw88: prepare locking for SDIO support
+> 
+> Hello rtw88 and mac80211 maintainers/contributors,
+> 
+> there is an ongoing effort where Jernej and I are working on adding
+> SDIO support to the rtw88 driver [0].
+> The hardware we use at the moment is RTL8822BS and RTL8822CS.
+> We are at a point where scanning, assoc etc. works (though it's not
+> fast yet, in my tests I got ~6Mbit/s in either direction).
 
-	David
+Could I know if you have improvement of this throughput issue?
 
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-> ---
->  mm/page_alloc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 8dd6399bafb5..60469b616ac1 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -8431,7 +8431,7 @@ static void __setup_per_zone_wmarks(void)
-> 
->  		spin_lock_irqsave(&zone->lock, flags);
->  		tmp = (u64)pages_min * zone_managed_pages(zone);
-> -		do_div(tmp, lowmem_pages);
-> +		tmp = div64_ul(tmp, lowmem_pages);
->  		if (is_highmem(zone)) {
->  			/*
->  			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
-> @@ -8804,7 +8804,7 @@ void *__init alloc_large_system_hash(const char *tablename,
->  	/* limit allocation size to 1/16 total memory by default */
->  	if (max == 0) {
->  		max = ((unsigned long long)nr_all_pages << PAGE_SHIFT) >> 4;
-> -		do_div(max, bucketsize);
-> +		max = div64_ul(max, bucketsize);
->  	}
->  	max = min(max, 0x80000000ULL);
-> 
-> --
-> 2.25.1
+I have done simple test of this patchset on RTL8822CE, and it works
+well. But, I think I don't test all flows yet, so I will do more
+test that will take a while. After that, I can give a Tested-by tag.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Thank you
+Ping-Ke
+
 

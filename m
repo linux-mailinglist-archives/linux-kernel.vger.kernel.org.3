@@ -2,144 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5315487E42
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670DC487E46
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiAGV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:27:49 -0500
-Received: from mail.efficios.com ([167.114.26.124]:34252 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiAGV1s (ORCPT
+        id S229972AbiAGVa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229879AbiAGVa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:27:48 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id BD2EF37BD41;
-        Fri,  7 Jan 2022 16:27:47 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id P420h2c_cXgU; Fri,  7 Jan 2022 16:27:47 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 39E0C37BB66;
-        Fri,  7 Jan 2022 16:27:47 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 39E0C37BB66
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1641590867;
-        bh=wfuaRpCRpCY8Tb4bfdjUHAUsYLMAX74Njj1pgAYmeo8=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=Nmq3CLL2jM9SJv9IH9Y/vERTJdgIsEwbiTazLqpKWqLkANv4331AJVHFBzXUjrR4P
-         t1OjzL8gZbnseZaGF2FcYXeifcBotv+Ji/sMi9peElzoqGcRniPijX+J5XDEnhg8hP
-         SPG9lPnMUk7FoK1TpPWWCJ0JhXYm3DCq/HzrYIGp+g5cWT6ueKmCSDWHoHZmCHSFLy
-         48ezOrKSbMgoiVbS9RSsqVVDa8ae/BQHu0ZbomX4sz9+S9Jm04lE7h4JrR03v67+Bi
-         Lo8e5K7XvARYIAfEwG7uE17LW8BuogqH6u8tn5P7KXnj+jDUSgPTBZxA7nGxg8mOsc
-         NBUTZ0DnLIOTA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Z5vwNaqddgDm; Fri,  7 Jan 2022 16:27:47 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 27EEC37BCE0;
-        Fri,  7 Jan 2022 16:27:47 -0500 (EST)
-Date:   Fri, 7 Jan 2022 16:27:47 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fw@deneb.enyo.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        carlos <carlos@redhat.com>
-Message-ID: <1300078200.13848.1641590867024.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1968088162.13310.1641584935813.JavaMail.zimbra@efficios.com>
-References: <20220107170302.8325-1-mathieu.desnoyers@efficios.com> <87a6g7ny0j.fsf@mid.deneb.enyo.de> <1968088162.13310.1641584935813.JavaMail.zimbra@efficios.com>
-Subject: Re: [RFC PATCH] rseq: x86: implement abort-at-ip extension
+        Fri, 7 Jan 2022 16:30:28 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8362EC061574;
+        Fri,  7 Jan 2022 13:30:28 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id v25so6505016pge.2;
+        Fri, 07 Jan 2022 13:30:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kz8qm+v1ne3z5CUVGP2ykHvg0hzupUzPna1i+Alij6k=;
+        b=TPPfku90RRWCK2zWAZzLBc2/HybyKErF5kbLSLV6aLNHiteEm5Kgbb5zUwc4kf9nV4
+         4gfKH0O6sr9FvwjylhrQ8vhtBbrzMzy1vHvDLQfcipg+wHPl+E79n5KIjOoty8QKjd5f
+         CqeGK6A/lV4w6pcrPrWvJrMLLvVte+1QnbBwTv/P/qmSn8pK3Z1pZ365s1PkjGV0V/6d
+         DjWBAX1MZqnCM9wMbkHidvcL+Ifn2Z2oiLHugHn4rwWO5DAuWHgu8b/BTjpesPy3ssWv
+         S9y1ijsQYfKh62NOUui+e7g6bVM/x8motai46gJZAtsB3hR0eOp52bVEmzFnkqM+a6W4
+         E+5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=kz8qm+v1ne3z5CUVGP2ykHvg0hzupUzPna1i+Alij6k=;
+        b=T4flqzAChatiZQQctNCmFj9LJViYON6v6gE+To63WgzctvAhuQxSTx63PKO1CmpH5l
+         Ibm0UyZF8QLcAVF877Fslc3aVSCh1YY77XlC6VH70GPpfoGqMYzy544CqJ2+Dz7ocV90
+         vaxTdbIbX1hCtcgyNM6HLZUzcNWEuCRNdIQq1vSJ2jUjyVTTdkx03uayU0F8A3dgZMH3
+         nrbMc8nSlumLEi/2DmRcu4X2GSk1LZi7XtRL6rD2SIMXlUnrwNiCkSiR3xOpw2588VEv
+         ypzDr8zUtvOS1D99G6QtnQIXbxBuI859yeMacHKhtFypHBvF1TXTaTY0Wto5Ql5YKvBW
+         1KQw==
+X-Gm-Message-State: AOAM532gZzntIxWbstGbE2LZpBAp2z6iSf4EvVu9j+cKd4nR6n4Cl+YB
+        sqxoXHJaVj3AIUTiiYtdb1g9g2zgj7m4Mw==
+X-Google-Smtp-Source: ABdhPJwM8bcozgA9ASTaRRN3AGYhHvYodatBMxcgsCU+Ne72WymZ4/53TZ7FUf9N9lJaXow3O8SZew==
+X-Received: by 2002:a63:43c5:: with SMTP id q188mr56934753pga.304.1641591027871;
+        Fri, 07 Jan 2022 13:30:27 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id w13sm5375527pgm.5.2022.01.07.13.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 13:30:27 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 7 Jan 2022 11:30:26 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jeff Garzik <jeff@bloq.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: ata: For what PHY was debounce delay introduced? (was: [PATCH v3
+ 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms debounce delay in
+ `sata_link_resume()`)
+Message-ID: <Ydiw8hxkNWDO2nW3@slm.duckdns.org>
+References: <20211229161119.1006-3-pmenzel@molgen.mpg.de>
+ <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
+ <19f6cd93-9bd7-60dc-4471-18022bcf456c@molgen.mpg.de>
+ <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
+ <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
+ <c6748a52-fc8f-3309-31c2-973a9e69a7e8@opensource.wdc.com>
+ <33deca4a-abed-123c-9530-3f15740a3261@molgen.mpg.de>
+ <27da2f5c-ca6c-1d64-3d05-5453f11e298f@opensource.wdc.com>
+ <66edbfd4-063f-b995-0d15-982d365dd7d7@molgen.mpg.de>
+ <CAHy7=M10exWuVJtDVo+w36YKadY533GttzwrKxPnotHf8-JQnw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF95 (Linux)/8.8.15_GA_4177)
-Thread-Topic: rseq: x86: implement abort-at-ip extension
-Thread-Index: 3gt3DeiK7OZf0kNeFIUwJ9FIkzAsPQxQ8i2E
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHy7=M10exWuVJtDVo+w36YKadY533GttzwrKxPnotHf8-JQnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Jan 7, 2022, at 2:48 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+Hello,
 
-> ----- On Jan 7, 2022, at 2:31 PM, Florian Weimer fw@deneb.enyo.de wrote:
+On Wed, Jan 05, 2022 at 03:49:58PM -0500, Jeff Garzik wrote:
+> On Tue, Jan 4, 2022 at 6:34 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
 > 
->> * Mathieu Desnoyers:
->> 
->>> Allow rseq critical section abort handlers to optionally figure out at
->>> which instruction pointer the rseq critical section was aborted.
->>>
->>> This allows implementing rseq critical sections containing loops, in
->>> which case the commit side-effect cannot be the last instruction. This
->>> is useful to implement adaptative mutexes aware of preemption in
->>> user-space. (see [1])
->> 
->> Could you write the program counter to the rseq area instead?  This
->> would avoid discussing which register to clobber.
+> > [cc: +jeff, +tejun]
+> >
+> > void sata_phy_reset(struct ata_port *ap)
+> > {
+> > […]
+> >         /* wait for phy to become ready, if necessary */
+> >         do {
+> >                 msleep(200);
+> >                 sstatus = scr_read(ap, SCR_STATUS);
+> >                 if ((sstatus & 0xf) != 1)
+> >                         break;
+> >         } while (time_before(jiffies, timeout));
+> > […]
+> > }
+> > ```
+> >
 > 
-> Using the rseq area for that purpose would be problematic for nested signal
-> handlers with rseq critical sections. If a signal happens to be delivered
-> right after the abort ip adjustment, its signal handler containing a rseq
-> critical section could overwrite the relevant "abort-at-ip" field in the
-> rseq per-thread area before it has been read by the abort handler interrupted
-> by the signal.
+> The piix did not have SCRs, as I recall, so it wouldn't apply to those
+> chips.   I don't recall further than that.
 > 
-> Making this architecture-agnostic is indeed a laudable goal, but I don't
-> think the rseq per-thread area is a good fit for this.
-> 
-> I also though about making the clobbered register configurable on a
-> per-critical-section basis, but I rather think that it would be
-> overengineered: too much complexity for the gain. Unless there are
-> very strong reasons for choosing one register over another on a per
-> use-case basis ?
-> 
-> I guess if we ever care about the state of a given register within a given
-> range of instructions, we may lose that information if it is overwritten
-> by the abort-at-ip value. For instance, in my adaptative mutex prototype,
-> I use the Zero Flag to check if cmpxchg has succeeded. But if I would have
-> wanted to use the register modified by cmpxchg, and it would happen to be
-> clobbered by the abort-at-ip on abort, then it limits what the abort handler
-> can observe. It's fine as long as instructions can select what registers they
-> operate on, but instructions like cmpxchg AFAIR work on specific registers,
-> which might warrant making the abort-at-ip register configurable per
-> critical section. But maybe just choosing a register for abort-at-ip which
-> is not typically used by instructions that rely on hardcoded registers might
-> be sufficient.
-> 
-> Thoughts ?
+> Presumably just give those early chips a "needs delay" quirk, and then
+> start testing newer chips to make sure they survive an immediate bitbang?
 
-That being said, there might be an architecture agnostic alternative available.
-On abort of a RSEQ_CS_FLAG_ABORT_AT_IP critical section, we could let the kernel
-decrement/increment the stack pointer to make room for a pointer (depending if the
-stack grows down or up). It would then store the abort-at-ip value at the top of
-stack.
+I don't remember exactly but most likely the sata_sil chips, I think. But,
+yeah, the way forward would be converting it to a quirk and gradually lift
+them with tests.
 
-The abort handler would be expected to use this top of stack abort-at-ip value,
-and would be required to increment/decrement (depending on the stack direction)
-the stack pointer back to its rightful value before the end of the assembly block.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+Thanks and happy new year.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+tejun

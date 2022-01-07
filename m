@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5AA486E60
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC17486E6C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343753AbiAGANk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:13:40 -0500
-Received: from mout.gmx.net ([212.227.15.19]:37655 "EHLO mout.gmx.net"
+        id S1344123AbiAGAOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:14:14 -0500
+Received: from mout.gmx.net ([212.227.17.20]:46757 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232819AbiAGANj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:13:39 -0500
+        id S1343788AbiAGAOE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 19:14:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641514390;
-        bh=EyPi8Y3Gc+gTu2ILQBh3edI82bKKE2zEKRdiyUFahW4=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=RcqA07djH1Kg19mjjHZT9kQEF5PBB0i+eBHqAXaC6T9NjHBCkybTynF/giLuDnIBk
-         o1hL4kgES4Z+FDB0zoVkVRjNS/wyuVImH+OQgV2PL8ZzWlZMoLIAl+pPrvfVK52dtb
-         Xsa+hpVlC6iKG5amEr6vxBqPsdcEcJXZXxPodJTY=
+        s=badeba3b8450; t=1641514442;
+        bh=GXWM4/EezVw90Q1yq7MNbtsLpD/+cAlg3y+cQMfbSB8=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=KBQqBfx+qMimh6e1iBpYxrQK3KIejIMEpuVSvP+Z2Y6lEmYcHo+Zf3E4+R4jicWX5
+         aqzKA7IClNDYPyf3xIO+lt5GayiGfq8AFNwt+0ImV7ptOUK5vwIPpJGq07VrBEa+di
+         dGmBp/WzP/JqCUhqQjZtA3cYYPvbqQy4XNPGiv2M=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MStCe-1mxUEN0uR4-00UK15; Fri, 07
- Jan 2022 01:13:10 +0100
-Message-ID: <db88497c-ea17-27ca-6158-2a987acb7a1c@gmx.com>
-Date:   Fri, 7 Jan 2022 08:13:01 +0800
+Received: from ls3530 ([92.116.152.191]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5mKJ-1mKb1V0ist-017CsJ; Fri, 07
+ Jan 2022 01:14:02 +0100
+Date:   Fri, 7 Jan 2022 01:13:02 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Cc:     linux-parisc@vger.kernel.org
+Subject: [PATCH] sections: Fix __is_kernel() to include init ranges
+Message-ID: <YdeFjo1OyhAD3/+K@ls3530>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] fs: btrfs: Disable BTRFS on platforms having 256K pages
-Content-Language: en-US
-To:     Neal Gompa <ngompa13@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, Hector Martin <marcan@marcan.st>
-References: <a16c31f3caf448dda5d9315e056585b6fafc22c5.1623302442.git.christophe.leroy@csgroup.eu>
- <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
- <CAEg-Je9UJDJ=hvLLqQDsHijWnxh1Z1CwaLKCFm+-bLTfCFingg@mail.gmail.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <CAEg-Je9UJDJ=hvLLqQDsHijWnxh1Z1CwaLKCFm+-bLTfCFingg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:anCYYKhzpZMxqykyFCq+8YxKtyr10cQ84WLxzimaPuneijGdCqz
- DCTt+qxKufcuCSCYh5BvF0kfQ7B0Ov4gS934FXjKQjR28CPsyZEYGntV8kpnaTxozhsyQRC
- PmkBHzOARVbxjBbf8Gsxv62DXHnI2kJv+jLn2ZfjzaKplUnXZJaOCfBKAPin1Ic1yimFXpN
- iHdKDG80XWbzbUv4D+TQg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:l2V/NFTYg4pHP7N2VuiFMzJsYgHSpjx30pzLTEnEda3F8gvjLKL
+ sG+UTVajAWFLn1IBdDBF6nGOZ/lyt5DgZVfzMCaUd9G0Y+6V0zgFirWSfZE1ctmHszUFHor
+ l6YYr8ywKFnMlJ5AFG9f4noleezH9C2fEjEecLWso2msGTl7WVA9y1vYNZUglxD5TQR5FxK
+ +dCCLVu8H5dG2acMZfzow==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HhiphtxHIBA=:jKABz3jdZsxi6EwxEaeBRz
- /vugjzSA51qNzCKgJwvYaZa2YSql73GgHl83okMs26BXff4nbudCZBsGEKWxwZXwfbG6X0RCc
- 7ZqRNly6LqVLWdgP03qj0D3t1BR7lzWByjCbE6zAdXaLVodjh6K75ihOiNQO2WBfyDz7qnmcX
- mlPLUhIFTKDlZU6FgKxB8bUHGLSNKRPnqaaBDPdzs7Rv+xggVOMbyz+/CfbrSRdQxnmiMXjTv
- dnsN+qmcMtklx2FKtAht9pdsgmGOB1HrHc5WUuGfOdEreSYKmRmjztIrtWoR9eHws0Dzbz7zN
- 465Xbz9zbOPnEfp4Y+8HhJe9S1QeBOD1Ex0TFoVfrA9TGaSgApBs9Po5dC8H2Ia0vAxmlqOWZ
- ik9jJHgVDg6m/6jPVQTF20+blPD1aQ8osdqUTz+8DROWqjJD2QzSHRTb9ZuGBQRW3lCkNJ1FK
- zkNrPJXv0xpY4Lx4oAlUZECuudUudNJNQv+/41YIb+DeMq51xYqYntsNRKMMdqEak/NhbtIdI
- e8VE4TVb/5f2Ylvu+6OD85RxjdcbVT5a9rq1YT0LAh/O899lnI00oz5NWppzgstdqCW/iD49R
- 8qTZ5bx3jU1NEDjnUH/7qFeX5V9UdB/HC4puVARS23Z7FFf7iZ+YtfV0Ga3wDYqcbDsUfWP75
- +3vXsOOZN7SgtMCI88jFddjtWd6RtMIX1NlXny5YhphJrOtSANWJstJp1qOuGKAYaoxx/MBMH
- 7GfknbMczRPnhbprQ1Z68yC1wTkUnOhBs3f5d60ruWjSoJcccxt/cles38CuRyuP3z8V/Sqzp
- 8V+3J6T7c7SaBTcXJjLCKVx/6jCZTK3rHzewI6iC04ioXD4TKgZGw8cGl8PYBf5JDzYYVp0if
- 4tc9RiHfvCrFnhJ3DFB3oLDICGDWS7OR5Spz19FI7sN6suUSGMjHvEkwIbd+SBoC7ZCKYle6L
- Er/fry33el3L1GNK6G4UH0ABvT5k0o1L1NUu9enWZ13N8Tg/QemjSkEm+ZlRXtPtIZLZGPP25
- DPa/jDJ6GD1G1N8iAXD8pf8hLJD1wYQ7ElBvUlj05p6amX4OB7/VyDfCFUE90ZyzHhB9yWgn2
- Hha+O/UqdMb8Nc=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:z21eSQYKMPY=:47dF8xUytUfpRYmsQ81rzW
+ ACNWxPFTYMe2o0CuQaNtnyjtYvgI37yQs6TTgZv3y4b3N2x59B3NHqfeFkJQWNI4yxxpOrVp5
+ zkvp9fzL+wTiaVpxpMzoBxTpqCop1AinDfDXDXhkfVtwY01JdUXXnTR1lSAehThrkKnLtSSaw
+ /8krTi1Yf7KfC6zMdJ2BpJ7Sx/9Nrdr5MUlLBBWHicNYk3Emv6IVcpoJK5L0UxqD6PjSIjIyH
+ auvatjpwsxwuf5gvPWrG6obMwn7Q5UDO2/j9BkKynSda3wLqnCn4ZaxM2rckstgaAkPSaUaNO
+ 1uwapGPnHxvI77CncwS/1sMzNb/boOwiQ4v/5v81GZrcgSyxv2sKpF14sCzEbylO4aoVlJefL
+ yyhYhIWrCvgDu/P68qEPTOao8tSHTOI2jD/oPuh2S8RuiSf7r28AUoocK/cJi+KHgAljXdAWA
+ oM58TmLeti+cIOYUCl3Jr88Exxf2bqVB/TPSzBntchPiX9VvI/9zGiGzbBukIlmGOTYBp3D4x
+ nfvi8tpPADDJV8mMt5vXHnsVQC/3i6rBUWVvASnxBHIGIXj6DBLXW92adUkrgpt/Z1AlJfSym
+ LRgQmgYcw0YCgeA1sVuiVlclifSg/I11EzLw15whB1OFJBdataz/AZdvlwhUGc7OV6+lkIGEP
+ q+l4UV4ymGaZNcQEJr6U7PPwOi7QwggvK4kj74slVgcrOWk+fVFQ4e1t7mB6lIrV0Cgy2Jn9d
+ cpTYOY1sxU65KMf3meHIrnNrsJIyKnVcvz1E1M8yaMODjUfoKZF3b96OGyPPC+0XnoV72+vS2
+ kt94w3evJC61duBiQdHJlf7AU9B6rf0lRoLjV8gk/VGWTByRhKb3I5kzFQBFZAgmmsBRMhSAy
+ eG6nfe+3bGNOE/TugYY0AMHJk0OM1OXGT8O7kX3Zzzm9H9ZLu0n6hKj4vGzb2m4oPbTbqrAl8
+ 1Fz/Ec4AF3gmqa3TKmerX4hfMFK9s+dH76+tsUuUk04qH7dRIh3ronkEJbnlZiJi2av/6IUvI
+ Mx12zqXlF9DuqVse1EZwRj81VqT0eyrZRlZdwO5VM1Szq5TwiNFmUWL4NhWsm9Mbpc9ekovhm
+ Xo9pxNRoKtfIt4=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With CONFIG_KALLSYMS_ALL=3Dy, the function is_ksym_addr() is used to
+determine if a symbol is from inside the kernel range. For that the
+given symbol address is checked if it's inside the _stext to _end range.
 
+Although this is correct, some architectures (e.g. parisc) may have the
+init area before the _stext address and as such the check in
+is_ksym_addr() fails.  By extending the range check to include the init
+section, __is_kernel() will now detect symbols in this range as well.
 
-On 2022/1/7 00:31, Neal Gompa wrote:
-> On Wed, Jan 5, 2022 at 7:05 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
->>
->> Hi Christophe,
->>
->> I'm recently enhancing the subpage support for btrfs, and my current
->> branch should solve the problem for btrfs to support larger page sizes.
->>
->> But unfortunately my current test environment can only provide page siz=
-e
->> with 64K or 4K, no 16K or 128K/256K support.
->>
->> Mind to test my new branch on 128K page size systems?
->> (256K page size support is still lacking though, which will be addresse=
-d
->> in the future)
->>
->> https://github.com/adam900710/linux/tree/metadata_subpage_switch
->>
->
-> The Linux Asahi folks have a 16K page environment (M1 Macs)...
+This fixes an issue on parisc where addresses of kernel functions in
+init sections aren't resolved to their symbol names.
 
-Su Yue kindly helped me testing 16K page size, and it's pretty OK there.
+Signed-off-by: Helge Deller <deller@gmx.de>
 
-So I'm not that concerned.
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections=
+.h
+index 1dfadb2e878d..00566b1fd699 100644
+=2D-- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -193,12 +193,16 @@ static inline bool __is_kernel_text(unsigned long ad=
+dr)
+  * @addr: address to check
+  *
+  * Returns: true if the address is located in the kernel range, false oth=
+erwise.
+- * Note: an internal helper, only check the range of _stext to _end.
++ * Note: an internal helper, check the range of _stext to _end,
++ *       and range from __init_begin to __init_end, which can be outside
++ *       of the _stext to _end range.
+  */
+ static inline bool __is_kernel(unsigned long addr)
+ {
+-	return addr >=3D (unsigned long)_stext &&
+-	       addr < (unsigned long)_end;
++	return ((addr >=3D (unsigned long)_stext &&
++	         addr < (unsigned long)_end) ||
++		(addr >=3D (unsigned long)__init_begin &&
++		 addr < (unsigned long)__init_end));
+ }
 
-It's 128K page size that I'm a little concerned, and I have not machine
-supporting that large page size to do the test.
-
-Thanks,
-Qu
-
->
-> Hector, could you look at it too?
->
->
->
+ #endif /* _ASM_GENERIC_SECTIONS_H_ */

@@ -2,75 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E05B487574
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57C648757F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346703AbiAGKZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:25:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:38042 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346679AbiAGKZQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:25:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8A5013D5;
-        Fri,  7 Jan 2022 02:25:15 -0800 (PST)
-Received: from [10.57.38.163] (unknown [10.57.38.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A9053F66F;
-        Fri,  7 Jan 2022 02:25:15 -0800 (PST)
-Subject: Re: linux-next: Fixes tag needs some work in the jc_docs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220107103649.53774b30@canb.auug.org.au>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
-Date:   Fri, 7 Jan 2022 10:25:14 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1346710AbiAGK3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:29:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39982 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237286AbiAGK3L (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 05:29:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641551350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QTfhdM1+a4CO4gpe38Ku+HajXRy5qhCcL1cLDMAP9Ew=;
+        b=BvLJ2TnG5PL02BtuKuKc7PTbf9N53kurMU+Ul9+4eDUFdRfxaUc00ekCI/cahWQwYvGXYL
+        f3Bhj68d0hZDfbysZghrFH7I/ygYlmFr3c5tN7Th8fuvqLSzRJhDJyLqur8uXI603dmCev
+        o58MUGfkDuGTdZsTzdbDULnALBdyYDw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-1xTA2HabO2C9jkS2SIXtAA-1; Fri, 07 Jan 2022 05:29:07 -0500
+X-MC-Unique: 1xTA2HabO2C9jkS2SIXtAA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CCD92185302E;
+        Fri,  7 Jan 2022 10:29:05 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1075672FA7;
+        Fri,  7 Jan 2022 10:29:00 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] KVM: nVMX: Fix Windows 11 + WSL2 + Enlightened VMCS
+Date:   Fri,  7 Jan 2022 11:28:54 +0100
+Message-Id: <20220107102859.1471362-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220107103649.53774b30@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes since v1 [Sean]:
+- Rename vmcs12_field_offset_table -> vmcs12_field_offsets, 
+ vmcs12_field_offset()->get_vmcs12_field_offset()
+- Forbid VMREAD when "current_vmptr == INVALID_GPA && evmptr_is_valid() &&
+  is_guest_mode()".
 
+Original description:
 
-On 06/01/2022 23:36, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   e94f43ea200a ("docs: automarkup.py: Fix invalid HTML link output and broken URI fragments")
-> 
-> Fixes tag
-> 
->   Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
-> 
-> has these problem(s):
-> 
->   - Subject has leading but no trailing parentheses
->   - Subject has leading but no trailing quotes
+Windows 11 with enabled Hyper-V role doesn't boot on KVM when Enlightened
+VMCS interface is provided to it. The observed behavior doesn't conform to
+Hyper-V TLFS. In particular, I'm observing 'VMREAD' instructions trying to
+access field 0x4404 ("VM-exit interruption information"). TLFS, however, is
+very clear this should not be happening:
 
-Hi Stephen,
+"Any VMREAD or VMWRITE instructions while an enlightened VMCS is active is
+unsupported and can result in unexpected behavior."
 
-Which validator are you using for this output? checkpatch.pl has a validator for commit references
-and it actually complains _more_ if it's not wrapped at 75 chars. At least for ones in the
-body of the commit rather than the fixes reference. Which is a bit confusing if there is
-a difference in the rule.
+Microsoft confirms this is a bug in Hyper-V which is supposed to get fixed
+eventually. For the time being, implement a workaround in KVM allowing 
+VMREAD instructions to read from the currently loaded Enlightened VMCS.
 
-> 
-> Please do not split Fixes tags across more than one line.
-> 
+Patches 1-2 are unrelated fixes to VMX feature MSR filtering when eVMCS is
+enabled. Patches 3 and 4 are preparatory changes, patch 5 implements the
+workaround.
 
-Is this just for the fixes tag and not for the one in the body? Would you consider adding
-this check to checkpatch.pl and submitting-patches.rst as I don't see that rule mentioned there.
+Vitaly Kuznetsov (5):
+  KVM: nVMX: Also filter MSR_IA32_VMX_TRUE_PINBASED_CTLS when eVMCS
+  KVM: nVMX: eVMCS: Filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER
+  KVM: nVMX: Rename vmcs_to_field_offset{,_table}
+  KVM: nVMX: Implement evmcs_field_offset() suitable for handle_vmread()
+  KVM: nVMX: Allow VMREAD when Enlightened VMCS is in use
 
-@Jonathan, I'm happy to resubmit with the changes, but it might be easier if you just
-make the fix in place.
+ arch/x86/kvm/vmx/evmcs.c  |  4 +--
+ arch/x86/kvm/vmx/evmcs.h  | 48 +++++++++++++++++++++++++------
+ arch/x86/kvm/vmx/nested.c | 59 +++++++++++++++++++++++++++------------
+ arch/x86/kvm/vmx/vmcs12.c |  4 +--
+ arch/x86/kvm/vmx/vmcs12.h |  6 ++--
+ 5 files changed, 87 insertions(+), 34 deletions(-)
 
-Thanks
-James
+-- 
+2.33.1
+

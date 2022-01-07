@@ -2,106 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2ECE487EFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C4C487EFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiAGWeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 17:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S231208AbiAGWf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 17:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiAGWem (ORCPT
+        with ESMTP id S229626AbiAGWf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 17:34:42 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5687EC061574;
-        Fri,  7 Jan 2022 14:34:42 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id f5so6695593pgk.12;
-        Fri, 07 Jan 2022 14:34:42 -0800 (PST)
+        Fri, 7 Jan 2022 17:35:28 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F836C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:35:28 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id c71so15866577edf.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 14:35:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Hajn5l7U97JtfpTs2/PxkmXJPD+Ebo3WEH1DTWrY9fs=;
-        b=IsQj6jO9nIti6ZtG5tnTQXikV7zTjNLfa2WWQSxgWIoYWrKvEATCYX4BjSrB13lF11
-         /71JjyKKz89vsseqUkFWfGUB9x75XEk5yasllnCh9yBcaP8WrtA8g6jlpcH5zqq/5KY3
-         QxV64YzC1oEuc+Sfc/wRK5mkdKv5XbL/RPffB5Nh+QTOFuBVJX8ZsaN8IeWR1pIWCuVQ
-         qQ5TBsa48KxO/TPTUmStiaNyDw42Q/xqcaRWFsxTu/kQLqs2fkMklND9WKJdS4k03lTg
-         vMzStdl6fpSiyUOk3XGgLErIYhelFo0re3iX2cv/nWdgqn0AJ3FUFDafW1fx3rbLyOdk
-         uRIA==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sJrTOgh1BpphQDyMp+sJajflfyJjq+t21DzU6lHdSU4=;
+        b=JkyBZUD07AqOXQSj7I8GTf0fX6mcjJjXqOyObGc+r3m34mdWfoNu30bMbljR9Pf7dV
+         Rv+++kSM1kEVlTak5gMIG1j3/46RspfbXH/cRfXYojy9DkYhhY7ziVjkfsrnJJVtPz9Q
+         wiWrQTg0l62jPRjn80WzmAKjOWXCeEcAM7NuVj3ZTf9J3pNCUE2di6ZL76uILIOQnoEi
+         SuIHrUr/veOipm4qCcmDCwsRLKI2Axtz4OrRsFqCLy8OQ4KzHSutJLcviK/r65RKhUFP
+         ljjO3ZN9MTKdupmsThe7THG2LJKq1SEJ5nK5a69Cb0o4g2dYwYQcACZ6XEvaBYEORkmt
+         +HnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=Hajn5l7U97JtfpTs2/PxkmXJPD+Ebo3WEH1DTWrY9fs=;
-        b=Ul2bX9+m9k0ravkn06pVaWjeUqPD75izNi8SojM4HkJMDqxPzPWRdemPFOSV8x8krN
-         zCXeCOu49wE1nIfJJaR73QUXhrEI+dflyEu1G9U+T43bxkVWRtPG1TTh4+U1ax7vsj7r
-         RArSz2jNA6zZV7l+JbanlWlY8F4hq6z/Ncs4c9aMUMo8jXMX77E9ckg2cyrVlSHC9uQT
-         7J08983tHpbQpLVavZxQa/fsmq9g8uK+KugyvPaZiEGfSgkvUi128yT4kcwA5s+0qhDs
-         mYDDLbx1aAWMrxnjwQFomT4VFere89gxILqzdw7zlWWNPTxm4Vwv5gAmPxwfKtxu3ggt
-         8gxw==
-X-Gm-Message-State: AOAM530HIyJd0LhgXLRr/MFsL6kA0RXYKm6gSkx6oEcbn78pZH5SyJFU
-        q7olmrDv+KghGoLx1ldWWKlaNsIAVCyniw==
-X-Google-Smtp-Source: ABdhPJwNFP28998exn86X98TlnrRjOP11pUelKWH34INVylajcgEsItEeu/0fsqTJgWVUoHjWNxmKQ==
-X-Received: by 2002:aa7:88ce:0:b0:4ba:efec:39e0 with SMTP id k14-20020aa788ce000000b004baefec39e0mr66630743pff.80.1641594881676;
-        Fri, 07 Jan 2022 14:34:41 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id e20sm6397994pfd.104.2022.01.07.14.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 14:34:41 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 7 Jan 2022 12:34:40 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [GIT PULL] cgroup fixes for v5.16-rc8
-Message-ID: <YdjAAK4AtsUDv5vw@slm.duckdns.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sJrTOgh1BpphQDyMp+sJajflfyJjq+t21DzU6lHdSU4=;
+        b=Toc0/Mn3enXCf0umwffQpyJGqUM0Lc3Z3DkgbQKXgXZbBIqi4Lep2xPWpkeuC41gfE
+         xTPLtrSXYbKz1DnGUbAgzI2zPiGy7Cq7Q9TsgCkHhlnbwDd/iouHBimSEylJ6r+NVObu
+         WSIp1HaTi0hn3g4fFA6nVXa6fcLIh4kZJ3eQIVzOlKW3TT2qRX+uamZ3OmBiihITHSwm
+         o6JiNxc6TIBM9t17SVFf2CycGFJPzqSGTR+9J4wRCzjBTsRAdKiXmSTOmzLCpvS8xpVE
+         xuoAOxNL7BZ1loXyLDN2beh+dUrMHMy8kq4WmpTNjcNn+5J8f4ILK46FnFItYNPM94Qq
+         xkpw==
+X-Gm-Message-State: AOAM530zCphMXRPvTAo6uWBCXaGuNgAFviCofXndfNTeF9Lxlh31AHSC
+        0u8ntg5UnvUw04ZSyK8hDPP+WNc2kkeNFcddRpA=
+X-Google-Smtp-Source: ABdhPJwWWj41v92H/MlW5O+b/Fbpqer/i92MXxrWRNrU7ja6rVWwWcPO1NMu7xJe2swKrRQnVOjVtheSWsg41w0MMsk=
+X-Received: by 2002:a17:906:519b:: with SMTP id y27mr5504426ejk.649.1641594926899;
+ Fri, 07 Jan 2022 14:35:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220107145515.613009-1-narmstrong@baylibre.com> <20220107145515.613009-6-narmstrong@baylibre.com>
+In-Reply-To: <20220107145515.613009-6-narmstrong@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 7 Jan 2022 23:35:16 +0100
+Message-ID: <CAFBinCCR4zftkvJWgX4T068BRsjVp9YhRbzgdBOR+tuMcGSZ3w@mail.gmail.com>
+Subject: Re: [PATCH 5/6] drm/meson: add DSI encoder
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus.
+Hi Neil,
 
-Sorry about the late pull request. I ended up staying offline longer than
-planned. This pull request contains the cgroup.procs permission check fixes
-so that they use the credentials at the time of open rather than write,
-which also fixes the cgroup namespace lifetime bug.
+On Fri, Jan 7, 2022 at 3:57 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
 
-While the changes seem safe to me and they tested fine, this is on the
-invasive side for a pull request this late, so please feel free to ignore.
-I'll include them when the merge window opens.
+[...]
+> +       writel_bits_relaxed(BIT(3), BIT(3), priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
+see my comment on patch #3 from this series for BIT(3)
 
-Thanks and happy new year.
 
-The following changes since commit 75acfdb6fd922598a408a0d864486aeb167c1a97:
-
-  Merge tag 'net-5.16-final' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-01-05 14:08:56 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.16-fixes
-
-for you to fetch changes up to bf35a7879f1dfb0d050fe779168bcf25c7de66f5:
-
-  selftests: cgroup: Test open-time cgroup namespace usage for migration checks (2022-01-06 11:02:29 -1000)
-
-----------------------------------------------------------------
-Tejun Heo (6):
-      cgroup: Use open-time credentials for process migraton perm checks
-      cgroup: Allocate cgroup_file_ctx for kernfs_open_file->priv
-      cgroup: Use open-time cgroup namespace for process migration perm checks
-      selftests: cgroup: Make cg_create() use 0755 for permission instead of 0644
-      selftests: cgroup: Test open-time credential usage for migration checks
-      selftests: cgroup: Test open-time cgroup namespace usage for migration checks
-
- kernel/cgroup/cgroup-internal.h              |  19 +++
- kernel/cgroup/cgroup-v1.c                    |  33 +++---
- kernel/cgroup/cgroup.c                       |  88 +++++++++-----
- tools/testing/selftests/cgroup/cgroup_util.c |   2 +-
- tools/testing/selftests/cgroup/test_core.c   | 165 +++++++++++++++++++++++++++
- 5 files changed, 263 insertions(+), 44 deletions(-)
-
--- 
-tejun
+Best regards,
+Martin

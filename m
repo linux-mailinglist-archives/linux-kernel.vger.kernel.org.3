@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D3D4873EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9774873EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345469AbiAGIJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:09:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiAGIJW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:09:22 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108D0C061245;
-        Fri,  7 Jan 2022 00:09:22 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id s1so4856459pga.5;
-        Fri, 07 Jan 2022 00:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=caUCLOkN9Sm5eFbTFlsGP0xGxd9i8A6ITsUxSKuDZSU=;
-        b=WY/WNVDa2zoOWuTB2YVH4wuHLFq2e9CIso+fXhU/yxNqPV9XnMLUs0wHbcAcoSC8Cp
-         ZdE9df2U1E1PBq0RNLJpJ6dAN/1F5Eewfpu4jvb1CSBW6Casb7KuqLiuzl71lW+E7uPj
-         GyXI6xs7CBcNKVp1afXOFx23kY9H74FmQyPeklWjevF6nv2LAuEtif3vAvHzUAL+ICE0
-         VbjgqgbboWbi4SOZCWoVgDxGTsjYSAfBQOEMIETCvifmIyvbmrNto9X4ZV7AKafuExyM
-         kkOibA2PXx04DdKwBSDZ1ZYVq/nIUk2FpDAqJ2NEjKU6qYlO7g/7M5AgML58mJDvEcWO
-         0FOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=caUCLOkN9Sm5eFbTFlsGP0xGxd9i8A6ITsUxSKuDZSU=;
-        b=ISMNuAvmqBAUqxBeeAc5XdiunpnNIPY3yGNkmwd4Obld3URa7nVQ45VsM5MbOSIP+z
-         sGt/hF/M5diIGy3zSpOEAGCQhMbBCGLyf4q6BH9+3KA4kb/Qw3fu9/fTFv5TK7tmU/gI
-         k1XyfgxQLt/gqQPPWVdYCgul0By5LSKMBGI06SZ1Pb5mAnMyJPl5fj1KplLjww82aAos
-         xM3JgZWhqq9sXuHX67aozLsKi6tPoNE2qSigSsjpLi/i0Mz71zWLdiBmsAYkI97lkynB
-         URpOd6G79DziYXEXxJHYQqBxJnmx5YH2Lgv6DlyTQTRnADd553G0fAba/ckV7HJ2GHyE
-         R0KQ==
-X-Gm-Message-State: AOAM533KoCJi1nsP9YE4ZQGWXHUSy1mc5pVd+/+m2EXv6elgLxFnE+Qr
-        kAYoU5w7cg+l5MtEg/LwmMY=
-X-Google-Smtp-Source: ABdhPJzXiICbOdrKbRllujNfXHikmjg0aDAbByOyuYXvxpGswTzgKfpOmmbL0h/jbB/xfkqNf5bN9A==
-X-Received: by 2002:a62:7813:0:b0:4ba:7afa:3786 with SMTP id t19-20020a627813000000b004ba7afa3786mr63360812pfc.55.1641542961614;
-        Fri, 07 Jan 2022 00:09:21 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id il18sm8686899pjb.37.2022.01.07.00.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 00:09:21 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linux-tegra@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/tegra-smmu: Fix missing put_device() call in tegra_smmu_find
-Date:   Fri,  7 Jan 2022 08:09:11 +0000
-Message-Id: <20220107080915.12686-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S235985AbiAGIKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:10:47 -0500
+Received: from mga06.intel.com ([134.134.136.31]:34405 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235551AbiAGIKq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 03:10:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641543046; x=1673079046;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rJHQ2EXQ32CSxR4GIfL+NqZalhNUeXEkqCdnFMiF+g8=;
+  b=hAg0799LhFfUOg+noHmAqAiDKGt7bVd822TqVLYSfYp0MXJIiA5rAstO
+   N91LkJtCqYTnBC29/rL9rjB1wp5uQsOwORvy8wCRhKZIBwEfiK5DTwzkr
+   QSHtuHEyKr5yZWnBWKtpbQ6N23RDRXspdnMZTDLquvtoABRKVan0FDLlm
+   AAddQVAudVZwuDLe0iYDWQYpSqwOo0awYWnQzW7fnb7EmjxSNiJigJ1Ri
+   lT+1NYcy7GFnzsIIVQhui67aBh2I3MJdf7UWTvyUtILANEO6gJ/FA1133
+   hsDaP5UgqqjlWfGbCS0nS4Brmlm6EuB55pTfCRkKMJCzi6YJJFhrBeQbi
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="303574585"
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="303574585"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 00:10:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="621826259"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 07 Jan 2022 00:10:45 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5kKi-000IRH-Gt; Fri, 07 Jan 2022 08:10:44 +0000
+Date:   Fri, 7 Jan 2022 16:09:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 51/53]
+ kernel/time/tick-sched.c:1455:6: warning: no previous prototype for
+ 'tick_setup_sched_timer_dump'
+Message-ID: <202201071623.rIzxzZ6C-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
+head:   56b8a9dc5e8aa4d625a09ce87015016ae339d44d
+commit: feba9f855e1f9231392df9e7c2ba94e2fe1bc822 [51/53] EXP timers: Debugging for last-resort jiffies update
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220107/202201071623.rIzxzZ6C-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/feba9f855e1f9231392df9e7c2ba94e2fe1bc822
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
+        git checkout feba9f855e1f9231392df9e7c2ba94e2fe1bc822
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash kernel/time/
 
-Fixes: 765a9d1d02b2 ("iommu/tegra-smmu: Fix mc errors on tegra124-nyan")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/time/tick-sched.c:1455:6: warning: no previous prototype for 'tick_setup_sched_timer_dump' [-Wmissing-prototypes]
+    1455 | void tick_setup_sched_timer_dump(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/tick_setup_sched_timer_dump +1455 kernel/time/tick-sched.c
+
+  1454	
+> 1455	void tick_setup_sched_timer_dump(void)
+  1456	{
+  1457		int cpu;
+  1458		int j = jiffies;
+  1459	
+  1460		pr_alert("%s state", __func__);
+  1461		for_each_possible_cpu(cpu)
+  1462			pr_cont(" j/c %x/%d %c",
+  1463				(int)(j - per_cpu(tick_setup_sched_timer_jiffies, cpu)) & 0xfff,
+  1464				per_cpu(tick_setup_sched_timer_jiffies_count, cpu),
+  1465				".H"[per_cpu(tick_setup_sched_timer_help_needed, cpu)]);
+  1466		pr_cont("\n");
+  1467	}
+  1468	
+
 ---
- drivers/iommu/tegra-smmu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index e900e3c46903..2561ce8a2ce8 100644
---- a/drivers/iommu/tegra-smmu.c
-+++ b/drivers/iommu/tegra-smmu.c
-@@ -808,8 +808,10 @@ static struct tegra_smmu *tegra_smmu_find(struct device_node *np)
- 		return NULL;
- 
- 	mc = platform_get_drvdata(pdev);
--	if (!mc)
-+	if (!mc) {
-+		put_device(&pdev->dev);
- 		return NULL;
-+	}
- 
- 	return mc->smmu;
- }
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

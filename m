@@ -2,353 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 208144872D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 06:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A304872D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 06:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiAGFm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 00:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiAGFm6 (ORCPT
+        id S232394AbiAGFnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 00:43:45 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42734 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229585AbiAGFno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 00:42:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90D3C061245;
-        Thu,  6 Jan 2022 21:42:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF4A3B824DA;
-        Fri,  7 Jan 2022 05:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85692C36AE9;
-        Fri,  7 Jan 2022 05:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641534174;
-        bh=a1MizlBW2TF0dnN8rkq7UcavB85V1091/Nkz6UsWonU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V5H/uO3ODGv6QkGOUWQBUJF4XMV0sxnXq2xjUUTmKTUe0vsWBql7vlNUZ7RSys2rj
-         pvccdrtIbegd3qcW1xsCwUKw9fDMVJtF8PREWFFudd8LGHmwi6uLpW/b/ChvAzHfMj
-         Xg3WruUWIxVaobM2lSrSyvNfkpocrWTBLyvznd+fQrsQQ0brguJRfooA8icOZlpuhh
-         yIkJrGV0Ill8Sj7lfzKxuML2FEeSN+DALtI3TgtI1vxFXSl4+9Y80iQClnhJgO4LrA
-         SLevGjbof6n1SS2vp6Xng6Ms8E9td8nlbsQDCLR39wVQMaBZ12wGYeRDXTo4r5O2DQ
-         9ZfQvYeY8FBBA==
-Date:   Fri, 7 Jan 2022 14:42:47 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
-Message-Id: <20220107144247.caf007b0c080de6a26acbf96@kernel.org>
-In-Reply-To: <YdcDRqmgOeOMmyoM@krava>
-References: <20220104080943.113249-1-jolsa@kernel.org>
-        <20220106002435.d73e4010c93462fbee9ef074@kernel.org>
-        <YdaoTuWjEeT33Zzm@krava>
-        <20220106225943.87701fcc674202dc3e172289@kernel.org>
-        <YdcDRqmgOeOMmyoM@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 7 Jan 2022 00:43:44 -0500
+X-UUID: 39b55fbe961c41f5a67f0b323c5ee1dc-20220107
+X-UUID: 39b55fbe961c41f5a67f0b323c5ee1dc-20220107
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1515343863; Fri, 07 Jan 2022 13:43:40 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 7 Jan 2022 13:43:39 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Jan
+ 2022 13:43:39 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 7 Jan 2022 13:43:37 +0800
+Message-ID: <6dd101e4e65ef56dbf81d67496a383a7db8cefb5.camel@mediatek.com>
+Subject: Re: [PATCH v7 4/4] arm64: dts: Add mediatek SoC mt8195 and
+ evaluation board
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+CC:     <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <matthias.bgg@gmail.com>, <broonie@kernel.org>,
+        <bgolaszewski@baylibre.com>, <sean.wang@mediatek.com>,
+        <bayi.cheng@mediatek.com>, <gch981213@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>
+Date:   Fri, 7 Jan 2022 13:43:37 +0800
+In-Reply-To: <18c342b20ccac520eabe8019562432030ddfe017.camel@mediatek.com>
+References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
+         <20211220121825.6446-5-tinghan.shen@mediatek.com>
+         <CAGXv+5GaFikojqYYv0TfQsz3NSqn7QPmTWyCJY8V2g8UYoV4OA@mail.gmail.com>
+         <18c342b20ccac520eabe8019562432030ddfe017.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 15:57:10 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
-
-> On Thu, Jan 06, 2022 at 10:59:43PM +0900, Masami Hiramatsu wrote:
-> 
-> SNIP
-> 
-> > > > 
-> > > > Hmm, I think there may be a time to split the "kprobe as an 
-> > > > interface for the software breakpoint" and "kprobe as a wrapper
-> > > > interface for the callbacks of various instrumentations", like
-> > > > 'raw_kprobe'(or kswbp) and 'kprobes'.
-> > > > And this may be called as 'fprobe' as ftrace_ops wrapper.
-> > > > (But if the bpf is enough flexible, this kind of intermediate layer
-> > > >  may not be needed, it can use ftrace_ops directly, eventually)
-> > > > 
-> > > > Jiri, have you already considered to use ftrace_ops from the
-> > > > bpf directly? Are there any issues?
-> > > > (bpf depends on 'kprobe' widely?)
+On Thu, 2022-01-06 at 19:14 +0800, Tinghan Shen wrote:
+> On Thu, 2021-12-23 at 17:59 +0800, Chen-Yu Tsai wrote:
+> > Hi,
+> > 
+> > On Mon, Dec 20, 2021 at 8:20 PM Tinghan Shen <
+> > tinghan.shen@mediatek.com> wrote:
 > > > 
-> > > at the moment there's not ftrace public interface for the return
-> > > probe merged in, so to get the kretprobe working I had to use
-> > > kprobe interface
-> > 
-> > Yeah, I found that too. We have to ask Steve to salvage it ;)
-> 
-> I got those patches rebased like half a year ago upstream code,
-> so should be easy to revive them
-
-Nice! :)
-
-> 
-> > 
-> > > but.. there are patches Steven shared some time ago, that do that
-> > > and make graph_ops available as kernel interface
+> > > Add basic chip support for mediatek mt8195.
 > > > 
-> > > I recall we considered graph_ops interface before as common attach
-> > > layer for trampolines, which was bad, but it might actually make
-> > > sense for kprobes
-> > 
-> > I started working on making 'fprobe' which will provide multiple
-> > function probe with similar interface of kprobes. See attached
-> > patch. Then you can use it in bpf, maybe with an union like
-> > 
-> > union {
-> > 	struct kprobe kp;	// for function body
-> > 	struct fprobe fp;	// for function entry and return
-> > };
-> > 
-> > At this moment, fprobe only support entry_handler, but when we
-> > re-start the generic graph_ops interface, it is easy to expand
-> > to support exit_handler.
-> > If this works, I think kretprobe can be phased out, since at that
-> > moment, kprobe_event can replace it with the fprobe exit_handler.
-> > (This is a benefit of decoupling the instrumentation layer from
-> > the event layer. It can choose the best way without changing
-> > user interface.)
-> > 
-> 
-> I can resend out graph_ops patches if you want to base
-> it directly on that
-
-Yes, that's very helpful. Now I'm considering to use it (or via fprobe)
-from kretprobes like ftrace-based kprobe.
-
-> > > I'll need to check it in more details but I think both graph_ops and
-> > > kprobe do about similar thing wrt hooking return probe, so it should
-> > > be comparable.. and they are already doing the same for the entry hook,
-> > > because kprobe is mostly using ftrace for that
+> > > Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
+> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > > ---
+> > >  arch/arm64/boot/dts/mediatek/Makefile       |    1 +
+> > >  arch/arm64/boot/dts/mediatek/mt8195-evb.dts |  209 ++++
+> > >  arch/arm64/boot/dts/mediatek/mt8195.dtsi    | 1034
+> > > +++++++++++++++++++
+> > >  3 files changed, 1244 insertions(+)
+> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
 > > > 
-> > > we would not need to introduce new program type - kprobe programs
-> > > should be able to run from ftrace callbacks just fine
+> > > diff --git a/arch/arm64/boot/dts/mediatek/Makefile
+> > > b/arch/arm64/boot/dts/mediatek/Makefile
+> > > index 4f68ebed2e31..7aa08bb4c078 100644
+> > > --- a/arch/arm64/boot/dts/mediatek/Makefile
+> > > +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> > > @@ -32,4 +32,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-
+> > > krane-sku0.dtb
+> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
+> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
+> > > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
+> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > > b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > > new file mode 100644
+> > > index 000000000000..e581c6bbead6
+> > > --- /dev/null
+> > > +++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+> > > @@ -0,0 +1,209 @@
+> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > > +/*
+> > > + * Copyright (C) 2021 MediaTek Inc.
+> > > + * Author: Seiya Wang <seiya.wang@mediatek.com>
+> > > + */
+> > > +/dts-v1/;
+> > > +#include "mt8195.dtsi"
+> > > +
+> > > +/ {
+> > > +       model = "MediaTek MT8195 evaluation board";
+> > > +       compatible = "mediatek,mt8195-evb", "mediatek,mt8195";
+> > > +
+> > > +       aliases {
+> > > +               serial0 = &uart0;
+> > > +       };
+> > > +
+> > > +       chosen {
+> > > +               stdout-path = "serial0:921600n8";
+> > > +       };
+> > > +
+> > > +       memory@40000000 {
+> > > +               device_type = "memory";
+> > > +               reg = <0 0x40000000 0 0x80000000>;
+> > > +       };
+> > > +};
+> > > +
+> > > +&auxadc {
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&i2c0 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c0_pin>;
+> > > +       clock-frequency = <100000>;
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&i2c1 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c1_pin>;
+> > > +       clock-frequency = <400000>;
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&i2c2 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c2_pin>;
+> > > +       status = "disabled";
+> > > +};
+> > > +
+> > > +&i2c3 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c3_pin>;
+> > > +       status = "disabled";
+> > > +};
 > > 
-> > That seems to bind your mind. The program type is just a programing
-> > 'model' of the bpf. You can choose the best implementation to provide
-> > equal functionality. 'kprobe' in bpf is just a name that you call some
-> > instrumentations which can probe kernel code.
-> 
-> I don't want to introduce new type, there's some dependencies
-> in bpf verifier and helpers code we'd need to handle for that
-> 
-> I'm looking for solution for current kprobe bpf program type
-> to be registered for multiple addresses quickly
+> > Is there any reason in particular to list "disabled" devices here?
+> > Are they part of some GPIO header? If they are not accessible, then
+> > it's better to not list them. If they are, please leave a comment
+> > about it.
+> > 
+> > > +
+> > > +&i2c4 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c4_pin>;
+> > > +       clock-frequency = <400000>;
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&i2c5 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c5_pin>;
+> > > +       status = "disabled";
+> > > +};
+> > > +
+> > > +&i2c6 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&i2c6_pin>;
+> > > +       clock-frequency = <400000>;
+> > > +       status = "disabled";
+> > > +};
+> > 
+> > Same here.
+> > 
+> > > +
+> > > +&nor_flash {
+> > > +       status = "okay";
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&nor_pins_default>;
+> > 
+> > Please add an empty line between properties and child device nodes.
+> > It helps
+> > with readability and also fits the style of other parts and other
+> > DT
+> > files.
+> > 
+> > > +       flash@0 {
+> > > +               compatible = "jedec,spi-nor";
+> > > +               reg = <0>;
+> > > +               spi-max-frequency = <50000000>;
+> > > +       };
+> > > +};
+> > > +
+> > > +&pio {
+> > > +       i2c0_pin: i2c0-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
+> > > +                                <PINMUX_GPIO9__FUNC_SCL0>;
+> > > +                       bias-pull-up = <1>;
+> > > +                       mediatek,rsel = <7>;
+> > 
+> > Please use the MTK_PULL_SET_RSEL_* macros with the bias-pull-*
+> > properties.
+> > We spent a lot of time defining those.
+> > 
+> > > +                       mediatek,drive-strength-adv = <0>;
+> > 
+> > This property is not part of the DT binding.
+> > 
+> > > +                       drive-strength = <MTK_DRIVE_6mA>;
+> > 
+> > Please just use raw numbers here. MTK_DRIVE_6mA just translates to
+> > 6.
+> > The binding already specifies mA as the unit for "drive-strength".
+> > 
+> > > +               };
+> > > +       };
+> > 
+> > Above comments apply to all the other "pins" nodes.
+> > 
+> > Please add an empty line between different child device nodes. It
+> > helps
+> > with readability and also fits the style of other parts and other
+> > DT
+> > files.
+> > 
+> > > +       i2c1_pin: i2c1-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO10__FUNC_SDA1>,
+> > > +                                <PINMUX_GPIO11__FUNC_SCL1>;
+> > > +                       bias-pull-up = <1>;
+> > > +                       mediatek,rsel = <7>;
+> > > +                       mediatek,drive-strength-adv = <0>;
+> > > +                       drive-strength = <MTK_DRIVE_6mA>;
+> > > +               };
+> > > +       };
+> > > +       i2c2_pin: i2c2-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO12__FUNC_SDA2>,
+> > > +                                <PINMUX_GPIO13__FUNC_SCL2>;
+> > > +                       bias-pull-up = <1>;
+> > > +                       mediatek,rsel = <7>;
+> > > +                       mediatek,drive-strength-adv = <7>;
+> > > +               };
+> > > +       };
+> > > +       i2c3_pin: i2c3-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO14__FUNC_SDA3>,
+> > > +                                <PINMUX_GPIO15__FUNC_SCL3>;
+> > > +                       bias-pull-up = <1>;
+> > > +                       mediatek,rsel = <7>;
+> > > +                       mediatek,drive-strength-adv = <7>;
+> > > +               };
+> > > +       };
+> > > +       i2c4_pin: i2c4-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO16__FUNC_SDA4>,
+> > > +                                <PINMUX_GPIO17__FUNC_SCL4>;
+> > > +                       bias-pull-up = <1>;
+> > > +                       mediatek,rsel = <7>;
+> > > +                       mediatek,drive-strength-adv = <7>;
+> > > +               };
+> > > +       };
+> > > +       i2c5_pin: i2c5-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO29__FUNC_SCL5>,
+> > > +                                <PINMUX_GPIO30__FUNC_SDA5>;
+> > > +                       bias-pull-up = <1>;
+> > > +                       mediatek,rsel = <7>;
+> > > +                       mediatek,drive-strength-adv = <7>;
+> > > +               };
+> > > +       };
+> > > +       i2c6_pin: i2c6-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO25__FUNC_SDA6>,
+> > > +                                <PINMUX_GPIO26__FUNC_SCL6>;
+> > > +                       bias-pull-up = <1>;
+> > > +               };
+> > > +       };
+> > > +       i2c7_pin: i2c7-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO27__FUNC_SCL7>,
+> > > +                                <PINMUX_GPIO28__FUNC_SDA7>;
+> > > +                       bias-pull-up = <1>;
+> > > +               };
+> > > +       };
+> > > +       nor_pins_default: nor-pins {
+> > > +               pins0 {
+> > > +                       pinmux =
+> > > <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
+> > > +                                        <PINMUX_GPIO141__FUNC_SP
+> > > IN
+> > > OR_CK>,
+> > > +                                        <PINMUX_GPIO143__FUNC_SP
+> > > IN
+> > > OR_IO1>;
+> > > +                       bias-pull-down;
+> > > +               };
+> > > +               pins1 {
+> > > +                       pinmux =
+> > > <PINMUX_GPIO140__FUNC_SPINOR_CS>,
+> > > +                                    <PINMUX_GPIO130__FUNC_SPINOR
+> > > _I
+> > > O2>,
+> > > +                                    <PINMUX_GPIO131__FUNC_SPINOR
+> > > _I
+> > > O3>;
+> > > +                       bias-pull-up;
+> > > +               };
+> > > +       };
+> > > +       uart0_pin: uart0-pins {
+> > > +               pins {
+> > > +                       pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
+> > > +                               <PINMUX_GPIO99__FUNC_URXD0>;
+> > > +               };
+> > > +       };
+> > > +};
+> > > +
+> > > +&u2port0 {
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&u2port1 {
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&u3phy0 {
+> > > +       status="okay";
+> > > +};
+> > > +
+> > > +&u3phy1 {
+> > > +       status="okay";
+> > > +};
+> > > +
+> > > +&u3port0 {
+> > > +       status = "okay";
+> > > +};
+> > > +
+> > > +&u3port1 {
+> > > +       status = "okay";
+> > > +};
+No need add status property for those u*port* subnodes, add it in
+parent node u*phy* is enough.
 
-Yes, as I replied to Alex, the bpf program type itself keeps 'kprobe'.
-For example, you've introduced bpf_kprobe_link at [8/13], 
+Thanks
 
-struct bpf_kprobe_link {
-	struct bpf_link link;
-	union {
-		struct kretprobe rp;
-		struct fprobe fp;
-	};
-	bool is_return;
-	bool is_fentry;
-	kprobe_opcode_t **addrs;
-	u32 cnt;
-	u64 bpf_cookie;
-};
-
-If all "addrs" are function entry, ::fp will be used.
-If cnt == 1 then use ::rp.
-
-> > > so we would have:
-> > >   - kprobe type programs attaching to:
-> > >   - new BPF_LINK_TYPE_FPROBE link using the graph_ops as attachment layer
+> > > +
+> > > +&uart0 {
+> > > +       pinctrl-names = "default";
+> > > +       pinctrl-0 = <&uart0_pin>;
+> > > +       status = "okay";
+> > > +};
 > > > 
-> > > jirka
-> > > 
-> > 
-> > 
-> > -- 
-> > Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> > From 269b86597c166d6d4c5dd564168237603533165a Mon Sep 17 00:00:00 2001
-> > From: Masami Hiramatsu <mhiramat@kernel.org>
-> > Date: Thu, 6 Jan 2022 15:40:36 +0900
-> > Subject: [PATCH] fprobe: Add ftrace based probe APIs
-> > 
-> > The fprobe is a wrapper API for ftrace function tracer.
-> > Unlike kprobes, this probes only supports the function entry, but
-> > it can probe multiple functions by one fprobe. The usage is almost
-> > same as the kprobe, user will specify the function names by
-> > fprobe::syms, the number of syms by fprobe::nsyms, and the user
-> > handler by fprobe::handler.
-> > 
-> > struct fprobe = { 0 };
-> > const char *targets[] = {"func1", "func2", "func3"};
-> > 
-> > fprobe.handler = user_handler;
-> > fprobe.nsyms = ARRAY_SIZE(targets);
-> > fprobe.syms = targets;
-> > 
-> > ret = register_fprobe(&fprobe);
-> > ...
-> > 
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  include/linux/fprobes.h |  52 ++++++++++++++++
-> >  kernel/trace/Kconfig    |  10 ++++
-> >  kernel/trace/Makefile   |   1 +
-> >  kernel/trace/fprobes.c  | 128 ++++++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 191 insertions(+)
-> >  create mode 100644 include/linux/fprobes.h
-> >  create mode 100644 kernel/trace/fprobes.c
-> > 
-> > diff --git a/include/linux/fprobes.h b/include/linux/fprobes.h
-> > new file mode 100644
-> > index 000000000000..22db748bf491
-> > --- /dev/null
-> > +++ b/include/linux/fprobes.h
-> > @@ -0,0 +1,52 @@
-> > +#ifndef _LINUX_FPROBES_H
-> > +#define _LINUX_FPROBES_H
-> > +/* Simple ftrace probe wrapper */
-> > +
-> > +#include <linux/compiler.h>
-> > +#include <linux/ftrace.h>
-> > +
-> > +struct fprobe {
-> > +	const char		**syms;
-> > +	unsigned long		*addrs;
-> 
-> could you add array of user data for each addr/sym?
-
-OK, something like this?
-
-	void	**user_data;
-
-But note that you need O(N) to search the entry corresponding to
-a specific address. To reduce the overhead, we may need to sort
-the array in advance (e.g. when registering it).
-
-> 
-> SNIP
-> 
-> > +static int populate_func_addresses(struct fprobe *fp)
-> > +{
-> > +	unsigned int i;
-> > +
-> > +	fp->addrs = kmalloc(sizeof(void *) * fp->nsyms, GFP_KERNEL);
-> > +	if (!fp->addrs)
-> > +		return -ENOMEM;
-> > +
-> > +	for (i = 0; i < fp->nsyms; i++) {
-> > +		fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
-> > +		if (!fp->addrs[i]) {
-> > +			kfree(fp->addrs);
-> > +			fp->addrs = NULL;
-> > +			return -ENOENT;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/**
-> > + * register_fprobe - Register fprobe to ftrace
-> > + * @fp: A fprobe data structure to be registered.
-> > + *
-> > + * This expects the user set @fp::syms or @fp::addrs (not both),
-> > + * @fp::nsyms (number of entries of @fp::syms or @fp::addrs) and
-> > + * @fp::handler. Other fields are initialized by this function.
-> > + */
-> > +int register_fprobe(struct fprobe *fp)
-> > +{
-> > +	unsigned int i;
-> > +	int ret;
-> > +
-> > +	if (!fp)
-> > +		return -EINVAL;
-> > +
-> > +	if (!fp->nsyms || (!fp->syms && !fp->addrs) || (fp->syms && fp->addrs))
-> > +		return -EINVAL;
-> > +
-> > +	if (fp->syms) {
-> > +		ret = populate_func_addresses(fp);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +	}
-> > +
-> > +	fp->ftrace.func = fprobe_handler;
-> > +	fp->ftrace.flags = FTRACE_OPS_FL_SAVE_REGS;
-> > +
-> > +	for (i = 0; i < fp->nsyms; i++) {
-> > +		ret = ftrace_set_filter_ip(&fp->ftrace, fp->addrs[i], 0, 0);
-> > +		if (ret < 0)
-> > +			goto error;
-> > +	}
-> 
-> I introduced ftrace_set_filter_ips, because loop like above was slow:
->   https://lore.kernel.org/bpf/20211118112455.475349-4-jolsa@kernel.org/
-
-Ah, thanks for noticing!
-
-Thank you,
-
-> 
-> thanks,
-> jirka
-> 
-> > +
-> > +	fp->nmissed = 0;
-> > +	ret = register_ftrace_function(&fp->ftrace);
-> > +	if (!ret)
-> > +		return ret;
-> > +
-> > +error:
-> > +	if (fp->syms) {
-> > +		kfree(fp->addrs);
-> > +		fp->addrs = NULL;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +/**
-> > + * unregister_fprobe - Unregister fprobe from ftrace
-> > + * @fp: A fprobe data structure to be unregistered.
-> > + */
-> > +int unregister_fprobe(struct fprobe *fp)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!fp)
-> > +		return -EINVAL;
-> > +
-> > +	if (!fp->nsyms || !fp->addrs)
-> > +		return -EINVAL;
-> > +
-> > +	ret = unregister_ftrace_function(&fp->ftrace);
-> > +
-> > +	if (fp->syms) {
-> > +		/* fp->addrs is allocated by register_fprobe() */
-> > +		kfree(fp->addrs);
-> > +		fp->addrs = NULL;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > -- 
-> > 2.25.1
 > > 
 > 
+> 
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,94 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A59486EB2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3699486EB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344057AbiAGAVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343961AbiAGAVd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:21:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DDCC061245;
-        Thu,  6 Jan 2022 16:21:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46AF0B82492;
-        Fri,  7 Jan 2022 00:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06963C36AF2;
-        Fri,  7 Jan 2022 00:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641514890;
-        bh=q2qMck5fOGv4y0jxtZgqjCAobqyuIwo9frnw8Ud7mxA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J4ZYJCvHRBauWGbjUzeywmS/bUleaEcbcoOcQY2UxYQBtqBfsGGwZ8H2rocOhrk4z
-         ZkeB7DRHWe41pM3c2lAOv2Eo2wmqsHcaPH+pzvnLCJVS7BJ9th3pzALPrsIFfALlaf
-         cxrHwXu72Jo0Dq0WxycTh74+mXobOm7E7xPq2U5cuGekRlxbEawZhGftKkHnvufWmV
-         Vk+XQKI/6IMZHl1ggUFum1pZ0Sim/Vzt9+JfqUfFqP04Ya8I5kUIL/n2cO/Gv6x76F
-         v4qXx6nj7I7KH1UYamzPNzEAdjbtU6QTJbJiCf9BEQjymZSJ96o3jih1mD9oFyNJEp
-         fSsa34JOiJQrA==
-Received: by mail-yb1-f172.google.com with SMTP id p15so12124835ybk.10;
-        Thu, 06 Jan 2022 16:21:29 -0800 (PST)
-X-Gm-Message-State: AOAM531oAgn5XWSoCq0mdQ5lv3kSnNfIJniKLl4TkisaxUinCpYMt90x
-        8JFtP89/usq3917eKTOFyV4uNMMEq14y+qD6zXk=
-X-Google-Smtp-Source: ABdhPJxgLvLXYZlXmHmikXGfVflPrHS0ENCRiG/npwgmyeoYAYOZ9vVJX5r+xW8325l7foPEjweplWKnwXcGPABDWxs=
-X-Received: by 2002:a25:dc94:: with SMTP id y142mr485732ybe.282.1641514889137;
- Thu, 06 Jan 2022 16:21:29 -0800 (PST)
+        id S1344105AbiAGAXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:23:53 -0500
+Received: from mga06.intel.com ([134.134.136.31]:38685 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343928AbiAGAXw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 19:23:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641515032; x=1673051032;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ZIszb2ptLlWN5jiqIqtYtNRvhlbcJxtJfClvbQTYBwI=;
+  b=dMYuhm+ct68A0mK/AURSdYZzwaoMXCHBssqJ0sBrPk0JE156EZJ6n2mv
+   Q8jnb2iPDsj6tJWZcwdg+0KIehA3WyzA91viaU1zX9qKa60909iFiJHFr
+   JWGJvIv0HndwQUW4K5kzd+5xgH7sbDgvcio9sx1Th/Z3XPbEVMaD5GKu6
+   98VgoUhnG0dK4uPqixS/2fWbOCdvJigpSzHc06TGL+sPGrONaQ0QEEwrk
+   vVmVC2zzfRBUZFZPn+3eADy422LnLb4EKarkGtUkaRmpQhvuvp2TINEJ1
+   nkzsw6NwpYqyWGSeJ6jNqLk7BBkxaYRIeEpAcU9SpJQYNxku2CFSeScub
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="303514982"
+X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
+   d="scan'208";a="303514982"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 16:23:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
+   d="scan'208";a="527179688"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 06 Jan 2022 16:23:45 -0800
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/8] iommu/amd: Use iommu_attach/detach_device()
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
+ <20220106022053.2406748-6-baolu.lu@linux.intel.com>
+ <20220106143345.GC2328285@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <456972f1-0237-81db-69cf-363f9ac611e0@linux.intel.com>
+Date:   Fri, 7 Jan 2022 08:23:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211229215646.830451-1-void@manifault.com>
-In-Reply-To: <20211229215646.830451-1-void@manifault.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 6 Jan 2022 16:21:18 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5PL1w_72Hrbsp2b3jA-SGyzv5oLfgybkq=s8J5KL6kmw@mail.gmail.com>
-Message-ID: <CAPhsuW5PL1w_72Hrbsp2b3jA-SGyzv5oLfgybkq=s8J5KL6kmw@mail.gmail.com>
-Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
-To:     void@manifault.com
-Cc:     live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
-        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220106143345.GC2328285@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 1:57 PM David Vernet <void@manifault.com> wrote:
->
-> When initializing a 'struct klp_object' in klp_init_object_loaded(), and
-> performing relocations in klp_resolve_symbols(), klp_find_object_symbol()
-> is invoked to look up the address of a symbol in an already-loaded module
-> (or vmlinux). This, in turn, calls kallsyms_on_each_symbol() or
-> module_kallsyms_on_each_symbol() to find the address of the symbol that is
-> being patched.
->
-> It turns out that symbol lookups often take up the most CPU time when
-> enabling and disabling a patch, and may hog the CPU and cause other tasks
-> on that CPU's runqueue to starve -- even in paths where interrupts are
-> enabled.  For example, under certain workloads, enabling a KLP patch with
-> many objects or functions may cause ksoftirqd to be starved, and thus for
-> interrupts to be backlogged and delayed. This may end up causing TCP
-> retransmits on the host where the KLP patch is being applied, and in
-> general, may cause any interrupts serviced by softirqd to be delayed while
-> the patch is being applied.
->
-> So as to ensure that kallsyms_on_each_symbol() does not end up hogging the
-> CPU, this patch adds a call to cond_resched() in kallsyms_on_each_symbol()
-> and module_kallsyms_on_each_symbol(), which are invoked when doing a symbol
-> lookup in vmlinux and a module respectively.  Without this patch, if a
-> live-patch is applied on a 36-core Intel host with heavy TCP traffic, a
-> ~10x spike is observed in TCP retransmits while the patch is being applied.
-> Additionally, collecting sched events with perf indicates that ksoftirqd is
-> awakened ~1.3 seconds before it's eventually scheduled.  With the patch, no
-> increase in TCP retransmit events is observed, and ksoftirqd is scheduled
-> shortly after it's awakened.
->
-> Signed-off-by: David Vernet <void@manifault.com>
+Hi Jason,
 
-Acked-by: Song Liu <song@kernel.org>
+On 1/6/22 10:33 PM, Jason Gunthorpe wrote:
+> On Thu, Jan 06, 2022 at 10:20:50AM +0800, Lu Baolu wrote:
+>> The individual device driver should use iommu_attach/detach_device()
+>> for domain attachment/detachment.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>>   drivers/iommu/amd/iommu_v2.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+>> index 58da08cc3d01..7d9d0fe89064 100644
+>> +++ b/drivers/iommu/amd/iommu_v2.c
+>> @@ -133,7 +133,7 @@ static void free_device_state(struct device_state *dev_state)
+>>   	if (WARN_ON(!group))
+>>   		return;
+>>   
+>> -	iommu_detach_group(dev_state->domain, group);
+>> +	iommu_detach_device(dev_state->domain, &dev_state->pdev->dev);
+>>   
+>>   	iommu_group_put(group);
+> 
+> This is the only user of the group in the function all the
+> group_get/put should be deleted too.
+> 
+> Joerg said in commit 55c99a4dc50f ("iommu/amd: Use
+> iommu_attach_group()") that the device API doesn't work here because
+> there are multi-device groups?
+> 
+> But I'm not sure how this can work with multi-device groups - this
+> seems to assigns a domain setup for direct map, so perhaps this only
+> works if all devices are setup for direct map?
 
-PS: Do we observe livepatch takes a longer time to load after this change?
-(I believe longer time shouldn't be a problem at all. Just curious.)
+It's also difficult for me to understand how this can work with multi-
+device group. The iommu_attach_group() returns -EBUSY if _init_device()
+is called for the second device in the group. That's the reason why I
+didn't set no_kernel_dma.
+
+> 
+>> @@ -791,7 +791,7 @@ int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
+>>   		goto out_free_domain;
+>>   	}
+>>   
+>> -	ret = iommu_attach_group(dev_state->domain, group);
+>> +	ret = iommu_attach_device(dev_state->domain, &pdev->dev);
+>>   	if (ret != 0)
+>>   		goto out_drop_group;
+> 
+> Same comment here
+
+Yes.
+
+> 
+> Jason
+> 
+
+Best regards,
+baolu

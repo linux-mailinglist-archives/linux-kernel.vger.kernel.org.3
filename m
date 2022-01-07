@@ -2,92 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79645487459
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB7248745E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346247AbiAGI5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:57:49 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:57341 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346181AbiAGI5q (ORCPT
+        id S1346279AbiAGI6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:58:52 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11314 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1346266AbiAGI6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:57:46 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V1AKtGu_1641545860;
-Received: from 30.240.102.225(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V1AKtGu_1641545860)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 07 Jan 2022 16:57:42 +0800
-Message-ID: <c3ddb561-15b0-855f-b50c-c97ebd0f5976@linux.alibaba.com>
-Date:   Fri, 7 Jan 2022 16:57:39 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v3 2/6] crypto: arm64/sm3-ce - make dependent on sm3
- library
+        Fri, 7 Jan 2022 03:58:51 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2078blLG013296;
+        Fri, 7 Jan 2022 08:58:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=oXCQfd4G/iTC0kL7PG2TR72N4GH+CGqN1sK2PO5maA4=;
+ b=D+5P/ZGSyoi3qPYSV5EyGzW0qKo6ryygTzox/7qVNKhSLB1lrykaGTT0JoJOwFjIr6Pn
+ OEjhEK2cN6QUuu/Y4jssOKdiS6t2/rajM/Jl2Ml06QNj7ldHkYteunRjf9mGGPsgLsCX
+ xE2IEcGhrgxZqKuWCRIFrc5AlAObIn+/ON9uAVrAz6Q33NiR+zMfF//NjuL7gw4l3nWS
+ 6YO01Re/4JbeoaGU9ViUW2/HU0RrhK7DMA4B/POH5HBhQg0asjiOiu0j45Uq6+1dTgxU
+ TZv96eciIPkOsnjKSjEV5BUz1qKE8i4mVFKFIm6PV1agU2Weex2nKm768tPQdszwWx8k sQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4x350m6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 08:58:44 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2078nE1P020440;
+        Fri, 7 Jan 2022 08:58:44 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4x350kn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 08:58:44 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2078qEpg027940;
+        Fri, 7 Jan 2022 08:58:42 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3de5gfvgt9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 08:58:42 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2078wevl28246344
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jan 2022 08:58:40 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00BD0A4066;
+        Fri,  7 Jan 2022 08:58:40 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0738A405C;
+        Fri,  7 Jan 2022 08:58:38 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.61.156])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jan 2022 08:58:38 +0000 (GMT)
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220106091921.3fa617bc@canb.auug.org.au>
+From:   kajoljain <kjain@linux.ibm.com>
+Message-ID: <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
+Date:   Fri, 7 Jan 2022 14:28:37 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20220106091921.3fa617bc@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20211223043547.32297-1-tianjia.zhang@linux.alibaba.com>
- <20211223043547.32297-3-tianjia.zhang@linux.alibaba.com>
- <YdezdZQHZT2+iYV3@gondor.apana.org.au>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <YdezdZQHZT2+iYV3@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GoUI2xrrQd_i_kr9YxZgHF4IHXHPjdbS
+X-Proofpoint-GUID: hE6zumqYfke5FYWDYh6Ygh00xlRsjP2J
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-07_03,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 clxscore=1011 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201070061
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
 
-On 1/7/22 11:28 AM, Herbert Xu wrote:
-> On Thu, Dec 23, 2021 at 12:35:43PM +0800, Tianjia Zhang wrote:
->> SM3 generic library is stand-alone implementation, sm3-ce can depend
->> on the SM3 library instead of sm3-generic.
->>
->> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->> ---
->>   arch/arm64/crypto/Kconfig       |  2 +-
->>   arch/arm64/crypto/sm3-ce-glue.c | 20 ++++++++++++++------
->>   2 files changed, 15 insertions(+), 7 deletions(-)
-> 
-> This doesn't compile cleanly with C=1 W=1:
-> 
->    CC [M]  arch/arm64/crypto/sm3-ce-glue.o
->    AS [M]  arch/arm64/crypto/sm3-ce-core.o
->    CC [M]  arch/arm64/crypto/sm4-ce-glue.o
->    CHECK   ../arch/arm64/crypto/sha3-ce-glue.c
-> ../arch/arm64/crypto/sm3-ce-glue.c: In function ‘sm3_ce_update’:
-> ../arch/arm64/crypto/sm3-ce-glue.c:30:10: error: void value not ignored as it ought to be
->     30 |   return sm3_update(shash_desc_ctx(desc), data, len);
->        |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/arm64/crypto/sm3-ce-glue.c: In function ‘sm3_ce_final’:
-> ../arch/arm64/crypto/sm3-ce-glue.c:42:10: error: void value not ignored as it ought to be
->     42 |   return sm3_final(shash_desc_ctx(desc), out);
->        |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> make[3]: *** [../scripts/Makefile.build:287: arch/arm64/crypto/sm3-ce-glue.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> 
-> Please make sure everything builds cleanly with C=1 W=1 *before*
-> you submit.
-> 
-> Thanks,
 
-Thanks for pointing it out, will fix it in next patch. There will never 
-be such a low-level error in the future
+On 1/6/22 3:49 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the perf tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> In file included from include/linux/perf_event.h:17,
+>                  from arch/powerpc/perf/isa207-common.h:12,
+>                  from arch/powerpc/perf/isa207-common.c:9:
+> arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
+> include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+>  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+>       |           ^~~~~~~~~
+> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+>   273 | #define P(a, b)    PERF_MEM_S(a, b)
+>       |                    ^~~~~~~~~~
+> arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+>   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+>       |                                                   ^
+> include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier is reported only once for each function it appears in
+>  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+>       |           ^~~~~~~~~
+> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+>   273 | #define P(a, b)    PERF_MEM_S(a, b)
+>       |                    ^~~~~~~~~~
+> arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+>   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+>       |                                                   ^
+> include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+>  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+>       |           ^~~~~~~~~
+> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+>   273 | #define P(a, b)    PERF_MEM_S(a, b)
+>       |                    ^~~~~~~~~~
+> arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
+>   244 |     ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
+>       |                                                   ^
+> 
+> Caused by commit
+> 
+>   af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platform")
+> 
+> It looks like patch 1/4 of this series is missing ...
 
-Kind Regards,
-Tianjia
+Hi Stephen,
+     Yes you are right, original patch series contain 4 patches, where
+1/4 patch contain kernel side changes for the same. Hence we are getting
+this error, as that patch is missing in the Arnaldo tree.
+
+Link to the patchset: https://lkml.org/lkml/2021/12/6/143
+
+That kernel side patch is taken by Michael Ellermen via powerpc git.
+
+Link to the patchset on powerpc/next:
+
+[1/4] perf: Add new macros for mem_hops field
+https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=cb1c4aba055f928ffae0c868e8dfe08eeab302e7
+
+
+[3/4] powerpc/perf: Add encodings to represent data based on newer
+composite PERF_MEM_LVLNUM* fields
+ https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=4a20ee106154ac1765dea97932faad29f0ba57fc
+
+[4/4] powerpc/perf: Add data source encodings for power10 platform
+https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=6ed05a8efda56e5be11081954929421de19cce88
+
+Thanks,
+Kajol Jain
+
+> 
+> I have used the perf tree from next-20220105 for today.
+> 

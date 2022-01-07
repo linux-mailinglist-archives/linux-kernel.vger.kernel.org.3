@@ -2,162 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF041487A6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32989487A64
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348275AbiAGQdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S1348245AbiAGQdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348268AbiAGQdm (ORCPT
+        with ESMTP id S240056AbiAGQdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:33:42 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9A3C06173F
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:33:41 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id k21so17567198lfu.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:33:41 -0800 (PST)
+        Fri, 7 Jan 2022 11:33:37 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D76C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:33:37 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id b26so11143802uap.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:33:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UhF6StDpI+3ZSQ6faKXsbBjH2ED0Nvwq42ETEz4x9/g=;
-        b=GfA0cldfIieDD4gKWyksixy8aDD3yca5nIRpVxlKor5YXoZ73svrV5gQNQWU1QRS+T
-         lG/tO43LaEmQ8cXjrOMICRqHlsDQvFxWqBYVXfOuO5Z18T/XUTq2f+LpzN56W2B4v/Ya
-         MvKg+J3KHJQ1Ugg4I+zfX7lQoNo9OSM9/wODvvxXf5xs9BA5ss2+P4+qjCt4PVMtgbi0
-         cZKETLV9n482jRFAH+DpdfJVfH9y6GcJn7lgrEagqRIc7p1xYQvYu0D5YSJBsbteBUdR
-         Bqc361go5ui1A+xiijGtK+07cIP14v9UBveCyhspOCF7DAoG3KlTMkoXe3S8uaQr6wkk
-         qHxw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QKSah4ftdKgnYH/5hc63jfRi1amTCzCRzRwNFNBPqJ0=;
+        b=PFB+S1WQQgqerJaTeJSXsFDSjqsJ/DjTZMXnoe7RtHHVtZnt/VYOBea7F0AT+vJG7v
+         sD+BOlP32ooXAaU3H4iFa4HkKV2BgBGPiBIaVdu9iekxPUxRvc0HZVlTQZwmx+tUodMR
+         38au5sQ6vxvquDV4ra602cTBFsNolF1KR9ZSEiugeTQGcEQWYIUTYXWIwEmNQM7JnppQ
+         wpIC5uPsqbUuDJdk3mqa4FQ2gn4OzaLpS6WZFKVt7+gHnEU3wF+A7w1Gbax3yUm1Josx
+         iL96Qgqx//3j0Nztw6dFxLICsslE5KZ/OZWBebrCf6XR+bPtz9oWnMjzwtkRaDa8GR1v
+         ZJAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UhF6StDpI+3ZSQ6faKXsbBjH2ED0Nvwq42ETEz4x9/g=;
-        b=wZdnbb6jQV6qXIehG+aZhgM1hhVjfPFGoxSsxHG2yEjWUoLhH5sCucAb0SeDE28All
-         rD8WEjGsRp/lp7mSieXkEh2wJqOT0tXML/pVpez/+bvYYt7rRFU4dMYuGsAJPnm1ySfe
-         7RrpQ5Hu/9hrBBqF6h5wfDGjvbmCyUYTHfxoKHkRNPruR7U+H9Hzp+3Uh2gWO30gXeK5
-         MBhad/pWyqJ4qmYAVaLZpEav2q1YOUgaQhE85wVq4Ht7RuXPbOcaGgFAFe+gNrrZkaS9
-         rT7KN3HdDD4j/cwgoDwQHronK0sWoSvMZhsXQDqabJyDS/qbp06R6iM5leI63iyBSZfL
-         tYxg==
-X-Gm-Message-State: AOAM53389j7zxYSe/b4PKYO9qQUIbF0dLeNyR+igQqGB/kBEbrz2GSrl
-        86RCDYStPFFDQWPh3vRVkZxKXhtnOBqHre4WDW3QMA==
-X-Google-Smtp-Source: ABdhPJzEuYs2SrCVpC4N16SjpYsCCsLOn5le1WCCeYZTgg3m4RBql877sG3Jf9246QuyNJuQuYqOyfGO06QpvouC8jI=
-X-Received: by 2002:a05:651c:1246:: with SMTP id h6mr39389480ljh.300.1641573220004;
- Fri, 07 Jan 2022 08:33:40 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QKSah4ftdKgnYH/5hc63jfRi1amTCzCRzRwNFNBPqJ0=;
+        b=S+w+TNwOwB+ecAfGKtSroS+eWqpOM4QsPIjhnjX4xvkaLllqIvu1PFAnArTa7DYEtX
+         h87kDby1S46oJGtZbkqYLgd+Z5Yk+Jk6jBpjwihhaYUJe5vWorJ/GzsGQYaHJN0sLsmt
+         tQgP7Jxs6o9w39lL8bESyOd14qGlzQEPNWXn8gOsfwBfm2xpDNghehccjJcRZ3jrkYsR
+         XUVkJyp2zdg9UbxQ6vRWm8FWnRadobRRh6/Wkcv29Lsx77X7JxpuYBPyMlb2iH38sBAC
+         lZmPz5JH/eJSd7A3J0MVOp4cVv0MUTN18vRaravK7eROyTJiDu87INyXwaBCulT6cZmB
+         qTgQ==
+X-Gm-Message-State: AOAM532R958XWMU+dFxj5GcGHmLsSl9uR3n3qsG8gcqW0GrDNf6Vx/5k
+        ASiORnA+nmwyKeQc0DnkFdLGhi8noRk=
+X-Google-Smtp-Source: ABdhPJzmn0b45sNrcvPvCIwEm/UfjCEorJ1FNwL5ECsZeAj84HCca+jQUAD3jbOXlTbFZsu8UbVHYA==
+X-Received: by 2002:a67:e303:: with SMTP id j3mr21959298vsf.33.1641573216680;
+        Fri, 07 Jan 2022 08:33:36 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:485:504a:2bb5:b3f3:9180:c62b])
+        by smtp.gmail.com with ESMTPSA id j76sm1115880vke.27.2022.01.07.08.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 08:33:36 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     broonie@kernel.org
+Cc:     matthias.schiffer@ew.tq-group.com, linux-kernel@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+Subject: [PATCH v3] regmap: Call regmap_debugfs_exit() prior to _init()
+Date:   Fri,  7 Jan 2022 13:33:07 -0300
+Message-Id: <20220107163307.335404-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220105182939.106885-1-paul@crapouillou.net> <20220105182939.106885-4-paul@crapouillou.net>
-In-Reply-To: <20220105182939.106885-4-paul@crapouillou.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jan 2022 17:33:04 +0100
-Message-ID: <CAPDyKFpUUPzqonNBrFq68h8QOVxardvf2q7AuEQVeUJ-S2726A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 at 19:30, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> These macros are defined conditionally, according to CONFIG_PM:
-> - if CONFIG_PM is enabled, these macros resolve to
->   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->   exported.
->
-> - if CONFIG_PM is disabled, these macros will result in a dummy static
->   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
->   will then be discarded by the compiler, along with the provided
->   callback functions if they are not used anywhere else.
->
-> In the second case, the symbol is not exported, which should be
-> perfectly fine - users of the symbol should all use the pm_ptr() or
-> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> client's code will never be accessed.
+From: Fabio Estevam <festevam@denx.de>
 
-How common is it to export the dev_pm_ops? Do we really need a macro for this?
+Since commit cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when
+calling regmap_attach_dev"), the following debugfs error is seen
+on i.MX boards:
 
-The similar comment/question applies for patch5.
+debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap' already present!
 
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+In the attempt to fix the memory leak, the above commit added a NULL check
+for map->debugfs_name. For the first debufs entry, map->debugfs_name is NULL
+and then the new name is allocated via kasprintf().
 
-Kind regards
-Uffe
+For the second debugfs entry, map->debugfs_name() is no longer NULL, so
+it will keep using the old entry name and the duplicate name error is seen.
 
-> ---
->
-> Notes:
->     v2: Remove useless empty line
->
->  include/linux/pm.h | 32 +++++++++++++++++++++++++++++---
->  1 file changed, 29 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 389e600df233..b82f40e701ab 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_H
->  #define _LINUX_PM_H
->
-> +#include <linux/export.h>
->  #include <linux/list.h>
->  #include <linux/workqueue.h>
->  #include <linux/spinlock.h>
-> @@ -357,14 +358,39 @@ struct dev_pm_ops {
->  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->  #endif
->
-> +#define _DEFINE_DEV_PM_OPS(name, \
-> +                          suspend_fn, resume_fn, \
-> +                          runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +const struct dev_pm_ops name = { \
-> +       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +       RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +}
-> +
->  /*
->   * Use this if you want to use the same suspend and resume callbacks for suspend
->   * to RAM and hibernation.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -const struct dev_pm_ops name = { \
-> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> -}
-> +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-> +
-> +#ifdef CONFIG_PM
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +                          runtime_resume_fn, idle_fn, sec) \
-> +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +                          runtime_resume_fn, idle_fn); \
-> +       _EXPORT_SYMBOL(name, sec)
-> +#else
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +                          runtime_resume_fn, idle_fn, sec) \
-> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> +                                        resume_fn, runtime_suspend_fn, \
-> +                                        runtime_resume_fn, idle_fn)
-> +#endif
-> +
-> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
->
->  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> --
-> 2.34.1
->
+Quoting Mark Brown:
+
+"That means that if the device gets freed we'll end up with the old debugfs
+file hanging around pointing at nothing.
+...
+To be more explicit this means we need a call to regmap_debugfs_exit()
+which will clean up all the existing debugfs stuff before we loose
+references to it."
+
+Call regmap_debugfs_exit() prior to regmap_debugfs_init() to fix
+the problem.
+
+Tested on i.MX6Q and i.MX6SX boards.
+
+Fixes: cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when calling regmap_attach_dev")
+Suggested-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+Changes since v2:
+- Use regmap_debugfs_exit() as suggested by Mark.
+
+ drivers/base/regmap/regmap.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+index 21a0c2562ec0..f7811641ed5a 100644
+--- a/drivers/base/regmap/regmap.c
++++ b/drivers/base/regmap/regmap.c
+@@ -647,6 +647,7 @@ int regmap_attach_dev(struct device *dev, struct regmap *map,
+ 	if (ret)
+ 		return ret;
+ 
++	regmap_debugfs_exit(map);
+ 	regmap_debugfs_init(map);
+ 
+ 	/* Add a devres resource for dev_get_regmap() */
+-- 
+2.25.1
+

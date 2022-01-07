@@ -2,148 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CA8486F52
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05994486F55
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344915AbiAGBAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbiAGA77 (ORCPT
+        id S1344970AbiAGBAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:00:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47148 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236544AbiAGBAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:59:59 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD10C061245;
-        Thu,  6 Jan 2022 16:59:59 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id z9so15937398edm.10;
-        Thu, 06 Jan 2022 16:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=193b4YHjs1buOAzSFIPKTBZORcA2cD4by1MwizuSpRM=;
-        b=kdBniaYQywtcRRDuNzzDVpl7lTixQ9Y1NbYlEmhfMQ2i4+aRsC1vE7CJKKX9g584zh
-         ZeL+Lo6hCKp4kL+AABTpvw0/wgU0PdG/e1Yn9XcaewePQVwXm7858s6paiywqz5HBVtb
-         sfcklQ3rSwXeeCWlt6xlXPXkacmQPqNzWiR27wkjPzqpiVyZNLtqUhbBRI5PMO/v863B
-         fu0pc2kBoDy23xSQQZ4de7w/peDUxNPBdLtM1ciYJ98fA3UzdSMsTrmeSejriUCh/epT
-         etPk4bp0MDizzZS98nVcRM9YoMztLIPOWXrRgahqL9m5pAIpqKZzMpntFvnlrOb+ElbB
-         mL8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=193b4YHjs1buOAzSFIPKTBZORcA2cD4by1MwizuSpRM=;
-        b=wHav4z5xYXcmbYkU6uN+PE4crKiZG7dZ9mFwzA2xkFCk/BdQBNCk8/Vni4ZGaW/5Yi
-         vB0eA05qBjg3v9R6vsoCYmKSMeprTLxGPfv6OrRl4TC9njIr7M0V/XLPgVEEhbELQrhX
-         EqGTd7Q7P3cZPHW4NXnYbMvJ3WdikeUQIThU0iSma0DXNZyAmojeyVeBalCsW47wFiIk
-         mX3jszRChEn95g05oNQEoUXbnhM6juN4G0zHPPSJlcmYEOjOrYjaFwawy2c0kWWHx7JK
-         L6xtFGrT9igGalhtj3f8MFdFFdO/foGZat4n7uTp5lQ5WoQnQn0Wv53Zghuvj742mdWf
-         1LdQ==
-X-Gm-Message-State: AOAM53373zDa1LzOm+nEBWNXGD53Y0gK6Hl/7WlUUzbv168N5H5wHQqm
-        ecZtPG0OwlhlIxFFN5nZKsnM5cOylu3on/BIWODmmFcafvw=
-X-Google-Smtp-Source: ABdhPJxJBcDiJq48nZOyiyf4PNZ9r4ZiJ6Rd1Q02GkfapSXgfzOPLAW687ZRqwj1yOM2vNvSGQt923kieCZkk7Xqono=
-X-Received: by 2002:a17:906:4793:: with SMTP id cw19mr51347677ejc.15.1641517197290;
- Thu, 06 Jan 2022 16:59:57 -0800 (PST)
+        Thu, 6 Jan 2022 20:00:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A17961E9B;
+        Fri,  7 Jan 2022 01:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50683C36AE3;
+        Fri,  7 Jan 2022 01:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641517220;
+        bh=dWaphkxeosDnzOLIsXfGqQdCs0GB28cQL553hwjSiig=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ThklsKuo/uGCPpetV9gMpmKJrCNmeREMHr/2WI1G985/9PkmZSb0RduCS026APTmQ
+         dmum1ndOVGJxFIwzeIPoIoPg3HXWpmrWNALqwtzCtMnvlxQKLjV4aD0wdGClazr7HU
+         dMTFXgjr2uIL0Hcm6te3Qom1mmhMOORI2lJ1iRkNcm3AvVvQNeVjqiJZf55a1d1/Wz
+         hC+yAGRsK6mT91vVIGj3ZGR25XnJRRtKWQeWFW8z+mOzYKWUeuHH52jycGKSR182NM
+         NMQ7YJhwD3GF6VyvqSeFx4gGPip6+IQuiu8BF4hcwPsR9HhM2fupq+NthIIs90YI64
+         fnLr59fpDjF5Q==
+Date:   Thu, 6 Jan 2022 17:00:19 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Aring <alex.aring@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Nicolas Schodet <nico@ni.fr.eu.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
+Message-ID: <20220106170019.730f45e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+        <20211222155743.256280-13-miquel.raynal@bootlin.com>
+        <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
+        <Ycx0mwQcFsmVqWVH@ni.fr.eu.org>
+        <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
+        <CAB_54W6gHE1S9Q+-SVbrnAWPxBxnvf54XVTCmddtj8g-bZzMRA@mail.gmail.com>
+        <20220104191802.2323e44a@xps13>
+        <CAB_54W5quZz8rVrbdx+cotTRZZpJ4ouRDZkxeW6S1L775Si=cw@mail.gmail.com>
+        <20220105215551.1693eba4@xps13>
+        <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211230062905.586150-1-luo.penghao@zte.com.cn>
- <YdZzt0LF/ajTGNXo@mit.edu> <20220106105843.comh4jk3krxppgbp@work>
-In-Reply-To: <20220106105843.comh4jk3krxppgbp@work>
-From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
-Date:   Thu, 6 Jan 2022 16:59:46 -0800
-Message-ID: <CAD+ocbyF=9pskuSRono-hAg2mEzEmCOD30oFGYW8piQ=BjwhYw@mail.gmail.com>
-Subject: Re: [PATCH linux] ext4: Delete useless ret assignment
-To:     Lukas Czerner <lczerner@redhat.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, cgel.zte@gmail.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First of all thanks for catching this. Yeah, I think the right thing
-to do here is to return the return value up to the caller. Also, I
-agree with Lukas, we should only set fc_modified_inodes_size if the
-allocation succeeds. Luo, would you be okay updating the patch to
-include these changes?
+On Wed, 5 Jan 2022 19:38:12 -0500 Alexander Aring wrote:
+> > Also, just for the record,
+> > - should I keep copying the netdev list for v2?  
+> 
+> yes, why not.
 
-Thanks,
-Harshad
-
-On Thu, Jan 6, 2022 at 2:58 AM Lukas Czerner <lczerner@redhat.com> wrote:
->
-> On Wed, Jan 05, 2022 at 11:44:39PM -0500, Theodore Ts'o wrote:
-> > On Thu, Dec 30, 2021 at 06:29:05AM +0000, cgel.zte@gmail.com wrote:
-> > > From: luo penghao <luo.penghao@zte.com.cn>
-> > >
-> > > The assignments in these two places will be overwritten by new
-> > > assignments later, so they should be deleted.
-> > >
-> > > The clang_analyzer complains as follows:
-> > >
-> > > fs/ext4/fast_commit.c
-> > >
-> > > Value stored to 'ret' is never read
-> >
-> > I suspect the right answer here is that we *should* be checking the
-> > return value, and reflecting the error up to caller, if appropriate.
-> >
-> > Harshad, what do you think?
->
-> Indeed we absolutely *must* be checking the return value and bail out
-> otherwise we risk overwriting kernel memory among other possible
-> problems.
->
-> See ext4_fc_record_modified_inode() where we increment
-> fc_modified_inodes_size before the actual reallocation which in case of
-> allocation failure will leave us with elevated fc_modified_inodes_size
-> and the next call to ext4_fc_record_modified_inode() can modify
-> fc_modified_inodes[] out of bounds.
->
-> In addition to checking the return value we should probably also move
-> incrementing the fc_modified_inodes_size until after the successful
-> reallocation in order to avoid such pitfalls.
->
-> Thanks!
-> -Lukas
->
-> >
-> >                                       - Ted
-> >
-> > >
-> > > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > > Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
-> > > ---
-> > >  fs/ext4/fast_commit.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> > > index 8ea5a81..8d5d044 100644
-> > > --- a/fs/ext4/fast_commit.c
-> > > +++ b/fs/ext4/fast_commit.c
-> > > @@ -1660,7 +1660,7 @@ static int ext4_fc_replay_add_range(struct super_block *sb,
-> > >             return 0;
-> > >     }
-> > >
-> > > -   ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
-> > > +   ext4_fc_record_modified_inode(sb, inode->i_ino);
-> > >
-> > >     start = le32_to_cpu(ex->ee_block);
-> > >     start_pblk = ext4_ext_pblock(ex);
-> > > @@ -1785,7 +1785,7 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
-> > >             return 0;
-> > >     }
-> > >
-> > > -   ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
-> > > +   ext4_fc_record_modified_inode(sb, inode->i_ino);
-> > >
-> > >     jbd_debug(1, "DEL_RANGE, inode %ld, lblk %d, len %d\n",
-> > >                     inode->i_ino, le32_to_cpu(lrange.fc_lblk),
-> > > --
-> > > 2.15.2
-> > >
-> > >
-> >
->
+On the question of lists copied it may make sense to CC linux-wireless@
+in case they have some precedent to share, and drop linux-kernel@.

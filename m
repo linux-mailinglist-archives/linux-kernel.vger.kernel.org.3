@@ -2,78 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909FE487674
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC03F48766D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347117AbiAGLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:25:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40254 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347093AbiAGLZm (ORCPT
+        id S1347088AbiAGLZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:25:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58662 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234491AbiAGLZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:25:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641554741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LihP/f7kkQcoH5EB358WZj2ActRS2QGX7JqNWfqK9rU=;
-        b=gFvKGa1wWIPYVY+Frs5OfyVJxbZzmB3ATD13/EuvOAiFFafKl1AfK946JVFd1zwa5OPAtj
-        fbLK/terXisLsMuLBD2G3Zudyxz6daLbIx29vbsFnA9yjntGE8S+uEsRCqI1xZLQeChNIF
-        RhFw0UpnYPeZTJo/NZ8JfOFhyPBHvxg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-25-ujFKLBTZNaCuaYSpYvGkxQ-1; Fri, 07 Jan 2022 06:25:33 -0500
-X-MC-Unique: ujFKLBTZNaCuaYSpYvGkxQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 7 Jan 2022 06:25:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0C3041800D50;
-        Fri,  7 Jan 2022 11:25:31 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C1DF02A189;
-        Fri,  7 Jan 2022 11:25:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <94b5163b0652c6106aa01a0f4c03bdf57c0a7e71.camel@kernel.org>
-References: <94b5163b0652c6106aa01a0f4c03bdf57c0a7e71.camel@kernel.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021552299.640689.10578652796777392062.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 46/68] cachefiles: Mark a backing file in use with an inode flag
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C55A61491
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 11:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D9EC36AE0;
+        Fri,  7 Jan 2022 11:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641554728;
+        bh=NMdqiP2YC/upM7BO54bfCKqBt+mzx1tNSThOlVG9NWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rHlBxW3gO02OmibTp6gW7ppQrTxm7SYzl5OI8tvxjhd1CzMPhq61R30weQ0F2AC95
+         26wznfgRog5Wu1jWwjU4E3fsdi0Meg181llDvH5tcdELo4LCIGAF/JqpHIMq0eKY41
+         12C2NfpHgl1xN8rcFQ5dmKvjGs6kykxiqWf+hW9M=
+Date:   Fri, 7 Jan 2022 12:25:25 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Michael Straube <straube.linux@gmail.com>,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/19] staging: r8188eu: release_firmware is not called
+ if allocation fails
+Message-ID: <YdgjJRwLjIBWVQvU@kroah.com>
+References: <20220107103620.15648-1-straube.linux@gmail.com>
+ <20220107103620.15648-4-straube.linux@gmail.com>
+ <ca0548c0-b36c-98dc-3e49-b629b3d3fb6a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3149601.1641554716.1@warthog.procyon.org.uk>
-Date:   Fri, 07 Jan 2022 11:25:16 +0000
-Message-ID: <3149602.1641554716@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca0548c0-b36c-98dc-3e49-b629b3d3fb6a@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
+On Fri, Jan 07, 2022 at 02:15:19PM +0300, Pavel Skripkin wrote:
+> Hi Michael,
+> 
+> On 1/7/22 13:36, Michael Straube wrote:
+> > In function load_firmware() release_firmware() is not called if the
+> > allocation of pFirmware->szFwBuffer fails or if fw->size is greater
+> > than FW_8188E_SIZE.
+> > 
+> > Move the call to release_firmware() to the exit label at the end of
+> > the function to fix this.
+> > 
+> > Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> > ---
+> >   drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> > index dc41682fd8d6..cfafbb6c42f7 100644
+> > --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> > +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> > @@ -538,10 +538,10 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
+> >   	}
+> >   	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
+> >   	pFirmware->ulFwLength = fw->size;
+> > -	release_firmware(fw);
+> >   	dev_dbg(device, "!bUsedWoWLANFw, FmrmwareLen:%d+\n", pFirmware->ulFwLength);
+> >   Exit:
+> > +	release_firmware(fw);
+> >   	return rtStatus;
+> >   }
+> 
+> 
+> This patch looks like a bug fix and it should go to stable kernels as well.
+> The problem is this patch is made on top of 2 previous clean up patches, so
+> it can't go to stable as is.
+> 
+> I think, the less painful way is to move this patch on the first place in
+> this series. On the other hand you can just resend this one separately.
+> 
+> 
+> Or, maybe, Greg knows some magic that will help here, we can wait him before
+> you resend 20 patch series :)
 
-> Probably, this patch should be merged with #38. The commit logs are the
-> same, and they are at least somewhat related.
+It's just not worth it for this staging driver, and for an allocation
+failure, to be backported here.  Allocation failures almost never happen
+in real-world situations, and if they do, they are not alone, so this
+would be the least of the problems happening here.
 
-That's not so simple, unfortunately.  Patch 46 requires bits of patches 43 and
-45 in addition to patch 38 and patch 39 depends on patch 38.
+So no need to care about it, I can take this as-is.
 
-David
+thanks,
 
+greg k-h

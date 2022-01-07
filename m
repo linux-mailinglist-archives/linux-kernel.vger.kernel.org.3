@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32726487069
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D42A487068
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345428AbiAGCbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345422AbiAGCbb (ORCPT
+        id S1345420AbiAGCbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:31:21 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:47483 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345392AbiAGCbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:31:31 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA5AC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:31:31 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id y9so4189223pgr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T9zD8rbf6qAqQOxdkAoI37yqWQ/rdxMv8DCOF1Su0rA=;
-        b=eBAGcmqHPUySjwBo0c8y0Aj1cvcnAhFIB84dAcxvbmc3oAPkiImoJPQ75rX3hqlhBi
-         Zv3UIMa4j5guCaG4etDZciJ+I9uPpohxPy2gI/qHvDSC5TbjYweBp0y66IK459695Du0
-         hK7CR8psWH0NlIH4nzSgEacQFHpOxK/cmW1s0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T9zD8rbf6qAqQOxdkAoI37yqWQ/rdxMv8DCOF1Su0rA=;
-        b=5/V8Rd0W/wfIikd+YHvnMJno7JHn3bT0LCm472QKO9UkKLHx0S+EXkH8+hzZ2ETYap
-         bFRIG0+24UyHduN0qBL9yEwTPlOopavgGfQxg8GlXjsm4YAUDu/fvNX4FfcHvFa/vjAT
-         2i4/yuGKKlNJSUfhA4LHCgVh+WOqLIabcVaSNAQdPOjg3QfiG/3lCW2zO+knMmfEQeZF
-         gJbZShW9ifvgJY7e8oSZAo5iLfyD2eEeZVj9vgw4yTVaMdTsAn7p/Tvqckd4mQWthAeW
-         TOkKIksBM+S8KChe+uxb1ciQNutamIjKGPMRg1VhGISooJ8hcPMUs2o/Vx9ljedso+IN
-         6nig==
-X-Gm-Message-State: AOAM530YlAmWwbWq3evtAdmfidJvkEoonWaLXgJSlnVjl9oXsWy4XFdl
-        AiMpvDIhVM+R4mhvX5IQXI7ROcQRqSTKyQ==
-X-Google-Smtp-Source: ABdhPJxNsIGDWP/HrcbVTJ5pOscXT1zsV2PDTzSOMs60WRPb9n8fAFhu+PztANXdrBPmrVuEzUypnQ==
-X-Received: by 2002:a05:6a00:10d5:b0:4bc:a0eb:c6a0 with SMTP id d21-20020a056a0010d500b004bca0ebc6a0mr22421007pfu.70.1641522691035;
-        Thu, 06 Jan 2022 18:31:31 -0800 (PST)
-Received: from localhost ([2401:fa00:1:10:6942:d6a2:95c9:2ac8])
-        by smtp.gmail.com with UTF8SMTPSA id z2sm3035795pge.86.2022.01.06.18.31.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 18:31:30 -0800 (PST)
-From:   Knox Chiou <knoxchiou@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Knox Chiou <knoxchiou@chromium.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH] nvmem: qfprom: Increase fuse blow timeout to prevent write fail.
-Date:   Fri,  7 Jan 2022 10:31:11 +0800
-Message-Id: <20220107103056.1.Ifc6ce6bb655ddb8ebbb0f340fcaaa58369bb009c@changeid>
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+        Thu, 6 Jan 2022 21:31:20 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Md6ZB-1mVV8X2suh-00aALI; Fri, 07 Jan 2022 03:31:18 +0100
+Received: by mail-wm1-f51.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso2175544wme.1;
+        Thu, 06 Jan 2022 18:31:18 -0800 (PST)
+X-Gm-Message-State: AOAM532YdSewgeC5zVPrxViB+szycqARFioOuqPwKzF7DOfngCSxl9qr
+        ux5u6i7e/9Y1tCKBxc/uR9AN+G1ViZPMoFpRC+M=
+X-Google-Smtp-Source: ABdhPJzPjYESERWywY2r/vy27PoJsyUe/sO9mYrCqlCb0tB5N5fglYx3siWs052mww9CA4oxRJdgYwk0eCv1ZWNvEtA=
+X-Received: by 2002:a7b:c190:: with SMTP id y16mr8685720wmi.35.1641522678363;
+ Thu, 06 Jan 2022 18:31:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220106225716.7425-1-paskripkin@gmail.com>
+In-Reply-To: <20220106225716.7425-1-paskripkin@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 6 Jan 2022 21:31:15 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a1tJTcFKfSSXzXRM1NLYacjf=-RYbz54HATxv0WSfu+qw@mail.gmail.com>
+Message-ID: <CAK8P3a1tJTcFKfSSXzXRM1NLYacjf=-RYbz54HATxv0WSfu+qw@mail.gmail.com>
+Subject: Re: [PATCH] net: mcs7830: handle usb read errors properly
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, tanghui20@huawei.com,
+        Andrew Lunn <andrew@lunn.ch>, Oliver Neukum <oneukum@suse.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:SIguIQGIepHyKd+m+UmjqM0lRVpbV/pQlunQrt5W39xZwXGZejK
+ +pdbkrelzYFXvkwxnV+7keszsCKDfb8zBZ73QcFlEJq35pqY5bBpXX3rNrYWyYlTjwvWQQB
+ BpwLhDpbmw+AuxgzABPWSHKb8rstA19x/hLDG0VjrAQ0pX8IDNfw4hqDPA0CLudaPG6alDA
+ 1x0izyfMDFGCPJQZgmOIw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZtxTtvMqY9U=:tIA7LuSFE3AIcuJ877bcvW
+ g27NHZ1Xb22IAaSdHlqo8g9lgxrsRlRv5uvd+AjlWjJLQTDIj9DzYIMK4NNNXyEdiWPAhEFnm
+ ixlGlP+d1HUeWeBzZufLPtJUe0vc8rQGVtCbyDKzxc85GUY9RwGcskLi8onNGVJXYU1ZcM4MN
+ PPAUEXHjIDhLLUGbTqLcY0yRWlF7azUJEGjyAxRz9G2YDq6sIIIqrzPiZZz/lJFDBe9U9Hsi3
+ 58erfT9fCQG7XvbBFxCGMneqedJERFMcrfLcDcmF0KM4DX0Okaie3zIUT8MvEukfIX/TdonZO
+ 3OPeY/L1M36fKxD/ViykKhw1BDM1MDQPK2tlQV66+OQnMGas33G0fKsazCyGS+nqOrsAl7pyr
+ 8yr6fM3YUZ/6+MiWxYlSfWomCVHvdKjzzZjT/a8rLs3uw9zqBWZXYE/8SM4hyeeYXtO7yUREa
+ kUMyugLDGl+kl2+hOVzWMIzpBCwe6ONi90xWNo4wiHoayd1XIBOjTJgsiACvpeVe5krO5WNQk
+ hNeVSG2OvceUMQK/IhmCE4O0N/ORUMp1xeW3KV9zgm5dV99IM7wMt+wd8RDoL8uyj8GGImMeM
+ RjZIuzhzSc3cbzZaEXaImeeN33QNor03IVbiWPxPpNulyDi6JbDCGZBiZ7iqJmtXgDsy/z/Rz
+ hZN6sR5T+CPq9tDmQNADLtFzH+2/tZ3rHdcP+cGD0LsmcwzxtamtsMGDzLfsFIgSmj7kKr/El
+ ttiwKbEdoIMDxO5qPnkDxZDyB2BNu1JHJl61omPCdQorkLfYjr/qyKYVFtDKWDAedW72cIGzd
+ c0iXHeTZiqzLPScJWWTudMYk0ib3dmCvP+EIsHSYBurfSwMWHs=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sc7180 blow fuses got slightly chances to hit qfprom_reg_write timeout.
-Current timeout is simply too low. Since blowing fuses is a
-very rare operation, so the risk associated with overestimating this
-number is low.
-Increase fuse blow timeout from 1ms to 10ms.
+On Thu, Jan 6, 2022 at 5:57 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Syzbot reported uninit value in mcs7830_bind(). The problem was in
+> missing validation check for bytes read via usbnet_read_cmd().
+>
+> usbnet_read_cmd() internally calls usb_control_msg(), that returns
+> number of bytes read. Code should validate that requested number of bytes
+> was actually read.
+>
+> So, this patch adds missing size validation check inside
+> mcs7830_get_reg() to prevent uninit value bugs
+>
+> CC: Arnd Bergmann <arnd@arndb.de>
+> Reported-and-tested-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+> Fixes: 2a36d7083438 ("USB: driver for mcs7830 (aka DeLOCK) USB ethernet adapter")
 
-Signed-off-by: Knox Chiou <knoxchiou@chromium.org>
----
+Looks good to me.
 
- drivers/nvmem/qfprom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/drivers/nvmem/qfprom.c b/drivers/nvmem/qfprom.c
-index c500d6235bf6b..1840d400fb53c 100644
---- a/drivers/nvmem/qfprom.c
-+++ b/drivers/nvmem/qfprom.c
-@@ -22,7 +22,7 @@
- 
- /* Amount of time required to hold charge to blow fuse in micro-seconds */
- #define QFPROM_FUSE_BLOW_POLL_US	100
--#define QFPROM_FUSE_BLOW_TIMEOUT_US	1000
-+#define QFPROM_FUSE_BLOW_TIMEOUT_US	10000
- 
- #define QFPROM_BLOW_STATUS_OFFSET	0x048
- #define QFPROM_BLOW_STATUS_BUSY		0x1
--- 
-2.34.1.448.ga2b2bfdf31-goog
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>
+> @Arnd, I am not sure about mcs7830_get_rev() function.
+>
+> Is get_reg(22, 2) == 1 valid read? If so, I think, we should call
+> usbnet_read_cmd() directly here, since other callers care only about
+> negative error values.
 
+I have no idea, I never had a datasheet for this device, only
+the hardware I bought cheaply and vendor source code I
+found somewhere on the net, and that was 16 years ago.
+
+I would not expect the hardware to ever return less data than
+was asked for, so any length checking would only have to
+account for attackers that fake this device.
+
+         Arnd

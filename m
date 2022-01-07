@@ -2,25 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6209248750A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820D8487501
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346613AbiAGJwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 04:52:21 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48940 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237143AbiAGJwH (ORCPT
+        id S1346560AbiAGJwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 04:52:14 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:59000 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237161AbiAGJwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Jan 2022 04:52:07 -0500
-X-UUID: 051e503f8cca4ea4ad27c6bf3376fd25-20220107
-X-UUID: 051e503f8cca4ea4ad27c6bf3376fd25-20220107
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+X-UUID: 2a098157fe644756863124aef37dd0e1-20220107
+X-UUID: 2a098157fe644756863124aef37dd0e1-20220107
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2091467111; Fri, 07 Jan 2022 17:52:02 +0800
+        with ESMTP id 1403671878; Fri, 07 Jan 2022 17:52:03 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 7 Jan 2022 17:52:01 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 7 Jan 2022 17:52:02 +0800
 Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Fri, 7 Jan 2022 17:52:01 +0800
@@ -46,9 +47,9 @@ CC:     Fan Chen <fan.chen@mediatek.com>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v21 4/8] soc: mediatek: SVS: add monitor mode
-Date:   Fri, 7 Jan 2022 17:51:56 +0800
-Message-ID: <20220107095200.4389-5-roger.lu@mediatek.com>
+Subject: [PATCH v21 5/8] soc: mediatek: SVS: add debug commands
+Date:   Fri, 7 Jan 2022 17:51:57 +0800
+Message-ID: <20220107095200.4389-6-roger.lu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220107095200.4389-1-roger.lu@mediatek.com>
 References: <20220107095200.4389-1-roger.lu@mediatek.com>
@@ -59,483 +60,436 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SVS monitor mode is based on different thermal temperature
-to provide suitable SVS bank voltages.
+The purpose of SVS is to help find the suitable voltages
+for DVFS. Therefore, if SVS bank voltages are concerned
+to be wrong, we can adjust SVS bank voltages by this patch.
 
 Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 ---
- drivers/soc/mediatek/mtk-svs.c | 253 ++++++++++++++++++++++++++++++++-
- 1 file changed, 247 insertions(+), 6 deletions(-)
+ drivers/soc/mediatek/mtk-svs.c | 321 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 318 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index fc7e2ee44a92..042c6e8e9069 100644
+index 042c6e8e9069..93cdaecadd6d 100644
 --- a/drivers/soc/mediatek/mtk-svs.c
 +++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -25,6 +25,7 @@
+@@ -6,6 +6,7 @@
+ #include <linux/bits.h>
+ #include <linux/clk.h>
+ #include <linux/completion.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+@@ -23,6 +24,7 @@
+ #include <linux/pm_qos.h>
+ #include <linux/pm_runtime.h>
  #include <linux/regulator/consumer.h>
++#include <linux/seq_file.h>
  #include <linux/slab.h>
  #include <linux/spinlock.h>
-+#include <linux/thermal.h>
- 
- /* svs bank 1-line sw id */
- #define SVSB_CPU_LITTLE			BIT(0)
-@@ -36,6 +37,7 @@
- #define SVSB_MODE_ALL_DISABLE		0
- #define SVSB_MODE_INIT01		BIT(1)
- #define SVSB_MODE_INIT02		BIT(2)
-+#define SVSB_MODE_MON			BIT(3)
- 
- /* svs bank volt flags */
- #define SVSB_INIT01_PD_REQ		BIT(0)
-@@ -53,11 +55,16 @@
- #define SVSB_EN_INIT01			0x1
- #define SVSB_EN_INIT02			0x5
- #define SVSB_EN_MASK			0x7
-+#define SVSB_EN_MON			0x2
- #define SVSB_EN_OFF			0x0
- #define SVSB_INTEN_INIT0x		0x00005f01
-+#define SVSB_INTEN_MONVOPEN		0x00ff0000
- #define SVSB_INTSTS_CLEAN		0x00ffffff
- #define SVSB_INTSTS_COMPLETE		0x1
-+#define SVSB_INTSTS_MONVOP		0x00ff0000
- #define SVSB_RUNCONFIG_DEFAULT		0x80000000
-+#define SVSB_TEMP_LOWER_BOUND		0xb2
-+#define SVSB_TEMP_UPPER_BOUND		0x64
+ #include <linux/thermal.h>
+@@ -68,6 +70,39 @@
  
  static DEFINE_SPINLOCK(svs_lock);
  
-@@ -66,6 +73,7 @@ static DEFINE_SPINLOCK(svs_lock);
-  * @SVSB_PHASE_ERROR: svs bank encounters unexpected condition
-  * @SVSB_PHASE_INIT01: svs bank basic init for data calibration
-  * @SVSB_PHASE_INIT02: svs bank can provide voltages to opp table
-+ * @SVSB_PHASE_MON: svs bank can provide voltages with thermal effect
-  * @SVSB_PHASE_MAX: total number of svs bank phase (debug purpose)
-  *
-  * Each svs bank has its own independent phase and we enable each svs bank by
-@@ -73,12 +81,13 @@ static DEFINE_SPINLOCK(svs_lock);
-  * condition, it will fire an irq (PHASE_ERROR) to inform svs software.
-  *
-  * svs bank general phase-enabled order:
-- * SVSB_PHASE_INIT01 -> SVSB_PHASE_INIT02
-+ * SVSB_PHASE_INIT01 -> SVSB_PHASE_INIT02 -> SVSB_PHASE_MON
-  */
- enum svsb_phase {
- 	SVSB_PHASE_ERROR = 0,
- 	SVSB_PHASE_INIT01,
- 	SVSB_PHASE_INIT02,
-+	SVSB_PHASE_MON,
- 	SVSB_PHASE_MAX,
- };
- 
-@@ -209,9 +218,11 @@ static const u32 svs_regs_v2[] = {
-  * @probe: svs platform probe function pointer
-  * @irqflags: svs platform irq settings flags
-  * @efuse_max: total number of svs efuse
-+ * @tefuse_max: total number of thermal efuse
-  * @regs: svs platform registers map
-  * @bank_max: total number of svs banks
-  * @efuse: svs efuse data received from NVMEM framework
-+ * @tefuse: thermal efuse data received from NVMEM framework
-  */
- struct svs_platform {
- 	char *name;
-@@ -224,9 +235,11 @@ struct svs_platform {
- 	int (*probe)(struct svs_platform *svsp);
- 	unsigned long irqflags;
- 	size_t efuse_max;
-+	size_t tefuse_max;
- 	const u32 *regs;
- 	u32 bank_max;
- 	u32 *efuse;
-+	u32 *tefuse;
- };
- 
++#define debug_fops_ro(name)						\
++	static int svs_##name##_debug_open(struct inode *inode,		\
++					   struct file *filp)		\
++	{								\
++		return single_open(filp, svs_##name##_debug_show,	\
++				   inode->i_private);			\
++	}								\
++	static const struct file_operations svs_##name##_debug_fops = {	\
++		.owner = THIS_MODULE,					\
++		.open = svs_##name##_debug_open,			\
++		.read = seq_read,					\
++		.llseek = seq_lseek,					\
++		.release = single_release,				\
++	}
++
++#define debug_fops_rw(name)						\
++	static int svs_##name##_debug_open(struct inode *inode,		\
++					   struct file *filp)		\
++	{								\
++		return single_open(filp, svs_##name##_debug_show,	\
++				   inode->i_private);			\
++	}								\
++	static const struct file_operations svs_##name##_debug_fops = {	\
++		.owner = THIS_MODULE,					\
++		.open = svs_##name##_debug_open,			\
++		.read = seq_read,					\
++		.write = svs_##name##_debug_write,			\
++		.llseek = seq_lseek,					\
++		.release = single_release,				\
++	}
++
++#define svs_dentry_data(name)	{__stringify(name), &svs_##name##_debug_fops}
++
  /**
-@@ -241,6 +254,7 @@ struct svs_platform {
-  * @get_volts: function pointer to get bank voltages
-  * @name: bank name
-  * @buck_name: regulator name
-+ * @tzone_name: thermal zone name
+  * enum svsb_phase - svs bank phase enumeration
+  * @SVSB_PHASE_ERROR: svs bank encounters unexpected condition
+@@ -258,6 +293,8 @@ struct svs_platform {
   * @suspended: suspend flag of this bank
   * @phase: bank current phase
   * @volt_od: bank voltage overdrive
-@@ -270,6 +284,13 @@ struct svs_platform {
-  * @sw_id: bank software identification
-  * @cpu_id: cpu core id for SVS CPU bank use only
-  * @ctl0: TS-x selection
-+ * @temp: bank temperature
-+ * @tzone_htemp: thermal zone high temperature threshold
-+ * @tzone_htemp_voffset: thermal zone high temperature voltage offset
-+ * @tzone_ltemp: thermal zone low temperature threshold
-+ * @tzone_ltemp_voffset: thermal zone low temperature voltage offset
-+ * @bts: svs efuse data
-+ * @mts: svs efuse data
-  * @bdes: svs efuse data
-  * @mdes: svs efuse data
-  * @mtdes: svs efuse data
-@@ -292,6 +313,7 @@ struct svs_bank {
- 	void (*get_volts)(struct svs_platform *svsp);
- 	char *name;
- 	char *buck_name;
-+	char *tzone_name;
++ * @voffset: bank voltage offset for debug purpose
++ * @reg_data: bank register data in different phase for debug purpose
+  * @pm_runtime_enabled_count: bank pm runtime enabled count
+  * @mode_support: bank mode support.
+  * @freq_base: reference frequency for bank init
+@@ -317,6 +354,8 @@ struct svs_bank {
  	bool suspended;
  	enum svsb_phase phase;
  	s32 volt_od;
-@@ -321,6 +343,13 @@ struct svs_bank {
- 	u32 sw_id;
- 	u32 cpu_id;
- 	u32 ctl0;
-+	u32 temp;
-+	u32 tzone_htemp;
-+	u32 tzone_htemp_voffset;
-+	u32 tzone_ltemp;
-+	u32 tzone_ltemp_voffset;
-+	u32 bts;
-+	u32 mts;
- 	u32 bdes;
- 	u32 mdes;
- 	u32 mtdes;
-@@ -361,10 +390,21 @@ static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt, u32 svsb_volt_step,
- 	return (svsb_volt * svsb_volt_step) + svsb_volt_base;
- }
- 
-+static int svs_get_zone_temperature(const char *tzone_name, int *tzone_temp)
-+{
-+	struct thermal_zone_device *tzd;
-+
-+	tzd = thermal_zone_get_zone_by_name(tzone_name);
-+	if (IS_ERR(tzd))
-+		return PTR_ERR(tzd);
-+
-+	return thermal_zone_get_temp(tzd, tzone_temp);
-+}
-+
- static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
- {
--	int ret = -EPERM;
--	u32 i, svsb_volt, opp_volt;
-+	int ret = -EPERM, tzone_temp = 0;
-+	u32 i, svsb_volt, opp_volt, temp_voffset = 0;
- 
- 	mutex_lock(&svsb->lock);
- 
-@@ -378,6 +418,22 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
- 		goto unlock_mutex;
- 	}
- 
-+	/* Get thermal effect */
-+	if (svsb->phase == SVSB_PHASE_MON) {
-+		ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
-+		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
-+			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
-+			dev_err(svsb->dev, "%s: %d (0x%x), run default volts\n",
-+				svsb->tzone_name, ret, svsb->temp);
-+			svsb->phase = SVSB_PHASE_ERROR;
-+		}
-+
-+		if (tzone_temp >= svsb->tzone_htemp)
-+			temp_voffset += svsb->tzone_htemp_voffset;
-+		else if (tzone_temp <= svsb->tzone_ltemp)
-+			temp_voffset += svsb->tzone_ltemp_voffset;
-+	}
-+
- 	/* vmin <= svsb_volt (opp_volt) <= default opp voltage */
- 	for (i = 0; i < svsb->opp_count; i++) {
- 		switch (svsb->phase) {
-@@ -393,6 +449,13 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
++	s32 voffset;
++	u32 reg_data[SVSB_PHASE_MAX][SVS_REG_MAX];
+ 	u32 pm_runtime_enabled_count;
+ 	u32 mode_support;
+ 	u32 freq_base;
+@@ -444,14 +483,15 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
+ 			/* do nothing */
+ 			goto unlock_mutex;
+ 		case SVSB_PHASE_INIT02:
+-			svsb_volt = max(svsb->volt[i], svsb->vmin);
++			svsb_volt = max(svsb->volt[i] + svsb->voffset,
++					svsb->vmin);
+ 			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
  							     svsb->volt_step,
  							     svsb->volt_base);
  			break;
-+		case SVSB_PHASE_MON:
-+			svsb_volt = max(svsb->volt[i] + temp_voffset,
-+					svsb->vmin);
-+			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
-+							     svsb->volt_step,
-+							     svsb->volt_base);
-+			break;
- 		default:
- 			dev_err(svsb->dev, "unknown phase: %u\n", svsb->phase);
- 			ret = -EINVAL;
-@@ -488,7 +551,7 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
- {
- 	struct svs_bank *svsb = svsp->pbank;
- 	u32 des_char, temp_char, det_char, limit_vals;
--	u32 init2vals;
-+	u32 init2vals, ts_calcs;
- 
- 	svs_switch_bank(svsp);
- 
-@@ -529,6 +592,12 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
- 		svs_writel_relaxed(svsp, init2vals, INIT2VALS);
- 		svs_writel_relaxed(svsp, SVSB_EN_INIT02, SVSEN);
- 		break;
-+	case SVSB_PHASE_MON:
-+		ts_calcs = (svsb->bts << 12) | svsb->mts;
-+		svs_writel_relaxed(svsp, ts_calcs, TSCALCS);
-+		svs_writel_relaxed(svsp, SVSB_INTEN_MONVOPEN, INTEN);
-+		svs_writel_relaxed(svsp, SVSB_EN_MON, SVSEN);
-+		break;
- 	default:
- 		dev_err(svsb->dev, "requested unknown target phase: %u\n",
- 			target_phase);
-@@ -548,6 +617,7 @@ static inline void svs_error_isr_handler(struct svs_platform *svsp)
- 	dev_err(svsb->dev, "SMSTATE0 = 0x%08x, SMSTATE1 = 0x%08x\n",
- 		svs_readl_relaxed(svsp, SMSTATE0),
- 		svs_readl_relaxed(svsp, SMSTATE1));
-+	dev_err(svsb->dev, "TEMP = 0x%08x\n", svs_readl_relaxed(svsp, TEMP));
- 
- 	svsb->mode_support = SVSB_MODE_ALL_DISABLE;
- 	svsb->phase = SVSB_PHASE_ERROR;
-@@ -599,6 +669,17 @@ static inline void svs_init02_isr_handler(struct svs_platform *svsp)
- 	svs_writel_relaxed(svsp, SVSB_INTSTS_COMPLETE, INTSTS);
+ 		case SVSB_PHASE_MON:
+-			svsb_volt = max(svsb->volt[i] + temp_voffset,
+-					svsb->vmin);
++			svsb_volt = max(svsb->volt[i] + temp_voffset +
++					svsb->voffset, svsb->vmin);
+ 			opp_volt = svs_bank_volt_to_opp_volt(svsb_volt,
+ 							     svsb->volt_step,
+ 							     svsb->volt_base);
+@@ -480,6 +520,257 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
+ 	return ret;
  }
  
-+static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
++static int svs_dump_debug_show(struct seq_file *m, void *p)
 +{
-+	struct svs_bank *svsb = svsp->pbank;
-+
-+	svsb->phase = SVSB_PHASE_MON;
-+	svsb->temp = svs_readl_relaxed(svsp, TEMP) & GENMASK(7, 0);
-+	svsb->get_volts(svsp);
-+
-+	svs_writel_relaxed(svsp, SVSB_INTSTS_MONVOP, INTSTS);
-+}
-+
- static irqreturn_t svs_isr(int irq, void *data)
- {
- 	struct svs_platform *svsp = data;
-@@ -629,6 +710,8 @@ static irqreturn_t svs_isr(int irq, void *data)
- 		else if (int_sts == SVSB_INTSTS_COMPLETE &&
- 			 svs_en == SVSB_EN_INIT02)
- 			svs_init02_isr_handler(svsp);
-+		else if (int_sts & SVSB_INTSTS_MONVOP)
-+			svs_mon_mode_isr_handler(svsp);
- 		else
- 			svs_error_isr_handler(svsp);
- 
-@@ -858,6 +941,25 @@ static int svs_init02(struct svs_platform *svsp)
- 	return 0;
- }
- 
-+static void svs_mon_mode(struct svs_platform *svsp)
-+{
++	struct svs_platform *svsp = (struct svs_platform *)m->private;
 +	struct svs_bank *svsb;
-+	unsigned long flags;
-+	u32 idx;
++	unsigned long svs_reg_addr;
++	u32 idx, i, j, bank_id;
 +
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
++	for (i = 0; i < svsp->efuse_max; i++)
++		if (svsp->efuse && svsp->efuse[i])
++			seq_printf(m, "M_HW_RES%d = 0x%08x\n",
++				   i, svsp->efuse[i]);
++
++	for (i = 0; i < svsp->tefuse_max; i++)
++		if (svsp->tefuse)
++			seq_printf(m, "THERMAL_EFUSE%d = 0x%08x\n",
++				   i, svsp->tefuse[i]);
++
++	for (bank_id = 0, idx = 0; idx < svsp->bank_max; idx++, bank_id++) {
 +		svsb = &svsp->banks[idx];
 +
-+		if (!(svsb->mode_support & SVSB_MODE_MON))
-+			continue;
++		for (i = SVSB_PHASE_INIT01; i <= SVSB_PHASE_MON; i++) {
++			seq_printf(m, "Bank_number = %u\n", bank_id);
 +
++			if (i == SVSB_PHASE_INIT01 || i == SVSB_PHASE_INIT02)
++				seq_printf(m, "mode = init%d\n", i);
++			else if (i == SVSB_PHASE_MON)
++				seq_puts(m, "mode = mon\n");
++			else
++				seq_puts(m, "mode = error\n");
++
++			for (j = DESCHAR; j < SVS_REG_MAX; j++) {
++				svs_reg_addr = (unsigned long)(svsp->base +
++							       svsp->regs[j]);
++				seq_printf(m, "0x%08lx = 0x%08x\n",
++					   svs_reg_addr, svsb->reg_data[i][j]);
++			}
++		}
++	}
++
++	return 0;
++}
++
++debug_fops_ro(dump);
++
++static int svs_enable_debug_show(struct seq_file *m, void *v)
++{
++	struct svs_bank *svsb = (struct svs_bank *)m->private;
++
++	switch (svsb->phase) {
++	case SVSB_PHASE_ERROR:
++		seq_puts(m, "disabled\n");
++		break;
++	case SVSB_PHASE_INIT01:
++		seq_puts(m, "init1\n");
++		break;
++	case SVSB_PHASE_INIT02:
++		seq_puts(m, "init2\n");
++		break;
++	case SVSB_PHASE_MON:
++		seq_puts(m, "mon mode\n");
++		break;
++	default:
++		seq_puts(m, "unknown\n");
++		break;
++	}
++
++	return 0;
++}
++
++static ssize_t svs_enable_debug_write(struct file *filp,
++				      const char __user *buffer,
++				      size_t count, loff_t *pos)
++{
++	struct svs_bank *svsb = file_inode(filp)->i_private;
++	struct svs_platform *svsp = dev_get_drvdata(svsb->dev);
++	unsigned long flags;
++	int enabled, ret;
++	char *buf = NULL;
++
++	if (count >= PAGE_SIZE)
++		return -EINVAL;
++
++	buf = (char *)memdup_user_nul(buffer, count);
++	if (IS_ERR(buf))
++		return PTR_ERR(buf);
++
++	ret = kstrtoint(buf, 10, &enabled);
++	if (ret)
++		return ret;
++
++	if (!enabled) {
 +		spin_lock_irqsave(&svs_lock, flags);
 +		svsp->pbank = svsb;
-+		svs_set_bank_phase(svsp, SVSB_PHASE_MON);
++		svsb->mode_support = SVSB_MODE_ALL_DISABLE;
++		svs_switch_bank(svsp);
++		svs_writel_relaxed(svsp, SVSB_EN_OFF, SVSEN);
++		svs_writel_relaxed(svsp, SVSB_INTSTS_CLEAN, INTSTS);
 +		spin_unlock_irqrestore(&svs_lock, flags);
++
++		svsb->phase = SVSB_PHASE_ERROR;
++		svs_adjust_pm_opp_volts(svsb, true);
 +	}
++
++	kfree(buf);
++
++	return count;
 +}
 +
- static int svs_start(struct svs_platform *svsp)
- {
- 	int ret;
-@@ -870,6 +972,8 @@ static int svs_start(struct svs_platform *svsp)
- 	if (ret)
- 		return ret;
- 
-+	svs_mon_mode(svsp);
++debug_fops_rw(enable);
 +
- 	return 0;
++static int svs_status_debug_show(struct seq_file *m, void *v)
++{
++	struct svs_bank *svsb = (struct svs_bank *)m->private;
++	struct dev_pm_opp *opp;
++	int tzone_temp = 0, ret;
++	u32 i;
++
++	ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
++	if (ret)
++		seq_printf(m, "%s: temperature ignore\n", svsb->name);
++	else
++		seq_printf(m, "%s: temperature = %d\n", svsb->name, tzone_temp);
++
++	for (i = 0; i < svsb->opp_count; i++) {
++		opp = dev_pm_opp_find_freq_exact(svsb->opp_dev,
++						 svsb->opp_dfreq[i], true);
++		if (IS_ERR(opp)) {
++			seq_printf(m, "%s: cannot find freq = %u (%ld)\n",
++				   svsb->name, svsb->opp_dfreq[i],
++				   PTR_ERR(opp));
++			return PTR_ERR(opp);
++		}
++
++		seq_printf(m, "opp_freq[%02u]: %u, opp_volt[%02u]: %lu, ",
++			   i, svsb->opp_dfreq[i], i,
++			   dev_pm_opp_get_voltage(opp));
++		seq_printf(m, "svsb_volt[%02u]: 0x%x, freq_pct[%02u]: %u\n",
++			   i, svsb->volt[i], i, svsb->freq_pct[i]);
++		dev_pm_opp_put(opp);
++	}
++
++	return 0;
++}
++
++debug_fops_ro(status);
++
++static int svs_voffset_debug_show(struct seq_file *m, void *v)
++{
++	struct svs_bank *svsb = (struct svs_bank *)m->private;
++
++	seq_printf(m, "%d\n", svsb->voffset);
++
++	return 0;
++}
++
++static ssize_t svs_voffset_debug_write(struct file *filp,
++				       const char __user *buffer,
++				       size_t count, loff_t *pos)
++{
++	struct svs_bank *svsb = file_inode(filp)->i_private;
++	char *buf = NULL;
++	s32 voffset;
++
++	if (count >= PAGE_SIZE)
++		return -EINVAL;
++
++	buf = (char *)memdup_user_nul(buffer, count);
++	if (IS_ERR(buf))
++		return PTR_ERR(buf);
++
++	if (!kstrtoint(buf, 10, &voffset)) {
++		svsb->voffset = voffset;
++		svs_adjust_pm_opp_volts(svsb, true);
++	}
++
++	kfree(buf);
++
++	return count;
++}
++
++debug_fops_rw(voffset);
++
++static int svs_create_debug_cmds(struct svs_platform *svsp)
++{
++	struct svs_bank *svsb;
++	struct dentry *svs_dir, *svsb_dir, *file_entry;
++	const char *d = "/sys/kernel/debug/svs";
++	u32 i, idx;
++
++	struct svs_dentry {
++		const char *name;
++		const struct file_operations *fops;
++	};
++
++	struct svs_dentry svs_entries[] = {
++		svs_dentry_data(dump),
++	};
++
++	struct svs_dentry svsb_entries[] = {
++		svs_dentry_data(enable),
++		svs_dentry_data(status),
++		svs_dentry_data(voffset),
++	};
++
++	svs_dir = debugfs_create_dir("svs", NULL);
++	if (IS_ERR(svs_dir)) {
++		dev_err(svsp->dev, "cannot create %s: %ld\n",
++			d, PTR_ERR(svs_dir));
++		return PTR_ERR(svs_dir);
++	}
++
++	for (i = 0; i < ARRAY_SIZE(svs_entries); i++) {
++		file_entry = debugfs_create_file(svs_entries[i].name, 0664,
++						 svs_dir, svsp,
++						 svs_entries[i].fops);
++		if (IS_ERR(file_entry)) {
++			dev_err(svsp->dev, "cannot create %s/%s: %ld\n",
++				d, svs_entries[i].name, PTR_ERR(file_entry));
++			return PTR_ERR(file_entry);
++		}
++	}
++
++	for (idx = 0; idx < svsp->bank_max; idx++) {
++		svsb = &svsp->banks[idx];
++
++		if (svsb->mode_support == SVSB_MODE_ALL_DISABLE)
++			continue;
++
++		svsb_dir = debugfs_create_dir(svsb->name, svs_dir);
++		if (IS_ERR(svsb_dir)) {
++			dev_err(svsp->dev, "cannot create %s/%s: %ld\n",
++				d, svsb->name, PTR_ERR(svsb_dir));
++			return PTR_ERR(svsb_dir);
++		}
++
++		for (i = 0; i < ARRAY_SIZE(svsb_entries); i++) {
++			file_entry = debugfs_create_file(svsb_entries[i].name,
++							 0664, svsb_dir, svsb,
++							 svsb_entries[i].fops);
++			if (IS_ERR(file_entry)) {
++				dev_err(svsp->dev, "no %s/%s/%s?: %ld\n",
++					d, svsb->name, svsb_entries[i].name,
++					PTR_ERR(file_entry));
++				return PTR_ERR(file_entry);
++			}
++		}
++	}
++
++	return 0;
++}
++
+ static u32 interpolate(u32 f0, u32 f1, u32 v0, u32 v1, u32 fx)
+ {
+ 	u32 vx;
+@@ -605,6 +896,16 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
+ 	}
  }
  
-@@ -923,6 +1027,8 @@ static int svs_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	svs_mon_mode(svsp);
++static inline void svs_save_bank_register_data(struct svs_platform *svsp,
++					       enum svsb_phase phase)
++{
++	struct svs_bank *svsb = svsp->pbank;
++	enum svs_reg_index rg_i;
 +
- 	return 0;
- }
- 
-@@ -1007,7 +1113,11 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
- static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
++	for (rg_i = DESCHAR; rg_i < SVS_REG_MAX; rg_i++)
++		svsb->reg_data[phase][rg_i] = svs_readl_relaxed(svsp, rg_i);
++}
++
+ static inline void svs_error_isr_handler(struct svs_platform *svsp)
  {
- 	struct svs_bank *svsb;
--	u32 idx, i, ft_pgm;
-+	struct nvmem_cell *cell;
-+	int format[6], x_roomt[6], o_vtsmcu[5], o_vtsabb, tb_roomt = 0;
-+	int adc_ge_t, adc_oe_t, ge, oe, gain, degc_cali, adc_cali_en_t;
-+	int o_slope, o_slope_sign, ts_id;
-+	u32 idx, i, ft_pgm, mts, temp0, temp1, temp2;
+ 	struct svs_bank *svsb = svsp->pbank;
+@@ -619,6 +920,8 @@ static inline void svs_error_isr_handler(struct svs_platform *svsp)
+ 		svs_readl_relaxed(svsp, SMSTATE1));
+ 	dev_err(svsb->dev, "TEMP = 0x%08x\n", svs_readl_relaxed(svsp, TEMP));
  
- 	for (i = 0; i < svsp->efuse_max; i++)
- 		if (svsp->efuse[i])
-@@ -1083,6 +1193,126 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- 		}
++	svs_save_bank_register_data(svsp, SVSB_PHASE_ERROR);
++
+ 	svsb->mode_support = SVSB_MODE_ALL_DISABLE;
+ 	svsb->phase = SVSB_PHASE_ERROR;
+ 
+@@ -635,6 +938,8 @@ static inline void svs_init01_isr_handler(struct svs_platform *svsp)
+ 		 svs_readl_relaxed(svsp, VDESIGN30),
+ 		 svs_readl_relaxed(svsp, DCVALUES));
+ 
++	svs_save_bank_register_data(svsp, SVSB_PHASE_INIT01);
++
+ 	svsb->phase = SVSB_PHASE_INIT01;
+ 	svsb->dc_voffset_in = ~(svs_readl_relaxed(svsp, DCVALUES) &
+ 				GENMASK(15, 0)) + 1;
+@@ -662,6 +967,8 @@ static inline void svs_init02_isr_handler(struct svs_platform *svsp)
+ 		 svs_readl_relaxed(svsp, VOP30),
+ 		 svs_readl_relaxed(svsp, DCVALUES));
+ 
++	svs_save_bank_register_data(svsp, SVSB_PHASE_INIT02);
++
+ 	svsb->phase = SVSB_PHASE_INIT02;
+ 	svsb->get_volts(svsp);
+ 
+@@ -673,6 +980,8 @@ static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
+ {
+ 	struct svs_bank *svsb = svsp->pbank;
+ 
++	svs_save_bank_register_data(svsp, SVSB_PHASE_MON);
++
+ 	svsb->phase = SVSB_PHASE_MON;
+ 	svsb->temp = svs_readl_relaxed(svsp, TEMP) & GENMASK(7, 0);
+ 	svsb->get_volts(svsp);
+@@ -1658,6 +1967,12 @@ static int svs_probe(struct platform_device *pdev)
+ 		goto svs_probe_iounmap;
  	}
  
-+	/* Get thermal efuse by nvmem */
-+	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
-+	if (IS_ERR(cell)) {
-+		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n",
-+			PTR_ERR(cell));
-+		goto remove_mt8183_svsb_mon_mode;
++	ret = svs_create_debug_cmds(svsp);
++	if (ret) {
++		dev_err(svsp->dev, "svs create debug cmds fail: %d\n", ret);
++		goto svs_probe_iounmap;
 +	}
 +
-+	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
-+	if (IS_ERR(svsp->tefuse)) {
-+		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
-+			PTR_ERR(svsp->tefuse));
-+		goto remove_mt8183_svsb_mon_mode;
-+	}
-+
-+	svsp->tefuse_max /= sizeof(u32);
-+	nvmem_cell_put(cell);
-+
-+	/* Thermal efuse parsing */
-+	adc_ge_t = (svsp->tefuse[1] >> 22) & GENMASK(9, 0);
-+	adc_oe_t = (svsp->tefuse[1] >> 12) & GENMASK(9, 0);
-+
-+	o_vtsmcu[0] = (svsp->tefuse[0] >> 17) & GENMASK(8, 0);
-+	o_vtsmcu[1] = (svsp->tefuse[0] >> 8) & GENMASK(8, 0);
-+	o_vtsmcu[2] = svsp->tefuse[1] & GENMASK(8, 0);
-+	o_vtsmcu[3] = (svsp->tefuse[2] >> 23) & GENMASK(8, 0);
-+	o_vtsmcu[4] = (svsp->tefuse[2] >> 5) & GENMASK(8, 0);
-+	o_vtsabb = (svsp->tefuse[2] >> 14) & GENMASK(8, 0);
-+
-+	degc_cali = (svsp->tefuse[0] >> 1) & GENMASK(5, 0);
-+	adc_cali_en_t = svsp->tefuse[0] & BIT(0);
-+	o_slope_sign = (svsp->tefuse[0] >> 7) & BIT(0);
-+
-+	ts_id = (svsp->tefuse[1] >> 9) & BIT(0);
-+	o_slope = (svsp->tefuse[0] >> 26) & GENMASK(5, 0);
-+
-+	if (adc_cali_en_t == 1) {
-+		if (!ts_id)
-+			o_slope = 0;
-+
-+		if (adc_ge_t < 265 || adc_ge_t > 758 ||
-+		    adc_oe_t < 265 || adc_oe_t > 758 ||
-+		    o_vtsmcu[0] < -8 || o_vtsmcu[0] > 484 ||
-+		    o_vtsmcu[1] < -8 || o_vtsmcu[1] > 484 ||
-+		    o_vtsmcu[2] < -8 || o_vtsmcu[2] > 484 ||
-+		    o_vtsmcu[3] < -8 || o_vtsmcu[3] > 484 ||
-+		    o_vtsmcu[4] < -8 || o_vtsmcu[4] > 484 ||
-+		    o_vtsabb < -8 || o_vtsabb > 484 ||
-+		    degc_cali < 1 || degc_cali > 63) {
-+			dev_err(svsp->dev, "bad thermal efuse, no mon mode\n");
-+			goto remove_mt8183_svsb_mon_mode;
-+		}
-+	} else {
-+		dev_err(svsp->dev, "no thermal efuse, no mon mode\n");
-+		goto remove_mt8183_svsb_mon_mode;
-+	}
-+
-+	ge = ((adc_ge_t - 512) * 10000) / 4096;
-+	oe = (adc_oe_t - 512);
-+	gain = (10000 + ge);
-+
-+	format[0] = (o_vtsmcu[0] + 3350 - oe);
-+	format[1] = (o_vtsmcu[1] + 3350 - oe);
-+	format[2] = (o_vtsmcu[2] + 3350 - oe);
-+	format[3] = (o_vtsmcu[3] + 3350 - oe);
-+	format[4] = (o_vtsmcu[4] + 3350 - oe);
-+	format[5] = (o_vtsabb + 3350 - oe);
-+
-+	for (i = 0; i < 6; i++)
-+		x_roomt[i] = (((format[i] * 10000) / 4096) * 10000) / gain;
-+
-+	temp0 = (10000 * 100000 / gain) * 15 / 18;
-+
-+	if (!o_slope_sign)
-+		mts = (temp0 * 10) / (1534 + o_slope * 10);
-+	else
-+		mts = (temp0 * 10) / (1534 - o_slope * 10);
-+
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+		svsb->mts = mts;
-+
-+		switch (svsb->sw_id) {
-+		case SVSB_CPU_LITTLE:
-+			tb_roomt = x_roomt[3];
-+			break;
-+		case SVSB_CPU_BIG:
-+			tb_roomt = x_roomt[4];
-+			break;
-+		case SVSB_CCI:
-+			tb_roomt = x_roomt[3];
-+			break;
-+		case SVSB_GPU:
-+			tb_roomt = x_roomt[1];
-+			break;
-+		default:
-+			dev_err(svsb->dev, "unknown sw_id: %u\n", svsb->sw_id);
-+			goto remove_mt8183_svsb_mon_mode;
-+		}
-+
-+		temp0 = (degc_cali * 10 / 2);
-+		temp1 = ((10000 * 100000 / 4096 / gain) *
-+			 oe + tb_roomt * 10) * 15 / 18;
-+
-+		if (!o_slope_sign)
-+			temp2 = temp1 * 100 / (1534 + o_slope * 10);
-+		else
-+			temp2 = temp1 * 100 / (1534 - o_slope * 10);
-+
-+		svsb->bts = (temp0 + temp2 - 250) * 4 / 10;
-+	}
-+
-+	return true;
-+
-+remove_mt8183_svsb_mon_mode:
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+		svsb->mode_support &= ~SVSB_MODE_MON;
-+	}
-+
- 	return true;
- }
+ 	return 0;
  
-@@ -1165,9 +1395,14 @@ static struct device *svs_add_device_link(struct svs_platform *svsp,
- 
- static int svs_mt8183_platform_probe(struct svs_platform *svsp)
- {
-+	struct device *dev;
- 	struct svs_bank *svsb;
- 	u32 idx;
- 
-+	dev = svs_add_device_link(svsp, "thermal");
-+	if (IS_ERR(dev))
-+		return PTR_ERR(dev);
-+
- 	for (idx = 0; idx < svsp->bank_max; idx++) {
- 		svsb = &svsp->banks[idx];
- 
-@@ -1275,9 +1510,11 @@ static struct svs_bank svs_mt8183_banks[] = {
- 		.set_freq_pct		= svs_set_bank_freq_pct_v2,
- 		.get_volts		= svs_get_bank_volts_v2,
- 		.buck_name		= "mali",
-+		.tzone_name		= "tzts2",
- 		.volt_flags		= SVSB_INIT01_PD_REQ |
- 					  SVSB_INIT01_VOLT_INC_ONLY,
--		.mode_support		= SVSB_MODE_INIT01 | SVSB_MODE_INIT02,
-+		.mode_support		= SVSB_MODE_INIT01 | SVSB_MODE_INIT02 |
-+					  SVSB_MODE_MON,
- 		.opp_count		= MAX_OPP_ENTRIES,
- 		.freq_base		= 900000000,
- 		.vboot			= 0x30,
-@@ -1293,6 +1530,10 @@ static struct svs_bank svs_mt8183_banks[] = {
- 		.core_sel		= 0x8fff0003,
- 		.int_st			= BIT(3),
- 		.ctl0			= 0x00050001,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 0,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 3,
- 	},
- };
- 
+ svs_probe_iounmap:
 -- 
 2.18.0
 

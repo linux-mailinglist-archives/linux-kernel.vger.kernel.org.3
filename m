@@ -2,153 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B84D5487774
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A02B487776
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbiAGMJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:09:43 -0500
-Received: from mga06.intel.com ([134.134.136.31]:33735 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231474AbiAGMJm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:09:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641557382; x=1673093382;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ONVVAebltRAi6Zc1gaT7ckSeHNyIUvdQOS3c0wVuDT4=;
-  b=dSvVEqF+uj1kBbQmxM47u06nfkR31p2/9oHdxTkqHR9++qPcOMllwEQh
-   6WwzA6y/yPjE4na19JzwslZmHcoW5HCK2LSprdtJMN5MH7XRhIs5A/mDB
-   iA20Lt8XJJFckOQSPF9JsWUVb4ztzcnCEVnuZsgLz2lZpIIFdqhdtd6Q+
-   y12l6wdLNOLiBwqjzS+iu1vBZ7nMY40smhsNlHTZThOUxSFoR2y4EZeU6
-   L+q3bDr+gAZGsi6LqOzSG+jI0lP+gpsuqIrZfYeJ0PC4n/MA7utOtvngc
-   3MBbqY4suHmaMS9AdefsVY0HsKdSYZ/AKhgTruCK92uWIgiJCYo/NbJZQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="303602281"
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="303602281"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 04:09:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="575081146"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 04:09:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n5o2g-007Ml3-Cn;
-        Fri, 07 Jan 2022 14:08:22 +0200
-Date:   Fri, 7 Jan 2022 14:08:22 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, linux-doc@vger.kernel.org, bhe@redhat.com,
-        vgoyal@redhat.com, stern@rowland.harvard.edu,
-        akpm@linux-foundation.org, corbet@lwn.net, halves@canonical.com,
-        kernel@gpiccoli.net
-Subject: Re: [PATCH V2] notifier/panic: Introduce panic_notifier_filter
-Message-ID: <YdgtNvd68kWakErr@smile.fi.intel.com>
-References: <20220106200007.112357-1-gpiccoli@igalia.com>
+        id S238402AbiAGMLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231423AbiAGMLB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 07:11:01 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C146C061245
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 04:11:01 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id d189so3555984vkg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 04:11:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=maXmEDQIldazO5h4bVSueIIOyBVkiIcZL+W9u+RSkqo=;
+        b=VYx0lxJtdeDn2m5uHMfpdtolLT4Skey7E94tSCg+elLde/0gae5nX0kXmFyfCwAc6L
+         aS9fh9kQCYyB2rzcFv2Vr2rCRvH+ynH1Er1rXkDoKvw2Rw1hG7vCDFNYIO/eKQ32UDGX
+         /sR55aJNm7HMj6nG+AWifNN0X07DI54Oll7Ud+ik0tKsdj9fCtjLGktUqgWAzCS53Iao
+         rR8UjP1SsShYv8cm17IzJxCEBH7JTHk2rYo877wRSeh+4d8jJDjBBxqld10be7ERqP0Y
+         dveqVaBYUJEhnZ54H4U3CZaBFlf2RXGjTcaYfDnAQZgv9YhjsrIX5FbAV7NRoAoXcGSq
+         70Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=maXmEDQIldazO5h4bVSueIIOyBVkiIcZL+W9u+RSkqo=;
+        b=MJe8TImMWXhLiPMJYR0zTKos8My/YZMfUCA2lJA5aLiODBOrAbURnkdMsJ21nNJ+hp
+         5GhbuOIIFZ1e8G6Tt3WMOvz9kNIXadH0eUvSWJdCYEN1+W+PWvB0+WPEpdbGS23oM5tW
+         CnugN4YIDIVIpMukzVIdDWciIU/ylUOTpmfyW1N1WhBWUZ1Xg1WnySYlkQeMdOpzQEJr
+         LD7YTmm2h3Q9A7mFLFVDXs98m9V4HY5YVm1+uiNpdGeQLdjQQ0cE78I+eAMJYhCO59/j
+         61X6GjBVNZzw+BANzEW14bZJaEZmr2SucyqhAKadKQyrWVCCdpsShqnWGl3QsMVSw5Oc
+         5ixw==
+X-Gm-Message-State: AOAM530gMHdLJlcF/Uz0RHKev1iJgFPVntgBKkxHTTwcnde7aH/BdAWt
+        SnGotOAmpNUFfn8uzZd7WvIL+6dTTMqwOWnKk/g=
+X-Google-Smtp-Source: ABdhPJzm1ciXt5avUmSf3tfVsL+DDp61VqUev49ZcaKXqe+xoAc8P4ZQJF3+Y0ciCZGDl8ZaiKYtPFH1njTgHXohUbk=
+X-Received: by 2002:a05:6122:a07:: with SMTP id 7mr21727151vkn.8.1641557460688;
+ Fri, 07 Jan 2022 04:11:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106200007.112357-1-gpiccoli@igalia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
+In-Reply-To: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
+From:   Mark Hemment <markhemm@googlemail.com>
+Date:   Fri, 7 Jan 2022 12:10:49 +0000
+Message-ID: <CANe_+UipVZRZeWqzXezacPaVb9UeC6a_ZhQp8GkrvftbRktotg@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
+ for shmem
+To:     Charan Teja Reddy <quic_charante@quicinc.com>
+Cc:     hughd@google.com, Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>, vbabka@suse.cz,
+        rientjes@google.com, mhocko@suse.com, surenb@google.com,
+        shakeelb@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Charan Teja Reddy <charante@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:00:07PM -0300, Guilherme G. Piccoli wrote:
-> The kernel notifier infrastructure allows function callbacks to be
-> added in multiple lists, which are then called in the proper time,
-> like in a reboot or panic event. The panic_notifier_list specifically
-> contains the callbacks that are executed during a panic event. As any
-> other notifier list, the panic one has no filtering and all functions
-> previously registered are executed.
-> 
-> The kdump infrastructure, on the other hand, enables users to set
-> a crash kernel that is kexec'ed in a panic event, and vmcore/logs
-> are collected in such crash kernel. When kdump is set, by default
-> the panic notifiers are ignored - the kexec jumps to the crash kernel
-> before the list is checked and callbacks executed.
-> 
-> There are some cases though in which kdump users might want to
-> allow panic notifier callbacks to execute _before_ the kexec to
-> the crash kernel, for a variety of reasons - for example, users
-> may think kexec is very prone to fail and want to give a chance
-> to kmsg dumpers to run (and save logs using pstore), or maybe
-> some panic notifier is required to properly quiesce some hardware
-> that must be used to the crash kernel. For these cases, we have
-> the kernel parameter "crash_kexec_post_notifiers".
-> 
-> But there's a problem: currently it's an "all-or-nothing" situation,
-> the kdump user choice is either to execute all panic notifiers or
-> none of them. Given that panic notifiers may increase the risk of a
-> kdump failure, this is a tough decision and may affect the debug of
-> hard to reproduce bugs, if for some reason the user choice is to
-> enable panic notifiers, but kdump then fails.
-> 
-> So, this patch aims to ease this decision: we hereby introduce a filter
-> for the panic notifier list, in which users may select specifically
-> which callbacks they wish to run, allowing a safer kdump. The allowlist
-> should be provided using the parameter "panic_notifier_filter=a,b,..."
-> where a, b are valid callback names. Invalid symbols are discarded.
-> 
-> Currently up to 16 symbols may be passed in this list, we consider
-> that this numbers allows enough flexibility (and no matter what
-> architecture is used, at most 30 panic callbacks are registered).
-> In an experiment using a qemu x86 virtual machine, by default only
-> six callbacks are registered in the panic notifier list.
-> Once a valid callback name is provided in the list, such function
-> is allowed to be registered/unregistered in the panic_notifier_list;
-> all other panic callbacks are ignored. Notice that this filter is
-> only for the panic notifiers and has no effect in the other notifiers.
+On Thu, 6 Jan 2022 at 17:06, Charan Teja Reddy
+<quic_charante@quicinc.com> wrote:
+>
+> From: Charan Teja Reddy <charante@codeaurora.org>
+>
+> Currently fadvise(2) is supported only for the files that doesn't
+> associated with noop_backing_dev_info thus for the files, like shmem,
+> fadvise results into NOP. But then there is file_operations->fadvise()
+> that lets the file systems to implement their own fadvise
+> implementation. Use this support to implement some of the POSIX_FADV_XXX
+> functionality for shmem files.
+>
+> [snip]
 
-...
-
-> +static int __init panic_notifier_filter_setup(char *buf)
+> +static int shmem_fadvise_willneed(struct address_space *mapping,
+> +                                pgoff_t start, pgoff_t long end)
 > +{
-> +	char *func;
-> +	unsigned long addr;
+> +       XA_STATE(xas, &mapping->i_pages, start);
+> +       struct page *page;
 > +
-> +	if (!buf)
-> +		return -EINVAL;
+> +       rcu_read_lock();
+> +       xas_for_each(&xas, page, end) {
+> +               if (!xa_is_value(page))
+> +                       continue;
+> +               xas_pause(&xas);
+> +               rcu_read_unlock();
 > +
-> +	while (buf) {
-> +		func = strsep(&buf, ",");
-
-Don't we have a parser of this format already?
-Anyway, you may reduce code by
-
-	unsigned long addr;
-	char *func = buf;
-
-	while ((func = strsep(&func, ",")) {
-
-> +		addr = kallsyms_lookup_name(func);
+> +               page = shmem_read_mapping_page(mapping, xas.xa_index);
+> +               if (!IS_ERR(page))
+> +                       put_page(page);
 > +
-> +		if (!addr) {
-> +			pr_info("panic_notifier_filter: invalid symbol %s\n", func);
-> +			continue;
-> +		}
+> +               rcu_read_lock();
+> +               if (need_resched()) {
+> +                       xas_pause(&xas);
+> +                       cond_resched_rcu();
+> +               }
+> +       }
+> +       rcu_read_unlock();
 > +
-> +		if (panic_nf_count < PANIC_NF_MAX) {
-> +			panic_nf_functions[panic_nf_count] = addr;
-> +			panic_nf_count++;
-> +			pr_debug("panic_notifier_filter: added symbol %s\n", func);
-> +		} else {
-> +			pr_warn("panic_notifier_filter: exceeded maximum notifiers (%d), aborting\n",
-> +				PANIC_NF_MAX);
-> +			panic_nf_count = 0;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +early_param("panic_notifier_filter", panic_notifier_filter_setup);
+> +       return 0;
 
--- 
-With Best Regards,
-Andy Shevchenko
+I have a doubt on referencing xa_index after calling xas_pause().
+xas_pause() walks xa_index forward, so will not be the value expected
+for the current page.
+Also, not necessary to re-call xas_pause() before cond_resched (it is
+a no-op).  Would be better to check need_resched() before
+rcu_read_lock().
 
+As this loop may call xas_pause() for most iterations, should consider
+using xa_for_each() instead (I *think* - still getting up to speed
+with XArray).
 
+Mark

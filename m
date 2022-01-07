@@ -2,166 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D698E487918
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFB148791B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239306AbiAGOfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:35:03 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40962 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiAGOfB (ORCPT
+        id S239354AbiAGOgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231307AbiAGOgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:35:01 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E656F1F46484
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641566099;
-        bh=tO2bafMKol/hq/296vAXOxJK1zX8lB17tRRk8j/yVMU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=n0Q/+BXcDc256g8LCW4ZtbwUMvlpa54V6RtKsE60O2nwj5Hol+3rq9wPhDTbAqSFi
-         CgK8XIxq4wVzA4Ue9XbOGmCl7uPbOXczAhKAza4WouLK582qQe2Nz4oqnep7WVJKsI
-         C4NaBX3Z6LbLxdxPAF5Q/wnZ6Lx2TcLP4VsaIUe1gMPb+Rz+lda+5JLhnH6KiGSYJ9
-         +sxNvgWNYDsRJ1QrHP7tyvYJ8rm8z8aD/YuCpz8Lk6Zx/IaUOOtjnkq06rLyDY726b
-         tQHFFQM7nSegzGjjO8UTDeNvseRkXTtO82usILDT+og2I2+LhHKGxuJ9jbbjkhALjt
-         n554laxjjXi4Q==
-Subject: Re: [PATCH v21 5/8] soc: mediatek: SVS: add debug commands
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220107095200.4389-1-roger.lu@mediatek.com>
- <20220107095200.4389-6-roger.lu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <47bcbffc-42f6-335e-dfab-990e0ab5f103@collabora.com>
-Date:   Fri, 7 Jan 2022 15:34:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Fri, 7 Jan 2022 09:36:32 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562ACC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:36:32 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id m21so23057090edc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NK1daiMXXe0LeZNqPUiALjw7BMBMV4uzHsm9KMsXtg0=;
+        b=gfE1VC/xN1Gf+WwqI7G4ljA87mIcGks2r6mp1MlP+xjVIxDGtuEjrT8VZawygxA0rh
+         EE0Mkz9zV5n3GODOlvhMZe6cIukDQNolseuER31yKDxUOgYJl2NK+bCcZzgGjclYXw6/
+         6d53AV+18lbON7rYp3fKhH3xUbG1qrfuUYDv3reE+UUmTaJuYRCznz8oYgwjlP2rQrlH
+         VPe5zKk1UPb8PeamhhrgnkzyjZLZMMc5o5h1bDSmIO2j8JnXR/cTPaInIjtgp4+JHKaT
+         0bJB4bsGDnygiHewyLloczEJ01BwWSix00M583WtKv4N9ll0iKGNqjq/hFxrSJkVf93e
+         ZJDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NK1daiMXXe0LeZNqPUiALjw7BMBMV4uzHsm9KMsXtg0=;
+        b=WXhk2rQKt/lG57mzptEya2qnDINSDsbnWOSJXrNCe0YA/a++hqmmV5AaQyolDt3sF3
+         QhsIt8M45021EMNXJI5+9oS8x4vlS9BqgT/3OlYqyhM6S7MVQ5OpiPTS8IxDaynA/T9B
+         FQuVyhBWVTRwj9CBvqDTdh3o9b4Yy/FMrjvTyS2TuCjelWGgMDo6yJt2ObBoESbigT+K
+         s9zxeoLbSqZ4Dfl8PY+MNjzVO7+0+9wZlKlJt6ew6TxX71K1UIuCsaq4GQlaeAaDmUb3
+         gM3gijTzfNu1sda//qyZ8OK3/L2SK6je8zhTRqgf9o7984xGyzcuNoTXDe4q5Y4M4du0
+         7PEw==
+X-Gm-Message-State: AOAM532NyC1oesPDzplFB4xsshr+tcHGOWTFaK/XW+YeB2dDQPIdMjUH
+        49IK32o42VrHiJ90vPM94Mw=
+X-Google-Smtp-Source: ABdhPJxrCWNxevTx7Tkga8k6Ujuhdr0bSHNVETc57425UiHlwXlQuZl8hByA3zr9KUI1zLMQ4e0EQA==
+X-Received: by 2002:a17:906:87c9:: with SMTP id zb9mr2645803ejb.725.1641566190968;
+        Fri, 07 Jan 2022 06:36:30 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8108:96c0:3b88::51e2])
+        by smtp.gmail.com with ESMTPSA id b4sm1445181ejl.206.2022.01.07.06.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 06:36:30 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/3] staging: r8188eu: move firmware related macros to rtw_fw.h
+Date:   Fri,  7 Jan 2022 15:36:14 +0100
+Message-Id: <20220107143617.2214-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20220107095200.4389-6-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/01/22 10:51, Roger Lu ha scritto:
-> The purpose of SVS is to help find the suitable voltages
-> for DVFS. Therefore, if SVS bank voltages are concerned
-> to be wrong, we can adjust SVS bank voltages by this patch.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 321 ++++++++++++++++++++++++++++++++-
->   1 file changed, 318 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index 042c6e8e9069..93cdaecadd6d 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
+This series moves firmware related macros from rtl8188e_hal.h to rtw_fw.h.
+I missed these when I moved the firmware code into its own file.
 
-..snip..
+Please apply this series on top of the series
+"staging: r8188eu: move firmware loading out of the hal layer".
 
-> @@ -605,6 +896,16 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
->   	}
->   }
->   
-> +static inline void svs_save_bank_register_data(struct svs_platform *svsp,
-> +					       enum svsb_phase phase)
-> +{
-> +	struct svs_bank *svsb = svsp->pbank;
-> +	enum svs_reg_index rg_i;
-> +
+Thanks,
+Michael
 
-I think that it'd be a good idea to add an `enable` parameter, so that we
-don't always do a register dump; after all, this is a debugging feature and
-it's going to be completely irrelevant to the user, so keeping this disabled
-by default would ensure to get no performance degradation (even if small)
-unless really wanted.
+Michael Straube (3):
+  staging: r8188eu: rename _pFwHdr in IS_FW_HEADER_EXIST
+  staging: r8188eu: add spaces around & operator in IS_FW_HEADER_EXIST
+  staging: r8188eu: move firmware related macros to rtw_fw.h
 
-So, in this case, here we'd have
+ drivers/staging/r8188eu/include/rtl8188e_hal.h | 11 -----------
+ drivers/staging/r8188eu/include/rtw_fw.h       | 10 +++++++++-
+ 2 files changed, 9 insertions(+), 12 deletions(-)
 
-	if (!svsp->debug_enabled)
-		return;
-
-> +	for (rg_i = DESCHAR; rg_i < SVS_REG_MAX; rg_i++)
-> +		svsb->reg_data[phase][rg_i] = svs_readl_relaxed(svsp, rg_i);
-> +}
-> +
-
-Of course, this implies adding a new debugfs entry to enable/disable the debugging.
-Everything else looks good :)
-
->   static inline void svs_error_isr_handler(struct svs_platform *svsp)
->   {
->   	struct svs_bank *svsb = svsp->pbank;
-> @@ -619,6 +920,8 @@ static inline void svs_error_isr_handler(struct svs_platform *svsp)
->   		svs_readl_relaxed(svsp, SMSTATE1));
->   	dev_err(svsb->dev, "TEMP = 0x%08x\n", svs_readl_relaxed(svsp, TEMP));
->   
-> +	svs_save_bank_register_data(svsp, SVSB_PHASE_ERROR);
-> +
->   	svsb->mode_support = SVSB_MODE_ALL_DISABLE;
->   	svsb->phase = SVSB_PHASE_ERROR;
->   
-> @@ -635,6 +938,8 @@ static inline void svs_init01_isr_handler(struct svs_platform *svsp)
->   		 svs_readl_relaxed(svsp, VDESIGN30),
->   		 svs_readl_relaxed(svsp, DCVALUES));
->   
-> +	svs_save_bank_register_data(svsp, SVSB_PHASE_INIT01);
-> +
->   	svsb->phase = SVSB_PHASE_INIT01;
->   	svsb->dc_voffset_in = ~(svs_readl_relaxed(svsp, DCVALUES) &
->   				GENMASK(15, 0)) + 1;
-> @@ -662,6 +967,8 @@ static inline void svs_init02_isr_handler(struct svs_platform *svsp)
->   		 svs_readl_relaxed(svsp, VOP30),
->   		 svs_readl_relaxed(svsp, DCVALUES));
->   
-> +	svs_save_bank_register_data(svsp, SVSB_PHASE_INIT02);
-> +
->   	svsb->phase = SVSB_PHASE_INIT02;
->   	svsb->get_volts(svsp);
->   
-> @@ -673,6 +980,8 @@ static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
->   {
->   	struct svs_bank *svsb = svsp->pbank;
->   
-> +	svs_save_bank_register_data(svsp, SVSB_PHASE_MON);
-> +
->   	svsb->phase = SVSB_PHASE_MON;
->   	svsb->temp = svs_readl_relaxed(svsp, TEMP) & GENMASK(7, 0);
->   	svsb->get_volts(svsp);
-> @@ -1658,6 +1967,12 @@ static int svs_probe(struct platform_device *pdev)
->   		goto svs_probe_iounmap;
->   	}
->   
-> +	ret = svs_create_debug_cmds(svsp);
-> +	if (ret) {
-> +		dev_err(svsp->dev, "svs create debug cmds fail: %d\n", ret);
-> +		goto svs_probe_iounmap;
-> +	}
-> +
->   	return 0;
->   
->   svs_probe_iounmap:
-> 
+-- 
+2.34.1
 

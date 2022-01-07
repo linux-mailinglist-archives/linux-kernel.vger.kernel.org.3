@@ -2,92 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6E948785A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1D0487867
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347600AbiAGNlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiAGNlC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:41:02 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A2FC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:41:01 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id z9so22159725edm.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:41:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1xWMzox84ooh/x8FbxrfvG4p5MAAAWHgM5SqmxnFrYA=;
-        b=ki55QVTGaIkvPjw4miNywVK8IpBgwE9/wxJlYhUiqDVbVgChSFhhkVl/4fOzoHI/Eh
-         I3fbG73ReEQw6Qwfymsb7DYAejTCaTjyckW6HcWsBHo/p6xSeJhzb/i2f1F4eHzEQDl5
-         oc63Ot53zn4Ak6Ew6R6QYtb5dAb+8bV8x1HTQelzjCiwofGk51soUR53VdPCyHdqdwqC
-         EJisxsICcm/JmE3/MqpqkePklKPda1+/+QRIo5lTichLmLWnfyeXs2+GrH4iMGGwuAHC
-         7pEvaW0erHBWzIIz2+e5gcHbQFYNU+lxBSUoDV1gQvfqgTGw1tjrSEdmC3HOFXplPrG+
-         IbQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1xWMzox84ooh/x8FbxrfvG4p5MAAAWHgM5SqmxnFrYA=;
-        b=TnVp9fbxv1uJFaJXdeosuHtcwbungwc1pUgVavPqz+QS0DRPZBZlfUYNxDDRaFqdSr
-         1gR/MTbR5vG87LvFZNJKfmKXz2Bz8PVQ1BaKAPLpsKHPv+nKsDpq2ARstlYnF0bEN2qn
-         NeqKPdRp6pQlvftxeeCudiHYItMyUw9ubWhQZfg5/aKGgOa4Lj3RZQuvpVBApPlrAWo/
-         dp0Kz8IHGgw3OUWSCTXRtH60A5txY/LFlSXl1J3oRPzSFam7U5TFRJh6DF70uw7A0WOW
-         HmQhCo7azzIoPls+R9njaDmnVAJkHF2Tc8Fo9M999j57jz8wdQILOrt/CKOq8Q815zc4
-         CImg==
-X-Gm-Message-State: AOAM531cjXE/w5xWcSOR9Ooo+77Mkgp+E4qJwaV/zk76rhHGJuON/XZ9
-        fsr16tDRG582FwHZkGxtlnU=
-X-Google-Smtp-Source: ABdhPJxPjVy6H5PJMWQNyO0yHLYRY16ttpNAMDbsUkoD3k43oeZR4VdaMLnzXjQtHCYUAUeAFutv/A==
-X-Received: by 2002:a05:6402:35c2:: with SMTP id z2mr63226104edc.136.1641562860061;
-        Fri, 07 Jan 2022 05:41:00 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 20sm1413896ejy.105.2022.01.07.05.40.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Jan 2022 05:40:59 -0800 (PST)
-Date:   Fri, 7 Jan 2022 13:40:59 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Wei Yang <richard.weiyang@gmail.com>, peterz@infradead.org,
-        akpm@linux-foundation.org, vbabka@suse.cz, will@kernel.org,
-        linyunsheng@huawei.com, aarcange@redhat.com, feng.tang@intel.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
- folio->lru
-Message-ID: <20220107134059.flxr2hcd6ilb6vt7@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220106235254.19190-1-richard.weiyang@gmail.com>
- <Yde6hZ41agqa2zs3@casper.infradead.org>
+        id S1347640AbiAGNnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:43:14 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:55946 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232401AbiAGNnN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:43:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=e/jSliqOAlavjyYTujY1gInGj0BgjAPJQsETI9dwpJ8=; b=QbqKBskiNCGfJzhUQN0B9QFoRI
+        3TXppxC9Xfe5tgpd1A7Fr0ox5/BmOGNndCe1XN3tZLrMZRayieXBLWaoFJ2m4O+CXKiRMZu0QkEVg
+        BJIKv1vc1wQbBswoIFXg2DW2NTb1tO3AMipMdGh8sPav76KxAWAyQzhdF0QzzwMyIMU8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n5pWJ-000lGZ-Av; Fri, 07 Jan 2022 14:43:03 +0100
+Date:   Fri, 7 Jan 2022 14:43:03 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
+Cc:     Ido Schimmel <idosch@idosch.org>, netdev@vger.kernel.org,
+        stephen@networkplumber.org,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 5/6] net: marvell: prestera: Register
+ inetaddr stub notifiers
+Message-ID: <YdhDZ9Fkkx/moJH5@lunn.ch>
+References: <20211227215233.31220-1-yevhen.orlov@plvision.eu>
+ <20211227215233.31220-6-yevhen.orlov@plvision.eu>
+ <Yc3DgqvTqHANUQcp@shredder>
+ <YdeaoJpSuIzPB/EP@yorlov.ow.s>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yde6hZ41agqa2zs3@casper.infradead.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <YdeaoJpSuIzPB/EP@yorlov.ow.s>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 03:59:01AM +0000, Matthew Wilcox wrote:
->On Thu, Jan 06, 2022 at 11:52:54PM +0000, Wei Yang wrote:
->> FOLIO_MATCH() is used to make sure struct page and folio has identical
->> layout for the first several words.
->> 
->> The comparison of offset between page->compound_head and folio->lru is
->> more like an internal check in struct page.
->> 
->> This patch just removes it.
->> 
->> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->
->No.
+On Fri, Jan 07, 2022 at 03:42:56AM +0200, Yevhen Orlov wrote:
+> On Thu, Dec 30, 2021 at 04:34:42PM +0200, Ido Schimmel wrote:
+> >
+> > What happens to that RIF when the port is linked to a bridge or unlinked
+> > from one?
+> >
+> 
+> We doesn't support any "RIF with bridge" scenario for now.
+> This restriction mentioned in cover latter.
 
-Hi, Matthew
+I did not look at the code. Does it return -EOPNOTSUPP? And then
+bridging is performed by the host in software?
 
-Would you mind sharing some insight on this check?
+	 Andrew
 
--- 
-Wei Yang
-Help you, Help me
+     

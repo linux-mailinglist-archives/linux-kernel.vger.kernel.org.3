@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF17487041
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7ED487049
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345345AbiAGCSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S1345352AbiAGCV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344454AbiAGCR7 (ORCPT
+        with ESMTP id S1345289AbiAGCV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:17:59 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E641C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:17:59 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id f138so4575801qke.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:17:59 -0800 (PST)
+        Thu, 6 Jan 2022 21:21:27 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCA2C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:21:27 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id d34so1804122ybi.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:21:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBYBagvggg03DwKt9otfHsLIPVT6M43LhOwukGYuXUk=;
-        b=Sy/9Uasu+Otq8grGnBaWjIKNca9j5Ulw4E54DZSJU9tQxqJbyIS5Yl3TBt9aVyQl03
-         SDmI2d6L3aWhErx9yzu5HQQnt+iaCDrGeg9dTsu1Znq7rqGwH8896Jikcw94pVX9T/w/
-         47Zvim1y1dNmKoWFwRJ80R+iy2vTtNwZAnKSOzh/xvo4PnAe2LR78mqK011pcjHK8fcd
-         8bLW1o6f0yP916KYwL3/V58Wk8dFEZeGHVF9wxnQas8g5Rhxi5elgFF9AL0ySncce+0h
-         rEIuIhqrJziFyDvqSM9n7XjCliE+t2nBz0WCe01w3c5BNLwCBdU3IVrEE8mkiJY/Vw3S
-         pDjA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w70wbEdrZB71eZ7G5vu7np2TisVg/QSyUt9QnspenOc=;
+        b=PJzY3wgh+mwzx/EdpWDTNd9qDUJSucxLoxDlCP73jyOvxKm+qXxPYA1o+dMHW2MdVO
+         XI0G0g0Ml2Gv3hYdGaLawxZiY4/2rPyx4OdBV5vHL5nSb8/AGkvP6ZnU4ZX1nHR70mbl
+         z4QtjCr0pgIwTgGF1JP2jZ9quepjPmmKr2sWI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBYBagvggg03DwKt9otfHsLIPVT6M43LhOwukGYuXUk=;
-        b=yN46oCJi19YXAGZQ/rpHFBR1ou0PXVZ0NfPV//5yPnYuvUPoUrs31AnqzmcZGqjZQi
-         H3EfQpDb6jkJReqGUUjdyC7sB1dtmvJpH0M30+RwFvjLwqVPbVHaUCVaBHMV55tThery
-         IWsERoshnhxvbXrUE8CcM4Ere624kH1TaN5E1EU5QJQl6u/EywBoNSui5gF/y+DPy7IJ
-         /FnRIxR52+8yn0+XwDsNuQF7ZyDPl8z74bqdoZeA5VcRMxUjPTXeom0zteW5S+mJa9U/
-         dKXdMnXcafsa0W1ZLVcIs+JKSPh4JORNOm486JJBtSVGc5YBRkL4wfc/hJeMEgis0nJk
-         umpg==
-X-Gm-Message-State: AOAM533qgjxZTYblrJOS4p3e9UMseJi5bN0ghLxe+YXsNWpUMcydnZWZ
-        HEHAQSO+3AAbmd/iX778z00=
-X-Google-Smtp-Source: ABdhPJzCmUe2aahWL31EXQn8osBohaFXJD+vj9UD1cu/3qosviYk4/6kjmfOCgNCUI1pwKR0p59aaw==
-X-Received: by 2002:a05:620a:2208:: with SMTP id m8mr40526762qkh.126.1641521878342;
-        Thu, 06 Jan 2022 18:17:58 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t11sm1092323qkm.96.2022.01.06.18.17.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 18:17:57 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] mm/page_alloc.c: Use div64_ul instead of do_div
-Date:   Fri,  7 Jan 2022 02:17:51 +0000
-Message-Id: <20220107021751.621522-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w70wbEdrZB71eZ7G5vu7np2TisVg/QSyUt9QnspenOc=;
+        b=Lsy1c8WKAF9v91XYaAzdHfCTXFoY4B7aN9KeoxSXNujUNAdlRyTINE5dU02h4fmSSr
+         pRI9+XwucbNMPlVWj/C3yW6br6h73aBynKJ43rh0JEXlUUQym2zzWc50k908WKWzbJjl
+         rspAHMyYOkJHfT8HVclPtNJM6Ju/FEU7mcO0ymG1LMj9nhFYU3qpGiHl2qC+l9S63DGE
+         x8Aa/k7xwhbkey+T0Q0n4eWmVKNnXgmK1roIN+WUjB40L1vgy6FPdGe7TTKoDImCwjTc
+         FFQcAFsxo8+xY5L62G7u12JMZNEsZVi15U6TW9fX6UnxKeXTDy056S+agArQxyrmG86c
+         Gdrw==
+X-Gm-Message-State: AOAM533+IWgoFqBocvcSdRe6z3hwGp5XyKB6U0KAC6/vr1yKaCb6jUwd
+        DCldMN7gz0qlC4lBmiv1adDZGrMKya9HRkEEIwNuzA==
+X-Google-Smtp-Source: ABdhPJyuGGdU1B4YPxYw/nS3nAD5s2wMNZ+axp3cZ+2j8IbHcyK/rE3IBGrNqTjmYE1Q7yj1rCOt5p2M1WYW4AGGLcg=
+X-Received: by 2002:a25:5ca:: with SMTP id 193mr70981373ybf.406.1641522086754;
+ Thu, 06 Jan 2022 18:21:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211129034317.2964790-1-stevensd@google.com> <20211129034317.2964790-5-stevensd@google.com>
+ <Yc4G23rrSxS59br5@google.com> <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
+ <YdXrURHO/R82puD4@google.com> <YdXvUaBUvaRPsv6m@google.com>
+ <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com> <YdcpIQgMZJrqswKU@google.com>
+In-Reply-To: <YdcpIQgMZJrqswKU@google.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Fri, 7 Jan 2022 11:21:15 +0900
+Message-ID: <CAD=HUj5v37wZ9NuNC4QBDvCGO2SyNG2KAiTc9Jxfg=R7neCuTw@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Chia-I Wu <olv@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> > These are the type of pages which KVM is currently rejecting. Is this
+> > something that KVM can support?
+>
+> I'm not opposed to it.  My complaint is that this series is incomplete in that it
+> allows mapping the memory into the guest, but doesn't support accessing the memory
+> from KVM itself.  That means for things to work properly, KVM is relying on the
+> guest to use the memory in a limited capacity, e.g. isn't using the memory as
+> general purpose RAM.  That's not problematic for your use case, because presumably
+> the memory is used only by the vGPU, but as is KVM can't enforce that behavior in
+> any way.
+>
+> The really gross part is that failures are not strictly punted to userspace;
+> the resulting error varies significantly depending on how the guest "illegally"
+> uses the memory.
+>
+> My first choice would be to get the amdgpu driver "fixed", but that's likely an
+> unreasonable request since it sounds like the non-KVM behavior is working as intended.
+>
+> One thought would be to require userspace to opt-in to mapping this type of memory
+> by introducing a new memslot flag that explicitly states that the memslot cannot
+> be accessed directly by KVM, i.e. can only be mapped into the guest.  That way,
+> KVM has an explicit ABI with respect to how it handles this type of memory, even
+> though the semantics of exactly what will happen if userspace/guest violates the
+> ABI are not well-defined.  And internally, KVM would also have a clear touchpoint
+> where it deliberately allows mapping such memslots, as opposed to the more implicit
+> behavior of bypassing ensure_pfn_ref().
 
-do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-to avoid a possible truncation.
+Is it well defined when KVM needs to directly access a memslot? At
+least for x86, it looks like most of the use cases are related to
+nested virtualization, except for the call in
+emulator_cmpxchg_emulated. Without being able to specifically state
+what should be avoided, a flag like that would be difficult for
+userspace to use.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- mm/page_alloc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 8dd6399bafb5..60469b616ac1 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -8431,7 +8431,7 @@ static void __setup_per_zone_wmarks(void)
- 
- 		spin_lock_irqsave(&zone->lock, flags);
- 		tmp = (u64)pages_min * zone_managed_pages(zone);
--		do_div(tmp, lowmem_pages);
-+		tmp = div64_ul(tmp, lowmem_pages);
- 		if (is_highmem(zone)) {
- 			/*
- 			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
-@@ -8804,7 +8804,7 @@ void *__init alloc_large_system_hash(const char *tablename,
- 	/* limit allocation size to 1/16 total memory by default */
- 	if (max == 0) {
- 		max = ((unsigned long long)nr_all_pages << PAGE_SHIFT) >> 4;
--		do_div(max, bucketsize);
-+		max = div64_ul(max, bucketsize);
- 	}
- 	max = min(max, 0x80000000ULL);
- 
--- 
-2.25.1
-
+> If we're clever, we might even be able to share the flag with the "guest private
+> memory"[*] concept being pursued for confidential VMs.
+>
+> [*] https://lore.kernel.org/all/20211223123011.41044-1-chao.p.peng@linux.intel.com

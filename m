@@ -2,142 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 365D84874D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1AA4874D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346548AbiAGJfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 04:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S1346504AbiAGJft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 04:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346546AbiAGJfY (ORCPT
+        with ESMTP id S1346547AbiAGJff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 04:35:24 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51122C061212
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:35:24 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so11425136pjj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 01:35:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uPa2Y9r48Tr2TjgiZvIGBvNI/0pFs3VgGlpYuEIyE5A=;
-        b=kyFrRWAXItsw/PhTpWsDKkqDCYcDPo/CSsPz1chXl/ng4d2iLDV1memUqL/OEl+92l
-         jKGiMTZfVGLMq/WAxpbqkBA9h7hsvxOyy3iKpvjEEyM4xccxqp3tdTL9PIwyyUim/vQx
-         bFvPiAgPzVA3vzOPwBiMo8GFUrN8g69RFQnTM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uPa2Y9r48Tr2TjgiZvIGBvNI/0pFs3VgGlpYuEIyE5A=;
-        b=Ic8jHiBRCTaUysWMWqTlj89YCE0U02XlTKTslZOAE3Ut0SZREvnI5L2JIoHJF+sFw2
-         l1KTeYpcA21qjec05Z4EPaBFagdpPI1K0IJiqTE4yqi3mVLqtYRDOA2/EpQ7bBxZpVBN
-         UXlkxXYDf6tLhHLmeSAbmO5C+ydWC6Rw6rQyZgCwsbOzKfvNz2vPT7lqoFfKZrsvebZ5
-         Xo/nNDljEvrpl+OW5KhBoiRwyzUkhx67T8G2Wed/ROWkKEC56l36g9BJQmQpnxzNlSoN
-         Bav0DegOwa69BRZ+JxmVLVNrHSC+0JWi0OfVsEMAXn5XWQmEN4lTTiFr6gz3mtOgrEAb
-         Z9cA==
-X-Gm-Message-State: AOAM532WaenHb97vMy6QIRZyMtdgKRt37mvFLQd9RUpVOD4NV+HLHS0F
-        wzTOoZ1a+s7MYw0msK0md1fMMg==
-X-Google-Smtp-Source: ABdhPJz1h5qNBJkMbnlr4tRBRegzKszr22xmYctO5J2KYeGk4idAT8zh0U05V3Xl73n4YwTJZIM3aA==
-X-Received: by 2002:a17:902:7c05:b0:149:a3b4:934c with SMTP id x5-20020a1709027c0500b00149a3b4934cmr35858061pll.42.1641548123889;
-        Fri, 07 Jan 2022 01:35:23 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:8f6b:ee:64d8:ae81])
-        by smtp.gmail.com with ESMTPSA id j17sm5269192pfu.77.2022.01.07.01.35.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 01:35:23 -0800 (PST)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFT v2 8/8] media: hantro: jpeg: Remove open-coded size in quantization table code
-Date:   Fri,  7 Jan 2022 17:34:55 +0800
-Message-Id: <20220107093455.73766-9-wenst@chromium.org>
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
-In-Reply-To: <20220107093455.73766-1-wenst@chromium.org>
-References: <20220107093455.73766-1-wenst@chromium.org>
+        Fri, 7 Jan 2022 04:35:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D418EC06118C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:35:34 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n5lej-0002WK-4G; Fri, 07 Jan 2022 10:35:29 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n5lei-00CmVE-Fd; Fri, 07 Jan 2022 10:35:28 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/1] iio: adc: tsc2046: add .read_raw support
+Date:   Fri,  7 Jan 2022 10:35:27 +0100
+Message-Id: <20220107093527.3046331-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The quantization tables used in the Hantro JPEG encoder driver are
-implicitly sized by the data they contain, but the loop that scales
-the tables based on the compression quality hard codes the size to
-64. No code exists to check whether the two actually match.
+Add read_raw() support to make use of iio_hwmon and other iio clients.
 
-Commit 85bdcb7eaae7 ("media: hantro: Write the quantization tables in
-proper order") introduced two new tables, with sizes hardcoded to 64,
-but still no checking if all the sizes are the same.
-
-Commit 41479adb5e52 ("media: hantro: Avoid global variable for jpeg
-quantization tables") added the macro JPEG_QUANT_SIZE, but only the
-newly added fields used this.
-
-This has resulted in code scattered with magic numbers and array sizes
-that happen to match up, without any sort of sanity checking to enforce
-it.
-
-Drop the hard-coded array sizes, replace the magic loop count with
-a proper JPEG_QUANT_SIZE macro, and add BUILD_BUG_ON()s to check
-that all the table sizes match up.
-
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/staging/media/hantro/hantro_jpeg.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/iio/adc/ti-tsc2046.c | 114 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 106 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_jpeg.c b/drivers/staging/media/hantro/hantro_jpeg.c
-index 84d3f0bfff00..d07b1b449b61 100644
---- a/drivers/staging/media/hantro/hantro_jpeg.c
-+++ b/drivers/staging/media/hantro/hantro_jpeg.c
-@@ -49,7 +49,7 @@ static const unsigned char chroma_q_table[] = {
- 	0x63, 0x63, 0x63, 0x63, 0x63, 0x63, 0x63, 0x63
- };
+diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
+index 8126084616e6..55787d18e2cd 100644
+--- a/drivers/iio/adc/ti-tsc2046.c
++++ b/drivers/iio/adc/ti-tsc2046.c
+@@ -82,6 +82,7 @@
+ #define TI_TSC2046_DATA_12BIT			GENMASK(14, 3)
  
--static const unsigned char zigzag[64] = {
-+static const unsigned char zigzag[] = {
- 	 0,  1,  8, 16,  9,  2,  3, 10,
- 	17, 24, 32, 25, 18, 11,  4,  5,
- 	12, 19, 26, 33, 40, 48, 41, 34,
-@@ -60,7 +60,7 @@ static const unsigned char zigzag[64] = {
- 	53, 60, 61, 54, 47, 55, 62, 63
- };
+ #define TI_TSC2046_MAX_CHAN			8
++#define TI_TSC2046_INT_VREF			2500
  
--static const u32 hw_reorder[64] = {
-+static const u32 hw_reorder[] = {
- 	 0,  8, 16, 24,  1,  9, 17, 25,
- 	32, 40, 48, 56, 33, 41, 49, 57,
- 	 2, 10, 18, 26,  3, 11, 19, 27,
-@@ -292,7 +292,10 @@ jpeg_scale_quant_table(unsigned char *file_q_tab,
- {
- 	int i;
- 
--	for (i = 0; i < 64; i++) {
-+	BUILD_BUG_ON(ARRAY_SIZE(zigzag) != JPEG_QUANT_SIZE);
-+	BUILD_BUG_ON(ARRAY_SIZE(hw_reorder) != JPEG_QUANT_SIZE);
-+
-+	for (i = 0; i < JPEG_QUANT_SIZE; i++) {
- 		file_q_tab[i] = jpeg_scale_qp(tab[zigzag[i]], scale);
- 		reordered_q_tab[i] = jpeg_scale_qp(tab[hw_reorder[i]], scale);
- 	}
-@@ -311,6 +314,11 @@ static void jpeg_set_quality(struct hantro_jpeg_ctx *ctx)
+ /* Represents a HW sample */
+ struct tsc2046_adc_atom {
+@@ -178,6 +179,11 @@ struct tsc2046_adc_priv {
+ 	.type = IIO_VOLTAGE,					\
+ 	.indexed = 1,						\
+ 	.channel = index,					\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |		\
++			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO) |	\
++			BIT(IIO_CHAN_INFO_DEBOUNCE_COUNT) |	\
++			BIT(IIO_CHAN_INFO_DEBOUNCE_TIME),	\
++	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
+ 	.datasheet_name = "#name",				\
+ 	.scan_index = index,					\
+ 	.scan_type = {						\
+@@ -241,6 +247,14 @@ static u8 tsc2046_adc_get_cmd(struct tsc2046_adc_priv *priv, int ch_idx,
  	else
- 		scale = 200 - 2 * ctx->quality;
+ 		pd = 0;
  
-+	BUILD_BUG_ON(ARRAY_SIZE(luma_q_table) != JPEG_QUANT_SIZE);
-+	BUILD_BUG_ON(ARRAY_SIZE(chroma_q_table) != JPEG_QUANT_SIZE);
-+	BUILD_BUG_ON(ARRAY_SIZE(ctx->hw_luma_qtable) != JPEG_QUANT_SIZE);
-+	BUILD_BUG_ON(ARRAY_SIZE(ctx->hw_chroma_qtable) != JPEG_QUANT_SIZE);
++	switch (ch_idx) {
++	case TI_TSC2046_ADDR_TEMP1:
++	case TI_TSC2046_ADDR_AUX:
++	case TI_TSC2046_ADDR_VBAT:
++	case TI_TSC2046_ADDR_TEMP0:
++		pd |= TI_TSC2046_SER | TI_TSC2046_PD1_VREF_ON;
++	}
 +
- 	jpeg_scale_quant_table(ctx->buffer + LUMA_QUANT_OFF,
- 			       ctx->hw_luma_qtable, luma_q_table, scale);
- 	jpeg_scale_quant_table(ctx->buffer + CHROMA_QUANT_OFF,
+ 	return TI_TSC2046_START | FIELD_PREP(TI_TSC2046_ADDR, ch_idx) | pd;
+ }
+ 
+@@ -252,16 +266,47 @@ static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
+ static int tsc2046_adc_read_one(struct tsc2046_adc_priv *priv, int ch_idx,
+ 				u32 *effective_speed_hz)
+ {
++	struct tsc2046_adc_ch_cfg *ch = &priv->ch_cfg[ch_idx];
++	struct tsc2046_adc_atom *rx_buf, *tx_buf;
++	unsigned int val, val_normalized = 0;
++	int ret, i, count_skip = 0, max_count;
+ 	struct spi_transfer xfer;
+ 	struct spi_message msg;
+-	int ret;
++	u8 cmd;
++
++	if (!effective_speed_hz) {
++		count_skip = tsc2046_adc_time_to_count(priv, ch->settling_time_us);
++		max_count = count_skip + ch->oversampling_ratio;
++	} else {
++		max_count = 1;
++	}
++
++	tx_buf = kcalloc(max_count, sizeof(*tx_buf), GFP_KERNEL);
++	if (!tx_buf)
++		return -ENOMEM;
++
++	rx_buf = kcalloc(max_count, sizeof(*rx_buf), GFP_KERNEL);
++	if (!rx_buf) {
++		ret = -ENOMEM;
++		goto free_tx;
++	}
++
++	/*
++	 * Do not enable automatic power down on working samples. Otherwise the
++	 * plates will never be completely charged.
++	 */
++	cmd = tsc2046_adc_get_cmd(priv, ch_idx, true);
++
++	for (i = 0; i < max_count - 1; i++)
++		tx_buf[i].cmd = cmd;
++
++	/* automatically power down on last sample */
++	tx_buf[i].cmd = tsc2046_adc_get_cmd(priv, ch_idx, false);
+ 
+ 	memset(&xfer, 0, sizeof(xfer));
+-	priv->tx_one->cmd = tsc2046_adc_get_cmd(priv, ch_idx, false);
+-	priv->tx_one->data = 0;
+-	xfer.tx_buf = priv->tx_one;
+-	xfer.rx_buf = priv->rx_one;
+-	xfer.len = sizeof(*priv->tx_one);
++	xfer.tx_buf = tx_buf;
++	xfer.rx_buf = rx_buf;
++	xfer.len = sizeof(*tx_buf) * max_count;
+ 	spi_message_init_with_transfers(&msg, &xfer, 1);
+ 
+ 	/*
+@@ -272,13 +317,25 @@ static int tsc2046_adc_read_one(struct tsc2046_adc_priv *priv, int ch_idx,
+ 	if (ret) {
+ 		dev_err_ratelimited(&priv->spi->dev, "SPI transfer failed %pe\n",
+ 				    ERR_PTR(ret));
+-		return ret;
++		goto free_bufs;
+ 	}
+ 
+ 	if (effective_speed_hz)
+ 		*effective_speed_hz = xfer.effective_speed_hz;
+ 
+-	return tsc2046_adc_get_value(priv->rx_one);
++	for (i = 0; i < max_count - count_skip; i++) {
++		val = tsc2046_adc_get_value(&rx_buf[count_skip + i]);
++		val_normalized += val;
++	}
++
++	ret = DIV_ROUND_UP(val_normalized, max_count - count_skip);
++
++free_bufs:
++	kfree(rx_buf);
++free_tx:
++	kfree(tx_buf);
++
++	return ret;
+ }
+ 
+ static size_t tsc2046_adc_group_set_layout(struct tsc2046_adc_priv *priv,
+@@ -385,6 +442,46 @@ static irqreturn_t tsc2046_adc_trigger_handler(int irq, void *p)
+ 	return IRQ_HANDLED;
+ }
+ 
++static int tsc2046_adc_read_raw(struct iio_dev *indio_dev,
++				struct iio_chan_spec const *chan,
++				int *val, int *val2, long m)
++{
++	struct tsc2046_adc_priv *priv = iio_priv(indio_dev);
++	int ret;
++
++	switch (m) {
++	case IIO_CHAN_INFO_RAW:
++		ret = tsc2046_adc_read_one(priv, chan->channel, NULL);
++		if (ret < 0)
++			return ret;
++
++		*val = ret;
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++		/*
++		 * Note: the TSC2046 has internal voltage divider on the VBAT
++		 * line. This divider can be influenced by external divider.
++		 * So, it is better to use external voltage-divider.
++		 */
++		*val = TI_TSC2046_INT_VREF;
++		*val2 = chan->scan_type.realbits;
++		return IIO_VAL_FRACTIONAL_LOG2;
++	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
++		*val = priv->ch_cfg[chan->channel].oversampling_ratio;
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_DEBOUNCE_COUNT:
++		*val = tsc2046_adc_time_to_count(priv,
++				priv->ch_cfg[chan->channel].settling_time_us);
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_DEBOUNCE_TIME:
++		*val = priv->ch_cfg[chan->channel].settling_time_us;
++		return IIO_VAL_INT;
++	}
++
++	return -EINVAL;
++}
++
+ static int tsc2046_adc_update_scan_mode(struct iio_dev *indio_dev,
+ 					const unsigned long *active_scan_mask)
+ {
+@@ -415,6 +512,7 @@ static int tsc2046_adc_update_scan_mode(struct iio_dev *indio_dev,
+ }
+ 
+ static const struct iio_info tsc2046_adc_info = {
++	.read_raw	  = tsc2046_adc_read_raw,
+ 	.update_scan_mode = tsc2046_adc_update_scan_mode,
+ };
+ 
 -- 
-2.34.1.575.g55b058a8bb-goog
+2.30.2
 

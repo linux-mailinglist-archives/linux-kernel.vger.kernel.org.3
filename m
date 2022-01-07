@@ -2,187 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12EB487B4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5E0487B55
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348548AbiAGRWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:22:13 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43874 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiAGRWM (ORCPT
+        id S1348565AbiAGRXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:23:41 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:52928 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348550AbiAGRXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:22:12 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 08565210EB;
-        Fri,  7 Jan 2022 17:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641576131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UI+Qu+ntgMHu9DPaL+mEKxd+gHSWitvbHxpVywBZ1V4=;
-        b=Mi4bJf/og/2zbr6waXD5G8AkMgEwGRLT+vXVlwBJjZLnPwi/ZKzW57EM5ugVnCb2u7clRd
-        7ZI+blAa737FdZzwD4+u3N0xtFeyswqJJhDoK9ZN8I1GMaQ15fhGbsl1DAimjYJGeAhpAK
-        7X39KdrWAKyAF/9yYUvJtMlBi1BQlmg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641576131;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UI+Qu+ntgMHu9DPaL+mEKxd+gHSWitvbHxpVywBZ1V4=;
-        b=IuOIC538emYqTz4YdjduIVikz+dOrQXeD31mk0m5oXYH5skO0o8959jcJpx3+86UKPEZ+k
-        mgO72vYi6bqEQHDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 866A913D17;
-        Fri,  7 Jan 2022 17:22:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T0ILIMJ22GH1RAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 07 Jan 2022 17:22:10 +0000
-Message-ID: <82de6739-a070-695b-bbc8-dfa931aa5e00@suse.cz>
-Date:   Fri, 7 Jan 2022 18:22:10 +0100
+        Fri, 7 Jan 2022 12:23:39 -0500
+Received: from [192.168.1.18] ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 5sxancGFrwEZf5sxgnfr6r; Fri, 07 Jan 2022 18:23:36 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 07 Jan 2022 18:23:36 +0100
+X-ME-IP: 90.11.185.88
+Message-ID: <cfabcc1c-16cd-80f7-7d28-6d817c29a7a0@wanadoo.fr>
+Date:   Fri, 7 Jan 2022 18:23:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 16/43] kmsan: mm: call KMSAN hooks from SLUB code
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 16/16] PCI: Remove usage of the deprecated
+ "pci-dma-compat.h" API
 Content-Language: en-US
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-17-glider@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211214162050.660953-17-glider@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <e965573211f8c81c8ba978cfbc21925810a662b1.1641500561.git.christophe.jaillet@wanadoo.fr>
+ <20220106222804.GA330366@bhelgaas>
+ <0e381699-8bfa-186b-3688-5346e42a63cd@wanadoo.fr>
+In-Reply-To: <0e381699-8bfa-186b-3688-5346e42a63cd@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 17:20, Alexander Potapenko wrote:
-> In order to report uninitialized memory coming from heap allocations
-> KMSAN has to poison them unless they're created with __GFP_ZERO.
+
+
+Le 07/01/2022 à 07:34, Christophe JAILLET a écrit :
+> Le 06/01/2022 à 23:28, Bjorn Helgaas a écrit :
+>> On Thu, Jan 06, 2022 at 10:55:33PM +0100, Christophe JAILLET wrote:
+>>> Final step, remove pci-dma-compat.h
+>>>
+>>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>>
+>> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+>>
+>> Obviously this has to be applied after all the others, so I assume
+>> somebody else will take this.
+>>
+>>> ---
+>>>   include/linux/pci-dma-compat.h | 129 ---------------------------------
+>>>   include/linux/pci.h            |   3 -
+>>>   2 files changed, 132 deletions(-)
+>>>   delete mode 100644 include/linux/pci-dma-compat.h
+>>>
+>>> diff --git a/include/linux/pci-dma-compat.h 
+>>> b/include/linux/pci-dma-compat.h
+>>> deleted file mode 100644
+>>> index 249d4d7fbf18..000000000000
+>>> --- a/include/linux/pci-dma-compat.h
+>>> +++ /dev/null
+>>> @@ -1,129 +0,0 @@
+>>> -/* SPDX-License-Identifier: GPL-2.0 */
+>>> -/* include this file if the platform implements the dma_ DMA Mapping 
+>>> API
+>>> - * and wants to provide the pci_ DMA Mapping API in terms of it */
+>>> -
+>>> -#ifndef _ASM_GENERIC_PCI_DMA_COMPAT_H
+>>> -#define _ASM_GENERIC_PCI_DMA_COMPAT_H
+>>> -
+>>> -#include <linux/dma-mapping.h>
+>>> -
+>>> [...]
+>>>  >>> diff --git a/include/linux/pci.h b/include/linux/pci.h
+>>> index d4308f847e58..ba8771eaf380 100644
+>>> --- a/include/linux/pci.h
+>>> +++ b/include/linux/pci.h
+>>> @@ -2455,9 +2455,6 @@ static inline bool 
+>>> pci_is_thunderbolt_attached(struct pci_dev *pdev)
+>>>   void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result 
+>>> err_type);
+>>>   #endif
+>>> -/* Provide the legacy pci_dma_* API */
+>>> -#include <linux/pci-dma-compat.h>
+>>> -
 > 
-> It's handy that we need KMSAN hooks in the places where
-> init_on_alloc/init_on_free initialization is performed.
+> After one more night, I should have mentionned that the way have removed 
+> "pci-dma-compat.h" may break OTHER drives because of indirect include.
 > 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-> ---
-> Link: https://linux-review.googlesource.com/id/I6954b386c5c5d7f99f48bb6cbcc74b75136ce86e
-> ---
->  mm/slab.h |  1 +
->  mm/slub.c | 26 +++++++++++++++++++++++---
->  2 files changed, 24 insertions(+), 3 deletions(-)
+> The line above should maybe be replaced by:
+>    #include <linux/dma-mapping.h>
+> which is hidden in "pci-dma-compat.h".
 > 
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 56ad7eea3ddfb..6175a74047b47 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -521,6 +521,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->  			memset(p[i], 0, s->object_size);
->  		kmemleak_alloc_recursive(p[i], s->object_size, 1,
->  					 s->flags, flags);
-> +		kmsan_slab_alloc(s, p[i], flags);
->  	}
->  
->  	memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
-> diff --git a/mm/slub.c b/mm/slub.c
-> index abe7db581d686..5a63486e52531 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -22,6 +22,7 @@
->  #include <linux/proc_fs.h>
->  #include <linux/seq_file.h>
->  #include <linux/kasan.h>
-> +#include <linux/kmsan.h>
->  #include <linux/cpu.h>
->  #include <linux/cpuset.h>
->  #include <linux/mempolicy.h>
-> @@ -346,10 +347,13 @@ static inline void *freelist_dereference(const struct kmem_cache *s,
->  			    (unsigned long)ptr_addr);
->  }
->  
-> +/*
-> + * See the comment to get_freepointer_safe().
-> + */
+> Will see if built-bots complain.
 
-I did...
+And so they did.
 
->  static inline void *get_freepointer(struct kmem_cache *s, void *object)
->  {
->  	object = kasan_reset_tag(object);
-> -	return freelist_dereference(s, object + s->offset);
-> +	return kmsan_init(freelist_dereference(s, object + s->offset));
+What is the best option?
+1. Add    #include <linux/dma-mapping.h>?		or
+2. Add this "missing" include in needed place?
 
-... but I don't see why it applies to get_freepointer() too? What am I missing?
+I would say 2, but I would need help, because I don't have a built farm 
+at home! :)
 
->  }
->  
->  static void prefetch_freepointer(const struct kmem_cache *s, void *object)
-> @@ -357,18 +361,28 @@ static void prefetch_freepointer(const struct kmem_cache *s, void *object)
->  	prefetchw(object + s->offset);
->  }
->  
-> +/*
-> + * When running under KMSAN, get_freepointer_safe() may return an uninitialized
-> + * pointer value in the case the current thread loses the race for the next
-> + * memory chunk in the freelist. In that case this_cpu_cmpxchg_double() in
-> + * slab_alloc_node() will fail, so the uninitialized value won't be used, but
-> + * KMSAN will still check all arguments of cmpxchg because of imperfect
-> + * handling of inline assembly.
-> + * To work around this problem, use kmsan_init() to force initialize the
-> + * return value of get_freepointer_safe().
-> + */
->  static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
->  {
->  	unsigned long freepointer_addr;
->  	void *p;
->  
->  	if (!debug_pagealloc_enabled_static())
-> -		return get_freepointer(s, object);
-> +		return kmsan_init(get_freepointer(s, object));
 
-So here kmsan_init() is done twice?
 
->  
->  	object = kasan_reset_tag(object);
->  	freepointer_addr = (unsigned long)object + s->offset;
->  	copy_from_kernel_nofault(&p, (void **)freepointer_addr, sizeof(p));
-> -	return freelist_ptr(s, p, freepointer_addr);
-> +	return kmsan_init(freelist_ptr(s, p, freepointer_addr));
->  }
->  
->  static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
+This breaks:
+
+    drivers/s390/net/ism_drv.c: In function 'register_sba':
+    drivers/s390/net/ism_drv.c:93:15: error: implicit declaration of 
+function 'dma_alloc_coherent' [-Werror=implicit-function-declaration]
+       93 |         sba = dma_alloc_coherent(&ism->pdev->dev, PAGE_SIZE, 
+&dma_handle,
+          |               ^~~~~~~~~~~~~~~~~~
+[...]
+
+
+
+I got another built failure that I don't understand:
+
+    In file included from drivers/scsi/fdomain.c:87:
+ >> include/scsi/scsicam.h:16:31: warning: 'struct block_device' 
+declared inside parameter list will not be visible outside of this 
+definition or declaration
+       16 | int scsicam_bios_param(struct block_device *bdev, sector_t 
+capacity, int *ip);
+          |                               ^~~~~~~~~~~~
+    include/scsi/scsicam.h:17:27: warning: 'struct block_device' 
+declared inside parameter list will not be visible outside of this 
+definition or declaration
+       17 | bool scsi_partsize(struct block_device *bdev, sector_t 
+capacity, int geom[3]);
+          |                           ^~~~~~~~~~~~
+    include/scsi/scsicam.h:18:40: warning: 'struct block_device' 
+declared inside parameter list will not be visible outside of this 
+definition or declaration
+       18 | unsigned char *scsi_bios_ptable(struct block_device *bdev);
+          |                                        ^~~~~~~~~~~~
+    drivers/scsi/fdomain.c: In function 'fdomain_biosparam':
+ >> drivers/scsi/fdomain.c:468:45: error: passing argument 1 of 
+'scsi_bios_ptable' from incompatible pointer type 
+[-Werror=incompatible-pointer-types]
+      468 |         unsigned char *p = scsi_bios_ptable(bdev);
+          |                                             ^~~~
+          |                                             |
+          |                                             struct 
+block_device *
+    In file included from drivers/scsi/fdomain.c:87:
+    include/scsi/scsicam.h:18:54: note: expected 'struct block_device *' 
+but argument is of type 'struct block_device *'
+       18 | unsigned char *scsi_bios_ptable(struct block_device *bdev);
+          |                                 ~~~~~~~~~~~~~~~~~~~~~^~~~
+
+
+CJ

@@ -2,118 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4868487F30
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C4F487F39
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiAGXCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 18:02:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37276 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiAGXB7 (ORCPT
+        id S231361AbiAGXJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 18:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231284AbiAGXJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 18:01:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 888D2B80B50;
-        Fri,  7 Jan 2022 23:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6867C36AE9;
-        Fri,  7 Jan 2022 23:01:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641596517;
-        bh=B0v7iGUci7GVYDzdLRx77A6fKfqdb4qSSCogIqDJ8Ec=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=PpsUtqiQCt8YbFCwFZYodxNP6vINYMVpPjhATJ7rYrs4f2Pb02CYJSS8h9BEdDv9+
-         8Vx9ey3K0YfnP3JUpt962jGDFz66TfUix2SYLQGx9sP+tWbsd4RJLZfUCmLEzA/Avj
-         HseUDM8G3JHkZxORXrpAzkWmyoizld66HY1+Sug0EnulHI7MN6ixQxG/uvsCxjVs+V
-         f80Z4rWTylYcehWWN2hhomoR4+Xe5wg1BEGITEbn5wO89A/ZQk6ZxuxaoIZaJRX1vl
-         TQH2Ej6/KuQQQRxlbxE64V7HYN04mhqaM/ehreiIPFSx4n4izb0IJWiIrORyYSmOHe
-         zpQs6rLzoZP4Q==
-Date:   Fri, 7 Jan 2022 17:01:55 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Fri, 7 Jan 2022 18:09:21 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDFAC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 15:09:21 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 200so6884376pgg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 15:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qHllN4kbwo4ufYEtJroZvaPo8Ljk02uIK7K+t+FgJRE=;
+        b=clxQZ9/ftSN9Vg09HHNPgNxsc3gPmDUeH96HuZnP9bVy/K3lNNKB0FSAY+y+NnH/ls
+         llJ8ym3M7uTyclFeuMpU2Me8bq8oK/6UHYeCvsYppqYFD+WARZ3FFYb8OAR79LenuP32
+         209ruO+EokmLNmPBtT3AxH/JhPL7IEGTYUpP8X5buH+NFTqRq3QIxDw4xhkxSzaxCzIY
+         /LjgTG+p2A5gYANiEX0T/7bslhjYorhRn27YidxdToHKUYDga8kOXYOPd0Euf6FUHFRW
+         pdnfbhgMpsMmOjzDHVWsj+0+FjyF0wILDRcHiKFFQQZTEA/w2mcxJue3EOEU0yogKkhM
+         zERQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qHllN4kbwo4ufYEtJroZvaPo8Ljk02uIK7K+t+FgJRE=;
+        b=XZe6Bz52mmzb1YbAIY3OXBf6l6HNoGlz9CsTSDJ+beCw3ecUrKRFiIzSjxZxXthhOZ
+         gsH4pRrj1+2YLYIRWclzks3XMsYuwV5e0HpQiyzlIlmaeODuUFHTar2kSXbfbtkHNl8k
+         1sFeyVVs1ZQwg6O9/7zcnjXHdDvXWcoT856iiRdIq3w4sboJ3Yxb85SaNikAur0xxjRJ
+         ipNk/A+HBIXahJOzZGtXpjXl5NkyHSBb8jnwbRYeVgfyBuWI/7hE8k5Pq/q2oV+EyNNa
+         ScrZP9mOeVn7IdC9AxLjvqsvMV5CM8Moa5SzWpHzN7y6JOYqMyOcm03W6d9WcDXBo2XY
+         9p2w==
+X-Gm-Message-State: AOAM531KQ1CcZD5GSISRLdaEpXXNX8L6y4ZTF9eUoJoEMJoSeMeofOOv
+        bIqtUDDjdh6qUkM5hjXriryzLg==
+X-Google-Smtp-Source: ABdhPJyt7KDmdYwRa0yzfNvIJHbHrYXII036Dt2obZiD43vzHxUYpQN2oxvsCMZIkl0YL3nuC8wDYQ==
+X-Received: by 2002:a63:af16:: with SMTP id w22mr57593728pge.560.1641596960987;
+        Fri, 07 Jan 2022 15:09:20 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p186sm8622pfp.128.2022.01.07.15.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 15:09:20 -0800 (PST)
+Date:   Fri, 7 Jan 2022 23:09:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/15] PCI: mvebu: Disallow mapping interrupts on
- emulated bridges
-Message-ID: <20220107230155.GA425110@bhelgaas>
+Subject: Re: [PATCH v2 3/5] KVM: nVMX: Rename vmcs_to_field_offset{,_table}
+Message-ID: <YdjIHQXtRilU2Hm7@google.com>
+References: <20220107102859.1471362-1-vkuznets@redhat.com>
+ <20220107102859.1471362-4-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220107221348.5s4ehqhxunmoacbm@pali>
+In-Reply-To: <20220107102859.1471362-4-vkuznets@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:13:48PM +0100, Pali Rohár wrote:
-> On Friday 07 January 2022 15:32:16 Bjorn Helgaas wrote:
-> > On Thu, Nov 25, 2021 at 01:45:55PM +0100, Pali Rohár wrote:
-> > > Interrupt support on mvebu emulated bridges is not implemented yet.
-> > 
-> > Is this mvebu-specific, or is aardvar also affected?
+On Fri, Jan 07, 2022, Vitaly Kuznetsov wrote:
+> vmcs_to_field_offset{,_table} may sound misleading as VMCS is an opaque
+> blob which is not supposed to be accessed directly. In fact,
+> vmcs_to_field_offset{,_table} are related to KVM defined VMCS12 structure.
 > 
-> This is pci-mvebu.c driver specific, it does not implement emulation of
-> neither INTx, nor MSI interrupts for emulated pci bridge (root port). As
-> we know this HW does not have compliant pci root port, it needs to be
-> emulated in driver, and emulation for interrupts is missing. (it means
-> that also AER interrupt is missing).
+> Rename vmcs_field_to_offset() to get_vmcs12_field_offset() for clarity.
 > 
-> And pci-aardvark.c driver has same issue and similar patch is required
-> for pci-aardvark.c too. Marek should take care of it. But for
-> pci-aardvark we already have implementation which emulates INTx
-> interrupts and it is waiting for review on the list:
-> https://lore.kernel.org/linux-pci/20211208061851.31867-1-kabel@kernel.org/
+> No functional change intended.
 > 
-> > > So properly indicate return value to callers that they cannot request
-> > > interrupts from emulated bridge.
-> > 
-> > Pet peeve: descriptions that say "do this *properly*".  As though the
-> > previous authors were just ignorant or intentionally did something
-> > *improperly* :)
-> > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Cc: stable@vger.kernel.org
-> > > ---
-> > >  drivers/pci/controller/pci-mvebu.c | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > index 19c6ee298442..a3df352d440e 100644
-> > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > @@ -705,6 +705,15 @@ static struct pci_ops mvebu_pcie_ops = {
-> > >  	.write = mvebu_pcie_wr_conf,
-> > >  };
-> > >  
-> > > +static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
-> > > +{
-> > > +	/* Interrupt support on mvebu emulated bridges is not implemented yet */
-> > > +	if (dev->bus->number == 0)
-> > > +		return 0; /* Proper return code 0 == NO_IRQ */
-> > > +
-> > > +	return of_irq_parse_and_map_pci(dev, slot, pin);
-> > 
-> > Is this something that could be done with a .read_base() op, e.g.,
-> > make PCI_INTERRUPT_PIN contain zero (PCI_INTERRUPT_UNKNOWN)?
-> 
-> I'm not sure... maybe. I choose this style as after I implement
-> emulation of INTx interrupts it allows me just to replace "return 0;" by
-> "return my_mapping_function_for_root_port(...);". 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
 
-OK, so even after you implement INTx for the emulated Root Ports, the
-default of_irq_parse_and_map_pci() is insufficient, and you will
-require an mvebu .map_irq() function.  That's reasonable.
-
-"PCI_INTERRUPT_PIN == 0" is the way software learns that a device
-doesn't use INTx, of course, and I suppose PCI_INTERRUPT_PIN already
-reads as zero, since mvebu_pci_bridge_emul_init() doesn't set
-bridge->conf.intpin, and I assume the default value would be zero?
-
-Bjorn
+Reviewed-by: Sean Christopherson <seanjc@google.com>

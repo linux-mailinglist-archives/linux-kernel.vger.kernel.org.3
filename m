@@ -2,130 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4674871D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D3B4871DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346091AbiAGEhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 23:37:05 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:33518 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346075AbiAGEhA (ORCPT
+        id S1345806AbiAGEnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 23:43:12 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58451 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbiAGEnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 23:37:00 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V19C5WZ_1641530215;
-Received: from 30.22.113.103(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0V19C5WZ_1641530215)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 07 Jan 2022 12:36:56 +0800
-Message-ID: <142c192f-f8a5-cd52-fe85-6cbccd6c2a9b@linux.alibaba.com>
-Date:   Fri, 7 Jan 2022 12:36:55 +0800
+        Thu, 6 Jan 2022 23:43:11 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVVvy0RpWz4xts;
+        Fri,  7 Jan 2022 15:43:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641530590;
+        bh=qPGhPR+Z+Z92noDv8k9SKWIIl+jHtp1XlEUwg7LNDTs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eIXXPvokUXnnraNUNNXhUX7dEjVOya6V+mOVF3EsUJbyjO1c3+PKSureViSHzS+FS
+         MlAR/1E3JCuovO1yozW6eHd4MQlzGjIJSQw0gihbz5sRROhVR1KO8cBMA/Nq+MuE+X
+         i7FnX5JtL4WGAQJn0LM4NPOh7ClFgSpqoSFuvbrOgGnlouzp4ChXe5PXbi1SyfbtIt
+         d6z+/AFcC+AmVbq/PH8XfirAYLIddJv18cVd7r7c5uCA4X4kfe7DwLh0yDTy9SdK1a
+         I3BdooU/RiDUs/wm2RAPqsMuQBTbFHAV8GxeAnFqCvY9efgFOucJd9V9LEpc52MhgA
+         tRqdOlbrzeDmw==
+Date:   Fri, 7 Jan 2022 15:43:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?B?bg==?= 
+        <mic@linux.microsoft.com>
+Subject: linux-next: manual merge of the tpmdd tree with the kbuild tree
+Message-ID: <20220107154309.287d658a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [RFC PATCH 5/6] KVM: X86: Alloc pae_root shadow page
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
-References: <20211210092508.7185-1-jiangshanlai@gmail.com>
- <20211210092508.7185-6-jiangshanlai@gmail.com> <YdTCKoTgI5IgOvln@google.com>
- <CAJhGHyAOyR6yGdyxsKydt_+HboGjxc-psbbSCqsrBo4WgUgQsQ@mail.gmail.com>
- <YdXLNEwCY8cqV7KS@google.com>
- <dc8f2508-35ac-0dee-2465-4b5a8e3879ca@linux.alibaba.com>
- <YddF+6eX7ycAsZLr@google.com>
-From:   Lai Jiangshan <laijs@linux.alibaba.com>
-In-Reply-To: <YddF+6eX7ycAsZLr@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/.WxI_cplo/pHnJakss.Mclc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/.WxI_cplo/pHnJakss.Mclc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2022/1/7 03:41, Sean Christopherson wrote:
-> On Thu, Jan 06, 2022, Lai Jiangshan wrote:
->>
->>
->> On 2022/1/6 00:45, Sean Christopherson wrote:
->>> On Wed, Jan 05, 2022, Lai Jiangshan wrote:
->>>> On Wed, Jan 5, 2022 at 5:54 AM Sean Christopherson <seanjc@google.com> wrote:
->>>>
->>>>>>
->>>>>> default_pae_pdpte is needed because the cpu expect PAE pdptes are
->>>>>> present when VMenter.
->>>>>
->>>>> That's incorrect.  Neither Intel nor AMD require PDPTEs to be present.  Not present
->>>>> is perfectly ok, present with reserved bits is what's not allowed.
->>>>>
->>>>> Intel SDM:
->>>>>     A VM entry that checks the validity of the PDPTEs uses the same checks that are
->>>>>     used when CR3 is loaded with MOV to CR3 when PAE paging is in use[7].  If MOV to CR3
->>>>>     would cause a general-protection exception due to the PDPTEs that would be loaded
->>>>>     (e.g., because a reserved bit is set), the VM entry fails.
->>>>>
->>>>>     7. This implies that (1) bits 11:9 in each PDPTE are ignored; and (2) if bit 0
->>>>>        (present) is clear in one of the PDPTEs, bits 63:1 of that PDPTE are ignored.
->>>>
->>>> But in practice, the VM entry fails if the present bit is not set in the
->>>> PDPTE for the linear address being accessed (when EPT enabled at least).  The
->>>> host kvm complains and dumps the vmcs state.
->>>
->>> That doesn't make any sense.  If EPT is enabled, KVM should never use a pae_root.
->>> The vmcs.GUEST_PDPTRn fields are in play, but those shouldn't derive from KVM's
->>> shadow page tables.
->>
->> Oh, I wrote the negative what I want to say again when I try to emphasis
->> something after I wrote a sentence and modified it several times.
->>
->> I wanted to mean "EPT not enabled" when vmx.
-> 
-> Heh, that makes a lot more sense.
-> 
->> The VM entry fails when the guest is in very early stage when booting which
->> might be still in real mode.
->>
->> VMEXIT: intr_info=00000000 errorcode=0000000 ilen=00000000
->> reason=80000021 qualification=0000000000000002
-> 
-> Yep, that's the signature for an illegal PDPTE at VM-Enter.  But as noted above,
-> a not-present PDPTE is perfectly legal, VM-Enter should failed if and only if a
-> PDPTE is present and has reserved bits set.
-> 
->> IDTVectoring: info=00000000 errorcode=00000000
->>
->>>
->>> And I doubt there is a VMX ucode bug at play, as KVM currently uses '0' in its
->>> shadow page tables for not-present PDPTEs.
->>>
->>> If you can post/provide the patches that lead to VM-Fail, I'd be happy to help
->>> debug.
->>
->> If you can try this patchset, you can just set the default_pae_pdpte to 0 to test
->> it.
-> 
-> I can't reproduce the failure with this on top of your series + kvm/queue (commit
-> cc0e35f9c2d4 ("KVM: SVM: Nullify vcpu_(un)blocking() hooks if AVIC is disabled")).
-> 
+Today's linux-next merge of the tpmdd tree got a conflict in:
 
+  certs/Makefile
 
-I can't reproduce the failure with this code base either.  And I can't reproduce
-the failure when I switch to the code base when I developed it.
+between commits:
 
-After reviewing all the logs I saved that time, I think it was fixed after
-make_pae_pdpte().  I should have added make_pae_pdpte() first before added
-default_pae_pdpte.  (The code was still mess and the guest can't fully
-function even when make_pae_pdpte() was added that time)
+  33c1957574b6 ("kbuild: do not quote string values in include/config/auto.=
+conf")
+  41f431290557 ("certs: refactor file cleaning")
 
-Removing default_pae_pdpte will simplify the code. Thank you.
+from the kbuild tree and commit:
 
-Thanks
-Lai.
+  0fde37e9c004 ("certs: Check that builtin blacklist hashes are valid")
+
+from the tpmdd tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc certs/Makefile
+index f7041c29a2e0,e38e10c46890..000000000000
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@@ -6,21 -6,46 +6,36 @@@
+  obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) +=3D system_keyring.o system_certifi=
+cates.o common.o
+  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist.o common.o
+  obj-$(CONFIG_SYSTEM_REVOCATION_LIST) +=3D revocation_certificates.o
+ -ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
+ +ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
++=20
++ quiet_cmd_check_blacklist_hashes =3D CHECK   $(patsubst "%",%,$(2))
++       cmd_check_blacklist_hashes =3D $(AWK) -f $(srctree)/scripts/check-b=
+lacklist-hashes.awk $(2); touch $@
++=20
++ $(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
++=20
++ $(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
++=20
++ CFLAGS_blacklist_hashes.o +=3D -I$(srctree)
++=20
+ -targets +=3D blacklist_hashes_checked
++ $(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$=
+(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FO=
+RCE
++ 	$(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SR=
+CPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
++=20
+  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_hashes.o
++=20
+  else
+  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_nohashes.o
+  endif
+++targets +=3D blacklist_hashes_checked
+ =20
+ -ifeq ($(CONFIG_SYSTEM_TRUSTED_KEYRING),y)
+ -
+ -$(eval $(call config_filename,SYSTEM_TRUSTED_KEYS))
+ +quiet_cmd_extract_certs  =3D CERT    $@
+ +      cmd_extract_certs  =3D $(obj)/extract-cert $(2) $@
+ =20
+ -# GCC doesn't include .incbin files in -MD generated dependencies (PR#668=
+71)
+  $(obj)/system_certificates.o: $(obj)/x509_certificate_list
+ =20
+ -# Cope with signing_key.x509 existing in $(srctree) not $(objtree)
+ -AFLAGS_system_certificates.o :=3D -I$(srctree)
+ -
+ -quiet_cmd_extract_certs  =3D EXTRACT_CERTS   $(patsubst "%",%,$(2))
+ -      cmd_extract_certs  =3D scripts/extract-cert $(2) $@
+ +$(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/extrac=
+t-cert FORCE
+ +	$(call if_changed,extract_certs,$(if $(CONFIG_SYSTEM_TRUSTED_KEYS),$<,""=
+))
+ =20
+  targets +=3D x509_certificate_list
+ -$(obj)/x509_certificate_list: scripts/extract-cert $(SYSTEM_TRUSTED_KEYS_=
+SRCPREFIX)$(SYSTEM_TRUSTED_KEYS_FILENAME) FORCE
+ -	$(call if_changed,extract_certs,$(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(CONFIG=
+_SYSTEM_TRUSTED_KEYS))
+ -endif # CONFIG_SYSTEM_TRUSTED_KEYRING
+ -
+ -clean-files :=3D x509_certificate_list .x509.list x509_revocation_list bl=
+acklist_hashes_checked
+ =20
+  ifeq ($(CONFIG_MODULE_SIG),y)
+  	SIGN_KEY =3D y
+
+--Sig_/.WxI_cplo/pHnJakss.Mclc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXxN0ACgkQAVBC80lX
+0GzaaAf/cxADqh2us9UXNDU264P1ZdwDGy4iOWO/Gphz2V1Qxov3VvQftG67eMJg
+NQ0E0WGBh7JL8X8WV3VootdAkjVJ9vZcAJ/nWM649gNqHtDq/Aunc2mzd1FOMooE
+tK/Np5K9dqK+t9Xnq1mcTqs9AxDvhtYFusKjDB6SO35BNpyGJo7vFyiINR3shHW6
+8EQE4rRSG8NYnum/ejzpr9ZsvKtJ96KawktzLHoAaNbMmVHqZKXcsZMW0gL3blUG
+B9dBG08n/v0GjyIQ47W+dj5iS1XpvTL0iMZMbDQ0yEIq+5H3/IgXHCaaTn83xDGu
++kx0qdIkgPfDxyftSDHNR4huuiGvOQ==
+=pzpK
+-----END PGP SIGNATURE-----
+
+--Sig_/.WxI_cplo/pHnJakss.Mclc--

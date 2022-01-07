@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E28E487E04
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D305487E08
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiAGVJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiAGVJH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:09:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAD6C061574;
-        Fri,  7 Jan 2022 13:09:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78A97B82604;
-        Fri,  7 Jan 2022 21:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05A8C36AE9;
-        Fri,  7 Jan 2022 21:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641589744;
-        bh=K/JhrwqQbSMuUehTwf3TsC5iGJ5JuvB2mFD5WJYCTBw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=C687/ms8TsF5D5FYUSJ8JkUCZI2qUNUy6Ru/vxOD+KCd8ojQDMInY4fdY7dZkUTm0
-         QoMgHmVZyTsFCEyBqKzOQBmNumfOxV1MJNrmVJEm5YluP+MHXYWUZXt5l3mkJ1bBKJ
-         TXC8q4nctPDoyqUyAaCHBUMw+6dweoml6yoS4XhHDdFMqaoWpbMwTw1/Sb6CdE43M8
-         eI3NZ0R8inL/ni1eC+90YBJE9Jyl7GWB6/wHsj/xgbM3zgiBDqMNZgYaqmGIwMmtAZ
-         bBb9I2qz8QVHl+HR6ylBDhgFlV0qucRbMCzySXuvSPU7XEIAtWkGzWKLOyxkrAWZ0P
-         5CSI43yYmlNeQ==
-Date:   Fri, 7 Jan 2022 15:09:02 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/15] PCI: mvebu: Check that PCI bridge specified in DT
- has function number zero
-Message-ID: <20220107210902.GA403155@bhelgaas>
+        id S229783AbiAGVKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:10:18 -0500
+Received: from mga18.intel.com ([134.134.136.126]:63950 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229462AbiAGVKR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 16:10:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641589817; x=1673125817;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZiH5XvkEy3rBJJsprYg7YQRVNMcngBzBe3wm7GQ5srs=;
+  b=n6joSYsCUl+537gUoT3YUx76/Rt1WNLluMQnXXQ0zzz1H3FH7439kQRM
+   b61z8xVgz2tcYhLWmGPIpui0FvVhYjvZpF8Q50OvlMk+2yV15DOtYGZ+8
+   8vaJ/Bb1Tc4a/AO6SOlxkqqpM+6MtUkOLAK5VMX7Fpr9/rtx8nA94bYlC
+   SBYpfQIqqJQpa+AB3Y8S7cixBOWKHAV8fL3H74W2ojWEBQ4BJlOi48Zp6
+   OAAL9Pce8uyFSTvLIUhL5tK59giTCXLzJ74I8DuBxLHFnb92hiM9wyKec
+   V3rxKTwsz4JKuHxO+WvAQjxVneKSCwuFD+tyd37tauIWOuHdu3uBwf1qJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="229749672"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="229749672"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 13:10:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="622064024"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 07 Jan 2022 13:10:16 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5wV5-000J2d-Ev; Fri, 07 Jan 2022 21:10:15 +0000
+Date:   Sat, 8 Jan 2022 05:10:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 625/2372]
+ include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No
+ such file or directory
+Message-ID: <202201080531.7YdO04Xs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220107181819.yiya3mxhtfsnubg4@pali>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 07:18:19PM +0100, Pali Rohár wrote:
-> On Friday 07 January 2022 12:15:12 Bjorn Helgaas wrote:
-> > On Thu, Nov 25, 2021 at 01:45:53PM +0100, Pali Rohár wrote:
-> > > Driver cannot handle PCI bridges at non-zero function address. So add
-> > > appropriate check. Currently all in-tree kernel DTS files set PCI bridge
-> > > function to zero.
-> > 
-> > Why can the driver not handle bridges at non-zero function addresses?
-> > The PCI spec allows that, doesn't it?  Is this a hardware limitation?
-> 
-> It is software / kernel limitation.
-> 
-> Because this bridge is virtual, emulated by pci-bridge-emul.c driver and
-> this driver can emulate only single function PCI-to-PCI bridge device.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   67f8f45b4d0cf00f8e53fc1c2b50c67608ede063
+commit: 625b17b2e0d914f895af230aeab06adad7f70223 [625/2372] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220108/202201080531.7YdO04Xs-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=625b17b2e0d914f895af230aeab06adad7f70223
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 625b17b2e0d914f895af230aeab06adad7f70223
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc prepare
 
-That's weird.  Why does pci-bridge-emul.c care about the function
-number?  Or maybe you're saying that pci-mvebu.c isn't smart enough to
-build an emulated bridge at a non-zero function?  Or, since this is
-emulated, maybe there's just no *reason* to ever use a non-zero
-function?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It would really be nice to have the commit log and maybe even a
-comment allude to what's going on here .  Otherwise this check sort of
-dangles without having an obvious reason for existence.
+All errors (new ones prefixed by >>):
 
-Does this issue also affect pci-aardvark.c (which looks like the only
-other user of pci_bridge_emul_init())?
+   arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unknown, fallback to ''
+   In file included from arch/arc/include/asm/barrier.h:42,
+                    from arch/arc/include/asm/cmpxchg.h:12,
+                    from arch/arc/include/asm/atomic.h:13,
+                    from include/linux/atomic.h:7,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/arc/include/asm/bitops.h:188,
+                    from include/linux/bitops.h:28,
+                    from include/linux/log2.h:12,
+                    from kernel/bounds.c:13:
+>> include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No such file or directory
+      16 | #include <asm/vdso/processor.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1197: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Cc: stable@vger.kernel.org
-> > > ---
-> > >  drivers/pci/controller/pci-mvebu.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > index 6197f7e7c317..08274132cdfb 100644
-> > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > @@ -864,6 +864,11 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
-> > >  	port->devfn = of_pci_get_devfn(child);
-> > >  	if (port->devfn < 0)
-> > >  		goto skip;
-> > > +	if (PCI_FUNC(port->devfn) != 0) {
-> > > +		dev_err(dev, "%s: invalid function number, must be zero\n",
-> > > +			port->name);
-> > > +		goto skip;
-> > > +	}
-> > >  
-> > >  	ret = mvebu_get_tgt_attr(dev->of_node, port->devfn, IORESOURCE_MEM,
-> > >  				 &port->mem_target, &port->mem_attr);
-> > > -- 
-> > > 2.20.1
-> > > 
+
+vim +16 include/asm-generic/barrier.h
+
+    15	
+  > 16	#include <asm/vdso/processor.h>
+    17	#include <linux/compiler.h>
+    18	#include <asm/rwonce.h>
+    19	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

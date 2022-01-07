@@ -2,365 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A304872D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 06:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773544872E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 06:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiAGFnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 00:43:45 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:42734 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229585AbiAGFno (ORCPT
+        id S232670AbiAGFty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 00:49:54 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:58747 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229585AbiAGFtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 00:43:44 -0500
-X-UUID: 39b55fbe961c41f5a67f0b323c5ee1dc-20220107
-X-UUID: 39b55fbe961c41f5a67f0b323c5ee1dc-20220107
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1515343863; Fri, 07 Jan 2022 13:43:40 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 7 Jan 2022 13:43:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Jan
- 2022 13:43:39 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 7 Jan 2022 13:43:37 +0800
-Message-ID: <6dd101e4e65ef56dbf81d67496a383a7db8cefb5.camel@mediatek.com>
-Subject: Re: [PATCH v7 4/4] arm64: dts: Add mediatek SoC mt8195 and
- evaluation board
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-CC:     <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <matthias.bgg@gmail.com>, <broonie@kernel.org>,
-        <bgolaszewski@baylibre.com>, <sean.wang@mediatek.com>,
-        <bayi.cheng@mediatek.com>, <gch981213@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>
-Date:   Fri, 7 Jan 2022 13:43:37 +0800
-In-Reply-To: <18c342b20ccac520eabe8019562432030ddfe017.camel@mediatek.com>
-References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
-         <20211220121825.6446-5-tinghan.shen@mediatek.com>
-         <CAGXv+5GaFikojqYYv0TfQsz3NSqn7QPmTWyCJY8V2g8UYoV4OA@mail.gmail.com>
-         <18c342b20ccac520eabe8019562432030ddfe017.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 7 Jan 2022 00:49:53 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 673A158046E;
+        Fri,  7 Jan 2022 00:49:52 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 07 Jan 2022 00:49:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=m
+        0eUzpbRurQerx+LcCzqwPejVGqLzsonypVAH0SBKsk=; b=orm0I+Q2e8duuVpoE
+        yedsGF383+vsCTEgDciuvU1YKyJHTdNzZB0icF4uaaRqvV5XIvLTQSl3V6RcRqZG
+        7mPhi4ZmqUMaeltxm/WnBqOPrjRuSG3MtZAEt6JmGyA/rgQO2stbzlUHhFCJ1z/d
+        By0/QVnNkIJECbMvnwus5FX+NP+LE9PciWG8f9ftvrzT+6F8WBkW5G+Y3APBqq+R
+        m9a0oOyDzkGqfucdxKwG8yscYsm/PsIeOqgfDhnD9q8znrXxfh2ylrg2V7qImmWW
+        DrrAE/hBgYJ57Ao/GMt65k1ME7kMsVpT8q9SEVD00XPMfLi58/Cbk54dYek+A7bA
+        pTSNg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=m0eUzpbRurQerx+LcCzqwPejVGqLzsonypVAH0SBK
+        sk=; b=jAiqqDpQWwi2oCc6RgaOof9fPPLzMQYaJ9S0v+mK4pNrpv6hRM9D8t/Wm
+        we+E/jQ/n36VF5JJ/u9nPRmHLs/tlG2y2vn8GCphfisIj2lbX0XmAAu5MFQj3lV9
+        zufDniZD01Sn85rJGqYDqdq8uIUQYwhCoZcrV1Gy/IIiaJ1Fzn1+3QKM5Qa4WV2J
+        JTLobWoVFiW+Z1UKDDWQPLwccVSANhTlcO7JrpzlwkC73uzfeW3nnNwc9vwP7oeZ
+        v89BRPejYHiqtVRgjNX7vknRs9SfKR4IsTlZc1HsARwzk/95E8fnIHwrWWNWbhDp
+        y985xqadfKj/YWxXJPEEE87iftIWg==
+X-ME-Sender: <xms:f9TXYVBnpS1DHxXdrkA6j6hO4fQi-yZz1SSI7SxbQuUofwbyu7rxbg>
+    <xme:f9TXYTj59O8QucmwlD-XSls60RkFls8-ocSzhYHoBWNMqfA9LmQNEo5ujKbK3tpls
+    wy2JJBrvsmQvTW-Bw>
+X-ME-Received: <xmr:f9TXYQnFNorqTRTDMzpkhKcbFqIsKVxx-oj_m69jd8zim_bYuJxwgML--zQSqldUtQhzpGI9hDhMn3Q101qHm8MplcI7mHjb2zkiJKftkXSZKI0TexAyUfA72w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudegtddgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgedthefghfevvdehfeevtddvueffieejjeegvdevtdeugfelvddv
+    hfdtteefveefnecuffhomhgrihhnpehgihhthhhusgdrtghomhdplhifnhdrnhgvthenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgv
+    lhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:f9TXYfxmh8Uqo3V2CKtc9PemWKHcuU_nEU1c6kQ1JQ2HmQ7RwGHJig>
+    <xmx:f9TXYaQFwXWQ7jLprSOOgqP8QwOF1aiFtw3n_ZsneBUdvLb73Y9hjQ>
+    <xmx:f9TXYSZbV3ruKzS-wE-4XxbJF5jvuqHrkM7fD3nTbhsK782AUqSjwQ>
+    <xmx:gNTXYfJIxAYMVE64KBOfjvfWzS3bvQP_hdE_P3mo2bhIYANQA4VYUg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 7 Jan 2022 00:49:51 -0500 (EST)
+Subject: Re: [PATCH v4 0/4] Add support for the Cypress cyttsp5
+To:     Alistair Francis <alistair@alistair23.me>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     dmitry.torokhov@gmail.com, alistair23@gmail.com,
+        robh+dt@kernel.org, linus.walleij@linaro.org, rydberg@bitmath.org,
+        andreas@kemnade.info
+References: <20211222124603.326920-1-alistair@alistair23.me>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <37291fe7-7028-cd9e-7fde-01d13f85f0d9@sholland.org>
+Date:   Thu, 6 Jan 2022 23:49:50 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+In-Reply-To: <20211222124603.326920-1-alistair@alistair23.me>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-06 at 19:14 +0800, Tinghan Shen wrote:
-> On Thu, 2021-12-23 at 17:59 +0800, Chen-Yu Tsai wrote:
-> > Hi,
-> > 
-> > On Mon, Dec 20, 2021 at 8:20 PM Tinghan Shen <
-> > tinghan.shen@mediatek.com> wrote:
-> > > 
-> > > Add basic chip support for mediatek mt8195.
-> > > 
-> > > Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
-> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > > ---
-> > >  arch/arm64/boot/dts/mediatek/Makefile       |    1 +
-> > >  arch/arm64/boot/dts/mediatek/mt8195-evb.dts |  209 ++++
-> > >  arch/arm64/boot/dts/mediatek/mt8195.dtsi    | 1034
-> > > +++++++++++++++++++
-> > >  3 files changed, 1244 insertions(+)
-> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-> > >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/mediatek/Makefile
-> > > b/arch/arm64/boot/dts/mediatek/Makefile
-> > > index 4f68ebed2e31..7aa08bb4c078 100644
-> > > --- a/arch/arm64/boot/dts/mediatek/Makefile
-> > > +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> > > @@ -32,4 +32,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-
-> > > krane-sku0.dtb
-> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
-> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
-> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
-> > > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> > >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-> > > b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-> > > new file mode 100644
-> > > index 000000000000..e581c6bbead6
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/mediatek/mt8195-evb.dts
-> > > @@ -0,0 +1,209 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > > +/*
-> > > + * Copyright (C) 2021 MediaTek Inc.
-> > > + * Author: Seiya Wang <seiya.wang@mediatek.com>
-> > > + */
-> > > +/dts-v1/;
-> > > +#include "mt8195.dtsi"
-> > > +
-> > > +/ {
-> > > +       model = "MediaTek MT8195 evaluation board";
-> > > +       compatible = "mediatek,mt8195-evb", "mediatek,mt8195";
-> > > +
-> > > +       aliases {
-> > > +               serial0 = &uart0;
-> > > +       };
-> > > +
-> > > +       chosen {
-> > > +               stdout-path = "serial0:921600n8";
-> > > +       };
-> > > +
-> > > +       memory@40000000 {
-> > > +               device_type = "memory";
-> > > +               reg = <0 0x40000000 0 0x80000000>;
-> > > +       };
-> > > +};
-> > > +
-> > > +&auxadc {
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&i2c0 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c0_pin>;
-> > > +       clock-frequency = <100000>;
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&i2c1 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c1_pin>;
-> > > +       clock-frequency = <400000>;
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&i2c2 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c2_pin>;
-> > > +       status = "disabled";
-> > > +};
-> > > +
-> > > +&i2c3 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c3_pin>;
-> > > +       status = "disabled";
-> > > +};
-> > 
-> > Is there any reason in particular to list "disabled" devices here?
-> > Are they part of some GPIO header? If they are not accessible, then
-> > it's better to not list them. If they are, please leave a comment
-> > about it.
-> > 
-> > > +
-> > > +&i2c4 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c4_pin>;
-> > > +       clock-frequency = <400000>;
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&i2c5 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c5_pin>;
-> > > +       status = "disabled";
-> > > +};
-> > > +
-> > > +&i2c6 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&i2c6_pin>;
-> > > +       clock-frequency = <400000>;
-> > > +       status = "disabled";
-> > > +};
-> > 
-> > Same here.
-> > 
-> > > +
-> > > +&nor_flash {
-> > > +       status = "okay";
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&nor_pins_default>;
-> > 
-> > Please add an empty line between properties and child device nodes.
-> > It helps
-> > with readability and also fits the style of other parts and other
-> > DT
-> > files.
-> > 
-> > > +       flash@0 {
-> > > +               compatible = "jedec,spi-nor";
-> > > +               reg = <0>;
-> > > +               spi-max-frequency = <50000000>;
-> > > +       };
-> > > +};
-> > > +
-> > > +&pio {
-> > > +       i2c0_pin: i2c0-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
-> > > +                                <PINMUX_GPIO9__FUNC_SCL0>;
-> > > +                       bias-pull-up = <1>;
-> > > +                       mediatek,rsel = <7>;
-> > 
-> > Please use the MTK_PULL_SET_RSEL_* macros with the bias-pull-*
-> > properties.
-> > We spent a lot of time defining those.
-> > 
-> > > +                       mediatek,drive-strength-adv = <0>;
-> > 
-> > This property is not part of the DT binding.
-> > 
-> > > +                       drive-strength = <MTK_DRIVE_6mA>;
-> > 
-> > Please just use raw numbers here. MTK_DRIVE_6mA just translates to
-> > 6.
-> > The binding already specifies mA as the unit for "drive-strength".
-> > 
-> > > +               };
-> > > +       };
-> > 
-> > Above comments apply to all the other "pins" nodes.
-> > 
-> > Please add an empty line between different child device nodes. It
-> > helps
-> > with readability and also fits the style of other parts and other
-> > DT
-> > files.
-> > 
-> > > +       i2c1_pin: i2c1-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO10__FUNC_SDA1>,
-> > > +                                <PINMUX_GPIO11__FUNC_SCL1>;
-> > > +                       bias-pull-up = <1>;
-> > > +                       mediatek,rsel = <7>;
-> > > +                       mediatek,drive-strength-adv = <0>;
-> > > +                       drive-strength = <MTK_DRIVE_6mA>;
-> > > +               };
-> > > +       };
-> > > +       i2c2_pin: i2c2-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO12__FUNC_SDA2>,
-> > > +                                <PINMUX_GPIO13__FUNC_SCL2>;
-> > > +                       bias-pull-up = <1>;
-> > > +                       mediatek,rsel = <7>;
-> > > +                       mediatek,drive-strength-adv = <7>;
-> > > +               };
-> > > +       };
-> > > +       i2c3_pin: i2c3-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO14__FUNC_SDA3>,
-> > > +                                <PINMUX_GPIO15__FUNC_SCL3>;
-> > > +                       bias-pull-up = <1>;
-> > > +                       mediatek,rsel = <7>;
-> > > +                       mediatek,drive-strength-adv = <7>;
-> > > +               };
-> > > +       };
-> > > +       i2c4_pin: i2c4-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO16__FUNC_SDA4>,
-> > > +                                <PINMUX_GPIO17__FUNC_SCL4>;
-> > > +                       bias-pull-up = <1>;
-> > > +                       mediatek,rsel = <7>;
-> > > +                       mediatek,drive-strength-adv = <7>;
-> > > +               };
-> > > +       };
-> > > +       i2c5_pin: i2c5-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO29__FUNC_SCL5>,
-> > > +                                <PINMUX_GPIO30__FUNC_SDA5>;
-> > > +                       bias-pull-up = <1>;
-> > > +                       mediatek,rsel = <7>;
-> > > +                       mediatek,drive-strength-adv = <7>;
-> > > +               };
-> > > +       };
-> > > +       i2c6_pin: i2c6-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO25__FUNC_SDA6>,
-> > > +                                <PINMUX_GPIO26__FUNC_SCL6>;
-> > > +                       bias-pull-up = <1>;
-> > > +               };
-> > > +       };
-> > > +       i2c7_pin: i2c7-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO27__FUNC_SCL7>,
-> > > +                                <PINMUX_GPIO28__FUNC_SDA7>;
-> > > +                       bias-pull-up = <1>;
-> > > +               };
-> > > +       };
-> > > +       nor_pins_default: nor-pins {
-> > > +               pins0 {
-> > > +                       pinmux =
-> > > <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
-> > > +                                        <PINMUX_GPIO141__FUNC_SP
-> > > IN
-> > > OR_CK>,
-> > > +                                        <PINMUX_GPIO143__FUNC_SP
-> > > IN
-> > > OR_IO1>;
-> > > +                       bias-pull-down;
-> > > +               };
-> > > +               pins1 {
-> > > +                       pinmux =
-> > > <PINMUX_GPIO140__FUNC_SPINOR_CS>,
-> > > +                                    <PINMUX_GPIO130__FUNC_SPINOR
-> > > _I
-> > > O2>,
-> > > +                                    <PINMUX_GPIO131__FUNC_SPINOR
-> > > _I
-> > > O3>;
-> > > +                       bias-pull-up;
-> > > +               };
-> > > +       };
-> > > +       uart0_pin: uart0-pins {
-> > > +               pins {
-> > > +                       pinmux = <PINMUX_GPIO98__FUNC_UTXD0>,
-> > > +                               <PINMUX_GPIO99__FUNC_URXD0>;
-> > > +               };
-> > > +       };
-> > > +};
-> > > +
-> > > +&u2port0 {
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&u2port1 {
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&u3phy0 {
-> > > +       status="okay";
-> > > +};
-> > > +
-> > > +&u3phy1 {
-> > > +       status="okay";
-> > > +};
-> > > +
-> > > +&u3port0 {
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&u3port1 {
-> > > +       status = "okay";
-> > > +};
-No need add status property for those u*port* subnodes, add it in
-parent node u*phy* is enough.
+Hello!
 
-Thanks
-
-> > > +
-> > > +&uart0 {
-> > > +       pinctrl-names = "default";
-> > > +       pinctrl-0 = <&uart0_pin>;
-> > > +       status = "okay";
-> > > +};
-> > > 
-> > 
+On 12/22/21 6:45 AM, Alistair Francis wrote:
+> This patch series builds on top of [1] and adds support for the cyttsp5
+> touchscreen controller for the reMarkable 2.
 > 
+> I first tried to add an I2C HID device. Although the cyttsp5 has some HID
+> looking aspects it is not HID compatible. Just in trying to probe the device
+> I found:
+>  - The HID descriptor has extra padding
+>  - The HID descriptor sets the high bytes of the descriptor length
+>  - The HID descriptor has extra unrecognised tags
+>  - The HID reset command doesn't appear to work
+> 
+> I don't think there is a way to use the I2C HID framework with the cyttsp5.
+> For anyone interested you can see the work here [2]. In that branch though I
+> can only obtain a HID descriptor, nothing else works without more core
+> changes.
+> 
+> So instead I rebased the series from [1]. Converted to the new yaml DTS
+> documentation, added regulator support and fixed a x/y miscalculation bug.
+
+I am working on the PineNote, which also uses a cyttsp5 touchscreen. I attempted
+to use the driver from this series, but I could not get it to work. I found that
+the cyttsp5_sensing_conf_data was filled with all zeroes, so every touch failed
+the max_tch check. I noticed that cmd_done was being completed by empty
+responses (which explains why the response buffer was zeroes), but I got stuck
+after that.
+
+So I looked back at the thread you linked below, and tried to implement the
+workarounds described there, and those above, plus some others, and I was able
+to get the touchscreen working with i2c_hid. Here are the changes I made to i2c_hid:
+https://github.com/smaeul/linux/commit/a1e07425a6c4
+
+In summary:
+ - Perform a 2-byte dummy read before reading the HID descriptor.
+   This is required to clear the two-byte empty message.
+ - Split command/response into multiple I2C transactions.
+   This is probably some sort of timing issue.
+   Without these first two, HID descriptor reads return "02 00".
+ - Chop 2 bytes out of the HID descriptor, as per the thread below.
+ - Similarly, chop 3 bytes out of the report descriptor.
+ - Skip the reset command, as above. Otherwise, the touchscreen
+   sends a different, short, unusable (partial?) report descriptor.
+
+I reused the the existing i2c_hid_of_goodix driver to handle toggling the reset
+line, which is required. That existing binding is almost identical to the one in
+this series. Here's the glue I added:
+https://github.com/smaeul/linux/commit/65d9250d3899
+
+And here is the result, from dmesg and debugfs:
+https://gist.github.com/smaeul/60b4b0f784bfff8bb8ce3ee3b4483be9
+
+So far, the quirks only appear to affect probing the device. The touchscreen
+works normally after that.
+
+What do you think of this approach? It certainly seems cleaner than parsing the
+HID reports/responses by hand. But I don't know if all of the quirks are
+acceptable for i2c_hid.
+
+One additional quirk that I haven't handled yet is the missing min/max for ABS_*
+axes in the report descriptor. This prevents libinput from working, but other
+evdev users appear to work fine. The driver in this series appears to get that
+information from some vendor-specific command, and I am not sure where to hook
+that up.
+
+Regards,
+Samuel
+
+> 1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josserand@bootlin.com/
+> 2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid
+> 
+> Alistair Francis (2):
+>   ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
+>   ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+> 
+> Mylène Josserand (2):
+>   Input: Add driver for Cypress Generation 5 touchscreen
+>   dt-bindings: input: Add Cypress TT2100 touchscreen controller
+> 
+>  .../input/touchscreen/cypress,tt21000.yaml    |  92 ++
+>  arch/arm/boot/dts/imx7d-remarkable2.dts       |  89 ++
+>  arch/arm/configs/imx_v6_v7_defconfig          |   1 +
+>  drivers/input/touchscreen/Kconfig             |  14 +
+>  drivers/input/touchscreen/Makefile            |   1 +
+>  drivers/input/touchscreen/cyttsp5.c           | 922 ++++++++++++++++++
+>  6 files changed, 1119 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+>  create mode 100644 drivers/input/touchscreen/cyttsp5.c
 > 
 

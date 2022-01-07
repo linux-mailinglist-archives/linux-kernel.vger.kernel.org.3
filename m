@@ -2,107 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9EF487835
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB546487836
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347553AbiAGN1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:27:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49740 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238756AbiAGN1V (ORCPT
+        id S1347567AbiAGN3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238674AbiAGN3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:27:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 932EB6104A
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:27:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B238C36AE0;
-        Fri,  7 Jan 2022 13:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641562041;
-        bh=vsjEEVdEu3j94SDiQtTHlnokuvTNBttfoof2rV1ZBcs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L9r/TwwgA6YQkPZh05urxxpu6SRf86kT0wnLUBL+vniMyrEepF3Tj1XyQbXZ8WA2Y
-         yCzZ2riTbyPYAaennJVbyc6ex9yOrKC4nJrgMIHJgl6t7gKTE4XHIJRpnh9iO3juS2
-         Iye2qonYgAxSf+xf8RVOs13eSf2QRUyCsT+zGZPw7ykiqnY3e4HpemOZhjuWmIx1kI
-         vtebshHCsuzyWjrPb29L5ALl4pNVYpKWQuwX8MBpc4eF1PkV9xMcUobg12WvUbYNw9
-         1k2BdXTgVIgUbkic/N49kYmDBdqCpIRM/5ZpmZluF9eAwHQh3ojAKrqqdO8JhEsfXt
-         tZHxSn7pNxCUg==
-Date:   Fri, 7 Jan 2022 13:27:16 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-Message-ID: <Ydg/tOqbeT1Cg6sh@sirena.org.uk>
-References: <20220106175019.3116389-1-festevam@gmail.com>
- <Ydc2EHf5f12w4YcW@sirena.org.uk>
- <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
- <YddLe8cCvj5fVBTQ@sirena.org.uk>
- <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
- <CAOMZO5DQEEHYJHv08nC=uYXbFtL9VTAatNAB8V5D_JHiQ0q=3A@mail.gmail.com>
+        Fri, 7 Jan 2022 08:29:02 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F16C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:29:02 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id a1so5474108qtx.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:29:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=G93pNib2AdYHJFPzHxQ0fNlVSs9vGqI40MeIunwH1I4=;
+        b=dVopYzfU+vYmuHEIGsl7xDGblp+DXnUgl2XAUswDynW9EppOkRKAk1H0adUgdQ3RC+
+         Tfyro2/t3gmle6RyTotvf4UyCj8ZSAp+TiO6L8KWWL9BjUYJHRVeqGT4ZOCHUrwDu4IF
+         oLBxaA0CkKD1ZSDvphgC6Q+M65UvtmLZkHomAup5Z+T3lED4kKw7OZrKbo3ZbdTzI7DK
+         qALOLVAw1m/AveRPnFbj95xqbgYD/83l1irj7WAwkdtFinOpk0qTaSjYblDQ9V/ZMDZ7
+         rfma75ea7kRyGXWGoOYwK6i6XnQq/QyQwW9mRzr8sv70OQuBASjU83DqaK3Ys8HqkqBE
+         YWlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=G93pNib2AdYHJFPzHxQ0fNlVSs9vGqI40MeIunwH1I4=;
+        b=hmXCw5hgL096X/FDfgaOa/99AxTvhjMHcEeqXmnsZN5V9C//onXDCpK202I3OvjSaZ
+         yM1A/IeofCS7EhPl7FE5jfi0I4Ad8hcTc/DgLTc8IktTH+vNcrYeCkrZihlaYIjVSgY+
+         5FjKV5SAmOFts8dWfAbilZovpoG9CkrkJEPF9kXat4HYF/AMKnzZLGtBU5ls1fKjh8gj
+         q88xe5/oxaVghvp9kY6Kr54ZcXZYBE6IaXB/yRs0t0DK5RSwAmoGiMHI60hf/AIDERNk
+         J5dBgoKLB3dByjhs05X+EzSaI0zR/HqKueGI6yYnmIU/ts2RIFeF1ssyErCDrVCxZrt7
+         Fptw==
+X-Gm-Message-State: AOAM5332hafwXpbweyidTf9a3moXNH50qFukY8phSI86WOiAir9Ei3/v
+        rkVFzSaqyFaDS5/KamvCr4sj4o+P7mmpaDPVOVtDK2CUXVN3oQ==
+X-Google-Smtp-Source: ABdhPJx5S+KrFZFdaW06QLf/K5Z8D9nNip9g3mX/Qb+GJz3jTcjVqkt4OL9dHv90IsMsXAvxk9GoTqbB1AYxcCuWXis=
+X-Received: by 2002:a05:622a:1386:: with SMTP id o6mr56067325qtk.64.1641562141301;
+ Fri, 07 Jan 2022 05:29:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XeHraxJsdrYekgPA"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5DQEEHYJHv08nC=uYXbFtL9VTAatNAB8V5D_JHiQ0q=3A@mail.gmail.com>
-X-Cookie: teamwork, n.:
+References: <15d09938180ee45bc5481c4a2d41ad656ca23c82.1636362169.git.greentime.hu@sifive.com>
+ <mhng-a7a94a37-5791-4c76-8f2d-072130d71819@palmer-ri-x1c9>
+In-Reply-To: <mhng-a7a94a37-5791-4c76-8f2d-072130d71819@palmer-ri-x1c9>
+From:   Greentime Hu <greentime.hu@sifive.com>
+Date:   Fri, 7 Jan 2022 21:28:50 +0800
+Message-ID: <CAHCEehJhMQf9jtVkTvorriv6xY5QnEDmN_JjM-UxcCj9UL86Lg@mail.gmail.com>
+Subject: Re: [PATCH v9 08/17] riscv: Add vector struct and assembler definitions
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Palmer Dabbelt <palmer@dabbelt.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=8815=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:29=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Tue, 09 Nov 2021 01:48:20 PST (-0800), greentime.hu@sifive.com wrote:
+> > Add vector state context struct in struct thread and asm-offsets.c
+> > definitions.
+> >
+> > The vector registers will be saved in datap pointer of __riscv_v_state.=
+ It
+> > will be dynamically allocated in kernel space. It will be put right aft=
+er
+> > the __riscv_v_state data structure in user space.
+> >
+> > Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
+> > Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+> > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> > ---
+> >  arch/riscv/include/asm/processor.h   |  1 +
+> >  arch/riscv/include/uapi/asm/ptrace.h | 11 +++++++++++
+> >  arch/riscv/kernel/asm-offsets.c      |  6 ++++++
+> >  3 files changed, 18 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/as=
+m/processor.h
+> > index 46b492c78cbb..a268f1382e52 100644
+> > --- a/arch/riscv/include/asm/processor.h
+> > +++ b/arch/riscv/include/asm/processor.h
+> > @@ -35,6 +35,7 @@ struct thread_struct {
+> >       unsigned long s[12];    /* s[0]: frame pointer */
+> >       struct __riscv_d_ext_state fstate;
+> >       unsigned long bad_cause;
+> > +     struct __riscv_v_state vstate;
+> >  };
+> >
+> >  /* Whitelist the fstate from the task_struct for hardened usercopy */
+> > diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/=
+uapi/asm/ptrace.h
+> > index 882547f6bd5c..bd3b8a710246 100644
+> > --- a/arch/riscv/include/uapi/asm/ptrace.h
+> > +++ b/arch/riscv/include/uapi/asm/ptrace.h
+> > @@ -77,6 +77,17 @@ union __riscv_fp_state {
+> >       struct __riscv_q_ext_state q;
+> >  };
+> >
+> > +struct __riscv_v_state {
+> > +     unsigned long vstart;
+> > +     unsigned long vl;
+> > +     unsigned long vtype;
+> > +     unsigned long vcsr;
+>
+> Don't we also need vlen to adequately determine the vector state?
+> Otherwise we're going to end up dropping some state when vl isn't vlmax,
+> which IIUC isn't legal.
 
---XeHraxJsdrYekgPA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do you mean vlenb? Since it is a constant value, we don't need to
+save/restore it in the context.
 
-On Thu, Jan 06, 2022 at 11:22:32PM -0300, Fabio Estevam wrote:
-> On Thu, Jan 6, 2022 at 6:13 PM Fabio Estevam <festevam@gmail.com> wrote:
+> > +     void *datap;
+> > +#if __riscv_xlen =3D=3D 32
+> > +     __u32 __padding;
+> > +#endif
+>
+> Why is there padding?
 
-> > > Before we try to reinitialise debugfs for the new name seems like the
-> > > obvious place.
+To keep vector registers saved in a 16-bytes aligned address for rv32.
 
-> > I am afraid I am not enough familiar with regmap to fix this problem.
+struct __riscv_ctx_hdr {
+        __u32 magic;
+        __u32 size;
+};
+struct __sc_riscv_v_state {
+        struct __riscv_ctx_hdr head;
+        struct __riscv_v_state v_state;
+} __attribute__((aligned(16)));
 
-> > If you could please submit a patch, I will be glad to test it.
+rv64 =3D> 48bytes -> 16byte aligned
+rv32 =3D> 32bytes -> 16byte aligned
 
-> I tried this change:
-> @@ -581,6 +581,8 @@ void regmap_debugfs_init(struct regmap *map)
->         if (map->dev)
->                 devname =3D dev_name(map->dev);
->=20
-> +       regmap_debugfs_exit(map);
-> +
+This struct and vector registers will be copied to
+sigcontext.reserved[] for signal handler so we'd like to keep it is
+16-byte aligned.
 
-I would have expected this to be prior to the call to _init() rather
-than actually in the call to _init() but OTOH this should work fine so
-meh.
+struct sigcontext {
+        struct user_regs_struct sc_regs;
+        union __riscv_fp_state sc_fpregs;
+        /*
+         * 4K + 128 reserved for vector state and future expansion.
+         * This space is enough to store the vector context whose VLENB
+         * is less or equal to 128.
+         * (The size of the vector context is 4144 byte as VLENB is 128)
+         */
+        __u8 __reserved[4224] __attribute__((__aligned__(16)));
+};
 
-> It does avoid the 'already present' error and I see that
-> /sys/kernel/debug/regmap/20e0000.pinctrl-gpr
-> is present, but /sys/kernel/debug/regmap/20e0000.pinctrl-gpr is not.
-> Not sure if this is the desired behavior.
 
-Yes, that's what we're looking for (assuming the second of those names
-should be the dummy name) - that means that the old debugfs file is not
-hanging around and so won't be stuck there pointing at a deallocated
-regmap if the regmap gets freed for some reason.
-
---XeHraxJsdrYekgPA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHYP7QACgkQJNaLcl1U
-h9B6QAf+Pu9sgnPjvMTqPr93bsPjx801W6G2LFl8hbxDWnhHlpHj6MdR/Ga4lACm
-L+PuveFulBlxOARMfXPAiPXkOJZAMgc5k+pMuP5/T8u9k/GBRoDS8veb29X9cT7C
-ufvIj2ry2OR+VwG5JSjXNge9+XRSvYUA8foAfLzN7u6vRFxr29so1PGNp69gWMAw
-NQKxnioC7jDDKrJDEfwtMm1V7PqbQrZ3enZUyfoRvFnvIKNpFMowrTbX61kYcIBQ
-7jqGkPLd4fVAsX0L5JT0Q3uLdwPQ/OwGdOHh75wDabTnGB77jUQlkqTmc0xBKpE4
-trLp26irYjPaBzDSUa4cMnNUBePwFg==
-=5rms
------END PGP SIGNATURE-----
-
---XeHraxJsdrYekgPA--
+> > +};
+> > +
+> >  #endif /* __ASSEMBLY__ */
+> >
+> >  #endif /* _UAPI_ASM_RISCV_PTRACE_H */
+> > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-of=
+fsets.c
+> > index 90f8ce64fa6f..34f43c84723a 100644
+> > --- a/arch/riscv/kernel/asm-offsets.c
+> > +++ b/arch/riscv/kernel/asm-offsets.c
+> > @@ -72,6 +72,12 @@ void asm_offsets(void)
+> >       OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
+> >  #endif
+> >
+> > +     OFFSET(RISCV_V_STATE_VSTART, __riscv_v_state, vstart);
+> > +     OFFSET(RISCV_V_STATE_VL, __riscv_v_state, vl);
+> > +     OFFSET(RISCV_V_STATE_VTYPE, __riscv_v_state, vtype);
+> > +     OFFSET(RISCV_V_STATE_VCSR, __riscv_v_state, vcsr);
+> > +     OFFSET(RISCV_V_STATE_DATAP, __riscv_v_state, datap);
+> > +
+> >       DEFINE(PT_SIZE, sizeof(struct pt_regs));
+> >       OFFSET(PT_EPC, pt_regs, epc);
+> >       OFFSET(PT_RA, pt_regs, ra);

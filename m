@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D90486F71
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED54486F73
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345073AbiAGBJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345068AbiAGBJk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 20:09:40 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6F6C061245;
-        Thu,  6 Jan 2022 17:09:39 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id t28so1300339wrb.4;
-        Thu, 06 Jan 2022 17:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8LHh10+xJEwQQJ1HEF7ipZJtQ43xHxuWPeAK1P7zvbk=;
-        b=JN1SD8KccynWq4OVrbYAy+R3lCUUI/juBe+hFVtkqWrmpI5vKsSNZabvdiYscWZCF1
-         vAGkkFI2vQ6fit6S8Gnaimll1ZFqGANhhGYdNUnll7YgW4mHX0OHNmTtnebQeKdN9bIb
-         C6O5fjNVpKOMVULJNeYauUc9INnAoF9jRW5PHiln3smJXTYuAaL16E0yWW0IDXaXvGjJ
-         dhWYZMrZUmB+8qbLOnviUaBa71PHF2uU26JZ8uUl1uVbjWneAULd1SfRrXB/CizUfT4z
-         +hCNh5S5MCwuGr0RZ2wH8oPJn6OopwEwawjMNOt4uCOEn8gBnNO9UFakeZQZap/4+Lnc
-         muug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8LHh10+xJEwQQJ1HEF7ipZJtQ43xHxuWPeAK1P7zvbk=;
-        b=fGvSZ2IYKg0FR2SmDvBH05tCEjyN1La80I5FI6X6CTBBqvjV7Y5NMONhCMeta/MN9U
-         HUho+vPztdL+4065IjaeG089ZNp9ofutuOXBrDQBlih+UiiDgZd+BZqE+GBNcG7Owr/J
-         3HSFfjgFQ+pY6rraT3/nB+96zQF+2WyZB5Dwjm1ZrrK1PlacEvZjPFn6ARQct/igAsy0
-         NO5r+pz6aWIOLvHeXN0Y6mbjiAXae/c4D3E1WnEmfWW0P+/fVU4CiXi0kXAkoWeX0tqG
-         yVuDtB22Fg33bNGPV6Zy8ITHdGY3kgk70FXdHHL2dufcLGoKHMjobAQzGWM1QzhDnnbX
-         UF2Q==
-X-Gm-Message-State: AOAM531sCvZUvjOvy/0zVOlaUwm5kukYiH4HHyx0QPXW36aBapgaJRl9
-        ciDo1q93iHwvB6eesHrWJiyNWub07j7/jtYt2Ps=
-X-Google-Smtp-Source: ABdhPJx4PVmGgpPehu0uD1OCS9wBsXyBQzRPXWGgG1zXN+7yaEwK36YYSylNoOnca5o02K8Zg354zCS6ESvwZ5zo/EY=
-X-Received: by 2002:a05:6000:186e:: with SMTP id d14mr54460304wri.205.1641517778464;
- Thu, 06 Jan 2022 17:09:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
- <20211222155743.256280-13-miquel.raynal@bootlin.com> <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
- <Ycx0mwQcFsmVqWVH@ni.fr.eu.org> <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
- <CAB_54W6gHE1S9Q+-SVbrnAWPxBxnvf54XVTCmddtj8g-bZzMRA@mail.gmail.com>
- <20220104191802.2323e44a@xps13> <CAB_54W5quZz8rVrbdx+cotTRZZpJ4ouRDZkxeW6S1L775Si=cw@mail.gmail.com>
- <20220105215551.1693eba4@xps13> <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
- <20220106170019.730f45e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220106170019.730f45e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Alexander Aring <alex.aring@gmail.com>
-Date:   Thu, 6 Jan 2022 20:09:27 -0500
-Message-ID: <CAB_54W5B5QYu=5PSO=_NVndgnXsE_hHyVKf1Y69n_oZpoEP48A@mail.gmail.com>
-Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Nicolas Schodet <nico@ni.fr.eu.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1345080AbiAGBKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:10:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:34162 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345066AbiAGBKO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 20:10:14 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2EAC1042;
+        Thu,  6 Jan 2022 17:10:13 -0800 (PST)
+Received: from p8cg001049571a15.blr.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 812BF3F5A1;
+        Thu,  6 Jan 2022 17:10:10 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/7] coresight: trbe: Workaround Cortex-A510 erratas
+Date:   Fri,  7 Jan 2022 06:40:01 +0530
+Message-Id: <1641517808-5735-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+	This series adds three different workarounds in the TRBE driver for
+Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
+part number definition in the platform. This series applies on 5.16-rc8.
 
-On Thu, 6 Jan 2022 at 20:00, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed, 5 Jan 2022 19:38:12 -0500 Alexander Aring wrote:
-> > > Also, just for the record,
-> > > - should I keep copying the netdev list for v2?
-> >
-> > yes, why not.
->
-> On the question of lists copied it may make sense to CC linux-wireless@
-> in case they have some precedent to share, and drop linux-kernel@.
+Relevant errata documents can be found here.
 
-Yes, that makes sense.
+https://developer.arm.com/documentation/SDEN2397239/900
+https://developer.arm.com/documentation/SDEN2397589/900
 
-- Alex
+Changes in V2:
+
+Accommodated most review comments from the previous version.
+
+- Split all patches into CPU errata definition, detection and TRBE workarounds
+- s/TRBE_WORKAROUND_SYSREG_WRITE_FAILURE/TRBE_NEEDS_DRAIN_AFTER_DISABLE
+- s/TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE/TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE
+- s/trbe_may_fail_sysreg_write()/trbe_needs_drain_after_disable()
+- s/trbe_may_corrupt_with_enable()/trbe_needs_ctxt_sync_after_enable()
+- Updated Kconfig help message for config ARM64_ERRATUM_1902691
+- Updated error message for trbe_is_broken() detection
+- Added new trblimitr parameter to set_trbe_enabled(), improving performance
+- Added COMPILE_TEST dependency in the errata, until TRBE part is available
+
+Changes in V1:
+
+https://lore.kernel.org/lkml/1641359159-22726-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: coresight@lists.linaro.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (7):
+  arm64: Add Cortex-A510 CPU part definition
+  arm64: errata: Add detection for TRBE ignored system register writes
+  arm64: errata: Add detection for TRBE invalid prohibited states
+  arm64: errata: Add detection for TRBE trace data corruption
+  coresight: trbe: Work around the ignored system register writes
+  coresight: trbe: Work around the invalid prohibited states
+  coresight: trbe: Work around the trace data corruption
+
+ Documentation/arm64/silicon-errata.rst       |   6 +
+ arch/arm64/Kconfig                           |  59 ++++++++++
+ arch/arm64/include/asm/cputype.h             |   2 +
+ arch/arm64/kernel/cpu_errata.c               |  27 +++++
+ arch/arm64/tools/cpucaps                     |   3 +
+ drivers/hwtracing/coresight/coresight-trbe.c | 114 ++++++++++++++-----
+ drivers/hwtracing/coresight/coresight-trbe.h |   8 --
+ 7 files changed, 183 insertions(+), 36 deletions(-)
+
+-- 
+2.25.1
+

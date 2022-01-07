@@ -2,121 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B44B4487E0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70929487E0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiAGVLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
+        id S229798AbiAGVMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiAGVLR (ORCPT
+        with ESMTP id S229504AbiAGVMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:11:17 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D26C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:11:16 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id t23so9954122oiw.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:11:16 -0800 (PST)
+        Fri, 7 Jan 2022 16:12:50 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8960C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:12:50 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id p65so8716730iof.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:12:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CC7rkV9VPExvEz7sd8V96EKukO7uSQmnri+7pqYA5QU=;
-        b=fimEXfjs2yx4VWXNRdfKBYbml4Uz5wUhad0i9v40w16BnjPGZWzn+tTl/ZGITRhzSb
-         E6VZdKDd8vjLhndkI8jdAsthwzm0S97yCklMm24l2wD8r5/W4D+60ZEgvXTocekLJ5Uu
-         tTyFKb7LVyosR4h7XqHmVQ45zrJSeMLafMxWpLNF7XqbULIDYhSmJ2YVDRhqzKRv/eX6
-         EyZDyd2QQLC6qahyrloFUo/cYEMXFMWZ9ZRsGozPMjP1IF5We82NGRGAdFdGeCI2JtcT
-         x6/lYT3rw0uE+Wg28gvwHAspNLp319p6SUlw97pB4e+sKDNC3TGVUxzY0PvXFD4GQc9I
-         LbAg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/qENwt6av9FoqyUmbkRyUdLHXz0uXpkP35VFB8ZVzzE=;
+        b=jfxGfDYOu0dSQMwGr5IAP4X9BaDPuiSk7xjdjsjCrFY2zC+35P/OcN51Cz8yi90OEE
+         KFWp0IAy7GbW4Q/wXWeiYV7kmDEZNHZyD8zsQoMEHvWEBQLJGVTyxtTf1XjUfbFMB2bc
+         9xhaA1U1RI4zDatJmBaugrtU1M0M1JXkQqZfc2HizWWiOYTOaBKZb4gKG2TuqHdEdyaD
+         IrHpHSiL1Iqmiw2hBwl86qmbyuh+UsGjhmXBh1Ga7durRlVhyJYwjNKJcfBw6oXEiqdH
+         RzJgxKMVEXHX428t1qnLUHMCx9Dhn5NzTNa83gIhlNFed58zS6pTKeA8ah2G63f5mZGQ
+         wo0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CC7rkV9VPExvEz7sd8V96EKukO7uSQmnri+7pqYA5QU=;
-        b=wc7fhS7fl0EGPK6BJ/kyS46BrAO0/faNCnASyLDU8xarroi5Tk9xyfcjkDYiiRmQus
-         QRVuDnj3qaT3WDEahttxq6H3GUiLD5iZthKic8ttm3Hpu6fnK1937fxmn+LiJYYuGXLf
-         OUt9NqRjNPiRBCtrQWeWP8UJhHvlpyrkUjmWU960h0zTF2Z2dwksIwe0ZGApCquucpx3
-         olftZSzRUEIsSw3IFhJOPEhReVZ5yRsPO9sps6Y5zNF+ES6u/tAAiOWvA6EP6zQH9DIH
-         P0ONPfqqvTPE36Y46n1r3LeHj2ca9RSGLJS0d0Gr/tWgwOmq8524YiSJBy6p7VCIVaxC
-         YQVw==
-X-Gm-Message-State: AOAM5300NePhdNN9YHdwE3S/eVquzO2T7VoWqMcn2VB21WDOb9buLA38
-        suj70NmSDLDf9UTPwdEX3p1xVM2/e558ODjUKsk=
-X-Google-Smtp-Source: ABdhPJzKm+S1E9EjLlqYZmiKF8D3k2idVtuWjR5VDpwCTDmfQHE/WUGGODf03izJ9cCWVRh/RmLlPgrYrYC2BC+hK7U=
-X-Received: by 2002:a05:6808:4c3:: with SMTP id a3mr11268120oie.123.1641589876388;
- Fri, 07 Jan 2022 13:11:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/qENwt6av9FoqyUmbkRyUdLHXz0uXpkP35VFB8ZVzzE=;
+        b=4SV8jzBBOisAbXtevUFdz4crPiMIQ+bqPGPiFmtomhTqiwOVNReKb9ohhCqPGAB6U/
+         o0tyTp5NTI0zezcL0yaJnpEWiCKeTGinVzERBYz5aX5X8AEguyPzKbhQc1He9xBKzn1X
+         ItlQmDxYyp0mLYiwIv/1wMD3+g1vOSST1Id3DXRoTQkLpj93fnF129F5xn2hY0YOP1ZW
+         mF83V6s5+IwFRdZDJTuU/jjZpP0Q1DRd5jCLLudfKv4Tek69ZkH4IOuvYTct9a0Pa0NY
+         B7X8kdthUrAKxQU5vTGH2FwDPKgPmpFbLOlYqJLEqvfXFeu2u/FSW2yhG0DeFnjVZBoZ
+         S7UA==
+X-Gm-Message-State: AOAM530cGFFPYSfEYcoYVIbp+zEeInrkpPsztv6rIcckBon4M/3CFDX0
+        Cx4OevMGqDMCYjcUgRi52ip/0Q==
+X-Google-Smtp-Source: ABdhPJy0iyR/1W/D1Pa0d93wK2dzWbtMJCV8eAQVzix+/W1m+ArtGufnaVAl4z1KizTD7hp1ws8WOw==
+X-Received: by 2002:a05:6602:330e:: with SMTP id b14mr28576817ioz.192.1641589969960;
+        Fri, 07 Jan 2022 13:12:49 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:8b41:537d:f5d3:269c])
+        by smtp.gmail.com with ESMTPSA id s12sm3485688ilv.88.2022.01.07.13.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 13:12:49 -0800 (PST)
+Date:   Fri, 7 Jan 2022 14:12:45 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <Ydisze9ZR/QBtjpX@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
+ <YdcTkrl84Xzg2dSz@dhcp22.suse.cz>
+ <Ydde2F4Oi0wKx//y@google.com>
+ <Ydf9RXPch5ddg/WC@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20220106095713.3276112-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220106095713.3276112-1-gregkh@linuxfoundation.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 7 Jan 2022 16:11:05 -0500
-Message-ID: <CADnq5_OqOUXHX-1Ri=BfhBwhSwwy=bxP_vPq2ejAF68kOGbLCg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdkfd: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydf9RXPch5ddg/WC@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:57 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the amdkfd sysfs code to use default_groups field which has
-> been the preferred way since aa30f47cf666 ("kobject: Add support for
-> default attribute groups to kobj_type") so that we can soon get rid of
-> the obsolete default_attrs field.
->
-> Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Fri, Jan 07, 2022 at 09:43:49AM +0100, Michal Hocko wrote:
+> On Thu 06-01-22 14:27:52, Yu Zhao wrote:
+> > On Thu, Jan 06, 2022 at 05:06:42PM +0100, Michal Hocko wrote:
+> [...]
+> > > > diff --git a/include/linux/oom.h b/include/linux/oom.h
+> > > > index 2db9a1432511..9c7a4fae0661 100644
+> > > > --- a/include/linux/oom.h
+> > > > +++ b/include/linux/oom.h
+> > > > @@ -57,6 +57,22 @@ struct oom_control {
+> > > >  extern struct mutex oom_lock;
+> > > >  extern struct mutex oom_adj_mutex;
+> > > >  
+> > > > +#ifdef CONFIG_MMU
+> > > > +extern struct task_struct *oom_reaper_list;
+> > > > +extern struct wait_queue_head oom_reaper_wait;
+> > > > +
+> > > > +static inline bool oom_reaping_in_progress(void)
+> > > > +{
+> > > > +	/* a racy check can be used to reduce the chance of overkilling */
+> > > > +	return READ_ONCE(oom_reaper_list) || !waitqueue_active(&oom_reaper_wait);
+> > > > +}
+> > > > +#else
+> > > > +static inline bool oom_reaping_in_progress(void)
+> > > > +{
+> > > > +	return false;
+> > > > +}
+> > > > +#endif
+> > > 
+> > > I do not like this. These are internal oom reaper's and no code should
+> > > really make any decisions based on that. oom_reaping_in_progress is not
+> > > telling much anyway.
+> > 
+> > There is a perfectly legitimate reason for this.
+> > 
+> > If there is already a oom kill victim and the oom reaper is making
+> > progress, the system may still be under memory pressure until the oom
+> > reaping is done. The page reclaim has two choices in this transient
+> > state: kill more processes or keep reclaiming (a few more) hot pages.
+> > 
+> > The first choice, AKA overkilling, is generally a bad one. The oom
+> > reaper is single threaded and it can't go faster with additional
+> > victims. Additional processes are sacrificed for nothing -- this is
+> > an overcorrection of a system that tries to strike a balance between
+> > the tendencies to release memory pressure and to improve memory
+> > utilization.
+> > 
+> > > This is a global queue for oom reaper that can
+> > > contain oom victims from different oom scopes (e.g. global OOM, memcg
+> > > OOM or memory policy OOM).
+> > 
+> > True, but this is a wrong reason to make the conclusion below. Oom
+> > kill scopes do NOT matter; only the pool the freed memory goes into
+> > does. And there is only one global pool free pages.
+> > 
+> > > Your lru_gen_age_node uses this to decide whether to trigger
+> > > out_of_memory and that is clearly wrong for the above reasons.
+> > 
+> > I hope my explanation above is clear enough. There is nothing wrong
+> > with the purpose and the usage of oom_reaping_in_progress(), and it
+> > has been well tested in the Arch Linux Zen kernel.
+> 
+> I disagree. An ongoing oom kill in one domain (say memcg A) shouldn't be
+> any base for any decisions in reclaim in other domain (say memcg B or
+> even a global reclaim). Those are fundamentally different conditions.
 
-Applied.  Thanks!
+I agree for the memcg A oom and memcg B reclaim case, because memory
+freed from A doesn't go to B.
 
-Alex
+I still think for the memcg A and the global reclaim case, memory
+freed from A can be considered when deciding whether to make more
+kills during global reclaim.
 
-> ---
->  drivers/gpu/drm/amd/amdkfd/kfd_process.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_process.c b/drivers/gpu/drm/a=
-md/amdkfd/kfd_process.c
-> index b993011cfa64..1f4a07f984eb 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_process.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_process.c
-> @@ -462,6 +462,7 @@ static struct attribute *procfs_queue_attrs[] =3D {
->         &attr_queue_gpuid,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(procfs_queue);
->
->  static const struct sysfs_ops procfs_queue_ops =3D {
->         .show =3D kfd_procfs_queue_show,
-> @@ -469,7 +470,7 @@ static const struct sysfs_ops procfs_queue_ops =3D {
->
->  static struct kobj_type procfs_queue_type =3D {
->         .sysfs_ops =3D &procfs_queue_ops,
-> -       .default_attrs =3D procfs_queue_attrs,
-> +       .default_groups =3D procfs_queue_groups,
->  };
->
->  static const struct sysfs_ops procfs_stats_ops =3D {
-> --
-> 2.34.1
->
+But this is something really minor, and I'll go with your suggestion,
+i.e., getting rid of oom_reaping_in_progress().
+
+> > Without it, overkills can be easily reproduced by the following simple
+> > script. That is additional oom kills happen to processes other than
+> > "tail".
+> > 
+> >   # enable zram
+> >   while true;
+> >   do
+> >       tail /dev/zero
+> >   done
+> 
+> I would be interested to hear more (care to send oom reports?).
+
+I agree with what said below. I think those additional ooms might have
+been from different oom domains. I plan to leave this for now and go
+with your suggestion as mentioned above.
+
+> > > out_of_memory is designed to skip over any action if there is an oom
+> > > victim pending from the oom domain (have a look at oom_evaluate_task).
+> > 
+> > Where exactly? Point me to the code please.
+> > 
+> > I don't see such a logic inside out_of_memory() or
+> > oom_evaluate_task(). Currently the only thing that could remotely
+> > prevent overkills is oom_lock. But it's inadequate.
+> 
+> OK, let me try to exaplain. The protocol is rather convoluted. Once the
+> oom killer is invoked it choses a victim to kill. oom_evaluate_task will
+> evaluate _all_ tasks from the oom respective domain (select_bad_process
+> which distinguishes memcg vs global oom kill and oom_cpuset_eligible for
+> the cpuset domains). If there is any pre-existing oom victim
+> (tsk_is_oom_victim) then the scan is aborted and the oom killer bails
+> out. OOM victim stops being considered as relevant once the oom reaper
+> manages to release its address space (or give up on the mmap_sem
+> contention) and sets MMF_OOM_SKIP flag for the mm.
+> 
+> That being said the out_of_memory automatically backs off and relies on
+> the oom reaper to process its queue.
+> 
+> Does it make more clear for you now?
+
+Yes, you are right, thanks.
+
+> > This is the entire pipeline:
+> > low on memory -> out_of_memory() -> oom_reaper() -> free memory
+> > 
+> > To avoid overkills, we need to consider the later half of it too.
+> > oom_reaping_in_progress() is exactly for this purpose.
+> > 
+> > > > +static bool age_lruvec(struct lruvec *lruvec, struct scan_control *sc,
+> > > > +		       unsigned long min_ttl)
+> > > > +{
+> > > > +	bool need_aging;
+> > > > +	long nr_to_scan;
+> > > > +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+> > > > +	int swappiness = get_swappiness(memcg);
+> > > > +	DEFINE_MAX_SEQ(lruvec);
+> > > > +	DEFINE_MIN_SEQ(lruvec);
+> > > > +
+> > > > +	if (mem_cgroup_below_min(memcg))
+> > > > +		return false;
+> > > 
+> > > mem_cgroup_below_min requires effective values to be calculated for the
+> > > reclaimed hierarchy. Have a look at mem_cgroup_calculate_protection
+> > 
+> > I always keep that in mind, and age_lruvec() is called *after*
+> > mem_cgroup_calculate_protection():
+> 
+> >   balance_pgdat()
+> >     memcgs_need_aging = 0
+> >     do {
+> >       lru_gen_age_node()
+> >         if (!memcgs_need_aging) {
+> >             memcgs_need_aging = 1
+> >             return
+> >         }
+> >         age_lruvec()
+> > 
+> >       shrink_node_memcgs()
+> >         mem_cgroup_calculate_protection()
+> >         lru_gen_shrink_lruvec()
+> >           if ...
+> >             memcgs_need_aging = 0
+> >     } while ...
+> 
+> Uff, this is really subtle. I really think you should be following the
+> existing pattern when the effective values are calculated right in the
+> same context as they are evaluated.
+
+Consider it done.

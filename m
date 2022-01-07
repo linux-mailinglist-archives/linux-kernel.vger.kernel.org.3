@@ -2,221 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF16487894
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2E2487896
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347697AbiAGNx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238992AbiAGNxX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:53:23 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16ABC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:53:22 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id f189-20020a1c1fc6000000b00347ac5ccf6cso907979wmf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=rAxfAsKzV2Pe0qb3PwDKOtR13CrT8bc/2sOCHjuoqFw=;
-        b=OnpWI4AZLiSo9UrT5h4eH13nvjqsTSeiW1oLL4Ka6pYQLm/Jtjx0PAS6xzq4VYCVnV
-         MSWJ9Aux3dhfvLOyuVITNYGbWMQKWgsFtzRiWGyaZjHzXY68wuxfawTDuvIFNTL+LKct
-         6jOx4FqFVkCi4Tful20rKutyNgxH4UZTLG8QHbEcMmax1z24Qb8yQTEbCn/kYgXKe3li
-         7ENwqoFasvPhaIvScH8NzPGRCvW+4c0gGDqP73W5G9+ofNzusEWyiaZnFD7heQpVsfQ/
-         eAlgm75uH7yookL2Ik/2V9kbMwAuhIF5PibTIZ9LSxelXbOkMaOs+N0goIrFqOey1OzL
-         Q9QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=rAxfAsKzV2Pe0qb3PwDKOtR13CrT8bc/2sOCHjuoqFw=;
-        b=BU287DhQnKhbO6xNB5Z9I/LAIRUn5zbcqHPXM9LarCGDTO5FaQv1yRVVYz7tfBzKKN
-         CJBLPOPS5Yx8QstRWMrACFMkQNOLYsP7Nt+Nge9wrn6dHAqycC0KCah8fREINr5BhcD1
-         HtqX7GaN6K+p1i9b82SlE3dS3/V7RzrzsETU6sVF0EcyZwIheKQpKST62K/TPw73xolB
-         qyAlFmPrCKapE43dH+yZksGBEm4gFd0gqUiu2pra9kdp3gCGcQsKP/75V342zQBq7zCE
-         SfC0KU5c9UUbzkYOrbq8lyzyOD4OW2Z2Hz7kV+hTL+xiNob9KF0WYfPMbvBJSvCkscvO
-         OCYg==
-X-Gm-Message-State: AOAM531jB+ZyMSqvQ4bzSfNHUC44PKC0uIriZ+9JrySLDUTrXqsqGRtv
-        D9LZBAUjzJcW9XZTLneyB4EB2LHqxmOQzZax
-X-Google-Smtp-Source: ABdhPJzKGqRpYwiwExY4pzGEPg7vMjL6mBq48LsmktgeX66Q8yaGm++enBP5DEwKO5Fkr6j8spun4Q==
-X-Received: by 2002:a05:600c:1f0f:: with SMTP id bd15mr11021421wmb.2.1641563601216;
-        Fri, 07 Jan 2022 05:53:21 -0800 (PST)
-Received: from smtpclient.apple (global-5-143.nat-2.net.cam.ac.uk. [131.111.5.143])
-        by smtp.gmail.com with ESMTPSA id o8sm5849233wry.20.2022.01.07.05.53.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jan 2022 05:53:20 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v9 08/17] riscv: Add vector struct and assembler
- definitions
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <CAHCEehJhMQf9jtVkTvorriv6xY5QnEDmN_JjM-UxcCj9UL86Lg@mail.gmail.com>
-Date:   Fri, 7 Jan 2022 13:53:20 +0000
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FAC07911-491C-46F5-AA96-7C97BC5BD7F4@jrtc27.com>
-References: <15d09938180ee45bc5481c4a2d41ad656ca23c82.1636362169.git.greentime.hu@sifive.com>
- <mhng-a7a94a37-5791-4c76-8f2d-072130d71819@palmer-ri-x1c9>
- <CAHCEehJhMQf9jtVkTvorriv6xY5QnEDmN_JjM-UxcCj9UL86Lg@mail.gmail.com>
-To:     Greentime Hu <greentime.hu@sifive.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        id S1347719AbiAGNzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:55:07 -0500
+Received: from mga12.intel.com ([192.55.52.136]:30015 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347706AbiAGNzB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:55:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641563701; x=1673099701;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=69u99/6sYlODDkJH1cqo79tAvytw6zvYBBRpPUtEcY0=;
+  b=TLuqiVwPO0S86JKq1D5xNLhYYVxkZ4UHwdsy8m8q4lHd/KAcgNAKVxgR
+   e9ikAuy/JumIswSCHdnwW0sQMQumQYUhrsDai0aYUutXY0FXvmAc0ARcK
+   AN+ktiO4dCkrCqIzT4xIuPH0397tm4VxUZPZVZ4xxDARPhkkyijL0ngfx
+   PFrxqNGlSNE5tF5suMLFCkGav+i4HeufgnQ0ZNW7ucU6V0UJzHhMR0sqw
+   cp1zuowucUT88KBnxG0rXENSkiyxRGqdvvU1iATWmCxoNFfLgbkO6kXiV
+   2UyJBhBfsC89eHsXEo1ODhtbR2KpUm8JK5APYEEhuil0V7eGb/7lrfBe/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="222859244"
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="222859244"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 05:55:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="689796445"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Jan 2022 05:54:59 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5phq-000Ijn-IC; Fri, 07 Jan 2022 13:54:58 +0000
+Date:   Fri, 7 Jan 2022 21:54:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: fs/file.c:401:54: sparse: sparse: incorrect type in initializer
+ (different address spaces)
+Message-ID: <202201072134.vhC4HnC4-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7 Jan 2022, at 13:28, Greentime Hu <greentime.hu@sifive.com> wrote:
->=20
-> Palmer Dabbelt <palmer@dabbelt.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=8815=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8812:29=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->>=20
->> On Tue, 09 Nov 2021 01:48:20 PST (-0800), greentime.hu@sifive.com =
-wrote:
->>> Add vector state context struct in struct thread and asm-offsets.c
->>> definitions.
->>>=20
->>> The vector registers will be saved in datap pointer of =
-__riscv_v_state. It
->>> will be dynamically allocated in kernel space. It will be put right =
-after
->>> the __riscv_v_state data structure in user space.
->>>=20
->>> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
->>> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
->>> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
->>> ---
->>> arch/riscv/include/asm/processor.h   |  1 +
->>> arch/riscv/include/uapi/asm/ptrace.h | 11 +++++++++++
->>> arch/riscv/kernel/asm-offsets.c      |  6 ++++++
->>> 3 files changed, 18 insertions(+)
->>>=20
->>> diff --git a/arch/riscv/include/asm/processor.h =
-b/arch/riscv/include/asm/processor.h
->>> index 46b492c78cbb..a268f1382e52 100644
->>> --- a/arch/riscv/include/asm/processor.h
->>> +++ b/arch/riscv/include/asm/processor.h
->>> @@ -35,6 +35,7 @@ struct thread_struct {
->>>      unsigned long s[12];    /* s[0]: frame pointer */
->>>      struct __riscv_d_ext_state fstate;
->>>      unsigned long bad_cause;
->>> +     struct __riscv_v_state vstate;
->>> };
->>>=20
->>> /* Whitelist the fstate from the task_struct for hardened usercopy =
-*/
->>> diff --git a/arch/riscv/include/uapi/asm/ptrace.h =
-b/arch/riscv/include/uapi/asm/ptrace.h
->>> index 882547f6bd5c..bd3b8a710246 100644
->>> --- a/arch/riscv/include/uapi/asm/ptrace.h
->>> +++ b/arch/riscv/include/uapi/asm/ptrace.h
->>> @@ -77,6 +77,17 @@ union __riscv_fp_state {
->>>      struct __riscv_q_ext_state q;
->>> };
->>>=20
->>> +struct __riscv_v_state {
->>> +     unsigned long vstart;
->>> +     unsigned long vl;
->>> +     unsigned long vtype;
->>> +     unsigned long vcsr;
->>=20
->> Don't we also need vlen to adequately determine the vector state?
->> Otherwise we're going to end up dropping some state when vl isn't =
-vlmax,
->> which IIUC isn't legal.
->=20
-> Do you mean vlenb? Since it is a constant value, we don't need to
-> save/restore it in the context.
->=20
->>> +     void *datap;
->>> +#if __riscv_xlen =3D=3D 32
->>> +     __u32 __padding;
->>> +#endif
->>=20
->> Why is there padding?
->=20
-> To keep vector registers saved in a 16-bytes aligned address for rv32.
+Hi Vineet,
 
-That struct has an alignment of 4 bytes. It doesn=E2=80=99t make sense =
-to put
-the padding there; it should be wherever the 16 byte alignment is
-introduced, which looks like your __sc_riscv_v_state below (assuming
-you need to explicitly name the padding and can=E2=80=99t just rely on =
-implicit
-compiler padding; presumably you need it so you can guarantee it=E2=80=99s=
- zero
-when written to userspace memory?).
+First bad commit (maybe != root cause):
 
-Especially since the amount of padding you need in __riscv_v_state if
-doing it this way depends on the size of __riscv_ctx_hdr, because that
-happens to be in __sc_riscv_v_state. This is quite fragile and
-non-obvious as it stands.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ddec8ed2d4905d0967ce2ec432e440e582aa52c6
+commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
+date:   5 months ago
+config: arc-randconfig-s031-20220107 (https://download.01.org/0day-ci/archive/20220107/202201072134.vhC4HnC4-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e188f3330a13df904d77003846eafd3edf99009d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash fs/ kernel/ net/ipv4/
 
-Jess
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> struct __riscv_ctx_hdr {
->        __u32 magic;
->        __u32 size;
-> };
-> struct __sc_riscv_v_state {
->        struct __riscv_ctx_hdr head;
->        struct __riscv_v_state v_state;
-> } __attribute__((aligned(16)));
->=20
-> rv64 =3D> 48bytes -> 16byte aligned
-> rv32 =3D> 32bytes -> 16byte aligned
->=20
-> This struct and vector registers will be copied to
-> sigcontext.reserved[] for signal handler so we'd like to keep it is
-> 16-byte aligned.
->=20
-> struct sigcontext {
->        struct user_regs_struct sc_regs;
->        union __riscv_fp_state sc_fpregs;
->        /*
->         * 4K + 128 reserved for vector state and future expansion.
->         * This space is enough to store the vector context whose VLENB
->         * is less or equal to 128.
->         * (The size of the vector context is 4144 byte as VLENB is =
-128)
->         */
->        __u8 __reserved[4224] __attribute__((__aligned__(16)));
-> };
->=20
->=20
->>> +};
->>> +
->>> #endif /* __ASSEMBLY__ */
->>>=20
->>> #endif /* _UAPI_ASM_RISCV_PTRACE_H */
->>> diff --git a/arch/riscv/kernel/asm-offsets.c =
-b/arch/riscv/kernel/asm-offsets.c
->>> index 90f8ce64fa6f..34f43c84723a 100644
->>> --- a/arch/riscv/kernel/asm-offsets.c
->>> +++ b/arch/riscv/kernel/asm-offsets.c
->>> @@ -72,6 +72,12 @@ void asm_offsets(void)
->>>      OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
->>> #endif
->>>=20
->>> +     OFFSET(RISCV_V_STATE_VSTART, __riscv_v_state, vstart);
->>> +     OFFSET(RISCV_V_STATE_VL, __riscv_v_state, vl);
->>> +     OFFSET(RISCV_V_STATE_VTYPE, __riscv_v_state, vtype);
->>> +     OFFSET(RISCV_V_STATE_VCSR, __riscv_v_state, vcsr);
->>> +     OFFSET(RISCV_V_STATE_DATAP, __riscv_v_state, datap);
->>> +
->>>      DEFINE(PT_SIZE, sizeof(struct pt_regs));
->>>      OFFSET(PT_EPC, pt_regs, epc);
->>>      OFFSET(PT_RA, pt_regs, ra);
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
+sparse warnings: (new ones prefixed by >>)
+   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
+   fs/file.c:350:17: sparse:     expected struct file **old_fds
+   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
+   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
+   fs/file.c:351:17: sparse:     expected struct file **new_fds
+   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
+   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
+   fs/file.c:366:17: sparse:    struct file *
+>> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
+   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
+   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
+--
+   net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
+   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
+   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
+>> net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
+   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
+   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
+
+vim +401 fs/file.c
+
+02afc6267f6d55 Al Viro          2008-05-08  382  
+ce08b62d18b3f9 Oleg Nesterov    2014-01-11  383  static struct fdtable *close_files(struct files_struct * files)
+7cf4dc3c8dbfdf Al Viro          2012-08-15  384  {
+7cf4dc3c8dbfdf Al Viro          2012-08-15  385  	/*
+7cf4dc3c8dbfdf Al Viro          2012-08-15  386  	 * It is safe to dereference the fd table without RCU or
+7cf4dc3c8dbfdf Al Viro          2012-08-15  387  	 * ->file_lock because this is the last reference to the
+ce08b62d18b3f9 Oleg Nesterov    2014-01-11  388  	 * files structure.
+7cf4dc3c8dbfdf Al Viro          2012-08-15  389  	 */
+ce08b62d18b3f9 Oleg Nesterov    2014-01-11  390  	struct fdtable *fdt = rcu_dereference_raw(files->fdt);
+9b80a184eaadc1 Alexey Dobriyan  2016-09-02  391  	unsigned int i, j = 0;
+ce08b62d18b3f9 Oleg Nesterov    2014-01-11  392  
+7cf4dc3c8dbfdf Al Viro          2012-08-15  393  	for (;;) {
+7cf4dc3c8dbfdf Al Viro          2012-08-15  394  		unsigned long set;
+7cf4dc3c8dbfdf Al Viro          2012-08-15  395  		i = j * BITS_PER_LONG;
+7cf4dc3c8dbfdf Al Viro          2012-08-15  396  		if (i >= fdt->max_fds)
+7cf4dc3c8dbfdf Al Viro          2012-08-15  397  			break;
+7cf4dc3c8dbfdf Al Viro          2012-08-15  398  		set = fdt->open_fds[j++];
+7cf4dc3c8dbfdf Al Viro          2012-08-15  399  		while (set) {
+7cf4dc3c8dbfdf Al Viro          2012-08-15  400  			if (set & 1) {
+7cf4dc3c8dbfdf Al Viro          2012-08-15 @401  				struct file * file = xchg(&fdt->fd[i], NULL);
+7cf4dc3c8dbfdf Al Viro          2012-08-15  402  				if (file) {
+7cf4dc3c8dbfdf Al Viro          2012-08-15  403  					filp_close(file, files);
+388a4c88064e7e Paul E. McKenney 2017-10-24  404  					cond_resched();
+7cf4dc3c8dbfdf Al Viro          2012-08-15  405  				}
+7cf4dc3c8dbfdf Al Viro          2012-08-15  406  			}
+7cf4dc3c8dbfdf Al Viro          2012-08-15  407  			i++;
+7cf4dc3c8dbfdf Al Viro          2012-08-15  408  			set >>= 1;
+7cf4dc3c8dbfdf Al Viro          2012-08-15  409  		}
+7cf4dc3c8dbfdf Al Viro          2012-08-15  410  	}
+ce08b62d18b3f9 Oleg Nesterov    2014-01-11  411  
+ce08b62d18b3f9 Oleg Nesterov    2014-01-11  412  	return fdt;
+7cf4dc3c8dbfdf Al Viro          2012-08-15  413  }
+7cf4dc3c8dbfdf Al Viro          2012-08-15  414  
+
+:::::: The code at line 401 was first introduced by commit
+:::::: 7cf4dc3c8dbfdfde163d4636f621cf99a1f63bfb move files_struct-related bits from kernel/exit.c to fs/file.c
+
+:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
+:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

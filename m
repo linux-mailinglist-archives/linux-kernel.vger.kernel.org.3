@@ -2,96 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 587A8487432
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7222048743E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346059AbiAGIgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346041AbiAGIgj (ORCPT
+        id S1346126AbiAGIrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:47:11 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:31146 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231298AbiAGIrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:36:39 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60DBC061201
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 00:36:38 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso9794668pjm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 00:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=0usgNPuxO2Xbite7dIWl/eUqLBFFjy4eURRS5eQlexE=;
-        b=db7Z0ELzm+ApbLFsM9kaoTKg5fw9dbZ6VA0Cr13+Zl2LzqmSGdSDtLVH3KTB09Ekyt
-         vrM918SYbXswzfnRiP5IYevCGXXj8avAtt+q3iS7l5RkQENFvOasfI7JrKDDq+52i2lA
-         4/PRS5KtpQhEPAzQXVlK52YmyDsiLxO/efb28hj+KW2B2QSeeLPQRq5hqwtspAwXBa6n
-         ffEvYvumpV4JDPyMZYpcmSjlXIvQ2WE4GBdQ8N/f1266lHwBiuFcbj1Jzg5Ls7Nb0ziz
-         lBQER0SA3Y8NYj/gpmtbHgZwwWnsPtsTBEddeX0KqPgbMxdq4qQ2NjmriVUNhx66YbTr
-         zDig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=0usgNPuxO2Xbite7dIWl/eUqLBFFjy4eURRS5eQlexE=;
-        b=jhbkIC4ogJDyOZANVT/SRXQL/mBGJoapCbgzBZJvX1ubtDLQPJVda758a8nl/0t+kD
-         kPfjPdGbSRDgMP3mNyDSda6bWDDlASmZgnr95C2AQF+SbyGGvhfDkBE4ytxa90H81tkp
-         l43mSA8s5DCzg9LDvqYNGfuS1/oxh8uv4osNhi+1tvW6uuwVNTI+ZHkBvLHCDdA8oToG
-         czdbYJNJ4piwYdqZDdWUXeq8miE4r/66RcxLDh9Z7ieKjRNcGbZqg61rnS+Fu5dKkMCj
-         nhSVIxIYgK7kPij5XlKnK/cKgjWG5rXfR1sTgufeBuCr8faiaDAT/llCRn4IJma1XWsP
-         p1Rw==
-X-Gm-Message-State: AOAM533pkCqOQ6QUYEVBhsxXXim2fpLEi9eyfSAb00msB7E0IVhKuLVg
-        8ydMQr0gDDRtjMuIQWTnTSM=
-X-Google-Smtp-Source: ABdhPJwFX+BUrAd7opzOCSQBmNe+AAAzzMRjvfY3Q5YfyjPq15ioRx70dDlJsKdD6o6knFYNsznE3g==
-X-Received: by 2002:a17:90b:1986:: with SMTP id mv6mr14795706pjb.37.1641544598539;
-        Fri, 07 Jan 2022 00:36:38 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id l1sm3909919pgn.35.2022.01.07.00.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 00:36:38 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Saravana Kannan <saravanak@google.com>,
-        Ondrej Jirman <megous@megous.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/sun4i: dw-hdmi: Fix missing put_device() call in sun8i_hdmi_phy_get
-Date:   Fri,  7 Jan 2022 08:36:32 +0000
-Message-Id: <20220107083633.20843-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Fri, 7 Jan 2022 03:47:08 -0500
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JVcGQ0Dxszbbjf;
+        Fri,  7 Jan 2022 16:44:30 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Fri, 7 Jan 2022 16:47:07 +0800
+From:   chenxiang <chenxiang66@hisilicon.com>
+To:     <linux@armlinux.org.uk>, <vkoul@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
+Subject: [RFC PATCH] ACPI / amba: Skip creating amba device when associated cpu is not online
+Date:   Fri, 7 Jan 2022 16:41:46 +0800
+Message-ID: <1641544906-7069-1-git-send-email-chenxiang66@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+From: Xiang Chen <chenxiang66@hisilicon.com>
 
-Fixes: 9bf3797796f5 ("drm/sun4i: dw-hdmi: Make HDMI PHY into a platform device")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+If not up all the cpus with command line "maxcpus=x", system will be
+blocked.
+We find that some amba devices such as ETM devices, are associated with
+special cpus, and if the cpu is not up, the register of associated device
+is not allowed to access. BIOS reports all the ETM device nodes and a
+amba device is created for every ETM device, so even if one cpu is not up,
+the amba device will still be created for the associated device, and also
+the register of device (pid and cid) will be accessed when adding amba
+device which will cause the issue.
+To fix it, skip creating amba device if it is associated with a cpu which
+is not online.
+
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
 ---
- drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/acpi/acpi_amba.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-index b64d93da651d..5e2b0175df36 100644
---- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-@@ -658,8 +658,10 @@ int sun8i_hdmi_phy_get(struct sun8i_dw_hdmi *hdmi, struct device_node *node)
- 		return -EPROBE_DEFER;
+diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
+index ab8a4e0191b1..2369198f734b 100644
+--- a/drivers/acpi/acpi_amba.c
++++ b/drivers/acpi/acpi_amba.c
+@@ -16,6 +16,7 @@
+ #include <linux/ioport.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <acpi/processor.h>
  
- 	phy = platform_get_drvdata(pdev);
--	if (!phy)
-+	if (!phy) {
-+		put_device(&pdev->dev);
- 		return -EPROBE_DEFER;
+ #include "internal.h"
+ 
+@@ -45,6 +46,35 @@ static void amba_register_dummy_clk(void)
+ 	clk_register_clkdev(amba_dummy_clk, "apb_pclk", NULL);
+ }
+ 
++static int acpi_handle_to_cpuid(acpi_handle handle)
++{
++	int cpu = -1;
++	struct acpi_processor *pr;
++
++	for_each_possible_cpu(cpu) {
++		pr = per_cpu(processors, cpu);
++		if (pr && pr->handle == handle)
++			break;
 +	}
++
++	return cpu;
++}
++
++static int acpi_dev_get_cpu(struct acpi_device *adev)
++{
++	acpi_handle cpu_handle;
++	acpi_status status;
++	int cpu;
++
++	status = acpi_get_parent(adev->handle, &cpu_handle);
++	if (ACPI_FAILURE(status))
++		return -1;
++	cpu = acpi_handle_to_cpuid(cpu_handle);
++	if (cpu >= nr_cpu_ids)
++		return -1;
++	return cpu;
++}
++
+ static int amba_handler_attach(struct acpi_device *adev,
+ 				const struct acpi_device_id *id)
+ {
+@@ -54,11 +84,17 @@ static int amba_handler_attach(struct acpi_device *adev,
+ 	bool address_found = false;
+ 	int irq_no = 0;
+ 	int ret;
++	int cpu;
  
- 	hdmi->phy = phy;
+ 	/* If the ACPI node already has a physical device attached, skip it. */
+ 	if (adev->physical_node_count)
+ 		return 0;
  
++	/* If the cpu associated with the device is not online, skip it. */
++	cpu = acpi_dev_get_cpu(adev);
++	if (cpu >= 0 && !cpu_online(cpu))
++		return 0;
++
+ 	dev = amba_device_alloc(dev_name(&adev->dev), 0, 0);
+ 	if (!dev) {
+ 		dev_err(&adev->dev, "%s(): amba_device_alloc() failed\n",
 -- 
-2.17.1
+2.33.0
 

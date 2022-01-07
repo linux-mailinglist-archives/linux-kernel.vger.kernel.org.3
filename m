@@ -2,199 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4714875DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB6D4875ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237725AbiAGKq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:46:56 -0500
-Received: from foss.arm.com ([217.140.110.172]:39382 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237653AbiAGKqy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:46:54 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F49C13D5;
-        Fri,  7 Jan 2022 02:46:54 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A639C3F66F;
-        Fri,  7 Jan 2022 02:46:52 -0800 (PST)
-Subject: Re: [RT] BUG in sched/cpupri.c
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        John Keeping <john@metanate.com>
-Cc:     linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        id S237817AbiAGKxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:53:53 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53544 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232217AbiAGKxx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 05:53:53 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 207A0kPj014394;
+        Fri, 7 Jan 2022 10:53:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=jMR9O+FM9qEWJpGAyuSKDdDsmxJsR9AVCqr0pHidOwo=;
+ b=NhRSszZexyZmoHbLxUWBaCRi/zXrjPkJDCzF9xzokULus7+PwdbAizZnv7GdXWYjK9Zb
+ XPZd94WpmNxRQFgHNI/uQQv4xIV1kdHHlwncerqWuyxpONHViKhZVnQ3O991pALkIiEg
+ 30DNatthZKdNqJx+/DC8pYaVU0FxPvYcV4Gwz+bQ8cO8xAV01Hm7LNn7FLMB/XJB9q9c
+ JpTGZvuG84+5oqdzTHnwxYDUNFgCJMaGaIUk0IefGRQt1m9r7mX6izWdqb8c2vcObHrG
+ UzsNS1EJ1RliiNM5YVtsivkw0NPg0ERM2+DKr3/BDNeLImc4y8szGAPmER2uPnV8kxde Kw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3de4v8hrav-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Jan 2022 10:53:49 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 207AVeaS127051;
+        Fri, 7 Jan 2022 10:53:48 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3de4vngpdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Jan 2022 10:53:48 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 207AnTKY192863;
+        Fri, 7 Jan 2022 10:53:47 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by userp3020.oracle.com with ESMTP id 3de4vngpdk-1;
+        Fri, 07 Jan 2022 10:53:47 +0000
+From:   Aayush Agarwal <aayush.a.agarwal@oracle.com>
+Cc:     aayush.a.agarwal@oracle.com, stable@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <Yb3vXx3DcqVOi+EA@donbot>
- <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com>
- <20211221164528.3c84543f.john@metanate.com>
- <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com> <87r1a4775a.mognet@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
-Date:   Fri, 7 Jan 2022 11:46:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: [PATCH 4.14] phonet: refcount leak in pep_sock_accep
+Date:   Fri,  7 Jan 2022 02:53:32 -0800
+Message-Id: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <87r1a4775a.mognet@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: 32QdoMVOwQVHfzppnChfzo1Q79XUlUxF
+X-Proofpoint-GUID: 32QdoMVOwQVHfzppnChfzo1Q79XUlUxF
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/2021 20:48, Valentin Schneider wrote:
-> On 22/12/21 18:46, Dietmar Eggemann wrote:
->> On 21.12.21 17:45, John Keeping wrote:
->>> On Tue, 21 Dec 2021 16:11:34 +0000
->>> Valentin Schneider <valentin.schneider@arm.com> wrote:
->>>
->>>> On 20/12/21 18:35, Dietmar Eggemann wrote:
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[...]
+commit bcd0f9335332 ("phonet: refcount leak in pep_sock_accep")
+upstream.
 
->> switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
->>   pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
->>     rto_push_irq_work_func() -> push_rt_task(rq, true)
->>
->> seems to be the only way with pull=true.
->>
->> In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
->>
->> [   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
->> [   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
->> [   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
->>                                                          ^^^^^^^^^^^^^^^^^^^^^^
->> [   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
->> [   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
->>                                                              ^^^^^^^^^^                           ^^^^^^
-> 
-> mark_wakeup_next_waiter() first deboosts the previous owner and then
-> wakeups the next top waiter. Seems like you somehow have the wakeup happen
-> before the push_rt_task IRQ work is run. Also, tell_cpu_to_push() should
-> only pick a CPU that is in rq->rd->rto_mask, which requires having at least
-> 2 RT tasks there...
+sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
+invoked in subsequent failure branches(pep_accept_conn() != 0).
 
-True, this_cpu has rt_nr_running = 0 and *cpu* has rt_nr_running >= 2:
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20211209082839.33985-1-hbh25y@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Aayush Agarwal <aayush.a.agarwal@oracle.com>
+---
+ net/phonet/pep.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-  mark_wakeup_next_waiter()
+diff --git a/net/phonet/pep.c b/net/phonet/pep.c
+index b0d958cd1823..4c4a8a42ee88 100644
+--- a/net/phonet/pep.c
++++ b/net/phonet/pep.c
+@@ -881,6 +881,7 @@ static struct sock *pep_sock_accept(struct sock *sk, int flags, int *errp,
+ 
+ 	err = pep_accept_conn(newsk, skb);
+ 	if (err) {
++		__sock_put(sk);
+ 		sock_put(newsk);
+ 		newsk = NULL;
+ 		goto drop;
+-- 
+2.27.0
 
-    (1) /* deboost */
-    rt_mutex_adjust_prio()
-
-      rt_mutex_setprio(current, ...)
-
-        rq = __task_rq_lock(current, );
-        check_class_changed(rq, p, prev_class, oldprio)
-
-          switched_from_rt()
-
-            if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
-              return;
-
-            rt_queue_pull_task(rq)
-
-              queue_balance_callback(rq, ..., pull_rt_task);
-
-                pull_rt_task()
-
-                  tell_cpu_to_push()
-
-                    *cpu* = rto_next_cpu(rq->rd)
-                    irq_work_queue_on(&rq->rd->rto_push_work, *cpu*)
-
-                      rto_push_irq_work_func()
-                        push_rt_task(rq, true) <-- !!!
-
-    (2) /* waking the top waiter */
-    rt_mutex_wake_q_add(wqh, waiter);
-
-> Now, that wakeup from the rtmutex unlock would give us a resched_curr() via
-> check_preempt_curr() if required, which is good, though I think we are
-> still missing some for sched_setscheduler() (there are no wakeups
-> there). So if we just have to live with an IRQ work popping in before we
-> get to preempt_schedule_irq() (or somesuch), then perhaps the below would
-> be sufficient.
-
-I think that's the case here but we are on the RT overloaded CPU (*cpu*).
-
-> 
->> What about slightly changing the layout in switched_from_rt() (only lightly tested):
->>
->>
->> @@ -2322,7 +2338,15 @@ static void switched_from_rt(struct rq *rq, struct task_struct *p)
->>          * we may need to handle the pulling of RT tasks
->>          * now.
->>          */
->> -       if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
->> +       if (!task_on_rq_queued(p))
->> +               return;
->> +
->> +       if (task_current(rq, p) && (p->sched_class < &rt_sched_class)) {
->> +               resched_curr(rq);
->> +               return;
->> +       }
->> +
->> +       if (rq->rt.rt_nr_running)
->>                 return;
->>
->>         rt_queue_pull_task(rq);
-> 
-> If !rq->rt.rt_nr_running then there's no point in issuing a reschedule (at
-> least from RT's perspective; p->sched_class->switched_to() takes care of
-> the rest)
-
-Right.
-
-[...]
-
->  /*
-> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> index ef8228d19382..8f3e3a1367b6 100644
-> --- a/kernel/sched/rt.c
-> +++ b/kernel/sched/rt.c
-> @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
->  	if (!next_task)
->  		return 0;
->  
-> +	/*
-> +	 * It's possible that the next_task slipped in of higher priority than
-> +	 * current, or current has *just* changed priority.  If that's the case
-> +	 * just reschedule current.
-> +	 */
-> +	if (unlikely(next_task->prio < rq->curr->prio)) {
-> +		resched_curr(rq);
-> +		return 0;
-> +	}
-
-IMHO, that's the bit which prevents the BUG.
-
-But this would also prevent the case in which rq->curr is an RT task
-with lower prio than next_task.
-
-Also `rq->curr = migration/X` goes still though which is somehow fine
-since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
-
-And DL tasks (like sugov:X go through and they can have
-task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
-freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
-can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
-by coincidence.
-
-So maybe something like this:
-
-@ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
-                if (!pull || rq->push_busy)
-                        return 0;
-
-+               if (rq->curr->sched_class != &rt_sched_class) {
-+                       resched_curr(rq);
-+                       return 0;
-+               }
-+
-                cpu = find_lowest_rq(rq->curr);
-
-[...]

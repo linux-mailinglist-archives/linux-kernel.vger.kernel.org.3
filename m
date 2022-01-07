@@ -2,80 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65494487D39
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD71487D43
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbiAGTnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 14:43:40 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:44004 "EHLO mail.skyhub.de"
+        id S233475AbiAGTpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 14:45:01 -0500
+Received: from mga07.intel.com ([134.134.136.100]:6110 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230209AbiAGTnj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 14:43:39 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 538241EC0464;
-        Fri,  7 Jan 2022 20:43:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641584613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=xT/Hp49EdTICk3VFgL8D3ISi+kG8cMrFjEZK0ltQXdI=;
-        b=b9mPYxy9efXiFExVz4Yp2WD82+Z3Dx8X3Kiye9rqZ4uUufJ4+4ZgTCaAuFBCYUHQGWrxCo
-        3l9QyG28YStnz5fmfNs8saMnE3vUp2TbWNf2oinDCWFED+7vnGViiKo7jf33L5W3yHHfo/
-        KzyOKpEV39+sf0dvpdoaKiSdIR9bivk=
-Date:   Fri, 7 Jan 2022 20:43:35 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        guang.zeng@intel.com, jing2.liu@intel.com, kevin.tian@intel.com,
-        seanjc@google.com, tglx@linutronix.de, wei.w.wang@intel.com,
-        yang.zhong@intel.com
-Subject: Re: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
- __fpstate_reset() a function argument
-Message-ID: <YdiX5y4KxQ7GY7xn@zn.tnic>
-References: <20220107185512.25321-1-pbonzini@redhat.com>
- <20220107185512.25321-6-pbonzini@redhat.com>
+        id S233343AbiAGTpA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 14:45:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641584700; x=1673120700;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WorxCgWr17sbvtgPDsd+RkxFOR14VabgFtJ+fZNZTp4=;
+  b=ls2mK9XYc9c/uhEKjnFSgpbugIwgHLjR/o9AGLaGgDS7YbQNcjwQT49M
+   wdPDFCWS/7MhgoQo1DjMzKcK9MpbOvxNbYR4oWJFUz4m+ONI9BO/WFjXH
+   T2GVsOoNWJe3MEuDgNzKJx6I49J9lMrqAqYeK/2WJ8vRyhrnyS2YX/XGi
+   0hPL6PRfodrLKSfbn33kzRskLJJeLDiNQAqR1vcUlEJuxkTflbd0ogD5j
+   Wh3BDSUuEwTc8Lx7aEBJI4nWCmwjokk8b56AxmU4548IB0LG0BpE6Ox6q
+   vcHjbN+aBknuXROU8pQ9OOq6l6IbMYJKGhHx5l+HD/q05RTxhEceV02Rz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="306295457"
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="306295457"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 11:44:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="513914043"
+Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 11:44:59 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Youquan Song <youquan.song@intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] mm/hwpoison: Fix error page recovered but reported "not recovered"
+Date:   Fri,  7 Jan 2022 11:44:50 -0800
+Message-Id: <20220107194450.1687264-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220107185512.25321-6-pbonzini@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 01:54:56PM -0500, Paolo Bonzini wrote:
-> From: Jing Liu <jing2.liu@intel.com>
-> 
-> vCPU threads are different from native tasks regarding to the initial XFD
-> value. While all native tasks follow a fixed value (init_fpstate::xfd)
-> established by the FPU core at boot, vCPU threads need to obey the reset
-> value (i.e. ZERO) defined by the specification, to meet the expectation of
-> the guest.
-> 
-> Let the caller supply an argument and adjust the host and guest related
-> invocations accordingly.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+From: Youquan Song <youquan.song@intel.com>
 
-If Jing is author, then tglx's SOB should come after Jing's to mean,
-tglx handled it further.
+When an uncorrected memory error is consumed there is a race between
+the CMCI from the memory controller reporting an uncorrected error
+with a UCNA signature, and the core reporting and SRAR signature
+machine check when the data is about to be consumed.
 
-As it is now, it looks wrong.
+If the CMCI wins that race, the page is marked poisoned when
+uc_decode_notifier() calls memory_failure() and the machine
+check processing code finds the page already poisoned. It calls
+kill_accessing_process() to make sure a SIGBUS is sent. But
+returns the wrong error code.
 
-Ditto for patches 10, 11, 12, 13.
+Console log looks like this:
 
-Also, I wonder if all those Signed-off-by's do mean "handled" or
-Co-developed-by but I haven't tracked that particular pile so...
+[34775.674296] mce: Uncorrected hardware memory error in user-access at 3710b3400
+[34775.675413] Memory failure: 0x3710b3: recovery action for dirty LRU page: Recovered
+[34775.690310] Memory failure: 0x3710b3: already hardware poisoned
+[34775.696247] Memory failure: 0x3710b3: Sending SIGBUS to einj_mem_uc:361438 due to hardware memory corruption
+[34775.706072] mce: Memory error not recovered
 
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-> Message-Id: <20220105123532.12586-6-yang.zhong@intel.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fix kill_accessing_process() to return -EHWPOISON to avoid the noise
+message "Memory error not recovered" and skip duplicate SIGBUS.
 
+[Tony: Reworded some parts of commit message]
+
+Fixes: a3f5d80ea401 ("mm,hwpoison: send SIGBUS with error virutal address")
+Signed-off-by: Youquan Song <youquan.song@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+
+This code is very subtle ... the fix makes the "not recovered" message
+go away ... but I'm not more than 75% confident that this is the right
+fix. Please check carefully :-)
+
+ mm/memory-failure.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 3a274468f193..a67f558b08ea 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -707,7 +707,8 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+ 	if (ret == 1 && priv.tk.addr)
+ 		kill_proc(&priv.tk, pfn, flags);
+ 	mmap_read_unlock(p->mm);
+-	return ret ? -EFAULT : -EHWPOISON;
++
++	return (ret < 0) ? -EFAULT : -EHWPOISON;
+ }
+ 
+ static const char *action_name[] = {
 -- 
-Regards/Gruss,
-    Boris.
+2.31.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

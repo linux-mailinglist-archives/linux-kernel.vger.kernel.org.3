@@ -2,53 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E344487F22
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 179AE487F23
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiAGW6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 17:58:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35330 "EHLO
+        id S231322AbiAGW6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 17:58:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35326 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiAGW6l (ORCPT
+        with ESMTP id S229628AbiAGW6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Jan 2022 17:58:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73D4362015
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 22:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D436CC36AED;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 613EB60F8D;
+        Fri,  7 Jan 2022 22:58:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB52C36AE9;
         Fri,  7 Jan 2022 22:58:40 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1n5yBz-001gya-Ou;
+        id 1n5yBz-001gzA-Vt;
         Fri, 07 Jan 2022 17:58:39 -0500
-Message-ID: <20220107225655.647376947@goodmis.org>
+Message-ID: <20220107225839.823118570@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 07 Jan 2022 17:56:55 -0500
+Date:   Fri, 07 Jan 2022 17:56:56 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH 0/2] tracing: Fix filtering on string pointers
+        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 1/2] tracing: Have syscall trace events use
+ trace_event_buffer_lock_reserve()
+References: <20220107225655.647376947@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If filtering on an event's string pointer that happens to point into
-user space, then the pointer could cause a page fault and crash the
-kernel.
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Also, have system call events use the temp buffer when filtering.
+Currently, the syscall trace events call trace_buffer_lock_reserve()
+directly, which means that it misses out on some of the filtering
+optimizations provided by the helper function
+trace_event_buffer_lock_reserve(). Have the syscall trace events call that
+instead, as it was missed when adding the update to use the temp buffer
+when filtering.
 
+Cc: stable@vger.kernel.org
+Fixes: 0fc1b09ff1ff4 ("tracing: Use temp buffer when filtering events")
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ kernel/trace/trace_syscalls.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Steven Rostedt (2):
-      tracing: Have syscall trace events use trace_event_buffer_lock_reserve()
-      tracing: Add test for user space strings when filtering on string pointers
-
-----
- kernel/trace/trace_events_filter.c | 79 +++++++++++++++++++++++++++++++++++++-
- kernel/trace/trace_syscalls.c      |  6 +--
- 2 files changed, 79 insertions(+), 6 deletions(-)
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index 8bfcd3b09422..f755bde42fd0 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -323,8 +323,7 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 
+ 	trace_ctx = tracing_gen_ctx();
+ 
+-	buffer = tr->array_buffer.buffer;
+-	event = trace_buffer_lock_reserve(buffer,
++	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+ 			sys_data->enter_event->event.type, size, trace_ctx);
+ 	if (!event)
+ 		return;
+@@ -367,8 +366,7 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 
+ 	trace_ctx = tracing_gen_ctx();
+ 
+-	buffer = tr->array_buffer.buffer;
+-	event = trace_buffer_lock_reserve(buffer,
++	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+ 			sys_data->exit_event->event.type, sizeof(*entry),
+ 			trace_ctx);
+ 	if (!event)
+-- 
+2.33.0

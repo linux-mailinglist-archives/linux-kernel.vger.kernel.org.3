@@ -2,137 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BE348779F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1B74877A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiAGMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiAGMcV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:32:21 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0437C061245;
-        Fri,  7 Jan 2022 04:32:21 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id h1so4767899pls.11;
-        Fri, 07 Jan 2022 04:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aX15vcXEfaENKROZ/2of0+4S5a/GCCCjcMiAL2bj5pI=;
-        b=njkBeIobxW6KB+Q6BlkJ1uXIYPRHhtIHmo69a0G5LngTBikhFI/KR/nP1YQcUBm8bg
-         jMkIrWHjl5X/hzEQMvfClaiO6A8xPnoWd2edU8kjXnS/kJMZZxA+jmjC4W+vCz+Injpu
-         NMGxDJWltE/N28HNkrMh0jsCUM8JYZOr8Uo36L/GoAEOvR9VnT2vqUvQETX50q8hQaTf
-         MjxIOr5PR3/Q/GSuU+kzSAbOl+qmsBWpeMFD0/2l8r10bF0+T37hKRdpDaqQS6w4LCoS
-         WvCGjoIIeS2BMKgDKrzNCQ6ln/XOWzXPf6YCubkXnfXKE4U+H6RhavvA4l/nJ8ggl15M
-         zGHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aX15vcXEfaENKROZ/2of0+4S5a/GCCCjcMiAL2bj5pI=;
-        b=oiX+n2mhBg1KsLB/TVh1x8OnKXQXKyWZAM3NbXlTPGZvCzdgbdojf1nNx89DFTVbf9
-         PULP0xjiloHdhTVvrsOqrle2xTmMlPipaPYDJipkNu+HJfz3GMFudFdJyIZqXphobKRA
-         8jnLQiAtrhHipsZ5Mz4g3a2LmNd9scHvcwTtWWK8NPOpkoLdhssNpUJAkLSVdhHFl35i
-         ogXU3LjbOQ4ek/E7K2WweFJOf5syaDHdSCi6cgkfQ5fZaNSdZgUwsVJ5dTHfq9aA9Aln
-         58D/g2koDBEQA/m+VOKCqUd8rvsLM3N8o/TrLZzQ5MeC4tUJ0irQYSF/G7UqgTgX4ZxX
-         QCsA==
-X-Gm-Message-State: AOAM530METK7oc1WJWoKdNuqOsU01yCduzTt49m/LMdhvvy5E+H2DXkN
-        JNb2801zzBNesFdxhfBNg0M=
-X-Google-Smtp-Source: ABdhPJwYdHiMRO98i2rLiFl9Ft0Ya+T45NVrvwXwIMql0uKuhSCsZaTxgRSImDtnMnRi9h1gyG/JBw==
-X-Received: by 2002:a17:90a:c68a:: with SMTP id n10mr1876007pjt.144.1641558741157;
-        Fri, 07 Jan 2022 04:32:21 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id t126sm4595721pgc.61.2022.01.07.04.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 04:32:20 -0800 (PST)
-Date:   Fri, 7 Jan 2022 21:32:18 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Gabriel L. Somlo" <gsomlo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>, david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v6 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-Message-ID: <Ydgy0mCMJFkZqWAb@antec>
-References: <20220106174803.1773876-1-gsomlo@gmail.com>
- <20220106174803.1773876-4-gsomlo@gmail.com>
- <CAHp75Ve_jWmo3+Es0G5SyMpcdC_=hWfxHoa866Difd+X3F0uxg@mail.gmail.com>
- <YddyMI7hJE7u0jQ/@errol.ini.cmu.edu>
- <CAMuHMdX2ujViu9GivVHtgAqC6AdiL3CvdJM58pVteJe9KdvdqQ@mail.gmail.com>
- <YdgSG7t2eG9YzkaG@antec>
- <CAHp75VdjP4jmUQHUV=eF2Ot+s=3==ZqUS7BFxMoPDw=NkCBm6Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdjP4jmUQHUV=eF2Ot+s=3==ZqUS7BFxMoPDw=NkCBm6Q@mail.gmail.com>
+        id S231891AbiAGMlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:41:23 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:30518 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229624AbiAGMlW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 07:41:22 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1641559282; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=Ro2y/JOjOo1Q+rpZmwqRvcFh1HOUbWXLk/gFbz/8VXE=; b=OfYJsOSH9vqMkRf6fPktO+VyHZOLHB1cBgTCHbusT0nzKqH9yqz7or9q/zfPKuIPZGY1P0Qe
+ mtq2A4J3kyOP985jQDRQJhyxjDo4NDV7QarjYCzEfadNWcUrY9lwvO9uISXtIiC+OIU1OtSJ
+ bJoo8gb7ph8GielviesIzyxV380=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 61d834f1df12ba53c4d2bc83 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 Jan 2022 12:41:21
+ GMT
+Sender: Vijayanand=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D39BEC4360D; Fri,  7 Jan 2022 12:41:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        FROM_ADDR_WS autolearn=no autolearn_force=no version=3.4.0
+Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vjitta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 057B9C4338F;
+        Fri,  7 Jan 2022 12:41:17 +0000 (UTC)
+From:   Vijayanand@codeaurora.org, Jitta@codeaurora.org
+To:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, vjitta@codeaurora.org,
+        Vijayanand Jitta <quic_vjitta@quicinc.com>
+Subject: [PATCH] iommu: Fix potential use-after-free during probe
+Date:   Fri,  7 Jan 2022 18:11:06 +0530
+Message-Id: <1641559266-3644-1-git-send-email-quic_vjitta@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 12:24:23PM +0200, Andy Shevchenko wrote:
-> On Fri, Jan 7, 2022 at 12:12 PM Stafford Horne <shorne@gmail.com> wrote:
-> > On Fri, Jan 07, 2022 at 10:36:12AM +0100, Geert Uytterhoeven wrote:
-> > > On Thu, Jan 6, 2022 at 11:50 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> 
-> ...
-> 
-> > > Many (most?) blurbs do mention the module name.
-> >
-> > I was doubting this as well, but I searched and its true.  The text 'module will
-> > be called' shows up many times, there is also different text.
-> >
-> >  $ grep -r 'module will be called' drivers/ | wc
-> >    1347    9023   9086
-> >
-> >  $ grep -r 'tristate \"' drivers/ | wc
-> >    7169   47486  521795
-> 
-> Just a side note: `git grep ...` is much faster in the Git trees.
+From: Vijayanand Jitta <quic_vjitta@quicinc.com>
 
-Yes, it is quite a lot faster, I always wondered why one would use it rather
-than just grep.  Thanks for the tip.
+Kasan has reported the following use after free on dev->iommu.
+when a device probe fails and it is in process of freeing dev->iommu
+in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+causing use after free.
 
-    < shorne@antec ~/work/linux > time grep -r 'module will be called' drivers/ >/dev/null
+BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
 
-    real    0m0.338s
-    user    0m0.220s
-    sys     0m0.113s
+Workqueue: events_unbound deferred_probe_work_func
+Call trace:
+ dump_backtrace+0x0/0x33c
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x16c/0x1e0
+ print_address_description+0x84/0x39c
+ __kasan_report+0x184/0x308
+ kasan_report+0x50/0x78
+ __asan_load8+0xc0/0xc4
+ of_iommu_configure+0xb4/0x4a4
+ of_dma_configure_id+0x2fc/0x4d4
+ platform_dma_configure+0x40/0x5c
+ really_probe+0x1b4/0xb74
+ driver_probe_device+0x11c/0x228
+ __device_attach_driver+0x14c/0x304
+ bus_for_each_drv+0x124/0x1b0
+ __device_attach+0x25c/0x334
+ device_initial_probe+0x24/0x34
+ bus_probe_device+0x78/0x134
+ deferred_probe_work_func+0x130/0x1a8
+ process_one_work+0x4c8/0x970
+ worker_thread+0x5c8/0xaec
+ kthread+0x1f8/0x220
+ ret_from_fork+0x10/0x18
 
-    < shorne@antec ~/work/linux > time git grep 'module will be called' -- drivers/ >/dev/null
+Allocated by task 1:
+ ____kasan_kmalloc+0xd4/0x114
+ __kasan_kmalloc+0x10/0x1c
+ kmem_cache_alloc_trace+0xe4/0x3d4
+ __iommu_probe_device+0x90/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
 
-    real    0m0.153s
-    user    0m0.205s
-    sys     0m0.659s
+Freed by task 1:
+ kasan_set_track+0x4c/0x84
+ kasan_set_free_info+0x28/0x4c
+ ____kasan_slab_free+0x120/0x15c
+ __kasan_slab_free+0x18/0x28
+ slab_free_freelist_hook+0x204/0x2fc
+ kfree+0xfc/0x3a4
+ __iommu_probe_device+0x284/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
 
+Fix this by adding device_lock for dev->iommu accesses.
 
-> And for this particular case I dare to advertise a script I wrote [1]
-> to help with recursive searches.
-> 
-> [1]: https://github.com/andy-shev/home-bin-tools/blob/master/gl4func.sh
+Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
+---
+ drivers/iommu/iommu.c |  4 ++++
+ include/linux/iommu.h | 22 ++++++++++++++++------
+ 2 files changed, 20 insertions(+), 6 deletions(-)
 
-Neat script.
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index dd7863e..85a2caa 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -201,15 +201,19 @@ static struct dev_iommu *dev_iommu_get(struct device *dev)
+ 		return NULL;
+ 
+ 	mutex_init(&param->lock);
++	device_lock(dev);
+ 	dev->iommu = param;
++	device_unlock(dev);
+ 	return param;
+ }
+ 
+ static void dev_iommu_free(struct device *dev)
+ {
+ 	iommu_fwspec_free(dev);
++	device_lock(dev);
+ 	kfree(dev->iommu);
+ 	dev->iommu = NULL;
++	device_unlock(dev);
+ }
+ 
+ static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index d2f3435..01b09be 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -640,29 +640,39 @@ const struct iommu_ops *iommu_ops_from_fwnode(struct fwnode_handle *fwnode);
+ 
+ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+ {
++	struct iommu_fwspec *fwspec = NULL;
++
++	device_lock(dev);
+ 	if (dev->iommu)
+-		return dev->iommu->fwspec;
+-	else
+-		return NULL;
++		fwspec = dev->iommu->fwspec;
++	device_unlock(dev);
++	return fwspec;
+ }
+ 
+ static inline void dev_iommu_fwspec_set(struct device *dev,
+ 					struct iommu_fwspec *fwspec)
+ {
++	device_lock(dev);
+ 	dev->iommu->fwspec = fwspec;
++	device_unlock(dev);
+ }
+ 
+ static inline void *dev_iommu_priv_get(struct device *dev)
+ {
++	void *priv = NULL;
++
++	device_lock(dev);
+ 	if (dev->iommu)
+-		return dev->iommu->priv;
+-	else
+-		return NULL;
++		priv = dev->iommu->priv;
++	device_unlock(dev);
++	return priv;
+ }
+ 
+ static inline void dev_iommu_priv_set(struct device *dev, void *priv)
+ {
++	device_lock(dev);
+ 	dev->iommu->priv = priv;
++	device_unlock(dev);
+ }
+ 
+ int iommu_probe_device(struct device *dev);
+-- 
+2.7.4
 
-> > So maybe >10% have module name in the blurb.  Example:
-> >
-> >           To compile this driver as a module, choose M here: the
-> >           module will be called tifm_sd.
-> 
-> 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko

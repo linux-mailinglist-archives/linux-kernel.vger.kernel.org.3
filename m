@@ -2,237 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B88487CFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48F3487CFF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiAGT1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 14:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S232364AbiAGT1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 14:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiAGT1E (ORCPT
+        with ESMTP id S232043AbiAGT1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 14:27:04 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528DC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 11:27:04 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id p65so8379714iof.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 11:27:04 -0800 (PST)
+        Fri, 7 Jan 2022 14:27:08 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB286C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 11:27:07 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso7699322otf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 11:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6AgMB0BliFhTnPqLx8MPzQovjh3xMAp8CJbNAjfQHdg=;
-        b=FOAJPVZDE+rv5n40LPFaJfuooCCHfMlxRIQLIG0itXHXqGrpYkBVbRFm4d3+NYpdMn
-         UWmeI6qlHOFlO43k+c8IxLrGACGW+ddYPINbubnpYmQapbLdeODZRodOf10UDV/pEXQf
-         z6FmfhQm1qJ6TmyqIgvzGrzuapE5uinfCrKjD0YdR8dPV7Kdl1t8XpDxoh9ZNEOjEIXM
-         OX607VLcdRGHWzdj8daQrAWq+E8AFQyDuAMxMGrohJ8EyvvN5HfGy8oMsC4vVc4XtRLw
-         Te3T85hCQz89ZhRENCwGv2meh1QZwQYD13M3I6fd4xCqn7gdL7e2VSqwhOjPAZuD7NSN
-         0wCw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7NkUgJRGyv/mGOJjcDFlQgMnvKEd2905SAIiMK/+wtE=;
+        b=diH74T6M28+vlK6mRBohtBievIcLoYDNhMQVJQtqXb+BQhjwBBgE9hnxvnCqEe+mjX
+         /I+FLpA0O1vUce24LeiofkQWsLGWOE7ROTLL5BznzuyIqOMjBJoy98WIkTPWrdQmLORk
+         NyUa+oYBYwcr8qa6rjXNlyv3oytgrYJ2nQRZU5Ea6iuATUbNJ+EwEP3nsUG/QLDWyeTT
+         J/rSDvmtQ2TuOBt5ylcNqKi24SQiUxZ8/4Q57iFAvYzeKQ8o2/EZI0Z0IbuEl/KlGWmP
+         C/wVpqcEv74u4/20GTMZUSr4VOzA4mElSt4qA6VexPyNVk2iSPuEJAi6FudZaoN00sSO
+         LyZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6AgMB0BliFhTnPqLx8MPzQovjh3xMAp8CJbNAjfQHdg=;
-        b=OL3Z/BRAwVx50mMEOuk12OLHql/fLyN32d+86at3UunIWvvVPj4Rx9gl+VRgB0XO4b
-         fu6dZhynxIz/vvSPBqGFPnie51NIhcnKbmIX1HXpdwYr0xwdZ6IKmm1c06TeVPHxRxTx
-         MHQSwc6rvzca5xTp3GUdJsxKqI/0L/cdfgoKf3GXv0C04Q4yLnXK0xqeHORb+8AoIb17
-         P0Qy2TJSKNipxPUQq+z2WLmxkp0IKvgmYvUfi6LFmgdUxbTtjqTHyrcQEbudjCC6KwuA
-         Z7pVuJdOK+dCGc+dP//jul5YKDcRyZsV2Npc6d8JTtat3qqIHTvmi7eyPxDQ5+pytdl6
-         b14A==
-X-Gm-Message-State: AOAM532XeIGMJ4vAptU73VmwWTVwVbR1gnRduLhiFvDqvsL6lP3Xn6zQ
-        hRgDMd36Abrz30bjPm+kK12wiXqAjo8Uk+UndbL57A==
-X-Google-Smtp-Source: ABdhPJxYq21JQPQkcDcKXPoirZGB7XqqYaNPPvqWi8ceIjY0WSKVoIXBg8HcrRBpeit1RilSvNvQpnNEigv162fYnSM=
-X-Received: by 2002:a05:6638:1193:: with SMTP id f19mr31185178jas.237.1641583623214;
- Fri, 07 Jan 2022 11:27:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7NkUgJRGyv/mGOJjcDFlQgMnvKEd2905SAIiMK/+wtE=;
+        b=qlgU6ARoEJ4iVHif/uhqFiNqb19y5rmExO0DlnWzc7RtfNFY5QOVtQa19fa51O/Gzj
+         X4WdBiXsIMEP5C4jQzc2ENnGxVfmr3RvzbZvmxr5yh+Fr4wiDJ/lZhOD6Nqazx4el0QK
+         8QNJrn1q6EkDeL+G0XIstEL7G7tyrWPGAuHpOB22W0AWo4UZfUo58qFaXxzXYrQRfkOe
+         bt3FtzXURL5MG/ji/VXMAsRP8f9hjRxffoy+6ZgKux5S7iUhRgQsY4FpikVxuHMnjoQp
+         1DAie7A9RdL9UrlWiGZCz3G8ABdqJO6CkQKgDBJG8tqhEx/63nY2hIYEph4xRqrWT8Zr
+         qBuw==
+X-Gm-Message-State: AOAM532QbZxO+ABSl2U5wu9Yx3zPJoVuRk2u6SxAhVq9yxT7BDjNUF1K
+        pHYnJPQ6lsSMvVcQhw46GOXPPg==
+X-Google-Smtp-Source: ABdhPJwzflM4/ZC276UeLQsqnYjgLT3b8PYW7TqWlC7GqsDuQtLFWDALbglEfGsUu1xN50Cdhej/Fw==
+X-Received: by 2002:a05:6830:1d5c:: with SMTP id p28mr49666970oth.10.1641583627216;
+        Fri, 07 Jan 2022 11:27:07 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id l3sm1067724oic.37.2022.01.07.11.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 11:27:06 -0800 (PST)
+Date:   Fri, 7 Jan 2022 11:27:54 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
+Message-ID: <YdiUOh8FtPRktlUM@ripper>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-7-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-References: <YddEVgNKBJiqcV6Y@kernel.org> <YddGjjmlMZzxUZbN@kernel.org>
- <YddHmYhvtVvgqZb/@kernel.org> <CAP-5=fU2QAr9BMHqm9i6uDKPaUFsY2EAqt+oO1AO8ovBXCh5xQ@mail.gmail.com>
- <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
- <CAP-5=fUN+XqrSmwqab9DyGtvpZ7iZkfnUNwBfK1CDA_iX+aF0Q@mail.gmail.com>
- <CAP-5=fVE5eo9TSX3rrGb-=DETeYvXtG0AqhpGwjnP6nr8pKrqg@mail.gmail.com> <YdiHSF6CGBoswQ1G@kernel.org>
-In-Reply-To: <YdiHSF6CGBoswQ1G@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 7 Jan 2022 11:26:50 -0800
-Message-ID: <CAP-5=fX4-kmkm+qn9m22O_4A2_8j=uAm=vcXh9x2RqqDKEdnBg@mail.gmail.com>
-Subject: Re: perf build broken seemingly due to libbpf changes, checking...
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218130014.4037640-7-daniel.lezcano@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 10:32 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Thu, Jan 06, 2022 at 07:30:34PM -0800, Ian Rogers escreveu:
-> > On Thu, Jan 6, 2022 at 2:04 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Thu, Jan 6, 2022 at 1:44 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Thu, Jan 6, 2022 at 1:42 PM Ian Rogers <irogers@google.com> wrot=
-e:
-> > > > >
-> > > > > On Thu, Jan 6, 2022 at 11:48 AM Arnaldo Carvalho de Melo
-> > > > > <acme@kernel.org> wrote:
-> > > > > >
-> > > > > > Em Thu, Jan 06, 2022 at 04:44:14PM -0300, Arnaldo Carvalho de M=
-elo escreveu:
-> > > > > > > Em Thu, Jan 06, 2022 at 04:34:46PM -0300, Arnaldo Carvalho de=
- Melo escreveu:
-> > > > > > > > After merging torvalds/master to perf/urgent I'm getting th=
-is:
-> > > > > > > >
-> > > > > > > > util/bpf-event.c:25:21: error: no previous prototype for =
-=E2=80=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dmissing-prototypes=
-]
-> > > > > > > >    25 | struct btf * __weak btf__load_from_kernel_by_id(__u=
-32 id)
-> > > > > > > >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > > > util/bpf-event.c:37:1: error: no previous prototype for =E2=
-=80=98bpf_object__next_program=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > > > > >    37 | bpf_object__next_program(const struct bpf_object *o=
-bj, struct bpf_program *prev)
-> > > > > > > >       | ^~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > > > util/bpf-event.c:46:1: error: no previous prototype for =E2=
-=80=98bpf_object__next_map=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > > > > >    46 | bpf_object__next_map(const struct bpf_object *obj, =
-const struct bpf_map *prev)
-> > > > > > > >       | ^~~~~~~~~~~~~~~~~~~~
-> > > > > > > > util/bpf-event.c:55:1: error: no previous prototype for =E2=
-=80=98btf__raw_data=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > > > > >    55 | btf__raw_data(const struct btf *btf_ro, __u32 *size=
-)
-> > > > > > > >       | ^~~~~~~~~~~~~
-> > > > > > > > cc1: all warnings being treated as errors
-> > > > > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.=
-build:96: /tmp/build/perf/util/bpf-event.o] Error 1
-> > > > > > > > make[4]: *** Waiting for unfinished jobs....
-> > > > > > > > util/bpf_counter.c: In function =E2=80=98bpf_target_prog_na=
-me=E2=80=99:
-> > > > > > > > util/bpf_counter.c:82:15: error: implicit declaration of fu=
-nction =E2=80=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dimplicit-fu=
-nction-declaration]
-> > > > > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_li=
-near->info.btf_id);
-> > > > > > > >       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > > > util/bpf_counter.c:82:13: error: assignment to =E2=80=98str=
-uct btf *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from integer wi=
-thout a cast [-Werror=3Dint-conversion]
-> > > > > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_li=
-near->info.btf_id);
-> > > > > > > >       |             ^
-> > > > > > > > cc1: all warnings being treated as errors
-> > > > > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.=
-build:96: /tmp/build/perf/util/bpf_counter.o] Error 1
-> > > > > > > >
-> > > > > > > > I'm checking now...
-> > > > > > > >
-> > > > > > > > BTW I test perf builds with:
-> > > > > > > >
-> > > > > > > > make -k BUILD_BPF_SKEL=3D1 CORESIGHT=3D1 PYTHON=3Dpython3 O=
-=3D/tmp/build/perf -C tools/perf install-bin && git status && perf test pyt=
-hon
-> > > > > > >
-> > > > > > > Nevermind, this was due to a patch by Ian Rogers I was testin=
-g,
-> > > > > > > bisecting get up to the last patch, since I had merged torval=
-ds/master
-> > > > > > > today it got me to a wrong correlation, sorry for the disturb=
-ance.
-> > > > > > >
-> > > > > > > For reference, this is the patch:
-> > > > > > >
-> > > > > > > http://lore.kernel.org/lkml/20220106072627.476524-1-irogers@g=
-oogle.com
-> > > > > >
-> > > > > > Ian, I have libbpf-devel installed:
-> > > > > >
-> > > > > > =E2=AC=A2[acme@toolbox perf]$ rpm -qa | grep libbpf
-> > > > > > libbpf-0.4.0-1.fc34.x86_64
-> > > > > > libbpf-devel-0.4.0-1.fc34.x86_64
-> > > > > > =E2=AC=A2[acme@toolbox perf]$
-> > > > > >
-> > > > > > But I'm not using LIBBPF_DYNAMIC=3D1, so you can't just give pr=
-ecedence to
-> > > > > > system headers for all of the homies in tools/lib/.
-> > > > > >
-> > > > > > I bet that if I remove the libbpf-devel package it works, yeah,=
- just
-> > > > > > tested. So we need to make those overrides dependent on using
-> > > > > > LIBBPF_DYNAMIC=3D1, LIBTRACEEVENT_DYNAMIC=3D1, etc and avoid th=
-e big hammer
-> > > > > > that is -Itools/lib/, using a more finegrained approach, right?
-> > > > >
-> > > > > Ugh, this is messy. The -I for tools/lib is overloaded and being =
-used
-> > > > > in tools/perf/util/bpf-event.c so that bpf/bpf.h, bpf/btf.h and
-> > > >
-> > > > can you do `make install` for libbpf instead and have it install
-> > > > headers into a dedicated target directory which can be added into -=
-I
-> > > > search path. Quentin did this for all the other libbpf users in ker=
-nel
-> > > > tree (bpftool, resolve_btfids, etc) and it works great.
-> > >
-> > > This sounds good to me, and being able to borrow code from bpftool
-> > > should make writing it is straightforward. I'll try to find time to d=
-o
-> > > a patch, but I don't mind someone getting there before me :-)
-> >
-> > So tools/lib also provides subcmd, symbol and api. These will need
-> > Makefiles to allow an install and likely the header file structure
-> > altering. This seems like too big a fix for the next 5.16rc, wdyt?
->
-> Right, I think the best thing is to revert the patch Jiri pointed out,
-> right?
+On Sat 18 Dec 05:00 PST 2021, Daniel Lezcano wrote:
 
-Your call. There is a latent bug that with LIBTRACEEVENT_DYNAMIC we
-are using tools/lib/traceevent header files. Reverting the change
-means we don't break because of this, but it means that people
-building with LIBTRACEEVENT_DYNAMIC and newer libtraceevent (at least
-my employer :-) ) lose logging. I can carry the change locally, so not
-a big loss :-) There are a few issues stemming from this:
+> The DTPM framework does support now the hierarchy description.
+> 
+> The platform specific code can call the hierarchy creation function
+> with an array of struct dtpm_node pointing to their parents.
+> 
+> This patch provides a description of the big and Little CPUs and the
+> GPU and tie them together under a virtual package name. Only sdm845 is
+> described.
+> 
+> The description could be extended in the future with the memory
+> controller with devfreq if it has the energy information.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/soc/qcom/Kconfig  |  9 ++++++
+>  drivers/soc/qcom/Makefile |  1 +
+>  drivers/soc/qcom/dtpm.c   | 65 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 75 insertions(+)
+>  create mode 100644 drivers/soc/qcom/dtpm.c
+> 
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index e718b8735444..f21c1df2f2f9 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -228,4 +228,13 @@ config QCOM_APR
+>  	  application processor and QDSP6. APR is
+>  	  used by audio driver to configure QDSP6
+>  	  ASM, ADM and AFE modules.
+> +
+> +config QCOM_DTPM
+> +	tristate "Qualcomm DTPM hierarchy"
+> +	depends on DTPM
+> +	help
+> +	 Describe the hierarchy for the Dynamic Thermal Power
+> +	 Management tree on this platform. That will create all the
+> +	 power capping capable devices.
+> +
+>  endmenu
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 70d5de69fd7b..cf38496c3f61 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+>  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+>  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+>  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+> +obj-$(CONFIG_QCOM_DTPM) += dtpm.o
+> diff --git a/drivers/soc/qcom/dtpm.c b/drivers/soc/qcom/dtpm.c
+> new file mode 100644
+> index 000000000000..c15283f59494
+> --- /dev/null
+> +++ b/drivers/soc/qcom/dtpm.c
+> @@ -0,0 +1,65 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright 2021 Linaro Limited
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + *
+> + * DTPM hierarchy description
+> + */
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/dtpm.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +static struct dtpm_node __initdata sdm845_hierarchy[] = {
+> +	[0]{ .name = "sdm845" },
 
-1) we've identified the current build is wrong for xxx_DYNAMIC options
-as tools/lib versions headers always override
-2) to address this we should make the tools/lib things proper
-libraries like libbpf, libtraceevent, etc.
-3) once we have proper libraries, we need to update the perf build to
-build non-dynamic libraries then depend on the built/installed header
-files
+Why is the index signifiant here?
+Doesn't this imply risk that we forget one element, which will be
+thereby implicitly be left initialized as {} and hence denote
+termination of the list?
 
-I expect at least some of this is going to break when testing on many
-distributions as that just seems to be what always happens, and
-changing the build in this significant way is going to have
-implications. Doing this means that the code base is in better shape
-and logging works. To counter some of the many distribution pain, do
-you have a way to reproduce your testing? My OpenSuSE recipe is:
+> +	[1]{ .name = "package",
+> +	     .parent = &sdm845_hierarchy[0] },
+> +	[2]{ .name = "/cpus/cpu@0",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[3]{ .name = "/cpus/cpu@100",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[4]{ .name = "/cpus/cpu@200",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[5]{ .name = "/cpus/cpu@300",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[6]{ .name = "/cpus/cpu@400",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[7]{ .name = "/cpus/cpu@500",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[8]{ .name = "/cpus/cpu@600",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[9]{ .name = "/cpus/cpu@700",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[10]{ .name = "/soc@0/gpu@5000000",
 
-```
-# Get the image
-docker pull opensuse/tumbleweed
-# Start it with an interactive bash shell and mounting the current
-directory as /kernel-src
-sudo docker run --privileged -it --net=3Dhost --env=3D"DISPLAY" --mount
-type=3Dbind,source=3D"$(pwd)",target=3D/kernel-src opensuse/tumbleweed
-/bin/bash
-# Install missing rpms
-zypper install make gcc diffutils flex bison kernel-devel findutils
-libelf-devel python3 kernel-kvmsmall-devel glibc-devel
-# Go to /kernel-src and build into /tmp, etc.
-```
-But finding every distribution, every rpm, etc. is quite laborious.
+It worries me that we encode the textual structure of the dts in the
+kernel. E.g. for quite a while this was "/soc/gpu@5000000", so if this
+landed a year ago this driver would have prevented us from correcting
+the dts.
 
-Thanks,
-Ian
+Another concern is that not all busses in the system are capable of
+36-bit wide addresses, so it's plausible that we might one day have to
+create a more accurate representation of the address space. Maybe not on
+SDM845, but this would force us to be inconsistent.
 
-> - Arnaldo
+Regards,
+Bjorn
+
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[11]{ },
+> +};
+> +
+> +static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
+> +        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
+> +        {},
+> +};
+> +
+> +static int __init sdm845_dtpm_init(void)
+> +{
+> +	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
+> +}
+> +late_initcall(sdm845_dtpm_init);
+> +
+> +MODULE_DESCRIPTION("Qualcomm DTPM driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:dtpm");
+> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
+> +
+> -- 
+> 2.25.1
+> 

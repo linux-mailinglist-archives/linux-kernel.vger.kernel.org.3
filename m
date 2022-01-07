@@ -2,286 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B95A487B24
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39D4487B21
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348523AbiAGROI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:14:08 -0500
-Received: from mga14.intel.com ([192.55.52.115]:40437 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348477AbiAGROH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:14:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641575647; x=1673111647;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5S8HMRuD2QZPFSULfx9qRH9Uh7G6jQZF8OyxPNfQmrc=;
-  b=mP2MOb8LDTT4hlrPPH0XpjHyGs4XMlSdbXfeNYD+TB0Hu3hrI0TnohMb
-   QomlkA1PlZT3hXgW4mC27NHpotQP+V36uiORulwWmNhqitxPjXJzaAjm2
-   0TWQrBzFrhdrqW77rRALCz2ZCNsRDo76r+mk/o1aaxOkBrjsRGACppP31
-   QBHkdh5TYdd5p6ltxm//joM4WBnWoZT7H8qV6cQleEcqgAKalzfPqGYt5
-   659+I1u88dyli7hWyCJ20hcA40RkdCA5/nva8klNKovcQc3Fw8esuHiK1
-   Q/C/3WfwXoJc6pIRp4Ole/GY2zsoY0Jx8YKW4uuuVYZsTf5quVOC7oFmv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="243099887"
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="243099887"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 09:14:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="689847429"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Jan 2022 09:13:05 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5snY-000Isx-IL; Fri, 07 Jan 2022 17:13:04 +0000
-Date:   Sat, 8 Jan 2022 01:12:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [l1k:rs485_fixes 10/10] drivers/tty/serial/8250/8250_omap.c:1450:40:
- error: incompatible type for argument 1 of 'serial_in'
-Message-ID: <202201080120.oOHk60a4-lkp@intel.com>
-MIME-Version: 1.0
+        id S1348518AbiAGRMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:12:52 -0500
+Received: from mail-bn1nam07on2063.outbound.protection.outlook.com ([40.107.212.63]:29115
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1348477AbiAGRMv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 12:12:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vo8FSGa0giwUhrsNsiLqM1ID6RMr5JSah1yKYdRFlKVqF/N/2bz8wb3PUAUjoEBSqdPaOlb6v0Gj1k7WoQade3ZxPOAs2WZnkobG7duoeyfZvcHFu6gsHBHWuZqeaIMdmSMvE3n7URjL/5+3ZXXmSOzEUXZQ9Jk+hySmpY6btM8kYmS2ji5SDqoVUxkrYOqLDb+OSjfm4TelJurWiiuMcdcGDuyO739LW5ePshpxD9F34CYSONcvsCfXyb3Qa2aHnCZ/BEWHM3u5Kcgdt9m/dTcgakVJi0pO6JBBO/oGRUpMJgRoyMWZOryyres/2IBIEU/5TA+RXNATyTKdzvSeHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vGeerC0fk4AxA1Tto3XUy6zVabdSyrt7TAMZlmMRD1I=;
+ b=lT6UQP966uTkFmvud5JKQHyfRIue4Z2oViBu/jP1Fzq5FOmLXmyELaiToIINyTZtj3XQR0AY8hrx+iZiFNYM+6GOaLXVXbjnsR9HbI52C0EUuQWlN1C7taqBL2nRqiiK61doOIV5rZvo70V4Dsg+SE9a9Qmj0NXh/3QJA0TQgnKzVSGTr1YvlaVaocdp8ENFC9aU4Xpov44psit+IfzMjPvUO6Z6GO/qoxZPsLswCAKGoFq+UNGmCrJNG8rNgvRC2ye9s/SpXaIPtkUl2y8lngWyiDeldhln4jIkkwp2FqltfSltf4Ihu+OZZhU2XX4AXjFTwlSVyvxX7/xuuFwFdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vGeerC0fk4AxA1Tto3XUy6zVabdSyrt7TAMZlmMRD1I=;
+ b=BKd+morRRyMuGsOPXbckWjQVLu2ZIGjemRCpUix34VUXMDDlOaunqbsRFR+Iex6D+FDTL6dy+PKGE1kaVDim4n+BLT4RhN/Yc0Ra5kkMtdN3N4ufhr2DbiyxcfDyg6i5S5qYlzfe2z1/62co5ourqjjHf5/ZzzvYxRdh4d/DzdQyeaFMZyxGvG654TaUvEZez0uPrRzVVeuxYGT3MdjaAdWNPsh68nN8iGbJ0ppXvIooUN140XQbpJ3IEZEstu4y/71ocje7NoSdRkz/u7zKVF2bQEKv5U0RW9DOtQ44XqAfIpOMSkB3Buu239XreyJJ8f0QQI+NcOgutMM50PiIZA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Fri, 7 Jan
+ 2022 17:12:49 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.011; Fri, 7 Jan 2022
+ 17:12:49 +0000
+Date:   Fri, 7 Jan 2022 13:12:48 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Alexander Duyck <alexanderduyck@fb.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Segall <bsegall@google.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Steve Sistare <steven.sistare@oracle.com>,
+        Tejun Heo <tj@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [RFC 00/16] padata, vfio, sched: Multithreaded VFIO page pinning
+Message-ID: <20220107171248.GU2328285@nvidia.com>
+References: <20220106004656.126790-1-daniel.m.jordan@oracle.com>
+ <20220106011306.GY2328285@nvidia.com>
+ <20220107030330.2kcpekbtxn7xmsth@oracle.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220107030330.2kcpekbtxn7xmsth@oracle.com>
+X-ClientProxiedBy: BL0PR02CA0111.namprd02.prod.outlook.com
+ (2603:10b6:208:35::16) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 649dcfbc-e04b-453f-f27a-08d9d200eeac
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5176:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB517618B763A9A1EEADDAD6E9C24D9@BL1PR12MB5176.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uxC/+4MAFs/8Hiue3WCGhzauHF2hmhZzOxwHjMs2hnSsh6qjWHSZQwpzxt5SuT4fIodloeLROvVaDGkx9JoWtOtm/TOUNGpi9hbWSHkhzufaGvxJ1YCspVha1+E/jk1n0SwF0265o1vVKlo9qwDwcgpboibCLGX3o0sCn688a56zOgfOqY8+uq3aKeYybuZkkWfTeNOLQEGY8YCCmbuTWF7WIcTqp0t5eNtjfhACUIPyetb6ooqy7OGt1gIjKRIlPPdkT5TghTERi1dFCHwZJZT/ehmmdfhNkoYwCgN+MJcgc/k7TvzJo9CDjbeZU4YXZOF+LdzeGeCI7wvkhAKb8blvaoTuLaGWAwkkq3juYE0+48OqsIQurfA5IW8XH+NpRUbhrK7jQBvQnT5wxj3AKnqGCmJ54nAxnLuwd6AODQqOUxeP73RLpG3ziKb+zG0VOKbec9gIqr9jexGHfXuXEE/rqtwnnh7axcuilKO/TqHh7QYboah4CQtg9N8xMvq74bDuwxR/+ndATsl/OXeBD25ijRzQMVhY70+LFVTL6YZfXrx/cQaHLdwYYCLP/w21esfRHwB6WsFIBs1z6ZKz5UDWc9pe2mN9ew80bSnPdUl22KORBLE5h2JXaieCWO+ED4sTRIwSyoVBkTqdJT9Clg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(26005)(4326008)(38100700002)(8676002)(6512007)(1076003)(7416002)(186003)(66946007)(508600001)(66476007)(66556008)(5660300002)(8936002)(54906003)(6486002)(316002)(6506007)(2906002)(33656002)(86362001)(2616005)(36756003)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xNA8M8acaIuuGm565wrw3dqDCb1jCNNPVDqC0dYhXW4kVkKIuL0oKgZ3tkio?=
+ =?us-ascii?Q?AZ2LNr7tPRF8o46ZJovCqoq600K0JIYcwSjcfL9Evvw29XDrDwnHzFIPExci?=
+ =?us-ascii?Q?EWrgxW00tC2tDcnKswJ0KxNUnmyEwBlvSq4fdrXao+pL0FrWZctNovyF4u43?=
+ =?us-ascii?Q?LySn/FcvpAXQR6GBpIm4CKhraIc04UNo0JKT5cYudo69Erwv/zPLC2ACBZpj?=
+ =?us-ascii?Q?+Fr0Yt8PtoDI9TcB0riRA6CF3lDBAUcgUGyAFzTxaDlug2PH0TTWn3zlQNdq?=
+ =?us-ascii?Q?+EvwgYSyZ74e8XW9vHLecmnQdCDbjGK37c1yNeMOM8YDYjIQ8kmo1Z5jGel4?=
+ =?us-ascii?Q?u3n9qXPisVAFHSwV1ZaNsxc08qaYL6l3vNCHfKWSwcokGO8C4sWngbb4AgqW?=
+ =?us-ascii?Q?7ak4s+ILRe8isZNCKP6VrgTpnHGzPoFYUpxjDwoV9Q8+TMCcMRs2Tx+DbCVe?=
+ =?us-ascii?Q?Lj45R8v2l7mE+kRfIKiDjmH7Y/x0Hr3jZktECyUkGEXw8CX3r1kG1ge92DMW?=
+ =?us-ascii?Q?ePaZs9ZxuYWiMmScT/4hs+w8nhOH2awtvar5gU1NkJCuMnHMH3B2QBZY4VZa?=
+ =?us-ascii?Q?98aaULwMM7uSw8pE8F/OO/lDPwTCWcff5HsER2o3XX515X3HJS89L76CpzZ/?=
+ =?us-ascii?Q?zMRFW1rWfCylR9apKYshhfk5MVp4aNYdJdH6Dsqd2ytax9+bfVrkibGHqUAJ?=
+ =?us-ascii?Q?de2/22Y+DKPIZf42vIUCfQ/5wZFPs++ekQMPz0EPv5y248zERpzzfMPovHOz?=
+ =?us-ascii?Q?A0aPJSIe/JwqDQ3gcws48UGSQR0JMu19YV94bCGxtQqiKejGP8CGYyD8ST2+?=
+ =?us-ascii?Q?VutLuNsDKHPHHLxDslyW9Nh8Q8M0W+W0qVaomCC8clcBpzbMphObdky3WWU/?=
+ =?us-ascii?Q?bAU0k8aq/F7/5AtX4S+8QeVbfD6HgV5+1W8GOqkRgUW1ZJ3DsHrmesG1NH9i?=
+ =?us-ascii?Q?0O2NykDTSRv1RR1mKVogA/n4SvrDLflk63zEoDsOxrUrefNWT4uCAuAiDw07?=
+ =?us-ascii?Q?eRBP0igain1aEo8QZpP1eJFJrhbQxfzTEdsON+lmTHuPMJm865ts+yn1uxcT?=
+ =?us-ascii?Q?CbX07tgQbK0V9VKrhOtN1Q4s7S2CNjQd5jpl7iSItBCbZ+1BBPQFm2GHG8+h?=
+ =?us-ascii?Q?djndMVBa16OPrXaVNvl4x528NpGxXZAxroF+yBUnpOJDKnaTa41xgL3UbWOV?=
+ =?us-ascii?Q?5vDqH1hBFD+19EYk1IR49FxP8bPanzQEbFdbtyvAtDxAO/d+wGaI1wcT6d8t?=
+ =?us-ascii?Q?Nu31eNUb/4ZHyXDz7zOMo2zZcscZ0CIfzpeyYrj8WbAT4clFu4Ixu1aLbl61?=
+ =?us-ascii?Q?XPIeypyQ+xEKo3W41TZI48dyoPHcpGSBx7ZjHUipASIHc1st8nsCHksMwc0f?=
+ =?us-ascii?Q?XAeLyl/9TfLgB7GWIcAUzpHfSovzcrT6w7EtCKUjgujoKGxvsYHmPA7+ywE7?=
+ =?us-ascii?Q?lFIo/1h1UVVJvyp61eDsCPmeLc6kYH8CVSRhld6+0cnObBX7NLf/8lEmqi6E?=
+ =?us-ascii?Q?ZuOiAAiaBRgm6qqFhNjchAxOrrUiVYbpgKc0ikpn/kiDkyySrP3HEDSDr5Cm?=
+ =?us-ascii?Q?Mm2x5Sz/7Oldmt6iHSs=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 649dcfbc-e04b-453f-f27a-08d9d200eeac
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 17:12:49.7498
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vU4pFjB8iJtzlhKRy4NPDyXYFyREHLRUVsX7F4c0RSxyMEXx8OrFNLFVBCfpUsK5
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5176
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux rs485_fixes
-head:   01e60137e91a8d400ecde3438328c168a3804820
-commit: 01e60137e91a8d400ecde3438328c168a3804820 [10/10] serial: 8250: 8250_omap: Support native rs485
-config: arc-randconfig-r013-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080120.oOHk60a4-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/01e60137e91a8d400ecde3438328c168a3804820
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k rs485_fixes
-        git checkout 01e60137e91a8d400ecde3438328c168a3804820
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/tty/serial/8250/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > It is also not good that this inserts arbitary cuts in the IOVA
+> > address space, that will cause iommu_map() to be called with smaller
+> > npages, and could result in a long term inefficiency in the iommu.
+> > 
+> > I don't know how the kernel can combat this without prior knowledge of
+> > the likely physical memory layout (eg is the VM using 1G huge pages or
+> > something)..
+>
+> The cuts aren't arbitrary, padata controls where they happen.  
 
-All errors (new ones prefixed by >>):
+Well, they are, you picked a PMD alignment if I recall.
 
-   drivers/tty/serial/8250/8250_omap.c: In function 'omap8250_probe':
->> drivers/tty/serial/8250/8250_omap.c:1450:40: error: incompatible type for argument 1 of 'serial_in'
-    1450 |                 priv->mdr3 = serial_in(up, UART_OMAP_MDR3);
-         |                                        ^~
-         |                                        |
-         |                                        struct uart_8250_port
-   In file included from drivers/tty/serial/8250/8250_omap.c:32:
-   drivers/tty/serial/8250/8250.h:113:52: note: expected 'struct uart_8250_port *' but argument is of type 'struct uart_8250_port'
-     113 | static inline int serial_in(struct uart_8250_port *up, int offset)
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~^~
+If hugetlbfs is using PUD pages then this is the wrong alignment,
+right?
 
+I suppose it could compute the cuts differently to try to maximize
+alignment at the cutpoints.. 
 
-vim +/serial_in +1450 drivers/tty/serial/8250/8250_omap.c
+> size.  If cuts in per-thread ranges are an issue, I *think* userspace
+> has the same problem?
 
-  1341	
-  1342	static int omap8250_probe(struct platform_device *pdev)
-  1343	{
-  1344		struct device_node *np = pdev->dev.of_node;
-  1345		struct omap8250_priv *priv;
-  1346		const struct omap8250_platdata *pdata;
-  1347		struct uart_8250_port up;
-  1348		struct resource *regs;
-  1349		void __iomem *membase;
-  1350		int irq, ret;
-  1351	
-  1352		irq = platform_get_irq(pdev, 0);
-  1353		if (irq < 0)
-  1354			return irq;
-  1355	
-  1356		regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-  1357		if (!regs) {
-  1358			dev_err(&pdev->dev, "missing registers\n");
-  1359			return -EINVAL;
-  1360		}
-  1361	
-  1362		priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-  1363		if (!priv)
-  1364			return -ENOMEM;
-  1365	
-  1366		membase = devm_ioremap(&pdev->dev, regs->start,
-  1367					       resource_size(regs));
-  1368		if (!membase)
-  1369			return -ENODEV;
-  1370	
-  1371		memset(&up, 0, sizeof(up));
-  1372		up.port.dev = &pdev->dev;
-  1373		up.port.mapbase = regs->start;
-  1374		up.port.membase = membase;
-  1375		up.port.irq = irq;
-  1376		/*
-  1377		 * It claims to be 16C750 compatible however it is a little different.
-  1378		 * It has EFR and has no FCR7_64byte bit. The AFE (which it claims to
-  1379		 * have) is enabled via EFR instead of MCR. The type is set here 8250
-  1380		 * just to get things going. UNKNOWN does not work for a few reasons and
-  1381		 * we don't need our own type since we don't use 8250's set_termios()
-  1382		 * or pm callback.
-  1383		 */
-  1384		up.port.type = PORT_8250;
-  1385		up.port.iotype = UPIO_MEM;
-  1386		up.port.flags = UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_SOFT_FLOW |
-  1387			UPF_HARD_FLOW;
-  1388		up.port.private_data = priv;
-  1389	
-  1390		up.port.regshift = 2;
-  1391		up.port.fifosize = 64;
-  1392		up.tx_loadsz = 64;
-  1393		up.capabilities = UART_CAP_FIFO;
-  1394	#ifdef CONFIG_PM
-  1395		/*
-  1396		 * Runtime PM is mostly transparent. However to do it right we need to a
-  1397		 * TX empty interrupt before we can put the device to auto idle. So if
-  1398		 * PM is not enabled we don't add that flag and can spare that one extra
-  1399		 * interrupt in the TX path.
-  1400		 */
-  1401		up.capabilities |= UART_CAP_RPM;
-  1402	#endif
-  1403		up.port.set_termios = omap_8250_set_termios;
-  1404		up.port.set_mctrl = omap8250_set_mctrl;
-  1405		up.port.pm = omap_8250_pm;
-  1406		up.port.startup = omap_8250_startup;
-  1407		up.port.shutdown = omap_8250_shutdown;
-  1408		up.port.throttle = omap_8250_throttle;
-  1409		up.port.unthrottle = omap_8250_unthrottle;
-  1410		up.port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
-  1411	
-  1412		ret = of_alias_get_id(np, "serial");
-  1413		if (ret < 0) {
-  1414			dev_err(&pdev->dev, "failed to get alias\n");
-  1415			return ret;
-  1416		}
-  1417		up.port.line = ret;
-  1418	
-  1419		if (of_property_read_u32(np, "clock-frequency", &up.port.uartclk)) {
-  1420			struct clk *clk;
-  1421	
-  1422			clk = devm_clk_get(&pdev->dev, NULL);
-  1423			if (IS_ERR(clk)) {
-  1424				if (PTR_ERR(clk) == -EPROBE_DEFER)
-  1425					return -EPROBE_DEFER;
-  1426			} else {
-  1427				up.port.uartclk = clk_get_rate(clk);
-  1428			}
-  1429		}
-  1430	
-  1431		if (of_property_read_u32(np, "overrun-throttle-ms",
-  1432					 &up.overrun_backoff_time_ms) != 0)
-  1433			up.overrun_backoff_time_ms = 0;
-  1434	
-  1435		priv->wakeirq = irq_of_parse_and_map(np, 1);
-  1436	
-  1437		pdata = of_device_get_match_data(&pdev->dev);
-  1438		if (pdata)
-  1439			priv->habit |= pdata->habit;
-  1440	
-  1441		if (!up.port.uartclk) {
-  1442			up.port.uartclk = DEFAULT_CLK_SPEED;
-  1443			dev_warn(&pdev->dev,
-  1444				 "No clock speed specified: using default: %d\n",
-  1445				 DEFAULT_CLK_SPEED);
-  1446		}
-  1447	
-  1448		if (priv->habit & UART_HAS_NATIVE_RS485) {
-  1449			up.port.rs485_config = omap8250_rs485_config;
-> 1450			priv->mdr3 = serial_in(up, UART_OMAP_MDR3);
-  1451		} else {
-  1452			up.port.rs485_config = serial8250_em485_config;
-  1453			up.rs485_start_tx = serial8250_em485_start_tx;
-  1454			up.rs485_stop_tx = serial8250_em485_stop_tx;
-  1455		}
-  1456	
-  1457		priv->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
-  1458		priv->calc_latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
-  1459		cpu_latency_qos_add_request(&priv->pm_qos_request, priv->latency);
-  1460		INIT_WORK(&priv->qos_work, omap8250_uart_qos_work);
-  1461	
-  1462		spin_lock_init(&priv->rx_dma_lock);
-  1463	
-  1464		device_init_wakeup(&pdev->dev, true);
-  1465		pm_runtime_enable(&pdev->dev);
-  1466		pm_runtime_use_autosuspend(&pdev->dev);
-  1467	
-  1468		/*
-  1469		 * Disable runtime PM until autosuspend delay unless specifically
-  1470		 * enabled by the user via sysfs. This is the historic way to
-  1471		 * prevent an unsafe default policy with lossy characters on wake-up.
-  1472		 * For serdev devices this is not needed, the policy can be managed by
-  1473		 * the serdev driver.
-  1474		 */
-  1475		if (!of_get_available_child_count(pdev->dev.of_node))
-  1476			pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
-  1477	
-  1478		pm_runtime_irq_safe(&pdev->dev);
-  1479	
-  1480		pm_runtime_get_sync(&pdev->dev);
-  1481	
-  1482		omap_serial_fill_features_erratas(&up, priv);
-  1483		up.port.handle_irq = omap8250_no_handle_irq;
-  1484		priv->rx_trigger = RX_TRIGGER;
-  1485		priv->tx_trigger = TX_TRIGGER;
-  1486	#ifdef CONFIG_SERIAL_8250_DMA
-  1487		/*
-  1488		 * Oh DMA support. If there are no DMA properties in the DT then
-  1489		 * we will fall back to a generic DMA channel which does not
-  1490		 * really work here. To ensure that we do not get a generic DMA
-  1491		 * channel assigned, we have the the_no_dma_filter_fn() here.
-  1492		 * To avoid "failed to request DMA" messages we check for DMA
-  1493		 * properties in DT.
-  1494		 */
-  1495		ret = of_property_count_strings(np, "dma-names");
-  1496		if (ret == 2) {
-  1497			struct omap8250_dma_params *dma_params = NULL;
-  1498	
-  1499			up.dma = &priv->omap8250_dma;
-  1500			up.dma->fn = the_no_dma_filter_fn;
-  1501			up.dma->tx_dma = omap_8250_tx_dma;
-  1502			up.dma->rx_dma = omap_8250_rx_dma;
-  1503			if (pdata)
-  1504				dma_params = pdata->dma_params;
-  1505	
-  1506			if (dma_params) {
-  1507				up.dma->rx_size = dma_params->rx_size;
-  1508				up.dma->rxconf.src_maxburst = dma_params->rx_trigger;
-  1509				up.dma->txconf.dst_maxburst = dma_params->tx_trigger;
-  1510				priv->rx_trigger = dma_params->rx_trigger;
-  1511				priv->tx_trigger = dma_params->tx_trigger;
-  1512			} else {
-  1513				up.dma->rx_size = RX_TRIGGER;
-  1514				up.dma->rxconf.src_maxburst = RX_TRIGGER;
-  1515				up.dma->txconf.dst_maxburst = TX_TRIGGER;
-  1516			}
-  1517		}
-  1518	#endif
-  1519		ret = serial8250_register_8250_port(&up);
-  1520		if (ret < 0) {
-  1521			dev_err(&pdev->dev, "unable to register 8250 port\n");
-  1522			goto err;
-  1523		}
-  1524		priv->line = ret;
-  1525		platform_set_drvdata(pdev, priv);
-  1526		pm_runtime_mark_last_busy(&pdev->dev);
-  1527		pm_runtime_put_autosuspend(&pdev->dev);
-  1528		return 0;
-  1529	err:
-  1530		pm_runtime_dont_use_autosuspend(&pdev->dev);
-  1531		pm_runtime_put_sync(&pdev->dev);
-  1532		pm_runtime_disable(&pdev->dev);
-  1533		return ret;
-  1534	}
-  1535	
+Userspace should know what it has done, if it is using hugetlbfs it
+knows how big the pages are.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > The results you got of only 1.2x improvement don't seem so
+> > compelling.
+> 
+> I know you understand, but just to be clear for everyone, that 1.2x is
+> the overall improvement to qemu init from multithreaded pinning alone
+> when prefaulting is done in both base and test.
+
+Yes
+
+> Pinning itself, the only thing being optimized, improves 8.5x in that
+> experiment, bringing the time from 1.8 seconds to .2 seconds.  That's a
+> significant savings IMHO
+
+And here is where I suspect we'd get similar results from folio's
+based on the unpin performance uplift we already saw.
+
+As long as PUP doesn't have to COW its work is largely proportional to
+the number of struct pages it processes, so we should be expecting an
+upper limit of 512x gains on the PUP alone with foliation. This is in
+line with what we saw with the prior unpin work.
+
+The other optimization that would help a lot here is to use
+pin_user_pages_fast(), something like:
+
+  if (current->mm != remote_mm)
+     mmap_lock()
+     pin_user_pages_remote(..)
+     mmap_unlock()
+  else
+     pin_user_pages_fast(..)
+
+But you can't get that gain with kernel-size parallization, right?
+
+(I haven't dug into if gup_fast relies on current due to IPIs or not,
+maybe pin_user_pages_remote_fast can exist?)
+
+> But, I'm skeptical that singlethreaded optimization alone will remove
+> the bottleneck with the enormous memory sizes we use.  
+
+I think you can get the 1.2x at least.
+
+> scaling up the times from the unpin results with both optimizations (the
+> IB specific one too, which would need to be done for vfio), 
+
+Oh, I did the IB one already in iommufd...
+
+> a 1T guest would still take almost 2 seconds to pin/unpin.
+
+Single threaded? Isn't that excellent and completely dwarfed by the
+populate overhead?
+
+> If people feel strongly that we should try optimizing other ways first,
+> ok, but I think these are complementary approaches.  I'm coming at this
+> problem this way because this is fundamentally a memory-intensive
+> operation where more bandwidth can help, and there are other kernel
+> paths we and others want this infrastructure for.
+
+At least here I would like to see an apples to apples at least before
+we have this complexity. Full user threading vs kernel auto threading.
+
+Saying multithreaded kernel gets 8x over single threaded userspace is
+nice, but sort of irrelevant because we can have multithreaded
+userspace, right?
+
+Jason

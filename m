@@ -2,198 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52404874BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C90214874C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346469AbiAGJbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 04:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S236728AbiAGJfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 04:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346462AbiAGJbn (ORCPT
+        with ESMTP id S229762AbiAGJfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 04:31:43 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9340CC0611FF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:31:42 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id q25so11215688edb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 01:31:42 -0800 (PST)
+        Fri, 7 Jan 2022 04:35:06 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89000C061245
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:35:06 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso5952434pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 01:35:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TezwQvy/GrVo/VcXl6Kmghnct9UHJH58seMMxyEI02A=;
-        b=w2V+iJUefGp3KlCNcBsEDN8BorejU5hp+6CahknIVFUn1oU3ZtxwjYoPDxNPziGlUz
-         a0NH22cY2sthTfr8gRtlzr68GQu94z9Vv96M1sr/BVNCzMP7KwH1oLc7Y7uPIprMBJGp
-         jTor+uLGWD9ND97HWJEqboKIKTNtxd8Zvqy6BGjuUSvq1G+ejn9P6ls5DRx/e8AnqPY1
-         oaAsTxnPIOOhhcMRfiaCuwrI7HEMhNpBw6z8s5N4t1kc9kc1BvoA7/mW0OOcWAqSy0qI
-         cnNGy3ahX/tVMOrHF3dRzQQbbFBVtWLE/ojZIbe0r6fp77jLr7sD41Ov5rETXekX5g/5
-         kEfg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M72YZwYw9pvtbpSVTp5m5V5BckLQlYZpyBC+Fudq/gQ=;
+        b=FCvRy/NgcsWkWaftL3OklPtrwlp3MakeGnyg3cfrO2T1HD/fsyh3L5GeeCeFioBMq1
+         hSL9ttME9mJXV2oZPc1y0C+l820gcPs+bfTNOep8HCpDh/415gXnxTV5eVDDLDD861ju
+         mAf2ui5aodGlhqLI6Tq869SrwIW07cn1XDsZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TezwQvy/GrVo/VcXl6Kmghnct9UHJH58seMMxyEI02A=;
-        b=FVltOIrcyW9IOAtBvJrkBZ8UfDP4///WZdtzz3TU0CjWzo17pmU851sVwZiWcv0HSb
-         21qZNHNUW9qKPUhDNhLEWZR45J4QEqat07vbS0AC1bXs7dv2xPhAYepj4LcjYc2ry+Fu
-         ZgURtKEk4omo/AgEVzB4GnbD2MrjKc1xzaJtV8Weymcv4JeetR6gl0HWACbV7g15n24T
-         gHjxWNGRrPI1J7aJyjzKJ5CKTu/LfXsbzLybba6ayLrSY8BZcB1R7EFVcAFS9JeD8CsN
-         joJ5dTYqChE6CbcCvzaFRioXbsbJUp/Qlg0a7FJF47rZzQhY8mmsWpilOAVvCAAgy2ac
-         lCKQ==
-X-Gm-Message-State: AOAM533CKVNu1eI6E3vuqGLzkjjhQKT/cXDYehWiwGGs1jPgMjFMunIM
-        yVh0COBTP58HIwv1utQbX9DvlfXbDHA3e7T5orEqZg==
-X-Google-Smtp-Source: ABdhPJy6Pd5StasJd8Vr9TrAn4EyS2U33Mwnkud6vbrw4HpmRdCGAwwGrmolTePbriBG/I8s4Z7aITOOhf8mDSkaceA=
-X-Received: by 2002:a17:907:386:: with SMTP id ss6mr6976366ejb.101.1641547901133;
- Fri, 07 Jan 2022 01:31:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M72YZwYw9pvtbpSVTp5m5V5BckLQlYZpyBC+Fudq/gQ=;
+        b=VdVMmJLaCM0Pe2Q8reM9dqb+gF3UWwBJJRTNMbKjUhmcvZsVBmzMoOBoZy0B7s7G0R
+         7Zt1PJQ99B7P3U3y3Wmh/bAJStpLdGWss0Vk0CJl0GrDTTYLnSDXD5sqt2KKcmcYni5p
+         o0hDQmxZtmyQPstX2VEAedXK24cKdkWB87DpdD0y/TAOWQGu1qfNxNBQ7Gxw93bJinx7
+         ysQg7eSQZdRLPxi6vzku0VbNUS4V1a+wN4ijIAeQj2sB1t69iE46WQ6AGuKGJGRtJbRk
+         gHbPhPetjNNRfghUgKJcv9NFQtQJnXBd3iWdpWGKJj67hbGTj88R/WUq+P7KEPRiDNe9
+         Q2Yw==
+X-Gm-Message-State: AOAM5315utZFQTYOaWm/OBBiI9/a9p9esni7mmPhoLWFlDKkP5mhOOLG
+        Dq+KajzIdYT9GdFgDhdsB5mUTQ==
+X-Google-Smtp-Source: ABdhPJzSA56kYIS/uw09iEzjo1FQYuRC75hjOlr6z5DRrfMoNU3Mj+lNSS1VRZxmv/3eS4ZNnns7gg==
+X-Received: by 2002:a17:902:bc4c:b0:149:ed05:3027 with SMTP id t12-20020a170902bc4c00b00149ed053027mr7388414plz.174.1641548105983;
+        Fri, 07 Jan 2022 01:35:05 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:8f6b:ee:64d8:ae81])
+        by smtp.gmail.com with ESMTPSA id j17sm5269192pfu.77.2022.01.07.01.35.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 01:35:05 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RFT v2 0/8] media: hantro: jpeg: Various improvements
+Date:   Fri,  7 Jan 2022 17:34:47 +0800
+Message-Id: <20220107093455.73766-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
 MIME-Version: 1.0
-References: <20220107031905.2406176-1-robh@kernel.org>
-In-Reply-To: <20220107031905.2406176-1-robh@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 7 Jan 2022 10:31:30 +0100
-Message-ID: <CAMRc=MdmOMfyyiguowrU52BvoxMr8u3sLQfzCiY_Rqs=qUsX-Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop required 'interrupt-parent'
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Suman Anna <s-anna@ti.com>, - <patches@opensource.cirrus.com>,
-        John Crispin <john@phrozen.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        netdev <netdev@vger.kernel.org>, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 4:19 AM Rob Herring <robh@kernel.org> wrote:
->
-> 'interrupt-parent' is never required as it can be in a parent node or a
-> parent node itself can be an interrupt provider. Where exactly it lives is
-> outside the scope of a binding schema.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/gpio/toshiba,gpio-visconti.yaml  | 1 -
->  .../devicetree/bindings/mailbox/ti,omap-mailbox.yaml     | 9 ---------
->  Documentation/devicetree/bindings/mfd/cirrus,madera.yaml | 1 -
->  .../devicetree/bindings/net/lantiq,etop-xway.yaml        | 1 -
->  .../devicetree/bindings/net/lantiq,xrx200-net.yaml       | 1 -
->  .../devicetree/bindings/pci/sifive,fu740-pcie.yaml       | 1 -
->  .../devicetree/bindings/pci/xilinx-versal-cpm.yaml       | 1 -
->  7 files changed, 15 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml b/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-> index 9ad470e01953..b085450b527f 100644
-> --- a/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-> @@ -43,7 +43,6 @@ required:
->    - gpio-controller
->    - interrupt-controller
->    - "#interrupt-cells"
-> -  - interrupt-parent
->
->  additionalProperties: false
->
-> diff --git a/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
-> index e864d798168d..d433e496ec6e 100644
-> --- a/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
-> @@ -175,15 +175,6 @@ required:
->    - ti,mbox-num-fifos
->
->  allOf:
-> -  - if:
-> -      properties:
-> -        compatible:
-> -          enum:
-> -            - ti,am654-mailbox
-> -    then:
-> -      required:
-> -        - interrupt-parent
-> -
->    - if:
->        properties:
->          compatible:
-> diff --git a/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml b/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
-> index 499c62c04daa..5dce62a7eff2 100644
-> --- a/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
-> @@ -221,7 +221,6 @@ required:
->    - '#gpio-cells'
->    - interrupt-controller
->    - '#interrupt-cells'
-> -  - interrupt-parent
->    - interrupts
->    - AVDD-supply
->    - DBVDD1-supply
-> diff --git a/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml b/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml
-> index 437502c5ca96..3ce9f9a16baf 100644
-> --- a/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml
-> +++ b/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml
-> @@ -46,7 +46,6 @@ properties:
->  required:
->    - compatible
->    - reg
-> -  - interrupt-parent
->    - interrupts
->    - interrupt-names
->    - lantiq,tx-burst-length
-> diff --git a/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml b/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml
-> index 7bc074a42369..5bc1a21ca579 100644
-> --- a/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml
-> +++ b/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml
-> @@ -38,7 +38,6 @@ properties:
->  required:
->    - compatible
->    - reg
-> -  - interrupt-parent
->    - interrupts
->    - interrupt-names
->    - "#address-cells"
-> diff --git a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-> index 2b9d1d6fc661..72c78f4ec269 100644
-> --- a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-> @@ -61,7 +61,6 @@ required:
->    - num-lanes
->    - interrupts
->    - interrupt-names
-> -  - interrupt-parent
->    - interrupt-map-mask
->    - interrupt-map
->    - clock-names
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> index a2bbc0eb7220..32f4641085bc 100644
-> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> @@ -55,7 +55,6 @@ required:
->    - reg-names
->    - "#interrupt-cells"
->    - interrupts
-> -  - interrupt-parent
->    - interrupt-map
->    - interrupt-map-mask
->    - bus-range
-> --
-> 2.32.0
->
+Hi everyone,
 
-For GPIO:
+Here are some improvements to the Hantro JPEG encoder driver. This
+finishes two of the TODO items.
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Changes since v1:
+
+- New patch 8 cleaning up JPEG quantization table dimension magic
+  numbers and sanity checking of various tables
+
+- Add sanity checks for JPEG header size and alignment
+
+- Drop linux/dma-mapping.h header now that the DMA bounce buffer is gone
+
+- Make JPEG_ACTIVE_MARKER control read only
+
+Patch 1 cleans up the final register write sequence in the JPEG encoder
+driver. This particular bit was a bit confusing and hard to understand
+given the lack of context around the original wmb(). Was it used to
+force all the register writes to finish or to make sure memory writes
+were completed? In the end I stuck with what the other hantro decoders
+were doing.
+
+Patch 2 fixes a misleading register name.
+
+Patch 3 implements cropping on the output queue with the selection API
+for the JPEG encoder. This allows specifying the visible area slightly
+smaller than the macroblock-aligned coded size. This bit can be reused
+by other stateless encoders once they are implemented.
+
+Patch 4 adds a JFIF APP0 segment to the JPEG encoder output.
+
+Patch 5 adds a COM segment to the JPEG encoder output. This is used to
+align the SOS segment payload area.
+
+Patch 6 implements the V4L2_CID_JPEG_ACTIVE_MARKER control. This is only
+used to signal the segments added to userspace. The driver ignores any
+changes requested.
+
+Patch 7 lets the encoder output directly into the capture buffer,
+getting rid of the DMA bounce buffer.
+
+Patch 8 cleans up some of the magic number 64 instances around the
+quantization table code. Sanity checks are also added.
+
+Please have a look and test. I only tested this on the RK3399 with
+gstreamer, and with Chromium's jpeg_encode_accelerator_unittest with the
+patches backported to v5.10 on a RK3399 Kevin Chromebook. The H1 variant
+is untested by me.
+
+To test the selection API bits with gstreamer, the v4l2videoenc plugin
+needs to be patched. A gst_v4l2_object_set_crop() call should be
+inserted after gst_v4l2_object_set_format() in
+gst_v4l2_video_enc_set_format().
+
+
+Regards
+ChenYu
+
+
+Chen-Yu Tsai (8):
+  media: hantro: jpeg: Relax register writes before write starting
+    hardware
+  media: hantro: Fix overfill bottom register field name
+  media: hantro: Support cropping visible area for encoders
+  media: hantro: jpeg: Add JFIF APP0 segment to JPEG encoder output
+  media: hantro: jpeg: Add COM segment to JPEG header to align image
+    scan
+  media: hantro: Implement V4L2_CID_JPEG_ACTIVE_MARKER control
+  media: hantro: output encoded JPEG content directly to capture buffers
+  media: hantro: jpeg: Remove open-coded size in quantization table code
+
+ drivers/staging/media/hantro/TODO             |  7 --
+ drivers/staging/media/hantro/hantro.h         |  1 -
+ drivers/staging/media/hantro/hantro_drv.c     | 41 ++++++---
+ .../staging/media/hantro/hantro_h1_jpeg_enc.c | 44 ++++++----
+ drivers/staging/media/hantro/hantro_h1_regs.h |  2 +-
+ drivers/staging/media/hantro/hantro_hw.h      | 11 ---
+ drivers/staging/media/hantro/hantro_jpeg.c    | 86 ++++++++++---------
+ drivers/staging/media/hantro/hantro_jpeg.h    |  2 +-
+ drivers/staging/media/hantro/hantro_v4l2.c    | 77 +++++++++++++++++
+ .../media/hantro/rockchip_vpu2_hw_jpeg_enc.c  | 47 +++++-----
+ .../staging/media/hantro/rockchip_vpu_hw.c    |  6 --
+ 11 files changed, 206 insertions(+), 118 deletions(-)
+
+-- 
+2.34.1.575.g55b058a8bb-goog
+

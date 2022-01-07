@@ -2,165 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA62A487B8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26AA487B93
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348590AbiAGRjm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 12:39:42 -0500
-Received: from aposti.net ([89.234.176.197]:47836 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240245AbiAGRjk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:39:40 -0500
-Date:   Fri, 07 Jan 2022 17:39:27 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS()
- macro
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Message-Id: <R1PC5R.M6H5LAMRKZ9P@crapouillou.net>
-In-Reply-To: <CAPDyKFpPOsoxBbamJWoAso_8cEb--Y1i4zDAnnTQ00EkSySVLQ@mail.gmail.com>
-References: <20220105182939.106885-1-paul@crapouillou.net>
-        <20220105182939.106885-2-paul@crapouillou.net>
-        <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
-        <U5MC5R.JX72XLGEKI8P@crapouillou.net>
-        <CAPDyKFpPOsoxBbamJWoAso_8cEb--Y1i4zDAnnTQ00EkSySVLQ@mail.gmail.com>
+        id S1348614AbiAGRmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240245AbiAGRmQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 12:42:16 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE30C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 09:42:16 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id u25so24980032edf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:42:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qlTeTJ7EDTm7c9BXsTdwqcJ1U93LI0ovtC5oLv7HJ/8=;
+        b=EzDtmhckdMcxUG26G41m9/0kVjTMfBYbN416j3lPs9mAd5lJ4W+Nk53u+bcN8Nof4h
+         6RuLaXCBf9fWX78BJbfmYuj5gh/YjzAfy3o7qlM/BlWCqaJs0c6/2nWx+SGMA2/6rME+
+         RkUGyAPUccxm6eDTAVNFU0couQa8OdlCouNYk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qlTeTJ7EDTm7c9BXsTdwqcJ1U93LI0ovtC5oLv7HJ/8=;
+        b=rduxE1tAHxOg9IWy2NKeuW9rBLW3tynBXWwvlFoZuEYZ+6nHwz4yOpD8AY5Q2wDNPV
+         glC7niNYoJ8Eh1BQ40e2RkK8lDAhNofpF+RKGoA1mWfjx0oyskS5wTzieoC0+OkxMmsF
+         Xc06PRsMmZcT/xZKX1kefLl31AVQhvXhjxCrNWciZFEfW93LFyvZo4temuyGa9lvtvFy
+         sO+4K9gd33LadMK9axATcIgLLuMphSuIv0dVCv9IjuAWgz/c38+T9FS+b/69UZyL4Sze
+         DA64z907STI6xRUcf3qtZE6rDfSt0ctICyCUxyDe5F+W6VjZcAqgu4XhB2qQAdKyCk7Y
+         P86w==
+X-Gm-Message-State: AOAM532/pfJLMAkadFedrOvRCLdd1xRQl0v0Ik1r0w4WULf9yVGcRtNv
+        haN5pCZ/PDej+7b7paV22wExVtYcdrXCok6PiY0=
+X-Google-Smtp-Source: ABdhPJwhubHyUP0qjX/9SIBSqx0zzYcT4sco1JBvEpASADeuH8sosZAuy7dIWFV0OvsGnPHvdmriTQ==
+X-Received: by 2002:a05:6402:177b:: with SMTP id da27mr63459067edb.82.1641577335008;
+        Fri, 07 Jan 2022 09:42:15 -0800 (PST)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id dn10sm1577626ejc.139.2022.01.07.09.42.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 09:42:14 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id l25so1599595wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:42:14 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr54539331wrp.442.1641577334232;
+ Fri, 07 Jan 2022 09:42:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <CAPM=9twnYJ8SrVzJEEH+Vksibomvk5CE+Nn6BXKYwLG_8r=GJQ@mail.gmail.com>
+In-Reply-To: <CAPM=9twnYJ8SrVzJEEH+Vksibomvk5CE+Nn6BXKYwLG_8r=GJQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 7 Jan 2022 09:41:58 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiyfiVoci-LHaY=e70zOpAoUqwoaFF4iD3xm847PkK1CQ@mail.gmail.com>
+Message-ID: <CAHk-=wiyfiVoci-LHaY=e70zOpAoUqwoaFF4iD3xm847PkK1CQ@mail.gmail.com>
+Subject: Re: [git pull] drm final fixes for 5.16
+To:     Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 6, 2022 at 7:23 PM Dave Airlie <airlied@gmail.com> wrote:
+>
+> There is only the amdgpu runtime pm regression fix in here.
 
+Thanks, from a quick test it works for me - the backlight actually
+does eventually go away.
 
-Le ven., janv. 7 2022 at 17:40:57 +0100, Ulf Hansson 
-<ulf.hansson@linaro.org> a écrit :
-> On Fri, 7 Jan 2022 at 17:37, Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->> 
->>  Hi Ulf,
->> 
->>  Le ven., janv. 7 2022 at 17:26:07 +0100, Ulf Hansson
->>  <ulf.hansson@linaro.org> a écrit :
->>  > On Wed, 5 Jan 2022 at 19:29, Paul Cercueil <paul@crapouillou.net>
->>  > wrote:
->>  >>
->>  >>  The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided
->>  >> callbacks
->>  >>  for both runtime PM and system sleep, which is very likely to 
->> be a
->>  >>  mistake, as a system sleep can be triggered while a given 
->> device is
->>  >>  already PM-suspended, which would cause the suspend callback to 
->> be
->>  >>  called twice.
->>  >>
->>  >>  The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
->>  >>  occurences) compared to the number of places where
->>  >>  SET_SYSTEM_SLEEP_PM_OPS() is used with 
->> pm_runtime_force_suspend()
->>  >> and
->>  >>  pm_runtime_force_resume(), which makes me think that none of 
->> these
->>  >> cases
->>  >>  are actually valid.
->>  >>
->>  >>  As this macro is currently unused, remove it before someone 
->> starts
->>  >> to
->>  >>  use it in yet another invalid case.
->>  >
->>  > I assume you refer to DEFINE_UNIVERSAL_DEV_PM_OPS here. Can you
->>  > perhaps make that more clear?
->> 
->>  I can.
->> 
->>  >>
->>  >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  >>  Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>  >>  ---
->>  >>
->>  >>  Notes:
->>  >>      v2: No change
->>  >>
->>  >>   include/linux/pm.h | 19 ++++++-------------
->>  >>   1 file changed, 6 insertions(+), 13 deletions(-)
->>  >>
->>  >>  diff --git a/include/linux/pm.h b/include/linux/pm.h
->>  >>  index e1e9402180b9..31bbaafb06d2 100644
->>  >>  --- a/include/linux/pm.h
->>  >>  +++ b/include/linux/pm.h
->>  >>  @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
->>  >>          SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  >>   }
->>  >>
->>  >>  +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->>  >>  +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  >>  +const struct dev_pm_ops __maybe_unused name = { \
->>  >>  +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  >>  +}
->>  >>  +
->>  >>   /*
->>  >>    * Use this for defining a set of PM operations to be used in 
->> all
->>  >> situations
->>  >>    * (system suspend, hibernation or runtime PM).
->>  >>  @@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
->>  >>    * .resume_early(), to the same routines as .runtime_suspend() 
->> and
->>  >>    * .runtime_resume(), respectively (and analogously for
->>  >> hibernation).
->>  >>    */
->>  >>  -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, 
->> resume_fn,
->>  >> idle_fn) \
->>  >>  -static const struct dev_pm_ops name = { \
->>  >>  -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  >>  -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
->>  >>  -}
->>  >>  -
->>  >>  -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->>  >>  -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  >>  -const struct dev_pm_ops __maybe_unused name = { \
->>  >>  -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  >>  -}
->>  >>  -
->>  >>  -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
->>  >
->>  > Shouldn't this macro be deprecated any more?
->> 
->>  I can only deprecate it if there is an alternative for it. The
->>  alternative is DEFINE_RUNTIME_DEV_PM_OPS() which is added in patch 
->> 4/6.
-> 
-> I don't think we need an immediate alternative to leave it 
-> deprecated, do we?
-> 
-> My point is, a user can still combine the macros in a way so that it
-> doesn't need to use the UNIVERSAL_DEV_PM_OPS.
+It does so only on the second time the monitors say "no signal, going
+to power save", but that has been true before too.
 
-Ok. I'll leave it deprecated in that patch then.
+So I think there's still some confusion in this area, but it might be
+elsewhere - who knows what Wayland and friends do. At least it doesn't
+look like a regression to me any more.
 
-Cheers,
--Paul
-
->>  >>   #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, 
->> idle_fn)
->>  >> \
->>  >>   const struct dev_pm_ops __maybe_unused name = { \
->>  >>          SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  >>  --
-> 
-> Kind regards
-> Uffe
-
-
+Thanks,
+                Linus

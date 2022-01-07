@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B443F487054
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E52487056
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345381AbiAGC0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:26:01 -0500
-Received: from mail-qv1-f45.google.com ([209.85.219.45]:33311 "EHLO
-        mail-qv1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344468AbiAGCZ7 (ORCPT
+        id S1345393AbiAGC0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345384AbiAGC0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:25:59 -0500
-Received: by mail-qv1-f45.google.com with SMTP id kk22so4254331qvb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:25:59 -0800 (PST)
+        Thu, 6 Jan 2022 21:26:09 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A8AC061245;
+        Thu,  6 Jan 2022 18:26:09 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id v4so4294198qtk.0;
+        Thu, 06 Jan 2022 18:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V1f0cCaEdimj+Qhl14+tLN/0LqLxCZYAJyfZ5GKR66k=;
+        b=cuw4elrPm3u4TIuhUoLMw9XNU1vrCEpCGRAj3S9IeDw47deVRw134oqEZdLHSX/rbI
+         7uDdDbBQre1dE781Pc7Mx1AZSGBR+0s/gnAIfm70UuYuzZzZoJPSusCib0gPajr+pvmp
+         TlkQxo0/kHYnmuJtckCmV0zI7hFi6kUpD002/7ioLq+9rhcqdi0KPA3wXJCz5pR1UDeE
+         WSO9Xs9gOg0t4L2F5B2BCo6zluhjY4YFj4cO45lvgU0sqXkDCSJT2EGKZ93eA++sSBJV
+         TgkzFCnQQ5geADGKoo6Wh8Q8Lv0/NiUwWl/xSo3sTM9n6RJ6O21U3srVEg6grhKkl3je
+         dM1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=87V7qqVxSV9ymSZhSZ8xp9p8szVy6J09JVmD0DH7rzE=;
-        b=w1zaNdYfzx0WGXjHO9rQqAm3NhJx1S5wIQIe05S9TDLOk19q5VkWqlUq2WZhjK6ZDA
-         Fw2Hx1a56HgyyA6ZqXTvsfChu/fd773r/J6BP/DPWGQLv196lmSHM0SZx+tm/hfv9/gk
-         bdJtKlUjo9aTSiDxe3T66Gy++BPnZtnlWvhrMFdZDaAUV1aVMwbVRDmT0no2Ijao5Un0
-         StY8109URrG27u9ctwEeOLgO5DNntdNJsbqG4un1Tqb4hRbdrvKpS7UEOR41g+pv1Z4v
-         spsUChQIljeMc9PNRuUxWHOj06kHmvP8L3t3yStZtLt34AwXBNJutjY6KQl5Ud1tVxe6
-         NTBg==
-X-Gm-Message-State: AOAM530fA3IQKB5hcGPvsd/ZsCA4iQdPV4o3LuVozcI53xIVsfh8j3iW
-        /Achf3/bZTWkiSjVpeY3d2XRElJ0a8miOGRH
-X-Google-Smtp-Source: ABdhPJwfQYwEP8Iw4ioYsijR0jBQHCbQXFUFfCO1goKcqM6eq3bgFgUpybMmhIx9drnFWKzPyuGEmQ==
-X-Received: by 2002:ad4:5969:: with SMTP id eq9mr56396745qvb.108.1641522358874;
-        Thu, 06 Jan 2022 18:25:58 -0800 (PST)
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com. [209.85.219.47])
-        by smtp.gmail.com with ESMTPSA id t204sm2439353qka.127.2022.01.06.18.25.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 18:25:58 -0800 (PST)
-Received: by mail-qv1-f47.google.com with SMTP id q4so4191433qvh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:25:57 -0800 (PST)
-X-Received: by 2002:a05:6214:252a:: with SMTP id gg10mr57453503qvb.19.1641522357806;
- Thu, 06 Jan 2022 18:25:57 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V1f0cCaEdimj+Qhl14+tLN/0LqLxCZYAJyfZ5GKR66k=;
+        b=tUXIFYp7Umcm3dsjhfFwRQKan1rxhbQSjQ3/reamMtCQwZMKL4mEMqX2aVDFgmUvYN
+         sExPdkrBGI9ZSonx5Su0bVLF+mhu8WnP3R9eze93Pltdw6CqI/4A8jrsmFDnJz7qqYiT
+         QkDfbPJ0uX/cTZ3R7uxTouqYemZnpKrAfRynUaj2r/XyEuAD/nGJ/cpCHwVorR755IbI
+         zUBsXRQr0RG+iyDe1WrjcoS/efnGQEyL05/hqIuSMKkNzb4m3efjLnm1jljEUHEyaQ5A
+         br99j1H8ltt8kCsYjRjbnNIoVIQnQkaXiBpS+reVpW8VPgb1O670qviXoWseH38Z3N5j
+         2siw==
+X-Gm-Message-State: AOAM5331qYX4TSuTwQ5TC8NV1XeVGG39tsc9vpCNuF/uLdtTVnsKSd0k
+        GtRvv2U0nEgEH+nh/p9KrD4=
+X-Google-Smtp-Source: ABdhPJyw1w8Zqf3SxiEeSE2o1kjSVJAA9XBqI3EdbtKfPsl6Pd9s758fUcfq7C//1R0Xd7CgcmAbgg==
+X-Received: by 2002:ac8:5e4e:: with SMTP id i14mr54135746qtx.646.1641522368739;
+        Thu, 06 Jan 2022 18:26:08 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 82sm2405725qkd.77.2022.01.06.18.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 18:26:08 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] power: supply: ab8500: remove unneeded variable
+Date:   Fri,  7 Jan 2022 02:26:02 +0000
+Message-Id: <20220107022602.622455-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211211090845.252700-1-wangborong@cdjrlc.com>
-In-Reply-To: <20211211090845.252700-1-wangborong@cdjrlc.com>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Fri, 7 Jan 2022 10:25:46 +0800
-X-Gmail-Original-Message-ID: <CADRPPNRe=qgH0n2XMTEro2+dYXcz82x=PcvhjiPX1GRGkkbfjg@mail.gmail.com>
-Message-ID: <CADRPPNRe=qgH0n2XMTEro2+dYXcz82x=PcvhjiPX1GRGkkbfjg@mail.gmail.com>
-Subject: Re: [PATCH] soc: fsl: qe: fix typo in a comment
-To:     wangborong@cdjrlc.com
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Zhao Qiang <qiang.zhao@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 11, 2021 at 5:12 PM Jason Wang <wangborong@cdjrlc.com> wrote:
->
-> The double `is' in the comment in line 150 is repeated. Remove one
-> of them from the comment.
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Looks like you also removed a redundant tab in a new line.  We
-probably can squeeze this trivial cleanup in, but we need to mention
-it.
+Remove unneeded variable used to store return value.
 
->
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/power/supply/ab8500_fg.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Applied for next with commit message updated.
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index b0919a6a6587..3927f4ad7c38 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -3170,7 +3170,6 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 
+ static int ab8500_fg_remove(struct platform_device *pdev)
+ {
+-	int ret = 0;
+ 	struct ab8500_fg *di = platform_get_drvdata(pdev);
+ 
+ 	component_del(&pdev->dev, &ab8500_fg_component_ops);
+@@ -3178,7 +3177,7 @@ static int ab8500_fg_remove(struct platform_device *pdev)
+ 	ab8500_fg_sysfs_exit(di);
+ 	ab8500_fg_sysfs_psy_remove_attrs(di);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static SIMPLE_DEV_PM_OPS(ab8500_fg_pm_ops, ab8500_fg_suspend, ab8500_fg_resume);
+-- 
+2.25.1
 
-> ---
->  drivers/soc/fsl/qe/qe.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
-> index 4d38c80f8be8..b3c226eb5292 100644
-> --- a/drivers/soc/fsl/qe/qe.c
-> +++ b/drivers/soc/fsl/qe/qe.c
-> @@ -147,7 +147,7 @@ EXPORT_SYMBOL(qe_issue_cmd);
->   * memory mapped space.
->   * The BRG clock is the QE clock divided by 2.
->   * It was set up long ago during the initial boot phase and is
-> - * is given to us.
-> + * given to us.
->   * Baud rate clocks are zero-based in the driver code (as that maps
->   * to port numbers). Documentation uses 1-based numbering.
->   */
-> @@ -421,7 +421,7 @@ static void qe_upload_microcode(const void *base,
->
->         for (i = 0; i < be32_to_cpu(ucode->count); i++)
->                 iowrite32be(be32_to_cpu(code[i]), &qe_immr->iram.idata);
-> -
-> +
->         /* Set I-RAM Ready Register */
->         iowrite32be(QE_IRAM_READY, &qe_immr->iram.iready);
->  }
-> --
-> 2.34.1
->

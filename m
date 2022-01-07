@@ -2,85 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26AA487B93
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676D6487B97
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348614AbiAGRmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        id S1348622AbiAGRne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240245AbiAGRmQ (ORCPT
+        with ESMTP id S240245AbiAGRn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:42:16 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE30C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 09:42:16 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id u25so24980032edf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:42:16 -0800 (PST)
+        Fri, 7 Jan 2022 12:43:29 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A69C061574;
+        Fri,  7 Jan 2022 09:43:29 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id r14-20020a17090b050e00b001b3548a4250so4132449pjz.2;
+        Fri, 07 Jan 2022 09:43:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qlTeTJ7EDTm7c9BXsTdwqcJ1U93LI0ovtC5oLv7HJ/8=;
-        b=EzDtmhckdMcxUG26G41m9/0kVjTMfBYbN416j3lPs9mAd5lJ4W+Nk53u+bcN8Nof4h
-         6RuLaXCBf9fWX78BJbfmYuj5gh/YjzAfy3o7qlM/BlWCqaJs0c6/2nWx+SGMA2/6rME+
-         RkUGyAPUccxm6eDTAVNFU0couQa8OdlCouNYk=
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g30nKtOg1oeqH8IqiezmzUi5A0C1r6MR6z8qoYYRJG0=;
+        b=noyvDUT/nbivAF0rT4dfV9xn454IPhiHu8WTlgdT6oRJhgftL0NuoSgAlbZV5RJIu9
+         nTN/iiRSBTxIP1KcsGuJek5zEuhhmvJdOkyteusKA3jjzOFtRc9NkCps2T0D/VkSHO+w
+         sx3YC9DckzmiUFjpY6leFfzIBYvLiM0e9EBP861h3wrCS5IGmu9OLi30S5+j9VfmCfkJ
+         6jbgNM0yNeieKo9HV/lzjqJeZ6bwyhFYTcSF518jb7VMNpDWgoYxMNgIV9YC1e04MEjH
+         PIJVNX+5v84rv15o728J8YW2ck+rZEDWYPlQSpJTnbu9Euk41vqTxb88DmpTmOiX9WYu
+         oBhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qlTeTJ7EDTm7c9BXsTdwqcJ1U93LI0ovtC5oLv7HJ/8=;
-        b=rduxE1tAHxOg9IWy2NKeuW9rBLW3tynBXWwvlFoZuEYZ+6nHwz4yOpD8AY5Q2wDNPV
-         glC7niNYoJ8Eh1BQ40e2RkK8lDAhNofpF+RKGoA1mWfjx0oyskS5wTzieoC0+OkxMmsF
-         Xc06PRsMmZcT/xZKX1kefLl31AVQhvXhjxCrNWciZFEfW93LFyvZo4temuyGa9lvtvFy
-         sO+4K9gd33LadMK9axATcIgLLuMphSuIv0dVCv9IjuAWgz/c38+T9FS+b/69UZyL4Sze
-         DA64z907STI6xRUcf3qtZE6rDfSt0ctICyCUxyDe5F+W6VjZcAqgu4XhB2qQAdKyCk7Y
-         P86w==
-X-Gm-Message-State: AOAM532/pfJLMAkadFedrOvRCLdd1xRQl0v0Ik1r0w4WULf9yVGcRtNv
-        haN5pCZ/PDej+7b7paV22wExVtYcdrXCok6PiY0=
-X-Google-Smtp-Source: ABdhPJwhubHyUP0qjX/9SIBSqx0zzYcT4sco1JBvEpASADeuH8sosZAuy7dIWFV0OvsGnPHvdmriTQ==
-X-Received: by 2002:a05:6402:177b:: with SMTP id da27mr63459067edb.82.1641577335008;
-        Fri, 07 Jan 2022 09:42:15 -0800 (PST)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id dn10sm1577626ejc.139.2022.01.07.09.42.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 09:42:14 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id l25so1599595wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:42:14 -0800 (PST)
-X-Received: by 2002:adf:f54e:: with SMTP id j14mr54539331wrp.442.1641577334232;
- Fri, 07 Jan 2022 09:42:14 -0800 (PST)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g30nKtOg1oeqH8IqiezmzUi5A0C1r6MR6z8qoYYRJG0=;
+        b=avqYy4fDGAuKI8fLAGzFD2ZwMH4rxUJckDgWjpVRngSZEbnRmn8nLBoOTo0fDuEN8V
+         XPxIl94ndnUc+LbK0AoqSYLJVRMsrAF8I+12gu2IhM1A8aKe7Mz2phuHsri74znHOFyt
+         Mm7O9SL0PDhqyzvERrqquDtWUFrwnh0+b+MwOSf0ffuhvCd6u0AyTmgyRKb/yK3IbuJc
+         NS1O/ed1C4Z/pS0uzqkGseBKQJjPVenDFJoGtfxAOkfG+kF+9KpdYiPE9DWL7m98ccsW
+         ohhpIUWDluIttTPIdUT3SxzKC7ps/vIwZutDsyXQAwsSaatbQ1bi39xNA04s4QUnvqXJ
+         6WMg==
+X-Gm-Message-State: AOAM533BmzegNS2Y4bhqXVKjlwIHxWgnpZ3/nHATPTaqnX9nyNUMNXYN
+        22/UIMZUi5epa45cZazgnuc=
+X-Google-Smtp-Source: ABdhPJwKY32mIfyYWhl9RZtln0aNIwFsoDt8YrT/vnaJUStlVNedJ3mNTbWr7JM9VrRLn5ydISU7aQ==
+X-Received: by 2002:a17:902:f54a:b0:14a:147b:6036 with SMTP id h10-20020a170902f54a00b0014a147b6036mr907495plf.154.1641577408541;
+        Fri, 07 Jan 2022 09:43:28 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:4a85:a3d:72a9:2009])
+        by smtp.gmail.com with ESMTPSA id z12sm6690164pfe.110.2022.01.07.09.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 09:43:27 -0800 (PST)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+X-Google-Original-From: Dmitry Torokhov <dtor@google.com>
+Date:   Fri, 7 Jan 2022 09:43:23 -0800
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Benson Leung <bleung@chromium.org>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, gwendal@google.com,
+        seanpaul@google.com, marcheu@google.com, rajatxjain@gmail.com
+Subject: Re: [PATCH v4 2/3] platform/chrome: Add driver for ChromeOS
+ privacy-screen
+Message-ID: <Ydh7u1kuXSMzwmW0@google.com>
+References: <20211222001127.3337471-1-rajatja@google.com>
+ <20211222001127.3337471-2-rajatja@google.com>
 MIME-Version: 1.0
-References: <CAPM=9twnYJ8SrVzJEEH+Vksibomvk5CE+Nn6BXKYwLG_8r=GJQ@mail.gmail.com>
-In-Reply-To: <CAPM=9twnYJ8SrVzJEEH+Vksibomvk5CE+Nn6BXKYwLG_8r=GJQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Jan 2022 09:41:58 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiyfiVoci-LHaY=e70zOpAoUqwoaFF4iD3xm847PkK1CQ@mail.gmail.com>
-Message-ID: <CAHk-=wiyfiVoci-LHaY=e70zOpAoUqwoaFF4iD3xm847PkK1CQ@mail.gmail.com>
-Subject: Re: [git pull] drm final fixes for 5.16
-To:     Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222001127.3337471-2-rajatja@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 7:23 PM Dave Airlie <airlied@gmail.com> wrote:
->
-> There is only the amdgpu runtime pm regression fix in here.
+Hi Rajat,
 
-Thanks, from a quick test it works for me - the backlight actually
-does eventually go away.
+On Tue, Dec 21, 2021 at 04:11:26PM -0800, Rajat Jain wrote:
+> +static int chromeos_privacy_screen_remove(struct acpi_device *adev)
+> +{
+> +	struct drm_privacy_screen *drm_privacy_screen =	acpi_driver_data(adev);
 
-It does so only on the second time the monitors say "no signal, going
-to power save", but that has been true before too.
+Please add an empty line here:
 
-So I think there's still some confusion in this area, but it might be
-elsewhere - who knows what Wayland and friends do. At least it doesn't
-look like a regression to me any more.
+WARNING: Missing a blank line after declarations
+#292: FILE: drivers/platform/chrome/chromeos_privacy_screen.c:129:
++       struct drm_privacy_screen *drm_privacy_screen = acpi_driver_data(adev);
++       drm_privacy_screen_unregister(drm_privacy_screen);
 
-Thanks,
-                Linus
+> +	drm_privacy_screen_unregister(drm_privacy_screen);
+> +	return 0;
+> +}
+> +
+> +static const struct acpi_device_id chromeos_privacy_screen_device_ids[] = {
+> +	{"GOOG0010", 0}, /* Google's electronic privacy screen for eDP-1 */
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, chromeos_privacy_screen_device_ids);
+> +
+> +static struct acpi_driver chromeos_privacy_screen_driver = {
+> +	.name = "chromeos_privacy_screen_drvr",
+
+Could I buy 2 move vowels? ;)
+
+> +	.class = "ChromeOS",
+> +	.ids = chromeos_privacy_screen_device_ids,
+> +	.ops = {
+> +		.add = chromeos_privacy_screen_add,
+> +		.remove = chromeos_privacy_screen_remove,
+> +	},
+> +};
+> +
+> +module_acpi_driver(chromeos_privacy_screen_driver);
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("ChromeOS ACPI Privacy Screen driver");
+> +MODULE_AUTHOR("Rajat Jain <rajatja@google.com>");
+
+Otherwise
+
+Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+Thanks.
+
+-- 
+Dmitry

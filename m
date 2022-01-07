@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D62A34875D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4644875D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237562AbiAGKm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:42:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36016 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbiAGKmz (ORCPT
+        id S237615AbiAGKqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:46:43 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:40324 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236787AbiAGKqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:42:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F759B82564
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 10:42:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99F4C36AE0;
-        Fri,  7 Jan 2022 10:42:50 +0000 (UTC)
-Date:   Fri, 7 Jan 2022 10:42:47 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jianyong Wu <Jianyong.Wu@arm.com>
-Cc:     "will@kernel.org" <will@kernel.org>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        Fri, 7 Jan 2022 05:46:42 -0500
+X-UUID: fd4f22808a404a7eb050b29edc47c02e-20220107
+X-UUID: fd4f22808a404a7eb050b29edc47c02e-20220107
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1091154965; Fri, 07 Jan 2022 18:46:39 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 7 Jan 2022 18:46:38 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 7 Jan 2022 18:46:38 +0800
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <robh+dt@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "gshan@redhat.com" <gshan@redhat.com>,
-        Justin He <Justin.He@arm.com>, nd <nd@arm.com>
-Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Message-ID: <YdgZJ/mBG+BCxmEv@arm.com>
-References: <20211216082812.165387-1-jianyong.wu@arm.com>
- <YdXdjcJ7jbnkFsqp@arm.com>
- <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdcRLohx777jzWah@arm.com>
- <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
+        <linux-mediatek@lists.infradead.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: [PATCH v2 0/2] Add PMIC wrapper support for Mediatek MT8186 SoC IC
+Date:   Fri, 7 Jan 2022 18:46:31 +0800
+Message-ID: <20220107104633.7500-1-johnson.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 09:10:57AM +0000, Jianyong Wu wrote:
-> Hi Catalin,
-> 
-> I roughly find the root cause.
->  alloc_init_pud will be called at the very beginning of kernel boot in create_mapping_noalloc where no memory allocator is initialized. But lockdep check may need allocate memory. So, kernel take exception when acquire lock.(I have not found the exact code that cause this issue) that's say we may not be able to use a lock so early.
-> 
-> I come up with 2 methods to address it. 
-> 1) skip dead lock check at the very beginning of kernel boot in lockdep code.
-> 2) provided 2 two versions of __create_pgd_mapping, one with lock in
-> it and the other without. There may be no possible of race for memory
-> mapping at the very beginning time of kernel boot, thus we can use the
-> no lock version of __create_pgd_mapping safely.
-> In my test, this issue is gone if there is no lock held in
-> create_mapping_noalloc. I think create_mapping_noalloc is called early
-> enough to avoid the race conditions of memory mapping, however, I have
-> not proved it.
+This series add PMIC wrapper support for Mediatek MT8186 SoC IC
 
-I think method 2 would work better but rather than implementing new
-nolock functions I'd add a NO_LOCK flag and check it in
-alloc_init_pud() before mutex_lock/unlock. Also add a comment when
-passing the NO_LOCK flag on why it's needed and why there wouldn't be
-any races at that stage (early boot etc.)
+Changes since v1:
+- Fix the conditional logic in pwrap_probe() function.
 
-Thanks.
+Johnson Wang (2):
+  soc: mediatek: pwrap: add pwrap driver for MT8186 SoC
+  dt-bindings: mediatek: add compatible for MT8186 pwrap
+
+ .../bindings/soc/mediatek/pwrap.txt           |  1 +
+ drivers/soc/mediatek/mtk-pmic-wrap.c          | 72 +++++++++++++++++++
+ 2 files changed, 73 insertions(+)
 
 -- 
-Catalin
+2.18.0
+

@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5946F487409
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CE448740C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345667AbiAGISf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiAGISf (ORCPT
+        id S1345730AbiAGIUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:20:00 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:51544 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229747AbiAGIT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:18:35 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D879C061245;
-        Fri,  7 Jan 2022 00:18:35 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id q14so4371667plx.4;
-        Fri, 07 Jan 2022 00:18:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=n6vfAQzSFOpgYjKm5NJhTvllBmQl5dP9+oW26E2m/6g=;
-        b=IXKDPtYu9RXlpIBNEZ0uZAl/Wx+mnwPeHSnuKUtwXOGu2Y/A1UWWGdbZzmxF8M2HG9
-         xtWIjsum5LY9bAsuCccjR3veRlPGZk2G3znW9xTm9j160xosgfrymMW9bVoJKmVrWGIK
-         yH8uQQWqgbNRUD/MBYECiWBldp6J8KZxxdHwcIxc3qZaNSwuM7t3fti2SHHNkADEViTY
-         3QiLOVcgRjYeg78iNwDAKXp/FrIa0G7QPaDQkCJPWqy66bOHcRWN6Yz6Qz9ervMH9VyC
-         5y6Xbl1MslF5jf8eWTItm2R0w7Dkmclk5hrhdv/iCBvVka0n9JnuVTVbh+yhFZsNSpP7
-         eheA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=n6vfAQzSFOpgYjKm5NJhTvllBmQl5dP9+oW26E2m/6g=;
-        b=EliNIVS+/qtf9ii3zNZ/pTxMxA2Ueo0jpri3YdzWW8AIkBBJsF9W2wjVEM5ThtuD0E
-         HIY0hbNQf30ZOJkSwe9D3PUE1gxVFA5GwhFOLOUlt4hcZ8DPDnqwyknCXpJGw81A06yp
-         an/eWyMPOFpAFUXMe10Wn2djVGPFPVtIDmO4UqDcoMLJwS7IQeZWoEVcEnKbmo13/CvZ
-         s8E4ohLxj3dNLqknZ1rB5vi3QQkoIg0Eofhx72lVFohcDYhnVpasPgsZfz3A/Bmc38bU
-         ze284v+lGNfq8FgvoMmSUKgfW1V4n5TRAioenXwZtUjOWFyfEK9byqbmOcpb5dUcmtJ6
-         A4cQ==
-X-Gm-Message-State: AOAM53068ULy/aBjsTLjmqWedU8JSw43KiODLq4jfEMpaw7xCQ09t454
-        pMR8VRACcbovF7iGFsgggX4=
-X-Google-Smtp-Source: ABdhPJwLyWyiNHtxq9qOeBdae4iZ4Y4S8/sywIRhMpbFXwz+sTEF+2B1NSWYC2RIww14DJHRM5GlSA==
-X-Received: by 2002:a17:902:7617:b0:149:9c02:f260 with SMTP id k23-20020a170902761700b001499c02f260mr38820198pll.30.1641543514607;
-        Fri, 07 Jan 2022 00:18:34 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id p15sm4696047pfh.86.2022.01.07.00.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 00:18:34 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: coda: Fix missing put_device() call in coda_get_vdoa_data
-Date:   Fri,  7 Jan 2022 08:18:29 +0000
-Message-Id: <20220107081829.15108-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Fri, 7 Jan 2022 03:19:59 -0500
+X-UUID: e9acf4ff940041b7899a31d39b7fe6e8-20220107
+X-UUID: e9acf4ff940041b7899a31d39b7fe6e8-20220107
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 608333862; Fri, 07 Jan 2022 16:19:57 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 7 Jan 2022 16:19:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Jan
+ 2022 16:19:55 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 7 Jan 2022 16:19:54 +0800
+Message-ID: <21ba4c9d2f3a7a3d8c12b303fc6bea4b19ef092f.camel@mediatek.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: mmc: add cap-sdio-async-int flag
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        "Eric Biggers" <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 7 Jan 2022 16:19:54 +0800
+In-Reply-To: <YdTLI/Nms4JiNutt@robh.at.kernel.org>
+References: <20211227083641.12538-1-axe.yang@mediatek.com>
+         <20211227083641.12538-2-axe.yang@mediatek.com>
+         <YdTLI/Nms4JiNutt@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+On Tue, 2022-01-04 at 16:33 -0600, Rob Herring wrote:
+> On Mon, Dec 27, 2021 at 04:36:39PM +0800, Axe Yang wrote:
+> > Asynchronous interrupt is a mechanism that allow SDIO devices alarm
+> > interrupt when host stop providing clock to card. Add a DT flag to
+> > enable this feature if it is supported by SDIO card.
+> 
+> A card property should be in the card node. Is this not discoverable?
 
-Fixes: e7f3c5481035 ("[media] coda: use VDOA for un-tiling custom macroblock format")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/media/platform/coda/coda-common.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Thank you for your comment.
+Async interrupt is not a 'card property', but more like a protocol.
+The intention of this flag is to decide whether to support this feature
+on SDIO host side.
+Before that, host need to confirm that async interrupt is supported on
+card side(by read and parse Support Async Interrupt segment in CCCR
+from card).
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 0e312b0842d7..579849082488 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -405,9 +405,13 @@ static struct vdoa_data *coda_get_vdoa_data(void)
- 		goto out;
- 
- 	vdoa_data = platform_get_drvdata(vdoa_pdev);
--	if (!vdoa_data)
-+	if (!vdoa_data) {
- 		vdoa_data = ERR_PTR(-EPROBE_DEFER);
-+		goto put;
-+	}
- 
-+put:
-+	put_device(&vdoa_pdev->dev);
- out:
- 	of_node_put(vdoa_node);
- 
--- 
-2.17.1
+> 
+> > 
+> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/mmc/mmc-controller.yaml | 5
+> > +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mmc/mmc-
+> > controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-
+> > controller.yaml
+> > index 25ac8e200970..7230421583c6 100644
+> > --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> > @@ -165,6 +165,11 @@ properties:
+> >      description:
+> >        eMMC hardware reset is supported
+> >  
+> > +  cap-sdio-async-int:
+> 
+> Perhaps be consistent with the next property and use 'irq'.
+
+Will fix it in next version.
+
+> 
+> > +    $ref: /schemas/types.yaml#/definitions/flag
+> > +    description:
+> > +      SDIO async interrupt is supported.
+> > +
+> >    cap-sdio-irq:
+> >      $ref: /schemas/types.yaml#/definitions/flag
+> >      description:
+> > -- 
+> > 2.25.1
+> > 
+> > 
 

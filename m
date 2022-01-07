@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 764BD48712A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B4648712E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345814AbiAGDUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:20:37 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:34358 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344897AbiAGDUg (ORCPT
+        id S1345004AbiAGDWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 22:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344897AbiAGDWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:20:36 -0500
-Received: by mail-oi1-f181.google.com with SMTP id r131so6539469oig.1;
-        Thu, 06 Jan 2022 19:20:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xcznktkJ1RYJEtl2X8NHggtUN6UgM0jAUxrx7u5OfmU=;
-        b=XgQqy2ECMu/4C2hMfET/OPYhMmtV1NOMNdBFgg79a4nHctocy63VoC/HRK7jMeF1JP
-         scLZGcjuHB5hOG53B+zWxVi1SkqVBehKfzoc24Kxr3XcSCCCvNoWK8HHA4z19d8rYI+x
-         qVPDQyoKwqvZiabzzdun9obJZXaAVUvKz/2rV/HG3VTH6nq71Y2PjGQHysY0kA3frUbR
-         RwEywcxcfpcaJok88Zsdm7dDgLBDJaAsH/y4YxohfIfW/X+bXeHZXLxRkKv7ncqiczGJ
-         BL3tLBs9JiUWTuvmJdEVmpCveNE9ZB6dCgJyMvJdURJuIxmLkri0zbZtG34cYQ/W8JmB
-         /VWA==
-X-Gm-Message-State: AOAM530oHLsoxJ2qm4s0r+EHty/GE/N0PSAq1vLa+MrWp4E6fTD2DLX9
-        JBGrNIXczhGYdCNkeYeql2w+jZJxzA==
-X-Google-Smtp-Source: ABdhPJzkfDZsJe0Ec4+qpKI0hXa2NFntKTcAzP1stxz5Nm4ujZoYDwby6QDk1u9/7k8pSZln1obcKQ==
-X-Received: by 2002:a05:6808:208e:: with SMTP id s14mr8803729oiw.170.1641525635296;
-        Thu, 06 Jan 2022 19:20:35 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id c3sm820747oiw.8.2022.01.06.19.20.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 19:20:34 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: iio: adi,ltc2983: Fix 64-bit property sizes
-Date:   Thu,  6 Jan 2022 21:20:26 -0600
-Message-Id: <20220107032026.2408196-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 6 Jan 2022 22:22:16 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A45DC061245;
+        Thu,  6 Jan 2022 19:22:16 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5fpW-000Fy5-3j; Fri, 07 Jan 2022 03:22:14 +0000
+Date:   Fri, 7 Jan 2022 03:22:14 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH 10/10] exit/kthread: Move the exit code for kernel
+ threads into struct kthread
+Message-ID: <Ydex5jwYyVsmIt3w@zeniv-ca.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211208202532.16409-10-ebiederm@xmission.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208202532.16409-10-ebiederm@xmission.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The '/bits/ 64' notation applies the next <> list of values. Another <> list
-is encoded as 32-bits by default. IOW, each <> list needs to be preceeded
-with '/bits/ 64'.
+On Wed, Dec 08, 2021 at 02:25:32PM -0600, Eric W. Biederman wrote:
+> The exit code of kernel threads has different semantics than the
+> exit_code of userspace tasks.  To avoid confusion and allow
+> the userspace implementation to change as needed move
+> the kernel thread exit code into struct kthread.
+> 
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>  kernel/kthread.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index 8e5f44bed027..9c6c532047c4 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -52,6 +52,7 @@ struct kthread_create_info
+>  struct kthread {
+>  	unsigned long flags;
+>  	unsigned int cpu;
+> +	int result;
+>  	int (*threadfn)(void *);
+>  	void *data;
+>  	mm_segment_t oldfs;
+> @@ -287,7 +288,9 @@ EXPORT_SYMBOL_GPL(kthread_parkme);
+>   */
+>  void __noreturn kthread_exit(long result)
+>  {
+> -	do_exit(result);
+> +	struct kthread *kthread = to_kthread(current);
+> +	kthread->result = result;
+> +	do_exit(0);
+>  }
+>  
+>  /**
+> @@ -679,7 +682,7 @@ int kthread_stop(struct task_struct *k)
+>  	kthread_unpark(k);
+>  	wake_up_process(k);
+>  	wait_for_completion(&kthread->exited);
+> -	ret = k->exit_code;
+> +	ret = kthread->result;
+>  	put_task_struct(k);
+>  
+>  	trace_sched_kthread_stop_ret(ret);
 
-While the dts format allows this, as a rule we don't mix sizes for DT
-properties since all size information is lost in the dtb file.
+Fine, except that you've turned the first two do_exit() in kthread() into
+calls of kthread_exit().  If they are hit, you are screwed, especially
+the second one - there you have an allocation failure for struct kthread,
+so this will instantly oops on attempt to store into ->result.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/iio/temperature/adi,ltc2983.yaml | 22 +++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-index 0f79d9a01c49..722781aa4697 100644
---- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-+++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-@@ -448,17 +448,17 @@ examples:
-                         reg = <20>;
-                         adi,sensor-type = <9>; //custom thermocouple
-                         adi,single-ended;
--                        adi,custom-thermocouple = /bits/ 64
--                                 <(-50220000) 0>,
--                                 <(-30200000) 99100000>,
--                                 <(-5300000) 135400000>,
--                                 <0 273150000>,
--                                 <40200000 361200000>,
--                                 <55300000 522100000>,
--                                 <88300000 720300000>,
--                                 <132200000 811200000>,
--                                 <188700000 922500000>,
--                                 <460400000 1000000000>; //10 pairs
-+                        adi,custom-thermocouple =
-+                                 /bits/ 64 <(-50220000) 0>,
-+                                 /bits/ 64 <(-30200000) 99100000>,
-+                                 /bits/ 64 <(-5300000) 135400000>,
-+                                 /bits/ 64 <0 273150000>,
-+                                 /bits/ 64 <40200000 361200000>,
-+                                 /bits/ 64 <55300000 522100000>,
-+                                 /bits/ 64 <88300000 720300000>,
-+                                 /bits/ 64 <132200000 811200000>,
-+                                 /bits/ 64 <188700000 922500000>,
-+                                 /bits/ 64 <460400000 1000000000>; //10 pairs
-                };
- 
-         };
--- 
-2.32.0
-
+See reply to your 6/10 regarding the difference between the last
+call of do_exit() in kthread() and the first two of them.  They
+(the first two) should be simply do_exit(0); transmission of error
+value happens differently and not in direction of kthread_stop().

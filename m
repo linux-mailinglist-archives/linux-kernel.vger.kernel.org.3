@@ -2,148 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2924873A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5243B4873AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344912AbiAGHey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 02:34:54 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44456
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344595AbiAGHex (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 02:34:53 -0500
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CEC793FFDD
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641540892;
-        bh=29xTho4bxkKXwnEyHI5IJ+c7kcKHDeYilSRX91ahp4E=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=bW+artJFJ5o70f5Ia+U+8fiDbIR8KIXHMizviSAL1dtoaAOkUE9UGk7wlv6DT8gMv
-         FoYefYDk/GhnJ22oRAcr8EotZWOkt/i7wS32rmu4YOjHlPDB/ZqbKiVCshcZHOQ5YW
-         EiRGCF16MSqzQ/GQx6Gs/YYSoUX6zB2W9G3EZDHM1Uwr85BI112JzP6PP55T6g6je2
-         LjlyN94pte6IXbWpr7QXymeKzRVCX0pQhrSdvlU69JiD2AepMNU564eV6cYmHtmqE5
-         3r7/8Yn9PxqH8xCCAnvyJYF1p88leak0RFt9U5ZOC3k42L0uuXTc4T+pDSwp7qa6zC
-         eSSs0l+5I0P7w==
-Received: by mail-wr1-f71.google.com with SMTP id q16-20020adfbb90000000b001a4838099baso1911807wrg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 23:34:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=29xTho4bxkKXwnEyHI5IJ+c7kcKHDeYilSRX91ahp4E=;
-        b=y07WL8M7ES0M916etv1q6I3Wp6CIsxCGLqscL1REFKrWJX2gSjltP/0wwa5+AfuPZb
-         xPCRccUgExl6Koc+n5jnS77ezpfdxVxwWRwbdANodn+8GHGCFG8ZEGoRTQwSzU6bhEJ6
-         ZKSOdmFGhjngDjpQlu+D41/KAYtNYCZIwDYRCJMSDEH4s3Wj39HIGj83wskfOM4AOaRd
-         i7ZGCkvPtztbba2t5FLlmsKMYE0C8GQLs6+o3/1TuG9g8hySJT/RHW7tFJy3z/khAY2n
-         YJVYMAWlzPanxijh/b7HjsCamIH4RWh5wY8O3McPx69KUloD4fNOzuJRiUPG4f4Aq9tc
-         C40w==
-X-Gm-Message-State: AOAM530++T+iojcXSFvu37v7wP/hr0NLEp/C8lPrH2vsfc0dRlq2Udlv
-        M4tmLd+gdk0JeJ+Hdlobi2eBAT0e3es8r/jfb79RivKfC8a2tgD4DWXFlX3v0Quc0pRqFaWx3lY
-        heSTHGJv2PPpPmW8bpJ/kOlqxo0LEszC2SvG4MS9F3w==
-X-Received: by 2002:a5d:614e:: with SMTP id y14mr971924wrt.612.1641540892489;
-        Thu, 06 Jan 2022 23:34:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzal1pG8kk1sn8VyXOvRs9p4HnfBX9rkUhBpqROcFubzAGcRyXhVKsHCKyDwlklTWzbHmAmtQ==
-X-Received: by 2002:a5d:614e:: with SMTP id y14mr971894wrt.612.1641540892246;
-        Thu, 06 Jan 2022 23:34:52 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id d17sm1525914wmq.42.2022.01.06.23.34.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 23:34:51 -0800 (PST)
-Message-ID: <e13e70ff-1416-e0b8-93ae-991cf58a5f1d@canonical.com>
-Date:   Fri, 7 Jan 2022 08:34:51 +0100
+        id S1345042AbiAGHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 02:40:47 -0500
+Received: from mga07.intel.com ([134.134.136.100]:49043 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344827AbiAGHkq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 02:40:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641541245; x=1673077245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rzUKGrIHlPEMqvM7zyx2deIcGLimwU2Ms3szre8ZO+g=;
+  b=TnGrsqfhUO0oOtu9tMJco5Pv7bd6BvDKrE6KHvzYwWuJlhu+IYLB7mVG
+   tUsX/hDzUMxkUL2WhSGYt4PDiUtp2VHGmTkSKn5X5+Ud/+5AoeeSHN+3v
+   QX6FO7/Q18TRjLetaLN7oqk5YL3Ol4NWEt0/gZhBZV5eOKSj3NA/4lUyz
+   i8Gfn66upgKwGRqkza41u6LIeeq3JZGKYsjhnr8oU3AShq9/57XlmubdG
+   iqhSh0+0kFeEDi7rZThL/OkTLQKcGtq+r6XENigCR4rRKKJ9w6zdrP1r3
+   VpcdzI9MMNbM7u7Nm0Z76PaY/YHo1+3jPT6a7wZwbBXU/zyqCY/mhcylv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="306191849"
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="306191849"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 23:40:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="471233079"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 06 Jan 2022 23:40:44 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5jrf-000IQ5-T3; Fri, 07 Jan 2022 07:40:43 +0000
+Date:   Fri, 7 Jan 2022 15:40:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH ammarfaizi2-block] EXP timers:
+ __pcpu_scope_tick_setup_sched_timer_help_needed can be static
+Message-ID: <20220107074006.GA18912@089a6aeb832b>
+References: <202201071509.qlXBeLQz-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 08/24] ARM: dts: exynos: simplify PMIC DVS pin
- configuration in Peach Pi
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@gmail.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com>
- <20211231162207.257478-2-krzysztof.kozlowski@canonical.com>
- <CAGOxZ52PjcMD0hFQa95NHO2M5Z+Gpx4HNO14+KCsYnCffLc3JQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAGOxZ52PjcMD0hFQa95NHO2M5Z+Gpx4HNO14+KCsYnCffLc3JQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201071509.qlXBeLQz-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2022 19:47, Alim Akhtar wrote:
-> Hi Krzysztof,
-> 
-> On Sat, Jan 1, 2022 at 1:15 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> The pin configuration for PMIC DVS (pmic-dvs-2 and pmic-dvs-3) are
->> exactly the same, so merge them.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
->>  arch/arm/boot/dts/exynos5800-peach-pi.dts | 20 +++++++-------------
->>  1 file changed, 7 insertions(+), 13 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/exynos5800-peach-pi.dts b/arch/arm/boot/dts/exynos5800-peach-pi.dts
->> index 6bf3fd37fb2b..eca805b83816 100644
->> --- a/arch/arm/boot/dts/exynos5800-peach-pi.dts
->> +++ b/arch/arm/boot/dts/exynos5800-peach-pi.dts
->> @@ -221,7 +221,7 @@ max77802: pmic@9 {
->>                 interrupts = <1 IRQ_TYPE_NONE>;
->>                 pinctrl-names = "default";
->>                 pinctrl-0 = <&max77802_irq>, <&pmic_selb>,
->> -                           <&pmic_dvs_1>, <&pmic_dvs_2>, <&pmic_dvs_3>;
->> +                           <&pmic_dvs_1>, <&pmic_dvs_2>;
->>                 wakeup-source;
->>                 reg = <0x9>;
->>                 #clock-cells = <1>;
->> @@ -874,26 +874,20 @@ &sd1_cmd {
->>
->>  &pinctrl_2 {
->>         pmic_dvs_2: pmic-dvs-2 {
->> -               samsung,pins = "gpj4-2";
->> +               samsung,pins = "gpj4-2", "gpj4-3";
->>                 samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
->>                 samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
->>                 samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
->>         };
->> +};
->>
->> -       pmic_dvs_3: pmic-dvs-3 {
->> -               samsung,pins = "gpj4-3";
->> -               samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
->> -               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
->> -               samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
->> -       };
->> +/* pinctrl_3*/
->> +/* Drive SPI lines at x2 for better integrity */
->> +&spi2_bus {
->> +       samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV3>;
->>  };
->>
-> Maybe move this spi2_bus part to patch #07 as the commit does not
-> mention this change.
-> 
+kernel/time/tick-sched.c:1453:1: warning: symbol '__pcpu_scope_tick_setup_sched_timer_help_needed' was not declared. Should it be static?
 
-Right, it should be part of #7.
+Fixes: 3cda34a0004e ("EXP timers: Non-nohz_full last-resort jiffies update on IRQ entry")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ tick-sched.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Best regards,
-Krzysztof
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 8790cd4834887c..1af62743be63e8 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1450,7 +1450,7 @@ early_param("skew_tick", skew_tick);
+ 
+ static DEFINE_PER_CPU(unsigned long, tick_setup_sched_timer_jiffies);
+ static DEFINE_PER_CPU(int, tick_setup_sched_timer_jiffies_count);
+-DEFINE_PER_CPU(bool, tick_setup_sched_timer_help_needed);
++static DEFINE_PER_CPU(bool, tick_setup_sched_timer_help_needed);
+ 
+ /**
+  * tick_setup_sched_timer - setup the tick emulation timer

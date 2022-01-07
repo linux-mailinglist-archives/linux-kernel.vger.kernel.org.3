@@ -2,189 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62317487D72
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDC6487D76
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbiAGUFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 15:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S233950AbiAGUGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 15:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbiAGUFu (ORCPT
+        with ESMTP id S233907AbiAGUGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 15:05:50 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A18C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 12:05:50 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id u20so5978840pfi.12
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 12:05:50 -0800 (PST)
+        Fri, 7 Jan 2022 15:06:03 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C6C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 12:06:03 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id g2so6308366pgo.9
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 12:06:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gbu1UV7Je4keqcQjWsILOs+1k4ApZXjllWNZvpUcAyY=;
-        b=Ggu+M7GRA58WAOXFL5u2VgLxDJSFBy7yc7+mqNI3FY7rP/LYXpT5BfXZFroBP+Zx9c
-         CQ6rTMNdT7youwhkgGq0RHKxHtXIYSYQmpPDBkC4BmkvtYFp8q7BxS8yX1KATD5rPEwa
-         zDFN2L+lKdIU9PP2gowGE2NC1Kyr2jBCOcp/s=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9aQGqZRmHVofJdgbyQpqYP9ZVw8rgMp4fyAd54UvKjI=;
+        b=oKB02UKX2GpWx89gjvdWfZ0z7iFyz6jXVLhUcI83TOu0Dm2uqbBoVD9trbzfsQO5bt
+         C9hzF5hu33iB+xe3NVipbIwJ5YLYNGsbtTHg+bzfI9LOPj10iuYdglFU1gmrLqOrSqOC
+         6iEb4Atd6HINbMwKeExRhl9iT9grnwCGhzDBY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Gbu1UV7Je4keqcQjWsILOs+1k4ApZXjllWNZvpUcAyY=;
-        b=MbrosFAa3p7dqSCANXSPFmoYzkCZw2mqbJSyXTX8/L5WG89FuRIKd49NOdGbro9qeo
-         NOWhqh5CwMmfH9PQpmjXWdYkb35f07cHaIO8mrSPn6xrX9FUM9xO7rGOisGp2Z484Y66
-         36Uf9Hi/QDlaMrOxc5ouWP/imR3qnqc+3gQuwa2dlBa/dj9FgpcFvkEU6Z2Dbwg6hoHy
-         Nl01tTX2QqDRYbJldQKTjiHyGf8fJEQ9db4qtBoYPBJQ2OGXiP0YUf5fTHNyxDDQGMyH
-         gkRkzNToLGj8uZnHKkAtUN7E6HVYnN2lcJiJgDtVqBmQx3JuX1p1DoQCdz4XZ+dOG2im
-         Slqw==
-X-Gm-Message-State: AOAM531bPqrLYtz6qJNJZcrdtQEaEfCgCMlxQ5TXLR5F7ZJKhrc42wI3
-        Wety3wEsVaWkqU+gNjb+8Z362w==
-X-Google-Smtp-Source: ABdhPJzh4NsZEYJ4W8U++BkJJcARgLs5oZM7+ClhAagD5qU4JTrllIyfj/ssE8KrIKjdLFswYSSuYQ==
-X-Received: by 2002:a05:6a00:1a52:b0:4bb:3ab:88a6 with SMTP id h18-20020a056a001a5200b004bb03ab88a6mr66566958pfv.29.1641585949835;
-        Fri, 07 Jan 2022 12:05:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9aQGqZRmHVofJdgbyQpqYP9ZVw8rgMp4fyAd54UvKjI=;
+        b=pjk4KJN5hgBFG+sXS+Ox4J3arVhAs/d2VcZnJof36Z3YRTV3ImPwjDf4Lcll6s/ghv
+         tDs+jCUsAhMoqoglBrpsuSoDaxop+jIc59Xq9YNLD58tmkMIBDn1SSAYTt+i6iTtH7tL
+         DuxnD9bUx41jfqOMbjpB0d3h9sjpT+swBtru+E3L1iCxARiunqTY5y9LBZFenIwjsg5z
+         JE8CATJQX1wq1ImtCsMn8auLRPmVq94AWxfa47IThXVv6UP7MNFerpIKvyMa0PE2Xuqp
+         vskXPrLhXd6cEeXyCrn+LKfvrH+RY/GhKV1UF1kZb+z4q9rlaQRTaqnKSZUPL+G5ZHB0
+         X9Zg==
+X-Gm-Message-State: AOAM531UbNKEsYZrf0AmoN8wMXUoiHE607/qDZ5KAzZhFnhMymqSd40b
+        pylIi+icpt7w6RsuE11FnQ60Qg==
+X-Google-Smtp-Source: ABdhPJxRLSIDf45pCKTTtVhB5TKIpwBXdiQ5iVWYe9E4TZ3n2ODOwkimZzHR1vjLIHQzP8qdcUQ82g==
+X-Received: by 2002:a63:f254:: with SMTP id d20mr57812751pgk.127.1641585962552;
+        Fri, 07 Jan 2022 12:06:02 -0800 (PST)
 Received: from kuabhs-cdev.c.googlers.com.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id y18sm5929492pfn.202.2022.01.07.12.05.49
+        by smtp.gmail.com with ESMTPSA id y18sm5929492pfn.202.2022.01.07.12.06.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 12:05:49 -0800 (PST)
+        Fri, 07 Jan 2022 12:06:02 -0800 (PST)
 From:   Abhishek Kumar <kuabhs@chromium.org>
 To:     kvalo@codeaurora.org, dianders@chromium.org
 Cc:     pillair@codeaurora.org, kuabhs@chromium.org,
         linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, ath10k@lists.infradead.org,
+        Kalle Valo <kvalo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 1/2] ath10k: search for default BDF name provided in DT
-Date:   Fri,  7 Jan 2022 20:04:30 +0000
-Message-Id: <20220107200417.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
+Subject: [PATCH 2/2] dt: bindings: add dt entry for ath10k default BDF name
+Date:   Fri,  7 Jan 2022 20:04:31 +0000
+Message-Id: <20220107200417.2.Ia0365467994f8f9085c86b5674b57ff507c669f8@changeid>
 X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
+In-Reply-To: <20220107200417.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
+References: <20220107200417.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There can be cases where the board-2.bin does not contain
-any BDF matching the chip-id+board-id+variant combination.
-This causes the wlan probe to fail and renders wifi unusable.
-For e.g. if the board-2.bin has default BDF as:
-bus=snoc,qmi-board-id=67 but for some reason the board-id
-on the wlan chip is not programmed and read 0xff as the
-default value. In such cases there won't be any matching BDF
-because the board-2.bin will be searched with following:
-bus=snoc,qmi-board-id=ff
-To address these scenarios, there can be an option to provide
-fallback default BDF name in the device tree. If none of the
-BDF names match then the board-2.bin file can be searched with
-default BDF names assigned in the device tree.
+It is possible that BDF name with board-id+chip-id+variant
+combination is not found in the board-2.bin. Such cases can
+cause wlan probe to fail and completely break wifi. In such
+case there can be an optional property to define a default
+BDF name to search for in the board-2.bin file when none of
+the combinations (board-id,chip-id,variant) match.
+To address the above concern provide an optional proptery:
+qcom,ath10k-default-bdf
 
-The default BDF name can be set as:
-wifi@a000000 {
-	status = "okay";
-	qcom,ath10k-default-bdf = "bus=snoc,qmi-board-id=67";
-};
-
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
 Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
 ---
 
- drivers/net/wireless/ath/ath10k/core.c | 30 ++++++++++++++++++++++++++
- drivers/net/wireless/ath/ath10k/core.h |  5 +++++
- drivers/net/wireless/ath/ath10k/qmi.c  |  4 ++++
- 3 files changed, 39 insertions(+)
+ .../devicetree/bindings/net/wireless/qcom,ath10k.txt          | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 8f5b8eb368fa..a7008c853f0f 100644
---- a/drivers/net/wireless/ath/ath10k/core.c
-+++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -1081,6 +1081,32 @@ int ath10k_core_check_dt(struct ath10k *ar)
- }
- EXPORT_SYMBOL(ath10k_core_check_dt);
- 
-+int ath10k_core_parse_default_bdf_dt(struct ath10k *ar)
-+{
-+	struct device_node *node;
-+	const char *board_name = NULL;
-+
-+	ar->id.default_bdf[0] = '\0';
-+
-+	node = ar->dev->of_node;
-+	if (!node)
-+		return -ENOENT;
-+
-+	of_property_read_string(node, "qcom,ath10k-default-bdf",
-+				&board_name);
-+	if (!board_name)
-+		return -ENODATA;
-+
-+	if (strscpy(ar->id.default_bdf,
-+		    board_name, sizeof(ar->id.default_bdf)) < 0)
-+		ath10k_warn(ar,
-+			    "default board name is longer than allocated buffer, board_name: %s; allocated size: %d\n",
-+			    board_name, sizeof(ar->id.default_bdf));
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(ath10k_core_parse_default_bdf_dt);
-+
- static int ath10k_download_fw(struct ath10k *ar)
- {
- 	u32 address, data_len;
-@@ -1441,6 +1467,10 @@ static int ath10k_core_fetch_board_data_api_n(struct ath10k *ar,
- 	if (ret == -ENOENT && fallback_boardname2)
- 		ret = ath10k_core_search_bd(ar, fallback_boardname2, data, len);
- 
-+	/* check default BDF name if provided in device tree */
-+	if (ret == -ENOENT && ar->id.default_bdf[0] != '\0')
-+		ret = ath10k_core_search_bd(ar, ar->id.default_bdf, data, len);
-+
- 	if (ret == -ENOENT) {
- 		ath10k_err(ar,
- 			   "failed to fetch board data for %s from %s/%s\n",
-diff --git a/drivers/net/wireless/ath/ath10k/core.h b/drivers/net/wireless/ath/ath10k/core.h
-index 9f6680b3be0a..1201bb7bb8ab 100644
---- a/drivers/net/wireless/ath/ath10k/core.h
-+++ b/drivers/net/wireless/ath/ath10k/core.h
-@@ -79,6 +79,9 @@
- /* The magic used by QCA spec */
- #define ATH10K_SMBIOS_BDF_EXT_MAGIC "BDF_"
- 
-+/* Default BDF board name buffer size */
-+#define ATH10K_DEFAULT_BDF_BUFFER_SIZE 0x40
-+
- /* Default Airtime weight multipler (Tuned for multiclient performance) */
- #define ATH10K_AIRTIME_WEIGHT_MULTIPLIER  4
- 
-@@ -1102,6 +1105,7 @@ struct ath10k {
- 		bool ext_bid_supported;
- 
- 		char bdf_ext[ATH10K_SMBIOS_BDF_EXT_STR_LENGTH];
-+		char default_bdf[ATH10K_DEFAULT_BDF_BUFFER_SIZE];
- 	} id;
- 
- 	int fw_api;
-@@ -1342,6 +1346,7 @@ int ath10k_core_register(struct ath10k *ar,
- void ath10k_core_unregister(struct ath10k *ar);
- int ath10k_core_fetch_board_file(struct ath10k *ar, int bd_ie_type);
- int ath10k_core_check_dt(struct ath10k *ar);
-+int ath10k_core_parse_default_bdf_dt(struct ath10k *ar);
- void ath10k_core_free_board_files(struct ath10k *ar);
- 
- #endif /* _CORE_H_ */
-diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
-index 80fcb917fe4e..a57675308014 100644
---- a/drivers/net/wireless/ath/ath10k/qmi.c
-+++ b/drivers/net/wireless/ath/ath10k/qmi.c
-@@ -831,6 +831,10 @@ static int ath10k_qmi_fetch_board_file(struct ath10k_qmi *qmi)
- 	if (ret)
- 		ath10k_dbg(ar, ATH10K_DBG_QMI, "DT bdf variant name not set.\n");
- 
-+	ret = ath10k_core_parse_default_bdf_dt(ar);
-+	if (ret)
-+		ath10k_dbg(ar, ATH10K_DBG_QMI, "Default BDF name not set in device tree.\n");
-+
- 	return ath10k_core_fetch_board_file(qmi->ar, ATH10K_BD_IE_BOARD);
- }
- 
+diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.txt b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.txt
+index b61c2d5a0ff7..d76d1392863d 100644
+--- a/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.txt
++++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.txt
+@@ -63,6 +63,10 @@ Optional properties:
+ 				 hw versions.
+ - qcom,ath10k-pre-calibration-data : pre calibration data as an array,
+ 				     the length can vary between hw versions.
++- qcom,ath10k-default-bdf : default board data file name to be searched in
++			    board-2.bin. This is searched if no BDF is found
++			    in board-2.bin that matches, chip-id, board-id and
++			    variant combination
+ - <supply-name>-supply: handle to the regulator device tree node
+ 			   optional "supply-name" are "vdd-0.8-cx-mx",
+ 			   "vdd-1.8-xo", "vdd-1.3-rfa", "vdd-3.3-ch0",
 -- 
 2.34.1.575.g55b058a8bb-goog
 

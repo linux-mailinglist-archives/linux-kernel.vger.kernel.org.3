@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA2748790C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC4C48790F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347869AbiAGOeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S1347851AbiAGOeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347858AbiAGOeB (ORCPT
+        with ESMTP id S1347880AbiAGOeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:34:01 -0500
+        Fri, 7 Jan 2022 09:34:07 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF891C06173E;
-        Fri,  7 Jan 2022 06:34:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0635C06173E;
+        Fri,  7 Jan 2022 06:34:06 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 8838B1F4436E
+        with ESMTPSA id E37361F45FD4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641566039;
-        bh=RldGw44u6+AGmi0efrlIYXk9AL8VfKkwLM4lhnsDUXI=;
+        s=mail; t=1641566045;
+        bh=X9ST1U3jQknSUjIu6aMdDzRiKeTrHNPc1c8i2C8L4B4=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=cPIH1x39COm7u9UN9YtQk3OD7h2sjmU4rBEhVRJrW7XnaiAyvz+uI1H/W038yL4M6
-         luSZUkBdKz8uItmPWQ26E2T1onNo4MrjjJcpQuKWv8EN6P2tIbdREp4XIZzQUkzu9c
-         Sp5kVo/2FfqKP0cWK+jYe+3ktoC+c2zAICAh4TU7YqGOSGaLTHtLmIwPTGqQoKfkzK
-         oY0Xgvq7NGNmtgIWNk0vNGNv/06N/hHvNPcF6r3I/04k8FP6kryoRQLCBwTKtmc5co
-         DOLZtHiBdxgDwLp+jtf9DwXjEQ6aIFNCxa2Z91HwtvV17qhecSeP/agYLjN3cfWbWL
-         Mnn+E+hCx393w==
-Subject: Re: [PATCH v21 3/8] soc: mediatek: SVS: introduce MTK SVS engine
+        b=h1Iz/82bo/LY7H2+i6dHhsELE94Wt8alNEPGB3XSJJDBJM3GNwmteXEbi12Jl2cte
+         RPd44n00nNQhfKxlGFJj3v1fgI8dbjG1FfCN3LN1pAKG64P8BV78OkXVRZemaCfjdz
+         xrsMzgfS48tM9cOKe1BlRMF3YwpB0R5J3rOj7npg8LauSCzupISzKSJxZf9BxOaeWs
+         iPddS6ICi6z9ozjDTZRkmVA49noJ+XBJ3w8JQRNl0/gwd4WPy6EDrs/93s46Z+hlVv
+         uVPDGA4TuhKrtRCob3QIHGNRuXSjj7NIFT3s+acb2X7OtHi8GI0KtgIVLuvi4/o7qr
+         vrdulJvqyrDBA==
+Subject: Re: [PATCH v21 4/8] soc: mediatek: SVS: add monitor mode
 To:     Roger Lu <roger.lu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -51,15 +51,15 @@ Cc:     Fan Chen <fan.chen@mediatek.com>,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         Guenter Roeck <linux@roeck-us.net>
 References: <20220107095200.4389-1-roger.lu@mediatek.com>
- <20220107095200.4389-4-roger.lu@mediatek.com>
+ <20220107095200.4389-5-roger.lu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <63d8884d-d02d-53f9-8524-4a074ca5bfea@collabora.com>
-Date:   Fri, 7 Jan 2022 15:33:56 +0100
+Message-ID: <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
+Date:   Fri, 7 Jan 2022 15:34:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20220107095200.4389-4-roger.lu@mediatek.com>
+In-Reply-To: <20220107095200.4389-5-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,134 +68,215 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 07/01/22 10:51, Roger Lu ha scritto:
-> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> which calculates suitable SVS bank voltages to OPP voltage table.
-> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+> SVS monitor mode is based on different thermal temperature
+> to provide suitable SVS bank voltages.
 > 
 > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->   drivers/soc/mediatek/Kconfig   |   10 +
->   drivers/soc/mediatek/Makefile  |    1 +
->   drivers/soc/mediatek/mtk-svs.c | 1446 ++++++++++++++++++++++++++++++++
->   3 files changed, 1457 insertions(+)
->   create mode 100644 drivers/soc/mediatek/mtk-svs.c
+>   drivers/soc/mediatek/mtk-svs.c | 253 ++++++++++++++++++++++++++++++++-
+>   1 file changed, 247 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
-> index fdd8bc08569e..3c3eedea35f7 100644
-> --- a/drivers/soc/mediatek/Kconfig
-> +++ b/drivers/soc/mediatek/Kconfig
-> @@ -73,4 +73,14 @@ config MTK_MMSYS
->   	  Say yes here to add support for the MediaTek Multimedia
->   	  Subsystem (MMSYS).
->   
-> +config MTK_SVS
-> +	tristate "MediaTek Smart Voltage Scaling(SVS)"
-> +	depends on MTK_EFUSE && NVMEM
-> +	help
-> +	  The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> +	  which has several controllers(banks) for calculating suitable
-> +	  voltage to different power domains(CPU/GPU/CCI) according to
-> +	  chip process corner, temperatures and other factors. Then DVFS
-> +	  driver could apply SVS bank voltage to PMIC/Buck.
-> +
->   endmenu
-> diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
-> index 90270f8114ed..0e9e703c931a 100644
-> --- a/drivers/soc/mediatek/Makefile
-> +++ b/drivers/soc/mediatek/Makefile
-> @@ -7,3 +7,4 @@ obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
->   obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
->   obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
->   obj-$(CONFIG_MTK_MMSYS) += mtk-mutex.o
-> +obj-$(CONFIG_MTK_SVS) += mtk-svs.o
 > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> new file mode 100644
-> index 000000000000..fc7e2ee44a92
-> --- /dev/null
+> index fc7e2ee44a92..042c6e8e9069 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
 > +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -0,0 +1,1446 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2020 MediaTek Inc.
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/completion.h>
-> +#include <linux/device.h>
-> +#include <linux/init.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/kthread.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/pm_qos.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/slab.h>
-> +#include <linux/spinlock.h>
-> +
-> +/* svs bank 1-line sw id */
-> +#define SVSB_CPU_LITTLE			BIT(0)
-> +#define SVSB_CPU_BIG			BIT(1)
-> +#define SVSB_CCI			BIT(2)
-> +#define SVSB_GPU			BIT(3)
-> +
-> +/* svs bank mode support */
-> +#define SVSB_MODE_ALL_DISABLE		0
-> +#define SVSB_MODE_INIT01		BIT(1)
-> +#define SVSB_MODE_INIT02		BIT(2)
-> +
-> +/* svs bank volt flags */
-> +#define SVSB_INIT01_PD_REQ		BIT(0)
-> +#define SVSB_INIT01_VOLT_IGNORE		BIT(1)
-> +#define SVSB_INIT01_VOLT_INC_ONLY	BIT(2)
-> +
-> +/* svs bank common setting */
-> +#define MAX_OPP_ENTRIES			16
-> +#define SVSB_DC_SIGNED_BIT		BIT(15)
-> +#define SVSB_DET_CLK_EN			BIT(31)
-> +#define SVSB_DET_MAX			0xffff
-> +#define SVSB_DET_WINDOW			0xa28
-> +#define SVSB_DTHI			0x1
-> +#define SVSB_DTLO			0xfe
-> +#define SVSB_EN_INIT01			0x1
-> +#define SVSB_EN_INIT02			0x5
-> +#define SVSB_EN_MASK			0x7
-> +#define SVSB_EN_OFF			0x0
-> +#define SVSB_INTEN_INIT0x		0x00005f01
-> +#define SVSB_INTSTS_CLEAN		0x00ffffff
-> +#define SVSB_INTSTS_COMPLETE		0x1
-> +#define SVSB_RUNCONFIG_DEFAULT		0x80000000
-> +
-> +static DEFINE_SPINLOCK(svs_lock);
+> @@ -25,6 +25,7 @@
+>   #include <linux/regulator/consumer.h>
+>   #include <linux/slab.h>
+>   #include <linux/spinlock.h>
+> +#include <linux/thermal.h>
+>   
+>   /* svs bank 1-line sw id */
+>   #define SVSB_CPU_LITTLE			BIT(0)
+> @@ -36,6 +37,7 @@
+>   #define SVSB_MODE_ALL_DISABLE		0
+>   #define SVSB_MODE_INIT01		BIT(1)
+>   #define SVSB_MODE_INIT02		BIT(2)
+> +#define SVSB_MODE_MON			BIT(3)
+>   
+>   /* svs bank volt flags */
+>   #define SVSB_INIT01_PD_REQ		BIT(0)
+> @@ -53,11 +55,16 @@
+>   #define SVSB_EN_INIT01			0x1
+>   #define SVSB_EN_INIT02			0x5
+>   #define SVSB_EN_MASK			0x7
+> +#define SVSB_EN_MON			0x2
+>   #define SVSB_EN_OFF			0x0
+>   #define SVSB_INTEN_INIT0x		0x00005f01
+> +#define SVSB_INTEN_MONVOPEN		0x00ff0000
+>   #define SVSB_INTSTS_CLEAN		0x00ffffff
+>   #define SVSB_INTSTS_COMPLETE		0x1
+> +#define SVSB_INTSTS_MONVOP		0x00ff0000
+>   #define SVSB_RUNCONFIG_DEFAULT		0x80000000
+> +#define SVSB_TEMP_LOWER_BOUND		0xb2
+> +#define SVSB_TEMP_UPPER_BOUND		0x64
+>   
+>   static DEFINE_SPINLOCK(svs_lock);
+>   
+> @@ -66,6 +73,7 @@ static DEFINE_SPINLOCK(svs_lock);
+>    * @SVSB_PHASE_ERROR: svs bank encounters unexpected condition
+>    * @SVSB_PHASE_INIT01: svs bank basic init for data calibration
+>    * @SVSB_PHASE_INIT02: svs bank can provide voltages to opp table
+> + * @SVSB_PHASE_MON: svs bank can provide voltages with thermal effect
+>    * @SVSB_PHASE_MAX: total number of svs bank phase (debug purpose)
+>    *
+>    * Each svs bank has its own independent phase and we enable each svs bank by
+> @@ -73,12 +81,13 @@ static DEFINE_SPINLOCK(svs_lock);
+>    * condition, it will fire an irq (PHASE_ERROR) to inform svs software.
+>    *
+>    * svs bank general phase-enabled order:
+> - * SVSB_PHASE_INIT01 -> SVSB_PHASE_INIT02
+> + * SVSB_PHASE_INIT01 -> SVSB_PHASE_INIT02 -> SVSB_PHASE_MON
+>    */
+>   enum svsb_phase {
+>   	SVSB_PHASE_ERROR = 0,
+>   	SVSB_PHASE_INIT01,
+>   	SVSB_PHASE_INIT02,
+> +	SVSB_PHASE_MON,
+>   	SVSB_PHASE_MAX,
+>   };
+>   
+> @@ -209,9 +218,11 @@ static const u32 svs_regs_v2[] = {
+>    * @probe: svs platform probe function pointer
+>    * @irqflags: svs platform irq settings flags
+>    * @efuse_max: total number of svs efuse
+> + * @tefuse_max: total number of thermal efuse
+>    * @regs: svs platform registers map
+>    * @bank_max: total number of svs banks
+>    * @efuse: svs efuse data received from NVMEM framework
+> + * @tefuse: thermal efuse data received from NVMEM framework
+>    */
+>   struct svs_platform {
+>   	char *name;
+> @@ -224,9 +235,11 @@ struct svs_platform {
+>   	int (*probe)(struct svs_platform *svsp);
+>   	unsigned long irqflags;
+>   	size_t efuse_max;
+> +	size_t tefuse_max;
+>   	const u32 *regs;
+>   	u32 bank_max;
+>   	u32 *efuse;
+> +	u32 *tefuse;
+>   };
+>   
+>   /**
+> @@ -241,6 +254,7 @@ struct svs_platform {
+>    * @get_volts: function pointer to get bank voltages
+>    * @name: bank name
+>    * @buck_name: regulator name
+> + * @tzone_name: thermal zone name
+>    * @suspended: suspend flag of this bank
+>    * @phase: bank current phase
+>    * @volt_od: bank voltage overdrive
+> @@ -270,6 +284,13 @@ struct svs_platform {
+>    * @sw_id: bank software identification
+>    * @cpu_id: cpu core id for SVS CPU bank use only
+>    * @ctl0: TS-x selection
+> + * @temp: bank temperature
+> + * @tzone_htemp: thermal zone high temperature threshold
+> + * @tzone_htemp_voffset: thermal zone high temperature voltage offset
+> + * @tzone_ltemp: thermal zone low temperature threshold
+> + * @tzone_ltemp_voffset: thermal zone low temperature voltage offset
+> + * @bts: svs efuse data
+> + * @mts: svs efuse data
+>    * @bdes: svs efuse data
+>    * @mdes: svs efuse data
+>    * @mtdes: svs efuse data
+> @@ -292,6 +313,7 @@ struct svs_bank {
+>   	void (*get_volts)(struct svs_platform *svsp);
+>   	char *name;
+>   	char *buck_name;
+> +	char *tzone_name;
+>   	bool suspended;
+>   	enum svsb_phase phase;
+>   	s32 volt_od;
+> @@ -321,6 +343,13 @@ struct svs_bank {
+>   	u32 sw_id;
+>   	u32 cpu_id;
+>   	u32 ctl0;
+> +	u32 temp;
+> +	u32 tzone_htemp;
+> +	u32 tzone_htemp_voffset;
+> +	u32 tzone_ltemp;
+> +	u32 tzone_ltemp_voffset;
+> +	u32 bts;
+> +	u32 mts;
+>   	u32 bdes;
+>   	u32 mdes;
+>   	u32 mtdes;
+> @@ -361,10 +390,21 @@ static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt, u32 svsb_volt_step,
+>   	return (svsb_volt * svsb_volt_step) + svsb_volt_base;
+>   }
+>   
 
-snip....
+I'm sorry for the double review, but this went unnoticed in the previous one.
 
-
+> +static int svs_get_zone_temperature(const char *tzone_name, int *tzone_temp)
+> +{
+> +	struct thermal_zone_device *tzd;
 > +
-> +struct svs_platform_data {
-> +	char *name;
-> +	struct svs_bank *banks;
-> +	bool (*efuse_parsing)(struct svs_platform *svsp);
-> +	unsigned long irqflags;
-> +	const u32 *regs;
-> +	u32 bank_max;
-> +	int (*probe)(struct svs_platform *svsp);
-> +};
+> +	tzd = thermal_zone_get_zone_by_name(tzone_name);
+
+This call is expensive, as it's iterating through the (possibly) entire
+thermal_tz_list (drivers/thermal/thermal_core.c) so, for performance purposes,
+noting that you're using this in svs_adjust_pm_opp_volts(), it's not a good idea
+to call it at every ISR.
+
+I would instead propose to get a pointer to the thermal_zone at driver probe
+time and cache that in struct svs_bank: this function would also be removed
+as the only thing that you'd need to do then would be just one call...
+
+[read forward...]
+
+> +	if (IS_ERR(tzd))
+> +		return PTR_ERR(tzd);
 > +
+> +	return thermal_zone_get_temp(tzd, tzone_temp);
+> +}
+> +
+>   static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
+>   {
+> -	int ret = -EPERM;
+> -	u32 i, svsb_volt, opp_volt;
+> +	int ret = -EPERM, tzone_temp = 0;
+> +	u32 i, svsb_volt, opp_volt, temp_voffset = 0;
+>   
+>   	mutex_lock(&svsb->lock);
+>   
+> @@ -378,6 +418,22 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool force_update)
+>   		goto unlock_mutex;
+>   	}
+>   
+> +	/* Get thermal effect */
+> +	if (svsb->phase == SVSB_PHASE_MON) {
+> +		ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
 
-Please move the definition of struct svs_platform_data at the beginning of
-the file for increased readability.
+... so you can simply call ...
 
-With that done,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+	ret = thermal_zone_get_temp(svsb->tzd, tzone_temp);
+
+
+...without any need for any helper.
+
+> +		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
+> +			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
+> +			dev_err(svsb->dev, "%s: %d (0x%x), run default volts\n",
+> +				svsb->tzone_name, ret, svsb->temp);
+> +			svsb->phase = SVSB_PHASE_ERROR;
+> +		}
+> +
+> +		if (tzone_temp >= svsb->tzone_htemp)
+> +			temp_voffset += svsb->tzone_htemp_voffset;
+> +		else if (tzone_temp <= svsb->tzone_ltemp)
+> +			temp_voffset += svsb->tzone_ltemp_voffset;
+> +	}
+> +
+>   	/* vmin <= svsb_volt (opp_volt) <= default opp voltage */
+>   	for (i = 0; i < svsb->opp_count; i++) {
+>   		switch (svsb->phase) {
+
+Apart from that, the commit looks good. Looking forward to review the new version!
+
+Regards,
+- Angelo

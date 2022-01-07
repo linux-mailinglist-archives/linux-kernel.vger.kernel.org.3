@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0776486E83
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529C5486E85
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343865AbiAGAQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S1343879AbiAGAQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343805AbiAGAQJ (ORCPT
+        with ESMTP id S1343805AbiAGAQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:16:09 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F0C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:16:08 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id v6so6007463oib.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=mE1P4O+5lb7Aj+m/u0inLsIsF4f3Obpma9YFsBVI+mk=;
-        b=R+c4v+KB6lM8fqhf7qCx4POmsHZ85uFetKficsf+q36Un+SUnj9mAYdkTsUDRSUEum
-         3ileYQjfrtriixrocxGrjGqEiu4uGATHnNupNBiTJoL0O/xhscZlTHbAyUz5ryn23sC8
-         TDxs9J8GCQtY1X4V4fVgCPSWDG3oMtNcHwmRE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=mE1P4O+5lb7Aj+m/u0inLsIsF4f3Obpma9YFsBVI+mk=;
-        b=15A+t4bwBCc6Mfs0it7zKxUo8fUaxDT3s6VOHnMHVAKFiPzvV+DTqyrJIErtzRW4gb
-         f7SVhXLlr24jIOj+jw5oq7LhdPJHUJu4hLHT0y/Mi8klWnzikF4Y8WbPVIBt/QyEj7FU
-         lvsVmDKHbxAQ4kUg9QfJF9cqDDC1NeDRmhKSPYDqNKCWyZxsKw01HApvOnbPymNgdExr
-         QzKIx2m+f9c407Lw3EgwrqnXLeLj1dLsJ0dx3NTzl7u+YUZvg9bhDYs+9lim+mWi/G04
-         YS6g3sN4SS7sgxYMTDXL2bVITWcdEjI4y0vxtj2gg1c/0Why+nh+H/w9kPjdfb98fjCY
-         Oe8w==
-X-Gm-Message-State: AOAM530SLvAZ/Nl7F6a2Fqf+4KWlgJmugF5wFAMeFUeXH0OFbYgU8oxr
-        FTwsngc1/JMNK53V9Oo0ZMb3ixT30/mK0gVOQH+NPQ==
-X-Google-Smtp-Source: ABdhPJxYOfr7WP2LZzJN/EUDtSmVISjJlgmRyG+L1riCyACt9jPXB4g4etKquIwp2+r5rnPWy0RDAAxc2R9ayyc2n28=
-X-Received: by 2002:aca:4382:: with SMTP id q124mr8016650oia.64.1641514568306;
- Thu, 06 Jan 2022 16:16:08 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 6 Jan 2022 16:16:07 -0800
+        Thu, 6 Jan 2022 19:16:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B835C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:16:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE55B61E9A
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 00:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 361A8C36AE0;
+        Fri,  7 Jan 2022 00:16:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641514592;
+        bh=OfWvjgMz/3A2cIrWooPNudV7uT9VchsrhR5VhQdH8dY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=soRh/bTmEiDBwxCHqevgGU3/fdavQHU24UxRQTjfUtXb7JO/wMUwf48N1HOl/IH3n
+         VU2yg3yrwiQDFjhMs47yHKhbqolAHqGBOl/0pyvo24POpX7YLDzbXkZz0Rpg/ufW2C
+         nZvMnM9ocIgL7yr2Q4IeS3c2zwuHCzj3TF84A9oo5k5X0Zq01bpcoGHUwCuXCMPSsH
+         4DQFGtRINjGlkGuiHQQqKZUJFucR+J+Bu/gm3E6qyIv2cghrXZfQ79BJvbvR0BecEk
+         XyGzG4Bg6BdzgkMI0Tm+0dnqcT4De+LebwYHo01kwobUBqPnldzGPq0OF/4aJ9O4z5
+         MdsHT4qeNKfJw==
+Date:   Thu, 6 Jan 2022 17:16:27 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Samuel Zeter <samuelzeter@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
+Message-ID: <YdeGWyzvsXxntcAT@archlinux-ax161>
+References: <20220106023606.283953-1-samuelzeter@gmail.com>
+ <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+ <Ydd522/ivtZunIXl@szeter>
 MIME-Version: 1.0
-In-Reply-To: <1641489296-16215-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1641489296-16215-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Thu, 6 Jan 2022 16:16:07 -0800
-Message-ID: <CAE-0n52-SL6jPVtn_wEPtY1FQ4EUZ2PhiQ=agXcnA0AHPV9TQQ@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/msm/dp: add support of tps4 (training pattern 4)
- for HBR3
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kuogee Hsieh <khsieh@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydd522/ivtZunIXl@szeter>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-06 09:14:56)
-> @@ -1189,12 +1190,20 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
->
->         *training_step = DP_TRAINING_2;
->
-> -       if (drm_dp_tps3_supported(ctrl->panel->dpcd))
-> +       if (drm_dp_tps4_supported(ctrl->panel->dpcd)) {
-> +               pattern = DP_TRAINING_PATTERN_4;
-> +               state_ctrl_bit = 4;
-> +       }
-> +       else if (drm_dp_tps3_supported(ctrl->panel->dpcd)) {
+On Fri, Jan 07, 2022 at 10:23:07AM +1100, Samuel Zeter wrote:
+> Thanks for the feedback, Nathan.
+> 
+> > For the future, I recommend putting the maintainers in the "To" field,
+> > rather than "Cc", to ensure they actually see it. Additionally, I see
+> > some small nits in the commit message that the tip maintainers might
+> > comment on, see
+> > 
+> > https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
+> > 
+> Thanks for the link, I missed that one. What were the nits apparent to you
+> in the commit message?
 
-also
+I primarily just saw a couple instances of "This patch", which is
+frowned upon in the main submitting patches document:
 
-	} else if (...) {
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#submittingpatches
+
+I thought I saw something else but upon further inspection, I didn't.
+It is minor enough that I would wait for further review comments from
+others to submit a v2.
+
+Cheers,
+Nathan

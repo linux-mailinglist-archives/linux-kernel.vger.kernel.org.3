@@ -2,121 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3E4487CF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B88487CFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 20:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbiAGTYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 14:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S232011AbiAGT1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 14:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiAGTYp (ORCPT
+        with ESMTP id S231470AbiAGT1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 14:24:45 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97A5C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 11:24:44 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 196so5914286pfw.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 11:24:44 -0800 (PST)
+        Fri, 7 Jan 2022 14:27:04 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528DC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 11:27:04 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id p65so8379714iof.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 11:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QMs6fkUvgPrjBNmbVuzeEIMf/pxNE8LPDDFFuRfaa5Y=;
-        b=dCs9HdAqqz6QxAPNLPq8whgVc4oHvxWlnjZ37shwKGAMr9nLlMHGTj32npKCuokJKK
-         idNPSZSRGH+nc2ioJAjnp/yxWTM7ATkZ2TMfTlI7vyXrC1mU6oPQBIUjpC02jlA+iTOw
-         KbrAJCTT/bPrRAvxOqGuQS1xW3bHeO2vbFjBWifi40D+8J2v5Rt9vuieY4N6QGCgy8vS
-         aWdxpFRMQl354PWRrVct4DMvizHyYS/1Vmo9qjqIuaNlW01Q7bE2FZF9t4Fbl9WYHFts
-         BG3bILBB0K1lP4jZgUcJmqDYwKxxYAtJdsXFi/N8w/jvnVY3Dh9HHPfouAWPWes9Ljq4
-         uoEg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6AgMB0BliFhTnPqLx8MPzQovjh3xMAp8CJbNAjfQHdg=;
+        b=FOAJPVZDE+rv5n40LPFaJfuooCCHfMlxRIQLIG0itXHXqGrpYkBVbRFm4d3+NYpdMn
+         UWmeI6qlHOFlO43k+c8IxLrGACGW+ddYPINbubnpYmQapbLdeODZRodOf10UDV/pEXQf
+         z6FmfhQm1qJ6TmyqIgvzGrzuapE5uinfCrKjD0YdR8dPV7Kdl1t8XpDxoh9ZNEOjEIXM
+         OX607VLcdRGHWzdj8daQrAWq+E8AFQyDuAMxMGrohJ8EyvvN5HfGy8oMsC4vVc4XtRLw
+         Te3T85hCQz89ZhRENCwGv2meh1QZwQYD13M3I6fd4xCqn7gdL7e2VSqwhOjPAZuD7NSN
+         0wCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QMs6fkUvgPrjBNmbVuzeEIMf/pxNE8LPDDFFuRfaa5Y=;
-        b=vszWQ3Pg64StfGMeyhtKJ+92OnRGMI2s3fFPny2FYDtZIJaIqW7yni2QcUMKVoPKhn
-         bp3lTebfX27W+svii30IqTe6jEwErIihE4nqISnZnMmymLzHadL6JJJ7sPMub06t6nhR
-         fb48NZ1FZtsbMJm/jR99ERWdeFREABBIPTuDvbPiaq9mDrmP7vGNuIj9oPHIA1yiuUx/
-         GmOiAGrTB1Q6B4goEC2WqhHmPnN0rDzuNx0dpNKBNbyPQB9I8ravSC58pKol/WTgAfTz
-         dFBXBK4d3mlxKreuPtPuoV1ZVjrQmt99WP/BJMsfK2yQ01hCe+pN+HdYnXENuLJ7sqxk
-         CbMg==
-X-Gm-Message-State: AOAM533K0zn5pDwIaPR9/PRmFdZXBtRyDLYehBjVJ3H/P1qzQi9R3Y91
-        ZJnQHffkfQcTOOY8cURAo18=
-X-Google-Smtp-Source: ABdhPJw9+NE0KP0rvwvLCzBHuz55aXfsGF21CuiFGPHj6dzg+8vwq0rmp3jqYablU9dH/XO+ZgdS2w==
-X-Received: by 2002:a05:6a00:1249:b0:4bb:4a31:1e0a with SMTP id u9-20020a056a00124900b004bb4a311e0amr65594800pfi.81.1641583484198;
-        Fri, 07 Jan 2022 11:24:44 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id y3sm5968077pjp.55.2022.01.07.11.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 11:24:43 -0800 (PST)
-Date:   Sat, 8 Jan 2022 08:24:38 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     gregkh@linuxfoundation.org, realwakka@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: pi433: move get version func to where all
- other functions are
-Message-ID: <20220107192438.GB2693@mail.google.com>
-References: <20220106201430.GA3416@mail.google.com>
- <20220106213325.GA10767@mail.google.com>
- <20220107085343.GP7674@kadam>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6AgMB0BliFhTnPqLx8MPzQovjh3xMAp8CJbNAjfQHdg=;
+        b=OL3Z/BRAwVx50mMEOuk12OLHql/fLyN32d+86at3UunIWvvVPj4Rx9gl+VRgB0XO4b
+         fu6dZhynxIz/vvSPBqGFPnie51NIhcnKbmIX1HXpdwYr0xwdZ6IKmm1c06TeVPHxRxTx
+         MHQSwc6rvzca5xTp3GUdJsxKqI/0L/cdfgoKf3GXv0C04Q4yLnXK0xqeHORb+8AoIb17
+         P0Qy2TJSKNipxPUQq+z2WLmxkp0IKvgmYvUfi6LFmgdUxbTtjqTHyrcQEbudjCC6KwuA
+         Z7pVuJdOK+dCGc+dP//jul5YKDcRyZsV2Npc6d8JTtat3qqIHTvmi7eyPxDQ5+pytdl6
+         b14A==
+X-Gm-Message-State: AOAM532XeIGMJ4vAptU73VmwWTVwVbR1gnRduLhiFvDqvsL6lP3Xn6zQ
+        hRgDMd36Abrz30bjPm+kK12wiXqAjo8Uk+UndbL57A==
+X-Google-Smtp-Source: ABdhPJxYq21JQPQkcDcKXPoirZGB7XqqYaNPPvqWi8ceIjY0WSKVoIXBg8HcrRBpeit1RilSvNvQpnNEigv162fYnSM=
+X-Received: by 2002:a05:6638:1193:: with SMTP id f19mr31185178jas.237.1641583623214;
+ Fri, 07 Jan 2022 11:27:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107085343.GP7674@kadam>
+References: <YddEVgNKBJiqcV6Y@kernel.org> <YddGjjmlMZzxUZbN@kernel.org>
+ <YddHmYhvtVvgqZb/@kernel.org> <CAP-5=fU2QAr9BMHqm9i6uDKPaUFsY2EAqt+oO1AO8ovBXCh5xQ@mail.gmail.com>
+ <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
+ <CAP-5=fUN+XqrSmwqab9DyGtvpZ7iZkfnUNwBfK1CDA_iX+aF0Q@mail.gmail.com>
+ <CAP-5=fVE5eo9TSX3rrGb-=DETeYvXtG0AqhpGwjnP6nr8pKrqg@mail.gmail.com> <YdiHSF6CGBoswQ1G@kernel.org>
+In-Reply-To: <YdiHSF6CGBoswQ1G@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 7 Jan 2022 11:26:50 -0800
+Message-ID: <CAP-5=fX4-kmkm+qn9m22O_4A2_8j=uAm=vcXh9x2RqqDKEdnBg@mail.gmail.com>
+Subject: Re: perf build broken seemingly due to libbpf changes, checking...
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:53:44AM +0300, Dan Carpenter wrote:
-> On Fri, Jan 07, 2022 at 10:33:25AM +1300, Paulo Miguel Almeida wrote:
-> > As a convention for the pi433 driver, all routines that deals with the
-> > rf69 chip are defined in the rf69.c file.
-> 
-> That's some EnterpriseQuality[tm] style guidelines.  It's an over fussy
-> rule that just makes the code harder to read for no reason.
-
-EnterpriseQuality[tm] was witty :)
-
-> >  
-> >  	/* Ping the chip by reading the version register */
-> 
-> This comment doesn't make sense now.
-
-you are right, I will change this.
-
-> > -	retval = spi_w8r8(spi, 0x10);
-> > -	if (retval < 0)
-> > -		return retval;
-> > +	retval = rf69_get_version(spi);
-> 
-> Just say:
-> 
-> 	retval = rf69_read_reg(spi, REG_VERSION);
-
-atm rf69_read_reg is a static function in rf69.c.
-
-I do agree that this is technically possible to write the code
-exactly as you suggested but on the other hand, that would be the only
-exception to the rule when considering all other higher-level functions
-provided in the rf69.c
-
-are you strongly set on the rf69_read_reg approach or would you 
-be open to keep the original approach? (rf69_get_version)
-
-> 	if (retval < 0)
-> 		return retval;
-> 
-> Deleting the error handling was a bad style choice.  Also preserve the
-> error code.
+On Fri, Jan 7, 2022 at 10:32 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
+> Em Thu, Jan 06, 2022 at 07:30:34PM -0800, Ian Rogers escreveu:
+> > On Thu, Jan 6, 2022 at 2:04 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Thu, Jan 6, 2022 at 1:44 PM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > > >
+> > > > On Thu, Jan 6, 2022 at 1:42 PM Ian Rogers <irogers@google.com> wrot=
+e:
+> > > > >
+> > > > > On Thu, Jan 6, 2022 at 11:48 AM Arnaldo Carvalho de Melo
+> > > > > <acme@kernel.org> wrote:
+> > > > > >
+> > > > > > Em Thu, Jan 06, 2022 at 04:44:14PM -0300, Arnaldo Carvalho de M=
+elo escreveu:
+> > > > > > > Em Thu, Jan 06, 2022 at 04:34:46PM -0300, Arnaldo Carvalho de=
+ Melo escreveu:
+> > > > > > > > After merging torvalds/master to perf/urgent I'm getting th=
+is:
+> > > > > > > >
+> > > > > > > > util/bpf-event.c:25:21: error: no previous prototype for =
+=E2=80=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dmissing-prototypes=
+]
+> > > > > > > >    25 | struct btf * __weak btf__load_from_kernel_by_id(__u=
+32 id)
+> > > > > > > >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > > util/bpf-event.c:37:1: error: no previous prototype for =E2=
+=80=98bpf_object__next_program=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > > > > >    37 | bpf_object__next_program(const struct bpf_object *o=
+bj, struct bpf_program *prev)
+> > > > > > > >       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > > util/bpf-event.c:46:1: error: no previous prototype for =E2=
+=80=98bpf_object__next_map=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > > > > >    46 | bpf_object__next_map(const struct bpf_object *obj, =
+const struct bpf_map *prev)
+> > > > > > > >       | ^~~~~~~~~~~~~~~~~~~~
+> > > > > > > > util/bpf-event.c:55:1: error: no previous prototype for =E2=
+=80=98btf__raw_data=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > > > > >    55 | btf__raw_data(const struct btf *btf_ro, __u32 *size=
+)
+> > > > > > > >       | ^~~~~~~~~~~~~
+> > > > > > > > cc1: all warnings being treated as errors
+> > > > > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.=
+build:96: /tmp/build/perf/util/bpf-event.o] Error 1
+> > > > > > > > make[4]: *** Waiting for unfinished jobs....
+> > > > > > > > util/bpf_counter.c: In function =E2=80=98bpf_target_prog_na=
+me=E2=80=99:
+> > > > > > > > util/bpf_counter.c:82:15: error: implicit declaration of fu=
+nction =E2=80=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dimplicit-fu=
+nction-declaration]
+> > > > > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_li=
+near->info.btf_id);
+> > > > > > > >       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > > util/bpf_counter.c:82:13: error: assignment to =E2=80=98str=
+uct btf *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from integer wi=
+thout a cast [-Werror=3Dint-conversion]
+> > > > > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_li=
+near->info.btf_id);
+> > > > > > > >       |             ^
+> > > > > > > > cc1: all warnings being treated as errors
+> > > > > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.=
+build:96: /tmp/build/perf/util/bpf_counter.o] Error 1
+> > > > > > > >
+> > > > > > > > I'm checking now...
+> > > > > > > >
+> > > > > > > > BTW I test perf builds with:
+> > > > > > > >
+> > > > > > > > make -k BUILD_BPF_SKEL=3D1 CORESIGHT=3D1 PYTHON=3Dpython3 O=
+=3D/tmp/build/perf -C tools/perf install-bin && git status && perf test pyt=
+hon
+> > > > > > >
+> > > > > > > Nevermind, this was due to a patch by Ian Rogers I was testin=
+g,
+> > > > > > > bisecting get up to the last patch, since I had merged torval=
+ds/master
+> > > > > > > today it got me to a wrong correlation, sorry for the disturb=
+ance.
+> > > > > > >
+> > > > > > > For reference, this is the patch:
+> > > > > > >
+> > > > > > > http://lore.kernel.org/lkml/20220106072627.476524-1-irogers@g=
+oogle.com
+> > > > > >
+> > > > > > Ian, I have libbpf-devel installed:
+> > > > > >
+> > > > > > =E2=AC=A2[acme@toolbox perf]$ rpm -qa | grep libbpf
+> > > > > > libbpf-0.4.0-1.fc34.x86_64
+> > > > > > libbpf-devel-0.4.0-1.fc34.x86_64
+> > > > > > =E2=AC=A2[acme@toolbox perf]$
+> > > > > >
+> > > > > > But I'm not using LIBBPF_DYNAMIC=3D1, so you can't just give pr=
+ecedence to
+> > > > > > system headers for all of the homies in tools/lib/.
+> > > > > >
+> > > > > > I bet that if I remove the libbpf-devel package it works, yeah,=
+ just
+> > > > > > tested. So we need to make those overrides dependent on using
+> > > > > > LIBBPF_DYNAMIC=3D1, LIBTRACEEVENT_DYNAMIC=3D1, etc and avoid th=
+e big hammer
+> > > > > > that is -Itools/lib/, using a more finegrained approach, right?
+> > > > >
+> > > > > Ugh, this is messy. The -I for tools/lib is overloaded and being =
+used
+> > > > > in tools/perf/util/bpf-event.c so that bpf/bpf.h, bpf/btf.h and
+> > > >
+> > > > can you do `make install` for libbpf instead and have it install
+> > > > headers into a dedicated target directory which can be added into -=
+I
+> > > > search path. Quentin did this for all the other libbpf users in ker=
+nel
+> > > > tree (bpftool, resolve_btfids, etc) and it works great.
+> > >
+> > > This sounds good to me, and being able to borrow code from bpftool
+> > > should make writing it is straightforward. I'll try to find time to d=
+o
+> > > a patch, but I don't mind someone getting there before me :-)
+> >
+> > So tools/lib also provides subcmd, symbol and api. These will need
+> > Makefiles to allow an install and likely the header file structure
+> > altering. This seems like too big a fix for the next 5.16rc, wdyt?
+>
+> Right, I think the best thing is to revert the patch Jiri pointed out,
+> right?
 
-I just want to double-check if this suggestion is taking into
-consideration what was mentioned here:
-https://lore.kernel.org/lkml/20220106210134.GB3416@mail.google.com/
+Your call. There is a latent bug that with LIBTRACEEVENT_DYNAMIC we
+are using tools/lib/traceevent header files. Reverting the change
+means we don't break because of this, but it means that people
+building with LIBTRACEEVENT_DYNAMIC and newer libtraceevent (at least
+my employer :-) ) lose logging. I can carry the change locally, so not
+a big loss :-) There are a few issues stemming from this:
 
-If it is, I'm happy to add it back but I just wanted to confirm it
-first.
+1) we've identified the current build is wrong for xxx_DYNAMIC options
+as tools/lib versions headers always override
+2) to address this we should make the tools/lib things proper
+libraries like libbpf, libtraceevent, etc.
+3) once we have proper libraries, we need to update the perf build to
+build non-dynamic libraries then depend on the built/installed header
+files
 
-thanks,
+I expect at least some of this is going to break when testing on many
+distributions as that just seems to be what always happens, and
+changing the build in this significant way is going to have
+implications. Doing this means that the code base is in better shape
+and logging works. To counter some of the many distribution pain, do
+you have a way to reproduce your testing? My OpenSuSE recipe is:
 
-Paulo A.
+```
+# Get the image
+docker pull opensuse/tumbleweed
+# Start it with an interactive bash shell and mounting the current
+directory as /kernel-src
+sudo docker run --privileged -it --net=3Dhost --env=3D"DISPLAY" --mount
+type=3Dbind,source=3D"$(pwd)",target=3D/kernel-src opensuse/tumbleweed
+/bin/bash
+# Install missing rpms
+zypper install make gcc diffutils flex bison kernel-devel findutils
+libelf-devel python3 kernel-kvmsmall-devel glibc-devel
+# Go to /kernel-src and build into /tmp, etc.
+```
+But finding every distribution, every rpm, etc. is quite laborious.
+
+Thanks,
+Ian
+
+> - Arnaldo

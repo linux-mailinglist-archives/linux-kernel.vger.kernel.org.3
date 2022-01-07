@@ -2,144 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C754C487F7A
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A89487F82
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbiAGXgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 18:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
+        id S231697AbiAGXmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 18:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiAGXgQ (ORCPT
+        with ESMTP id S231605AbiAGXmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 18:36:16 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32266C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 15:36:16 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id o7so9040499ioo.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 15:36:16 -0800 (PST)
+        Fri, 7 Jan 2022 18:42:31 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA39C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 15:42:31 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id n2-20020a255902000000b0060f9d75eafeso14997181ybb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 15:42:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xYu9qteuFVNrHyo1i7aEmcfHOTj3gefz8I1p+xu99cE=;
-        b=KVMWEcwAp4WTr2X5uSFAYSIb1gUJnxmuasFdE3TRGGuc9UPxRC1uEOaA//819Vna+R
-         e9pELwJ72UnnP7NVDJw7XrozwhzL7wNV4H0GV2T4b8gpxk7axMm4pExfS9/MaG3i6JGJ
-         Z8S4aOFzx5B381qYvSPzTu5BJTrmtIv1ta/fUPycwLNiPf1Pym5MuhqHYhl89EwEfffD
-         dxpEejJr/Qlyh1TY1lKhv+BBjEtQhaYJFnqsK8x+2h5JwQlcsGqV/YIBJPMCubPsaWsX
-         q8NP4iA/07CScovcAUk4KMBQ/aNkFtrHYjB2enZvlLociLWQWb9+rmYQARL8qQ7iRn6D
-         eAaA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=f1pXGfsk7avYpPXu3PeJjHEizsy/IQrvYVZ7vLNdmGI=;
+        b=TebD9wiX+C8MwdxWZ0VYyUFIfwlcBrKlegJNUBC42WT2g9QHmRDzcPCWX9qr9UdLCj
+         dpl46yFNSqhInLq2LjVn7oBCVowiLmveaogZog6DEOPO6axxPsWT+LznA+3RzRcjpgBU
+         CEtSW1w9wBgMHnBTSmgoSC/0Ij7cfgu4F5vhYtZwWeQJ6woRnMVVNGc/d9uXl+0eQMSD
+         Saq7LdyXrzHyi0IYEW+BjuRsEV/UjvL1ciRejxGEnxRI68sRe0AVI8fJNUNjKx9ZhVYl
+         t8G1IXGc8bs/ZkgcsoCfcpgu7LSY2dfekL8f2UMBv9bZ0wAVHbbB0Gn8/ArF6l/K4gT6
+         hGsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xYu9qteuFVNrHyo1i7aEmcfHOTj3gefz8I1p+xu99cE=;
-        b=uTiZ0Ds3Shgxn67rUB1CXOXNGrBRqv5saehBQInQG6rsPqWksPAsBiQaTtvTWN2Cgl
-         srOKxuUeKN+53HQ6VRYWWDSyLugMpdM9jJloASyhv4nxNhqhRKIlgngouAGyHCluqMEF
-         fJ6+ED2onGK5IWh0/PkarlKOkwVs1niDqIfUsxdgN05DEG2tRW8jtqtcsxGqYx7Y4k+j
-         8Oympt6JTDAG88v2Hdb1h2BHasnLLCduLr9hzhnGwjRg5XDbLvw+BcZZeE6mPpW1noyN
-         Mv0TuAS9gyz2I4SwxVROB2GOPUnpugUGX0i64NwfAPGLwRtXczz2LZDouqX9zBiDIOap
-         P+Ug==
-X-Gm-Message-State: AOAM533DcQ+JxnzozsOFRNZ49JhKLxVSw+y2TUWLYvf9O04N8hIXgzFU
-        cmalIDsp07JjW0hz2OA3avy0PQ==
-X-Google-Smtp-Source: ABdhPJzDj049VbsKt/EYYdSUgiTzJatv/z9OgEricIXR1zpNkxJjKeELDnzLfrvVCz7m4TJ/mII9Dg==
-X-Received: by 2002:a05:6602:1410:: with SMTP id t16mr32400729iov.160.1641598575473;
-        Fri, 07 Jan 2022 15:36:15 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:8b41:537d:f5d3:269c])
-        by smtp.gmail.com with ESMTPSA id w7sm48105ilu.27.2022.01.07.15.36.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 15:36:15 -0800 (PST)
-Date:   Fri, 7 Jan 2022 16:36:11 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=f1pXGfsk7avYpPXu3PeJjHEizsy/IQrvYVZ7vLNdmGI=;
+        b=sPPSSHTrK1HlTaFNVKczZIymrldTN0VWKk3Biu2lt+W20FrQOHa82sLK6ZbX6BOcZL
+         VuJxbt8c1+icsS6x3fPAIaEZnJiNFzgWSCljUdW1ZGzRpKeZW5+EDOwCrGzK18IGG3mB
+         i9PMt0vfUQlV8yyAfaBVmfZS8zpJGu77v94Q/jz/DK7rzs/M6jUqP0QeD4f2rjg8tIbX
+         Ia9PMCSmb0B4IVIlmSWA5ckyOtIvsRs8j8APHfWq3el6z2lnvpbNBwCuiVNBV4Ag2Sqk
+         eQp/iCZUxzeGsdA0lDtzZlJJIGr+rTzAnk0xRnY03rMu0OFZZeMCB0JGQnoPfEaKHlJ2
+         VOpw==
+X-Gm-Message-State: AOAM533smSvOSBznEXZGiv/NA0ycXUmx19x9abNIMgvlxa3VTRaNqx5Q
+        jclYrygD0kMmTwR92wBEozpz441+0z1w
+X-Google-Smtp-Source: ABdhPJzodwUpF3ogCC2ZzwWTsJpUxVvsQNocM1flz4IkGFnNZVXeIBky/eXhk8rrT15s93xXB+lyJF3o+faZ
+X-Received: from joshdon.svl.corp.google.com ([2620:15c:2cd:202:6b45:ed9d:9cdc:3f67])
+ (user=joshdon job=sendgmr) by 2002:a25:908e:: with SMTP id
+ t14mr4570299ybl.133.1641598950397; Fri, 07 Jan 2022 15:42:30 -0800 (PST)
+Date:   Fri,  7 Jan 2022 15:41:37 -0800
+Message-Id: <20220107234138.1765668-1-joshdon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
+Subject: [PATCH 1/2] cgroup: add cpu.stat_percpu
+From:   Josh Don <joshdon@google.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <YdjOazilBEkdUT7x@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <Ydg8AeE6JIUnC+ps@dhcp22.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydg8AeE6JIUnC+ps@dhcp22.suse.cz>
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Josh Don <joshdon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 02:11:29PM +0100, Michal Hocko wrote:
-> On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> [...]
-> > +static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
-> > +{
-> > +	struct mem_cgroup *memcg;
-> > +	bool success = false;
-> > +	unsigned long min_ttl = READ_ONCE(lru_gen_min_ttl);
-> > +
-> > +	VM_BUG_ON(!current_is_kswapd());
-> > +
-> > +	current->reclaim_state->mm_walk = &pgdat->mm_walk;
-> > +
-> > +	memcg = mem_cgroup_iter(NULL, NULL, NULL);
-> > +	do {
-> > +		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
-> > +
-> > +		if (age_lruvec(lruvec, sc, min_ttl))
-> > +			success = true;
-> > +
-> > +		cond_resched();
-> > +	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)));
-> > +
-> > +	if (!success && mutex_trylock(&oom_lock)) {
-> > +		struct oom_control oc = {
-> > +			.gfp_mask = sc->gfp_mask,
-> > +			.order = sc->order,
-> > +		};
-> > +
-> > +		if (!oom_reaping_in_progress())
-> > +			out_of_memory(&oc);
-> > +
-> > +		mutex_unlock(&oom_lock);
-> > +	}
-> 
-> Why do you need to trigger oom killer from this path? Why cannot you
-> rely on the page allocator to do that like we do now?
+cpu.stat displays global metrics, such as cgroup usage. It would also be
+useful to be able to break these down by cpu; to that end, this patch
+adds a new interface, 'cpu.stat_percpu', to display the percpu values of
+these stats.
 
-This is per desktop users' (repeated) requests. The can't tolerate
-thrashing as servers do because of UI lags; and they usually don't
-have fancy tools like oomd.
+Each line of the output corresponds to a particular metric. The format
+of each line is the name of the metric, followed by space delimited
+percpu values. The reason for this approach (vs having each line
+correspond to a particular cpu) is to make it easier to display extra
+subsystem-specific percpu fields.
 
-Related discussions I saw:
-https://github.com/zen-kernel/zen-kernel/issues/218
-https://lore.kernel.org/lkml/20101028191523.GA14972@google.com/
-https://lore.kernel.org/lkml/20211213051521.21f02dd2@mail.inbox.lv/
-https://lore.kernel.org/lkml/54C2C89C.8080002@gmail.com/
-https://lore.kernel.org/lkml/d9802b6a-949b-b327-c4a6-3dbca485ec20@gmx.com/
+Signed-off-by: Josh Don <joshdon@google.com>
+---
+ include/linux/cgroup-defs.h     |   5 +
+ kernel/cgroup/cgroup-internal.h |   1 +
+ kernel/cgroup/cgroup.c          |  10 ++
+ kernel/cgroup/rstat.c           | 159 ++++++++++++++++++++++++++++----
+ 4 files changed, 155 insertions(+), 20 deletions(-)
 
-From patch 8:
-  Personal computers
-  ------------------
-  :Thrashing prevention: Write ``N`` to
-   ``/sys/kernel/mm/lru_gen/min_ttl_ms`` to prevent the working set of
-   ``N`` milliseconds from getting evicted. The OOM killer is invoked if
-   this working set can't be kept in memory. Based on the average human
-   detectable lag (~100ms), ``N=1000`` usually eliminates intolerable
-   lags due to thrashing. Larger values like ``N=3000`` make lags less
-   noticeable at the cost of more OOM kills.
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index db2e147e069f..7778a011f457 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -461,6 +461,11 @@ struct cgroup {
+ 	struct cgroup_base_stat bstat;
+ 	struct prev_cputime prev_cputime;	/* for printing out cputime */
+ 
++	/* Per-cpu basic resource statistics. These are NULL on root. */
++	struct cgroup_base_stat __percpu *bstat_cpu;
++	struct cgroup_base_stat __percpu *last_bstat_cpu;
++	struct prev_cputime __percpu *prev_cputime_cpu;
++
+ 	/*
+ 	 * list of pidlists, up to two for each namespace (one for procs, one
+ 	 * for tasks); created on demand.
+diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
+index bfbeabc17a9d..07e932c4f875 100644
+--- a/kernel/cgroup/cgroup-internal.h
++++ b/kernel/cgroup/cgroup-internal.h
+@@ -254,6 +254,7 @@ int cgroup_rstat_init(struct cgroup *cgrp);
+ void cgroup_rstat_exit(struct cgroup *cgrp);
+ void cgroup_rstat_boot(void);
+ void cgroup_base_stat_cputime_show(struct seq_file *seq);
++void cgroup_base_stat_percpu_cputime_show(struct seq_file *seq);
+ 
+ /*
+  * namespace.c
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 919194de39c8..4f5ddce529eb 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3604,6 +3604,12 @@ static int cpu_stat_show(struct seq_file *seq, void *v)
+ 	return ret;
+ }
+ 
++static int cpu_stat_percpu_show(struct seq_file *seq, void *v)
++{
++	cgroup_base_stat_percpu_cputime_show(seq);
++	return 0;
++}
++
+ #ifdef CONFIG_PSI
+ static int cgroup_io_pressure_show(struct seq_file *seq, void *v)
+ {
+@@ -5014,6 +5020,10 @@ static struct cftype cgroup_base_files[] = {
+ 		.name = "cpu.stat",
+ 		.seq_show = cpu_stat_show,
+ 	},
++	{
++		.name = "cpu.stat_percpu",
++		.seq_show = cpu_stat_percpu_show,
++	},
+ #ifdef CONFIG_PSI
+ 	{
+ 		.name = "io.pressure",
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 1486768f2318..1af37333e5bf 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -253,7 +253,19 @@ int cgroup_rstat_init(struct cgroup *cgrp)
+ 	if (!cgrp->rstat_cpu) {
+ 		cgrp->rstat_cpu = alloc_percpu(struct cgroup_rstat_cpu);
+ 		if (!cgrp->rstat_cpu)
+-			return -ENOMEM;
++			goto error_nomem;
++
++		cgrp->last_bstat_cpu = alloc_percpu(struct cgroup_base_stat);
++		if (!cgrp->last_bstat_cpu)
++			goto error_nomem;
++
++		cgrp->bstat_cpu = alloc_percpu(struct cgroup_base_stat);
++		if (!cgrp->bstat_cpu)
++			goto error_nomem;
++
++		cgrp->prev_cputime_cpu = alloc_percpu(struct prev_cputime);
++		if (!cgrp->prev_cputime_cpu)
++			goto error_nomem;
+ 	}
+ 
+ 	/* ->updated_children list is self terminated */
+@@ -265,6 +277,21 @@ int cgroup_rstat_init(struct cgroup *cgrp)
+ 	}
+ 
+ 	return 0;
++
++error_nomem:
++	free_percpu(cgrp->rstat_cpu);
++	cgrp->rstat_cpu = NULL;
++
++	free_percpu(cgrp->last_bstat_cpu);
++	cgrp->last_bstat_cpu = NULL;
++
++	free_percpu(cgrp->bstat_cpu);
++	cgrp->bstat_cpu = NULL;
++
++	free_percpu(cgrp->prev_cputime_cpu);
++	cgrp->prev_cputime_cpu = NULL;
++
++	return -ENOMEM;
+ }
+ 
+ void cgroup_rstat_exit(struct cgroup *cgrp)
+@@ -284,6 +311,12 @@ void cgroup_rstat_exit(struct cgroup *cgrp)
+ 
+ 	free_percpu(cgrp->rstat_cpu);
+ 	cgrp->rstat_cpu = NULL;
++	free_percpu(cgrp->last_bstat_cpu);
++	cgrp->last_bstat_cpu = NULL;
++	free_percpu(cgrp->bstat_cpu);
++	cgrp->bstat_cpu = NULL;
++	free_percpu(cgrp->prev_cputime_cpu);
++	cgrp->prev_cputime_cpu = NULL;
+ }
+ 
+ void __init cgroup_rstat_boot(void)
+@@ -319,22 +352,29 @@ static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
+ 	struct cgroup_rstat_cpu *rstatc = cgroup_rstat_cpu(cgrp, cpu);
+ 	struct cgroup *parent = cgroup_parent(cgrp);
+ 	struct cgroup_base_stat cur, delta;
++	struct cgroup_base_stat *bstat_cpu, *last_bstat_cpu;
+ 	unsigned seq;
+ 
+ 	/* Root-level stats are sourced from system-wide CPU stats */
+ 	if (!parent)
+ 		return;
+ 
++	/* these are not present on root */
++	bstat_cpu = per_cpu_ptr(cgrp->bstat_cpu, cpu);
++	last_bstat_cpu = per_cpu_ptr(cgrp->last_bstat_cpu, cpu);
++
+ 	/* fetch the current per-cpu values */
+ 	do {
+ 		seq = __u64_stats_fetch_begin(&rstatc->bsync);
+ 		cur.cputime = rstatc->bstat.cputime;
+ 	} while (__u64_stats_fetch_retry(&rstatc->bsync, seq));
+ 
++
+ 	/* propagate percpu delta to global */
+ 	delta = cur;
+ 	cgroup_base_stat_sub(&delta, &rstatc->last_bstat);
+ 	cgroup_base_stat_add(&cgrp->bstat, &delta);
++	cgroup_base_stat_add(bstat_cpu, &delta);
+ 	cgroup_base_stat_add(&rstatc->last_bstat, &delta);
+ 
+ 	/* propagate global delta to parent (unless that's root) */
+@@ -343,6 +383,11 @@ static void cgroup_base_stat_flush(struct cgroup *cgrp, int cpu)
+ 		cgroup_base_stat_sub(&delta, &cgrp->last_bstat);
+ 		cgroup_base_stat_add(&parent->bstat, &delta);
+ 		cgroup_base_stat_add(&cgrp->last_bstat, &delta);
++
++		delta = *bstat_cpu;
++		cgroup_base_stat_sub(&delta, last_bstat_cpu);
++		cgroup_base_stat_add(per_cpu_ptr(parent->bstat_cpu, cpu), &delta);
++		cgroup_base_stat_add(last_bstat_cpu, &delta);
+ 	}
+ }
+ 
+@@ -400,6 +445,30 @@ void __cgroup_account_cputime_field(struct cgroup *cgrp,
+ 	cgroup_base_stat_cputime_account_end(cgrp, rstatc, flags);
+ }
+ 
++/* See root_cgroup_cputime. Note that this does not first reset cputime. */
++static void root_cgroup_add_cputime_cpu(struct task_cputime *cputime, int cpu)
++{
++	struct kernel_cpustat kcpustat;
++	u64 *cpustat = kcpustat.cpustat;
++	u64 user = 0;
++	u64 sys = 0;
++
++	kcpustat_cpu_fetch(&kcpustat, cpu);
++
++	user += cpustat[CPUTIME_USER];
++	user += cpustat[CPUTIME_NICE];
++	cputime->utime += user;
++
++	sys += cpustat[CPUTIME_SYSTEM];
++	sys += cpustat[CPUTIME_IRQ];
++	sys += cpustat[CPUTIME_SOFTIRQ];
++	cputime->stime += sys;
++
++	cputime->sum_exec_runtime += user;
++	cputime->sum_exec_runtime += sys;
++	cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
++}
++
+ /*
+  * compute the cputime for the root cgroup by getting the per cpu data
+  * at a global level, then categorizing the fields in a manner consistent
+@@ -414,25 +483,7 @@ static void root_cgroup_cputime(struct task_cputime *cputime)
+ 	cputime->utime = 0;
+ 	cputime->sum_exec_runtime = 0;
+ 	for_each_possible_cpu(i) {
+-		struct kernel_cpustat kcpustat;
+-		u64 *cpustat = kcpustat.cpustat;
+-		u64 user = 0;
+-		u64 sys = 0;
+-
+-		kcpustat_cpu_fetch(&kcpustat, i);
+-
+-		user += cpustat[CPUTIME_USER];
+-		user += cpustat[CPUTIME_NICE];
+-		cputime->utime += user;
+-
+-		sys += cpustat[CPUTIME_SYSTEM];
+-		sys += cpustat[CPUTIME_IRQ];
+-		sys += cpustat[CPUTIME_SOFTIRQ];
+-		cputime->stime += sys;
+-
+-		cputime->sum_exec_runtime += user;
+-		cputime->sum_exec_runtime += sys;
+-		cputime->sum_exec_runtime += cpustat[CPUTIME_STEAL];
++		root_cgroup_add_cputime_cpu(cputime, i);
+ 	}
+ }
+ 
+@@ -464,3 +515,71 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
+ 		   "system_usec %llu\n",
+ 		   usage, utime, stime);
+ }
++
++void cgroup_base_stat_percpu_cputime_show(struct seq_file *seq)
++{
++	static DEFINE_MUTEX(mutex);
++	static DEFINE_PER_CPU(struct cgroup_base_stat, cached_percpu_stats);
++	struct cgroup_base_stat *cached_bstat;
++	struct cgroup *cgrp = seq_css(seq)->cgroup;
++	u64 val;
++	int cpu;
++
++	/* protects cached_percpu_stats */
++	mutex_lock(&mutex);
++
++	if (cgroup_parent(cgrp)) {
++		struct cgroup_base_stat *bstat_cpu;
++
++		cgroup_rstat_flush_hold(cgrp);
++
++		for_each_possible_cpu(cpu) {
++			bstat_cpu = per_cpu_ptr(cgrp->bstat_cpu, cpu);
++			cached_bstat = per_cpu_ptr(&cached_percpu_stats, cpu);
++
++			cached_bstat->cputime.sum_exec_runtime =
++				bstat_cpu->cputime.sum_exec_runtime;
++			cputime_adjust(&bstat_cpu->cputime,
++				       per_cpu_ptr(cgrp->prev_cputime_cpu, cpu),
++				       &cached_bstat->cputime.utime,
++				       &cached_bstat->cputime.stime);
++		}
++
++		cgroup_rstat_flush_release();
++	} else {
++		for_each_possible_cpu(cpu) {
++			cached_bstat = per_cpu_ptr(&cached_percpu_stats, cpu);
++			memset(cached_bstat, 0, sizeof(*cached_bstat));
++			root_cgroup_add_cputime_cpu(&cached_bstat->cputime, cpu);
++		}
++	}
++
++	seq_puts(seq, "usage_usec");
++	for_each_possible_cpu(cpu) {
++		cached_bstat = per_cpu_ptr(&cached_percpu_stats, cpu);
++		val = cached_bstat->cputime.sum_exec_runtime;
++		do_div(val, NSEC_PER_USEC);
++		seq_printf(seq, " %llu", val);
++	}
++	seq_puts(seq, "\n");
++
++	seq_puts(seq, "user_usec");
++	for_each_possible_cpu(cpu) {
++		cached_bstat = per_cpu_ptr(&cached_percpu_stats, cpu);
++		val = cached_bstat->cputime.utime;
++		do_div(val, NSEC_PER_USEC);
++		seq_printf(seq, " %llu", val);
++	}
++	seq_puts(seq, "\n");
++
++	seq_puts(seq, "system_usec");
++	for_each_possible_cpu(cpu) {
++		cached_bstat = per_cpu_ptr(&cached_percpu_stats, cpu);
++		val = cached_bstat->cputime.stime;
++		do_div(val, NSEC_PER_USEC);
++		seq_printf(seq, " %llu", val);
++	}
++	seq_puts(seq, "\n");
++
++	mutex_unlock(&mutex);
++}
+-- 
+2.34.1.575.g55b058a8bb-goog
+

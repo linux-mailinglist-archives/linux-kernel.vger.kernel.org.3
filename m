@@ -2,148 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D036487C1F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56EB487C21
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240876AbiAGSY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240357AbiAGSY4 (ORCPT
+        id S240910AbiAGSZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:25:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38916 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240901AbiAGSZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:24:56 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF63C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 10:24:56 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id e9so11144615wra.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 10:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aMZSPHzmKlp4nB0z4xKj0z3g/eSIybOBv9g3NZ7AxBc=;
-        b=quivSkBIqvYx7HHIhNcVzJMk1g2PqMCIZD1U/C28SoY52KIZVa5erqh7Ecy9Tc/uZY
-         xy4im3rnanh7XX52x+uEDm25eQrSTTTTbNHMWzskQJXewA8l7Hv96MPweGA/piN6vemc
-         QVv2Q40zjmLPAkJb+NzuKcX+moy8OXQKB+eokdpiJE08XFhpn0xuE9Y0PsEAAJd29Wem
-         7htfnQKkQ5q7zRBKjmd3VSX0H9hNVHQib++OsGrYO+xrumfrsa18w+sFaev6RmewTxf6
-         A22wpqc3XnTwBa1i+0U1Vw9ykX9ZeZVRW1vvsZybcWbe5bdOjkgO1PPHNCfPXIwgn5t/
-         H8SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aMZSPHzmKlp4nB0z4xKj0z3g/eSIybOBv9g3NZ7AxBc=;
-        b=X6oJj8svwLcnoeyOaAqf23cSHvFLllJh3MQ1wCCRVb7v6Z5p/6aNIUNuFTRMK9VL9v
-         ov7RJY/QDBDy7Jviyau60e5cg8d3tlQEeKyH06a7xlCvoI30DmNa3v7FKLxsMZv2rRI1
-         Iz3S8vWU30kjMjwspvqYZWfDtkWIVq6yotE4nJVFX8YtAjHJofPb8sBEHJ334BitxqUU
-         zKrcrEJEDMqmEjUU1salEcnaSf+uWbYjlchfg2C67i2vW0VAAKIl1GGmSu3uOeiP96h4
-         tiqC0QAmRaOzosN2MrVd0Fh4OIKVOPcE56776cSnjzP0A0v7xjJ8IZ86AUqR3NUmLUHP
-         SFsg==
-X-Gm-Message-State: AOAM532sfA2fx+mbNVsa3FOSmHF+6gia4gZ/0N9ZRIgCnH1EtuZ9WzZE
-        Dp1Cn2OIJRw4VwyGdb6zzwA=
-X-Google-Smtp-Source: ABdhPJxIMdZG2/mErKh1SRRIvGw8qzcobjoNHtD+/pns9H9ulLIrwuZ3L3ZaYlzt5h+xMKGoMXaS6g==
-X-Received: by 2002:a05:6000:2a9:: with SMTP id l9mr55607369wry.71.1641579894699;
-        Fri, 07 Jan 2022 10:24:54 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id g18sm5305938wrv.42.2022.01.07.10.24.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 10:24:54 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, ikjn@chromium.org,
-        chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Subject: [PATCH RESEND v2] clk: mediatek: Fix memory leaks on probe
-Date:   Fri,  7 Jan 2022 19:24:51 +0100
-Message-Id: <20220107182451.139456-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 7 Jan 2022 13:25:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1794461FC5
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 18:25:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0397C36AE0;
+        Fri,  7 Jan 2022 18:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641579914;
+        bh=boy129E9PdA7n6s3xoz7akFRvP4uixNAw6b4IO95Srg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=muTAdRWu/3QtlS0GIUJl5RULWo4aakF7LypM2Rtmc5Zr3Lv250zv0IPwOiQGcc/j7
+         e3wCoIDox/kEpu2CKB04XSQh6VHi6yO3Y7DmT5n4Q8HBfAp3TQvk8CAeGol44oosVZ
+         mkIFAISH9eBe+Zh0Q767Ooc3YcWTzH0IZsk7G8uOszCOpLykAzAltWH9DbsMFFP/Dh
+         +kXZ812SOOlNqgv68z6kCpulp9Wr9pDP/KbwQi5Lbs0AJgv9q0uP30ZnQrmP8fRxcD
+         7YFCQ0wwc+e6q6fV+bKZx1XtvubjQHVTPQzvWZav3xoYYTyzOW73BAi1MGBkNPM2rd
+         1+EXQe4/06J1Q==
+From:   Mark Brown <broonie@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, matthias.schiffer@ew.tq-group.com,
+        Fabio Estevam <festevam@denx.de>
+In-Reply-To: <20220107163307.335404-1-festevam@gmail.com>
+References: <20220107163307.335404-1-festevam@gmail.com>
+Subject: Re: [PATCH v3] regmap: Call regmap_debugfs_exit() prior to _init()
+Message-Id: <164157991337.718321.10584300077901907830.b4-ty@kernel.org>
+Date:   Fri, 07 Jan 2022 18:25:13 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handle the error branches to free memory where required.
+On Fri, 7 Jan 2022 13:33:07 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@denx.de>
+> 
+> Since commit cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when
+> calling regmap_attach_dev"), the following debugfs error is seen
+> on i.MX boards:
+> 
+> debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap' already present!
+> 
+> [...]
 
-Addresses-Coverity-ID: 1491825 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Applied to
 
----
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-v2: Add Reviewed-by tag
----
- drivers/clk/mediatek/clk-mt8192.c | 36 +++++++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 6 deletions(-)
+Thanks!
 
-diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
-index cbc7c6dbe0f4..79ddb3cc0b98 100644
---- a/drivers/clk/mediatek/clk-mt8192.c
-+++ b/drivers/clk/mediatek/clk-mt8192.c
-@@ -1236,9 +1236,17 @@ static int clk_mt8192_infra_probe(struct platform_device *pdev)
- 
- 	r = mtk_clk_register_gates(node, infra_clks, ARRAY_SIZE(infra_clks), clk_data);
- 	if (r)
--		return r;
-+		goto free_clk_data;
-+
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		goto free_clk_data;
-+
-+	return r;
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
- }
- 
- static int clk_mt8192_peri_probe(struct platform_device *pdev)
-@@ -1253,9 +1261,17 @@ static int clk_mt8192_peri_probe(struct platform_device *pdev)
- 
- 	r = mtk_clk_register_gates(node, peri_clks, ARRAY_SIZE(peri_clks), clk_data);
- 	if (r)
--		return r;
-+		goto free_clk_data;
-+
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		goto free_clk_data;
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	return r;
-+
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
- }
- 
- static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
-@@ -1271,9 +1287,17 @@ static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
- 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
- 	r = mtk_clk_register_gates(node, apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
- 	if (r)
--		return r;
-+		goto free_clk_data;
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		goto free_clk_data;
-+
-+	return r;
-+
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
- }
- 
- static const struct of_device_id of_match_clk_mt8192[] = {
--- 
-2.25.1
+[1/1] regmap: Call regmap_debugfs_exit() prior to _init()
+      commit: 530792efa6cb86f5612ff093333fec735793b582
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,124 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4880148765C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEDE48766A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347057AbiAGLUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S1347074AbiAGLYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbiAGLUL (ORCPT
+        with ESMTP id S234491AbiAGLYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:20:11 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ADFC061245;
-        Fri,  7 Jan 2022 03:20:11 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id t32so5201871pgm.7;
-        Fri, 07 Jan 2022 03:20:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5V2o61eWDAqOXcsRe6/XgMQ5T1T2V+4fY1qcRTcYrWA=;
-        b=dmel9QbML+hRkxqAxsjXKi/G1CKnpFHxOh41J9gB+etNt4UfC2Q7EqVpHguXdfIYea
-         jo0e05LRR6HnCnMgFoTI6yTSCLKbAKEEWhXAcEcSZMI9MBtUK18W0D2udvo19LmNLBux
-         3ADjKMUAAhEPEc+qd2QfFCdElPzR4L2s/My9txaygB+BgAJLltTa6EKcmljGN2qnYy2c
-         8ziwEQPgbhwrCOoHQvOjPtWKhqsh2/jpq3iSMXAhYQTCWf3uDUGg9vflKV6V9Z+69ZqW
-         4YYRr/2oSZXPE3O5c9P0XSgZjGkMUeLzOScd7uHlGRhpWDPahaYkZTTUoOSobycgwprh
-         z9XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5V2o61eWDAqOXcsRe6/XgMQ5T1T2V+4fY1qcRTcYrWA=;
-        b=2J/V9hdW4Xj16DD13dXw+H6/hJVxORTjbA9pwTKa7SPYn2XjI9+SHgIFKm/+9SHNC8
-         b3ki0rwfrr0/s5l8fdWPL9DrvT2XIiVfWpF2lxb1AUlHEHNe5vmIlwU0DREud1YVZ8Aj
-         G9hTmpsdn2Yo7L4H/zLup3WjHA+ua9DZ33CLdy+YjarokvwmaJ+SACbZyZyPP7KfTH3d
-         n7zO5uy1FnTSCULizZ2EhHsh+JDm4QNPIvleOu6IN+K/BfnbTgQM0G4Q52q6SEl7pQzl
-         iO4JC4XV5y6a/Tv9WBywqgWLBR5lwsAbjZ2jbwmoEqtlCKpQH+XnQeAJ1yL/tFgdl1aL
-         10AA==
-X-Gm-Message-State: AOAM530UdvwPe/rGNkDSsLvtfgEy+kkFUzRlaA63Dl21rgHkWrsfXAUw
-        2vMNfAY1nMbrP5s+45wVXC0=
-X-Google-Smtp-Source: ABdhPJwS8i6iyuX0/y+5MDM+0BNxr5UYrpsDhUf3e+diuS5EI3aS4hNwaNwH24cHMs9oCTeskUODRA==
-X-Received: by 2002:a62:7a42:0:b0:4ba:5289:1f18 with SMTP id v63-20020a627a42000000b004ba52891f18mr63745171pfc.54.1641554410613;
-        Fri, 07 Jan 2022 03:20:10 -0800 (PST)
-Received: from gmail.com (113x33x71x97.ap113.ftth.ucom.ne.jp. [113.33.71.97])
-        by smtp.gmail.com with ESMTPSA id m14sm5312821pff.151.2022.01.07.03.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 03:20:10 -0800 (PST)
-Date:   Fri, 7 Jan 2022 20:20:05 +0900
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 RESEND 0/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF
- files
-Message-ID: <20220107112005.gdvtvjvgqfs6umha@gmail.com>
-References: <20220106232513.143014-1-akirakawata1@gmail.com>
- <CAKXUXMwzULZHmfx5T74cjG++gd8mFKVOR7Z4aS8RabKnXWGOdQ@mail.gmail.com>
+        Fri, 7 Jan 2022 06:24:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B67C061245;
+        Fri,  7 Jan 2022 03:24:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 518A161215;
+        Fri,  7 Jan 2022 11:24:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1E9C36AE0;
+        Fri,  7 Jan 2022 11:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641554649;
+        bh=lS3K+/8eH/hW2rM5DBnjQgNBWnfsEKjwtRKohwXDT/I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xTSf+xG1jRpuWw9UMZ6P6VfSj13FImWS4aDczypiLoS2WS20KVO+kqsL92aWOXWT8
+         576NdvXxwy+wrd9Z49kUtCTP5ykfZL/UlEQDjpT1pXcyhtBkxlHwnaGyXtTOrsf3oj
+         SxrLTlwmbKvYgQ2EJhZ5stdBu+M+GEHy4yoG7x6E=
+Date:   Fri, 7 Jan 2022 12:24:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aayush Agarwal <aayush.a.agarwal@oracle.com>
+Cc:     stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4.14] phonet: refcount leak in pep_sock_accep
+Message-ID: <Ydgi0qF/7GwoCh96@kroah.com>
+References: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKXUXMwzULZHmfx5T74cjG++gd8mFKVOR7Z4aS8RabKnXWGOdQ@mail.gmail.com>
+In-Reply-To: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 07:40:50AM +0100, Lukas Bulwahn wrote:
-> On Fri, Jan 7, 2022 at 12:25 AM Akira Kawata <akirakawata1@gmail.com> wrote:
-> >
-> >  These patches fix a bug in AT_PHDR calculation.
-> >
-> >  We cannot calculate AT_PHDR as the sum of load_addr and exec->e_phoff.
-> >  This is because exec->e_phoff is the offset of PHDRs in the file and the
-> >  address of PHDRs in the memory may differ from it. These patches fix the
-> >  bug by calculating the address of program headers from PT_LOADs
-> >  directly.
-> >
-> >  Sorry for my latency.
-> >
-> >  Changes in v4
-> >  - Reflecting comments from Lukas, add a refactoring commit.
-> >
+On Fri, Jan 07, 2022 at 02:53:32AM -0800, Aayush Agarwal wrote:
+> From: Hangyu Hua <hbh25y@gmail.com>
 > 
-> Thanks for removing the dead store with your refactoring as a small
-> stylistic change, but I really think that Kees Cook's comment that you
-> simply removed an important feature is much more important to address.
-> There was no reply to that and it seems that Kees hypothesis that the
-> feature has been removed, was not questioned by anyone.
+> commit bcd0f9335332 ("phonet: refcount leak in pep_sock_accep")
+> upstream.
 > 
-> Lukas
+> sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
+> invoked in subsequent failure branches(pep_accept_conn() != 0).
 > 
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> Link: https://lore.kernel.org/r/20211209082839.33985-1-hbh25y@gmail.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Aayush Agarwal <aayush.a.agarwal@oracle.com>
+> ---
+>  net/phonet/pep.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Thank you for your comments.
+What about releases 5.15.y, 5.10.y, 5.4.y, and 4.19.y?  Is this also
+relevant for those trees?
 
-I will try to understand Kees Cook's comment again although I couldn't
-it the last year.
+thanks,
 
-Akira
-
-> >  Changes in v3:
-> >  - Fix a reported bug from kernel test robot.
-> >
-> >  Changes in v2:
-> >  - Remove unused load_addr from create_elf_tables.
-> >  - Improve the commit message. *** SUBJECT HERE ***
-> >
-> > Akira Kawata (2):
-> >   fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-> >   fs/binfmt_elf: Refactor load_elf_binary function
-> >
-> >  fs/binfmt_elf.c | 36 +++++++++++++++++++++---------------
-> >  1 file changed, 21 insertions(+), 15 deletions(-)
-> >
-> >
-> > base-commit: 4eee8d0b64ecc3231040fa68ba750317ffca5c52
-> > --
-> > 2.25.1
-> >
+greg k-h

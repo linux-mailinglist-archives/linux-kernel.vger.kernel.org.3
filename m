@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137A1487BC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD61487BC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348772AbiAGSEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:04:40 -0500
-Received: from mout.perfora.net ([74.208.4.197]:42061 "EHLO mout.perfora.net"
+        id S1348752AbiAGSEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:04:49 -0500
+Received: from mout.perfora.net ([74.208.4.197]:38061 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348725AbiAGSEb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:04:31 -0500
+        id S1348722AbiAGSEd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 13:04:33 -0500
 Received: from localhost.localdomain ([194.191.235.54]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1Mlvix-1mgDpQ3fbX-00izFg;
- Fri, 07 Jan 2022 19:04:12 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1N0WTY-1mBkfS2l8u-00wY9n;
+ Fri, 07 Jan 2022 19:04:15 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
@@ -29,37 +29,38 @@ Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 09/14] arm64: defconfig: build mcp251xfd can as a module
-Date:   Fri,  7 Jan 2022 19:03:09 +0100
-Message-Id: <20220107180314.1816515-10-marcel@ziswiler.com>
+Subject: [PATCH v1 10/14] arm64: defconfig: build sdio mwifiex as a module
+Date:   Fri,  7 Jan 2022 19:03:10 +0100
+Message-Id: <20220107180314.1816515-11-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220107180314.1816515-1-marcel@ziswiler.com>
 References: <20220107180314.1816515-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:52SPNROfhDFzUawLl4TeZvubizEsY2HMPxY8e60xm5LW++X+0qa
- WPG8JBCDLULLIp/7DvQd96eEcoq60z4uWpfTmtVIzYKE1f3/ktuOgNrRRjRGa03HOD9VqoS
- gS3zP6QcMNqUGp/UuNW8d/4ffA0DH96ZM1EVDaiFeUl3266IWrZ4rumHHjguPl8XAJdcPfW
- jdzMl7ra7UcE7gOQMNzyA==
+X-Provags-ID: V03:K1:dIh7h5rlN33PwA3ovKLqpk5xtrn+ocqE3Q+4F0qvAetRS7aV3gh
+ T9OCbdFqFB/olMszrN5q3SIOSDLdff/h6EmZGkV1Ux0IRTBISF5CzNa3t0GTCg5ELjqQU7y
+ xwYU247UtwMK047lWSmYE2hnO9BPJBnND8DznTzGLZ0mNXMZh16rwtJUbyGpSEntjJMEzjw
+ n98hlRJRMht2h5h0Z5IOQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tc0ZAqRSmOM=:K/8/ndrZgW6SKtv7Otd/M1
- yH8mbbaEXqIXAHTXOlOv/A4TwqL9XBVwXS0ZWwVBeytEwffaMM9wDawySZ20POqmeUOwXfH7C
- LuU2DpdOH0lJT7sOtkwaRFi5ryADfxWxSsbn7UALjDN0RD2IiQcDRG/f4Q0N2jfNmPkEl3O5E
- wucTmKoT2gJ8Z+IdLe12soYPGcRgQ1tyGeaXhj6loxlxAsdYAXJ/g4diK5eOBMtqUsXhACXCI
- 3Jk1/8VrcqVlxVRqIOq0wIKIMtU6jhhnddX7wvj8ngeqUvNEBQDnD2gCZ17QHjnUizohswfrU
- htA+0W+koevXxtNpq2gx4NKYrpq6nTfQXqexdxbLeRkO9dEmHMy07tH+SMwB28ZwnQFRleokc
- 9bpifvzZnmspxzY+xV2FqTeRO0Y9Qop5Fq5hRJ8ViBSztqBuxh4XJhi1G9g0q6uczfzIfJBq2
- 7ORmG389laU04xKdPDxOoBGOzUVuM92WyA2bJ1jFVYO8pOdWrEkxQeCna0Of/HyzE2HdG8B41
- JCerK9Z2XdX/3mcO/M3LgXIEjf76euz+G6TIxYiw1pq19Q/lo5HyGqhi/yZImXiYovjToT/x3
- zmYxGrPeRIfVN+qT5tYsEOouoq2T8rjmI0wdebYYkGyoblZV97OqTDxJVU1JWp4203YyahLII
- azuQ0iD8SymbUJ7Zy1JQ5a+4vV00OAkdgAsCjZkYK0Ipm1hqT2MfFkSWXbUpK8IcfeEs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hf4QyUbkLcI=:bnqA3jGG/t5smlC3SPKvSL
+ MplKTCAxNX2JlnaF22ZlcYmE5WHo5Z7r0w/KWnvJOCwph9sSHlqBmBkVPKK3441IA0M72tWYB
+ bKS1jh1FLkwvxFiA3f3v0fz7PW0EMlS799h8bmAjDy5RxXLD1+OG1hoH8EEfSlCo8CyHp6lm2
+ mack66J/VAwRThizsv05ZlSq1F6Lv+rGNcUt8LNbRGl7uLsSbT4g3Ag9sz6EaN3HyMtPkXglC
+ xrQ5Tn8XTaGMXpu6uMW7ct2OifzvIoBhwyE6u/kpYBltfrdPQ3VwRo4K7EnPMM4eip2/R+UZz
+ Ravia2yyJYEJtrK6/NOh+4igAiqYeO0rJsL+FrH3c1KB7yJGhHsHwbclrAc+bFm80rh5yL6Bf
+ xQhKa8P/BRebo2jsx7vO0JO1ioFKEFhtdyclMl3BG57viYWXJCr57J2dgFIbbr/bguyH/MR/z
+ rp9jsiw95CRCbjVlAP5405thbu9/41MkPpsV5IiWrpCixu7BJ44MOnpj0EjZWoEw4ZSvIPB9n
+ onOxhlRZi4+UjkAu1ViFtNRTM/LKbPKOy620EklAfjIm7NFb4uwN6NU3SDnife2KoXa0kD0kj
+ i0U3VhMGCAdsbxHsAs4sP43huyLFRdqMl8kTK2nI6fzM/HnC6VWCTECu8p02cFZfV9lAOiMUi
+ hrQ1uw1kncClZd0H0T8bspqxJ/Y6vcAGhpVj5R5TURCqdqXW8a8ZcJI7IKxzsgSIIkWA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Build Microchip MCP251XFD CAN (CONFIG_CAN_MCP251XFD) as a module.
+Build NXP (formerly Marvell) SDIO MWIFIEX (CONFIG_MWIFIEX_SDIO) as a
+module.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
@@ -68,17 +69,17 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index b4fd61fda35d..870404a1957d 100644
+index 870404a1957d..cb99bd97e736 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -173,6 +173,7 @@ CONFIG_CAN=m
- CONFIG_CAN_FLEXCAN=m
- CONFIG_CAN_RCAR=m
- CONFIG_CAN_RCAR_CANFD=m
-+CONFIG_CAN_MCP251XFD=m
- CONFIG_BT=m
- CONFIG_BT_HIDP=m
- # CONFIG_BT_LE is not set
+@@ -380,6 +380,7 @@ CONFIG_ATH10K_SNOC=m
+ CONFIG_WCN36XX=m
+ CONFIG_BRCMFMAC=m
+ CONFIG_MWIFIEX=m
++CONFIG_MWIFIEX_SDIO=m
+ CONFIG_MWIFIEX_PCIE=m
+ CONFIG_WL18XX=m
+ CONFIG_WLCORE_SDIO=m
 -- 
 2.33.1
 

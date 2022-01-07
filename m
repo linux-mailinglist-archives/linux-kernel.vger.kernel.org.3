@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DFE48783B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F98948783D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347574AbiAGNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:30:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47792 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238674AbiAGNa5 (ORCPT
+        id S1347583AbiAGNcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:32:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33603 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347576AbiAGNcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:30:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C857B8251D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:30:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8EFC36AE5;
-        Fri,  7 Jan 2022 13:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641562255;
-        bh=mf3LP3lUm5J9wVLHu2wTxEJXjlpxLj5eih4vBNaXJJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0j3ONlkZm/ucgIxz30hZxKh6QczJ3ieDcxQIh9a3VXqLR10YTOciduYlsubORnktP
-         lmqzSWJvxfIlGM5H/+IJiT9S8owL8aqxlUGAXAZZBwNr1F45LbMRjLA5zIg5yoqlw2
-         7NHI99n+HuoVb3bQ21o9sTvsM7RjqFthuJ0VoKC8=
-Date:   Fri, 7 Jan 2022 14:30:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     Tejun Heo <tj@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/2] kernfs: use kernfs_node specific mutex and
- spinlock.
-Message-ID: <YdhAjOkU4TkbFvVJ@kroah.com>
-References: <20220103084544.1109829-1-imran.f.khan@oracle.com>
- <20220103084544.1109829-2-imran.f.khan@oracle.com>
- <YdLH6qQNxa11YmRO@kroah.com>
- <719eb5d2-680c-e596-1446-3ca8f47c3aea@oracle.com>
- <YdP57ij4JxahpdnC@kroah.com>
- <YddRVH4r6uNHt3xa@slm.duckdns.org>
- <03cb9939-efbb-1ce8-42f5-c167ac5246da@oracle.com>
+        Fri, 7 Jan 2022 08:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641562335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cFxA12PHF5x2snjaqknP/Xo7sJEChO7mQ3FWdzGbJfc=;
+        b=W064crogQUwrQ5+zNHrqsmR4SO/aMxUP3Oba8eEgYEjdrRXJ1gv46b2RJw55Q4VW8b1qWd
+        dMz8DNJkhtnz6icLU+WoTOxf405cuCEzqwZ+P1B8tb/iu3etqQjDd766MygECf4yR1iomD
+        CZORRgOKzwdzTd1BX53QitzML5UzHqc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-28x2H94iNE-N2Snd8rPgXQ-1; Fri, 07 Jan 2022 08:32:13 -0500
+X-MC-Unique: 28x2H94iNE-N2Snd8rPgXQ-1
+Received: by mail-wm1-f71.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso512829wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:32:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=cFxA12PHF5x2snjaqknP/Xo7sJEChO7mQ3FWdzGbJfc=;
+        b=RZiG1hVzuFtcpsT+7n291Yij2OmtzW90SBCZeZR5SxB4IEh41gNdqv5IoGzskoE1QW
+         gLciWsb3OXPw5et4qOLeIftnYehCKUN3gGRFuawla4ASRK16hqBeEZSQL3Jw399qqKmE
+         YHOLOFRLazgDTIKNIq+vMGCLyGR8KBAoI62b3zuQ/IyPkXTsoB4nQtO9YKeLcTdvxYty
+         6cQLRhMrgBhRiIl7kMlvLH7zCbpXC3b+3DKr4sAipd/pFgEWEnfc+WMIljwgy7fR6CbC
+         Oh+x6XgQbnYH3zFb2l6+W2ECUBEqFgQx1bYuaL8hOlqSJyxd+3Tmf+EBU4DKT29Myvkb
+         Emow==
+X-Gm-Message-State: AOAM531RaU9YTOlF1gcDsyUwHmZ7ByZC1JJWU2oGEEfVi4qxqbCROIZo
+        bjkJ8tFyvCCjtLe8G5fzR/+a2ryTh8CeaG5TQsd6LsE3DjS5iP/QT3HoKS3FSv3n7c1MIO0FmX+
+        vIp2ZTlhVO8CKQJ5L3gliyEnL
+X-Received: by 2002:a1c:6a13:: with SMTP id f19mr10216385wmc.13.1641562332705;
+        Fri, 07 Jan 2022 05:32:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyftZXAOc3XjSdwFOB0wtyxXs5TYDRf8z1gme7WWUEWB4FfE05bcdM3IruZ8l9IzQVuhX/J9A==
+X-Received: by 2002:a1c:6a13:: with SMTP id f19mr10216376wmc.13.1641562332491;
+        Fri, 07 Jan 2022 05:32:12 -0800 (PST)
+Received: from [192.168.2.20] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
+        by smtp.gmail.com with ESMTPSA id o11sm8663447wmq.15.2022.01.07.05.32.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 05:32:11 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <3b7780d5-8f0b-0388-37e2-51ee8b282ab0@redhat.com>
+Date:   Fri, 7 Jan 2022 14:32:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03cb9939-efbb-1ce8-42f5-c167ac5246da@oracle.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hawk@kernel.org,
+        ilias.apalodimas@linaro.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH net-next] page_pool: remove spinlock in
+ page_pool_refill_alloc_cache()
+Content-Language: en-US
+To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org
+References: <20220107090042.13605-1-linyunsheng@huawei.com>
+In-Reply-To: <20220107090042.13605-1-linyunsheng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:01:55PM +1100, Imran Khan wrote:
-> Hi Tejun,
-> 
-> On 7/1/22 7:30 am, Tejun Heo wrote:
-> > Hello,
-> > 
-> > On Tue, Jan 04, 2022 at 08:40:30AM +0100, Greg KH wrote:
-> >>> We are seeing the launch time of some DB workloads adversely getting
-> >>> affected with this contention.
-> >>
-> >> What workloads?  sysfs should NEVER be in the fast-path of any normal
-> >> operation, including booting.  What benchmark or real-work is having
-> >> problems here?
-> > 
-> > In most systems, this shouldn't matter at all but sysfs and cgroupfs host a
-> > lot of statistics files which may be read regularly. It is conceivable that
-> > in large enough systems, the current locking scheme doesn't scale well
-> > enough. We should definitely measure the overhead and gains tho.
-> > 
-> > If this is something necessary, I think one possible solution is using
-> > hashed locks. I know that it isn't a popular choice but it makes sense given
-> > the constraints.
-> > 
-> 
-> Could you please suggest me some current users of hashed locks ? I can
-> check that code and modify my patches accordingly.
-> 
-> As of now I have not found any standard benchmarks/workloads to show the
-> impact of this contention. We have some in house DB applications where
-> the impact can be easily seen.  Of course those applications can be
-> modified to get the needed data from somewhere else or access sysfs less
-> frequently but nonetheless I am trying to make the current locking
-> scheme more scalable.
 
-Why are applications hitting sysfs so hard that this is noticable?  What
-in it is needed by userspace so badly?  And what changed to make this a
-requirement of them?
 
-thanks,
+On 07/01/2022 10.00, Yunsheng Lin wrote:
+> As page_pool_refill_alloc_cache() is only called by
+> __page_pool_get_cached(), which assumes non-concurrent access
+> as suggested by the comment in __page_pool_get_cached(), and
+> ptr_ring allows concurrent access between consumer and producer,
+> so remove the spinlock in page_pool_refill_alloc_cache().
 
-greg k-h
+This should be okay as __ptr_ring_consume() have a memory barrier via 
+READ_ONCE in __ptr_ring_peek(). The code page_pool_empty_ring() also 
+does ptr_ring consume, but drivers should already take care that this 
+will not be called concurrently, as it is part of the teardown code path 
+(which can only run concurrently with ptr_ring producer side).
+
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+
+The original reason behind this lock was that I was planning to allow 
+the memory subsystem to reclaim pages sitting in page_pool's cache.
+Unfortunately I never got around to implement this.
+
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> ---
+>   net/core/page_pool.c | 4 ----
+>   1 file changed, 4 deletions(-)
+> 
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 1a6978427d6c..6efad8b29e9c 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -130,9 +130,6 @@ static struct page *page_pool_refill_alloc_cache(struct page_pool *pool)
+>   	pref_nid = numa_mem_id(); /* will be zero like page_to_nid() */
+>   #endif
+>   
+> -	/* Slower-path: Get pages from locked ring queue */
+> -	spin_lock(&r->consumer_lock);
+> -
+>   	/* Refill alloc array, but only if NUMA match */
+>   	do {
+>   		page = __ptr_ring_consume(r);
+> @@ -157,7 +154,6 @@ static struct page *page_pool_refill_alloc_cache(struct page_pool *pool)
+>   	if (likely(pool->alloc.count > 0))
+>   		page = pool->alloc.cache[--pool->alloc.count];
+>   
+> -	spin_unlock(&r->consumer_lock);
+>   	return page;
+>   }
+>   
+> 
+

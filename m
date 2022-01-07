@@ -2,119 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35114876F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5680487700
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347300AbiAGLyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:54:54 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:50954 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1347295AbiAGLyq (ORCPT
+        id S1347343AbiAGLzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:55:50 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:35834 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347307AbiAGLzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:54:46 -0500
-X-UUID: 6f7dfea76555490bbc652be58e2bdf24-20220107
-X-UUID: 6f7dfea76555490bbc652be58e2bdf24-20220107
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1256696717; Fri, 07 Jan 2022 19:54:41 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 7 Jan 2022 19:54:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Jan
- 2022 19:54:40 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 7 Jan 2022 19:54:39 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Sean Wang <sean.wang@mediatek.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <ryder.lee@kernel.org>, <wenst@chromium.org>,
-        <chunfeng.yun@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: [PATCH v8 3/4] dt-bindings: pinctrl: mt8195: Add mediatek,drive-strength-adv property
-Date:   Fri, 7 Jan 2022 19:53:44 +0800
-Message-ID: <20220107115345.9075-4-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.15.GIT
-In-Reply-To: <20220107115345.9075-1-tinghan.shen@mediatek.com>
-References: <20220107115345.9075-1-tinghan.shen@mediatek.com>
+        Fri, 7 Jan 2022 06:55:45 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 095101F39C;
+        Fri,  7 Jan 2022 11:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641556543; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=NLOYJhZxOiXByA38wXhVENRBwHFkUqymDefaIYtjAww=;
+        b=DYJoYIvMIuaAn4jT6wzepOZddowzB3R6YLybX2O6n7TCAQCZlR4zDeU0GcYPnKW505nABj
+        su4oZEJ0oCH/m55uGP7Yy8WYS2BMfpXyjxmpyLh4GOyEj5o4ZfyvIZxpFvDygtVE3Fuflf
+        UZa4paGKe6qZiNlPFieplKDZDzlXTZ8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641556543;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=NLOYJhZxOiXByA38wXhVENRBwHFkUqymDefaIYtjAww=;
+        b=bNOaWUaTqMbaig6Oa1FbHF72xkJH1yRNSzF6PLDJzt5jO3qibt3lGaCHNMAjYvcm6B/ewl
+        K+WzVdl2lkZBQJAw==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 668BAA3B83;
+        Fri,  7 Jan 2022 11:55:38 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v3 0/6] KEXEC_SIG with appended signature
+Date:   Fri,  7 Jan 2022 12:53:44 +0100
+Message-Id: <cover.1641555875.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend pin driving support for I2C pins on SoC mt8195.
-This property is also documented in mediatek,mt8183-pinctrl.yaml.
+Hello,
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
----
- .../bindings/pinctrl/pinctrl-mt8195.yaml      | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+This is a refresh of the KEXEC_SIG series.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-index 567f71cab7b4..5e27e01d6588 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-@@ -98,6 +98,32 @@ patternProperties:
-           drive-strength:
-             enum: [2, 4, 6, 8, 10, 12, 14, 16]
- 
-+          mediatek,drive-strength-adv:
-+            description: |
-+              Describe the specific driving setup property.
-+              For I2C pins, the existing generic driving setup can only support
-+              2/4/6/8/10/12/14/16mA driving. But in specific driving setup, they
-+              can support 0.125/0.25/0.5/1mA adjustment. If we enable specific
-+              driving setup, the existing generic setup will be disabled.
-+              The specific driving setup is controlled by E1E0EN.
-+              When E1=0/E0=0, the strength is 0.125mA.
-+              When E1=0/E0=1, the strength is 0.25mA.
-+              When E1=1/E0=0, the strength is 0.5mA.
-+              When E1=1/E0=1, the strength is 1mA.
-+              EN is used to enable or disable the specific driving setup.
-+              Valid arguments are described as below:
-+              0: (E1, E0, EN) = (0, 0, 0)
-+              1: (E1, E0, EN) = (0, 0, 1)
-+              2: (E1, E0, EN) = (0, 1, 0)
-+              3: (E1, E0, EN) = (0, 1, 1)
-+              4: (E1, E0, EN) = (1, 0, 0)
-+              5: (E1, E0, EN) = (1, 0, 1)
-+              6: (E1, E0, EN) = (1, 1, 0)
-+              7: (E1, E0, EN) = (1, 1, 1)
-+              So the valid arguments are from 0 to 7.
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            enum: [0, 1, 2, 3, 4, 5, 6, 7]
-+
-           bias-pull-down:
-             description: |
-               For pull down type is normal, it don't need add RSEL & R1R0 define
-@@ -265,4 +291,13 @@ examples:
-           bias-pull-down;
-         };
-       };
-+
-+      i2c0-pins {
-+        pins {
-+          pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
-+                   <PINMUX_GPIO9__FUNC_SCL0>;
-+          bias-disable;
-+          mediatek,drive-strength-adv = <7>;
-+        };
-+      };
-     };
+This adds KEXEC_SIG support on powerpc and deduplicates the code dealing
+with appended signatures in the kernel.
+
+powerpc supports IMA_KEXEC but that's an exception rather than the norm.
+On the other hand, KEXEC_SIG is portable across platforms.
+
+For distributions to have uniform security features across platforms one
+option should be used on all platforms.
+
+Thanks
+
+Michal
+
+Previous revision: https://lore.kernel.org/linuxppc-dev/cover.1637862358.git.msuchanek@suse.de/
+Patched kernel tree: https://github.com/hramrach/kernel/tree/kexec_sig
+
+Michal Suchanek (6):
+  s390/kexec_file: Don't opencode appended signature check.
+  powerpc/kexec_file: Add KEXEC_SIG support.
+  kexec_file: Don't opencode appended signature verification.
+  module: strip the signature marker in the verification function.
+  module: Use key_being_used_for for log messages in
+    verify_appended_signature
+  module: Move duplicate mod_check_sig users code to mod_parse_sig
+
+ arch/powerpc/Kconfig                     | 16 +++++++
+ arch/powerpc/kexec/elf_64.c              | 14 ++++++
+ arch/s390/Kconfig                        |  2 +-
+ arch/s390/kernel/machine_kexec_file.c    | 43 ++----------------
+ crypto/asymmetric_keys/asymmetric_type.c |  1 +
+ include/linux/module_signature.h         |  1 +
+ include/linux/verification.h             |  4 ++
+ kernel/module-internal.h                 |  2 -
+ kernel/module.c                          | 12 +++--
+ kernel/module_signature.c                | 56 +++++++++++++++++++++++-
+ kernel/module_signing.c                  | 33 +++++++-------
+ security/integrity/ima/ima_modsig.c      | 22 ++--------
+ 12 files changed, 119 insertions(+), 87 deletions(-)
+
 -- 
-2.18.0
+2.31.1
 

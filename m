@@ -2,363 +2,443 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 758F3487A00
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5284879FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348174AbiAGP53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 10:57:29 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36302 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239764AbiAGP52 (ORCPT
+        id S1348161AbiAGP4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 10:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233290AbiAGP4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 10:57:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 466E2B82657;
-        Fri,  7 Jan 2022 15:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1DBC36AEF;
-        Fri,  7 Jan 2022 15:57:25 +0000 (UTC)
-From:   Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 5.15.13-rt26
-Date:   Fri, 07 Jan 2022 15:56:46 -0000
-Message-ID: <164157100674.1024533.9109652155025672364@puck.lan>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
+        Fri, 7 Jan 2022 10:56:25 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B279AC06173F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:56:24 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id h5-20020a9d6a45000000b005908066fa64so6138712otn.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 07:56:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=4UEj+Bd+UZxpb6+13xzUnRXx4XQV/BsazNWfQXf6uWk=;
+        b=ku0s0jiEX2FuNrLzb7KkrJ0fNQiyqu9gG2XAcdSCTVQRDqubpSiBirr7pOkZDAJKpu
+         gMPp3j62vb4sXmdzxkcjDGP502muoCyfs2MmhXXQAtHo7aMah4V4dSQpRqlwWEDCV+PU
+         EKRCiEwoc3o1Ce/HL9IYNMrtrVJ+GioS6NOoLsZ5F5Tb+pkbqHLxPw1qvGB62qdDzSPt
+         lSrzqaSHzQGjhF5VV+XryUQyg7bziO5jnIdUywrBW67G2yT3WQnND2S5PTftCeYAEPuq
+         IGaQUIvd+uTLm+VaqCzJYjM5BUl38Xkb7ptc1Loz6KUAkuUXKKORvWa2ayD96LiYiDY0
+         00hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=4UEj+Bd+UZxpb6+13xzUnRXx4XQV/BsazNWfQXf6uWk=;
+        b=GFP2VXwF5sdQ1oaet9eeatTj6DssLut0OO/2b2NfZ0GyN/DGjLNObgHSmQ75c8B+mD
+         FCHgyd2huFAI5tpwRv8VNA9qNsL6uocd54lIAJ+7yuD6i8mnPwDq92kLU1NDMuSd35+Y
+         ASLbj+INmTtRImKtIavZxXHx4WRWgQhefXPlXmiD8yn1I5JdsiPguOgM8AYAD6EOYBTE
+         e25F3Ky71DnFkZvWg2CxzIrsqgkZw8KZiGlBwgoPMcYY5SyBgZ94out8um9I6mTxwfpi
+         IhQ4EuHtJ53+HZ2/wS5yvpItss+4DZyf4tKHDWD3mLfMeEd/LzcoMKfVCFTKZMlMFjUi
+         6nYg==
+X-Gm-Message-State: AOAM532P52cCZgAQS6MQKPPfIH5CisYwSnke7b+ASiNzoVGrsYS2Gr/e
+        aTLsABDjBXBia5QrKckFpu1sEJ1mVWWchg==
+X-Google-Smtp-Source: ABdhPJwc8OsiodbPPNbWQo8njC5EetlB4u3ZsjP5JrJ3F6ECDNzo9ZhA0GEDBI6o1VIZIyV+nFLgIw==
+X-Received: by 2002:a9d:6351:: with SMTP id y17mr45702350otk.105.1641570983831;
+        Fri, 07 Jan 2022 07:56:23 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id f59sm941939otf.9.2022.01.07.07.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 07:56:23 -0800 (PST)
+Date:   Fri, 7 Jan 2022 07:57:11 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Souradeep Chowdhury <schowdhu@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>, vkoul@kernel.org
+Subject: Re: [PATCH V6 2/7] soc: qcom: dcc:Add driver support for Data
+ Capture and Compare unit(DCC)
+Message-ID: <Ydhi1/SH5ySDLNfI@ripper>
+References: <cover.1628617260.git.schowdhu@codeaurora.org>
+ <fc69469f26983d373d5ad7dc2dc83df207967eda.1628617260.git.schowdhu@codeaurora.org>
+ <YbzvD+FFHuDWzCtZ@yoga>
+ <caccb6da-2024-db4e-700c-9b4c13946ca0@quicinc.com>
+ <YdeC456prDBG7tBA@ripper>
+ <77a2ef02-384d-ce67-ae84-02c385eccd60@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <77a2ef02-384d-ce67-ae84-02c385eccd60@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
-
-I'm pleased to announce the 5.15.13-rt26 stable release.
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v5.15-rt
-  Head SHA1: 3c5612b1862f0e2ee513fdc9d9dfe878ab24b09d
-
-Or to build 5.15.13-rt26 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.13.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.13-rt26.patch.xz
-
-
-You can also build from 5.15.12-rt25 by applying the incremental patch:
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/incr/patch-5.15.12-rt25-rt26.patch.xz
-
-Enjoy!
-Clark
-
-Changes from v5.15.12-rt25:
----
-
-Adrian Hunter (3):
-      perf intel-pt: Fix parsing of VM time correlation arguments
-      perf script: Fix CPU filtering of a script's switch events
-      perf scripts python: intel-pt-events.py: Fix printing of switch events
-
-Aleksander Jan Bajkowski (1):
-      net: lantiq_xrx200: fix statistics of received bytes
-
-Alex Deucher (1):
-      drm/amdgpu: add support for IP discovery gc_info table v2
-
-Alexey Makhalov (1):
-      scsi: vmw_pvscsi: Set residual data length conditionally
-
-Amir Tzin (1):
-      net/mlx5e: Wrap the tx reporter dump callback to extract the sq
-
-Andra Paraschiv (1):
-      nitro_enclaves: Use get_user_pages_unlocked() call to handle mmap assert
-
-Angus Wang (1):
-      drm/amd/display: Changed pipe split policy to allow for multi-display pipe split
-
-Chris Mi (2):
-      net/mlx5: Fix tc max supported prio for nic mode
-      net/mlx5e: Delete forward rule for ct or sample action
-
-Christian Brauner (1):
-      fs/mount_setattr: always cleanup mount_kattr
-
-Christian KÃ¶nig (1):
-      drm/nouveau: wait for the exclusive fence after the shared ones v2
-
-Christophe JAILLET (2):
-      net: ag71xx: Fix a potential double free in error handling paths
-      ionic: Initialize the 'lif->dbid_inuse' bitmap
-
-Chunfeng Yun (3):
-      usb: mtu3: add memory barrier before set GPD's HWO
-      usb: mtu3: fix list_head check warning
-      usb: mtu3: set interval of FS intr and isoc endpoint
-
-Clark Williams (2):
-      Merge tag 'v5.15.13' into v5.15-rt
-      Linux 5.15.13-rt26
-
-Coco Li (2):
-      udp: using datalen to cap ipv6 udp max gso segments
-      selftests: Calculate udpgso segment count without header adjustment
-
-Dan Carpenter (1):
-      scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
-
-Dmitry V. Levin (1):
-      uapi: fix linux/nfc.h userspace compilation errors
-
-Dmitry Vyukov (1):
-      tomoyo: Check exceeded quota early in tomoyo_domain_quota_is_ok().
-
-Dust Li (2):
-      net/smc: don't send CDC/LLC message if link not ready
-      net/smc: fix kernel panic caused by race of smc_sock
-
-Gal Pressman (1):
-      net/mlx5e: Fix wrong features assignment in case of error
-
-Greg Kroah-Hartman (1):
-      Linux 5.15.13
-
-Heiko Carstens (1):
-      recordmcount.pl: fix typo in s390 mcount regex
-
-Helge Deller (1):
-      parisc: Clear stale IIR value on instruction access rights trap
-
-Jackie Liu (1):
-      memblock: fix memblock_phys_alloc() section mismatch error
-
-James McLaughlin (1):
-      igc: Fix TX timestamp support for non-MSI-X platforms
-
-Javier Martinez Canillas (1):
-      efi: Move efifb_setup_from_dmi() prototype from arch headers
-
-Jianguo Wu (2):
-      selftests: net: Fix a typo in udpgro_fwd.sh
-      selftests: net: using ping6 for IPv6 in udpgro_fwd.sh
-
-Jiasheng Jiang (1):
-      net/ncsi: check for error return from call to nla_put_u32
-
-Karsten Graul (1):
-      net/smc: fix using of uninitialized completions
-
-Krzysztof Kozlowski (1):
-      nfc: uapi: use kernel size_t to fix user-space builds
-
-Leo L. Schwab (1):
-      Input: spaceball - fix parsing of movement data packets
-
-Libin Yang (2):
-      ALSA: hda: intel-sdw-acpi: harden detection of controller
-      ALSA: hda: intel-sdw-acpi: go through HDAS ACPI at max depth of 2
-
-Mathias Nyman (1):
-      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
-
-Matthias-Christian Ott (1):
-      net: usb: pegasus: Do not drop long Ethernet frames
-
-Maxim Mikityanskiy (2):
-      net/mlx5e: Fix interoperability between XSK and ICOSQ recovery flow
-      net/mlx5e: Fix ICOSQ recovery flow for XSK
-
-Miaoqian Lin (3):
-      platform/mellanox: mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
-      net/mlx5: DR, Fix NULL vs IS_ERR checking in dr_domain_init_resources
-      fsl/fman: Fix missing put_device() call in fman_port_probe
-
-Michael Ellerman (1):
-      powerpc/ptdump: Fix DEBUG_WX since generic ptdump conversion
-
-Moshe Shemesh (1):
-      net/mlx5: Fix SF health recovery flow
-
-Muchun Song (1):
-      net: fix use-after-free in tw_timer_handler
-
-Nicholas Kazlauskas (2):
-      drm/amd/display: Send s0i2_rdy in stream_count == 0 optimization
-      drm/amd/display: Set optimize_pwr_state for DCN31
-
-Nikolay Aleksandrov (3):
-      net: bridge: mcast: add and enforce query interval minimum
-      net: bridge: mcast: add and enforce startup query interval minimum
-      net: bridge: mcast: fix br_multicast_ctx_vlan_global_disabled helper
-
-Paul Blakey (1):
-      net/sched: Extend qdisc control block with tc control block
-
-Pavel Skripkin (2):
-      i2c: validate user data in compat ioctl
-      Input: appletouch - initialize work before device registration
-
-Roi Dayan (1):
-      net/mlx5e: Use tc sample stubs instead of ifdefs in source file
-
-Samuel ÄŒavoj (1):
-      Input: i8042 - enable deferred probe quirk for ASUS UM325UA
-
-SeongJae Park (1):
-      mm/damon/dbgfs: fix 'struct pid' leaks in 'dbgfs_target_ids_write()'
-
-Shay Drory (1):
-      net/mlx5: Fix error print in case of IRQ request failed
-
-Takashi Iwai (1):
-      Input: i8042 - add deferred probe support
-
-Tetsuo Handa (1):
-      tomoyo: use hwight16() in tomoyo_domain_quota_is_ok()
-
-Todd Kjos (1):
-      binder: fix async_free_space accounting for empty parcels
-
-Tom Rix (1):
-      selinux: initialize proto variable in selinux_ip_postroute_compat()
-
-Vincent Pelletier (1):
-      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
-
-Vinicius Costa Gomes (1):
-      igc: Do not enable crosstimestamping for i225-V models
-
-Wang Qing (1):
-      platform/x86: apple-gmux: use resource_size() with res
-
-Wei Yongjun (1):
-      NFC: st21nfca: Fix memory leak in device probe and remove
-
-Xin Long (1):
-      sctp: use call_rcu to free endpoint
-
-chen gong (1):
-      drm/amdgpu: When the VCN(1.0) block is suspended, powergating is explicitly enabled
-
-wujianguo (1):
-      selftests/net: udpgso_bench_tx: fix dst ip argument
----
-Documentation/admin-guide/kernel-parameters.txt    |  2 +
- Makefile                                           |  2 +-
- arch/arm/include/asm/efi.h                         |  1 -
- arch/arm64/include/asm/efi.h                       |  1 -
- arch/parisc/kernel/traps.c                         |  2 +
- arch/powerpc/mm/ptdump/ptdump.c                    |  2 +-
- arch/riscv/include/asm/efi.h                       |  1 -
- arch/x86/include/asm/efi.h                         |  2 -
- drivers/android/binder_alloc.c                     |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c      | 76 +++++++++++++++-------
- drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c              |  7 ++
- .../amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c   |  1 +
- .../gpu/drm/amd/display/dc/dcn20/dcn20_resource.c  |  2 +-
- .../gpu/drm/amd/display/dc/dcn21/dcn21_resource.c  |  2 +-
- .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |  2 +-
- .../drm/amd/display/dc/dcn301/dcn301_resource.c    |  2 +-
- .../drm/amd/display/dc/dcn302/dcn302_resource.c    |  2 +-
- .../drm/amd/display/dc/dcn303/dcn303_resource.c    |  2 +-
- drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c  |  1 +
- .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |  2 +-
- drivers/gpu/drm/amd/include/discovery.h            | 49 ++++++++++++++
- drivers/gpu/drm/nouveau/nouveau_fence.c            | 28 ++++----
- drivers/i2c/i2c-dev.c                              |  3 +
- drivers/input/joystick/spaceball.c                 | 11 +++-
- drivers/input/mouse/appletouch.c                   |  4 +-
- drivers/input/serio/i8042-x86ia64io.h              | 21 ++++++
- drivers/input/serio/i8042.c                        | 54 +++++++++------
- drivers/net/ethernet/atheros/ag71xx.c              | 23 +++----
- drivers/net/ethernet/freescale/fman/fman_port.c    | 12 ++--
- drivers/net/ethernet/intel/igc/igc_main.c          |  6 ++
- drivers/net/ethernet/intel/igc/igc_ptp.c           | 15 ++++-
- drivers/net/ethernet/lantiq_xrx200.c               |  2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en.h       |  5 +-
- .../net/ethernet/mellanox/mlx5/core/en/health.h    |  2 +
- .../net/ethernet/mellanox/mlx5/core/en/rep/tc.c    |  2 -
- .../ethernet/mellanox/mlx5/core/en/reporter_rx.c   | 35 +++++++++-
- .../ethernet/mellanox/mlx5/core/en/reporter_tx.c   | 10 ++-
- .../net/ethernet/mellanox/mlx5/core/en/tc/sample.h | 27 ++++++++
- .../net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 16 ++++-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c  | 48 +++++++++-----
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    | 29 ++-------
- .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |  3 +
- drivers/net/ethernet/mellanox/mlx5/core/main.c     | 11 ++--
- drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c  |  4 +-
- .../mellanox/mlx5/core/steering/dr_domain.c        |  5 +-
- drivers/net/ethernet/pensando/ionic/ionic_lif.c    |  2 +-
- drivers/net/usb/pegasus.c                          |  4 +-
- drivers/nfc/st21nfca/i2c.c                         | 29 ++++++---
- drivers/platform/mellanox/mlxbf-pmc.c              |  4 +-
- drivers/platform/x86/apple-gmux.c                  |  2 +-
- drivers/scsi/lpfc/lpfc_debugfs.c                   |  4 +-
- drivers/scsi/vmw_pvscsi.c                          |  7 +-
- drivers/usb/gadget/function/f_fs.c                 |  9 ++-
- drivers/usb/host/xhci-pci.c                        |  5 +-
- drivers/usb/mtu3/mtu3_gadget.c                     |  8 +++
- drivers/usb/mtu3/mtu3_qmu.c                        |  7 +-
- drivers/virt/nitro_enclaves/ne_misc_dev.c          |  5 +-
- fs/namespace.c                                     |  9 ++-
- include/linux/efi.h                                |  6 ++
- include/linux/memblock.h                           |  4 +-
- include/net/pkt_sched.h                            | 15 +++++
- include/net/sch_generic.h                          |  2 -
- include/net/sctp/sctp.h                            |  6 +-
- include/net/sctp/structs.h                         |  3 +-
- include/uapi/linux/nfc.h                           |  6 +-
- localversion-rt                                    |  2 +-
- mm/damon/dbgfs.c                                   |  8 +++
- net/bridge/br_multicast.c                          | 32 +++++++++
- net/bridge/br_netlink.c                            |  4 +-
- net/bridge/br_private.h                            | 12 +++-
- net/bridge/br_sysfs_br.c                           |  4 +-
- net/bridge/br_vlan_options.c                       |  4 +-
- net/core/dev.c                                     |  8 +--
- net/ipv4/af_inet.c                                 | 10 ++-
- net/ipv6/udp.c                                     |  2 +-
- net/ncsi/ncsi-netlink.c                            |  6 +-
- net/sched/act_ct.c                                 | 14 ++--
- net/sched/cls_api.c                                |  6 +-
- net/sched/cls_flower.c                             |  3 +-
- net/sched/sch_frag.c                               |  3 +-
- net/sctp/diag.c                                    | 12 ++--
- net/sctp/endpointola.c                             | 23 ++++---
- net/sctp/socket.c                                  | 23 ++++---
- net/smc/smc.h                                      |  5 ++
- net/smc/smc_cdc.c                                  | 52 +++++++--------
- net/smc/smc_cdc.h                                  |  2 +-
- net/smc/smc_core.c                                 | 27 ++++++--
- net/smc/smc_core.h                                 |  6 ++
- net/smc/smc_ib.c                                   |  4 +-
- net/smc/smc_ib.h                                   |  1 +
- net/smc/smc_llc.c                                  |  2 +-
- net/smc/smc_wr.c                                   | 51 +++------------
- net/smc/smc_wr.h                                   |  5 +-
- scripts/recordmcount.pl                            |  2 +-
- security/selinux/hooks.c                           |  2 +-
- security/tomoyo/util.c                             | 31 ++++-----
- sound/hda/intel-sdw-acpi.c                         | 13 +++-
- tools/perf/builtin-script.c                        |  2 +-
- tools/perf/scripts/python/intel-pt-events.py       | 23 ++++---
- tools/perf/util/intel-pt.c                         |  1 +
- tools/testing/selftests/net/udpgro_fwd.sh          |  6 +-
- tools/testing/selftests/net/udpgso.c               | 12 ++--
- tools/testing/selftests/net/udpgso_bench_tx.c      |  8 ++-
- 103 files changed, 734 insertions(+), 373 deletions(-)
----
+On Fri 07 Jan 07:27 PST 2022, Souradeep Chowdhury wrote:
+
+> 
+> On 1/7/2022 5:31 AM, Bjorn Andersson wrote:
+> > On Wed 05 Jan 23:57 PST 2022, Souradeep Chowdhury wrote:
+> > 
+> > > On 12/18/2021 1:41 AM, Bjorn Andersson wrote:
+> > > > On Tue 10 Aug 12:54 CDT 2021, Souradeep Chowdhury wrote:
+> > > > 
+> > > > > The DCC is a DMA Engine designed to capture and store data
+> > > > > during system crash or software triggers.The DCC operates
+> > > > Please include a space after '.'
+> > > Ack
+> > > > > based on user inputs via the sysfs interface.The user gives
+> > > > > addresses as inputs and these addresses are stored in the
+> > > > > form of linkedlists.In case of a system crash or a manual
+> > > > I think the user configures the DCC hardware with "a sequence of
+> > > > operations to be performed as DCC is triggered".
+> > > > 
+> > > > Afaict the sequence is stored just as a sequence of operations in SRAM,
+> > > > there's no linked list involved - except in your intermediate
+> > > > implementation.
+> > > The user just enters the addresses as input whereas the sequence of
+> > > operations takes
+> > > 
+> > > place as per configuration code inside the driver. The end result is storage
+> > > of these
+> > > 
+> > > addresses inside the DCC SRAM. The DCC hardware will capture the value at
+> > > these
+> > > 
+> > > addresses on a crash or manual trigger by the user.
+> > > 
+> > > > > software trigger by the user through the sysfs interface,
+> > > > > the dcc captures and stores the values at these addresses.
+> > > > > This patch contains the driver which has all the methods
+> > > > > pertaining to the sysfs interface, auxiliary functions to
+> > > > > support all the four fundamental operations of dcc namely
+> > > > > read, write, first read then write and loop.The probe method
+> > > > "first read then write" is called "read/modify/write"
+> > > Ack
+> > > > > here instantiates all the resources necessary for dcc to
+> > > > > operate mainly the dedicated dcc sram where it stores the
+> > > > > values.The DCC driver can be used for debugging purposes
+> > > > > without going for a reboot since it can perform manual
+> > > > > triggers.
+> > > > > 
+> > > > > Also added the documentation for sysfs entries
+> > > > > and explained the functionalities of each sysfs file that
+> > > > > has been created for dcc.
+> > > > > 
+> > > > > The following is the justification of using sysfs interface
+> > > > > over the other alternatives like ioctls
+> > > > > 
+> > > > > i) As can be seen from the sysfs attribute descriptions,
+> > > > > most of it does basic hardware manipulations like dcc_enable,
+> > > > > dcc_disable, config reset etc. As a result sysfs is preferred
+> > > > > over ioctl as we just need to enter a 0 or 1.
+> > > > > 
+> > > > As I mentioned in our chat, using sysfs allows us to operate the
+> > > > interface using the shell without additional tools.
+> > > > 
+> > > > But I don't think that it's easy to implement enable/disable/reset using
+> > > > sysfs is a strong argument. The difficult part of this ABI is the
+> > > > operations to manipulate the sequence of operations, so that's what you
+> > > > need to have a solid plan for.
+> > > The sysfs interface is being used to get the addresses values entered by the
+> > > user
+> > > 
+> > > and to also go for manual triggers. The sequence of operations are kept as a
+> > > part of
+> > > 
+> > > fixed driver code which is called when the user enters the data.
+> > > 
+> > But does the hardware really just operate on "addresses values entered
+> > by the user". Given the various types of operations: read, write,
+> > read-modify-write and loop I get the feeling that the hardware
+> > "executes" a series of actions.
+> > 
+> > I'm don't think the proposed sysfs interface best exposes this to the
+> > user and I don't think that "it's easy to implement enable/disable
+> > attributes in sysfs" is reason enough to go with that approach.
+> 
+> So the sysfs interface here has been introduced keeping in mind how the
+> DCC_SRAM needs to be
+> 
+> programmed for the dcc hardware to work. We are maintaining a list here
+> based on the address
+> 
+> entry. The 4 cases for the type of addresses are as follows-:
+> 
+> i) READ ADDRESSES
+> 
+> user enters something like "echo <addr> <len> > config"
+> 
+> DCC driver stores the <addr> along with the length information in the
+> DCC_SRAM.
+> 
+> ii) WRITE ADDRESSES
+> 
+> User enters something like "echo <addr> <write_val> 1  > config_write"
+> 
+> DCC stores the <addr> first in sram followed by <write_val>.
+> 
+> For the above 2 type of addresses there won't be much difference if we use
+> IOCTL.
+> 
+> However, for the next 2 type of addresses
+> 
+> iii) LOOP ADDRESSES
+> 
+> user has to enter something like below
+> 
+> echo 9 > loop
+> echo 0x01741010 1 > config
+> echo 0x01741014 1 > config
+> echo 1 > loop
+> 
+> The DCC SRAM will be programmed precisely like the above entries where the
+> loop count will be stored first
+> 
+> followed by loop addresses and then again a "echo 1 > loop " marks the end
+> of loop addresses.
+> 
+> in DCC_SRAM.
+> 
+> iv) READ_WRITE ADDRESSES
+> 
+> User has to enter something like below
+> 
+> echo <addr> > /sys/bus/platform/devices/../config
+> 
+> echo <mask> <val> > /sys/bus/platform/devices/../rd_mod_wr
+> 
+> Here first the  <addr> is stored in DCC_SRAM followed by <mask> and then the
+> <val>.
+> 
+> The above representation to the user space is consistent with the dcc
+> hardware in terms of
+> 
+> the way the sequence of values are programmed in the DCC SRAM . Moving to
+> IOCTL will
+> 
+> only change the way the READ_WRITE address is represented although user will
+> have to enter
+> 
+> multiple parameters at once, let me know if we still need to go for the
+> same.
+> 
+
+So if I understand correctly, my concern is that if I would like to
+perform something like (in pseudo code):
+
+readl(X)
+write(1, Y)
+readl(Z) 5 times
+
+then I will do this as:
+
+echo X > config
+echo Y 1 > config_write
+echo 5 > loop
+echo Z > config
+echo 1 > loop
+
+And the DCC driver will then write this to SRAM as something like:
+
+read X
+write Y, 1
+loop 5
+read Z
+loop
+
+
+In other words, my mind and the DCC has the same representation of this
+sequence of operations, but I have to shuffle the information into 4
+different sysfs attributes to get there.
+
+The design guideline for sysfs is that each attribute should hold one
+value per attribute, but in your model the attributes are tangled and
+writing things to them depends on what has been written in that or other
+attributes previously.
+
+I simply don't think that's a good ABI.
+
+[..]
+> > > > > +		The address argument should
+> > > > > +		be given of the form <mask> <value>.For debugging
+> > > > > +		purposes sometimes we need to first read from a register
+> > > > > +		and then set some values to the register.
+> > > > > +		Example:
+> > > > > +		echo 0x80000000 > /sys/bus/platform/devices/.../config
+> > > > > +		(Set the address in config file)
+> > > > > +		echo 0xF 0xA > /sys/bus/platform/devices/.../rd_mod_wr
+> > > > > +		(Provide the mask and the value to write)
+> > > > > +
+> > > > > +What:           /sys/bus/platform/devices/.../ready
+> > > > > +Date:           March 2021
+> > > > > +Contact:        Souradeep Chowdhury<schowdhu@codeaurora.org>
+> > > > > +Description:
+> > > > > +		This file is used to check the status of the dcc
+> > > > > +		hardware if it's ready to take the inputs.
+> > > > When will this read "false"?
+> > > This will give false if the DCC hardware is not in an operational state.
+> > > 
+> > > Will update accordingly.
+> > > 
+> > > > > +		Example:
+> > > > > +		cat /sys/bus/platform/devices/.../ready
+> > > > > +
+> > > > > +What:		/sys/bus/platform/devices/.../curr_list
+> > > > > +Date:		February 2021
+> > > > > +Contact:	Souradeep Chowdhury<schowdhu@codeaurora.org>
+> > > > > +Description:
+> > > > > +		This attribute is used to enter the linklist to be
+> > > > I think it would be more appropriate to use the verb "select" here and
+> > > > afaict it's a "list" as the "linked" part only relates to your
+> > > > implementation).
+> > > > 
+> > > > But that said, I don't like this ABI. I think it would be cleaner if you
+> > > > had specific attributes for each of the lists. That way it would be
+> > > > clear that you have N lists and they can be configured and enabled
+> > > > independently, and there's no possible race conditions.
+> > > So we do have attributes for independent lists in this case. The user is
+> > > given the option
+> > > 
+> > > to configure multiple lists at one go. For example I can do
+> > > 
+> > > echo 1 > curr_list
+> > > 
+> > > echo 0x18000010 1 > config
+> > > echo 0x18000024 1 > config
+> > > 
+> > > Then followed by
+> > > 
+> > > echo 2 > curr_list
+> > > 
+> > > echo 0x18010038 6 > config
+> > > echo 0x18020010 1 > config
+> > > 
+> > > We will get the output in terms of two separate list of registers values.
+> > > 
+> > I understand that this will define two lists of operations and that we
+> > will get 2 and 7 registers dumped, respectively. Perhaps unlikely, but
+> > what happens if you try to do these two operations concurrently?
+> > 
+> > 
+> > What I'm suggesting here is that if you have N contexts, you should have
+> > N interfaces to modify each one independently - simply because that's
+> > generally a very good thing.
+> 
+> Not sure if there will ever be a concurrency issue in this case.
+> This is just about programming the DCC SRAM from the user entries
+> sequentially.
+
+So you've decided that two such sequences must not happen at the same
+time. (I know it's unlikely, but there's nothing preventing me from
+running the two snippets of echos concurrently and the outcome will be
+unexpected)
+
+> The curr_list number is nothing but some register writes
+> done in the dcc so that the dcc_hardware knows the beginning and end
+> of a particular list and can dump the captured data according. Even if
+> an user chooses multiple curr_list entries, it will be programmed
+> sequentially in DCC_SRAM.
+> 
+
+So there's no separation between the lists in the hardware?
+
+Looking at the driver I get a sense that we have N lists that can be
+configured independently and will be run "independently" upon a trigger.
+
+If this isn't the case, what's the purpose of the multiple lists?
+
+> > 
+> > > > > +		used while appending addresses.The range of values
+> > > > > +		for this can be from 0 to 3.This feature is given in
+> > > > > +		order to use certain linkedlist for certain debugging
+> > > > > +		purposes.
+> > > > > +		Example:
+> > > > > +		echo 0 > /sys/bus/platform/devices/10a2000.dcc/curr_list
+> > > > > +
+> > [..]
+> > > > > diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
+> > [..]
+> > > > > +static int dcc_valid_list(struct dcc_drvdata *drvdata, int curr_list)
+> > > > > +{
+> > > > > +	u32 lock_reg;
+> > > > > +
+> > > > > +	if (list_empty(&drvdata->cfg_head[curr_list]))
+> > > > > +		return -EINVAL;
+> > > > > +
+> > > > > +	if (drvdata->enable[curr_list]) {
+> > > > > +		dev_err(drvdata->dev, "List %d is already enabled\n",
+> > > > > +				curr_list);
+> > > > > +		return -EINVAL;
+> > > > > +	}
+> > > > > +
+> > > > > +	lock_reg = dcc_readl(drvdata, DCC_LL_LOCK(curr_list));
+> > > > Under what circumstances would this differ from
+> > > > drvdata->enable[curr_list}?
+> > > So locking the list is done on the register as soon as the user enters the
+> > > curr_list entry whereas
+> > > 
+> > > the list is marked as enabled only on successfully programming the SRAM
+> > > contents. So a list can
+> > > 
+> > > be locked and not marked enabled in certain cases. The first is used so that
+> > > the user doesn't
+> > > 
+> > > mistakenly enter the same curr_list twice whereas the later is used to mark
+> > > that the list has been
+> > > 
+> > > successfully configured.
+> > > 
+> > So this will mark the list as "actively in use, but disabled"? Why is
+> > this kept in the hardware? When is this not the same as the list of
+> > operations for that list being non-empty?
+> 
+> So this is in accordance with the dcc hardware configuration
+> requirement. We have to lock the list first and after that proceed
+> with the subsequent writes.
+
+But what does this mean? What happens when I lock a list?
+
+Afacit we have a "lock" bit and an "enable" bit. So in what circumstance
+does the hardware care about a list being locked? Wouldn't it be
+sufficient to just have the enable bit?
+
+> As per the driver code below
+> 
+>                /* 1. Take ownership of the list */
+>                 dcc_writel(drvdata, BIT(0), DCC_LL_LOCK(list));
+> 
+>                 /* 2. Program linked-list in the SRAM */
+>                 ram_cfg_base = drvdata->ram_cfg;
+>                 ret = __dcc_ll_cfg(drvdata, list);
+>                 if (ret) {
+>                         dcc_writel(drvdata, 0, DCC_LL_LOCK(list));
+>                         goto err;
+>                 }
+> 
+>                 /* 3. program DCC_RAM_CFG reg */
+>                 dcc_writel(drvdata, ram_cfg_base +
+>                         drvdata->ram_offset/4, DCC_LL_BASE(list));
+>                 dcc_writel(drvdata, drvdata->ram_start +
+>                         drvdata->ram_offset/4, DCC_FD_BASE(list));
+>                 dcc_writel(drvdata, 0xFFF, DCC_LL_TIMEOUT(list));
+> 
+>                 /* 4. Clears interrupt status register */
+>                 dcc_writel(drvdata, 0, DCC_LL_INT_ENABLE(list));
+>                 dcc_writel(drvdata, (BIT(0) | BIT(1) | BIT(2)),
+>                                         DCC_LL_INT_STATUS(list));
+> 
+> In case of any errors we again unlock the list before exiting.
+> 
+
+So it needs to be locked while SRAM contains a valid sequence of
+operations?
+
+Or does it need to be locked while we write to SRAM? If so, why is that?
+
+Regards,
+Bjorn

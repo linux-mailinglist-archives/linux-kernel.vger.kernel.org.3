@@ -2,93 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D337486F39
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70DA486F3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344266AbiAGA46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiAGA45 (ORCPT
+        id S1344397AbiAGA5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:57:31 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:26842 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230133AbiAGA53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:56:57 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B81C061245;
-        Thu,  6 Jan 2022 16:56:56 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id z30so559357pge.4;
-        Thu, 06 Jan 2022 16:56:56 -0800 (PST)
+        Thu, 6 Jan 2022 19:57:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uMXLFosFcOPnqBCXyW3ou3WsEkK2Jt5B5KOIU+ZiGjo=;
-        b=HY4MDnfHnH1FSfwxEYfvyFHzygyUTcL7uLz8N+p5bzibRbSBx+GAIuZ8nd4l6mG1f+
-         WAACkXbTWfBQldkidOw0KFrYGhJNninO9z5X5dGSZtU9XHp55GYmSnCLPH2G3WF8jnkq
-         qQSvXUiFJdYJ0KB3RfWExyIGmKBIRVLWM+owOCNIAJneRgkO/ZU6uh/Ce0Nwmw9mBd+y
-         AeKvXFZxym6e4OcgJsSslfQjGT7CDIdFPChoxVtgZRD5OSnuM9jwzDC+VsStGcFeGezU
-         Uz+3SlbeMwklQerUWH2J0t6iSBMJQZr3ypkyqoFbSrkd0/PPpd9svnG6xSLngtnVSlc2
-         hDww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uMXLFosFcOPnqBCXyW3ou3WsEkK2Jt5B5KOIU+ZiGjo=;
-        b=H2gmqyBB9TIiqIZC4q9/KO9juDVU+nYR9e9YOepbPlB5Dl3I6GQqGR5oUOqQxg3G73
-         W59WmvpYTqqQyA26FfHOeQhP4pSqaPrkfEtkLFmX0VmJ1GJomb71Wq7sw6rH58e3xDVo
-         LdyDCA0BRtcqjqY3rI9WebbotD+AvMUUzlqWXk5V6mjlvpfG4H+hUwwday9KNDZrCD8o
-         gZBIL/8vxs1208lmX2/Bf1E1Kpx2o6+l+LvCKgjCNylojIr0vFSwAFgTFGwXcZRImlyj
-         lN7FKQFue0kkUv0usJHLb8cOtXrIU+rjtcD/cV22hRSTiCvh7BDXWolANfi/zPPsoKcr
-         DQ6g==
-X-Gm-Message-State: AOAM530riIZ/sMGEwXmaDbDJY1TU83NA5pTer4HiMz2FHTME1DxEtm/l
-        cNjX2bhMHisRFfBcWJuLQkbtMGpuXvLZLopZzU0=
-X-Google-Smtp-Source: ABdhPJyStCRrCyOg1AqLK7/yPv4PQhWye7FYWRV+XtcsXNpTI0p6T7PzG9+39q9Vk00MLMuYf0phF733PraMX/fG0Gw=
-X-Received: by 2002:aa7:8c59:0:b0:4bc:9dd2:6c12 with SMTP id
- e25-20020aa78c59000000b004bc9dd26c12mr23062631pfd.59.1641517016438; Thu, 06
- Jan 2022 16:56:56 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641517049; x=1673053049;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=+Z7xRVSlmNeiIFWUHvEdTDAW69uc9POi1AmSX78ne+Q=;
+  b=DW01MZc4I917lHP+xMYZwdIZng3V8NsZGq57y3s5NcYBCU4zhLLLdmiu
+   MEZhbEKUFodoIBBFyuimom8hleild7zsCVFwMYDUYKs/DiUoM5B0bBknR
+   knMaqnuyYI4bMxTmFhLNo9iMskOC0Wkwzml1NoVr94WQ6nMFMGxmz+0Tx
+   k=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 16:57:28 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 16:57:28 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 16:57:27 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 16:57:25 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kuogee Hsieh <khsieh@codeaurora.org>
+Subject: [PATCH v4] drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+Date:   Thu, 6 Jan 2022 16:57:08 -0800
+Message-ID: <1641517028-27639-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220105030345.3255846-1-jevburton.kernel@gmail.com> <20220105030345.3255846-3-jevburton.kernel@gmail.com>
-In-Reply-To: <20220105030345.3255846-3-jevburton.kernel@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 6 Jan 2022 16:56:45 -0800
-Message-ID: <CAADnVQK+kB=9hdNUa_=6637ff_q46avnjoQOsUS8vRVVoUeHLQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/3] bpf: Add selftests
-To:     Joe Burton <jevburton.kernel@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Petar Penkov <ppenkov@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 7:03 PM Joe Burton <jevburton.kernel@gmail.com> wrote:
-> +
-> +enum BoolOrErr {
-> +       TRUE = 0,
-> +       FALSE = 1,
-> +       ERROR = 2,
-> +};
+From: Kuogee Hsieh <khsieh@codeaurora.org>
 
-No camel style in the kernel please.
+Some DP sinkers prefer to use tps4 instead of tps3 during training #2.
+This patch will use tps4 to perform link training #2 if sinker's DPCD
+supports it.
 
-> +++ b/tools/testing/selftests/bpf/progs/bpf_map_trace_common.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2022 Google */
-> +#pragma once
+Changes in V2:
+-- replace  dp_catalog_ctrl_set_pattern() with  dp_catalog_ctrl_set_pattern_state_bit()
 
-Didn't you say that pragma once was removed?
+Changes in V3:
+-- change state_ctrl_bits type to u32 and pattern type to u8
 
-> +
-> +enum MapAccessLocations {
+Changes in V4:
+-- align } else if { and } else {
 
-here and other places.
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/gpu/drm/msm/dp/dp_catalog.c | 12 ++++++------
+ drivers/gpu/drm/msm/dp/dp_catalog.h |  2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 17 ++++++++++++-----
+ 3 files changed, 19 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+index 6ae9b29..64f0b26 100644
+--- a/drivers/gpu/drm/msm/dp/dp_catalog.c
++++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+@@ -456,19 +456,19 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
+ 	dp_write_p0(catalog, MMSS_DP_DSC_DTO, 0x0);
+ }
+ 
+-int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
+-					u32 pattern)
++int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog,
++					u32 state_bit)
+ {
+ 	int bit, ret;
+ 	u32 data;
+ 	struct dp_catalog_private *catalog = container_of(dp_catalog,
+ 				struct dp_catalog_private, dp_catalog);
+ 
+-	bit = BIT(pattern - 1);
+-	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, pattern);
++	bit = BIT(state_bit - 1);
++	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, state_bit);
+ 	dp_catalog_ctrl_state_ctrl(dp_catalog, bit);
+ 
+-	bit = BIT(pattern - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
++	bit = BIT(state_bit - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
+ 
+ 	/* Poll for mainlink ready status */
+ 	ret = readx_poll_timeout(readl, catalog->io->dp_controller.link.base +
+@@ -476,7 +476,7 @@ int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
+ 					data, data & bit,
+ 					POLLING_SLEEP_US, POLLING_TIMEOUT_US);
+ 	if (ret < 0) {
+-		DRM_ERROR("set pattern for link_train=%d failed\n", pattern);
++		DRM_ERROR("set state_bit for link_train=%d failed\n", state_bit);
+ 		return ret;
+ 	}
+ 	return 0;
+diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
+index 6965afa..7dea101 100644
+--- a/drivers/gpu/drm/msm/dp/dp_catalog.h
++++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
+@@ -94,7 +94,7 @@ void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog, bool enable);
+ void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
+ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
+ 				u32 stream_rate_khz, bool fixed_nvid);
+-int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog, u32 pattern);
++int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog, u32 pattern);
+ void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
+ bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
+ void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 39558a2..ad64ddd 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1083,7 +1083,7 @@ static int dp_ctrl_link_train_1(struct dp_ctrl_private *ctrl,
+ 
+ 	*training_step = DP_TRAINING_1;
+ 
+-	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, DP_TRAINING_PATTERN_1);
++	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, 1);
+ 	if (ret)
+ 		return ret;
+ 	dp_ctrl_train_pattern_set(ctrl, DP_TRAINING_PATTERN_1 |
+@@ -1181,7 +1181,8 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
+ 			int *training_step)
+ {
+ 	int tries = 0, ret = 0;
+-	char pattern;
++	u8 pattern;
++	u32 state_ctrl_bit;
+ 	int const maximum_retries = 5;
+ 	u8 link_status[DP_LINK_STATUS_SIZE];
+ 
+@@ -1189,12 +1190,18 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
+ 
+ 	*training_step = DP_TRAINING_2;
+ 
+-	if (drm_dp_tps3_supported(ctrl->panel->dpcd))
++	if (drm_dp_tps4_supported(ctrl->panel->dpcd)) {
++		pattern = DP_TRAINING_PATTERN_4;
++		state_ctrl_bit = 4;
++	} else if (drm_dp_tps3_supported(ctrl->panel->dpcd)) {
+ 		pattern = DP_TRAINING_PATTERN_3;
+-	else
++		state_ctrl_bit = 3;
++	} else {
+ 		pattern = DP_TRAINING_PATTERN_2;
++		state_ctrl_bit = 2;
++	}
+ 
+-	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, pattern);
++	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, state_ctrl_bit);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

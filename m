@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 760CC487935
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD7F48793A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347856AbiAGOsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239548AbiAGOsF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:48:05 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7C3C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:48:05 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id u8so7352744iol.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=08UG9ldMiIKdmS2iZih9on1+nM9rLQX/zKMslKeCB3s=;
-        b=ODpNx+E5W3JT2auKiRB5qHnko2O+pKToBUMq1m5IqCRgjz9lSHnWjMtnHDqVZ+dMXz
-         SXbJbd3PEl7Xo1ndGjUSrCErgn7TGKOv+P1TZJgMgPc/PwSa0U0O8+xL4+aciaaRdzmC
-         7r6cHz13L5X8hGpebnW1QBzD85zd0T5XNpd2AeUzCHYL0PtX+PwOtA9gVCpVo4blUzmT
-         Am+WHIoKvWmC0ZLgZB39d4asN1bkZxki5aLM/Qi1cNEftjkIMBCyfBCCIkwtOhOfQjZQ
-         WpWdBEbfW8je/2Hllypqp9RwIpPya0QAPvmQ4lnrwNXl/SDZbOTys4ZPDsGDavOl5C3t
-         mNYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=08UG9ldMiIKdmS2iZih9on1+nM9rLQX/zKMslKeCB3s=;
-        b=JcWLuqX4lxGuJCrUYXXMO3U+zhM0hWWkEG2dIuaXSEMTSelgdY6+RyftSPkMSORet5
-         E0l4jxlwjFxDShmarxngrAe+iSmkjEIFevuAXZK2IUXsCrgeLnMx14AHODoE3SynLIq+
-         LteAO6e+78zbSo65Cv7sKyHljaPte0kHA5YnweYV3jvX00dssXCpeTygPhZOc5sUZDnC
-         2em7+72IWi9k8osvV61WErwpG4jQyJestoD3fDmi3Pvoiut0ZnO2FrJixkwKhhcbjPwQ
-         3MX6pqIh1VXTdhvuXMFdD6vdYiEDug7HZaFlkRmEvTY+jqWo/1jvaheeNnDC/9SUYejB
-         3HwQ==
-X-Gm-Message-State: AOAM532V9yZjuiyFGqr44wcSkfpH5OnUcDMNfvlmYZDazO+TlhLJfjJi
-        YjHtL5yJhjd3lrVNDUNA/lH0dYjapni4G6R37t4=
-X-Google-Smtp-Source: ABdhPJxjpTJgRloIUGjz4uAjULYxtDg2osGBV30m1CDVxyCZm8543tsRUMJPXfo5XYXJYrCExO1LLVznV5n5qc36H4Y=
-X-Received: by 2002:a05:6638:2615:: with SMTP id m21mr28449645jat.271.1641566884855;
- Fri, 07 Jan 2022 06:48:04 -0800 (PST)
+        id S1347883AbiAGOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:49:18 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:60372 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347864AbiAGOtQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 09:49:16 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABnb5_VUthhJmv7BQ--.49088S2;
+        Fri, 07 Jan 2022 22:48:53 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] tty/serial: Check for null pointer after calling devm_ioremap
+Date:   Fri,  7 Jan 2022 22:48:52 +0800
+Message-Id: <20220107144852.4081390-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6638:3786:0:0:0:0 with HTTP; Fri, 7 Jan 2022 06:48:04
- -0800 (PST)
-Reply-To: fahham.abuahmad1971@aol.com
-From:   "Mr. Amir Aziz" <wu5060344@gmail.com>
-Date:   Fri, 7 Jan 2022 15:48:04 +0100
-Message-ID: <CANCEQCqE7CBrY3s78e5b056apYkKJXeHJ06Wbj2KRQtGrxWvVw@mail.gmail.com>
-Subject: Dear friend Contact my secretary
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowABnb5_VUthhJmv7BQ--.49088S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw4UZry8tw4UKr17Cr45Jrb_yoWkCrg_GF
+        n5uan5Cw18CF4Fya17JryfZFWqq390vayxWrn2gr9Iq3sxAF4kXFZrWrn3Zw4UW3yqvFyU
+        CrZruF47Zr1UujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry5MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
+        CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUVxRhUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear friend Contact my secretary
+As the possible failure of the devres_alloc(), the devm_ioremap()
+may return NULL pointer.
+And the 'port->membase' will be used in mlb_usio_startup() without the
+check.
+Therefore, in order to avoid the dereference of the NULL pointer, it
+should be better to add the check to guarantee the success of the probe.
 
+Fixes: ba44dc043004 ("serial: Add Milbeaut serial control")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
 
-I am sorry to tell you about my successes getting the fund remitted
-through a co-operation of new business partner from U-Emirates I tried
-my possible best to involves you=E2=80=99re in Gold and Diamond business,
-Almighty decided whole conditions I am presently in Bangladesh for
-project/investments with my owner percentage share of total fund sum
+v1 -> v2
 
-I don=E2=80=99t forget you past attempts/effort for assists me in remittanc=
-e
-of the fund despite that it=E2=80=99s failed us that period time
+* Change 1. Refine the commit message to be more clear.
+---
+ drivers/tty/serial/milbeaut_usio.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-You should contact my secretary in Burkina Faso his Name. Mr. fahham
-abuahmad and his Email.  fahham.abuahmad1971@aol.com
+diff --git a/drivers/tty/serial/milbeaut_usio.c b/drivers/tty/serial/milbeaut_usio.c
+index 8f2cab7f66ad..1ecbf6d0dc79 100644
+--- a/drivers/tty/serial/milbeaut_usio.c
++++ b/drivers/tty/serial/milbeaut_usio.c
+@@ -523,6 +523,10 @@ static int mlb_usio_probe(struct platform_device *pdev)
+ 	}
+ 	port->membase = devm_ioremap(&pdev->dev, res->start,
+ 				resource_size(res));
++	if (!port->membase) {
++		ret = -ENOMEM;
++		goto failed;
++	}
+ 
+ 	ret = platform_get_irq_byname(pdev, "rx");
+ 	mlb_usio_irq[index][RX] = ret;
+-- 
+2.25.1
 
-Tell/advice him to send you ATM Visa Card sum of (USD $2,500,000) I
-kept for your compensations in all past attempts/effort you made for
-assist me in past I so much appreciated your assist/effort during the
-period time so feel free get in touch with my secretary his name Mr.
-fahham abuahmad instructs him where to send the ATM Visa Card worth of
-(USD $2,500,000) to you.
-
-This amount is me and my new partner contributed it to offered you
-amount (USD $1,500,000) is from my own percentage share then my new
-partner offered you (USD $1,000,000) from his own percentage share
-because I explained everything to him that you are the first person I
-contacted who assisting me but you couldn=E2=80=99t make it he says okay
-there=E2=80=99s no problem
-
-Now you should keep everything secret/confidential for my successfully
-because I know that it was only you knew how I made this money in life
-so kept everything secret/confidential, I hope you understood reason
-why this big amount of money was kept for you??
-
-Please du inform me immediately you received the ATM Visa Card sum of
-(USD $2,500,000) so that we will share our joys after all suffering at
-past time period, am here because I and my new partner having big
-investment projects at hands now
-
-You should remembered that I have forward instructions to the
-secretary on your behalf to send the ATM Visa Card to you immediately,
-so feel free to contact my secretary so that he will send the ATM Visa
-Card sum of Two Million Five-Hundred Thousand United State Dollars
-(USD $2,500,000) to you immediately without delay.
-
-Yours faithfully
-Mr. Amir Aziz

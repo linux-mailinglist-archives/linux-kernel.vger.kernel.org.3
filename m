@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36364487E5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 066DD487E66
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiAGVgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:36:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47888 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiAGVgO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:36:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6CA76201E;
-        Fri,  7 Jan 2022 21:36:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D8FC36AE9;
-        Fri,  7 Jan 2022 21:36:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641591373;
-        bh=j5HsOLNVGqvbLwGLGzH8tyxrFSkvHryzBUNEAa7ADyk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=In9yUjCOAz4yBAFFwZiTIGL9H8CrbBUhXsbbAFgLnV9HfbQpjtzPVEuavbStBXlug
-         AiDMsvd9ZuyXr6Wnabxhz1DwlZZ/rznzTjgegpXW8diQtA8TavGKIRDOO8Ic8BI5pe
-         UM4Lx4PRk05o4MDn2Ac2UkKcWX6ajl+yuZnjmQ6C9F3VXd/lVQnyu9GoBIkT5/S15b
-         EK1Tl51s0s8CqcaQ4cCk8vELSVvNCSICkYlhW4llbBHKKiJM5V3GZG4pftfdZw9diU
-         ov+XUmhk5mo4GtoTnm/8QNVS21+GVLD+EmHmNp11Nsa8K8oNe3Lc0QCJ3U3f+Mut1D
-         RzBzUe5F38UeA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E3E615C08AA; Fri,  7 Jan 2022 13:36:12 -0800 (PST)
-Date:   Fri, 7 Jan 2022 13:36:12 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Yu Kuai <yukuai3@huawei.com>, hch@infradead.org,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v5 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <20220107213612.GQ4202@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211210083143.3181535-1-yukuai3@huawei.com>
- <20211210083143.3181535-3-yukuai3@huawei.com>
- <20220107150519.GA26824@blackbody.suse.cz>
- <YdiuN9kv5OvE/Rtf@slm.duckdns.org>
+        id S230079AbiAGVlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:41:19 -0500
+Received: from mga14.intel.com ([192.55.52.115]:62651 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229922AbiAGVlS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 16:41:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641591678; x=1673127678;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9Pmuy7o54TmXZCwtBjSxaQ6heIrQDvWCBXZmr+GzRM4=;
+  b=IIsdO0VQgNQMCEo0jvcORljQpLrEB8FRholFWx7c7zooPUQkLru+AQdv
+   yp6zNd4JQtdMGit9ahT1I2qCbJn9yHsXG15Mp7lauAoz/+ebYXRA0V59F
+   4eQVlVvcS72IibU65Nm+UK0Isdc5J8EHuyGRgSpI+MAjuNAOy0C8c07wq
+   ZxhJW4SHmU7yS+uSoK/I9MwXYfq6qTCT1eRplV12Vkwa19qvJAawBXcVv
+   rFqCwz6dOHU9lxIyF7R6KxRLwkDbj4xy7po+LZgjkU0uj+o8fzLVcMc/w
+   YTXMTFW4/D+8qiQHR+NrsvJ67SO0ZQeQWvwzLa++yWpXpvs8a/O2vXNAd
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="243145826"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="243145826"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 13:41:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="513948828"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 07 Jan 2022 13:41:16 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5wz6-000J4L-9m; Fri, 07 Jan 2022 21:41:16 +0000
+Date:   Sat, 8 Jan 2022 05:40:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 81/2372]
+ arch/x86/kernel/../../../kernel/sched/per_task_area_struct_defs.h:9:13:
+ warning: no previous prototype for 'per_task_common'
+Message-ID: <202201080551.oDOcaGTi-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdiuN9kv5OvE/Rtf@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:18:47AM -1000, Tejun Heo wrote:
-> Hello,
-> 
-> On Fri, Jan 07, 2022 at 04:05:19PM +0100, Michal Koutný wrote:
-> > On Fri, Dec 10, 2021 at 04:31:43PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
-> > > +	 * queue_lock is held, rcu lock is not needed here.
-> > > +	 */
-> > > +	blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg)
-> > > +		tg_drain_bios(&blkg_to_tg(blkg)->service_queue);
-> > 
-> > FTR, I acknowledge this can work due to RCU peculiarities, however, I
-> > don't understand why is it preferred against more robust explict
-> > rcu_read_lock().
-> > 
-> > (All in all, this isn't a deal breaker and I'm not confident evaluating
-> > the rest of the patch.)
-> 
-> Cc'ing Paul for RCU. Paul, this nit is around whether or not to use
-> rcu_read_lock() in an irq disabled section. I can see both sides of the
-> arguments - it's weird to put in an extra rcu_read_lock() when technically
-> unnecessary but it's also nice to have something explicit and structured to
-> mark parts which require RCU protection. Putting in a comment is okay but
-> consistency is difficult to achieve that way.
-> 
-> Maybe all these are unnecessary as lockdep would be able to catch them
-> anyway, or maybe we'd want something to explicitly mark RCU protected
-> sections. I don't know but whichever way, I think we need to establish a
-> convention.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   67f8f45b4d0cf00f8e53fc1c2b50c67608ede063
+commit: cbe5c34b83fe53e121e44ba15f1af1f491da4602 [81/2372] headers/deps: per_task: Add the per_task infrastructure for x86, arm64, sparc and MIPS
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220108/202201080551.oDOcaGTi-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=cbe5c34b83fe53e121e44ba15f1af1f491da4602
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout cbe5c34b83fe53e121e44ba15f1af1f491da4602
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 prepare
 
-The easiest thing to do is to use rcu_dereference_sched() instead of
-rcu_dereference().  This will cause lockdep to insist on preemption
-(for example, interrupts) being disabled.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Or is this a case where a function containing rcu_dereference() is invoked
-with interrupts disabled from some call sites and under rcu_read_lock()
-protection from other call sites?  In this case, it is usually best to
-include that redundant rcu_read_lock() [1].
+All warnings (new ones prefixed by >>):
 
-							Thanx, Paul
+   In file included from arch/x86/kernel/asm-offsets.c:34:
+>> arch/x86/kernel/../../../kernel/sched/per_task_area_struct_defs.h:9:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+       9 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
+--
+>> kernel/sched/core.c:9294:13: warning: no previous prototype for 'per_task_init' [-Wmissing-prototypes]
+    9294 | void __init per_task_init(void)
+         |             ^~~~~~~~~~~~~
+--
+   In file included from arch/x86/kernel/asm-offsets.c:34:
+>> arch/x86/kernel/../../../kernel/sched/per_task_area_struct_defs.h:9:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+       9 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
 
-[1]	If you are a glutton for punishment, or if you would otherwise
-	have to add a cubic goatskin of rcu_read_lock() calls, you
-	could instead write this priceless gem in place of the calls to
-	rcu_dereference() in that common function:
 
-	p = rcu_dereference_check(ptr, rcu_read_lock_sched_held());
+vim +/per_task_common +9 arch/x86/kernel/../../../kernel/sched/per_task_area_struct_defs.h
 
-	This would cause lockdep to be happy with either rcu_read_lock()
-	or preemption being disabled.
+     8	
+   > 9	void __used per_task_common(void)
+    10	{
+    11	#ifdef CONFIG_THREAD_INFO_IN_TASK
+    12		DEF_PER_TASK(ti);
+    13	#endif
+    14		DEF_PER_TASK(stack);
+    15		DEF_PER_TASK(usage);
+    16		DEF_PER_TASK(flags);
+    17		DEF_PER_TASK(ptrace);
+    18	
 
-	This is more precise, and would be preferable in some cases,
-	for example, if there were lots of hotpath callsites with
-	interrupts disabled.  "Do we add 25 pairs of rcu_read_lock()
-	and rcu_read_unlock()?	Or do we add just the one ugly
-	rcu_dereference_check()?"
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

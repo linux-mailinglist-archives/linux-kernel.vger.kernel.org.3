@@ -2,89 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 524254877D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E80F4877DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238763AbiAGMyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:54:53 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:20510 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiAGMyv (ORCPT
+        id S1347305AbiAGMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:55:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38304 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231207AbiAGMzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:54:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641560091; x=1673096091;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=67zSzwS61kzAPs2xc9MB8BNIEpTH2Xw/IlQpSfxeB4A=;
-  b=n9/aWTSSIhLXnYiEwflWCJ1QfDyWlqkJIkPBScNqpNaryF2SnZFWi++R
-   o7wWfowZ0tpAE6rlpmH24eD19/95hzTxcyYDqBE0U0mlJAB3KV/5412m4
-   thuxiUWN3UqmNlGzeriqqPX54BXlYGSBW3Z59UHPoXOw365LBxZHQZ8gI
-   c=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 07 Jan 2022 04:54:51 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 04:54:50 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 7 Jan 2022 04:54:50 -0800
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 7 Jan 2022 04:54:47 -0800
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH v2] arm64: dts: ipq8074: add the reserved-memory node
-Date:   Fri, 7 Jan 2022 18:24:38 +0530
-Message-ID: <1641560078-860-1-git-send-email-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+        Fri, 7 Jan 2022 07:55:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEAAA60AAF;
+        Fri,  7 Jan 2022 12:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91584C36AE5;
+        Fri,  7 Jan 2022 12:55:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641560114;
+        bh=JsU2qs9kcOP11xgLqJB4Eq2GZtGGt42uQoq8yv8fZVM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QEVI3shOr9SR1meDkjYxcklM/V/6xbAbo5TK3ThOsPiZV/MHKPGfXtOQZnos0jlre
+         XcwqQapC6J9BH3/rq0zh9cC5YEGqtHBcdIEFa42P4mXdCpwis16rwYrFZfEl8o1uFJ
+         Ip2fEa1p0dcK99KBgG4rsKwoem0H17SS17/VA6KnsVpoQnThC6YmuWWbJWb04Xsc8f
+         ZsRCgCoy7akLsCEhiUuV6TR0XbY+P4HrWVLlC7p3nyIUb0AOLNV9QwWPOmEB1kMylm
+         VxRMVbKN+eF/nqxBtfgLsNKlRnI/XqKzKxlasvbBEZ7Najunn2/bbk1/ndfhSPxfz1
+         15dkwWmvgfdZw==
+Date:   Fri, 7 Jan 2022 21:55:08 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
+Message-Id: <20220107215508.eaac4e225add48b0705f5f14@kernel.org>
+In-Reply-To: <CAADnVQ+mZxxm=96pQ4ekV3rbjV=svPOKg3TG+K0396g+iMjTbA@mail.gmail.com>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+        <20220106002435.d73e4010c93462fbee9ef074@kernel.org>
+        <YdaoTuWjEeT33Zzm@krava>
+        <20220106225943.87701fcc674202dc3e172289@kernel.org>
+        <CAADnVQLjjcsckQVqaSB8ODB4FKdVUt-PB9xyJ3FAa2GWGLbHgA@mail.gmail.com>
+        <20220107085203.14f9c06e0537ea6b00779842@kernel.org>
+        <CAADnVQ+mZxxm=96pQ4ekV3rbjV=svPOKg3TG+K0396g+iMjTbA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On IPQ8074, 4MB of memory is needed for TZ. So mark that region
-as reserved.
+On Thu, 6 Jan 2022 16:20:05 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
-Changes since V1:
-	* Fixed the commit title
+> On Thu, Jan 6, 2022 at 3:52 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Thu, 6 Jan 2022 09:40:17 -0800
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > On Thu, Jan 6, 2022 at 5:59 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > >
+> > > > That seems to bind your mind. The program type is just a programing
+> > > > 'model' of the bpf. You can choose the best implementation to provide
+> > > > equal functionality. 'kprobe' in bpf is just a name that you call some
+> > > > instrumentations which can probe kernel code.
+> > >
+> > > No. We're not going to call it "fprobe" or any other name.
+> > > From bpf user's pov it's going to be "multi attach kprobe",
+> > > because this is how everyone got to know kprobes.
+> > > The 99% usage is at the beginning of the funcs.
+> > > When users say "kprobe" they don't care how kernel attaches it.
+> > > The func entry limitation for "multi attach kprobe" is a no-brainer.
+> >
+> > Agreed. I think I might mislead you. From the bpf user pov, it always be
+> > shown as 'multi attached kprobes (but only for the function entry)'
+> > the 'fprobe' is kernel internal API name.
+> >
+> > > And we need both "multi attach kprobe" and "multi attach kretprobe"
+> > > at the same time. It's no go to implement one first and the other
+> > > some time later.
+> >
+> > You can provide the interface to user space, but the kernel implementation
+> > is optimized step by step. We can start it with using real multiple
+> > kretprobes, and then, switch to 'fprobe' after integrating fgraph
+> > callback. :)
+> 
+> Sounds good to me.
+> My point was that users often want to say:
+> "profile speed of all foo* functions".
+> To perform such a command a tracer would need to
+> attach kprobes and kretprobes to all such functions.
 
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Yeah, I know. That is more than 10 years issue since
+systemtap. :)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 6c6a0f853669..b4d813c27230 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -82,6 +82,17 @@
- 		};
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		memory@4ac00000 {
-+			no-map;
-+			reg = <0x0 0x4ac00000 0x0 0x00400000>;
-+		};
-+	};
-+
- 	soc: soc {
- 		#address-cells = <0x1>;
- 		#size-cells = <0x1>;
+> The speed of attach/detach has to be fast.
+
+Yes, that's why I provided register/unregister_kprobes()
+but it sounds not enough (and maybe not optimized enough
+because all handlers are same)
+
+> Currently tracers artificially limit the regex just because
+> attach/detach is so slow that the user will likely Ctrl-C
+> instead of waiting for many seconds.
+
+Ah, OK.
+Anyway I also would like to fix that issue. If user wants
+only function entry/exit, it should be done by ftrace. But
+since the syntax (and user's mind model) it should be done via
+'kprobe', so transparently converting such request to ftrace
+is needed.
+
+Thank you,
+
 -- 
-2.7.4
-
+Masami Hiramatsu <mhiramat@kernel.org>

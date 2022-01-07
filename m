@@ -2,170 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A0748739C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CCC487396
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344827AbiAGHe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 02:34:28 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:20220 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344595AbiAGHe0 (ORCPT
+        id S1344185AbiAGHdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 02:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234699AbiAGHdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 02:34:26 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2073Hfu2014505;
-        Fri, 7 Jan 2022 07:34:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=KtWka6YYZ4VBdwmXEq0PNM4GBSIOfWsKW/+brqgHpwE=;
- b=LgVXzc0Ep38RoSA5Qo3gsxauItpL+ugFEYZwQQvBi5GnUPkL7U+rg/mcvy0DmfPFOBT/
- jwxJ0wCS1e4ZBjlGFhiZOnJ9tmxD5YQJSWHtickFJqeTYDGv4OfxaCX9nr+LOincELiM
- NL/gs8Yk8Tc2rzNkatOOj2dHLm8E1JMNiwBp1aokhbTeqHHeXXKuH4J9cWE+p3sRPxyp
- IHKvb8zdFGBKPT8FWOk+JlfSL2NbGhUwOg+UejJZyTEqmLAvfBv3woyKNiuaT0fmBDNk
- uhgKVXXXEghPIb1npfstiv7OAO9NacFxOxzRYo9GfttWbyCxlOKw9kHfXAPBIWzQT69p 3w== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3de4v8ha8u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jan 2022 07:34:22 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2077VOO2142220;
-        Fri, 7 Jan 2022 07:34:21 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2041.outbound.protection.outlook.com [104.47.74.41])
-        by userp3020.oracle.com with ESMTP id 3de4vn88jx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Jan 2022 07:34:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mIJcLEavEVIdVCIpqapF+zmMMQVjXIIfISz/J1MDd+NVDMub9P+daNpgZ7imuzWxMwbw9V1fx+QXzjce+p6VD3trgUpvYlHLBbZjfyIIoj/CDHc15u/A7d+9GTmrmPpI6Me8Q6D8IuPGjrwVJVl6YKOGbnLKWUW0zODGbkAGJUFJ7rtiJHT4GZDAWXWib4oMLoJoS+0YgZ6T0CMJm54sT/LtRBlg3PDbO4tLnBsHH666INx2gcWBXFs2WxJNg3b2jP5VMrgudYKGSeKppJg2rNrWC11Ah91Fj/HAWYWc5BJlW7ITBUMvnvsxTcekEn6GEyfCfVV5ovmce7cmnyaCEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KtWka6YYZ4VBdwmXEq0PNM4GBSIOfWsKW/+brqgHpwE=;
- b=kA1B741hgEQBTyoxDM9K8CcU/3tjeP0xt2L0Gwsaxgc/yPSy725Jx6LWnn4ZvR/tK/+nRI7WqLYBkEkg9cpUsLFPXwplxxROo8V29Ix/6M8ir1TCh9DlcK4ramlcLmXvmAXTpYWRymU+nduCR8PiWCWvQiUL8ZR0ZkOyXZtwqgIen0doInzY/+bJHecnU8NsCfY4JLTBjxehOUEQC7HRmCXP6L4vomUziW+APQIG28bZSnvAUoSGTy8gwKHYDKiA9UDJgd5e60KQTlSAU1zveCMAW0+gy78BEI5EIAltzSeRTTjtBlU8CRQWpBdz6Xbu4FbIpgwAQlpQLb6mOSJeuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 7 Jan 2022 02:33:51 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B003BC061245;
+        Thu,  6 Jan 2022 23:33:51 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id r6so4734215qvr.13;
+        Thu, 06 Jan 2022 23:33:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KtWka6YYZ4VBdwmXEq0PNM4GBSIOfWsKW/+brqgHpwE=;
- b=KUAq+2QWs2lnYBl431KPoPVuyQSsA7UwREEB2CkyCWhsesmtZtFQwupNMDaPTZBAkP/yEGzaI4zls9cfPaxwYxjyoJZ4Pi2JaR3uzKQXxN92MpJdun+OScbx2WcBz8SA6pcFEzZbmXws9AUasDrydDeQie5k2bMjcejlT0yq1hs=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MW4PR10MB5752.namprd10.prod.outlook.com
- (2603:10b6:303:18d::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Fri, 7 Jan
- 2022 07:34:18 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b889:5c86:23c0:82b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b889:5c86:23c0:82b8%4]) with mapi id 15.20.4867.011; Fri, 7 Jan 2022
- 07:34:18 +0000
-Date:   Fri, 7 Jan 2022 10:34:07 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>
-Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] ACPI: pfr_telemetry: Fix info leak in pfrt_log_ioctl()
-Message-ID: <20220107073407.GG22086@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0184.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:44::19) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OWA1fdbzmylL4NYUKt7VSHUi8U/n20t6ksYYhfNxj8U=;
+        b=dqBvjEJ42WPrTh6ySpy7KW/04ETvvXvpUF7wFNrq5p3b3IVpJoa4ixSXPIG1c72JSM
+         8f2fBwRpoSpmM9K1RpR/o1REC0MhWWe0M4nCxXxDMhf6/p3TmK/mT7Igowysoh+jCnwj
+         sEh1MT0UzLvdg8xhBYHMMmDuB8mQiTj7dJJo3780QL2Ld4ttUVp7038PyXWFtFL+w29k
+         9qVfwXaLPUPSwQTsTUgEn5pgS2pmCq3hsAqaF5oSxmdwejCPRe1s23oSJCUj9DxULdQK
+         jWKFWlxB1aayOxfmtS6ZFKApRKRa+0aSri3Lth5Xb9Eopwojupyz50R8ctwAazDDWz7X
+         wvCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OWA1fdbzmylL4NYUKt7VSHUi8U/n20t6ksYYhfNxj8U=;
+        b=hOkBZYecikIxv23NRZ0t+UFSc5sYHuzAOPJYS9uckA5sjVmKFMLQQ8jhNEpJiNcjvp
+         btdR3LS41O9eq/suVMsediKkCZA9rOmq+dDRigwbZ8rJ9fDSVDYh1kbGhl+ES5kTlSDi
+         M35XDMPYFLvtriMg2PzGj8TxqOPXdcn2dzlvO4MVbB++dM9R0eAlpXGG3vidbbBsC8tR
+         bDIQTee/CfArRxq0mIMHJbz7LpEso44Foe6PDwg/hab710NjBosvRYr5Fft589LfzUGj
+         /Y45cng6FRIfgOMRQRfrlBScdLFMm0Yl5e0yyzgN3G8ugttcrN7PcVbQyoKTYo6y3wVp
+         N5/g==
+X-Gm-Message-State: AOAM531XdsMUg0FCpVXTqrKncn7jy5YeR/ZbPfnB0WRtoV5KzgG/iJv9
+        MEnfHpP70KyxRLqPV8VGPJXq4F3QySYrPTYq2I8=
+X-Google-Smtp-Source: ABdhPJwaXB9IYwGWMkewpDaud/Nyq0WCEzceD9GziR40a5CzBY5Pqs7Yf5uvZaZs+Xiuux+TdQsFUbO0DPEI0rnTeIs=
+X-Received: by 2002:a05:6214:2504:: with SMTP id gf4mr2063513qvb.11.1641540830896;
+ Thu, 06 Jan 2022 23:33:50 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f3d98a26-1fdc-4e22-2942-08d9d1b01d3e
-X-MS-TrafficTypeDiagnostic: MW4PR10MB5752:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR10MB5752D7CD0DFB6402057441318E4D9@MW4PR10MB5752.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iDCnhHFM/zJBViTznO333zdfjv44qPB2sHdKJfz4dxqVJ2TN6XqPRKD8rNBQw3tPY4DpcHGXG7f6rcIcdPOFRjhQCFPUq1MeeuG51+kX3jlvXlFdC3c7rM1e+SOuhPc/leIJmfj6e5Ekgc5GlATeY6RYQqtx+boueF75uXaF4eOXDlCl1zq7KtjgDpf6oO9M+ZQm4uJCxghdVYazS++c05d5XQPorKebgdYHxRHalSmj1uuUvZHmeTKj4CrWdHxEwTTlqnlB7/IjDZGnUqTKlSVM7vM+c8tIjdZ24I+y3X2Q6g9FzHbgptcrC+HzVAv1CUqv9XE5P1E+iPbLR0KZ21D5IFuORMWxRUs05xlEexRQbRBRHe3Ejvd9kz9a1KSsdL6l9qpR0Kt140oLK2+z2n+krfihMDWH6rTg1y3VIkB/ofWPvGMe5z04vmnAX/dU6MTDvRHSPYFP6mrPGrmzWaTLkyoiuFeUAB+b68G3g6oLRmDsIgsgOPkyButqpwU6FHD/AJh3tktzpYKG3waDJl5vKm5DnZ2QAF0jNxkQB1ljra7Mg3JeM9cUfzafHEhkoqaVK95jrD+3rMscdkp4lJpdoBch1cfHwMuRTa1sDcGq9HuxfhOasi/g6psNUHtO5zCheF0beGT0IITA/7WVC3C+g3aDDVeFR6SYNoIFRYH4r3JIAVe6+59LFp10wMrGGI4CXTVl4gop6/8ttkfJ5w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(66946007)(6486002)(8936002)(6666004)(2906002)(186003)(4326008)(33716001)(1076003)(5660300002)(33656002)(44832011)(9686003)(6512007)(316002)(52116002)(508600001)(110136005)(38100700002)(38350700002)(66556008)(6506007)(86362001)(66476007)(26005)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dnHlmsr628+T7sCDgD4KvgLKVMpYG2MkZIQbkjbFlesbfJ4wSqNvJIQvOpTk?=
- =?us-ascii?Q?C/ZsTafTEEzw6qJD3ZY2hBo9MTBbVzA+kWWakBrlGtnTc5uXZIafG9VghiQ9?=
- =?us-ascii?Q?jEvD6vaZJZkw6KdX+5XT1m+oQFikzGrm87O+RPHgRoqOlaszr1xp2LLriEHv?=
- =?us-ascii?Q?pyAaNekKAZZMKOR5zJ/1VuSmWUav075G115SDedx2T5hudf0yhILJzLAQUin?=
- =?us-ascii?Q?CNBPjPgobbjNPHmbmCPDy3KsRM17f1qEEYQCYV2VXSILgoH3U1jCgjwArjWn?=
- =?us-ascii?Q?GRIvyBcHz9qJr4vojyKbIsh4LWsI5ORJvo0d5IuKuEuUBBG6WOvetIjaUMft?=
- =?us-ascii?Q?sXITj73iMVTo4VXjinkGEaMrtwfpDHdK0tzL1JsxDhnq1fZRcfpOvsQjArKX?=
- =?us-ascii?Q?+kZSbB6z6vsTcvlSCDwtPvUxQbar9gYcAEJ1ZF7v65lo2zGJ72ckNXUoZWTf?=
- =?us-ascii?Q?/fnycE8pB10Klw312MMG8II8QXDn92OghAS8khIFSCSeGgB01VJos27hAVOn?=
- =?us-ascii?Q?WhvMc6R+aRwsaOXhpTTed2XfCQ6SdDYtxpUfAg9F/QeeErfIy56zOh6MVZRZ?=
- =?us-ascii?Q?gyp2nSRtl+gYsIbAmfDmUxGJPrhgQdX5o8DGrrPKhD9hJSD5pI1Ny+T0nqSB?=
- =?us-ascii?Q?FCvziN3NPBPwtO7yFeze+GyFOasK5FFPf9hHzh9aVBYwPIqXuWYn8C04smwV?=
- =?us-ascii?Q?IqsSS5Gmx/unlQB3NU9FqTUvvmfGlLCmgekTcSOwiuTsYlLij29cM5bNHXod?=
- =?us-ascii?Q?RWlH5/Sfe7aMPdQY6P6Ur3EfSWr967gXBiLBmwNY2r334cwu4iUL4ttj4I4t?=
- =?us-ascii?Q?V5mZp8Ho9eRtg4aMzJO1ma6CR+Iz3Y8QeE4Lk302fqESJzNl86CvXCwBcOKe?=
- =?us-ascii?Q?wCsMJUrKQ6DBhFKf9ketBtHAM0TChzM+ZSk6wqaOyl+IBajvmZdIqXj/WGl1?=
- =?us-ascii?Q?b9ZILDqmyLwZxNIvqjkAGA//eBTEPIUujmKvqyuL77rL5Wq4rcKtUzB/Lwek?=
- =?us-ascii?Q?AKnF/Hkj/69qjhF7zUyR5ddZmq+mw9NVdeYjtQzAU3zjz8fy6AqBX7oKGnA0?=
- =?us-ascii?Q?ONKPRiKgVaakaUlaeVYJXLPCJNAou/EaV+yqp3TNO4FipuNuW+RS1LiJklnc?=
- =?us-ascii?Q?put4QxcxwT/sUr1XnFL7iIAlmBPv0UyQd5gxfAUv+KH77pPuhb0uyEDur+Nj?=
- =?us-ascii?Q?XqFt3O+46i8GUaysto4mGZeuB6rBteW5CbGuEyF4KjaIC6r/OaxW4bXLpQLA?=
- =?us-ascii?Q?TptbZvXrAWpNK3MPVHkXh7mQS/y8Vd8duAiou0zXb8KTGTb3e6GoxwEU8hQt?=
- =?us-ascii?Q?kob3pa+pxiOvVGvkZnMCwLrFPuu2qE8udarXPBlH409q9McH6+AgX/h3kn0d?=
- =?us-ascii?Q?rdL1dnCNkgpGj3nKNz/5Z1n06m06POfqcuMCqEAPWyJPfxrzkGFre7zB9isw?=
- =?us-ascii?Q?DtzGhEjyPleAVLatLisJMyi6MoFOXzoYWbG1Iqp0rzythsofpt6bgA5zs7RF?=
- =?us-ascii?Q?mVU5S4/wDx22H4XthkWLccV1hi5ltWKZyXgWlmjhOORKljHO9/RA4+h1sr2Q?=
- =?us-ascii?Q?u0mGRBAdkfpI4vFm9GqOjJ00MAprY87KWHMM1BEGEsy/Z3JSqKU0iqfvcbej?=
- =?us-ascii?Q?KLA3ddh1yBoG+Q4H5eGhfR5/QDfwlOiQyHCIhLEgi27v5mvfueYZZCjGUWLL?=
- =?us-ascii?Q?fpuXMS09G26+ZbFqf4pShFRdH1Y=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3d98a26-1fdc-4e22-2942-08d9d1b01d3e
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 07:34:18.5635
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tDToMSzQEX+T7gbw7vdB/g3XRIFkcq29VYbNZ0K8XmrdnnO2Z0K5BU1H/npLzXPJJHnahevuazbSWqNH0k6JTMbscY7wAYycT6ZDkt5GGIM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5752
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10219 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201070053
-X-Proofpoint-ORIG-GUID: y0EA88hfT8teSFG4j_1XdOPq8cAF05Rv
-X-Proofpoint-GUID: y0EA88hfT8teSFG4j_1XdOPq8cAF05Rv
+References: <20220106125947.139523-1-gengcixi@gmail.com> <20220106125947.139523-8-gengcixi@gmail.com>
+In-Reply-To: <20220106125947.139523-8-gengcixi@gmail.com>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Fri, 7 Jan 2022 15:34:32 +0800
+Message-ID: <CADBw62qd6RuHnxnkf1gQZERtq08okXC4asDBQ=6m_T_P_JDxqw@mail.gmail.com>
+Subject: Re: [PATCH 7/7] iio: adc: sc27xx: add Ump9620 ADC suspend and resume
+ pm support
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, jic23@kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
+        Mark Brown <broonie@kernel.org>, yuming.zhu1@unisoc.com,
+        linux-iio@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "data_info" struct is copied to the user.  It has a 4 byte struct
-hole after the last struct member so we need to memset that to avoid
-copying uninitialized stack data to the user.
+On Thu, Jan 6, 2022 at 9:00 PM Cixi Geng <gengcixi@gmail.com> wrote:
+>
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+>
+> Ump9620 ADC suspend and resume pm optimization, configuration
+> 0x6490_ 0350(PAD_ CLK26M_ SINOUT_ PMIC_ 1P8 ) bit 8.
+>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
+> ---
+>  drivers/iio/adc/sc27xx_adc.c | 103 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 102 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+> index 68b967f32498..cecda8d53474 100644
+> --- a/drivers/iio/adc/sc27xx_adc.c
+> +++ b/drivers/iio/adc/sc27xx_adc.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+> +#include <linux/pm_runtime.h>
+>
+>  /* PMIC global registers definition */
+>  #define SC2730_MODULE_EN               0x1808
+> @@ -83,6 +84,9 @@
+>  /* ADC default channel reference voltage is 2.8V */
+>  #define SC27XX_ADC_REFVOL_VDD28                2800000
+>
+> +/* 10s delay before suspending the ADC IP */
+> +#define SC27XX_ADC_AUTOSUSPEND_DELAY   10000
+> +
+>  enum sc27xx_pmic_type {
+>         SC27XX_ADC,
+>         SC2721_ADC,
+> @@ -618,6 +622,9 @@ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
+>                 return ret;
+>         }
+>
+> +       if (data->var_data->pmic_type == UMP9620_ADC)
+> +               pm_runtime_get_sync(data->indio_dev->dev.parent);
+> +
+>         /*
+>          * According to the sc2721 chip data sheet, the reference voltage of
+>          * specific channel 30 and channel 31 in ADC module needs to be set from
+> @@ -700,6 +707,11 @@ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
+>                 }
+>         }
+>
+> +       if (data->var_data->pmic_type == UMP9620_ADC) {
+> +               pm_runtime_mark_last_busy(data->indio_dev->dev.parent);
+> +               pm_runtime_put_autosuspend(data->indio_dev->dev.parent);
+> +       }
+> +
+>         hwspin_unlock_raw(data->hwlock);
+>
+>         if (!ret)
+> @@ -947,6 +959,10 @@ static int sc27xx_adc_enable(struct sc27xx_adc_data *data)
+>                 ret = regmap_update_bits(data->regmap, UMP9620_XTL_WAIT_CTRL0,
+>                                          UMP9620_XTL_WAIT_CTRL0_EN,
+>                                          UMP9620_XTL_WAIT_CTRL0_EN);
+> +               if (ret) {
+> +                       dev_err(data->dev, "failed to set the UMP9620 ADC clk26m bit8 on IP\n");
+> +                       goto clean_adc_clk26m_bit8;
+> +               }
+>         }
+>
+>         /* Enable ADC work clock */
+> @@ -988,6 +1004,11 @@ static int sc27xx_adc_enable(struct sc27xx_adc_data *data)
+>         regmap_update_bits(data->regmap, data->var_data->module_en,
+>                            SC27XX_MODULE_ADC_EN, 0);
+>
+> +clean_adc_clk26m_bit8:
+> +       if (data->var_data->pmic_type == UMP9620_ADC)
+> +               regmap_update_bits(data->regmap, UMP9620_XTL_WAIT_CTRL0,
+> +                               UMP9620_XTL_WAIT_CTRL0_EN, 0);
 
-Fixes: b0013e037a8b ("ACPI: Introduce Platform Firmware Runtime Telemetry driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
-When you're adding a new driver to the kernel then please use the new
-driver's prefix instead of just the subsystem prefix.
+Can you hide this into the pm runtime callbacks?
 
- Bad: ACPI: Introduce Platform Firmware Runtime Telemetry driver
-Good: ACPI / pfr_telemetry: Introduce Platform Firmware Runtime Telemetry driver
+> +
+>         return ret;
+>  }
+>
+> @@ -1086,6 +1107,8 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
+>         if (!indio_dev)
+>                 return -ENOMEM;
+>
+> +       platform_set_drvdata(pdev, indio_dev);
+> +
+>         sc27xx_data = iio_priv(indio_dev);
+>
+>         sc27xx_data->regmap = dev_get_regmap(dev->parent, NULL);
+> @@ -1126,7 +1149,10 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       sc27xx_data->dev = dev;
+>         sc27xx_data->var_data = pdata;
+> +       sc27xx_data->indio_dev = indio_dev;
+> +
+>         sc27xx_data->var_data->init_scale(sc27xx_data);
+>
+>         ret = sc27xx_adc_enable(sc27xx_data);
+> @@ -1137,18 +1163,39 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
+>
+>         ret = devm_add_action_or_reset(dev, sc27xx_adc_disable, sc27xx_data);
+>         if (ret) {
+> +               sc27xx_adc_disable(sc27xx_data);
+>                 dev_err(dev, "failed to add ADC disable action\n");
+>                 return ret;
+>         }
+>
+> +       indio_dev->dev.parent = dev;
+>         indio_dev->name = dev_name(dev);
+>         indio_dev->modes = INDIO_DIRECT_MODE;
+>         indio_dev->info = &sc27xx_info;
+>         indio_dev->channels = sc27xx_channels;
+>         indio_dev->num_channels = ARRAY_SIZE(sc27xx_channels);
+> +
+> +       if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
+> +               pm_runtime_set_autosuspend_delay(dev,
+> +                                                SC27XX_ADC_AUTOSUSPEND_DELAY);
+> +               pm_runtime_use_autosuspend(dev);
+> +               pm_runtime_set_suspended(dev);
+> +               pm_runtime_enable(dev);
+> +       }
+> +
+>         ret = devm_iio_device_register(dev, indio_dev);
+> -       if (ret)
+> +       if (ret) {
+>                 dev_err(dev, "could not register iio (ADC)");
+> +               goto err_iio_register;
+> +       }
+> +
+> +       return 0;
+> +
+> +err_iio_register:
+> +       if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
+> +               pm_runtime_put(dev);
 
-Otherwise it's just up to me to guess what prefix you wanted.
+I don't think the pm_runtime_put() is needed, since you did not get
+the counter before, right?
 
- drivers/acpi/pfr_telemetry.c | 1 +
- 1 file changed, 1 insertion(+)
+> +               pm_runtime_disable(dev);
+> +       }
+>
+>         return ret;
+>  }
+> @@ -1163,11 +1210,65 @@ static const struct of_device_id sc27xx_adc_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, sc27xx_adc_of_match);
+>
+> +static int sc27xx_adc_remove(struct platform_device *pdev)
+> +{
+> +       struct iio_dev *indio_dev = platform_get_drvdata(pdev);
+> +       struct sc27xx_adc_data *sc27xx_data = iio_priv(indio_dev);
+> +
+> +       if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
+> +               pm_runtime_put(&pdev->dev);
 
-diff --git a/drivers/acpi/pfr_telemetry.c b/drivers/acpi/pfr_telemetry.c
-index da50dd80192c..9abf350bd7a5 100644
---- a/drivers/acpi/pfr_telemetry.c
-+++ b/drivers/acpi/pfr_telemetry.c
-@@ -83,6 +83,7 @@ static int get_pfrt_log_data_info(struct pfrt_log_data_info *data_info,
- 	union acpi_object *out_obj, in_obj, in_buf;
- 	int ret = -EBUSY;
- 
-+	memset(data_info, 0, sizeof(*data_info));
- 	memset(&in_obj, 0, sizeof(in_obj));
- 	memset(&in_buf, 0, sizeof(in_buf));
- 	in_obj.type = ACPI_TYPE_PACKAGE;
+You did not get the pm count, why put it firstly?
+
+> +               pm_runtime_disable(&pdev->dev);
+> +
+> +               /* set the UMP9620 ADC clk26m bit8 on IP */
+> +               regmap_update_bits(sc27xx_data->regmap, UMP9620_XTL_WAIT_CTRL0,
+> +                               UMP9620_XTL_WAIT_CTRL0_EN, 0);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int sc27xx_adc_runtime_suspend(struct device *dev)
+> +{
+> +       struct sc27xx_adc_data *sc27xx_data = iio_priv(dev_get_drvdata(dev));
+> +
+> +       /* clean the UMP9620 ADC clk26m bit8 on IP */
+> +       if (sc27xx_data->var_data->pmic_type == UMP9620_ADC)
+> +               regmap_update_bits(sc27xx_data->regmap, UMP9620_XTL_WAIT_CTRL0,
+> +                               UMP9620_XTL_WAIT_CTRL0_EN, 0);
+> +
+> +       return 0;
+> +}
+> +
+> +static int sc27xx_adc_runtime_resume(struct device *dev)
+> +{
+> +       int ret = 0;
+
+no need to initialize it.
+
+> +       struct sc27xx_adc_data *sc27xx_data = iio_priv(dev_get_drvdata(dev));
+> +
+> +       /* set the UMP9620 ADC clk26m bit8 on IP */
+> +       if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
+> +               ret = regmap_update_bits(sc27xx_data->regmap, UMP9620_XTL_WAIT_CTRL0,
+> +                               UMP9620_XTL_WAIT_CTRL0_EN, UMP9620_XTL_WAIT_CTRL0_EN);
+> +               if (ret) {
+> +                       dev_err(dev, "failed to set the UMP9620 ADC clk26m bit8 on IP\n");
+> +                       return ret;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dev_pm_ops sc27xx_adc_pm_ops = {
+> +       .runtime_suspend = &sc27xx_adc_runtime_suspend,
+> +       .runtime_resume = &sc27xx_adc_runtime_resume,
+> +};
+
+Please use SET_RUNTIME_PM_OPS macro.
+
+> +
+>  static struct platform_driver sc27xx_adc_driver = {
+>         .probe = sc27xx_adc_probe,
+> +       .remove = sc27xx_adc_remove,
+>         .driver = {
+>                 .name = "sc27xx-adc",
+>                 .of_match_table = sc27xx_adc_of_match,
+> +               .pm     = &sc27xx_adc_pm_ops,
+>         },
+>  };
+>
+> --
+> 2.25.1
+>
+
+
 -- 
-2.20.1
-
+Baolin Wang

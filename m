@@ -2,169 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF14487441
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8A1487446
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346171AbiAGItN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:49:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21804 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346146AbiAGItM (ORCPT
+        id S1346181AbiAGIue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236255AbiAGIud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:49:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641545351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6palvWqfH5KyhGR0Cfbu8us1WPnz3WY1UKlbwit/wL8=;
-        b=CeId4hW5k2GWCAAEsfj5vpR25JkiFJXgkg3cpAMCFYTz05uc9Ll2tY/xFdPHjAvbOuqTrG
-        BtNEW2EPGfjo8+gO4BLwnkSpe/OSQAqxnfhZ3YZzULw4KKU/vZL/vqYMzquiGf+vLT2e5m
-        Wu7wgwi8GRSGLz7JfD5IFqvKR9TamFI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-3qf5dAWcM1OI3b090FDrAA-1; Fri, 07 Jan 2022 03:49:10 -0500
-X-MC-Unique: 3qf5dAWcM1OI3b090FDrAA-1
-Received: by mail-wm1-f70.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so4355927wmq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 00:49:10 -0800 (PST)
+        Fri, 7 Jan 2022 03:50:33 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8927DC061245;
+        Fri,  7 Jan 2022 00:50:33 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id v25so4938175pge.2;
+        Fri, 07 Jan 2022 00:50:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=IQS4J/qtHwJGGOnAQs0o0rtK4NFNyvH92Ln82XpYq1E=;
+        b=BR9uftG+cCtV8P36GOU+YlObjfqGNjV8mIZYTwYw5+DCzL+BOwdPwVbM3W2Gruavzu
+         32qKXVL3Pm05dggOZeyGMYvmCVPqcnm644blBcdbV+bKenZmugHuv991x8t0KfqfwIQV
+         72D0fgW9hmUTsgWjbgKZS4YCyBQ6kgfjpKzcwJtq1bvHQx4X4zTIOnNbJAxtClRLGJZi
+         1zSj3Oy67PRKgvBwhkJl8UPb6juw9oepXa+8aF6xLEm5RXNB/y3goROq2NB66Nv9KWMr
+         AfoSW1ItYV32P/T0irVa6Bw4SK9lVifs8P2m69RBE0IXafbaxoNuzUp8px1kY9ZYE5wB
+         Mxhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=6palvWqfH5KyhGR0Cfbu8us1WPnz3WY1UKlbwit/wL8=;
-        b=7BnaheuO6db0KhzMQ5IUGrBzOUV9GihhMIPJL/xAmAYfyj4W2/tUKAKfddxZoPZW1l
-         +X5rbiDmE23UNPvDiSvVk8+MJhw/ebJIItqw/9NN8k8iNw6kBMRtlmznv2q88Z+xo10w
-         RONWJZCt7OwbNUAi6JJDI3RTfNQYcPiktGDEPHmNyrQzeGC4FKiQZ3HZ8VLOIQMXLrLe
-         iW2DeZ6sx9yooChR9MY4KYX8Fqao0jg7J13o5SFGv3J6Z39rtmBPpQfuGnLjMZdT/UIx
-         21wnMraDg3CclhEhj2NmQ+ek/E0Qelvgq6t9RLH0DduFi+ku5cr67mCswlfK4m/y+5YK
-         ttGw==
-X-Gm-Message-State: AOAM533CdQzIYw2Pu+zz0nMsO/CXxJHmdFxwalaJxIUM99yoTmOyNWDJ
-        WbiBjzHho8JzdRY5DJNy5Ku1bhyYRm0ksRcdQ6oE4VycEU6YhZPr3e6EkyNoPQ0OAiZIxTN9t04
-        6Bh/ziFmsdk46q2OqpFkKS8VvKpYBs90JItNI7iAfD6T8TR0V4JRzMJr1ubAmzEwZLruoFIRzuX
-        qg
-X-Received: by 2002:adf:fc50:: with SMTP id e16mr9390775wrs.554.1641545349333;
-        Fri, 07 Jan 2022 00:49:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJySkbXqG2xki3KSYdnsJVvy9VoZM4eO74+AV/DdBkYX9hu/aqfLJUkycWON9qrUR2HHBlANow==
-X-Received: by 2002:adf:fc50:: with SMTP id e16mr9390755wrs.554.1641545349083;
-        Fri, 07 Jan 2022 00:49:09 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id u12sm4111477wrf.60.2022.01.07.00.49.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=IQS4J/qtHwJGGOnAQs0o0rtK4NFNyvH92Ln82XpYq1E=;
+        b=VOvnUCf5X7LXaC7OJfaHyZA89O1UjxpEWNEfkrDrT4w9WngsF/5/pNBJ+8Sx4ELsyn
+         N5ckMDs6fpiKv1kfyjP2RoV5lPehgZ2aJjlS2ezwDBKxm4V5C8ePsbwJTgiVwb7Z6gHc
+         mzyJTRqTaXAeTX82mC0mSUbSQA/IYmmRpjmnobJ83sXhDuOoih8DGPzlAToCGCJk36nI
+         5ahxUgCHUJ3IJ2FkuXEWK50sxuo1luvVbTA/kAQfQPXFVHgEr47ICm1clVO2jPXw4x75
+         C9Q9FTdbWFAt8MFEWlrMkcCSkkYZENLBBXv2obz0TrjMeqFJyBKil7IcPBxBp+PPps4X
+         FkIg==
+X-Gm-Message-State: AOAM531vGqQlFcF2rJIr/I2mdfKSC1v6Vhbwzzwe7CskblqHVdgQrUjj
+        rntUSmEYfsz3v/gO4HF7Zw8=
+X-Google-Smtp-Source: ABdhPJzrezcJmoyT8I5bb9IzMr0GwT31Qhm2NI7Dx6C7H3w2cx5/PuMuN/+otYHv28cEYnq5kQUd5w==
+X-Received: by 2002:a63:8149:: with SMTP id t70mr55367147pgd.71.1641545433164;
+        Fri, 07 Jan 2022 00:50:33 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id f20sm5167583pfe.166.2022.01.07.00.50.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 00:49:08 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] KVM: nVMX: Allow VMREAD when Enlightened VMCS is in
- use
-In-Reply-To: <YdeDNzho8LihsF5o@google.com>
-References: <20211214143859.111602-1-vkuznets@redhat.com>
- <20211214143859.111602-6-vkuznets@redhat.com>
- <YdeDNzho8LihsF5o@google.com>
-Date:   Fri, 07 Jan 2022 09:49:07 +0100
-Message-ID: <87a6g8orr0.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Fri, 07 Jan 2022 00:50:32 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Archit Taneja <architt@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/msm/hdmi: Fix missing put_device() call in msm_hdmi_get_phy
+Date:   Fri,  7 Jan 2022 08:50:22 +0000
+Message-Id: <20220107085026.23831-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling path.
 
-> On Tue, Dec 14, 2021, Vitaly Kuznetsov wrote:
->> Hyper-V TLFS explicitly forbids VMREAD and VMWRITE instructions when
->> Enlightened VMCS interface is in use:
->> 
->> "Any VMREAD or VMWRITE instructions while an enlightened VMCS is
->> active is unsupported and can result in unexpected behavior.""
->> 
->> Windows 11 + WSL2 seems to ignore this, attempts to VMREAD VMCS field
->> 0x4404 ("VM-exit interruption information") are observed. Failing
->> these attempts with nested_vmx_failInvalid() makes such guests
->> unbootable.
->> 
->> Microsoft confirms this is a Hyper-V bug and claims that it'll get fixed
->> eventually but for the time being we need a workaround. (Temporary) allow
->
-> Temporarily.  And for the record, I highly doubt this will be temporary :-)
->
+Fixes: e00012b256d4 ("drm/msm/hdmi: Make HDMI core get its PHY")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/gpu/drm/msm/hdmi/hdmi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I'm just trying to be optimistic, at least in commit messages, you know :-)
-
->> VMREAD to get data from the currently loaded Enlightened VMCS.
->
-> ...
->
->> @@ -5074,27 +5075,44 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
->>  	if (!nested_vmx_check_permission(vcpu))
->>  		return 1;
->>  
->> +	/* Normal or Enlightened VMPTRLD must be performed first */
->> +	if (vmx->nested.current_vmptr == INVALID_GPA &&
->> +	    !evmptr_is_valid(vmx->nested.hv_evmcs_vmptr))
->> +		return nested_vmx_failInvalid(vcpu);
->
-> I believe this is wrong, as it allows this combination
->
-> 	current_vmptr == INVALID_GPA && evmptr_is_valid() && is_guest_mode()
->
-> which is eVMCS with VMCS shadowing exposed to L2.  SECONDARY_EXEC_SHADOW_VMCS is
-> listed in EVMCS1_UNSUPPORTED_2NDEXEC, so it should be impossible for VMCS shadowing
-> to be enabled for L2.  And if VMCS shadowing is not enabled, all VMREADs cause
-> exits to L1, i.e. shouldn't reach this point.  If we want to allow that behavior,
-> then I think that should be a separate change.
-
-I think you're right, there's no need to allow for that. I'll use your
-suggestion from below, thanks!
-
->
-> Assuming eVMCS really isn't compatible with shadow VMCS, I believe we can do:
->
-> 	/*
-> 	 * Decode instruction info and find the field to read.  This can be
-> 	 * done speculatively as there are no side effects
-> 	 */
-> 	field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
->
-> 	if (!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)) {
-> 		/*
-> 		 * In VMX non-root operation, when the VMCS-link pointer is
-> 		 * INVALID_GPA, any VMREAD sets the ALU flags for VMfailInvalid.
-> 		 */
-> 		if (vmx->nested.current_vmptr == INVALID_GPA ||
-> 		    (is_guest_mode(vcpu) &&
-> 		     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-> 			return nested_vmx_failInvalid(vcpu);
->
-> 		offset = vmcs12_field_offset(field);
-> 		if (offset < 0)
-> 			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
->
-> 		if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
-> 			copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
->
-> 		/* Read the field, zero-extended to a u64 value */
-> 		value = vmcs12_read_any(vmcs12, field, offset);
-> 	} else {
-> 		/*
-> 		 * <snarky comment about Hyper-V>
-> 		 */
-> 		if (WARN_ON_ONCE(is_guest_mode(vcpu))
-> 			return nested_vmx_failInvalid(vcpu);
->
-> 		offset = evmcs_field_offset(field, NULL);
-> 		if (offset < 0)
-> 			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
->
-> 		/* Read the field, zero-extended to a u64 value */
-> 		value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
-> 	}
->
-
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+index 75b64e6ae035..a439794a32e8 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+@@ -95,10 +95,15 @@ static int msm_hdmi_get_phy(struct hdmi *hdmi)
+ 
+ 	of_node_put(phy_node);
+ 
+-	if (!phy_pdev || !hdmi->phy) {
++	if (!phy_pdev) {
+ 		DRM_DEV_ERROR(&pdev->dev, "phy driver is not ready\n");
+ 		return -EPROBE_DEFER;
+ 	}
++	if (!hdmi->phy) {
++		DRM_DEV_ERROR(&pdev->dev, "phy driver is not ready\n");
++		put_device(&phy_pdev->dev);
++		return -EPROBE_DEFER;
++	}
+ 
+ 	hdmi->phy_dev = get_device(&phy_pdev->dev);
+ 
 -- 
-Vitaly
+2.17.1
 

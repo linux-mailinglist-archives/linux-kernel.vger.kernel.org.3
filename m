@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 933D2486FA3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DC948701F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345202AbiAGBUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S1345236AbiAGCCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345195AbiAGBUH (ORCPT
+        with ESMTP id S1344474AbiAGCCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 20:20:07 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FAAC061245;
-        Thu,  6 Jan 2022 17:20:07 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id z30so599286pge.4;
-        Thu, 06 Jan 2022 17:20:07 -0800 (PST)
+        Thu, 6 Jan 2022 21:02:17 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CB6C061245;
+        Thu,  6 Jan 2022 18:02:17 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id e25so4536964qkl.12;
+        Thu, 06 Jan 2022 18:02:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fw29SMG9zs2Lc8ckvr2Ud0WuhWRxk7FcTRUOfZLouWI=;
-        b=qgGfeHebJnI2mPy1fCaGOSyNojWYJJpUjAS0OdJPR9/+jXwplYkVxXzIGHtZ6yjcnG
-         gz45mlXRnSdJoGaVF1j0pyWogtD33YnYYOzHmW5h/TURflIeHl5AMN11OB9iZv3unziS
-         DGbkpZVP7B9FkiiTC8TsWUtrR7EsO1Y+7/9oKnvAedR9PvCMOYXD6S5vjsQeQ5i1xIvZ
-         2HHm+39YJ4RJIBITnFPxrBA5si/NmSWxqtXV2wHMCXrBO4lBTf6Z0X8kwnWkkScUwDYX
-         7BCTErqGz9du0G5EVIMzE/vZll79EfE+cSW8qIWfRgQrBJV0adwIjwk80kisTUQFiNsq
-         D4ow==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Li/jQ4nlT3gPpvd1NyTQnIxzc9JA+p42BI5110gVryI=;
+        b=D48pMHDKbceVDw3lQnRewim5ayodaSN8T49QKqKck52RgM8Mk1qDNvXzqQZTnFoxUT
+         cwf++gs/8Oewu2oZnv8+2UTTs7QjqQsCOUDMLb0NapFC1w3DOCVRufqCim/OZ4C9dUnd
+         +oFMPFlkmFwfvmJkbdujiDwc5O++ZtZBcOkcjZZr3S53UF7oR3YhsJXqyoY14X2DverP
+         Xcr+jZjlMins+iJLvn1DvIBZOpTRisZoI2kgWnfl8q0elZmlT2h63bzyNpNF+n5BWqPE
+         OU4hOI1VfzBTi4rMdyRztgoAn4DZL0e1MMRPnNtUXCBRL4xOzpTOasUJgChGwtosRfzR
+         uiVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fw29SMG9zs2Lc8ckvr2Ud0WuhWRxk7FcTRUOfZLouWI=;
-        b=UP2CECRIv7hieF+dbLFvjANXRepaxn6HjtKaRn4IMIiK+2VFHlklYO/TOQSHXnDbWc
-         pNOCVAh83M/uCWrCWH0mHWfKolqjeoXG2GNRQRgtEnQsP3VDNxrGzOjq/GCdBnZf7jJE
-         arF+R1jgcOX2Zb5kMkhnoEU6k8q4nppZfIeJaqOWV6vey7pBo0SQ1ySyxWCX9E+l07z1
-         4jVbFzHOkx4D729yyBqiWg/GA5XW+J8vS1jW8C9Lxe992Fccv2ZyKwulDuFXhyH1Bg/D
-         rG3rxkIVYxzglrMxlgt4bIUmBB7jI3BlGOtQWWdcGHreHv7mN0narUurTADFdQ5N2fgq
-         Sw4A==
-X-Gm-Message-State: AOAM533SyZpCEz9u0GuKGZjLw4F0T1MhUu0boW/lsFuhh3J+pgO4YMpM
-        0hvbUzy6uEUC9xxveT1kSBfHFKvXfVLpBf2bULM=
-X-Google-Smtp-Source: ABdhPJx9kdiC9H7F8/0GppMF32c4y0gvMqPnzyIsGPRGZbsOfetEhWFolPNs9CBWNyQg47YnFWEC9mNf+MukmnZnS10=
-X-Received: by 2002:a63:8f06:: with SMTP id n6mr55290339pgd.95.1641518407032;
- Thu, 06 Jan 2022 17:20:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Li/jQ4nlT3gPpvd1NyTQnIxzc9JA+p42BI5110gVryI=;
+        b=ns5w6Rg4SXR7ETsPsheyYkVw3HyX7+END0OoJHQ97qft8rnkguOgtjva+ZNcOoxKAL
+         gr3vQVU+3WtwtdN25uEehzmDPSmYOjxUiUn+o9CUtiziMOqcoacYxnkEialYkLvLM0mC
+         XTUVHxcpgDA9agYf2g9q9Rwoup7qW4k9T3t/9HA0rGocx25kiOo6GiJWXHrBF5TDPNeH
+         RHlXumewPPsrPh0+oT26yrMG0SlWREyowjd/4kR1gLemZepMoL5T4ZU5I37o18wlS4CP
+         9XYUXcFeCMm/B+b3xYJUbHRWVySntznIDnsLbkdSOT4ub2e8KZ6yPbDNBf0dAlU4hCc3
+         sC+g==
+X-Gm-Message-State: AOAM531HOcs6YzyenOw5Lf2NsszmXCzn5l7ctGRk1hnRXeEnYsQiDrp6
+        X9etw1TPj15+8RfnKIfJf21UzY3Ofkk=
+X-Google-Smtp-Source: ABdhPJyFLUnXGpl/Ej//ERbkZnC0lZ7GVhRcnFLH5j/9dsaix5WLKtzn9XSDUBszz5HWPfy/+38YFw==
+X-Received: by 2002:a37:34c:: with SMTP id 73mr44285797qkd.726.1641520936215;
+        Thu, 06 Jan 2022 18:02:16 -0800 (PST)
+Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
+        by smtp.gmail.com with ESMTPSA id m20sm2960331qtx.39.2022.01.06.18.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 18:02:15 -0800 (PST)
+From:   Peter Geis <pgwipeout@gmail.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH 0/4] add pine64 touch panel support to rockpro64
+Date:   Thu,  6 Jan 2022 20:22:06 -0500
+Message-Id: <20220107012207.3779449-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220106132022.3470772-1-imagedong@tencent.com>
-In-Reply-To: <20220106132022.3470772-1-imagedong@tencent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 6 Jan 2022 17:19:55 -0800
-Message-ID: <CAADnVQJQxaxDc6VPVRvqVbUyp7160TzxVOED_ZQgu5nxJLxQhg@mail.gmail.com>
-Subject: Re: [PATCH v5 net-next 0/3] net: bpf: handle return value of
- post_bind{4,6} and add selftests for it
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 5:20 AM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> The return value of BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND() in
-> __inet_bind() is not handled properly. While the return value
-> is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
-> exit:
-> exit:
->
->         err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
->         if (err) {
->                 inet->inet_saddr = inet->inet_rcv_saddr = 0;
->                 goto out_release_sock;
->         }
->
-> Let's take UDP for example and see what will happen. For UDP
-> socket, it will be added to 'udp_prot.h.udp_table->hash' and
-> 'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
-> called success. If 'inet->inet_rcv_saddr' is specified here,
-> then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
-> to (because inet_saddr is changed to 0), and UDP packet received
-> will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
-> specified here, the sock will work fine, as it can receive packet
-> properly, which is wired, as the 'bind()' is already failed.
->
-> To undo the get_port() operation, introduce the 'put_port' field
-> for 'struct proto'. For TCP proto, it is inet_put_port(); For UDP
-> proto, it is udp_lib_unhash(); For icmp proto, it is
-> ping_unhash().
->
-> Therefore, after sys_bind() fail caused by
-> BPF_CGROUP_RUN_PROG_INET4_POST_BIND(), it will be unbinded, which
-> means that it can try to be binded to another port.
->
-> The second patch use C99 initializers in test_sock.c
->
-> The third patch is the selftests for this modification.
->
-> Changes since v4:
-> - use C99 initializers in test_sock.c before adding the test case
+This patch series adds support for the Pine64 touch panel to the
+rockpro64 single board computer.
+This panel attaches to the dsi port and includes an i2c touch screen.
 
-Thanks for the fix. Applied.
+The first two patches involve making the reset pin to the Feiyang
+fy07024di26a30d panel optional. On the rockpro64 and quartz64-a this pin
+is tied to dvdd and automatically comes high when power is applied.
+The third patch adds the device tree nodes to rockpro64 to permit the
+panel to be used.
+The fourth patch is an example patch to enable this support, tagged do
+not merge as this is something for the end user to enable only when they
+have the panel attached.
 
-In the future please make sure to tag your patches with
-[PATCH bpf-next]
-so that BPF CI can properly test it right away.
+Peter Geis (4):
+  dt-bindings: display: panel: feiyang,fy07024di26a30d: make reset gpio
+    optional
+  drm/panel: feiyang-fy07024di26a30d: make reset gpio optional
+  arm64: dts: rockchip: add pine64 touch panel display to rockpro64
+  arm64: dts: rockchip: enable the pine64 touch screen on rockpro64
+
+ .../panel/feiyang,fy07024di26a30d.yaml        |  1 -
+ .../boot/dts/rockchip/rk3399-rockpro64.dtsi   | 80 ++++++++++++++++++-
+ .../drm/panel/panel-feiyang-fy07024di26a30d.c | 11 ++-
+ 3 files changed, 83 insertions(+), 9 deletions(-)
+
+-- 
+2.32.0
+

@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A259487DB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D11487DBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbiAGU0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 15:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiAGU0n (ORCPT
+        id S229687AbiAGU2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 15:28:45 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40782 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229542AbiAGU2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 15:26:43 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B6DC061574;
-        Fri,  7 Jan 2022 12:26:43 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id e25so7071310qkl.12;
-        Fri, 07 Jan 2022 12:26:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=srnZFRlh9ysQsQawEGT8y/8MQC8adaoMhhD5XwuRpMM=;
-        b=lja69UgbMBkrCcTxdA3Sh8wFKglBslgmSfHDH9aQ/n/olCQWKyfC8HoAKwGmLN1Iy6
-         nOK79rpMd5ZbQtQfIig8Lu9W2ovk2j+HKswvgGeQk+/dzbrDGlsAfuK6PMrL2VSUcLAc
-         aGDPfPSGfFtRNhNDUda4JN0uKtxwkbJpd3OG3zVywl5W8t6qkW7C2XmCFnRtRcGNnoLc
-         VIoTx6Dew7uGXAfrOjr/PdNx9YAiU+5ccn9xVkvQDsuUAt8tRcokP1QYnoE4MAt0SIZn
-         9ZRX8tWIWH8zlB6GIodq4MvapQL6nKik+undu9hx2xClJAfYopQZM9nSiGSLUiqwlVix
-         HDJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=srnZFRlh9ysQsQawEGT8y/8MQC8adaoMhhD5XwuRpMM=;
-        b=wTgaBcQH7MHIZDkYw0NlxrpkTBvdbWyaV6J55ynCnaBKWbilogKJFIs2GEb4miOAJ9
-         CDad33bNyy0IiECRU6kAGjlXVZOlhEP1FDQ8DJXAYHvIEZSlvDYLCi4fKh0ETVcnMSPr
-         4bPTtVy13C4KkRpQqhBXd9/6dTu77VS8RT9jgyazUtkt481lm3Xxr4Y8yfwkjh1dZ2Ja
-         LewIKgZQsb8tDutd+YxrijtUxnJxcgxDC1pIGNCEVEUxA8jtHMOZDc3lTVr79aEvuIgl
-         TMCp5oOYJTJllT5YcboS9IeM244TaalG14KduN9FEqGF+Bo/2rEURX9rZz654MBjOi7u
-         HYdw==
-X-Gm-Message-State: AOAM533BtZyBypTjkfpzv4BrW1jLzP9eb22p0EvFSSGzc4zmidQX47wN
-        9tLmB//D0OPdIj8fSVeKMANZLNHWe9A7KPOMYB3iV1fh
-X-Google-Smtp-Source: ABdhPJxhGYKHJyaoeqNIZfhZ/aEtZjIGR7UMdzgVIVsYWwTf1VetwJL5bObjIJ1MfKL01y/7XtxeXAZx6xJ4hwpbeyw=
-X-Received: by 2002:a05:620a:2486:: with SMTP id i6mr46164354qkn.522.1641587202089;
- Fri, 07 Jan 2022 12:26:42 -0800 (PST)
+        Fri, 7 Jan 2022 15:28:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A361BB825EA;
+        Fri,  7 Jan 2022 20:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE8CC36AE9;
+        Fri,  7 Jan 2022 20:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641587321;
+        bh=5hs9o7Y0/M10LfMom2sJh2iZ2CcjB8bH8iHJC8sTRXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tpLw1LhR+ui1ai6iQG2W0IRYaQRXF8uI6AdQcklRVO7iMNrJZEK1ifzdfp8bWGT7e
+         D8DiOJACdjKX1wF+BHUq8fdmNWrhq+vOYhnR/Nzmf7mBId9DH3cVlefZgnFMJdYBD5
+         sVnIyOTtgOGY//alD+miTo17a3BFEBoWALH2nkgQGWvQ5zfOodpVemmm6G8UTjFDEz
+         zMkQhiF6Cn03MstIUo+mIHljRUqnHfNqRTqLLxsyg1RxE6qmyzzKIp2tQUvLSFQ6c7
+         wpyP2YbzKgar2p+QYWEttzgzODW4s7x+2z+Sy4tTC5nteK3ciELmILAcLY5CUm7ubh
+         ZoKcMqpYiPM6w==
+Date:   Fri, 7 Jan 2022 21:28:38 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-i2c@vger.kernel.org
+Cc:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
+        Konstantin Kharlamov <hi-angel@yandex.ru>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in
+ adapter"
+Message-ID: <YdiidodK03y0oCMD@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
+        Konstantin Kharlamov <hi-angel@yandex.ru>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <20220106122452.18719-1-wsa@kernel.org>
 MIME-Version: 1.0
-References: <20220106024518.8161-1-yinxin.x@bytedance.com> <20220106024518.8161-2-yinxin.x@bytedance.com>
-In-Reply-To: <20220106024518.8161-2-yinxin.x@bytedance.com>
-From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
-Date:   Fri, 7 Jan 2022 12:26:31 -0800
-Message-ID: <CAD+ocbx2e06YoESJM7m5ra-6so0ijWsYyN1L1ZFTXqxedMMoNw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ext4: prevent used blocks from being allocated during
- fast commit replay
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NInPz8sSrNptA7q8"
+Content-Disposition: inline
+In-Reply-To: <20220106122452.18719-1-wsa@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 6:45 PM Xin Yin <yinxin.x@bytedance.com> wrote:
->
-> during fast commit replay procedure, we clear inode blocks bitmap in
-> ext4_ext_clear_bb(), this may cause ext4_mb_new_blocks_simple() allocate
-> blocks still in use.
->
-> make ext4_fc_record_regions() also record physical disk regions used by
-> inodes during replay procedure. Then ext4_mb_new_blocks_simple() can
-> excludes these blocks in use.
->
-> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-> ---
->  fs/ext4/ext4.h        |  2 ++
->  fs/ext4/extents.c     |  4 ++++
->  fs/ext4/fast_commit.c | 11 ++++++++---
->  3 files changed, 14 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 82fa51d6f145..7b0686758691 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -2932,6 +2932,8 @@ bool ext4_fc_replay_check_excluded(struct super_block *sb, ext4_fsblk_t block);
->  void ext4_fc_replay_cleanup(struct super_block *sb);
->  int ext4_fc_commit(journal_t *journal, tid_t commit_tid);
->  int __init ext4_fc_init_dentry_cache(void);
-> +int ext4_fc_record_regions(struct super_block *sb, int ino,
-> +                    ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay);
->
->  /* mballoc.c */
->  extern const struct seq_operations ext4_mb_seq_groups_ops;
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index c3e76a5de661..9b6c76629c93 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -6096,11 +6096,15 @@ int ext4_ext_clear_bb(struct inode *inode)
->
->                                         ext4_mb_mark_bb(inode->i_sb,
->                                                         path[j].p_block, 1, 0);
-> +                                       ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-> +                                                       0, path[j].p_block, 1, 1);
->                                 }
->                                 ext4_ext_drop_refs(path);
->                                 kfree(path);
->                         }
->                         ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
-> +                       ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-> +                                       map.m_lblk, map.m_pblk, map.m_len, 1);
->                 }
->                 cur = cur + map.m_len;
->         }
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index 23d13983a281..f0cd20f5fe5e 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -1567,13 +1567,15 @@ static int ext4_fc_replay_create(struct super_block *sb, struct ext4_fc_tl *tl,
->   * Record physical disk regions which are in use as per fast commit area. Our
->   * simple replay phase allocator excludes these regions from allocation.
->   */
-> -static int ext4_fc_record_regions(struct super_block *sb, int ino,
-> -               ext4_lblk_t lblk, ext4_fsblk_t pblk, int len)
-> +int ext4_fc_record_regions(struct super_block *sb, int ino,
-> +               ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay)
-Can you explain a bit why this replay parameter is needed here? This
-function simply reallocs the regions array if it doesn't have enough
-space. I am not sure why we need to change that behavior.
->  {
->         struct ext4_fc_replay_state *state;
->         struct ext4_fc_alloc_region *region;
->
->         state = &EXT4_SB(sb)->s_fc_replay_state;
-> +       if (replay && state->fc_regions_used != state->fc_regions_valid)
-> +               state->fc_regions_used = state->fc_regions_valid;
->         if (state->fc_regions_used == state->fc_regions_size) {
->                 state->fc_regions_size +=
->                         EXT4_FC_REPLAY_REALLOC_INCREMENT;
-> @@ -1591,6 +1593,9 @@ static int ext4_fc_record_regions(struct super_block *sb, int ino,
->         region->pblk = pblk;
->         region->len = len;
->
-> +       if (replay)
-> +               state->fc_regions_valid++;
-> +
->         return 0;
->  }
->
-> @@ -1938,7 +1943,7 @@ static int ext4_fc_replay_scan(journal_t *journal,
->                         ret = ext4_fc_record_regions(sb,
->                                 le32_to_cpu(ext.fc_ino),
->                                 le32_to_cpu(ex->ee_block), ext4_ext_pblock(ex),
-> -                               ext4_ext_get_actual_len(ex));
-> +                               ext4_ext_get_actual_len(ex), 0);
->                         if (ret < 0)
->                                 break;
->                         ret = JBD2_FC_REPLAY_CONTINUE;
-> --
-> 2.20.1
->
+
+--NInPz8sSrNptA7q8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jan 06, 2022 at 01:24:52PM +0100, Wolfram Sang wrote:
+> This largely reverts commit 5a7b95fb993ec399c8a685552aa6a8fc995c40bd. It
+> breaks suspend with AMD GPUs, and we couldn't incrementally fix it. So,
+> let's remove the code and go back to the drawing board. We keep the
+> header extension to not break drivers already populating the regulator.
+> We expect to re-add the code handling it soon.
+>=20
+> Reported-by: "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
+> Link: https://lore.kernel.org/r/1295184560.182511.1639075777725@mail.yaho=
+o.com
+> Reported-by: Konstantin Kharlamov <hi-angel@yandex.ru>
+> Link: https://lore.kernel.org/r/7143a7147978f4104171072d9f5225d2ce355ec1.=
+camel@yandex.ru
+> BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1850
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+
+Applied to for-current, thanks!
+
+
+--NInPz8sSrNptA7q8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHYonYACgkQFA3kzBSg
+KbaESw//Yifh5V0HIYEvxarVwyg8B4g4TvQBSBVlzchPdF8g8BKRmnpCCsqc62Ks
+JqQWIFN8KAWt7LV8LtM3d3KRuLkkwrhrAHdr8RygtkDOJJeyjbtvcarXPUe8QYM0
+gAZPXNlAObjretxgeTtJrHIWUkCVcAA6YdxMDj1XMQYjfa15lQTem/nHJr53ngo2
+DM1HY5N390WZAzmd0EiUmkVJBuLe7oOBh2qnBwa8uYGhqpisQRXmSBQS5OtWs2a+
+bA5IT/cusIDSG2G2SfIheFFsKYmar1RtSXf2W49Y/EPl8IdaGRGjFFcNtMWZgRVv
+wrpNIu5O1uhawJ5Kb9fuc7noQt4VKxHYFc+KjAF6oUJrWatHyJpi4263yL9KR3J2
+bul/r+aKDxd9eX3sqoHwHtjE4jlEsLC+9LKBCqgwXBxthuf3pT/KY9+92U/WyNN+
+SSRtme95cwPkqge5/4v9pq8ZbWvZhU5XNf7a7BeYdushtqSEmxe6bcLl4Z6iOq0C
+3bvq6e5+CspHHCMObX8jvis6uKxCQue5cLq4e7M0tG+GEJDrVPVL6GEr4tGM6QEp
+bZQDmKSvD91bfW6EKymJY5UnOZ0VUOEHYce8/H3NpTRV9jDzS8rjqmWF1xV3yLBu
+vM5zjuhNhQ5YLW6jvxz5iB51ebI7+RSRKzOGxyciAH7i3v/4GtU=
+=gvGl
+-----END PGP SIGNATURE-----
+
+--NInPz8sSrNptA7q8--

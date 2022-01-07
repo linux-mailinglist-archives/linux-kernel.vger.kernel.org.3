@@ -2,109 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14115487454
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DCA487452
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346241AbiAGIzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:55:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57262 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346229AbiAGIzK (ORCPT
+        id S1346222AbiAGIzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:55:01 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:31147 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236255AbiAGIzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:55:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 27E4321126;
-        Fri,  7 Jan 2022 08:55:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641545709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rsH9bvGYmcoVLtgyOeudSiXiKCPWiynwrsli+B3sPnQ=;
-        b=UP1E+5z3SkIzHd+AgFvtKhkj1igIXiPHVg/zKRG/6JCEPDtSsv/kAIQ8PFbHCkl0nCi/br
-        hjj1L7x0eW/vzawzbR1Q4qKP+0Qrv/i533npRsABif8OOsXzQmjRYZWVA6IXXt2+j1B7Zd
-        bSMWFbCfwgwfJ7VkTFpFlJvSnhKWG8E=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6642DA3B91;
-        Fri,  7 Jan 2022 08:55:08 +0000 (UTC)
-Date:   Fri, 7 Jan 2022 09:55:08 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Ydf/7DDu94fMs0CG@dhcp22.suse.cz>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <YdcU4P+XWkbDUUoO@dhcp22.suse.cz>
- <Yddh+APQGg8dKRgw@google.com>
+        Fri, 7 Jan 2022 03:55:00 -0500
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JVcRT3my1zbbcF;
+        Fri,  7 Jan 2022 16:52:21 +0800 (CST)
+Received: from huawei.com (10.67.174.47) by dggeme758-chm.china.huawei.com
+ (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Fri, 7
+ Jan 2022 16:54:58 +0800
+From:   He Ying <heying24@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <marcan@marcan.st>, <maz@kernel.org>,
+        <joey.gouly@arm.com>, <pcc@google.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <heying24@huawei.com>
+Subject: [PATCH] arm64: Make CONFIG_ARM64_PSEUDO_NMI macro wrap all the pseudo-NMI code
+Date:   Fri, 7 Jan 2022 03:55:36 -0500
+Message-ID: <20220107085536.214501-1-heying24@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yddh+APQGg8dKRgw@google.com>
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.47]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 06-01-22 14:41:12, Yu Zhao wrote:
-> On Thu, Jan 06, 2022 at 05:12:16PM +0100, Michal Hocko wrote:
-> > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> > > +static struct lru_gen_mm_walk *alloc_mm_walk(void)
-> > > +{
-> > > +	if (!current->reclaim_state || !current->reclaim_state->mm_walk)
-> > > +		return kvzalloc(sizeof(struct lru_gen_mm_walk), GFP_KERNEL);
-> > > +
-> > > +	return current->reclaim_state->mm_walk;
-> > > +}
-> > > +
-> > > +static void free_mm_walk(struct lru_gen_mm_walk *walk)
-> > > +{
-> > > +	if (!current->reclaim_state || !current->reclaim_state->mm_walk)
-> > > +		kvfree(walk);
-> > > +}
-> > 
-> > Do I get it right that you are allocating from the reclaim context? What
-> > prevents this to completely deplete the memory as the reclaim context is
-> > PF_MEMALLOC?
-> 
-> Yes, and in general the same reason zram/zswap/etc. allocate memory in
-> the reclaim context: to make more free memory.
+Our product has been updating its kernel from 4.4 to 5.10 recently and
+found a performance issue. We do a bussiness test called ARP test, which
+tests the latency for a ping-pong packets traffic with a certain payload.
+The result is as following.
 
-I have to admit that I am not really familiar with zram/zswap but I find
-the concept of requiring memory to do the reclaim really problematic.
+ - 4.4 kernel: avg = ~20s
+ - 5.10 kernel (CONFIG_ARM64_PSEUDO_NMI is not set): avg = ~40s
+
+I have been just learning arm64 pseudo-NMI code and have a question,
+why is the related code not wrapped by CONFIG_ARM64_PSEUDO_NMI?
+I wonder if this brings some performance regression.
+
+First, I make this patch and then do the test again. Here's the result.
+
+ - 5.10 kernel with this patch not applied: avg = ~40s
+ - 5.10 kernel with this patch applied: avg = ~23s
+
+Amazing! Note that all kernel is built with CONFIG_ARM64_PSEUDO_NMI not
+set. It seems the pseudo-NMI feature actually brings some overhead to
+performance event if CONFIG_ARM64_PSEUDO_NMI is not set.
+
+Furthermore, I find the feature also brings some overhead to vmlinux size.
+I build 5.10 kernel with this patch applied or not while
+CONFIG_ARM64_PSEUDO_NMI is not set.
+
+ - 5.10 kernel with this patch not applied: vmlinux size is 384060600 Bytes.
+ - 5.10 kernel with this patch applied: vmlinux size is 383842936 Bytes.
+
+That means arm64 pseudo-NMI feature may bring ~200KB overhead to
+vmlinux size.
+
+Above all, arm64 pseudo-NMI feature brings some overhead to vmlinux size
+and performance even if config is not set. To avoid it, add macro control
+all around the related code.
+
+Signed-off-by: He Ying <heying24@huawei.com>
+---
+ arch/arm64/include/asm/irqflags.h | 38 +++++++++++++++++++++++++++++--
+ arch/arm64/kernel/entry.S         |  4 ++++
+ 2 files changed, 40 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/include/asm/irqflags.h b/arch/arm64/include/asm/irqflags.h
+index b57b9b1e4344..82f771b41cf5 100644
+--- a/arch/arm64/include/asm/irqflags.h
++++ b/arch/arm64/include/asm/irqflags.h
+@@ -26,6 +26,7 @@
+  */
+ static inline void arch_local_irq_enable(void)
+ {
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	if (system_has_prio_mask_debugging()) {
+ 		u32 pmr = read_sysreg_s(SYS_ICC_PMR_EL1);
  
-> In this case, lru_gen_mm_walk is small (160 bytes); it's per direct
-> reclaimer; and direct reclaimers rarely come here, i.e., only when
-> kswapd can't keep up in terms of the aging, which is similar to the
-> condition where the inactive list is empty for the active/inactive
-> lru.
-
-Well, this is not a strong argument to be honest. Kswapd being stuck
-and the majority of the reclaim being done in the direct reclaim
-context is a situation I have seen many many times. We used to have
-problems with direct reclaimers throttling to prevent an over eager OOM
-situations.
-
-Have you considered using a pool of preallocated objects instead?
+@@ -41,10 +42,18 @@ static inline void arch_local_irq_enable(void)
+ 		: "memory");
+ 
+ 	pmr_sync();
++#else
++	asm volatile(
++		"msr	daifclr, #3		// arch_local_irq_enable"
++		:
++		:
++		: "memory");
++#endif
+ }
+ 
+ static inline void arch_local_irq_disable(void)
+ {
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	if (system_has_prio_mask_debugging()) {
+ 		u32 pmr = read_sysreg_s(SYS_ICC_PMR_EL1);
+ 
+@@ -58,6 +67,13 @@ static inline void arch_local_irq_disable(void)
+ 		:
+ 		: "r" ((unsigned long) GIC_PRIO_IRQOFF)
+ 		: "memory");
++#else
++	asm volatile(
++		"msr	daifset, #3		// arch_local_irq_disable"
++		:
++		:
++		: "memory");
++#endif
+ }
+ 
+ /*
+@@ -66,7 +82,7 @@ static inline void arch_local_irq_disable(void)
+ static inline unsigned long arch_local_save_flags(void)
+ {
+ 	unsigned long flags;
+-
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	asm volatile(ALTERNATIVE(
+ 		"mrs	%0, daif",
+ 		__mrs_s("%0", SYS_ICC_PMR_EL1),
+@@ -74,12 +90,19 @@ static inline unsigned long arch_local_save_flags(void)
+ 		: "=&r" (flags)
+ 		:
+ 		: "memory");
+-
++#else
++	asm volatile(
++		"mrs	%0, daif"
++		: "=r" (flags)
++		:
++		: "memory");
++#endif
+ 	return flags;
+ }
+ 
+ static inline int arch_irqs_disabled_flags(unsigned long flags)
+ {
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	int res;
+ 
+ 	asm volatile(ALTERNATIVE(
+@@ -91,6 +114,9 @@ static inline int arch_irqs_disabled_flags(unsigned long flags)
+ 		: "memory");
+ 
+ 	return res;
++#else
++	return flags & PSR_I_BIT;
++#endif
+ }
+ 
+ static inline int arch_irqs_disabled(void)
+@@ -119,6 +145,7 @@ static inline unsigned long arch_local_irq_save(void)
+  */
+ static inline void arch_local_irq_restore(unsigned long flags)
+ {
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	asm volatile(ALTERNATIVE(
+ 		"msr	daif, %0",
+ 		__msr_s(SYS_ICC_PMR_EL1, "%0"),
+@@ -128,6 +155,13 @@ static inline void arch_local_irq_restore(unsigned long flags)
+ 		: "memory");
+ 
+ 	pmr_sync();
++#else
++	asm volatile(
++		"msr	daif, %0"
++		:
++		: "r" (flags)
++		: "memory");
++#endif
+ }
+ 
+ #endif /* __ASM_IRQFLAGS_H */
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index 2f69ae43941d..ffc32d3d909a 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -300,6 +300,7 @@ alternative_else_nop_endif
+ 	str	w21, [sp, #S_SYSCALLNO]
+ 	.endif
+ 
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	/* Save pmr */
+ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
+ 	mrs_s	x20, SYS_ICC_PMR_EL1
+@@ -307,6 +308,7 @@ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
+ 	mov	x20, #GIC_PRIO_IRQON | GIC_PRIO_PSR_I_SET
+ 	msr_s	SYS_ICC_PMR_EL1, x20
+ alternative_else_nop_endif
++#endif
+ 
+ 	/* Re-enable tag checking (TCO set on exception entry) */
+ #ifdef CONFIG_ARM64_MTE
+@@ -330,6 +332,7 @@ alternative_else_nop_endif
+ 	disable_daif
+ 	.endif
+ 
++#ifdef CONFIG_ARM64_PSEUDO_NMI
+ 	/* Restore pmr */
+ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
+ 	ldr	x20, [sp, #S_PMR_SAVE]
+@@ -339,6 +342,7 @@ alternative_if ARM64_HAS_IRQ_PRIO_MASKING
+ 	dsb	sy				// Ensure priority change is seen by redistributor
+ .L__skip_pmr_sync\@:
+ alternative_else_nop_endif
++#endif
+ 
+ 	ldp	x21, x22, [sp, #S_PC]		// load ELR, SPSR
+ 
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+

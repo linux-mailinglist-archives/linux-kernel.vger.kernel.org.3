@@ -2,129 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BE7487B74
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42A4487B79
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348585AbiAGRcD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 12:32:03 -0500
-Received: from aposti.net ([89.234.176.197]:46346 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237699AbiAGRcC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:32:02 -0500
-Date:   Fri, 07 Jan 2022 17:31:52 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined
- reference to `__clzdi2'
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>
-Message-Id: <4POC5R.OFCAH4UODPNE2@crapouillou.net>
-In-Reply-To: <AAD37797-0EC4-47FC-939E-F855F2E9954C@fb.com>
-References: <202201060233.mO6P39bM-lkp@intel.com>
-        <AAD37797-0EC4-47FC-939E-F855F2E9954C@fb.com>
+        id S1348592AbiAGRcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:32:51 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35496
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348575AbiAGRct (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 12:32:49 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 273D93F17B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 17:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641576762;
+        bh=reiJbrHsd6HUY73y6dW3uK1fLpWZ0z6nBvTr3IYdF1I=;
+        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type;
+        b=CDBbniOLG2fzCedU1W1uGhuW1uSYpVieoy9rDDZ7SmyfeNfMGQBJZUvWW8KoFK2Bp
+         fVN+3zZvlLhhDRgxvwrgU667tXL8OuunNBMsICFGYyMq2X2u4hpGSnF9wiwKSPcoyu
+         hoSl9wZDDctBJGrVOpG/SSlLOe293XpBcqYpLTVH56gt1SEGOm2nLBMlVDECMitUMu
+         +J7HfBPfhY2lGqY3u02eyzE+l+J3X7uellmANesYi+ieq9ZCmoy3L2WDrnNiXz5EDq
+         /ubwIc6DmKYgcQpWbbwYL0nq4zY71BFOX9rXNyad+qBUqwxk98kly3hW0234SiydNy
+         w8kOu3ViI+3Ig==
+Received: by mail-ed1-f71.google.com with SMTP id z10-20020a05640235ca00b003f8efab3342so5239289edc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:32:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=reiJbrHsd6HUY73y6dW3uK1fLpWZ0z6nBvTr3IYdF1I=;
+        b=z4bMJG1VosG4SAwHKas/rIQ+iWmPtIfX8Lds/V9zwfWXgHwdlt9RXWJyNVYRzJrRvn
+         LgOQN6Tkzf3aqGcvL53EQSJxmLEZ6gHTWWCu3OWPImHkG2NsOg/jLeRWh7NGnCzI0UF3
+         0Fy7KXby1REshZgNn29whkU4Dk7+FC6W7ipvLvjMPzkbqSCkREeQLlEmlNtss24RgVLa
+         XhJP4bzdyMpJYjUnjutLF6R5AW27cSCBbXyPb7IES6fpIHGfua2p8zATJGybtLKBXLs+
+         ojuqMqOdu4VE8Y6Z0w4qKn2ByBrRyGFmujjR8ZcdawABEuAf9k5je3HM0u00U+VFxxj+
+         nIig==
+X-Gm-Message-State: AOAM533ZFGH7k6zmbnq3i0SQ3h28UR3uYXMrAEYQDrPKROHiuF25HnOu
+        6UFIWnOMcLIac2Jh0m6uiyHzbf+gpiXB1UG83fDDphp6TB/+QR0Hn6E2IvUPLmfYzS41GJFYB4x
+        xFbmyYzNEb0EkY6tCdgpIMyQN37B6QKoR1RNSQtXfCQ==
+X-Received: by 2002:a05:6402:1e88:: with SMTP id f8mr58042948edf.2.1641576761933;
+        Fri, 07 Jan 2022 09:32:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJymgxobe9HSGQM+bXdtE+Ng/EHT7YtrMrHAaqPUP6/VX7AeRCAV/M1g3xczPO8LehBpBNlmtA==
+X-Received: by 2002:a05:6402:1e88:: with SMTP id f8mr58042935edf.2.1641576761781;
+        Fri, 07 Jan 2022 09:32:41 -0800 (PST)
+Received: from localhost ([2001:67c:1560:8007::aac:c1b6])
+        by smtp.gmail.com with ESMTPSA id dd5sm1583151ejc.59.2022.01.07.09.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 09:32:41 -0800 (PST)
+Date:   Fri, 7 Jan 2022 18:32:40 +0100
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Stefan Roese <sr@denx.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Marek Vasut <marex@denx.de>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: "PCI/MSI: Mask MSI-X vectors only on success" (boot problem on
+ c4.large)
+Message-ID: <Ydh5OCudJKz5Y7jc@arighi-desktop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+Hi Stefan,
 
-Le mer., janv. 5 2022 at 20:18:27 +0000, Nick Terrell <terrelln@fb.com> 
-a écrit :
-> 
-> 
->>  On Jan 5, 2022, at 11:02 AM, kernel test robot <lkp@intel.com> 
->> wrote:
->> 
->>  tree:   
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
->> master
->>  head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
->>  commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade 
->> to latest upstream zstd version 1.4.10
->>  date:   8 weeks ago
->>  config: mips-randconfig-r025-20220105 
->> (https://download.01.org/0day-ci/archive/20220106/202201060233.mO6P39bM-lkp@intel.com/config 
->> )
->>  compiler: mips64el-linux-gcc (GCC) 11.2.0
->>  reproduce (this is a W=1 build):
->>         wget 
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->>  -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         # 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
->>         git remote add linus 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>         git fetch --no-tags linus master
->>         git checkout e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
->>         # save the config file to linux build tree
->>         mkdir build_dir
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 
->> make.cross O=build_dir ARCH=mips SHELL=/bin/bash
->> 
->>  If you fix the issue, kindly add following tag as appropriate
->>  Reported-by: kernel test robot <lkp@intel.com>
->> 
->>  All errors (new ones prefixed by >>):
->> 
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `FSE_buildDTable_internal':
->>>>  decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined 
->>>> reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `BIT_initDStream':
->>    decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to 
->> `__clzdi2'
->>    mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): 
->> undefined reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `ZSTD_buildFSETable_body_default.constprop.0':
->>>>  
->>>> decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): 
->>>> undefined reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `FSE_readNCount_body_default':
->>>>  decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined 
->>>> reference to `__ctzdi2'
->>>>  mips64el-linux-ld: 
->>>> decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined 
->>>> reference to `__ctzdi2'
->>>>  mips64el-linux-ld: 
->>>> decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined 
->>>> reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `HUF_readStats_body_default':
->>>>  decompress.c:(.text.HUF_readStats_body_default+0x184): undefined 
->>>> reference to `__clzdi2'
->>>>  mips64el-linux-ld: 
->>>> decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined 
->>>> reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `ZSTD_DCtx_getParameter':
->>>>  decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined 
->>>> reference to `__clzdi2'
-> 
-> These are complaining about usage of __builtin_c{l,t}z(). The code 
-> before this change also used
-> __builtin_clz(), so this isn't new. E.g. the call in 
-> BIT_initDStream() is present before the change,
-> it just moved locations. So these errors aren't new.
-> 
-> This is breaking the MIPS boot code when zstd compressed kernels are 
-> enabled, and was
-> Introduced in commit a510b61613 [0][1]. The fix is to include the 
-> definitions from `lib/clz_ctz.c` [2].
-> The same problem was fixed for s390 in this patch [3].
-> 
-> CC: Paul Cercueil
+I'm experiencing some boot problems on c4.large instances on AWS with
+this commit applied (system stuck at boot - no oops or panic, just
+stuck):
 
-Thanks, I'll send a patch.
+ 83dbf898a2d4 ("PCI/MSI: Mask MSI-X vectors only on success")
 
-Cheers,
--Paul
+If I revert this commit the boot completes correctly (found doing a
+bisect).
 
+I'm using a 5.15.12 kernel. Let me know if there's anything I can do to
+better track down the issue. For now I've just reverted the commit.
 
+Thanks,
+-Andrea

@@ -2,89 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B9A48795B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992E4487965
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239529AbiAGO5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239219AbiAGO5T (ORCPT
+        id S1347947AbiAGPAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 10:00:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50023 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347926AbiAGPAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:57:19 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B97C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:57:18 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id l3so7329821iol.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MmKzdxi5tqqXaV9pr7x7K4Gv2kquAOpSYKeE1KvCgP0=;
-        b=C/TWWdHnG3Yy7oClfhVjhBYGKp0/W9wPweqNH480cAcO/Ghf9bAVQ/l2Xi2PefoEpS
-         QJ29L8NMETfujIGdiRKYv0HVnGajKrxfskdROkKulfal/11XXNlvo57XjyM92q0Ca5rK
-         jkLHuCVfempPfBnXeIUxvbzUlIxCmR1qD19TQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MmKzdxi5tqqXaV9pr7x7K4Gv2kquAOpSYKeE1KvCgP0=;
-        b=Or0jRdlmiagg5hA92fA1oRgwaUeG7JHczp0SNDn+A71alVqCcOi0ie/+WtKtR3juIT
-         6SK78arrwSRHY9OuDSsvsSPWmWgCjaf4IR4kSdFB8aNttyDJy1XsjBLnM7sGSS4j+C/c
-         MjNldblLalJjVniJgUUESot+SsgzRJCreKZ7B1uk1NGL2V9oWcJn5xyTc0/8YI54IYFl
-         y0AD23lmU+8qgqRlfd9xJoZelRmkNsaon+9qvgoTN5CalwyNzdaKmAvIP9ksbs5Cc6Lz
-         4VQUeC6Ws/rMKpBI/W4P211QMei93rIshpFytjuDH6iWoNfjiHHyusqaWxpy1YDsVToA
-         0ebA==
-X-Gm-Message-State: AOAM533Lex5EbMvGj2QYNTYywqGkARnGO1mrWkegSuKhgficn5MpuBx/
-        7OPs9num4w0HC3N9K9sh+a4NlraBHnuVrg==
-X-Google-Smtp-Source: ABdhPJwZDFHrSRrz3MV15s8u/GijoRMXFdGSsVLjdHKZaolzsNTg2Le35FhrlrV+2gxvqUoQFVB3HA==
-X-Received: by 2002:a02:aa8f:: with SMTP id u15mr30020688jai.63.1641567437927;
-        Fri, 07 Jan 2022 06:57:17 -0800 (PST)
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com. [209.85.166.44])
-        by smtp.gmail.com with ESMTPSA id b5sm2984205ilj.9.2022.01.07.06.57.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 06:57:17 -0800 (PST)
-Received: by mail-io1-f44.google.com with SMTP id s6so7460541ioj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:57:17 -0800 (PST)
-X-Received: by 2002:a6b:e508:: with SMTP id y8mr28973111ioc.177.1641567437115;
- Fri, 07 Jan 2022 06:57:17 -0800 (PST)
+        Fri, 7 Jan 2022 10:00:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641567601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dxL2UWiHy8dK2ML86RN61guOi9HfUG9Ov992Oazdqws=;
+        b=hdMqcWymmwOG/yBdN+B13e8oEhrYtxN6Tqm3mh1n3zVzifLT7tvcDdZz3hObULdL1BfdL5
+        dcLHL5acnsJiF2/xjatDIw028S4m+6jRKhR1DP7PDdN1FK897LKo82fnlYCsjQaKXNqjyf
+        pzEBvyfJdwvTY6ECmDvxBCypRMGWWzU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-1Q6K5Gf9NCiHIgkMy7FTkw-1; Fri, 07 Jan 2022 09:59:57 -0500
+X-MC-Unique: 1Q6K5Gf9NCiHIgkMy7FTkw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0ED49760C7;
+        Fri,  7 Jan 2022 14:59:56 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.18.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A44FA2B5A9;
+        Fri,  7 Jan 2022 14:59:41 +0000 (UTC)
+Date:   Fri, 7 Jan 2022 09:59:39 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nitesh Lal <nilal@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nicolas Saenz <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@gentwo.de>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH 0/8] sched/isolation: Split housekeeping cpumask
+Message-ID: <YdhVW+PbfzIyQKPz@lorien.usersys.redhat.com>
+References: <20220104144944.1278663-1-frederic@kernel.org>
 MIME-Version: 1.0
-References: <20220107103056.1.Ifc6ce6bb655ddb8ebbb0f340fcaaa58369bb009c@changeid>
-In-Reply-To: <20220107103056.1.Ifc6ce6bb655ddb8ebbb0f340fcaaa58369bb009c@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 7 Jan 2022 06:57:05 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=U0-W_H=-u-GDc5GYm8GHSix0F1dKF+3eMNixP30fhtrQ@mail.gmail.com>
-Message-ID: <CAD=FV=U0-W_H=-u-GDc5GYm8GHSix0F1dKF+3eMNixP30fhtrQ@mail.gmail.com>
-Subject: Re: [PATCH] nvmem: qfprom: Increase fuse blow timeout to prevent
- write fail.
-To:     Knox Chiou <knoxchiou@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104144944.1278663-1-frederic@kernel.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jan 6, 2022 at 6:31 PM Knox Chiou <knoxchiou@chromium.org> wrote:
->
-> sc7180 blow fuses got slightly chances to hit qfprom_reg_write timeout.
-> Current timeout is simply too low. Since blowing fuses is a
-> very rare operation, so the risk associated with overestimating this
-> number is low.
-> Increase fuse blow timeout from 1ms to 10ms.
->
-> Signed-off-by: Knox Chiou <knoxchiou@chromium.org>
+On Tue, Jan 04, 2022 at 03:49:36PM +0100 Frederic Weisbecker wrote:
+> Hi,
+> 
+> To prepare for extending cpusets to control CPU isolation features
+> (nohz_full, rcu_nocbs, unbound timers, workqueues, kthreads affinity...),
+> we need to split the global housekeeping_mask to one cpumask per isolation
+> feature.
+> 
+> Doing so is quite a chunk already so I'm working on that as a standalone
+> patchset. Once that get merged, the next step is to finally provide a
+> cpuset interface for one of these isolation features: rcu_nocb could
+> be interesting to handle first as nohz_full depends on it.
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+> 	isolation/split
+> 
+> HEAD: 2c07a16ff50d1e722babee28b926d70522e6bd3e
+> 
+> Thanks,
+> 	Frederic
 > ---
->
->  drivers/nvmem/qfprom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Slight nit that ${SUBJECT} for patches usually doesn't end with a
-period. Presumably if Srinivas cares he can fix it while applying.
+This is excellent, thanks!
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Phil Auld <pauld@redhat.com>
+
+
+> 
+> Frederic Weisbecker (8):
+>       pci: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+>       workqueue: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+>       net: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+>       sched/isolation: Use single feature type while referring to housekeeping cpumask
+>       sched/isolation: Consolidate check for housekeeping minimum service
+>       sched/isolation: Consolidate error handling
+>       sched/isolation: Fix housekeeping_mask memory leak
+>       sched/isolation: Split housekeeping cpumask per isolation features
+> 
+> 
+>  arch/x86/kernel/cpu/aperfmperf.c |   6 +-
+>  arch/x86/kvm/x86.c               |   2 +-
+>  drivers/base/cpu.c               |   2 +-
+>  drivers/pci/pci-driver.c         |  21 +++--
+>  include/linux/sched/isolation.h  |  43 ++++++-----
+>  kernel/cgroup/cpuset.c           |   6 +-
+>  kernel/cpu.c                     |   4 +-
+>  kernel/irq/cpuhotplug.c          |   4 +-
+>  kernel/irq/manage.c              |   4 +-
+>  kernel/kthread.c                 |   4 +-
+>  kernel/rcu/tasks.h               |   2 +-
+>  kernel/rcu/tree_plugin.h         |   2 +-
+>  kernel/sched/core.c              |  12 +--
+>  kernel/sched/fair.c              |  10 +--
+>  kernel/sched/isolation.c         | 162 +++++++++++++++++++++++++--------------
+>  kernel/sched/topology.c          |   8 +-
+>  kernel/watchdog.c                |   2 +-
+>  kernel/workqueue.c               |   4 +-
+>  net/core/net-sysfs.c             |   6 +-
+>  19 files changed, 180 insertions(+), 124 deletions(-)
+> 
+
+-- 
+

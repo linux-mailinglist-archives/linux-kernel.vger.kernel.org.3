@@ -2,124 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B338548763A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A14487641
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347018AbiAGLHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:07:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52488 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232906AbiAGLHh (ORCPT
+        id S1347011AbiAGLIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:08:18 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37116 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232906AbiAGLIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:07:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641553656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mErlQ9bFbWCh8pEI+M0nh3UElgFrVyLNdlmQovZz1FE=;
-        b=XQrqtJLfC7yoOodnMylFN8HTiwKMGpZn4HYW9KK554ly2Xuk4aLBPhLPrSAyj+35Jq/pl8
-        jh6iE6sNyOqrjWD+8HT/Bnrq/71jwOTULcTgqm6zT6LJ5zOQdw0W1ZgvOnmh6x6gm4w/D3
-        1umiAYT0W9OV2N7Vx8LxoQc+omA4HfA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-391--6xtewSzPRa1Z3CrEh2IJw-1; Fri, 07 Jan 2022 06:07:35 -0500
-X-MC-Unique: -6xtewSzPRa1Z3CrEh2IJw-1
-Received: by mail-wm1-f70.google.com with SMTP id l20-20020a05600c1d1400b003458e02cea0so4488301wms.7
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 03:07:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mErlQ9bFbWCh8pEI+M0nh3UElgFrVyLNdlmQovZz1FE=;
-        b=YJCQK502byZCOmmaSrftUDJj0EBvapFSEt6OAEcr5C7VFgV0eH12l45pi+j3Ioe1Ci
-         xQtCB+4UlSgC4Bpi47mlBRYapC1UjFiPBZmsM+iuszjbtFwaRnCkCC7GE+EBzj2Y0K+3
-         hkLfDuPRcwrwraI6pxkkpOhWYiAKsoyhqs96qYYKt/9p9j7L19yFwrMng0ZMeWouAGkx
-         jJ71jdLdyxd1YgmYoOcp2CBpCcEIHIUv1Lu/UQXssFbFt3RFAqUxe4oCaJZthdW1n0GV
-         J+EGVWzaDX/fdCM0j6rRUkjfEgt1oR9lsfoF7LVVGqzngJDP+lMTZeTTT2LlCyYE/mxd
-         EgiQ==
-X-Gm-Message-State: AOAM533rVzLLwwoZPD7uqCPRAL3iC8ZxvdG7WFYILJu4b74U8YhVmNIi
-        V9Y4FDJFWyyO5By6YOfnhlix4nyY3GBEo/QKqZ0iaIN5r7hd4W4P4p1LnmnU0V+5shiqSeqEX08
-        ZqrbFrnpFcU450DfYSm9nv8C5jfs33fL/YR7ejX2OC5rg5FQWw8gW/i05QqIUURfJ9W6qS0N1zn
-        I=
-X-Received: by 2002:adf:d1ef:: with SMTP id g15mr56009309wrd.198.1641553654114;
-        Fri, 07 Jan 2022 03:07:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzpfs8sNGNszizzpb8wIqMXaS0IM36pG7DV7riTr9kWpDEc6r6DU/cu0qurtWMt/rqjTZw+Ug==
-X-Received: by 2002:adf:d1ef:: with SMTP id g15mr56009285wrd.198.1641553653870;
-        Fri, 07 Jan 2022 03:07:33 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r9sm9337273wmq.18.2022.01.07.03.07.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 03:07:33 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kris Karas <bugs-a21@moonlit-rail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH 2/2] video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
-Date:   Fri,  7 Jan 2022 12:07:23 +0100
-Message-Id: <20220107110723.323276-3-javierm@redhat.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220107110723.323276-1-javierm@redhat.com>
-References: <20220107110723.323276-1-javierm@redhat.com>
+        Fri, 7 Jan 2022 06:08:17 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CC7EE2113B;
+        Fri,  7 Jan 2022 11:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1641553695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pcgOij+zx5nFnaRiqb8urjJJkXOiXD7b+GBxBwuYFwI=;
+        b=rS769dMisf4vxaz5k9ZjWfDO0VFsumHv9tE/vbud+8wu6JUeaCxeHnHe8jNja+ZXkmj6nv
+        Cb+NyUwUut6yV3jLO4hZw2vTb+sGkgdPEW6vtJpJNaYvbNb9B/ATN1wfwklBzHce6krhaF
+        oUph6fwLlPOkXNVYnZUgAZamiLdmxrE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1641553695;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pcgOij+zx5nFnaRiqb8urjJJkXOiXD7b+GBxBwuYFwI=;
+        b=jih4ir8RwzvUGJ35SsTE2CF6NacPV2cNWRoYfluMrvE79NK9YwIzfQ8+BAkyaRX67jjTmY
+        yRp6EsXuIuTpUdCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A071313CCC;
+        Fri,  7 Jan 2022 11:08:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id o5M3Jh8f2GFxGwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 07 Jan 2022 11:08:15 +0000
+Message-ID: <fa6573eb-9d5c-ef49-06b1-157c16efb868@suse.cz>
+Date:   Fri, 7 Jan 2022 12:08:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: [GIT PULL] slab for 5.17
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vga16fb framebuffer driver only supports Enhanced Graphics Adapter
-(EGA) and Video Graphics Array (VGA) 16 color graphic cards.
+Linus,
 
-But it doesn't check if the adapter is one of those or if a VGA16 mode
-is used. This means that the driver will be probed even if a VESA BIOS
-Extensions (VBE) or Graphics Output Protocol (GOP) interface is used.
+please pull the latest slab changes from
 
-This issue has been present for a long time but it was only exposed by
-commit d391c5827107 ("drivers/firmware: move x86 Generic System
-Framebuffers support") since the platform device registration to match
-the {vesa,efi}fb drivers is done later as a consequence of that change.
+  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.17
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215001
-Fixes: d391c5827107 ("drivers/firmware: move x86 Generic System Framebuffers support")
-Reported-by: Kris Karas <bugs-a21@moonlit-rail.com>
-Cc: <stable@vger.kernel.org> # 5.15.x
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Tested-by: Kris Karas <bugs-a21@moonlit-rail.com>
----
+======================================
 
- drivers/video/fbdev/vga16fb.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+- Separate struct slab from struct page - an offshot of the page
+  folio work. Struct page fields used by slab allocators are
+  moved from struct page to a new struct slab, that uses the
+  same physical storage. Similar to struct folio, it always is a
+  head page. This brings better type safety, separation of large
+  kmalloc allocations from true slabs, and cleanup of related
+  objcg code.
 
-diff --git a/drivers/video/fbdev/vga16fb.c b/drivers/video/fbdev/vga16fb.c
-index 3347c9b6a332..72b6aeceeff8 100644
---- a/drivers/video/fbdev/vga16fb.c
-+++ b/drivers/video/fbdev/vga16fb.c
-@@ -1422,6 +1422,18 @@ static int __init vga16fb_init(void)
- 
- 	vga16fb_setup(option);
- #endif
-+
-+	/* only EGA and VGA in 16 color graphic mode are supported */
-+	if (screen_info.orig_video_isVGA != VIDEO_TYPE_EGAC &&
-+	    screen_info.orig_video_isVGA != VIDEO_TYPE_VGAC)
-+		return -ENODEV;
-+
-+	if (screen_info.orig_video_mode != 0x0D &&	/* 320x200/4 (EGA) */
-+	    screen_info.orig_video_mode != 0x0E &&	/* 640x200/4 (EGA) */
-+	    screen_info.orig_video_mode != 0x10 &&	/* 640x350/4 (EGA) */
-+	    screen_info.orig_video_mode != 0x12)	/* 640x480/4 (VGA) */
-+		return -ENODEV;
-+
- 	ret = platform_driver_register(&vga16fb_driver);
- 
- 	if (!ret) {
--- 
-2.33.1
+- A SLAB_MERGE_DEFAULT config optimization.
 
+======================================
+
+The struct slab series was originally based on v5.16-rc3 and in linux-next
+since beginning of December [1]. I decided to rebase to v5.16-rc6 after Stephen
+reported a conflict with mm made it to mainline [2].
+
+If possible I would also like to finish the removal of slab fields from struct
+page within this merge window. It now depends on commits in the iommu tree that
+remove iommu's usage of the 'freelist' field. I currently have a branch
+for-5.17/struct-slab-part2 [3] that merges the iommu 'core' branch after the
+main struct slab series and adds a commit on top. I wonder if it's ok to send a
+pull request with that structure later (assuming after both this pull request
+and iommu tree are merged) or should it rather be rebased on your tree's commit
+that does the later merge of those two?
+
+Thanks,
+Vlastimil
+
+[1] https://lore.kernel.org/all/20211203073949.3d081406@canb.auug.org.au/
+[2] https://lore.kernel.org/all/3ec33e65-1080-96be-f8bb-0012e3b87387@suse.cz/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=for-5.17/struct-slab-part2
+
+----------------------------------------------------------------
+Hyeonggon Yoo (2):
+      mm: Make SLAB_MERGE_DEFAULT depend on SL[AU]B
+      mm/slob: Remove unnecessary page_mapcount_reset() function call
+
+Matthew Wilcox (Oracle) (14):
+      mm: Split slab into its own type
+      mm: Convert [un]account_slab_page() to struct slab
+      mm: Convert virt_to_cache() to use struct slab
+      mm: Convert __ksize() to struct slab
+      mm: Use struct slab in kmem_obj_info()
+      mm: Convert check_heap_object() to use struct slab
+      mm/slub: Convert detached_freelist to use a struct slab
+      mm/slub: Convert kfree() to use a struct slab
+      mm/slub: Convert print_page_info() to print_slab_info()
+      mm/slub: Convert pfmemalloc_match() to take a struct slab
+      mm/slob: Convert SLOB to use struct slab and struct folio
+      mm/kasan: Convert to struct folio and struct slab
+      zsmalloc: Stop using slab fields in struct page
+      bootmem: Use page->index instead of page->freelist
+
+Vlastimil Babka (18):
+      mm: add virt_to_folio() and folio_address()
+      mm/slab: Dissolve slab_map_pages() in its caller
+      mm/slub: Make object_err() static
+      mm/slub: Convert __slab_lock() and __slab_unlock() to struct slab
+      mm/slub: Convert alloc_slab_page() to return a struct slab
+      mm/slub: Convert __free_slab() to use struct slab
+      mm/slub: Convert most struct page to struct slab by spatch
+      mm/slub: Finish struct page to struct slab conversion
+      mm/slab: Convert kmem_getpages() and kmem_freepages() to struct slab
+      mm/slab: Convert most struct page to struct slab by spatch
+      mm/slab: Finish struct page to struct slab conversion
+      mm: Convert struct page to struct slab in functions used by other subsystems
+      mm/memcg: Convert slab objcgs from struct page to struct slab
+      mm/kfence: Convert kfence_guarded_alloc() to struct slab
+      mm/sl*b: Differentiate struct slab fields by sl*b implementations
+      mm/slub: Simplify struct slab slabs field definition
+      mm/slub: Define struct slab fields for CONFIG_SLUB_CPU_PARTIAL only when enabled
+      Merge branch 'for-5.17/struct-slab' into for-linus
+
+ arch/x86/mm/init_64.c        |    2 +-
+ include/linux/bootmem_info.h |    2 +-
+ include/linux/kasan.h        |    9 +-
+ include/linux/memcontrol.h   |   48 --
+ include/linux/mm.h           |   12 +
+ include/linux/mm_types.h     |   10 +-
+ include/linux/slab.h         |    8 -
+ include/linux/slab_def.h     |   16 +-
+ include/linux/slub_def.h     |   29 +-
+ init/Kconfig                 |    1 +
+ mm/bootmem_info.c            |    7 +-
+ mm/kasan/common.c            |   27 +-
+ mm/kasan/generic.c           |    8 +-
+ mm/kasan/kasan.h             |    1 +
+ mm/kasan/quarantine.c        |    2 +-
+ mm/kasan/report.c            |   13 +-
+ mm/kasan/report_tags.c       |   10 +-
+ mm/kfence/core.c             |   17 +-
+ mm/kfence/kfence_test.c      |    6 +-
+ mm/memcontrol.c              |   55 +-
+ mm/slab.c                    |  456 ++++++++--------
+ mm/slab.h                    |  302 +++++++++--
+ mm/slab_common.c             |   14 +-
+ mm/slob.c                    |   62 +--
+ mm/slub.c                    | 1177 +++++++++++++++++++++---------------------
+ mm/sparse.c                  |    2 +-
+ mm/usercopy.c                |   13 +-
+ mm/zsmalloc.c                |   18 +-
+ 28 files changed, 1265 insertions(+), 1062 deletions(-)

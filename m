@@ -2,112 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A913487DDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098E8487DDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 21:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiAGUyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 15:54:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiAGUyu (ORCPT
+        id S229647AbiAGU6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 15:58:15 -0500
+Received: from mail-pl1-f174.google.com ([209.85.214.174]:45000 "EHLO
+        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbiAGU6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 15:54:50 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F81C061574;
-        Fri,  7 Jan 2022 12:54:49 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id j6so26504839edw.12;
-        Fri, 07 Jan 2022 12:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PYqun+LwcFZngeUshoTPTihl/JBvURcYFS+g3dFr7pY=;
-        b=JmeQL+nQXNozJbExGxXiex7Z2lWmVrtO5jQd2GIF1Cs/LpIekKoxfAXcGOeeeUeJoW
-         Ju70RuLvrys6cGD2dvAMj+2J/M34hu1JcNlyooeifO6BG1qhdYBDNddYpKYB97Gq2JeW
-         m3mSZm7Pzvxy89rRjVQuXakRW/9LuDJbCMInmh7vyKN+CdV0BpGf2d7w0JX7VkzNf6Dz
-         KH+bu/cvolM+ZrTnNiZ3LRYldSdUnHKxyi+9WBMIQD2HX7xGiL5wCv+lGv+E3F9xcZsq
-         DB3UT055T4CcG8sffjs1G0FUGugnWprHwlozwB32xImqMH4Gu1rqN/ngwKPAnbkvGNJu
-         ZH8A==
+        Fri, 7 Jan 2022 15:58:14 -0500
+Received: by mail-pl1-f174.google.com with SMTP id h1so5744729pls.11;
+        Fri, 07 Jan 2022 12:58:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PYqun+LwcFZngeUshoTPTihl/JBvURcYFS+g3dFr7pY=;
-        b=pW0ltc6XME27CMiKWyIP4DmAEAH/p+/JkG3Vn1dV/OnJw3+sxxoCNa7eEDTDX6inUB
-         De+9+rIXD3P/BfgZ+EbnLvP8Ohq+HlLGb2sxOkvy+KxW/IRB5VoBF8eotAk1pF7R3Tqr
-         who1oTJsIjacRdyK702srV/mJhA++Bgh46DvS35+YJa/UO3FmAwHMQbsjxqMJTFRpbyP
-         rTg1TEGXkP9sJ8aN0h0q2GYajSpIP/0ENL/6fdypmPVMjxjD+wrlXjZejHMVe1vAMs6h
-         /D7aWUvHJ37SRPTTqmTHsid0LtCXUVVL53yzTdTo0Yt9AlebpxZ7vkTBSx4OcXP13Puf
-         cyGw==
-X-Gm-Message-State: AOAM530PxasoUn67w3rRj/FVkLow6FgaO0PDzyCnXoWTcJpWiQm1ft5B
-        YEVGDc1ZQvwPUW7trPzbHUXlFPIUAv3vOfKKwvY=
-X-Google-Smtp-Source: ABdhPJw4kjvtMSCN/EYkF9HQv+yinFPUdFSWCQCaD0VtTsfhAU4vzaDMumOlD/8dnaiaNaBdAXVAsEp5WqwMU7joCYY=
-X-Received: by 2002:a05:6402:12c4:: with SMTP id k4mr62289532edx.218.1641588888229;
- Fri, 07 Jan 2022 12:54:48 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oGg6eEoyVeP3AsWSET5vQXpARWWBJj2efG9QJ7/Rr00=;
+        b=YLVgqrl7Y3kn2OILpy1lQy7qFiX5L2mXexV+eUyY4cW3XCmpkxmkmcXZEgSHc9ceYS
+         tdG/zb2pJ65H6pM/ddwqqVU7gMPA6zjTFt4obrremJF+s2cENKomhbXZGBRnknylmm1n
+         5zdJfZ0HvaUymBiqfNZNFA4uTkee+JFVrS0OD/Lxh7yhuLTalX8AWTloZ9dIt3rtLoRs
+         JKDPICgv9+wR41RJ6EKty/lTb4KuM3atiR2Gr6E/kaiHN51uJr2dh4F678b+XmXTNFyf
+         dM92yrbf5WuwJiiH4nCETPsEPdwtmsczWxtCcdOaLOZQ5zbz2L71FX7PkzogVHlQ8AOk
+         Bfgg==
+X-Gm-Message-State: AOAM533xe9Lrf14O04w7D0baIx4ADRu8iAz8Pj3TlNvZkDh6rTcmZBL2
+        17GQJ1BnFoHJx+spuSTBYmk5Pn3Dlkk=
+X-Google-Smtp-Source: ABdhPJyZMDQwYg25LmbxhXmRoavew5HZXicqdbehbXyIjNxXyVMTLPDIQSJ5/cpns4UpDcSoMLYYYQ==
+X-Received: by 2002:a17:903:1c4:b0:149:45fb:d6f0 with SMTP id e4-20020a17090301c400b0014945fbd6f0mr63257885plh.143.1641589093673;
+        Fri, 07 Jan 2022 12:58:13 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:d201:bcd0:fc75:8697? ([2620:15c:211:201:d201:bcd0:fc75:8697])
+        by smtp.gmail.com with ESMTPSA id l6sm6840272pfu.63.2022.01.07.12.58.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 12:58:12 -0800 (PST)
+Message-ID: <65376e36-579b-76c4-0642-4582d6679914@acm.org>
+Date:   Fri, 7 Jan 2022 12:58:11 -0800
 MIME-Version: 1.0
-References: <20220107170616.2041589-1-gsomlo@gmail.com> <20220107170616.2041589-4-gsomlo@gmail.com>
-In-Reply-To: <20220107170616.2041589-4-gsomlo@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 7 Jan 2022 22:54:12 +0200
-Message-ID: <CAHp75VfBUomALtdhRXN-Z12RDAvLUiNHzazK0Mit6ExzRUTtRw@mail.gmail.com>
-Subject: Re: [PATCH v7 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 0/8] docs: consolidate sysfs-block into
+ Documentation/ABI/
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20211209003833.6396-1-ebiggers@kernel.org>
+ <YcH1uxfdTRHIwl7Y@quark> <YdMQ6rfSZWSOLptA@quark>
+ <YddiJFr+ba7Veh82@sol.localdomain>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <YddiJFr+ba7Veh82@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 7:06 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
->
-> LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
-> that targets FPGAs. LiteSDCard is a small footprint, configurable
-> SDCard core commonly used in LiteX designs.
->
-> The driver was first written in May 2020 and has been maintained
-> cooperatively by the LiteX community. Thanks to all contributors!
+On 1/6/22 13:41, Eric Biggers wrote:
+> Jens, any reason you haven't applied this series yet?  It looks like you've been
+> applying other patches.  To be clear, I've been expecting that this would go in
+> through the block tree, rather than the docs tree.
 
-...
+We are close to the v5.17 merge window so this is not a good time for a maintainer to
+apply a large patch series. If Jens does not reply I propose to repost this patch
+series after the v5.17 merge window has closed (three weeks from now?).
 
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * LiteX LiteSDCard driver
-> + *
-> + * Copyright (C) 2019-2020 Antmicro <contact@antmicro.com>
-> + * Copyright (C) 2019-2020 Kamil Rakoczy <krakoczy@antmicro.com>
-> + * Copyright (C) 2019-2020 Maciej Dudek <mdudek@internships.antmicro.com>
-> + * Copyright (C) 2020 Paul Mackerras <paulus@ozlabs.org>
-> + * Copyright (C) 2020-2021 Gabriel Somlo <gsomlo@gmail.com>
+See also https://lore.kernel.org/lkml/CAHk-=wg=3dEpPGhz8YvJUDWhFW_GUeASBGmqyw3aPQRfB3ki9w@mail.gmail.com/
 
-> + *
+Thanks,
 
-I guess I have commented on this and there was no discussion about the
-necessity of this blank line. I dunno what else has been ignored, so I
-will wait either for the continuation of the discussion (as per v6) or
-amending code in v8.
-
-> + */
-
-...
-
-On top of that it might still be the ordering issues in the error path
-of ->probe() and in ->remove(). I believe we will likely see v8.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Bart.

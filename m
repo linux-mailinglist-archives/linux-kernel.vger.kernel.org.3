@@ -2,303 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD3F486E4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5778F486E4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343654AbiAGAEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S1343723AbiAGAEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245707AbiAGAEp (ORCPT
+        with ESMTP id S232813AbiAGAEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:04:45 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29889C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:04:45 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id l10so7869782wrh.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:04:45 -0800 (PST)
+        Thu, 6 Jan 2022 19:04:24 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD495C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:04:23 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id s21-20020a05683004d500b0058f585672efso4914646otd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:04:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qZ/kV5I13xLnXZ0aN2eX4nkw4e8YZBKxbZZmZwBNDeM=;
-        b=qTdz+JYdP9kSgCiycihLd4IjnySCCLkrE5XPDo9GIsBavE45LvNkYIeWq3BJ6USV2x
-         H7X3rqEVnTRsqF+noTRPb9cAleSNj2yAGrWPc6xE6J9iZHqDVy+3JjW6Ofet28jtEG8A
-         6Hfc1181r6xm9GkGmLVJpRORW6xHnm/btCmB9m+IzT9NjV5jYJULb7K9jTCOSESQ3i0d
-         LO6XToJ/V0m6cyNOdtUNqrLKgR/geWT436uYr3zpsikOUMjuHwyLbpmXpN+C3EefQe0b
-         lp3G5XSkgTiPDRJ63u+sGeOnu+xHTlNjE4CE8rZgp2rjw1w3CCWBh417fdPupqX5bQXn
-         UpsA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=J7C4yHitHR47NwWThmeAgvuR8JMdvoB6j8bjsW2LazI=;
+        b=HY53Wt6hjFWIGUiPpgKBdRw0ZwLfNwrtTa42eqWDZjG84pTQUogeS7LpPIRBr4xTdN
+         Y+ULiF6Bh+PjVjuxRvhX4T7vS+EA9971FKMZSkM4/8d76UIbFnn5nzlKmd8Bq4jIgNu5
+         wAyTcDm/46rXItNOyVN7xdp2aS1KKuNopJwa19i1+7rF9d3CqQsmvdOA8StOICA7hSsn
+         IpTfO8qge36Pfw18UZr72bpGazYbX4eFxtYoYPEV0cCT8Vxv0IywwbEDw8AbJbasyAI9
+         kT/D0bFQdFdtTxpw3+xIGGrAczy77SqaL5n4L7mbMGy7b0mtTYipFzvfP+uXO9wWm5L0
+         yOwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qZ/kV5I13xLnXZ0aN2eX4nkw4e8YZBKxbZZmZwBNDeM=;
-        b=Z3qdTkImNj/OCtRE4SaPFMjKB+ET7siJwnBDrEKq2YNLm2L3ig0K3US+7Vuzcvh9G2
-         7qsRz0WvD/X7vXfs0v0AZ8KD0Oxex8N+wVkljVdUjsHznJACBPsgZOSTj+ZJb4qpJ9b+
-         gJEX8hgOreKkBxkPvoPK5MNJiu7g4d7rk9UEVN23cBlNV6VjhfrowvRbTN1JhRITfvbD
-         2mH5NGj128/OQKH6STUu3NwdelMjgcZPNg00iUN6fgEGIGmi2OkwI6QvgopC9UPKTWZN
-         VrSSKqj6yV+4QvwGKtT7gJ4kZ5DU/n+Kok8614zeNL6SXH/H3Kd4w+9HOrts1gjVAcwq
-         e0aw==
-X-Gm-Message-State: AOAM533qJsx4p4Y5ZqT0UNeAzuKtGhnckIZAfEBF11RTy/pbyJPOjbES
-        jmvy6rMHCGSAj7+AgVM0k+eG
-X-Google-Smtp-Source: ABdhPJz9ow2dZr4PoHSQvxtKLvfsqZhebTiS83MEAKQ4Cz6haMOK/+y6Lh93jzvDuNLoXQFcsxNPRg==
-X-Received: by 2002:a5d:5282:: with SMTP id c2mr27213616wrv.580.1641513883556;
-        Thu, 06 Jan 2022 16:04:43 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:209:d60e:99b8:56c2:167e])
-        by smtp.gmail.com with ESMTPSA id f10sm3350658wmg.43.2022.01.06.16.04.42
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=J7C4yHitHR47NwWThmeAgvuR8JMdvoB6j8bjsW2LazI=;
+        b=vvGTW2lLhAEXk/WPV2ptNX+YeFmzOnIwkYORqdqXXntmlBBmkNBqQn+IfZ7WWcuPe4
+         9rzatr1ok99uoIDUDfH+5okz97Pa3+NB6XsAY/Vjw0FTXcJ5o103TpT1W8Cl5rZrwBfI
+         C91IwNxvHzEM+5KHp9Yjm47n1v0e37PF2VZJEIXFdkKARa/B6tcZW0uOsNjksjOsgq3A
+         Xe5VsXu0V4otSoonU16YsyKx7Pfk5O2H/1X/gugq2JnLvwxrLBKlZeJpaEuBFQHRHX84
+         jNaqTQCm0jhDgtZ+X7aRvkQdGyXa9mc1H/OuasTWRX+20aZ4teu0ugtD3Fj3lw4Ovu9i
+         tvOQ==
+X-Gm-Message-State: AOAM5315I0/4cczpCqZOOchVol5ckeAydNis6vWB7DScm4Pc3E7myy2+
+        7ZiMhGdW6K6s3s128tU5NUK0iw==
+X-Google-Smtp-Source: ABdhPJy2c2E/SjB/T65xvjIV5zoB+HHwkiqPtMiEA0/4xJ52Y/gWSDSsPp2FYuPdYGsWvyW0DUs/Lg==
+X-Received: by 2002:a05:6830:2379:: with SMTP id r25mr43959467oth.343.1641513863111;
+        Thu, 06 Jan 2022 16:04:23 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a17sm732379oiw.43.2022.01.06.16.04.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 16:04:43 -0800 (PST)
-Date:   Fri, 7 Jan 2022 00:04:39 +0000
-From:   Wedson Almeida Filho <wedsonaf@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Brazdil <dbrazdil@google.com>,
+        Thu, 06 Jan 2022 16:04:22 -0800 (PST)
+Date:   Thu, 6 Jan 2022 16:05:10 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] misc: open-dice: Add driver to expose DICE data
- to userspace
-Message-ID: <YdeDl5aIpv1e503i@google.com>
-References: <20211221174502.63891-1-dbrazdil@google.com>
- <20211221174502.63891-3-dbrazdil@google.com>
- <YdXM44q07C5iQydu@google.com>
- <YdbJgf+IWnlCHQA7@google.com>
- <YdbSi+ANXw1JRkUj@kroah.com>
- <Ydch333UxlCKO8Wa@google.com>
- <Ydcl3XjGhVh33Txi@kroah.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>, vkoul@kernel.org
+Subject: Re: [PATCH V6 0/7] Add driver support for Data Capture and Compare
+ Engine(DCC) for SM8150,SC7280,SC7180,SDM845
+Message-ID: <YdeDtlmPRQx3FU9i@ripper>
+References: <cover.1628617260.git.schowdhu@codeaurora.org>
+ <396edd95-4f38-6830-99da-11e73d62a0cf@linaro.org>
+ <705c280b-bced-476d-8e21-1a5afbf3d2f3@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Ydcl3XjGhVh33Txi@kroah.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <705c280b-bced-476d-8e21-1a5afbf3d2f3@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 06:24:45PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Jan 06, 2022 at 05:07:43PM +0000, David Brazdil wrote:
-> > Hi Greg,
-> > 
-> > On Thu, Jan 06, 2022 at 12:29:15PM +0100, Greg Kroah-Hartman wrote:
-> > > On Thu, Jan 06, 2022 at 10:50:41AM +0000, David Brazdil wrote:
-> > > > Hi Wedson,
-> > > > 
-> > > > On Wed, Jan 05, 2022 at 04:52:51PM +0000, Wedson Almeida Filho wrote:
-> > > > > On Tue, Dec 21, 2021 at 05:45:02PM +0000, David Brazdil wrote:
-> > > > > > Open Profile for DICE is an open protocol for measured boot compatible
-> > > > > > with the Trusted Computing Group's Device Identifier Composition
-> > > > > > Engine (DICE) specification. The generated Compound Device Identifier
-> > > > > > (CDI) certificates represent the hardware/software combination measured
-> > > > > > by DICE, and can be used for remote attestation and sealing.
-> > > > > > 
-> > > > > > Add a driver that exposes reserved memory regions populated by firmware
-> > > > > > with DICE CDIs and exposes them to userspace via a character device.
-> > > > > > 
-> > > > > > Userspace obtains the memory region's size from read() and calls mmap()
-> > > > > > to create a mapping of the memory region in its address space. The
-> > > > > > mapping is not allowed to be write+shared, giving userspace a guarantee
-> > > > > > that the data were not overwritten by another process.
-> > > > > > 
-> > > > > > Userspace can also call write(), which triggers a wipe of the DICE data
-> > > > > > by the driver. Because both the kernel and userspace mappings use
-> > > > > > write-combine semantics, all clients observe the memory as zeroed after
-> > > > > > the syscall has returned.
-> > > > > > 
-> > > > > > Cc: Andrew Scull <ascull@google.com>
-> > > > > > Cc: Will Deacon <will@kernel.org>
-> > > > > > Signed-off-by: David Brazdil <dbrazdil@google.com>
-> > > > > > ---
-> > > > > >  drivers/misc/Kconfig     |  12 +++
-> > > > > >  drivers/misc/Makefile    |   1 +
-> > > > > >  drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
-> > > > > >  drivers/of/platform.c    |   1 +
-> > > > > >  4 files changed, 202 insertions(+)
-> > > > > >  create mode 100644 drivers/misc/open-dice.c
-> > > > > > 
-> > > > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> > > > > > index 0f5a49fc7c9e..a2b26426efba 100644
-> > > > > > --- a/drivers/misc/Kconfig
-> > > > > > +++ b/drivers/misc/Kconfig
-> > > > > > @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
-> > > > > >  	  switching between the dual-role USB-C port and the USB-A host ports
-> > > > > >  	  using only one USB controller.
-> > > > > >  
-> > > > > > +config OPEN_DICE
-> > > > > > +	tristate "Open Profile for DICE driver"
-> > > > > > +	depends on OF_RESERVED_MEM
-> > > > > > +	help
-> > > > > > +	  This driver exposes a DICE reserved memory region to userspace via
-> > > > > > +	  a character device. The memory region contains Compound Device
-> > > > > > +	  Identifiers (CDIs) generated by firmware as an output of DICE
-> > > > > > +	  measured boot flow. Userspace can use CDIs for remote attestation
-> > > > > > +	  and sealing.
-> > > > > > +
-> > > > > > +	  If unsure, say N.
-> > > > > > +
-> > > > > >  source "drivers/misc/c2port/Kconfig"
-> > > > > >  source "drivers/misc/eeprom/Kconfig"
-> > > > > >  source "drivers/misc/cb710/Kconfig"
-> > > > > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> > > > > > index a086197af544..70e800e9127f 100644
-> > > > > > --- a/drivers/misc/Makefile
-> > > > > > +++ b/drivers/misc/Makefile
-> > > > > > @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
-> > > > > >  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
-> > > > > >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
-> > > > > >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
-> > > > > > +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> > > > > > diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..f1819f951173
-> > > > > > --- /dev/null
-> > > > > > +++ b/drivers/misc/open-dice.c
-> > > > > > @@ -0,0 +1,188 @@
-> > > > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > > > +/*
-> > > > > > + * Copyright (C) 2021 - Google LLC
-> > > > > > + * Author: David Brazdil <dbrazdil@google.com>
-> > > > > > + *
-> > > > > > + * Driver for Open Profile for DICE.
-> > > > > > + *
-> > > > > > + * This driver takes ownership of a reserved memory region containing data
-> > > > > > + * generated by the Open Profile for DICE measured boot protocol. The memory
-> > > > > > + * contents are not interpreted by the kernel but can be mapped into a userspace
-> > > > > > + * process via a misc device. Userspace can also request a wipe of the memory.
-> > > > > > + *
-> > > > > > + * Userspace can access the data with (w/o error handling):
-> > > > > > + *
-> > > > > > + *     fd = open("/dev/open-dice0", O_RDWR);
-> > > > > > + *     read(fd, &size, sizeof(unsigned long));
-> > > > > > + *     data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
-> > > > > > + *     write(fd, NULL, 0); // wipe
-> > > > > > + *     close(fd);
-> > > > > > + */
-> > > > > > +
-> > > > > > +#include <linux/io.h>
-> > > > > > +#include <linux/miscdevice.h>
-> > > > > > +#include <linux/mm.h>
-> > > > > > +#include <linux/module.h>
-> > > > > > +#include <linux/of_reserved_mem.h>
-> > > > > > +#include <linux/platform_device.h>
-> > > > > > +
-> > > > > > +#define DRIVER_NAME "open-dice"
-> > > > > > +
-> > > > > > +struct open_dice_drvdata {
-> > > > > > +	spinlock_t lock;
-> > > > > > +	char name[16];
-> > > > > > +	struct reserved_mem *rmem;
-> > > > > > +	struct miscdevice misc;
-> > > > > > +};
-> > > > > > +
-> > > > > > +static inline struct open_dice_drvdata *to_open_dice_drvdata(struct file *filp)
-> > > > > > +{
-> > > > > > +	return container_of(filp->private_data, struct open_dice_drvdata, misc);
-> > > > > > +}
-> > > > > > +
-> > > > > > +static int open_dice_wipe(struct open_dice_drvdata *drvdata)
-> > > > > > +{
-> > > > > > +	void *kaddr;
-> > > > > > +
-> > > > > > +	spin_lock(&drvdata->lock);
-> > > > > > +	kaddr = devm_memremap(drvdata->misc.this_device, drvdata->rmem->base,
-> > > > > > +			      drvdata->rmem->size, MEMREMAP_WC);
-> > > > > > +	if (IS_ERR(kaddr)) {
-> > > > > > +		spin_unlock(&drvdata->lock);
-> > > > > > +		return PTR_ERR(kaddr);
-> > > > > > +	}
-> > > > > > +
-> > > > > > +	memset(kaddr, 0, drvdata->rmem->size);
-> > > > > > +	devm_memunmap(drvdata->misc.this_device, kaddr);
-> > > > > > +	spin_unlock(&drvdata->lock);
-> > > > > > +	return 0;
-> > > > > > +}
-> > > > > > +
-> > > > > > +/*
-> > > > > > + * Copies the size of the reserved memory region to the user-provided buffer.
-> > > > > > + */
-> > > > > > +static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
-> > > > > > +			      loff_t *off)
-> > > > > > +{
-> > > > > > +	unsigned long val = to_open_dice_drvdata(filp)->rmem->size;
-> > > > > 
-> > > > > There's a UAF issue here (and in all file operations that call
-> > > > > to_open_dice_drvdata) when the platform device in unbounded from the driver
-> > > > > while userspace has an instance of the misc device open: after open_dice_remove
-> > > > > is called, all managed resources are freed (which includes this
-> > > > > open_dice_drvdata allocation).
-> > > > > 
-> > > > > No new miscdev files can be created, but the existing ones continue to exist
-> > > > > with a now dangling pointer stored in private_data. So read/write/mmap syscalls
-> > > > > from userspace will lead to dereferencing this dangling pointer.
-> > > > 
-> > > > Please correct me if I'm wrong, but I don't think this can happen
-> > > > without tainting the kernel.
-> > > > 
-> > > > To call open_dice_remove, we have to remove the module. And any process
-> > > > holding an FD of the misc device will increase the module's refcounter,
-> > > > which is zero-checked in SYS_delete_module. The only way to get past
-> > > > that check is by compiling the kernel with CONFIG_MODULE_FORCE_UNLOAD,
-> > > > which changes the implementation of try_force_unload (kernel/module.c)
-> > > > and adds taint. Otherwise SYS_delete_module returns an error.
-> > > > 
-> > > > Unless there is another way how to trigger this situation, I think the
-> > > > existing protection is sufficient. The user cannot force the removal of
-> > > > the module without agreeing to the consequences.
-> > > 
-> > > You can remove the driver from the device by writing to the "unbind"
-> > > file in sysfs for this driver.
-> > > 
-> > > Otherwise, yes, you are correct, you can not remove the module from the
-> > > system if the file is open, but that does not prevent the driver from
-> > > being unbound from the device.
-> > > 
-> > > Yes, it is rare, and only able to be done by root, and even then is
-> > > something that many drivers fail at.  But for new ones, when we notice
-> > > it, it should be fixed up before merging just to prevent any future
-> > > problems.
-> > 
-> > Ah, I see. I'd opt for just setting 'suppress_bind_attrs=true' to
-> > prevent that, unless you think unbinding needs to be supported. I don't
-> > see a use for that on our side and would prefer to keep the code simple.
-> 
-> No objection from me, that solves it easily :)
-> 
-> > > > > > +	/* Create write-combine mapping so all clients observe a wipe. */
-> > > > > > +	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-> > > > > > +	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
-> > > > > > +	return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
-> > > > > > +}
-> > > > > 
-> > > > > Is there a reason for mapping this memory instead of, say, copying it to
-> > > > > userspace via read?
-> > > > 
-> > > > The data should be treated as secret, so the idea is that avoiding
-> > > > reading it in the kernel means we don't need to worry about it leakage
-> > > > via the stack, etc. The reason for this is that the DICE derivation
-> > > > chain may continue in userspace, so we want to minimize the chance of
-> > > > a child process getting the parent secret from the kernel.
-> > > 
-> > > The kernel stack is already secret, this should not be an issue.  And
-> > > even then, you can always erase it before the call returns to ensure
-> > > that it does not stick around, like many crypto functions do.
-> > 
-> > I can rewrite it and memzero_explicit the memory if you or Wedson feel
-> > strongly about this, but I actually really like mmap() because it avoids
-> > the need for dealing with that.
-> 
-> I think if we remove the ability for userspace to unbind the device from
-> the driver with the file handle open like above, all should be ok to
-> keep this as a mmap thing.
-> 
-> Wedson, any objection?
+On Thu 06 Jan 07:20 PST 2022, Souradeep Chowdhury wrote:
 
-No object from me, I like simplicity!
+> 
+> On 12/16/2021 9:18 PM, Thara Gopinath wrote:
+> > 
+> > 
+> > On 8/10/21 1:54 PM, Souradeep Chowdhury wrote:
+> > > DCC(Data Capture and Compare) is a DMA engine designed for debugging
+> > > purposes.In case of a system
+> > > crash or manual software triggers by the user the DCC hardware
+> > > stores the value at the register
+> > > addresses which can be used for debugging purposes.The DCC driver
+> > > provides the user with sysfs
+> > > interface to configure the register addresses.The options that the
+> > > DCC hardware provides include
+> > > reading from registers,writing to registers,first reading and then
+> > > writing to registers and looping
+> > > through the values of the same register.
+> > > 
+> > > In certain cases a register write needs to be executed for accessing
+> > > the rest of the registers,
+> > > also the user might want to record the changing values of a register
+> > > with time for which he has the
+> > > option to use the loop feature.
+> > 
+> > Hello Souradeep,
+> > 
+> > First of all, I think this is very a useful feature to have. I have some
+> > generic design related queries/comments on driver and the interface
+> > exposed to the user space. Also, I do not understand the h/w well here,
+> > so feel free to correct me if I am wrong.
+> > 
+> > 1. Linked list looks like a very internal feature to the h/w. It really
+> > is not an info that user should be aware of. I tried reading the code a
+> > bit. IUC, every time a s/w trigger is issued the configs in all the
+> > enabled linked lists are executed. The final ram dump that you get from
+> > /dev/dcc_sram is a dump of contents from all the enabled list? Is this
+> > understanding correct ? And we are talking of at-most 4 linked list?
+> > If yes, I think it might be better to have a folder per linked list with
+> > config, config_write etc. Also if possible it will be better to dump the
+> > results to a file in the specific folder instead of reading from
+> > /dev/dcc_sram.
+> > If no, there is no real need for user to know the linked list, right?
+> > Choosing of linked list can be done by kernel driver in this case with
+> > no input needed from user.
+> > 
+> > 2. Now to the sysfs interface itself, I know lot of thought has gone
+> > into sysfs vs debugfs considerations. But, have you considered using
+> > netlink interface instead of sysfs. Netlink interface is used for
+> > asynchronous communication between kernel and user space. In case of
+> > DCC, the communication appears to be asynchronous, where in user asks
+> > the kernel to capture some info and kernel can indicate back to user
+> > when the info is captured. Also the entire mess surrounding echoing addr
+> > / value / offset repeatedly into a sysfs entry can be avoided using
+> > netlink interface.
+> > 
+> Hello Thara,
+> 
+> Thanks for your review comments. Following are some points from my end
+> 
+> 
+> 1) Each linked list represent a particular block of memory in DCC_SRAM which
+> is preserved for that particular list. That is why offset calculation is
+> done on the driver based on the linked list chosen by the user.
+> 
+>     This choice needs to be made by the user since the number for the linked
+> list chosen is specific to the registers used to debug a particular
+> component.  Also we are giving the user flexibility to configure multiple
+> 
+>     linked lists at one go so that even if we don't have a separate folder
+> for it , the dumps are collected as a separate list of registers. Also there
+> are certain curr_list values which may be supported by the dcc
+> 
+>     hardware but may not be accessible to the user and so the choice cannot
+> be made arbitrarily from the driver.
+> 
 
-For maintainability, I think it would be a good idea to leave a comment when
-setting suppress_bind_attrs to true that indicates that if one wants to change
-it to false in the future, one must ensure that mappings are torn down and
-lifetime issues with drvdata are addressed after unbind.
+But in the end, as you write out the SRAM content, is there really any
+linked lists? Afaict it's just a sequence of operations/commands. The
+linked list part seems to be your data structure of choice to keep track
+of these operations in the driver before flushing them out.
 
-Cheers,
--Wedson
+Regards,
+Bjorn
+
+> 
+> 2) From opensource, I can see that Netlink has been used in most of the
+> cases where we need to notify stats to the user by taking the advantage of
+> asynchronous communication. In this case, that requirement is not
+> 
+>     there since it is mostly one way communication from user to kernel. Also
+> since this is used for debugging purposes perhaps sysfs adds more
+> reliability than Netlink. In case of Netlink we have the additional
+> 
+>      overhead of dealing with socket calls. Let me know otherwise.
+> 
+> 
+> Thanks,
+> 
+> Souradeep
+> 
+> 
+> 
+> 
+> 

@@ -2,116 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0C8487AE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DAE487AE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348424AbiAGRDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:03:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20260 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348385AbiAGRDG (ORCPT
+        id S1348428AbiAGRDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:03:14 -0500
+Received: from mail.efficios.com ([167.114.26.124]:35026 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348391AbiAGRDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:03:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641574985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eOMl7Din8scPcX4i9u0nmf8/CJIoSqLDwGlSdjGTQSg=;
-        b=QhZTwfF4KkqISjE5YnkZwli0nGcg82d5Rf/2KGzJWaLhuBzlux5+8HalUNL2VGXy5xBGu4
-        n+vfTfRu0AAVDYnovV1r5BUUy0eROAl32Urvydr3jHMtCQsjH8sm/W9p7yC1tlETzLmHMq
-        UpCdD2GH7hNI9sN9mOHzw9BWJg/mPHk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-0O4KSMD8P4OndBKUpREVjA-1; Fri, 07 Jan 2022 12:03:04 -0500
-X-MC-Unique: 0O4KSMD8P4OndBKUpREVjA-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso5119231edt.20
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:03:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eOMl7Din8scPcX4i9u0nmf8/CJIoSqLDwGlSdjGTQSg=;
-        b=SSSnKWGtBUzCKJHligz5iHuG1NVOL6DtMAqWmH9I5GzpWkCVSRSbHIYiqigBVM6K+t
-         uiv3g4dliVJlqyjaHx0GN1sjCyIkDN58NgdNJODuwMmz4ewhtYhRtZPxzI+ctueiLz/t
-         mEpHIJsqjcGROr5y97cgcfADJtn30ZT8P5wxvPFJeKsQd1szBRHInWhVWUq+JGaMbPnI
-         veJ2giwC3g2fW5zod3TZrtxyRVive5oUv8qrPM2/NMeMwUmO9wyHOYVnAHPRAejgi7xE
-         uWu/xHNIzeaoMeHDI3kNT1uYCf3LN9up/gJrDNDe14F4lMlhQ5FyLCCHwj+egyLi9TmV
-         aiXg==
-X-Gm-Message-State: AOAM530rXnnzT6lUP4m1HyqUyM+zIHC5p76aku6Hy4FFqhIlu5fd1bi2
-        INb0RoK74zWspeaFohd2wqzmVIwO5BeAts1tGjL0HFM1t7laXFdGVVXkF8eMLw0zOl4wspHnh+l
-        HTuvMmgnoZujplCAL84Ziqp4S
-X-Received: by 2002:a05:6402:35cc:: with SMTP id z12mr62033459edc.285.1641574983159;
-        Fri, 07 Jan 2022 09:03:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzFr7eF3bZsfEIhy3BEr7y+EXMk7etp5+RuYoUF63kUUZgZhCPb9+2w4VCnRkIWLMyXOYfHVA==
-X-Received: by 2002:a05:6402:35cc:: with SMTP id z12mr62033433edc.285.1641574982959;
-        Fri, 07 Jan 2022 09:03:02 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id c19sm2322987ede.62.2022.01.07.09.03.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 09:03:01 -0800 (PST)
-Message-ID: <19241e3d-f7eb-2b7f-046e-6a004a2225de@redhat.com>
-Date:   Fri, 7 Jan 2022 18:03:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] KVM: x86: Check for rmaps allocation
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Nikunj A Dadhania <nikunj@amd.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vasant.hegde@amd.com,
-        brijesh.singh@amd.com
-References: <20220105040337.4234-1-nikunj@amd.com>
- <YdVfvp2Pw6JUR61K@xz-m1.local> <Ydhx1qguxVZxOGfo@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ydhx1qguxVZxOGfo@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Fri, 7 Jan 2022 12:03:11 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id AD4E437A19F;
+        Fri,  7 Jan 2022 12:03:10 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id bOQmj1UfwrDU; Fri,  7 Jan 2022 12:03:10 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id DA44B379E7B;
+        Fri,  7 Jan 2022 12:03:09 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DA44B379E7B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1641574989;
+        bh=K+nxIILxOBXRPK8sQ8bAJe5ia11pU0WXQ+j7Fs6Nfcw=;
+        h=From:To:Date:Message-Id;
+        b=aVANYaEvG181lL205TYrxL51kIXOq5NbU2dwNu7Dj1jIUPmJcUgMHt6fT4Kod4VpU
+         v2473lkMLkqN5O3Ha1p8ZLBnj7tvdGbAxv1+rLeBkAGKd8V0aYJdHPUMDVz3ObhDcp
+         /orenxs86FvM805aJTDFnseKbD4vXlw2DvZgr9cf6yduKq0jTrPsLIBAnJoAMInoAT
+         9nXSbx5SCYwQyfyCRifY4rmDtQMhQqWUlWLMjNLLgF0oE1QFzyAD8Ceskg74Ys/Qic
+         vr6aXKbg3LAutHtlANaRHyt6c5OOXnk3tQZA7I2ZCqRN7aNfivtZazN4uZcPXqjmAt
+         dAxHeC/CiH6lg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id EafJTTreUIo3; Fri,  7 Jan 2022 12:03:09 -0500 (EST)
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by mail.efficios.com (Postfix) with ESMTPSA id 7B3B8379DFD;
+        Fri,  7 Jan 2022 12:03:09 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>, carlos@redhat.com,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH] rseq: x86: implement abort-at-ip extension
+Date:   Fri,  7 Jan 2022 12:03:02 -0500
+Message-Id: <20220107170302.8325-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/22 18:01, Sean Christopherson wrote:
-> On Wed, Jan 05, 2022, Peter Xu wrote:
->> On Wed, Jan 05, 2022 at 09:33:37AM +0530, Nikunj A Dadhania wrote:
->>> With TDP MMU being the default now, access to mmu_rmaps_stat debugfs
->>> file causes following oops:
->>>
->>> BUG: kernel NULL pointer dereference, address: 0000000000000000
->>> PGD 0 P4D 0
->>> Oops: 0000 [#1] PREEMPT SMP NOPTI
->>> CPU: 7 PID: 3185 Comm: cat Not tainted 5.16.0-rc4+ #204
->>> RIP: 0010:pte_list_count+0x6/0x40
->>>   Call Trace:
->>>    <TASK>
->>>    ? kvm_mmu_rmaps_stat_show+0x15e/0x320
->>>    seq_read_iter+0x126/0x4b0
->>>    ? aa_file_perm+0x124/0x490
->>>    seq_read+0xf5/0x140
->>>    full_proxy_read+0x5c/0x80
->>>    vfs_read+0x9f/0x1a0
->>>    ksys_read+0x67/0xe0
->>>    __x64_sys_read+0x19/0x20
->>>    do_syscall_64+0x3b/0xc0
->>>    entry_SYSCALL_64_after_hwframe+0x44/0xae
->>>   RIP: 0033:0x7fca6fc13912
->>>
->>> Return early when rmaps are not present.
->>>
->>> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
->>> Tested-by: Vasant Hegde <vasant.hegde@amd.com>
->>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
->>> ---
-> 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> 
+Allow rseq critical section abort handlers to optionally figure out at
+which instruction pointer the rseq critical section was aborted.
 
-Queued, thanks.
+This allows implementing rseq critical sections containing loops, in
+which case the commit side-effect cannot be the last instruction. This
+is useful to implement adaptative mutexes aware of preemption in
+user-space. (see [1])
 
-paolo
+This also allows implementing rseq critical sections with multiple
+commit steps, and use the abort-at-ip information to figure out what
+needs to be undone in the abort handler.
+
+Introduce the RSEQ_FLAG_QUERY_ABORT_AT_IP rseq system call flag. This
+lets userspace query whether the kernel and architecture supports the
+abort-at-ip rseq extension.
+
+Only provide this information for rseq critical sections for which the
+rseq_cs descriptor has the RSEQ_CS_FLAG_ABORT_AT_IP flag set. Those
+critical sections need to expect those ecx/rcx registers to be
+clobbered on abort.
+
+For x86-32, provide the abort-at-ip information in the %ecx register.
+For x86-64, provide the abort-at-ip information in the %rcx register.
+
+[1] https://github.com/compudj/rseq-test/blob/adapt-lock-abort-at-ip/test-rseq-adaptative-lock.c#L80
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ arch/x86/include/asm/ptrace.h | 12 ++++++++++++
+ include/uapi/linux/rseq.h     |  4 ++++
+ kernel/rseq.c                 | 15 +++++++++++++++
+ 3 files changed, 31 insertions(+)
+
+diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+index b94f615600d5..0a50e7f14c64 100644
+--- a/arch/x86/include/asm/ptrace.h
++++ b/arch/x86/include/asm/ptrace.h
+@@ -387,5 +387,17 @@ extern int do_set_thread_area(struct task_struct *p, int idx,
+ # define do_set_thread_area_64(p, s, t)	(0)
+ #endif
+ 
++#ifdef CONFIG_RSEQ
++
++#define RSEQ_ARCH_HAS_ABORT_AT_IP
++
++/* Use ecx/rcx as placeholder for abort-at ip. */
++static inline void rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip)
++{
++	regs->cx = ip;
++}
++
++#endif
++
+ #endif /* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_PTRACE_H */
+diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+index 9a402fdb60e9..3130232e6d0c 100644
+--- a/include/uapi/linux/rseq.h
++++ b/include/uapi/linux/rseq.h
+@@ -20,12 +20,14 @@ enum rseq_cpu_id_state {
+ 
+ enum rseq_flags {
+ 	RSEQ_FLAG_UNREGISTER = (1 << 0),
++	RSEQ_FLAG_QUERY_ABORT_AT_IP = (1 << 1),
+ };
+ 
+ enum rseq_cs_flags_bit {
+ 	RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT	= 0,
+ 	RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT	= 1,
+ 	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT	= 2,
++	RSEQ_CS_FLAG_ABORT_AT_IP_BIT		= 3,
+ };
+ 
+ enum rseq_cs_flags {
+@@ -35,6 +37,8 @@ enum rseq_cs_flags {
+ 		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
+ 	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE	=
+ 		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
++	RSEQ_CS_FLAG_ABORT_AT_IP		=
++		(1U << RSEQ_CS_FLAG_ABORT_AT_IP_BIT),
+ };
+ 
+ /*
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index 6d45ac3dae7f..6612136412c8 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -21,6 +21,13 @@
+ #define RSEQ_CS_PREEMPT_MIGRATE_FLAGS (RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE | \
+ 				       RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT)
+ 
++#ifdef RSEQ_ARCH_HAS_ABORT_AT_IP
++static bool rseq_has_abort_at_ip(void) { return true; }
++#else
++static bool rseq_has_abort_at_ip(void) { return false; }
++static void rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip) { }
++#endif
++
+ /*
+  *
+  * Restartable sequences are a lightweight interface that allows
+@@ -261,6 +268,8 @@ static int rseq_ip_fixup(struct pt_regs *regs)
+ 	trace_rseq_ip_fixup(ip, rseq_cs.start_ip, rseq_cs.post_commit_offset,
+ 			    rseq_cs.abort_ip);
+ 	instruction_pointer_set(regs, (unsigned long)rseq_cs.abort_ip);
++	if (rseq_cs.flags & RSEQ_CS_FLAG_ABORT_AT_IP)
++		rseq_abort_at_ip(regs, ip);
+ 	return 0;
+ }
+ 
+@@ -330,6 +339,12 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ {
+ 	int ret;
+ 
++	if (flags & RSEQ_FLAG_QUERY_ABORT_AT_IP) {
++		if (flags & ~RSEQ_FLAG_QUERY_ABORT_AT_IP)
++			return -EINVAL;
++		return rseq_has_abort_at_ip() ? 0 : -EINVAL;
++	}
++
+ 	if (flags & RSEQ_FLAG_UNREGISTER) {
+ 		if (flags & ~RSEQ_FLAG_UNREGISTER)
+ 			return -EINVAL;
+-- 
+2.17.1
 

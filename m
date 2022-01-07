@@ -2,147 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5634876AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2DD4876AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347186AbiAGLnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237668AbiAGLnB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:43:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255A9C061245;
-        Fri,  7 Jan 2022 03:43:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1179B825E5;
-        Fri,  7 Jan 2022 11:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E70C36AE0;
-        Fri,  7 Jan 2022 11:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641555778;
-        bh=gwX1wUVYeNEw/0pE+CCT1kIe3J4A7iSduIbxxDzZtdg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=govdLCzbMCFUyMaBAshxtMCsjQGHpUayH2Zyrdg06qgGS4ayj90tVw2WWbmfLi0GY
-         E4jtmO/ExrqldNMRaqpaYB4K02IxPg5StiFXYYc/Apso6nZgc2wJgsjL459Vj0JpLA
-         IhucE310IuTJOzvU8Y1rbFqKc+zzIGjba3eW2WCJ7TLUcsI13HGGWe/jgCH2kA0PB+
-         i+1IiQmT4BnMqIzoSRjQDMu+7bFBmhtohpFdnlIK6EpKuubtljck4mfl0hqiBIgtvU
-         4dGbXe5Bc1HsNf+QCR9b0pMi7earlt4+Q4560Zei9XX4pZ9fjqNBwN2hgKnbFsCJzE
-         1vE9Vsmla9UpQ==
-Date:   Fri, 7 Jan 2022 13:42:53 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, reinette.chatre@intel.com,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org
-Subject: Re: [PATCH v13 2/2] x86/sgx: Add an attribute for the amount of SGX
- memory in a NUMA node
-Message-ID: <YdgnPTE5cnrptniM@iki.fi>
-References: <20211116162116.93081-1-jarkko@kernel.org>
- <20211116162116.93081-2-jarkko@kernel.org>
- <YbzhBrimHGGpddDM@archlinux-ax161>
- <YcuhhI2+k0XVuTb1@iki.fi>
- <c857c964-89b9-d827-74ec-32cf874e8d8b@intel.com>
- <YddAiHSSX0V7UUik@iki.fi>
+        id S1347189AbiAGLnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:43:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:39870 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237668AbiAGLnj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 06:43:39 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E5DD13D5;
+        Fri,  7 Jan 2022 03:43:39 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A38413F66F;
+        Fri,  7 Jan 2022 03:43:37 -0800 (PST)
+Date:   Fri, 7 Jan 2022 11:43:32 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Roman Bacik <roman.bacik@broadcom.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
+Message-ID: <20220107114332.GA22419@lpieralisi>
+References: <20220105181306.mkratasqg36tjf4e@pali>
+ <20220106180026.GA295674@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YddAiHSSX0V7UUik@iki.fi>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220106180026.GA295674@bhelgaas>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 09:18:35PM +0200, Jarkko Sakkinen wrote:
-> On Sat, Jan 01, 2022 at 08:54:51PM -0800, Dave Hansen wrote:
-> > On 12/28/21 3:45 PM, Jarkko Sakkinen wrote:
-> > >> If I can provide any further information or testing, let me know!
-> > > Dave, when is the fix going to be applied [*]?
-> > > 
-> > >> Cheers,
-> > >> Nathan
-> > > [*] https://lore.kernel.org/linux-sgx/YcGTePmWDMOQU1pn@iki.fi/T/#m831a01bdde347f9e0af2c973986fae0499718201
-> > 
-> > Greg preferred hiding the file as opposed to faking a number in there.
-> > Any testing of the attached would be appreciated.
+On Thu, Jan 06, 2022 at 12:00:26PM -0600, Bjorn Helgaas wrote:
+> On Wed, Jan 05, 2022 at 07:13:06PM +0100, Pali Rohár wrote:
+> > On Wednesday 05 January 2022 09:51:48 Ray Jui wrote:
+> > > On 1/5/2022 1:35 AM, Pali Rohár wrote:
 > 
+> > > 2. I suppose 'PCI_CLASS_BRIDGE_PCI_NORMAL' is defined in some common PCI
+> > > header in a separate patch as described in the commit message. Then how
+> > > come these patches are not constructed with a patch series?
 > > 
-> > From: Dave Hansen <dave.hansen@linux.intel.com>
+> > Yes, PCI_CLASS_BRIDGE_PCI_NORMAL is a new constant for common pci header
+> > file defined in patch linked in commit message.
+> > https://lore.kernel.org/linux-pci/20211220145140.31898-1-pali@kernel.org/
 > > 
-> > Nathan Chancellor reported an oops when aceessing the
-> > 'sgx_total_bytes' sysfs file:
+> > Originally I included this change in v1 of linked patch in December but
+> > I realized that it does not match standard PCI config space (different
+> > offset 0x43c vs 0x08 and also different shift 0x8 vs 0x0) and probably
+> > there is something either incorrect or really non-standard. So later in
+> > December I dropped iproc_pcie_check_link() change in v2 of the linked
+> > patch where is introduced PCI_CLASS_BRIDGE_PCI_NORMAL and now sent new
+> > change for iproc_pcie_check_link() separately.
 > > 
-> > 	https://lore.kernel.org/all/YbzhBrimHGGpddDM@archlinux-ax161/
+> > Technically, linked patch in commit message is just extracting code into
+> > the common macros without any functional changed. But change in this
+> > iproc_pcie_check_link() has also functional change as now also lower 8
+> > bits of class code are changed. So in my opinion this patch should be
+> > really separate of linked patch.
 > > 
-> > The sysfs output code accesses the sgx_numa_nodes[] array
-> > unconditionally.  However, this array is allocated during SGX
-> > initialization, which only occurs on systems where SGX is
-> > supported.
-> > 
-> > If the sysfs file is accessed on systems without SGX support,
-> > sgx_numa_nodes[] is NULL and an oops occurs.
-> > 
-> > To fix this, hide the entire nodeX/x86/ attribute group on
-> > systems without SGX support using the ->is_visible attribute
-> > group callback.
-> > 
-> > Fixes: 50468e431335 ("x86/sgx: Add an attribute for the amount of SGX memory in a NUMA node")
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > Cc: linux-sgx@vger.kernel.org
-> > Cc: x86@kernel.org
-> > Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > ---
-> > 
-> >  b/arch/x86/kernel/cpu/sgx/main.c |   11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> > 
-> > diff -puN arch/x86/kernel/cpu/sgx/main.c~sgx-null-ptr arch/x86/kernel/cpu/sgx/main.c
-> > --- a/arch/x86/kernel/cpu/sgx/main.c~sgx-null-ptr	2021-12-20 07:56:38.309584807 -0800
-> > +++ b/arch/x86/kernel/cpu/sgx/main.c	2021-12-20 08:17:28.997705149 -0800
-> > @@ -910,6 +910,16 @@ static ssize_t sgx_total_bytes_show(stru
-> >  }
-> >  static DEVICE_ATTR_RO(sgx_total_bytes);
-> >  
-> > +static umode_t arch_node_attr_is_visible(struct kobject * kobj,
-> > +		struct attribute * attr, int idx)
-> > +{
-> > +	/* Make all x86/ attributes invisible when SGX is not initialized: */
-> > +	if (nodes_empty(sgx_numa_mask))
-> > +		return 0;
-> > +
-> > +	return attr->mode;
-> > +}
-> > +
-> >  static struct attribute *arch_node_dev_attrs[] = {
-> >  	&dev_attr_sgx_total_bytes.attr,
-> >  	NULL,
-> > @@ -918,6 +928,7 @@ static struct attribute *arch_node_dev_a
-> >  const struct attribute_group arch_node_dev_group = {
-> >  	.name = "x86",
-> >  	.attrs = arch_node_dev_attrs,
-> > +	.is_visible = arch_node_attr_is_visible,
-> >  };
-> >  #endif /* CONFIG_NUMA */
-> >  
-> > _
+> > I hope that Lorenzo and Bjorn take patches in correct order...
 > 
-> I'm compiling now kernel with this applied, reporting soon but the fix
-> looks good to me.
+> If patches are not sent together in a series, you can't assume
+> anything about the order they'll be applied in.  Adding a note about
+> "this patch depends patch X" helps a little but adds a fair amount of
+> friction to the process.
 
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Indeed, more so given that the dependency requires an ACK from other
+maintainers - I certainly can't pull this patch as-is.
 
-Did two tests in a virtual machine:
-
-1. Without the patch reproduced the crash.
-2. With the patch verified that the crash does not occur.
-
-/Jarkko
+Lorenzo

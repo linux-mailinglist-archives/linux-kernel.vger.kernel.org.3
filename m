@@ -2,155 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C093C4877CB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299504877CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238405AbiAGMvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:51:47 -0500
-Received: from mx-out.tlen.pl ([193.222.135.145]:32268 "EHLO mx-out.tlen.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238689AbiAGMvq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:51:46 -0500
-Received: (wp-smtpd smtp.tlen.pl 11641 invoked from network); 7 Jan 2022 13:51:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1641559904; bh=MRl1ggHFuJRUUgPcgGYIjWNycMQc/u+l0MgTCskd6Gk=;
-          h=From:To:Cc:Subject;
-          b=dOozskg9pCAhCp7+o0Q3JHBGFKLt5pDaq1Zh3Ln6YGWw4XkltJRu68Zk7GLGlOf4O
-           JHNDQJxHay2RWlMeTNkq6pVA5oh+2x0zsMRzjpzEDKFz4GmkL/4N1P8yo3USooaczz
-           k3XmwEQgXAB04eazjG72LfW+hTwSyrbe3aCY5fE8=
-Received: from aafo3.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.144.3])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-rtc@vger.kernel.org>; 7 Jan 2022 13:51:44 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [DEBUG PATCH v5] rtc-cmos: cmos_read_alarm bug demonstration
-Date:   Fri,  7 Jan 2022 13:51:36 +0100
-Message-Id: <20220107125136.165332-1-mat.jonczyk@o2.pl>
+        id S238589AbiAGMxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:53:39 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:47396 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232347AbiAGMxi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 07:53:38 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADn7Jy2N9hh_rL5BQ--.48737S2;
+        Fri, 07 Jan 2022 20:53:10 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     damien.lemoal@opensource.wdc.com, David.Laight@ACULAB.COM,
+        davem@davemloft.net
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>, stable@vger.kernel.org
+Subject: [PATCH v3] ide: Check for null pointer after calling devm_ioremap
+Date:   Fri,  7 Jan 2022 20:53:08 +0800
+Message-Id: <20220107125308.4057544-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220107124934.159878-9-mat.jonczyk@o2.pl>
-References: <20220107124934.159878-9-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: fe72e307d62f10880ccae58e1412d27f
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [oXOE]                               
+X-CM-TRANSID: qwCowADn7Jy2N9hh_rL5BQ--.48737S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw47AF1fZry5Gw1UKr15Arb_yoW8Aw4rpF
+        4SgFWSvrWDWr1UK3WxAr18ZFyUu3ZrJa4FgFyYvw4kZ3s0qr18JrWaqFWIqr9rJrW3CayY
+        v3W2yr4kuFZ8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5JwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjsjjDUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before my commit "rtc-cmos: avoid UIP when reading alarm time",
-applying this patch and reading the CMOS time like so:
+In linux-stable-5.15.13, this file has been removed and combined
+to `drivers/ata/pata_platform.c` without this bug.
+But in the older LTS kernels, like 5.10.90, this bug still exists.
+As the possible failure of the devres_alloc(), the devm_ioremap() and
+devm_ioport_map() may return NULL pointer.
+And then, the 'base' and 'alt_base' are used in plat_ide_setup_ports().
+Therefore, it should be better to add the check in order to avoid the
+dereference of the NULL pointer.
+Actually, it introduced the bug from commit 8cb1f567f4c0
+("ide: Platform IDE driver") and we can know from the commit message
+that it tended to be similar to the `drivers/ata/pata_platform.c`.
+But actually, even the first time pata_platform was built,
+commit a20c9e820864 ("[PATCH] ata: Generic platform_device libata driver"),
+there was no the bug, as there was a check after the ioremap().
+So possibly the bug was caused by ide itself.
 
-        while true; do cat /sys/class/rtc/rtc0/time ; sleep 0.5; done
-
-produces errors in dmesg on my Intel Kaby Lake laptop.
-
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Fixes: 8cb1f567f4c0 ("ide: Platform IDE driver")
+Cc: stable@vger.kernel.org#5.10
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+Changelog
 
-v5: Update to apply cleanly
+v1 -> v2
 
- drivers/rtc/rtc-cmos.c | 59 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+* Change 1. Correct the fixes tag and commit message.
 
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index b90a603d6b12..9baf91fc2c41 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -43,6 +43,9 @@
- #include <linux/dmi.h>
- #endif
- 
-+#include <linux/ktime.h>
-+#include <linux/timekeeping.h>
-+
- /* this is for "generic access to PC-style RTC" using CMOS_READ/CMOS_WRITE */
- #include <linux/mc146818rtc.h>
- 
-@@ -220,6 +223,8 @@ static inline void cmos_write_bank2(unsigned char val, unsigned char addr)
- 
- /*----------------------------------------------------------------*/
- 
-+static void cmos_read_alarm_uip_debugging(struct device *dev);
-+
- static int cmos_read_time(struct device *dev, struct rtc_time *t)
- {
- 	int ret;
-@@ -237,6 +242,7 @@ static int cmos_read_time(struct device *dev, struct rtc_time *t)
- 		return ret;
+v2 -> v3
+
+* Change 1. Correct the code.
+---
+ drivers/ide/ide_platform.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/ide/ide_platform.c b/drivers/ide/ide_platform.c
+index 91639fd6c276..5500c5afb3ca 100644
+--- a/drivers/ide/ide_platform.c
++++ b/drivers/ide/ide_platform.c
+@@ -85,6 +85,10 @@ static int plat_ide_probe(struct platform_device *pdev)
+ 		alt_base = devm_ioport_map(&pdev->dev,
+ 			res_alt->start, resource_size(res_alt));
  	}
- 
-+	cmos_read_alarm_uip_debugging(dev);
- 	return 0;
- }
- 
-@@ -319,6 +325,59 @@ static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	return 0;
- }
- 
-+static void cmos_read_alarm_uip_debugging(struct device *dev)
-+{
-+	unsigned long	flags;
-+	unsigned char	rtc_uip_baseline, rtc_uip;
-+	struct rtc_wkalrm t_baseline, t;
-+	ktime_t time_start, time_end;
-+	int i;
-+
-+	spin_lock_irqsave(&rtc_lock, flags);
-+	rtc_uip_baseline = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
-+	spin_unlock_irqrestore(&rtc_lock, flags);
-+
-+	cmos_read_alarm(dev, &t_baseline);
-+
-+	time_start = ktime_get();
-+
-+	for (i = 0; i < 2000; i++) {
-+		spin_lock_irqsave(&rtc_lock, flags);
-+		rtc_uip = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
-+		spin_unlock_irqrestore(&rtc_lock, flags);
-+
-+		cmos_read_alarm(dev, &t);
-+
-+		if (t_baseline.time.tm_sec != t.time.tm_sec) {
-+			dev_err(dev,
-+				"Inconsistent alarm tm_sec value: %d != %d (RTC_UIP = %d; %d)\n",
-+				t_baseline.time.tm_sec,
-+				t.time.tm_sec,
-+				rtc_uip_baseline, rtc_uip);
-+		}
-+		if (t_baseline.time.tm_min != t.time.tm_min) {
-+			dev_err(dev,
-+				"Inconsistent alarm tm_min value: %d != %d (RTC_UIP = %d; %d)\n",
-+				t_baseline.time.tm_min,
-+				t.time.tm_min,
-+				rtc_uip_baseline, rtc_uip);
-+		}
-+		if (t_baseline.time.tm_hour != t.time.tm_hour) {
-+			dev_err(dev,
-+				"Inconsistent alarm tm_hour value: %d != %d (RTC_UIP = %d; %d)\n",
-+				t_baseline.time.tm_hour,
-+				t.time.tm_hour,
-+				rtc_uip_baseline, rtc_uip);
-+		}
-+
++	if (!base || !alt_base) {
++		ret = -ENOMEM;
++		goto out;
 +	}
-+
-+	time_end = ktime_get();
-+
-+	pr_info_ratelimited("%s: loop executed in %lld ns\n",
-+			__func__, ktime_to_ns(ktime_sub(time_end, time_start)));
-+}
-+
- static void cmos_checkintr(struct cmos_rtc *cmos, unsigned char rtc_control)
- {
- 	unsigned char	rtc_intr;
+ 
+ 	memset(&hw, 0, sizeof(hw));
+ 	plat_ide_setup_ports(&hw, base, alt_base, pdata, res_irq->start);
 -- 
 2.25.1
 

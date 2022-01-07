@@ -2,313 +2,628 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 910DA487789
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADF748778C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346855AbiAGMUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:20:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49838 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238207AbiAGMUw (ORCPT
+        id S1346933AbiAGMWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238207AbiAGMWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:20:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 523ABB825E8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 12:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65BEC36AE0;
-        Fri,  7 Jan 2022 12:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641558049;
-        bh=MmbxWvy0GrQ2hGg5skln5erXJS6IzOGs4o2Xr0SyRTE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=daMo0MGa83aamuWa10Zhpe0ncfTWRCA6cuc9YOSrxI4KO50RSC+DUBSXdUQVd0AZE
-         FMzOFSbrhW/wgET3MS+06ikjCF9lpYVqT8ukpsz7K5NxOeIvoKrJW3YmN83Ku3Ewk5
-         govzv5wBA9QsxNqScRHADmj9pg4z2ePg7E61U5WT8gHG0q8so4hAd2MVVZ1hiZKtfS
-         9wxIN3+CT/LeZ3VXyoqB5CdRjdBZBkQRHOKjUj5ZMgtSKQKvqk5JBoGmM4uEJP+QVQ
-         uPy+gxmAWlUXQf7D2IQy2LbyO6zzv/t588OdvQzVLPbLZ4aZ0Yuk107fwVG7GZxeWx
-         DylutD7xn/+1A==
-Date:   Fri, 7 Jan 2022 21:20:46 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jianhua Liu <jianhua.ljh@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        orson.zhai@unisoc.com
-Subject: Re: [PATCH v2 2/2] arm64: kprobes: add support for
- KPROBES_ON_FTRACE
-Message-Id: <20220107212046.13e55368664b31c2b41b7e94@kernel.org>
-In-Reply-To: <CAAgTQPXi_cmi27upcLHgen3PotOtcu64oAxjYp559g6fYgkCvQ@mail.gmail.com>
-References: <1635858706-27320-1-git-send-email-jianhua.ljh@gmail.com>
-        <1635858706-27320-2-git-send-email-jianhua.ljh@gmail.com>
-        <20211217164019.7d5d9848f350fef4f709c62f@kernel.org>
-        <CAAgTQPXi_cmi27upcLHgen3PotOtcu64oAxjYp559g6fYgkCvQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Fri, 7 Jan 2022 07:22:16 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5EBC061201
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 04:22:16 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id s1so5323515pga.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 04:22:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=HMmCz2nrNteWHuUAqnxJ8pz2W732iiTx6bH2rWc5HN0=;
+        b=a3bvd9wF9CSwvbCgEYo/IY5NW5aWN/h3U1vPMwFLF4gJyi8Z8jfN5wgn+MzKF/Djkt
+         y57eVWxqNiEZzzy2eeyX/IWV2EXvK+/oHJfv/z6ieh7n1h98/GVD/ccMtojVtIizC2G0
+         h3eCz6PfzEkIhCDiV4yEoilfarnguxZ9jsHcCdhzlv7LU/rDX/Ec+ArSJ+bWdbrCIksR
+         Ss4EqSWbIVBFTTe36J2BFoBpAyGh9EopEBJxnrmm1H7cKsiB0V+laSG3IpsEuQ86PwvT
+         OYECUnGo4tnSKgYRm7x8SOXm+vv67V950qPNEC+UALzehAZGnP4UCCQfO0W6a4BMbYZS
+         0q+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HMmCz2nrNteWHuUAqnxJ8pz2W732iiTx6bH2rWc5HN0=;
+        b=WQ2CHy+O9KeouQNK607qMI0Bk466ZvKmGH1J6VQggWddwJX/1/SzaBPlG+wLTwLoTy
+         gyK+PNDLQCS7UZV8TLQiQoq4i7aEugyszBisSZvxsyRHfv/g6ZD7pzfpNByPwecj17lF
+         HFa4cr2LIk4FRY0mn3NmU/t8RBdNcex6jq5FGUi2kjxiIHTpYQ+JZa8zpZp0l5BEK8mE
+         /RgQxAntBOO2Ncp6SgfjozlC/JXKrKSIlFTybh5R3Xt/1OoKVZdC21fVPDZQIPUXxbNe
+         3SOlk8PFxn/b0CIjuLFeeu+HcmFYETKt7/USZZNDP+/lgA7s2Xt7P/FPh2Sd9otodMSd
+         XF+w==
+X-Gm-Message-State: AOAM533JaR2/YnSeyXfD2cx42GtG57XsHA19m8wv5GOgrwXATfB+7u7T
+        tTk5s6QvregdpQSmVLNUw5XrKw==
+X-Google-Smtp-Source: ABdhPJwjy+fVLNFfSkMw34LXtT+FGxzT9q/+j95y507Ds6eEMqKU1U9UQ8aedohBXMCPVexcvKHgag==
+X-Received: by 2002:a63:7202:: with SMTP id n2mr16889788pgc.254.1641558135675;
+        Fri, 07 Jan 2022 04:22:15 -0800 (PST)
+Received: from ubuntu.huaqin.com ([101.78.151.213])
+        by smtp.gmail.com with ESMTPSA id o11sm6013071pfu.150.2022.01.07.04.22.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 04:22:15 -0800 (PST)
+From:   xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     hsinyi@chromium.org,
+        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+Subject: [PATCH v2 1/2] drm/panel: Add inx Himax8279d MIPI-DSI LCD panel driver
+Date:   Fri,  7 Jan 2022 20:22:07 +0800
+Message-Id: <20220107122208.3893-1-xiazhengqiao@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 01:34:16 +0800
-Jianhua Liu <jianhua.ljh@gmail.com> wrote:
+Add STARRY 2081101QFH032011-53G 10.1" WUXGA TFT LCD panel
 
-> On Fri, Dec 17, 2021 at 3:40 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi,
-> >
-> > On Tue,  2 Nov 2021 21:11:46 +0800
-> > Janet Liu <jianhua.ljh@gmail.com> wrote:
-> >
-> > > From: Janet Liu <janet.liu@unisoc.com>
-> > >
-> > > This patch allow kprobes on ftrace call sites. This optimization
-> > > avoids use of a trap with regular kprobes.
-> > >
-> > > This depends on HAVE_DYNAMIC_FTRACE_WITH_REGS which depends on
-> > > "patchable-function-entry" options which is only implemented with newer
-> > > toolchains.
-> > >
-> > > Signed-off-by: Janet Liu <janet.liu@unisoc.com>
-> > > ---
-> > >  arch/arm64/Kconfig                 |  1 +
-> > >  arch/arm64/kernel/probes/Makefile  |  1 +
-> > >  arch/arm64/kernel/probes/ftrace.c  | 73 ++++++++++++++++++++++++++++++
-> > >  arch/arm64/kernel/probes/kprobes.c | 27 +++++++++++
-> > >  4 files changed, 102 insertions(+)
-> > >  create mode 100644 arch/arm64/kernel/probes/ftrace.c
-> > >
-> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > index 339130712093..f59005608976 100644
-> > > --- a/arch/arm64/Kconfig
-> > > +++ b/arch/arm64/Kconfig
-> > > @@ -200,6 +200,7 @@ config ARM64
-> > >       select HAVE_SYSCALL_TRACEPOINTS
-> > >       select HAVE_KPROBES
-> > >       select HAVE_OPTPROBES
-> > > +     select HAVE_KPROBES_ON_FTRACE
-> > >       select HAVE_KRETPROBES
-> > >       select HAVE_GENERIC_VDSO
-> > >       select IOMMU_DMA if IOMMU_SUPPORT
-> > > diff --git a/arch/arm64/kernel/probes/Makefile b/arch/arm64/kernel/probes/Makefile
-> > > index c77c92ac95fd..d9b204f4795a 100644
-> > > --- a/arch/arm64/kernel/probes/Makefile
-> > > +++ b/arch/arm64/kernel/probes/Makefile
-> > > @@ -3,5 +3,6 @@ obj-$(CONFIG_KPROBES)         += kprobes.o decode-insn.o      \
-> > >                                  kprobes_trampoline.o         \
-> > >                                  simulate-insn.o
-> > >  obj-$(CONFIG_OPTPROBES)      += opt.o opt_head.o
-> > > +obj-$(CONFIG_KPROBES_ON_FTRACE) += ftrace.o
-> > >  obj-$(CONFIG_UPROBES)                += uprobes.o decode-insn.o      \
-> > >                                  simulate-insn.o
-> > > diff --git a/arch/arm64/kernel/probes/ftrace.c b/arch/arm64/kernel/probes/ftrace.c
-> > > new file mode 100644
-> > > index 000000000000..46ea92eb552f
-> > > --- /dev/null
-> > > +++ b/arch/arm64/kernel/probes/ftrace.c
-> > > @@ -0,0 +1,73 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +//
-> > > +// Dynamic Ftrace based Kprobes Optimization
-> > > +//
-> > > +// Copyright (C) 2021, Unisoc Inc.
-> > > +// Author: Janet Liu <janet.liu@unisoc.com>
-> > > +#include <linux/kprobes.h>
-> > > +#include <linux/ptrace.h>
-> > > +#include <linux/hardirq.h>
-> > > +#include <linux/preempt.h>
-> > > +#include <linux/ftrace.h>
-> > > +
-> > > +
-> > > +/* Ftrace callback handler for kprobes*/
-> > > +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> > > +                        struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > > +{
-> > > +     struct kprobe *p;
-> > > +     struct kprobe_ctlblk *kcb;
-> > > +     struct pt_regs *regs = ftrace_get_regs(fregs);
-> > > +     int bit;
-> > > +
-> > > +     bit = ftrace_test_recursion_trylock(ip, parent_ip);
-> > > +     if (bit < 0)
-> > > +             return;
-> > > +
-> > > +     preempt_disable_notrace();
-> >
-> > This already has been done in ftrace side.
-> 
-> Hi Masami,
-> 
-> Got it by reading code, will fix this.
-> 
-> >
-> > > +     p = get_kprobe((kprobe_opcode_t *)ip);
-> > > +     if (unlikely(!p) || kprobe_disabled(p))
-> > > +             goto end;
-> > > +
-> > > +     kcb = get_kprobe_ctlblk();
-> > > +     if (kprobe_running()) {
-> > > +             kprobes_inc_nmissed_count(p);
-> > > +     } else {
-> > > +             unsigned long orig_ip = instruction_pointer(regs);
-> > > +
-> > > +             instruction_pointer_set(regs, ip);
-> >
-> > The 'ip' is the address of the 'bl' instruction, which must be
-> > p->addr + AARCH64_INSN_SIZE * 2. But this is a bit strange.
-> >
-> > On aarch64, if the user probe callback is called from breakpoint handler,
-> > regs->pc == kp->addr. But in this case, it is not the same.
-> >
-> > So, what about this?
-> >
-> >  instruction_pointer_set(regs, ip - AARCH64_INSN_SIZE);
-> >
-> 
-> I got what you said.
-> 
-> But p->addr is changed when KPROBES_ON_FTRACE enable.
-> I implemented kprobe_lookup_name for arm64 to do the change in this patch.
+Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/gpu/drm/panel/Kconfig                 |   9 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ .../gpu/drm/panel/panel-innolux-himax8279d.c  | 515 ++++++++++++++++++
+ 3 files changed, 525 insertions(+)
+ create mode 100644 drivers/gpu/drm/panel/panel-innolux-himax8279d.c
 
-Hmm, that is no good, because printk("%pS\n", p->addr) does not show
-what the user set by p->symbol_name. This may confuse user.
-Moreover, if user doesn't set symbol_name but addr directly (this
-happens when you use 'perf probe' command, which will pass the address
-from '_text', not the function entry.
-
-> because kernel/kprobe.c:check_ftrace_location check,
-> if p->addr != ftrace_addr, don't kprobe on ftrace entry.
-> so p->addr is equal to ftrace addr(the second nop), is equal to 'ip'.
-> here should be instruction_pointer_set(regs, ip);
-
-Hmm, OK. this is a special case for the arm64 (and maybe other
-architectures except for x86). Let's fix the check_ftrace_location().
-We already know that 2 instructions at the beginning of function will
-be used for ftrace on arm64. Thus arm64 version of check_ftrace_location()
-will check the given address + 1 is ftrace location or not.
-
-> 
-> > > +
-> > > +             __this_cpu_write(current_kprobe, p);
-> > > +             kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> > > +             if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> > > +                     /*
-> > > +                      *Emulate singlestep (and also recover regs->pc)
-> > > +                      *as if there is a nop
-> > > +                      */
-> > > +                     instruction_pointer_set(regs,
-> > > +                                     (unsigned long)p->addr + MCOUNT_INSN_SIZE);
-> >
-> > And then, this will be
-> >
-> >                         instruction_pointer_set(regs,
-> >                                         (unsigned long)p->addr + AARCH64_INSN_SIZE * 2);
-> >
-> > So basically, kprobes on ftrace will skips 2 NOP instructions (the compiler installed
-> > 2 nops) and call post handler. This means we have a virtual big NOP instruction there.
-> >
-> Ditto, skip two nop instructions should
-> instruction_pointer_set(regs,
->                         (unsigned long)p->addr + AARCH64_INSN_SIZE);
-> 
-> 
-> > > +                     if (unlikely(p->post_handler)) {
-> > > +                             kcb->kprobe_status = KPROBE_HIT_SSDONE;
-> > > +                             p->post_handler(p, regs, 0);
-> > > +                     }
-> > > +                     instruction_pointer_set(regs, orig_ip);
-> > > +             }
-> > > +
-> > > +             /*
-> > > +              * If pre_handler returns !0,it changes regs->pc. We have to
-> > > +              * skip emulating post_handler.
-> > > +              */
-> > > +             __this_cpu_write(current_kprobe, NULL);
-> > > +     }
-> > > +end:
-> > > +     preempt_enable_notrace();
-> > > +     ftrace_test_recursion_unlock(bit);
-> > > +}
-> > > +NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-> > > +
-> > > +int arch_prepare_kprobe_ftrace(struct kprobe *p)
-> > > +{
-> > > +     p->ainsn.api.insn = NULL;
-> > > +     p->ainsn.api.restore = 0;
-> > > +     return 0;
-> > > +}
-> > > diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
-> > > index 6dbcc89f6662..3d371d3e4dfa 100644
-> > > --- a/arch/arm64/kernel/probes/kprobes.c
-> > > +++ b/arch/arm64/kernel/probes/kprobes.c
-> > > @@ -417,6 +417,33 @@ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
-> > >       return 0;
-> > >  }
-> > >
-> > > +kprobe_opcode_t __kprobes *kprobe_lookup_name(const char *name, unsigned int offset)
-> > > +{
-> > > +     kprobe_opcode_t *addr;
-> > > +
-> > > +     addr = (kprobe_opcode_t *)kallsyms_lookup_name(name);
-> > > +#ifdef CONFIG_KPROBES_ON_FTRACE
-> > > +     if (addr && !offset) {
-> > > +             unsigned long faddr;
-> > > +
-> > > +             faddr = ftrace_location_range((unsigned long)addr,
-> > > +                                           (unsigned long)addr + 8);
-> >
-> > this '8' must be (AARCH64_INSN_SIZE * 2). And here you may need to add
-> > a comment why search the 2 instructions. (it is because arm64 uses
-> > -fpatchable-function-entry=2.)
-> >
-> Got it , will fix it.
-> > > +             if (faddr)
-> > > +                     addr = (kprobe_opcode_t *)faddr;
-> > > +     }
-> This change the p->addr to ftrace_addr.
-
-Ah, OK. Please forgot above. What we have to do is to change the
-check_ftrace_location(), not this conversion.
-
-Thank you,
-
-> 
-> > > +#endif
-> > > +     return addr;
-> > > +}
-> > > +
-> > > +bool __kprobes arch_kprobe_on_func_entry(unsigned long offset)
-> > > +{
-> > > +#ifdef CONFIG_KPROBES_ON_FTRACE
-> > > +     return offset <= 8;
-> >
-> > Ditto.
-> Got it, will add comment.
-> 
-> Thanks
-> 
-> Jianhua
-> >
-> > > +#else
-> > > +     return !offset;
-> > > +#endif
-> > > +}
-> > > +
-> > >  int __init arch_init_kprobes(void)
-> > >  {
-> > >       register_kernel_break_hook(&kprobes_break_hook);
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > Thank you,
-> >
-> >
-> > --
-> > Masami Hiramatsu <mhiramat@kernel.org>
-
-
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index cfc8d644cedf..9458262ef1dd 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -167,6 +167,15 @@ config DRM_PANEL_INNOLUX_EJ030NA
+           320x480 3.0" panel as found in the RS97 V2.1, RG300(non-ips)
+           and LDK handheld gaming consoles.
+ 
++config DRM_PANEL_INNOLUX_HIMAX8279D
++	tristate "INX 2081101qfh032011-53g 1200x1920 video panel"
++	depends on OF
++	depends on DRM_MIPI_DSI
++	depends on BACKLIGHT_CLASS_DEVICE
++	help
++	  Say Y here if you want to support for inx 2081101qfh032011-53g
++	  1200x1920 video panel.
++
+ config DRM_PANEL_INNOLUX_P079ZCA
+ 	tristate "Innolux P079ZCA panel"
+ 	depends on OF
+diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+index bca4cc1f2715..ec94fd5700fc 100644
+--- a/drivers/gpu/drm/panel/Makefile
++++ b/drivers/gpu/drm/panel/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_DRM_PANEL_ILITEK_IL9322) += panel-ilitek-ili9322.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9341) += panel-ilitek-ili9341.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9881C) += panel-ilitek-ili9881c.o
+ obj-$(CONFIG_DRM_PANEL_INNOLUX_EJ030NA) += panel-innolux-ej030na.o
++obj-$(CONFIG_DRM_PANEL_INNOLUX_HIMAX8279D) += panel-innolux-himax8279d.o
+ obj-$(CONFIG_DRM_PANEL_INNOLUX_P079ZCA) += panel-innolux-p079zca.o
+ obj-$(CONFIG_DRM_PANEL_JDI_LT070ME05000) += panel-jdi-lt070me05000.o
+ obj-$(CONFIG_DRM_PANEL_KHADAS_TS050) += panel-khadas-ts050.o
+diff --git a/drivers/gpu/drm/panel/panel-innolux-himax8279d.c b/drivers/gpu/drm/panel/panel-innolux-himax8279d.c
+new file mode 100644
+index 000000000000..6840449548e4
+--- /dev/null
++++ b/drivers/gpu/drm/panel/panel-innolux-himax8279d.c
+@@ -0,0 +1,515 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021, Huaqin Telecom Technology Co., Ltd
++ * Author: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
++ */
++
++#include <linux/delay.h>
++#include <linux/gpio/consumer.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/regulator/consumer.h>
++
++#include <drm/drm_connector.h>
++#include <drm/drm_crtc.h>
++#include <drm/drm_mipi_dsi.h>
++#include <drm/drm_panel.h>
++
++#include <video/mipi_display.h>
++
++struct panel_desc {
++	const struct drm_display_mode *modes;
++	unsigned int bpc;
++
++	/**
++	 * @width_mm: width of the panel's active display area
++	 * @height_mm: height of the panel's active display area
++	 */
++	struct {
++		unsigned int width_mm;
++		unsigned int height_mm;
++	} size;
++
++	unsigned long mode_flags;
++	enum mipi_dsi_pixel_format format;
++	const struct panel_init_cmd *init_cmds;
++	unsigned int lanes;
++	bool discharge_on_disable;
++};
++
++struct inx_panel {
++	struct drm_panel base;
++	struct mipi_dsi_device *dsi;
++
++	const struct panel_desc *desc;
++
++	enum drm_panel_orientation orientation;
++	struct regulator *pp1800;
++	struct regulator *avee;
++	struct regulator *avdd;
++	struct gpio_desc *enable_gpio;
++
++	bool prepared;
++};
++
++enum dsi_cmd_type {
++	INIT_DCS_CMD,
++	DELAY_CMD,
++};
++
++struct panel_init_cmd {
++	enum dsi_cmd_type type;
++	size_t len;
++	const char *data;
++};
++
++#define _INIT_DCS_CMD(...) { \
++	.type = INIT_DCS_CMD, \
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++#define _INIT_DELAY_CMD(...) { \
++	.type = DELAY_CMD,\
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++static const struct panel_init_cmd starry_qfh032011_53g_init_cmd[] = {
++	_INIT_DCS_CMD(0xB0, 0x01),
++	_INIT_DCS_CMD(0xC3, 0x4F),
++	_INIT_DCS_CMD(0xC4, 0x40),
++	_INIT_DCS_CMD(0xC5, 0x40),
++	_INIT_DCS_CMD(0xC6, 0x40),
++	_INIT_DCS_CMD(0xC7, 0x40),
++	_INIT_DCS_CMD(0xC8, 0x4D),
++	_INIT_DCS_CMD(0xC9, 0x52),
++	_INIT_DCS_CMD(0xCA, 0x51),
++	_INIT_DCS_CMD(0xCD, 0x5D),
++	_INIT_DCS_CMD(0xCE, 0x5B),
++	_INIT_DCS_CMD(0xCF, 0x4B),
++	_INIT_DCS_CMD(0xD0, 0x49),
++	_INIT_DCS_CMD(0xD1, 0x47),
++	_INIT_DCS_CMD(0xD2, 0x45),
++	_INIT_DCS_CMD(0xD3, 0x41),
++	_INIT_DCS_CMD(0xD7, 0x50),
++	_INIT_DCS_CMD(0xD8, 0x40),
++	_INIT_DCS_CMD(0xD9, 0x40),
++	_INIT_DCS_CMD(0xDA, 0x40),
++	_INIT_DCS_CMD(0xDB, 0x40),
++	_INIT_DCS_CMD(0xDC, 0x4E),
++	_INIT_DCS_CMD(0xDD, 0x52),
++	_INIT_DCS_CMD(0xDE, 0x51),
++	_INIT_DCS_CMD(0xE1, 0x5E),
++	_INIT_DCS_CMD(0xE2, 0x5C),
++	_INIT_DCS_CMD(0xE3, 0x4C),
++	_INIT_DCS_CMD(0xE4, 0x4A),
++	_INIT_DCS_CMD(0xE5, 0x48),
++	_INIT_DCS_CMD(0xE6, 0x46),
++	_INIT_DCS_CMD(0xE7, 0x42),
++	_INIT_DCS_CMD(0xB0, 0x03),
++	_INIT_DCS_CMD(0xBE, 0x03),
++	_INIT_DCS_CMD(0xCC, 0x44),
++	_INIT_DCS_CMD(0xC8, 0x07),
++	_INIT_DCS_CMD(0xC9, 0x05),
++	_INIT_DCS_CMD(0xCA, 0x42),
++	_INIT_DCS_CMD(0xCD, 0x3E),
++	_INIT_DCS_CMD(0xCF, 0x60),
++	_INIT_DCS_CMD(0xD2, 0x04),
++	_INIT_DCS_CMD(0xD3, 0x04),
++	_INIT_DCS_CMD(0xD4, 0x01),
++	_INIT_DCS_CMD(0xD5, 0x00),
++	_INIT_DCS_CMD(0xD6, 0x03),
++	_INIT_DCS_CMD(0xD7, 0x04),
++	_INIT_DCS_CMD(0xD9, 0x01),
++	_INIT_DCS_CMD(0xDB, 0x01),
++	_INIT_DCS_CMD(0xE4, 0xF0),
++	_INIT_DCS_CMD(0xE5, 0x0A),
++	_INIT_DCS_CMD(0xB0, 0x00),
++	_INIT_DCS_CMD(0xCC, 0x08),
++	_INIT_DCS_CMD(0xC2, 0x08),
++	_INIT_DCS_CMD(0xC4, 0x10),
++	_INIT_DCS_CMD(0xB0, 0x02),
++	_INIT_DCS_CMD(0xC0, 0x00),
++	_INIT_DCS_CMD(0xC1, 0x0A),
++	_INIT_DCS_CMD(0xC2, 0x20),
++	_INIT_DCS_CMD(0xC3, 0x24),
++	_INIT_DCS_CMD(0xC4, 0x23),
++	_INIT_DCS_CMD(0xC5, 0x29),
++	_INIT_DCS_CMD(0xC6, 0x23),
++	_INIT_DCS_CMD(0xC7, 0x1C),
++	_INIT_DCS_CMD(0xC8, 0x19),
++	_INIT_DCS_CMD(0xC9, 0x17),
++	_INIT_DCS_CMD(0xCA, 0x17),
++	_INIT_DCS_CMD(0xCB, 0x18),
++	_INIT_DCS_CMD(0xCC, 0x1A),
++	_INIT_DCS_CMD(0xCD, 0x1E),
++	_INIT_DCS_CMD(0xCE, 0x20),
++	_INIT_DCS_CMD(0xCF, 0x23),
++	_INIT_DCS_CMD(0xD0, 0x07),
++	_INIT_DCS_CMD(0xD1, 0x00),
++	_INIT_DCS_CMD(0xD2, 0x00),
++	_INIT_DCS_CMD(0xD3, 0x0A),
++	_INIT_DCS_CMD(0xD4, 0x13),
++	_INIT_DCS_CMD(0xD5, 0x1C),
++	_INIT_DCS_CMD(0xD6, 0x1A),
++	_INIT_DCS_CMD(0xD7, 0x13),
++	_INIT_DCS_CMD(0xD8, 0x17),
++	_INIT_DCS_CMD(0xD9, 0x1C),
++	_INIT_DCS_CMD(0xDA, 0x19),
++	_INIT_DCS_CMD(0xDB, 0x17),
++	_INIT_DCS_CMD(0xDC, 0x17),
++	_INIT_DCS_CMD(0xDD, 0x18),
++	_INIT_DCS_CMD(0xDE, 0x1A),
++	_INIT_DCS_CMD(0xDF, 0x1E),
++	_INIT_DCS_CMD(0xE0, 0x20),
++	_INIT_DCS_CMD(0xE1, 0x23),
++	_INIT_DCS_CMD(0xE2, 0x07),
++	_INIT_DCS_CMD(0X11),
++	_INIT_DELAY_CMD(120),
++	_INIT_DCS_CMD(0X29),
++	_INIT_DELAY_CMD(80),
++	{},
++};
++
++static inline struct inx_panel *to_inx_panel(struct drm_panel *panel)
++{
++	return container_of(panel, struct inx_panel, base);
++}
++
++static int inx_panel_init_dcs_cmd(struct inx_panel *inx)
++{
++	struct mipi_dsi_device *dsi = inx->dsi;
++	struct drm_panel *panel = &inx->base;
++	int i, err = 0;
++
++	if (inx->desc->init_cmds) {
++		const struct panel_init_cmd *init_cmds = inx->desc->init_cmds;
++
++		for (i = 0; init_cmds[i].len != 0; i++) {
++			const struct panel_init_cmd *cmd = &init_cmds[i];
++
++			switch (cmd->type) {
++			case DELAY_CMD:
++				msleep(cmd->data[0]);
++				err = 0;
++				break;
++
++			case INIT_DCS_CMD:
++				err = mipi_dsi_dcs_write(dsi, cmd->data[0],
++							 cmd->len <= 1 ? NULL :
++							 &cmd->data[1],
++							 cmd->len - 1);
++				break;
++
++			default:
++				err = -EINVAL;
++			}
++
++			if (err < 0) {
++				dev_err(panel->dev,
++					"failed to write command %u\n", i);
++				return err;
++			}
++		}
++	}
++	return 0;
++}
++
++static int inx_panel_enter_sleep_mode(struct inx_panel *inx)
++{
++	struct mipi_dsi_device *dsi = inx->dsi;
++	int ret;
++
++	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
++
++	ret = mipi_dsi_dcs_set_display_off(dsi);
++	if (ret < 0)
++		return ret;
++
++	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int inx_panel_unprepare(struct drm_panel *panel)
++{
++	struct inx_panel *inx = to_inx_panel(panel);
++	int ret;
++
++	if (!inx->prepared)
++		return 0;
++
++	ret = inx_panel_enter_sleep_mode(inx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to set panel off: %d\n", ret);
++		return ret;
++	}
++
++	msleep(150);
++
++	if (inx->desc->discharge_on_disable) {
++		regulator_disable(inx->avee);
++		regulator_disable(inx->avdd);
++		usleep_range(5000, 7000);
++		gpiod_set_value(inx->enable_gpio, 0);
++		usleep_range(5000, 7000);
++		regulator_disable(inx->pp1800);
++	} else {
++		gpiod_set_value(inx->enable_gpio, 0);
++		usleep_range(500, 1000);
++		regulator_disable(inx->avee);
++		regulator_disable(inx->avdd);
++		usleep_range(5000, 7000);
++		regulator_disable(inx->pp1800);
++	}
++
++	inx->prepared = false;
++
++	return 0;
++}
++
++static int inx_panel_prepare(struct drm_panel *panel)
++{
++	struct inx_panel *inx = to_inx_panel(panel);
++	int ret;
++
++	if (inx->prepared)
++		return 0;
++
++	gpiod_set_value(inx->enable_gpio, 0);
++	usleep_range(1000, 1500);
++
++	ret = regulator_enable(inx->pp1800);
++	if (ret < 0)
++		return ret;
++
++	usleep_range(3000, 5000);
++
++	ret = regulator_enable(inx->avdd);
++	if (ret < 0)
++		goto poweroff1v8;
++	ret = regulator_enable(inx->avee);
++	if (ret < 0)
++		goto poweroffavdd;
++
++	usleep_range(5000, 10000);
++
++	gpiod_set_value(inx->enable_gpio, 1);
++	usleep_range(1000, 2000);
++	gpiod_set_value(inx->enable_gpio, 0);
++	usleep_range(1000, 2000);
++	gpiod_set_value(inx->enable_gpio, 1);
++	usleep_range(6000, 10000);
++
++	ret = inx_panel_init_dcs_cmd(inx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to init panel: %d\n", ret);
++		goto poweroff;
++	}
++
++	inx->prepared = true;
++
++	return 0;
++
++poweroff:
++	regulator_disable(inx->avee);
++poweroffavdd:
++	regulator_disable(inx->avdd);
++poweroff1v8:
++	usleep_range(5000, 7000);
++	regulator_disable(inx->pp1800);
++	gpiod_set_value(inx->enable_gpio, 0);
++
++	return ret;
++}
++
++static int inx_panel_enable(struct drm_panel *panel)
++{
++	msleep(130);
++	return 0;
++}
++
++static const struct drm_display_mode starry_qfh032011_53g_default_mode = {
++	.clock = 165731,
++	.hdisplay = 1200,
++	.hsync_start = 1200 + 100,
++	.hsync_end = 1200 + 100 + 10,
++	.htotal = 1200 + 100 + 10 + 100,
++	.vdisplay = 1920,
++	.vsync_start = 1920 + 14,
++	.vsync_end = 1920 + 14 + 10,
++	.vtotal = 1920 + 14 + 10 + 15,
++};
++
++static const struct panel_desc starry_qfh032011_53g_desc = {
++	.modes = &starry_qfh032011_53g_default_mode,
++	.bpc = 8,
++	.size = {
++		.width_mm = 135,
++		.height_mm = 216,
++	},
++	.lanes = 4,
++	.format = MIPI_DSI_FMT_RGB888,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++		      MIPI_DSI_MODE_LPM,
++	.init_cmds = starry_qfh032011_53g_init_cmd,
++	.discharge_on_disable = false,
++};
++
++static int inx_panel_get_modes(struct drm_panel *panel,
++			       struct drm_connector *connector)
++{
++	struct inx_panel *inx = to_inx_panel(panel);
++	const struct drm_display_mode *m = inx->desc->modes;
++	struct drm_display_mode *mode;
++
++	mode = drm_mode_duplicate(connector->dev, m);
++	if (!mode) {
++		dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
++			m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
++		return -ENOMEM;
++	}
++
++	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
++	drm_mode_set_name(mode);
++	drm_mode_probed_add(connector, mode);
++
++	connector->display_info.width_mm = inx->desc->size.width_mm;
++	connector->display_info.height_mm = inx->desc->size.height_mm;
++	connector->display_info.bpc = inx->desc->bpc;
++	drm_connector_set_panel_orientation(connector, inx->orientation);
++
++	return 1;
++}
++
++static const struct drm_panel_funcs inx_panel_funcs = {
++	.unprepare = inx_panel_unprepare,
++	.prepare = inx_panel_prepare,
++	.enable = inx_panel_enable,
++	.get_modes = inx_panel_get_modes,
++};
++
++static int inx_panel_add(struct inx_panel *inx)
++{
++	struct device *dev = &inx->dsi->dev;
++	int err;
++
++	inx->avdd = devm_regulator_get(dev, "avdd");
++	if (IS_ERR(inx->avdd))
++		return PTR_ERR(inx->avdd);
++
++	inx->avee = devm_regulator_get(dev, "avee");
++	if (IS_ERR(inx->avee))
++		return PTR_ERR(inx->avee);
++
++	inx->pp1800 = devm_regulator_get(dev, "pp1800");
++	if (IS_ERR(inx->pp1800))
++		return PTR_ERR(inx->pp1800);
++
++	inx->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
++	if (IS_ERR(inx->enable_gpio)) {
++		dev_err(dev, "cannot get reset-gpios %ld\n",
++			PTR_ERR(inx->enable_gpio));
++		return PTR_ERR(inx->enable_gpio);
++	}
++
++	gpiod_set_value(inx->enable_gpio, 0);
++
++	drm_panel_init(&inx->base, dev, &inx_panel_funcs,
++		       DRM_MODE_CONNECTOR_DSI);
++	err = of_drm_get_panel_orientation(dev->of_node, &inx->orientation);
++	if (err < 0) {
++		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, err);
++		return err;
++	}
++
++	err = drm_panel_of_backlight(&inx->base);
++	if (err)
++		return err;
++
++	inx->base.funcs = &inx_panel_funcs;
++	inx->base.dev = &inx->dsi->dev;
++
++	drm_panel_add(&inx->base);
++
++	return 0;
++}
++
++static int inx_panel_probe(struct mipi_dsi_device *dsi)
++{
++	struct inx_panel *inx;
++	int ret;
++	const struct panel_desc *desc;
++
++	inx = devm_kzalloc(&dsi->dev, sizeof(*inx), GFP_KERNEL);
++	if (!inx)
++		return -ENOMEM;
++
++	desc = of_device_get_match_data(&dsi->dev);
++	dsi->lanes = desc->lanes;
++	dsi->format = desc->format;
++	dsi->mode_flags = desc->mode_flags;
++	inx->desc = desc;
++	inx->dsi = dsi;
++	ret = inx_panel_add(inx);
++	if (ret < 0)
++		return ret;
++
++	mipi_dsi_set_drvdata(dsi, inx);
++
++	ret = mipi_dsi_attach(dsi);
++	if (ret)
++		drm_panel_remove(&inx->base);
++
++	return ret;
++}
++
++static void inx_panel_shutdown(struct mipi_dsi_device *dsi)
++{
++	struct inx_panel *inx = mipi_dsi_get_drvdata(dsi);
++
++	drm_panel_disable(&inx->base);
++	drm_panel_unprepare(&inx->base);
++}
++
++static int inx_panel_remove(struct mipi_dsi_device *dsi)
++{
++	struct inx_panel *inx = mipi_dsi_get_drvdata(dsi);
++	int ret;
++
++	inx_panel_shutdown(dsi);
++
++	ret = mipi_dsi_detach(dsi);
++	if (ret < 0)
++		dev_err(&dsi->dev, "failed to detach from DSI host: %d\n", ret);
++
++	if (inx->base.dev)
++		drm_panel_remove(&inx->base);
++
++	return 0;
++}
++
++static const struct of_device_id inx_of_match[] = {
++	{ .compatible = "starry,2081101qfh032011-53g",
++	  .data = &starry_qfh032011_53g_desc
++	},
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, inx_of_match);
++
++static struct mipi_dsi_driver inx_panel_driver = {
++	.driver = {
++		.name = "panel-innolux-himax8279d",
++		.of_match_table = inx_of_match,
++	},
++	.probe = inx_panel_probe,
++	.remove = inx_panel_remove,
++	.shutdown = inx_panel_shutdown,
++};
++module_mipi_dsi_driver(inx_panel_driver);
++
++MODULE_AUTHOR("Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>");
++MODULE_DESCRIPTION("INNOLUX HIMAX8279D 1200x1920 video mode panel driver");
++MODULE_LICENSE("GPL v2");
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.17.1
+

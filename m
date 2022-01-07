@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2EB487517
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F342487520
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346595AbiAGJzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 04:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbiAGJzk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 04:55:40 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB6EC061212
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:55:40 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so11425987pjf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 01:55:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zFGzcYvSOCyKFk85uoXR06gkzPo3qnZX3+iKg13B8Qs=;
-        b=fDe/ventyNhPXmnvbmLfT4xlloglwiYf+RpthMcLc5Pk0UbdbKiFlxNU4w/Jh12lz3
-         0GMloo5wHSewYXABHYpnjgtrrGYLHoA0U+/1jqqXl8CcIsjy/LsqYalDEq2nNvZNRfaI
-         cPgJfiyHspv4A+To9wy3XiGLfDfQYp7xI/Jq3BLwe/KqNCQ5oDws67Dttp7pUejRQIoW
-         bwwZha9NFeQa6kotkd8fOF5d7wKrnnV+I4fn5f5lYh9xzTgf+In4zfETcKd40j+QN+w7
-         aELX/H1EMfQOHx67fD4xZecWSzmw+l+37UeM49PHuuE7pMpaaBxOQPzFIeRbQeh5B383
-         t6Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zFGzcYvSOCyKFk85uoXR06gkzPo3qnZX3+iKg13B8Qs=;
-        b=zMhhXDN103Qps+PS8gS81TKpDiKCUEEcFTPoHK1t5JA4cjw5dg1g7OAE4fzYqe6Bnc
-         +ikphcQmkiJtFGCI2c69NE2Ae9t20F7dZgh7IE7nM911qazWwrVBMX0URn/xmR48AXfG
-         ZqmK6nTTJDFdG4FsEBiwdN+YaXS3f6pV4Q2nXDGgWio0QAYaDC+nE8wKrkG5f0okVJIR
-         EtzIIQ/NJYStD8n99YdAQmGIuzOaM11F40tb+QqCLb7K2nSo/2kzPIeC+b0X3pKvW8xa
-         pcoKS/6NG90fuZMyWLo6SqOs3iXbDjRT5DFfmlBTmtKRKinlAEq4czwlHWQZ6hhtSKCH
-         tZvA==
-X-Gm-Message-State: AOAM530wgW5mmYA/0tKldLKpEXm//l3ERPkMznIvsx09wum9VDITc2wb
-        tgVV1ltqmZ7lSCsNZnZOsbq8eJQMLjBWQoVw
-X-Google-Smtp-Source: ABdhPJxO1HqtsaEul2VvPlXMzFWkpde4PUaL57aUmXCzXUP4g3slVu5RUBEc82gJdiJHoSSSFqUQ5g==
-X-Received: by 2002:a17:90a:e7cb:: with SMTP id kb11mr14742426pjb.75.1641549340245;
-        Fri, 07 Jan 2022 01:55:40 -0800 (PST)
-Received: from nlap2 ([171.78.146.184])
-        by smtp.gmail.com with ESMTPSA id s7sm5635783pfu.133.2022.01.07.01.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 01:55:39 -0800 (PST)
-Date:   Fri, 7 Jan 2022 15:25:32 +0530
-From:   Abdun Nihaal <abdun.nihaal@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] staging: r8188eu: change functions to return void
-Message-ID: <20220107095532.gosbmlwdmnljxbxp@nlap2>
-References: <cover.1641490034.git.abdun.nihaal@gmail.com>
- <9db6b08837bd6354c8e07a4b1c4bca662091f945.1641490034.git.abdun.nihaal@gmail.com>
- <Ydct2sBt6aB+MChS@kroah.com>
- <20220107065210.7utcwjenvcspydyk@nlap2>
- <20220107085852.GQ7674@kadam>
+        id S1346609AbiAGJ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 04:58:02 -0500
+Received: from mailgw.kylinos.cn ([123.150.8.42]:6189 "EHLO nksmu.kylinos.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236788AbiAGJ6B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 04:58:01 -0500
+X-UUID: 51f8efc21ea04903991e1abefbd59d34-20220107
+X-CPASD-INFO: b29efc9df7c3401f828f9506db65018e@q4JzhZOVZ5SSV6V_g3N8oFhjaJZqYVC
+        FppxWZV5hZIWVhH5xTWJsXVKBfG5QZWNdYVN_eGpQY19gZFB5i3-XblBgXoZgUZB3sXRzhZaRaQ==
+X-CPASD-FEATURE: 0.0
+X-CLOUD-ID: b29efc9df7c3401f828f9506db65018e
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
+        VAL:187.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:130.0,IP:-2.0,MAL:0.0,ATTNUM:0
+        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CF
+        OB:0.0,SPC:0.0,SIG:-5,AUF:12,DUF:29770,ACD:157,DCD:259,SL:0,AG:0,CFC:0.168,CF
+        SR:0.366,UAT:0,RAF:0,VERSION:2.3.4
+X-CPASD-ID: 51f8efc21ea04903991e1abefbd59d34-20220107
+X-CPASD-BLOCK: 1001
+X-CPASD-STAGE: 1, 1
+X-UUID: 51f8efc21ea04903991e1abefbd59d34-20220107
+X-User: lizhenneng@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
+        (envelope-from <lizhenneng@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1687336020; Fri, 07 Jan 2022 18:11:04 +0800
+From:   Zhenneng Li <lizhenneng@kylinos.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xinhui.Pan@amd.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Zhenneng Li <lizhenneng@kylinos.cn>
+Subject: [PATCH 0/2]
+Date:   Fri,  7 Jan 2022 17:57:30 +0800
+Message-Id: <20220107095732.982194-1-lizhenneng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107085852.GQ7674@kadam>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+For adapting radeon rx6600 xt on arm64 platform,
+there report some compile errors.
 
-On Fri, Jan 07, 2022 at 11:58:52AM +0300, Dan Carpenter wrote:
-> You're not allowed to end a void function with a return statement.
+Zhenneng Li (2):
+  drm/amdgpu: fix compile error for dcn on arm64
+  drm/amdgpu: enable dcn support on arm64
 
-Sorry, I didn't know that. I'll fix it.
+ drivers/gpu/drm/amd/display/Kconfig           |  2 +-
+ drivers/gpu/drm/amd/display/dc/calcs/Makefile |  6 +++++
+ .../gpu/drm/amd/display/dc/clk_mgr/Makefile   |  7 ++++++
+ drivers/gpu/drm/amd/display/dc/dcn10/Makefile |  4 +++
+ drivers/gpu/drm/amd/display/dc/dcn20/Makefile |  4 +++
+ .../gpu/drm/amd/display/dc/dcn201/Makefile    |  6 +++++
+ drivers/gpu/drm/amd/display/dc/dcn21/Makefile |  4 +++
+ drivers/gpu/drm/amd/display/dc/dcn30/Makefile |  6 +++++
+ .../gpu/drm/amd/display/dc/dcn302/Makefile    |  6 +++++
+ .../gpu/drm/amd/display/dc/dcn303/Makefile    |  6 +++++
+ drivers/gpu/drm/amd/display/dc/dcn31/Makefile |  6 +++++
+ drivers/gpu/drm/amd/display/dc/dml/Makefile   | 25 +++++++++++++++++++
+ drivers/gpu/drm/amd/display/dc/dsc/Makefile   |  7 ++++++
+ 13 files changed, 88 insertions(+), 1 deletion(-)
 
-> Checkpatch will only detect these if you run it again with the -f
-> option.
+-- 
+2.25.1
 
-Thanks. I'll make sure to run checkpatch on the modified files also (not
-just on the patches).
 
-Regards,
-Abdun Nihaal
+No virus found
+		Checked by Hillstone Network AntiVirus

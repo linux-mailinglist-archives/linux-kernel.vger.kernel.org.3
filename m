@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCBE486F22
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1E8486F2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344703AbiAGAxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:53:36 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:43145 "EHLO
+        id S1344844AbiAGAyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:54:21 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:38509 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344587AbiAGAxf (ORCPT
+        with ESMTP id S1344777AbiAGAyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:53:35 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MVeDq-1mvptp38YW-00RaD6; Fri, 07 Jan 2022 01:53:33 +0100
-Received: by mail-wr1-f50.google.com with SMTP id k18so7979569wrg.11;
-        Thu, 06 Jan 2022 16:53:33 -0800 (PST)
-X-Gm-Message-State: AOAM531KoSNsvUmeAkyKLxAZ5inYDvi63CFJI/Q496oH1TxJd6KMGSkO
-        H/j8Py2vmYMPMEK80PgwHadiGELtv0BGiXdvGjg=
-X-Google-Smtp-Source: ABdhPJzDgGNNS/2+ftq7IJW57CZ4gfVas+wNR19KbZ757dVgRYx5nXrRPsR+f9zPIVKlYT9vhVR+/somYqM+zzG/2KE=
-X-Received: by 2002:a05:6000:16c7:: with SMTP id h7mr5162012wrf.317.1641516813381;
- Thu, 06 Jan 2022 16:53:33 -0800 (PST)
+        Thu, 6 Jan 2022 19:54:16 -0500
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N3bGP-1mMmG52uXL-010gE3; Fri, 07 Jan 2022 01:54:14 +0100
+Received: by mail-wr1-f54.google.com with SMTP id q8so7975160wra.12;
+        Thu, 06 Jan 2022 16:54:14 -0800 (PST)
+X-Gm-Message-State: AOAM532L+UAeUXywi22Hnf0S9Xe6cQslcrAEDM3CvobC0jk+qbZGOlMf
+        oB5E2eNv97SumDSiEqkqsUx1LchIFCxA8kkG2mQ=
+X-Google-Smtp-Source: ABdhPJzUkvG1xUIThSiIkMw0/YRz6SvnFTVggx6zEMnW3ReCQQIe6ig2yNv8s0ZDFSrXOk5a7CczVdAxmwTDPVeyzWo=
+X-Received: by 2002:a05:6000:118e:: with SMTP id g14mr379844wrx.12.1641516854286;
+ Thu, 06 Jan 2022 16:54:14 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <f865712ee4edbbf3cdd831795b7546a768d923a3.1641500561.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <f865712ee4edbbf3cdd831795b7546a768d923a3.1641500561.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <86c6275e55abc16137d316e17a8fa0af53fc96ec.1641500561.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <86c6275e55abc16137d316e17a8fa0af53fc96ec.1641500561.git.christophe.jaillet@wanadoo.fr>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 6 Jan 2022 19:53:30 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a1rGDZmumXNHX=RdWBebJw12pbK1WBUQYSh6mqrwi0Vtw@mail.gmail.com>
-Message-ID: <CAK8P3a1rGDZmumXNHX=RdWBebJw12pbK1WBUQYSh6mqrwi0Vtw@mail.gmail.com>
-Subject: Re: [PATCH 05/16] agp/intel: Remove usage of the deprecated
+Date:   Thu, 6 Jan 2022 19:54:11 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a3E8aBJAfZCznbvZBjSr3-HxC8GoNn6rvS58GBLHsobfQ@mail.gmail.com>
+Message-ID: <CAK8P3a3E8aBJAfZCznbvZBjSr3-HxC8GoNn6rvS58GBLHsobfQ@mail.gmail.com>
+Subject: Re: [PATCH 06/16] sparc: Remove usage of the deprecated
  "pci-dma-compat.h" API
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Christoph Hellwig <hch@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
+        David Miller <davem@davemloft.net>,
+        sparclinux <sparclinux@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         kernel-janitors <kernel-janitors@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:79xrko4jOHYWAEn/KMjzX1oBTTV1CMjTiFjBiPjnkOZMyDIp97f
- 0MdGXZxHfKNkdvuXosk5nd0KujeQsqikl/fYYlIui5wjlX+QxoFKdeQw0daQZEOpjCW93qB
- sjDqs2tdp8irXXH5DA8h9iOkivRcQTRAlA2cf5QMtjWg5WdS0IQXiF+Vk5FhvDofX6I9kHk
- K0HSaLSc7L13/3uXfuB7A==
+X-Provags-ID: V03:K1:JbFE8XmKaa+FjRgreSD3ATEJprRKTUF0RXpPZtXoQOO3ULFS8CF
+ RrUL5P4Bci96YU92PVyIbPdP41yOpe06nSSBEt9/NeWLobKK3PhVbTniCo9oZE11vMT2Yok
+ 1QaHxqeg5rA0dP9gTBi6amktPtKwucblzpS5LW2leApiHivf8zNDFXJLJ3rGcJLdsvYVKwp
+ JRdQEEJX3+EruOS/4UI0g==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3acWCDFvt0s=:wHpKzrkVbr79dgp5j8+b8/
- nXU6/gCpetWm4sb0Vya3OJHT2Oz1t414ehJRkRfm6iZp2EBuRKWzd3z2GFpKgdafjDG9+6X1K
- rq1aLGdqRga5aY5tvfXRZB1m0OwswV1xCgDj7uIASuu/ekbpuDJPj7LGxN0FTPFHPW6Nbkov2
- hf3zgt5lQeC0ZdVPAopzVwNiexXpX6clfV/bF4RsLHn+USXJY+mwP06UIgyvIqjy3nBFksrk5
- qm9E4MixC3Q+7hciO6WA4SUKFU7DWAZdSlajAgJY3aB5xe8pRBO9JYruetdKd4qiUEI9dQ6Pb
- VcwYxw3UTETqWVEICsdenVhJM6RIOFq9d78K67Fmg8Ac+bYPLBfTh5nCiCDu/vkXbiSVSHujw
- xXErhc/XCktv/+bd5JviGJ5YxH52BO/eGMXzu7KWsGdOayVhg6b6fg5taGckir2aHnf17ikbF
- 3eBKEjlsnNq5KS7n85DQeboL3ADQQp1gjFkw+28KnYOmoI1r4zaamF11OCzauy7vZBe22EySh
- +F64bl/YQTC+VcguwvRtTo597+2+gu9wsFqXR+Us47m24heq2LH0AhBPrRri4e8HhAEFSY7+u
- TNELgOJNpu/sMdtsE2busNiik+CxzoNXIS20YVsS7w/FTXskbJSVETUyLnqNa83H5rrEJRJhF
- qltIpGOs8RWSMxsBtm1144pDJPCLmGC5pQlCXVQzA4dLlU5duWdQPhG63x6/t3Ta7W2i0uf9h
- bb2eo/oa3qibsZQ1f1ehcY07b0uM2fyEKtKfmAPUqaopp12gn85B1TAK1d/J86WEhFzNC1yco
- HhBTofxx2+hSUxpkAYCMbTAsDSpPW/UuiFLXHCkEWHqsgzI9eg=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UbpgZVEoDDs=:FvjQH3X63PdhB6+40ELI1p
+ MyBAITaSFN5RsZG0Hkw4O1ONRRY9OQxT+pzreIQza+K/TPoMn6AKu9oyjCUAaVmCFaUUJHVYl
+ GZpABlOtCIzfxnaL0LLKaQsp56ABU8wjuKNiTl+48//H0NYkHpTUYSIlrjGufNkN6AyfhPoaX
+ +x6bfOzsB7SOQ6535Lj3VtFt5gF6HiozcTfZXk6Z/WQOj1CT8RvtEPCG7tcgS7N1VaE6OybA2
+ SjHSEHu8JKnV8cZiE0zCA2kkN6zqCHuW0oviaXE6mNdN731r8+0YFA+YGLJasj4hoXU6HBgw6
+ yVb+MqLD+VQZ33HD++xXQx9gEHdfJJMeOaobyySF848SGFQhrlVEi+4yP9meCghOGi5HW7F73
+ aXXxzzSmbNfJOGj9hZcH0amHofMmMmHuz7DIRCXxw5FeCEvI79mWvq+Gc8ujfgVIWhwnEgHV1
+ MBObgHTZuTXYsWBJCwK2ynfdKbDyGimdkueWSB/AVRsescbStUwoTsro4NSdHJV2NLgB+T9w+
+ KDhWtFhkhlcf8S9VWj5VTFQLNiGddJx8a8K7fLU9sCLNpLZ2o/5osCMUx7bXXhgpQeYEacbZ0
+ lX3F1Oq8EZ9VXoOyyYzd+QcMrWnSNWyCk/oUnfT6y26B87s47D1iLzkTSGt6ST02tqIs8AKuX
+ jfcTLhvHTT3qyVWpXSqhK7ovpLvZQZ+4bI9lIdzcBSgR+4XXQtJoyuLHe0Jls1pFv1dsslTZi
+ qMBKxSOqGiJrpSKjB0gcBO3xmiTMjtNK3FE48IdfvGbMFamGAAcarA1y6hF/wZyTFYpNx/i1/
+ 3lAdlJfLZx0ZeRpXp6nBK9a6PwHizLW4nIBRV4gXrlOvf5hilQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -80,6 +81,3 @@ On Thu, Jan 6, 2022 at 4:51 PM Christophe JAILLET
 > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-
-I suppose this should just go through the drm-misc tree, the patch has no
-dependencies on anything else.

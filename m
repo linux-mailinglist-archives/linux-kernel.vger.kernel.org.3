@@ -2,190 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C743487C92
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEB8487CA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbiAGS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:56:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28051 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232853AbiAGSzh (ORCPT
+        id S232729AbiAGS5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:57:52 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:1445 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230027AbiAGS5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:55:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641581737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ms8oamnV9ATtAzyj0HE2k4dLqAn6UNVYQIiTNYGjoYQ=;
-        b=OjRIMBeKApyMO9RneD94ciRALxSgC0ozcddSnJzJW68szfVHZw0SqwBZuLKhaKp9Vykyfo
-        3IeCBrpPfOD8aK+9qbXejQhA8s4GU0ullkPghCGCrVub0TrR9pj/fkQEkGpsueRk0Btx8S
-        zE6TSbKkr7dGBraZfguqGut3dmZ7Ba8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-414-9mXsQg6TOd6q09GtKhJZKQ-1; Fri, 07 Jan 2022 13:55:33 -0500
-X-MC-Unique: 9mXsQg6TOd6q09GtKhJZKQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7BFAB10168D1;
-        Fri,  7 Jan 2022 18:55:32 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C26378CB2B;
-        Fri,  7 Jan 2022 18:55:31 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     guang.zeng@intel.com, jing2.liu@intel.com, kevin.tian@intel.com,
-        seanjc@google.com, tglx@linutronix.de, wei.w.wang@intel.com,
-        yang.zhong@intel.com
-Subject: [PATCH v6 21/21] kvm: x86: Disable interception for IA32_XFD on demand
-Date:   Fri,  7 Jan 2022 13:55:12 -0500
-Message-Id: <20220107185512.25321-22-pbonzini@redhat.com>
-In-Reply-To: <20220107185512.25321-1-pbonzini@redhat.com>
-References: <20220107185512.25321-1-pbonzini@redhat.com>
+        Fri, 7 Jan 2022 13:57:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641581832; x=1673117832;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=9vfAV3gOFEUjz+LWPdJMI8NxbEyI+AbCWXgdnv6rab4=;
+  b=oJb045fJu1ZFTiD7KqepsZbJD8In6euDhC7Wu62jpUbx+U10jp9AABN9
+   KzK7cfs+sWkH6VN4smNlae5DPkW7Q0FZR4rp6K1GwQySI3oQrbTVl5xMl
+   VoKrpKExrzSHL5+epi9/eC/gVZGak5G8IPFNHEE/29IlXmUlUymVgtIj4
+   k=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Jan 2022 10:57:11 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 10:57:11 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 7 Jan 2022 10:57:11 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 7 Jan 2022
+ 10:57:07 -0800
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "Matthias Kaehlcke" <mka@chromium.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH v3] thermal/core: Clear all mitigation when thermal zone is disabled
+Date:   Sat, 8 Jan 2022 00:26:46 +0530
+Message-ID: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Tian <kevin.tian@intel.com>
+Whenever a thermal zone is in trip violated state, there is a chance
+that the same thermal zone mode can be disabled either via thermal
+core API or via thermal zone sysfs. Once it is disabled, the framework
+bails out any re-evaluation of thermal zone. It leads to a case where
+if it is already in mitigation state, it will stay the same state
+until it is re-enabled.
 
-Always intercepting IA32_XFD causes non-negligible overhead when this
-register is updated frequently in the guest.
+To avoid above mentioned issue, on thermal zone disable request
+reset thermal zone and clear mitigation for each trip explicitly.
 
-Disable r/w emulation after intercepting the first WRMSR(IA32_XFD)
-with a non-zero value.
-
-Disable WRMSR emulation implies that IA32_XFD becomes out-of-sync
-with the software states in fpstate and the per-cpu xfd cache. This
-leads to two additional changes accordingly:
-
-  - Call fpu_sync_guest_vmexit_xfd_state() after vm-exit to bring
-    software states back in-sync with the MSR, before handle_exit_irqoff()
-    is called.
-
-  - Always trap #NM once write interception is disabled for IA32_XFD.
-    The #NM exception is rare if the guest doesn't use dynamic
-    features. Otherwise, there is at most one exception per guest
-    task given a dynamic feature.
-
-p.s. We have confirmed that SDM is being revised to say that
-when setting IA32_XFD[18] the AMX register state is not guaranteed
-to be preserved. This clarification avoids adding mess for a creative
-guest which sets IA32_XFD[18]=1 before saving active AMX state to
-its own storage.
-
-Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Jing Liu <jing2.liu@intel.com>
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-Message-Id: <20220105123532.12586-22-yang.zhong@intel.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 ---
- arch/x86/include/asm/kvm_host.h |  1 +
- arch/x86/kvm/vmx/vmx.c          | 24 +++++++++++++++++++-----
- arch/x86/kvm/vmx/vmx.h          |  2 +-
- arch/x86/kvm/x86.c              |  8 ++++++++
- 4 files changed, 29 insertions(+), 6 deletions(-)
+ drivers/thermal/thermal_core.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 6cbf97a2ebc4..89d1fdb39c46 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -647,6 +647,7 @@ struct kvm_vcpu_arch {
- 	u64 smi_count;
- 	bool tpr_access_reporting;
- 	bool xsaves_enabled;
-+	bool xfd_no_write_intercept;
- 	u64 ia32_xss;
- 	u64 microcode_version;
- 	u64 arch_capabilities;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index b8b7f5c7b3df..15e30602782b 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -162,6 +162,7 @@ static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
- 	MSR_FS_BASE,
- 	MSR_GS_BASE,
- 	MSR_KERNEL_GS_BASE,
-+	MSR_IA32_XFD,
- 	MSR_IA32_XFD_ERR,
- #endif
- 	MSR_IA32_SYSENTER_CS,
-@@ -764,10 +765,11 @@ void vmx_update_exception_bitmap(struct kvm_vcpu *vcpu)
- 	}
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 51374f4..e288c82 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
  
- 	/*
--	 * Trap #NM if guest xfd contains a non-zero value so guest XFD_ERR
--	 * can be saved timely.
-+	 * Disabling xfd interception indicates that dynamic xfeatures
-+	 * might be used in the guest. Always trap #NM in this case
-+	 * to save guest xfd_err timely.
- 	 */
--	if (vcpu->arch.guest_fpu.fpstate->xfd)
-+	if (vcpu->arch.xfd_no_write_intercept)
- 		eb |= (1u << NM_VECTOR);
+ 	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
  
- 	vmcs_write32(EXCEPTION_BITMAP, eb);
-@@ -1978,9 +1980,21 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		break;
- 	case MSR_IA32_XFD:
- 		ret = kvm_set_msr_common(vcpu, msr_info);
--		/* Update #NM interception according to guest xfd */
--		if (!ret)
-+		/*
-+		 * Always intercepting WRMSR could incur non-negligible
-+		 * overhead given xfd might be changed frequently in
-+		 * guest context switch. Disable write interception
-+		 * upon the first write with a non-zero value (indicating
-+		 * potential usage on dynamic xfeatures). Also update
-+		 * exception bitmap to trap #NM for proper virtualization
-+		 * of guest xfd_err.
-+		 */
-+		if (!ret && data) {
-+			vmx_disable_intercept_for_msr(vcpu, MSR_IA32_XFD,
-+						      MSR_TYPE_RW);
-+			vcpu->arch.xfd_no_write_intercept = true;
- 			vmx_update_exception_bitmap(vcpu);
-+		}
- 		break;
- #endif
- 	case MSR_IA32_SYSENTER_CS:
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 69dd2f85abdc..f8fc7441baea 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -349,7 +349,7 @@ struct vcpu_vmx {
- 	struct lbr_desc lbr_desc;
- 
- 	/* Save desired MSR intercept (read: pass-through) state */
--#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
-+#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
- 	struct {
- 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
- 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index bde18ca657db..60da2331ec32 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10083,6 +10083,14 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 	vcpu->mode = OUTSIDE_GUEST_MODE;
- 	smp_wmb();
- 
-+	/*
-+	 * Sync xfd before calling handle_exit_irqoff() which may
-+	 * rely on the fact that guest_fpu::xfd is up-to-date (e.g.
-+	 * in #NM irqoff handler).
-+	 */
-+	if (vcpu->arch.xfd_no_write_intercept)
-+		fpu_sync_guest_vmexit_xfd_state();
+-	if (mode == THERMAL_DEVICE_ENABLED)
++	if (mode == THERMAL_DEVICE_ENABLED) {
+ 		thermal_notify_tz_enable(tz->id);
+-	else
++	} else {
++		int trip;
 +
- 	static_call(kvm_x86_handle_exit_irqoff)(vcpu);
++		/* make sure all previous throttlings are cleared */
++		thermal_zone_device_init(tz);
++		for (trip = 0; trip < tz->trips; trip++)
++			handle_thermal_trip(tz, trip);
++
+ 		thermal_notify_tz_disable(tz->id);
++	}
  
- 	if (vcpu->arch.guest_fpu.xfd_err)
--- 
-2.31.1
+ 	return ret;
+ }
 

@@ -2,96 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C387748714B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B46487155
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345868AbiAGDhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:37:40 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:57334 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345647AbiAGDhi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:37:38 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A1F741A0307;
-        Fri,  7 Jan 2022 04:37:37 +0100 (CET)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6873D1A0246;
-        Fri,  7 Jan 2022 04:37:37 +0100 (CET)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 7426F4030F;
-        Thu,  6 Jan 2022 20:37:36 -0700 (MST)
-From:   Li Yang <leoyang.li@nxp.com>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        shawnguo@kernel.org
-Subject: [GIT PULL] soc/fsl drivers changes for next(v5.17)
-Date:   Thu,  6 Jan 2022 21:37:36 -0600
-Message-Id: <20220107033736.26762-1-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
+        id S1345879AbiAGDnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 22:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345647AbiAGDnD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 22:43:03 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77C8C061245;
+        Thu,  6 Jan 2022 19:43:02 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5g9b-000GHp-Vy; Fri, 07 Jan 2022 03:43:00 +0000
+Date:   Fri, 7 Jan 2022 03:42:59 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH 03/10] exit: Move oops specific logic from do_exit into
+ make_task_dead
+Message-ID: <Yde2wwNmqzRTxh1f@zeniv-ca.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211208202532.16409-3-ebiederm@xmission.com>
+ <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi soc maintainers,
+On Wed, Jan 05, 2022 at 05:48:08AM +0000, Al Viro wrote:
+> On Wed, Dec 08, 2021 at 02:25:25PM -0600, Eric W. Biederman wrote:
+> > The beginning of do_exit has become cluttered and difficult to read as
+> > it is filled with checks to handle things that can only happen when
+> > the kernel is operating improperly.
+> > 
+> > Now that we have a dedicated function for cleaning up a task when the
+> > kernel is operating improperly move the checks there.
+> 
+> Umm...  I would probably take profile_task_exit() crap out before that
+> point.
+> 	1) the damn thing is dead - nothing registers notifiers there
+> 	2) blocking_notifier_call_chain() is not a nice thing to do on oops...
+> 
+> I'll post a patch ripping the dead parts of kernel/profile.c out tomorrow
+> morning (there's also profile_handoff_task(), equally useless these days
+> and complicating things for __put_task_struct()).
 
-Please merge the following new changes for soc/fsl drivers.
-
-Regards,
-Leo
-
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/leo/linux.git tags/soc-fsl-next-v5.17
-
-for you to fetch changes up to 1ce93cb102e7fcf5d1849044d23ce92b5a71040a:
-
-  soc: fsl: qe: Check of ioremap return value (2022-01-06 20:53:18 -0600)
-
-----------------------------------------------------------------
-NXP/FSL SoC driver updates for v5.17
-
-- Add new SoC compatible in existing binding
-- Replace kernel.h with the necessary inclusions
-- MAINTAINERS file fixes
-- Fix memory allocation failure check in guts driver
-- Various cleanups and minor fixes
-
-----------------------------------------------------------------
-Andy Shevchenko (3):
-      soc: fsl: Replace kernel.h with the necessary inclusions
-      soc: fsl: Correct MAINTAINERS database (QUICC ENGINE LIBRARY)
-      soc: fsl: Correct MAINTAINERS database (SOC)
-
-Christophe JAILLET (2):
-      soc: fsl: guts: Revert commit 3c0d64e867ed
-      soc: fsl: guts: Add a missing memory allocation failure check
-
-Jason Wang (1):
-      soc: fsl: qe: fix typo in a comment
-
-Jiasheng Jiang (1):
-      soc: fsl: qe: Check of ioremap return value
-
-Li Yang (2):
-      dt-bindings: qoriq-clock: add missing compatible for lx2160a
-      dt-bindings: fsl,layerscape-dcfg: add missing compatible for lx2160a
-
- .../bindings/arm/freescale/fsl,layerscape-dcfg.txt         |  2 +-
- Documentation/devicetree/bindings/clock/qoriq-clock.txt    |  1 +
- MAINTAINERS                                                |  4 ++--
- drivers/soc/fsl/guts.c                                     | 14 +++++++++-----
- drivers/soc/fsl/qe/qe.c                                    |  4 ++--
- drivers/soc/fsl/qe/qe_io.c                                 |  2 ++
- include/soc/fsl/dpaa2-fd.h                                 |  3 ++-
- include/soc/fsl/qe/immap_qe.h                              |  3 ++-
- include/soc/fsl/qe/qe_tdm.h                                |  4 +++-
- include/soc/fsl/qe/ucc_fast.h                              |  2 +-
- include/soc/fsl/qe/ucc_slow.h                              |  2 +-
- 11 files changed, 26 insertions(+), 15 deletions(-)
+Argh...  OK, so your subsequent series had pretty much the same thing.
+My apologies - still digging myself out from mail pile that had accumulated
+over two months ;-/

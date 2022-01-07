@@ -2,104 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2369B487335
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F7D48733D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbiAGGyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiAGGyf (ORCPT
+        id S233511AbiAGHBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 02:01:09 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52230 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229715AbiAGHBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:54:35 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4B4C061245;
-        Thu,  6 Jan 2022 22:54:35 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id i130so5131042qke.3;
-        Thu, 06 Jan 2022 22:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yrBuwkc3UJOnaZsE53cuiLxqo4psd26IwGHgNiN3kEc=;
-        b=oO0AEOwE3Q7d2KwP8pT6tM13zhkurR+sV/NFZx6avdPHtf6QxvpHVspg6DHV1hX58K
-         2P9vrplcGu9Bpu1qSrR76Z5PC6CZ2cS1N9PU1U/7YS71mZaQYYTwV5EpGD4tjkW4g1OW
-         EiBw6vzdEjxKaO4cEjkvMnjQPpOP0CX6d871mm79vC+GYbku1rom0QwJduQigL6vEpxB
-         hpkDnfGx2owN8IopC3GYOL/rVlX9YhegVWuxjrNYLGwAsHvAcKkx4ef+w1FqWbcHg6MF
-         YsMNAzXNy7G0rCDnZwSnid90sS8ijvSHfcUg/jgqzS8G1iHLViPpTqgNGmDgYzx8sNR+
-         01nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yrBuwkc3UJOnaZsE53cuiLxqo4psd26IwGHgNiN3kEc=;
-        b=N6h26S+SIGrCKOYcgLT0hpmdDoBYAEuPQenf7hyk1bCJqr+7p997uNQCbfKFBsY/11
-         OflYToPdYKhZrmUAydimGj1gFB1ejBfUopRa9SGEupvUqcBMvU7AkE8UDr82yGIaaNMp
-         OGf9fagTxTeayLivK5arq+EgLF+73+/Sbmgqhpb2ZyFydr/zIBudTEWEHM+p3xx157u6
-         bFkxk1EpASEy2s4sBeEgzZ9lb3vihfrDaQ80AnPQNWlt5Yj3vww4Hw1Ff87b3VCXNcKR
-         PQ7ycbKPWt/1qo1EODmtnpMPRW2HrS0gZV8BXy19FLdsIjPfNgix3Pkb00S3F9uAYs4S
-         f7fg==
-X-Gm-Message-State: AOAM530uWRbG7kMMCTDpXknE2dYYnp2WtG8413384VJCKuunnF87vjfY
-        sqjd+4eMczssNqgbzKq1525qDUSnMQ6w4bZOghA=
-X-Google-Smtp-Source: ABdhPJw7h1jUJmt3VmLh8gqvFvgATYpYUaQ7BqtBAAc3WuI6UPuOgXOcgJAA3HbY/m1IBHZO68AJzuKOkskPMly0/t0=
-X-Received: by 2002:a37:983:: with SMTP id 125mr42361380qkj.63.1641538474279;
- Thu, 06 Jan 2022 22:54:34 -0800 (PST)
+        Fri, 7 Jan 2022 02:01:08 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BD48B21110;
+        Fri,  7 Jan 2022 07:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641538866; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/C+FOPOAlJErWFC/CZxgo1BoC+YGMpjmEjNtbMN44+M=;
+        b=utyw9gMiU2bGyYmvN6Ae8LkMV0GQP5wVM/VEANIrJu3UfiQAjgd4G8OlvLIaasuPcTffHN
+        rtb2cU1PcZu9LCYPXYriCszszNqRpBz64dUixvSckenAvmdEduH6YXVL6iLymVZ2fVfRtN
+        BlcUW15Nnqo+bG7Wu3D6i1cHfFjmPnw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641538866;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/C+FOPOAlJErWFC/CZxgo1BoC+YGMpjmEjNtbMN44+M=;
+        b=u8WdzK0XZuYwh/NYEgeFRuNfi9yiPpT42fQ3UI7kH9gS75Wvvk0VDKTDeWwbrZuX6G/3/L
+        rNxcG9AEciy2TIAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5225713CA1;
+        Fri,  7 Jan 2022 07:01:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2m2pEjLl12GJGgAAMHmgww
+        (envelope-from <nstange@suse.de>); Fri, 07 Jan 2022 07:01:06 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Stephan =?utf-8?Q?M=C3=BCller?= <smueller@chronox.de>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org
+Subject: Re: [PATCH v2 03/18] crypto: dh - optimize domain parameter serialization for well-known groups
+In-Reply-To: <YcvEkfS4cONDXXB9@gondor.apana.org.au> (Herbert Xu's message of
+        "Wed, 29 Dec 2021 13:14:41 +1100")
+References: <20211209090358.28231-1-nstange@suse.de>
+        <20211209090358.28231-4-nstange@suse.de>
+        <20211217055227.GA20698@gondor.apana.org.au> <87r1a7thy0.fsf@suse.de>
+        <YcvEkfS4cONDXXB9@gondor.apana.org.au>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+Date:   Fri, 07 Jan 2022 08:01:05 +0100
+Message-ID: <87ee5k3u8e.fsf@suse.de>
 MIME-Version: 1.0
-References: <20220106125947.139523-1-gengcixi@gmail.com> <20220106125947.139523-3-gengcixi@gmail.com>
-In-Reply-To: <20220106125947.139523-3-gengcixi@gmail.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Fri, 7 Jan 2022 14:55:15 +0800
-Message-ID: <CADBw62pCDOu41G6t42dupuYF8F0mdhidNYg9=G7D+ns3AkyE_w@mail.gmail.com>
-Subject: Re: [PATCH 2/7] iio: adc: sc27xx: fix read big scale voltage not right
-To:     Cixi Geng <gengcixi@gmail.com>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, jic23@kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
-        Mark Brown <broonie@kernel.org>, yuming.zhu1@unisoc.com,
-        linux-iio@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 9:00 PM Cixi Geng <gengcixi@gmail.com> wrote:
->
-> From: Cixi Geng <cixi.geng1@unisoc.com>
->
-> Fix wrong configuration value of SC27XX_ADC_SCALE_MASK and
-> SC27XX_ADC_SCALE_SHIFT by spec documetation.
->
-> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Herbert Xu <herbert@gondor.apana.org.au> writes:
 
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+> On Mon, Dec 20, 2021 at 04:27:35PM +0100, Nicolai Stange wrote:
+>>=20
+>> Just for my understanding: the problem here is having a (single) enum
+>> for the representation of all the possible "known" groups in the first
+>> place or more that the individual group id enum members have hard-coded
+>> values assigned to them each?
+>
+> Yes the fact that you need to have a list of all "known" groups is
+> the issue.
 
-> ---
->  drivers/iio/adc/sc27xx_adc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-> index 00098caf6d9e..aee076c8e2b1 100644
-> --- a/drivers/iio/adc/sc27xx_adc.c
-> +++ b/drivers/iio/adc/sc27xx_adc.c
-> @@ -36,8 +36,8 @@
->
->  /* Bits and mask definition for SC27XX_ADC_CH_CFG register */
->  #define SC27XX_ADC_CHN_ID_MASK         GENMASK(4, 0)
-> -#define SC27XX_ADC_SCALE_MASK          GENMASK(10, 8)
-> -#define SC27XX_ADC_SCALE_SHIFT         8
-> +#define SC27XX_ADC_SCALE_MASK          GENMASK(10, 9)
-> +#define SC27XX_ADC_SCALE_SHIFT         9
->
->  /* Bits definitions for SC27XX_ADC_INT_EN registers */
->  #define SC27XX_ADC_IRQ_EN              BIT(0)
-> --
-> 2.25.1
->
+Ok, understood. Thanks for the clarification.
 
 
--- 
-Baolin Wang
+>> However, after some back and forth, I opted against doing something
+>> similar for dh at the time, because there are quite some more possible
+>> parameter sets than there are for ecdh, namely ten vs. three. If we were
+>
+> I don't understand why we can't support ten or an even larger
+> number of parameter sets.
+
+There's no real reason. I just didn't dare to promote what I considered
+mere input parameter sets to full-fledged crypto_alg instances with
+their associated overhead each:
+- the global crypto_alg_list will get longer, which might have an
+  impact on the lookup searches,
+- every ffdheXYZ(dh) template instance will need to have individual
+  TVs associated with it.
+
+However, I take it as that's fine and I'd be more than happy to
+implement the ffhdheXYZ(dh) template approach you suggested in a v3.
+
+
+>
+> If you are concerned about code duplication then there are ways
+> around that.  Or do you have another specific concern in mind
+> with respect to a large number of parameter sets under this scheme?
+>=20=20
+>> Anyway, just to make sure I'm getting it right: when you're saying
+>> "template", you mean to implement a crypto_template for instantiating
+>> patterns like "dh(ffdhe2048)", "dh(ffdhe3072)" and so on? The dh(...)
+>> template instantiations would keep a crypto_spawn for referring to the
+>> underlying, non-template "dh" kpp_alg so that "dh" implementations of
+>> higher priority (hpre + qat) would take over once they'd become
+>> available, correct?
+>
+> The template would work in the other dirirection.  It would look
+> like ffdhe2048(dh) with dh being implemented in either software or
+> hardware.
+>
+> The template wrapper would simply supply the relevant parameters.
+
+Makes sense.
+
+Thanks!
+
+Nicolai
+
+--=20
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
+ermany
+(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev

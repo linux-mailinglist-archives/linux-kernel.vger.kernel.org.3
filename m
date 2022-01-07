@@ -2,89 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31453487106
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323C34870FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345754AbiAGDH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiAGDH1 (ORCPT
+        id S1345731AbiAGDF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 22:05:56 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54038 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345713AbiAGDFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:07:27 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E137C061245;
-        Thu,  6 Jan 2022 19:07:27 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id 200so4286350pgg.3;
-        Thu, 06 Jan 2022 19:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MrHlmIX3ye0jx29v1ryUPTnUa+JQoFItY+qNfZbdSu8=;
-        b=WT2C/Z93DPpWF4hga6hm/qiEapwtzLQAIigP7KHMqMD40QW1Htj8X5p1+RwT+EhovO
-         aTutOXerK0n0j6i93u/kCaZGxea9v2M1BMa3YnzvNV/x5ZrhN4Pe5cj2XIpqfhEMhH3H
-         Nyv63niP0L9p0/IWPc6bE5wInzNRVkuCpdGtw7eLHHqCba+i0GkAGq0Q7xnfLTNF8SUx
-         1tufdZcX9h6xpewBnwWccpcKuhQsgMnFN9YGZp4syBEAuc8uIPzQvL3z+BDUUPi7WdrT
-         PGHz5z5sARFmC/vdRsDP9ED+Tf6vsa+zf5lwbSIzQ7zA5hCZZIdbEpjvqaEVCTqR6SAY
-         2sew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MrHlmIX3ye0jx29v1ryUPTnUa+JQoFItY+qNfZbdSu8=;
-        b=MX+cculV5tP3gtK3tOP1swaWvoOl0ElABfU14umCykzFdU87qBXbp2W3e4E5ey3oj/
-         gXzybZP5/5MBOnVY76wSW3F0b8RCX4Tcbkx3F1+a6k6EmhCAHsgF10lkFYBYe5rcilkl
-         Y7BV/xLMuIkLnVI/Ple1ZEebVJ1ydFgtraWzxIcpsxrkWbEwlrtUjue7uW3qdlai3zqv
-         hO19YkFHX3+KzXK3oujX+4AW4TKfzjrl45HxP1KrqcWQePBCYp1lo08HDhcyAA1KS9wp
-         aqG11BVyIUz+Rm7ArmERHsP4e1Z9QgmN16ALxrKyxi51zMPqyuZLyncW8Z256WA2dwrw
-         /5FQ==
-X-Gm-Message-State: AOAM533OYMIa8F6QmQR3cOqTGcMTI9V9+05sVRwlk7PgQ6ZLioOEPzm5
-        KNutcCxgS/uT2t1dSXmNPE0=
-X-Google-Smtp-Source: ABdhPJwWxca6Qy0lf9jKV5ryVkTp5hCx2FTfSEvqOCrsTSR8XEBBMjrGh9t24daNdH0PCFUTy74FeQ==
-X-Received: by 2002:a63:348a:: with SMTP id b132mr49836144pga.204.1641524847102;
-        Thu, 06 Jan 2022 19:07:27 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.38])
-        by smtp.googlemail.com with ESMTPSA id s29sm3062584pgo.34.2022.01.06.19.07.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 19:07:26 -0800 (PST)
-From:   Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: kunit: Fix typo
-Date:   Fri,  7 Jan 2022 11:05:53 +0800
-Message-Id: <20220107030553.398321-1-qhjin.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        Thu, 6 Jan 2022 22:05:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41D4D6198E;
+        Fri,  7 Jan 2022 03:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA9FBC36AE3;
+        Fri,  7 Jan 2022 03:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641524754;
+        bh=E0PL4Bmmy5TQTItwz8zKtSNCU2gEEmQl4S2Pra9QPWA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=fQU2QTD8sQXogCo0kAfGGp6xWPSn1aIacNzRk9PlMuMyY0qDmmGcwRQ7ArPFtFnCV
+         9qkdmiHluIhH3v4g4tbk2Chb2ANqtEIwwYQbbzB35XKodAzEiKlymcgme9kc4UXpXn
+         lGuZw12pb7PtU5GMDu0Sk0aJR3OVBaBEtI2yzNAbfQj59Ggngi65QODW5M/7rgle5r
+         AnpfWuxwngyqQlrG57pJwajBrDAFU1KEPAQdFJE8beGABG6HqH+JhG9Zzo3utVhBDi
+         yEM5tjwoqQAk1RUQZTW7muapcCyLXrsyAFBM5G+w0BIa6PTdfKZk2/Or1+udWE5o9f
+         dLR8SIBgI/BRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99F9DF79403;
+        Fri,  7 Jan 2022 03:05:54 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220107011519.GA3028671@nvidia.com>
+References: <20220107011519.GA3028671@nvidia.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220107011519.GA3028671@nvidia.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+X-PR-Tracked-Commit-Id: b35a0f4dd544eaa6162b6d2f13a2557a121ae5fd
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ddec8ed2d4905d0967ce2ec432e440e582aa52c6
+Message-Id: <164152475462.17821.13228277522402535613.pr-tracker-bot@kernel.org>
+Date:   Fri, 07 Jan 2022 03:05:54 +0000
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a typo: actualy -> actual
+The pull request you sent on Thu, 6 Jan 2022 21:15:19 -0400:
 
-Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
----
- Documentation/dev-tools/kunit/usage.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 63f1bb89ebf5..b9940758787c 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -615,7 +615,7 @@ kunit_tool) only fully supports running tests inside of UML and QEMU; however,
- this is only due to our own time limitations as humans working on KUnit. It is
- entirely possible to support other emulators and even actual hardware, but for
- now QEMU and UML is what is fully supported within the KUnit Wrapper. Again, to
--be clear, this is just the Wrapper. The actualy KUnit tests and the KUnit
-+be clear, this is just the Wrapper. The actual KUnit tests and the KUnit
- library they are written in is fully architecture agnostic and can be used in
- virtually any setup, you just won't have the benefit of typing a single command
- out of the box and having everything magically work perfectly.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ddec8ed2d4905d0967ce2ec432e440e582aa52c6
+
+Thank you!
+
 -- 
-2.30.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

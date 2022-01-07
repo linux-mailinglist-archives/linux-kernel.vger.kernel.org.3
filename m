@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1E1486F32
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87932486F35
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343957AbiAGAzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiAGAzX (ORCPT
+        id S1344133AbiAGA4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:56:23 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:48417 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230133AbiAGA4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:55:23 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2948C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:55:23 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id s127so6185803oig.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:55:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PPHN7dIp4QC+dIELGI0e4PB8xgBekSRxt9hWBqYZaeQ=;
-        b=QAoJfOBrBgvrMUWejWpVu+DGP0fKi1jKKzzm0JxDDhqqdjpvInSeW2fQwwOZnN/44N
-         c9OjRqHLLopjfcrSBsptXfUcmjG2js+eW8+gv/n5Qa7hA8vDEYx6QpbShaiHjfrDYNAy
-         bKWR1MpZM0RvtS04wQaTyVhyhVd5BwrrhmwYUqwOxELjco1lKVtOYPKGQqR3CjOxDIUo
-         LsHxt5cLZW2PGLAbyqeOsD19xEXhTTgUtGaHNn/ySKyeBSb692CDquAmy3gx08FHyPvE
-         F/o2xfGaTrOwY46ssKOxkf0rIyWzi3qa/GnfGbIu+ksWxdFG3v264RLuRoK3pgkCRjhj
-         Awjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PPHN7dIp4QC+dIELGI0e4PB8xgBekSRxt9hWBqYZaeQ=;
-        b=x5CN3HgFB7DRpqNPVHCfDL8bzuCUEsS54n9Rw/4iKqm5qcb6cSkagfNTGg+0prniHv
-         mkaDSsyL7mRWN6te0Eab5YUBpJAIj5tGbPHa3s3qaa/JeBS6K7u4sSBvlLEFxAEerw70
-         ioOwMQl/zspRTFbeKBg0Z2utA3wo8pFimqwpx35kfmqmsFV9rMLiFs4JEyMGjrt1NnHB
-         dep/U5fpsRQsTrSsLUBxMHRdAX05FZ55sa6wl2mWv99cTyfo0UOyjaYVILf6dXHl4CGi
-         +dvyLV81jzgssmrbuqEdxRmhrvgva44WD2J5zREzzQIzGRJ0H8/pVJiDOo6leyY6Pcbp
-         foxQ==
-X-Gm-Message-State: AOAM530G9xOOcEE8i9/gDpUCmNWv0xYUWLKJdNZvVk5GMDlA71W7w8Zn
-        yNyaeoHrE51EHk+M0qo+E2r6CA==
-X-Google-Smtp-Source: ABdhPJzreEyFRJ4mudEoHFIkqdyi66BzGsimcD1Jb7Q1Uwvgz9R2jmPCaxSvZBU0jpuX2qjcPAh0kQ==
-X-Received: by 2002:aca:1214:: with SMTP id 20mr6675134ois.126.1641516922985;
-        Thu, 06 Jan 2022 16:55:22 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w20sm5557otl.40.2022.01.06.16.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 16:55:22 -0800 (PST)
-Date:   Thu, 6 Jan 2022 16:56:10 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        greg@kroah.com, linux-kernel@vger.kernel.org, tsoni@codeaurora.org,
-        psodagud@codeaurora.org, satyap@codeaurora.org,
-        pheragu@codeaurora.org, rnayak@codeaurora.org,
-        sibis@codeaurora.org, saiprakash.ranjan@codeaurora.org
-Subject: Re: [PATCH V3 3/7] bindings: usb: dwc3: Update dwc3 properties for
- EUD connector
-Message-ID: <YdePqpJjIiPAuHlJ@ripper>
-References: <cover.1641288286.git.quic_schowdhu@quicinc.com>
- <163f4d977fb6a0d80d8fd8d358991aeeb58d31a6.1641288286.git.quic_schowdhu@quicinc.com>
+        Thu, 6 Jan 2022 19:56:22 -0500
+Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M1q8m-1n7pPg1q5A-002ChG; Fri, 07 Jan 2022 01:56:20 +0100
+Received: by mail-wm1-f48.google.com with SMTP id v123so2947397wme.2;
+        Thu, 06 Jan 2022 16:56:20 -0800 (PST)
+X-Gm-Message-State: AOAM530jfekjigejhTLDOXluhtt0COCPQYc0Mu5p4f5MX/mAAMyVJw4G
+        EbAl9VUt9lPA/smHFJbbdnC06udKN5Egu2jactE=
+X-Google-Smtp-Source: ABdhPJxjN0PpAY15g3YezZc1097ikKMl8cojBSZBTSHIZod49CbqSEfCpIHQ97t2EibZ/TdiK8l3W1GIDlIfyiK2eos=
+X-Received: by 2002:a7b:c448:: with SMTP id l8mr8889792wmi.173.1641516980036;
+ Thu, 06 Jan 2022 16:56:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <163f4d977fb6a0d80d8fd8d358991aeeb58d31a6.1641288286.git.quic_schowdhu@quicinc.com>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <b88f25f3d07be92dd75494dc129a85619afb1366.1641500561.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <b88f25f3d07be92dd75494dc129a85619afb1366.1641500561.git.christophe.jaillet@wanadoo.fr>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 6 Jan 2022 19:56:17 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a2J_QZtqq8_y8hwSo4T_Dh_4f_WXy9osomHeBND3-abgA@mail.gmail.com>
+Message-ID: <CAK8P3a2J_QZtqq8_y8hwSo4T_Dh_4f_WXy9osomHeBND3-abgA@mail.gmail.com>
+Subject: Re: [PATCH 07/16] dmaengine: pch_dma: Remove usage of the deprecated
+ "pci-dma-compat.h" API
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:NPDhkDyPz7/evS+qLJycWeh+LpmULWxQY7o4Jp3SxxD1PjmJZLY
+ 6S4QR+5s7Dtm9IZnM0Zd2i5LM17wL0S4VgSYfbW67Bt9JvZjq71G/Cv6W/mHusq6HakCcxj
+ 8O7QmB6hA5R3qXuO4CzhdbNuQ9u7xqBj1aTgjxzj1bVn9c/oSHiiqXOU/ldhXY1pt5CP1NL
+ 6moalj1gusVCwxdjgiSjQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fiSYhjP+vKg=:xbR1Oo53gAwr8ZBYJ4wl+c
+ NmOcrgTn3ywwvGp1R0fuhWyCFlpAgOOnTZ+GUHYtowcsqGBhKa5sMKFH1twNv+ewrQ5+X0CFb
+ WBUzqk3gbamXwDkGlrvGfPsaptHIOlMEIwEEYfVnAlENamqBK7AE5Zm/AZhyOTd8y4x2BQSxa
+ ZZt3wuCYJb3RAO7piNswIiFnZCMYSm6ry1WwjAUrObLQq/f8KyJncsyS3axB6YgHgQUL+B0cS
+ pYSbYBsjbnVv/MoBayanll5urDHKgxbrRSz9acTTZ6SZ0uGEcJhddlYhpFPMatZEdruxCZNUv
+ UpdSkn7u7uVuMsFzsi1uXG+qRdzKoxODK2yZLFUJ60cgIuPP3j2CKMitaxR76PlcGFetM31QB
+ JmycpSDSoKLPmT0YKW6UbwVl6cOblCdn7X21C3WNaLcHwGqw4bhXbDeCmUj9RhzALTmYb/ayJ
+ DBxOA396fK4h2YycYT+bf1orPCyX0GEsTIH2w/6/4sWW7aCdBUsSc8d5O2B0wlxoTA62N2V86
+ KzShcmHbB05F6gFxf9xpOgZi6XibdAoqNBXLez3alqfydAeBoKYhSouAAW6HNKTwEHUsmmNdD
+ 3Wy8PO4E4zt4xGzLeAI4Wcihj+rlOjS2N/2UI2VmJgzxFT90TpyGKg6EAXR0Q3bErFAlQC+2s
+ bqwhwMt5QHY5KcIC36kZhIR/M0Y/26YsxgigiRoDK6CP+bTxcQoAUGgxfGXzuXH6NwIhLozzz
+ LLm027DEDZjWZpuB17g02D+cA/1y+3uuWuJ85Pz2SAJR7wnHwJAX7fF+4jN83P1IANfEsWpNi
+ vSh24IcZvJAl1uxZaFlwxI7WCOp8WsNY/fBtqa3HLtNhi//pbI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 04 Jan 03:58 PST 2022, Souradeep Chowdhury wrote:
+On Thu, Jan 6, 2022 at 4:52 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> In [1], Christoph Hellwig has proposed to remove the wrappers in
+> include/linux/pci-dma-compat.h.
+>
+> Some reasons why this API should be removed have been given by Julia
+> Lawall in [2].
+>
+> A coccinelle script has been used to perform the needed transformation.
+> It can be found in [3].
+>
+> [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
+> [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
+> [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-> Add the connector property for dwc3 node. This connector can
-> be used to role-switch the controller from device to host and
-> vice versa.
-> 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 078fb78..9382168 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -318,6 +318,12 @@ properties:
->      items:
->        enum: [1, 4, 8, 16, 32, 64, 128, 256]
->  
-> +  connector:
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-The dwc3 isn't the connector, so I think you should put a ports {} in
-the dwc3 and link that to the connector that is described elsewhere.
-
-Regards,
-Bjorn
-
-> +    type: object
-> +    $ref: /connector/usb-connector.yaml#
-> +    description:
-> +      Connector for dual role switch, especially for "eud-usb-c-connector"
-> +
->  unevaluatedProperties: false
->  
->  required:
-> -- 
-> 2.7.4
-> 
+Vinod, can you apply this one to the dmaengine tree? It has no other
+dependencies.

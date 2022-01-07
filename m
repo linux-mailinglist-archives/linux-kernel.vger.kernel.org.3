@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEDE48766A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A58248766C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347074AbiAGLYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiAGLYL (ORCPT
+        id S1347081AbiAGLYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:24:55 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4368 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234491AbiAGLYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:24:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B67C061245;
-        Fri,  7 Jan 2022 03:24:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 518A161215;
-        Fri,  7 Jan 2022 11:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1E9C36AE0;
-        Fri,  7 Jan 2022 11:24:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641554649;
-        bh=lS3K+/8eH/hW2rM5DBnjQgNBWnfsEKjwtRKohwXDT/I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xTSf+xG1jRpuWw9UMZ6P6VfSj13FImWS4aDczypiLoS2WS20KVO+kqsL92aWOXWT8
-         576NdvXxwy+wrd9Z49kUtCTP5ykfZL/UlEQDjpT1pXcyhtBkxlHwnaGyXtTOrsf3oj
-         SxrLTlwmbKvYgQ2EJhZ5stdBu+M+GEHy4yoG7x6E=
-Date:   Fri, 7 Jan 2022 12:24:02 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aayush Agarwal <aayush.a.agarwal@oracle.com>
-Cc:     stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14] phonet: refcount leak in pep_sock_accep
-Message-ID: <Ydgi0qF/7GwoCh96@kroah.com>
-References: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
+        Fri, 7 Jan 2022 06:24:54 -0500
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVgjm2KHrz67Ntg;
+        Fri,  7 Jan 2022 19:19:56 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 7 Jan 2022 12:24:52 +0100
+Received: from [10.47.89.210] (10.47.89.210) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 7 Jan
+ 2022 11:24:51 +0000
+Subject: Re: PCI MSI issue for maxcpus=1
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+ <87a6g8vp8k.wl-maz@kernel.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+Date:   Fri, 7 Jan 2022 11:24:38 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
+In-Reply-To: <87a6g8vp8k.wl-maz@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.89.210]
+X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 02:53:32AM -0800, Aayush Agarwal wrote:
-> From: Hangyu Hua <hbh25y@gmail.com>
-> 
-> commit bcd0f9335332 ("phonet: refcount leak in pep_sock_accep")
-> upstream.
-> 
-> sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
-> invoked in subsequent failure branches(pep_accept_conn() != 0).
-> 
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> Link: https://lore.kernel.org/r/20211209082839.33985-1-hbh25y@gmail.com
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Aayush Agarwal <aayush.a.agarwal@oracle.com>
-> ---
->  net/phonet/pep.c | 1 +
->  1 file changed, 1 insertion(+)
+Hi Marc,
 
-What about releases 5.15.y, 5.10.y, 5.4.y, and 4.19.y?  Is this also
-relevant for those trees?
+>> So it's the driver call to pci_alloc_irq_vectors_affinity() which
+>> errors [1]:
+>>
+>> [    9.619070] hisi_sas_v3_hw: probe of 0000:74:02.0 failed with error -2
+> Can you log what error is returned from pci_alloc_irq_vectors_affinity()?
 
-thanks,
+-EINVAL
 
-greg k-h
+> 
+>> Some details:
+>> - device supports 32 MSI
+>> - min and max msi for that function is 17 and 32, respect.
+> This 17 is a bit odd, owing to the fact that MultiMSI can only deal
+> with powers of 2. You will always allocate 32 in this case. Not sure
+> why that'd cause an issue though. Unless...
+
+Even though 17 is the min, we still try for nvec=32 in 
+msi_capability_init() as possible CPUs is 96.
+
+> 
+>> - affd pre and post are 16 and 0, respect.
+>>
+>> I haven't checked to see what the issue is yet and I think that the
+>> pci_alloc_irq_vectors_affinity() usage is ok...
+> ... we really end-up with desc->nvec_used == 32 and try to activate
+> past vector 17 (which is likely to fail). Could you please check this?
+
+Yeah, that looks to fail. Reason being that in the GIC ITS driver when 
+we try to activate the irq for this managed interrupt all cpus in the 
+affinity mask are offline. Calling its_irq_domain_activate() -> 
+its_select_cpu() it gives cpu=nr_cpu_ids. The affinity mask for that 
+interrupt is 24-29.
+
+Thanks,
+John

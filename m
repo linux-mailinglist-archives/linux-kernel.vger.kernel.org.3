@@ -2,98 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B4648712E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDE7487130
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345004AbiAGDWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344897AbiAGDWQ (ORCPT
+        id S1345818AbiAGDXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 22:23:04 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:36987 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344897AbiAGDW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:22:16 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A45DC061245;
-        Thu,  6 Jan 2022 19:22:16 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n5fpW-000Fy5-3j; Fri, 07 Jan 2022 03:22:14 +0000
-Date:   Fri, 7 Jan 2022 03:22:14 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH 10/10] exit/kthread: Move the exit code for kernel
- threads into struct kthread
-Message-ID: <Ydex5jwYyVsmIt3w@zeniv-ca.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-10-ebiederm@xmission.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208202532.16409-10-ebiederm@xmission.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        Thu, 6 Jan 2022 22:22:58 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V18NGIH_1641525769;
+Received: from localhost(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V18NGIH_1641525769)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 07 Jan 2022 11:22:56 +0800
+From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
+To:     bhelgaas@google.com, lukas@wunner.de
+Cc:     yaohongbo@linux.alibaba.com, zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2] PCI: Waiting command completed in get_port_device_capability()
+Date:   Fri,  7 Jan 2022 11:22:49 +0800
+Message-Id: <1641525769-113099-1-git-send-email-yaohongbo@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:25:32PM -0600, Eric W. Biederman wrote:
-> The exit code of kernel threads has different semantics than the
-> exit_code of userspace tasks.  To avoid confusion and allow
-> the userspace implementation to change as needed move
-> the kernel thread exit code into struct kthread.
-> 
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  kernel/kthread.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/kthread.c b/kernel/kthread.c
-> index 8e5f44bed027..9c6c532047c4 100644
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -52,6 +52,7 @@ struct kthread_create_info
->  struct kthread {
->  	unsigned long flags;
->  	unsigned int cpu;
-> +	int result;
->  	int (*threadfn)(void *);
->  	void *data;
->  	mm_segment_t oldfs;
-> @@ -287,7 +288,9 @@ EXPORT_SYMBOL_GPL(kthread_parkme);
->   */
->  void __noreturn kthread_exit(long result)
->  {
-> -	do_exit(result);
-> +	struct kthread *kthread = to_kthread(current);
-> +	kthread->result = result;
-> +	do_exit(0);
->  }
->  
->  /**
-> @@ -679,7 +682,7 @@ int kthread_stop(struct task_struct *k)
->  	kthread_unpark(k);
->  	wake_up_process(k);
->  	wait_for_completion(&kthread->exited);
-> -	ret = k->exit_code;
-> +	ret = kthread->result;
->  	put_task_struct(k);
->  
->  	trace_sched_kthread_stop_ret(ret);
+According to the PCIe specification Revision 5.0, section
+7.5.3.11 (slot Status Register), if Command Complete notification
+is supported,  a write to the slot control register needs to set
+the command completed bit, which can indicate the controller is
+ready to receive the next command.
 
-Fine, except that you've turned the first two do_exit() in kthread() into
-calls of kthread_exit().  If they are hit, you are screwed, especially
-the second one - there you have an allocation failure for struct kthread,
-so this will instantly oops on attempt to store into ->result.
+However, before probing the pcie hotplug service, there needs to set
+HPIE bit in the slot ctrl register to disable hotplug interrupts,
+and there is no wait currently.
 
-See reply to your 6/10 regarding the difference between the last
-call of do_exit() in kthread() and the first two of them.  They
-(the first two) should be simply do_exit(0); transmission of error
-value happens differently and not in direction of kthread_stop().
+The interval between the two functions get_port_device_capability() and
+pcie_disable_notification() is not long, which may cause the latter to
+be interfered by the former.
+
+The command complete event received by pcie_disable_notification() may
+belong to the operation of get_port_device_capability().
+
+Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
+---
+ drivers/pci/pcie/portdrv_core.c | 40 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+index bda6308..ec2088b6e 100644
+--- a/drivers/pci/pcie/portdrv_core.c
++++ b/drivers/pci/pcie/portdrv_core.c
+@@ -15,6 +15,7 @@
+ #include <linux/string.h>
+ #include <linux/slab.h>
+ #include <linux/aer.h>
++#include <linux/delay.h>
+ 
+ #include "../pci.h"
+ #include "portdrv.h"
+@@ -190,6 +191,42 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
+ 	return 0;
+ }
+ 
++static void pcie_port_disable_hp_interrupt(struct pci_dev *dev)
++{
++	u16 slot_status;
++	u32 slot_cap;
++	int timeout = 1000;
++
++	pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
++			PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
++
++	/*
++	 * If the command completed notification is not supported,
++	 * we don't need to wait after writing to the slot ctrl register.
++	 */
++	pcie_capability_read_dword(dev, PCI_EXP_SLTCAP, &slot_cap);
++	if (slot_cap & PCI_EXP_SLTCAP_NCCS)
++		return;
++
++	do {
++		pcie_capability_read_word(dev, PCI_EXP_SLTSTA, &slot_status);
++		if (slot_status == (u16) ~0) {
++			pci_info(dev, "%s: no response from device\n",  __func__);
++			return;
++		}
++
++		if (slot_status & PCI_EXP_SLTSTA_CC) {
++			pcie_capability_write_word(dev, PCI_EXP_SLTSTA, PCI_EXP_SLTSTA_CC);
++			return;
++		}
++
++		msleep(10);
++		timeout -= 10;
++	} while (timeout >= 0);
++
++	pci_info(dev, "Timeout on hotplug disable interrupt!\n");
++}
++
+ /**
+  * get_port_device_capability - discover capabilities of a PCI Express port
+  * @dev: PCI Express port to examine
+@@ -213,8 +250,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+ 		 * Disable hot-plug interrupts in case they have been enabled
+ 		 * by the BIOS and the hot-plug service driver is not loaded.
+ 		 */
+-		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
+-			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
++		pcie_port_disable_hp_interrupt(dev);
+ 	}
+ 
+ #ifdef CONFIG_PCIEAER
+-- 
+1.8.3.1
+

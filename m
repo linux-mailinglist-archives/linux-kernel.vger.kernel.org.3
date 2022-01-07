@@ -2,59 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E094875F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD3D4875F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238051AbiAGK4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:56:16 -0500
-Received: from foss.arm.com ([217.140.110.172]:39478 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237912AbiAGK4Q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:56:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAB8113D5;
-        Fri,  7 Jan 2022 02:56:15 -0800 (PST)
-Received: from e123427-lin.arm.com (unknown [10.57.36.216])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3B843F66F;
-        Fri,  7 Jan 2022 02:56:13 -0800 (PST)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Rob Herring <robh@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1346823AbiAGK5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:57:09 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55074 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346728AbiAGK5G (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 05:57:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F1020CE29BE;
+        Fri,  7 Jan 2022 10:57:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2789C36AE9;
+        Fri,  7 Jan 2022 10:57:01 +0000 (UTC)
+Date:   Fri, 7 Jan 2022 10:56:58 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/5] PCI: Keystone: Misc fixes for TI's AM65x PCIe
-Date:   Fri,  7 Jan 2022 10:56:06 +0000
-Message-Id: <164155292976.23228.14963816874511057147.b4-ty@arm.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211126083119.16570-1-kishon@ti.com>
-References: <20211126083119.16570-1-kishon@ti.com>
+Subject: Re: [PATCH V2 1/7] arm64: Add Cortex-A510 CPU part definition
+Message-ID: <YdgcegdfpV6eCvXl@arm.com>
+References: <1641517808-5735-1-git-send-email-anshuman.khandual@arm.com>
+ <1641517808-5735-2-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1641517808-5735-2-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Nov 2021 14:01:14 +0530, Kishon Vijay Abraham I wrote:
-> Patch series includes miscellaneous fixes for TI's AM65x SoC
-> "PCI: keystone: Add workaround for Errata #i2037 (AM65x SR 1.0)"  has
-> already been sent before [1]
+On Fri, Jan 07, 2022 at 06:40:02AM +0530, Anshuman Khandual wrote:
+> Add the CPU Partnumbers for the new Arm designs.
 > 
-> The other patch is to prevent PCIEPORTBUS driver to write to
-> MSI-X table (which is not mapped) leading to ~10sec delay
-> due to msix_mask_all().
-> 
-> [...]
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Applied (patches 1 and 2) to pci/keystone, thanks!
-
-[1/5] dt-bindings: PCI: ti,am65: Fix "ti,syscon-pcie-id"/"ti,syscon-pcie-mode" to take argument
-      https://git.kernel.org/lpieralisi/pci/c/d91e775e66
-[2/5] PCI: keystone: Use phandle argument from "ti,syscon-pcie-id"/"ti,syscon-pcie-mode"
-      https://git.kernel.org/lpieralisi/pci/c/7dcf07ac88
-
-Thanks,
-Lorenzo
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

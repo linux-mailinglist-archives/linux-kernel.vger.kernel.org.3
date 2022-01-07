@@ -2,80 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3679487EC0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52B6487EC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiAGWGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 17:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S230409AbiAGWHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 17:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiAGWGQ (ORCPT
+        with ESMTP id S230397AbiAGWHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 17:06:16 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038D5C061574;
-        Fri,  7 Jan 2022 14:06:15 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id f5so6596031pgk.12;
-        Fri, 07 Jan 2022 14:06:15 -0800 (PST)
+        Fri, 7 Jan 2022 17:07:52 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4851C06173F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:07:51 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id a5so9610156wrh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 14:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tn3eWO9zz8sRJIypwap85PQFXjv9Ix4xcI+tN55JBrE=;
-        b=PFm4tFrOfDjDZHQWcN2Kxn/K0Sg2LubhX99OruFwoZADzE1tw8uJXWa2gym+YCUkZq
-         upwonpi3EVVTBNDD/of8XpfOHtku8uYEEsSg0Bw0B/oXUfnFoLHmv5thWYo1nZq6/4Xj
-         chKi+Hz3cCiZeRfB0t9D6xB/2qkPyIdOmOboXQA+/sfYfthM08j2zussz5D/vVc/45+R
-         vJ13VoBaYIjf8XgQM9zTbGp4Gic1dM5nxI1nhTcG8qdorrlp8CO5he1PtX5Gs/a4ofGJ
-         Fu6H8vjM9VDT6KAvrNiWfk2+Lwm0P0JyF/C0CSldXnt3Qv5hAdw34WLuvjmm4qdtV/I5
-         DhlQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cWkdJMcjc1NqLSEp8693DqYqekE889IyVMB4055e5S8=;
+        b=J+DiQRaps5T4HtDY/Mqw3TFP/vjPCqu6rvpsgg1pWVfweJZ2XTaPfoJNJSrf91u4Yn
+         yFH5Gkh6H6RabJj7vj6uUFTj7Ihkf/S2JuldgiyARtwOhddLh0RkqPLjHfbHSm3eOCcx
+         aYie2KVpSFpa4NmgmjpBcRdjmnMyVvGuG0YSZB6U5RXcf0sW4f3WqAhaebTXu6uxB7Y8
+         /2rnqMOWYwjTDbmp9QukfpnU6sj6T/TRyC91m2zhtWRrIPEMA4VU7RsSUovxftGdMm+u
+         asflqKEgd+b4maCEQ8UM2otLFuMbC410no/m9ULDYLryn20OtIg30MrAChYPQK0y8mSD
+         Xz/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=tn3eWO9zz8sRJIypwap85PQFXjv9Ix4xcI+tN55JBrE=;
-        b=3+Wk47RGYCG52myyJWSswq6c9YRXhR3M/zvObRco5petorukgamXKDjqS8Kd3PYBSD
-         wpzjHOWBg4BEd+YZ2fdCAjq12+rSXCa7TSQm5JWS/2ljTB/HKiRqaRl4WKd6IBTHgqqy
-         z8Mu2sHyoAVCM0hnglHBBOvah2NXH8QAlu96t42qD7qu4zbKgSffcIEzUPMkh2ZmjV9B
-         aVXJHMlK3Ow7oghgOUHxd+WawXGM6yi+RZWwajGxKTTsA+LtGzsiS8g2vWjO/oHCgrUZ
-         oXiHd7B+plDhIVffl/FO2hF5Ps/hR0jfoHJND5nUgugPMx6cSP3irwg0+FXqutt86Xtn
-         Sinw==
-X-Gm-Message-State: AOAM530/QngJQ+DgMEY9xw50huTSBW1fINO97kIwJS6M6lU3alNPbnxU
-        5MJUt+fn+6jNJcpuo9iFCHE=
-X-Google-Smtp-Source: ABdhPJxJFMX7ieZqKIwoYK9S9/VgibaX9Zx5SJ0CG8ADu0MfzfhAJDflfNC+7G5H1MthjWg/4RA4XQ==
-X-Received: by 2002:a63:657:: with SMTP id 84mr58033444pgg.399.1641593175217;
-        Fri, 07 Jan 2022 14:06:15 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id v14sm7368420pfu.14.2022.01.07.14.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 14:06:14 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 7 Jan 2022 12:06:13 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuset: convert 'allowed' in __cpuset_node_allowed() to
- be boolean
-Message-ID: <Ydi5VRmOm5e2Malb@slm.duckdns.org>
-References: <20211219024154.28853-1-zhengqi.arch@bytedance.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cWkdJMcjc1NqLSEp8693DqYqekE889IyVMB4055e5S8=;
+        b=AF57pd6YLLfipeDTBNNaEZhOkgBuTyBxJvR+jhGkQJjxIZGcLYZGM/1GdGYVRvxk5F
+         D0aZuK670qCUKy9TxweVSKxpEdYKBt+CrNEAFa0Pi52T4nZZZsgRfd60S1j4XKlZJnk/
+         Rs1pcGCO0CF6TweMWWn+W6nPh03RAGNq3rwe5yrUHC+ReEJnDX4DWroi+iC3HVp4ZSxL
+         u8txscxn29ErEBA2kwnSs6BE/CGA5vVLVruQkrNQSx5vpXwY3xod5SGsjOBgJEZhfXCU
+         VukYELHJdZPnQhSBQGvLxb4YV6gkdt17XSHqemK2XkwJLsSXQ9gIov/dgfyhvLVXnMrX
+         HbBQ==
+X-Gm-Message-State: AOAM5317Xex/OGBUZOgk9NzlhA9yO9O2WAbElJtnotvX8/rNVsh4n2XO
+        l7vshgS+DffJru2GOhKdJePfMQ==
+X-Google-Smtp-Source: ABdhPJz5FUIX9NI1tI9NJydj1K6qi0+C7X1rD+70goNR48JdvHVnob19+nmnj7N7wIPoUcWZRN+ZRQ==
+X-Received: by 2002:a5d:6c6b:: with SMTP id r11mr53610204wrz.548.1641593270165;
+        Fri, 07 Jan 2022 14:07:50 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:75e4:1cf:8890:e76? ([2a01:e34:ed2f:f020:75e4:1cf:8890:e76])
+        by smtp.googlemail.com with ESMTPSA id m5sm8895818wml.14.2022.01.07.14.07.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 14:07:49 -0800 (PST)
+Subject: Re: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-7-daniel.lezcano@linaro.org>
+ <YdiUOh8FtPRktlUM@ripper>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <8e2fa6b6-4f95-9381-4d7e-810afe98fcea@linaro.org>
+Date:   Fri, 7 Jan 2022 23:07:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211219024154.28853-1-zhengqi.arch@bytedance.com>
+In-Reply-To: <YdiUOh8FtPRktlUM@ripper>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 19, 2021 at 10:41:54AM +0800, Qi Zheng wrote:
-> Convert 'allowed' in __cpuset_node_allowed() to be boolean since the
-> return types of node_isset() and __cpuset_node_allowed() are both
-> boolean.
+
+Hi Bjorn,
+
+On 07/01/2022 20:27, Bjorn Andersson wrote:
+
+[ ... ]
+
+>> +#include <linux/dtpm.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +static struct dtpm_node __initdata sdm845_hierarchy[] = {
+>> +	[0]{ .name = "sdm845" },
 > 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Why is the index signifiant here?
+> Doesn't this imply risk that we forget one element, which will be
+> thereby implicitly be left initialized as {} and hence denote
+> termination of the list?
 
-Applied to cgroup/for-5.17.
+Yes, that is possible. The other annotation is also possible. The index
+helps to refer from the .parent field.
 
-Thanks.
+That said nothing forces to use the index, so it is a matter of taste.
+
+>> +	[1]{ .name = "package",
+>> +	     .parent = &sdm845_hierarchy[0] },
+>> +	[2]{ .name = "/cpus/cpu@0",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[3]{ .name = "/cpus/cpu@100",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[4]{ .name = "/cpus/cpu@200",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[5]{ .name = "/cpus/cpu@300",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[6]{ .name = "/cpus/cpu@400",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[7]{ .name = "/cpus/cpu@500",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[8]{ .name = "/cpus/cpu@600",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[9]{ .name = "/cpus/cpu@700",
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[10]{ .name = "/soc@0/gpu@5000000",
+> 
+> It worries me that we encode the textual structure of the dts in the
+> kernel. E.g. for quite a while this was "/soc/gpu@5000000", so if this
+> landed a year ago this driver would have prevented us from correcting
+> the dts.
+
+Why ? The change should be reflected in the driver also, no ?
+
+> Another concern is that not all busses in the system are capable of
+> 36-bit wide addresses, so it's plausible that we might one day have to
+> create a more accurate representation of the address space. Maybe not on
+> SDM845, but this would force us to be inconsistent.
+
+Sorry, I'm missing the point :/
+
+If a change is done in the DT, the code using the description must be
+changed accordingly, no?
+
+
+> Regards,
+> Bjorn
+> 
+>> +	     .type = DTPM_NODE_DT,
+>> +	     .parent = &sdm845_hierarchy[1] },
+>> +	[11]{ },
+>> +};
+>> +
+>> +static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
+>> +        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
+>> +        {},
+>> +};
+>> +
+>> +static int __init sdm845_dtpm_init(void)
+>> +{
+>> +	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
+>> +}
+>> +late_initcall(sdm845_dtpm_init);
+>> +
+>> +MODULE_DESCRIPTION("Qualcomm DTPM driver");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:dtpm");
+>> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
+>> +
+>> -- 
+>> 2.25.1
+>>
+
 
 -- 
-tejun
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

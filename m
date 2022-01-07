@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 813C8487C78
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61BB487C7B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiAGSxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiAGSxx (ORCPT
+        id S231470AbiAGSzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:55:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60654 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231202AbiAGSzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:53:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD5C061574;
-        Fri,  7 Jan 2022 10:53:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 7 Jan 2022 13:55:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641581718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+3+EjMImidl9Lu9LCLBcfnoGdya+H44S/UpDLAGKtus=;
+        b=CJJwt+Grd3gXSRsOQJ2YLAmL1cjmM9lwGZxynOfgZPqoosvo0LIHEZhfvCygQkigWQ+vob
+        qBv0BCx4bPAJvYiL29ZTPO2oP/fqZM9W4lJuYYd0Z+cdctV1UTKPnlTERZhYiTmKP0bOzZ
+        lqxKdAaN+voGMC1j/8StrjDRdvDMEXM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-eyRDmh6XMBaaBr05XTclEw-1; Fri, 07 Jan 2022 13:55:15 -0500
+X-MC-Unique: eyRDmh6XMBaaBr05XTclEw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBF5860C08;
-        Fri,  7 Jan 2022 18:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2DFC36AE0;
-        Fri,  7 Jan 2022 18:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641581632;
-        bh=foOMKyQ7PGZKwf86IMQUEEvCUUdpdeI7caXXChqQ+Lw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qlEmySjN1PoChrh9Gf4yY0T1w4ss/KdXpzpvt5Ldks1IzeRRtdHV/xevjYsBY3pu4
-         t/k4EiMlsTbzT9n2Y3N1WqQIYDnXJB5X/4iejp+n7NWKVFmljTgNITWCGdtgxZkJrU
-         m5SjfxC8nNhyQaX3t3HmqH2MJ73/6Y2uUvcgZj5n/Jjw0x8nlh/AWuPGWkQ+kRIVfh
-         2QCg8p5LWkQi5tqdB6Pae7JUuRy0Mm13jbzLJvHY+7qFSh5u1bPSCWsc8jPJ1eOPgh
-         18Vd78fx4yPvLZEotV1P5eUWoWVKxEEH8t3wKeTc+90yMwGmRl5CtKCFnXxVv+nvPV
-         aBI81sF3/qmaw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1n5uN4-00GdIn-D6; Fri, 07 Jan 2022 18:53:50 +0000
-Date:   Fri, 07 Jan 2022 18:53:50 +0000
-Message-ID: <87wnjbtm0x.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/11] PCI: mvebu: Implement support for legacy INTx interrupts
-In-Reply-To: <20220107115053.k5d2uv7yrftrpcez@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
-        <20220105150239.9628-11-pali@kernel.org>
-        <87bl0ovq7f.wl-maz@kernel.org>
-        <20220106154447.aie6taiuvav5wu6y@pali>
-        <878rvsvoyo.wl-maz@kernel.org>
-        <20220106162047.vqykmygs75eimfgy@pali>
-        <877dbcvngf.wl-maz@kernel.org>
-        <20220106182044.3ff0828c@thinkpad>
-        <874k6gvkhz.wl-maz@kernel.org>
-        <20220107115053.k5d2uv7yrftrpcez@pali>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pali@kernel.org, kabel@kernel.org, lorenzo.pieralisi@arm.com, bhelgaas@google.com, robh+dt@kernel.org, thomas.petazzoni@bootlin.com, kw@linux.com, rmk+kernel@armlinux.org.uk, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3E37264A7B;
+        Fri,  7 Jan 2022 18:55:14 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 323F9838FF;
+        Fri,  7 Jan 2022 18:55:13 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     guang.zeng@intel.com, jing2.liu@intel.com, kevin.tian@intel.com,
+        seanjc@google.com, tglx@linutronix.de, wei.w.wang@intel.com,
+        yang.zhong@intel.com
+Subject: [PATCH v6 00/21] AMX support for KVM
+Date:   Fri,  7 Jan 2022 13:54:51 -0500
+Message-Id: <20220107185512.25321-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jan 2022 11:50:53 +0000,
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
->=20
-> On Thursday 06 January 2022 17:31:36 Marc Zyngier wrote:
-> > On Thu, 06 Jan 2022 17:20:44 +0000,
-> > Marek Beh=C3=BAn <kabel@kernel.org> wrote:
-> > >=20
-> > > On Thu, 06 Jan 2022 16:27:44 +0000
-> > > Marc Zyngier <maz@kernel.org> wrote:
-> > > > You are completely missing my point. I'm talking about data
-> > > > structures, you're talking about interrupts. You have this:
-> > > >=20
-> > > > struct mvebu_pcie_port {
-> > > >        // Tons of stuff
-> > > >        struct irq_chip intx_chip;
-> > > > };
-> > > >=20
-> > > > What I want you to do is:
-> > > >=20
-> > > > struct mvebu_pcie_port {
-> > > >        // Tons of stuff
-> > > > };
-> > > >=20
-> > > > static struct irq_chip intx_chip =3D {
-> > > > 	.name		=3D "INTx",
-> > > > 	.irq_mask	=3D mvebu_pcie_intx_irq_mask,
-> > > > 	.irq_unmask	=3D mvebu_pcie_intx_irq_unmask;
-> > > > };
-> > > >=20
-> > > > That's it. No more, no less.
-> > > >=20
-> > > > 	M.
-> > > >=20
-> > >=20
-> > > Hmm, but struct irq_chip contains a dynamic member,
-> > >   struct device *parent_device;
-> > > Isn't that used? Or are you planning to kill it?
-> >=20
-> > Indeed, and I am definitely planning to kill it. This is the wrong
-> > place for this stuff, and I want it gone. There are thankfully very
-> > few users of this misfeature.
->=20
-> Ok, so what about this change?
->=20
-> @@ -1458,7 +1617,17 @@ static int mvebu_pcie_remove(struct platform_devic=
-e *pdev)
->  		mvebu_writel(port, cmd, PCIE_CMD_OFF);
-> =20
->  		/* Mask all interrupt sources. */
-> -		mvebu_writel(port, 0, PCIE_MASK_OFF);
-> +		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
-> +
-> +		/* Clear all interrupt causes. */
-> +		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
-> +
-> +		/* Remove IRQ domains. */
-> +		if (port->intx_irq_domain)
-> +			irq_domain_remove(port->intx_irq_domain);
-> +
-> +		if (irq > 0)
-> +			irq_set_chained_handler_and_data(irq, NULL, NULL);
+These are the final patches that I am committing.  They are the
+same as v5 except for some cosmetic changes in patch 7 that
+remove the need for the IS_ENABLED(CONFIG_X86_64) check, and
+a rebase on top of kvm/next.
 
-You really want this to be done *before* you remove the domain, as
-there still could be interrupts in flight at this point.
+Paolo
 
-	M.
+Guang Zeng (1):
+  kvm: x86: Add support for getting/setting expanded xstate buffer
 
---=20
-Without deviation from the norm, progress is not possible.
+Jing Liu (11):
+  kvm: x86: Fix xstate_required_size() to follow XSTATE alignment rule
+  kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID
+  x86/fpu: Make XFD initialization in __fpstate_reset() a function
+    argument
+  kvm: x86: Enable dynamic xfeatures at KVM_SET_CPUID2
+  kvm: x86: Add emulation for IA32_XFD
+  x86/fpu: Prepare xfd_err in struct fpu_guest
+  kvm: x86: Intercept #NM for saving IA32_XFD_ERR
+  kvm: x86: Emulate IA32_XFD_ERR for guest
+  kvm: x86: Disable RDMSR interception of IA32_XFD_ERR
+  kvm: x86: Add XCR0 support for Intel AMX
+  kvm: x86: Add CPUID support for Intel AMX
+
+Kevin Tian (2):
+  x86/fpu: Provide fpu_update_guest_xfd() for IA32_XFD emulation
+  kvm: x86: Disable interception for IA32_XFD on demand
+
+Sean Christopherson (1):
+  x86/fpu: Provide fpu_enable_guest_xfd_features() for KVM
+
+Thomas Gleixner (5):
+  x86/fpu: Extend fpu_xstate_prctl() with guest permissions
+  x86/fpu: Prepare guest FPU for dynamically enabled FPU features
+  x86/fpu: Add guest support to xfd_enable_feature()
+  x86/fpu: Add uabi_size to guest_fpu
+  x86/fpu: Provide fpu_sync_guest_vmexit_xfd_state()
+
+Wei Wang (1):
+  kvm: selftests: Add support for KVM_CAP_XSAVE2
+
+ Documentation/virt/kvm/api.rst                |  46 +++++-
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/fpu/api.h                |  11 ++
+ arch/x86/include/asm/fpu/types.h              |  32 ++++
+ arch/x86/include/asm/kvm_host.h               |   1 +
+ arch/x86/include/uapi/asm/kvm.h               |  16 +-
+ arch/x86/include/uapi/asm/prctl.h             |  26 ++--
+ arch/x86/kernel/fpu/core.c                    |  99 +++++++++++-
+ arch/x86/kernel/fpu/xstate.c                  | 147 +++++++++++-------
+ arch/x86/kernel/fpu/xstate.h                  |  19 ++-
+ arch/x86/kernel/process.c                     |   2 +
+ arch/x86/kvm/cpuid.c                          |  86 +++++++---
+ arch/x86/kvm/cpuid.h                          |   2 +
+ arch/x86/kvm/vmx/vmcs.h                       |   5 +
+ arch/x86/kvm/vmx/vmx.c                        |  68 ++++++++
+ arch/x86/kvm/vmx/vmx.h                        |   2 +-
+ arch/x86/kvm/x86.c                            | 112 ++++++++++++-
+ include/uapi/linux/kvm.h                      |   4 +
+ tools/arch/x86/include/uapi/asm/kvm.h         |  16 +-
+ tools/include/uapi/linux/kvm.h                |   3 +
+ .../selftests/kvm/include/kvm_util_base.h     |   2 +
+ .../selftests/kvm/include/x86_64/processor.h  |  10 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  32 ++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  67 +++++++-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |   2 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |   2 +-
+ .../testing/selftests/kvm/x86_64/state_test.c |   2 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |   2 +-
+ 28 files changed, 711 insertions(+), 107 deletions(-)
+
+-- 
+2.31.1
+

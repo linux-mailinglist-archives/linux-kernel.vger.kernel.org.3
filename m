@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD72487E01
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E28E487E04
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiAGVI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S229746AbiAGVJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiAGVI5 (ORCPT
+        with ESMTP id S229749AbiAGVJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:08:57 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AEFC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:08:57 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id w80so9901204oie.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:08:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=O7pvSOfIkV4dqbPfuv/2HOh0xU+VB9JiCav0R4FD6b4=;
-        b=pr418NVHAUExpVkYCuuatPAeH6dxKsAdEKvI0rruXEbnOAk1Lj5AVEaq989nHFeUP8
-         xFXlhLn9+/zsAiLiBpNCuk/bu+LDmSXRqEUKrwmXopsHTlWrM/g8pmJFPlTb2UktTcWr
-         JqGGSfdJ4qMpZSig3S1uwVD4RBOfLcbRmilmvSlg5EPM6SHY3VdPHEicCzSZm027pzuz
-         XLfEmyV48472KMtvVCa6qRclsTAKT4HXpNFmqqkk0eMFXEoA3U3sWRMBSaPFCqAzlujY
-         5uNx2OIq8a4bjewwDKJ2rZNWs0eRbtYpB98v/XGOckHWULrSUB+AhAgj0MmZbvmCXgG2
-         YXyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=O7pvSOfIkV4dqbPfuv/2HOh0xU+VB9JiCav0R4FD6b4=;
-        b=hT0z/A8p5jzbpcG+aB/B7KW/3XruIw7o5VUZjc0IK2lNxEIZckyXwnC3wcR3AiPVhh
-         M6W11Lm5r+DRARxBxq+STGEoBOe7F0LdH5s/9Zwmroo0EF0pt5L1Q/Pq9WjO/QRe0X7z
-         SuJTwAR5q0IzmOhnjLqJzW+ny1HgmzYODwtV6kfXRuSs8MTOyMoxlK8u3mohxEMDmHiz
-         NfECuO91xX9D72vX20a0I+Lzv5X7VG0ZD+18/+LVIKyO98wGTaoQwHJ9nFXSkpmlaY4Q
-         NHkXQFGkk7rwBK5ynOMlre8RAMAhC2h4MxpFVPn9S5O0YrFMesRnBqPX1zf+xZFi52Yb
-         FUSg==
-X-Gm-Message-State: AOAM533aKa5jDjuKLBwwQNPsQZgZ5oF4i90i4MTGEAtfuRiL0Fuwujb5
-        hXFb1aES/KWZ+rCgP6tEdd2c9WHXMmnrCEHS2ns=
-X-Google-Smtp-Source: ABdhPJz/BW/3gQ7COMiFX5lVTDRtnXMjaMVu4RoviTgP8z3CUc0YhYzZKKZOXmlZyqFiTsL0pwvkpb21SPSJvzf4f90=
-X-Received: by 2002:a05:6808:68f:: with SMTP id k15mr10755798oig.5.1641589736048;
- Fri, 07 Jan 2022 13:08:56 -0800 (PST)
+        Fri, 7 Jan 2022 16:09:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAD6C061574;
+        Fri,  7 Jan 2022 13:09:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78A97B82604;
+        Fri,  7 Jan 2022 21:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05A8C36AE9;
+        Fri,  7 Jan 2022 21:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641589744;
+        bh=K/JhrwqQbSMuUehTwf3TsC5iGJ5JuvB2mFD5WJYCTBw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=C687/ms8TsF5D5FYUSJ8JkUCZI2qUNUy6Ru/vxOD+KCd8ojQDMInY4fdY7dZkUTm0
+         QoMgHmVZyTsFCEyBqKzOQBmNumfOxV1MJNrmVJEm5YluP+MHXYWUZXt5l3mkJ1bBKJ
+         TXC8q4nctPDoyqUyAaCHBUMw+6dweoml6yoS4XhHDdFMqaoWpbMwTw1/Sb6CdE43M8
+         eI3NZ0R8inL/ni1eC+90YBJE9Jyl7GWB6/wHsj/xgbM3zgiBDqMNZgYaqmGIwMmtAZ
+         bBb9I2qz8QVHl+HR6ylBDhgFlV0qucRbMCzySXuvSPU7XEIAtWkGzWKLOyxkrAWZ0P
+         5CSI43yYmlNeQ==
+Date:   Fri, 7 Jan 2022 15:09:02 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/15] PCI: mvebu: Check that PCI bridge specified in DT
+ has function number zero
+Message-ID: <20220107210902.GA403155@bhelgaas>
 MIME-Version: 1.0
-References: <20220106095610.3275631-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220106095610.3275631-1-gregkh@linuxfoundation.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 7 Jan 2022 16:08:45 -0500
-Message-ID: <CADnq5_Mwxto+cp3MLmkWchzos8yeXaLqtJPFkZkyvWHR4_e+ug@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Kim <jonathan.kim@amd.com>,
-        Kevin Wang <kevin1.wang@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Tao Zhou <tao.zhou1@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        shaoyunl <shaoyun.liu@amd.com>,
-        John Clements <john.clements@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220107181819.yiya3mxhtfsnubg4@pali>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:56 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the amdgpu sysfs code to use default_groups field which has
-> been the preferred way since aa30f47cf666 ("kobject: Add support for
-> default attribute groups to kobj_type") so that we can soon get rid of
-> the obsolete default_attrs field.
->
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Hawking Zhang <Hawking.Zhang@amd.com>
-> Cc: John Clements <john.clements@amd.com>
-> Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-> Cc: Jonathan Kim <jonathan.kim@amd.com>
-> Cc: Kevin Wang <kevin1.wang@amd.com>
-> Cc: shaoyunl <shaoyun.liu@amd.com>
-> Cc: Tao Zhou <tao.zhou1@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Fri, Jan 07, 2022 at 07:18:19PM +0100, Pali Rohár wrote:
+> On Friday 07 January 2022 12:15:12 Bjorn Helgaas wrote:
+> > On Thu, Nov 25, 2021 at 01:45:53PM +0100, Pali Rohár wrote:
+> > > Driver cannot handle PCI bridges at non-zero function address. So add
+> > > appropriate check. Currently all in-tree kernel DTS files set PCI bridge
+> > > function to zero.
+> > 
+> > Why can the driver not handle bridges at non-zero function addresses?
+> > The PCI spec allows that, doesn't it?  Is this a hardware limitation?
+> 
+> It is software / kernel limitation.
+> 
+> Because this bridge is virtual, emulated by pci-bridge-emul.c driver and
+> this driver can emulate only single function PCI-to-PCI bridge device.
 
-Applied.  Thanks!
+That's weird.  Why does pci-bridge-emul.c care about the function
+number?  Or maybe you're saying that pci-mvebu.c isn't smart enough to
+build an emulated bridge at a non-zero function?  Or, since this is
+emulated, maybe there's just no *reason* to ever use a non-zero
+function?
 
-Alex
+It would really be nice to have the commit log and maybe even a
+comment allude to what's going on here .  Otherwise this check sort of
+dangles without having an obvious reason for existence.
 
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c b/drivers/gpu/drm/a=
-md/amdgpu/amdgpu_xgmi.c
-> index 567df2db23ac..94dcb004988d 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
-> @@ -208,6 +208,7 @@ static struct attribute *amdgpu_xgmi_hive_attrs[] =3D=
- {
->         &amdgpu_xgmi_hive_id,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(amdgpu_xgmi_hive);
->
->  static ssize_t amdgpu_xgmi_show_attrs(struct kobject *kobj,
->         struct attribute *attr, char *buf)
-> @@ -237,7 +238,7 @@ static const struct sysfs_ops amdgpu_xgmi_hive_ops =
-=3D {
->  struct kobj_type amdgpu_xgmi_hive_type =3D {
->         .release =3D amdgpu_xgmi_hive_release,
->         .sysfs_ops =3D &amdgpu_xgmi_hive_ops,
-> -       .default_attrs =3D amdgpu_xgmi_hive_attrs,
-> +       .default_groups =3D amdgpu_xgmi_hive_groups,
->  };
->
->  static ssize_t amdgpu_xgmi_show_device_id(struct device *dev,
-> --
-> 2.34.1
->
+Does this issue also affect pci-aardvark.c (which looks like the only
+other user of pci_bridge_emul_init())?
+
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > Cc: stable@vger.kernel.org
+> > > ---
+> > >  drivers/pci/controller/pci-mvebu.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > index 6197f7e7c317..08274132cdfb 100644
+> > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > @@ -864,6 +864,11 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+> > >  	port->devfn = of_pci_get_devfn(child);
+> > >  	if (port->devfn < 0)
+> > >  		goto skip;
+> > > +	if (PCI_FUNC(port->devfn) != 0) {
+> > > +		dev_err(dev, "%s: invalid function number, must be zero\n",
+> > > +			port->name);
+> > > +		goto skip;
+> > > +	}
+> > >  
+> > >  	ret = mvebu_get_tgt_attr(dev->of_node, port->devfn, IORESOURCE_MEM,
+> > >  				 &port->mem_target, &port->mem_attr);
+> > > -- 
+> > > 2.20.1
+> > > 

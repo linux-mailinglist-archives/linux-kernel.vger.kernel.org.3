@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71976487581
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA52487582
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbiAGK3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:29:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49213 "EHLO
+        id S1346728AbiAGK3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:29:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34844 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346712AbiAGK3N (ORCPT
+        by vger.kernel.org with ESMTP id S1346713AbiAGK3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Jan 2022 05:29:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
@@ -18,23 +18,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ji9Xa62KyjOXb6hvNO7YbP50Ro+nqRN9L5eN1quX6og=;
-        b=MRHxLrTsHuOxYDlW6d4/qE7GZiU1Cw7p7wIkmT58C/nnjf4kMeUkswFHzRcnJll/0K69iB
-        DvQRNVxK6z+nTmx0ascnN5YWN7i3tTrZ9MXXnM39qRAoHYcCFJ2rWJwMf6f/0ijKUpXf/U
-        5o1AhdCzSM7FI744VrSqC/E+pCAZBE4=
+        bh=oyWXnG+neDWU5V0//CHhGuirHGv/L4Z1aChq1FrAom4=;
+        b=Q1ICdb5YPSM6GqhHtUPm08utmzvEdgcJYDmQCZP7Dt8usgl5VF+zEk/QruFJTLfrwKSeZ7
+        1kkKiv5Pn43RYdeShcZAAEUB/E/t5iuDlLtk6vf7HfIfs4hoZm9vqBIY2uYmIoTeafHNe5
+        Ww6jk6SdL4ECzarZq/VMZ6wpG7COPAg=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-cEBx_acsMyiOUJWPOzjevQ-1; Fri, 07 Jan 2022 05:29:09 -0500
-X-MC-Unique: cEBx_acsMyiOUJWPOzjevQ-1
+ us-mta-447-aNkpbJOTOlyzVjOKW9awug-1; Fri, 07 Jan 2022 05:29:11 -0500
+X-MC-Unique: aNkpbJOTOlyzVjOKW9awug-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 495221006AA5;
-        Fri,  7 Jan 2022 10:29:08 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97A101853022;
+        Fri,  7 Jan 2022 10:29:10 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.40.194.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2884872FA2;
-        Fri,  7 Jan 2022 10:29:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 971FE72FA2;
+        Fri,  7 Jan 2022 10:29:08 +0000 (UTC)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
 To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -42,9 +42,9 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Jim Mattson <jmattson@google.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/5] KVM: nVMX: Also filter MSR_IA32_VMX_TRUE_PINBASED_CTLS when eVMCS
-Date:   Fri,  7 Jan 2022 11:28:55 +0100
-Message-Id: <20220107102859.1471362-2-vkuznets@redhat.com>
+Subject: [PATCH v2 2/5] KVM: nVMX: eVMCS: Filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER
+Date:   Fri,  7 Jan 2022 11:28:56 +0100
+Message-Id: <20220107102859.1471362-3-vkuznets@redhat.com>
 In-Reply-To: <20220107102859.1471362-1-vkuznets@redhat.com>
 References: <20220107102859.1471362-1-vkuznets@redhat.com>
 MIME-Version: 1.0
@@ -54,33 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to MSR_IA32_VMX_EXIT_CTLS/MSR_IA32_VMX_TRUE_EXIT_CTLS,
-MSR_IA32_VMX_ENTRY_CTLS/MSR_IA32_VMX_TRUE_ENTRY_CTLS pair,
-MSR_IA32_VMX_TRUE_PINBASED_CTLS needs to be filtered the same way
-MSR_IA32_VMX_PINBASED_CTLS is currently filtered as guests may solely rely
-on 'true' MSR data.
+Enlightened VMCS v1 doesn't have VMX_PREEMPTION_TIMER_VALUE field,
+PIN_BASED_VMX_PREEMPTION_TIMER is also filtered out already so it makes
+sense to filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER too.
 
 Note, none of the currently existing Windows/Hyper-V versions are known
-to stumble upon the unfiltered MSR_IA32_VMX_TRUE_PINBASED_CTLS, the change
-is aimed at making the filtering future proof.
+to enable 'save VMX-preemption timer value' when eVMCS is in use, the
+change is aimed at making the filtering future proof.
 
 Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 ---
- arch/x86/kvm/vmx/evmcs.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/vmx/evmcs.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
-index ba6f99f584ac..a7ed30d5647a 100644
---- a/arch/x86/kvm/vmx/evmcs.c
-+++ b/arch/x86/kvm/vmx/evmcs.c
-@@ -362,6 +362,7 @@ void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
- 	case MSR_IA32_VMX_PROCBASED_CTLS2:
- 		ctl_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
- 		break;
-+	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
- 	case MSR_IA32_VMX_PINBASED_CTLS:
- 		ctl_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
- 		break;
+diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+index 16731d2cf231..3a461a32128b 100644
+--- a/arch/x86/kvm/vmx/evmcs.h
++++ b/arch/x86/kvm/vmx/evmcs.h
+@@ -59,7 +59,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+ 	 SECONDARY_EXEC_SHADOW_VMCS |					\
+ 	 SECONDARY_EXEC_TSC_SCALING |					\
+ 	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
+-#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
++#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
++	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
++	 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER)
+ #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
+ #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
+ 
 -- 
 2.33.1
 

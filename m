@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2E2487896
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C31F487895
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347719AbiAGNzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:55:07 -0500
-Received: from mga12.intel.com ([192.55.52.136]:30015 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347706AbiAGNzB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:55:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641563701; x=1673099701;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=69u99/6sYlODDkJH1cqo79tAvytw6zvYBBRpPUtEcY0=;
-  b=TLuqiVwPO0S86JKq1D5xNLhYYVxkZ4UHwdsy8m8q4lHd/KAcgNAKVxgR
-   e9ikAuy/JumIswSCHdnwW0sQMQumQYUhrsDai0aYUutXY0FXvmAc0ARcK
-   AN+ktiO4dCkrCqIzT4xIuPH0397tm4VxUZPZVZ4xxDARPhkkyijL0ngfx
-   PFrxqNGlSNE5tF5suMLFCkGav+i4HeufgnQ0ZNW7ucU6V0UJzHhMR0sqw
-   cp1zuowucUT88KBnxG0rXENSkiyxRGqdvvU1iATWmCxoNFfLgbkO6kXiV
-   2UyJBhBfsC89eHsXEo1ODhtbR2KpUm8JK5APYEEhuil0V7eGb/7lrfBe/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="222859244"
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="222859244"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 05:55:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
-   d="scan'208";a="689796445"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Jan 2022 05:54:59 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5phq-000Ijn-IC; Fri, 07 Jan 2022 13:54:58 +0000
-Date:   Fri, 7 Jan 2022 21:54:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: fs/file.c:401:54: sparse: sparse: incorrect type in initializer
- (different address spaces)
-Message-ID: <202201072134.vhC4HnC4-lkp@intel.com>
+        id S238901AbiAGNyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238992AbiAGNyd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:54:33 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1420AC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:54:33 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id be32so8240415oib.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:54:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YGqOgKFnGJz28p+OQa8FIlCc2oy0neN/zp9RS60zfPI=;
+        b=jWKSfBEn9ok2HZUeR+w6zEdF7KlqnV9ecDNZmFU56q9i6pZhqsiGI4wo9PAa8IkvLw
+         l6/CxhreIEzcnz6RYIOsspnD09k+sWkh3IzXye80wspUZlMEXkYv/fLtcl+35oewdfub
+         NAC3GNNUKd/F1dztRnWm8M+U0xATDpJzR9PJS3yjQDRPsbEg8Zu/zp/8ctP9v9izitsi
+         FwBEAr3iKspMBkRw7Vqe9UWRomDM0GSYiMKquYnvuxiDaMW+6iFMfepnOCt3NSBecciJ
+         tCm3ckCcsJSVaDBmmSwY9f3oCOzPcO8u6ym2jt6BlhpYfxETskpPSN66C2ho92iyjeuZ
+         1dZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YGqOgKFnGJz28p+OQa8FIlCc2oy0neN/zp9RS60zfPI=;
+        b=YPetBU+KR4Lhu132X3qf4vKZtNNeo77WwN2uAr8i2i+aXYGXST09nAQPmfvmuo62a4
+         vmpJoUFbrk+j9yNCaNJvZ27nqCkoXpjgiIpIxBDGv6zQal1Bc3wF5DTE7whv5cfluBy1
+         Tchw5zNZGipaZFUzfY0KozZzzEJV794H2Uz7TdxBUPuOufVCXVXbJX03VWxX+YwE+sx8
+         S5CeeUsTvTQoqnh308XPbnD171hOqCcXY2M8G+UMQ3MYvkQwHSpMH6on/5ji5AuvOGgm
+         CrRwOQWmtNhgH/HxqBgfeSyDrmhF5FB6AiKB5HpzzAsQ3F4tKszivji/y/+iffYOvpf2
+         lBOw==
+X-Gm-Message-State: AOAM532QBB5G7OZWY15NOlmVb8/EHpAqdAPrQ5kiXO7hhm2DK5ydYXNl
+        a5k7/tLPlsqvDYKYLd2nFyqakawA6WVA/5ZmmrnW+w==
+X-Google-Smtp-Source: ABdhPJwdSDeEyuNMn6xzl7TFHAJyAsBV1CxPZXt4r7CFmM/gxUg7EJ77kn/TFWbdL5Tz3o4LdT55DWBC21J/LQQlcM4=
+X-Received: by 2002:aca:b843:: with SMTP id i64mr9973885oif.109.1641563672135;
+ Fri, 07 Jan 2022 05:54:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <00000000000004591305d4bebf11@google.com> <20220105155036.1ee64ea3a4322085b6fbb431@linux-foundation.org>
+In-Reply-To: <20220105155036.1ee64ea3a4322085b6fbb431@linux-foundation.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 7 Jan 2022 14:54:20 +0100
+Message-ID: <CACT4Y+Z1RGApGaxnPEFPees5RUNfYzy0VgaRxddGCJbEpTm1Dw@mail.gmail.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in mpol_rebind_task (2)
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>,
+        glider@google.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vineet,
+On Thu, 6 Jan 2022 at 00:50, Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue, 04 Jan 2022 02:03:17 -0800 syzbot <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com> wrote:
+>
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
+> > git tree:       https://github.com/google/kmsan.git master
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=112b8f7db00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=217f792c92599518a2ab
+> > compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13366ea5b00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14526cb3b00000
+>
+> Thanks.  I don't get it.
+>
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com
+> >
+> > =====================================================
+> > BUG: KMSAN: uninit-value in mpol_rebind_policy mm/mempolicy.c:352 [inline]
+> > BUG: KMSAN: uninit-value in mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+> >  mpol_rebind_policy mm/mempolicy.c:352 [inline]
+>
+> Appears to be
+>
+>         if (!mpol_store_user_nodemask(pol) &&
+>
+> But if so, why didn't it also report
+>
+>         mpol_store_user_nodemask mm/mempolicy.c:184 [inline]
+>
+> which is where the
+>
+>         return pol->flags & MPOL_MODE_FLAGS;
+>
+> actually happened?
 
-First bad commit (maybe != root cause):
+Hi Andrew,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ddec8ed2d4905d0967ce2ec432e440e582aa52c6
-commit: e188f3330a13df904d77003846eafd3edf99009d ARC: cmpxchg/xchg: rewrite as macros to make type safe
-date:   5 months ago
-config: arc-randconfig-s031-20220107 (https://download.01.org/0day-ci/archive/20220107/202201072134.vhC4HnC4-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e188f3330a13df904d77003846eafd3edf99009d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e188f3330a13df904d77003846eafd3edf99009d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash fs/ kernel/ net/ipv4/
+KMSAN doesn't just flag loads of non-stored to variables. It tracks
+propagation of uninit values of memory and registers and flags only
+"uses" of uninit values. Where uses are roughly when uninits affect
+control flow, are part of dereferenced pointers or sink to user-space.
+The problem is that real code tends to load, stores and even do
+computations on uninit values (or partially uninit values) a lot.
+Think of bitfields, alignment paddings, or just tricky structured
+code.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+That's why:
+return pol->flags & MPOL_MODE_FLAGS;
+is not yet flagged, it just marks the result as uninit.
 
 
-sparse warnings: (new ones prefixed by >>)
-   fs/file.c:350:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **old_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:350:17: sparse:     expected struct file **old_fds
-   fs/file.c:350:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:351:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file **new_fds @@     got struct file [noderef] __rcu **fd @@
-   fs/file.c:351:17: sparse:     expected struct file **new_fds
-   fs/file.c:351:17: sparse:     got struct file [noderef] __rcu **fd
-   fs/file.c:366:17: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   fs/file.c:366:17: sparse:    struct file [noderef] __rcu *
-   fs/file.c:366:17: sparse:    struct file *
->> fs/file.c:401:54: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu *[assigned] _val_ @@
-   fs/file.c:441:28: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct fdtable [noderef] __rcu *fdt @@     got struct fdtable * @@
-   fs/file.c:608:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:762:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:813:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
-   fs/file.c:1038:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *tofree @@     got struct file [noderef] __rcu * @@
---
-   net/ipv4/tcp_cong.c:238:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct tcp_congestion_ops const [noderef] __rcu *_val_ @@     got struct tcp_congestion_ops *[assigned] ca @@
-   net/ipv4/tcp_cong.c:238:24: sparse:     expected struct tcp_congestion_ops const [noderef] __rcu *_val_
-   net/ipv4/tcp_cong.c:238:24: sparse:     got struct tcp_congestion_ops *[assigned] ca
->> net/ipv4/tcp_cong.c:238:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tcp_congestion_ops const *prev @@     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_ @@
-   net/ipv4/tcp_cong.c:238:22: sparse:     expected struct tcp_congestion_ops const *prev
-   net/ipv4/tcp_cong.c:238:22: sparse:     got struct tcp_congestion_ops const [noderef] __rcu *[assigned] _val_
 
-vim +401 fs/file.c
+> >  mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+> >  cpuset_change_task_nodemask kernel/cgroup/cpuset.c:1711 [inline]
+> >  cpuset_attach+0x787/0x15e0 kernel/cgroup/cpuset.c:2278
+> >  cgroup_migrate_execute+0x1023/0x1d20 kernel/cgroup/cgroup.c:2515
+> >  cgroup_migrate kernel/cgroup/cgroup.c:2771 [inline]
+> >  cgroup_attach_task+0x540/0x8b0 kernel/cgroup/cgroup.c:2804
+> >  __cgroup1_procs_write+0x5cc/0x7a0 kernel/cgroup/cgroup-v1.c:520
+> >  cgroup1_tasks_write+0x94/0xb0 kernel/cgroup/cgroup-v1.c:539
+> >  cgroup_file_write+0x4c2/0x9e0 kernel/cgroup/cgroup.c:3852
+> >  kernfs_fop_write_iter+0x66a/0x9f0 fs/kernfs/file.c:296
+> >  call_write_iter include/linux/fs.h:2162 [inline]
+> >  new_sync_write fs/read_write.c:503 [inline]
+> >  vfs_write+0x1318/0x2030 fs/read_write.c:590
+> >  ksys_write+0x28b/0x510 fs/read_write.c:643
+> >  __do_sys_write fs/read_write.c:655 [inline]
+> >  __se_sys_write fs/read_write.c:652 [inline]
+> >  __x64_sys_write+0xdb/0x120 fs/read_write.c:652
+> >  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+> >  do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> >
+> > Uninit was created at:
+> >  slab_post_alloc_hook mm/slab.h:524 [inline]
+> >  slab_alloc_node mm/slub.c:3251 [inline]
+> >  slab_alloc mm/slub.c:3259 [inline]
+> >  kmem_cache_alloc+0x902/0x11c0 mm/slub.c:3264
+> >  mpol_new mm/mempolicy.c:293 [inline]
+>
+> But mpol_new() does
+>
+>         policy->flags = flags;
 
-02afc6267f6d55 Al Viro          2008-05-08  382  
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  383  static struct fdtable *close_files(struct files_struct * files)
-7cf4dc3c8dbfdf Al Viro          2012-08-15  384  {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  385  	/*
-7cf4dc3c8dbfdf Al Viro          2012-08-15  386  	 * It is safe to dereference the fd table without RCU or
-7cf4dc3c8dbfdf Al Viro          2012-08-15  387  	 * ->file_lock because this is the last reference to the
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  388  	 * files structure.
-7cf4dc3c8dbfdf Al Viro          2012-08-15  389  	 */
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  390  	struct fdtable *fdt = rcu_dereference_raw(files->fdt);
-9b80a184eaadc1 Alexey Dobriyan  2016-09-02  391  	unsigned int i, j = 0;
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  392  
-7cf4dc3c8dbfdf Al Viro          2012-08-15  393  	for (;;) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  394  		unsigned long set;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  395  		i = j * BITS_PER_LONG;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  396  		if (i >= fdt->max_fds)
-7cf4dc3c8dbfdf Al Viro          2012-08-15  397  			break;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  398  		set = fdt->open_fds[j++];
-7cf4dc3c8dbfdf Al Viro          2012-08-15  399  		while (set) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  400  			if (set & 1) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15 @401  				struct file * file = xchg(&fdt->fd[i], NULL);
-7cf4dc3c8dbfdf Al Viro          2012-08-15  402  				if (file) {
-7cf4dc3c8dbfdf Al Viro          2012-08-15  403  					filp_close(file, files);
-388a4c88064e7e Paul E. McKenney 2017-10-24  404  					cond_resched();
-7cf4dc3c8dbfdf Al Viro          2012-08-15  405  				}
-7cf4dc3c8dbfdf Al Viro          2012-08-15  406  			}
-7cf4dc3c8dbfdf Al Viro          2012-08-15  407  			i++;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  408  			set >>= 1;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  409  		}
-7cf4dc3c8dbfdf Al Viro          2012-08-15  410  	}
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  411  
-ce08b62d18b3f9 Oleg Nesterov    2014-01-11  412  	return fdt;
-7cf4dc3c8dbfdf Al Viro          2012-08-15  413  }
-7cf4dc3c8dbfdf Al Viro          2012-08-15  414  
+I suspect the tool points at nodes field (but line 352 rather than 353
+because the && that produces the final uninit value used for control
+flow in on 352).
 
-:::::: The code at line 401 was first introduced by commit
-:::::: 7cf4dc3c8dbfdfde163d4636f621cf99a1f63bfb move files_struct-related bits from kernel/exit.c to fs/file.c
+Is it possible that flags contain MPOL_MODE_FLAGS, but mode is
+MPOL_LOCAL so that nodes are not set or something along these lines?
 
-:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
-:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >  do_set_mempolicy+0x421/0xb70 mm/mempolicy.c:853
+> >  kernel_set_mempolicy mm/mempolicy.c:1504 [inline]
+> >  __do_sys_set_mempolicy mm/mempolicy.c:1510 [inline]
+> >  __se_sys_set_mempolicy+0x44c/0xb60 mm/mempolicy.c:1507
+> >  __x64_sys_set_mempolicy+0xd8/0x110 mm/mempolicy.c:1507
+> >  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+> >  do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> >
+> > CPU: 1 PID: 3479 Comm: syz-executor124 Not tainted 5.16.0-rc5-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > =====================================================

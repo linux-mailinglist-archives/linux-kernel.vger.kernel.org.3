@@ -2,153 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7434879F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 758F3487A00
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348180AbiAGPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 10:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348161AbiAGPzG (ORCPT
+        id S1348174AbiAGP53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 10:57:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36302 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239764AbiAGP52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 10:55:06 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662D4C06173E;
-        Fri,  7 Jan 2022 07:55:06 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:21c7:4f13:8afa:4f9f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 7 Jan 2022 10:57:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9F1971F464CA;
-        Fri,  7 Jan 2022 15:55:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641570905;
-        bh=EXKf6+cAPMel1Fr0Yy1N9Am53nRT8O/XhWuurI0MN0Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Stc52kMSdWbGQxct7MjE4EsjzKCNgCZl4LhV8C+wihEkAcDwQenMrBMWrRgfOn/5z
-         hNytBG44PkaMZbLZX3sLfKxWshhWeJ/ZqQsK0aptTdfPZnadKZLTBhOib6lvPrG+j6
-         035jNPQ+m5bswB/Ug9k5cMlGNANMlfMZYYLCG3XCKsCyThRoTMOM9xpgxzPsqINglv
-         9jhez8PWpxBRtv5Qx5pTGK4rvBv9dCiwqkOMLOdtRlV6VJE7hAvxFFrvnFoMTdYC52
-         pV+VkZ92zk9WKnb1c/vNj74VHE+CWCbGIP3LyaIB5TRvlwpAgpIabt/qMiFsA3kFpA
-         fkhhlf8zVPoZA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, jernej.skrabec@gmail.com,
-        nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 2/2] media: hevc: Embedded indexes in RPS
-Date:   Fri,  7 Jan 2022 16:54:55 +0100
-Message-Id: <20220107155455.604536-3-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220107155455.604536-1-benjamin.gaignard@collabora.com>
-References: <20220107155455.604536-1-benjamin.gaignard@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 466E2B82657;
+        Fri,  7 Jan 2022 15:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1DBC36AEF;
+        Fri,  7 Jan 2022 15:57:25 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 5.15.13-rt26
+Date:   Fri, 07 Jan 2022 15:56:46 -0000
+Message-ID: <164157100674.1024533.9109652155025672364@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference Picture Set lists provide indexes of short and long term
-reference in DBP array.
-Fix Hantro to not do a look up in DBP entries.
-Make documentation more clear about it.
+Hello RT-list!
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+I'm pleased to announce the 5.15.13-rt26 stable release.
+
+You can get this release via the git tree at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+
+  branch: v5.15-rt
+  Head SHA1: 3c5612b1862f0e2ee513fdc9d9dfe878ab24b09d
+
+Or to build 5.15.13-rt26 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.13.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.13-rt26.patch.xz
+
+
+You can also build from 5.15.12-rt25 by applying the incremental patch:
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/incr/patch-5.15.12-rt25-rt26.patch.xz
+
+Enjoy!
+Clark
+
+Changes from v5.15.12-rt25:
 ---
-version 5:
-- add review-by tag from Ezequiel
 
- .../media/v4l/ext-ctrls-codec.rst             |  6 ++---
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 25 +++++--------------
- 2 files changed, 9 insertions(+), 22 deletions(-)
+Adrian Hunter (3):
+      perf intel-pt: Fix parsing of VM time correlation arguments
+      perf script: Fix CPU filtering of a script's switch events
+      perf scripts python: intel-pt-events.py: Fix printing of switch events
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 5d1fc2d33dc7..f730707cd1cf 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3383,15 +3383,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     * - __u8
-       - ``poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocStCurrBefore as described in section 8.3.2 "Decoding process for reference
--        picture set.
-+        picture set": provides the index of the short term before references in DPB array.
-     * - __u8
-       - ``poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocStCurrAfter as described in section 8.3.2 "Decoding process for reference
--        picture set.
-+        picture set": provides the index of the short term after references in DPB array.
-     * - __u8
-       - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocLtCurr as described in section 8.3.2 "Decoding process for reference
--        picture set.
-+        picture set": provides the index of the long term references in DPB array.
-     * - __u64
-       - ``flags``
-       - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 14e0e6414100..c524af41baf5 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -255,24 +255,11 @@ static void set_params(struct hantro_ctx *ctx)
- 	hantro_reg_write(vpu, &g2_apf_threshold, 8);
- }
- 
--static int find_ref_pic_index(const struct v4l2_hevc_dpb_entry *dpb, int pic_order_cnt)
--{
--	int i;
--
--	for (i = 0; i < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; i++) {
--		if (dpb[i].pic_order_cnt[0] == pic_order_cnt)
--			return i;
--	}
--
--	return 0x0;
--}
--
- static void set_ref_pic_list(struct hantro_ctx *ctx)
- {
- 	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
- 	struct hantro_dev *vpu = ctx->dev;
- 	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
--	const struct v4l2_hevc_dpb_entry *dpb = decode_params->dpb;
- 	u32 list0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX] = {};
- 	u32 list1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX] = {};
- 	static const struct hantro_reg ref_pic_regs0[] = {
-@@ -316,11 +303,11 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
- 	/* List 0 contains: short term before, short term after and long term */
- 	j = 0;
- 	for (i = 0; i < decode_params->num_poc_st_curr_before && j < ARRAY_SIZE(list0); i++)
--		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_before[i]);
-+		list0[j++] = decode_params->poc_st_curr_before[i];
- 	for (i = 0; i < decode_params->num_poc_st_curr_after && j < ARRAY_SIZE(list0); i++)
--		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_after[i]);
-+		list0[j++] = decode_params->poc_st_curr_after[i];
- 	for (i = 0; i < decode_params->num_poc_lt_curr && j < ARRAY_SIZE(list0); i++)
--		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_lt_curr[i]);
-+		list0[j++] = decode_params->poc_lt_curr[i];
- 
- 	/* Fill the list, copying over and over */
- 	i = 0;
-@@ -329,11 +316,11 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
- 
- 	j = 0;
- 	for (i = 0; i < decode_params->num_poc_st_curr_after && j < ARRAY_SIZE(list1); i++)
--		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_after[i]);
-+		list1[j++] = decode_params->poc_st_curr_after[i];
- 	for (i = 0; i < decode_params->num_poc_st_curr_before && j < ARRAY_SIZE(list1); i++)
--		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_before[i]);
-+		list1[j++] = decode_params->poc_st_curr_before[i];
- 	for (i = 0; i < decode_params->num_poc_lt_curr && j < ARRAY_SIZE(list1); i++)
--		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_lt_curr[i]);
-+		list1[j++] = decode_params->poc_lt_curr[i];
- 
- 	i = 0;
- 	while (j < ARRAY_SIZE(list1))
--- 
-2.30.2
+Aleksander Jan Bajkowski (1):
+      net: lantiq_xrx200: fix statistics of received bytes
 
+Alex Deucher (1):
+      drm/amdgpu: add support for IP discovery gc_info table v2
+
+Alexey Makhalov (1):
+      scsi: vmw_pvscsi: Set residual data length conditionally
+
+Amir Tzin (1):
+      net/mlx5e: Wrap the tx reporter dump callback to extract the sq
+
+Andra Paraschiv (1):
+      nitro_enclaves: Use get_user_pages_unlocked() call to handle mmap assert
+
+Angus Wang (1):
+      drm/amd/display: Changed pipe split policy to allow for multi-display pipe split
+
+Chris Mi (2):
+      net/mlx5: Fix tc max supported prio for nic mode
+      net/mlx5e: Delete forward rule for ct or sample action
+
+Christian Brauner (1):
+      fs/mount_setattr: always cleanup mount_kattr
+
+Christian König (1):
+      drm/nouveau: wait for the exclusive fence after the shared ones v2
+
+Christophe JAILLET (2):
+      net: ag71xx: Fix a potential double free in error handling paths
+      ionic: Initialize the 'lif->dbid_inuse' bitmap
+
+Chunfeng Yun (3):
+      usb: mtu3: add memory barrier before set GPD's HWO
+      usb: mtu3: fix list_head check warning
+      usb: mtu3: set interval of FS intr and isoc endpoint
+
+Clark Williams (2):
+      Merge tag 'v5.15.13' into v5.15-rt
+      Linux 5.15.13-rt26
+
+Coco Li (2):
+      udp: using datalen to cap ipv6 udp max gso segments
+      selftests: Calculate udpgso segment count without header adjustment
+
+Dan Carpenter (1):
+      scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
+
+Dmitry V. Levin (1):
+      uapi: fix linux/nfc.h userspace compilation errors
+
+Dmitry Vyukov (1):
+      tomoyo: Check exceeded quota early in tomoyo_domain_quota_is_ok().
+
+Dust Li (2):
+      net/smc: don't send CDC/LLC message if link not ready
+      net/smc: fix kernel panic caused by race of smc_sock
+
+Gal Pressman (1):
+      net/mlx5e: Fix wrong features assignment in case of error
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.13
+
+Heiko Carstens (1):
+      recordmcount.pl: fix typo in s390 mcount regex
+
+Helge Deller (1):
+      parisc: Clear stale IIR value on instruction access rights trap
+
+Jackie Liu (1):
+      memblock: fix memblock_phys_alloc() section mismatch error
+
+James McLaughlin (1):
+      igc: Fix TX timestamp support for non-MSI-X platforms
+
+Javier Martinez Canillas (1):
+      efi: Move efifb_setup_from_dmi() prototype from arch headers
+
+Jianguo Wu (2):
+      selftests: net: Fix a typo in udpgro_fwd.sh
+      selftests: net: using ping6 for IPv6 in udpgro_fwd.sh
+
+Jiasheng Jiang (1):
+      net/ncsi: check for error return from call to nla_put_u32
+
+Karsten Graul (1):
+      net/smc: fix using of uninitialized completions
+
+Krzysztof Kozlowski (1):
+      nfc: uapi: use kernel size_t to fix user-space builds
+
+Leo L. Schwab (1):
+      Input: spaceball - fix parsing of movement data packets
+
+Libin Yang (2):
+      ALSA: hda: intel-sdw-acpi: harden detection of controller
+      ALSA: hda: intel-sdw-acpi: go through HDAS ACPI at max depth of 2
+
+Mathias Nyman (1):
+      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
+
+Matthias-Christian Ott (1):
+      net: usb: pegasus: Do not drop long Ethernet frames
+
+Maxim Mikityanskiy (2):
+      net/mlx5e: Fix interoperability between XSK and ICOSQ recovery flow
+      net/mlx5e: Fix ICOSQ recovery flow for XSK
+
+Miaoqian Lin (3):
+      platform/mellanox: mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
+      net/mlx5: DR, Fix NULL vs IS_ERR checking in dr_domain_init_resources
+      fsl/fman: Fix missing put_device() call in fman_port_probe
+
+Michael Ellerman (1):
+      powerpc/ptdump: Fix DEBUG_WX since generic ptdump conversion
+
+Moshe Shemesh (1):
+      net/mlx5: Fix SF health recovery flow
+
+Muchun Song (1):
+      net: fix use-after-free in tw_timer_handler
+
+Nicholas Kazlauskas (2):
+      drm/amd/display: Send s0i2_rdy in stream_count == 0 optimization
+      drm/amd/display: Set optimize_pwr_state for DCN31
+
+Nikolay Aleksandrov (3):
+      net: bridge: mcast: add and enforce query interval minimum
+      net: bridge: mcast: add and enforce startup query interval minimum
+      net: bridge: mcast: fix br_multicast_ctx_vlan_global_disabled helper
+
+Paul Blakey (1):
+      net/sched: Extend qdisc control block with tc control block
+
+Pavel Skripkin (2):
+      i2c: validate user data in compat ioctl
+      Input: appletouch - initialize work before device registration
+
+Roi Dayan (1):
+      net/mlx5e: Use tc sample stubs instead of ifdefs in source file
+
+Samuel Čavoj (1):
+      Input: i8042 - enable deferred probe quirk for ASUS UM325UA
+
+SeongJae Park (1):
+      mm/damon/dbgfs: fix 'struct pid' leaks in 'dbgfs_target_ids_write()'
+
+Shay Drory (1):
+      net/mlx5: Fix error print in case of IRQ request failed
+
+Takashi Iwai (1):
+      Input: i8042 - add deferred probe support
+
+Tetsuo Handa (1):
+      tomoyo: use hwight16() in tomoyo_domain_quota_is_ok()
+
+Todd Kjos (1):
+      binder: fix async_free_space accounting for empty parcels
+
+Tom Rix (1):
+      selinux: initialize proto variable in selinux_ip_postroute_compat()
+
+Vincent Pelletier (1):
+      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
+
+Vinicius Costa Gomes (1):
+      igc: Do not enable crosstimestamping for i225-V models
+
+Wang Qing (1):
+      platform/x86: apple-gmux: use resource_size() with res
+
+Wei Yongjun (1):
+      NFC: st21nfca: Fix memory leak in device probe and remove
+
+Xin Long (1):
+      sctp: use call_rcu to free endpoint
+
+chen gong (1):
+      drm/amdgpu: When the VCN(1.0) block is suspended, powergating is explicitly enabled
+
+wujianguo (1):
+      selftests/net: udpgso_bench_tx: fix dst ip argument
+---
+Documentation/admin-guide/kernel-parameters.txt    |  2 +
+ Makefile                                           |  2 +-
+ arch/arm/include/asm/efi.h                         |  1 -
+ arch/arm64/include/asm/efi.h                       |  1 -
+ arch/parisc/kernel/traps.c                         |  2 +
+ arch/powerpc/mm/ptdump/ptdump.c                    |  2 +-
+ arch/riscv/include/asm/efi.h                       |  1 -
+ arch/x86/include/asm/efi.h                         |  2 -
+ drivers/android/binder_alloc.c                     |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c      | 76 +++++++++++++++-------
+ drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c              |  7 ++
+ .../amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c   |  1 +
+ .../gpu/drm/amd/display/dc/dcn20/dcn20_resource.c  |  2 +-
+ .../gpu/drm/amd/display/dc/dcn21/dcn21_resource.c  |  2 +-
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |  2 +-
+ .../drm/amd/display/dc/dcn301/dcn301_resource.c    |  2 +-
+ .../drm/amd/display/dc/dcn302/dcn302_resource.c    |  2 +-
+ .../drm/amd/display/dc/dcn303/dcn303_resource.c    |  2 +-
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c  |  1 +
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |  2 +-
+ drivers/gpu/drm/amd/include/discovery.h            | 49 ++++++++++++++
+ drivers/gpu/drm/nouveau/nouveau_fence.c            | 28 ++++----
+ drivers/i2c/i2c-dev.c                              |  3 +
+ drivers/input/joystick/spaceball.c                 | 11 +++-
+ drivers/input/mouse/appletouch.c                   |  4 +-
+ drivers/input/serio/i8042-x86ia64io.h              | 21 ++++++
+ drivers/input/serio/i8042.c                        | 54 +++++++++------
+ drivers/net/ethernet/atheros/ag71xx.c              | 23 +++----
+ drivers/net/ethernet/freescale/fman/fman_port.c    | 12 ++--
+ drivers/net/ethernet/intel/igc/igc_main.c          |  6 ++
+ drivers/net/ethernet/intel/igc/igc_ptp.c           | 15 ++++-
+ drivers/net/ethernet/lantiq_xrx200.c               |  2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en.h       |  5 +-
+ .../net/ethernet/mellanox/mlx5/core/en/health.h    |  2 +
+ .../net/ethernet/mellanox/mlx5/core/en/rep/tc.c    |  2 -
+ .../ethernet/mellanox/mlx5/core/en/reporter_rx.c   | 35 +++++++++-
+ .../ethernet/mellanox/mlx5/core/en/reporter_tx.c   | 10 ++-
+ .../net/ethernet/mellanox/mlx5/core/en/tc/sample.h | 27 ++++++++
+ .../net/ethernet/mellanox/mlx5/core/en/xsk/setup.c | 16 ++++-
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c  | 48 +++++++++-----
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    | 29 ++-------
+ .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |  3 +
+ drivers/net/ethernet/mellanox/mlx5/core/main.c     | 11 ++--
+ drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c  |  4 +-
+ .../mellanox/mlx5/core/steering/dr_domain.c        |  5 +-
+ drivers/net/ethernet/pensando/ionic/ionic_lif.c    |  2 +-
+ drivers/net/usb/pegasus.c                          |  4 +-
+ drivers/nfc/st21nfca/i2c.c                         | 29 ++++++---
+ drivers/platform/mellanox/mlxbf-pmc.c              |  4 +-
+ drivers/platform/x86/apple-gmux.c                  |  2 +-
+ drivers/scsi/lpfc/lpfc_debugfs.c                   |  4 +-
+ drivers/scsi/vmw_pvscsi.c                          |  7 +-
+ drivers/usb/gadget/function/f_fs.c                 |  9 ++-
+ drivers/usb/host/xhci-pci.c                        |  5 +-
+ drivers/usb/mtu3/mtu3_gadget.c                     |  8 +++
+ drivers/usb/mtu3/mtu3_qmu.c                        |  7 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c          |  5 +-
+ fs/namespace.c                                     |  9 ++-
+ include/linux/efi.h                                |  6 ++
+ include/linux/memblock.h                           |  4 +-
+ include/net/pkt_sched.h                            | 15 +++++
+ include/net/sch_generic.h                          |  2 -
+ include/net/sctp/sctp.h                            |  6 +-
+ include/net/sctp/structs.h                         |  3 +-
+ include/uapi/linux/nfc.h                           |  6 +-
+ localversion-rt                                    |  2 +-
+ mm/damon/dbgfs.c                                   |  8 +++
+ net/bridge/br_multicast.c                          | 32 +++++++++
+ net/bridge/br_netlink.c                            |  4 +-
+ net/bridge/br_private.h                            | 12 +++-
+ net/bridge/br_sysfs_br.c                           |  4 +-
+ net/bridge/br_vlan_options.c                       |  4 +-
+ net/core/dev.c                                     |  8 +--
+ net/ipv4/af_inet.c                                 | 10 ++-
+ net/ipv6/udp.c                                     |  2 +-
+ net/ncsi/ncsi-netlink.c                            |  6 +-
+ net/sched/act_ct.c                                 | 14 ++--
+ net/sched/cls_api.c                                |  6 +-
+ net/sched/cls_flower.c                             |  3 +-
+ net/sched/sch_frag.c                               |  3 +-
+ net/sctp/diag.c                                    | 12 ++--
+ net/sctp/endpointola.c                             | 23 ++++---
+ net/sctp/socket.c                                  | 23 ++++---
+ net/smc/smc.h                                      |  5 ++
+ net/smc/smc_cdc.c                                  | 52 +++++++--------
+ net/smc/smc_cdc.h                                  |  2 +-
+ net/smc/smc_core.c                                 | 27 ++++++--
+ net/smc/smc_core.h                                 |  6 ++
+ net/smc/smc_ib.c                                   |  4 +-
+ net/smc/smc_ib.h                                   |  1 +
+ net/smc/smc_llc.c                                  |  2 +-
+ net/smc/smc_wr.c                                   | 51 +++------------
+ net/smc/smc_wr.h                                   |  5 +-
+ scripts/recordmcount.pl                            |  2 +-
+ security/selinux/hooks.c                           |  2 +-
+ security/tomoyo/util.c                             | 31 ++++-----
+ sound/hda/intel-sdw-acpi.c                         | 13 +++-
+ tools/perf/builtin-script.c                        |  2 +-
+ tools/perf/scripts/python/intel-pt-events.py       | 23 ++++---
+ tools/perf/util/intel-pt.c                         |  1 +
+ tools/testing/selftests/net/udpgro_fwd.sh          |  6 +-
+ tools/testing/selftests/net/udpgso.c               | 12 ++--
+ tools/testing/selftests/net/udpgso_bench_tx.c      |  8 ++-
+ 103 files changed, 734 insertions(+), 373 deletions(-)
+---

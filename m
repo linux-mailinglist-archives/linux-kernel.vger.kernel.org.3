@@ -2,138 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86955487A60
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF041487A6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240133AbiAGQbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S1348275AbiAGQdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239847AbiAGQbi (ORCPT
+        with ESMTP id S1348268AbiAGQdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:31:38 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADA2C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:31:38 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 8so5828515pgc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:31:38 -0800 (PST)
+        Fri, 7 Jan 2022 11:33:42 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9A3C06173F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:33:41 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id k21so17567198lfu.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8x5aau+9GId4X1fkS/Ix8Wi9zq+PLZoxIQ2oHrW+IM8=;
-        b=L9AJlkClDBCQp2d0qcZIwYZbbM0UJrWK7mAnAs7XoHi5p3eXECQk/DT7ZPdJL6dOLF
-         jIWwg4D0FCWGc+KY752pSLb0iqOUgyV4ueCX1tRs0iyIihUOfu+/nrN1UnQgQtHzU6Q9
-         E2bh0Vzff3Bi2MgEvD6x1btKH7Hj+ZDktF1TswaiGXH2itZ6sMNFH0eff2bzCSZIUzPx
-         Ljeu9mMpDh9SifesE99f/y4hFJusqSEbqQ+3QYY58RlPh7erzlf6CgVoHjBTmnzEr0gg
-         cXvZjK196zShjNX+a2OopX31KfOYlHQPnp5tpCH8PJpwA4n+VcXTb4X9AGr99mUZ2sKJ
-         dpBA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UhF6StDpI+3ZSQ6faKXsbBjH2ED0Nvwq42ETEz4x9/g=;
+        b=GfA0cldfIieDD4gKWyksixy8aDD3yca5nIRpVxlKor5YXoZ73svrV5gQNQWU1QRS+T
+         lG/tO43LaEmQ8cXjrOMICRqHlsDQvFxWqBYVXfOuO5Z18T/XUTq2f+LpzN56W2B4v/Ya
+         MvKg+J3KHJQ1Ugg4I+zfX7lQoNo9OSM9/wODvvxXf5xs9BA5ss2+P4+qjCt4PVMtgbi0
+         cZKETLV9n482jRFAH+DpdfJVfH9y6GcJn7lgrEagqRIc7p1xYQvYu0D5YSJBsbteBUdR
+         Bqc361go5ui1A+xiijGtK+07cIP14v9UBveCyhspOCF7DAoG3KlTMkoXe3S8uaQr6wkk
+         qHxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8x5aau+9GId4X1fkS/Ix8Wi9zq+PLZoxIQ2oHrW+IM8=;
-        b=WZkbkHkxobgw5+LXXpXSg8GVF/fvDJGeL463yVLWeqPBehoMmkUxcwhaWvilYCAZpV
-         xQwovYuDmhc9NkXvBkSMHfTfOCuajE06v6+JZWswy5duT0rfrDvl4K4kcLcetqV9D+E9
-         F07Y1QWEBXLmWG9nGDb+bFyMc8PTEGYzoyZwxjlSOQjHC2eKXN4mknwBWhAhjNND8Nhh
-         3fawinRty0x9rSPt3dOlVxBGydP3ALo1bmJ5rpA7Y0fZjOSMWKmujXCIl9jMNesG+BZw
-         4nmOCWAUwIGVms3HNHynr1TBNwgYLm2yooJ14veXvcOXeL+0ezeZHeMlAcXAIqahbZBC
-         Drig==
-X-Gm-Message-State: AOAM533txzlfIkwPLApJJum1/lEII4TcSFgsHpcj9FYjWVbMjALGXi+i
-        NvOQgTu8T/qGItXxDFKmFQc7XQ==
-X-Google-Smtp-Source: ABdhPJzgG47GKpuKWTf6oJSn9E2fBwBv84lP3oKIaE8NOaZd04A6CCABm5d7mq013onV7fWVKolFbQ==
-X-Received: by 2002:a63:3f88:: with SMTP id m130mr5233049pga.413.1641573097689;
-        Fri, 07 Jan 2022 08:31:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v128sm4290920pfc.36.2022.01.07.08.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 08:31:37 -0800 (PST)
-Date:   Fri, 7 Jan 2022 16:31:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Chia-I Wu <olv@chromium.org>
-Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
-Message-ID: <Ydhq5aHW+JFo15UF@google.com>
-References: <20211129034317.2964790-1-stevensd@google.com>
- <20211129034317.2964790-5-stevensd@google.com>
- <Yc4G23rrSxS59br5@google.com>
- <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
- <YdXrURHO/R82puD4@google.com>
- <YdXvUaBUvaRPsv6m@google.com>
- <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com>
- <YdcpIQgMZJrqswKU@google.com>
- <CAD=HUj5v37wZ9NuNC4QBDvCGO2SyNG2KAiTc9Jxfg=R7neCuTw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UhF6StDpI+3ZSQ6faKXsbBjH2ED0Nvwq42ETEz4x9/g=;
+        b=wZdnbb6jQV6qXIehG+aZhgM1hhVjfPFGoxSsxHG2yEjWUoLhH5sCucAb0SeDE28All
+         rD8WEjGsRp/lp7mSieXkEh2wJqOT0tXML/pVpez/+bvYYt7rRFU4dMYuGsAJPnm1ySfe
+         7RrpQ5Hu/9hrBBqF6h5wfDGjvbmCyUYTHfxoKHkRNPruR7U+H9Hzp+3Uh2gWO30gXeK5
+         MBhad/pWyqJ4qmYAVaLZpEav2q1YOUgaQhE85wVq4Ht7RuXPbOcaGgFAFe+gNrrZkaS9
+         rT7KN3HdDD4j/cwgoDwQHronK0sWoSvMZhsXQDqabJyDS/qbp06R6iM5leI63iyBSZfL
+         tYxg==
+X-Gm-Message-State: AOAM53389j7zxYSe/b4PKYO9qQUIbF0dLeNyR+igQqGB/kBEbrz2GSrl
+        86RCDYStPFFDQWPh3vRVkZxKXhtnOBqHre4WDW3QMA==
+X-Google-Smtp-Source: ABdhPJzEuYs2SrCVpC4N16SjpYsCCsLOn5le1WCCeYZTgg3m4RBql877sG3Jf9246QuyNJuQuYqOyfGO06QpvouC8jI=
+X-Received: by 2002:a05:651c:1246:: with SMTP id h6mr39389480ljh.300.1641573220004;
+ Fri, 07 Jan 2022 08:33:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=HUj5v37wZ9NuNC4QBDvCGO2SyNG2KAiTc9Jxfg=R7neCuTw@mail.gmail.com>
+References: <20220105182939.106885-1-paul@crapouillou.net> <20220105182939.106885-4-paul@crapouillou.net>
+In-Reply-To: <20220105182939.106885-4-paul@crapouillou.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Jan 2022 17:33:04 +0100
+Message-ID: <CAPDyKFpUUPzqonNBrFq68h8QOVxardvf2q7AuEQVeUJ-S2726A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022, David Stevens wrote:
-> > > These are the type of pages which KVM is currently rejecting. Is this
-> > > something that KVM can support?
-> >
-> > I'm not opposed to it.  My complaint is that this series is incomplete in that it
-> > allows mapping the memory into the guest, but doesn't support accessing the memory
-> > from KVM itself.  That means for things to work properly, KVM is relying on the
-> > guest to use the memory in a limited capacity, e.g. isn't using the memory as
-> > general purpose RAM.  That's not problematic for your use case, because presumably
-> > the memory is used only by the vGPU, but as is KVM can't enforce that behavior in
-> > any way.
-> >
-> > The really gross part is that failures are not strictly punted to userspace;
-> > the resulting error varies significantly depending on how the guest "illegally"
-> > uses the memory.
-> >
-> > My first choice would be to get the amdgpu driver "fixed", but that's likely an
-> > unreasonable request since it sounds like the non-KVM behavior is working as intended.
-> >
-> > One thought would be to require userspace to opt-in to mapping this type of memory
-> > by introducing a new memslot flag that explicitly states that the memslot cannot
-> > be accessed directly by KVM, i.e. can only be mapped into the guest.  That way,
-> > KVM has an explicit ABI with respect to how it handles this type of memory, even
-> > though the semantics of exactly what will happen if userspace/guest violates the
-> > ABI are not well-defined.  And internally, KVM would also have a clear touchpoint
-> > where it deliberately allows mapping such memslots, as opposed to the more implicit
-> > behavior of bypassing ensure_pfn_ref().
-> 
-> Is it well defined when KVM needs to directly access a memslot?
+On Wed, 5 Jan 2022 at 19:30, Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> These macros are defined conditionally, according to CONFIG_PM:
+> - if CONFIG_PM is enabled, these macros resolve to
+>   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
+>   exported.
+>
+> - if CONFIG_PM is disabled, these macros will result in a dummy static
+>   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
+>   will then be discarded by the compiler, along with the provided
+>   callback functions if they are not used anywhere else.
+>
+> In the second case, the symbol is not exported, which should be
+> perfectly fine - users of the symbol should all use the pm_ptr() or
+> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
+> client's code will never be accessed.
 
-Not really, there's certainly no established rule.
+How common is it to export the dev_pm_ops? Do we really need a macro for this?
 
-> At least for x86, it looks like most of the use cases are related to nested
-> virtualization, except for the call in emulator_cmpxchg_emulated.
+The similar comment/question applies for patch5.
 
-The emulator_cmpxchg_emulated() will hopefully go away in the nearish future[*].
-Paravirt features that communicate between guest and host via memory is the other
-case that often maps a pfn into KVM.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> Without being able to specifically state what should be avoided, a flag like
-> that would be difficult for userspace to use.
+Kind regards
+Uffe
 
-Yeah :-(  I was thinking KVM could state the flag would be safe to use if and only
-if userspace could guarantee that the guest would use the memory for some "special"
-use case, but hadn't actually thought about how to word things.
-
-The best thing to do is probably to wait for for kvm_vcpu_map() to be eliminated,
-as described in the changelogs for commits:
-
-  357a18ad230f ("KVM: Kill kvm_map_gfn() / kvm_unmap_gfn() and gfn_to_pfn_cache")
-  7e2175ebd695 ("KVM: x86: Fix recording of guest steal time / preempted status")
-
-Once that is done, everything in KVM will either access guest memory through the
-userspace hva, or via a mechanism that is tied into the mmu_notifier, at which
-point accessing non-refcounted struct pages is safe and just needs to worry about
-not corrupting _refcount.
+> ---
+>
+> Notes:
+>     v2: Remove useless empty line
+>
+>  include/linux/pm.h | 32 +++++++++++++++++++++++++++++---
+>  1 file changed, 29 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 389e600df233..b82f40e701ab 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _LINUX_PM_H
+>  #define _LINUX_PM_H
+>
+> +#include <linux/export.h>
+>  #include <linux/list.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/spinlock.h>
+> @@ -357,14 +358,39 @@ struct dev_pm_ops {
+>  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+>  #endif
+>
+> +#define _DEFINE_DEV_PM_OPS(name, \
+> +                          suspend_fn, resume_fn, \
+> +                          runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+> +const struct dev_pm_ops name = { \
+> +       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +       RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+> +}
+> +
+>  /*
+>   * Use this if you want to use the same suspend and resume callbacks for suspend
+>   * to RAM and hibernation.
+>   */
+>  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops name = { \
+> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
+> +
+> +#ifdef CONFIG_PM
+> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +                          runtime_resume_fn, idle_fn, sec) \
+> +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +                          runtime_resume_fn, idle_fn); \
+> +       _EXPORT_SYMBOL(name, sec)
+> +#else
+> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +                          runtime_resume_fn, idle_fn, sec) \
+> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
+> +                                        resume_fn, runtime_suspend_fn, \
+> +                                        runtime_resume_fn, idle_fn)
+> +#endif
+> +
+> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
+> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
+>
+>  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> --
+> 2.34.1
+>

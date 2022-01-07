@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7ED487049
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E37448704A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345352AbiAGCV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345289AbiAGCV1 (ORCPT
+        id S1345354AbiAGCWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:22:30 -0500
+Received: from mail-qk1-f170.google.com ([209.85.222.170]:33607 "EHLO
+        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344468AbiAGCW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:21:27 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCA2C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:21:27 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id d34so1804122ybi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:21:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w70wbEdrZB71eZ7G5vu7np2TisVg/QSyUt9QnspenOc=;
-        b=PJzY3wgh+mwzx/EdpWDTNd9qDUJSucxLoxDlCP73jyOvxKm+qXxPYA1o+dMHW2MdVO
-         XI0G0g0Ml2Gv3hYdGaLawxZiY4/2rPyx4OdBV5vHL5nSb8/AGkvP6ZnU4ZX1nHR70mbl
-         z4QtjCr0pgIwTgGF1JP2jZ9quepjPmmKr2sWI=
+        Thu, 6 Jan 2022 21:22:29 -0500
+Received: by mail-qk1-f170.google.com with SMTP id de30so4660967qkb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:22:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w70wbEdrZB71eZ7G5vu7np2TisVg/QSyUt9QnspenOc=;
-        b=Lsy1c8WKAF9v91XYaAzdHfCTXFoY4B7aN9KeoxSXNujUNAdlRyTINE5dU02h4fmSSr
-         pRI9+XwucbNMPlVWj/C3yW6br6h73aBynKJ43rh0JEXlUUQym2zzWc50k908WKWzbJjl
-         rspAHMyYOkJHfT8HVclPtNJM6Ju/FEU7mcO0ymG1LMj9nhFYU3qpGiHl2qC+l9S63DGE
-         x8Aa/k7xwhbkey+T0Q0n4eWmVKNnXgmK1roIN+WUjB40L1vgy6FPdGe7TTKoDImCwjTc
-         FFQcAFsxo8+xY5L62G7u12JMZNEsZVi15U6TW9fX6UnxKeXTDy056S+agArQxyrmG86c
-         Gdrw==
-X-Gm-Message-State: AOAM533+IWgoFqBocvcSdRe6z3hwGp5XyKB6U0KAC6/vr1yKaCb6jUwd
-        DCldMN7gz0qlC4lBmiv1adDZGrMKya9HRkEEIwNuzA==
-X-Google-Smtp-Source: ABdhPJyuGGdU1B4YPxYw/nS3nAD5s2wMNZ+axp3cZ+2j8IbHcyK/rE3IBGrNqTjmYE1Q7yj1rCOt5p2M1WYW4AGGLcg=
-X-Received: by 2002:a25:5ca:: with SMTP id 193mr70981373ybf.406.1641522086754;
- Thu, 06 Jan 2022 18:21:26 -0800 (PST)
+        bh=Ozs941wKBNQg3LxRfsqbP6OaMzoQiK3QsZ3gg9gac/I=;
+        b=gVle5U3uroiVNOrc//pSaayI2TrK4rt+PcvXJlgZKzuJrLvJy06nhrOvr0Fo8ds9o9
+         XVE6CfGc7Ja4TTNbicaELjh9KaUL33VJij7TpXM5W7D5ZsO303mJlEQsUMsI68jTKXjc
+         Hi65M9tcBLdw8MW0hCjAQfEk0cBYaTEucKKVZ831ITdMyVLDLkKl+kQGr+PuZkhLBqdb
+         wvPwpWxpoEfWae5USKE0DPJVFC+fvOrXNX2gFnv8Ar85W2mJIQSSHeD1x25GWQGnU4Fb
+         SyvHET1amqL1SPRRYXwufyYVokYKIcMgqF1Xu79MK70GH1c7sPKHY18iU3zXOEOXDeog
+         0Jbw==
+X-Gm-Message-State: AOAM531lRdfoY+iKpzhZ0jMIF5kl6NLnrj13o3LkXH7qkHwl20pgfZ6A
+        /bhHVOtU3uJzCa4T2fNGFPkvfLDIb+g8Ycf9
+X-Google-Smtp-Source: ABdhPJwVTSNqkpnFR42PZcd6sbHrGIi3qTOhfcAnMm3VgYk2mm9CSdgpRUp3dHxDDiHj12ix+grAiQ==
+X-Received: by 2002:a05:620a:4485:: with SMTP id x5mr42125706qkp.277.1641522148858;
+        Thu, 06 Jan 2022 18:22:28 -0800 (PST)
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com. [209.85.219.52])
+        by smtp.gmail.com with ESMTPSA id bs30sm2496214qkb.87.2022.01.06.18.22.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jan 2022 18:22:28 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id kd9so4176042qvb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:22:27 -0800 (PST)
+X-Received: by 2002:a05:6214:1d01:: with SMTP id e1mr4141088qvd.72.1641522147639;
+ Thu, 06 Jan 2022 18:22:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20211129034317.2964790-1-stevensd@google.com> <20211129034317.2964790-5-stevensd@google.com>
- <Yc4G23rrSxS59br5@google.com> <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
- <YdXrURHO/R82puD4@google.com> <YdXvUaBUvaRPsv6m@google.com>
- <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com> <YdcpIQgMZJrqswKU@google.com>
-In-Reply-To: <YdcpIQgMZJrqswKU@google.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Fri, 7 Jan 2022 11:21:15 +0900
-Message-ID: <CAD=HUj5v37wZ9NuNC4QBDvCGO2SyNG2KAiTc9Jxfg=R7neCuTw@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Chia-I Wu <olv@chromium.org>
+References: <20211230014543.1799867-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20211230014543.1799867-1-jiasheng@iscas.ac.cn>
+From:   Li Yang <leoyang.li@nxp.com>
+Date:   Fri, 7 Jan 2022 10:22:15 +0800
+X-Gmail-Original-Message-ID: <CADRPPNSsLYzv6ueSqVu4b3yep7JYLJBJcNwbiBVG61ADyqaPBw@mail.gmail.com>
+Message-ID: <CADRPPNSsLYzv6ueSqVu4b3yep7JYLJBJcNwbiBVG61ADyqaPBw@mail.gmail.com>
+Subject: Re: [PATCH] soc: fsl: qe: Check of ioremap return value
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     Zhao Qiang <qiang.zhao@nxp.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > These are the type of pages which KVM is currently rejecting. Is this
-> > something that KVM can support?
+On Thu, Dec 30, 2021 at 9:47 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
 >
-> I'm not opposed to it.  My complaint is that this series is incomplete in that it
-> allows mapping the memory into the guest, but doesn't support accessing the memory
-> from KVM itself.  That means for things to work properly, KVM is relying on the
-> guest to use the memory in a limited capacity, e.g. isn't using the memory as
-> general purpose RAM.  That's not problematic for your use case, because presumably
-> the memory is used only by the vGPU, but as is KVM can't enforce that behavior in
-> any way.
+> As the possible failure of the ioremap(), the par_io could be NULL.
+> Therefore it should be better to check it and return error in order to
+> guarantee the success of the initiation.
+> But, I also notice that all the caller like mpc85xx_qe_par_io_init() in
+> `arch/powerpc/platforms/85xx/common.c` don't check the return value of
+> the par_io_init().
+> Actually, par_io_init() needs to check to handle the potential error.
+> I will submit another patch to fix that.
+> Anyway, par_io_init() itsely should be fixed.
 >
-> The really gross part is that failures are not strictly punted to userspace;
-> the resulting error varies significantly depending on how the guest "illegally"
-> uses the memory.
->
-> My first choice would be to get the amdgpu driver "fixed", but that's likely an
-> unreasonable request since it sounds like the non-KVM behavior is working as intended.
->
-> One thought would be to require userspace to opt-in to mapping this type of memory
-> by introducing a new memslot flag that explicitly states that the memslot cannot
-> be accessed directly by KVM, i.e. can only be mapped into the guest.  That way,
-> KVM has an explicit ABI with respect to how it handles this type of memory, even
-> though the semantics of exactly what will happen if userspace/guest violates the
-> ABI are not well-defined.  And internally, KVM would also have a clear touchpoint
-> where it deliberately allows mapping such memslots, as opposed to the more implicit
-> behavior of bypassing ensure_pfn_ref().
+> Fixes: 7aa1aa6ecec2 ("QE: Move QE from arch/powerpc to drivers/soc")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-Is it well defined when KVM needs to directly access a memslot? At
-least for x86, it looks like most of the use cases are related to
-nested virtualization, except for the call in
-emulator_cmpxchg_emulated. Without being able to specifically state
-what should be avoided, a flag like that would be difficult for
-userspace to use.
+Applied for next.  Thanks.
 
-> If we're clever, we might even be able to share the flag with the "guest private
-> memory"[*] concept being pursued for confidential VMs.
+> ---
+>  drivers/soc/fsl/qe/qe_io.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> [*] https://lore.kernel.org/all/20211223123011.41044-1-chao.p.peng@linux.intel.com
+> diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
+> index e277c827bdf3..a5e2d0e5ab51 100644
+> --- a/drivers/soc/fsl/qe/qe_io.c
+> +++ b/drivers/soc/fsl/qe/qe_io.c
+> @@ -35,6 +35,8 @@ int par_io_init(struct device_node *np)
+>         if (ret)
+>                 return ret;
+>         par_io = ioremap(res.start, resource_size(&res));
+> +       if (!par_io)
+> +               return -ENOMEM;
+>
+>         if (!of_property_read_u32(np, "num-ports", &num_ports))
+>                 num_par_io_ports = num_ports;
+> --
+> 2.25.1
+>

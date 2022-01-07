@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2253F4870C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188A64870CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345590AbiAGCvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:51:45 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17331 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344814AbiAGCvk (ORCPT
+        id S1344955AbiAGCzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344704AbiAGCzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:51:40 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JVSQ301Y5z90xm;
-        Fri,  7 Jan 2022 10:50:35 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 10:51:38 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <gustavoars@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-Subject: [PATCH -next] sched: Use struct_size() helper in task_numa_group()
-Date:   Fri, 7 Jan 2022 10:52:12 +0800
-Message-ID: <20220107025212.177040-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 6 Jan 2022 21:55:08 -0500
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8BDC061245;
+        Thu,  6 Jan 2022 18:55:08 -0800 (PST)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id B04C46EB4; Thu,  6 Jan 2022 21:55:06 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org B04C46EB4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1641524106;
+        bh=mV/CusCbYN+ImDIAt+xzz3GQo7TXQaG57+I89Ej6n/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PidLj1BKKe2RHUPM8IfJuH/zCpPTWeh07ovOHSPDgerCJKrkdUemDAfCLBYkaB1nu
+         IE6220rYJNKUryzB6XE6+Kfm01rlnu/d8CjQIme8gDbNXk2hVR78rR8cUNz5sFkknH
+         CwdVk4OTvP1pCOtIgL7UWObJIbqCt0uDwGZxwmcQ=
+Date:   Thu, 6 Jan 2022 21:55:06 -0500
+From:   "J. Bruce Fields" <bfields@fieldses.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: state of the nfsd tree
+Message-ID: <20220107025506.GA16601@fieldses.org>
+References: <20220107134621.7814487b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220107134621.7814487b@canb.auug.org.au>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of struct_size() helper instead of an open-coded calculation.
-There is no functional change in this patch.
+On Fri, Jan 07, 2022 at 01:46:21PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> I noticed commit
+> 
+>   a71baee992c6 ("MAINTAINERS: remove bfields")
+> 
+> in the cel tree and was sondering if I shuld remove the nfsd tree
+> (git://git.linux-nfs.org/~bfields/linux.git#nfsd-next) from linux-next.
 
-Link: https://github.com/KSPP/linux/issues/160
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- kernel/sched/fair.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Sounds like a good idea to me.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 095b0aa378df..265e37be0c92 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2437,11 +2437,8 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
- 	int i;
- 
- 	if (unlikely(!deref_curr_numa_group(p))) {
--		unsigned int size = sizeof(struct numa_group) +
--				    NR_NUMA_HINT_FAULT_STATS *
--				    nr_node_ids * sizeof(unsigned long);
--
--		grp = kzalloc(size, GFP_KERNEL | __GFP_NOWARN);
-+		grp = kzalloc(struct_size(grp, faults, NR_NUMA_HINT_FAULT_STATS * nr_node_ids),
-+			      GFP_KERNEL | __GFP_NOWARN);
- 		if (!grp)
- 			return;
- 
--- 
-2.17.1
+> Maybe I sould rename the cel tree
+> (git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux#for-next)
+> to be the nfsd treeas well?
 
+Probably so.
+
+--b.

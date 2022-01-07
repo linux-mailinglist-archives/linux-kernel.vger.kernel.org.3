@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D4E487940
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703EC487942
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347865AbiAGOwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S239306AbiAGOwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239306AbiAGOv4 (ORCPT
+        with ESMTP id S239040AbiAGOwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:51:56 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01860C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:51:56 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id f17so3222186qtf.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:51:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8nl5vAeNGSOns35uL+fkC4uu+J6bk11HauJCQV7waYU=;
-        b=C/yvRfk+luoRHRR7kHkAThuRQYp4xm78a5kqIhQ8UpMeNBe0eGmcD1kQ7myXnJWzXD
-         Oc42tbOu6W//pMLS0RGc4l/yNqSmsIdk8WcpzutVWaYfhLGVSG/l5x5zu/t+SunX4i0r
-         ufP5oiYWU+ohl1aNtMR43P6ArASJUA+rBwf9NRMzzb8w/5h5qDGWEBke1mIjFSBViS9g
-         grsrZhMmuMCpotC6ymi092bmB9rl5cpdcymiOxkZyNmY0pPAnVp1GlYke9XK+NXR9xsW
-         AQBIkMDX+K5MhSQwkSS5u2nHOIXO6OAmqTKeS+wBLdUN5iEHzL1etCH04z38tIMIEaA2
-         xw5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8nl5vAeNGSOns35uL+fkC4uu+J6bk11HauJCQV7waYU=;
-        b=jFfi0JELUw7nSeIffFBxNnNLjrL6OLwhV4srunKbO3xjAf4mEiCxavoe37vab27jpE
-         7qMVV8nfwMrWcUmjhfRjkSbVvDvAm1u7kTLmJ7Pq+mUCyBUnwoUL8yZ1V5CipVUpCS0n
-         S/otf1jJJY9GiwfbnogOOWUqyVle/Tr27pv7Pzn+yNiUR011vS7tlYgOZyNtxI5ZXkYs
-         nVTQzETNQYYHNEKYdBUdIVXreQ9dwjxGEx1zabYP/KuIyZxMcLtMjs42Xza7Sjz5Arrg
-         SfAD3Fr3myUofLRbgBUwz/W6CXfbPdzXwCoXBIDGWuOboBhR8MQM/HzYYvcMGH/QSALf
-         lxVA==
-X-Gm-Message-State: AOAM531013+Bf+BC800MxPPpHLUYLd9P/pKhTb7/OBm9n9X4cgpDNhai
-        e9HoNIWnrLQMpwdvifVkaXCITw==
-X-Google-Smtp-Source: ABdhPJw+X70xUw0SSMUFrYRmkB6I8xJ9Ys/8V5scbKprm7qM3U7XyJoaBel6NBHVbSQjcZTvZULcnA==
-X-Received: by 2002:a05:622a:1010:: with SMTP id d16mr8179622qte.81.1641567115127;
-        Fri, 07 Jan 2022 06:51:55 -0800 (PST)
-Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id az16sm3776899qkb.124.2022.01.07.06.51.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 06:51:54 -0800 (PST)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     bjorn.andersson@linaro.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, herbert@gondor.apana.org.au
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Update email address
-Date:   Fri,  7 Jan 2022 09:51:54 -0500
-Message-Id: <20220107145154.458779-1-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 7 Jan 2022 09:52:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547B9C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:52:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F10AF611EC
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB90C36AE0;
+        Fri,  7 Jan 2022 14:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641567154;
+        bh=SSfH/FiGlP71ZZUlQcsn9kFCbrQiH+wUpaW61PMfEsU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vf3InwUDtTiZYBDEYD1PXZ0vo4JsxTKiWCPm7eEa5NwSwHpA2IbPdBGfAk+toIeZe
+         2UBdYFaOwA6g6l0WFmqIVLRsTUoouyUcBBqNZfkiQLh4AsKWpxE5NrAneeM82ch/ES
+         FPNd81XaoPw40rjuVbtYdNim+LekCfDz6eOxly37dSKHXyA6h8VjiHDJWRhZqejyOe
+         IQiXgdGVVPgAfFl0kQMUE20Ml+BiuKKMTq9r56Xd1JNL1m9S/jOCxecD6O5pLhLnEU
+         lbfQuxkeXGAKQ50YfjaHh8DtRv7q2k/vT72mZSNnowrgRS6hbsI6U3o5N/AGtMGIzy
+         FmT+qXHgkHl+g==
+Date:   Fri, 7 Jan 2022 14:52:30 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
+Message-ID: <YdhTrkcFASCwOD2w@sirena.org.uk>
+References: <20220106175019.3116389-1-festevam@gmail.com>
+ <Ydc2EHf5f12w4YcW@sirena.org.uk>
+ <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
+ <YddLe8cCvj5fVBTQ@sirena.org.uk>
+ <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
+ <CAOMZO5DQEEHYJHv08nC=uYXbFtL9VTAatNAB8V5D_JHiQ0q=3A@mail.gmail.com>
+ <Ydg/tOqbeT1Cg6sh@sirena.org.uk>
+ <CAOMZO5AJy7arJM9v9A6n84k7yzWEoBxX5zTakK50dL6obSR6WA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NYF0mpFJBDkO0H1w"
+Content-Disposition: inline
+In-Reply-To: <CAOMZO5AJy7arJM9v9A6n84k7yzWEoBxX5zTakK50dL6obSR6WA@mail.gmail.com>
+X-Cookie: teamwork, n.:
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update my email address in the MAINTAINERS file as  the current
-one will stop functioning in a while.
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
----
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--NYF0mpFJBDkO0H1w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fb18ce7168aa..afcdd7588822 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15751,7 +15751,7 @@ F:	Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
- F:	drivers/cpufreq/qcom-cpufreq-nvmem.c
- 
- QUALCOMM CRYPTO DRIVERS
--M:	Thara Gopinath <thara.gopinath@linaro.org>
-+M:	Thara Gopinath <thara.gopinath@gmail.com>
- L:	linux-crypto@vger.kernel.org
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
-@@ -15868,7 +15868,7 @@ F:	include/linux/if_rmnet.h
- 
- QUALCOMM TSENS THERMAL DRIVER
- M:	Amit Kucheria <amitk@kernel.org>
--M:	Thara Gopinath <thara.gopinath@linaro.org>
-+M:	Thara Gopinath <thara.gopinath@gmail.com>
- L:	linux-pm@vger.kernel.org
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
--- 
-2.25.1
+On Fri, Jan 07, 2022 at 11:48:59AM -0300, Fabio Estevam wrote:
 
+> Will send a patch shortly.
+
+Great!
+
+--NYF0mpFJBDkO0H1w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHYU60ACgkQJNaLcl1U
+h9DRpgf+K5T8FgNihxDvrOK7OMo2h3IKSL1qW43wl5wHDoWTDTBT8KBPIu2Ppz7Y
+J5PbRv83gE9Iin9FAH2nOD52kyUn5OhsqBVBygSYtT3/JL4Mm+MSeB+s6gSh7uHs
+lxsKR19B0DQpZQgUKIi6Qq5UPGpf13S4L4SA0Rvk7/kjAfyjtYg1sHUAsLnjvhjU
+CcDdKbS98aZbmR7gfbgtZGMSE4RXv/jOETlj0lwhGsNYNuAuxJShq7n/TU0ZNDOM
+2kesLX1g4S9LxfClEcVxpZy5u2XzCanMMqNOZoPoP6AAgFRTKG8yc5AVt0NUoFGI
+pm8YgovDPrVmYhBqLbTSZO7eSmdXeA==
+=qfGs
+-----END PGP SIGNATURE-----
+
+--NYF0mpFJBDkO0H1w--

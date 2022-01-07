@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E553487771
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B67487784
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238274AbiAGMJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiAGMJF (ORCPT
+        id S238675AbiAGMQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:16:30 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52116 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238068AbiAGMQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:09:05 -0500
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0357AC061245
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 04:09:04 -0800 (PST)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JVhpP4dy5zMwpPR;
-        Fri,  7 Jan 2022 13:09:01 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4JVhpM0bdNzlhSMW;
-        Fri,  7 Jan 2022 13:08:58 +0100 (CET)
-Message-ID: <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
-Date:   Fri, 7 Jan 2022 13:14:30 +0100
+        Fri, 7 Jan 2022 07:16:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D193D61E29;
+        Fri,  7 Jan 2022 12:16:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2786C36AE0;
+        Fri,  7 Jan 2022 12:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641557786;
+        bh=OEzm5MxALJhNyOsku6yeW8tVG6buBywhtCNcnD3+YQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A/O0s2vskaTBSjzYQm5b8+ZRXYYMIKuIAle6eknlF7nl0dryrHI05pKeRnttJ3cgD
+         3jOFCyhW7Ujlt3qz599IH1LN9jvKA4XPwEYg8XeuG7XHJnVlBz+KDIXoINUAYlsDf3
+         eSCZgqnyJhgy0byAdZYXjazOosp6qy+Xq2jNfp19bTDDpw55nlRAhy5sJz0hIoZxsu
+         +++oRMOlvtyU26P9VxTmO/iHnJoR/zIm8Dy3snPuETP51PYJFnOaEk06VQCLYU/gUh
+         i5m/KbkRAM+SjfypyJ6vdGd8yymDc6r1GIJSXNJgRrdCI5BtRht6Zhp8UgEaiZmS68
+         YoFUDg+rO4uRw==
+Date:   Fri, 7 Jan 2022 14:16:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YdgvFTIRboHwTgRT@iki.fi>
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
+ <db9b7bc9-fdca-4dd2-2c3f-3b7354c165bb@kernel.org>
+ <YawAWmodeNaUbzV8@iki.fi>
+ <a1b14f33-5142-8cab-3b5f-4cc79b62091e@intel.com>
+ <a24bc46e4ba8a69938a7f73012019ce0f61005c2.camel@kernel.org>
+ <f6a55943-13ef-41ef-609a-6406cffef513@intel.com>
+ <YcsklLw1uFyppSji@iki.fi>
+ <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>
-References: <20210712170313.884724-1-mic@digikod.net>
- <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net> <YcGVZitNa23PCSFV@iki.fi>
- <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net> <Ydc/E3S2vmtDOnpw@iki.fi>
- <YddADJJNLDlQAYRW@iki.fi>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
-In-Reply-To: <YddADJJNLDlQAYRW@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 06, 2022 at 09:46:06AM -0800, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 12/28/2021 6:52 AM, Jarkko Sakkinen wrote:
+> > On Mon, Dec 13, 2021 at 02:10:17PM -0800, Reinette Chatre wrote:
+> >> Hi Jarkko,
+> >>
+> >> On 12/10/2021 11:42 PM, Jarkko Sakkinen wrote:
+> >>> On Mon, 2021-12-06 at 13:20 -0800, Reinette Chatre wrote:
+> >>>>> This is a valid question. Since EMODPE exists why not just make things for
+> >>>>> EMODPE, and ignore EMODPR altogether?
+> >>>>>
+> >>>>
+> >>>> I believe that we should support the best practice of principle of least
+> >>>> privilege - once a page no longer needs a particular permission there
+> >>>> should be a way to remove it (the unneeded permission).
+> >>>
+> >>> What if EMODPR was not used at all, since EMODPE is there anyway?
+> >>
+> >> EMODPR and EMODPE are not equivalent.
+> >>
+> >> EMODPE can only be used to "extend"/relax permissions while EMODPR can only
+> >> be used to restrict permissions.
+> >>
+> >> Notice in the EMODPE instruction reference of the SDM:
+> >>
+> >> (* Update EPCM permissions *)
+> >> EPCM(DS:RCX).R := EPCM(DS:RCX).R | SCRATCH_SECINFO.FLAGS.R;
+> >> EPCM(DS:RCX).W := EPCM(DS:RCX).W | SCRATCH_SECINFO.FLAGS.W;
+> >> EPCM(DS:RCX).X := EPCM(DS:RCX).X | SCRATCH_SECINFO.FLAGS.X;
+> >>
+> >> So, when using EMODPE it is only possible to add permissions, not remove
+> >> permissions.
+> >>
+> >> If a user wants to remove permissions from an EPCM page it is only possible
+> >> when using EMODPR. Notice in its instruction reference found in the SDM how
+> >> it in turn can only be used to restrict permissions:
+> >>
+> >> (* Update EPCM permissions *)
+> >> EPCM(DS:RCX).R := EPCM(DS:RCX).R & SCRATCH_SECINFO.FLAGS.R;
+> >> EPCM(DS:RCX).W := EPCM(DS:RCX).W & SCRATCH_SECINFO.FLAGS.W;
+> >> EPCM(DS:RCX).X := EPCM(DS:RCX).X & SCRATCH_SECINFO.FLAGS.X;
+> > 
+> > OK, so the question is: do we need both or would a mechanism just to extend
+> > permissions be sufficient?
+> 
+> I do believe that we need both in order to support pages having only
+> the permissions required to support their intended use during the time the
+> particular access is required. While technically it is possible to grant
+> pages all permissions they may need during their lifetime it is safer to
+> remove permissions when no longer required.
 
-On 06/01/2022 20:16, Jarkko Sakkinen wrote:
-> On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
->> On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
->>>
->>> On 21/12/2021 09:50, Jarkko Sakkinen wrote:
->>>> On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
->>>>> Hi Jarkko,
->>>>>
->>>>> Since everyone seems OK with this and had plenty of time to complain, could
->>>>> you please take this patch series in your tree? It still applies on
->>>>> v5.16-rc5 and it is really important to us. Please let me know if you need
->>>>> something more.
->>>>>
->>>>> Regards,
->>>>>    Mickaël
->>>>
->>>> I'm off-work up until end of the year, i.e. I will address only important
->>>> bug fixes and v5.16 up until that.
->>>>
->>>> If any of the patches is yet missing my ack, feel free to
->>>>
->>>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>
->>> Thanks Jarkko. Can you please take it into your tree?
->>
->> I can yes, as I need to anyway do a revised PR for v5.17, as one commit
->> in my first trial had a truncated fixes tag.
-> 
-> Please check:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> 
-> /Jarkko
+So if we imagine a run-time: how EMODPR would be useful, and how using it
+would make things safer?
 
-Great, thanks!
+/Jarkko

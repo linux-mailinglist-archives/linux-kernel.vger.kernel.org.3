@@ -2,201 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FE5487AD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27989487AD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348391AbiAGQ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:58:28 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:42218 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240182AbiAGQ60 (ORCPT
+        id S1348400AbiAGQ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:59:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55635 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231523AbiAGQ74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:58:26 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CD55A212C9;
-        Fri,  7 Jan 2022 16:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641574704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 7 Jan 2022 11:59:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641574796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H8FQTxCSaXobv79wKMviWdxMIyZK3K1KzS8f/6eUeio=;
-        b=Vj7Pn1v9b6e2yk3AO2G3XAA6rYAbLOJ1TtblVWH0NW18+yh5L4oafKVVCpbNmuEH+KaABF
-        89jEE4DtBwthjOsXBSQ+y/JA1dLCARXSW29swHQxGyj9x/++TcF+mWu4BM9fN7zwTZkpfg
-        bha1DVjmRMGw3kc4ZxOqwzyj33acxWE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641574704;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H8FQTxCSaXobv79wKMviWdxMIyZK3K1KzS8f/6eUeio=;
-        b=eHP7GlMOpEhfkAKy7wMaJH0n0Stew7ZEGmsS2l1i1rHiGX54sBR/6qZuGRMSjevRWVAlTG
-        ZXQuxaHReWWa6KAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CC9713D21;
-        Fri,  7 Jan 2022 16:58:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mfKfITBx2GECOwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 07 Jan 2022 16:58:24 +0000
-Message-ID: <91d662f1-baf6-1114-f237-a66ebc164009@suse.cz>
-Date:   Fri, 7 Jan 2022 17:58:24 +0100
+        bh=+lmUBbsP+HB/oFdKh0UL456mGzPQATQ/BH2hseISnSI=;
+        b=Z9oiQjle49FzWgc0iXktoxuTV0+ywEKsoepIutLN/L/xvnGVVZdWqW0I5VfAaJgyVwVIdx
+        sRtrQWp3Tyzl3q7sz79hcH5QZYtkueTno+vJQereQireH/i5F0WWA1qyORi6pvZmNu1GDG
+        xluSLKpVFXiI4CL+WkJLZGL7OfNVhSw=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-213-xH7cruEHOVucua9iIkby7Q-1; Fri, 07 Jan 2022 11:59:52 -0500
+X-MC-Unique: xH7cruEHOVucua9iIkby7Q-1
+Received: by mail-ed1-f70.google.com with SMTP id g11-20020a056402090b00b003f8fd1ac475so5168051edz.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:59:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+lmUBbsP+HB/oFdKh0UL456mGzPQATQ/BH2hseISnSI=;
+        b=oaGmBhTt8+9jW3VXJWSj2zh2OEK4I4Sg7YtjJMVFnZ9UDRdXmNs05X5YK2UvmBR//F
+         uL3HuZBI3eIgwMQ3c7pzTpXpDjcqn4ADxVRRpZaDzxTPUCfZY2aQXdirjEK1aYL8DWwS
+         6JxqfbMqJjRKyym1AU4kLt6fPHAULGd9qrDdfiz/Yg5luYv3GDyqVsqnxTDBJwQQ4f67
+         q6dGoKl+mCaNws6iHfwMpNyT23FzCvu9WuDRKyjzQkpoTJdPfF08L3e/J4QUchlvLYu5
+         eoSHcthcWSwFoGMkgl77P1bVyk8jRSlSGo/dMUKlhqNImZzVTpeDibgf3oeoPhZWiHsD
+         qKmQ==
+X-Gm-Message-State: AOAM530p9/IjZjQFr8Zck2uArh3WIMzZiBH7HL6q3ztLYfcJby7J6q9R
+        EP53W/ziOIx7gbQSVio/uoH0+AiTagURPZGQw0h69SaUUkIFxwUPzq7Hg9wXOi+iF1yW47h2HcR
+        T+dnbLsuA3flttDbattY5SXV1
+X-Received: by 2002:a17:907:728c:: with SMTP id dt12mr6801669ejc.188.1641574791644;
+        Fri, 07 Jan 2022 08:59:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxstuz4ig67e43HaTHAZvQGqrXrTiJRix3l13GLpwNya6AHdYZ9BVvZwFAXZ2GF+Ih0NRgT0A==
+X-Received: by 2002:a17:907:728c:: with SMTP id dt12mr6801658ejc.188.1641574791469;
+        Fri, 07 Jan 2022 08:59:51 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id jg38sm1543421ejc.154.2022.01.07.08.59.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 08:59:50 -0800 (PST)
+Message-ID: <b57f1785-e61f-20dd-49e1-76dfc1917df8@redhat.com>
+Date:   Fri, 7 Jan 2022 17:59:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] sysinfo: include availram field in sysinfo struct
+ Thunderbird/91.4.0
+Subject: Re: [PATCH RESEND] KVM: x86/pmu: Make top-down.slots event
+ unavailable in supported leaf
 Content-Language: en-US
-To:     Pintu Agarwal <pintu.ping@gmail.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Cyrill Gorcunov <gorcunov@gmail.com>,
-        Pintu Kumar <quic_pintu@quicinc.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>, ebiederm@xmission.com,
-        sfr@canb.auug.org.au, legion@kernel.org, sashal@kernel.org,
-        chris.hyser@oracle.com, ccross@google.com, pcc@google.com,
-        dave@stgolabs.net, caoxiaofeng@yulong.com, david@redhat.com,
-        Linux API <linux-api@vger.kernel.org>
-References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
- <YdcUttZWaqYQpR1K@grain>
- <CAOuPNLifYFPU4Gt2+1sOSsYNNLQq7U2aGVaYknrhaMc-CVx8vg@mail.gmail.com>
- <Ydcmk+WaBWKlLkAw@grain> <20220107120451.z2eqru2tm5mlhla3@wittgenstein>
- <CAOuPNLiJZu_HJQ+Hf5BJOgmT+v7DT96VLkiXrfx0MJQrkD3rSw@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAOuPNLiJZu_HJQ+Hf5BJOgmT+v7DT96VLkiXrfx0MJQrkD3rSw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220105050711.67280-1-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220105050711.67280-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC linux-api
+On 1/5/22 06:07, Like Xu wrote:
+> +		/*
+> +		 * The 8th Intel pre-defined architectural event (Topdown Slots) will be supported
+> +		 * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
+> +		 *
+> +		 * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
+> +		 * to make this event unavailable in a consistent way.
+> +		 */
+> +		if (edx.split.num_counters_fixed < 4) {
+> +			if (eax.split.mask_length > 7)
+> +				eax.split.mask_length--;
+> +			if (eax.split.mask_length > 7)
+> +				cap.events_mask |= BIT_ULL(7);
+> +		}
+> +
 
-On 1/7/22 14:44, Pintu Agarwal wrote:
-> On Fri, 7 Jan 2022 at 17:35, Christian Brauner
-> <christian.brauner@ubuntu.com> wrote:
->>
->> On Thu, Jan 06, 2022 at 08:27:47PM +0300, Cyrill Gorcunov wrote:
->> > On Thu, Jan 06, 2022 at 10:19:55PM +0530, Pintu Agarwal wrote:
->> > > > > diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
->> > > > > index 435d5c2..6e77e90 100644
->> > > > > --- a/include/uapi/linux/sysinfo.h
->> > > > > +++ b/include/uapi/linux/sysinfo.h
->> > > > > @@ -12,6 +12,7 @@ struct sysinfo {
->> > > > >       __kernel_ulong_t freeram;       /* Available memory size */
->> > > > >       __kernel_ulong_t sharedram;     /* Amount of shared memory */
->> > > > >       __kernel_ulong_t bufferram;     /* Memory used by buffers */
->> > > > > +     __kernel_ulong_t availram;      /* Memory available for allocation */
->> > > > >       __kernel_ulong_t totalswap;     /* Total swap space size */
->> > > > >       __kernel_ulong_t freeswap;      /* swap space still available */
->> > > > >       __u16 procs;                    /* Number of current processes */
->> > > >
->> > > > Hi! Sorry, but I don't understand -- the sysinfo structure seems to
->> > > > be part of user API, no? Don't we break it up here?
->> > >
->> > > Yes, the corresponding user space header /usr/include/linux/sysinfo.h
->> > > also needs to be updated.
->> > > When we generate the kernel header it will be updated automatically.
->> >
->> > Wait. The userspace may pass old structure here, and in result we
->> > return incorrect layout which won't match old one, no? Old binary
->> > code has no clue about this header update.
->>
->> Yes, that won't work as done.
->>
->> If we want to do this it needs to be done at the end of the struct right
->> before the padding field and the newly added field substracted from the
->> padding. (Not the preferred way to do it these days for new structs.)
->>
->> A new kernel can then pass in the struct with the newly added field and
->> an old kernel can just fill the struct in as usual. New kernel will
->> update the field with the correct value.
->>
->> But there's a catch depending on the type of value.
->> The problem with these types of extensions is that you'll often need
->> indicators to and from the kernel whether the extension is supported.
->>
->> Consider an extension where 0 is a valid value meaning "this resource is
->> completely used". Since the kernel and userspace always agree on the
->> size of the struct the kernel will zero the whole struct. So if in your
->> newly added field 0 is a valid value you can't differentiate between 0
->> as a valid value indicating that your resource isn't available and 0 as
->> the kernel not supporting your extension.
->>
->> Other APIs solve this and similar problems by having a request mask and
->> a return mask.  Userspace fills in what values it wants reported in the
->> request mask and kernel sets the supported flags in the return mask.
->> This way you can differentiate between the two (see statx).
->>
->> If the 0 example is not a concern or acceptable for userspace it's
->> probably fine. But you need to document that having 0 returned can mean
->> both things.
->>
->> Or, you select a value different from 0 (-1?) that you can use to
->> indicate to userspace that the resource is used up so 0 can just mean
->> "kernel doesn't support this extension".
-> 
-> Thanks all for your inputs.
-> As Eric suggested in other thread (pasting here for reference):
-> {
->> Before the padding and you should reduce the size of the padding by the
->> size of your new field.
-> 
->>> Also, I could not understand what this is for ?
->>> Do we need to update this since sture is changed ?
-> 
->> In general padding like that is so new fields can be added.  The
->> comment about libc5 makes me a wonder a bit, but I expect libc5 just
->> added the padding in it's copy of the structure that it exported to
->> userspace many many years ago so that new fields could be added.
-> 
->> Eric
-> }
-> 
-> I made the changes like below and this seems to work even with older user space.
-> I mean earlier, when I ran "free" command it was giving "stack
-> smashing..." error,
-> but now the "free" command (which comes as part of busybox) works fine
-> even without recompiling with the updated header.
-> 
-> These are the header changes for quick look:
-> {{{
-> diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
-> index 6e77e90..fe84c6a 100644
-> --- a/include/uapi/linux/sysinfo.h
-> +++ b/include/uapi/linux/sysinfo.h
-> @@ -12,7 +12,6 @@ struct sysinfo {
->         __kernel_ulong_t freeram;       /* Available memory size */
->         __kernel_ulong_t sharedram;     /* Amount of shared memory */
->         __kernel_ulong_t bufferram;     /* Memory used by buffers */
-> -       __kernel_ulong_t availram;      /* Memory available for allocation */
->         __kernel_ulong_t totalswap;     /* Total swap space size */
->         __kernel_ulong_t freeswap;      /* swap space still available */
->         __u16 procs;                    /* Number of current processes */
-> @@ -20,7 +19,8 @@ struct sysinfo {
->         __kernel_ulong_t totalhigh;     /* Total high memory size */
->         __kernel_ulong_t freehigh;      /* Available high memory size */
->         __u32 mem_unit;                 /* Memory unit size in bytes */
-> -       char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /*
-> Padding: libc5 uses this.. */
-> +       __kernel_ulong_t availram;      /* Memory available for allocation */
-> +       char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /*
-> Padding: libc5 uses this.. */
->  };
-> }}}
-> 
-> If this is fine, I will push the new patch set.
+The first "> 7" is wrong; it should be == 8, shouldn't it?  Something like
 
-Please CC linux-api@vger.kernel.org on the new posting.
+if (edx.split.num_counters_fixed < 4 && eax.split.mask_length >= 8) {
+	if (eax.split.mask_length == 8)
+		eax.split.mask_length--;
+	else
+		cap.events_mask |= BIT_ULL(7);
+}
 
-> Thanks,
-> Pintu
-> 
+is what you mean, I think?
+
+Paolo
 

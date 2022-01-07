@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D11E5487C40
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A737487C43
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiAGSgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiAGSfw (ORCPT
+        id S229622AbiAGShH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:37:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30990 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229528AbiAGShF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:35:52 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78954C061574;
-        Fri,  7 Jan 2022 10:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=+Gbab7Fnbxp9CRQp1CY+Df8nwrrWXPr1d5W8ipvlME8=; b=Ne7AU
-        FALCLnVOJabo2OuSO1Hv6r1Ehk9p2dTlls8CCLBntRvC3ffJbtm71+1aSlspKAnpyHwdOkSB6zrE7
-        3y7O220veg6azUkjAb7JPgnoHSx8vd2Enk+o3o/rAzel8rjCsOOKegLl5TjcL997fhU5G7GVD+rIn
-        vuzvx6kFjFicwqBZCRPioKj5R81p0u+cgACjXfQ9W8jJIYqB7gtw221L4UUzR8X/zNUvqrmz8puap
-        88zK+cyu7kRndtinjobjQCA2ApL/cUSDx4gewqN3lqUDZzceEKR1EFaK/eP+HuR9Ga8daAeyM835Y
-        dI9yEFH1qXqVbUMG8m4wVhpYhR4HA==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n5u5W-00037k-8f; Fri, 07 Jan 2022 18:35:42 +0000
-Date:   Fri, 7 Jan 2022 18:35:40 +0000
-From:   John Keeping <john@metanate.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-Message-ID: <YdiH/IphUgixfayu@donbot>
-References: <Yb3vXx3DcqVOi+EA@donbot>
- <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
- <87zgou6iq1.mognet@arm.com>
- <20211221164528.3c84543f.john@metanate.com>
- <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
- <87r1a4775a.mognet@arm.com>
- <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
- <Ydgo2lENzywieaZL@donbot>
- <88826618-5ce8-dd1f-c9db-ec273fede3ce@arm.com>
+        Fri, 7 Jan 2022 13:37:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641580625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uPSTezG0qBUzZU5b+ipwh4/mE7DoJRL0xcY71ufegho=;
+        b=FmtCrAOsC+oCIKBQR0PZZnDO1MoLUIIcrQybrfdorUQTqJxvUV9lpcDwA14RhmjLhUAPIY
+        4kYyOcZW4+d4nfFtAQivAtx2DcYtz+dwObvSaYSVIpc8v1OMvKyfniui7Ct4gIztVR95AD
+        2dFAKpF1lSXBfVvmkaPFfuE9aVeE5ns=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-264-IW_UplKKNBiGVwkbs7ap0w-1; Fri, 07 Jan 2022 13:37:04 -0500
+X-MC-Unique: IW_UplKKNBiGVwkbs7ap0w-1
+Received: by mail-ed1-f72.google.com with SMTP id s7-20020a056402520700b003f841380832so5372532edd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 10:37:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=uPSTezG0qBUzZU5b+ipwh4/mE7DoJRL0xcY71ufegho=;
+        b=GK3s1OP0Ig0VNGnuR2z8XtB8+MAzZsKladKCZLv4tObik3iU7DFfh9myXpB2QLKrE5
+         8ksxoDRmkIdpp/3/1Ayx5z/Ov+eU/NPsjzZOSVGZ1Px3I1PZX+nm1ACJ5X+VovHMBzj0
+         RKoBIieVV2FLD56+zBSorLClKZRBb0JcI8SrdOqya0fiunkvxIj6qRa/pDklGfoqAdKY
+         5u/tFYXt02FGH0on1x/wpDIJOfgT6kZgelv6+EUR77qSeJaEJj38iwgSg4eT7UZ0o5di
+         OYmDCAzxjtVLaEArFTTjQy52HYvUFVuL9UPGRpQnuRriL73Rti8lGezl36ZG4m2sVOId
+         u2+A==
+X-Gm-Message-State: AOAM532Rj6FInjpVnuouP4eRbXzV9ESpjfD+lx1nUjf3C9mKWRvBEfrF
+        s+oYDptK9l6dmJyL8tLsgwB0wHOHdo9TQyg/vXmgYJwOHymB8Eyh54dfKsGb/JYvajVPcPAdvB9
+        A7R94olASJB9e5cbI8KH56AmA
+X-Received: by 2002:a17:906:619:: with SMTP id s25mr51826649ejb.237.1641580622753;
+        Fri, 07 Jan 2022 10:37:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy4odmwqaxtbqXcUV1sdIzK4rqzuTlxtGZIrWvniq6UiCUTgxjK1RQu6mI3MUUsoObGxHRq4Q==
+X-Received: by 2002:a17:906:619:: with SMTP id s25mr51826624ejb.237.1641580622442;
+        Fri, 07 Jan 2022 10:37:02 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ne39sm1630080ejc.142.2022.01.07.10.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 10:37:01 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 5FF33181F2A; Fri,  7 Jan 2022 19:37:01 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        syzbot <syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [syzbot] general protection fault in dev_get_by_index_rcu (2)
+In-Reply-To: <874k6fa1zc.fsf@toke.dk>
+References: <000000000000ab9b3e05d4feacd6@google.com>
+ <CAADnVQLH5r-OLfGwduMqvTuz952Y+D7X29bW-f8QGpE9G6dF6g@mail.gmail.com>
+ <874k6fa1zc.fsf@toke.dk>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 07 Jan 2022 19:37:01 +0100
+Message-ID: <87y23r8kaa.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88826618-5ce8-dd1f-c9db-ec273fede3ce@arm.com>
-X-Authenticated: YES
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 03:25:21PM +0100, Dietmar Eggemann wrote:
-> On 07/01/2022 12:49, John Keeping wrote:
-> > On Fri, Jan 07, 2022 at 11:46:45AM +0100, Dietmar Eggemann wrote:
-> >> On 22/12/2021 20:48, Valentin Schneider wrote:
-> >>>  /*
-> >>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> >>> index ef8228d19382..8f3e3a1367b6 100644
-> >>> --- a/kernel/sched/rt.c
-> >>> +++ b/kernel/sched/rt.c
-> >>> @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
-> >>>  	if (!next_task)
-> >>>  		return 0;
-> >>>  
-> >>> +	/*
-> >>> +	 * It's possible that the next_task slipped in of higher priority than
-> >>> +	 * current, or current has *just* changed priority.  If that's the case
-> >>> +	 * just reschedule current.
-> >>> +	 */
-> >>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
-> >>> +		resched_curr(rq);
-> >>> +		return 0;
-> >>> +	}
-> >>
-> >> IMHO, that's the bit which prevents the BUG.
-> >>
-> >> But this would also prevent the case in which rq->curr is an RT task
-> >> with lower prio than next_task.
-> >>
-> >> Also `rq->curr = migration/X` goes still though which is somehow fine
-> >> since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
-> >>
-> >> And DL tasks (like sugov:X go through and they can have
-> >> task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
-> >> freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
-> >> can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
-> >> by coincidence.
-> >>
-> >> So maybe something like this:
-> > 
-> > Do you mean to replace just the one hunk from Valentin's patch with the
-> > change below (keeping the rest), or are you saying that only the change
-> > below is needed?
-> 
-> The latter.
+Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> writes:
 
-Thanks!  I tested the patch below and can confirm that I no longer see
-any BUGs with this applied.
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>
+>> Toke, Jesper,
+>>
+>> please take a look.
+>> Seems to be in your area of expertise.
+>
+> Yikes, I think I see the problem. Let me just confirm and I'll send a
+> fix :)
 
-Tested-By: John Keeping <john@metanate.com>
+Fix here: https://lore.kernel.org/r/20220107183049.311134-1-toke@redhat.com
 
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
-                if (!pull || rq->push_busy)
-                        return 0;
- 
-+               if (rq->curr->sched_class != &rt_sched_class) {
-+                       resched_curr(rq);
-+                       return 0;
-+               }
-+
-                cpu = find_lowest_rq(rq->curr);
-                if (cpu == -1 || cpu == rq->cpu)
-                        return 0;
+-Toke
+

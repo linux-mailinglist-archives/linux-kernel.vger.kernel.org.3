@@ -2,111 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3579487DEF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925D6487DF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiAGVBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S229712AbiAGVCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiAGVBg (ORCPT
+        with ESMTP id S229663AbiAGVCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:01:36 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076CC061574;
-        Fri,  7 Jan 2022 13:01:36 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x7so19851246lfu.8;
-        Fri, 07 Jan 2022 13:01:36 -0800 (PST)
+        Fri, 7 Jan 2022 16:02:46 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33407C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:02:46 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id p15so20121969ybk.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:02:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FYsF1MlT+oLQPwSGSddilNMw95xcZJ7HznnO1uWFm8I=;
-        b=LqPRfxLi7DqJd/HOUZ4XQQZr8ti7zG35Z3qK0sVpES24j5Upfyf0FtmjG+/v1/c8xo
-         FQ6TNwCDfycxtsS46VnAWtXF4bQoBY4ZrzcHWoN9SDLz8d1R4jMlZVJYVLtlR9H22BNt
-         IPXPe53nvH8iIFC5uc2u/jeeVahF+dmZzGcDNftD9+JJ99D+O5u8GBth4ZbM4UQL3LfL
-         R2MvPUsqS9FNw5xaBA1rdWSJx0UM/T/KMpn+W5JB9k3515exOAN6eLyqc+hOeIThG2GZ
-         W/x+ZpA473eJ2KqUEuClza6+0fc3t3Ii3TuO8kStStDuZziYeTCkR+Fr8cpUUV9NsKjD
-         tfvQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=a2Rrh6wPEkhhpBKKt41LwoHTQap0tuBjE5IBXaNmSsE=;
+        b=dM54qGGoNJuWZd4Fk/EEwZ3tb9VX5IfsAGl6kqOEZSX8hzsPIvMI5te2DF4bzi4OwA
+         Ry9+GHrLstwM1mzWALXkoKHdKrURN1Rq2VJ0ycmFc5+Zsx8JIlHWeO4sQ++n5h+0Cf24
+         i5kRIkzKAr0d3ZNCCW10mpow9M8ezO+aG4DTiHZaElmTjlXv9QqY7zM0DLNMGo7n5Fb3
+         WvfOiaP31hH6pM57lmM4mbN0LHDq9199PTFIWKMUIuSfn33YJu/pmRFhRnuSQ4GnkBgL
+         HxMJIwCg8VKBJaJdsrTs7RYCbk96EDhGJvJfiRs84rtfeaBuq/h4az2D2w/xhGP6Xcn7
+         5jrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FYsF1MlT+oLQPwSGSddilNMw95xcZJ7HznnO1uWFm8I=;
-        b=jA+3IspSDB/oANuZiddJXWdRMUdhqwCD7q6xNkX7Hyv+rTQWuPrzkH9+zC8Vpztzsg
-         swgd06PBV77PqSfC7R5YqsEYGD3B0yHAndoIqjfffaDO9+N5aZTFpFxLtVIEoJ7Itby0
-         qAW2gY1pWUf3OCubum3F532mn1lKYYycok29H4nCpgkIhAtwzUAqeEaeNRMETrGQEJR6
-         bo+CkPDglcaH3Z7jjIiQiyEjzKasPsp6JnCL5O4nBHKT2AXc12mJbpAGj18RYqq8VHEW
-         1ydlBzjN8U8Ox5HsYz5/dlDTA/7KvEZvMfAYJafaXZKS70t2CQckmNuamXj3DPogJhZe
-         /O7w==
-X-Gm-Message-State: AOAM531z84G8RwIqINnZWLPTwxMCZHBLivKvAwsWsgVPDgIKdV2TmuHn
-        6q65SsKsCYjdeCrSl14pibc=
-X-Google-Smtp-Source: ABdhPJwRvJP9mJ8cEjfVRCF5EIlJvc6FB1T2y3fbShFHTpOnWBVuSA8ajnjQadoPfpau2lk6IYBodQ==
-X-Received: by 2002:a19:380e:: with SMTP id f14mr57642917lfa.612.1641589294390;
-        Fri, 07 Jan 2022 13:01:34 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id i7sm712214lfu.175.2022.01.07.13.01.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 13:01:33 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id DCFD75A0020; Sat,  8 Jan 2022 00:01:32 +0300 (MSK)
-Date:   Sat, 8 Jan 2022 00:01:32 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Pintu Kumar <quic_pintu@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-mm@kvack.org, ebiederm@xmission.com,
-        christian.brauner@ubuntu.com, sfr@canb.auug.org.au,
-        legion@kernel.org, sashal@kernel.org, chris.hyser@oracle.com,
-        ccross@google.com, pcc@google.com, dave@stgolabs.net,
-        caoxiaofeng@yulong.com, david@redhat.com, pintu.ping@gmail.com,
-        vbabka@suse.cz, linux-api@vger.kernel.org
-Subject: Re: [PATCH v2] sysinfo: include availram field in sysinfo struct
-Message-ID: <YdiqLKS5Sv9eWwu2@grain>
-References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
- <1641578854-14232-1-git-send-email-quic_pintu@quicinc.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=a2Rrh6wPEkhhpBKKt41LwoHTQap0tuBjE5IBXaNmSsE=;
+        b=2CMuF8rEQVvBb/wMkfx6dNEz9fDTkP/4/csodha+9Cx/RcyCOw92GhClAuqNUUaiwO
+         +Ii4vEGxmN7l1pN6I6kZoloResaxj3S+AaVi3saPdmiepY5KAiUGsjzOXZd+oVfuqSen
+         aU7td5nPAavTj0vkFr/8tzWOJFVzjcn6p4jRyAlTQUzsT72MVo84QZZFYvKpu1yN0JnJ
+         JnYX+9Vr4uDsseULraORznTwWULtsVN5uidAI8y9gzvw4r8uXQu2kfpSsmYaEtEGQaph
+         dOhrtt7Mh6oV8FFO64md9dyPWSUzUjA5rAJKYuYsbxb/FpXGQf99Dd0Zk0bemi4lIvzB
+         zjfw==
+X-Gm-Message-State: AOAM533QBtlFweYOdfOqb8csrDHhdteW8F+r6KtNUVPxIx2td8pqk4w1
+        lzTiZs0NP9Ias5Op+hBTyVhD99p7KzOd0XVlmZE=
+X-Google-Smtp-Source: ABdhPJwLW/wNkH51AFoW9YvPPTqQos516bD0Ftrr0mePOow3W3RL1hf0nnJxONMZLWsvwH9bMRGFtrkmRVv8ORadLPk=
+X-Received: by 2002:a25:bcc3:: with SMTP id l3mr56427230ybm.148.1641589365155;
+ Fri, 07 Jan 2022 13:02:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1641578854-14232-1-git-send-email-quic_pintu@quicinc.com>
-User-Agent: Mutt/2.0.7 (2021-05-04)
+Received: by 2002:a05:6918:b28d:b0:86:e68c:4753 with HTTP; Fri, 7 Jan 2022
+ 13:02:44 -0800 (PST)
+Reply-To: hmdnshkhmhmmd@gmail.com
+From:   Prince Hamdan Sheikh Mohammed <rc923072@gmail.com>
+Date:   Fri, 7 Jan 2022 13:02:44 -0800
+Message-ID: <CAKOMoFJzdfUw6e6HVzXm8B9oiWHXUTo+k3M6gXbhM3kVVPKjXA@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:37:34PM +0530, Pintu Kumar wrote:
-> The sysinfo member does not have any "available ram" field and
-> the bufferram field is not much helpful either, to get a rough
-> estimate of available ram needed for allocation.
-> 
-> One needs to parse MemAvailable field separately from /proc/meminfo
-> to get this info instead of directly getting if from sysinfo itself.
+--=20
+Hello, greetings from Royal home,
 
-Who exactly needs this change? Do you have some application for which
-parsing /proc/meminfo is a hot path so it needs this information via
-sysinfo interface?
+I=E2=80=99m the present crown prince of Dubai United Arab Emirates and the =
+Deputy
+Ruler. My dad is the Prime Minister., from Dubai United Arab Emirates. It
+would please me to negotiate a possible working terms with you on an
+investment interest in your country.
 
-Don't get me wrong please but such extension really need a strong
-justification because they are part of UAPI and there is not that much
-space left in sysinfo structure. We will _have_ to live with this new
-field forever so I propose to not introduce anything new here until
-we have no other choise or parsing meminfo become a really bottleneck.
+Please get back to me for proper discussion if it would please you to, for
+acquaintance and more elaborate discussions.
 
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index ecc4cf0..7059515 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@ -2671,6 +2671,7 @@ static int do_sysinfo(struct sysinfo *info)
->  	info->freeram <<= bitcount;
->  	info->sharedram <<= bitcount;
->  	info->bufferram <<= bitcount;
-> +	info->availram <<= bitcount;
->  	info->totalswap <<= bitcount;
->  	info->freeswap <<= bitcount;
->  	info->totalhigh <<= bitcount;
-> @@ -2700,6 +2701,7 @@ struct compat_sysinfo {
->  	u32 freeram;
->  	u32 sharedram;
->  	u32 bufferram;
-> +	u32 availram;
-
-If only I'm not missing something ovious, this is part of UAPI as well.
+Kind regards
+H.R.H Prince Hamdan Sheikh Bin Mohammed
+Crown Prince of Dubai United Arab Emirates

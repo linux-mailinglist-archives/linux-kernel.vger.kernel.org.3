@@ -2,106 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8B6487848
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A083487849
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238848AbiAGNhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S238880AbiAGNiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 08:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238475AbiAGNhS (ORCPT
+        with ESMTP id S238475AbiAGNiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:37:18 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CCEC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:37:18 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so12014040pjd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:37:18 -0800 (PST)
+        Fri, 7 Jan 2022 08:38:17 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA2DC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:38:16 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x7so15610434lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 05:38:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vtkNWuyheWVSf68PWKxrLpobqQHGirx2hOFiSE7ChDM=;
-        b=J/a1oXzpAVBVL83H3AIMREpjgTXahGdH1QDPZMRPhS2QZo/e9FhuDDTMued19ICsv8
-         zLp8hRUAWjQ3CtHw5A9c85SEeLxKIuQv9QcPThoMeRKRF30GaFuPoYDoW5Xw6AFiz5rF
-         I6PX+5WQkwm0syfIqQLTCFvBZUjV68yPzyshVYCXfE7zgDBM4HE3JPGCqHeguXd9vRUX
-         V/FcmHzVx+zUE71h5b4qN1Xq9ooWRK9UObBPcplSNTMcnRhg3hUWpLdTgQuEX1ffRsC5
-         CiQ+abEK7KHTdrKORBTj6WVJNHHyghgH6lzO86KhJ70o1MBYNX/z7j7zvRSutegNmgfQ
-         vxIg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=pvHAwTKRl884ufywj4q2OPKqFSh3zvRZclGCMo1cJeM=;
+        b=LB0TTy6OkeBxt10pp4RfFMEXfuprvQ1MYdw7TQVd2NXfQqWpxw+6vTUSiP8eBr1Z+w
+         RwsPwFAWMoy0BhJ+3Fc7AN25kcs6nFfpTLRwytiupCePH+csnyprWUC+ki2UCD2t0U1n
+         qjkB7p6+KF46HLLi96+l0W81xvKxZNCiKuKDcH4mUEh5PrbcxzsQu2vvQsQl2cyThNKH
+         fDZ3lpHei+5gxC1Chh9alH9EJ4JGF+jHirMe1IQYdNeg/mE7+4xxocdAqsB7M0GV6FpR
+         nG5rgxxJqUaVFVd/FQZOxjmXoQuBNDXm6bZ9PY2RSGCGvb1UyGJXqZPpJXXJMbvDyXzl
+         GeFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vtkNWuyheWVSf68PWKxrLpobqQHGirx2hOFiSE7ChDM=;
-        b=ArfDrcnJONOd0HABBNsQIh7em+QfpY7H9McdS6meGJyKo9gzB4AHa1KF/hNAEl41hl
-         oK/o8OJR3oFl69QDimGu9h997AL+dgHimTPdlvybn3fQOnMKJQRIAk5LzycAChB50taN
-         0rncd5XEaX0qpK3UZzqXJegeheIQf4wwfBJSvR7UAMSj26nNk6ykRyvAyvZ+2cMB+k7O
-         pTOh5jKiJIS7z82zKFfbcCKTyuNLk8IruarmmBh+f5V9o+lXvqe6goDL2axV/EgupukD
-         trPLiu97qYiKjUY1w1AOtPnvsHosrFqipxxlLPrJlrIMjSN5LyFfvhJnxr1QVoEZqaTN
-         0wlw==
-X-Gm-Message-State: AOAM533k5C/dSDR2bRQqt/knikTAFbQKrX3raZUPnvqcAzq5SY1i2f0b
-        Ne7W8ir0xW2ncuKtnrpPbYA=
-X-Google-Smtp-Source: ABdhPJxaJvviRqH2N90C3l0TfERl3azSjtGZzzymuRYYOhuM/LECebZRtdBjeOoeGZnERSZl7HJa7Q==
-X-Received: by 2002:a17:902:bd4b:b0:149:460a:9901 with SMTP id b11-20020a170902bd4b00b00149460a9901mr63289863plx.44.1641562637852;
-        Fri, 07 Jan 2022 05:37:17 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.38])
-        by smtp.googlemail.com with ESMTPSA id h4sm8282441pjk.2.2022.01.07.05.37.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 05:37:17 -0800 (PST)
-From:   Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Jan Kara <jack@suse.cz>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jamorris@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] minix: fix bug when opening a file with O_DIRECT
-Date:   Fri,  7 Jan 2022 21:36:25 +0800
-Message-Id: <20220107133626.413379-1-qhjin.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220107113254.bkfpud453zivotov@wittgenstein>
-References: <20220107113254.bkfpud453zivotov@wittgenstein>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=pvHAwTKRl884ufywj4q2OPKqFSh3zvRZclGCMo1cJeM=;
+        b=tmq2OgdCRptVlbS6sZwq8c06jyGk+cdap3PeX9dOZQviCNdT8cvrKtykknSn+MsW0r
+         0BS4Iksu3N+quOubORlQerXnN4MyKHXQ6lnh9dj/CiDMR4DJInS2OPtEmZbI0TcUHI65
+         RkmqOvuEGtsV0pJkzbHBA1gODVz7cNechw1KMYQa5vFxBavTMQ4GBfYzGKju4bC/7bCk
+         jgTdZAA1/IeidFZdhmQEuiyBzvmHIYufwMPfim3+0UvXXMAsBcWCj4etZb6lMvfKUs8k
+         XP+Z8hfdbcAi1CxuwmTFRNnLcz1ExPBFWlFFqkz+Bccy9TeIwcNPi+3mXDWT1Alp61vo
+         2NrA==
+X-Gm-Message-State: AOAM531R2DfTCBjeZrkRGfhnJK3BxJZ8IX7NAb8/lLXycdMuCNMcuWeW
+        H5Ax0MqAwgBu9/HbiO8JAKQx4Axtn4rCmXttZAA=
+X-Google-Smtp-Source: ABdhPJwQpj/wOxNg3ARTmxkoXvbmJ4ojiQ5oxAOJObSyO02m+0jMSq1JoCuDIsMak1x0f9YxpVp2SLh35btAmaI4NG0=
+X-Received: by 2002:a2e:81c5:: with SMTP id s5mr47952908ljg.77.1641562694996;
+ Fri, 07 Jan 2022 05:38:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a05:6520:4d04:b0:18f:63f7:c8a8 with HTTP; Fri, 7 Jan 2022
+ 05:38:14 -0800 (PST)
+Reply-To: gb528796@gmail.com
+From:   george brown <gh727530@gmail.com>
+Date:   Fri, 7 Jan 2022 14:38:14 +0100
+Message-ID: <CACXbO7dM6S7JnP6nwGgk5SQA_8WjwnetP4mzg6vv_Bb6Mhc+5A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Testcase:
-1. create a minix file system and mount it
-2. open a file on the file system with O_RDWR|O_CREAT|O_TRUNC|O_DIRECT
-3. open fails with -EINVAL but leaves an empty file behind. All other
-open() failures don't leave the failed open files behind.
+Hallo
 
-It is hard to check the direct_IO op before creating the inode. Just as
-ext4 and btrfs do, this patch will resolve the issue by allowing to
-create the file with O_DIRECT but returning error when writing the file.
+Mein Name ist George Brown. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
+dir anbieten
+der n=C3=A4chste Angeh=C3=B6rige meines Klienten. Sie erben die Summe von (=
+8,5
+Millionen US-Dollar)
+Dollar, die mein Mandant vor seinem Tod auf der Bank hinterlie=C3=9F.
 
-Reported-by: Colin Ian King <colin.king@intel.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
----
- fs/minix/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Mein Mandant ist ein B=C3=BCrger Ihres Landes, der mit seiner Frau bei
+einem Autounfall ums Leben gekommen ist
+und einziger Sohn. Ich habe Anspruch auf 50 % des Gesamtfonds, w=C3=A4hrend
+50 % dazu berechtigt sind
+sein f=C3=BCr dich.
+Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere Details:
+gb528796@gmail.com
 
-diff --git a/fs/minix/inode.c b/fs/minix/inode.c
-index a71f1cf894b9..d4bd94234ef7 100644
---- a/fs/minix/inode.c
-+++ b/fs/minix/inode.c
-@@ -447,7 +447,8 @@ static const struct address_space_operations minix_aops = {
- 	.writepage = minix_writepage,
- 	.write_begin = minix_write_begin,
- 	.write_end = generic_write_end,
--	.bmap = minix_bmap
-+	.bmap = minix_bmap,
-+	.direct_IO = noop_direct_IO
- };
- 
- static const struct inode_operations minix_symlink_inode_operations = {
--- 
-2.30.2
-
+Vielen Dank im Voraus,
+Herr George Brown,

@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7183A486F6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D90486F71
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345051AbiAGBIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:08:20 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16690 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiAGBIT (ORCPT
+        id S1345073AbiAGBJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345068AbiAGBJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 20:08:19 -0500
-Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JVQ3z4b8wzZf4v;
-        Fri,  7 Jan 2022 09:04:47 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 09:08:16 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 09:08:16 +0800
-Subject: Re: [PATCH v5 0/2] cancel all throttled bios in del_gendisk()
-From:   "yukuai (C)" <yukuai3@huawei.com>
-To:     <tj@kernel.org>, <mkoutny@suse.com>, <hch@infradead.org>,
-        <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20211210083143.3181535-1-yukuai3@huawei.com>
- <ca8d39fc-48d3-cfd9-3fa4-a329bb37b91b@huawei.com>
-Message-ID: <29a780c6-ad65-ece8-4fbc-acd766b681f8@huawei.com>
-Date:   Fri, 7 Jan 2022 09:08:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 6 Jan 2022 20:09:40 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6F6C061245;
+        Thu,  6 Jan 2022 17:09:39 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t28so1300339wrb.4;
+        Thu, 06 Jan 2022 17:09:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8LHh10+xJEwQQJ1HEF7ipZJtQ43xHxuWPeAK1P7zvbk=;
+        b=JN1SD8KccynWq4OVrbYAy+R3lCUUI/juBe+hFVtkqWrmpI5vKsSNZabvdiYscWZCF1
+         vAGkkFI2vQ6fit6S8Gnaimll1ZFqGANhhGYdNUnll7YgW4mHX0OHNmTtnebQeKdN9bIb
+         C6O5fjNVpKOMVULJNeYauUc9INnAoF9jRW5PHiln3smJXTYuAaL16E0yWW0IDXaXvGjJ
+         dhWYZMrZUmB+8qbLOnviUaBa71PHF2uU26JZ8uUl1uVbjWneAULd1SfRrXB/CizUfT4z
+         +hCNh5S5MCwuGr0RZ2wH8oPJn6OopwEwawjMNOt4uCOEn8gBnNO9UFakeZQZap/4+Lnc
+         muug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8LHh10+xJEwQQJ1HEF7ipZJtQ43xHxuWPeAK1P7zvbk=;
+        b=fGvSZ2IYKg0FR2SmDvBH05tCEjyN1La80I5FI6X6CTBBqvjV7Y5NMONhCMeta/MN9U
+         HUho+vPztdL+4065IjaeG089ZNp9ofutuOXBrDQBlih+UiiDgZd+BZqE+GBNcG7Owr/J
+         3HSFfjgFQ+pY6rraT3/nB+96zQF+2WyZB5Dwjm1ZrrK1PlacEvZjPFn6ARQct/igAsy0
+         NO5r+pz6aWIOLvHeXN0Y6mbjiAXae/c4D3E1WnEmfWW0P+/fVU4CiXi0kXAkoWeX0tqG
+         yVuDtB22Fg33bNGPV6Zy8ITHdGY3kgk70FXdHHL2dufcLGoKHMjobAQzGWM1QzhDnnbX
+         UF2Q==
+X-Gm-Message-State: AOAM531sCvZUvjOvy/0zVOlaUwm5kukYiH4HHyx0QPXW36aBapgaJRl9
+        ciDo1q93iHwvB6eesHrWJiyNWub07j7/jtYt2Ps=
+X-Google-Smtp-Source: ABdhPJx4PVmGgpPehu0uD1OCS9wBsXyBQzRPXWGgG1zXN+7yaEwK36YYSylNoOnca5o02K8Zg354zCS6ESvwZ5zo/EY=
+X-Received: by 2002:a05:6000:186e:: with SMTP id d14mr54460304wri.205.1641517778464;
+ Thu, 06 Jan 2022 17:09:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <ca8d39fc-48d3-cfd9-3fa4-a329bb37b91b@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+ <20211222155743.256280-13-miquel.raynal@bootlin.com> <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
+ <Ycx0mwQcFsmVqWVH@ni.fr.eu.org> <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
+ <CAB_54W6gHE1S9Q+-SVbrnAWPxBxnvf54XVTCmddtj8g-bZzMRA@mail.gmail.com>
+ <20220104191802.2323e44a@xps13> <CAB_54W5quZz8rVrbdx+cotTRZZpJ4ouRDZkxeW6S1L775Si=cw@mail.gmail.com>
+ <20220105215551.1693eba4@xps13> <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
+ <20220106170019.730f45e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220106170019.730f45e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Alexander Aring <alex.aring@gmail.com>
+Date:   Thu, 6 Jan 2022 20:09:27 -0500
+Message-ID: <CAB_54W5B5QYu=5PSO=_NVndgnXsE_hHyVKf1Y69n_oZpoEP48A@mail.gmail.com>
+Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Nicolas Schodet <nico@ni.fr.eu.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2021/12/18 17:09, yukuai (C) 写道:
-> 在 2021/12/10 16:31, Yu Kuai 写道:
->> If del_gendisk() is done when some io are still throttled, such io
->> will not be handled until the throttle is done, which is not
->> necessary.
->>
->> Changes in v2:
->>   - move WARN_ON_ONCE() from throtl_rb_first() to it's caller
->>   - merge some patches into one.
->>
->> Changes in v3:
->>   - some code optimization in patch 1
->>   - hold queue lock to cancel bios in patch 2
->>
->> Changes in v4:
->>   - delete rcu_read_lock() and rcu_read_unlock() in patch 2
->>
->> Changes in v5:
->>   - add comment about rcu lock
-> Friendly ping...
+Hi,
 
-Friendly ping ...
+On Thu, 6 Jan 2022 at 20:00, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 5 Jan 2022 19:38:12 -0500 Alexander Aring wrote:
+> > > Also, just for the record,
+> > > - should I keep copying the netdev list for v2?
+> >
+> > yes, why not.
+>
+> On the question of lists copied it may make sense to CC linux-wireless@
+> in case they have some precedent to share, and drop linux-kernel@.
 
->>
->> Yu Kuai (2):
->>    blk-throtl: move WARN_ON_ONCE() from throtl_rb_first() to it's caller
->>    block: cancel all throttled bios in del_gendisk()
->>
->>   block/blk-throttle.c | 75 ++++++++++++++++++++++++++++++++++++++++++--
->>   block/blk-throttle.h |  2 ++
->>   block/genhd.c        |  2 ++
->>   3 files changed, 76 insertions(+), 3 deletions(-)
->>
+Yes, that makes sense.
+
+- Alex

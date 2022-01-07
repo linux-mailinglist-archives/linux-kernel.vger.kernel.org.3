@@ -2,228 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAB3487AE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AD7487AEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348443AbiAGRDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348407AbiAGRDk (ORCPT
+        id S1348407AbiAGREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:04:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47179 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240301AbiAGREN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:03:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93921C061574;
-        Fri,  7 Jan 2022 09:03:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D768E61F7D;
-        Fri,  7 Jan 2022 17:03:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F94C36AE0;
-        Fri,  7 Jan 2022 17:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641575019;
-        bh=OFEHu/bkwozuqgXzmAJslWkaBtA/8D7wQRLLpTkuX10=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g3j3AWguhtz9Ax4HaYWyVFJTrVmh++66LQtuos6qOmFxhrRerKv8mq6Ap3/eUMY1g
-         ywXnPHwHHsPTK+G8/XyvT14E91Pbq/NlcXWgWg5MSg7ni9uuFT4g557BSa5DwNrnTs
-         7L1AOT5sK2UYixVIwXdgGskmMWwWxjz9uBqq3CvqQbSyqkxs8EqcgkpAmdjnieVA7D
-         +IQp1JeMf6h03hhI/PMi8zgypqmwQjJrnwsWMWb0cxe2rt43GcPRQv57cWuT/CHJBS
-         8Vscu3b7VfSHp1+eVPdviTyf6vUt/AL0AgqLhPQ946jUr4tajOtbjQRSQcxryIz9zf
-         UYidjqVfdbWPg==
-Received: by mail-ed1-f51.google.com with SMTP id u25so24581469edf.1;
-        Fri, 07 Jan 2022 09:03:39 -0800 (PST)
-X-Gm-Message-State: AOAM530Fh/5JFCLeO1LXFCEOOQXF4I5mDyFSCviI2CN2Qfrym//c7TZO
-        P+wdHy5Ldl8k9L962E2qZGEzeQeOfoMoY1ymDQ==
-X-Google-Smtp-Source: ABdhPJyVHvfifLk+kw1sqHl8xV7RW2+DKP2YJdCdWKyWvhJDsj6/0F6MjSoppkQ/mBd9/4EtbX68a6mdmbqlGPBPU48=
-X-Received: by 2002:a17:906:d184:: with SMTP id c4mr6269057ejz.20.1641575017424;
- Fri, 07 Jan 2022 09:03:37 -0800 (PST)
+        Fri, 7 Jan 2022 12:04:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641575053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yQ2sKCfCcZU2Bxbu6F8PHdSva7fA8R5kZpvDr4zlGGo=;
+        b=fqwfmzPL4dGiAprBAr6YL2gLSRfo0pUxJW5aj5RJpsdl1OaXHq52EIuwnfg+MO2nBBxEZr
+        j1dc7rcG+DOy/1BsBja5He9ttpbraBxUKSg6CiCu0JvFqdm6sCDDf6+lXJUG3m/08qxcal
+        s3JGxpPdMGfcPA81nHdoKqsymoiEGoo=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-640--mWS7ihHOc6kCRfUJhI4CQ-1; Fri, 07 Jan 2022 12:04:12 -0500
+X-MC-Unique: -mWS7ihHOc6kCRfUJhI4CQ-1
+Received: by mail-ed1-f72.google.com with SMTP id h6-20020a056402280600b003f9967993aeso5160005ede.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:04:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yQ2sKCfCcZU2Bxbu6F8PHdSva7fA8R5kZpvDr4zlGGo=;
+        b=ms7jcKWNBwXIL44MrSmIjVgktFudHKBhqhx6tc7FPd6XsLoRPKEDO3nroOtDLfowQu
+         xml3g3o/b5jj+nhaGTOikrdP9AHGzWaY9zSKOtc1LHpyxbQc7sj2yprsF+njR+QiLQP8
+         pltAdMxt5ObV3/RNa9XvZGEnvDITV7vCKLnTvCZKfzprZ/5VRfaJFkzJbCYIjLNRmRM9
+         JJ4iUZ2qVyaRdPUVr13tb+QS+aKIPCSmjHjber8mraonxfEkmiSuGIIOzuf9Wnpr72mK
+         0ebYWOlzoJ9p4HTWmdeaZHzOKNGVO70/sgU1KRO5NHggL6ryiYvvCwQpBJnDV51SrYD+
+         KF2w==
+X-Gm-Message-State: AOAM532GagTgOf8y1F9CZivBGba4yfDkKAE1lD23Z01kh3Chz20ELR3M
+        AR3p8gphENmMkgq3LfmEtPUeurhR8S53LuaBjAq8A5hcsnr+7N8zg7rw/apDtjkoKBsavCesWlA
+        pnhshYuyYYIsVZ9IXlC62lmnY
+X-Received: by 2002:a17:906:c14f:: with SMTP id dp15mr53895101ejc.267.1641575051122;
+        Fri, 07 Jan 2022 09:04:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwxiOmqafaff21rmaGP9L/GaY7kp3AdC2ZyQUvS3e0/4WFekTuNB6HGGiXRl6CWI39JR+XUKw==
+X-Received: by 2002:a17:906:c14f:: with SMTP id dp15mr53895091ejc.267.1641575050958;
+        Fri, 07 Jan 2022 09:04:10 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id p4sm1559114eju.98.2022.01.07.09.04.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 09:04:10 -0800 (PST)
+Message-ID: <f070a443-9763-a62f-38ef-3398fa942465@redhat.com>
+Date:   Fri, 7 Jan 2022 18:04:09 +0100
 MIME-Version: 1.0
-References: <20220107031905.2406176-1-robh@kernel.org> <cf75f1ee-8424-b6b2-f873-beea4676a29f@ti.com>
- <CAL_JsqL3PGqmzA0wW37G7TXhbRVgByznk==Q8GhA0_OFBKAycQ@mail.gmail.com> <8902cefa-e2d7-1bcc-aae2-f272be53d675@ti.com>
-In-Reply-To: <8902cefa-e2d7-1bcc-aae2-f272be53d675@ti.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 7 Jan 2022 11:03:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKScenYRO4QERfdB-e8-70Va1tMBbSTXbAoUp+AVTk8Pw@mail.gmail.com>
-Message-ID: <CAL_JsqKScenYRO4QERfdB-e8-70Va1tMBbSTXbAoUp+AVTk8Pw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop required 'interrupt-parent'
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        - <patches@opensource.cirrus.com>,
-        John Crispin <john@phrozen.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        netdev <netdev@vger.kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "Nagalla, Hari" <hnagalla@ti.com>, "Menon, Nishanth" <nm@ti.com>,
-        Vignesh R <vigneshr@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] KVM: x86: Check for rmaps allocation
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Nikunj A Dadhania <nikunj@amd.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vasant.hegde@amd.com,
+        brijesh.singh@amd.com
+References: <20220105040337.4234-1-nikunj@amd.com>
+ <YdVfvp2Pw6JUR61K@xz-m1.local> <Ydhx1qguxVZxOGfo@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ydhx1qguxVZxOGfo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 10:29 AM Suman Anna <s-anna@ti.com> wrote:
->
-> Hi Rob,
->
-> On 1/7/22 9:20 AM, Rob Herring wrote:
-> > On Fri, Jan 7, 2022 at 8:27 AM Suman Anna <s-anna@ti.com> wrote:
-> >>
-> >> Hi Rob,
-> >>
-> >> On 1/6/22 9:19 PM, Rob Herring wrote:
-> >>> 'interrupt-parent' is never required as it can be in a parent node or a
-> >>> parent node itself can be an interrupt provider. Where exactly it lives is
-> >>> outside the scope of a binding schema.
-> >>>
-> >>> Signed-off-by: Rob Herring <robh@kernel.org>
-> >>> ---
-> >>>  .../devicetree/bindings/gpio/toshiba,gpio-visconti.yaml  | 1 -
-> >>>  .../devicetree/bindings/mailbox/ti,omap-mailbox.yaml     | 9 ---------
-> >>>  Documentation/devicetree/bindings/mfd/cirrus,madera.yaml | 1 -
-> >>>  .../devicetree/bindings/net/lantiq,etop-xway.yaml        | 1 -
-> >>>  .../devicetree/bindings/net/lantiq,xrx200-net.yaml       | 1 -
-> >>>  .../devicetree/bindings/pci/sifive,fu740-pcie.yaml       | 1 -
-> >>>  .../devicetree/bindings/pci/xilinx-versal-cpm.yaml       | 1 -
-> >>>  7 files changed, 15 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml b/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-> >>> index 9ad470e01953..b085450b527f 100644
-> >>> --- a/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-> >>> +++ b/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
-> >>> @@ -43,7 +43,6 @@ required:
-> >>>    - gpio-controller
-> >>>    - interrupt-controller
-> >>>    - "#interrupt-cells"
-> >>> -  - interrupt-parent
-> >>>
-> >>>  additionalProperties: false
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
-> >>> index e864d798168d..d433e496ec6e 100644
-> >>> --- a/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
-> >>> +++ b/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
-> >>> @@ -175,15 +175,6 @@ required:
-> >>>    - ti,mbox-num-fifos
-> >>>
-> >>>  allOf:
-> >>> -  - if:
-> >>> -      properties:
-> >>> -        compatible:
-> >>> -          enum:
-> >>> -            - ti,am654-mailbox
-> >>> -    then:
-> >>> -      required:
-> >>> -        - interrupt-parent
-> >>> -
-> >>
-> >> There are multiple interrupt controllers on TI K3 devices, and we need this
-> >> property to be defined _specifically_ to point to the relevant interrupt router
-> >> parent node.
-> >>
-> >> While what you state in general is true, I cannot have a node not define this on
-> >> K3 devices, and end up using the wrong interrupt parent (GIC
-> >> interrupt-controller). That's why the conditional compatible check.
-> >
-> > But you could.
-> >
-> > The parent node can have a default interrupt-parent and child nodes
-> > can override that. It doesn't matter which one is the default though
-> > typically you would want the one used the most to be the default.
-> > Looking at your dts files, it looks like you all did the opposite.
->
-> Hmm, I am not sure I understood your last comment. Can you point out the
-> specific usage?
+On 1/7/22 18:01, Sean Christopherson wrote:
+> On Wed, Jan 05, 2022, Peter Xu wrote:
+>> On Wed, Jan 05, 2022 at 09:33:37AM +0530, Nikunj A Dadhania wrote:
+>>> With TDP MMU being the default now, access to mmu_rmaps_stat debugfs
+>>> file causes following oops:
+>>>
+>>> BUG: kernel NULL pointer dereference, address: 0000000000000000
+>>> PGD 0 P4D 0
+>>> Oops: 0000 [#1] PREEMPT SMP NOPTI
+>>> CPU: 7 PID: 3185 Comm: cat Not tainted 5.16.0-rc4+ #204
+>>> RIP: 0010:pte_list_count+0x6/0x40
+>>>   Call Trace:
+>>>    <TASK>
+>>>    ? kvm_mmu_rmaps_stat_show+0x15e/0x320
+>>>    seq_read_iter+0x126/0x4b0
+>>>    ? aa_file_perm+0x124/0x490
+>>>    seq_read+0xf5/0x140
+>>>    full_proxy_read+0x5c/0x80
+>>>    vfs_read+0x9f/0x1a0
+>>>    ksys_read+0x67/0xe0
+>>>    __x64_sys_read+0x19/0x20
+>>>    do_syscall_64+0x3b/0xc0
+>>>    entry_SYSCALL_64_after_hwframe+0x44/0xae
+>>>   RIP: 0033:0x7fca6fc13912
+>>>
+>>> Return early when rmaps are not present.
+>>>
+>>> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+>>> Tested-by: Vasant Hegde <vasant.hegde@amd.com>
+>>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>>> ---
+> 
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> 
 
-Perhaps an example. These are all equivalent:
+Queued, thanks.
 
-parent {
-  child1 {
-    interrupt-parent = <&intc1>;
-    interrupts = <1>;
-  };
-  child2 {
-    interrupt-parent = <&intc2>;
-    interrupts = <2>;
- };
-};
+Paolo
 
-parent {
-  interrupt-parent = <&intc1>; // Or in the parent's parent...
-  child1 {
-    interrupts = <1>;
-  };
-  child2 {
-    interrupt-parent = <&intc2>;
-    interrupts = <2>;
-  };
-};
-
-parent {
-  interrupt-parent = <&intc2>;
-  child1 {
-    interrupt-parent = <&intc1>;
-    interrupts = <1>;
-  };
-  child2 {
-    interrupts = <2>;
-  };
-};
-
-You could structure main_navss and child nodes in any of these 3 ways.
-
->
-> All our K3 dts files have the interrupt-parent = <&gic500> defined at the
-> root-node, which is the default ARM GIC.
->
-> Let us know if we need to fix something in our dts files.
-
-No! I'm just saying there are multiple correct ways to write the dts files.
-
-> The
-> > only way that wouldn't work is if the parent node is if the parent
-> > node has its own 'interrupts' or you are just abusing
-> > 'interrupt-parent' where the standard parsing doesn't work.
->
-> All our K3 gic500 nodes does have an 'interrupts' property.
-
-I said the parent node, not the 'interrupt-parent'. In this case, the
-parent is 'main_navss: bus@30800000'. It doesn't have 'interrupts' in
-your case, so only the 2nd case is a possibility.
-
-> > You are also free to use 'interrupts-extended' anywhere 'interrupts'
-> > is used and then interrupt-parent being present is an error.
->
-> Yes, this is understood. The OMAP Mailbox binding is reused between multiple SoC
-> families, some of which do not use an Interrupt Router in between.
->
-> So, whats the best way to enforce this in the specific schema? I have used the
-> common 'interrupts' property that applies to all SoCs, and enforced the
-> conditional 'interrupt-parent' only on relevant compatibles.
-
-You can't. There is no way a schema can ensure you connect the right
-interrupt controller just as it can't ensure you used the right
-interrupt number and flags or used the right addresses. Well, you
-could technically, but then at that point we could just generate the
-dts from the schema.
-
-Rob

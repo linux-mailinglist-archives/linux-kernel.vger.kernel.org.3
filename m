@@ -2,117 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D681487696
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE82487682
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbiAGLeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:34:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29706 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232117AbiAGLeN (ORCPT
+        id S1347127AbiAGLaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:30:23 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:56877 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347109AbiAGLaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:34:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641555253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/4miwulnF5JUWTEMT0YKoKtJPjUdNUU/eGbpM5de04o=;
-        b=Q2DEqYGlzJvNbb6ktZcRJBi1QJsconfjnMmUCo5rKu8nTKULMu4qu5ZuNEQ3TNoYVaHpeR
-        YabcxIHc7gdurJ6eQU73SejaI0cSnmPqDcZotke5UQlddWkC62ieBo356VZr9i9TT8zedz
-        KUtLCiZIlQUMoeK6zv52MUiHaDi0syQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-rV2-3EDmPUm_m-rym8TsRQ-1; Fri, 07 Jan 2022 06:34:11 -0500
-X-MC-Unique: rV2-3EDmPUm_m-rym8TsRQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 416611800D50;
-        Fri,  7 Jan 2022 11:34:10 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D4C0A84A3A;
-        Fri,  7 Jan 2022 11:33:56 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 6A7EA40C5C1D; Fri,  7 Jan 2022 08:30:01 -0300 (-03)
-Date:   Fri, 7 Jan 2022 08:30:01 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v8 02/10] add prctl task isolation prctl docs and samples
-Message-ID: <20220107113001.GA105857@fuller.cnet>
-References: <20211208161000.684779248@fuller.cnet>
- <20220106234956.GA1321256@lothringen>
+        Fri, 7 Jan 2022 06:30:22 -0500
+Received: by mail-io1-f70.google.com with SMTP id d187-20020a6bb4c4000000b00601c0b8532aso3656021iof.23
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 03:30:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=twH3lIsDg1mK6ZZSNQSJNyI5AQBsCC6K6+Ds2Qz7NWk=;
+        b=4Z3SBvPzK+BTczOOZ3jDGCCsgSB3UXPf1xl02l+rAIkrW4Lo043vnA2gXNEVmMD48J
+         hoGVWmpCENE08Kme/E4j7hNH8Ylt9GXoxE3YvgX+IdeHb+kxDeqq2AScEg77XAEQVruL
+         KyyrtIlnPZWo+Xm3CuExccj+N1CUlKTW+Xg9VaPR7Ts4CJ5n1dIXUZc4Za6DQ7F4c5xc
+         QzEHTLVP/cTxI/HiZdIlRuU5CyNc7aZ+VAaSey3tu9PesiWlPiw1myKfyS5DpRBWcuwE
+         LblLPFqrSQhAM+v1s9Yk014QDG4vUKeNhuizA8BjYVJql6JvQLRf3DxFvoSdjES+dF81
+         A/TA==
+X-Gm-Message-State: AOAM531NletF+fQDigI/BMxNRbokxM/X3GxbeBueGZsfhElq+hIhQae1
+        lhcL8tRnOTgvXfL6vo75IJifW1AUKBeqlgWxugz9WLx2WRDk
+X-Google-Smtp-Source: ABdhPJx8+AuwAbAyNythFIFEgT9WXemyq3V4aiVKpF35RZGmzmc1IDHPqct/QgSSivDa9dO9u0zHh2QWwMTSfHQM4KqSie6FNJrE
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106234956.GA1321256@lothringen>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Received: by 2002:a05:6638:4192:: with SMTP id az18mr29573189jab.252.1641555021228;
+ Fri, 07 Jan 2022 03:30:21 -0800 (PST)
+Date:   Fri, 07 Jan 2022 03:30:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eb759205d4fc4f58@google.com>
+Subject: [syzbot] KMSAN: uninit-value in ip_fast_csum (2)
+From:   syzbot <syzbot+2e4b07b74e6ce750cd4d@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        glider@google.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 12:49:56AM +0100, Frederic Weisbecker wrote:
-> On Wed, Dec 08, 2021 at 01:09:08PM -0300, Marcelo Tosatti wrote:
-> > Add documentation and userspace sample code for prctl
-> > task isolation interface.
-> > 
-> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> 
-> Acked-by: Frederic Weisbecker <frederic@kernel.org>
-> 
-> Thanks a lot! Time for me to look at the rest of the series.
-> 
-> Would be nice to have Thomas's opinion as well at least on
-> the interface (this patch).
+Hello,
 
-Yes. AFAIAW most of his earlier comments on what the 
-interface should look like have been addressed (or at
-least i've tried to)... including the ability for
-the system admin to configure the isolation options.
+syzbot found the following issue on:
 
-The one thing missing is to attempt to enter nohz_full
-on activation (which Christoph asked for).
+HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fb290db00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=2e4b07b74e6ce750cd4d
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
 
-Christoph, have a question on that. At
-https://lkml.org/lkml/2021/12/14/346, you wrote:
+Unfortunately, I don't have any reproducer for this issue yet.
 
-"Applications running would ideally have no performance penalty and there
-is no  issue with kernel activity unless the application is in its special
-low latency loop. NOHZ is currently only activated after spinning in that
-loop for 2 seconds or so. Would be best to be able to trigger that
-manually somehow."
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2e4b07b74e6ce750cd4d@syzkaller.appspotmail.com
 
-So was thinking of something similar to what the full task isolation
-patchset does (with the behavior of returning an error as option...):
+=====================================================
+BUG: KMSAN: uninit-value in do_csum lib/checksum.c:51 [inline]
+BUG: KMSAN: uninit-value in ip_fast_csum+0x429/0x5b0 lib/checksum.c:108
+ do_csum lib/checksum.c:51 [inline]
+ ip_fast_csum+0x429/0x5b0 lib/checksum.c:108
+ ip_send_check net/ipv4/ip_output.c:95 [inline]
+ ip_frag_next+0xd92/0xfd0 net/ipv4/ip_output.c:740
+ ip_do_fragment+0x1158/0x2a30 net/ipv4/ip_output.c:886
+ ip_fragment+0x378/0x4e0
+ __ip_finish_output+0x69b/0x960 net/ipv4/ip_output.c:297
+ ip_finish_output+0x15c/0x4d0 net/ipv4/ip_output.c:309
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip_output+0x333/0x6d0 net/ipv4/ip_output.c:423
+ dst_output include/net/dst.h:450 [inline]
+ NF_HOOK+0x180/0x450 include/linux/netfilter.h:307
+ raw_send_hdrinc+0x1a42/0x1f20 net/ipv4/raw.c:429
+ raw_sendmsg+0x276d/0x2e90 net/ipv4/raw.c:660
+ inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ kernel_sendmsg+0x22c/0x2f0 net/socket.c:744
+ sock_no_sendpage+0x227/0x2c0 net/core/sock.c:3080
+ inet_sendpage+0x2c2/0x2f0 net/ipv4/af_inet.c:834
+ kernel_sendpage+0x4a0/0x5a0 net/socket.c:3504
+ sock_sendpage+0x161/0x1a0 net/socket.c:1003
+ pipe_to_sendpage+0x3f1/0x510 fs/splice.c:364
+ splice_from_pipe_feed fs/splice.c:418 [inline]
+ __splice_from_pipe+0x5c3/0x1000 fs/splice.c:562
+ splice_from_pipe fs/splice.c:597 [inline]
+ generic_splice_sendpage+0x1d5/0x2c0 fs/splice.c:746
+ do_splice_from fs/splice.c:767 [inline]
+ direct_splice_actor+0x1a4/0x240 fs/splice.c:936
+ splice_direct_to_actor+0xa7a/0x1410 fs/splice.c:891
+ do_splice_direct+0x3b2/0x600 fs/splice.c:979
+ do_sendfile+0xe3c/0x1f50 fs/read_write.c:1245
+ __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ __x64_sys_sendfile64+0x367/0x400 fs/read_write.c:1296
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-+int try_stop_full_tick(void)
-+{
-+	int cpu = smp_processor_id();
-+	struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
-+
-+	/* For an unstable clock, we should return a permanent error code. */
-+	if (atomic_read(&tick_dep_mask) & TICK_DEP_MASK_CLOCK_UNSTABLE)
-+		return -EINVAL;
-+
-+	if (!can_stop_full_tick(cpu, ts))
-+		return -EAGAIN;
-+
-+	tick_nohz_stop_sched_tick(ts, cpu);
-+	return 0;
-+}
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1126 [inline]
+ ip_frag_next+0x1b9/0xfd0 net/ipv4/ip_output.c:686
+ ip_do_fragment+0x1158/0x2a30 net/ipv4/ip_output.c:886
+ ip_fragment+0x378/0x4e0
+ __ip_finish_output+0x69b/0x960 net/ipv4/ip_output.c:297
+ ip_finish_output+0x15c/0x4d0 net/ipv4/ip_output.c:309
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip_output+0x333/0x6d0 net/ipv4/ip_output.c:423
+ dst_output include/net/dst.h:450 [inline]
+ NF_HOOK+0x180/0x450 include/linux/netfilter.h:307
+ raw_send_hdrinc+0x1a42/0x1f20 net/ipv4/raw.c:429
+ raw_sendmsg+0x276d/0x2e90 net/ipv4/raw.c:660
+ inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ kernel_sendmsg+0x22c/0x2f0 net/socket.c:744
+ sock_no_sendpage+0x227/0x2c0 net/core/sock.c:3080
+ inet_sendpage+0x2c2/0x2f0 net/ipv4/af_inet.c:834
+ kernel_sendpage+0x4a0/0x5a0 net/socket.c:3504
+ sock_sendpage+0x161/0x1a0 net/socket.c:1003
+ pipe_to_sendpage+0x3f1/0x510 fs/splice.c:364
+ splice_from_pipe_feed fs/splice.c:418 [inline]
+ __splice_from_pipe+0x5c3/0x1000 fs/splice.c:562
+ splice_from_pipe fs/splice.c:597 [inline]
+ generic_splice_sendpage+0x1d5/0x2c0 fs/splice.c:746
+ do_splice_from fs/splice.c:767 [inline]
+ direct_splice_actor+0x1a4/0x240 fs/splice.c:936
+ splice_direct_to_actor+0xa7a/0x1410 fs/splice.c:891
+ do_splice_direct+0x3b2/0x600 fs/splice.c:979
+ do_sendfile+0xe3c/0x1f50 fs/read_write.c:1245
+ __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+ __x64_sys_sendfile64+0x367/0x400 fs/read_write.c:1296
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Is that sufficient? (note it might still be possible 
-for a failure to enter nohz_full due to a number of 
-reasons), see tick_nohz_stop_sched_tick.
+CPU: 1 PID: 6492 Comm: syz-executor.3 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

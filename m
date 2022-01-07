@@ -2,224 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A664A4878D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8E94878E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239203AbiAGOVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347768AbiAGOVH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:21:07 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A4BC061574;
-        Fri,  7 Jan 2022 06:21:06 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=truhe.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1n5q76-0007s5-Kc; Fri, 07 Jan 2022 15:21:04 +0100
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     linux-doc@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH v2 2/2] docs: regressions.rst: rules of thumb for handling regressions
-Date:   Fri,  7 Jan 2022 15:21:02 +0100
-Message-Id: <42d1f7d44ab1469be626799b0579894267cabe95.1641565030.git.linux@leemhuis.info>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1641565030.git.linux@leemhuis.info>
-References: <cover.1641565030.git.linux@leemhuis.info>
+        id S239195AbiAGOZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:25:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:41090 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238858AbiAGOZY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 09:25:24 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0174613A1;
+        Fri,  7 Jan 2022 06:25:24 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 38D8F3F774;
+        Fri,  7 Jan 2022 06:25:22 -0800 (PST)
+Subject: Re: [RT] BUG in sched/cpupri.c
+To:     John Keeping <john@metanate.com>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <Yb3vXx3DcqVOi+EA@donbot>
+ <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com>
+ <20211221164528.3c84543f.john@metanate.com>
+ <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com> <87r1a4775a.mognet@arm.com>
+ <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com> <Ydgo2lENzywieaZL@donbot>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <88826618-5ce8-dd1f-c9db-ec273fede3ce@arm.com>
+Date:   Fri, 7 Jan 2022 15:25:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641565266;60e5e95e;
-X-HE-SMSGID: 1n5q76-0007s5-Kc
+In-Reply-To: <Ydgo2lENzywieaZL@donbot>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a section with a few rules of thumb about how quickly regressions
-should be fixed. They are written after studying the quotes from Linus
-found in the modified document and especially influenced by statements
-like "Users are literally the _only_ thing that matters" and "without
-users, your program is not a program, it's a pointless piece of code
-that you might as well throw away". The author interpreted those in
-perspective to how the various Linux kernel series are maintained and
-what those practices might mean for users running into a regression when
-updating.
+On 07/01/2022 12:49, John Keeping wrote:
+> On Fri, Jan 07, 2022 at 11:46:45AM +0100, Dietmar Eggemann wrote:
+>> On 22/12/2021 20:48, Valentin Schneider wrote:
+>>>  /*
+>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>>> index ef8228d19382..8f3e3a1367b6 100644
+>>> --- a/kernel/sched/rt.c
+>>> +++ b/kernel/sched/rt.c
+>>> @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>>  	if (!next_task)
+>>>  		return 0;
+>>>  
+>>> +	/*
+>>> +	 * It's possible that the next_task slipped in of higher priority than
+>>> +	 * current, or current has *just* changed priority.  If that's the case
+>>> +	 * just reschedule current.
+>>> +	 */
+>>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
+>>> +		resched_curr(rq);
+>>> +		return 0;
+>>> +	}
+>>
+>> IMHO, that's the bit which prevents the BUG.
+>>
+>> But this would also prevent the case in which rq->curr is an RT task
+>> with lower prio than next_task.
+>>
+>> Also `rq->curr = migration/X` goes still though which is somehow fine
+>> since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
+>>
+>> And DL tasks (like sugov:X go through and they can have
+>> task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
+>> freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
+>> can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
+>> by coincidence.
+>>
+>> So maybe something like this:
+> 
+> Do you mean to replace just the one hunk from Valentin's patch with the
+> change below (keeping the rest), or are you saying that only the change
+> below is needed?
 
-That for example lead to the paragraph starting with "Aim to get fixes
-for regressions mainlined within one week after identifying the culprit,
-if the regression was introduced in a stable/longterm release or the
-devel cycle for the latest mainline release". This is a pretty high bar,
-but on the other hand needed to not leave users out in the cold for to
-long. This can quickly happen, as the previous stable series is normally
-stamped "End of Life" about three or four weeks after a new mainline
-release, which makes a lot of users switch during this timeframe. Any of
-them risk running into regressions not promptly fixed; even worse, once
-the previous stable series is EOLed for real, users that face a
-regression might be left with only three options:
+The latter.
 
- (1) continue running an outdated and thus potentially insecure kernel
-     version from an abandoned stable series
+I think Valentin wanted to see if something like this can also occur via
+sched_setscheduler() and maybe for this changes in switched_from_[rt/dl]
+will be necessary.
 
- (2) run the kernel with the regression
-
- (3) downgrade to an earlier longterm series still supported
-
-This is better avoided, as (1) puts users and their data in danger, (2)
-will only be possible if it's a minor regression that doesn't interfere
-with booting or serious usage, and (3) might be regression itself or
-impossible on the particular machine, as some users will require drivers
-or features only introduced after the latest longterm series took of.
-
-In the end this lead to the "Aim to fix regression within one week"
-part. It also is the reason for the "Try to resolve any regressions
-introduced in the current development cycle before its end.".
-
-Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
-CC: Linus Torvalds <torvalds@linux-foundation.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
-Hi! A lot of developers are doing a good job in fixing regressions, but
-I noticed it sometimes takes many weeks to get even simple fixes for
-regressions merged. Most of the time this is due to one of these
-factors:
-
- * it takes a long time to get the fix ready, as some developers
-   apparently don't prioritize work on fixing regressions
-
- * fully developed fixes linger in git trees of maintainers for weeks,
-   sometimes even without the fix being in linux-next
-
-This afaics is especially a problem for regressions introduced in
-mainline, but only found after a recent release or a stable kernel
-series derived from it. Sometimes fixes for these regressions are even
-left lying around for weeks until the next merge window, which
-contributes to a huge pile of fixes getting backported to stable and
-longterm releases during or shortly after merge windows. Asking
-developers to speed things up rarely helped, as people have different
-options on how fast regression fixes need to be developed and merged
-upstream.
-
-That's why it would be a great help to my work as regression tracker if
-we had some rough written down guidelines for handling regressions, as
-proposed by the patch below. I'm well aware that the text sets a pretty
-high bar. That's because I approached the problem primarily from the
-point of a user, as can be seen by the patch description.
-
-The text added by this patch likely will lead to some discussions,
-that's why I submit it separately from the rest of the new document on
-regressions, which is found in patch 1/2; I also CCed Linus on this
-patch and hope they state his opinion or ACK is. In the end I can
-easily tone this down or write something totally different: that's
-totally fine for me, I'm mainly interested in having some expectations
-roughly documented to get everyone on the same page.
----
- Documentation/admin-guide/regressions.rst | 79 +++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
-
-diff --git a/Documentation/admin-guide/regressions.rst b/Documentation/admin-guide/regressions.rst
-index 6eb8d9784a1f..17db7be110c1 100644
---- a/Documentation/admin-guide/regressions.rst
-+++ b/Documentation/admin-guide/regressions.rst
-@@ -64,6 +64,10 @@ list; add the aforementioned paragraph, just omit the caret (the ^) before the
- ``introduced``, which makes regzbot treat your mail (and not the one you reply
- to) as the report.
- 
-+Try to fix regressions quickly once the culprit has been identified. Fixes for
-+most regressions should be mainlined within two weeks, but some should be
-+addressed within two or three days.
-+
- When submitting fixes for regressions, always include 'Link:' tags in the commit
- message that point to all places where the issue was reported, as explained in
- `Documentation/process/submitting-patches.rst` and
-@@ -235,6 +239,81 @@ Alternatively to all the above you can just forward or bounce the report to the
- Linux kernel's regression tracker, but consider the downsides already outlined
- in the previous section.
- 
-+How quickly should regressions be fixed?
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Developers should fix any reported regression as quickly as possible, to provide
-+affected users with a solution in a timely manner and prevent more users from
-+running into the issue; nevertheless developers need to take enough time and
-+care to ensure regression fixes do not cause additional damage.
-+
-+In the end though, developers should give their best to prevent users from
-+running into situations where a regression leaves them only three options: 'run
-+a kernel with a regression that seriously impacts usage', 'continue running an
-+outdated and thus potentially insecure kernel version for more than two weeks
-+after a regression's culprit was identified', and 'downgrade to a still
-+supported kernel series that's missing required features'.
-+
-+How to realize this depends a lot on the situation. Here are a few rules of
-+thumb for developers, in order or importance:
-+
-+ * Prioritize work on handling reports about regression and fixing them over all
-+   other Linux kernel work, unless the latter concerns acute security issues or
-+   bugs causing data loss or damage.
-+
-+ * Always consider reverting the culprit commits and reapplying them later
-+   together with necessary fixes, as this might be the least dangerous and
-+   quickest way to fix a regression.
-+
-+ * Try to resolve any regressions introduced in the current development before
-+   its end. If you fear a fix might be too risky to apply only days before a new
-+   mainline release, let Linus decide: submit the fix separately to him as soon
-+   as possible with the explanation of the situation. He then can make a call
-+   and postpone the release if necessary, for example if multiple such changes
-+   show up in his inbox.
-+
-+ * Address regressions in stable, longterm, or proper mainline releases with
-+   more urgency than regressions in mainline pre-releases. That changes after
-+   the release of the fifth pre-release, aka '-rc5': mainline then becomes as
-+   important, to ensure all the improvements and fixes are ideally tested
-+   together for at least one week before Linus releases a new mainline version.
-+
-+ * Fix regressions within two or three days, if they are critical for some
-+   reason -- for example, if the issue is likely to affect many users of the
-+   kernel series in question on all or certain architectures. This thus includes
-+   fixes for compile errors in mainline, as they might prevent testers and
-+   continuous integration systems from doing their work.
-+
-+ * Aim to merge regression fixes into mainline within one week after the culprit
-+   was identified, if the regression was introduced in a stable/longterm release
-+   or the development cycle for the latest mainline release (say v5.14). If
-+   possible, try to address the issue even quicker, if the previous stable
-+   series (v5.13.y) will be abandoned soon or already was stamped 'End-of-Life'
-+   (EOL) -- this usually happens about three to four weeks after a new mainline
-+   release.
-+
-+ * Try to fix all other regressions within two weeks after the culprit was
-+   found. Two or three additional weeks are acceptable for performance
-+   regressions and other issues which are annoying, but don't prevent anyone
-+   from running Linux -- unless it's an issue in the current development cycle,
-+   which should be addressed before the release. A few weeks in total are also
-+   acceptable if a regression can only be fixed with a risky change and at the
-+   same time is affecting only a few users; as much time is also acceptable if
-+   the regression is already present in the second newest longterm kernel
-+   series.
-+
-+Note: The aforementioned time frames for resolving regressions are meant to
-+include getting the fix tested, reviewed, and merged into mainline, ideally with
-+the fix being in linux-next for two days. Developers need to keep in mind that
-+each of these steps takes some time.
-+
-+Subsystem maintainers are expected to assist in reaching those periods by doing
-+timely reviews and quick handling of accepted patches. They thus might have to
-+send git-pull requests earlier or more often than usual; depending on the fix,
-+it might even be acceptable to skip testing in linux-next. Especially fixes for
-+regressions in stable and longterm kernels need to be handled quickly, as fixes
-+need to be merged in mainline before they can be backported to older series.
-+
- Are really all regressions fixed?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.31.1
-
+>> @ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>                 if (!pull || rq->push_busy)
+>>                         return 0;
+>>
+>> +               if (rq->curr->sched_class != &rt_sched_class) {
+>> +                       resched_curr(rq);
+>> +                       return 0;
+>> +               }
+>> +
+>>                 cpu = find_lowest_rq(rq->curr);
+>>
+>> [...

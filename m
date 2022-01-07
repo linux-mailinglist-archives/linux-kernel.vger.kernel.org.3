@@ -2,154 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 399FC48778F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B991487796
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347141AbiAGMWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S231230AbiAGM0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347046AbiAGMWV (ORCPT
+        with ESMTP id S231223AbiAGM0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:22:21 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BC3C061201
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 04:22:21 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso6303296pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 04:22:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=j2hVMlNtYj5VEZ4Y0Jxi4coXu71w03xKJ5OC/uICxbM=;
-        b=NmATg7It3Il/fTwBYVReR2qL0539xNHXqwhaC0Io36c1Hse/4RmuJk8p3V1iAoEAHz
-         Id310GNdgnitLhaWeAwpIxqQ8Ama2awsWR2hUiMGlGzHeNrgWx1VCzgQg7aWjweGPpaz
-         hhmcdLVcHmdpxgOnIkNAAQNNE75nHl7Jxo0WPKuySplURCkS5PG3f3qM757JjNtUPezY
-         61YiywVtRFfCcCREn5xMi8kKQID6rH3ngw4+WcW4QOXG169tGnQ2vXGEzA9hcqnutGn3
-         tVxOuucpCztEO18Skvsnulo0/WBkM1lVzfxAFkqszmGcO/0v260EcPG7RZpHYTIXOczv
-         nDqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=j2hVMlNtYj5VEZ4Y0Jxi4coXu71w03xKJ5OC/uICxbM=;
-        b=o/s4XDaKQeQiT2+KZqJRSSHe0556Zjs+ObNZPV/BJHKNOcnAvhUUTPwsCM3zdrxtUe
-         GwRqAU2Anve3i5MaULxzH1drGh3Qe41gKN++GALrRZzvx1fE4BQJndNbMN9ydYn/xdZ1
-         FeJtntCsbApNXgur9/T0icqhDwZZjIZZ2g3eEfAUpgEkTOjtsQiD8qkqajt8mENiBkgY
-         V6CAl3xzeSMeEVCuvwQhBle7z4qacxijfnPrZswfKB47J2dg0tpMvRT5YFtBOjdkpxJu
-         4HUv/yFsqMRliuqyLF0Htgs8x09oT1072mJ1EEWWkSLz5jp8bBm8FSHQfiOzTlZ9wMa5
-         cCbg==
-X-Gm-Message-State: AOAM531ecroBC1bsmS1+KPDYafLz/+05K+yBpa37aoZSb7Or+1KD0q4B
-        i0Ri/4gMLyD4mMnm0I22/8b2SQ==
-X-Google-Smtp-Source: ABdhPJxYPhYn/uXSncnYHL8SnUZXPEHJiyYRnFKZgWswA7zlt3cluhf9z1TPTccC6ncbn0MdMB9u5w==
-X-Received: by 2002:a17:90b:3848:: with SMTP id nl8mr15322592pjb.167.1641558140626;
-        Fri, 07 Jan 2022 04:22:20 -0800 (PST)
-Received: from ubuntu.huaqin.com ([101.78.151.213])
-        by smtp.gmail.com with ESMTPSA id o11sm6013071pfu.150.2022.01.07.04.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 04:22:20 -0800 (PST)
-From:   xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hsinyi@chromium.org,
-        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: [PATCH v2 2/2] dt-bindings: display: Add STARRY 2081101QFH032011-53G
-Date:   Fri,  7 Jan 2022 20:22:08 +0800
-Message-Id: <20220107122208.3893-2-xiazhengqiao@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220107122208.3893-1-xiazhengqiao@huaqin.corp-partner.google.com>
-References: <20220107122208.3893-1-xiazhengqiao@huaqin.corp-partner.google.com>
+        Fri, 7 Jan 2022 07:26:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF65C061245;
+        Fri,  7 Jan 2022 04:26:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD2B61E29;
+        Fri,  7 Jan 2022 12:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C611CC36AE0;
+        Fri,  7 Jan 2022 12:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641558377;
+        bh=aKwLmZO6B2wjO3JzQbIVujH9UXKt1lKP5lgh1sDezbE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bu97ErzTXbk7b3/b+UXvRAveEch1CwAFM1AS6DcOQY4z6AcAiPQ3VEB3fj6v4g4Ch
+         fsE+HTAKyw81pppXnew33TYXVRiGRoMKQ+7BqjHf34+IzvBu9Ndf4WvjqgQ/ErL0wz
+         BS8H3cpO8y8tQ8m48L+/m3LEiceRLt0niGRCadEaVD9DHyA/YOVMPsfqvHlIhU1yD9
+         zH4MlfjF2Ld23DjTk9adZ1idXWL+NpfRmlXK6u3CB6I5clC+ODOINS8vP33nUh7gX3
+         Y9hcg9xnySXwJpnLJsx9/zbuii9CZpSU6/CSrZF+szuZEJYdht/rI+pfC0lF3jGAeH
+         k2QaZ3gdBmRnQ==
+Date:   Fri, 7 Jan 2022 14:26:12 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/25] x86/sgx: Move PTE zap code to separate function
+Message-ID: <YdgxZFvjrPQN2D8S@iki.fi>
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <bd228c90c139437bb4fcc4b7b99063bfd3eb1439.1638381245.git.reinette.chatre@intel.com>
+ <Yavy5JTYAkdZjnK2@iki.fi>
+ <66151f3a-0e32-fc57-cb54-5b714588389b@intel.com>
+ <917c53ff755d9a20e1f4bcb48c70add8364d1065.camel@kernel.org>
+ <192e252a-653f-2221-73dd-99894c134a37@intel.com>
+ <YcsleU6ExUbpN51r@iki.fi>
+ <cf654da2-00b3-0c3c-57ad-bb669e60de92@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf654da2-00b3-0c3c-57ad-bb669e60de92@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt-bindings for 10.1" TFT LCD module called STARRY 2081101
-QFH032011-53G.
+On Thu, Jan 06, 2022 at 09:46:35AM -0800, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 12/28/2021 6:55 AM, Jarkko Sakkinen wrote:
+> > On Mon, Dec 13, 2021 at 02:11:26PM -0800, Reinette Chatre wrote:
+> >> Hi Jarkko,
+> >>
+> >> On 12/10/2021 11:52 PM, Jarkko Sakkinen wrote:
+> >>> On Mon, 2021-12-06 at 13:30 -0800, Reinette Chatre wrote:
+> >>>> Hi Jarkko,
+> >>>>
+> >>>> On 12/4/2021 2:59 PM, Jarkko Sakkinen wrote:
+> >>>>> On Wed, Dec 01, 2021 at 11:23:05AM -0800, Reinette Chatre wrote:
+> >>>>>> The SGX reclaimer removes page table entries pointing to pages that are
+> >>>>>> moved to swap. SGX2 enables changes to pages belonging to an initialized
+> >>>>>> enclave, for example changing page permissions. Supporting SGX2 requires
+> >>>>>> this ability to remove page table entries that is available in the
+> >>>>>> SGX reclaimer code.
+> >>>>>
+> >>>>> Missing: why SGX2 requirest this?
+> >>>>
+> >>>> The above paragraph states that SGX2 needs to remove page table entries
+> >>>> because it modifies page permissions. Could you please elaborate what is
+> >>>> missing?
+> >>>
+> >>> It does not say why SGX2 requires an ability to remove page table entries.
+> >>
+> >> Are you saying that modification of EPCM page permissions is not a reason to
+> >> remove page table entries pointing to those pages?
+> > 
+> > So you have:
+> > 
+> > "Supporting SGX2 requires this ability to remove page table entries that is
+> > available in the SGX reclaimer code"
+> > 
+> > Just write down where you need this ability (briefly).
+> 
+> Will do. I will expand the current permission changing text and also add the need
+> for this ability when regular pages are changed to TCS pages. TCS pages may not
+> be accessed by enclave code so when a regular page becomes a TCS page any page
+> table entries pointing to it should be removed.
 
-Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
----
- .../display/panel/innolux,himax8279d.yaml     | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/innolux,himax8279d.yaml
+Thank you, sounds good.
 
-diff --git a/Documentation/devicetree/bindings/display/panel/innolux,himax8279d.yaml b/Documentation/devicetree/bindings/display/panel/innolux,himax8279d.yaml
-new file mode 100644
-index 000000000000..fdcea3870dfb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/innolux,himax8279d.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/innolux,himax8279d.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: INNOLUX HIMAX8279D DSI Display Panel
-+
-+maintainers:
-+  - xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+        # STARRY 2081101QFH032011-53G 10.1" WUXGA TFT LCD panel
-+      - starry,2081101qfh032011-53g
-+
-+  reg:
-+    description: the virtual channel number of a DSI peripheral
-+
-+  enable-gpios:
-+    description: a GPIO spec for the enable pin
-+
-+  pp1800-supply:
-+    description: core voltage supply
-+
-+  avdd-supply:
-+    description: phandle of the regulator that provides positive voltage
-+
-+  avee-supply:
-+    description: phandle of the regulator that provides negative voltage
-+
-+  backlight:
-+    description: phandle of the backlight device attached to the panel
-+
-+  port: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - enable-gpios
-+  - pp1800-supply
-+  - avdd-supply
-+  - avee-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    dsi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        panel@0 {
-+            compatible = "starry,2081101qfh032011-53g";
-+            reg = <0>;
-+            enable-gpios = <&pio 45 0>;
-+            avdd-supply = <&ppvarn_lcd>;
-+            avee-supply = <&ppvarp_lcd>;
-+            pp1800-supply = <&pp1800_lcd>;
-+            backlight = <&backlight_lcd0>;
-+            port {
-+                panel_in: endpoint {
-+                    remote-endpoint = <&dsi_out>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
--- 
-2.17.1
-
+BR,
+Jarkko

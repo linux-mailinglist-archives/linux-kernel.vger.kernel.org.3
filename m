@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D04A8487877
+	by mail.lfdr.de (Postfix) with ESMTP id 86F18487876
 	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 14:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347669AbiAGNqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 08:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347663AbiAGNqq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1347662AbiAGNqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 7 Jan 2022 08:46:46 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E75DC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 05:46:45 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from proxima.lasnet.de ([78.47.171.185]:52756 "EHLO
+        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233066AbiAGNqp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:46:45 -0500
+Received: from [IPV6:2003:e9:d724:9af0:641c:922:9a06:5c2c] (p200300e9d7249af0641c09229a065c2c.dip0.t-ipconnect.de [IPv6:2003:e9:d724:9af0:641c:922:9a06:5c2c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 124061EC0464;
-        Fri,  7 Jan 2022 14:46:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641563200;
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 5A894C005A;
+        Fri,  7 Jan 2022 14:46:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1641563203;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=C1pkyHo94BGO/tBMRde+1i2VQ9Ft0h9GgoA41VSbaxM=;
-        b=XXjObhAf7T2FHM7XmYB9J9bf+1FK5lvodL7CL1/otDfDlDGR2xN6hcwVN/xTZFCHdjtpmc
-        qU1MUWEgRpqJcKhVPUxIxau89v4b7E5IisdRDgHJlEWxzkCrZ/iEH5MMEZsAIRAXAbL61s
-        GsL9hH9OHUyj6V2endmuvyz4C3mwRAY=
-Date:   Fri, 7 Jan 2022 14:46:41 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/26] x86/tdx: Handle in-kernel MMIO
-Message-ID: <YdhEQTnm+XMxoDPW@zn.tnic>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-9-kirill.shutemov@linux.intel.com>
- <YdV1BpMiAUGrwASv@zn.tnic>
- <20220105154311.bocij4mwbga4t2hb@box.shutemov.name>
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ta7MOcivJtNYj5c/HQIfAoE0zlPdJosOBmR89DAXB8=;
+        b=jP5tLhBwcj7/nUdpKppFv9+9bSM986kOXpBVgu0qRTYHr99NNpNQScwVwOHOPvbnWdR53x
+        SMWeniQS9VoqhH7l7NRu6wGnwDbLaz+wxg/wz456Gk+TRO9kfUt+geOoOm4oH/3ZeQRZlr
+        cI0Xaywxu4aWBdcx9OYxJ0v8niAj/m8myM66/xy8bZG/QWgZQdRJlOT1a3LQMQEd7rysv1
+        kM8rfnm6k9KFbnzqd+ssl59BD9tyTgFuRMhuOoPvlto4hz61MdKTRoX52/jSkjOkwbiVtk
+        aKRJa0i2x66L8x4UQOSPX9b1GSdybR6kS8ncMOfvvsPgcri4yf2PZaTJrTfeEA==
+Message-ID: <2439d9ab-133f-0338-24f9-a9a5cd2065a3@datenfreihafen.org>
+Date:   Fri, 7 Jan 2022 14:46:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220105154311.bocij4mwbga4t2hb@box.shutemov.name>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH -next] ieee802154: atusb: move to new USB API
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, alex.aring@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220105144947.12540-1-paskripkin@gmail.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220105144947.12540-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 06:43:11PM +0300, Kirill A. Shutemov wrote:
-> Not encrypted, saved/restored by TDX module. But yes, cannot be exposed
-> (without guest intend).
-> 
-> I talk here about *why* the traditional way to handle MMIO -- on VMM side
-> -- doesn't work for TDX. It's not safe with untrusted VMM.
 
-Lemme see if I understand this correctly: TDX module saves/restores
-guest registers so a malicious hypervisor cannot access them? And that's
-why you can't do the traditional way MMIO is done?
+Hello.
 
-> readX()/writeX() helpers limit the range of instructions which can trigger
-> MMIO. It makes MMIO instruction emulation feasible. Raw access to MMIO
-> region allows compiler to generate whatever instruction it wants.
-> Supporting all possible instructions is a task of a different scope.
+On 05.01.22 15:49, Pavel Skripkin wrote:
+> @@ -176,9 +105,13 @@ static int atusb_read_subreg(struct atusb *lp,
+>   			     unsigned int addr, unsigned int mask,
+>   			     unsigned int shift)
+>   {
+> -	int rc;
+> +	int rc, ret;
+> +
+> +	ret = usb_control_msg_recv(lp->usb_dev, 0, ATUSB_REG_READ, ATUSB_REQ_FROM_DEV,
 
-Yap, please add that to the commit message.
+You are changing the meaning of the rc variable away from a return code. 
+Its the register value now. I would prefer if we change the name to 
+something like reg to reflect this new meaning.
 
-Thx.
+> +				   0, addr, &rc, 1, 1000, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> -	rc = atusb_read_reg(lp, addr);
+>   	rc = (rc & mask) >> shift;
+>   
+>   	return rc;
 
--- 
-Regards/Gruss,
-    Boris.
+The change above and the bug fix I reported the other day is all that is 
+missing for this to be applied. You want to send a v2 with this changes 
+or do you prefer me doing them here locally and apply?
 
-https://people.kernel.org/tglx/notes-about-netiquette
+regards
+Stefan Schmidt

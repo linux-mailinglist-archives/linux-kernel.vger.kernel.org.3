@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A58248766C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909FE487674
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347081AbiAGLYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:24:55 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4368 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiAGLYy (ORCPT
+        id S1347117AbiAGLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:25:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40254 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347093AbiAGLZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:24:54 -0500
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVgjm2KHrz67Ntg;
-        Fri,  7 Jan 2022 19:19:56 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 12:24:52 +0100
-Received: from [10.47.89.210] (10.47.89.210) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 7 Jan
- 2022 11:24:51 +0000
-Subject: Re: PCI MSI issue for maxcpus=1
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        chenxiang <chenxiang66@hisilicon.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "liuqi (BA)" <liuqi115@huawei.com>
-References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
- <87a6g8vp8k.wl-maz@kernel.org>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
-Date:   Fri, 7 Jan 2022 11:24:38 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 7 Jan 2022 06:25:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641554741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LihP/f7kkQcoH5EB358WZj2ActRS2QGX7JqNWfqK9rU=;
+        b=gFvKGa1wWIPYVY+Frs5OfyVJxbZzmB3ATD13/EuvOAiFFafKl1AfK946JVFd1zwa5OPAtj
+        fbLK/terXisLsMuLBD2G3Zudyxz6daLbIx29vbsFnA9yjntGE8S+uEsRCqI1xZLQeChNIF
+        RhFw0UpnYPeZTJo/NZ8JfOFhyPBHvxg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-ujFKLBTZNaCuaYSpYvGkxQ-1; Fri, 07 Jan 2022 06:25:33 -0500
+X-MC-Unique: ujFKLBTZNaCuaYSpYvGkxQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0C3041800D50;
+        Fri,  7 Jan 2022 11:25:31 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C1DF02A189;
+        Fri,  7 Jan 2022 11:25:17 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <94b5163b0652c6106aa01a0f4c03bdf57c0a7e71.camel@kernel.org>
+References: <94b5163b0652c6106aa01a0f4c03bdf57c0a7e71.camel@kernel.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021552299.640689.10578652796777392062.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 46/68] cachefiles: Mark a backing file in use with an inode flag
 MIME-Version: 1.0
-In-Reply-To: <87a6g8vp8k.wl-maz@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.89.210]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3149601.1641554716.1@warthog.procyon.org.uk>
+Date:   Fri, 07 Jan 2022 11:25:16 +0000
+Message-ID: <3149602.1641554716@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Jeff Layton <jlayton@kernel.org> wrote:
 
->> So it's the driver call to pci_alloc_irq_vectors_affinity() which
->> errors [1]:
->>
->> [    9.619070] hisi_sas_v3_hw: probe of 0000:74:02.0 failed with error -2
-> Can you log what error is returned from pci_alloc_irq_vectors_affinity()?
+> Probably, this patch should be merged with #38. The commit logs are the
+> same, and they are at least somewhat related.
 
--EINVAL
+That's not so simple, unfortunately.  Patch 46 requires bits of patches 43 and
+45 in addition to patch 38 and patch 39 depends on patch 38.
 
-> 
->> Some details:
->> - device supports 32 MSI
->> - min and max msi for that function is 17 and 32, respect.
-> This 17 is a bit odd, owing to the fact that MultiMSI can only deal
-> with powers of 2. You will always allocate 32 in this case. Not sure
-> why that'd cause an issue though. Unless...
+David
 
-Even though 17 is the min, we still try for nvec=32 in 
-msi_capability_init() as possible CPUs is 96.
-
-> 
->> - affd pre and post are 16 and 0, respect.
->>
->> I haven't checked to see what the issue is yet and I think that the
->> pci_alloc_irq_vectors_affinity() usage is ok...
-> ... we really end-up with desc->nvec_used == 32 and try to activate
-> past vector 17 (which is likely to fail). Could you please check this?
-
-Yeah, that looks to fail. Reason being that in the GIC ITS driver when 
-we try to activate the irq for this managed interrupt all cpus in the 
-affinity mask are offline. Calling its_irq_domain_activate() -> 
-its_select_cpu() it gives cpu=nr_cpu_ids. The affinity mask for that 
-interrupt is 24-29.
-
-Thanks,
-John

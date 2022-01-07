@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD024879EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359C24879F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348139AbiAGPuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 10:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S1348136AbiAGPyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 10:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239713AbiAGPuU (ORCPT
+        with ESMTP id S1348145AbiAGPyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 10:50:20 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48F3C061574;
-        Fri,  7 Jan 2022 07:50:19 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id p5so10590697ybd.13;
-        Fri, 07 Jan 2022 07:50:19 -0800 (PST)
+        Fri, 7 Jan 2022 10:54:39 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DDFC06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:54:39 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id u13so16955564lff.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 07:54:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1OhZbkZC6Q/vRS5LzzFYge2UROcV5To4d6Z9LDg9hRU=;
-        b=Z6PACJQR+qBcCqi/W3s8z/EJl6kS8xU6PePoWWLLjSPyPhxMSB+KOjeqSwoWQhqBtb
-         yBHM+bgRC5CC4p0Z7beU5C4nXVWZMNB075KIx6vqqp96AJadNK5xTMX7GUeco5Y1SRu2
-         iBoeohvkMHgJfdpKajo4mTuIHzPG+wg2XUKgurhV2kzpaSuvxp8DuxXvFRnjt5rYg2R/
-         NU5TLgw5HLeCPimsUpra46NVDXq3hdk2SgJ9TSX3AXqrShLkhj7BqtxfAsOkIBX3BRy2
-         evJMxCCq0+mV28ObTtkWe1gr2403Qwm2GSdD/fhiANwjbVwGJrfU7Y7sARijdOfH4qR+
-         7txA==
+         :cc;
+        bh=ZO/W9rGLOxOpKaVamlRqS2vqDyG5yS3id6+AvMs5yjg=;
+        b=trRMaGODxAyUdqkqVw17H/6Wktal/N4fmj24uECvOEBch+PgmF/YkUDKm8DDCkI/c1
+         Vu3txWOgsJuTx3iFPu2sln8SLaYqkaqL2PCMTTd1LfgzmRvfI+evy2P9KswuoYfd7in5
+         Pv5kj6AHEfDfvieYAwng/hwjyJxWllp/N/BNSgvRy5Cr5teRXul359Gep5MxACwprHCb
+         vl+RaPMQzSJcotC6BPnlHcmsVlYwxfNrYpithBaI1kTS6p+n+zn6vCgJHfjgYWwF24Bw
+         3KJozjeFpowjT2oA6JEgtakhSua+Q+k3aonuwi0KGm+RfWs2EVr7xVGzFPRcQllUXZfB
+         fyFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1OhZbkZC6Q/vRS5LzzFYge2UROcV5To4d6Z9LDg9hRU=;
-        b=NhCqRrSe1eIGz/nu93ydzsM9u4I8AW18WUB5n73NwlKEiGfudAnTfHo/9YyK7+bawe
-         d3XFyYBk9G+N47WHK8ERczf+/87UnkgEoPso6/N1VNn11f6vavq5NXjsIzZEvluVTfNk
-         5h2xwd0bwFsGtQG4mN5zmoMLmFkGPLquFXZB92e2P10zUEHW1pf+ZmNN1RE96VFwTwmh
-         d3M3lnbjM5VwdqwS6j8h28Zt+0vccsc9Vylb1P17THE1r3rTE5PLw/PtqvEr8nG/hSPw
-         B7SdrJNKBQh+CohHHBjw6LW6nzRihjBgf5kWrfG16cwFeW8BkozPaKdBScMV9nReJ6l6
-         VBbw==
-X-Gm-Message-State: AOAM533i18GT08MXyRxy5n8VeipPAY/jpN5Q64db5qR7jAXXZhw7F2nw
-        /O3ggEpXDvfSiFNZ8xMDf1Ih60B4RSfAI8MbHWw=
-X-Google-Smtp-Source: ABdhPJx5FnRmyjoFHwgvfNs7zgSpqJ1ZbFZcA3E/g23QncWcbtpUDOtPHnSWcm8psKTtAJnD+Y4SUfY9LmrdU43vrGc=
-X-Received: by 2002:a25:c794:: with SMTP id w142mr51978239ybe.690.1641570618829;
- Fri, 07 Jan 2022 07:50:18 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=ZO/W9rGLOxOpKaVamlRqS2vqDyG5yS3id6+AvMs5yjg=;
+        b=qSW/RqJcgUnjQh6bTNhZRFApbA0gN/z6D+cdPohM30xOcptOJ0AiJJHT2FMqJBUpNL
+         LJrUWhyn/PZUf+MHpAT9mkx8zMt4FkegYubw+qVJt1AEn/IWU+b7N3aLgPLeN7rZXyMV
+         cq18Zd828F82WonPEhL5mvMNMCqNr0nAx6v6tVeIvaKCKq/gZmgFd6o+6jPmVkWognEW
+         7yS9r+3MfGSjpRFTX+wJR0ti2c80o4ih8aJrz47GLkgAAg5m0O0Blv+/lmdIEQZFHafi
+         CC8arQptXGepbxCsWBTiJ8KlyTfP98sXVIMKdhVHZEJlgQAo8yWULOaxYME8o/h4wp6Z
+         SylA==
+X-Gm-Message-State: AOAM532Nc/rvjxQ+v63rUN14+TLIz5wjQDFa/xsR0CKQ/TPgW4Y821ut
+        1wdH72l/AI2l/lNPMjlLuw//zd82U7GZK/9Btn1ynP4xAkAXYs4s
+X-Google-Smtp-Source: ABdhPJyQeu9mN7kR7KthJ1yYHTKt2DUQkemDvvaMggnz/5gzMvRlBtgUbPtaNUKQGsHMsCuQliyQ9twCV00Ok/bMpqw=
+X-Received: by 2002:a05:6512:4015:: with SMTP id br21mr57521918lfb.233.1641570877566;
+ Fri, 07 Jan 2022 07:54:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20200904201835.5958-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200904201835.5958-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <8b5d4928-2921-b876-7d1e-04bb42eff4fa@st.com> <3b54ab9b-4ffd-ab32-d495-fad6132ea504@microchip.com>
- <5c56c87d-ca48-5573-0606-da1441fab7ff@microchip.com> <CA+V-a8uk3h95aL7n7cDjYdXJBbE6GWF_LkiAVMOFtVzv-83ZpQ@mail.gmail.com>
- <450850f6-9296-e505-4b92-c71ed190b95f@microchip.com> <CA+V-a8vsX9Ei8dS+fJQe9jqcFXmvfeVb==-HhDkXFnajQYT6tg@mail.gmail.com>
- <e6cfb1fd-7132-0b5c-9e85-dd9c8dfd6d79@microchip.com> <CA+V-a8vOOk4WunS-27d5hrvhLbs3YqAUoGX+Mcan7e6kuHkajQ@mail.gmail.com>
-In-Reply-To: <CA+V-a8vOOk4WunS-27d5hrvhLbs3YqAUoGX+Mcan7e6kuHkajQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 7 Jan 2022 15:49:52 +0000
-Message-ID: <CA+V-a8u51keKGMaVg=E5vZsoL2ntFg=q-UrNw=4JY4ykPXdm0g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] media: i2c: ov5640: Remain in power down for DVP
- mode unless streaming
-To:     Eugen Hristev <Eugen.Hristev@microchip.com>
-Cc:     Hugues Fruchet <hugues.fruchet@st.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Paul <paul.kocialkowski@bootlin.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-3-daniel.lezcano@linaro.org> <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
+ <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
+In-Reply-To: <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Jan 2022 16:54:01 +0100
+Message-ID: <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 9:57 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
+[...]
+
+> >> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+> >> +                              const struct dtpm_node *it, struct dtpm *parent)
+> >> +{
+> >> +       struct dtpm *dtpm;
+> >> +       int i, ret;
+> >> +
+> >> +       for (i = 0; hierarchy[i].name; i++) {
+> >> +
+> >> +               if (hierarchy[i].parent != it)
+> >> +                       continue;
+> >> +
+> >> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
+> >> +               if (!dtpm || IS_ERR(dtpm))
+> >> +                       continue;
+> >> +
+> >> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
+> >
+> > Why do you need to recursively call dtpm_for_each_child() here?
+> >
+> > Is there a restriction on how the dtpm core code manages adding
+> > children/parents?
 >
-> Hi Eugen,
+> [ ... ]
 >
-> On Mon, Jan 3, 2022 at 11:29 AM <Eugen.Hristev@microchip.com> wrote:
-> >
-> > On 12/21/21 5:11 PM, Lad, Prabhakar wrote:
-> > > Hi Eugen,
-> > >
-<snip>
-> > > could you give it a shot with yavta please.
-> >
-> > Hello Lad,
-> >
-> > I debugged this further, and I have some news:
-> >
-> > It looks like the 'write 0x2 to SYS_CLTR0' does not fail itself, rather
-> > the sensor refuses to accept a power up.
-> >
-> > I tried to read the register before the write, and it reads 0x42.
-> > Then, I tried to write 0x42 back, and it works fine.
-> > So, I do not think there is a problem with i2c communication.
-> > The only problem is that the sensor refuses to power up (accept the 0x2
-> > into the SYS_CTRL_0 ), due to an unknown (to me) reason.
-> >
-> That's strange.
->
-> > If the power up is performed at the initialization phase, it works.
-> >
-> > I also tried to capture with v4l2-ctl, and the result is the same.
-> >
-> you mean yavta ?
->
-> > Which of the init configuration set of registers your test is using?
-> I have been testing 320x240 and 640x480. Could you give that a try please=
-?
->
-> > It may be that it does not work in a specific config .
-> >
-> > The datasheet which I have does not claim that the 'power up' might fai=
-l
-> > in some circumstances.
-> >
-> Let me check if I can ping OmniVision FAE.
->
-Fyi.. I got the below feedback from OmniVision FAE.
+> The recursive call is needed given the structure of the tree in an array
+> in order to connect with the parent.
 
-SW standby bit is working as expected from my side.
+Right, I believe I understand what you are trying to do here, but I am
+not sure if this is the best approach to do this. Maybe it is.
 
+The problem is that we are also allocating memory for a dtpm and we
+call dtpm_register() on it in this execution path - and this memory
+doesn't get freed up nor unregistered, if any of the later recursive
+calls to dtpm_for_each_child() fails.
 
-As far as the sensor initialization is concerned  we use HW power up
-sequence defined in the datasheet followed by SW initialization.
+The point is, it looks like it can get rather messy with the recursive
+calls to cope with the error path. Maybe it's easier to store the
+allocated dtpms in a list somewhere and use this to also find a
+reference of a parent?
 
-SW initialization consist of the following :-
+Later on, when we may decide to implement "dtpm_destroy_hierarchy()"
+(or whatever we would call such interface), you probably need a list
+of the allocated dtpms anyway, don't you think?
 
-78 3103  11    ;  I2C timing ( do not modify)
-78 3008  82  ;   SW reset
-78 3008  42  ;   Stop streaming
-78 =E2=80=A6=E2=80=A6.            Sensor settings for required mode
+[...]
 
-78 3008  02  ;   Start  streaming
-
-Note:-  0x3008[7]  SW reset bit is volatile, as soon as a reset is
-applied the  all the bits  are  cleared  and  0x3008[7:0] set to
-default value hence  should read  0x2
-
-Cheers,
-Prabhakar
+Kind regards
+Uffe

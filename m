@@ -2,110 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25951487B1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D04487B1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348501AbiAGRMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S1348508AbiAGRMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240501AbiAGRMN (ORCPT
+        with ESMTP id S239660AbiAGRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:12:13 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963BEC06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 09:12:12 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id h7so17888317lfu.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:12:12 -0800 (PST)
+        Fri, 7 Jan 2022 12:12:38 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76AAC061574;
+        Fri,  7 Jan 2022 09:12:37 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id w80so9018666oie.9;
+        Fri, 07 Jan 2022 09:12:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hsyXsxtBZEcruNE0RSBDpIO6UfRz2bkT6mcQH0TCHag=;
-        b=JedtYuO2MBL/Jq63d8Dpm5ZGe9pdlriNG20Z9JXbiXhAGT2T1eosIqxH+SrokNeZ41
-         9XdXy/0ssc8O5/QBN3AWwRqY1SNx9QWp0s08dyv92POQAOPFJ5GJzbglguXPwq8Q81uf
-         wXzTM6hkENstyjHcvgZJZuXh60y3kQH3sIZDlN2ATWFy+XFGH6nyOYqRiH8B7Nm2EBz5
-         JKlkxvBPsWG8Y+gWYWZyQrUGbDfIpsIZVnrvdk8bSwZlKoCG1TPcTKigjDCu657OUyf9
-         hUQxxyMpGVJiBU+GmokUpYUsSBLdPm/8bNzEiTF7adWaKZdTzMy8j0lCGwhMMo+0KmKO
-         j4zA==
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=meWJzKr/lTzDUp9/XTgznWUNAOJF/DX7ONGAL+XEdDE=;
+        b=CebyNuSFAISoL8GLFOIls5ab12rksmV+sCFCD2dYzRH9UPGxInpCbjflUw1Puh7lNq
+         JBvUWRNLJtK+iJcset2E2nK83KhszuXRmJ0bb0pv/6ul1yte/sr+oaMqjmeINlLIVbfJ
+         a6yz7kZn61u6NIuNHLxe/H/CJhMnB86/+xa61p133dStn2B+5jsdtxb33+a+w9iqsxe/
+         PzIsmytcRlDCDaEQvDs3SDzyQic7/h6hPHJ1KgXDzhQ12p5X44VpFsIuGOOI5pMHAWZp
+         zsJyE99ROU/KuXzH/h3S8MG+T10WKPfFUpYoW9q/Cv9pWACK3U0HPLA/tvoXClkMdRjT
+         lN+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hsyXsxtBZEcruNE0RSBDpIO6UfRz2bkT6mcQH0TCHag=;
-        b=Z+Qco6Z2TnmYkzO+CGP9IZ8ZITUcJhqnIMMh5OF9gRYdBmqFIcp/bN/qO3FTFEKnhK
-         9eVDD+j9k4nJTo2f8TwH0AkYrS37yBKoikQJ8w2df6Iz5xD5cCzLZ0QiUMKQ3l0UQ9Xh
-         +5GWwXiomAZACBKm4kO3Hbn2Qmv0nHWX0IDByxwr1s1DH0f/ouOJVPgXIecA2z91wH6N
-         09XQ1GSixR/cjdbos7jZpVTyHfaZIwu4gTm8fxqHKz/+BFscBVBI/vee1IMKWue+Pkdz
-         Ha0rlM9gxLMRzx2qc0vxfikiMHwL96xefgGTO+hfnvfO/rPxeWOnDtE/G7oabpLvfz6n
-         nLzQ==
-X-Gm-Message-State: AOAM530YXkqPnVhgsV6iH2bQQFh2dhc5QH9DdsL6Mok0FAVJahNfCa3q
-        aVorTOfcAMo0bUbencad3La17YCzyXeWG+yqY3yxOQ==
-X-Google-Smtp-Source: ABdhPJzE30DbulawhWiCujkHtN/T2lniSHQIt33HGVagdBHXpBynwjYjWgZOH4SOHIPIVmb+1kFlNRu6ksu6c+EqOVc=
-X-Received: by 2002:a05:6512:3bb:: with SMTP id v27mr54814798lfp.71.1641575530922;
- Fri, 07 Jan 2022 09:12:10 -0800 (PST)
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=meWJzKr/lTzDUp9/XTgznWUNAOJF/DX7ONGAL+XEdDE=;
+        b=yQPhNDwMxsPRk2zqKT1eQ4xHyXybCeDZWXDwqsoL0NDJyRCXZFETqDwA3/yjjWxW7k
+         Uw3QDKU3XeRLW8NjYNh3PWapP5Z8QGE7CzGTvRqhkeoRSsnWf1KxsUTAbBFQB3GFHBga
+         TU/wdLkn7LC0bxj/BmqbdMgxF00lLajB/oou8qg2BUhXLWHF6n7OsGBLj/CJNHV4uUZO
+         Zf6Gjf95ICXtV9TnlOUEZsbowlMRmAGKizwr7w6e/XISQyhOVRfenyrLN4sHyRb9NwbY
+         S1FTqERq2G0RaxI/aP/DHSVLULOM0/DKOoAeemuICP9H/2XO94xgJw0bPdDPBSFvkYxn
+         rpLQ==
+X-Gm-Message-State: AOAM531mKlqCe3kA8mR70J6QGvsnw4oX2WwgnrHitgZnjgJ3dAZ9RQJX
+        oS/PFfaqLbku7STTduI2wuv+bjaA6+U=
+X-Google-Smtp-Source: ABdhPJw7YvIfoiY0y4PDfRlT5fALUBVcjFRb/Fp6PiEruD1lC365sWjUSQW/TcqkK4BEd0fXsDK5UQ==
+X-Received: by 2002:a05:6808:d4d:: with SMTP id w13mr10379078oik.85.1641575555698;
+        Fri, 07 Jan 2022 09:12:35 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t17sm968120otc.17.2022.01.07.09.12.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 09:12:34 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Robert Richter <rrichter@amd.com>,
+        Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, ssg.sos.patches@amd.com,
+        sudheesh.mavila@amd.com,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>
+References: <20211103161521.43447-1-terry.bowman@amd.com>
+ <20211103161521.43447-4-terry.bowman@amd.com>
+ <20220106181809.GA240027@roeck-us.net>
+ <9afabe55-6429-2284-cafd-d59ce481f067@amd.com>
+ <YdgeU2p+i5hN1XCU@rric.localdomain>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] Watchdog: sp5100_tco: Add EFCH SMBus controller
+ initialization using MMIO
+Message-ID: <ac8e1173-3002-54f1-0264-6f0cdf26c475@roeck-us.net>
+Date:   Fri, 7 Jan 2022 09:12:32 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220105182939.106885-1-paul@crapouillou.net> <20220105182939.106885-4-paul@crapouillou.net>
- <CAPDyKFpUUPzqonNBrFq68h8QOVxardvf2q7AuEQVeUJ-S2726A@mail.gmail.com> <PGMC5R.ZEUF4DPAECD7@crapouillou.net>
-In-Reply-To: <PGMC5R.ZEUF4DPAECD7@crapouillou.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jan 2022 18:11:34 +0100
-Message-ID: <CAPDyKFod5nxW2dG1_a9WyEb2UNJW+OzyS411+9nVYxUOiP6iMg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YdgeU2p+i5hN1XCU@rric.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 at 17:43, Paul Cercueil <paul@crapouillou.net> wrote:
->
->
->
-> Le ven., janv. 7 2022 at 17:33:04 +0100, Ulf Hansson
-> <ulf.hansson@linaro.org> a =C3=A9crit :
-> > On Wed, 5 Jan 2022 at 19:30, Paul Cercueil <paul@crapouillou.net>
-> > wrote:
-> >>
-> >>  These macros are defined conditionally, according to CONFIG_PM:
-> >>  - if CONFIG_PM is enabled, these macros resolve to
-> >>    DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
-> >>    exported.
-> >>
-> >>  - if CONFIG_PM is disabled, these macros will result in a dummy
-> >> static
-> >>    dev_pm_ops to be created with the __maybe_unused flag. The
-> >> dev_pm_ops
-> >>    will then be discarded by the compiler, along with the provided
-> >>    callback functions if they are not used anywhere else.
-> >>
-> >>  In the second case, the symbol is not exported, which should be
-> >>  perfectly fine - users of the symbol should all use the pm_ptr() or
-> >>  pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> >>  client's code will never be accessed.
-> >
-> > How common is it to export the dev_pm_ops? Do we really need a macro
-> > for this?
->
-> $ rgrep EXPORT_SYMBOL drivers/ |grep pm_ops |wc -l
-> 44
->
-> That should be enough to justify a macro.
+On 1/7/22 3:05 AM, Robert Richter wrote:
+> On 06.01.22 13:07:11, Terry Bowman wrote:
+>> On 1/6/22 12:18 PM, Guenter Roeck wrote:
+>>> On Wed, Nov 03, 2021 at 11:15:20AM -0500, Terry Bowman wrote:
+> 
+>>>> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+>>>> index 80ae42ae7aaa..4777e672a8ad 100644
+>>>> --- a/drivers/watchdog/sp5100_tco.c
+>>>> +++ b/drivers/watchdog/sp5100_tco.c
+>>>> @@ -48,12 +48,14 @@
+>>>>   /* internal variables */
+>>>>   
+>>>>   enum tco_reg_layout {
+>>>> -	sp5100, sb800, efch
+>>>> +	sp5100, sb800, efch, efch_mmio
+>>>>   };
+>>>>   
+>>>>   struct sp5100_tco {
+>>>>   	struct watchdog_device wdd;
+>>>>   	void __iomem *tcobase;
+>>>> +	void __iomem *addr;
+>>>> +	struct resource *res;
+>>>
+>>> I must admit that I really don't like this code. Both res and
+>>> addr are only used during initialization, yet their presence suggests
+>>> runtime usage. Any chance to reqork this to not require those variables ?
+> 
+> We did that in an earlier version, see struct efch_cfg of:
+> 
+>   https://patchwork.kernel.org/project/linux-watchdog/patch/20210813213216.54780-1-Terry.Bowman@amd.com/
+> 
+> The motivation of it was the same as you suggested to only use it
+> during init.
+> 
+> Having it in struct sp5100_tco made things simpler esp. in the
+> definition of the function interfaces where those new members are
+> used.
+> 
 
-Yep, certainly! I will take a closer look beginning next week.
+'res' is only used in the context of sp5100_request_region_mmio()
+and sp5100_release_region_mmio(), and both are called from
+sp5100_tco_setupdevice_mmio(). I do not see a need for carrying it around
+anywhere else, including efch_read_pm_reg8() and efch_update_pm_reg8().
 
-[...]
+efch_read_pm_reg8() is only called from sp5100_tco_setupdevice_mmio(),
+and it only uses struct sp5100_tco *tco to get the address. I don't see
+why the address can not be passed to it directly.
 
-Kind regards
-Uffe
+efch_update_pm_reg8() also uses tco only to get the address. Again, passing
+it instead of a pointer to sp5100_tco *tco would easily be possible.
+
+efch_update_pm_reg8() is only called fromm sp5100_tco_setupdevice_mmio(),
+where the change would be easy. It is also called from tco_timer_enable(),
+which in turn is called from sp5100_tco_timer_init(). This, again, is called
+from sp5100_tco_setupdevice_mmio(). Since the first operation in
+sp5100_tco_timer_init() is to call tco_timer_enable() and that function
+does nothing but calling efch_update_pm_reg8(), it would easily be possible
+to pull out that code from tco_timer_enable() and move it into
+sp5100_tco_setupdevice_mmio().
+
+So, no, I neither see the need for having the information in struct
+sp5100_tco nor for keeping it in its own structure. If you'd merge
+sp5100_request_region_mmio() and sp5100_release_region_mmio() into
+sp5100_tco_setupdevice_mmio() you would not even need any pointers
+to pass the values from sp5100_request_region_mmio(). Otherwise you
+could have sp5100_request_region_mmio() return a pointer to res or
+an ERR_PTR, and pass the address as pointer parameter.
+
+Guenter
+
+> If that init vars are no longer in struct sp5100_tco then callers of
+> efch_read_pm_reg8() and efch_update_pm_reg8() will need to carry a
+> pointer to them. To avoid this I see those options:
+> 
+> 1) Implement them as global (or a single global struct) and possibly
+> protect it by a mutex. There is only a single device anyway and we
+> wouldn't need a protection.
+> 
+> 2) Have an own mmio implementation of tco_timer_enable() and/or
+> sp5100_tco_timer_init().
+> 
+>> Yes, v3 will include refactoring to remove 'res' and 'addr'. I will also
+>> correct the trailing newline you mentioned in an earlier email.
+>>
+>> Regards,
+>> Terry
+>>
+>>>>   	enum tco_reg_layout tco_reg_layout;
+> 
+> While at it, tco_reg_layout is also only used during initialization
+> and can be moved there too. This would raise option 3:
+> 
+> 3) Add a pointer of struct sp5100_tco to struct efch_cfg and use that
+> struct instead in init funtions only. But that causes the most rework
+> (which would be ok to me).
+> 
+> Going with 3) looks the cleanest way, I would try that. But all
+> options have its advantages.
+> 
+> -Robert
+> 
+>>>>   };
+

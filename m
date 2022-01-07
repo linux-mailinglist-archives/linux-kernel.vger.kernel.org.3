@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1E8486F2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181C9486F27
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344844AbiAGAyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:54:21 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:38509 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344777AbiAGAyQ (ORCPT
+        id S1344714AbiAGAyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344587AbiAGAyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:54:16 -0500
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N3bGP-1mMmG52uXL-010gE3; Fri, 07 Jan 2022 01:54:14 +0100
-Received: by mail-wr1-f54.google.com with SMTP id q8so7975160wra.12;
-        Thu, 06 Jan 2022 16:54:14 -0800 (PST)
-X-Gm-Message-State: AOAM532L+UAeUXywi22Hnf0S9Xe6cQslcrAEDM3CvobC0jk+qbZGOlMf
-        oB5E2eNv97SumDSiEqkqsUx1LchIFCxA8kkG2mQ=
-X-Google-Smtp-Source: ABdhPJzUkvG1xUIThSiIkMw0/YRz6SvnFTVggx6zEMnW3ReCQQIe6ig2yNv8s0ZDFSrXOk5a7CczVdAxmwTDPVeyzWo=
-X-Received: by 2002:a05:6000:118e:: with SMTP id g14mr379844wrx.12.1641516854286;
- Thu, 06 Jan 2022 16:54:14 -0800 (PST)
+        Thu, 6 Jan 2022 19:54:00 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F65C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:54:00 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so5016172otg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:54:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZaO37rktJawAGRVJ7BAS8tiuBiMt1OmvNN9i/ri29DQ=;
+        b=RAdm6DZWQ5g2F/aBBCCkg01lbWhvNrtc9vED4F1Ho0UmIKwjLv2uzDQ3qEEeU+Yk3f
+         4ShJeZ0Ppl9m1op1RlTSkmVs+p0Ov6F44AR9mBUThQPSxDd2zixogB3uD4yOcLYqI9u9
+         9vIALNx/Yr5NS4hAJw4dfF7puBne5wGydpzt6dPsjA3OXiQ39vla/wBepsEQDiXeIjlK
+         Ui85JKjV5h0mpGSVdk8V6Pdri8cHQt/rwuodsuwlmtPfPk0VrpIQ6xInqo/mVI3xDTcM
+         d9xLWun6sxJliEwxCB1yqDVoRhiPweHw3AT2JYlDelHEwGvRpa7eYDG19YagGVGJuN3q
+         rzeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZaO37rktJawAGRVJ7BAS8tiuBiMt1OmvNN9i/ri29DQ=;
+        b=35I2KlDxt1uveurZCsZIkskGZxb7pr2s5ypvqKBXPzgOUXrJ3pwXsA+2wcQRESUkND
+         TlAVlR3PpUmUyFLDQx7DQuuH/w9kquz/bKx5afE3gvZBAIx70S2m20xR0kadXNBKAe2f
+         DJhMCerQOA11oJ02THrXqw5IiSw6V01mhrZT65Vj3QWp283+ns9t2VaYZnqsGOiYJw8y
+         cMcifymSm42RKrWakZyVxW/9A3lM62RwceQHItPVoQjKl/Psvdzeq3vODFuCHMnrK/6Z
+         8Tuy7HgvvSitdX+LZVbT6fZbvH1AREKw7fdBHivi/xsL7ETt9UGS1/qHgFwCJd9FC3jX
+         rUZw==
+X-Gm-Message-State: AOAM532GifZ9Tcc5W1oUV0kRhZDICIUFTtOC1lTQ9+jD27SuFPRuf5QM
+        0ME5yu2DitkrC/8EKEfrcTzOnw==
+X-Google-Smtp-Source: ABdhPJyZVteF1NkP4Sbb0U2jo9U56E4id3LLp773JFeCV+mN6jG2FiJXPenLnEUwPvvVJya5XkNUFg==
+X-Received: by 2002:a05:6830:2:: with SMTP id c2mr44776634otp.341.1641516839647;
+        Thu, 06 Jan 2022 16:53:59 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id g22sm630920otj.0.2022.01.06.16.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 16:53:59 -0800 (PST)
+Date:   Thu, 6 Jan 2022 16:54:49 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        greg@kroah.com, linux-kernel@vger.kernel.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, satyap@codeaurora.org,
+        pheragu@codeaurora.org, rnayak@codeaurora.org,
+        sibis@codeaurora.org, saiprakash.ranjan@codeaurora.org
+Subject: Re: [PATCH V3 2/7] dt-bindings: connector: Add property for EUD
+ type-C connector
+Message-ID: <YdePWXEwfk50S+P2@ripper>
+References: <cover.1641288286.git.quic_schowdhu@quicinc.com>
+ <8194777786be70073a5364fe45ba7ec684019a71.1641288286.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <86c6275e55abc16137d316e17a8fa0af53fc96ec.1641500561.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <86c6275e55abc16137d316e17a8fa0af53fc96ec.1641500561.git.christophe.jaillet@wanadoo.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 6 Jan 2022 19:54:11 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a3E8aBJAfZCznbvZBjSr3-HxC8GoNn6rvS58GBLHsobfQ@mail.gmail.com>
-Message-ID: <CAK8P3a3E8aBJAfZCznbvZBjSr3-HxC8GoNn6rvS58GBLHsobfQ@mail.gmail.com>
-Subject: Re: [PATCH 06/16] sparc: Remove usage of the deprecated
- "pci-dma-compat.h" API
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:JbFE8XmKaa+FjRgreSD3ATEJprRKTUF0RXpPZtXoQOO3ULFS8CF
- RrUL5P4Bci96YU92PVyIbPdP41yOpe06nSSBEt9/NeWLobKK3PhVbTniCo9oZE11vMT2Yok
- 1QaHxqeg5rA0dP9gTBi6amktPtKwucblzpS5LW2leApiHivf8zNDFXJLJ3rGcJLdsvYVKwp
- JRdQEEJX3+EruOS/4UI0g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UbpgZVEoDDs=:FvjQH3X63PdhB6+40ELI1p
- MyBAITaSFN5RsZG0Hkw4O1ONRRY9OQxT+pzreIQza+K/TPoMn6AKu9oyjCUAaVmCFaUUJHVYl
- GZpABlOtCIzfxnaL0LLKaQsp56ABU8wjuKNiTl+48//H0NYkHpTUYSIlrjGufNkN6AyfhPoaX
- +x6bfOzsB7SOQ6535Lj3VtFt5gF6HiozcTfZXk6Z/WQOj1CT8RvtEPCG7tcgS7N1VaE6OybA2
- SjHSEHu8JKnV8cZiE0zCA2kkN6zqCHuW0oviaXE6mNdN731r8+0YFA+YGLJasj4hoXU6HBgw6
- yVb+MqLD+VQZ33HD++xXQx9gEHdfJJMeOaobyySF848SGFQhrlVEi+4yP9meCghOGi5HW7F73
- aXXxzzSmbNfJOGj9hZcH0amHofMmMmHuz7DIRCXxw5FeCEvI79mWvq+Gc8ujfgVIWhwnEgHV1
- MBObgHTZuTXYsWBJCwK2ynfdKbDyGimdkueWSB/AVRsescbStUwoTsro4NSdHJV2NLgB+T9w+
- KDhWtFhkhlcf8S9VWj5VTFQLNiGddJx8a8K7fLU9sCLNpLZ2o/5osCMUx7bXXhgpQeYEacbZ0
- lX3F1Oq8EZ9VXoOyyYzd+QcMrWnSNWyCk/oUnfT6y26B87s47D1iLzkTSGt6ST02tqIs8AKuX
- jfcTLhvHTT3qyVWpXSqhK7ovpLvZQZ+4bI9lIdzcBSgR+4XXQtJoyuLHe0Jls1pFv1dsslTZi
- qMBKxSOqGiJrpSKjB0gcBO3xmiTMjtNK3FE48IdfvGbMFamGAAcarA1y6hF/wZyTFYpNx/i1/
- 3lAdlJfLZx0ZeRpXp6nBK9a6PwHizLW4nIBRV4gXrlOvf5hilQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8194777786be70073a5364fe45ba7ec684019a71.1641288286.git.quic_schowdhu@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 4:51 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> In [1], Christoph Hellwig has proposed to remove the wrappers in
-> include/linux/pci-dma-compat.h.
->
-> Some reasons why this API should be removed have been given by Julia
-> Lawall in [2].
->
-> A coccinelle script has been used to perform the needed transformation.
-> It can be found in [3].
->
-> [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
-> [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
-> [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Tue 04 Jan 03:58 PST 2022, Souradeep Chowdhury wrote:
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Added the property for EUD(Embedded USB Debugger) connector. EUD
+> is a mini usb hub with debug and trace capabilities and it has a
+> type C connector attached to it for role-switching. This connector
+> is attached to EUD via port.
+> 
+
+Per my feedback on the dts patch, I don't think this binding is needed.
+
+Regards,
+Bjorn
+
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/connector/usb-connector.yaml | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> index 7eb8659..417d39a 100644
+> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -30,6 +30,10 @@ properties:
+>            - const: samsung,usb-connector-11pin
+>            - const: usb-b-connector
+>  
+> +      - items:
+> +          - const: qcom,usb-connector-eud
+> +          - const: usb-c-connector
+> +
+>    label:
+>      description: Symbolic name for the connector.
+>  
+> @@ -179,7 +183,8 @@ properties:
+>      properties:
+>        port@0:
+>          $ref: /schemas/graph.yaml#/properties/port
+> -        description: High Speed (HS), present in all connectors.
+> +        description: High Speed (HS), present in all connectors. Also used as a
+> +                     port to connect QCOM Embedded USB Debugger(EUD).
+>  
+>        port@1:
+>          $ref: /schemas/graph.yaml#/properties/port
+> -- 
+> 2.7.4
+> 

@@ -2,140 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB85487033
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517D3487037
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345305AbiAGCOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:14:04 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:39521 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344442AbiAGCOD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:14:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1641521643; x=1673057643;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=;
-  b=acgHco/qD05EPvnFhOih/Q3OuzXlj9tnyYSYgNgniRWBsGtYcI2Xo4L8
-   udtpPKqJdTyn1a4vhSMcelri+eYGNWAmJOHIJGJo4su6nOG3BkTxgXmMY
-   8x2UaWd+Ae2tibCZgmFYDXbqJzQyHqepepW8cRPLikBOqpescn1WPlzGy
-   WQU3PVUmW7TjgVpsoRfl8uilVXLSRFgLazK7ebMkGVrEo+TH7FoyeQjtv
-   HckCRf5FualZunAftaUYdd/dIKqsz9BzgdGNsP6t+rQPU4NKT6QAQSggU
-   wWLOUV9vb0taJmX2nYEy689R1A9ZeVK81l+RjOhythBrbLR008S+jHbSv
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,268,1635177600"; 
-   d="scan'208";a="301757476"
-Received: from mail-dm6nam12lp2177.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.177])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Jan 2022 10:14:01 +0800
+        id S1345334AbiAGCPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:15:54 -0500
+Received: from mail-db8eur05on2132.outbound.protection.outlook.com ([40.107.20.132]:15457
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1345312AbiAGCPx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 21:15:53 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a+2xcdKZ9I10SvpTSSPKtk+7rc1ugxENYQedAlr1CQyx1fLCU+5/AHwpffNYckJy3fzko9yoQAF+O6zIe8W9gohu5XtGNC7bi392sS4un8CY1cqm/962nmTgDR6R1NKcYCL/5/2LXA/dXBr7wBKZB4wkP8a9O6PdJiWUQcDQfErF6Tyg/Fb1pXzf0NkL9IrgjEBWM+CEiBtp6A3HWE7Nivk5ejq1VWfjI9PWVluBOpFgi48bdSubRiPdv+u210YAL7q6VC4CyK0p9ntXTXMxBF7joaQTNrazmX2zg3oUl9zorB04xK4t5k6EvRQL9Y7mDBj7amOHxgWCSEhmE8c7vw==
+ b=f1Hrs5apWYe6TiUCl42a6JQgkOHq+f9Qg8jZbIH4Osens7D/H86mzoYCsb2XAczwEN5o6ITdL3RFBAuNRPprfS4PXzH+5LggyFcaBgvsGNBDezvkjYCSx9tPD+k8Y3d9b19FtNwzijaHousS5rcUu4xjP2aDHzDk8gP3+kP0F8/PeISiddJGQHFXaxpW1yhoRTrJ25yeKL4aTF0BVqfsikOhylzRBe1Md4+7X+0DaS88b1DRsu7ImixnCOeG1O6VlPtbfnn/IHK/0sry2gPuzrNmHM1DaSBAlNZRi96eZ6tJoCQ/WAW+AdYREtKtx5Muva0xsfME736pEWi5sa65NQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
- b=OlZHxXAyiukQXee/czRjdp9JV/CVnxT7r5yCjjBGtEehXsc7F5hKyyXbE9UV69RhwinstProlEHj+vZGaJGi7uRnQwH88GPxDlINRbjvaCLtub4zAB5sIYsQXkhPWMoH5x9gBAIoNz+Pl5I6j3RENvd72c18A2+CQz9nWlDtJ4XewvQ7UllQSyD2BN6moYJBl4spBJZAfVwIh66e/LORY53Iloa3oloJ7CwRX1/SR8ir+zDLd7V9rA8ZTmoKX9wwVppOyeFlLfSBS3kN0VS4CSfI/IYiZnQz2b7U+MDI0wmH82KxV5S83aYBJ+0kPShb9H4SyGytiZwQycHqwaBb5w==
+ bh=Wx6jXPGwkLZbaLF92DzGv0pKR9WLhXgVCSKVBBXqhYQ=;
+ b=PeaRwlHXAiTmm4ZiVR3DV4VPf1G/Omh64e4Ka+E8s3AxsK2PqVWza1m9mCij4LCDTeAB7AiwQmcCCXTLGDnAvivaDzhy4IXaqE8m1fyCYbfJCAKVZ1K2os6uVUQGbiwG5Y8EAsV9xKlC5N9vM+hGtWfCNMQkHYQ6HEl69wwvhzrmKj4SwHdn+olfUF1QvmZCDquQHnDZptjVrp7HQsESIQZa/dACd1NnNEMoW8XLIVQCBxTL/fCiZSb0POmhTEP1PeKIeKZb02i+HtoH7nqJi5Dl0F578OQkuHSqz5fSe7F4D4vtdfiLsOpXH5bjDPun2/T2yewfLPOG3dUhBzHgfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
- b=ryb7zdpmykJR1rsSF6od79JBe+b/l6HLbg8JP3uvug+KlSpT5ynruoDMhLul9NgbnKd1ChVR7nLof4QR1ZXbwxrOGVuNZVBxiFBBZ4RorbrSCRk9wEvdELR2KoIdUT3U+vKQ8uTf5Op2sHGXCtuC7Xgm8nf51wTNYbUQ0+qwJ1o=
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com (2603:10b6:5:244::21)
- by DM6PR04MB4538.namprd04.prod.outlook.com (2603:10b6:5:21::16) with
+ bh=Wx6jXPGwkLZbaLF92DzGv0pKR9WLhXgVCSKVBBXqhYQ=;
+ b=fTakXyYndqH1ve8H4r05uCwF4B6H6da3vTccqWa5KoB3N/tagyIVUzKSHHvSBWhjwomwAIo+K/bEKgIEXaQOr8YVnlSU8iieDBkacSSgZjP+vSMpCHFLfuC+KOD33cifh5e7QclU8LXVURiC/nwIRM9OGLczZSDPUC7hwg7ULyI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from PA4P190MB1136.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:10b::20)
+ by PA4P190MB1117.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:105::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Fri, 7 Jan
- 2022 02:14:01 +0000
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::e58a:8ae5:2f73:35ea]) by DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::e58a:8ae5:2f73:35ea%9]) with mapi id 15.20.4867.007; Fri, 7 Jan 2022
- 02:14:01 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "heinrich.schuchardt@canonical.com" 
-        <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        "bin.meng@windriver.com" <bin.meng@windriver.com>,
-        "sagar.kadam@sifive.com" <sagar.kadam@sifive.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 12/12] RISC-V: defconfigs: Remove redundant K210 DT source
-Thread-Topic: [PATCH 12/12] RISC-V: defconfigs: Remove redundant K210 DT
- source
-Thread-Index: AQHX3WTpsbliyan1bkCwPrZcgVMvjA==
-Date:   Fri, 7 Jan 2022 02:14:00 +0000
-Message-ID: <DM6PR04MB70816AD80E3D9BD56A59FEFFE74D9@DM6PR04MB7081.namprd04.prod.outlook.com>
-References: <mhng-40969d90-76cb-4b9b-9c39-32dbd0f9a7ea@palmer-ri-x1c9>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c1b46f53-1670-41ed-eeee-08d9d1835ec1
-x-ms-traffictypediagnostic: DM6PR04MB4538:EE_
-x-microsoft-antispam-prvs: <DM6PR04MB45383E2FFF02949B1369297EE74D9@DM6PR04MB4538.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:1728;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: i3+TBkSV72RjnXM0JeSFYAMebaCJQZ/3yYKv0+QYifi1qEpHrQwBvWDukbJ6fUAFr65G3ftUjPVZeGvvmpg2nVYPCrhaoWG78lVJWD8Xx5Pfoz/IUuroKH3PX9xXAJ6h0vr3A6MW2Ikd7Ig8GTjlyoiG0/1mJUJT7mxsqFkoMdw9h5PT3zesYlrpPaas6jJ9GfOLHR5T8LCmlodktTj7LFg6WtiJnMZHYYiKRl97DeECANEuxcDM1bbNAIewSi4S3JFC/BbqL6MvjEZZ7MYXJ7stOhQ+ydLAyUgAGwxokpvQfYJGb+B7cO2/Fj6E3G1v1yF6cnBV3GZoLi8ftLjEZdPtG9HsZoRWtvCIO8DLiooMTujlbxiQ9pnCcjred98zo6f/km6KFV+oTrRxFameSOluSfAjIIZdcNtygsOqmJWPRTEaNZSRZYtPVfg2KSgGS+Kb+PStwzdLIKKwrZFYUQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB7081.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(52536014)(54906003)(66476007)(8936002)(6916009)(76116006)(91956017)(316002)(73894004)(86362001)(2906002)(71200400001)(621065003)(38100700002)(82960400001)(66446008)(64756008)(122000001)(66946007)(55016003)(38070700005)(33656002)(66556008)(7696005)(186003)(4270600006)(9686003)(8676002)(6506007)(7416002)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HW0L8UYsxkr6N/1ZbSS5nzXJmgsJJxFVHeGHDjwNvjgDUwSSwhyiZOBzUWh8?=
- =?us-ascii?Q?0q22nIkNaDJGaAdLZqO4XfZ6CNjNH5rJwZDuN4Xo7rErriNRLjDd9gNn+kfw?=
- =?us-ascii?Q?Q/eH3tkevFMXtMs+zMDeOrPqJZG4mBEuibGBtbDA0A7o4iL9FWnpEok9/fEk?=
- =?us-ascii?Q?Dk++IRvpmPMlkzbDlBP8to5XwbenwpA/e/H5VwysUd+buYxoc8bvnSrQ5w1N?=
- =?us-ascii?Q?4luT9yjyK+sQy2pnsb2hYfhe7sAPJ3tOPTw7+imYiRjTrSjW4qbotXHvXnNv?=
- =?us-ascii?Q?MdYUZ7ZPVV/qWt8/crkAC381AaYcLOkrdVFWiWyhbYN3xxI680k7UkHKdsUe?=
- =?us-ascii?Q?pymlAbJA/k1S2gyVtBNENQ79jq0bZuA+l8L20iCxBx+Q+YHoj4igyl/qZS0I?=
- =?us-ascii?Q?yZMcaVIJ+aZMBRJyPD8C9C+s0Bw/8AkGH23ZxanT7gV1ZLvtfMEOKtqQySHY?=
- =?us-ascii?Q?jwfwXDcjfXMO7p7hA4A2N920cIrtpcECcSfz8DB2L8mEd/8dxNh7sAR1t1Rd?=
- =?us-ascii?Q?TYcxg1GIfO69hrpe+SRZ4YZhC+dJiq2XULKx0M7X8mPBoZ35wAdpUWJHFeWZ?=
- =?us-ascii?Q?ST6O8E6pdqGLXZHwhXJ77Icz5Quokwf8pdaZg9u0KO6SpzWgdAe04KdG0t0W?=
- =?us-ascii?Q?t2Cn/sn+jMYouMelRW2dZOGCLJTwZpa5S84DJ5RgCAA6biVctWeNVXLNWjBj?=
- =?us-ascii?Q?TroX7ytClpvC+OE3JdlHC102H6eCOz992rW2W4X/LNlokF5rPPrSdvNMs6/1?=
- =?us-ascii?Q?YdgnPEEzJLJsgLxXxvLfK4M273dP0tslIrppXLUsBHdek2fR/rV564/w+uU8?=
- =?us-ascii?Q?Q+/jk7N6ynP77duhWRW9JqPZMUbfEFjeOed1cIAejj1Yc8qSSPgBfeTY4qYW?=
- =?us-ascii?Q?mSWl9jjXf2wAT0rM9QbrQJwZD2AF1j1zxqSDtkNoAyKvEw7Z/pNjOB8TTDIZ?=
- =?us-ascii?Q?O4uM3i1XFa0Jk+Hicyzijj0RigtyfhdQQ14VXqQtZMMqyiBw5NCpqlx3r/Mi?=
- =?us-ascii?Q?PVmMhdRbzhn419I24gvXrRmTl1BAkoHH51WoHZdneOnaosfZGP80BxVlZoyW?=
- =?us-ascii?Q?79Z+YM53LQsV3eA1TDWwu5CV4IO1oXyHIJdfHN6N27DU/lxmcCOhW54en7bt?=
- =?us-ascii?Q?xdYqfdcdbIvDlfpkx524V9RxGEf4af5Gt+w9zR0w8UgSX31bJ9WhGAko0gw6?=
- =?us-ascii?Q?uYixQJ0S1yWNz2Ym/vSdtXu1XRh+uAuSGMj+CJJjMraU+lX+F3ID3J4+P5xS?=
- =?us-ascii?Q?76xvPIdKMMUiTQwb2PizCODsMjyYEAZrhf+GKXbrGyDfbdwXkJ7JAbkKuyA6?=
- =?us-ascii?Q?vMemaCC8acnPPSBnb0DgOUUFh02YmjRxJaVcliUjwNMhn+O7CKIzuJJJbPn5?=
- =?us-ascii?Q?NfhDHRdS22zNX9yjrj1yMTo5r652uI/lqwsbkwA0X9wzXb3y15j+h/Cl+YFR?=
- =?us-ascii?Q?ICo3+1Z7TxOZCcwUWEdh0+g5FFUysItiwyrcWxHifYaWFZFwTidl0CAd6znW?=
- =?us-ascii?Q?WmH3QuHKUDkPst70xJXYBQ6DFr09tBCxRpts2st1vbQdKP5xRnzjDq12zaJH?=
- =?us-ascii?Q?YK1ubq0HcYGN5q3mtNNkfhNq2QgREwanC0g+tWf9e855R7Fxn7FObd3Wi9FQ?=
- =?us-ascii?Q?GPXCvHIDoKwuHAEYBVS/54R2wpXOapLnX3cLo0kBQ1aqfHwDNuVbZuKkUGfM?=
- =?us-ascii?Q?ymEelXmUvm2FIhgPKfyWNAGpOpNZgPXzPkEHhdWB1fTwG57s?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Fri, 7 Jan
+ 2022 02:15:49 +0000
+Received: from PA4P190MB1136.EURP190.PROD.OUTLOOK.COM
+ ([fe80::dc32:681:7104:d4ad]) by PA4P190MB1136.EURP190.PROD.OUTLOOK.COM
+ ([fe80::dc32:681:7104:d4ad%3]) with mapi id 15.20.4867.010; Fri, 7 Jan 2022
+ 02:15:49 +0000
+Date:   Fri, 7 Jan 2022 04:15:45 +0200
+From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     netdev@vger.kernel.org, stephen@networkplumber.org, andrew@lunn.ch,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/6] net: marvell: prestera: Add router
+ interface ABI
+Message-ID: <YdeiUcL476kdanpP@yorlov.ow.s>
+References: <20211227215233.31220-1-yevhen.orlov@plvision.eu>
+ <20211227215233.31220-3-yevhen.orlov@plvision.eu>
+ <Yc230kOuj+tHOkjQ@shredder>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yc230kOuj+tHOkjQ@shredder>
+X-ClientProxiedBy: FR0P281CA0052.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::20) To PA4P190MB1136.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:102:10b::20)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 373fcd3d-efbd-49af-ab68-08d9d1839f39
+X-MS-TrafficTypeDiagnostic: PA4P190MB1117:EE_
+X-Microsoft-Antispam-PRVS: <PA4P190MB111782F62BAFC4A7F5C2BF08934D9@PA4P190MB1117.EURP190.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kXKMcOE7HQJgQjiYlsQSR/hnU53b2qXdOyZdv3xqTUQWG0vjB78rb9KbWv4UXUBmy6ztDbepH/BhG2xX3JFZAPwupxH6xP2ozrF8MUZTntPokxwf03/i10H+bLGS4I23PXbVzDLeW6IeCgY2OQ+Na/aPar8oNJ+236CYgiGz6E0If3Uk1T9WpZgql1f1ee4lxz0B4SOXKA2zyGpR9F8LLYY3hVP429yA9gWjJbC6cGOP0FQ2qlauCs4QUp/+uxe3WItc7WCaI2kRJAqcg3FZPKMWSbMDUKBanHDw1SwHtICDKPiFXIAWnhBJtArVS7ZN5BRy9DGuscn1mNv914mpHZPiRSClsPjrFK2cxlF5xcSUD8qA3AhhyxRbYOzJ8oqYv5ImjdBphDtYVXbeBexN2GllWclvzlQiPHg4lEBEKp3FSulhCGOO/5MEQKjhDOZNF5YfraFaNMKGyOcqld0koVcIBjjDwr+x9tS1j0GBfxpzTDQh7HD4lpYCshLFqlkH/lo2p1ckvkpxSnWMQawBhSWGlUg91+BppgR2ADVRl96ZOvGMOvOy8s1CUJzWnhJPiFwl/02b7dVSDjJXlmdhYCpvseUfCHAmjvV/46fY57VCKkXZBBcKP/SOuqBoVNcyI40kv7hdUzGCn/9K8tp4FO+MYkgFB4LmqO/SME317YInclzMQUKVuzlwCD2S4EQeJceJoxa4BKi6d2QClWdm3w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4P190MB1136.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(366004)(136003)(39830400003)(346002)(376002)(8676002)(26005)(52116002)(9686003)(5660300002)(6666004)(8936002)(54906003)(2906002)(44832011)(4326008)(316002)(6512007)(38100700002)(508600001)(38350700002)(6486002)(6916009)(6506007)(4744005)(186003)(86362001)(66556008)(66574015)(66476007)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WGjltiKtfs6PHLFYo7oaxRLLQXGz9zWQSdeUJE2wUAB1bR4wPhgKgnwzrZpI?=
+ =?us-ascii?Q?zZBqksrAyG0BnLOnlpIjn6IvfAXz5d8KW1FUIn9dMCmzPBLgrksCbDBikbHY?=
+ =?us-ascii?Q?rceuHaQv2Uf1My+zVmm9rvQbFC2DVaQ1vn16J1lHeXCMAAOpxStLbQ50CBDT?=
+ =?us-ascii?Q?+qZKb9Q66l3/m07ZNSB1C1D2ow4zhlm7DCxFg6jyXjdfhdulx4o57O0D2uoM?=
+ =?us-ascii?Q?n+2Ceu+bZ3tpDO6lNmunAT+MBBN/5dOrozDpg9k+8J8Es8/rzt/muYBghQBR?=
+ =?us-ascii?Q?zd8wvCfGOSNQlgWO0vypb+qAR1IqDIvToYbUOCLvnyTL7OH280NpNyV81FNa?=
+ =?us-ascii?Q?UrCgeFGPpbqST76O792h/bNoLe/0F75tUnxGNnlVUFCRlRXqBDoSyQKfW7VA?=
+ =?us-ascii?Q?8o/9exI5EP5ky79hAS81Iu6eTvQjWae1SwtVo3tq1j9PGLaoRZ1zjT03yris?=
+ =?us-ascii?Q?lKwalTIRmRVy6Izpl0UaJbdhGNtZFbQRvy3P1pewrAuvBI2F1jx+//AwR/jt?=
+ =?us-ascii?Q?Pgvc5jktqXH+VHAMx+Q8x8u6bFoqrvzuEkY2VfUn4hNzmCp/eJNjeTxdDct8?=
+ =?us-ascii?Q?bPn5a+pRwF2ys+qgTKkM6Hp8A+hFfgDwJgf2xsOTcpTfqBT2rveJIvb7ZRUi?=
+ =?us-ascii?Q?w3njBwHIegLXJHxBrYuY/y6ivClyXTGf0hy/xKv8zWrjtHiHMvnwClnAXbWx?=
+ =?us-ascii?Q?83OkuwLo6Tctnn8s6Qxoe0VPHXDYCbjRQ6WKo+HMS/+SGTgsWqHNewhubcQE?=
+ =?us-ascii?Q?CJscuZ8W1DX0ZVBdtFG4zkKXIPWyDq/awkGACz0KBlBZdoeBJZhEH35mEEH3?=
+ =?us-ascii?Q?ZEFV+gAPuao4TvyPJwKk7Ah+bYNdJo1P8M+IxBt3OKTXJXS1YX8RJuzoBZWz?=
+ =?us-ascii?Q?sypGMdpN/yF1Nb/578xFUim6ZINko064Gr0qySaWGD3RuDEvrOYP7zrJqTlm?=
+ =?us-ascii?Q?HXA+ZoNyxtnSXJtbVUqvXCuy/7OeSAeiWxmL01xI/01cYsFATgzwI/v+Vhvr?=
+ =?us-ascii?Q?T+Y35lGx6+v9Tk0Nyzizc2G0MK7zgL85gVO0gjS960SGeLVzJNpY5WRQ1+Cx?=
+ =?us-ascii?Q?LzVFIOBm1VmfXP+96F4B6CMR0uxbI8GDZKVpgqHZrn0ComuPG4vqOglNYPPY?=
+ =?us-ascii?Q?ajc4wPRIdzjX9KEgIatE9As/JXJaHy1DrHTwbbMasvGAbDnuCiCcl+vSukl+?=
+ =?us-ascii?Q?+85516lmEiR6HP7ocfbkESNlvJagX4jgLkP36EfHGdvF0Wj2dMQ0D5migdcF?=
+ =?us-ascii?Q?p3b/C4uo05T8vn6vBw08zxBO2uZabArugfMqnr6sK/8cgxTUaqEMW6gS09CZ?=
+ =?us-ascii?Q?opkU2uqCZikCSxhwdJTDJdmncahIX+ol0UfZIIbF5i0pqwyaLwZRMSakRJug?=
+ =?us-ascii?Q?x7nqgvsZd122ibMqza6jpY1rlJaMIicWqOxrBEQ8K95lY4/jNIvEVdyv5m04?=
+ =?us-ascii?Q?XYX+MLSqLNOXWU9AKcOviLGfOVxNdHWX26JEfHC6uqq0WnnVB2OU9XDcHjvg?=
+ =?us-ascii?Q?ahaQYjdi+g5Qh0PLOL7PD7AuWTPNPtRgRVS1ehbYQgEtHrIICgeXGxKNjWZh?=
+ =?us-ascii?Q?AkQdbVn6aZITbgMIl6Ha9tTLwRU7IGsCofVN1C01KQjQyXHj+M77Vp1rME6b?=
+ =?us-ascii?Q?TW9fTsZNsH2hNBtrh0Cl0aWqF5Z0rimv4n/llVBoxPu4rMampeVBeApPIClZ?=
+ =?us-ascii?Q?I2QMRA=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 373fcd3d-efbd-49af-ab68-08d9d1839f39
+X-MS-Exchange-CrossTenant-AuthSource: PA4P190MB1136.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB7081.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1b46f53-1670-41ed-eeee-08d9d1835ec1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jan 2022 02:14:00.9231
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 02:15:49.6444
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UUy66ESalU8eCwpb7msgc5nsb89rGZvY3Inmq/YhjEuP/+KS6ZOB/nPIIkMidHwJ8idVpsflDer0Jp2/kBewEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4538
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xMTfW6at9PbKYSqQ+xYL+iMUXSTIaE99oiOu/Q67x8XiT/eHDNY1sGkKOIqaqJVsreuLAhi3sZtWHxECRWj4q78t58+SiTfEWMIC05M1dE4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4P190MB1117
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 30, 2021 at 03:44:50PM +0200, Ido Schimmel wrote:
+> On Mon, Dec 27, 2021 at 11:52:27PM +0200, Yevhen Orlov wrote:
+> > Add functions to enable routing on port, which is not in vlan.
+> > Also we can enable routing on vlan.
+>
+> I don't understand these two lines. Can you explain for which netdev
+> types you can create a router interface?
+>
 
+Sure.
+For now we support only regular port (has no upper or lower dev).
+
+But ABI potentially support RIF on bridge/vlan (see prestera_if_type).
+This feature will be implemented soon.

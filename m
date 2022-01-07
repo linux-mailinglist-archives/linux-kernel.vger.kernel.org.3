@@ -2,183 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70DA486F3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F45486F41
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344397AbiAGA5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:57:31 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:26842 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230133AbiAGA53 (ORCPT
+        id S1344788AbiAGA6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:58:33 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:58897 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230133AbiAGA6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:57:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641517049; x=1673053049;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=+Z7xRVSlmNeiIFWUHvEdTDAW69uc9POi1AmSX78ne+Q=;
-  b=DW01MZc4I917lHP+xMYZwdIZng3V8NsZGq57y3s5NcYBCU4zhLLLdmiu
-   MEZhbEKUFodoIBBFyuimom8hleild7zsCVFwMYDUYKs/DiUoM5B0bBknR
-   knMaqnuyYI4bMxTmFhLNo9iMskOC0Wkwzml1NoVr94WQ6nMFMGxmz+0Tx
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 16:57:28 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 16:57:28 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 16:57:27 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 16:57:25 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kuogee Hsieh <khsieh@codeaurora.org>
-Subject: [PATCH v4] drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
-Date:   Thu, 6 Jan 2022 16:57:08 -0800
-Message-ID: <1641517028-27639-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 6 Jan 2022 19:58:32 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MryCb-1mZLl547mP-00nwrQ; Fri, 07 Jan 2022 01:58:31 +0100
+Received: by mail-wr1-f51.google.com with SMTP id w20so8022640wra.9;
+        Thu, 06 Jan 2022 16:58:30 -0800 (PST)
+X-Gm-Message-State: AOAM533zWTLAKMEcV7Uo4P0bzAv8Pl25ySMtGdb3pt4sLeBzs6VA0O+O
+        jRm8vXoyMA6yUCH8jYkClWheiSxbD/xJDS4FTJc=
+X-Google-Smtp-Source: ABdhPJw358xnVBy0xVmQn6spXwbuORRrv/Zlnm9a5imL/72/70FXovvZLsKseIasTfU7fEcAA/3bt/0PrbYZH1MsmmA=
+X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr54689312wrq.407.1641517110623;
+ Thu, 06 Jan 2022 16:58:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+ <4a0a48fb682d13e6861f604d3cad3424672bee1f.1641500561.git.christophe.jaillet@wanadoo.fr>
+ <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 6 Jan 2022 19:58:28 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a01EyEzJKyk2upmvXW-VEb6XRGZgeBwEzH=jJYYL3saGg@mail.gmail.com>
+Message-ID: <CAK8P3a01EyEzJKyk2upmvXW-VEb6XRGZgeBwEzH=jJYYL3saGg@mail.gmail.com>
+Subject: Re: [PATCH 03/16] fpga: dfl: pci: Remove usage of the deprecated
+ "pci-dma-compat.h" API
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, hao.wu@intel.com,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:S2NrGVuAJNeavdPuhHi9VbemRQp6gLroIRh+i6dxMTncWt+j5Yc
+ jlCd6sEKAnBguUUv9AR5mN5Pz/+8b3+1c6O7ZJ2bq46mz9/R2mqUk1K4aTeLdTgmKatDoyN
+ HN0AsO5Gwu41LWyyEb4Cvf6axNMvmWLYUp11hmSqUJiNla9KsdeiQd/wPLeuyu+qBGdrnaf
+ vOPTfS5s4K/R8YugX3V7w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kLzSUkWBejc=:2M0yazoBlemnF4JFCIolbg
+ LtdWTHkqJR+p7X0meRzANwVwWSent5vC/A2GBcgjjm4kvxsn/lEZ8Id9LvkyqV+QqcjelIZy5
+ AnpQZ+EN5xgyNp2qFXRDATPszv1V62+5RxYOXcuDS297StNZYLqZrOQIwcxd9QvNP+vPZE2MX
+ 14sJzumOVGwo6tnCS5METHD/DgW84a8Uvld2+nxwV+CM51DVVVgfyjy680CcXsiQ3utvmfYNt
+ OZo43mHMg4qADe80bwQC/QrNZzFmwnQOSF6xAjZwKEamtBU+6pkonDCzjXTlYNXrLjxYu6cwS
+ yGEHLQTrqbZVIZMtLxCv+ia/iFfJIWCXA+znHvJQ/vnvT6lbz0Oie4PJkk20e4W75P5l9qut1
+ O1BYoBr7NtGnKqqSZRePkZ71oU6MgjzIYU9mEJEUyiJh+A7lrSi98fxDMaYceLJ5OipeR7DKC
+ KogiB4jle/K2wWOgxcP/A/GBZ3uG8U9phgrPAoI9sch9akAxL58+9Yeue5LcbReM6S1+NhZ4N
+ b3tx/0AMk1qECz8QZW2BOJkQMHBwoHzDGixRMAbTT8nimtXH7XEhJ3i0X7BcMFlGmu7votXF8
+ C7RIeWgXoVARwqZOyBlsTR1zGiQ3U6iquPUhwzrAmqfLlb2+E/CXslAAbpBB6NGtbQrspG24h
+ 7BWIHWxgC9Rkg9CheBx2ZHf/E5+hYpO7dAbBoeU0cESCpUfh0YYAQZfiCsU+l8UubdDVAHaof
+ sFLChQTggOwvPVoOnsFYoWuwiX4MElU3Tr2dExk9UeyIBjf8oA8Pvydncg0Xr8NQLMSF8UDRj
+ EIktJi25XRxl7wTe+lDjF+NaD3xVsUn6g9li79pGiuQ+/ZRqKI0iif/QSjU14r2/LIBmPm9s6
+ KJhn81H04aR2DtnkLeRFwX13MrLR0Z6zkLKQxrHM3/zEhfdjeF2oyhTBjYofLnv7bt84Kz3tq
+ h3l+lRcIb3w==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <khsieh@codeaurora.org>
+On Thu, Jan 6, 2022 at 6:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
 
-Some DP sinkers prefer to use tps4 instead of tps3 during training #2.
-This patch will use tps4 to perform link training #2 if sinker's DPCD
-supports it.
+> > [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
+> > [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
+> > [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
+> >
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+>
+> This is a correct conversion of the driver, but I'd prefer to keep this separate
+> from the pci-dma-compat series.
 
-Changes in V2:
--- replace  dp_catalog_ctrl_set_pattern() with  dp_catalog_ctrl_set_pattern_state_bit()
+Nevermind, I just misread the patch, and it is required after all to get
+rid of pci_set_dma_mask()
 
-Changes in V3:
--- change state_ctrl_bits type to u32 and pattern type to u8
-
-Changes in V4:
--- align } else if { and } else {
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_catalog.c | 12 ++++++------
- drivers/gpu/drm/msm/dp/dp_catalog.h |  2 +-
- drivers/gpu/drm/msm/dp/dp_ctrl.c    | 17 ++++++++++++-----
- 3 files changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-index 6ae9b29..64f0b26 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-@@ -456,19 +456,19 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
- 	dp_write_p0(catalog, MMSS_DP_DSC_DTO, 0x0);
- }
- 
--int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
--					u32 pattern)
-+int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog,
-+					u32 state_bit)
- {
- 	int bit, ret;
- 	u32 data;
- 	struct dp_catalog_private *catalog = container_of(dp_catalog,
- 				struct dp_catalog_private, dp_catalog);
- 
--	bit = BIT(pattern - 1);
--	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, pattern);
-+	bit = BIT(state_bit - 1);
-+	DRM_DEBUG_DP("hw: bit=%d train=%d\n", bit, state_bit);
- 	dp_catalog_ctrl_state_ctrl(dp_catalog, bit);
- 
--	bit = BIT(pattern - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
-+	bit = BIT(state_bit - 1) << DP_MAINLINK_READY_LINK_TRAINING_SHIFT;
- 
- 	/* Poll for mainlink ready status */
- 	ret = readx_poll_timeout(readl, catalog->io->dp_controller.link.base +
-@@ -476,7 +476,7 @@ int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog,
- 					data, data & bit,
- 					POLLING_SLEEP_US, POLLING_TIMEOUT_US);
- 	if (ret < 0) {
--		DRM_ERROR("set pattern for link_train=%d failed\n", pattern);
-+		DRM_ERROR("set state_bit for link_train=%d failed\n", state_bit);
- 		return ret;
- 	}
- 	return 0;
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
-index 6965afa..7dea101 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.h
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
-@@ -94,7 +94,7 @@ void dp_catalog_ctrl_mainlink_ctrl(struct dp_catalog *dp_catalog, bool enable);
- void dp_catalog_ctrl_config_misc(struct dp_catalog *dp_catalog, u32 cc, u32 tb);
- void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog, u32 rate,
- 				u32 stream_rate_khz, bool fixed_nvid);
--int dp_catalog_ctrl_set_pattern(struct dp_catalog *dp_catalog, u32 pattern);
-+int dp_catalog_ctrl_set_pattern_state_bit(struct dp_catalog *dp_catalog, u32 pattern);
- void dp_catalog_ctrl_reset(struct dp_catalog *dp_catalog);
- bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
- void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index 39558a2..ad64ddd 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1083,7 +1083,7 @@ static int dp_ctrl_link_train_1(struct dp_ctrl_private *ctrl,
- 
- 	*training_step = DP_TRAINING_1;
- 
--	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, DP_TRAINING_PATTERN_1);
-+	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, 1);
- 	if (ret)
- 		return ret;
- 	dp_ctrl_train_pattern_set(ctrl, DP_TRAINING_PATTERN_1 |
-@@ -1181,7 +1181,8 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
- 			int *training_step)
- {
- 	int tries = 0, ret = 0;
--	char pattern;
-+	u8 pattern;
-+	u32 state_ctrl_bit;
- 	int const maximum_retries = 5;
- 	u8 link_status[DP_LINK_STATUS_SIZE];
- 
-@@ -1189,12 +1190,18 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
- 
- 	*training_step = DP_TRAINING_2;
- 
--	if (drm_dp_tps3_supported(ctrl->panel->dpcd))
-+	if (drm_dp_tps4_supported(ctrl->panel->dpcd)) {
-+		pattern = DP_TRAINING_PATTERN_4;
-+		state_ctrl_bit = 4;
-+	} else if (drm_dp_tps3_supported(ctrl->panel->dpcd)) {
- 		pattern = DP_TRAINING_PATTERN_3;
--	else
-+		state_ctrl_bit = 3;
-+	} else {
- 		pattern = DP_TRAINING_PATTERN_2;
-+		state_ctrl_bit = 2;
-+	}
- 
--	ret = dp_catalog_ctrl_set_pattern(ctrl->catalog, pattern);
-+	ret = dp_catalog_ctrl_set_pattern_state_bit(ctrl->catalog, state_ctrl_bit);
- 	if (ret)
- 		return ret;
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

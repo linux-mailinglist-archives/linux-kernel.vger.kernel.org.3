@@ -2,78 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC940487122
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0334E487127
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345796AbiAGDR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:17:56 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:35804 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344897AbiAGDRz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:17:55 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowADX35_PsNdhaqPxBQ--.15390S2;
-        Fri, 07 Jan 2022 11:17:35 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     davem@davemloft.net
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] ide: Check for null pointer after calling devm_ioremap
-Date:   Fri,  7 Jan 2022 11:17:33 +0800
-Message-Id: <20220107031733.3588290-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1345805AbiAGDTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 22:19:48 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:34791 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344897AbiAGDTq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 22:19:46 -0500
+Received: by mail-oi1-f175.google.com with SMTP id r131so6537209oig.1;
+        Thu, 06 Jan 2022 19:19:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N/+02Uu7Xsp1Sp9baEddjo+2GjQCq8pPfkwGXAATyL4=;
+        b=h8DgHNc0YRkw52axUfUCpRduO1WL1Addg7w4C6DZnNnLLZbxzq2RQQUBWUdEBnf+BA
+         +q5oSqer1RL5JCWqm2OlT1rIWEtGHF3rHpwaLw99KjlkXS8YkVjgQlK1IozK7L89AnKg
+         5vROE+hb6LpD5OQYe4Iwcz7+Chw9OO2Yn4S2Ie7xgZytmYklTK9gRdtOhrs5juxyX1A7
+         pyQ34QXfZyi51bY4WRlP/HJeUdRtnNdPX+fsLX1JnSoV0DB+uFfFAR45Tay1K4ZOwk+w
+         f665aYX9vJYLOocsjqq1FFd61f6VK51pZfgHWb6rfxZc4CtdZ8aMwnPEFCIpJwK9HLJ+
+         qBXw==
+X-Gm-Message-State: AOAM5324wlUrOb81/3kGdLkXTSChYQOaIKPwmasbSYTv0KDOwB9/7sW2
+        7F3OSrhsY7MUUPvCCY3hAg==
+X-Google-Smtp-Source: ABdhPJxFwsoov8BM23F84ePRF4MesulXZT7/QFwJgwS4jJCHX9pjJTcfT92RcdErUYh2DLqb705wyg==
+X-Received: by 2002:a05:6808:f11:: with SMTP id m17mr4241451oiw.36.1641525585657;
+        Thu, 06 Jan 2022 19:19:45 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id q13sm555020otf.76.2022.01.06.19.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 19:19:45 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Suman Anna <s-anna@ti.com>, - <patches@opensource.cirrus.com>,
+        John Crispin <john@phrozen.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH] dt-bindings: Drop required 'interrupt-parent'
+Date:   Thu,  6 Jan 2022 21:19:04 -0600
+Message-Id: <20220107031905.2406176-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowADX35_PsNdhaqPxBQ--.15390S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xw4UtF4xKryxJF1xWw13XFb_yoWDZrg_Ca
-        1ruFsrWw4rAr1ktF17tr13uryFv34q9rZ7urnIkwsIg3sxXw17JrWUurs8Xa18WryI9r9F
-        yF9rKw4fu343ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj8uctUUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the devres_alloc(), the devm_ioremap() and
-devm_ioport_map() may return NULL pointer.
-And then, the 'base' and 'alt_base' is used in plat_ide_setup_ports().
-Therefore, it should be better to add the check in order to avoid the
-dereference of the NULL pointer.
+'interrupt-parent' is never required as it can be in a parent node or a
+parent node itself can be an interrupt provider. Where exactly it lives is
+outside the scope of a binding schema.
 
-Fixes: 2bfba3c444fe ("ide: remove useless subdirs from drivers/ide/")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/ide/ide_platform.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../devicetree/bindings/gpio/toshiba,gpio-visconti.yaml  | 1 -
+ .../devicetree/bindings/mailbox/ti,omap-mailbox.yaml     | 9 ---------
+ Documentation/devicetree/bindings/mfd/cirrus,madera.yaml | 1 -
+ .../devicetree/bindings/net/lantiq,etop-xway.yaml        | 1 -
+ .../devicetree/bindings/net/lantiq,xrx200-net.yaml       | 1 -
+ .../devicetree/bindings/pci/sifive,fu740-pcie.yaml       | 1 -
+ .../devicetree/bindings/pci/xilinx-versal-cpm.yaml       | 1 -
+ 7 files changed, 15 deletions(-)
 
-diff --git a/drivers/ide/ide_platform.c b/drivers/ide/ide_platform.c
-index 91639fd6c276..8c6e1af7b6eb 100644
---- a/drivers/ide/ide_platform.c
-+++ b/drivers/ide/ide_platform.c
-@@ -85,6 +85,10 @@ static int plat_ide_probe(struct platform_device *pdev)
- 		alt_base = devm_ioport_map(&pdev->dev,
- 			res_alt->start, resource_size(res_alt));
- 	}
-+	if (!base || !alt_base) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
+diff --git a/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml b/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
+index 9ad470e01953..b085450b527f 100644
+--- a/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
++++ b/Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
+@@ -43,7 +43,6 @@ required:
+   - gpio-controller
+   - interrupt-controller
+   - "#interrupt-cells"
+-  - interrupt-parent
  
- 	memset(&hw, 0, sizeof(hw));
- 	plat_ide_setup_ports(&hw, base, alt_base, pdata, res_irq->start);
+ additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
+index e864d798168d..d433e496ec6e 100644
+--- a/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml
+@@ -175,15 +175,6 @@ required:
+   - ti,mbox-num-fifos
+ 
+ allOf:
+-  - if:
+-      properties:
+-        compatible:
+-          enum:
+-            - ti,am654-mailbox
+-    then:
+-      required:
+-        - interrupt-parent
+-
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml b/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
+index 499c62c04daa..5dce62a7eff2 100644
+--- a/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
++++ b/Documentation/devicetree/bindings/mfd/cirrus,madera.yaml
+@@ -221,7 +221,6 @@ required:
+   - '#gpio-cells'
+   - interrupt-controller
+   - '#interrupt-cells'
+-  - interrupt-parent
+   - interrupts
+   - AVDD-supply
+   - DBVDD1-supply
+diff --git a/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml b/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml
+index 437502c5ca96..3ce9f9a16baf 100644
+--- a/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml
++++ b/Documentation/devicetree/bindings/net/lantiq,etop-xway.yaml
+@@ -46,7 +46,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - interrupt-parent
+   - interrupts
+   - interrupt-names
+   - lantiq,tx-burst-length
+diff --git a/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml b/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml
+index 7bc074a42369..5bc1a21ca579 100644
+--- a/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml
++++ b/Documentation/devicetree/bindings/net/lantiq,xrx200-net.yaml
+@@ -38,7 +38,6 @@ properties:
+ required:
+   - compatible
+   - reg
+-  - interrupt-parent
+   - interrupts
+   - interrupt-names
+   - "#address-cells"
+diff --git a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+index 2b9d1d6fc661..72c78f4ec269 100644
+--- a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+@@ -61,7 +61,6 @@ required:
+   - num-lanes
+   - interrupts
+   - interrupt-names
+-  - interrupt-parent
+   - interrupt-map-mask
+   - interrupt-map
+   - clock-names
+diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+index a2bbc0eb7220..32f4641085bc 100644
+--- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
++++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+@@ -55,7 +55,6 @@ required:
+   - reg-names
+   - "#interrupt-cells"
+   - interrupts
+-  - interrupt-parent
+   - interrupt-map
+   - interrupt-map-mask
+   - bus-range
 -- 
-2.25.1
+2.32.0
 

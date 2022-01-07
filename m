@@ -2,79 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB05D48773A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566B048773D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbiAGL7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232237AbiAGL7D (ORCPT
+        id S238587AbiAGL7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:59:08 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:42522 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238118AbiAGL7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:59:03 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B97BC061245
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 03:59:03 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1n5ntc-0004Qo-QE; Fri, 07 Jan 2022 12:59:00 +0100
-Message-ID: <8fa36ec0a6252db4b0c7fbbf09de5e816d634206.camel@pengutronix.de>
-Subject: Re: [PATCH v3 2/2] arm64: dts: imx8m: define proper status for caam
- jr
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>,
-        Rouven Czerwinski <r.czerwinski@pengutronix.de>
-Cc:     ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>,
-        linux-kernel@vger.kernel.org, peng.fan@nxp.com, ping.bai@nxp.com,
-        alice.guo@nxp.com, agx@sigxcpu.org, krzk@kernel.org,
-        leonard.crestez@nxp.com, festevam@gmail.com, marex@denx.de,
-        herbert@gondor.apana.org.au, horia.geanta@nxp.com,
-        daniel.baluta@nxp.com, frieder.schrempf@kontron.de,
-        linux-imx@nxp.com, devicetree@vger.kernel.org,
-        hongxing.zhu@nxp.com, s.hauer@pengutronix.de, pankaj.gupta@nxp.com,
-        robh+dt@kernel.org, thunder.leizhen@huawei.com, martink@posteo.de,
-        aford173@gmail.com, linux-arm-kernel@lists.infradead.org,
-        gregkh@linuxfoundation.org, shengjiu.wang@nxp.com,
-        qiangqing.zhang@nxp.com, op-tee@lists.trustedfirmware.org,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        shawnguo@kernel.org, davem@davemloft.net, jun.li@nxp.com
-Date:   Fri, 07 Jan 2022 12:58:58 +0100
-In-Reply-To: <4ed84dc354eee36067ade567097ddd68@walle.cc>
-References: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
-         <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
-         <20211207230206.14637-3-andrey.zhizhikin@leica-geosystems.com>
-         <aa84249b7e099cf23b49016433b22ae541c0a41d.camel@pengutronix.de>
-         <AM6PR06MB469100A5D7A069AF84A83EEFA64C9@AM6PR06MB4691.eurprd06.prod.outlook.com>
-         <30312d09effae6b78309723a7261f85915b8d5b8.camel@pengutronix.de>
-         <4ed84dc354eee36067ade567097ddd68@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Fri, 7 Jan 2022 06:59:04 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5280E2113B;
+        Fri,  7 Jan 2022 11:59:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641556743; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZViy4ha+GjCcmI2PF81BweyGx62I6IF+pFFopJC3jJs=;
+        b=oi9wEuzAhRVZkEW8F/3BAYMe10ZGDWGvvlGZex5LcOM3C/0LXwqg9lLMc0FDR4E2YVIY9U
+        3hEaYh4j44STfUXp2Vr6O6tk7F0eAGv1gmrBUMWZ/4BQmkjV9DESlQotQyjs13thwZ7L78
+        wpF1m2PfIOj2j45xWcbmWGOjLXz2zS0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641556743;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZViy4ha+GjCcmI2PF81BweyGx62I6IF+pFFopJC3jJs=;
+        b=aVXmdDPISblXMUjDHSNZygTWSUqec5goc3MEtwkn4Sy6Fx8BgMCQN3Uym4SdP6p+1yLDAI
+        mGDYrj5O05/qEhDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3115A13350;
+        Fri,  7 Jan 2022 11:59:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gZuQCwcr2GEtMQAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 07 Jan 2022 11:59:03 +0000
+Date:   Fri, 7 Jan 2022 12:59:09 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     Dov Murik <dovmurik@linux.ibm.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
+ secret area
+Message-ID: <YdgrDRCJOOg4k1Za@zn.tnic>
+References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
+ <YdNHgtuVoLofL4cW@zn.tnic>
+ <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
+ <YdSRWmqdNY7jRcer@zn.tnic>
+ <YdWEXRt7Ixm6/+Dq@work-vm>
+ <YdXq9t75aYLJfb69@zn.tnic>
+ <YdX6aAwy0txT9Dk7@work-vm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdX6aAwy0txT9Dk7@work-vm>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 07.01.2022 um 12:47 +0100 schrieb Michael Walle:
-> Hi Rouven,
+On Wed, Jan 05, 2022 at 08:07:04PM +0000, Dr. David Alan Gilbert wrote:
+> I thought I saw something in their patch series where they also had a
+> secret that got passed down from EFI?
+
+Probably. I've seen so many TDX patchsets so that I'm completely
+confused what is what.
+
+> As I remember they had it with an ioctl and something; but it felt to
+> me if it would be great if it was shared.
+
+I guess we could try to share
+
+https://lore.kernel.org/r/20211210154332.11526-28-brijesh.singh@amd.com
+
+for SNP and TDX.
+
+> I'd love to hear from those other cloud vendors; I've not been able to
+> find any detail on how their SEV(-ES) systems actually work.
+
+Same here.
+
+> However, this aims to be just a comms mechanism to pass that secret;
+> so it's pretty low down in the stack and is there for them to use -
+> hopefully it's general enough.
+
+Exactly!
+
+> (An interesting question is what exactly gets passed in this key and
+> what it means).
 > 
-> Am 2022-01-07 10:46, schrieb Rouven Czerwinski:
-> > .. since AFAIK i.MX8M* can not be run without TF-A.
-> 
-> Are you sure? There probably aren't any boards out there
-> without TF-A, but why shouldn't it work without it?
+> All the contentious stuff I've seen seems to be further up the stack - like
+> who does the attestation and where they get the secrets and how they
+> know what a valid measurement looks like.
 
-PSCI, i.e. the only means to start the secondary CPUs, is implemented
-in TF-A, so it's very unlikely that anyone would want to run a system
-without TF-A. Also quite a bit of the lowlevel SoC initialization is
-implemented in TF-A.
+It would be much much better if all the parties involved would sit down
+and decide on a common scheme so that implementation can be shared but
+getting everybody to agree is likely hard...
 
-Regards,
-Lucas
+-- 
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

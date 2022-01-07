@@ -2,76 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F4002487A7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E713E487A83
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348278AbiAGQfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240146AbiAGQfC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:35:02 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6CFC061574;
-        Fri,  7 Jan 2022 08:35:02 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 596EE385;
-        Fri,  7 Jan 2022 16:35:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 596EE385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1641573302; bh=YhgZI0FFIn0hZaq5zbXIpWpArNqcf+xaFaMH98W3O7s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=gTjKnqYjVLLwUDWp64VbAkskquX2XUz9xQJ8vRD7IsI0mZm22pbQZdmvb0APZcq6M
-         OzTcRyrmK6awej83cn0KhEWaDSJJbXwzjrV0tyUQdftmMlfpotBRdZZycfLWxQRnwu
-         FkwVi15P5z6ilqv5JHYtCljs2ySVSVNJLajatC6uHownbh2OTNoZmSOnlD8EwVkxWF
-         XZ9+FaWk754mukv+S3FI+uQBA6iJnZJHVCEw1kKqq8hmdkQ6iL2mPnQuawHd8KsJ5e
-         /EsBJPX7zlvnLesLSCUjCAmueO9yMxKDHtOvD/uXkDRwbFFTrz450u2PMzgcg3cIeG
-         +gRLXcDp7pNrw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     James Clark <james.clark@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the jc_docs tree
-In-Reply-To: <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
-References: <20220107103649.53774b30@canb.auug.org.au>
- <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
-Date:   Fri, 07 Jan 2022 09:35:10 -0700
-Message-ID: <87lezro669.fsf@meer.lwn.net>
+        id S1348298AbiAGQhU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 11:37:20 -0500
+Received: from aposti.net ([89.234.176.197]:39404 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240148AbiAGQhU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 11:37:20 -0500
+Date:   Fri, 07 Jan 2022 16:37:06 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS()
+ macro
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Message-Id: <U5MC5R.JX72XLGEKI8P@crapouillou.net>
+In-Reply-To: <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
+References: <20220105182939.106885-1-paul@crapouillou.net>
+        <20220105182939.106885-2-paul@crapouillou.net>
+        <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-James Clark <james.clark@arm.com> writes:
+Hi Ulf,
 
-> On 06/01/2022 23:36, Stephen Rothwell wrote:
->> Hi all,
+Le ven., janv. 7 2022 at 17:26:07 +0100, Ulf Hansson 
+<ulf.hansson@linaro.org> a écrit :
+> On Wed, 5 Jan 2022 at 19:29, Paul Cercueil <paul@crapouillou.net> 
+> wrote:
 >> 
->> In commit
+>>  The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided 
+>> callbacks
+>>  for both runtime PM and system sleep, which is very likely to be a
+>>  mistake, as a system sleep can be triggered while a given device is
+>>  already PM-suspended, which would cause the suspend callback to be
+>>  called twice.
 >> 
->>   e94f43ea200a ("docs: automarkup.py: Fix invalid HTML link output and broken URI fragments")
+>>  The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+>>  occurences) compared to the number of places where
+>>  SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() 
+>> and
+>>  pm_runtime_force_resume(), which makes me think that none of these 
+>> cases
+>>  are actually valid.
 >> 
->> Fixes tag
->> 
->>   Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
->> 
->> has these problem(s):
->> 
->>   - Subject has leading but no trailing parentheses
->>   - Subject has leading but no trailing quotes
+>>  As this macro is currently unused, remove it before someone starts 
+>> to
+>>  use it in yet another invalid case.
+> 
+> I assume you refer to DEFINE_UNIVERSAL_DEV_PM_OPS here. Can you
+> perhaps make that more clear?
 
-[...]
+I can.
 
-> @Jonathan, I'm happy to resubmit with the changes, but it might be
-> easier if you just make the fix in place.
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>  ---
+>> 
+>>  Notes:
+>>      v2: No change
+>> 
+>>   include/linux/pm.h | 19 ++++++-------------
+>>   1 file changed, 6 insertions(+), 13 deletions(-)
+>> 
+>>  diff --git a/include/linux/pm.h b/include/linux/pm.h
+>>  index e1e9402180b9..31bbaafb06d2 100644
+>>  --- a/include/linux/pm.h
+>>  +++ b/include/linux/pm.h
+>>  @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>>          SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>   }
+>> 
+>>  +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>>  +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  +const struct dev_pm_ops __maybe_unused name = { \
+>>  +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  +}
+>>  +
+>>   /*
+>>    * Use this for defining a set of PM operations to be used in all 
+>> situations
+>>    * (system suspend, hibernation or runtime PM).
+>>  @@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
+>>    * .resume_early(), to the same routines as .runtime_suspend() and
+>>    * .runtime_resume(), respectively (and analogously for 
+>> hibernation).
+>>    */
+>>  -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, 
+>> idle_fn) \
+>>  -static const struct dev_pm_ops name = { \
+>>  -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+>>  -}
+>>  -
+>>  -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>>  -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  -const struct dev_pm_ops __maybe_unused name = { \
+>>  -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  -}
+>>  -
+>>  -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
+> 
+> Shouldn't this macro be deprecated any more?
 
-I've fixed it, no worries.
+I can only deprecate it if there is an alternative for it. The 
+alternative is DEFINE_RUNTIME_DEV_PM_OPS() which is added in patch 4/6.
 
-Thanks,
+Cheers,
+-Paul
 
-jon
+>>   #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) 
+>> \
+>>   const struct dev_pm_ops __maybe_unused name = { \
+>>          SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  --
+>>  2.34.1
+>> 
+> 
+> Kind regards
+> Uffe
+
+

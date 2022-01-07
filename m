@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EECAA4876C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 331954876C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347226AbiAGLty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238042AbiAGLtx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:49:53 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800F7C061245;
-        Fri,  7 Jan 2022 03:49:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=DBw/yxgkvw2Kf7vhLp4FcogOKyh2cchQam1f9G18PGg=; b=kOuwZ
-        rWvV2p2OgeZwCFNQJQPxkmu8WhWcubSfQ8KVtEvseu4O+GGl9oAREjqYzlyyst3Kh90lU9rLaHXnS
-        4/KUhbupU/eCvM/D2g3rcsAniIW6Sn3PIP668vEKtGe/4TGOjKiXJdbjUXh5TWChfDggeqqwcK6Nb
-        qr9S7qR1R42trU2lSwn9O2j+IeWufNwyowxUmbFgZDJohdoPrluKl0/x9nAdv4r9Y1dM2f8QzFRQJ
-        rCB7MogGTsyUrIpzr/53asHuCoH5GEf/mPgI0qbejILaMULHipUO6tW0vtaq93GxtXWJELaxUk0By
-        QzPReYW1OI7TQGTNXdnVfVbDTcPug==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n5nki-0006Nq-5S; Fri, 07 Jan 2022 11:49:48 +0000
-Date:   Fri, 7 Jan 2022 11:49:46 +0000
-From:   John Keeping <john@metanate.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-Message-ID: <Ydgo2lENzywieaZL@donbot>
-References: <Yb3vXx3DcqVOi+EA@donbot>
- <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
- <87zgou6iq1.mognet@arm.com>
- <20211221164528.3c84543f.john@metanate.com>
- <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
- <87r1a4775a.mognet@arm.com>
- <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
+        id S1347236AbiAGLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:50:24 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:39206 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347228AbiAGLuX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 06:50:23 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABXXp7pKNhhIsD4BQ--.39687S2;
+        Fri, 07 Jan 2022 19:50:01 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     David.Laight@ACULAB.COM, damien.lemoal@opensource.wdc.com,
+        davem@davemloft.net
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] ide: Check for null pointer after calling devm_ioremap
+Date:   Fri,  7 Jan 2022 19:50:00 +0800
+Message-Id: <20220107115000.4057454-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
-X-Authenticated: YES
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowABXXp7pKNhhIsD4BQ--.39687S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw47AF1fZry5Gw1UKr15Arb_yoW8Aw4UpF
+        4SgFWSvrWDWr1UK3WxAr18ZFyUu3ZrJa4FgFyYvw4kZ3s0vr18JrWaqFWIqr9rJrW3CayY
+        v3W7tr4kuFZ8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8KwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
+        1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU589NDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 11:46:45AM +0100, Dietmar Eggemann wrote:
-> On 22/12/2021 20:48, Valentin Schneider wrote:
-> >  /*
-> > diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> > index ef8228d19382..8f3e3a1367b6 100644
-> > --- a/kernel/sched/rt.c
-> > +++ b/kernel/sched/rt.c
-> > @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
-> >  	if (!next_task)
-> >  		return 0;
-> >  
-> > +	/*
-> > +	 * It's possible that the next_task slipped in of higher priority than
-> > +	 * current, or current has *just* changed priority.  If that's the case
-> > +	 * just reschedule current.
-> > +	 */
-> > +	if (unlikely(next_task->prio < rq->curr->prio)) {
-> > +		resched_curr(rq);
-> > +		return 0;
-> > +	}
-> 
-> IMHO, that's the bit which prevents the BUG.
-> 
-> But this would also prevent the case in which rq->curr is an RT task
-> with lower prio than next_task.
-> 
-> Also `rq->curr = migration/X` goes still though which is somehow fine
-> since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
-> 
-> And DL tasks (like sugov:X go through and they can have
-> task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
-> freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
-> can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
-> by coincidence.
-> 
-> So maybe something like this:
+In linux-stable-5.15.13, this file has been removed and combined
+to `drivers/ata/pata_platform.c` without this bug.
+But in the older LTS kernels, like 5.10.90, this bug still exists.
+As the possible failure of the devres_alloc(), the devm_ioremap() and
+devm_ioport_map() may return NULL pointer.
+And then, the 'base' and 'alt_base' are used in plat_ide_setup_ports().
+Therefore, it should be better to add the check in order to avoid the
+dereference of the NULL pointer.
+Actually, it introduced the bug from commit 8cb1f567f4c0
+("ide: Platform IDE driver") and we can know from the commit message
+that it tended to be similar to the `drivers/ata/pata_platform.c`.
+But actually, even the first time pata_platform was built,
+commit a20c9e820864 ("[PATCH] ata: Generic platform_device libata driver"),
+there was no the bug, as there was a check after the ioremap().
+So possibly the bug was caused by ide itself.
 
-Do you mean to replace just the one hunk from Valentin's patch with the
-change below (keeping the rest), or are you saying that only the change
-below is needed?
+Fixes: 8cb1f567f4c0 ("ide: Platform IDE driver")
+Cc: stable@vger.kernel.org#5.10.90
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
 
-> @ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
->                 if (!pull || rq->push_busy)
->                         return 0;
-> 
-> +               if (rq->curr->sched_class != &rt_sched_class) {
-> +                       resched_curr(rq);
-> +                       return 0;
-> +               }
-> +
->                 cpu = find_lowest_rq(rq->curr);
-> 
-> [...]
+v2 -> v3
+
+* Change 1. Correct the fixes tag and commit message.
+* Change 2. Correct the code.
+---
+ drivers/ide/ide_platform.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/ide/ide_platform.c b/drivers/ide/ide_platform.c
+index 91639fd6c276..5500c5afb3ca 100644
+--- a/drivers/ide/ide_platform.c
++++ b/drivers/ide/ide_platform.c
+@@ -85,6 +85,10 @@ static int plat_ide_probe(struct platform_device *pdev)
+ 		alt_base = devm_ioport_map(&pdev->dev,
+ 			res_alt->start, resource_size(res_alt));
+ 	}
++	if (!base || !alt_base) {
++		ret = -ENOMEM;
++		goto out;
++	}
+ 
+ 	memset(&hw, 0, sizeof(hw));
+ 	plat_ide_setup_ports(&hw, base, alt_base, pdata, res_irq->start);
+-- 
+2.25.1
+

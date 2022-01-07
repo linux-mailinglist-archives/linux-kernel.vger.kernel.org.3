@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A52184871E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937DC4871EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345947AbiAGEz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 23:55:59 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37169 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiAGEz6 (ORCPT
+        id S1346120AbiAGE6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 23:58:09 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:21390 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231868AbiAGE6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 23:55:58 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVWBf5zFXz4xPt;
-        Fri,  7 Jan 2022 15:55:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1641531357;
-        bh=+0gt3Ce/FGhwyld+iB75eE7kUGD74gyF9fLmCmmqJI0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dxzQHmNiOmvWH1t16AItMd6p2d3tqG+A+i+kTTwCUtjXndn/8t9HVsubSR2LYK9eq
-         qLV+AKENtXbVxF82SjKPi5H6auA5H+E4xy6aiXfHuirtVyc7Qhxg+wabbGX3nLq2I+
-         EVwFipTHBcl1/0TSEOGQGu0eMTP1XgIOY5vXGnkyOyrZB/q+fnCh70MZQMo3GoAc8U
-         IN5HuWy0bik/ia7uIcPDYvlI3PUdoNflPOt4Fs8Jm6ZUFT+FCtexoWndZbvp/N+ycV
-         DPSDznKiugLXkGclPgPiKw9E5UlaFcBlFWMybBsKimfWKwiQ3hmOKf+nRWyw2oAdgE
-         Y2f4UI+/F3KVw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>, Neal Gompa <ngompa13@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH] fs: btrfs: Disable BTRFS on platforms having 256K pages
-In-Reply-To: <db88497c-ea17-27ca-6158-2a987acb7a1c@gmx.com>
-References: <a16c31f3caf448dda5d9315e056585b6fafc22c5.1623302442.git.christophe.leroy@csgroup.eu>
- <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
- <CAEg-Je9UJDJ=hvLLqQDsHijWnxh1Z1CwaLKCFm+-bLTfCFingg@mail.gmail.com>
- <db88497c-ea17-27ca-6158-2a987acb7a1c@gmx.com>
-Date:   Fri, 07 Jan 2022 15:55:51 +1100
-Message-ID: <87bl0o2lgo.fsf@mpe.ellerman.id.au>
+        Thu, 6 Jan 2022 23:58:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641531488; x=1673067488;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=uga+3cVxFTHnol9TYNiQ9BvLxyCVow4Vx6zh3T14HSI=;
+  b=zJjxbUr5LNZk30ADU8tzBDqHxJrp8rHCEF9++vBTwAMIeoRsXsYfyUuu
+   NeU7RLMt4iNTP6JSxXmtcffA5NtHVhkoYuunywSc2Eamz+vMNoGXOg+6T
+   A/p6xEWwQkl+PcjnyIw8uPO0i0rqFk3pHVnqzX6i9m0/WzoQRYob7zpdr
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 20:58:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 20:58:06 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 6 Jan 2022 20:58:06 -0800
+Received: from [10.216.49.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 6 Jan 2022
+ 20:58:03 -0800
+Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
+ DWC3 controller
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+ <Ydb79/twbxLDJB8/@kroah.com>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Message-ID: <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+Date:   Fri, 7 Jan 2022 10:27:59 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <Ydb79/twbxLDJB8/@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qu Wenruo <quwenruo.btrfs@gmx.com> writes:
-> On 2022/1/7 00:31, Neal Gompa wrote:
->> On Wed, Jan 5, 2022 at 7:05 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
->>>
->>> Hi Christophe,
->>>
->>> I'm recently enhancing the subpage support for btrfs, and my current
->>> branch should solve the problem for btrfs to support larger page sizes.
->>>
->>> But unfortunately my current test environment can only provide page size
->>> with 64K or 4K, no 16K or 128K/256K support.
->>>
->>> Mind to test my new branch on 128K page size systems?
->>> (256K page size support is still lacking though, which will be addressed
->>> in the future)
->>>
->>> https://github.com/adam900710/linux/tree/metadata_subpage_switch
->>>
+
+On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
+> On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
+>> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+>> usage value is 2 because the phy is initialized from DWC3 and HCD core.
+>> DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>> initialization in HCD core.
 >>
->> The Linux Asahi folks have a 16K page environment (M1 Macs)...
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> ---
+>> v5:
+>> Added comment to explain the change done.
+>> v4:
+>> Changed pdev->dev.parent->of_node to sysdev->of_node
+>>
+>>   drivers/usb/host/xhci-plat.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>> index c1edcc9..e6014d4 100644
+>> --- a/drivers/usb/host/xhci-plat.c
+>> +++ b/drivers/usb/host/xhci-plat.c
+>> @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>>   					 &xhci->imod_interval);
+>>   	}
+>>   
+>> +	/*
+>> +	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>> +	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>> +	 * initialization in HCD core.
+>> +	 */
+>> +	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+>> +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
+>> +
+> Why is this function caring about dwc3 stuff?  Shoudn't this be a
+> "generic" device property instead of this device-specific one?
 >
-> Su Yue kindly helped me testing 16K page size, and it's pretty OK there.
+> thanks,
 >
-> So I'm not that concerned.
->
-> It's 128K page size that I'm a little concerned, and I have not machine
-> supporting that large page size to do the test.
+> greg k-h
 
-Did Christophe say he had a 128K system to test on?
+This quirk is set only if required for some controllers (eg: dwc3 & cdns3).
 
-In mainline powerpc only supports 4K/16K/64K/256K.
+Please check below commit.
 
-AFAIK there's no arch with 128K page size support, but that's only based
-on some grepping, maybe it's hidden somewhere.
+https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
 
-cheers
+
+Regards
+
+Sandeep
+
+

@@ -2,108 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C44E48720C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 06:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F6B487211
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 06:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346145AbiAGFNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 00:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
+        id S1346135AbiAGFPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 00:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiAGFNm (ORCPT
+        with ESMTP id S233029AbiAGFPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 00:13:42 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32547C0611FD;
-        Thu,  6 Jan 2022 21:13:42 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id l11so4896406qke.11;
-        Thu, 06 Jan 2022 21:13:42 -0800 (PST)
+        Fri, 7 Jan 2022 00:15:11 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B500C061212
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 21:15:11 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id l10-20020a4a840a000000b002dc09752694so1223215oog.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 21:15:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZnX2c/AivJPvE3M4KgpGz9qCvVjWTtRZpCLeFLJb/64=;
-        b=jhcH33f2rPJdslRUlsnQb/mI5egx3yjh1XRyMm1WHG3iNkzWWKLPWiwt1LvxANMrm6
-         +wuTlRzzaEJAHEnGVYo66bULDqob6E+XP08ruvluHzgCCyA9uaGV6lcQNpSkZcxPmHjC
-         laOvrBhyfeqEQW3rMlEiVYEWA49a6HrO+2RoScWGyP0sOK4A41q8iuW009sz8vN6oqNY
-         RGc5zybzvtgFd4MxIhYKAWU5RsjqqThBSNxNdHqW4nRrEv/l9re1/JyFT8Mk0t27stSa
-         nMZiHyg3qsS44wioLnKqSpvb1w72tzbUvOUzDp/c4Q8rTI47dNCm3BhEASgiYLrmLGpW
-         hJaw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/lXYTMqTPQj6nVYc2LjkC+PRXcEeKHgZlGRbidIcOIo=;
+        b=L3zHbWNYc53NMKrX6Sl1d3PRn29b66vuiNXviFr8GA4a+SYGpiSAyvS18jms6d8qVB
+         fKs3D+Nbr+M6SNOoFZDyMEvRSdPvzFrzzEGDWpLMQWGidJTOSq1Iqpx53jH1xd4YXitS
+         SSGZeD8LGKgJig/FEGdCluCKQl2Oe2NwjhtHQpWiii5utKHQBmtfn6tScZX6Kakzb2TF
+         EP0qNy52kdQQDeE0/CzqJ36Xhn6zZGmaoniKY5iaEE+FoazTqn1MIU0UX+METLAKof5P
+         IzzC0+07tN5TPfH60atp5u5kgV5lP7qVsaQzSBeSiN0T3CFVtqm2p2FVW9BXdVs6KNB/
+         cx8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZnX2c/AivJPvE3M4KgpGz9qCvVjWTtRZpCLeFLJb/64=;
-        b=en8iMBU5x6I+RWr31o4BvDWGruTTp9k2/kUfFkJAD5JZ+xw8g3ZAdm2GF0uLFwUxDQ
-         RKFrubZQcs+PMW52ES1QqIDKc615oSqBIBnLGgNvHhO7gZvZNXbzVbBRHSz+BOAd+oR9
-         basjNx76PJmQFFuPYSwLgwEPgWjUAHjx7N6IMsg/FnXHB7w7IUL+9bjkvlwTCvuwgEHL
-         H/KNn5eMUGujZSqUlr3OgZYFKvn12IZdJ+UIJIA4KojSs+scpRXFNoC0w2SbbPx8APkI
-         71X05ZaVJJtBM6uDOHavk4fwojfqLgKW+H4y5bzbujIVQcxfijTpPCKbNrpWlAUuvy/9
-         HMeQ==
-X-Gm-Message-State: AOAM5333/OTw6X5OMC6H5orjRd5Nu2mOA3pdHiYL4JE/C0dJlhudE4Ig
-        8Eyyy6OSwmBIltsJan2S0w4=
-X-Google-Smtp-Source: ABdhPJyxvYrqYFDlkIi0IZIQpBfxEsFe8ZBlx2sEOe9KCyROC7cqYGRV1dzISY18pXdzDCCbz24+YA==
-X-Received: by 2002:a05:620a:25c8:: with SMTP id y8mr44783504qko.455.1641532421366;
-        Thu, 06 Jan 2022 21:13:41 -0800 (PST)
-Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
-        by smtp.gmail.com with ESMTPSA id d15sm1651461qka.3.2022.01.06.21.13.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 21:13:41 -0800 (PST)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: rockchip: enable the pine64 touch screen on rockpro64
-Date:   Fri,  7 Jan 2022 00:13:35 -0500
-Message-Id: <20220107051335.3812535-5-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220107051335.3812535-1-pgwipeout@gmail.com>
-References: <20220107051335.3812535-1-pgwipeout@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/lXYTMqTPQj6nVYc2LjkC+PRXcEeKHgZlGRbidIcOIo=;
+        b=nnQPna7gJl5nsXWNMaxkxf4qtBHuSu79o+Nzfox8EVOzUp9UiVmUF+jcJCYkgJZbYw
+         fn1UqcymIt7FXoeiO1PPNWHFpcaW2J/M+CZf+6Z12d3AFzBe4SYh88vaiwE+i5Ab2UWO
+         P7jHgNriiheSjUb/+25mQzGQp/yrMOL3vEPkQpRxK1kE0AdHZix/KSgJMnQOlmc5y+pE
+         LIxukrFMZS1zwzNjDwP8veKvkkXxrz2ptSrp5+cSj29nsLEErk/DpBwCoDoLl2Otme7C
+         j3h/3nkfQIz3r1HmJDFw/Mmq1XcuvHFL+iRIXz1jr8xRy9mDLc+JEP1RcV1t+MhHhbRn
+         Tkmw==
+X-Gm-Message-State: AOAM532xF6dumXgfC4X8nrSMWZNlIG3BTM8xp0BzUOGbPH4O91rOg+jy
+        HSzZLvK26Sc2HGnSqCzHPtPuvyUZkzLSpnfq9sYpwQ==
+X-Google-Smtp-Source: ABdhPJwJ2NaeNTYz8jr/Bz1rJEZfuZ5XHAT20ivQM2kiMSToIXtUl8uQhMexLkbtkzTkHr/nOhstN/RfFJf7Y6M22uk=
+X-Received: by 2002:a4a:5403:: with SMTP id t3mr3926068ooa.72.1641532510072;
+ Thu, 06 Jan 2022 21:15:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211229215330.4134835-1-yaelt@google.com> <CAFA6WYPuPHgcnzt6j+Q-EA2Dos6vBDukrjpheo5srLVXFrifEg@mail.gmail.com>
+ <5a38824152eeee0fc9ba0a4fd2308bb6e0970059.camel@linux.ibm.com>
+ <CAFA6WYOJt3=YMTt_QQSq6Z-MK42hwWspgSpasw2fuPtVFcP3uA@mail.gmail.com> <CAKoutNvW1c7MkTaFwyrD7MjUVXvTtcBOGFULMittJ5vzjMN0mg@mail.gmail.com>
+In-Reply-To: <CAKoutNvW1c7MkTaFwyrD7MjUVXvTtcBOGFULMittJ5vzjMN0mg@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 7 Jan 2022 10:44:57 +0530
+Message-ID: <CAFA6WYPQRagZF8-grn_LC8_SAaxBzh=cSgHhFAQQOYK+L2KuBQ@mail.gmail.com>
+Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
+ decrypted data
+To:     Yael Tiomkin <yaelt@google.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        jejb@linux.ibm.com, Jarkko Sakkinen <jarkko@kernel.org>,
+        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
+        serge@hallyn.com, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the touch screen, backlight, and dsi nodes for the Pine64 touch panel
-attached to the rockpro64.
+Hi Yael,
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu, 6 Jan 2022 at 01:48, Yael Tiomkin <yaelt@google.com> wrote:
+>
+> Hi Sumit,
+>
+> On Mon, Jan 3, 2022 at 1:51 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+> >
+> > Hi Mimi,
+> >
+> > Apologies for the delayed reply as I was on leave for a long new year weekend.
+> >
+> > On Thu, 30 Dec 2021 at 18:59, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > >
+> > > Hi Sumit,
+> > >
+> > > On Thu, 2021-12-30 at 15:37 +0530, Sumit Garg wrote:
+> > > > + Jan, Ahmad
+> > > >
+> > > > On Thu, 30 Dec 2021 at 03:24, Yael Tiomkin <yaelt@google.com> wrote:
+> > > > >
+> > > > > The encrypted.c class supports instantiation of encrypted keys with
+> > > > > either an already-encrypted key material, or by generating new key
+> > > > > material based on random numbers. This patch defines a new datablob
+> > > > > format: [<format>] <master-key name> <decrypted data length>
+> > > > > <decrypted data> that allows to instantiate encrypted keys using
+> > > > > user-provided decrypted data, and therefore allows to perform key
+> > > > > encryption from userspace. The decrypted key material will be
+> > > > > inaccessible from userspace.
+> > > >
+> > > > This type of user-space key import feature has already been discussed
+> > > > at large in the context of trusted keys here [1]. So what makes it
+> > > > special in case of encrypted keys such that it isn't a "UNSAFE_IMPORT"
+> > > > or "DEBUGGING_IMPORT" or "DEVELOPMENT_IMPORT", ...?
+> > > >
+> > > > [1] https://lore.kernel.org/linux-integrity/74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de/
+> > > >
+> > > > -Sumit
+> > > >
+> > > > >
+> > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > Signed-off-by: Yael Tiomkin <yaelt@google.com>
+> > >
+> > > There is a difference between trusted and encrypted keys.
+> >
+> > Yeah I understand the implementation differences.
+> >
+> > >  So in
+> > > addition to pointing to the rather long discussion thread, please
+> > > summarize the conclusion and, assuming you agree, include why in once
+> > > case it was acceptable and in the other it wasn't to provide userspace
+> > > key data.
+> >
+> > My major concern with importing user-space key data in *plain* format
+> > is that if import is *not* done in a safe (manufacturing or
+> > production) environment then the plain key data is susceptible to
+> > user-space compromises when the device is in the field.
+>
+> I agree this can happen. Key distribution in any scenario needs to be
+> secure and this could also potentially be an issue if the key is first
+> encrypted and then imported.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-index 158befb9a48c..f6c36fcd6db3 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
-@@ -26,7 +26,7 @@ backlight: backlight {
- 		pwms = <&pwm0 0 1000000 0>;
- 		brightness-levels = <0 4 8 16 32 64 128 255>;
- 		default-brightness-level = <5>;
--		status = "disabled";
-+		status = "okay";
- 	};
- 
- 	clkin_gmac: external-gmac-clock {
-@@ -594,7 +594,7 @@ touch: touchscreen@5d {
- 		interrupts = <RK_PD5 IRQ_TYPE_EDGE_FALLING>;
- 		irq-gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_HIGH>;
- 		reset-gpios = <&gpio4 RK_PD6 GPIO_ACTIVE_HIGH>;
--		status = "disabled";
-+		status = "okay";
- 	};
- };
- 
-@@ -633,7 +633,7 @@ &io_domains {
- 
- /* enable for pine64 panel display support */
- &mipi_dsi {
--	status = "disabled";
-+	status = "okay";
- 	clock-master;
- 
- 	ports {
--- 
-2.32.0
+Currently its not the case with encrypted keys. These are random keys
+generated within the kernel and encrypted with master key within the
+kernel and then exposed to user-space as encrypted blob only.
 
+> We can make sure the documentation
+> highlights the safety requirement.
+>
+
+IMO, you should enable this feature as a compile time option. The help
+text for that config option should highlight the use-case along with a
+safety warning.
+
+-Sumit
+
+> >
+> > And it sounds like we are diverting from basic definition [1] of encrypted keys:
+> >
+> > "Trusted and Encrypted Keys are two new key types added to the
+> > existing kernel key ring service. Both of these new types are variable
+> > length symmetric keys, and in both cases all keys are created in the
+> > kernel, and **user space sees, stores, and loads** only encrypted
+> > blobs."
+> >
+> > Also, as Jarrko mentioned earlier the use-case is still not clear to
+> > me as well. Isn't user logon keys an alternative option for
+> > non-readable user-space keys?
+>
+> The goal in this change is to allow key encryption from userspace,
+> using user-provided decrypted data. This cannot be achieved in logon
+> keys, which as you mentioned, are simply non-readable user type keys.
+>
+>
+> >
+> > [1] https://www.kernel.org/doc/html/v4.13/security/keys/trusted-encrypted.html
+> >
+> > -Sumit
+> >
+> > >
+> > > thanks,
+> > >
+> > > Mimi
+> > >
+>
+> Yael

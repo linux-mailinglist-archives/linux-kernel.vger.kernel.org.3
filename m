@@ -2,84 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F45486F41
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CA8486F52
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344788AbiAGA6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:58:33 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:58897 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiAGA6c (ORCPT
+        id S1344915AbiAGBAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236544AbiAGA77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:58:32 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MryCb-1mZLl547mP-00nwrQ; Fri, 07 Jan 2022 01:58:31 +0100
-Received: by mail-wr1-f51.google.com with SMTP id w20so8022640wra.9;
-        Thu, 06 Jan 2022 16:58:30 -0800 (PST)
-X-Gm-Message-State: AOAM533zWTLAKMEcV7Uo4P0bzAv8Pl25ySMtGdb3pt4sLeBzs6VA0O+O
-        jRm8vXoyMA6yUCH8jYkClWheiSxbD/xJDS4FTJc=
-X-Google-Smtp-Source: ABdhPJw358xnVBy0xVmQn6spXwbuORRrv/Zlnm9a5imL/72/70FXovvZLsKseIasTfU7fEcAA/3bt/0PrbYZH1MsmmA=
-X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr54689312wrq.407.1641517110623;
- Thu, 06 Jan 2022 16:58:30 -0800 (PST)
+        Thu, 6 Jan 2022 19:59:59 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD10C061245;
+        Thu,  6 Jan 2022 16:59:59 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z9so15937398edm.10;
+        Thu, 06 Jan 2022 16:59:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=193b4YHjs1buOAzSFIPKTBZORcA2cD4by1MwizuSpRM=;
+        b=kdBniaYQywtcRRDuNzzDVpl7lTixQ9Y1NbYlEmhfMQ2i4+aRsC1vE7CJKKX9g584zh
+         ZeL+Lo6hCKp4kL+AABTpvw0/wgU0PdG/e1Yn9XcaewePQVwXm7858s6paiywqz5HBVtb
+         sfcklQ3rSwXeeCWlt6xlXPXkacmQPqNzWiR27wkjPzqpiVyZNLtqUhbBRI5PMO/v863B
+         fu0pc2kBoDy23xSQQZ4de7w/peDUxNPBdLtM1ciYJ98fA3UzdSMsTrmeSejriUCh/epT
+         etPk4bp0MDizzZS98nVcRM9YoMztLIPOWXrRgahqL9m5pAIpqKZzMpntFvnlrOb+ElbB
+         mL8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=193b4YHjs1buOAzSFIPKTBZORcA2cD4by1MwizuSpRM=;
+        b=wHav4z5xYXcmbYkU6uN+PE4crKiZG7dZ9mFwzA2xkFCk/BdQBNCk8/Vni4ZGaW/5Yi
+         vB0eA05qBjg3v9R6vsoCYmKSMeprTLxGPfv6OrRl4TC9njIr7M0V/XLPgVEEhbELQrhX
+         EqGTd7Q7P3cZPHW4NXnYbMvJ3WdikeUQIThU0iSma0DXNZyAmojeyVeBalCsW47wFiIk
+         mX3jszRChEn95g05oNQEoUXbnhM6juN4G0zHPPSJlcmYEOjOrYjaFwawy2c0kWWHx7JK
+         L6xtFGrT9igGalhtj3f8MFdFFdO/foGZat4n7uTp5lQ5WoQnQn0Wv53Zghuvj742mdWf
+         1LdQ==
+X-Gm-Message-State: AOAM53373zDa1LzOm+nEBWNXGD53Y0gK6Hl/7WlUUzbv168N5H5wHQqm
+        ecZtPG0OwlhlIxFFN5nZKsnM5cOylu3on/BIWODmmFcafvw=
+X-Google-Smtp-Source: ABdhPJxJBcDiJq48nZOyiyf4PNZ9r4ZiJ6Rd1Q02GkfapSXgfzOPLAW687ZRqwj1yOM2vNvSGQt923kieCZkk7Xqono=
+X-Received: by 2002:a17:906:4793:: with SMTP id cw19mr51347677ejc.15.1641517197290;
+ Thu, 06 Jan 2022 16:59:57 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
- <4a0a48fb682d13e6861f604d3cad3424672bee1f.1641500561.git.christophe.jaillet@wanadoo.fr>
- <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
-In-Reply-To: <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 6 Jan 2022 19:58:28 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a01EyEzJKyk2upmvXW-VEb6XRGZgeBwEzH=jJYYL3saGg@mail.gmail.com>
-Message-ID: <CAK8P3a01EyEzJKyk2upmvXW-VEb6XRGZgeBwEzH=jJYYL3saGg@mail.gmail.com>
-Subject: Re: [PATCH 03/16] fpga: dfl: pci: Remove usage of the deprecated
- "pci-dma-compat.h" API
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, hao.wu@intel.com,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
+References: <20211230062905.586150-1-luo.penghao@zte.com.cn>
+ <YdZzt0LF/ajTGNXo@mit.edu> <20220106105843.comh4jk3krxppgbp@work>
+In-Reply-To: <20220106105843.comh4jk3krxppgbp@work>
+From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
+Date:   Thu, 6 Jan 2022 16:59:46 -0800
+Message-ID: <CAD+ocbyF=9pskuSRono-hAg2mEzEmCOD30oFGYW8piQ=BjwhYw@mail.gmail.com>
+Subject: Re: [PATCH linux] ext4: Delete useless ret assignment
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, cgel.zte@gmail.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:S2NrGVuAJNeavdPuhHi9VbemRQp6gLroIRh+i6dxMTncWt+j5Yc
- jlCd6sEKAnBguUUv9AR5mN5Pz/+8b3+1c6O7ZJ2bq46mz9/R2mqUk1K4aTeLdTgmKatDoyN
- HN0AsO5Gwu41LWyyEb4Cvf6axNMvmWLYUp11hmSqUJiNla9KsdeiQd/wPLeuyu+qBGdrnaf
- vOPTfS5s4K/R8YugX3V7w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kLzSUkWBejc=:2M0yazoBlemnF4JFCIolbg
- LtdWTHkqJR+p7X0meRzANwVwWSent5vC/A2GBcgjjm4kvxsn/lEZ8Id9LvkyqV+QqcjelIZy5
- AnpQZ+EN5xgyNp2qFXRDATPszv1V62+5RxYOXcuDS297StNZYLqZrOQIwcxd9QvNP+vPZE2MX
- 14sJzumOVGwo6tnCS5METHD/DgW84a8Uvld2+nxwV+CM51DVVVgfyjy680CcXsiQ3utvmfYNt
- OZo43mHMg4qADe80bwQC/QrNZzFmwnQOSF6xAjZwKEamtBU+6pkonDCzjXTlYNXrLjxYu6cwS
- yGEHLQTrqbZVIZMtLxCv+ia/iFfJIWCXA+znHvJQ/vnvT6lbz0Oie4PJkk20e4W75P5l9qut1
- O1BYoBr7NtGnKqqSZRePkZ71oU6MgjzIYU9mEJEUyiJh+A7lrSi98fxDMaYceLJ5OipeR7DKC
- KogiB4jle/K2wWOgxcP/A/GBZ3uG8U9phgrPAoI9sch9akAxL58+9Yeue5LcbReM6S1+NhZ4N
- b3tx/0AMk1qECz8QZW2BOJkQMHBwoHzDGixRMAbTT8nimtXH7XEhJ3i0X7BcMFlGmu7votXF8
- C7RIeWgXoVARwqZOyBlsTR1zGiQ3U6iquPUhwzrAmqfLlb2+E/CXslAAbpBB6NGtbQrspG24h
- 7BWIHWxgC9Rkg9CheBx2ZHf/E5+hYpO7dAbBoeU0cESCpUfh0YYAQZfiCsU+l8UubdDVAHaof
- sFLChQTggOwvPVoOnsFYoWuwiX4MElU3Tr2dExk9UeyIBjf8oA8Pvydncg0Xr8NQLMSF8UDRj
- EIktJi25XRxl7wTe+lDjF+NaD3xVsUn6g9li79pGiuQ+/ZRqKI0iif/QSjU14r2/LIBmPm9s6
- KJhn81H04aR2DtnkLeRFwX13MrLR0Z6zkLKQxrHM3/zEhfdjeF2oyhTBjYofLnv7bt84Kz3tq
- h3l+lRcIb3w==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 6:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
+First of all thanks for catching this. Yeah, I think the right thing
+to do here is to return the return value up to the caller. Also, I
+agree with Lukas, we should only set fc_modified_inodes_size if the
+allocation succeeds. Luo, would you be okay updating the patch to
+include these changes?
 
-> > [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
-> > [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
-> > [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
+Thanks,
+Harshad
+
+On Thu, Jan 6, 2022 at 2:58 AM Lukas Czerner <lczerner@redhat.com> wrote:
+>
+> On Wed, Jan 05, 2022 at 11:44:39PM -0500, Theodore Ts'o wrote:
+> > On Thu, Dec 30, 2021 at 06:29:05AM +0000, cgel.zte@gmail.com wrote:
+> > > From: luo penghao <luo.penghao@zte.com.cn>
+> > >
+> > > The assignments in these two places will be overwritten by new
+> > > assignments later, so they should be deleted.
+> > >
+> > > The clang_analyzer complains as follows:
+> > >
+> > > fs/ext4/fast_commit.c
+> > >
+> > > Value stored to 'ret' is never read
 > >
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> > I suspect the right answer here is that we *should* be checking the
+> > return value, and reflecting the error up to caller, if appropriate.
+> >
+> > Harshad, what do you think?
 >
-> This is a correct conversion of the driver, but I'd prefer to keep this separate
-> from the pci-dma-compat series.
-
-Nevermind, I just misread the patch, and it is required after all to get
-rid of pci_set_dma_mask()
-
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Indeed we absolutely *must* be checking the return value and bail out
+> otherwise we risk overwriting kernel memory among other possible
+> problems.
+>
+> See ext4_fc_record_modified_inode() where we increment
+> fc_modified_inodes_size before the actual reallocation which in case of
+> allocation failure will leave us with elevated fc_modified_inodes_size
+> and the next call to ext4_fc_record_modified_inode() can modify
+> fc_modified_inodes[] out of bounds.
+>
+> In addition to checking the return value we should probably also move
+> incrementing the fc_modified_inodes_size until after the successful
+> reallocation in order to avoid such pitfalls.
+>
+> Thanks!
+> -Lukas
+>
+> >
+> >                                       - Ted
+> >
+> > >
+> > > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > > Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+> > > ---
+> > >  fs/ext4/fast_commit.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> > > index 8ea5a81..8d5d044 100644
+> > > --- a/fs/ext4/fast_commit.c
+> > > +++ b/fs/ext4/fast_commit.c
+> > > @@ -1660,7 +1660,7 @@ static int ext4_fc_replay_add_range(struct super_block *sb,
+> > >             return 0;
+> > >     }
+> > >
+> > > -   ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > > +   ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > >
+> > >     start = le32_to_cpu(ex->ee_block);
+> > >     start_pblk = ext4_ext_pblock(ex);
+> > > @@ -1785,7 +1785,7 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
+> > >             return 0;
+> > >     }
+> > >
+> > > -   ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > > +   ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > >
+> > >     jbd_debug(1, "DEL_RANGE, inode %ld, lblk %d, len %d\n",
+> > >                     inode->i_ino, le32_to_cpu(lrange.fc_lblk),
+> > > --
+> > > 2.15.2
+> > >
+> > >
+> >
+>

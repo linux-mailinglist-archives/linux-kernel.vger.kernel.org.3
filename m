@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA0B487929
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BF348792E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239506AbiAGOm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:42:28 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:46808 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiAGOm1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:42:27 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 207EgHJ6097592;
-        Fri, 7 Jan 2022 08:42:17 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641566537;
-        bh=84xH1S3boxkyVmLpM/dCun8ytu+7FFaeZjh0qwynxBc=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=rcI3bCZ2HHT3qZnYU8Msi+RdU3AMVH09+Ui3c+1oGS2Pr/OJkkCWRAyRQKZDFjppY
-         AZD4xZ1rzd9JKmoE+lmyzniUWR5Tns6ZN2AZaPJLIIN39MlVkiQS8SdNmqFw1yfojM
-         fQciHpSAIa12A4WRYDAeR6+I/wQgnt8MK6P1PxqM=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 207EgHSP093470
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 7 Jan 2022 08:42:17 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 7
- Jan 2022 08:42:17 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 7 Jan 2022 08:42:17 -0600
-Received: from [10.249.36.164] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 207EgGC7124001;
-        Fri, 7 Jan 2022 08:42:16 -0600
-Subject: Re: [PATCH] iommu/omap: Fix missing put_device() call in
- omap_iommu_probe_device
-To:     Miaoqian Lin <linmq006@gmail.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        "Nagalla, Hari" <hnagalla@ti.com>
-References: <20220107080428.10873-1-linmq006@gmail.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
-Date:   Fri, 7 Jan 2022 08:42:16 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S239543AbiAGOo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:44:29 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:59852 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230012AbiAGOo2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 09:44:28 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAAH3aW2Udhh42H7BQ--.18277S2;
+        Fri, 07 Jan 2022 22:44:06 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] thermal/int340x_thermal: Check for null pointer after calling kmemdup
+Date:   Fri,  7 Jan 2022 22:44:05 +0800
+Message-Id: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220107080428.10873-1-linmq006@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAH3aW2Udhh42H7BQ--.18277S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4rAr4UKF43Xw48tF45trb_yoW8AFWDpF
+        WFgr1UJrs5WF1xWwnrArn8XayDCF4vga4UuF4FkayYy3ZxCFWSqFyFyF1Fyry0kr17t3Wj
+        y345tF4xZryDJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
+        6r1DMxkIecxEwVAFwVW5XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
+        87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfU8D73DUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+As the possible failure of the allocation, kmemdup() may return NULL
+pointer.
+Then the 'bin_attr_data_vault.private' will be NULL pointer but the
+'bin_attr_data_vault.size' is not 0.
+Therefore, it should be better to check the return value of kmemdup() to
+avoid the wrong size.
 
-On 1/7/22 2:04 AM, Miaoqian Lin wrote:
-> The reference taken by 'of_find_device_by_node()' must be released when
-> not needed anymore.
+Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
 
-Thanks for catching this.
+v1 -> v2
 
-> Add the corresponding 'put_device()' in the error handling paths.
+* Change 1. Use out_kfree to simplify the code.
+---
+ .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Also, need it in the regular path, not just in error handling path.
-
-> 
-> Fixes: ede1c2e7d4dc ("iommu/omap: Store iommu_dev pointer in arch_data")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/iommu/omap-iommu.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
-> index 91749654fd49..cbc7ca5e890a 100644
-> --- a/drivers/iommu/omap-iommu.c
-> +++ b/drivers/iommu/omap-iommu.c
-> @@ -1684,6 +1684,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
->  		oiommu = platform_get_drvdata(pdev);
->  		if (!oiommu) {
->  			of_node_put(np);
-> +			put_device(&pdev->dev);
-
-nit, doesn't matter for functionality, but prefer the put_device before
-of_node_put().
-
-regards
-Suman
-
->  			kfree(arch_data);
->  			return ERR_PTR(-EINVAL);
->  		}
-> 
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 19926beeb3b7..f869aeb087d3 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -457,17 +457,21 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
+ 
+ 	obj = buffer.pointer;
+ 	if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
+-	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
+-		kfree(buffer.pointer);
+-		return;
+-	}
++	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER)
++		goto out_kfree;
+ 
+ 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
+ 				   obj->package.elements[0].buffer.length,
+ 				   GFP_KERNEL);
++	if (!priv->data_vault)
++		goto out_kfree;
++
+ 	bin_attr_data_vault.private = priv->data_vault;
+ 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
+ 	kfree(buffer.pointer);
++
++out_kfree:
++	kfree(buffer.pointer);
+ }
+ 
+ static int int3400_thermal_probe(struct platform_device *pdev)
+-- 
+2.25.1
 

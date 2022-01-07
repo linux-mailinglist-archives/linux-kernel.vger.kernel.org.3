@@ -2,88 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C99487938
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CEC48793E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347862AbiAGOtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S239402AbiAGOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239113AbiAGOtM (ORCPT
+        with ESMTP id S232065AbiAGOug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:49:12 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0B6C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:49:12 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id o6so23029465edc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:49:11 -0800 (PST)
+        Fri, 7 Jan 2022 09:50:36 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53663C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:50:35 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp20so16354222lfb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3dnEOn1mC1NQNiRRaMsSZyymmcEfa5G6V1qN/15a9UQ=;
-        b=iuJctLNVE4gZM+UBz6bkyQrYSKd1uj/sStmLfgQR8PjcV9kLke8VTHACz/8Lv3T/As
-         VlQXC/J7zVGA7ak4YqXx9l9KSp2vBHf7rTItU9zcSDG8jG0XaKN6x/Nq5/IW+OlilRTU
-         yksMYNjbnYgsaK8kQ1LoFkW1YQR1FsKpvBtQ8JovzxwukOQyJva680O1M2fr+NR8D0QX
-         ZB2HnWsblwLp82DduO1VW7Gf4t63fCYTy/S35cWx3JXTOgwFucXOXnkJ67ruMOjtxgNI
-         97u2Wk1Rb0uPTbFpwhUS/4ydszpzBs+MgHg5bj2/LjgGZj+5QDIEzK5Gkq2bFFRQkMlL
-         6+hw==
+        bh=/d5KDjwbf/j/V9ij+JUJJfPSYLZLI5qkKPPbe9Vs//U=;
+        b=TSQQd9jhNzdgS3Q7sdJuidX/1KozmxZOJpekwqz4vCyTaQJ0rasZkimqN1gSikS1qU
+         5mTIIQNXHNFkJJmoA5pdw/tkU3piK6RSo9iAuhCZ4ECRPyCUn37RqLa+VaLiYxcMpuDb
+         t+MQR23xB1RR8nipc42nCm6hy/YFXKkZWTGznXBUP6P3IzFXsae/msC7jAE+Acavbo8c
+         NJstSG+EF0TJBxSzbOGmizrIzDc1R3FH+8O9ARcr40nG5PXAmJyQrBdDt4l3K4K7V9/C
+         Mg2bcG9+oMqHgGbOFonCBXRJHWjABVNejlF32e74emPbBAmYYZBaaCac17K+SqgWns6B
+         VY7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3dnEOn1mC1NQNiRRaMsSZyymmcEfa5G6V1qN/15a9UQ=;
-        b=aQulAX0ccYVHSQarBkmrAKTggwr8ZGPK0BsEi5En2bj9oBDXGbYMc+GMnUpflvKfSs
-         TYot2DTf455WGNkFtvq7/+E+0qs+WJbaRPqzNENpzLSVNMv+0XsRr7TTOjOSfi75lwwC
-         Y3hdzFpPnz4e+6twtr4OS0w7cQ10GPZGxxMAHY5fxS2BxGA7mIOjFg3hucgK4PIylsm9
-         snQsOO++z0MpzvNg9NFPdaqFpzQdLODffC3kGl0HFildMicHecbTTZNe58xDe3+ETpLS
-         JKhng0pzUbDqHhZRB8W5ZzQWUmcqUQH+wSBmYsnXbPLS/5iQceYltzCpcQphm6fNEmPi
-         nklQ==
-X-Gm-Message-State: AOAM532gAeSXnLJHHb8u+LNP33dDjzAppE0bMUTxGv3BREQX8RUxL4hZ
-        IfkUayLb7bVkdRG5LXdlVKyD6UXZfgep1F4Qb5lajfqHvv0=
-X-Google-Smtp-Source: ABdhPJzN3pVqGwcR4vRi218vGlOqSjc9kF4Vh5J6EPiCGi91K5VKP4xOZeqaWmkwTnRhe/zkk8mKg0GjthCz3mecVcA=
-X-Received: by 2002:a17:906:314f:: with SMTP id e15mr50797272eje.658.1641566950552;
- Fri, 07 Jan 2022 06:49:10 -0800 (PST)
+        bh=/d5KDjwbf/j/V9ij+JUJJfPSYLZLI5qkKPPbe9Vs//U=;
+        b=kGE56TfBQP7tTM4BM5sQE+CJwN2qjyddOn5yJGF4UjUj1/q0qsnHULdzjGsFfgrijc
+         8Nrza/mzP01oL5Fm1Ki3Ew6Qz2AZ+a/uWZNkNhSAgTbUkeGcxUHhaqvotVav3OxkHZKc
+         U3clOA+uj0Q0Wwc/0F/fmOgpDSQR+/pdKcyt56IH4iAMP+TKeKTNdO2LJ5xRRB7gUc63
+         2YGAlpdnscD0SCOjpQzfVaITUy6/V5rkTA7lpCHYOtxVPnQ4m2JwZ/qVI0ctEV1LvDA9
+         Xf2HqkT0D2zuSqYAc4qo0yjYdXNvYKY53A/cqYvAM+y148zo4/RiylW9hLfy1yizTFIe
+         IOuw==
+X-Gm-Message-State: AOAM532iiWQHRE5Gsw0F1bOTw1lNFwuWDgtS4JKIUFpu8wQYnr7mmDPm
+        0jjE/y5TCJ3BK5k31U/zOdHpt1c9QrXMe4175f3Asw==
+X-Google-Smtp-Source: ABdhPJxmiIoDwltqWIeYOccdeCvfhPekqAhRl5CsJTEvUjmfpP0Y4AOg8V9wqCb3uZc4dt7YhDpUhKnR9B/+dEVTtNk=
+X-Received: by 2002:a19:6748:: with SMTP id e8mr26227258lfj.358.1641567033566;
+ Fri, 07 Jan 2022 06:50:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20220106175019.3116389-1-festevam@gmail.com> <Ydc2EHf5f12w4YcW@sirena.org.uk>
- <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
- <YddLe8cCvj5fVBTQ@sirena.org.uk> <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
- <CAOMZO5DQEEHYJHv08nC=uYXbFtL9VTAatNAB8V5D_JHiQ0q=3A@mail.gmail.com> <Ydg/tOqbeT1Cg6sh@sirena.org.uk>
-In-Reply-To: <Ydg/tOqbeT1Cg6sh@sirena.org.uk>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 7 Jan 2022 11:48:59 -0300
-Message-ID: <CAOMZO5AJy7arJM9v9A6n84k7yzWEoBxX5zTakK50dL6obSR6WA@mail.gmail.com>
-Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-2-daniel.lezcano@linaro.org> <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
+ <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
+In-Reply-To: <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Jan 2022 15:49:56 +0100
+Message-ID: <CAPDyKFpWtVFoqhFrhMQOgHUjggvg_GPYwmeK-jkphQpA7KQZRw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
+ to data section
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 10:27 AM Mark Brown <broonie@kernel.org> wrote:
+On Fri, 7 Jan 2022 at 14:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 31/12/2021 14:33, Ulf Hansson wrote:
+> > On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> The dtpm table is used to let the different dtpm backends to register
+> >> their setup callbacks in a single place and preventing to export
+> >> multiple functions all around the kernel. That allows the dtpm code to
+> >> be self-encapsulated.
+> >
+> > Well, that's not entirely true. The dtpm code and its backends (or
+> > ops, whatever we call them) are already maintained from a single
+> > place, the /drivers/powercap/* directory. I assume we intend to keep
+> > it like this going forward too, right?
+> >
+> > That is also what patch4 with the devfreq backend continues to conform to.
+> >
+> >>
+> >> The dtpm hierarchy will be passed as a parameter by a platform
+> >> specific code and that will lead to the creation of the different dtpm
+> >> nodes.
+> >>
+> >> The function creating the hierarchy could be called from a module at
+> >> init time or when it is loaded. However, at this moment the table is
+> >> already freed as it belongs to the init section and the creation will
+> >> lead to a invalid memory access.
+> >>
+> >> Fix this by moving the table to the data section.
+> >
+> > With the above said, I find it a bit odd to put a table in the data
+> > section like this. Especially, since the only remaining argument for
+> > why, is to avoid exporting functions, which isn't needed anyway.
+> >
+> > I mean, it would be silly if we should continue to put subsystem
+> > specific tables in here, to just let them contain a set of subsystem
+> > specific callbacks.
+>
+> So I tried to change the approach and right now I was not able to find
+> an alternative keeping the code self-encapsulate and without introducing
+> cyclic dependencies.
+>
+> I suggest to keep the patch as it is and double check if it makes sense
+> to change it after adding more dtpm backends
+>
+> Alternatively I can copy the table to a dynamically allocated table.
 
-> I would have expected this to be prior to the call to _init() rather
-> than actually in the call to _init() but OTOH this should work fine so
-> meh.
+I am not sure I understand the problem. You don't need a "table of
+callbacks" at all, at least to start with.
 
-Yes, I can call it prior to _init()  as you suggested:
+Instead, what you need is to make a call to a function, or actually
+one call per supported dtpm type from dtpm_setup_dt() (introduced in
+patch2).
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 21a0c2562ec0..f7811641ed5a 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -647,6 +647,7 @@ int regmap_attach_dev(struct device *dev, struct
-regmap *map,
-  if (ret)
-  return ret;
+For CPUs, you would simply call dtpm_cpu_setup() (introduced in
+patch3) from dtpm_setup_dt(), rather than walking the dtpm table an
+invoking the ->setup() callback.
 
-+ regmap_debugfs_exit(map);
-  regmap_debugfs_init(map);
+Did that make sense to you?
 
-  /* Add a devres resource for dev_get_regmap() */
+Going forward, when we decide to introduce the option to add/remove
+support for dtpm types dynamically, you can then convert to a
+dynamically allocated table.
 
-Will send a patch shortly.
+[...]
 
-Thanks
+Kind regards
+Uffe

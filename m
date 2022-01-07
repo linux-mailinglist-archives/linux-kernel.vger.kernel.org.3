@@ -2,192 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 537B3487602
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0CE487603
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346877AbiAGK6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:58:43 -0500
-Received: from mga07.intel.com ([134.134.136.100]:62442 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346861AbiAGK6m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:58:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641553122; x=1673089122;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=BMc9Z3LTtaONxwRGR93Wx3i0m7MuqSXfo4BQM2965WY=;
-  b=NituwgX3U7C8QRUcAiInl/+cN0rBXUDuFUq9t4NAR/q2YJVlrzHF/kWU
-   159dxEBhqOJTICkUcMu85+12z7TTdZgGVwQtBdNOGn+T6K1ald8OCzg0+
-   3UihEfaquYE2vIjqsMHO5tLQ/bIFAOqpMFgH/lvOn9k27565BqJOA0Mc5
-   PhmKs3qURP/ophSuSrIlFWj1OBTTdvqtCjsc7YGLyvk5QH6uJuKbJzZaB
-   BrdU1weoaTPAiuqTmTWCzMiq/lSSORUKnEV1eRW4MSm90w1a0R4LIONwY
-   QC2UnGxhHpVKuthu2BR2JDIWJltYYBByYda9tbqFUwsPO0LZLJtRpNhW9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="306216986"
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="306216986"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 02:58:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="513754516"
-Received: from dgreerx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.24.206])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 02:58:37 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] drm/dp: Remove common Post Cursor2 register handling
-In-Reply-To: <202201051410.8F65E4E0@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220105173507.2420910-1-keescook@chromium.org>
- <878rvujc4t.fsf@intel.com> <202201051410.8F65E4E0@keescook>
-Date:   Fri, 07 Jan 2022 12:58:32 +0200
-Message-ID: <87y23rlsmf.fsf@intel.com>
+        id S1346886AbiAGK7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346878AbiAGK7M (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 05:59:12 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB82C061245
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 02:59:12 -0800 (PST)
+Received: from [77.23.61.2] (helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n5mxe-0005hj-CU; Fri, 07 Jan 2022 11:59:06 +0100
+Message-ID: <7cd73147-2170-a0cd-c64e-ded4bef645b0@leemhuis.info>
+Date:   Fri, 7 Jan 2022 11:59:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-BS
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Song Liu <songliubraving@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        wsa@kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Special regressions report for the pending 5.16 release
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641553152;8e5e8aa0;
+X-HE-SMSGID: 1n5mxe-0005hj-CU
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Jan 2022, Kees Cook <keescook@chromium.org> wrote:
-> On Wed, Jan 05, 2022 at 08:00:50PM +0200, Jani Nikula wrote:
->> On Wed, 05 Jan 2022, Kees Cook <keescook@chromium.org> wrote:
->> > The link_status array was not large enough to read the Adjust Request
->> > Post Cursor2 register, so remove the common helper function to avoid
->> > an OOB read, found with a -Warray-bounds build:
->> >
->> > drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
->> > drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
->> >    59 |         return link_status[r - DP_LANE0_1_STATUS];
->> >       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
->> > drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
->> >   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->> >       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> >
->> > Replace the only user of the helper with an open-coded fetch and decode,
->> > similar to drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c.
->> >
->> > Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
->> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
->> > Cc: Maxime Ripard <mripard@kernel.org>
->> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> > Cc: David Airlie <airlied@linux.ie>
->> > Cc: Daniel Vetter <daniel@ffwll.ch>
->> > Cc: dri-devel@lists.freedesktop.org
->> > Signed-off-by: Kees Cook <keescook@chromium.org>
->> > ---
->> > This is the alternative to:
->> > https://lore.kernel.org/lkml/20211203084354.3105253-1-keescook@chromium.org/
->> > ---
->> >  drivers/gpu/drm/drm_dp_helper.c | 10 ----------
->> >  drivers/gpu/drm/tegra/dp.c      | 11 ++++++++++-
->> >  include/drm/drm_dp_helper.h     |  2 --
->> >  3 files changed, 10 insertions(+), 13 deletions(-)
->> >
->> > diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
->> > index 23f9073bc473..c9528aa62c9c 100644
->> > --- a/drivers/gpu/drm/drm_dp_helper.c
->> > +++ b/drivers/gpu/drm/drm_dp_helper.c
->> > @@ -144,16 +144,6 @@ u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->> >  }
->> >  EXPORT_SYMBOL(drm_dp_get_adjust_tx_ffe_preset);
->> >  
->> > -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->> > -					 unsigned int lane)
->> > -{
->> > -	unsigned int offset = DP_ADJUST_REQUEST_POST_CURSOR2;
->> > -	u8 value = dp_link_status(link_status, offset);
->> > -
->> > -	return (value >> (lane << 1)) & 0x3;
->> > -}
->> > -EXPORT_SYMBOL(drm_dp_get_adjust_request_post_cursor);
->> > -
->> >  static int __8b10b_clock_recovery_delay_us(const struct drm_dp_aux *aux, u8 rd_interval)
->> >  {
->> >  	if (rd_interval > 4)
->> > diff --git a/drivers/gpu/drm/tegra/dp.c b/drivers/gpu/drm/tegra/dp.c
->> > index 70dfb7d1dec5..f5535eb04c6b 100644
->> > --- a/drivers/gpu/drm/tegra/dp.c
->> > +++ b/drivers/gpu/drm/tegra/dp.c
->> > @@ -549,6 +549,15 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->> >  {
->> >  	struct drm_dp_link_train_set *adjust = &link->train.adjust;
->> >  	unsigned int i;
->> > +	u8 post_cursor;
->> > +	int err;
->> > +
->> > +	err = drm_dp_dpcd_read(link->aux, DP_ADJUST_REQUEST_POST_CURSOR2,
->> > +			       &post_cursor, sizeof(post_cursor));
->> 
->> There's a drm_dp_dpcd_readb() for the common 1-byte reads. Other than
->> that,
->> 
->> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
->
-> Thanks!
->
->> 
->> Though obviously that's not enough to actually merge to tegra.
->
-> As in, "a review by Jani isn't sufficient to land via the tegra tree"?
-
-Yeah. Or, in this case, via any tree, really.
-
-> What should next steps be?
-
-Get an ack from tegra and/or drm-misc maintainers. All the relevant
-folks and lists are in the recipients already.
-
-BR,
-Jani.
+Hi Linus,
 
 
->
-> -Kees
->
->> 
->> > +	if (err < 0) {
->> > +		DRM_ERROR("failed to read post_cursor2: %d\n", err);
->> > +		post_cursor = 0;
->> > +	}
->> >  
->> >  	for (i = 0; i < link->lanes; i++) {
->> >  		adjust->voltage_swing[i] =
->> > @@ -560,7 +569,7 @@ static void drm_dp_link_get_adjustments(struct drm_dp_link *link,
->> >  				DP_TRAIN_PRE_EMPHASIS_SHIFT;
->> >  
->> >  		adjust->post_cursor[i] =
->> > -			drm_dp_get_adjust_request_post_cursor(status, i);
->> > +			(post_cursor >> (i << 1)) & 0x3;
->> >  	}
->> >  }
->> >  
->> > diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
->> > index 472dac376284..fdf3cf6ccc02 100644
->> > --- a/include/drm/drm_dp_helper.h
->> > +++ b/include/drm/drm_dp_helper.h
->> > @@ -1528,8 +1528,6 @@ u8 drm_dp_get_adjust_request_pre_emphasis(const u8 link_status[DP_LINK_STATUS_SI
->> >  					  int lane);
->> >  u8 drm_dp_get_adjust_tx_ffe_preset(const u8 link_status[DP_LINK_STATUS_SIZE],
->> >  				   int lane);
->> > -u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
->> > -					 unsigned int lane);
->> >  
->> >  #define DP_BRANCH_OUI_HEADER_SIZE	0xc
->> >  #define DP_RECEIVER_CAP_SIZE		0xf
->> 
->> -- 
->> Jani Nikula, Intel Open Source Graphics Center
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+a quick brief manual regressions report, as I assume you'll likely
+release 5.16 soon and thus might find this helpful. Below is a list of
+remaining regressions in 5.16-rc I'm currently aware of.
+
+
+regressions where a fix exists
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+* This fix afaics is not yet mainlined:
+
+[PATCH] md/raid1: fix missing bitmap update w/o WriteMostly devices
+
+https://lore.kernel.org/all/20220103230401.180704-1-song@kernel.org/
+
+
+
+But I'm pretty sure Jens (CCed) will send it onwards soon:
+
+https://lore.kernel.org/all/499b185d-ff9a-934e-7768-ec796244fa1a@kernel.dk/
+
+
+
+* There is an open regression "Applications that need amdgpu doesn't run
+after waking up from suspend":
+
+https://lore.kernel.org/all/1295184560.182511.1639075777725@mail.yahoo.com/
+
+
+
+Wolfram (CCed) plans to revert a i2c commit to fix it, but I'm not sure
+if he plans to send in onwards for 5.16 (or if that would be a good idea
+at all):
+
+https://lore.kernel.org/lkml/20220106122452.18719-1-wsa@kernel.org/
+
+
+
+* There are suspend and resume problems related to amdgpu:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215436
+
+Mario (CCed) recently found the root cause and came up with a fix, but
+it likely needs a little more time to bake:
+
+https://lore.kernel.org/all/BL1PR12MB5157F21C23A020052FF5C13BE24C9@BL1PR12MB5157.namprd12.prod.outlook.com/
+
+
+https://lore.kernel.org/all/20220106163054.13781-3-mario.limonciello@amd.com/
+
+no fix in sight
+
+~~~~~~~~~~~~~~~
+
+
+
+ * screen contents do get restored after some input events (so it
+doesn't stay blank).
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215203
+
+(related: https://gitlab.freedesktop.org/drm/amd/-/issues/1840 )
+
+
+
+Alex (CCed) is trying hard to find a fix for, but afaics needs more time.
+
+
+
+Need more time to analyse
+
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+I'm aware of two more reports that afaics need (a lot?) more time to
+analyse:
+
+
+
+ * suspend issues for a user that faces another regression that might
+interfer:
+
+https://lore.kernel.org/linux-pm/256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net/
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215427
+
+
+
+ * 5-10% increase in IO latencies with nohz balance patch
+
+https://lore.kernel.org/lkml/YaUH5GFFoLiS4%2F3%2F@localhost.localdomain/
+
+
+
+Closing words
+
+~~~~~~~~~~~~~
+
+
+
+HTH, ciao, Thorsten

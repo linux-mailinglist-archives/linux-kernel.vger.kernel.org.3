@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1EE487BC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796B5487BBF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348699AbiAGSEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:04:33 -0500
-Received: from mout.perfora.net ([74.208.4.194]:60417 "EHLO mout.perfora.net"
+        id S1348724AbiAGSEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:04:32 -0500
+Received: from mout.perfora.net ([74.208.4.196]:43639 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240475AbiAGSEZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S240517AbiAGSEZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Jan 2022 13:04:25 -0500
 Received: from localhost.localdomain ([194.191.235.54]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MOznU-1mitcv2HwS-00PPGZ;
- Fri, 07 Jan 2022 19:04:06 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MK470-1mnpZu3jB8-00LZm9;
+ Fri, 07 Jan 2022 19:04:09 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
@@ -29,38 +29,38 @@ Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 07/14] arm64: defconfig: build ads1015 adc driver as a module
-Date:   Fri,  7 Jan 2022 19:03:07 +0100
-Message-Id: <20220107180314.1816515-8-marcel@ziswiler.com>
+Subject: [PATCH v1 08/14] arm64: defconfig: build lm75 temperature sensor driver as a module
+Date:   Fri,  7 Jan 2022 19:03:08 +0100
+Message-Id: <20220107180314.1816515-9-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220107180314.1816515-1-marcel@ziswiler.com>
 References: <20220107180314.1816515-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:c3r6KQGKGeNTIT6j7Hnt1g1cDwAHJD/E37OZPAIuO9kfZNVCVDt
- alvZ8oiJBEyRYjOUOklSqQfF38XTFNhKkbMp2HJzWK5AlGupwv92Fnjr8wDNCtoca9TZpYu
- J23e1vka9NC3Zp/PVCjhHgGs2fQmtDZGhZeuiB7nwgst0FNc9kS1FKGn/2zIZLtKPaiFT88
- e+hRDpUTHYY47TLgXji+g==
+X-Provags-ID: V03:K1:zNsla55G+0y2j4GN5ahi8nbSFYTvNVmS6ZETu0q0EpLhNgVFW6N
+ HoVSd38LZVErTC2WVrwN6/+OSqyunsHOlwtrVm9peDAG3uPjEmqanlEUGX1FlA1unOQsJMt
+ W5ZbJk6kO/jlfh9cZqtA1D/ByhsTibjmCNBpLrtmR0nSEgLngNhqKf2IIPJe4X0pnXZdJKI
+ C1oBVIPO4j/1z1PPNHgcg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Zdfv2+b2/bc=:dbysLBn7EgZEG58YMK9yIY
- T615r4cGOt8sgriNeetEwgTOXqqe7nYszCy5FAkILvYtTYjzu3XcbIlXX/7fP0jcUOn9sW5wR
- g/Na5tpCfdr29lzecw6bpRRpO2tjWat1yt5ohUlcapNUGhrFA+D/+Y7Een8zWCbUZ3mqiCrrq
- IkPXdFoO/efWpsl1QwJBtrqIzsJXZw/3gdu0OrApi1v+5GUFjAg68Eh1f8JUcjXzx4JgXmSX8
- xgZ+2CHCR4Pko6YtHhejZA3bE4HcrdaSbJejq62dJn8nqoS1deuGJvQtslNW3eAe0YURiOkmc
- JPjqVI+q1SkENEYtVq7cuG7QRP8g6uF0kmJ//x373vIjC4i0bxbr5cpTIx0RvIJUPGKG6Kg3D
- 0YgH0V39KUSq4aBozBrxlDcNnuJD0IvCLB40rPdmf2ZvxI99/eVn1RH71iTHfbb6l4RRXhcWz
- 3DkHrSbLvRnWHnX8Y0Ae0ZyMSqXo9a+JaVjeShkzGb6O2DYpdWfJ5EhrMhXjVnxeDiX/1Muwm
- LQ5p8cPMSDYumb5DoflxDV+uzSXuPfeSWRX+cZ4cJNQ1NowmgO7I0QotDgGT3/BIFEr1eMdhv
- LRdeuO2wr05V/mnGCQ6MghiSveeIUxj+lS3eHNy8Jnyv0B+KWB8hwtjBYLNyIoGixGAkjB7zy
- NRsr+LssZvofQ0jBvtNYF+SG79yjk9x+vLago7wdpkpW12bv2okGe5KFAljNIlZB0B0bS+TB5
- LXb1gXh/L8SJkPyZ
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pQ7HYORBDy4=:1gcFFLC8urbbfJrRI8rwCm
+ ZC9KrGGIhPOtk10KmnDBkU/B3rvAzd0WOnEt9YLXUjn2Dc5qEJS4dGNG7SuVtEElp/y9rJzvD
+ bl9sasJyFSTdyQ8chOHiyNKj1CRz0TojTY93lxxc1fgEHoZysQMwgTG4ej5K6kRsgbAXifBR3
+ kalhfqWe/Vf6s7ezq98lC4+rQAHmiWHCmXADpLSUGElQDtJX+G8Ab+mWoLLPgy7i/0c7bgAIP
+ 6tS2lnWD728O49OEWw2QqUlxmzzjRPolfocqbIhqeL1wQUv0yr0NfUXnLwai1pBDcq41xdKJR
+ 8E/lfQi6p5njHID0xRTRrPeHHnVPlvMKOPYAUtmABO+Ule9e7u2LtWQyKyCXyXafBlrFsDa6q
+ 35fqPLQkluKD3fQYxgALeq/73+nerVqi+E6LQnBPCAJYXZ9gbslmQFNpvrRc9B51I6dAe/WrZ
+ 63WFTR8q4LyuTw+ivuG+JBL6hDVh6WqbEdTBVtBNiaS0BvCjVxNBE+kDjijAH2WBZOFCibofx
+ KrLos2yprL6dXVpgnRJrtgTiiYAHqA33ulN1sPFYl6dKYr7KklroCSl3XsiFBsgx9ZDuBF8lS
+ XcNK5Y8rjTWfSHjKqNl6qNGqNZdra64q9fpzJNIg6SKD6gJH2pEQ510eBsPlgRNNRx1nnq37M
+ iSaEfPxspqC8RqP+rInTshzg4iv+NfUg5q81K1pnK/pZs1tOGD+932HGAUQ38VKeFDCEAsoj/
+ OjN8ouZGoNC+O6RZ
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Build Texas Instruments ADS1015 ADC IIO driver as a module.
+Build Maxim Integrated LM75 temperature sensor driver as a module.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
@@ -69,17 +69,17 @@ Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 86d39d8456c1..1d0fe0bd0059 100644
+index 1d0fe0bd0059..b4fd61fda35d 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -1071,6 +1071,7 @@ CONFIG_QCOM_SPMI_VADC=m
- CONFIG_QCOM_SPMI_ADC5=m
- CONFIG_ROCKCHIP_SARADC=m
- CONFIG_RZG2L_ADC=m
-+CONFIG_TI_ADS1015=m
- CONFIG_IIO_CROS_EC_SENSORS_CORE=m
- CONFIG_IIO_CROS_EC_SENSORS=m
- CONFIG_IIO_ST_LSM6DSX=m
+@@ -541,6 +541,7 @@ CONFIG_CHARGER_BQ25980=m
+ CONFIG_SENSORS_ARM_SCMI=y
+ CONFIG_SENSORS_ARM_SCPI=y
+ CONFIG_SENSORS_JC42=m
++CONFIG_SENSORS_LM75=m
+ CONFIG_SENSORS_LM90=m
+ CONFIG_SENSORS_PWM_FAN=m
+ CONFIG_SENSORS_RASPBERRYPI_HWMON=m
 -- 
 2.33.1
 

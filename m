@@ -2,101 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC17486E6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5897486E63
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344123AbiAGAOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:14:14 -0500
-Received: from mout.gmx.net ([212.227.17.20]:46757 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343788AbiAGAOE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:14:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641514442;
-        bh=GXWM4/EezVw90Q1yq7MNbtsLpD/+cAlg3y+cQMfbSB8=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=KBQqBfx+qMimh6e1iBpYxrQK3KIejIMEpuVSvP+Z2Y6lEmYcHo+Zf3E4+R4jicWX5
-         aqzKA7IClNDYPyf3xIO+lt5GayiGfq8AFNwt+0ImV7ptOUK5vwIPpJGq07VrBEa+di
-         dGmBp/WzP/JqCUhqQjZtA3cYYPvbqQy4XNPGiv2M=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.152.191]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5mKJ-1mKb1V0ist-017CsJ; Fri, 07
- Jan 2022 01:14:02 +0100
-Date:   Fri, 7 Jan 2022 01:13:02 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Cc:     linux-parisc@vger.kernel.org
-Subject: [PATCH] sections: Fix __is_kernel() to include init ranges
-Message-ID: <YdeFjo1OyhAD3/+K@ls3530>
+        id S1343796AbiAGAOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:14:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343764AbiAGAOC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 19:14:02 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5888C061245;
+        Thu,  6 Jan 2022 16:14:01 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so10320395pjj.2;
+        Thu, 06 Jan 2022 16:14:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bHp8KHmssnLYTaOK1agSupyvSqkjwpt0DTwhR+0qxuQ=;
+        b=OXC+WfjOI7Dw/780ZlSKKOJzpuyxzgwPvAn3vd5y6IIL5/USBcS/+EaFEydk/P9fQW
+         I8seI4B9zA0/MGxPODSkOM9ZDZRH+cO8KQ6b0oDrQXmRtDE/44L5wYuaL8ZxDwXL1G3K
+         b3XBMgo5lMG9hXK0h5wObvGX5v+4NIBh7krq4ad1ieKoJ4O1jP44XxoEhjGH9jcwJwhz
+         ty6BtKXTF2hpc/1tgHTjkmdSf8x0jYj8LiAj69jCG2AOoYo1Q2ZvMX496O7PmOjiBO3d
+         CXkf7I9yF7IPB7Qo40feEfYj8pP6Qk3Qido+AHnwlFaM4t/7xP77Vr+tN10CWwrCcs2S
+         m5Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bHp8KHmssnLYTaOK1agSupyvSqkjwpt0DTwhR+0qxuQ=;
+        b=W6PyeQnI7bT3TaPL+fArsyh7GkTjV5XvwgDcj9uRqtGpWsHgYYKaGR0AW4D3ItVUKd
+         wXwH/eFzblQjL1onUl2fFFzTv5g7+Q5OJin5s5polciu54O+BXKAQJTa7nnAEKUhuCT4
+         DSzoj8LU+2d1ToNFJHfgw9vWfS7r9xMa22DX0JsCImDGztiGUjUbWUXhk144yTaO2QPy
+         n/bPmvjwscmJi+TrcAbPJaRhNTGp/eaBrsfW2x5D5FgW0mXAegr3GPYQ0rcsdaUv+Olq
+         0OuTYbNOjZ75+peZFWyT8RPszGK5splPzHC7aiQTUVDP78IJsglldZ1z9Bn2EoZKMpEr
+         H5Hw==
+X-Gm-Message-State: AOAM530zngTVuBHh8Bmjj+wj1M3tRVuyBg6xM5APjmRIz0/NrLbARa2i
+        1a53bGryg1ZlY7MLV6hvPOE=
+X-Google-Smtp-Source: ABdhPJxs5ngIS8diKlG5kij1EnlAAnRL98ICjCAo5rn2ZWpvA4FWNRG7fhGUSWexig/0VqQWjrMFHQ==
+X-Received: by 2002:a17:903:300b:b0:149:f48b:e8b8 with SMTP id o11-20020a170903300b00b00149f48be8b8mr4420991pla.108.1641514441399;
+        Thu, 06 Jan 2022 16:14:01 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y3sm3301906pju.37.2022.01.06.16.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 16:14:00 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mtd@lists.infradead.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-wireless@vger.kernel.org (open list:BROADCOM SPECIFIC AMBA DRIVER
+        (BCMA)),
+        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
+        FLASH DRIVER)
+Subject: [PATCH v2 0/9] BCMA support for brcmnand
+Date:   Thu,  6 Jan 2022 16:13:19 -0800
+Message-Id: <20220107001328.2233896-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:l2V/NFTYg4pHP7N2VuiFMzJsYgHSpjx30pzLTEnEda3F8gvjLKL
- sG+UTVajAWFLn1IBdDBF6nGOZ/lyt5DgZVfzMCaUd9G0Y+6V0zgFirWSfZE1ctmHszUFHor
- l6YYr8ywKFnMlJ5AFG9f4noleezH9C2fEjEecLWso2msGTl7WVA9y1vYNZUglxD5TQR5FxK
- +dCCLVu8H5dG2acMZfzow==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:z21eSQYKMPY=:47dF8xUytUfpRYmsQ81rzW
- ACNWxPFTYMe2o0CuQaNtnyjtYvgI37yQs6TTgZv3y4b3N2x59B3NHqfeFkJQWNI4yxxpOrVp5
- zkvp9fzL+wTiaVpxpMzoBxTpqCop1AinDfDXDXhkfVtwY01JdUXXnTR1lSAehThrkKnLtSSaw
- /8krTi1Yf7KfC6zMdJ2BpJ7Sx/9Nrdr5MUlLBBWHicNYk3Emv6IVcpoJK5L0UxqD6PjSIjIyH
- auvatjpwsxwuf5gvPWrG6obMwn7Q5UDO2/j9BkKynSda3wLqnCn4ZaxM2rckstgaAkPSaUaNO
- 1uwapGPnHxvI77CncwS/1sMzNb/boOwiQ4v/5v81GZrcgSyxv2sKpF14sCzEbylO4aoVlJefL
- yyhYhIWrCvgDu/P68qEPTOao8tSHTOI2jD/oPuh2S8RuiSf7r28AUoocK/cJi+KHgAljXdAWA
- oM58TmLeti+cIOYUCl3Jr88Exxf2bqVB/TPSzBntchPiX9VvI/9zGiGzbBukIlmGOTYBp3D4x
- nfvi8tpPADDJV8mMt5vXHnsVQC/3i6rBUWVvASnxBHIGIXj6DBLXW92adUkrgpt/Z1AlJfSym
- LRgQmgYcw0YCgeA1sVuiVlclifSg/I11EzLw15whB1OFJBdataz/AZdvlwhUGc7OV6+lkIGEP
- q+l4UV4ymGaZNcQEJr6U7PPwOi7QwggvK4kj74slVgcrOWk+fVFQ4e1t7mB6lIrV0Cgy2Jn9d
- cpTYOY1sxU65KMf3meHIrnNrsJIyKnVcvz1E1M8yaMODjUfoKZF3b96OGyPPC+0XnoV72+vS2
- kt94w3evJC61duBiQdHJlf7AU9B6rf0lRoLjV8gk/VGWTByRhKb3I5kzFQBFZAgmmsBRMhSAy
- eG6nfe+3bGNOE/TugYY0AMHJk0OM1OXGT8O7kX3Zzzm9H9ZLu0n6hKj4vGzb2m4oPbTbqrAl8
- 1Fz/Ec4AF3gmqa3TKmerX4hfMFK9s+dH76+tsUuUk04qH7dRIh3ronkEJbnlZiJi2av/6IUvI
- Mx12zqXlF9DuqVse1EZwRj81VqT0eyrZRlZdwO5VM1Szq5TwiNFmUWL4NhWsm9Mbpc9ekovhm
- Xo9pxNRoKtfIt4=
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_KALLSYMS_ALL=3Dy, the function is_ksym_addr() is used to
-determine if a symbol is from inside the kernel range. For that the
-given symbol address is checked if it's inside the _stext to _end range.
+Hi all,
 
-Although this is correct, some architectures (e.g. parisc) may have the
-init area before the _stext address and as such the check in
-is_ksym_addr() fails.  By extending the range check to include the init
-section, __is_kernel() will now detect symbols in this range as well.
+This patch series adds support for the BRCMNAND controller revision 3.4
+embedded in MIPS-based SoCs such as 5357, typically found in the Netgear
+WNR3500L v2 and other kinds of Wi-Fi routers. The upstream platform that
+uses this controller is under arch/mips/bcm47xx/ and does not use Device
+Tree (and probably never will by now). BCMA (Broadcom AMBA) is a special
+kind of discoverable memory mapped interface which requires the use of
+special accessors to read from/write to the hardware block.
 
-This fixes an issue on parisc where addresses of kernel functions in
-init sections aren't resolved to their symbol names.
+The integration of brcmnand into that SoC is a bit quirky in that every
+register offering byte level data about the flash (OOB, device ID, etc.)
+requires byte swapping. The command shift should also have been 24, but
+is in fact 0, took me a while to understand why no reads were actually
+working because of that.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
+This has been tested with Linux 5.10.82 and Linus' master with OpenWrt
+and confirmed that the squashfs + jffs2 overlay that OpenWrt creates is
+entirely functional and that written data is made persistent.
 
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections=
-.h
-index 1dfadb2e878d..00566b1fd699 100644
-=2D-- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -193,12 +193,16 @@ static inline bool __is_kernel_text(unsigned long ad=
-dr)
-  * @addr: address to check
-  *
-  * Returns: true if the address is located in the kernel range, false oth=
-erwise.
-- * Note: an internal helper, only check the range of _stext to _end.
-+ * Note: an internal helper, check the range of _stext to _end,
-+ *       and range from __init_begin to __init_end, which can be outside
-+ *       of the _stext to _end range.
-  */
- static inline bool __is_kernel(unsigned long addr)
- {
--	return addr >=3D (unsigned long)_stext &&
--	       addr < (unsigned long)_end;
-+	return ((addr >=3D (unsigned long)_stext &&
-+	         addr < (unsigned long)_end) ||
-+		(addr >=3D (unsigned long)__init_begin &&
-+		 addr < (unsigned long)__init_end));
- }
+Changes in v2:
 
- #endif /* _ASM_GENERIC_SECTIONS_H_ */
+- re-ordered the patch such that the soc variable is initialized as
+  early as possible
+- corrected bug in the conversion of brcmnand_init_cs() which
+  incorrectly used the wrong device_node variable (parent instead of
+  child)
+- took Andy's feedback to make the test for a valid interrupt to be > 0
+  while calling platform_get_irq_optional()
+- utilized static branch (disabled by default) and conditional
+  compilation and confirm with disassembly that the generated code is
+  as efficient as before if not enabling the BCMA shim and as efficient
+  as possible if enabling BCMA shim
+- updated BCMA shim driver descriptor, author and added helper function
+  to encapsulate the container_of usage
+- added comment to explain why a slightly different platform device name
+  is used for the 5357-style NAND controller
+
+Florian Fainelli (9):
+  mtd: rawnand: brcmnand: Assign soc as early as possible
+  mtd: rawnand: brcmnand: Allow SoC to provide I/O operations
+  mtd: rawnand: brcmnand: Avoid pdev in brcmnand_init_cs()
+  mtd: rawnand: brcmnand: Move OF operations out of brcmnand_init_cs()
+  mtd: rawnand: brcmnand: Allow working without interrupts
+  mtd: rawnand: brcmnand: Add platform data structure for BCMA
+  mtd: rawnand: brcmnand: Allow platform data instantation
+  mtd: rawnand: brcmnand: BCMA controller uses command shift of 0
+  mtd: rawnand: brcmnand: Add BCMA shim
+
+ MAINTAINERS                                 |   1 +
+ drivers/bcma/driver_chipcommon_nflash.c     |  20 ++-
+ drivers/mtd/nand/raw/Kconfig                |  13 ++
+ drivers/mtd/nand/raw/brcmnand/Makefile      |   2 +
+ drivers/mtd/nand/raw/brcmnand/bcma_nand.c   | 132 ++++++++++++++++
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c    | 160 +++++++++++++-------
+ drivers/mtd/nand/raw/brcmnand/brcmnand.h    |  29 ++++
+ include/linux/bcma/bcma_driver_chipcommon.h |   5 +
+ include/linux/platform_data/brcmnand.h      |  12 ++
+ 9 files changed, 321 insertions(+), 53 deletions(-)
+ create mode 100644 drivers/mtd/nand/raw/brcmnand/bcma_nand.c
+ create mode 100644 include/linux/platform_data/brcmnand.h
+
+-- 
+2.25.1
+

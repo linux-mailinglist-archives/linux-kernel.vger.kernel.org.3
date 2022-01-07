@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B0C4878FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8416A4878FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347793AbiAGOc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:32:59 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:58698 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233190AbiAGOc6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:32:58 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowADXbaYAT9hh3kz7BQ--.38327S2;
-        Fri, 07 Jan 2022 22:32:32 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] thermal/int340x_thermal: Check for null pointer after calling kmemdup
-Date:   Fri,  7 Jan 2022 22:32:30 +0800
-Message-Id: <20220107143230.4057632-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1347802AbiAGOdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347798AbiAGOdR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 09:33:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478FDC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:33:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F6E61F18
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AB5C36AE0;
+        Fri,  7 Jan 2022 14:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641565996;
+        bh=KpbqoRlgmphIlm84h+uqsaJzyJ5t4kS27HZK3LhwIWY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=AA3f0pr0VJtAtJeF5s+CSuzz4G34KQPqzo/kaOuB4gTNqgLuzLb/sEdo8mBFiuPNb
+         TlDULYV7Ye202yP2PBI4A0B7iRQ9Ne3wQWhll9z1/EdAVB+T5jKBlC6E2EF0hqW1ZY
+         ny06A/x5UuPBycKW38Juql0d6TbtN0D/xrUxM54to2IPJFbA8LKhUKuOhyIoYsDI3s
+         /t7ey6/hGzTfae395qc9yQ7KfUxXI4yVMYF3w93bK6weE3TzE4usYiRYux/wbjQaOK
+         NN0ZBDC/kKHmoW9au9GmgtXNXDV8UQe7kcPE5plZUR6C7SLaWp1n2RuXUX/nGpLCeY
+         G6tOj0BZ+b0hg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Watson Chow <watson.chow@avnet.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20220106224350.16957-1-laurent.pinchart+renesas@ideasonboard.com>
+References: <20220106224350.16957-1-laurent.pinchart+renesas@ideasonboard.com>
+Subject: Re: [PATCH v2 0/2] regulator: Add driver for Maxim MAX20086-MAX20089
+Message-Id: <164156599462.2077470.16513079176958565691.b4-ty@kernel.org>
+Date:   Fri, 07 Jan 2022 14:33:14 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowADXbaYAT9hh3kz7BQ--.38327S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1UCw45Zr1kGF1xuFW7Jwb_yoW8Xr4kpF
-        WSgryUArZYgF48XwnrAr15Ja98C3Z5Ka95uFyFga4YyFnIyFWSgFyFyF1Ykry0kr1xKw1j
-        ya4YqFs7ZryDJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5XwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjc183UUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 08:05:17PM +0800, Daniel Lezcano wrote:
->> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
->> index 823354a1a91a..999b5682c28a 100644
->> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
->> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
->> @@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->>  	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->>  				   obj->package.elements[0].buffer.length,
->>  				   GFP_KERNEL);
->> +	if (!priv->data_vault) {
->> +		kfree(buffer.pointer);
->> +		return;
->> +	}
->> +
->
-> There is another kfree on error before
->
-> Please replace those by a goto out_kfree;
->
->>  	bin_attr_data_vault.private = priv->data_vault;
->>  	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
->
-> out_kfree;
->>  	kfree(buffer.pointer);
->> 
+On Fri, 7 Jan 2022 00:43:48 +0200, Laurent Pinchart wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Hello,
+> 
+> This small series adds a new driver (along with DT bindings) for the
+> Maxim MAX20086-MAX20089 camera power protectors.
+> 
+> [...]
 
-Ok, I will submit new patch to replace those.
+Applied to
 
-> Why there is no error code returned to the caller?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-Well, I check the commit 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-and find that it was designed to return without error.
-And it seems that the 'bin_attr_data_vault.size' is related to the
-'bin_attr_data_vault.private'.
-If the size is 0, then the array will not be used.
-Therefore, I think it is unnecessary to return error.
+Thanks!
 
-Sincerely thanks,
-Jiang
+[1/2] dt-bindings: regulators: Add bindings for Maxim MAX20086-MAX20089
+      commit: 764aaa4e031a9acd26babc622cabe652f57bbb04
+[2/2] regulator: Add MAX20086-MAX20089 driver
+      commit: bfff546aae50ae68ed395bf0e0848188d27b0ba3
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80A2487328
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5CA48732A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbiAGGlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiAGGlC (ORCPT
+        id S233382AbiAGGlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 01:41:31 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:56465 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233207AbiAGGlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:41:02 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5293C061245;
-        Thu,  6 Jan 2022 22:41:01 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id o185so1110239ybc.12;
-        Thu, 06 Jan 2022 22:41:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uft5SNmCUYH/4LsuZcNHSZqtW5wt4J0g/joxJK/IOOc=;
-        b=BYcBYUWKdfwX2cIp/9B3Lh+01mGBKcOL6zrXIuF74WaMVm6jXkQAVk/sTP/DjUb3XR
-         oHOlupyFT4PDvH09jEFQ0xp/buGhbo+HDqenSlYPyis/yuI917iu+xNZ7joeBlC4xoXs
-         QKuHWLiy8RdGBRgTwzwkh6fsOQ74Jhc5WvnNImcPcZOfvxarl8wyG1oonhWCepZWPZmP
-         xsYOv7N3k6wuuQ0igqdpFW5zbwWIwe//hVhYuCTZKwn9uHuQlBv6uKcAuVs4VeM6Opze
-         nAh+o5B15QdYtDx/+zA9poaRTJ32i5uVxYjYJPTnc69XjKZHcBeornANNuPIQ+ZzwAR0
-         SaCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uft5SNmCUYH/4LsuZcNHSZqtW5wt4J0g/joxJK/IOOc=;
-        b=xQ6LdV9tTA+ANXd8hu/Zuk4+GVZzIVtx/6A3IpktCh+7FLgGsm2MdPg9viqAQUXyCH
-         vV5sSr8Ex+T1dW01x9+nD8cIqmpCLhGAn7b83JlO0SSh5/o+oVy7mftCaDf2r/jziVvw
-         l9dT6vXBNq1NamYzLjxUh48Z/K4bBvatayivIL7S57ERD9bV3gTzXZxViAAjiwaVq6jV
-         sEqm9Ix5PWagj9ADmOqQyHpqMgAFmOsYT7c6JSo3ZUXtf/yR7hfqG+x2+QWua76UHPsC
-         qRj5QlRAHwFemDHzv3jjyU85y/mZmo6gqB0u3sUxTMDSYxen09A/+iSmXZVmWzcNKT93
-         pwXw==
-X-Gm-Message-State: AOAM533WhjY7Q3KPtRXcpQb+bOLZw41zFRMgPRMH1eqnMDiFXc5DkKEg
-        immTzDaZnw/5H7W/xsPoWcZCpPHfK1x+Qp5LNVE=
-X-Google-Smtp-Source: ABdhPJx999Drhi+3awoScOG1JFjBCWxkktxoQrLaxkoATFE7C2HzJ2Gr61gd1O06Yvbc85LPaG2bBWvj7JfRpXr2p3o=
-X-Received: by 2002:a25:2cd0:: with SMTP id s199mr66404026ybs.234.1641537661030;
- Thu, 06 Jan 2022 22:41:01 -0800 (PST)
+        Fri, 7 Jan 2022 01:41:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1641537684; x=1673073684;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iwQYZhPpwMpxea++iPye//jg3r0vrEscM38jEzj1QnI=;
+  b=CUAJNmJ6xsvWXME16lRLB79Sl3S0m0v4rJo0xsdr/bZeiWekK2BzG6ps
+   sntriqmUZtr/+YJRXoj4MgAptGluoRSZwdxsTOF+kbM8PXIQuXoNsx/dR
+   ALxwD0yeSKeOlHJ20EHkW31YNHEml0NAYmM341SFjjab6zbeAppASkNRL
+   PfQvsWjpGzlOaVXja9lnd9ZMpz3J9PCOA4YvCNBcBUuu+6DjtU3Sb6XkE
+   y0p8cfTIy/1hcDd3ygTmTnBiqTMdT+EyDuXCpitr3acyrzq9E89UGl2va
+   dax7cpB5w1+qzajJiRu624oGO884tnLyXfX+ElbAgTItkO+Jj3xGyQrv5
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,268,1635177600"; 
+   d="scan'208";a="194707179"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Jan 2022 14:41:22 +0800
+IronPort-SDR: nTonICdq2F4NrecZzkC7ARB7Y3b7L68609c8i5SPOKf5eE+gj0d+uFfaqWsXoPykZUaclu2aos
+ pkxPa2+wkHZDa8dlTnjLC8trvEW4zYX7gFPy3A4NA7uuGlk9VZYOQUxWYubFHtTruymirynu/h
+ bMJpX9dml48oKEWrhH7LNLYzx4lM/cvS6rqsPfOugcyEap6nmmtXeonJ0JQE5Vyf/FXei1qApd
+ PtQN1ScZ+qsISI6y5cw3d9+cEyyYPwkJ3U+F2U+3hbgTfmCTlALft7mL8eL32olyI54qjcDvLv
+ ctQ5Lkd5czSY754JAWHkteAB
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 22:15:12 -0800
+IronPort-SDR: ZXyZSZF9ZMUpdltvnWMiK04zYkoGVKsKKHWd3AaPWH1UMHGfJuPTxOFcdNAwUzc++HYYyTFGCc
+ CqZQcC5NSobOQSXnyzhK52u2mOaM36LXhcj+Af0RuMExGHhvCL5sdofQbw4FD7jw08utQvQe0W
+ aohBSlppX5FFCZJOqF8ysdIIkVIl6bqIrLi1hPHOFj7Jg7kp+OUggY19T88KI5zCSJWNCoh3fj
+ IoxvFj3i8Ow4m+kp3sEWcWzvv9buDxtHqOOpyemO6SB+fT2gha9UkckjLXPV13+JTdyjXA0OW4
+ J40=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 22:41:23 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JVYXL2QJTz1VSkY
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 22:41:22 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1641537681; x=1644129682; bh=iwQYZhPpwMpxea++iPye//jg3r0vrEscM38
+        jEzj1QnI=; b=FXUQSxx/q2w+qVeECbYZ+2vlBPqSBl2kERh4AzX+/o/B2BSFcOI
+        MF9Vwl5c7wBxUXEZMps+cVBND5LdbGxAXwzkFB/scMZBYjEAeSMjiGvKHx7fTvNs
+        RpT2K8bqVL9aQS898USNKwHKBl7SnhOXG/utbJLhLNgyOGZRGS3Viy+13wprSxbf
+        iELxm6n55wqW5sn2kaT1ZLM2B7TJ2C3bK+GY5NVGZ0bYYV/GK9mnmcQJfBp5+FIk
+        7265RomK7Ynqrs1Qnahvd2fV2tO2eYHC5rPom1PEEUfHI+K6/nu5GYAGAfnvaMOF
+        yZlVWq9D7a96025Cl75fRPaZQRGU+Yvg0SA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id y0A5RQPY7yRs for <linux-kernel@vger.kernel.org>;
+        Thu,  6 Jan 2022 22:41:21 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JVYXK27NRz1VSkV;
+        Thu,  6 Jan 2022 22:41:21 -0800 (PST)
+Message-ID: <bcd92fb0-8b2a-99b8-e2d3-80882b904d2a@opensource.wdc.com>
+Date:   Fri, 7 Jan 2022 15:41:19 +0900
 MIME-Version: 1.0
-References: <20220106232513.143014-1-akirakawata1@gmail.com>
-In-Reply-To: <20220106232513.143014-1-akirakawata1@gmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 7 Jan 2022 07:40:50 +0100
-Message-ID: <CAKXUXMwzULZHmfx5T74cjG++gd8mFKVOR7Z4aS8RabKnXWGOdQ@mail.gmail.com>
-Subject: Re: [PATCH v4 RESEND 0/2] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-To:     Akira Kawata <akirakawata1@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] ide: Check for null pointer after calling devm_ioremap
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, davem@davemloft.net
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220107062814.3611747-1-jiasheng@iscas.ac.cn>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <20220107062814.3611747-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 12:25 AM Akira Kawata <akirakawata1@gmail.com> wrote:
->
->  These patches fix a bug in AT_PHDR calculation.
->
->  We cannot calculate AT_PHDR as the sum of load_addr and exec->e_phoff.
->  This is because exec->e_phoff is the offset of PHDRs in the file and the
->  address of PHDRs in the memory may differ from it. These patches fix the
->  bug by calculating the address of program headers from PT_LOADs
->  directly.
->
->  Sorry for my latency.
->
->  Changes in v4
->  - Reflecting comments from Lukas, add a refactoring commit.
->
+On 2022/01/07 15:28, Jiasheng Jiang wrote:
+> On Fri, Jan 07, 2022 at 01:30:35PM +0800, Damien Le Moal wrote:
+>> There is no such file... What kernel is this patch against ?
+> 
+> Thanks, this patch is based on linux-stable-5.13.9.
+> And I just notice that in Jun 16 2021, this file was removed.
+> Anyway, this patch can be applied to the previous version, which still
+> has the `drivers/ide/ide_platform.c`.
 
-Thanks for removing the dead store with your refactoring as a small
-stylistic change, but I really think that Kees Cook's comment that you
-simply removed an important feature is much more important to address.
-There was no reply to that and it seems that Kees hypothesis that the
-feature has been removed, was not questioned by anyone.
+Kernel 5.13 is EOL. No new patches are applied to this kernel. If you need this
+fixed, then please check the latest kernel first and mark the patch for
+backporting (fixes + cc: stable tags) to the latest stable (5.15) and LTS
+kernels (5.15, 5.10 etc).
 
-Lukas
 
->  Changes in v3:
->  - Fix a reported bug from kernel test robot.
->
->  Changes in v2:
->  - Remove unused load_addr from create_elf_tables.
->  - Improve the commit message. *** SUBJECT HERE ***
->
-> Akira Kawata (2):
->   fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
->   fs/binfmt_elf: Refactor load_elf_binary function
->
->  fs/binfmt_elf.c | 36 +++++++++++++++++++++---------------
->  1 file changed, 21 insertions(+), 15 deletions(-)
->
->
-> base-commit: 4eee8d0b64ecc3231040fa68ba750317ffca5c52
-> --
-> 2.25.1
->
+> 
+> Sincerely thanks,
+> Jiang
+> 
+
+
+-- 
+Damien Le Moal
+Western Digital Research

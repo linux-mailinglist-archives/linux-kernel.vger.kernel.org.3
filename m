@@ -2,131 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51539487B06
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4676487B02
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348480AbiAGRJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:09:00 -0500
-Received: from mail-vk1-f172.google.com ([209.85.221.172]:39533 "EHLO
-        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiAGRI6 (ORCPT
+        id S1348457AbiAGRI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:08:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47684 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240445AbiAGRIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:08:58 -0500
-Received: by mail-vk1-f172.google.com with SMTP id m200so4077885vka.6;
-        Fri, 07 Jan 2022 09:08:57 -0800 (PST)
+        Fri, 7 Jan 2022 12:08:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641575334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W5E//EkxyUr9K8+lVRMvOlJDgAaGmOrJeciI09SYa5Y=;
+        b=VGWPU1D7MXPbtHUxOtiMlDTPpMgGUf+KRPgawBdK0cLtfaHm1OsiNiWq4DirKPN0GMYCHM
+        BNAsRY5u+c/5J1kkaEqigZClijDbLf+JxBJ3Z2n2b0aHyO/y02552epH8Zn/hy2X13nl7P
+        cS//8w4id46Vd+7o672J3y219k9OQXY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-2ElBdO9bMwG1MW5MxSnQLg-1; Fri, 07 Jan 2022 12:08:53 -0500
+X-MC-Unique: 2ElBdO9bMwG1MW5MxSnQLg-1
+Received: by mail-ed1-f70.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so5140094edd.21
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:08:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=uz+6BXh4Z52ZUQtzR9JKwYOpZReL+4Yw1Gm06dlXLiA=;
-        b=sf7Y5gJRuD8tZtIDep5ThICTvK0q9kwV4PZWLrnkn3P4RmvM8Rlkvfb5sl7ltdBwxg
-         4Y+s9bC4FAUD7v7T6oXwLa+QDY3kTUP3UoJGUjXFR7c2P3QBa9RwDE2edkmuJMZg/Jzt
-         1qsHqs8h+tKDM8AVNwdJY47/m9IW6Vpb1fVD9rTE7P8CmvLR3Zo+/pqg7+0NG/8RXSRY
-         UlpYqVDgWIFthvdozeZD8hWiIcE4W/rUgwn5+gznWTpYdKT7CjS/CxQbzU/5oyEcGpKG
-         78hFdaj6c1YbM3+pGWx9QgODQdGxR9pYD8Fmbhao+RU5q18iWisZdcoK7Qwu+jHxLXoz
-         jqtA==
-X-Gm-Message-State: AOAM531uQHN60g9YbNGMEUFlQrD1u0NUHsbL/4K1ghMRa2qqRQ+i98az
-        itxdbv8J+UQA3NZKGvKrXkBBRO/Y3YcXRA==
-X-Google-Smtp-Source: ABdhPJzHw1xhFn7uoHIHdVcNm8AygsUXJGzzExNqdDe/Dmz4mhKr/+c0Zg2TPVrA6DunCoqtr7QNVA==
-X-Received: by 2002:a05:6122:1799:: with SMTP id o25mr24089375vkf.3.1641575336998;
-        Fri, 07 Jan 2022 09:08:56 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id h2sm3865441vsj.5.2022.01.07.09.08.56
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=W5E//EkxyUr9K8+lVRMvOlJDgAaGmOrJeciI09SYa5Y=;
+        b=exLqJccJprDaQX86tvJGnRxb2MIKXQFo3JyKDkl/X6nkXtiK0VVBc3xhtOyRXu5NfV
+         DbMJeLY4zje94p+mR7DKwZVQE8AC5DN81zHxbGMSO8iZFCOfP13qk2A8tfdyzSeWkbsY
+         Kd3QANpc7IGfUteBRwx3YPF7DT3+5TNzUN0XZ4u0i5V5gpSBEEA8FALQYKumg7UEIXWm
+         uui12m/TCYhhKCsk+yHk1NhZ9OC0Hj/Q0U2MJimNlJvdrv5ELimPRdheJdcuwTqzJ2iQ
+         Q9xckMHgRTh2CLFG17hmM8GYktn7YCgMxUu5qX8RIlj2zVI43v+FMK2pL3u1tYV7368v
+         0E/w==
+X-Gm-Message-State: AOAM533a59/W3EW1NDJ3zSRP+a5N7z4QCl5ItZdgjVAUNMB4EY8XOBnq
+        eT7QCVMx007zTWDwFFW7zVBmha51K/+pHBungrl1ff6C0Bis+8wXEfLhYueKyAMFrI5c1tUXNiX
+        tgiurb6SFtCShfXu4B8meMPNk
+X-Received: by 2002:a17:907:1692:: with SMTP id hc18mr50762249ejc.558.1641575332582;
+        Fri, 07 Jan 2022 09:08:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzKiJjTdncqFRbTGuEUs7lsUg4iJVlfqzEVwkkiFsbwO+TR8/xX3O0iZkZXQbxCwm67L9dYRg==
+X-Received: by 2002:a17:907:1692:: with SMTP id hc18mr50762231ejc.558.1641575332329;
+        Fri, 07 Jan 2022 09:08:52 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id d7sm2289533edt.74.2022.01.07.09.08.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 09:08:56 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id o1so11355295uap.4;
-        Fri, 07 Jan 2022 09:08:56 -0800 (PST)
-X-Received: by 2002:a05:6102:2155:: with SMTP id h21mr21200168vsg.68.1641575336492;
- Fri, 07 Jan 2022 09:08:56 -0800 (PST)
+        Fri, 07 Jan 2022 09:08:51 -0800 (PST)
+Message-ID: <6867e529-a85d-72fe-4577-55a4e793ba31@redhat.com>
+Date:   Fri, 7 Jan 2022 18:08:50 +0100
 MIME-Version: 1.0
-References: <20211219132442.4080-1-wsa+renesas@sang-engineering.com>
- <20211219132442.4080-2-wsa+renesas@sang-engineering.com> <CAMuHMdVh60ocfzkJKz8zR1hODr8SWp=sbyHrR3KGx2ntLmuFGQ@mail.gmail.com>
- <YcL7p5nzZs8vnojl@shikoro> <CAMuHMdXn-cmK1HewukjOnjC1JEgfFfH7FW23YvPTKHcNCiet2w@mail.gmail.com>
- <YcMg8NzjlNDLksNT@ninjato>
-In-Reply-To: <YcMg8NzjlNDLksNT@ninjato>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 7 Jan 2022 18:08:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW+=5UM+Jcbu9pTi-tKCfJh42pRk0YrA9ZSbvziNsbAFg@mail.gmail.com>
-Message-ID: <CAMuHMdW+=5UM+Jcbu9pTi-tKCfJh42pRk0YrA9ZSbvziNsbAFg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/1] gpio: add sloppy logic analyzer using polling
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] KVM: x86: Check for rmaps allocation
+Content-Language: en-US
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vasant.hegde@amd.com,
+        brijesh.singh@amd.com
+References: <20220105040337.4234-1-nikunj@amd.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220105040337.4234-1-nikunj@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+On 1/5/22 05:03, Nikunj A Dadhania wrote:
+> With TDP MMU being the default now, access to mmu_rmaps_stat debugfs
+> file causes following oops:
+> 
+> BUG: kernel NULL pointer dereference, address: 0000000000000000
+> PGD 0 P4D 0
+> Oops: 0000 [#1] PREEMPT SMP NOPTI
+> CPU: 7 PID: 3185 Comm: cat Not tainted 5.16.0-rc4+ #204
+> RIP: 0010:pte_list_count+0x6/0x40
+>   Call Trace:
+>    <TASK>
+>    ? kvm_mmu_rmaps_stat_show+0x15e/0x320
+>    seq_read_iter+0x126/0x4b0
+>    ? aa_file_perm+0x124/0x490
+>    seq_read+0xf5/0x140
+>    full_proxy_read+0x5c/0x80
+>    vfs_read+0x9f/0x1a0
+>    ksys_read+0x67/0xe0
+>    __x64_sys_read+0x19/0x20
+>    do_syscall_64+0x3b/0xc0
+>    entry_SYSCALL_64_after_hwframe+0x44/0xae
+>   RIP: 0033:0x7fca6fc13912
+> 
+> Return early when rmaps are not present.
+> 
+> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+> Tested-by: Vasant Hegde <vasant.hegde@amd.com>
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> ---
+> 
+> v1: https://lore.kernel.org/kvm/20220104092814.11553-1-nikunj@amd.com/T/#u
+> 
+> Check the rmaps inside kvm_mmu_rmaps_stat_show() as the rmaps can be
+> allocated dynamically (Peter Xu)
+> 
+>   arch/x86/kvm/debugfs.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/debugfs.c b/arch/x86/kvm/debugfs.c
+> index 543a8c04025c..9240b3b7f8dd 100644
+> --- a/arch/x86/kvm/debugfs.c
+> +++ b/arch/x86/kvm/debugfs.c
+> @@ -95,6 +95,9 @@ static int kvm_mmu_rmaps_stat_show(struct seq_file *m, void *v)
+>   	unsigned int *log[KVM_NR_PAGE_SIZES], *cur;
+>   	int i, j, k, l, ret;
+>   
+> +	if (!kvm_memslots_have_rmaps(kvm))
+> +		return 0;
+> +
+>   	ret = -ENOMEM;
+>   	memset(log, 0, sizeof(log));
+>   	for (i = 0; i < KVM_NR_PAGE_SIZES; i++) {
 
-On Wed, Dec 22, 2021 at 1:58 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > > Yes, the search engines helped[1]. I run a minimal system, so when I
-> > > mount cpusets, it will actually mount cgroups with a default mount
-> > > option of "noprefix". But you likely run a rootfs with cgroups already,
-> > > so it gets mounted directly without "noprefix". Then, when the logic
-> > > analyzer tries to mount again, the implied default "noprefix" is
-> > > discarded.
-> >
-> > Yeah, systemd on Debian has it mounted.
->
-> So, the proper solution is to use/mount 'cgroups2' instead of 'cpuset'.
-> But this needs more thinking and testing and, thus, another revision.
-> Dunno if I can make it this year, so I am probably going to miss the
-> next merge window after all :(
->
-> Geert, if you still want to test the PFC patch I sent, then this patch
-> for the script should get you going:
+Queued, thanks.
 
-Thank you, much better!
+Paolo
 
-With this I get:
-
-    1# gpio-sloppy-logic-analyzer -s 1500000 -t 1H+2F -d 15000
-    Auto-Isolating CPU1
-    Setting up 'i2c2-analyzer': 22500 samples at 1500000Hz with 1H+2F
-trigger using CPU1
-    1# echo: write error: Numerical result out of range
-    Capture error! Check kernel log
-
-kernel log has:
-
-    gpio-sloppy-logic-analyzer i2c2-analyzer: couldn't read GPIOs: -34
-
-with debug code:
-
-    priv->delay_ns = 666
-    priv->acq_delay = 2342
-
-Whoops, R-Car M2-W GPIO is too slow (clocked at 10 MHz, compared to 66
-MHz on R-Car H3 ES2.0)?
-
-Retry with slower speed, until it works:
-
-    1# gpio-sloppy-logic-analyzer -s 300000 -t 1H+2F -d 15000
-    Setting up 'i2c2-analyzer': 4500 samples at 300000Hz with 1H+2F
-trigger using CPU1
-    2# i2cdetect -y 2
-    1# cp: cannot stat
-'/sys/kernel/debug/gpio-sloppy-logic-analyzer/i2c2-analyzer/sample_data':
-No such file or directory
-
-And the sample_data file is indeed missing.
-
-After reboot, everything works fine, and I can no longer reproduce the
-missing file issue above, even when repeating the same steps.
-The resulting data file can be viewed with pulseview, and I can see SCL
-and SDA activity. Nice!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,93 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFBE4875FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49B14875FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346842AbiAGK5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:57:50 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:55224 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237991AbiAGK5o (ORCPT
+        id S1346850AbiAGK6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237224AbiAGK6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:57:44 -0500
+        Fri, 7 Jan 2022 05:58:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27ACC061245;
+        Fri,  7 Jan 2022 02:58:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7F6B2CE29BE;
-        Fri,  7 Jan 2022 10:57:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68250C36AE9;
-        Fri,  7 Jan 2022 10:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641553060;
-        bh=Zx/AXWLVluUT54cAqQJ0SxAQoNbFfocAhgDAYiIwEqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iynpA4ecmQlJKnuCXtmTCewwhRuYTkO+xGMDA6shpvAU1g/BMgheKruQ6239iylZS
-         LyJZVGyvDp4+8OyDQYdWICOslNfB8ldCebQOBDfnA4lACgjlVrkgWQ5eCsfAwbwIJN
-         y0D5gMOJJfZKf2k8O3nQlrTRs40E+6mi4sLjSxB4=
-Date:   Fri, 7 Jan 2022 11:57:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Alaa Hleihel <alaa@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 04/42] RDMA/mlx5: Fix releasing unallocated memory
- in dereg MR flow
-Message-ID: <YdgcogmDQcZwLxxe@kroah.com>
-References: <20211215172026.641863587@linuxfoundation.org>
- <20211215172026.789963312@linuxfoundation.org>
- <bbb587b1-4555-ba8d-fe43-d56d41a3c652@leemhuis.info>
- <3802192c-d9ce-8f4a-88c5-a87f58eaf37b@leemhuis.info>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4EFDDCE29BE;
+        Fri,  7 Jan 2022 10:58:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F2A1C36AE9;
+        Fri,  7 Jan 2022 10:58:30 +0000 (UTC)
+Date:   Fri, 7 Jan 2022 10:58:27 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/7] arm64: errata: Add detection for TRBE ignored
+ system register writes
+Message-ID: <Ydgc06hHrMDMqMnf@arm.com>
+References: <1641517808-5735-1-git-send-email-anshuman.khandual@arm.com>
+ <1641517808-5735-3-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3802192c-d9ce-8f4a-88c5-a87f58eaf37b@leemhuis.info>
+In-Reply-To: <1641517808-5735-3-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 06:57:51AM +0100, Thorsten Leemhuis wrote:
-> Hi Greg!
+On Fri, Jan 07, 2022 at 06:40:03AM +0530, Anshuman Khandual wrote:
+> TRBE implementations affected by Arm erratum #2064142 might fail to write
+> into certain system registers after the TRBE has been disabled. Under some
+> conditions after TRBE has been disabled, writes into certain TRBE registers
+> TRBLIMITR_EL1, TRBPTR_EL1, TRBBASER_EL1, TRBSR_EL1 and TRBTRG_EL1 will be
+> ignored and not be effected. This adds a new errata ARM64_ERRATUM_2064142
+> in arm64 errata framework.
 > 
-> On 01.01.22 11:56, Thorsten Leemhuis wrote:
-> > Hi, this is your Linux kernel regression tracker speaking.
-> > 
-> > On 15.12.21 18:20, Greg Kroah-Hartman wrote:
-> >> From: Alaa Hleihel <alaa@nvidia.com>
-> >>
-> >> [ Upstream commit f0ae4afe3d35e67db042c58a52909e06262b740f ]
-> >>
-> >> For the case of IB_MR_TYPE_DM the mr does doesn't have a umem, even though
-> >> it is a user MR. This causes function mlx5_free_priv_descs() to think that
-> >> it is a kernel MR, leading to wrongly accessing mr->descs that will get
-> >> wrong values in the union which leads to attempt to release resources that
-> >> were not allocated in the first place.
-> > 
-> > TWIMC, that commit made it into 5.15.y, but is known to cause a
-> > regression in v5.16-rc:
-> > 
-> > https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
-> > https://lore.kernel.org/all/EEBA2D1C-F29C-4237-901C-587B60CEE113@oracle.com/
-> > 
-> > A fix for mainline was posted, but got stuck afaics:
-> > https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
-> > 
-> > A revert was also discussed, but not performed:
-> > https://lore.kernel.org/all/20211222101312.1358616-1-maorg@nvidia.com/
-> 
-> I assume your scripts will catch this, nevertheless FYI:
-> 
-> Below patch was reverted in mainline, as it "is not the full fix and
-> still causes to call traces". You likely want to revert it from v5.15.y
-> as well. For details see
-> 
-> 4163cb3d1980 ("Revert "RDMA/mlx5: Fix releasing unallocated memory in
-> dereg MR flow"")
-> 
-> https://git.kernel.org/torvalds/c/4163cb3d1980383220ad7043002b930995dcba33
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Thanks for the heads-up, I have now queued this patch up for 5.15.y.
-
-greg k-h
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

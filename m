@@ -2,135 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DFF487EB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70F4487EB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 22:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiAGV6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 16:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S230344AbiAGV6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 16:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiAGV6N (ORCPT
+        with ESMTP id S230267AbiAGV6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:58:13 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBFCC06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 13:58:12 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id l15so5897441pls.7
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 13:58:12 -0800 (PST)
+        Fri, 7 Jan 2022 16:58:36 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4159C061574;
+        Fri,  7 Jan 2022 13:58:35 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id j6so27015068edw.12;
+        Fri, 07 Jan 2022 13:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YwXvl9LyxPLT5KXmkZnhb1YhT1RhoPjqa4mfsaDtNLk=;
-        b=vCOx5mxoPf5yDaezl0FLUSox3TvjNiTFVaS3YESthdUcIUX2XkP1LEQJz3KCfNEu4/
-         dr5dFPmSJwo6+a60TPNeMwGKmfG7+V/ijQpoV2zFmRm0wjKZZQeE1wzBcPTixDmEUqxK
-         M3ypkkcyHDB1SjRF+HkryUIKAQgySodaHoKr9XKCrzpAhx541sqP5yAtg/aMBhjtZnXV
-         xG5GcMJEBdig7xMx6p8UF2xXquE5hd0GemBXAylcSEmp8+UsAeVGCmK2HRmUEHMa1UnB
-         QBxfIj9gqYF22D5wyzqcSBBOQ3MZ/yxtk6O7W3G2Q4NsA1GN9MduSokiAeTfowGE15Pf
-         SXOw==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Y+yvylrq8G9K24aTv5ZnK1lCvLyWIJOHvFwGQ2S4h8=;
+        b=ScsV4/GFRAfwNY22P5ppslH6X6pBUQP05JYve6o22LMyOvM0tDvdnvAq3bETEIUtrk
+         5LZBAP6u5NJsnVM6ftdVURmyCsgEaNNAwGKwUfdLe2+OqAmtoJGm4Kk7+h+TMBpfR0C1
+         4AinlpD7xTuax7hzDAuzJ3dN2g/esM45cQJQbOZQDTWfaPIJzoNdIq7XeqzzMlhlGusu
+         vUQgV8K6kV10TaiX4ibAv2go+zM1AC68O+wTSstLvszokcZi76acZx3ZCXmzjn8AJaxB
+         U71W16gexR89e0nlH1eJPmGsE0/M66Pno5L3CckNrrJGKkad/ZS9UfUdOwZRGmIzLn4q
+         6yTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=YwXvl9LyxPLT5KXmkZnhb1YhT1RhoPjqa4mfsaDtNLk=;
-        b=XutBHN/Edq8tlhj5DBiH4DwBwiOCiFKskX+OD/W0/jMWt0LwQM9UFL1KW25ULI5XdA
-         FsKScBoTpq9qkm6yR3jwDK/Bc026GySvRvUZx3WNUvypwrI6P1rWP5nFi/YcMqEGpr1Y
-         5IX2uhsv9BBStFLuCa5EQeo7y5QFuabqLr+XD5cC/ITkj+0bc0V5vHm3QEMm/DfzyR5k
-         uY910qEoNvwjj0VS8eDstXqiYZf2XFLpooQU5Wj2uA+EEh1Qp7CG45lqG0dHVszy+Hgb
-         jgTU07juaouhyKJdghoGsC9/Y7qntyh/kTn+fpFSaVJZwm50PU79vTsF854tR2GPGQGT
-         Hbrg==
-X-Gm-Message-State: AOAM531IyK9oeDXpEyc3JDDyQUH0q/IiD0UzuDMY09TMHNvGQlYOd9QS
-        uSKdXcFpmhb2GbSCtnnh2TYk+LzNNmD8Nw==
-X-Google-Smtp-Source: ABdhPJwjdYvL9KC4dQqmY1X2DJSMm1IhfC/WV0RmK9svOcjiOdVLZeVIvOciLmiFA1ZiydXONVBgwA==
-X-Received: by 2002:a17:902:a589:b0:149:dc8c:76ad with SMTP id az9-20020a170902a58900b00149dc8c76admr13027341plb.94.1641592692055;
-        Fri, 07 Jan 2022 13:58:12 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id p32sm5500061pgb.49.2022.01.07.13.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 13:58:11 -0800 (PST)
-Date:   Fri, 07 Jan 2022 13:58:11 -0800 (PST)
-X-Google-Original-Date: Fri, 07 Jan 2022 13:57:44 PST (-0800)
-Subject:     Re: [PATCH v1 0/2] Provide a fraemework for RISC-V ISA extensions 
-In-Reply-To: <20211224211632.1698523-1-atishp@rivosinc.com>
-CC:     linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
-        aou@eecs.berkeley.edu, atishp@atishpatra.org, anup@brainfault.org,
-        damien.lemoal@wdc.com, devicetree@vger.kernel.org,
-        jszhang@kernel.org, krzysztof.kozlowski@canonical.com,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     atishp@atishpatra.org
-Message-ID: <mhng-791652b4-53f0-48e4-a640-f4c418c9926b@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Y+yvylrq8G9K24aTv5ZnK1lCvLyWIJOHvFwGQ2S4h8=;
+        b=r0rMd9Y8q+OLNpSlElrb4nau4jKKEy3Iu8NIIP85JOjFqJwmK/J2jXaSkdTG+FitkX
+         d0tnlz3zRrtEoDQaTwZn7NjrAWQRjYfTyh1UZArZn2Ojl1k+Gv4Ty16MUmahJqT6Z9UW
+         g/fv1POyCwCwqF36i3omW6xa/ZtoiMqdrc04hQMlda4QNN9OmCTMp3WPbeJB2THxNu7B
+         EaA5cbO360gonqUrE/wyWRydN9vd6vvtBqDIePB4OdahwZP8KatnzdN9GOM01cTmmvqB
+         nPnHrn4DfT0PGzv3yP0SLKvTZVA5dhtXriPrZ0MS0PzaI8wAIuhNjP9Gij/1CnzOqu15
+         Icpg==
+X-Gm-Message-State: AOAM532rgPBG8NwS0n8HHYvHRMhtQw35LTfDCEIJqoiTjkDMvyb2HWUf
+        Bi4RMfo4BQnx0FP5KAAUYyGsHqtvkPEiTXo8RelZfdXgpYc=
+X-Google-Smtp-Source: ABdhPJxwHPeEHPAjD+LC51Ae0NUSbl+DZBbSQw9QOq/pdLTaBbF3QqP9KZH8X/zObztoMoesIIbfXmUSn46MNuaZqgM=
+X-Received: by 2002:a17:906:519b:: with SMTP id y27mr5429738ejk.649.1641592714281;
+ Fri, 07 Jan 2022 13:58:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20220107023931.13251-1-zelong.dong@amlogic.com> <20220107023931.13251-4-zelong.dong@amlogic.com>
+In-Reply-To: <20220107023931.13251-4-zelong.dong@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 7 Jan 2022 22:58:23 +0100
+Message-ID: <CAFBinCAP66AHM4252BwJ2FMLtyw2RzUsoitahpK0jNdgZaJLXg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] reset: reset-meson: add support for the Meson-S4 SoC
+ Reset Controller
+To:     Zelong Dong <zelong.dong@amlogic.com>
+Cc:     p.zabel@pengutronix.de, robh+dt@kernel.org, khilman@baylibre.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, jbrunet@baylibre.com,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 13:16:30 PST (-0800), atishp@atishpatra.org wrote:
-> This series implements a generic framework to parse multi-letter ISA
-> extensions. It introduces a new DT node that can be under /cpus or
-> individual cpu depends on the platforms with homogeneous or heterogeneous
-> harts. This version of the series only allows adds support for homogeneous
-> harts as there are no platforms with heterogeneous harts yet. However,
-> the DT binding allows both.
+On Fri, Jan 7, 2022 at 3:40 AM Zelong Dong <zelong.dong@amlogic.com> wrote:
 >
-> The patch also indicates the user space about the available ISA extensions
-> via /proc/cpuinfo.
+> Compared to the A1 SoCs the number of RESET registers is different
+> and the offset for the level registers is the same. Add a new
+> compatible string and struct meson_reset_param to add support for the
+> reset controller on the S4 SoC.
 >
-> Here is the example output of /proc/cpuinfo:
-> (with debug patches in Qemu and Linux kernel)
->
-> / # cat /proc/cpuinfo
-> processor	: 0
-> hart		: 0
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
-
-IMO this is the wrong way to go.  I get that the ISA string is very 
-complicated to parse, but we've tried to come up with other 
-representations of this we've ended up having that interface break when 
-the ISA string rules eventually change.  We should just stick to the ISA 
-string for these interfaces, as that's at least something everyone can 
-agree on because they're defined by the spec.
-
-That said, we should add the spec versions into this interface.  At 
-least the user spec version is relevant here, but given that we're 
-passing through some other priv-level details we might as well pass that 
-though too.
-
-> processor	: 1
-> hart		: 1
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
->
-> processor	: 2
-> hart		: 2
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
->
-> processor	: 3
-> hart		: 3
-> isa		: rv64imafdcsu
-> isa-ext		: sstc,sscofpmf
-> mmu		: sv48
->
-> Anybody adding support for any new multi-letter extensions should add an
-> entry to the riscv_isa_ext_id and the isa extension array.
-> E.g. The patch[1] adds the support for sscofpmf extension.
->
-> [1] https://github.com/atishp04/linux/commit/a23157264118d6fd905fd08d8717c7df03078bb1
->
-> Atish Patra (2):
-> RISC-V: Provide a framework for parsing multi-letter ISA extensions
-> dt-bindings: riscv: Add DT binding for RISC-V ISA extensions
->
-> .../devicetree/bindings/riscv/cpus.yaml       |  9 +++
-> arch/riscv/include/asm/hwcap.h                | 31 ++++++++++
-> arch/riscv/kernel/cpu.c                       | 16 +++++
-> arch/riscv/kernel/cpufeature.c                | 58 ++++++++++++++++++-
-> 4 files changed, 113 insertions(+), 1 deletion(-)
+> Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>

@@ -2,129 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C3A4872ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ADF4872F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiAGGDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:03:16 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:47255 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232763AbiAGGDO (ORCPT
+        id S231602AbiAGGHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 01:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230466AbiAGGHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:03:14 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R751e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V19Yyfg_1641535391;
-Received: from 30.225.24.141(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V19Yyfg_1641535391)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 07 Jan 2022 14:03:12 +0800
-Message-ID: <24d3294b-2d22-3f68-e280-a833879c69b1@linux.alibaba.com>
-Date:   Fri, 7 Jan 2022 14:03:10 +0800
+        Fri, 7 Jan 2022 01:07:10 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EAFC061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 22:07:10 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id m13so4363584pji.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 22:07:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2q58XOryfIlXBk+Ga94YK5KAiqVRv5tmtrlFtSkfC0E=;
+        b=ochKJUmv9jcYYqjl8Ri0yXzDhwacQ2/M9JFDOvS2FBy8XLGNBzhfSvKLa9ii/FgSHR
+         lKXPiHPPHOi42VPVoABzyceIiJ8F+Kbs3IS0k75hH2A5mdF2XigOH5lmdKWrpcwtxdbr
+         ezxvlB8NX6lqdXgr7vLxp+V4EZIGdh1LCkEFmJztS6KTyCd2fXWSEdqhhi3oBwVmS13w
+         /pYkJOH9knWKKZPd/LGxDD94eatNe6H5EBW+iGlQr71hEgAmZVB6ZiK24VPUj2ooMIaj
+         42ZKBZFHvnOHD474TolWmS+OmhGNji04Be9HsERGLppfG0rRjME6jGJDuXtYXGuWgZIu
+         K72Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2q58XOryfIlXBk+Ga94YK5KAiqVRv5tmtrlFtSkfC0E=;
+        b=fqJn4kmzIN6WJ3lj4gZXRAuYmo7nEWSpTHF8yqLNblkWLuPya61F+9SrAMebwJqlHe
+         MbFBo+9+5f+l3mCzTiCnhGzn9F35yzx5Tv/5GhmslsUHprWSaGgzfT52uBT26+oVRKrm
+         hYyo6G1ZqBYEl+Ibtlt7PV0g/84IDcl0WRkx7MoRenXK5fZrmtvAIMNkQCa4545ygFYP
+         1PSCY0yfHakkQniDAXsaq3qAzhVaLmIy31DDhA/rxvgMFv7e8HqX1H94zl8LZGHoJi21
+         TP7mzzgVDj4HMBqZlzfmMcPNHfMc8xXPZB/KIzIZgvWCaiH9kEAlvm/bAkiv9ZS3f3nq
+         gRVw==
+X-Gm-Message-State: AOAM533fSb4yBlYGLB59m9OzQCJy0Iz1sTtg3oDzFbk3Eg0UdmfJDzw8
+        4hcXHCi/ktTWgxBFOKiyAS6U5DReJZH6+JepbiRkrw==
+X-Google-Smtp-Source: ABdhPJzi8RhMHj39b+4Rn0KshD189vXaFIX2vj8EwamLndmdEQUpG8o9KUsh8L5L/q0EpOVykikO8FcKUk+BveZguG8=
+X-Received: by 2002:a17:902:c652:b0:148:f1a5:b7bf with SMTP id
+ s18-20020a170902c65200b00148f1a5b7bfmr62134703pls.122.1641535629407; Thu, 06
+ Jan 2022 22:07:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [RFC PATCH] PCI: Add "pci=reassign_all_bus" boot parameter
-To:     bhelgaas@google.com
-Cc:     zhangliguang@linux.alibaba.com,
-        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
-From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
-In-Reply-To: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+In-Reply-To: <20220104194918.373612-2-rananta@google.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Thu, 6 Jan 2022 22:06:53 -0800
+Message-ID: <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bjorn,
-Gentel ping! Any comments on this patch?
+Hi Raghu,
 
-I think this is useful to find whether there is a problem with
-the PCI enumeration of the bios or the OS.
-
-在 2021/12/30 下午5:30, Yao Hongbo 写道:
-> PCI bridges may be misconfigured by te system BIOS, and then the OS
-> scan the bridges that need to be reconfigured.
-> However, the PCI bus topology configured by the bios may be wrong:
-> 
-> [   19.376273] pci 0000:40:00.0: bridge configuration invalid ([bus
-> 00-00]), reconfiguring
-> [   19.384443] pci_bus 0000:47: busn_res: can not insert [bus 47-46]
-> under [bus 40-46] (conflicts with (null) [bus 40-46])
-> 
-> The primary bus number and subordinate bus number written by the bios
-> were wrong, and the OS continues to add bridges on the wrong bus
-> topology.
-> 
-> In order to avoid such problems, a kernel cmdline needs to be
-> added to support the os to fully configure the pci bus.
-> 
-> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
+On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
+<rananta@google.com> wrote:
+>
+> Capture the start of the KVM VM, which is basically the
+> start of any vCPU run. This state of the VM is helpful
+> in the upcoming patches to prevent user-space from
+> configuring certain VM features after the VM has started
+> running.
+>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > ---
->  Documentation/admin-guide/kernel-parameters.txt | 1 +
->  drivers/acpi/pci_root.c                         | 3 +++
->  drivers/pci/pci.c                               | 5 +++++
->  include/linux/pci.h                             | 2 ++
->  4 files changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 2fba824..c83a2e5 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -4084,6 +4084,7 @@
->  		nomio		[S390] Do not use MIO instructions.
->  		norid		[S390] ignore the RID field and force use of
->  				one PCI domain per PCI function
-> +		reassign_all_bus	The OS fully configure the PCI bus.
->  
->  	pcie_aspm=	[PCIE] Forcibly enable or disable PCIe Active State Power
->  			Management.
-> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> index ab2f7df..e21ac25 100644
-> --- a/drivers/acpi/pci_root.c
-> +++ b/drivers/acpi/pci_root.c
-> @@ -592,6 +592,9 @@ static int acpi_pci_root_add(struct acpi_device *device,
->  	is_pcie = strcmp(acpi_device_hid(device), "PNP0A08") == 0;
->  	negotiate_os_control(root, &no_aspm, is_pcie);
->  
-> +	if (pci_reassign_all_bus)
-> +		pci_add_flags(PCI_REASSIGN_ALL_BUS);
+>  include/linux/kvm_host.h | 3 +++
+>  virt/kvm/kvm_main.c      | 9 +++++++++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index c310648cc8f1..d0bd8f7a026c 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -623,6 +623,7 @@ struct kvm {
+>         struct notifier_block pm_notifier;
+>  #endif
+>         char stats_id[KVM_STATS_NAME_SIZE];
+> +       bool vm_started;
+
+Since KVM_RUN on any vCPUs doesn't necessarily mean that the VM
+started yet, the name might be a bit misleading IMHO.  I would
+think 'has_run_once' or 'ran_once' might be more clear (?).
+
+
+>  };
+>
+>  #define kvm_err(fmt, ...) \
+> @@ -1666,6 +1667,8 @@ static inline bool kvm_check_request(int req, struct kvm_vcpu *vcpu)
+>         }
+>  }
+>
+> +#define kvm_vm_has_started(kvm) (kvm->vm_started)
 > +
->  	/*
->  	 * TBD: Need PCI interface for enumeration/configuration of roots.
->  	 */
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 3d2fb39..5746e88 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -142,6 +142,9 @@ bool pci_reset_supported(struct pci_dev *dev)
->  /* If set, the PCI config space of each device is printed during boot. */
->  bool pci_early_dump;
->  
-> +/* If set, the pci will reassign resources*/
-> +bool pci_reassign_all_bus;
+>  extern bool kvm_rebooting;
+>
+>  extern unsigned int halt_poll_ns;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 72c4e6b39389..962b91ac2064 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3686,6 +3686,7 @@ static long kvm_vcpu_ioctl(struct file *filp,
+>         int r;
+>         struct kvm_fpu *fpu = NULL;
+>         struct kvm_sregs *kvm_sregs = NULL;
+> +       struct kvm *kvm = vcpu->kvm;
+>
+>         if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_dead)
+>                 return -EIO;
+> @@ -3723,6 +3724,14 @@ static long kvm_vcpu_ioctl(struct file *filp,
+>                         if (oldpid)
+>                                 synchronize_rcu();
+>                         put_pid(oldpid);
 > +
->  bool pci_ats_disabled(void)
->  {
->  	return pcie_ats_disabled;
-> @@ -6846,6 +6849,8 @@ static int __init pci_setup(char *str)
->  				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
->  			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
->  				disable_acs_redir_param = str + 18;
-> +			} else if (!strncmp(str, "reassign_all_bus", 16)) {
-> +				pci_reassign_all_bus = true;
->  			} else {
->  				pr_err("PCI: Unknown option `%s'\n", str);
->  			}
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 18a75c8e..ad0e3e9 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -2119,6 +2119,8 @@ int pcim_iomap_regions_request_all(struct pci_dev *pdev, int mask,
->  extern u8 pci_dfl_cache_line_size;
->  extern u8 pci_cache_line_size;
->  
-> +extern bool pci_reassign_all_bus;
-> +
->  /* Architecture-specific versions may override these (weak) */
->  void pcibios_disable_device(struct pci_dev *dev);
->  void pcibios_set_master(struct pci_dev *dev);
+> +                       /*
+> +                        * Since we land here even on the first vCPU run,
+> +                        * we can mark that the VM has started running.
+> +                        */
+
+It might be nicer to add a comment why the code below gets kvm->lock.
+
+Anyway, the patch generally looks good to me, and thank you
+for making this change (it works for my purpose as well).
+
+Reviewed-by: Reiji Watanabe <reijiw@google.com>
+
+Thanks,
+Reiji
+
+
+> +                       mutex_lock(&kvm->lock);
+> +                       kvm->vm_started = true;
+> +                       mutex_unlock(&kvm->lock);
+>                 }
+>                 r = kvm_arch_vcpu_ioctl_run(vcpu);
+>                 trace_kvm_userspace_exit(vcpu->run->exit_reason, r);
+> --
+> 2.34.1.448.ga2b2bfdf31-goog
+>

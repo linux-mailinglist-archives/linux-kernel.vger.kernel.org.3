@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A38E4873BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2C14873C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236120AbiAGHrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 02:47:37 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37340
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235999AbiAGHrg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 02:47:36 -0500
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9B22F402EA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:47:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641541655;
-        bh=PdugAwOKj5OweNcK0/97VfSiKgWNV0xCmwKuJGhwWoE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=uEBUumSQwUxDSX+8q4UuuyyDBmXgq/LhLCAnGxShgh7U/w3R+ccT2HASdO2Eu1+FK
-         egKmBVbaY8z8XwyaTkCSIkG0RTlNZXoLM8ggrzI7pdxy7dgX/L6XmOI3xmssuNFJKU
-         QUKAkN+jBHVX2OP1Bl7jNk6FhCJoKKRvB5Ltvdu11Nm0GfhHrtv29ceKc19m98t25t
-         omwSrWlA9xL13qzZLaibbimIYj3UO19rlvyNIBo3NrZ8jzXmXPChJTcU5eaUjxZUDs
-         Lbf249DI/LSXnj5Gi161tUBPKc8v5LQu11Ti6OyYMrN8EBdDHYF8nxxCcPXf24SV2M
-         5K0RsrbrM6J0g==
-Received: by mail-wm1-f70.google.com with SMTP id m15-20020a05600c3b0f00b003465ede5e04so1134437wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 23:47:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PdugAwOKj5OweNcK0/97VfSiKgWNV0xCmwKuJGhwWoE=;
-        b=HKD/AliQYpx9hL1x3+rbvNmiOJsd0CM6FSVYWubggO6ilvAsrKaCwVBS7zPGSBvbVQ
-         NZh49QKNWUSXSz9z3LQqT1dAAFOpwa+Uk/bB8xgpFtmyxFfPPFiOzr8Ytcg7z/OQ2269
-         89AE9Pykc3XyBqo9BhtRyvt+aGnRAji+4uVgClFl2eYNeDTXc0QwI0NKm+eTLFIOe0v2
-         Swu1tRLJeBZ3mi21gWlLDhZV0BopefuI7GgUtkUhzk4sYn/ci7G2A6ByIZWY8Sy4+Hi4
-         w1A0SL0avns/ayVjeez6FA+szvFcMTuhuKqYAWeas5LI906NtToMQRCWzU0DVIvwl2TK
-         BHew==
-X-Gm-Message-State: AOAM530FemI2RMC/hnMxhxi+Jwm/u92kdv//jU2h9GpQtWaRoZVWJ59G
-        nDrVZ/rhnM+JmlvozdfAeYCSrsMxaMiwStTotfO1gTCnP7Q9FObUghVXFsBWfX5xcy5O/i6ne0X
-        8+ibHbcHxFYySNQlSXjGz/y4eFbchnxbahH5fSdmnMQ==
-X-Received: by 2002:a05:600c:34c8:: with SMTP id d8mr10369563wmq.94.1641541654978;
-        Thu, 06 Jan 2022 23:47:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzBTfZa15VkS7xNqxo/0lg4qbFu1EvIdIy6O7U40/j2g0LzvxAKZFECt3AXaHWvqWXpOlO3KA==
-X-Received: by 2002:a05:600c:34c8:: with SMTP id d8mr10369553wmq.94.1641541654841;
-        Thu, 06 Jan 2022 23:47:34 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id w8sm1271049wrs.41.2022.01.06.23.47.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 23:47:34 -0800 (PST)
-Message-ID: <66754058-187e-ffd5-71ba-4720101f5d98@canonical.com>
-Date:   Fri, 7 Jan 2022 08:47:33 +0100
+        id S1345073AbiAGHtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 02:49:47 -0500
+Received: from mga06.intel.com ([134.134.136.31]:59776 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235937AbiAGHtq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 02:49:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641541786; x=1673077786;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WQa6IMqpwZPSAmXokM9OppP4lB6YOU8OOtGYA63eq18=;
+  b=c8CTQn+TyfAjmYb6PSPHyGnisqiXrRFpALePeNlvXClh4YoByT1+Qr/U
+   Y7qgrchrMJFW5hWw8S5w7OFCroS6lwTyEef5Pll1bRkDA2VuryARUi+3R
+   1gOxV07jvO/pyxOQSrNE/ZGpLFti1f6zThixa4OE9adDhrGejZcicCj09
+   ftZ4Nvu0Jr9tIFygj2X/luQqEP6ONsuKj5zU1+sCQCptWo2RxUxP34kTF
+   zHC8pqE2yEYXgtEmHdYPXjKcB1qLBfLyCATEg4qy64QGWGiCx3/Q84nvT
+   cm4c6/6YCTxwzAcRr3FfkliyH51ag8a+JU9kw8hhUfaZxfUP1w4f4i802
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="303572004"
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="303572004"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 23:49:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
+   d="scan'208";a="527291732"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Jan 2022 23:49:44 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5k0O-000IQL-2N; Fri, 07 Jan 2022 07:49:44 +0000
+Date:   Fri, 7 Jan 2022 15:49:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 50/53]
+ kernel/time/tick-sched.c:1453:1: sparse: sparse: symbol
+ '__pcpu_scope_tick_setup_sched_timer_help_needed' was not declared. Should
+ it be static?
+Message-ID: <202201071509.qlXBeLQz-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [RFT][PATCH 3/3] arm64: dts: exynos: drop incorrectly placed
- wakeup interrupts in Exynos850
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sylwester Nawrocki <snawrocki@kernel.org>
-References: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
- <20211230195325.328220-3-krzysztof.kozlowski@canonical.com>
- <CAPLW+4mDWg1xAGEALNVN1vs8jb3rzH2VqEBfacTkM_gNxeuhRg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAPLW+4mDWg1xAGEALNVN1vs8jb3rzH2VqEBfacTkM_gNxeuhRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 22:09, Sam Protsenko wrote:
-> On Thu, 30 Dec 2021 at 21:53, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> The pin controller device node is expected to have one (optional)
->> interrupt.  Its pin banks capable of external interrupts, should define
->> interrupts for each pin, unless a muxed interrupt is used.
->>
->> Exynos850 defined the second part - interrupt for each pin in wake-up
->> pin controller - but also added these interrupts in main device node,
->> which is not correct.
->>
->> Fixes: e3493220fd3e ("arm64: dts: exynos: Add initial Exynos850 SoC support")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
-> 
-> Tested-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> 
-> Despite some errors brought by this change:
-> 
->     samsung-pinctrl 11850000.pinctrl: irq number not available
->     samsung-pinctrl 11c30000.pinctrl: irq number not available
-> 
-> the interrupts seem to be functional still. Tested on E850-96 board,
-> by pressing buttons connected to gpa0..gpa1, and checking
-> /proc/interrupts info. I guess it's ok to merge this one as is, and
-> then work further to fix the driver (or dts?) accordingly.
-> 
-> Also, I submitted related patch ("arm64: dts: exynos: Add missing gpm6
-> and gpm7 nodes to Exynos850"), please take a look.
-> 
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
+head:   56b8a9dc5e8aa4d625a09ce87015016ae339d44d
+commit: 3cda34a0004e965b08daf04fb0f2cee935654e9f [50/53] EXP timers: Non-nohz_full last-resort jiffies update on IRQ entry
+config: i386-randconfig-s001-20220107 (https://download.01.org/0day-ci/archive/20220107/202201071509.qlXBeLQz-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/3cda34a0004e965b08daf04fb0f2cee935654e9f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
+        git checkout 3cda34a0004e965b08daf04fb0f2cee935654e9f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/time/
 
-Several Exynos850 pinctrl banks use exynos_eint_gpio_init, so they need
-the interrupt property (for external interrupts). Otherwise external
-GPIO interrupts won't work. The ones you checked, could be the external
-wakeup interrupts which are not affected here.
-
-This change seems wrong. Instead one interrupt should be left. However I
-don't know which - should be described in reference manual in interrupt
-sources.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-Best regards,
-Krzysztof
+sparse warnings: (new ones prefixed by >>)
+>> kernel/time/tick-sched.c:1453:1: sparse: sparse: symbol '__pcpu_scope_tick_setup_sched_timer_help_needed' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

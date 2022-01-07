@@ -2,338 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E85487ABD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72760487AC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348366AbiAGQv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:51:27 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:36582 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348358AbiAGQv0 (ORCPT
+        id S1348375AbiAGQzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:55:16 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:33588 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240137AbiAGQzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:51:26 -0500
-Received: by mail-io1-f72.google.com with SMTP id j6-20020a6b5506000000b00601e1eac0ecso4303714iob.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:51:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=1b9kcxEzadYvbxSNtVaIR8baq9a/dGnbLKfd8RBwxPY=;
-        b=B3ATWZehhbLsfYjB4bLwOPk0ir77yR8gHnGPOV2auY9yY+/SexyUvNwHFxtkh7SYQ0
-         iqShRZBzWEP7myhgHhtd2ZUpN9kCaEdKShPEcziTTCqcqNpamNgsnhpdeZD0ZQ14QJbN
-         QJSMzX8FuvhqV/JE+ydjfSHfTzizEyxdvLvuxDv4ouODqTDMcZhwRxfHFNXTaj0W186h
-         VswRaVxS0KI5hWU2Yp5U4d/nfFBq9x+USKD+tFut6H6Y0MooZExIu2h6kSgmweSok9xO
-         XhHmONxFu66er2hOsyCuK7Ygtv5ShLmBFTsL407WUfGFWV6IjuKY19Y7pdlvPdLcUj5S
-         rxtA==
-X-Gm-Message-State: AOAM5309gLs45/Xn6yIfibIW1OC7bB5l+CEzTqfehaQeK2HrTN7dAkVy
-        Km/zbGDqr0Yvs6XhgaGqB/jkiR18bYsY9GTE8OpRK8BAgWKY
-X-Google-Smtp-Source: ABdhPJxaDV+LM1+jm1tKLrJYnaiuddmQd2y5lLCFhxLfx/muoOgdaqZUF86rMJV41ZYo+H4ZKK+wQ/EqB5mU/8A5SqqR/J7EZ7vQ
+        Fri, 7 Jan 2022 11:55:14 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 207DswIg014686;
+        Fri, 7 Jan 2022 16:55:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=h+x3fYIFmmCy1DZJl1g+VUIFxBml2+dgbUfmAdj0T3s=;
+ b=Or6XOy7zQt/zYdIMieDJ0j2r5DnnabOUzeaj6acF95k7SSEWHcfIQ5ogNcU+kT+DZ2Eh
+ tDYs31B/JWkPYykamHjei1Ur8gI4nl2ezIjbUQni/GLzA1+nTgNy6AePqdRk73i1iwZY
+ 7URc5ZLKrPK4M9XRUKDT7soVGBxgEY2Rmlneo5KRjIJS3eA55NBICk6mxe8pe7vutPUL
+ BQYz50SbfXyu0rOkfZxQoWckDk7QxopvxY4iHExCUz462lEz2lyE9ePQyEUiHWpASdqw
+ M15PyK2VKA4gAAG72UE0hH8pNpuryl/2Z8NaX+Gj7zTfIG1yY+9e3syMIDf0Tnwpk3vJ XA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3de4v8jh7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Jan 2022 16:55:09 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 207GVPSM181467;
+        Fri, 7 Jan 2022 16:55:08 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
+        by userp3020.oracle.com with ESMTP id 3de4vnxr8w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Jan 2022 16:55:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TLzm/LmMF3S/x0mSyr6tp+wZM2jFNbSx8J4oEx2xW1qaa6+0XfpMvU+X2r0DaKpgRyoUB0vJMXkO15Pz7PeAym0farrYZPAJqyxMUVn7Flcx3EqEs7Hj+rpi+erLT9e12LZRoZEL23cnpVTYjaL8KyRs0vuT+cJtaMKXWHO1lBDt20zpaodYnxD7TFeU/n0/vYOeoOFER1MzJC6iWqef1FdGonDpv2EVIS0QX+6zx6ySUzorD0bZyHwwKE3uBYgpPMDXKxMdos4CMv+qn6XAq65I+v7ka8eRPTEHxuWmlpDYDak7cOECmispnLqxfO5MrlV3wderX0zbtC9uHXUE5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h+x3fYIFmmCy1DZJl1g+VUIFxBml2+dgbUfmAdj0T3s=;
+ b=RPfq1CQ5EQYBW+m7ozry7ClkUBqAn29SPbM3UPvZ/heX9k3agUI+PIXddOBGNZj/qHwPYuVkwZx2h6t64XsJ3u59rmhDrG+x7jlwZi6Y7bvWHlEwB4uKTTQlSXvmMMXJRDQBqjQMkO7AYXdZon3XAGOzD0U79+1MvBD6cBPK4zTF5eEq5mIBvQuISgs4PgJ1AQWZeHxx1PmrXZ/6tKG1tXPrj+VkRK76IpjOeNd/Vex2sySuTBeSnt83LIhtTze4Jfr1HKieK7WKFwYIgEJqfeXXQKDH4tcKvIe58MyuQVQYgmu5Cz3BNjM2lTZbaVyXbmHJAXv84yI+2gRxL4RrMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h+x3fYIFmmCy1DZJl1g+VUIFxBml2+dgbUfmAdj0T3s=;
+ b=Wg5J8wYsUoVtioQfudWB8Rin7XUZFfpm02F6Ov+JJLi4uavLX3BGAkzCbWjpQr3qUFl3zhfvUAPwgvLQJc6Uc7zEf7zYGRz2AI45+34TfFq5RcLynSox5JHnJjehTwjN7sHxcBK907k/Nz0RPvuy7BuBmSu0+/3ULMIHm1r8pLY=
+Received: from CO1PR10MB4532.namprd10.prod.outlook.com (2603:10b6:303:6d::17)
+ by MWHPR1001MB2080.namprd10.prod.outlook.com (2603:10b6:301:35::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Fri, 7 Jan
+ 2022 16:55:05 +0000
+Received: from CO1PR10MB4532.namprd10.prod.outlook.com
+ ([fe80::39d5:4686:22ac:da3b]) by CO1PR10MB4532.namprd10.prod.outlook.com
+ ([fe80::39d5:4686:22ac:da3b%7]) with mapi id 15.20.4867.011; Fri, 7 Jan 2022
+ 16:55:05 +0000
+Message-ID: <baa2a339-2917-fc6b-6cc5-c4174c20f533@oracle.com>
+Date:   Fri, 7 Jan 2022 22:24:53 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [External] : Re: [PATCH 4.14] phonet: refcount leak in
+ pep_sock_accep
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
+ <Ydgi0qF/7GwoCh96@kroah.com>
+From:   aayush.a.agarwal@oracle.com
+In-Reply-To: <Ydgi0qF/7GwoCh96@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR0601CA0003.apcprd06.prod.outlook.com (2603:1096:3::13)
+ To CO1PR10MB4532.namprd10.prod.outlook.com (2603:10b6:303:6d::17)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1244:: with SMTP id o4mr28029318jas.80.1641574286038;
- Fri, 07 Jan 2022 08:51:26 -0800 (PST)
-Date:   Fri, 07 Jan 2022 08:51:26 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003118ba05d500cce1@google.com>
-Subject: [syzbot] KMSAN: uninit-value in nf_nat_setup_info (2)
-From:   syzbot <syzbot+cbcd154fce7c6d953d1c@syzkaller.appspotmail.com>
-To:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
-        glider@google.com, kadlec@netfilter.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 19527ad8-2dd7-4794-69ad-08d9d1fe7427
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2080:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB20800E27E01862035AEACB64BA4D9@MWHPR1001MB2080.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:404;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WgPc1cQr2rbLa27ftNC04IOA2VHSf8/Hyg6u6+mhQHDN51IP7Z6rhKMSMaKrgccRrLYQiLGLkAasWXHP4tIGSGvi2/B5gOQbZ64zC/czXhxYoMdTGhKugar9ru0uPl7nEXO3qo1rMlQH9gp9+jtmMU6f7qr7kDqV1mcprOlS1T1B1UlAuP1vLHgbsZDChIkfKBPqqeu91ZFAubhOG2R80dwufSNBUdMKpcvdSv43VBGGMijd+DjMEw/arCMrrJR893Tlpzdrzu4bXMz/YpoqOb8wXINSFQp2M8uxQg9l8MDxPCvnUNmyj63CLjCkNDAnYbW9+CigYN4ItkLe/nV0nDI0pVy1od0IN4D4wOTgvtbLNS2YDtdC/uJVcT16pgatlg+GGmZjpKQvjHRLOaNNeUEL/QOXpxtsDsXBp6HWV3lKeMWBmkws5FL8V8U3HVDBS1QVzzuQXEIhc/ublVcO0zrYOFFElW9l5gS4xIHsiJzm/ZoiQywdsqLpjbm5MtwT8Tp15ksJBeUotrunfHejESJN/a/X86Ux/1IouoxHZPJTn0Rp51WAn3OMvc4hdqENKEYJ7Ji7Ikjn2pwUFfrg/wLuOgPObRSIMewbeVHuUO0QrlUvvWhKHAAdm0b4rUuSd6pOFA5jayq0AB1YNkUGho4jY18xEjpUv9l/s1hu2gdha6tMdEWO8f5ccPP/dQXXBtU1/2GV50oQXpl6zZcU2tQ2fzOWPiySKRw+8gikcmkQopKiXL8+c09ElV3SoeUJkr2sDaEk0xCJTZ0aDEBrZIIDuICqwp4h6T+f4hqj6/E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4532.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66946007)(2616005)(6916009)(53546011)(36756003)(38100700002)(6666004)(508600001)(2906002)(86362001)(966005)(31696002)(9686003)(6512007)(5660300002)(6506007)(26005)(6486002)(66556008)(31686004)(66476007)(186003)(316002)(54906003)(4326008)(83380400001)(8936002)(8676002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TG02TmZMK0dPaFhNaWF6d3lNdUFQQnpoOEs2eXMvdzlEcmxwNVpwVkYyQ0JW?=
+ =?utf-8?B?ZTRuc0ZHanFYUXY2MG1XYVQwYm82bk8zbUVKVjZFUWMzd0puNGZKVzIxR2pS?=
+ =?utf-8?B?OG0yS3pZemdRNnhFdE14QU1TYXg5ZmMxRFFSR2pNSmZRQ0l2MEhzSDRZWFJr?=
+ =?utf-8?B?Wjh5Y2RreC9IQXJ4RDVUVXRpbW9sSWN2MXpLdnlsc1AyOGQ4UzhNKy9NelhU?=
+ =?utf-8?B?T1orSkE2ME82L2ZiT2tIVXplVWxXQUNMVnNhb2JGSzYyblFQNXF5VUMxZE1l?=
+ =?utf-8?B?Yk1saWZtVTJrNUtUdkpuVExXZ2dRb3pDSkhwWG5wVVBvZGo2NU5PODJ4ZDVX?=
+ =?utf-8?B?cUZDWDE3RGpLV3pkOVJJTUlaOUo0TFRWZTBqM1lwdS8rRm45QjgrcDU1M2xY?=
+ =?utf-8?B?c2NSSU9uZUJmN2laUG5DZWlBK1loMjMwaElhKzlPL2NBTkFzNWd1b2EwZXEw?=
+ =?utf-8?B?T0NiSFZkOHp1aXZxYmNKZUFBbjlsbzk3bFJNMGI0ODA3VmNrRzZKL3Q4Z1F4?=
+ =?utf-8?B?NFk5K0FXc2RnL2V1Z0pDdVJzVXNYQU9zbXp6VG5Ma2dsRlF5cDhIK0cwTFd5?=
+ =?utf-8?B?UjJpcnNLN3lLYk5SMDFvU1UxbDFneVc0YUJhOXA4Qmw4YWpoOG1Od0t2TUhX?=
+ =?utf-8?B?Z1BBS2pYVGNjQ0d3SXA1RWthTnUyVU5OMTU2QUpmaGdvOE9xR2YwdUQvQi9S?=
+ =?utf-8?B?V3RwSERPWnBXWFZ0d3hRbVZoTXY2aUZqMjR4OFZDZitlR3pCN0VDMTlNcWpD?=
+ =?utf-8?B?WEpWL3RGWFBDaWhUYi9EdW92VW8vR1ZpUC84M2FRL3ZHZU5KcTYyYnpyenVq?=
+ =?utf-8?B?WlRlM0pvMHh6UGdEc3RRTUtocGpaYlRyR2poOTZKak9Ybi9Ec1BsT0hORkpB?=
+ =?utf-8?B?Zmx0dUJkempHQ3BsSXJLa2xRYUdla3RWTS94UFYxbmUyQjFrdkdra2hqejdt?=
+ =?utf-8?B?Z2RoZzRsZFpxMDlhbE9qckF3RHBvc0dtdTMwbi9CdWZ0WjZCTm1FOSsxZHN0?=
+ =?utf-8?B?eWJaMGdQT3hBNUhuOHgzbDdhVGtZL3Qzd2Z0Z1Y4SDR2b0xqeHN0RGMrUURN?=
+ =?utf-8?B?U0V6UGtKeXFvVUtFUnpyWmR4VDFOUkRqNXBraXNadUdmZVhNMHhvZEh2Yjlj?=
+ =?utf-8?B?cjZQc2ord2kxWEQ2YVlSSHhEQnhIRmpxMTIrOHUwejd1T2R5UlphVndkNy83?=
+ =?utf-8?B?c0RJSXNOc0VCU1JxMEYwaVhoQWQ1TjVhNHJBbnp2S0ZkZ1ROUW45RTFuK3R4?=
+ =?utf-8?B?NzIxaVBWQXpyaEx3UnF1dEZuSGlhSm96TkpZb0M2VmZjMXNGK01ZV2Q2Zklo?=
+ =?utf-8?B?MUZQS3puS1BTOTBNU0p6WXprUjh4RzR2Y1JBd1RvaXpWbkdRakJLMGdFK1pE?=
+ =?utf-8?B?NXkyLzBSUHRROTJSVjBlWXBERnM4dk4xUTJMbjh6WEp2b09ZYnAyYlNVVkJa?=
+ =?utf-8?B?eWlDQXg1dDJEbHFFWVlGVXB0UDdKY2Vhb2FsUjROOFdJWGJTOEZlazJxRjdJ?=
+ =?utf-8?B?OWk5Ui9aUlNtb1FEV1VNZHdkc09sWHNXcG5KZ0NraVFMdmhiZ1h0R0JyZHEr?=
+ =?utf-8?B?b1h6WjB0RVpSZFZkdmVVT05YSlhpRkdWak1IKzV6R3FqYURCRWRWYXU5clRu?=
+ =?utf-8?B?SGxtNVhtazBGcVB3dzNFTXl2em5KdFY5aDY2d3FwcDZPcEUrMzBzTTMrRlJR?=
+ =?utf-8?B?TWwvNk1iMEFDSVdNcTUzL0ljYVVXR0FaYVYzZmVUQ25wMDkrSE5kaW9MS1Vt?=
+ =?utf-8?B?eFFGL2tRaUJScnJZNHhmbElGbTQwcjJBb0ltZUdzdTQyOUR0aFVSM1liclRn?=
+ =?utf-8?B?NFRmdlZpV0tPbTNOR3ZEMWhNTndNVWlJckdoVzRKdVViUit6VXEzdGFRWlgr?=
+ =?utf-8?B?QU8rRGNVRHBQcUNpK3RQYjlVYmRIUmhOcitERVI4cUNVd2xhaC9mWEx5WlVr?=
+ =?utf-8?B?ZzkrSHl1NW16WGNSblozZWxRRm9XUjdWcVNPRTQycHYyZG01SFhtS2hSZDJW?=
+ =?utf-8?B?NmJISkxFUEdPOGFZeHZpS1NpamJpUlYrZFhnd0ZDTlFWRkk3TGFldTQ3Tmcw?=
+ =?utf-8?B?dSs4SEdTTW5oSmt3RmVTZ255dDgwRCtZcUkveFB6NWlDRmVKRllyeTJGQjgv?=
+ =?utf-8?B?OGZDUmZXWTg3VGNlY1M0cXVhZFFYdDlteU9QcTJYcTdLSjhHOEZyZFBlNEE3?=
+ =?utf-8?B?Q1J3TDNpK0xSWHUzYy9YaGp1dnpSYlhueWFPR3RmS3QwRWFZdFV0dU9uaXpz?=
+ =?utf-8?B?WDFXK0E5N1JjNGdidzJuMExsZG93PT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19527ad8-2dd7-4794-69ad-08d9d1fe7427
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4532.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 16:55:05.3074
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LlWB4jrh1122SEXA85T/tBhGlYdRz11OhXPpM4/IhD7d/zXjAziyJ1VFpzl14xNFHiSnTOv1b7DpC/aUIVh9+3hfGw9tcdzrD7GovobsDHs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2080
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10220 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201070112
+X-Proofpoint-ORIG-GUID: jQjaWlJqbDErfpFRdPo7MYkVEBa1ySg-
+X-Proofpoint-GUID: jQjaWlJqbDErfpFRdPo7MYkVEBa1ySg-
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+On 07/01/22 4:54 pm, Greg KH wrote:
+> On Fri, Jan 07, 2022 at 02:53:32AM -0800, Aayush Agarwal wrote:
+>> From: Hangyu Hua <hbh25y@gmail.com>
+>>
+>> commit bcd0f9335332 ("phonet: refcount leak in pep_sock_accep")
+>> upstream.
+>>
+>> sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
+>> invoked in subsequent failure branches(pep_accept_conn() != 0).
+>>
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>> Link: https://urldefense.com/v3/__https://lore.kernel.org/r/20211209082839.33985-1-hbh25y@gmail.com__;!!ACWV5N9M2RV99hQ!Znc0Oy9gtZZ18UDMwcZiYrfjj4GUibhEq5WJZ44m6azDWCC1hrZpkFh9AmGOqqS94cqz-A$
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> Signed-off-by: Aayush Agarwal <aayush.a.agarwal@oracle.com>
+>> ---
+>>   net/phonet/pep.c | 1 +
+>>   1 file changed, 1 insertion(+)
+> What about releases 5.15.y, 5.10.y, 5.4.y, and 4.19.y?  Is this also
+> relevant for those trees?
+>
+> thanks,
+>
+> greg k-h
 
-HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=125922b3b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbcd154fce7c6d953d1c
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cbcd154fce7c6d953d1c@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in __nf_ct_tuple_src_equal include/net/netfilter/nf_conntrack_tuple.h:128 [inline]
-BUG: KMSAN: uninit-value in nf_ct_tuple_equal include/net/netfilter/nf_conntrack_tuple.h:143 [inline]
-BUG: KMSAN: uninit-value in nf_nat_setup_info+0x3adb/0x4750 net/netfilter/nf_nat_core.c:607
- __nf_ct_tuple_src_equal include/net/netfilter/nf_conntrack_tuple.h:128 [inline]
- nf_ct_tuple_equal include/net/netfilter/nf_conntrack_tuple.h:143 [inline]
- nf_nat_setup_info+0x3adb/0x4750 net/netfilter/nf_nat_core.c:607
- __nf_nat_alloc_null_binding net/netfilter/nf_nat_core.c:664 [inline]
- nf_nat_alloc_null_binding net/netfilter/nf_nat_core.c:670 [inline]
- nf_nat_inet_fn+0x12bc/0x1720 net/netfilter/nf_nat_core.c:759
- nf_nat_ipv6_fn+0x4dd/0x580 net/netfilter/nf_nat_proto.c:937
- nf_nat_ipv6_local_fn+0xa7/0x830 net/netfilter/nf_nat_proto.c:1001
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_slow+0x184/0x480 net/netfilter/core.c:619
- nf_hook include/linux/netfilter.h:262 [inline]
- NF_HOOK include/linux/netfilter.h:305 [inline]
- ip6_xmit+0x27b6/0x2880 net/ipv6/ip6_output.c:324
- sctp_v6_xmit+0xd84/0x19b0 net/sctp/ipv6.c:250
- sctp_packet_transmit+0x438f/0x45a0 net/sctp/output.c:652
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Uninit was stored to memory at:
- nf_ct_invert_tuple+0x5e8/0x620 net/netfilter/nf_conntrack_core.c:464
- nf_nat_setup_info+0x30d/0x4750 net/netfilter/nf_nat_core.c:602
- __nf_nat_alloc_null_binding net/netfilter/nf_nat_core.c:664 [inline]
- nf_nat_alloc_null_binding net/netfilter/nf_nat_core.c:670 [inline]
- nf_nat_inet_fn+0x12bc/0x1720 net/netfilter/nf_nat_core.c:759
- nf_nat_ipv6_fn+0x4dd/0x580 net/netfilter/nf_nat_proto.c:937
- nf_nat_ipv6_local_fn+0xa7/0x830 net/netfilter/nf_nat_proto.c:1001
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_slow+0x184/0x480 net/netfilter/core.c:619
- nf_hook include/linux/netfilter.h:262 [inline]
- NF_HOOK include/linux/netfilter.h:305 [inline]
- ip6_xmit+0x27b6/0x2880 net/ipv6/ip6_output.c:324
- sctp_v6_xmit+0xd84/0x19b0 net/sctp/ipv6.c:250
- sctp_packet_transmit+0x438f/0x45a0 net/sctp/output.c:652
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Uninit was stored to memory at:
- __nf_conntrack_alloc+0x2de/0x7f0 net/netfilter/nf_conntrack_core.c:1559
- init_conntrack+0x29b/0x2530 net/netfilter/nf_conntrack_core.c:1635
- resolve_normal_ct net/netfilter/nf_conntrack_core.c:1746 [inline]
- nf_conntrack_in+0x1b4b/0x2fe0 net/netfilter/nf_conntrack_core.c:1901
- ipv6_conntrack_local+0x68/0x80 net/netfilter/nf_conntrack_proto.c:414
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_slow+0x184/0x480 net/netfilter/core.c:619
- nf_hook include/linux/netfilter.h:262 [inline]
- NF_HOOK include/linux/netfilter.h:305 [inline]
- ip6_xmit+0x27b6/0x2880 net/ipv6/ip6_output.c:324
- sctp_v6_xmit+0xd84/0x19b0 net/sctp/ipv6.c:250
- sctp_packet_transmit+0x438f/0x45a0 net/sctp/output.c:652
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Uninit was stored to memory at:
- nf_ct_invert_tuple+0x614/0x620 net/netfilter/nf_conntrack_core.c:465
- init_conntrack+0x11f/0x2530 net/netfilter/nf_conntrack_core.c:1629
- resolve_normal_ct net/netfilter/nf_conntrack_core.c:1746 [inline]
- nf_conntrack_in+0x1b4b/0x2fe0 net/netfilter/nf_conntrack_core.c:1901
- ipv6_conntrack_local+0x68/0x80 net/netfilter/nf_conntrack_proto.c:414
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_slow+0x184/0x480 net/netfilter/core.c:619
- nf_hook include/linux/netfilter.h:262 [inline]
- NF_HOOK include/linux/netfilter.h:305 [inline]
- ip6_xmit+0x27b6/0x2880 net/ipv6/ip6_output.c:324
- sctp_v6_xmit+0xd84/0x19b0 net/sctp/ipv6.c:250
- sctp_packet_transmit+0x438f/0x45a0 net/sctp/output.c:652
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Uninit was stored to memory at:
- nf_ct_get_tuple_ports net/netfilter/nf_conntrack_core.c:255 [inline]
- nf_ct_get_tuple+0x1500/0x1730 net/netfilter/nf_conntrack_core.c:327
- resolve_normal_ct net/netfilter/nf_conntrack_core.c:1722 [inline]
- nf_conntrack_in+0x74d/0x2fe0 net/netfilter/nf_conntrack_core.c:1901
- ipv6_conntrack_local+0x68/0x80 net/netfilter/nf_conntrack_proto.c:414
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_slow+0x184/0x480 net/netfilter/core.c:619
- nf_hook include/linux/netfilter.h:262 [inline]
- NF_HOOK include/linux/netfilter.h:305 [inline]
- ip6_xmit+0x27b6/0x2880 net/ipv6/ip6_output.c:324
- sctp_v6_xmit+0xd84/0x19b0 net/sctp/ipv6.c:250
- sctp_packet_transmit+0x438f/0x45a0 net/sctp/output.c:652
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Uninit was stored to memory at:
- pskb_expand_head+0x3c9/0x1ca0 net/core/skbuff.c:1710
- skb_expand_head+0x561/0x970 net/core/skbuff.c:1828
- ip6_xmit+0xb97/0x2880 net/ipv6/ip6_output.c:266
- sctp_v6_xmit+0xd84/0x19b0 net/sctp/ipv6.c:250
- sctp_packet_transmit+0x438f/0x45a0 net/sctp/output.c:652
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1126 [inline]
- sctp_packet_transmit+0x528/0x45a0 net/sctp/output.c:597
- sctp_packet_singleton+0x3d8/0x580 net/sctp/outqueue.c:777
- sctp_outq_flush_ctrl net/sctp/outqueue.c:908 [inline]
- sctp_outq_flush+0x667/0x5eb0 net/sctp/outqueue.c:1202
- sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
- sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
- sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
- sctp_primitive_ASSOCIATE+0x172/0x1a0 net/sctp/primitive.c:73
- sctp_sendmsg_to_asoc+0x143f/0x1f90 net/sctp/socket.c:1837
- sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
- inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2492
- __compat_sys_sendmsg net/compat.c:347 [inline]
- __do_compat_sys_sendmsg net/compat.c:354 [inline]
- __se_compat_sys_sendmsg net/compat.c:351 [inline]
- __ia32_compat_sys_sendmsg+0xed/0x130 net/compat.c:351
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-CPU: 0 PID: 21099 Comm: syz-executor.2 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
+It's relevant for all currently supported stable releases: 4.4.y, 4.9.y, 
+4.14.y, 4.19.y, 5.4.y, 5.10.y, 5.15.y . I missed adding the tag "Cc: 
+stable@viger.kernel.org #4.4+". Should I send the patch again?
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

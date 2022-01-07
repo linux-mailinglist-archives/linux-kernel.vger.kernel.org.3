@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51EF48708F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070E748708B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345474AbiAGChY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:37:24 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:59068 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344794AbiAGChX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:37:23 -0500
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1n5f78-0006EM-9F; Fri, 07 Jan 2022 13:36:23 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 07 Jan 2022 13:36:21 +1100
-Date:   Fri, 7 Jan 2022 13:36:21 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
-        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "qiangqing.zhang@nxp.com" <qiangqing.zhang@nxp.com>,
-        "peng.fan@nxp.com" <peng.fan@nxp.com>,
-        "alice.guo@nxp.com" <alice.guo@nxp.com>,
-        "aford173@gmail.com" <aford173@gmail.com>,
-        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "shengjiu.wang@nxp.com" <shengjiu.wang@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "ping.bai@nxp.com" <ping.bai@nxp.com>,
-        "daniel.baluta@nxp.com" <daniel.baluta@nxp.com>,
-        "jun.li@nxp.com" <jun.li@nxp.com>, "marex@denx.de" <marex@denx.de>,
-        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
-        "martink@posteo.de" <martink@posteo.de>,
-        "leonard.crestez@nxp.com" <leonard.crestez@nxp.com>,
-        "hongxing.zhu@nxp.com" <hongxing.zhu@nxp.com>,
-        "agx@sigxcpu.org" <agx@sigxcpu.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
-Subject: Re: [PATCH v3 0/2] CAAM Driver: re-factor and set proper JR status
-Message-ID: <YdenJaDAVmJB2AGd@gondor.apana.org.au>
-References: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
- <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
- <AM6PR06MB469129E72ED6FBE0B33C693DA64C9@AM6PR06MB4691.eurprd06.prod.outlook.com>
+        id S1345462AbiAGCgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:36:52 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:33129 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344793AbiAGCgv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 21:36:51 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V18E5FX_1641523008;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0V18E5FX_1641523008)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 07 Jan 2022 10:36:49 +0800
+Subject: Re: [PATCH] virtio-pci: fix memory leak of vp_dev
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220106083123.4064853-1-xianting.tian@linux.alibaba.com>
+ <CACGkMEuW5po+v-fFPNH6wtVVXD84Bx0UWhe86sHFYXQM39OKRA@mail.gmail.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <9589357f-8d23-5a48-c5f6-ba17eb79cf57@linux.alibaba.com>
+Date:   Fri, 7 Jan 2022 10:36:48 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR06MB469129E72ED6FBE0B33C693DA64C9@AM6PR06MB4691.eurprd06.prod.outlook.com>
+In-Reply-To: <CACGkMEuW5po+v-fFPNH6wtVVXD84Bx0UWhe86sHFYXQM39OKRA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 10:56:12AM +0000, ZHIZHIKIN Andrey wrote:
-> Hello Herbert,
-> 
-> Gentle ping on this V3. I see that in Patchwork this series state is set to "Deferred".
-> 
-> Is there anything missing here to proceed further?
+Thanks, I checked this before your reply, it is not a bug,
 
-Please get the caam driver maintainer to review and ack the
-patch series.
+Sorry for the inconvenience caused.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+在 2022/1/7 上午10:34, Jason Wang 写道:
+> On Thu, Jan 6, 2022 at 4:31 PM Xianting Tian
+> <xianting.tian@linux.alibaba.com> wrote:
+>> In virtio_pci_probe(), vp_dev will not be freed if it goes to
+>> "err_register" branch. fix it
+>>
+>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> So we had this:
+>
+> commit 33635bd976fb4c3ccf0cfbb81a8d29bb87760607
+> Author: weiping zhang <zhangweiping@didichuxing.com>
+> Date:   Thu Dec 21 20:40:24 2017 +0800
+>
+>      virtio_pci: don't kfree device on register failure
+>
+>      As mentioned at drivers/base/core.c:
+>      /*
+>       * NOTE: _Never_ directly free @dev after calling this function, even
+>       * if it returned an error! Always use put_device() to give up the
+>       * reference initialized in this function instead.
+>       */
+>      so we don't free vp_dev until vp_dev->vdev.dev.release be called.
+>
+>      Signed-off-by: weiping zhang <zhangweiping@didichuxing.com>
+>      Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+>      Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>
+> Any reason that the above fix is wrong?
+>
+> Thanks
+>
+>> ---
+>>   drivers/virtio/virtio_pci_common.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+>> index fdbde1db5..48b5ac15e 100644
+>> --- a/drivers/virtio/virtio_pci_common.c
+>> +++ b/drivers/virtio/virtio_pci_common.c
+>> @@ -602,8 +602,7 @@ static int virtio_pci_probe(struct pci_dev *pci_dev,
+>>   err_enable_device:
+>>          if (reg_dev)
+>>                  put_device(&vp_dev->vdev.dev);
+>> -       else
+>> -               kfree(vp_dev);
+>> +       kfree(vp_dev);
+>>          return rc;
+>>   }
+>>
+>> --
+>> 2.17.1
+>>

@@ -2,130 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC7F4873EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79E14873F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345469AbiAGINF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:13:05 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31145 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiAGINE (ORCPT
+        id S1345550AbiAGINT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345560AbiAGINR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:13:04 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JVbW4654hzbbc8;
-        Fri,  7 Jan 2022 16:10:24 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 16:13:01 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 16:13:00 +0800
-Subject: Re: [PATCH v18 02/17] x86/setup: Move xen_pv_domain() check and
- insert_resource() to setup_arch()
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>
-References: <20211222130820.1754-1-thunder.leizhen@huawei.com>
- <20211222130820.1754-3-thunder.leizhen@huawei.com> <YcSxLodOnxXHx0sV@zn.tnic>
- <d6226aa2-f1f2-24cc-c9d2-9762bd615686@huawei.com>
- <5d8aed79-b20f-2575-3c3f-8945d8cbac3f@huawei.com>
-Message-ID: <7e7c8d93-e745-2bfd-b93d-aecb3b70bf33@huawei.com>
-Date:   Fri, 7 Jan 2022 16:13:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 7 Jan 2022 03:13:17 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE00C0611FD
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 00:13:14 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id v6so9516538wra.8
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 00:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UqdRj1EmconcuS8b1F/rCY0dKZJIq6ZhPGwfLyW4b+Y=;
+        b=WPfeUfOnlhSOfGOHgN5PeWWc/KjXHsBD3ggQsMA5SngsdPvUDeylLDbubRb9YbKDGk
+         QO0UWkkK70YiTrGqaG5onQYmQ1E+gkQ2JD2tubl/p4bPAWJjDsDMEciF2w5fbAXKeEmv
+         fZw6HeDHavCBcle6tFSb7rCSNIc8k0pTuyhYM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UqdRj1EmconcuS8b1F/rCY0dKZJIq6ZhPGwfLyW4b+Y=;
+        b=GgYB8Qyu9JpFFgQ/LLFuFPmlzPyL51U3I082KHivHBrPT9r3NOFNYewS3N6ttiADYc
+         wlQQKBI7U1AKYVAIS48vOHxviqbJ3aekucdCY/r7vRx1Xq3mdxX2lAXnRm2FVcTOaGRu
+         m1y/ku8XE4tJoXIlJ+X/+Ooyl1osO5Arsqejj57gSYUbst44a8K+9UtHpUhQ659mXqzf
+         mcSTsqqluP4IrH//+fhTwLVbiYz1m2D8ilKkcZBK+WwvAsST47cQFbF/li/mGCcl0Dwi
+         bV/qjMZ4ky50/h9pTsGFgQz6iTe1HEn1C2m0TpUZqPsuubsys0yOJ/BowRlsNJwoCk8S
+         xJ/g==
+X-Gm-Message-State: AOAM530uCaF8ZkkPlka+bAZpQBtJixcp7c8bytqX++JrPHLQykdnlZ3I
+        Fa5DY1GlfdapMdaWW+WSogtjIkR9MRfFGQ==
+X-Google-Smtp-Source: ABdhPJyJ/bwB16MM5ozIXq1cXUNN7h5qKXxouxf4Co5jB+HxWmwlFvBPg/aC1WWQZKL0O8FlOg86Lg==
+X-Received: by 2002:a05:6000:382:: with SMTP id u2mr55089116wrf.331.1641543193020;
+        Fri, 07 Jan 2022 00:13:13 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (mob-5-90-38-18.net.vodafone.it. [5.90.38.18])
+        by smtp.gmail.com with ESMTPSA id w17sm4280633wmc.14.2022.01.07.00.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 00:13:12 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Coiby Xu <coiby.xu@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        M Chetan Kumar <m.chetan.kumar@intel.com>,
+        linux-doc@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC PATCH 0/2] Add the first documentation for a CAN driver
+Date:   Fri,  7 Jan 2022 09:13:04 +0100
+Message-Id: <20220107081306.3681899-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <5d8aed79-b20f-2575-3c3f-8945d8cbac3f@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The series was born from the need to document the enabling at runtime
+reception of RTR frames for the Flexcan CAN controller.
+For more details see https://lore.kernel.org/all/20220106105415.pdmrdgnx6p2tyff6@pengutronix.de/
 
 
-On 2021/12/25 9:53, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2021/12/24 14:36, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2021/12/24 1:26, Borislav Petkov wrote:
->>> On Wed, Dec 22, 2021 at 09:08:05PM +0800, Zhen Lei wrote:
->>>> From: Chen Zhou <chenzhou10@huawei.com>
->>>>
->>>> We will make the functions reserve_crashkernel() as generic, the
->>>> xen_pv_domain() check in reserve_crashkernel() is relevant only to
->>>> x86,
->>>
->>> Why is that so? Is Xen-PV x86-only?
->>>
->>>> the same as insert_resource() in reserve_crashkernel[_low]().
->>>
->>> Why?
->>>
->>> Looking at
->>>
->>>   0212f9159694 ("x86: Add Crash kernel low reservation")
->>>
->>> it *surprisingly* explains why that resources thing is being added:
->>>
->>>     We need to add another range in /proc/iomem like "Crash kernel low",
->>>     so kexec-tools could find that info and append to kdump kernel
->>>     command line.
->>>
->>> Then,
->>>
->>>   157752d84f5d ("kexec: use Crash kernel for Crash kernel low")
->>>
->>> renamed it because, as it states, kexec-tools was taught to handle
->>> multiple resources of the same name.
->>>
->>> So why does kexec-tools on arm *not* need those iomem resources? How
->>> does it parse the ranges there? Questions over questions...
+Dario Binacchi (2):
+  docs: networking: device drivers: add can sub-folder
+  docs: networking: device drivers: can: add flexcan
 
-Hi Borislav:
-  The reason why insert_resource() cannot be used in reserve_crashkernel[_low]()
-on arm64 is clear. The parent resource node of crashk[_low]_res is added by
-request_resource() in request_standard_resources(), so that it will be conflicted.
-All request_resource() in request_standard_resources() should be changed to
-insert_resource(), to make insert_resource() can be used in reserve_crashkernel[_low]().
-
-  I found commit e25e6e7593ca ("kdump, x86: Process multiple Crash kernel in /proc/iomem")
-in kexec-tools. I'm trying to port it to arm64, or make it generic.
-
-  Thanks.
-
-> 
-> It's a good question worth figuring out. I'm going to dig into this.
-> I admire your rigorous style and sharp vision.
-> 
-
+ .../device_drivers/can/freescale/flexcan.rst  | 25 +++++++++++++++++++
+ .../networking/device_drivers/can/index.rst   | 20 +++++++++++++++
+ .../networking/device_drivers/index.rst       |  1 +
+ 3 files changed, 46 insertions(+)
+ create mode 100644 Documentation/networking/device_drivers/can/freescale/flexcan.rst
+ create mode 100644 Documentation/networking/device_drivers/can/index.rst
 
 -- 
-Regards,
-  Zhen Lei
+2.32.0
+

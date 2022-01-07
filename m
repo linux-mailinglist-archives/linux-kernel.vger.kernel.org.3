@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A890487634
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6721D487639
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346997AbiAGLHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:07:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41552 "EHLO
+        id S1347015AbiAGLHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:07:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24151 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237725AbiAGLHf (ORCPT
+        by vger.kernel.org with ESMTP id S1346998AbiAGLHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:07:35 -0500
+        Fri, 7 Jan 2022 06:07:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641553654;
+        s=mimecast20190719; t=1641553655;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+kcDM4DA7iF+2H6LBkZldn3r6QWbKOMJ1NrH2QklOIQ=;
-        b=Mx4FXWdPZ4TiluYsosNBJOJLLQ4rwf2cYYAcc1CDWvqBFdOPDNf8SEqTHnaHI4GJdZzv/c
-        sfKjCgXNW1zhiqUQd+NwCh9dQqvRAQyKd9XoLGpMd60JqphmLfJpFJKtbqDJgT/E0VSyn4
-        idjop+OcctuK3JsymcAurqIH3nDyNwY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=58zbRN1g/CU6F0V6Z7/ygK3GmWeTFgdq63VOW5AeL6U=;
+        b=VNpYDy8ZFcOe2bOKxaFR8Tq3ifDvbCCdn9Gv8OuuLUufJr9RZ3YBO8klNilfXD9z3RZZje
+        3D1tbbQOjxGM4+dvZscGnxi15S/Na3qfQmI/1ciU3lYAX+LDQCMHEYkw4uYZHaHjjY0/bL
+        Ml/kXp8aNVct57NbJ3tKIuFCzA4sR4k=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-1vkUShSeNeu6MRwkHKN98g-1; Fri, 07 Jan 2022 06:07:33 -0500
-X-MC-Unique: 1vkUShSeNeu6MRwkHKN98g-1
-Received: by mail-wr1-f70.google.com with SMTP id i23-20020adfaad7000000b001a6320b66b9so266155wrc.15
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 03:07:33 -0800 (PST)
+ us-mta-357-l8t1e2DKMUeccoBLdStHUA-1; Fri, 07 Jan 2022 06:07:34 -0500
+X-MC-Unique: l8t1e2DKMUeccoBLdStHUA-1
+Received: by mail-wm1-f72.google.com with SMTP id d4-20020a05600c34c400b00345d5d47d54so1353143wmq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 03:07:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+kcDM4DA7iF+2H6LBkZldn3r6QWbKOMJ1NrH2QklOIQ=;
-        b=FiNiK8WTKXuNEysYhaSfkoDrpQBvhIKrgxHKankdHhKk2uKKEpmqSGvgB/lhP/dKdV
-         6R3mF+1TVNK2T+T/MnnmIP7gfcaW3OUP6UJqJRKHoLKkMag/SIIA+uEgoHJSwDbEtMhX
-         NF/pMCj3J2LiE6NgxMHAheTJXi1XzlvJ8esqprnESvvnC2nxy+cl82/rXZDb/UGJTEiw
-         js8ZbCPqtKyq/C1A8iN0+DRzdSJG453SIYINfzbSJHSUz0CibOPltehBRf5R27OfN/Gf
-         xVwkKCD9UNJhwX+ytR1+3fDIOtJk/vFquyrMU8Qh4OCbMLuCAFWnGVnA5r1n33SBXunF
-         TTbA==
-X-Gm-Message-State: AOAM531+w95u9VKtRM1H21J8qcIt/yDDf2UbO+Muqn9oUJtxbZT1ypRt
-        +wQKs0J8+zKT+yznt0vYbUlXIu9SZYYahbYb0aKR6VAwgRWob4Ove0NV9DRHMEApGcE0pdRy1s1
-        tbHc33MkRMSOj0rTvdY3x05Ws4B3thQ4BImGBP1eJ6wl+fEjTruVpVdINnghb29jnjGN7BS+sCe
-        c=
-X-Received: by 2002:a05:6000:1449:: with SMTP id v9mr54376485wrx.49.1641553652119;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=58zbRN1g/CU6F0V6Z7/ygK3GmWeTFgdq63VOW5AeL6U=;
+        b=bhR5pffWIO0/sOE6gok/CtfzmlFVSP1K6zA0DpVdksBI4afiq/2elYw8rppvBy3nhN
+         z++EJZQSrauBVQIKICvLxD2P0aQdyMB+5qfUvYYcBOyuOszYhxkATpAENUJGlrGtJckR
+         uv1A4jYEcP9yo3ZBw6CbT9elg8ct1XWUigSOY+yFHpEnVHQ8N9zBLsDCnKM+9QT1UeKE
+         xYDCfXx7HGL5e0R3oVuwPvlpZ0bvoY7ycI6AUFmAgvclldXGj3YOeWn8c5gv58G/aUhx
+         omTIEPqBDhtstNCtI7tuh1NvTvKOUFWPZFy3/gbaAOkcAJGJFxeOvwduGsiOAq9CapaQ
+         7bsA==
+X-Gm-Message-State: AOAM533gJQvG5Y96hpo/zc9YSSg6bv0lnhCTieinFbXVCYZ+wU3Cc9Qz
+        8vrAKXozPYFmRaFcL47JhoOT8sAk+5X2fg7y1mJ4aY9KwKLLyYBL9UlA5RfQo9gMQKQ9+HAeVWg
+        e726BxoQVJhawyLsjgyPTLq5v91q+bqdq/g7qSj3OaMB/gcsNXJsubZXuwAuDbVcGlra3mHJ2vI
+        g=
+X-Received: by 2002:a05:6000:184f:: with SMTP id c15mr55611171wri.632.1641553653106;
+        Fri, 07 Jan 2022 03:07:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw8FiBkwupY26l2VOQFCBjlQX2PiwGOdMzcc0tazi6OhYPBwayO3s/sLvIG8bnzF/tTNPF5NQ==
+X-Received: by 2002:a05:6000:184f:: with SMTP id c15mr55611147wri.632.1641553652846;
         Fri, 07 Jan 2022 03:07:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwtOPD/6pEBen2ILWzQHaAQuxOtuwbQ3rz4DnLfmgOAOVsFRE5K9lxV3eeCKmjU9fywMsfmMw==
-X-Received: by 2002:a05:6000:1449:: with SMTP id v9mr54376465wrx.49.1641553651914;
-        Fri, 07 Jan 2022 03:07:31 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r9sm9337273wmq.18.2022.01.07.03.07.31
+        by smtp.gmail.com with ESMTPSA id r9sm9337273wmq.18.2022.01.07.03.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 03:07:31 -0800 (PST)
+        Fri, 07 Jan 2022 03:07:32 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kris Karas <bugs-a21@moonlit-rail.com>,
         Javier Martinez Canillas <javierm@redhat.com>,
-        Borislav Petkov <bp@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH 0/2] video: A couple of fixes for the vga16fb driver
-Date:   Fri,  7 Jan 2022 12:07:21 +0100
-Message-Id: <20220107110723.323276-1-javierm@redhat.com>
+Subject: [PATCH 1/2] video: vga16fb: Fix logic that checks for the display standard
+Date:   Fri,  7 Jan 2022 12:07:22 +0100
+Message-Id: <20220107110723.323276-2-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220107110723.323276-1-javierm@redhat.com>
+References: <20220107110723.323276-1-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series contains two fixes for the vga16fb driver. I looked at
-the driver due a regression reported [0], caused by commit d391c5827107
-("drivers/firmware: move x86 Generic System Framebuffers support").
+The vga16fb framebuffer driver supports both Enhanced Graphics Adapter
+(EGA) and Video Graphics Array (VGA) 16 color graphic cards.
 
-The mentioned commit didn't change any logic but just moved the platform
-device registration that matches the vesafb and efifb drivers to happen
-later. And this caused the vga16fb driver to be probed even in machines
-that don't have an EGA or VGA video adapter.
+But the logic to check whether the EGA or VGA standard are used is not
+correct. It just checks if screen_info.orig_video_isVGA is set, but it
+should check if is set to VIDEO_TYPE_VGAC instead.
 
-Patch #1 is fixing the wrong check to determine if either EGA or VGA is
-used and patch #2 adds a check to the driver to only be loaded for EGA
-and VGA 16 color graphic cards.
+This means that it assumes to be VGA even if is set to VIDEO_TYPE_EGAC.
 
-[0]: https://bugzilla.kernel.org/show_bug.cgi?id=215001
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-Best regards,
-Javier
+ drivers/video/fbdev/vga16fb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Javier Martinez Canillas (2):
-  video: vga16fb: Fix logic that checks for the display standard
-  video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
-
- drivers/video/fbdev/vga16fb.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/video/fbdev/vga16fb.c b/drivers/video/fbdev/vga16fb.c
+index e2757ff1c23d..3347c9b6a332 100644
+--- a/drivers/video/fbdev/vga16fb.c
++++ b/drivers/video/fbdev/vga16fb.c
+@@ -1332,7 +1332,7 @@ static int vga16fb_probe(struct platform_device *dev)
+ 	printk(KERN_INFO "vga16fb: mapped to 0x%p\n", info->screen_base);
+ 	par = info->par;
+ 
+-	par->isVGA = screen_info.orig_video_isVGA;
++	par->isVGA = screen_info.orig_video_isVGA == VIDEO_TYPE_VGAC;
+ 	par->palette_blanked = 0;
+ 	par->vesa_blanked = 0;
+ 
 -- 
 2.33.1
 

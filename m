@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6037487C3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B80A487C3F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348826AbiAGSdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:33:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43206 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240556AbiAGSda (ORCPT
+        id S229763AbiAGSfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbiAGSfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:33:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD53D60BD3;
-        Fri,  7 Jan 2022 18:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370CAC36AE0;
-        Fri,  7 Jan 2022 18:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641580409;
-        bh=/O1V8c1GBTvHNkBLACc6ZOiDCdYgbkOd1VzcLgA42jQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=M0Y7keVE7rrIVFdBNO2atcUnhA56BhFQhTy1L6AXowSSUPb//mMnH+ghuIu4c+CIx
-         6k1rIi6UQXJrePHrjoTP3MLNOnTYDSjqB/hFxeMY4Udoqwp/XR2JXDnLCY2hjSUBVb
-         NWrJ3WqCpMws10Xc8E4w5B2Y8vqEHKQfnS6WvMlzEP7TIXR+0XeFBW8pC+/aJ45O8w
-         BMplBOHZuxZKI5Y1YuF8gZYj3TYx6yxT1tvktM2GWiKOhMxIk7khsKD4td8WjgnSwF
-         pNmdl10WxB9p4LY7d6rQiAUBqYdf2zBOWCe7I1UV5/yH8uCchTmkvWN41cJw2eJmQC
-         vchUXo9JjGqPQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] clk: visconti: Remove pointless NULL check in visconti_pll_add_lookup()
-Date:   Fri,  7 Jan 2022 11:33:03 -0700
-Message-Id: <20220107183303.2337676-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 7 Jan 2022 13:35:25 -0500
+Received: from forward103j.mail.yandex.net (forward103j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63376C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 10:35:25 -0800 (PST)
+Received: from myt5-c81fdca3da50.qloud-c.yandex.net (myt5-c81fdca3da50.qloud-c.yandex.net [IPv6:2a02:6b8:c12:19b:0:640:c81f:dca3])
+        by forward103j.mail.yandex.net (Yandex) with ESMTP id 2EC96101369;
+        Fri,  7 Jan 2022 21:35:15 +0300 (MSK)
+Received: from myt6-efff10c3476a.qloud-c.yandex.net (myt6-efff10c3476a.qloud-c.yandex.net [2a02:6b8:c12:13a3:0:640:efff:10c3])
+        by myt5-c81fdca3da50.qloud-c.yandex.net (mxback/Yandex) with ESMTP id 30vQDQHSJU-ZEfOHudj;
+        Fri, 07 Jan 2022 21:35:15 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1641580515;
+        bh=LfM4E//CgUEjI1DdLUtxQtDo6ENRzw5Pg0ou76vlGYc=;
+        h=In-Reply-To:References:Date:To:From:Subject:Message-ID;
+        b=wRHxxrAOhatPrrsmOvd3rajz+Sgy7qmskN7YJ1KunnlyhPUK4S4rhvImxbyz+ntwq
+         6RoMbKXSJ6FrvcyKVp4WAjD1Olt63HYa9HVWPUN7tAyodtrbNCkaUkGT23L/keVYID
+         H+IoD2x/TrmMakhFpN810ni/ir+ANSIyI2GB85tI=
+Authentication-Results: myt5-c81fdca3da50.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by myt6-efff10c3476a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id KEsX1LLLoA-ZDPSYMNE;
+        Fri, 07 Jan 2022 21:35:13 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+Message-ID: <2cb9b469ab16eaad35aab9461588cfe9977eb8fd.camel@yandex.ru>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in
+ adapter"
+From:   Konstantin Kharlamov <hi-angel@yandex.ru>
+To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
+        Konstantin Kharlamov <hi-angel@yandex.ru>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Date:   Fri, 07 Jan 2022 21:35:13 +0300
+In-Reply-To: <5849ab287df1b06e141d87bbffdbcd627e999578.camel@yandex.ru>
+References: <20220106122452.18719-1-wsa () kernel ! org>
+         <5849ab287df1b06e141d87bbffdbcd627e999578.camel@yandex.ru>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Fri, 2022-01-07 at 21:20 +0300, Konstantin Kharlamov wrote:
+> Thank you! I tested it (had to resolve a small conflict), works for me. So, in
+> case you need it, the patch is
+> 
+>         Tested-by: Konstantin Kharlamov <hi-angel@yandex.ru>
+> 
+> By the way, shouldn't the patch include a field 
+> 
+>         Cc: <stable@vger.kernel.org> # 5.14+
+> 
+> ?
+> 
+> P.S.: sorry, for all mangled up CC fields. For some reason I didn't get your
+> email, I found this patch in the archive. And the mbox that archive provides
+> breaks all TO and CC fields, so I manually restored addresses that I have.
 
-drivers/clk/visconti/pll.c:292:20: warning: address of array 'ctx->clk_data.hws' will always evaluate to 'true' [-Wpointer-bool-conversion]
-        if (ctx->clk_data.hws && id)
-            ~~~~~~~~~~~~~~^~~ ~~
-1 warning generated.
-
-This array cannot be NULL if ctx is not NULL, which is allocated in
-visconti_init_pll(), so just remove the check, which matches other clk
-drivers.
-
-Fixes: b4cbe606dc36 ("clk: visconti: Add support common clock driver and reset driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1564
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/clk/visconti/pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/visconti/pll.c b/drivers/clk/visconti/pll.c
-index 3b6e88bb73d5..a2398bc6c6e4 100644
---- a/drivers/clk/visconti/pll.c
-+++ b/drivers/clk/visconti/pll.c
-@@ -289,7 +289,7 @@ static void visconti_pll_add_lookup(struct visconti_pll_provider *ctx,
- 				    struct clk_hw *hw_clk,
- 				    unsigned int id)
- {
--	if (ctx->clk_data.hws && id)
-+	if (id)
- 		ctx->clk_data.hws[id] = hw_clk;
- }
- 
-
-base-commit: 70faf946ad975c64efb2eb809f9139f304a494b0
--- 
-2.34.1
-
+Restored the fields now, sorry, I found the mail, it was moved to another folder by a filter

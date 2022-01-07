@@ -2,61 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39511487194
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 04:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709B6487198
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 05:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345993AbiAGD7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 22:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345981AbiAGD7r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 22:59:47 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5612BC061245;
-        Thu,  6 Jan 2022 19:59:47 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n5gPp-000GSv-9P; Fri, 07 Jan 2022 03:59:45 +0000
-Date:   Fri, 7 Jan 2022 03:59:45 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH 09/10] kthread: Ensure struct kthread is present for all
- kthreads
-Message-ID: <Yde6sQqp9Rx0Zm5I@zeniv-ca.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-9-ebiederm@xmission.com>
+        id S1345981AbiAGECQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 23:02:16 -0500
+Received: from marcansoft.com ([212.63.210.85]:55538 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229694AbiAGECP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 23:02:15 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id BFEE34212E;
+        Fri,  7 Jan 2022 04:02:03 +0000 (UTC)
+Message-ID: <25eaec8a-337e-78b7-1bc3-7224a0218501@marcan.st>
+Date:   Fri, 7 Jan 2022 13:02:01 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208202532.16409-9-ebiederm@xmission.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 06/35] brcmfmac: firmware: Support passing in multiple
+ board_types
+Content-Language: en-US
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-7-marcan@marcan.st>
+ <911f7e95-7d6a-1c7f-c8de-0d4e0c7b7238@broadcom.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <911f7e95-7d6a-1c7f-c8de-0d4e0c7b7238@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:25:31PM -0600, Eric W. Biederman wrote:
-> Today the rules are a bit iffy and arbitrary about which kernel
-> threads have struct kthread present.  Both idle threads and thread
-> started with create_kthread want struct kthread present so that is
-> effectively all kernel threads.  Make the rule that if PF_KTHREAD
-> and the task is running then struct kthread is present.
+On 2022/01/06 21:16, Arend van Spriel wrote:
+> On 1/4/2022 8:26 AM, Hector Martin wrote:
+>> In order to make use of the multiple alt_path functionality, change
+>> board_type to an array. Bus drivers can pass in a NULL-terminated list
+>> of board type strings to try for the firmware fetch.
 > 
-> This will allow the kernel thread code to using tsk->exit_code
-> with different semantics from ordinary processes.
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+>> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>> ---
+>>   .../broadcom/brcm80211/brcmfmac/firmware.c    | 35 ++++++++++++-------
+>>   .../broadcom/brcm80211/brcmfmac/firmware.h    |  2 +-
+>>   .../broadcom/brcm80211/brcmfmac/pcie.c        |  4 ++-
+>>   .../broadcom/brcm80211/brcmfmac/sdio.c        |  2 +-
+>>   4 files changed, 27 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+>> index 7570dbf22cdd..054ea3ed133e 100644
+>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+>> @@ -594,28 +594,39 @@ static int brcmf_fw_complete_request(const struct firmware *fw,
+>>   	return (cur->flags & BRCMF_FW_REQF_OPTIONAL) ? 0 : ret;
+>>   }
+>>   
+>> -static int brcm_alt_fw_paths(const char *path, const char *board_type,
+>> +static int brcm_alt_fw_paths(const char *path, struct brcmf_fw *fwctx,
+>>   			     const char *alt_paths[BRCMF_FW_MAX_ALT_PATHS])
+>>   {
+>> +	const char **board_types = fwctx->req->board_types;
+>> +	unsigned int i;
+>>   	char alt_path[BRCMF_FW_NAME_LEN];
+>>   	const char *suffix;
+> 
+> [...]
+> 
+>> +	for (i = 0; i < BRCMF_FW_MAX_ALT_PATHS; i++) {
+>> +		if (!board_types[i])
+>> +		    break;
+>>   
+>> -	strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
+>> -	strlcat(alt_path, board_type, BRCMF_FW_NAME_LEN);
+>> -	strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
+>> +		/* strip extension at the end */
+>> +		strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
+>> +		alt_path[suffix - path] = 0;
+>>   
+>> -	alt_paths[0] = kstrdup(alt_path, GFP_KERNEL);
+>> +		strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
+>> +		strlcat(alt_path, board_types[i], BRCMF_FW_NAME_LEN);
+>> +		strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
+>> +
+>> +		alt_paths[i] = kstrdup(alt_path, GFP_KERNEL);
+>> +		brcmf_dbg(TRACE, "FW alt path: %s\n", alt_paths[i]);
+> 
+> Could use alt_path in the debug print thus avoiding additional array 
+> access (working hard to find those nits to pick ;-) ).
+> 
 
-Getting rid of ->exit_code abuse is independent from this.
-I'm not saying that this change is a bad idea, but it's an
-independent thing.  Simply turn these two failure exits
-into do_exit(0) in 06/10 and that's it.  Then this one
-would get rid of if (!self) and the second of those two
-calls, but it won't be nailed to that point of queue.
+So you're saying my code is so good you have to resort to nits on this
+level to make it clear you read it, right? ;-)
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

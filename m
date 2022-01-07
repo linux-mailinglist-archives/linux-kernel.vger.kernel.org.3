@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05994486F55
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C992486F57
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 02:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344970AbiAGBAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 20:00:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47148 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbiAGBAV (ORCPT
+        id S1344997AbiAGBAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 20:00:43 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:33739 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236544AbiAGBAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 20:00:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A17961E9B;
-        Fri,  7 Jan 2022 01:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50683C36AE3;
-        Fri,  7 Jan 2022 01:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641517220;
-        bh=dWaphkxeosDnzOLIsXfGqQdCs0GB28cQL553hwjSiig=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ThklsKuo/uGCPpetV9gMpmKJrCNmeREMHr/2WI1G985/9PkmZSb0RduCS026APTmQ
-         dmum1ndOVGJxFIwzeIPoIoPg3HXWpmrWNALqwtzCtMnvlxQKLjV4aD0wdGClazr7HU
-         dMTFXgjr2uIL0Hcm6te3Qom1mmhMOORI2lJ1iRkNcm3AvVvQNeVjqiJZf55a1d1/Wz
-         hC+yAGRsK6mT91vVIGj3ZGR25XnJRRtKWQeWFW8z+mOzYKWUeuHH52jycGKSR182NM
-         NMQ7YJhwD3GF6VyvqSeFx4gGPip6+IQuiu8BF4hcwPsR9HhM2fupq+NthIIs90YI64
-         fnLr59fpDjF5Q==
-Date:   Thu, 6 Jan 2022 17:00:19 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Aring <alex.aring@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Nicolas Schodet <nico@ni.fr.eu.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
-Message-ID: <20220106170019.730f45e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-        <20211222155743.256280-13-miquel.raynal@bootlin.com>
-        <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
-        <Ycx0mwQcFsmVqWVH@ni.fr.eu.org>
-        <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
-        <CAB_54W6gHE1S9Q+-SVbrnAWPxBxnvf54XVTCmddtj8g-bZzMRA@mail.gmail.com>
-        <20220104191802.2323e44a@xps13>
-        <CAB_54W5quZz8rVrbdx+cotTRZZpJ4ouRDZkxeW6S1L775Si=cw@mail.gmail.com>
-        <20220105215551.1693eba4@xps13>
-        <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
+        Thu, 6 Jan 2022 20:00:43 -0500
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MD9jV-1nECKG2wcL-0097oP; Fri, 07 Jan 2022 02:00:41 +0100
+Received: by mail-wr1-f47.google.com with SMTP id r10so374715wrc.3;
+        Thu, 06 Jan 2022 17:00:41 -0800 (PST)
+X-Gm-Message-State: AOAM5335hx53U5HKfOMs7M8K3+PYufMuAtr0DC2nSITkFCuZIOAbc+T/
+        o3FOM69vDjCVNXG6i3xVgS3UPbHWGqItzuAlFsQ=
+X-Google-Smtp-Source: ABdhPJy+QxLYZAEh0tcKnUCPWH2awGby0oPIVh1+zunkAi9c20kfhXGBzIRZmpUDYW3Yto6/u5ecQOGKYn9Oed0f9pA=
+X-Received: by 2002:a5d:4651:: with SMTP id j17mr5394152wrs.219.1641517241345;
+ Thu, 06 Jan 2022 17:00:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr> <bdcc562c16d2551d6eb87baf557813330de45127.1641500561.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <bdcc562c16d2551d6eb87baf557813330de45127.1641500561.git.christophe.jaillet@wanadoo.fr>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 6 Jan 2022 20:00:38 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a1c_jOKX6EQihRY2TmjxMOkXDXDgdv4rUf_6e52+3o2Ag@mail.gmail.com>
+Message-ID: <CAK8P3a1c_jOKX6EQihRY2TmjxMOkXDXDgdv4rUf_6e52+3o2Ag@mail.gmail.com>
+Subject: Re: [PATCH 08/16] rapidio/tsi721: Remove usage of the deprecated
+ "pci-dma-compat.h" API
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alex Bounine <alex.bou9@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:b3f3bLRba7qTq2kT4lU5/vMkdzInvzsiOS8Ar7cIyd0kXMIzeyX
+ efKjS9bsSSCCOcf4J3uqygkcj8pkEXPyMRkWQ6CZS3kH0oDtPOWAylHHC+8YCy3Wvpf+TX6
+ YYM27lOVp0cpL2YRCJwh1gZgsh/v15NsmisFlM5tY57wXhizOpWYcaCcFBAz9q8v03vbCYo
+ zHLBxLhmYwO+Kng305Y+g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nfYHcHTz8G8=:hLei3higSeMShsAvGcmrmn
+ NQSKlIdE0l31lqiqvaBvJdbjQOKj0//9HUenyYvKtCj1FP9BWJ8JeWz4jg4U2Iolg8nf0609j
+ vrq46QV8CvSsTeV7D+VgPOc7rxva2O8VrEOJqCCVaHV60/YrkC9VoEP+qQ//MAbyG/X/GTU04
+ ekobFh02Nzt/OXcaVKRapLbBpMBKoEKvElA4TGOb0fPYRh7lKEjb5cV8N19+9y8ndQC8nlRIS
+ oEhJixWW0BGGLbbofYXJoPEeu45KiJuoGzeY4cUeJA/jNMacFsbBibp1fjTosKt+VYwKXiN/0
+ hqyslI7Q1+2YwdxKv6ebr3RSoC8GVLrFXydvYKoGBt/VyJ26Q9/DHK6z5hIEhcIRpEyAuHfsQ
+ /VaNEN9N4XEHtbuEsr7S+NOljHXH81/gvuWP5cIgeverFv1ZUwTPyzo7Ob2bPSQK31TvtXd8w
+ glHhQvW73lgV2DZT9om0tiGuQfJust0RJdnrxQZpEqk9a3ktQ4Zew9Fa1/8Th458vwSZ079QH
+ lksQDohOQQ3zZ17zoqWJ9DUXnqPl/uib736qDTg18UaXqsX2Mm2l2gmtVDZgM4p9xuYB1f/Mb
+ OK5N7pBeGaHLcRFmnexLFYtKdb4xHYSR9wu1zrmTsdGHfQ64O7YXBn2aWRiWNnWj0MoS4de6i
+ PKlev0mSQvse3R8r+r4p4GG35PH8z5QVzkYSxRVPwRYgwyXsWkWUHe5s1aq4+K6BzUhS5HR8U
+ gf0WluQppmSi3UocShZDh7Kg/563hdw6oeq8Zyx6BNChJJJ/hj28O+mi/WjCGPhuf+17U+Gfi
+ 5oCBcBrIAxjkFYeEZLzh9zZ5+g9OMqDlszqGbJ/GSV+nao8HbM=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 19:38:12 -0500 Alexander Aring wrote:
-> > Also, just for the record,
-> > - should I keep copying the netdev list for v2?  
-> 
-> yes, why not.
+On Thu, Jan 6, 2022 at 4:52 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> In [1], Christoph Hellwig has proposed to remove the wrappers in
+> include/linux/pci-dma-compat.h.
+>
+> Some reasons why this API should be removed have been given by Julia
+> Lawall in [2].
+>
+> A coccinelle script has been used to perform the needed transformation.
+> It can be found in [3].
+>
+> [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
+> [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
+> [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-On the question of lists copied it may make sense to CC linux-wireless@
-in case they have some precedent to share, and drop linux-kernel@.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

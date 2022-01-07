@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7482487621
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFF3487624
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 12:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346954AbiAGLDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 06:03:16 -0500
-Received: from a.mx.secunet.com ([62.96.220.36]:33280 "EHLO a.mx.secunet.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237611AbiAGLDK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 06:03:10 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 74CF8201C7;
-        Fri,  7 Jan 2022 12:03:07 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gMKdpjXO0lLp; Fri,  7 Jan 2022 12:03:06 +0100 (CET)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id EF1C720185;
-        Fri,  7 Jan 2022 12:03:06 +0100 (CET)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id E922180004A;
-        Fri,  7 Jan 2022 12:03:06 +0100 (CET)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 7 Jan 2022 12:03:06 +0100
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 7 Jan
- 2022 12:03:06 +0100
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 5FABD318057A; Fri,  7 Jan 2022 12:03:06 +0100 (CET)
-Date:   Fri, 7 Jan 2022 12:03:06 +0100
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Saeed Mahameed <saeed@kernel.org>
-CC:     Raed Salem <raeds@nvidia.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <huyn@nvidia.com>,
-        <saeedm@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 net] net/xfrm: IPsec tunnel mode fix inner_ipproto
- setting in sec_path
-Message-ID: <20220107110306.GT3272477@gauss3.secunet.de>
-References: <20220103111929.11563-1-raeds@nvidia.com>
- <20220106093223.GA2638190@gauss3.secunet.de>
- <20220107004726.unyuuu2qki4gskxv@sx1>
+        id S1346958AbiAGLER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 06:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236589AbiAGLEQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 06:04:16 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF213C061245
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 03:04:15 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id k18so10315135wrg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 03:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DYdVfhrze3PmGoBWLbqEClWHtyMjN7/HGWigZUPvV3o=;
+        b=BtLrZRY5x7D9+1KKbopGNR0c8VrIy+vWl9DZ8XWSAB8IjTaa5yKWJPgg5N2jJN6E0c
+         kv6W68xgY3fSeLwqiHHlKd9jx+1QA9tvvmMneSXla7xZD/gxHUs4/9qaJGfdAnxyuxh6
+         4S0lWmOLep3rdrKPKiM5P/S4RYTO1rErxa4CfplYbAJV6HT5FLJnLIQMF/jF0V9BzxdQ
+         r6Lpv1MV9HcphTg5z2EO972wrcWOV6JL/1F6I/cMw3P51g1SDa1cd9em0LEq5AAkVV5c
+         RTjsgn2lYl2zrlXZcjsHeRGzWpGrX6FysanjgaeFIDgnrfuHYAMT3gef0w6kcAdTlMzP
+         Bveg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DYdVfhrze3PmGoBWLbqEClWHtyMjN7/HGWigZUPvV3o=;
+        b=70yUvgN/VPRVX7ZQ9TvrCe9dt94LDZEvojw/IIgQgqPf7ePfYbamDNvLHTPQbJeP8i
+         SY1/XCoQk647hxna0KCqyudXHtRbjiwNeNYGDbhopaG632vkakZ2hWDK9R2uK8zRCBV4
+         T5vmwf27N1W2rD1WwV7HK2rxK4qn3rfuLxPFv9d9MbyyoSlGAUwD5erukU00DTjBOAz/
+         66snD4PDS25uQCrmpwhr86xUFnN+GM2CkLv13c2LOn6Oebk6La8GbQSrrTnsPyza8XVI
+         kflj9bjiF8hP+FBuhfC+8V3goWX8JIFeTCSgaTsMz0vRsrg+uOs1PFJGobfjKvNWa10W
+         xdig==
+X-Gm-Message-State: AOAM5321ZB9hZVnGKkFWtzvTJSCaJw5CG2eB9IBEu1Q26iuKISAjbs9t
+        Q02hl0P/ezdtVOPuPGd5KNsfWlbDw7KZA9E5Cgs8BbCBawo=
+X-Google-Smtp-Source: ABdhPJx8MflMlhSiAKN9fYc6Bm7/OBTsbY5tB727sPzZjkNslEUMFA3YP9bUTlPTVwecDtRQGKmuc1jglGwB1zVEX0s=
+X-Received: by 2002:a05:6000:156b:: with SMTP id 11mr54881538wrz.261.1641553454546;
+ Fri, 07 Jan 2022 03:04:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220107004726.unyuuu2qki4gskxv@sx1>
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+References: <CAPY8ntAdknutH=OmV1dWPbez1ZqLgaOj-BoQQkZAu0WbhbE6nQ@mail.gmail.com>
+ <20220106124657.32737-1-linmq006@gmail.com>
+In-Reply-To: <20220106124657.32737-1-linmq006@gmail.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 7 Jan 2022 11:03:57 +0000
+Message-ID: <CAPY8ntAz2V81gwO6O+KxLev38Dy8wKGKW_SWDnEo8CU66qpe0w@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/v3d: Fix PM disable depth imbalance in v3d_platform_drm_probe
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Eric Anholt <emma@anholt.net>, Eric Anholt <eric@anholt.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 04:47:26PM -0800, Saeed Mahameed wrote:
-> On Thu, Jan 06, 2022 at 10:32:23AM +0100, Steffen Klassert wrote:
-> > On Mon, Jan 03, 2022 at 01:19:29PM +0200, Raed Salem wrote:
-> > > The inner_ipproto saves the inner IP protocol of the plain
-> > > text packet. This allows vendor's IPsec feature making offload
-> > > decision at skb's features_check and configuring hardware at
-> > > ndo_start_xmit, current code implenetation did not handle the
-> > > case where IPsec is used in tunnel mode.
-> > > 
-> > > Fix by handling the case when IPsec is used in tunnel mode by
-> > > reading the protocol of the plain text packet IP protocol.
-> > > 
-> > > Fixes: fa4535238fb5 ("net/xfrm: Add inner_ipproto into sec_path")
-> > > Signed-off-by: Raed Salem <raeds@nvidia.com>
-> > 
-> > Applied, thanks Raed!
-> 
-> hmm, there are two mlx5 patches that depend on this patch, I thought Raed
-> was planning to send them along with this.
-> 
-> Steffen, is it ok if I submit those two patches to you and so you would
-> send them all at once in your next net PR ?
+On Thu, 6 Jan 2022 at 12:47, Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> The pm_runtime_enable will increase power disable depth.
+> If the probe fails, we should use pm_runtime_disable() to balance
+> pm_runtime_enable().
+>
+> Fixes: 57692c9 ("drm/v3d: Introduce a new DRM driver for Broadcom V3D V3.x+")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-The pull request with that patch included is already merged into
-the net tree. So if you pull the net tree, you can apply the
-mlx5 patches yourself. But if you prefer, I can take them too.
+Thanks for the update - that looks good to me.
 
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+
+> ---
+> Changes in v2
+> - put pm_runtime_disable before dma_free_wc
+> - rename dma_free to pm_disable
+> ---
+>  drivers/gpu/drm/v3d/v3d_drv.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+> index bd46396a1ae0..7d500dd5314e 100644
+> --- a/drivers/gpu/drm/v3d/v3d_drv.c
+> +++ b/drivers/gpu/drm/v3d/v3d_drv.c
+> @@ -282,7 +282,7 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+>
+>         ret = v3d_gem_init(drm);
+>         if (ret)
+> -               goto dma_free;
+> +               goto pm_disable;
+>
+>         ret = v3d_irq_init(v3d);
+>         if (ret)
+> @@ -298,7 +298,8 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+>         v3d_irq_disable(v3d);
+>  gem_destroy:
+>         v3d_gem_destroy(drm);
+> -dma_free:
+> +pm_disable:
+> +       pm_runtime_disable(dev);
+>         dma_free_wc(dev, 4096, v3d->mmu_scratch, v3d->mmu_scratch_paddr);
+>         return ret;
+>  }
+> --
+> 2.17.1
+>

@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DECA24878B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B6D4878B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347533AbiAGONN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:13:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37044 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239085AbiAGONN (ORCPT
+        id S1347553AbiAGOOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:14:08 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57626 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238832AbiAGOOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:13:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641564792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2L4YEi0aDoHLNeQF/we9qhhc3irCTkuMiMi3Iny+wp0=;
-        b=RXWEO5kUivo8zJtXAcXpT2aKXarUSQer69rrTu+/tOFjSWSuxIpwsePdZ37R5b63KTbQpf
-        t1DZA8HOhtEsjYEj3NcBweIU3jec3cYa0OYEDB6xOoM9iCgBUlA+mIuEIz01FzRU+9NGSM
-        dATu6Z2qlAjGucELUaTB927AvrSVuZw=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-mABfESBkPKKWZ6Eo-7ktJA-1; Fri, 07 Jan 2022 09:13:11 -0500
-X-MC-Unique: mABfESBkPKKWZ6Eo-7ktJA-1
-Received: by mail-qk1-f197.google.com with SMTP id bs14-20020a05620a470e00b0046b1e29f53cso4224594qkb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:13:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2L4YEi0aDoHLNeQF/we9qhhc3irCTkuMiMi3Iny+wp0=;
-        b=TlHMGiWIQw1P7M1LJKoRAA8v4hrrw88nyfpdo7cTmTwcoBAOURvzJF+Sa4iGYckvvc
-         AmLVeEThJE3vIJf+sjTsDktVPsSBe55mz+hwmZeBi6jw+2y5pJ7RLjYfNPe2MIqYYnj5
-         8Ra1PjRCy1aLlMFZZF/Xd01rMxzt7UjypRa7VRo/KOCXAts5XZl25TLUJ2yHIg0Hm2P0
-         cDy6ByBW8AaVt93O+H9Js3MexftexmFsrCalyWZ7wPWQDVQfjYMtIXyZl2fHXeY4hFKk
-         i4rXZQcDVdkJSMu4okqY4hRFxKT28vkpsf8PwPxTnTkDdeXyCu84Pyb6DHXAMlpTRL6s
-         PVLw==
-X-Gm-Message-State: AOAM532CznurqS6a2AR5VWNjwj55qC/KuCv4UeA0DUb7B7nNo6Xge4JP
-        XSMAbx+f1KC4BWWn+lDBlyJ6tIxbd+YxcERKS32uYxqR4g4CjO6JWUKK4fdwj0chCF50XdqB2z9
-        E7TkQlnOC3fXEzZwMFYbOkFUW
-X-Received: by 2002:a05:620a:4446:: with SMTP id w6mr44672986qkp.273.1641564790444;
-        Fri, 07 Jan 2022 06:13:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyxpJ4Sg3lAOJt40+fckPzVrfV1SS+laz3cGFmL/vYslY4erIf4p5P2MVtYSxieCu2+92/1+w==
-X-Received: by 2002:a05:620a:4446:: with SMTP id w6mr44672964qkp.273.1641564790148;
-        Fri, 07 Jan 2022 06:13:10 -0800 (PST)
-Received: from [192.168.1.9] (pool-68-163-101-245.bstnma.fios.verizon.net. [68.163.101.245])
-        by smtp.gmail.com with ESMTPSA id o17sm3509317qkp.89.2022.01.07.06.13.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 06:13:09 -0800 (PST)
-To:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz
-References: <20211229215646.830451-1-void@manifault.com>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
-Message-ID: <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
-Date:   Fri, 7 Jan 2022 09:13:08 -0500
+        Fri, 7 Jan 2022 09:14:08 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 207EDt2j041934;
+        Fri, 7 Jan 2022 08:13:55 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1641564835;
+        bh=IdKClSqCi2IgnKjhnsNkLkR4E+KGUg7FXkzRHnBjT/M=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=UYDBWmsZ6lJPxMF2Ql5ralBK+E2LgwS+hH74GM79Fci2k1Fu9S9W5R19eG2tD2kbX
+         sXzUtcQgWVnVi/prr8190Rl53q3x468t2ZdFG3l3tkJ3HiQZnycV23s2noxsbn8vsm
+         QJV3XrbDtQELDvhMmYD+NgFxIpKy14bdWwYHgftU=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 207EDtUM002141
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 7 Jan 2022 08:13:55 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 7
+ Jan 2022 08:13:54 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 7 Jan 2022 08:13:54 -0600
+Received: from [10.249.36.164] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 207EDs1W015704;
+        Fri, 7 Jan 2022 08:13:54 -0600
+Subject: Re: [PATCH] dt-bindings: remoteproc: ti: Fix the number of mailboxes
+To:     Rob Herring <robh@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Nagalla, Hari" <hnagalla@ti.com>
+References: <20220107030457.2383750-1-robh@kernel.org>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <642312db-4af8-7087-45bf-e86923396038@ti.com>
+Date:   Fri, 7 Jan 2022 08:13:54 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211229215646.830451-1-void@manifault.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20220107030457.2383750-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/21 4:56 PM, David Vernet wrote:
-> For example, under certain workloads, enabling a KLP patch with
-> many objects or functions may cause ksoftirqd to be starved, and thus for
-> interrupts to be backlogged and delayed.
+Hi Rob,
 
-Just curious, approximately how many objects/functions does it take to
-hit this condition?  While the livepatching kselftests are more about
-API and kernel correctness, this sounds like an interesting test case
-for some of the other (out of tree) test suites.
+On 1/6/22 9:04 PM, Rob Herring wrote:
+> Based on the example, the TI K3 DSP and R5 have 2 mailboxes, but the schema
+> says 1. Fix the schema.
 
-Thanks,
--- 
-Joe
+No, 1 is correct. The OMAP Mailbox binding uses #mbox-cells as 1 and not 0, and
+uses a phandle as the cell-value.
+
+regards
+Suman
+
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml         | 2 +-
+>  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml         | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> index 5ec6505ac408..648144fa1582 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> @@ -53,7 +53,7 @@ properties:
+>        OMAP Mailbox specifier denoting the sub-mailbox, to be used for
+>        communication with the remote processor. This property should match
+>        with the sub-mailbox node used in the firmware image.
+> -    maxItems: 1
+> +    maxItems: 2
+>  
+>    memory-region:
+>      minItems: 2
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+> index eeef255c4045..2c5f91ea5296 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+> @@ -135,7 +135,7 @@ patternProperties:
+>            OMAP Mailbox specifier denoting the sub-mailbox, to be used for
+>            communication with the remote processor. This property should match
+>            with the sub-mailbox node used in the firmware image.
+> -        maxItems: 1
+> +        maxItems: 2
+>  
+>        memory-region:
+>          description: |
+> 
 

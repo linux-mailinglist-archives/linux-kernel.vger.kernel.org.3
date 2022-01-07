@@ -2,209 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8387A487356
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0725248735B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 08:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiAGHKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 02:10:41 -0500
-Received: from mail-eopbgr60118.outbound.protection.outlook.com ([40.107.6.118]:31492
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232122AbiAGHKk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 02:10:40 -0500
+        id S234565AbiAGHMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 02:12:31 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:51456 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232122AbiAGHMa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 02:12:30 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2072lPRX011035;
+        Fri, 7 Jan 2022 07:12:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=PDZN883zYs4dq9Y+Xn0tK95iHAS798QJFVlVRvCyIrY=;
+ b=a/5T0l6R/KuZRfWs/zHxeXGp40wl8sZcR4rWheZkEEojV6l7UKv7lhSCOnb9BOwqUvIU
+ AvDE/VHRgGXF2I0h9BvUrsi6dBn4ffItnKXWbWfy1r+aGgEEEtFaPzVyNNJQe6oFvMXi
+ 3PQF4W+59Gjlh3cKOXB46+1ve+qAhsVLNEs+UmJNA7KxkZa9Lqepy/kx2YgFhW0dea6z
+ 8e4ZJ8S+F9+CRABN7VAlwncz0lr4HDcugRcNvEcLGLr31dbBCMJXKUAnNC3CzkGnheuv
+ FaudTySZEgEdLa3IpgqNHqFDGcuTgYxhg75wm8xmJih6dJfi+1fpLr01/eMexEKOxR6A DA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3de4vb99tv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Jan 2022 07:12:23 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20775N3u073453;
+        Fri, 7 Jan 2022 07:12:22 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
+        by userp3020.oracle.com with ESMTP id 3de4vn7huv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 07 Jan 2022 07:12:22 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mTvGd7uqwpmE4OaQemLQTPNiWWfBBjv3jw/xb23Ka/U2hd6J15GOC18z8Sj0gNQ9oZAxlbP1YaHww+OFLq28hQAglgf0qaq39RwKb+995ZIscQehnS2qYNFJ1Jz9mOH+YCD9EMdqlNwTLKJwI+65JnylpvsaKZraCngzgo6Mfr6Qg+PLJ7ydStNzJib/TE3rVh6vWUtmvHKFRFCVsxfnAEX65b9b4RWuuerAPM66ka1wyldhJOpv894wOroThXF7yD3qGwQayNRl09XDs0nzN6NoVux/Qkgoo2V4oLH3ieWtTHG4SFazLF/Qn0JgaFAuQYt4NTKNPcIuSe9+nyn2GA==
+ b=DwpbFadD6mGSiMpoX7GIQIAt33+v+ukDANTEH5BwwAAlgYKLmxKi0YJuEvPya0Kit5ZzdNldPWjfsRsJWEM4mhJXhshWEW4eOWC5a06rQ0pqCeT1ir5fm/dy3BsRcnqYZzSDizO68xY6CSlKViZFCmdz08rL11aL+WHwFhwk0AscMZU3lCNUiYN49S2y+14OweHur9FmmjcUgp6WOjDG+0IdtOPkX7eHCj8IOZZqfR9LB9GOB9Bzt0s81W/07Yhyvyht3eH5Nj3GtDhseRY+b5fYY8w0a9Yjn5RmWSZAbEqHxZMb4aD15R3G6aSpDGmR3CeIneGE7lYdpM6zQ/vD3g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ykp1kW54MwVCv4nIQCwds+Xcfm13zPbeKnYEJDRhChE=;
- b=KE9+BnSMx9pESEMS7ls5ygou07zI8CmBsKHvVpnVQByXu97LWyJwhHx7m0WUlp2zKTwTji0sXkPfKc9+19p40nxg1Awmwa1Zh/bthJQAdkgqdpDEZecFRTcPWMfv/HP4FrKkIyN2+IMaeKZhNI6Ppi5BrAVJ34d51Z3d9FEz7gKCksZnQO3Zkmtt8os1/UPdYRsr7hKd6tljToD2DgSLzZsOwuS6UCndq1JEQx3FnTCIK68+iUFnTrYNYg4KpzQ2BPvYRGKk8CLPWwY6hh90GBTQ00OPJpt8mYdHfTDYLCp/LAyGsUPhHroRTDLbKSOh3FPO9XmlimFcrbjcPIUtDQ==
+ bh=PDZN883zYs4dq9Y+Xn0tK95iHAS798QJFVlVRvCyIrY=;
+ b=T3V5F4COCr4mpUrsSX6w3/oZdPqh7suGANTZ1dgeTraKPUFjaYfF7rf2lZLkbxU0K7dNmi+RwHIaysf8bzXalP7l3Ma2YKI568+OAs+NCLrDAGwi1qLGRMOOj0SFRWNKMroe+VVUJ00p5o7mG1omYS0n2UsdcY+33Tl/XQj+DuCIc6PKiFaoIswr1ouvkkOmegmrrZsl8kxSpwDEVclMafhU+wvUVI8ag97v/xGHzk6H4pYT3zgHkUbTYWaYsrCyACdd+95qA+eKSmyuoMhWdcWFLuPX5XKtg0vcQASM9B4VuEidiLxa/iucoD61keeS8jeSF8gKa6XmOdRjBxvC2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ykp1kW54MwVCv4nIQCwds+Xcfm13zPbeKnYEJDRhChE=;
- b=d5Ge8/J4gDhwBOuT9kUAs3txQJZrcP1nUcb8DhgLoVN75iSFew9fmUo9Dpyu11jT4SkXri1eealTKA9/SuAiMZrYrCKvoPwqfgzttWW28OAgc1ByQaixv1y82NVRw5QTSB2X5eUbMeMqVLOfQDqrMeU8hxOaFsrRI1RIWDquXOc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
- by DB7PR02MB3929.eurprd02.prod.outlook.com (2603:10a6:10:45::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Fri, 7 Jan
- 2022 07:10:37 +0000
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::99a:847f:ce2e:745]) by DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::99a:847f:ce2e:745%4]) with mapi id 15.20.4867.011; Fri, 7 Jan 2022
- 07:10:37 +0000
-Message-ID: <08cf07a5-5aaf-586c-5745-c41df7091b54@axentia.se>
-Date:   Fri, 7 Jan 2022 08:10:34 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 4/6] mux: add missing mux_state_get
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Aswath Govindraju <a-govindraju@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <94ab71e1-2e68-def2-95b8-33162172f65c@axentia.se>
- <90c40462-9672-949a-14cd-e13e440fe177@axentia.se>
- <YdLvGge5SbuhAi3N@kroah.com>
- <08a48424-a8e6-f08a-63d3-b00aa5cd33f2@axentia.se>
- <Ydb/lQMPxw3/IDIF@kroah.com>
-From:   Peter Rosin <peda@axentia.se>
-Organization: Axentia Technologies AB
-In-Reply-To: <Ydb/lQMPxw3/IDIF@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HE1PR0901CA0051.eurprd09.prod.outlook.com
- (2603:10a6:3:45::19) To DB8PR02MB5482.eurprd02.prod.outlook.com
- (2603:10a6:10:eb::29)
+ bh=PDZN883zYs4dq9Y+Xn0tK95iHAS798QJFVlVRvCyIrY=;
+ b=CI7CKYFQdVn6nnQEwo1uWZKKl55RtSQJtX2BpOSU9TJo+Kj8XQIPp8yVFO2cSGb/EtcI+GJYwFDAo9wLRFTrwOXWMUGhZ9pG8AKjiij3q0l3j0NSu7ZCMHUMyaHEnG/Ax4YxYG/qrl7V+b0WLo6zTZGNjqAecmSLHXjMDscNerg=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MW4PR10MB5679.namprd10.prod.outlook.com
+ (2603:10b6:303:18d::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.16; Fri, 7 Jan
+ 2022 07:12:20 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b889:5c86:23c0:82b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b889:5c86:23c0:82b8%4]) with mapi id 15.20.4867.011; Fri, 7 Jan 2022
+ 07:12:20 +0000
+Date:   Fri, 7 Jan 2022 10:12:10 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Ralf Baechle <ralf@linux-mips.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-hams@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH net] netrom: fix api breakage in nr_setsockopt()
+Message-ID: <20220107071209.GA22086@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: ZR0P278CA0193.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:44::23) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: baab41fa-6148-4f6d-cce3-08d9d1acce31
-X-MS-TrafficTypeDiagnostic: DB7PR02MB3929:EE_
-X-Microsoft-Antispam-PRVS: <DB7PR02MB39295E0CBE2FC15A82C0A225BC4D9@DB7PR02MB3929.eurprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1201;
+X-MS-Office365-Filtering-Correlation-Id: bbd5e6c9-dda3-48d8-7044-08d9d1ad0b80
+X-MS-TrafficTypeDiagnostic: MW4PR10MB5679:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR10MB56797702235B2B9FB99277F18E4D9@MW4PR10MB5679.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: av7CkjVJoHEk2lLte3z1j01TkSQ5PWd7k14PhZfTxla/6Tu8DSPgmJbcg2fhAUMbFHVtF4EuHfII+POnj+WzPUuQVtiIayL5tkac1n1gSlHAz9jFgEjvyuwRM/ORPN4vnw79jTLYAm2b8bsISnIZg6CF6siawC9Q9p1QUAWLYpFbWuslLzStJj4ARWDeHmDN2kz1W/iwMqCqxDCO1broTmXBRmgWBRCKi+otXG48gDRzXZz6jonvHtvAq9zjnDAhqeo1PKM6ti5chd7PmM7KZAxKI81uM+cVFLzkaCTA1okpFI4cl0YfoZeIp7kE0Jf3zqurCdYXrTFkE1RKRYFXXXErp0F2pzfVQZrEJ9Yd8Q2IwlTS0q5FIrJCIsgVxdC0G2TxpdMKFLj2GyABPCW+Mop6/N/Gv81N5iWMkzPbYET5Qxlq08jqqjyX4glE58f2aOGneJW8Lv+Yvlr+d8ZrH7/rm+Ugn7/4dFqHi4nhqE+DB2CO8Hd+l9ncDJC26F3DkqFe2zeNnfPfiTvcZC5sd/L14ljJQoBdO0l5tI3dUM0xp4r57+4KOXPZiElmEr0f11kkfMEXeYYzFvAqRjSDLFJzD0C8o65Tdn0vqZF032/rWZkYtNUQe/WTfN7U/cAo7yOdf4Z7lwc8iwYjRScaR/AaELhoy4z6YqOMaOqLBxgou9G7yfd2PQlpwWSHf9/kgpk4Syqj+dhJ+GUAknIeRoRAW8k03a46yGYD2DPbgi4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(396003)(136003)(376002)(346002)(366004)(66946007)(5660300002)(4326008)(36916002)(66556008)(6486002)(66476007)(2616005)(36756003)(26005)(8676002)(316002)(6512007)(186003)(53546011)(6506007)(6666004)(54906003)(8936002)(31686004)(6916009)(83380400001)(31696002)(2906002)(508600001)(86362001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: /YolkiP4CtL9+3kKjv4rMbFYB3IB+zqmVEbTvaUkaMC+wKSWL3gwxPnhWIk+Zt1IxGigz3UDwFAxG0+sKaDUfBRsV9DhMksTZNIV+q+CtnhqhX9CWXCRfMSEWjQN6KC3iD3QTXLnIBdrDKH534+8hq7e5x0s7MR5EqC/tHbUja5bOsH6mNP1Mrg07tPsfLld92InoMrwgYkzJ3y0pl65Ms6fwaGw+snYzIiXwdRfRdpwVwTcCBhHL/NADaSjw1WDYHl5yMp5x2RJYO+JAUe+OjKmbfSFyD6KgjHkAiIN5nt88UQ477caV5VjXQhSszTtm/8avLr/INkMrkweqvcc6dUaaZFPgMrA/37hIXxeW3/J+oYvl1FDMGGDrdDaEflCsaRm9/HSnou+hgI6TAFHTJ7p+HKlW3E/QlCcyuQy2GB4LWxud/o9up87Xc01pF4SZqzf0KKKQrDZ9cOVAUXbIk+4AE30NIwgbKwogOlQP8kbEKNLNfbqM2RE8hjR5rhL3PSGQZB0O8I7RRwq7cxNBQo2y9IFk/MYLuPB6oDJoWsKTzzjB/qwEaVrzNyDvOdJ652n1jhZP7itVCJcWT7Aq2oa6ebmBTA9SvnbGZAVqVx0jje4pHk5EKO0/2/R5pB/p7JPRKS4g5uq2elaen/qfsEZicz5BNgBqnhHBXqtZo4DTignWc9+9Vrmt4eO4fRjigvvMJiwmkR0sIfB95BJPA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(66556008)(66946007)(6506007)(83380400001)(2906002)(33656002)(54906003)(9686003)(66476007)(1076003)(26005)(33716001)(6512007)(8676002)(5660300002)(86362001)(44832011)(4326008)(316002)(38350700002)(6916009)(508600001)(52116002)(6486002)(186003)(38100700002)(6666004)(8936002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnRzdStkbm93SmJoR2hpWVJYSGJtc2ZwR3dZNnhCaHFNeThMMTFnZC9YVHBH?=
- =?utf-8?B?SHN0Y3BLMmhFMU9VcU9GQWxSQ1pwYjZGbjJpTEZDeFVzWWE5K0duamhOUDBF?=
- =?utf-8?B?MTZpcjBPc0ZNNVV4c3U1T3VWM1Z1WmQ5OFRpRG00N3FvZEZPMEtlc2pHUjJH?=
- =?utf-8?B?WnF5VUpTNk05VkxoWWxYaEd0NWpvU0Mzb2J4Zmw0WVlqeS9rZHZkdTUyc0Fv?=
- =?utf-8?B?ald0djVjMVZiK3c1eEVERzd1QitSOHFqZzhHS2RQR2VIa3dndVJYOGlXdkIw?=
- =?utf-8?B?WlgyYkUyeGFVSEhqUzF1YklkSitnREhSc2JCSlNvSGkxaXBXdFNhSnNwMDBt?=
- =?utf-8?B?Nzg3T2FraXZybEFqTmhNQ3U5Ty9RL0cyTTVzT0pldDlVUTVzRVFhNXpPdUEw?=
- =?utf-8?B?OTJFeTNFWUlPdTZYWDVpcjJibWVpMXJ6Vmd4WXdRNE9hK2hDZkhZWFVCeklZ?=
- =?utf-8?B?ekhnbUd2VlZtMmtBaWQxRXhLL2d5L1ViMTdWTkRmbmF6eisyS0NMT0RLY1ov?=
- =?utf-8?B?N2xWUDRaMVlrbE5XNVRLWWtmelE5VnZML0VxbUdXOWJOM2tBQ3FYS1FpUEg1?=
- =?utf-8?B?bmdTZzVFSnVmSUlCNCsyVXJ2dkJSbGpZQVZiUlRlM1pZT1h6Sis1ajZuT0o4?=
- =?utf-8?B?UUtleG1OMW1hK1d2VzVsQVprcDdvNlB0ZENjVEt4RjZhMGhOMTZtUzdBZnN2?=
- =?utf-8?B?TW1wNUZPSklIOTlXYUk4U0Q3a1pHTzlIMVV5NGFWeEZyUXcvb0l1SEdLMWVu?=
- =?utf-8?B?aENVYjZQaEM0WEpyMlp0MnlMVnN3dUxRRFZxU0grRE1HL1dWb2FDamRGN0Fm?=
- =?utf-8?B?VXdENTc4bkN1d215Y1ZPbGZGSFZpU0c1L3kzVnZYVjU2QWtENTIvMDVFTFdV?=
- =?utf-8?B?SXVGYVNHRVU5MzRuZUVFODZXNGgySnVNMkFUYzMxakhLNG1KRkhodjkzNG1W?=
- =?utf-8?B?UEtKbEM0TXFzckRYTEhHNWNhVmYrVVRxNFYwam5qWmNjU1VPS0c4TFFtcDRt?=
- =?utf-8?B?N0I2NnRGM0xHRXdQbXk5cWlHVUVUbkJsK25MVXk5Z002Z2ZBVGhqbkFOblRi?=
- =?utf-8?B?N21GZ2w3T3ZZbGU1OE1oWEJtR2N0MGg4Q1NMRVQvVXZlR2pkbGVtTE1HM3pE?=
- =?utf-8?B?amU2UE1lZUpzQmZ2cEE4NHJVKzFmdWo5YjhrL0NSKzlLVDl6VFZIRk5vTG5r?=
- =?utf-8?B?bldYRHg3OFdOblJ6MVFyQ3VnMkE4VWNxTitaV2dZWG5BWTNSOGdzQ09Zek5s?=
- =?utf-8?B?N1V0TytGS2ozWmVPcTRvUW5KY1pmWm1wN0NUMTRFUk9COWp0WU5RZmtvdUh3?=
- =?utf-8?B?WVJtYzhva2x4QmFFcEJhekg4OWwwYzVCWWRTL1BKV1l2QUtkQTRUSXZaQ1Vy?=
- =?utf-8?B?LzkzS2Ixd3NJZHZTMDB4V1I1UFhaa1RZRlZtbEJ2WTZuWmZ2QTdleUVPU3ds?=
- =?utf-8?B?b2NEMVNLWVpTblQwbDZkb2gxWnFlWW1aeE4zSUdLdkkvMzdsOFpKV2MwWDdU?=
- =?utf-8?B?ZzFwMVRnaGxUVkRCZG95ZmNyVDBKbGZPVisva2RLTTBRc2lhbTlBdG1VeXIz?=
- =?utf-8?B?aHZKRHRVV2RMK0pkREdwTnFLdWkzUjlVV2NWalFoVmF0cWFsVzI3ZGRMMkhi?=
- =?utf-8?B?N3RBazZsa1RSWjliSG9DekpidzhtZWZHeWREaVZpUFNUZzhGeHBRMzloRjRp?=
- =?utf-8?B?c2dEUFNKMXQxOFFEUzFxTnhlRThNMUpVODhaMTd6enNycEhZMXpRWGRJTldG?=
- =?utf-8?B?cW1zSTBjbTNFaHFUd3I5MzVDdUhxMVQzaXVwQVp1ZUdXTmIraFNUb1lkUU9t?=
- =?utf-8?B?alFpUEdhNmlIZGxjdXY2ZXpVWFJIS1paa016Qk0xdnQvU0JTRnloUG5POUtr?=
- =?utf-8?B?U3VSVStvK1grTWtaQ0xKaVNHdUtjcEFpaDhtbnBOeG1kTkNEZFh2Q0pjM2Fr?=
- =?utf-8?B?ZDNDRzhYa2E4TjBqdDhUc1VVSk1QTXlWaFQwUkhXRG5rOXAraHBjbEgzbmU5?=
- =?utf-8?B?Tlk5UmRGOFJNTSt6NVZteTN0aUp2aEJFTG90TGVCSlFqRk9OM04xTWV2b2Ux?=
- =?utf-8?B?dXJxVWsrN29sRHZhbnZqaTJCUkxFOWlaLzR1NnBzY3NoTDVXMDZSMWJENE9T?=
- =?utf-8?Q?LF48=3D?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: baab41fa-6148-4f6d-cce3-08d9d1acce31
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XhOiWyrY/fIT7jYbsQ4lSaQNsfP6y1ICwqe+vy9DyVHA4nyX4PJadB4Dbn/V?=
+ =?us-ascii?Q?ekHAS2hVIqjXqR8OcdfhgaSf3Trv4pBM8vqHv6ejrWQE4boh/lYYQdGD9bpW?=
+ =?us-ascii?Q?BlbiPnXA605ii801CanScPAXyoQ2vaTvwA1n9CTMNwZXjCL5SEPkF5h0E1rl?=
+ =?us-ascii?Q?I1U5QB57FMOed05zXnKY+B2vdcj7QVxFCd5AG2P74OzK6bcUovGHH7p7CMsw?=
+ =?us-ascii?Q?qBSekgeEl19G9Hx+Vmb9DbwzvmqDZiqOoYE+/3D7UBB2Daet0CPQASWi5cT6?=
+ =?us-ascii?Q?j/WwCqGN5B4UKxL3uRmJg6Zc6jBebbs6VFBBARhq+jeanaWJs77HwPpJEurx?=
+ =?us-ascii?Q?mon/gRCNgMt04lAtTKUePjCUbX1LyNs//bqTsQwgsbq6U6ywEFav9EK6QQqY?=
+ =?us-ascii?Q?ytJFCy3qf1jYNWTvvmG3a5SLGqK+y8vR4jLZMt75WM8vIwSIjmbn1QkGhfoX?=
+ =?us-ascii?Q?xc5fC7hzKwHTkK13xK9SNLZzQvWxK1yqKdmL4NQSLHQ+IS2HOOHeikHyQcty?=
+ =?us-ascii?Q?yXLfV47uW67uDN4SOz2IwIwGzpFm80UnxLoqpAc4+YWhJCUzebIVPOcyTGVg?=
+ =?us-ascii?Q?AUvP7TQUKSntOSPEQ4XEfVNAHyGZvxhVUbrhGOClHK05iY8yRbwO8IJl5nZQ?=
+ =?us-ascii?Q?qEGobB06Q7QXTHfauZuECMOkYZ7pyH6pmwlUbqsClGcWRdJM1bPn1FUTYL+r?=
+ =?us-ascii?Q?o0uvOk1dqsoQP06zuSB+YfFn7swjJmUFMcbSFIYpNYOJzSr6w21w9tBLMlX9?=
+ =?us-ascii?Q?0XuKP/Wxtqqz7ctJK6PiocGliN+Hng3IaDApCnL1SuiT4/pOqKX4xlUoTS6P?=
+ =?us-ascii?Q?sVb9C8WKcDltXsu90037R0ifUf19/P7XxtS9//77rt8jOz4kbW+jUIDPmbnw?=
+ =?us-ascii?Q?u+yHhEuGqsa7NQ76TbDhpBLNcq3GO3QH3dJYHZ0T7Bk5T00Ft5XY8A62RBjj?=
+ =?us-ascii?Q?MCJ0X9Il2v0O0788BySnz/fPjqYy6HdAu/IA8ZLwBNItoHDaTVhd5uvOqIw8?=
+ =?us-ascii?Q?yXZhpKbOssQrQBJBzvZs1Gt/QeifXiuax8ZpHY7xWICdpxRrDnPMfOuQJRit?=
+ =?us-ascii?Q?2jhMFQ0i55ZA9c+2EiwSffuirawN6Xcsf+sgFoG5zJvyV5T5DcUk4WiKCWQO?=
+ =?us-ascii?Q?irr4y4AA0iXgQLmV4h50auH961lZFADZDnL2FymgBLd8HP+29itFYxAJrgwg?=
+ =?us-ascii?Q?dIVeBzjwsoOtHrRvMB+lh4TMnz3qs7bcTEOK8cVnHI9qzDR95ZPekbRO2AMJ?=
+ =?us-ascii?Q?dxQ9hCWAW3lbAmMOTJ+jCXmBHvmVOJVPtXSCHgJ3hd0psXGsGWW235rVYeuM?=
+ =?us-ascii?Q?xxx3K+sIXUljrm2pnf00FsjRnzsa6zMPBBLCiJgqCDV8QUQAjF3sOX3JZ5te?=
+ =?us-ascii?Q?PTnlChvBHIoNJMPTQJ5tqPweYXKmE0CEstSpKvR214z/lyoUKO0Jtt9NQeHE?=
+ =?us-ascii?Q?oIN/KdGL1icblZrADWnCxh7PRDgonGvJtTFMj7OQ2l2FU8kQNjit30rCsynK?=
+ =?us-ascii?Q?fJxUOWX4Aw1oD9dDl2vWC//rCDmeOXRuB6ToC8VxmDAsnI/MDVd9Cq93jDya?=
+ =?us-ascii?Q?XAjP0XgCi4QBx2ULX27d8x7hJJXBW2HHPnRGsIcJtGH9zd2WWlN3P3dWpTFH?=
+ =?us-ascii?Q?KNepIWGzyDx+cWdzdFJT9x3Bl3XXc0hsuLIelysjt++ap5grNCEhU4HeaESI?=
+ =?us-ascii?Q?pLnmPIT9WhkuiK1SqQI6ln02RCw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbd5e6c9-dda3-48d8-7044-08d9d1ad0b80
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 07:10:37.5617
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 07:12:20.4962
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Kp2TqDZlTC1NtHHKElKbBnh+udNfwIUzjCDdOGTmjG+vdx9GmTrB1kdSkbP+q6QE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB3929
+X-MS-Exchange-CrossTenant-UserPrincipalName: jL8v/NrwYKbYir/vsPtxh3b1MZ5gNrLO0HcAtzUigRdvTvYxY6m4Rr9p97z80qnY1TsUEtR5rNGCsoiZRvvsn4v7jeTE15HudB934A+fOKQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5679
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10219 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201070051
+X-Proofpoint-ORIG-GUID: OK1mOG0WhsefiEewy8fAbox89yUb8Zti
+X-Proofpoint-GUID: OK1mOG0WhsefiEewy8fAbox89yUb8Zti
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+This needs to copy an unsigned int from user space instead of a long to
+avoid breaking user space with an API change.
 
-On 2022-01-06 15:41, Greg Kroah-Hartman wrote:
-> On Mon, Jan 03, 2022 at 06:26:21PM +0100, Peter Rosin wrote:
->> Hi!
->>
->> On 2022-01-03 13:42, Greg Kroah-Hartman wrote:
->>> On Sun, Jan 02, 2022 at 11:38:36PM +0100, Peter Rosin wrote:
->>>> From: Peter Rosin <peda@axentia.se>
->>>>
->>>> And implement devm_mux_state_get in terms of the new function.
->>>>
->>>> Tested-by: Aswath Govindraju <a-govindraju@ti.com>
->>>> Signed-off-by: Peter Rosin <peda@axentia.se>
->>>> ---
->>>>  drivers/mux/core.c           | 41 ++++++++++++++++++++++++++----------
->>>>  include/linux/mux/consumer.h |  1 +
->>>>  2 files changed, 31 insertions(+), 11 deletions(-)
->>>>
->>>> diff --git a/drivers/mux/core.c b/drivers/mux/core.c
->>>> index 7d38e7c0c02e..90073ce01539 100644
->>>> --- a/drivers/mux/core.c
->>>> +++ b/drivers/mux/core.c
->>>> @@ -673,6 +673,33 @@ struct mux_control *devm_mux_control_get(struct device *dev,
->>>>  }
->>>>  EXPORT_SYMBOL_GPL(devm_mux_control_get);
->>>>  
->>>> +/**
->>>> + * mux_state_get() - Get the mux-state for a device.
->>>> + * @dev: The device that needs a mux-state.
->>>> + * @mux_name: The name identifying the mux-state.
->>>> + *
->>>> + * Return: A pointer to the mux-state, or an ERR_PTR with a negative errno.
->>>> + */
->>>> +struct mux_state *mux_state_get(struct device *dev, const char *mux_name)
->>>> +{
->>>> +	struct mux_state *mstate;
->>>> +
->>>> +	mstate = kzalloc(sizeof(*mstate), GFP_KERNEL);
->>>> +	if (!mstate)
->>>> +		return ERR_PTR(-ENOMEM);
->>>> +
->>>> +	mstate->mux = mux_get(dev, mux_name, &mstate->state);
->>>
->>> will this build?  I haven't applied it but mux_get() in my tree right
->>> now is defined as:
->>> 	static inline void mux_get(struct gsm_mux *gsm)
->>
->> Yes it builds. As mentioned in the cover letter, the patches have been
->> in -next for a couple of weeks. The static definition you are pointing
->> at is from n_gsm.c (which does not seem to be #included by any other
->> file). This definition of mux_get is again static and in a .c file
->> (which is not #included by anything). Surely not a conflict?
-> 
-> If it's static, no, it's fine, but I don't see it in this commit either?
-> 
-> I'm confused now, 
+I have updated all the integer overflow checks from ULONG to UINT as
+well.  This is a slight API change but I do not expect it to affect
+anything in real life.
 
-Apparently :-)
+Fixes: 3087a6f36ee0 ("netrom: fix copying in user data in nr_setsockopt")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ net/netrom/af_netrom.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-The static drivers/mux/core.c:mux_get() is not in your tree because it was
-introduced in patch 3/6. That patch refactored the existing mux_control_get()
-into a new static helper function mux_get() with two wrappers -- the old
-mux_control_get() that preserves the preexisting interface and the new
-devm_mux_state_get(). mux_control_get() was always in turn wrapped by
-devm_mux_control_get(), while patch 3/6 failed to add a similar double
-wrapping with an intermediate mux_state_get(). Instead it wrapped mux_get()
-directly.
+diff --git a/net/netrom/af_netrom.c b/net/netrom/af_netrom.c
+index f1ba7dd3d253..fa9dc2ba3941 100644
+--- a/net/netrom/af_netrom.c
++++ b/net/netrom/af_netrom.c
+@@ -298,7 +298,7 @@ static int nr_setsockopt(struct socket *sock, int level, int optname,
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct nr_sock *nr = nr_sk(sk);
+-	unsigned long opt;
++	unsigned int opt;
+ 
+ 	if (level != SOL_NETROM)
+ 		return -ENOPROTOOPT;
+@@ -306,18 +306,18 @@ static int nr_setsockopt(struct socket *sock, int level, int optname,
+ 	if (optlen < sizeof(unsigned int))
+ 		return -EINVAL;
+ 
+-	if (copy_from_sockptr(&opt, optval, sizeof(unsigned long)))
++	if (copy_from_sockptr(&opt, optval, sizeof(opt)))
+ 		return -EFAULT;
+ 
+ 	switch (optname) {
+ 	case NETROM_T1:
+-		if (opt < 1 || opt > ULONG_MAX / HZ)
++		if (opt < 1 || opt > UINT_MAX / HZ)
+ 			return -EINVAL;
+ 		nr->t1 = opt * HZ;
+ 		return 0;
+ 
+ 	case NETROM_T2:
+-		if (opt < 1 || opt > ULONG_MAX / HZ)
++		if (opt < 1 || opt > UINT_MAX / HZ)
+ 			return -EINVAL;
+ 		nr->t2 = opt * HZ;
+ 		return 0;
+@@ -329,13 +329,13 @@ static int nr_setsockopt(struct socket *sock, int level, int optname,
+ 		return 0;
+ 
+ 	case NETROM_T4:
+-		if (opt < 1 || opt > ULONG_MAX / HZ)
++		if (opt < 1 || opt > UINT_MAX / HZ)
+ 			return -EINVAL;
+ 		nr->t4 = opt * HZ;
+ 		return 0;
+ 
+ 	case NETROM_IDLE:
+-		if (opt > ULONG_MAX / (60 * HZ))
++		if (opt > UINT_MAX / (60 * HZ))
+ 			return -EINVAL;
+ 		nr->idle = opt * 60 * HZ;
+ 		return 0;
+-- 
+2.20.1
 
-I didn't notice that mux_state_get() was missing until after a couple of
-rounds of review with Aswath, and didn't want go for another round when it
-was me who had made a mistake, and instead just fixed it with a commit of
-my own.
-
-Maybe you thought "the new function" that this commit message speaks about
-was mux_get() (which was new in 3/6, but no longer "new" here in 4/6), when
-in fact it refers to mux_state_get()?
-
->                    can you resend the remaining changes and I will review
-> them again?
-
-On it.
-
-Cheers,
-Peter

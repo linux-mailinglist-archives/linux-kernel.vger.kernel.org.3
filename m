@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BCD487F40
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73857487F42
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiAGXNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 18:13:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42358 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiAGXNH (ORCPT
+        id S231403AbiAGXN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 18:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229973AbiAGXN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 18:13:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D75561EA6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 23:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1552C36AE9;
-        Fri,  7 Jan 2022 23:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641597186;
-        bh=ICdoyhLp4mfXiHECs/IAYYg5cV1mgJexXdcbH5yA24A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=We7ZfrlbepKtokTbFzqyCMUcoDW79GKYBwQIZtKFESHnEWhsq6AuOnm5nSJv8qCXF
-         aVeg17F+lH6k2ol+fWCp980eHzmH2cV0o5u3s0N3O1tpv4S3LM0wOnN0YHtT2tkYiz
-         /0MXWEcAO2MgZ/9vDrhXg9MKMNDcRsn7Y6+XYAxLPy08b+xh3JBHpI9xEQrbu2Mw6b
-         5MMuUpxptY3chVnEaqNqGD93EcgZxRAgKGiiaJklmhv7bFi1Y68M3NcF3E7i4VAexN
-         gQGChSnFzb2HWw0yJrmhj7FPWRZ/mVPgDzQEcR/JkLCEUMV0txKS+4kr0vrAuEP/ud
-         Jauf6p4+t/fIQ==
-Date:   Fri, 7 Jan 2022 15:13:05 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH 3/6] f2fs: do not expose unwritten blocks to user by DIO
-Message-ID: <YdjJAS7Ua4aJEFhz@sol.localdomain>
-References: <20220104212419.1879225-1-jaegeuk@kernel.org>
- <20220104212419.1879225-3-jaegeuk@kernel.org>
+        Fri, 7 Jan 2022 18:13:58 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CEFC06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 15:13:58 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id k15-20020a4a850f000000b002dc3cdb0256so1471535ooh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 15:13:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=F+nj6othnUl9TqkvFEAN8QCl9928qsii1lcVa7kLyO0=;
+        b=S5SV+VQAkuTKHO5/FvAxca/8OBYi/ti1oNsqiSj5mMReOmQXTwpD+mb6ZbIa9bnUoM
+         5Kw8fCPhmeh4cIwqZSe82B+V3viliBaHr6RnsFjK2pPD0aeyYN4xjXDLL/TEtN183wA5
+         0AaPrE9uYu6HT+fcqIw+LDE/VaaGM3ik5K34o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=F+nj6othnUl9TqkvFEAN8QCl9928qsii1lcVa7kLyO0=;
+        b=uS4YIG30/nQxhOfXtkY8J5TTR/en672qwANCajyyv0JgJsdpVXbq/tpB4snpBGu387
+         zMbzLDA2wX/2GS4tHU7R7vr+c/FgmKh7p0iuv73cqgAfLem1Chvm9EDEbNMe4BFjawlO
+         jk+n9qjLJnOoi8Ebmqq9eEMk+ZMvpu4rW+izZtDi9pB+YP7r3nFZUX/T/tZBzKL4Xrw0
+         1LBB/kGOIoXf+eWk95k6tyQ+QId+Phm8ZfWfTF6NU2uaSSe5lqeu0CTMw+vlG6jYW5xf
+         6dIxIgf+GCiakmegWduqsS/cFrJhzZ+YMqEHUOHXa8/2NnB/yf2ulGLWD6rPU39T0iNz
+         DtHA==
+X-Gm-Message-State: AOAM5323BM2dNHWNwMsul7/lnei7My4YIlXVY3gdB1aA+2BeEt1SOvYV
+        PELllwXBiNtEdXNOXXDv+tWwK8DTmq19OfUhhUe0Jg==
+X-Google-Smtp-Source: ABdhPJzO7C3fHocXirj1DvzWKV0S4KZ3cR6JfxhqaPd87TiYoV4N8oaQI2EINw2KgSOIzZIvRPVbNpXH5frEH5M8MWU=
+X-Received: by 2002:a05:6820:411:: with SMTP id o17mr41624593oou.8.1641597237623;
+ Fri, 07 Jan 2022 15:13:57 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 7 Jan 2022 15:13:57 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104212419.1879225-3-jaegeuk@kernel.org>
+In-Reply-To: <YdieAFj0ppmAtQxS@google.com>
+References: <YdieAFj0ppmAtQxS@google.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Fri, 7 Jan 2022 15:13:57 -0800
+Message-ID: <CAE-0n52HCrp+-7BxsEku0ifmC4P=Rw0SxE4BJ6j1iMd1b7_pNw@mail.gmail.com>
+Subject: Re: [PATCH] HID: vivaldi: fix handling devices not using numbered reports
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     "Sean O'Brien" <seobrien@chromium.org>,
+        Ting Shen <phoenixshen@google.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jaegeuk,
-
-On Tue, Jan 04, 2022 at 01:24:16PM -0800, Jaegeuk Kim wrote:
-> DIO preallocates physical blocks before writing data, but if an error occurrs
-> or power-cut happens, we can see block contents from the disk. This patch tries
-> to fix it by 1) turning to buffered writes for DIO into holes, 2) truncating
-> unwritten blocks from error or power-cut.
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Quoting Dmitry Torokhov (2022-01-07 12:09:36)
+> Unfortunately details of USB HID transport bled into HID core and
+> handling of numbered/unnumbered reports is quite a mess, with
+> hid_report_len() calculating the length according to USB rules,
+> and hid_hw_raw_request() adding report ID to the buffer for both
+> numbered and unnumbered reports.
+>
+> Untangling it all requres a lot of changes in HID, so for now let's
+> handle this in the driver.
+>
+> Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > ---
->  fs/f2fs/data.c  |  5 ++++-
->  fs/f2fs/f2fs.h  |  5 +++++
->  fs/f2fs/file.c  | 27 ++++++++++++++++++---------
->  fs/f2fs/inode.c |  8 ++++++++
->  4 files changed, 35 insertions(+), 10 deletions(-)
 
-Unfortunately, this patch doesn't completely fix the uninitialized data
-exposure.  The problem is that it only makes DIO writes fall back to buffered
-writes for holes, and not for reserved blocks (NEW_ADDR).  f2fs's reserved
-blocks are *not* the same as the unwritten extents that other filesystems have;
-f2fs's reserved blocks have to be turned into regular blocks before DIO can
-write to them.  That immediately exposes them to concurrent reads (at least
-buffered reads, but I think DIO reads too).
+This silences a warning I see printed from this driver
 
-This can be reproduced using the aiodio_sparse program from LTP, as follows:
+  hid-vivaldi 0003:18D1:504C.0002: failed to fetch feature 0
 
-	aiodio_sparse -i 4 -a 8k -w 1024k -s 4096k -n 6
+and then I see the 'function_row_physmap' attribute in sysfs is non-zero
+now. Thanks!
 
-This was reported at
-https://lore.kernel.org/r/20211226132851.GC34518@xsang-OptiPlex-9020 as a
-regression from the commit "f2fs: use iomap for direct I/O", but it actually
-failed before too.  Note that it's nondeterministic; writing random data to the
-block device before creating the filesystem helps with reproduction.
-
-I see only three possible solutions:
-
-* Make DIO writes to reserved blocks fall back to buffered writes, just like
-  writes to holes.  This would mean that a file would have to be written to
-  before direct writes would work; fallocate() wouldn't be enough.  Note that my
-  patch https://lore.kernel.org/r/20210728015154.171507-1-ebiggers@kernel.org
-  would have done this.
-
-* Or, change the f2fs on-disk format to support unwritten extents.
-
-* Or, split up block allocation into two parts, so that blocks could be
-  preliminarily allocated and not exposed to reads yet.  This would be like
-  Ted's suggestion here: https://lore.kernel.org/r/YQS5eBljtztWwOFE@mit.edu
-
-- Eric
+Tested-by: Stephen Boyd <swboyd@chromium.org> # CoachZ

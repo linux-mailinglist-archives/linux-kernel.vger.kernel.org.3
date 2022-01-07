@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD6F4870B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604AA4870B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345560AbiAGCpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344689AbiAGCpu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:45:50 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB7FC061245;
-        Thu,  6 Jan 2022 18:45:50 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id pj2so2821729pjb.2;
-        Thu, 06 Jan 2022 18:45:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nJhGdS30+uCnJBMCA7oLAq184lBQGokQoxsLttwuw5Y=;
-        b=OuzpKPg6XeqgVM9LvSRfobOAOmK3Y2f+JDVe8zGX21j2a+3oIdpgmU5IkapBKoz7Eo
-         aUnrZM9FcLarcg4YxCFGOVdNbQlcFme3vKigI0OpgvihwSVDZGdEdam1+EMwvaGHe8/8
-         aNhfai+4O7XwYvtxIfbQV5VUk0cgXGimaImnOo6jBIoSUtsA3tO3fJWElvo1A/FrW2Gk
-         x4qu1N+wD860uQRzi9ag+PaJRFnLnxCmH8qy2omFgHTzg615pak1kg7zWNlQvTY/SuHI
-         chhYrpdf9ddvVbLXadOHHXAE11QwjkBifNu9SY1p/V1ncKqY1ase+a5TLkezwaOBED7E
-         8GQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nJhGdS30+uCnJBMCA7oLAq184lBQGokQoxsLttwuw5Y=;
-        b=Ehxw6UzdHC7qyTetZgcwFoA2OqWbEA4MdvIHeDAfKBTnhfd+dnXGH+5fhPhBFmVAki
-         n6IZqBnSPJiceOPYcgFl/c9hRkRqs//bRocA/R3KhPgui1WmfswXEwDY+dJmZbtlScXI
-         09Zjg4Kx8E+TmULGRt5Zd6EWYdh47S/W65ZGNslMyYEGAicshhoqWgSh4MZ4h5zBly/7
-         H0jua3zD92V7He4I65WP+XEFmwAp6O1PymdDu/qaZCV1Ts0otm+GvC51sYaw22lwBDsZ
-         MLpFEvnfUpYvrIwUgtxrZmo78czvnUN6VdLu/FnneqHboz3lyZJUDFuFEviL60y1nMnZ
-         QLSA==
-X-Gm-Message-State: AOAM531315n2ufQ3p+IvrNg6MDwrujtXDusff0pgldCoh1RKPHAlzRW0
-        UaSnArh/UOWs/pLd8TX3Iwo=
-X-Google-Smtp-Source: ABdhPJzyIk4GOWV1wfGptUIxf9J6mGghXrqwQtaFHmAcLvF8BMSQvXrTEsrKi3WItljjgSjZ0iZwNA==
-X-Received: by 2002:a17:902:714b:b0:149:f3bc:c4d6 with SMTP id u11-20020a170902714b00b00149f3bcc4d6mr4957732plm.11.1641523549973;
-        Thu, 06 Jan 2022 18:45:49 -0800 (PST)
-Received: from localhost.localdomain ([8.212.10.173])
-        by smtp.gmail.com with ESMTPSA id e9sm3049883pgp.39.2022.01.06.18.45.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 18:45:49 -0800 (PST)
-From:   "Zhou,Junde" <junde.zhou@gmail.com>
-To:     wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhoujd@clounix.com
-Subject: [PATCH] check parameter for i2c driver interface and improve efficieny for the issues.
-Date:   Fri,  7 Jan 2022 10:45:24 +0800
-Message-Id: <20220107024524.2293-1-junde.zhou@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        id S1344868AbiAGCpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:45:46 -0500
+Received: from marcansoft.com ([212.63.210.85]:36390 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344689AbiAGCpp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 21:45:45 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 70AEA43320;
+        Fri,  7 Jan 2022 02:45:40 +0000 (UTC)
+Message-ID: <d8cd9082-4514-9c6c-85c7-418356f1f66d@marcan.st>
+Date:   Fri, 7 Jan 2022 11:45:38 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] fs: btrfs: Disable BTRFS on platforms having 256K pages
+Content-Language: en-US
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>, Neal Gompa <ngompa13@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org
+References: <a16c31f3caf448dda5d9315e056585b6fafc22c5.1623302442.git.christophe.leroy@csgroup.eu>
+ <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
+ <CAEg-Je9UJDJ=hvLLqQDsHijWnxh1Z1CwaLKCFm+-bLTfCFingg@mail.gmail.com>
+ <db88497c-ea17-27ca-6158-2a987acb7a1c@gmx.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <db88497c-ea17-27ca-6158-2a987acb7a1c@gmx.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Zhou,Junde" <zhoujd@clounix.com>
+On 2022/01/07 9:13, Qu Wenruo wrote:
+> 
+> 
+> On 2022/1/7 00:31, Neal Gompa wrote:
+>> On Wed, Jan 5, 2022 at 7:05 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>>
+>>> Hi Christophe,
+>>>
+>>> I'm recently enhancing the subpage support for btrfs, and my current
+>>> branch should solve the problem for btrfs to support larger page sizes.
+>>>
+>>> But unfortunately my current test environment can only provide page size
+>>> with 64K or 4K, no 16K or 128K/256K support.
+>>>
+>>> Mind to test my new branch on 128K page size systems?
+>>> (256K page size support is still lacking though, which will be addressed
+>>> in the future)
+>>>
+>>> https://github.com/adam900710/linux/tree/metadata_subpage_switch
+>>>
+>>
+>> The Linux Asahi folks have a 16K page environment (M1 Macs)...
+> 
+> Su Yue kindly helped me testing 16K page size, and it's pretty OK there.
+> 
+> So I'm not that concerned.
+> 
+> It's 128K page size that I'm a little concerned, and I have not machine
+> supporting that large page size to do the test.
+> 
+> Thanks,
+> Qu
 
-do parameter checking in drivers/i2c/i2c-core-smbus.c.
+I'm happy to test things on 16K in the future if you need me to :-)
 
-return -EINVAL when input parameter length is equal to 0.
-
-Signed-off-by: Zhou,Junde <zhoujd@clounix.com>
----
- drivers/i2c/i2c-core-smbus.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index e5b2d1465e7e..9fbc96be6958 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -254,6 +254,8 @@ s32 i2c_smbus_write_block_data(const struct i2c_client *client, u8 command,
- 
- 	if (length > I2C_SMBUS_BLOCK_MAX)
- 		length = I2C_SMBUS_BLOCK_MAX;
-+	if (length == 0)
-+		return -EINVAL;
- 	data.block[0] = length;
- 	memcpy(&data.block[1], values, length);
- 	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-@@ -271,6 +273,8 @@ s32 i2c_smbus_read_i2c_block_data(const struct i2c_client *client, u8 command,
- 
- 	if (length > I2C_SMBUS_BLOCK_MAX)
- 		length = I2C_SMBUS_BLOCK_MAX;
-+	if (length == 0)
-+		return -EINVAL;
- 	data.block[0] = length;
- 	status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
- 				I2C_SMBUS_READ, command,
-@@ -290,6 +294,8 @@ s32 i2c_smbus_write_i2c_block_data(const struct i2c_client *client, u8 command,
- 
- 	if (length > I2C_SMBUS_BLOCK_MAX)
- 		length = I2C_SMBUS_BLOCK_MAX;
-+	if (length == 0)
-+		return -EINVAL;
- 	data.block[0] = length;
- 	memcpy(data.block + 1, values, length);
- 	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
 -- 
-2.25.1
-
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

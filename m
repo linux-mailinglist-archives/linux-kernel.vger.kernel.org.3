@@ -2,79 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C770F487F13
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A7D487F14
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiAGWtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 17:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S229628AbiAGWt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 17:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiAGWtI (ORCPT
+        with ESMTP id S229538AbiAGWt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 17:49:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77430C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:49:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B46DBB82411
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 22:49:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A920C36AE5;
-        Fri,  7 Jan 2022 22:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641595744;
-        bh=ViSqgQgJuvP+htaIPnhi8An9uFQEuN9qNJ/GiLYWh+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1oCrg9LFE1Jvd6RAH9k2xELL+kLGarb8CZsayVgHdtMIvEHSd954rjT0/h/vgDkJ
-         MpYyr7hl6H4CWPGTx3439RkplHvCY55qpaVJGndfucNbQvIn9Iymj+K7GLh5rKCoks
-         d69kq4uXX0gwXguQeQwuZZi9TBwkdprAMFqRI+VRr2pZ7cDz36FN2y8wgYijT3hrBd
-         rB6bCFVMEQD+XgWq4ccMp2s2ysLS/5o77YvCIFS6hR2MRwFL8gefSwCApG83MM8NYS
-         dVCkXbrZKfnNSsUpWsFw414UvdLkMmk72imthqc/e5G+iz3NR6iPW9GkuY5dfulAMf
-         Z6pGm4B+hGWhA==
-Date:   Fri, 7 Jan 2022 14:49:02 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     lkp@intel.com, Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>, ltp@lists.linux.it
-Subject: Re: [LTP] [f2fs]  a1e09b03e6: ltp.ADSP024.fail
-Message-ID: <YdjDXiXYjQMJnr/c@sol.localdomain>
-References: <20211226132851.GC34518@xsang-OptiPlex-9020>
+        Fri, 7 Jan 2022 17:49:28 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E84C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:49:27 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z9so27437479edm.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 14:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0jAJoVGwKCLDgKpaY3NT5v3Vqx+TvDpkuQx8Gs0x1gs=;
+        b=DmtAvonseYsCB/mOaNcr+9nV05NBD10NPqvkp30dSg0RL2Ppk4MI0R1ncIbDvgrdOz
+         pH06HbrpA9kNXZzu3OsyLUiKaHDljZYG9iUYT5ihOs/BFJ4iZ4uUXUoNlx5DkwWl5heW
+         9YGXJTrJ9O8jzWtOUeULIdIJUlVkCuxqVn+ekKmvTRMsrj98IwG4PCLOAXfnnsHeNhB1
+         FfI/Hu5ucpsOV/SSHBjlmtM8TipBKMeqYmUS+d3iiNve7HmWJhYrb8Gy/1pCyXtbqQeD
+         +zxYcX/ZqWm6lcL9EPUtEgqCfq+aG2YjOebBRvJ+/jxjSQwlgM4Wp+5Ba/ECM1thr6tB
+         ZfRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0jAJoVGwKCLDgKpaY3NT5v3Vqx+TvDpkuQx8Gs0x1gs=;
+        b=eIeTQSh/NsrmnNzOjgDd4DEYgsrPcSgCK2qwc71K80xxlku3QqXhe9FyLymnh56+E4
+         VXgBMXLigCeMyzDG//FI0ImADUaEbOqC2utgnAzy26EOiT4xx8YbdI/gnwDI5wOymPIF
+         tFDd+briiy+b9rGarLAof+N6+ZfInjgRczlzJ057O7446LArGP+c1hUExJ4rDuVdgF77
+         yFFepTofwftqU+yOSYzavwYQaZZdGjAmZLcPo6luJcaETijMywTw7kPqrIDlouAr/z37
+         wtMs+TYKDZ/TWE8YX2ouKCEMm3viapS0nv+ot+ov5bZLuhuFDN91e35VFrE13B3W2OJ4
+         nDRA==
+X-Gm-Message-State: AOAM530PR5xv8jc1gejQEpg8jopc/evwZI62qxqJiu/gTgVetqH7ntO+
+        3u23UjMwpDAxgigjF1eGZH/KP9S9nNaH78kXPXZW9v42SIM=
+X-Google-Smtp-Source: ABdhPJwwX9ho759ZVzvF+W55tvIMEqaGGO7Vp4Mpcx74sZoQafx4zes9X+G/lG9j1CKl/613d0xbAiXn3pl1+kmoznY=
+X-Received: by 2002:aa7:d5c7:: with SMTP id d7mr7934096eds.280.1641595766362;
+ Fri, 07 Jan 2022 14:49:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211226132851.GC34518@xsang-OptiPlex-9020>
+References: <20220107145515.613009-1-narmstrong@baylibre.com> <20220107145515.613009-7-narmstrong@baylibre.com>
+In-Reply-To: <20220107145515.613009-7-narmstrong@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 7 Jan 2022 23:49:15 +0100
+Message-ID: <CAFBinCB3+dSjQFRp5CBpGk5Qi8zoxRDRaobuCtXzU6VtM8+ryQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] drm/meson: add support for MIPI-DSI transceiver
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 09:28:52PM +0800, kernel test robot wrote:
-> 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-9):
-> 
-> commit: a1e09b03e6f5c1d713c88259909137c0fd264ede ("f2fs: use iomap for direct I/O")
-> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
-> 
-> in testcase: ltp
-> version: ltp-x86_64-14c1f76-1_20211221
-> with following parameters:
-> 
-> 	disk: 1HDD
-> 	fs: f2fs
-> 	test: ltp-aiodio.part2
-> 	ucode: 0x21
-> 
+Hi Neil,
 
-This is caused by an f2fs bug where it exposes DIO-allocated blocks to users
-before they have been initialized.  This test actually fails both before and
-after my commit "f2fs: use iomap for direct I/O".  It is nondeterministic, which
-is why it may have appeared to be a regression.
+some high-level comments from me below.
 
-I'll start a separate discussion on linux-f2fs-devel about this, since this
-thread has too many irrelevant mailing lists and this has been discussed before.
+On Fri, Jan 7, 2022 at 3:58 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+[...]
+> +/*  MIPI DSI Relative REGISTERs Definitions */
+> +/* For MIPI_DSI_TOP_CNTL */
+> +#define BIT_DPI_COLOR_MODE        20
+> +#define BIT_IN_COLOR_MODE         16
+> +#define BIT_CHROMA_SUBSAMPLE      14
+> +#define BIT_COMP2_SEL             12
+> +#define BIT_COMP1_SEL             10
+> +#define BIT_COMP0_SEL              8
+> +#define BIT_DE_POL                 6
+> +#define BIT_HSYNC_POL              5
+> +#define BIT_VSYNC_POL              4
+> +#define BIT_DPICOLORM              3
+> +#define BIT_DPISHUTDN              2
+> +#define BIT_EDPITE_INTR_PULSE      1
+> +#define BIT_ERR_INTR_PULSE         0
+Why not use BIT() and GENMASK() for these and prefixing them with
+MIPI_DSI_TOP_CNTL_?
+That would make them consistent with other parts of the meson sub-driver.
 
-- Eric
+[...]
+> +static void meson_dw_mipi_dsi_hw_init(struct meson_dw_mipi_dsi *mipi_dsi)
+> +{
+> +       writel_relaxed((1 << 4) | (1 << 5) | (0 << 6),
+> +                      mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+please use the macros from above
+
+> +       writel_bits_relaxed(0xf, 0xf, mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+> +       writel_bits_relaxed(0xf, 0, mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+
+[...]
+> +       phy_power_on(mipi_dsi->phy);
+Please propagate the error code here.
+Also shouldn't this go to a new dw_mipi_dsi_phy_power_on() as the PHY
+driver uses the updated settings from phy_configure only in it's
+.power_on callback?
+
+[...]
+> +       phy_configure(mipi_dsi->phy, &mipi_dsi->phy_opts);
+please propagate the error code here as the PHY driver has some
+explicit code to return an error in it's .phy_configure callback
+
+[...]
+> +       phy_init(mipi_dsi->phy);
+please propagate the error code here
+
+[...]
+> +       phy_exit(mipi_dsi->phy);
+please propagate the error code here
+
+[...]
+> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       mipi_dsi->base = devm_ioremap_resource(&pdev->dev, res);
+other parts of the meson DRM driver have been converted to use
+devm_platform_ioremap_resource()
+I suggest updating this as well to simplify the code here
+
+[...]
+> +       mipi_dsi->phy = devm_phy_get(&pdev->dev, "dphy");
+> +       if (IS_ERR(mipi_dsi->phy)) {
+> +               ret = PTR_ERR(mipi_dsi->phy);
+> +               dev_err(&pdev->dev, "failed to get mipi dphy: %d\n", ret);
+> +               return ret;
+you can simplify this with:
+  return dev_err_probe(&pdev->dev, PTR_ERR(mipi_dsi->phy, "failed to
+get mipi dphy\n");
+
+[...]
+> +       mipi_dsi->px_clk = devm_clk_get(&pdev->dev, "px_clk");
+> +       if (IS_ERR(mipi_dsi->px_clk)) {
+> +               dev_err(&pdev->dev, "Unable to get PLL clk\n");
+> +               return PTR_ERR(mipi_dsi->px_clk);
+you can simplify this with:
+  return dev_err_probe(&pdev->dev, PTR_ERR(mipi_dsi->px_clk, "Unable
+to get PLL clk\n");
+Also should it say s/PLL clk/px clock/?
+
+[...]
+> +       top_rst = devm_reset_control_get_exclusive(&pdev->dev, "top");
+> +       if (IS_ERR(top_rst)) {
+> +               ret = PTR_ERR(top_rst);
+> +
+> +               if (ret != -EPROBE_DEFER)
+> +                       dev_err(&pdev->dev, "Unable to get reset control: %d\n", ret);
+> +
+> +               return ret;
+you can simplify this with:
+  return dev_err_probe(&pdev->dev, PTR_ERR(top_rst, "Unable to get
+reset control\n");
+
+[...]
+> +       mipi_dsi->dmd = dw_mipi_dsi_probe(pdev, &mipi_dsi->pdata);
+> +       if (IS_ERR(mipi_dsi->dmd)) {
+> +               ret = PTR_ERR(mipi_dsi->dmd);
+> +               if (ret != -EPROBE_DEFER)
+> +                       dev_err(&pdev->dev,
+> +                               "Failed to probe dw_mipi_dsi: %d\n", ret);
+you can simplify this with:
+  dev_err_probe(&pdev->dev, ret, "Failed to probe dw_mipi_dsi\n");
+
+
+Best regards,
+Martin

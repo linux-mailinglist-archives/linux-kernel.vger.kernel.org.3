@@ -2,209 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56460487B17
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25951487B1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 18:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348502AbiAGRLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 12:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
+        id S1348501AbiAGRMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 12:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240526AbiAGRLN (ORCPT
+        with ESMTP id S240501AbiAGRMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:11:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D3C061574;
-        Fri,  7 Jan 2022 09:11:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CB8FB82683;
-        Fri,  7 Jan 2022 17:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F72C36AE0;
-        Fri,  7 Jan 2022 17:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641575470;
-        bh=8pdjkK9yk5bBrBIZ78fRTTJbntr0HxUaqMtcapdm0uo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=G2shAwl+WbSW6rLWsVQVik6pd1tNj5ltwX9UO6VnpkaVEnW+PtwfJbhc0OyyO7vzC
-         ErtsGcIDi2klE8yD23PT8i3xhR/Ko+ov0JC+Jih3TncNy1rkm9QAIGekvYSgQUf2ZG
-         XAfnXCaEWVbScjlGAsk2Uzm83EJY2FH+VC8B9IlBOgyva1AmUmkl9sF8qf0J7g6gQZ
-         nYzsuuw2i8R7XGiIZ0q/VAO4NmyDsBpYwmSc39wc8+ru4r9I6z/xSloPpPrpwttXak
-         i6KP5AGqm65Rd/A+yvlGTLuqn2SE2mhb6utdqcE26iX79QSVk4aewyEiU3bZsXzzIF
-         UVTvsXIDcoLaA==
-Date:   Fri, 7 Jan 2022 11:11:08 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v3 3/8] platform/x86/intel: Add Primary to Sideband
- (P2SB) bridge support
-Message-ID: <20220107171108.GA381493@bhelgaas>
+        Fri, 7 Jan 2022 12:12:13 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963BEC06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 09:12:12 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id h7so17888317lfu.4
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 09:12:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hsyXsxtBZEcruNE0RSBDpIO6UfRz2bkT6mcQH0TCHag=;
+        b=JedtYuO2MBL/Jq63d8Dpm5ZGe9pdlriNG20Z9JXbiXhAGT2T1eosIqxH+SrokNeZ41
+         9XdXy/0ssc8O5/QBN3AWwRqY1SNx9QWp0s08dyv92POQAOPFJ5GJzbglguXPwq8Q81uf
+         wXzTM6hkENstyjHcvgZJZuXh60y3kQH3sIZDlN2ATWFy+XFGH6nyOYqRiH8B7Nm2EBz5
+         JKlkxvBPsWG8Y+gWYWZyQrUGbDfIpsIZVnrvdk8bSwZlKoCG1TPcTKigjDCu657OUyf9
+         hUQxxyMpGVJiBU+GmokUpYUsSBLdPm/8bNzEiTF7adWaKZdTzMy8j0lCGwhMMo+0KmKO
+         j4zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hsyXsxtBZEcruNE0RSBDpIO6UfRz2bkT6mcQH0TCHag=;
+        b=Z+Qco6Z2TnmYkzO+CGP9IZ8ZITUcJhqnIMMh5OF9gRYdBmqFIcp/bN/qO3FTFEKnhK
+         9eVDD+j9k4nJTo2f8TwH0AkYrS37yBKoikQJ8w2df6Iz5xD5cCzLZ0QiUMKQ3l0UQ9Xh
+         +5GWwXiomAZACBKm4kO3Hbn2Qmv0nHWX0IDByxwr1s1DH0f/ouOJVPgXIecA2z91wH6N
+         09XQ1GSixR/cjdbos7jZpVTyHfaZIwu4gTm8fxqHKz/+BFscBVBI/vee1IMKWue+Pkdz
+         Ha0rlM9gxLMRzx2qc0vxfikiMHwL96xefgGTO+hfnvfO/rPxeWOnDtE/G7oabpLvfz6n
+         nLzQ==
+X-Gm-Message-State: AOAM530YXkqPnVhgsV6iH2bQQFh2dhc5QH9DdsL6Mok0FAVJahNfCa3q
+        aVorTOfcAMo0bUbencad3La17YCzyXeWG+yqY3yxOQ==
+X-Google-Smtp-Source: ABdhPJzE30DbulawhWiCujkHtN/T2lniSHQIt33HGVagdBHXpBynwjYjWgZOH4SOHIPIVmb+1kFlNRu6ksu6c+EqOVc=
+X-Received: by 2002:a05:6512:3bb:: with SMTP id v27mr54814798lfp.71.1641575530922;
+ Fri, 07 Jan 2022 09:12:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdhUqhflS/0YsRWJ@smile.fi.intel.com>
+References: <20220105182939.106885-1-paul@crapouillou.net> <20220105182939.106885-4-paul@crapouillou.net>
+ <CAPDyKFpUUPzqonNBrFq68h8QOVxardvf2q7AuEQVeUJ-S2726A@mail.gmail.com> <PGMC5R.ZEUF4DPAECD7@crapouillou.net>
+In-Reply-To: <PGMC5R.ZEUF4DPAECD7@crapouillou.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Jan 2022 18:11:34 +0100
+Message-ID: <CAPDyKFod5nxW2dG1_a9WyEb2UNJW+OzyS411+9nVYxUOiP6iMg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 04:56:42PM +0200, Andy Shevchenko wrote:
-> On Thu, Jan 06, 2022 at 07:03:05PM -0600, Bjorn Helgaas wrote:
-> > On Tue, Dec 21, 2021 at 08:15:21PM +0200, Andy Shevchenko wrote:
+On Fri, 7 Jan 2022 at 17:43, Paul Cercueil <paul@crapouillou.net> wrote:
+>
+>
+>
+> Le ven., janv. 7 2022 at 17:33:04 +0100, Ulf Hansson
+> <ulf.hansson@linaro.org> a =C3=A9crit :
+> > On Wed, 5 Jan 2022 at 19:30, Paul Cercueil <paul@crapouillou.net>
+> > wrote:
+> >>
+> >>  These macros are defined conditionally, according to CONFIG_PM:
+> >>  - if CONFIG_PM is enabled, these macros resolve to
+> >>    DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
+> >>    exported.
+> >>
+> >>  - if CONFIG_PM is disabled, these macros will result in a dummy
+> >> static
+> >>    dev_pm_ops to be created with the __maybe_unused flag. The
+> >> dev_pm_ops
+> >>    will then be discarded by the compiler, along with the provided
+> >>    callback functions if they are not used anywhere else.
+> >>
+> >>  In the second case, the symbol is not exported, which should be
+> >>  perfectly fine - users of the symbol should all use the pm_ptr() or
+> >>  pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
+> >>  client's code will never be accessed.
+> >
+> > How common is it to export the dev_pm_ops? Do we really need a macro
+> > for this?
+>
+> $ rgrep EXPORT_SYMBOL drivers/ |grep pm_ops |wc -l
+> 44
+>
+> That should be enough to justify a macro.
 
-> > And, of course, if the OS cannot enumerate a PCI device, obviously
-> > it cannot reassign any BARs on this device it doesn't know about.
-> 
-> Exactly. And I believe this explains why the region is excluded from
-> _CRS and why we mustn't reallocate it. It probably will work (again,
-> no-one have broadly tested this), but it will consume resources
-> which can be used by others (like Thunderbolt).
+Yep, certainly! I will take a closer look beginning next week.
 
-Firmware excluded it from _CRS because it knows the region is in use.
-If it *were* in _CRS, the OS would see that no device uses it, so it
-could assign it to some PCI device, and an MMIO read would get two
-responses.
+[...]
 
-If you manually reassign that BAR to some unused address space
-elsewhere, we have no idea what would happen.  Since the device is not
-described anywhere, we have no idea what address space even *reaches*
-the device.  And if firmware is using the device, changing the BAR
-will likely break whatever firmware is doing.
-
-> > The hardware and BIOS went to some trouble to hide this MMIO space
-> > from the OS, but now the OS wants to use it.  I'm pretty sure the
-> > systems were never tested against *that* configuration either :)
-> 
-> What do you mean? The unhide/hide back has been tested and we have
-> already users in the kernel (they have other issues though with the
-> PCI rescan lock, but it doesn't mean it wasn't ever tested).
-
-Does the firmware team that hid this device sign off on the OS
-unhiding and using it?  How do we know that BIOS is not using the
-device?
-
-> > And the fact that they went to all this trouble to hide it means
-> > the BIOS is likely using it for its own purposes and the OS may
-> > cause conflicts if it also uses it.
-> 
-> What purposes do you have in mind?
-
-The functionality implemented in the P2SB MMIO space is not specified,
-so I have no idea what it does or whether BIOS could be using it.
-
-But here's a hypothetical example: some platform firmware logs errors
-to NVRAM.  That NVRAM could exist on a device like the P2SB, where the
-firmware assigns the MMIO address and hides the device from the OS.
-The firmware legitimately assumes it has exclusive control of the
-device and the OS will never touch it.  If the OS unhides the device
-and also uses that NVRAM, the platform error logging no longer works.
-
-My point is that the unhide is architecturally messed up.  The OS runs
-on the platform as described by ACPI.  Devices that cannot be
-enumerated are described in the ACPI namespace.
-
-If the OS goes outside that ACPI-described platform and pokes at
-things it "knows" should be there, the architectural model falls
-apart.  The OS relies on things the firmware didn't guarantee, and
-the firmware can't rely on non-interference from the OS.
-
-If you want to go outside the ACPI model, that's up to you, but I
-don't think we should tweak the PCI core to work with things that
-the BIOS has explicitly arranged to *not* be PCI devices.
-
-> > The way the BIOS has this set up, P2SB is logically not a PCI
-> > device.  It is not enumerable.  The MMIO space it uses is not in
-> > the _CRS of a PCI host bridge.  That means it's now a platform
-> > device.
-> 
-> I do not follow what you are implying here.
-
-On an ACPI system, the way we enumerate PCI devices is to find all the
-PCI host bridges (ACPI PNP0A03 devices), and scan config space to find
-the PCI devices below them.  That doesn't find P2SB, so from a
-software point of view, it is not a PCI device.
-
-Platform devices are by definition non-enumerable, and they have to be
-described via ACPI, DT, or some kind of platform-specific code.  P2SB
-is not enumerable, so I think a platform device is the most natural
-way to handle it.
-
-> As you see the code, it's not a driver, it's a library that reuses
-> PCI functions because the hardware is represented by an IP inside
-> PCI hierarchy and with PCI programming interface.
-
-Yes, it's a PCI programming interface at the hardware level, but at
-the software level, it's not part of PCI.
-
-This series does quite a lot of work in the PCI core to read that one
-register in a device the PCI core doesn't know about.  I think it will
-be simpler overall if instead of wedging this into PCI, we make p2sb.c
-start with the ECAM base, ioremap() it, compute the register address,
-readl() the MMIO address, and be done with it.  No need to deal with
-pci_find_bus(), pci_lock_rescan_remove(), change the core's BAR sizing
-code, etc.
-
-> > The correct way to use this would be as an ACPI device so the OS
-> > can enumerate it and the firmware can mediate access to it.  Going
-> > behind the back of the firmware does not sound advisable to me.
-> 
-> Are you going to fix all firmwares and devices on the market?  We
-> have it's done like this and unfortunately we can't fix what's is
-> done due to users who won't update their firmwares by one or another
-> reason.
-
-I just mean that from a platform design standpoint, an ACPI device
-would be the right way to do this.  Obviously it's not practical to
-add that to systems in the field.  You could create a platform_device
-manually now, and if there ever is an ACPI device, ACPI can create a
-platform_device for you.
-
-> > If you want to hack something in, I think it might be easier to
-> > treat this purely as a platform device instead of a PCI device.
-> > You can hack up the config accesses you need, discover the MMIO
-> > address, plug that in as a resource of the platform device, and go
-> > wild.  I don't think the PCI core needs to be involved at all.
-> 
-> Sorry, I do not follow you. The device is PCI, but it's taken out of
-> PCI subsystem control by this hardware trick.
-
-The electrical connection might be PCI, but from the software point of
-view, it's only a PCI device if it can be enumerated by the mechanism
-specified by the spec, namely, reading the Vendor ID of each potential
-device.
-
-Yes, doing it as a platform device would involve some code in p2sb.c
-that looks sort of like code in the PCI core.  But I don't think it's
-actually very much, and I think it would be less confusing than trying
-to pretend that this device sometimes behaves like a PCI device and
-sometimes not.
-
-> There are document numbers that make sense.
-> I believe that
-> 
-> [2]: https://cdrdv2.intel.com/v1/dl/getContent/332690?wapkw=332690
-> [3]: https://cdrdv2.intel.com/v1/dl/getContent/332691?wapkw=332691
-> 
-> work for you. Tell me if not (Meanwhile I have changed locally)
-
-Great, thanks.  The links work for me (currently).  I think a proper
-citation would also include the document title and document number,
-since I doubt Intel guarantees those URLs will work forever.
-
-Bjorn
+Kind regards
+Uffe

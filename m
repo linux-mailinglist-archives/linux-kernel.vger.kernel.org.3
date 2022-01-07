@@ -2,181 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5778F486E4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E094486E57
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343723AbiAGAEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiAGAEY (ORCPT
+        id S1343745AbiAGAGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:06:05 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10634 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245707AbiAGAGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:04:24 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD495C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:04:23 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id s21-20020a05683004d500b0058f585672efso4914646otd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:04:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=J7C4yHitHR47NwWThmeAgvuR8JMdvoB6j8bjsW2LazI=;
-        b=HY53Wt6hjFWIGUiPpgKBdRw0ZwLfNwrtTa42eqWDZjG84pTQUogeS7LpPIRBr4xTdN
-         Y+ULiF6Bh+PjVjuxRvhX4T7vS+EA9971FKMZSkM4/8d76UIbFnn5nzlKmd8Bq4jIgNu5
-         wAyTcDm/46rXItNOyVN7xdp2aS1KKuNopJwa19i1+7rF9d3CqQsmvdOA8StOICA7hSsn
-         IpTfO8qge36Pfw18UZr72bpGazYbX4eFxtYoYPEV0cCT8Vxv0IywwbEDw8AbJbasyAI9
-         kT/D0bFQdFdtTxpw3+xIGGrAczy77SqaL5n4L7mbMGy7b0mtTYipFzvfP+uXO9wWm5L0
-         yOwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=J7C4yHitHR47NwWThmeAgvuR8JMdvoB6j8bjsW2LazI=;
-        b=vvGTW2lLhAEXk/WPV2ptNX+YeFmzOnIwkYORqdqXXntmlBBmkNBqQn+IfZ7WWcuPe4
-         9rzatr1ok99uoIDUDfH+5okz97Pa3+NB6XsAY/Vjw0FTXcJ5o103TpT1W8Cl5rZrwBfI
-         C91IwNxvHzEM+5KHp9Yjm47n1v0e37PF2VZJEIXFdkKARa/B6tcZW0uOsNjksjOsgq3A
-         Xe5VsXu0V4otSoonU16YsyKx7Pfk5O2H/1X/gugq2JnLvwxrLBKlZeJpaEuBFQHRHX84
-         jNaqTQCm0jhDgtZ+X7aRvkQdGyXa9mc1H/OuasTWRX+20aZ4teu0ugtD3Fj3lw4Ovu9i
-         tvOQ==
-X-Gm-Message-State: AOAM5315I0/4cczpCqZOOchVol5ckeAydNis6vWB7DScm4Pc3E7myy2+
-        7ZiMhGdW6K6s3s128tU5NUK0iw==
-X-Google-Smtp-Source: ABdhPJy2c2E/SjB/T65xvjIV5zoB+HHwkiqPtMiEA0/4xJ52Y/gWSDSsPp2FYuPdYGsWvyW0DUs/Lg==
-X-Received: by 2002:a05:6830:2379:: with SMTP id r25mr43959467oth.343.1641513863111;
-        Thu, 06 Jan 2022 16:04:23 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a17sm732379oiw.43.2022.01.06.16.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 16:04:22 -0800 (PST)
-Date:   Thu, 6 Jan 2022 16:05:10 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>, vkoul@kernel.org
-Subject: Re: [PATCH V6 0/7] Add driver support for Data Capture and Compare
- Engine(DCC) for SM8150,SC7280,SC7180,SDM845
-Message-ID: <YdeDtlmPRQx3FU9i@ripper>
-References: <cover.1628617260.git.schowdhu@codeaurora.org>
- <396edd95-4f38-6830-99da-11e73d62a0cf@linaro.org>
- <705c280b-bced-476d-8e21-1a5afbf3d2f3@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Thu, 6 Jan 2022 19:06:03 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 206M47ow001443;
+        Thu, 6 Jan 2022 16:05:38 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=odcCMMjGlxz9y06KZBAeyksRHl21KPeCVZ9ybGuVvw0=;
+ b=HP6kPjMjQWzc4EHddEfkOf6Fy4yfioCZ6JnGTTNdr6iP/AdQR9W5/jNQRiZb20onpqaU
+ kfu6g/LBBUlXn+Xd8GEd2jbbY4pig3vrcGKWol9py9NjzKzQjoZLCOT82Vz9irodKsvT
+ e1Y+/XgX+tcqW86k6yQq4S2E92cXLnBqvm0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3de4wg2aus-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 06 Jan 2022 16:05:38 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 16:05:37 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DS3uACJHe75zo5WB9eH+OJAwr1g1c+jga8WPPYB2+7zoRfxozAeFh3nIQc6ZusZwF0m81kbLEuUShMG9BV0EJnDg656wh5TVJcIPFK2e4XZ8NnyxczsPZh0BfP99OCNThXrJV/jWQQ2neHj1n6Id/4jQ5vZRySql2onG//MKQnRYWOq83X0UC0Zwpy4Pa2uMtz3SGDMr2OB3Rq9KnvT2yht2xLaZzdY/ISIJCl7s0+iEkoUJMafR2YNVILtHFElF6qjC0FvBazuUksiUzx5EGXQ2uBh7yTIlqjFKswCh/sUHeOERRQIPNJ9YBCz7tTiBQNT2jiubGnkOAmcflD4cRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=odcCMMjGlxz9y06KZBAeyksRHl21KPeCVZ9ybGuVvw0=;
+ b=SvMzwXVk8bbP3etFhA1vw3NTHu/CEwo+2bNfTUJkmJtQVsONgafou4zP6xwky2ziYVicDgAsffP9K9qbrQEFZ5VavLQ7BPyisO4Rnsm4rrFO/Y85yTaMerVNxhybbO47uQKyzLGry27LpEpIx13AZG+JVxu3KZH8h+oW7FIymUcMbJ5tdzCuKA6Ia+efaVOfL+I5Cxn3gJsPJRhK6jht2V1aFvWJxARgg3rtMmiM4o1EHRD/75XUQksqw4e3mELxRsCG7b0TQlnK1ARJa4zuAcMgX/Dx9o4/AjW5oKtR2rl4Ve4fvw4i1LyXuZ95X5VVm7jNBP3Ei+TvRmrmrfiO/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by BY5PR15MB3521.namprd15.prod.outlook.com (2603:10b6:a03:1b6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Fri, 7 Jan
+ 2022 00:05:35 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::c4e9:672d:1e51:7913]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::c4e9:672d:1e51:7913%3]) with mapi id 15.20.4867.009; Fri, 7 Jan 2022
+ 00:05:35 +0000
+Date:   Thu, 6 Jan 2022 16:05:30 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+CC:     <willy@infradead.org>, <akpm@linux-foundation.org>,
+        <hannes@cmpxchg.org>, <mhocko@kernel.org>,
+        <vdavydov.dev@gmail.com>, <shakeelb@google.com>,
+        <shy828301@gmail.com>, <alexs@kernel.org>,
+        <richard.weiyang@gmail.com>, <david@fromorbit.com>,
+        <trond.myklebust@hammerspace.com>, <anna.schumaker@netapp.com>,
+        <jaegeuk@kernel.org>, <chao@kernel.org>,
+        <kari.argillander@gmail.com>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-nfs@vger.kernel.org>, <zhengqi.arch@bytedance.com>,
+        <duanxiongchun@bytedance.com>, <fam.zheng@bytedance.com>,
+        <smuchun@gmail.com>
+Subject: Re: [PATCH v5 01/16] mm: list_lru: optimize memory consumption of
+ arrays of per cgroup lists
+Message-ID: <YdeDym9IUghnagrK@carbon.dhcp.thefacebook.com>
+References: <20211220085649.8196-1-songmuchun@bytedance.com>
+ <20211220085649.8196-2-songmuchun@bytedance.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <705c280b-bced-476d-8e21-1a5afbf3d2f3@quicinc.com>
+In-Reply-To: <20211220085649.8196-2-songmuchun@bytedance.com>
+X-ClientProxiedBy: CO2PR07CA0061.namprd07.prod.outlook.com (2603:10b6:100::29)
+ To BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 379f3078-4249-4def-648d-08d9d1716dae
+X-MS-TrafficTypeDiagnostic: BY5PR15MB3521:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR15MB352127D78927BBB931E60A6FBE4D9@BY5PR15MB3521.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nK8ouzNW9YEvMHgWlmL5zyC6oUdf0SmjoryaQcAe+RJr4VlrjecBSNgLEm8U0A6dzTBWBU31Qu+ze2GwGi/+Pz9ZAYQfNSoZxGaIbIlUWTKSzSsblOwpWLzekeEgYyAejoIVurlz9iySC4WRUVG5oM+zBHb3E1oUsXTK3w7Ns4vNxGdZa6glXAh3P2nUt444LKTZbv+lcMfEIg4MVTSUb6iOU8QDfPDV88kZB7jOgKoqvCt/pOFZ1gDqt/ERqaaBBMKC01NCO8iCicSYakNJGbsXith8fasqfgKh6XYySza4bf5Jy0FFO8dTnViTEMPOJIRYLveqQmtjUxG+YDyUSplfd4OtB/0Y2lEcV8rcEaDeAfHUKyObbuxsrCXvYz+efjyoVwMm3TdCV1hwxi7vuz39sqk1Q7ae65WgvZaFkaeZ4q1bRL3qcxxjRRtfJkVMFVypNPzA9yzeZNSSJPzJB1u/a981XmmmHAteclrhmdNqAdj1rmKPWB6CbBljvCmzBTcdLT4ks4N2Nrp7cn3j3WaGJg9e1bL6PinDeEIcm88rf6y0YBLiU6OOgl/oCTczP9oHcTDM6aENVIQZzj/dWZN47biS8DDRuRsInT6hoW+POCHs1e02WGfnwZ2Se2oGeNXc2GdfMmXNyYR8WWDQEA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(9686003)(38100700002)(6512007)(508600001)(6486002)(8676002)(86362001)(6666004)(7416002)(316002)(8936002)(4326008)(66476007)(66556008)(5660300002)(83380400001)(186003)(2906002)(52116002)(66946007)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yE/3I50AXpE1qbdbkprCueyHNF1LqrL4/658c1OIlfJWAuXkP1cIWNRXUgv4?=
+ =?us-ascii?Q?/8EqlSMV4bu5azh62qJWoh0dl46D5WsXAsjd1FisDtyCvtVyKX0jAOJycN0c?=
+ =?us-ascii?Q?1qvDPPIu9oHwpyXBGmMXnMhAFNBssshPYnAu6H676al1C+elJZMD4gmX9+92?=
+ =?us-ascii?Q?T7vIfaWub142fJv1uHpPdq0DIbKZFHDqUdy3l68VRb0CwDCLk+RgoTgCmsh7?=
+ =?us-ascii?Q?i6aIxAVNQFZHSPpAMS9rPuBnYSxGVQzkQrzsbpuhQ1bkMhemFAtyRX+n3vp8?=
+ =?us-ascii?Q?k+9TRBqxJKPsJfZV1nZjNyIgnam7cAm+6VTI5AqDQEAVTRcoHJJ/dfrLNK5c?=
+ =?us-ascii?Q?WFCzOGycjZUTHVpSLAxX2tizeMCdSadk+bo0DUvhWc2JBp3rYs1gJmd1WjbA?=
+ =?us-ascii?Q?oXJzqMJEqklu3tQ4dGaMy0aoJQABI0fH7xjgCWVDmcHe5JGJouTjN0pgMt2F?=
+ =?us-ascii?Q?0J2QnpPeD9/FkJTxR9lDB0Z6mEjSHcEe6VMr74dGhLGz/OQpDfowi4CyREir?=
+ =?us-ascii?Q?b8xv5asqL6MuG53IATYZOx770j75c7VmBn8yKXhPH0PRjTEusOVPbDCNXbf1?=
+ =?us-ascii?Q?pzuUtM5bPL/1qweTxa1MmpgmuH8KkHT0bGheuKHHZdgy95qYzNGZx8yJPD3p?=
+ =?us-ascii?Q?L/MDQ3PgJW43XbGf1lmCd+HPTFA0OI/lh+tT+jo8ZDvybi9YThpQplPHUwKc?=
+ =?us-ascii?Q?7EQvJDJtIwPnZxIzfApQNd+DECKYTbgAbD9aBoRcuHBwEnjW7n47/SNWK6mr?=
+ =?us-ascii?Q?+BRh0plmxJC+4T6Rk096Brro68KIV2CfavsHczNK5VtuZyOpaswMlWln2mna?=
+ =?us-ascii?Q?aMCYsigPjgnNyPET4nInsdt2sw29BWLXH/0uL9Cxe9n7rIHaIKZp3LgEwBrw?=
+ =?us-ascii?Q?8XN+jyYgtP/uJHxL4whGfQ4QGDzFdunXJTSpQaO6AYvBOqQItMnLimqP2SMZ?=
+ =?us-ascii?Q?kfdOn66BQYG0rwyXeSpGCtexY6r0xbLALJ+ETy0/nk5GPdpTARpApnCIUWws?=
+ =?us-ascii?Q?e+7p4Mxuw3b7KjHi3zSwL9HegLB5bteGxYKF8NZeuhkp+mNQmDAqGBvmID9n?=
+ =?us-ascii?Q?r9HKgmEhKozsGNGBow/9wPDNx39avU4HFmPMfJgGUsIhoLHSdQopRu8Qis0a?=
+ =?us-ascii?Q?wdynpM04VBDHS9mylEfaDFsMaqsha5aj1s26tRTrrCKO1PLezY0fuyHBmkTf?=
+ =?us-ascii?Q?ghcU4CkTCGdOBhunmrKhLhKq/FQ39rw7/9/8NdI2rLBr44OeE9RV90Ep/sd2?=
+ =?us-ascii?Q?jVxNmHytsHk1uLVhEfZI26s5LxH9Wo27iCqPAJwILW4epwH4kIShP+KzrqPN?=
+ =?us-ascii?Q?Epjz0N7Bjum1AoFrw/ApBN9J+kT9kCaW3C3CaL16suQ1R0CllgUY9dHvQ3fq?=
+ =?us-ascii?Q?dzBwv7QH+Ie/ZfQRLJaQumkzWAecNr2MGSy8z46G1gMcyy8h3gQtqEJfPAU7?=
+ =?us-ascii?Q?AaLSO/WXNuqNDaQVgi2VPdUhhXy6tknOiqnOfL/pOJc8YlyQx2l0gLFPjbf0?=
+ =?us-ascii?Q?4R2wZ0URUMmqEX0tKXXeVSKqh5Wu+FgNaiTDekK4fp87Ny/gx1Gb94ujNJ0y?=
+ =?us-ascii?Q?fKOKxE/kYcbvL7V+yC7IuyBraLbyYdYD+T+SvIqq?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 379f3078-4249-4def-648d-08d9d1716dae
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2022 00:05:35.6290
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MVmZwJeDDcqFFQBtWQnq0msMi4MM7gm8ZkzEmIYXb+6M1T2aHq5QnpRsGwKBcZbl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3521
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: kATk6L6Vgraw8S2e947YFprAVEKvkTyj
+X-Proofpoint-ORIG-GUID: kATk6L6Vgraw8S2e947YFprAVEKvkTyj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-06_10,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 mlxlogscore=623 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201060146
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 06 Jan 07:20 PST 2022, Souradeep Chowdhury wrote:
+On Mon, Dec 20, 2021 at 04:56:34PM +0800, Muchun Song wrote:
+> The list_lru uses an array (list_lru_memcg->lru) to store pointers
+> which point to the list_lru_one. And the array is per memcg per node.
+> Therefore, the size of the arrays will be 10K * number_of_node * 8 (
+> a pointer size on 64 bits system) when we run 10k containers in the
+> system. The memory consumption of the arrays becomes significant. The
+> more numa node, the more memory it consumes.
+> 
+> I have done a simple test, which creates 10K memcg and mount point
+> each in a two-node system. The memory consumption of the list_lru
+> will be 24464MB. After converting the array from per memcg per node
+> to per memcg, the memory consumption is going to be 21957MB. It is
+> reduces by 2.5GB. In our AMD servers with 8 numa nodes in those
+> sysuem, the memory consumption could be more significant. The savings
+> come from the list_lru_one heads, that it also simplifies the
+> alloc/dealloc path.
+> 
+> The new scheme looks like the following.
+> 
+>   +----------+   mlrus   +----------------+   mlru   +----------------------+
+>   | list_lru +---------->| list_lru_memcg +--------->|  list_lru_per_memcg  |
+>   +----------+           +----------------+          +----------------------+
+>                                                      |  list_lru_per_memcg  |
+>                                                      +----------------------+
+>                                                      |          ...         |
+>                           +--------------+   node    +----------------------+
+>                           | list_lru_one |<----------+  list_lru_per_memcg  |
+>                           +--------------+           +----------------------+
+>                           | list_lru_one |
+>                           +--------------+
+>                           |      ...     |
+>                           +--------------+
+>                           | list_lru_one |
+>                           +--------------+
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-> 
-> On 12/16/2021 9:18 PM, Thara Gopinath wrote:
-> > 
-> > 
-> > On 8/10/21 1:54 PM, Souradeep Chowdhury wrote:
-> > > DCC(Data Capture and Compare) is a DMA engine designed for debugging
-> > > purposes.In case of a system
-> > > crash or manual software triggers by the user the DCC hardware
-> > > stores the value at the register
-> > > addresses which can be used for debugging purposes.The DCC driver
-> > > provides the user with sysfs
-> > > interface to configure the register addresses.The options that the
-> > > DCC hardware provides include
-> > > reading from registers,writing to registers,first reading and then
-> > > writing to registers and looping
-> > > through the values of the same register.
-> > > 
-> > > In certain cases a register write needs to be executed for accessing
-> > > the rest of the registers,
-> > > also the user might want to record the changing values of a register
-> > > with time for which he has the
-> > > option to use the loop feature.
-> > 
-> > Hello Souradeep,
-> > 
-> > First of all, I think this is very a useful feature to have. I have some
-> > generic design related queries/comments on driver and the interface
-> > exposed to the user space. Also, I do not understand the h/w well here,
-> > so feel free to correct me if I am wrong.
-> > 
-> > 1. Linked list looks like a very internal feature to the h/w. It really
-> > is not an info that user should be aware of. I tried reading the code a
-> > bit. IUC, every time a s/w trigger is issued the configs in all the
-> > enabled linked lists are executed. The final ram dump that you get from
-> > /dev/dcc_sram is a dump of contents from all the enabled list? Is this
-> > understanding correct ? And we are talking of at-most 4 linked list?
-> > If yes, I think it might be better to have a folder per linked list with
-> > config, config_write etc. Also if possible it will be better to dump the
-> > results to a file in the specific folder instead of reading from
-> > /dev/dcc_sram.
-> > If no, there is no real need for user to know the linked list, right?
-> > Choosing of linked list can be done by kernel driver in this case with
-> > no input needed from user.
-> > 
-> > 2. Now to the sysfs interface itself, I know lot of thought has gone
-> > into sysfs vs debugfs considerations. But, have you considered using
-> > netlink interface instead of sysfs. Netlink interface is used for
-> > asynchronous communication between kernel and user space. In case of
-> > DCC, the communication appears to be asynchronous, where in user asks
-> > the kernel to capture some info and kernel can indicate back to user
-> > when the info is captured. Also the entire mess surrounding echoing addr
-> > / value / offset repeatedly into a sysfs entry can be avoided using
-> > netlink interface.
-> > 
-> Hello Thara,
-> 
-> Thanks for your review comments. Following are some points from my end
-> 
-> 
-> 1) Each linked list represent a particular block of memory in DCC_SRAM which
-> is preserved for that particular list. That is why offset calculation is
-> done on the driver based on the linked list chosen by the user.
-> 
->     This choice needs to be made by the user since the number for the linked
-> list chosen is specific to the registers used to debug a particular
-> component.  Also we are giving the user flexibility to configure multiple
-> 
->     linked lists at one go so that even if we don't have a separate folder
-> for it , the dumps are collected as a separate list of registers. Also there
-> are certain curr_list values which may be supported by the dcc
-> 
->     hardware but may not be accessible to the user and so the choice cannot
-> be made arbitrarily from the driver.
-> 
+As much as I like the code changes (there is indeed a significant simplification!),
+I don't like the commit message and title, because I wasn't able to understand
+what the patch is doing and some parts look simply questionable. Overall it
+sounds like you reduce the number of list_lru_one structures, which is not true.
 
-But in the end, as you write out the SRAM content, is there really any
-linked lists? Afaict it's just a sequence of operations/commands. The
-linked list part seems to be your data structure of choice to keep track
-of these operations in the driver before flushing them out.
+How about something like this?
 
-Regards,
-Bjorn
+--
+mm: list_lru: transpose the array of per-node per-memcg lru lists
 
-> 
-> 2) From opensource, I can see that Netlink has been used in most of the
-> cases where we need to notify stats to the user by taking the advantage of
-> asynchronous communication. In this case, that requirement is not
-> 
->     there since it is mostly one way communication from user to kernel. Also
-> since this is used for debugging purposes perhaps sysfs adds more
-> reliability than Netlink. In case of Netlink we have the additional
-> 
->      overhead of dealing with socket calls. Let me know otherwise.
-> 
-> 
-> Thanks,
-> 
-> Souradeep
-> 
-> 
-> 
-> 
-> 
+The current scheme of maintaining per-node per-memcg lru lists looks like:
+  struct list_lru {
+    struct list_lru_node *node;           (for each node)
+      struct list_lru_memcg *memcg_lrus;
+        struct list_lru_one *lru[];       (for each memcg)
+  }
+
+By effectively transposing the two-dimension array of list_lru_one's structures
+(per-node per-memcg => per-memcg per-node) it's possible to save some memory
+and simplify alloc/dealloc paths. The new scheme looks like:
+  struct list_lru {
+    struct list_lru_memcg *mlrus;
+      struct list_lru_per_memcg *mlru[];  (for each memcg)
+        struct list_lru_one node[0];      (for each node)
+  }
+
+Memory savings are coming from having fewer list_lru_memcg structures, which
+contain an extra struct rcu_head to handle the destruction process.
+--
+
+But what worries me is that memory savings numbers you posted don't do up.
+In theory we can save
+16 (size of struct rcu_head) * 10000 (number of cgroups) * 2 (number of numa nodes) = 320k
+per slab cache. Did you have a ton of mount points? Otherwise I don't understand
+where these 2.5Gb are coming from.
+
+Thanks!

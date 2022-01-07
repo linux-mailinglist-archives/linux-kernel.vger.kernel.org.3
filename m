@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADFB48704B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D19648704E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 03:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345359AbiAGCWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 21:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S1345371AbiAGCXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 21:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344468AbiAGCWp (ORCPT
+        with ESMTP id S1344468AbiAGCXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 21:22:45 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD51BC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:22:44 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z9so16489157edm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:22:44 -0800 (PST)
+        Thu, 6 Jan 2022 21:23:39 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B549C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:23:39 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 205so4052390pfu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 18:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5YR3mYViIVeHRd2mGjIB7Zi0i9tmtApidqtk9Dz9pOM=;
-        b=TDYlvt4PSEsnBELZjCsmVQwrVG3TxmHvlxQceQFr5FcsrGKH1nIA4FVQZGJMnBwIyu
-         sqf+hHPaPmW3h/u49LjLjRWglow+7XH9J52xi8ucmVHPeg12k29w++nCRQ+zvgdfBwIz
-         qY3lbBf8n33PQ2qzhYsaGuWBoWkyL/Dp/MAcCpsLuDGC8d6N0KGu1wCHVybm9fySZh3L
-         +8Ra2T0qK7DN4rDIJ8mAHnpRLsIsCQ5ZiT2fiW3kR69mH54BI9nvSwnV4UXrNwfVjjYO
-         XrbHlmrKU6XK/zty/S2vTw1y5012UvNLzaiPFaQ9GZnmbesH8iwkTuRVXlsTanEAQdTj
-         /24A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4WQ/8JHSUHdcC60H26iiWsvlZ6gMDmzCg30bgw7CA0o=;
+        b=FL4sc2NxYvM7CVA0ejjbQITIST/Lwlef9buy0Gi1qxucnL+bBNxx9HtfQ5A7zUyeIS
+         4SdEFiy9roL/i3Nu+kpbXkViLRtnlkVsk0TfkNNlMW1Wxiqan/VWs4LdKg5KknAbC/5P
+         cglaoA3R+Vkl/XM3HR0O6vwHTyDJXCSZDhtBtwX+R5OQjJeQfq1oHgZdCpXX3tmclTIv
+         Q/dK6fuWF6NWY34EAo3GJ1AacIXX7IfIi7xie7kTycTkDYA1BCppojRR+wobKtxAfjOh
+         OEEIXaNjCGP4QsyfEgoXTdrYc2UjbO3PXgowPe7zHwk4PqLZWB9NMEOeVQ7pSXCAHCEg
+         oZSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5YR3mYViIVeHRd2mGjIB7Zi0i9tmtApidqtk9Dz9pOM=;
-        b=jza1dhPRA2e8CIujtOySVxCZKaqC8qYbCqiih22c640GptHB57cPLi43Fx4AE/dFKB
-         Jht1Q9c/ykR2SaG/5lujta/GSBb43LjBcthIVcdlJSJaiX3MzyfK2tsZHwq7K3oND/7O
-         gEmGN/BLQuMzvoeJi33XD0XgqVwF+Sn//1kCnrLohIsLBh84LXOOaZ88eH4fpV0EhsNP
-         bAfj8qZHy6uTaS2vjXOUYBvoCyAwf+YQ8b5kPnus4dB2/XUGyZTj8iDLCzRM1DMOwAkD
-         mz8X+HF3y1ZmV5Q2gSWFiAcqcYGNErH12KpfLa5dBidLIRnJR9NIFvHB+ed9dtRxbvk6
-         LUnQ==
-X-Gm-Message-State: AOAM532VZFwEwDxdUyk5j8VGOVaZig/cH8+M+rpCN57FoS2mukJVSd6F
-        Wio3sw27n1N6hxtZ6axTKgDlwsonqyQYhyClKa7Mg9uvnhA=
-X-Google-Smtp-Source: ABdhPJy0zRj1/S/19FguK/ib0HHjvZRS1GyaaMOm9W/m5vh/zKiWbsRTVfZHhRJ1dvfNb2SWSvvhLDNQVo4H3Xz/OZE=
-X-Received: by 2002:a17:907:7205:: with SMTP id dr5mr48290670ejc.696.1641522163351;
- Thu, 06 Jan 2022 18:22:43 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4WQ/8JHSUHdcC60H26iiWsvlZ6gMDmzCg30bgw7CA0o=;
+        b=dY5j82Ed+zOqLZ0MnMBoLAmb8qSEC8bqYxrPfHxwXsdxcgZIou4j4RcSPQvqm7EVyt
+         de0o4mgbVL2wRe2AYXNaXM72uiaZ5nshHaywKMu90Wwj0a+sIvE1IbHrmyh31OQGRYwI
+         OiMrEsoJNa+ec46bmfBRCUlFYpLaOpyRdeS5EgA8VkDkbxxe4WQr6YvRlrOB98otrxAY
+         eBKr2PshyRsXHYmqo2PqXBIFuqtkaM8y6oGLOivHP08uAlaeEOFWAn+/MApEXgfKYMh6
+         OacYyC1v29zPpYEAvkBYSJQVj/7lHIa2fZNVuxPJ8SVY+nRZaHXLXfAm1XilqmY26sVV
+         KlAQ==
+X-Gm-Message-State: AOAM530dm1A+aDsehExsLgsLJPIIaHEv+tjdQdobrHMc/c4OvHlyiRPy
+        E5CtVVB9HF99x4F0hvkQP0o=
+X-Google-Smtp-Source: ABdhPJw6bDSKRP5ew33JRHzIyIA8jawuyjfDgVbtuw55FeuP83NGxhrNbRGDiATaOoID+LN51S0NDQ==
+X-Received: by 2002:a63:8c1c:: with SMTP id m28mr50519636pgd.594.1641522218829;
+        Thu, 06 Jan 2022 18:23:38 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.38])
+        by smtp.googlemail.com with ESMTPSA id h4sm6439769pjk.2.2022.01.06.18.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 18:23:38 -0800 (PST)
+From:   Qinghua Jin <qhjin.dev@gmail.com>
+Cc:     qhjin_dev@163.com, Qinghua Jin <qhjin.dev@gmail.com>,
+        James Smart <james.smart@broadcom.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] nvme-fc: fix typo
+Date:   Fri,  7 Jan 2022 10:22:58 +0800
+Message-Id: <20220107022258.396058-1-qhjin.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220106175019.3116389-1-festevam@gmail.com> <Ydc2EHf5f12w4YcW@sirena.org.uk>
- <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
- <YddLe8cCvj5fVBTQ@sirena.org.uk> <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
-In-Reply-To: <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 6 Jan 2022 23:22:32 -0300
-Message-ID: <CAOMZO5DQEEHYJHv08nC=uYXbFtL9VTAatNAB8V5D_JHiQ0q=3A@mail.gmail.com>
-Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+subsytem -> subsystem
 
-On Thu, Jan 6, 2022 at 6:13 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi Mark,
->
-> On Thu, Jan 6, 2022 at 5:05 PM Mark Brown <broonie@kernel.org> wrote:
->
-> > > Where exactly would you like me to call regmap_debugfs_exit()?
-> >
-> > Before we try to reinitialise debugfs for the new name seems like the
-> > obvious place.
->
-> I am afraid I am not enough familiar with regmap to fix this problem.
->
-> If you could please submit a patch, I will be glad to test it.
+Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
+---
+ include/linux/nvme-fc-driver.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I tried this change:
+diff --git a/include/linux/nvme-fc-driver.h b/include/linux/nvme-fc-driver.h
+index cb909edb76c4..5358a5facdee 100644
+--- a/include/linux/nvme-fc-driver.h
++++ b/include/linux/nvme-fc-driver.h
+@@ -721,7 +721,7 @@ enum {
+  *
+  * Fields with static values for the port. Initialized by the
+  * port_info struct supplied to the registration call.
+- * @port_num:  NVME-FC transport subsytem port number
++ * @port_num:  NVME-FC transport subsystem port number
+  * @node_name: FC WWNN for the port
+  * @port_name: FC WWPN for the port
+  * @private:   pointer to memory allocated alongside the local port
+-- 
+2.30.2
 
-diff --git a/drivers/base/regmap/regmap-debugfs.c
-b/drivers/base/regmap/regmap-debugfs.c
-index ad684d37c2da..fa8821ecc06a 100644
---- a/drivers/base/regmap/regmap-debugfs.c
-+++ b/drivers/base/regmap/regmap-debugfs.c
-@@ -581,6 +581,8 @@ void regmap_debugfs_init(struct regmap *map)
-        if (map->dev)
-                devname = dev_name(map->dev);
-
-+       regmap_debugfs_exit(map);
-+
-        if (name) {
-                if (!map->debugfs_name) {
-                        map->debugfs_name = kasprintf(GFP_KERNEL, "%s-%s",
-
-It does avoid the 'already present' error and I see that
-/sys/kernel/debug/regmap/20e0000.pinctrl-gpr
-is present, but /sys/kernel/debug/regmap/20e0000.pinctrl-gpr is not.
-Not sure if this is the desired behavior.
-
-Cheers

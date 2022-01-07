@@ -2,74 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA5B487322
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D7E487326
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbiAGGel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:34:41 -0500
-Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:64198 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiAGGek (ORCPT
+        id S233207AbiAGGhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 01:37:34 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:51454 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231269AbiAGGhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:34:40 -0500
-Received: from [192.168.1.18] ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 5iphnH3Y7w2Xx5ipinF57P; Fri, 07 Jan 2022 07:34:39 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 07 Jan 2022 07:34:39 +0100
-X-ME-IP: 90.11.185.88
-Message-ID: <5ed8c8d1-aa61-b2ba-62ff-6714a83c96ba@wanadoo.fr>
-Date:   Fri, 7 Jan 2022 07:34:37 +0100
+        Fri, 7 Jan 2022 01:37:32 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 30CE121117;
+        Fri,  7 Jan 2022 06:37:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641537451; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vIQjcAIlZIBanVtOIP65zLGslt4nQ94ZBtMBJM1KnBg=;
+        b=Nt/gVl/PR8oGMBsVx7ETqvvijQ2sj3ZcUigBVm7c4nDgAonMZPnepg5ZbPBBFutCv+TRb8
+        bDvPmWNoMSzvA2wI1kwyY27db7ohXyuBaA0OsRiwyShaiOy7Nwg9ZILhKJhROhmWMfuqy9
+        QjaHPPnvWUP/d4gu7cXvfiTz+e5U0BY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641537451;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vIQjcAIlZIBanVtOIP65zLGslt4nQ94ZBtMBJM1KnBg=;
+        b=uBWkCLFm1ckuD5XriBHye1lbxZ2qtjiDG0BLtdKG3QM7iNhBFpS9GDJF/I99taQz/u7Bz6
+        s7eHIXHUi795HjBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A940C13CA2;
+        Fri,  7 Jan 2022 06:37:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p0OoJ6rf12HWEwAAMHmgww
+        (envelope-from <nstange@suse.de>); Fri, 07 Jan 2022 06:37:30 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Stephan Mueller <smueller@chronox.de>,
+        Nicolai Stange <nstange@suse.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com
+Subject: Re: [PATCH v2 03/18] crypto: dh - optimize domain parameter serialization for well-known groups
+In-Reply-To: <YdepEhTI/LB9wdJr@gondor.apana.org.au> (Herbert Xu's message of
+        "Fri, 7 Jan 2022 13:44:34 +1100")
+References: <20211209090358.28231-1-nstange@suse.de> <87r1a7thy0.fsf@suse.de>
+        <YcvEkfS4cONDXXB9@gondor.apana.org.au>
+        <2468270.qO8rWLYou6@tauon.chronox.de>
+        <YdepEhTI/LB9wdJr@gondor.apana.org.au>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+Date:   Fri, 07 Jan 2022 07:37:30 +0100
+Message-ID: <87lezs3vbp.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 03/16] fpga: dfl: pci: Remove usage of the deprecated
- "pci-dma-compat.h" API
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, hao.wu@intel.com,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>, linux-fpga@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
- <4a0a48fb682d13e6861f604d3cad3424672bee1f.1641500561.git.christophe.jaillet@wanadoo.fr>
- <CAK8P3a0MfHbB8ZFuTJpbVwPLZ-9QY-MWRFGukW1S4rbBBuDRzw@mail.gmail.com>
- <CAK8P3a01EyEzJKyk2upmvXW-VEb6XRGZgeBwEzH=jJYYL3saGg@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAK8P3a01EyEzJKyk2upmvXW-VEb6XRGZgeBwEzH=jJYYL3saGg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 07/01/2022 à 01:58, Arnd Bergmann a écrit :
-> On Thu, Jan 6, 2022 at 6:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
+Herbert Xu <herbert@gondor.apana.org.au> writes:
+
+> On Thu, Jan 06, 2022 at 03:30:04PM +0100, Stephan Mueller wrote:
 >>
-> 
->>> [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
->>> [2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
->>> [3]: https://lore.kernel.org/kernel-janitors/20200716192821.321233-1-christophe.jaillet@wanadoo.fr/
->>>
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->>> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
->>
->> This is a correct conversion of the driver, but I'd prefer to keep this separate
->> from the pci-dma-compat series.
-> 
-> Nevermind, I just misread the patch, and it is required after all to get
-> rid of pci_set_dma_mask()
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
+>> This means in FIPS mode, invoking the algo of "dh" should not be possibl=
+e.=20
+>> Yet, on the other hand, we cannot mark "dh" as fips_allowed =3D=3D 0 as =
+the=20
+>> templates would not be able to instantiate them.
+>
+> Right, we have exactly the same problem with sha1 where sha1
+> per se should be not be allowed in FIPS mode but hmac(sha1)
+> should be.
+>
+>> Therefore, I think we should mark "dh" as CRYPTO_ALG_INTERNAL if in FIPS=
+ mode.=20
+> I think the annotation should be added to testmgr.c.  We could
+> mark dh and sha1 as not fips_allowed but allowed as the parameter
+> of a template.  This could then be represented in the crypto_alg
+> object by a new flag.
+>
+> This flag could then be set automatically in crypto_grab_* to
+> allow them to be picked up automatically for templates.
+>
+> I'm already writing this up for sha1 anyway so let me polish it
+> off and I'll post it soon which you can then reuse it for dh.
 
-Hi,
+Perfect, this will solve my problem with how to handle "dh"
+vs. fips_enabled quite nicely.
 
-I also have another WIP which removes these DMA(32) fallbacks.
-It will be clean-up later-on.
+Many thanks!
 
-CJ
+Nicolai
 
+--=20
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
+ermany
+(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev

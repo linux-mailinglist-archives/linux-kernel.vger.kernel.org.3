@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7B648797E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A72487981
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 16:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiAGPFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 10:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S1348009AbiAGPFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 10:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiAGPFS (ORCPT
+        with ESMTP id S232324AbiAGPFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 10:05:18 -0500
+        Fri, 7 Jan 2022 10:05:19 -0500
 Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FF1C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:05:17 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id e9so10086389wra.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 07:05:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F78AC06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 07:05:18 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v6so11550918wra.8
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 07:05:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6hNM7Jx0ka9c89ARXL18Y6Yomz5BgQ3R+02Ck2gVejo=;
-        b=znEnsrWNoFHGs0yDXT0ajFzwU3OmTsmRvzG8YPbXJWhTE3RvFvkGF0qip3OKuZ9hkV
-         pH1kfep0nAMkZa70Ig88zskk6DuT2hUovV8k3yDl8LUBRr6qLgWZGObYSafE1RoYr7aD
-         3ne8alY1BcDoA2PCxjhiFXWJ96tba09NTTPYRH3AtwJUcV9BSu+8S68ZP67CUrYEHhQi
-         pdKFBZje2nL9bik1Rf7F8fnK+Ju1ptnXg6R61JT304s+PUvM3NxkOAaBTGLNOxYUD733
-         genYxlDbbQnIMLpqnIYFS0ZGH4tjjOcRDrjgfIGMz+04huQVwJDrFynQbUif+tMZ83DJ
-         sOxQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=PxD5eSuoVNmuy9uK+8ImVic/9oJqQQRTmLdQoVDSq7Y=;
+        b=allaRBuE+NfgOYcgaqBMlz6bKoIKZa8JYncqLI5T6/Xtm6s6P6phIFYcUa0rvypbvu
+         sFWrlfMVftIjPl3vzagIyy/M2Idct/NJQ65Dt4MsVWkaQSY22o8Ng5+G0JTDaiGnEgTf
+         D8J6bt/LQ3SE+l1KzZVb2l+lTAhO8AMfv3n5rhWYYg58uYnBEjk6MmYqr0fDMv8OCQqL
+         cZmgZ0QKnnBsZUQZMXVsdI0Ux9IhoNlMKgOpvpiRquPdzKj8cwuewopvpioacSyMWw7W
+         UbszOOEDbO8iGME//IQGBRZz1x5MPd6TWSz3gZMnUs1WZ39ZYmdPetza2HDkmKNZE9hi
+         8Kow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6hNM7Jx0ka9c89ARXL18Y6Yomz5BgQ3R+02Ck2gVejo=;
-        b=qhFdaOhljQl+IfacsN9j2R00GRHATB+MhL+1qYruuLgojXJzUfXF1LxRBlHqXnGmwZ
-         Zy+LDKOkL6E0Eb7lb992Yj9khQAMPpKFVLYWvD7NTzQGmBIXJgyhjbTNLfkoefS3JUHy
-         BX5zQKO6rau1LYe5bzPdJdXav3Q3Na7C6hk1jHYSZwlMt5hZSzUMhx+P2h7/XMAf86uk
-         0Iov+/P88z0UJR6mZeH8lwHbOqpxj6ZrLvHgGmx8F6wHRieAl8eRs7L/zLtLnzGhTd+7
-         hFd0Jto+q/rmfkQyoDubqyYNcFHThiDNZpQ/LNhiG6LhvTIy8Nnee8id7ZvsHJMFkItT
-         rtpw==
-X-Gm-Message-State: AOAM531fk1c1u8YAIbQX987iDzHZcDcMAXcjukWZ78oAO81E1GooBI4H
-        XtSbDlJ3qxAH5CAPa1/TCApYQ1EB393/hQ==
-X-Google-Smtp-Source: ABdhPJwsYouaf+AyQmEepe6AEBBvuC5jNOW9Pb+QrOUDvWasENRXpdZ7054JoO1WwFi5HzBbNnHvhQ==
-X-Received: by 2002:adf:f103:: with SMTP id r3mr5618982wro.555.1641567916256;
-        Fri, 07 Jan 2022 07:05:16 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=PxD5eSuoVNmuy9uK+8ImVic/9oJqQQRTmLdQoVDSq7Y=;
+        b=cw6qIo4VdR8bEvKh4VIPgz2WHVSlIFcjw7+v2WjpacXasZHGm+tc2JCplLC1GL6BR9
+         ZBQLA9BZrq4I1rS11mrjiNwOUbKOwXlrOaVihGSMlyLpUrgToZ5ybyy4bIQLClNg5ptB
+         GOloqo0Iv7YfPGQLuYhk0dTNwastWtJuOEixF8EUQx5fFHXGv/ALMbsbkk/xWNG/s6hY
+         hONbIe0hXeRahRTpqC2yi+C2HSnrJbsKi/gh0Fmevzs7gt208FFmkFPFYmZ6Ufn6sXD9
+         AyQvKWQuokMBckFdxaF1it/PQQISA24Xl1Ueky4XdoH9h9WpsEwDsBD2P6aHRWukDgKA
+         s63Q==
+X-Gm-Message-State: AOAM530TnFmE6h5nV9KgON9gypwPaX9qsgbvY9uG/0lRS2niTFzGqeN1
+        Z19IhJtb9lTSxKMfEEjZVCpciQ==
+X-Google-Smtp-Source: ABdhPJzx5sj2gYh1ULvzxGJ7yFMUUqcDmoHIYl0Ac4TNb3gQXehLf7eOzhw8ByfX64VEo3qPUrx8HA==
+X-Received: by 2002:a5d:554e:: with SMTP id g14mr53969208wrw.353.1641567917145;
+        Fri, 07 Jan 2022 07:05:17 -0800 (PST)
 Received: from localhost.localdomain ([2001:861:44c0:66c0:fc89:e826:8938:cbde])
-        by smtp.gmail.com with ESMTPSA id s194sm1848246wme.45.2022.01.07.07.05.15
+        by smtp.gmail.com with ESMTPSA id s194sm1848246wme.45.2022.01.07.07.05.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 07:05:15 -0800 (PST)
+        Fri, 07 Jan 2022 07:05:16 -0800 (PST)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     kishon@ti.com, vkoul@kernel.org
+To:     kishon@ti.com, vkoul@kernel.org, devicetree@vger.kernel.org
 Cc:     linux-phy@lists.infradead.org, linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH v3 0/2] phy: amlogic: Add support for the G12A Analog MIPI D-PHY
-Date:   Fri,  7 Jan 2022 16:05:10 +0100
-Message-Id: <20220107150512.614423-1-narmstrong@baylibre.com>
+Subject: [PATCH v3 1/2] dt-bindings: phy: add Amlogic G12A Analog MIPI D-PHY bindings
+Date:   Fri,  7 Jan 2022 16:05:11 +0100
+Message-Id: <20220107150512.614423-2-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220107150512.614423-1-narmstrong@baylibre.com>
+References: <20220107150512.614423-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -65,32 +67,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The Amlogic G12A SoCs embeds an Analog MIPI D-PHY to communicate with DSI
 panels, this adds the bindings.
-    
+
 This Analog D-PHY works with a separate Digital MIPI D-PHY.
 
-This serie adds the Bindings and the PHY driver.
-
-Changes from v2 at [2]:
-- Bindings example fix
-
-Changes from v1 at [1]:
-- Bindings fixes
-
-[1] https://lore.kernel.org/r/20201123145157.300456-1-narmstrong@baylibre.com
-[2] https://lore.kernel.org/r/20210210080736.771803-1-narmstrong@baylibre.com
-
-Neil Armstrong (2):
-  dt-bindings: phy: add Amlogic G12A Analog MIPI D-PHY bindings
-  phy: amlogic: Add G12A Analog MIPI D-PHY driver
-
- .../phy/amlogic,g12a-mipi-dphy-analog.yaml    |  35 ++++
- drivers/phy/amlogic/Kconfig                   |  12 ++
- drivers/phy/amlogic/Makefile                  |   1 +
- .../amlogic/phy-meson-g12a-mipi-dphy-analog.c | 177 ++++++++++++++++++
- 4 files changed, 225 insertions(+)
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ .../phy/amlogic,g12a-mipi-dphy-analog.yaml    | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/phy/amlogic,g12a-mipi-dphy-analog.yaml
- create mode 100644 drivers/phy/amlogic/phy-meson-g12a-mipi-dphy-analog.c
 
+diff --git a/Documentation/devicetree/bindings/phy/amlogic,g12a-mipi-dphy-analog.yaml b/Documentation/devicetree/bindings/phy/amlogic,g12a-mipi-dphy-analog.yaml
+new file mode 100644
+index 000000000000..7aa0c05d6ce4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/amlogic,g12a-mipi-dphy-analog.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/phy/amlogic,g12a-mipi-dphy-analog.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Amlogic G12A MIPI analog PHY
++
++maintainers:
++  - Neil Armstrong <narmstrong@baylibre.com>
++
++properties:
++  compatible:
++    const: amlogic,g12a-mipi-dphy-analog
++
++  "#phy-cells":
++    const: 0
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - "#phy-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    phy@0 {
++          compatible = "amlogic,g12a-mipi-dphy-analog";
++          reg = <0x0 0xc>;
++          #phy-cells = <0>;
++    };
 -- 
 2.25.1
 

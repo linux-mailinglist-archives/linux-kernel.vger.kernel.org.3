@@ -2,151 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F342C486E46
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD3F486E4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343687AbiAGADK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
+        id S1343654AbiAGAEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiAGADJ (ORCPT
+        with ESMTP id S245707AbiAGAEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:03:09 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8614C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:03:08 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id i6so3650151pla.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:03:08 -0800 (PST)
+        Thu, 6 Jan 2022 19:04:45 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29889C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:04:45 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id l10so7869782wrh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 16:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=l1t9kIfl1gk+1GwOXc/6jik8uobFLWDwlvLVoOnYJFM=;
-        b=a0q5vxcCsEkI+tSuc9EvSVS6Pu/p5qSJqJKtSQRcvsSjhTNe/45UDkSVNffDctrjGe
-         axvr3FbZiJq4uqoYX3Cvx2PVuu88L/F3Zowhc7dhUHPI1t7YLIz/vo7wK410S8GSYJhp
-         4nJbjQB7moguCRHTDal6iGf8zEYN1Ior18HRDjIzqrMiDPotb6w6MTrXuowdowPX52k3
-         ViY3xU0oc6p1auCUg2BkuypGiSWSwCdlpRFdyDO5EasDF0B6l9L0wh1lOALxhq49kLO+
-         yMbOr9CsFhtK2MlI7uISRTkwLGKIXQdZFYLbJQFefiwQCeOy9lwetdP5v4GhEWnlFBm8
-         UZwg==
+        bh=qZ/kV5I13xLnXZ0aN2eX4nkw4e8YZBKxbZZmZwBNDeM=;
+        b=qTdz+JYdP9kSgCiycihLd4IjnySCCLkrE5XPDo9GIsBavE45LvNkYIeWq3BJ6USV2x
+         H7X3rqEVnTRsqF+noTRPb9cAleSNj2yAGrWPc6xE6J9iZHqDVy+3JjW6Ofet28jtEG8A
+         6Hfc1181r6xm9GkGmLVJpRORW6xHnm/btCmB9m+IzT9NjV5jYJULb7K9jTCOSESQ3i0d
+         LO6XToJ/V0m6cyNOdtUNqrLKgR/geWT436uYr3zpsikOUMjuHwyLbpmXpN+C3EefQe0b
+         lp3G5XSkgTiPDRJ63u+sGeOnu+xHTlNjE4CE8rZgp2rjw1w3CCWBh417fdPupqX5bQXn
+         UpsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=l1t9kIfl1gk+1GwOXc/6jik8uobFLWDwlvLVoOnYJFM=;
-        b=pxdB6bPpvkO2K8lOZv4sEI+vDYfjzqQ6Zvg77MCypczztyRVYMpKvhUk95fUvC+APS
-         lw78KcyQrvmChd5p3WTWaZbX8RS6+8pICsWR6EeWsSjpHNRd3rV0IdDMZmtJjrqoPW43
-         bndZrgJ0GbsW8osLmeri673pY1hMuYjmpQ2haUORcA2tFuS42EhnqAzh7wKvJUzJn/vU
-         np6UrNZ2+8x/Yef1BN4wu3CcEtYrqr07eKM6IHMuy/Tr7ewEZRnnRFDbyh9+q4l4Yyug
-         I7wC9tSJDR1GYxpu11kcIWkP8mWqvc8OkNXsu5FmdJxb+rVpAX0CCoQNBmMrx/7xf+fW
-         WK4A==
-X-Gm-Message-State: AOAM530pIsrjk4YntqBgJ55Zht1HurcDPzrjDCFJMvXjSDN4nuosJQ4h
-        QeOlsEXMXJ2p6Ml32gMW3grwv2vXlYC/pA==
-X-Google-Smtp-Source: ABdhPJx1RVbPdRhyykBG75L7cdWUYFilTBiikqMjDdiinOKIeFIAMo5m15T9DZ/92uEZxSVU6poHqQ==
-X-Received: by 2002:a17:902:a502:b0:149:c5a5:5329 with SMTP id s2-20020a170902a50200b00149c5a55329mr14185766plq.164.1641513788028;
-        Thu, 06 Jan 2022 16:03:08 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n14sm2853684pgd.80.2022.01.06.16.03.07
+        bh=qZ/kV5I13xLnXZ0aN2eX4nkw4e8YZBKxbZZmZwBNDeM=;
+        b=Z3qdTkImNj/OCtRE4SaPFMjKB+ET7siJwnBDrEKq2YNLm2L3ig0K3US+7Vuzcvh9G2
+         7qsRz0WvD/X7vXfs0v0AZ8KD0Oxex8N+wVkljVdUjsHznJACBPsgZOSTj+ZJb4qpJ9b+
+         gJEX8hgOreKkBxkPvoPK5MNJiu7g4d7rk9UEVN23cBlNV6VjhfrowvRbTN1JhRITfvbD
+         2mH5NGj128/OQKH6STUu3NwdelMjgcZPNg00iUN6fgEGIGmi2OkwI6QvgopC9UPKTWZN
+         VrSSKqj6yV+4QvwGKtT7gJ4kZ5DU/n+Kok8614zeNL6SXH/H3Kd4w+9HOrts1gjVAcwq
+         e0aw==
+X-Gm-Message-State: AOAM533qJsx4p4Y5ZqT0UNeAzuKtGhnckIZAfEBF11RTy/pbyJPOjbES
+        jmvy6rMHCGSAj7+AgVM0k+eG
+X-Google-Smtp-Source: ABdhPJz9ow2dZr4PoHSQvxtKLvfsqZhebTiS83MEAKQ4Cz6haMOK/+y6Lh93jzvDuNLoXQFcsxNPRg==
+X-Received: by 2002:a5d:5282:: with SMTP id c2mr27213616wrv.580.1641513883556;
+        Thu, 06 Jan 2022 16:04:43 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:d60e:99b8:56c2:167e])
+        by smtp.gmail.com with ESMTPSA id f10sm3350658wmg.43.2022.01.06.16.04.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 16:03:07 -0800 (PST)
-Date:   Fri, 7 Jan 2022 00:03:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
+        Thu, 06 Jan 2022 16:04:43 -0800 (PST)
+Date:   Fri, 7 Jan 2022 00:04:39 +0000
+From:   Wedson Almeida Filho <wedsonaf@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Brazdil <dbrazdil@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] KVM: nVMX: Allow VMREAD when Enlightened VMCS is in
- use
-Message-ID: <YdeDNzho8LihsF5o@google.com>
-References: <20211214143859.111602-1-vkuznets@redhat.com>
- <20211214143859.111602-6-vkuznets@redhat.com>
+Subject: Re: [PATCH v5 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <YdeDl5aIpv1e503i@google.com>
+References: <20211221174502.63891-1-dbrazdil@google.com>
+ <20211221174502.63891-3-dbrazdil@google.com>
+ <YdXM44q07C5iQydu@google.com>
+ <YdbJgf+IWnlCHQA7@google.com>
+ <YdbSi+ANXw1JRkUj@kroah.com>
+ <Ydch333UxlCKO8Wa@google.com>
+ <Ydcl3XjGhVh33Txi@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214143859.111602-6-vkuznets@redhat.com>
+In-Reply-To: <Ydcl3XjGhVh33Txi@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021, Vitaly Kuznetsov wrote:
-> Hyper-V TLFS explicitly forbids VMREAD and VMWRITE instructions when
-> Enlightened VMCS interface is in use:
+On Thu, Jan 06, 2022 at 06:24:45PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 06, 2022 at 05:07:43PM +0000, David Brazdil wrote:
+> > Hi Greg,
+> > 
+> > On Thu, Jan 06, 2022 at 12:29:15PM +0100, Greg Kroah-Hartman wrote:
+> > > On Thu, Jan 06, 2022 at 10:50:41AM +0000, David Brazdil wrote:
+> > > > Hi Wedson,
+> > > > 
+> > > > On Wed, Jan 05, 2022 at 04:52:51PM +0000, Wedson Almeida Filho wrote:
+> > > > > On Tue, Dec 21, 2021 at 05:45:02PM +0000, David Brazdil wrote:
+> > > > > > Open Profile for DICE is an open protocol for measured boot compatible
+> > > > > > with the Trusted Computing Group's Device Identifier Composition
+> > > > > > Engine (DICE) specification. The generated Compound Device Identifier
+> > > > > > (CDI) certificates represent the hardware/software combination measured
+> > > > > > by DICE, and can be used for remote attestation and sealing.
+> > > > > > 
+> > > > > > Add a driver that exposes reserved memory regions populated by firmware
+> > > > > > with DICE CDIs and exposes them to userspace via a character device.
+> > > > > > 
+> > > > > > Userspace obtains the memory region's size from read() and calls mmap()
+> > > > > > to create a mapping of the memory region in its address space. The
+> > > > > > mapping is not allowed to be write+shared, giving userspace a guarantee
+> > > > > > that the data were not overwritten by another process.
+> > > > > > 
+> > > > > > Userspace can also call write(), which triggers a wipe of the DICE data
+> > > > > > by the driver. Because both the kernel and userspace mappings use
+> > > > > > write-combine semantics, all clients observe the memory as zeroed after
+> > > > > > the syscall has returned.
+> > > > > > 
+> > > > > > Cc: Andrew Scull <ascull@google.com>
+> > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > Signed-off-by: David Brazdil <dbrazdil@google.com>
+> > > > > > ---
+> > > > > >  drivers/misc/Kconfig     |  12 +++
+> > > > > >  drivers/misc/Makefile    |   1 +
+> > > > > >  drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
+> > > > > >  drivers/of/platform.c    |   1 +
+> > > > > >  4 files changed, 202 insertions(+)
+> > > > > >  create mode 100644 drivers/misc/open-dice.c
+> > > > > > 
+> > > > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > > > > index 0f5a49fc7c9e..a2b26426efba 100644
+> > > > > > --- a/drivers/misc/Kconfig
+> > > > > > +++ b/drivers/misc/Kconfig
+> > > > > > @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
+> > > > > >  	  switching between the dual-role USB-C port and the USB-A host ports
+> > > > > >  	  using only one USB controller.
+> > > > > >  
+> > > > > > +config OPEN_DICE
+> > > > > > +	tristate "Open Profile for DICE driver"
+> > > > > > +	depends on OF_RESERVED_MEM
+> > > > > > +	help
+> > > > > > +	  This driver exposes a DICE reserved memory region to userspace via
+> > > > > > +	  a character device. The memory region contains Compound Device
+> > > > > > +	  Identifiers (CDIs) generated by firmware as an output of DICE
+> > > > > > +	  measured boot flow. Userspace can use CDIs for remote attestation
+> > > > > > +	  and sealing.
+> > > > > > +
+> > > > > > +	  If unsure, say N.
+> > > > > > +
+> > > > > >  source "drivers/misc/c2port/Kconfig"
+> > > > > >  source "drivers/misc/eeprom/Kconfig"
+> > > > > >  source "drivers/misc/cb710/Kconfig"
+> > > > > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> > > > > > index a086197af544..70e800e9127f 100644
+> > > > > > --- a/drivers/misc/Makefile
+> > > > > > +++ b/drivers/misc/Makefile
+> > > > > > @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+> > > > > >  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+> > > > > >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+> > > > > >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+> > > > > > +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> > > > > > diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..f1819f951173
+> > > > > > --- /dev/null
+> > > > > > +++ b/drivers/misc/open-dice.c
+> > > > > > @@ -0,0 +1,188 @@
+> > > > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > > > +/*
+> > > > > > + * Copyright (C) 2021 - Google LLC
+> > > > > > + * Author: David Brazdil <dbrazdil@google.com>
+> > > > > > + *
+> > > > > > + * Driver for Open Profile for DICE.
+> > > > > > + *
+> > > > > > + * This driver takes ownership of a reserved memory region containing data
+> > > > > > + * generated by the Open Profile for DICE measured boot protocol. The memory
+> > > > > > + * contents are not interpreted by the kernel but can be mapped into a userspace
+> > > > > > + * process via a misc device. Userspace can also request a wipe of the memory.
+> > > > > > + *
+> > > > > > + * Userspace can access the data with (w/o error handling):
+> > > > > > + *
+> > > > > > + *     fd = open("/dev/open-dice0", O_RDWR);
+> > > > > > + *     read(fd, &size, sizeof(unsigned long));
+> > > > > > + *     data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+> > > > > > + *     write(fd, NULL, 0); // wipe
+> > > > > > + *     close(fd);
+> > > > > > + */
+> > > > > > +
+> > > > > > +#include <linux/io.h>
+> > > > > > +#include <linux/miscdevice.h>
+> > > > > > +#include <linux/mm.h>
+> > > > > > +#include <linux/module.h>
+> > > > > > +#include <linux/of_reserved_mem.h>
+> > > > > > +#include <linux/platform_device.h>
+> > > > > > +
+> > > > > > +#define DRIVER_NAME "open-dice"
+> > > > > > +
+> > > > > > +struct open_dice_drvdata {
+> > > > > > +	spinlock_t lock;
+> > > > > > +	char name[16];
+> > > > > > +	struct reserved_mem *rmem;
+> > > > > > +	struct miscdevice misc;
+> > > > > > +};
+> > > > > > +
+> > > > > > +static inline struct open_dice_drvdata *to_open_dice_drvdata(struct file *filp)
+> > > > > > +{
+> > > > > > +	return container_of(filp->private_data, struct open_dice_drvdata, misc);
+> > > > > > +}
+> > > > > > +
+> > > > > > +static int open_dice_wipe(struct open_dice_drvdata *drvdata)
+> > > > > > +{
+> > > > > > +	void *kaddr;
+> > > > > > +
+> > > > > > +	spin_lock(&drvdata->lock);
+> > > > > > +	kaddr = devm_memremap(drvdata->misc.this_device, drvdata->rmem->base,
+> > > > > > +			      drvdata->rmem->size, MEMREMAP_WC);
+> > > > > > +	if (IS_ERR(kaddr)) {
+> > > > > > +		spin_unlock(&drvdata->lock);
+> > > > > > +		return PTR_ERR(kaddr);
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	memset(kaddr, 0, drvdata->rmem->size);
+> > > > > > +	devm_memunmap(drvdata->misc.this_device, kaddr);
+> > > > > > +	spin_unlock(&drvdata->lock);
+> > > > > > +	return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +/*
+> > > > > > + * Copies the size of the reserved memory region to the user-provided buffer.
+> > > > > > + */
+> > > > > > +static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
+> > > > > > +			      loff_t *off)
+> > > > > > +{
+> > > > > > +	unsigned long val = to_open_dice_drvdata(filp)->rmem->size;
+> > > > > 
+> > > > > There's a UAF issue here (and in all file operations that call
+> > > > > to_open_dice_drvdata) when the platform device in unbounded from the driver
+> > > > > while userspace has an instance of the misc device open: after open_dice_remove
+> > > > > is called, all managed resources are freed (which includes this
+> > > > > open_dice_drvdata allocation).
+> > > > > 
+> > > > > No new miscdev files can be created, but the existing ones continue to exist
+> > > > > with a now dangling pointer stored in private_data. So read/write/mmap syscalls
+> > > > > from userspace will lead to dereferencing this dangling pointer.
+> > > > 
+> > > > Please correct me if I'm wrong, but I don't think this can happen
+> > > > without tainting the kernel.
+> > > > 
+> > > > To call open_dice_remove, we have to remove the module. And any process
+> > > > holding an FD of the misc device will increase the module's refcounter,
+> > > > which is zero-checked in SYS_delete_module. The only way to get past
+> > > > that check is by compiling the kernel with CONFIG_MODULE_FORCE_UNLOAD,
+> > > > which changes the implementation of try_force_unload (kernel/module.c)
+> > > > and adds taint. Otherwise SYS_delete_module returns an error.
+> > > > 
+> > > > Unless there is another way how to trigger this situation, I think the
+> > > > existing protection is sufficient. The user cannot force the removal of
+> > > > the module without agreeing to the consequences.
+> > > 
+> > > You can remove the driver from the device by writing to the "unbind"
+> > > file in sysfs for this driver.
+> > > 
+> > > Otherwise, yes, you are correct, you can not remove the module from the
+> > > system if the file is open, but that does not prevent the driver from
+> > > being unbound from the device.
+> > > 
+> > > Yes, it is rare, and only able to be done by root, and even then is
+> > > something that many drivers fail at.  But for new ones, when we notice
+> > > it, it should be fixed up before merging just to prevent any future
+> > > problems.
+> > 
+> > Ah, I see. I'd opt for just setting 'suppress_bind_attrs=true' to
+> > prevent that, unless you think unbinding needs to be supported. I don't
+> > see a use for that on our side and would prefer to keep the code simple.
 > 
-> "Any VMREAD or VMWRITE instructions while an enlightened VMCS is
-> active is unsupported and can result in unexpected behavior.""
+> No objection from me, that solves it easily :)
 > 
-> Windows 11 + WSL2 seems to ignore this, attempts to VMREAD VMCS field
-> 0x4404 ("VM-exit interruption information") are observed. Failing
-> these attempts with nested_vmx_failInvalid() makes such guests
-> unbootable.
+> > > > > > +	/* Create write-combine mapping so all clients observe a wipe. */
+> > > > > > +	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+> > > > > > +	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
+> > > > > > +	return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
+> > > > > > +}
+> > > > > 
+> > > > > Is there a reason for mapping this memory instead of, say, copying it to
+> > > > > userspace via read?
+> > > > 
+> > > > The data should be treated as secret, so the idea is that avoiding
+> > > > reading it in the kernel means we don't need to worry about it leakage
+> > > > via the stack, etc. The reason for this is that the DICE derivation
+> > > > chain may continue in userspace, so we want to minimize the chance of
+> > > > a child process getting the parent secret from the kernel.
+> > > 
+> > > The kernel stack is already secret, this should not be an issue.  And
+> > > even then, you can always erase it before the call returns to ensure
+> > > that it does not stick around, like many crypto functions do.
+> > 
+> > I can rewrite it and memzero_explicit the memory if you or Wedson feel
+> > strongly about this, but I actually really like mmap() because it avoids
+> > the need for dealing with that.
 > 
-> Microsoft confirms this is a Hyper-V bug and claims that it'll get fixed
-> eventually but for the time being we need a workaround. (Temporary) allow
+> I think if we remove the ability for userspace to unbind the device from
+> the driver with the file handle open like above, all should be ok to
+> keep this as a mmap thing.
+> 
+> Wedson, any objection?
 
-Temporarily.  And for the record, I highly doubt this will be temporary :-)
+No object from me, I like simplicity!
 
-> VMREAD to get data from the currently loaded Enlightened VMCS.
+For maintainability, I think it would be a good idea to leave a comment when
+setting suppress_bind_attrs to true that indicates that if one wants to change
+it to false in the future, one must ensure that mappings are torn down and
+lifetime issues with drvdata are addressed after unbind.
 
-...
-
-> @@ -5074,27 +5075,44 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
->  	if (!nested_vmx_check_permission(vcpu))
->  		return 1;
->  
-> +	/* Normal or Enlightened VMPTRLD must be performed first */
-> +	if (vmx->nested.current_vmptr == INVALID_GPA &&
-> +	    !evmptr_is_valid(vmx->nested.hv_evmcs_vmptr))
-> +		return nested_vmx_failInvalid(vcpu);
-
-I believe this is wrong, as it allows this combination
-
-	current_vmptr == INVALID_GPA && evmptr_is_valid() && is_guest_mode()
-
-which is eVMCS with VMCS shadowing exposed to L2.  SECONDARY_EXEC_SHADOW_VMCS is
-listed in EVMCS1_UNSUPPORTED_2NDEXEC, so it should be impossible for VMCS shadowing
-to be enabled for L2.  And if VMCS shadowing is not enabled, all VMREADs cause
-exits to L1, i.e. shouldn't reach this point.  If we want to allow that behavior,
-then I think that should be a separate change.
-
-Assuming eVMCS really isn't compatible with shadow VMCS, I believe we can do:
-
-	/*
-	 * Decode instruction info and find the field to read.  This can be
-	 * done speculatively as there are no side effects
-	 */
-	field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
-
-	if (!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)) {
-		/*
-		 * In VMX non-root operation, when the VMCS-link pointer is
-		 * INVALID_GPA, any VMREAD sets the ALU flags for VMfailInvalid.
-		 */
-		if (vmx->nested.current_vmptr == INVALID_GPA ||
-		    (is_guest_mode(vcpu) &&
-		     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-			return nested_vmx_failInvalid(vcpu);
-
-		offset = vmcs12_field_offset(field);
-		if (offset < 0)
-			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-
-		if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
-			copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
-
-		/* Read the field, zero-extended to a u64 value */
-		value = vmcs12_read_any(vmcs12, field, offset);
-	} else {
-		/*
-		 * <snarky comment about Hyper-V>
-		 */
-		if (WARN_ON_ONCE(is_guest_mode(vcpu))
-			return nested_vmx_failInvalid(vcpu);
-
-		offset = evmcs_field_offset(field, NULL);
-		if (offset < 0)
-			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-
-		/* Read the field, zero-extended to a u64 value */
-		value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
-	}
+Cheers,
+-Wedson

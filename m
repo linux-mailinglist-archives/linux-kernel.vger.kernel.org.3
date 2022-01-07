@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E713E487A83
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64733487A8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348298AbiAGQhU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 11:37:20 -0500
-Received: from aposti.net ([89.234.176.197]:39404 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240148AbiAGQhU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:37:20 -0500
-Date:   Fri, 07 Jan 2022 16:37:06 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS()
- macro
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Message-Id: <U5MC5R.JX72XLGEKI8P@crapouillou.net>
-In-Reply-To: <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
-References: <20220105182939.106885-1-paul@crapouillou.net>
-        <20220105182939.106885-2-paul@crapouillou.net>
-        <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
+        id S1348301AbiAGQjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240148AbiAGQjp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 11:39:45 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF8FC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:39:44 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 200so5883194pgg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:39:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YJyOALamxRFMJcn4o1a34k+J+D9h1hzsUTCMkOSszJ8=;
+        b=NVMcCWu8NYWRB/wm9VgzmwpVvnKv3PpnyuzqMgbKtmK2KX/l0s8YqHoowVqA1Vlsu9
+         vyVx+xv5W+kYUZKQz+adZl+yKmcI0SlDKkMsPygGV1CyVTTEis3pCmAC6DIDj+Ti5BLi
+         95Xx/NEHjxaruM9WF8cUkhTKE3aQk43ijen1QgvMk4otbL7al3YJVw0L+j64Ce0VYn7g
+         H91FMVsklLWfbfcr3x+lXGbkqY0toMVzpLOZdy3LpoeieOgQrRY3rhftPKPAUsvcq3g4
+         g53qaJ+Vo2uHng1lxfgZPWPXKpahzuoVvZ7WirO5ca7Ffz4gG23uzqr5akCb2apMdoLe
+         rcaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YJyOALamxRFMJcn4o1a34k+J+D9h1hzsUTCMkOSszJ8=;
+        b=QfVeWDjWP0Pp9Jo9Lq6AADiWe4NMXDU7Cc2VMqwNZVCuOGPxMH1YZ34XDEshUG5USF
+         ygrOtfEMrykrbrO5dy25tBWlYmDFGyyMqbj7vl0mJSeDuNwwSBPFqgM+5jO4btjl/Bhv
+         FhrO4C3qOurqIPPr1Noy7yyaa2ten9vg2B+5kDS4iZHvVEMMWCfqTC9r8BpkXnKP6N35
+         eg8V5dBjlwZlJyE3/2JPeugwqxSVSSvKRxkGD3PkUPDY5kkTjfWfe0ZGE5KOYND19Pa6
+         wi5sfay0+4rHq5DYVWO27WPc+oA/8TzS3oo/vIbRHNrQj/GlIjY9eqBtB2SfpdQzSxNO
+         LAjA==
+X-Gm-Message-State: AOAM530l2/4BRCYPKeXizhlVnd8S2wUzymMDGMxd9tCPqkBeJTMEeTRT
+        nnpTr8JUX0L/L8OmPcDiQzC5uUA0fq98VnfYMTYVHw==
+X-Google-Smtp-Source: ABdhPJwFNRCSr0/dPoK8wSlj1H2T5uIMWR0N4+GVlprTJ6WDuON1qW34quodUCBvOQ/VjzEH4Ib34wSCpNcyoA7J6WQ=
+X-Received: by 2002:a62:d044:0:b0:4ba:6f3b:ab08 with SMTP id
+ p65-20020a62d044000000b004ba6f3bab08mr65661363pfg.29.1641573584363; Fri, 07
+ Jan 2022 08:39:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <20211110220050.2854-1-jirivanek1@gmail.com> <20220106190027.1498-1-jirivanek1@gmail.com>
+ <CAGWqDJ6T6EGNjoc2qfNHLMdcuwcnJArF7a7sToRXJ90Zs57E_A@mail.gmail.com>
+In-Reply-To: <CAGWqDJ6T6EGNjoc2qfNHLMdcuwcnJArF7a7sToRXJ90Zs57E_A@mail.gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Fri, 7 Jan 2022 17:39:33 +0100
+Message-ID: <CAG3jFyuWtQ4Zr1RhHjjzjOavzt7T2_z9bHVZJ2vDXCjSEuWztA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge/tc358775: Fix for dual-link LVDS
+To:     Vinay Simha B N <simhavcs@gmail.com>
+Cc:     Jiri Vanek <jirivanek1@gmail.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ulf,
+On Thu, 6 Jan 2022 at 20:22, Vinay Simha B N <simhavcs@gmail.com> wrote:
+>
+> Reviewed-by: Vinay Simha BN <simhavcs@gmail.com>
+>
+> Jiri Vanek,
+> Could you please share the part number or datasheet of the dual-link LVDS display/panel used.
+>
+>
+> On Fri, Jan 7, 2022 at 12:30 AM Jiri Vanek <jirivanek1@gmail.com> wrote:
+>>
+>> Fixed wrong register shift for single/dual link LVDS output.
+>>
+>> Tested-by: Jiri Vanek <jirivanek1@gmail.com>
+>> Signed-off-by: Jiri Vanek <jirivanek1@gmail.com>
+>>
+>> ---
+>> v1:
+>> * Initial version
+>>
+>> v2:
+>> * Tested-by tag added
+>>
+>> ---
+>>  drivers/gpu/drm/bridge/tc358775.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/bridge/tc358775.c
+>> index 2272adcc5b4a..1d6ec1baeff2 100644
+>> --- a/drivers/gpu/drm/bridge/tc358775.c
+>> +++ b/drivers/gpu/drm/bridge/tc358775.c
+>> @@ -241,7 +241,7 @@ static inline u32 TC358775_LVCFG_PCLKDIV(uint32_t val)
+>>  }
+>>
+>>  #define TC358775_LVCFG_LVDLINK__MASK                         0x00000002
+>> -#define TC358775_LVCFG_LVDLINK__SHIFT                        0
+>> +#define TC358775_LVCFG_LVDLINK__SHIFT                        1
+>>  static inline u32 TC358775_LVCFG_LVDLINK(uint32_t val)
+>>  {
+>>         return ((val) << TC358775_LVCFG_LVDLINK__SHIFT) &
+>> --
 
-Le ven., janv. 7 2022 at 17:26:07 +0100, Ulf Hansson 
-<ulf.hansson@linaro.org> a écrit :
-> On Wed, 5 Jan 2022 at 19:29, Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->> 
->>  The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided 
->> callbacks
->>  for both runtime PM and system sleep, which is very likely to be a
->>  mistake, as a system sleep can be triggered while a given device is
->>  already PM-suspended, which would cause the suspend callback to be
->>  called twice.
->> 
->>  The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
->>  occurences) compared to the number of places where
->>  SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() 
->> and
->>  pm_runtime_force_resume(), which makes me think that none of these 
->> cases
->>  are actually valid.
->> 
->>  As this macro is currently unused, remove it before someone starts 
->> to
->>  use it in yet another invalid case.
-> 
-> I assume you refer to DEFINE_UNIVERSAL_DEV_PM_OPS here. Can you
-> perhaps make that more clear?
-
-I can.
-
->> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>  ---
->> 
->>  Notes:
->>      v2: No change
->> 
->>   include/linux/pm.h | 19 ++++++-------------
->>   1 file changed, 6 insertions(+), 13 deletions(-)
->> 
->>  diff --git a/include/linux/pm.h b/include/linux/pm.h
->>  index e1e9402180b9..31bbaafb06d2 100644
->>  --- a/include/linux/pm.h
->>  +++ b/include/linux/pm.h
->>  @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
->>          SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>   }
->> 
->>  +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->>  +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  +const struct dev_pm_ops __maybe_unused name = { \
->>  +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  +}
->>  +
->>   /*
->>    * Use this for defining a set of PM operations to be used in all 
->> situations
->>    * (system suspend, hibernation or runtime PM).
->>  @@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
->>    * .resume_early(), to the same routines as .runtime_suspend() and
->>    * .runtime_resume(), respectively (and analogously for 
->> hibernation).
->>    */
->>  -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, 
->> idle_fn) \
->>  -static const struct dev_pm_ops name = { \
->>  -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
->>  -}
->>  -
->>  -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->>  -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  -const struct dev_pm_ops __maybe_unused name = { \
->>  -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  -}
->>  -
->>  -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
-> 
-> Shouldn't this macro be deprecated any more?
-
-I can only deprecate it if there is an alternative for it. The 
-alternative is DEFINE_RUNTIME_DEV_PM_OPS() which is added in patch 4/6.
-
-Cheers,
--Paul
-
->>   #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) 
->> \
->>   const struct dev_pm_ops __maybe_unused name = { \
->>          SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  --
->>  2.34.1
->> 
-> 
-> Kind regards
-> Uffe
-
-
+Applied to drm-misc-next

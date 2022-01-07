@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CEC48793E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D4E487940
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 15:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239402AbiAGOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 09:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S1347865AbiAGOwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 09:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiAGOug (ORCPT
+        with ESMTP id S239306AbiAGOv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:50:36 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53663C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:50:35 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bp20so16354222lfb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:50:35 -0800 (PST)
+        Fri, 7 Jan 2022 09:51:56 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01860C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 06:51:56 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id f17so3222186qtf.8
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 06:51:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/d5KDjwbf/j/V9ij+JUJJfPSYLZLI5qkKPPbe9Vs//U=;
-        b=TSQQd9jhNzdgS3Q7sdJuidX/1KozmxZOJpekwqz4vCyTaQJ0rasZkimqN1gSikS1qU
-         5mTIIQNXHNFkJJmoA5pdw/tkU3piK6RSo9iAuhCZ4ECRPyCUn37RqLa+VaLiYxcMpuDb
-         t+MQR23xB1RR8nipc42nCm6hy/YFXKkZWTGznXBUP6P3IzFXsae/msC7jAE+Acavbo8c
-         NJstSG+EF0TJBxSzbOGmizrIzDc1R3FH+8O9ARcr40nG5PXAmJyQrBdDt4l3K4K7V9/C
-         Mg2bcG9+oMqHgGbOFonCBXRJHWjABVNejlF32e74emPbBAmYYZBaaCac17K+SqgWns6B
-         VY7A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8nl5vAeNGSOns35uL+fkC4uu+J6bk11HauJCQV7waYU=;
+        b=C/yvRfk+luoRHRR7kHkAThuRQYp4xm78a5kqIhQ8UpMeNBe0eGmcD1kQ7myXnJWzXD
+         Oc42tbOu6W//pMLS0RGc4l/yNqSmsIdk8WcpzutVWaYfhLGVSG/l5x5zu/t+SunX4i0r
+         ufP5oiYWU+ohl1aNtMR43P6ArASJUA+rBwf9NRMzzb8w/5h5qDGWEBke1mIjFSBViS9g
+         grsrZhMmuMCpotC6ymi092bmB9rl5cpdcymiOxkZyNmY0pPAnVp1GlYke9XK+NXR9xsW
+         AQBIkMDX+K5MhSQwkSS5u2nHOIXO6OAmqTKeS+wBLdUN5iEHzL1etCH04z38tIMIEaA2
+         xw5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/d5KDjwbf/j/V9ij+JUJJfPSYLZLI5qkKPPbe9Vs//U=;
-        b=kGE56TfBQP7tTM4BM5sQE+CJwN2qjyddOn5yJGF4UjUj1/q0qsnHULdzjGsFfgrijc
-         8Nrza/mzP01oL5Fm1Ki3Ew6Qz2AZ+a/uWZNkNhSAgTbUkeGcxUHhaqvotVav3OxkHZKc
-         U3clOA+uj0Q0Wwc/0F/fmOgpDSQR+/pdKcyt56IH4iAMP+TKeKTNdO2LJ5xRRB7gUc63
-         2YGAlpdnscD0SCOjpQzfVaITUy6/V5rkTA7lpCHYOtxVPnQ4m2JwZ/qVI0ctEV1LvDA9
-         Xf2HqkT0D2zuSqYAc4qo0yjYdXNvYKY53A/cqYvAM+y148zo4/RiylW9hLfy1yizTFIe
-         IOuw==
-X-Gm-Message-State: AOAM532iiWQHRE5Gsw0F1bOTw1lNFwuWDgtS4JKIUFpu8wQYnr7mmDPm
-        0jjE/y5TCJ3BK5k31U/zOdHpt1c9QrXMe4175f3Asw==
-X-Google-Smtp-Source: ABdhPJxmiIoDwltqWIeYOccdeCvfhPekqAhRl5CsJTEvUjmfpP0Y4AOg8V9wqCb3uZc4dt7YhDpUhKnR9B/+dEVTtNk=
-X-Received: by 2002:a19:6748:: with SMTP id e8mr26227258lfj.358.1641567033566;
- Fri, 07 Jan 2022 06:50:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8nl5vAeNGSOns35uL+fkC4uu+J6bk11HauJCQV7waYU=;
+        b=jFfi0JELUw7nSeIffFBxNnNLjrL6OLwhV4srunKbO3xjAf4mEiCxavoe37vab27jpE
+         7qMVV8nfwMrWcUmjhfRjkSbVvDvAm1u7kTLmJ7Pq+mUCyBUnwoUL8yZ1V5CipVUpCS0n
+         S/otf1jJJY9GiwfbnogOOWUqyVle/Tr27pv7Pzn+yNiUR011vS7tlYgOZyNtxI5ZXkYs
+         nVTQzETNQYYHNEKYdBUdIVXreQ9dwjxGEx1zabYP/KuIyZxMcLtMjs42Xza7Sjz5Arrg
+         SfAD3Fr3myUofLRbgBUwz/W6CXfbPdzXwCoXBIDGWuOboBhR8MQM/HzYYvcMGH/QSALf
+         lxVA==
+X-Gm-Message-State: AOAM531013+Bf+BC800MxPPpHLUYLd9P/pKhTb7/OBm9n9X4cgpDNhai
+        e9HoNIWnrLQMpwdvifVkaXCITw==
+X-Google-Smtp-Source: ABdhPJw+X70xUw0SSMUFrYRmkB6I8xJ9Ys/8V5scbKprm7qM3U7XyJoaBel6NBHVbSQjcZTvZULcnA==
+X-Received: by 2002:a05:622a:1010:: with SMTP id d16mr8179622qte.81.1641567115127;
+        Fri, 07 Jan 2022 06:51:55 -0800 (PST)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id az16sm3776899qkb.124.2022.01.07.06.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 06:51:54 -0800 (PST)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     bjorn.andersson@linaro.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, herbert@gondor.apana.org.au
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Update email address
+Date:   Fri,  7 Jan 2022 09:51:54 -0500
+Message-Id: <20220107145154.458779-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-2-daniel.lezcano@linaro.org> <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
- <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
-In-Reply-To: <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jan 2022 15:49:56 +0100
-Message-ID: <CAPDyKFpWtVFoqhFrhMQOgHUjggvg_GPYwmeK-jkphQpA7KQZRw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
- to data section
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 at 14:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 31/12/2021 14:33, Ulf Hansson wrote:
-> > On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> The dtpm table is used to let the different dtpm backends to register
-> >> their setup callbacks in a single place and preventing to export
-> >> multiple functions all around the kernel. That allows the dtpm code to
-> >> be self-encapsulated.
-> >
-> > Well, that's not entirely true. The dtpm code and its backends (or
-> > ops, whatever we call them) are already maintained from a single
-> > place, the /drivers/powercap/* directory. I assume we intend to keep
-> > it like this going forward too, right?
-> >
-> > That is also what patch4 with the devfreq backend continues to conform to.
-> >
-> >>
-> >> The dtpm hierarchy will be passed as a parameter by a platform
-> >> specific code and that will lead to the creation of the different dtpm
-> >> nodes.
-> >>
-> >> The function creating the hierarchy could be called from a module at
-> >> init time or when it is loaded. However, at this moment the table is
-> >> already freed as it belongs to the init section and the creation will
-> >> lead to a invalid memory access.
-> >>
-> >> Fix this by moving the table to the data section.
-> >
-> > With the above said, I find it a bit odd to put a table in the data
-> > section like this. Especially, since the only remaining argument for
-> > why, is to avoid exporting functions, which isn't needed anyway.
-> >
-> > I mean, it would be silly if we should continue to put subsystem
-> > specific tables in here, to just let them contain a set of subsystem
-> > specific callbacks.
->
-> So I tried to change the approach and right now I was not able to find
-> an alternative keeping the code self-encapsulate and without introducing
-> cyclic dependencies.
->
-> I suggest to keep the patch as it is and double check if it makes sense
-> to change it after adding more dtpm backends
->
-> Alternatively I can copy the table to a dynamically allocated table.
+Update my email address in the MAINTAINERS file as  the current
+one will stop functioning in a while.
 
-I am not sure I understand the problem. You don't need a "table of
-callbacks" at all, at least to start with.
+Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Instead, what you need is to make a call to a function, or actually
-one call per supported dtpm type from dtpm_setup_dt() (introduced in
-patch2).
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fb18ce7168aa..afcdd7588822 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15751,7 +15751,7 @@ F:	Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+ F:	drivers/cpufreq/qcom-cpufreq-nvmem.c
+ 
+ QUALCOMM CRYPTO DRIVERS
+-M:	Thara Gopinath <thara.gopinath@linaro.org>
++M:	Thara Gopinath <thara.gopinath@gmail.com>
+ L:	linux-crypto@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+@@ -15868,7 +15868,7 @@ F:	include/linux/if_rmnet.h
+ 
+ QUALCOMM TSENS THERMAL DRIVER
+ M:	Amit Kucheria <amitk@kernel.org>
+-M:	Thara Gopinath <thara.gopinath@linaro.org>
++M:	Thara Gopinath <thara.gopinath@gmail.com>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+-- 
+2.25.1
 
-For CPUs, you would simply call dtpm_cpu_setup() (introduced in
-patch3) from dtpm_setup_dt(), rather than walking the dtpm table an
-invoking the ->setup() callback.
-
-Did that make sense to you?
-
-Going forward, when we decide to introduce the option to add/remove
-support for dtpm types dynamically, you can then convert to a
-dynamically allocated table.
-
-[...]
-
-Kind regards
-Uffe

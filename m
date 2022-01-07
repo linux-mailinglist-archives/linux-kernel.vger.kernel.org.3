@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7460487EF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2ECE487EFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 23:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiAGWd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 17:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S231197AbiAGWeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 17:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiAGWd1 (ORCPT
+        with ESMTP id S229626AbiAGWem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 17:33:27 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050D5C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 14:33:27 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o6so27437450edc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 14:33:26 -0800 (PST)
+        Fri, 7 Jan 2022 17:34:42 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5687EC061574;
+        Fri,  7 Jan 2022 14:34:42 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id f5so6695593pgk.12;
+        Fri, 07 Jan 2022 14:34:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8T8doFUfcR5cgStFn5ZLESZonisd/dSTdaOiy5Kb8QA=;
-        b=dN/3L7Z6AJTTAnVwtOp76cHCMKCbVrV+Yelp6Q7bWAKzdu9DgwsqDDJBPIVl7NBQXw
-         X98xAlhcP4PqGdDmhDbX+ml8mPsZZ4N4uqCqNzxKBuUK27Z5BITKdSKCc+K5NMOuJjQx
-         kxYX9+cIGUYuQBh1Ou0R9Sq7Ab+poJcVEUv160oSRKYyQk3628c4DDL+1ssq9kfhUGFo
-         UVGOzO4/Nr6chGKB5mGYmRSs2U8xpKO70Yr5fNA1pmv9OUWNyMe/VCGQlp8x7Bdvl33O
-         3r2aW42EKd242AsHewkiI4SIjyvGZKqIF3IudfGie7LuOzbVgoYLKTpVbvvNLXmBRKHm
-         2czg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Hajn5l7U97JtfpTs2/PxkmXJPD+Ebo3WEH1DTWrY9fs=;
+        b=IsQj6jO9nIti6ZtG5tnTQXikV7zTjNLfa2WWQSxgWIoYWrKvEATCYX4BjSrB13lF11
+         /71JjyKKz89vsseqUkFWfGUB9x75XEk5yasllnCh9yBcaP8WrtA8g6jlpcH5zqq/5KY3
+         QxV64YzC1oEuc+Sfc/wRK5mkdKv5XbL/RPffB5Nh+QTOFuBVJX8ZsaN8IeWR1pIWCuVQ
+         qQ5TBsa48KxO/TPTUmStiaNyDw42Q/xqcaRWFsxTu/kQLqs2fkMklND9WKJdS4k03lTg
+         vMzStdl6fpSiyUOk3XGgLErIYhelFo0re3iX2cv/nWdgqn0AJ3FUFDafW1fx3rbLyOdk
+         uRIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8T8doFUfcR5cgStFn5ZLESZonisd/dSTdaOiy5Kb8QA=;
-        b=4j0lT+FeY7rVriLdZ3QBqcdg8uA/N8tN+sJxqmmEWRBbjq0ftrdjSFbD8hd0umi3A+
-         P6pZlPZLawkDir/TMr3ARjmp9n/PBmwl8mDwGtxLAgPsdxgT8KLKGjJjSf4g7GJPy6EK
-         dZtXkFQzbNYLllUjAXXtfoGllK9i4Ly7QrytvPVlrxD5lTOb1V5SVj/ZO6U8n30ShvHx
-         qnY6FfwVO96RwL7NOeB8TimBlU8tF/TzsyGxjpdyRn3K3tOna5OupakLGppmDVk8Jva5
-         Z6UCMZJYUN1YmcwJ1LQxgzUro/+yFBmtuEoQ/bslH/rTZPS8ud34Ni8mHx+uY/RT8XW5
-         exBg==
-X-Gm-Message-State: AOAM532IXzRpalX9H0lCKd3t0Ec8u+dUqWe/UUp/mkEX9XOGKARl8TxV
-        z3XKpF8wtf8RUhT4zt7jpmMPZNWX0Q5XYO/c5ZU=
-X-Google-Smtp-Source: ABdhPJzbXsvXpgX9e6hGaq1b/+QGyt2wH0o0Y6/IEpioYHbtcG4YlIfuLJSCGmsgrIbS463oHtb9vsY4g55XDvEjWEo=
-X-Received: by 2002:aa7:c7c6:: with SMTP id o6mr5089953eds.32.1641594805544;
- Fri, 07 Jan 2022 14:33:25 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=Hajn5l7U97JtfpTs2/PxkmXJPD+Ebo3WEH1DTWrY9fs=;
+        b=Ul2bX9+m9k0ravkn06pVaWjeUqPD75izNi8SojM4HkJMDqxPzPWRdemPFOSV8x8krN
+         zCXeCOu49wE1nIfJJaR73QUXhrEI+dflyEu1G9U+T43bxkVWRtPG1TTh4+U1ax7vsj7r
+         RArSz2jNA6zZV7l+JbanlWlY8F4hq6z/Ncs4c9aMUMo8jXMX77E9ckg2cyrVlSHC9uQT
+         7J08983tHpbQpLVavZxQa/fsmq9g8uK+KugyvPaZiEGfSgkvUi128yT4kcwA5s+0qhDs
+         mYDDLbx1aAWMrxnjwQFomT4VFere89gxILqzdw7zlWWNPTxm4Vwv5gAmPxwfKtxu3ggt
+         8gxw==
+X-Gm-Message-State: AOAM530HIyJd0LhgXLRr/MFsL6kA0RXYKm6gSkx6oEcbn78pZH5SyJFU
+        q7olmrDv+KghGoLx1ldWWKlaNsIAVCyniw==
+X-Google-Smtp-Source: ABdhPJwNFP28998exn86X98TlnrRjOP11pUelKWH34INVylajcgEsItEeu/0fsqTJgWVUoHjWNxmKQ==
+X-Received: by 2002:aa7:88ce:0:b0:4ba:efec:39e0 with SMTP id k14-20020aa788ce000000b004baefec39e0mr66630743pff.80.1641594881676;
+        Fri, 07 Jan 2022 14:34:41 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id e20sm6397994pfd.104.2022.01.07.14.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 14:34:41 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 7 Jan 2022 12:34:40 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: [GIT PULL] cgroup fixes for v5.16-rc8
+Message-ID: <YdjAAK4AtsUDv5vw@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20220107145515.613009-1-narmstrong@baylibre.com> <20220107145515.613009-4-narmstrong@baylibre.com>
-In-Reply-To: <20220107145515.613009-4-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 7 Jan 2022 23:33:14 +0100
-Message-ID: <CAFBinCA-df8Sedqh8Arh_BsMCHYv6-Kb3owrkFBd=W_EY2qxSA@mail.gmail.com>
-Subject: Re: [PATCH 3/6] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Hi Neil,
+Hello, Linus.
 
-On Fri, Jan 7, 2022 at 3:57 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> This adds supports for the ENCL encoder connected to a MIPI-DSI transceiver on the
-> Amlogic AXG SoCs.
-Should this be "AXG and newer SoCs" or is this really AXG specific?
+Sorry about the late pull request. I ended up staying offline longer than
+planned. This pull request contains the cgroup.procs permission check fixes
+so that they use the credentials at the time of open rather than write,
+which also fixes the cgroup namespace lifetime bug.
 
-[...]
-> +#define GAMMA_VCOM_POL    7     /* RW */
-> +#define GAMMA_RVS_OUT     6     /* RW */
-> +#define ADR_RDY           5     /* Read Only */
-> +#define WR_RDY            4     /* Read Only */
-> +#define RD_RDY            3     /* Read Only */
-> +#define GAMMA_TR          2     /* RW */
-> +#define GAMMA_SET         1     /* RW */
-> +#define GAMMA_EN          0     /* RW */
-> +
-> +#define H_RD              12
-> +#define H_AUTO_INC        11
-> +#define H_SEL_R           10
-> +#define H_SEL_G           9
-> +#define H_SEL_B           8
-I think all values above can be wrapped in the BIT() macro, then you
-don't need that below.
+While the changes seem safe to me and they tested fine, this is on the
+invasive side for a pull request this late, so please feel free to ignore.
+I'll include them when the merge window opens.
 
-> +#define HADR_MSB          7            /* 7:0 */
-> +#define HADR              0            /* 7:0 */
-Here GENMASK(7, 0) can be used for HADR
+Thanks and happy new year.
 
-Also I think prefixing all macros above with their register name
-(L_GAMMA_CNTL_PORT_ or L_GAMMA_ADDR_PORT_) will make the code easier
-to read.
+The following changes since commit 75acfdb6fd922598a408a0d864486aeb167c1a97:
 
-[...]
-> +       writel_relaxed(0x8000, priv->io_base + _REG(ENCL_VIDEO_MODE));
-The public S905 datasheet calls 0x8000 ENCL_PX_LN_CNT_SHADOW_EN
+  Merge tag 'net-5.16-final' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-01-05 14:08:56 -0800)
 
-> +       writel_relaxed(0x0418, priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
-According to the public S905 datasheet this is:
-- BIT(3): ENCL_VIDEO_MODE_ADV_VFIFO_EN
-- BIT(4): ENCL_VIDEO_MODE_ADV_GAIN_HDTV
-- BIT(10): ENCL_SEL_GAMMA_RGB_IN
+are available in the Git repository at:
 
-> +       writel_relaxed(0x1000, priv->io_base + _REG(ENCL_VIDEO_FILT_CTRL));
-I don't know the exact name but the 32-bit vendor kernel sources have
-a comment [0] saying that 0x1000 is "bypass filter"
-But maybe we can simply call it ENCL_VIDEO_FILT_CTRL_BYPASS_FILTER
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.16-fixes
 
-[...]
-> +       writel_relaxed(3, priv->io_base + _REG(ENCL_VIDEO_RGBIN_CTRL));
-The public S905 datasheet says:
-- BIT(0): USE RGB data from VIU, furthermore a comment in the 3.10
-kernel sources make this more clear: bit[0] 1:RGB, 0:YUV
-- BIT(1): CFG_VIDEO_RGBIN_ZBLK
+for you to fetch changes up to bf35a7879f1dfb0d050fe779168bcf25c7de66f5:
 
-> +       /* default black pattern */
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_MDSEL));
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_Y));
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_CB));
-> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_CR));
-> +       writel_relaxed(1, priv->io_base + _REG(ENCL_TST_EN));
-> +       writel_bits_relaxed(BIT(3), 0, priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
-same as above: ENCL_VIDEO_MODE_ADV_VFIFO_EN
+  selftests: cgroup: Test open-time cgroup namespace usage for migration checks (2022-01-06 11:02:29 -1000)
 
-> +
-> +       writel_relaxed(1, priv->io_base + _REG(ENCL_VIDEO_EN));
-> +
-> +       writel_relaxed(0, priv->io_base + _REG(L_RGB_BASE_ADDR));
-> +       writel_relaxed(0x400, priv->io_base + _REG(L_RGB_COEFF_ADDR));
-note to self: L_RGB_COEFF_ADDR seems to contain some "magic" value,
-there's no further info in the 3.10 kernel sources or datasheet
+----------------------------------------------------------------
+Tejun Heo (6):
+      cgroup: Use open-time credentials for process migraton perm checks
+      cgroup: Allocate cgroup_file_ctx for kernfs_open_file->priv
+      cgroup: Use open-time cgroup namespace for process migration perm checks
+      selftests: cgroup: Make cg_create() use 0755 for permission instead of 0644
+      selftests: cgroup: Test open-time credential usage for migration checks
+      selftests: cgroup: Test open-time cgroup namespace usage for migration checks
 
-> +       writel_relaxed(0x400, priv->io_base + _REG(L_DITH_CNTL_ADDR));
-According to the public S905 datasheet BIT(10) is DITH10_EN (10-bits
-Dithering to 8 Bits Enable).
-I am not sure if this would belong to the selected video mode/bit depth.
-I'll let other reviewers decide if this is relevant or not because I don't know.
+ kernel/cgroup/cgroup-internal.h              |  19 +++
+ kernel/cgroup/cgroup-v1.c                    |  33 +++---
+ kernel/cgroup/cgroup.c                       |  88 +++++++++-----
+ tools/testing/selftests/cgroup/cgroup_util.c |   2 +-
+ tools/testing/selftests/cgroup/test_core.c   | 165 +++++++++++++++++++++++++++
+ 5 files changed, 263 insertions(+), 44 deletions(-)
 
-[...]
-> +       writel_relaxed(0, priv->io_base + _REG(L_INV_CNT_ADDR));
-> +       writel_relaxed(BIT(4) | BIT(5),
-> +                      priv->io_base + _REG(L_TCON_MISC_SEL_ADDR));
-the public S905 datasheet states:
-- BIT(4): STV1_SEL (STV1 is frame Signal)
-- BIT(5): STV2_SEL (STV2 is frame Signal)
-This doesn't seem helpful to me though, but maybe you can still create
-preprocessor macros for this (for consistency)?
-
-[...]
-> +       switch (priv->venc.current_mode) {
-> +       case MESON_VENC_MODE_MIPI_DSI:
-> +               writel_relaxed(0x200,
-> +                              priv->io_base + _REG(VENC_INTCTRL));
-the public S905 datasheet documents this as:
-- BIT(9): ENCP_LNRST_INT_EN (Progressive encoder filed change interrupt enable)
-Please add a preprocessor macro to make it consistent with
-VENC_INTCTRL_ENCI_LNRST_INT_EN which already exists and is used below.
-
-
-Best regards,
-Martin
+-- 
+tejun

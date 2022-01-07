@@ -2,178 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6771748730A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C22D487311
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 07:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbiAGGWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 01:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiAGGWJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 01:22:09 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083C4C061245;
-        Thu,  6 Jan 2022 22:22:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVY666Qv7z4xsl;
-        Fri,  7 Jan 2022 17:22:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641536527;
-        bh=nHGeUliebDmEO1ebGGAygpLNK2xu1YUT2hKojM43UWU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JvIkye2mopHOr9Jw17Wl+wTizDiw9v4p3xMgcAe7FcoG7pQTs9iDJUkejTZEr/mqj
-         b9d/MNPgNx4InjCvgF1k5QLaW2fO82dHaJI2/9Ic8+pktGu3rpYVzniOOYwweCqgB4
-         njec+rqRj6KDxZmBOCupcbfVdnnK0lLjRPsRjhbhszw04xvpBUYxgMEBv2/apSGD4E
-         6G4K88Z6UlqudQdxffgE3G/ENIEJinxajF6QTzNdhNhQBbK+8UMyIexgdxSAEJjvgj
-         V3+Gt7UzuFwQYTpjb3FcFr7tjABH/Crn6F0W16U6eE9jNGLWpZZfjSMJK6L+tP8cZS
-         MTbk0HDxnexcg==
-Date:   Fri, 7 Jan 2022 17:22:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: much more building going on
-Message-ID: <20220107172206.3fbdd09f@canb.auug.org.au>
-In-Reply-To: <20220107171319.0afa619a@canb.auug.org.au>
-References: <20220107171319.0afa619a@canb.auug.org.au>
+        id S231869AbiAGG2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 01:28:36 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:34960 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231816AbiAGG2f (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 01:28:35 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAD32RZ_3ddhP_LGBQ--.10292S2;
+        Fri, 07 Jan 2022 14:28:15 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     damien.lemoal@opensource.wdc.com, davem@davemloft.net
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] ide: Check for null pointer after calling devm_ioremap
+Date:   Fri,  7 Jan 2022 14:28:14 +0800
+Message-Id: <20220107062814.3611747-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gfnq..WJdAx3hrDrbehH6IR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAD32RZ_3ddhP_LGBQ--.10292S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
+        c2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjfU8xR6UUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/gfnq..WJdAx3hrDrbehH6IR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jan 07, 2022 at 01:30:35PM +0800, Damien Le Moal wrote:
+> There is no such file... What kernel is this patch against ?
 
-Hi all,
+Thanks, this patch is based on linux-stable-5.13.9.
+And I just notice that in Jun 16 2021, this file was removed.
+Anyway, this patch can be applied to the previous version, which still
+has the `drivers/ide/ide_platform.c`.
 
-On Fri, 7 Jan 2022 17:13:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Since yesterday, my builds are taking much longer and it seems just
-> about everything is being rebuilt when there should be very little done.
->=20
-> One example is after mergeing the clockevents tree, the diffstat looks
-> like this:
->=20
-> $ git diff --stat HEAD^..
->  .../devicetree/bindings/timer/cdns,ttc.yaml        |   3 +
->  .../bindings/timer/mstar,msc313e-timer.yaml        |  46 ++++
->  .../devicetree/bindings/timer/nxp,tpm-timer.yaml   |   6 +-
->  .../devicetree/bindings/timer/renesas,ostm.yaml    |  20 +-
->  .../bindings/timer/rockchip,rk-timer.yaml          |   1 -
->  MAINTAINERS                                        |   1 +
->  drivers/clocksource/Kconfig                        |  12 +-
->  drivers/clocksource/Makefile                       |   1 +
->  drivers/clocksource/exynos_mct.c                   |  52 +++--
->  drivers/clocksource/renesas-ostm.c                 |  39 +++-
->  drivers/clocksource/timer-imx-sysctr.c             |   6 +-
->  drivers/clocksource/timer-msc313e.c                | 253 +++++++++++++++=
-++++++
->  drivers/clocksource/timer-pistachio.c              |   3 +-
->  13 files changed, 411 insertions(+), 32 deletions(-)
->=20
-> but my powerpc and arm builds rebuilt basically everything.
->=20
-> This happens for a lot of merges - though some do not rebuild very much
-> at all.
->=20
-> Any ideas about what changed yesterday?  (I directed this to the kbuild
-> tree maintainer since the kbuild tree was updated yesterday - though
-> that may be a coincidence).
+Sincerely thanks,
+Jiang
 
-OK, it *may* have something to do with Kconfig file updates for example wit=
-h this diffstat:
-
- .../memory-controllers/synopsys,ddrc-ecc.yaml      |  1 +
- drivers/edac/Kconfig                               |  2 +-
- drivers/edac/amd64_edac.c                          | 36 ++++++++++++++-
- drivers/edac/amd64_edac.h                          |  8 +++-
- drivers/edac/edac_mc.c                             |  2 +
- drivers/edac/sb_edac.c                             |  2 +-
- drivers/edac/sifive_edac.c                         |  2 +-
- drivers/edac/synopsys_edac.c                       | 52 ++++++++++++++++++=
-----
- drivers/ras/cec.c                                  |  2 +-
- include/linux/edac.h                               |  6 +++
- 10 files changed, 98 insertions(+), 15 deletions(-)
-
-And only this Kconfig change:
-
-$ git diff HEAD^.. drivers/edac/Kconfig
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 2fc4c3f91fd5..58ab63642e72 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -484,7 +484,7 @@ config EDAC_ARMADA_XP
-=20
- config EDAC_SYNOPSYS
-        tristate "Synopsys DDR Memory Controller"
--       depends on ARCH_ZYNQ || ARCH_ZYNQMP
-+       depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
-        help
-          Support for error detection and correction on the Synopsys DDR
-          memory controller.
-
-I noticed that the following files have changed (timestamp at least) in
-the object directory:
-
--rw-r--r-- 1 sfr users    46271 Jan  7 17:09 ./include/config/auto.conf.cmd
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_TCP_C=
-ONG
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_INIT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/BUILD_SALT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_SYSTOHC_D=
-EVICE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_TARGETS
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_IMPLICIT_F=
-ALLTHROUGH
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_HCTOSYS_D=
-EVICE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_FIRMWARE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_HOSTN=
-AME
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_VERSION_TE=
-XT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MODPROBE_PATH
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LOCALVERSION
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/INITRAMFS_SOU=
-RCE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/FAT_DEFAULT_I=
-OCHARSET
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CMDLINE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/NLS_DEFAULT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MAGIC_SYSRQ_S=
-ERIAL_SEQUENCE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LSM
--rw-r--r-- 1 sfr users    54294 Jan  7 17:09 ./include/generated/autoconf.h
--rw-r--r-- 1 sfr users    39198 Jan  7 17:09 ./include/config/auto.conf
-
-then lots more is rebuilt.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gfnq..WJdAx3hrDrbehH6IR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHX3A4ACgkQAVBC80lX
-0Gzy5Qf8CwGEMFBySFhGkmnSMraFTI2kyaPxmd7fn75Hd/xKyIkIJp5txKpReDPD
-nBA+xrpGP3emNkSSAOcqaeybFY3foddQt8CGCWiyVaJhlY3AOpvNr7e5QZqzIgtD
-O1CZFDDVoBwFP/lCbueNY5xRe1Q6vmgDv6SfxERjmOpc39y9B2bZSGyHqlrbw8Od
-apeWnvFNmGts6/pnSTkUQuiBrLTXxHmY18fxw/vaQwchozdFQ33iVi/FDdgcIPfu
-brZpATo0VFC0d4oCKZ1YyVMaTmJuhL7oT+Ay8wo6TgqeYB5i6GEEgnrOQsokw9Kn
-4ZLkwZi+yq9py/GlHUZlmmf+T3B73Q==
-=AKR7
------END PGP SIGNATURE-----
-
---Sig_/gfnq..WJdAx3hrDrbehH6IR--

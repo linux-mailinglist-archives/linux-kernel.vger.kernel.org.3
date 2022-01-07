@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 590614873CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2572E4873DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 09:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345188AbiAGIBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 03:01:04 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:53608 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235102AbiAGIBD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 03:01:03 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAHnqYW89dhYnv1BQ--.51251S2;
-        Fri, 07 Jan 2022 16:00:22 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, straube.linux@gmail.com,
-        martin@kaiser.cx
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] staging: r8188eu: Check for null pointer after calling skb_clone
-Date:   Fri,  7 Jan 2022 16:00:21 +0800
-Message-Id: <20220107080021.4034205-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAHnqYW89dhYnv1BQ--.51251S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw43GryUtFWUGr4fCr17Jrb_yoWDAwc_uF
-        W0qF1DX34DGr1xtw1UtF1xJryIva1xZr4Svw4jka95Xw43GFW5X34kuFy5Ga45WFW5Kr9r
-        Cr4vqrWFqr18WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8ZwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhdbbUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S1345364AbiAGIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 03:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345296AbiAGIEd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 03:04:33 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA00DC061245
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 00:04:33 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id x15so4358492plg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 00:04:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=5wW8NfAn9pQjxsJKsrZHm4OzxBBzuThAXcIy8E5AppU=;
+        b=C/xfse/uxT2x9U/Tl+654bYJSgGUNOo661B+VyheRZrXA/TtzFIeiRbcIjHxH0RYT3
+         Gt1y6wEmMzdV8HTH5F6gk6s7qQfFX5GC4TPFO5rzoerh5MXtn+dw2XgjPTNca20YiBsT
+         R+7t5IOsj4DquenT2BiiGtDUXvlqb//qBkTGVoQNFOVTDR14/qfqVu2/KGLImu4ASX3r
+         btfkRNgesp8oC4WSYRI9FoknS5gKBUSssP5udDH1o1fHs/0NKNuqaMTBs2xddLVKYAEe
+         EvwXR+J+pDbICtJOAydYtPMb2OGRgH+D0PjgGoXXMd1aI7xvFqS2pqQ6MJtIq2k6uOwx
+         7HGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5wW8NfAn9pQjxsJKsrZHm4OzxBBzuThAXcIy8E5AppU=;
+        b=hldFpKQ3ZRHnLbAOcwpzAqlIUsibnD7TBNWrm+Umn/ESV4Q9Pn7RrCjdAVkoUqNp9t
+         /as7QGpd2Tk60JsxlXb1BxoIWEGd2w4A78b1LHMOs1hPhJcZj4HeMovpf4GmVtkBOZyu
+         2komzP2OlYHSBKovR8gpohPus0JNXP79D4h8/HYQWdx0MeYzr6wxaaaFamwABV0KZQxM
+         gU0hd5eb11y7o5vTgG4j7nDwtoEM7v1JjJSEM/PychHp3T24IoATShYmin0qYpHrzAhi
+         3TslKCrW5V7maQWckQon7yXLlza7K0KseymZeJV6l4P+M5dHzPccDpjUgl5Ijf13383U
+         5zRg==
+X-Gm-Message-State: AOAM530AEHus7v4NrSbDrfayfnEgGW1r7dwu8WFq1QpAvlhiytP5uRjb
+        gC41EjBJs2F/GXFDhsx6Kd4=
+X-Google-Smtp-Source: ABdhPJxqn041UHbxvVSnHdNKGkj65+PAU2TXMvpsM1SyWkimxkNQbsHYzQdgIS0Tn1N+1c3rRVAyhQ==
+X-Received: by 2002:a17:90a:7f98:: with SMTP id m24mr6788243pjl.163.1641542673336;
+        Fri, 07 Jan 2022 00:04:33 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id f10sm5416663pfj.145.2022.01.07.00.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 00:04:33 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, Suman Anna <s-anna@ti.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/omap: Fix missing put_device() call in omap_iommu_probe_device
+Date:   Fri,  7 Jan 2022 08:04:28 +0000
+Message-Id: <20220107080428.10873-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the allocation, the skb_clone may return NULL
-pointer.
-Therefore, it may cause the dereference of NULL pointer.
-Also, same as rtw_os_recv_indicate_pkt() in
-`drivers/staging/rtl8723bs/os_dep/recv_linux.c`, it should be better to
-add the check.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Fixes: ede1c2e7d4dc ("iommu/omap: Store iommu_dev pointer in arch_data")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/staging/r8188eu/os_dep/recv_linux.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iommu/omap-iommu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/r8188eu/os_dep/recv_linux.c b/drivers/staging/r8188eu/os_dep/recv_linux.c
-index 917a63e3e94c..cf40f33f3295 100644
---- a/drivers/staging/r8188eu/os_dep/recv_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/recv_linux.c
-@@ -151,7 +151,7 @@ int rtw_recv_indicatepkt(struct adapter *padapter,
- 
- 				rtw_xmit_entry(skb, pnetdev);
- 
--				if (bmcast)
-+				if (bmcast && pskb2)
- 					skb = pskb2;
- 				else
- 					goto _recv_indicatepkt_end;
+diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
+index 91749654fd49..cbc7ca5e890a 100644
+--- a/drivers/iommu/omap-iommu.c
++++ b/drivers/iommu/omap-iommu.c
+@@ -1684,6 +1684,7 @@ static struct iommu_device *omap_iommu_probe_device(struct device *dev)
+ 		oiommu = platform_get_drvdata(pdev);
+ 		if (!oiommu) {
+ 			of_node_put(np);
++			put_device(&pdev->dev);
+ 			kfree(arch_data);
+ 			return ERR_PTR(-EINVAL);
+ 		}
 -- 
-2.25.1
+2.17.1
 

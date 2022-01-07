@@ -2,211 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFBC4877C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394774877C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 13:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347467AbiAGMuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 07:50:23 -0500
-Received: from mx-out.tlen.pl ([193.222.135.175]:30988 "EHLO mx-out.tlen.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346598AbiAGMuL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:50:11 -0500
-Received: (wp-smtpd smtp.tlen.pl 27442 invoked from network); 7 Jan 2022 13:50:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1641559809; bh=EVwu6okZda3ea33LLk/febbyBMhJfcnyYZkfcTAZYN8=;
-          h=From:To:Cc:Subject;
-          b=A7q+3JBistTkIRJlfxeWuhr17UgeGKjYKHR0k6oi/nUP/cKiOUpCtSd5cZk8t3I7c
-           uYXTQ8ecSKBOALHs1E96PV50seILisSjtljSYZO2gscQyJZ5yaA6dXpf2xqB555blh
-           GgX/Wa60CL87nPeVyqcib/GQWe9DKw4LqF3wpYfs=
-Received: from aafo3.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.144.3])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-rtc@vger.kernel.org>; 7 Jan 2022 13:50:08 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH v5 9/9] rtc-cmos: avoid UIP when writing alarm time
-Date:   Fri,  7 Jan 2022 13:49:34 +0100
-Message-Id: <20220107124934.159878-10-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220107124934.159878-1-mat.jonczyk@o2.pl>
-References: <20220107124934.159878-1-mat.jonczyk@o2.pl>
+        id S1347502AbiAGMua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 07:50:30 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:48869 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347382AbiAGMuU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 07:50:20 -0500
+Received: by mail-io1-f69.google.com with SMTP id i12-20020a056602134c00b0060211f8b5b7so3807291iov.15
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 04:50:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=+OH30RJykWQK1mq+kRReOZroe/Z4LtMcBR3nlNtusOA=;
+        b=NIP0bDsPworI/543L1iggtD2+/DgCB5sLW+diqm8D14p2i9xx0Ysh3/FAfWaeDV9MV
+         OIL75JVtpwyvaFwVVAZEOCP1NHtvzU6PazOHS3voejoWQqB3OZAXQIOnLTOSJU0h/QZl
+         mw6uTA78z2tK/3IPM0CVUYJ7m5rW58bgQsuKeHITmG3A9lBWCXLw0cqmnOYXS1CjoG1z
+         ZH6/rO4Y/+JgDqphfnfZ9KoQGeqG7yDjE5Ua6iQ9BE8XHhT3KKqxp1XvwR0dxAD3gs7d
+         RArbRyzqvPGc12aTKhFnzuwQRcPtQO93EPhrimcCHgqlaQyhP1exQktI25FBSLwlC/kw
+         UB6Q==
+X-Gm-Message-State: AOAM533NQsu8UAirqqcW7D5IwWs2jNLdYp6Q1JT8X2MzUYgcQDrFMRbv
+        t3Xn3b8/o5cZuMcoz3vU4nLxkJtN8W31VstZLKlExbVLA7/P
+X-Google-Smtp-Source: ABdhPJyepLMsI1PrEIR3ZlhJKqTTlvGfane7G6i3GD3tWhuWhaqTlYok5xlbyEFPR/38JTQ9DX16l+OGDlni2dMoBbw/BuMZx3Ec
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 9f6697dfe8e70238c3076b6c1dff8000
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [kcOk]                               
+X-Received: by 2002:a92:d34d:: with SMTP id a13mr3850552ilh.266.1641559819934;
+ Fri, 07 Jan 2022 04:50:19 -0800 (PST)
+Date:   Fri, 07 Jan 2022 04:50:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f1e24805d4fd6d50@google.com>
+Subject: [syzbot] KMSAN: uninit-value in p9pdu_vwritef
+From:   syzbot <syzbot+99f920ef970b8c366bfe@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, davem@davemloft.net, ericvh@gmail.com,
+        glider@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some Intel chipsets disconnect the time and date RTC registers when the
-clock update is in progress: during this time reads may return bogus
-values and writes fail silently. This includes the RTC alarm registers.
-[1]
+Hello,
 
-cmos_set_alarm() did not take account for that, fix it.
+syzbot found the following issue on:
 
-[1] 7th Generation Intel ® Processor Family I/O for U/Y Platforms [...]
-Datasheet, Volume 1 of 2 (Intel's Document Number: 334658-006)
-Page 208
-https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/7th-and-8th-gen-core-family-mobile-u-y-processor-lines-i-o-datasheet-vol-1.pdf
-        "If a RAM read from the ten time and date bytes is attempted
-        during an update cycle, the value read do not necessarily
-        represent the true contents of those locations. Any RAM writes
-        under the same conditions are ignored."
+HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=10501807b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=99f920ef970b8c366bfe
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+99f920ef970b8c366bfe@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in check_copy_size include/linux/thread_info.h:216 [inline]
+BUG: KMSAN: uninit-value in copy_from_iter include/linux/uio.h:161 [inline]
+BUG: KMSAN: uninit-value in copy_from_iter_full include/linux/uio.h:170 [inline]
+BUG: KMSAN: uninit-value in pdu_write_u net/9p/protocol.c:68 [inline]
+BUG: KMSAN: uninit-value in p9pdu_vwritef+0x458f/0x5100 net/9p/protocol.c:439
+ check_copy_size include/linux/thread_info.h:216 [inline]
+ copy_from_iter include/linux/uio.h:161 [inline]
+ copy_from_iter_full include/linux/uio.h:170 [inline]
+ pdu_write_u net/9p/protocol.c:68 [inline]
+ p9pdu_vwritef+0x458f/0x5100 net/9p/protocol.c:439
+ p9_client_prepare_req+0xe64/0x16d0 net/9p/client.c:703
+ p9_client_rpc+0x28b/0x1460 net/9p/client.c:734
+ p9_client_write+0x722/0xfa0 net/9p/client.c:1662
+ v9fs_fid_xattr_set+0x3a6/0x520 fs/9p/xattr.c:130
+ v9fs_xattr_set fs/9p/xattr.c:100 [inline]
+ v9fs_xattr_handler_set+0x1b4/0x220 fs/9p/xattr.c:159
+ __vfs_setxattr+0x910/0x960 fs/xattr.c:180
+ __vfs_setxattr_noperm+0x382/0xe80 fs/xattr.c:214
+ __vfs_setxattr_locked+0x629/0x690 fs/xattr.c:275
+ vfs_setxattr+0x440/0x7b0 fs/xattr.c:301
+ setxattr+0x42e/0x7c0 fs/xattr.c:575
+ path_setxattr+0x2f4/0x520 fs/xattr.c:595
+ __do_sys_setxattr fs/xattr.c:611 [inline]
+ __se_sys_setxattr fs/xattr.c:607 [inline]
+ __ia32_sys_setxattr+0x15b/0x1c0 fs/xattr.c:607
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ slab_alloc mm/slub.c:3259 [inline]
+ kmem_cache_alloc_trace+0xaca/0x1140 mm/slub.c:3276
+ kmalloc include/linux/slab.h:590 [inline]
+ p9_fid_create+0x7d/0x470 net/9p/client.c:892
+ p9_client_walk+0x15f/0xe50 net/9p/client.c:1175
+ clone_fid fs/9p/fid.h:21 [inline]
+ v9fs_fid_xattr_set+0x244/0x520 fs/9p/xattr.c:118
+ v9fs_xattr_set fs/9p/xattr.c:100 [inline]
+ v9fs_xattr_handler_set+0x1b4/0x220 fs/9p/xattr.c:159
+ __vfs_setxattr+0x910/0x960 fs/xattr.c:180
+ __vfs_setxattr_noperm+0x382/0xe80 fs/xattr.c:214
+ __vfs_setxattr_locked+0x629/0x690 fs/xattr.c:275
+ vfs_setxattr+0x440/0x7b0 fs/xattr.c:301
+ setxattr+0x42e/0x7c0 fs/xattr.c:575
+ path_setxattr+0x2f4/0x520 fs/xattr.c:595
+ __do_sys_setxattr fs/xattr.c:611 [inline]
+ __se_sys_setxattr fs/xattr.c:607 [inline]
+ __ia32_sys_setxattr+0x15b/0x1c0 fs/xattr.c:607
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+CPU: 0 PID: 22907 Comm: syz-executor.4 Tainted: G S                5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
 
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v4: fix some checkpatch --strict warnings
-
- drivers/rtc/rtc-cmos.c | 107 +++++++++++++++++++++++++----------------
- 1 file changed, 66 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 6f47d68d2c86..7c006c2b125f 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -470,10 +470,57 @@ static int cmos_validate_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	return 0;
- }
- 
-+struct cmos_set_alarm_callback_param {
-+	struct cmos_rtc *cmos;
-+	unsigned char mon, mday, hrs, min, sec;
-+	struct rtc_wkalrm *t;
-+};
-+
-+/* Note: this function may be executed by mc146818_avoid_UIP() more then
-+ *	 once
-+ */
-+static void cmos_set_alarm_callback(unsigned char __always_unused seconds,
-+				    void *param_in)
-+{
-+	struct cmos_set_alarm_callback_param *p =
-+		(struct cmos_set_alarm_callback_param *)param_in;
-+
-+	/* next rtc irq must not be from previous alarm setting */
-+	cmos_irq_disable(p->cmos, RTC_AIE);
-+
-+	/* update alarm */
-+	CMOS_WRITE(p->hrs, RTC_HOURS_ALARM);
-+	CMOS_WRITE(p->min, RTC_MINUTES_ALARM);
-+	CMOS_WRITE(p->sec, RTC_SECONDS_ALARM);
-+
-+	/* the system may support an "enhanced" alarm */
-+	if (p->cmos->day_alrm) {
-+		CMOS_WRITE(p->mday, p->cmos->day_alrm);
-+		if (p->cmos->mon_alrm)
-+			CMOS_WRITE(p->mon, p->cmos->mon_alrm);
-+	}
-+
-+	if (use_hpet_alarm()) {
-+		/*
-+		 * FIXME the HPET alarm glue currently ignores day_alrm
-+		 * and mon_alrm ...
-+		 */
-+		hpet_set_alarm_time(p->t->time.tm_hour, p->t->time.tm_min,
-+				    p->t->time.tm_sec);
-+	}
-+
-+	if (p->t->enabled)
-+		cmos_irq_enable(p->cmos, RTC_AIE);
-+}
-+
- static int cmos_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- {
- 	struct cmos_rtc	*cmos = dev_get_drvdata(dev);
--	unsigned char mon, mday, hrs, min, sec, rtc_control;
-+	struct cmos_set_alarm_callback_param p = {
-+		.cmos = cmos,
-+		.t = t
-+	};
-+	unsigned char rtc_control;
- 	int ret;
- 
- 	/* This not only a rtc_op, but also called directly */
-@@ -484,11 +531,11 @@ static int cmos_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	if (ret < 0)
- 		return ret;
- 
--	mon = t->time.tm_mon + 1;
--	mday = t->time.tm_mday;
--	hrs = t->time.tm_hour;
--	min = t->time.tm_min;
--	sec = t->time.tm_sec;
-+	p.mon = t->time.tm_mon + 1;
-+	p.mday = t->time.tm_mday;
-+	p.hrs = t->time.tm_hour;
-+	p.min = t->time.tm_min;
-+	p.sec = t->time.tm_sec;
- 
- 	spin_lock_irq(&rtc_lock);
- 	rtc_control = CMOS_READ(RTC_CONTROL);
-@@ -496,43 +543,21 @@ static int cmos_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 
- 	if (!(rtc_control & RTC_DM_BINARY) || RTC_ALWAYS_BCD) {
- 		/* Writing 0xff means "don't care" or "match all".  */
--		mon = (mon <= 12) ? bin2bcd(mon) : 0xff;
--		mday = (mday >= 1 && mday <= 31) ? bin2bcd(mday) : 0xff;
--		hrs = (hrs < 24) ? bin2bcd(hrs) : 0xff;
--		min = (min < 60) ? bin2bcd(min) : 0xff;
--		sec = (sec < 60) ? bin2bcd(sec) : 0xff;
--	}
--
--	spin_lock_irq(&rtc_lock);
--
--	/* next rtc irq must not be from previous alarm setting */
--	cmos_irq_disable(cmos, RTC_AIE);
--
--	/* update alarm */
--	CMOS_WRITE(hrs, RTC_HOURS_ALARM);
--	CMOS_WRITE(min, RTC_MINUTES_ALARM);
--	CMOS_WRITE(sec, RTC_SECONDS_ALARM);
--
--	/* the system may support an "enhanced" alarm */
--	if (cmos->day_alrm) {
--		CMOS_WRITE(mday, cmos->day_alrm);
--		if (cmos->mon_alrm)
--			CMOS_WRITE(mon, cmos->mon_alrm);
--	}
--
--	if (use_hpet_alarm()) {
--		/*
--		 * FIXME the HPET alarm glue currently ignores day_alrm
--		 * and mon_alrm ...
--		 */
--		hpet_set_alarm_time(t->time.tm_hour, t->time.tm_min,
--				    t->time.tm_sec);
-+		p.mon = (p.mon <= 12) ? bin2bcd(p.mon) : 0xff;
-+		p.mday = (p.mday >= 1 && p.mday <= 31) ? bin2bcd(p.mday) : 0xff;
-+		p.hrs = (p.hrs < 24) ? bin2bcd(p.hrs) : 0xff;
-+		p.min = (p.min < 60) ? bin2bcd(p.min) : 0xff;
-+		p.sec = (p.sec < 60) ? bin2bcd(p.sec) : 0xff;
- 	}
- 
--	if (t->enabled)
--		cmos_irq_enable(cmos, RTC_AIE);
--
--	spin_unlock_irq(&rtc_lock);
-+	/*
-+	 * Some Intel chipsets disconnect the alarm registers when the clock
-+	 * update is in progress - during this time writes fail silently.
-+	 *
-+	 * Use mc146818_avoid_UIP() to avoid this.
-+	 */
-+	if (!mc146818_avoid_UIP(cmos_set_alarm_callback, &p))
-+		return -EIO;
- 
- 	cmos->alarm_expires = rtc_tm_to_time64(&t->time);
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

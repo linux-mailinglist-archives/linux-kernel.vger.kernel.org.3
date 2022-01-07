@@ -2,163 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C65E0487AA3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7407E487AA8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348336AbiAGQnv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 11:43:51 -0500
-Received: from aposti.net ([89.234.176.197]:40182 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240038AbiAGQnu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:43:50 -0500
-Date:   Fri, 07 Jan 2022 16:43:37 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
- macros
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Message-Id: <PGMC5R.ZEUF4DPAECD7@crapouillou.net>
-In-Reply-To: <CAPDyKFpUUPzqonNBrFq68h8QOVxardvf2q7AuEQVeUJ-S2726A@mail.gmail.com>
-References: <20220105182939.106885-1-paul@crapouillou.net>
-        <20220105182939.106885-4-paul@crapouillou.net>
-        <CAPDyKFpUUPzqonNBrFq68h8QOVxardvf2q7AuEQVeUJ-S2726A@mail.gmail.com>
+        id S1348332AbiAGQq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:46:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35374 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240038AbiAGQq5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 11:46:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F93161F63;
+        Fri,  7 Jan 2022 16:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B804C36AEF;
+        Fri,  7 Jan 2022 16:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641574016;
+        bh=uY8qyK5QY52TdDm0IBri989Ttzdm1zbibvJDDniXh4U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bpu/vrNhak7b95ZBgmQlriTRt7oaTeTtLK3MqWS3u0PIJ+gwLYn66cl5Ty8rQgJKg
+         9Jwezafy84yqyYTWUuXQ3KSJntANN/HkRsQdb7ENNaXmzdBiKAlp0rSwTPAPkvfF7L
+         Y33zr5gH1+AxB0UvHQyY/sYNkq3T4pN7MFjawZRz3CBMY6Q6so65iZaZ0ce+2Q35C9
+         INgINOdsNqXYXc/gr8M+UAArxOvJHmfdsz9zXkx8Rb4i1vL5RYbNNh3GmRHR3y/IDO
+         6ymHLl6r47EvDRhF2/p7AAP2/vz1kX+DFojRuBA7L15t1hHXjHAxlx6zXzvDEJSQ2k
+         8BqL492OFwUVw==
+Received: by mail-yb1-f175.google.com with SMTP id d201so18310206ybc.7;
+        Fri, 07 Jan 2022 08:46:55 -0800 (PST)
+X-Gm-Message-State: AOAM533Vwze6CJuc0D5AFe5+rnuyw6MMr9DTzOgOGFWkmb3CiO4CfSw4
+        8Eth6HPWRLIbLdKO8N0dgoU+U3/zmiKV2EMJVDU=
+X-Google-Smtp-Source: ABdhPJxPBE7HCwAiCj6POan6TNgTerrP9DAYS4LQmDmyoY4KD1kUjFNihbISjMKwJL06bWBbmkh5TO4TFUeO1A6blX0=
+X-Received: by 2002:a5b:c01:: with SMTP id f1mr84256178ybq.47.1641574015121;
+ Fri, 07 Jan 2022 08:46:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <20211229215646.830451-1-void@manifault.com> <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
+In-Reply-To: <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 7 Jan 2022 08:46:44 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com>
+Message-ID: <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com>
+Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
+        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 7, 2022 at 6:13 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
+>
+> On 12/29/21 4:56 PM, David Vernet wrote:
+> > For example, under certain workloads, enabling a KLP patch with
+> > many objects or functions may cause ksoftirqd to be starved, and thus for
+> > interrupts to be backlogged and delayed.
+>
+> Just curious, approximately how many objects/functions does it take to
+> hit this condition?  While the livepatching kselftests are more about
+> API and kernel correctness, this sounds like an interesting test case
+> for some of the other (out of tree) test suites.
 
+Not many patched functions. We only do small fixes at the moment. In the recent
+example, we hit the issue with ~10 patched functions. Another version
+with 2 to 3
+patched function seems fine.
 
-Le ven., janv. 7 2022 at 17:33:04 +0100, Ulf Hansson 
-<ulf.hansson@linaro.org> a écrit :
-> On Wed, 5 Jan 2022 at 19:30, Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->> 
->>  These macros are defined conditionally, according to CONFIG_PM:
->>  - if CONFIG_PM is enabled, these macros resolve to
->>    DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->>    exported.
->> 
->>  - if CONFIG_PM is disabled, these macros will result in a dummy 
->> static
->>    dev_pm_ops to be created with the __maybe_unused flag. The 
->> dev_pm_ops
->>    will then be discarded by the compiler, along with the provided
->>    callback functions if they are not used anywhere else.
->> 
->>  In the second case, the symbol is not exported, which should be
->>  perfectly fine - users of the symbol should all use the pm_ptr() or
->>  pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
->>  client's code will never be accessed.
-> 
-> How common is it to export the dev_pm_ops? Do we really need a macro 
-> for this?
+Yes, I think this is an important test case.
 
-$ rgrep EXPORT_SYMBOL drivers/ |grep pm_ops |wc -l
-44
-
-That should be enough to justify a macro.
-
-Cheers,
--Paul
-
-> 
-> The similar comment/question applies for patch5.
-> 
->> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> Kind regards
-> Uffe
-> 
->>  ---
->> 
->>  Notes:
->>      v2: Remove useless empty line
->> 
->>   include/linux/pm.h | 32 +++++++++++++++++++++++++++++---
->>   1 file changed, 29 insertions(+), 3 deletions(-)
->> 
->>  diff --git a/include/linux/pm.h b/include/linux/pm.h
->>  index 389e600df233..b82f40e701ab 100644
->>  --- a/include/linux/pm.h
->>  +++ b/include/linux/pm.h
->>  @@ -8,6 +8,7 @@
->>   #ifndef _LINUX_PM_H
->>   #define _LINUX_PM_H
->> 
->>  +#include <linux/export.h>
->>   #include <linux/list.h>
->>   #include <linux/workqueue.h>
->>   #include <linux/spinlock.h>
->>  @@ -357,14 +358,39 @@ struct dev_pm_ops {
->>   #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->>   #endif
->> 
->>  +#define _DEFINE_DEV_PM_OPS(name, \
->>  +                          suspend_fn, resume_fn, \
->>  +                          runtime_suspend_fn, runtime_resume_fn, 
->> idle_fn) \
->>  +const struct dev_pm_ops name = { \
->>  +       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  +       RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, 
->> idle_fn) \
->>  +}
->>  +
->>   /*
->>    * Use this if you want to use the same suspend and resume 
->> callbacks for suspend
->>    * to RAM and hibernation.
->>    */
->>   #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  -const struct dev_pm_ops name = { \
->>  -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->>  -}
->>  +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, 
->> NULL)
->>  +
->>  +#ifdef CONFIG_PM
->>  +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, 
->> runtime_suspend_fn, \
->>  +                          runtime_resume_fn, idle_fn, sec) \
->>  +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, 
->> runtime_suspend_fn, \
->>  +                          runtime_resume_fn, idle_fn); \
->>  +       _EXPORT_SYMBOL(name, sec)
->>  +#else
->>  +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, 
->> runtime_suspend_fn, \
->>  +                          runtime_resume_fn, idle_fn, sec) \
->>  +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, 
->> suspend_fn, \
->>  +                                        resume_fn, 
->> runtime_suspend_fn, \
->>  +                                        runtime_resume_fn, idle_fn)
->>  +#endif
->>  +
->>  +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, 
->> NULL, "")
->>  +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, 
->> NULL, "_gpl")
->> 
->>   /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->>   #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
->>  --
->>  2.34.1
->> 
-
-
+Song

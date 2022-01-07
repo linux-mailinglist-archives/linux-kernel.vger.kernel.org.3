@@ -2,140 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 792CD487A4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC23D487A52
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 17:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348225AbiAGQ1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 11:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S1348260AbiAGQ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 11:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348219AbiAGQ1i (ORCPT
+        with ESMTP id S1348240AbiAGQ1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:27:38 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036ECC061746
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 08:27:37 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id x6so17394824lfa.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 08:27:37 -0800 (PST)
+        Fri, 7 Jan 2022 11:27:49 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27BCC06173E;
+        Fri,  7 Jan 2022 08:27:48 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id c2so5583037pfc.1;
+        Fri, 07 Jan 2022 08:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3Ee5TfAm0O/7oOb78wyCjsPYvF8t2d2cn5OSORbvHz4=;
-        b=lmfhs9Unvsa0JVwr+yaavqdMLXSMvPihFC7wUcl6yCbJcnP0sFhBerazGYto6B26Zk
-         KK3OVtuvUihYmuzhn/qpgNTREg2O7nsPzH4kUhK8/9oczN33tSDJIgw5FxF5m+9BiSly
-         OxxTOhmP8F8IrV3fMvbECCze5UKO5VBxfDPw+1Hqb07dM4OGoHvFpk3mBBhif9mg+fO+
-         B835IdCFKazt6ho3NGidHRsNauOS2vpWWF4VtD7h5UN0pMBNbyCDBXaY94wmj2/spkvf
-         60pheYdvVwpZ+v6ONxehFkPfz5mx/QnbeYVbo+8T01rcyyrpbXSxF5cm4iFJ0X4eQQnD
-         eIUg==
+        bh=OrXHzwsQEzApYAb08/vgr/iOHUJBZcv9FRHsGwpb498=;
+        b=i3fTnUvhY06ZcPs+HMvpfS5zHX7agZRWvHdsTwTl1TkL2GOuFKrYHRjsqymJdUFwdC
+         4zMNL1r/l5EsQMPrzHYEK4HCmNjWiRdEiM8b0vPCXdH2zFTHBzsBXRi6zzPOcCjGj6u9
+         ghz6mT4vlXaNrerpTP5/Vm/E6EbTJTG9EVeZFxSaeBwdnHIe7T3Xy7yEdPdFRHBoVwrd
+         A7a/LbGJqm8Geg6hldftvJjXnalsXkts9v6HJrYZ4GSnuwxCEXIzIiUIolFYVNtyQKqy
+         m/FJ9kYbtYjTfG1lOsAW7ajVu2XduaCgmbLM9XpEjJwDgtSGLyhBtTeq0DG8LMPayJGk
+         QxjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3Ee5TfAm0O/7oOb78wyCjsPYvF8t2d2cn5OSORbvHz4=;
-        b=R7BHVHghAEwOH/ETTtYxbs3Nf2QIfGypUxCxsnSUv3y0KvQp4KOWNB57BSeS3o+sxh
-         e4qXfvNqUmBlxHlQ/3kiBNXOxZoWe4JyBNPjfwytlAYMLzHmhsa0+qIs+9xpLdCG1RbE
-         uIqfxykLyx72Z0fuG1dGVWBZgqLJwL637lyZvfshpTYOHwN5GkuhKkXo00KhFp7R2V4N
-         dOyw9KSpvOKawVGseCx7hVXkyb7UHNPFQvsF5xh3AA147PmCQYaAiPir/3C4z5CNfRTO
-         pKHXVpQdEDp5BAeaXww2/35I9VLYSqWFsSl58D/tN/hzAki74lJzOfMUuwwKtSTwD95x
-         rUqg==
-X-Gm-Message-State: AOAM532tntS4m3TYQeQQ4BuAdPDpN9kbihAzgcBCCnqMahKVEvN1ote6
-        a4D+BmXYy5JJ0oB+MQHr3D0w0/DIFYLMWe++pNFlvQ==
-X-Google-Smtp-Source: ABdhPJxDUAV+onrE/eFRssYk5Hxo7+8TSlBh+dLnXGAN2nXCchIxKEPDtRv+bPiA77beRzI9qDcWSo60rl1Uw1PsG+8=
-X-Received: by 2002:a2e:9659:: with SMTP id z25mr51179931ljh.16.1641572856161;
- Fri, 07 Jan 2022 08:27:36 -0800 (PST)
+        bh=OrXHzwsQEzApYAb08/vgr/iOHUJBZcv9FRHsGwpb498=;
+        b=ZN91GUcUyCxTKEd4gWyhN9lLMuJrpHGh2AzugVp2cK9J1zqi/I0g4fWRYYzeheWSzn
+         kSHCrTcFTVs1urJsSIF87WkONRWGrwb23XgULHEaRh8Jvczde4ZGkdPYSvPCpiQIYN4V
+         cma1h0U7kOo9tC16DJ40QmBKZeip3FNWwn4S//lnncbeFEpg7GQfPVFLKnsU7EnkpMXm
+         RWvHGWaeQk8FtzsB81bunlFsE3eHtUrZwnFUa2Gd/bW755f0IezB4i4d1nXGSLE6Qlxj
+         exPJRySH6oFf7/MQUK3PBigDpfhRbTr3fJS8FEzrZXzIzP3YFBEsqIoxnAWnvxCEAhYN
+         cj4g==
+X-Gm-Message-State: AOAM530jABsEf85cfhQB3WYjZ3rygrfxBMQ9WAJ9wRqZugXGBcEctwxw
+        XZqJ57Lg7hwdPOynO7JD93Z2F2ZILKo/2gxZMpA=
+X-Google-Smtp-Source: ABdhPJzNM8P/vPaXr4QbCREfthoANHoIqq5NUUR5uPMjknD9QyIBJ46ngS7OoP8j6eGWJNPaUCkH33Zlse0Yz5loNAA=
+X-Received: by 2002:aa7:8c59:0:b0:4bc:9dd2:6c12 with SMTP id
+ e25-20020aa78c59000000b004bc9dd26c12mr25922525pfd.59.1641572868290; Fri, 07
+ Jan 2022 08:27:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20220105182939.106885-1-paul@crapouillou.net> <20220105182939.106885-3-paul@crapouillou.net>
-In-Reply-To: <20220105182939.106885-3-paul@crapouillou.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jan 2022 17:26:59 +0100
-Message-ID: <CAPDyKFppBN3R5pMx0MDhbn119+JeSdrduR5csNBMfRcT=f2pzw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] PM: core: Remove static qualifier in
- DEFINE_SIMPLE_DEV_PM_OPS macro
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
+References: <000000000000ab9b3e05d4feacd6@google.com>
+In-Reply-To: <000000000000ab9b3e05d4feacd6@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 7 Jan 2022 08:27:37 -0800
+Message-ID: <CAADnVQLH5r-OLfGwduMqvTuz952Y+D7X29bW-f8QGpE9G6dF6g@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in dev_get_by_index_rcu (2)
+To:     syzbot <syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 at 19:29, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Keep this macro in line with the other ones. This makes it possible to
-> use them in the cases where the underlying dev_pm_ops structure is
-> exported.
->
-> Restore the "static" qualifier in the two drivers where the
-> DEFINE_SIMPLE_DEV_PM_OPS macro was used.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Toke, Jesper,
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+please take a look.
+Seems to be in your area of expertise.
 
-Kind regards
-Uffe
+Thanks
 
+On Fri, Jan 7, 2022 at 6:19 AM syzbot
+<syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    819d11507f66 bpf, selftests: Fix spelling mistake "tained"..
+> git tree:       bpf
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12500db3b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=22b66456935ee10
+> dashboard link: https://syzkaller.appspot.com/bug?extid=983941aa85af6ded1fd9
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153a6cb3b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=121c690bb00000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com
+>
+> general protection fault, probably for non-canonical address 0xdffffc000000003e: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x00000000000001f0-0x00000000000001f7]
+> CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:dev_index_hash net/core/dev.c:222 [inline]
+> RIP: 0010:dev_get_by_index_rcu+0x28/0x140 net/core/dev.c:885
+> Code: 00 00 41 55 41 54 55 89 f5 53 48 89 fb e8 00 9d 4d fa 48 8d bb f0 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 fc 00 00 00 48 8b 93 f0 01 00 00 40 0f b6 c5 48
+> RSP: 0018:ffffc90000d97608 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
+> RDX: 000000000000003e RSI: ffffffff872a14d0 RDI: 00000000000001f0
+> RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffffff873745ad R11: 000000000008808a R12: ffff88806a062100
+> R13: 0000000000000003 R14: ffff88806a062100 R15: ffffc90001116000
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000055555733a848 CR3: 000000001479e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  ____bpf_clone_redirect net/core/filter.c:2410 [inline]
+>  bpf_clone_redirect+0x91/0x420 net/core/filter.c:2401
+>  bpf_prog_bebbfe2050753572+0x56/0xcc0
+>  __bpf_prog_run include/linux/filter.h:626 [inline]
+>  bpf_prog_run_xdp include/linux/filter.h:801 [inline]
+>  veth_xdp_rcv_skb+0x64b/0x1b20 drivers/net/veth.c:775
+>  veth_xdp_rcv+0x3ac/0x810 drivers/net/veth.c:881
+>  veth_poll+0x134/0x850 drivers/net/veth.c:913
+>  __napi_poll+0xaf/0x440 net/core/dev.c:7023
+>  napi_poll net/core/dev.c:7090 [inline]
+>  net_rx_action+0x801/0xb40 net/core/dev.c:7177
+>  __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+>  run_ksoftirqd kernel/softirq.c:921 [inline]
+>  run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+>  smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+>  kthread+0x405/0x4f0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 86b7d5782a67ad32 ]---
+> RIP: 0010:dev_index_hash net/core/dev.c:222 [inline]
+> RIP: 0010:dev_get_by_index_rcu+0x28/0x140 net/core/dev.c:885
+> Code: 00 00 41 55 41 54 55 89 f5 53 48 89 fb e8 00 9d 4d fa 48 8d bb f0 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 fc 00 00 00 48 8b 93 f0 01 00 00 40 0f b6 c5 48
+> RSP: 0018:ffffc90000d97608 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
+> RDX: 000000000000003e RSI: ffffffff872a14d0 RDI: 00000000000001f0
+> RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffffff873745ad R11: 000000000008808a R12: ffff88806a062100
+> R13: 0000000000000003 R14: ffff88806a062100 R15: ffffc90001116000
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000055555733a848 CR3: 000000001479e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:   00 00                   add    %al,(%rax)
+>    2:   41 55                   push   %r13
+>    4:   41 54                   push   %r12
+>    6:   55                      push   %rbp
+>    7:   89 f5                   mov    %esi,%ebp
+>    9:   53                      push   %rbx
+>    a:   48 89 fb                mov    %rdi,%rbx
+>    d:   e8 00 9d 4d fa          callq  0xfa4d9d12
+>   12:   48 8d bb f0 01 00 00    lea    0x1f0(%rbx),%rdi
+>   19:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+>   20:   fc ff df
+>   23:   48 89 fa                mov    %rdi,%rdx
+>   26:   48 c1 ea 03             shr    $0x3,%rdx
+> * 2a:   80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+>   2e:   0f 85 fc 00 00 00       jne    0x130
+>   34:   48 8b 93 f0 01 00 00    mov    0x1f0(%rbx),%rdx
+>   3b:   40 0f b6 c5             movzbl %bpl,%eax
+>   3f:   48                      rex.W
+>
+>
 > ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
 >
-> Notes:
->     v2: Merge the driver changes to make the commit atomic
->
->  drivers/mmc/host/jz4740_mmc.c | 4 ++--
->  drivers/mmc/host/mxcmmc.c     | 2 +-
->  include/linux/pm.h            | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-> index 7693236c946f..7ab1b38a7be5 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -1128,8 +1128,8 @@ static int jz4740_mmc_resume(struct device *dev)
->         return pinctrl_select_default_state(dev);
->  }
->
-> -DEFINE_SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
-> -       jz4740_mmc_resume);
-> +static DEFINE_SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
-> +                               jz4740_mmc_resume);
->
->  static struct platform_driver jz4740_mmc_driver = {
->         .probe = jz4740_mmc_probe,
-> diff --git a/drivers/mmc/host/mxcmmc.c b/drivers/mmc/host/mxcmmc.c
-> index 98c218bd6669..40b6878bea6c 100644
-> --- a/drivers/mmc/host/mxcmmc.c
-> +++ b/drivers/mmc/host/mxcmmc.c
-> @@ -1210,7 +1210,7 @@ static int mxcmci_resume(struct device *dev)
->         return ret;
->  }
->
-> -DEFINE_SIMPLE_DEV_PM_OPS(mxcmci_pm_ops, mxcmci_suspend, mxcmci_resume);
-> +static DEFINE_SIMPLE_DEV_PM_OPS(mxcmci_pm_ops, mxcmci_suspend, mxcmci_resume);
->
->  static struct platform_driver mxcmci_driver = {
->         .probe          = mxcmci_probe,
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 31bbaafb06d2..389e600df233 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -362,7 +362,7 @@ struct dev_pm_ops {
->   * to RAM and hibernation.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -static const struct dev_pm_ops name = { \
-> +const struct dev_pm_ops name = { \
->         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->  }
->
-> --
-> 2.34.1
->
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

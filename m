@@ -2,75 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B80A487C3F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11E5487C40
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 19:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiAGSfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 13:35:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229834AbiAGSgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 13:36:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiAGSfZ (ORCPT
+        with ESMTP id S229528AbiAGSfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:35:25 -0500
-Received: from forward103j.mail.yandex.net (forward103j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63376C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 10:35:25 -0800 (PST)
-Received: from myt5-c81fdca3da50.qloud-c.yandex.net (myt5-c81fdca3da50.qloud-c.yandex.net [IPv6:2a02:6b8:c12:19b:0:640:c81f:dca3])
-        by forward103j.mail.yandex.net (Yandex) with ESMTP id 2EC96101369;
-        Fri,  7 Jan 2022 21:35:15 +0300 (MSK)
-Received: from myt6-efff10c3476a.qloud-c.yandex.net (myt6-efff10c3476a.qloud-c.yandex.net [2a02:6b8:c12:13a3:0:640:efff:10c3])
-        by myt5-c81fdca3da50.qloud-c.yandex.net (mxback/Yandex) with ESMTP id 30vQDQHSJU-ZEfOHudj;
-        Fri, 07 Jan 2022 21:35:15 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1641580515;
-        bh=LfM4E//CgUEjI1DdLUtxQtDo6ENRzw5Pg0ou76vlGYc=;
-        h=In-Reply-To:References:Date:To:From:Subject:Message-ID;
-        b=wRHxxrAOhatPrrsmOvd3rajz+Sgy7qmskN7YJ1KunnlyhPUK4S4rhvImxbyz+ntwq
-         6RoMbKXSJ6FrvcyKVp4WAjD1Olt63HYa9HVWPUN7tAyodtrbNCkaUkGT23L/keVYID
-         H+IoD2x/TrmMakhFpN810ni/ir+ANSIyI2GB85tI=
-Authentication-Results: myt5-c81fdca3da50.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by myt6-efff10c3476a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id KEsX1LLLoA-ZDPSYMNE;
-        Fri, 07 Jan 2022 21:35:13 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-Message-ID: <2cb9b469ab16eaad35aab9461588cfe9977eb8fd.camel@yandex.ru>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in
- adapter"
-From:   Konstantin Kharlamov <hi-angel@yandex.ru>
-To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Date:   Fri, 07 Jan 2022 21:35:13 +0300
-In-Reply-To: <5849ab287df1b06e141d87bbffdbcd627e999578.camel@yandex.ru>
-References: <20220106122452.18719-1-wsa () kernel ! org>
-         <5849ab287df1b06e141d87bbffdbcd627e999578.camel@yandex.ru>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        Fri, 7 Jan 2022 13:35:52 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78954C061574;
+        Fri,  7 Jan 2022 10:35:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=+Gbab7Fnbxp9CRQp1CY+Df8nwrrWXPr1d5W8ipvlME8=; b=Ne7AU
+        FALCLnVOJabo2OuSO1Hv6r1Ehk9p2dTlls8CCLBntRvC3ffJbtm71+1aSlspKAnpyHwdOkSB6zrE7
+        3y7O220veg6azUkjAb7JPgnoHSx8vd2Enk+o3o/rAzel8rjCsOOKegLl5TjcL997fhU5G7GVD+rIn
+        vuzvx6kFjFicwqBZCRPioKj5R81p0u+cgACjXfQ9W8jJIYqB7gtw221L4UUzR8X/zNUvqrmz8puap
+        88zK+cyu7kRndtinjobjQCA2ApL/cUSDx4gewqN3lqUDZzceEKR1EFaK/eP+HuR9Ga8daAeyM835Y
+        dI9yEFH1qXqVbUMG8m4wVhpYhR4HA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1n5u5W-00037k-8f; Fri, 07 Jan 2022 18:35:42 +0000
+Date:   Fri, 7 Jan 2022 18:35:40 +0000
+From:   John Keeping <john@metanate.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RT] BUG in sched/cpupri.c
+Message-ID: <YdiH/IphUgixfayu@donbot>
+References: <Yb3vXx3DcqVOi+EA@donbot>
+ <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com>
+ <87zgou6iq1.mognet@arm.com>
+ <20211221164528.3c84543f.john@metanate.com>
+ <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com>
+ <87r1a4775a.mognet@arm.com>
+ <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
+ <Ydgo2lENzywieaZL@donbot>
+ <88826618-5ce8-dd1f-c9db-ec273fede3ce@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88826618-5ce8-dd1f-c9db-ec273fede3ce@arm.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-07 at 21:20 +0300, Konstantin Kharlamov wrote:
-> Thank you! I tested it (had to resolve a small conflict), works for me. So, in
-> case you need it, the patch is
+On Fri, Jan 07, 2022 at 03:25:21PM +0100, Dietmar Eggemann wrote:
+> On 07/01/2022 12:49, John Keeping wrote:
+> > On Fri, Jan 07, 2022 at 11:46:45AM +0100, Dietmar Eggemann wrote:
+> >> On 22/12/2021 20:48, Valentin Schneider wrote:
+> >>>  /*
+> >>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> >>> index ef8228d19382..8f3e3a1367b6 100644
+> >>> --- a/kernel/sched/rt.c
+> >>> +++ b/kernel/sched/rt.c
+> >>> @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+> >>>  	if (!next_task)
+> >>>  		return 0;
+> >>>  
+> >>> +	/*
+> >>> +	 * It's possible that the next_task slipped in of higher priority than
+> >>> +	 * current, or current has *just* changed priority.  If that's the case
+> >>> +	 * just reschedule current.
+> >>> +	 */
+> >>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
+> >>> +		resched_curr(rq);
+> >>> +		return 0;
+> >>> +	}
+> >>
+> >> IMHO, that's the bit which prevents the BUG.
+> >>
+> >> But this would also prevent the case in which rq->curr is an RT task
+> >> with lower prio than next_task.
+> >>
+> >> Also `rq->curr = migration/X` goes still though which is somehow fine
+> >> since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
+> >>
+> >> And DL tasks (like sugov:X go through and they can have
+> >> task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
+> >> freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
+> >> can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
+> >> by coincidence.
+> >>
+> >> So maybe something like this:
+> > 
+> > Do you mean to replace just the one hunk from Valentin's patch with the
+> > change below (keeping the rest), or are you saying that only the change
+> > below is needed?
 > 
->         Tested-by: Konstantin Kharlamov <hi-angel@yandex.ru>
-> 
-> By the way, shouldn't the patch include a field 
-> 
->         Cc: <stable@vger.kernel.org> # 5.14+
-> 
-> ?
-> 
-> P.S.: sorry, for all mangled up CC fields. For some reason I didn't get your
-> email, I found this patch in the archive. And the mbox that archive provides
-> breaks all TO and CC fields, so I manually restored addresses that I have.
+> The latter.
 
-Restored the fields now, sorry, I found the mail, it was moved to another folder by a filter
+Thanks!  I tested the patch below and can confirm that I no longer see
+any BUGs with this applied.
+
+Tested-By: John Keeping <john@metanate.com>
+
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
+                if (!pull || rq->push_busy)
+                        return 0;
+ 
++               if (rq->curr->sched_class != &rt_sched_class) {
++                       resched_curr(rq);
++                       return 0;
++               }
++
+                cpu = find_lowest_rq(rq->curr);
+                if (cpu == -1 || cpu == rq->cpu)
+                        return 0;

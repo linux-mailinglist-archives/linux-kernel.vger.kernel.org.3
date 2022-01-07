@@ -2,142 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E15486EEE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF4D486F01
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343943AbiAGAgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:36:23 -0500
-Received: from mga04.intel.com ([192.55.52.120]:21290 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343881AbiAGAgV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:36:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641515781; x=1673051781;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=EkfKPQpb+SxTuleKwyjV6r0f1bhBPsTCAoGe8AyQC4w=;
-  b=D0TCen4FESg0wVQFELmL3mFqto4PjM0A7f2vOtjUcdWZ09PkPPtoAjHl
-   yJ8xUjos2fMJmWH7CiRcaIZvVcNorQJQmyvyU0qKwlvJfnlVgXvWqjq/m
-   6Z+BlkK4gdao49XJZE7nkGhTiioET2DP+nQ+iJ9V/qSsKezSal8nI3xbY
-   rKjymDk2KhlKROoLQ9E47o5AieUGu4m6qv8pV9eZgURJBPgnSdIICUCgp
-   QA6WL3EXVJSCgkUxbBNUvyvsCLTz4KTExKjfdIsHVOZtzh5O8hzNFXWqh
-   LnFkZIRAfMBTTokUfnQLlSSOO4zN+kSo6b07R6FPwUp4S/5kEBIxK3Yzu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="241586420"
-X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
-   d="scan'208";a="241586420"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 16:36:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
-   d="scan'208";a="527184334"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 06 Jan 2022 16:36:14 -0800
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 6/8] gpu/host1x: Use iommu_attach/detach_device()
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
- <20220106022053.2406748-7-baolu.lu@linux.intel.com>
- <20220106153543.GD2328285@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <2befad17-05fe-3768-6fbb-67440a5befa3@linux.intel.com>
-Date:   Fri, 7 Jan 2022 08:35:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1344063AbiAGAmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:42:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58554 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343865AbiAGAmB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 19:42:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0768BB8240F;
+        Fri,  7 Jan 2022 00:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE93C36AE0;
+        Fri,  7 Jan 2022 00:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641516118;
+        bh=Pd98R3goIk+E5okVr1q0OLtQzqo9FH4v6pbDvQnNilA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g5oheXA8hsFKxI2ZF2pVFv4yVXCt+dapX25W2D82mnCgc0n+wYrWhiQ4b+tBUpKCL
+         uBFd7F4nM+C6gypfGz0Dd/QtZfmjx5nAesuWOQuLb/n9C0UqA6zpRUBWMYKE8Pns9c
+         OZf8eXAcLQzhR4W9izNeZnbR2XZVp0VRksTj2fnH8o/tdO9kOvOnDkmBuprJWHjEns
+         nBgRIXm0qUrOXedcQv56rAE3aKDLooWBc3JF2FHNJhaF4BJ42QyB2AhMdFxj4l5lRT
+         1h3WKr8wtyhze1RmLAH4HHPIg+SufYrgu5d2Hy5QAS1hLhbQWgUGp1IlgJ4UAdzRL+
+         D36Ow49DdLeYQ==
+Date:   Thu, 6 Jan 2022 16:41:56 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <20220107004156.ycgrmqesgtnvxzrp@sx1>
+References: <20220107025749.35eaa2c2@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220106153543.GD2328285@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220107025749.35eaa2c2@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/22 11:35 PM, Jason Gunthorpe wrote:
-> On Thu, Jan 06, 2022 at 10:20:51AM +0800, Lu Baolu wrote:
->> Ordinary drivers should use iommu_attach/detach_device() for domain
->> attaching and detaching.
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->>   drivers/gpu/host1x/dev.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
->> index fbb6447b8659..6e08cb6202cc 100644
->> +++ b/drivers/gpu/host1x/dev.c
->> @@ -265,7 +265,7 @@ static struct iommu_domain *host1x_iommu_attach(struct host1x *host)
->>   			goto put_cache;
->>   		}
->>   
->> -		err = iommu_attach_group(host->domain, host->group);
->> +		err = iommu_attach_device(host->domain, host->dev);
->>   		if (err) {
->>   			if (err == -ENODEV)
->>   				err = 0;
->> @@ -335,7 +335,7 @@ static void host1x_iommu_exit(struct host1x *host)
->>   {
->>   	if (host->domain) {
->>   		put_iova_domain(&host->iova);
->> -		iommu_detach_group(host->domain, host->group);
->> +		iommu_detach_device(host->domain, host->dev);
->>   
->>   		iommu_domain_free(host->domain);
->>   		host->domain = NULL;
-> 
-> Shouldn't this add the flag to tegra_host1x_driver ?
+On Fri, Jan 07, 2022 at 02:57:49AM +1100, Stephen Rothwell wrote:
+>Hi all,
+>
+>After merging the net-next tree, today's linux-next build (htmldocs)
+>produced this warning:
+>
+>Documentation/networking/devlink/mlx5.rst:13: WARNING: Error parsing content block for the "list-table" directive: uniform two-level bullet list expected, but row 2 does not contain the same number of items as row 1 (2 vs 3).
+>
 
-This is called for a single driver. The call trace looks like below:
+...
 
-static struct platform_driver tegra_host1x_driver = {
-         .driver = {
-                 .name = "tegra-host1x",
-                 .of_match_table = host1x_of_match,
-         },
-         .probe = host1x_probe,
-         .remove = host1x_remove,
-};
+>Introduced by commit
+>
+>  0844fa5f7b89 ("net/mlx5: Let user configure io_eq_size param")
+>
 
-host1x_probe(dev)
-->host1x_iommu_init(host)	//host is a wrapper of dev
--->host1x_iommu_attach(host)
----->iommu_group_get(host->dev)
-      iommu_domain_alloc(&platform_bus_type)
-      iommu_attach_group(domain, group);
+Thanks for the report, I just submitted a fix to net-next.
 
-It seems that the existing code only works for singleton group.
 
-> 
-> And do like we did in the other tegra stuff and switch to the dma api
-> when !host1x_wants_iommu() ?
-> 
-> Jason
-> 
-
-Best regards,
-baolu

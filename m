@@ -2,114 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0964B486E9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2877C486E9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 01:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343971AbiAGAUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 19:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
+        id S1343982AbiAGAUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 19:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343531AbiAGAUR (ORCPT
+        with ESMTP id S1344011AbiAGAUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 19:20:17 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965EBC061245;
-        Thu,  6 Jan 2022 16:20:17 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id p14so3636625plf.3;
-        Thu, 06 Jan 2022 16:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fj9kX4cP4lXIzAUcHvTSQq+2gUiSFponYUkO/x8lnjw=;
-        b=UnE0aozBfaeQomCHtjaN7v7Yx2D4xqEwHcCYiqp4MT44aEusmUxKsmm9iPLyEKJJmW
-         6/jp4Kzvmu7ZiijqFGhrPSeNU4KlsgPp0MOpEDe3r7U9QJ7XfMZGJ4AbR3Au0VNqTWs/
-         IchQHJY5m8vFvavDJ/9PNNyiSxxUmb/aJJWeHUO/SpKjCTadpF+Lt1hMUqLcbgGSOj1R
-         jhx6U5mFE+8gis4mWuTTRFZltykwD0bB5ZuTELqW2w3vNNlOzaOYMCUzX8lyjAQpFC02
-         OCQOhF56cplnkWp+9G+ZvWdBNPknYCdDOGQRjSi9jAxwAG+IIpu5VHR19GHNJImJXm6k
-         5Xsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fj9kX4cP4lXIzAUcHvTSQq+2gUiSFponYUkO/x8lnjw=;
-        b=dUeOW8yxPZb1MuyI0uQ7V5YEIdbujs7/dQoj8oeFKX0bt7PTZnSDc34Z8YJoYXPH02
-         Pww/bBhGziJl4IqWGseX66JDh38EVDzenDrzLze0yMF+kIpVSavT5wEm5Xt+HtIorDbo
-         QIRsGlUWMnsb0whvThkR3Vtkd074B6b2WE//F9pP96cHGJvLPpmezMdvqbumLXVsvKMz
-         VUh99wzBA0jWZkM2O1Cfbc4uEYdUO2Ut+Jrt27R8f8l+NphHAtJQPd3C56P+Kg43Y4eU
-         TRyLgcVo5t6lifG14gBMBtehk4c+TfrhEiHZq7Y8UU5EIt6rEgZqmCNysoI97pn3Sray
-         4DtQ==
-X-Gm-Message-State: AOAM531lzG6AzQ5j9Ohp7PcRtCY9Hc4ELU5puEHUrqHYlujz/baTX/ZK
-        4WAx/Y13dRspITxsTqectpr/sR50ZB4OgN7w5qU=
-X-Google-Smtp-Source: ABdhPJxbzLuwc2Ntd3uq6VipTXN3kSaA9q1s0yI8P2Jbc2VnoX2P1Ts//npiixSjvow9S7wGphrDiFUAdRbn7qz4Z0w=
-X-Received: by 2002:a17:90b:798:: with SMTP id l24mr12797709pjz.122.1641514817074;
- Thu, 06 Jan 2022 16:20:17 -0800 (PST)
+        Thu, 6 Jan 2022 19:20:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96157C061245;
+        Thu,  6 Jan 2022 16:20:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 526F661C55;
+        Fri,  7 Jan 2022 00:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5513C36AE0;
+        Fri,  7 Jan 2022 00:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641514821;
+        bh=LPZoZva39qia0NK5/RjsftEgY/50mELNLWNvxMkHfQk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Y5sm2IP3HHJr5yOfFnN68NqA8DQhtBu2hLRHjGPfpezLQK0uYuVquaeNBhB7aGKPX
+         2pJ0DbJOsRdcMZm9hrZCEFixvs/p77yLsPwk69K22RQjQFL05JhaFzrChtzfkT8Jnw
+         ql8F6XGr22N5krz5p1rMSokMqNpBkkNwsYWwj1GqLbbby4GYmaXToHgLeWQ3ksD6Br
+         dKja9ugX+R3A/u8eYvhY/CyXaE4hS//uRJ2CaKTvTvP5fCKK/QBChkCwW3ePx1vjbl
+         lXZOrI43740elH/dJbNomo8B1De4ooVePyH/hawgu/nekWMh3qwYav+ukz7gmc/Js7
+         /tPLE8ZfPX7vQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220104080943.113249-1-jolsa@kernel.org> <20220106002435.d73e4010c93462fbee9ef074@kernel.org>
- <YdaoTuWjEeT33Zzm@krava> <20220106225943.87701fcc674202dc3e172289@kernel.org>
- <CAADnVQLjjcsckQVqaSB8ODB4FKdVUt-PB9xyJ3FAa2GWGLbHgA@mail.gmail.com> <20220107085203.14f9c06e0537ea6b00779842@kernel.org>
-In-Reply-To: <20220107085203.14f9c06e0537ea6b00779842@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 6 Jan 2022 16:20:05 -0800
-Message-ID: <CAADnVQ+mZxxm=96pQ4ekV3rbjV=svPOKg3TG+K0396g+iMjTbA@mail.gmail.com>
-Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220106182518.1435497-1-robh@kernel.org>
+References: <20220106182518.1435497-1-robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: clock: imx5: Drop clock consumer node from example
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Date:   Thu, 06 Jan 2022 16:20:20 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20220107002021.A5513C36AE0@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 3:52 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Thu, 6 Jan 2022 09:40:17 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > On Thu, Jan 6, 2022 at 5:59 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > That seems to bind your mind. The program type is just a programing
-> > > 'model' of the bpf. You can choose the best implementation to provide
-> > > equal functionality. 'kprobe' in bpf is just a name that you call some
-> > > instrumentations which can probe kernel code.
-> >
-> > No. We're not going to call it "fprobe" or any other name.
-> > From bpf user's pov it's going to be "multi attach kprobe",
-> > because this is how everyone got to know kprobes.
-> > The 99% usage is at the beginning of the funcs.
-> > When users say "kprobe" they don't care how kernel attaches it.
-> > The func entry limitation for "multi attach kprobe" is a no-brainer.
->
-> Agreed. I think I might mislead you. From the bpf user pov, it always be
-> shown as 'multi attached kprobes (but only for the function entry)'
-> the 'fprobe' is kernel internal API name.
->
-> > And we need both "multi attach kprobe" and "multi attach kretprobe"
-> > at the same time. It's no go to implement one first and the other
-> > some time later.
->
-> You can provide the interface to user space, but the kernel implementation
-> is optimized step by step. We can start it with using real multiple
-> kretprobes, and then, switch to 'fprobe' after integrating fgraph
-> callback. :)
+Quoting Rob Herring (2022-01-06 10:25:09)
+> The example nodes have different sized interrupt cells which is not valid
+> given no interrupt-parent is specified. As provider examples don't need to
+> show the consumer side in the first place, just drop the consumer node.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Sounds good to me.
-My point was that users often want to say:
-"profile speed of all foo* functions".
-To perform such a command a tracer would need to
-attach kprobes and kretprobes to all such functions.
-The speed of attach/detach has to be fast.
-Currently tracers artificially limit the regex just because
-attach/detach is so slow that the user will likely Ctrl-C
-instead of waiting for many seconds.
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>

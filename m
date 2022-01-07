@@ -2,201 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD63487F98
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5F5487F9E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 00:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbiAGXud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 18:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S231808AbiAGXwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 18:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiAGXud (ORCPT
+        with ESMTP id S231708AbiAGXwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 18:50:33 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E4AC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 15:50:32 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso8248940otf.12
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 15:50:32 -0800 (PST)
+        Fri, 7 Jan 2022 18:52:07 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCF7C061574;
+        Fri,  7 Jan 2022 15:52:07 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id q14so7107799qtx.10;
+        Fri, 07 Jan 2022 15:52:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MtaD0jiMFwAF1y23324QcO/uLTF1MdIlBdqofV7+EOc=;
-        b=Q+B2lEj0bz8JV+KmSIt6rAYLeSA47VFwgPmyyJHDdfeozhwIqTwykMCHq17LlfcTz5
-         vjIELSVRqAZ9zs+G75wAyWpm2i3Y2u6Kspaumwln3M6SI0krQV9GEThAeOl0bwKRWDR3
-         FyyNK1+JCt8qOb21gIHhKUPXvhyfXrBuFMixtbLWh+1Wo012DrUJYwLe6vorrykjAadS
-         cwY/1OU7P9hfa0G2ilSPtl674kNTccKEkBFqkjDgS2D/1C3ZZQ+KrnBXHOshCcxfwo2K
-         DHlGIuD8f+8qnIa2Yr4XVbkXPXIcXxgn9MPN0UpFdJPzee1LvApu5jGUdX5aNhab1uiy
-         6hZg==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=aU8/5mVKlEMT/Qttq5O3DrV9RFJs3vfNMkN1OVYl94g=;
+        b=T4+XCh3ftAIzbtt6LmDGuXNGec6C43LntQC5i7/C8HYKmZwGU4u7r24REaDJeSEtA/
+         zR3ebKwPeraqdH4kX28aYgydtUbXPLe4W+7F7I1+KX5EhGyLX1WOt5c6HDgaRNzEXQZ3
+         B5BOx+wOgekab4gN5/tQrRjVKUfRA3mk4SDwbuPpSFBr17DfkCivQfbIuCehRQD3uPfs
+         mldbt//G5L6ADXvSYeDQfCMjnmFoTLzcHVL69TVir+Uw1LNlW38+51udxrZ+nB3kA0Ae
+         xduGQX5iqtsLr4/y5XrblwVQw1psd0C/oextHRYqE0k7bS0GhK2WV5eqiasQZlHSoG1q
+         El1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MtaD0jiMFwAF1y23324QcO/uLTF1MdIlBdqofV7+EOc=;
-        b=WQqMaQswzKcf9JjQcEXjJCw8rXieLLJA4AGUtujSHKSm2yYNmANcmEsRsD4kMExaVj
-         Q3R00W0FD8Mdug6ZIhZ7ysGCb8lpJw/xr817ui/ul/gfaCCyhcHb3kGl2kbN8yF4PRPX
-         W23CP356+fv4Dsjit9A6Qj2+EJmpM6QH7PqjYf4tk2jgqGNBi2ByF3GTGnXws3UVMge7
-         zsnsaMC5V2tu7Z/0dqFfmeEc7vmVHRfj3CQ1BlzNmiyp/gBpjXqXHPP3JO/9ai1sNc18
-         PTrddj8scm38p+ROfy2/IB1WcXq2s9ZQmd1xHkpwGe392t1TIC1uEcRobJHqCNViOhyF
-         /sXQ==
-X-Gm-Message-State: AOAM531reE1kK6oySLkVr448mIx+hGad/03fLBJx/MjaMCrZme75hkNk
-        +bn/b0znRXM8m6PrqtgrhkC1hQ==
-X-Google-Smtp-Source: ABdhPJxklGIFuq/RlZCNvCdPn3v/sMlRnAHaJ5h26MfOvxULajImCkiEjEqmrndPQwpf1X/OszmkAg==
-X-Received: by 2002:a05:6830:2b20:: with SMTP id l32mr47965797otv.333.1641599432328;
-        Fri, 07 Jan 2022 15:50:32 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id i25sm33714otl.8.2022.01.07.15.50.31
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=aU8/5mVKlEMT/Qttq5O3DrV9RFJs3vfNMkN1OVYl94g=;
+        b=XGx6aQRQPBDG7Hde2iuguFipXz8X5hzA9Te23QgdDT+P7hkN6FsBZuSZIgWgm+n1uN
+         l3FFUiNHwNxE4lY+lREfuXfSDsE+rC1JKH+8epYe6InsG23aj5hGSZlpgd8/2j1ddrWR
+         DUjaosJcCZgIev8bIF+JXm35UqX+4vU1qdyMACp46Ij6D7yxgQJc937CR1hgua3fuV/l
+         n8tfwBIXbuUf2IX6NjD6NLxQZnrdmGyXsiHY2NeIk7mzVrO42gE6JCe5NMb+TVshCbej
+         9S26Y6iESpmgKoqhmJAkhnVMBo7TWj8cDjlVvXAUypohdJNjchlkKMvMVtBJi1Jgstx6
+         EpGw==
+X-Gm-Message-State: AOAM533zktX+u48kvWbHOumaZxWBqleWeYWQ3VnnhtNLDbwFabXhmBut
+        ROPgQeb6zS+aO66YytDDiaM=
+X-Google-Smtp-Source: ABdhPJzVrNtO+yZnVgnRKPZ02xfBJ44/6rIzZC/wm4x6y67anqWEKcF9mt4dRk2NK9iOVHJEVPvm+Q==
+X-Received: by 2002:ac8:5942:: with SMTP id 2mr55955504qtz.239.1641599526268;
+        Fri, 07 Jan 2022 15:52:06 -0800 (PST)
+Received: from errol.ini.cmu.edu (pool-108-39-235-221.pitbpa.fios.verizon.net. [108.39.235.221])
+        by smtp.gmail.com with ESMTPSA id m20sm93186qkp.112.2022.01.07.15.52.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 15:50:31 -0800 (PST)
-Date:   Fri, 7 Jan 2022 15:51:18 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
-Message-ID: <YdjR9kQSFEydZybr@ripper>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-7-daniel.lezcano@linaro.org>
- <YdiUOh8FtPRktlUM@ripper>
- <8e2fa6b6-4f95-9381-4d7e-810afe98fcea@linaro.org>
+        Fri, 07 Jan 2022 15:52:05 -0800 (PST)
+Date:   Fri, 7 Jan 2022 18:52:03 -0500
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Kamil Rakoczy <krakoczy@antmicro.com>,
+        "mdudek@internships.antmicro.com" <mdudek@internships.antmicro.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "david.abdurachmanov@sifive.com" <david.abdurachmanov@sifive.com>,
+        Florent Kermarrec <florent@enjoy-digital.fr>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+Message-ID: <YdjSI1R9qdnYHFNB@errol.ini.cmu.edu>
+References: <20220107170616.2041589-1-gsomlo@gmail.com>
+ <20220107170616.2041589-4-gsomlo@gmail.com>
+ <YdhzmE8eBsvkRCBn@errol.ini.cmu.edu>
+ <CAHp75Ve5T-yNV-BJww_kN+6y8P9FyHodKfZ4nfi2POynp6BPVg@mail.gmail.com>
+ <YdivZYknD2IQ1Wzy@errol.ini.cmu.edu>
+ <CAHp75VfMJyeF4dpz63TqZv9UCMBWmQu0U622SOV7wLmn7Qm0mQ@mail.gmail.com>
+ <CAHp75Vfo=uJ3eY0GtjdjTk32KkaQfOFYw6kF5oZqQLb38AnhbA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <8e2fa6b6-4f95-9381-4d7e-810afe98fcea@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75Vfo=uJ3eY0GtjdjTk32KkaQfOFYw6kF5oZqQLb38AnhbA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 07 Jan 14:07 PST 2022, Daniel Lezcano wrote:
-
+On Sat, Jan 08, 2022 at 01:40:06AM +0200, Andy Shevchenko wrote:
 > 
-> Hi Bjorn,
 > 
-> On 07/01/2022 20:27, Bjorn Andersson wrote:
+> On Saturday, January 8, 2022, Andy Shevchenko <andy.shevchenko@gmail.com>
+> wrote:
 > 
-> [ ... ]
 > 
-> >> +#include <linux/dtpm.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/of.h>
-> >> +#include <linux/platform_device.h>
-> >> +
-> >> +static struct dtpm_node __initdata sdm845_hierarchy[] = {
-> >> +	[0]{ .name = "sdm845" },
-> > 
-> > Why is the index signifiant here?
-> > Doesn't this imply risk that we forget one element, which will be
-> > thereby implicitly be left initialized as {} and hence denote
-> > termination of the list?
 > 
-> Yes, that is possible. The other annotation is also possible. The index
-> helps to refer from the .parent field.
+>     On Friday, January 7, 2022, Gabriel L. Somlo <gsomlo@gmail.com> wrote:
 > 
-> That said nothing forces to use the index, so it is a matter of taste.
+>         On Fri, Jan 07, 2022 at 10:50:02PM +0200, Andy Shevchenko wrote:
+>         > > > +             .of_match_table = of_match_ptr(litex_match),
+>         > >
+>         > > You said "Wrong usage of of_match_ptr()" here, and all I have to go
+>         by
+>         > > is a bunch of other `drivers/mmc/host/*.c` files that use it in a
+>         > > similar way, so can you please clarify and/or provide an example of
+>         how
+>         > > to do it properly?
+>         >
+>         > First of all, you have a dependency to OF, try to remove it and
+>         > compile with OF=n and you will immediately see the issue. You may
+>         also
+>         > go for  `git log --no-merges --grep of_match_ptr` and analyze the
+>         > result.
 > 
-> >> +	[1]{ .name = "package",
-> >> +	     .parent = &sdm845_hierarchy[0] },
-> >> +	[2]{ .name = "/cpus/cpu@0",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[3]{ .name = "/cpus/cpu@100",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[4]{ .name = "/cpus/cpu@200",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[5]{ .name = "/cpus/cpu@300",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[6]{ .name = "/cpus/cpu@400",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[7]{ .name = "/cpus/cpu@500",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[8]{ .name = "/cpus/cpu@600",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[9]{ .name = "/cpus/cpu@700",
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[10]{ .name = "/soc@0/gpu@5000000",
-> > 
-> > It worries me that we encode the textual structure of the dts in the
-> > kernel. E.g. for quite a while this was "/soc/gpu@5000000", so if this
-> > landed a year ago this driver would have prevented us from correcting
-> > the dts.
+>         Ah, grepping for "of_match_ptr" was *never* going to show me the
+>         "right way of using of_match_ptr()" :)
 > 
-> Why ? The change should be reflected in the driver also, no ?
+> 
+> 
+>     Hmm... this is strange. The above command is grepping in the commit
+>     messages, and not in the code.
+>      
+> 
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/?qt=
+> grep&q=of_match_ptr
+> 
+> Shows a lot of the commits that I referred to.
 > 
 
-There was no update needed to change /soc to /soc@0, but with this
-driver in place we would need to do that.
+Right. I was originally looking at *code* for current usage examples.
 
-The problem is that the life cycle of the DTB is different from Linux
-and we promise our users that the kernel will be backwards compatible
-with existing DTBs (at least for a reasonable amount of time).
+I get that you were referring to grepping through *commits*, which
+seems to be the new way of figuring out what's canonical (as a lot of
+the existing code seems to be in need of update :)
 
-So if we made a change in the kernel to turn the incorrect
-"/soc/gpu@5000000" into "/soc@0/gpu@5000000" we would no longer find a
-match if you try to boot with yesterday's DTB.
-
-> > Another concern is that not all busses in the system are capable of
-> > 36-bit wide addresses, so it's plausible that we might one day have to
-> > create a more accurate representation of the address space. Maybe not on
-> > SDM845, but this would force us to be inconsistent.
-> 
-> Sorry, I'm missing the point :/
-> 
-> If a change is done in the DT, the code using the description must be
-> changed accordingly, no?
-> 
-
-No, the kernel should continue to function with the old DTB.
-
-Consider when your Linux distro gives you a new kernel version on your
-computer, that shouldn't require an upgrade of "BIOS" in order to boot
-the new kernel.
-
-Regards,
-Bjorn
-
-> 
-> > Regards,
-> > Bjorn
-> > 
-> >> +	     .type = DTPM_NODE_DT,
-> >> +	     .parent = &sdm845_hierarchy[1] },
-> >> +	[11]{ },
-> >> +};
-> >> +
-> >> +static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
-> >> +        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
-> >> +        {},
-> >> +};
-> >> +
-> >> +static int __init sdm845_dtpm_init(void)
-> >> +{
-> >> +	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
-> >> +}
-> >> +late_initcall(sdm845_dtpm_init);
-> >> +
-> >> +MODULE_DESCRIPTION("Qualcomm DTPM driver");
-> >> +MODULE_LICENSE("GPL");
-> >> +MODULE_ALIAS("platform:dtpm");
-> >> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
-> >> +
-> >> -- 
-> >> 2.25.1
-> >>
+Thanks,
+--Gabriel
+  
 > 
 > 
-> -- 
-> <http://www.linaro.org/> Linaro.org ??? Open source software for ARM SoCs
+>         OTOH, grepping for "of_match_table" (and of course the commits
+>         returned by your command line) suggests that I simply should *not*
+>         use it at all, and assign its argument directly to .of_match_table.
 > 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+>         Got it, fixed it, thanks!
+> 
+>         Now, on to the probe ordering issue... :)
+> 
+>         Thanks,
+>         --G
+> 
+> 
+> 
+>     --
+>     With Best Regards,
+>     Andy Shevchenko
+> 
+> 
+> 
+> 
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 

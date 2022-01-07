@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2333848748D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5008487491
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 10:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237011AbiAGJOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 04:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346396AbiAGJOD (ORCPT
+        id S1346416AbiAGJP6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Jan 2022 04:15:58 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:38316 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346393AbiAGJP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 04:14:03 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCED9C061212
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 01:14:03 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso5901156pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 01:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=u41zQxzUJskSm1JtWiXabOaQySyrCGnhUZ53TnpbGpY=;
-        b=smwDmME3VUxoGMc9YFhEy4pLhEavyaB4mrYD6YOUUV2UMjIpj1rXZqNOUPOjaioQ93
-         OdOPUk2uiCO77dEpNQkomtg7a6gXVl35D5jnFvzcmNQ60UxERhZzNS7Pnno+3YcG1cYD
-         9yVGsYf55ORxXJrblJnJ/0cwIlu3VGaqhhsoUH5UyB+VB3x4AFBu+29QAQFLSG/ZjJmB
-         d3GStGrFLjR6NTsEQB3/hOMZfsCpAMkPM+agm8e/3lMLKI1LQkWVOuc1m6i2vAWbm9s5
-         YqdScY6iNYEjVLuiL/FbKA4GkzHnyLoo9EDAtHb/CwvHL8/xv00IPn3+Z+w7MGPhZW8V
-         2DpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=u41zQxzUJskSm1JtWiXabOaQySyrCGnhUZ53TnpbGpY=;
-        b=jdyudkl+l0yJjITWXz7TuP1wHkDw7791FQx2K9GZNJ95PSEz9sAIVD5v8LxTW41e12
-         Mo0m8oL/I1LMHJv3PZSdVTKkP3fsJ5NHZWVu1qCEBktl1U5L3e+4ViJDxli1trlcMr1i
-         zjqL1odRQqPG+SjvMef9nttAD3n3CbxmRLnhZCF+1oO4EExJqaOfEwH57odQCGosM3SS
-         bs2BmcXtooSldhhDCeclvE17uGYy1qPDqvsTRW3HwO/boTCHxC7Rd3IqfI1IPljQI21Z
-         1Pjn8kmVEeDUv2k9q6+c8CqDUpGXrd378TiFFp8m49m3wzWnEx0IEdVsNIPmyvcjPZkV
-         sO3A==
-X-Gm-Message-State: AOAM532oXKr0G+fy6peDwlV8Nrxvk0yO0uz6stsx5MEEIziJN4wdf37O
-        s3c5D0BoYVETRjGBo7Xa51In2aG925JsiHvb
-X-Google-Smtp-Source: ABdhPJwQjt9ERBNHx2f2cwuGqlzpQGsV3rxZnAtnOpFt8SIitKk7KLdF/dpiL5GSeDMQ/98D/7MSQw==
-X-Received: by 2002:a17:902:e541:b0:149:2af:fa6a with SMTP id n1-20020a170902e54100b0014902affa6amr62348194plf.27.1641546843300;
-        Fri, 07 Jan 2022 01:14:03 -0800 (PST)
-Received: from ubuntu.huaqin.com ([101.78.151.213])
-        by smtp.gmail.com with ESMTPSA id my5sm5814653pjb.5.2022.01.07.01.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 01:14:02 -0800 (PST)
-From:   Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     dianders@google.com,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: [PATCH v2] HID: google: modify HID device groups of eel
-Date:   Fri,  7 Jan 2022 17:13:57 +0800
-Message-Id: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 7 Jan 2022 04:15:57 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-283-imPCMXOvPNuWtN3LA9tbww-1; Fri, 07 Jan 2022 09:15:55 +0000
+X-MC-Unique: imPCMXOvPNuWtN3LA9tbww-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Fri, 7 Jan 2022 09:15:54 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Fri, 7 Jan 2022 09:15:54 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'cgel.zte@gmail.com'" <cgel.zte@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: RE: [PATCH] mm/page_alloc.c: Use div64_ul instead of do_div
+Thread-Topic: [PATCH] mm/page_alloc.c: Use div64_ul instead of do_div
+Thread-Index: AQHYA2zM76VKweVeN0S3fxclkHxO96xXRvoA
+Date:   Fri, 7 Jan 2022 09:15:54 +0000
+Message-ID: <665a758a3bd5421ea7cf9c01d154f718@AcuMS.aculab.com>
+References: <20220107021751.621522-1-deng.changcheng@zte.com.cn>
+In-Reply-To: <20220107021751.621522-1-deng.changcheng@zte.com.cn>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If HID_GROUP of eel is set to HID_GROUP_GENERIC, Whiskers Tablet
-Mode Switch of eel hammer will not be detected by system. when it
-is set to HID_GROUP_VIVALDI, system will detect Whiskers Tablet
-Mode Switch successfully.
+From: cgel.zte@gmail.com
+> Sent: 07 January 2022 02:18
+> 
+> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
+> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
+> to avoid a possible truncation.
 
-Signed-off-by: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
----
- drivers/hid/hid-google-hammer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You really need to check the domain of the divisor, not its type.
+Just because the type is 64 bits doesn't mean that the value can be
+anywhere near even 32 bits.
 
-diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-index 0403beb3104b..e5acd15f4a55 100644
---- a/drivers/hid/hid-google-hammer.c
-+++ b/drivers/hid/hid-google-hammer.c
-@@ -585,7 +585,7 @@ static void hammer_remove(struct hid_device *hdev)
- static const struct hid_device_id hammer_devices[] = {
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
--	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-+	{ HID_DEVICE(BUS_USB, HID_GROUP_VIVALDI,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_HAMMER) },
--- 
-2.17.1
+	David
+
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>  mm/page_alloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 8dd6399bafb5..60469b616ac1 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8431,7 +8431,7 @@ static void __setup_per_zone_wmarks(void)
+> 
+>  		spin_lock_irqsave(&zone->lock, flags);
+>  		tmp = (u64)pages_min * zone_managed_pages(zone);
+> -		do_div(tmp, lowmem_pages);
+> +		tmp = div64_ul(tmp, lowmem_pages);
+>  		if (is_highmem(zone)) {
+>  			/*
+>  			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
+> @@ -8804,7 +8804,7 @@ void *__init alloc_large_system_hash(const char *tablename,
+>  	/* limit allocation size to 1/16 total memory by default */
+>  	if (max == 0) {
+>  		max = ((unsigned long long)nr_all_pages << PAGE_SHIFT) >> 4;
+> -		do_div(max, bucketsize);
+> +		max = div64_ul(max, bucketsize);
+>  	}
+>  	max = min(max, 0x80000000ULL);
+> 
+> --
+> 2.25.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

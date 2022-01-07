@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1452C487571
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E05B487574
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 11:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346683AbiAGKZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 05:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbiAGKZC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:25:02 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3037C061245;
-        Fri,  7 Jan 2022 02:25:01 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id z9so20260481edm.10;
-        Fri, 07 Jan 2022 02:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qmkH4HduGuDqN56JXHqEKJBLN+FBRsxZyV1qZNn/vGI=;
-        b=R+7oVNEt7WbifMQOMsewUjqj9ff3qjy2u35LIVMmh2ObEXcuKRT10Bib026YKKD94C
-         dwDcZ1GxbD+MzeOnjuqYyNLHWGWOQ0O+G513GMDgWThNbCgK8BbK+R+gumLxGFlENbN8
-         MH2gB/XUv9jvGWtSJef6HH5zkjBCdFxzo5vfjKE1SoXwXEpxk2d8+IlopQAW72PzxIA7
-         ppawoDPM7JVi2dgqe2JpQ0IgA8CVrYSjDM/FyZ88l5bziaI7/qBPhjI8wpAFDvcWPXtt
-         gJmcGUSCPST/Fl5d8H960+FW9rcNPzFWBbgJE3cVCdLAOE/vs3Em9DIG3eRkMBWPdAl3
-         F3SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qmkH4HduGuDqN56JXHqEKJBLN+FBRsxZyV1qZNn/vGI=;
-        b=i6dWYC/rmmpQizd5AaM+zPxriPhGmKWUUO8IGtUmBZ14PZ8nXJA5LdQ9MzZLeVkxpj
-         bXiXz+6Keo5Dj2HVAu8hUJRr6tFquT220Aw9fXrIY+ECHHOBYg1rfM2YL+Zu+K3lJ8U9
-         /lGFjtVXvZ9eUrl7AeZl9Cr1mOzo5ZaWM+il7owH6hqwgL/laO8m/37IpSIrrgd7tjWF
-         XRyfv2dGbpLsuKzIb3uQq+hP6ACf6Emd0nNzqDkAlo2FYfssTW+FOD+zWIemHHyWvslU
-         JWxfN34dUBZaBR9HMdNazwqJ3bkKhAyDDLEXW2X+/T4twwq1KYId/W+QK/f7HsR7wZzV
-         olXg==
-X-Gm-Message-State: AOAM533KYvUZif1mVHiuppEJx07DczxNQEf9JqrS5kUP0B3MrnMAgGZN
-        4+5VggW1FLAcK8Wtsc0DJOteRFedOabgOCULR8Gf6M+llCV7mQ==
-X-Google-Smtp-Source: ABdhPJwY1QWSUINg7cruSSBn6h8xxuURGw+5jNlvUGuofk536vAhkZSweQDZGB2f5QcjXzDZpjqUzS8UpMZ6glQYs4E=
-X-Received: by 2002:a05:6402:518a:: with SMTP id q10mr58704139edd.29.1641551100325;
- Fri, 07 Jan 2022 02:25:00 -0800 (PST)
+        id S1346703AbiAGKZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 05:25:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:38042 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346679AbiAGKZQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 05:25:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8A5013D5;
+        Fri,  7 Jan 2022 02:25:15 -0800 (PST)
+Received: from [10.57.38.163] (unknown [10.57.38.163])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A9053F66F;
+        Fri,  7 Jan 2022 02:25:15 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the jc_docs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220107103649.53774b30@canb.auug.org.au>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
+Date:   Fri, 7 Jan 2022 10:25:14 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220106174803.1773876-1-gsomlo@gmail.com> <20220106174803.1773876-4-gsomlo@gmail.com>
- <CAHp75Ve_jWmo3+Es0G5SyMpcdC_=hWfxHoa866Difd+X3F0uxg@mail.gmail.com>
- <YddyMI7hJE7u0jQ/@errol.ini.cmu.edu> <CAMuHMdX2ujViu9GivVHtgAqC6AdiL3CvdJM58pVteJe9KdvdqQ@mail.gmail.com>
- <YdgSG7t2eG9YzkaG@antec>
-In-Reply-To: <YdgSG7t2eG9YzkaG@antec>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 7 Jan 2022 12:24:23 +0200
-Message-ID: <CAHp75VdjP4jmUQHUV=eF2Ot+s=3==ZqUS7BFxMoPDw=NkCBm6Q@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Gabriel L. Somlo" <gsomlo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>, david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220107103649.53774b30@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 12:12 PM Stafford Horne <shorne@gmail.com> wrote:
-> On Fri, Jan 07, 2022 at 10:36:12AM +0100, Geert Uytterhoeven wrote:
-> > On Thu, Jan 6, 2022 at 11:50 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-
-...
-
-> > Many (most?) blurbs do mention the module name.
->
-> I was doubting this as well, but I searched and its true.  The text 'module will
-> be called' shows up many times, there is also different text.
->
->  $ grep -r 'module will be called' drivers/ | wc
->    1347    9023   9086
->
->  $ grep -r 'tristate \"' drivers/ | wc
->    7169   47486  521795
-
-Just a side note: `git grep ...` is much faster in the Git trees.
-
-And for this particular case I dare to advertise a script I wrote [1]
-to help with recursive searches.
-
-[1]: https://github.com/andy-shev/home-bin-tools/blob/master/gl4func.sh
-
-> So maybe >10% have module name in the blurb.  Example:
->
->           To compile this driver as a module, choose M here: the
->           module will be called tifm_sd.
 
 
+On 06/01/2022 23:36, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   e94f43ea200a ("docs: automarkup.py: Fix invalid HTML link output and broken URI fragments")
+> 
+> Fixes tag
+> 
+>   Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
+> 
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
 
--- 
-With Best Regards,
-Andy Shevchenko
+Hi Stephen,
+
+Which validator are you using for this output? checkpatch.pl has a validator for commit references
+and it actually complains _more_ if it's not wrapped at 75 chars. At least for ones in the
+body of the commit rather than the fixes reference. Which is a bit confusing if there is
+a difference in the rule.
+
+> 
+> Please do not split Fixes tags across more than one line.
+> 
+
+Is this just for the fixes tag and not for the one in the body? Would you consider adding
+this check to checkpatch.pl and submitting-patches.rst as I don't see that rule mentioned there.
+
+@Jonathan, I'm happy to resubmit with the changes, but it might be easier if you just
+make the fix in place.
+
+Thanks
+James

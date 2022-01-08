@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49721488485
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62270488487
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbiAHQZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 11:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S234582AbiAHQ0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 11:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiAHQZU (ORCPT
+        with ESMTP id S229553AbiAHQ0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 11:25:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E235C06173F;
-        Sat,  8 Jan 2022 08:25:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58FCBB80259;
-        Sat,  8 Jan 2022 16:25:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93351C36AE3;
-        Sat,  8 Jan 2022 16:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641659118;
-        bh=C2VKpp7NNq9PTCZgyOANayncg/RnDrFND2NQX7+3jXQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nFpWeLErycJzwsyQrAW/LcCbybR22/KTbydhLNsLr0RdAjX1siuEuk1WkCVEr6lcn
-         e3UOderd5PbbUcgGdnxnM5MKYi5EfcRJ8e3QBP6HUMflToHj00aTkJSYWE8Y1Fu8PG
-         Md3e86tuHTK4AK1kRLmEfTudNXy04gzonMJhVAR+k5OqCcaqWlFNM/fTdRwkpQQPCB
-         9gbV54PQ9ht2fpc0woPTgqMTBWRxlgZ+bIiEZcfwSKc9BmZ8QA+ZJD48Mfg/RZZ2GI
-         3m43dbnwB+EHim5dn5qsGZlc0Zws5lrj8a4ron7/YLez9KZCTUO5Sjfq7H6lOfQAVZ
-         6+Hvu+MzUwvDw==
-Date:   Sat, 8 Jan 2022 18:25:09 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 1/8] integrity: Fix warning about missing prototypes
-Message-ID: <Ydm65Uruy4u9SWeO@iki.fi>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
- <20220105235012.2497118-2-eric.snowberg@oracle.com>
+        Sat, 8 Jan 2022 11:26:49 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A6C06173F;
+        Sat,  8 Jan 2022 08:26:48 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id c126-20020a1c9a84000000b00346f9ebee43so4606534wme.4;
+        Sat, 08 Jan 2022 08:26:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=u1H+4M8YW/2Pf02D9Owq7XFEu0//KRJ4dZR9M7ZqmXM=;
+        b=lbVUVnGHfcTzJBF2F548kPdl9MhJVD6uLhE7qCGEUhQNDeRx5WTGn1nVPEFO9KvAbC
+         gXSGDWF9BB76AMshlf8OB+C9S14M39+Li9rUSxfhTaQ7hY0MWFwI9lM5qBnSnIZ1QaIX
+         62uBFYE2NopfBbgsnJTMWiw38/FtKfcqz6kv2mRa6akyggaKbpvhasE+/Abl4izU1NBc
+         chqgfMyZByAAdMjPq50JGBpaHB6hCLHepMW0IV1nYOwrE7yMFa4xLSYxKJVTA3N5XPQE
+         7tVaM331Y5Vhgsl8T31q7c+asit+oYoO4sPO6yLkmAgAS45bop160hs+2CQdWiHFQrmS
+         759A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=u1H+4M8YW/2Pf02D9Owq7XFEu0//KRJ4dZR9M7ZqmXM=;
+        b=4LqTtCUuuDNlLVzw6rHScJTKAIanx4ABkEOuD4wvp1YShuqLE8NlGuYU1PjMMVsRBT
+         bdKj946A2qA5yp2ZQqWNkjgR2gBlGwuXQdP9hiuKWEa5IO6ufVDgPEtuMV4GmoQjxgY3
+         zYfTbXEi/XrlNVJvehXQ2cG+A5gaieOSjpQiuRlqZqqe/tmTG0xIIR2KeUT7dt5rI/a3
+         8pX17Dde4iMmQJNd0R7gzt4jLovTXJPJynsmkn/ypJ3chTs9E/G17uPR2r+JPtCOxSPg
+         nYQIhQDVOjb0JHdxae2XlYKaK8M3wmAcX/gqxUaDYzdjjK8e8Zmkm8V4CuvkKuhKZ4sw
+         NW+Q==
+X-Gm-Message-State: AOAM5309cyVxYPqBaIT8kka+MbdLnJdHNcCeGVFMovrKO+pDqs/P79Lf
+        bCJi0Zv3BAN11caIWOuMzjdDNNItogg=
+X-Google-Smtp-Source: ABdhPJzRjZ2b9JHMj0IW5N3QTRZ/Stk2xBRhG48hW6YwIExuDVyO2N7PkihIu9GmMRiiP2RasfynxQ==
+X-Received: by 2002:a05:600c:198f:: with SMTP id t15mr14978271wmq.154.1641659207291;
+        Sat, 08 Jan 2022 08:26:47 -0800 (PST)
+Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
+        by smtp.gmail.com with ESMTPSA id m17sm1984931wmq.31.2022.01.08.08.26.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 08:26:46 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 8 Jan 2022 17:26:45 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
+Message-ID: <Ydm7ReZWQPrbIugn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105235012.2497118-2-eric.snowberg@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 06:50:05PM -0500, Eric Snowberg wrote:
-> make W=1 generates the following warning in keyring_handler.c
-> 
-> security/integrity/platform_certs/keyring_handler.c:71:30: warning: no previous prototype for get_handler_for_db [-Wmissing-prototypes]
->  __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
->                               ^~~~~~~~~~~~~~~~~~
-> security/integrity/platform_certs/keyring_handler.c:82:30: warning: no previous prototype for get_handler_for_dbx [-Wmissing-prototypes]
->  __init efi_element_handler_t get_handler_for_dbx(const efi_guid_t *sig_type)
->                               ^~~~~~~~~~~~~~~~~~~
-> Add the missing prototypes by including keyring_handler.h.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
-> v7: Initial version
-> v8: Code unmodified from v7 added Mimi's Reviewed-by
-> v9: Unmodified from v8
-> ---
->  security/integrity/platform_certs/keyring_handler.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
-> index 5604bd57c990..e9791be98fd9 100644
-> --- a/security/integrity/platform_certs/keyring_handler.c
-> +++ b/security/integrity/platform_certs/keyring_handler.c
-> @@ -9,6 +9,7 @@
->  #include <keys/asymmetric-type.h>
->  #include <keys/system_keyring.h>
->  #include "../integrity.h"
-> +#include "keyring_handler.h"
->  
->  static efi_guid_t efi_cert_x509_guid __initdata = EFI_CERT_X509_GUID;
->  static efi_guid_t efi_cert_x509_sha256_guid __initdata =
-> -- 
-> 2.18.4
-> 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+I'm pleased to announce -v2 of the "Fast Kernel Headers" tree, which is a 
+comprehensive rework of the Linux kernel's header hierarchy & header 
+dependencies, with the dual goals of:
 
-BR, Jarkko
+ - speeding up the kernel build (both absolute and incremental build times)
+
+ - decoupling subsystem type & API definitions from each other
+
+The fast-headers tree consists of over 25 sub-trees internally, spanning 
+over 2,300 commits, which can be found at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+
+   # HEAD: 391ce485ced0 headers/deps: Introduce the CONFIG_FAST_HEADERS=y config option
+
+Changes in -v2:
+
+ - Port to v5.16-rc8
+
+ - Clang/LLVM support (with the help of Nathan Chancellor):
+
+   On my 'reference distro config' the build speedup under Clang is around +88%
+   in elapsed time and +77% in CPU time used:
+
+     #
+     # v5.16-rc8
+     #
+     Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
+
+      18,490,451.51 msec cpu-clock          # 54.740 CPUs utilized   ( +-  0.04% )
+
+      337.788 +- 0.834 seconds time elapsed  ( +-  0.25% )
+
+     #
+     # -fast-headers-v2
+     #
+     Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
+
+      10,443,670.86 msec cpu-clock          # 58.093 CPUs utilized   ( +-  0.00% )
+
+      179.773 +- 0.829 seconds time elapsed  ( +-  0.46% )
+
+ - Unify the duplicated 'struct task_struct_per_task' into a single definition,
+   which should address the definition ugliness reported by Greg Kroah-Hartman.
+
+ - Fix bugs reported by Nathan Chancellor:
+
+    - cacheline attribute definition bug
+    - build bug with GCC plugins
+    - fix off-tree build
+
+ - Header optimizations that speed up the RDMA (infiniband) subsystem build 
+   by about +9% over -v1 and +41% over the vanilla kernel:
+
+     $ perf stat --repeat 3 -e instructions,cycles,cpu-clock --sync --pre "find . -name '*.o' | xargs rm" m-rdma >/dev/null
+     ...
+
+     # v5.16-rc8:
+
+          643,570.38 msec cpu-clock                 #   52.253 CPUs utilized            ( +-  0.06% )
+
+               12.316 +- 0.183 seconds time elapsed  ( +-  1.49% )
+
+     # -fast-headers-v1:
+          446,243.49 msec cpu-clock                 #   47.106 CPUs utilized            ( +-  0.06% )
+
+                9.4731 +- 0.0666 seconds time elapsed  ( +-  0.70% )
+
+     # -fast-headers-v2:
+          400,650.32 msec cpu-clock                 #   45.888 CPUs utilized            ( +-  0.02% )
+
+                8.7310 +- 0.0162 seconds time elapsed  ( +-  0.19% )
+
+  - Another round of <linux/sched.h> header footprint reductions: the 
+    header is now used in only ~36% of .c files, down from 99% in the 
+    mainline kernel and 68% in -v1.
+
+  - Various bisectability improvements & other fixes & optimizations.
+
+Thanks,
+
+	Ingo

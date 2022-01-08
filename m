@@ -2,181 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2FC4881C3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 07:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 628714881C5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 07:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbiAHGFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 01:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiAHGFc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 01:05:32 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE25DC061574;
-        Fri,  7 Jan 2022 22:05:31 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id j6so30206922edw.12;
-        Fri, 07 Jan 2022 22:05:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qKy0Ld0t/rb55huiDujNkhyOqnsFdqUh2fOUZOkxN48=;
-        b=ElRDvdPLDhCghbXgOzk6lq0DvtAMSlweI65lMQ4TxnkMwgDT8qVmAz8Gz1ZcwPiXDZ
-         OgGx76dYF5k5etnZL964lEtp0RFYI+0bSL1U8JsSbJIUYJxofeYy0nmAFWSft836JsBs
-         EYZcEMpcjzeqSSS64G3L7mCdso3rRvofOOgCbUTCOxsjMUR8G4sEXSL9uOB26uqccwgP
-         8dShbjYVR8iMnvgsUFiDkyDltok/kMDA/wR/+txPjih1D1HcLpk0DIp3xSEAcCwkRLpl
-         xGZdAF8BF3HZ0eR2h6xUQCl5j3g60VsSVEu8WQRJ9DYffDDFAIANaGD8BkaOH9r7wXQ4
-         cfKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qKy0Ld0t/rb55huiDujNkhyOqnsFdqUh2fOUZOkxN48=;
-        b=XUit0u0q8Ml4Vaz5ETtCWJaiFvSHXh5ISlmJpNYcZcrqWX7FB1z0EuyNUqaeyvLg32
-         rKFW6MrPiR3G0LqR1jLJomk2kGFBroCcIvIQuPEk0V0KBysohGxTGpGnvbySSwgzyqrJ
-         +8d1kPrcytCKevNZ6/5S7q8ZCm/tdguGeEt0QKBeKH+K5PowmT8fWirYfNUt5pHb76M3
-         wnimifkUR7rqJimOFXouUXhV57TD+gDmOTBhDGo3nXk847fEat/3ICRjA17GTmomzlcL
-         eZeupIOxc+VeTK37m2iH1PC7x6GZSRCNj8Ga6aN3H3zR8B9iHYkZ/J74rGe9pY2X4kfG
-         6Pqw==
-X-Gm-Message-State: AOAM533xcqFEThay9o7EOSCNRLEYBi+yxQMzwoyCq2g4IPYdu8rDawZk
-        9p/wmAASH2iC10JW1Y03wWeRs19uaQhCa9s8tLw=
-X-Google-Smtp-Source: ABdhPJy2T/2xdEWvLdKJc3r4bh7gu318iPxRp81+gvESMiy7CEHxte4tHO54XPF/7TWqoNokTRo6zMZTBaLG4Jw2l60=
-X-Received: by 2002:a05:6402:4241:: with SMTP id g1mr65579080edb.11.1641621930273;
- Fri, 07 Jan 2022 22:05:30 -0800 (PST)
+        id S233254AbiAHGHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 01:07:43 -0500
+Received: from mga04.intel.com ([192.55.52.120]:23779 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229913AbiAHGHl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 01:07:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641622061; x=1673158061;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iFnm1+bUL3YvHnsySUYNgqV5f3qovLQYV6y6T14WesM=;
+  b=KHSvbnti3GC5Rn4ptHF1nK+Q/NLBy7yMbxHnPHOJdKMMrEV5FCdVZK9M
+   NjD/UEEuHQWpadS62FxBO5+82BuoQLHEKbK95FXwfgVipjM0vsXPvRm0P
+   INTPUfMaWZXz1r9Rqqln+r31h8CwT5PDdynwOBAtXBGMpjxmsb267UOGw
+   u45ZAt4PfaECibBPjHcfbED49/tpan2z/aG+fV8neIBce/x7krKuNNmta
+   72OX9DNzc2UPSHB+NvxYrFN58yzz9DHGuWj7WWna3F5gZsR1p8gljMtG7
+   RJVWajetvqCHNZOEgh+TlOyhc5kvHtKDIgx7lCUpnRe0XVBoMvyPDtkdD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="241803599"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="241803599"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 22:07:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="575325702"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Jan 2022 22:07:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n64t8-0000Jo-OW; Sat, 08 Jan 2022 06:07:38 +0000
+Date:   Sat, 8 Jan 2022 14:07:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: drivers/media/i2c/ov5648.c:2035:39: warning: taking address of
+ packed member 'handler' of class or structure 'ov5648_ctrls' may result in
+ an unaligned pointer value
+Message-ID: <202201081304.I6PRwgoL-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220106024518.8161-1-yinxin.x@bytedance.com> <20220106024518.8161-2-yinxin.x@bytedance.com>
- <CAD+ocbx2e06YoESJM7m5ra-6so0ijWsYyN1L1ZFTXqxedMMoNw@mail.gmail.com> <CAK896s4EgEPU4FyyXczW79uFhVDido-Cwc=X-6jJ3kz2LXwBqw@mail.gmail.com>
-In-Reply-To: <CAK896s4EgEPU4FyyXczW79uFhVDido-Cwc=X-6jJ3kz2LXwBqw@mail.gmail.com>
-From:   harshad shirwadkar <harshadshirwadkar@gmail.com>
-Date:   Fri, 7 Jan 2022 22:05:19 -0800
-Message-ID: <CAD+ocbzn4gopc_ohSe66WxiZ-yz4e=XKF+_tHTVQ6JWXd_T8kA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH 1/2] ext4: prevent used blocks from being
- allocated during fast commit replay
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ah, I see okay. Yeah, that makes sense. We do need to update
-fc_regions_valid for every addition during the replay phase. I think
-it may be helpful to add some comments describing this behavior in the
-code. But other than that, I think what you're doing is fine.
+Hi Paul,
 
-Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+FYI, the error/warning still remains.
 
-On Fri, Jan 7, 2022 at 6:09 PM Xin Yin <yinxin.x@bytedance.com> wrote:
->
-> On Sat, Jan 8, 2022 at 4:26 AM harshad shirwadkar
-> <harshadshirwadkar@gmail.com> wrote:
-> >
-> > On Wed, Jan 5, 2022 at 6:45 PM Xin Yin <yinxin.x@bytedance.com> wrote:
-> > >
-> > > during fast commit replay procedure, we clear inode blocks bitmap in
-> > > ext4_ext_clear_bb(), this may cause ext4_mb_new_blocks_simple() allocate
-> > > blocks still in use.
-> > >
-> > > make ext4_fc_record_regions() also record physical disk regions used by
-> > > inodes during replay procedure. Then ext4_mb_new_blocks_simple() can
-> > > excludes these blocks in use.
-> > >
-> > > Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-> > > ---
-> > >  fs/ext4/ext4.h        |  2 ++
-> > >  fs/ext4/extents.c     |  4 ++++
-> > >  fs/ext4/fast_commit.c | 11 ++++++++---
-> > >  3 files changed, 14 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> > > index 82fa51d6f145..7b0686758691 100644
-> > > --- a/fs/ext4/ext4.h
-> > > +++ b/fs/ext4/ext4.h
-> > > @@ -2932,6 +2932,8 @@ bool ext4_fc_replay_check_excluded(struct super_block *sb, ext4_fsblk_t block);
-> > >  void ext4_fc_replay_cleanup(struct super_block *sb);
-> > >  int ext4_fc_commit(journal_t *journal, tid_t commit_tid);
-> > >  int __init ext4_fc_init_dentry_cache(void);
-> > > +int ext4_fc_record_regions(struct super_block *sb, int ino,
-> > > +                    ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay);
-> > >
-> > >  /* mballoc.c */
-> > >  extern const struct seq_operations ext4_mb_seq_groups_ops;
-> > > diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> > > index c3e76a5de661..9b6c76629c93 100644
-> > > --- a/fs/ext4/extents.c
-> > > +++ b/fs/ext4/extents.c
-> > > @@ -6096,11 +6096,15 @@ int ext4_ext_clear_bb(struct inode *inode)
-> > >
-> > >                                         ext4_mb_mark_bb(inode->i_sb,
-> > >                                                         path[j].p_block, 1, 0);
-> > > +                                       ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-> > > +                                                       0, path[j].p_block, 1, 1);
-> > >                                 }
-> > >                                 ext4_ext_drop_refs(path);
-> > >                                 kfree(path);
-> > >                         }
-> > >                         ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
-> > > +                       ext4_fc_record_regions(inode->i_sb, inode->i_ino,
-> > > +                                       map.m_lblk, map.m_pblk, map.m_len, 1);
-> > >                 }
-> > >                 cur = cur + map.m_len;
-> > >         }
-> > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> > > index 23d13983a281..f0cd20f5fe5e 100644
-> > > --- a/fs/ext4/fast_commit.c
-> > > +++ b/fs/ext4/fast_commit.c
-> > > @@ -1567,13 +1567,15 @@ static int ext4_fc_replay_create(struct super_block *sb, struct ext4_fc_tl *tl,
-> > >   * Record physical disk regions which are in use as per fast commit area. Our
-> > >   * simple replay phase allocator excludes these regions from allocation.
-> > >   */
-> > > -static int ext4_fc_record_regions(struct super_block *sb, int ino,
-> > > -               ext4_lblk_t lblk, ext4_fsblk_t pblk, int len)
-> > > +int ext4_fc_record_regions(struct super_block *sb, int ino,
-> > > +               ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay)
-> > Can you explain a bit why this replay parameter is needed here? This
-> > function simply reallocs the regions array if it doesn't have enough
-> > space. I am not sure why we need to change that behavior.
->
-> ext4_fc_record_regions() originally only used during scan phase,  and
-> set fc_regions_valid = fc_regions_use when getting a TAIL tag. Now we
-> also use it during the replay phase,   and need to update
-> fc_regions_valid in this case, because ext4_fc_replay_check_excluded()
-> uses fc_regions_valid for regions checking.
-> Please correct me if I'm wrong.
->
-> > >  {
-> > >         struct ext4_fc_replay_state *state;
-> > >         struct ext4_fc_alloc_region *region;
-> > >
-> > >         state = &EXT4_SB(sb)->s_fc_replay_state;
-> > > +       if (replay && state->fc_regions_used != state->fc_regions_valid)
-> > > +               state->fc_regions_used = state->fc_regions_valid;
-> > >         if (state->fc_regions_used == state->fc_regions_size) {
-> > >                 state->fc_regions_size +=
-> > >                         EXT4_FC_REPLAY_REALLOC_INCREMENT;
-> > > @@ -1591,6 +1593,9 @@ static int ext4_fc_record_regions(struct super_block *sb, int ino,
-> > >         region->pblk = pblk;
-> > >         region->len = len;
-> > >
-> > > +       if (replay)
-> > > +               state->fc_regions_valid++;
-> > > +
-> > >         return 0;
-> > >  }
-> > >
-> > > @@ -1938,7 +1943,7 @@ static int ext4_fc_replay_scan(journal_t *journal,
-> > >                         ret = ext4_fc_record_regions(sb,
-> > >                                 le32_to_cpu(ext.fc_ino),
-> > >                                 le32_to_cpu(ex->ee_block), ext4_ext_pblock(ex),
-> > > -                               ext4_ext_get_actual_len(ex));
-> > > +                               ext4_ext_get_actual_len(ex), 0);
-> > >                         if (ret < 0)
-> > >                                 break;
-> > >                         ret = JBD2_FC_REPLAY_CONTINUE;
-> > > --
-> > > 2.20.1
-> > >
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
+commit: e43ccb0a045f34838b786e8021dc4838b4af5c38 media: i2c: Add support for the OV5648 image sensor
+date:   12 months ago
+config: mips-buildonly-randconfig-r002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081304.I6PRwgoL-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e43ccb0a045f34838b786e8021dc4838b4af5c38
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e43ccb0a045f34838b786e8021dc4838b4af5c38
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/media/i2c/ drivers/media/v4l2-core/ fs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov5648.c:2035:39: warning: taking address of packed member 'handler' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           struct v4l2_ctrl_handler *handler = &ctrls->handler;
+                                                ^~~~~~~~~~~~~~
+>> drivers/media/i2c/ov5648.c:2054:29: warning: taking address of packed member 'exposure_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
+                                      ^~~~~~~~~~~~~~~~~~~~
+>> drivers/media/i2c/ov5648.c:2064:29: warning: taking address of packed member 'gain_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
+                                      ^~~~~~~~~~~~~~~~
+>> drivers/media/i2c/ov5648.c:2080:29: warning: taking address of packed member 'white_balance_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +2035 drivers/media/i2c/ov5648.c
+
+  2031	
+  2032	static int ov5648_ctrls_init(struct ov5648_sensor *sensor)
+  2033	{
+  2034		struct ov5648_ctrls *ctrls = &sensor->ctrls;
+> 2035		struct v4l2_ctrl_handler *handler = &ctrls->handler;
+  2036		const struct v4l2_ctrl_ops *ops = &ov5648_ctrl_ops;
+  2037		int ret;
+  2038	
+  2039		v4l2_ctrl_handler_init(handler, 32);
+  2040	
+  2041		/* Use our mutex for ctrl locking. */
+  2042		handler->lock = &sensor->mutex;
+  2043	
+  2044		/* Exposure */
+  2045	
+  2046		ctrls->exposure_auto = v4l2_ctrl_new_std_menu(handler, ops,
+  2047							      V4L2_CID_EXPOSURE_AUTO,
+  2048							      V4L2_EXPOSURE_MANUAL, 0,
+  2049							      V4L2_EXPOSURE_AUTO);
+  2050	
+  2051		ctrls->exposure = v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE,
+  2052						    16, 1048575, 16, 512);
+  2053	
+> 2054		v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
+  2055	
+  2056		/* Gain */
+  2057	
+  2058		ctrls->gain_auto =
+  2059			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTOGAIN, 0, 1, 1, 1);
+  2060	
+  2061		ctrls->gain = v4l2_ctrl_new_std(handler, ops, V4L2_CID_GAIN, 16, 1023,
+  2062						16, 16);
+  2063	
+> 2064		v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
+  2065	
+  2066		/* White Balance */
+  2067	
+  2068		ctrls->white_balance_auto =
+  2069			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTO_WHITE_BALANCE, 0,
+  2070					  1, 1, 1);
+  2071	
+  2072		ctrls->red_balance = v4l2_ctrl_new_std(handler, ops,
+  2073						       V4L2_CID_RED_BALANCE, 0, 4095,
+  2074						       1, 1024);
+  2075	
+  2076		ctrls->blue_balance = v4l2_ctrl_new_std(handler, ops,
+  2077							V4L2_CID_BLUE_BALANCE, 0, 4095,
+  2078							1, 1024);
+  2079	
+> 2080		v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
+  2081	
+  2082		/* Flip */
+  2083	
+  2084		v4l2_ctrl_new_std(handler, ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
+  2085		v4l2_ctrl_new_std(handler, ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
+  2086	
+  2087		/* Test Pattern */
+  2088	
+  2089		v4l2_ctrl_new_std_menu_items(handler, ops, V4L2_CID_TEST_PATTERN,
+  2090					     ARRAY_SIZE(ov5648_test_pattern_menu) - 1,
+  2091					     0, 0, ov5648_test_pattern_menu);
+  2092	
+  2093		/* MIPI CSI-2 */
+  2094	
+  2095		ctrls->link_freq =
+  2096			v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ,
+  2097					       ARRAY_SIZE(ov5648_link_freq_menu) - 1,
+  2098					       0, ov5648_link_freq_menu);
+  2099	
+  2100		ctrls->pixel_rate =
+  2101			v4l2_ctrl_new_std(handler, NULL, V4L2_CID_PIXEL_RATE, 1,
+  2102					  INT_MAX, 1, 1);
+  2103	
+  2104		if (handler->error) {
+  2105			ret = handler->error;
+  2106			goto error_ctrls;
+  2107		}
+  2108	
+  2109		ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
+  2110		ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
+  2111	
+  2112		ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+  2113		ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+  2114	
+  2115		sensor->subdev.ctrl_handler = handler;
+  2116	
+  2117		return 0;
+  2118	
+  2119	error_ctrls:
+  2120		v4l2_ctrl_handler_free(handler);
+  2121	
+  2122		return ret;
+  2123	}
+  2124	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

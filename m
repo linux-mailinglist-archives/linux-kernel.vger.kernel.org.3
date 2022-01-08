@@ -2,180 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB780487FD0
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025FE487FD2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiAHAD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 19:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S229746AbiAHAFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 19:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiAHADz (ORCPT
+        with ESMTP id S229712AbiAHAFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 19:03:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D48C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:03:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B34E0B827B9
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9AEC36AE9;
-        Sat,  8 Jan 2022 00:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641600232;
-        bh=hE1JBx+LnKCkS09uZwGJ9c57lUnWhsJUSmayJAeW0Xc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LTu0WQosVkpZblvDe8q2lVUw/g2V5ZluNj9YT2OEG5Sniqpa+5EtIU2RJKp4HOri+
-         y+oLdkV9twKnLnS+Tm2j0mTSBsdZhMK3KcVsYoIgjFF30WpQ08HugvMmyrUIyczRPy
-         yl/iEjYJ7y5bHTAhmKkTu+tnIME3w+LHoJjycST5SjwPAPMachykGfzG2kqtBd6d6y
-         kKcLAAIYEfwIZbrUJW/22q+1Q03d56GSwfTqWi3/kTt3NHSFQeJp5+z6WJJUY8HiGa
-         ZRbr9EwKN/jNwuVCQQKY6yKF8UDxREgg7MeTnRLnk7MxPwYet4QWaDN4mjFOTkcFPA
-         1+mEJ4+JtzcCg==
-Message-ID: <5d1a9dff-6319-14a6-ad81-97350a6849af@kernel.org>
-Date:   Fri, 7 Jan 2022 16:03:46 -0800
+        Fri, 7 Jan 2022 19:05:01 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5164C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:05:01 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id h5-20020a9d6a45000000b005908066fa64so7445629otn.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 16:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xIQIMAF9RLT+C4D5YuRDhHVaZflXIUIUiQfqwkcoWZc=;
+        b=ikRLN/s+6VutL3/OAv9/D8Jt2GzaaDDFBTBjvFaNhLcP59xDsK76CcNlzc4oMBOwvc
+         UodXoB8hp54v4YFwcJxBfHQoyZOxoD1KzRVhLjlrtXjMZ0kC/iGoTZH/bl4fz0ea+ER3
+         Dd6O6lLHatYVKexOUaY4+UdpkbMut0ZQWhp+xoET0+ViFkHdL9PAOTCEnOnGuUhRVAYq
+         5xd7e0TjW+HC1AYlN3jhHqlHe+wD8UU3lli7sEi6wuM8YwejdHniz5x1YpypSMC+KP4N
+         bza8pbAUy1ess2KEkKTP8RDE1JvFMBkG3bWqEnfOBv4UnBRMOkZdssMMEE+iUi6lxhsD
+         FCiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xIQIMAF9RLT+C4D5YuRDhHVaZflXIUIUiQfqwkcoWZc=;
+        b=wtBNdP7aBCQQ3HrDn/WmCVqT7k48jD1I8s43oSBCoad175v0JxDDYdBC/5L30fK8w1
+         lGRKrlgLqeDL2K9tV6+7ZZux/qWi0Sem063Xc8xTnyvaOEjvLqSEEfnltSxSJnGh798+
+         Bkot1eqtB5nCvbcerxy83azW3/Mb4DSaR5022k09+hvqzxPiDgPrcAbsvY/dDyzuoscz
+         ht847npv5VZoapqulOf/47VSZ8Y8GJ6L10ktV/zBWWqdvc+vLeCcNOF3zHaSq8fKSPFJ
+         FX2VHs/ROK22NMVdW/IyGuFVEBs0YCb/T3Knt1OOrEJPun6zG9lM+MTU33//3Gx5HKA9
+         SgQQ==
+X-Gm-Message-State: AOAM532IKb8YRi4AAgLYFm8miqrs+o4NU0t5jF6Vdk7ACmRdoV2EXvys
+        3EUowu2PGomt8TL09I/iptW93UPmQjEQDFKOd7+ETw==
+X-Google-Smtp-Source: ABdhPJyvaiFT2G34coGt3czDQ/iLkIq+EgyiHgmZSbvDmR6/D06mxLvwlCBW5kXpWCbVDzlXbPJqPLrmwno45hzKJ4M=
+X-Received: by 2002:a05:6830:4a9:: with SMTP id l9mr44223760otd.75.1641600300700;
+ Fri, 07 Jan 2022 16:05:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v1 2/3] x86/entry/64: Add info about registers on exit
-Content-Language: en-US
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        Michael Matz <matz@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Willy Tarreau <w@1wt.eu>
-References: <20220107235210.1339168-1-ammarfaizi2@gnuweeb.org>
- <20220107235210.1339168-3-ammarfaizi2@gnuweeb.org>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20220107235210.1339168-3-ammarfaizi2@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+ <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com> <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+In-Reply-To: <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 7 Jan 2022 16:04:49 -0800
+Message-ID: <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/7/22 15:52, Ammar Faizi wrote:
-> There was a controversial discussion about the wording in the System
-> V ABI document regarding what registers the kernel is allowed to
-> clobber when the userspace executes syscall.
-> 
-> The resolution of the discussion was reviewing the clobber list in
-> the glibc source. For a historical reason in the glibc source, the
-> kernel must restore all registers before returning to the userspace
-> (except for rax, rcx and r11).
-> 
-> Link: https://lore.kernel.org/lkml/alpine.LSU.2.20.2110131601000.26294@wotan.suse.de/
-> Link: https://gitlab.com/x86-psABIs/x86-64-ABI/-/merge_requests/25
-> 
-> This adds info about registers on exit.
-> 
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Michael Matz <matz@suse.de>
-> Cc: "H.J. Lu" <hjl.tools@gmail.com>
-> Cc: Willy Tarreau <w@1wt.eu>
-> Cc: x86-ml <x86@kernel.org>
-> Cc: lkml <linux-kernel@vger.kernel.org>
-> Cc: GNU/Weeb Mailing List <gwml@gnuweeb.org>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
-> 
-> Quoted the full comment in that file after patched, so it's easier to
-> review:
-> /*
->   * 64-bit SYSCALL instruction entry. Up to 6 arguments in registers.
->   *
->   * This is the only entry point used for 64-bit system calls.  The
->   * hardware interface is reasonably well designed and the register to
->   * argument mapping Linux uses fits well with the registers that are
->   * available when SYSCALL is used.
->   *
->   * SYSCALL instructions can be found inlined in libc implementations as
->   * well as some other programs and libraries.  There are also a handful
->   * of SYSCALL instructions in the vDSO used, for example, as a
->   * clock_gettimeofday fallback.
->   *
->   * 64-bit SYSCALL saves rip to rcx, clears rflags.RF, then saves rflags to r11,
->   * then loads new ss, cs, and rip from previously programmed MSRs.
->   * rflags gets masked by a value from another MSR (so CLD and CLAC
->   * are not needed). SYSCALL does not save anything on the stack
->   * and does not change rsp.
->   *
->   * Registers on entry:
->   * rax  system call number
->   * rcx  return address
->   * r11  saved rflags (note: r11 is callee-clobbered register in C ABI)
->   * rdi  arg0
->   * rsi  arg1
->   * rdx  arg2
->   * r10  arg3 (needs to be moved to rcx to conform to C ABI)
->   * r8   arg4
->   * r9   arg5
->   * (note: r12-r15, rbp, rbx are callee-preserved in C ABI)
->   *
->   * Only called from user space.
->   *
->   * Registers on exit:
->   * rax  syscall return value
->   * rcx  return address
->   * r11  rflags
->   *
->   * For a historical reason in the glibc source, the kernel must restore all
->   * registers except the rax (syscall return value) before returning to the
->   * userspace.
->   *
->   * In other words, with respect to the userspace, when the kernel returns
->   * to the userspace, only 3 registers are clobbered, they are rax, rcx,
->   * and r11.
->   *
->   * When user can change pt_regs->foo always force IRET. That is because
->   * it deals with uncanonical addresses better. SYSRET has trouble
->   * with them due to bugs in both AMD and Intel CPUs.
->   */
-> 
-> ---
-> 
->   arch/x86/entry/entry_64.S | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index e432dd075291..1111fff2e05f 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -79,6 +79,19 @@
->    *
->    * Only called from user space.
->    *
-> + * Registers on exit:
-> + * rax  syscall return value
-> + * rcx  return address
-> + * r11  rflags
-> + *
-> + * For a historical reason in the glibc source, the kernel must restore all
-> + * registers except the rax (syscall return value) before returning to the
-> + * userspace.
-> + *
-> + * In other words, with respect to the userspace, when the kernel returns
-> + * to the userspace, only 3 registers are clobbered, they are rax, rcx,
-> + * and r11.
-> + *
+On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
+<rananta@google.com> wrote:
+>
+> Hi Reiji,
+>
+> On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
+> >
+> > Hi Raghu,
+> >
+> > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
+> > <rananta@google.com> wrote:
+> > >
+> > > Capture the start of the KVM VM, which is basically the
+> > > start of any vCPU run. This state of the VM is helpful
+> > > in the upcoming patches to prevent user-space from
+> > > configuring certain VM features after the VM has started
+> > > running.
 
-I would say this much more concisely:
-
-The Linux kernel preserves all registers (even C callee-clobbered 
-registers) except for rax, rcx and r11 across system calls, and existing 
-user code relies on this behavior.
-
->    * When user can change pt_regs->foo always force IRET. That is because
->    * it deals with uncanonical addresses better. SYSRET has trouble
->    * with them due to bugs in both AMD and Intel CPUs.
-> 
-
+What about live migration, where the VM has already technically been
+started before the first call to KVM_RUN?

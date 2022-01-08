@@ -2,104 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 225694881EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 07:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261B84881FE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiAHGwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 01:52:06 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:57299 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiAHGwF (ORCPT
+        id S232797AbiAHHIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 02:08:47 -0500
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:54603 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231136AbiAHHIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 01:52:05 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JW9kD0pZmz4xZ1;
-        Sat,  8 Jan 2022 17:52:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641624724;
-        bh=Pnm6t1NzZXyTTkRT5GqaQ++WxzJT42jttwY+X2SPjjY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UKZSgOeaBU8LpM3I8I7L00kB96ywufwpA2KxIbaTPkt/z4d2ydEU2+PTh65pWdXxY
-         hP4NRzmfpAkEeFKlBB8byIfKQ2iqKIwEDjeWquKkUg6a+DLJ7uOR5ZINIBGctppMZQ
-         UAvWNELFgcaycchqihi68dwmCcRkYslVJIhA0kdqJAPpQXbu7OPBln/rq5eNBgrVg4
-         3P98cl3thm8DD8S6U2psUBAwCujGJtPLDrGpx9OFb8vEH1e/LvprV2YCchS9RdgXd2
-         DRDE2GfwU4C/yX+5RxSIhEhcQUHBvcqlrjG5SpiMWPOHF8GpfjoWMQaEDJPpWEgvXw
-         8fohyAxT27abw==
-Date:   Sat, 8 Jan 2022 17:52:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: state of the nfsd tree
-Message-ID: <20220108175203.705695f8@canb.auug.org.au>
-In-Reply-To: <8F605496-7EB6-42A5-8C44-0A541EB2E402@oracle.com>
-References: <20220107134621.7814487b@canb.auug.org.au>
-        <20220107025506.GA16601@fieldses.org>
-        <8F605496-7EB6-42A5-8C44-0A541EB2E402@oracle.com>
+        Sat, 8 Jan 2022 02:08:47 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 65qGnknaaozli65qGnO5GR; Sat, 08 Jan 2022 08:08:45 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 08 Jan 2022 08:08:45 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] virtio: Simplify DMA setting
+Date:   Sat,  8 Jan 2022 08:08:43 +0100
+Message-Id: <fc97319a44d41d8b7eb127e1facdef4139ed77ac.1641625657.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VEtbp4VdIj8EE=H5/70Zm8X";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/VEtbp4VdIj8EE=H5/70Zm8X
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-Hi all,
+Simplify code and remove some dead code accordingly.
 
-On Fri, 7 Jan 2022 03:13:58 +0000 Chuck Lever III <chuck.lever@oracle.com> =
-wrote:
->
-> > On Jan 6, 2022, at 9:55 PM, J. Bruce Fields <bfields@fieldses.org> wrot=
-e:
-> >=20
-> > =EF=BB=BFOn Fri, Jan 07, 2022 at 01:46:21PM +1100, Stephen Rothwell wro=
-te: =20
-> >>=20
-> >> I noticed commit
-> >>=20
-> >>  a71baee992c6 ("MAINTAINERS: remove bfields")
-> >>=20
-> >> in the cel tree and was sondering if I shuld remove the nfsd tree
-> >> (git://git.linux-nfs.org/~bfields/linux.git#nfsd-next) from linux-next=
-. =20
-> >=20
-> > Sounds like a good idea to me.
-> >  =20
-> >> Maybe I sould rename the cel tree
-> >> (git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux#for-next)
-> >> to be the nfsd treeas well? =20
-> >=20
-> > Probably so. =20
->=20
-> Both sound OK to me too.
 
-OK, both changes will happen from Monday.
+While at it, include directly <linux/dma-mapping.h> instead on relying on
+indirect inclusion.
 
---=20
-Cheers,
-Stephen Rothwell
+[1]: https://lkml.org/lkml/2021/6/7/398
 
---Sig_/VEtbp4VdIj8EE=H5/70Zm8X
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/virtio/virtio_mmio.c           | 4 +---
+ drivers/virtio/virtio_pci_legacy_dev.c | 7 +++----
+ drivers/virtio/virtio_pci_modern_dev.c | 6 ++----
+ 3 files changed, 6 insertions(+), 11 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 56128b9c46eb..aa1efa854de1 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -617,9 +617,7 @@ static int virtio_mmio_probe(struct platform_device *pdev)
+ 		rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	}
+ 	if (rc)
+-		rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+-	if (rc)
+-		dev_warn(&pdev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
++		dev_warn(&pdev->dev, "Failed to enable DMA.  Trying to continue, but this might not work.\n");
+ 
+ 	platform_set_drvdata(pdev, vm_dev);
+ 
+diff --git a/drivers/virtio/virtio_pci_legacy_dev.c b/drivers/virtio/virtio_pci_legacy_dev.c
+index 677d1f68bc9b..52b1c4dd43fe 100644
+--- a/drivers/virtio/virtio_pci_legacy_dev.c
++++ b/drivers/virtio/virtio_pci_legacy_dev.c
+@@ -2,6 +2,7 @@
+ 
+ #include "linux/virtio_pci.h"
+ #include <linux/virtio_pci_legacy.h>
++#include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ 
+@@ -26,9 +27,7 @@ int vp_legacy_probe(struct virtio_pci_legacy_device *ldev)
+ 		return -ENODEV;
+ 
+ 	rc = dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(64));
+-	if (rc) {
+-		rc = dma_set_mask_and_coherent(&pci_dev->dev, DMA_BIT_MASK(32));
+-	} else {
++	if (!rc) {
+ 		/*
+ 		 * The virtio ring base address is expressed as a 32-bit PFN,
+ 		 * with a page size of 1 << VIRTIO_PCI_QUEUE_ADDR_SHIFT.
+@@ -38,7 +37,7 @@ int vp_legacy_probe(struct virtio_pci_legacy_device *ldev)
+ 	}
+ 
+ 	if (rc)
+-		dev_warn(&pci_dev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
++		dev_warn(&pci_dev->dev, "Failed to enable DMA.  Trying to continue, but this might not work.\n");
+ 
+ 	rc = pci_request_region(pci_dev, 0, "virtio-pci-legacy");
+ 	if (rc)
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index e8b3ff2b9fbc..830dc269d68f 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include <linux/virtio_pci_modern.h>
++#include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ 
+@@ -256,10 +257,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
+ 
+ 	err = dma_set_mask_and_coherent(&pci_dev->dev, DMA_BIT_MASK(64));
+ 	if (err)
+-		err = dma_set_mask_and_coherent(&pci_dev->dev,
+-						DMA_BIT_MASK(32));
+-	if (err)
+-		dev_warn(&pci_dev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
++		dev_warn(&pci_dev->dev, "Failed to enable DMA.  Trying to continue, but this might not work.\n");
+ 
+ 	/* Device capability is only mandatory for devices that have
+ 	 * device-specific configuration.
+-- 
+2.32.0
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHZNJMACgkQAVBC80lX
-0GyIdAf/QFszsebPjvjvBymyJRFnUmLVTbEDelYAjHW0/Q5nxWy5P22toMrhAM9E
-L7ebLG4yhIAr9nxeRkXy2m/E+WLgRC9YYF7UBmhhxg4bJukNm4IbZyAqen0xIJBd
-SVPPI558D1LILZBDKpHkcVesJ2Jr3txnVkcD0TF/sX1b2xH5eIERz1Kl5//X8d9c
-pXymSVnL1FPxpTeQBdFNyNYNAdgk1MxbAT7wnfihXL/xFQ2npgnvF0vhkz4dyCM/
-COGBvu9jzQiT0PLk6g9VeRvK53OnwNyBAx1b55giBv8O704pD/O7iTrhk+Fd2ozs
-awrFY3yK0guU48YDIeTbfPTXy5yGjg==
-=9rM8
------END PGP SIGNATURE-----
-
---Sig_/VEtbp4VdIj8EE=H5/70Zm8X--

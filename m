@@ -2,64 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66273488269
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D263488270
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiAHIhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 03:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
+        id S231430AbiAHIkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 03:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiAHIho (ORCPT
+        with ESMTP id S229613AbiAHIkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 03:37:44 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A91C061574
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:37:44 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id bj47so83046vkb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 00:37:44 -0800 (PST)
+        Sat, 8 Jan 2022 03:40:19 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E403AC061574;
+        Sat,  8 Jan 2022 00:40:18 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso9100396pjb.1;
+        Sat, 08 Jan 2022 00:40:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=UYP4lcoiUubu40xKDoz+HHmARGMttawlmOP75PgH1eLFVkOtP+Yc0rRTv9Cvs0ZFDW
-         kDZsujJF+R8IJr1wECbs3yvOgkFBr8ruR0ftv9W26ykptKIpWtcE8Iwsq3e9e5yro5Ee
-         abjUpEH5ALi0bYB5fenDLG+/zuV/KWdkCYav1gUJkVKJ2aoVDu3gqF8uENMfWvCF719a
-         nCOB4SMLFTYLRLGrmAEi+BjJIeZPllOUOJQhOu1PHQLzhGTGONZjDEyse7Zos0nJj9wH
-         pK+RXOEBRLmtU9ZK+8HCnYOnec9o1S2WYfRcCcGUZnK3yga77uJ8A6kHeILgH5TMLbCm
-         g1bQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9zEwDmNMe5JERLrwlCRlU/+ORPGYL9TSSP35Lx3dN30=;
+        b=CuClFgSfhd2sHttE34W8oabBRGxMtRezBYjAnGdE1RsZ83TYi8ViK3Xmg1auClddbx
+         GwH8+CYdXARMc5nifS/9sklBitiGXcSlRdnrqDF2MuITggX4gShDw9xqSds5Vpz7jCdI
+         obMtp+Es1uBXHuSFLk6cpS/sZ6r/fkDEt9tU/Jefu5BOy6FA9Xpo/UoGwAe8GN9aT+jK
+         1ajH/DIXh2JtuFylbH9pgGuAyChKpvsSDU5ZJ/l+mvjagsxC1W4UekWKCzX8MoJQ7FJT
+         8KTmDJSHASgXEZU6rzCV9rFAKcCM0kdexhEdPXqjC5bBR6WVtnaOtp1Qbp+chGejhIkn
+         EijQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=Thh4Qzp3Y6modpIlADrMN0kQ2dQSqzyyvDr0N2Idj0nuL+Q8aDMTNCx6WceJtPxYTw
-         2JzhBbt6jDJXZ2z0TggrBoTNFJRBKF2/7yCByMFKWygEYTkbSExrLvsaEybMi4BdHBuU
-         mcqZZn+dZ//cEvQZPZpe6DdpkCWE2wnzDS57S8hXj0vmYLx27n+hPDNMG0y3jkFg3ckX
-         FXCP7p15hZdOGvkpBwEi5cL+9vHKC2rbjnXleV/uUWWmMLjIg0MFWP3OPj6157rvu+0E
-         WF33Vgti5q6u0UM3k9EpPBn6nYt5NQqJH20PmFmv2ubv7Ld9D4aUT6YzoJ09HmZ5fytv
-         41Fg==
-X-Gm-Message-State: AOAM5314mFoPNZTVE+q0X5fZckbdQEAaBihyJ8Mipsfz1zyEi1syDWzz
-        y3Dna1aDidIhyFwfeRbCGzoJgFRVuCmatnVj9Lg=
-X-Google-Smtp-Source: ABdhPJzn5WEGcRQA85Uw+FrCJHX2cn6ZdLQ5yel8g2TRrQzIOUbQyWV+y3xo2SQE1zF0vHUBx9U7d5hWn30eO61CqMM=
-X-Received: by 2002:a05:6122:201e:: with SMTP id l30mr23711366vkd.10.1641631062564;
- Sat, 08 Jan 2022 00:37:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9zEwDmNMe5JERLrwlCRlU/+ORPGYL9TSSP35Lx3dN30=;
+        b=pG9tYXAsTSdT3aTmov757Z+rM75NpqEyN+m5LNXgJKDA/18KMOpgnMDVNtdEaqSLPG
+         6XYrWqWQDxDTl7FDZyDT590iELjSA5w0gYRtes2jo9BCyy7HqgWdDyBlH5rr7gQvxa/G
+         +a5ysUFDTFs30cgKvJ3O3qOWOBoYMWAt/u/Jytnvkgu2Fy8JDvgUrZPZHVLKSnNxPfoH
+         7ZhbLlIRbCq9wGGogcAVz94Od2mn3P4sOgcihb3WXQ4gLfkDpTwgCKk3ANRbJWavvcx2
+         H5TY8uKiv91chEqtwGwqz4XiAMo5D2qp6rYCX/RU531dmc99ppnfnsWzFvUnHVylTXpO
+         zXtw==
+X-Gm-Message-State: AOAM532mmWuZtz4BylICiWVfPfppiAdja/Y7cD7Hb59NxRIUUrC7uFPK
+        br/F7XuaQQF5DfAKS+n5mR0=
+X-Google-Smtp-Source: ABdhPJxgT+hITarZ5kOie4lgQKjGUCs4kcAxUmDsHXGRU8Ggif6Uqhy6zZ/xF3aIzhOlokShIaQfEQ==
+X-Received: by 2002:a17:902:a3c4:b0:149:6639:4b86 with SMTP id q4-20020a170902a3c400b0014966394b86mr62292275plb.60.1641631218474;
+        Sat, 08 Jan 2022 00:40:18 -0800 (PST)
+Received: from localhost.localdomain ([111.199.185.103])
+        by smtp.gmail.com with ESMTPSA id mq12sm1333897pjb.48.2022.01.08.00.40.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 00:40:18 -0800 (PST)
+From:   Wei Fu <fuweid89@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wei Fu <fuweid89@gmail.com>
+Subject: [PATCH bpf] tools/bpf: only set obj->skeleton without err
+Date:   Sat,  8 Jan 2022 16:40:08 +0800
+Message-Id: <20220108084008.1053111-1-fuweid89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab0:1613:0:0:0:0:0 with HTTP; Sat, 8 Jan 2022 00:37:41 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <kundah7@gmail.com>
-Date:   Sat, 8 Jan 2022 00:37:42 -0800
-Message-ID: <CAFuRN-T7T2O2RA8-iGrzOxB4+c6FwpCH1UGp+5g1YDxjW_a_1A@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After `bpftool gen skeleton`, the ${bpf_app}.skel.h will provide that
+${bpf_app_name}__open helper to load bpf. If there is some error
+like ENOMEM, the ${bpf_app_name}__open will rollback(free) the allocated
+object, including `bpf_object_skeleton`.
+
+Since the ${bpf_app_name}__create_skeleton set the obj->skeleton first
+and not rollback it when error, it will cause double-free in
+${bpf_app_name}__destory at ${bpf_app_name}__open. Therefore, we should
+set the obj->skeleton before return 0;
+
+Signed-off-by: Wei Fu <fuweid89@gmail.com>
+---
+ tools/bpf/bpftool/gen.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 5c18351290f0..e61e08f524da 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -928,7 +928,6 @@ static int do_skeleton(int argc, char **argv)
+ 			s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));\n\
+ 			if (!s)						    \n\
+ 				goto err;				    \n\
+-			obj->skeleton = s;				    \n\
+ 									    \n\
+ 			s->sz = sizeof(*s);				    \n\
+ 			s->name = \"%1$s\";				    \n\
+@@ -1001,6 +1000,8 @@ static int do_skeleton(int argc, char **argv)
+ 									    \n\
+ 			s->data = (void *)%2$s__elf_bytes(&s->data_sz);	    \n\
+ 									    \n\
++			obj->skeleton = s;				    \n\
++									    \n\
+ 			return 0;					    \n\
+ 		err:							    \n\
+ 			bpf_object__destroy_skeleton(s);		    \n\
 -- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+2.25.1
+

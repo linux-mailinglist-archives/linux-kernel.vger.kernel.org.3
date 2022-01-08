@@ -2,154 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE14488340
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C807D488342
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbiAHLgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 06:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S233445AbiAHLiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 06:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiAHLgu (ORCPT
+        with ESMTP id S230135AbiAHLiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 06:36:50 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC0EC061574;
-        Sat,  8 Jan 2022 03:36:49 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id a18so31430084edj.7;
-        Sat, 08 Jan 2022 03:36:49 -0800 (PST)
+        Sat, 8 Jan 2022 06:38:18 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC43C061574;
+        Sat,  8 Jan 2022 03:38:18 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id x18-20020a7bc212000000b00347cc83ec07so2044838wmi.4;
+        Sat, 08 Jan 2022 03:38:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EYRn/Fp3acdQ41ODnQ1cE0XJd0M/Kvs9MRUomdtJDaw=;
-        b=OS3F2rWU17CcZI0zRB4Xfk3Z8cVgMU/A2YX9Bb3gW/AiFRn2Tqb97ZGj+NX5FxG8bz
-         KHw0/U+j74Asg2mDLQJePjhcACT86AlZD0MN0EPgc5ArBUHzBeTqJxBBBZwO5XIP0IHh
-         4i9nY28n0BQGALOEPdyPgcEPxOwlJWFLaN0mLhw4Uhq2StpyAPtS2fXD9TbUB/glyidA
-         CYBPdqhFQz0n45JCP1MbM79CNNO8eKpdj0Eo/DLYi8PlQR9gQtPJJd1eKZ7gUcFzU3nm
-         ueyqFnzq2a0ayxjTg5/5C88dE27Ywltsm5MZx1CN+H25dR4KqMr06qoS7lIX33Ueqk5p
-         aaog==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3cBlkt0IFDqo3j02RGZKPkNAC+y562vttgIBpBo+5KU=;
+        b=HBK13ph8L4p0NCCz88xQiOfNvLIaJ74EYjqIHXgwXgaQC3QOuYUkKDbhxmWykZRKgH
+         G903+qO79La+8eRFVld+Lx+E0XfXh7ipEH6Qh/HDzDj8dk1mmCaIg2iZx1uWZ9h1hVsj
+         5FYm3h898kVYEz8WlzChhYQCg3sViC89bF5rkIEHZYJHCeFz398znibNqPeRdKqa9xTn
+         YveG/hR8vqiBZyLbumFu1R8kBzCrV+pipX+/9DRNtyNNwNX6qP7YL2y0UH7jDduFW9sC
+         83fSh/u+zDMoXx70F3ijA5zs4hwkY8szKZXXCZ7MMH5rWOGr8FTc9eUaz2C8u+O0rlre
+         3v/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EYRn/Fp3acdQ41ODnQ1cE0XJd0M/Kvs9MRUomdtJDaw=;
-        b=Jfzj1Q6cGlRG2onoQFaigHoqiEzw2WxLDvBjEYJhyff/kg8ah9WRl8SiEYRulKCZjz
-         JYv9U6lwtcDGKpPkYlsCLEyBt42+/F3Pb/YzhvRWlNBSHuCFkXecWJBjAsLTF/+WPz7k
-         6kyhLC3auKmKusOZAEjKOrPNJLLLGtIc7hAVUBcvZVdhIovBXawftbZLlPXhawnVQARd
-         GpHWzVH2lvfvLjuySelnPsNs9imTo4HpuY63MKJ/p6TrKJrn8f4F4pSGZGZRNxE1fmva
-         IC5rq0hb4kVQodN0KYXnz20OqI3fe1b/LG5B4ZBLsEd1SBYYL90XgL8JTADgiNoFvKKQ
-         2KRw==
-X-Gm-Message-State: AOAM533M7mai0O+fSP+tmfCFtrGf9d0t/H67vb4PqXysZbieNXTBNQXz
-        mdoMHy3JEYjYETKMqH+v7T+aO91aXsU5gHnaAqVN96SA5j8y2Q==
-X-Google-Smtp-Source: ABdhPJxPORkzyKOY44ccsJlQq+uFWr7Ezt47t6pPKg+cmSNUXdTnP9uu0M+OcNWvro3oIUcTVd4Z0xhN/U11GYQjpsY=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr5079745ejc.639.1641641808269;
- Sat, 08 Jan 2022 03:36:48 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3cBlkt0IFDqo3j02RGZKPkNAC+y562vttgIBpBo+5KU=;
+        b=HO/4l17uc5Cl/KfVwJdfrG+WcJ3x/tehPRj1ubdtyd6fGBkI8mn4Y+qTR9eOf8oPqn
+         c4iW7HIGA+5FvXuRUfPP7W1muTwPH/6mKjulrWwo3pLLtq+8o+c/YvCtnXUIEGrWZ3Kx
+         k1Q/6yr3+eXnG68txgsqu718zI6b+HFSyqKEKiueT0yag08I5+VXSvxfitcwhqhI+BP6
+         sIHMHW+YLgB1Xqr9U9Se7gPIFbEzbS3nfv/TrX8DHCKMJSrCSOw83yQF2HRH1TqUlXLd
+         j/wBLJeqU/gzVQoSjIBjb2f/xRuWN5e9Whg6M0tqzBJOMx5nhQlAtlzAENSryarRfS8B
+         /e6A==
+X-Gm-Message-State: AOAM531CXl/b27D0R4z3lpiHL0XLpd6BrpB+Ldyof7wWjbJDPPHTA2kZ
+        F4p+SXyLxG85D8/MDNWTpHeGTtU5HgI=
+X-Google-Smtp-Source: ABdhPJwdBO4j15yeSfxn/1a7R7TCbBFqdCbRAuer2Pd+PCOFZqKlqhtfK7tVlHQcmAHIZgivYnmfhA==
+X-Received: by 2002:a05:600c:1d95:: with SMTP id p21mr1948650wms.9.1641641896891;
+        Sat, 08 Jan 2022 03:38:16 -0800 (PST)
+Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
+        by smtp.gmail.com with ESMTPSA id g15sm267498wrm.2.2022.01.08.03.38.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 03:38:16 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 8 Jan 2022 12:38:14 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
+Subject: [PATCH] x86/bitops: Remove unused __sw_hweight64() assembly
+ implementation
+Message-ID: <Ydl3pk94T+V7E7cz@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
+ <YdTvXkKFzA0pOjFf@gmail.com>
+ <YdYQu9YxNw0CxJRn@archlinux-ax161>
 MIME-Version: 1.0
-References: <20220107232409.1331599-1-keescook@chromium.org>
-In-Reply-To: <20220107232409.1331599-1-keescook@chromium.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 8 Jan 2022 13:36:12 +0200
-Message-ID: <CAHp75VdqK7h63fz-cPaQ2MGaVdaR2f1Fb5kKCZidUG3RwLsAVA@mail.gmail.com>
-Subject: Re: [PATCH] eeprom: at25: Restore missing allocation
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 1:01 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Building under CONFIG_FORTIFY_SOURCE=y and -Warray-bounds complained about
-> strncpy() being used against an empty object. It turns out this was due to
-> the at25 allocation going missing during a conflict resolution. Restore
-> this, and while we're here take the opportunity to do another strncpy()
-> replacement, since it's use is deprecated[1].
->
-> Seen as:
->
-> In function 'strncpy',
->     inlined from 'at25_fw_to_chip.constprop' at drivers/misc/eeprom/at25.c:312:2:
-> ./include/linux/fortify-string.h:48:33: warning: '__builtin_strncpy' offset [0, 9] is out of the bounds [0, 0] [-Warray-bounds]
->    48 | #define __underlying_strncpy    __builtin_strncpy
->       |                                 ^
-> ./include/linux/fortify-string.h:59:16: note: in expansion of macro '__underlying_strncpy'
->    59 |         return __underlying_strncpy(p, q, size);
->       |                ^~~~~~~~~~~~~~~~~~~~
-> In function 'strncpy',
->     inlined from 'at25_fram_to_chip' at drivers/misc/eeprom/at25.c:373:2,
->     inlined from 'at25_probe' at drivers/misc/eeprom/at25.c:453:10:
-> ./include/linux/fortify-string.h:48:33: warning: '__builtin_strncpy' offset [0, 9] is out of the bounds [0, 0] [-Warray-bounds]
->    48 | #define __underlying_strncpy    __builtin_strncpy
->       |                                 ^
-> ./include/linux/fortify-string.h:59:16: note: in expansion of macro '__underlying_strncpy'
->    59 |         return __underlying_strncpy(p, q, size);
->       |                ^~~~~~~~~~~~~~~~~~~~
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
 
-Thanks!
-With or without the below comment being addressed
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+* Nathan Chancellor <nathan@kernel.org> wrote:
 
-> Fixes: af40d16042d6 ("Merge v5.15-rc5 into char-misc-next")
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jiri Prchal <jiri.prchal@aksignal.cz>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/misc/eeprom/at25.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
-> index c3305bdda69c..1a19fa5728c8 100644
-> --- a/drivers/misc/eeprom/at25.c
-> +++ b/drivers/misc/eeprom/at25.c
-> @@ -309,7 +309,7 @@ static int at25_fw_to_chip(struct device *dev, struct spi_eeprom *chip)
->         u32 val;
->         int err;
->
-> -       strncpy(chip->name, "at25", sizeof(chip->name));
-> +       strscpy(chip->name, "at25", sizeof(chip->name));
->
->         err = device_property_read_u32(dev, "size", &val);
->         if (err)
-> @@ -370,7 +370,7 @@ static int at25_fram_to_chip(struct device *dev, struct spi_eeprom *chip)
->         u8 id[FM25_ID_LEN];
->         int i;
->
-> -       strncpy(chip->name, "fm25", sizeof(chip->name));
-> +       strscpy(chip->name, "fm25", sizeof(chip->name));
->
->         /* Get ID of chip */
->         fm25_aux_read(at25, id, FM25_RDID, FM25_ID_LEN);
-> @@ -440,6 +440,10 @@ static int at25_probe(struct spi_device *spi)
->                 return -ENXIO;
->         }
->
-> +       at25 = devm_kzalloc(&spi->dev, sizeof(struct at25_data), GFP_KERNEL);
+> 4. modpost warning around __sw_hweight64
+> 
+> With the first issue resolved:
+> 
+> $ make -skj"$(nproc)" ARCH=i386 allmodconfig
+> WARNING: modpost: EXPORT symbol "__sw_hweight64" [vmlinux] version ...
+> Is "__sw_hweight64" prototyped in <asm/asm-prototypes.h>?
 
-I would use sizeof(*at25) but I think you restored the exact context.
+So I was hoping that this commit made explicit all the random indirect 
+header dependencies x86's <asm/asm-prototypes.h> imports on mainline:
 
-> +       if (!at25)
-> +               return -ENOMEM;
-> +
->         mutex_init(&at25->lock);
->         at25->spi = spi;
->         spi_set_drvdata(spi, at25);
-> --
-> 2.30.2
->
+    headers/prep: x86/kbuild: Add symbol prototype header dependencies for modversions
+
+... but a i386 case slipped through.
+
+But, this actually highlights a real x86 symbol export bug IMO.
+
+__arch_hweight64() on x86-32 is defined in the 
+arch/x86/include/asm/arch_hweight.h header as an inline, using 
+__arch_hweight32():
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+  #ifdef CONFIG_X86_32
+  static inline unsigned long __arch_hweight64(__u64 w)
+  {
+          return  __arch_hweight32((u32)w) +
+                  __arch_hweight32((u32)(w >> 32));
+  }
+
+*But* there's also a __sw_hweight64() assembly implementation:
+
+  arch/x86/lib/hweight.S
+
+  SYM_FUNC_START(__sw_hweight64)
+  #ifdef CONFIG_X86_64
+  ...
+  #else /* CONFIG_X86_32 */
+        /* We're getting an u64 arg in (%eax,%edx): unsigned long hweight64(__u64 w) */
+        pushl   %ecx
+
+        call    __sw_hweight32
+        movl    %eax, %ecx                      # stash away result
+        movl    %edx, %eax                      # second part of input
+        call    __sw_hweight32
+        addl    %ecx, %eax                      # result
+
+        popl    %ecx
+        ret
+  #endif
+
+But this __sw_hweight64 assembly implementation is unused - and it's 
+essentially doing the same thing that the inline wrapper does. Then we 
+export this unused helper with no prototype.
+
+This went unnoticed in mainline, because mainline defines the prototype for 
+the unused prototype.
+
+So I think the real solution to resolve this is by removing the unused 
+32-bit variant - see the patch below.
+
+Thanks,
+
+	Ingo
+
+======================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Sat, 8 Jan 2022 12:33:58 +0100
+Subject: [PATCH] x86/bitops: Remove unused __sw_hweight64() assembly implementation
+
+Header cleanups in the fast-headers tree highlighted that we have an
+unused assembly implementation for __sw_hweight64():
+
+    WARNING: modpost: EXPORT symbol "__sw_hweight64" [vmlinux] version ...
+
+__arch_hweight64() on x86-32 is defined in the
+arch/x86/include/asm/arch_hweight.h header as an inline, using
+__arch_hweight32():
+
+  #ifdef CONFIG_X86_32
+  static inline unsigned long __arch_hweight64(__u64 w)
+  {
+          return  __arch_hweight32((u32)w) +
+                  __arch_hweight32((u32)(w >> 32));
+  }
+
+*But* there's also a __sw_hweight64() assembly implementation:
+
+  arch/x86/lib/hweight.S
+
+  SYM_FUNC_START(__sw_hweight64)
+  #ifdef CONFIG_X86_64
+  ...
+  #else /* CONFIG_X86_32 */
+        /* We're getting an u64 arg in (%eax,%edx): unsigned long hweight64(__u64 w) */
+        pushl   %ecx
+
+        call    __sw_hweight32
+        movl    %eax, %ecx                      # stash away result
+        movl    %edx, %eax                      # second part of input
+        call    __sw_hweight32
+        addl    %ecx, %eax                      # result
+
+        popl    %ecx
+        ret
+  #endif
+
+But this __sw_hweight64 assembly implementation is unused - and it's
+essentially doing the same thing that the inline wrapper does.
+
+Remove the assembly version and add a comment about it.
+
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+---
+ arch/x86/lib/hweight.S | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/lib/hweight.S b/arch/x86/lib/hweight.S
+index dbf8cc97b7f5..585e2f1372d0 100644
+--- a/arch/x86/lib/hweight.S
++++ b/arch/x86/lib/hweight.S
+@@ -36,8 +36,12 @@ SYM_FUNC_START(__sw_hweight32)
+ SYM_FUNC_END(__sw_hweight32)
+ EXPORT_SYMBOL(__sw_hweight32)
+ 
+-SYM_FUNC_START(__sw_hweight64)
++/*
++ * No 32-bit variant, because it's implemented as an inline wrapper
++ * on top of __arch_hweight32():
++ */
+ #ifdef CONFIG_X86_64
++SYM_FUNC_START(__sw_hweight64)
+ 	pushq   %rdi
+ 	pushq   %rdx
+ 
+@@ -66,18 +70,6 @@ SYM_FUNC_START(__sw_hweight64)
+ 	popq    %rdx
+ 	popq    %rdi
+ 	ret
+-#else /* CONFIG_X86_32 */
+-	/* We're getting an u64 arg in (%eax,%edx): unsigned long hweight64(__u64 w) */
+-	pushl   %ecx
+-
+-	call    __sw_hweight32
+-	movl    %eax, %ecx                      # stash away result
+-	movl    %edx, %eax                      # second part of input
+-	call    __sw_hweight32
+-	addl    %ecx, %eax                      # result
+-
+-	popl    %ecx
+-	ret
+-#endif
+ SYM_FUNC_END(__sw_hweight64)
+ EXPORT_SYMBOL(__sw_hweight64)
++#endif

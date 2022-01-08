@@ -2,147 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909594885D5
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 21:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FA84885D8
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 21:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232695AbiAHURD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 15:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiAHURC (ORCPT
+        id S232741AbiAHUTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 15:19:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55836 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232712AbiAHUTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 15:17:02 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC11FC06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 12:17:01 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n6I8z-0005H9-Qq; Sat, 08 Jan 2022 21:16:53 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-6624-65e0-1d16-9a67.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6624:65e0:1d16:9a67])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3C4536D39B6;
-        Sat,  8 Jan 2022 20:16:51 +0000 (UTC)
-Date:   Sat, 8 Jan 2022 21:16:50 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring
- parameters
-Message-ID: <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
-References: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lrt6ctyi5zm6ndge"
-Content-Disposition: inline
-In-Reply-To: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+        Sat, 8 Jan 2022 15:19:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50F8260AC9;
+        Sat,  8 Jan 2022 20:19:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9ADFC36AE5;
+        Sat,  8 Jan 2022 20:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641673192;
+        bh=SOErDPvXoxDkJ9mGbGeKs1MfFZ1T0CAP45m4iR6cGVs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Kzzdw0pzda+/aXyUud6FFeJ0tIAho0yHVMmrPT/65SObvdRIZDxAMIMGZIJmb9Fs5
+         qTCVdvs3QQuBNBl1UL0FipLASSWL/10Y3ahd9aezQF32IMnvq67BppIPtcqzFCpomB
+         BBmuvnDMC0bHFjE+F86tdpFoD7NI7++hBddTc/vDTgziCsMkiattf9w/+mSBaIEzal
+         Og5gY1SMwwc7rzpvnWxURrsR95J8XaaIfY9FBbgvZN4cwkzCw2CXyrmUiIoPqpxFNd
+         DOr8+anHntp4lzrk8oJzUGC/NoQ0Ma7uHbm8tasUKDQHitjjH6hH0d2A64z8jCLIKB
+         AVYlJQchtRUWw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6B69F79407;
+        Sat,  8 Jan 2022 20:19:52 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply fixes for 5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220108112229.v3d7enmuibypa5tm@earth.universe>
+References: <20220108112229.v3d7enmuibypa5tm@earth.universe>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220108112229.v3d7enmuibypa5tm@earth.universe>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.16-rc
+X-PR-Tracked-Commit-Id: 644106cdb89844be2496b21175b7c0c2e0fab381
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d445d649c7929ddafff319ad90e3e190722c685a
+Message-Id: <164167319267.14130.13289312994054568512.pr-tracker-bot@kernel.org>
+Date:   Sat, 08 Jan 2022 20:19:52 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Sat, 8 Jan 2022 12:22:29 +0100:
 
---lrt6ctyi5zm6ndge
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.16-rc
 
-On 08.01.2022 19:16:33, Dario Binacchi wrote:
-> Adds ethtool support to get the number of message buffers configured for
-> reception/transmission, which may also depends on runtime configurations
-> such as the 'rx-rtr' flag state.
->=20
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->=20
-> ---
->=20
->  drivers/net/can/flexcan/flexcan-ethtool.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->=20
-> diff --git a/drivers/net/can/flexcan/flexcan-ethtool.c b/drivers/net/can/=
-flexcan/flexcan-ethtool.c
-> index 5bb45653e1ac..d119bca584f6 100644
-> --- a/drivers/net/can/flexcan/flexcan-ethtool.c
-> +++ b/drivers/net/can/flexcan/flexcan-ethtool.c
-> @@ -80,7 +80,24 @@ static int flexcan_set_priv_flags(struct net_device *n=
-dev, u32 priv_flags)
->  	return 0;
->  }
-> =20
-> +static void flexcan_get_ringparam(struct net_device *ndev,
-> +				  struct ethtool_ringparam *ring)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d445d649c7929ddafff319ad90e3e190722c685a
 
-This doesn't compile on net-next/master, as the prototype of the
-get_ringparam callback changed, fixed this while applying.
+Thank you!
 
-> +{
-> +	struct flexcan_priv *priv =3D netdev_priv(ndev);
-> +
-> +	ring->rx_max_pending =3D priv->mb_count;
-> +	ring->tx_max_pending =3D priv->mb_count;
-> +
-> +	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)
-> +		ring->rx_pending =3D __sw_hweight64(priv->rx_mask);
-
-I've replaced the hamming weight calculation by the simpler:
-
-| 		ring->rx_pending =3D priv->offload.mb_last -
-| 			priv->offload.mb_first + 1;
-
-> +	else
-> +		ring->rx_pending =3D 6;
-> +
-> +	ring->tx_pending =3D __sw_hweight64(priv->tx_mask);
-
-=2E..and here I added a hardcoded "1", as the driver currently only
-support on TX buffer.
-
-> +}
-> +
->  static const struct ethtool_ops flexcan_ethtool_ops =3D {
-> +	.get_ringparam =3D flexcan_get_ringparam,
->  	.get_sset_count =3D flexcan_get_sset_count,
->  	.get_strings =3D flexcan_get_strings,
->  	.get_priv_flags =3D flexcan_get_priv_flags,
-
-BTW: If you're looking for more TX performance, this can be done by
-using more than one TX buffer. It's also possible to configure the
-number of RX and TX buffers via ethtool during runtime. I'm currently
-preparing a patch set for the mcp251xfd to implement this.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---lrt6ctyi5zm6ndge
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHZ8S8ACgkQqclaivrt
-76k6Uwf+IPEx/+Pn1u4SCWbKlyCLP8f51HsSh1PizfRD6yZuIVJYHnS72AhkDeZR
-ydYE3Whns+UbnP6CfS0VR+i75EwkpO/1gUlKb1oiE24HyqG1Md12E7wDttBOF/yz
-xTbMF+gBeUerm9AATKrgO5gF7o0YHT6LNh7v2wbk0Laj0DHUHZqOhPPJG4os5K5y
-FyeYiTZTl6U1dAR96dqeQN9lWVWcjZEfyI6bbJDzHPLHDKkT24Bx8hYtqfDf9Gpc
-j0TjFTkWedacxwoNPVVIflEmAKgc4W/5bOTbZ0/HStYL8TZuH9y9XmZYojuhag9U
-hJeWGMwv9vC7s82mNLDfKQSFyMbWNA==
-=iBua
------END PGP SIGNATURE-----
-
---lrt6ctyi5zm6ndge--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

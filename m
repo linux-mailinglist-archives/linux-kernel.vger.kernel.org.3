@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F42D4882F0
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EC94882F5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbiAHJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:53:10 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:33528 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbiAHJxJ (ORCPT
+        id S234096AbiAHJy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:54:28 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:49858 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234011AbiAHJy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:53:09 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id C0CC41C0B79; Sat,  8 Jan 2022 10:53:07 +0100 (CET)
-Date:   Sat, 8 Jan 2022 10:53:06 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Pavel Machek <pavel@denx.de>,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: adc: rzg2l_adc: Fix typo
-Message-ID: <20220108095306.GA32266@amd>
-References: <20220107172529.12361-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Sat, 8 Jan 2022 04:54:27 -0500
+X-UUID: c0c55eff8b2e41cebddcbafd572e2847-20220108
+X-UUID: c0c55eff8b2e41cebddcbafd572e2847-20220108
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1973836362; Sat, 08 Jan 2022 17:54:23 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 8 Jan 2022 17:54:21 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 8 Jan 2022 17:54:21 +0800
+From:   Kewei Xu <kewei.xu@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
+        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
+        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>,
+        <ryan-jh.yu@mediatek.com>
+Subject: [PATCH 0/2] add i2c support for mt8186
+Date:   Sat, 8 Jan 2022 17:54:16 +0800
+Message-ID: <20220108095418.16602-1-kewei.xu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="sm4nu43k4a2Rpi4c"
-Content-Disposition: inline
-In-Reply-To: <20220107172529.12361-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kewei Xu (2):
+  dt-bindings: i2c: update bindings for MT8186 SoC
+  i2c: mediatek: Add i2c compatible for Mediatek MT8186
 
---sm4nu43k4a2Rpi4c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt         |  1 +
+ drivers/i2c/busses/i2c-mt65xx.c                    | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
-On Fri 2022-01-07 17:25:29, Lad Prabhakar wrote:
-> Fix typo RZG2L_ADSMP_DEFUALT_SAMPLING -> RZG2L_ADSMP_DEFAULT_SAMPLING.
->=20
-> Reported-by: Pavel Machek <pavel@denx.de>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+--
+2.18.0
 
-Reviewed-by: Pavel Machek <pavel@denx.de>
-
-Thank you.
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---sm4nu43k4a2Rpi4c
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmHZXwIACgkQMOfwapXb+vJd/wCdG4P08xtXY5i02VJ9n+Jl5QGx
-nqUAn3eSndJgvb/zgv6ncU8HSAyDdPQH
-=G+qI
------END PGP SIGNATURE-----
-
---sm4nu43k4a2Rpi4c--

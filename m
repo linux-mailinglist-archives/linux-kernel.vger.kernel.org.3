@@ -2,102 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D478148843F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF45488449
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiAHPjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 10:39:03 -0500
-Received: from mx4.wp.pl ([212.77.101.12]:18250 "EHLO mx4.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234562AbiAHPjC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 10:39:02 -0500
-Received: (wp-smtpd smtp.wp.pl 21519 invoked from network); 8 Jan 2022 16:38:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1641656339; bh=JDyJZijKbzW/bA7FC6rgs8PEPxMktxgfUDwI1yY3boY=;
-          h=Subject:To:Cc:From;
-          b=kSp9n64uVvCLz0YOxw2Sj5/YIi5HOysIrl+2Ccm5aScRw7NLM+v72Ky5OEgdWwNXq
-           cu3WkkmZKSr0IGtmuW2O9vjLCimOZ0wnLGXFw//aTd/ziJGkOnPA8X/92iPEI5j9p/
-           pTiafA3kAp87ZLOU69hh0xTo9miTDqxBwuu48BQc=
-Received: from riviera.nat.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <joe@perches.com>; 8 Jan 2022 16:38:59 +0100
-Message-ID: <dd6bc95f-ee94-b9b4-35ba-1a4284d96049@wp.pl>
-Date:   Sat, 8 Jan 2022 16:38:59 +0100
+        id S234582AbiAHPpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 10:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231841AbiAHPpy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 10:45:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A88C06173F;
+        Sat,  8 Jan 2022 07:45:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 958E7B80259;
+        Sat,  8 Jan 2022 15:45:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C7EC36AE3;
+        Sat,  8 Jan 2022 15:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641656750;
+        bh=1paZYEVtT19xm+lguuMbu/mMdfS7w78Iwwv0Yl0bEuk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EfUY+h4C3UJDL/3LWw4zULjQAG3wiCsloaYoFIt6fGWTir1xvlQh9dB2bU6OIYrIQ
+         q607/tIYKhTihj01oyOyi9OzrkpxYyZbkoDaftIjKQ+m6OxK8VV+DFtB/QiL/7nQ3r
+         KVR0PuytGckBbm+DaR6/PS3AYRBk0lnacgTqkxHU9lsNmyfaecTZRsUPtxtx3OSgoJ
+         O3AXdX7nKvAuNwX1WbbZwKvQo4qXTgHDUWk9fS5NfGFoteBcsMfYB4SRTtEfSItVyO
+         +p8V0CcYpSxDULVcRR2OHaJbcEFHsa6EMSfHJ1LJKjcvMsrwmJyKgPgQg/k80J0gox
+         jbeka9ig/poDw==
+Date:   Sat, 8 Jan 2022 17:45:41 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YdmxpTVM1JG8nxQ3@iki.fi>
+References: <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
+ <db9b7bc9-fdca-4dd2-2c3f-3b7354c165bb@kernel.org>
+ <YawAWmodeNaUbzV8@iki.fi>
+ <a1b14f33-5142-8cab-3b5f-4cc79b62091e@intel.com>
+ <a24bc46e4ba8a69938a7f73012019ce0f61005c2.camel@kernel.org>
+ <f6a55943-13ef-41ef-609a-6406cffef513@intel.com>
+ <YcsklLw1uFyppSji@iki.fi>
+ <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
+ <YdgvFTIRboHwTgRT@iki.fi>
+ <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH net-next] net: lantiq_etop: add blank line after
- declaration
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>, davem@davemloft.net,
-        kuba@kernel.org, rdunlap@infradead.org, jgg@ziepe.ca,
-        arnd@arndb.de, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>
-References: <20211228220031.71576-1-olek2@wp.pl>
- <fc1bf93d92bb5b2f99c6c62745507cc22f3a7b2d.camel@perches.com>
-From:   Aleksander Bajkowski <olek2@wp.pl>
-In-Reply-To: <fc1bf93d92bb5b2f99c6c62745507cc22f3a7b2d.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-WP-MailID: d31c9a37df5b2af05e9d7f5ec7fba301
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000B [IRMk]                               
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joe,
+On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
+> > > > OK, so the question is: do we need both or would a mechanism just
+> > > to extend
+> > > > permissions be sufficient?
+> > > 
+> > > I do believe that we need both in order to support pages having only
+> > > the permissions required to support their intended use during the
+> > > time the
+> > > particular access is required. While technically it is possible to grant
+> > > pages all permissions they may need during their lifetime it is safer to
+> > > remove permissions when no longer required.
+> > 
+> > So if we imagine a run-time: how EMODPR would be useful, and how using it
+> > would make things safer?
+> > 
+> In scenarios of JIT compilers, once code is generated into RW pages,
+> modifying both PTE and EPCM permissions to RX would be a good defensive
+> measure. In that case, EMODPR is useful.
 
-On 1/8/22 09:04, Joe Perches wrote:
-> (adding John Crispin, the original submitter of this driver)
-> 
-> On Tue, 2021-12-28 at 23:00 +0100, Aleksander Jan Bajkowski wrote:
->> This patch adds a missing line after the declaration and
->> fixes the checkpatch warning:
->>
->> WARNING: Missing a blank line after declarations
->> +		int desc;
->> +		for (desc = 0; desc < LTQ_DESC_NUM; desc++)
->>
->> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> []
->> diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
-> []
->> @@ -218,6 +218,7 @@ ltq_etop_free_channel(struct net_device *dev, struct ltq_etop_chan *ch)
->>  		free_irq(ch->dma.irq, priv);
->>  	if (IS_RX(ch->idx)) {
->>  		int desc;
->> +
->>  		for (desc = 0; desc < LTQ_DESC_NUM; desc++)
->>  			dev_kfree_skb_any(ch->skb[ch->dma.desc]);
->>  	}
-> 
-> The change is innocuous and has already been applied but the code
-> doesn't seem to make sense.
-> 
-> Why is dev_kfree_skb_any called multiple times with the same argument?
-> 
-> Is there some missing logic here?  Maybe a missing ++?
-> 
-> Something like:
-> 
-> 		for (desc = 0; desc < LTQ_DESC_NUM; desc++)
->  			dev_kfree_skb_any(ch->skb[ch->dma.desc++]);
-> 
-> Dunno, but the current code seems wrong.
-> 
-> 
+What is the exact threat we are talking about?
 
-
-FYI: This driver is mainly used by OpenWRT. OpenWRT has two
-patches that were never upstreamed. One of them is called
-"various etop fixes" and I would expect more bugs in this driver.
-The part that adds support for ar9 must be rewritten before
-upstreaming. This SoC has a built-in 2 port switch and needs
-a DSA driver. The rest of the fixes in this patch can probably
-be sent upstream.
-
-
-1. https://github.com/abajk/openwrt/blob/master/target/linux/lantiq/patches-5.10/0028-NET-lantiq-various-etop-fixes.patch
-2. https://github.com/abajk/openwrt/blob/master/target/linux/lantiq/patches-5.10/0701-NET-lantiq-etop-of-mido.patch
+/Jarkko

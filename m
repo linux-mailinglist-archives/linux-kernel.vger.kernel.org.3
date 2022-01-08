@@ -2,200 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628714881C5
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 07:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6CB4881CE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 07:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiAHGHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 01:07:43 -0500
-Received: from mga04.intel.com ([192.55.52.120]:23779 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229913AbiAHGHl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 01:07:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641622061; x=1673158061;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iFnm1+bUL3YvHnsySUYNgqV5f3qovLQYV6y6T14WesM=;
-  b=KHSvbnti3GC5Rn4ptHF1nK+Q/NLBy7yMbxHnPHOJdKMMrEV5FCdVZK9M
-   NjD/UEEuHQWpadS62FxBO5+82BuoQLHEKbK95FXwfgVipjM0vsXPvRm0P
-   INTPUfMaWZXz1r9Rqqln+r31h8CwT5PDdynwOBAtXBGMpjxmsb267UOGw
-   u45ZAt4PfaECibBPjHcfbED49/tpan2z/aG+fV8neIBce/x7krKuNNmta
-   72OX9DNzc2UPSHB+NvxYrFN58yzz9DHGuWj7WWna3F5gZsR1p8gljMtG7
-   RJVWajetvqCHNZOEgh+TlOyhc5kvHtKDIgx7lCUpnRe0XVBoMvyPDtkdD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="241803599"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="241803599"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 22:07:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="575325702"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Jan 2022 22:07:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n64t8-0000Jo-OW; Sat, 08 Jan 2022 06:07:38 +0000
-Date:   Sat, 8 Jan 2022 14:07:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: drivers/media/i2c/ov5648.c:2035:39: warning: taking address of
- packed member 'handler' of class or structure 'ov5648_ctrls' may result in
- an unaligned pointer value
-Message-ID: <202201081304.I6PRwgoL-lkp@intel.com>
+        id S233475AbiAHGOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 01:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229913AbiAHGOf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 01:14:35 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846B1C061574;
+        Fri,  7 Jan 2022 22:14:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JW8tp4Fslz4xZ1;
+        Sat,  8 Jan 2022 17:14:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641622466;
+        bh=VlbUS0YFLzM/+xUK70jWJdSjwW9tB9L5ujY3XHpJa1s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=olc3XfDjpgRqTqCJd12QJ9KESCKlNQrGPWU15SmY5eS0jJXaozwVmG0o4Tp/yy/Ml
+         oUQC9nTjV2Ng9h/1TWDD8kftkA3xwp5ckU806bQEeJY6M/3kTBd/VrYSq08CVWvev3
+         LnIXqqpxxvduDRnzuKQvGyim4DxZyjQQ5xRIGqAGpWJ8EJRTDioAcXcfLGASLSaHPu
+         /wrL4mrZO9/oZ+SpkYLPQYqfECY9MGgX6uXb2JJtJeqx58z8hE/rIEMsqNniKWNVNb
+         G4vMt4euqVCAptMS6vm0dnCR3F31g/fBpDesmq/k8s1H877eZdxepYjuNTZydYgKCh
+         DwF2BjmtMJI3Q==
+Date:   Sat, 8 Jan 2022 17:14:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: much more building going on
+Message-ID: <20220108171424.669e37d6@canb.auug.org.au>
+In-Reply-To: <20220107172206.3fbdd09f@canb.auug.org.au>
+References: <20220107171319.0afa619a@canb.auug.org.au>
+        <20220107172206.3fbdd09f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/k4Lxhz0euttgII+Xqj+ro9j";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+--Sig_/k4Lxhz0euttgII+Xqj+ro9j
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FYI, the error/warning still remains.
+Hi all,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
-commit: e43ccb0a045f34838b786e8021dc4838b4af5c38 media: i2c: Add support for the OV5648 image sensor
-date:   12 months ago
-config: mips-buildonly-randconfig-r002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081304.I6PRwgoL-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e43ccb0a045f34838b786e8021dc4838b4af5c38
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e43ccb0a045f34838b786e8021dc4838b4af5c38
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/media/i2c/ drivers/media/v4l2-core/ fs/
+On Fri, 7 Jan 2022 17:22:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> On Fri, 7 Jan 2022 17:13:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > Since yesterday, my builds are taking much longer and it seems just
+> > about everything is being rebuilt when there should be very little done.
+> >=20
+> > One example is after mergeing the clockevents tree, the diffstat looks
+> > like this:
+> >=20
+> > $ git diff --stat HEAD^..
+> >  .../devicetree/bindings/timer/cdns,ttc.yaml        |   3 +
+> >  .../bindings/timer/mstar,msc313e-timer.yaml        |  46 ++++
+> >  .../devicetree/bindings/timer/nxp,tpm-timer.yaml   |   6 +-
+> >  .../devicetree/bindings/timer/renesas,ostm.yaml    |  20 +-
+> >  .../bindings/timer/rockchip,rk-timer.yaml          |   1 -
+> >  MAINTAINERS                                        |   1 +
+> >  drivers/clocksource/Kconfig                        |  12 +-
+> >  drivers/clocksource/Makefile                       |   1 +
+> >  drivers/clocksource/exynos_mct.c                   |  52 +++--
+> >  drivers/clocksource/renesas-ostm.c                 |  39 +++-
+> >  drivers/clocksource/timer-imx-sysctr.c             |   6 +-
+> >  drivers/clocksource/timer-msc313e.c                | 253 +++++++++++++=
+++++++++
+> >  drivers/clocksource/timer-pistachio.c              |   3 +-
+> >  13 files changed, 411 insertions(+), 32 deletions(-)
+> >=20
+> > but my powerpc and arm builds rebuilt basically everything.
+> >=20
+> > This happens for a lot of merges - though some do not rebuild very much
+> > at all.
+> >=20
+> > Any ideas about what changed yesterday?  (I directed this to the kbuild
+> > tree maintainer since the kbuild tree was updated yesterday - though
+> > that may be a coincidence). =20
+>=20
+> OK, it *may* have something to do with Kconfig file updates for example w=
+ith this diffstat:
+>=20
+>  .../memory-controllers/synopsys,ddrc-ecc.yaml      |  1 +
+>  drivers/edac/Kconfig                               |  2 +-
+>  drivers/edac/amd64_edac.c                          | 36 ++++++++++++++-
+>  drivers/edac/amd64_edac.h                          |  8 +++-
+>  drivers/edac/edac_mc.c                             |  2 +
+>  drivers/edac/sb_edac.c                             |  2 +-
+>  drivers/edac/sifive_edac.c                         |  2 +-
+>  drivers/edac/synopsys_edac.c                       | 52 ++++++++++++++++=
+++----
+>  drivers/ras/cec.c                                  |  2 +-
+>  include/linux/edac.h                               |  6 +++
+>  10 files changed, 98 insertions(+), 15 deletions(-)
+>=20
+> And only this Kconfig change:
+>=20
+> $ git diff HEAD^.. drivers/edac/Kconfig
+> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> index 2fc4c3f91fd5..58ab63642e72 100644
+> --- a/drivers/edac/Kconfig
+> +++ b/drivers/edac/Kconfig
+> @@ -484,7 +484,7 @@ config EDAC_ARMADA_XP
+> =20
+>  config EDAC_SYNOPSYS
+>         tristate "Synopsys DDR Memory Controller"
+> -       depends on ARCH_ZYNQ || ARCH_ZYNQMP
+> +       depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
+>         help
+>           Support for error detection and correction on the Synopsys DDR
+>           memory controller.
+>=20
+> I noticed that the following files have changed (timestamp at least) in
+> the object directory:
+>=20
+> -rw-r--r-- 1 sfr users    46271 Jan  7 17:09 ./include/config/auto.conf.c=
+md
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_TCP=
+_CONG
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_INIT
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/BUILD_SALT
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_SYSTOHC=
+_DEVICE
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_TARGE=
+TS
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_IMPLICIT=
+_FALLTHROUGH
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_HCTOSYS=
+_DEVICE
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_FIRMW=
+ARE
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_HOS=
+TNAME
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_VERSION_=
+TEXT
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MODPROBE_PA=
+TH
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LOCALVERSION
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/INITRAMFS_S=
+OURCE
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/FAT_DEFAULT=
+_IOCHARSET
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CMDLINE
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/NLS_DEFAULT
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MAGIC_SYSRQ=
+_SERIAL_SEQUENCE
+> -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LSM
+> -rw-r--r-- 1 sfr users    54294 Jan  7 17:09 ./include/generated/autoconf=
+.h
+> -rw-r--r-- 1 sfr users    39198 Jan  7 17:09 ./include/config/auto.conf
+>=20
+> then lots more is rebuilt.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Bisection points to commit
 
-All warnings (new ones prefixed by >>):
+  33c1957574b6 ("kbuild: do not quote string values in include/config/auto.=
+conf")
 
->> drivers/media/i2c/ov5648.c:2035:39: warning: taking address of packed member 'handler' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           struct v4l2_ctrl_handler *handler = &ctrls->handler;
-                                                ^~~~~~~~~~~~~~
->> drivers/media/i2c/ov5648.c:2054:29: warning: taking address of packed member 'exposure_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
-                                      ^~~~~~~~~~~~~~~~~~~~
->> drivers/media/i2c/ov5648.c:2064:29: warning: taking address of packed member 'gain_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
-                                      ^~~~~~~~~~~~~~~~
->> drivers/media/i2c/ov5648.c:2080:29: warning: taking address of packed member 'white_balance_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+from the kbuild tree and indeed if I revert commits
 
+  ec769168623b ("microblaze: use built-in function to get CPU_{MAJOR,MINOR,=
+REV}")
+  98bb79d61f0c ("certs: move scripts/extract-cert to certs/")
+  33c1957574b6 ("kbuild: do not quote string values in include/config/auto.=
+conf")
 
-vim +2035 drivers/media/i2c/ov5648.c
+from the merge of the kbuild tree into linux-next (up to that point),
+the problem goes away.
 
-  2031	
-  2032	static int ov5648_ctrls_init(struct ov5648_sensor *sensor)
-  2033	{
-  2034		struct ov5648_ctrls *ctrls = &sensor->ctrls;
-> 2035		struct v4l2_ctrl_handler *handler = &ctrls->handler;
-  2036		const struct v4l2_ctrl_ops *ops = &ov5648_ctrl_ops;
-  2037		int ret;
-  2038	
-  2039		v4l2_ctrl_handler_init(handler, 32);
-  2040	
-  2041		/* Use our mutex for ctrl locking. */
-  2042		handler->lock = &sensor->mutex;
-  2043	
-  2044		/* Exposure */
-  2045	
-  2046		ctrls->exposure_auto = v4l2_ctrl_new_std_menu(handler, ops,
-  2047							      V4L2_CID_EXPOSURE_AUTO,
-  2048							      V4L2_EXPOSURE_MANUAL, 0,
-  2049							      V4L2_EXPOSURE_AUTO);
-  2050	
-  2051		ctrls->exposure = v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE,
-  2052						    16, 1048575, 16, 512);
-  2053	
-> 2054		v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
-  2055	
-  2056		/* Gain */
-  2057	
-  2058		ctrls->gain_auto =
-  2059			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTOGAIN, 0, 1, 1, 1);
-  2060	
-  2061		ctrls->gain = v4l2_ctrl_new_std(handler, ops, V4L2_CID_GAIN, 16, 1023,
-  2062						16, 16);
-  2063	
-> 2064		v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
-  2065	
-  2066		/* White Balance */
-  2067	
-  2068		ctrls->white_balance_auto =
-  2069			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTO_WHITE_BALANCE, 0,
-  2070					  1, 1, 1);
-  2071	
-  2072		ctrls->red_balance = v4l2_ctrl_new_std(handler, ops,
-  2073						       V4L2_CID_RED_BALANCE, 0, 4095,
-  2074						       1, 1024);
-  2075	
-  2076		ctrls->blue_balance = v4l2_ctrl_new_std(handler, ops,
-  2077							V4L2_CID_BLUE_BALANCE, 0, 4095,
-  2078							1, 1024);
-  2079	
-> 2080		v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
-  2081	
-  2082		/* Flip */
-  2083	
-  2084		v4l2_ctrl_new_std(handler, ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-  2085		v4l2_ctrl_new_std(handler, ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-  2086	
-  2087		/* Test Pattern */
-  2088	
-  2089		v4l2_ctrl_new_std_menu_items(handler, ops, V4L2_CID_TEST_PATTERN,
-  2090					     ARRAY_SIZE(ov5648_test_pattern_menu) - 1,
-  2091					     0, 0, ov5648_test_pattern_menu);
-  2092	
-  2093		/* MIPI CSI-2 */
-  2094	
-  2095		ctrls->link_freq =
-  2096			v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ,
-  2097					       ARRAY_SIZE(ov5648_link_freq_menu) - 1,
-  2098					       0, ov5648_link_freq_menu);
-  2099	
-  2100		ctrls->pixel_rate =
-  2101			v4l2_ctrl_new_std(handler, NULL, V4L2_CID_PIXEL_RATE, 1,
-  2102					  INT_MAX, 1, 1);
-  2103	
-  2104		if (handler->error) {
-  2105			ret = handler->error;
-  2106			goto error_ctrls;
-  2107		}
-  2108	
-  2109		ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
-  2110		ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
-  2111	
-  2112		ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-  2113		ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-  2114	
-  2115		sensor->subdev.ctrl_handler = handler;
-  2116	
-  2117		return 0;
-  2118	
-  2119	error_ctrls:
-  2120		v4l2_ctrl_handler_free(handler);
-  2121	
-  2122		return ret;
-  2123	}
-  2124	
+My test case is this:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+$ rm -rf ../test
+$ mkdir ../test
+$ make ARCH=3Dpowerpc O=3D../test -s ppc64_defconfig
+$ make ARCH=3Dpowerpc O=3D../test -j40 -O init/main.o
+(edit drivers/edac/Kconfig as above)
+$ make ARCH=3Dpowerpc O=3D../test -s ppc64_defconfig
+$ make ARCH=3Dpowerpc O=3D../test -j40 -O init/main.o
+
+In the good case, none of the files in ../test/include/config
+representing CONFIG_ options are changed and init/main.o is not
+rebuilt.  In the bad case some of the files above (in
+../test/include/config) are touched and init/main.o is rebuilt.
+
+Please see if you can figure out what actually is wrong with
+33c1957574b6 or else remove those commits from the kbuild tree (or
+revert them).  This extra rebuilding is adding about 7 hours to my day
+:-(
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/k4Lxhz0euttgII+Xqj+ro9j
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHZK8AACgkQAVBC80lX
+0Gwr1wf6AqB7PkbVu6cqb5K5A22VhUJy7s68MvOd+HP8yDXA/Np5q1OM6Vdu4TPG
+b4nYKZaMmKJxOnRq6/C+RdFPY2FVc4XIxEclFdSkFRKR6oLzZMwvUeBbh3OWoaQ1
+QjksD4i7HDSzCeJ7/XFTzgQxtM2e8WrxQIxq9slCq5rpqH3cgMPoBsW1+UA/S8x8
+pJO1UPecHL86SGIHQg/8rNjPPzbL/AhUOoQbrXuBZRE87xJpUUpOxuePEyd/1i7x
+vOWmTaXY0RP5xV6RDcmN7Sf2Dcu5h+01R9v8O81oZ7ppNB/W/3m7p8hl28lWsBZg
+t7QUWVRnb5vVX7GqGvyhUk8FBPyKVw==
+=D188
+-----END PGP SIGNATURE-----
+
+--Sig_/k4Lxhz0euttgII+Xqj+ro9j--

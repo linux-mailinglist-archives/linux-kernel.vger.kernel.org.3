@@ -2,97 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABE0488308
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 11:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F90488311
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 11:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbiAHKPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 05:15:18 -0500
-Received: from smtp.bonedaddy.net ([45.33.94.42]:40620 "EHLO
-        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiAHKPR (ORCPT
+        id S234112AbiAHKlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 05:41:24 -0500
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21365 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231232AbiAHKlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 05:15:17 -0500
-X-Greylist: delayed 561 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Jan 2022 05:15:17 EST
-Received: from localhost (n175-38-222-73.per2.wa.optusnet.com.au [175.38.222.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pabs3@bonedaddy.net)
-        by smtp.bonedaddy.net (Postfix) with ESMTPSA id 0EA3618007A;
-        Sat,  8 Jan 2022 05:06:35 -0500 (EST)
-Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
-        s=mail; t=1641636398;
-        bh=sU8wHdA/eA0+RGEHn8+xBGwBO0Ds63zMwONdksN3I9E=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date;
-        b=HuRQ7TPxtF08ZgMu9hUVU3JpGavRY2/kA4d/obXcAWeL1p8EIwcb4rPkuKBveiskA
-         xfQxXQPKcQstVjwU+siZ1L4EAyKdF/6xWb4cHuL7GLcVe9jCoUgBhJG9RclcBjRnG+
-         0tQu4vbvWMN4nabxmvPciwJ7aV7eXxLzmSqsr6jMLTk3DXmRSGgs0et558ChbdbG85
-         Mdo0hj8MBxLDINnaFLJojVFIOlmnY3XRxDvudZWebnj5v1AyP6CLK5GKVkIIVwToBM
-         odD2MYlNntF84V3qloSgVZHVxc2elTp2gEA/cYYWsmo94SeGBUS8HBh4cfNTZ00B6Y
-         rFOBv6lNdh1IQ==
-Message-ID: <b6079be95091af6dfa3dcf02673bde8db841941e.camel@bonedaddy.net>
-Subject: Re: [PATCH] tools/lib/lockdep: drop liblockdep
-From:   Paul Wise <pabs3@bonedaddy.net>
-To:     Sasha Levin <sashal@kernel.org>, mingo@kernel.org
-Cc:     peterz@infradead.org, linux-kernel <linux-kernel@vger.kernel.org>
-In-Reply-To: <b82c6441832477653dfc4c2556b81b29bc1c75fa.camel@bonedaddy.net>
-References: <20211112151602.1378857-1-sashal@kernel.org>
-         <b82c6441832477653dfc4c2556b81b29bc1c75fa.camel@bonedaddy.net>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-jPS1CGmwKxPQaYGvflRO"
-Date:   Sat, 08 Jan 2022 18:05:39 +0800
-MIME-Version: 1.0
-User-Agent: Evolution 3.42.2-1 
+        Sat, 8 Jan 2022 05:41:23 -0500
+X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Jan 2022 05:41:23 EST
+ARC-Seal: i=1; a=rsa-sha256; t=1641637565; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=WgwiF0IYgyDlk4sAQxBjW6mUA1+fgjV7K8Cs0jGpFlgK3qSb2txrn6yulsyS1HxdYLVv6cXgoeEwu7eL/BdxJGHE1UEamNfFyYo6+ixo5hnNyUz8xvPiIMnzhtBArfnBt2t62qSImcF8zZ5pa1l2j+QpkCnv6PYzKo7dHaEwB8I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1641637565; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=3oVlywFdC3C3cF00ZwzlVKVn1orvNCqgXAwzOeRwhtk=; 
+        b=bIUnhLXdT+toGHXrpaeRpa62UfChA7ZyGTAXuRKE5/OLQnGp9UToBHdO/TBGVGPxN3mE2BfKvsRIlP3oD6wVUstLkWABXvvObSxiZyixqEFPwXyiYmCDt8z+/0c+2wFnZ37cpfq7D4e9M7EILAPrkx8pPxCt96FHBej56bzAEsg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=kodeit.net;
+        spf=pass  smtp.mailfrom=admin@kodeit.net;
+        dmarc=pass header.from=<admin@kodeit.net>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=main; d=kodeit.net; 
+  h=content-type:mime-version:subject:from:in-reply-to:date:cc:message-id:references:to; 
+  b=CWYkWfLtdxdoCXumCRIqGv1DkoGnO5qu+roaHH4onYXU1AKzDPUDTIxWSrRSoq4CMFDPtVD5AwZz
+    7IKlF5txXinTXysaqfzeimGf7uIcLZ3UeseVyXFC/lyDyIoKQgIK/YdmTk1yt01N3236ccq74ICC
+    nRZCPLcOEBCaKfoY+U8=  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1641637565;
+        s=zoho; d=kodeit.net; i=admin@kodeit.net;
+        h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:To;
+        bh=3oVlywFdC3C3cF00ZwzlVKVn1orvNCqgXAwzOeRwhtk=;
+        b=a8F3i5HIfGrVxah1A+HHDqpK6x36WYVJoA5Ca106Vua5o/re9YC0ruEcAMHD2Drk
+        Enc57WfDVW9Mt2nKECQ4wOjZ6XIXyPwbKcCxoPYUSqjnUnw3YY0oVuME7BT64x5bxkW
+        ju80kGi45gzF8NGshRO98SppkVmRxXyE7x73sdu8=
+Received: from smtpclient.apple (70.120.98.38 [70.120.98.38]) by mx.zohomail.com
+        with SMTPS id 1641637563409375.69097930732096; Sat, 8 Jan 2022 02:26:03 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH] drm/i915: Discard large BIOS framebuffers causing display
+ corruption.
+From:   Aun-Ali Zaidi <admin@kodeit.net>
+In-Reply-To: <AC748346-8777-4107-9E7D-526D5854F11B@outlook.com>
+Date:   Sat, 8 Jan 2022 04:26:00 -0600
+Cc:     Orlando Chamberlain <redecorating@protonmail.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
+        Aditya Garg <gargaditya08@live.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D5A25DCE-75BB-404A-9CBC-979B762DD151@kodeit.net>
+References: <20220108050812.6303-1-redecorating@protonmail.com>
+ <AC748346-8777-4107-9E7D-526D5854F11B@outlook.com>
+To:     Ashish Arora <ashisharora.linux@outlook.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+LGTM
 
---=-jPS1CGmwKxPQaYGvflRO
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+=E2=80=94
+Aun-Ali Zaidi
 
-On Thu, 2021-11-18 at 08:32 +0800, Paul Wise wrote:
+> On Jan 8, 2022, at 3:59 AM, Ashish Arora =
+<ashisharora.linux@outlook.com> wrote:
+>=20
+>=20
+> I believe I forgot to add Aditya to the conversation. So, I am sending =
+the patch as an attachment for those who want to test :)<0001-drm.patch>
 
-
-> I read that liblockdep and the lockdep tool are moving out of the Linux
-> kernel tree, but couldn't find where they will be moving to. An LWN
-> commenter suggested I contact you to ask about this. Thoughts?
-
-I got this response from Sasha elsewhere and permission to fwd here:
-
-   I haven't really gotten to extracting it out of the kernel tree.
-   There's a bunch of annoying work needed there to extract whatever
-   headers and code we need out of the kernel tree and make it work,
-   and I just haven't had the time to do it yet. I'm hopeful I could
-   do it in the next few weeks - have been a bit busy.
-
---=20
-bye,
-pabs
-
-https://bonedaddy.net/pabs3/
-
---=-jPS1CGmwKxPQaYGvflRO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmHZYfAACgkQMRa6Xp/6
-aaMPRQ//RR/ZiLXR04AhblrVl5Q8oLfUK8G5G8F13dADVSZoq5rWjArtX5P8deVx
-rQ2leVTXOToGqLwc9FqrX5TV4gH7cmB4w0OcOGLs0hMJjF7eEfYqxDs1Zp6UK4IK
-7q/jlHD0iSicD7ipFZcY4knyGKhbOrt5PCY8NumF9ht2NmixtQ/9TymwocYuJ2Un
-dIoBOiErNL4OU1j4nPiLkqs/6NYZIvFkAdDltJwbXpYsqr/DK4zA/04hizB9YcPQ
-VPQBfGNdEFyo8ePtsimVn8bSf2HuSzlAg8JBtM25clOG1Y6mqZSkLn70DoIX4JEE
-jMcXYvSBu6VSIbLypIqBRzFxb9byUYppA32m/msBRR1l3CNlGLVHbDOgvD1xFqDZ
-TYBbRAdrKVPp/nL0RW8T49z0zP/v3/XRzZyTXK4LdLvf3bM27TRltDEoG/Y+1zxI
-ri1B9E1GsRKWmPuyKHMFBOhb9BPa5tkV0AHLYjXqivsIpdtC1RCeZgerhbjUU4es
-Cg8xOwFe8BSc54+03CtnuhQz583ZWjBO7aM18FoogeWkN27aIY7nTTtrWYjWfuZ8
-V+tEihoEQpN5chT3P9xX6NUEv+tA+8r3DjVFN321cSLl++rWpdRzEqGq3ByXAAEs
-n2IxxyR9P3EmwIunsvCu/tqW/G47jfbjOEVAED6tkMArhQr+9P0=
-=CGrv
------END PGP SIGNATURE-----
-
---=-jPS1CGmwKxPQaYGvflRO--

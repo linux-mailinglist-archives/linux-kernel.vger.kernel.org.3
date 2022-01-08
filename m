@@ -2,132 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04852487FEF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89913487FF1
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbiAHA1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 19:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiAHA1J (ORCPT
+        id S231253AbiAHAep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 19:34:45 -0500
+Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:44908
+        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229553AbiAHAeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 19:27:09 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B0C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:27:09 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id 45-20020a9d0a30000000b0058f1a6df088so8386557otg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 16:27:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=8g9Y4RuZWFxiMsPIDvaQ+fBgT+fTQjHR9ZTccgF3/K4=;
-        b=OYRhnU3o+R1nSiicP0JnwrEAAytRujnsK5+KCA2Nzs5bmK0AIzWHPKMnresN9gTbkk
-         W/ep+yUJjES90oRk63c1ajbxa4IamvlQFIn39zMpruqGre2frlO6kseWNwrpkWlIh4d0
-         tFyFnXGczc1jB8ZgqO5q8cWkhpgalR1JM3diY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=8g9Y4RuZWFxiMsPIDvaQ+fBgT+fTQjHR9ZTccgF3/K4=;
-        b=vTC8IJoWPdc0Ye20oo7bieXkwKvpDMuKY+zjxxTmaSzuHDxvBVbDm9rD/pZyV8SECc
-         9cp+Nqjj7Au7qJ1+mVyPutbbeO12e0vtlW6Wf4n45dw5BRVQ5X5T475GypqezzB6LDcs
-         c148kPHL9PWCcZnr6m4caSBZl7eaoRiAuNYLepYwqZuu4OTEYWq+N/sVyqdxSQ6V77Jf
-         KXu66aDiUVAHqB0+Na5mCUgfD/33DKFG7jbNDMSfW5ITx3NFACb/fW1kTn/e5wDzxUy7
-         JgHWSu2XkhlKVuADhlt+3/v2jEEPx6JUDVvRGq1rSEKrjg47z4bNG3wtatRxiEDzg/UI
-         Ckcg==
-X-Gm-Message-State: AOAM531qXV+mDdH5vNlBCw9p+cCmp6lUculp7+jAqFfIqw2UQ/knPTDg
-        xBnDgSgj3iSDjHY6yxhzJxbjsWUrnQxXwroJeChmbA==
-X-Google-Smtp-Source: ABdhPJzm5bl+1dlG7IjEcfo4sutjPa4jJpUog3GV9//EpeVjS9XpHdZ2agKLM8sM3JMIGirZ+LdbhWUZaj563d9ilNM=
-X-Received: by 2002:a9d:2243:: with SMTP id o61mr46117313ota.126.1641601628423;
- Fri, 07 Jan 2022 16:27:08 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 7 Jan 2022 16:27:08 -0800
+        Fri, 7 Jan 2022 19:34:44 -0500
+Received: from [192.168.88.87] (unknown [36.68.70.227])
+        by gnuweeb.org (Postfix) with ESMTPSA id CEEB9C16A3;
+        Sat,  8 Jan 2022 00:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
+        s=default; t=1641602083;
+        bh=0xcjPoPfkzyVc5Gka7zNxUOAxnE7w/mp3ZC5xlgICrs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AAS0a1q7Z58b3PdeHM9ClLOUa8v1yP0XXtCzEv88OBs9vCXcj9xIR5iO4SIDnQ0jp
+         LGE23zjFPj7a+0+Bb5o+nxy+2RadeYBvibZg7GvfWf84RQ+EQTTV2AYrWgZUAwBzBB
+         lcdSF30vKioN6EUaYtGRMjk9nbFcJAjPUutq46SWRFxN9uxd9eKOs7tQ7P2sUgJ6w9
+         +g2hhaxIEZdqD/+DCxWWrL5sGUYwpfKYWiHPxPPTBMRthV+mB9rCBaB5eo7ObXrLY7
+         8cnd0XY9UeJj04hH+J/iR4M79xhyAhrZ4ucVLkL36ghy9wlSMGBGrxTMwgCxnttM72
+         j5vuqL2NnKSJA==
+Message-ID: <6d10d7e4-8af4-5398-7c08-8d111d1179ee@gnuweeb.org>
+Date:   Sat, 8 Jan 2022 07:34:42 +0700
 MIME-Version: 1.0
-In-Reply-To: <20220106181449.696988-2-robdclark@gmail.com>
-References: <20220106181449.696988-1-robdclark@gmail.com> <20220106181449.696988-2-robdclark@gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Fri, 7 Jan 2022 16:27:07 -0800
-Message-ID: <CAE-0n53N0GQ2UXYNpDOf_WVvvUa3cu95ePGYfYk7jZwPTqJ-XA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/msm/gpu: Wait for idle before suspending
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v1 2/3] x86/entry/64: Add info about registers on exit
+Content-Language: en-US
+To:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        Michael Matz <matz@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Willy Tarreau <w@1wt.eu>
+References: <20220107235210.1339168-1-ammarfaizi2@gnuweeb.org>
+ <20220107235210.1339168-3-ammarfaizi2@gnuweeb.org>
+ <5d1a9dff-6319-14a6-ad81-97350a6849af@kernel.org>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <5d1a9dff-6319-14a6-ad81-97350a6849af@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------S0MaOf4czMBu0L1g6p8RczRv"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Clark (2022-01-06 10:14:46)
-> From: Rob Clark <robdclark@chromium.org>
->
-> System suspend uses pm_runtime_force_suspend(), which cheekily bypasses
-> the runpm reference counts.  This doesn't actually work so well when the
-> GPU is active.  So add a reasonable delay waiting for the GPU to become
-> idle.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------S0MaOf4czMBu0L1g6p8RczRv
+Content-Type: multipart/mixed; boundary="------------mYuysVt05c8ZcM1WrKYlRuzx";
+ protected-headers="v1"
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+ GNU/Weeb Mailing List <gwml@gnuweeb.org>, Michael Matz <matz@suse.de>,
+ "H.J. Lu" <hjl.tools@gmail.com>, Willy Tarreau <w@1wt.eu>
+Message-ID: <6d10d7e4-8af4-5398-7c08-8d111d1179ee@gnuweeb.org>
+Subject: Re: [PATCH v1 2/3] x86/entry/64: Add info about registers on exit
+References: <20220107235210.1339168-1-ammarfaizi2@gnuweeb.org>
+ <20220107235210.1339168-3-ammarfaizi2@gnuweeb.org>
+ <5d1a9dff-6319-14a6-ad81-97350a6849af@kernel.org>
+In-Reply-To: <5d1a9dff-6319-14a6-ad81-97350a6849af@kernel.org>
 
-Maybe also say:
+--------------mYuysVt05c8ZcM1WrKYlRuzx
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Failure to wait during system wide suspend leads to GPU hangs seen on
-resume.
+T24gMS84LzIyIDc6MDMgQU0sIEFuZHkgTHV0b21pcnNraSB3cm90ZToNCj4gT24gMS83LzIy
+IDE1OjUyLCBBbW1hciBGYWl6aSB3cm90ZToNCj4+IFRoZXJlIHdhcyBhIGNvbnRyb3ZlcnNp
+YWwgZGlzY3Vzc2lvbiBhYm91dCB0aGUgd29yZGluZyBpbiB0aGUgU3lzdGVtDQo+PiBWIEFC
+SSBkb2N1bWVudCByZWdhcmRpbmcgd2hhdCByZWdpc3RlcnMgdGhlIGtlcm5lbCBpcyBhbGxv
+d2VkIHRvDQo+PiBjbG9iYmVyIHdoZW4gdGhlIHVzZXJzcGFjZSBleGVjdXRlcyBzeXNjYWxs
+Lg0KPj4NCj4+IFRoZSByZXNvbHV0aW9uIG9mIHRoZSBkaXNjdXNzaW9uIHdhcyByZXZpZXdp
+bmcgdGhlIGNsb2JiZXIgbGlzdCBpbg0KPj4gdGhlIGdsaWJjIHNvdXJjZS4gRm9yIGEgaGlz
+dG9yaWNhbCByZWFzb24gaW4gdGhlIGdsaWJjIHNvdXJjZSwgdGhlDQo+PiBrZXJuZWwgbXVz
+dCByZXN0b3JlIGFsbCByZWdpc3RlcnMgYmVmb3JlIHJldHVybmluZyB0byB0aGUgdXNlcnNw
+YWNlDQo+PiAoZXhjZXB0IGZvciByYXgsIHJjeCBhbmQgcjExKS4NCj4+DQo+PiBMaW5rOiBo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sL2FscGluZS5MU1UuMi4yMC4yMTEwMTMxNjAx
+MDAwLjI2Mjk0QHdvdGFuLnN1c2UuZGUvDQo+PiBMaW5rOiBodHRwczovL2dpdGxhYi5jb20v
+eDg2LXBzQUJJcy94ODYtNjQtQUJJLy0vbWVyZ2VfcmVxdWVzdHMvMjUNCj4+DQo+PiBUaGlz
+IGFkZHMgaW5mbyBhYm91dCByZWdpc3RlcnMgb24gZXhpdC4NCj4+DQo+PiBDYzogQW5keSBM
+dXRvbWlyc2tpIDxsdXRvQGtlcm5lbC5vcmc+DQo+PiBDYzogVGhvbWFzIEdsZWl4bmVyIDx0
+Z2x4QGxpbnV0cm9uaXguZGU+DQo+PiBDYzogSW5nbyBNb2xuYXIgPG1pbmdvQHJlZGhhdC5j
+b20+DQo+PiBDYzogQm9yaXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+DQo+PiBDYzogRGF2
+ZSBIYW5zZW4gPGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT4NCj4+IENjOiAiSC4gUGV0
+ZXIgQW52aW4iIDxocGFAenl0b3IuY29tPg0KPj4gQ2M6IE1pY2hhZWwgTWF0eiA8bWF0ekBz
+dXNlLmRlPg0KPj4gQ2M6ICJILkouIEx1IiA8aGpsLnRvb2xzQGdtYWlsLmNvbT4NCj4+IENj
+OiBXaWxseSBUYXJyZWF1IDx3QDF3dC5ldT4NCj4+IENjOiB4ODYtbWwgPHg4NkBrZXJuZWwu
+b3JnPg0KPj4gQ2M6IGxrbWwgPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+DQo+PiBD
+YzogR05VL1dlZWIgTWFpbGluZyBMaXN0IDxnd21sQGdudXdlZWIub3JnPg0KPj4gU2lnbmVk
+LW9mZi1ieTogQW1tYXIgRmFpemkgPGFtbWFyZmFpemkyQGdudXdlZWIub3JnPg0KPj4gLS0t
+DQpbLi4uXQ0KPj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2VudHJ5L2VudHJ5XzY0LlMgYi9h
+cmNoL3g4Ni9lbnRyeS9lbnRyeV82NC5TDQo+PiBpbmRleCBlNDMyZGQwNzUyOTEuLjExMTFm
+ZmYyZTA1ZiAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2VudHJ5L2VudHJ5XzY0LlMNCj4+
+ICsrKyBiL2FyY2gveDg2L2VudHJ5L2VudHJ5XzY0LlMNCj4+IEBAIC03OSw2ICs3OSwxOSBA
+QA0KPj4gICAgKg0KPj4gICAgKiBPbmx5IGNhbGxlZCBmcm9tIHVzZXIgc3BhY2UuDQo+PiAg
+ICAqDQo+PiArICogUmVnaXN0ZXJzIG9uIGV4aXQ6DQo+PiArICogcmF4ICBzeXNjYWxsIHJl
+dHVybiB2YWx1ZQ0KPj4gKyAqIHJjeCAgcmV0dXJuIGFkZHJlc3MNCj4+ICsgKiByMTEgIHJm
+bGFncw0KPj4gKyAqDQo+PiArICogRm9yIGEgaGlzdG9yaWNhbCByZWFzb24gaW4gdGhlIGds
+aWJjIHNvdXJjZSwgdGhlIGtlcm5lbCBtdXN0IHJlc3RvcmUgYWxsDQo+PiArICogcmVnaXN0
+ZXJzIGV4Y2VwdCB0aGUgcmF4IChzeXNjYWxsIHJldHVybiB2YWx1ZSkgYmVmb3JlIHJldHVy
+bmluZyB0byB0aGUNCj4+ICsgKiB1c2Vyc3BhY2UuDQo+PiArICoNCj4+ICsgKiBJbiBvdGhl
+ciB3b3Jkcywgd2l0aCByZXNwZWN0IHRvIHRoZSB1c2Vyc3BhY2UsIHdoZW4gdGhlIGtlcm5l
+bCByZXR1cm5zDQo+PiArICogdG8gdGhlIHVzZXJzcGFjZSwgb25seSAzIHJlZ2lzdGVycyBh
+cmUgY2xvYmJlcmVkLCB0aGV5IGFyZSByYXgsIHJjeCwNCj4+ICsgKiBhbmQgcjExLg0KPj4g
+KyAqDQo+IA0KPiBJIHdvdWxkIHNheSB0aGlzIG11Y2ggbW9yZSBjb25jaXNlbHk6DQo+IA0K
+PiBUaGUgTGludXgga2VybmVsIHByZXNlcnZlcyBhbGwgcmVnaXN0ZXJzIChldmVuIEMgY2Fs
+bGVlLWNsb2JiZXJlZA0KPiByZWdpc3RlcnMpIGV4Y2VwdCBmb3IgcmF4LCByY3ggYW5kIHIx
+MSBhY3Jvc3Mgc3lzdGVtIGNhbGxzLCBhbmQNCj4gZXhpc3RpbmcgdXNlciBjb2RlIHJlbGll
+cyBvbiB0aGlzIGJlaGF2aW9yLg0KDQpBZ3JlZSwgSSB3aWxsIHRha2UgdGhhdCBhcyBTdWdn
+ZXN0ZWQtYnkgaW4gdGhlIHYyLg0KDQotLSANCkFtbWFyIEZhaXppDQoNCg==
 
->
-> Alternatively we could just return -EBUSY in this case, but that has the
-> disadvantage of causing system suspend to fail.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/adreno/adreno_device.c | 9 +++++++++
->  drivers/gpu/drm/msm/msm_gpu.c              | 3 +++
->  drivers/gpu/drm/msm/msm_gpu.h              | 3 +++
->  3 files changed, 15 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index 93005839b5da..b677ca3fd75e 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -611,6 +611,15 @@ static int adreno_resume(struct device *dev)
->  static int adreno_suspend(struct device *dev)
->  {
->         struct msm_gpu *gpu = dev_to_gpu(dev);
-> +       int ret = 0;
+--------------mYuysVt05c8ZcM1WrKYlRuzx--
 
-Please don't assign and then immediately overwrite.
+--------------S0MaOf4czMBu0L1g6p8RczRv
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> +
-> +       ret = wait_event_timeout(gpu->retire_event,
-> +                                !msm_gpu_active(gpu),
-> +                                msecs_to_jiffies(1000));
-> +       if (ret == 0) {
+-----BEGIN PGP SIGNATURE-----
 
-The usual pattern is
+wsB5BAABCAAjFiEE6JNybcjkwN47ogEHNk+6NP8XCksFAmHY3CIFAwAAAAAACgkQNk+6NP8XCkth
+4Qf/RF4cx4FfzB07Ou2xw7JaPoCo/QTqSi+eyRJ3NCgjfxoJRtSITCEnGFLien21SioRRQHT3wV3
+oJ/L8i0t29Ew+VCImFYdLo0LnSGUiR1ggE6MW7rFAe8LbAyU/B301h3lZqijFzVkdk+5NzPeGsjB
+zLlVEKJX9xzQPySzaC5gejChdT4pTM1c2b/wz6pSDejwPsqIz1H/rizC0tA/g8sDTCtQUP9MOhXE
+IFZ3KduGNoz0UrUtyDc757TVxoO+DUIsNaahDLKI1UMkZrimmA3pPc9jY9I7utgiZG6myI3o1hoD
+07rbv/2NTg0TJ2CFO+quewoGXqrVNJ7LhfqFs63k4w==
+=diYx
+-----END PGP SIGNATURE-----
 
-	long timeleft;
-
-	timeleft = wait_event_timeout(...)
-	if (!timeleft) {
-		/* no time left; timed out */
-
-Can it be the same pattern here? It helps because people sometimes
-forget that wait_event_timeout() returns the time that is left and not
-an error code when it times out.
-
-> +               dev_err(dev, "Timeout waiting for GPU to suspend\n");
-> +               return -EBUSY;
-> +       }
->
->         return gpu->funcs->pm_suspend(gpu);
->  }
+--------------S0MaOf4czMBu0L1g6p8RczRv--

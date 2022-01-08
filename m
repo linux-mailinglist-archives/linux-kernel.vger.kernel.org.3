@@ -2,195 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA2B487FE3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F5B487FE5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbiAHAVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 19:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiAHAVR (ORCPT
+        id S231890AbiAHAVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 19:21:42 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:40794 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231809AbiAHAVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 19:21:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64DEC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:21:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 552B362030
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22156C36AE5;
-        Sat,  8 Jan 2022 00:21:16 +0000 (UTC)
-Date:   Fri, 7 Jan 2022 19:21:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jeff Xie <xiehuan09@gmail.com>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH v6 1/5] trace: Add trace any kernel object
-Message-ID: <20220107192114.3389b5a0@gandalf.local.home>
-In-Reply-To: <20211219120723.df2a892e2b4b7caec8905503@kernel.org>
-References: <20211129164951.220511-1-xiehuan09@gmail.com>
-        <20211129164951.220511-2-xiehuan09@gmail.com>
-        <20211217135149.db5ee4b1b110c845739106d4@kernel.org>
-        <CAEr6+EAn3+vWvp46mheO=MTetLyHXy-GDENtN8O6y+5T+Y-N7w@mail.gmail.com>
-        <20211219120723.df2a892e2b4b7caec8905503@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 7 Jan 2022 19:21:41 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 207Ls0SK029039;
+        Sat, 8 Jan 2022 00:21:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=XqrgjdeirmUOLLvu6Ln/DTf04cRrt17j8K11HRRo0YY=;
+ b=xAw7DiAY2Oabxs6MyykGRC6Qr24pBmD7ke/vu1N5ic2H4/cl0idDPijSAA5wQF1DX9s3
+ 45eQvcZ14szhPmXrbnYKxI6CZCUj/z++oWEVyAs8D5Rvix1ns0PwvP9ow3OQWW2yT1yo
+ gLxD8PEoCAPAEXonu6Dv603G09j6ADJAw7KIfEnSDrbhCmv+bpOMvIQWezGi7oqCd4ud
+ HDonWuvsv7wwsQOY1pfslHj5I/Vv2WuOfpa8sHJ3oitamlHFFb34/Sm2ZAtDqeLf9rk2
+ X6Yf195gb16zvnKsLdJSLwCbCA+nDCjwlqG1NUZyNg0vS/kmfi+dfDXs2LNCkeNpbU51 mg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3de4vbbacp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Jan 2022 00:21:34 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20801m9l064475;
+        Sat, 8 Jan 2022 00:21:34 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by aserp3020.oracle.com with ESMTP id 3dej4tg2wa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Jan 2022 00:21:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oBhIX1LoxutMZDC72da46jNbIsdgSQAlobIefPxSNOkrnQhQViz20sY0yyjGefPgK0Oue0dQFibHVmqElfgcZyrX/O8qGd6gQIMSgmg38qAi1Baq1NVGcaLCsBywl2xN0cgg6mXHWxkxhJtOPUWq4EVdrqPYWX3nW2kmcuweMisIEArJIXJHgL6HpseRahUBcWjdYlRx9eFtt3aZk+uI2lHX83oduTWgDStZzv8PPep9+P2DsWsESbhDbEUn49/T8ATEDhlyruzTFJNxtutZ3uxI97xEzmvmSrkEKYzijEP6BJWjsxOnDn/7F2OdzFSo2hsHwjWBe+xydCxayrcLNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XqrgjdeirmUOLLvu6Ln/DTf04cRrt17j8K11HRRo0YY=;
+ b=oOwq/rZhPyVvYZPW15UbbwCykpFqST+Ik1lv9MY5IcPLzXaeFxeJQ8C88IT3r46lp9HPm+qEn6UhBQ3S4MSm0YwsWQXf7uUKcgmO3lQiVg2goDwj+tHS7Fr92FJGFICDDG6F4a2MvnqYwV+Wd6pkUuayyyJ7VCXVRsIFYloKIXBRs+1at1sJ4bclhIvA0woAlSSnaaVC3xZ94vZNwBihAv15BSju4kUxyZfTILAfdP/MaPUElpkb04ssLUFAeqXL7WHaziahzY7ejnzzbpvVrBDRwO8DL6FxQVguZcZv4bw0Iq5sRmnbIJkPNIPH6Ht/Vz0+DDY1gvApdmofn8NRsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XqrgjdeirmUOLLvu6Ln/DTf04cRrt17j8K11HRRo0YY=;
+ b=Hz+HTCitrlEOCUJ8uQ9GraDuh7pT5yAI/uQ+Mu0NTv/ut6eCci+Ez8kpgV6+uBswo2ABrUwYensqpP8DHT40kD110VQONkGKfG6R4D3j4wmJAcPTLEn9jNNYrvv9ev+/4Wm1UQc5g5v/vJEN14OeRvmPCq8kwI+aRSMaYQFjpkA=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH0PR10MB4680.namprd10.prod.outlook.com (2603:10b6:510:3e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Sat, 8 Jan
+ 2022 00:21:31 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::1053:7ae3:932b:f166]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::1053:7ae3:932b:f166%7]) with mapi id 15.20.4867.011; Sat, 8 Jan 2022
+ 00:21:31 +0000
+To:     Eric Wheeler <bcache@lists.ewheeler.net>
+Cc:     Coly Li <colyli@suse.de>, linux-block@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BCACHE (BLOCK LAYER CACHE)" <linux-bcache@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] bcache: make stripe_size configurable and persistent
+ for hardware raid5/6
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq15yqvw1f0.fsf@ca-mkp.ca.oracle.com>
+References: <d3f7fd44-9287-c7fa-ee95-c3b8a4d56c93@suse.de>
+        <1561245371-10235-1-git-send-email-bcache@lists.ewheeler.net>
+        <200638b0-7cba-38b4-20c4-b325f3cfe862@suse.de>
+        <alpine.LRH.2.11.1906241800350.1114@mx.ewheeler.net>
+        <8a9131dc-9bf7-a24a-f7b8-35e0c019e905@suse.de>
+        <fdb85dc1-eee6-e55e-8e9c-fa1f36b4a37@ewheeler.net>
+Date:   Fri, 07 Jan 2022 19:21:28 -0500
+In-Reply-To: <fdb85dc1-eee6-e55e-8e9c-fa1f36b4a37@ewheeler.net> (Eric
+        Wheeler's message of "Wed, 5 Jan 2022 19:29:05 -0800 (PST)")
+Content-Type: text/plain
+X-ClientProxiedBy: SN2PR01CA0001.prod.exchangelabs.com (2603:10b6:804:2::11)
+ To PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 121dc24e-35fc-40ef-d3b5-08d9d23cd227
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4680:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB4680CE34EEAFBF758A00CC948E4E9@PH0PR10MB4680.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gWY8zMTP4zNM1evnz90sprg2EkV5LGth1DP9DYU7XcsxGMCg2aSWyfbMl0C8Vu/HK8t/PFwxfYgBDa1in0BslJ/2ce4IR0aWp4t/l9r52dDzbIYyCUjMOeSLCXRyMKfNWLcwwsOAZhmPE+kwobU2ew5cGQODnxh3GONe/fupJQhdyb22sv262tLER84R0/jKbX6eg03vK+HHDh5FzN2XgF6QgYtWiTmgaw7x6y5eak9CG/oBf/1mTcgG8KbRYypYPKBU48jplvIdbPkSR7FiIf9KKGSh3T3FjhQsiDEKh9XmA4j9LQKwx/usD1zpWsIlvsuKLBRwL8Au/a5NsE9GvXsYvpO3c5LJcGMSYFoIHSIg+onyP1Fy3H9TfE3EEB5eyaVQWlz4nFUTR0M4h2zHGVm0D1b4nDBfjFdZo9s8qMKzQ9/usk56UG4weG/Gc5c4OTrXcIYWd31yayGE7mBAvv6DxKLUR+mE+oneVydoTiWzMBB1DhAJPXK59JMyjI7eOdhbZTG34feAEw61XH+w52RoELueuPUovAKw1ss0nzB+4tkJL1GzmpBBe2Jl8Ozv7FRLDzehhYxYTKhZx2ebdAbZI5Uw4oAYdvPS6uXZ8x1IQfQWu/HVEw9b+faapw+e+YGOisB6Q6tXybiGX7y3PAF5+nYoamwVYcW7ZvEJKrDUXqN3A6PcSzmWejJyLTSTWyFoaCqNPDYFMQytHKFamg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66476007)(6486002)(316002)(66946007)(2906002)(66556008)(38350700002)(6666004)(38100700002)(6506007)(6512007)(107886003)(26005)(186003)(4326008)(6916009)(83380400001)(8676002)(52116002)(8936002)(5660300002)(36916002)(508600001)(54906003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ik4jk7PQP2G3xXstYWpsC0lmvdAArm4QRRgP1bbYZ1BtMHMkGGnC2z07mYaA?=
+ =?us-ascii?Q?4hbGVXB6UZWO3jHkFKh/HELDJ3xnbHdLS9nm4ctTxBAjhDTEj7ZtUrK6gGZV?=
+ =?us-ascii?Q?INPluJGFgKkgvi+IxSJRhvLLqgM4o7dM3Ag0+701XGKgAQXoHyuBIewdOBdx?=
+ =?us-ascii?Q?0hqQZtPi/W7zMfl5MwaVV4YCyGV/UetGPo/4JTR+zT+oCT/hVoTBxUQsoCMh?=
+ =?us-ascii?Q?I5Mf4SFNP+k5dX1pX3pWgN6os2fTIUNec3NKAb71oNhcIql2gJVtAPz0ouao?=
+ =?us-ascii?Q?WTD1f6rLIIt0OqreipVEujqBs2CUcnl0x/DuDBjKz9z29fbSF++DLXBh0w1S?=
+ =?us-ascii?Q?BR8kYXSnarW/614WwA5Ca8dPSoUiojPVjQCR9AvvX87q/ETqg4t7CT4YMg7s?=
+ =?us-ascii?Q?zNXrl9EoajJ4p3YGeLotzX9OmDoDVoBCf1nc7y7a/rNGkd1LsiThC7miX2Zo?=
+ =?us-ascii?Q?oUWjX0jcK+iW3pEG7oKRoGnae5924H4gkks7iXIl1hoqbH5eDJl0Q6fW1cuS?=
+ =?us-ascii?Q?0RQmziGw+4LpM6ksPWSKvLguzjtKWDzBsjpz9msaQmF1qxvCUqQgAdXMEJ6X?=
+ =?us-ascii?Q?LHPwX5Fxt5eIo/D0HaRj8xeeN3utJ3ePYrpwiHKuRg1RtPvnvYJw5WY78RC3?=
+ =?us-ascii?Q?Ouo1XOk40Cjjv/acALp3r6L+DyaMCCQikNcCD7ezXbz3L8NTEp/CJn6Wts6r?=
+ =?us-ascii?Q?bkkuzenZd9ssW/1d2MjyL8n3+uQyCBGQHLeOzDUHprcPoKpjFBZGjdWuPoMU?=
+ =?us-ascii?Q?SM7F9RFWKXYEiscu8jTMA2IK69KMHcnsAFHZWslT51kf7aYUnoXJOvkzWcIj?=
+ =?us-ascii?Q?/YWsGJY2/AQzoZI1RqJGnvNm9z5XGUe/mbv4byAtxsx0xTc7/nnBYtZcT/7k?=
+ =?us-ascii?Q?n+V2B5YjJVgPimGfLFBYuTuXeyYeExQxB6mM7j9WYV2+p/WCHo/7EOXKD4FA?=
+ =?us-ascii?Q?vK8bDvYWQyGA7Pfo/S6WVYhasoJ/4fxmhoGWQ4ljPqV5lBV73ye8orFKqYAT?=
+ =?us-ascii?Q?X3B2uqhcXAFOdxiclRHjlpTEUKJuYaFPKV7TRhu7xfvK44w8hogv2WLgEahb?=
+ =?us-ascii?Q?uzfxOOb+l31CKUk3isLQxFKLHikieDjBYH2tuIz56pVrEB6TeNUNjzx0laeR?=
+ =?us-ascii?Q?NwnTcf1hl2t0cHiM1n+wpwxzJiakRED8YxpllK3rSyAsIXFqPSOhgA6mW/ML?=
+ =?us-ascii?Q?Zei+3CO4Ib/zy0naIdPTsvQaBNz673TKQVYtkAXDxBA4VJeLlNcOxiEMGUks?=
+ =?us-ascii?Q?FaovtA6zINrDeJdvpVYp4LFg7yoNu7G9ZP2UqMGbTu7K5aRMDTu75dXxZg/q?=
+ =?us-ascii?Q?yBMuvAI7ccO/iF+9RSzpEXJK+ePuY00tTYy2rH7SDZeZ1Igw7gNWDAX3Nxh7?=
+ =?us-ascii?Q?JqKekuV0muy/gNqYP3IsAifrKPRfZ8/WimSngX8gdLmdntGOv58ZGvL/eVUz?=
+ =?us-ascii?Q?a15X8y+DmPoNHdrrpuQrWOLV3yX80hJBsRLG1K9n5jjIiDL+Lbqg6w8K8Fs0?=
+ =?us-ascii?Q?ycA2P1Uo3kbAYfJix8OCGNcAyyOKvgn5BHhCdViN5J+4Ors6WSm4/ivf15aQ?=
+ =?us-ascii?Q?TuNT4QIYMjd4xgwvkmdFvtpebyRzuhH9oQ+5Uifjcx9qx1To2DAGLBtCXhLt?=
+ =?us-ascii?Q?bG4bFK1t2enxMA0ohJx8Llb3ATT/pxzwdLhYsIkDnHv0WwlzN5yULF6BPSFi?=
+ =?us-ascii?Q?67ccqg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 121dc24e-35fc-40ef-d3b5-08d9d23cd227
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2022 00:21:31.7206
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hJrIbXulQ6StTMUefIEOSghXVHMUcHA3M1qvNP8Wn0wFsKt3+1F+kDr7sIm3fxn3mrV4NXGNo7BkY0/h1coTwsAkIRYbPSyVYHSAYQr13x4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4680
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10220 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ phishscore=0 malwarescore=0 spamscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201070140
+X-Proofpoint-ORIG-GUID: dJYvrOy5FGYEB4YUnP6yYk60QYrINz8x
+X-Proofpoint-GUID: dJYvrOy5FGYEB4YUnP6yYk60QYrINz8x
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the late reply, I'm currently unemployed (for another week) and
-was spending all my time renovating my office. I finished my office and I'm
-now trying to get back up to speed.
 
-On Sun, 19 Dec 2021 12:07:23 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Eric,
 
+> Even new new RAID controlers that _do_ provide `io_opt` still do _not_ 
+> indicate partial_stripes_expensive (which is an mdraid feature, but Martin 
+> please correct me if I'm wrong here).
 
-> > > > +#include "trace_output.h"
-> > > > +#include <linux/freelist.h>
-> > > > +
-> > > > +static DEFINE_PER_CPU(atomic_t, trace_object_event_disable);  
-> > >
-> > > atomic_t is for atomic operation which must be shared among cpus. On the
-> > > other hand, per-cpu variable is used for the core-local storage or flags,
-> > > other cpus never touch it. Thus the per-cpu atomic_t is very strange.
-> > >  
-> > 
-> > From the patch V1, I cloned it from the  function_test_events_call()
-> > in kernel/trace/trace_events.c
-> > 
-> > commit: 9ea21c1ecdb35ecdcac5fd9d95f62a1f6a7ffec0
-> > tracing/events: perform function tracing in event selftests
-> > Author:     Steven Rostedt <srostedt@redhat.com>  
-> 
-> Hmm, OK.
+partial_stripes_expensive is a bcache thing, I am not sure why it needs
+a separate flag. It is implied, although I guess one could argue that
+RAID0 is a special case since partial writes are not as painful as with
+parity RAID.
 
-Ug, showing me my skeletons in my closet! That commit is from 2009, where I
-didn't know any better ;-)
+The SCSI spec states that submitting an I/O that is smaller than io_min
+"may incur delays in processing the command". And similarly, submitting
+a command larger than io_opt "may incur delays in processing the
+command".
 
-> 
-> > 
-> > It should be to prevent being preempted by the interrupt context in
-> > the process of adding one  
-> 
-> Yeah, I think so.
-> 
-> The commit says "some bugs" but it is not sure what actually needs to be
-> cared.
-> 
->     tracing/events: perform function tracing in event selftests
->     
->     We can find some bugs in the trace events if we stress the writes as well.
->     The function tracer is a good way to stress the events.
-> 
-> Steve, can you tell me what was the problem?
-> 
-> I think we don't need per-cpu atomic_t because the counter is increment
-> and decrement. Thus when quiting the nested ftrace handler on the same CPU,
-> the counter comes back to the same value. We don't need to care about
-> atomic increment.
-> 
-> I mean, if we use the normal per-cpu "unsigned int" as a counter, the
-> operation of "counter++" becomes;
+IOW, the spec says "don't write less than an aligned multiple of the
+stripe chunk size" and "don't write more than an aligned full
+stripe". That leaves "aligned multiples of the stripe chunk size but
+less than the full stripe width" unaccounted for. And I guess that's
+what the bcache flag is trying to capture.
 
-Yes, that was from the days of being extra paranoid. A simple counter would
-work, with a barrier() in place such that gcc doesn't cause any issues.
+SCSI doesn't go into details about RAID levels and other implementation
+details which is why the wording is deliberately vague. But obviously
+the expectation is that partial stripe writes are slower than full.
 
-I may have to go back and revisit all that code and clean it up a bit.
+In my book any component in the stack that sees either io_min or io_opt
+should try very hard to send I/Os that are aligned multiples of those
+values. I am not opposed to letting users manually twiddle the
+settings. But I do think that we should aim for the stack doing the
+right thing when it sees io_opt reported on a device.
 
-> 
-> load counter to reg1
-> [1]
-> reg1 = reg1 + 1
-> store reg1 to counter
-> 
-> And if an interrupt occurs at [1], the following happens.
-> 
-> load counter to reg1 # counter = 0
-> 
->   (interrupt - save reg1)
->   load counter to reg1  # counter = 0
->   reg1 = reg1 + 1
->   store reg1 to counter  # counter = 1
->   ...
->   load counter to reg1  # counter = 1
->   reg1 = reg1 - 1
->   store reg1 to counter  # counter = 0
->   (iret - restore reg1)
-> 
-> reg1 = reg1 + 1
-> store reg1 to counter
-> 
-> So, even if the operation is not atomic, there seems no problem.
-> What else scenario we have to worry?
-> 
-> (BTW, what is the ftrace_test_recursion_trylock()? Is that also
-> for detecting nesting case??)
-
-Yes, the ftrace_test_recursion_trylock() is for finding recursions.
-
-The above code is from the early days of ftrace, and was only used in
-testing at boot up. It's not something to copy from ;-)
-
-> 
-> > > > +static DEFINE_RAW_SPINLOCK(object_spin_lock);
-> > > > +static struct trace_event_file event_trace_file;
-> > > > +static const int max_args_num = 6;
-> > > > +static const int max_obj_pool = 10;
-> > > > +static atomic_t trace_object_ref;
-> > > > +static int exit_trace_object(void);
-> > > > +static int init_trace_object(void);
-> > > > +  
-> > >
-> > > Please add more comments to the code itself. Explain why this is needed
-> > > and how it works for which case. That will lead deeper understanding.
-> > >  
-> > 
-> > I agree, I will add more comments in the next version.
-> >   
-> > > > +struct object_instance {
-> > > > +     void *object;
-> > > > +     struct freelist_node free_list;
-> > > > +     struct list_head active_list;
-> > > > +};
-> > > > +
-> > > > +struct obj_pool {
-> > > > +     struct freelist_head free_list;
-> > > > +     struct list_head active_list;
-> > > > +};
-> > > > +static struct obj_pool *obj_pool;
-> > > > +
-> > > > +static bool object_exist(void *obj)
-> > > > +{
-> > > > +     struct object_instance *inst;
-> > > > +     bool ret = false;
-> > > > +
-> > > > +     list_for_each_entry_rcu(inst, &obj_pool->active_list, active_list) {
-> > > > +             if (inst->object == obj) {
-> > > > +                     ret = true;
-> > > > +                     goto out;
-> > > > +             }
-> > > > +     }
-> > > > +out:
-> > > > +     return ret;
-
-BTW, the above really should be:
-
-static bool object_exist(void *obj)
-{
-	struct object_instance *inst;
-
-	list_for_each_entry_rcu(inst, &obj_pool->active_list, active_list) {
-		if (inst->object == obj)
-			return true;
-	}
-	return false;
-}
-
--- Steve
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering

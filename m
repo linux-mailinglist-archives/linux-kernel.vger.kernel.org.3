@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F094882CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A438A4882D4
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbiAHJ2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S234031AbiAHJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiAHJ2i (ORCPT
+        with ESMTP id S231347AbiAHJb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:28:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBD7C061574;
-        Sat,  8 Jan 2022 01:28:38 -0800 (PST)
+        Sat, 8 Jan 2022 04:31:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028B9C061574;
+        Sat,  8 Jan 2022 01:31:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C669AB80761;
-        Sat,  8 Jan 2022 09:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B30FC36AF3;
-        Sat,  8 Jan 2022 09:28:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B12560B61;
+        Sat,  8 Jan 2022 09:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF2DC36AF4;
+        Sat,  8 Jan 2022 09:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641634115;
-        bh=y4ep/F5PBEWZUrYeJuA0/XjOUSWGAFc4NcKBSn7/XHA=;
+        s=k20201202; t=1641634286;
+        bh=jjD+NJPlawSx/AlIpPp/NXrmxDO2bZYxDhuTS6IqXlU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N69OittcDHFsKRVNTdEd4hgh4lOrW37sEYnQxnPKlWMdYJbuqH1hABOLImzSXp85w
-         WfjVJn+nZgKH0rHlLggoHcuwCpZqBcSIn15vVQwgyC4z3ih8kzsN3xUHChBVRrFa5b
-         zWoT5buC9prSdeu0ifvSBsLhXtFsX2nAaSdlgM6iDPGv4rtJ71JCxAgNv9JxgGSfCT
-         64OOQTIZPxzaQQGt+B+4tQJlcXs7LMnQWxHFfGb2YoOwxSKV9UBvdHJvMWHIhZ2oC+
-         3e69Klikw81LIHkHrQJA+auXL1ywytPzPjl3xaziDP+ZVq09qUihULL6b7rnheHkGr
-         Wr+hmDMyZhGDA==
-Received: by mail-wr1-f51.google.com with SMTP id w20so15816447wra.9;
-        Sat, 08 Jan 2022 01:28:35 -0800 (PST)
-X-Gm-Message-State: AOAM53356z8gG4FrqqPXUP8Txj2Iv5b2Q3lmA1t8JNG14f6NTywRjtLE
-        ieIL0w6IKrE8CHRDJKTHX/xqGzOz7CNb0RIsYR8=
-X-Google-Smtp-Source: ABdhPJyukHr4M5a6n/vBvBkRTI+74AD5T6HuJpUY4GGoeQfjhVfDWc17TiBkifGIHuX1VaYsc3hUH5MF6ZqGBR1YiuE=
-X-Received: by 2002:adf:fe08:: with SMTP id n8mr1294483wrr.417.1641634113765;
- Sat, 08 Jan 2022 01:28:33 -0800 (PST)
+        b=nXYn+P8OQrwu9P3f4K7G0ug1hT7+QGfHEzWTs/lAN5DSFFFYWu6FBiOvr06Xts/mQ
+         3qzxE1Nr31jlmNNvIbHS4hPcnBrPJW7F+ORGgtoTSnwokM9xTigMnOoJjoC+u3335B
+         2o/P9P/LYUa8LE2JPJa+k4hjCLUrEGetpEP0H1DPkKtdark8XDVz9SHg5DO3kdZByI
+         koGBiizop7a1ZNQJt2PijPssbshloMy5fHvNNfVAxoBx7J3jeqmv9NKO+qzy2qkWM7
+         dLBmchBvz63OE6vZh1jjyy0KFjLu41oS2cAfXoSYVy6d7NJ1JiDIzkY2hyWI+fDORS
+         K6yjyPvc5bxhw==
+Received: by mail-wr1-f46.google.com with SMTP id q8so15777477wra.12;
+        Sat, 08 Jan 2022 01:31:26 -0800 (PST)
+X-Gm-Message-State: AOAM532wNVb9wjoPNGZwVqb5NPsmMu4RNkLci8u06+/7QxMtxH7nml+a
+        MM/xrM/XqERqy1xf8FxT4HQMZ4GAfdDE156saBA=
+X-Google-Smtp-Source: ABdhPJxx2qmdR7NAzQD9V8jeJxYPy2vtISFzIOMS3FjflpBZ9EvhrL6zKLbCx5As2Kj2V3TQfjjrkP6hm71LtFvwKGk=
+X-Received: by 2002:a05:6000:154c:: with SMTP id 12mr57379330wry.447.1641634285039;
+ Sat, 08 Jan 2022 01:31:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20220105174953.2433019-1-keescook@chromium.org>
-In-Reply-To: <20220105174953.2433019-1-keescook@chromium.org>
+References: <20220107232746.1540130-1-keescook@chromium.org>
+In-Reply-To: <20220107232746.1540130-1-keescook@chromium.org>
 From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 8 Jan 2022 10:28:22 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFi=A+QZWom_CYDQ0UVPrB10MkxJFtQ=KT0HQNprgrUjw@mail.gmail.com>
-Message-ID: <CAMj1kXFi=A+QZWom_CYDQ0UVPrB10MkxJFtQ=KT0HQNprgrUjw@mail.gmail.com>
-Subject: Re: [PATCH v2] crypto: octeontx2 - Avoid stack variable overflow
+Date:   Sat, 8 Jan 2022 10:31:13 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFOqUuSUG=9g0Dd+m3yUfbtf7JG=CR2VP6i6AGXPPAa8Q@mail.gmail.com>
+Message-ID: <CAMj1kXFOqUuSUG=9g0Dd+m3yUfbtf7JG=CR2VP6i6AGXPPAa8Q@mail.gmail.com>
+Subject: Re: [PATCH] arm64: atomics: Dereference matching size
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Suheil Chandran <schandran@marvell.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Lukasz Bartosik <lbartosik@marvell.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -66,93 +60,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 at 18:50, Kees Cook <keescook@chromium.org> wrote:
+On Sat, 8 Jan 2022 at 00:28, Kees Cook <keescook@chromium.org> wrote:
 >
-> Building with -Warray-bounds showed a stack variable array index
-> overflow. Increase the expected size of the array to avoid the warning:
+> When building with -Warray-bounds (which is desired to be enabled
+> globally), the following warning is generated:
 >
-> In file included from ./include/linux/printk.h:555,
->                  from ./include/asm-generic/bug.h:22,
->                  from ./arch/x86/include/asm/bug.h:84,
->                  from ./include/linux/bug.h:5,
->                  from ./include/linux/mmdebug.h:5,
->                  from ./include/linux/gfp.h:5,
->                  from ./include/linux/firmware.h:7,
->                  from drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:5:
-> drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c: In function 'otx2_cpt_print_uc_dbg_info':
-> ./include/linux/dynamic_debug.h:162:33: warning: array subscript 4 is above array bounds of 'u32[4]' {aka 'unsigned int[4]'} [-Warray-bounds]
->   162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
->       |                                 ^
-> ./include/linux/dynamic_debug.h:134:17: note: in definition of macro '__dynamic_func_call'
->   134 |                 func(&id, ##__VA_ARGS__);               \
->       |                 ^~~~
-> ./include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
->   162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
->       |         ^~~~~~~~~~~~~~~~~~
-> ./include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
->   570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
->       |         ^~~~~~~~~~~~~~~~
-> drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1807:41: note: in expansion of macro 'pr_debug'
->  1807 |                                         pr_debug("Mask: %8.8x %8.8x %8.8x %8.8x %8.8x",
->       |                                         ^~~~~~~~
-> drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1765:13: note: while referencing 'mask'
->  1765 |         u32 mask[4];
->       |             ^~~~
+> In file included from ./arch/arm64/include/asm/lse.h:16,
+>                  from ./arch/arm64/include/asm/cmpxchg.h:14,
+>                  from ./arch/arm64/include/asm/atomic.h:16,
+>                  from ./include/linux/atomic.h:7,
+>                  from ./include/asm-generic/bitops/atomic.h:5,
+>                  from ./arch/arm64/include/asm/bitops.h:25,
+>                  from ./include/linux/bitops.h:33,
+>                  from ./include/linux/kernel.h:22,
+>                  from kernel/printk/printk.c:22:
+> ./arch/arm64/include/asm/atomic_lse.h:247:9: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'atomic_t[1]' [-Warray-bounds]
+>   247 |         asm volatile(                                                   \
+>       |         ^~~
+> ./arch/arm64/include/asm/atomic_lse.h:266:1: note: in expansion of macro '__CMPXCHG_CASE'
+>   266 | __CMPXCHG_CASE(w,  , acq_, 32,  a, "memory")
+>       | ^~~~~~~~~~~~~~
+> kernel/printk/printk.c:3606:17: note: while referencing 'printk_cpulock_owner'
+>  3606 | static atomic_t printk_cpulock_owner = ATOMIC_INIT(-1);
+>       |                 ^~~~~~~~~~~~~~~~~~~~
 >
-> This is justified because the mask size (eng_grps->engs_num) can be at
-> most 144 (OTX2_CPT_MAX_ENGINES bits), which is larger than available
-> storage. 4 * 32 == 128, so this must be 5: 5 * 32bit = 150.
+> This is due to the compiler seeing an unsigned long * cast against
+> something (atomic_t) that is int sized. Replace the cast with the
+> matching size cast. This results in no change in binary output.
 >
-
-160
-
-> Additionally clear the mask before conversion so trailing bits are zero.
->
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Boris Brezillon <bbrezillon@kernel.org>
-> Cc: Arnaud Ebalard <arno@natisbad.org>
-> Cc: Srujana Challa <schalla@marvell.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Suheil Chandran <schandran@marvell.com>
-> Cc: Shijith Thotton <sthotton@marvell.com>
-> Cc: Lukasz Bartosik <lbartosik@marvell.com>
-> Cc: linux-crypto@vger.kernel.org
-> Fixes: d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups")
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
 > ---
-> v1: https://lore.kernel.org/lkml/20211215225558.1995027-1-keescook@chromium.org/
-> v2:
->  - expliticly zero "mask"
->  - explain math in commit log
->  - move definition into local context
-> ---
->  drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/arm64/include/asm/atomic_lse.h | 2 +-
+>  arch/arm64/include/asm/cmpxchg.h    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-> index 4c8ebdf671ca..1b4d425bbf0e 100644
-> --- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-> +++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-> @@ -1753,7 +1753,6 @@ void otx2_cpt_print_uc_dbg_info(struct otx2_cptpf_dev *cptpf)
->         char engs_info[2 * OTX2_CPT_NAME_LENGTH];
->         struct otx2_cpt_eng_grp_info *grp;
->         struct otx2_cpt_engs_rsvd *engs;
-> -       u32 mask[4];
->         int i, j;
+> diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
+> index d955ade5df7c..5d460f6b7675 100644
+> --- a/arch/arm64/include/asm/atomic_lse.h
+> +++ b/arch/arm64/include/asm/atomic_lse.h
+> @@ -249,7 +249,7 @@ __lse__cmpxchg_case_##name##sz(volatile void *ptr,                  \
+>         "       mov     %" #w "[tmp], %" #w "[old]\n"                   \
+>         "       cas" #mb #sfx "\t%" #w "[tmp], %" #w "[new], %[v]\n"    \
+>         "       mov     %" #w "[ret], %" #w "[tmp]"                     \
+> -       : [ret] "+r" (x0), [v] "+Q" (*(unsigned long *)ptr),            \
+> +       : [ret] "+r" (x0), [v] "+Q" (*(u##sz *)ptr),                    \
+>           [tmp] "=&r" (tmp)                                             \
+>         : [old] "r" (x1), [new] "r" (x2)                                \
+>         : cl);                                                          \
+> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
+> index f9bef42c1411..497acf134d99 100644
+> --- a/arch/arm64/include/asm/cmpxchg.h
+> +++ b/arch/arm64/include/asm/cmpxchg.h
+> @@ -243,7 +243,7 @@ static inline void __cmpwait_case_##sz(volatile void *ptr,          \
+>         "       cbnz    %" #w "[tmp], 1f\n"                             \
+>         "       wfe\n"                                                  \
+>         "1:"                                                            \
+> -       : [tmp] "=&r" (tmp), [v] "+Q" (*(unsigned long *)ptr)           \
+> +       : [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)                   \
+>         : [val] "r" (val));                                             \
+>  }
 >
->         pr_debug("Engine groups global info");
-> @@ -1785,6 +1784,8 @@ void otx2_cpt_print_uc_dbg_info(struct otx2_cptpf_dev *cptpf)
->                 for (j = 0; j < OTX2_CPT_MAX_ETYPES_PER_GRP; j++) {
->                         engs = &grp->engs[j];
->                         if (engs->type) {
-> +                               u32 mask[5] = { };
-> +
->                                 get_engs_info(grp, engs_info,
->                                               2 * OTX2_CPT_NAME_LENGTH, j);
->                                 pr_debug("Slot%d: %s", j, engs_info);
 > --
 > 2.30.2
 >
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

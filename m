@@ -2,65 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A40487FCD
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AF4487FCE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiAHACL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 19:02:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55670 "EHLO
+        id S229633AbiAHACg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 19:02:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55818 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiAHACK (ORCPT
+        with ESMTP id S229529AbiAHACf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 19:02:10 -0500
+        Fri, 7 Jan 2022 19:02:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45CACB827B7;
-        Sat,  8 Jan 2022 00:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DFADBC36AE9;
-        Sat,  8 Jan 2022 00:02:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC6A7B827BA
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956B2C36AE5;
+        Sat,  8 Jan 2022 00:02:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641600127;
-        bh=I20x4Wyk5/OEgv0aB7SmYSXRN4pt2WIGX2rzKyoO5Bs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=muE/+lZacqB1IZIM/MuWz6CE7BmcNJzXW7d25CrPgf+Gvh3ZV75PKgVbRgipb0rd2
-         /I1emWrwm1CjCI0/YZNG7jCa4gXIWmqo9J30Odeg89QtmDaGEI20FAO/jQ6/9BFv+n
-         0sltFri1SwsiYfrnrdLwj9CJSzHRkP9kC+/crP94DlHUSyBHjRHX10xxsI1UqYuYgw
-         Mwp6S2mdO4bDgcCUHoFkcn5KLy+9XhYL9kGrd4ItprEUUsW5Rve0+SGR1bf4WrC5dM
-         uQhZjDg1DgdjgXoSiy4wfH+xtiga2Ccfv2vF9rfBw5NG2Dx+CKUnanjlKf5wMUQyr/
-         eMNhiv5mF2n5A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC4C3F79407;
-        Sat,  8 Jan 2022 00:02:07 +0000 (UTC)
-Subject: Re: [GIT PULL] cgroup fixes for v5.16-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YdjAAK4AtsUDv5vw@slm.duckdns.org>
-References: <YdjAAK4AtsUDv5vw@slm.duckdns.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YdjAAK4AtsUDv5vw@slm.duckdns.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.16-fixes
-X-PR-Tracked-Commit-Id: bf35a7879f1dfb0d050fe779168bcf25c7de66f5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d1587f7bfe9a0f97a75d42ac1489aeda551106bc
-Message-Id: <164160012782.14023.3781753125840093469.pr-tracker-bot@kernel.org>
-Date:   Sat, 08 Jan 2022 00:02:07 +0000
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+        s=k20201202; t=1641600153;
+        bh=xYWsaBpg8GJluGfp56NCYqYBUSwqnZhGsPKLc7bt8ZE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hnvG9ccPNutq8WQ8cn98dUlt59RPBl7cgL+d2S27cHbmXB8OH3veyMDPXUNTgJd/V
+         XTroRC5a74pCiDDdlma4Ly3Zlg8KVOL5q2eomeNZzhCp4Sm14aSNvtFTo9BE/8lhkK
+         WxRNhWppCEQv73u61k3YMPrEgWrBBsuhQhvCeOrFWpt5s7o1+MqULZnAwaZWe8j16B
+         GyJWPLr8dNf+Scmp4HAftWXHdQnP3UIS7TmzFcJ1OddI75Oc9EG2KlVpi/3Y/DNhp7
+         LodQN8DLp+uSO3ES2H7VH1r58eUrm0jPW7+2stzyLWTRPoIxjFJN/weUUSeSZFj8oQ
+         CMsZHVqEalLYQ==
+Message-ID: <37ce01e8-43eb-7eff-9667-745e17cdd65f@kernel.org>
+Date:   Fri, 7 Jan 2022 16:02:27 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v1 3/3] Documentation: x86-64: Document registers on entry
+ and exit
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        Michael Matz <matz@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, Willy Tarreau <w@1wt.eu>
+References: <20220107235210.1339168-1-ammarfaizi2@gnuweeb.org>
+ <20220107235210.1339168-4-ammarfaizi2@gnuweeb.org>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <20220107235210.1339168-4-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 7 Jan 2022 12:34:40 -1000:
+On 1/7/22 15:52, Ammar Faizi wrote:
+> There was a controversial discussion about the wording in the System
+> V ABI document regarding what registers the kernel is allowed to
+> clobber when the userspace executes syscall.
+> 
+> The resolution of the discussion was reviewing the clobber list in
+> the glibc source. For a historical reason in the glibc source, the
+> kernel must restore all registers before returning to the userspace
+> (except for rax, rcx and r11).
+> 
+> On Wed, 13 Oct 2021 at 16:24:28 +0000, Michael Matz <matz@suse.de> wrote:
+>> It might also be interesting to know that while the wording of the psABI
+>> was indeed intended to imply that all argument registers are potentially
+>> clobbered (like with normal calls) glibc's inline assembler to call
+>> syscalls relies on most registers to actually be preserved:
+>>
+>> # define REGISTERS_CLOBBERED_BY_SYSCALL "cc", "r11", "cx"
+>> ...
+>> #define internal_syscall6(number, arg1, arg2, arg3, arg4, arg5, arg6) \
+>> ({                                                                      \
+>>      unsigned long int resultvar;                                        \
+>>      TYPEFY (arg6, __arg6) = ARGIFY (arg6);                              \
+>>      TYPEFY (arg5, __arg5) = ARGIFY (arg5);                              \
+>>      TYPEFY (arg4, __arg4) = ARGIFY (arg4);                              \
+>>      TYPEFY (arg3, __arg3) = ARGIFY (arg3);                              \
+>>      TYPEFY (arg2, __arg2) = ARGIFY (arg2);                              \
+>>      TYPEFY (arg1, __arg1) = ARGIFY (arg1);                              \
+>>      register TYPEFY (arg6, _a6) asm ("r9") = __arg6;                    \
+>>      register TYPEFY (arg5, _a5) asm ("r8") = __arg5;                    \
+>>      register TYPEFY (arg4, _a4) asm ("r10") = __arg4;                   \
+>>      register TYPEFY (arg3, _a3) asm ("rdx") = __arg3;                   \
+>>      register TYPEFY (arg2, _a2) asm ("rsi") = __arg2;                   \
+>>      register TYPEFY (arg1, _a1) asm ("rdi") = __arg1;                   \
+>>      asm volatile (                                                      \
+>>      "syscall\n\t"                                                       \
+>>      : "=a" (resultvar)                                                  \
+>>      : "0" (number), "r" (_a1), "r" (_a2), "r" (_a3), "r" (_a4),         \
+>>        "r" (_a5), "r" (_a6)                                              \
+>>      : "memory", REGISTERS_CLOBBERED_BY_SYSCALL);                        \
+>>      (long int) resultvar;                                               \
+>> })
+>>
+>>
+>> Note in particular the missing clobbers or outputs of any of the argument
+>> regs.
+>>
+>> So, even though the psABI (might have) meant something else, as glibc is
+>> doing the above we in fact have a de-facto standard that the kernel can't
+>> clobber any of the argument regs.  The wording and the linux x86-64
+>> syscall implementation (and use in glibc) all come from the same time in
+>> 2001, so there never was a time when the kernel was not saving/restoring
+>> the arg registers, so it can't stop now.
+>>
+>> In effect this means the psABI should be clarified to explicitely say the
+>> the arg registers aren't clobbered, i.e. that the mentioned list of
+>> clobbered regs isn't inclusive but exclusive.  I will do that.
+>>
+>> When I was discussing this with Boris earlier I hadn't yet looked at glibc
+>> use but only gave my interpretation from memory and reading.  Obviously
+>> reality trumps anything like that :-)
+> 
+> Link: https://lore.kernel.org/lkml/alpine.LSU.2.20.2110131601000.26294@wotan.suse.de/
+> Link: https://gitlab.com/x86-psABIs/x86-64-ABI/-/merge_requests/25
+> 
+> This documents "registers on entry" and "registers on exit".
+> 
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Michael Matz <matz@suse.de>
+> Cc: "H.J. Lu" <hjl.tools@gmail.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Willy Tarreau <w@1wt.eu>
+> Cc: x86-ml <x86@kernel.org>
+> Cc: lkml <linux-kernel@vger.kernel.org>
+> Cc: GNU/Weeb Mailing List <gwml@gnuweeb.org>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+>   Documentation/x86/entry_64.rst | 47 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 47 insertions(+)
+> 
+> diff --git a/Documentation/x86/entry_64.rst b/Documentation/x86/entry_64.rst
+> index e433e08f7018..3f2007e2a938 100644
+> --- a/Documentation/x86/entry_64.rst
+> +++ b/Documentation/x86/entry_64.rst
+> @@ -108,3 +108,50 @@ We try to only use IST entries and the paranoid entry code for vectors
+>   that absolutely need the more expensive check for the GS base - and we
+>   generate all 'normal' entry points with the regular (faster) paranoid=0
+>   variant.
+> +
+> +
+> +Registers on entry:
+> +-------------------
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.16-fixes
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d1587f7bfe9a0f97a75d42ac1489aeda551106bc
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+This is SYSCALL64 registers on entry, not general registers on entry. 
+Also, this has little to do with the entry logic, so it probably doesn't 
+belong in this file.

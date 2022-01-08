@@ -2,117 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5082B488453
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705DD488455
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbiAHPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 10:50:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44236 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233948AbiAHPuL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 10:50:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641657010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nutHqRyjAUxs0OigylRB1piW55HI8TWHHwTVtcKgRN8=;
-        b=fGZB5zbsX0GfqthVikzZQCgMybG5NOq5Q0JwqehAS4rCm874VZTE3tjQJdwJ3Jk/xTcPm6
-        OeuMHwGZ5EBv2OCs3+LYO0KR4hrTxEUgPpVI0diok0M3nfciMGLbIgWgQyVsRyTVfMveBi
-        x2GjfGyXb1qyvBgmJN/cu9O5nF/zTC8=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-57-P-RHVBGVMaaShUxOPGVmoQ-1; Sat, 08 Jan 2022 10:50:09 -0500
-X-MC-Unique: P-RHVBGVMaaShUxOPGVmoQ-1
-Received: by mail-oo1-f69.google.com with SMTP id q6-20020a4a3306000000b002daad7a3be2so6130312ooq.11
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 07:50:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nutHqRyjAUxs0OigylRB1piW55HI8TWHHwTVtcKgRN8=;
-        b=QtnxEQxtwp2w9z/qUJPvpHUTMej0D36pJlez9NXptjEgEjPk/sOUDEjTA+5DYM6Y1U
-         37RCqBNwwb0UZKyp0ozs4zrCkmERj0DYwi+lttIjj80wtkxfuOPdCoI4Smj8va/TEWmM
-         L+ZGwm0+FYg/NNQwa98W+AWuIz4W2/yWLdTTbEb5sGEuPA9KX8A3ZJTN1/TiVCu8W3Ni
-         f8EbVYUo86Z8KMHWXwPMFwVVR3E1sus2AuO5FUVF2T5ltaHR6/PpZvqAg5Q59SgnhFKN
-         SEKWeijQyV/3qE67fb734iP9C7utHeTQI3/S7ag36PyeGyaAB2rzJZvPDpNwthJQFoNx
-         cQSg==
-X-Gm-Message-State: AOAM533OpvQ2aD5251nDXqhjw3dhu21ZnT+9luV390o52QzL7oZUQ2nb
-        9SZR+Nvpf+w/gf8EYY1SbgUFTDSkR0a5i1sxIQkfL8Dq7sxRIif06G4O9FfVbqdvfr/KUT/uLXO
-        ruaxERQRhPvFUMfL/yVQzlBH6
-X-Received: by 2002:a4a:d5d5:: with SMTP id a21mr43792304oot.43.1641657008670;
-        Sat, 08 Jan 2022 07:50:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwDAnHZJpVjRqSRJBkvJ07yYIEgasx5S6n/t1vzZoDi6lprUw7Ku1TMowLE/zzd5lBQtwBZWg==
-X-Received: by 2002:a4a:d5d5:: with SMTP id a21mr43792283oot.43.1641657008487;
-        Sat, 08 Jan 2022 07:50:08 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q13sm384815otf.76.2022.01.08.07.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 07:50:08 -0800 (PST)
-From:   trix@redhat.com
-To:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
-        Mark-MC.Lee@mediatek.com, davem@davemloft.net, kuba@kernel.org,
-        matthias.bgg@gmail.com, linux@armlinux.org.uk, nathan@kernel.org,
-        ndesaulniers@google.com, opensource@vdorst.com
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: ethernet: mtk_eth_soc: fix error checking in mtk_mac_config()
-Date:   Sat,  8 Jan 2022 07:50:03 -0800
-Message-Id: <20220108155003.3991055-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S234621AbiAHPvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 10:51:01 -0500
+Received: from mga04.intel.com ([192.55.52.120]:44194 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231809AbiAHPvB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 10:51:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641657061; x=1673193061;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ankn6rVKgrmIkAESFcefa40Sl2JXrtbBTyfCDCjU4Lc=;
+  b=NHq703l8/XFdEMCmLXvRROFJ2ZM2RM5MkIeCzqmBWiofPG1lFIjK4Ndk
+   mQBys/ESzqTpsJSBbwaMssWp7PrrEt0l1odxXgVnwOzeUFKgeTMNVYTlO
+   IYtafWJtCi2WFB9DX+c9JXmQuHwx9HvO0tMK+n7a5tBd+7jyRPyDd52up
+   f/hja8mtApuzOZ+SlMx3nh/4aSn4jKwiRc89gvy9K3q6YGt+RkPFpOoi6
+   Cmh5zPQcP3zuzD7yU2p3/d/7eRKWRkslO5b1U9WeEm1+jStokjwdIKnf6
+   tx4lGFC4JN6Ncs174g8aKRiWLp7w5rlTsO8/zDwdnywlrdA6thqs7XAaE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="241836364"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="241836364"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 07:51:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="690114625"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 Jan 2022 07:50:59 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6Dze-0000lk-JF; Sat, 08 Jan 2022 15:50:58 +0000
+Date:   Sat, 8 Jan 2022 23:50:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 2172/2300] arch/x86/kernel/cpu/mtrr/mtrr.c:570:5:
+ warning: no previous prototype for function 'arch_phys_wc_add'
+Message-ID: <202201082308.u0u4twP0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   4e348e961395297bb17f101cc63bc133d8a348e9
+commit: f6af87b875ceb9038ddcf363e00fd00940498ac0 [2172/2300] headers/deps: mm: Optimize <linux/dmapool.h> dependencies, remove <linux/scatterlist.h> and <asm/io.h> inclusion
+config: i386-randconfig-r031-20220108 (https://download.01.org/0day-ci/archive/20220108/202201082308.u0u4twP0-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f6af87b875ceb9038ddcf363e00fd00940498ac0
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout f6af87b875ceb9038ddcf363e00fd00940498ac0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/cpu/mtrr/
 
-Clang static analysis reports this problem
-mtk_eth_soc.c:394:7: warning: Branch condition evaluates
-  to a garbage value
-                if (err)
-                    ^~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-err is not initialized and only conditionally set.
-Check err consistently with the rest of mtk_mac_config(),
-after even possible setting.
+All warnings (new ones prefixed by >>):
 
-Fixes: 7e538372694b ("net: ethernet: mediatek: Re-add support SGMII")
-Signed-off-by: Tom Rix <trix@redhat.com>
+>> arch/x86/kernel/cpu/mtrr/mtrr.c:570:5: warning: no previous prototype for function 'arch_phys_wc_add' [-Wmissing-prototypes]
+   int arch_phys_wc_add(unsigned long base, unsigned long size)
+       ^
+   arch/x86/kernel/cpu/mtrr/mtrr.c:570:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int arch_phys_wc_add(unsigned long base, unsigned long size)
+   ^
+   static 
+>> arch/x86/kernel/cpu/mtrr/mtrr.c:596:6: warning: no previous prototype for function 'arch_phys_wc_del' [-Wmissing-prototypes]
+   void arch_phys_wc_del(int handle)
+        ^
+   arch/x86/kernel/cpu/mtrr/mtrr.c:596:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void arch_phys_wc_del(int handle)
+   ^
+   static 
+>> arch/x86/kernel/cpu/mtrr/mtrr.c:616:5: warning: no previous prototype for function 'arch_phys_wc_index' [-Wmissing-prototypes]
+   int arch_phys_wc_index(int handle)
+       ^
+   arch/x86/kernel/cpu/mtrr/mtrr.c:616:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int arch_phys_wc_index(int handle)
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +/arch_phys_wc_add +570 arch/x86/kernel/cpu/mtrr/mtrr.c
+
+^1da177e4c3f41 arch/i386/kernel/cpu/mtrr/main.c Linus Torvalds    2005-04-16  554  
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  555  /**
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  556   * arch_phys_wc_add - add a WC MTRR and handle errors if PAT is unavailable
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  557   * @base: Physical base address
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  558   * @size: Size of region
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  559   *
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  560   * If PAT is available, this does nothing.  If PAT is unavailable, it
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  561   * attempts to add a WC MTRR covering size bytes starting at base and
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  562   * logs an error if this fails.
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  563   *
+2f9e897353fcb9 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26  564   * The called should provide a power of two size on an equivalent
+2f9e897353fcb9 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26  565   * power of two boundary.
+2f9e897353fcb9 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26  566   *
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  567   * Drivers must store the return value to pass to mtrr_del_wc_if_needed,
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  568   * but drivers should not try to interpret that return value.
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  569   */
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13 @570  int arch_phys_wc_add(unsigned long base, unsigned long size)
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  571  {
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  572  	int ret;
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  573  
+cb32edf65bf219 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26  574  	if (pat_enabled() || !mtrr_enabled())
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  575  		return 0;  /* Success!  (We don't need to do anything.) */
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  576  
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  577  	ret = mtrr_add(base, size, MTRR_TYPE_WRCOMB, true);
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  578  	if (ret < 0) {
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  579  		pr_warn("Failed to add WC MTRR for [%p-%p]; performance may suffer.",
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  580  			(void *)base, (void *)(base + size - 1));
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  581  		return ret;
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  582  	}
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  583  	return ret + MTRR_TO_PHYS_WC_OFFSET;
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  584  }
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  585  EXPORT_SYMBOL(arch_phys_wc_add);
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  586  
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  587  /*
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  588   * arch_phys_wc_del - undoes arch_phys_wc_add
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  589   * @handle: Return value from arch_phys_wc_add
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  590   *
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  591   * This cleans up after mtrr_add_wc_if_needed.
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  592   *
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  593   * The API guarantees that mtrr_del_wc_if_needed(error code) and
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  594   * mtrr_del_wc_if_needed(0) do nothing.
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  595   */
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13 @596  void arch_phys_wc_del(int handle)
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  597  {
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  598  	if (handle >= 1) {
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  599  		WARN_ON(handle < MTRR_TO_PHYS_WC_OFFSET);
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  600  		mtrr_del(handle - MTRR_TO_PHYS_WC_OFFSET, 0, 0);
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  601  	}
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  602  }
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  603  EXPORT_SYMBOL(arch_phys_wc_del);
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  604  
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  605  /*
+7d010fdf299929 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26  606   * arch_phys_wc_index - translates arch_phys_wc_add's return value
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  607   * @handle: Return value from arch_phys_wc_add
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  608   *
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  609   * This will turn the return value from arch_phys_wc_add into an mtrr
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  610   * index suitable for debugging.
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  611   *
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  612   * Note: There is no legitimate use for this function, except possibly
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  613   * in printk line.  Alas there is an illegitimate use in some ancient
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  614   * drm ioctls.
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  615   */
+7d010fdf299929 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26 @616  int arch_phys_wc_index(int handle)
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  617  {
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  618  	if (handle < MTRR_TO_PHYS_WC_OFFSET)
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  619  		return -1;
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  620  	else
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  621  		return handle - MTRR_TO_PHYS_WC_OFFSET;
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  622  }
+7d010fdf299929 arch/x86/kernel/cpu/mtrr/main.c  Luis R. Rodriguez 2015-05-26  623  EXPORT_SYMBOL_GPL(arch_phys_wc_index);
+d0d98eedee2178 arch/x86/kernel/cpu/mtrr/main.c  Andy Lutomirski   2013-05-13  624  
+
+:::::: The code at line 570 was first introduced by commit
+:::::: d0d98eedee2178c803dd824bb09f52b0e2ac1811 Add arch_phys_wc_{add, del} to manipulate WC MTRRs if needed
+
+:::::: TO: Andy Lutomirski <luto@amacapital.net>
+:::::: CC: Dave Airlie <airlied@redhat.com>
+
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index b67b4323cff08..a27e548488584 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -385,14 +385,16 @@ static void mtk_mac_config(struct phylink_config *config, unsigned int mode,
- 		       0 : mac->id;
- 
- 		/* Setup SGMIISYS with the determined property */
--		if (state->interface != PHY_INTERFACE_MODE_SGMII)
-+		if (state->interface != PHY_INTERFACE_MODE_SGMII) {
- 			err = mtk_sgmii_setup_mode_force(eth->sgmii, sid,
- 							 state);
--		else if (phylink_autoneg_inband(mode))
-+			if (err)
-+				goto init_err;
-+		} else if (phylink_autoneg_inband(mode)) {
- 			err = mtk_sgmii_setup_mode_an(eth->sgmii, sid);
--
--		if (err)
--			goto init_err;
-+			if (err)
-+				goto init_err;
-+		}
- 
- 		regmap_update_bits(eth->ethsys, ETHSYS_SYSCFG0,
- 				   SYSCFG0_SGMII_MASK, val);
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

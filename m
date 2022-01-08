@@ -2,264 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD1C48823E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DA0488233
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbiAHHz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 02:55:27 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:18468 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233665AbiAHHz0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 02:55:26 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1641628526; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=ETGeSzFGnLOfUFkpuQ8JPsoi7tFFJl/Lj4L8F3wSPws=; b=j3r4wTY0wyGPO1xmoEGAw+gmrfiRPooLSgVL7BFDyLaQYAOOBwwChcdx0g5Wy/qy34yQo1fx
- v2SpAlX5TTZqZA7No8Lbpo2LkL5Qn9sHp9hvEFBH0bzMUuTn23BUhJ7JyPCHlVCA+UvOXKuC
- md4JIz6Xjj5XFkpwNBaaU0xVmK8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 61d9436d305e503c096fa26d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 08 Jan 2022 07:55:25
- GMT
-Sender: Vijayanand=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D3CE2C43616; Sat,  8 Jan 2022 07:55:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        FROM_ADDR_WS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: vjitta)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7FCE1C4338F;
-        Sat,  8 Jan 2022 07:55:21 +0000 (UTC)
-From:   Vijayanand@codeaurora.org, Jitta@codeaurora.org
-To:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, vjitta@codeaurora.org,
-        Vijayanand Jitta <quic_vjitta@quicinc.com>
-Subject: [PATCH v2] iommu: Fix potential use-after-free during probe
-Date:   Sat,  8 Jan 2022 13:25:12 +0530
-Message-Id: <1641628512-31572-1-git-send-email-quic_vjitta@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        id S233778AbiAHIAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 03:00:30 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:35416 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233769AbiAHIAZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 03:00:25 -0500
+Received: by mail-io1-f71.google.com with SMTP id 123-20020a6b1481000000b006044f43fba9so5987371iou.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 00:00:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=zoA6QDxz3PS7MAyLWApYsQnm2pFkixHDdjsPGCEpEk0=;
+        b=li5raxyEWPkaAetyUhJ4dTFooN4AYknyJ2BkOHOwvqoYw2kM7PAdn4PzWJjwX0T/Zt
+         IWOfgBSm3k3nzXg4oALRbWlfZ4VZQJ5TfYovrJHKg1jcApSQeDeZ5ik5WK+xPW/a4smg
+         xqwtwJWkQH9oq8Lq9FWy8O++wOseMgLDeDxWqStDmduXhJc16wlaZROP/Kdi5B4g4dkc
+         PYdtofMnopTrGeLroIToE7Rx6+unA3nJ8ZGXNnN6WAiHnp2KNMzzW0qbZK0NT+g3vBGb
+         H/nNCxhICh44XgdPfvI6Gkw3w3vAu1nb1+x+BHnqe9LUY3z3HsWPwQz6gmeoE28Km9iN
+         wHiQ==
+X-Gm-Message-State: AOAM531R8BWaR3TVytrPV3K5cLp3jXhfW/aiNifdqG22Sv2T3mz7BBdV
+        4d5Ni22rJI4iMorLS7EEwQ7ZqMw7pu6GoX4gmZh/q2C+mTY0
+X-Google-Smtp-Source: ABdhPJxxpIIw13W+L4C0NlnaAdtY0cniTk8F77x4I1lVeU+b4ButZnGQ6oEy6MS0PSxZFLkoX7rS/l+itUJumD6f0ADmOF3fZEVX
+MIME-Version: 1.0
+X-Received: by 2002:a92:dc8c:: with SMTP id c12mr29429570iln.43.1641628825031;
+ Sat, 08 Jan 2022 00:00:25 -0800 (PST)
+Date:   Sat, 08 Jan 2022 00:00:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f81aa305d50d7e4c@google.com>
+Subject: [syzbot] KMSAN: uninit-value in sctp_inq_pop (2)
+From:   syzbot <syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
+        nhorman@tuxdriver.com, syzkaller-bugs@googlegroups.com,
+        vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijayanand Jitta <quic_vjitta@quicinc.com>
+Hello,
 
-Kasan has reported the following use after free on dev->iommu.
-when a device probe fails and it is in process of freeing dev->iommu
-in dev_iommu_free function, a deferred_probe_work_func runs in parallel
-and tries to access dev->iommu->fwspec in of_iommu_configure path thus
-causing use after free.
+syzbot found the following issue on:
 
-BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
-Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
+HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=15dad2c3b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=70a42f45e76bede082be
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173a7b0db00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14de2ffdb00000
 
-Workqueue: events_unbound deferred_probe_work_func
-Call trace:
- dump_backtrace+0x0/0x33c
- show_stack+0x18/0x24
- dump_stack_lvl+0x16c/0x1e0
- print_address_description+0x84/0x39c
- __kasan_report+0x184/0x308
- kasan_report+0x50/0x78
- __asan_load8+0xc0/0xc4
- of_iommu_configure+0xb4/0x4a4
- of_dma_configure_id+0x2fc/0x4d4
- platform_dma_configure+0x40/0x5c
- really_probe+0x1b4/0xb74
- driver_probe_device+0x11c/0x228
- __device_attach_driver+0x14c/0x304
- bus_for_each_drv+0x124/0x1b0
- __device_attach+0x25c/0x334
- device_initial_probe+0x24/0x34
- bus_probe_device+0x78/0x134
- deferred_probe_work_func+0x130/0x1a8
- process_one_work+0x4c8/0x970
- worker_thread+0x5c8/0xaec
- kthread+0x1f8/0x220
- ret_from_fork+0x10/0x18
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+70a42f45e76bede082be@syzkaller.appspotmail.com
 
-Allocated by task 1:
- ____kasan_kmalloc+0xd4/0x114
- __kasan_kmalloc+0x10/0x1c
- kmem_cache_alloc_trace+0xe4/0x3d4
- __iommu_probe_device+0x90/0x394
- probe_iommu_group+0x70/0x9c
- bus_for_each_dev+0x11c/0x19c
- bus_iommu_probe+0xb8/0x7d4
- bus_set_iommu+0xcc/0x13c
- arm_smmu_bus_init+0x44/0x130 [arm_smmu]
- arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
- platform_drv_probe+0xe4/0x13c
- really_probe+0x2c8/0xb74
- driver_probe_device+0x11c/0x228
- device_driver_attach+0xf0/0x16c
- __driver_attach+0x80/0x320
- bus_for_each_dev+0x11c/0x19c
- driver_attach+0x38/0x48
- bus_add_driver+0x1dc/0x3a4
- driver_register+0x18c/0x244
- __platform_driver_register+0x88/0x9c
- init_module+0x64/0xff4 [arm_smmu]
- do_one_initcall+0x17c/0x2f0
- do_init_module+0xe8/0x378
- load_module+0x3f80/0x4a40
- __se_sys_finit_module+0x1a0/0x1e4
- __arm64_sys_finit_module+0x44/0x58
- el0_svc_common+0x100/0x264
- do_el0_svc+0x38/0xa4
- el0_svc+0x20/0x30
- el0_sync_handler+0x68/0xac
- el0_sync+0x160/0x180
+netlink: 244 bytes leftover after parsing attributes in process `syz-executor678'.
+=====================================================
+BUG: KMSAN: uninit-value in sctp_inq_pop+0x15c8/0x18f0 net/sctp/inqueue.c:205
+ sctp_inq_pop+0x15c8/0x18f0 net/sctp/inqueue.c:205
+ sctp_assoc_bh_rcv+0x1fa/0xdd0 net/sctp/associola.c:1000
+ sctp_inq_push+0x31c/0x440 net/sctp/inqueue.c:80
+ sctp_backlog_rcv+0x30f/0x10b0 net/sctp/input.c:344
+ sk_backlog_rcv include/net/sock.h:1030 [inline]
+ __release_sock+0x256/0x640 net/core/sock.c:2768
+ release_sock+0x98/0x2e0 net/core/sock.c:3300
+ sctp_wait_for_connect+0x52a/0x9e0 net/sctp/socket.c:9306
+ sctp_sendmsg_to_asoc+0x1c47/0x1f90 net/sctp/socket.c:1881
+ sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
+ inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ __sys_sendto+0x9ef/0xc70 net/socket.c:2036
+ __do_sys_sendto net/socket.c:2048 [inline]
+ __se_sys_sendto net/socket.c:2044 [inline]
+ __x64_sys_sendto+0x19c/0x210 net/socket.c:2044
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Freed by task 1:
- kasan_set_track+0x4c/0x84
- kasan_set_free_info+0x28/0x4c
- ____kasan_slab_free+0x120/0x15c
- __kasan_slab_free+0x18/0x28
- slab_free_freelist_hook+0x204/0x2fc
- kfree+0xfc/0x3a4
- __iommu_probe_device+0x284/0x394
- probe_iommu_group+0x70/0x9c
- bus_for_each_dev+0x11c/0x19c
- bus_iommu_probe+0xb8/0x7d4
- bus_set_iommu+0xcc/0x13c
- arm_smmu_bus_init+0x44/0x130 [arm_smmu]
- arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
- platform_drv_probe+0xe4/0x13c
- really_probe+0x2c8/0xb74
- driver_probe_device+0x11c/0x228
- device_driver_attach+0xf0/0x16c
- __driver_attach+0x80/0x320
- bus_for_each_dev+0x11c/0x19c
- driver_attach+0x38/0x48
- bus_add_driver+0x1dc/0x3a4
- driver_register+0x18c/0x244
- __platform_driver_register+0x88/0x9c
- init_module+0x64/0xff4 [arm_smmu]
- do_one_initcall+0x17c/0x2f0
- do_init_module+0xe8/0x378
- load_module+0x3f80/0x4a40
- __se_sys_finit_module+0x1a0/0x1e4
- __arm64_sys_finit_module+0x44/0x58
- el0_svc_common+0x100/0x264
- do_el0_svc+0x38/0xa4
- el0_svc+0x20/0x30
- el0_sync_handler+0x68/0xac
- el0_sync+0x160/0x180
+Uninit was stored to memory at:
+ sctp_inq_pop+0x155c/0x18f0 net/sctp/inqueue.c:201
+ sctp_assoc_bh_rcv+0x1fa/0xdd0 net/sctp/associola.c:1000
+ sctp_inq_push+0x31c/0x440 net/sctp/inqueue.c:80
+ sctp_backlog_rcv+0x30f/0x10b0 net/sctp/input.c:344
+ sk_backlog_rcv include/net/sock.h:1030 [inline]
+ __release_sock+0x256/0x640 net/core/sock.c:2768
+ release_sock+0x98/0x2e0 net/core/sock.c:3300
+ sctp_wait_for_connect+0x52a/0x9e0 net/sctp/socket.c:9306
+ sctp_sendmsg_to_asoc+0x1c47/0x1f90 net/sctp/socket.c:1881
+ sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
+ inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ __sys_sendto+0x9ef/0xc70 net/socket.c:2036
+ __do_sys_sendto net/socket.c:2048 [inline]
+ __se_sys_sendto net/socket.c:2044 [inline]
+ __x64_sys_sendto+0x19c/0x210 net/socket.c:2044
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Fix this by adding device_lock for dev->iommu accesses.
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1126 [inline]
+ sctp_packet_pack net/sctp/output.c:471 [inline]
+ sctp_packet_transmit+0x194c/0x45a0 net/sctp/output.c:620
+ sctp_outq_flush_transports net/sctp/outqueue.c:1163 [inline]
+ sctp_outq_flush+0x17d9/0x5eb0 net/sctp/outqueue.c:1211
+ sctp_outq_uncork+0x105/0x120 net/sctp/outqueue.c:758
+ sctp_side_effects net/sctp/sm_sideeffect.c:1195 [inline]
+ sctp_do_sm+0x946f/0x9b50 net/sctp/sm_sideeffect.c:1166
+ sctp_assoc_bh_rcv+0xa15/0xdd0 net/sctp/associola.c:1054
+ sctp_inq_push+0x31c/0x440 net/sctp/inqueue.c:80
+ sctp_backlog_rcv+0x30f/0x10b0 net/sctp/input.c:344
+ sk_backlog_rcv include/net/sock.h:1030 [inline]
+ __release_sock+0x256/0x640 net/core/sock.c:2768
+ release_sock+0x98/0x2e0 net/core/sock.c:3300
+ sctp_wait_for_connect+0x52a/0x9e0 net/sctp/socket.c:9306
+ sctp_sendmsg_to_asoc+0x1c47/0x1f90 net/sctp/socket.c:1881
+ sctp_sendmsg+0x3eaa/0x5460 net/sctp/socket.c:2027
+ inet_sendmsg+0x15b/0x1d0 net/ipv4/af_inet.c:819
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ __sys_sendto+0x9ef/0xc70 net/socket.c:2036
+ __do_sys_sendto net/socket.c:2048 [inline]
+ __se_sys_sendto net/socket.c:2044 [inline]
+ __x64_sys_sendto+0x19c/0x210 net/socket.c:2044
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
+CPU: 0 PID: 3479 Comm: syz-executor678 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
+
 ---
- drivers/iommu/iommu.c |  9 +++++++++
- include/linux/iommu.h | 32 ++++++++++++++++++++++++++------
- 2 files changed, 35 insertions(+), 6 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index d410311..c5f35c5 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -171,6 +171,7 @@ EXPORT_SYMBOL_GPL(iommu_device_unregister);
- static struct dev_iommu *dev_iommu_get(struct device *dev)
- {
- 	struct dev_iommu *param = dev->iommu;
-+	int ret;
- 
- 	if (param)
- 		return param;
-@@ -180,15 +181,23 @@ static struct dev_iommu *dev_iommu_get(struct device *dev)
- 		return NULL;
- 
- 	mutex_init(&param->lock);
-+	ret = device_trylock(dev);
- 	dev->iommu = param;
-+	if (ret)
-+		device_unlock(dev);
- 	return param;
- }
- 
- static void dev_iommu_free(struct device *dev)
- {
-+	int ret;
-+
- 	iommu_fwspec_free(dev);
-+	ret = device_trylock(dev);
- 	kfree(dev->iommu);
- 	dev->iommu = NULL;
-+	if (ret)
-+		device_unlock(dev);
- }
- 
- static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index f7f6ada..2edd624 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -627,29 +627,49 @@ const struct iommu_ops *iommu_ops_from_fwnode(struct fwnode_handle *fwnode);
- 
- static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
- {
-+	struct iommu_fwspec *fwspec = NULL;
-+	int ret;
-+
-+	ret = device_trylock(dev);
- 	if (dev->iommu)
--		return dev->iommu->fwspec;
--	else
--		return NULL;
-+		fwspec = dev->iommu->fwspec;
-+	if (ret)
-+		device_unlock(dev);
-+	return fwspec;
- }
- 
- static inline void dev_iommu_fwspec_set(struct device *dev,
- 					struct iommu_fwspec *fwspec)
- {
-+	int ret;
-+
-+	ret = device_trylock(dev);
- 	dev->iommu->fwspec = fwspec;
-+	if (ret)
-+		device_unlock(dev);
- }
- 
- static inline void *dev_iommu_priv_get(struct device *dev)
- {
-+	int ret;
-+	void *priv = NULL;
-+
-+	ret = device_trylock(dev);
- 	if (dev->iommu)
--		return dev->iommu->priv;
--	else
--		return NULL;
-+		priv = dev->iommu->priv;
-+	if (ret)
-+		device_unlock(dev);
-+	return priv;
- }
- 
- static inline void dev_iommu_priv_set(struct device *dev, void *priv)
- {
-+	int ret;
-+
-+	ret = device_trylock(dev);
- 	dev->iommu->priv = priv;
-+	if (ret)
-+		device_unlock(dev);
- }
- 
- int iommu_probe_device(struct device *dev);
--- 
-2.7.4
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,86 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9327E48834E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76AA488364
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiAHLxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 06:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S234181AbiAHLyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 06:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiAHLxR (ORCPT
+        with ESMTP id S234182AbiAHLya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 06:53:17 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEE1C061574
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 03:53:17 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n6AHa-0000BO-KR; Sat, 08 Jan 2022 12:53:14 +0100
-Message-ID: <cf5b69c6-532b-4c6e-c046-eaad65019e8f@leemhuis.info>
-Date:   Sat, 8 Jan 2022 12:53:12 +0100
+        Sat, 8 Jan 2022 06:54:30 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0EAC061574;
+        Sat,  8 Jan 2022 03:54:30 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id w20so16328689wra.9;
+        Sat, 08 Jan 2022 03:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LRHExVyfqWb+CjlvuZOFy5IY4pp0xV737GyYU0gQJqY=;
+        b=dhR4qC1zWBI/BYofjo0JBp6GSuRVM4PtMqn3wpYt+OfRYZA3hu6GjQhgd6Qng1xcuj
+         VSvBddIy5gV5KuhbrGoO5t2Z8fZ3gOHSv1Fwh8pd3QHvSiyp2AT+C1xr0aAQYQ69uWND
+         Rsm67RworqPvMm1UAVUSXzftKO7FhkiyqSM3UpRW3LBo0CPXKEK577vqVHvp3S0M44xG
+         MQG6JNmtmJl33mruzUXQxRMgyR8jH1P42Bsnzyg4JoERzs7ooFoD8KdQdZpEANmvX+XA
+         QLoehmgEt7GTCMTSuriEricCRns63iSlH6CT6CiVOAidj3NWkER394eXR0/vaTJwwD0U
+         Bm9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=LRHExVyfqWb+CjlvuZOFy5IY4pp0xV737GyYU0gQJqY=;
+        b=XCsI9cntt4JNRBMm8ezUU+X2Qa8hCSJIo/rMmR5Aa2c3tPv6w/nq9o0OGFIsOR3BcR
+         EFW+Dr7xoNWQhejdvTLnQoVKFYLs62Tc8DM4U45I3NXYrNOD7agcHP2B5fiEZNL6TC39
+         bhk+HKFpoRcmqQCYzU2YD0xQi/EQQBoXY4meeH+F1a27Ngpj5xvR+8XZRuSsszvrbcS4
+         jSQfqve/jSm+7za42hfIo/3EujQh7msxyReqYnvCpCn9yjPjQC5xSuqrOMnUrgBOdxgx
+         nRkHf5TrnKNvVDx062nmoUEl6NKhUcVGj3Yfy49dhi58o620viydlMziljr/8COl6lZh
+         b+Aw==
+X-Gm-Message-State: AOAM531lWDVuRoc6WO/eAWmK9GJFQ0Lc4Coe8tJn68wZ85y8z0xKZHbE
+        fdgKus0WkjerH43TMkbir3yMdAj5zDs=
+X-Google-Smtp-Source: ABdhPJwgBlb6v6JR6QP7yO5yqdQZRJJ9sLZO2j0NeN+fBYL1HYkmvkAe2VDjKBPC0aTOTceZHbfPHQ==
+X-Received: by 2002:a05:6000:24b:: with SMTP id m11mr12586202wrz.122.1641642868870;
+        Sat, 08 Jan 2022 03:54:28 -0800 (PST)
+Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
+        by smtp.gmail.com with ESMTPSA id bd21sm1433232wmb.8.2022.01.08.03.54.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 03:54:28 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 8 Jan 2022 12:54:26 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <Ydl7ch/up7qJqByj@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdeJgJFRRsIb9pah@archlinux-ax161>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] fix 5.15 init regression for Intel Bluetooth
-Content-Language: en-BS
-To:     "An, Tedd" <tedd.an@intel.com>,
-        "ortwin.glueck@logobject.ch" <ortwin.glueck@logobject.ch>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <856c5dc7-9fb4-8438-3451-7b369832056a@odi.ch>
- <b0f6f66b-28aa-9d43-0aab-e6887ee0fda8@logobject.ch>
- <7b400964d7bcf052fb609bd1647936df03bdc667.camel@intel.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <7b400964d7bcf052fb609bd1647936df03bdc667.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641642797;c3e13826;
-X-HE-SMSGID: 1n6AHa-0000BO-KR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdeJgJFRRsIb9pah@archlinux-ax161>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.01.22 03:08, An, Tedd wrote:
-> On Mon, 2021-12-27 at 11:26 +0100, Ortwin Glück wrote:
->> On all 5.15 kernels the Intel Bluetooth no longer works. All was fine in 5.14.
->> Apparently the quirk is needed for this device.
->>
->> vanilla 5.15.5:
->>     Bluetooth: hci0: Reading Intel version command failed (-110)
->>     Bluetooth: hci0: command tx timeout
->>
->> with patch:
->>     Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 build 3 week 17 2014
->>     Bluetooth: hci0: Intel device is already patched. patch num: 32
->>
->> Please apply to stable too.
+
+* Nathan Chancellor <nathan@kernel.org> wrote:
+
+> On Tue, Jan 04, 2022 at 11:47:30AM +0100, Ingo Molnar wrote:
+> > > > With the fast-headers kernel that's down to ~36,000 lines of code, 
+> > > > almost a factor of 3 reduction:
+> > > > 
+> > > >   # fast-headers-v1:
+> > > >   kepler:~/mingo.tip.git> wc -l kernel/pid.i
+> > > >   35941 kernel/pid.i
+> > > 
+> > > Coming from someone who often has to reduce a preprocessed kernel source 
+> > > file with creduce/cvise to report compiler bugs, this will be a very 
+> > > welcomed change, as those tools will have to do less work, and I can get 
+> > > my reports done faster.
+> > 
+> > That's nice, didn't think of that side effect.
+> > 
+> > Could you perhaps measure this too, to see how much of a benefit it is?
 > 
-> The fix for this issue is in bluetooth-next and will be merged to mainline soon.
-> https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=95655456e7cee858a23793f67025765b4c4c227b
+> As it turns out, I got an opportunity to measure this sooner rather than
+> later [1]. Using cvise [2] with an identical set of toolchains and
+> interestingness test [3], reducing net/core/skbuff.c took significantly
+> less time with the version from the fast-headers tree.
+> 
+> v5.16-rc8:
+> 
+> $ wc -l skbuff.i
+> 105135 skbuff.i
+> 
+> $ time cvise test.fish skbuff.i
+> ...
+> ________________________________________________________
+> Executed in  114.02 mins    fish           external
+>    usr time  1180.43 mins   69.29 millis  1180.43 mins
+>    sys time  229.80 mins  248.11 millis  229.79 mins
+> 
+> fast-headers:
+> 
+> $ wc -l skbuff.i
+> 78765 skbuff.i
+> 
+> $ time cvise test.fish skbuff.i
+> ...
+> ________________________________________________________
+> Executed in   47.38 mins    fish           external
+>    usr time  620.17 mins   32.78 millis  620.17 mins
+>    sys time  123.70 mins  122.38 millis  123.70 mins
+> 
+> I was not expecting that much of a difference but it somewhat makes 
+> sense, as the tool spends less time eliminated unused code and the 
+> compiler invocations will be incrementally quicker as the input becomes 
+> smaller.
 
-Tedd, many thx for fixing this. Next time when you fix a issue, please
-include a "Link:" tag to all issue reports on the list (IOW: the message
-that started this thread) and in bug trackers, as explained in
-Documentation/process/submitting-patches.rst. To quote:
+Indeed, that's a +140% speedup in build performance, not bad. :-)
 
-```
-If related discussions or any other background information behind the
-change can be found on the web, add 'Link:' tags pointing to it. In case
-your patch fixes a bug, for example, add a tag with a URL referencing
-the report in the mailing list archives or a bug tracker;
-```
+I also got around testing Clang (12) myself, and with my 'reference distro 
+config' I got these results:
 
-This concept is old, but the text was reworked recently to make this use
-case for the Link: tag clearer. For details see:
-https://git.kernel.org/linus/1f57bd42b77c
+ #
+ # v5.16-rc8
+ #
+ Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
 
-These link help others that want to look into the issue now or in a year
-from now. There are also tools out there that rely on these links to
-connect reports and fixes. Regzbot, the regression tracking bot I use,
-is one such tool which I'm running (there might be others). And because
-the link was missing, I now have to tell the bot manually about the fix. :-/
+ 55,638,543,274,254      instructions              #    0.77  insn per cycle           ( +-  0.01% )
+ 72,074,911,968,393      cycles                    #    3.901 GHz                      ( +-  0.04% )
+      18,490,451.51 msec cpu-clock                 #   54.740 CPUs utilized            ( +-  0.04% )
 
-#regzbot fixed-by:  95655456e7cee858a2
+                 337.788 +- 0.834 seconds time elapsed  ( +-  0.25% )
 
-Ciao, Thorsten
+ #
+ # -fast-headers-v2-rc3
+ #
+ Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
 
+ 30,904,130,243,855      instructions              #    0.76  insn per cycle           ( +-  0.02% )
+ 40,703,482,733,690      cycles                    #    3.898 GHz                      ( +-  0.00% )
+      10,443,670.86 msec cpu-clock                 #   58.093 CPUs utilized            ( +-  0.00% )
+
+                 179.773 +- 0.829 seconds time elapsed  ( +-  0.46% )
+
+That's a +88% build speedup on Clang - even better than the +78% speedup on 
+GCC(-10).
+
+Thanks,
+
+	Ingo

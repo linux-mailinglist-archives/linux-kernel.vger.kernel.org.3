@@ -2,366 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5108648AC0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4612C48AC1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238090AbiAKK7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235439AbiAKK7l (ORCPT
+        id S238316AbiAKLFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 06:05:01 -0500
+Received: from mail.spearsnetwork.net ([197.254.58.132]:63151 "EHLO
+        nd0-wnmx0-in.wingunode.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238096AbiAKLFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:59:41 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD81C06173F;
-        Tue, 11 Jan 2022 02:59:41 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id c15so17677629qtc.4;
-        Tue, 11 Jan 2022 02:59:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bHrbOrbls6RMwF4zXh/JucakSYo80NpW3Y1oPsSn0+A=;
-        b=N+MW1AOl6r8OnoNgkE7IklzPbNXkOMm8DKxoSGLIlJl3g1xEfBdMpQfjcH0LUl5ZLl
-         l9p06YQhns35PMs7qmp7Q3sAvIWerlgkmkJ3IoaA5RP8OkOAHpdEwUrqymW0/nvPUjhV
-         MI/9Fj8wjVvZpNdcvDDXyz/a44ryDQ8X5UCq0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bHrbOrbls6RMwF4zXh/JucakSYo80NpW3Y1oPsSn0+A=;
-        b=htg89TPJEQXMbFO8+Qg3Mg8X/QGk4cr83LpGMeHfzB4vjF6opFcm7zQIJ3hqtpk9/4
-         wqgG2sMhcXO6F/jG0NakNV5JSYvRUvzUrROaIgY/Z1qr7CXeY4DVMTEMLX/mmGSV4lrE
-         H0q9XyHjdJseVZatt3tWsVvT0VDTazvUMQRj/42KoDdurRentW/w6t3PjBX/1hn9zZGq
-         xbCo+bu2+ZcKEHom2kc6poUT6iIDcphWvLZANmFFTJcUEgnSodoOr0s7/2uHk/lj/W78
-         TloiELL9AcG5+BncCfySOGlSO/3m0KvUoDOR2Cr1PUs8fWeHsx8SwJat/xhTIGh/FEik
-         L0Fw==
-X-Gm-Message-State: AOAM531+SNESBA7t+Bq/co7Zg0jeHOSDae+SlRHQefhYEGWxOIejSvY9
-        4iIvX0sDP6z49ZXTP/4WqlhGXocJAUhHVsaU2cY=
-X-Google-Smtp-Source: ABdhPJwFsqlEroGN3U55JVWSumZqoKNo3s6q1iayFmqeYxyY4VyTbQDGFPPubUrEmX0irnNrB5YLROVH6FTznMWp9tw=
-X-Received: by 2002:a05:622a:1044:: with SMTP id f4mr3122569qte.494.1641898780492;
- Tue, 11 Jan 2022 02:59:40 -0800 (PST)
+        Tue, 11 Jan 2022 06:05:01 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by nd0-wnmx0-in.wingunode.com (Postfix) with ESMTP id 95B8510252EC2;
+        Mon, 10 Jan 2022 16:08:31 +0300 (EAT)
+Received: from nd0-wnmx0-in.wingunode.com ([127.0.0.1])
+        by localhost (nd0-wnmx0-in.wingunode.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CzVmiE6EJ3Cu; Mon, 10 Jan 2022 16:08:30 +0300 (EAT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by nd0-wnmx0-in.wingunode.com (Postfix) with ESMTP id AB8231056655E;
+        Sun,  9 Jan 2022 19:05:29 +0300 (EAT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 nd0-wnmx0-in.wingunode.com AB8231056655E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=parliament.go.ke;
+        s=EBEECBF8-0DED-11EB-9388-353CCF6424A4; t=1641744329;
+        bh=B3oqdpZ+WFOFMP0BKMp0prkVrUS0OVSc0OXSPAAPpLA=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=AiHmSiVJwTjl1lqTzJ6XS/F1asKFszc4//mog/Cfm4yHDHGQ1gRLhgyVo+trl0hod
+         8kp2axIstvyzTHgjyRdHmvxUo05mvGxWi/W5yC7fk387hCZvkI2DYkPb2Yo5MuMYyQ
+         WrxgdtHaT6nUgfMxCX8fDqdB0cVIos3OJvzOQe8oQWEy1Bx2RHjUj1wWRqMMDBXcwY
+         0MeUrjLZrG7B8OcHswAdkNXoIkzrJTMARNAUPTgzJ8ePkoya8PiRxpO1SQEl7n8jRB
+         RQt70E1k7YOVJzkcZDjwJWi1v+LYVSvh00z8DIUjPcn+5wzPKzsRswVSSzpKz7NxHm
+         n8jZ6j8XVz8Cg==
+X-Virus-Scanned: amavisd-new at nd0-wnmx0-in.wingunode.com
+Received: from nd0-wnmx0-in.wingunode.com ([127.0.0.1])
+        by localhost (nd0-wnmx0-in.wingunode.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id b_-SXDvKghGC; Sun,  9 Jan 2022 19:05:29 +0300 (EAT)
+Received: from [103.1.179.201] (unknown [103.1.179.201])
+        by nd0-wnmx0-in.wingunode.com (Postfix) with ESMTPSA id 1E658106712DE;
+        Sat,  8 Jan 2022 23:49:27 +0300 (EAT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20220105101719.7093-1-zev@bewilderbeest.net>
-In-Reply-To: <20220105101719.7093-1-zev@bewilderbeest.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 11 Jan 2022 10:59:28 +0000
-Message-ID: <CACPK8XeHyoo0D1vQm=L8m284kC5n-O+FEMp1HN+ROWJfx7qjhQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: aspeed: Add ASRock ROMED8HM3 BMC
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Neil Horman <neil.horman@privafy.com>,
-        Anthony Jenkins <anthony.jenkins@privafy.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Regards
+To:     Recipients <butula@parliament.go.ke>
+From:   "Mr. Kai Wen" <butula@parliament.go.ke>
+Date:   Sun, 09 Jan 2022 02:19:20 +0530
+Reply-To: mrkkaiwwen@aol.com
+Message-Id: <20220108204928.1E658106712DE@nd0-wnmx0-in.wingunode.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 at 23:10, Zev Weiss <zev@bewilderbeest.net> wrote:
->
-> This is a half-width, single-socket Epyc server board with an AST2500
-> BMC.  This device tree is sufficient for basic OpenBMC functionality,
-> but we'll need to add a few more devices (as driver support becomes
-> available) before it's fully usable.
->
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Greetings My Friend,
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+I am Mr. Kai Wen, I work with a bank here in China as head of the audit dep=
+artment. During our last year fiscal bank general account auditing, I disco=
+vered an overdue funds sum of USD19,500,000.00 Million belonging to my bank=
+ late customer who died over 10 years ago leaving no body to inherit his fu=
+nds.
+ =
 
-Have you considered using the openbmc gpio naming scheme for the
-gpio-line-names?
+I am contacting you so that we may have an agreement/proper arrangement. no=
+te 50% of the sum will be for you while the other 50% will be my share as w=
+ell.
 
+I will be waiting for your quick response in order to update you with full =
+detail and be informed that this deal will be executed legally.
 
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-asrock-romed8hm3.dts  | 259 ++++++++++++++++++
->  2 files changed, 260 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 0de64f237cd8..4008d2143b44 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1481,6 +1481,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->         aspeed-bmc-arm-centriq2400-rep.dtb \
->         aspeed-bmc-arm-stardragon4800-rep2.dtb \
->         aspeed-bmc-asrock-e3c246d4i.dtb \
-> +       aspeed-bmc-asrock-romed8hm3.dtb \
->         aspeed-bmc-bytedance-g220a.dtb \
->         aspeed-bmc-facebook-cloudripper.dtb \
->         aspeed-bmc-facebook-cmm.dtb \
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts b/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> new file mode 100644
-> index 000000000000..e71ccfd1df63
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts
-> @@ -0,0 +1,259 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/dts-v1/;
-> +
-> +#include "aspeed-g5.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/{
-> +       model = "ASRock ROMED8HM3 BMC v1.00";
-> +       compatible = "asrock,romed8hm3-bmc", "aspeed,ast2500";
-> +
-> +       aliases {
-> +               serial4 = &uart5;
-> +       };
-> +
-> +       chosen {
-> +               stdout-path = &uart5;
-> +               bootargs = "console=tty0 console=ttyS4,115200 earlycon";
-> +       };
-> +
-> +       memory@80000000 {
-> +               reg = <0x80000000 0x20000000>;
-> +       };
-> +
-> +       leds {
-> +               compatible = "gpio-leds";
-> +
-> +               heartbeat {
-> +                       gpios = <&gpio ASPEED_GPIO(H, 6) GPIO_ACTIVE_LOW>;
-> +                       linux,default-trigger = "timer";
-> +               };
-> +
-> +               system-fault {
-> +                       gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
-> +                       panic-indicator;
-> +               };
-> +       };
-> +
-> +       iio-hwmon {
-> +               compatible = "iio-hwmon";
-> +               io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
-> +                       <&adc 4>, <&adc 5>, <&adc 6>, <&adc 7>,
-> +                       <&adc 8>, <&adc 9>, <&adc 10>, <&adc 11>,
-> +                       <&adc 12>, <&adc 13>, <&adc 14>, <&adc 15>;
-> +       };
-> +};
-> +
-> +&fmc {
-> +       status = "okay";
-> +       flash@0 {
-> +               status = "okay";
-> +               m25p,fast-read;
-> +               label = "bmc";
-> +               spi-max-frequency = <100000000>; /* 100 MHz */
-> +#include "openbmc-flash-layout-64.dtsi"
-> +       };
-> +};
-> +
-> +&uart5 {
-> +       status = "okay";
-> +};
-> +
-> +&vuart {
-> +       status = "okay";
-> +       aspeed,lpc-io-reg = <0x2f8>;
-> +       aspeed,lpc-interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> +};
-> +
-> +&mac0 {
-> +       status = "okay";
-> +
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
-> +};
-> +
-> +&i2c0 {
-> +       status = "okay";
-> +
-> +       /* inlet temp sensor */
-> +       w83773g@4c {
-> +               compatible = "nuvoton,w83773g";
-> +               reg = <0x4c>;
-> +       };
-> +};
-> +
-> +&i2c1 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c2 {
-> +       status = "okay";
-> +
-> +       /* IPB temp sensor */
-> +       w83773g@4c {
-> +               compatible = "nuvoton,w83773g";
-> +               reg = <0x4c>;
-> +       };
-> +
-> +       /* IPB PMIC */
-> +       lm25066@40 {
-> +               compatible = "lm25066";
-> +               reg = <0x40>;
-> +       };
-> +
-> +       /* 12VSB PMIC */
-> +       lm25066@41 {
-> +               compatible = "lm25066";
-> +               reg = <0x41>;
-> +       };
-> +};
-> +
-> +&i2c4 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c5 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c6 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c7 {
-> +       status = "okay";
-> +
-> +       /* Baseboard FRU eeprom */
-> +       eeprom@50 {
-> +               compatible = "st,24c128", "atmel,24c128";
-> +               reg = <0x50>;
-> +               pagesize = <16>;
-> +       };
-> +};
-> +
-> +&i2c8 {
-> +       status = "okay";
-> +};
-> +
-> +&i2c9 {
-> +       status = "okay";
-> +};
-> +
-> +&video {
-> +       status = "okay";
-> +};
-> +
-> +&vhub {
-> +       status = "okay";
-> +};
-> +
-> +&lpc_ctrl {
-> +       status = "okay";
-> +};
-> +
-> +&lpc_snoop {
-> +       status = "okay";
-> +       snoop-ports = <0x80>;
-> +};
-> +
-> +&kcs3 {
-> +       status = "okay";
-> +       aspeed,lpc-io-reg = <0xca2>;
-> +};
-> +
-> +&pwm_tacho {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_pwm3_default
-> +               &pinctrl_pwm4_default
-> +               &pinctrl_pwm5_default
-> +               &pinctrl_pwm6_default>;
-> +
-> +       fan@3 {
-> +               reg = <0x03>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x03 0x0b>;
-> +       };
-> +
-> +       fan@4 {
-> +               reg = <0x04>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x04 0x0c>;
-> +       };
-> +
-> +       fan@5 {
-> +               reg = <0x05>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x05 0x0d>;
-> +       };
-> +
-> +       fan@6 {
-> +               reg = <0x06>;
-> +               aspeed,fan-tach-ch = /bits/ 8 <0x06 0x0e>;
-> +       };
-> +};
-> +
-> +&gpio {
-> +       status = "okay";
-> +       gpio-line-names =
-> +               /*  A */ "LOCATORLED_STATUS_N", "BMC_MAC2_INTB", "NMI_BTN_N", "BMC_NMI",
-> +                       "", "", "", "",
-> +               /*  B */ "DDR_MEM_TEMP", "", "", "", "", "", "", "",
-> +               /*  C */ "", "", "", "", "PCIE_HP_SEL_N", "PCIE_SATA_SEL_N", "LOCATORBTN", "",
-> +               /*  D */ "BMC_PSIN", "BMC_PSOUT", "BMC_RESETCON", "RESETCON",
-> +                       "", "", "", "PSU_FAN_FAIL_N",
-> +               /*  E */ "", "", "", "", "", "", "", "",
-> +               /*  F */ "NIC_PWR_GOOD", "PRSNTB0", "PRSNTB1", "PRSNTB2",
-> +                       "PRSNTB3", "", "3VSB_PCIE1_PG", "12V_PCIE1_PG",
-> +               /*  G */ "HWM_BAT_EN", "CHASSIS_ID0", "CHASSIS_ID1", "CHASSIS_ID2",
-> +                       "BMC_ALERT1_N_R", "BMC_ALERT2_N_R", "BMC_ALERT3_N", "BMC_ALERT4_N",
-> +               /*  H */ "X24_C1_PRSNT", "X24_C2_PRSNT", "X24_C3_PRSNT", "FM_MEM_THERM_EVENT_BMC_R_N",
-> +                       "FACMODE", "BMC_RTCRST", "BMC_HB_LED_N", "BMC_CASEOPEN",
-> +               /*  I */ "", "", "", "", "", "", "", "",
-> +               /*  J */ "BMC_READY", "BMC_PCH_BIOS_CS_N", "", "P0_MA_DDR_QS_CS_N",
-> +                       "", "", "", "",
-> +               /*  K */ "", "", "", "", "", "", "", "",
-> +               /*  L */ "", "", "", "", "", "", "", "",
-> +               /*  M */ "", "", "MEZZ_PWRBRK_N", "OCP_HP_RST_EN",
-> +                       "MAIN_PWR_EN_G", "BMC_MAIN_EN", "AUX_PWR_EN_G", "BMC_AUX_EN",
-> +               /*  N */ "", "", "", "", "", "", "", "",
-> +               /*  O */ "", "", "", "", "", "", "", "",
-> +               /*  P */ "", "", "", "", "", "", "", "",
-> +               /*  Q */ "", "", "", "",
-> +                       "BMC_SMB_PRESENT_1_N", "BMC_SMB_PRESENT_2_N",
-> +                       "BMC_SMB_PRESENT_3_N", "BMC_PCIE_WAKE_N",
-> +               /*  R */ "", "", "THERMALTRIP_CLEAR_N", "", "", "", "", "",
-> +               /*  S */ "", "", "", "", "", "", "", "",
-> +               /*  T */ "", "", "", "", "", "", "", "",
-> +               /*  U */ "", "", "", "", "", "", "", "",
-> +               /*  V */ "", "", "", "", "", "", "", "",
-> +               /*  W */ "", "", "", "", "", "", "", "",
-> +               /*  X */ "", "", "", "", "", "", "", "",
-> +               /*  Y */ "SLP_S3", "SLP_S4_S5", "NODE_ID_1", "NODE_ID_2", "", "", "", "",
-> +               /*  Z */ "", "", "SYSTEM_FAULT_LED_N", "FAST_THROTTLE_N",
-> +                       "", "", "", "",
-> +               /* AA */ "FM_CPU0_IBMC_THERMTRIP_N", "", "PROCHOT_L_G", "",
-> +                       "", "", "", "",
-> +               /* AB */ "BMC_FORCE_SELFREFRESH", "PWRGD_OUT", "", "IRQ_BMC_PCH_SMI_LPC_N",
-> +                       "", "", "", "",
-> +               /* AC */ "", "", "", "", "", "", "", "";
-> +};
-> +
-> +&adc {
-> +       status = "okay";
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_adc0_default
-> +               &pinctrl_adc1_default
-> +               &pinctrl_adc2_default
-> +               &pinctrl_adc3_default
-> +               &pinctrl_adc4_default
-> +               &pinctrl_adc5_default
-> +               &pinctrl_adc6_default
-> +               &pinctrl_adc7_default
-> +               &pinctrl_adc8_default
-> +               &pinctrl_adc9_default
-> +               &pinctrl_adc10_default
-> +               &pinctrl_adc11_default
-> +               &pinctrl_adc12_default
-> +               &pinctrl_adc13_default
-> +               &pinctrl_adc14_default
-> +               &pinctrl_adc15_default>;
-> +};
-> --
-> 2.34.1
->
+Yours Sincerely,
+Mr. Kai Wen.

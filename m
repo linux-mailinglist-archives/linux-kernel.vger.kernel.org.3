@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6952488519
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD9748851D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiAHRsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 12:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiAHRsL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 12:48:11 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8140C06173F;
-        Sat,  8 Jan 2022 09:48:10 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j6so35265213edw.12;
-        Sat, 08 Jan 2022 09:48:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HKLi8ROSD1N0wXToisA4xUpZ4tz7KIbvKJEjlY+zaMA=;
-        b=PcqwM7NAXcRYpLPiEYfz8ZW5rmZxpmtXiai7y6zR+n4NY3My0rbQigrJBCedZ/3eOu
-         wI/l1T+lA0cMqcOenXQCOSVOVy8wUMIn4j+kys9sbU01qzjmrSNfk9Hx4u2VN5PktxSd
-         s9h1Ztclpvqx0V8qlFfWyJiE0OilijmlZ9tpsRiiyz4MX+XLIR+Kss1QFd6RU/ETrANN
-         /j7PuJmGhgKufed9GjyC7hJlcDPe7gfnPWde1f7ZRcU+qxKOP8JgKGDMdf4d7rP7DOq8
-         kWXs9BnYca0Kvhu+hztSbUUswZ/0Z6YzQfMw0aKfnRqsG6nB/vs2qo4EnhJ6ia+mxe7l
-         NHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HKLi8ROSD1N0wXToisA4xUpZ4tz7KIbvKJEjlY+zaMA=;
-        b=a5oQaB6GJPLnysoScdF2s3l3BdWuanLFO9R57h2/4vSN6Pv4aW/N4mnu4q6TtmeNaw
-         ueizkgOaP4VCmyOLdesqQ2BTCMDUK9czMesZxVIgSl+a/pCJeVkrMbkOtAP2WRgbgis5
-         jbgE9+WmS/K7wWDhPlgWFkOS2D+7LIprgFdzTHofN/Tqa3HNihtRo2cI9/JJ79EL/OvX
-         vleENNF16rNoXHyt5lXXPB1SLwrqgUREcmZBG2i150aU93dORlV5JmK3y4GZ8oZ7AqpY
-         DzsqBFNA90rq0xWKECACmE0cQSW8i2LW8zNfdZNLFxFB7O6qsoVE70oLWLYqlrZgr2Xv
-         IIgA==
-X-Gm-Message-State: AOAM530ZsT4/ihUpEpwsxHUOR/SLFVpFjShqBmNCOmjeOz7uggwIAJ/r
-        sFNBv2Fl0Xw9+n92dsTgjwPW0zdjDW9lF/2Jd+c=
-X-Google-Smtp-Source: ABdhPJyanEkx9eiDlQV1xTggUJn4Revs/1UtDujKoh9WRgpTMrFstm6S1BQMKo9gsk+Y+tQTRTagKlu9TPLuX8AsFnk=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr52555537ejj.636.1641664089284;
- Sat, 08 Jan 2022 09:48:09 -0800 (PST)
+        id S232146AbiAHRzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 12:55:16 -0500
+Received: from ixit.cz ([94.230.151.217]:51044 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230249AbiAHRzP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 12:55:15 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 394E52243C;
+        Sat,  8 Jan 2022 18:55:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1641664513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eoCjj7+HR4fQDUjIGrYwHS+tJEZ1XmSyNtZpViK/xe8=;
+        b=BFTu8BDrU7JD3DMReUk9dA//MtPRZoKOgO2KtdAJ67qrUZvVQEjvmJzi0cfUktkzM/Wc3l
+        mFZxe9yB+CKH7J1tMc0CI0hSXw5qWqwo/pAPjyrW7jeIJKzhJ7apsLH/TWYjEj0258GMxk
+        WIgosjTDp1fOlElDhjInfRDTQKAzZMk=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: qcom: add KPSS GCC compatible to clock nodes
+Date:   Sat,  8 Jan 2022 18:55:09 +0100
+Message-Id: <20220108175509.62804-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220107233458.2326512-1-gsomlo@gmail.com> <20220107233458.2326512-4-gsomlo@gmail.com>
- <CAHp75VcHnHpX1=ojmFnujqkf55aS1ePiVW4kKydTJQe=dXbwbQ@mail.gmail.com>
- <YdjvlA7rqQoZe44F@errol.ini.cmu.edu> <CAHp75Vf7o1g0FTAd+Zo6TMzDN3C2nGLhbDo0OJ9Cmwcxm=Kc8Q@mail.gmail.com>
- <YdmPho2GpVcvWUgU@errol.ini.cmu.edu>
-In-Reply-To: <YdmPho2GpVcvWUgU@errol.ini.cmu.edu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 8 Jan 2022 19:47:32 +0200
-Message-ID: <CAHp75VcSenjpZdA_wujKju5rHr8bAw2VjfL8RMKb7RW6Zmz4QA@mail.gmail.com>
-Subject: Re: [PATCH v8 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "kgugala@antmicro.com" <kgugala@antmicro.com>,
-        "mholenko@antmicro.com" <mholenko@antmicro.com>,
-        "krakoczy@antmicro.com" <krakoczy@antmicro.com>,
-        "mdudek@internships.antmicro.com" <mdudek@internships.antmicro.com>,
-        "paulus@ozlabs.org" <paulus@ozlabs.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "shorne@gmail.com" <shorne@gmail.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "david.abdurachmanov@sifive.com" <david.abdurachmanov@sifive.com>,
-        "florent@enjoy-digital.fr" <florent@enjoy-digital.fr>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 3:20 PM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> On Sat, Jan 08, 2022 at 01:26:08PM +0200, Andy Shevchenko wrote:
-> > On Sat, Jan 8, 2022 at 3:57 AM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> > > On Sat, Jan 08, 2022 at 01:54:07AM +0200, Andy Shevchenko wrote:
-> > > > On Saturday, January 8, 2022, Gabriel Somlo <gsomlo@gmail.com> wrote:
+Some of nodes missing additional compatible.
 
-...
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ arch/arm/boot/dts/qcom-apq8064.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-mdm9615.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-msm8660.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-> > > >     +       u32 div;
-> > > >     +
-> > > >     +       div = freq ? host->ref_clk / freq : 256U;
-> > > >
-> > > >     +       div = roundup_pow_of_two(div);
-> > > >     +       div = clamp(div, 2U, 256U);
-> > > >
-> > > > Logically seems to me that you may join these two together, because clamped
-> > > > range is power-of-2 one.
-> > >
-> > > `div` needs to be a power-of-2 when written to the LITEX_PHY_CLOCKERDIV
-> > > register (below). And clamp() will just enforce a min/max range, so if
-> > > (div = ref_clk / freq) ends up e.g., 5, I need both roundup_pow_of_two()
-> > > to bump it to 8, and clamp() to enforce that it's between 2 and 256.
-> > >
-> > > Unless you mean I should simply write it like:
-> > >
-> > >         div = clamp(roundup_pow_of_two(div), 2U, 256U);
-> > >
-> > > ... as a single line?
-> >
-> > Yes, that's what I meant.
->
-> Turns out, clamp really hates being passed roundup_pow_of_two()
-> directly (see below). I think it's probably better if we leave
-> them as-is, to avoid going the explicit cast route which Geert
-> recommended against.
-
-I see, then ignore my comment on this matter in v9.
-Perhaps add a comment in the code explaining that roundup_pow_of_two()
-may not be unified with clamp()?
-
+diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+index 25b0d35446c9..8d7ae3b41b3a 100644
+--- a/arch/arm/boot/dts/qcom-apq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+@@ -867,7 +867,7 @@ mmcc: clock-controller@4000000 {
+ 		};
+ 
+ 		l2cc: clock-controller@2011000 {
+-			compatible	= "syscon";
++			compatible	= "qcom,kpss-gcc", "syscon";
+ 			reg		= <0x2011000 0x1000>;
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+index 8b58f80093e8..13e0f6f1c376 100644
+--- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
++++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+@@ -150,7 +150,7 @@ lcc: clock-controller@28000000 {
+ 		};
+ 
+ 		l2cc: clock-controller@2011000 {
+-			compatible = "syscon";
++			compatible = "qcom,kpss-gcc", "syscon";
+ 			reg = <0x02011000 0x1000>;
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/qcom-msm8660.dtsi b/arch/arm/boot/dts/qcom-msm8660.dtsi
+index b16060b65593..f144f76b4558 100644
+--- a/arch/arm/boot/dts/qcom-msm8660.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8660.dtsi
+@@ -389,7 +389,7 @@ vibrator@4a {
+ 		};
+ 
+ 		l2cc: clock-controller@2082000 {
+-			compatible	= "syscon";
++			compatible	= "qcom,kpss-gcc", "syscon";
+ 			reg		= <0x02082000 0x1000>;
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+index 5baa47d51fec..ea6156b35554 100644
+--- a/arch/arm/boot/dts/qcom-msm8960.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+@@ -136,7 +136,7 @@ clock-controller@4000000 {
+ 		};
+ 
+ 		l2cc: clock-controller@2011000 {
+-			compatible	= "syscon";
++			compatible	= "qcom,kpss-gcc", "syscon";
+ 			reg		= <0x2011000 0x1000>;
+ 		};
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+

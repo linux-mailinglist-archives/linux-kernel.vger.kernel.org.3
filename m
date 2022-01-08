@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 878D04884C3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553634884C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbiAHRCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 12:02:04 -0500
-Received: from mga02.intel.com ([134.134.136.20]:57388 "EHLO mga02.intel.com"
+        id S234789AbiAHRCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 12:02:05 -0500
+Received: from mga01.intel.com ([192.55.52.88]:36539 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231398AbiAHRCD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S232235AbiAHRCD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Jan 2022 12:02:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641661323; x=1673197323;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PPp4shNkrkr5sM/CPXa3UKR2QAr+sPRGe4T07ev9Mqc=;
-  b=gIuKsMpDf+FOS0pjAzxXVnwPuDXIAmhsUslhmX5hjmdjYEPP+D2ZBbfV
-   eje4hMHw+RbS/CdNRXovdwin7w9us/7I/jDddhzkpJAzrCzjCCuoqBmd8
-   irj9W/0syzeeYlDK0YKYxv8sk/ThG5fu618WDdQFgOiY5oi0O3hoWhXjD
-   1fnwell4sNMqnH5vn6RMYCskYLilhNeY1ufbe+gn2EqjyqVLPES5zru2T
-   VtNo5U7zDh1SMIu3E9Z1j3zdb9PvLY6o0tZrccmu3MziNEwaHFjApfjVJ
-   LC7+ea2LBDFdB0EK4hiIp/HY9W3fVWUGgk2SRgglI2YYrxmM1irReSjYW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="230367954"
+  bh=TcYzdRPhQ+m3PxKtqutXrOivaHHD8Ara1TjaCG1JcxI=;
+  b=GlQ1xOsCqvW03/0Kb4ti/nfvidNxRqpL8DFHjhrEVBUsvXnc3StH+2Kt
+   c/PzpUg8dZ4EQtCxx6pGKACGrOni+aRRTcyK6l1562kCglhxNPNXZ4og/
+   e9us6Dq12QgtMk1TZSah4dx3CIv7OuXIWl8dM5bqJ1FhN39VKAmDeJRTz
+   qVxQcJ/Xb9ALWLU+YbR4TdPHdvNQPqkD0lxM92ADv1Cpw0D8A6EzmitTD
+   4DES1z1cTcZI+y53aNVx+1JBzq2dVuRbC25GFu/DgVBAIvPq93I85nE7y
+   K0wpghsfNmagw6I+zQC69eWCbhfv5FdAYMowV5k4RNsqYJtWAa1Bb73DW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="267343327"
 X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="230367954"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 09:02:03 -0800
+   d="scan'208";a="267343327"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 09:02:03 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="557573728"
+   d="scan'208";a="471629828"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jan 2022 09:02:01 -0800
+  by orsmga003.jf.intel.com with ESMTP; 08 Jan 2022 09:02:01 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n6F6P-0000qB-4j; Sat, 08 Jan 2022 17:02:01 +0000
-Date:   Sun, 9 Jan 2022 01:01:36 +0800
+        id 1n6F6P-0000q9-3e; Sat, 08 Jan 2022 17:02:01 +0000
+Date:   Sun, 9 Jan 2022 01:01:33 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ingo Molnar <mingo@kernel.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 2130/2300] drivers/net/fddi/defza.c:104:16:
- warning: returning 'int' from a function with return type 'struct sk_buff *'
- makes pointer from integer without a cast
-Message-ID: <202201090043.nAZcpAke-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 2373/2375]
+ drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: warning: data definition
+ has no type or storage class
+Message-ID: <202201090037.nahE66F3-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -52,77 +52,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   4e348e961395297bb17f101cc63bc133d8a348e9
-commit: 849a5d0b76b20f2ffe001b8c745fe15441b98bc7 [2130/2300] headers/deps: net: Optimize <linux/netdevice_api.h> dependencies, remove various headers
-config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20220109/202201090043.nAZcpAke-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   351ceeab2ef96ab2fc306934ddb201b44636181b
+commit: 13920d67d91106f4681f468a6c01d404e1924739 [2373/2375] headers/deps: RDMA: Optimize <rdma/ib_verbs.h> dependencies, remove <linux/dim.h> inclusion
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220109/202201090037.nahE66F3-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=849a5d0b76b20f2ffe001b8c745fe15441b98bc7
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=13920d67d91106f4681f468a6c01d404e1924739
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 849a5d0b76b20f2ffe001b8c745fe15441b98bc7
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 13920d67d91106f4681f468a6c01d404e1924739
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/dec/ drivers/net/fddi/ drivers/video/fbdev/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/infiniband/hw/hns/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/net/fddi/defza.c: In function 'fza_alloc_skb_irq':
-   drivers/net/fddi/defza.c:104:16: error: implicit declaration of function '__netdev_alloc_skb' [-Werror=implicit-function-declaration]
-     104 |         return __netdev_alloc_skb(dev, length, GFP_ATOMIC);
-         |                ^~~~~~~~~~~~~~~~~~
->> drivers/net/fddi/defza.c:104:16: warning: returning 'int' from a function with return type 'struct sk_buff *' makes pointer from integer without a cast [-Wint-conversion]
-     104 |         return __netdev_alloc_skb(dev, length, GFP_ATOMIC);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/fddi/defza.c: In function 'fza_alloc_skb':
-   drivers/net/fddi/defza.c:110:16: warning: returning 'int' from a function with return type 'struct sk_buff *' makes pointer from integer without a cast [-Wint-conversion]
-     110 |         return __netdev_alloc_skb(dev, length, GFP_KERNEL);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/fddi/defza.c: In function 'fza_skb_align':
-   drivers/net/fddi/defza.c:120:9: error: implicit declaration of function 'skb_reserve' [-Werror=implicit-function-declaration]
-     120 |         skb_reserve(skb, y - x);
-         |         ^~~~~~~~~~~
-   drivers/net/fddi/defza.c: In function 'fza_rx':
-   drivers/net/fddi/defza.c:757:25: error: implicit declaration of function 'skb_put' [-Werror=implicit-function-declaration]
-     757 |                         skb_put(skb, pkt_len);  /* And cut off FCS. */
-         |                         ^~~~~~~
-   drivers/net/fddi/defza.c: In function 'fza_tx_smt':
-   drivers/net/fddi/defza.c:827:33: error: implicit declaration of function 'skb_reset_network_header'; did you mean 'skb_inner_network_header'? [-Werror=implicit-function-declaration]
-     827 |                                 skb_reset_network_header(skb);
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                                 skb_inner_network_header
-   drivers/net/fddi/defza.c: In function 'fza_start_xmit':
-   drivers/net/fddi/defza.c:1091:9: error: implicit declaration of function 'skb_push' [-Werror=implicit-function-declaration]
-    1091 |         skb_push(skb, 3);                       /* Make room for PRH. */
-         |         ^~~~~~~~
-   drivers/net/fddi/defza.c:1148:9: error: implicit declaration of function 'dev_kfree_skb'; did you mean 'dev_kfree_skb_any'? [-Werror=implicit-function-declaration]
-    1148 |         dev_kfree_skb(skb);
+>> drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: warning: data definition has no type or storage class
+    4460 | MODULE_DEVICE_TABLE(of, hns_roce_of_match);
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: error: type defaults to 'int' in declaration of 'MODULE_DEVICE_TABLE' [-Werror=implicit-int]
+>> drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: warning: parameter names (without types) in function declaration
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4466:1: warning: data definition has no type or storage class
+    4466 | MODULE_DEVICE_TABLE(acpi, hns_roce_acpi_match);
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4466:1: error: type defaults to 'int' in declaration of 'MODULE_DEVICE_TABLE' [-Werror=implicit-int]
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4466:1: warning: parameter names (without types) in function declaration
+   In file included from include/linux/device_api.h:34,
+                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:46:
+   include/linux/device/driver.h:164:1: warning: data definition has no type or storage class
+     164 | module_init(__driver##_init); \
+         | ^~~~~~~~~~~
+   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
+     253 |         module_driver(__platform_driver, platform_driver_register, \
          |         ^~~~~~~~~~~~~
-         |         dev_kfree_skb_any
-   cc1: some warnings being treated as errors
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
+    4686 | module_platform_driver(hns_roce_driver);
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/driver.h:164:1: error: type defaults to 'int' in declaration of 'module_init' [-Werror=implicit-int]
+     164 | module_init(__driver##_init); \
+         | ^~~~~~~~~~~
+   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
+     253 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
+    4686 | module_platform_driver(hns_roce_driver);
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from include/linux/printk.h:7,
+                    from include/asm-generic/bug.h:22,
+                    from arch/sparc/include/asm/bug.h:25,
+                    from include/linux/bug.h:5,
+                    from include/linux/cpumask_types.h:12,
+                    from include/linux/cpumask.h:5,
+                    from include/linux/smp_api.h:12,
+                    from include/linux/lockdep_api.h:27,
+                    from include/linux/timer.h:5,
+                    from include/linux/workqueue_types.h:9,
+                    from include/linux/workqueue_api.h:10,
+                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:33:
+   include/linux/export.h:19:30: warning: parameter names (without types) in function declaration
+      19 | #define THIS_MODULE ((struct module *)0)
+         |                              ^~~~~~
+   include/linux/platform_device.h:223:41: note: in expansion of macro 'THIS_MODULE'
+     223 |         __platform_driver_register(drv, THIS_MODULE)
+         |                                         ^~~~~~~~~~~
+   include/linux/device/driver.h:162:16: note: in expansion of macro 'platform_driver_register'
+     162 |         return __register(&(__driver) , ##__VA_ARGS__); \
+         |                ^~~~~~~~~~
+   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
+     253 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
+    4686 | module_platform_driver(hns_roce_driver);
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/device_api.h:34,
+                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:46:
+   include/linux/device/driver.h:169:1: warning: data definition has no type or storage class
+     169 | module_exit(__driver##_exit);
+         | ^~~~~~~~~~~
+   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
+     253 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
+    4686 | module_platform_driver(hns_roce_driver);
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/driver.h:169:1: error: type defaults to 'int' in declaration of 'module_exit' [-Werror=implicit-int]
+     169 | module_exit(__driver##_exit);
+         | ^~~~~~~~~~~
+   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
+     253 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
+    4686 | module_platform_driver(hns_roce_driver);
+         | ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from include/linux/printk.h:7,
+                    from include/asm-generic/bug.h:22,
+                    from arch/sparc/include/asm/bug.h:25,
+                    from include/linux/bug.h:5,
+                    from include/linux/cpumask_types.h:12,
+                    from include/linux/cpumask.h:5,
+                    from include/linux/smp_api.h:12,
+                    from include/linux/lockdep_api.h:27,
+                    from include/linux/timer.h:5,
+                    from include/linux/workqueue_types.h:9,
+                    from include/linux/workqueue_api.h:10,
+                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:33:
+   include/linux/export.h:19:30: warning: parameter names (without types) in function declaration
+      19 | #define THIS_MODULE ((struct module *)0)
+         |                              ^~~~~~
+   include/linux/platform_device.h:223:41: note: in expansion of macro 'THIS_MODULE'
+     223 |         __platform_driver_register(drv, THIS_MODULE)
+         |                                         ^~~~~~~~~~~
+   include/linux/device/driver.h:162:16: note: in expansion of macro 'platform_driver_register'
+     162 |         return __register(&(__driver) , ##__VA_ARGS__); \
+         |                ^~~~~~~~~~
+   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
+     253 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^~~~~~~~~~~~~
+   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
+    4686 | module_platform_driver(hns_roce_driver);
 
 
-vim +104 drivers/net/fddi/defza.c
+vim +4460 drivers/infiniband/hw/hns/hns_roce_hw_v1.c
 
-61414f5ec9834d Maciej W. Rozycki 2018-10-09  100  
-61414f5ec9834d Maciej W. Rozycki 2018-10-09  101  static inline struct sk_buff *fza_alloc_skb_irq(struct net_device *dev,
-61414f5ec9834d Maciej W. Rozycki 2018-10-09  102  						unsigned int length)
-61414f5ec9834d Maciej W. Rozycki 2018-10-09  103  {
-61414f5ec9834d Maciej W. Rozycki 2018-10-09 @104  	return __netdev_alloc_skb(dev, length, GFP_ATOMIC);
-61414f5ec9834d Maciej W. Rozycki 2018-10-09  105  }
-61414f5ec9834d Maciej W. Rozycki 2018-10-09  106  
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4455) 
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4456) static const struct of_device_id hns_roce_of_match[] = {
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4457) 	{ .compatible = "hisilicon,hns-roce-v1", .data = &hns_roce_hw_v1, },
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4458) 	{},
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4459) };
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30 @4460) MODULE_DEVICE_TABLE(of, hns_roce_of_match);
+08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4461) 
 
-:::::: The code at line 104 was first introduced by commit
-:::::: 61414f5ec9834df8aa4f55c90de16b71a3d6ca8d FDDI: defza: Add support for DEC FDDIcontroller 700 TURBOchannel adapter
+:::::: The code at line 4460 was first introduced by commit
+:::::: 08805fdbeb2d9300c09e681793518fb4da522235 RDMA/hns: Split hw v1 driver from hns roce driver
 
-:::::: TO: Maciej W. Rozycki <macro@linux-mips.org>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Wei Hu(Xavier) <xavier.huwei@huawei.com>
+:::::: CC: Doug Ledford <dledford@redhat.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

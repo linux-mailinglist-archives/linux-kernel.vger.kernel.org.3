@@ -2,164 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DF44886C5
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DCD4886C8
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiAHWaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 17:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiAHWaP (ORCPT
+        id S234956AbiAHWfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 17:35:32 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:33901 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229899AbiAHWfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 17:30:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDC6C06173F;
-        Sat,  8 Jan 2022 14:30:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4165B8095D;
-        Sat,  8 Jan 2022 22:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC418C36AE9;
-        Sat,  8 Jan 2022 22:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641681012;
-        bh=wlFCQfXctgtYh+4c70NcYh18nrkot7llO/ttKYh7Q5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jEv8EHI5ZFQeYflFxj/coG8/WXVrMXjGF5DSz8gFttUUh5lS0q/OyAR5dmMXb2qMW
-         JxBQhcrwAmwB7MzuNDM6tACXmoGC1ulfv93pxTjzu2dP0tlOHAlsiDEks9g38IKdCt
-         q8eTGkHLXpeimYCV+swDTTmEBBQ4z/g2TY78ZQZIFAl5LAq+j4ytDThtNi8JJFmMEX
-         tF37/UN4QRTctjyNmWG3Z669v+G93wcOAaUXWlCoFEzLtXqwbvEVGkw9QiEsOjWjFJ
-         Hsx+DIsK/h5/OEsGST5RPM5kudoJ6rhbqIv+q8csU2qIwC8P0vA2vz0TYG4nPlbbuv
-         NSZ5xYju7v5jQ==
-Date:   Sun, 9 Jan 2022 00:30:04 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 8/8] integrity: Only use machine keyring when
- uefi_check_trust_mok_keys is true
-Message-ID: <YdoQbKD/jJompy6I@iki.fi>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
- <20220105235012.2497118-9-eric.snowberg@oracle.com>
+        Sat, 8 Jan 2022 17:35:30 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-273-98gkTIwGNSu2nY5srYZbTQ-1; Sat, 08 Jan 2022 22:35:25 +0000
+X-MC-Unique: 98gkTIwGNSu2nY5srYZbTQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Sat, 8 Jan 2022 22:35:24 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Sat, 8 Jan 2022 22:35:24 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Pintu Agarwal' <pintu.ping@gmail.com>
+CC:     Pintu Kumar <quic_pintu@quicinc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "legion@kernel.org" <legion@kernel.org>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "ccross@google.com" <ccross@google.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "caoxiaofeng@yulong.com" <caoxiaofeng@yulong.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "dhowells@redhat.com" <dhowells@redhat.com>
+Subject: RE: [PATCH v2] sysinfo: include availram field in sysinfo struct
+Thread-Topic: [PATCH v2] sysinfo: include availram field in sysinfo struct
+Thread-Index: AQHYA/GqnIwLmHPdn0+moS7Mf5DX3axYIclAgAE2xoCAAF134A==
+Date:   Sat, 8 Jan 2022 22:35:24 +0000
+Message-ID: <5aa1e8c55cf84436b35ee5557a508e8d@AcuMS.aculab.com>
+References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
+ <1641578854-14232-1-git-send-email-quic_pintu@quicinc.com>
+ <19cce51e24584c2a8090b618c580a0bd@AcuMS.aculab.com>
+ <CAOuPNLh-WLxJ7w=_C7zKXArgZLbO7OahHHhuwAyN9E1yZvNTdQ@mail.gmail.com>
+In-Reply-To: <CAOuPNLh-WLxJ7w=_C7zKXArgZLbO7OahHHhuwAyN9E1yZvNTdQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105235012.2497118-9-eric.snowberg@oracle.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 06:50:12PM -0500, Eric Snowberg wrote:
-> With the introduction of uefi_check_trust_mok_keys, it signifies the end-
-> user wants to trust the machine keyring as trusted keys.  If they have
-> chosen to trust the machine keyring, load the qualifying keys into it
-> during boot, then link it to the secondary keyring .  If the user has not
-> chosen to trust the machine keyring, it will be empty and not linked to
-> the secondary keyring.
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
-> v4: Initial version
-> v5: Rename to machine keyring
-> v6: Unmodified from v5
-> v7: Made trust_mok static
-> v8: Unmodified from v7
-> ---
->  security/integrity/digsig.c                      |  2 +-
->  security/integrity/integrity.h                   |  5 +++++
->  .../integrity/platform_certs/keyring_handler.c   |  2 +-
->  .../integrity/platform_certs/machine_keyring.c   | 16 ++++++++++++++++
->  4 files changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index 7b719aa76188..c8c8a4a4e7a0 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -112,7 +112,7 @@ static int __init __integrity_init_keyring(const unsigned int id,
->  	} else {
->  		if (id == INTEGRITY_KEYRING_PLATFORM)
->  			set_platform_trusted_keys(keyring[id]);
-> -		if (id == INTEGRITY_KEYRING_MACHINE)
-> +		if (id == INTEGRITY_KEYRING_MACHINE && trust_moklist())
->  			set_machine_trusted_keys(keyring[id]);
->  		if (id == INTEGRITY_KEYRING_IMA)
->  			load_module_cert(keyring[id]);
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> index 730771eececd..2e214c761158 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -287,9 +287,14 @@ static inline void __init add_to_platform_keyring(const char *source,
->  
->  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
->  void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
-> +bool __init trust_moklist(void);
->  #else
->  static inline void __init add_to_machine_keyring(const char *source,
->  						  const void *data, size_t len)
->  {
->  }
-> +static inline bool __init trust_moklist(void)
-> +{
-> +	return false;
-> +}
->  #endif
-> diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
-> index 4872850d081f..1db4d3b4356d 100644
-> --- a/security/integrity/platform_certs/keyring_handler.c
-> +++ b/security/integrity/platform_certs/keyring_handler.c
-> @@ -83,7 +83,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
->  __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
->  {
->  	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
-> -		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
-> +		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
->  			return add_to_machine_keyring;
->  		else
->  			return add_to_platform_keyring;
-> diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
-> index 09fd8f20c756..7aaed7950b6e 100644
-> --- a/security/integrity/platform_certs/machine_keyring.c
-> +++ b/security/integrity/platform_certs/machine_keyring.c
-> @@ -8,6 +8,8 @@
->  #include <linux/efi.h>
->  #include "../integrity.h"
->  
-> +static bool trust_mok;
-> +
->  static __init int machine_keyring_init(void)
->  {
->  	int rc;
-> @@ -59,3 +61,17 @@ static __init bool uefi_check_trust_mok_keys(void)
->  
->  	return false;
->  }
-> +
-> +bool __init trust_moklist(void)
-> +{
-> +	static bool initialized;
-> +
-> +	if (!initialized) {
-> +		initialized = true;
-> +
-> +		if (uefi_check_trust_mok_keys())
-> +			trust_mok = true;
-> +	}
-> +
-> +	return trust_mok;
-> +}
-> -- 
-> 2.18.4
-> 
+RnJvbTogUGludHUgQWdhcndhbA0KPiBTZW50OiAwOCBKYW51YXJ5IDIwMjIgMTY6NTMNCj4gDQo+
+IE9uIFNhdCwgOCBKYW4gMjAyMiBhdCAwMzo1MiwgRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRA
+YWN1bGFiLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBQaW50dSBLdW1hcg0KPiA+ID4gU2Vu
+dDogMDcgSmFudWFyeSAyMDIyIDE4OjA4DQo+ID4gPg0KPiA+ID4gVGhlIHN5c2luZm8gbWVtYmVy
+IGRvZXMgbm90IGhhdmUgYW55ICJhdmFpbGFibGUgcmFtIiBmaWVsZCBhbmQNCj4gPiA+IHRoZSBi
+dWZmZXJyYW0gZmllbGQgaXMgbm90IG11Y2ggaGVscGZ1bCBlaXRoZXIsIHRvIGdldCBhIHJvdWdo
+DQo+ID4gPiBlc3RpbWF0ZSBvZiBhdmFpbGFibGUgcmFtIG5lZWRlZCBmb3IgYWxsb2NhdGlvbi4N
+Cj4gPiA+DQo+ID4gPiBPbmUgbmVlZHMgdG8gcGFyc2UgTWVtQXZhaWxhYmxlIGZpZWxkIHNlcGFy
+YXRlbHkgZnJvbSAvcHJvYy9tZW1pbmZvDQo+ID4gPiB0byBnZXQgdGhpcyBpbmZvIGluc3RlYWQg
+b2YgZGlyZWN0bHkgZ2V0dGluZyBpZiBmcm9tIHN5c2luZm8gaXRzZWxmLg0KPiA+ID4NCj4gPiA+
+IFRodXMsIHRoaXMgcGF0Y2ggaW50cm9kdWNlIGEgbmV3IGZpZWxkIGFzIGF2YWlscmFtIGluIHN5
+c2luZm8NCj4gPiA+IHNvIHRoYXQgYWxsIHRoZSBpbmZvIHRvdGFsL2ZyZWUvYXZhaWxhYmxlIGNh
+biBiZSByZXRyaWV2ZWQgZnJvbQ0KPiA+ID4gb25lIHBsYWNlIGl0c2VsZi4NCj4gPiA+DQo+ID4g
+Li4uDQo+ID4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L3N5c2luZm8uaCBiL2lu
+Y2x1ZGUvdWFwaS9saW51eC9zeXNpbmZvLmgNCj4gPiA+IGluZGV4IDQzNWQ1YzIuLmZlODRjNmEg
+MTAwNjQ0DQo+ID4gPiAtLS0gYS9pbmNsdWRlL3VhcGkvbGludXgvc3lzaW5mby5oDQo+ID4gPiAr
+KysgYi9pbmNsdWRlL3VhcGkvbGludXgvc3lzaW5mby5oDQo+ID4gPiBAQCAtMTksNyArMTksOCBA
+QCBzdHJ1Y3Qgc3lzaW5mbyB7DQo+ID4gPiAgICAgICBfX2tlcm5lbF91bG9uZ190IHRvdGFsaGln
+aDsgICAgIC8qIFRvdGFsIGhpZ2ggbWVtb3J5IHNpemUgKi8NCj4gPiA+ICAgICAgIF9fa2VybmVs
+X3Vsb25nX3QgZnJlZWhpZ2g7ICAgICAgLyogQXZhaWxhYmxlIGhpZ2ggbWVtb3J5IHNpemUgKi8N
+Cj4gPiA+ICAgICAgIF9fdTMyIG1lbV91bml0OyAgICAgICAgICAgICAgICAgLyogTWVtb3J5IHVu
+aXQgc2l6ZSBpbiBieXRlcyAqLw0KPiA+ID4gLSAgICAgY2hhciBfZlsyMC0yKnNpemVvZihfX2tl
+cm5lbF91bG9uZ190KS1zaXplb2YoX191MzIpXTsgICAvKiBQYWRkaW5nOiBsaWJjNSB1c2VzIHRo
+aXMuLiAqLw0KPiA+DQo+ID4gVGhlcmUgYXJlIDQgcGFkIGJ5dGVzIGhlcmUgb24gbW9zdCA2NGJp
+dCBhcmNoaXRlY3R1cmVzLg0KPiA+DQo+ID4gPiArICAgICBfX2tlcm5lbF91bG9uZ190IGF2YWls
+cmFtOyAgICAgIC8qIE1lbW9yeSBhdmFpbGFibGUgZm9yIGFsbG9jYXRpb24gKi8NCj4gPiA+ICsg
+ICAgIGNoYXIgX2ZbMjAtMypzaXplb2YoX19rZXJuZWxfdWxvbmdfdCktc2l6ZW9mKF9fdTMyKV07
+ICAgLyogUGFkZGluZzogbGliYzUgdXNlcyB0aGlzLi4gKi8NCj4gPiA+ICB9Ow0KPiA+DQo+ID4g
+WW91J3ZlIG5vdCBjb21waWxlLXRpbWUgdGVzdGVkIHRoZSBzaXplIG9mIHRoZSBzdHJ1Y3R1cmUu
+DQo+ID4NCj4gV2l0aCAiMzIiIGluc3RlYWQgb2YgIjIwIiBpbiBwYWRkaW5nIEkgZ2V0IHRoZXNl
+IHNpemUgb2Ygc3lzaW5mbzoNCj4gSW4geDg2LTY0IGtlcm5lbCwgd2l0aCBhcHAgNjQtYml0OiBT
+aXplIG9mIHN5c2luZm8gPSAxMjgNCj4gSW4geDg2LTY0IGtlcm5lbCwgd2l0aCBhcHAgMzItYml0
+OjogU2l6ZSBvZiBzeXNpbmZvID0gNzYNCj4gSW4gYXJtLTY0IGtlcm5lbCwgd2l0aCBhcHAgMzIt
+Yml0OiBTaXplIG9mIHN5c2luZm8gPSA3Ng0KDQpZb3UgbmVlZCB0byBjb21wYXJlIHRoZSBzaXpl
+cyBiZWZvcmUgYW5kIGFmdGVyIHlvdXIgcGF0Y2gNCnRvIGVuc3VyZSBpdCBkb2Vzbid0IGNoYW5n
+ZSBvbiBhbnkgYXJjaGl0ZWN0dXJlLg0KDQo+IE9rYXkgdGhlIHN5cyByb2JvdCByZXBvcnRlZCBz
+b21lIGlzc3VlIGluIDY0LWJpdCBidWlsZC4NCj4ge3t7DQo+ID4+IGluY2x1ZGUvdWFwaS9saW51
+eC9zeXNpbmZvLmg6MjM6MTQ6IGVycm9yOiBzaXplIG9mIGFycmF5ICdfZicgaXMgdG9vIGxhcmdl
+DQo+ID4+ICAgIDIzIHwgICAgICAgICBjaGFyIF9mWzIwLTMqc2l6ZW9mKF9fa2VybmVsX3Vsb25n
+X3QpLXNpemVvZihfX3UzMildOyAgIC8qIFBhZGRpbmc6IGxpYmM1IHVzZXMNCj4gdGhpcy4uICov
+DQo+ID4+ICAgICAgIHwgICAgICAgICAgICAgIF5+DQo+IH19fQ0KPiANCj4gQWxzbywgSSBnb3Qg
+dGhlIHNhbWUgaXNzdWUgd2hpbGUgYnVpbGRpbmcgZm9yIGFybTY0LCBzbyBJIHRyaWVkIHRvDQo+
+IGFkanVzdCBsaWtlIHRoaXM6DQo+IGNoYXIgX2ZbMzItMypzaXplb2YoX19rZXJuZWxfdWxvbmdf
+dCktc2l6ZW9mKF9fdTMyKV07DQo+IA0KPiBXaXRoIHRoaXMgdGhlIGJ1aWxkIHdvcmtzIG9uIGJv
+dGggMzIvNjQgYnV0IG91dHB1dCBmYWlscyB3aGVuIHJ1bm5pbmcNCj4gMzItYml0IHByb2dyYW0g
+b24gNjQtYml0IGtlcm5lbC4NCj4gQWxzbywgdGhlIGZyZWUgY29tbWFuZCBvbiA2NC1iaXQgcmVw
+b3J0cyAic3RhY2sgc21hc2hpbmcgZXJyb3IiLi4NCj4gDQo+IEhvdyBkbyB3ZSByZXNvbHZlIHRo
+aXMgaXNzdWUgdG8gbWFrZSBpdCB3b3JrIG9uIGJvdGggYXJjaCA/DQo+IEFsc28sIEkgZG9uJ3Qg
+cmVhbGx5IHVuZGVyc3RhbmQgdGhlIHNpZ25pZmljYW5jZSBvZiB0aGF0IG51bWJlciAiMjAiDQo+
+IGluIHBhZGRpbmcgPw0KDQpNeSBndWVzcyBpcyB0aGF0IHNvbWVvbmUgYWRkZWQgYSBjaGFyIF9m
+WzIwXSBwYWQgdG8gYWxsb3cgZm9yIGV4cGFuc2lvbi4NClRoZW4gdHdvIF9fa2VybmVsX3Vsb25n
+X3QgYW5kIG9uZSBfX3UzMiBmaWVsZCB3ZXJlIGFkZGVkLCBzbyB0aGUNCnNpemUgb2YgdGhlIHBh
+ZCB3YXMgcmVkdWNlZC4NCldoZW4gX19rZXJuZWxfdWxvbmdfdCBpcyA2NGJpdCB0aGVuIGl0IHNl
+ZW1zIHRvIGJlIGNoYXIgX2ZbMF0NCi0gd2hpY2ggbWlnaHQgZ2VuZXJhdGUgYSBjb21waWxlIHdh
+cm5pbmcgc2luY2UgeW91IGFyZSBzdXBwb3NlZA0KdG8gdXNlIGNoYXIgX2ZbXSB0byBpbmRpY2F0
+ZSBhbiBleHRlbnNpYmxlIHN0cnVjdHVyZS4NClRoZXJlIGlzLCBob3dldmVyLCA0IGJ5dGVzIG9m
+IHBhZCBhZnRlciB0aGUgX2ZbXSBvbiBtb3N0IDY0Yml0DQphcmNoaXRlY3R1cmVzLg0KDQpTbyBh
+Y3R1YWxseSB0aGVyZSBpc24ndCBlbm91Z2ggc3BhY2UgdG8gYW55dGhpbmcgdXNlZnVsIGF0IGFs
+bC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBS
+b2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9u
+IE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-Mimi, have you tested these patches already?
-
-/Jarkko

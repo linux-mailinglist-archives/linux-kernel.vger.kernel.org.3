@@ -2,84 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8234886E1
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 00:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3304886DB
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 00:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbiAHXTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 18:19:33 -0500
-Received: from mail.foescog.net ([5.56.56.234]:56416 "EHLO mail.foescog.net"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229761AbiAHXTc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 18:19:32 -0500
-X-Greylist: delayed 489 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Jan 2022 18:19:32 EST
-Received: from 42.91-116-32.dynamic.clientes.euskaltel.es (unknown [91.116.32.42])
-        by mail.foescog.net (Postfix) with ESMTPSA id 764F62060B1
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 00:11:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gruposerys.net;
-        s=default; t=1641683480;
-        bh=xUrfVs0SwqMa4XF9Lpvuw2aBNh65XgM2+voF5q808Ko=; h=From:To:Subject;
-        b=JZ5Bgaa7yfJb16d+Bv2SNbAf9VZwjcoTCtdbtTUswUCs4XuQFpa3KeCmmAI7h+ATt
-         NkNasEcx/JAmZ7U+VLppqdbDOO2Q6lC/vjtcoSOD73ZQRetYQmCT6IhLPDLZMVc9hE
-         BJ3eaeeEGwgSyDuR/ZOas27RIwDeMasqnPmTLXx8=
+        id S233328AbiAHXOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 18:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230523AbiAHXOx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 18:14:53 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59948C06173F;
+        Sat,  8 Jan 2022 15:14:53 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C2CBCA1B;
+        Sun,  9 Jan 2022 00:14:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1641683691;
+        bh=7Aio/iRDAxNunTbg8WsiGIhvJ9QnXJxaQ4E1tDijvNQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aNSEDsJgvdh4F4knVbBevLF9EM7wlrg3IO2x89Wb6re7ziDtXxmE/mhQJK4VJfpWz
+         ea8FZ3qoPxmUF1P7olq/+Ic75FLIqcyoudgr58sOrPtKGRCC6rIo31B7MlQf4uNVnL
+         9i+ohMduDNFqYcy0nDW507xCtoSuE8YOYADrWgr0=
+Date:   Sun, 9 Jan 2022 01:14:42 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x
+ variants
+Message-ID: <Ydoa4nK8PjzZGQ9F@pendragon.ideasonboard.com>
+References: <20220108185759.2086347-1-patrick.rudolph@9elements.com>
+ <20220108185759.2086347-2-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-From:   "SERYS" <info2@gruposerys.net>
-Reply-To: info2@gruposerys.net
-To:     linux-kernel@vger.kernel.org
-Subject: Consulta SERYS
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Smart_Send_4_3_3
-Date:   Sun, 9 Jan 2022 00:11:17 +0100
-Message-ID: <9052468301968191234011@DESKTOP-E4PFAM0>
-X-Priority: 1
-X-MSMail-Priority: High
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220108185759.2086347-2-patrick.rudolph@9elements.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Buenos d=EDas
+Hi Patrick,
 
+Thank you for the patch.
 
+On Sat, Jan 08, 2022 at 07:57:55PM +0100, Patrick Rudolph wrote:
+> Add the Maxim MAX735x/MAX736x as supported chip and give an example
+> how to use it. The functionality will be provided by the exisintg
+> pca954x driver.
 
-Desde SERYS ENERGIA estamos informando a todas las empresas, particulares y=
- entidades p=FAblicas acerca del servicio de autoconsumo el=E9ctrico median=
-te la instalaci=F3n totalmente financidada de placas solares fotovoltaicas.
+While DT bindings and drivers are decoupled, the fact that the same
+driver provides support for the MAX735x/MAX736x indicates there's some
+similarity between those and the PCA954x chips. Would they be similar
+enough to have a single DT binding schema file ? This file looks very
+similar to Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml.
 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> ---
+>  .../bindings/i2c/i2c-mux-max735x.yaml         | 101 ++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
+> new file mode 100644
+> index 000000000000..dc924ec934ca
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
+> @@ -0,0 +1,101 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/i2c-mux-max735x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX735x/MAX736x I2C bus switch
+> +
+> +maintainers:
+> +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> +
+> +description:
+> +  The binding supports Maxim MAX735x and MAX736x I2C mux/switch devices.
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-mux.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - maxim,max7367
+> +              - maxim,max7369
+> +    then:
+> +      properties:
+> +        interrupts: true
+> +
+> +        "#interrupt-cells":
+> +          const: 2
+> +
+> +        interrupt-controller: true
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - maxim,max7356
+> +          - maxim,max7357
+> +          - maxim,max7358
+> +          - maxim,max7367
+> +          - maxim,max7368
+> +          - maxim,max7369
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  i2c-mux-idle-disconnect:
+> +    type: boolean
+> +    description: Forces mux to disconnect all children in idle state. This is
+> +      necessary for example, if there are several multiplexers on the bus and
+> +      the devices behind them use same I2C addresses.
+> +
+> +  idle-state:
+> +    description: if present, overrides i2c-mux-idle-disconnect
+> +    $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        i2c-mux@74 {
+> +            compatible = "maxim,max7357";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0x74>;
+> +
+> +            i2c@1 {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <1>;
+> +
+> +                eeprom@54 {
+> +                    compatible = "atmel,24c08";
+> +                    reg = <0x54>;
+> +                };
+> +            };
+> +
+> +            i2c@7 {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <7>;
+> +
+> +                rtc@51 {
+> +                    compatible = "nxp,pcf8563";
+> +                    reg = <0x51>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
 
-Por este motivo rogamos pod=E1is respondernos indicando una de la siguiente=
-s respuestas:
+-- 
+Regards,
 
-
-1 - Precisamos recibir presupuesto personalizado y sin compromiso (Indicar =
-por favor nombre y tel=E9fono de contacto).
-
-2 - No precisamos recibir informaci=F3n, disponemos ya de una instalaci=F3n=
- fotovoltaica.
-
-3 - No precisamos recibir informaci=F3n, no nos interesa cambiar.
-
-
-Gracias por vuestra colaboraci=F3n, quedamos a la espera de vuestra respues=
-ta.
-
-
-Saludos cordiales.
-
-
-Departamento de autoconsumo y renovables
-SERYS CONSULTING ESPA=D1A
-Tel. 604213428
-Email. info@serys-energia.com
-
-www.serys-energia.com
-
-Antes de imprimir este e-mail piense bien si es necesario hacerlo. De confo=
-rmidad con lo dispuesto en el Reglamento Europeo del 2016/679, del 27 de Ab=
-ril de 2016 le informamos que la informaci=F3n transmitida en este mensaje =
-est=E1 dirigida solamente a las personas o entidades que figuran en el enca=
-bezamiento y contiene informaci=F3n confidencial, por lo que, si usted lo r=
-ecibiera por error, por favor destr=FAyalo sin copiarlo, usarlo ni distribu=
-irlo, comunic=E1ndolo inmediatamente al emisor del mensaje.=20
-
-Puede solicitar BAJA en el env=EDo de correos electr=F3nicos "PULSANDO AQUI=
-" <mailto:bajas@serys.net=3FSubject=3DBAJA%20CORREOS> y "ENVIAR".
+Laurent Pinchart

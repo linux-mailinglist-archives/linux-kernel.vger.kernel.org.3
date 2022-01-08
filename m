@@ -2,144 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B544948848B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F1B48848D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234649AbiAHQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 11:34:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S234689AbiAHQga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 11:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiAHQe4 (ORCPT
+        with ESMTP id S229553AbiAHQg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 11:34:56 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101CAC06173F;
-        Sat,  8 Jan 2022 08:34:56 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id c15so8540733qtc.4;
-        Sat, 08 Jan 2022 08:34:56 -0800 (PST)
+        Sat, 8 Jan 2022 11:36:29 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6F7C06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 08:36:29 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so10370957pjb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 08:36:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ir0fUBlJOSxIKJ5kZssUGKPR5Sf2B0VkC+VrvjdSBaM=;
-        b=KtEIObBVBgUUq62VNIUSeZ5W2yR2/dw7e8HJu6LnPPpvfyFHfRifjjibMqwvS6wosP
-         JnXln5aKPkjmwth1AJfix/kXTyfj1gSZsVWHxvlTtl2I4ynEsbUnEmil3XV6tlKmB3JH
-         M21QokQZZ7P3MHzEffD7yCJ248o20YOdqzeZZJbgsIVN21QP8KKlJ3CjIJjPr9O4s4Fy
-         H8BYXsdvXazUntCMhXAvyk+13pzcyy3njcLvY81HC0AE6pzxK6iF1lFendL2i+muDOFT
-         rCDy/ChVrM0tGtuURQrs2ZdeMAnE82sXQJfs8Z9Mrmh0cR+tTExn8hWfrVw/CSe53ClZ
-         62Bg==
+        bh=XvXSaj2zeUMV5gu1zDCnUuXXW18H0oit6FmC8vDPjvA=;
+        b=iGkQAeeBFRxLCjXlK7BRY37ALdjccxhPJ3PSopYuGyxD5aLrjRQmuH6D6Uv2v7RFC9
+         RBfuFRb6n0vH3FZSZCIRwv3CxfyYbFJpFoLRT3PbA80YMciR9NZBsY1+kr7r5popNxeP
+         EPe7OIz3MpJcAfU2ujrnBHccjlfesO9BOiXCd3cnvoQCu4jFtxe9haq7bLVbNxBIyISP
+         VS6ezhBRJkXeRLpWCZTWvInZd+W9M3WYjDkNsGEPJqInomzyrNSgvOKFRW1KjbHAZJ0E
+         gd62tvHeOmne2av4Ta0n9RXScLiA4wdE8sMmIbkRkMSZwy8EON4z6qxyH5RFOZtdoYwe
+         kocg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ir0fUBlJOSxIKJ5kZssUGKPR5Sf2B0VkC+VrvjdSBaM=;
-        b=mI7RUN43YlnAhADP+mq9e3u8jQfwz+UOYMF0kUsgS7gceea6lVqNptpDotR02o7/iu
-         65Q+9tUtC3LGH5VJMpNGvFHG4PswRfCehlbxLtA859TmLMpLO7Na54mNM7dz6cyboisr
-         bl7dYndLnGO8AWqKgSwt6c38wEvi8hJdfGrYzeohluTmAU29jvdOM3IVt42Hjjwaeqd1
-         9XWiWIzF2SBz9++FBAsTSrnZ3Z7mPDyFrl3MTsZ9eZCAG4nqkozaozyImx+T64sgs1Ne
-         flGZzrzxvNE1hv/VF4ItFKGLA2BSBPi7a/9FpMLgUZDOvuBtUWYpyM6Qw2bHqupdvowJ
-         c0sg==
-X-Gm-Message-State: AOAM5310rgt/+oyC4yVjQvjNLKTh3oI62PkPOcGlfg1ZyKrKVS7zeHI9
-        41K6RwwE70pZAZ1qFV4REeo=
-X-Google-Smtp-Source: ABdhPJy20tpp8O0kcl4aDH3SX+8JaeJaoDFyiNgwGe1V587lbQ99xsZ30YXqamGXPwAImXhrRiMpjA==
-X-Received: by 2002:ac8:758b:: with SMTP id s11mr60096920qtq.51.1641659695139;
-        Sat, 08 Jan 2022 08:34:55 -0800 (PST)
-Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
-        by smtp.gmail.com with ESMTPSA id q25sm1215898qkj.102.2022.01.08.08.34.53
+        bh=XvXSaj2zeUMV5gu1zDCnUuXXW18H0oit6FmC8vDPjvA=;
+        b=skeWEaXBsY8f7x1XO7bAmEs/uJcRhLDp8qNBBQrBpoDqIvxGFHIi90NBI8QUT0VKBg
+         lg33++80Ilk8O3dUcSs1F71x+IazPa/CZpVkjohMtHFoHlxki2GgpBPPaVmbOtk11/1d
+         x0hyNbIp8d8U8HB6mdgACQklz7Tdfz4IC/AxAbgaqLtn02Hkm6ass34Ce4RFSOc4gTa8
+         AYPSH9YukpwCHLady1y8GtZWYW0HdnMRZirNnH42Z/FDRBbUL3pLXowmJ+xsV8BfdJ/B
+         JC9hQPNXBTzYBjyp5cP1xE+O7Q+zwT5mOUGfTCGZTnR0nFgLIhEhg24RLypEctAcSIsp
+         HPgA==
+X-Gm-Message-State: AOAM532rutBh2CDuuWNlhykWlyDlAm2q4jTD1/KywBKby0sldAYO6N/G
+        197GXD/Fwbf27fnvgT9h/3Q=
+X-Google-Smtp-Source: ABdhPJwo6okPb9QZ8f70X4vvIP1d9EnTARDX/m6CwIFyPpxLKZIrld+qwvd8vNVklN/OSYm8MN0MCA==
+X-Received: by 2002:a17:90a:bb91:: with SMTP id v17mr20206722pjr.238.1641659788756;
+        Sat, 08 Jan 2022 08:36:28 -0800 (PST)
+Received: from realwakka ([59.12.165.26])
+        by smtp.gmail.com with ESMTPSA id z12sm2627183pfe.110.2022.01.08.08.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 08:34:54 -0800 (PST)
-Date:   Sat, 8 Jan 2022 11:34:51 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v11 09/15] iio: afe: rescale: reduce risk of integer
- overflow
-Message-ID: <Ydm9K3Zx3jPPv70B@shaak>
-References: <20211222034646.222189-1-liambeguin@gmail.com>
- <20211222034646.222189-10-liambeguin@gmail.com>
- <CAHp75Vc0aWrFtNK1ZkHkwP62zNXQJaDcn9pc8Uhfq0kOnWzmJg@mail.gmail.com>
- <YcNwt5RFMNFUimD/@shaak>
- <CAHp75VdrLTNLWZRgWkLXD23RAF28zh29XybywAPyMtb=GNxXbw@mail.gmail.com>
- <YcODglDWiknz2oeV@shaak>
- <CAHp75Vejfr_S7iK7fAvs7ELxE1TJUECvmKv0-G5Zwunyc6nDQA@mail.gmail.com>
+        Sat, 08 Jan 2022 08:36:28 -0800 (PST)
+Date:   Sat, 8 Jan 2022 16:36:21 +0000
+From:   Sidong Yang <realwakka@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: pi433: move get version func to where all
+ other functions are
+Message-ID: <20220108163621.GA26654@realwakka>
+References: <20220106201430.GA3416@mail.google.com>
+ <20220106213325.GA10767@mail.google.com>
+ <20220107085343.GP7674@kadam>
+ <20220107192438.GB2693@mail.google.com>
+ <20220108111910.GA1978@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vejfr_S7iK7fAvs7ELxE1TJUECvmKv0-G5Zwunyc6nDQA@mail.gmail.com>
+In-Reply-To: <20220108111910.GA1978@kadam>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Sat, Jan 08, 2022 at 02:19:10PM +0300, Dan Carpenter wrote:
 
-On Wed, Dec 22, 2021 at 11:32:24PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 22, 2021 at 9:59 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> > On Wed, Dec 22, 2021 at 08:56:12PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Dec 22, 2021 at 8:38 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> > > > On Wed, Dec 22, 2021 at 02:29:04PM +0200, Andy Shevchenko wrote:
-> > > > > On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
+Hi, Paul.
+Thanks for applying my opinion. And there is one thing to metion.
+
+> On Sat, Jan 08, 2022 at 08:24:38AM +1300, Paulo Miguel Almeida wrote:
+> > On Fri, Jan 07, 2022 at 11:53:44AM +0300, Dan Carpenter wrote:
+> > > Just say:
+> > > 
+> > > 	retval = rf69_read_reg(spi, REG_VERSION);
+> > 
+> > atm rf69_read_reg is a static function in rf69.c.
+> > 
 > 
-> ...
+> I would remove be the static.
 > 
-> > > > > > -               tmp = 1 << *val2;
-> > > > >
-> > > > > At some point this should be BIT()
+> > I do agree that this is technically possible to write the code
+> > exactly as you suggested but on the other hand, that would be the only
+> > exception to the rule when considering all other higher-level functions
+> > provided in the rf69.c
+> 
+> There may be other functions which will benefit from this later on.  So
+> instead of "only" a better word is "first".  Some of those high level
+> functions make sense because they are slightly complicated and have
+> multiple callers.  But in this case open coding it seems easier to read.
+> 
+> > 
+> > are you strongly set on the rf69_read_reg approach or would you
+> > be open to keep the original approach? (rf69_get_version)
+> 
+> I think my approach is best but I don't care.
+> 
+> > 
+> > > 	if (retval < 0)
+> > > 		return retval;
+> > > 
+> > > Deleting the error handling was a bad style choice.  Also preserve the
+> > > error code.
 > > >
-> > > Forgot to add, If it's 64-bit, then BIT_ULL().
-> > >
-> > > > I'm not against changing this, but (to me at least) 1 << *val2 seems
-> > > > more explicit as we're not working with bitfields. No?
-> > >
-> > > You may add a comment. You may use int_pow(), but it will be suboptimal.
-> > >
-> > > > > Rule of thumb (in accordance with C standard), always use unsigned
-> > > > > value as left operand of the _left_ shift.
-> > > >
-> > > > Right, that makes sense! In practice though, since we'll most likely
-> > > > never use higher bits of *val2 with IIO_VAL_FRACTIONAL_LOG2, would it be
-> > > > enough to simply typecast?
-> > > >
-> > > >         tmp = 1 << (unsigned int)*val2;
-> > >
-> > > No, it's about the _left_ operand.
-> > > I haven't checked if tmp is 64-bit, then even that would be still wrong.
-> >
-> > Okay so your recommendation is to not use a left shift?
+> > 
+> > I just want to double-check if this suggestion is taking into
+> > consideration what was mentioned here:
+> > https://lore.kernel.org/lkml/20220106210134.GB3416@mail.google.com/ 
+> > 
+> > If it is, I'm happy to add it back but I just wanted to confirm it
+> > first.
 > 
-> No, I recommend not to use int type as a _leftside_ operand.
-> BIT() / BIT_ULL() does a left shift anyway.
+> Yes.  Keep the error handling.  Your way makes the code more complicated
+> to read.
 
-Oh, got it. Sorry for misreading your message.
-would something like this be good enough?
+I totally really agree with it.
+Because the switch clause under this patch catches error with 'default:'
+but it returns '-ENODEV'. I worried that it lost retval from reading
+register if it has error.
 
-	s64 tmp;
-	u64 tmp2;
-
-	tmp2 = 1 << *val2;
-	tmp = tmp2;
-
-	...
-
-How can I validate this?
-
-> > I can look into that but given how unlikely it is to fall into those bad
-> > cases, I'd rather keep things as they are. Would that be okay?
 > 
-> > Also, I don't think using BIT() or BIT_ULL() would address this as they
-> > both do the same shift, with no extra checks.
+> regards,
+> dan carpenter
 > 
-> They do slightly different versions of it. They use an unsigned int type.
-> 
-> Open coded or not, it's up to you. Just convert to unsigned int.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
-Cheers,
-Liam

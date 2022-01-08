@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DB5488322
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AA7488327
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiAHLIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 06:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiAHLIa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 06:08:30 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716D0C061574;
-        Sat,  8 Jan 2022 03:08:29 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so16201674wra.6;
-        Sat, 08 Jan 2022 03:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QEd7jShQk1ml/OyAi/kpMudTLo3rO1TWVpy7f9K8afc=;
-        b=bMgpN08rni6AurnSOUKC9hTpgCbtphQymgTmu+WqvnMnSiD88yJYICu51fRcP6Q5LU
-         ZeLmWdmsQcj71iv//LrobynxxsVgN88HwmnvHu9ZuK744sikFEKVvoCpGe/gESYJflAg
-         3kZK/W9LumTPVAgLJ9xK40y4MoYEZuepKrzS9SYbfuwk+JKIY8LeoRPDiuIdD6p7y4i/
-         MFnsXgM9McX3pHsHZ0TcRLdQOuSD8GYoq+1zsVGNifB7vkpvKdMHIPApQ5MkGuiNnh6v
-         L+9lOoTJi4+15cvANwgqCloJQPRUwY5iE3oq3tBfdZmKZN/O5iYZ1EvXWtEpX7bzQ3A7
-         3IwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=QEd7jShQk1ml/OyAi/kpMudTLo3rO1TWVpy7f9K8afc=;
-        b=HXlhIc7jiozBk6DWJsr+ZKCywKYvEv3UZn32CrI4tKJ0WRx4dsaaCDij6r2VWzrbKE
-         B3wfSoQ/rGI16vdDB3NOt59oK+yizsvH/QEHe+ZqNSYVofBXhWpbGYrYwmHLIKq0RWtb
-         jgkLk1aTweWzvG6wXywotHJAQUS2Pl7+rfBmBiOv33nxq8yuVyENHX/KXdgiLPzjK64F
-         xI34gOAL7Ocg8kfrX1tShbgVURmNPzvutXv3ku3/1gcaLrX0zWmEX0ng8rPuqAiPcO5V
-         JslPS5Gky14HPc3K4H4ig5JFA7g1CT7VuCcnECRsxZr8mi5Pqp39tLia1hInPzL2X6Ly
-         u8+A==
-X-Gm-Message-State: AOAM530Xew8H9Lxg2xtT43A9RTipWxkrlfkTjkp4sMz9i4UrtjpZ4iQH
-        3Tk5jCX+at/LutKsFtEbtNs=
-X-Google-Smtp-Source: ABdhPJwnsz6GcODYiRzSMmaPUkZdoCsUYOGKtkSZsehdoKS7bUE4455GcXP3luYqUcXtqbLpkH0DPA==
-X-Received: by 2002:a5d:53c2:: with SMTP id a2mr13050516wrw.154.1641640107930;
-        Sat, 08 Jan 2022 03:08:27 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id m6sm1535455wrx.36.2022.01.08.03.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 03:08:27 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 12:08:24 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: [PATCH] FIX: headers/deps: uapi/headers: Create usr/include/uapi
- symbolic link
-Message-ID: <YdlwqFQCJpYiDfRR@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
- <YdTvXkKFzA0pOjFf@gmail.com>
- <YdYQu9YxNw0CxJRn@archlinux-ax161>
+        id S231493AbiAHLOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 06:14:55 -0500
+Received: from mga02.intel.com ([134.134.136.20]:14175 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231459AbiAHLOy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 06:14:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641640494; x=1673176494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v+IekTsQmQ/ksCj4H81MNQxrz7WPGupipOILz7V/o7o=;
+  b=dYhZHWwNRJPid1uBOf2y7MnZLhl9m1zRt3qLgYZR9BJw7+MsB9aDPHDi
+   mgdi+IYKhutbkmgBl6PLlLojtE1VMAqrV8JMm2Pf1D0Jed0DL+0jaonz/
+   KRiEbha+93ibmtIsl+u8OA/ucOWEgVI9ml/qp1hM5GqceVhsVS7lraHZq
+   JOgrgthAwYQYTZl5plFJstX33nFSkB3ygHu3Tbb9uNBdqGmJcFC88xTlk
+   JM+tRPewfr2gT1dxI/yWDXxNopZOJO3QICq4igIe8WrxvMYsgmfJm0M0j
+   he122J4Mmp1HDd5ZpdAgSUqOBhzd0nZ1Lqm8u+IdAvHvwro4pTaS8TuRT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="230347942"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="230347942"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 03:14:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="473624106"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Jan 2022 03:14:52 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n69gR-0000ZA-Rt; Sat, 08 Jan 2022 11:14:51 +0000
+Date:   Sat, 8 Jan 2022 19:13:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sanrio Alvares <sanrio.alvares@intel.com>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        mika.westerberg@linux.intel.com,
+        Sanrio Alvares <sanrio.alvares@intel.com>
+Subject: Re: [PATCH] PCI / thunderbolt: Add quirk to handle incorrect
+ Supported Link Speeds
+Message-ID: <202201081937.sL6eGkBc-lkp@intel.com>
+References: <20220106224240.31052-1-sanrio.alvares@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
+In-Reply-To: <20220106224240.31052-1-sanrio.alvares@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Sanrio,
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
+Thank you for the patch! Perhaps something to improve:
 
-> 2. Build failures with CONFIG_UAPI_HEADER_TEST=y and O=...
-> 
-> This was originally reproduced with allmodconfig but this is a simpler
-> reproducer I think.
-> 
-> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 defconfig
-> 
-> $ scripts/config --file .build/x86_64/.config -e HEADERS_INSTALL -e UAPI_HEADER_TEST
-> 
-> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 olddefconfig usr/
+[auto build test WARNING on helgaas-pci/next]
+[also build test WARNING on v5.16-rc8 next-20220107]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-The simplified & scripted reproducer is very useful, thanks a ton!
+url:    https://github.com/0day-ci/linux/commits/Sanrio-Alvares/PCI-thunderbolt-Add-quirk-to-handle-incorrect-Supported-Link-Speeds/20220107-064444
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: i386-randconfig-r024-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081937.sL6eGkBc-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/98f8f42acd1b8f46f3e6778fa58dd0d1cd005369
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sanrio-Alvares/PCI-thunderbolt-Add-quirk-to-handle-incorrect-Supported-Link-Speeds/20220107-064444
+        git checkout 98f8f42acd1b8f46f3e6778fa58dd0d1cd005369
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/pci/
 
-> In file included from <command-line>:
-> ./usr/include/linux/rds.h:38:10: fatal error: uapi/linux/sockios.h: No such file or directory
->    38 | #include <uapi/linux/sockios.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/rds.hdrtest] Error 1
-> In file included from ./usr/include/linux/qrtr.h:5,
->                  from <command-line>:
-> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
->     5 | #include <uapi/linux/socket_types.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> In file included from ./usr/include/linux/in.h:24,
->                  from ./usr/include/linux/nfs_mount.h:12,
->                  from <command-line>:
-> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
->     5 | #include <uapi/linux/socket_types.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/qrtr.hdrtest] Error 1
-> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/nfs_mount.hdrtest] Error 1
-> ...
-> 
-> I don't see this when just building in the tree. I am guessing that
-> commit f989e243f1f4 ("headers/deps: uapi/headers: Create
-> usr/include/uapi symbolic link") needs to account for this?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yeah. Here's my second attempt that creates the symlink as the 
-header-install make process, as it should - also pushed out into 
-sched/headers.
+All warnings (new ones prefixed by >>):
 
-(My Makefile-fu isn't overly powerful though, so this is just an attempt.)
+>> drivers/pci/quirks.c:5304:6: warning: no previous prototype for function 'quirk_intel_tbt_supported_link_speeds' [-Wmissing-prototypes]
+   void quirk_intel_tbt_supported_link_speeds(struct pci_dev *pdev)
+        ^
+   drivers/pci/quirks.c:5304:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void quirk_intel_tbt_supported_link_speeds(struct pci_dev *pdev)
+   ^
+   static 
+   1 warning generated.
 
-This fix will be backmerged into f989e243f1f4 in -v2.
 
-Thanks,
+vim +/quirk_intel_tbt_supported_link_speeds +5304 drivers/pci/quirks.c
 
-	Ingo
-
-=========================>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Sat, 8 Jan 2022 12:05:57 +0100
-Subject: [PATCH] FIX: f989e243f1f4 headers/deps: uapi/headers: Create usr/include/uapi symbolic link
+  5298	
+  5299	/*
+  5300	 * Intel Titan Ridge returns incorrect Supported Link Speeds Vector
+  5301	 * when max Link Speed is 2.5GT/s. This results in an extra 1s delay during
+  5302	 * resume_noirq with pcie tunneling enabled. Override that value:
+  5303	 */
+> 5304	void quirk_intel_tbt_supported_link_speeds(struct pci_dev *pdev)
+  5305	{
+  5306		pci_info(pdev, "applying Supported Link Speeds quirk\n");
+  5307		pdev->supported_link_speed = PCIE_SPEED_2_5GT;
+  5308	}
+  5309	DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15e7, quirk_intel_tbt_supported_link_speeds);
+  5310	DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ea, quirk_intel_tbt_supported_link_speeds);
+  5311	DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ef, quirk_intel_tbt_supported_link_speeds);
+  5312	
 
 ---
- scripts/Makefile.headersinst | 3 +++
- usr/include/uapi             | 1 -
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/Makefile.headersinst b/scripts/Makefile.headersinst
-index 029d85bb0b23..8ac831458143 100644
---- a/scripts/Makefile.headersinst
-+++ b/scripts/Makefile.headersinst
-@@ -78,6 +78,9 @@ existing-headers := $(filter $(old-headers), $(all-headers))
- 
- -include $(foreach f,$(existing-headers),$(dir $(f)).$(notdir $(f)).cmd)
- 
-+# link the <uapi/*> namespace:
-+LINK := $(shell ln -sf ../include $(objtree)/$(dst)/uapi)
-+
- PHONY += FORCE
- FORCE:
- 
-diff --git a/usr/include/uapi b/usr/include/uapi
-deleted file mode 120000
-index f5030fe88998..000000000000
---- a/usr/include/uapi
-+++ /dev/null
-@@ -1 +0,0 @@
--../include
-\ No newline at end of file
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

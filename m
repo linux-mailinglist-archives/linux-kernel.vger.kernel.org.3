@@ -2,87 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA5A488227
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CF948822E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiAHHZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 02:25:42 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:59781 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiAHHZl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 02:25:41 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JWBSz39k6z4xd4;
-        Sat,  8 Jan 2022 18:25:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641626740;
-        bh=T/jZhA/L/dBQfp25qCLfio2/MXXlXg5j0WqIA2XSV8U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rx3o9dExyKX7LRxz2Yil+gTijoel8hV5faFiZV8GFqt4M2b8M7aW9BL/ru6C0Ydki
-         HfqWJZm1S02eNX4Dx8psrGdl1xZEapwgZf+nfy2H9cxKVa82FClmwHubFo8nPa7DRQ
-         XJQCL7m6GMRuyyJxKCuKc0uDYYY0NR6Bz5kFr/qcDufvsw94WlfQn7UyxOEeKuk+f0
-         7+jVnbWVGGSz/+L5KZyBfZr6opY/lf5Gcwld3odg+IH/O/cbysInLGvuBJkqwqiMdR
-         /xNXjWdx/pYp5u4UJ63eg2Z6DRNvgSIsQV8FxDDxO4kHAVaubMe9+6Zq2FKmSGNArd
-         JNk1IyfkYo/hQ==
-Date:   Sat, 8 Jan 2022 18:25:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Baruch Siach <baruch@tkos.co.il>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the devicetree tree
-Message-ID: <20220108182538.362c8e29@canb.auug.org.au>
+        id S233738AbiAHH3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 02:29:48 -0500
+Received: from mga06.intel.com ([134.134.136.31]:10241 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233661AbiAHH3o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 02:29:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641626984; x=1673162984;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WmRyuzIY+tPoFY4WEGVgh86n0NOzU8FUsaqCLrCaXzU=;
+  b=Hc5bE/RBDuEDZ2dqeMZDLzEZEVsLok43TO8bVOhBl/QueMOLxFMZzRUz
+   DWPn389pMxqkRd4rdhbE+Al3lA0do+cxCAvuX145hec290P116fbcfMTS
+   WSJcpzC6nOaehGlumPl1ret4CA1rlXvUN9bKk6tJHXJzaG+teyMinS9U3
+   tsX/FwSMA+HspiOfbVGGLLdha1L26dPbUtm5DmrRpJ/vxxeiubZpWZPI7
+   ofCCBIEukX/Jy7GnJ+Smwlx6XaJ6rFBAfZQ3/C1gWsDcQbPIQglrD2Rdo
+   KYah2o9Yxp1ThAX6CKXGqJBD17axlm3/OH/Qar+r/zwH+6zKdv5wDj/dK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="303737556"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="303737556"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 23:29:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="690045002"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Jan 2022 23:29:43 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n66AY-0000NC-UI; Sat, 08 Jan 2022 07:29:42 +0000
+Date:   Sat, 8 Jan 2022 15:29:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1824/2372] lib/memcat_p.c:10:8: warning: no
+ previous prototype for '__memcat_p'
+Message-ID: <202201081547.TX8B6yRX-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   67f8f45b4d0cf00f8e53fc1c2b50c67608ede063
+commit: fdd4a8e803c246ee0751f572a078ffd97b73ba36 [1824/2372] headers/deps: smp: Optimize <linux/smp.h> dependencies, remove <linux/smp_api.h> inclusion
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220108/202201081547.TX8B6yRX-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=fdd4a8e803c246ee0751f572a078ffd97b73ba36
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout fdd4a8e803c246ee0751f572a078ffd97b73ba36
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Hi all,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-In commit
+All warnings (new ones prefixed by >>):
 
-  86ce070ce00a ("of: base: Fix phandle argument length mismatch error messa=
-ge")
+>> lib/memcat_p.c:10:8: warning: no previous prototype for '__memcat_p' [-Wmissing-prototypes]
+      10 | void **__memcat_p(void **a, void **b)
+         |        ^~~~~~~~~~
 
-Fixes tag
 
-  Fixes: af3be70a321 ("of: Improve of_phandle_iterator_next() error message=
-")
+vim +/__memcat_p +10 lib/memcat_p.c
 
-has these problem(s):
+93048c0944150b Alexander Shishkin 2018-10-16   4  
+93048c0944150b Alexander Shishkin 2018-10-16   5  /*
+93048c0944150b Alexander Shishkin 2018-10-16   6   * Merge two NULL-terminated pointer arrays into a newly allocated
+93048c0944150b Alexander Shishkin 2018-10-16   7   * array, which is also NULL-terminated. Nomenclature is inspired by
+93048c0944150b Alexander Shishkin 2018-10-16   8   * memset_p() and memcat() found elsewhere in the kernel source tree.
+93048c0944150b Alexander Shishkin 2018-10-16   9   */
+93048c0944150b Alexander Shishkin 2018-10-16 @10  void **__memcat_p(void **a, void **b)
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+:::::: The code at line 10 was first introduced by commit
+:::::: 93048c0944150b316a15f92c41a4d626c8df37fd lib: Fix ia64 bootloader linkage
 
---=20
-Cheers,
-Stephen Rothwell
+:::::: TO: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
---Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHZPHIACgkQAVBC80lX
-0Gx/aQf/eghOLjKTIVvNHNnRYh2WP+Q0W35fUwCi9/dQQqaebGkDApItJcfmys9d
-qG0NsxqzEUnyoCzZzdyB4JdqIXo6fkYnT5AcMrlhmr25Mppb9ZqW0JFKzDCgN88/
-iUrEnHKDvPc2j/ZUV27qkvB2mDn7AG3D0q0BQ/yypcXRyL6jJSTZjz0HP886ezFg
-nHroxBA85Vwu4gnZdGu1aLrNthPx6bEDH9dMphX1kk8XNY6vaiNU0LxhFKI3UyWY
-3tyPCmEpSXC+R8R/mgIXwGOpS4jJn9Gbr1Vp3IfdZN04TdTxk/TpXoFVCB/vKbO9
-ha1PmxccFgj7MQDy0jaVxbQCFb4/eA==
-=JDhE
------END PGP SIGNATURE-----
-
---Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

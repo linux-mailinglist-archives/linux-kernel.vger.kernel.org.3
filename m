@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 265054882F9
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6174882FF
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbiAHJye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:54:34 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56956 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234098AbiAHJya (ORCPT
+        id S231189AbiAHJ7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233794AbiAHJ7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:54:30 -0500
-X-UUID: c0a4e9be4b2d401a978f18a303c73f16-20220108
-X-UUID: c0a4e9be4b2d401a978f18a303c73f16-20220108
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1657393619; Sat, 08 Jan 2022 17:54:25 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 8 Jan 2022 17:54:23 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 8 Jan 2022 17:54:23 +0800
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
-        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>,
-        <ryan-jh.yu@mediatek.com>
-Subject: [PATCH 2/2] i2c: mediatek: Add i2c compatible for Mediatek MT8186
-Date:   Sat, 8 Jan 2022 17:54:18 +0800
-Message-ID: <20220108095418.16602-3-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220108095418.16602-1-kewei.xu@mediatek.com>
-References: <20220108095418.16602-1-kewei.xu@mediatek.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+        Sat, 8 Jan 2022 04:59:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB5CC061574;
+        Sat,  8 Jan 2022 01:59:37 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id ie13so7342274pjb.1;
+        Sat, 08 Jan 2022 01:59:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=3YvpI2aQajSf+bmgHYcKJMYUYFxW4dc1y5z8f6G/cK0=;
+        b=P2FVqzYVWe6+KuQVzsgZuDyn6OLCfg18oqD8JqrgzlOKXtzEiFgBrxjP8HTrxKQC9A
+         PqCImA1ph6ebv+bJUQs2HCXe6aHjSkt9xdvm3Gnnzy2ktpjYQDDiglmMOFFz2N1puFrS
+         B11v/Bodbv38vtOpVP8YVsfLUM7lGhWXAvRcSTXiS1oojkgyESmZFHP71k5rAfgyoJ2i
+         DitOhmjFArNdHZE151HP2zwbTZyEOqjiXi6UbQErtkI1b6LbaMawlqYSlDUOYyulQaOr
+         onmSGcdolKX41NuNDN3T6gwGu/8B+1m6NuUa8qlZMDzOtL2Dlj+DodBzXb47sTXupToF
+         vs4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3YvpI2aQajSf+bmgHYcKJMYUYFxW4dc1y5z8f6G/cK0=;
+        b=diJYNWNVQylvARzVJOmVlvCHhDPAYwSNCH754cMT3bBOPMiJ3Kx3HV78pptrSN1QXF
+         6aibfRaSuP6iin/T02IhHTGBspRj600xPdO7W4Rmhxbsnxu5fNJ8CGLCEBs9HswHpkJd
+         7VmMRvp4ob98P3k2cuTrLLClaWQMgnTeUe+LsELyzJjpBsTMvrDPLJIsYF6BbcUNcAQD
+         br7gAIG9eVQ9bB4BFwTLiuwqQpq/JAQQqrnx6QoaWb8+Asy6lC4DMHx+hC00CW7iPxYC
+         Sc3oCaegr9bq0mmb09gsc0r1Y9PEzYOloIfhV+yvPXI9o7ywbSOE1McLmcNP+hrqq330
+         W6Qg==
+X-Gm-Message-State: AOAM530dkkyZmyO/XievkN+BCcsr/MGWdLXKnFKnPXeyaG+qd3D93EIc
+        cqr5u1+67sw3fM/mJeKJQF4=
+X-Google-Smtp-Source: ABdhPJxTeodozfSS6DrwSXCJTyXIAQXTtLUReC93ySeR2bzKfk76kvJvE+iEcEuDK+CsgqweEPHeFg==
+X-Received: by 2002:a17:90a:5295:: with SMTP id w21mr17888320pjh.179.1641635977318;
+        Sat, 08 Jan 2022 01:59:37 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q19sm1536777pfk.83.2022.01.08.01.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 01:59:37 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Deepak Kumar Singh <deesin@codeaurora.org>,
+        Chris Lew <clew@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: qcom: aoss: Fix missing put_device call in qmp_get
+Date:   Sat,  8 Jan 2022 09:59:31 +0000
+Message-Id: <20220108095931.21527-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i2c compatible for MT8186. Compare to MT8192 i2c controller,
-MT8186 doesn't need handshake signal witch apdma.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+Fixes: 8c75d585b931 ("soc: qcom: aoss: Expose send for generic usecase")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/i2c/busses/i2c-mt65xx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/soc/qcom/qcom_aoss.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 9ea427f53083..aa4d21838e14 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -397,6 +397,19 @@ static const struct mtk_i2c_compatible mt8183_compat = {
- 	.max_dma_support = 33,
- };
+diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
+index 34acf58bbb0d..e234d78b33e7 100644
+--- a/drivers/soc/qcom/qcom_aoss.c
++++ b/drivers/soc/qcom/qcom_aoss.c
+@@ -451,7 +451,11 @@ struct qmp *qmp_get(struct device *dev)
  
-+static const struct mtk_i2c_compatible mt8186_compat = {
-+	.regs = mt_i2c_regs_v2,
-+	.pmic_i2c = 0,
-+	.dcm = 0,
-+	.auto_restart = 1,
-+	.aux_len_reg = 1,
-+	.timing_adjust = 1,
-+	.dma_sync = 0,
-+	.ltiming_adjust = 1,
-+	.apdma_sync = 0,
-+	.max_dma_support = 36,
-+};
-+
- static const struct mtk_i2c_compatible mt8192_compat = {
- 	.quirks = &mt8183_i2c_quirks,
- 	.regs = mt_i2c_regs_v2,
-@@ -418,6 +431,7 @@ static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt7622-i2c", .data = &mt7622_compat },
- 	{ .compatible = "mediatek,mt8173-i2c", .data = &mt8173_compat },
- 	{ .compatible = "mediatek,mt8183-i2c", .data = &mt8183_compat },
-+	{ .compatible = "mediatek,mt8186-i2c", .data = &mt8186_compat },
- 	{ .compatible = "mediatek,mt8192-i2c", .data = &mt8192_compat },
- 	{}
- };
+ 	qmp = platform_get_drvdata(pdev);
+ 
+-	return qmp ? qmp : ERR_PTR(-EPROBE_DEFER);
++	if (!qmp) {
++		put_device(&pdev->dev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++	return qmp;
+ }
+ EXPORT_SYMBOL(qmp_get);
+ 
 -- 
-2.25.1
+2.17.1
 

@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B1F4883EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 15:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DE04883F2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 15:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiAHOIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 09:08:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43203 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229667AbiAHOIE (ORCPT
+        id S234449AbiAHOWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 09:22:18 -0500
+Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:56188 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234433AbiAHOWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 09:08:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641650883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PocnGmnCbMvgl/mM4UqClsCjrZwW9G0adKzchgFrwe0=;
-        b=iLB5RW9dFvOyNLjleJPnR8RNYyAvHOI3RR6RvFQwIESAbnY/GyV3U822N1QYRlkze7Yk8g
-        UIzi4low+y6hLGKd/E4bcNjKndrHCCZEecL/loon5v6x/pZiTkuHRq6yCLB4TZ1O08v2pr
-        1VEOjfimHjDRdE/OHTlT3z2hN8Ol0FI=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-QfPMwBi9NfS7_VlScco9hQ-1; Sat, 08 Jan 2022 09:08:02 -0500
-X-MC-Unique: QfPMwBi9NfS7_VlScco9hQ-1
-Received: by mail-oo1-f72.google.com with SMTP id q6-20020a4a3306000000b002daad7a3be2so5937405ooq.11
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 06:08:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PocnGmnCbMvgl/mM4UqClsCjrZwW9G0adKzchgFrwe0=;
-        b=pC4Hrz+YNdsWtgCtSIIFLFGl5xx7U5BqT4ZjfLSsT4aRe1c2wCbb9d4aUan3umuSq/
-         fxkbwEuu3GXlv/uGAs37N1E7zheIAqKin9YZFryUuDjI85ifOf9HVRswByFCmjwG9A6t
-         f59edG39AoxjJJV8Nx1B6rU2A0qLzmUies4E50LRddqczCXHnoGl7125k1Yg2kjnjjl8
-         L4ajxNuh2FQhgfsegMJt/8oIqHXiv+MML9IYwpAQSV1EynHsrh8z14K6Gto2oJfwL94Y
-         /u/+In75Wrm0KtHOK7MOx+YZ6WxPQoHTwoPFtYe95k2IOpvqQVKwQGj25eeDNr6JsCvW
-         ZYyA==
-X-Gm-Message-State: AOAM530EH8kE3v1gSne1Qj0txZdwvA4K7xEnWzxOYhzOFFX3YY99tfBK
-        I/EETk/jb2OctEIFjC57G2jtMKE4XZZbJP+H1e9A3EUGTObX+WiszpD5MdJ79jNvW9Xfwyg7PyV
-        iYJ8x08HS1WD4RwRQVj6P5ffF
-X-Received: by 2002:a4a:da59:: with SMTP id f25mr43483445oou.46.1641650881926;
-        Sat, 08 Jan 2022 06:08:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxLFcO/UPfE7QdAafOO6wi0ODe4Q/vmKo+QUX+NZH/NVBUk5VTc2tOqw3QSi/spK+bC/u82nA==
-X-Received: by 2002:a4a:da59:: with SMTP id f25mr43483434oou.46.1641650881740;
-        Sat, 08 Jan 2022 06:08:01 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id i27sm348535ots.49.2022.01.08.06.08.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 06:08:01 -0800 (PST)
-From:   trix@redhat.com
-To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
-        tanureal@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] ALSA: hda: cs35l41: fix double free in cs35l41_hda_probe()
-Date:   Sat,  8 Jan 2022 06:07:56 -0800
-Message-Id: <20220108140756.3985487-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sat, 8 Jan 2022 09:22:16 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 6CbmnLdHIBazo6Cbmn7Pa3; Sat, 08 Jan 2022 15:22:15 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 08 Jan 2022 15:22:15 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     christopher.lee@cspi.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] myri10ge: Simplify DMA setting
+Date:   Sat,  8 Jan 2022 15:22:13 +0100
+Message-Id: <e92b0c3a3c1574a97a4e6fd0c30225f10fa59d18.1641651693.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-Clang static analysis reports this problem
-cs35l41_hda.c:501:2: warning: Attempt to free released memory
-        kfree(acpi_hw_cfg);
-        ^~~~~~~~~~~~~~~~~~
+If dma_set_mask_and_coherent() succeeds, 'dac_enabled' is known to be 1.
 
-This second free happens in the function's error handler which
-is normally ok but acpi_hw_cfg is freed in the non error case
-when it is still possible to have an error.
+Simplify code and remove some dead code accordingly.
 
-Consolidate the frees.
 
-Fixes: 7b2f3eb492da ("ALSA: hda: cs35l41: Add support for CS35L41 in HDA systems")
-Signed-off-by: Tom Rix <trix@redhat.com>
+[1]: https://lkml.org/lkml/2021/6/7/398
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- sound/pci/hda/cs35l41_hda.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/myricom/myri10ge/myri10ge.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index aa5bb6977792c..265ace98965f5 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -476,7 +476,6 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
- 	ret = cs35l41_hda_apply_properties(cs35l41, acpi_hw_cfg);
- 	if (ret)
- 		goto err;
--	kfree(acpi_hw_cfg);
+diff --git a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
+index 83a5e29c836a..50ac3ee2577a 100644
+--- a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
++++ b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
+@@ -3742,7 +3742,6 @@ static int myri10ge_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	struct myri10ge_priv *mgp;
+ 	struct device *dev = &pdev->dev;
+ 	int status = -ENXIO;
+-	int dac_enabled;
+ 	unsigned hdr_offset, ss_offset;
+ 	static int board_number;
  
- 	if (cs35l41->reg_seq->probe) {
- 		ret = regmap_register_patch(cs35l41->regmap, cs35l41->reg_seq->probe,
-@@ -495,13 +494,14 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
+@@ -3782,14 +3781,7 @@ static int myri10ge_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  
- 	dev_info(cs35l41->dev, "Cirrus Logic CS35L41 (%x), Revision: %02X\n", regid, reg_revid);
+ 	myri10ge_mask_surprise_down(pdev);
+ 	pci_set_master(pdev);
+-	dac_enabled = 1;
+ 	status = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+-	if (status != 0) {
+-		dac_enabled = 0;
+-		dev_err(&pdev->dev,
+-			"64-bit pci address mask was refused, trying 32-bit\n");
+-		status = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+-	}
+ 	if (status != 0) {
+ 		dev_err(&pdev->dev, "Error %d setting DMA mask\n", status);
+ 		goto abort_with_enabled;
+@@ -3874,10 +3866,7 @@ static int myri10ge_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	/* fake NETIF_F_HW_VLAN_CTAG_RX for good GRO performance */
+ 	netdev->hw_features |= NETIF_F_HW_VLAN_CTAG_RX;
  
--	return 0;
+-	netdev->features = netdev->hw_features;
 -
- err:
- 	kfree(acpi_hw_cfg);
--	if (!cs35l41->vspk_always_on)
--		gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
--	gpiod_put(cs35l41->reset_gpio);
-+
-+	if (unlikely(ret)) {
-+		if (!cs35l41->vspk_always_on)
-+			gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
-+		gpiod_put(cs35l41->reset_gpio);
-+	}
+-	if (dac_enabled)
+-		netdev->features |= NETIF_F_HIGHDMA;
++	netdev->features = netdev->hw_features | NETIF_F_HIGHDMA;
  
- 	return ret;
- }
+ 	netdev->vlan_features |= mgp->features;
+ 	if (mgp->fw_ver_tiny < 37)
 -- 
-2.26.3
+2.32.0
 

@@ -2,137 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A438A4882D4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3EA4882D5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbiAHJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiAHJb2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:31:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028B9C061574;
-        Sat,  8 Jan 2022 01:31:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B12560B61;
-        Sat,  8 Jan 2022 09:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF2DC36AF4;
-        Sat,  8 Jan 2022 09:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641634286;
-        bh=jjD+NJPlawSx/AlIpPp/NXrmxDO2bZYxDhuTS6IqXlU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nXYn+P8OQrwu9P3f4K7G0ug1hT7+QGfHEzWTs/lAN5DSFFFYWu6FBiOvr06Xts/mQ
-         3qzxE1Nr31jlmNNvIbHS4hPcnBrPJW7F+ORGgtoTSnwokM9xTigMnOoJjoC+u3335B
-         2o/P9P/LYUa8LE2JPJa+k4hjCLUrEGetpEP0H1DPkKtdark8XDVz9SHg5DO3kdZByI
-         koGBiizop7a1ZNQJt2PijPssbshloMy5fHvNNfVAxoBx7J3jeqmv9NKO+qzy2qkWM7
-         dLBmchBvz63OE6vZh1jjyy0KFjLu41oS2cAfXoSYVy6d7NJ1JiDIzkY2hyWI+fDORS
-         K6yjyPvc5bxhw==
-Received: by mail-wr1-f46.google.com with SMTP id q8so15777477wra.12;
-        Sat, 08 Jan 2022 01:31:26 -0800 (PST)
-X-Gm-Message-State: AOAM532wNVb9wjoPNGZwVqb5NPsmMu4RNkLci8u06+/7QxMtxH7nml+a
-        MM/xrM/XqERqy1xf8FxT4HQMZ4GAfdDE156saBA=
-X-Google-Smtp-Source: ABdhPJxx2qmdR7NAzQD9V8jeJxYPy2vtISFzIOMS3FjflpBZ9EvhrL6zKLbCx5As2Kj2V3TQfjjrkP6hm71LtFvwKGk=
-X-Received: by 2002:a05:6000:154c:: with SMTP id 12mr57379330wry.447.1641634285039;
- Sat, 08 Jan 2022 01:31:25 -0800 (PST)
+        id S234040AbiAHJcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:32:52 -0500
+Received: from mga12.intel.com ([192.55.52.136]:22393 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231347AbiAHJcv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 04:32:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641634371; x=1673170371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TWEkWPHLX2IJoddB7iNldtAD+V2GysZca6V/7YMEAWY=;
+  b=B7teS4sWT3eng3xxGtT6k/O1X2g7jx/dZ0Xdq83FjJqMzvNjwNnaJinN
+   Udy35vwp2Q+lotQBCnl5xTnb2BNxTJg+q8VEh98VGAJ+2a84Sr3BSpscl
+   gPr/pY/rstWu9moEwfjGcpwAQ11Qwx+4UqiupZYTNTcXZ0vZZ++FZVeaE
+   pkhuaxQjt4zp8mBq5tC7AMX9omCI/SdZweG3T/MLplLIkiVc4w19Sem+8
+   7cBv7EInMInj2MgAndtZpndTETh7fr1uCgkOlU4p/+78e9qnAQP25H5Ci
+   CZ9Sp6LSgWloG/85uhQVINB6f2PRXPIWYoQNAwNbzByHwtfFHKkzmxD2Q
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="222989086"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="222989086"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 01:32:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="622190250"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Jan 2022 01:32:50 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n685h-0000TH-F2; Sat, 08 Jan 2022 09:32:49 +0000
+Date:   Sat, 8 Jan 2022 17:32:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-5.16.y-rt-rebase 102/127]
+ kernel/locking/spinlock.c:306:9: error: implicit declaration of function
+ '__raw_write_lock_nested'; did you mean '_raw_write_lock_nested'?
+Message-ID: <202201081743.6XKFffqI-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220107232746.1540130-1-keescook@chromium.org>
-In-Reply-To: <20220107232746.1540130-1-keescook@chromium.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 8 Jan 2022 10:31:13 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFOqUuSUG=9g0Dd+m3yUfbtf7JG=CR2VP6i6AGXPPAa8Q@mail.gmail.com>
-Message-ID: <CAMj1kXFOqUuSUG=9g0Dd+m3yUfbtf7JG=CR2VP6i6AGXPPAa8Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: atomics: Dereference matching size
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Jan 2022 at 00:28, Kees Cook <keescook@chromium.org> wrote:
->
-> When building with -Warray-bounds (which is desired to be enabled
-> globally), the following warning is generated:
->
-> In file included from ./arch/arm64/include/asm/lse.h:16,
->                  from ./arch/arm64/include/asm/cmpxchg.h:14,
->                  from ./arch/arm64/include/asm/atomic.h:16,
->                  from ./include/linux/atomic.h:7,
->                  from ./include/asm-generic/bitops/atomic.h:5,
->                  from ./arch/arm64/include/asm/bitops.h:25,
->                  from ./include/linux/bitops.h:33,
->                  from ./include/linux/kernel.h:22,
->                  from kernel/printk/printk.c:22:
-> ./arch/arm64/include/asm/atomic_lse.h:247:9: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'atomic_t[1]' [-Warray-bounds]
->   247 |         asm volatile(                                                   \
->       |         ^~~
-> ./arch/arm64/include/asm/atomic_lse.h:266:1: note: in expansion of macro '__CMPXCHG_CASE'
->   266 | __CMPXCHG_CASE(w,  , acq_, 32,  a, "memory")
->       | ^~~~~~~~~~~~~~
-> kernel/printk/printk.c:3606:17: note: while referencing 'printk_cpulock_owner'
->  3606 | static atomic_t printk_cpulock_owner = ATOMIC_INIT(-1);
->       |                 ^~~~~~~~~~~~~~~~~~~~
->
-> This is due to the compiler seeing an unsigned long * cast against
-> something (atomic_t) that is int sized. Replace the cast with the
-> matching size cast. This results in no change in binary output.
->
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.16.y-rt-rebase
+head:   a6be65cb880860db356744acca5d49bf43ac0e94
+commit: a80864a2a62f4fc6fd4061092d0996ef870d7a9d [102/127] locking/rwlocks: introduce write_lock_nested
+config: sparc64-randconfig-p002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081743.6XKFffqI-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=a80864a2a62f4fc6fd4061092d0996ef870d7a9d
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-5.16.y-rt-rebase
+        git checkout a80864a2a62f4fc6fd4061092d0996ef870d7a9d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  arch/arm64/include/asm/atomic_lse.h | 2 +-
->  arch/arm64/include/asm/cmpxchg.h    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
-> index d955ade5df7c..5d460f6b7675 100644
-> --- a/arch/arm64/include/asm/atomic_lse.h
-> +++ b/arch/arm64/include/asm/atomic_lse.h
-> @@ -249,7 +249,7 @@ __lse__cmpxchg_case_##name##sz(volatile void *ptr,                  \
->         "       mov     %" #w "[tmp], %" #w "[old]\n"                   \
->         "       cas" #mb #sfx "\t%" #w "[tmp], %" #w "[new], %[v]\n"    \
->         "       mov     %" #w "[ret], %" #w "[tmp]"                     \
-> -       : [ret] "+r" (x0), [v] "+Q" (*(unsigned long *)ptr),            \
-> +       : [ret] "+r" (x0), [v] "+Q" (*(u##sz *)ptr),                    \
->           [tmp] "=&r" (tmp)                                             \
->         : [old] "r" (x1), [new] "r" (x2)                                \
->         : cl);                                                          \
-> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
-> index f9bef42c1411..497acf134d99 100644
-> --- a/arch/arm64/include/asm/cmpxchg.h
-> +++ b/arch/arm64/include/asm/cmpxchg.h
-> @@ -243,7 +243,7 @@ static inline void __cmpwait_case_##sz(volatile void *ptr,          \
->         "       cbnz    %" #w "[tmp], 1f\n"                             \
->         "       wfe\n"                                                  \
->         "1:"                                                            \
-> -       : [tmp] "=&r" (tmp), [v] "+Q" (*(unsigned long *)ptr)           \
-> +       : [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)                   \
->         : [val] "r" (val));                                             \
->  }
->
-> --
-> 2.30.2
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+All errors (new ones prefixed by >>):
+
+   kernel/locking/spinlock.c:68:17: warning: no previous prototype for '__raw_spin_lock' [-Wmissing-prototypes]
+      68 | void __lockfunc __raw_##op##_lock(locktype##_t *lock)                   \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:126:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     126 | BUILD_LOCK_OPS(spin, raw_spinlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:80:26: warning: no previous prototype for '__raw_spin_lock_irqsave' [-Wmissing-prototypes]
+      80 | unsigned long __lockfunc __raw_##op##_lock_irqsave(locktype##_t *lock)  \
+         |                          ^~~~~~
+   kernel/locking/spinlock.c:126:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     126 | BUILD_LOCK_OPS(spin, raw_spinlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:98:17: warning: no previous prototype for '__raw_spin_lock_irq' [-Wmissing-prototypes]
+      98 | void __lockfunc __raw_##op##_lock_irq(locktype##_t *lock)               \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:126:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     126 | BUILD_LOCK_OPS(spin, raw_spinlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:103:17: warning: no previous prototype for '__raw_spin_lock_bh' [-Wmissing-prototypes]
+     103 | void __lockfunc __raw_##op##_lock_bh(locktype##_t *lock)                \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:126:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     126 | BUILD_LOCK_OPS(spin, raw_spinlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:68:17: warning: no previous prototype for '__raw_read_lock' [-Wmissing-prototypes]
+      68 | void __lockfunc __raw_##op##_lock(locktype##_t *lock)                   \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:129:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     129 | BUILD_LOCK_OPS(read, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:80:26: warning: no previous prototype for '__raw_read_lock_irqsave' [-Wmissing-prototypes]
+      80 | unsigned long __lockfunc __raw_##op##_lock_irqsave(locktype##_t *lock)  \
+         |                          ^~~~~~
+   kernel/locking/spinlock.c:129:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     129 | BUILD_LOCK_OPS(read, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:98:17: warning: no previous prototype for '__raw_read_lock_irq' [-Wmissing-prototypes]
+      98 | void __lockfunc __raw_##op##_lock_irq(locktype##_t *lock)               \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:129:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     129 | BUILD_LOCK_OPS(read, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:103:17: warning: no previous prototype for '__raw_read_lock_bh' [-Wmissing-prototypes]
+     103 | void __lockfunc __raw_##op##_lock_bh(locktype##_t *lock)                \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:129:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     129 | BUILD_LOCK_OPS(read, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:68:17: warning: no previous prototype for '__raw_write_lock' [-Wmissing-prototypes]
+      68 | void __lockfunc __raw_##op##_lock(locktype##_t *lock)                   \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:130:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     130 | BUILD_LOCK_OPS(write, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:80:26: warning: no previous prototype for '__raw_write_lock_irqsave' [-Wmissing-prototypes]
+      80 | unsigned long __lockfunc __raw_##op##_lock_irqsave(locktype##_t *lock)  \
+         |                          ^~~~~~
+   kernel/locking/spinlock.c:130:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     130 | BUILD_LOCK_OPS(write, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:98:17: warning: no previous prototype for '__raw_write_lock_irq' [-Wmissing-prototypes]
+      98 | void __lockfunc __raw_##op##_lock_irq(locktype##_t *lock)               \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:130:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     130 | BUILD_LOCK_OPS(write, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c:103:17: warning: no previous prototype for '__raw_write_lock_bh' [-Wmissing-prototypes]
+     103 | void __lockfunc __raw_##op##_lock_bh(locktype##_t *lock)                \
+         |                 ^~~~~~
+   kernel/locking/spinlock.c:130:1: note: in expansion of macro 'BUILD_LOCK_OPS'
+     130 | BUILD_LOCK_OPS(write, rwlock);
+         | ^~~~~~~~~~~~~~
+   kernel/locking/spinlock.c: In function '_raw_write_lock_nested':
+>> kernel/locking/spinlock.c:306:9: error: implicit declaration of function '__raw_write_lock_nested'; did you mean '_raw_write_lock_nested'? [-Werror=implicit-function-declaration]
+     306 |         __raw_write_lock_nested(lock, subclass);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+         |         _raw_write_lock_nested
+   cc1: some warnings being treated as errors
+
+
+vim +306 kernel/locking/spinlock.c
+
+   303	
+   304	void __lockfunc _raw_write_lock_nested(rwlock_t *lock, int subclass)
+   305	{
+ > 306		__raw_write_lock_nested(lock, subclass);
+   307	}
+   308	EXPORT_SYMBOL(_raw_write_lock_nested);
+   309	#endif
+   310	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

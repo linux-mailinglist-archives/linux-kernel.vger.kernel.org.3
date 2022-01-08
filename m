@@ -2,69 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C43148838B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 13:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B202A488390
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 13:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiAHMIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 07:08:00 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:56567 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiAHMH6 (ORCPT
+        id S231871AbiAHMRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 07:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231714AbiAHMRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 07:07:58 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6AVnn9cLGUGql6AVnn8Qbq; Sat, 08 Jan 2022 13:07:56 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 08 Jan 2022 13:07:56 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, broonie@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] spi: qcom: geni: Simplify DMA setting
-Date:   Sat,  8 Jan 2022 13:07:54 +0100
-Message-Id: <1b14e4ce91a33c16b2c655389c728071a9c9aa2e.1641643601.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sat, 8 Jan 2022 07:17:36 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A164C061574;
+        Sat,  8 Jan 2022 04:17:35 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id o3so16407671wrh.10;
+        Sat, 08 Jan 2022 04:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ohcfovccatjc30lDRcB2IuIrGBvRWfvjPU9QBrd0eXE=;
+        b=V9c8dDmXSfsabiD2MId/xdQkhc1ypm2tNSgpNroSiTuvYZW7U0dsWTyMIa6VL4QJ1F
+         O6GRDav6qCi+i8OSKsQ0jmxN5EbpY9uNnqR8f0IKwpU9uaLbxCYm4AJWVoT3hHa05fKk
+         4nPOtZqigrHY1mYoB7dt143fFsnf86znEcxoDlmFc5UNocVCF+zAzp501U1sPVA5mmww
+         Be6jNLeRq2aOjZ9zLEVtqLUN4Zc0jQlww+aFa/9Ds+HSwWp6mC5Dz1SwgqoIcVTjfYnK
+         2ciGkMqXxnI4C/WJLSQs+zfnlRSP1N5gL9zzYbroiQqAOSIylcboQPyJ1rw16hQAYfHx
+         7MPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Ohcfovccatjc30lDRcB2IuIrGBvRWfvjPU9QBrd0eXE=;
+        b=T2Ikbhay9o8iFoSLg5HSg8c33C0s4Gg4IRw7EZ0ZNeQjppFgB5IWw8Y+3RqwCndM59
+         LSF35/EUI23en8lvcccKEEFxVWgML529GjFRZt0bfdmPesvJedyFodCUMC7tEtjCMhoN
+         sEMoj6I7nQ0EoTWuFhosml0WsY0XzjaPwQS+XtDFD92tYKHfAeeO2WAh0yu5/uhwDpuF
+         J2/oyKynPw8t7nuZ8SHAPVyk7w46KInf6NanKI8cg7Qdo2EHfr5UQ6rbbynczloFjwHh
+         fNQWeXZXiOzQHwAPPKD9gFGjUAZJqPdg4Ooe/RJoPI0gnQM6Vu4clZ4JA1ClW4uETzJo
+         4Mqw==
+X-Gm-Message-State: AOAM5324dhRGbeyE5mChDrNIZNdqSmyC4V/nU+Ejg6mCryYQbcgT1GGB
+        g+JP7gCEPCKZwp7VhXaBqUuWLWNlcEU=
+X-Google-Smtp-Source: ABdhPJwFDk2SLOyQmmgllC7CCS/eqLk9g3liE0EfOLpUi0/bBgkUryOYqauZ+Sh2FV7K6fL/YJREkQ==
+X-Received: by 2002:a5d:424c:: with SMTP id s12mr56773031wrr.465.1641644254049;
+        Sat, 08 Jan 2022 04:17:34 -0800 (PST)
+Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
+        by smtp.gmail.com with ESMTPSA id o8sm1637297wry.20.2022.01.08.04.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 04:17:33 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 8 Jan 2022 13:17:31 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdmA2/BJPK7m3d7d@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
+ <YdTvXkKFzA0pOjFf@gmail.com>
+ <YdYQu9YxNw0CxJRn@archlinux-ax161>
+ <Ydl6MATrfA1GA0G+@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydl6MATrfA1GA0G+@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
 
-Simplify code and remove some dead code accordingly.
+* Ingo Molnar <mingo@kernel.org> wrote:
 
-[1]: https://lkml.org/lkml/2021/6/7/398
+> * Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > 5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
+> > 
+> > With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
+> > 
+> > $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
+> > 
+> > $ scripts/config -e LTO_CLANG_THIN
+> > 
+> > $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
+> > ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
+> > >>> .macro __put, val, name
+> > >>> ^
+> > make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
+> > 
+> > I was not able to figure out the exact include chain but CONFIG_LTO
+> > causes asm/alternative-macros.h to be included in asm/rwonce.h, which
+> > eventually gets included in either asm/cache.h or asm/memory.h.
+> > 
+> > I managed to solve this with the following diff but I am not sure if
+> > there is a better or cleaner way to do that.
+> > 
+> > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> > index 1bce62fa908a..e19572a205d0 100644
+> > --- a/arch/arm64/include/asm/rwonce.h
+> > +++ b/arch/arm64/include/asm/rwonce.h
+> > @@ -5,7 +5,7 @@
+> >  #ifndef __ASM_RWONCE_H
+> >  #define __ASM_RWONCE_H
+> >  
+> > -#ifdef CONFIG_LTO
+> > +#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
+> >  
+> >  #include <linux/compiler_types.h>
+> >  #include <asm/alternative-macros.h>
+> > @@ -66,7 +66,7 @@
+> >  })
+> >  
+> >  #endif	/* !BUILD_VDSO */
+> > -#endif	/* CONFIG_LTO */
+> > +#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/spi/spi-geni-qcom.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+In any case I've added your fix to the fast-headers tree, with a comment 
+that this might just be a workaround.
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index f7d905d2a90f..4e83cc5b445d 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -898,11 +898,8 @@ static int spi_geni_probe(struct platform_device *pdev)
- 		return irq;
- 
- 	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
--	if (ret) {
--		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
--		if (ret)
--			return dev_err_probe(dev, ret, "could not set DMA mask\n");
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "could not set DMA mask\n");
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
--- 
-2.32.0
+Thanks,
 
+	Ingo

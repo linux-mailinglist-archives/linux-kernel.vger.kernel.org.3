@@ -2,154 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62270488487
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FAF488488
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiAHQ0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 11:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiAHQ0t (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 11:26:49 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A6C06173F;
-        Sat,  8 Jan 2022 08:26:48 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id c126-20020a1c9a84000000b00346f9ebee43so4606534wme.4;
-        Sat, 08 Jan 2022 08:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=u1H+4M8YW/2Pf02D9Owq7XFEu0//KRJ4dZR9M7ZqmXM=;
-        b=lbVUVnGHfcTzJBF2F548kPdl9MhJVD6uLhE7qCGEUhQNDeRx5WTGn1nVPEFO9KvAbC
-         gXSGDWF9BB76AMshlf8OB+C9S14M39+Li9rUSxfhTaQ7hY0MWFwI9lM5qBnSnIZ1QaIX
-         62uBFYE2NopfBbgsnJTMWiw38/FtKfcqz6kv2mRa6akyggaKbpvhasE+/Abl4izU1NBc
-         chqgfMyZByAAdMjPq50JGBpaHB6hCLHepMW0IV1nYOwrE7yMFa4xLSYxKJVTA3N5XPQE
-         7tVaM331Y5Vhgsl8T31q7c+asit+oYoO4sPO6yLkmAgAS45bop160hs+2CQdWiHFQrmS
-         759A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=u1H+4M8YW/2Pf02D9Owq7XFEu0//KRJ4dZR9M7ZqmXM=;
-        b=4LqTtCUuuDNlLVzw6rHScJTKAIanx4ABkEOuD4wvp1YShuqLE8NlGuYU1PjMMVsRBT
-         bdKj946A2qA5yp2ZQqWNkjgR2gBlGwuXQdP9hiuKWEa5IO6ufVDgPEtuMV4GmoQjxgY3
-         zYfTbXEi/XrlNVJvehXQ2cG+A5gaieOSjpQiuRlqZqqe/tmTG0xIIR2KeUT7dt5rI/a3
-         8pX17Dde4iMmQJNd0R7gzt4jLovTXJPJynsmkn/ypJ3chTs9E/G17uPR2r+JPtCOxSPg
-         nYQIhQDVOjb0JHdxae2XlYKaK8M3wmAcX/gqxUaDYzdjjK8e8Zmkm8V4CuvkKuhKZ4sw
-         NW+Q==
-X-Gm-Message-State: AOAM5309cyVxYPqBaIT8kka+MbdLnJdHNcCeGVFMovrKO+pDqs/P79Lf
-        bCJi0Zv3BAN11caIWOuMzjdDNNItogg=
-X-Google-Smtp-Source: ABdhPJzRjZ2b9JHMj0IW5N3QTRZ/Stk2xBRhG48hW6YwIExuDVyO2N7PkihIu9GmMRiiP2RasfynxQ==
-X-Received: by 2002:a05:600c:198f:: with SMTP id t15mr14978271wmq.154.1641659207291;
-        Sat, 08 Jan 2022 08:26:47 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id m17sm1984931wmq.31.2022.01.08.08.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 08:26:46 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 17:26:45 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
-Message-ID: <Ydm7ReZWQPrbIugn@gmail.com>
+        id S231253AbiAHQbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 11:31:14 -0500
+Received: from mga11.intel.com ([192.55.52.93]:33380 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229553AbiAHQbN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 11:31:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641659473; x=1673195473;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j3fWbRXUi/kYwRK/t3Dnce1UbCwALle6DniDJcdVWBY=;
+  b=JFgEY2GwwjPjkPNCodMmcZXPlklbqlzNiADsLufVmK6R+7AdqjJjzmz1
+   /H+BO6Fuf6L2FWqs4aiu/7noWF3E9DFa6NZWTOXQVxIhFDVwX9ApOiyiA
+   zk5i2kdaGsCsoWQSuruCiGu8EcWXBmK3RgRSeBF7JWcql9IU1TlUMr61D
+   hpFm5cLtIhsc0MKGaLwVUStS5tzbiQK8dnWjiTdmvIxoNA5QM6TDfq/27
+   8L4CxiNZKcWeWSfvSlS5lWwBG+VjISjeB85/IpKiDwp1/0WOZpb62bDnQ
+   AKw71DqoVSF7uvah4P46BU9KuNUWh8zNJ89VqdT6Edsc3PHZNfsQCx+ro
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="240575551"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="240575551"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 08:31:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="471625325"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 08 Jan 2022 08:31:00 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6EcO-0000oH-5F; Sat, 08 Jan 2022 16:31:00 +0000
+Date:   Sun, 9 Jan 2022 00:30:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1860/2375]
+ arch/x86/entry/vsyscall/vsyscall_64.c:323:24: warning: no previous prototype
+ for function 'get_gate_vma'
+Message-ID: <202201090022.G97ulrJ2-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   351ceeab2ef96ab2fc306934ddb201b44636181b
+commit: f09977356680cc3b264d9598e1eebf2c74258586 [1860/2375] headers/deps: mm: Optimize <linux/mm_api.h>, remove the <linux/mm_api_gate_area.h> header
+config: x86_64-randconfig-r032-20220108 (https://download.01.org/0day-ci/archive/20220109/202201090022.G97ulrJ2-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f09977356680cc3b264d9598e1eebf2c74258586
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout f09977356680cc3b264d9598e1eebf2c74258586
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vsyscall/
 
-I'm pleased to announce -v2 of the "Fast Kernel Headers" tree, which is a 
-comprehensive rework of the Linux kernel's header hierarchy & header 
-dependencies, with the dual goals of:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- - speeding up the kernel build (both absolute and incremental build times)
+All warnings (new ones prefixed by >>):
 
- - decoupling subsystem type & API definitions from each other
+>> arch/x86/entry/vsyscall/vsyscall_64.c:323:24: warning: no previous prototype for function 'get_gate_vma' [-Wmissing-prototypes]
+   struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+                          ^
+   arch/x86/entry/vsyscall/vsyscall_64.c:323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+   ^
+   static 
+>> arch/x86/entry/vsyscall/vsyscall_64.c:334:5: warning: no previous prototype for function 'in_gate_area' [-Wmissing-prototypes]
+   int in_gate_area(struct mm_struct *mm, unsigned long addr)
+       ^
+   arch/x86/entry/vsyscall/vsyscall_64.c:334:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int in_gate_area(struct mm_struct *mm, unsigned long addr)
+   ^
+   static 
+>> arch/x86/entry/vsyscall/vsyscall_64.c:349:5: warning: no previous prototype for function 'in_gate_area_no_mm' [-Wmissing-prototypes]
+   int in_gate_area_no_mm(unsigned long addr)
+       ^
+   arch/x86/entry/vsyscall/vsyscall_64.c:349:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int in_gate_area_no_mm(unsigned long addr)
+   ^
+   static 
+   3 warnings generated.
 
-The fast-headers tree consists of over 25 sub-trees internally, spanning 
-over 2,300 commits, which can be found at:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+vim +/get_gate_vma +323 arch/x86/entry/vsyscall/vsyscall_64.c
 
-   # HEAD: 391ce485ced0 headers/deps: Introduce the CONFIG_FAST_HEADERS=y config option
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  322  
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @323  struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  324  {
+c338867d0e4224 arch/x86/entry/vsyscall/vsyscall_64.c Brian Gerst             2015-06-22  325  #ifdef CONFIG_COMPAT
+ff170cd0595398 arch/x86/entry/vsyscall/vsyscall_64.c Gabriel Krisman Bertazi 2020-10-03  326  	if (!mm || !(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  327  		return NULL;
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  328  #endif
+87983c66bc02c9 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  329  	if (vsyscall_mode == NONE)
+87983c66bc02c9 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  330  		return NULL;
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  331  	return &gate_vma;
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  332  }
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  333  
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @334  int in_gate_area(struct mm_struct *mm, unsigned long addr)
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  335  {
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  336  	struct vm_area_struct *vma = get_gate_vma(mm);
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  337  
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  338  	if (!vma)
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  339  		return 0;
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  340  
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  341  	return (addr >= vma->vm_start) && (addr < vma->vm_end);
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  342  }
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  343  
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  344  /*
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  345   * Use this when you have no reliable mm, typically from interrupt
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  346   * context. It is less reliable than using a task's mm and may give
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  347   * false positives.
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  348   */
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @349  int in_gate_area_no_mm(unsigned long addr)
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  350  {
+87983c66bc02c9 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  351  	return vsyscall_mode != NONE && (addr & PAGE_MASK) == VSYSCALL_ADDR;
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  352  }
+b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  353  
 
-Changes in -v2:
+:::::: The code at line 323 was first introduced by commit
+:::::: b93590901a01a6d036b3b7c856bcc5724fdb9911 x86_64/vsyscall: Move all of the gate_area code to vsyscall_64.c
 
- - Port to v5.16-rc8
+:::::: TO: Andy Lutomirski <luto@amacapital.net>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
- - Clang/LLVM support (with the help of Nathan Chancellor):
-
-   On my 'reference distro config' the build speedup under Clang is around +88%
-   in elapsed time and +77% in CPU time used:
-
-     #
-     # v5.16-rc8
-     #
-     Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
-
-      18,490,451.51 msec cpu-clock          # 54.740 CPUs utilized   ( +-  0.04% )
-
-      337.788 +- 0.834 seconds time elapsed  ( +-  0.25% )
-
-     #
-     # -fast-headers-v2
-     #
-     Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
-
-      10,443,670.86 msec cpu-clock          # 58.093 CPUs utilized   ( +-  0.00% )
-
-      179.773 +- 0.829 seconds time elapsed  ( +-  0.46% )
-
- - Unify the duplicated 'struct task_struct_per_task' into a single definition,
-   which should address the definition ugliness reported by Greg Kroah-Hartman.
-
- - Fix bugs reported by Nathan Chancellor:
-
-    - cacheline attribute definition bug
-    - build bug with GCC plugins
-    - fix off-tree build
-
- - Header optimizations that speed up the RDMA (infiniband) subsystem build 
-   by about +9% over -v1 and +41% over the vanilla kernel:
-
-     $ perf stat --repeat 3 -e instructions,cycles,cpu-clock --sync --pre "find . -name '*.o' | xargs rm" m-rdma >/dev/null
-     ...
-
-     # v5.16-rc8:
-
-          643,570.38 msec cpu-clock                 #   52.253 CPUs utilized            ( +-  0.06% )
-
-               12.316 +- 0.183 seconds time elapsed  ( +-  1.49% )
-
-     # -fast-headers-v1:
-          446,243.49 msec cpu-clock                 #   47.106 CPUs utilized            ( +-  0.06% )
-
-                9.4731 +- 0.0666 seconds time elapsed  ( +-  0.70% )
-
-     # -fast-headers-v2:
-          400,650.32 msec cpu-clock                 #   45.888 CPUs utilized            ( +-  0.02% )
-
-                8.7310 +- 0.0162 seconds time elapsed  ( +-  0.19% )
-
-  - Another round of <linux/sched.h> header footprint reductions: the 
-    header is now used in only ~36% of .c files, down from 99% in the 
-    mainline kernel and 68% in -v1.
-
-  - Various bisectability improvements & other fixes & optimizations.
-
-Thanks,
-
-	Ingo
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

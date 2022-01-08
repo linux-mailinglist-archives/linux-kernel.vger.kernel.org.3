@@ -2,88 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5BC488687
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353D2488694
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiAHV6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 16:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbiAHV6r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 16:58:47 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C553FC06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 13:58:47 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id n16so8799879plc.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 13:58:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ewMb6x8qSgRhiQLnj41jmD5Jf2Gw2+saUAqctPrcO2c=;
-        b=w9/7KlPbT9FQyV+9mSQdPl9F78lvYzYDszYA2ivdbja+c4oJE5crdNClxmu/GffdUA
-         /TSjYcOlabCO7psTxdZJvCm1egr3Gp31fR/asnrlJSZFHZdPCPHWaiEfySl7BcQm1y9I
-         GonrvTbMoJOFAwAvSK7FffJn49ehieE7WBF6fk+zEZLOr3MjqFlHP1zwiucbCJj/o133
-         z1DTkurh+zVTV2zzGYiiMyeZStpw6CdqPW7t7K4t7aaSf09LgvtiWLapirj46h6o4iZz
-         6oL23Ttl2mjYK+fmOgXEX5Eps4VCbAG8MEbn/WwQ/SjvqMITgM5r9qO5jQvG05kUuqTw
-         HrjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ewMb6x8qSgRhiQLnj41jmD5Jf2Gw2+saUAqctPrcO2c=;
-        b=Bpa5HFtZS6v1G6Q8uBg0aXhn1bqwDuqNv3J8ALuhhBgJFXwSQtBEfOzwm5Hs7/vlsk
-         oWeuEIl31mrlIDcsBNhB1hcxAuxEdHBtX70C+KNDff8qfhQsrrlxQ9Bjw7aTBE9fLYPC
-         qEKPcSINuWpgDGtWAR9AWZgw5qWxLStDe/FnmW670kWPcysRmI9MmsrR75EN9jGtWBQg
-         yRkWCeM+pkUdx6fz3Xf6+XtPqRgKXF8GaQhWRjyHWlnFALIYgErwz9vKadZfRK7ldp/V
-         ry3nFOW4wPZpK2oS98degH3mPkQE9LcbbZC7XbzuuHTeKfeAgCi91VpEBtkb1ufGudXf
-         S97A==
-X-Gm-Message-State: AOAM533Nf0OeQBvq5lfDW9XcrNqvy4A+Qx7UQ6AdsgZ/QuXt6gGYmzpN
-        yncJX+votEP+eIsqirIHUaJ0Gp9IDzCauQ==
-X-Google-Smtp-Source: ABdhPJwxLq2cEmd460c6VV/QK+DLhkjh2M1rDHCU9wbX7c4uGX+Td1WeqSvq3fdLkFCxPAEho1fNKg==
-X-Received: by 2002:a63:6b07:: with SMTP id g7mr62621216pgc.234.1641679127302;
-        Sat, 08 Jan 2022 13:58:47 -0800 (PST)
-Received: from localhost (99-152-116-91.lightspeed.sntcca.sbcglobal.net. [99.152.116.91])
-        by smtp.gmail.com with ESMTPSA id s8sm2862623pfu.58.2022.01.08.13.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 13:58:46 -0800 (PST)
-Date:   Sat, 8 Jan 2022 13:58:40 -0800
-From:   Olof Johansson <olof@lixom.net>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] Apple SoC MAINTAINERS updates for 5.17
-Message-ID: <YdoJEMjEr5jKwLf7@lx2k>
-References: <24ae6871-3e67-5c7f-2060-28048db439a2@marcan.st>
+        id S233320AbiAHWKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 17:10:14 -0500
+Received: from mga03.intel.com ([134.134.136.65]:42899 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229943AbiAHWKN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 17:10:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641679813; x=1673215813;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IWzuCSzB8TbQjtO1bt+7zE4UyMGIG27eDneCDPdj4xg=;
+  b=U7rv0gV6pbKz0GP0Mib2Til6+UzLVslIUpmQEv0ViEBZHRnMJaAeOxef
+   IHcIWCfj+iESf+1pLVcTBpCeYB5HfRTsmgJgZgR42soru832N8z63ksSX
+   +tN8NcWbSi65wM5Es2a6Xlbmik1bsoBrTmoUA8yEtxoLkY8P2nxPfqQ11
+   0jVLNdH9CPEEkruknaess2lsq61Eik0E9DgvtUOzbYteFt6B4HWZ/5qwk
+   FkOe5TSPhCgpD628LlpQ5RRH2SGTtdhhXwKTAvJjcwO0t0aQRpRYgaUaZ
+   VsJO4UiZYQXNn/2GEw1YE1wUHhsGhvooNy+EFYgAzTuJ9iX6MpYeMhTPc
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="242993164"
+X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
+   d="scan'208";a="242993164"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 14:10:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
+   d="scan'208";a="690167954"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 Jan 2022 14:10:11 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6Jud-00016z-BM; Sat, 08 Jan 2022 22:10:11 +0000
+Date:   Sun, 9 Jan 2022 06:10:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 2296/2300] arch/mips/dec/platform.c:33:19: error:
+ expected '=', ',', ';', 'asm' or '__attribute__' before 'dec_add_devices'
+Message-ID: <202201090604.UYYPTJHx-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <24ae6871-3e67-5c7f-2060-28048db439a2@marcan.st>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 02:13:49PM +0900, Hector Martin wrote:
-> Hi SoC folks,
-> 
-> Please merge this trivial MAINTAINERS change for 5.17.
-> 
-> This commit was waiting on the watchdog driver to be merged, but I only
-> just now realized that it silently did. Sorry for the last-minute pull.
-> If this can't make it into the 5.17 merge window, it can be added as a
-> fix later instead.
-> 
-> The branch is based on asahi-soc-dt-5.17-v2 to avoid a merge conflict
-> with other changes that happened there.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   4e348e961395297bb17f101cc63bc133d8a348e9
+commit: 4d78e75186678c7853df35a422c167910b400856 [2296/2300] headers/deps: driver/core: Optimize <linux/device/driver.h> dependencies, remove <linux/module.h> inclusion
+config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20220109/202201090604.UYYPTJHx-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4d78e75186678c7853df35a422c167910b400856
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout 4d78e75186678c7853df35a422c167910b400856
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-Hi,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I've merged a bunch of outstanding pull requests into an arm/late branch, but
-I'm holding on to this one for a bit, we'll merge it once the main branches
-have gone in, since it contains a bunch of that contents. Since it's just
-a MAINTAINERS update it's fine to merge late, no need to soak in -next.
+All errors (new ones prefixed by >>):
+
+>> arch/mips/dec/platform.c:33:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dec_add_devices'
+      33 | static int __init dec_add_devices(void)
+         |                   ^~~~~~~~~~~~~~~
+   arch/mips/dec/platform.c:40:1: warning: data definition has no type or storage class
+      40 | device_initcall(dec_add_devices);
+         | ^~~~~~~~~~~~~~~
+>> arch/mips/dec/platform.c:40:1: error: type defaults to 'int' in declaration of 'device_initcall' [-Werror=implicit-int]
+   arch/mips/dec/platform.c:40:1: warning: parameter names (without types) in function declaration
+   arch/mips/dec/platform.c:25:31: warning: 'dec_rtc_device' defined but not used [-Wunused-variable]
+      25 | static struct platform_device dec_rtc_device = {
+         |                               ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
--Olof
+vim +33 arch/mips/dec/platform.c
+
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  32  
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06 @33  static int __init dec_add_devices(void)
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  34  {
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  35  	dec_rtc_resources[0].start = RTC_PORT(0);
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  36  	dec_rtc_resources[0].end = RTC_PORT(0) + dec_kn_slot_size - 1;
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  37  	return platform_device_register(&dec_rtc_device);
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  38  }
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06  39  
+fae67ad431146d2 Maciej W. Rozycki 2014-06-06 @40  device_initcall(dec_add_devices);
+
+:::::: The code at line 33 was first introduced by commit
+:::::: fae67ad431146d2584dd813cbc198400a477aa53 arch/mips/dec: switch DECstation systems to rtc-cmos
+
+:::::: TO: Maciej W. Rozycki <macro@linux-mips.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

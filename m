@@ -2,100 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210964883C4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 14:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34294883C7
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 14:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbiAHNVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 08:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiAHNVG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 08:21:06 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9386C061574;
-        Sat,  8 Jan 2022 05:21:05 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id x6so26008720lfa.5;
-        Sat, 08 Jan 2022 05:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rEEQvk5Uck5nCpY81jxsRsod1zvCRX8Cy7vuSwuU20w=;
-        b=nvoIU95jfD0X5rzdTYqID+b+uRLzjpP8BoezE4XHaRZZ9Al1zMLBamHUotVxV6R33S
-         vxoqQqVnI156zdGsy4VZJeROx293CXzs2/3QvErcZvkzrBSSK4B/Iid/YiwjJ11FCOPu
-         Fh5B044qXfSQXdkHa0FnjvpBK10ga91QeM/GobLb5HPQ6ht3ql/8Si5E0cIhkXLEzME/
-         46nEWM65tOuKzWPnUbNlcMB/pqem/GjFg+cG8hZjtNKJ2jQol/+iG5K7pGhWjUaHAotG
-         zAASZAfIzBIrwwdndvDe0Pif80PysNDCiAAPUHd/GqWedryEvKuoGKy0K8QA+TdT9z5/
-         0p7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rEEQvk5Uck5nCpY81jxsRsod1zvCRX8Cy7vuSwuU20w=;
-        b=f/x4RwO390LZkXZIfYs4jLv5DwMCnl0VNhXxt2ASP5QydWUEKZJ3i33RXYdsCqdoeH
-         28Op2T5EOaLF3VVxSEQ7iCsSmrAaadurulqNJ+kkHgmRFt4RZMbUBB5lUVxMkL4zrf1L
-         siotCNJvDXGoMOVtYcd98xuegH2/e5h5/LW3uDbyANoZBOncjqu+xfdv8S8jjhvEsZQi
-         HpZv1cH4cXXkE1tehkxW3Zkx5J+bX4eEmW5exf+6O2A0hnr08Xl6M0I2q6+8ntVwtN3J
-         gXNV/D545/BC8o9fHFXq9i1uSPEvK8BO3Ab1P49MXBxyvKJpp3pryRkdMBLAJdFyxq3M
-         DTVw==
-X-Gm-Message-State: AOAM533t7IEvBmhVf0T9nxKOZoTnNrntBRaa2EtVxyWznsJM5VUfURXZ
-        ocZKah2mMQC7J1XdPHbVmxA=
-X-Google-Smtp-Source: ABdhPJxE1+p7uSaAQ1gOWG571UTgSZCt/5TZLMGoJLFBT8yu2EYsfO9aU8EnVDTlB+yU3tOsbc0q0w==
-X-Received: by 2002:a2e:9dcb:: with SMTP id x11mr49877694ljj.296.1641648064177;
-        Sat, 08 Jan 2022 05:21:04 -0800 (PST)
-Received: from [192.168.1.11] ([217.117.245.67])
-        by smtp.gmail.com with ESMTPSA id q5sm223025lji.57.2022.01.08.05.21.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jan 2022 05:21:03 -0800 (PST)
-Message-ID: <9f7b9736-e67e-19fb-0f7b-6ee6735d5d13@gmail.com>
-Date:   Sat, 8 Jan 2022 16:21:01 +0300
+        id S234226AbiAHN1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 08:27:19 -0500
+Received: from mx3.wp.pl ([212.77.101.9]:55116 "EHLO mx3.wp.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229478AbiAHN1S (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 08:27:18 -0500
+Received: (wp-smtpd smtp.wp.pl 32852 invoked from network); 8 Jan 2022 14:27:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1641648434; bh=bekp1Qt50V5BwOs8/LkFBvx1MFKWNaNfsRC8YTk1aKw=;
+          h=Subject:To:From;
+          b=rBrmGHMWSQfVKsRjCKwyRdjEsD67tqQgaHptiCaTLRUaFBG7FbaDLrXzEsE12eKAP
+           Wc3fAIz3+9dF/g6jXkeuUvGrUoMDy1HK5zK+y6WBnP2EkwxpJt22CfbkZloY5zaaOu
+           YUHTWpU6cZUv2tGNmASDKgD4yvVyljzDqDghFT4g=
+Received: from riviera.nat.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <eric.dumazet@gmail.com>; 8 Jan 2022 14:27:14 +0100
+Message-ID: <98bed219-5fb4-8376-e300-c77daf4549eb@wp.pl>
+Date:   Sat, 8 Jan 2022 14:27:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.1
-Subject: Re: [PATCH -next v2] ieee802154: atusb: move to new USB API
+Subject: Re: [PATCH net-next] net: lantiq_xrx200: add ingress SG DMA support
 Content-Language: en-US
-To:     alex.aring@gmail.com, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+To:     Eric Dumazet <eric.dumazet@gmail.com>, hauke@hauke-m.de,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <2439d9ab-133f-0338-24f9-a9a5cd2065a3@datenfreihafen.org--to=stefan@datenfreihafen.org>
- <20220108131808.12225-1-paskripkin@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220108131808.12225-1-paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220103194316.1116630-1-olek2@wp.pl>
+ <0215980e-a258-5322-13e9-42fe868817b3@gmail.com>
+From:   Aleksander Bajkowski <olek2@wp.pl>
+In-Reply-To: <0215980e-a258-5322-13e9-42fe868817b3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: de796539d1e4a2922f773213bc572bae
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [4fMk]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/8/22 16:18, Pavel Skripkin wrote:
-> Old USB API is prone to uninit value bugs if error handling is not
-> correct. Let's move atusb to use new USB API to
-> 
-> 	1) Make code more simple, since new API does not require memory
-> 	   to be allocates via kmalloc()
-> 
-> 	2) Defend driver from usb-related uninit value bugs.
-> 
-> 	3) Make code more modern and simple
-> 
-> This patch removes atusb usb wrappers as Greg suggested [0], this will make
-> code more obvious and easier to understand over time, and replaces old
-> API calls with new ones.
-> 
-> Also this patch adds and updates usb related error handling to prevent
-> possible uninit value bugs in future
-> 
-> Link: https://lore.kernel.org/all/YdL0GPxy4TdGDzOO@kroah.com/ [0]
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Hi Eric,
 
-Please, ignore this one.
+On 1/4/22 18:41, Eric Dumazet wrote:
+> 
+> On 1/3/22 11:43, Aleksander Jan Bajkowski wrote:
+>> This patch adds support for scatter gather DMA. DMA in PMAC splits
+>> the packet into several buffers when the MTU on the CPU port is
+>> less than the MTU of the switch. The first buffer starts at an
+>> offset of NET_IP_ALIGN. In subsequent buffers, dma ignores the
+>> offset. Thanks to this patch, the user can still connect to the
+>> device in such a situation. For normal configurations, the patch
+>> has no effect on performance.
+>>
+>> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+>> ---
+>>   drivers/net/ethernet/lantiq_xrx200.c | 47 +++++++++++++++++++++++-----
+>>   1 file changed, 40 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
+>> index 80bfaf2fec92..503fb99c5b90 100644
+>> --- a/drivers/net/ethernet/lantiq_xrx200.c
+>> +++ b/drivers/net/ethernet/lantiq_xrx200.c
+>> @@ -27,6 +27,9 @@
+>>   #define XRX200_DMA_TX        1
+>>   #define XRX200_DMA_BURST_LEN    8
+>>   +#define XRX200_DMA_PACKET_COMPLETE    0
+>> +#define XRX200_DMA_PACKET_IN_PROGRESS    1
+>> +
+>>   /* cpu port mac */
+>>   #define PMAC_RX_IPG        0x0024
+>>   #define PMAC_RX_IPG_MASK    0xf
+>> @@ -62,6 +65,9 @@ struct xrx200_chan {
+>>       struct ltq_dma_channel dma;
+>>       struct sk_buff *skb[LTQ_DESC_NUM];
+>>   +    struct sk_buff *skb_head;
+>> +    struct sk_buff *skb_tail;
+>> +
+>>       struct xrx200_priv *priv;
+>>   };
+>>   @@ -205,7 +211,8 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
+>>       struct xrx200_priv *priv = ch->priv;
+>>       struct ltq_dma_desc *desc = &ch->dma.desc_base[ch->dma.desc];
+>>       struct sk_buff *skb = ch->skb[ch->dma.desc];
+>> -    int len = (desc->ctl & LTQ_DMA_SIZE_MASK);
+>> +    u32 ctl = desc->ctl;
+>> +    int len = (ctl & LTQ_DMA_SIZE_MASK);
+>>       struct net_device *net_dev = priv->net_dev;
+>>       int ret;
+>>   @@ -221,12 +228,36 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
+>>       }
+>>         skb_put(skb, len);
+>> -    skb->protocol = eth_type_trans(skb, net_dev);
+>> -    netif_receive_skb(skb);
+>> -    net_dev->stats.rx_packets++;
+>> -    net_dev->stats.rx_bytes += len;
+>>   -    return 0;
+>> +    /* add buffers to skb via skb->frag_list */
+>> +    if (ctl & LTQ_DMA_SOP) {
+>> +        ch->skb_head = skb;
+>> +        ch->skb_tail = skb;
+>> +    } else if (ch->skb_head) {
+>> +        if (ch->skb_head == ch->skb_tail)
+>> +            skb_shinfo(ch->skb_tail)->frag_list = skb;
+>> +        else
+>> +            ch->skb_tail->next = skb;
+>> +        ch->skb_tail = skb;
+>> +        skb_reserve(ch->skb_tail, -NET_IP_ALIGN);
+>> +        ch->skb_head->len += skb->len;
+>> +        ch->skb_head->data_len += skb->len;
+>> +        ch->skb_head->truesize += skb->truesize;
+>> +    }
+>> +
+>> +    if (ctl & LTQ_DMA_EOP) {
+>> +        ch->skb_head->protocol = eth_type_trans(ch->skb_head, net_dev);
+>> +        netif_receive_skb(ch->skb_head);
+>> +        net_dev->stats.rx_packets++;
+>> +        net_dev->stats.rx_bytes += ch->skb_head->len;
+> 
+> 
+> Use after free alert.
+> 
+> Please add/test the following fix.
+> 
+> (It is illegal to deref skb after netif_receive_skb())
+> 
+> 
+> diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
+> index 503fb99c5b90..bf7e3c7910d1 100644
+> --- a/drivers/net/ethernet/lantiq_xrx200.c
+> +++ b/drivers/net/ethernet/lantiq_xrx200.c
+> @@ -247,9 +247,9 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
+> 
+>         if (ctl & LTQ_DMA_EOP) {
+>                 ch->skb_head->protocol = eth_type_trans(ch->skb_head, net_dev);
+> -               netif_receive_skb(ch->skb_head);
+>                 net_dev->stats.rx_packets++;
+>                 net_dev->stats.rx_bytes += ch->skb_head->len;
+> +               netif_receive_skb(ch->skb_head);
+>                 ch->skb_head = NULL;
+>                 ch->skb_tail = NULL;
+>                 ret = XRX200_DMA_PACKET_COMPLETE;
+> 
+> 
+>
 
-Typo in git send-email args caused this email to be send in wrong thread 
-and missed Stefan in CC list.
+
+Thanks for spot this bug. I tested this patch and it works
+ok. I will sent this patch it soon. 
 
 
-
-With regards,
-Pavel Skripkin
+>> +        ch->skb_head = NULL;
+>> +        ch->skb_tail = NULL;
+>> +        ret = XRX200_DMA_PACKET_COMPLETE;
+>> +    } else {
+>> +        ret = XRX200_DMA_PACKET_IN_PROGRESS;
+>> +    }
+>> +
+>> +    return ret;
+>>   }
+>>     static int xrx200_poll_rx(struct napi_struct *napi, int budget)
+>> @@ -241,7 +272,9 @@ static int xrx200_poll_rx(struct napi_struct *napi, int budget)
+>>             if ((desc->ctl & (LTQ_DMA_OWN | LTQ_DMA_C)) == LTQ_DMA_C) {
+>>               ret = xrx200_hw_receive(ch);
+>> -            if (ret)
+>> +            if (ret == XRX200_DMA_PACKET_IN_PROGRESS)
+>> +                continue;
+>> +            if (ret != XRX200_DMA_PACKET_COMPLETE)
+>>                   return ret;
+>>               rx++;
+>>           } else {

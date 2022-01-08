@@ -2,124 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F01488313
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 11:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDE9488314
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 11:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbiAHKny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 05:43:54 -0500
-Received: from mga12.intel.com ([192.55.52.136]:12799 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231232AbiAHKny (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 05:43:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641638634; x=1673174634;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6YbQrnMcQA5+BPCkyY5BHW2Z3rlPfkppDF4M7vJLRLk=;
-  b=Ko+JQ6EICpxW8WTV+nzS4tDXa52evseB4OTk9sDWkrQwjLum6LNwU0pb
-   BF7BNZgH4M0YgrKC4ruQb4b0bH0ryusmWZWrPjuWICLAeovTZfhIjySCQ
-   QgfQksk9H3Ml7HgVyoAkZhS2nQHke3SayF6TxAHwbZVhaux9WJp4xWs2a
-   eGu98/RimHk5500rAw+3itAVuOZfXoOCWHsuteSU94OFDzl4quIpzYCOe
-   LdUXF2ZOvnjquqCc8OExONzhg3ZYspkvZcz9iNny2mtJ/MjKV+Y+SIbQS
-   iuD5DnOxQABRnG5KZHtdGh76JEVk4w5OwFs+GNVhVMn/O/1IRehxbkAKv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="222992423"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="222992423"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 02:43:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="690072772"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Jan 2022 02:43:51 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n69CR-0000XI-1n; Sat, 08 Jan 2022 10:43:51 +0000
-Date:   Sat, 8 Jan 2022 18:43:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pintu Kumar <quic_pintu@quicinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>,
-        Pintu Agarwal <pintu.ping@gmail.com>
-Subject: include/uapi/linux/sysinfo.h:23:10: error: array is too large
- (18446744073709551608 elements)
-Message-ID: <202201081822.SPIpoaId-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S234129AbiAHKpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 05:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231232AbiAHKpD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 05:45:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31995C061574
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 02:45:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 872E860DDF
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 10:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A13C36AE5;
+        Sat,  8 Jan 2022 10:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641638701;
+        bh=jzhOp8C6hTySN8VYbW0FS606ZaRRUE4qLQu1l9rI4rU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sgG8ObE6KEsr0n2V5Ld+QHlse5DPN1sFDdn+pwKli1a7E6P/toO+VQjgDc2Gt9rxK
+         k2qFdOO4xTM34DhHtKSVlNp0EwNiOpm+YZq03HVyMP4GJpV54g3UaiXwrlIDYz9fTW
+         F4xbALj2e/8ir9RetHxF5pA4r1gbVevW7HTHQ/18bJafoWjznrfZYOzBQorMveSa5k
+         K+hDJspZWCKW0G4QVmeH1uZ2pQF+IRTPxxQNZRvfG8YuiBjgeUdzIpL4fY4LWeovJ9
+         uuOQPGsBXuIe4rebsvIfX3M+GJdZJ93A2aa+da+oKTbBeuXyjVEOfGX+2KkXIhNT2C
+         zmwbwvBQKeFHw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n69DY-00Gk7U-11; Sat, 08 Jan 2022 10:45:00 +0000
+Date:   Sat, 08 Jan 2022 10:44:59 +0000
+Message-ID: <87sftytsk4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Qianggui Song <qianggui.song@amlogic.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>
+Subject: Re: [PATCH 3/4] irqchip/meson-gpio: add select trigger type callback
+In-Reply-To: <20220108084218.31877-4-qianggui.song@amlogic.com>
+References: <20220108084218.31877-1-qianggui.song@amlogic.com>
+        <20220108084218.31877-4-qianggui.song@amlogic.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qianggui.song@amlogic.com, tglx@linutronix.de, khilman@baylibre.com, narmstrong@baylibre.com, jbrunet@baylibre.com, martin.blumenstingl@googlemail.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220108-020953/Pintu-Kumar/sysinfo-include-availram-field-in-sysinfo-struct/20220106-233557
-head:   85f46444fa2eff4f03aeb701d44edd62af00ee44
-commit: 85f46444fa2eff4f03aeb701d44edd62af00ee44 sysinfo: include availram field in sysinfo struct
-date:   17 hours ago
-config: s390-randconfig-r015-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081822.SPIpoaId-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/85f46444fa2eff4f03aeb701d44edd62af00ee44
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220108-020953/Pintu-Kumar/sysinfo-include-availram-field-in-sysinfo-struct/20220106-233557
-        git checkout 85f46444fa2eff4f03aeb701d44edd62af00ee44
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+On Sat, 08 Jan 2022 08:42:17 +0000,
+Qianggui Song <qianggui.song@amlogic.com> wrote:
+> 
+> Due to some chips may use different registers and offset, provide
+> a set trigger type call back.
+> 
+> Signed-off-by: Qianggui Song <qianggui.song@amlogic.com>
+> ---
+>  drivers/irqchip/irq-meson-gpio.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-meson-gpio.c b/drivers/irqchip/irq-meson-gpio.c
+> index 6a7b4fb13452..98419428fcbd 100644
+> --- a/drivers/irqchip/irq-meson-gpio.c
+> +++ b/drivers/irqchip/irq-meson-gpio.c
+> @@ -55,6 +55,8 @@ struct irq_ctl_ops {
+>  	void (*gpio_irq_sel_pin)(struct meson_gpio_irq_controller *ctl,
+>  				 unsigned int channel, unsigned long hwirq);
+>  	void (*gpio_irq_init)(struct meson_gpio_irq_controller *ctl);
+> +	unsigned int (*gpio_irq_sel_type)(struct meson_gpio_irq_controller *ctl,
+> +					  unsigned int idx, u32 val);
+>  };
+>  
+>  struct meson_gpio_irq_params {
+> @@ -68,16 +70,17 @@ struct meson_gpio_irq_params {
+>  	struct irq_ctl_ops ops;
+>  };
+>  
+> -#define INIT_MESON_COMMON(irqs, init, sel)			\
+> +#define INIT_MESON_COMMON(irqs, init, sel, type)		\
+>  	.nr_hwirq = irqs,					\
+>  	.ops = {						\
+>  		.gpio_irq_init = init,				\
+>  		.gpio_irq_sel_pin = sel,			\
+> +		.gpio_irq_sel_type = type,			\
+>  	},
+>  
+>  #define INIT_MESON8_COMMON_DATA(irqs)				\
+>  	INIT_MESON_COMMON(irqs, meson_gpio_irq_init_dummy,	\
+> -			  meson8_gpio_irq_sel_pin)		\
+> +			  meson8_gpio_irq_sel_pin, NULL)	\
+>  	.edge_single_offset = 0,				\
+>  	.pol_low_offset = 16,					\
+>  	.pin_sel_mask = 0xff,					\
+> @@ -85,7 +88,7 @@ struct meson_gpio_irq_params {
+>  
+>  #define INIT_MESON_A1_COMMON_DATA(irqs)				\
+>  	INIT_MESON_COMMON(irqs, meson_a1_gpio_irq_init,		\
+> -			  meson_a1_gpio_irq_sel_pin)		\
+> +			  meson_a1_gpio_irq_sel_pin, NULL)	\
+>  	.support_edge_both = true,				\
+>  	.edge_both_offset = 16,					\
+>  	.edge_single_offset = 8,				\
+> @@ -279,6 +282,10 @@ static int meson_gpio_irq_type_setup(struct meson_gpio_irq_controller *ctl,
+>  	 */
+>  	type &= IRQ_TYPE_SENSE_MASK;
+>  
+> +	/* Some controllers may have different calculation method*/
+> +	if (params->ops.gpio_irq_sel_type)
+> +		return params->ops.gpio_irq_sel_type(ctl, idx, type);
+> +
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No. If you are going to indirect these things, indirect them for all
+implementations and keep the code clean.
 
-All errors (new ones prefixed by >>):
+	M.
 
-   In file included from kernel/bounds.c:10:
-   In file included from include/linux/page-flags.h:10:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/s390/include/asm/bug.h:68:
-   In file included from include/asm-generic/bug.h:22:
-   In file included from include/linux/printk.h:9:
-   In file included from include/linux/cache.h:5:
-   In file included from include/uapi/linux/kernel.h:5:
->> include/uapi/linux/sysinfo.h:23:10: error: array is too large (18446744073709551608 elements)
-           char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1197: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +23 include/uapi/linux/sysinfo.h
-
-     6	
-     7	#define SI_LOAD_SHIFT	16
-     8	struct sysinfo {
-     9		__kernel_long_t uptime;		/* Seconds since boot */
-    10		__kernel_ulong_t loads[3];	/* 1, 5, and 15 minute load averages */
-    11		__kernel_ulong_t totalram;	/* Total usable main memory size */
-    12		__kernel_ulong_t freeram;	/* Available memory size */
-    13		__kernel_ulong_t sharedram;	/* Amount of shared memory */
-    14		__kernel_ulong_t bufferram;	/* Memory used by buffers */
-    15		__kernel_ulong_t totalswap;	/* Total swap space size */
-    16		__kernel_ulong_t freeswap;	/* swap space still available */
-    17		__u16 procs;		   	/* Number of current processes */
-    18		__u16 pad;		   	/* Explicit padding for m68k */
-    19		__kernel_ulong_t totalhigh;	/* Total high memory size */
-    20		__kernel_ulong_t freehigh;	/* Available high memory size */
-    21		__u32 mem_unit;			/* Memory unit size in bytes */
-    22		__kernel_ulong_t availram;	/* Memory available for allocation */
-  > 23		char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];	/* Padding: libc5 uses this.. */
-    24	};
-    25	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Without deviation from the norm, progress is not possible.

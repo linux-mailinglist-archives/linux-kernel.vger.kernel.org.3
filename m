@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB49B4884BD
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357D94884BF
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbiAHQx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 11:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
+        id S234778AbiAHQ6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 11:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiAHQx0 (ORCPT
+        with ESMTP id S231398AbiAHQ6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 11:53:26 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA3C06173F;
-        Sat,  8 Jan 2022 08:53:25 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id i3so25986971ybh.11;
-        Sat, 08 Jan 2022 08:53:25 -0800 (PST)
+        Sat, 8 Jan 2022 11:58:19 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B03AC06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 08:58:18 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id s1so17639852wra.6
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 08:58:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wRueC447D4PZrB32erkJF3XwhKSeC1rTxvcavGyEUwk=;
-        b=ZrVqbaPjn7kIDuXaAq+QHRgZEfEXSm7q2xeT9TzSeiG9qyNBaZP/pT58cJuw+YpbNd
-         oir+ZzEBgOrjXyFlJoGojSQQT1mLfJjsufsu7juL7AzWmzB/W460pLiAHR5MrSQ/xou4
-         7e/POZbW9uwsiZB9s8aOb4G72BM8ou89f21nuT1FjPGeFtFxjDq6HDZcvQ7u9edPPXe0
-         4FeUk55iNhv2lwwcbfBO+UOv39L1K/WtMo5gIumbiGeKoD2uuLRm3KyTgJxJqgh5e6Rz
-         WEdc2HwC2ON3ERih1nMOxyFT+mZdUbvwzh+OMVemtgqkpn40BF1foSUlvUPv9Zlz4+6a
-         V0cg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwgudjBV0Q9OuU6LjxXGZNHz2djTQPX0z94x7AWMsDs=;
+        b=J7zpwWts951P7cyFXIO9rZFBy3Jb5BbE1wlNjj9t+NS+mkA59d/Mz5SwppBGR1Lw5J
+         Xccku4xvzLCUOqaRCojDZK/fu+lRqAHRkE1s2vZFl9aMSkLlOJ+K4UmtLdUXbRKBtl/R
+         R2ruWAmGnGf52ttJpG98KcES0Q2w9qoeVZXe+0iGSVpr5KqhakudbKhVvTZglPkNkOSY
+         +iHChFEU0Xg9L5E9MV+sypvy5gBwTgd3MIeQad7f9cevtGycBZxdXQePvfOsSu9wGLvY
+         ByDWVOi8DZ9zmZRwFYQYxcWPEwXioARQx07GkUJchmRi0qgzcTTPKqUR4GF8paGs8OdK
+         kSng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wRueC447D4PZrB32erkJF3XwhKSeC1rTxvcavGyEUwk=;
-        b=P2xIgBux8hZeRHJE3pdD0EC8fe2zR4L/UpJCYyeHvZGOrp5nySIFNo/ySsHKm9oaVS
-         Ha1gbGdn8FnVk0SR6UJiikGDRwFCwbaaF9pMe4ObWxNw9/wGy2jC3oso6aFehx5zqvSQ
-         VHEYTgknDcUZmPQh5DYbVkjh5nQ+7X6jtk4IPnzoo0ouJEb3DjV95hXKWpeNpxdQIQ82
-         /YlcrsGT8kmhDcoJX2jhxXWS61vjB09KX9Q0y1nkv539Zol3YyzQe/nfCsNiQujJKpBP
-         QIZIoREwKwbyt2mDQhNqz+06eGbiVTYzyI5y8Z5iEtjiMIm12gu8YA1bX8LXXBud93ee
-         qx2g==
-X-Gm-Message-State: AOAM533p+SPDFrF4BCZNIlyC5dmLysyO90QKvut0xRs+yZfBjZB52JE8
-        30k/U27vbJiv2yi7bAhSz9qrcaxKxQPF2BKd3eP4NvsKSMO4Bw==
-X-Google-Smtp-Source: ABdhPJzxEId/ef5PfNvO/2kgKT3ZEILPu/ThbMWisj0D2vBTpaNodUYRbNAlgHFENDIUk1FfCydjmJYQIOm3ixIiokw=
-X-Received: by 2002:a25:e647:: with SMTP id d68mr73393299ybh.591.1641660805023;
- Sat, 08 Jan 2022 08:53:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwgudjBV0Q9OuU6LjxXGZNHz2djTQPX0z94x7AWMsDs=;
+        b=PNodK7MZQIQKTGD1ZqDWACOumXO/P5iygwI0a63F6/BiPihJECXDQEls2wMOFDVjtq
+         2TzgplNhUqbvHJ1M3T0/26gGfymTXMstV6elCS7TwjBWzz2E4TUax5fxeggEr9C66mkQ
+         vQLbQpbAZ1ybyVhrtdycTZlwZ1cssK/nTnX8iXi5oZJ5g7uZzRJ7ds1QPgbZiYd+zl8F
+         yIowtf1YwbjaS4H/e3rCWWMGYWWNVItHfnpCsINVbpA+HnUpOeX/dMj+gDJwd+m2Q+bo
+         xliJv4DRQpsM/0hGOu7+fDArqkr/XLZ48cyOiBZTMEqlc1GuENpgbIuzNgzee22+1ojB
+         h9gg==
+X-Gm-Message-State: AOAM532HGlpih96kWqBQ1mg+GZ7NNe6/U1fHmGO8E2ct/CIpw41bSE9F
+        Fx9GnFuA0NhxvEU+OaGfSoAeX9VCin9FdQ==
+X-Google-Smtp-Source: ABdhPJwdNd7qRP1YLQiy8gs11DzHwPv1yjxGoy0OLq6yk4KX6pMbvSP854cGBp+9mxPevIN78My9+A==
+X-Received: by 2002:a05:6000:156b:: with SMTP id 11mr59243951wrz.261.1641661097073;
+        Sat, 08 Jan 2022 08:58:17 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id y8sm2219513wrd.10.2022.01.08.08.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 08:58:16 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     airlied@linux.ie
+Cc:     daniel@ffwll.ch, lee.jones@linaro.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2] drm/selftests/test-drm_dp_mst_helper: Fix memory leak in sideband_msg_req_encode_decode
+Date:   Sat,  8 Jan 2022 17:58:12 +0100
+Message-Id: <20220108165812.46797-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
- <1641578854-14232-1-git-send-email-quic_pintu@quicinc.com> <19cce51e24584c2a8090b618c580a0bd@AcuMS.aculab.com>
-In-Reply-To: <19cce51e24584c2a8090b618c580a0bd@AcuMS.aculab.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Sat, 8 Jan 2022 22:23:13 +0530
-Message-ID: <CAOuPNLh-WLxJ7w=_C7zKXArgZLbO7OahHHhuwAyN9E1yZvNTdQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sysinfo: include availram field in sysinfo struct
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Pintu Kumar <quic_pintu@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "legion@kernel.org" <legion@kernel.org>,
-        "sashal@kernel.org" <sashal@kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "ccross@google.com" <ccross@google.com>,
-        "pcc@google.com" <pcc@google.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "caoxiaofeng@yulong.com" <caoxiaofeng@yulong.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        dhowells@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Jan 2022 at 03:52, David Laight <David.Laight@aculab.com> wrote:
->
-> From: Pintu Kumar
-> > Sent: 07 January 2022 18:08
-> >
-> > The sysinfo member does not have any "available ram" field and
-> > the bufferram field is not much helpful either, to get a rough
-> > estimate of available ram needed for allocation.
-> >
-> > One needs to parse MemAvailable field separately from /proc/meminfo
-> > to get this info instead of directly getting if from sysinfo itself.
-> >
-> > Thus, this patch introduce a new field as availram in sysinfo
-> > so that all the info total/free/available can be retrieved from
-> > one place itself.
-> >
-> ...
-> > diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
-> > index 435d5c2..fe84c6a 100644
-> > --- a/include/uapi/linux/sysinfo.h
-> > +++ b/include/uapi/linux/sysinfo.h
-> > @@ -19,7 +19,8 @@ struct sysinfo {
-> >       __kernel_ulong_t totalhigh;     /* Total high memory size */
-> >       __kernel_ulong_t freehigh;      /* Available high memory size */
-> >       __u32 mem_unit;                 /* Memory unit size in bytes */
-> > -     char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
->
-> There are 4 pad bytes here on most 64bit architectures.
->
-> > +     __kernel_ulong_t availram;      /* Memory available for allocation */
-> > +     char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
-> >  };
->
-> You've not compile-time tested the size of the structure.
->
-With "32" instead of "20" in padding I get these size of sysinfo:
-In x86-64 kernel, with app 64-bit: Size of sysinfo = 128
-In x86-64 kernel, with app 32-bit:: Size of sysinfo = 76
-In arm-64 kernel, with app 32-bit: Size of sysinfo = 76
+Avoid leaking the "out" variable if it is not possible to allocate
+the "txmsg" variable.
 
-Okay the sys robot reported some issue in 64-bit build.
-{{{
->> include/uapi/linux/sysinfo.h:23:14: error: size of array '_f' is too large
->>    23 |         char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
->>       |              ^~
-}}}
+Fixes: 09234b88ef55 ("drm/selftests/test-drm_dp_mst_helper: Move 'sideband_msg_req_encode_decode' onto the heap")
+Addresses-Coverity-ID: 1475685 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 
-Also, I got the same issue while building for arm64, so I tried to
-adjust like this:
-char _f[32-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];
+---
 
-With this the build works on both 32/64 but output fails when running
-32-bit program on 64-bit kernel.
-Also, the free command on 64-bit reports "stack smashing error"..
+v2: Improve commit message
+---
+ drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-How do we resolve this issue to make it work on both arch ?
-Also, I don't really understand the significance of that number "20"
-in padding ?
+diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+index 6b4759ed6bfd..c491429f1a02 100644
+--- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
++++ b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+@@ -131,8 +131,10 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
+ 		return false;
+ 
+ 	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
+-	if (!txmsg)
++	if (!txmsg) {
++		kfree(out);
+ 		return false;
++	}
+ 
+ 	drm_dp_encode_sideband_req(in, txmsg);
+ 	ret = drm_dp_decode_sideband_req(txmsg, out);
+-- 
+2.25.1
 
-Thanks,
-Pintu

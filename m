@@ -2,137 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CCC4886E8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 00:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4FC4886EF
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 00:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbiAHXZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 18:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiAHXZL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 18:25:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E2CC06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 15:25:10 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n6L59-0005ig-8E; Sun, 09 Jan 2022 00:25:07 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-6624-65e0-1d16-9a67.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6624:65e0:1d16:9a67])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id ADD7C6D3BA2;
-        Sat,  8 Jan 2022 23:25:04 +0000 (UTC)
-Date:   Sun, 9 Jan 2022 00:25:03 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Brian Silverman <bsilver16384@gmail.com>
+        id S234975AbiAHXff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 18:35:35 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:6635 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230502AbiAHXfe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 18:35:34 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JWbzn6Bf4z9c;
+        Sun,  9 Jan 2022 00:35:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1641684931; bh=PlUOfTOJmz/Ue3/EDBlVUxJ2DxqecfDU18/1xQbQtoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FscL30pAUhiOa20r1Aci5nnOyAPPM7+JoY4I/TdvClRTh0U4D6S+wg1hl5DP6lTxY
+         uXsR1x49ZX58OBDSXL5QGeKh44OE5Qx3HX+fhAHnzzl6d2Bb3RMolFLW/CZs7ANyT9
+         2B2bqDVSaDvrnFLV9W4laov2KVjSpYZyXNNSx0uhvIf6/Ty/Jc6im2Ya6WtOK+mKnU
+         8tBa912YBdNEWU6kN5XGlGndW+KwbfYMSoJHIv4OJWOXoW7NdW+vFlXd5iG2C0Sl5t
+         yLjrrdYJpGeB9xfuugFJFXVZkd4+VRh97hWFY+LEwPEsT5kUEeN00fOMl2F0IbFH2g
+         x9nJQfgC6GmfA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+Date:   Sun, 9 Jan 2022 00:35:15 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Subject: Re: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA
- devices
-Message-ID: <20220108232503.ecwf7f4uuo7s7eni@pengutronix.de>
-References: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 04/21] kernel: Add combined power-off+restart handler
+ call chain API
+Message-ID: <Ydofs2CIfA+r5KAz@qmqm.qmqm.pl>
+References: <20211212210309.9851-1-digetx@gmail.com>
+ <20211212210309.9851-5-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j2owows65r7zjzcq"
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
-In-Reply-To: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211212210309.9851-5-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021 at 12:02:52AM +0300, Dmitry Osipenko wrote:
+[...]
+> +/**
+> + * struct power_off_data - Power-off callback argument
+> + *
+> + * @cb_data: Callback data.
+> + */
+> +struct power_off_data {
+> +	void *cb_data;
+> +};
+> +
+> +/**
+> + * struct power_off_prep_data - Power-off preparation callback argument
+> + *
+> + * @cb_data: Callback data.
+> + */
+> +struct power_off_prep_data {
+> +	void *cb_data;
+> +};
 
---j2owows65r7zjzcq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why two exactly same structures? Why only a single pointer instead? If
+it just to enable type-checking callbacks, then thouse could be opaque
+or zero-sized structs that would be embedded or casted away in
+respective callbacks.
 
-On 05.01.2022 16:25:09, Brian Silverman wrote:
-> It's a M_TTCAN with some NVIDIA-specific glue logic and clocks. The
-> existing m_can driver works with it after handling the glue logic.
->=20
-> The code is a combination of pieces from m_can_platform and NVIDIA's
-> driver [1].
->=20
-> [1] https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvidi=
-a/drivers/net/can/mttcan/hal/m_ttcan.c
->=20
-> Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+> +
+> +/**
+> + * struct restart_data - Restart callback argument
+> + *
+> + * @cb_data: Callback data.
+> + * @cmd: Restart command string.
+> + * @stop_chain: Further lower priority callbacks won't be executed if set to
+> + *		true. Can be changed within callback. Default is false.
+> + * @mode: Reboot mode ID.
+> + */
+> +struct restart_data {
+> +	void *cb_data;
+> +	const char *cmd;
+> +	bool stop_chain;
+> +	enum reboot_mode mode;
+> +};
+> +
+> +/**
+> + * struct reboot_prep_data - Reboot and shutdown preparation callback argument
+> + *
+> + * @cb_data: Callback data.
+> + * @cmd: Restart command string.
+> + * @stop_chain: Further lower priority callbacks won't be executed if set to
+> + *		true. Can be changed within callback. Default is false.
 
-Thanks for your patch.
+Why would we want to stop power-off or erboot chain? If the callback
+succeded, then further calls won't be made. If it doesn't succeed, but
+possibly breaks the system somehow, it shouldn't return. Then the only
+case left would be to just try the next method of shutting down.
 
-> ---
-> I ran into bugs with the error handling in NVIDIA's m_ttcan driver, so I
-> switched to m_can which has been much better. I'm looking for feedback
-> on whether I should ensure rebasing hasn't broken anything, write up DT
-> documentation, and submit this patch for real. The driver works great,
-> but I've got some questions about submitting it.
->=20
-> question: This has liberal copying of GPL code from NVIDIA's
-> non-upstreamed m_ttcan driver. Is that OK?
+> + * @mode: Preparation mode ID.
+> + */
+> +struct reboot_prep_data {
+> +	void *cb_data;
+> +	const char *cmd;
+> +	bool stop_chain;
+> +	enum reboot_prepare_mode mode;
+> +};
+> +
+> +struct sys_off_handler_private_data {
+> +	struct notifier_block power_off_nb;
+> +	struct notifier_block restart_nb;
+> +	struct notifier_block reboot_nb;
 
-The header in the driver says it's GPLv2:
+What's the difference between restart and reboot?
 
-| https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvidia/dr=
-ivers/net/can/mttcan/hal/m_ttcan.c#L5
+> +	void (*platform_power_off_cb)(void);
+> +	void (*simple_power_off_cb)(void *data);
+> +	void *simple_power_off_cb_data;
+> +	bool registered;
+> +};
 
-So it's OK. You should copy the original copyright notice to your glue
-driver, though.
+BTW, I couldn't find a right description of my idea of unifying the
+chains before, so let me sketch it now.
 
-> corollary: I don't know what any of this glue logic does. I do know the
-> device doesn't work without it. I can't find any documentation of what
-> these addresses do.
+The idea is to have a single system-off chain in which the callback
+gets a mode ({QUERY_*, PREP_*, DO_*} for each of {*_REBOOT, *_POWEROFF, ...?).
+The QUERY_* calls would be made in can_kernel_reboot/poweroff(): all
+would be called, and if at least one returned true, then the shutdown
+mode would continue. All of PREP_* would be called then. After that
+all DO_* would be tried until one doesn't return (succeeded or broke
+the system hard). Classic for(;;); could be a final fallback for the
+case where arch/machine (lowest priority) call would return instead
+of halting the system in machine-dependent way. The QUERY and PREP
+stages could be combined, but I haven't thought about it enough to
+see what conditions would need to be imposed on the callbacks in
+that case (maybe it's not worth the trouble, since it isn't a fast
+path anyway?). The goal here is to have less (duplicated) code in
+kernel, but otherwise it seems equivalent to your API proposal.
 
-hmmm ok
-
-> question: There is some duplication between this and m_can_platform. It
-> doesn't seem too bad to me, but is this the preferred way to do it or is
-> there another alternative?
-
-You might merge this driver to the generic platform driver.
-
-> question: Do new DT bindings need to be in the YAML format, or is the
-> .txt one OK?
-
-YAML
-
-Please fix the checkpatch warning found by:
-
-| ./scripts/checkpatch.pl --file drivers/net/can/m_can/m_can_tegra.c
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---j2owows65r7zjzcq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHaHUwACgkQqclaivrt
-76lrtwf/TBE40m671Kec7lv1AErSTYn7yLjVZkgZy8sHRUkiBzDfOvpFkRXfn4Yl
-RFKlGuNl1bzSNH1FP2iEQu5G6HBzougiMCff1tjL/ou7fKoGfdPiR85QWGsXHUZZ
-US1UXyMBBPWeFZeK9Fm9XmgOfDUaEvI9RDrHyUrul9T5DyKw3A1j4x43QOR++9VE
-GzitPzB8oPWPnFyi/8iFwCfkg6+j8V7VX/UmwJyvkzZT8R99dWh4OUWuwKJjFkHa
-PsOr7ToXgoKJTAOu3IMNyLrxu0tJSBEDGWTPmJ07bBJfyTLoyL4mHOAr89J4xPGG
-O6UboqJB0B5WyE1+EMaoMLNhbzy+7g==
-=BWAy
------END PGP SIGNATURE-----
-
---j2owows65r7zjzcq--
+Best Regards
+Micha³ Miros³aw

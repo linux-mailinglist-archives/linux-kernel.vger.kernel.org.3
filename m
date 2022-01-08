@@ -2,131 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1672488238
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD1C48823E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbiAHHkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 02:40:46 -0500
-Received: from mga12.intel.com ([192.55.52.136]:30331 "EHLO mga12.intel.com"
+        id S233763AbiAHHz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 02:55:27 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:18468 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232935AbiAHHkp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 02:40:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641627645; x=1673163645;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RwBntXTdAi7/01ONVX+EzLb37fJpXmGV/6H3s4eQ3rk=;
-  b=d7/ImJWrfH6xaDr0+L909slTnRUygih1oEVdLp8gUqDNWFtvI4XrBEm2
-   g83XddR9cFc9qvcO0vWYYUlu+0CEDayDbsphhKmd9Zz7pIYL7KcDJsnrx
-   gPWFe/GwCYz0HwDQgpEtTLPeCoyXPUFn6bgo3o6Wf0TgmJwyPWKgSROPr
-   SXNVWmHqu0ohMzI1jHJjjjIlI1E50d7SIjdR2DwZ3caH1/YMe2Xvkk0Ob
-   07ObFHYDaf/VdlWGyV8lqQtkA95HRyiYwfuXUoGhPXYNYcDLRG3nGy+6q
-   CPe0FIUpShf1CoSq5lSAuQXXjkmXgP38Lfau15vyaXkwpvdeNDF9iPsii
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="222981632"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="222981632"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 23:40:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="489528222"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jan 2022 23:40:43 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n66LD-0000Ne-7D; Sat, 08 Jan 2022 07:40:43 +0000
-Date:   Sat, 8 Jan 2022 15:39:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steve Muckle <smuckle@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android11-kiwi-5.4
- 754/9999] drivers/rtc/hctosys.c:24:5: warning: no previous prototype for
- function 'rtc_hctosys'
-Message-ID: <202201081509.7cqEIyBV-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233665AbiAHHz0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 02:55:26 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1641628526; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=ETGeSzFGnLOfUFkpuQ8JPsoi7tFFJl/Lj4L8F3wSPws=; b=j3r4wTY0wyGPO1xmoEGAw+gmrfiRPooLSgVL7BFDyLaQYAOOBwwChcdx0g5Wy/qy34yQo1fx
+ v2SpAlX5TTZqZA7No8Lbpo2LkL5Qn9sHp9hvEFBH0bzMUuTn23BUhJ7JyPCHlVCA+UvOXKuC
+ md4JIz6Xjj5XFkpwNBaaU0xVmK8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 61d9436d305e503c096fa26d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 08 Jan 2022 07:55:25
+ GMT
+Sender: Vijayanand=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D3CE2C43616; Sat,  8 Jan 2022 07:55:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        FROM_ADDR_WS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vjitta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7FCE1C4338F;
+        Sat,  8 Jan 2022 07:55:21 +0000 (UTC)
+From:   Vijayanand@codeaurora.org, Jitta@codeaurora.org
+To:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, vjitta@codeaurora.org,
+        Vijayanand Jitta <quic_vjitta@quicinc.com>
+Subject: [PATCH v2] iommu: Fix potential use-after-free during probe
+Date:   Sat,  8 Jan 2022 13:25:12 +0530
+Message-Id: <1641628512-31572-1-git-send-email-quic_vjitta@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+From: Vijayanand Jitta <quic_vjitta@quicinc.com>
 
-FYI, the error/warning still remains.
+Kasan has reported the following use after free on dev->iommu.
+when a device probe fails and it is in process of freeing dev->iommu
+in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+causing use after free.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android11-kiwi-5.4
-head:   7d1d5848183bd1d9086d0572f9af431d3ded407f
-commit: 5f378fd56aa3988be21e859254a2d72628d044c6 [754/9999] ANDROID: rtc: class: support hctosys from modular RTC drivers
-config: x86_64-randconfig-a011-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081509.7cqEIyBV-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/5f378fd56aa3988be21e859254a2d72628d044c6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android11-kiwi-5.4
-        git checkout 5f378fd56aa3988be21e859254a2d72628d044c6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/rtc/
+BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Workqueue: events_unbound deferred_probe_work_func
+Call trace:
+ dump_backtrace+0x0/0x33c
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x16c/0x1e0
+ print_address_description+0x84/0x39c
+ __kasan_report+0x184/0x308
+ kasan_report+0x50/0x78
+ __asan_load8+0xc0/0xc4
+ of_iommu_configure+0xb4/0x4a4
+ of_dma_configure_id+0x2fc/0x4d4
+ platform_dma_configure+0x40/0x5c
+ really_probe+0x1b4/0xb74
+ driver_probe_device+0x11c/0x228
+ __device_attach_driver+0x14c/0x304
+ bus_for_each_drv+0x124/0x1b0
+ __device_attach+0x25c/0x334
+ device_initial_probe+0x24/0x34
+ bus_probe_device+0x78/0x134
+ deferred_probe_work_func+0x130/0x1a8
+ process_one_work+0x4c8/0x970
+ worker_thread+0x5c8/0xaec
+ kthread+0x1f8/0x220
+ ret_from_fork+0x10/0x18
 
-All warnings (new ones prefixed by >>):
+Allocated by task 1:
+ ____kasan_kmalloc+0xd4/0x114
+ __kasan_kmalloc+0x10/0x1c
+ kmem_cache_alloc_trace+0xe4/0x3d4
+ __iommu_probe_device+0x90/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
 
->> drivers/rtc/hctosys.c:24:5: warning: no previous prototype for function 'rtc_hctosys' [-Wmissing-prototypes]
-   int rtc_hctosys(void)
-       ^
-   drivers/rtc/hctosys.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int rtc_hctosys(void)
-   ^
-   static 
-   1 warning generated.
+Freed by task 1:
+ kasan_set_track+0x4c/0x84
+ kasan_set_free_info+0x28/0x4c
+ ____kasan_slab_free+0x120/0x15c
+ __kasan_slab_free+0x18/0x28
+ slab_free_freelist_hook+0x204/0x2fc
+ kfree+0xfc/0x3a4
+ __iommu_probe_device+0x284/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
 
+Fix this by adding device_lock for dev->iommu accesses.
 
-vim +/rtc_hctosys +24 drivers/rtc/hctosys.c
-
-    12	
-    13	/* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
-    14	 * whether it stores the most close value or the value with partial
-    15	 * seconds truncated. However, it is important that we use it to store
-    16	 * the truncated value. This is because otherwise it is necessary,
-    17	 * in an rtc sync function, to read both xtime.tv_sec and
-    18	 * xtime.tv_nsec. On some processors (i.e. ARM), an atomic read
-    19	 * of >32bits is not possible. So storing the most close value would
-    20	 * slow down the sync API. So here we have the truncated value and
-    21	 * the best guess is to add 0.5s.
-    22	 */
-    23	
-  > 24	int rtc_hctosys(void)
-    25	{
-    26		int err = -ENODEV;
-    27		struct rtc_time tm;
-    28		struct timespec64 tv64 = {
-    29			.tv_nsec = NSEC_PER_SEC >> 1,
-    30		};
-    31		struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
-    32	
-    33		if (!rtc) {
-    34			pr_info("unable to open rtc device (%s)\n",
-    35				CONFIG_RTC_HCTOSYS_DEVICE);
-    36			goto err_open;
-    37		}
-    38	
-    39		err = rtc_read_time(rtc, &tm);
-    40		if (err) {
-    41			dev_err(rtc->dev.parent,
-    42				"hctosys: unable to read the hardware clock\n");
-    43			goto err_read;
-    44		}
-    45	
-    46		tv64.tv_sec = rtc_tm_to_time64(&tm);
-    47	
-
+Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/iommu/iommu.c |  9 +++++++++
+ include/linux/iommu.h | 32 ++++++++++++++++++++++++++------
+ 2 files changed, 35 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index d410311..c5f35c5 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -171,6 +171,7 @@ EXPORT_SYMBOL_GPL(iommu_device_unregister);
+ static struct dev_iommu *dev_iommu_get(struct device *dev)
+ {
+ 	struct dev_iommu *param = dev->iommu;
++	int ret;
+ 
+ 	if (param)
+ 		return param;
+@@ -180,15 +181,23 @@ static struct dev_iommu *dev_iommu_get(struct device *dev)
+ 		return NULL;
+ 
+ 	mutex_init(&param->lock);
++	ret = device_trylock(dev);
+ 	dev->iommu = param;
++	if (ret)
++		device_unlock(dev);
+ 	return param;
+ }
+ 
+ static void dev_iommu_free(struct device *dev)
+ {
++	int ret;
++
+ 	iommu_fwspec_free(dev);
++	ret = device_trylock(dev);
+ 	kfree(dev->iommu);
+ 	dev->iommu = NULL;
++	if (ret)
++		device_unlock(dev);
+ }
+ 
+ static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index f7f6ada..2edd624 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -627,29 +627,49 @@ const struct iommu_ops *iommu_ops_from_fwnode(struct fwnode_handle *fwnode);
+ 
+ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+ {
++	struct iommu_fwspec *fwspec = NULL;
++	int ret;
++
++	ret = device_trylock(dev);
+ 	if (dev->iommu)
+-		return dev->iommu->fwspec;
+-	else
+-		return NULL;
++		fwspec = dev->iommu->fwspec;
++	if (ret)
++		device_unlock(dev);
++	return fwspec;
+ }
+ 
+ static inline void dev_iommu_fwspec_set(struct device *dev,
+ 					struct iommu_fwspec *fwspec)
+ {
++	int ret;
++
++	ret = device_trylock(dev);
+ 	dev->iommu->fwspec = fwspec;
++	if (ret)
++		device_unlock(dev);
+ }
+ 
+ static inline void *dev_iommu_priv_get(struct device *dev)
+ {
++	int ret;
++	void *priv = NULL;
++
++	ret = device_trylock(dev);
+ 	if (dev->iommu)
+-		return dev->iommu->priv;
+-	else
+-		return NULL;
++		priv = dev->iommu->priv;
++	if (ret)
++		device_unlock(dev);
++	return priv;
+ }
+ 
+ static inline void dev_iommu_priv_set(struct device *dev, void *priv)
+ {
++	int ret;
++
++	ret = device_trylock(dev);
+ 	dev->iommu->priv = priv;
++	if (ret)
++		device_unlock(dev);
+ }
+ 
+ int iommu_probe_device(struct device *dev);
+-- 
+2.7.4
+

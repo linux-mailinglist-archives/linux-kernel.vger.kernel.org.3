@@ -2,237 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27354883F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 15:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5F54883FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 15:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbiAHO27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 09:28:59 -0500
-Received: from mga11.intel.com ([192.55.52.93]:45306 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229717AbiAHO26 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 09:28:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641652138; x=1673188138;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z2dy1qLzxOD3uuker7FSPcMBNnSn8/cnfAFzTkY5vXw=;
-  b=ltPNw5U2IeCyACiekwISGb/A1eRkjM2uKO8RonbGAY9Pi/wZPJQWx/mL
-   dsgVioaRaZjrYf0C0fQ1tNh7yqgSKh80Z9rmwu8mfxsVIcybNGQYPoJK1
-   sqFQ4Y5rSZgouGLL8Vun9l386846r+hB6Hl1x8ue27AWBxr4x8s3WmrDy
-   FmBgdHg7UL7cih0OYBKWyAQgg+mwWk2fGVJe/yTBvXSUFViWrf1K1QKQq
-   2nVoPNFtTamaXUMNVs2odfNoFtEPvJi7vY+UdC9ESYiI89FjTcwTd10ia
-   IkINcuGUnSp7c0EKFgG5vANxx6qouvO6IfBFh5Jhe7potT2wb4K8EYWjQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="240567511"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="240567511"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 06:28:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="514153584"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jan 2022 06:28:56 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6CiF-0000gk-Fh; Sat, 08 Jan 2022 14:28:55 +0000
-Date:   Sat, 8 Jan 2022 22:28:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 631/2375]
- arch/powerpc/include/asm/page_32.h:48:9: error: implicit declaration of
- function 'WARN_ON'
-Message-ID: <202201082245.1MS3SHJh-lkp@intel.com>
+        id S234458AbiAHOd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 09:33:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31514 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229712AbiAHOd1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 09:33:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641652406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OTEoDAXesUBrrz0y7VX933AG7BpNKcC+21DOjfav4eQ=;
+        b=N8zW4mVxz9x85I2DTig0IFp+9D5JB7bbiXl86u1vWUY1oN9e53DGCRn1ZvjmbCHBCS3QY3
+        T86ENFsag5dSAYFydtWmWngPtrmi/plN8ehPnv5+gFt4lt/vDREbrKUbpd/hEq3Jo/7Dxe
+        MLsojwuUDHbPIkePTvRMFXkCW68k4gg=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-134-7uLzGcGAMkuwwpYik-DyUQ-1; Sat, 08 Jan 2022 09:33:25 -0500
+X-MC-Unique: 7uLzGcGAMkuwwpYik-DyUQ-1
+Received: by mail-oo1-f69.google.com with SMTP id p3-20020a4a4803000000b002da84ca8abcso5998494ooa.14
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 06:33:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OTEoDAXesUBrrz0y7VX933AG7BpNKcC+21DOjfav4eQ=;
+        b=anhMbeUA8zwacPX7ngIpZH4C67KX33E0byABNRDGdkKOa7TBVwA1AihCoP8VgBQ8M5
+         NeSF5NEonYKqu4Hb7qaP6zMnt2rrgH552TVHwbF8QvGv4dayKBB+HrZQmSGNKXNycaNW
+         pzwj0kSwVIXqPeozvtjk317JLAZwFmvt/2F8eFvbL7IcZPgsNnWpJkS2rdQqb6y8XW1r
+         P4v3UlElktN/cq+QnGcV2Sk5unioq0j5JuswDiTbC66YTBSAN8pBRZQ6sdg0v+qbF5cJ
+         bRqJYi3J5SY4OXrJX7bjsUgI3S6ir1UPWHgotKb4GuSxaq9LEmTZP4jk+9uL70YS6XdP
+         JZSQ==
+X-Gm-Message-State: AOAM531IN5804YeaZa8EosX0NEDl3kZHSINvxs3/RpGVlfALXcnOOkKP
+        yYdyoSxlX7fbWB2lFfeoJMq/ywFEly/7a87pn2pJ6YyXoLHmxSuEaAE4UcGZZQPiG/FEDy6nAnb
+        S+0EiZu4gjurawUUdZWNbU+QU
+X-Received: by 2002:a9d:d68:: with SMTP id 95mr46520890oti.188.1641652404334;
+        Sat, 08 Jan 2022 06:33:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyrzTGEeaVMK49HTR2/2D3npJiXwy7xQHcIPlSumyPxfb0SUfpPiLi4GiaG2GrUwzY6o8mW7Q==
+X-Received: by 2002:a9d:d68:: with SMTP id 95mr46520883oti.188.1641652404104;
+        Sat, 08 Jan 2022 06:33:24 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id r37sm353568otv.54.2022.01.08.06.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 06:33:23 -0800 (PST)
+From:   trix@redhat.com
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        mailhol.vincent@wanadoo.fr, stefan.maetje@esd.eu
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] can: janz-ican3: initialize dlc variable
+Date:   Sat,  8 Jan 2022 06:33:19 -0800
+Message-Id: <20220108143319.3986923-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   351ceeab2ef96ab2fc306934ddb201b44636181b
-commit: a657aeec64a85023d6fe6be475a83661c6abb5b8 [631/2375] headers/deps: Add header dependencies to .h files: <linux/atomic_api.h>
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220108/202201082245.1MS3SHJh-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=a657aeec64a85023d6fe6be475a83661c6abb5b8
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout a657aeec64a85023d6fe6be475a83661c6abb5b8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc prepare
+From: Tom Rix <trix@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Clang static analysis reports this problem
+janz-ican3.c:1311:2: warning: Undefined or garbage value returned to caller
+        return dlc;
+        ^~~~~~~~~~
 
-Note: the mingo-tip/sched/headers HEAD 351ceeab2ef96ab2fc306934ddb201b44636181b builds fine.
-      It only hurts bisectability.
+dlc is only set with this conditional
+	if (!(cf->can_id & CAN_RTR_FLAG))
+		dlc = cf->len;
 
-All error/warnings (new ones prefixed by >>):
+But is always returned.  So initialize dlc to 0.
 
-   In file included from arch/powerpc/include/asm/page.h:249,
-                    from arch/powerpc/include/asm/thread_info.h:13,
-                    from include/linux/thread_info.h:61,
-                    from arch/powerpc/include/asm/ptrace.h:323,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:526,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/atomic_api.h:1,
-                    from include/linux/jump_label.h:76,
-                    from include/linux/dynamic_debug.h:6,
-                    from include/linux/printk.h:559,
-                    from include/asm-generic/bug.h:22,
-                    from arch/powerpc/include/asm/bug.h:149,
-                    from include/linux/bug.h:5,
-                    from include/linux/page-flags.h:10,
-                    from kernel/bounds.c:10:
-   arch/powerpc/include/asm/page_32.h: In function 'clear_page':
->> arch/powerpc/include/asm/page_32.h:48:9: error: implicit declaration of function 'WARN_ON' [-Werror=implicit-function-declaration]
-      48 |         WARN_ON((unsigned long)addr & (L1_CACHE_BYTES - 1));
-         |         ^~~~~~~
-   In file included from arch/powerpc/include/asm/hw_breakpoint.h:12,
-                    from arch/powerpc/include/asm/processor.h:43,
-                    from arch/powerpc/include/asm/thread_info.h:40,
-                    from include/linux/thread_info.h:61,
-                    from arch/powerpc/include/asm/ptrace.h:323,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:526,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/atomic_api.h:1,
-                    from include/linux/jump_label.h:76,
-                    from include/linux/dynamic_debug.h:6,
-                    from include/linux/printk.h:559,
-                    from include/asm-generic/bug.h:22,
-                    from arch/powerpc/include/asm/bug.h:149,
-                    from include/linux/bug.h:5,
-                    from include/linux/page-flags.h:10,
-                    from kernel/bounds.c:10:
-   arch/powerpc/include/asm/cpu_has_feature.h: At top level:
->> arch/powerpc/include/asm/cpu_has_feature.h:21:31: error: array type has incomplete element type 'struct static_key_true'
-      21 | extern struct static_key_true cpu_feature_keys[NUM_CPU_FTR_KEYS];
-         |                               ^~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/cpu_has_feature.h: In function 'cpu_has_feature':
->> arch/powerpc/include/asm/cpu_has_feature.h:32:14: error: 'static_key_initialized' undeclared (first use in this function)
-      32 |         if (!static_key_initialized) {
-         |              ^~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/cpu_has_feature.h:32:14: note: each undeclared identifier is reported only once for each function it appears in
->> arch/powerpc/include/asm/cpu_has_feature.h:46:16: error: implicit declaration of function 'static_branch_likely' [-Werror=implicit-function-declaration]
-      46 |         return static_branch_likely(&cpu_feature_keys[i]);
-         |                ^~~~~~~~~~~~~~~~~~~~
->> arch/powerpc/include/asm/cpu_has_feature.h:25:13: warning: variable 'i' set but not used [-Wunused-but-set-variable]
-      25 |         int i;
-         |             ^
-   In file included from arch/powerpc/include/asm/ptrace.h:323,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:526,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/atomic_api.h:1,
-                    from include/linux/jump_label.h:76,
-                    from include/linux/dynamic_debug.h:6,
-                    from include/linux/printk.h:559,
-                    from include/asm-generic/bug.h:22,
-                    from arch/powerpc/include/asm/bug.h:149,
-                    from include/linux/bug.h:5,
-                    from include/linux/page-flags.h:10,
-                    from kernel/bounds.c:10:
-   arch/powerpc/include/asm/thread_info.h: In function 'clear_thread_local_flags':
->> include/linux/thread_info.h:26:32: error: implicit declaration of function 'task_thread_info'; did you mean 'current_thread_info'? [-Werror=implicit-function-declaration]
-      26 | # define current_thread_info() task_thread_info(current)
-         |                                ^~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/thread_info.h:159:34: note: in expansion of macro 'current_thread_info'
-     159 |         struct thread_info *ti = current_thread_info();
-         |                                  ^~~~~~~~~~~~~~~~~~~
->> include/linux/thread_info.h:26:32: warning: initialization of 'struct thread_info *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-      26 | # define current_thread_info() task_thread_info(current)
-         |                                ^~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/thread_info.h:159:34: note: in expansion of macro 'current_thread_info'
-     159 |         struct thread_info *ti = current_thread_info();
-         |                                  ^~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/thread_info.h: In function 'test_thread_local_flags':
->> include/linux/thread_info.h:26:32: warning: initialization of 'struct thread_info *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-      26 | # define current_thread_info() task_thread_info(current)
-         |                                ^~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/thread_info.h:165:34: note: in expansion of macro 'current_thread_info'
-     165 |         struct thread_info *ti = current_thread_info();
-         |                                  ^~~~~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/ptrace.h:323,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:526,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/atomic_api.h:1,
-                    from include/linux/jump_label.h:76,
-                    from include/linux/dynamic_debug.h:6,
-                    from include/linux/printk.h:559,
-                    from include/asm-generic/bug.h:22,
-                    from arch/powerpc/include/asm/bug.h:149,
-                    from include/linux/bug.h:5,
-                    from include/linux/page-flags.h:10,
-                    from kernel/bounds.c:10:
-   include/linux/thread_info.h: In function 'copy_overflow':
-   include/linux/thread_info.h:105:9: error: implicit declaration of function 'WARN' [-Werror=implicit-function-declaration]
-     105 |         WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
-         |         ^~~~
-   include/linux/thread_info.h: In function 'check_copy_size':
-   include/linux/thread_info.h:121:13: error: implicit declaration of function 'WARN_ON_ONCE' [-Werror=implicit-function-declaration]
-     121 |         if (WARN_ON_ONCE(bytes > INT_MAX))
-         |             ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1197: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/WARN_ON +48 arch/powerpc/include/asm/page_32.h
-
-7ab0b7cb8951d4 arch/powerpc/include/asm/page_32.h Christophe Leroy 2019-08-16  38  
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  39  /*
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  40   * Clear page using the dcbz instruction, which doesn't cause any
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  41   * memory traffic (except to write out any cache lines which get
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  42   * displaced).  This only works on cacheable memory.
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  43   */
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  44  static inline void clear_page(void *addr)
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  45  {
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  46  	unsigned int i;
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  47  
-7ab0b7cb8951d4 arch/powerpc/include/asm/page_32.h Christophe Leroy 2019-08-16 @48  	WARN_ON((unsigned long)addr & (L1_CACHE_BYTES - 1));
-7ab0b7cb8951d4 arch/powerpc/include/asm/page_32.h Christophe Leroy 2019-08-16  49  
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  50  	for (i = 0; i < PAGE_SIZE / L1_CACHE_BYTES; i++, addr += L1_CACHE_BYTES)
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  51  		dcbz(addr);
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  52  }
-5cd16ee934eafc include/asm-powerpc/page_32.h      Michael Ellerman 2005-11-11  53  extern void copy_page(void *to, void *from);
-5cd16ee934eafc include/asm-powerpc/page_32.h      Michael Ellerman 2005-11-11  54  
-
-:::::: The code at line 48 was first introduced by commit
-:::::: 7ab0b7cb8951d4095d73e203759b74d41916e455 powerpc/32: Add warning on misaligned copy_page() or clear_page()
-
-:::::: TO: Christophe Leroy <christophe.leroy@c-s.fr>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
+Fixes: cc4b08c31b5c ("can: do not increase tx_bytes statistics for RTR frames")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/can/janz-ican3.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/janz-ican3.c b/drivers/net/can/janz-ican3.c
+index 5b677af5f2a41..808c105cf8f7e 100644
+--- a/drivers/net/can/janz-ican3.c
++++ b/drivers/net/can/janz-ican3.c
+@@ -1285,7 +1285,7 @@ static unsigned int ican3_get_echo_skb(struct ican3_dev *mod)
+ {
+ 	struct sk_buff *skb = skb_dequeue(&mod->echoq);
+ 	struct can_frame *cf;
+-	u8 dlc;
++	u8 dlc = 0;
+ 
+ 	/* this should never trigger unless there is a driver bug */
+ 	if (!skb) {
+-- 
+2.26.3
+

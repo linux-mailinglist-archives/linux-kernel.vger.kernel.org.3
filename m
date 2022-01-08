@@ -2,178 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9EE488115
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 04:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6290548811E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 04:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbiAHD0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 22:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbiAHD0p (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 22:26:45 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4275BC061574;
-        Fri,  7 Jan 2022 19:26:45 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id c36so13582891uae.13;
-        Fri, 07 Jan 2022 19:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+7nJBAN+/cn5qfpWk0NOHHqyla4qQf4mJjTbq7ER8vY=;
-        b=Vthr3oxs6/VFx1JmMo90V37g81MHiSon7+Pw+HQUJIS0BS5WxwWvPntiEdWhgA/Zk0
-         W5yy8+HQ0zeLuSGqa6t3dxjqzWRjGSQGhqVJ7IiDw0QtYhFWdufi1PZiZgWnbIbf3Q2h
-         Jk1pZP9Q3lqBv4mRzfDiug3GFI65VVd5JZHDQ24vh51kaRwrVrhWeSB5KpkfmJJOxMoz
-         02KfBV+kaoRYu7OT9UDUOkuEkqc1PG6faGzy2nLzMYOY5tW5lhaZfHNwqupo5h9Gg83N
-         Q85vFA5xPCwHNNNzDwtXfRNsu3VMtYMO2G9ZG59gOnr1RwaEMTnEUMiC4RdWYWr4xL0y
-         CMjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+7nJBAN+/cn5qfpWk0NOHHqyla4qQf4mJjTbq7ER8vY=;
-        b=PegoHBoAbjCNIbS3GfMQHNYyGrxo5EtgyXWGW30uZIg4RcAjRvLyKxosy88GDuNGrE
-         5xroClLJ0S0RLnjCyLVTBcPJTnbdKi5sdabAO10A8D9rMIWbQprMiGwcqWpG6vx8WiRJ
-         dR9/i5mtH6mfUJ3CWsDfOmTnPkBoZ4l39X0I/KJMTbNJh0mDiveZv11BTxD0GUsgglC+
-         zTQT+ayQpr362Uu4Yb0Vw0mdV7WmR5WaVnqr0SmNFQX6llHtIoW3I5+KEihegKDTY/yo
-         6OwaYgaI1FTDE8rKDU6cuQMFVZ2j76MDlrtQud/IoK/DaON2rIN34I4rnSquHPKp7v8H
-         EF5A==
-X-Gm-Message-State: AOAM531RdepEDmKdY5U8yLqGLZMkrp/H8IpnTCDioCuqKuslJtBc9oCD
-        JFM3tRMQp4DKfdhDQzQfprn61SGNILSPlxYIpZg=
-X-Google-Smtp-Source: ABdhPJxp5daUskrG8M75oyns0o+q4QGhp/kZKOM5gZQoscaTpTpAcP/QEasfwQ40qIj4RxU3EjLFaXSSXmaHiHbcBjw=
-X-Received: by 2002:a67:b807:: with SMTP id i7mr20030054vsf.52.1641612404012;
- Fri, 07 Jan 2022 19:26:44 -0800 (PST)
+        id S233470AbiAHDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 22:35:36 -0500
+Received: from mga06.intel.com ([134.134.136.31]:9778 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229834AbiAHDfg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 22:35:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641612936; x=1673148936;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4OhFLWCrUroJF/xtAZxj6QcCWPNqdhlaQ2FqD1tIaMk=;
+  b=XAMzUjkUS1oQezq4DGuOleYQT0TxGc0zgszmiLDnJEldyEgl6Qqj86oX
+   K/IZ+vQbwIwtf4l0ZkPAMJHz6elnydlFc5rbC3T3CDqi8aJEO822uFsaM
+   eIggwLO5CNTn9BZhE82XRus5AZq9f+eXmyBdDU1JgCe5XPffbOmd8z2wR
+   4rRa2GZGiVf1Wq7n/cVj1jHYTj5y3efRudFfppj/S7YM4QbjR6+Hc1AA4
+   Kw/BFwZjDOiU3DL7Vnj/7lr+KYkkOD+jXyymIGMhpOr/DxUQq8U7PjwYy
+   Fbg9bu0nCbYohxM1clb2AwBKSbTjJSNkfWuITNhA4EZvMroq+f5aZcluc
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="303725588"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="303725588"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 19:35:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="471508535"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 19:35:32 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n62Vv-0000Dc-OL; Sat, 08 Jan 2022 03:35:31 +0000
+Date:   Sat, 8 Jan 2022 11:34:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Lizhi Hou <lizhi.hou@xilinx.com>,
+        linux-fpga@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com
+Subject: Re: [PATCH V4 XRT Alveo Infrastructure 3/5] of: create empty of root
+Message-ID: <202201081100.CZieN1nu-lkp@intel.com>
+References: <20220105225013.1567871-4-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
-References: <20220106000658.243509-1-helgaas@kernel.org> <20220106163035.GA292309@bhelgaas>
-In-Reply-To: <20220106163035.GA292309@bhelgaas>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 8 Jan 2022 11:26:44 +0800
-Message-ID: <CAAhV-H63JN5YTz_hu1XviMy0sp+U1VTMG6frDt7vL6qxKMmASA@mail.gmail.com>
-Subject: Re: [PATCH v8 00/10] vgaarb: Rework default VGA device selection
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105225013.1567871-4-lizhi.hou@xilinx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the whole series:
-Tested-by: Huacai Chen <chenhuacai@loongson.cn>
+Hi Lizhi,
 
-On Fri, Jan 7, 2022 at 12:30 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+to Maarten, Maxime, Thomas: sorry, I forgot to use
-> get_maintainer.pl so I missed you the first time.  Beginning of thread:
-> https://lore.kernel.org/all/20220106000658.243509-1-helgaas@kernel.org/#t
-> Git branch with this v8 + a couple trivial renames, based on v5.16-rc1:
-> https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=0f4caffa1297]
->
-> On Wed, Jan 05, 2022 at 06:06:48PM -0600, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Current default VGA device selection fails in some cases because part of it
-> > is done in the vga_arb_device_init() subsys_initcall, and some arches
-> > enumerate PCI devices in pcibios_init(), which runs *after* that.
-> >
-> > For example:
-> >
-> >   - On BMC system, the AST2500 bridge [1a03:1150] does not implement
-> >     PCI_BRIDGE_CTL_VGA.  This is perfectly legal but means the legacy VGA
-> >     resources won't reach downstream devices unless they're included in the
-> >     usual bridge windows.
-> >
-> >   - vga_arb_select_default_device() will set a device below such a bridge
-> >     as the default VGA device as long as it has PCI_COMMAND_IO and
-> >     PCI_COMMAND_MEMORY enabled.
-> >
-> >   - vga_arbiter_add_pci_device() is called for every VGA device, either at
-> >     boot-time or at hot-add time, and it will also set the device as the
-> >     default VGA device, but ONLY if all bridges leading to it implement
-> >     PCI_BRIDGE_CTL_VGA.
-> >
-> >   - This difference between vga_arb_select_default_device() and
-> >     vga_arbiter_add_pci_device() means that a device below an AST2500 or
-> >     similar bridge can only be set as the default if it is enumerated
-> >     before vga_arb_device_init().
-> >
-> >   - On ACPI-based systems, PCI devices are enumerated by acpi_init(), which
-> >     runs before vga_arb_device_init().
-> >
-> >   - On non-ACPI systems, like on MIPS system, they are enumerated by
-> >     pcibios_init(), which typically runs *after* vga_arb_device_init().
-> >
-> > This series consolidates all the default VGA device selection in
-> > vga_arbiter_add_pci_device(), which is always called after enumerating a
-> > PCI device.
-> >
-> > Almost all the work here is Huacai's.  I restructured it a little bit and
-> > added a few trivial patches on top.
-> >
-> > I'd like to move vgaarb.c to drivers/pci eventually, but there's another
-> > initcall ordering snag that needs to be resolved first, so this leaves
-> > it where it is.
-> >
-> > Bjorn
-> >
-> > Version history:
-> > V0 original implementation as final quirk to set default device.
-> > https://lore.kernel.org/r/20210514080025.1828197-6-chenhuacai@loongson.cn
-> >
-> > V1 rework vgaarb to do all default device selection in
-> > vga_arbiter_add_pci_device().
-> > https://lore.kernel.org/r/20210705100503.1120643-1-chenhuacai@loongson.cn
-> >
-> > V2 move arbiter to PCI subsystem, fix nits.
-> > https://lore.kernel.org/r/20210722212920.347118-1-helgaas@kernel.org
-> >
-> > V3 rewrite the commit log of the last patch (which is also summarized
-> > by Bjorn).
-> > https://lore.kernel.org/r/20210820100832.663931-1-chenhuacai@loongson.cn
-> >
-> > V4 split the last patch to two steps.
-> > https://lore.kernel.org/r/20210827083129.2781420-1-chenhuacai@loongson.cn
-> >
-> > V5 split Patch-9 again and sort the patches.
-> > https://lore.kernel.org/r/20210911093056.1555274-1-chenhuacai@loongson.cn
-> >
-> > V6 split Patch-5 again and sort the patches again.
-> > https://lore.kernel.org/r/20210916082941.3421838-1-chenhuacai@loongson.cn
-> >
-> > V7 stop moving vgaarb to drivers/pci because of ordering issues with
-> > misc_init().
-> > https://lore.kernel.org/r/20211015061512.2941859-1-chenhuacai@loongson.cn
-> > https://lore.kernel.org/r/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU27KHWcyWKkMftEsA@mail.gmail.com
-> >
-> >
-> > Bjorn Helgaas (8):
-> >   vgaarb: Factor out vga_select_framebuffer_device()
-> >   vgaarb: Factor out default VGA device selection
-> >   vgaarb: Move framebuffer detection to ADD_DEVICE path
-> >   vgaarb: Move non-legacy VGA detection to ADD_DEVICE path
-> >   vgaarb: Move disabled VGA device detection to ADD_DEVICE path
-> >   vgaarb: Remove empty vga_arb_device_card_gone()
-> >   vgaarb: Use unsigned format string to print lock counts
-> >   vgaarb: Replace full MIT license text with SPDX identifier
-> >
-> > Huacai Chen (2):
-> >   vgaarb: Move vga_arb_integrated_gpu() earlier in file
-> >   vgaarb: Log bridge control messages when adding devices
-> >
-> >  drivers/gpu/vga/vgaarb.c | 311 +++++++++++++++++++--------------------
-> >  1 file changed, 154 insertions(+), 157 deletions(-)
-> >
-> > --
-> > 2.25.1
-> >
-> >
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linux/master linus/master v5.16-rc8 next-20220107]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20220106-065312
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: i386-randconfig-m021-20220105 (https://download.01.org/0day-ci/archive/20220108/202201081100.CZieN1nu-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+New smatch warnings:
+drivers/of/fdt.c:541 of_fdt_root_init() warn: inconsistent indenting
+
+Old smatch warnings:
+drivers/of/fdt.c:1313 early_init_dt_add_memory_arch() warn: unsigned 'base + size' is never less than zero.
+drivers/of/fdt.c:1318 early_init_dt_add_memory_arch() warn: unsigned 'base' is never less than zero.
+drivers/of/fdt.c:1428 unflatten_and_copy_device_tree() warn: should '1 << (((__builtin_constant_p((((((7 * 4) + 4) + 4) + 4)) - 1)) ?((((((((7 * 4) + 4) + 4) + 4)) - 1) < 2) ?0:63 - __builtin_clzll((((((7 * 4) + 4) + 4) + 4)) - 1)):((4 <= 4)) ?__ilog2_u32((((((7 * 4) + 4) + 4) + 4)) - 1):__ilog2_u64((((((7 * 4) + 4) + 4) + 4)) - 1)) + 1)' be a 64 bit type?
+
+vim +541 drivers/of/fdt.c
+
+   468	
+   469	static int __init of_fdt_root_init(void)
+   470	{
+   471		struct device_node *dt = NULL, *np;
+   472		void *fdt = NULL, *fdt_aligned;
+   473		struct property *prop = NULL;
+   474		__be32 *val = NULL;
+   475		int size, rc = 0;
+   476	
+   477	#if !defined(CONFIG_OF_UNITTEST)
+   478		if (of_root)
+   479			return 0;
+   480	#endif
+   481		size = __dtb_fdt_default_end - __dtb_fdt_default_begin;
+   482	
+   483		fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+   484		if (!fdt)
+   485			return -ENOMEM;
+   486	
+   487		fdt_aligned = PTR_ALIGN(fdt, FDT_ALIGN_SIZE);
+   488		memcpy(fdt_aligned, __dtb_fdt_default_begin, size);
+   489	
+   490		if (!of_fdt_unflatten_tree((const unsigned long *)fdt_aligned,
+   491					   NULL, &dt)) {
+   492			pr_warn("%s: unflatten default tree failed\n", __func__);
+   493			kfree(fdt);
+   494			return -ENODATA;
+   495		}
+   496		if (!dt) {
+   497			pr_warn("%s: empty default tree\n", __func__);
+   498			kfree(fdt);
+   499			return -ENODATA;
+   500		}
+   501	
+   502		/*
+   503		 * This lock normally encloses of_resolve_phandles()
+   504		 */
+   505		of_overlay_mutex_lock();
+   506	
+   507		rc = of_resolve_phandles(dt);
+   508		if (rc) {
+   509			pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
+   510			goto failed;
+   511		}
+   512	
+   513		if (!of_root) {
+   514			prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
+   515			if (!prop) {
+   516				rc = -ENOMEM;
+   517				goto failed;
+   518			}
+   519			val = kzalloc(sizeof(*val), GFP_KERNEL);
+   520			if (!val) {
+   521				rc = -ENOMEM;
+   522				goto failed;
+   523			}
+   524			*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
+   525	
+   526			prop->name = "#address-cells";
+   527			prop->value = val;
+   528			prop->length = sizeof(u32);
+   529			of_add_property(dt, prop);
+   530			prop++;
+   531			prop->name = "#size-cells";
+   532			prop->value = val;
+   533			prop->length = sizeof(u32);
+   534			of_add_property(dt, prop);
+   535			of_root = dt;
+   536			for_each_of_allnodes(np)
+   537				__of_attach_node_sysfs(np);
+   538			of_aliases = of_find_node_by_path("/aliases");
+   539			of_chosen = of_find_node_by_path("/chosen");
+   540			of_overlay_mutex_unlock();
+ > 541	pr_info("OF ROOT FLAG %lx\n", of_root->_flags);
+   542			return 0;
+   543		}
+   544	
+   545		unittest_data_add(dt);
+   546	
+   547		of_overlay_mutex_unlock();
+   548	
+   549		return 0;
+   550	
+   551	failed:
+   552		of_overlay_mutex_unlock();
+   553		kfree(val);
+   554		kfree(prop);
+   555		return rc;
+   556	}
+   557	pure_initcall(of_fdt_root_init);
+   558	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

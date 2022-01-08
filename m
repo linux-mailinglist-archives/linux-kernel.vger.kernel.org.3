@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF0F487FD7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967FB487FD8
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiAHAIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 19:08:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57562 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiAHAIO (ORCPT
+        id S229888AbiAHAI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 19:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229849AbiAHAI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 19:08:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 7 Jan 2022 19:08:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E15CC061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:08:28 -0800 (PST)
+Received: from mail.kernel.org (unknown [198.145.29.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 126CEB827B9;
-        Sat,  8 Jan 2022 00:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8373C36AE5;
-        Sat,  8 Jan 2022 00:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641600491;
-        bh=eRTFqRjFRgCxvmbchANikxM/bE3d5Z9QWcoIjpeA9No=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=q7NbhrGKV6ToLJTDT/XYgUGwPUbhiN8AEtI6Wg693M0CZuPXWEVz+MgWoYAq2hIkt
-         ogidsf6NW0emarxkW/WFsbpWzrFGw/Yaf3ATe9pbnv8xa5RB2j/BgGZypx3IwkPJx4
-         Aae+3HWZ1Qo08Gp5Nz1RJClmeqAT29g4jYvtnVqQTa3pr6Yc+6ALJL6/3DxbVj8JBq
-         RX0O+cFzp5j0UbKezAbDODbsuh1S7E0/Loumw/xUsELKpifGrCQLIX+LB67RZoLbdR
-         I/uMVLX4zaG6CJ3ECT7lMhwvFVyIWY/NoHU94bmqAD+HCHwR2GN57RQzizf1Lqw1HT
-         f3xD1828e65xw==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220107183303.2337676-1-nathan@kernel.org>
-References: <20220107183303.2337676-1-nathan@kernel.org>
-Subject: Re: [PATCH] clk: visconti: Remove pointless NULL check in visconti_pll_add_lookup()
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Date:   Fri, 07 Jan 2022 16:08:10 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220108000811.B8373C36AE5@smtp.kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D557B61FFF
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:08:27 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E047060F59;
+        Sat,  8 Jan 2022 00:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1641600507;
+        bh=S0OAIUS2YGgbOt1PH5LgUdKQjhfpiQvx9k8KtXkjS1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dUYNV8q3CdxNgS5+By8xUIKeoeayCRnCzsrSbsgLbPXllVHT70pBLRHlIOglj6ys4
+         OSsfDmaNivej7gsOueuMtL6aydb9t7EV4L/BmVH/UqfbrNLy+IbjFj4MKzJBGJ7ev+
+         Omo7VopC/rBVDkudnpvGcPZPq0YwL5b25xny0iWg=
+Date:   Fri, 7 Jan 2022 16:08:25 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, peterz@infradead.org,
+        vbabka@suse.cz, will@kernel.org, linyunsheng@huawei.com,
+        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
+ folio->lru
+Message-Id: <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
+In-Reply-To: <Ydi6iMbSZ/FewYPT@casper.infradead.org>
+References: <20220106235254.19190-1-richard.weiyang@gmail.com>
+        <Yde6hZ41agqa2zs3@casper.infradead.org>
+        <20220107134059.flxr2hcd6ilb6vt7@master>
+        <Ydi6iMbSZ/FewYPT@casper.infradead.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Nathan Chancellor (2022-01-07 10:33:03)
-> Clang warns:
->=20
-> drivers/clk/visconti/pll.c:292:20: warning: address of array 'ctx->clk_da=
-ta.hws' will always evaluate to 'true' [-Wpointer-bool-conversion]
->         if (ctx->clk_data.hws && id)
->             ~~~~~~~~~~~~~~^~~ ~~
-> 1 warning generated.
->=20
-> This array cannot be NULL if ctx is not NULL, which is allocated in
-> visconti_init_pll(), so just remove the check, which matches other clk
-> drivers.
->=20
-> Fixes: b4cbe606dc36 ("clk: visconti: Add support common clock driver and =
-reset driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1564
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+On Fri, 7 Jan 2022 22:11:20 +0000 Matthew Wilcox <willy@infradead.org> wrote:
 
-Applied to clk-next
+> On Fri, Jan 07, 2022 at 01:40:59PM +0000, Wei Yang wrote:
+> > On Fri, Jan 07, 2022 at 03:59:01AM +0000, Matthew Wilcox wrote:
+> > >On Thu, Jan 06, 2022 at 11:52:54PM +0000, Wei Yang wrote:
+> > >> FOLIO_MATCH() is used to make sure struct page and folio has identical
+> > >> layout for the first several words.
+> > >> 
+> > >> The comparison of offset between page->compound_head and folio->lru is
+> > >> more like an internal check in struct page.
+> > >> 
+> > >> This patch just removes it.
+> > >> 
+> > >> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> > >
+> > >No.
+> > 
+> > Hi, Matthew
+> > 
+> > Would you mind sharing some insight on this check?
+> 
+> It's right there in the comments.
+
+Well I can't figure out which comment you're referring to?
+
+> If you can't be bothered to read, why should I write?
+
+I don't think the punishment comes close to fitting the crime here :(

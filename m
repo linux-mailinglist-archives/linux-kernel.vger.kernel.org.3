@@ -2,170 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A79488286
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2AF48828C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbiAHImd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 03:42:33 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:35571 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbiAHIm3 (ORCPT
+        id S233953AbiAHIn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 03:43:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34607 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231294AbiAHIn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 03:42:29 -0500
-Received: from droid09-sz.software.amlogic (10.28.8.19) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Sat, 8 Jan 2022
- 16:42:21 +0800
-From:   Qianggui Song <qianggui.song@amlogic.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-CC:     Qianggui Song <qianggui.song@amlogic.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>
-Subject: [PATCH 4/4] irqchip/meson-gpio: Add support for meson s4 SoCs
-Date:   Sat, 8 Jan 2022 16:42:18 +0800
-Message-ID: <20220108084218.31877-5-qianggui.song@amlogic.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220108084218.31877-1-qianggui.song@amlogic.com>
-References: <20220108084218.31877-1-qianggui.song@amlogic.com>
+        Sat, 8 Jan 2022 03:43:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641631405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CuAQLvFAvrXC/CGaNT1eE7oPqrX2KbSln6Qc3hozJtk=;
+        b=dk5HDeJEba08h92a1zV97jGT2k2IpYlDd+sq7g/xgvIzdTtMBuhikEFkNxViQS+NSoEmyI
+        TxcMinxegP8EKJHh3ftU70Z6qnDtdEZDb6R60hR5vnRDLlDeM25ZAOxghLtsR90yeHa2dU
+        b2cs51B+NXwkptLIAD8KtXyFWtftXfw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-118-xHmu0LN6MMyH2esABKG0fQ-1; Sat, 08 Jan 2022 03:43:22 -0500
+X-MC-Unique: xHmu0LN6MMyH2esABKG0fQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E3CF418397A7;
+        Sat,  8 Jan 2022 08:43:19 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2554F5F4EA;
+        Sat,  8 Jan 2022 08:43:11 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Ydk6jWmFH6TZLPZq@casper.infradead.org>
+References: <Ydk6jWmFH6TZLPZq@casper.infradead.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk> <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, Amir Goldstein <amir73il@gmail.com>,
+        linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        ceph-devel <ceph-devel@vger.kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 38/68] vfs, cachefiles: Mark a backing file in use with an inode flag
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.19]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3492247.1641631391.1@warthog.procyon.org.uk>
+Date:   Sat, 08 Jan 2022 08:43:11 +0000
+Message-ID: <3492248.1641631391@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The meson s4 SoCs support 12 gpio irq lines compared with previous
-serial chips and have something different, details are as below.
+Matthew Wilcox <willy@infradead.org> wrote:
 
-IRQ Number:
-- 80:68 13 pins on bank Z
-- 67:48 20 pins on bank X
-- 47:36 12 pins on bank H
-- 35:24 12 pins on bank D
-- 23:22 2  pins on bank E
-- 21:14 8  pins on bank C
-- 13:0  13 pins on bank B
+> 
+> Huh?  If some other kernel module sets it, cachefiles will try to set it,
+> see it's already set, and fail.  Presumably cachefiles does not go round
+> randomly "unusing" files that it has not previously started using.
 
-- PADCTRL_GPIO_IRQ_CTRL0
-  bit[31]:    enable/disable the whole irq lines
-  bit[12-23]: single edge trigger
-  bit[0-11]:  poll trigger
+Correct.  It only unuses a file that it marked in-use in the first place.
 
-- PADCTRL_GPIO_IRQ_CTRL[X]
-- bit[0-16]: 7 bits to chooge gpio source for irq line 2*[X] - 2
-- bit[16-22]:7 bits to chooge gpio source for irq line 2*[X] - 1
-  where X = 1-6
-
-- PADCTRL_GPIO_IRQ_CTRL[7]
-  bit[0-11]: both edge trigger
-
-Signed-off-by: Qianggui Song <qianggui.song@amlogic.com>
----
- drivers/irqchip/irq-meson-gpio.c | 51 ++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
-
-diff --git a/drivers/irqchip/irq-meson-gpio.c b/drivers/irqchip/irq-meson-gpio.c
-index 98419428fcbd..c5d20a866c37 100644
---- a/drivers/irqchip/irq-meson-gpio.c
-+++ b/drivers/irqchip/irq-meson-gpio.c
-@@ -42,6 +42,11 @@
- #define REG_PIN_SEL_SHIFT(x)	(((x) % 4) * 8)
- #define REG_FILTER_SEL_SHIFT(x)	((x) * 4)
- 
-+/* use for s4 chips */
-+#define REG_EDGE_POL_S4	0x1c
-+#define REG_EDGE_POL_MASK_S4(x)				\
-+	({typeof(x) _x = (x); BIT(_x) | BIT(12 + (_x)); })
-+
- struct meson_gpio_irq_controller;
- static void meson8_gpio_irq_sel_pin(struct meson_gpio_irq_controller *ctl,
- 				    unsigned int channel, unsigned long hwirq);
-@@ -50,6 +55,9 @@ static void meson_a1_gpio_irq_sel_pin(struct meson_gpio_irq_controller *ctl,
- 				      unsigned int channel,
- 				      unsigned long hwirq);
- static void meson_a1_gpio_irq_init(struct meson_gpio_irq_controller *ctl);
-+static unsigned int
-+meson_s4_gpio_irq_sel_type(struct meson_gpio_irq_controller *ctl,
-+			   unsigned int idx, u32 val);
- 
- struct irq_ctl_ops {
- 	void (*gpio_irq_sel_pin)(struct meson_gpio_irq_controller *ctl,
-@@ -96,6 +104,17 @@ struct meson_gpio_irq_params {
- 	.pin_sel_mask = 0x7f,					\
- 	.channel_num = 8,					\
- 
-+#define INIT_MESON_S4_COMMON_DATA(irqs)                         \
-+	INIT_MESON_COMMON(irqs, meson_a1_gpio_irq_init,         \
-+			  meson_a1_gpio_irq_sel_pin,            \
-+			  meson_s4_gpio_irq_sel_type)           \
-+	.support_edge_both = true,				\
-+	.edge_both_offset = 0,					\
-+	.edge_single_offset = 12,				\
-+	.pol_low_offset = 0,					\
-+	.pin_sel_mask = 0xff,					\
-+	.channel_num = 12,					\
-+
- static const struct meson_gpio_irq_params meson8_params = {
- 	INIT_MESON8_COMMON_DATA(134)
- };
-@@ -126,6 +145,10 @@ static const struct meson_gpio_irq_params a1_params = {
- 	INIT_MESON_A1_COMMON_DATA(62)
- };
- 
-+static const struct meson_gpio_irq_params s4_params = {
-+	INIT_MESON_S4_COMMON_DATA(82)
-+};
-+
- static const struct of_device_id meson_irq_gpio_matches[] = {
- 	{ .compatible = "amlogic,meson8-gpio-intc", .data = &meson8_params },
- 	{ .compatible = "amlogic,meson8b-gpio-intc", .data = &meson8b_params },
-@@ -135,6 +158,7 @@ static const struct of_device_id meson_irq_gpio_matches[] = {
- 	{ .compatible = "amlogic,meson-g12a-gpio-intc", .data = &axg_params },
- 	{ .compatible = "amlogic,meson-sm1-gpio-intc", .data = &sm1_params },
- 	{ .compatible = "amlogic,meson-a1-gpio-intc", .data = &a1_params },
-+	{ .compatible = "amlogic,meson-s4-gpio-intc", .data = &s4_params },
- 	{ }
- };
- 
-@@ -202,6 +226,33 @@ static void meson_a1_gpio_irq_init(struct meson_gpio_irq_controller *ctl)
- 	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL, BIT(31), BIT(31));
- }
- 
-+static unsigned int
-+meson_s4_gpio_irq_sel_type(struct meson_gpio_irq_controller *ctl,
-+			   unsigned int idx, unsigned int type)
-+{
-+	unsigned int val = 0;
-+
-+	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL_S4, BIT(0 + (idx)), 0);
-+
-+	if (type == IRQ_TYPE_EDGE_BOTH) {
-+		val |= BIT(ctl->params->edge_both_offset + (idx));
-+		meson_gpio_irq_update_bits(ctl, REG_EDGE_POL_S4,
-+					   BIT(ctl->params->edge_both_offset + (idx)), val);
-+		return 0;
-+	}
-+
-+	if (type & (IRQ_TYPE_LEVEL_LOW | IRQ_TYPE_EDGE_FALLING))
-+		val |= BIT(ctl->params->pol_low_offset + (idx));
-+
-+	if (type & (IRQ_TYPE_EDGE_RISING | IRQ_TYPE_EDGE_FALLING))
-+		val |= BIT(ctl->params->edge_single_offset  + (idx));
-+
-+	meson_gpio_irq_update_bits(ctl, REG_EDGE_POL,
-+				   REG_EDGE_POL_MASK_S4(idx), val);
-+
-+	return 0;
-+};
-+
- static int
- meson_gpio_irq_request_channel(struct meson_gpio_irq_controller *ctl,
- 			       unsigned long  hwirq,
--- 
-2.34.1
+David
 

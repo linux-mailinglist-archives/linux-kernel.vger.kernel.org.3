@@ -2,72 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 637704882B3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5589B4882C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiAHJJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:09:48 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:42566 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231402AbiAHJJr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:09:47 -0500
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cxi+jRVNlhpLMAAA--.2989S2;
-        Sat, 08 Jan 2022 17:09:37 +0800 (CST)
-From:   Ming Wang <wangming01@loongson.cn>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] misc: pci_endpoint_test: Use a semicolon as the end of the statement.
-Date:   Sat,  8 Jan 2022 17:09:37 +0800
-Message-Id: <1641632977-6588-1-git-send-email-wangming01@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Cxi+jRVNlhpLMAAA--.2989S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr45uFykuw45Wr1UZF43ZFb_yoW3Arc_Ga
-        yUZwsxurWrGr18GrnIvw1xZrZF9wnIgF1rur1aqFZIya42v34DAFyjgr4vyr47CFnxCFnr
-        C3sF9r9YkF1xAjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbI8YjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28I
-        cVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx
-        0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY
-        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xU7GQ6DUUUU
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/
+        id S233998AbiAHJVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:21:52 -0500
+Received: from mga02.intel.com ([134.134.136.20]:61959 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231347AbiAHJVv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 04:21:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641633711; x=1673169711;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eGmDA91vw1cAP61EA0OaUm/Oee1N6LqneZ+nBrptQVM=;
+  b=DVB2Gg0yvLnKAgwj8mHTCNa7PwBCZ5f4W6We2q+zHDk2N5wJc0OuQEg5
+   aGOGSsUlhQXMvTYkSP+M7MFJhFCY45W9MK58yiwrebnavoqw30jcJMZwD
+   FzAdcx8S4N20qLacL8/hqkaj1gwL715U6T61R+zf9PMe+zfODimN4Bqoy
+   oSGWZjVvI4ieOq7r0oSJHZ5mXk9onzYWaZM6FOjxXc2qDpcNpBNs8mTxv
+   yVxECjZ+mFKaMK1GOyoPoXyPItQmBP2emyMyNp0rnXb3xfl0xLJddlKq9
+   Bwn/7W7AMw9iSrjFl7oI2ZnTzhaDPIeMquJeRaUXk6MoO5Qxp/Qaq2D/D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="230342663"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="230342663"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 01:21:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="473608112"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Jan 2022 01:21:50 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n67v3-0000Sx-Bl; Sat, 08 Jan 2022 09:21:49 +0000
+Date:   Sat, 8 Jan 2022 17:21:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.01.04a 52/55] kernel/stop_machine.c:207:13:
+ warning: variable 't' set but not used
+Message-ID: <202201081735.gNXE7dpe-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even so, there is no syntax error. But, this may be a
-clerical error. ';' are more appropriate than ','.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.01.04a
+head:   64595d0dff992756e8c6d53c0e9f1e3e50c451f7
+commit: 5cd99ef59351bcdd73ce5412934fda67d0ca2a1c [52/55] EXP timers: NMI stacktraces for last-resort jiffies update
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220108/202201081735.gNXE7dpe-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=5cd99ef59351bcdd73ce5412934fda67d0ca2a1c
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu dev.2022.01.04a
+        git checkout 5cd99ef59351bcdd73ce5412934fda67d0ca2a1c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-Signed-off-by: Ming Wang <wangming01@loongson.cn>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   kernel/stop_machine.c: In function 'dump_multi_cpu_stop_state':
+   kernel/stop_machine.c:209:9: error: implicit declaration of function 'tick_setup_sched_timer_dump' [-Werror=implicit-function-declaration]
+     209 |         tick_setup_sched_timer_dump();
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/stop_machine.c:207:13: warning: variable 't' set but not used [-Wunused-but-set-variable]
+     207 |         u64 t;
+         |             ^
+   kernel/stop_machine.c: In function 'multi_cpu_stop':
+   kernel/stop_machine.c:288:21: error: implicit declaration of function 'cpu_hp_check_delay' [-Werror=implicit-function-declaration]
+     288 |                     cpu_hp_check_delay("MULTI_STOP_RUN in", multi_cpu_stop))
+         |                     ^~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/t +207 kernel/stop_machine.c
+
+   201	
+   202	static void dump_multi_cpu_stop_state(struct multi_stop_data *msdata, bool *firsttime)
+   203	{
+   204		struct cpu_stopper *stopper;
+   205		unsigned long flags;
+   206		int cpu;
+ > 207		u64 t;
+   208	
+ > 209		tick_setup_sched_timer_dump();
+   210		pr_info("%s threads %d/%d state %d\n", __func__, atomic_read(&msdata->thread_ack), msdata->num_threads, msdata->state);
+   211		for_each_online_cpu(cpu) {
+   212			if (cpu_is_offline(cpu))
+   213				continue;
+   214			stopper = &per_cpu(cpu_stopper, cpu);
+   215			raw_spin_lock_irqsave(&stopper->lock, flags);
+   216			t = ktime_get();
+   217	//		tlast = stopper->lasttime;
+   218			pr_info("%s: %s%s ->state=%#x%s\n", __func__, stopper->thread->comm, stopper->thread == current ? " (me)" : "", stopper->thread->__state, task_curr(stopper->thread) ? "" : " Not running!");
+   219			raw_spin_unlock_irqrestore(&stopper->lock, flags);
+   220			if (firsttime && *firsttime && !task_curr(stopper->thread)) {
+   221				trigger_single_cpu_backtrace(cpu);
+   222				*firsttime = false;
+   223			}
+   224	//		if (time_after64(t, tlast + NSEC_PER_SEC) &&
+   225	//		    smp_load_acquire(&multi_stop_cpu_ipi_handled)) {
+   226	//			pr_info("%s: sending IPI from CPU %d to CPU %d\n", __func__, raw_smp_processor_id(), cpu);
+   227	//			WRITE_ONCE(multi_stop_cpu_ipi_handled, false);
+   228	//			smp_mb();
+   229	//			smp_call_function_single(cpu, multi_stop_cpu_ipi, NULL, 0);
+   230	//		}
+   231		}
+   232	}
+   233	
+
 ---
- drivers/misc/pci_endpoint_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 2ed7e3a..8f786a2 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -865,7 +865,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
- 		goto err_release_irq;
- 	}
- 	misc_device->parent = &pdev->dev;
--	misc_device->fops = &pci_endpoint_test_fops,
-+	misc_device->fops = &pci_endpoint_test_fops;
- 
- 	err = misc_register(misc_device);
- 	if (err) {
--- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

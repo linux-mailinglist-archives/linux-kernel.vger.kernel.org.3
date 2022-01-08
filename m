@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6174882FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABE0488308
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 11:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiAHJ7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:59:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbiAHJ7h (ORCPT
+        id S233813AbiAHKPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 05:15:18 -0500
+Received: from smtp.bonedaddy.net ([45.33.94.42]:40620 "EHLO
+        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231232AbiAHKPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:59:37 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB5CC061574;
-        Sat,  8 Jan 2022 01:59:37 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id ie13so7342274pjb.1;
-        Sat, 08 Jan 2022 01:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=3YvpI2aQajSf+bmgHYcKJMYUYFxW4dc1y5z8f6G/cK0=;
-        b=P2FVqzYVWe6+KuQVzsgZuDyn6OLCfg18oqD8JqrgzlOKXtzEiFgBrxjP8HTrxKQC9A
-         PqCImA1ph6ebv+bJUQs2HCXe6aHjSkt9xdvm3Gnnzy2ktpjYQDDiglmMOFFz2N1puFrS
-         B11v/Bodbv38vtOpVP8YVsfLUM7lGhWXAvRcSTXiS1oojkgyESmZFHP71k5rAfgyoJ2i
-         DitOhmjFArNdHZE151HP2zwbTZyEOqjiXi6UbQErtkI1b6LbaMawlqYSlDUOYyulQaOr
-         onmSGcdolKX41NuNDN3T6gwGu/8B+1m6NuUa8qlZMDzOtL2Dlj+DodBzXb47sTXupToF
-         vs4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3YvpI2aQajSf+bmgHYcKJMYUYFxW4dc1y5z8f6G/cK0=;
-        b=diJYNWNVQylvARzVJOmVlvCHhDPAYwSNCH754cMT3bBOPMiJ3Kx3HV78pptrSN1QXF
-         6aibfRaSuP6iin/T02IhHTGBspRj600xPdO7W4Rmhxbsnxu5fNJ8CGLCEBs9HswHpkJd
-         7VmMRvp4ob98P3k2cuTrLLClaWQMgnTeUe+LsELyzJjpBsTMvrDPLJIsYF6BbcUNcAQD
-         br7gAIG9eVQ9bB4BFwTLiuwqQpq/JAQQqrnx6QoaWb8+Asy6lC4DMHx+hC00CW7iPxYC
-         Sc3oCaegr9bq0mmb09gsc0r1Y9PEzYOloIfhV+yvPXI9o7ywbSOE1McLmcNP+hrqq330
-         W6Qg==
-X-Gm-Message-State: AOAM530dkkyZmyO/XievkN+BCcsr/MGWdLXKnFKnPXeyaG+qd3D93EIc
-        cqr5u1+67sw3fM/mJeKJQF4=
-X-Google-Smtp-Source: ABdhPJxTeodozfSS6DrwSXCJTyXIAQXTtLUReC93ySeR2bzKfk76kvJvE+iEcEuDK+CsgqweEPHeFg==
-X-Received: by 2002:a17:90a:5295:: with SMTP id w21mr17888320pjh.179.1641635977318;
-        Sat, 08 Jan 2022 01:59:37 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q19sm1536777pfk.83.2022.01.08.01.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 01:59:37 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Deepak Kumar Singh <deesin@codeaurora.org>,
-        Chris Lew <clew@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: qcom: aoss: Fix missing put_device call in qmp_get
-Date:   Sat,  8 Jan 2022 09:59:31 +0000
-Message-Id: <20220108095931.21527-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Sat, 8 Jan 2022 05:15:17 -0500
+X-Greylist: delayed 561 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Jan 2022 05:15:17 EST
+Received: from localhost (n175-38-222-73.per2.wa.optusnet.com.au [175.38.222.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pabs3@bonedaddy.net)
+        by smtp.bonedaddy.net (Postfix) with ESMTPSA id 0EA3618007A;
+        Sat,  8 Jan 2022 05:06:35 -0500 (EST)
+Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
+        s=mail; t=1641636398;
+        bh=sU8wHdA/eA0+RGEHn8+xBGwBO0Ds63zMwONdksN3I9E=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date;
+        b=HuRQ7TPxtF08ZgMu9hUVU3JpGavRY2/kA4d/obXcAWeL1p8EIwcb4rPkuKBveiskA
+         xfQxXQPKcQstVjwU+siZ1L4EAyKdF/6xWb4cHuL7GLcVe9jCoUgBhJG9RclcBjRnG+
+         0tQu4vbvWMN4nabxmvPciwJ7aV7eXxLzmSqsr6jMLTk3DXmRSGgs0et558ChbdbG85
+         Mdo0hj8MBxLDINnaFLJojVFIOlmnY3XRxDvudZWebnj5v1AyP6CLK5GKVkIIVwToBM
+         odD2MYlNntF84V3qloSgVZHVxc2elTp2gEA/cYYWsmo94SeGBUS8HBh4cfNTZ00B6Y
+         rFOBv6lNdh1IQ==
+Message-ID: <b6079be95091af6dfa3dcf02673bde8db841941e.camel@bonedaddy.net>
+Subject: Re: [PATCH] tools/lib/lockdep: drop liblockdep
+From:   Paul Wise <pabs3@bonedaddy.net>
+To:     Sasha Levin <sashal@kernel.org>, mingo@kernel.org
+Cc:     peterz@infradead.org, linux-kernel <linux-kernel@vger.kernel.org>
+In-Reply-To: <b82c6441832477653dfc4c2556b81b29bc1c75fa.camel@bonedaddy.net>
+References: <20211112151602.1378857-1-sashal@kernel.org>
+         <b82c6441832477653dfc4c2556b81b29bc1c75fa.camel@bonedaddy.net>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-jPS1CGmwKxPQaYGvflRO"
+Date:   Sat, 08 Jan 2022 18:05:39 +0800
+MIME-Version: 1.0
+User-Agent: Evolution 3.42.2-1 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling paths.
 
-Fixes: 8c75d585b931 ("soc: qcom: aoss: Expose send for generic usecase")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/soc/qcom/qcom_aoss.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+--=-jPS1CGmwKxPQaYGvflRO
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
-index 34acf58bbb0d..e234d78b33e7 100644
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -451,7 +451,11 @@ struct qmp *qmp_get(struct device *dev)
- 
- 	qmp = platform_get_drvdata(pdev);
- 
--	return qmp ? qmp : ERR_PTR(-EPROBE_DEFER);
-+	if (!qmp) {
-+		put_device(&pdev->dev);
-+		return ERR_PTR(-EPROBE_DEFER);
-+	}
-+	return qmp;
- }
- EXPORT_SYMBOL(qmp_get);
- 
--- 
-2.17.1
+On Thu, 2021-11-18 at 08:32 +0800, Paul Wise wrote:
 
+
+> I read that liblockdep and the lockdep tool are moving out of the Linux
+> kernel tree, but couldn't find where they will be moving to. An LWN
+> commenter suggested I contact you to ask about this. Thoughts?
+
+I got this response from Sasha elsewhere and permission to fwd here:
+
+   I haven't really gotten to extracting it out of the kernel tree.
+   There's a bunch of annoying work needed there to extract whatever
+   headers and code we need out of the kernel tree and make it work,
+   and I just haven't had the time to do it yet. I'm hopeful I could
+   do it in the next few weeks - have been a bit busy.
+
+--=20
+bye,
+pabs
+
+https://bonedaddy.net/pabs3/
+
+--=-jPS1CGmwKxPQaYGvflRO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmHZYfAACgkQMRa6Xp/6
+aaMPRQ//RR/ZiLXR04AhblrVl5Q8oLfUK8G5G8F13dADVSZoq5rWjArtX5P8deVx
+rQ2leVTXOToGqLwc9FqrX5TV4gH7cmB4w0OcOGLs0hMJjF7eEfYqxDs1Zp6UK4IK
+7q/jlHD0iSicD7ipFZcY4knyGKhbOrt5PCY8NumF9ht2NmixtQ/9TymwocYuJ2Un
+dIoBOiErNL4OU1j4nPiLkqs/6NYZIvFkAdDltJwbXpYsqr/DK4zA/04hizB9YcPQ
+VPQBfGNdEFyo8ePtsimVn8bSf2HuSzlAg8JBtM25clOG1Y6mqZSkLn70DoIX4JEE
+jMcXYvSBu6VSIbLypIqBRzFxb9byUYppA32m/msBRR1l3CNlGLVHbDOgvD1xFqDZ
+TYBbRAdrKVPp/nL0RW8T49z0zP/v3/XRzZyTXK4LdLvf3bM27TRltDEoG/Y+1zxI
+ri1B9E1GsRKWmPuyKHMFBOhb9BPa5tkV0AHLYjXqivsIpdtC1RCeZgerhbjUU4es
+Cg8xOwFe8BSc54+03CtnuhQz583ZWjBO7aM18FoogeWkN27aIY7nTTtrWYjWfuZ8
+V+tEihoEQpN5chT3P9xX6NUEv+tA+8r3DjVFN321cSLl++rWpdRzEqGq3ByXAAEs
+n2IxxyR9P3EmwIunsvCu/tqW/G47jfbjOEVAED6tkMArhQr+9P0=
+=CGrv
+-----END PGP SIGNATURE-----
+
+--=-jPS1CGmwKxPQaYGvflRO--

@@ -2,180 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6290548811E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 04:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243DC48811F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 04:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbiAHDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 22:35:36 -0500
-Received: from mga06.intel.com ([134.134.136.31]:9778 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229834AbiAHDfg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 22:35:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641612936; x=1673148936;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4OhFLWCrUroJF/xtAZxj6QcCWPNqdhlaQ2FqD1tIaMk=;
-  b=XAMzUjkUS1oQezq4DGuOleYQT0TxGc0zgszmiLDnJEldyEgl6Qqj86oX
-   K/IZ+vQbwIwtf4l0ZkPAMJHz6elnydlFc5rbC3T3CDqi8aJEO822uFsaM
-   eIggwLO5CNTn9BZhE82XRus5AZq9f+eXmyBdDU1JgCe5XPffbOmd8z2wR
-   4rRa2GZGiVf1Wq7n/cVj1jHYTj5y3efRudFfppj/S7YM4QbjR6+Hc1AA4
-   Kw/BFwZjDOiU3DL7Vnj/7lr+KYkkOD+jXyymIGMhpOr/DxUQq8U7PjwYy
-   Fbg9bu0nCbYohxM1clb2AwBKSbTjJSNkfWuITNhA4EZvMroq+f5aZcluc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="303725588"
-X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
-   d="scan'208";a="303725588"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 19:35:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
-   d="scan'208";a="471508535"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 19:35:32 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n62Vv-0000Dc-OL; Sat, 08 Jan 2022 03:35:31 +0000
-Date:   Sat, 8 Jan 2022 11:34:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com
-Subject: Re: [PATCH V4 XRT Alveo Infrastructure 3/5] of: create empty of root
-Message-ID: <202201081100.CZieN1nu-lkp@intel.com>
-References: <20220105225013.1567871-4-lizhi.hou@xilinx.com>
+        id S233479AbiAHDgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 22:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233480AbiAHDgB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 22:36:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D66C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 19:36:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3E00B827CA
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 03:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A14B1C36AE0;
+        Sat,  8 Jan 2022 03:35:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641612957;
+        bh=hKYGsyuzBJO04oP8yE2Lv5IRXUyoE6ue4ZmbzPKsNy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jh4jugah5bS70Ajj89OvfPQIQL70fkjFwA6WnYZV6iQNjM/Mu8IPvebDk9fobfF/C
+         RYVp8vfWSNhq2UhLG4uCKbpuQd4wiWxdf336Huvr9dzs3x8SrDBBFIWS7ddsoH8+N0
+         p4zeTklnTJ/UzmDC+tBmYetCNurDoUnUG+yKkFfDKkIzQdWlQg+Vq/PDQv01SQIHH9
+         M28VhIs+YpRAtFLpWimJolSgDWQir6PYghTKa85Q0aV5eD1b2B5jTmjFkCv0rM8Xw3
+         mRZmS+nOv+WQT0z3SG1KzvERgBCgh0gN7o09J1gC1mHZBvNGSYk1cJJFbDKDG7otO7
+         6t0zxB0QO2k/w==
+Date:   Fri, 7 Jan 2022 19:35:56 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 3/6] f2fs: do not expose unwritten blocks to user by DIO
+Message-ID: <YdkGnA3/3f/Qka5M@google.com>
+References: <20220104212419.1879225-1-jaegeuk@kernel.org>
+ <20220104212419.1879225-3-jaegeuk@kernel.org>
+ <YdjJAS7Ua4aJEFhz@sol.localdomain>
+ <YdjucBBopEDuUb5b@google.com>
+ <Ydj1JvEeLo1mrqvb@sol.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105225013.1567871-4-lizhi.hou@xilinx.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Ydj1JvEeLo1mrqvb@sol.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lizhi,
+On 01/07, Eric Biggers wrote:
+> On Fri, Jan 07, 2022 at 05:52:48PM -0800, Jaegeuk Kim wrote:
+> > On 01/07, Eric Biggers wrote:
+> > > Hi Jaegeuk,
+> > > 
+> > > On Tue, Jan 04, 2022 at 01:24:16PM -0800, Jaegeuk Kim wrote:
+> > > > DIO preallocates physical blocks before writing data, but if an error occurrs
+> > > > or power-cut happens, we can see block contents from the disk. This patch tries
+> > > > to fix it by 1) turning to buffered writes for DIO into holes, 2) truncating
+> > > > unwritten blocks from error or power-cut.
+> > > > 
+> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > ---
+> > > >  fs/f2fs/data.c  |  5 ++++-
+> > > >  fs/f2fs/f2fs.h  |  5 +++++
+> > > >  fs/f2fs/file.c  | 27 ++++++++++++++++++---------
+> > > >  fs/f2fs/inode.c |  8 ++++++++
+> > > >  4 files changed, 35 insertions(+), 10 deletions(-)
+> > > 
+> > > Unfortunately, this patch doesn't completely fix the uninitialized data
+> > > exposure.  The problem is that it only makes DIO writes fall back to buffered
+> > > writes for holes, and not for reserved blocks (NEW_ADDR).  f2fs's reserved
+> > > blocks are *not* the same as the unwritten extents that other filesystems have;
+> > > f2fs's reserved blocks have to be turned into regular blocks before DIO can
+> > > write to them.  That immediately exposes them to concurrent reads (at least
+> > > buffered reads, but I think DIO reads too).
+> > 
+> > Isn't it resolved by i_size which gives the written blocks only?
+> > 
+> 
+> I'm not sure what you mean, but this is for non-extending writes, so i_size
+> isn't relevant.
 
-I love your patch! Perhaps something to improve:
+Ah, do you mean the file has NEW_ADDR within i_size? If so, let me continue
+to investigate further based on the current -dev, as it's quite hard to remove
+the old commits.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linux/master linus/master v5.16-rc8 next-20220107]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20220106-065312
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: i386-randconfig-m021-20220105 (https://download.01.org/0day-ci/archive/20220108/202201081100.CZieN1nu-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-New smatch warnings:
-drivers/of/fdt.c:541 of_fdt_root_init() warn: inconsistent indenting
-
-Old smatch warnings:
-drivers/of/fdt.c:1313 early_init_dt_add_memory_arch() warn: unsigned 'base + size' is never less than zero.
-drivers/of/fdt.c:1318 early_init_dt_add_memory_arch() warn: unsigned 'base' is never less than zero.
-drivers/of/fdt.c:1428 unflatten_and_copy_device_tree() warn: should '1 << (((__builtin_constant_p((((((7 * 4) + 4) + 4) + 4)) - 1)) ?((((((((7 * 4) + 4) + 4) + 4)) - 1) < 2) ?0:63 - __builtin_clzll((((((7 * 4) + 4) + 4) + 4)) - 1)):((4 <= 4)) ?__ilog2_u32((((((7 * 4) + 4) + 4) + 4)) - 1):__ilog2_u64((((((7 * 4) + 4) + 4) + 4)) - 1)) + 1)' be a 64 bit type?
-
-vim +541 drivers/of/fdt.c
-
-   468	
-   469	static int __init of_fdt_root_init(void)
-   470	{
-   471		struct device_node *dt = NULL, *np;
-   472		void *fdt = NULL, *fdt_aligned;
-   473		struct property *prop = NULL;
-   474		__be32 *val = NULL;
-   475		int size, rc = 0;
-   476	
-   477	#if !defined(CONFIG_OF_UNITTEST)
-   478		if (of_root)
-   479			return 0;
-   480	#endif
-   481		size = __dtb_fdt_default_end - __dtb_fdt_default_begin;
-   482	
-   483		fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
-   484		if (!fdt)
-   485			return -ENOMEM;
-   486	
-   487		fdt_aligned = PTR_ALIGN(fdt, FDT_ALIGN_SIZE);
-   488		memcpy(fdt_aligned, __dtb_fdt_default_begin, size);
-   489	
-   490		if (!of_fdt_unflatten_tree((const unsigned long *)fdt_aligned,
-   491					   NULL, &dt)) {
-   492			pr_warn("%s: unflatten default tree failed\n", __func__);
-   493			kfree(fdt);
-   494			return -ENODATA;
-   495		}
-   496		if (!dt) {
-   497			pr_warn("%s: empty default tree\n", __func__);
-   498			kfree(fdt);
-   499			return -ENODATA;
-   500		}
-   501	
-   502		/*
-   503		 * This lock normally encloses of_resolve_phandles()
-   504		 */
-   505		of_overlay_mutex_lock();
-   506	
-   507		rc = of_resolve_phandles(dt);
-   508		if (rc) {
-   509			pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
-   510			goto failed;
-   511		}
-   512	
-   513		if (!of_root) {
-   514			prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
-   515			if (!prop) {
-   516				rc = -ENOMEM;
-   517				goto failed;
-   518			}
-   519			val = kzalloc(sizeof(*val), GFP_KERNEL);
-   520			if (!val) {
-   521				rc = -ENOMEM;
-   522				goto failed;
-   523			}
-   524			*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
-   525	
-   526			prop->name = "#address-cells";
-   527			prop->value = val;
-   528			prop->length = sizeof(u32);
-   529			of_add_property(dt, prop);
-   530			prop++;
-   531			prop->name = "#size-cells";
-   532			prop->value = val;
-   533			prop->length = sizeof(u32);
-   534			of_add_property(dt, prop);
-   535			of_root = dt;
-   536			for_each_of_allnodes(np)
-   537				__of_attach_node_sysfs(np);
-   538			of_aliases = of_find_node_by_path("/aliases");
-   539			of_chosen = of_find_node_by_path("/chosen");
-   540			of_overlay_mutex_unlock();
- > 541	pr_info("OF ROOT FLAG %lx\n", of_root->_flags);
-   542			return 0;
-   543		}
-   544	
-   545		unittest_data_add(dt);
-   546	
-   547		of_overlay_mutex_unlock();
-   548	
-   549		return 0;
-   550	
-   551	failed:
-   552		of_overlay_mutex_unlock();
-   553		kfree(val);
-   554		kfree(prop);
-   555		return rc;
-   556	}
-   557	pure_initcall(of_fdt_root_init);
-   558	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> - Eric

@@ -2,97 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C84B14886C0
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DF44886C5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiAHW3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 17:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        id S234928AbiAHWaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 17:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiAHW3R (ORCPT
+        with ESMTP id S229899AbiAHWaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 17:29:17 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8D0C06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 14:29:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n6KD1-0001CP-Q9; Sat, 08 Jan 2022 23:29:11 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-6624-65e0-1d16-9a67.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6624:65e0:1d16:9a67])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 469416D3B84;
-        Sat,  8 Jan 2022 22:29:10 +0000 (UTC)
-Date:   Sat, 8 Jan 2022 23:29:04 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Brian Silverman <brian.silverman@bluerivertech.com>
-Cc:     Brian Silverman <bsilver16384@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] can: gs_usb: Zero-initialize flags
-Message-ID: <20220108222904.plwxywgmnwrwpvmt@pengutronix.de>
-References: <20220106002952.25883-1-brian.silverman@bluerivertech.com>
+        Sat, 8 Jan 2022 17:30:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDC6C06173F;
+        Sat,  8 Jan 2022 14:30:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4165B8095D;
+        Sat,  8 Jan 2022 22:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC418C36AE9;
+        Sat,  8 Jan 2022 22:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641681012;
+        bh=wlFCQfXctgtYh+4c70NcYh18nrkot7llO/ttKYh7Q5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jEv8EHI5ZFQeYflFxj/coG8/WXVrMXjGF5DSz8gFttUUh5lS0q/OyAR5dmMXb2qMW
+         JxBQhcrwAmwB7MzuNDM6tACXmoGC1ulfv93pxTjzu2dP0tlOHAlsiDEks9g38IKdCt
+         q8eTGkHLXpeimYCV+swDTTmEBBQ4z/g2TY78ZQZIFAl5LAq+j4ytDThtNi8JJFmMEX
+         tF37/UN4QRTctjyNmWG3Z669v+G93wcOAaUXWlCoFEzLtXqwbvEVGkw9QiEsOjWjFJ
+         Hsx+DIsK/h5/OEsGST5RPM5kudoJ6rhbqIv+q8csU2qIwC8P0vA2vz0TYG4nPlbbuv
+         NSZ5xYju7v5jQ==
+Date:   Sun, 9 Jan 2022 00:30:04 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
+        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
+        zohar@linux.ibm.com, keescook@chromium.org,
+        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 8/8] integrity: Only use machine keyring when
+ uefi_check_trust_mok_keys is true
+Message-ID: <YdoQbKD/jJompy6I@iki.fi>
+References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
+ <20220105235012.2497118-9-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pjxvzi7v3h4aeqoz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220106002952.25883-1-brian.silverman@bluerivertech.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20220105235012.2497118-9-eric.snowberg@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 05, 2022 at 06:50:12PM -0500, Eric Snowberg wrote:
+> With the introduction of uefi_check_trust_mok_keys, it signifies the end-
+> user wants to trust the machine keyring as trusted keys.  If they have
+> chosen to trust the machine keyring, load the qualifying keys into it
+> during boot, then link it to the secondary keyring .  If the user has not
+> chosen to trust the machine keyring, it will be empty and not linked to
+> the secondary keyring.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+> v4: Initial version
+> v5: Rename to machine keyring
+> v6: Unmodified from v5
+> v7: Made trust_mok static
+> v8: Unmodified from v7
+> ---
+>  security/integrity/digsig.c                      |  2 +-
+>  security/integrity/integrity.h                   |  5 +++++
+>  .../integrity/platform_certs/keyring_handler.c   |  2 +-
+>  .../integrity/platform_certs/machine_keyring.c   | 16 ++++++++++++++++
+>  4 files changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+> index 7b719aa76188..c8c8a4a4e7a0 100644
+> --- a/security/integrity/digsig.c
+> +++ b/security/integrity/digsig.c
+> @@ -112,7 +112,7 @@ static int __init __integrity_init_keyring(const unsigned int id,
+>  	} else {
+>  		if (id == INTEGRITY_KEYRING_PLATFORM)
+>  			set_platform_trusted_keys(keyring[id]);
+> -		if (id == INTEGRITY_KEYRING_MACHINE)
+> +		if (id == INTEGRITY_KEYRING_MACHINE && trust_moklist())
+>  			set_machine_trusted_keys(keyring[id]);
+>  		if (id == INTEGRITY_KEYRING_IMA)
+>  			load_module_cert(keyring[id]);
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> index 730771eececd..2e214c761158 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -287,9 +287,14 @@ static inline void __init add_to_platform_keyring(const char *source,
+>  
+>  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
+>  void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
+> +bool __init trust_moklist(void);
+>  #else
+>  static inline void __init add_to_machine_keyring(const char *source,
+>  						  const void *data, size_t len)
+>  {
+>  }
+> +static inline bool __init trust_moklist(void)
+> +{
+> +	return false;
+> +}
+>  #endif
+> diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
+> index 4872850d081f..1db4d3b4356d 100644
+> --- a/security/integrity/platform_certs/keyring_handler.c
+> +++ b/security/integrity/platform_certs/keyring_handler.c
+> @@ -83,7 +83,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
+>  __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
+>  {
+>  	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
+> -		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
+> +		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
+>  			return add_to_machine_keyring;
+>  		else
+>  			return add_to_platform_keyring;
+> diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
+> index 09fd8f20c756..7aaed7950b6e 100644
+> --- a/security/integrity/platform_certs/machine_keyring.c
+> +++ b/security/integrity/platform_certs/machine_keyring.c
+> @@ -8,6 +8,8 @@
+>  #include <linux/efi.h>
+>  #include "../integrity.h"
+>  
+> +static bool trust_mok;
+> +
+>  static __init int machine_keyring_init(void)
+>  {
+>  	int rc;
+> @@ -59,3 +61,17 @@ static __init bool uefi_check_trust_mok_keys(void)
+>  
+>  	return false;
+>  }
+> +
+> +bool __init trust_moklist(void)
+> +{
+> +	static bool initialized;
+> +
+> +	if (!initialized) {
+> +		initialized = true;
+> +
+> +		if (uefi_check_trust_mok_keys())
+> +			trust_mok = true;
+> +	}
+> +
+> +	return trust_mok;
+> +}
+> -- 
+> 2.18.4
+> 
 
---pjxvzi7v3h4aeqoz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-On 05.01.2022 16:29:50, Brian Silverman wrote:
-> No information is deliberately sent here in host->device communications,
-> but the open-source candleLight firmware echoes it back, which can
-> result in the GS_CAN_FLAG_OVERFLOW flag being set and generating
-> spurious ERRORFRAMEs.
->=20
-> Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+Mimi, have you tested these patches already?
 
-Applied to linux-can/testing + opened an issue on github:
-https://github.com/candle-usb/candleLight_fw/issues/87
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---pjxvzi7v3h4aeqoz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHaECsACgkQqclaivrt
-76mXDgf/b4ClkCbm/lky9poV+sXGbqtEc05wazrWOw32rg1valAD6Ev7Cqjhb93A
-EKD7l4l7XiSu8MQpnkc795zinvDb59c7TOM7TQ7VCahku9yppJYVynVD0/J4Ktu4
-jr6HnipC70NOqZoEpXpWaklfL/Hynl3//42quNvdOOA6mKr8SvtvM8WSIZ6pYA3/
-y5cJ7I7nPaM9LdKEiUOqnV0g+gz6/rXTsc9Oh8uXrzNpYKA4q1fdoRCRFU0nG6zO
-jfxoqNfLIZ09xlcRMsyn1hVIqrr7S0C75aE9rUX6mptI3Pkrtf6Y55/l97i7UESD
-d5XBoofpzs9GZ8ZpBKQy/uI9bJDdvQ==
-=PeL/
------END PGP SIGNATURE-----
-
---pjxvzi7v3h4aeqoz--
+/Jarkko

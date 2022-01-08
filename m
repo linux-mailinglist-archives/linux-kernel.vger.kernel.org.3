@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE9A488641
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F628488644
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiAHVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 16:20:15 -0500
-Received: from mga05.intel.com ([192.55.52.43]:38033 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229953AbiAHVUM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 16:20:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641676812; x=1673212812;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ur+RHZ2uYfVNTbYuazwnYsitFHH8JK7Y6Ggp5nKyGCk=;
-  b=aUttaLhGDkLLYeXcw3oWs2KeYps+kvib6q9xf6swE0b6ti3uOrhLtZWP
-   /Rxcj5C837axIcH5C4f2AVwv2lAWSchTYAQOjYJS6DuHA+IvTfBNPt2WP
-   YcCGIMuLIq+dUVm99GZ+BbxeijIV9WRlTAXneg67/odzeLz+mS3T7warj
-   QOiyV+/EyWybLneQh7Qq2Blq0dpGNpzYTguYgCS8FS4TlZ7qM893xbPBW
-   4bZ1EMoB6ySHHAOzu9EkaIFY/wO+bSArtw7EGK2Ua06rd0xffqxjkz/+x
-   Q/sT9DBq0Ow2RFeX2LMlfLaCQidFQdD7nksXwFhUB3e2Obp6ct7DbVvbQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="329382337"
-X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="329382337"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 13:20:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="764176364"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jan 2022 13:20:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6J8E-00014H-9F; Sat, 08 Jan 2022 21:20:10 +0000
-Date:   Sun, 9 Jan 2022 05:19:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 203/2375] kernel/kcsan/permissive.h:31:26:
- error: no member named 'flags' in 'struct task_struct'
-Message-ID: <202201090555.OpViV38G-lkp@intel.com>
+        id S230517AbiAHV1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 16:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229953AbiAHV1e (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 16:27:34 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C9C06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 13:27:34 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l16-20020a17090a409000b001b2e9628c9cso11451826pjg.4
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 13:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=Hln/abMmSGptaGAwTz+GKaanQQs67LPV58I6VoMNHu8=;
+        b=g15Yc7jTPv4tOUKzEqNuKmxSFPSKgN3zOxTRMRiOuJWpv8fxHh5t/x5VcMB8dlGiX1
+         CcbIi7qfX0uF+0HXHI8QZDxVqUXlcVnA8eVoo1tKv8/Hc+w2ElCWy98KNrqa2OcKIJ6V
+         BPPvDEqysqW/+2uGMG7V9O9YJz+9SN1VLmCYetqRB84Y9gkJUr/8JwHRxwU0dsgvAV5m
+         DUIbPK0jWi/wa0ydF+iZvSfspfjHeI7NlcdsROMmU8fJMoQAPMO1VhKtfjd8sDjza1wG
+         7YHyDGK3tHcmMzmYB8w6Cyn5POvtjtnKCsID1RX94ncR2vpR2QwlucCJAkU5Y+Kz5CsV
+         Ru4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=Hln/abMmSGptaGAwTz+GKaanQQs67LPV58I6VoMNHu8=;
+        b=assmCNsQ2RqrozLsfNF33gG/Uns9BfQxIuJrth4SQ5GfuyJr8YyVBbE6ApesRfXPX+
+         Ne8diO08cullDtJxsJQ5QiteM6Yj/04eVb82XVe5+W4oY61mvZlP2FtrAxMd9P1bVL5a
+         9o9wsdI+pHsKn6wnFHsxvT8rggJjl04ba6lz3NSDDEYgD6ZD55dyuGf1gUF3jhVPO/Sq
+         cFp7re1qgrdkCZTaXo5smbiQctUpNiKdFnm7eh1OlCTsX25MHub6/vQp3awl1fwh5VwQ
+         yLsOeKuxhyVMjdyF+Zuj2/cmFaiS6guYlObJJ/9zAOQElqSlqhAWJEVArv/3865tIU4M
+         AKgg==
+X-Gm-Message-State: AOAM530/suhoZ0/geTPj6TPoglauaejAUT+R2MQZJCSIxefMLl6/AwFC
+        vuq/vrhtALzksVhR6wtDnFE=
+X-Google-Smtp-Source: ABdhPJx3caGq9OVUiu1RUlDNfvtbm4t6Th9ctenQkoF2PNqCtnGVcj5BCJsMDp1g9OmiPwtdbz082w==
+X-Received: by 2002:a62:5211:0:b0:4bc:c949:ae8d with SMTP id g17-20020a625211000000b004bcc949ae8dmr23710733pfb.26.1641677254101;
+        Sat, 08 Jan 2022 13:27:34 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id v24sm2595991pjn.29.2022.01.08.13.27.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 13:27:33 -0800 (PST)
+Date:   Sun, 9 Jan 2022 10:27:28 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: pi433: move get version func to where all other
+ functions are
+Message-ID: <20220108212728.GA7784@mail.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220108205955.GA3660@mail.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   351ceeab2ef96ab2fc306934ddb201b44636181b
-commit: 6d8683d081e753b3921879e105659a4bcfd9c08c [203/2375] headers/deps: Move task_struct::flags to per_task()
-config: x86_64-buildonly-randconfig-r004-20220108 (https://download.01.org/0day-ci/archive/20220109/202201090555.OpViV38G-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=6d8683d081e753b3921879e105659a4bcfd9c08c
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 6d8683d081e753b3921879e105659a4bcfd9c08c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
+As a convention for the pi433 driver, all routines that deals with the
+rf69 chip are defined in the rf69.c file. There was an exception to the
+rule in which the uC version verification was being done directly
+elsewhere. While at it, the Version Register hardcoded value was 
+replaced with a pre-existing constant in the driver.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patch adds rf69_get_version function to rf69.c
 
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/kcsan/core.c:25:
->> kernel/kcsan/permissive.h:31:26: error: no member named 'flags' in 'struct task_struct'
-           return ptr == &current->flags;
-                          ~~~~~~~  ^
-   1 error generated.
-
-
-vim +31 kernel/kcsan/permissive.h
-
-49f72d5358dd3c Marco Elver 2021-06-07  18  
-49f72d5358dd3c Marco Elver 2021-06-07  19  /*
-49f72d5358dd3c Marco Elver 2021-06-07  20   * Access ignore rules based on address.
-49f72d5358dd3c Marco Elver 2021-06-07  21   */
-49f72d5358dd3c Marco Elver 2021-06-07  22  static __always_inline bool kcsan_ignore_address(const volatile void *ptr)
-49f72d5358dd3c Marco Elver 2021-06-07  23  {
-49f72d5358dd3c Marco Elver 2021-06-07  24  	if (!IS_ENABLED(CONFIG_KCSAN_PERMISSIVE))
-49f72d5358dd3c Marco Elver 2021-06-07  25  		return false;
-49f72d5358dd3c Marco Elver 2021-06-07  26  
-d8fd74d35a8d3c Marco Elver 2021-06-07  27  	/*
-d8fd74d35a8d3c Marco Elver 2021-06-07  28  	 * Data-racy bitops on current->flags are too common, ignore completely
-d8fd74d35a8d3c Marco Elver 2021-06-07  29  	 * for now.
-d8fd74d35a8d3c Marco Elver 2021-06-07  30  	 */
-d8fd74d35a8d3c Marco Elver 2021-06-07 @31  	return ptr == &current->flags;
-49f72d5358dd3c Marco Elver 2021-06-07  32  }
-49f72d5358dd3c Marco Elver 2021-06-07  33  
-
-:::::: The code at line 31 was first introduced by commit
-:::::: d8fd74d35a8d3c602232e3238e916bda9d03d520 kcsan: permissive: Ignore data-racy 1-bit value changes
-
-:::::: TO: Marco Elver <elver@google.com>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
-
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v3: add original validation right after reading version value via spi.
+Requesters: Dan Carpenter, Sidong Yang, Greg k-h
+v2: function names where altered to match suggestions given during code
+review. Requester: Sidong Yang
+v1: https://lore.kernel.org/lkml/20220106093110.GA20011@mail.google.com/
+---
+ drivers/staging/pi433/pi433_if.c | 4 ++--
+ drivers/staging/pi433/rf69.c     | 5 +++++
+ drivers/staging/pi433/rf69.h     | 1 +
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+index 68c09fa016ed..051c9052aeeb 100644
+--- a/drivers/staging/pi433/pi433_if.c
++++ b/drivers/staging/pi433/pi433_if.c
+@@ -1115,8 +1115,8 @@ static int pi433_probe(struct spi_device *spi)
+ 		"spi interface setup: mode 0x%2x, %d bits per word, %dhz max speed",
+ 		spi->mode, spi->bits_per_word, spi->max_speed_hz);
+ 
+-	/* Ping the chip by reading the version register */
+-	retval = spi_w8r8(spi, 0x10);
++	/* read chip version */
++	retval = rf69_get_version(spi);
+ 	if (retval < 0)
+ 		return retval;
+ 
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index d64df072d8e8..ee8c81d164e1 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -102,6 +102,11 @@ static inline int rf69_read_mod_write(struct spi_device *spi, u8 reg,
+ 
+ /*-------------------------------------------------------------------------*/
+ 
++int rf69_get_version(struct spi_device *spi)
++{
++	return rf69_read_reg(spi, REG_VERSION);
++}
++
+ int rf69_set_mode(struct spi_device *spi, enum mode mode)
+ {
+ 	static const u8 mode_map[] = {
+diff --git a/drivers/staging/pi433/rf69.h b/drivers/staging/pi433/rf69.h
+index b648ba5fff89..c25942f142a6 100644
+--- a/drivers/staging/pi433/rf69.h
++++ b/drivers/staging/pi433/rf69.h
+@@ -17,6 +17,7 @@
+ #define FIFO_SIZE	66		/* bytes */
+ #define FIFO_THRESHOLD	15		/* bytes */
+ 
++int rf69_get_version(struct spi_device *spi);
+ int rf69_set_mode(struct spi_device *spi, enum mode mode);
+ int rf69_set_data_mode(struct spi_device *spi, u8 data_mode);
+ int rf69_set_modulation(struct spi_device *spi, enum modulation modulation);
+-- 
+2.25.4
+

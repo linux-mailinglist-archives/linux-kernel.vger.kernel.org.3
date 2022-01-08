@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0B5488225
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA5A488227
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbiAHHZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 02:25:26 -0500
-Received: from box.trvn.ru ([194.87.146.52]:56037 "EHLO box.trvn.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233484AbiAHHZZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 02:25:25 -0500
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S233715AbiAHHZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 02:25:42 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:59781 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233484AbiAHHZl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 02:25:41 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 513EC4038B;
-        Sat,  8 Jan 2022 12:25:19 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1641626721; bh=xSTjwXWm03zXFQo0llbV1rDWCB+tlvOs66q7D/jrNgg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=epAcW3haHkcxECO4fhpYKScBgMXqNlBNUG2+cW5jDomY+kcf0MDNq3gAPA6UuyXM+
-         yKTgRwUYchNnwuexw8rggh7wSOkYc3Y9+bpc88nQd0ApHcJGU83jR2Sr0VFOtBljH7
-         cX1o/eGahOki14stGjyeiRwDZNNms7owI7d4I/GVPv2IDaPLKRZp2sEeXv/HwQezBK
-         fBujLPdT6vZNaoTMQ53mVYlaK3tvHE1r3HWMvb3vl5NM+L+vPrDCAVHjY8JRTYavWw
-         hkSreKo+bgTthBvEbg+LMs6JYtRDbPAuECg5n1ZbNa0j1Cx0gf7Es7N4DRTiUUsPUe
-         65q5iO/G5lgWA==
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JWBSz39k6z4xd4;
+        Sat,  8 Jan 2022 18:25:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641626740;
+        bh=T/jZhA/L/dBQfp25qCLfio2/MXXlXg5j0WqIA2XSV8U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rx3o9dExyKX7LRxz2Yil+gTijoel8hV5faFiZV8GFqt4M2b8M7aW9BL/ru6C0Ydki
+         HfqWJZm1S02eNX4Dx8psrGdl1xZEapwgZf+nfy2H9cxKVa82FClmwHubFo8nPa7DRQ
+         XJQCL7m6GMRuyyJxKCuKc0uDYYY0NR6Bz5kFr/qcDufvsw94WlfQn7UyxOEeKuk+f0
+         7+jVnbWVGGSz/+L5KZyBfZr6opY/lf5Gcwld3odg+IH/O/cbysInLGvuBJkqwqiMdR
+         /xNXjWdx/pYp5u4UJ63eg2Z6DRNvgSIsQV8FxDDxO4kHAVaubMe9+6Zq2FKmSGNArd
+         JNk1IyfkYo/hQ==
+Date:   Sat, 8 Jan 2022 18:25:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Baruch Siach <baruch@tkos.co.il>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the devicetree tree
+Message-ID: <20220108182538.362c8e29@canb.auug.org.au>
 MIME-Version: 1.0
-Date:   Sat, 08 Jan 2022 12:25:19 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linus.walleij@linaro.org, mturquette@baylibre.com,
-        bjorn.andersson@linaro.org, agross@kernel.org, tdas@codeaurora.org,
-        svarbanov@mm-sol.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 1/4] clk: qcom: clk-rcg2: Fail Duty-Cycle configuration if
- MND divider is not enabled.
-In-Reply-To: <20220108005209.5140EC36AEB@smtp.kernel.org>
-References: <20211209163720.106185-1-nikita@trvn.ru>
- <20211209163720.106185-2-nikita@trvn.ru>
- <20220108005209.5140EC36AEB@smtp.kernel.org>
-Message-ID: <991533e0fddd6999c8a06a536ae57999@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Stephen Boyd писал(а) 08.01.2022 05:52:
-> Quoting Nikita Travkin (2021-12-09 08:37:17)
->> In cases when MND is not enabled (e.g. when only Half Integer Divider is
->> used), setting D registers makes no effect. Fail instead of making
->> ineffective write.
->>
->> Fixes: 7f891faf596e ("clk: qcom: clk-rcg2: Add support for duty-cycle for RCG")
->> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->> ---
->>  drivers/clk/qcom/clk-rcg2.c | 7 ++++++-
->>  1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
->> index e1b1b426fae4..6964cf914b60 100644
->> --- a/drivers/clk/qcom/clk-rcg2.c
->> +++ b/drivers/clk/qcom/clk-rcg2.c
->> @@ -396,7 +396,7 @@ static int clk_rcg2_get_duty_cycle(struct clk_hw *hw, struct clk_duty *duty)
->>  static int clk_rcg2_set_duty_cycle(struct clk_hw *hw, struct clk_duty *duty)
->>  {
->>         struct clk_rcg2 *rcg = to_clk_rcg2(hw);
->> -       u32 notn_m, n, m, d, not2d, mask, duty_per;
->> +       u32 notn_m, n, m, d, not2d, mask, duty_per, cfg;
->>         int ret;
->>
->>         /* Duty-cycle cannot be modified for non-MND RCGs */
->> @@ -407,6 +407,11 @@ static int clk_rcg2_set_duty_cycle(struct clk_hw *hw, struct clk_duty *duty)
->>
->>         regmap_read(rcg->clkr.regmap, RCG_N_OFFSET(rcg), &notn_m);
->>         regmap_read(rcg->clkr.regmap, RCG_M_OFFSET(rcg), &m);
->> +       regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
->> +
->> +       /* Duty-cycle cannot be modified if MND divider is in bypass mode. */
->> +       if (!(cfg & CFG_MODE_MASK))
->> +               return -EINVAL;
-> 
-> Should we still allow 50% duty cycle to succeed?
+Hi all,
 
-*Technically* setting 50% duty cycle works since it's the default,
-but how I understand it, the main way to get there is to call
-clk_set_duty_cycle() which implies that it's caller intends
-to control duty cycle specifically but the call doesn't actually
-control anything as the hardware block is disabled.
+In commit
 
-I'm adding this error here primarily to bring attention of the
-user (e.g. developer enabling some peripheral that needs
-duty cycle control) who might have to change their clock tree
-to make this control effective. So, assuming that if someone
-sets the duty cycle to 50% then they might set it to some other
-value later, it makes sense to fail the first call anyway.
+  86ce070ce00a ("of: base: Fix phandle argument length mismatch error messa=
+ge")
 
-If you think there are some other possibilities for this call
-to happen specifically with 50% duty cycle (e.g. some
-preparations or cleanups in the clk subsystem or some drivers
-that I'm not aware of) then I can make an exemption in the check
-for that.
+Fixes tag
 
-Thanks,
-Nikita
+  Fixes: af3be70a321 ("of: Improve of_phandle_iterator_next() error message=
+")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHZPHIACgkQAVBC80lX
+0Gx/aQf/eghOLjKTIVvNHNnRYh2WP+Q0W35fUwCi9/dQQqaebGkDApItJcfmys9d
+qG0NsxqzEUnyoCzZzdyB4JdqIXo6fkYnT5AcMrlhmr25Mppb9ZqW0JFKzDCgN88/
+iUrEnHKDvPc2j/ZUV27qkvB2mDn7AG3D0q0BQ/yypcXRyL6jJSTZjz0HP886ezFg
+nHroxBA85Vwu4gnZdGu1aLrNthPx6bEDH9dMphX1kk8XNY6vaiNU0LxhFKI3UyWY
+3tyPCmEpSXC+R8R/mgIXwGOpS4jJn9Gbr1Vp3IfdZN04TdTxk/TpXoFVCB/vKbO9
+ha1PmxccFgj7MQDy0jaVxbQCFb4/eA==
+=JDhE
+-----END PGP SIGNATURE-----
+
+--Sig_/XmTTLoeyiaSTdJ=sNqjs6TJ--

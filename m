@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117A448814B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 05:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E0048814D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 05:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiAHE2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 23:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiAHE2w (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 23:28:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAFFC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 20:28:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01B22B82627
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 04:28:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B49C36AE0;
-        Sat,  8 Jan 2022 04:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641616129;
-        bh=00KpkfETKBNFzTQ2r0RXyaLcukVc2JqwH1AAYaCfME4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ZWMPriyYR1YuCWkV7d1zhgBqZHQ2ka7lkqpJuM3LHyrNUAip4Ws3Bixh7cG9sPriz
-         H2mOuEStYl3BCyuCsTWIIsLlWPx6EdR/5oHK5KNeDWqyVmEEl9I1x1I8a4ev/omSiH
-         p3g9sFBQnEgCT+f+UdnLslKgaz5mgHYH9u1S/J6RrkkJX7hlksXFZdg9w8iOKmRiyB
-         zXGjl/S3Ozp25V3eGOnE2MbXYY9FmPK8qIilMGM9xyib5fCL+xejhUp6wPavlZeyxI
-         AUACnYr05QooWxKTGpvU3g7DmqusJjeGaic5q9qk9p1a2NFippIifz+uRY4cbGKNQr
-         IWxLyhYPnkhnw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5111E5C1AB8; Fri,  7 Jan 2022 20:28:49 -0800 (PST)
-Date:   Fri, 7 Jan 2022 20:28:49 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
+        id S229907AbiAHEgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 23:36:37 -0500
+Received: from mga03.intel.com ([134.134.136.65]:26192 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229527AbiAHEgg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 23:36:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641616596; x=1673152596;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jJIYD2+JxGdZJd7hRTmLQg4dIy8Hi2EawL1T3h9xbsU=;
+  b=Zy9nE22yiugLAXKigt3ccfhmOx8G7tw4TW7hol/OPpNZhB/1CW8GIaHF
+   1Ydo7YMDRvNYYD7qetktD+hXg5N2+sTE6ThyHjD9DLvGcbxywWEus7NuP
+   +pTNvKfSML8SZ+j9cXO66BvFRBt2XEd/6nA9asFbYWP0xT1mP+ccnGVGL
+   yhSUcjRPgGz7ikETmiLVefGCDPab0iV6Ymsh9GnBbbmWME/X/f+cclWcI
+   p1YxiBdAcP56nsF1zNpEf5IWqiIJzjGeDxi/2tsqNKLpJapTFoDzoPmk1
+   jUDfNww4oMH19btVkEYyPfqQoBWiparihS+ubJ+8pqBmYU7CwZ1KKzkgZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="242936644"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="242936644"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 20:36:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="690010525"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Jan 2022 20:36:34 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n63T0-0000Fp-8O; Sat, 08 Jan 2022 04:36:34 +0000
+Date:   Sat, 8 Jan 2022 12:35:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [paulmck-rcu:dev.2022.01.04a 55/55] kernel/time/timer.c:1776:6:
- warning: no previous prototype for 'tick_setup_sched_timer_dump'
-Message-ID: <20220108042849.GS4202@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202201080834.rGuSv2SS-lkp@intel.com>
+Subject: [mingo-tip:sched/headers 1785/2372] kernel/sched/core.c:5331:20:
+ warning: no previous prototype for 'task_sched_runtime'
+Message-ID: <202201081252.k0vPJH1N-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201080834.rGuSv2SS-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 08:41:32AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.01.04a
-> head:   64595d0dff992756e8c6d53c0e9f1e3e50c451f7
-> commit: 64595d0dff992756e8c6d53c0e9f1e3e50c451f7 [55/55] squash! EXP timers: Non-nohz_full last-resort jiffies update on IRQ entry
-> config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220108/202201080834.rGuSv2SS-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> reproduce (this is a W=1 build):
->         # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=64595d0dff992756e8c6d53c0e9f1e3e50c451f7
->         git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
->         git fetch --no-tags paulmck-rcu dev.2022.01.04a
->         git checkout 64595d0dff992756e8c6d53c0e9f1e3e50c451f7
->         # save the config file to linux build tree
->         mkdir build_dir
->         make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash kernel/time/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   67f8f45b4d0cf00f8e53fc1c2b50c67608ede063
+commit: b0906e7a2f182e8f595888b41c1fc6f0c80c4f6d [1785/2372] headers/deps: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220108/202201081252.k0vPJH1N-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b0906e7a2f182e8f595888b41c1fc6f0c80c4f6d
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout b0906e7a2f182e8f595888b41c1fc6f0c80c4f6d
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Good catch, but this was due to debug code that has since been removed.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-							Thanx, Paul
+All warnings (new ones prefixed by >>):
 
-> All warnings (new ones prefixed by >>):
-> 
->    kernel/time/timer.c:254:5: warning: no previous prototype for 'timer_migration_handler' [-Wmissing-prototypes]
->      254 | int timer_migration_handler(struct ctl_table *table, int write,
->          |     ^~~~~~~~~~~~~~~~~~~~~~~
-> >> kernel/time/timer.c:1776:6: warning: no previous prototype for 'tick_setup_sched_timer_dump' [-Wmissing-prototypes]
->     1776 | void tick_setup_sched_timer_dump(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> 
-> vim +/tick_setup_sched_timer_dump +1776 kernel/time/timer.c
-> 
->   1775	
-> > 1776	void tick_setup_sched_timer_dump(void)
->   1777	{
->   1778		int cpu;
->   1779		int j = jiffies;
->   1780	
->   1781		pr_alert("%s state", __func__);
->   1782		for_each_possible_cpu(cpu)
->   1783			pr_cont(" j/c %x/%d %c",
->   1784				(int)(j - per_cpu(tick_setup_sched_timer_jiffies, cpu)) & 0xfff,
->   1785				per_cpu(tick_setup_sched_timer_jiffies_count, cpu),
->   1786				".H"[per_cpu(tick_setup_sched_timer_help_needed, cpu)]);
->   1787		pr_cont("\n");
->   1788	}
->   1789	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>> kernel/sched/core.c:5331:20: warning: no previous prototype for 'task_sched_runtime' [-Wmissing-prototypes]
+    5331 | unsigned long long task_sched_runtime(struct task_struct *p)
+         |                    ^~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:9450:13: warning: no previous prototype for 'sched_init_smp' [-Wmissing-prototypes]
+    9450 | void __init sched_init_smp(void)
+         |             ^~~~~~~~~~~~~~
+   kernel/sched/core.c:9480:13: warning: no previous prototype for 'per_task_init' [-Wmissing-prototypes]
+    9480 | void __init per_task_init(void)
+         |             ^~~~~~~~~~~~~
+>> kernel/sched/core.c:9489:13: warning: no previous prototype for 'sched_init' [-Wmissing-prototypes]
+    9489 | void __init sched_init(void)
+         |             ^~~~~~~~~~
+
+
+vim +/task_sched_runtime +5331 kernel/sched/core.c
+
+6075620b0590ea kernel/sched/core.c Giovanni Gherdovich 2016-08-05  5325  
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5326  /*
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5327   * Return accounted runtime for the task.
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5328   * In case the task is currently running, return the runtime plus current's
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5329   * pending runtime that have not been accounted yet.
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5330   */
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31 @5331  unsigned long long task_sched_runtime(struct task_struct *p)
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5332  {
+eb58075149b7f0 kernel/sched/core.c Peter Zijlstra      2015-07-31  5333  	struct rq_flags rf;
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5334  	struct rq *rq;
+6e998916dfe327 kernel/sched/core.c Stanislaw Gruszka   2014-11-12  5335  	u64 ns;
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5336  
+
+:::::: The code at line 5331 was first introduced by commit
+:::::: c5f8d99585d7b5b7e857fabf8aefd0174903a98c posixtimers, sched: Fix posix clock monotonicity
+
+:::::: TO: Hidetoshi Seto <seto.hidetoshi@jp.fujitsu.com>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

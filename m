@@ -2,124 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 753A6488161
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 06:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2500488166
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 06:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiAHE4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 23:56:40 -0500
-Received: from mga01.intel.com ([192.55.52.88]:12401 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229527AbiAHE4k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 23:56:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641617800; x=1673153800;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=amh0S41kviibyhBRS+hWko6HYQX7jqyUsf/G4yUOZSM=;
-  b=fw2NFMiFBwGC8EIK7QpvQ4aLN/mZSAd8EHtb9tqYRH/NqSEmXW1T/Att
-   ztHmkrDdaf8F0xZrsTy0gpknJoU4kvq3JHAAkvsIG8DyrN6m9bxWmXDCY
-   a6eWgWfasiSB6VGATQnIzbgXfQi3qY+U7tdRNMSrb7FcfVYNq75nI+o+U
-   MB0NOYM1FA4v6P2vVRzcfp0XcrrMcpGga4Pg3J4Q5StolvJ480DYVD3QR
-   YMo3UX80vUFu6fJsumEjO2mSfkHNeqH/foKbLqOI55HYBTTWeedoz4547
-   iZN93LvoPkpAoLDHfLcUTZBVt1+wJRI3MtUNiF3tkvq24op6habBmVl2Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="267292855"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="267292855"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 20:56:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="473561462"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jan 2022 20:56:38 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n63mP-0000H1-HC; Sat, 08 Jan 2022 04:56:37 +0000
-Date:   Sat, 8 Jan 2022 12:56:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steve Muckle <smuckle@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android11-kiwi-5.4
- 754/9999] drivers/rtc/hctosys.c:24:5: warning: no previous prototype for
- 'rtc_hctosys'
-Message-ID: <202201081257.UmKmhhk7-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230106AbiAHFLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 00:11:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229761AbiAHFLa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 00:11:30 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFFAC06173F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 21:11:29 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so8827136pjp.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 21:11:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openresty-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=y9WGOS+NmTpwsfWAaNLR4kcuvqh/6mnBxgOTqljYllg=;
+        b=mn2CR4XIf7DQVYu0fqTfWTYBxNu65IiPfwv1HlAf/ALTTJ3+P5rVhrRHdYxevNiaEg
+         eWlsdKRIF5v0DxpsZMlAIEpHb0S/agb+1TdIR9v0sQ8oqq5LsWggYlFx+Y6NuqxSxSil
+         6aHqXsfbOBznPGcdmOkoo9ZjdtpLRAdUfasPQUBIutE0s7VoSHZ6ZJFP6HFj1jBP4Q+H
+         8cS6VvNs64y+ERwLuQ8uCSZn+0CjY9EBR5c4CjGjELaeGf+ZnVnMRijop4DNpXUvUyD5
+         iEWxkQeQvZ1i6aW/7eGjVrpqJVYX2m9ttGiovsLfxWH+b5lEYilpvnRalcdBEJ8I5QHd
+         CiYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=y9WGOS+NmTpwsfWAaNLR4kcuvqh/6mnBxgOTqljYllg=;
+        b=IwvsO1JHEXaovX3uvn/ZGMA/3176DW0aw0KORZbYrPe9jrb4+X451jLzvYEhbxO5hO
+         p027POGyRkZkkrGz1DcFd+RXzdd23MHyso9Y3QpafhBrgKRS0ch1dABgOeKB6ihZM9e5
+         j6pJ5BH2EMkaQmT/eMKzZT6ZOvYnwQsr87zmHpAAq+x+Y5ZtvMEatx2zc5+bAxdCmdnf
+         tCDGM22otzJ/iPMSa2chuzxf/TnfgwFvvLOeHogQ9jW26c50XCfb9hoZd1vXHHPHv6ML
+         P+iemDlUTPUYE991dmBOZQeGXl8V9ssbuP+QW/2Z57GcOSpV9hHOjmrlsEbd8DALo1Ip
+         +ZyQ==
+X-Gm-Message-State: AOAM5300uG4eAsUwaaGA5e7DtEl5YPKIXeqG7/kvCOXA7qsEEaOWjYAR
+        kZ3U0PsZ+XPU9KE1qYDIiBYEYA==
+X-Google-Smtp-Source: ABdhPJyXnncodsFk1sYhJ9INkN1BNwdN6A1mtZXDP0lfXNH1P2YDSCXWdLhFwc1/n3/1bKwdV6/4ZQ==
+X-Received: by 2002:a17:90b:30cc:: with SMTP id hi12mr19315174pjb.50.1641618689293;
+        Fri, 07 Jan 2022 21:11:29 -0800 (PST)
+Received: from localhost.localdomain (c-98-35-249-89.hsd1.ca.comcast.net. [98.35.249.89])
+        by smtp.gmail.com with ESMTPSA id q16sm552808pfu.31.2022.01.07.21.11.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 07 Jan 2022 21:11:28 -0800 (PST)
+From:   "Yichun Zhang (agentzh)" <yichun@openresty.com>
+To:     yichun@openresty.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: core: Fix the call ins's offset s32 -> s16 truncation
+Date:   Fri,  7 Jan 2022 21:11:21 -0800
+Message-Id: <20220108051121.28632-1-yichun@openresty.com>
+X-Mailer: git-send-email 2.17.2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+The BPF interpreter always truncates the BPF CALL instruction's 32-bit
+jump offset to 16-bit. Large BPF programs run by the interpreter often
+hit this issue and result in weird behaviors when jumping to the wrong
+destination instructions.
 
-FYI, the error/warning still remains.
+The BPF JIT compiler does not have this bug.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android11-kiwi-5.4
-head:   7d1d5848183bd1d9086d0572f9af431d3ded407f
-commit: 5f378fd56aa3988be21e859254a2d72628d044c6 [754/9999] ANDROID: rtc: class: support hctosys from modular RTC drivers
-config: i386-randconfig-a001-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081257.UmKmhhk7-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/5f378fd56aa3988be21e859254a2d72628d044c6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android11-kiwi-5.4
-        git checkout 5f378fd56aa3988be21e859254a2d72628d044c6
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/rtc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/rtc/hctosys.c:24:5: warning: no previous prototype for 'rtc_hctosys' [-Wmissing-prototypes]
-      24 | int rtc_hctosys(void)
-         |     ^~~~~~~~~~~
-
-
-vim +/rtc_hctosys +24 drivers/rtc/hctosys.c
-
-    12	
-    13	/* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
-    14	 * whether it stores the most close value or the value with partial
-    15	 * seconds truncated. However, it is important that we use it to store
-    16	 * the truncated value. This is because otherwise it is necessary,
-    17	 * in an rtc sync function, to read both xtime.tv_sec and
-    18	 * xtime.tv_nsec. On some processors (i.e. ARM), an atomic read
-    19	 * of >32bits is not possible. So storing the most close value would
-    20	 * slow down the sync API. So here we have the truncated value and
-    21	 * the best guess is to add 0.5s.
-    22	 */
-    23	
-  > 24	int rtc_hctosys(void)
-    25	{
-    26		int err = -ENODEV;
-    27		struct rtc_time tm;
-    28		struct timespec64 tv64 = {
-    29			.tv_nsec = NSEC_PER_SEC >> 1,
-    30		};
-    31		struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
-    32	
-    33		if (!rtc) {
-    34			pr_info("unable to open rtc device (%s)\n",
-    35				CONFIG_RTC_HCTOSYS_DEVICE);
-    36			goto err_open;
-    37		}
-    38	
-    39		err = rtc_read_time(rtc, &tm);
-    40		if (err) {
-    41			dev_err(rtc->dev.parent,
-    42				"hctosys: unable to read the hardware clock\n");
-    43			goto err_read;
-    44		}
-    45	
-    46		tv64.tv_sec = rtc_tm_to_time64(&tm);
-    47	
-
+Fixes: 1ea47e01ad6ea ("bpf: add support for bpf_call to interpreter")
+Signed-off-by: Yichun Zhang (agentzh) <yichun@openresty.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ kernel/bpf/core.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 2405e39d800f..dc3c90992f33 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -59,6 +59,9 @@
+ #define CTX	regs[BPF_REG_CTX]
+ #define IMM	insn->imm
+ 
++static u64 (*interpreters_args[])(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5,
++				  const struct bpf_insn *insn);
++
+ /* No hurry in this branch
+  *
+  * Exported for the bpf jit load helper.
+@@ -1560,10 +1563,10 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 		CONT;
+ 
+ 	JMP_CALL_ARGS:
+-		BPF_R0 = (__bpf_call_base_args + insn->imm)(BPF_R1, BPF_R2,
+-							    BPF_R3, BPF_R4,
+-							    BPF_R5,
+-							    insn + insn->off + 1);
++		BPF_R0 = (interpreters_args[insn->off])(BPF_R1, BPF_R2,
++							BPF_R3, BPF_R4,
++							BPF_R5,
++							insn + insn->imm + 1);
+ 		CONT;
+ 
+ 	JMP_TAIL_CALL: {
+@@ -1810,9 +1813,7 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+ {
+ 	stack_depth = max_t(u32, stack_depth, 1);
+-	insn->off = (s16) insn->imm;
+-	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
+-		__bpf_call_base_args;
++	insn->off = (round_up(stack_depth, 32) / 32) - 1;
+ 	insn->code = BPF_JMP | BPF_CALL_ARGS;
+ }
+ 
+-- 
+2.17.2
+

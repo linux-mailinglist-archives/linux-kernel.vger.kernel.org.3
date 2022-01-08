@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9E0488148
+	by mail.lfdr.de (Postfix) with ESMTP id E5B0A488149
 	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 05:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbiAHEL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 23:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiAHEL0 (ORCPT
+        id S229692AbiAHEVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 23:21:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46086 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229527AbiAHEVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 23:11:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE49C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 20:11:26 -0800 (PST)
+        Fri, 7 Jan 2022 23:21:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB604B82627
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 04:11:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D97C36AE0;
-        Sat,  8 Jan 2022 04:11:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8C37B8248F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 04:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8856CC36AE0;
+        Sat,  8 Jan 2022 04:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641615083;
-        bh=bvv7IG6N5bla8LAh3U7RUkbm19iWwxkuYVm+JG2rdTU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PS7hv/vpxpVZpJ5xTPm409/sjhvOHUwsqfsVjZd3Fb54rg/Nh+xxRqUHrSFbVDTOx
-         CTIXg3ODTZz/HDrpVP9X1bFuNMJiieqjj98eu0kqeFGws/si7k9zbXHnndZBr0re6G
-         CUmuRp+2TQqFRvllLz4d3iqJJvP5jWgmUOFeZAEdoQvEbEQBG04++LSWVmdjsO8lQU
-         Yy+cW/5QZ3CVwBhHT7LHUudgWYxLL3euAgemgZyWPIxFnjHF8wVaPGAZeQWi9tg6rx
-         1tnUJs4ytTgQ8LfCm9jeuR35bEiNK9NvQ7IxCOCFBum3jJuiBeH5iSWbeU6gDqJmMD
-         eD2sQTEQt3/rg==
-Date:   Sat, 8 Jan 2022 13:11:18 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Xiangyang Zhang <xyz.sun.ok@gmail.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
-        oleg@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tracing/kprobes: 'nmissed' not showed correctly for
- kretprobe
-Message-Id: <20220108131118.ed2d82a8a51ed1562676077c@kernel.org>
-In-Reply-To: <20220107150242.5019-1-xyz.sun.ok@gmail.com>
-References: <20220107150242.5019-1-xyz.sun.ok@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1641615707;
+        bh=9F8SZHGAQUDCatH81wxQRvcS4OWRwa7E3axfNM55X+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BiwSz/c8UgBo43mqs29QRpTUUj/h3Bq1TWnWwL/Y9t/BWxW5qxUJ0vzv5MFS/DWIH
+         aQ6dkJuDSXkT0+H/xTPDaD4X8tdEctWtDq6L5ByMnFNQkJSLivdXxpa//5SIN8q9QX
+         llpUiAo7n9at74GaOStpoAN5bAavLwuyPNsZ5ef9CIkZPtebrdhkaGvh74BinUoaog
+         MiXzFBImolh62z45e9P/I9EeQSRQqeJy0apJXO2K3LVSA1e7OstqJNcav3rt9b6KV4
+         wKaTi9Y9QUWWgxUmDQhV0DmW+b8PiW1WtILu86WlVEEmpBbX2xZqAk+F9uPIYXhVMt
+         D6v9zzKVO0/fA==
+Date:   Fri, 7 Jan 2022 20:21:46 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 3/6] f2fs: do not expose unwritten blocks to user by DIO
+Message-ID: <YdkRWgvZEkRM+RSP@sol.localdomain>
+References: <20220104212419.1879225-1-jaegeuk@kernel.org>
+ <20220104212419.1879225-3-jaegeuk@kernel.org>
+ <YdjJAS7Ua4aJEFhz@sol.localdomain>
+ <YdjucBBopEDuUb5b@google.com>
+ <Ydj1JvEeLo1mrqvb@sol.localdomain>
+ <YdkGnA3/3f/Qka5M@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdkGnA3/3f/Qka5M@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Jan 2022 23:02:42 +0800
-Xiangyang Zhang <xyz.sun.ok@gmail.com> wrote:
-
-> The 'nmissed' column of the 'kprobe_profile' file for kretprobe is
-> not showed correctly, kretprobe can be skipped by two reasons,
-> shortage of kretprobe_instance which is counted by tk->rp.nmissed,
-> and kprobe itself is missed by some reason, so to show the sum.
+On Fri, Jan 07, 2022 at 07:35:56PM -0800, Jaegeuk Kim wrote:
+> On 01/07, Eric Biggers wrote:
+> > On Fri, Jan 07, 2022 at 05:52:48PM -0800, Jaegeuk Kim wrote:
+> > > On 01/07, Eric Biggers wrote:
+> > > > Hi Jaegeuk,
+> > > > 
+> > > > On Tue, Jan 04, 2022 at 01:24:16PM -0800, Jaegeuk Kim wrote:
+> > > > > DIO preallocates physical blocks before writing data, but if an error occurrs
+> > > > > or power-cut happens, we can see block contents from the disk. This patch tries
+> > > > > to fix it by 1) turning to buffered writes for DIO into holes, 2) truncating
+> > > > > unwritten blocks from error or power-cut.
+> > > > > 
+> > > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > > ---
+> > > > >  fs/f2fs/data.c  |  5 ++++-
+> > > > >  fs/f2fs/f2fs.h  |  5 +++++
+> > > > >  fs/f2fs/file.c  | 27 ++++++++++++++++++---------
+> > > > >  fs/f2fs/inode.c |  8 ++++++++
+> > > > >  4 files changed, 35 insertions(+), 10 deletions(-)
+> > > > 
+> > > > Unfortunately, this patch doesn't completely fix the uninitialized data
+> > > > exposure.  The problem is that it only makes DIO writes fall back to buffered
+> > > > writes for holes, and not for reserved blocks (NEW_ADDR).  f2fs's reserved
+> > > > blocks are *not* the same as the unwritten extents that other filesystems have;
+> > > > f2fs's reserved blocks have to be turned into regular blocks before DIO can
+> > > > write to them.  That immediately exposes them to concurrent reads (at least
+> > > > buffered reads, but I think DIO reads too).
+> > > 
+> > > Isn't it resolved by i_size which gives the written blocks only?
+> > > 
+> > 
+> > I'm not sure what you mean, but this is for non-extending writes, so i_size
+> > isn't relevant.
+> 
+> Ah, do you mean the file has NEW_ADDR within i_size? If so, let me continue
+> to investigate further based on the current -dev, as it's quite hard to remove
+> the old commits.
 > 
 
-Thanks! This looks good to me.
+Yes, "NEW_ADDR within i_size" is the intended result of fallocate() on f2fs,
+right?  The problem is that DIO writes convert the NEW_ADDR blocks to real
+blocks, which makes uninitialized data immediately visible to reads before the
+write actually happens.
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-> Fixes: 4a846b443b4e ("tracing/kprobes: Cleanup kprobe tracer code")
-> Signed-off-by: Xiangyang Zhang <xyz.sun.ok@gmail.com>
-> ---
->  kernel/trace/trace_kprobe.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index f8c26ee72de3..3d85323278ed 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1170,15 +1170,18 @@ static int probes_profile_seq_show(struct seq_file *m, void *v)
->  {
->  	struct dyn_event *ev = v;
->  	struct trace_kprobe *tk;
-> +	unsigned long nmissed;
->  
->  	if (!is_trace_kprobe(ev))
->  		return 0;
->  
->  	tk = to_trace_kprobe(ev);
-> +	nmissed = trace_kprobe_is_return(tk) ?
-> +		tk->rp.kp.nmissed + tk->rp.nmissed : tk->rp.kp.nmissed;
->  	seq_printf(m, "  %-44s %15lu %15lu\n",
->  		   trace_probe_name(&tk->tp),
->  		   trace_kprobe_nhit(tk),
-> -		   tk->rp.kp.nmissed);
-> +		   nmissed);
->  
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+- Eric

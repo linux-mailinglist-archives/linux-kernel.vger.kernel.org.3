@@ -2,82 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734064880DF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 03:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F614880E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 03:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiAHCVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 21:21:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42574 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiAHCVb (ORCPT
+        id S233318AbiAHCWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 21:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233306AbiAHCWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 21:21:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01048B827B9
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 02:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DBCC36AEB;
-        Sat,  8 Jan 2022 02:21:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641608488;
-        bh=d6tCE8L07WiRQLdTYY6Wo8RkTxESU2i1+P95PULKkIY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bujMAGF6pgyHVhKQKZcmvfxdRkR7hdH8E6Z2WtaUI2kJMt7ZWdpVwY8j28eU2pjsr
-         eB5noMBWxJLjXGt9AcSc0tOordHBLhAGcEG2AamuSvy68MFEZo3PDnu/ABNdOr7kNN
-         eVvAoNt+VdAVYfNQvBxNV1RQ8y5vpoXfoFTsikDFRDKP5WfV+Dq2pzuon6Vvx89/GM
-         pPyfOWeeIn9MFS8cyWShjIWRIulzTGoOGrlCleBvMUoCpmQAhgA4Hltgn3v/Hd9dAS
-         jTjmLEi6J8oJj9mwqcFpZ+QG/nqm1jBrWQPb8QvBnh8iG8yHSi4U1PtpNz1uJALVz3
-         IrBDXX/qYgtfw==
-Date:   Fri, 7 Jan 2022 18:21:26 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH 3/6] f2fs: do not expose unwritten blocks to user by DIO
-Message-ID: <Ydj1JvEeLo1mrqvb@sol.localdomain>
-References: <20220104212419.1879225-1-jaegeuk@kernel.org>
- <20220104212419.1879225-3-jaegeuk@kernel.org>
- <YdjJAS7Ua4aJEFhz@sol.localdomain>
- <YdjucBBopEDuUb5b@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdjucBBopEDuUb5b@google.com>
+        Fri, 7 Jan 2022 21:22:32 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD20C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 18:22:32 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id i8so7246767pgt.13
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 18:22:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openresty-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kGrdecSC3sPdHtWn9polPOvxxPNBR4DlkW3QJLsVlic=;
+        b=KPgC6CipYjBN1/pAogCBoywf5xWdGJ/B9J1tE0Hjb5fDeS78+bRTKYKFp+dRTA50iR
+         jO8NboZ1pDij5ZzWF1Bd/xLD8gjq3VCnc3rgCrlYet288M2HgQnc+N3crLRiaMjABrJ9
+         GkBSXOqYM8tqEIG0zIOr5Mc6CBrdse+Mp8jQ10jmIqqKBrO/CDmWYjPAIfIRciBdMAMs
+         j44VKzPle4WaUYSt/LQcPDR5GZF6ZVyzVFs5U/gvy1macxEh/jf0mRblD/Nr0dSMtBa2
+         GkIKnNiSwbsZ/5wmDRnVM/hew30R1R9C/M7XRdzFVpFqBIS15pX4Uatv61K+MF2WHRqz
+         h+xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kGrdecSC3sPdHtWn9polPOvxxPNBR4DlkW3QJLsVlic=;
+        b=h8Tk5cZdAwETQxoMugXn/Pfmx6vyAw20O2QIAtzD0ZxAQupFSYab5cEm8oWC80b+xl
+         vgVvUvM35o5mogNJ62cPGb4Udg+ch1Q2XIMPDRNs/jyFgcBH7duMsqBpPAQ2sLv16l90
+         Grnc8VrkOjXpejACkYymsi7kKAbEGwgIMqo5m0Q+Wki4+9ZPma+Ttktw3n9DWN3lgYFg
+         ZSZ5NYSH9g3aT7+Q8qtgek3OAvVrEIhoLtDxZ49aIrPkMjViS0Hj5LJJ83b/aA3d7bJM
+         l9vMkQAb1Ke+bLmlFd7/0uz2HRKe7x99cvKdBYCKj1Te4pqYVK8IgZLwFx+AaNmouTtM
+         Ydmw==
+X-Gm-Message-State: AOAM531fcKCeFWY9BhhMVqtQ+EMAoqAb1+//ZkoKsOVJHU4X5oWZ+GN/
+        Vy48Uyg7a89kJyrW9Q1SPNqJPA==
+X-Google-Smtp-Source: ABdhPJxCSy6VDT37VYN49wFdKlTjPScq9HkyQDn/tBoXW63qDWHpTqEY0bRELQJ9YMLrm9tBHwPbEw==
+X-Received: by 2002:a63:af1c:: with SMTP id w28mr54159096pge.372.1641608552345;
+        Fri, 07 Jan 2022 18:22:32 -0800 (PST)
+Received: from localhost.localdomain (c-98-35-249-89.hsd1.ca.comcast.net. [98.35.249.89])
+        by smtp.gmail.com with ESMTPSA id w2sm169050pgt.93.2022.01.07.18.22.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 07 Jan 2022 18:22:31 -0800 (PST)
+From:   "Yichun Zhang (agentzh)" <yichun@openresty.com>
+To:     yichun@openresty.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] bpf: btf: Fix a var size check in validator
+Date:   Fri,  7 Jan 2022 18:22:12 -0800
+Message-Id: <20220108022212.962-1-yichun@openresty.com>
+X-Mailer: git-send-email 2.17.2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 05:52:48PM -0800, Jaegeuk Kim wrote:
-> On 01/07, Eric Biggers wrote:
-> > Hi Jaegeuk,
-> > 
-> > On Tue, Jan 04, 2022 at 01:24:16PM -0800, Jaegeuk Kim wrote:
-> > > DIO preallocates physical blocks before writing data, but if an error occurrs
-> > > or power-cut happens, we can see block contents from the disk. This patch tries
-> > > to fix it by 1) turning to buffered writes for DIO into holes, 2) truncating
-> > > unwritten blocks from error or power-cut.
-> > > 
-> > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > ---
-> > >  fs/f2fs/data.c  |  5 ++++-
-> > >  fs/f2fs/f2fs.h  |  5 +++++
-> > >  fs/f2fs/file.c  | 27 ++++++++++++++++++---------
-> > >  fs/f2fs/inode.c |  8 ++++++++
-> > >  4 files changed, 35 insertions(+), 10 deletions(-)
-> > 
-> > Unfortunately, this patch doesn't completely fix the uninitialized data
-> > exposure.  The problem is that it only makes DIO writes fall back to buffered
-> > writes for holes, and not for reserved blocks (NEW_ADDR).  f2fs's reserved
-> > blocks are *not* the same as the unwritten extents that other filesystems have;
-> > f2fs's reserved blocks have to be turned into regular blocks before DIO can
-> > write to them.  That immediately exposes them to concurrent reads (at least
-> > buffered reads, but I think DIO reads too).
-> 
-> Isn't it resolved by i_size which gives the written blocks only?
-> 
+The btf validator should croak when the variable size is larger than
+its type size, not less. The LLVM optimizer may use smaller sizes for
+the C type.
 
-I'm not sure what you mean, but this is for non-extending writes, so i_size
-isn't relevant.
+We ran into this issue with real-world BPF programs emitted by the
+latest version of Clang/LLVM.
 
-- Eric
+Fixes: 1dc92851849cc ("bpf: kernel side support for BTF Var and DataSec")
+Signed-off-by: Yichun Zhang (agentzh) <yichun@openresty.com>
+---
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 9bdb03767db5..2a6967b13ce1 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3696,7 +3696,7 @@ static int btf_datasec_resolve(struct btf_verifier_env *env,
+ 			return -EINVAL;
+ 		}
+ 
+-		if (vsi->size < type_size) {
++		if (vsi->size > type_size) {
+ 			btf_verifier_log_vsi(env, v->t, vsi, "Invalid size");
+ 			return -EINVAL;
+ 		}
+-- 
+2.17.2
+

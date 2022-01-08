@@ -2,83 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D05B48816B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 06:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DE44881AB
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 06:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiAHFNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 00:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiAHFNy (ORCPT
+        id S231217AbiAHFeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 00:34:25 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:17913 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229708AbiAHFeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 00:13:54 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EA4C061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 21:13:54 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id CFED641982;
-        Sat,  8 Jan 2022 05:13:51 +0000 (UTC)
-From:   Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC MAINTAINERS updates for 5.17
-To:     SoC Team <soc@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Message-ID: <24ae6871-3e67-5c7f-2060-28048db439a2@marcan.st>
-Date:   Sat, 8 Jan 2022 14:13:49 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sat, 8 Jan 2022 00:34:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641620064; x=1673156064;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rur0/nZv+Mm/lbEL32xKYlmQrxtSdjeSo48l1xph7k8=;
+  b=jjkZLFZMHk8L/E7zv84O+8hjotCGU4HCcqqa2NGm6871gfL5ghjNaFWN
+   d+v3mnOD7yR9mVliP5pnau7JXFmBqWmc4pDAPB2+VcXeLuepkWM9yJpxA
+   Lq/6B5mm0sz41GZ24UFFYQc3QNMimtWnSGXgyeitROeaKQMCicWAhA+iS
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Jan 2022 21:34:24 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 21:34:24 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 7 Jan 2022 21:34:23 -0800
+Received: from [10.50.8.216] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 7 Jan 2022
+ 21:34:19 -0800
+Message-ID: <b36d92de-ae0b-243d-f2de-e12fe730f6c4@quicinc.com>
+Date:   Sat, 8 Jan 2022 11:04:16 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [PATCHv6 4/5] tracing: Add register read/write tracing support
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        gregkh <gregkh@linuxfoundation.org>, <quic_psodagud@quicinc.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+References: <cover.1638858746.git.quic_saipraka@quicinc.com>
+ <76983c26d889df7252a17017a48754163fb6b0d5.1638858747.git.quic_saipraka@quicinc.com>
+ <20220106131824.073fbe5c@gandalf.local.home>
+ <df9b5a82-5f00-f3ec-14cf-0b212be2a7a7@quicinc.com>
+ <20220107095638.7d81c1b9@gandalf.local.home>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220107095638.7d81c1b9@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SoC folks,
+Hi,
 
-Please merge this trivial MAINTAINERS change for 5.17.
+On 1/7/2022 8:26 PM, Steven Rostedt wrote:
+> On Fri, 7 Jan 2022 10:40:05 +0530
+> Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
+>
+>> Hi Steve,
+>>
+>> On 1/6/2022 11:48 PM, Steven Rostedt wrote:
+>>> This should not be in the kernel/trace directory. It should be in the
+>> Hmm these are called from low level generic io header file
+>> (include/asm-generic/) where
+>> we wouldn't have any Kconfig to control this feature flexibly and as we
+>> can have this as
+>> a generic feature selectable by other architectures, wouldn't this be
+>> suited in kernel/trace?
+> Isn't there a place for generic rwmmio code?
 
-This commit was waiting on the watchdog driver to be merged, but I only
-just now realized that it silently did. Sorry for the last-minute pull.
-If this can't make it into the 5.17 merge window, it can be added as a
-fix later instead.
+I am thinking of moving it to lib/ similar to an interface of 
+logic_iomem.c which
+Arnd had initially suggested to look at.
 
-The branch is based on asahi-soc-dt-5.17-v2 to avoid a merge conflict
-with other changes that happened there.
+>> I thought you were ok with the folder structure in the initial versions
+>> of the series?
+> Sorry, I missed the C file in kernel/trace. The files in kernel/trace tend
+> to be specific for the internals of tracing. This C file is more to hold
+> helper functions for mmio, which to me should be someplace for mmio code.
+> Perhaps in mm/ ?
+>
 
--Hector
+Oh ok, mm would not be the right fit as it is memory management and this 
+is about
+memory mapped IO, let me try and move it to lib/ as done for logic_iomem.c
 
-The following changes since commit 301f651614c3396d711a8cc3f92f6fb95b12f5c5:
-
-  dt-bindings: mailbox: apple,mailbox: Add power-domains property
-(2021-12-15 20:20:38 +0900)
-
-are available in the Git repository at:
-
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-maintainers-5.17
-
-for you to fetch changes up to 6dc701ee9fabfc929cae2d7acc957bf38e4c3264:
-
-  MAINTAINERS: Add Apple watchdog to ARM/APPLE MACHINE SUPPORT
-(2022-01-08 14:10:03 +0900)
-
-----------------------------------------------------------------
-Apple SoC MAINTAINERS updates for 5.17.
-
-Adds the watchdog driver MAINTAINERS changes. The driver itself is
-already merged.
-
-This branch is based on asahi-soc-dt-5.17-v2 to avoid a merge conflict.
-
-----------------------------------------------------------------
-Sven Peter (1):
-      MAINTAINERS: Add Apple watchdog to ARM/APPLE MACHINE SUPPORT
-
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
+Thanks,
+Sai

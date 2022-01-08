@@ -2,241 +2,736 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3CD4885FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 21:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D99488603
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 21:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbiAHUsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 15:48:11 -0500
-Received: from mail-db8eur05on2124.outbound.protection.outlook.com ([40.107.20.124]:1633
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232838AbiAHUsK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 15:48:10 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uh0EGhC6b49gea+57GZymtBH8SoIhn5utqQv3M/kNTNGsJ8b1+FlAdxvRO65XkeiorrVNqDljj3qiqi7Jj/Rjvr3FjHFuFZ5qSbREO17eNvC56tOx7WAMkYremXU0kYp/u419k5JmSdkU/0eoHqb4TKPozBTFoylMYlhFptG8iy2vNzAzTkmV1R0X19kzgHR3TwAkEBHp5HbB7EezxiuLklEjo9mocoH+u/+nticymgFJVLUHn/Ir/Fq5JXgcZnHJHhnWdYaNh9maFRnJa0ZI5jBU0ynxE2Bnfm8S6tt6lnQkKpsTKab1z2JzJd1Mx1mMONGQGNb0DUhXitjkdKH0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Qlkw7xq7FN8aZFiPXwN2F9WZxHtD3vlK4CXvNHRRBg=;
- b=Qj25K/NK6SxDlY0LkViu+HMDR84FuG1V3L8Xd9WSQ4YTTIkri37Pb20seE7JWYv1u1ltonrzPecTVwL0vpNQEaiRw9ZTYgBihdMIY93W5y2hhhlma2iucbvJr/U9a5G8LjOqHKEXduu57ZQ9PHi/1eTgotW0F2xI3RFTZ5CsDhsaqOS8yaCJj54JdHVpZAHGzOHm6qrrvHwTMMgl1vqEcrq1QOgoTEIL/o7AvGmgdaonQvedEXz/P+SUZKTCfvUSvcN9RyL5Xsx784qEG6OPRFve2s3bcmZlOnfTbzGOTwQdKzw0rPhYYAjr7g8u12Nte6kM6/VfUSTTCUhT+CMNEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
- header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Qlkw7xq7FN8aZFiPXwN2F9WZxHtD3vlK4CXvNHRRBg=;
- b=ntQhcZJ0jEYtMo7UG9Y4z/dyBtqnsVGfIuQnO9hC+SlVzAkcwb1zUDV8j7/OQK24gPEEGwlFNHECBnne5OjdGD4CLX+BRuio4iMGXMlpB36o3aRYjbNAAOWmzxjQv3IetRUj5IjB/7sBpejewNmk1aizTa9UD/Lz/262L6+ofKw=
-Received: from AM6PR06MB4691.eurprd06.prod.outlook.com (2603:10a6:20b:37::25)
- by AS8PR06MB8149.eurprd06.prod.outlook.com (2603:10a6:20b:3d0::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Sat, 8 Jan
- 2022 20:48:03 +0000
-Received: from AM6PR06MB4691.eurprd06.prod.outlook.com
- ([fe80::8cee:862c:c31b:fa97]) by AM6PR06MB4691.eurprd06.prod.outlook.com
- ([fe80::8cee:862c:c31b:fa97%6]) with mapi id 15.20.4867.011; Sat, 8 Jan 2022
- 20:48:03 +0000
-From:   ZHIZHIKIN Andrey <andrey.zhizhikin@leica-geosystems.com>
-To:     Rouven Czerwinski <r.czerwinski@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "peng.fan@nxp.com" <peng.fan@nxp.com>,
-        "ping.bai@nxp.com" <ping.bai@nxp.com>,
-        "alice.guo@nxp.com" <alice.guo@nxp.com>,
-        "agx@sigxcpu.org" <agx@sigxcpu.org>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "leonard.crestez@nxp.com" <leonard.crestez@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
-        "daniel.baluta@nxp.com" <daniel.baluta@nxp.com>,
-        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "hongxing.zhu@nxp.com" <hongxing.zhu@nxp.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
-        "martink@posteo.de" <martink@posteo.de>,
-        "aford173@gmail.com" <aford173@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "shengjiu.wang@nxp.com" <shengjiu.wang@nxp.com>,
-        "qiangqing.zhang@nxp.com" <qiangqing.zhang@nxp.com>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jun.li@nxp.com" <jun.li@nxp.com>
-Subject: RE: [PATCH v3 2/2] arm64: dts: imx8m: define proper status for caam
- jr
-Thread-Topic: [PATCH v3 2/2] arm64: dts: imx8m: define proper status for caam
- jr
-Thread-Index: AQHX676SBO3pDQeWRkCE6ZrH5/CEf6xWCQMAgAAYObCAAV4TAIAAB1fggAAc0QCAAicakA==
-Date:   Sat, 8 Jan 2022 20:48:03 +0000
-Message-ID: <AM6PR06MB4691D4FCA4D82284E70A9F53A64E9@AM6PR06MB4691.eurprd06.prod.outlook.com>
-References: <20211111164601.13135-1-andrey.zhizhikin@leica-geosystems.com>
-         <20211207230206.14637-1-andrey.zhizhikin@leica-geosystems.com>
-         <20211207230206.14637-3-andrey.zhizhikin@leica-geosystems.com>
-         <aa84249b7e099cf23b49016433b22ae541c0a41d.camel@pengutronix.de>
-         <AM6PR06MB469100A5D7A069AF84A83EEFA64C9@AM6PR06MB4691.eurprd06.prod.outlook.com>
-         <30312d09effae6b78309723a7261f85915b8d5b8.camel@pengutronix.de>
-         <AM6PR06MB46919E01996D1F1DE326306DA64D9@AM6PR06MB4691.eurprd06.prod.outlook.com>
- <b5e37dc573f9cefc83f73f1113a632a29ba9a833.camel@pengutronix.de>
-In-Reply-To: <b5e37dc573f9cefc83f73f1113a632a29ba9a833.camel@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 35d85a73-3045-467c-6867-08d9d2e82a7b
-x-ms-traffictypediagnostic: AS8PR06MB8149:EE_
-x-microsoft-antispam-prvs: <AS8PR06MB814961D22D4CC6F05D222D1AA64E9@AS8PR06MB8149.eurprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vdQOH5RDSMronN9Vd1ELxzKI85i1kbdM83/ttrDuiVU9RHGudP/abJEf4yNRE2UVi5LEDdNQaQyyN4H+P2WNC9xI7UqBZMR4xlQC0eNR4iNIGeMiOLIcIex4Hmgz07f69z9h49/WF9VtppFF/m/bbYZrzBqWYI0enNvcmpI5xwuW/BWupDKeCHgmzOyVNAA2r07svoH5BG4b2Zitjhl68qImbzkDoIV8nAd52dibkbAbiU/O5Iof3teCBm2SO2m9ucA0izpZ1vyxz7qMWVGsez+MGRxDGwOtya2YCM0h/41RRJ4fBlMlrpUm915WUrZS9B8q7KIikMzygaIYyUGxbF0CXeTN7VNvTbAtFzLnDyDqLQa1+78GGF+WofMlk0qOOHBEoRydg9MwLinoRAtry6ICnNEV3rIQil4GoOZhgckA4rhYRnq0rewojLSz54M7XeY69GuHlVh2NZEqEkT/iK5mAVL6ISmyH2dft714Wsfx28qsDr9CqlJpu0CpFDMMAc6FUYf1na3sKCvAFFWxE9nLTumSInt+Hv608adzpEpWyjZu7ZlZ+vMYoc0IuUHvJvXvMn6sD53b1CdwBMeF1WfG631IL7/+LxdrMT12iNRzcWxJNmCcWNcQt4g1t80cxxlkYhUuuOMOP7rQnDu7HaXS8l+5xI1UmXnOKvAOAT3VucGNg98f0RFdyEC/AQtkeFbbQlhuOQ9uq37FasoctfJk4pTxnXIzFToax6jWJGxX/jyzKCnzsAivJqZHkoMMk6MnrIcHeGcZC1AGTaX/UgbBQph6GsnWJMp0h3mMdd3ZUOL94aq1SzXGxrGlW3TV
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR06MB4691.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(122000001)(66476007)(966005)(7696005)(26005)(33656002)(186003)(8936002)(7406005)(54906003)(110136005)(316002)(38100700002)(86362001)(83380400001)(55016003)(4326008)(5660300002)(508600001)(9686003)(66446008)(52536014)(2906002)(6506007)(71200400001)(66946007)(66556008)(76116006)(7416002)(38070700005)(8676002)(64756008)(32563001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M0RoejBoTXM2R09wdnM3UWxNYXQ2UE54MTJrWDhqUWIvUzhUZDBBNGwyT1Rr?=
- =?utf-8?B?a2xVUmw2UXpKVndTRlJTWE4rc3dVdDAvU0hOWm0zS25VWjc5UklNOWlLcVhz?=
- =?utf-8?B?TnZxam5ESi95cFR2d1dta2ZqeE02YzNOWEhLL3ppV1JNWDhLQS9zMHpoVTFj?=
- =?utf-8?B?Q0lpazUrQWhDUFhxRnhvQVJtZmFWeGFRSWx2d0xDS2VVOFdQM3dDREFGVjlT?=
- =?utf-8?B?d2RlaUpoMzh1KzlCZjg1TG1TT3V5N21KaHpMVGRYdXRWUzUrSW8veWkvUEV3?=
- =?utf-8?B?U3E2NURyWkFxRkZhKzZyRVlqUmUxVW1rVzR0SjJLWkhvR1dsRzM4dzg1d29n?=
- =?utf-8?B?TGVUSTJYRzYrazVPKzUwZ25EYUVLYkhNR1NUOU84UVBGSmxlM2ZZSXNVT1JR?=
- =?utf-8?B?MDdsUXRpSDJkZ1ZMc3I4UEZsTHZjc1I0K1dwNlAwYzFKYXR6U2Q3NnlCYis0?=
- =?utf-8?B?RDdONFhSZmp4VUhWbDhEbm9zTkJuUWdZd2MzWDhnNEVqTUNJOUEyM1VKSTh5?=
- =?utf-8?B?SThXTFpZSGVxdllkd1hVS2g2NEE1ZWt5a2pPM0ZZdUhJc3hUL3J5UHg5Ri9G?=
- =?utf-8?B?aXFDbngwVFFtSVh5bXgrdGo1L2Y1Y3lVdWRNZ1pqK25EWkNoLzVJZkIrWWMw?=
- =?utf-8?B?Uzh0UzNxQndxUm5iajRNUm1Mc2VEWEdzMURpbXV5NFN1ZTk5eWdnZ09uRCs2?=
- =?utf-8?B?NUdTMmhKaHBsalIyQSs4V2NvOXNBbWNhZWN1NitocGU0MmRaVEdtdkpKMDhK?=
- =?utf-8?B?Vkg1QnJ3cXI1ZG1rcHJTckloOGFEa3ZpeEc4OEh1VExVQk56TVpjWGZVdG8y?=
- =?utf-8?B?cGRURnRSQnNaU0N0bjFGYnEzSVY0UU1hTWcxcmVRcmI3TXh0cFZuRU1QTUd4?=
- =?utf-8?B?M0FmWUJ1V2ZUeDlncGtwb0t6NXNFTzRwMVYwbTVwaXNEVkJoNEtJRmxlWDRY?=
- =?utf-8?B?L21RaUNHVTByT3dINDZYQm55SFM0NnJMdlpQSVY4Sjk5bFV3c3EzTDFVZWZJ?=
- =?utf-8?B?QzhmSnBPeU5FM1JrUU52S2NRbFZCL1hkUzUyRTZ3ZkZocTIxbTZPN1dqWFpq?=
- =?utf-8?B?S2VvNDVOYmRJYXYrYVhFYnhzZDZSdjA0SlBRekJaZEY2WmZDZlhCUUVscXY2?=
- =?utf-8?B?V2N3S2R4K21HWjZJUEYzd1J0UDFYc1p4QXZFYi9zZ2tUdzl1TGJtVHBBWlp3?=
- =?utf-8?B?dUhRdGUxNUFnRXluL0JIdmR2dE5UT1VRZ002V2VoMXl0eGJiSUhRd3RhcGR3?=
- =?utf-8?B?NzZwbk1XSmlJUm0xTFZtclRMb0tVeVplN0lPcTFQdURQcXlNZHVXd1hUaFE1?=
- =?utf-8?B?R0QwTGJYRWdzR1JNdXFONE9wVmtYUTdqOVdDRXpPRytXU2I5NmhzZ1N5cmlK?=
- =?utf-8?B?YXBFVThuVWQ3aUdNYUx1ZkphWmdIcHF1K0ZiMmRKaEFhczBOaVh0d04xdy9R?=
- =?utf-8?B?UTNDaTZ3ekxtL1FqeHlEM1c0N2lXSCtmajhLRHdnOGJkOHdkTjdYblpqSU5y?=
- =?utf-8?B?aEV2ME1wREZhSUQrOWdncUVZTUZaNnMwUW1pc2ZmSldoWWttbGxOQ2prbTB0?=
- =?utf-8?B?eXo1cC9OVitUT05uOWdVa3F0RjFIR2hTYXNweDZrcDRHb1YyTWtXQ05XNjNx?=
- =?utf-8?B?MVZtaHN4Q3NmbmlLUW9ORzFJUzFseXhVeDJlR0xpK3Z6RmluREo4UXdubUsx?=
- =?utf-8?B?N3FJT3MrMlkvWkkxbjlHT2tkbzF4ajJjUm5OQ2F2UkZkSlhseFQzYk9ueGJS?=
- =?utf-8?B?U3hONEp0Z3hvOUVTNWovYzY1UTJ2dDQ3Z0pXc3hoS2dHdlYvMW85Q2dXbmln?=
- =?utf-8?B?THJMbVNaQ3NUcno3OG82aUJxNTJKc1FPL2Z4b1lwdWMwd0tScW1uR09GR0pL?=
- =?utf-8?B?K1N4NGg0Z3hzSXdkejJaR2EyMDVMbXZzd0NhV2RwcitZNEFNVGNyaWxlS1A3?=
- =?utf-8?B?OHN5WUpPTkFXOFFRbFFrRlF4aVNTbDNRRW83WGlQekdiSEYzOC9UazVobFQy?=
- =?utf-8?B?dytOaWUyNzJVRlNtSlpEM3JucWd5ZGErVVdhKzlTbHlLSDkvTjdkR1BzUlFv?=
- =?utf-8?B?WElPRkVhSzRQREhhQ3ZFa2tHeHFZYTJVRnpVVDJYUTcwelNXeGlCcTExZ2xG?=
- =?utf-8?B?NHpmM1AxdUpxSFRYTXRlRHVXNGgrR29zenpaU3RKWE9OdUQ5RGFsc3ljTlhZ?=
- =?utf-8?B?TElwcWNxS2lNdHU4YnFIR0pXRDZCVEw3c0M3ekdVbjQ3MXRtU1VGTHhGbzdO?=
- =?utf-8?B?em1zZ2NYcU5UTXFoVyt1UjlSZDZub2xET0htZFBQbkp6RDJZTlBGajFGM2gx?=
- =?utf-8?Q?gOTsg6wuDx+Tq6AfpX?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232890AbiAHUxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 15:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232867AbiAHUxa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 15:53:30 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C70C06173F;
+        Sat,  8 Jan 2022 12:53:30 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id c10so7871863qte.2;
+        Sat, 08 Jan 2022 12:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LgT50u2L1LhL7D5mFr3gqfPtf3g2KUB4mUhB0p/NLoM=;
+        b=OJsvfKT2sSlfdYPf1b3oxCUxRy3AkqrgaSPR7Wiby4UvCfKLNVE1K18vG4zSMnko/m
+         kGiodSOZjEL6Kl9AvGQXveiyvfezNmtrg8MRf6iGQiXq7+8h1yOxj/nUILTNKJvwAJRr
+         wwTriF30ll3oIztmvr4JgijAE+/xUChApcvqfB0yUtwOIO+sbT6/+PjJkYpEnxEmhpgp
+         WQoIbEnLMXx3O2Iy55DIBxKAs1y5d4n1RD2+z92ME599H2xFbyvaF19F9XrkVfzFRKkB
+         X2fDEvJ14LXOL8sGSkth2rkMH8rLG13zJULieTQ2vKsIiX7ld5+q15Rc3peq7ZHToxI0
+         EjcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LgT50u2L1LhL7D5mFr3gqfPtf3g2KUB4mUhB0p/NLoM=;
+        b=Sfb/IWSaMYGuLi6NoXS2vj/ZlfOjW46Uhh+cXhDKhOsegC7SBz+pzfiDwPt+/REqeA
+         4ElxekP/aONKjqEkHgxlZiYDCr8kjRZ/vy6he5r9mN9/vxN221Ju9wlEOJT7iB7ZF3o1
+         s75mdRKBpH7tbN5wHivhX6styW2KXYy8ih/qitLBFVCYaAIFsFQQuImMxkVHdDFGrg/c
+         yXRKM/HOfbV+7+gx5KK5ubmKLfmTMkd97KPEzv1JHWFBBY/BMTuPj1Yo2KozfG9cwc1e
+         liRDkyfBqjFLwOpXuxURlqvO5XTiytD9jMCDVEuWQzuEz1KRNgRL5SxfTkzu0bCn2Ahb
+         9vxQ==
+X-Gm-Message-State: AOAM533C54wUyfNB7Kefa7MJls5/mZNZn2WD/HRU56r94fl2q3mBXs8p
+        BaRHl/3aYx/PoQbUScasHd4=
+X-Google-Smtp-Source: ABdhPJxD+6hXecBHF735GyBZ9IkzBXlFxqPqzSEqqZex7EDJvF8fT3QsGJKunqxPu25jGZm+XjQkmA==
+X-Received: by 2002:ac8:7d0f:: with SMTP id g15mr3201706qtb.411.1641675208935;
+        Sat, 08 Jan 2022 12:53:28 -0800 (PST)
+Received: from shaak.. (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
+        by smtp.gmail.com with ESMTPSA id p16sm1650377qtx.19.2022.01.08.12.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 12:53:28 -0800 (PST)
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     liambeguin@gmail.com, peda@axentia.se, jic23@kernel.org,
+        andy.shevchenko@gmail.com, lars@metafoo.de
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: [PATCH v12 00/16] iio: afe: add temperature rescaling support
+Date:   Sat,  8 Jan 2022 15:53:03 -0500
+Message-Id: <20220108205319.2046348-1-liambeguin@gmail.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR06MB4691.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35d85a73-3045-467c-6867-08d9d2e82a7b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2022 20:48:03.5942
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BkDzPeH32kUuf01wJWXTn4aVcmQE62ZJUocUz+9GbKmNQYk3VHjiCsIaYWdpZzJxo+jcTamo68vOvcQb2r+JD5fXuui3dlCCPAt3n4coS5ecwxNlvkMoVLwQ2hm/pPaF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB8149
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gUm91dmVuLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFJv
-dXZlbiBDemVyd2luc2tpIDxyLmN6ZXJ3aW5za2lAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IEZy
-aWRheSwgSmFudWFyeSA3LCAyMDIyIDEyOjU2IFBNDQoNCltzbmlwXQ0KDQo+IA0KPiBZZXMsIHVw
-c3RyZWFtIFRGLUEgZG9lcyBub3QgaW1wbGVtZW50IHRoZSBOWFAgc3BlY2lmaWMgU0lQcyB0bw0K
-PiBjb21tdW5pY2F0ZSB3aXRoIHRoZSBST00gY29kZSB0byBkbyBmdXJ0aGVyIGltYWdlIGF1dGhl
-bnRpY2F0aW9uLg0KPiBUaGF0cyBhbHNvIHRoZSByZWFzb24gd2h5IGFsbCBKUnMgYXJlIHJlbGVh
-c2VkIHRvIG5vcm1hbCB3b3JsZCwgdGhlcmUNCj4gaXMgbm8gcG9zc2libGUgSEFCIHVzZSBhZnRl
-ciBURi1BIGhhcyBzdGFydGVkLg0KPiANCj4gPiBJJ3ZlIGJlZW4gZm9sbG93aW5nIHRoZSBidWls
-ZCBkb2N1bWVudGF0aW9uIGluIFUtQm9vdCwgd2hlcmUgdGhlIGRvd25zdHJlYW0NCj4gPiBURi1B
-IGlzIGxpc3RlZCBhcyBidWlsZCBwcmVxdWlzaXRlcyBbMl0gd2l0aG91dCBhbnkgbWVudGlvbmlu
-ZyBvZiB1cHN0cmVhbSwNCj4gPiBoZW5jZSBJIHJlY2VpdmVkIGEgcmVhZG91dCB0aGF0IG1hdGNo
-ZWQgdGhlIEJvb3RST00gIjEtdG8tMSIuDQo+IA0KPiBZZXMsIHNpbmNlIHRoZSBkb3duc3RyZWFt
-IFRGLUEgaXMgcmVxdWlyZWQgdG8gYXV0aGVudGljYXRlIGZ1cnRoZXINCj4gaW1hZ2VzLg0KPiAN
-Cj4gQXNpZGUgZnJvbSB0aGlzIHRoZSBib290cm9tIEhBQiBpbnRlcmZhY2Ugb24gaS5NWDhNUSB3
-YXMgYnJva2VuIGluDQo+IGludGVyZXN0aW5nIHdheXMsIEkgaGFkIHRvIGltcGxlbWVudCBwYXJz
-aW5nIG9mIHRoZSBIQUIgc3RhdHVzIFNSQU0NCj4gYXJlYSBieSBoYW5kIHdpdGhpbiBiYXJlYm94
-Lg0KPiANCj4gPiBJIGJlbGlldmUgdGhhdCBpZiB0aGUgaW5mb3JtYXRpb24gZnJvbSBOWFAgcmVn
-YXJkaW5nIEpSMCByZXNlcnZhdGlvbiBmb3INCj4gPiBIQUIgaXMgY29ycmVjdCAoYW5kIEkgaGF2
-ZSBubyByZWFzb25zIHRvIGRvdWJ0IGl0KSwgdGhlbiB1cHN0cmVhbSBURi1BDQo+ID4gc2hvdWxk
-IGJlIGFkYXB0ZWQgaW4gb3JkZXIgZm9yIEhBQiBmZWF0dXJlIHRvIHdvcmssIGFuZCBpbiB0aGF0
-IGNhc2UgdGhpcw0KPiA+IHBhdGNoIGJyaW5ncyBjb3JyZWN0IEhXIHN0YXRlIGRlc2NyaXB0aW9u
-IGFzIHNlZWluZyBmcm9tIExpbnV4Lg0KPiANCj4gSlIwIGZvciBIQUIgaW4gUy1Xb3JsZCBtYWtl
-cyBzZW5zZSB0byBtZSwgb3RoZXJ3aXNlIHRoZSBib290cm9tIHdpbGwNCj4gcHJvYmFibHkgcmVm
-dXNlIHRvIHdvcmsgd2l0aCB0aGUgSlIuDQo+IA0KPiA+IEFuZCBpbiBjb250cmFyeSwgaWYgdGhl
-IHVwc3RyZWFtIFRGLUEgaXMgbm90IGFkanVzdGVkIHRvIGluY2x1ZGUgSEFCDQo+ID4gc3VwcG9y
-dCAtIHRoZW4gYXBwbHlpbmcgdGhpcyBwYXRjaCB3b3VsZCBlZmZlY3RpdmVseSBqdXN0ICJyZW1v
-dmUiIG9uZQ0KPiA+IEpSIGRldmljZSwgc3RpbGwga2VlcGluZyAyIGFkZGl0aW9uYWwgYXZhaWxh
-YmxlIG5vZGVzIGZvciBIVyBjcnlwdG8NCj4gPiBvcGVyYXRpb25zIGluIEtlcm5lbCwgd2l0aCBh
-ZGRlZCBiZW5lZml0IHRoYXQgYm90aCB1cHN0cmVhbSBhbmQNCj4gPiBkb3duc3RyZWFtIFRGLUEg
-Y2FuIGJlIHVzZWQgZHVyaW5nIHRoZSBib290IHdpdGhvdXQgc2VlaW5nIGlzc3VlcyBsYXRlcg0K
-PiA+IGluIHRoZSBLZXJuZWwuDQo+IA0KPiBFdmVuIHdpdGggdGhlIGRvd25zdHJlYW0gVEYtQSB0
-aGVyZSBpcyBubyByZWFzb24gdG8ga2VlcCBKUjAgYXNpZ25lZCB0bw0KPiB0aGUgc2VjdXJlIHdv
-cmxkLCB1bmxlc3MgeW91IGFyZSBydW5uaW5nIE9QLVRFRS4gSlIwIGFzc2lnbmVtZW50IGZvcg0K
-PiBIQUIgc2hvdWxkbid0IGJlIHJlcXVpcmVkIGFmdGVyIHRoZSBib290bG9hZGVyIGhhcyBydW4s
-IHVubGVzcyB5b3Ugd2FudA0KPiB0byBIQUIgYXV0aGVudGljYXRlIGltYWdlcyBmcm9tIGEgcnVu
-bmluZyBMaW51eCBrZXJuZWwuDQoNClRoZW4gdGhpcyBwcm9iYWJseSBzaG91bGQgYmUgY29tbXVu
-aWNhdGVkIGluIFUtQm9vdCBhcyB0aGVyZSBpcyBhDQpwYXRjaHNldCBwcm9wb3NlZCBpbiBVLUJv
-b3QsIGFuZCBvbmUgb2YgdGhlIHBhdGNoZXMgaW4gdGhhdCBzZXJpZXMgWzFdDQpkaXNhYmxlZCBK
-UjAgYXMgd2VsbC4gT25jZSBtZXJnZWQgLSB0aGUgSlIwIGlzIG5vdCBnb2luZyB0byBiZSBhdmFp
-bGFibGUNCmZvciBMaW51eCwgcmVnYXJkbGVzcyBvZiB0aGUgZmFjdCB0aGF0IFRGLUEgd291bGQg
-c2V0IERJRHMgdG8gMHgxLg0KDQo+IA0KPiBUaGUgcmVhc29uIE5YUCBoYXJkY29kZXMgdGhlIGNv
-bmZpZ3VyYXRpb24gZG93bnN0cmVhbSBpcyBvZiBjb3Vyc2UgdG8NCj4gc3VwcG9ydCBIQUIgJiBP
-UC1URUUsIGJ1dCB0aGlzIGlzIHN0aWxsIG5vdCBhIHJlYXNvbiB0byBoYXJkY29kZSB0aGlzDQo+
-IGFzc2lnbmVtZW50IGludG8gdGhlIGtlcm5lbCBkZXZpY2UgdHJlZS4gVGhleSBwcm9iYWJseSBh
-bHNvIGhhcmRjb2RlIGl0DQo+IGluIHRoZWlyIGRvd25zdHJlYW0ga2VybmVsIHZlcnNpb25zLg0K
-DQpBY3R1YWxseSwgSSd2ZSBjaGVja2VkIHRoZSBkb3duc3RyZWFtIE5YUCBLZXJuZWwgdmVyc2lv
-biwgYW5kIG5vbmUgb2YNCnRoZSBKb2IgUmluZyBub2RlcyAoaW5jbHVkaW5nIEpSMCkgYXJlIGRp
-c2FibGVkIHRoZXJlLg0KDQo+IA0KPiBJIGNhbiB1bmRlcnN0YW5kIHRoYXQgaXQgc2VlbXMgZWFz
-aWVyIHRvIGhhcmRjb2RlIHRoaXMgaW4gdGhlIGtlcm5lbCwNCj4gYnV0IGFzIEkgc2FpZCBiZWZv
-cmUsIGlmIHlvdSBhcmUgcnVubmluZyBPUC1URUUgeW91IG5lZWQgdG8gYWRqdXN0IHRoZQ0KPiBE
-VCBhbnl3YXkgc2luY2Ugbm9kZXMgbmVlZCB0byBiZSBhZGRlZCBhbmQgeW91IG1pZ2h0IGFzIHdl
-bGwgYWRqdXN0IHRoZQ0KPiBqb2JyaW5nIGNvbmZpZ3VyYXRpb24gdGhhbi4NCg0KTXkgZmlyc3Qg
-dmVyc2lvbiBvZiB0aGlzIHBhdGNoIGhhcyBiZWVuIHRhcmdldGluZyBkeW5hbWljIHJlZ2lzdGVy
-DQpyZWFkb3V0IHRvIGNoZWNrIGlmIERJRCBpcyBzZXQgZm9yIGVpdGhlciBTIG9yIE5TIFdvcmxk
-cywgYnV0IHRoYXQgd2FzDQpyZWplY3RlZCBkdWUgdG8gdW5yZWxpYWJsZSByZWFkb3V0IGluIEhX
-LiBIZW5jZSB0aGlzIGF0dGVtcHQgdG8NCnN0YXRpY2FsbHkgZGlzYWJsZSBub2RlIHdhcyBtYWRl
-Lg0KDQpQbGVhc2Ugbm90ZSwgdGhhdCB0aGVyZSBhcmUgY29tYmluYXRpb25zIG91dCB0aGVyZSB3
-aGljaCBkbyBoYXZlIEhBQiwNClRGLUEgYnV0IG5vIE9QLVRFRS4gSW4gdGhhdCBjYXNlIHBhdGNo
-aW5nIERUIGlzIG5vdCBhbiBvcHRpb24sIGFuZA0Kd291bGQgY2F1c2UgdGhlIHByb2JpbmcgZXJy
-b3IgYXQgYm9vdC4NCg0KRnJhbmtseSBzcGVha2luZywgSSdtIG5vdCBzdXJlIGhvdyB0byBwcm9j
-ZWVkIHdpdGggdGhpcyBmdXJ0aGVyLi4uDQoNCkNsZWFybHksIHRoZXJlIGlzIGFuIGlzc3VlIHRo
-YXQgSlIgZGV2aWNlcyBhcmUgbm90IGF2YWlsYWJsZSBpbiBjZXJ0YWluDQpjb21iaW5hdGlvbiBv
-ZiBTVyBlbnRpdGllcyB0aGF0IGFyZSBzZXR0aW5nIGRpZmZlcmVudCBwZXJtaXNzaW9ucyBvbiBK
-UjoNCnVwc3RyZWFtIFRGLUEgZG9lcyBub3QgZG8gYW55IHJlc2VydmF0aW9uIGJ1dCBkb2VzIG5v
-dCBzdXBwb3J0IEhBQiAoYW5kDQp0aGlzIGlzIGFsaWduZWQgd2l0aCBjdXJyZW50IERUIG5vZGVz
-IGRlc2NyaXB0aW9uKTsgZG93bnN0cmVhbSBURi1BIGRvZXMNCnBlcmZvcm0gcmVzZXJ2YXRpb24g
-YW5kIHN1cHBvcnQgSEFCLCBidXQgZG9lcyBub3QgcmVsZWFzZSBKUjAgdG8gTlMtV29ybGQNCmNh
-dXNpbmcgZXJyb3Igb24gdGhlIGJvb3QgYXQgSlIgcHJvYmluZy4gU2luY2UgdGhvc2UgMiBjb21i
-aW5hdGlvbnMgYXJlDQpvcnRob2dvbmFsIC0gdGhlIG9ubHkgc29sdXRpb24gdGhhdCBJIHNlZSAo
-aW5jbHVkaW5nIHRoZSBwYXRjaCBwcm9wb3NlZA0KaW4gVS1Cb290IE1MKSBpcyB0byByZXNlcnZl
-IHRoZSBKUjAgZm9yIGFsbCBjb21iaW5hdGlvbnMsIGxvb3NpbmcgaXQgaW4NCkxpbnV4IGJ1dCBj
-b3ZlcmluZyBib3RoIFRGLUEgKEhBQiBhbmQgbm9uLUhBQikgYXQgdGhlIHNhbWUgdGltZS4NCg0K
-SWYgeW91IGhhdmUgYW55IG90aGVyIHN1Z2dlc3Rpb25zIGhlcmUgLSBJJ20gZnVsbHkgb3BlbmVk
-IHRvIHJlY2VpdmUgdGhvc2UhDQoNCj4gDQo+IEtpbmQgcmVnYXJkcywNCj4gUm91dmVuDQo+IA0K
-PiANCg0KUmVnYXJkcywNCkFuZHJleQ0KDQpMaW5rOiBbMV06IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL3UtYm9vdC8yMDIxMTIwNzA3NDEyOS4xMDk1NS0zLWdhdXJhdi5qYWluQG54cC5jb20vDQo=
+Jonathan, Peter, Andy,
+
+I left out IIO_VAL_INT overflows for now, so that I can focus on getting
+the rest of these changes pulled in, but I don't mind adding a patch for
+that later on.
+
+This series focuses on adding temperature rescaling support to the IIO
+Analog Front End (AFE) driver.
+
+The first few patches address minor bugs in IIO inkernel functions, and
+prepare the AFE driver for the additional features.
+
+The main changes to the AFE driver include an initial Kunit test suite,
+support for IIO_VAL_INT_PLUS_{NANO,MICRO} scales, and support for RTDs
+and temperature transducer sensors.
+
+My apologies Andy for misunderstanding your left-shift comments, I don't
+know where my head was at... Thanks for your patience!
+
+Thanks you all again for your time, and Happy New Year!
+Liam
+
+Changes since v11:
+- update commits with my personal email since all this work was done on
+  my own time
+- apply Peter's Reviewed-by to my local tree
+- fix use of units.h
+- make use of units.h more consistently in iio-rescale.c and in the
+  tests
+- fix #include ordering
+- treat 04/16 as a fix. Move it, and add a Fixes: tag
+- fix undefined behavior on left-shift operation
+- add comment about fract_mult with iio_str_to_fixpoint()
+- reword commit message for 14/16, based on Andy's comments
+
+Changes since v10:
+- apply Andy's suggestion for offset calculations
+- make use of units.h more consistently
+
+Changes since v9:
+- make use of linux/units.h
+- reorder commits, fix fract_log2 before merging fract
+- keep fractional representation when not overflowing
+
+Changes since v8:
+- reword comment
+- fix erroneous 64-bit division
+- optimize and use 32-bit divisions when values are know to not overflow
+- keep IIO_VAL_FRACTIONAL scale when possible, if not default to fixed
+  point
+- add test cases
+- use nano precision in test cases
+- simplify offset calculation in rtd_props()
+
+Changes since v7:
+- drop gcd() logic in rescale_process_scale()
+- use div_s64() instead of do_div() for signed 64-bit divisions
+- combine IIO_VAL_FRACTIONAL and IIO_VAL_FRACTIONAL_LOG2 scale cases
+- switch to INT_PLUS_NANO when accuracy is lost with FRACTIONAL scales
+- rework test logic to allow for small relative error
+- rename test variables to align error output messages
+
+Changes since v6:
+- rework IIO_VAL_INT_PLUS_{NANO,MICRO} based on Peter's suggestion
+- combine IIO_VAL_INT_PLUS_{NANO,MICRO} cases
+- add test cases for negative IIO_VAL_INT_PLUS_{NANO,MICRO} corner cases
+- force use of positive integers with gcd()
+- reduce risk of integer overflow in IIO_VAL_FRACTIONAL_LOG2
+- fix duplicate symbol build error
+- apply Reviewed-by
+
+Changes since v5:
+- add include/linux/iio/afe/rescale.h
+- expose functions use to process scale and offset
+- add basic iio-rescale kunit test cases
+- fix integer overflow case
+- improve precision for IIO_VAL_FRACTIONAL_LOG2
+
+Changes since v4:
+- only use gcd() when necessary in overflow mitigation
+- fix INT_PLUS_{MICRO,NANO} support
+- apply Reviewed-by
+- fix temperature-transducer bindings
+
+Changes since v3:
+- drop unnecessary fallthrough statements
+- drop redundant local variables in some calculations
+- fix s64 divisions on 32bit platforms by using do_div
+- add comment describing iio-rescaler offset calculation
+- drop unnecessary MAINTAINERS entry
+
+Changes since v2:
+- don't break implicit offset truncations
+- make a best effort to get a valid value for fractional types
+- drop return value change in iio_convert_raw_to_processed_unlocked()
+- don't rely on processed value for offset calculation
+- add INT_PLUS_{MICRO,NANO} support in iio-rescale
+- revert generic implementation in favor of temperature-sense-rtd and
+  temperature-transducer
+- add separate section to MAINTAINERS file
+
+Changes since v1:
+- rebase on latest iio `testing` branch
+- also apply consumer scale on integer channel scale types
+- don't break implicit truncation in processed channel offset
+  calculation
+- drop temperature AFE flavors in favor of a simpler generic
+  implementation
+
+Liam Beguin (16):
+  iio: inkern: apply consumer scale on IIO_VAL_INT cases
+  iio: inkern: apply consumer scale when no channel scale is available
+  iio: inkern: make a best effort on offset calculation
+  iio: afe: rescale: use s64 for temporary scale calculations
+  iio: afe: rescale: reorder includes
+  iio: afe: rescale: expose scale processing function
+  iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
+  iio: afe: rescale: add offset support
+  iio: afe: rescale: fix accuracy for small fractional scales
+  iio: afe: rescale: reduce risk of integer overflow
+  iio: afe: rescale: make use of units.h
+  iio: test: add basic tests for the iio-rescale driver
+  iio: afe: rescale: add RTD temperature sensor support
+  iio: afe: rescale: add temperature transducers
+  dt-bindings: iio: afe: add bindings for temperature-sense-rtd
+  dt-bindings: iio: afe: add bindings for temperature transducers
+
+ .../iio/afe/temperature-sense-rtd.yaml        | 101 +++
+ .../iio/afe/temperature-transducer.yaml       | 114 +++
+ drivers/iio/afe/iio-rescale.c                 | 296 +++++++-
+ drivers/iio/inkern.c                          |  40 +-
+ drivers/iio/test/Kconfig                      |  10 +
+ drivers/iio/test/Makefile                     |   1 +
+ drivers/iio/test/iio-test-rescale.c           | 711 ++++++++++++++++++
+ include/linux/iio/afe/rescale.h               |  36 +
+ 8 files changed, 1259 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-sense-rtd.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml
+ create mode 100644 drivers/iio/test/iio-test-rescale.c
+ create mode 100644 include/linux/iio/afe/rescale.h
+
+Range-diff against v11:
+ 1:  ae3cc93baee6 !  1:  a8ca9300ef2a iio: inkern: apply consumer scale on IIO_VAL_INT cases
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: inkern: apply consumer scale on IIO_VAL_INT cases
+    @@ Commit message
+         Make sure to always apply the scaling factor requested by the consumer.
+     
+         Fixes: 48e44ce0f881 ("iio:inkern: Add function to read the processed value")
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/inkern.c ##
+     @@ drivers/iio/inkern.c: static int iio_convert_raw_to_processed_unlocked(struct iio_channel *chan,
+ 2:  06f66e7f7403 !  2:  efaeceac8d87 iio: inkern: apply consumer scale when no channel scale is available
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: inkern: apply consumer scale when no channel scale is available
+    @@ Commit message
+         Make sure to always apply the scaling factor requested by the consumer.
+     
+         Fixes: adc8ec5ff183 ("iio: inkern: pass through raw values if no scaling")
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/inkern.c ##
+     @@ drivers/iio/inkern.c: static int iio_convert_raw_to_processed_unlocked(struct iio_channel *chan,
+ 3:  1717b82460c0 !  3:  8131208a4454 iio: inkern: make a best effort on offset calculation
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: inkern: make a best effort on offset calculation
+    @@ Commit message
+         cases without breaking implicit truncations.
+     
+         Fixes: 48e44ce0f881 ("iio:inkern: Add function to read the processed value")
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/inkern.c ##
+     @@ drivers/iio/inkern.c: EXPORT_SYMBOL_GPL(iio_read_channel_average_raw);
+ -:  ------------ >  4:  06202d8f6481 iio: afe: rescale: use s64 for temporary scale calculations
+ -:  ------------ >  5:  87b9d77f0d30 iio: afe: rescale: reorder includes
+ 4:  6fc26588f651 !  6:  e9bf09ca9703 iio: afe: rescale: expose scale processing function
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: expose scale processing function
+    @@ Commit message
+         In preparation for the addition of kunit tests, expose the logic
+         responsible for combining channel scales.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@
+    - #include <linux/gcd.h>
+    - #include <linux/iio/consumer.h>
+    - #include <linux/iio/iio.h>
+    -+#include <linux/iio/afe/rescale.h>
+    - #include <linux/module.h>
+    - #include <linux/of.h>
+    - #include <linux/of_device.h>
+      #include <linux/platform_device.h>
+      #include <linux/property.h>
+      
+    ++#include <linux/iio/afe/rescale.h>
+    + #include <linux/iio/consumer.h>
+    + #include <linux/iio/iio.h>
+    + 
+     -struct rescale;
+     -
+     -struct rescale_cfg {
+    @@ drivers/iio/afe/iio-rescale.c
+     +int rescale_process_scale(struct rescale *rescale, int scale_type,
+     +			  int *val, int *val2)
+     +{
+    -+	unsigned long long tmp;
+    ++	s64 tmp;
+      
+     -struct rescale {
+     -	const struct rescale_cfg *cfg;
+    @@ drivers/iio/afe/iio-rescale.c
+     +		*val2 = rescale->denominator;
+     +		return IIO_VAL_FRACTIONAL;
+     +	case IIO_VAL_FRACTIONAL_LOG2:
+    -+		tmp = *val * 1000000000LL;
+    -+		do_div(tmp, rescale->denominator);
+    ++		tmp = (s64)*val * 1000000000LL;
+    ++		tmp = div_s64(tmp, rescale->denominator);
+     +		tmp *= rescale->numerator;
+    -+		do_div(tmp, 1000000000LL);
+    ++		tmp = div_s64(tmp, 1000000000LL);
+     +		*val = tmp;
+     +		return scale_type;
+     +	default:
+    @@ drivers/iio/afe/iio-rescale.c
+      			    int *val, int *val2, long mask)
+      {
+      	struct rescale *rescale = iio_priv(indio_dev);
+    --	unsigned long long tmp;
+    +-	s64 tmp;
+      	int ret;
+      
+      	switch (mask) {
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_read_raw(struct iio_dev *indio
+     -			*val2 = rescale->denominator;
+     -			return IIO_VAL_FRACTIONAL;
+     -		case IIO_VAL_FRACTIONAL_LOG2:
+    --			tmp = *val * 1000000000LL;
+    --			do_div(tmp, rescale->denominator);
+    +-			tmp = (s64)*val * 1000000000LL;
+    +-			tmp = div_s64(tmp, rescale->denominator);
+     -			tmp *= rescale->numerator;
+    --			do_div(tmp, 1000000000LL);
+    +-			tmp = div_s64(tmp, 1000000000LL);
+     -			*val = tmp;
+     -			return ret;
+     -		default:
+    @@ include/linux/iio/afe/rescale.h (new)
+     +#ifndef __IIO_RESCALE_H__
+     +#define __IIO_RESCALE_H__
+     +
+    ++#include <linux/types.h>
+     +#include <linux/iio/iio.h>
+     +
+    ++struct device;
+     +struct rescale;
+     +
+     +struct rescale_cfg {
+ 5:  8e63c4036157 !  7:  865296d2bc4f iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: add INT_PLUS_{MICRO,NANO} support
+    @@ Commit message
+         Some ADCs use IIO_VAL_INT_PLUS_{NANO,MICRO} scale types.
+         Add support for these to allow using the iio-rescaler with them.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@
+    @@ drivers/iio/afe/iio-rescale.c
+      #include <linux/property.h>
+     +#include <linux/units.h>
+      
+    - int rescale_process_scale(struct rescale *rescale, int scale_type,
+    + #include <linux/iio/afe/rescale.h>
+    + #include <linux/iio/consumer.h>
+    +@@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
+      			  int *val, int *val2)
+      {
+    - 	unsigned long long tmp;
+    + 	s64 tmp;
+     +	s32 rem;
+     +	u32 mult;
+     +	u32 neg;
+    @@ drivers/iio/afe/iio-rescale.c
+      	case IIO_VAL_FRACTIONAL:
+     @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
+      		tmp *= rescale->numerator;
+    - 		do_div(tmp, 1000000000LL);
+    + 		tmp = div_s64(tmp, 1000000000LL);
+      		*val = tmp;
+     +		return scale_type;
+     +	case IIO_VAL_INT_PLUS_NANO:
+     +	case IIO_VAL_INT_PLUS_MICRO:
+    -+		mult = scale_type == IIO_VAL_INT_PLUS_NANO ? NANO : MICRO;
+    ++		mult = scale_type == IIO_VAL_INT_PLUS_NANO ? GIGA : MEGA;
+     +
+     +		/*
+     +		 * For IIO_VAL_INT_PLUS_{MICRO,NANO} scale types if either *val
+ 6:  eea57faec241 !  8:  aea3159ed169 iio: afe: rescale: add offset support
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: add offset support
+    @@ Commit message
+         This is a preparatory change required for the addition of temperature
+         sensing front ends.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
+    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
+     +		*val = div_s64(tmp, scale) + schan_off;
+     +		return IIO_VAL_INT;
+     +	case IIO_VAL_INT_PLUS_NANO:
+    -+		tmp = (s64)rescale->offset * NANO;
+    -+		tmp2 = ((s64)scale * NANO) + scale2;
+    ++		tmp = (s64)rescale->offset * GIGA;
+    ++		tmp2 = ((s64)scale * GIGA) + scale2;
+     +		*val = div64_s64(tmp, tmp2) + schan_off;
+     +		return IIO_VAL_INT;
+     +	case IIO_VAL_INT_PLUS_MICRO:
+    -+		tmp = (s64)rescale->offset * MICRO;
+    -+		tmp2 = ((s64)scale * MICRO) + scale2;
+    ++		tmp = (s64)rescale->offset * MEGA;
+    ++		tmp2 = ((s64)scale * MEGA) + scale2;
+     +		*val = div64_s64(tmp, tmp2) + schan_off;
+     +		return IIO_VAL_INT;
+     +	default:
+ 7:  6bc5dd8c92ac <  -:  ------------ iio: afe: rescale: use s64 for temporary scale calculations
+ 8:  7d426d67a7fd !  9:  7b518cba1cb5 iio: afe: rescale: fix accuracy for small fractional scales
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: fix accuracy for small fractional scales
+    @@ Commit message
+         integer part. Switch to an IIO_VAL_INT_PLUS_NANO scale type in such
+         cases to maintain accuracy.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
+    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
+     +		return IIO_VAL_INT_PLUS_NANO;
+      	case IIO_VAL_INT_PLUS_NANO:
+      	case IIO_VAL_INT_PLUS_MICRO:
+    - 		mult = scale_type == IIO_VAL_INT_PLUS_NANO ? NANO : MICRO;
+    + 		mult = scale_type == IIO_VAL_INT_PLUS_NANO ? GIGA : MEGA;
+ 9:  dbea6ae8fec2 ! 10:  4310bb2153e2 iio: afe: rescale: reduce risk of integer overflow
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: reduce risk of integer overflow
+    @@ Commit message
+         a 64-bit integer. Since the rescaling is only performed on *val, reuse
+         the IIO_VAL_FRACTIONAL_LOG2 case.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
+    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
+     +		if (scale_type == IIO_VAL_FRACTIONAL)
+     +			tmp = *val2;
+     +		else
+    -+			tmp = 1 << *val2;
+    ++			tmp = ULL(1) << *val2;
+      
+      		rem2 = *val % (int)tmp;
+      		*val = *val / (int)tmp;
+10:  9ab1138449d3 ! 11:  fd794683186a iio: afe: rescale: make use of units.h
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: make use of units.h
+     
+         Make use of well-defined SI metric prefixes to improve code readability.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale, int scale_type,
+    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
+      		fallthrough;
+      	case IIO_VAL_FRACTIONAL_LOG2:
+     -		tmp = (s64)*val * 1000000000LL;
+    -+		tmp = (s64)*val * NANO;
+    ++		tmp = (s64)*val * GIGA;
+      		tmp = div_s64(tmp, rescale->denominator);
+      		tmp *= rescale->numerator;
+      
+     -		tmp = div_s64_rem(tmp, 1000000000LL, &rem);
+    -+		tmp = div_s64_rem(tmp, NANO, &rem);
+    ++		tmp = div_s64_rem(tmp, GIGA, &rem);
+      		*val = tmp;
+      
+      		if (!rem)
+    @@ drivers/iio/afe/iio-rescale.c: int rescale_process_scale(struct rescale *rescale
+      		*val2 = rem / (int)tmp;
+      		if (rem2)
+     -			*val2 += div_s64((s64)rem2 * 1000000000LL, tmp);
+    -+			*val2 += div_s64((s64)rem2 * NANO, tmp);
+    ++			*val2 += div_s64((s64)rem2 * GIGA, tmp);
+      
+      		return IIO_VAL_INT_PLUS_NANO;
+      	case IIO_VAL_INT_PLUS_NANO:
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_current_sense_amplifier_props(
+      	 */
+     -	factor = gcd(sense, 1000000);
+     -	rescale->numerator = 1000000 / factor;
+    -+	factor = gcd(sense, MICRO);
+    -+	rescale->numerator = MICRO / factor;
+    ++	factor = gcd(sense, MEGA);
+    ++	rescale->numerator = MEGA / factor;
+      	rescale->denominator = sense / factor;
+      
+      	factor = gcd(rescale->numerator, gain_mult);
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_current_sense_shunt_props(stru
+      
+     -	factor = gcd(shunt, 1000000);
+     -	rescale->numerator = 1000000 / factor;
+    -+	factor = gcd(shunt, MICRO);
+    -+	rescale->numerator = MICRO / factor;
+    ++	factor = gcd(shunt, MEGA);
+    ++	rescale->numerator = MEGA / factor;
+      	rescale->denominator = shunt / factor;
+      
+      	return 0;
+11:  3006151cd193 ! 12:  5053bcff8445 iio: test: add basic tests for the iio-rescale driver
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: test: add basic tests for the iio-rescale driver
+    @@ Commit message
+         Then run:
+                 $ ./tools/testing/kunit/kunit.py run --kunitconfig .kunitconfig
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/test/Kconfig ##
+     @@
+    @@ drivers/iio/test/iio-test-rescale.c (new)
+     + * Copyright (c) 2021 Liam Beguin <liambeguin@gmail.com>
+     + */
+     +
+    -+#include <kunit/test.h>
+     +#include <linux/gcd.h>
+    ++#include <linux/overflow.h>
+    ++#include <linux/units.h>
+    ++
+     +#include <linux/iio/afe/rescale.h>
+     +#include <linux/iio/iio.h>
+    -+#include <linux/overflow.h>
+    ++
+    ++#include <kunit/test.h>
+     +
+     +struct rescale_tc_data {
+     +	const char *name;
+    @@ drivers/iio/test/iio-test-rescale.c (new)
+     + */
+     +static int iio_str_to_nano(const char *str, s64 *nano)
+     +{
+    -+	int fract_mult = 100000000LL;
+     +	int tmp, tmp2;
+     +	int ret = 0;
+     +
+    -+	ret = iio_str_to_fixpoint(str, fract_mult, &tmp, &tmp2);
+    ++	/*
+    ++	 * iio_str_to_fixpoint() uses 10^8 here instead of 10^9 as fract_mult is
+    ++	 * the multiplier for the first decimal place.
+    ++	 */
+    ++	ret = iio_str_to_fixpoint(str, 100000000, &tmp, &tmp2);
+     +	if (ret < 0)
+     +		return ret;
+     +
+     +	if (tmp < 0)
+     +		tmp2 *= -1;
+     +
+    -+	*nano = (s64)tmp * 10 * fract_mult + tmp2;
+    ++	*nano = (s64)tmp * GIGA + tmp2;
+     +
+     +	return ret;
+     +}
+    @@ drivers/iio/test/iio-test-rescale.c (new)
+     +		return -EINVAL;
+     +	}
+     +
+    -+	err = 1000000 * abs(exp - real);
+    -+	err = div64_u64(err, abs(exp));
+    -+	return (int)err;
+    ++	err = MEGA * abs(exp - real);
+    ++
+    ++	return (int)div64_u64(err, abs(exp));
+     +}
+     +
+     +static void iio_rescale_test_scale(struct kunit *test)
+12:  d4229e8d7f24 ! 13:  aec4f7e44277 iio: afe: rescale: add RTD temperature sensor support
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: add RTD temperature sensor support
+    @@ Commit message
+         give range (usually 0 to 100 degrees Celsius). Common types of RTDs
+         include PT100, PT500, and PT1000.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@ drivers/iio/afe/iio-rescale.c: static int rescale_voltage_divider_props(struct device *dev,
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_voltage_divider_props(struct d
+     +		return ret;
+     +	}
+     +
+    -+	tmp = r0 * iexc * alpha / MICRO;
+    -+	factor = gcd(tmp, MICRO);
+    -+	rescale->numerator = MICRO / factor;
+    ++	tmp = r0 * iexc * alpha / MEGA;
+    ++	factor = gcd(tmp, MEGA);
+    ++	rescale->numerator = MEGA / factor;
+     +	rescale->denominator = tmp / factor;
+     +
+    -+	rescale->offset = -1 * ((r0 * iexc) / MICRO * MILLI);
+    ++	rescale->offset = -1 * ((r0 * iexc) / MEGA * MILLI);
+     +
+     +	return 0;
+     +}
+13:  b93e303c5e60 ! 14:  e5467185f3b3 iio: afe: rescale: add temperature transducers
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         iio: afe: rescale: add temperature transducers
+     
+         A temperature transducer is a device that converts a thermal quantity
+    -    into any other physical quantity. This patch add support for temperature
+    -    to voltage (like the LTC2997) and temperature to current (like the
+    -    AD590) linear transducers.
+    +    into any other physical quantity. This patch adds support for
+    +    temperature to voltage (like the LTC2997) and temperature to current
+    +    (like the AD590) linear transducers.
+         In both cases these are assumed to be connected to a voltage ADC.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## drivers/iio/afe/iio-rescale.c ##
+     @@ drivers/iio/afe/iio-rescale.c: static int rescale_temp_sense_rtd_props(struct device *dev,
+    @@ drivers/iio/afe/iio-rescale.c: static int rescale_temp_sense_rtd_props(struct de
+     +		return ret;
+     +	}
+     +
+    -+	rescale->numerator = MICRO;
+    ++	rescale->numerator = MEGA;
+     +	rescale->denominator = alpha * sense;
+     +
+     +	rescale->offset = div_s64((s64)offset * rescale->denominator,
+14:  7bdd57435c5c ! 15:  3d16dc359e35 dt-bindings: iio: afe: add bindings for temperature-sense-rtd
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         dt-bindings: iio: afe: add bindings for temperature-sense-rtd
+    @@ Commit message
+         binding describe one case, the measurement of a temperature through the
+         voltage across an RTD resistor such as a PT1000.
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+         Reviewed-by: Rob Herring <robh@kernel.org>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## Documentation/devicetree/bindings/iio/afe/temperature-sense-rtd.yaml (new) ##
+     @@
+15:  604ef3e42c07 ! 16:  b70fb25c3643 dt-bindings: iio: afe: add bindings for temperature transducers
+    @@
+      ## Metadata ##
+    -Author: Liam Beguin <lvb@xiphos.com>
+    +Author: Liam Beguin <liambeguin@gmail.com>
+     
+      ## Commit message ##
+         dt-bindings: iio: afe: add bindings for temperature transducers
+    @@ Commit message
+         This binding describe one case, the measurement of a temperature
+         through a temperature transducer (either voltage or current).
+     
+    -    Signed-off-by: Liam Beguin <lvb@xiphos.com>
+    +    Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+         Reviewed-by: Rob Herring <robh@kernel.org>
+    +    Reviewed-by: Peter Rosin <peda@axentia.se>
+     
+      ## Documentation/devicetree/bindings/iio/afe/temperature-transducer.yaml (new) ##
+     @@
+
+base-commit: 2b6bff0b122785f09cfbdc34b1aa9edceea6e4c1
+-- 
+2.34.0
+

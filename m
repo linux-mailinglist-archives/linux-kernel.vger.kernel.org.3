@@ -2,133 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5566348858B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 20:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C189D48858C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 20:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiAHTNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 14:13:24 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33690 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230409AbiAHTNX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 14:13:23 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 208J1dSM028622;
-        Sat, 8 Jan 2022 19:13:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=ZtrEmj7RpLT0D2CRHKuWX77vx/C+jmz39Z1GFmH3mLs=;
- b=tHqU1llKYcXRmyJ2hPlZPcDrCzMthnMjQ6FHBCKK/+d2tuoN5POvef0cikqmXgKGkqu8
- gxo3qWCqEWGyizloBiONrA/qTFUYqRqU/Ihxd+iSN1negkudiRNvbw7Sqod3CieychtI
- 2LlMdVm+tU0q4Lp3WaLL4k+9DaOpmQkaQbQOfay8tGtvFB/kMPG+266ctHesN8njk6QT
- lbclNazsdI/GTT/7LvlkHLcgnEJF/xxgPOFUZdJHfQA1z9UM7OXf73BqcKZr+I5CqFNl
- NE+I/NrgIJvrAALOxz9nz3zgDWioqKrYIJMpyvyVJsGVeXfAr1jYadDDHBXZXFA3Rnwe DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3df37w1e36-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 19:13:13 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 208J4kFu006144;
-        Sat, 8 Jan 2022 19:13:13 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3df37w1e2w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 19:13:13 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 208J7cox001250;
-        Sat, 8 Jan 2022 19:13:11 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vhb012-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 19:13:11 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 208JD8Ae32506164
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 8 Jan 2022 19:13:08 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C87AD11C04A;
-        Sat,  8 Jan 2022 19:13:08 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 646E911C04C;
-        Sat,  8 Jan 2022 19:13:08 +0000 (GMT)
-Received: from osiris (unknown [9.145.35.196])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat,  8 Jan 2022 19:13:08 +0000 (GMT)
-Date:   Sat, 8 Jan 2022 20:13:06 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
-Message-ID: <YdniQob7w5hTwB1v@osiris>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211213225350.27481-1-ebiederm@xmission.com>
- <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
- <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
+        id S232107AbiAHTQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 14:16:08 -0500
+Received: from mga06.intel.com ([134.134.136.31]:9504 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230409AbiAHTQH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 14:16:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641669367; x=1673205367;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7/yNwRjBuPqq8LiFXACSCkIrACXXcME5E1K+Bsdj5PA=;
+  b=NLTvm5ZaCRI6LEkJ9ikAHOITXMg6PuWcb/aTDc+O7tq1NW1hBp48q5jx
+   Ryh/mVSncMn9sKyd6zPeSX5+/MPmi7tBDV89+jnPomk+lrLVaJXB0p98t
+   bdIQhrUr3Ta7A2jG94ekY/nhtKLRRpXo4QsD4Vu8npv8RIXcatTkzJOJv
+   LUY/CSGGSHfs359XmEdfIOxS6QE80TfVK9u970Bo1DQ7cL3x8To6JivdI
+   WqOvrd7eZcao1Ss6Z5A9pq/v1ZvCVn//In//9YLRhsLIlqIY7tF11fOwi
+   OUg8Z8aI9+/qPrgmRT8Uz4V2Yi+DwHkDieO4EYy8LAVjt+uMhAMjDHS9d
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="303777170"
+X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
+   d="scan'208";a="303777170"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 11:16:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
+   d="scan'208";a="514212197"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Jan 2022 11:16:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6HCA-0000xG-0s; Sat, 08 Jan 2022 19:16:06 +0000
+Date:   Sun, 9 Jan 2022 03:15:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 50/50]
+ kernel/time/timer.c:1774:1: sparse: sparse: symbol
+ '__pcpu_scope_tick_setup_sched_timer_help_needed' was not declared. Should
+ it be static?
+Message-ID: <202201090357.zengylDN-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iK6vptB3IxazjPD9tBOXzl9b-opgXk7z
-X-Proofpoint-ORIG-GUID: 7N4-cUVmsiUdvBVeWxNSY1UpZbWLMSIk
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-08_07,2022-01-07_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=693
- priorityscore=1501 suspectscore=0 clxscore=1011 spamscore=0 phishscore=0
- mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201080145
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 01:47:05PM -0600, Eric W. Biederman wrote:
-> Currently I suspect changing wait_event_uninterruptible to
-> wait_event_killable, is causing problems.
-> 
-> Or perhaps there is some reason tasks that have already entered do_exit
-> need to have fatal_signal_pending set. (The will have
-> fatal_signal_pending set up until they enter get_signal which calls
-> do_group_exit which calls do_exit).
-> 
-> Which is why I am trying to reproduce the reported failure so I can get
-> the kernel to tell me what is going on.  If this is not resolved quickly
-> I won't send you this change, and I will pull it out of linux-next.
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
+head:   d0f29964f08485944aa4c850fbedc740ce216ff9
+commit: d0f29964f08485944aa4c850fbedc740ce216ff9 [50/50] EXP timers: Non-nohz_full last-resort jiffies update on IRQ entry
+config: i386-randconfig-s001-20220107 (https://download.01.org/0day-ci/archive/20220109/202201090357.zengylDN-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/d0f29964f08485944aa4c850fbedc740ce216ff9
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
+        git checkout d0f29964f08485944aa4c850fbedc740ce216ff9
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/time/
 
-It would have been good if you would have removed this from linux-next
-already.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Anyway, now I also had to spend quite some time to bisect why several test
-suites just hang with linux-next. It's probably because of holidays that
-you didn't get more bug reports.
 
-On s390
+sparse warnings: (new ones prefixed by >>)
+>> kernel/time/timer.c:1774:1: sparse: sparse: symbol '__pcpu_scope_tick_setup_sched_timer_help_needed' was not declared. Should it be static?
 
-- ltp
-- elfutils selftests
-- seccomp kernel selftests
+vim +/__pcpu_scope_tick_setup_sched_timer_help_needed +1774 kernel/time/timer.c
 
-hang with linux-next.
+  1771	
+  1772	static DEFINE_PER_CPU(unsigned long, tick_setup_sched_timer_jiffies);
+  1773	static DEFINE_PER_CPU(int, tick_setup_sched_timer_jiffies_count);
+> 1774	DEFINE_PER_CPU(bool, tick_setup_sched_timer_help_needed);
+  1775	
 
-I bisected the problem to this patch using elfutils selftests:
-
-git clone git://sourceware.org/git/elfutils.git
-cd elfutils
-autoreconf -fi
-./configure --enable-maintainer-mode --disable-debuginfod
-make -j $(nproc) > /dev/null
-cd tests
-make -j $(nproc) check
-
-Note: I actually didn't verify if this also causes ltp+seccomp selftests
-      to hang. I just assume it is the case.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

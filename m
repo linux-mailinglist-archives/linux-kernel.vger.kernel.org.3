@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4633488550
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40B6488553
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiAHSQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 13:16:03 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:57896 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiAHSQB (ORCPT
+        id S232365AbiAHSQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 13:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbiAHSQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 13:16:01 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:45214)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n6GG0-0010gX-AF; Sat, 08 Jan 2022 11:16:00 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:33968 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n6GFz-000wMo-EX; Sat, 08 Jan 2022 11:15:59 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <20211213225350.27481-1-ebiederm@xmission.com>
-        <9363765f-9883-75ee-70f1-a1a8e9841812@gmail.com>
-        <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
-        <5bbb54c4-7504-cd28-5dde-4e5965496625@gmail.com>
-        <87bl0m14ew.fsf@email.froward.int.ebiederm.org>
-Date:   Sat, 08 Jan 2022 12:15:52 -0600
-In-Reply-To: <87bl0m14ew.fsf@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Sat, 08 Jan 2022 12:13:59 -0600")
-Message-ID: <87zgo6ytyf.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sat, 8 Jan 2022 13:16:44 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BEAC061401
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 10:16:40 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id c71so24037075edf.6
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 10:16:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4VShwSPVfj7GfXP2tBCw17qNbBXH8y4PIVu4DylC+Yk=;
+        b=deXjQd7iwt9NyWs3LiY3Y9oI7jXD9KYC0IAF+0hRTqNmUO46HyW8ILfoOLGfgz//vh
+         bCPBuxZGgnjzyrl2hGUk+zougES865YL10Wa9bFX33dyhBpICNXBvbv61Ex2fXGdTLOW
+         js2nQ8zOWSmp/Ib607pVKzFkn2YJ6TnrNafCE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4VShwSPVfj7GfXP2tBCw17qNbBXH8y4PIVu4DylC+Yk=;
+        b=Urt5ZyUNRqGbk0r7VUMPxHw/CKArMd9W8SUTfEFtWDXav7VVvjmo40Vhw8j0Zo9Swm
+         3Cr3itHA+qSiLtNOKD+BlMjuwH67RRDb1Vza8yQixnVwEIUX/GsQCT8MYI5bSiNMEkZM
+         lK3gSt8yjxICFbIZuxBpW6Y5dXmrNdKPl9uq1qTKqF4p4wOjSgM1+ldHj6Bpb9Wpkd7Q
+         d4m2MpxWud70hXDXC075iDnL0/zeBCS2PWTvv6VtZZ/103fYqWWaMfVzOOwT2ByDH5Sa
+         D4706eOjri/LE5dIoOYFrV9j0GOsRPu2dvpUkwxRqM5/cU1F7vBZ35HipSdymANqpfb2
+         7MVg==
+X-Gm-Message-State: AOAM531OZiWGAbT5PMIBAWvs6/sndujkgcgZOe78Rr92bD0yyX8sosSN
+        MGupiLr8nX2ax58cwFeK/4VgMcsmB2/v3w==
+X-Google-Smtp-Source: ABdhPJwV7uU0oXOSs+GBb8Le/beFcuoTyG5jHEtbobZSHjJAhyGtEFElIRca3PoA1E/tV1K+/Oy+rA==
+X-Received: by 2002:a17:906:6c1:: with SMTP id v1mr51856789ejb.638.1641665798545;
+        Sat, 08 Jan 2022 10:16:38 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-244-92-231.retail.telecomitalia.it. [95.244.92.231])
+        by smtp.gmail.com with ESMTPSA id cm12sm1016616edb.6.2022.01.08.10.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 10:16:38 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring parameters
+Date:   Sat,  8 Jan 2022 19:16:33 +0100
+Message-Id: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1n6GFz-000wMo-EX;;;mid=<87zgo6ytyf.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX193qILMax3IbglF3xPQ+2Hp9i5erwfkqmQ=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TooManySym_01,XMNoVowels,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Dmitry Osipenko <digetx@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 302 ms - load_scoreonly_sql: 0.12 (0.0%),
-        signal_user_changed: 13 (4.1%), b_tie_ro: 11 (3.6%), parse: 1.26
-        (0.4%), extract_message_metadata: 13 (4.4%), get_uri_detail_list: 1.00
-        (0.3%), tests_pri_-1000: 13 (4.4%), tests_pri_-950: 1.26 (0.4%),
-        tests_pri_-900: 1.07 (0.4%), tests_pri_-90: 71 (23.5%), check_bayes:
-        69 (22.9%), b_tokenize: 6 (1.8%), b_tok_get_all: 5 (1.8%),
-        b_comp_prob: 2.1 (0.7%), b_tok_touch_all: 53 (17.4%), b_finish: 1.00
-        (0.3%), tests_pri_0: 174 (57.6%), check_dkim_signature: 0.55 (0.2%),
-        check_dkim_adsp: 2.9 (0.9%), poll_dns_idle: 1.01 (0.3%), tests_pri_10:
-        3.0 (1.0%), tests_pri_500: 8 (2.7%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 2/2] signal: Make coredump handling explicit in complete_signal
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adds ethtool support to get the number of message buffers configured for
+reception/transmission, which may also depends on runtime configurations
+such as the 'rx-rtr' flag state.
 
-Ever since commit 6cd8f0acae34 ("coredump: ensure that SIGKILL always
-kills the dumping thread") it has been possible for a SIGKILL received
-during a coredump to set SIGNAL_GROUP_EXIT and trigger a process
-shutdown (for a second time).
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Update the logic to explicitly allow coredumps so that coredumps can
-set SIGNAL_GROUP_EXIT and shutdown like an ordinary process.
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- kernel/signal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index f95a4423519d..0706c1345a71 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1032,7 +1032,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
- 	 * then start taking the whole group down immediately.
- 	 */
- 	if (sig_fatal(p, sig) &&
--	    !(signal->flags & SIGNAL_GROUP_EXIT) &&
-+	    (signal->core_state || !(signal->flags & SIGNAL_GROUP_EXIT)) &&
- 	    !sigismember(&t->real_blocked, sig) &&
- 	    (sig == SIGKILL || !p->ptrace)) {
- 		/*
+ drivers/net/can/flexcan/flexcan-ethtool.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/net/can/flexcan/flexcan-ethtool.c b/drivers/net/can/flexcan/flexcan-ethtool.c
+index 5bb45653e1ac..d119bca584f6 100644
+--- a/drivers/net/can/flexcan/flexcan-ethtool.c
++++ b/drivers/net/can/flexcan/flexcan-ethtool.c
+@@ -80,7 +80,24 @@ static int flexcan_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+ 	return 0;
+ }
+ 
++static void flexcan_get_ringparam(struct net_device *ndev,
++				  struct ethtool_ringparam *ring)
++{
++	struct flexcan_priv *priv = netdev_priv(ndev);
++
++	ring->rx_max_pending = priv->mb_count;
++	ring->tx_max_pending = priv->mb_count;
++
++	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)
++		ring->rx_pending = __sw_hweight64(priv->rx_mask);
++	else
++		ring->rx_pending = 6;
++
++	ring->tx_pending = __sw_hweight64(priv->tx_mask);
++}
++
+ static const struct ethtool_ops flexcan_ethtool_ops = {
++	.get_ringparam = flexcan_get_ringparam,
+ 	.get_sset_count = flexcan_get_sset_count,
+ 	.get_strings = flexcan_get_strings,
+ 	.get_priv_flags = flexcan_get_priv_flags,
 -- 
-2.29.2
+2.32.0
 

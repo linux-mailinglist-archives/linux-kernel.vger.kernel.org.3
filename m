@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6ECC48816A
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 06:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D05B48816B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 06:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiAHFMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 00:12:03 -0500
-Received: from mail-4319.protonmail.ch ([185.70.43.19]:54119 "EHLO
-        mail-4319.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiAHFMC (ORCPT
+        id S230425AbiAHFNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 00:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbiAHFNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 00:12:02 -0500
-Date:   Sat, 08 Jan 2022 05:11:50 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1641618721;
-        bh=/j2Vx1bVQJXPbpvBXRiaCl4gIC+8JojGiGdJO7cqyB0=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
-        b=QGEtXTxetiOWU/1q7fkqclnSXkd95iuiWFTPSHAVarKQCDtsBuqp2BRAvStu5HQED
-         w5nW5A6R5alBGRmzKFBef9WImrZ3eehWK8eVdsqOVsshFTpFHixaewrqf+FWH54+UI
-         P1dDg8PZ/NMmfhXfmBTT1O4Z3yvM2HgEkBW+Fo7PmUjW4bkHolRZGTpAToRpwAiaRq
-         07E41t4DZV10MBPP4kznsdngux7Hppcvhukg2KmH3k1wNuV/iQWzAq6g+2cA6+b2oI
-         p+lJPgd23AUjgnPirTArbYkpiGqMR3nxpt3ldwYYO4ZBAaSOUZJXnajhsqFNz9ZWvW
-         U9VJJpW9HwoQw==
-To:     jani.nikula@linux.intel.com
-From:   Orlando Chamberlain <redecorating@protonmail.com>
-Cc:     ashisharora.linux@outlook.com, intel-gfx@lists.freedesktop.org,
-        joonas.lahtinen@linux.intel.com, linux-kernel@vger.kernel.org,
-        rodrigo.vivi@intel.com, Aun-Ali Zaidi <admin@kodeit.net>
-Reply-To: Orlando Chamberlain <redecorating@protonmail.com>
-Subject: Re: [PATCH] drm/i915: Discard large BIOS framebuffers causing display corruption.
-Message-ID: <20220108050812.6303-1-redecorating@protonmail.com>
+        Sat, 8 Jan 2022 00:13:54 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EA4C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 21:13:54 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id CFED641982;
+        Sat,  8 Jan 2022 05:13:51 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+Subject: [GIT PULL] Apple SoC MAINTAINERS updates for 5.17
+To:     SoC Team <soc@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Message-ID: <24ae6871-3e67-5c7f-2060-28048db439a2@marcan.st>
+Date:   Sat, 8 Jan 2022 14:13:49 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I haven't observed "display corruption", but on my MacBookPro16,1 the botto=
-m
-and right edges of the TTY are not on the screen, so a few lines of text
-cannot be seen.
+Hi SoC folks,
 
-This also occurs on the internal displays of all (as far as I know) other
-2018-2020 Intel Macbooks when using the Intel GPU (The 15" and 16" ones
-also have an AMDGPU, but this issue occurs when they have the Intel GPU
-set as the boot gpu).
+Please merge this trivial MAINTAINERS change for 5.17.
 
-There's a similar patch that hasn't been sent upstream that people with the=
-se
-Macbooks have been using:
-https://github.com/aunali1/linux-mbp-arch/blob/master/7001-drm-i915-fbdev-D=
-iscard-BIOS-framebuffers-exceeding-h.patch
+This commit was waiting on the watchdog driver to be merged, but I only
+just now realized that it silently did. Sorry for the last-minute pull.
+If this can't make it into the 5.17 merge window, it can be added as a
+fix later instead.
 
-Cc: Aun-Ali Zaidi <admin@kodeit.net>
+The branch is based on asahi-soc-dt-5.17-v2 to avoid a merge conflict
+with other changes that happened there.
 
---
-Thanks,
-Orlando
+-Hector
+
+The following changes since commit 301f651614c3396d711a8cc3f92f6fb95b12f5c5:
+
+  dt-bindings: mailbox: apple,mailbox: Add power-domains property
+(2021-12-15 20:20:38 +0900)
+
+are available in the Git repository at:
+
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-maintainers-5.17
+
+for you to fetch changes up to 6dc701ee9fabfc929cae2d7acc957bf38e4c3264:
+
+  MAINTAINERS: Add Apple watchdog to ARM/APPLE MACHINE SUPPORT
+(2022-01-08 14:10:03 +0900)
+
+----------------------------------------------------------------
+Apple SoC MAINTAINERS updates for 5.17.
+
+Adds the watchdog driver MAINTAINERS changes. The driver itself is
+already merged.
+
+This branch is based on asahi-soc-dt-5.17-v2 to avoid a merge conflict.
+
+----------------------------------------------------------------
+Sven Peter (1):
+      MAINTAINERS: Add Apple watchdog to ARM/APPLE MACHINE SUPPORT
+
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 

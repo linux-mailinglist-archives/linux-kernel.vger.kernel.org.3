@@ -2,142 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BCA488524
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467F3488529
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbiAHR4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 12:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiAHR4A (ORCPT
+        id S233476AbiAHSAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 13:00:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52143 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230162AbiAHSAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 12:56:00 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C24C06173F;
-        Sat,  8 Jan 2022 09:55:59 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id q25so26848717edb.2;
-        Sat, 08 Jan 2022 09:55:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0R/bgHibWfpOUod24j2qh0CJvdTR+UyHQ+DqSW1KNwE=;
-        b=dPjmlSA+WNP7T5KefRwHVClkd+mr1+2I49hq8DHoAknmoibMR1HoB0UlbIyZKWgvdV
-         30KjdjCVWb0lQmA8EmiPSWz0r6VYErWWOADkmN1ymNXSVu0cRVnr3phkIbhmIzV7qnPB
-         b9yb/8gyAhnh/RogZYdQLvfnNJ8WrQgU2IYgqJTkFWHano8i+a7LGu0q7b94nOZ4ZGYI
-         gIK7hQFIAo+FgyW+tdZfQsSS8zM2nTz/oaqYheOicRzXqT5+bfb/RAtD3qC/KYXiDHgZ
-         Ogu19m8lDUvgt81A8XCvitUbcZAfbGoQHcM0uwCM4A19/p5QSApGjO2+F6rcmsK7Zvhd
-         Zv5Q==
+        Sat, 8 Jan 2022 13:00:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641664848;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=pzEFHr83S9POpRQq4pM/eG49Pxi7C/LXxl9tC2D25S0=;
+        b=TcWhXw0uEWVd1UuWCb+bgQKED/9ASrNdmlLH9JaP6+nXOlVzCYllHDPVfTi3D4CWgaMesN
+        mOxYgvJ5t9HgGXreZK6EL2SpTlwtz08ld7g198DPSLSn/EotcyLacWZnNFKswp7zykCDx5
+        XuZR2acfLOytD0QoM59pzsnVPufFby0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-204-4pnuOBITM-me-p8UXf6mpQ-1; Sat, 08 Jan 2022 13:00:47 -0500
+X-MC-Unique: 4pnuOBITM-me-p8UXf6mpQ-1
+Received: by mail-wm1-f72.google.com with SMTP id bh10-20020a05600c3d0a00b00347aa76728fso2851451wmb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 10:00:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0R/bgHibWfpOUod24j2qh0CJvdTR+UyHQ+DqSW1KNwE=;
-        b=drooantsfoDw4iiehDWAJl+CksBHWtXzqt1Lbfm61eLkmCaocbiSsAH2FqO7y152pX
-         KcO7737u5L9gIyTHv29aGRbmB1LdvtU6zSTnIa4ZUn4pCTg/Oi4hAFwmMtSe6thknnWA
-         744cIvSqrJXD27x3/DEwAlJV7W6c7NWUbjuLgYhVmxutKGc1p9VKSTHBmcBgc7KL+K6l
-         dkkG9LPVE3d/k461cPavyxhZ4BWzM4xRAVpQJxQK7FJOBu21pdq9O29G7CE2moZLQ+Uq
-         DfitGq6GdH/I4JWLdmiYFhh39Hl6PQqDhmonavjv3nEsax20qCeyYwIgHvDkKs5ZiD3A
-         xo+Q==
-X-Gm-Message-State: AOAM532ixie6aaJtcHZXfj8/aSbOGAdO95185F1yN2TaPZ83Sg2AMdUM
-        hJM6q0QoVePqvjpbi7CsJ84D7LYjOCr37MAoJBc=
-X-Google-Smtp-Source: ABdhPJzPY6YaQFWOIUsr6/FJDSgMARqplrEy1CQeW74Ko264I1NgTsElZM6z/nm9LvaHb9vCOWD7Ic5GS/CuIMQ+Mjs=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr52569474ejj.636.1641664557628;
- Sat, 08 Jan 2022 09:55:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=pzEFHr83S9POpRQq4pM/eG49Pxi7C/LXxl9tC2D25S0=;
+        b=EowJ0DTyn9X2uz2gwi5URG4fWvzokS7RNM0WTwfB5KSrJsUy1a2lOV9c+YIIxkmjux
+         TLc7EatOydi8mTyCXPd7FNFJqJTMB1ogs4WXC8jMQ4LtaEGQmP/1hiCFBYzfQlQV+NXB
+         a6xVPP+MNkxMFunSmO6Z6NWzOtUyDp278QUpXdIMmKJtylN7G592qXuSig+l159ikXVG
+         Z5VD9FEBkJ3n6QhzJivRT4J6WTxtCFUoPjME0yb9rOUPDLV720oRGx+c3gBXDcNKOWlJ
+         FufyMnyFT9AjYEeg04caspDWBUk4o2Q7xNYCx+Losb4gyIy0/nziCSt/TpM392+nWqW1
+         hCUw==
+X-Gm-Message-State: AOAM532r80kNInxEhGnK6D5Zby7FASPz4h1yz5O65bktsX0qGmuxWYR8
+        asDOHyErbiuGXBseFAZuE9NGwj/CjhduTyek3Vw6D+BodyJIxrviXiR1aCIMQ4zN2CSmHDEHa2D
+        HhFAyDvxjle5XXa2Znugw6obeAHJlG5WIAm5bjzWq+ZTYEZBwTcHxYz3PLWwY3bOEc+8jdA==
+X-Received: by 2002:a05:6000:23a:: with SMTP id l26mr56753437wrz.666.1641664845508;
+        Sat, 08 Jan 2022 10:00:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwz9GxLhfeBhj5hp36+qSVZeY0MnNgIW7wIVNb8K+OXWilRMvLTYxibFK7C1W6P4qkC6t8P/Q==
+X-Received: by 2002:a05:6000:23a:: with SMTP id l26mr56753418wrz.666.1641664845266;
+        Sat, 08 Jan 2022 10:00:45 -0800 (PST)
+Received: from redhat.com ([2a10:800d:b77b:0:4c0a:9a47:da3d:38fd])
+        by smtp.gmail.com with ESMTPSA id l26sm2173403wrz.44.2022.01.08.10.00.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 10:00:44 -0800 (PST)
+Date:   Sat, 8 Jan 2022 13:00:43 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Eli Cohen <elic@nvidia.com>, kernel test robot <lkp@intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH] vdpa/mlx5: fix endian-ness for max vqs
+Message-ID: <20220108180041.4601-1-mst@redhat.com>
 MIME-Version: 1.0
-References: <20211222034646.222189-1-liambeguin@gmail.com> <20211222034646.222189-10-liambeguin@gmail.com>
- <CAHp75Vc0aWrFtNK1ZkHkwP62zNXQJaDcn9pc8Uhfq0kOnWzmJg@mail.gmail.com>
- <YcNwt5RFMNFUimD/@shaak> <CAHp75VdrLTNLWZRgWkLXD23RAF28zh29XybywAPyMtb=GNxXbw@mail.gmail.com>
- <YcODglDWiknz2oeV@shaak> <CAHp75Vejfr_S7iK7fAvs7ELxE1TJUECvmKv0-G5Zwunyc6nDQA@mail.gmail.com>
- <Ydm9K3Zx3jPPv70B@shaak>
-In-Reply-To: <Ydm9K3Zx3jPPv70B@shaak>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 8 Jan 2022 19:55:21 +0200
-Message-ID: <CAHp75Ve5-W7vRGBMaz8jh5DvOCyTovdKaRR_5iB7S7epiWQmfA@mail.gmail.com>
-Subject: Re: [PATCH v11 09/15] iio: afe: rescale: reduce risk of integer overflow
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 6:34 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> On Wed, Dec 22, 2021 at 11:32:24PM +0200, Andy Shevchenko wrote:
-> > On Wed, Dec 22, 2021 at 9:59 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> > > On Wed, Dec 22, 2021 at 08:56:12PM +0200, Andy Shevchenko wrote:
-> > > > On Wed, Dec 22, 2021 at 8:38 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> > > > > On Wed, Dec 22, 2021 at 02:29:04PM +0200, Andy Shevchenko wrote:
-> > > > > > On Wed, Dec 22, 2021 at 5:47 AM Liam Beguin <liambeguin@gmail.com> wrote:
+sparse warnings: (new ones prefixed by >>)
+>> drivers/vdpa/mlx5/net/mlx5_vnet.c:1247:23: sparse: sparse: cast to restricted __le16
+>> drivers/vdpa/mlx5/net/mlx5_vnet.c:1247:23: sparse: sparse: cast from restricted __virtio16
 
-...
+> 1247                  num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
 
-> > > > > > > -               tmp = 1 << *val2;
-> > > > > >
-> > > > > > At some point this should be BIT()
-> > > >
-> > > > Forgot to add, If it's 64-bit, then BIT_ULL().
-> > > >
-> > > > > I'm not against changing this, but (to me at least) 1 << *val2 seems
-> > > > > more explicit as we're not working with bitfields. No?
-> > > >
-> > > > You may add a comment. You may use int_pow(), but it will be suboptimal.
-> > > >
-> > > > > > Rule of thumb (in accordance with C standard), always use unsigned
-> > > > > > value as left operand of the _left_ shift.
-> > > > >
-> > > > > Right, that makes sense! In practice though, since we'll most likely
-> > > > > never use higher bits of *val2 with IIO_VAL_FRACTIONAL_LOG2, would it be
-> > > > > enough to simply typecast?
-> > > > >
-> > > > >         tmp = 1 << (unsigned int)*val2;
-> > > >
-> > > > No, it's about the _left_ operand.
-> > > > I haven't checked if tmp is 64-bit, then even that would be still wrong.
-> > >
-> > > Okay so your recommendation is to not use a left shift?
-> >
-> > No, I recommend not to use int type as a _leftside_ operand.
-> > BIT() / BIT_ULL() does a left shift anyway.
->
-> Oh, got it. Sorry for misreading your message.
-> would something like this be good enough?
->
->         s64 tmp;
->         u64 tmp2;
+Address this using the appropriate wrapper.
 
->         tmp2 = 1 << *val2;
+Fixes: 7620d51af29a ("vdpa/mlx5: Support configuring max data virtqueue")
+Cc: "Eli Cohen" <elic@nvidia.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This still has a UB according to the C standard. That's why
-BIT()/BIT_ULL() is preferable to use since they don't have such
-issues. You may open code it, of course (since I remember you wished
-to show that this is not a bit, but a number).
-
->         tmp = tmp2;
-
-> How can I validate this?
-
-By understanding the C standard? I dunno, actually. GCC will generate
-correct code, it's just a special warning you may get when supplying a
-parameter (Linux kernel doesn't use that one even on W=2 IIRC).
-
--Wshift-overflow=2
-
-> > > I can look into that but given how unlikely it is to fall into those bad
-> > > cases, I'd rather keep things as they are. Would that be okay?
-> >
-> > > Also, I don't think using BIT() or BIT_ULL() would address this as they
-> > > both do the same shift, with no extra checks.
-> >
-> > They do slightly different versions of it. They use an unsigned int type.
-> >
-> > Open coded or not, it's up to you. Just convert to unsigned int.
-
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index 84b1919015ce..d1ff65065fb1 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1242,7 +1242,8 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+ 	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+ 		num = 1;
+ 	else
+-		num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
++		num = mlx5vdpa16_to_cpu(&ndev->mvdev,
++					ndev->config.max_virtqueue_pairs);
+ 
+ 	max_rqt = min_t(int, roundup_pow_of_two(num),
+ 			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
 -- 
-With Best Regards,
-Andy Shevchenko
+MST
+

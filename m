@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D8248843E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D478148843F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234544AbiAHPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 10:36:52 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:38980 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiAHPgv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 10:36:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ksDx2/aVzsr3FZhZnXzgOkQqcI19EivKVZQ8aUre55w=; b=LQiRs/gXSiRJj7ddoJiPntEh8r
-        n4VPIxVypb3caWg6MKPZNSUR38kjB+DZtqaZran0xuF41kCQbVnT43i8eoDvZ7TmpTORFP416Qxr1
-        IEMdUUqJrwgzfxS4LaQfifCMeTGVJKtDaEufXSgOazSo6vlGNm+pmTwIGjujAyjR8QmGP6eB92cB1
-        sIzcfJA2EKMDdjooXoagR98G1DYPcfz4cF7Ye9h42sB8TmGhlTrZ8OS7zzuvin356OLokjPFdZ4vC
-        qDIOpa664OjcLUYOilD91yG0jdIF/e1BXOu9dBSsqvCv36hGbyF7WC6R22bQSCJ5aA924GL88v9Vq
-        Mz17mcjg==;
-Received: from [179.113.53.20] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n6Dlw-0005wP-Ip; Sat, 08 Jan 2022 16:36:48 +0100
-Message-ID: <c2923957-9719-ef23-802a-24765ead7630@igalia.com>
-Date:   Sat, 8 Jan 2022 12:36:32 -0300
+        id S234569AbiAHPjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 10:39:03 -0500
+Received: from mx4.wp.pl ([212.77.101.12]:18250 "EHLO mx4.wp.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234562AbiAHPjC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 10:39:02 -0500
+Received: (wp-smtpd smtp.wp.pl 21519 invoked from network); 8 Jan 2022 16:38:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1641656339; bh=JDyJZijKbzW/bA7FC6rgs8PEPxMktxgfUDwI1yY3boY=;
+          h=Subject:To:Cc:From;
+          b=kSp9n64uVvCLz0YOxw2Sj5/YIi5HOysIrl+2Ccm5aScRw7NLM+v72Ky5OEgdWwNXq
+           cu3WkkmZKSr0IGtmuW2O9vjLCimOZ0wnLGXFw//aTd/ziJGkOnPA8X/92iPEI5j9p/
+           pTiafA3kAp87ZLOU69hh0xTo9miTDqxBwuu48BQc=
+Received: from riviera.nat.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <joe@perches.com>; 8 Jan 2022 16:38:59 +0100
+Message-ID: <dd6bc95f-ee94-b9b4-35ba-1a4284d96049@wp.pl>
+Date:   Sat, 8 Jan 2022 16:38:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.1
-Subject: Re: [PATCH] notifier/panic: Introduce panic_notifier_filter
+Subject: Re: [PATCH net-next] net: lantiq_etop: add blank line after
+ declaration
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>
-References: <20220107191233.172644-1-gpiccoli@igalia.com>
- <CAHp75Vf8SisR16tK=hwiF9ET0PoQRcu1h5LCZHZAGX8M3KysRA@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAHp75Vf8SisR16tK=hwiF9ET0PoQRcu1h5LCZHZAGX8M3KysRA@mail.gmail.com>
+To:     Joe Perches <joe@perches.com>, davem@davemloft.net,
+        kuba@kernel.org, rdunlap@infradead.org, jgg@ziepe.ca,
+        arnd@arndb.de, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     John Crispin <john@phrozen.org>
+References: <20211228220031.71576-1-olek2@wp.pl>
+ <fc1bf93d92bb5b2f99c6c62745507cc22f3a7b2d.camel@perches.com>
+From:   Aleksander Bajkowski <olek2@wp.pl>
+In-Reply-To: <fc1bf93d92bb5b2f99c6c62745507cc22f3a7b2d.camel@perches.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-WP-MailID: d31c9a37df5b2af05e9d7f5ec7fba301
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [IRMk]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2022 20:07, Andy Shevchenko wrote:
-> [...] 
->     +       if (!buf)
->     +               return -EINVAL;
-> 
-> 
-> I also implied that you don’t need this condition.
-> 
->     +       while ((func = strsep(&buf, ","))) {
->     +               addr = kallsyms_lookup_name(func);
-> 
->  
-> 
->     +
-> 
-> 
-> Btw, this is redundant blank line.
->  
-> 
->     +               if (!addr) {
+Hi Joe,
 
-Thanks Andy, just submitted a V4 that incorporates your suggestions.
-Cheers,
+On 1/8/22 09:04, Joe Perches wrote:
+> (adding John Crispin, the original submitter of this driver)
+> 
+> On Tue, 2021-12-28 at 23:00 +0100, Aleksander Jan Bajkowski wrote:
+>> This patch adds a missing line after the declaration and
+>> fixes the checkpatch warning:
+>>
+>> WARNING: Missing a blank line after declarations
+>> +		int desc;
+>> +		for (desc = 0; desc < LTQ_DESC_NUM; desc++)
+>>
+>> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> []
+>> diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
+> []
+>> @@ -218,6 +218,7 @@ ltq_etop_free_channel(struct net_device *dev, struct ltq_etop_chan *ch)
+>>  		free_irq(ch->dma.irq, priv);
+>>  	if (IS_RX(ch->idx)) {
+>>  		int desc;
+>> +
+>>  		for (desc = 0; desc < LTQ_DESC_NUM; desc++)
+>>  			dev_kfree_skb_any(ch->skb[ch->dma.desc]);
+>>  	}
+> 
+> The change is innocuous and has already been applied but the code
+> doesn't seem to make sense.
+> 
+> Why is dev_kfree_skb_any called multiple times with the same argument?
+> 
+> Is there some missing logic here?  Maybe a missing ++?
+> 
+> Something like:
+> 
+> 		for (desc = 0; desc < LTQ_DESC_NUM; desc++)
+>  			dev_kfree_skb_any(ch->skb[ch->dma.desc++]);
+> 
+> Dunno, but the current code seems wrong.
+> 
+> 
 
 
-Guilherme
+FYI: This driver is mainly used by OpenWRT. OpenWRT has two
+patches that were never upstreamed. One of them is called
+"various etop fixes" and I would expect more bugs in this driver.
+The part that adds support for ar9 must be rewritten before
+upstreaming. This SoC has a built-in 2 port switch and needs
+a DSA driver. The rest of the fixes in this patch can probably
+be sent upstream.
+
+
+1. https://github.com/abajk/openwrt/blob/master/target/linux/lantiq/patches-5.10/0028-NET-lantiq-various-etop-fixes.patch
+2. https://github.com/abajk/openwrt/blob/master/target/linux/lantiq/patches-5.10/0701-NET-lantiq-etop-of-mido.patch

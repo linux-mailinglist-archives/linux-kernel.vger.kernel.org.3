@@ -2,242 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 140A748809C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 02:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B6A4880B6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 02:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbiAHBfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 20:35:51 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:59440 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230520AbiAHBfu (ORCPT
+        id S233186AbiAHBuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 20:50:06 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:50178 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229935AbiAHBuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 20:35:50 -0500
-X-UUID: a68be2b4b47b48959ab3f3e003f4ba29-20220108
-X-UUID: a68be2b4b47b48959ab3f3e003f4ba29-20220108
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 213261639; Sat, 08 Jan 2022 09:35:48 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 8 Jan 2022 09:35:46 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 8 Jan 2022 09:35:46 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>
-CC:     <johan.hedberg@gmail.com>, <Mark-YW.Chen@mediatek.com>,
-        <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
-        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
-        <jsiuda@google.com>, <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?q?Re=3A=20Bluetooth=3A=20mt7921s=3A=20Enable=20SCO=20over=20I2S?=
-Date:   Sat, 8 Jan 2022 09:35:44 +0800
-Message-ID: <1641605744-14346-1-git-send-email-sean.wang@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <6DDA9D10-3001-4A57-B2F4-9712732868AC@holtmann.org--annotate>
-References: <6DDA9D10-3001-4A57-B2F4-9712732868AC@holtmann.org--annotate>
+        Fri, 7 Jan 2022 20:50:04 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2081T21a027793;
+        Sat, 8 Jan 2022 01:49:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=T7rtdv+A5KujriLkYIwQCOKn2I0bV/xFgPKPaHDmOWc=;
+ b=vmEpltP+hZfkdMm21pSYks3rov0kedIvrZpeq7vKbxNlfy8vs4iOrG7eRB6WVFr3FNh/
+ cCuSDDq/ofLZ9ERA6hH7VUlZAGR7CJBflfEWI4YXYlwHTrQWU+985U7V2qroNSe2E2ld
+ +vcnUkMfb2H0Xxzel/B3REHR48W5/dnza/X+O4+SdULzsRu2Hvq0VUrzhCTGPZI9W0II
+ 5XmNXL7vcEXv3RiV44w9PqaCUMT6j+LiSR+o2q7ax0ZrJ5cWTxKyOw3C2kW+MF3+KHN7
+ CHpTWnJDxICpYClttD6vvB8XShDo15/LkskQOT4wdcC+k0LQsg6PLuBHim3Lmp4f24iw pw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3de4v8bbjs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Jan 2022 01:49:52 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2081jmq3112155;
+        Sat, 8 Jan 2022 01:49:51 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
+        by aserp3020.oracle.com with ESMTP id 3dej4tjcbr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Jan 2022 01:49:51 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FhH8Bjcrtii0aBCfJApzC7287CLEg+C74HD8OZ3PkOUtjYFgSl/9tiQLvjjNZ/ncgiTkx++XXxfde7pO6pIxSm2xBQtJydRBlvOIEwQsRvTnCIAot/fogGlgcvfIVevqeROsbGOXI9r1QE2BrqdH3PFZE9dKOwLZRODtJhf73BNbIVsV9fWg1mizyR+zSIXN97biFfcRKjICHcoX7tGZ5ozf2vl2a/VrfVtEj+pQ9Gzmm1c675rqMDubcAVX+UIzRknLQA1Rbwcw/ew8aSmQWQRha55RQg2+PmJMZAr2AE+t8hnNLOz6QqN7fjBEjgsdaWvX2aEnzVGGHMa2YJB6Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T7rtdv+A5KujriLkYIwQCOKn2I0bV/xFgPKPaHDmOWc=;
+ b=Jo/TFygTQeBvHaL9icCcgzNTcJtk/YK4pudWb/xBmhyCOn2oyIOe7NMoe7kfnWfNkDMA1E0gEdzLKtQAdwcJLgo42RhMi+fSaZvK2kBGg+icQK2a53vZwtPCWakrGRtEL1tMrShhxub9dnHFupbnU3WwaOzSKGssXcBSf5uss8DPJ5d9nPNOQNxVccNoQ3h6mas7C2q62f4qZAxAYA1kupjgyIuWJujBsT/v7767xKqrv+uvn+p3iqQYdUD/zJLqraai8GGx0tK9HfzswQEB9H1gNyd2iIaLXgPvXfKzDYoexMlTOBtgZIh6DDj0J0EXrTGg3a4quP5JhFApnvMbEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T7rtdv+A5KujriLkYIwQCOKn2I0bV/xFgPKPaHDmOWc=;
+ b=d55lMVzYmYaLLybe/eK2HB4HTfkn6OT5m+aDhL3y26I9BEWycm5AahT2s8v1l7jmp7T8/RfqNAJnJ6+lsKjAli15vlv5hSgDeW+Z1i/K5O1rW3RAMWSmBUTumi7lR6raN8rHe8yyJU4X33DIFHf+KZ13KPUBugx6dIN9uwbzjAc=
+Received: from BN8PR10MB3283.namprd10.prod.outlook.com (2603:10b6:408:d1::28)
+ by BN0PR10MB5094.namprd10.prod.outlook.com (2603:10b6:408:129::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Sat, 8 Jan
+ 2022 01:49:48 +0000
+Received: from BN8PR10MB3283.namprd10.prod.outlook.com
+ ([fe80::317a:27e2:c007:7eb]) by BN8PR10MB3283.namprd10.prod.outlook.com
+ ([fe80::317a:27e2:c007:7eb%6]) with mapi id 15.20.4867.011; Sat, 8 Jan 2022
+ 01:49:48 +0000
+Message-ID: <3740be2d-192f-aeaf-02fe-e309cdb278dc@oracle.com>
+Date:   Fri, 7 Jan 2022 17:49:42 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] vdpa/mlx5: fix error handling in mlx5_vdpa_dev_add()
+Content-Language: en-US
+To:     trix@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com, elic@nvidia.com,
+        parav@nvidia.com, xieyongji@bytedance.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220107211352.3940570-1-trix@redhat.com>
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20220107211352.3940570-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0296.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::31) To BN8PR10MB3283.namprd10.prod.outlook.com
+ (2603:10b6:408:d1::28)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 260235fc-61b2-423b-2f27-08d9d2492726
+X-MS-TrafficTypeDiagnostic: BN0PR10MB5094:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR10MB5094E4AF40CF4A864C778F3FB14E9@BN0PR10MB5094.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DJpgEFRO0GT+HaU3+lM5RnVTYIj/65Bpvb2F95tDeJcH7sqgfX7kYnO10Jz59NYTLQSksnzFw8rIIRgiNoDUax14x8vv929YITZrdOgT4Dbu+ybGTQ1NT1c2ifTWvpXZrc2y30EVzPbLt/EnW58jtYVDa2258o5iLgxVzoiu3c2GRVY3yTmNqQv/8MHHDonUa04+RxaUXNqhAd++Zy439Xr//PG2nGy1R0K7ckoyTyNzqZr+E0EYhbsgsVXW5UQj/A88TMx1A+5knaz9CZDpdrO7mUYf9Jwa0uKKszFojhHLU/vDgobcA0aqY9TVsAnhl1ouVbQ0PHpR5OuhdoySdSEfHgFMiK0VLXMmuGEI0Bd3wQVwgYYEtKc7fAPU4nbqa7a2p2ccVbYpLezkZMvHC8Mv0hIC//JkCrjblMW5y+WrUDpkKors3nKgVW7Xox+RmYpAvm9NiAA8mbbkNpSyMcTJJm0h2Br3oqhlkqn3ybVkSIn9YTOUy7B/WEsNmsgksvJgHmRMkmIs4WE5tVYi/81/Ib3MYmKKdj/oxc5ctF7kY2cgl0lGmypESCih6DIUlMJWNFV3nihL1XsIjopZKQ/6WinuhKYyFeIPHgD+0xK84XNwVPwLq18YfIMlC/I/5PY+kThxNmSLIANJ1LbRA2bIGpwzQQULPvTxK/sg/I7xQcO7wwpJukU3QKI74PM6/0QHGbnW0Il31SPy4NzEX6YcxEnKblCCs1x356aQ6CA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3283.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8936002)(8676002)(36756003)(83380400001)(31696002)(186003)(86362001)(6512007)(316002)(4326008)(38100700002)(6486002)(6506007)(36916002)(31686004)(2616005)(5660300002)(66556008)(53546011)(66476007)(26005)(7416002)(66946007)(2906002)(508600001)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmhmVTkxbzRUN0liMVRlRCs4NU5ueURYV3NMQ21QbzFZMXlaR2pZdCt6VVd5?=
+ =?utf-8?B?TThaVFFWd21IKzN5U0JPQU5mNGJFc0t0dWpYQ1VWZmVRdE1kNWRLcFhDV3Nu?=
+ =?utf-8?B?cXZMbTRZUkt3ZXoyZ0k0bnFZeGsySmJhM3g0cDNhazlLYXRaOWdSZUp5NnJo?=
+ =?utf-8?B?d0xoamsyTy9uZHk0aDBJTjgyMHlxTGtBUkNRaXd0M2FuSTBHQXgvR2o3TXRM?=
+ =?utf-8?B?QUhFWnRmaUFsWXZiK2Z3N3RGUzBTbFNMNTNSM3ZjdFhsaGZoNVFJSU1MR1Ev?=
+ =?utf-8?B?aEZQVVJTTFVVdTg1Y1poenJTT0pUcDV2NnFrQnVPRHNiU1l2QzF4MzN3UEFE?=
+ =?utf-8?B?Mnplb3hmdDBuT3FCeU5WWVh3a2VocVd5K3dpM3VEcXhTNUJaQjhrSmk4RVov?=
+ =?utf-8?B?LzEvMHlEYTdXL0ZPa0pWeE4xRHI0cHd6VkgyWXI0S0x3ckNJMmwweEJrb1Bu?=
+ =?utf-8?B?T09nbDl1eHIvRXQwWkkyRk1CV1FrZEprNW9Pcm9xZEc4MTl2NUk2OEw3R253?=
+ =?utf-8?B?OUxjTXpKU3hPM21Qb3F3NkMxcWY0dVJQYlVwTnE2dGhURnhNUzJDbHNwTEFH?=
+ =?utf-8?B?YzkxSUdNN1BlaVYxMlFneUp5N0xOMlBwQjNPcFBEaTRZRUJxVURNTGVqenBM?=
+ =?utf-8?B?cEJBRGxuMFJvc3lqeFRLNjZGeGVmMUw3c3RCYnZqNy9OWnU5TStleDR3TzVw?=
+ =?utf-8?B?eTNqQTN2NmVUejRaYStsZDI5WlJJYjBwQk9FUnV3dDk1eG9Bd2JCbnFUQ2ds?=
+ =?utf-8?B?TnFZOXJHd0x4QzkzTjdLN3lLOHJibTJnVDNwaXhsSzFEMW5nUFBmbjJMNTZ0?=
+ =?utf-8?B?NXJsRWhTaGV4bmVsUXlPbDF6a0daMFhaMnBnbG1HRFpMdkxJelVaejQ1dlZx?=
+ =?utf-8?B?Z2ZyL3FvK01BUFRBZlFzdU9CV1JIK2xDTHBLeGtEcUdFT3lONlVaMy9OaSt6?=
+ =?utf-8?B?VjRmdDZwVm5sWUFFVDdxbjVKZFlPeWhvNlcvY2NzTVZNOFBEcVdYV0ZFRnRj?=
+ =?utf-8?B?dGF5MEx1Z09EeExFNXR5QXZnamVudmdLU0tZS3hZdVNlN1RvV2U3cXJCNVJT?=
+ =?utf-8?B?OG9GdmM2Ungxd0N0WkM3Tk5Lc1RPdDR6eUhDdnpiNG5CM0szaWZZdTcrWlRn?=
+ =?utf-8?B?UkZmUnhxTi9icjFzOUphQTVGUW5JVENvU2ozVzZZb0dCMlVNYWlBamFNTVV3?=
+ =?utf-8?B?ejNiL3ppa0QzaDBSYStOYVQzTjE3dzJwcXVzM3AwalcyVldXaDl2d25oRXM1?=
+ =?utf-8?B?NVc4TU1tYStRMlpsSXdCNS95NTRGZDd4NnRTVG9UNlhQd1F3N08wQ0xyU2Jp?=
+ =?utf-8?B?emxwV0VIcmJ2ZjRsNUk5Nk5iNzBqU1lHd05OZ2lOS2dVYURHRW4rSFNERUhr?=
+ =?utf-8?B?Y3RGSk1US01TZHdVNGxVWlZLZjlYOTk3ZldvUHlId3Y5QU1nTGRnTXVvMlpR?=
+ =?utf-8?B?REorMlB3Y1VjMENvaU8vcThvaEErN3Q4eVF3ZUlqZFBXUlUzYXE4MUNVR2Zm?=
+ =?utf-8?B?eU5ObDVmRHpwWGtmV2N1ZUpmUkdKUEltdFFXd3RmU0JsZlFVamdZbFQ2dHhN?=
+ =?utf-8?B?SDdhVStzL0c3VlBwc3dhd2UzNG1YSWJWQkRWMVJjcURlUDV4YTVnVm54U1N6?=
+ =?utf-8?B?a3pPLzRTNFhPa3I5UDN2UENwZldFUE5ENC83VWlBdzRRVVRZQjY1OUJQem5p?=
+ =?utf-8?B?RkZkU2pDb2xxT01nam5OWDVEZ2ZBS1huWjJmVFE5T0d2aVpJRHc3TDhZakVP?=
+ =?utf-8?B?Qk05OXUxSHdrc0VnUlA1eXowL2Vxc0tld3dwSExPdy9xdTJNeUo5UHRlZEVo?=
+ =?utf-8?B?ZFdSaVdJdUxxQnlWOXVLcW9mNUhNVFo4NDZva3AxcnUrcWhsK1dGNFloR1l3?=
+ =?utf-8?B?MmhuOUx6eC9JbENiYjVmZkRZRlErRFBhWENDM0tIUzlxeFFLUFQ0WXRFQlI2?=
+ =?utf-8?B?Zjc5WmxHNFB4em5sdlZERjFuem5lcjlIVWVRak5IQmNwWHVTaFFKT1J3NmVt?=
+ =?utf-8?B?dGxKaU4vZi92clpPS2VweXdHVlZzdUhuMmtOS0pMc3JSRlVMUlkrMkFhZjla?=
+ =?utf-8?B?QVBXK1ZhV2pPZ1lpNjZyeVJVZ3R2M29vQlNVSFZTdUFCdysrQ3dpWkdzdHNs?=
+ =?utf-8?B?TmJlMm1UWVJPTk1qc2w1Z1JXMG8zOWI0Q2lrVDJsR3ZValh1MGVVTXNxbWNT?=
+ =?utf-8?Q?LxHzpI1WdwpglKEdHh4bR5g=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 260235fc-61b2-423b-2f27-08d9d2492726
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3283.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2022 01:49:48.2613
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nrlrILorL6VauSHh4TTY/mwwG1Wpdqd21dxD65tnriOO4QizX0/nUpvvaMl/PYMPrz/paQhp/eiTDHZq2nX4XQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5094
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10220 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ phishscore=0 malwarescore=0 spamscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201080008
+X-Proofpoint-ORIG-GUID: DHJdobcfejsf_EeP_Fx710edgW_y0TdM
+X-Proofpoint-GUID: DHJdobcfejsf_EeP_Fx710edgW_y0TdM
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
 
-Hi, Marcel
+The proposed fix looks fine, but I still hope this to revert this series 
+if at all possible. The review hadn't been done yet.
 
+On 1/7/2022 1:13 PM, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 >
->Hi Sean,
+> Clang build fails with
+> mlx5_vnet.c:2574:6: error: variable 'mvdev' is used uninitialized whenever
+>    'if' condition is true
+>          if (!ndev->vqs || !ndev->event_cbs) {
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> mlx5_vnet.c:2660:14: note: uninitialized use occurs here
+>          put_device(&mvdev->vdev.dev);
+>                      ^~~~~
+> This because mvdev is set after trying to allocate ndev->vqs,event_cbs.
+> So move the allocation to after mvdev is set but before the arrays
+> are used in init_mvqs()
 >
->> The driver has to issue the specific command to enable Bluetooth SCO
->> over the I2S/PCM interface on mt7921s, that is supported since the
->> firmware with version 20211222191101 was added, and the patch would
->> not cause any harm even when the old firmware is applied.
->>
->> The SCO profile with the patch was tested by setting up a VOIP
->> application, connected to HFP device, checked telephony function can work normally.
->>
->> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
->> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
->> ---
->> v2: refine git message and fix typo
->> v3:
->>    1. free skb after calling  __hci_cmd_sync
->>    2. make bt_awake as const struct btmtk_sco
->> v4:
->>    1. update git message
->>    2. drop a few redundant error messages
->> ---
->> drivers/bluetooth/btmtk.h     | 20 +++++++++++
->> drivers/bluetooth/btmtksdio.c | 68 +++++++++++++++++++++++++++++++++++
->> 2 files changed, 88 insertions(+)
->>
->> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
->> index 2be1d2680ad8..fc57ef09d132 100644
->> --- a/drivers/bluetooth/btmtk.h
->> +++ b/drivers/bluetooth/btmtk.h
->> @@ -7,8 +7,12 @@
->>
->> #define HCI_WMT_MAX_EVENT_SIZE		64
->>
->> +#define BTMTK_WMT_REG_WRITE 0x1
->> #define BTMTK_WMT_REG_READ 0x2
->>
->> +#define MT7921_PINMUX_0 0x70005050
->> +#define MT7921_PINMUX_1 0x70005054
->> +
->> enum {
->>	BTMTK_WMT_PATCH_DWNLD = 0x1,
->>	BTMTK_WMT_TEST = 0x2,
->> @@ -76,6 +80,22 @@ struct btmtk_wakeon {
->>	__le16 wakeup_delay;
->> } __packed;
->>
->> +struct btmtk_sco {
->> +	u8 clock_config;
->> +	u8 transmit_format_config;
->> +	u8 channel_format_config;
->> +	u8 channel_select_config;
->> +} __packed;
->> +
->> +struct reg_write_cmd {
->> +	u8 type;
->> +	u8 rsv;
->> +	u8 num;
->> +	__le32 addr;
->> +	__le32 data;
->> +	__le32 mask;
->> +} __packed;
->> +
->> struct btmtk_hci_wmt_params {
->>	u8 op;
->>	u8 flag;
->> diff --git a/drivers/bluetooth/btmtksdio.c
->> b/drivers/bluetooth/btmtksdio.c index 89bd70651e9e..f6fb82b317de
->> 100644
->> --- a/drivers/bluetooth/btmtksdio.c
->> +++ b/drivers/bluetooth/btmtksdio.c
->> @@ -830,6 +830,66 @@ static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
->>	return err;
->> }
->>
->> +static int btsdio_mtk_reg_write(struct hci_dev *hdev, u32 reg, u32
->> +val, u32 mask) {
->> +	struct btmtk_hci_wmt_params wmt_params;
->> +	struct reg_write_cmd reg_write = {
->> +		.type = 1,
->> +		.num = 1,
->> +		.addr = cpu_to_le32(reg),
->> +		.data = cpu_to_le32(val),
->> +		.mask = cpu_to_le32(mask),
->> +	};
->
->Maybe a good idea to make this const as well.
->
+> Fixes: 7620d51af29a ("vdpa/mlx5: Support configuring max data virtqueue")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-will do it next verion
-
->> +	int err, status;
->> +
->> +	wmt_params.op = BTMTK_WMT_REGISTER;
->> +	wmt_params.flag = BTMTK_WMT_REG_WRITE;
->> +	wmt_params.dlen = sizeof(reg_write);
->> +	wmt_params.data = &reg_write;
->> +	wmt_params.status = &status;
->> +
->> +	err = mtk_hci_wmt_sync(hdev, &wmt_params);
->> +	if (err < 0)
->> +		bt_dev_err(hdev, "Failed to write reg(%d)", err);
+Reviewed-by: Si-Wei Liu<si-wei.liu@oracle.com>
+> ---
+>   drivers/vdpa/mlx5/net/mlx5_vnet.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
 >
->The please “..reg (%d)” as you have for the other error message.
->
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index b564c70475815..37220f6db7ad7 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2569,16 +2569,18 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+>   	if (IS_ERR(ndev))
+>   		return PTR_ERR(ndev);
+>   
+> +	ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
+> +	ndev->mvdev.max_vqs = max_vqs;
+> +	mvdev = &ndev->mvdev;
+> +	mvdev->mdev = mdev;
+> +
+>   	ndev->vqs = kcalloc(max_vqs, sizeof(*ndev->vqs), GFP_KERNEL);
+>   	ndev->event_cbs = kcalloc(max_vqs + 1, sizeof(*ndev->event_cbs), GFP_KERNEL);
+>   	if (!ndev->vqs || !ndev->event_cbs) {
+>   		err = -ENOMEM;
+>   		goto err_alloc;
+>   	}
+> -	ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
+> -	ndev->mvdev.max_vqs = max_vqs;
+> -	mvdev = &ndev->mvdev;
+> -	mvdev->mdev = mdev;
+> +
+>   	init_mvqs(ndev);
+>   	mutex_init(&ndev->reslock);
+>   	config = &ndev->config;
 
-will do it next version
-
->> +
->> +	return err;
->> +}
->> +
->> +static int btsdio_mtk_sco_setting(struct hci_dev *hdev) {
->> +	const struct btmtk_sco sco_setting = {
->> +		.clock_config = 0x49,
->> +		.channel_format_config = 0x80,
->> +	};
->> +	struct sk_buff *skb;
->> +	u32 val;
->> +	int err;
->> +
->> +	/* Enable SCO over I2S/PCM for MediaTek chipset */
->> +	skb =  __hci_cmd_sync(hdev, 0xfc72, sizeof(sco_setting),
->> +			      &sco_setting, HCI_CMD_TIMEOUT);
->> +	if (IS_ERR(skb))
->> +		return PTR_ERR(skb);
->> +
->> +	kfree_skb(skb);
->> +
->> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_0, &val);
->> +	if (err < 0)
->> +		return err;
->> +
->> +	val |= 0x11000000;
->> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_0, val, ~0);
->> +	if (err < 0)
->> +		return err;
->> +
->> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_1, &val);
->> +	if (err < 0)
->> +		return err;
->> +
->> +	val |= 0x00000101;
->> +	return btsdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0); }
->> +
->> static int btmtksdio_setup(struct hci_dev *hdev) {
->>	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev); @@ -862,6 +922,14
->> @@ static int btmtksdio_setup(struct hci_dev *hdev)
->>		err = mt79xx_setup(hdev, fwname);
->>		if (err < 0)
->>			return err;
->> +
->> +		/* Enable SCO over I2S/PCM */
->> +		err = btsdio_mtk_sco_setting(hdev);
->> +		if (err < 0) {
->> +			bt_dev_err(hdev, "Failed to enable SCO setting (%d)", err);
->> +			return err;
->> +		}
->> +
->
->Is this really a failure or could the chip continue to operate? It just means it falls back to SCO over HCI?
->
-
-In fact, the firmware with the btmtksdio driver does not support SCO over HCI.
-
-If we fail there, the chip will not be able to continue running the SCO profile,
-So I prefer we should be aware of this problem and return an error code immediately.
-
-By the way, the reason why we do not support SCO over HCI is btmtksdio and wifi
-sdio driver would compete for the same SDIO bus to send and receive data. This
-will cause a lot of latency for SCO data, so we use a dedicated bus to minimize
-the latency to ensure audio quality in the actual product.
-
->>		break;
->>	case 0x7663:
->>	case 0x7668:
->
->Regards
->
->Marcel
->

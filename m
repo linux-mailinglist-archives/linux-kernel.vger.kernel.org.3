@@ -2,200 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 553634884C4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358434884C7
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234789AbiAHRCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 12:02:05 -0500
-Received: from mga01.intel.com ([192.55.52.88]:36539 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232235AbiAHRCD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 12:02:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641661323; x=1673197323;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TcYzdRPhQ+m3PxKtqutXrOivaHHD8Ara1TjaCG1JcxI=;
-  b=GlQ1xOsCqvW03/0Kb4ti/nfvidNxRqpL8DFHjhrEVBUsvXnc3StH+2Kt
-   c/PzpUg8dZ4EQtCxx6pGKACGrOni+aRRTcyK6l1562kCglhxNPNXZ4og/
-   e9us6Dq12QgtMk1TZSah4dx3CIv7OuXIWl8dM5bqJ1FhN39VKAmDeJRTz
-   qVxQcJ/Xb9ALWLU+YbR4TdPHdvNQPqkD0lxM92ADv1Cpw0D8A6EzmitTD
-   4DES1z1cTcZI+y53aNVx+1JBzq2dVuRbC25GFu/DgVBAIvPq93I85nE7y
-   K0wpghsfNmagw6I+zQC69eWCbhfv5FdAYMowV5k4RNsqYJtWAa1Bb73DW
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="267343327"
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="267343327"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 09:02:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
-   d="scan'208";a="471629828"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jan 2022 09:02:01 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6F6P-0000q9-3e; Sat, 08 Jan 2022 17:02:01 +0000
-Date:   Sun, 9 Jan 2022 01:01:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2373/2375]
- drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: warning: data definition
- has no type or storage class
-Message-ID: <202201090037.nahE66F3-lkp@intel.com>
+        id S234798AbiAHREo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 12:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232235AbiAHREo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 12:04:44 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B87C06173F;
+        Sat,  8 Jan 2022 09:04:43 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id e9so16141985wra.2;
+        Sat, 08 Jan 2022 09:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D0S+D/FQRGuVQki4kVkJvs2fOsfa72Dpr2oChnts0Ws=;
+        b=ReWSbFnVM+asKsJH7t3pVj9MX+erLTHsb5AizEdt6MprV9Ez3Dk2sloGNYQc4QMEZJ
+         uyAWXuIUVxj2T5YPvWceQsp6/jAejpvj+UuaHH3B8dXewNkxpuC3ZC1BY2vB1cDq2rC2
+         GEb2t8LDeO+ZvpAcIohyyl0+eu3Db6qN3N6SD3zQD51OJDXAzN/ZAPm5ykwHqjdVTzqa
+         ipIeY61+Uqr9g+bUipWws92I8p7lVrxgjPqPODm7lNx3wmO7fYDilw/INXuJ30T7P0om
+         D9M2E5av6BUFQhKiVgsJfg+/JFcTyFUEjVNT2fkPoQtrqUnMP0LNNW/QLxfp4mVCbw2t
+         HEsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D0S+D/FQRGuVQki4kVkJvs2fOsfa72Dpr2oChnts0Ws=;
+        b=Dxu2ctGrkkmkESTnfXvFtKAfVlXwjhBBClPXD4ZDJV411dCsaFevI5ybr6ZgNnXGYj
+         hXLemEFJvi3e7niaFLnPI761T5C0LlEr8LuJLUMismIPtS4wdi72hsW080ePffHrHTrw
+         nrNSFCRrnOEyRRE7Gg9jWNckm4w3dxaZ6SIz0eslU0eU972aezAvupaAjiHpE+MaZzxW
+         9WBDHdgf65GKsvO8dBaS1qbpBaVSbqf4COFUosjpRdhykI6Ctp0/dqWsJOhZtTS8qypQ
+         frHDx3db6MdGgwxEj3I18WGoqU2xVE2UrLFvqEipZ/52+ANQ5lJGazCMP0xzgRE0eHwV
+         EHag==
+X-Gm-Message-State: AOAM5327vzlC6WKPhLUHDQbrWjgp0pyJogRj29SEqVHEeOFAHTXCOI8V
+        metP0QxO3Rx3eVJ/pKodylk5CiJoFkIIWQ==
+X-Google-Smtp-Source: ABdhPJy0wEyg+On4sfjTIHisEZxONTaD+blK8YcC2BhPE2gEa/aGuUPNG3VD6DN+a2niO7vwxOmWpA==
+X-Received: by 2002:adf:d1e5:: with SMTP id g5mr58250673wrd.94.1641661482190;
+        Sat, 08 Jan 2022 09:04:42 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id n15sm2455935wmc.0.2022.01.08.09.04.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 09:04:41 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ribalda@chromium.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH RESEND v2] media: uvcvideo: Fix memory leak in uvc_gpio_parse
+Date:   Sat,  8 Jan 2022 18:04:39 +0100
+Message-Id: <20220108170439.49984-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   351ceeab2ef96ab2fc306934ddb201b44636181b
-commit: 13920d67d91106f4681f468a6c01d404e1924739 [2373/2375] headers/deps: RDMA: Optimize <rdma/ib_verbs.h> dependencies, remove <linux/dim.h> inclusion
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220109/202201090037.nahE66F3-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=13920d67d91106f4681f468a6c01d404e1924739
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 13920d67d91106f4681f468a6c01d404e1924739
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/infiniband/hw/hns/
+Previously the unit buffer was allocated before checking the IRQ for
+privacy GPIO.
+In case of error, the unit buffer was leaked.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Allocate the unit buffer after the IRQ to avoid it.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: warning: data definition has no type or storage class
-    4460 | MODULE_DEVICE_TABLE(of, hns_roce_of_match);
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: error: type defaults to 'int' in declaration of 'MODULE_DEVICE_TABLE' [-Werror=implicit-int]
->> drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4460:1: warning: parameter names (without types) in function declaration
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4466:1: warning: data definition has no type or storage class
-    4466 | MODULE_DEVICE_TABLE(acpi, hns_roce_acpi_match);
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4466:1: error: type defaults to 'int' in declaration of 'MODULE_DEVICE_TABLE' [-Werror=implicit-int]
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4466:1: warning: parameter names (without types) in function declaration
-   In file included from include/linux/device_api.h:34,
-                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:46:
-   include/linux/device/driver.h:164:1: warning: data definition has no type or storage class
-     164 | module_init(__driver##_init); \
-         | ^~~~~~~~~~~
-   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
-     253 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
-    4686 | module_platform_driver(hns_roce_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device/driver.h:164:1: error: type defaults to 'int' in declaration of 'module_init' [-Werror=implicit-int]
-     164 | module_init(__driver##_init); \
-         | ^~~~~~~~~~~
-   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
-     253 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
-    4686 | module_platform_driver(hns_roce_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/linkage.h:7,
-                    from include/linux/printk.h:7,
-                    from include/asm-generic/bug.h:22,
-                    from arch/sparc/include/asm/bug.h:25,
-                    from include/linux/bug.h:5,
-                    from include/linux/cpumask_types.h:12,
-                    from include/linux/cpumask.h:5,
-                    from include/linux/smp_api.h:12,
-                    from include/linux/lockdep_api.h:27,
-                    from include/linux/timer.h:5,
-                    from include/linux/workqueue_types.h:9,
-                    from include/linux/workqueue_api.h:10,
-                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:33:
-   include/linux/export.h:19:30: warning: parameter names (without types) in function declaration
-      19 | #define THIS_MODULE ((struct module *)0)
-         |                              ^~~~~~
-   include/linux/platform_device.h:223:41: note: in expansion of macro 'THIS_MODULE'
-     223 |         __platform_driver_register(drv, THIS_MODULE)
-         |                                         ^~~~~~~~~~~
-   include/linux/device/driver.h:162:16: note: in expansion of macro 'platform_driver_register'
-     162 |         return __register(&(__driver) , ##__VA_ARGS__); \
-         |                ^~~~~~~~~~
-   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
-     253 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
-    4686 | module_platform_driver(hns_roce_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/device_api.h:34,
-                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:46:
-   include/linux/device/driver.h:169:1: warning: data definition has no type or storage class
-     169 | module_exit(__driver##_exit);
-         | ^~~~~~~~~~~
-   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
-     253 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
-    4686 | module_platform_driver(hns_roce_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device/driver.h:169:1: error: type defaults to 'int' in declaration of 'module_exit' [-Werror=implicit-int]
-     169 | module_exit(__driver##_exit);
-         | ^~~~~~~~~~~
-   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
-     253 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
-    4686 | module_platform_driver(hns_roce_driver);
-         | ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/linkage.h:7,
-                    from include/linux/printk.h:7,
-                    from include/asm-generic/bug.h:22,
-                    from arch/sparc/include/asm/bug.h:25,
-                    from include/linux/bug.h:5,
-                    from include/linux/cpumask_types.h:12,
-                    from include/linux/cpumask.h:5,
-                    from include/linux/smp_api.h:12,
-                    from include/linux/lockdep_api.h:27,
-                    from include/linux/timer.h:5,
-                    from include/linux/workqueue_types.h:9,
-                    from include/linux/workqueue_api.h:10,
-                    from drivers/infiniband/hw/hns/hns_roce_hw_v1.c:33:
-   include/linux/export.h:19:30: warning: parameter names (without types) in function declaration
-      19 | #define THIS_MODULE ((struct module *)0)
-         |                              ^~~~~~
-   include/linux/platform_device.h:223:41: note: in expansion of macro 'THIS_MODULE'
-     223 |         __platform_driver_register(drv, THIS_MODULE)
-         |                                         ^~~~~~~~~~~
-   include/linux/device/driver.h:162:16: note: in expansion of macro 'platform_driver_register'
-     162 |         return __register(&(__driver) , ##__VA_ARGS__); \
-         |                ^~~~~~~~~~
-   include/linux/platform_device.h:253:9: note: in expansion of macro 'module_driver'
-     253 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^~~~~~~~~~~~~
-   drivers/infiniband/hw/hns/hns_roce_hw_v1.c:4686:1: note: in expansion of macro 'module_platform_driver'
-    4686 | module_platform_driver(hns_roce_driver);
-
-
-vim +4460 drivers/infiniband/hw/hns/hns_roce_hw_v1.c
-
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4455) 
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4456) static const struct of_device_id hns_roce_of_match[] = {
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4457) 	{ .compatible = "hisilicon,hns-roce-v1", .data = &hns_roce_hw_v1, },
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4458) 	{},
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4459) };
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30 @4460) MODULE_DEVICE_TABLE(of, hns_roce_of_match);
-08805fdbeb2d93 Wei Hu(Xavier  2017-08-30  4461) 
-
-:::::: The code at line 4460 was first introduced by commit
-:::::: 08805fdbeb2d9300c09e681793518fb4da522235 RDMA/hns: Split hw v1 driver from hns roce driver
-
-:::::: TO: Wei Hu(Xavier) <xavier.huwei@huawei.com>
-:::::: CC: Doug Ledford <dledford@redhat.com>
+Addresses-Coverity-ID: 1474639 ("Resource leak")
+Fixes: 2886477ff987 ("media: uvcvideo: Implement UVC_EXT_GPIO_UNIT")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+v2: Add Fixes and Reviewed-by tags
+---
+ drivers/media/usb/uvc/uvc_driver.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 7c007426e082..9e83e2002710 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1533,10 +1533,6 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+ 	if (IS_ERR_OR_NULL(gpio_privacy))
+ 		return PTR_ERR_OR_ZERO(gpio_privacy);
+ 
+-	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
+-	if (!unit)
+-		return -ENOMEM;
+-
+ 	irq = gpiod_to_irq(gpio_privacy);
+ 	if (irq < 0) {
+ 		if (irq != EPROBE_DEFER)
+@@ -1545,6 +1541,10 @@ static int uvc_gpio_parse(struct uvc_device *dev)
+ 		return irq;
+ 	}
+ 
++	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
++	if (!unit)
++		return -ENOMEM;
++
+ 	unit->gpio.gpio_privacy = gpio_privacy;
+ 	unit->gpio.irq = irq;
+ 	unit->gpio.bControlSize = 1;
+-- 
+2.25.1
+

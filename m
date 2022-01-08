@@ -2,267 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0A54883D3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 14:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1294883D5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 14:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiAHNtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 08:49:05 -0500
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:60681 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiAHNtE (ORCPT
+        id S234253AbiAHNxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 08:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230023AbiAHNxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 08:49:04 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6C5dnLRFaBazo6C5dn7MaF; Sat, 08 Jan 2022 14:49:02 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 08 Jan 2022 14:49:02 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     shshaikh@marvell.com, manishc@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] qlcnic: Simplify DMA setting
-Date:   Sat,  8 Jan 2022 14:48:59 +0100
-Message-Id: <4996ab0337d62ec6a54b2edf234cd5ced4b4d7ad.1641649611.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sat, 8 Jan 2022 08:53:24 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CA3C061574
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 05:53:24 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id a18so32541557edj.7
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 05:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IfBpMF7ZpiSkVVFjrUiS9oq4g5AGMq3hHhumCDyyUTo=;
+        b=kQUhGaUdZLBCXPxF/kdwC3ug4bfeBbV/4DtwPQPwXGWJbO15X7gfmBVfUmPOgK5cM0
+         /0sl/M0RT1dsEj1I+ky70JXWKTEEbYSlTpin4J79Pnmx0JO8CybEziMZrudI7RRrQfKE
+         vD1cX5floz8zJtD2xc550oUS1VHhCWoOaPc9I1g2zfDTNmKU0VrPXjM3HnQNb6wSflGR
+         9Uf+rv+hY9sl67qcsnHNglxufQNannXokbwSB+B7I4VD88s7XR3KR0pVfNf69JG3OTnG
+         UBsxiH9v1pnKmPQIZQiPypi/qfwT3u8yTceeoyg+iajsRGvlmYLEDufz/3oAYN8jTJJH
+         rI7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IfBpMF7ZpiSkVVFjrUiS9oq4g5AGMq3hHhumCDyyUTo=;
+        b=qfZBubnNV/kmKnfTGEAjbtypEEkLCQFlKe/pEW0OPpfBZ6uHCUjLpK1l+5A47Izpzm
+         hKxlKsgOq8y5fEOxX2oXPIs2B9sX2smELcXeolw2Qa6OJxdE31qvLPYUbFUYIzqIHJNn
+         LnQtpFYenBeLC5HqThwHPB5AKhqkgnB72zjmwhxcM2zsBcrKLrQxM7ncoD3Iif7w+cJR
+         DqurrPxRJEgD5xqPuKbP6nc0MVjzQDslcLWORI7AaE5nocQ9Qjf9WvgdeKFQxUSsAbnh
+         +qXtSjEiuspHjsa+4FwQwnuxFuNpx6K1Y2nS6dPxejmPbQR34M44c/9lh+ZrTM+zuJzU
+         5JAg==
+X-Gm-Message-State: AOAM532Gqmi5RSWbKQI3++pcLDEH57zU8Zzrb/sjYdOpscEpIvj1BCBw
+        Yo8SdAGddvzq2tkQKptKi88=
+X-Google-Smtp-Source: ABdhPJzzyYjDVAKU1HN2s+625kayP58JZA+p6Gzt5uwrUrIVIXEWlS4+KTJ+wwWTvN5Fqk+jwW+s9A==
+X-Received: by 2002:a17:906:2799:: with SMTP id j25mr52869223ejc.700.1641650002572;
+        Sat, 08 Jan 2022 05:53:22 -0800 (PST)
+Received: from t470p (host-79-36-120-235.retail.telecomitalia.it. [79.36.120.235])
+        by smtp.gmail.com with ESMTPSA id k25sm537456ejk.179.2022.01.08.05.53.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 05:53:22 -0800 (PST)
+Date:   Sat, 8 Jan 2022 14:53:19 +0100
+From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linuxfancy@googlegroups.com,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Ivan Safonov <insafonov@gmail.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/56] staging: r8188eu: remove dead macro ClearToDs
+Message-ID: <20220108135319.GA509144@t470p>
+References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
+ <20220103190326.363960-4-alb3rt0.m3rciai@gmail.com>
+ <Ydb5SrclLcYzUrsC@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydb5SrclLcYzUrsC@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+> > Remove dead macro ClearToDs.
+> 
+> "dead"?  Was it ever alive?
+> 
+> I think you mean to write something like:
+> 
+> 	The #define ClearToDs() is not used anywhere in the r8188eu
+> 	driver, so it can be safely removed.
+> 
+> right?
+Yes, correct.
 
-So qlcnic_set_dma_mask(), (in qlcnic_main.c) can be simplified a lot and
-inlined directly in its only caller.
+Thanks,
+Alberto
 
-
-If dma_set_mask_and_coherent() succeeds, 'pci_using_dac' is known to be 1.
-So it can be removed from all the calling chain.
-
-qlcnic_setup_netdev() can finally be simplified as-well.
-
-
-[1]: https://lkml.org/lkml/2021/6/7/398
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/ethernet/qlogic/qlcnic/qlcnic.h   |  2 +-
- .../ethernet/qlogic/qlcnic/qlcnic_83xx_hw.h   |  2 +-
- .../ethernet/qlogic/qlcnic/qlcnic_83xx_init.c |  4 +-
- .../net/ethernet/qlogic/qlcnic/qlcnic_main.c  | 38 +++++--------------
- .../net/ethernet/qlogic/qlcnic/qlcnic_sriov.h |  2 +-
- .../qlogic/qlcnic/qlcnic_sriov_common.c       |  9 ++---
- 6 files changed, 19 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h
-index be7abee160e7..b25102fded7b 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic.h
-@@ -1698,7 +1698,7 @@ int qlcnic_set_vxlan_port(struct qlcnic_adapter *adapter, u16 port);
- int qlcnic_set_vxlan_parsing(struct qlcnic_adapter *adapter, u16 port);
- int qlcnic_83xx_configure_opmode(struct qlcnic_adapter *adapter);
- int qlcnic_read_mac_addr(struct qlcnic_adapter *);
--int qlcnic_setup_netdev(struct qlcnic_adapter *, struct net_device *, int);
-+int qlcnic_setup_netdev(struct qlcnic_adapter *, struct net_device *);
- void qlcnic_set_netdev_features(struct qlcnic_adapter *,
- 				struct qlcnic_esw_func_cfg *);
- void qlcnic_sriov_vf_set_multi(struct net_device *);
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.h
-index 6f1d9c1fd1b0..23cd47d588e5 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.h
-@@ -609,7 +609,7 @@ int qlcnic_83xx_read_flash_descriptor_table(struct qlcnic_adapter *);
- int qlcnic_83xx_flash_read32(struct qlcnic_adapter *, u32, u8 *, int);
- int qlcnic_83xx_lockless_flash_read32(struct qlcnic_adapter *,
- 				      u32, u8 *, int);
--int qlcnic_83xx_init(struct qlcnic_adapter *, int);
-+int qlcnic_83xx_init(struct qlcnic_adapter *);
- int qlcnic_83xx_idc_ready_state_entry(struct qlcnic_adapter *);
- void qlcnic_83xx_idc_poll_dev_state(struct work_struct *);
- void qlcnic_83xx_idc_exit(struct qlcnic_adapter *);
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
-index 27dffa299ca6..dbb800769cb6 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
-@@ -2432,7 +2432,7 @@ static void qlcnic_83xx_init_rings(struct qlcnic_adapter *adapter)
- 	qlcnic_set_sds_ring_count(adapter, rx_cnt);
- }
- 
--int qlcnic_83xx_init(struct qlcnic_adapter *adapter, int pci_using_dac)
-+int qlcnic_83xx_init(struct qlcnic_adapter *adapter)
- {
- 	struct qlcnic_hardware_context *ahw = adapter->ahw;
- 	int err = 0;
-@@ -2466,7 +2466,7 @@ int qlcnic_83xx_init(struct qlcnic_adapter *adapter, int pci_using_dac)
- 		goto exit;
- 
- 	if (qlcnic_sriov_vf_check(adapter)) {
--		err = qlcnic_sriov_vf_init(adapter, pci_using_dac);
-+		err = qlcnic_sriov_vf_init(adapter);
- 		if (err)
- 			goto detach_mbx;
- 		else
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-index ed84f0f97623..d320567b2cca 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
-@@ -2258,8 +2258,7 @@ static int qlcnic_set_real_num_queues(struct qlcnic_adapter *adapter,
- }
- 
- int
--qlcnic_setup_netdev(struct qlcnic_adapter *adapter, struct net_device *netdev,
--		    int pci_using_dac)
-+qlcnic_setup_netdev(struct qlcnic_adapter *adapter, struct net_device *netdev)
- {
- 	int err;
- 	struct pci_dev *pdev = adapter->pdev;
-@@ -2278,20 +2277,15 @@ qlcnic_setup_netdev(struct qlcnic_adapter *adapter, struct net_device *netdev,
- 
- 	netdev->features |= (NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_RXCSUM |
- 			     NETIF_F_IPV6_CSUM | NETIF_F_GRO |
--			     NETIF_F_HW_VLAN_CTAG_RX);
-+			     NETIF_F_HW_VLAN_CTAG_RX | NETIF_F_HIGHDMA);
- 	netdev->vlan_features |= (NETIF_F_SG | NETIF_F_IP_CSUM |
--				  NETIF_F_IPV6_CSUM);
-+				  NETIF_F_IPV6_CSUM | NETIF_F_HIGHDMA);
- 
- 	if (QLCNIC_IS_TSO_CAPABLE(adapter)) {
- 		netdev->features |= (NETIF_F_TSO | NETIF_F_TSO6);
- 		netdev->vlan_features |= (NETIF_F_TSO | NETIF_F_TSO6);
- 	}
- 
--	if (pci_using_dac) {
--		netdev->features |= NETIF_F_HIGHDMA;
--		netdev->vlan_features |= NETIF_F_HIGHDMA;
--	}
--
- 	if (qlcnic_vlan_tx_check(adapter))
- 		netdev->features |= (NETIF_F_HW_VLAN_CTAG_TX);
- 
-@@ -2341,20 +2335,6 @@ qlcnic_setup_netdev(struct qlcnic_adapter *adapter, struct net_device *netdev,
- 	return 0;
- }
- 
--static int qlcnic_set_dma_mask(struct pci_dev *pdev, int *pci_using_dac)
--{
--	if (!dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64)))
--		*pci_using_dac = 1;
--	else if (!dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)))
--		*pci_using_dac = 0;
--	else {
--		dev_err(&pdev->dev, "Unable to set DMA mask, aborting\n");
--		return -EIO;
--	}
--
--	return 0;
--}
--
- void qlcnic_free_tx_rings(struct qlcnic_adapter *adapter)
- {
- 	int ring;
-@@ -2441,8 +2421,8 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	struct net_device *netdev = NULL;
- 	struct qlcnic_adapter *adapter = NULL;
- 	struct qlcnic_hardware_context *ahw;
--	int err, pci_using_dac = -1;
- 	char board_name[QLCNIC_MAX_BOARD_NAME_LEN + 19]; /* MAC + ": " + name */
-+	int err;
- 
- 	err = pci_enable_device(pdev);
- 	if (err)
-@@ -2453,9 +2433,11 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		goto err_out_disable_pdev;
- 	}
- 
--	err = qlcnic_set_dma_mask(pdev, &pci_using_dac);
--	if (err)
-+	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-+	if (err) {
-+		dev_err(&pdev->dev, "Unable to set DMA mask, aborting\n");
- 		goto err_out_disable_pdev;
-+	}
- 
- 	err = pci_request_regions(pdev, qlcnic_driver_name);
- 	if (err)
-@@ -2569,7 +2551,7 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	} else if (qlcnic_83xx_check(adapter)) {
- 		qlcnic_83xx_check_vf(adapter, ent);
- 		adapter->portnum = adapter->ahw->pci_func;
--		err = qlcnic_83xx_init(adapter, pci_using_dac);
-+		err = qlcnic_83xx_init(adapter);
- 		if (err) {
- 			switch (err) {
- 			case -ENOTRECOVERABLE:
-@@ -2633,7 +2615,7 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (adapter->portnum == 0)
- 		qlcnic_set_drv_version(adapter);
- 
--	err = qlcnic_setup_netdev(adapter, netdev, pci_using_dac);
-+	err = qlcnic_setup_netdev(adapter, netdev);
- 	if (err)
- 		goto err_out_disable_mbx_intr;
- 
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-index d0111cb3b40e..c42b99cd58bd 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h
-@@ -188,7 +188,7 @@ int qlcnic_sriov_init(struct qlcnic_adapter *, int);
- void qlcnic_sriov_cleanup(struct qlcnic_adapter *);
- void __qlcnic_sriov_cleanup(struct qlcnic_adapter *);
- void qlcnic_sriov_vf_register_map(struct qlcnic_hardware_context *);
--int qlcnic_sriov_vf_init(struct qlcnic_adapter *, int);
-+int qlcnic_sriov_vf_init(struct qlcnic_adapter *);
- void qlcnic_sriov_vf_set_ops(struct qlcnic_adapter *);
- int qlcnic_sriov_func_to_index(struct qlcnic_adapter *, u8);
- void qlcnic_sriov_handle_bc_event(struct qlcnic_adapter *, u32);
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-index 42a44c97572a..9282321c2e7f 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov_common.c
-@@ -525,8 +525,7 @@ static int qlcnic_sriov_vf_init_driver(struct qlcnic_adapter *adapter)
- 	return 0;
- }
- 
--static int qlcnic_sriov_setup_vf(struct qlcnic_adapter *adapter,
--				 int pci_using_dac)
-+static int qlcnic_sriov_setup_vf(struct qlcnic_adapter *adapter)
- {
- 	int err;
- 
-@@ -571,7 +570,7 @@ static int qlcnic_sriov_setup_vf(struct qlcnic_adapter *adapter,
- 	if (err)
- 		goto err_out_send_channel_term;
- 
--	err = qlcnic_setup_netdev(adapter, adapter->netdev, pci_using_dac);
-+	err = qlcnic_setup_netdev(adapter, adapter->netdev);
- 	if (err)
- 		goto err_out_send_channel_term;
- 
-@@ -614,7 +613,7 @@ static int qlcnic_sriov_check_dev_ready(struct qlcnic_adapter *adapter)
- 	return 0;
- }
- 
--int qlcnic_sriov_vf_init(struct qlcnic_adapter *adapter, int pci_using_dac)
-+int qlcnic_sriov_vf_init(struct qlcnic_adapter *adapter)
- {
- 	struct qlcnic_hardware_context *ahw = adapter->ahw;
- 	int err;
-@@ -631,7 +630,7 @@ int qlcnic_sriov_vf_init(struct qlcnic_adapter *adapter, int pci_using_dac)
- 	if (err)
- 		return err;
- 
--	err = qlcnic_sriov_setup_vf(adapter, pci_using_dac);
-+	err = qlcnic_sriov_setup_vf(adapter);
- 	if (err)
- 		return err;
- 
--- 
-2.32.0
 

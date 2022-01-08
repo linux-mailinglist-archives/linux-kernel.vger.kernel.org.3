@@ -2,95 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AF64882A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056B74882AA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiAHIxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 03:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbiAHIxn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 03:53:43 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CD7C061574;
-        Sat,  8 Jan 2022 00:53:43 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id oa15so6401953pjb.4;
-        Sat, 08 Jan 2022 00:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=7kXCs28W66sTjdWSN/kGCXx/YzaMyVz/KostDbMYDNo=;
-        b=XYUtRnSqZLyCfMJsjZiPZ6h/tM6wDNm3I9gT0fv2sqsgH+HHPZS83umFpLfZcbkZA6
-         YtBJInOUEnA9DtoRjmHquuxagajzQT97tqjhwPiJvWaOuRVOIDF6t+0c9aRxLr9ofA6e
-         +RvNPW6lDhE+/Cj0eC1X2R857mHky757FYqJGlizehwvgNdRG0jTzbNeBOZpLwnVBaEs
-         clDEN4YXe3ULyy5kQEq1q4lUeeeaHKysiMbLuH8XK567CFvyq6oIal2zRKmeKH3xlUHb
-         hUkmru9s0pH0grqTZ8nDUV7+JvDsRrMJreX4CM4zEPFY0tEcEheoInx0xPu8p5s+LRjq
-         go0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7kXCs28W66sTjdWSN/kGCXx/YzaMyVz/KostDbMYDNo=;
-        b=658qEP2tMhTP/emXrLpOkLi+7Rkrh3mICiRomCdP8/3mFAj0RvkFr98KIM4Gw2M/wD
-         jZza3UWJzI86OiA99jZrdgD3EYxcdkPnUcKSk7q5mnwbr/FlINEtzvyxb5/KHjvQvdz1
-         H34m8zKZLEjFePYOjQvRhgJ+70ZHnidr8d3dPRJlmHkubShMwCbGYiwvOUENlBGSPxNR
-         mAzT/JIZGZW48umgkhv2+Jd6vFfGzeKY8+ziFW+g4MMfHAWNvNNF1F5z4lz89LW1Ub5/
-         npjOXz/PiLQ06PgnMP3COXXfQzZny7PJJXYGUPr14rVw//foOQ0sNGMDTASHaF557XY5
-         RlyA==
-X-Gm-Message-State: AOAM533s+zq57Cg70jXSc/moB31axvhvNfwfz7+KCoqiyXEBahl//8n5
-        3gcLPon0AtlMrRQPXMQiH7U=
-X-Google-Smtp-Source: ABdhPJxRGudJlEubQRa6AT+BqCt57yVyLI5cKLsapEtYJ/lqs2rRTAfk7sN5HbiEu0UTf+5GGsAlTA==
-X-Received: by 2002:a17:902:a505:b0:149:b646:a173 with SMTP id s5-20020a170902a50500b00149b646a173mr29701788plq.64.1641632022784;
-        Sat, 08 Jan 2022 00:53:42 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id ot7sm1427048pjb.12.2022.01.08.00.53.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 00:53:42 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        dmaengine@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: stm32-dmamux: Fix PM disable depth imbalance in stm32_dmamux_probe
-Date:   Sat,  8 Jan 2022 08:53:36 +0000
-Message-Id: <20220108085336.11992-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S233955AbiAHJBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:01:20 -0500
+Received: from mxhk.zte.com.cn ([63.216.63.35]:47458 "EHLO mxhk.zte.com.cn"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231402AbiAHJBT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 04:01:19 -0500
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4JWDbK2847z8131k;
+        Sat,  8 Jan 2022 17:01:17 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 20890qAW079364;
+        Sat, 8 Jan 2022 17:00:52 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from fox-cloudhost8.localdomain (unknown [10.234.72.110])
+        by smtp (Zmail) with SMTP;
+        Mon, 8 Jan 2022 17:00:52 +0800
+X-Zmail-TransId: 3e8161d952c3001-c1ba5
+From:   Yi Wang <wang.yi59@zte.com.cn>
+To:     pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
+        wang.liang82@zte.com.cn, ZhaoQiang <zhao.qiang11@zte.com.cn>
+Subject: [PATCH] KVM: Fix OOM vulnerability caused by continuously creating devices
+Date:   Sun,  9 Jan 2022 00:49:48 +0800
+Message-Id: <20220108164948.42112-1-wang.yi59@zte.com.cn>
+X-Mailer: git-send-email 2.33.0.rc0.dirty
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 20890qAW079364
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 61D952DD.000 by FangMail milter!
+X-FangMail-Envelope: 1641632477/4JWDbK2847z8131k/61D952DD.000/10.30.14.238/[10.30.14.238]/mse-fl1.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 61D952DD.000/4JWDbK2847z8131k
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pm_runtime_enable will increase power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+From: ZhaoQiang <zhao.qiang11@zte.com.cn>
 
-Fixes: 4f3ceca254e0 ("dmaengine: stm32-dmamux: Add PM Runtime support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+When processing the ioctl request for creating a device in the
+kvm_vm_ioctl()function,the branch did not reclaim the successfully
+created device,which caused memory leak.
+
+Signed-off-by: ZhaoQiang <zhao.qiang11@zte.com.cn>
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
 ---
- drivers/dma/stm32-dmamux.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ virt/kvm/kvm_main.c | 39 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/stm32-dmamux.c b/drivers/dma/stm32-dmamux.c
-index a42164389ebc..d5d55732adba 100644
---- a/drivers/dma/stm32-dmamux.c
-+++ b/drivers/dma/stm32-dmamux.c
-@@ -292,10 +292,12 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
- 	ret = of_dma_router_register(node, stm32_dmamux_route_allocate,
- 				     &stm32_dmamux->dmarouter);
- 	if (ret)
--		goto err_clk;
-+		goto pm_disable;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 72c4e6b39389..f4fbc935faea 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -52,6 +52,7 @@
+ #include <linux/lockdep.h>
+ #include <linux/kthread.h>
+ #include <linux/suspend.h>
++#include <linux/syscalls.h>
  
+ #include <asm/processor.h>
+ #include <asm/ioctl.h>
+@@ -4092,6 +4093,40 @@ static int kvm_ioctl_create_device(struct kvm *kvm,
  	return 0;
+ }
  
-+pm_disable:
-+	pm_runtime_disable(&pdev->dev);
- err_clk:
- 	clk_disable_unprepare(stm32_dmamux->clk);
++static int kvm_ioctl_destroy_device(struct kvm *kvm,
++				    struct kvm_create_device *cd)
++{
++	struct kvm_device_ops *ops = NULL;
++	struct kvm_device *dev;
++	struct file *file;
++	int type;
++
++	if (cd->type >= ARRAY_SIZE(kvm_device_ops_table))
++		return -ENODEV;
++
++	type = array_index_nospec(cd->type, ARRAY_SIZE(kvm_device_ops_table));
++	ops = kvm_device_ops_table[type];
++	if (ops == NULL)
++		return -ENODEV;
++
++	file = fget(cd->fd);
++	if (!file)
++		return -ENODEV;
++
++	dev = file->private_data;
++	if (!dev)
++		return -ENODEV;
++
++	kvm_put_kvm(kvm);
++	mutex_lock(&kvm->lock);
++	list_del(&device->vm_node);
++	mutex_unlock(&kvm->lock);
++	ops->destroy(dev);
++	ksys_close(cd->fd);
++
++	return 0;
++}
++
+ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ {
+ 	switch (arg) {
+@@ -4448,8 +4483,10 @@ static long kvm_vm_ioctl(struct file *filp,
+ 			goto out;
  
+ 		r = -EFAULT;
+-		if (copy_to_user(argp, &cd, sizeof(cd)))
++		if (copy_to_user(argp, &cd, sizeof(cd))) {
++			kvm_ioctl_destroy_device(kvm, &cd);
+ 			goto out;
++		}
+ 
+ 		r = 0;
+ 		break;
 -- 
-2.17.1
-
+2.27.0

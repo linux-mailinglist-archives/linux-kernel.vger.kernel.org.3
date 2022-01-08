@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BADE4884CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC214884DE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbiAHRGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 12:06:13 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49028 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234693AbiAHRGM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 12:06:12 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 208FaV3Q004554;
-        Sat, 8 Jan 2022 17:06:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=j0OUCLfNHaU034PxN9KRvkQFqMCKb6Yc7XYLUNXq7tE=;
- b=kP368OksrP8zfbMLGZOFgcKXKzwP2HG38BButvBqynkjGYVHghTa6fyTifAEFOEMQxNA
- Ejrxg81AF5CTTZDpWWjlHERjR9QcrUBTMT5QX/y9DPf+ZtI4uurnY2J2WX4DdO0v+hZ7
- hotw84ECL6u29ZozuNsflWQs/gcf06jnBE72viozNeNMRnEt24vnx0ZE9NKqKZzIDk48
- vRCnu7CMHYqtpdmU2VVfL46uGBBPalou+yxPVv7BWOmniV2tYguG6I+N11rEynKxALA2
- tKWl+gwpy64lK1qnh2J8WaUCa6RganUyA8F174QqxsBh2eMKis6S3XZu7VM4yaHW4Zrf Xg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3df38b87f2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 17:06:10 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 208H3fuo011969;
-        Sat, 8 Jan 2022 17:06:08 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vhanxm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 17:06:08 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 208H65JS40632826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 8 Jan 2022 17:06:05 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 415F542045;
-        Sat,  8 Jan 2022 17:06:05 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DAFF242042;
-        Sat,  8 Jan 2022 17:06:04 +0000 (GMT)
-Received: from osiris (unknown [9.145.35.196])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat,  8 Jan 2022 17:06:04 +0000 (GMT)
-Date:   Sat, 8 Jan 2022 18:06:03 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH] s390/dasd: use default_groups in kobj_type
-Message-ID: <YdnEe5sEoRLEBK3Y@osiris>
-References: <20220106095401.3274637-1-gregkh@linuxfoundation.org>
+        id S234802AbiAHRMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 12:12:06 -0500
+Received: from mga05.intel.com ([192.55.52.43]:31828 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232548AbiAHRME (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 12:12:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641661924; x=1673197924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dwH0pSVP2xSw9DHGOdd7z50SBxYcy3eGeVZoAFYmuHY=;
+  b=lKbPHgN5OcW9rbQcDpRxJtlk92LaCLkyOsuPXBIn7ksWWKqJQZqZ7jfj
+   G1ASUTVwwacrmLpqSGE0cckyFjblTJRf6rrwm6r4kTbFtB9lyaPr94aIN
+   ZhSy+iP0beak7hcHqB93io2ZFZlj22QIL0RXnysh9FjA3j1eKLuHSXf7I
+   5qmak6cGhsM2cYKmkI7Ade9r+xawmOrtXqs3QoBCQ5yUDXHyIIm/2bzfA
+   FnwtKUb+wQD9T9QBZwtL0ZKHerl95rOZcKz1LvdIILewdesDzeP/UvS3w
+   1qG2wPGr0QkJLyrAV0CUGwrCvFN9pziaLzo31/TaV1zxgAwfvY+ByS0yo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="329370084"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="329370084"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 09:12:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="622253286"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Jan 2022 09:12:02 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6FG5-0000r0-L9; Sat, 08 Jan 2022 17:12:01 +0000
+Date:   Sun, 9 Jan 2022 01:11:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2037/2375]
+ drivers/video/console/newport_con.c:746:1: warning: data definition has no
+ type or storage class
+Message-ID: <202201090153.UNw6LldM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220106095401.3274637-1-gregkh@linuxfoundation.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: enGDZqK2eR6_X9sBQLx3ShLFIIhoOj8f
-X-Proofpoint-ORIG-GUID: enGDZqK2eR6_X9sBQLx3ShLFIIhoOj8f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-08_06,2022-01-07_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=812 spamscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201080133
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 10:54:01AM +0100, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the s390 dasd sysfs code to use default_groups field which
-> has been the preferred way since aa30f47cf666 ("kobject: Add support for
-> default attribute groups to kobj_type") so that we can soon get rid of
-> the obsolete default_attrs field.
-> 
-> Cc: Stefan Haberland <sth@linux.ibm.com>
-> Cc: Jan Hoeppner <hoeppner@linux.ibm.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/s390/block/dasd_devmap.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   351ceeab2ef96ab2fc306934ddb201b44636181b
+commit: 54c5029d29aefc6e1cdd9ce1650822a5a4e1105a [2037/2375] headers/deps: dev/core: Optimize <linux/device.h> dependencies, remove <linux/device_api.h> inclusion
+config: mips-buildonly-randconfig-r003-20220108 (https://download.01.org/0day-ci/archive/20220109/202201090153.UNw6LldM-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=54c5029d29aefc6e1cdd9ce1650822a5a4e1105a
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 54c5029d29aefc6e1cdd9ce1650822a5a4e1105a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/video/console/
 
-Applied, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/video/console/newport_con.c:746:1: warning: data definition has no type or storage class
+     746 | module_driver(newport_driver, gio_register_driver, gio_unregister_driver);
+         | ^~~~~~~~~~~~~
+   drivers/video/console/newport_con.c:746:1: error: type defaults to 'int' in declaration of 'module_driver' [-Werror=implicit-int]
+>> drivers/video/console/newport_con.c:746:1: warning: parameter names (without types) in function declaration
+   drivers/video/console/newport_con.c:740:26: warning: 'newport_driver' defined but not used [-Wunused-variable]
+     740 | static struct gio_driver newport_driver = {
+         |                          ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +746 drivers/video/console/newport_con.c
+
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  739  
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  740  static struct gio_driver newport_driver = {
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  741  	.name = "newport",
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  742  	.id_table = newport_ids,
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  743  	.probe = newport_probe,
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  744  	.remove = newport_remove,
+e84de0c6190503 Thomas Bogendoerfer 2011-11-22  745  };
+9b07655c7740a9 Jiri Slaby          2020-08-18 @746  module_driver(newport_driver, gio_register_driver, gio_unregister_driver);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  747  
+
+:::::: The code at line 746 was first introduced by commit
+:::::: 9b07655c7740a97b918ebe7dc59447e29e22a957 newport_con: make module's init & exit static using module_driver
+
+:::::: TO: Jiri Slaby <jslaby@suse.cz>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

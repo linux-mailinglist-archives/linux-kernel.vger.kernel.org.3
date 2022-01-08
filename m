@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 306404880F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 03:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5774880F7
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 03:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbiAHCne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 21:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbiAHCnd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 21:43:33 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E85EC061574;
-        Fri,  7 Jan 2022 18:43:33 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso8556802pjb.1;
-        Fri, 07 Jan 2022 18:43:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Z2eSIKO2hPoT+F0EzCBQkbD8++MWEeeyBWhA5iN+68Y=;
-        b=glfc7fN0TWPpbZ+AVWEc/w6+06Iuf0L3kedFBlWLaOikOcNjAnKCc1RLxuUPJGYoPx
-         kRI3Bty9geKEQbfp4wfI6AkRFC3/ZpUdxPQdNMfxD8Zky/MR8nmXioXB2Lu1XGtuzqzR
-         D9GaQdYY9JPNMob1ODQJNFe2u65KSdxJ9aGHcm88hCX0STJCN0nl/znYbAbK8YIpOZ23
-         XCVlM3iBOI1HIBcGhK+JDg7JGyMzDC3XWcIZ08mblXXPkIIbKany7SpiBo+ZvJJMcqML
-         alrXGSKHHWemJFQ8LZP0yYTtYzCJWw498T3TYilKLDbOF5hMMruhS0M/lepKqNYVbYX9
-         XVgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Z2eSIKO2hPoT+F0EzCBQkbD8++MWEeeyBWhA5iN+68Y=;
-        b=lQ3mMvsC8WJt0YBLbGT0eof0Yx7DlNMSHvpwMI+rl+qlv0kcvnbj4ChJJS0h2+z47X
-         fdZG1xXsrLIu945QOl9DRd3waNLZZ97RgYq1ikWFlMtw19G4AlhXvwvOiybuI4w6ZBjG
-         jUka2uTzmHf0IIy/7LKpuptRe43BF01uCiJajcUrMqe+lnaGfuGPEBAt07qlic0W9GtK
-         mymKmGvsDVCJhrQV/or3P9mX+ZBIFHL3cf3Htn6Ny9khUqhys2Yql/qmnQlTP1niqHTf
-         +CBzoKcgPIy2jarDdbubx7k42irXSxiq4hx8z+wM9RmitOGr57yAJTyk0BUbJQD1Wbd0
-         /XLA==
-X-Gm-Message-State: AOAM5313TKYL9b8ttMycBHxWpT937igqAMAkvf/o7yNkZmtFiDre6Lq8
-        x9rmNHGt9PSR4Os8ZGKttEuiL1o8hu2Dcw==
-X-Google-Smtp-Source: ABdhPJwDPz958rqpbQg7VFAdWApy6Jg0jxDxj+Vx1RjRcmmJVR6qZoGUUb6M6atUfFhwXtJoswZqKw==
-X-Received: by 2002:a17:902:b696:b0:149:9e52:eda1 with SMTP id c22-20020a170902b69600b001499e52eda1mr41304901pls.174.1641609812983;
-        Fri, 07 Jan 2022 18:43:32 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.116])
-        by smtp.googlemail.com with ESMTPSA id f12sm226250pfe.127.2022.01.07.18.43.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jan 2022 18:43:32 -0800 (PST)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH v2] KVM: VMX: Dont' send posted IRQ if vCPU == this vCPU and vCPU is IN_GUEST_MODE
-Date:   Fri,  7 Jan 2022 18:42:42 -0800
-Message-Id: <1641609762-39471-1-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
+        id S233380AbiAHCoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 21:44:34 -0500
+Received: from mga04.intel.com ([192.55.52.120]:22453 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230174AbiAHCoc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Jan 2022 21:44:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641609872; x=1673145872;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PtctAWIEnQqRKJOz0FTv5G04uaLdee7FzheU9sSh2hA=;
+  b=aQfxMOkC4zLTLZ3pk4mn1xcEw81rRBLWeEXgjhVEuQotKEhEgs7QYpYG
+   tz1nMNoXsotQhbqoiAYVpdxR7iTGBbT/HFsVEhDYXsaMY/2ZnyRjFBmUt
+   s20/IVyc0PAkIdsJIeWCRYtFbIKzud49EaiFSoXGNTrdIjGQ1JNTHvn+L
+   OTjgHA4H4CKlN8r7OosbleH2BuZA/O0G3TF3KLkTFzwhCfFuS9icSutMt
+   D4+9JNl3XqZJpD5Fnwg5c9/aZ893Vqqcya+UJ2NQVSm2ztTdvPCDk/Xtm
+   R+wLUlo/nJgPeBKnO4ejK0sXcrnONvTTpe4/M5l9FnMM/rADaEMhWDe5L
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="241793129"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="241793129"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 18:44:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="471500822"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 18:44:30 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n61iX-0000Be-Rr; Sat, 08 Jan 2022 02:44:29 +0000
+Date:   Sat, 8 Jan 2022 10:43:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pintu Kumar <quic_pintu@quicinc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>,
+        Pintu Agarwal <pintu.ping@gmail.com>
+Subject: include/uapi/linux/sysinfo.h:23:14: error: size of array '_f' is too
+ large
+Message-ID: <202201081013.w2UXbEsE-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220108-020953/Pintu-Kumar/sysinfo-include-availram-field-in-sysinfo-struct/20220106-233557
+head:   85f46444fa2eff4f03aeb701d44edd62af00ee44
+commit: 85f46444fa2eff4f03aeb701d44edd62af00ee44 sysinfo: include availram field in sysinfo struct
+date:   9 hours ago
+config: ia64-randconfig-r015-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081013.w2UXbEsE-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/85f46444fa2eff4f03aeb701d44edd62af00ee44
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20220108-020953/Pintu-Kumar/sysinfo-include-availram-field-in-sysinfo-struct/20220106-233557
+        git checkout 85f46444fa2eff4f03aeb701d44edd62af00ee44
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 prepare
 
-When delivering a virtual interrupt, don't actually send a posted interrupt
-if the target vCPU is also the currently running vCPU and is IN_GUEST_MODE,
-in which case the interrupt is being sent from a VM-Exit fastpath and the
-core run loop in vcpu_enter_guest() will manually move the interrupt from
-the PIR to vmcs.GUEST_RVI.  IRQs are disabled while IN_GUEST_MODE, thus
-there's no possibility of the virtual interrupt being sent from anything
-other than KVM, i.e. KVM won't suppress a wake event from an IRQ handler
-(see commit fdba608f15e2, "KVM: VMX: Wake vCPU when delivering posted IRQ
-even if vCPU == this vCPU").
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Eliding the posted interrupt restores the performance provided by the
-combination of commits 379a3c8ee444 ("KVM: VMX: Optimize posted-interrupt
-delivery for timer fastpath") and 26efe2fd92e5 ("KVM: VMX: Handle
-preemption timer fastpath").
+All errors (new ones prefixed by >>):
 
-Thanks Sean for better comments.
+   In file included from include/uapi/linux/kernel.h:5,
+                    from include/linux/cache.h:5,
+                    from include/linux/printk.h:9,
+                    from include/asm-generic/bug.h:22,
+                    from arch/ia64/include/asm/bug.h:17,
+                    from include/linux/bug.h:5,
+                    from include/linux/page-flags.h:10,
+                    from kernel/bounds.c:10:
+>> include/uapi/linux/sysinfo.h:23:14: error: size of array '_f' is too large
+      23 |         char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
+         |              ^~
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1197: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Suggested-by: Chao Gao <chao.gao@intel.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+
+vim +/_f +23 include/uapi/linux/sysinfo.h
+
+     6	
+     7	#define SI_LOAD_SHIFT	16
+     8	struct sysinfo {
+     9		__kernel_long_t uptime;		/* Seconds since boot */
+    10		__kernel_ulong_t loads[3];	/* 1, 5, and 15 minute load averages */
+    11		__kernel_ulong_t totalram;	/* Total usable main memory size */
+    12		__kernel_ulong_t freeram;	/* Available memory size */
+    13		__kernel_ulong_t sharedram;	/* Amount of shared memory */
+    14		__kernel_ulong_t bufferram;	/* Memory used by buffers */
+    15		__kernel_ulong_t totalswap;	/* Total swap space size */
+    16		__kernel_ulong_t freeswap;	/* swap space still available */
+    17		__u16 procs;		   	/* Number of current processes */
+    18		__u16 pad;		   	/* Explicit padding for m68k */
+    19		__kernel_ulong_t totalhigh;	/* Total high memory size */
+    20		__kernel_ulong_t freehigh;	/* Available high memory size */
+    21		__u32 mem_unit;			/* Memory unit size in bytes */
+    22		__kernel_ulong_t availram;	/* Memory available for allocation */
+  > 23		char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];	/* Padding: libc5 uses this.. */
+    24	};
+    25	
+
 ---
- arch/x86/kvm/vmx/vmx.c | 40 +++++++++++++++++++++-------------------
- 1 file changed, 21 insertions(+), 19 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index fe06b02994e6..e06377c9a4cf 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3908,31 +3908,33 @@ static inline void kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
- #ifdef CONFIG_SMP
- 	if (vcpu->mode == IN_GUEST_MODE) {
- 		/*
--		 * The vector of interrupt to be delivered to vcpu had
--		 * been set in PIR before this function.
-+		 * The vector of the virtual has already been set in the PIR.
-+		 * Send a notification event to deliver the virtual interrupt
-+		 * unless the vCPU is the currently running vCPU, i.e. the
-+		 * event is being sent from a fastpath VM-Exit handler, in
-+		 * which case the PIR will be synced to the vIRR before
-+		 * re-entering the guest.
- 		 *
--		 * Following cases will be reached in this block, and
--		 * we always send a notification event in all cases as
--		 * explained below.
-+		 * When the target is not the running vCPU, the following
-+		 * possibilities emerge:
- 		 *
--		 * Case 1: vcpu keeps in non-root mode. Sending a
--		 * notification event posts the interrupt to vcpu.
-+		 * Case 1: vCPU stays in non-root mode. Sending a notification
-+		 * event posts the interrupt to the vCPU.
- 		 *
--		 * Case 2: vcpu exits to root mode and is still
--		 * runnable. PIR will be synced to vIRR before the
--		 * next vcpu entry. Sending a notification event in
--		 * this case has no effect, as vcpu is not in root
--		 * mode.
-+		 * Case 2: vCPU exits to root mode and is still runnable. The
-+		 * PIR will be synced to the vIRR before re-entering the guest.
-+		 * Sending a notification event is ok as the host IRQ handler
-+		 * will ignore the spurious event.
- 		 *
--		 * Case 3: vcpu exits to root mode and is blocked.
--		 * vcpu_block() has already synced PIR to vIRR and
--		 * never blocks vcpu if vIRR is not cleared. Therefore,
--		 * a blocked vcpu here does not wait for any requested
--		 * interrupts in PIR, and sending a notification event
--		 * which has no effect is safe here.
-+		 * Case 3: vCPU exits to root mode and is blocked. vcpu_block()
-+		 * has already synced PIR to vIRR and never blocks the vCPU if
-+		 * the vIRR is not empty. Therefore, a blocked vCPU here does
-+		 * not wait for any requested interrupts in PIR, and sending a
-+		 * notification event also results in a benign, spurious event.
- 		 */
- 
--		apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
-+		if (vcpu != kvm_get_running_vcpu())
-+			apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
- 		return;
- 	}
- #endif
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

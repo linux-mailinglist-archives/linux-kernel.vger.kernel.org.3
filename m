@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4CB488093
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 02:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE15488095
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 02:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232619AbiAHBde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 20:33:34 -0500
-Received: from mail.efficios.com ([167.114.26.124]:55454 "EHLO
+        id S232622AbiAHBdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 20:33:37 -0500
+Received: from mail.efficios.com ([167.114.26.124]:55518 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiAHBdd (ORCPT
+        with ESMTP id S232608AbiAHBde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 20:33:33 -0500
+        Fri, 7 Jan 2022 20:33:34 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 7118437D399;
-        Fri,  7 Jan 2022 20:33:32 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id E1C5937D26C;
+        Fri,  7 Jan 2022 20:33:33 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OEy1PZNXHlTp; Fri,  7 Jan 2022 20:33:31 -0500 (EST)
+        with ESMTP id CueKu7_PTaPK; Fri,  7 Jan 2022 20:33:33 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id E00E637D398;
-        Fri,  7 Jan 2022 20:33:31 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com E00E637D398
+        by mail.efficios.com (Postfix) with ESMTP id 9E6C937D605;
+        Fri,  7 Jan 2022 20:33:33 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9E6C937D605
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1641605611;
+        s=default; t=1641605613;
         bh=zs3mrnBsLhYeroMuTKJk/TqjMUFWWyfhrso2Mz8iNoA=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=TgkPAKZCJm+Pr69nyHKsrYmGcXO58YlmBZLgdt6rUsSVYcjfI+rjmG5MWMBYPEAS8
-         AtRVcwHBBsx9YilxfZq8wgbMkzLwBOt5YaF14xw1CCWU1RVhFI8JGyWywKjrVabI6I
-         DDLZqBKndJMG14h/2wJtgVejGbvHAic/VWT7EaDn6NbIDTxIaZH9JCqMG9UDBZMhz4
-         pZsymuER/EX4isUCTktgGQYl+SxyPHpJmjqXrBALDm3uZWRK0iBuUbgv2pGBCYRrQI
-         cIPmf+7/XM4LsPzL7MiEnHqtHbYHz6E6kvjtFcwDgpFeIERk+pToQ5xW0pjgQCSIEu
-         QbOHlKQV+A9bQ==
+        b=WovgtdjXG2SapFxa0fdwh+l8XMT/+8rzdYyjN3vv2uAarbqs2Vf69K6HoLwusZZ31
+         kVlp9glMrv1c1XtLR5P8pHdJEaTAedzQGFNrOxT3Da9tFzh13V4W87NpTboEpU85s0
+         1JcLVYmqoGoG7dNCKiXAy/Tq/FP1zwWW8/Yt1cCQ6fcx3cMlA+db9d5fUxcRJAVZqQ
+         AKe9kJDKXf5HpG+N8KcMlHu86B+QJod7pNrm40OsXlhi/maYdm9aT6PLEERLmpQP+J
+         MaySh/jEjqGRwjNeElmS234Y+iHtmNVWZ/Dqo355UaGWNbKghvoMwyeo/iIgY8qemL
+         Xox9vSZb/Hmwg==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gZ4UsiUK74oS; Fri,  7 Jan 2022 20:33:31 -0500 (EST)
+        with ESMTP id 7o2BUmHlX3FV; Fri,  7 Jan 2022 20:33:33 -0500 (EST)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id CCF8D37D49A;
-        Fri,  7 Jan 2022 20:33:31 -0500 (EST)
-Date:   Fri, 7 Jan 2022 20:33:31 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id 8DF3237D604;
+        Fri,  7 Jan 2022 20:33:33 -0500 (EST)
+Date:   Fri, 7 Jan 2022 20:33:33 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     David Laight <David.Laight@ACULAB.COM>
 Cc:     Florian Weimer <fw@deneb.enyo.de>,
@@ -51,7 +51,7 @@ Cc:     Florian Weimer <fw@deneb.enyo.de>,
         linux-api <linux-api@vger.kernel.org>,
         Christian Brauner <christian.brauner@ubuntu.com>,
         carlos <carlos@redhat.com>
-Message-ID: <1798976202.14561.1641605611712.JavaMail.zimbra@efficios.com>
+Message-ID: <1752185722.14562.1641605613561.JavaMail.zimbra@efficios.com>
 In-Reply-To: <333385690.14559.1641604090435.JavaMail.zimbra@efficios.com>
 References: <20220107170302.8325-1-mathieu.desnoyers@efficios.com> <87a6g7ny0j.fsf@mid.deneb.enyo.de> <1968088162.13310.1641584935813.JavaMail.zimbra@efficios.com> <1300078200.13848.1641590867024.JavaMail.zimbra@efficios.com> <701ff3888b3f42f4a6a1dded84b79078@AcuMS.aculab.com> <333385690.14559.1641604090435.JavaMail.zimbra@efficios.com>
 Subject: Re: [RFC PATCH] rseq: x86: implement abort-at-ip extension
@@ -61,7 +61,7 @@ Content-Transfer-Encoding: 7bit
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF95 (Linux)/8.8.15_GA_4177)
 Thread-Topic: rseq: x86: implement abort-at-ip extension
-Thread-Index: AdgEFboSAErst/O1Thaz4M9J8smUeRwcvnzKVRu0LZo=
+Thread-Index: AdgEFboSAErst/O1Thaz4M9J8smUeRwcvnzKreT/0YI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org

@@ -2,153 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575BF4884F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE1B488500
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 18:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbiAHRdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 12:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S233476AbiAHRlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 12:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiAHRdy (ORCPT
+        with ESMTP id S229928AbiAHRlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 12:33:54 -0500
-Received: from balrog.mythic-beasts.com (balrog.mythic-beasts.com [IPv6:2a00:1098:0:82:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E46DC06173F;
-        Sat,  8 Jan 2022 09:33:53 -0800 (PST)
-Received: from [81.101.6.87] (port=34286 helo=jic23-huawei)
-        by balrog.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n6Faq-0001DM-Oj; Sat, 08 Jan 2022 17:33:33 +0000
-Date:   Sat, 8 Jan 2022 17:38:51 +0000
-From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v3 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
- macros
-Message-ID: <20220108173825.08ebf8ba@jic23-huawei>
-In-Reply-To: <20220107181723.54392-4-paul@crapouillou.net>
-References: <20220107181723.54392-1-paul@crapouillou.net>
-        <20220107181723.54392-4-paul@crapouillou.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 8 Jan 2022 12:41:49 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8823BC06173F;
+        Sat,  8 Jan 2022 09:41:48 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l4so6033334wmq.3;
+        Sat, 08 Jan 2022 09:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/unm4dEq29U+9A9+H2q9l5M3g8YNwwQHL3sl9HPMEOc=;
+        b=A56B2+9idZXB4ljHp4MA6vbbshXMYE3jxMDTKvEJG8H006EDYL8WTBaZWKOfdYz4o6
+         WAS/3d2ve6G3WYLiSQ2p9Af+FWc/+UJAh1NCSP8cDyIXNzBqGyXLTDQIO3USgtrMLhS8
+         b24XIxZ79yYi/btgogT2xIbEgkaHj8/pjYQmHnAn/7HLcUJ/X3mq7wNVix73mmlO6JWJ
+         tCynh2II4X5LLMdOFpymqw3Zw8mznKJ5212z0LoMyO0k1iKloTJkMvd3m6lhDMXZxfVf
+         Bu1sYheCznaW6JvLKSepgp/UDHx/Jzf30JjTMDICkLs0mc0dcKR8fylLxM3IAGElm/Uk
+         6ThQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/unm4dEq29U+9A9+H2q9l5M3g8YNwwQHL3sl9HPMEOc=;
+        b=sM1r6VxNBj45w/6eoO5yAatc12Ju0Jc3sgTELVtXZPPMQOUzoKP+iU8yW7mBPgH2/7
+         Yy5l47WtzC7Yj0SFaP/OR/wFdJvlsBgX5aZ3WehrvJtHmbu4D8IFeVuI7CtD9w8YeK3W
+         G+mrt/W/98BWhyZDdK/qTEnPhs2kt6lvnkVnP8fFJmZdMwnLd5aK8ew9IJrpkgHLJlYT
+         sp6DEGQou6lR/HWH3AioVBDHBT2Rvtwn6zfACRSiDDEEwqndJuKXEkRLK9zwi3WTcV7r
+         rUdDbskeo+C4SqTOiKOrZUM3aVe7gvIXEW/lGMze5Te44Pn8wm1v2RmKoIXWyFrDtitZ
+         7S1Q==
+X-Gm-Message-State: AOAM5314H9gdEIF41/FKI1PDradr2EYuotQYpC37FwNin+yKJesNhd8D
+        MDOmSXpC2jJJKB/YduXC9D52F8pwuAg5K4Yjmd1b9tCb
+X-Google-Smtp-Source: ABdhPJwd0wOlFffJMGuuMGPsuIzurCxyjNc7dAwFocxE2vZTcOuLbPq7fXcRJisaNMg1TR0EEwgzo8+Wew8pQPOOrAg=
+X-Received: by 2002:a7b:c3c5:: with SMTP id t5mr15181606wmj.168.1641663706920;
+ Sat, 08 Jan 2022 09:41:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 19
-X-Spam-Status: No, score=1.9
+References: <20220106181449.696988-1-robdclark@gmail.com> <20220106181449.696988-2-robdclark@gmail.com>
+ <CAE-0n53N0GQ2UXYNpDOf_WVvvUa3cu95ePGYfYk7jZwPTqJ-XA@mail.gmail.com>
+In-Reply-To: <CAE-0n53N0GQ2UXYNpDOf_WVvvUa3cu95ePGYfYk7jZwPTqJ-XA@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Sat, 8 Jan 2022 09:41:35 -0800
+Message-ID: <CAF6AEGsO1f5DC8AWjjA+9XLne3CRMGsLfLwWbv3iQVZW3wUTiw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/msm/gpu: Wait for idle before suspending
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  7 Jan 2022 18:17:20 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
+On Fri, Jan 7, 2022 at 4:27 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Rob Clark (2022-01-06 10:14:46)
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > System suspend uses pm_runtime_force_suspend(), which cheekily bypasses
+> > the runpm reference counts.  This doesn't actually work so well when the
+> > GPU is active.  So add a reasonable delay waiting for the GPU to become
+> > idle.
+>
+> Maybe also say:
+>
+> Failure to wait during system wide suspend leads to GPU hangs seen on
+> resume.
 
-> These macros are defined conditionally, according to CONFIG_PM:
-> - if CONFIG_PM is enabled, these macros resolve to
->   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->   exported.
-> 
-> - if CONFIG_PM is disabled, these macros will result in a dummy static
->   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
->   will then be discarded by the compiler, along with the provided
->   callback functions if they are not used anywhere else.
-> 
-> In the second case, the symbol is not exported, which should be
-> perfectly fine - users of the symbol should all use the pm_ptr() or
-> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> client's code will never be accessed.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+The fallout can actually be a lot more than just GPU hangs.. that is
+just the case that is easy (for us) to observe because the crash
+logging captures them.  But sync/async external aborts are also
+possible.. and I think even just undefined behavior (ie. I think if
+the timing works out right, it can survive but just "lose" rendering
+that hadn't completed yet)
 
-Hi Paul,
+> >
+> > Alternatively we could just return -EBUSY in this case, but that has the
+> > disadvantage of causing system suspend to fail.
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >  drivers/gpu/drm/msm/adreno/adreno_device.c | 9 +++++++++
+> >  drivers/gpu/drm/msm/msm_gpu.c              | 3 +++
+> >  drivers/gpu/drm/msm/msm_gpu.h              | 3 +++
+> >  3 files changed, 15 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > index 93005839b5da..b677ca3fd75e 100644
+> > --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > @@ -611,6 +611,15 @@ static int adreno_resume(struct device *dev)
+> >  static int adreno_suspend(struct device *dev)
+> >  {
+> >         struct msm_gpu *gpu = dev_to_gpu(dev);
+> > +       int ret = 0;
+>
+> Please don't assign and then immediately overwrite.
+>
+> > +
+> > +       ret = wait_event_timeout(gpu->retire_event,
+> > +                                !msm_gpu_active(gpu),
+> > +                                msecs_to_jiffies(1000));
+> > +       if (ret == 0) {
+>
+> The usual pattern is
+>
+>         long timeleft;
+>
+>         timeleft = wait_event_timeout(...)
+>         if (!timeleft) {
+>                 /* no time left; timed out */
+>
+> Can it be the same pattern here? It helps because people sometimes
+> forget that wait_event_timeout() returns the time that is left and not
+> an error code when it times out.
 
-Can definitely be a follow up rather than needing to be in this series
-but an EXPORT_NS_[_GPL]_SIMPLE_DEV_PM_OPS() will be needed as I suspect
-a lot of the places that export pm_ops structures will have their exports
-moved to a namespace at somepoint.
+ok, I'll update in v2..
 
-That can easily go in with the first user though rather than needing
-to be rushed in now.
+BR,
+-R
 
-Jonathan
-
-> ---
-> 
-> Notes:
->     v2: Remove useless empty line
->     v3: - Reorder the code to have non-private macros together in the file
->         - Add comment about the necesity to use the new export macro when
->           the dev_pm_ops has to be exported
-> 
->  include/linux/pm.h | 35 ++++++++++++++++++++++++++++++++---
->  1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 8e13387e70ec..8279af2c538a 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_H
->  #define _LINUX_PM_H
->  
-> +#include <linux/export.h>
->  #include <linux/list.h>
->  #include <linux/workqueue.h>
->  #include <linux/spinlock.h>
-> @@ -357,14 +358,42 @@ struct dev_pm_ops {
->  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->  #endif
->  
-> +#define _DEFINE_DEV_PM_OPS(name, \
-> +			   suspend_fn, resume_fn, \
-> +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +const struct dev_pm_ops name = { \
-> +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +}
-> +
-> +#ifdef CONFIG_PM
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn); \
-> +	_EXPORT_SYMBOL(name, sec)
-> +#else
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> +					 resume_fn, runtime_suspend_fn, \
-> +					 runtime_resume_fn, idle_fn)
-> +#endif
-> +
->  /*
->   * Use this if you want to use the same suspend and resume callbacks for suspend
->   * to RAM and hibernation.
-> + *
-> + * If the underlying dev_pm_ops struct symbol has to be exported, use
-> + * EXPORT_SIMPLE_DEV_PM_OPS() or EXPORT_GPL_SIMPLE_DEV_PM_OPS() instead.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -const struct dev_pm_ops name = { \
-> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> -}
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-> +
-> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
->  
->  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-
+> > +               dev_err(dev, "Timeout waiting for GPU to suspend\n");
+> > +               return -EBUSY;
+> > +       }
+> >
+> >         return gpu->funcs->pm_suspend(gpu);
+> >  }

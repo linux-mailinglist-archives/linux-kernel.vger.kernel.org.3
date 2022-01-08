@@ -2,179 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A21488348
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7311148834B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 12:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiAHLtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 06:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S234143AbiAHLuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 06:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiAHLtI (ORCPT
+        with ESMTP id S234072AbiAHLuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 06:49:08 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45478C061574;
-        Sat,  8 Jan 2022 03:49:08 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so403499wms.0;
-        Sat, 08 Jan 2022 03:49:08 -0800 (PST)
+        Sat, 8 Jan 2022 06:50:01 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80201C06173E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 03:50:01 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id g5so1440834vkg.0
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 03:50:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TIQPStEwHsYCQix6ClSHzAfuLTp+Laib4nyBu+e0kwM=;
-        b=LSeS14TMVX4vfr4DuRUTZEycyI9rRYiH46AnKHYBgHQqEbdLU00IMiSMoBNwEsSg+C
-         SGzLOLMFRbEsGV4jCQow2e31qtbVlDLf27GP+uBERq/wNFbx4LJPWvfKlcy8iiHunbMZ
-         u4qIzoWsACdjGvpCXtcWsdymXZFnQZvy+g5U616PxD9aujqHl1/YSXlx0kEA6HHp30I2
-         LabgIZs2/5SfsRP0PodzOwFGdOyeQ7uqV48HX+xmSusij0Gb5Nbi/92u1ncKQFcCOxMS
-         8Qxsrch0kXzSSY/KUyJeQ19yRlT5zAQxoulnEY0blpv8C/CSf4Zcm9uJktLhOfJ3+LPm
-         EZuQ==
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jT+rZ6KhWgyOiP8gxdO8rfmpX6djtwY+FUwd5SZNm1o=;
+        b=ACIzHwB/Ky1kjBSFyQgqEhnsE3Obu0izZaLSJnESASh5JGs1J3mR65xCNqsyDpXyJk
+         0sJL5/uYRWDUaH+7J9ZO9s8a1AS0rGrvpdtcn3wd2mfJCyRA3gCo1DGzAkX12HgYjI9d
+         yrjO9tJLtxprk9m7ELO5gr4jMN/nfpTxbIiR0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=TIQPStEwHsYCQix6ClSHzAfuLTp+Laib4nyBu+e0kwM=;
-        b=z8cI2TFpcWOp41cRYDiWj6phgfkjTa1j0FaH/HaHlSw8udbH+AV+vWiYZ15ambVSA0
-         T91A+fISuSIRfEmRo5Nw6aDvxbtEruREtZZD3GsyyfnPSCe0/QUij7b+1jMZuiSGClGA
-         Cr0uLq2tNOIJ8siHL2zrhXHGZxUl9zjMeadrDQFRBrQYeqimW6hh6dp7RchjV2sfyOr1
-         oZPxuEB/f+RQrxb3YSoJYJ0++GuM9DvnCTj4+TbkUj14h7tDVoSZzUgGxT4R0yidXdlL
-         n5MoBO7A3DZ3H7lvCZQZzMwtCDIopy7llG+fxNUfWPWsGuYTTrgO/zQffhYx+LVCGSrx
-         bKUA==
-X-Gm-Message-State: AOAM5337m6anBT0dmEMTq6eN3NKg2nNkUTucohVUBnV5QOXMcVumsO2x
-        JW8tFwDmK5eYLJsOpl1Mlts=
-X-Google-Smtp-Source: ABdhPJxUlMOsDAYXYEahBIXZcX6MtCXb4bcH54TkG8AmFEtTZQ37zGFOVW5YumZ4MBcke35vZiVx6w==
-X-Received: by 2002:a1c:740c:: with SMTP id p12mr14392156wmc.140.1641642546676;
-        Sat, 08 Jan 2022 03:49:06 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id r19sm532925wmh.42.2022.01.08.03.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 03:49:06 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 12:49:04 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <Ydl6MATrfA1GA0G+@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
- <YdTvXkKFzA0pOjFf@gmail.com>
- <YdYQu9YxNw0CxJRn@archlinux-ax161>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jT+rZ6KhWgyOiP8gxdO8rfmpX6djtwY+FUwd5SZNm1o=;
+        b=JqUawS5cMZ5KV1O+DQnIfHx7O+Nsx1x3UsMTGO/NUBq11RDj8CCPEwFgLJWzjSfq3P
+         eVB53x2ghFngi2PTdEEtuL69BTCGzlzFmy2G8nRB8Y1KoViu0LVmu+d2AkWpP7Tw8M1J
+         HblfMD0cEujgoVv0Dr5y74SzKQ5LR+CppzRTHveFyPpI7AyaVYyWZ5VwdagZTpDUZg/d
+         oJohBvM2UyFm5quJsfNi6y0SONFZ2Ro1hLfzZSNtzRJoLXsBtBIy6cBEajCHftzfKA1v
+         BHvVRNhF0FUu2oGs9f98/NLQPf/Iemq5/KoJQzJfPzOXmUpTpKyxFPTCX9j9qO5Oi6xv
+         q8Fw==
+X-Gm-Message-State: AOAM530N05JBlZK1ZbvfrO5E9ZDgDZcFXp5ijZburJRwVDyT6zChpD8s
+        djl7rquoHUrg4unbMZpYc2AponQH5Hk3xb2TbKlCfA==
+X-Google-Smtp-Source: ABdhPJysus5Yn/PoxPLFBsNV4aVDh5kZHK4M1irFeEkdg+EXrcz9VCeGuicFabTl+uMRLKeeDpbKaMsEn1lMI2wcD3o=
+X-Received: by 2002:a05:6122:788:: with SMTP id k8mr21980762vkr.39.1641642600543;
+ Sat, 08 Jan 2022 03:50:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
+References: <20220102165730.50190-1-romain.perier@gmail.com>
+ <20220102165730.50190-3-romain.perier@gmail.com> <20220108012515.D1213C36AEB@smtp.kernel.org>
+In-Reply-To: <20220108012515.D1213C36AEB@smtp.kernel.org>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Sat, 8 Jan 2022 20:49:49 +0900
+Message-ID: <CAFr9PX=PvqTtueB9Mi_hZWaUvwfQWhm9Z2D+VtiJcnjzZSxH9w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] clk: mstar: msc313 cpupll clk driver
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Romain Perier <romain.perier@gmail.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Stephen,
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
+Thank you for looking at this for us.
 
-> 5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
-> 
-> With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
-> 
-> $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
-> 
-> $ scripts/config -e LTO_CLANG_THIN
-> 
-> $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
-> ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
-> >>> .macro __put, val, name
-> >>> ^
-> make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
-> 
-> I was not able to figure out the exact include chain but CONFIG_LTO
-> causes asm/alternative-macros.h to be included in asm/rwonce.h, which
-> eventually gets included in either asm/cache.h or asm/memory.h.
-> 
-> I managed to solve this with the following diff but I am not sure if
-> there is a better or cleaner way to do that.
-> 
-> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index 1bce62fa908a..e19572a205d0 100644
-> --- a/arch/arm64/include/asm/rwonce.h
-> +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -5,7 +5,7 @@
->  #ifndef __ASM_RWONCE_H
->  #define __ASM_RWONCE_H
->  
-> -#ifdef CONFIG_LTO
-> +#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
->  
->  #include <linux/compiler_types.h>
->  #include <asm/alternative-macros.h>
-> @@ -66,7 +66,7 @@
->  })
->  
->  #endif	/* !BUILD_VDSO */
-> -#endif	/* CONFIG_LTO */
-> +#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
+On Sat, 8 Jan 2022 at 10:25, Stephen Boyd <sboyd@kernel.org> wrote:
 
-So the error message suggests that the linker script somehow ends up 
-including asm-generic/export.h:
+> > +static void msc313_cpupll_reg_write32(struct msc313_cpupll *cpupll, unsigned int reg, u32 value)
+> > +{
+> > +       u16 l = value & 0xffff, h = (value >> 16) & 0xffff;
+> > +
+> > +       iowrite16(l, cpupll->base + reg);
+>
+> We don't usually see 16-bit accesses but if that's what the hardware
+> wants then OK.
 
-  kepler:~/mingo.tip.git> git grep 'macro __put'
-  include/asm-generic/export.h:.macro __put, val, name
+This hardware is weird and most of the registers are like this where
+they are 32bit spaced but only 16 bits are used in each.
+32bit registers are split across 2 16 bit registers spaced 32bits
+apart. Writing the two parts has to be in the right order to get the
+right result.
 
-?
+> > +       iowrite16(h, cpupll->base + reg + 4);
+> > +}
+> > +
+> > +static void msc313_cpupll_setfreq(struct msc313_cpupll *cpupll, u32 regvalue)
+> > +{
+> > +       msc313_cpupll_reg_write32(cpupll, REG_LPF_HIGH_BOTTOM, regvalue);
+> > +
+> > +       iowrite16(0x1, cpupll->base + REG_LPF_MYSTERYONE);
+> > +       iowrite16(0x6, cpupll->base + REG_LPF_MYSTERYTWO);
+> > +       iowrite16(0x8, cpupll->base + REG_LPF_UPDATE_COUNT);
+> > +       iowrite16(BIT(12), cpupll->base + REG_LPF_TRANSITIONCTRL);
+> > +
+> > +       iowrite16(0, cpupll->base + REG_LPF_TOGGLE);
+> > +       iowrite16(1, cpupll->base + REG_LPF_TOGGLE);
+> > +
+> > +       while (!(ioread16(cpupll->base + REG_LPF_LOCK)))
+> > +               cpu_relax();
+>
+> Any timeout? Can this use the io read timeout APIs?
 
-But I'd guess that similar to the __ASSEMBLY__ patterns we have in headers, 
-not including the rwonce.h bits if LINKER_SCRIPT is defined is probably 
-close to the right solution - but it would also know how such a low level 
-header ended up in a linker script. Might have been to pick up some offset 
-or size definition somewhere?
+Good point. I never saw a situation where the lock didn't happen but I
+think Willy did when he was poking at it.
+I guess if it doesn't lock we should timeout, warn that something
+isn't working and return an error.
 
-I.e. how did the build end up including asm/rwonce.h?
+> > +static long msc313_cpupll_round_rate(struct clk_hw *hw, unsigned long rate,
+> > +                                    unsigned long *parent_rate)
+> > +{
+> > +       u32 reg = msc313_cpupll_regforfrequecy(rate, *parent_rate);
+> > +       long rounded = msc313_cpupll_frequencyforreg(reg, *parent_rate);
+> > +
+> > +       /*
+> > +        * This is my poor attempt at making sure the resulting
+> > +        * rate doesn't overshoot the requested rate.
+>
+> If you want better bounds you can use determine_rate and then look at
+> the min/max constraints to make sure you don't overshoot. But otherwise
+> round_rate implementation is up to the provider to figure out what
+> should happen, i.e. overshooting could be OK if the provider intends for
+> it.
 
-You can generally debug such weird dependency chains by putting a
-debug #warning into the affected header - such as the patch below.
+This clock is basically only used by cpufreq-dt. I'm not sure what it
+would do with determine_rate. I'll take a look.
+The main thing I wanted to do here was make sure the resulting clock
+wasn't higher than what we have in the opp table and end up with the
+CPU locking up.
 
-This prints a stack of the header dependencies:
+> > +       clk_init.name = dev_name(dev);
+> > +       clk_init.ops = &msc313_cpupll_ops;
+> > +       clk_init.flags = CLK_IS_CRITICAL;
+>
+> Why is it critical? Can we have a comment? The clk ops don't have enable
+> or disable so it seems like the flag won't do anything.
 
-    CC      kernel/sched/core.o
-  In file included from ./include/linux/compiler.h:263,
-                 from ./include/linux/static_call_types.h:7,
-                 from ./include/linux/kernel.h:6,
-                 from ./include/linux/highmem.h:5,
-                 from kernel/sched/core.c:9:
-  ./arch/arm64/include/asm/rwonce.h:8:2: warning: #warning debug [-Wcpp]
-      8 | #warning debug
+This clock is critical in the sense that once the DDR memory is setup
+by the bootloader you must not turn it off even if you switch the CPU
+to the other clock source. If you disable it the system locks up.
+I think it can be dropped as does nothing without enable or disable
+like you wrote.
 
-... and should in principle also work in the linker script context.
+Cheers,
 
-Thanks,
-
-	Ingo
-
-===============>
- arch/arm64/include/asm/rwonce.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 1bce62fa908a..5b3305381481 100644
---- a/arch/arm64/include/asm/rwonce.h
-+++ b/arch/arm64/include/asm/rwonce.h
-@@ -5,6 +5,8 @@
- #ifndef __ASM_RWONCE_H
- #define __ASM_RWONCE_H
- 
-+#warning debug
-+
- #ifdef CONFIG_LTO
- 
- #include <linux/compiler_types.h>
+Daniel

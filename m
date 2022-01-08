@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E17D488542
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D5A488544
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiAHSJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 13:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S234868AbiAHSKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 13:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234868AbiAHSJa (ORCPT
+        with ESMTP id S232146AbiAHSKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 13:09:30 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6719C06173F;
-        Sat,  8 Jan 2022 10:09:29 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id hv15so1844920pjb.5;
-        Sat, 08 Jan 2022 10:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NpENl1wlwqcfbBT73rctGeiDbGEPDlZ8miqyZA+HW/A=;
-        b=Dadc/cXPO0Uubd/3MkatQs1U4WERUA3XCupDgrJmGVsJIwvpDXnqEeetn63+ka7T6Z
-         QJYYtuWQ5Gyrir8ulQHyjWOX0EnHqHvClV0uivmDk7DPOB7iZRL6wlcZIglDpjtOJ1su
-         +W99NY5LlfFCa7TGy62ZQFZTX88A0anOL/loyhDqYjjitMGy92fcAVjzSMnBVdlt7yDE
-         94MyLMx/eNiHmh8ipu6YCC6PkDl1WMt9c9uXODNhAR5deTV37UvygLEdopJp7mibuvN6
-         knAv7q0CKzIOYCT7fetCaRQb7VFAyZT45H84lTcSs7ZqxIxoj3u2UdaLqu3DiBYylpPp
-         iPmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NpENl1wlwqcfbBT73rctGeiDbGEPDlZ8miqyZA+HW/A=;
-        b=a1FxggYFVw4/snXtsPwtSefNrM8v7bmcmFwMMafr9w0sMVi8Xg49irY4B/GLJMaRFh
-         wkkXDlD82u1Zsbm3nGsaZnx6ke+AfHlGHEu/zfPZb7bunDSSGnW3jAKwMmAp0nq3zgVh
-         TyxfP+FIf1KDEiGenwHpc6D+6BmU6FnBJyk2AdHWXjqOh9UAWlpPnykxYLQ1EatPa5a7
-         nFvqRFbCBNcxcFT6zEmhHQlhKVhwUK1nAzXPMK4cncRMnAxMPzE/ZZri047O8x8yVPQG
-         stM7zVt05892iwHl2HxKRMY6EysykcYsHD8NDivd3Xzg0G3YlEj5IjuFsZnBBAh1glq0
-         Rqaw==
-X-Gm-Message-State: AOAM532ajfDdyjMFK1ICNY2+lwyTDYtX8Jp6GMjNsGMwHJyGtUY6CsKj
-        PEFbNvCC6MZ50OiqYTwS8K4=
-X-Google-Smtp-Source: ABdhPJx4ZDShbND64UCj+uvq1tWaXe/Sn2QWDwmlo3FJc5MoNWsmz0nVsKR3UQiVl1O+Xbl8i6SO9g==
-X-Received: by 2002:a17:902:e749:b0:148:f083:3905 with SMTP id p9-20020a170902e74900b00148f0833905mr68561286plf.136.1641665369257;
-        Sat, 08 Jan 2022 10:09:29 -0800 (PST)
-Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id ng7sm2564668pjb.41.2022.01.08.10.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 10:09:28 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 2/2] drm/msm/gpu: Cancel idle/boost work on suspend
-Date:   Sat,  8 Jan 2022 10:09:11 -0800
-Message-Id: <20220108180913.814448-3-robdclark@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220108180913.814448-1-robdclark@gmail.com>
-References: <20220108180913.814448-1-robdclark@gmail.com>
+        Sat, 8 Jan 2022 13:10:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB27BC06173F;
+        Sat,  8 Jan 2022 10:10:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB773B80B46;
+        Sat,  8 Jan 2022 18:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F032C36AE3;
+        Sat,  8 Jan 2022 18:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641665450;
+        bh=8ZiDhDQC+Di1SmCGY0f+43UowLJHZQnmiVTSMFASUbk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oyasuitI0WD77XvjJOiDrJjuN7CGucxmVR8FjO3lyreng0QN08HXemik4H3XI1xDp
+         QvJq3O60qqvsCdsAg8HSE+nA8TzDCfU7iqEvx4ubgYVtIUtOHfmE0neh6yIfDc6Yjx
+         l9mJaSAL7JgSVSuaf7t8ZtkOEKK9Ao8bZeCrAuqRH6fr8L591kekfqcLYu6lO0qKIG
+         Q/2emmu4wHXojr7u6JpAS0CBWAXAYsnBrmiLTIijXfO80t26Ll0SVq1YvXuAnczGAo
+         //5V0E8TnTvAG9ozMOFWZRhjWbmgHgATVWDsK50gmbkusMKPPl/aZ9Xfhwf1OUxqLE
+         E4PkPEFxdYsiA==
+Date:   Sat, 8 Jan 2022 19:10:42 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.16
+Message-ID: <YdnToqh/UgE8NtXX@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qMMXKThljYKmVutZ"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
 
-With system suspend using pm_runtime_force_suspend() we can't rely on
-the pm_runtime_get_if_in_use() trick to deal with devfreq callbacks
-after (or racing with) suspend.  So flush any pending idle or boost
-work in the suspend path.
+--qMMXKThljYKmVutZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_gpu_devfreq.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Linus,
 
-diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-index 62405e980925..9bf319be11f6 100644
---- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-+++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-@@ -133,6 +133,18 @@ void msm_devfreq_init(struct msm_gpu *gpu)
- 			      CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- }
- 
-+static void cancel_idle_work(struct msm_gpu_devfreq *df)
-+{
-+	hrtimer_cancel(&df->idle_work.timer);
-+	kthread_cancel_work_sync(&df->idle_work.work);
-+}
-+
-+static void cancel_boost_work(struct msm_gpu_devfreq *df)
-+{
-+	hrtimer_cancel(&df->boost_work.timer);
-+	kthread_cancel_work_sync(&df->boost_work.work);
-+}
-+
- void msm_devfreq_cleanup(struct msm_gpu *gpu)
- {
- 	struct msm_gpu_devfreq *df = &gpu->devfreq;
-@@ -152,7 +164,12 @@ void msm_devfreq_resume(struct msm_gpu *gpu)
- 
- void msm_devfreq_suspend(struct msm_gpu *gpu)
- {
--	devfreq_suspend_device(gpu->devfreq.devfreq);
-+	struct msm_gpu_devfreq *df = &gpu->devfreq;
-+
-+	devfreq_suspend_device(df->devfreq);
-+
-+	cancel_idle_work(df);
-+	cancel_boost_work(df);
- }
- 
- static void msm_devfreq_boost_work(struct kthread_work *work)
-@@ -196,7 +213,7 @@ void msm_devfreq_active(struct msm_gpu *gpu)
- 	/*
- 	 * Cancel any pending transition to idle frequency:
- 	 */
--	hrtimer_cancel(&df->idle_work.timer);
-+	cancel_idle_work(df);
- 
- 	idle_time = ktime_to_ms(ktime_sub(ktime_get(), df->idle_time));
- 
--- 
-2.33.1
+here is the I2C pull request fixing the regression with AMD GPU suspend
+by reverting the handling of bus regulators in the I2C core. Also, there
+is a fix for the MPC driver to prevent an out-of-bound-access.
 
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+
+  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to a19f75de73c220b4496d2aefb7a605dd032f7c01:
+
+  Revert "i2c: core: support bus regulator controlling in adapter" (2022-01-07 21:27:15 +0100)
+
+----------------------------------------------------------------
+Chris Packham (1):
+      i2c: mpc: Avoid out of bounds memory access
+
+Wolfram Sang (1):
+      Revert "i2c: core: support bus regulator controlling in adapter"
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+"Tareque Md.Hanif" (1):
+      (Test) Revert "i2c: core: support bus regulator controlling in adapter"
+
+Konstantin Kharlamov (1):
+      (Test) Revert "i2c: core: support bus regulator controlling in adapter"
+
+ drivers/i2c/busses/i2c-mpc.c | 15 ++++---
+ drivers/i2c/i2c-core-base.c  | 95 --------------------------------------------
+ 2 files changed, 9 insertions(+), 101 deletions(-)
+
+--qMMXKThljYKmVutZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHZ054ACgkQFA3kzBSg
+KbbcsBAAmCxNzwyS//LsUzfYCpt9caaHLLQB6IhEVUNdYjyOaW6cc1r1I4Y9huy4
+3GHllXisokPkA0yCmVnPoFslpHesdACSn79MwevcuOu01w5e3RGKFvrImtcwAKPz
+VSPSvp0uvD+D7VDa2ZEAt2QDVv6/PsVkp3IVqcEBBnAG9NDMW6tGuiZBNsph3H+g
+3cvba0xxf+ZRHZ8f0axDj7POhEKHIJHONh0Kn/SaCJOu7w8+crN6L+1E6cHBRY81
+cyWS6lYlWpunoB0EOg6yC2F4LK1g8yUZbuQmkyw/LSSP4xL5PUomrNb4ddzeR9hr
+p/3efqb5QXYtHeb4jfgH7sgcQrLq14rrdrJQFEyl69n7SUy0xxltbUYaYSK/uTCW
+kb6wMn1hZdeT404Lhj88FdVj1Ko5dctAaMtb4q2exFKXC+TKClu4RNiOhX63WX3t
+UZrnIwhdOO830iSj5M0bICx1qwmcKRTsx9Wx3XvyE7g4DQ6I4fyWY0PFoEhQQsnd
+zDc/mF9prQuin36CXL+bo4S+mzLIz/nVa53UT9tmrtihVO73MJcFUPVq4JeK+s7q
+SsLCYz56f3BXcK8HAbrA7xoQRiiPE0oaySx3vNBvbIywLbFWWlyoQ2XXOFAWYFtR
+D0dBpxFutzr8cJe6f8xG42GUVMXJNh0gh2f5g6W4DlohB4hOhNA=
+=ybA2
+-----END PGP SIGNATURE-----
+
+--qMMXKThljYKmVutZ--

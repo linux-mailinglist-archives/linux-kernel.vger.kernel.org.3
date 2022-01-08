@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C54948863F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE9A488641
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiAHVUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 16:20:12 -0500
-Received: from mga04.intel.com ([192.55.52.120]:29084 "EHLO mga04.intel.com"
+        id S230331AbiAHVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 16:20:15 -0500
+Received: from mga05.intel.com ([192.55.52.43]:38033 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229492AbiAHVUM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S229953AbiAHVUM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Jan 2022 16:20:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641676812; x=1673212812;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ndCv+G5iqec2CTcl45H/FyqzgGEsJ90lhw5hGVPd7wc=;
-  b=QpXb+27BtnQBTEvdRLfMzWIy75tI3QUex2GXUiVDxS/Rj52+Bab8JiGt
-   eGhVqgN6IC9X+jTkkTWuXScmEm4p2sjiuGCFKTKUvB1bgJTSyim6CH2k8
-   nFp+xX6O+jZD0r/NzwFpqX3oXqY2l6sGn16lP+q4DdgF3wENFmetyOYMx
-   RCrUFEir6/Oh2xRc14zPHzGB/Cv0+Qvzdjd8eoy5YvfnNVEIDcYjsWnh1
-   G3jcqz2lqCho7H/Hf6DHOmAhi5B7XXy+wr6o2aSKaPMuF4mSuKYm+bqYh
-   LwX32Ce4SzuGdKr514xVDbAxSIYVyjx2R5NE1ziXHnG2qQMLHb3ed7IQu
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="241854032"
+  bh=ur+RHZ2uYfVNTbYuazwnYsitFHH8JK7Y6Ggp5nKyGCk=;
+  b=aUttaLhGDkLLYeXcw3oWs2KeYps+kvib6q9xf6swE0b6ti3uOrhLtZWP
+   /Rxcj5C837axIcH5C4f2AVwv2lAWSchTYAQOjYJS6DuHA+IvTfBNPt2WP
+   YcCGIMuLIq+dUVm99GZ+BbxeijIV9WRlTAXneg67/odzeLz+mS3T7warj
+   QOiyV+/EyWybLneQh7Qq2Blq0dpGNpzYTguYgCS8FS4TlZ7qM893xbPBW
+   4bZ1EMoB6ySHHAOzu9EkaIFY/wO+bSArtw7EGK2Ua06rd0xffqxjkz/+x
+   Q/sT9DBq0Ow2RFeX2LMlfLaCQidFQdD7nksXwFhUB3e2Obp6ct7DbVvbQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="329382337"
 X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="241854032"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 13:20:11 -0800
+   d="scan'208";a="329382337"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 13:20:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="575444826"
+   d="scan'208";a="764176364"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Jan 2022 13:20:10 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jan 2022 13:20:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n6J8E-00014C-8C; Sat, 08 Jan 2022 21:20:10 +0000
-Date:   Sun, 9 Jan 2022 05:19:19 +0800
+        id 1n6J8E-00014H-9F; Sat, 08 Jan 2022 21:20:10 +0000
+Date:   Sun, 9 Jan 2022 05:19:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 2294/2300] drivers/video/fbdev/bt431.h:210:17:
- error: implicit declaration of function 'DIV_ROUND_UP'
-Message-ID: <202201090404.fXkl0j7u-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 203/2375] kernel/kcsan/permissive.h:31:26:
+ error: no member named 'flags' in 'struct task_struct'
+Message-ID: <202201090555.OpViV38G-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -51,70 +52,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   4e348e961395297bb17f101cc63bc133d8a348e9
-commit: a35948847a1e0bf875f580f821cb871ce16d4c60 [2294/2300] headers/deps: time: Optimize <linux/time64.h> dependencies, remove <linux/time64_api.h> inclusion
-config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20220109/202201090404.fXkl0j7u-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   351ceeab2ef96ab2fc306934ddb201b44636181b
+commit: 6d8683d081e753b3921879e105659a4bcfd9c08c [203/2375] headers/deps: Move task_struct::flags to per_task()
+config: x86_64-buildonly-randconfig-r004-20220108 (https://download.01.org/0day-ci/archive/20220109/202201090555.OpViV38G-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=a35948847a1e0bf875f580f821cb871ce16d4c60
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=6d8683d081e753b3921879e105659a4bcfd9c08c
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout a35948847a1e0bf875f580f821cb871ce16d4c60
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 6d8683d081e753b3921879e105659a4bcfd9c08c
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/video/fbdev/pmag-aa-fb.c:44:
-   drivers/video/fbdev/bt431.h: In function 'bt431_set_cursor':
->> drivers/video/fbdev/bt431.h:210:17: error: implicit declaration of function 'DIV_ROUND_UP' [-Werror=implicit-function-declaration]
-     210 |         width = DIV_ROUND_UP(width, 8);
-         |                 ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+   In file included from kernel/kcsan/core.c:25:
+>> kernel/kcsan/permissive.h:31:26: error: no member named 'flags' in 'struct task_struct'
+           return ptr == &current->flags;
+                          ~~~~~~~  ^
+   1 error generated.
 
 
-vim +/DIV_ROUND_UP +210 drivers/video/fbdev/bt431.h
+vim +31 kernel/kcsan/permissive.h
 
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  201  
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  202  static inline void bt431_set_cursor(struct bt431_regs *regs,
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  203  				    const char *data, const char *mask,
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  204  				    u16 rop, u16 width, u16 height)
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  205  {
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  206  	u16 x, y;
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  207  	int i;
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  208  
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  209  	i = 0;
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22 @210  	width = DIV_ROUND_UP(width, 8);
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  211  	bt431_select_reg(regs, BT431_REG_CRAM_BASE);
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  212  	for (y = 0; y < BT431_CURSOR_SIZE; y++)
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  213  		for (x = 0; x < BT431_CURSOR_SIZE / 8; x++) {
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  214  			u16 val = 0;
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  215  
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  216  			if (y < height && x < width) {
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  217  				val = mask[i];
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  218  				if (rop == ROP_XOR)
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  219  					val = (val << 8) | (val ^ data[i]);
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  220  				else
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  221  					val = (val << 8) | (val & data[i]);
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  222  				i++;
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  223  			}
-90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  224  			bt431_write_cmap_inc(regs, val);
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  225  		}
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  226  }
-^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  227  
+49f72d5358dd3c Marco Elver 2021-06-07  18  
+49f72d5358dd3c Marco Elver 2021-06-07  19  /*
+49f72d5358dd3c Marco Elver 2021-06-07  20   * Access ignore rules based on address.
+49f72d5358dd3c Marco Elver 2021-06-07  21   */
+49f72d5358dd3c Marco Elver 2021-06-07  22  static __always_inline bool kcsan_ignore_address(const volatile void *ptr)
+49f72d5358dd3c Marco Elver 2021-06-07  23  {
+49f72d5358dd3c Marco Elver 2021-06-07  24  	if (!IS_ENABLED(CONFIG_KCSAN_PERMISSIVE))
+49f72d5358dd3c Marco Elver 2021-06-07  25  		return false;
+49f72d5358dd3c Marco Elver 2021-06-07  26  
+d8fd74d35a8d3c Marco Elver 2021-06-07  27  	/*
+d8fd74d35a8d3c Marco Elver 2021-06-07  28  	 * Data-racy bitops on current->flags are too common, ignore completely
+d8fd74d35a8d3c Marco Elver 2021-06-07  29  	 * for now.
+d8fd74d35a8d3c Marco Elver 2021-06-07  30  	 */
+d8fd74d35a8d3c Marco Elver 2021-06-07 @31  	return ptr == &current->flags;
+49f72d5358dd3c Marco Elver 2021-06-07  32  }
+49f72d5358dd3c Marco Elver 2021-06-07  33  
 
-:::::: The code at line 210 was first introduced by commit
-:::::: 90c83176e5cfa666bb2e7643d74ca87e08e171cb video: fbdev: pmag-aa-fb: Adapt to current APIs
+:::::: The code at line 31 was first introduced by commit
+:::::: d8fd74d35a8d3c602232e3238e916bda9d03d520 kcsan: permissive: Ignore data-racy 1-bit value changes
 
-:::::: TO: Maciej W. Rozycki <macro@linux-mips.org>
-:::::: CC: Tomi Valkeinen <tomi.valkeinen@ti.com>
+:::::: TO: Marco Elver <elver@google.com>
+:::::: CC: Paul E. McKenney <paulmck@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

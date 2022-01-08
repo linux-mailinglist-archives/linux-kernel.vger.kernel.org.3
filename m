@@ -2,69 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4392448856D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A6E48856F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 19:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbiAHS44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 13:56:56 -0500
-Received: from ixit.cz ([94.230.151.217]:51166 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232365AbiAHS4z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 13:56:55 -0500
-Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 2BD3C2243C;
-        Sat,  8 Jan 2022 19:56:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1641668213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aJ10w6+42BJVTFqDcrmvsCYXSpOMsQ1znw8zHssXl2I=;
-        b=d85huZPiP7U8a8Ic4elb8mqtj1lMgZNk6hzc4tRhBWKdxKox9Qzb2z9kFe3ow8gHk4mSYP
-        LJAC08oaOzFp6zzyZORqu9jWmhl9UEjCMoGK13tNVda7h0nUUCq0G6OCrJ59NizK7o5Ac1
-        Kwxw6COYUXdutCVRN/fJ+zV+UI9r7OE=
-Date:   Sat, 08 Jan 2022 19:56:47 +0100
-From:   David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH] dt-bindings: mfd: syscon: Add Qualcomm TCSR registers
-To:     Rob Herring <robh@kernel.org>
-Cc:     Baruch Siach <baruch@tkos.co.il>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <NANE5R.VEKBJ1CUXFCA3@ixit.cz>
-In-Reply-To: <YdTHJrqjt5IPhoM2@robh.at.kernel.org>
-References: <20211225140708.22000-1-david@ixit.cz>
-        <YdTHJrqjt5IPhoM2@robh.at.kernel.org>
-X-Mailer: geary/40.0
+        id S234916AbiAHS6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 13:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232429AbiAHS6e (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 13:58:34 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF1C061746
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 10:58:34 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h10so7901608wrb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 10:58:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EEyUTxFJIz6kwG3kSZIrQjY/C5LVppVG+iMmlquslj8=;
+        b=E+yTJXXtUQcdFe9Z3H/jh0u9LJZFAbE7eeTqrqwH3oqz3G/sR5tCW62S98Q7D6jRMV
+         OZJirLXxbHMb8wsY51jj0ggRnYjPy2VspNlR85CpQoR9NWsQjFUy8w1akBhDATSnJbed
+         bAKXQT7moY5AScR8Ee+P2knxdwTHmoNKXYfVg65xJExpFGI2/QoghUhUig87/uOK0Lo0
+         pkMv9bz6iTo3xbTkihdTMELumJ3w6KIxgC5I9/7NZIrFkDLaPuPS9FWneOoX8x1pF01v
+         04jyBzMH2aoInZJLouzdrpKO3uR5dw3Muyp1Zfc/aX3DaDp00cjSS+tKe7Qcq6Y/TwYK
+         wRbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EEyUTxFJIz6kwG3kSZIrQjY/C5LVppVG+iMmlquslj8=;
+        b=PyMGjfltWIzVWj6Heq1HTNI2aF5DnIa5rG/HswFoP3nt96LjjyOBe08dSPTjSW3sZf
+         j40YMQlgyAU5mV9/GReHpu6iExqTmzUkGlqUVNg0lUerIu2aySdrCeaFdfqX7x44O29g
+         5b0tpGGAzyFQabS0Bjk/NqgWIU4cgSJ7UtMO01ULzi9x92OpEFVgx/x2UxKhX2kftJ4h
+         hDgUWOSg0JinLVNiws7amtafSvHIVnosvyVlM+8ewJ7SkwO1mfrUrAo6K5JQGyvHw58V
+         I08TqW4ZgpVn7uz1ZidLYZw6o2juIAiHXMITrP6gcUPQmgC3qVYq1q1Gc65jA2j2fmru
+         JVdQ==
+X-Gm-Message-State: AOAM531/CR1nAI7gU6AMS072YNPZt4DJ0QhWhOamzJO8OUJt7JSFIXCB
+        nvuyR+M11s5IZWcsYzS/A3f3Z6RzEZzrbA==
+X-Google-Smtp-Source: ABdhPJyIy71saxDADU4/SYJS7nSb3jiPXr13T4krVXzJ2fLHr3iaJzgUMloaWMlFrUgDB+8sB0so8w==
+X-Received: by 2002:a5d:47c2:: with SMTP id o2mr59475440wrc.637.1641668312719;
+        Sat, 08 Jan 2022 10:58:32 -0800 (PST)
+Received: from fedora.sec.9e.network (ip-88-153-139-166.hsi04.unitymediagroup.de. [88.153.139.166])
+        by smtp.gmail.com with ESMTPSA id bg12sm2886209wmb.5.2022.01.08.10.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 10:58:32 -0800 (PST)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/4] Add support for Maxim MAX735x/MAX736x variants
+Date:   Sat,  8 Jan 2022 19:57:54 +0100
+Message-Id: <20220108185759.2086347-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Should I go path specifying MFD or though I could just add minItems: 2 
-and maxItems: 4 to the list?
+v2:
+- Move dt-bindings to separate file
+- Added support for MAX736x as they are very similar
+- Fixed an issue found by kernel test robot
+- Dropped max735x property and custom IRQ check
+- Added MAX7357 config register defines instead of magic values
+- Renamed vcc-supply to vdd-supply
 
-What you think Rob?
-David
+Patrick Rudolph (4):
+  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+  i2c: muxes: pca954x: Add MAX735x/MAX736x support
+  dt-bindings: i2c: Add regulator to pca954x and max735x
+  i2c: muxes: pca954x: Add regulator support
 
-On Tue, Jan 4 2022 at 16:16:06 -0600, Rob Herring <robh@kernel.org> 
-wrote:
-> On Sat, Dec 25, 2021 at 03:07:07PM +0100, David Heidelberg wrote:
->>  Qualcomm devices have a set of registers that provide various 
->> control and status
->>  functions for their peripherals.
->> 
->>  Modification:
->>   - dropped "qcom,tcsr-ipq6018", "syscon", "simple-mfd", since it's 
->> not
->>     used anywhere.
-> 
-> There is about to be. See:
-> https://lore.kernel.org/all/b5053b42f73e574f48cf860a8e225d6b1939d216.1639499239.git.baruch@tkos.co.il/
+ .../bindings/i2c/i2c-mux-max735x.yaml         | 106 +++++++++++++++
+ .../bindings/i2c/i2c-mux-pca954x.yaml         |   5 +
+ drivers/i2c/muxes/Kconfig                     |   4 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 124 ++++++++++++++++--
+ 4 files changed, 228 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
 
+-- 
+2.33.1
 

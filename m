@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0292A4884B8
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB49B4884BD
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 17:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbiAHQwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 11:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S234772AbiAHQx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 11:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiAHQwg (ORCPT
+        with ESMTP id S231398AbiAHQx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 11:52:36 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439BDC06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 08:52:36 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id e9so16091949wra.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 08:52:36 -0800 (PST)
+        Sat, 8 Jan 2022 11:53:26 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA3C06173F;
+        Sat,  8 Jan 2022 08:53:25 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id i3so25986971ybh.11;
+        Sat, 08 Jan 2022 08:53:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AbP6l9e9WPV7+5ZHWs4pOKGgGXLLRP9ERXDPMtE742M=;
-        b=ijB1mmORd5xw+l7Hxh3xST5FVoqGTx9yCeIHp7jV0qngf8E00G3RxEs1Jdh7zIvCev
-         lMv9phcfD4cDeTSQ/RYXPqyJjGyz0BVe+/1e6USleTvyACydxUDPlcgQu8dWrNuhNC4r
-         qvr8eMznhyQcgQwbTY4cxBYnriLwKyR57Ihzp2GxJ2nnd9BdANjIiyVNtpf5NFrMJ+Z2
-         7uNPH+UnZyqu9cYnLxto6D/wV6ZBg4y8dGBur0rNtd5Rbwynzy0YZwCTZDfkIHed1G77
-         tyLQ/FcE7TnWD2EPQeGOckiQ+Gn9M+jBBC4O7JYsFSvft3xKt/5smy9cXuu9mjJv0sV3
-         MTfQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wRueC447D4PZrB32erkJF3XwhKSeC1rTxvcavGyEUwk=;
+        b=ZrVqbaPjn7kIDuXaAq+QHRgZEfEXSm7q2xeT9TzSeiG9qyNBaZP/pT58cJuw+YpbNd
+         oir+ZzEBgOrjXyFlJoGojSQQT1mLfJjsufsu7juL7AzWmzB/W460pLiAHR5MrSQ/xou4
+         7e/POZbW9uwsiZB9s8aOb4G72BM8ou89f21nuT1FjPGeFtFxjDq6HDZcvQ7u9edPPXe0
+         4FeUk55iNhv2lwwcbfBO+UOv39L1K/WtMo5gIumbiGeKoD2uuLRm3KyTgJxJqgh5e6Rz
+         WEdc2HwC2ON3ERih1nMOxyFT+mZdUbvwzh+OMVemtgqkpn40BF1foSUlvUPv9Zlz4+6a
+         V0cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AbP6l9e9WPV7+5ZHWs4pOKGgGXLLRP9ERXDPMtE742M=;
-        b=A5w7Qyfvw30kDSgJY4ppxVvQgCuzg2jaFDg1XuIJpXEiD9WVEOMPs1YXKEsmYHyXCK
-         MPWu+b0ro14hQIc6TZdU4Ph/mfMYybyi5c/+KrHEvQL6cqnoHB8QEQL0cifveFWZx2Q+
-         mEx2HsamqRrtBKZUdac7CDXdNnCiWa5KAGQLDGbMfs5fADX4N1Lv+vOuBJ79BiJ0LN7J
-         geEH52DhNNHh4U9Gj0v2zeg5xT9dIpI/ZrQpN9gzq3BvTlI57AojQoI1GcRLcGqooDvQ
-         HG0V/PvfwwxHUeRlHVsJJ3vT4BipWkNv+U+iQTAfuR1gGC6aE0XJ8qrFdCYtwVDp9q++
-         qOYA==
-X-Gm-Message-State: AOAM531fGIxJ/L3Kio3c5kV30xoWYkpwz++HXe2Fq6m6unaI1PVZ1+vE
-        D2D5fAcR36KZc9kEpxiuziVlvc68b3E28w==
-X-Google-Smtp-Source: ABdhPJyP3K2xyfHsiOTYzsNlxEQq1yvbgeoIsW8mx3C8Bd5U5lyhs6OogxOaB9jsymdj5SYPzdyWOg==
-X-Received: by 2002:a05:6000:1085:: with SMTP id y5mr60144131wrw.696.1641660754296;
-        Sat, 08 Jan 2022 08:52:34 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id p21sm1994610wmq.20.2022.01.08.08.52.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 08:52:33 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     LW@karo-electronics.de
-Cc:     airlied@linux.ie, daniel@ffwll.ch, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2] drm/imx: Fix memory leak in imx_pd_connector_get_modes
-Date:   Sat,  8 Jan 2022 17:52:30 +0100
-Message-Id: <20220108165230.44610-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wRueC447D4PZrB32erkJF3XwhKSeC1rTxvcavGyEUwk=;
+        b=P2xIgBux8hZeRHJE3pdD0EC8fe2zR4L/UpJCYyeHvZGOrp5nySIFNo/ySsHKm9oaVS
+         Ha1gbGdn8FnVk0SR6UJiikGDRwFCwbaaF9pMe4ObWxNw9/wGy2jC3oso6aFehx5zqvSQ
+         VHEYTgknDcUZmPQh5DYbVkjh5nQ+7X6jtk4IPnzoo0ouJEb3DjV95hXKWpeNpxdQIQ82
+         /YlcrsGT8kmhDcoJX2jhxXWS61vjB09KX9Q0y1nkv539Zol3YyzQe/nfCsNiQujJKpBP
+         QIZIoREwKwbyt2mDQhNqz+06eGbiVTYzyI5y8Z5iEtjiMIm12gu8YA1bX8LXXBud93ee
+         qx2g==
+X-Gm-Message-State: AOAM533p+SPDFrF4BCZNIlyC5dmLysyO90QKvut0xRs+yZfBjZB52JE8
+        30k/U27vbJiv2yi7bAhSz9qrcaxKxQPF2BKd3eP4NvsKSMO4Bw==
+X-Google-Smtp-Source: ABdhPJzxEId/ef5PfNvO/2kgKT3ZEILPu/ThbMWisj0D2vBTpaNodUYRbNAlgHFENDIUk1FfCydjmJYQIOm3ixIiokw=
+X-Received: by 2002:a25:e647:: with SMTP id d68mr73393299ybh.591.1641660805023;
+ Sat, 08 Jan 2022 08:53:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
+ <1641578854-14232-1-git-send-email-quic_pintu@quicinc.com> <19cce51e24584c2a8090b618c580a0bd@AcuMS.aculab.com>
+In-Reply-To: <19cce51e24584c2a8090b618c580a0bd@AcuMS.aculab.com>
+From:   Pintu Agarwal <pintu.ping@gmail.com>
+Date:   Sat, 8 Jan 2022 22:23:13 +0530
+Message-ID: <CAOuPNLh-WLxJ7w=_C7zKXArgZLbO7OahHHhuwAyN9E1yZvNTdQ@mail.gmail.com>
+Subject: Re: [PATCH v2] sysinfo: include availram field in sysinfo struct
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Pintu Kumar <quic_pintu@quicinc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "legion@kernel.org" <legion@kernel.org>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "ccross@google.com" <ccross@google.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "caoxiaofeng@yulong.com" <caoxiaofeng@yulong.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        dhowells@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid leaking the display mode variable if of_get_drm_display_mode
-fails.
+On Sat, 8 Jan 2022 at 03:52, David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Pintu Kumar
+> > Sent: 07 January 2022 18:08
+> >
+> > The sysinfo member does not have any "available ram" field and
+> > the bufferram field is not much helpful either, to get a rough
+> > estimate of available ram needed for allocation.
+> >
+> > One needs to parse MemAvailable field separately from /proc/meminfo
+> > to get this info instead of directly getting if from sysinfo itself.
+> >
+> > Thus, this patch introduce a new field as availram in sysinfo
+> > so that all the info total/free/available can be retrieved from
+> > one place itself.
+> >
+> ...
+> > diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
+> > index 435d5c2..fe84c6a 100644
+> > --- a/include/uapi/linux/sysinfo.h
+> > +++ b/include/uapi/linux/sysinfo.h
+> > @@ -19,7 +19,8 @@ struct sysinfo {
+> >       __kernel_ulong_t totalhigh;     /* Total high memory size */
+> >       __kernel_ulong_t freehigh;      /* Available high memory size */
+> >       __u32 mem_unit;                 /* Memory unit size in bytes */
+> > -     char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
+>
+> There are 4 pad bytes here on most 64bit architectures.
+>
+> > +     __kernel_ulong_t availram;      /* Memory available for allocation */
+> > +     char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
+> >  };
+>
+> You've not compile-time tested the size of the structure.
+>
+With "32" instead of "20" in padding I get these size of sysinfo:
+In x86-64 kernel, with app 64-bit: Size of sysinfo = 128
+In x86-64 kernel, with app 32-bit:: Size of sysinfo = 76
+In arm-64 kernel, with app 32-bit: Size of sysinfo = 76
 
-Fixes: 76ecd9c9fb24 ("drm/imx: parallel-display: check return code from of_get_drm_display_mode()")
-Addresses-Coverity-ID: 1443943 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Okay the sys robot reported some issue in 64-bit build.
+{{{
+>> include/uapi/linux/sysinfo.h:23:14: error: size of array '_f' is too large
+>>    23 |         char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
+>>       |              ^~
+}}}
 
----
+Also, I got the same issue while building for arm64, so I tried to
+adjust like this:
+char _f[32-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];
 
-v2: Improve commit message
----
- drivers/gpu/drm/imx/parallel-display.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+With this the build works on both 32/64 but output fails when running
+32-bit program on 64-bit kernel.
+Also, the free command on 64-bit reports "stack smashing error"..
 
-diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
-index a8aba0141ce7..3bf8e0a4803a 100644
---- a/drivers/gpu/drm/imx/parallel-display.c
-+++ b/drivers/gpu/drm/imx/parallel-display.c
-@@ -75,8 +75,10 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
- 		ret = of_get_drm_display_mode(np, &imxpd->mode,
- 					      &imxpd->bus_flags,
- 					      OF_USE_NATIVE_MODE);
--		if (ret)
-+		if (ret) {
-+			drm_mode_destroy(connector->dev, mode);
- 			return ret;
-+		}
- 
- 		drm_mode_copy(mode, &imxpd->mode);
- 		mode->type |= DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
--- 
-2.25.1
+How do we resolve this issue to make it work on both arch ?
+Also, I don't really understand the significance of that number "20"
+in padding ?
 
+Thanks,
+Pintu

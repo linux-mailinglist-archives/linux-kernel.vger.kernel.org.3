@@ -2,104 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D263488270
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A5148827B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiAHIkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 03:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiAHIkT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 03:40:19 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E403AC061574;
-        Sat,  8 Jan 2022 00:40:18 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso9100396pjb.1;
-        Sat, 08 Jan 2022 00:40:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9zEwDmNMe5JERLrwlCRlU/+ORPGYL9TSSP35Lx3dN30=;
-        b=CuClFgSfhd2sHttE34W8oabBRGxMtRezBYjAnGdE1RsZ83TYi8ViK3Xmg1auClddbx
-         GwH8+CYdXARMc5nifS/9sklBitiGXcSlRdnrqDF2MuITggX4gShDw9xqSds5Vpz7jCdI
-         obMtp+Es1uBXHuSFLk6cpS/sZ6r/fkDEt9tU/Jefu5BOy6FA9Xpo/UoGwAe8GN9aT+jK
-         1ajH/DIXh2JtuFylbH9pgGuAyChKpvsSDU5ZJ/l+mvjagsxC1W4UekWKCzX8MoJQ7FJT
-         8KTmDJSHASgXEZU6rzCV9rFAKcCM0kdexhEdPXqjC5bBR6WVtnaOtp1Qbp+chGejhIkn
-         EijQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9zEwDmNMe5JERLrwlCRlU/+ORPGYL9TSSP35Lx3dN30=;
-        b=pG9tYXAsTSdT3aTmov757Z+rM75NpqEyN+m5LNXgJKDA/18KMOpgnMDVNtdEaqSLPG
-         6XYrWqWQDxDTl7FDZyDT590iELjSA5w0gYRtes2jo9BCyy7HqgWdDyBlH5rr7gQvxa/G
-         +a5ysUFDTFs30cgKvJ3O3qOWOBoYMWAt/u/Jytnvkgu2Fy8JDvgUrZPZHVLKSnNxPfoH
-         7ZhbLlIRbCq9wGGogcAVz94Od2mn3P4sOgcihb3WXQ4gLfkDpTwgCKk3ANRbJWavvcx2
-         H5TY8uKiv91chEqtwGwqz4XiAMo5D2qp6rYCX/RU531dmc99ppnfnsWzFvUnHVylTXpO
-         zXtw==
-X-Gm-Message-State: AOAM532mmWuZtz4BylICiWVfPfppiAdja/Y7cD7Hb59NxRIUUrC7uFPK
-        br/F7XuaQQF5DfAKS+n5mR0=
-X-Google-Smtp-Source: ABdhPJxgT+hITarZ5kOie4lgQKjGUCs4kcAxUmDsHXGRU8Ggif6Uqhy6zZ/xF3aIzhOlokShIaQfEQ==
-X-Received: by 2002:a17:902:a3c4:b0:149:6639:4b86 with SMTP id q4-20020a170902a3c400b0014966394b86mr62292275plb.60.1641631218474;
-        Sat, 08 Jan 2022 00:40:18 -0800 (PST)
-Received: from localhost.localdomain ([111.199.185.103])
-        by smtp.gmail.com with ESMTPSA id mq12sm1333897pjb.48.2022.01.08.00.40.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 00:40:18 -0800 (PST)
-From:   Wei Fu <fuweid89@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wei Fu <fuweid89@gmail.com>
-Subject: [PATCH bpf] tools/bpf: only set obj->skeleton without err
-Date:   Sat,  8 Jan 2022 16:40:08 +0800
-Message-Id: <20220108084008.1053111-1-fuweid89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S233889AbiAHIlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 03:41:50 -0500
+Received: from mga01.intel.com ([192.55.52.88]:58970 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233852AbiAHIlr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 03:41:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641631307; x=1673167307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GzEgai5YpqW4VLJLYbRgUGReQHJmpARbqA6scsPsFu4=;
+  b=BPuLKuisgM6APnH+K2pcbZJhl0eshKqsbyVm9tCsn3bmdR9M3nuaV27K
+   27NJ/kiaJMuaPsPKaPosWJUG2gRRdB8kZLQhGw0aPFbxEltyn59CYPXa+
+   lPp4HI76P2oEEhbA36q2geZTdP/aXrP3R8EWAQ5jz49U4hP1itK0OWUFX
+   8oFlNiLswlAD3XjVEOqJkTIciYiN8CLOduh18UqBp/CtHvu20QLYbnclS
+   VAejkwwPfz4i2zf1AfchFjMsuqHFp6AFmjoosgAV3Eo3piR8/WQafUxB8
+   yCaQPPXZphWgVYoOzyVCpd05fyeHmjTMCQ8etOSIlgembDuKvtMloEfw0
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="267312695"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="267312695"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 00:41:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="514097113"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Jan 2022 00:41:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n67IG-0000QE-Dx; Sat, 08 Jan 2022 08:41:44 +0000
+Date:   Sat, 8 Jan 2022 16:41:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Quan <evan.quan@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>
+Subject: [agd5f:drm-next 20/53]
+ drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:6: warning: no
+ previous prototype for function 'amdgpu_dpm_get_active_displays'
+Message-ID: <202201081630.rt0Uku7J-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After `bpftool gen skeleton`, the ${bpf_app}.skel.h will provide that
-${bpf_app_name}__open helper to load bpf. If there is some error
-like ENOMEM, the ${bpf_app_name}__open will rollback(free) the allocated
-object, including `bpf_object_skeleton`.
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   ec1289d5cf9f8b8872ed8b9e57130d27938faccf
+commit: 855b49a8859f07dc29076c3a301888b39550c362 [20/53] drm/amd/pm: optimize the amdgpu_pm_compute_clocks() implementations
+config: x86_64-randconfig-a013-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081630.rt0Uku7J-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 855b49a8859f07dc29076c3a301888b39550c362
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
 
-Since the ${bpf_app_name}__create_skeleton set the obj->skeleton first
-and not rollback it when error, it will cause double-free in
-${bpf_app_name}__destory at ${bpf_app_name}__open. Therefore, we should
-set the obj->skeleton before return 0;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Wei Fu <fuweid89@gmail.com>
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:6: warning: no previous prototype for function 'amdgpu_dpm_get_active_displays' [-Wmissing-prototypes]
+   void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:76:5: warning: no previous prototype for function 'amdgpu_dpm_get_vrefresh' [-Wmissing-prototypes]
+   u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
+       ^
+   drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/amdgpu_dpm_get_active_displays +29 drivers/gpu/drm/amd/amdgpu/../pm/amdgpu_dpm_internal.c
+
+    28	
+  > 29	void amdgpu_dpm_get_active_displays(struct amdgpu_device *adev)
+    30	{
+    31		struct drm_device *ddev = adev_to_drm(adev);
+    32		struct drm_crtc *crtc;
+    33		struct amdgpu_crtc *amdgpu_crtc;
+    34	
+    35		adev->pm.dpm.new_active_crtcs = 0;
+    36		adev->pm.dpm.new_active_crtc_count = 0;
+    37		if (adev->mode_info.num_crtc && adev->mode_info.mode_config_initialized) {
+    38			list_for_each_entry(crtc,
+    39					    &ddev->mode_config.crtc_list, head) {
+    40				amdgpu_crtc = to_amdgpu_crtc(crtc);
+    41				if (amdgpu_crtc->enabled) {
+    42					adev->pm.dpm.new_active_crtcs |= (1 << amdgpu_crtc->crtc_id);
+    43					adev->pm.dpm.new_active_crtc_count++;
+    44				}
+    45			}
+    46		}
+    47	}
+    48	
+    49	u32 amdgpu_dpm_get_vblank_time(struct amdgpu_device *adev)
+    50	{
+    51		struct drm_device *dev = adev_to_drm(adev);
+    52		struct drm_crtc *crtc;
+    53		struct amdgpu_crtc *amdgpu_crtc;
+    54		u32 vblank_in_pixels;
+    55		u32 vblank_time_us = 0xffffffff; /* if the displays are off, vblank time is max */
+    56	
+    57		if (adev->mode_info.num_crtc && adev->mode_info.mode_config_initialized) {
+    58			list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
+    59				amdgpu_crtc = to_amdgpu_crtc(crtc);
+    60				if (crtc->enabled && amdgpu_crtc->enabled && amdgpu_crtc->hw_mode.clock) {
+    61					vblank_in_pixels =
+    62						amdgpu_crtc->hw_mode.crtc_htotal *
+    63						(amdgpu_crtc->hw_mode.crtc_vblank_end -
+    64						amdgpu_crtc->hw_mode.crtc_vdisplay +
+    65						(amdgpu_crtc->v_border * 2));
+    66	
+    67					vblank_time_us = vblank_in_pixels * 1000 / amdgpu_crtc->hw_mode.clock;
+    68					break;
+    69				}
+    70			}
+    71		}
+    72	
+    73		return vblank_time_us;
+    74	}
+    75	
+  > 76	u32 amdgpu_dpm_get_vrefresh(struct amdgpu_device *adev)
+
 ---
- tools/bpf/bpftool/gen.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 5c18351290f0..e61e08f524da 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -928,7 +928,6 @@ static int do_skeleton(int argc, char **argv)
- 			s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));\n\
- 			if (!s)						    \n\
- 				goto err;				    \n\
--			obj->skeleton = s;				    \n\
- 									    \n\
- 			s->sz = sizeof(*s);				    \n\
- 			s->name = \"%1$s\";				    \n\
-@@ -1001,6 +1000,8 @@ static int do_skeleton(int argc, char **argv)
- 									    \n\
- 			s->data = (void *)%2$s__elf_bytes(&s->data_sz);	    \n\
- 									    \n\
-+			obj->skeleton = s;				    \n\
-+									    \n\
- 			return 0;					    \n\
- 		err:							    \n\
- 			bpf_object__destroy_skeleton(s);		    \n\
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A4B488640
+	by mail.lfdr.de (Postfix) with ESMTP id 3C54948863F
 	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiAHVUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 16:20:14 -0500
-Received: from mga11.intel.com ([192.55.52.93]:25742 "EHLO mga11.intel.com"
+        id S230078AbiAHVUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 16:20:12 -0500
+Received: from mga04.intel.com ([192.55.52.120]:29084 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229638AbiAHVUM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S229492AbiAHVUM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Jan 2022 16:20:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641676812; x=1673212812;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y4UZJ4cX7OU1X3j3Ps5JxeT1lk3Rm7W0CKTCNXxPRn4=;
-  b=c1U3Y4xVgur5nfWi5t7vv6rLIMDbjybim7iZ161pO1j9+r0x0k9J65cM
-   AZ8MUKuM3l6JTMhnr4DzXvJkO75vGNPqsNIQo+tQ1u8u2rwe450gSUuXv
-   2rAHGTh250Ave0/YSl0NKAY6uhjkhVEG2Cd1W725FDexZQtZJVYVBHsDl
-   U0j6GUAa1QmO7LZcsz8aLEFQb8et2mybfWl2e9pQJD0uBiVTnfZBk9UgD
-   QJl4Un4aYUXhysanLvQF5kryr6ZIk3hbNgBSMguZOJe/rjJiURBuSCyNQ
-   KbXCuwcOWpZK4dYATBnSFRctKaPb9eUQrD31YRg8NLHrI8bbphOoOL4r/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="240590005"
+  bh=ndCv+G5iqec2CTcl45H/FyqzgGEsJ90lhw5hGVPd7wc=;
+  b=QpXb+27BtnQBTEvdRLfMzWIy75tI3QUex2GXUiVDxS/Rj52+Bab8JiGt
+   eGhVqgN6IC9X+jTkkTWuXScmEm4p2sjiuGCFKTKUvB1bgJTSyim6CH2k8
+   nFp+xX6O+jZD0r/NzwFpqX3oXqY2l6sGn16lP+q4DdgF3wENFmetyOYMx
+   RCrUFEir6/Oh2xRc14zPHzGB/Cv0+Qvzdjd8eoy5YvfnNVEIDcYjsWnh1
+   G3jcqz2lqCho7H/Hf6DHOmAhi5B7XXy+wr6o2aSKaPMuF4mSuKYm+bqYh
+   LwX32Ce4SzuGdKr514xVDbAxSIYVyjx2R5NE1ziXHnG2qQMLHb3ed7IQu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="241854032"
 X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="240590005"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 13:20:11 -0800
+   d="scan'208";a="241854032"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 13:20:11 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="669109780"
+   d="scan'208";a="575444826"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Jan 2022 13:20:10 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 08 Jan 2022 13:20:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n6J8E-00014E-8h; Sat, 08 Jan 2022 21:20:10 +0000
-Date:   Sun, 9 Jan 2022 05:19:17 +0800
+        id 1n6J8E-00014C-8C; Sat, 08 Jan 2022 21:20:10 +0000
+Date:   Sun, 9 Jan 2022 05:19:19 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: ERROR: modpost: "__ld_r13_to_r25_ret" [lib/zstd/zstd_decompress.ko]
- undefined!
-Message-ID: <202201090409.Bi3yEXiF-lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 2294/2300] drivers/video/fbdev/bt431.h:210:17:
+ error: implicit declaration of function 'DIV_ROUND_UP'
+Message-ID: <202201090404.fXkl0j7u-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -52,34 +51,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
-commit: 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8 lib: zstd: Don't add -O3 to cflags
-date:   7 weeks ago
-config: arc-randconfig-r001-20220107 (https://download.01.org/0day-ci/archive/20220109/202201090409.Bi3yEXiF-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   4e348e961395297bb17f101cc63bc133d8a348e9
+commit: a35948847a1e0bf875f580f821cb871ce16d4c60 [2294/2300] headers/deps: time: Optimize <linux/time64.h> dependencies, remove <linux/time64_api.h> inclusion
+config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20220109/202201090404.fXkl0j7u-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7416cdc9b9c10968c57b1f73be5d48b3ecdaf3c8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=a35948847a1e0bf875f580f821cb871ce16d4c60
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout a35948847a1e0bf875f580f821cb871ce16d4c60
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "__ld_r13_to_r25_ret" [lib/zstd/zstd_decompress.ko] undefined!
-ERROR: modpost: "__st_r13_to_r25" [lib/zstd/zstd_decompress.ko] undefined!
+   In file included from drivers/video/fbdev/pmag-aa-fb.c:44:
+   drivers/video/fbdev/bt431.h: In function 'bt431_set_cursor':
+>> drivers/video/fbdev/bt431.h:210:17: error: implicit declaration of function 'DIV_ROUND_UP' [-Werror=implicit-function-declaration]
+     210 |         width = DIV_ROUND_UP(width, 8);
+         |                 ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/DIV_ROUND_UP +210 drivers/video/fbdev/bt431.h
+
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  201  
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  202  static inline void bt431_set_cursor(struct bt431_regs *regs,
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  203  				    const char *data, const char *mask,
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  204  				    u16 rop, u16 width, u16 height)
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  205  {
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  206  	u16 x, y;
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  207  	int i;
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  208  
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  209  	i = 0;
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22 @210  	width = DIV_ROUND_UP(width, 8);
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  211  	bt431_select_reg(regs, BT431_REG_CRAM_BASE);
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  212  	for (y = 0; y < BT431_CURSOR_SIZE; y++)
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  213  		for (x = 0; x < BT431_CURSOR_SIZE / 8; x++) {
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  214  			u16 val = 0;
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  215  
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  216  			if (y < height && x < width) {
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  217  				val = mask[i];
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  218  				if (rop == ROP_XOR)
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  219  					val = (val << 8) | (val ^ data[i]);
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  220  				else
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  221  					val = (val << 8) | (val & data[i]);
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  222  				i++;
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  223  			}
+90c83176e5cfa6 drivers/video/fbdev/bt431.h Maciej W. Rozycki 2016-02-22  224  			bt431_write_cmap_inc(regs, val);
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  225  		}
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  226  }
+^1da177e4c3f41 drivers/video/bt431.h       Linus Torvalds    2005-04-16  227  
+
+:::::: The code at line 210 was first introduced by commit
+:::::: 90c83176e5cfa666bb2e7643d74ca87e08e171cb video: fbdev: pmag-aa-fb: Adapt to current APIs
+
+:::::: TO: Maciej W. Rozycki <macro@linux-mips.org>
+:::::: CC: Tomi Valkeinen <tomi.valkeinen@ti.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACBA48867F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EBA488684
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 22:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiAHVtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 16:49:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55030 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiAHVtv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 16:49:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S233139AbiAHVvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 16:51:31 -0500
+Received: from mx.ewheeler.net ([173.205.220.69]:34602 "EHLO mx.ewheeler.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233083AbiAHVva (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 16:51:30 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mx.ewheeler.net (Postfix) with ESMTP id DCF9645;
+        Sat,  8 Jan 2022 13:51:29 -0800 (PST)
+X-Virus-Scanned: amavisd-new at ewheeler.net
+Received: from mx.ewheeler.net ([127.0.0.1])
+        by localhost (mx.ewheeler.net [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id tEEkCLizf5QF; Sat,  8 Jan 2022 13:51:25 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3ABCEB80B9B;
-        Sat,  8 Jan 2022 21:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4243EC36AE5;
-        Sat,  8 Jan 2022 21:49:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641678588;
-        bh=QJzWduRV0XXJmS+zFAvoRkFyeEQBm0h8/sDIkY0UrhE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qwfBU2/k6DJwwavWbPsjV94HkbteNMrge/f1urb2Ml+gqL7eimHaAdE4SxdU6Bxcv
-         RTXNwJCPaSLCavxis2SLEkzqvJNPCCTuOxVxoLQiD49JZfEjF4dkLSWjsbsP3l5zX5
-         Z74i1LmiLALOlzdHl/0nsdO1OZIoEsS1yeChjVx1TQPI2q9qnfe/L8Ur2kvwvdwnIL
-         CoH62tsstpAuKqZ6RYbMYp6jBR/b0MBCpqGyjY+3dB/kVv/QIVcoIrlUrh/t11NBRV
-         7rtwzjXb6Ygfe4yFAodFtoxxhMjRVtDWUx6FE1fjt51BYHEL6/qOyLqv+VEhtZ9L2S
-         XIczwpHcuXSjg==
-Date:   Sat, 8 Jan 2022 22:49:45 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Terry.Bowman@amd.com, Jean Delvare <jdelvare@suse.de>,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.lendacky@amd.com
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-Message-ID: <YdoG+en5Z/MaS/wu@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>, Terry.Bowman@amd.com,
-        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.lendacky@amd.com
-References: <20210715221828.244536-1-Terry.Bowman@amd.com>
- <20210907183720.6e0be6b6@endymion>
- <20211105170550.746443b9@endymion>
- <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
- <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
- <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
+        by mx.ewheeler.net (Postfix) with ESMTPSA id EAB4439;
+        Sat,  8 Jan 2022 13:51:24 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx.ewheeler.net EAB4439
+Date:   Sat, 8 Jan 2022 13:51:22 -0800 (PST)
+From:   Eric Wheeler <bcache@lists.ewheeler.net>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Coly Li <colyli@suse.de>, linux-block@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BCACHE (BLOCK LAYER CACHE)" <linux-bcache@vger.kernel.org>
+Subject: Re: [PATCH] bcache: make stripe_size configurable and persistent
+ for hardware raid5/6
+In-Reply-To: <c9abd220-6b7f-9299-48a1-a16d64981734@ewheeler.net>
+Message-ID: <98aa1886-859-abb9-164f-c9eb9be38a91@ewheeler.net>
+References: <d3f7fd44-9287-c7fa-ee95-c3b8a4d56c93@suse.de> <1561245371-10235-1-git-send-email-bcache@lists.ewheeler.net> <200638b0-7cba-38b4-20c4-b325f3cfe862@suse.de> <alpine.LRH.2.11.1906241800350.1114@mx.ewheeler.net> <8a9131dc-9bf7-a24a-f7b8-35e0c019e905@suse.de>
+ <fdb85dc1-eee6-e55e-8e9c-fa1f36b4a37@ewheeler.net> <yq15yqvw1f0.fsf@ca-mkp.ca.oracle.com> <c9abd220-6b7f-9299-48a1-a16d64981734@ewheeler.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pO8Sf19TDHcJTC4i"
-Content-Disposition: inline
-In-Reply-To: <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 7 Jan 2022, Eric Wheeler wrote:
+> On Fri, 7 Jan 2022, Martin K. Petersen wrote:
+> > Eric,
+> > 
+> > > Even new new RAID controlers that _do_ provide `io_opt` still do _not_ 
+> > > indicate partial_stripes_expensive (which is an mdraid feature, but Martin 
+> > > please correct me if I'm wrong here).
+> > 
+> > partial_stripes_expensive is a bcache thing, I am not sure why it needs
+> > a separate flag. It is implied, although I guess one could argue that
+> > RAID0 is a special case since partial writes are not as painful as with
+> > parity RAID.
+> 
+> I'm guessing bcache used did some optimization for 
+> queue->limits.raid_partial_stripes_expensive because md raid5 code sets 
+> this flag.  At least when using Linux md as the RAID5 implementation it 
+> gets configured automatically:
+>    raid5.c:       mddev->queue->limits.raid_partial_stripes_expensive = 1;
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/md/raid5.c#L7729
+> 
+> Interestingly only bcache uses it, but md does set it.
 
---pO8Sf19TDHcJTC4i
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ok so `git blame` shows that Kent added this to md/raid5.c in 
+c78afc6261b (Kent Overstreet 2013-07-11 22:39:53 -0700 7526)
+	mddev->queue->limits.raid_partial_stripes_expensive = 1;
+
+    bcache/md: Use raid stripe size
+    
+    Now that we've got code for raid5/6 stripe awareness, bcache just needs
+    to know about the stripes and when writing partial stripes is expensive
+    - we probably don't want to enable this optimization for raid1 or 10,
+    even though they have stripes. So add a flag to queue_limits.
+
+Kent, Martin:
+
+Do you think we should leave the md-specific 
+raid_partial_stripes_expensive setting and require users of RAID 
+controllers to set the bit themselves in bcache---or---remove all 
+raid_partial_stripes_expensive code and always treat writes as "expensive" 
+when `opt_io` is defined?
+
+--
+Eric Wheeler
 
 
-> I think you'll need approval from someone with authority to accept the
-> suggested change in include/linux/ioport.h. No idea who that would be.
-
-ioport.h has no dedicated maintainer. I would modify it via my tree if
-we have enough review. I'd think Guenter, me, and maybe Andy
-(Shevchenko), and Rafael should be a good crowd. So, I suggest to do
-your v2 and add all these people to CC. It is usually easier to talk
-about existing code.
-
-
---pO8Sf19TDHcJTC4i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHaBvUACgkQFA3kzBSg
-KbabVQ//fueRV5koTSX3RE3AVT7uA4O6RwpjY5YDbNgF6xD2JtJWUD3upGRN+Hn4
-3ZrUjmQ7wfYLtBrDNFe+JzX1LchEzgOH6W1bVQgdglAaMom/K3zfXGcPql5NfNuf
-eOhohD7PvLqG6ssJANvEPe3HQFKA8j6NCNNMH7kOSONDmUhIeIhG30pAqnXNa+1Q
-/W7rVfDK55VrOUMJPHSC9VG1CJMm5/GsfhGKylXb5WgFquKc5N/n3/R0a/IPWLcw
-YPH2KrmwCwBPV5ah2Jeyjrm05LmvCKUsMQT4tKshXxvFiXaEfdoCkmPrwFn8hya1
-ZbqrciOyOr7lv2K3BRjTNjuOCIAwY4pTgx0+Tj9xXoUeASsBA27tYormUnckbzrz
-Pqg//tHBzmHYBL4V/FlUKWlnmjlFC74b2zWnuHd4gycvtXC7Fx6kGTjD6JV2Y3qD
-EYqv80ou1FFFFUbuhNz1g5FUOyVOHfDUi2ZECnkF77b3/iBYA3ThZMkiYiN/4Hvl
-VmiDWqspsDsQ6AAwdLqsfm6bjVeUXiFchNr3qp2J/PAPsh5OG9xJpv7/GtJb1cyJ
-vvCnb4wqwgF14F131omQ6E/gzWOFT/DZTAkb3N6J8yYCxCI23W8lFy7IgLhORIyL
-cVL5lPyUAKrW7xlFcR3XrzkgmTGPnpMvFBYMSWiCReDm3nQMjSk=
-=y7En
------END PGP SIGNATURE-----
-
---pO8Sf19TDHcJTC4i--
+> 
+> > The SCSI spec states that submitting an I/O that is smaller than io_min
+> > "may incur delays in processing the command". And similarly, submitting
+> > a command larger than io_opt "may incur delays in processing the
+> > command".
+> > 
+> > IOW, the spec says "don't write less than an aligned multiple of the
+> > stripe chunk size" and "don't write more than an aligned full
+> > stripe". That leaves "aligned multiples of the stripe chunk size but
+> > less than the full stripe width" unaccounted for. And I guess that's
+> > what the bcache flag is trying to capture.
+> 
+> Maybe any time io_opt is provided then partial_stripes_expensive should be 
+> flagged too and any code to the contrary should be removed?
+> 
+> Question: Does anyone have a reason to keep partial_stripes_expensive in 
+> the kernel at all?
+> 
+> > SCSI doesn't go into details about RAID levels and other implementation
+> > details which is why the wording is deliberately vague. But obviously
+> > the expectation is that partial stripe writes are slower than full.
+> > 
+> > In my book any component in the stack that sees either io_min or io_opt
+> > should try very hard to send I/Os that are aligned multiples of those
+> > values. I am not opposed to letting users manually twiddle the
+> > settings. But I do think that we should aim for the stack doing the
+> > right thing when it sees io_opt reported on a device.
+> 
+> Agreed, thanks for the feedback!
+> 
+> -Eric
+> 
+> 
+> > 
+> > -- 
+> > Martin K. Petersen	Oracle Linux Engineering
+> > 
+> 

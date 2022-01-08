@@ -2,110 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3499D488277
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61911488282
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 09:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiAHIlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 03:41:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31803 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233254AbiAHIlm (ORCPT
+        id S233878AbiAHImZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 03:42:25 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:35571 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233739AbiAHImW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 03:41:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641631302;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A9IAN3xR9Cay5DTUAfbThKuQWTtiMNDV7nchjhETfU8=;
-        b=Fek+KStXW0bRLozWJ77M1/8P+WqzUMQxNK321kdrJWMpnM0f7ZztLumhJNaK4JDvzw/T3C
-        WMZSXuTw26RnV128dQtLmQRBlVvyC6w5ToRGMq13uYczIWW2EremRn0Hr/goCgK79JALpw
-        N7eKmPFdgjsueAm4iV6Y7bKcdSJKQJ0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-N4TjadJYNBChUM06yBqS9g-1; Sat, 08 Jan 2022 03:41:39 -0500
-X-MC-Unique: N4TjadJYNBChUM06yBqS9g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7036B18397A7;
-        Sat,  8 Jan 2022 08:41:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA3CF5F92A;
-        Sat,  8 Jan 2022 08:41:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com>
-References: <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 38/68] vfs, cachefiles: Mark a backing file in use with an inode flag
+        Sat, 8 Jan 2022 03:42:22 -0500
+Received: from droid09-sz.software.amlogic (10.28.8.19) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Sat, 8 Jan 2022
+ 16:42:20 +0800
+From:   Qianggui Song <qianggui.song@amlogic.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+CC:     Qianggui Song <qianggui.song@amlogic.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH 0/4] irqchip/meson-gpio: Add support for Meson-S4 SoC
+Date:   Sat, 8 Jan 2022 16:42:14 +0800
+Message-ID: <20220108084218.31877-1-qianggui.song@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3492170.1641631286.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Sat, 08 Jan 2022 08:41:26 +0000
-Message-ID: <3492171.1641631286@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.19]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amir Goldstein <amir73il@gmail.com> wrote:
+This patchset add support for GPIO interrupt controller of Meson-S4 SoC
+Which has somethings different with current other meson chips. To
+support the new chips, current gpio irqchip driver need to rework as
+below:
+1. support more than 8 gpio irq line.
+2. add a set trigger type callback function.
 
-> > -       if (is_local_mountpoint(dentry))
-> > +       if (is_local_mountpoint(dentry) ||
-> > +           (dentry->d_inode->i_flags & S_KERNEL_FILE))
-> =
+With above work, add support for S4 gpio irqchip
 
-> Better as this check to the many other checks in may_delete()
+Qianggui Song (4):
+  dt-bindings: interrupt-controller: New binding for Meson-S4 SoCs
+  irqchip/meson-gpio: support more than 8 channels gpio irq line
+  irqchip/meson-gpio: add select trigger type callback
+  irqchip/meson-gpio: Add support for meson s4 SoCs
 
-Okay.  It will make things a bit more complicated, so I'll do it in a foll=
-ow
-up patch.  The problem is that it will prevent the cachefiles driver in th=
-e
-kernel from renaming directories and unlinking files as it's currently
-removing the mark *after* moving/deleting them.
+ .../amlogic,meson-gpio-intc.txt               |  1 +
+ drivers/irqchip/irq-meson-gpio.c              | 97 ++++++++++++++++---
+ 2 files changed, 86 insertions(+), 12 deletions(-)
 
-> > +#define S_KERNEL_FILE  (1 << 17) /* File is in use by the kernel (eg.=
- fs/cachefiles) */
-> >
-> =
-
-> Trying to brand this flag as a generic "in use by kernel" is misleading.
-> Modules other than cachefiles cannot set/clear this flag, because then
-> cachefiles won't know that it is allowed to set/clear the flag.
-
-If the flag is set, then cachefiles thinks some other kernel driver is usi=
-ng
-the file and it shouldn't try to use it.  It doesn't matter who has it ope=
-n.
-
-It should never happen as other kernel drivers shouldn't be poking around
-inside cachefiles's cache, but possibly someone could misconfigure somethi=
-ng.
-
-David
+-- 
+2.34.1
 

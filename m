@@ -2,167 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BC04886A6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16054886B6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 23:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiAHWZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 17:25:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39330 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiAHWZk (ORCPT
+        id S233555AbiAHW07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 17:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229943AbiAHW07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 17:25:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36E94B80972;
-        Sat,  8 Jan 2022 22:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D2EC36AE9;
-        Sat,  8 Jan 2022 22:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641680737;
-        bh=0+uUgU/dGkTTDnx69h7pfbDE68Fsm1j4ayaPAkADzpM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BSpnrNQlMKmc9bQcaFqySSZoiLE450OE8FwipduUN1xGJy1HUCa7GwgNa5MDXVzAj
-         lKi/4UXFaxNLPDnZ/jLZUCNdXhojmoqzy9f9bEbuKVj3ftURHnhO/krDLLcAW0wrpe
-         PLEiSOm4RyjiLATu2UbHdO3gyAkySus2yH3G9Mw5KyzbVOnkgafEu7VezgZYCaVVE4
-         vcQLKk1iOVxsi5g9oQHGwmCpf0KufG7dmUb1v4sHRlkHhchptAFWGIJJBYKmxo0aav
-         jSfpoppNbOGWBrCLmBfo78VM6/JUj+I0KWxsyLLGkqY54JXuqzkwiS0QI4h8o9Tq+3
-         8QUfvv5A2gtJw==
-Date:   Sun, 9 Jan 2022 00:25:29 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 5/8] KEYS: Introduce link restriction for machine keys
-Message-ID: <YdoPWR2DvWVAF0BU@iki.fi>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
- <20220105235012.2497118-6-eric.snowberg@oracle.com>
+        Sat, 8 Jan 2022 17:26:59 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9E9C06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 14:26:59 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id ie23-20020a17090b401700b001b38a5318easo2557535pjb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 14:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=D8/JlBkAi0y2afqFLTSdtNkXWi33ii5rg2RxUo+G0fw=;
+        b=bN3MVvkfKJivM2T2cJDqmlhQOdX7hl67Y4ZMxe96VQT6KBz2UzdDTcRaihcSlGavVC
+         aG4egn1C8ad95sLbBc5VyJRsAmbiAJ3MFO+er1VJ7fU33Rin4xjzEP31N+/1Bn8HjQfd
+         A8YsHvCK8uZkMaTGbsn/som/FNEu0y79fiI9Hi4qb7gxZTq8X7PDMpnJLVCfRPBLyLDd
+         QdyIZZrI218IufrSPmTvPHznlZnLM5J+keYU/Gz0FaKhaM9CuSoWevIRLMehWsGCDhKT
+         zMsPewNVKTfnGxJPxJHRyasCR8Zt/ZNfqr6Pdsd+zPDzNpKAKXJxQTzeT9J9tgrmrnHe
+         6TcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=D8/JlBkAi0y2afqFLTSdtNkXWi33ii5rg2RxUo+G0fw=;
+        b=jTWpAtezXhj0K6Dg0OdtrCZDJGG3tZs520jndaV6enx/GG8QdtBSuPQIhkZyNuDzmi
+         ZJb+4gC+sEwUjcDz4uJLeUphjW11v58AuDSRwP5PLKcnBXwR0raQSLiMZvG0lTGstqyL
+         asZzeSfgBXndKuSFxm2C7iKdK7bFr1ICF23qfoYUqI6Oo315mzK+RPhi8SsbNbnSfFb5
+         WDR+H596k07l4jaf35blxEmmjYjhwgxfSFpB6OYpXg3UOCcwBMfL5SEqFlKjGGA6MJiK
+         GPJ4RNYNePdrag4ybGAHv0rn/m6LTxalIqiGXCXq2PIJejF1XHcOTq9+whHr4Ez9GG9z
+         aPSQ==
+X-Gm-Message-State: AOAM531iWFlEl6YhNMXpirb6vOyd8YtUInFAxJUkwT1QzJAInhlkEo1M
+        C2qRo2O2HtD58qy9ffXhMLwSUjdmpoHnO4BN
+X-Google-Smtp-Source: ABdhPJxHB1SgPy0t8v5ZXm5kSrMORgFDGQZvDyTED5ESzv2Kx2QAwbzskMFjgvPk5OE+fVP/HptLoQ==
+X-Received: by 2002:a17:902:9890:b0:149:8930:47e4 with SMTP id s16-20020a170902989000b00149893047e4mr53655131plp.89.1641680817983;
+        Sat, 08 Jan 2022 14:26:57 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id lw5sm2892998pjb.13.2022.01.08.14.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 14:26:57 -0800 (PST)
+Date:   Sun, 9 Jan 2022 11:26:52 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: enforce tx_cfg to be set before any message
+ can be sent
+Message-ID: <20220108222652.GA11883@mail.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105235012.2497118-6-eric.snowberg@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 06:50:09PM -0500, Eric Snowberg wrote:
-> Introduce a new link restriction that includes the trusted builtin,
-> secondary and machine keys. The restriction is based on the key to be
-> added being vouched for by a key in any of these three keyrings.
-> 
-> With the introduction of the machine keyring, the end-user may choose to
-> trust Machine Owner Keys (MOK) within the kernel. If they have chosen to
-> trust them, the .machine keyring will contain these keys.  If not, the
-> machine keyring will always be empty.  Update the restriction check to
-> allow the secondary trusted keyring and ima keyring to also trust
-> machine keys.
-> 
-> Allow the .machine keyring to be linked to the secondary_trusted_keys.
-> After the link is created, keys contained in the .machine keyring will
-> automatically be searched when searching secondary_trusted_keys.
-> 
-> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
-> v3: Initial version
-> v4: moved code under CONFIG_INTEGRITY_MOK_KEYRING
-> v5: Rename to machine keyring
-> v6: Change subject name (suggested by Mimi)
->     Rename restrict_link_by_builtin_secondary_and_ca_trusted
->       to restrict_link_by_builtin_secondary_and_machine (suggested by
->       Mimi)
-> v7: Unmodified from v6
-> v8: Add missing parameter definitions (suggested by Mimi)
-> v9: Combine with "change link restriction to trust the machine keyring"
->       patch
-> ---
->  certs/system_keyring.c        | 35 ++++++++++++++++++++++++++++++++++-
->  include/keys/system_keyring.h |  6 ++++++
->  2 files changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 08ea542c8096..05b66ce9d1c9 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -89,7 +89,10 @@ static __init struct key_restriction *get_builtin_and_secondary_restriction(void
->  	if (!restriction)
->  		panic("Can't allocate secondary trusted keyring restriction\n");
->  
-> -	restriction->check = restrict_link_by_builtin_and_secondary_trusted;
-> +	if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
-> +		restriction->check = restrict_link_by_builtin_secondary_and_machine;
-> +	else
-> +		restriction->check = restrict_link_by_builtin_and_secondary_trusted;
->  
->  	return restriction;
->  }
-> @@ -98,6 +101,36 @@ static __init struct key_restriction *get_builtin_and_secondary_restriction(void
->  void __init set_machine_trusted_keys(struct key *keyring)
->  {
->  	machine_trusted_keys = keyring;
-> +
-> +	if (key_link(secondary_trusted_keys, machine_trusted_keys) < 0)
-> +		panic("Can't link (machine) trusted keyrings\n");
-> +}
-> +
-> +/**
-> + * restrict_link_by_builtin_secondary_and_machine - Restrict keyring addition.
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restrict_key: A ring of keys that can be used to vouch for the new cert.
-> + *
-> + * Restrict the addition of keys into a keyring based on the key-to-be-added
-> + * being vouched for by a key in either the built-in, the secondary, or
-> + * the machine keyrings.
-> + */
-> +int restrict_link_by_builtin_secondary_and_machine(
-> +	struct key *dest_keyring,
-> +	const struct key_type *type,
-> +	const union key_payload *payload,
-> +	struct key *restrict_key)
-> +{
-> +	if (machine_trusted_keys && type == &key_type_keyring &&
-> +	    dest_keyring == secondary_trusted_keys &&
-> +	    payload == &machine_trusted_keys->payload)
-> +		/* Allow the machine keyring to be added to the secondary */
-> +		return 0;
-> +
-> +	return restrict_link_by_builtin_and_secondary_trusted(dest_keyring, type,
-> +							      payload, restrict_key);
->  }
->  #endif
->  
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
-> index 98c9b10cdc17..2419a735420f 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -39,8 +39,14 @@ extern int restrict_link_by_builtin_and_secondary_trusted(
->  #endif
->  
->  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
-> +extern int restrict_link_by_builtin_secondary_and_machine(
-> +	struct key *dest_keyring,
-> +	const struct key_type *type,
-> +	const union key_payload *payload,
-> +	struct key *restrict_key);
->  extern void __init set_machine_trusted_keys(struct key *keyring);
->  #else
-> +#define restrict_link_by_builtin_secondary_and_machine restrict_link_by_builtin_trusted
->  static inline void __init set_machine_trusted_keys(struct key *keyring)
->  {
->  }
-> -- 
-> 2.18.4
-> 
+this driver relies on exposing a char device to userspace to tx
+messages. Every message can be sent using different trasmitter settings
+such so the tx_cfg must be written before sending any messages.
+Failing to do so will cause the message to fail silently depending on
+printk/dynamic_debug settings which makes it hard to troubleshoot.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+This patch add a control variable that will get initialized once tx_cfg
+is set for the fd used when interacting with the char device.
 
-/Jarkko
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+Patch dependency: 
+- This patch needs the patch below to be applied first as both tweak the
+  same file.
+https://lore.kernel.org/lkml/20220108212728.GA7784@mail.google.com/
+
+meta-comments:
+- I'm not entirely sure if -EPERM is the best error code to return here,
+  I'm taking suggestions
+---
+ drivers/staging/pi433/pi433_if.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+index 051c9052aeeb..3e9913f4bc7d 100644
+--- a/drivers/staging/pi433/pi433_if.c
++++ b/drivers/staging/pi433/pi433_if.c
+@@ -108,6 +108,9 @@ struct pi433_device {
+ struct pi433_instance {
+ 	struct pi433_device	*device;
+ 	struct pi433_tx_cfg	tx_cfg;
++
++	/* control flags */
++	bool			tx_cfg_initialized;
+ };
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -823,6 +826,16 @@ pi433_write(struct file *filp, const char __user *buf,
+ 	if (count > MAX_MSG_SIZE)
+ 		return -EMSGSIZE;
+ 
++	/*
++	 * check if tx_cfg has been initialized otherwise we won't be able to
++	 * config the RF trasmitter correctly due to invalid settings
++	 */
++	if (!instance->tx_cfg_initialized) {
++		dev_dbg(device->dev,
++			"write: failed due to uninitialized tx_cfg");
++		return -EPERM;
++	}
++
+ 	/*
+ 	 * write the following sequence into fifo:
+ 	 * - tx_cfg
+@@ -897,6 +910,7 @@ pi433_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 			return -EFAULT;
+ 		mutex_lock(&device->tx_fifo_lock);
+ 		memcpy(&instance->tx_cfg, &tx_cfg, sizeof(struct pi433_tx_cfg));
++		instance->tx_cfg_initialized = true;
+ 		mutex_unlock(&device->tx_fifo_lock);
+ 		break;
+ 	case PI433_IOC_RD_RX_CFG:
+@@ -950,7 +964,7 @@ static int pi433_open(struct inode *inode, struct file *filp)
+ 	/* setup instance data*/
+ 	instance->device = device;
+ 	instance->tx_cfg.bit_rate = 4711;
+-	// TODO: fill instance->tx_cfg;
++	instance->tx_cfg_initialized = false;
+ 
+ 	/* instance data as context */
+ 	filp->private_data = instance;
+-- 
+2.25.4
+

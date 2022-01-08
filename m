@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 168B8488215
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBE648820F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 08:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiAHHSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 02:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S233664AbiAHHRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 02:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiAHHSB (ORCPT
+        with ESMTP id S233484AbiAHHRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 02:18:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13E5C061574;
-        Fri,  7 Jan 2022 23:18:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KSMh/bpBH4Uy4k4tKFX+8O00P4Uf43q6ePBN9GKywck=; b=WiPnWas5oTaP9guznINp2fF7Mn
-        xzeGATWy/kuuFgSPlHg0Z8p5TIkf0mgvMeVP/tuV5jx+0s7gV9k4Z6oSwJi3CV16ub/PpWYkJdZYX
-        q4MlD2+tI2XgKSLzq22nOThJEogSiORw9rPQJ+jkYM2tUxoHCrOJ2YGItwntGNPqhSv48p6l3l814
-        dsFW43m+yQ8TTq1QC27ZoJZ3Jna/BRJNtdsQCUlGXQvrqcSMm6K6JZz10DYCatuBjNOg0u5fY4VuN
-        Y5Pex2G5YuW3GH6T0rTtO9g6DtAvcx8KdFRcNJjZfO5NnnTZ3Wo34SXMHqK/Kc2zDv56IQgvzE3PB
-        LgjbtHfw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n65yn-000Uuc-Lb; Sat, 08 Jan 2022 07:17:33 +0000
-Date:   Sat, 8 Jan 2022 07:17:33 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 38/68] vfs, cachefiles: Mark a backing file in use
- with an inode flag
-Message-ID: <Ydk6jWmFH6TZLPZq@casper.infradead.org>
-References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
- <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk>
- <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com>
+        Sat, 8 Jan 2022 02:17:39 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3099C06173F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 23:17:38 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id g80so23333030ybf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Jan 2022 23:17:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=FRPPY5MAn+t4RekFXaenM3Ts2hEbAKwsckjDxJ4s190=;
+        b=HgE5EqgnNoRAB6RN3XVircLMmknO4rHmYgjR0yujU8DI3VAOjVmyr1L4b4YJtyVhFd
+         Q7/7gNyRTEC3Sw9iovlCE4MocIjjDodyXPuxqzTu7Lff9PrwdI0MwdJHMT+Bss0NuZgi
+         JyBY0wC+VBjYMka391BAAplQlZCRNe3SiRR4+S9ocjuMX5JmCcWFWcQD67NgJcnsIzzS
+         4VgHS5/NBNNsTzkm3R71tZaPOU3Z+734FRUkvlzUQMt4gL7U/t/W8i4S030XCW1loN8t
+         3ws0lfbWE006KJutVb/+TjDdpnKsMmuZy+7GrEz3yhyirz4/HjJMtjeZWL5ylNHIsvT3
+         CZlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=FRPPY5MAn+t4RekFXaenM3Ts2hEbAKwsckjDxJ4s190=;
+        b=K/p+DBuxwK4xQQ7UXOU9AKLGGqaqkIE9Nf3vv9RWJCSSO3ZmpW071Lx6CYOysn2Ixq
+         5vU1nnjDgs2a+9p/ViO+BOHjrym9Jt2GfNIgURYMGpXxsgf3+nDkRsCMm5VsKlUn6YHs
+         iByb4ZR97OoY9MX8arXdaQYeWuDZaeRJgeZgWoA///EPOeYu2Dc+3QkH5Kl2AE18dm9M
+         +XNmatSqwkM+/0mZTf6YsQZDB3fx9s15cGwjvq0oKix3ei762hNetiJVSjelfNpeB0Jl
+         ZK/DTjYyOXlpcX0/j7Rgrx9rglb57KO10z8saMxa7oQ4kxTpQ3OnEe6PMBpQDDhog0yr
+         Z2hw==
+X-Gm-Message-State: AOAM533SU6L9bFD51lTuc/nNdPMUFozsD9o+NtygIiK33QeA06wwDdLr
+        OZIGh1EJ6VXDIb30IU0MbZvSMID6BajGnQiyxh8=
+X-Google-Smtp-Source: ABdhPJzAGuqjwBxLdLgkZGf8Q77j/fswa51Jfd0HYLREqDttXEPjr9nhtCPDjNuZxCu5chwnIvOUka4QcEjIcWMZ2R4=
+X-Received: by 2002:a25:da44:: with SMTP id n65mr5220878ybf.259.1641626257917;
+ Fri, 07 Jan 2022 23:17:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com>
+Sender: adonald323@gmail.com
+Received: by 2002:a05:7000:aa27:0:0:0:0 with HTTP; Fri, 7 Jan 2022 23:17:37
+ -0800 (PST)
+From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
+Date:   Sat, 8 Jan 2022 07:17:37 +0000
+X-Google-Sender-Auth: zY76MOhAOJgZG9CdDTENqxGzLDg
+Message-ID: <CANHbP4N4N-XN+JRL+AE9iOW9X0efog8SrS_wR+=a+PytYdwLyA@mail.gmail.com>
+Subject: Investment offer,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 09:08:57AM +0200, Amir Goldstein wrote:
-> > +#define S_KERNEL_FILE  (1 << 17) /* File is in use by the kernel (eg. fs/cachefiles) */
-> 
-> Trying to brand this flag as a generic "in use by kernel" is misleading.
-> Modules other than cachefiles cannot set/clear this flag, because then
-> cachefiles won't know that it is allowed to set/clear the flag.
+Hello Dear Friend,
 
-Huh?  If some other kernel module sets it, cachefiles will try to set it,
-see it's already set, and fail.  Presumably cachefiles does not go round
-randomly "unusing" files that it has not previously started using.
+With due respect to your person and much sincerity of purpose I wish
+to write to you today for our mutual benefit in this investment
+transaction.
+I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
+Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
+single Mother and a widow with three Children. I am the only
+biological Daughter of the late Libyan President (Late Colonel Muammar
+Gaddafi). I have an investment funds worth Twenty Seven Million Five
+Hundred Thousand United State Dollars ($27.500.000.00 ) and i need an
+investment Manager/Partner and because of my Asylum Status I will
+authorize you the ownership of the investment funds, However, I am
+interested in you for investment project assistance in your country,
+may be from there,. we can build a business relationship in the
+nearest future.
 
-I mean, yes, obviously, it's a kernel module, it can set and clear
-whatever flags it likes on any inode in the system, but conceptually,
-it's an advisory whole-file lock.
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits. If you are
+willing to handle this project kindly reply urgently to enable me to
+provide you more information about the investment funds..
+
+Your urgent reply will be appreciated if only you are interested in
+this investment project.
+Best Regards
+Mrs. Aisha Al-Gaddafi..

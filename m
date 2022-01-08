@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CAF488418
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 15:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D26448841D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 16:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiAHOvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 09:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiAHOvy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 09:51:54 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E98C06173F;
-        Sat,  8 Jan 2022 06:51:53 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id q25so25412320edb.2;
-        Sat, 08 Jan 2022 06:51:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GJNvP81kDD3Aq8VqWSnfW17jNjOma0D87q13FaA8B+4=;
-        b=j/nPbsw+RhbBku9yHWRED1dLHMmsmmd95cjBfGoit6rXk19xi6SEFe7eL5Muke+Lcr
-         a/LkWOMP9hb3Jl4iIq0w8+exDViLl71k7TFIS9E/FmTk/MYaoMuJB78LCvj3e7IW5L6+
-         dbkNWNGHnKeEIfzk0t8eMi8YVjDF4uKjuvlWm2agIKL6rhRO1W+z0xCmnyeuMd6jjG+P
-         mh/4Ax1CnVydDlB2LKqvYLyJarBcZ+a1TH0NNdMmNJuxZ9oU4X4JezpfJ2m24sQah5Hl
-         LReARQRLqofXCPpOxUaAPECrNEQJuTnuk18z4cEcsuKX0uZGm7upMX3jgIcZs4atcmfM
-         cing==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GJNvP81kDD3Aq8VqWSnfW17jNjOma0D87q13FaA8B+4=;
-        b=U381hAbEiXdalz81B97727Wvlis7POuI+FTIUq5oRhnU27Tf64tpSkJKMLkqiC2/d1
-         R5vxvLWoVikCSwnbWbpb1sKYI/7UUmR0Xx6rNhjxelbiD67j6KsWhMCpFIvz3NtffPEu
-         w7M9DOhNU9ST3p4Jo5bp65PZtUdc54XpLATd3HRzhwcdlSezJJFwwqH+QtBGumyVEDHO
-         sKkWIfLWFJOlT6r5og/IZCRntX05y1hQ6d7ye+6g9+Mt45cwSlMheYyecVbsihTup2Y5
-         PzDs++2fOq/lwTEgx3h95kIlpWK6PYwzyemxLDdYUDhJBi9Abqnl5ZCBpLz5dl2o9L9n
-         uRQg==
-X-Gm-Message-State: AOAM532oB/RYBAsa1751SMsiGHFysxyCjWyldbOdJBgrx2Me8uLIej+P
-        Szrnc7EaXH7d9YPg6gGQg/zRSCWQd4cgUnAFPvsNvww=
-X-Google-Smtp-Source: ABdhPJwwM8bk7yCYdYEfadjoAbD/C6WC+irnLfxO0bZZszQJjfTeN/PPr28VLUyg0DOAynxeGpZJBERPJThdrEc6oHg=
-X-Received: by 2002:aa7:ce88:: with SMTP id y8mr8952343edv.303.1641653512070;
- Sat, 08 Jan 2022 06:51:52 -0800 (PST)
+        id S234489AbiAHPAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 10:00:00 -0500
+Received: from mga11.intel.com ([192.55.52.93]:47073 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229703AbiAHPAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 10:00:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641654000; x=1673190000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EDl2K8TuBODyo/rP2NekgRyZH6/0pbxe/iSdJtGGP48=;
+  b=WEfl5jC9IEIPUD3vRg4sGymeAajTz21LllWub6w81t4Y8MyzjkiJ7ge3
+   LSNcWhSS7ZXrKM2QSu48mfXsDnsW+4qZgNtZkc5zGhV8iAB+PKknvNGB0
+   aR6VAzOKhQqRrmW601BcbzWelv9wTLchHNVFWRy32fIw46AukyDluQqh4
+   0BBYULiQ7JKykPViIEt5eUglhGuXMWKG62nY6F89BbQsznMbMUcO6SiFW
+   N9a2sHgO9gpiLpUj58NMpK5yoHDsDEYp/bUZflTKYXiInNierXQIMSwqR
+   XqAhqvU7IaZP6rGbj33M61LpL9PM0MgVargWzp9X20aUdQyGbUn3LUTJG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="240569086"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="240569086"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 06:59:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="489587440"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 08 Jan 2022 06:59:57 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6DCH-0000i0-6i; Sat, 08 Jan 2022 14:59:57 +0000
+Date:   Sat, 8 Jan 2022 22:58:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sanrio Alvares <sanrio.alvares@intel.com>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, mika.westerberg@linux.intel.com,
+        Sanrio Alvares <sanrio.alvares@intel.com>
+Subject: Re: [PATCH] PCI / thunderbolt: Add quirk to handle incorrect
+ Supported Link Speeds
+Message-ID: <202201082217.CMkPI5k2-lkp@intel.com>
+References: <20220106224240.31052-1-sanrio.alvares@intel.com>
 MIME-Version: 1.0
-References: <20220108182538.362c8e29@canb.auug.org.au>
-In-Reply-To: <20220108182538.362c8e29@canb.auug.org.au>
-From:   Rob Herring <robherring2@gmail.com>
-Date:   Sat, 8 Jan 2022 08:51:40 -0600
-Message-ID: <CAL_JsqLZd59vyYdpcJ_Xwu5ypO9ksAfEtd8RV40oJ7LUNxB4Ag@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the devicetree tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Baruch Siach <baruch@tkos.co.il>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106224240.31052-1-sanrio.alvares@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 1:25 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   86ce070ce00a ("of: base: Fix phandle argument length mismatch error message")
->
-> Fixes tag
->
->   Fixes: af3be70a321 ("of: Improve of_phandle_iterator_next() error message")
->
-> has these problem(s):
->
->   - SHA1 should be at least 12 digits long
->     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
->     or later) just making sure it is not set (or set to "auto").
+Hi Sanrio,
 
-Thanks, now fixed.
+Thank you for the patch! Perhaps something to improve:
 
-Rob
+[auto build test WARNING on helgaas-pci/next]
+[also build test WARNING on v5.16-rc8 next-20220107]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Sanrio-Alvares/PCI-thunderbolt-Add-quirk-to-handle-incorrect-Supported-Link-Speeds/20220107-064444
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: riscv-randconfig-s032-20220106 (https://download.01.org/0day-ci/archive/20220108/202201082217.CMkPI5k2-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/98f8f42acd1b8f46f3e6778fa58dd0d1cd005369
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sanrio-Alvares/PCI-thunderbolt-Add-quirk-to-handle-incorrect-Supported-Link-Speeds/20220107-064444
+        git checkout 98f8f42acd1b8f46f3e6778fa58dd0d1cd005369
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/pci/ kernel/bpf/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/pci/quirks.c:2323:57: sparse: sparse: restricted pci_power_t degrades to integer
+>> drivers/pci/quirks.c:5304:6: sparse: sparse: symbol 'quirk_intel_tbt_supported_link_speeds' was not declared. Should it be static?
+
+vim +/quirk_intel_tbt_supported_link_speeds +5304 drivers/pci/quirks.c
+
+  5298	
+  5299	/*
+  5300	 * Intel Titan Ridge returns incorrect Supported Link Speeds Vector
+  5301	 * when max Link Speed is 2.5GT/s. This results in an extra 1s delay during
+  5302	 * resume_noirq with pcie tunneling enabled. Override that value:
+  5303	 */
+> 5304	void quirk_intel_tbt_supported_link_speeds(struct pci_dev *pdev)
+  5305	{
+  5306		pci_info(pdev, "applying Supported Link Speeds quirk\n");
+  5307		pdev->supported_link_speed = PCIE_SPEED_2_5GT;
+  5308	}
+  5309	DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15e7, quirk_intel_tbt_supported_link_speeds);
+  5310	DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ea, quirk_intel_tbt_supported_link_speeds);
+  5311	DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ef, quirk_intel_tbt_supported_link_speeds);
+  5312	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

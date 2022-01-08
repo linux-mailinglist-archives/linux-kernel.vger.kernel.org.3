@@ -2,127 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056B74882AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637704882B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 10:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiAHJBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 04:01:20 -0500
-Received: from mxhk.zte.com.cn ([63.216.63.35]:47458 "EHLO mxhk.zte.com.cn"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231402AbiAHJBT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 04:01:19 -0500
-Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4JWDbK2847z8131k;
-        Sat,  8 Jan 2022 17:01:17 +0800 (CST)
-Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
-        by mse-fl1.zte.com.cn with SMTP id 20890qAW079364;
-        Sat, 8 Jan 2022 17:00:52 +0800 (GMT-8)
-        (envelope-from wang.yi59@zte.com.cn)
-Received: from fox-cloudhost8.localdomain (unknown [10.234.72.110])
-        by smtp (Zmail) with SMTP;
-        Mon, 8 Jan 2022 17:00:52 +0800
-X-Zmail-TransId: 3e8161d952c3001-c1ba5
-From:   Yi Wang <wang.yi59@zte.com.cn>
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-        wang.liang82@zte.com.cn, ZhaoQiang <zhao.qiang11@zte.com.cn>
-Subject: [PATCH] KVM: Fix OOM vulnerability caused by continuously creating devices
-Date:   Sun,  9 Jan 2022 00:49:48 +0800
-Message-Id: <20220108164948.42112-1-wang.yi59@zte.com.cn>
-X-Mailer: git-send-email 2.33.0.rc0.dirty
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 20890qAW079364
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 61D952DD.000 by FangMail milter!
-X-FangMail-Envelope: 1641632477/4JWDbK2847z8131k/61D952DD.000/10.30.14.238/[10.30.14.238]/mse-fl1.zte.com.cn/<wang.yi59@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 61D952DD.000/4JWDbK2847z8131k
+        id S233980AbiAHJJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 04:09:48 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42566 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231402AbiAHJJr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 04:09:47 -0500
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cxi+jRVNlhpLMAAA--.2989S2;
+        Sat, 08 Jan 2022 17:09:37 +0800 (CST)
+From:   Ming Wang <wangming01@loongson.cn>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] misc: pci_endpoint_test: Use a semicolon as the end of the statement.
+Date:   Sat,  8 Jan 2022 17:09:37 +0800
+Message-Id: <1641632977-6588-1-git-send-email-wangming01@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Cxi+jRVNlhpLMAAA--.2989S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr45uFykuw45Wr1UZF43ZFb_yoW3Arc_Ga
+        yUZwsxurWrGr18GrnIvw1xZrZF9wnIgF1rur1aqFZIya42v34DAFyjgr4vyr47CFnxCFnr
+        C3sF9r9YkF1xAjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbI8YjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28I
+        cVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx
+        0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY
+        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        xU7GQ6DUUUU
+X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhaoQiang <zhao.qiang11@zte.com.cn>
+Even so, there is no syntax error. But, this may be a
+clerical error. ';' are more appropriate than ','.
 
-When processing the ioctl request for creating a device in the
-kvm_vm_ioctl()function,the branch did not reclaim the successfully
-created device,which caused memory leak.
-
-Signed-off-by: ZhaoQiang <zhao.qiang11@zte.com.cn>
-Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Signed-off-by: Ming Wang <wangming01@loongson.cn>
 ---
- virt/kvm/kvm_main.c | 39 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ drivers/misc/pci_endpoint_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 72c4e6b39389..f4fbc935faea 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -52,6 +52,7 @@
- #include <linux/lockdep.h>
- #include <linux/kthread.h>
- #include <linux/suspend.h>
-+#include <linux/syscalls.h>
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index 2ed7e3a..8f786a2 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -865,7 +865,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
+ 		goto err_release_irq;
+ 	}
+ 	misc_device->parent = &pdev->dev;
+-	misc_device->fops = &pci_endpoint_test_fops,
++	misc_device->fops = &pci_endpoint_test_fops;
  
- #include <asm/processor.h>
- #include <asm/ioctl.h>
-@@ -4092,6 +4093,40 @@ static int kvm_ioctl_create_device(struct kvm *kvm,
- 	return 0;
- }
- 
-+static int kvm_ioctl_destroy_device(struct kvm *kvm,
-+				    struct kvm_create_device *cd)
-+{
-+	struct kvm_device_ops *ops = NULL;
-+	struct kvm_device *dev;
-+	struct file *file;
-+	int type;
-+
-+	if (cd->type >= ARRAY_SIZE(kvm_device_ops_table))
-+		return -ENODEV;
-+
-+	type = array_index_nospec(cd->type, ARRAY_SIZE(kvm_device_ops_table));
-+	ops = kvm_device_ops_table[type];
-+	if (ops == NULL)
-+		return -ENODEV;
-+
-+	file = fget(cd->fd);
-+	if (!file)
-+		return -ENODEV;
-+
-+	dev = file->private_data;
-+	if (!dev)
-+		return -ENODEV;
-+
-+	kvm_put_kvm(kvm);
-+	mutex_lock(&kvm->lock);
-+	list_del(&device->vm_node);
-+	mutex_unlock(&kvm->lock);
-+	ops->destroy(dev);
-+	ksys_close(cd->fd);
-+
-+	return 0;
-+}
-+
- static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
- {
- 	switch (arg) {
-@@ -4448,8 +4483,10 @@ static long kvm_vm_ioctl(struct file *filp,
- 			goto out;
- 
- 		r = -EFAULT;
--		if (copy_to_user(argp, &cd, sizeof(cd)))
-+		if (copy_to_user(argp, &cd, sizeof(cd))) {
-+			kvm_ioctl_destroy_device(kvm, &cd);
- 			goto out;
-+		}
- 
- 		r = 0;
- 		break;
+ 	err = misc_register(misc_device);
+ 	if (err) {
 -- 
-2.27.0
+1.8.3.1
+

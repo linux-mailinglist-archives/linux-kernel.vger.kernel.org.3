@@ -2,125 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C6E487FCF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB780487FD0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Jan 2022 01:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiAHADP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Jan 2022 19:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S229695AbiAHAD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Jan 2022 19:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiAHADN (ORCPT
+        with ESMTP id S229529AbiAHADz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Jan 2022 19:03:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAAFC061574
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:03:12 -0800 (PST)
+        Fri, 7 Jan 2022 19:03:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D48C061574
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Jan 2022 16:03:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C30461FAD
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A42C36AE5;
-        Sat,  8 Jan 2022 00:03:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B34E0B827B9
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 00:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9AEC36AE9;
+        Sat,  8 Jan 2022 00:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641600192;
-        bh=I1RE0CAYdqfqkrIQHATpl4qU99Y7HFm//09IbfqvcB0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ey5Iy0qfHQGiFHFV0qPis3tBMmiizR3q8uQEK43TrqEGBTutEh1d028uHBe4TsPgj
-         adkK/dxhvQRJQygsqTe1FfXOLY4f/NtEnE4ELB1RXkx6LptZMvHfIIcBxV/+30n+YN
-         X57l+WszviCoW1bUiBZUQMLiIWL20o09NShTP9hOi2hWxxPLvod1Fp4sQfFxsOYHc2
-         oyQMMUTIiRS1tg38iKDauMG90Uv5gnPA3ysSL/wl9p6QG6VMOY07i3Qe5sW0Q7lwv6
-         bawSKIBFO5iBQcg8f1pUSNT7NS5MSVTeoyxEsEXvs7hspPEIm6AMFwdmgZZPR9EIn4
-         A/7f7kuUP2CSg==
-Date:   Sat, 8 Jan 2022 01:03:08 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
-        Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v8 02/10] add prctl task isolation prctl docs and samples
-Message-ID: <20220108000308.GB1337751@lothringen>
-References: <20211208161000.684779248@fuller.cnet>
- <20220106234956.GA1321256@lothringen>
- <20220107113001.GA105857@fuller.cnet>
+        s=k20201202; t=1641600232;
+        bh=hE1JBx+LnKCkS09uZwGJ9c57lUnWhsJUSmayJAeW0Xc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LTu0WQosVkpZblvDe8q2lVUw/g2V5ZluNj9YT2OEG5Sniqpa+5EtIU2RJKp4HOri+
+         y+oLdkV9twKnLnS+Tm2j0mTSBsdZhMK3KcVsYoIgjFF30WpQ08HugvMmyrUIyczRPy
+         yl/iEjYJ7y5bHTAhmKkTu+tnIME3w+LHoJjycST5SjwPAPMachykGfzG2kqtBd6d6y
+         kKcLAAIYEfwIZbrUJW/22q+1Q03d56GSwfTqWi3/kTt3NHSFQeJp5+z6WJJUY8HiGa
+         ZRbr9EwKN/jNwuVCQQKY6yKF8UDxREgg7MeTnRLnk7MxPwYet4QWaDN4mjFOTkcFPA
+         1+mEJ4+JtzcCg==
+Message-ID: <5d1a9dff-6319-14a6-ad81-97350a6849af@kernel.org>
+Date:   Fri, 7 Jan 2022 16:03:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107113001.GA105857@fuller.cnet>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v1 2/3] x86/entry/64: Add info about registers on exit
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        Michael Matz <matz@suse.de>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Willy Tarreau <w@1wt.eu>
+References: <20220107235210.1339168-1-ammarfaizi2@gnuweeb.org>
+ <20220107235210.1339168-3-ammarfaizi2@gnuweeb.org>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <20220107235210.1339168-3-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 08:30:01AM -0300, Marcelo Tosatti wrote:
-> On Fri, Jan 07, 2022 at 12:49:56AM +0100, Frederic Weisbecker wrote:
-> > On Wed, Dec 08, 2021 at 01:09:08PM -0300, Marcelo Tosatti wrote:
-> > > Add documentation and userspace sample code for prctl
-> > > task isolation interface.
-> > > 
-> > > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > Acked-by: Frederic Weisbecker <frederic@kernel.org>
-> > 
-> > Thanks a lot! Time for me to look at the rest of the series.
-> > 
-> > Would be nice to have Thomas's opinion as well at least on
-> > the interface (this patch).
+On 1/7/22 15:52, Ammar Faizi wrote:
+> There was a controversial discussion about the wording in the System
+> V ABI document regarding what registers the kernel is allowed to
+> clobber when the userspace executes syscall.
 > 
-> Yes. AFAIAW most of his earlier comments on what the 
-> interface should look like have been addressed (or at
-> least i've tried to)... including the ability for
-> the system admin to configure the isolation options.
+> The resolution of the discussion was reviewing the clobber list in
+> the glibc source. For a historical reason in the glibc source, the
+> kernel must restore all registers before returning to the userspace
+> (except for rax, rcx and r11).
 > 
-> The one thing missing is to attempt to enter nohz_full
-> on activation (which Christoph asked for).
+> Link: https://lore.kernel.org/lkml/alpine.LSU.2.20.2110131601000.26294@wotan.suse.de/
+> Link: https://gitlab.com/x86-psABIs/x86-64-ABI/-/merge_requests/25
 > 
-> Christoph, have a question on that. At
-> https://lkml.org/lkml/2021/12/14/346, you wrote:
+> This adds info about registers on exit.
 > 
-> "Applications running would ideally have no performance penalty and there
-> is no  issue with kernel activity unless the application is in its special
-> low latency loop. NOHZ is currently only activated after spinning in that
-> loop for 2 seconds or so. Would be best to be able to trigger that
-> manually somehow."
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Michael Matz <matz@suse.de>
+> Cc: "H.J. Lu" <hjl.tools@gmail.com>
+> Cc: Willy Tarreau <w@1wt.eu>
+> Cc: x86-ml <x86@kernel.org>
+> Cc: lkml <linux-kernel@vger.kernel.org>
+> Cc: GNU/Weeb Mailing List <gwml@gnuweeb.org>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
 > 
-> So was thinking of something similar to what the full task isolation
-> patchset does (with the behavior of returning an error as option...):
+> Quoted the full comment in that file after patched, so it's easier to
+> review:
+> /*
+>   * 64-bit SYSCALL instruction entry. Up to 6 arguments in registers.
+>   *
+>   * This is the only entry point used for 64-bit system calls.  The
+>   * hardware interface is reasonably well designed and the register to
+>   * argument mapping Linux uses fits well with the registers that are
+>   * available when SYSCALL is used.
+>   *
+>   * SYSCALL instructions can be found inlined in libc implementations as
+>   * well as some other programs and libraries.  There are also a handful
+>   * of SYSCALL instructions in the vDSO used, for example, as a
+>   * clock_gettimeofday fallback.
+>   *
+>   * 64-bit SYSCALL saves rip to rcx, clears rflags.RF, then saves rflags to r11,
+>   * then loads new ss, cs, and rip from previously programmed MSRs.
+>   * rflags gets masked by a value from another MSR (so CLD and CLAC
+>   * are not needed). SYSCALL does not save anything on the stack
+>   * and does not change rsp.
+>   *
+>   * Registers on entry:
+>   * rax  system call number
+>   * rcx  return address
+>   * r11  saved rflags (note: r11 is callee-clobbered register in C ABI)
+>   * rdi  arg0
+>   * rsi  arg1
+>   * rdx  arg2
+>   * r10  arg3 (needs to be moved to rcx to conform to C ABI)
+>   * r8   arg4
+>   * r9   arg5
+>   * (note: r12-r15, rbp, rbx are callee-preserved in C ABI)
+>   *
+>   * Only called from user space.
+>   *
+>   * Registers on exit:
+>   * rax  syscall return value
+>   * rcx  return address
+>   * r11  rflags
+>   *
+>   * For a historical reason in the glibc source, the kernel must restore all
+>   * registers except the rax (syscall return value) before returning to the
+>   * userspace.
+>   *
+>   * In other words, with respect to the userspace, when the kernel returns
+>   * to the userspace, only 3 registers are clobbered, they are rax, rcx,
+>   * and r11.
+>   *
+>   * When user can change pt_regs->foo always force IRET. That is because
+>   * it deals with uncanonical addresses better. SYSRET has trouble
+>   * with them due to bugs in both AMD and Intel CPUs.
+>   */
 > 
-> +int try_stop_full_tick(void)
-> +{
-> +	int cpu = smp_processor_id();
-> +	struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
-> +
-> +	/* For an unstable clock, we should return a permanent error code. */
-> +	if (atomic_read(&tick_dep_mask) & TICK_DEP_MASK_CLOCK_UNSTABLE)
-> +		return -EINVAL;
-> +
-> +	if (!can_stop_full_tick(cpu, ts))
-> +		return -EAGAIN;
-> +
-> +	tick_nohz_stop_sched_tick(ts, cpu);
-> +	return 0;
-> +}
+> ---
 > 
-> Is that sufficient? (note it might still be possible 
-> for a failure to enter nohz_full due to a number of 
-> reasons), see tick_nohz_stop_sched_tick.
+>   arch/x86/entry/entry_64.S | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+> 
+> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> index e432dd075291..1111fff2e05f 100644
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -79,6 +79,19 @@
+>    *
+>    * Only called from user space.
+>    *
+> + * Registers on exit:
+> + * rax  syscall return value
+> + * rcx  return address
+> + * r11  rflags
+> + *
+> + * For a historical reason in the glibc source, the kernel must restore all
+> + * registers except the rax (syscall return value) before returning to the
+> + * userspace.
+> + *
+> + * In other words, with respect to the userspace, when the kernel returns
+> + * to the userspace, only 3 registers are clobbered, they are rax, rcx,
+> + * and r11.
+> + *
 
-Well, I guess we can simply make tick_nohz_full_update_tick() an API, then
-it could be a QUIESCE feature.
+I would say this much more concisely:
 
-But keep in mind we may not only fail to enter into nohz_full mode, we
-may also enter it but, instead of completely stopping the tick, it can
-be delayed to some future if there is still a timer callback queued somewhere.
+The Linux kernel preserves all registers (even C callee-clobbered 
+registers) except for rax, rcx and r11 across system calls, and existing 
+user code relies on this behavior.
 
-Make sure you test "ts->next_tick == KTIME_MAX" after stopping the tick.
-
-This raise the question: what do we do if a quiescing fails? At least if it's a
-oneshot, we can return an -EBUSY from the prctl() but otherwise, subsequent kernel
-entry/exit are a problem.
+>    * When user can change pt_regs->foo always force IRET. That is because
+>    * it deals with uncanonical addresses better. SYSRET has trouble
+>    * with them due to bugs in both AMD and Intel CPUs.
+> 
 

@@ -2,107 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC9B488C06
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D4A488C08
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiAITYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 14:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S236746AbiAIT0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 14:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236723AbiAITYo (ORCPT
+        with ESMTP id S236725AbiAIT0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 14:24:44 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C955C061751;
-        Sun,  9 Jan 2022 11:24:43 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id c66so7416328wma.5;
-        Sun, 09 Jan 2022 11:24:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/7KLjfPHsWfXinvdT9x6SwzVroZgq92QvU7YFU5ZeWM=;
-        b=eJ2muUDWeSDar4I1sLFaTGZhcHvqAdSpGMogP4fuj4m5J2xdYuZQPEszkuQHAbE08C
-         fy20TVvX4eSaHLy986Oe8RMqcP62rOxSFOpaAvq+SGNKos5U2QTn73e8xJXEUK5TugXp
-         BPztQRIxS3ET5kmCq2F8hSY/4zEwfidL2fwngro2M2GsXgGYLa8R10h4tC67IALi9dcJ
-         rmvEvIoTD879fADNyXMYKP7xX6rO92qnN5sCdzgfjWVswCg5pOHTbCeuufsZKAoTqrut
-         CSQp8CU2czG+ZiucpIEDGWIbeFiWI1xFyhUJvfD9ILlY+6e3Za2UTPxwutRpLTZFFw8y
-         ly3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/7KLjfPHsWfXinvdT9x6SwzVroZgq92QvU7YFU5ZeWM=;
-        b=Eebsqlv88jU2wGM6EAQBkvnUnmqAJDmmFKCmZTgaNsR0md5oI+bLELQyKJfpQFWLRk
-         gTLSmgh4eiyhI8aSnCXzfv45i+5HPAW163j2+Nshzc37tUp6MUazYNlb8y7DMzOBgInP
-         663lyFwCq+NywplEGQvHqPWP6bNltD5b5N807jWdhSSI+1Ex1o6ieNPVVkpHSoKwwDG9
-         Wd/f7M61aPNt2BKBKmuZo+ctMDdEd1kPkXPh8ZMGnwDlHmKvElc1/o+YnBYEeylQIzGt
-         CiG9cKR2LDW9tmPWWFtpSYMQVxYSPIR4lKauXn7h+BncIWlCMOfq2lXLi25VkraopBGB
-         bsSg==
-X-Gm-Message-State: AOAM532BSf7M33dZkw/e53MNw9EelcKeUOM40wC9kc6dRek70JrRiOwe
-        v5fLmW2mVW59kIToz4fcaJU=
-X-Google-Smtp-Source: ABdhPJxob2kx7PZCoFwkFA0s/AKSHeLZcHwTJ8YZObT7NHoX+c9068fofT99Quzq/1i0wvnVcFJNFQ==
-X-Received: by 2002:a7b:c0cf:: with SMTP id s15mr1712753wmh.95.1641756281658;
-        Sun, 09 Jan 2022 11:24:41 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id w17sm5403831wmc.14.2022.01.09.11.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 11:24:41 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     kalyan_t@codeaurora.org
-Cc:     robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, dmitry.baryshkov@linaro.org,
-        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] drm/msm/dpu: invalid parameter check in dpu_setup_dspp_pcc
-Date:   Sun,  9 Jan 2022 20:24:31 +0100
-Message-Id: <20220109192431.135949-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Sun, 9 Jan 2022 14:26:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DF6C06173F;
+        Sun,  9 Jan 2022 11:25:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF9E2B80E00;
+        Sun,  9 Jan 2022 19:25:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 810ECC36AEF;
+        Sun,  9 Jan 2022 19:25:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641756357;
+        bh=F9yd/aVVTkpn4dmi9+LssN/d4HmEa2NqclhIZVV87Xg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Ixvb6sD2ujikNmqRaqsMXVdhYHexJCJSLcuXGCBTT0azyRAA8RDpnk4h/XMAQeZjs
+         huhUsVjXD//YKIPcaLMzBKtxM2L9QcU7uu6wKGxdfH3IuW7i50Tcqd20enVhdedppy
+         CMBoA5483RVUvbYT4OznWLVdI5VzdN7uc9/e9pfSJJwe73+1MU6DcuO/xeh5x6foI2
+         PnN/0X3Hnws+WSwasCc1/Z9ytkcVthWzH8Nir51MjeKGSk2aXJ4YtUBgBqpJW0C/MI
+         WTtQUo8iXZY/ZL8MPVbxORgNNo4x5PQ3XwqTJiLtcSWXRG9BPJN1K8Cb6F0aCXQBld
+         WLbmT+Rek0BXw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6D727F7940E;
+        Sun,  9 Jan 2022 19:25:57 +0000 (UTC)
+Subject: Re: [GIT PULL] perf tools fixes for v5.16: 6th batch
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220109153446.160593-1-acme@kernel.org>
+References: <20220109153446.160593-1-acme@kernel.org>
+X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220109153446.160593-1-acme@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.16-2022-01-09
+X-PR-Tracked-Commit-Id: dc9f2dd5de04d2bbcccbabdf5df9715c2ddcf25f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9a12a5aa17741fe1d4204dc07abd4d6bd07d9b39
+Message-Id: <164175635744.32020.979679807911671253.pr-tracker-bot@kernel.org>
+Date:   Sun, 09 Jan 2022 19:25:57 +0000
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function performs a check on the "ctx" input parameter, however, it
-is used before the check.
+The pull request you sent on Sun,  9 Jan 2022 12:34:46 -0300:
 
-Initialize the "base" variable after the sanity check to avoid a
-possible NULL pointer dereference.
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.16-2022-01-09
 
-Fixes: 4259ff7ae509e ("drm/msm/dpu: add support for pcc color block in dpu driver")
-Addresses-Coverity-ID: 1493866 ("Null pointer dereference")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9a12a5aa17741fe1d4204dc07abd4d6bd07d9b39
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
-index a98e964c3b6f..355894a3b48c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
-@@ -26,9 +26,16 @@ static void dpu_setup_dspp_pcc(struct dpu_hw_dspp *ctx,
- 		struct dpu_hw_pcc_cfg *cfg)
- {
- 
--	u32 base = ctx->cap->sblk->pcc.base;
-+	u32 base;
- 
--	if (!ctx || !base) {
-+	if (!ctx) {
-+		DRM_ERROR("invalid ctx %pK\n", ctx);
-+		return;
-+	}
-+
-+	base = ctx->cap->sblk->pcc.base;
-+
-+	if (!base) {
- 		DRM_ERROR("invalid ctx %pK pcc base 0x%x\n", ctx, base);
- 		return;
- 	}
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,206 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC100488915
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA8748892F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 13:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbiAILyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 06:54:07 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:46453 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235391AbiAILyD (ORCPT
+        id S235410AbiAIMBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 07:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233852AbiAIMBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 06:54:03 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3087658036F;
-        Sun,  9 Jan 2022 06:54:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 09 Jan 2022 06:54:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=liWNH9cngrKwH
-        G/iQAoSwWAxTQqxW15kZvnIgwu8SwU=; b=cboZRsWYwKPdbffWxfww33xQDo0vD
-        Ep4ViXirP7xaQDkH6hMOf+YgadAj1oUIIGwibcOpTVB5tXut4W9tapzvaI7dj49G
-        ijWFEjw2Q+AyNJ7mU3f6YnLTDUyFHHmA9u2u0k5WJbJGLROFqleuq0q3VI8Hg2lD
-        LseFGxYBbNFfEZ9esvesz496wZbir/hVRetOhMoq7pqUdzTu6hnx9osyoqLOZ/Fd
-        nBTTUL3WpMFgv8+jVwqSrPhcEgdNa3Yx8OmDoIC3OmyayO789vrR33ciTVKXrYQX
-        EAlsa8wCvA7LNVjjtib+ajgTz/zIQ+YVh03vaE2xaYPBT/jcPsZErqHVQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=liWNH9cngrKwHG/iQAoSwWAxTQqxW15kZvnIgwu8SwU=; b=FDMnC1Tw
-        d2NwocaWEn4wo9nLzLnziQ0cYavgqqafQtRUy7sn58TikzDGxmbDay+HNvbq1Lui
-        HL9NuF8hvNz32bpCqTdQv+kvRdLEqZ+cdHm1C8vksIGt1Zvg0jdmtNm+882yNTz+
-        aiEW4Xt6RIOjjIOTedPNnTophkxZ9BYDcJUN0Pe4CNTepJ47ZC/+OFrKxltXF9Cu
-        dt5vU2mnDpr9Au23OEQ6ArdWrYwMHiTjpZp5I57oEHKQEnTEimrxWGQiBBym5PXj
-        z+aU5dRO1GYTeb6oOilsxeIPm9+tC2qisp/Yqvm2CZzFyJQ8WXJ+Ftq/8YsXwsun
-        KfupYFfRS0z6Pw==
-X-ME-Sender: <xms:28zaYbJtOxynKymtn--sf_1rLqzn2wiwiJ1tynFF_ioqsjXiLrApQA>
-    <xme:28zaYfK86S1TTyISOaZjmnfLKLC-IafkQ3tYixxEzjN2ZmYKFVgTE8nx1DDVmE-kf
-    plt-EFcW4TOl0ZVzJ0>
-X-ME-Received: <xmr:28zaYTs3v44g78GCdQ46waDQceTqH_44MDUgMShLCPOTX3XCDK5T53JidOP66GQtRJciFmCTIOoTVYyDpmDoBVdSGjQFV6Nub10>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudegkedgfeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
-    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeggedtteejke
-    eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
-    hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:28zaYUbyUOwFpQ-Ef93T8l1r3r_T9Ita2nPBqry_-gHA3bj3BBlsEg>
-    <xmx:28zaYSbQ7aCIOhaJu2FreCqpi3i01i3K0K3HAr816kGz1oWetllZKQ>
-    <xmx:28zaYYBgMoZIQvZaA5guc_bUV9X7wPtCTwgcnNAM1XUJetAd7OUYlA>
-    <xmx:28zaYYkwP8c5qfDcO7w_hpKdi9W3BQsBnn-Gs6oDISPBdkGrY07lwQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 9 Jan 2022 06:53:58 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     dmitry.torokhov@gmail.com, rydberg@bitmath.org,
-        andreas@kemnade.info, linus.walleij@linaro.org,
-        alistair23@gmail.com, robh+dt@kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v5 4/4] ARM: dts: imx7d-remarkable2: Enable the cyttsp5
-Date:   Sun,  9 Jan 2022 21:53:31 +1000
-Message-Id: <20220109115331.388633-5-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220109115331.388633-1-alistair@alistair23.me>
-References: <20220109115331.388633-1-alistair@alistair23.me>
+        Sun, 9 Jan 2022 07:01:12 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA89C06173F;
+        Sun,  9 Jan 2022 04:01:12 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id w22so3359555iov.3;
+        Sun, 09 Jan 2022 04:01:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=spkLu4uIr0v4idqd3BcQfFaA/zlQoV1DfA8cSo6CIKU=;
+        b=m8va4gCSJncMYbF5p4Ng95n4ZpMoZfJL1ws1RWZZA0DiCT6LWFpaLTpXCWSbNTpQkV
+         ds/2kKAb2sB0sE9YSIZ8fliTk5xvsd3NaXnFpocQVSIZY/rfV5XdX+jygk8DnbAqzxQC
+         eKTdQa8wJdIG1E3IUZuKa5o4EhSpmEKwYEVrL67uWmv3XssokJO9CCR0GMlKKZ6ATo3W
+         oTkOsfTpSvwJwTaq4QChHt+1vFlvUIcJqefnPW2sH4eV2uCcQYZUyDML98j4Ki0f7dzO
+         pi6owWZ+c2anwpYnahcp/T8xSTtJjmYTmZsEHH/EmSbQZjsty21UIiFuCX9TbOeVwmIh
+         sInA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=spkLu4uIr0v4idqd3BcQfFaA/zlQoV1DfA8cSo6CIKU=;
+        b=O3H3zgd5FOjqShKDfwXJ7qnSKWGCD2AKHFmoZNJXmOw8aaEBL/RHihb9OqS0BxW4WE
+         DWyUQfBcx3CXE1kfoT6CUZytJQ51Q2UcTypdqDA0AGzp+92rnXyzQcKOHzeO91Nn3hCK
+         7lsWU19FMm2wti5Surtcrn01ovuLdIEXNCPYyoJ9cPHh7IS7nPf2fq5NJsOimD2b1E24
+         cTtaO23hJClPogmOw6nmCGFPlizQQVpQA6aAWjs4aMwx+B3kgtBVQl+E/CJ2sgHnp9SB
+         SW+1aoASCIaww6/dzN1iO4JeyTjj+2MPsBSR54tg9SRW3LI9XCSZHMkXaGztyPV5+c7L
+         uR9A==
+X-Gm-Message-State: AOAM531wX9F0DV0BF/KmrNm/xnaiP4xduIUzFOvE6rAIYNwHCzu2xRNW
+        Es5Chv4dhJevv/dAwzud3qMuHDx2qJME2w37eeo=
+X-Google-Smtp-Source: ABdhPJy0DMSC8QDWbRPi8FsckA21vkZbQHA/1KkLQojh2VCkH7A6aNmT1QdcnBw+wmVV81jq64FSCwx2wxNozNHc1mo=
+X-Received: by 2002:a05:6638:204c:: with SMTP id t12mr32094554jaj.169.1641729671949;
+ Sun, 09 Jan 2022 04:01:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211222124603.326920-1-alistair@alistair23.me> <37291fe7-7028-cd9e-7fde-01d13f85f0d9@sholland.org>
+In-Reply-To: <37291fe7-7028-cd9e-7fde-01d13f85f0d9@sholland.org>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Sun, 9 Jan 2022 22:00:45 +1000
+Message-ID: <CAKmqyKOpO-PemwbQN-PL+miZjV1aq2zzipwMqwVXMJvH=10=Tw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Add support for the Cypress cyttsp5
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Andreas Kemnade <andreas@kemnade.info>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the cyttsp5 touchscreen controller for the reMarkable 2.
+On Fri, Jan 7, 2022 at 3:49 PM Samuel Holland <samuel@sholland.org> wrote:
+>
+> Hello!
+>
+> On 12/22/21 6:45 AM, Alistair Francis wrote:
+> > This patch series builds on top of [1] and adds support for the cyttsp5
+> > touchscreen controller for the reMarkable 2.
+> >
+> > I first tried to add an I2C HID device. Although the cyttsp5 has some H=
+ID
+> > looking aspects it is not HID compatible. Just in trying to probe the d=
+evice
+> > I found:
+> >  - The HID descriptor has extra padding
+> >  - The HID descriptor sets the high bytes of the descriptor length
+> >  - The HID descriptor has extra unrecognised tags
+> >  - The HID reset command doesn't appear to work
+> >
+> > I don't think there is a way to use the I2C HID framework with the cytt=
+sp5.
+> > For anyone interested you can see the work here [2]. In that branch tho=
+ugh I
+> > can only obtain a HID descriptor, nothing else works without more core
+> > changes.
+> >
+> > So instead I rebased the series from [1]. Converted to the new yaml DTS
+> > documentation, added regulator support and fixed a x/y miscalculation b=
+ug.
+>
+> I am working on the PineNote, which also uses a cyttsp5 touchscreen. I at=
+tempted
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 89 +++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
+Hey! That's great! PineNote support would be awesome
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 89cbf13097a4..f12d6805b214 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -8,6 +8,7 @@
- /dts-v1/;
- 
- #include "imx7d.dtsi"
-+#include <dt-bindings/input/linux-event-codes.h>
- 
- / {
- 	model = "reMarkable 2.0";
-@@ -34,6 +35,18 @@ reg_brcm: regulator-brcm {
- 		startup-delay-us = <150>;
- 	};
- 
-+	reg_touch: regulator-touch {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDD_3V3_TOUCH";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_touch_reg>;
-+		pinctrl-1 = <&pinctrl_touch_reg>;
-+		gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -51,6 +64,59 @@ &clks {
- 	assigned-clock-rates = <0>, <32768>;
- };
- 
-+&i2c3 {
-+	clock-frequency = <100000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c3>;
-+	status = "okay";
-+
-+	tsc@24 {
-+		compatible = "cypress,tt21000";
-+		reg = <0x24>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_touch>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-+		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
-+		vdd-supply = <&reg_touch>;
-+		touchscreen-size-x = <880>;
-+		touchscreen-size-y = <1280>;
-+
-+		button-0 {
-+			linux,code = <KEY_HOMEPAGE>;
-+		};
-+
-+		button-1 {
-+			linux,code = <KEY_MENU>;
-+		};
-+
-+		button-2 {
-+			linux,code = <KEY_BACK>;
-+		};
-+
-+		button-3 {
-+			linux,code = <KEY_SEARCH>;
-+		};
-+
-+		button-4 {
-+			linux,code = <KEY_VOLUMEDOWN>;
-+		};
-+
-+		button-5 {
-+			linux,code = <KEY_VOLUMEUP>;
-+		};
-+
-+		button-6 {
-+			linux,code = <KEY_CAMERA>;
-+		};
-+
-+		button-7 {
-+			linux,code = <KEY_POWER>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -125,6 +191,29 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
- 		>;
- 	};
- 
-+	pinctrl_touch: touchgrp {
-+		fsl,pins = <
-+			/* CYTTSP interrupt */
-+			MX7D_PAD_GPIO1_IO14__GPIO1_IO14		0x54
-+			/* CYTTSP reset */
-+			MX7D_PAD_GPIO1_IO13__GPIO1_IO13		0x04
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			MX7D_PAD_I2C3_SDA__I2C3_SDA		0x4000007f
-+			MX7D_PAD_I2C3_SCL__I2C3_SCL		0x4000007f
-+		>;
-+	};
-+
-+	pinctrl_touch_reg: touchreggrp {
-+		fsl,pins = <
-+			/* TOUCH_PWR_EN */
-+			MX7D_PAD_GPIO1_IO11__GPIO1_IO11		0x14
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
+> to use the driver from this series, but I could not get it to work. I fou=
+nd that
+> the cyttsp5_sensing_conf_data was filled with all zeroes, so every touch =
+failed
+> the max_tch check. I noticed that cmd_done was being completed by empty
+> responses (which explains why the response buffer was zeroes), but I got =
+stuck
+> after that.
 
+Hmm... That's annoying. This series now works with the rM2 and a kobo
+device, so I don't understand why it wouldn't work on the PineNote.
+
+I just sent a v5 (sorry, I forgot to CC you) that has some code
+cleanups, but I don't expect it to fix the issues you are seeing.
+
+>
+> So I looked back at the thread you linked below, and tried to implement t=
+he
+> workarounds described there, and those above, plus some others, and I was=
+ able
+> to get the touchscreen working with i2c_hid. Here are the changes I made =
+to i2c_hid:
+> https://github.com/smaeul/linux/commit/a1e07425a6c4
+>
+> In summary:
+>  - Perform a 2-byte dummy read before reading the HID descriptor.
+>    This is required to clear the two-byte empty message.
+>  - Split command/response into multiple I2C transactions.
+>    This is probably some sort of timing issue.
+>    Without these first two, HID descriptor reads return "02 00".
+>  - Chop 2 bytes out of the HID descriptor, as per the thread below.
+>  - Similarly, chop 3 bytes out of the report descriptor.
+>  - Skip the reset command, as above. Otherwise, the touchscreen
+>    sends a different, short, unusable (partial?) report descriptor.
+
+Cool! I'm impressed you got this working!
+
+>
+> I reused the the existing i2c_hid_of_goodix driver to handle toggling the=
+ reset
+> line, which is required. That existing binding is almost identical to the=
+ one in
+> this series. Here's the glue I added:
+> https://github.com/smaeul/linux/commit/65d9250d3899
+>
+> And here is the result, from dmesg and debugfs:
+> https://gist.github.com/smaeul/60b4b0f784bfff8bb8ce3ee3b4483be9
+>
+> So far, the quirks only appear to affect probing the device. The touchscr=
+een
+> works normally after that.
+
+If the PineNote and eInk setups are different (they probably are if
+this series isn't working for you) then there might be other changes
+as well.
+
+>
+> What do you think of this approach? It certainly seems cleaner than parsi=
+ng the
+> HID reports/responses by hand. But I don't know if all of the quirks are
+> acceptable for i2c_hid.
+
+I'll leave that for an I2C HID maintainer to answer.
+
+>
+> One additional quirk that I haven't handled yet is the missing min/max fo=
+r ABS_*
+> axes in the report descriptor. This prevents libinput from working, but o=
+ther
+> evdev users appear to work fine. The driver in this series appears to get=
+ that
+> information from some vendor-specific command, and I am not sure where to=
+ hook
+> that up.
+
+We will need that won't we? So then i2c_hid would have to implement
+that as well?
+
+Alistair
+
+>
+> Regards,
+> Samuel
+>
+> > 1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josser=
+and@bootlin.com/
+> > 2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid
+> >
+> > Alistair Francis (2):
+> >   ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
+> >   ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+> >
+> > Myl=C3=A8ne Josserand (2):
+> >   Input: Add driver for Cypress Generation 5 touchscreen
+> >   dt-bindings: input: Add Cypress TT2100 touchscreen controller
+> >
+> >  .../input/touchscreen/cypress,tt21000.yaml    |  92 ++
+> >  arch/arm/boot/dts/imx7d-remarkable2.dts       |  89 ++
+> >  arch/arm/configs/imx_v6_v7_defconfig          |   1 +
+> >  drivers/input/touchscreen/Kconfig             |  14 +
+> >  drivers/input/touchscreen/Makefile            |   1 +
+> >  drivers/input/touchscreen/cyttsp5.c           | 922 ++++++++++++++++++
+> >  6 files changed, 1119 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/input/touchscreen=
+/cypress,tt21000.yaml
+> >  create mode 100644 drivers/input/touchscreen/cyttsp5.c
+> >
+>

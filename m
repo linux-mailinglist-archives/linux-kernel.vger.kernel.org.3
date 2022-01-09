@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B856488BF8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97BE488BFA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiAITVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 14:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236466AbiAITUz (ORCPT
+        id S236685AbiAITYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 14:24:17 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:49692 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236466AbiAITYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 14:20:55 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0391CC06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 11:20:55 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id c71so33541097edf.6
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 11:20:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VWWFkIhkFDieoIAt51lsGMTCATR8BiITQDIvsBDfn9E=;
-        b=Msv53R/QNphspQKxQKHE0fOtUUofGqL2OLP4z/ir4My1RjKQSPb5XfqmCQgWZAC4Gs
-         Bwjvt96AZNZfJYq1Vpoa4Eh4cCQc9tZ/7chCsAMlxYWz+SI2bvvFmgG3YqB7M5GEESG8
-         uqerig2JIhLuCCxNRaGFnvWTAaUOYLMdgSAKA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VWWFkIhkFDieoIAt51lsGMTCATR8BiITQDIvsBDfn9E=;
-        b=xNVzTos+/Gk/iAVd1yH4YsBk/opdQvQJBxF5gFSw7GmppdJEXf1o4meD6q8shnNLrm
-         MhSR2Lb1iq8mKshlxyrzDMwpeLNe1ZwGJOiYD6dVlopkwXwAoZly5RD3LHqPTV1s4Zw1
-         fnkVC43hjp2qsG8KdqF3bsqE/t+L6PiQRdwosidKvlTSL4gZRt+nh3Iw1i5K+6ueR7gg
-         d3ysXeqnYk8VIlPRNCFgClq6beC008zeIBPa32Co9A+3STBW7NcbapbkWbN809AtXnqd
-         JcV94FnGEqgd4Fm4nB2Pjg3M1nTUMN6gTDZjAn+gDujzIKj8yoRnxNwoPSQvyABq4umP
-         LV9g==
-X-Gm-Message-State: AOAM533dqr30ZVFEcC6vh0KrOw3CvjK4r7EQxqoUfayhFkmDFx0wWzmz
-        XOLnt0FYi4emNhxo372opCB9jP5/U+2McUGuHDI=
-X-Google-Smtp-Source: ABdhPJyJwd3EbI2EgQK6Z65nXjFIJ/ayGBSKHdz3HqmY2AHBH06ogScYq/cK1JBCB162c1Zh4+HEdA==
-X-Received: by 2002:a17:906:713:: with SMTP id y19mr12158865ejb.723.1641756053407;
-        Sun, 09 Jan 2022 11:20:53 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id v16sm2440640edc.4.2022.01.09.11.20.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 11:20:53 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id p18so660952wmg.4
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 11:20:52 -0800 (PST)
-X-Received: by 2002:a05:600c:4c94:: with SMTP id g20mr2575626wmp.26.1641756052725;
- Sun, 09 Jan 2022 11:20:52 -0800 (PST)
+        Sun, 9 Jan 2022 14:24:16 -0500
+X-UUID: 4245f4e59f954e49ac963be9702e01f6-20220110
+X-UUID: 4245f4e59f954e49ac963be9702e01f6-20220110
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1934936454; Mon, 10 Jan 2022 03:24:13 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 10 Jan 2022 03:24:11 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 10 Jan 2022 03:24:05 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
+CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
+        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
+        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
+        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
+        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
+        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
+        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <jemele@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 1/5] Bluetooth: btmtksdio: rename btsdio_mtk_reg_read
+Date:   Mon, 10 Jan 2022 03:23:57 +0800
+Message-ID: <a22b710e69551c3503203f73ea898504cb634815.1641755121.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-References: <164175418046.1037107.9730034714816887497@leemhuis.info>
-In-Reply-To: <164175418046.1037107.9730034714816887497@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 9 Jan 2022 11:20:36 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi8gSsM7-+fx-iSoKGHtgrgN==NcQtRikYfiFmv8gjbnQ@mail.gmail.com>
-Message-ID: <CAHk-=wi8gSsM7-+fx-iSoKGHtgrgN==NcQtRikYfiFmv8gjbnQ@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2022-01-09]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 9, 2022 at 10:51 AM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> 5-10% increase in IO latencies with nohz balance patch
+From: Sean Wang <sean.wang@mediatek.com>
 
-This one is clearly not rootcaused, but even the reporter isn't sure
-what triggered it.  It was bisected to that mentioned patch, but even
-that bisection result isn't really entirely certain.
+Using "btmtksdio" as the prefix instead of "btsdio"
 
-So this one will remain pending, I'm afraid.
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+---
+v5: new created to make the series better
+---
+ drivers/bluetooth/btmtksdio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> pm: laptop totally freezes when going to hibernation
-> drm: amdgpu: s0ix suspend stopped working
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index b5ea8d3bffaa..891e34b50e44 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -797,7 +797,7 @@ static int mt79xx_setup(struct hci_dev *hdev, const char *fwname)
+ 	return err;
+ }
+ 
+-static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
++static int btmtksdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
+ {
+ 	struct btmtk_hci_wmt_params wmt_params;
+ 	struct reg_read_cmd {
+@@ -844,13 +844,13 @@ static int btmtksdio_setup(struct hci_dev *hdev)
+ 
+ 	switch (bdev->data->chipid) {
+ 	case 0x7921:
+-		err = btsdio_mtk_reg_read(hdev, 0x70010200, &dev_id);
++		err = btmtksdio_mtk_reg_read(hdev, 0x70010200, &dev_id);
+ 		if (err < 0) {
+ 			bt_dev_err(hdev, "Failed to get device id (%d)", err);
+ 			return err;
+ 		}
+ 
+-		err = btsdio_mtk_reg_read(hdev, 0x80021004, &fw_version);
++		err = btmtksdio_mtk_reg_read(hdev, 0x80021004, &fw_version);
+ 		if (err < 0) {
+ 			bt_dev_err(hdev, "Failed to get fw version (%d)", err);
+ 			return err;
+-- 
+2.25.1
 
-Something clearly not great in amdgpu suspend/resume land. The reports
-are not fully clear, with even the bisection being questionable.
-
-But from the previous cycle reports:
-
-> =========================================================================================
-> previous cycle (v5.14..v5.15), culprit identified, with activity in the past three months
-> =========================================================================================
->
-> drm: amdgpu: NUC8i7HVKVA crashes during system suspend
-
-This one isn't questionable, and Len sent me the revert he's been
-using on his system for a long time. So I applied it.
-
-Maybe it's related, maybe it's not.
-
-             Linus

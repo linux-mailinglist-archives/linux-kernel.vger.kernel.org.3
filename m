@@ -2,160 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 737144888D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E524888DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbiAILXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 06:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiAILXM (ORCPT
+        id S232229AbiAILbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 06:31:46 -0500
+Received: from mxout01.lancloud.ru ([45.84.86.81]:60122 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230510AbiAILbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 06:23:12 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D99C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 03:23:07 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g11so34051833lfu.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 03:23:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/VuyKoLpWpEEZox/0t1toTPqDMCC65viZRvg9Agp6Rc=;
-        b=dJPaZcxnQDoggqCqDo8SgAfO7tb06gDGic1MlpIuAl1WKAb1IrZyFWhx4ySSrIWNyJ
-         qWJ6FrK8U+m+QW4qoDRndMDgG8p564Lt49T0onB8wBboILu+sjsS7VqS1UIErAg4zhn/
-         aUCXP6JgTQq/tdxHxNMCmbydvDrjg1E6eYGAc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/VuyKoLpWpEEZox/0t1toTPqDMCC65viZRvg9Agp6Rc=;
-        b=LGANLftvECUmKw+1EyfdyrntOy3uJgsMaGiARt9DMrxJTZ+FE6zJ2E7zSja5vSd7IE
-         1DwdnkeCyPGskSxd9VT5fz2iUeQee3qeGYN2/zcrgVmGpFuhYdfX1K5IZe3ODJd56WDP
-         a6Z0TYhl64PJrR8s+xheB1W7YBKtxVZiMO0Eu0AuHeThxSLD+sTvZwYabngdY5nOudev
-         yNdivmrx8lVk6QZSCsV6eiiX3AfMmBWMZtLZT3l6os6KtboUJjHAVgu6xFXYkmeZNqfF
-         PiTWhhuwWz6HtiFoYl/j4kO8t2YfETKEJIvRRNh+rBu5aWtvxaz6mo7Jm2QKX+iEaJoD
-         mYrQ==
-X-Gm-Message-State: AOAM531sKfX+XKwkZ1sI2sNnDMwYynJpdhmgqhhZ4KVZrh6LV7PlU9IL
-        ZZ7zkm9/tjNpgek8fuoXVK9Wwtp/Ayvl5rAjQfdDG7wHP3dC3w==
-X-Google-Smtp-Source: ABdhPJz+5GwtyaN/5n8Jbaloti4ZQbWg5UCqS9v3FH2+ZEJYOcidZDDjriHT2NrEphgQkiv8v8+L/snICziKs2BJanM=
-X-Received: by 2002:a05:651c:145:: with SMTP id c5mr57989978ljd.237.1641727385719;
- Sun, 09 Jan 2022 03:23:05 -0800 (PST)
+        Sun, 9 Jan 2022 06:31:45 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 0442E20E3CB6
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
+ its ilk
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
+ <YbJhu53WEmotslox@smile.fi.intel.com>
+ <59f08001-7e1e-7fe2-28ba-045972bbae90@omp.ru>
+ <YbM3T29wPZFLMu1D@smile.fi.intel.com>
+ <8a415980-990b-abae-6f60-dedd0c199583@omp.ru>
+ <CAHp75VddS225riMvTD36M4UNKC=zKYLCmUdJsACvWbf7=8CqRA@mail.gmail.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <a45b348e-3d98-2343-6648-b2ec817bb236@omp.ru>
+Date:   Sun, 9 Jan 2022 14:31:39 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com> <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
-In-Reply-To: <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Sun, 9 Jan 2022 12:22:54 +0100
-Message-ID: <CABGWkvoGs_VBGD-7dt18LY9NV=63w50OceKjmaKYeqDe_WJk9g@mail.gmail.com>
-Subject: Re: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring parameters
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAHp75VddS225riMvTD36M4UNKC=zKYLCmUdJsACvWbf7=8CqRA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 9:16 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 08.01.2022 19:16:33, Dario Binacchi wrote:
-> > Adds ethtool support to get the number of message buffers configured for
-> > reception/transmission, which may also depends on runtime configurations
-> > such as the 'rx-rtr' flag state.
-> >
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >
-> > ---
-> >
-> >  drivers/net/can/flexcan/flexcan-ethtool.c | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >
-> > diff --git a/drivers/net/can/flexcan/flexcan-ethtool.c b/drivers/net/can/flexcan/flexcan-ethtool.c
-> > index 5bb45653e1ac..d119bca584f6 100644
-> > --- a/drivers/net/can/flexcan/flexcan-ethtool.c
-> > +++ b/drivers/net/can/flexcan/flexcan-ethtool.c
-> > @@ -80,7 +80,24 @@ static int flexcan_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-> >       return 0;
-> >  }
-> >
-> > +static void flexcan_get_ringparam(struct net_device *ndev,
-> > +                               struct ethtool_ringparam *ring)
->
-> This doesn't compile on net-next/master, as the prototype of the
-> get_ringparam callback changed, fixed this while applying.
->
-> > +{
-> > +     struct flexcan_priv *priv = netdev_priv(ndev);
-> > +
-> > +     ring->rx_max_pending = priv->mb_count;
-> > +     ring->tx_max_pending = priv->mb_count;
-> > +
-> > +     if (priv->devtype_data.quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)
-> > +             ring->rx_pending = __sw_hweight64(priv->rx_mask);
->
-> I've replaced the hamming weight calculation by the simpler:
->
-> |               ring->rx_pending = priv->offload.mb_last -
-> |                       priv->offload.mb_first + 1;
->
-> > +     else
-> > +             ring->rx_pending = 6;
-> > +
-> > +     ring->tx_pending = __sw_hweight64(priv->tx_mask);
->
-> ...and here I added a hardcoded "1", as the driver currently only
-> support on TX buffer.
->
-> > +}
-> > +
-> >  static const struct ethtool_ops flexcan_ethtool_ops = {
-> > +     .get_ringparam = flexcan_get_ringparam,
-> >       .get_sset_count = flexcan_get_sset_count,
-> >       .get_strings = flexcan_get_strings,
-> >       .get_priv_flags = flexcan_get_priv_flags,
->
-> BTW: If you're looking for more TX performance, this can be done by
-> using more than one TX buffer.
+On 1/5/22 1:09 PM, Andy Shevchenko wrote:
 
-I didn't expect only one message buffer to be used for transmission
+>>>>> Wanna help?
+>>>>
+>>>>    No, I'm afraid you're on your own here...
+>>
+>>    Tell me please, how far you've got with this by now?
+>>    (I've already started to add the fixups to your patch -- unfortunately, this change has to be
+>> done atomically, not piecemeal.)
 
-thanks and regards,
-Dario
+   Now I'm doing "the 2nd pass" over the platform_get_irq_optional() patch, and I think I'm done
+with the 2nd, platform_get_irq_byname_optional() patch... Expecting to post those 2 early next week.
 
-> It's also possible to configure the
-> number of RX and TX buffers via ethtool during runtime. I'm currently
-> preparing a patch set for the mcp251xfd to implement this.
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> I just returned from vacation and will have another one soon, I don't
+> think I will be doing much for the next couple of weeks.
 
+   You've settled in well -- having (several!) vacations while I've been doing your homework for you
+during my holidays. B-)
 
+>>>>>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+>>>>>
+>>>>> Not sure.
+>>>>
+>>>>    Why? It fixes gthe IRQ0 problem, so that you don't have to check for IRQ0 in many callers
+>>>> (for the subsytems that treat 0 as s/th special, like polling mode)... If you have something
+>>>> to improve, you can do that atop of this patch...
+>>>
+>>> Because first we need to fix all users of platform_get_irq_optional().
+>>
+>>    I still don't understand why your issue should be fixed 1st -- but I don't really care about
+>> the order...
+> 
+> See my other comments on the discussion.
+> The rough roadmap is:
+> 1) check which drivers are still subjects of vIRQ0 which is retrieved
+> via IRQ resource
 
--- 
+   We have WARN() added for that -- which isn't even limited to the static IRQ resources...
 
-Dario Binacchi
+> 2) fix them accordingly (for example, by transforming to IRQ domains)
 
-Embedded Linux Developer
+   I think we may choose to do a quick workaround, with the IRQ domain transformation somewhat
+deferred...
 
-dario.binacchi@amarulasolutions.com
+> 3) convert platform_get_irq() and Co (including optional variants) to
+> follow the pattern
+>  a) non-optional APIs never return 0
+>  b) optional APIs return negative error, or positive vIRQ or 0 when
+> IRQ not found
 
-__________________________________
+   Yeah, and that means that we should 1st convert your platform_do_get_irq() (I'm renaming it)to not return 0 on IRQ0 -- in order to avoid the ambiguity with the "IRQ not found" outcome.
 
+> Alternatively you may put a big comment in the drivers first and use
+> platform_get_resource() for retrieving IRQ0 without WARN(). Then they
+> will be subject to fix later on.
 
-Amarula Solutions SRL
+  No -- that would be a step backward, I think...
 
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+MBR, Sergey

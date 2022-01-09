@@ -2,171 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 981EE488B6B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCEA488B6F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbiAIRkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbiAIRkm (ORCPT
+        id S235892AbiAIRq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:46:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31452 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234088AbiAIRq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:40:42 -0500
-Received: from haggis.mythic-beasts.com (haggis.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02047C06173F;
-        Sun,  9 Jan 2022 09:40:41 -0800 (PST)
-Received: from [81.101.6.87] (port=47182 helo=jic23-huawei)
-        by haggis.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n6cBJ-0008Uy-Rs; Sun, 09 Jan 2022 17:40:38 +0000
-Date:   Sun, 9 Jan 2022 17:46:33 +0000
-From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings:iio:frequency: add admv1014 doc
-Message-ID: <20220109174625.7f5d8ff7@jic23-huawei>
-In-Reply-To: <20220103092201.21576-3-antoniu.miclaus@analog.com>
-References: <20220103092201.21576-1-antoniu.miclaus@analog.com>
-        <20220103092201.21576-3-antoniu.miclaus@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 9 Jan 2022 12:46:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641750416;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/m0DGCCGgJDWa2WsJaVc+ekN3fltbDLow+eopcpVs/g=;
+        b=azD3afQbwLNK8HfM8H4m4aKg4xQex8rjpPAPLhANryTGTJn2npSNQFp894b7WTfO+HG7g0
+        00CBXmzOU31Mm6pkcJxgg/pSIllLlf1ZsTvr8Ug1YtzStbu5TKk1tDu4PKF6rlgWnK14SY
+        rA6Fk1SVCjJIzrRPvr0FCXyjpJMa69w=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-672-9IZU5LY6PW2kA0j5WL2_zw-1; Sun, 09 Jan 2022 12:46:55 -0500
+X-MC-Unique: 9IZU5LY6PW2kA0j5WL2_zw-1
+Received: by mail-oi1-f200.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso8356112oif.23
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 09:46:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=/m0DGCCGgJDWa2WsJaVc+ekN3fltbDLow+eopcpVs/g=;
+        b=YEtozoNhxLMd27bjSKT80d/d/n1I8dzFu4Zhf5PrWend9MD1/88g301pVVsup95LPv
+         iOjREMlo0N7OaQOXM5tqCjcQnahSpCvZK+GkBPwuRmoe9XH2fvj5JcosJ+08GeYMIazM
+         dD4MO2i723wPlP74KirRqW42KlAe9nawZffVrEyMMTvDtzqFR01CPTsRtlvw7fBWEvk3
+         blDocUzIQ3PacZiivNfjipTyTRXM6zvvt8K6Sf16Q6sSZDSMBVWQEN8y0PIRA8A6wzvL
+         eS/eRVoLXOZApnFi+HOA4FXf212aTjfP1Hkvh6/SfI7aWbJFAM5uXoMNmrOf7lNGeIVF
+         MGgg==
+X-Gm-Message-State: AOAM5334DhRHYUh4eYn5MKAwGMlDt6gV7+OQqrzypBI1b4CmhhfvJnEr
+        SfiH60joXCPuE1b12mbuiRm9blWyL2kbHtO0oSSXzMG2eaPW3NeafFsEqZqI5zO1BIPSfPb6yDa
+        YEpKIA0++/754WmNPzB0nTBoB
+X-Received: by 2002:a05:6808:1201:: with SMTP id a1mr16245638oil.153.1641750414372;
+        Sun, 09 Jan 2022 09:46:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJweDPl4PyHuvvuqinIq0jaAq2rNaiCsPD4uGdY/3qNKroGAOcF1Z+Angfs9zypXlyhd8U5DOw==
+X-Received: by 2002:a05:6808:1201:: with SMTP id a1mr16245611oil.153.1641750414074;
+        Sun, 09 Jan 2022 09:46:54 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id q65sm789210oih.45.2022.01.09.09.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jan 2022 09:46:53 -0800 (PST)
+Subject: Re: [PATCH V4 XRT Alveo Infrastructure 2/5] Documentation:
+ devicetree: bindings: add binding for Alveo platform
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
+Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
+        robh@kernel.org, dwmw2@infradead.org,
+        Max Zhen <max.zhen@xilinx.com>
+References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
+ <20220105225013.1567871-3-lizhi.hou@xilinx.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <41c78998-d308-b23d-7b0e-9b668227f251@redhat.com>
+Date:   Sun, 9 Jan 2022 09:46:51 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20220105225013.1567871-3-lizhi.hou@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 19
-X-Spam-Status: No, score=1.9
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jan 2022 11:22:00 +0200
-Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
 
-binding rather than doc.  Yaml is code a well as documentation afterall.
-
-> Add device tree bindings for the ADMV1014 Upconverter.
-> 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+On 1/5/22 2:50 PM, Lizhi Hou wrote:
+> Create device tree binding document for partitions and pr isolation on
+> Xilinx Alveo platform.
+>
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 > ---
->  .../bindings/iio/frequency/adi,admv1014.yaml  | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+>   .../bindings/fpga/xlnx,alveo-partition.yaml   | 76 +++++++++++++++++++
+>   .../fpga/xlnx,alveo-pr-isolation.yaml         | 40 ++++++++++
+>   2 files changed, 116 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml
+>   create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml b/Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml
 > new file mode 100644
-> index 000000000000..a3e5e61c8ade
+> index 000000000000..ee50cb51d08e
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
-> @@ -0,0 +1,97 @@
+> +++ b/Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml
+> @@ -0,0 +1,76 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
+> +$id: http://devicetree.org/schemas/fpga/xlnx,alveo-partition.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: ADMV1014 Microwave Downconverter
-> +
-> +maintainers:
-> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
+> +title: Xilinx Alveo platform partition bindings
 > +
 > +description: |
-> +   Wideband, microwave downconverter optimized for point to point microwave
-> +   radio designs operating in the 24 GHz to 44 GHz frequency range.
+> +  Xilinx Alveo platform is a PCI device and has one or more partitions. A
+PCIe
+> +  partition is programmed dynamically and contains a set of hardware
+> +  peripherals also referred to as endpoints which appear on the PCI BARs.
+> +  This binding is defined for endpoint address translation which uses the
+> +  the following encoding:
 > +
-> +   https://www.analog.com/en/products/admv1014.html
+> +    0xIooooooo 0xoooooooo
+> +
+> +  Where:
+> +
+> +    I = BAR index
+> +    oooooo oooooooo = BAR offset
+> +
+> +  As a PCI device, the Alveo platform is enumerated at runtime. Thus,
+> +  the partition node is created by Alveo device driver. The device driver
+> +  gets the BAR base address of the PCI device and creates the 'range'
+> +  property for address translation.
+> +
+> +allOf:
+> +  - $ref: /schemas/simple-bus.yaml#
+> +
+> +maintainers:
+> +  - Lizhi Hou <lizhi.hou@xilinx.com>
 > +
 > +properties:
 > +  compatible:
-> +    enum:
-> +      - adi,admv1014
+> +    contains:
+> +      const: xlnx,alveo-partition
 > +
-> +  reg:
-> +    maxItems: 1
+> +  "#address-cells":
+> +    const: 2
 > +
-> +  spi-max-frequency:
-> +    maximum: 1000000
+> +  "#size-cells":
+> +    const: 2
 > +
-> +  clocks:
-> +    description:
-> +      Definition of the external clock.
-
-Not a particularly helpful way of describing it.  
-This is the local oscillator input.  I'd put the description
-in clock-names rather than here as then it's obvious what lo_in
-means.
-
-> +    minItems: 1
+> +  ranges: true
 > +
-> +  clock-names:
-> +    items:
-> +      - const: lo_in
-> +
-> +  vcm-supply:
-> +    description:
-> +      Analog voltage regulator.
-
-There seem to be a whole load of other VCC_X supplies from the datasheet.
-They should all be here. 
-
-> +
-> +  adi,input-mode:
-> +    description:
-> +      Select the input mode.
-> +      iq - in-phase quadrature (I/Q) input
-> +      if - complex intermediate frequency (IF) input
-> +    enum: [iq, if]
-> +
-> +  adi,detector-enable:
-> +    description:
-> +      Digital Rx Detector Enable. The Square Law Detector output is
-> +      available at output pin VDET.
-> +    type: boolean
-> +
-> +  adi,p1db-comp-enable:
-> +    description:
-> +      Turn on bits to optimize P1dB.
-
-Expand comp to compensation perhaps as not a totally clear abbreviation.
-
-> +    type: boolean
-> +
-> +  adi,quad-se-mode:
-> +    description:
-> +      Switch the LO path from differential to single-ended operation.
-> +      se-neg - Single-Ended Mode, Negative Side Disabled.
-> +      se-pos - Single-Ended Mode, Positive Side Disabled.
-> +      diff - Differential Mode.
-> +    enum: [se-neg, se-pos, diff]
-> +
-> +  '#clock-cells':
-> +    const: 0
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+> +    description: hardware endpoints belong to this partition.
+> +    type: object
 > +
 > +required:
 > +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - vcm-supply
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
 > +
 > +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    spi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      admv1014@0{
-> +        compatible = "adi,admv1014";
-> +        reg = <0>;
-> +        spi-max-frequency = <1000000>;
-> +        clocks = <&admv1014_lo>;
-> +        clock-names = "lo_in";
-> +        vcm-supply = <&vcm>;
-> +        adi,quad-se-mode = "diff";
-> +        adi,detector-enable;
-> +        adi,p1db-comp-enable;
-> +      };
+> +    bus {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        xrt-part-bus@0 {
+> +            compatible = "xlnx,alveo-partition", "simple-bus";
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +            ranges = <0x0 0x0 0x0 0xe0000000 0x0 0x2000000
+> +                      0x20000000 0x0 0x0 0xe4200000 0x0 0x40000>;
+> +            pr-isolate-ulp@41000 {
+> +                compatible = "xlnx,alveo-pr-isolation";
+> +                reg = <0x0 0x41000 0 0x1000>;
+> +            };
+> +        };
 > +    };
-> +...
+> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml b/Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml
+> new file mode 100644
+> index 000000000000..8db949093ee0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/xlnx,alveo-pr-isolation.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Partial Reconfig Isolation for Alveo platforms
+Expand 'Partial Reconfig' to 'Partial Reconfiguration'
+> +
+> +description: |
+> +  The Partial Reconfig ensures glitch free operation of the inputs from
+> +  a reconfigurable partition during partial reconfiguration on Alveo
+> +  platform.
+
+glitch free is not descriptive. maybe describe what that reg is used for.
+
+Tom
+
+> +
+> +maintainers:
+> +  - Lizhi Hou <lizhi.hou@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,alveo-pr-isolation
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    bus {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        pr-isolation-ulp@41000 {
+> +            compatible = "xlnx,alveo-pr-isolation";
+> +            reg = <0 0x41000 0 0x1000>;
+> +        };
+> +    };
 

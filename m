@@ -2,170 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F634887A8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 05:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1EF48882B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 06:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbiAIEuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 23:50:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
+        id S233175AbiAIF4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 00:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235152AbiAIEue (ORCPT
+        with ESMTP id S229960AbiAIF4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 23:50:34 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C257EC06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 20:50:33 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id e198so6367754ybf.7
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 20:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sTZpxUej1WV035yAJtohiVvLExaKbKUenCSLiOyFQAA=;
-        b=aqRON71E4TpjVhVCmbsvwLBooQ5QVh+ZtuwD7CWK2QhGySXMwcaxQ/m/0djGwFwgov
-         A2tlufrTFIFL4g1bi+jMWgGDRzuMcsLH9iXozDUjBqa+wBI2xhlJXR7xoBV8oBkfdmgm
-         TVPPwrdvVCgcHHlQCrWf+RpmZnlPhZX23GLnAzxpubduArd/PB4qaNnO9w2ymktAMbru
-         BJjTOL7M8a2OKMOhsC+Xxp8TVVIYLIEAnhesXP9IPrPwu9nDM8v5KIk93F9vJ4WnUD3r
-         5kkDrCy1CrG9lBPP+qg0nUyOVRhTkRzfHFH75IF12oERYbixYM8C1KGKqRuq2EFn2smm
-         DVEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sTZpxUej1WV035yAJtohiVvLExaKbKUenCSLiOyFQAA=;
-        b=w4GcP/eQ8ockNPn6+FfpjhAY2u9iygxaLXG7NG6iJZWoIYaK5arprWLWv5prLu+NAP
-         Id0OEfR3JGJesxOHctAO3fDG2lmNPS8QH1Ul69CzW13TL1AreL9vJo3/u+vjiz15pPex
-         EI6YGzYfc+WTJKNMluHrQaGdurs8NZC8Unk96QhTv6jg2FJUhhamOeSiv2pJs746zvkU
-         E41SYWysoK4LlRn2svlgbSkiA6elxTG1ReqzVZacmG+p+D+PCz5QucD/m82Du4FBISqT
-         dI/E+fZbA3HY2Anx8l1fkmcV4kpLwb7QaQbtMXd6hURriwhX3gpoVkQ8AN8XbOVtMnjr
-         A63A==
-X-Gm-Message-State: AOAM5322OMsb/LGak16t67bDVEnyPOIolCqf/7cGU/PAKtQP8AY9WRwz
-        h2eMS4sVukV4SQMPUTp3z1LG6zvLXc7QwFcjddwRgw==
-X-Google-Smtp-Source: ABdhPJyI2p9fJXUmNrwKfQpdp0yuDuQ3zFxLKcu1BudZqfd3OH5/4mKyOocVNopKghFkw/D4n0prPwhmuzIwcp7yHAE=
-X-Received: by 2002:a25:b97:: with SMTP id 145mr80561142ybl.132.1641703832755;
- Sat, 08 Jan 2022 20:50:32 -0800 (PST)
+        Sun, 9 Jan 2022 00:56:40 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C43BC06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 21:56:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=hfHrbUWm53dg29/Yt/DorGtbkOF3vLQS4YQI309TBF8=; b=dCiq4W+I7kpVX5gUrWPbvtZPNt
+        KNILE6QUj75niBGjjHP4cATCifniKUqcpkEfUaOkB0TGA8lUjr63COe5ypjSYgeBUDR4p3U6A7SUU
+        Ck9dKXJoTNvSz0xqSCXwSrZdoABfZCCm5JJYy4nVWjCMeHIEDi1Yf9KVUzOlBckNpfukXIJC7Yuph
+        cuUGxDBDEl9n86hYLvuIvBWa+4m68Ht2DryC6Y5+Nb4z5rVRSbgWerN73SENS5Tl4LdMEg/i9vrE3
+        SLUss9mgRLwHt44i6Wx2aEplwcnNvt/e0x9i5k1DW8wDEBxYumhl+zpalK4TeykrJuDgJG4ukGliY
+        zG+LgGHQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6RC1-007Of2-8G; Sun, 09 Jan 2022 05:56:37 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Subject: [PATCH] sysctl: documentation: fix table format warning
+Date:   Sat,  8 Jan 2022 21:56:35 -0800
+Message-Id: <20220109055635.6999-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-2-songmuchun@bytedance.com> <YdeDym9IUghnagrK@carbon.dhcp.thefacebook.com>
-In-Reply-To: <YdeDym9IUghnagrK@carbon.dhcp.thefacebook.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Sun, 9 Jan 2022 12:49:56 +0800
-Message-ID: <CAMZfGtV2G=R9nTuSYGAeqv+RkJsCVVACc3h47OeWA7n3mWbqsA@mail.gmail.com>
-Subject: Re: [PATCH v5 01/16] mm: list_lru: optimize memory consumption of
- arrays of per cgroup lists
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 8:05 AM Roman Gushchin <guro@fb.com> wrote:
->
-> On Mon, Dec 20, 2021 at 04:56:34PM +0800, Muchun Song wrote:
-> > The list_lru uses an array (list_lru_memcg->lru) to store pointers
-> > which point to the list_lru_one. And the array is per memcg per node.
-> > Therefore, the size of the arrays will be 10K * number_of_node * 8 (
-> > a pointer size on 64 bits system) when we run 10k containers in the
-> > system. The memory consumption of the arrays becomes significant. The
-> > more numa node, the more memory it consumes.
-> >
-> > I have done a simple test, which creates 10K memcg and mount point
-> > each in a two-node system. The memory consumption of the list_lru
-> > will be 24464MB. After converting the array from per memcg per node
-> > to per memcg, the memory consumption is going to be 21957MB. It is
-> > reduces by 2.5GB. In our AMD servers with 8 numa nodes in those
-> > sysuem, the memory consumption could be more significant. The savings
-> > come from the list_lru_one heads, that it also simplifies the
-> > alloc/dealloc path.
-> >
-> > The new scheme looks like the following.
-> >
-> >   +----------+   mlrus   +----------------+   mlru   +----------------------+
-> >   | list_lru +---------->| list_lru_memcg +--------->|  list_lru_per_memcg  |
-> >   +----------+           +----------------+          +----------------------+
-> >                                                      |  list_lru_per_memcg  |
-> >                                                      +----------------------+
-> >                                                      |          ...         |
-> >                           +--------------+   node    +----------------------+
-> >                           | list_lru_one |<----------+  list_lru_per_memcg  |
-> >                           +--------------+           +----------------------+
-> >                           | list_lru_one |
-> >                           +--------------+
-> >                           |      ...     |
-> >                           +--------------+
-> >                           | list_lru_one |
-> >                           +--------------+
-> >
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
->
-> As much as I like the code changes (there is indeed a significant simplification!),
-> I don't like the commit message and title, because I wasn't able to understand
-> what the patch is doing and some parts look simply questionable. Overall it
-> sounds like you reduce the number of list_lru_one structures, which is not true.
->
-> How about something like this?
->
-> --
-> mm: list_lru: transpose the array of per-node per-memcg lru lists
->
-> The current scheme of maintaining per-node per-memcg lru lists looks like:
->   struct list_lru {
->     struct list_lru_node *node;           (for each node)
->       struct list_lru_memcg *memcg_lrus;
->         struct list_lru_one *lru[];       (for each memcg)
->   }
->
-> By effectively transposing the two-dimension array of list_lru_one's structures
-> (per-node per-memcg => per-memcg per-node) it's possible to save some memory
-> and simplify alloc/dealloc paths. The new scheme looks like:
->   struct list_lru {
->     struct list_lru_memcg *mlrus;
->       struct list_lru_per_memcg *mlru[];  (for each memcg)
->         struct list_lru_one node[0];      (for each node)
->   }
->
-> Memory savings are coming from having fewer list_lru_memcg structures, which
-> contain an extra struct rcu_head to handle the destruction process.
+Fix malformed table warning in sysctl documentation:
+(don't use ':'s)
 
-My bad English. Actually, the saving is coming from not only 'struct rcu_head'
-but also some pointer arrays used to store the pointer to 'struct list_lru_one'.
-The array is per node and its size is 8 (a pointer) * num_memcgs. So the total
-size of the arrays is  8 * num_nodes * memcg_nr_cache_ids. After this patch,
-the size becomes 8 * memcg_nr_cache_ids. So the saving is
+Documentation/admin-guide/sysctl/kernel.rst:798: WARNING: Malformed table.
+Text in column margin in table line 7.
 
-   8 * (num_nodes - 1) * memcg_nr_cache_ids.
+=====  ============================================
+bit 0  print all tasks info
+bit 1  print system memory info
+bit 2  print timer info
+bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+bit 4  print ftrace buffer
+bit 5: print all printk messages in buffer
+bit 6: print all CPUs backtrace (if available in the arch)
 
-> --
->
-> But what worries me is that memory savings numbers you posted don't do up.
-> In theory we can save
-> 16 (size of struct rcu_head) * 10000 (number of cgroups) * 2 (number of numa nodes) = 320k
-> per slab cache. Did you have a ton of mount points? Otherwise I don't understand
-> where these 2.5Gb are coming from.
+Fixes: 934d51cad60c ("docs: sysctl/kernel: add missing bit to panic_print")
+Fixes: addc64999934 ("panic: add option to dump all CPUs backtraces in panic_print")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org
+---
+ Documentation/admin-guide/sysctl/kernel.rst |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-memcg_nr_cache_ids is 12286 when creating 10k memcgs. So the saving
-of arrays of one list_lru is 8 * 1 (number of numa nodes - 1) * 12286 = 96k.
-There will be 2 * 10k list_lru when mounting 10k points. So the total
-saving is 96k * 2 * 10k = 1920 M.
-
-Thanks Roman.
+--- linux-next-20220107.orig/Documentation/admin-guide/sysctl/kernel.rst
++++ linux-next-20220107/Documentation/admin-guide/sysctl/kernel.rst
+@@ -795,8 +795,8 @@ bit 1  print system memory info
+ bit 2  print timer info
+ bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+ bit 4  print ftrace buffer
+-bit 5: print all printk messages in buffer
+-bit 6: print all CPUs backtrace (if available in the arch)
++bit 5  print all printk messages in buffer
++bit 6  print all CPUs backtrace (if available in the arch)
+ =====  ============================================
+ 
+ So for example to print tasks and memory info on panic, user can::

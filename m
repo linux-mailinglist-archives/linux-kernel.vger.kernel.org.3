@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BA64889BC
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723A74889BF
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 15:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiAIN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:59:53 -0500
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:65469 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiAIN7w (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:59:52 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6YjenCh7DUujj6YjfnIYDW; Sun, 09 Jan 2022 14:59:51 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 09 Jan 2022 14:59:51 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH] cxgb4vf: Remove useless DMA-32 fallback configuration
-Date:   Sun,  9 Jan 2022 14:59:48 +0100
-Message-Id: <b14986ea39cea2ca9a6cd0476a3fc167c853ee67.1641736772.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        id S235755AbiAIOCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 09:02:14 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:55074 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229922AbiAIOCN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 09:02:13 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAD3zKXH6tphla8UBg--.15783S2;
+        Sun, 09 Jan 2022 22:01:43 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     damien.lemoal@opensource.wdc.com, David.Laight@ACULAB.COM,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v3] ide: Check for null pointer after calling devm_ioremap
+Date:   Sun,  9 Jan 2022 22:01:42 +0800
+Message-Id: <20220109140142.4081651-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAD3zKXH6tphla8UBg--.15783S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFyDKF4DurWfGr17GFyrtFb_yoWDKrXEyr
+        y8tr93J345Ar45tanYkFs2vr1j93WxWFykAr1Yya9xKry3CrWfXa9xJF93Arn8Gw1rur47
+        Gan8JFn7urZIvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5
+        XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUO4E_DUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+On Sun, Jan 09, 2022 at 04:53:39PM +0800, Damien Le Moal wrote:
+>>>> Cc: stable@vger.kernel.org#5.10
+>>>
+>>> Please keep the space before the #
+>>>
+>>> Cc: stable@vger.kernel.org #5.10
+>> 
+>> Actually, I added the space before, but the when I use the tool
+>> 'scripts/checkpatch.pl' to check my format, it told me a warning
+>> that it should not have space.
+>> 
+>> The warning is as follow:
+>> WARNING: email address 'stable@vger.kernel.org #5.10' might be
+>> better as 'stable@vger.kernel.org#5.10'
+>
+> Cc: stable@vger.kernel.org # 5.10
+>
+> Should work.
 
-So, if dma_set_mask_and_coherent() succeeds, 'pci_using_dac' is known to be
-1.
+I used 'scripts/checkpatch.pl' to check it, giving me the warning again.
 
-Simplify code and remove some dead code accordingly.
+The warning is as follow:
+WARNING: email address 'stable@vger.kernel.org # 5.10' might be better as
+'stable@vger.kernel.org# 5.10'
 
-[1]: https://lkml.org/lkml/2021/6/7/398
+And if I use the 'stable@vger.kernel.org# 5.10', warning too.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- .../ethernet/chelsio/cxgb4vf/cxgb4vf_main.c   | 20 +++++--------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+The warning is as follow:
+WARNING: email address 'stable@vger.kernel.org# 5.10' might be better as
+'stable@vger.kernel.org#5.10' 
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c b/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c
-index acac2be0e3f0..7de3800437c9 100644
---- a/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf_main.c
-@@ -2899,7 +2899,6 @@ static int cxgb4vf_pci_probe(struct pci_dev *pdev,
- 	struct net_device *netdev;
- 	struct port_info *pi;
- 	unsigned int pmask;
--	int pci_using_dac;
- 	int err, pidx;
- 
- 	/*
-@@ -2920,19 +2919,12 @@ static int cxgb4vf_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	/*
--	 * Set up our DMA mask: try for 64-bit address masking first and
--	 * fall back to 32-bit if we can't get 64 bits ...
-+	 * Set up our DMA mask
- 	 */
- 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
--	if (err == 0) {
--		pci_using_dac = 1;
--	} else {
--		err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
--		if (err != 0) {
--			dev_err(&pdev->dev, "no usable DMA configuration\n");
--			goto err_release_regions;
--		}
--		pci_using_dac = 0;
-+	if (err) {
-+		dev_err(&pdev->dev, "no usable DMA configuration\n");
-+		goto err_release_regions;
- 	}
- 
- 	/*
-@@ -3078,9 +3070,7 @@ static int cxgb4vf_pci_probe(struct pci_dev *pdev,
- 		netdev->hw_features = NETIF_F_SG | TSO_FLAGS | NETIF_F_GRO |
- 			NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM |
- 			NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_HW_VLAN_CTAG_RX;
--		netdev->features = netdev->hw_features;
--		if (pci_using_dac)
--			netdev->features |= NETIF_F_HIGHDMA;
-+		netdev->features = netdev->hw_features | NETIF_F_HIGHDMA;
- 		netdev->vlan_features = netdev->features & VLAN_FEAT;
- 
- 		netdev->priv_flags |= IFF_UNICAST_FLT;
--- 
-2.32.0
+It seems that the only non-warning format is 'stable@vger.kernel.org#5.10'.
+
+Sincerely thanks,
+Jiang
 

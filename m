@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1971D488735
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 02:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24291488753
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 02:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbiAIB1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 20:27:18 -0500
-Received: from mga17.intel.com ([192.55.52.151]:46209 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229775AbiAIB1R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 20:27:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641691637; x=1673227637;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4YeicfVBQeHcvDEk0vcF0T29V+pc8uYFRoJ+tNGqVfE=;
-  b=NJ0byEOBJcjiTyeJhFuJdcBGXcIhdLiFiUG2LWSFyiFBKTdub67M8ik+
-   r0KtkG1fvmjK40xYT1FMUhW7SqcxDrl0gUt0zADsEk8PyzvFt9/mm22la
-   DlmHX2gwWIjYIs3pyfRdmCP0w3XgYsPBClCz0XKNtmEEz4nWc11sLoXPi
-   sz3fTpaSmWx1l8tOAkJh+xkg92RATHc3DH/v2E88gTliTWbGqQkeob04h
-   4RcxTTJA7jbC6GRUB9FrG3WSfmAAWq2OX8rLzdvvMlkOHd0pL4HvXVDVZ
-   TDf6o9U013eTTDcB69cvah4P79OhS99hMNzgsUS7KUy3ZKanrBmqlAEkA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="223749491"
-X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="223749491"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 17:27:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
-   d="scan'208";a="690193927"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Jan 2022 17:27:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6MzL-0001Fs-HE; Sun, 09 Jan 2022 01:27:15 +0000
-Date:   Sun, 9 Jan 2022 09:26:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [ammarfaizi2-block:tiwai/sound/master 182/191]
- cs35l41_hda_spi.c:undefined reference to `__devm_regmap_init_spi'
-Message-ID: <202201090923.rxJv49Vw-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233704AbiAIBsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 20:48:05 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31874 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231803AbiAIBsD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 8 Jan 2022 20:48:03 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209126Ku014139;
+        Sun, 9 Jan 2022 01:47:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=OZR+ah/EEcHp0R5Lc27Qcjl4B+yDvahQO8yI+JoAnaY=;
+ b=CaJKfgJoNxcxjdSBCN/yA+6gCE5OoxksgVVBRk8FRDpwf3Apy5AQmtOu1GTgmpsSwayi
+ uZ66G5c8YkPKL/XcpfUZZGvF/PMOKxuHHrNkD5uiEnGa0cwzKjn0XwPeKhgBX0fbCYz6
+ hX/zbZf8cEhlg6FMLs6sPwCTvmm46duOrcC3mDBN56bn7rPHBRpmqGJp8L6wh/6imZkf
+ kPCNtW6rs42HbNhc1oMSNS/QHuo61hXMO9xv9+gEjmy3c6SEjna1It1iwcrZtYgbQSPZ
+ hye0EBvneOQFlMhcni6zMhipDSWNjOmXP/miQWQDlM8sU4llE7FEUy8iwA7ODhbMDIqy ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmpm10c0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 01:47:29 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2091lTGo012003;
+        Sun, 9 Jan 2022 01:47:29 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmpm10be-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 01:47:29 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2091lPVr026565;
+        Sun, 9 Jan 2022 01:47:26 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3df1vhunaf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 01:47:26 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2091lOn430802382
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 9 Jan 2022 01:47:24 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3BDEE11C050;
+        Sun,  9 Jan 2022 01:47:24 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3CA5011C04C;
+        Sun,  9 Jan 2022 01:47:22 +0000 (GMT)
+Received: from sig-9-65-90-30.ibm.com (unknown [9.65.90.30])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun,  9 Jan 2022 01:47:22 +0000 (GMT)
+Message-ID: <2aa9e4b290424c869afe983ed63b5a0c4d12df36.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 8/8] integrity: Only use machine keyring when
+ uefi_check_trust_mok_keys is true
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
+        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
+        keescook@chromium.org, torvalds@linux-foundation.org,
+        weiyongjun1@huawei.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Sat, 08 Jan 2022 20:47:21 -0500
+In-Reply-To: <YdoQbKD/jJompy6I@iki.fi>
+References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
+         <20220105235012.2497118-9-eric.snowberg@oracle.com>
+         <YdoQbKD/jJompy6I@iki.fi>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9oUeFJysa5sv7YWHrbFnSWMq5XgGhiSC
+X-Proofpoint-ORIG-GUID: 5zwOrCfCPgD-ovmE2lzA6sA08F2T0i_0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-08_09,2022-01-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ malwarescore=0 bulkscore=0 clxscore=1011 impostorscore=0 mlxscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201090008
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tiwai/sound/master
-head:   d678af1433773cd81ebc1054131c8efc9ff00269
-commit: 7b2f3eb492dac7665c75df067e4d8e4869589f4a [182/191] ALSA: hda: cs35l41: Add support for CS35L41 in HDA systems
-config: ia64-randconfig-r035-20220106 (https://download.01.org/0day-ci/archive/20220109/202201090923.rxJv49Vw-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/7b2f3eb492dac7665c75df067e4d8e4869589f4a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tiwai/sound/master
-        git checkout 7b2f3eb492dac7665c75df067e4d8e4869589f4a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
+On Sun, 2022-01-09 at 00:30 +0200, Jarkko Sakkinen wrote:
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> Mimi, have you tested these patches already?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry, not yet this version this of the patch set.  Planning to test
+shortly.
 
-All errors (new ones prefixed by >>):
+Mimi
 
-   ia64-linux-ld: sound/pci/hda/cs35l41_hda_spi.o: in function `cs35l41_hda_spi_probe':
->> cs35l41_hda_spi.c:(.text+0xd2): undefined reference to `__devm_regmap_init_spi'
-   ia64-linux-ld: sound/pci/hda/cs35l41_hda_spi.o: in function `cs35l41_spi_driver_init':
->> cs35l41_hda_spi.c:(.init.text+0x22): undefined reference to `__spi_register_driver'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

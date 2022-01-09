@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EC5488A84
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 17:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428F3488A95
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 17:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiAIQWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 11:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbiAIQWj (ORCPT
+        id S236018AbiAIQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 11:33:14 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:39485 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231853AbiAIQdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 11:22:39 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD46C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 08:22:38 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id t32so9177002pgm.7
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 08:22:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=P5smF/L+0vVOLfQMCaHB8W8ju291goGonFD5lJTIRYs=;
-        b=Aby3IWgBrVrcorEm15/O2tyHjF8xiuIW1tZpkAUZvsZyIg2o0hIaqlVActxNqGIA+h
-         OAK5cM8qgo8CQedzSjppBmhpc9pWDDcJ5H7JMvflZBjjyPjCN1S8afi0m840B3iWPqjY
-         JMspDDWwCfjd/7x/XXPnRDEIlhZZyHCKmIoOuAvtx4ezgn/Tw+YegDwxhhtM1+gIZGLQ
-         hNoUMA+ZUjJHvM8fUkb0yrc4EnBLaawyxsVY+JvrMQVdlcIp2mhLc0Zh5am5mZ/wi3pM
-         8RoBzUEIl83h3yZN3gHtY2/RhVv48qnRWwsKNLMYA4h1EK9I+5kZi9lV/8/vMXd3biyX
-         0i4w==
+        Sun, 9 Jan 2022 11:33:13 -0500
+Received: by mail-ot1-f48.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso3261828otr.6;
+        Sun, 09 Jan 2022 08:33:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P5smF/L+0vVOLfQMCaHB8W8ju291goGonFD5lJTIRYs=;
-        b=g8u1qA43dahdn7Cy4r9MK2X+SIqhXbaTF09MQKSLNUNvNwgmdU/o3zE8FqDwH0uSby
-         4yz+S7dDyzN8x4br/l/d1pBP4chXzjt+cuc0m3UJn3EKIRprt8Dw3VhwW+3I7Rtv3WyX
-         fldFXoDR1yrkN5ryaaCoDZD+ocHGsRR/BKdOGRnTtV17Gvtp0JOFJ9HluASKTscnZHe5
-         Dh0OoNmLsI1R2FcPXU/cDdFsYV5tTy1gbhw5Alyi0WNgS22zRhfzyl4lFNrRpr6TaXU2
-         GiTTD945WfzvcaxW2BAhGC+uCU1nrkgPxGrNTMOh7LHWviLr162waxSeBoLe3jKjl63F
-         Kw7Q==
-X-Gm-Message-State: AOAM532Bsvd328tB6Sv5kzKDyQhCs9//ixd/IX6wVJPCFsviMFbKUugv
-        4dMuA02lzbdaADo4sGV/vAI=
-X-Google-Smtp-Source: ABdhPJxFo+q/93JwCrG9pC5sHXxoADXGiYWysLC43Lc7I5Hm6ZHQZVurb47HfaWFu8SBCz7a9jJc/w==
-X-Received: by 2002:a63:381d:: with SMTP id f29mr2347843pga.291.1641745358453;
-        Sun, 09 Jan 2022 08:22:38 -0800 (PST)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id k8sm5881302pjj.3.2022.01.09.08.22.36
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=6aQP76L17zZIifS48mJSyI2JpkFOM8CJyj+hC/CiesE=;
+        b=SAeXACI8IJbntaLQmRUSoStSnUl/wC0E5rKRw8V7FyhpCMdoSN2YrXGMJ5qHo0IkR7
+         mKIeihpeZBWazgUDY2/rkc6iVzUXvoo0fxHQUnwvRAgDQcTK/N94wH8BcFBjjkpU9wQK
+         kC+idPSRnDonJd3uAmdQSu0KVXOlBFngBZwmUqGc9Qo2ZINAykRoW+dFuKiBzG0YQABK
+         umL9xf9LedepjkKHArrqTArfWC3RRmkXI6hRZp9G/T/bgDz58BE4t1DPVFguLtndUqxR
+         zhaol/uDtxxsEwGJI9mqcDOgX73SiYbO7n1Wa0FiqxHiDdx8hSshUQM8G606ZBqV84tK
+         FyIw==
+X-Gm-Message-State: AOAM532r/d0+6YWwI7+2o9bJSqPxkm9OFxXkQcalH3spV0sJ66A4zG2Y
+        U7oCo6UA+wcwv2MakCclS9WLoqoC3A==
+X-Google-Smtp-Source: ABdhPJyjNrFptPbU7HtswyOghK5ZNW41xftu9unOvQFYSHzdWpB2VWJ/iT1O1WH3Rms7hoEFc6T7aQ==
+X-Received: by 2002:a9d:4d8d:: with SMTP id u13mr14022539otk.246.1641745993000;
+        Sun, 09 Jan 2022 08:33:13 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q65sm759252oih.45.2022.01.09.08.33.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 08:22:38 -0800 (PST)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH v2] tracing: Remove duplicate warnings
-Date:   Mon, 10 Jan 2022 00:22:32 +0800
-Message-Id: <20220109162232.361747-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220109101611.73da76d9@rorschach.local.home>
-References: <20220109101611.73da76d9@rorschach.local.home>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 09 Jan 2022 08:33:12 -0800 (PST)
+Received: (nullmailer pid 3263068 invoked by uid 1000);
+        Sun, 09 Jan 2022 16:33:11 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Derek Basehore <dbasehore@chromium.org>,
+        linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>
+In-Reply-To: <20220107155215.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
+References: <20220107235320.965497-1-briannorris@chromium.org> <20220107155215.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
+Subject: Re: [PATCH 01/10] dt-bindings: devfreq: rk3399_dmc: Convert to YAML
+Date:   Sun, 09 Jan 2022 10:33:11 -0600
+Message-Id: <1641745991.444665.3263067.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the same warning message is already printed in the
-trace_create_file() function, there is no need to print it again.
+On Fri, 07 Jan 2022 15:53:11 -0800, Brian Norris wrote:
+> I want to add, deprecate, and bugfix some properties, as well as add the
+> first users. This is easier with a proper schema.
+> 
+> The transformation is mostly straightforward, plus a few notable tweaks:
+> 
+>  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
+>    driver code and the example matched, but the description was
+>    different. I went with the implementation.
+> 
+>  * Drop upthreshold and downdifferential properties from the example.
+>    These were undocumented (so, wouldn't pass validation), but were
+>    representing software properties (governor tweaks). I drop them from
+>    the driver in subsequent patches.
+> 
+>  * Rename clock from pclk_ddr_mon to dmc_clk. The driver, DT example,
+>    and all downstream users matched -- the binding definition was the
+>    exception. Anyway, "dmc_clk" is a more appropriately generic name.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+> 
+>  .../bindings/devfreq/rk3399_dmc.txt           | 212 -------------
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 297 ++++++++++++++++++
+>  2 files changed, 297 insertions(+), 212 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> 
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
-Changes since v1:
-- remove unnecessary braces
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
- kernel/trace/trace_events.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml:37:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 92be9cb1d7d4..3147614c1812 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -3461,10 +3461,8 @@ create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)
- 
- 	entry = trace_create_file("enable", TRACE_MODE_WRITE, d_events,
- 				  tr, &ftrace_tr_enable_fops);
--	if (!entry) {
--		pr_warn("Could not create tracefs 'enable' entry\n");
-+	if (!entry)
- 		return -ENOMEM;
--	}
- 
- 	/* There are not as crucial, just warn if they are not created */
- 
-@@ -3480,17 +3478,13 @@ create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)
- 		pr_warn("Could not create tracefs 'set_event_notrace_pid' entry\n");
- 
- 	/* ring buffer internal formats */
--	entry = trace_create_file("header_page", TRACE_MODE_READ, d_events,
-+	trace_create_file("header_page", TRACE_MODE_READ, d_events,
- 				  ring_buffer_print_page_header,
- 				  &ftrace_show_header_fops);
--	if (!entry)
--		pr_warn("Could not create tracefs 'header_page' entry\n");
- 
--	entry = trace_create_file("header_event", TRACE_MODE_READ, d_events,
-+	trace_create_file("header_event", TRACE_MODE_READ, d_events,
- 				  ring_buffer_print_entry_header,
- 				  &ftrace_show_header_fops);
--	if (!entry)
--		pr_warn("Could not create tracefs 'header_event' entry\n");
- 
- 	tr->event_dir = d_events;
- 
--- 
-2.34.1
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1577007
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

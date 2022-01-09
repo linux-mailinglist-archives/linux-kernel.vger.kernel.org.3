@@ -2,1243 +2,459 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E90E488A3D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 16:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B29488A40
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 16:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235864AbiAIPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 10:33:47 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:44537 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiAIPdn (ORCPT
+        id S235894AbiAIPe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 10:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234710AbiAIPez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 10:33:43 -0500
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 421B4E0002;
-        Sun,  9 Jan 2022 15:33:38 +0000 (UTC)
-Date:   Sun, 9 Jan 2022 16:34:39 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH v7 2/2] Driver for ON Semi AR0521 camera sensor
-Message-ID: <20220109153439.bfnfigocaeeeghmp@uno.localdomain>
-References: <m3czl9eylt.fsf@t19.piap.pl>
- <m34k6leyb1.fsf@t19.piap.pl>
+        Sun, 9 Jan 2022 10:34:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11903C06173F;
+        Sun,  9 Jan 2022 07:34:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A73BFB80D51;
+        Sun,  9 Jan 2022 15:34:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F67CC36AEB;
+        Sun,  9 Jan 2022 15:34:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641742492;
+        bh=o4mZ4w6htlI/KoIry3L87tMK2V9mw3OPQcgV9f/jHXw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kuqr9aR1f0euGikVdn+x2e9aezH7Ih6CYBfPKp8BN8aswb6GWWfJ8TfaPT+hCjpy0
+         hUokgXLYTwqb3fNAA3XwPfsJsgYgZ+WeXs21nMgMnoA7ERmwuNlCMOOZPPKPSDXfiF
+         fMHIA//OFO+DI+CjYbt8CeWWtZ/7lT9uKMbLxXJLLWyYehZdzGcyaD3MpCwckvY4RQ
+         6US6kTRf9pnjk6h5YCzhU3b234e3lnWHbqnsU7QwSaRKn6ZoLrBHGHSR38t3Kk0Zx5
+         LZj33uP0HmgvgudUHIOEQt8q7K0y+KoX53AOlqsIOCngdd/IY0FeAnkDzdjp7V4fSb
+         5Oj5VUeKzauOQ==
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [GIT PULL] perf tools fixes for v5.16: 6th batch
+Date:   Sun,  9 Jan 2022 12:34:46 -0300
+Message-Id: <20220109153446.160593-1-acme@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <m34k6leyb1.fsf@t19.piap.pl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+Hi Linus,
 
-On Mon, Jan 03, 2022 at 02:36:18PM +0100, Krzysztof Hałasa wrote:
-> The driver has been extensively tested in an i.MX6-based system.
-> AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
-> from On Semiconductor.
->
-> Signed-off-by: Krzysztof Hałasa <khalasa@piap.pl>
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 79fd8a012893..5d33f0277ad2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1383,6 +1383,13 @@ S:	Supported
->  W:	http://www.aquantia.com
->  F:	drivers/net/ethernet/aquantia/atlantic/aq_ptp*
->
-> +AR0521 ON SEMICONDUCTOR CAMERA SENSOR DRIVER
-> +M:	Krzysztof Hałasa <khalasa@piap.pl>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
-> +F:	drivers/media/i2c/ar0521.c
-> +
->  ARASAN NAND CONTROLLER DRIVER
->  M:	Miquel Raynal <miquel.raynal@bootlin.com>
->  M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index 69c56e24a612..741ae073623e 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -733,6 +733,19 @@ config VIDEO_APTINA_PLL
->  config VIDEO_CCS_PLL
->  	tristate
->
-> +config VIDEO_AR0521
-> +	tristate "ON Semiconductor AR0521 sensor support"
-> +	depends on I2C && VIDEO_V4L2
-> +	select MEDIA_CONTROLLER
-> +	select VIDEO_V4L2_SUBDEV_API
-> +	select V4L2_FWNODE
-> +	help
-> +	  This is a Video4Linux2 sensor driver for the ON Semiconductor
-> +	  AR0521 camera.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called ar0521.
-> +
->  config VIDEO_HI556
->  	tristate "Hynix Hi-556 sensor support"
->  	depends on I2C && VIDEO_V4L2
-> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> index b01f6cd05ee8..4e4986e16071 100644
-> --- a/drivers/media/i2c/Makefile
-> +++ b/drivers/media/i2c/Makefile
-> @@ -118,6 +118,7 @@ obj-$(CONFIG_VIDEO_I2C)		+= video-i2c.o
->  obj-$(CONFIG_VIDEO_ML86V7667)	+= ml86v7667.o
->  obj-$(CONFIG_VIDEO_OV2659)	+= ov2659.o
->  obj-$(CONFIG_VIDEO_TC358743)	+= tc358743.o
-> +obj-$(CONFIG_VIDEO_AR0521)	+= ar0521.o
->  obj-$(CONFIG_VIDEO_HI556)	+= hi556.o
->  obj-$(CONFIG_VIDEO_HI846)	+= hi846.o
->  obj-$(CONFIG_VIDEO_IMX208)	+= imx208.o
-> diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-> new file mode 100644
-> index 000000000000..0adbbd8ea3b5
-> --- /dev/null
-> +++ b/drivers/media/i2c/ar0521.c
-> @@ -0,0 +1,1093 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 Sieć Badawcza Łukasiewicz
-> + * - Przemysłowy Instytut Automatyki i Pomiarów PIAP
-> + * Written by Krzysztof Hałasa
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/pm_runtime.h>
-> +
-> +#include <media/v4l2-ctrls.h>
-> +#include <media/v4l2-fwnode.h>
-> +#include <media/v4l2-subdev.h>
-> +
-> +/* External clock (extclk) frequencies */
-> +#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
-> +#define AR0521_EXTCLK_MAX	  (48 * 1000 * 1000)
-> +
-> +/* PLL and PLL2 */
-> +#define AR0521_PLL_MIN		 (320 * 1000 * 1000)
-> +#define AR0521_PLL_MAX		(1280 * 1000 * 1000)
-> +
-> +/* Effective pixel clocks, the registers may be DDR */
-> +#define AR0521_PIXEL_CLOCK_RATE	 (184 * 1000 * 1000)
-> +#define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
-> +#define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
-> +
-> +#define AR0521_WIDTH_MIN	       8u
-> +#define AR0521_WIDTH_MAX	    2608u
-> +#define AR0521_HEIGHT_MIN	       8u
-> +#define AR0521_HEIGHT_MAX	    1958u
-> +
-> +#define AR0521_WIDTH_BLANKING_MIN     572u
-> +#define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
-> +#define AR0521_TOTAL_WIDTH_MIN	     2968u
-> +
-> +/* AR0521 registers */
-> +#define AR0521_REG_VT_PIX_CLK_DIV		0x0300
-> +#define AR0521_REG_FRAME_LENGTH_LINES		0x0340
-> +
-> +#define AR0521_REG_CHIP_ID			0x3000
-> +#define AR0521_REG_COARSE_INTEGRATION_TIME	0x3012
-> +#define AR0521_REG_ROW_SPEED			0x3016
-> +#define AR0521_REG_EXTRA_DELAY			0x3018
-> +#define AR0521_REG_RESET			0x301A
-> +#define   AR0521_REG_RESET_DEFAULTS		  0x0238
-> +#define   AR0521_REG_RESET_GROUP_PARAM_HOLD	  0x8000
-> +#define   AR0521_REG_RESET_STREAM		  BIT(2)
-> +#define   AR0521_REG_RESET_RESTART		  BIT(1)
-> +#define   AR0521_REG_RESET_INIT			  BIT(0)
-> +
-> +#define AR0521_REG_GREEN1_GAIN			0x3056
-> +#define AR0521_REG_BLUE_GAIN			0x3058
-> +#define AR0521_REG_RED_GAIN			0x305A
-> +#define AR0521_REG_GREEN2_GAIN			0x305C
-> +#define AR0521_REG_GLOBAL_GAIN			0x305E
-> +
-> +#define AR0521_REG_HISPI_TEST_MODE		0x3066
-> +#define AR0521_REG_HISPI_TEST_MODE_LP11		  0x0004
-> +
-> +#define AR0521_REG_TEST_PATTERN_MODE		0x3070
-> +
-> +#define AR0521_REG_SERIAL_FORMAT		0x31AE
-> +#define AR0521_REG_SERIAL_FORMAT_MIPI		  0x0200
-> +
-> +#define AR0521_REG_HISPI_CONTROL_STATUS		0x31C6
-> +#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
-> +
-> +#define be		cpu_to_be16
-> +
-> +static const char * const ar0521_supply_names[] = {
-> +	"vdd_io",	/* I/O (1.8V) supply */
-> +	"vdd",		/* Core, PLL and MIPI (1.2V) supply */
-> +	"vaa",		/* Analog (2.7V) supply */
-> +};
-> +
-> +struct ar0521_ctrls {
-> +	struct v4l2_ctrl_handler handler;
-> +	struct {
-> +		struct v4l2_ctrl *gain;
-> +		struct v4l2_ctrl *red_balance;
-> +		struct v4l2_ctrl *blue_balance;
-> +	};
-> +	struct {
-> +		struct v4l2_ctrl *hblank;
-> +		struct v4l2_ctrl *vblank;
-> +	};
-> +	struct v4l2_ctrl *pixrate;
-> +	struct v4l2_ctrl *exposure;
-> +	struct v4l2_ctrl *test_pattern;
-> +};
-> +
-> +struct ar0521_dev {
-> +	struct i2c_client *i2c_client;
-> +	struct v4l2_subdev sd;
-> +	struct media_pad pad;
-> +	struct clk *extclk;
-> +	u32 extclk_freq;
-> +
-> +	struct regulator *supplies[ARRAY_SIZE(ar0521_supply_names)];
-> +	struct gpio_desc *reset_gpio;
-> +
-> +	/* lock to protect all members below */
-> +	struct mutex lock;
-> +
-> +	struct v4l2_mbus_framefmt fmt;
-> +	struct ar0521_ctrls ctrls;
-> +	unsigned int lane_count;
-> +	u16 total_width;
-> +	u16 total_height;
-> +	u16 pll_pre;
-> +	u16 pll_mult;
-> +	u16 pll_pre2;
-> +	u16 pll_mult2;
-> +	bool streaming;
-> +};
-> +
-> +static inline struct ar0521_dev *to_ar0521_dev(struct v4l2_subdev *sd)
-> +{
-> +	return container_of(sd, struct ar0521_dev, sd);
-> +}
-> +
-> +static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
-> +{
-> +	return &container_of(ctrl->handler, struct ar0521_dev,
-> +			     ctrls.handler)->sd;
-> +}
-> +
-> +static u32 div64_round(u64 v, u32 d)
-> +{
-> +	return div_u64(v + (d >> 1), d);
-> +}
-> +
-> +static u32 div64_round_up(u64 v, u32 d)
-> +{
-> +	return div_u64(v + d - 1, d);
-> +}
-> +
-> +/* Data must be BE16, the first value is the register address */
-> +static int ar0521_write_regs(struct ar0521_dev *sensor, const __be16 *data,
-> +			     unsigned int count)
-> +{
-> +	struct i2c_client *client = sensor->i2c_client;
-> +	struct i2c_msg msg;
-> +	int ret;
-> +
-> +	msg.addr = client->addr;
-> +	msg.flags = client->flags;
-> +	msg.buf = (u8 *)data;
-> +	msg.len = count * sizeof(*data);
-> +
-> +	ret = i2c_transfer(client->adapter, &msg, 1);
-> +
-> +	if (ret < 0) {
-> +		v4l2_err(&sensor->sd, "%s: I2C write error\n", __func__);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ar0521_write_reg(struct ar0521_dev *sensor, u16 reg, u16 val)
-> +{
-> +	__be16 buf[2] = {be(reg), be(val)};
-> +
-> +	return ar0521_write_regs(sensor, buf, 2);
-> +}
-> +
-> +static int ar0521_set_geometry(struct ar0521_dev *sensor)
-> +{
-> +	/* All dimensions are unsigned 12-bit integers */
-> +	u16 x = (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
-> +	u16 y = ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
-> +	__be16 regs[] = {
-> +		be(AR0521_REG_FRAME_LENGTH_LINES),
-> +		be(sensor->total_height),
-> +		be(sensor->total_width),
-> +		be(x),
-> +		be(y),
-> +		be(x + sensor->fmt.width - 1),
-> +		be(y + sensor->fmt.height - 1),
-> +		be(sensor->fmt.width),
-> +		be(sensor->fmt.height)
-> +	};
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +
-> +	return ar0521_write_regs(sensor, regs, ARRAY_SIZE(regs));
-> +}
-> +
-> +static int ar0521_set_gains(struct ar0521_dev *sensor)
-> +{
-> +	int green = sensor->ctrls.gain->val;
-> +	int red = max(green + sensor->ctrls.red_balance->val, 0);
-> +	int blue = max(green + sensor->ctrls.blue_balance->val, 0);
-> +	unsigned int gain = min(red, min(green, blue));
-> +	unsigned int analog = min(gain, 64u); /* range is 0 - 127 */
-> +	__be16 regs[5];
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +
-> +	red   = min(red   - analog + 64, 511u);
-> +	green = min(green - analog + 64, 511u);
-> +	blue  = min(blue  - analog + 64, 511u);
-> +	regs[0] = be(AR0521_REG_GREEN1_GAIN);
-> +	regs[1] = be(green << 7 | analog);
-> +	regs[2] = be(blue  << 7 | analog);
-> +	regs[3] = be(red   << 7 | analog);
-> +	regs[4] = be(green << 7 | analog);
-> +
-> +	return ar0521_write_regs(sensor, regs, ARRAY_SIZE(regs));
-> +}
-> +
-> +static u32 calc_pll(struct ar0521_dev *sensor, int num, u32 freq, u16 *pre_ptr,
-> +		    u16 *mult_ptr)
-> +{
-> +	u16 pre = 1, mult = 1, new_pre;
-> +	u32 pll = AR0521_PLL_MAX + 1;
-> +
-> +	for (new_pre = 1; new_pre < 64; new_pre++) {
-> +		u32 new_pll;
-> +		u32 new_mult = div64_round_up((u64)freq * new_pre,
-> +					      sensor->extclk_freq);
-> +
-> +		if (new_mult < 32)
-> +			continue; /* Minimum value */
-> +		if (new_mult > 254)
-> +			break; /* Maximum, larger pre won't work either */
-> +		if (sensor->extclk_freq * (u64)new_mult < AR0521_PLL_MIN *
-> +		    new_pre)
-> +			continue;
-> +		if (sensor->extclk_freq * (u64)new_mult > AR0521_PLL_MAX *
-> +		    new_pre)
-> +			break; /* Larger pre won't work either */
-> +		new_pll = div64_round_up(sensor->extclk_freq * (u64)new_mult,
-> +					 new_pre);
-> +		if (new_pll < pll) {
-> +			pll = new_pll;
-> +			pre = new_pre;
-> +			mult = new_mult;
-> +		}
-> +	}
-> +
-> +	pll = div64_round(sensor->extclk_freq * (u64)mult, pre);
-> +	*pre_ptr = pre;
-> +	*mult_ptr = mult;
-> +	return pll;
-> +}
-> +
-> +#define DIV 4
-> +static void ar0521_calc_mode(struct ar0521_dev *sensor)
-> +{
-> +	unsigned int speed_mod = 4 / sensor->lane_count; /* 1 with 4 DDR lanes */
-> +	u16 total_width = max(sensor->fmt.width + AR0521_WIDTH_BLANKING_MIN,
-> +			      AR0521_TOTAL_WIDTH_MIN);
-> +	u16 total_height = sensor->fmt.height + AR0521_HEIGHT_BLANKING_MIN;
-> +
-> +	/* Calculate approximate pixel clock first */
-> +	u64 pix_clk = AR0521_PIXEL_CLOCK_RATE;
-> +
-> +	/* PLL1 drives pixel clock - dual rate */
-> +	pix_clk = calc_pll(sensor, 1, pix_clk * (DIV / 2), &sensor->pll_pre,
-> +			   &sensor->pll_mult);
-> +	pix_clk = div64_round(pix_clk, (DIV / 2));
-> +	calc_pll(sensor, 2, pix_clk * (DIV / 2) * speed_mod, &sensor->pll_pre2,
-> +		 &sensor->pll_mult2);
-> +
-> +	sensor->total_width = total_width;
-> +	sensor->total_height = total_height;
-> +}
-> +
-> +static int ar0521_write_mode(struct ar0521_dev *sensor)
-> +{
-> +	__be16 pll_regs[] = {
-> +		be(AR0521_REG_VT_PIX_CLK_DIV),
-> +		/* 0x300 */ be(4), /* vt_pix_clk_div = number of bits / 2 */
-> +		/* 0x302 */ be(1), /* vt_sys_clk_div */
-> +		/* 0x304 */ be((sensor->pll_pre2 << 8) | sensor->pll_pre),
-> +		/* 0x306 */ be((sensor->pll_mult2 << 8) | sensor->pll_mult),
-> +		/* 0x308 */ be(8), /* op_pix_clk_div = 2 * vt_pix_clk_div */
-> +		/* 0x30A */ be(1)  /* op_sys_clk_div */
-> +	};
-> +	int ret;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +
-> +	/* Stop streaming for just a moment */
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-> +			       AR0521_REG_RESET_DEFAULTS);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ar0521_set_geometry(sensor);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_COARSE_INTEGRATION_TIME,
-> +			       sensor->ctrls.exposure->val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-> +			       AR0521_REG_RESET_DEFAULTS |
-> +			       AR0521_REG_RESET_STREAM);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
-> +			       sensor->ctrls.test_pattern->val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev,
-> +		"AR0521: %ux%u, total %ux%u\n",
-> +		sensor->fmt.width, sensor->fmt.height, sensor->total_width,
-> +		sensor->total_height);
-> +	return 0;
-> +}
-> +
-> +static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
-> +{
-> +	int ret;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s(%u)\n", __func__, on);
-> +
-> +	if (on) {
-> +		ret = pm_runtime_resume_and_get(&sensor->i2c_client->dev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ar0521_calc_mode(sensor);
-> +		ret = ar0521_write_mode(sensor);
-> +		if (ret)
-> +			goto err;
-> +
-> +		ret = ar0521_set_gains(sensor);
-> +		if (ret)
-> +			goto err;
-> +
-> +		/* Exit LP-11 mode on clock and data lanes */
-> +		ret = ar0521_write_reg(sensor, AR0521_REG_HISPI_CONTROL_STATUS,
-> +				       0);
-> +		if (ret)
-> +			goto err;
-> +
-> +		/* Start streaming */
-> +		ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-> +				       AR0521_REG_RESET_DEFAULTS |
-> +				       AR0521_REG_RESET_STREAM);
-> +		if (ret)
-> +			goto err;
-> +
-> +		return 0;
-> +
-> +err:
-> +		pm_runtime_put(&sensor->i2c_client->dev);
-> +		return ret;
-> +
-> +	} else {
-> +		/* Reset gain, the sensor may produce all white pixels without
-> +		   this */
-> +		ret = ar0521_write_reg(sensor, AR0521_REG_GLOBAL_GAIN, 0x2000);
-> +		if (ret)
-> +			return ret;
-> +
-> +		/* Stop streaming */
-> +		ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-> +				       AR0521_REG_RESET_DEFAULTS);
-> +		if (ret)
-> +			return ret;
-> +
-> +		pm_runtime_put(&sensor->i2c_client->dev);
-> +		return 0;
-> +	}
-> +}
-> +
-> +static void ar0521_adj_fmt(struct v4l2_mbus_framefmt *fmt)
-> +{
-> +	fmt->width = clamp(ALIGN(fmt->width, 4), AR0521_WIDTH_MIN,
-> +			   AR0521_WIDTH_MAX);
-> +	fmt->height = clamp(ALIGN(fmt->height, 4), AR0521_HEIGHT_MIN,
-> +			    AR0521_HEIGHT_MAX);
-> +	fmt->code = MEDIA_BUS_FMT_SGRBG8_1X8;
-> +	fmt->field = V4L2_FIELD_NONE;
-> +	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-> +	fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> +	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-> +	fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> +}
-> +
-> +static int ar0521_get_fmt(struct v4l2_subdev *sd,
-> +			  struct v4l2_subdev_state *sd_state,
-> +			  struct v4l2_subdev_format *format)
-> +{
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	struct v4l2_mbus_framefmt *fmt;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s(%u)\n", __func__, format->which);
-> +
-> +	mutex_lock(&sensor->lock);
-> +
-> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
-> +		fmt = v4l2_subdev_get_try_format(&sensor->sd, sd_state, 0
-> +						 /* pad */);
-> +	else
-> +		fmt = &sensor->fmt;
-> +
-> +	format->format = *fmt;
-> +
-> +	mutex_unlock(&sensor->lock);
-> +	return 0;
-> +}
-> +
-> +static int ar0521_set_fmt(struct v4l2_subdev *sd,
-> +			  struct v4l2_subdev_state *sd_state,
-> +			  struct v4l2_subdev_format *format)
-> +{
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	int ret = 0;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s(%u)\n", __func__, format->which);
-> +
-> +	ar0521_adj_fmt(&format->format);
-> +
-> +	mutex_lock(&sensor->lock);
-> +
-> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-> +		struct v4l2_mbus_framefmt *fmt;
-> +
-> +		fmt = v4l2_subdev_get_try_format(sd, sd_state, 0 /* pad */);
-> +		*fmt = format->format;
-> +	} else {
-> +		sensor->fmt = format->format;
-> +		ar0521_calc_mode(sensor);
-> +	}
-> +
-> +	mutex_unlock(&sensor->lock);
-> +	return ret;
-> +}
-> +
-> +static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	int ret;
-> +
-> +	/* v4l2_ctrl_lock() locks our own mutex */
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s(0x%X)\n", __func__, ctrl->id);
-> +
-> +	switch (ctrl->id) {
-> +	case V4L2_CID_HBLANK:
-> +	case V4L2_CID_VBLANK:
-> +		sensor->total_width = sensor->fmt.width +
-> +			sensor->ctrls.hblank->val;
-> +		sensor->total_height = sensor->fmt.width +
-> +			sensor->ctrls.vblank->val;
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	// access the sensor only if it's powered up
-> +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
+	Please consider pulling,
 
-As you correctly do not access the chip's registers if it's powered
-off, you have to call __v4l2_ctrl_handler_setup() at power on time to
-make sure controls are actually set.
+Best regards,
 
-> +		return 0;
-> +
-> +	switch (ctrl->id) {
-> +	case V4L2_CID_HBLANK:
-> +	case V4L2_CID_VBLANK:
-> +		ret = ar0521_set_geometry(sensor);
-> +		break;
-> +	case V4L2_CID_GAIN:
-> +	case V4L2_CID_RED_BALANCE:
-> +	case V4L2_CID_BLUE_BALANCE:
-> +		ret = ar0521_set_gains(sensor);
-> +		break;
-> +	case V4L2_CID_EXPOSURE:
-> +		ret = ar0521_write_reg(sensor,
-> +				       AR0521_REG_COARSE_INTEGRATION_TIME,
-> +				       ctrl->val);
-> +		break;
-> +	case V4L2_CID_TEST_PATTERN:
-> +		ret = ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
-> +				       ctrl->val);
-> +		break;
-> +	}
-> +
-> +	pm_runtime_put(&sensor->i2c_client->dev);
-> +	return ret;
-> +}
-> +
-> +static const struct v4l2_ctrl_ops ar0521_ctrl_ops = {
-> +	.s_ctrl = ar0521_s_ctrl,
-> +};
-> +
-> +static const char * const test_pattern_menu[] = {
-> +	"Disabled",
-> +	"Solid color",
-> +	"Color bars",
-> +	"Faded color bars"
-> +};
-> +
-> +static int ar0521_init_controls(struct ar0521_dev *sensor)
-> +{
-> +	const struct v4l2_ctrl_ops *ops = &ar0521_ctrl_ops;
-> +	struct ar0521_ctrls *ctrls = &sensor->ctrls;
-> +	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-> +	int ret;
-> +
-> +	v4l2_ctrl_handler_init(hdl, 32);
-> +
-> +	/* We can use our own mutex for the ctrl lock */
-> +	hdl->lock = &sensor->lock;
-> +
-> +	/* Manual gain */
-> +	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN, 0, 511, 1, 0);
-> +	ctrls->red_balance = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_RED_BALANCE,
-> +					       -512, 511, 1, 0);
-> +	ctrls->blue_balance = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_BLUE_BALANCE,
-> +						-512, 511, 1, 0);
-> +	v4l2_ctrl_cluster(3, &ctrls->gain);
-> +
-> +	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK,
-> +					  AR0521_WIDTH_BLANKING_MIN, 4094, 1,
-> +					  AR0521_WIDTH_BLANKING_MIN);
-> +	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
-> +					  AR0521_HEIGHT_BLANKING_MIN, 4094, 2,
-> +					  AR0521_HEIGHT_BLANKING_MIN);
-> +	v4l2_ctrl_cluster(2, &ctrls->hblank);
+- Arnaldo
 
-Is it intended to have vblank and hblank as cluster, can't they change
-independently ?
+Test results at the end of this message.
 
-> +
-> +	/* Read-only */
-> +	ctrls->pixrate = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
-> +					   AR0521_PIXEL_CLOCK_MIN,
-> +					   AR0521_PIXEL_CLOCK_MAX, 1,
-> +					   AR0521_PIXEL_CLOCK_RATE);
+The following changes since commit 24556728c305886b8bb05bf2ac7e20cf7db3e314:
 
-so you have to mark it as read-only
+  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm (2022-01-07 09:28:37 -0800)
 
-        ctrl->pixelrate->flags = V4L2_CTRL_FLAG_READ_ONLY;
+are available in the Git repository at:
 
-> +
-> +	/* Manual exposure time */
-> +	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, 0,
-> +					    65535, 1, 360);
-> +
-> +	ctrls->test_pattern = v4l2_ctrl_new_std_menu_items(hdl, ops,
-> +					V4L2_CID_TEST_PATTERN,
-> +					ARRAY_SIZE(test_pattern_menu) - 1,
-> +					0, 0, test_pattern_menu);
-> +
-> +	if (hdl->error) {
-> +		ret = hdl->error;
-> +		goto free_ctrls;
-> +	}
-> +
-> +	sensor->sd.ctrl_handler = hdl;
-> +	return 0;
-> +
-> +free_ctrls:
-> +	v4l2_ctrl_handler_free(hdl);
-> +	return ret;
-> +}
-> +
-> +#define REGS_ENTRY(a)	{(a), ARRAY_SIZE(a)}
-> +#define REGS(...)	REGS_ENTRY(((const __be16[]){__VA_ARGS__}))
-> +
-> +static const struct initial_reg {
-> +	const __be16 *data; /* data[0] is register address */
-> +	unsigned int count;
-> +} initial_regs[] = {
-> +	REGS(be(0x0112), be(0x0808)), /* 8-bit/8-bit mode */
-> +
-> +	/* PEDESTAL+2 :+2 is a workaround for 10bit mode +0.5 rounding */
-> +	REGS(be(0x301E), be(0x00AA)),
-> +
-> +	/* corrections_recommended_bayer */
-> +	REGS(be(0x3042),
-> +	     be(0x0004),  /* 3042: RNC: enable b/w rnc mode */
-> +	     be(0x4580)), /* 3044: RNC: enable row noise correction */
-> +
-> +	REGS(be(0x30D2),
-> +	     be(0x0000),  /* 30D2: CRM/CC: enable crm on Visible and CC rows */
-> +	     be(0x0000),  /* 30D4: CC: CC enabled with 16 samples per column */
-> +	     /* 30D6: CC: bw mode enabled/12 bit data resolution/bw mode */
-> +	     be(0x2FFF)),
-> +
-> +	REGS(be(0x30DA),
-> +	     be(0x0FFF),  /* 30DA: CC: column correction clip level 2 is 0 */
-> +	     be(0x0FFF),  /* 30DC: CC: column correction clip level 3 is 0 */
-> +	     be(0x0000)), /* 30DE: CC: Group FPN correction */
-> +
-> +	/* RNC: rnc scaling factor = * 54 / 64 (32 / 38 * 64 = 53.9) */
-> +	REGS(be(0x30EE), be(0x1136)),
-> +	REGS(be(0x30FA), be(0xFD00)), /* GPIO0 = flash, GPIO1 = shutter */
-> +	REGS(be(0x3120), be(0x0005)), /* p1 dither enabled for 10bit mode */
-> +	REGS(be(0x3172), be(0x0206)), /* txlo clk divider options */
-> +	/* FDOC:fdoc settings with fdoc every frame turned of */
-> +	REGS(be(0x3180), be(0x9434)),
-> +
-> +	REGS(be(0x31B0),
-> +	     be(0x008B),  /* 31B0: frame_preamble - FIXME check WRT lanes# */
-> +	     be(0x0050)), /* 31B2: line_preamble - FIXME check WRT lanes# */
-> +
-> +	/* don't use continuous clock mode while shut down */
-> +	REGS(be(0x31BC), be(0x068C)),
-> +	REGS(be(0x31E0), be(0x0781)), /* Fuse/2DDC: enable 2ddc */
-> +
-> +	/* analog_setup_recommended_10bit */
-> +	REGS(be(0x341A), be(0x4735)), /* Samp&Hold pulse in ADC */
-> +	REGS(be(0x3420), be(0x4735)), /* Samp&Hold pulse in ADC */
-> +	REGS(be(0x3426), be(0x8A1A)), /* ADC offset distribution pulse */
-> +	REGS(be(0x342A), be(0x0018)), /* pulse_config */
-> +
-> +	/* pixel_timing_recommended */
-> +	REGS(be(0x3D00),
-> +	     /* 3D00 */ be(0x043E), be(0x4760), be(0xFFFF), be(0xFFFF),
-> +	     /* 3D08 */ be(0x8000), be(0x0510), be(0xAF08), be(0x0252),
-> +	     /* 3D10 */ be(0x486F), be(0x5D5D), be(0x8056), be(0x8313),
-> +	     /* 3D18 */ be(0x0087), be(0x6A48), be(0x6982), be(0x0280),
-> +	     /* 3D20 */ be(0x8359), be(0x8D02), be(0x8020), be(0x4882),
-> +	     /* 3D28 */ be(0x4269), be(0x6A95), be(0x5988), be(0x5A83),
-> +	     /* 3D30 */ be(0x5885), be(0x6280), be(0x6289), be(0x6097),
-> +	     /* 3D38 */ be(0x5782), be(0x605C), be(0xBF18), be(0x0961),
-> +	     /* 3D40 */ be(0x5080), be(0x2090), be(0x4390), be(0x4382),
-> +	     /* 3D48 */ be(0x5F8A), be(0x5D5D), be(0x9C63), be(0x8063),
-> +	     /* 3D50 */ be(0xA960), be(0x9757), be(0x8260), be(0x5CFF),
-> +	     /* 3D58 */ be(0xBF10), be(0x1681), be(0x0802), be(0x8000),
-> +	     /* 3D60 */ be(0x141C), be(0x6000), be(0x6022), be(0x4D80),
-> +	     /* 3D68 */ be(0x5C97), be(0x6A69), be(0xAC6F), be(0x4645),
-> +	     /* 3D70 */ be(0x4400), be(0x0513), be(0x8069), be(0x6AC6),
-> +	     /* 3D78 */ be(0x5F95), be(0x5F70), be(0x8040), be(0x4A81),
-> +	     /* 3D80 */ be(0x0300), be(0xE703), be(0x0088), be(0x4A83),
-> +	     /* 3D88 */ be(0x40FF), be(0xFFFF), be(0xFD70), be(0x8040),
-> +	     /* 3D90 */ be(0x4A85), be(0x4FA8), be(0x4F8C), be(0x0070),
-> +	     /* 3D98 */ be(0xBE47), be(0x8847), be(0xBC78), be(0x6B89),
-> +	     /* 3DA0 */ be(0x6A80), be(0x6986), be(0x6B8E), be(0x6B80),
-> +	     /* 3DA8 */ be(0x6980), be(0x6A88), be(0x7C9F), be(0x866B),
-> +	     /* 3DB0 */ be(0x8765), be(0x46FF), be(0xE365), be(0xA679),
-> +	     /* 3DB8 */ be(0x4A40), be(0x4580), be(0x44BC), be(0x7000),
-> +	     /* 3DC0 */ be(0x8040), be(0x0802), be(0x10EF), be(0x0104),
-> +	     /* 3DC8 */ be(0x3860), be(0x5D5D), be(0x5682), be(0x1300),
-> +	     /* 3DD0 */ be(0x8648), be(0x8202), be(0x8082), be(0x598A),
-> +	     /* 3DD8 */ be(0x0280), be(0x2048), be(0x3060), be(0x8042),
-> +	     /* 3DE0 */ be(0x9259), be(0x865A), be(0x8258), be(0x8562),
-> +	     /* 3DE8 */ be(0x8062), be(0x8560), be(0x9257), be(0x8221),
-> +	     /* 3DF0 */ be(0x10FF), be(0xB757), be(0x9361), be(0x1019),
-> +	     /* 3DF8 */ be(0x8020), be(0x9043), be(0x8E43), be(0x845F),
-> +	     /* 3E00 */ be(0x835D), be(0x805D), be(0x8163), be(0x8063),
-> +	     /* 3E08 */ be(0xA060), be(0x9157), be(0x8260), be(0x5CFF),
-> +	     /* 3E10 */ be(0xFFFF), be(0xFFE5), be(0x1016), be(0x2048),
-> +	     /* 3E18 */ be(0x0802), be(0x1C60), be(0x0014), be(0x0060),
-> +	     /* 3E20 */ be(0x2205), be(0x8120), be(0x908F), be(0x6A80),
-> +	     /* 3E28 */ be(0x6982), be(0x5F9F), be(0x6F46), be(0x4544),
-> +	     /* 3E30 */ be(0x0005), be(0x8013), be(0x8069), be(0x6A80),
-> +	     /* 3E38 */ be(0x7000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E40 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E48 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E50 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E58 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E60 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E68 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E70 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E78 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E80 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E88 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E90 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3E98 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3EA0 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3EA8 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
-> +	     /* 3EB0 */ be(0x0000), be(0x0000), be(0x0000)),
-> +
-> +	REGS(be(0x3EB6), be(0x004C)), /* ECL */
-> +
-> +	REGS(be(0x3EBA),
-> +	     be(0xAAAD),  /* 3EBA */
-> +	     be(0x0086)), /* 3EBC: Bias currents for FSC/ECL */
-> +
-> +	REGS(be(0x3EC0),
-> +	     be(0x1E00),  /* 3EC0: SFbin/SH mode settings */
-> +	     be(0x100A),  /* 3EC2: CLK divider for ramp for 10 bit 400MH */
-> +	     /* 3EC4: FSC clamps for HDR mode and adc comp power down co */
-> +	     be(0x3300),
-> +	     be(0xEA44),  /* 3EC6: VLN and clk gating controls */
-> +	     be(0x6F6F),  /* 3EC8: Txl0 and Txlo1 settings for normal mode */
-> +	     be(0x2F4A),  /* 3ECA: CDAC/Txlo2/RSTGHI/RSTGLO settings */
-> +	     be(0x0506),  /* 3ECC: RSTDHI/RSTDLO/CDAC/TXHI settings */
-> +	     /* 3ECE: Ramp buffer settings and Booster enable (bits 0-5) */
-> +	     be(0x203B),
-> +	     be(0x13F0),  /* 3ED0: TXLO from atest/sf bin settings */
-> +	     be(0xA53D),  /* 3ED2: Ramp offset */
-> +	     be(0x862F),  /* 3ED4: TXLO open loop/row driver settings */
-> +	     be(0x4081),  /* 3ED6: Txlatch fr cfpn rows/vln bias */
-> +	     be(0x8003),  /* 3ED8: Ramp step setting for 10 bit 400 Mhz */
-> +	     be(0xA580),  /* 3EDA: Ramp Offset */
-> +	     be(0xC000),  /* 3EDC: over range for rst and under range for sig */
-> +	     be(0xC103)), /* 3EDE: over range for sig and col dec clk settings */
-> +
-> +	/* corrections_recommended_bayer */
-> +	REGS(be(0x3F00),
-> +	     be(0x0017),  /* 3F00: BM_T0 */
-> +	     be(0x02DD),  /* 3F02: BM_T1 */
-> +	     /* 3F04: if Ana_gain less than 2, use noise_floor0, multipl */
-> +	     be(0x0020),
-> +	     /* 3F06: if Ana_gain between 4 and 7, use noise_floor2 and */
-> +	     be(0x0040),
-> +	     /* 3F08: if Ana_gain between 4 and 7, use noise_floor2 and */
-> +	     be(0x0070),
-> +	     /* 3F0A: Define noise_floor0(low address) and noise_floor1 */
-> +	     be(0x0101),
-> +	     be(0x0302)), /* 3F0C: Define noise_floor2 and noise_floor3 */
-> +
-> +	REGS(be(0x3F10),
-> +	     be(0x0505),  /* 3F10: single k factor 0 */
-> +	     be(0x0505),  /* 3F12: single k factor 1 */
-> +	     be(0x0505),  /* 3F14: single k factor 2 */
-> +	     be(0x01FF),  /* 3F16: cross factor 0 */
-> +	     be(0x01FF),  /* 3F18: cross factor 1 */
-> +	     be(0x01FF),  /* 3F1A: cross factor 2 */
-> +	     be(0x0022)), /* 3F1E */
-> +
-> +	/* GTH_THRES_RTN: 4max,4min filtered out of every 46 samples and */
-> +	REGS(be(0x3F2C), be(0x442E)),
-> +
-> +	REGS(be(0x3F3E),
-> +	     be(0x0000),  /* 3F3E: Switch ADC from 12 bit to 10 bit mode */
-> +	     be(0x1511),  /* 3F40: couple k factor 0 */
-> +	     be(0x1511),  /* 3F42: couple k factor 1 */
-> +	     be(0x0707)), /* 3F44: couple k factor 2 */
-> +};
-> +
-> +static int ar0521_power_off(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	int i;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +	clk_disable_unprepare(sensor->extclk);
-> +
-> +	if (sensor->reset_gpio)
-> +		gpiod_set_value(sensor->reset_gpio, 1); /* assert RESET signal */
-> +
-> +	for (i = ARRAY_SIZE(ar0521_supply_names) - 1; i >= 0; i--) {
-> +		if (sensor->supplies[i])
-> +			regulator_disable(sensor->supplies[i]);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int ar0521_power_on(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	unsigned int cnt;
-> +	int ret;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +	for (cnt = 0; cnt < ARRAY_SIZE(ar0521_supply_names); cnt++)
-> +		if (sensor->supplies[cnt]) {
-> +			ret = regulator_enable(sensor->supplies[cnt]);
-> +			if (ret < 0)
-> +				goto off;
-> +
-> +			usleep_range(1000, 1500); /* min 1 ms */
-> +		}
-> +
-> +	ret = clk_prepare_enable(sensor->extclk);
-> +	if (ret < 0) {
-> +		v4l2_err(&sensor->sd, "error enabling sensor clock\n");
-> +		goto off;
-> +	}
-> +	usleep_range(1000, 1500); /* min 1 ms */
-> +
-> +	if (sensor->reset_gpio)
-> +		/* deassert RESET signal */
-> +		gpiod_set_value(sensor->reset_gpio, 0);
-> +	usleep_range(4500, 5000); /* min 45000 clocks */
-> +
-> +	for (cnt = 0; cnt < ARRAY_SIZE(initial_regs); cnt++)
-> +		if (ar0521_write_regs(sensor, initial_regs[cnt].data,
-> +				      initial_regs[cnt].count))
-> +			goto off;
-> +
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_SERIAL_FORMAT,
-> +			       AR0521_REG_SERIAL_FORMAT_MIPI |
-> +			       sensor->lane_count);
-> +	if (ret)
-> +		goto off;
-> +
-> +	/* set MIPI test mode - disabled for now */
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_HISPI_TEST_MODE,
-> +			       ((0x40 << sensor->lane_count) - 0x40) |
-> +			       AR0521_REG_HISPI_TEST_MODE_LP11);
-> +	if (ret)
-> +		goto off;
-> +
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_ROW_SPEED, 0x110 |
-> +			       4 / sensor->lane_count);
-> +	if (ret)
-> +		goto off;
-> +
-> +	return 0;
-> +off:
-> +	ar0521_power_off(dev);
-> +	return ret;
-> +}
-> +
-> +static int ar0521_enum_mbus_code(struct v4l2_subdev *sd,
-> +				 struct v4l2_subdev_state *sd_state,
-> +				 struct v4l2_subdev_mbus_code_enum *code)
-> +{
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +
-> +	if (code->index)
-> +		return -EINVAL;
-> +
-> +	code->code = sensor->fmt.code;
-> +	dev_dbg(&sensor->i2c_client->dev, "%s() = %X\n", __func__, code->code);
-> +	return 0;
-> +}
-> +
-> +static int ar0521_pre_streamon(struct v4l2_subdev *sd, u32 flags)
-> +{
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	int ret;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s(0x%X)\n", __func__, flags);
-> +	if (!(flags & V4L2_SUBDEV_PRE_STREAMON_FL_MANUAL_LP))
-> +		return -EACCES;
-> +
-> +	ret = pm_runtime_resume_and_get(&sensor->i2c_client->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Set LP-11 on clock and data lanes */
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_HISPI_CONTROL_STATUS,
-> +			AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE);
-> +	if (ret)
-> +		goto err;
-> +
-> +	/* Start streaming LP-11 */
-> +	ret = ar0521_write_reg(sensor, AR0521_REG_RESET,
-> +			       AR0521_REG_RESET_DEFAULTS |
-> +			       AR0521_REG_RESET_STREAM);
-> +	if (ret)
-> +		goto err;
-> +	return 0;
-> +
-> +err:
-> +	pm_runtime_put(&sensor->i2c_client->dev);
-> +	return ret;
-> +}
-> +
-> +static int ar0521_post_streamoff(struct v4l2_subdev *sd)
-> +{
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +
-> +	pm_runtime_put(&sensor->i2c_client->dev);
-> +	return 0;
-> +}
-> +
-> +static int ar0521_s_stream(struct v4l2_subdev *sd, int enable)
-> +{
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +	int ret;
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s(%i)\n", __func__, enable);
-> +	mutex_lock(&sensor->lock);
-> +
-> +	ret = ar0521_set_stream(sensor, enable);
-> +	if (!ret)
-> +		sensor->streaming = enable;
-> +
-> +	mutex_unlock(&sensor->lock);
-> +	return ret;
-> +}
-> +
-> +static const struct v4l2_subdev_core_ops ar0521_core_ops = {
-> +	.log_status = v4l2_ctrl_subdev_log_status,
-> +};
-> +
-> +static const struct v4l2_subdev_video_ops ar0521_video_ops = {
-> +	.s_stream = ar0521_s_stream,
-> +	.pre_streamon = ar0521_pre_streamon,
-> +	.post_streamoff = ar0521_post_streamoff,
-> +};
-> +
-> +static const struct v4l2_subdev_pad_ops ar0521_pad_ops = {
-> +	.enum_mbus_code = ar0521_enum_mbus_code,
-> +	.get_fmt = ar0521_get_fmt,
-> +	.set_fmt = ar0521_set_fmt,
-> +};
-> +
-> +static const struct v4l2_subdev_ops ar0521_subdev_ops = {
-> +	.core = &ar0521_core_ops,
-> +	.video = &ar0521_video_ops,
-> +	.pad = &ar0521_pad_ops,
-> +};
-> +
-> +static int __maybe_unused ar0521_suspend(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +	if (sensor->streaming)
-> +		ar0521_set_stream(sensor, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused ar0521_resume(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +
-> +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
-> +	if (sensor->streaming)
-> +		return ar0521_set_stream(sensor, 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ar0521_probe(struct i2c_client *client,
-> +			const struct i2c_device_id *id)
-> +{
-> +	struct v4l2_fwnode_endpoint ep = {
-> +		.bus_type = V4L2_MBUS_CSI2_DPHY
-> +	};
-> +	struct device *dev = &client->dev;
-> +	struct fwnode_handle *endpoint;
-> +	struct ar0521_dev *sensor;
-> +	unsigned int cnt;
-> +	int ret;
-> +
-> +	dev_dbg(dev, "%s()\n", __func__);
+  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.16-2022-01-09
 
-Rather useless, please drop. Same for all other debug functions that
-just print the current function name in other parts of the driver.
-While maybe useful when developing, they're mostly noise for users
-imo.
+for you to fetch changes up to dc9f2dd5de04d2bbcccbabdf5df9715c2ddcf25f:
 
-> +	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-> +	if (!sensor)
-> +		return -ENOMEM;
-> +
-> +	sensor->i2c_client = client;
-> +	sensor->fmt.width = AR0521_WIDTH_MAX;
-> +	sensor->fmt.height = AR0521_HEIGHT_MAX;
-> +	ar0521_adj_fmt(&sensor->fmt);
-> +
-> +	endpoint = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), 0, 0,
-> +						   FWNODE_GRAPH_ENDPOINT_NEXT);
+  Revert "libtraceevent: Increase libtraceevent logging when verbose" (2022-01-07 16:08:50 -0300)
 
-The drivers supports a single endpoint right ? Then
-fwnode_graph_get_next_enpoint() can be used
+----------------------------------------------------------------
+perf tools fixes for v5.16: 6th batch
 
+- Revert "libtraceevent: Increase libtraceevent logging when verbose", breaks the build
+  with libtraceevent-1.3.0, i.e. when building with 'LIBTRACEEVENT_DYNAMIC=1'.
 
-> +	if (!endpoint) {
-> +		dev_err(dev, "endpoint node not found\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = v4l2_fwnode_endpoint_parse(endpoint, &ep);
-> +	fwnode_handle_put(endpoint);
-> +	if (ret) {
-> +		dev_err(dev, "could not parse endpoint\n");
-> +		return ret;
-> +	}
-> +
-> +	if (ep.bus_type != V4L2_MBUS_CSI2_DPHY) {
-> +		dev_err(dev, "invalid bus type, must be MIPI CSI2\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	sensor->lane_count = ep.bus.mipi_csi2.num_data_lanes;
-> +	switch (sensor->lane_count) {
-> +	case 1:
-> +	case 2:
-> +	case 4:
-> +		break;
-> +	default:
-> +		dev_err(dev, "invalid number of MIPI data lanes\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Get master clock (extclk) */
-> +	sensor->extclk = devm_clk_get(dev, "extclk");
-> +	if (IS_ERR(sensor->extclk)) {
-> +		dev_err(dev, "failed to get extclk\n");
-> +		return PTR_ERR(sensor->extclk);
-> +	}
-> +
-> +	sensor->extclk_freq = clk_get_rate(sensor->extclk);
-> +
-> +	if (sensor->extclk_freq < AR0521_EXTCLK_MIN ||
-> +	    sensor->extclk_freq > AR0521_EXTCLK_MAX) {
-> +		dev_err(dev, "extclk frequency out of range: %u Hz\n",
-> +			sensor->extclk_freq);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Request optional reset pin (usually active low) and assert it */
-> +	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-> +						     GPIOD_OUT_HIGH);
-> +
-> +	v4l2_i2c_subdev_init(&sensor->sd, client, &ar0521_subdev_ops);
-> +
-> +	sensor->sd.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
-> +	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> +	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (cnt = 0; cnt < ARRAY_SIZE(ar0521_supply_names); cnt++) {
-> +		struct regulator *supply = devm_regulator_get(dev,
-> +						ar0521_supply_names[cnt]);
-> +
-> +		if (IS_ERR(supply)) {
-> +			dev_info(dev, "no %s regulator found: %li\n",
-> +				 ar0521_supply_names[cnt], PTR_ERR(supply));
-> +			return PTR_ERR(supply);
-> +		}
-> +		sensor->supplies[cnt] = supply;
-> +	}
+- Avoid early exit in 'perf trace' due to running SIGCHLD handler before it
+  makes sense to.  It can happen when using a BPF source code event that have
+  to be first built into an object file.
 
-Using the regulator bulk api would simplify this.
-See drivers/media/i2c/ccs/ccs-core.c
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-> +
-> +	mutex_init(&sensor->lock);
-> +
-> +	ret = ar0521_init_controls(sensor);
-> +	if (ret)
-> +		goto entity_cleanup;
-> +
-> +	ar0521_adj_fmt(&sensor->fmt);
+----------------------------------------------------------------
+Arnaldo Carvalho de Melo (1):
+      Revert "libtraceevent: Increase libtraceevent logging when verbose"
 
-Called already here above. Can anything in here change the format ?
+Jiri Olsa (1):
+      perf trace: Avoid early exit due to running SIGCHLD handler before it makes sense to
 
-> +
-> +	ret = v4l2_async_register_subdev(&sensor->sd);
-> +	if (ret)
-> +		goto free_ctrls;
-> +
-> +	/* Turn on the device and enable runtime PM */
-> +	ret = ar0521_power_on(&client->dev);
-> +	if (ret)
-> +		goto disable;
+ tools/perf/builtin-trace.c |  2 +-
+ tools/perf/util/debug.c    | 19 -------------------
+ 2 files changed, 1 insertion(+), 20 deletions(-)
 
-Does the device stay powered all the time ?
-Doesn't your resume callback call power_on() already ?
+Test results:
 
-> +	pm_runtime_set_active(&client->dev);
-> +	pm_runtime_enable(&client->dev);
-> +	dev_dbg(dev, "AR0521 driver initialized, master clock frequency: %u Hz, %u MIPI data lanes\n",
-> +		sensor->extclk_freq, sensor->lane_count);
-> +	return 0;
-> +
-> +disable:
-> +	v4l2_async_unregister_subdev(&sensor->sd);
-> +	media_entity_cleanup(&sensor->sd.entity);
-> +free_ctrls:
-> +	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-> +entity_cleanup:
-> +	media_entity_cleanup(&sensor->sd.entity);
-> +	mutex_destroy(&sensor->lock);
-> +	return ret;
-> +}
-> +
-> +static int ar0521_remove(struct i2c_client *client)
-> +{
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct ar0521_dev *sensor = to_ar0521_dev(sd);
-> +
-> +	v4l2_async_unregister_subdev(&sensor->sd);
-> +	media_entity_cleanup(&sensor->sd.entity);
-> +	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-> +	pm_runtime_disable(&client->dev);
-> +	if (!pm_runtime_status_suspended(&client->dev))
-> +		ar0521_power_off(&client->dev);
-> +	pm_runtime_set_suspended(&client->dev);
-> +	mutex_destroy(&sensor->lock);
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops ar0521_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(ar0521_suspend, ar0521_resume)
-> +	SET_RUNTIME_PM_OPS(ar0521_power_off, ar0521_power_on, NULL)
-> +};
-> +static const struct of_device_id ar0521_dt_ids[] = {
-> +	{.compatible = "onnn,ar0521"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, ar0521_dt_ids);
-> +
-> +static struct i2c_driver ar0521_i2c_driver = {
-> +	.driver = {
-> +		.name  = "ar0521",
-> +		.pm = &ar0521_pm_ops,
-> +		.of_match_table	= ar0521_dt_ids,
-> +	},
-> +	.probe    = ar0521_probe,
+The first ones are container based builds of tools/perf with and without libelf
+support.  Where clang is available, it is also used to build perf with/without
+libelf, and building with LIBCLANGLLVM=1 (built-in clang) with gcc and clang
+when clang and its devel libraries are installed.
 
-You could use probe_new and drop the "const struct i2c_device_id *id"
-argument to probe()
+Several are cross builds, the ones with -x-ARCH and the android one, and those
+may not have all the features built, due to lack of multi-arch devel packages,
+available and being used so far on just a few, like
+debian:experimental-x-{arm64,mipsel}.
 
-Thanks
-  j
+The 'perf test' one will perform a variety of tests exercising
+tools/perf/util/, tools/lib/{bpf,traceevent,etc}, as well as run perf commands
+with a variety of command line event specifications to then intercept the
+sys_perf_event syscall to check that the perf_event_attr fields are set up as
+expected, among a variety of other unit tests.
 
-> +	.remove   = ar0521_remove,
-> +};
-> +
-> +module_i2c_driver(ar0521_i2c_driver);
-> +
-> +MODULE_DESCRIPTION("AR0521 MIPI Camera subdev driver");
-> +MODULE_AUTHOR("Krzysztof Hałasa <khalasa@piap.pl>");
-> +MODULE_LICENSE("GPL v2");
+Then there is the 'make -C tools/perf build-test' ones, that build tools/perf/
+with a variety of feature sets, exercising the build with an incomplete set of
+features as well as with a complete one.
+
+There is still the mageia:7 distro + clang 8 failure, seemingly unrelated to
+the patches in this series, it'll be investigated. It builds just fine with gcc
+8.4.
+
+There is also a strange one with openmandriva:cooker, where on the feature build
+test it doesn't manage to find libpthread, looks like a distro problem, will keep
+it there to see if a refreshed container cures this soon. This has been the case
+for quite a while, probably time to drop building for those distros?
+
+Ubuntu 20.04 is failing on a corner case where perf links with libllvm and libclang,
+which isn't the default perf build.
+
+  $ grep -m1 'model name' /proc/cpuinfo
+  model name	: AMD Ryzen 9 5950X 16-Core Processor
+  $ export BUILD_TARBALL=http://192.168.100.2/perf/perf-5.16.0-rc8.tar.xz
+  $ time dm
+   1   172.07 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+   2   156.97 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
+   3   214.90 alpine:3.5                    : Ok   gcc (Alpine 6.2.1) 6.2.1 20160822 , clang version 3.8.1 (tags/RELEASE_381/final)
+   4   140.00 alpine:3.6                    : Ok   gcc (Alpine 6.3.0) 6.3.0 , clang version 4.0.0 (tags/RELEASE_400/final)
+   5    71.89 alpine:3.7                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.0 (tags/RELEASE_500/final) (based on LLVM 5.0.0)
+   6    65.84 alpine:3.8                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.1 (tags/RELEASE_501/final) (based on LLVM 5.0.1)
+   7    67.34 alpine:3.9                    : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 5.0.1 (tags/RELEASE_502/final) (based on LLVM 5.0.1)
+   8    93.94 alpine:3.10                   : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
+   9   103.84 alpine:3.11                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 9.0.0 (https://git.alpinelinux.org/aports f7f0d2c2b8bcd6a5843401a9a702029556492689) (based on LLVM 9.0.0)
+  10   114.99 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+  11   138.23 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1 
+  12   101.04 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
+  13   103.46 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
+  14   102.94 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128 , Alpine clang version 12.0.1
+  15    50.45 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+  16    75.15 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0 
+  17    74.14 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+  18    73.06 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20210911 (ALT Sisyphus 11.2.1-alt1) , ALT Linux Team clang version 12.0.1
+  19    51.36 amazonlinux:1                 : Ok   gcc (GCC) 7.2.1 20170915 (Red Hat 7.2.1-2) , clang version 3.6.2 (tags/RELEASE_362/final)
+  20    83.48 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
+  21    78.56 archlinux:base                : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
+  22    80.96 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
+  23    96.22 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-3) , clang version 12.0.1 (Red Hat 12.0.1-2.module_el8.6.0+937+1cafe22c)
+  24    26.86 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 11.2.1 20211228 releases/gcc-11.2.0-618-g3b2b18144c , clang version 11.1.0
+  25    77.63 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 , clang version 3.8.1-24 (tags/RELEASE_381/final)
+  26    61.00 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
+  27    85.67 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
+  28    85.27 debian:experimental           : Ok   gcc (Debian 11.2.0-13) 11.2.0 , Debian clang version 13.0.0-9+b2
+  29    23.16 debian:experimental-x-arm64   : Ok   aarch64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
+  30    18.94 debian:experimental-x-mips    : Ok   mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110 
+  31    20.84 debian:experimental-x-mips64  : Ok   mips64-linux-gnuabi64-gcc (Debian 10.2.1-6) 10.2.1 20210110 
+  32    21.64 debian:experimental-x-mipsel  : Ok   mipsel-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0 
+  33    21.34 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.5.0 (tags/RELEASE_350/final)
+  34    55.18 fedora:23                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.7.0 (tags/RELEASE_370/final)
+  35    65.70 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) , clang version 3.8.1 (tags/RELEASE_381/final)
+  36    17.33 fedora:24-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 7.1.1 20170710 
+  37    68.02 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) , clang version 3.9.1 (tags/RELEASE_391/final)
+  38    80.04 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) , clang version 4.0.1 (tags/RELEASE_401/final)
+  39    86.27 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) , clang version 5.0.2 (tags/RELEASE_502/final)
+  40    92.70 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 6.0.1 (tags/RELEASE_601/final)
+  41    97.83 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 7.0.1 (Fedora 7.0.1-6.fc29)
+  42   103.45 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 8.0.0 (Fedora 8.0.0-3.fc30)
+  43    90.49 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
+  44    84.79 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
+  45    82.69 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
+  46    86.18 fedora:34                     : Ok   gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
+  47    19.23 fedora:34-x-ARC-glibc         : Ok   arc-linux-gcc (ARC HS GNU/Linux glibc toolchain 2019.03-rc1) 8.3.1 20190225 
+  48    17.33 fedora:34-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCv2 ISA Linux uClibc toolchain 2019.03-rc1) 8.3.1 20190225 
+  49    88.71 fedora:35                     : Ok   gcc (GCC) 11.2.1 20211203 (Red Hat 11.2.1-7) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+  50    96.62 fedora:rawhide                : Ok   gcc (GCC) 11.2.1 20211203 (Red Hat 11.2.1-7) , clang version 13.0.0 (Fedora 13.0.0-5.fc36)
+  51    77.47 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
+  52    67.21 mageia:6                      : Ok   gcc (Mageia 5.5.0-1.mga6) 5.5.0 , clang version 3.9.1 (tags/RELEASE_391/final)
+  53    37.70 mageia:7                      : FAIL clang version 8.0.0 (Mageia 8.0.0-1.mga7)
+          yychar = yylex (&yylval, &yylloc, scanner);
+                   ^
+    #define yylex           parse_events_lex
+                            ^
+    1 error generated.
+    make[3]: *** [/git/perf-5.16.0-rc8/tools/build/Makefile.build:139: util] Error 2
+  54    86.38 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
+  55     6.08 openmandriva:cooker           : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC) 
+    In file included from builtin-bench.c:22:
+    bench/bench.h:66:19: error: conflicting types for 'pthread_attr_setaffinity_np'; have 'int(pthread_attr_t *, size_t,  cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  cpu_set_t *)'}
+       66 | static inline int pthread_attr_setaffinity_np(pthread_attr_t *attr __maybe_unused,
+          |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+    In file included from bench/bench.h:64,
+                     from builtin-bench.c:22:
+    /usr/include/pthread.h:394:12: note: previous declaration of 'pthread_attr_setaffinity_np' with type 'int(pthread_attr_t *, size_t,  const cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  const cpu_set_t *)'}
+      394 | extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
+          |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+    ld: warning: -r and --icf may not be used together, disabling --icf
+    ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+    ld: warning: -r and --icf may not be used together, disabling --icf
+    ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+    ld: warning: -r and --icf may not be used together, disabling --icf
+  56    97.79 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] , clang version 5.0.1 (tags/RELEASE_501/final 312548)
+  57   104.12 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 7.0.1 (tags/RELEASE_701/final 349238)
+  58    98.89 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1 
+  59   112.05 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
+  60   111.35 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
+  61   127.01 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 11.2.1 20211124 [revision 7510c23c1ec53aa4a62705f0384079661342ff7b] , clang version 13.0.0
+  62    91.61 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
+  63    92.61 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module+el8.5.0+715+58f51d49)
+  64    67.43 ubuntu:16.04                  : Ok   gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 , clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)
+  65    18.34 ubuntu:16.04-x-arm            : Ok   arm-linux-gnueabihf-gcc (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609 
+  66    18.54 ubuntu:16.04-x-arm64          : Ok   aarch64-linux-gnu-gcc (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609 
+  67    18.04 ubuntu:16.04-x-powerpc        : Ok   powerpc-linux-gnu-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609 
+  68    18.43 ubuntu:16.04-x-powerpc64      : Ok   powerpc64-linux-gnu-gcc (Ubuntu/IBM 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609 
+  69    18.54 ubuntu:16.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu/IBM 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609 
+  70    18.34 ubuntu:16.04-x-s390           : Ok   s390x-linux-gnu-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609 
+  71    73.42 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 , clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
+  72    19.84 ubuntu:18.04-x-arm            : Ok   arm-linux-gnueabihf-gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0 
+  73    19.74 ubuntu:18.04-x-arm64          : Ok   aarch64-linux-gnu-gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0 
+  74    16.43 ubuntu:18.04-x-m68k           : Ok   m68k-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  75    19.34 ubuntu:18.04-x-powerpc        : Ok   powerpc-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  76    20.84 ubuntu:18.04-x-powerpc64      : Ok   powerpc64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  77    21.05 ubuntu:18.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  78    94.30 ubuntu:18.04-x-riscv64        : Ok   riscv64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  79    17.74 ubuntu:18.04-x-s390           : Ok   s390x-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  80    19.04 ubuntu:18.04-x-sh4            : Ok   sh4-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  81    17.74 ubuntu:18.04-x-sparc64        : Ok   sparc64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 
+  82    70.33 ubuntu:20.04                  : FAIL clang version 10.0.0-4ubuntu1 
+
+  83    21.25 ubuntu:20.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0 
+  84    71.95 ubuntu:20.10                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1~20.10) 10.3.0 , Ubuntu clang version 11.0.0-2
+  85    81.77 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
+  86    84.59 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
+  87   102.73 ubuntu:22.04                  : Ok   gcc (Ubuntu 11.2.0-13ubuntu1) 11.2.0 , Ubuntu clang version 13.0.0-9
+  BUILD_TARBALL_HEAD=dc9f2dd5de04d2bbcccbabdf5df9715c2ddcf25f
+  88 6045.77
+
+  real	102m51.359s
+  user	1m13.564s
+  sys	0m50.846s
+  $ 
+
+  $ uname -a
+  Linux quaco 5.15.7-200.fc35.x86_64 #1 SMP Wed Dec 8 19:00:47 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+  $ git log --oneline -1
+  dc9f2dd5de04d2bb (HEAD -> perf/urgent, seventh/perf/urgent, five/perf/urgent, acme.korg/tmp.perf/urgent) Revert "libtraceevent: Increase libtraceevent logging when verbose"
+  $ perf -v
+  perf version 5.16.rc8.gdc9f2dd5de04
+  # perf -vv
+  perf version 5.16.rc8.gdc9f2dd5de04
+                   dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+      dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+                   glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+           syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+                  libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+                  libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+                 libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+  numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+                 libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+               libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+                libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+               libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+               libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+      libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+                    zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+                    lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+               get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+                     bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+                     aio: [ on  ]  # HAVE_AIO_SUPPORT
+                    zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+                 libpfm4: [ OFF ]  # HAVE_LIBPFM
+  # perf test
+   1: vmlinux symtab matches kallsyms                                 : Ok
+   2: Detect openat syscall event                                     : Ok
+   3: Detect openat syscall event on all cpus                         : Ok
+   4: Read samples using the mmap interface                           : Ok
+   5: Test data source output                                         : Ok
+   6: Parse event definition strings                                  : Ok
+   7: Simple expression parser                                        : Ok
+   8: PERF_RECORD_* events & perf_sample fields                       : Ok
+   9: Parse perf pmu format                                           : Ok
+  10: PMU events                                                      :
+  10.1: PMU event table sanity                                        : Ok
+  10.2: PMU event map aliases                                         : Ok
+  10.3: Parsing of PMU event table metrics                            : Ok
+  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+  11: DSO data read                                                   : Ok
+  12: DSO data cache                                                  : Ok
+  13: DSO data reopen                                                 : Ok
+  14: Roundtrip evsel->name                                           : Ok
+  15: Parse sched tracepoints fields                                  : Ok
+  16: syscalls:sys_enter_openat event fields                          : Ok
+  17: Setup struct perf_event_attr                                    : Ok
+  18: Match and link multiple hists                                   : Ok
+  19: 'import perf' in python                                         : Ok
+  20: Breakpoint overflow signal handler                              : Ok
+  21: Breakpoint overflow sampling                                    : Ok
+  22: Breakpoint accounting                                           : Ok
+  23: Watchpoint                                                      :
+  23.1: Read Only Watchpoint                                          : Skip (missing hardware support)
+  23.2: Write Only Watchpoint                                         : Ok
+  23.3: Read / Write Watchpoint                                       : Ok
+  23.4: Modify Watchpoint                                             : Ok
+  24: Number of exit events of a simple workload                      : Ok
+  25: Software clock events period values                             : Ok
+  26: Object code reading                                             : Ok
+  27: Sample parsing                                                  : Ok
+  28: Use a dummy software event to keep tracking                     : Ok
+  29: Parse with no sample_id_all bit set                             : Ok
+  30: Filter hist entries                                             : Ok
+  31: Lookup mmap thread                                              : Ok
+  32: Share thread maps                                               : Ok
+  33: Sort output of hist entries                                     : Ok
+  34: Cumulate child hist entries                                     : Ok
+  35: Track with sched_switch                                         : Ok
+  36: Filter fds with revents mask in a fdarray                       : Ok
+  37: Add fd to a fdarray, making it autogrow                         : Ok
+  38: kmod_path__parse                                                : Ok
+  39: Thread map                                                      : Ok
+  40: LLVM search and compile                                         :
+  40.1: Basic BPF llvm compile                                        : Ok
+  40.2: kbuild searching                                              : Ok
+  40.3: Compile source for BPF prologue generation                    : Ok
+  40.4: Compile source for BPF relocation                             : Ok
+  41: Session topology                                                : Ok
+  42: BPF filter                                                      :
+  42.1: Basic BPF filtering                                           : Ok
+  42.2: BPF pinning                                                   : Ok
+  42.3: BPF prologue generation                                       : Ok
+  43: Synthesize thread map                                           : Ok
+  44: Remove thread map                                               : Ok
+  45: Synthesize cpu map                                              : Ok
+  46: Synthesize stat config                                          : Ok
+  47: Synthesize stat                                                 : Ok
+  48: Synthesize stat round                                           : Ok
+  49: Synthesize attr update                                          : Ok
+  50: Event times                                                     : Ok
+  51: Read backward ring buffer                                       : Ok
+  52: Print cpu map                                                   : Ok
+  53: Merge cpu map                                                   : Ok
+  54: Probe SDT events                                                : Ok
+  55: is_printable_array                                              : Ok
+  56: Print bitmap                                                    : Ok
+  57: perf hooks                                                      : Ok
+  58: builtin clang support                                           :
+  58.1: builtin clang compile C source to IR                          : Skip (not compiled in)
+  58.2: builtin clang compile C source to ELF object                  : Skip (not compiled in)
+  59: unit_number__scnprintf                                          : Ok
+  60: mem2node                                                        : Ok
+  61: time utils                                                      : Ok
+  62: Test jit_write_elf                                              : Ok
+  63: Test libpfm4 support                                            :
+  63.1: test of individual --pfm-events                               : Skip (not compiled in)
+  63.2: test groups of --pfm-events                                   : Skip (not compiled in)
+  64: Test api io                                                     : Ok
+  65: maps__merge_in                                                  : Ok
+  66: Demangle Java                                                   : Ok
+  67: Demangle OCaml                                                  : Ok
+  68: Parse and process metrics                                       : Ok
+  69: PE file support                                                 : Ok
+  70: Event expansion for cgroups                                     : Ok
+  71: Convert perf time to TSC                                        : Ok
+  72: dlfilter C API                                                  : Ok
+  73: x86 rdpmc                                                       : Ok
+  74: Test dwarf unwind                                               : Ok
+  75: x86 instruction decoder - new instructions                      : Ok
+  76: Intel PT packet decoder                                         : Ok
+  77: x86 bp modify                                                   : Ok
+  78: x86 Sample parsing                                              : Ok
+  79: build id cache operations                                       : Ok
+  80: daemon operations                                               : Ok
+  81: perf pipe recording and injection test                          : Ok
+  82: Add vfs_getname probe to get syscall args filenames             : Ok
+  83: probe libc's inet_pton & backtrace it with ping                 : Ok
+  84: Use vfs_getname probe to get syscall args filenames             : Ok
+  85: Zstd perf.data compression/decompression                        : Ok
+  86: perf stat csv summary test                                      : Ok
+  87: perf stat metrics (shadow stat) test                            : Ok
+  88: perf all metricgroups test                                      : FAILED!
+  89: perf all metrics test                                           : Ok
+  90: perf all PMU test                                               : Ok
+  91: perf stat --bpf-counters test                                   : Ok
+  92: Check Arm CoreSight trace data recording and synthesized samples: Skip
+  93: Check Arm SPE trace data recording and synthesized samples      : Skip
+  94: Check open filename arg using perf trace + vfs_getname          : Ok
+  #
+
+  $ grep -m1 'model name' /proc/cpuinfo 
+  model name	: Intel(R) Core(TM) i5-7500 CPU @ 3.40GHz
+  $ git log --oneline -1 ; time make -C tools/perf build-test
+  dc9f2dd5de04 (HEAD -> perf/urgent, quaco/perf/urgent, five/perf/urgent, acme/tmp.perf/urgent) Revert "libtraceevent: Increase libtraceevent logging when verbose"
+  make: Entering directory '/home/acme/git/perf/tools/perf'
+  - tarpkg: ./tests/perf-targz-src-pkg .
+                   make_static: make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 -j4  DESTDIR=/tmp/tmp.2TbIC7CiEs
+                make_with_gtk2: make GTK2=1 -j4  DESTDIR=/tmp/tmp.cfIYXjFKYx
+  - /home/acme/git/perf/tools/perf/BUILD_TEST_FEATURE_DUMP: make FEATURE_DUMP_COPY=/home/acme/git/perf/tools/perf/BUILD_TEST_FEATURE_DUMP  feature-dump
+  make FEATURE_DUMP_COPY=/home/acme/git/perf/tools/perf/BUILD_TEST_FEATURE_DUMP feature-dump
+         make_install_prefix_O: make install prefix=/tmp/krava
+                 make_cscope_O: make cscope
+   make_install_prefix_slash_O: make install prefix=/tmp/krava/
+            make_install_bin_O: make install-bin
+                 make_no_sdt_O: make NO_SDT=1
+              make_no_libelf_O: make NO_LIBELF=1
+                   make_help_O: make help
+            make_no_auxtrace_O: make NO_AUXTRACE=1
+        make_no_libbpf_DEBUG_O: make NO_LIBBPF=1 DEBUG=1
+         make_with_clangllvm_O: make LIBCLANGLLVM=1
+         make_libbpf_dynamic_O: make LIBBPF_DYNAMIC=1
+                   make_tags_O: make tags
+             make_no_scripts_O: make NO_LIBPYTHON=1 NO_LIBPERL=1
+           make_with_libpfm4_O: make LIBPFM4=1
+                 make_perf_o_O: make perf.o
+           make_no_libbionic_O: make NO_LIBBIONIC=1
+            make_no_libaudit_O: make NO_LIBAUDIT=1
+                make_install_O: make install
+             make_util_map_o_O: make util/map.o
+                  make_debug_O: make DEBUG=1
+       make_util_pmu_bison_o_O: make util/pmu-bison.o
+                make_no_newt_O: make NO_NEWT=1
+                make_no_gtk2_O: make NO_GTK2=1
+              make_no_libbpf_O: make NO_LIBBPF=1
+             make_no_libnuma_O: make NO_LIBNUMA=1
+  make_no_libdw_dwarf_unwind_O: make NO_LIBDW_DWARF_UNWIND=1
+                   make_pure_O: make
+             make_no_libperl_O: make NO_LIBPERL=1
+                make_minimal_O: make NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK2=1 NO_DEMANGLE=1 NO_LIBELF=1 NO_LIBUNWIND=1 NO_BACKTRACE=1 NO_LIBNUMA=1 NO_LIBAUDIT=1 NO_LIBBIONIC=1 NO_LIBDW_DWARF_UNWIND=1 NO_AUXTRACE=1 NO_LIBBPF=1 NO_LIBCRYPTO=1 NO_SDT=1 NO_JVMTI=1 NO_LIBZSTD=1 NO_LIBCAP=1 NO_SYSCALL_TABLE=1
+               make_no_slang_O: make NO_SLANG=1
+           make_no_libunwind_O: make NO_LIBUNWIND=1
+                  make_no_ui_O: make NO_NEWT=1 NO_SLANG=1 NO_GTK2=1
+           make_no_libcrypto_O: make NO_LIBCRYPTO=1
+              make_clean_all_O: make clean all
+         make_no_syscall_tbl_O: make NO_SYSCALL_TABLE=1
+         make_with_coresight_O: make CORESIGHT=1
+            make_no_demangle_O: make NO_DEMANGLE=1
+        make_with_babeltrace_O: make LIBBABELTRACE=1
+           make_no_backtrace_O: make NO_BACKTRACE=1
+                    make_doc_O: make doc
+           make_no_libpython_O: make NO_LIBPYTHON=1
+  OK
+  make: Leaving directory '/home/acme/git/perf/tools/perf'
+  
+  real	24m55.435s
+  user	53m13.737s
+  sys	29m19.387s
+  $

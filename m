@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2FC488C21
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32E2488C22
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbiAITqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 14:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S236828AbiAITsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 14:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbiAITq2 (ORCPT
+        with ESMTP id S236802AbiAITsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 14:46:28 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8533C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 11:46:27 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n6e93-0000ko-HL; Sun, 09 Jan 2022 20:46:25 +0100
-Message-ID: <5fa1a2ba-f9f3-7f27-6909-1c4c38f6f331@leemhuis.info>
-Date:   Sun, 9 Jan 2022 20:46:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Linux regressions report for mainline [2022-01-09]
-Content-Language: en-BS
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <164175418046.1037107.9730034714816887497@leemhuis.info>
- <CAHk-=wi8gSsM7-+fx-iSoKGHtgrgN==NcQtRikYfiFmv8gjbnQ@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CAHk-=wi8gSsM7-+fx-iSoKGHtgrgN==NcQtRikYfiFmv8gjbnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641757587;d729b19d;
-X-HE-SMSGID: 1n6e93-0000ko-HL
+        Sun, 9 Jan 2022 14:48:07 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31868C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 11:48:07 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id v11so8952069pfu.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 11:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JyqLjQnkJpIxD8QTaBOhLwMadk8N68x8plAXpy9Hz0c=;
+        b=wlXDxSwWI+cU/jDX6EPuCXko8qAEyfTr/XvemTHjVyrH8tQJ+erL/GO9C9svhL6FPT
+         6Gc3OZs9vxDPI1BfDW/FAza1teZ8+10EHnk20ZcxHs/OO78y01q4KTkPAhcIbXPtxFK6
+         KKfAkKQrZeOvgXCnCFSdeMNbPlRlD6WQWqwtlqHtXD2rT80XWhfnRMxFBRz7LtXS2R2/
+         KIOlc22iKAeDZ5bYPGyXfhw+XbmBw8XPd5fhsGUjDVVDooZzZCrcCXezOM4kT7avIoPl
+         n9ODPvqnocR8sb2leSniR9IJYU2ZEMEfv4Tl/XBFi3hTNz7rg5hLiCr04efMLWhp/mhc
+         Ag9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=JyqLjQnkJpIxD8QTaBOhLwMadk8N68x8plAXpy9Hz0c=;
+        b=atB8i7ygcsXTRn2Jp7aawZk6MamO2vD2O1vFj/ym4xP5BaylhpRGp02Jb8RYZ3llKa
+         rnYskifASiZ6aRL5JtRbCE1nDEflFFIWiU3FbBmf2Oum4pclCgHgAyarlnTNz57xQG66
+         hEY1CNFOwbmukXkpydzB2kpIlRX6KYCydcQk4UIGTqgUsAbyCaymqNGiL1V3CJDT4HBc
+         ZHVLTDHAx9Fq7hk0Wgfg36L/LilhlwCcu4LNXcB+lZHujhjdpjgSG8XE0ex+0VaEaE0c
+         tyGFH+QPXVIn/o/6ss9r85MXaLJ8IB462vEgf1tG1CkpVD3wxAnwev5boyBJtzFYqjFk
+         sw/Q==
+X-Gm-Message-State: AOAM533jki2gRkOxziAz2C9BUrKfRV3Lv4U9XFVRl0ZPcxl+pghNZku/
+        GdV5reqtA4WJYjyaagyjxuR7Aw==
+X-Google-Smtp-Source: ABdhPJwu+d4+2ofEkpi1W3WNzWjp7vIYF0vd9QvzESYvxs7HnIN7MVX0KSrgkszCVogy/ZsxBkTSSg==
+X-Received: by 2002:a63:9602:: with SMTP id c2mr48737508pge.538.1641757686425;
+        Sun, 09 Jan 2022 11:48:06 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id s14sm1213780pfw.33.2022.01.09.11.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 11:48:06 -0800 (PST)
+Date:   Sun, 09 Jan 2022 11:48:06 -0800 (PST)
+X-Google-Original-Date: Sun, 09 Jan 2022 11:47:30 PST (-0800)
+Subject:     Re: [PATCH 0/5] riscv: misc clean up
+In-Reply-To: <20211128160741.2122-1-jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        anup@brainfault.org, atishp@atishpatra.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org
+Message-ID: <mhng-4e157e52-f315-48ee-ac92-03628c35cbde@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 28 Nov 2021 08:07:36 PST (-0800), jszhang@kernel.org wrote:
+> This series is a misc clean up: clean up useless LoCs, or make some
+> functions static, or mark function pointer as __initdata, or remove
+> one function().
+>
+> Jisheng Zhang (5):
+>   riscv: remove cpu_stop()
+>   riscv: head: make secondary_start_common() static
+>   riscv: kvm: make kvm_riscv_vcpu_fp_clean() static
+
+Probably best to split out the KVM patches, as they go in via a 
+different tree.
+
+>   riscv: errata: alternative: mark vendor_patch_func __initdata
+>   riscv: head: remove useless __PAGE_ALIGNED_BSS and .balign
+>
+>  arch/riscv/errata/alternative.c | 3 ++-
+>  arch/riscv/include/asm/smp.h    | 2 --
+>  arch/riscv/kernel/cpu-hotplug.c | 8 +-------
+>  arch/riscv/kernel/head.S        | 9 ++-------
+>  arch/riscv/kvm/vcpu_fp.c        | 2 +-
+>  5 files changed, 6 insertions(+), 18 deletions(-)
+
+These are on for-next (aside from the KVM one, which Anup has already 
+picked up).
+
+Thanks!
 
 
-On 09.01.22 20:20, Linus Torvalds wrote:
-> On Sun, Jan 9, 2022 at 10:51 AM Regzbot (on behalf of Thorsten
-> Leemhuis) <regressions@leemhuis.info> wrote:
->>
->> 5-10% increase in IO latencies with nohz balance patch
-> 
-> This one is clearly not rootcaused, but even the reporter isn't sure
-> what triggered it.  It was bisected to that mentioned patch, but even
-> that bisection result isn't really entirely certain.
-> 
-> So this one will remain pending, I'm afraid.
-
-Yeah. I'm a bit unsure how to handle such cases better in regzbot. I
-consider marking them manually as "needinfo", "blurry", "ambiguous", or
-something like that. Then regzbot can put them into a separate section
-or mark them somehow.
-
->> pm: laptop totally freezes when going to hibernation
-
-This is one I'd for now consider "ambiguous" for now.
-
->> drm: amdgpu: s0ix suspend stopped working
-> 
-> Something clearly not great in amdgpu suspend/resume land. The reports
-> are not fully clear, with even the bisection being questionable.
-
-This afaics should help soon for the second case:
-
-https://lore.kernel.org/all/BL1PR12MB5157F21C23A020052FF5C13BE24C9@BL1PR12MB5157.namprd12.prod.outlook.com/
-https://lore.kernel.org/all/20220106163054.13781-3-mario.limonciello@amd.com/
-
-Regzbot didn't pick up this patch automatically (and I forgot to point
-it towards it...), as support for tracking regressions mainly handled in
-bug trackers is still missing. It's pretty high on my todo list, but
-nevertheless it might take a few weeks before I get to that, as real
-world forces me to focus on a few other things first (some regzbot
-related, some not). That's why I have not much time left currently to
-work on regzbot's code. :-/
-
-> But from the previous cycle reports:
-> 
->> =========================================================================================
->> previous cycle (v5.14..v5.15), culprit identified, with activity in the past three months
->> =========================================================================================
->>
->> drm: amdgpu: NUC8i7HVKVA crashes during system suspend
-> 
-> This one isn't questionable, and Len sent me the revert he's been
-> using on his system for a long time. So I applied it.
-> 
-> Maybe it's related, maybe it's not.
-
-Thx for letting me know. This was a issue mainly discussed in
-bugzilla.kernel.org and another area where regzbot is missing a feature:
-to detect activity and patches there. On my todo list, too. But one step
-at a time...
-
-Ciao, Thorsten

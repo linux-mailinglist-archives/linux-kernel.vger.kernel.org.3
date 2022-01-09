@@ -2,150 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E754887A0
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 05:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE0E4887A5
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 05:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234735AbiAIEXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 23:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiAIEXH (ORCPT
+        id S235150AbiAIEou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 23:44:50 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:45246 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232890AbiAIEot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 23:23:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35C0C06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 20:23:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2461F60C0F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 04:23:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA48C36AE5;
-        Sun,  9 Jan 2022 04:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641702185;
-        bh=4W3k8FdPcqQIH2C5xA4zp9axIzUwMzpEFbgT1noGXs8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=XPHJ2D8vYrh3nnxPeWKfUayoaXSbPJgyAXmqShMp1QEldemGt+aaGQ+u3ZTjAe9fb
-         PCWqOuEy8k+7RfAketjlV7zuo880SyyGGU4BQEEk06IHtfT4TRh44Rsu46kvOpfwSE
-         or1Br1RCuddYZgyHK3aQDMti1JNii63+swSZ1C191WwhVQm/KXZiqcBauxFFTvx5HW
-         V+r19quFZNffwXyXf33b61Yqi9SDQwTA69RVNdHmpU/koGCRqq8IMAcrEXmyxMTCxQ
-         S5FLcOsSRbXNhobk7lZm3u68djNfYOYaSRXliPTf58AiCAkqTT8NiWNJv0WZAaD7G3
-         lXXbyNS9wyqnw==
-Message-ID: <b2c8ad2086362a64853b70fc0aa4c29ce6348544.camel@kernel.org>
-Subject: Re: [PATCH v5 4/4] tracing: Have existing event_command.parse()
- implementations use helpers
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 08 Jan 2022 22:23:03 -0600
-In-Reply-To: <20220108195406.0c4f659d@gandalf.local.home>
-References: <cover.1639507505.git.zanussi@kernel.org>
-         <f043571a0b7ccc0eb524f87b63c520a460e59baf.1639507505.git.zanussi@kernel.org>
-         <20220108195406.0c4f659d@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Sat, 8 Jan 2022 23:44:49 -0500
+Received: from microsoft.com (unknown [50.47.106.53])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1967D20B7179;
+        Sat,  8 Jan 2022 20:44:49 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1967D20B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1641703489;
+        bh=lM17pZ6iCOU37RIPTzxAvgHmS64CHTJOGzcs8Z4rB34=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Pt81cE8fadR7R460L1iG8bsxgGyCM/Bsiat2And1RpMyQOdUl5tByVzm35+6jCJTE
+         UJ0Y8oWiMG2cPhiVvBlAh5dCxLpYFjBKOPB5KbOGmM9OOu6gpEKeLgZLFNL9F/Y8Wa
+         fat3yJpF4IuUWzWQlsNUoannnzAKi2cZALoSiq04=
+From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>
+Subject: [PATCH] mtd: spi-nor: Add support for w25q512jvm
+Date:   Sat,  8 Jan 2022 20:44:18 -0800
+Message-Id: <20220109044418.4657-1-dphadke@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+Add support for Winbond 64MB W25Q512JV-DTR NOR flash.
+Use PARSE_SFDP flag to init parameters during SFDP parsing.
 
-On Sat, 2022-01-08 at 19:54 -0500, Steven Rostedt wrote:
-> On Tue, 14 Dec 2021 12:57:32 -0600
-> Tom Zanussi <zanussi@kernel.org> wrote:
-> 
-> > index da103826f27e..e6a48e8c79eb 100644
-> > --- a/kernel/trace/trace_events_trigger.c
-> > +++ b/kernel/trace/trace_events_trigger.c
-> > @@ -973,7 +973,7 @@ int event_trigger_register(struct event_command
-> > *cmd_ops,
-> >   * @file: The trace_event_file associated with the event
-> >   * @glob: The raw string used to register the trigger
-> >   * @cmd: The cmd portion of the string used to register the
-> > trigger
-> > - * @param: The params portion of the string used to register the
-> > trigger
-> > + * @param_and_filter: The param and filter portion of the string
-> > used to register the trigger
-> >   *
-> >   * Common implementation for event command parsing and trigger
-> >   * instantiation.
-> > @@ -986,94 +986,53 @@ int event_trigger_register(struct
-> > event_command *cmd_ops,
-> >  static int
-> >  event_trigger_parse(struct event_command *cmd_ops,
-> >  		    struct trace_event_file *file,
-> > -		    char *glob, char *cmd, char *param)
-> > +		    char *glob, char *cmd, char *param_and_filter)
-> >  {
-> >  	struct event_trigger_data *trigger_data;
-> >  	struct event_trigger_ops *trigger_ops;
-> > -	char *trigger = NULL;
-> > -	char *number;
-> > +	char *param, *filter;
-> > +	bool remove;
-> >  	int ret;
-> >  
-> > -	/* separate the trigger from the filter (t:n [if filter]) */
-> > -	if (param && isdigit(param[0])) {
-> > -		trigger = strsep(&param, " \t");
-> > -		if (param) {
-> > -			param = skip_spaces(param);
-> > -			if (!*param)
-> > -				param = NULL;
-> > -		}
-> > -	}
-> > +	remove = event_trigger_check_remove(glob);
-> >  
-> > -	trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
-> 
-> Did you mean to remove the assignment of trigger_ops here?
+Signed-off-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
+---
+ drivers/mtd/spi-nor/winbond.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hmm, yeah, that shouldn't have been removed, but...
-
-> 
-> > +	ret = event_trigger_separate_filter(param_and_filter, &param,
-> > &filter, false);
-> > +	if (ret)
-> > +		return ret;
-> >  
-> >  	ret = -ENOMEM;
-> > -	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
-> > +	trigger_data = event_trigger_alloc(cmd_ops, cmd, param, file);
-> >  	if (!trigger_data)
-> >  		goto out;
-> >  
-> > -	trigger_data->count = -1;
-> > -	trigger_data->ops = trigger_ops;
-> > -	trigger_data->cmd_ops = cmd_ops;
-> > -	trigger_data->private_data = file;
-> > -	INIT_LIST_HEAD(&trigger_data->list);
-> > -	INIT_LIST_HEAD(&trigger_data->named_list);
-> > -
-> > -	if (glob[0] == '!') {
-> > +	if (remove) {
-> >  		cmd_ops->unreg(glob+1, trigger_ops, trigger_data,
-> > file);
-> 
-> It's still used here and below.
-> 
-> I get a warning on this.
-
-I'm not getting a warning, and remove should have crashed the
-testcases, but I'm not seeing that either.
-
-Will have to investigate tomorrow..
-
-Tom
-
-
-> 
-> Thanks,
-> 
-> -- Steve
-> 
-> >  		kfree(trigger_data);
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index 675f32c136b3..ebc826e21f76 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -118,6 +118,8 @@ static const struct flash_info winbond_parts[] = {
+ 		.fixups = &w25q256_fixups },
+ 	{ "w25q256jvm", INFO(0xef7019, 0, 64 * 1024, 512)
+ 		PARSE_SFDP },
++	{ "w25q512jvm", INFO(0xef7020, 0, 64 * 1024, 1024),
++		PARSE_SFDP },
+ 	{ "w25q256jw", INFO(0xef6019, 0, 64 * 1024, 512)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
+-- 
+2.25.1
 

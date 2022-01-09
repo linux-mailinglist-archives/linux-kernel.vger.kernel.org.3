@@ -2,121 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116B7488B82
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C752488B91
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbiAISLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 13:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbiAISLu (ORCPT
+        id S236474AbiAISQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 13:16:23 -0500
+Received: from conuserg-09.nifty.com ([210.131.2.76]:31213 "EHLO
+        conuserg-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236378AbiAISQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 13:11:50 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF76FC06173F;
-        Sun,  9 Jan 2022 10:11:49 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id pf13so2922817pjb.0;
-        Sun, 09 Jan 2022 10:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version:reply-to
-         :organization:content-transfer-encoding;
-        bh=tNvI+a7A8PS5Wd2PToIgDMYPiKE2u7O11qPaKJfdtO8=;
-        b=hFx4PqOcNZK5MuhbcALaswLAWpYR63pmyKMyh3S1r4Dkx2YT9LsxaoSfGDgGTqktAB
-         izsb8drDwggw5idyFf8BE9Yx6Z/c8yjegszok9iAO31xvjdvQgHKJPMkB+bmVambspHc
-         edGrF9kxxltrQOgWkEx4t/iW9GCDaq7dIKgswpbPRWCAnZ3e+wq4b9erEaNphdtClGFP
-         uZZSLB2zsU2s67S2/TBCfDocJUGkJLfaSbNvoI0sbpD1OTkK8103AhbEPjYs4TdsIkw/
-         lzzlNlbbb09ddQ87s3T0ZlaaIxY6wZreQrPPhkVmmMJNYgUWceNQJA0ElerW1/m3Inwe
-         q+PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=tNvI+a7A8PS5Wd2PToIgDMYPiKE2u7O11qPaKJfdtO8=;
-        b=4Pjgb3CPlWtVXA4QwXi1vZnFqUH3BgRvt+Fq9p7YnCVs+qiTeX4DEPZpaOKXO2OUeo
-         r/6psmJP6KsB+qtowYLXwGo8mGaFKQAc+z+huW0o3jtH7xLUAJMPMvKYkpaJOOdcOUuL
-         mJUfIEyCy8rRLxFMR4ThCJoZQGojTOvjgvmiELIHlXt27Vdo3lo2AsPTJHekajP5jRui
-         5TpOrH9mIMKRrtEqEUYcED1IqAnsNvxDqMbnT4ih8Zxq1r6m0LEHaAH5+FOcgrjlPTAQ
-         2LXbUD4RHgYrtR07UyVIH7STwLW04YOO13+GDR8Jh15o7K5wH6PT0F0BHyyJuYBeN1sp
-         cmFg==
-X-Gm-Message-State: AOAM532XbhxYf1awFYQ4UVXWe1u3BOiUgLWZ6Jq3L9Km89PNG2PVmcBb
-        SKt5oIYsyqXMPVPL1sBBLi6D7O0jOgRijg==
-X-Google-Smtp-Source: ABdhPJyh8djCs5KBhtHmWvs+w17xnphZd7/tx119erntsFX9510Pj8MdMJrgE3jzC2Hewn4vcst2iQ==
-X-Received: by 2002:a17:90b:4c11:: with SMTP id na17mr27193063pjb.84.1641751909234;
-        Sun, 09 Jan 2022 10:11:49 -0800 (PST)
-Received: from localhost.localdomain (h69-131-29-103.cntcnh.broadband.dynamic.tds.net. [69.131.29.103])
-        by smtp.gmail.com with ESMTPSA id j4sm4372827pfj.34.2022.01.09.10.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 10:11:48 -0800 (PST)
-Sender: Len Brown <lenb417@gmail.com>
-From:   Len Brown <lenb@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Len Brown <len.brown@intel.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        stable@vger.kernel.org
-Subject: [PATCH REGRESSION] Revert "drm/amdgpu: stop scheduler when calling hw_fini (v2)"
-Date:   Sun,  9 Jan 2022 13:11:37 -0500
-Message-Id: <8ab406c8bb2e58969668a806a529d5988b447530.1641750730.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 9 Jan 2022 13:16:11 -0500
+Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 209IFWZx030890;
+        Mon, 10 Jan 2022 03:15:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 209IFWZx030890
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1641752132;
+        bh=xJqrI0VPWaFJ8l3XbINJ/1PkDU8rQXznE1lusSMRuuw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0lRmUzhj46SJOuGSEv9Y4r4r26/ApSiS4iwtN8LfORqQ/p93z2beYGUkh5llI4VMe
+         cLJo0rjxdjXlleVz7O2nSPzvqltWm3jpEpv9W/54tn04gP0L61QIqK0J08x0GlWxLP
+         unkVHIdY115BMKXMWTRgfovD0P7uiq3PYXtTf2w3K3ElxKXdBZx+731/L0SG6us0oh
+         T5ddcVq02OPTeRvYzM/8+Nj32WuyhSND67NdpzftiUffn12UJ64/iZrh9xkuMldY04
+         PEwBdyfpX2CLSf8OeZLH8iFzh2+sqvPOONkSNn5pONVyJ9lFZmzqhbsMlHDx7s1kZl
+         G2SrCKeCCoDFg==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 1/5] sh: rename suffix-y to suffix_y
+Date:   Mon, 10 Jan 2022 03:15:25 +0900
+Message-Id: <20220109181529.351420-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Len Brown <len.brown@intel.com>
+'export suffix-y' does not work reliably because hyphens are disallowed
+in shell variables.
 
-This reverts commit f7d6779df642720e22bffd449e683bb8690bd3bf.
+A similar issue was fixed by commit 2bfbe7881ee0 ("kbuild: Do not use
+hyphen in exported variable name").
 
-This bisected regression has impacted suspend-resume stability
-since 5.15-rc1. It regressed -stable via 5.14.10.
+If I do similar in dash, ARCH=sh fails to build.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215315
+  $ mv linux linux~
+  $ cd linux~
+  $ dash
+  $ make O=foo/bar ARCH=sh CROSS_COMPILE=sh4-linux-gnu- defconfig all
+  make[1]: Entering directory '/home/masahiro/linux~/foo/bar'
+    [ snip ]
+  make[4]: *** No rule to make target 'arch/sh/boot/compressed/vmlinux.bin.', needed by 'arch/sh/boot/compressed/piggy.o'.  Stop.
+  make[3]: *** [/home/masahiro/linux~/arch/sh/boot/Makefile:40: arch/sh/boot/compressed/vmlinux] Error 2
+  make[2]: *** [/home/masahiro/linux~/arch/sh/Makefile:194: zImage] Error 2
+  make[1]: *** [/home/masahiro/linux~/Makefile:350: __build_one_by_one] Error 2
+  make[1]: Leaving directory '/home/masahiro/linux~/foo/bar'
+  make: *** [Makefile:219: __sub-make] Error 2
 
-Fixes: f7d6779df64 ("drm/amdgpu: stop scheduler when calling hw_fini (v2)")
-Cc: Guchun Chen <guchun.chen@amd.com>
-Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc: Christian Koenig <christian.koenig@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: <stable@vger.kernel.org> # 5.14+
-Signed-off-by: Len Brown <len.brown@intel.com>
+The maintainer of GNU Make stated that there is no consistent way to
+export variables that do not meet the shell's naming criteria.
+(https://savannah.gnu.org/bugs/?55719)
+
+Consequently, you cannot use hyphens in exported variables.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 8 --------
- 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index 9afd11ca2709..45977a72b5dd 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -547,9 +547,6 @@ void amdgpu_fence_driver_hw_fini(struct amdgpu_device *adev)
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
+ arch/sh/boot/Makefile            | 16 ++++++++--------
+ arch/sh/boot/compressed/Makefile |  2 +-
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/arch/sh/boot/Makefile b/arch/sh/boot/Makefile
+index 5c123f5b2797..1f5d2df3c7e0 100644
+--- a/arch/sh/boot/Makefile
++++ b/arch/sh/boot/Makefile
+@@ -19,12 +19,12 @@ CONFIG_ZERO_PAGE_OFFSET	?= 0x00001000
+ CONFIG_ENTRY_OFFSET	?= 0x00001000
+ CONFIG_PHYSICAL_START	?= $(CONFIG_MEMORY_START)
  
--		if (!ring->no_scheduler)
--			drm_sched_stop(&ring->sched, NULL);
--
- 		/* You can't wait for HW to signal if it's gone */
- 		if (!drm_dev_is_unplugged(adev_to_drm(adev)))
- 			r = amdgpu_fence_wait_empty(ring);
-@@ -609,11 +606,6 @@ void amdgpu_fence_driver_hw_init(struct amdgpu_device *adev)
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
+-suffix-y := bin
+-suffix-$(CONFIG_KERNEL_GZIP)	:= gz
+-suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
+-suffix-$(CONFIG_KERNEL_LZMA)	:= lzma
+-suffix-$(CONFIG_KERNEL_XZ)	:= xz
+-suffix-$(CONFIG_KERNEL_LZO)	:= lzo
++suffix_y := bin
++suffix_$(CONFIG_KERNEL_GZIP)	:= gz
++suffix_$(CONFIG_KERNEL_BZIP2)	:= bz2
++suffix_$(CONFIG_KERNEL_LZMA)	:= lzma
++suffix_$(CONFIG_KERNEL_XZ)	:= xz
++suffix_$(CONFIG_KERNEL_LZO)	:= lzo
  
--		if (!ring->no_scheduler) {
--			drm_sched_resubmit_jobs(&ring->sched);
--			drm_sched_start(&ring->sched, true);
--		}
--
- 		/* enable the interrupt */
- 		if (ring->fence_drv.irq_src)
- 			amdgpu_irq_get(adev, ring->fence_drv.irq_src,
+ targets := zImage vmlinux.srec romImage uImage uImage.srec uImage.gz \
+ 	   uImage.bz2 uImage.lzma uImage.xz uImage.lzo uImage.bin \
+@@ -106,10 +106,10 @@ OBJCOPYFLAGS_uImage.srec := -I binary -O srec
+ $(obj)/uImage.srec: $(obj)/uImage FORCE
+ 	$(call if_changed,objcopy)
+ 
+-$(obj)/uImage: $(obj)/uImage.$(suffix-y)
++$(obj)/uImage: $(obj)/uImage.$(suffix_y)
+ 	@ln -sf $(notdir $<) $@
+ 	@echo '  Image $@ is ready'
+ 
+ export CONFIG_PAGE_OFFSET CONFIG_MEMORY_START CONFIG_BOOT_LINK_OFFSET \
+        CONFIG_PHYSICAL_START CONFIG_ZERO_PAGE_OFFSET CONFIG_ENTRY_OFFSET \
+-       KERNEL_MEMORY suffix-y
++       KERNEL_MEMORY suffix_y
+diff --git a/arch/sh/boot/compressed/Makefile b/arch/sh/boot/compressed/Makefile
+index cf3174df7859..c1eb9a62de55 100644
+--- a/arch/sh/boot/compressed/Makefile
++++ b/arch/sh/boot/compressed/Makefile
+@@ -64,5 +64,5 @@ OBJCOPYFLAGS += -R .empty_zero_page
+ 
+ LDFLAGS_piggy.o := -r --format binary --oformat $(ld-bfd) -T
+ 
+-$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix-y) FORCE
++$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix_y) FORCE
+ 	$(call if_changed,ld)
 -- 
-2.25.1
+2.32.0
 

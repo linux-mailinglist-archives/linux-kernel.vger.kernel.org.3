@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA126488BD8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134D6488BDB
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbiAISzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 13:55:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35902 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236614AbiAISzh (ORCPT
+        id S234462AbiAIS4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 13:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229582AbiAIS4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 13:55:37 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209I5ZT1021796;
-        Sun, 9 Jan 2022 18:55:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=zROlUnGp7KwW/JRJDF1wWCeMVgCxWkXiPtbI6LaWmgA=;
- b=HF7heHGVE6wZrG9Fta53b1u4TTR5ogsIHB+BnB8btOxWDwmupEmcjFK3h8z9WDVEhgnf
- wLUZuXVkqGSqAl3favxPCIxXeVq1yk/zl9BR3Jiwi0HpMyvr7HfM5/M9KV1G8wZQ/NYX
- t/4De4iqWvSQ+6ovuiuhC8e5dO0rxQXhXRc/nJ3b7SOUKNgK3buhMc/mGncjlEcjn+yF
- k7N7G7bQ7hmtGUXU09VndYcVAY4Zf9SxhSlb4mSlo9h0VUS1tFPtmdObc2atm4Cf0hgj
- ENOrpPv03glr+U9Xkecr4mMV75XSSe7ZpBJlviurxbHtDgucA5bt/XuyJWxhNlY8gMhi nw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dfkyrb2d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 18:55:35 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 209IreqH023288;
-        Sun, 9 Jan 2022 18:55:33 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3df288ekj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 18:55:33 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 209ItVik40370648
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 9 Jan 2022 18:55:31 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FF29A404D;
-        Sun,  9 Jan 2022 18:55:31 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C911A4051;
-        Sun,  9 Jan 2022 18:55:30 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.69.17])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  9 Jan 2022 18:55:30 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] fsverity: update the documentation
-Date:   Sun,  9 Jan 2022 13:55:17 -0500
-Message-Id: <20220109185517.312280-7-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220109185517.312280-1-zohar@linux.ibm.com>
-References: <20220109185517.312280-1-zohar@linux.ibm.com>
-MIME-Version: 1.0
+        Sun, 9 Jan 2022 13:56:54 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81B6C061748
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 10:56:53 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id p37so8867680pfh.4
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 10:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wJEUw9ff5ZoyLDqzlPoT0/RMmRbe6oRM0UsL8abW2Hc=;
+        b=nTW3bDU69D+maIKyxjfA6EnVwxU+mhMaNR5SCm/lYu7vEvl8ymOHumN8fBNq+OX+Mu
+         yTq6u/xKNc7GPDJWaNOToTFg3dZ5cmgOvmoQ20gYdNMZeFPphC2pRDKDkGJxgX1jbDXq
+         QvliYpvuMIXD2ENnu7p0OokAjEXoOY0OKh589ax8WNrIwQAcpbsRzk7ISDGME6hcfTzu
+         8zsm/esLTe5a5vWid2Ki2BVcKuuhaeYsJghhu/mhgDCkOZxVTDcfJ/P5F1oXu1vTK6MZ
+         XOd+cznTrxoaSh22tmlZDvHstM5yOjpy2g6S20yBQCFBpOfSOIfqa5MB+JLU7wBlddCR
+         xksg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=wJEUw9ff5ZoyLDqzlPoT0/RMmRbe6oRM0UsL8abW2Hc=;
+        b=6LkWDdtAVBGbK8bX6NxIanApvJSGjiFIh1O+6VS8lL5KeOZ77EZ44v5WBNwXaF/WuX
+         sPmbBrZp8+YC9mgz8HWC109BaZjgptR4rM37JRT3hsEB9qy7Jp0vxLYQrMJbCQ27CziB
+         5OYf967gb6GAR/nG0teht0hMpy32Z+E0Bdf1Iirw4hIuWak8vNdE91IQY3Z1FIvQRqta
+         xJ0BOedZ0UkM0Saw5g77gfaAycGNS7BSCOXlKIQ1+00IBgi3aBKD2CJBDgClllYp6zaI
+         6RbEahefdyw7UVClz7V5zPL2fvE5JZmCW+XCaM7us90NHAYWBehnrVuGMmuJPQsUHxKU
+         8l/w==
+X-Gm-Message-State: AOAM531aYN685bxl3JpmUbmlicPoiiFG+CPLIyHx/gpE3ovGKbyFSPtp
+        Eneq+PnPkJU3rad2pRHfVWdiPg==
+X-Google-Smtp-Source: ABdhPJyr0zws2LdZ788TXsTMQDc/XOoIDXppwbYJus0GYLTDrTrLrpomN372UEv+yckAjiNujYAteQ==
+X-Received: by 2002:a63:4a5f:: with SMTP id j31mr62757106pgl.222.1641754613260;
+        Sun, 09 Jan 2022 10:56:53 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id d4sm4216032pfu.50.2022.01.09.10.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 10:56:52 -0800 (PST)
+Date:   Sun, 09 Jan 2022 10:56:52 -0800 (PST)
+X-Google-Original-Date: Sun, 09 Jan 2022 10:55:49 PST (-0800)
+Subject:     Re: [PATCH 1/3] riscv: Don't use va_pa_offset on kdump
+In-Reply-To: <70fe8aa8bfe3923308e6248377577f58@mailhost.ics.forth.gr>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alex@ghiti.fr, stable@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     mick@ics.forth.gr
+Message-ID: <mhng-d399244b-db6d-40e5-9113-77baf96bf987@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gtgM7nNJhqVvYGAtG8laFqJgZiSoGPsp
-X-Proofpoint-ORIG-GUID: gtgM7nNJhqVvYGAtG8laFqJgZiSoGPsp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-09_08,2022-01-07_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201090135
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the fsverity documentation related to IMA signature support.
+On Fri, 07 Jan 2022 10:03:59 PST (-0800), mick@ics.forth.gr wrote:
+> Hello Palmer,
+>
+> Any updates on those 3 patches ?
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- Documentation/filesystems/fsverity.rst | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+Sorry, I hadn't realized these were fixes so they got stuck in the 
+queue0.  I do now remember you saying you had some fixes at the RISC-V 
+conference, but I guess that got lost as well.  Including something like 
+"fix" or "-fixes" in a subject line always helps, but if I miss stuff 
+IRC's always a good bet as that'll at least make sure I see it when I'm 
+in front of the computer -- there's a lot of people who want things at 
+these conferences.
 
-diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-index 1d831e3cbcb3..7d8a574a0d3b 100644
---- a/Documentation/filesystems/fsverity.rst
-+++ b/Documentation/filesystems/fsverity.rst
-@@ -74,8 +74,12 @@ authenticating the files is up to userspace.  However, to meet some
- users' needs, fs-verity optionally supports a simple signature
- verification mechanism where users can configure the kernel to require
- that all fs-verity files be signed by a key loaded into a keyring; see
--`Built-in signature verification`_.  Support for fs-verity file hashes
--in IMA (Integrity Measurement Architecture) policies is also planned.
-+`Built-in signature verification`_.
-+
-+IMA supports including fs-verity file digests and signatures based
-+on the fs-verity file digests in the IMA (Integrity Measurement
-+Architecture) measurement list and verifying fs-verity based file
-+signatures stored as security.ima xattrs, based on policy.
- 
- User API
- ========
-@@ -653,13 +657,13 @@ weren't already directly answered in other parts of this document.
-     hashed and what to do with those hashes, such as log them,
-     authenticate them, or add them to a measurement list.
- 
--    IMA is planned to support the fs-verity hashing mechanism as an
--    alternative to doing full file hashes, for people who want the
--    performance and security benefits of the Merkle tree based hash.
--    But it doesn't make sense to force all uses of fs-verity to be
--    through IMA.  As a standalone filesystem feature, fs-verity
--    already meets many users' needs, and it's testable like other
--    filesystem features e.g. with xfstests.
-+    IMA supports the fs-verity hashing mechanism as an alternative
-+    to doing full file hashes, for people who want the performance
-+    and security benefits of the Merkle tree based hash.  But it
-+    doesn't make sense to force all uses of fs-verity to be through
-+    IMA.  As a standalone filesystem feature, fs-verity already meets
-+    many users' needs, and it's testable like other filesystem
-+    features e.g. with xfstests.
- 
- :Q: Isn't fs-verity useless because the attacker can just modify the
-     hashes in the Merkle tree, which is stored on-disk?
--- 
-2.27.0
+It's too late for fixes, but it looks like things have been broken for a 
+while so these will have to all get backported to stable regardless.
 
+This is on for-next.
+
+Thanks!
+
+>
+> Regards,
+> Nick
+>
+> Στις 2021-11-26 20:04, Nick Kossifidis έγραψε:
+>> On kdump instead of using an intermediate step to relocate the kernel,
+>> that lives in a "control buffer" outside the current kernel's mapping,
+>> we jump to the crash kernel directly by calling
+>> riscv_kexec_norelocate().
+>> The current implementation uses va_pa_offset while switching to
+>> physical
+>> addressing, however since we moved the kernel outside the linear
+>> mapping
+>> this won't work anymore since riscv_kexec_norelocate() is part of the
+>> kernel mapping and we should use kernel_map.va_kernel_pa_offset, and
+>> also
+>> take XIP kernel into account.
+>>
+>> We don't really need to use va_pa_offset on riscv_kexec_norelocate, we
+>> can just set STVEC to the physical address of the new kernel instead
+>> and
+>> let the hart jump to the new kernel on the next instruction after
+>> setting
+>> SATP to zero. This fixes kdump and is also simpler/cleaner.
+>>
+>> I tested this on the latest qemu and HiFive Unmatched and works as
+>> expected.
+>>
+>> v2: I removed the direct jump after setting satp as suggested.
+>>
+>> Fixes: 2bfc6cd81bd1 ("riscv: Move kernel mapping outside of linear
+>> mapping")
+>>
+>> Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
+>> Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
+>> Cc: <stable@vger.kernel.org> # 5.13
+>> Cc: <stable@vger.kernel.org> # 5.14

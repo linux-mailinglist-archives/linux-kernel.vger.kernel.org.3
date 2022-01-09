@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1474B488838
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 07:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EF948883C
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 07:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbiAIGWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 01:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S235218AbiAIGhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 01:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiAIGWA (ORCPT
+        with ESMTP id S229960AbiAIGhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 01:22:00 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E86C06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 22:21:59 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id p5so22187550ybd.13
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 22:21:59 -0800 (PST)
+        Sun, 9 Jan 2022 01:37:19 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30361C06173F;
+        Sat,  8 Jan 2022 22:37:18 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so3217964pja.1;
+        Sat, 08 Jan 2022 22:37:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7MHOoZalZ4yzdXRz8I2/T4uac/wUxMGeLB4SbnbuPrk=;
-        b=E0CjwfS0akiynM70MG+cOaaLmR+MLPa5cimWRH++WIDvhMf8SNXD6+Ce+k86NXuhHe
-         Bpjc/YIFX0whSU8iyb5UwnoIqPW0+KheS1Ta0solvIEE/OXwqcLbeSLi2ynZm6JX5uZK
-         r43biAwgdy2lKh9uqKPl+Wcpux/0SwkCI+ZaI8upAedJ2QX2Dg0VtaXtCsofOk7pSVoa
-         av18a9k08ZqjeCsmIAhlqZIPUz4wnApQ8DCMjG6jSeothuRUF9Hgn/rVvkyY8SnAOLIX
-         ZRaP8hTxlaH+RVc4hXGQGT3UVPHzAMIOs9v4HAr6wXJm35qWlalg3XFz21lJCLIoj4RW
-         VwmA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Iti5sESAOcClmZrnJzGTRKx0DfFMS6RUHfyIcg2sm0M=;
+        b=H4XTKWn52DkOQY8RTNT6sXH0wIUZ/6UDKNShUgPNfMk4ctOGUs6YLnD7KM7hcnkHQH
+         bqTj/uwHiuStZKbQ5olShYHgBc1FNfSTPokagR/HXCBldtoBwmiYHPIpaxFhwlqPA3fg
+         iYFzVF1I3rsQv0vzBmz2pbgWhU+CF2Bzc4u4ylaHdg28OJxiUsy1V7ucGhdkEjHtqoJn
+         5MazbhsLaGLzErJgAemrBgr46C61GhVGvixK5z5vHAy5mdSAGRUWVlrDSpQ23OrYA4GJ
+         T3H9aNqb2WWo/YjN9F7FEtlP5z6ErD3c2DR70W5cXtlFgp2cjbiHnqv3y+dANXHmyYki
+         lgJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7MHOoZalZ4yzdXRz8I2/T4uac/wUxMGeLB4SbnbuPrk=;
-        b=D0C+bIlBbJmKo9HEqApaZFFTjpQKYEz7cUPMN+RqnEmUBJMCRgsZT19wwCBHCQg236
-         RRxw9TCcEJNvD6g8txobl7Z3K8mTLjOHqRjT51yJ3bod2+ofPSTZ8lRXE2cCjHOiiUAY
-         PpnALfMZzxbTZn0lyfsAop77b+N6u2HUfxrLlGIRULUb2cPaj4xcIe+m1a6YU/N3ibqu
-         TuuQxKSFKFDF1DOy97mxwTjD7ahzTUsyag7UvZiUkMGWOejpnJDmxvQUC3SPcZwyg5lx
-         lzRjPe3/yw50boJMCswUOB3ljGfNTDOzyLisxuyvENzFIW2cCLhgRo8FZMaVvXZdAO+N
-         V4KA==
-X-Gm-Message-State: AOAM532xw6odxnTYVU+OpBNGMqAX/VGlNmlAlUF2oPrs/MY9IMgxGJAM
-        4wcdGwPNgJP8R/F7K4qt1LMc+7gMklnoo9Qdp9EIVg==
-X-Google-Smtp-Source: ABdhPJyZ+bU4mbb0+w9+kdvDUEc5jYGIsxWWLUHnc0CSRRjhs5Oh0+esW/JLryFaRopClBiW67hA/1+sdioiJ76IOfs=
-X-Received: by 2002:a25:3890:: with SMTP id f138mr79980398yba.703.1641709318562;
- Sat, 08 Jan 2022 22:21:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Iti5sESAOcClmZrnJzGTRKx0DfFMS6RUHfyIcg2sm0M=;
+        b=GbFNj45BxEdeJtFq55gwcqog22h/9Nd8nu/9kSSSM5a7atTFFor/8LkcfOYI5FHXsK
+         HfrwwwTx2UWEOHcesMLxg6ORg5jvpbnEuHjb1fOi1E89aDiY0daOeK/kZ34P9Egnvt3p
+         Ch7OCtJFtB0tH/JYIOpg1OmXiron+BAqNTm1OM6EgwL6FNk+ln8VK6SUmWoje8BNEszH
+         LO0Ky5eTInH/a+4kYQPPLgzM0hBbnpKsvxOi7SO0yBitOv/8Xstgn758cWFxR7D5jf7F
+         AgBGiGlr+mz37NnJV3keJNPqcvXbD97ylUS0w2D/UF7IAJL6OHiRMzqWRflDoIEiaErq
+         Dxuw==
+X-Gm-Message-State: AOAM531zs26d6XpvC0GjYIn4GfnXHs20jrZ2jBVny5DXX3WubllwSYrI
+        Br6mi4CA09hDAe2vsl6WxbQ=
+X-Google-Smtp-Source: ABdhPJzQgBuulClcFSDrkGK/2LXG4hJ8BQ7KJjCr8JwaT/Ewm6qwRI55gdNIbeaGEMeYausDb5ZXUQ==
+X-Received: by 2002:a17:902:8347:b0:149:b26a:b9bc with SMTP id z7-20020a170902834700b00149b26ab9bcmr34789001pln.141.1641710238047;
+        Sat, 08 Jan 2022 22:37:18 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id my5sm5892042pjb.5.2022.01.08.22.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 22:37:17 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     rostedt@goodmis.org, dsahern@kernel.org
+Cc:     mingo@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        nhorman@tuxdriver.com, edumazet@google.com,
+        yoshfuji@linux-ipv6.org, alobakin@pm.me, willemb@google.com,
+        cong.wang@bytedance.com, keescook@chromium.org, pabeni@redhat.com,
+        talalahmad@google.com, haokexin@gmail.com,
+        ilias.apalodimas@linaro.org, memxor@gmail.com, atenart@kernel.org,
+        bigeasy@linutronix.de, weiwan@google.com, arnd@arndb.de,
+        vvs@virtuozzo.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, jonathan.lemon@gmail.com,
+        imagedong@tencent.com
+Subject: [PATCH v4 net-next 0/3] net: skb: introduce kfree_skb_with_reason()
+Date:   Sun,  9 Jan 2022 14:36:25 +0800
+Message-Id: <20220109063628.526990-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-3-songmuchun@bytedance.com> <Ydet1XmiY8SZPLUx@carbon.dhcp.thefacebook.com>
-In-Reply-To: <Ydet1XmiY8SZPLUx@carbon.dhcp.thefacebook.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Sun, 9 Jan 2022 14:21:22 +0800
-Message-ID: <CAMZfGtWmwTLHdO6acx9_+nR68j-v9SKjMsq-0v4ZDeQORgaQ=w@mail.gmail.com>
-Subject: Re: [PATCH v5 02/16] mm: introduce kmem_cache_alloc_lru
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 11:05 AM Roman Gushchin <guro@fb.com> wrote:
->
-[...]
-> >  /*
-> >   * struct kmem_cache related prototypes
-> > @@ -425,6 +426,8 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
-> >
-> >  void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
-> >  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
-> > +void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
-> > +                        gfp_t gfpflags) __assume_slab_alignment __malloc;
->
-> I'm not a big fan of this patch: I don't see why preparing the lru
-> infrastructure has to be integrated that deep into the slab code.
->
-> Why can't kmem_cache_alloc_lru() be a simple wrapper like (pseudo-code):
->   void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->                            gfp_t gfpflags) {
->         if (necessarily)
->            prepare_lru_infra();
->         return kmem_cache_alloc();
->   }
+From: Menglong Dong <imagedong@tencent.com>
 
-Hi Roman,
+In this series patch, the interface kfree_skb_with_reason() is
+introduced(), which is used to collect skb drop reason, and pass
+it to 'kfree_skb' tracepoint. Therefor, 'drop_monitor' or eBPF is
+able to monitor abnormal skb with detail reason.
 
-Actually, it can. But there is going to be some redundant code similar
-like memcg_slab_pre_alloc_hook() does to detect the necessity of
-prepare_lru_infra() in the new scheme of kmem_cache_alloc_lru().
-I just want to reduce the redundant overhead.
+In fact, this series patches are out of the intelligence of David
+and Steve, I'm just a truck man :/
 
-Thanks.
+Previous discussion is here:
+
+https://lore.kernel.org/netdev/20211118105752.1d46e990@gandalf.local.home/
+https://lore.kernel.org/netdev/67b36bd8-2477-88ac-83a0-35a1eeaf40c9@gmail.com/
+
+In the first patch, kfree_skb_with_reason() is introduced and
+the 'reason' field is added to 'kfree_skb' tracepoint. In the
+second patch, 'kfree_skb()' in replaced with 'kfree_skb_with_reason()'
+in tcp_v4_rcv(). In the third patch, 'kfree_skb_with_reason()' is
+used in __udp4_lib_rcv().
+
+Changes since v3:
+- fix some code style problems in skb.h
+
+Changes since v2:
+- rename kfree_skb_with_reason() to kfree_skb_reason()
+- make kfree_skb() static inline, as Jakub suggested
+
+Changes since v1:
+- rename some drop reason, as David suggested
+- add the third patch
+
+
+Menglong Dong (3):
+  net: bpf: handle return value of 
+    BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
+  bpf: selftests: use C99 initializers in test_sock.c
+  bpf: selftests: add bind retry for post_bind{4, 6}
+
+ include/net/sock.h                      |   1 +
+ net/ipv4/af_inet.c                      |   2 +
+ net/ipv4/ping.c                         |   1 +
+ net/ipv4/tcp_ipv4.c                     |   1 +
+ net/ipv4/udp.c                          |   1 +
+ net/ipv6/af_inet6.c                     |   2 +
+ net/ipv6/ping.c                         |   1 +
+ net/ipv6/tcp_ipv6.c                     |   1 +
+ net/ipv6/udp.c                          |   1 +
+ tools/testing/selftests/bpf/test_sock.c | 370 ++++++++++++++----------
+ 10 files changed, 233 insertions(+), 148 deletions(-)
+
+-- 
+2.27.0
+

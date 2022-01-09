@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4908248896B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 13:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CC248896E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 13:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235150AbiAIMvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 07:51:49 -0500
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:52344 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbiAIMvs (ORCPT
+        id S235552AbiAIMxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 07:53:24 -0500
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:41830 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231394AbiAIMxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 07:51:48 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6XfmnCKJUUujj6XfmnIRy3; Sun, 09 Jan 2022 13:51:47 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 09 Jan 2022 13:51:47 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] thunderbolt: Remove useless DMA-32 fallback configuration
-Date:   Sun,  9 Jan 2022 13:51:31 +0100
-Message-Id: <4b40fc065771fadc1a5187d533bd760e034ece58.1641732679.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 9 Jan 2022 07:53:23 -0500
+Received: by mail-wr1-f41.google.com with SMTP id v6so21418542wra.8
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 04:53:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=grA0cdw5lnO9WkWK/DwhFMP5UY39CgS8WhXA1sFFVq8=;
+        b=VnFdHjtBkpGtnDGlNJugLvoXijtIRsGZXQhEmdQb1iYUSJpLqAoJnzqWFpTTI8M5ZP
+         mG+TVWgDZNbMnmTrG6r0vjrVOsgVHtzE0dsy22QoDeKOJokEEDNWDz+SFB6MBoWXWEDU
+         wIhq+JrT9ZlkIJtbXmYmYwULl2OdEahCHaQNZdP6jOQI+LbKAELl0uJfTNgGM4cYF6Xu
+         NOA3c/I9QlUG7UFfuT7SMCFIBjxKp4gFZ4L3H0AAIWY9nzQWCzMWvr7N7rLLEcM7yio8
+         kzjjhpBCSJ1Fiol/4BOCNbywc38l0hNKPa1sRyvJ+FK3+rcMXQPtg5VU9cB+QzTDS6PT
+         WAEA==
+X-Gm-Message-State: AOAM5317VdKXaw760u2HfMWXE7v7Gz5d0HbUdzNbHKaCNaEoGrSO2cut
+        2shRwX9gLMAiiP/7Ieij5sE=
+X-Google-Smtp-Source: ABdhPJxJ/93rgdQgBGTs+tjFxGX8oyPr9mzIhPM28zbabY5uED4+tJmShtT+/RBKYe4teDOpUbzu9Q==
+X-Received: by 2002:a05:6000:1684:: with SMTP id y4mr59128621wrd.26.1641732802695;
+        Sun, 09 Jan 2022 04:53:22 -0800 (PST)
+Received: from [192.168.64.123] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id l14sm4177198wrr.53.2022.01.09.04.53.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jan 2022 04:53:22 -0800 (PST)
+Subject: Re: [PATCH] nvme-fabrics: remove unneeded variable
+To:     cgel.zte@gmail.com, kbusch@kernel.org
+Cc:     axboe@fb.com, hch@lst.de, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220107022306.622222-1-deng.changcheng@zte.com.cn>
+From:   Sagi Grimberg <sagi@grimberg.me>
+Message-ID: <5212915e-5e1f-7a77-f05e-248de382fcfb@grimberg.me>
+Date:   Sun, 9 Jan 2022 14:53:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220107022306.622222-1-deng.changcheng@zte.com.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
 
-Simplify code and remove some dead code accordingly.
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
+> Remove unneeded variable used to store return value.
 
+I actually think that ret is missing an assignment in the error
+case (e.g ret = -ENODEV)...
 
-While at it, include directly <linux/dma-mapping.h> instead on relying on
-indirect inclusion.
-
-[1]: https://lkml.org/lkml/2021/6/7/398
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/thunderbolt/nhi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index c73da0532be4..4a582183f675 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/errno.h>
- #include <linux/pci.h>
-+#include <linux/dma-mapping.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/delay.h>
-@@ -1229,8 +1230,6 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	spin_lock_init(&nhi->lock);
- 
- 	res = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
--	if (res)
--		res = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (res) {
- 		dev_err(&pdev->dev, "failed to set DMA mask\n");
- 		return res;
--- 
-2.32.0
-
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>   drivers/nvme/host/fabrics.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/nvme/host/fabrics.c b/drivers/nvme/host/fabrics.c
+> index 7ae041e2b3fb..f79a66d4e22c 100644
+> --- a/drivers/nvme/host/fabrics.c
+> +++ b/drivers/nvme/host/fabrics.c
+> @@ -1092,7 +1092,6 @@ static void __nvmf_concat_opt_tokens(struct seq_file *seq_file)
+>   static int nvmf_dev_show(struct seq_file *seq_file, void *private)
+>   {
+>   	struct nvme_ctrl *ctrl;
+> -	int ret = 0;
+>   
+>   	mutex_lock(&nvmf_dev_mutex);
+>   	ctrl = seq_file->private;
+> @@ -1106,7 +1105,7 @@ static int nvmf_dev_show(struct seq_file *seq_file, void *private)
+>   
+>   out_unlock:
+>   	mutex_unlock(&nvmf_dev_mutex);
+> -	return ret;
+> +	return 0;
+>   }
+>   
+>   static int nvmf_dev_open(struct inode *inode, struct file *file)
+> 

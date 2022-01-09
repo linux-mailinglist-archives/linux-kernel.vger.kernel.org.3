@@ -2,113 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74923488CE8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 23:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAC2488CE9
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 23:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237325AbiAIWmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 17:42:52 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26708 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235592AbiAIWmv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 17:42:51 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209K8jts009677;
-        Sun, 9 Jan 2022 22:42:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=m7kkaOgprMhyZKpBAE0U3Rg3/s8DXxuGpFqmaEYLgXU=;
- b=eT8I4T0fENCfLrpQVlHHcpt2ffsZw4uqAgEX+7ZNnkm3q3Q0JnVAN5CHbGaJNDr5otUN
- 9Zq/7Kq+GD2QW5PJ3Lc8xv8/nT5xFozv9477i6ie++BxEluCAk8hAB3wjRWmlxypbcJM
- DtWNXcl1YHhvhigBfHyYnr47r8vYDMeLCCdQzQ2wRE7sKyJjAiINonVKEH7vwFLxKK6x
- c57RFIFJ1xj4yanedbXhhAof+WbEPBANvIvSaYWAOCHgx3Ks0IT700k7+pH1gwbuQLhj
- Uu8/zbVoGquEKOQrnfuclNFxkmtTtgCmm38GEt/GyerM/a5Nn2G1AU6y1CQWSWS0h/K5 ZQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dfm9gcxnt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 22:42:23 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 209MdbF2009477;
-        Sun, 9 Jan 2022 22:42:22 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dfm9gcxnm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 22:42:22 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 209MbeKd010915;
-        Sun, 9 Jan 2022 22:42:20 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3df288y4kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 22:42:20 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 209MgIZg39453012
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 9 Jan 2022 22:42:18 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C659A4060;
-        Sun,  9 Jan 2022 22:42:18 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B21F5A4054;
-        Sun,  9 Jan 2022 22:42:15 +0000 (GMT)
-Received: from sig-9-65-69-17.ibm.com (unknown [9.65.69.17])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  9 Jan 2022 22:42:15 +0000 (GMT)
-Message-ID: <4038761f32f97ab60802fc0bc9cfa65fa0ed4bca.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 5/8] KEYS: Introduce link restriction for machine keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, ardb@kernel.org, jarkko@kernel.org
-Cc:     jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        keescook@chromium.org, torvalds@linux-foundation.org,
-        weiyongjun1@huawei.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Date:   Sun, 09 Jan 2022 17:42:09 -0500
-In-Reply-To: <20220105235012.2497118-6-eric.snowberg@oracle.com>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
-         <20220105235012.2497118-6-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XFDV990_tYuNDSKLB5cATkiEE0Peu3Uy
-X-Proofpoint-GUID: CdvUNCdUM0lPSQe2GhWQs6fuoaDDNz3B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-09_10,2022-01-07_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 impostorscore=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201090163
+        id S237328AbiAIWoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 17:44:04 -0500
+Received: from mga07.intel.com ([134.134.136.100]:49628 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237329AbiAIWoC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 17:44:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641768242; x=1673304242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iyjTCySE0zve+TY3ce5l8pWwsA4o7tvfTiZksYf9uac=;
+  b=LFXkAthRVHOLC8Pnn4tzg+7FBibUHdcmnoge7+blRKgRfU3oTiuAF4E/
+   2I/+hlqBT4H4cJGy8oTrmrYxrBZ3UYX+2Pc9MimNOd1P1/jEkqlYu2dp5
+   z/kPgxdLnEe8oq+/ZSrv44pofCSWFLHJR6L26xWDFqPNv4AFssZxO2E3n
+   U436QoS6jgCsbGI+TMKmNVWZ4X2YFszL48EamBmw5bmhTDYxdWT81N/Hn
+   ZbhoLkRnFmyw7uYUiJCkGOItr4Q0qm+Gei/yZDlMAeEv/DEEshKFGMF42
+   GYAJOr2zXqQLcfQBHJYpIf9MrieHaEq9Yz7Y2oJSJCd3ehp/TJcI7ivtU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="306479708"
+X-IronPort-AV: E=Sophos;i="5.88,275,1635231600"; 
+   d="scan'208";a="306479708"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 14:44:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,275,1635231600"; 
+   d="scan'208";a="764355337"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jan 2022 14:43:59 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6gus-0001wX-KW; Sun, 09 Jan 2022 22:43:58 +0000
+Date:   Mon, 10 Jan 2022 06:43:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1105/2380]
+ arch/powerpc/include/asm/inst.h:143:17: error: implicit declaration of
+ function 'sprintf'
+Message-ID: <202201100628.S5iEUAdr-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-05 at 18:50 -0500, Eric Snowberg wrote:
-> Introduce a new link restriction that includes the trusted builtin,
-> secondary and machine keys. The restriction is based on the key to be
-> added being vouched for by a key in any of these three keyrings.
-> 
-> With the introduction of the machine keyring, the end-user may choose to
-> trust Machine Owner Keys (MOK) within the kernel. If they have chosen to
-> trust them, the .machine keyring will contain these keys.  If not, the
-> machine keyring will always be empty.  Update the restriction check to
-> allow the secondary trusted keyring and ima keyring to also trust
-> machine keys.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   351bfbf7f1e8dce84b605c8007c98dd603c4ca4d
+commit: cda4a13524f2ac766110f33d7851a490d39accd4 [1105/2380] headers/deps: Add header dependencies to .c files: <linux/kernel.h>
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220110/202201100628.S5iEUAdr-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=cda4a13524f2ac766110f33d7851a490d39accd4
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout cda4a13524f2ac766110f33d7851a490d39accd4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc prepare
 
-As suggested the Kconfig in "[PATCH v9 2/8] integrity: Introduce a
-Linux keyring called machine" only loads the platform keys onto the
-.machine keyring, when
-IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is not enabled.  The
-last sentence needs to be updated to reflect v9.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-thanks,
+Note: the mingo-tip/sched/headers HEAD 351bfbf7f1e8dce84b605c8007c98dd603c4ca4d builds fine.
+      It only hurts bisectability.
 
-Mimi
+All error/warnings (new ones prefixed by >>):
 
+   In file included from arch/powerpc/include/asm/hw_breakpoint.h:12,
+                    from arch/powerpc/include/asm/processor.h:43,
+                    from arch/powerpc/include/asm/thread_info.h:40,
+                    from include/linux/thread_info.h:61,
+                    from arch/powerpc/include/asm/ptrace.h:323,
+                    from arch/powerpc/include/asm/hw_irq.h:12,
+                    from arch/powerpc/include/asm/irqflags.h:12,
+                    from include/linux/irqflags.h:16,
+                    from include/asm-generic/cmpxchg-local.h:6,
+                    from arch/powerpc/include/asm/cmpxchg.h:526,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/atomic_api.h:1,
+                    from include/linux/jump_label.h:76,
+                    from include/linux/dynamic_debug.h:6,
+                    from include/linux/printk.h:559,
+                    from include/linux/kernel.h:20,
+                    from kernel/bounds.c:10:
+   arch/powerpc/include/asm/cpu_has_feature.h:21:31: error: array type has incomplete element type 'struct static_key_true'
+      21 | extern struct static_key_true cpu_feature_keys[NUM_CPU_FTR_KEYS];
+         |                               ^~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/cpu_has_feature.h: In function 'cpu_has_feature':
+   arch/powerpc/include/asm/cpu_has_feature.h:32:14: error: 'static_key_initialized' undeclared (first use in this function)
+      32 |         if (!static_key_initialized) {
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/cpu_has_feature.h:32:14: note: each undeclared identifier is reported only once for each function it appears in
+   arch/powerpc/include/asm/cpu_has_feature.h:46:16: error: implicit declaration of function 'static_branch_likely' [-Werror=implicit-function-declaration]
+      46 |         return static_branch_likely(&cpu_feature_keys[i]);
+         |                ^~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/cpu_has_feature.h:25:13: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+      25 |         int i;
+         |             ^
+   In file included from arch/powerpc/include/asm/hw_breakpoint.h:13,
+                    from arch/powerpc/include/asm/processor.h:43,
+                    from arch/powerpc/include/asm/thread_info.h:40,
+                    from include/linux/thread_info.h:61,
+                    from arch/powerpc/include/asm/ptrace.h:323,
+                    from arch/powerpc/include/asm/hw_irq.h:12,
+                    from arch/powerpc/include/asm/irqflags.h:12,
+                    from include/linux/irqflags.h:16,
+                    from include/asm-generic/cmpxchg-local.h:6,
+                    from arch/powerpc/include/asm/cmpxchg.h:526,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/atomic_api.h:1,
+                    from include/linux/jump_label.h:76,
+                    from include/linux/dynamic_debug.h:6,
+                    from include/linux/printk.h:559,
+                    from include/linux/kernel.h:20,
+                    from kernel/bounds.c:10:
+   arch/powerpc/include/asm/inst.h: In function '__ppc_inst_as_str':
+>> arch/powerpc/include/asm/inst.h:143:17: error: implicit declaration of function 'sprintf' [-Werror=implicit-function-declaration]
+     143 |                 sprintf(str, "%08x %08x", ppc_inst_val(x), ppc_inst_suffix(x));
+         |                 ^~~~~~~
+   arch/powerpc/include/asm/inst.h:1:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+     +++ |+#include <stdio.h>
+       1 | /* SPDX-License-Identifier: GPL-2.0-or-later */
+>> arch/powerpc/include/asm/inst.h:143:17: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
+     143 |                 sprintf(str, "%08x %08x", ppc_inst_val(x), ppc_inst_suffix(x));
+         |                 ^~~~~~~
+   arch/powerpc/include/asm/inst.h:143:17: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+   In file included from arch/powerpc/include/asm/ptrace.h:323,
+                    from arch/powerpc/include/asm/hw_irq.h:12,
+                    from arch/powerpc/include/asm/irqflags.h:12,
+                    from include/linux/irqflags.h:16,
+                    from include/asm-generic/cmpxchg-local.h:6,
+                    from arch/powerpc/include/asm/cmpxchg.h:526,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/atomic_api.h:1,
+                    from include/linux/jump_label.h:76,
+                    from include/linux/dynamic_debug.h:6,
+                    from include/linux/printk.h:559,
+                    from include/linux/kernel.h:20,
+                    from kernel/bounds.c:10:
+   arch/powerpc/include/asm/thread_info.h: In function 'clear_thread_local_flags':
+   include/linux/thread_info.h:26:32: error: implicit declaration of function 'task_thread_info'; did you mean 'current_thread_info'? [-Werror=implicit-function-declaration]
+      26 | # define current_thread_info() task_thread_info(current)
+         |                                ^~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/thread_info.h:159:34: note: in expansion of macro 'current_thread_info'
+     159 |         struct thread_info *ti = current_thread_info();
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:26:32: warning: initialization of 'struct thread_info *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      26 | # define current_thread_info() task_thread_info(current)
+         |                                ^~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/thread_info.h:159:34: note: in expansion of macro 'current_thread_info'
+     159 |         struct thread_info *ti = current_thread_info();
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/thread_info.h: In function 'test_thread_local_flags':
+   include/linux/thread_info.h:26:32: warning: initialization of 'struct thread_info *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      26 | # define current_thread_info() task_thread_info(current)
+         |                                ^~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/thread_info.h:165:34: note: in expansion of macro 'current_thread_info'
+     165 |         struct thread_info *ti = current_thread_info();
+         |                                  ^~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1197: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/sprintf +143 arch/powerpc/include/asm/inst.h
+
+50428fdc53ba48 Jordan Niethe 2020-06-02  139  
+50428fdc53ba48 Jordan Niethe 2020-06-02  140  static inline char *__ppc_inst_as_str(char str[PPC_INST_STR_LEN], struct ppc_inst x)
+50428fdc53ba48 Jordan Niethe 2020-06-02  141  {
+50428fdc53ba48 Jordan Niethe 2020-06-02  142  	if (ppc_inst_prefixed(x))
+50428fdc53ba48 Jordan Niethe 2020-06-02 @143  		sprintf(str, "%08x %08x", ppc_inst_val(x), ppc_inst_suffix(x));
+50428fdc53ba48 Jordan Niethe 2020-06-02  144  	else
+50428fdc53ba48 Jordan Niethe 2020-06-02  145  		sprintf(str, "%08x", ppc_inst_val(x));
+50428fdc53ba48 Jordan Niethe 2020-06-02  146  
+50428fdc53ba48 Jordan Niethe 2020-06-02  147  	return str;
+50428fdc53ba48 Jordan Niethe 2020-06-02  148  }
+50428fdc53ba48 Jordan Niethe 2020-06-02  149  
+
+:::::: The code at line 143 was first introduced by commit
+:::::: 50428fdc53ba48f6936b10dfdc0d644972403908 powerpc: Add a ppc_inst_as_str() helper
+
+:::::: TO: Jordan Niethe <jniethe5@gmail.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

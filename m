@@ -2,123 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF484889C2
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 15:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9083A4889D9
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 15:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbiAIOFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 09:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiAIOFi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 09:05:38 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96C1C06173F;
-        Sun,  9 Jan 2022 06:05:37 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id b13so42932598edd.8;
-        Sun, 09 Jan 2022 06:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=1T/jOp2YlfQdXwI5Lba833/98dqJmXanJ/UjQY3X2JY=;
-        b=OM+jlDrL74+JWv85i8qlUlrOvkcy7gVikjVc7ybfxLifJwRKJP3XIj8T+YAik9PAv/
-         mACjkRlvZOe3p2MKUIerDw5pcHlmJvTEpKs/+ChoT6SMGxC/ZVrRCWAlk0/smE8Sa9P5
-         vDNvxvQrJzmC69sEZCMLEmQw173WXprL32hv/jeFhkb/poDiphw6YxWLQpw1bkUolfE5
-         Cwa0T10KiiwGzDOlUxqwXGLaAyUky7wUgQ1dPBhofyvDev+w3cn0hGp5SYl2z+vRJqv9
-         nvPWEzJWjJ86bdrNFgXESvJzipDMn2f0a1KcsUYI/HDGJtG/F8GZg8byFqlYPArkT59Z
-         4F9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1T/jOp2YlfQdXwI5Lba833/98dqJmXanJ/UjQY3X2JY=;
-        b=nLzNjALf9wTfoMe2HM+Bum+Do8qavveTG0Vf+R96eJTjDC7u0yesteO5denKdLSg96
-         yXT0dJrYjHcLtAevqP/f1m/5f7GWK/6hbk8w2FU7ifImQ+RvNaoFsXLSf15cHklPr3GI
-         03KbYqcUVqn97geTRYYSbGlPW3s+rco1d0LJWSk/A6WTphFrW4Dz3QNCM0BsAHrwC7t9
-         nStj4d9oyXPIlXJThJJH+UOOKhNHxCxj6rR9P6NbTP+Wboa8kqBysKHBxjzI09wHAt8P
-         sOpQwgifLUnZKYDALvXc4f3/jp+eQYJQB0w2zWnUPuBwOMdOdXSb54wtXP00upFWu+MV
-         ctFQ==
-X-Gm-Message-State: AOAM531n4yPhYYJTgfKTkD6pUWdlBRAdcAgDL6JlFR8owdcmOXsFyJIZ
-        8O6/kyei1Ouiu7mAOcZW+Vv1XcbQucclr1wB7/4=
-X-Google-Smtp-Source: ABdhPJwiVfWz1fgtQciEOSQSLf/tNpKgIyuXTJDat67dbZujfGxLXKQ+NvmRDuO0wh7z4gjvACjlPZWzJRmv6ytR/wg=
-X-Received: by 2002:a50:ec81:: with SMTP id e1mr9684850edr.37.1641737136387;
- Sun, 09 Jan 2022 06:05:36 -0800 (PST)
+        id S234033AbiAIOQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 09:16:07 -0500
+Received: from mail-dm6nam11on2061.outbound.protection.outlook.com ([40.107.223.61]:52769
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229922AbiAIOQG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 09:16:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RC148HWRYFazVJeBMM6Guab7lW6BdMxiB+nUsWcikYjKOH2/c+2oQGVjy2uWNZ5FgsjUrA5WmUjAgDTgQE79EIBS8aEiVcrU0KQ+gI7ZWPXFqJHKdW5BA855oDUDAXFa9FOShTh7zemaUHpwfRikhWmbJ3eHMXIVpsVem+GOunfHiTpAAsqNirZxXSwh1g1At+P7oCWDlVYonqtsfOTTr9qQ9UH3uClfGopd3nLGGxZwmFunc9W4V8N9/Cji3ixu55c5PvGRDL7BQjwg0uSfJlmIzUiPeiH4lht+BR3V0GR9z8jy5p4iqvWahS0BFif9gKyU52lBW1AwLGSx76jeMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QB9KEK9yD8fcfg/WPeZBUBKtSl7/rVbeEPwnaFYLqyc=;
+ b=OODHyjunTxiQM7YKM1XAiK5EM2d3VtFd5ax/DQ61Lcvq/Ntgq9TnC/LvJVShV610EiagcDOILZ7C4g5TdNP7127hnkPE8dzAn/Ycp+EQQHrgpxOrfjgd+770Luq5LJlhW/lxqxiw9BR2S071Z0Z9VqwsY2eaKK+mJOx1yV9yLyk7S8uFtnl9EClMjwsKEduGFO49vKLkGzX9AOwMI/7IyO/pP+reb9NaXJewJnGTibunAFM7ofdclZZ+QLjm6GiHOM9zzFdTkEAk7ZiqFtbnjAuPTMCrjWz6wD0DsVDJ9ptNBNTISWuZVLU56MeShYvAxBmmZyJRrTLQtEs4Uvbksg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=bytedance.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QB9KEK9yD8fcfg/WPeZBUBKtSl7/rVbeEPwnaFYLqyc=;
+ b=n8RaaEIsoUY/2gPx2cSLnC8IeE4dU84ljrXg0CTWSS4W7MOPsRrZHarFf/AKmF0wqG2VIXUjF2f6nOLlfe3+StuZPBsQCgBUrTcyQ3r99IPxHEZcfzmPc7GkqAa3gg9y+dU0VnLHz8d9GAys2MvTWBk2YdBMnxOREDOiCa2XeQGHyfUOmSjiSryPsoi4hjFY17In7ojS3CWIPF1aTJizrx5XUn8arUrwjb3d+u08AcAp7yecobrGmpk1Id97DcuQfG+cIq+TqrK1dCnwA9NthcFAe17NUh1K5p/5Ijg9Bu+sfy0m+xLhoNGyYhJEMsJtiwSjiE6w4WTRSqDdvxrsJA==
+Received: from CO2PR07CA0067.namprd07.prod.outlook.com (2603:10b6:100::35) by
+ MN2PR12MB3263.namprd12.prod.outlook.com (2603:10b6:208:ab::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4867.11; Sun, 9 Jan 2022 14:16:04 +0000
+Received: from CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:100:0:cafe::b2) by CO2PR07CA0067.outlook.office365.com
+ (2603:10b6:100::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9 via Frontend
+ Transport; Sun, 9 Jan 2022 14:16:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT011.mail.protection.outlook.com (10.13.175.186) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4867.9 via Frontend Transport; Sun, 9 Jan 2022 14:16:03 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sun, 9 Jan
+ 2022 14:12:14 +0000
+Received: from mtl-vdi-166.wap.labs.mlnx (10.127.8.10) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9;
+ Sun, 9 Jan 2022 06:12:11 -0800
+Date:   Sun, 9 Jan 2022 16:12:07 +0200
+From:   Eli Cohen <elic@nvidia.com>
+To:     <trix@redhat.com>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>, <parav@nvidia.com>,
+        <si-wei.liu@oracle.com>, <xieyongji@bytedance.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vdpa/mlx5: simplfy error handler in mlx5_vdpa_dev_add()
+Message-ID: <20220109141207.GC70879@mtl-vdi-166.wap.labs.mlnx>
+References: <20220109132422.4047425-1-trix@redhat.com>
 MIME-Version: 1.0
-From:   "Sabri N. Ferreiro" <snferreiro1@gmail.com>
-Date:   Sun, 9 Jan 2022 22:05:24 +0800
-Message-ID: <CAKG+3NTTHD3iXgK67B4R3e+ScZ+vW5H4FdwLYy9CR5oBF44DOA@mail.gmail.com>
-Subject: WARNING in kvm_mmu_uninit_tdp_mmu
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sunhao.th@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220109132422.4047425-1-trix@redhat.com>
+User-Agent: Mutt/1.9.5 (bf161cf53efb) (2018-04-13)
+X-Originating-IP: [10.127.8.10]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b5eba36b-3ad9-43c2-cbb8-08d9d37a9201
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3263:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3263B1CD9D0876239CA3FEFEAB4F9@MN2PR12MB3263.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3tvS6Oj0W3jPCCf+Kh+Kv5ek8D949OF59JySSuOuAbjwWIT5bBGDPuhLpqsbTy5/j0SEzfvFke5u6ujIn31QI4GuNhn5iv+k1YM+i0P1eCjZW4DBRoVoSugwye2T5sU/r5UbJ9ryxKzc4kzujR+Fbysi2qIwBLIapl8oAjn1t5dToROcewWWSlSn6tOvg8TU2vUiQyC2pdd3z5tqToVdrpvuA23dI62wjWKdWJSClMglZ6dmWozn040TjucHaiZFvOt0/3zto/pOxxK12WoK5AD1sCWE9th3IBm+zNXx3FQIgOfKx3fe/rEKr1g1saU7nz2Es8Yok2ZT4Nte8X7rJFCfAE3bUAXMUQaIJrE70+53AP+Ag1G7PPo1bJCybvXEkQZM5HenWqaCz2dZwFWDGijNvAlO2AN0ed4vuuclMEilmlNU806CWXWTJ9lq+oz+ycMZKYIANPe9x2/CyJCcV5iQ0XnQGcJvor0CYxT/2ob8EQnUbDk+g+InAvpe042YUNgqhRbSh0aVp5Liie73Fjk5/xbajLcoyyq2o0TJ/vAzG9+bsY7HgPyqy8pgSRAzbCoHXCU4D+fbkMKEuFakg/r2voGNdlIdC/eLKdN7wjpOy605eM28xX7zn3GZU+6EpAxSFmzi2I2LqYC67KQqSa1Kphc3i+Sh8SzqB+o8LQvw+IoUgZ9S7iU+ffEdCKvCF1EDDHzBMO2bopOerOpf5yHJ/vfsBzIV0OM1WKOgBjlMfWeC1Q2a68kejvPiIRbHLXV29Z4+OqnGbdB+pG4Dl2Buj2aEWpIxM8AAmEGvPR8=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(316002)(26005)(5660300002)(54906003)(426003)(1076003)(83380400001)(8676002)(336012)(186003)(8936002)(508600001)(356005)(81166007)(82310400004)(55016003)(70586007)(70206006)(40460700001)(16526019)(7696005)(4326008)(36860700001)(86362001)(9686003)(6916009)(2906002)(33656002)(6666004)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2022 14:16:03.7760
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5eba36b-3ad9-43c2-cbb8-08d9d37a9201
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3263
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Jan 09, 2022 at 05:24:22AM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> The use of pfmdev is protected by two calls to is_zero_ether_add().
+> The second call in the error handler can be replaced by
+> checking if pfmdev was set as part of the earlier call.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
 
-When using Syzkaller to fuzz the Linux kernel, it triggers the following crash.
+It's not fixing anything, right? Maybe add justification for this change
+by e.g. showing the code size had decreased or so?
 
-HEAD commit: a7904a538933 Linux 5.16-rc6
-git tree: upstream
-console output: https://pastebin.com/raw/keWCUeJ2
-kernel config: https://docs.google.com/document/d/1w94kqQ4ZSIE6BW-5WIhqp4_Zh7XTPH57L5OF2Xb6O6o/view
-C reproducer: https://pastebin.com/raw/kSxa6Yit
-Syzlang reproducer: https://pastebin.com/raw/2RMu8p6E
-
-If you fix this issue, please add the following tag to the commit:
-Reported-by: Yuheng Shen mosesfonscqf75@gmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 5 PID: 29657 at arch/x86/kvm/mmu/tdp_mmu.c:46
-kvm_mmu_uninit_tdp_mmu+0xb9/0xf0
-Modules linked in:
-CPU: 5 PID: 29657 Comm: syz-executor.5 Not tainted 5.16.0-rc8+ #10
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:kvm_mmu_uninit_tdp_mmu+0xb9/0xf0
-Code: ea 03 80 3c 02 00 75 39 48 8b 83 e8 ae 00 00 48 39 c5 75 1a e8
-48 86 5a 00 e8 e3 bf 46 00 5b 5d e9 3c 86 5a 00 e8 37 86 5a 00 <0f> 0b
-eb b7 e8 2e 86 5a 00 0f 0b eb dd e8 a5 38 a1 00 e9 60 ff ff
-RSP: 0018:ffffc90016057b30 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffffc90015f89000 RCX: ffff888130d18000
-RDX: 0000000000000000 RSI: ffff888130d18000 RDI: 0000000000000002
-RBP: ffffc90015f93ef8 R08: ffffffff811cc8f9 R09: 0000000000000000
-R10: 0000000000000001 R11: fffffbfff20e793a R12: ffffc90015f8b1c8
-R13: 0000000000000003 R14: ffffc90015f8b1e8 R15: dffffc0000000000
-FS:  00007f7f240cb700(0000) GS:ffff888135d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055f76caf3498 CR3: 0000000123d22000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- kvm_arch_destroy_vm+0x42b/0x5b0
- kvm_put_kvm+0x4e9/0xbd0
- kvm_vcpu_release+0x4d/0x70
- __fput+0x286/0x9f0
- task_work_run+0xe0/0x1a0
- get_signal+0x1fb5/0x25e0
- arch_do_signal_or_restart+0x2ed/0x1c40
- exit_to_user_mode_prepare+0x192/0x2a0
- syscall_exit_to_user_mode+0x19/0x60
- do_syscall_64+0x42/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f7f257dd89d
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7f240cac28 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: 0000000000000000 RBX: 00007f7f258fd2a0 RCX: 00007f7f257dd89d
-RDX: 0000000000000000 RSI: 000000000000ae9a RDI: 0000000000000005
-RBP: 00007f7f2584a00d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdf486b75f R14: 00007f7f258fd2a0 R15: 00007f7f240cadc0
- </TASK>
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 37220f6db7ad7..2d38b8fe9305e 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2530,7 +2530,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+>  {
+>  	struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
+>  	struct virtio_net_config *config;
+> -	struct mlx5_core_dev *pfmdev;
+> +	struct mlx5_core_dev *pfmdev = NULL;
+>  	struct mlx5_vdpa_dev *mvdev;
+>  	struct mlx5_vdpa_net *ndev;
+>  	struct mlx5_core_dev *mdev;
+> @@ -2654,7 +2654,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+>  err_res:
+>  	mlx5_vdpa_free_resources(&ndev->mvdev);
+>  err_mpfs:
+> -	if (!is_zero_ether_addr(config->mac))
+> +	if (pfmdev)
+>  		mlx5_mpfs_del_mac(pfmdev, config->mac);
+>  err_mtu:
+>  	mutex_destroy(&ndev->reslock);
+> -- 
+> 2.26.3
+> 

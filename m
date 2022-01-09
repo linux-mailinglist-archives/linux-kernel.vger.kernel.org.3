@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E62C488C4B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 21:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03075488C50
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 21:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236935AbiAIUb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 15:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S236953AbiAIUiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 15:38:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiAIUbz (ORCPT
+        with ESMTP id S229579AbiAIUix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 15:31:55 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD7DC06173F;
-        Sun,  9 Jan 2022 12:31:54 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id a5so19047261wrh.5;
-        Sun, 09 Jan 2022 12:31:54 -0800 (PST)
+        Sun, 9 Jan 2022 15:38:53 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF23DC06173F;
+        Sun,  9 Jan 2022 12:38:52 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id w22so4439053iov.3;
+        Sun, 09 Jan 2022 12:38:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CVxqdhSmwND7LPC9Ui4ZQJOIVfvWlzvv/90s7w6B5IM=;
-        b=c/Zk0NQcXA2SZ9SiVcMCotQhECHHHx7PSWjjvXc3/8beOJuLmOFmaZJ3B0UOrVzQiY
-         Rvpt1XGBc0vy0b7vroeODiwR3LaXmdaF/O11MNffAyjvA8a2hSRInyDWEJ1VKGTogXTI
-         pvQI30pctZNmdEbD3ly+7Pq9pjmqy4khzpI3vnJ0gHBuTVF0earYnmtKl1lMHPNqnPxL
-         3U99hze3eCkl5+lAkf6yln2HDhbiaVMfypz5PYaNS9G4ALkox/GmA+3kxCkV6ei5dJG/
-         7BRTQVrLytg9ZI/XwcBLhx+KXNvTrae3srdkbf0Ynwlm/I8Ur3PopP7ez7F+j5l05cvJ
-         WCYA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aUgjMWnA1IN7R+ANpNtaHO4QvxMEdQHiPYa1/JTQhjM=;
+        b=IwV3q9ht1h2hBcaQmOAGKqpqBhTcCCXyIV9yGk7wcXIyMKiPUDzbFTsloct6a608iR
+         JwEhWGPWQyYIvz3dcbJO7AIE114EUL61a23I058gP2Tm5lO3NWTtHx6biP+puIUIStpi
+         6Zy5qMHlhbr3FipO4iGWS4diSOY71GJI5BzISFYPjulmk25JXaiaLRUyr0e6nR4Wp0Th
+         wzztMQpVLgn9Tcmpp4r5hjg09IxGH/z43e1h7+236Gb5T+n2a3bNftxge/SvUXeqe0ui
+         BcoeLCqdn1hGI4Xv1YFBW3R8GG5y/v/abRkRj2wCTAVz0aKW2bJFkbseWwEQPaRTkiYA
+         6X7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CVxqdhSmwND7LPC9Ui4ZQJOIVfvWlzvv/90s7w6B5IM=;
-        b=iYldydz0Qtog/NE0EUg4YZ/2SVLNbD8TWiLYmmDnLxJR/SCwQW33TL3wNMuKyKsamw
-         xnWpxvHmVOfejEg7v4kC8kHC6WvAKNMQFnU5nO8RTaG/5tr2HEhlzj/sZAaN2eVDZ7IZ
-         IAGD8NUT1ce/2n6rCs8lKC0ffrpSSndo6WtGTNaUm7fUamj06IwJSBAvsYuD/u4ueGrh
-         5S6QY1p6GCxuy3TJxcmvc0+NDiCiwt5oJzyYo67+e03QZ4n3FZTj6wSGq046R5KbIn2l
-         BfudkT6tWy1bxYyfah97hcyXvs29JymjNAx6NrNM7B8x3thhEBTTEn2lNLWNOmLVhd5v
-         diow==
-X-Gm-Message-State: AOAM530kFqTCYm/Cb9oHHHZUhgVUvuiG1c7EP9P7QxD37O8tYhViK9Li
-        YRaDEYWptOmNJSpcCQEfUjU=
-X-Google-Smtp-Source: ABdhPJxVqtlvscb41hOdCYQDVd7o8btAn3V18ZKgh8iUFdh4Qc76jZk6Pjedl6ObHF3sbnrvwkRJrA==
-X-Received: by 2002:a5d:6d85:: with SMTP id l5mr62101570wrs.579.1641760313091;
-        Sun, 09 Jan 2022 12:31:53 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f8sm5304253wry.16.2022.01.09.12.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 12:31:52 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i915: make array flex_regs static const
-Date:   Sun,  9 Jan 2022 20:31:52 +0000
-Message-Id: <20220109203152.51414-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aUgjMWnA1IN7R+ANpNtaHO4QvxMEdQHiPYa1/JTQhjM=;
+        b=uQXuz58OvV6r7tCm4E4FH4nNv7XFd38vhhLphQclP3ik8ndVdXxxG3lmCGxlJCb7Qh
+         MjvpGIe8ksqQV0LFiLjtP9pkmFaJlLbuug00rcLMrjpJD8jSGuElaiF2D4QFj/32uVXO
+         sVDaA2xIK8kc+Kho7UkFijSVktuLwEKY4p3B+3UhE1EPjBYSTYX4hMatKcIfEVEAPPba
+         fzeYKlvpWE9omzy7VpmAdLxxXLtlXjMWqgUo/ZG3OgVLXtZEO7XyW6JhzU3PC0EOhW2T
+         CaBW3Jp6HQR5PEft7hBgYtKeejrezHLgV/wQ5r7P5jfs4dG2VYJMC7Ow+eyZYC8K/+F5
+         m2QQ==
+X-Gm-Message-State: AOAM53085FFVEKUHdCP1uNnqnm2iHwH+ucQC5XhAABeC9xuJAQlWc3TW
+        o3jSu14cmUz2PrYgp6qXTQi8qgVYFoEw7bK2QuQ=
+X-Google-Smtp-Source: ABdhPJwXGNlIUiI8Ot7yHO5wT2K+zq/wsRQ/6JpZQUWK1OY7zqxDusKkMDHQL6lbCyw5EPAOXo18XwDRxpq+43oh7dc=
+X-Received: by 2002:a5d:9ec2:: with SMTP id a2mr35621393ioe.44.1641760732400;
+ Sun, 09 Jan 2022 12:38:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220106123357.16220-1-sj@kernel.org>
+In-Reply-To: <20220106123357.16220-1-sj@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 9 Jan 2022 21:38:40 +0100
+Message-ID: <CANiq72muzMPVUNJQU7Vcx0uCSEZc7Y_67LuX7PB=xNkCJ+NX7A@mail.gmail.com>
+Subject: Re: [PATCH] init/Kconfig: Specify the interpreter for rust-version.sh
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only array flex_regs on the stack but
-instead it static const. Also makes the object code a little smaller.
+On Thu, Jan 6, 2022 at 1:34 PM SeongJae Park <sj@kernel.org> wrote:
+>
+> Some common tools like 'diff' don't support permissions of the files.
+> Due to that, 'rust-version.sh' in some trees including '-mm' result in
+> having no execution permission, and therefore build fails like below:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/i915/i915_perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Do you mean the Quilt workflow? From a quick look:
 
-diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-index e27f3b7cf094..df698960fdc0 100644
---- a/drivers/gpu/drm/i915/i915_perf.c
-+++ b/drivers/gpu/drm/i915/i915_perf.c
-@@ -2114,7 +2114,7 @@ gen8_update_reg_state_unlocked(const struct intel_context *ce,
- 	u32 ctx_oactxctrl = stream->perf->ctx_oactxctrl_offset;
- 	u32 ctx_flexeu0 = stream->perf->ctx_flexeu0_offset;
- 	/* The MMIO offsets for Flex EU registers aren't contiguous */
--	i915_reg_t flex_regs[] = {
-+	static const i915_reg_t flex_regs[] = {
- 		EU_PERF_CNTL0,
- 		EU_PERF_CNTL1,
- 		EU_PERF_CNTL2,
--- 
-2.32.0
+https://lists.nongnu.org/archive/html/quilt-dev/2008-01/msg00000.html
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=749069
 
+Is that the issue? I am surprised it loses that information...
+
+> It's not a big deal, but not so fun.  This commit fixes the issue by
+> specifying the interpreter for 'rust-version.sh' in the Kconfig file.
+
+Other script calls do not do that, so I would prefer to avoid it. But
+I can take it temporarily to help you (until we are in mainline, if I
+understand correctly the issue), but I would prefer to have a comment
+nearby it justifying the workaround and explaining when we can remove
+it.
+
+Cheers,
+Miguel

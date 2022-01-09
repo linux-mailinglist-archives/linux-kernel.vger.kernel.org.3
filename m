@@ -2,229 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCEA488B6F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC9B488B71
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiAIRq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:46:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31452 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234088AbiAIRq4 (ORCPT
+        id S236300AbiAIRsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:48:43 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:48836 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234088AbiAIRsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:46:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641750416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/m0DGCCGgJDWa2WsJaVc+ekN3fltbDLow+eopcpVs/g=;
-        b=azD3afQbwLNK8HfM8H4m4aKg4xQex8rjpPAPLhANryTGTJn2npSNQFp894b7WTfO+HG7g0
-        00CBXmzOU31Mm6pkcJxgg/pSIllLlf1ZsTvr8Ug1YtzStbu5TKk1tDu4PKF6rlgWnK14SY
-        rA6Fk1SVCjJIzrRPvr0FCXyjpJMa69w=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-672-9IZU5LY6PW2kA0j5WL2_zw-1; Sun, 09 Jan 2022 12:46:55 -0500
-X-MC-Unique: 9IZU5LY6PW2kA0j5WL2_zw-1
-Received: by mail-oi1-f200.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso8356112oif.23
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 09:46:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/m0DGCCGgJDWa2WsJaVc+ekN3fltbDLow+eopcpVs/g=;
-        b=YEtozoNhxLMd27bjSKT80d/d/n1I8dzFu4Zhf5PrWend9MD1/88g301pVVsup95LPv
-         iOjREMlo0N7OaQOXM5tqCjcQnahSpCvZK+GkBPwuRmoe9XH2fvj5JcosJ+08GeYMIazM
-         dD4MO2i723wPlP74KirRqW42KlAe9nawZffVrEyMMTvDtzqFR01CPTsRtlvw7fBWEvk3
-         blDocUzIQ3PacZiivNfjipTyTRXM6zvvt8K6Sf16Q6sSZDSMBVWQEN8y0PIRA8A6wzvL
-         eS/eRVoLXOZApnFi+HOA4FXf212aTjfP1Hkvh6/SfI7aWbJFAM5uXoMNmrOf7lNGeIVF
-         MGgg==
-X-Gm-Message-State: AOAM5334DhRHYUh4eYn5MKAwGMlDt6gV7+OQqrzypBI1b4CmhhfvJnEr
-        SfiH60joXCPuE1b12mbuiRm9blWyL2kbHtO0oSSXzMG2eaPW3NeafFsEqZqI5zO1BIPSfPb6yDa
-        YEpKIA0++/754WmNPzB0nTBoB
-X-Received: by 2002:a05:6808:1201:: with SMTP id a1mr16245638oil.153.1641750414372;
-        Sun, 09 Jan 2022 09:46:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJweDPl4PyHuvvuqinIq0jaAq2rNaiCsPD4uGdY/3qNKroGAOcF1Z+Angfs9zypXlyhd8U5DOw==
-X-Received: by 2002:a05:6808:1201:: with SMTP id a1mr16245611oil.153.1641750414074;
-        Sun, 09 Jan 2022 09:46:54 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q65sm789210oih.45.2022.01.09.09.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 09:46:53 -0800 (PST)
-Subject: Re: [PATCH V4 XRT Alveo Infrastructure 2/5] Documentation:
- devicetree: bindings: add binding for Alveo platform
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, dwmw2@infradead.org,
-        Max Zhen <max.zhen@xilinx.com>
-References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
- <20220105225013.1567871-3-lizhi.hou@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <41c78998-d308-b23d-7b0e-9b668227f251@redhat.com>
-Date:   Sun, 9 Jan 2022 09:46:51 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 9 Jan 2022 12:48:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Ta5u1tMcVsHVM2qpoxG/0Wgw3v/CyJYs5Hd40n8EmEo=; b=ilcLSD15Roeid0rJLBvlCL63wR
+        z9ySoC3aSX89Dut632+zJEkhvCtxLAYHzeuyrg6JBb67WmI39kJQREy/MeskUcEa/qPCRSTboOfQz
+        mFDcP0H0TVgYbbj1N10y21vN/jHGuR2PHlxodCmp8YGf7LMqY2zEissNq66kjnXQETF4xLxTERB6o
+        4gbEkmHs9CQm3obgSPq2kpl7tjQR0iXg9y1T54yiCA5LlvO5XMC8fUJFh3YYYUz63OaDFSUw58MCZ
+        pjA0sSL0zxLE84RRoOGWDsQzCelQjbbRGmd2eThS8ooFULja1Mu9m/8SMNLLBDf5ELsCIU1HtCB66
+        VYkzjDwg==;
+Received: from [165.90.113.117] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1n6cJ4-0000Zy-Fy; Sun, 09 Jan 2022 18:48:38 +0100
+Date:   Sun, 9 Jan 2022 16:48:17 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     dave.stevenson@raspberrypi.com, emma@anholt.net, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        eric@anholt.net
+Subject: Re: [PATCH v2] drm/v3d: Fix PM disable depth imbalance in
+ v3d_platform_drm_probe
+Message-ID: <20220109174817.drma7zfckeywvndc@mail.igalia.com>
+References: <CAPY8ntAdknutH=OmV1dWPbez1ZqLgaOj-BoQQkZAu0WbhbE6nQ@mail.gmail.com>
+ <20220106124657.32737-1-linmq006@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220105225013.1567871-3-lizhi.hou@xilinx.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ee43ywlavjqsjxzn"
+Content-Disposition: inline
+In-Reply-To: <20220106124657.32737-1-linmq006@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 1/5/22 2:50 PM, Lizhi Hou wrote:
-> Create device tree binding document for partitions and pr isolation on
-> Xilinx Alveo platform.
->
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+--ee43ywlavjqsjxzn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 01/06, Miaoqian Lin wrote:
+> The pm_runtime_enable will increase power disable depth.
+> If the probe fails, we should use pm_runtime_disable() to balance
+> pm_runtime_enable().
+>=20
+> Fixes: 57692c9 ("drm/v3d: Introduce a new DRM driver for Broadcom V3D V3.=
+x+")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
->   .../bindings/fpga/xlnx,alveo-partition.yaml   | 76 +++++++++++++++++++
->   .../fpga/xlnx,alveo-pr-isolation.yaml         | 40 ++++++++++
->   2 files changed, 116 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml
->   create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml
->
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml b/Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml
-> new file mode 100644
-> index 000000000000..ee50cb51d08e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,alveo-partition.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/xlnx,alveo-partition.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Alveo platform partition bindings
-> +
-> +description: |
-> +  Xilinx Alveo platform is a PCI device and has one or more partitions. A
-PCIe
-> +  partition is programmed dynamically and contains a set of hardware
-> +  peripherals also referred to as endpoints which appear on the PCI BARs.
-> +  This binding is defined for endpoint address translation which uses the
-> +  the following encoding:
-> +
-> +    0xIooooooo 0xoooooooo
-> +
-> +  Where:
-> +
-> +    I = BAR index
-> +    oooooo oooooooo = BAR offset
-> +
-> +  As a PCI device, the Alveo platform is enumerated at runtime. Thus,
-> +  the partition node is created by Alveo device driver. The device driver
-> +  gets the BAR base address of the PCI device and creates the 'range'
-> +  property for address translation.
-> +
-> +allOf:
-> +  - $ref: /schemas/simple-bus.yaml#
-> +
-> +maintainers:
-> +  - Lizhi Hou <lizhi.hou@xilinx.com>
-> +
-> +properties:
-> +  compatible:
-> +    contains:
-> +      const: xlnx,alveo-partition
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
-> +
-> +  ranges: true
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-> +    description: hardware endpoints belong to this partition.
-> +    type: object
-> +
-> +required:
-> +  - compatible
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    bus {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        xrt-part-bus@0 {
-> +            compatible = "xlnx,alveo-partition", "simple-bus";
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +            ranges = <0x0 0x0 0x0 0xe0000000 0x0 0x2000000
-> +                      0x20000000 0x0 0x0 0xe4200000 0x0 0x40000>;
-> +            pr-isolate-ulp@41000 {
-> +                compatible = "xlnx,alveo-pr-isolation";
-> +                reg = <0x0 0x41000 0 0x1000>;
-> +            };
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml b/Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml
-> new file mode 100644
-> index 000000000000..8db949093ee0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,alveo-pr-isolation.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/xlnx,alveo-pr-isolation.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Partial Reconfig Isolation for Alveo platforms
-Expand 'Partial Reconfig' to 'Partial Reconfiguration'
-> +
-> +description: |
-> +  The Partial Reconfig ensures glitch free operation of the inputs from
-> +  a reconfigurable partition during partial reconfiguration on Alveo
-> +  platform.
+> Changes in v2
+> - put pm_runtime_disable before dma_free_wc
+> - rename dma_free to pm_disable
+> ---
+>  drivers/gpu/drm/v3d/v3d_drv.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+> index bd46396a1ae0..7d500dd5314e 100644
+> --- a/drivers/gpu/drm/v3d/v3d_drv.c
+> +++ b/drivers/gpu/drm/v3d/v3d_drv.c
+> @@ -282,7 +282,7 @@ static int v3d_platform_drm_probe(struct platform_dev=
+ice *pdev)
+> =20
+>  	ret =3D v3d_gem_init(drm);
+>  	if (ret)
+> -		goto dma_free;
+> +		goto pm_disable;
+> =20
+>  	ret =3D v3d_irq_init(v3d);
+>  	if (ret)
+> @@ -298,7 +298,8 @@ static int v3d_platform_drm_probe(struct platform_dev=
+ice *pdev)
+>  	v3d_irq_disable(v3d);
+>  gem_destroy:
+>  	v3d_gem_destroy(drm);
+> -dma_free:
+> +pm_disable:
+> +	pm_runtime_disable(dev);
 
-glitch free is not descriptive. maybe describe what that reg is used for.
+Hi,
 
-Tom
+I see this pm_runtime_disable balancing is also missing for
+v3d_platform_drm_remove(), right?
 
-> +
-> +maintainers:
-> +  - Lizhi Hou <lizhi.hou@xilinx.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,alveo-pr-isolation
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    bus {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        pr-isolation-ulp@41000 {
-> +            compatible = "xlnx,alveo-pr-isolation";
-> +            reg = <0 0x41000 0 0x1000>;
-> +        };
-> +    };
+BR,
 
+Melissa
+>  	dma_free_wc(dev, 4096, v3d->mmu_scratch, v3d->mmu_scratch_paddr);
+>  	return ret;
+>  }
+> --=20
+> 2.17.1
+>=20
+
+--ee43ywlavjqsjxzn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHbH9wACgkQwqF3j0dL
+ehwfGw//UjlDJVwtU17AnsPL+/W4lUJyxKJ8A34ElKhICjWegLZpByNFW3uxTjdS
+hDNKBP5EnBthGwy4zk/gdqbl4s38d7p2PuFDX2DTofhbTkYOuV1TpgkdeVtAlKQR
+7ktsKfZ7KHnSxQptfhywPpV4DXu3021rMY2FDqBU+ncJStrhMn4Q84ZNTatObjG3
+pbVDL9r6RU03heGR/KrKJFdSAQx1D10JoChnnLBHdwIpgj786EN5cft4eKDRnyr7
+kqN3Zov4BE2X02XFoLs2WpLam+f9se/cSPZLTT6E7KwYv9GnFeW/UuWsd3FLjM1D
+aJUgVSXvE5PPpSNbMob1rkm31aToQlSEVztEW+wi4DxmQtIwHOWs4yFalpyjGoDS
+/i4N9KCLIv2M2lThwXWzkp8PE0qFVGhxH0Hlx2j6WHw+8vMAiIxhL5O3R8pRDSRv
+hRA87ag+GISXnRK14M4Q+86TrUKnzasrB/mGgN/UI7CQJNOA5gmQHKIsjSsnQeG2
+1sgbznJ8VQTruLQ0qAjx07LMu+2ISiFgis6o7H/xdeZ0z6GuLTyntvm3VZ4IaiHu
+37s2QQPyAD7GO7L/4kUjKjNGSHiu0x3kX/wuZ53lE0anE2X9JVUlfEXR0+GJmYbc
+WYTCPgk9g9ZnQgvNJNP1tb7KLbnuvKxsV4gGTLGBQY46HfqTVlM=
+=84uP
+-----END PGP SIGNATURE-----
+
+--ee43ywlavjqsjxzn--

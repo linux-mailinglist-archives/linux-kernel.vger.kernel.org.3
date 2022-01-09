@@ -2,188 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 275F5488BA3
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76821488B9A
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbiAISar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 13:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236473AbiAISap (ORCPT
+        id S236441AbiAISYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 13:24:12 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:65007 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236425AbiAISYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 13:30:45 -0500
-X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Jan 2022 10:30:44 PST
-Received: from biche.re (biche.re [IPv6:2607:5300:201:3100::6c88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2559C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 10:30:44 -0800 (PST)
-From:   Victorien Molle <biche@biche.re>
-DKIM-Filter: OpenDKIM Filter v2.11.0 biche.re 46FBC40F84
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=biche.re; s=biche;
-        t=1641752648; bh=HmvLkz1mVjyAOwxpC8spDiTxpZx+nArauSp2vpV1ec0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tYQmiAzQTcNCv7TVJPB6fuahrJxmDXY9zHelOTr/0V0z62ek/RkOsJ0VsT234APEf
-         vX9fBgllZtbmCiXfowMItimDkMp6EsYX8B2ABCOsTHR8hk1ZpqdhmE6UEhwe5cDPri
-         9YQlio51DXcHO/F9+Y3o42YZrxuQxiotwiJ/W2kRxVPO0IxHOmxm0vdljFbt8fupXP
-         YH8Q6dg/7cbKr754Skv0ykaItSgW3BkZkKjsX8W+ZpASc9GaZzHo9sYtwnGugsD2Q7
-         R94LrA5xkVI1GrPB/sLMDLFgOoBIssOxvqN7tQtmsfdvwzooed407WrL25Tjhcy7BN
-         f1n9nTNGTabZA==
-To:     linux-kernel@vger.kernel.org
-Cc:     Victorien Molle <biche@biche.re>
-Subject: [PATCH] KVM: x86: Add support for basic RAPL (Running Average Power Limit) metrics
-Date:   Sun,  9 Jan 2022 19:23:17 +0100
-Message-Id: <20220109182317.1075762-1-biche@biche.re>
-X-Mailer: git-send-email 2.34.1
+        Sun, 9 Jan 2022 13:24:10 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 6crRnvsaysoWh6crRnw2vo; Sun, 09 Jan 2022 19:24:09 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 09 Jan 2022 19:24:09 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christoph Hellwig <hch@lst.de>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH] iavf: Remove useless DMA-32 fallback configuration
+Date:   Sun,  9 Jan 2022 19:24:08 +0100
+Message-Id: <afb3317bc87677096e55fc96f317df29f2ff3408.1641752631.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current KVM code handles two MSR registers,
-which are used to store RAPL values:
-    - MSR_RAPL_POWER_UNIT
-    - MSR_PKG_ENERGY_STATUS
+As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-However, these two registers are currently not accessible for writing
-and always return 0.
-This patch enables the possibility to set these two MSR registers
-and get the written values from guest.
-It also adds support of the following MSR registers,
-used to store RAPL values:
-    - MSR_PKG_POWER_LIMIT
-    - MSR_AMD_RAPL_POWER_UNIT
-    - MSR_AMD_PKG_ENERGY_STATUS
+Simplify code and remove some dead code accordingly.
 
-Writing value into one of these MSR registers causes,
-if there are multiple vCPUs, the value to be saved for all active vCPUs.
+[1]: https://lkml.org/lkml/2021/6/7/398
 
-Signed-off-by: Victorien Molle <biche@biche.re>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- arch/x86/include/asm/kvm_host.h |  5 +++++
- arch/x86/kvm/vmx/pmu_intel.c    |  3 +++
- arch/x86/kvm/x86.c              | 35 +++++++++++++++++++++++++++++++--
- arch/x86/xen/pmu.c              |  6 ++++++
- 4 files changed, 47 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 555f4de47ef2..56182daadf88 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -908,6 +908,11 @@ struct kvm_vcpu_arch {
- #if IS_ENABLED(CONFIG_HYPERV)
- 	hpa_t hv_root_tdp;
- #endif
-+
-+	/* RAPL values */
-+	u64 power_unit;
-+	u64 power_limit;
-+	u64 energy_status;
- };
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 8125b9120615..b0bd95c85480 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -4368,12 +4368,9 @@ static int iavf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  
- struct kvm_lpage_info {
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 1b7456b2177b..e741f73d35ea 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -217,6 +217,9 @@ static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
- 	case MSR_CORE_PERF_GLOBAL_STATUS:
- 	case MSR_CORE_PERF_GLOBAL_CTRL:
- 	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
-+	case MSR_RAPL_POWER_UNIT:
-+	case MSR_PKG_POWER_LIMIT:
-+	case MSR_PKG_ENERGY_STATUS:
- 		ret = pmu->version > 1;
- 		break;
- 	default:
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e50e97ac4408..bc32b87a7989 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1359,6 +1359,9 @@ static const u32 msrs_to_save_all[] = {
- 	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
- 	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
- 	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
-+
-+	MSR_RAPL_POWER_UNIT, MSR_PKG_POWER_LIMIT, MSR_PKG_ENERGY_STATUS,
-+	MSR_AMD_RAPL_POWER_UNIT, MSR_AMD_PKG_ENERGY_STATUS,
- };
+ 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (err) {
+-		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+-		if (err) {
+-			dev_err(&pdev->dev,
+-				"DMA configuration failed: 0x%x\n", err);
+-			goto err_dma;
+-		}
++		dev_err(&pdev->dev,
++			"DMA configuration failed: 0x%x\n", err);
++		goto err_dma;
+ 	}
  
- static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_all)];
-@@ -3383,6 +3386,7 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
- int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- {
- 	bool pr = false;
-+	u16 it = 0;
- 	u32 msr = msr_info->index;
- 	u64 data = msr_info->data;
- 
-@@ -3669,6 +3673,23 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			return 1;
- 		vcpu->arch.msr_misc_features_enables = data;
- 		break;
-+	case MSR_RAPL_POWER_UNIT:
-+	case MSR_AMD_RAPL_POWER_UNIT:
-+		/* Apply the value on all vCPUs */
-+		for (; it < vcpu->kvm->created_vcpus; ++it)
-+			vcpu->kvm->vcpus[it]->arch.power_unit = data;
-+		break;
-+	case MSR_PKG_POWER_LIMIT:
-+		/* Apply the value on all vCPUs */
-+		for (; it < vcpu->kvm->created_vcpus; ++it)
-+			vcpu->kvm->vcpus[it]->arch.power_limit = data;
-+		break;
-+	case MSR_PKG_ENERGY_STATUS:
-+	case MSR_AMD_PKG_ENERGY_STATUS:
-+		/* Apply the value on all vCPUs */
-+		for (; it < vcpu->kvm->created_vcpus; ++it)
-+			vcpu->kvm->vcpus[it]->arch.energy_status = data;
-+		break;
- 	default:
- 		if (kvm_pmu_is_valid_msr(vcpu, msr))
- 			return kvm_pmu_set_msr(vcpu, msr_info);
-@@ -3742,13 +3763,23 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	 * data here. Do not conditionalize this on CPUID, as KVM does not do
- 	 * so for existing CPU-specific MSRs.
- 	 */
--	case MSR_RAPL_POWER_UNIT:
- 	case MSR_PP0_ENERGY_STATUS:	/* Power plane 0 (core) */
- 	case MSR_PP1_ENERGY_STATUS:	/* Power plane 1 (graphics uncore) */
--	case MSR_PKG_ENERGY_STATUS:	/* Total package */
- 	case MSR_DRAM_ENERGY_STATUS:	/* DRAM controller */
-+		kvm_pmu_is_valid_msr(vcpu, msr_info->index);
- 		msr_info->data = 0;
- 		break;
-+	case MSR_RAPL_POWER_UNIT:
-+	case MSR_AMD_RAPL_POWER_UNIT:
-+		msr_info->data = vcpu->arch.power_unit;
-+		break;
-+	case MSR_PKG_POWER_LIMIT:
-+		msr_info->data = vcpu->arch.power_limit;
-+		break;
-+	case MSR_PKG_ENERGY_STATUS:	/* Total package */
-+	case MSR_AMD_PKG_ENERGY_STATUS:
-+		msr_info->data = vcpu->arch.energy_status;
-+		break;
- 	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
- 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
- 			return kvm_pmu_get_msr(vcpu, msr_info);
-diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
-index e13b0b49fcdf..c3baaa34836b 100644
---- a/arch/x86/xen/pmu.c
-+++ b/arch/x86/xen/pmu.c
-@@ -157,6 +157,12 @@ static int is_intel_pmu_msr(u32 msr_index, int *type, int *index)
- 		*type = MSR_TYPE_GLOBAL;
- 		return true;
- 
-+	case MSR_RAPL_POWER_UNIT:
-+	case MSR_PKG_POWER_LIMIT:
-+	case MSR_PKG_ENERGY_STATUS:
-+		*type = MSR_TYPE_GLOBAL;
-+		return true;
-+
- 	default:
- 
- 		if ((msr_index >= MSR_CORE_PERF_FIXED_CTR0) &&
+ 	err = pci_request_regions(pdev, iavf_driver_name);
 -- 
-2.34.1
+2.32.0
 

@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DD9488BDF
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 433D9488BE5
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiAIS5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 13:57:23 -0500
-Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:55501 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiAIS5U (ORCPT
+        id S231935AbiAITCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 14:02:02 -0500
+Received: from relay026.a.hostedemail.com ([64.99.140.26]:60567 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229582AbiAITCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 13:57:20 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6dNWnw2VWsoWh6dNWnw5jl; Sun, 09 Jan 2022 19:57:19 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 09 Jan 2022 19:57:19 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH] scsi: efct: Remove useless DMA-32 fallback configuration
-Date:   Sun,  9 Jan 2022 19:57:04 +0100
-Message-Id: <958bcb2a6e86344c14f38369e8e7079615a2b0e3.1641754613.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 9 Jan 2022 14:02:02 -0500
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id 08E33604A7;
+        Sun,  9 Jan 2022 19:01:59 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 5772F20024;
+        Sun,  9 Jan 2022 19:01:53 +0000 (UTC)
+Message-ID: <9011348fd53b35857afb6a65f5d3163adec9a923.camel@perches.com>
+Subject: Re: [PATCH v7 2/2] Driver for ON Semi AR0521 camera sensor
+From:   Joe Perches <joe@perches.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>
+Date:   Sun, 09 Jan 2022 11:01:52 -0800
+In-Reply-To: <20220109153439.bfnfigocaeeeghmp@uno.localdomain>
+References: <m3czl9eylt.fsf@t19.piap.pl> <m34k6leyb1.fsf@t19.piap.pl>
+         <20220109153439.bfnfigocaeeeghmp@uno.localdomain>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.87
+X-Stat-Signature: 6bg6f45dt746mue5c8rib6zi6pe6efb6
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 5772F20024
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/BA1xNhmFMhCYZ8dmyxVvDk5TbaYHhH3E=
+X-HE-Tag: 1641754913-479941
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+On Sun, 2022-01-09 at 16:34 +0100, Jacopo Mondi wrote:
+> Hi Krzysztof
 
-Simplify code and remove some dead code accordingly.
+Hi Jacopo
 
-While at it, return the error code returned by dma_set_mask_and_coherent()
-instead of -1.
+Can you please trim your replies to just the sections that
+you are commenting on?
 
-[1]: https://lkml.org/lkml/2021/6/7/398
+Finding the reply in the duplicated reply content isn't easy.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch was not part of the 1st serie I've sent. So there is no
-Reviewed-by tag.
----
- drivers/scsi/elx/efct/efct_driver.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+> > +	// access the sensor only if it's powered up
+> > +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
+> 
+> As you correctly do not access the chip's registers if it's powered
+> off, you have to call __v4l2_ctrl_handler_setup() at power on time to
+> make sure controls are actually set.
 
-diff --git a/drivers/scsi/elx/efct/efct_driver.c b/drivers/scsi/elx/efct/efct_driver.c
-index ae62fc3c9ee3..b08fc8839808 100644
---- a/drivers/scsi/elx/efct/efct_driver.c
-+++ b/drivers/scsi/elx/efct/efct_driver.c
-@@ -541,13 +541,10 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	pci_set_drvdata(pdev, efct);
- 
--	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64)) != 0) {
--		dev_warn(&pdev->dev, "trying DMA_BIT_MASK(32)\n");
--		if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)) != 0) {
--			dev_err(&pdev->dev, "setting DMA_BIT_MASK failed\n");
--			rc = -1;
--			goto dma_mask_out;
--		}
-+	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-+	if (rc) {
-+		dev_err(&pdev->dev, "setting DMA_BIT_MASK failed\n");
-+		goto dma_mask_out;
- 	}
- 
- 	num_interrupts = efct_device_interrupts_required(efct);
--- 
-2.32.0
+It was 25 pages down in the reply to find this.
+
 

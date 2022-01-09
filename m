@@ -2,171 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1EA488ADB
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DFA488AE7
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236126AbiAIROw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:14:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55542 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiAIROv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:14:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S236158AbiAIRS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:18:29 -0500
+Received: from ixit.cz ([94.230.151.217]:52900 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236128AbiAIRS1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 12:18:27 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B62860A55
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 17:14:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097F5C36AE3;
-        Sun,  9 Jan 2022 17:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641748490;
-        bh=3mdUU2H2XgCZ+pdrmPE+3ORCHyq42l7sLmzBCamX8k8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Q285x1TnCBt1BAz+CmgV5mvTvQt3ZunNckOu0CjgksL46LkRtM2RVIwpopgdZO6vz
-         WwYUj9lPBKyOPenHgsalWs+md4PCjdq6IVwP4xpapfyqeio8AC+8I83zXD/PjKfL0f
-         6T15utBc6uV9E5mFkW2ehgeW291e5cgz6meM/NgljGYZCAya0z+Vs8tDOhT4XpFWr/
-         CpsdScKp7Uv+cCFiJ41n5vm0kH87m1bkHg7w2lWk+4libzG+dv1lA3/FFcWmpbWLyt
-         hIPvEsJHKd5LEJ6Y4Ay3BrlJkH5oH2JI6Nf4oLV5ZqNxsC+/01O8uhuPGe8PZEyqiR
-         psfrxZEeO16bA==
-Message-ID: <8909952722ad8c2816fff1d1aebafab17c7b7110.camel@kernel.org>
-Subject: Re: [PATCH v5 4/4] tracing: Have existing event_command.parse()
- implementations use helpers
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 09 Jan 2022 11:14:48 -0600
-In-Reply-To: <b2c8ad2086362a64853b70fc0aa4c29ce6348544.camel@kernel.org>
-References: <cover.1639507505.git.zanussi@kernel.org>
-         <f043571a0b7ccc0eb524f87b63c520a460e59baf.1639507505.git.zanussi@kernel.org>
-         <20220108195406.0c4f659d@gandalf.local.home>
-         <b2c8ad2086362a64853b70fc0aa4c29ce6348544.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        by ixit.cz (Postfix) with ESMTPSA id 8D7BB2243C;
+        Sun,  9 Jan 2022 18:18:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1641748701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1neQMH4UzNAqauJdDad8SbWmvmqaMSnRi7ODRmIgqZc=;
+        b=KAglRMact6mEBZWDewf3xQaQpwdkkMxOVw13HBLKw9vI6q/b4XFb5aUPMhcdMchTSvVwDz
+        P7fTe4IlW22Of8Eu5Waq3f7QPYlpPEFQI20EPOvwXkAY/t5IaAaJS8/3jxwiHETMzboNyV
+        eqsrh1RMGSLp1NWgf1wK8hYBBspHNsA=
+From:   David Heidelberg <david@ixit.cz>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: msm/mdp4: convert to yaml format
+Date:   Sun,  9 Jan 2022 18:18:13 +0100
+Message-Id: <20220109171814.16103-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-01-08 at 22:23 -0600, Tom Zanussi wrote:
-> Hi Steve,
-> 
-> On Sat, 2022-01-08 at 19:54 -0500, Steven Rostedt wrote:
-> > On Tue, 14 Dec 2021 12:57:32 -0600
-> > Tom Zanussi <zanussi@kernel.org> wrote:
-> > 
-> > > index da103826f27e..e6a48e8c79eb 100644
-> > > --- a/kernel/trace/trace_events_trigger.c
-> > > +++ b/kernel/trace/trace_events_trigger.c
-> > > @@ -973,7 +973,7 @@ int event_trigger_register(struct
-> > > event_command
-> > > *cmd_ops,
-> > >   * @file: The trace_event_file associated with the event
-> > >   * @glob: The raw string used to register the trigger
-> > >   * @cmd: The cmd portion of the string used to register the
-> > > trigger
-> > > - * @param: The params portion of the string used to register the
-> > > trigger
-> > > + * @param_and_filter: The param and filter portion of the string
-> > > used to register the trigger
-> > >   *
-> > >   * Common implementation for event command parsing and trigger
-> > >   * instantiation.
-> > > @@ -986,94 +986,53 @@ int event_trigger_register(struct
-> > > event_command *cmd_ops,
-> > >  static int
-> > >  event_trigger_parse(struct event_command *cmd_ops,
-> > >  		    struct trace_event_file *file,
-> > > -		    char *glob, char *cmd, char *param)
-> > > +		    char *glob, char *cmd, char *param_and_filter)
-> > >  {
-> > >  	struct event_trigger_data *trigger_data;
-> > >  	struct event_trigger_ops *trigger_ops;
-> > > -	char *trigger = NULL;
-> > > -	char *number;
-> > > +	char *param, *filter;
-> > > +	bool remove;
-> > >  	int ret;
-> > >  
-> > > -	/* separate the trigger from the filter (t:n [if filter]) */
-> > > -	if (param && isdigit(param[0])) {
-> > > -		trigger = strsep(&param, " \t");
-> > > -		if (param) {
-> > > -			param = skip_spaces(param);
-> > > -			if (!*param)
-> > > -				param = NULL;
-> > > -		}
-> > > -	}
-> > > +	remove = event_trigger_check_remove(glob);
-> > >  
-> > > -	trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
-> > 
-> > Did you mean to remove the assignment of trigger_ops here?
-> 
-> Hmm, yeah, that shouldn't have been removed, but...
+Convert mdp4 binding into yaml format.
 
-Actually, it should be removed, because get_trigger_ops() is now called
-in event_trigger_alloc() in patch 3/4.  And trigger_ops isn't actually
-used by unreg(), so the trigger_ops local can just be removed.  For
-that matter, trigger_ops should probably be removed from the
-reg()/unreg() callbacks altogether.  Will add a separate pach to do
-that.
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../devicetree/bindings/display/msm/mdp4.txt  | 114 ----------------
+ .../devicetree/bindings/display/msm/mdp4.yaml | 124 ++++++++++++++++++
+ 2 files changed, 124 insertions(+), 114 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/msm/mdp4.txt
+ create mode 100644 Documentation/devicetree/bindings/display/msm/mdp4.yaml
 
-> 
-> > 
-> > > +	ret = event_trigger_separate_filter(param_and_filter, &param,
-> > > &filter, false);
-> > > +	if (ret)
-> > > +		return ret;
-> > >  
-> > >  	ret = -ENOMEM;
-> > > -	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
-> > > +	trigger_data = event_trigger_alloc(cmd_ops, cmd, param, file);
-> > >  	if (!trigger_data)
-> > >  		goto out;
-> > >  
-> > > -	trigger_data->count = -1;
-> > > -	trigger_data->ops = trigger_ops;
-> > > -	trigger_data->cmd_ops = cmd_ops;
-> > > -	trigger_data->private_data = file;
-> > > -	INIT_LIST_HEAD(&trigger_data->list);
-> > > -	INIT_LIST_HEAD(&trigger_data->named_list);
-> > > -
-> > > -	if (glob[0] == '!') {
-> > > +	if (remove) {
-> > >  		cmd_ops->unreg(glob+1, trigger_ops, trigger_data,
-> > > file);
-> > 
-> > It's still used here and below.
-> > 
-> > I get a warning on this.
-> 
-> I'm not getting a warning, and remove should have crashed the
-> testcases, but I'm not seeing that either.
-
-I'm not getting a warning because of -Wno-maybe-ininitialized.  I had
-to build with W=2 to see the warning.
-
-Also, the testcases aren't crashing because trigger_ops is never used
-in unreg().
-
-I'll respin and resend later today.
-
-Tom
-
-> 
-> Will have to investigate tomorrow..
-> 
-> Tom
-> 
-> 
-> > 
-> > Thanks,
-> > 
-> > -- Steve
-> > 
-> > >  		kfree(trigger_data);
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/display/msm/mdp4.txt b/Documentation/devicetree/bindings/display/msm/mdp4.txt
+deleted file mode 100644
+index b07eeb38f709..000000000000
+--- a/Documentation/devicetree/bindings/display/msm/mdp4.txt
++++ /dev/null
+@@ -1,114 +0,0 @@
+-Qualcomm adreno/snapdragon MDP4 display controller
+-
+-Description:
+-
+-This is the bindings documentation for the MDP4 display controller found in
+-SoCs like MSM8960, APQ8064 and MSM8660.
+-
+-Required properties:
+-- compatible:
+-  * "qcom,mdp4" - mdp4
+-- reg: Physical base address and length of the controller's registers.
+-- interrupts: The interrupt signal from the display controller.
+-- clocks: device clocks
+-  See ../clocks/clock-bindings.txt for details.
+-- clock-names: the following clocks are required.
+-  * "core_clk"
+-  * "iface_clk"
+-  * "bus_clk"
+-  * "lut_clk"
+-  * "hdmi_clk"
+-  * "tv_clk"
+-- ports: contains the list of output ports from MDP. These connect to interfaces
+-  that are external to the MDP hardware, such as HDMI, DSI, EDP etc (LVDS is a
+-  special case since it is a part of the MDP block itself).
+-
+-  Each output port contains an endpoint that describes how it is connected to an
+-  external interface. These are described by the standard properties documented
+-  here:
+-	Documentation/devicetree/bindings/graph.txt
+-	Documentation/devicetree/bindings/media/video-interfaces.txt
+-
+-  The output port mappings are:
+-	Port 0 -> LCDC/LVDS
+-	Port 1 -> DSI1 Cmd/Video
+-	Port 2 -> DSI2 Cmd/Video
+-	Port 3 -> DTV
+-
+-Optional properties:
+-- clock-names: the following clocks are optional:
+-  * "lut_clk"
+-- qcom,lcdc-align-lsb: Boolean value indicating that LSB alignment should be
+-  used for LCDC. This is only valid for 18bpp panels.
+-
+-Example:
+-
+-/ {
+-	...
+-
+-	hdmi: hdmi@4a00000 {
+-		...
+-		ports {
+-			...
+-			port@0 {
+-				reg = <0>;
+-				hdmi_in: endpoint {
+-					remote-endpoint = <&mdp_dtv_out>;
+-				};
+-			};
+-			...
+-		};
+-		...
+-	};
+-
+-	...
+-
+-	mdp: mdp@5100000 {
+-		compatible = "qcom,mdp4";
+-		reg = <0x05100000 0xf0000>;
+-		interrupts = <GIC_SPI 75 0>;
+-		clock-names =
+-		    "core_clk",
+-		    "iface_clk",
+-		    "lut_clk",
+-		    "hdmi_clk",
+-		    "tv_clk";
+-		clocks =
+-		    <&mmcc MDP_CLK>,
+-		    <&mmcc MDP_AHB_CLK>,
+-		    <&mmcc MDP_AXI_CLK>,
+-		    <&mmcc MDP_LUT_CLK>,
+-		    <&mmcc HDMI_TV_CLK>,
+-		    <&mmcc MDP_TV_CLK>;
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-				port@0 {
+-					reg = <0>;
+-					mdp_lvds_out: endpoint {
+-					};
+-				};
+-
+-				port@1 {
+-					reg = <1>;
+-					mdp_dsi1_out: endpoint {
+-					};
+-				};
+-
+-				port@2 {
+-					reg = <2>;
+-					mdp_dsi2_out: endpoint {
+-					};
+-				};
+-
+-				port@3 {
+-					reg = <3>;
+-					mdp_dtv_out: endpoint {
+-						remote-endpoint = <&hdmi_in>;
+-					};
+-				};
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/display/msm/mdp4.yaml b/Documentation/devicetree/bindings/display/msm/mdp4.yaml
+new file mode 100644
+index 000000000000..f63f60fea27c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/msm/mdp4.yaml
+@@ -0,0 +1,124 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/display/msm/mdp4.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Qualcomm Adreno/Snapdragon MDP4 display controller
++
++description: >
++  MDP4 display controller found in SoCs like MSM8960, APQ8064 and MSM8660.
++
++maintainers:
++  - Rob Clark <robdclark@gmail.com>
++
++properties:
++  compatible:
++    const: qcom,mdp4
++
++  clocks:
++    minItems: 6
++    maxItems: 6
++
++  clock-names:
++    items:
++      - const: core_clk
++      - const: iface_clk
++      - const: bus_clk
++      - const: lut_clk
++      - const: hdmi_clk
++      - const: tv_clk
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  iommus:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: LCDC/LVDS
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: DSI1 Cmd / Video
++
++      port@2:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: DSI2 Cmd / Video
++
++      port@3:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Digital TV
++
++  qcom,lcdc-align-lsb:
++    type: boolean
++    description: >
++      Indication that LSB alignment should be used for LCDC.
++      This is only valid for 18bpp panels.
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    mdp: mdp@5100000 {
++        compatible = "qcom,mdp4";
++        reg = <0x05100000 0xf0000>;
++        interrupts = <0 75 0>;
++        clock-names =
++            "core_clk",
++            "iface_clk",
++            "bus_clk",
++            "lut_clk",
++            "hdmi_clk",
++            "tv_clk";
++        clocks =
++            <&mmcc 77>,
++            <&mmcc 86>,
++            <&mmcc 102>,
++            <&mmcc 75>,
++            <&mmcc 97>,
++            <&mmcc 12>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++                mdp_lvds_out: endpoint {
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++                mdp_dsi1_out: endpoint {
++                };
++            };
++
++            port@2 {
++                reg = <2>;
++                mdp_dsi2_out: endpoint {
++                };
++            };
++
++            port@3 {
++                reg = <3>;
++                mdp_dtv_out: endpoint {
++                    remote-endpoint = <&hdmi_in>;
++                };
++            };
++        };
++    };
+-- 
+2.34.1
 

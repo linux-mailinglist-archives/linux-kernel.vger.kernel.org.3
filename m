@@ -2,134 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287504888F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD17488902
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235340AbiAILno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 06:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233810AbiAILnl (ORCPT
+        id S235350AbiAILti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 06:49:38 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60746 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230364AbiAILth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 06:43:41 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A750C06173F;
-        Sun,  9 Jan 2022 03:43:40 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id m21so42227641edc.0;
-        Sun, 09 Jan 2022 03:43:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9TFIzk+YWuBPnFiZs9zbXgKZUSa8lbE6A2L93JvJOAI=;
-        b=m8FVlzEACozZV7ZCKpB5fPIjBehAKE569w7eh9lIulCATbt+Qy1r0NOCyomiVnv5Mx
-         U8KiJWT9NhkDxsjZum67cpKm3IhBSeLuvWa/5WE8WW7y4XstOxCJlwrX1Fv5w3Wa5xns
-         x9sbuC98nOF3iHOrOgGEbPY3CQFeXaKQHvxe/I/mlxCkgIQZBDLo3PKwNzSKf84B8EId
-         2zbSUmaRGjO+vDXZS2RbQYeTtbe3h8c+ZfZCj+QtTEWhyjssiLADDjGqNDFgtzeUu5kf
-         QSNxTw5QxYArSoFWxaEt4bhfZoxU12BpCLRjcG7QIKBgCDIu8s+rPb+K9ALQa0oLXxZe
-         ZSvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9TFIzk+YWuBPnFiZs9zbXgKZUSa8lbE6A2L93JvJOAI=;
-        b=eUoi0RqK+Bw359DVGh9V1/6mZqAwksoWhBaStnApwvNc+phJQF3GnCQVwG/Finu6A3
-         GIX2gffp7F4pxoZc9vDxh7FppolOqWJSTrWqbKPFO7b9utRIZw0tldmI/siwFkfDd9e+
-         QKxEKuBXHMV2E8xp84VGXfuGofDBQ7DM+Zghv3k8aDakO7kzTzZW8EruYvAgzq2xhOFL
-         zMlvbDQlJLtS4bBnofrsZellMiyyzSuqSWR31/FIt2U8upH/JU5d0xndhC8DRc9tm0Hk
-         MO5PJ9p8df+/+k4AUNpI8M385sFkh/NQfNFsv7JPSCzsRLChi7rCMot9PNdy5PHdFPPb
-         IZtw==
-X-Gm-Message-State: AOAM533eIB3gwYu+uFfFWBj6BUbqpZexHwajFyrVoWZNOuyv18HLbqCw
-        66OJannpLT4XXFdNFQ8X3qT30Zkhm4Gjkr5+xaeyUBZ3oXQnsg==
-X-Google-Smtp-Source: ABdhPJy0oaDrKZza1wFSyb1sYllgA9khXqRnVJR6Jtj44+rHVwhWSD+PHOx5ip7NXKtHAJMijxvqtqj3BRxKkmAoShE=
-X-Received: by 2002:a17:907:a0c7:: with SMTP id hw7mr2925514ejc.579.1641728619015;
- Sun, 09 Jan 2022 03:43:39 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHp75VeEvT-_47gKFAYdz-BR9y=KLEw2uMbRxYKo1rLQSQEfyg@mail.gmail.com>
- <Ydorm5HirY2i/RCg@errol.ini.cmu.edu>
-In-Reply-To: <Ydorm5HirY2i/RCg@errol.ini.cmu.edu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 9 Jan 2022 13:43:02 +0200
-Message-ID: <CAHp75Vdm-2DqDhVe2s-OF-5kiJV01fUp1u1iWFDT2fGSzrqXvg@mail.gmail.com>
-Subject: Re: [PATCH v9 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 9 Jan 2022 06:49:37 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209Bd09e014161;
+        Sun, 9 Jan 2022 11:49:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=8h0dyO6ZGefPyVvITZczJl5MykXF2bf0VSLrgNBaNj8=;
+ b=IbQEE4EkCpYExi5WBfoBGrs/Djry5hyxa/TLVaxVXneNh7M/bHXNCv8Enb3EMrs7gPq0
+ JkLKbwhFvhAgkE61Zs+WszxkgnoxXca7RepKgN5chWf53AmOrpFMO4wv7J/f4y2vfW7Q
+ rSzon8g7UGcZk6hHBqFpQ9xuO+7nKCbt7E7FqfALTh9quj3F0BA4kDdj3TSKnSczzOQ+
+ dmrEiF6+m9rcVqItZ2UVPWzHxcWFCrgEpCZ/AcKD7YbSFRwHY/bnfKVsUbGgdINDooQD
+ DXUAlq9usuo8+Klzsn35wz/coYvgHfwy7Uumc+zAZ0TJSLrq7jy6T0YPcA3ZzVpXIs3T 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3uy7pk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 11:49:30 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 209BnUOO001988;
+        Sun, 9 Jan 2022 11:49:30 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3uy7p6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 11:49:30 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 209BfYeu032033;
+        Sun, 9 Jan 2022 11:49:27 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3df288wgrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 11:49:27 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 209BeTaj48627992
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 9 Jan 2022 11:40:29 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 689ADA405C;
+        Sun,  9 Jan 2022 11:49:25 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C112AA405B;
+        Sun,  9 Jan 2022 11:49:23 +0000 (GMT)
+Received: from sig-9-65-83-86.ibm.com (unknown [9.65.83.86])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun,  9 Jan 2022 11:49:23 +0000 (GMT)
+Message-ID: <4ba63271bdf06fa8ae98c5cbd60d7b91bdbe75f7.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 1/3] certs: export load_certificate_list() to be used
+ outside certs/
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Nayna Jain <nayna@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        dhowells@redhat.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, kernel test robot <lkp@intel.com>
+Date:   Sun, 09 Jan 2022 06:49:23 -0500
+In-Reply-To: <YdmX2/BabFk2bNAv@iki.fi>
+References: <20220105175410.554444-1-nayna@linux.ibm.com>
+         <20220105175410.554444-2-nayna@linux.ibm.com> <YdmX2/BabFk2bNAv@iki.fi>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JHrsbk1oxW91h_D9QkNNHgq-_k7R3E05
+X-Proofpoint-GUID: maFV3BWOXsas5gLuRHLsHUy7w-JLiAf6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-09_04,2022-01-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201090083
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 9, 2022 at 2:26 AM Gabriel L. Somlo <gsomlo@gmail.com> wrote:
-> On Sat, Jan 08, 2022 at 07:43:19PM +0200, Andy Shevchenko wrote:
-> > On Sat, Jan 8, 2022 at 6:11 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
+Hi Jarkko,
 
-...
+On Sat, 2022-01-08 at 15:55 +0200, Jarkko Sakkinen wrote:
+> On Wed, Jan 05, 2022 at 12:54:08PM -0500, Nayna Jain wrote:
+> > load_certificate_list() parses certificates embedded in the kernel
+> > image to load them onto the keyring.
+> > 
+> > Commit "2565ca7f5ec1 (certs: Move load_system_certificate_list to a common
+> > function)" made load_certificate_list() a common function in the certs/
+> > directory. Now, export load_certificate_list() outside certs/ to be used
+> > by load_platform_certificate_list() which is added later in the patchset.
+> 
+> Also, please describe the specific use it will be used. Patchset is not
+> a valid cross-reference in this context.
 
-> > > +       u32 div;
-> > > +
-> > > +       div = freq ? host->ref_clk / freq : 256U;
-> >
-> > > +       div = roundup_pow_of_two(div);
-> > > +       div = clamp(div, 2U, 256U);
-> >
-> > Not sure why it becomes two lines again.
->
-> Per my previous email, I have:
->
->         div = clamp((u32)roundup_pow_of_two(div), 2U, 256U);
->
-> ... lined up for v10 (pending also Geert's OK on the (u32) cast
-> to shut up compiler warnings) :)
+The specific usecase scenario is described in the cover letter.  Is
+that what you're looking for?
 
-Yeah, I have read that and I think we may survive without comment and
-being in two lines.
+thanks,
 
-That roundup_pow_of_two may return int, unsigned long, and who knows
-what depending on the per arch implementations.
+Mimi
 
-What a mess...
-
-...
-
->     /* wrapper for use with devm_add_action_or_reset(), below */
-
-No need for this comment.
-
->     static void litex_mmc_free_host_wrapper(void *ptr)
->     {
-
->         mmc_free_host((struct mmc_host *)ptr);
-
-Casting is not needed, just name the variable as mmc
-
-        mmc_free_host(mmc);
-
->     }
-
-...
-
-> I'll wait till sometime tomorrow for additional feedback on clamp()
-> casting and voltage range hard-coding vs. regulators, before I send
-> out v10 so we can continue from there.
-
-Thanks!
-
-
--- 
-With Best Regards,
-Andy Shevchenko

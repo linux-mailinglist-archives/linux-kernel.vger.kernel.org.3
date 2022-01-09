@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 357DC48889E
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 11:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137444888A0
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 11:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbiAIKB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 05:01:57 -0500
-Received: from mail-pj1-f52.google.com ([209.85.216.52]:43532 "EHLO
-        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiAIKB4 (ORCPT
+        id S235264AbiAIKCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 05:02:36 -0500
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:34681 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229473AbiAIKCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 05:01:56 -0500
-Received: by mail-pj1-f52.google.com with SMTP id ie23-20020a17090b401700b001b38a5318easo3915831pjb.2;
-        Sun, 09 Jan 2022 02:01:56 -0800 (PST)
+        Sun, 9 Jan 2022 05:02:35 -0500
+Received: by mail-ua1-f44.google.com with SMTP id y4so18560659uad.1;
+        Sun, 09 Jan 2022 02:02:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qVWt1AOHq8FaZK5a1Obn95ziGdwNeIdN+dxQ37ARsjk=;
-        b=paHBr5bKG2rQheXCmwJ4dS4H1fR4dM2sVTmiQc4NjgLn+mEQzwb9bouxwCTTbNMZJC
-         2nJZ7mQ+05I6vzTBjRx725+ln+fA+pg4h1uFtvrxsY7yByZqC5W29D1Ze37ooQMhAfDc
-         JO9GCfJ/YTitm33Of0RwuI8eB+5wq/8Q3dMDaNWe+tbJHQGcrLDOpIEAoxmbW2JIMzVi
-         n52N7y9D6ezx2XPPBbAmj3OtYqI1QFs67vPO6JNzWxItqPcbQUI6vr1pvri8rkjVEcgO
-         6fYnYasf89+xDNrrxk5HJFizNN5wbSt7QJeCptXT/JwA3ZLTJrmxr9sNQukrKHA9wxGn
-         Vw1w==
-X-Gm-Message-State: AOAM5302CCymzWrCTwjjg6BMHNcaubHc5svULCHOZcsG9cZhKPTR325u
-        zdhBIkjRpAuhJuRCuAdWQk+MmdcWBKG91g==
-X-Google-Smtp-Source: ABdhPJxCDVKm/loC0NBZH667A2F59JO4QcPTUVleIWxENLM/W4d5qDnzA+Qiu3h0O9MYPNX0kCv1Cw==
-X-Received: by 2002:a05:6102:3746:: with SMTP id u6mr23168225vst.60.1641722505077;
-        Sun, 09 Jan 2022 02:01:45 -0800 (PST)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id c15sm2190459uaj.13.2022.01.09.02.01.44
+        bh=DDvAPw0xd5cx+5QwR7u2cboYnfSLEx7aiq6fPxnv/Dw=;
+        b=uA5B/wsqn2z4reXZDbfk7U/Jb0MdQPhZlLBEVE2NLMC6FdQgQGu1qmpvEU6LtEZEeC
+         JQXtF9OIaznUoD5eV4a0lDtpUbTXJYk+38zsZrNMEvAwDQJrAyuH8qK9afs3FQr55Hna
+         ydSbVYxkssQnJfVNOoy5V72wUsEzfOPdV9jnbfPZvVZiNe3kI/3a6mWJ/XpVTWHaW7LH
+         wJotq7cze9l2POgqP/+zlKYV60EuiHTC/Is0Yvgzflnsfu4xD2/f7+b2RW6cfQ6NGRog
+         5forF/BL7mfs3kODeNzVhAOXW7zUEBwcxqnhV6uVmWHj/4jY4AofoNjD7EkhcvAuE9tA
+         N1zA==
+X-Gm-Message-State: AOAM532cDhpw6dEZc8ysfM8QNFLI/I1Ryufyc9NasBav1Wkd/ZtdZtFU
+        0C8zIK/zIfFk+lIPiS+PGMrxg29cAUQvRA==
+X-Google-Smtp-Source: ABdhPJwFAz2EXCy2Z9kOEkv83ixLPHl4t/lg47+J2Fd1KFuTLPdNzqJBjzBn8/LoDZkv3GWRnq0kwg==
+X-Received: by 2002:ab0:28cc:: with SMTP id g12mr10269069uaq.76.1641722554216;
+        Sun, 09 Jan 2022 02:02:34 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id j129sm1183229vkh.16.2022.01.09.02.02.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 02:01:44 -0800 (PST)
-Received: by mail-ua1-f45.google.com with SMTP id m15so4136949uap.6;
-        Sun, 09 Jan 2022 02:01:44 -0800 (PST)
-X-Received: by 2002:ab0:2118:: with SMTP id d24mr23782568ual.78.1641722504022;
- Sun, 09 Jan 2022 02:01:44 -0800 (PST)
+        Sun, 09 Jan 2022 02:02:33 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id c36so18398999uae.13;
+        Sun, 09 Jan 2022 02:02:33 -0800 (PST)
+X-Received: by 2002:a67:e985:: with SMTP id b5mr16239vso.77.1641722553460;
+ Sun, 09 Jan 2022 02:02:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20220107110723.323276-1-javierm@redhat.com> <20220107110723.323276-3-javierm@redhat.com>
-In-Reply-To: <20220107110723.323276-3-javierm@redhat.com>
+References: <20220107110723.323276-1-javierm@redhat.com> <20220107110723.323276-2-javierm@redhat.com>
+In-Reply-To: <20220107110723.323276-2-javierm@redhat.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 9 Jan 2022 11:01:32 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWvFL9GYM-dMdZeyZrQjr13Sgt-XXN19bc6jA3emn2Dcw@mail.gmail.com>
-Message-ID: <CAMuHMdWvFL9GYM-dMdZeyZrQjr13Sgt-XXN19bc6jA3emn2Dcw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] video: vga16fb: Only probe for EGA and VGA 16 color
- graphic cards
+Date:   Sun, 9 Jan 2022 11:02:22 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXG3xOUrzOoRQVgpb4MmuQKJ1y3yPXv=p4AiNEohrzZug@mail.gmail.com>
+Message-ID: <CAMuHMdXG3xOUrzOoRQVgpb4MmuQKJ1y3yPXv=p4AiNEohrzZug@mail.gmail.com>
+Subject: Re: [PATCH 1/2] video: vga16fb: Fix logic that checks for the display standard
 To:     Javier Martinez Canillas <javierm@redhat.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Kris Karas <bugs-a21@moonlit-rail.com>,
-        stable <stable@vger.kernel.org>, Borislav Petkov <bp@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         DRI Development <dri-devel@lists.freedesktop.org>,
         Linux Fbdev development list <linux-fbdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -65,61 +60,35 @@ Hi Javier,
 
 On Fri, Jan 7, 2022 at 9:00 PM Javier Martinez Canillas
 <javierm@redhat.com> wrote:
-> The vga16fb framebuffer driver only supports Enhanced Graphics Adapter
+> The vga16fb framebuffer driver supports both Enhanced Graphics Adapter
 > (EGA) and Video Graphics Array (VGA) 16 color graphic cards.
 >
-> But it doesn't check if the adapter is one of those or if a VGA16 mode
-> is used. This means that the driver will be probed even if a VESA BIOS
-> Extensions (VBE) or Graphics Output Protocol (GOP) interface is used.
+> But the logic to check whether the EGA or VGA standard are used is not
+> correct. It just checks if screen_info.orig_video_isVGA is set, but it
+> should check if is set to VIDEO_TYPE_VGAC instead.
 >
-> This issue has been present for a long time but it was only exposed by
-> commit d391c5827107 ("drivers/firmware: move x86 Generic System
-> Framebuffers support") since the platform device registration to match
-> the {vesa,efi}fb drivers is done later as a consequence of that change.
+> This means that it assumes to be VGA even if is set to VIDEO_TYPE_EGAC.
 >
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215001
-> Fixes: d391c5827107 ("drivers/firmware: move x86 Generic System Framebuffers support")
-> Reported-by: Kris Karas <bugs-a21@moonlit-rail.com>
-> Cc: <stable@vger.kernel.org> # 5.15.x
 > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Tested-by: Kris Karas <bugs-a21@moonlit-rail.com>
 
 Thanks for your patch!
 
 > --- a/drivers/video/fbdev/vga16fb.c
 > +++ b/drivers/video/fbdev/vga16fb.c
-> @@ -1422,6 +1422,18 @@ static int __init vga16fb_init(void)
+> @@ -1332,7 +1332,7 @@ static int vga16fb_probe(struct platform_device *dev)
+>         printk(KERN_INFO "vga16fb: mapped to 0x%p\n", info->screen_base);
+>         par = info->par;
 >
->         vga16fb_setup(option);
->  #endif
-> +
-> +       /* only EGA and VGA in 16 color graphic mode are supported */
-> +       if (screen_info.orig_video_isVGA != VIDEO_TYPE_EGAC &&
-> +           screen_info.orig_video_isVGA != VIDEO_TYPE_VGAC)
-> +               return -ENODEV;
-
-Probably these checks should be wrapped inside a check for CONFIG_X86?
+> -       par->isVGA = screen_info.orig_video_isVGA;
+> +       par->isVGA = screen_info.orig_video_isVGA == VIDEO_TYPE_VGAC;
 
 All non-x86 architectures (except for 2 MIPS platforms) treat
 orig_video_isVGA as a boolean flag, and just assign 1 to it.
+Hence this change would break them.
 
-> +
-> +       if (screen_info.orig_video_mode != 0x0D &&      /* 320x200/4 (EGA) */
-> +           screen_info.orig_video_mode != 0x0E &&      /* 640x200/4 (EGA) */
-> +           screen_info.orig_video_mode != 0x10 &&      /* 640x350/4 (EGA) */
-> +           screen_info.orig_video_mode != 0x12)        /* 640x480/4 (VGA) */
-> +               return -ENODEV;
-> +
-
-Likewise.
-
-A long time ago, I used vga16fb on a PPC box to use a standard PC
-graphics card (initialized using an emulator for the card's BIOS ROM),
-as a second display. The above changes would break such a use case.
-
->         ret = platform_driver_register(&vga16fb_driver);
+>         par->palette_blanked = 0;
+>         par->vesa_blanked = 0;
 >
->         if (!ret) {
 
 Gr{oetje,eeting}s,
 

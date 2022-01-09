@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DCF488C02
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC9B488C06
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236729AbiAITYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 14:24:38 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:49974 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236725AbiAITYb (ORCPT
+        id S236756AbiAITYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 14:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236723AbiAITYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 14:24:31 -0500
-X-UUID: 21bb4bc72a2b46caacca9030e5418a3c-20220110
-X-UUID: 21bb4bc72a2b46caacca9030e5418a3c-20220110
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1198602015; Mon, 10 Jan 2022 03:24:29 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 10 Jan 2022 03:24:28 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 10 Jan 2022 03:24:27 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 5/5] Bluetooth: btmtksdio: clean up inconsistent error message in btmtksdio_mtk_reg_read
-Date:   Mon, 10 Jan 2022 03:24:01 +0800
-Message-ID: <7a5491bd4192cbd7423c8769641df9045a565ad4.1641755121.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <a22b710e69551c3503203f73ea898504cb634815.1641755121.git.objelf@gmail.com>
-References: <a22b710e69551c3503203f73ea898504cb634815.1641755121.git.objelf@gmail.com>
+        Sun, 9 Jan 2022 14:24:44 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C955C061751;
+        Sun,  9 Jan 2022 11:24:43 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c66so7416328wma.5;
+        Sun, 09 Jan 2022 11:24:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/7KLjfPHsWfXinvdT9x6SwzVroZgq92QvU7YFU5ZeWM=;
+        b=eJ2muUDWeSDar4I1sLFaTGZhcHvqAdSpGMogP4fuj4m5J2xdYuZQPEszkuQHAbE08C
+         fy20TVvX4eSaHLy986Oe8RMqcP62rOxSFOpaAvq+SGNKos5U2QTn73e8xJXEUK5TugXp
+         BPztQRIxS3ET5kmCq2F8hSY/4zEwfidL2fwngro2M2GsXgGYLa8R10h4tC67IALi9dcJ
+         rmvEvIoTD879fADNyXMYKP7xX6rO92qnN5sCdzgfjWVswCg5pOHTbCeuufsZKAoTqrut
+         CSQp8CU2czG+ZiucpIEDGWIbeFiWI1xFyhUJvfD9ILlY+6e3Za2UTPxwutRpLTZFFw8y
+         ly3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/7KLjfPHsWfXinvdT9x6SwzVroZgq92QvU7YFU5ZeWM=;
+        b=Eebsqlv88jU2wGM6EAQBkvnUnmqAJDmmFKCmZTgaNsR0md5oI+bLELQyKJfpQFWLRk
+         gTLSmgh4eiyhI8aSnCXzfv45i+5HPAW163j2+Nshzc37tUp6MUazYNlb8y7DMzOBgInP
+         663lyFwCq+NywplEGQvHqPWP6bNltD5b5N807jWdhSSI+1Ex1o6ieNPVVkpHSoKwwDG9
+         Wd/f7M61aPNt2BKBKmuZo+ctMDdEd1kPkXPh8ZMGnwDlHmKvElc1/o+YnBYEeylQIzGt
+         CiG9cKR2LDW9tmPWWFtpSYMQVxYSPIR4lKauXn7h+BncIWlCMOfq2lXLi25VkraopBGB
+         bsSg==
+X-Gm-Message-State: AOAM532BSf7M33dZkw/e53MNw9EelcKeUOM40wC9kc6dRek70JrRiOwe
+        v5fLmW2mVW59kIToz4fcaJU=
+X-Google-Smtp-Source: ABdhPJxob2kx7PZCoFwkFA0s/AKSHeLZcHwTJ8YZObT7NHoX+c9068fofT99Quzq/1i0wvnVcFJNFQ==
+X-Received: by 2002:a7b:c0cf:: with SMTP id s15mr1712753wmh.95.1641756281658;
+        Sun, 09 Jan 2022 11:24:41 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id w17sm5403831wmc.14.2022.01.09.11.24.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 11:24:41 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     kalyan_t@codeaurora.org
+Cc:     robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch, dmitry.baryshkov@linaro.org,
+        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] drm/msm/dpu: invalid parameter check in dpu_setup_dspp_pcc
+Date:   Sun,  9 Jan 2022 20:24:31 +0100
+Message-Id: <20220109192431.135949-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+The function performs a check on the "ctx" input parameter, however, it
+is used before the check.
 
-Have "..reg (%d)" to be consistent with the other similar error messages.
+Initialize the "base" variable after the sanity check to avoid a
+possible NULL pointer dereference.
 
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Fixes: 4259ff7ae509e ("drm/msm/dpu: add support for pcc color block in dpu driver")
+Addresses-Coverity-ID: 1493866 ("Null pointer dereference")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
-v5: new created to make the series better
----
- drivers/bluetooth/btmtksdio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index d82ba9d71fb8..25fb9c79b1f4 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -816,7 +816,7 @@ static int btmtksdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
+index a98e964c3b6f..355894a3b48c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c
+@@ -26,9 +26,16 @@ static void dpu_setup_dspp_pcc(struct dpu_hw_dspp *ctx,
+ 		struct dpu_hw_pcc_cfg *cfg)
+ {
  
- 	err = mtk_hci_wmt_sync(hdev, &wmt_params);
- 	if (err < 0) {
--		bt_dev_err(hdev, "Failed to read reg(%d)", err);
-+		bt_dev_err(hdev, "Failed to read reg (%d)", err);
- 		return err;
+-	u32 base = ctx->cap->sblk->pcc.base;
++	u32 base;
+ 
+-	if (!ctx || !base) {
++	if (!ctx) {
++		DRM_ERROR("invalid ctx %pK\n", ctx);
++		return;
++	}
++
++	base = ctx->cap->sblk->pcc.base;
++
++	if (!base) {
+ 		DRM_ERROR("invalid ctx %pK pcc base 0x%x\n", ctx, base);
+ 		return;
  	}
- 
 -- 
 2.25.1
 

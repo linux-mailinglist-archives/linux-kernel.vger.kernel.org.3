@@ -2,34 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8DE488A52
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 16:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC3B488A5D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 16:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiAIPub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 10:50:31 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:55722 "EHLO
+        id S235958AbiAIP66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 10:58:58 -0500
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:62698 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiAIPu3 (ORCPT
+        with ESMTP id S235949AbiAIP65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 10:50:29 -0500
+        Sun, 9 Jan 2022 10:58:57 -0500
 Received: from pop-os.home ([90.11.185.88])
         by smtp.orange.fr with ESMTPA
-        id 6aShnj1ubIEdl6aShnROx1; Sun, 09 Jan 2022 16:50:28 +0100
+        id 6aatnj4tcIEdl6aatnRPiu; Sun, 09 Jan 2022 16:58:55 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 09 Jan 2022 16:50:28 +0100
+X-ME-Date: Sun, 09 Jan 2022 16:58:55 +0100
 X-ME-IP: 90.11.185.88
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Bryan Whitehead <bryan.whitehead@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>,
+To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         netdev@vger.kernel.org
-Subject: [PATCH] lan743x: Remove useless DMA-32 fallback configuration
-Date:   Sun,  9 Jan 2022 16:50:19 +0100
-Message-Id: <ef548716606f257939df9738a801f15b6edf2568.1641743405.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] hinic: Remove useless DMA-32 fallback configuration
+Date:   Sun,  9 Jan 2022 16:57:50 +0100
+Message-Id: <23541c28df8d0dcd3663b5dbe0f76af71e70e9cc.1641743855.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,49 +45,28 @@ Simplify code and remove some dead code accordingly.
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/net/ethernet/microchip/lan743x_main.c | 22 +++++++------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+ drivers/net/ethernet/huawei/hinic/hinic_main.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
-index 7d7647481f70..8c6390d95158 100644
---- a/drivers/net/ethernet/microchip/lan743x_main.c
-+++ b/drivers/net/ethernet/microchip/lan743x_main.c
-@@ -1739,13 +1739,10 @@ static int lan743x_tx_ring_init(struct lan743x_tx *tx)
- 	}
- 	if (dma_set_mask_and_coherent(&tx->adapter->pdev->dev,
- 				      DMA_BIT_MASK(64))) {
--		if (dma_set_mask_and_coherent(&tx->adapter->pdev->dev,
--					      DMA_BIT_MASK(32))) {
--			dev_warn(&tx->adapter->pdev->dev,
--				 "lan743x_: No suitable DMA available\n");
--			ret = -ENOMEM;
--			goto cleanup;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+index 1e1b1be86174..05329292d940 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+@@ -1392,12 +1392,8 @@ static int hinic_probe(struct pci_dev *pdev,
+ 
+ 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (err) {
+-		dev_warn(&pdev->dev, "Couldn't set 64-bit DMA mask\n");
+-		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+-		if (err) {
+-			dev_err(&pdev->dev, "Failed to set DMA mask\n");
+-			goto err_dma_mask;
 -		}
-+		dev_warn(&tx->adapter->pdev->dev,
-+			 "lan743x_: No suitable DMA available\n");
-+		ret = -ENOMEM;
-+		goto cleanup;
++		dev_err(&pdev->dev, "Failed to set DMA mask\n");
++		goto err_dma_mask;
  	}
- 	ring_allocation_size = ALIGN(tx->ring_size *
- 				     sizeof(struct lan743x_tx_descriptor),
-@@ -2284,13 +2281,10 @@ static int lan743x_rx_ring_init(struct lan743x_rx *rx)
- 	}
- 	if (dma_set_mask_and_coherent(&rx->adapter->pdev->dev,
- 				      DMA_BIT_MASK(64))) {
--		if (dma_set_mask_and_coherent(&rx->adapter->pdev->dev,
--					      DMA_BIT_MASK(32))) {
--			dev_warn(&rx->adapter->pdev->dev,
--				 "lan743x_: No suitable DMA available\n");
--			ret = -ENOMEM;
--			goto cleanup;
--		}
-+		dev_warn(&rx->adapter->pdev->dev,
-+			 "lan743x_: No suitable DMA available\n");
-+		ret = -ENOMEM;
-+		goto cleanup;
- 	}
- 	ring_allocation_size = ALIGN(rx->ring_size *
- 				     sizeof(struct lan743x_rx_descriptor),
+ 
+ 	err = nic_dev_init(pdev);
 -- 
 2.32.0
 

@@ -2,161 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0E2488D61
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 00:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D17488D64
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 00:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiAIXpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 18:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S234821AbiAIXx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 18:53:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiAIXpB (ORCPT
+        with ESMTP id S234315AbiAIXx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 18:45:01 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE22CC06173F;
-        Sun,  9 Jan 2022 15:45:00 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w16so46725200edc.11;
-        Sun, 09 Jan 2022 15:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KMVKzWzTDkR0qm3suHIJabcOLRjs4Osz10LuFhuiBqQ=;
-        b=qF2H6YQCKG5mK6HEF6v1TEfhR5giSM4UdtU5JQ+Wai88ek6ir4iysxX/o10d/v/PCa
-         z0QWciGSY0zbmWfbrt74Pao6mVGeNPNXvQZQo+lmY5+68Ss8liZ6S07P3zlyf6V/i8WB
-         +B8GMfLUlRr9H777q1RwWXtA+/uWvNrtyGK96FeiOGdov1Kh9FW61FqMdOhaAQ6ka4am
-         Axyq4xec0qBcjUPVUlmwdqZv+TiQbZWrVlFZzyGTEPbJl3IeCOVlnqJKA/LuFRpHm8wX
-         9oYOtS1A5luxTphAqWZ4b175Kkr+ohBQ+xoztyg1HmeY8AKseWZvgn49TCa7e97rfLko
-         dDDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KMVKzWzTDkR0qm3suHIJabcOLRjs4Osz10LuFhuiBqQ=;
-        b=HYhljqUpLDiSwG9ukmI+oZCSMxBgsgs0LS4WMLl7rsKcKKUwZhUI8WTPEfD8fsdk/Q
-         SVp4INl2R88rd2hiWoK5Y07cXLVooBkGxorJO14C8ogsCYFEksq0ju7FP2MeRs358pyE
-         9HliYbjrLu2gOoNInjF4BqbR2mtFCjnShhJVjAXGfKNYTwXWFvPziiGPUPjpGhO//BYh
-         dBCrXNPLQWNuEFAlvyPuAc+olSOAalyEr3QZJkFG6RiSXc6eaXySG3OjYRkqhMoelPwz
-         aZuSVIeinC9v1olfgEVY2zIhOKYuO05vGfVcvU/a1357wkLwwv2bGCdjrOXJ4yzygQ8N
-         sxRw==
-X-Gm-Message-State: AOAM532OBIuG1YeaXPa2zBGe6mzSxmuJjg4KcL1U10vIt1+dBmioZOmB
-        JhWMn/F41z/geRjVGrc+tZy8hVKdxWq3CQ==
-X-Google-Smtp-Source: ABdhPJzOTbCQjm+GkHz+iDH9OwEiyI+CzOOSB6eqLvqd8dIFttdcgGTi873z0pS3ZB48GBdoRGdTXw==
-X-Received: by 2002:a17:906:d554:: with SMTP id cr20mr55865493ejc.356.1641771898951;
-        Sun, 09 Jan 2022 15:44:58 -0800 (PST)
-Received: from localhost.localdomain (host-79-18-211-221.retail.telecomitalia.it. [79.18.211.221])
-        by smtp.gmail.com with ESMTPSA id kx21sm1783493ejc.155.2022.01.09.15.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 15:44:58 -0800 (PST)
-From:   Dario Petrillo <dario.pk1@gmail.com>
-To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dario Petrillo <dario.pk1@gmail.com>
-Subject: [PATCH] perf tui: avoid crash when annotating recursive functions
-Date:   Mon, 10 Jan 2022 00:44:41 +0100
-Message-Id: <20220109234441.325106-1-dario.pk1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 9 Jan 2022 18:53:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED410C06173F;
+        Sun,  9 Jan 2022 15:53:56 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXDLp2WQ2z4xtf;
+        Mon, 10 Jan 2022 10:53:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641772434;
+        bh=6HOUCmNugf2XGu363vjtyjbKWU7Ib45fZOI78YJ+wv8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YF9aYkSSYUK1cvGVU+CdhzFbHinVIV8eafOS6KGmvEr1g354uUuLuXzA7FZME8sHy
+         vvmmbQmOUaA46c+g8Q4NQ2RN9VuJRci4RHotfxEVzRXQrVVED1KyXDSZ5CGK7AmIgu
+         ShXUNGQBQbpINt5lKb9d/15k+UqnOodG2KwfEPkagWoX86J3i6/kYY5o38m8GgUIg8
+         5SAWDJVH0ud2Ak64y9BKDHkOvl5c+bVBo8iK32yDz3Rn/uxUXi68ST1eySiktDQkJj
+         F4C+oyfMuAxC8ttAtV9Pqy2W4JVTsSTSS/g7e2oiZjymXXWpN8sR3Rr6RjwXAWLMAS
+         pKdswjxbo3TQA==
+Date:   Mon, 10 Jan 2022 10:53:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the input tree with Linus' tree
+Message-ID: <20220110105353.266873fb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/B4jPmG7BV93__j4jOfyeuyx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In perf report, entering a recursive function from inside of itself
-(either directly of indirectly through some other function) results in
-calling symbol__annotate2 multiple times, and freeing the whole disassembly
-when exiting from the innermost instance. The first issue causes the
-function's disassembly to be duplicated, and the latter a heap
-use-after-free (and crash) when trying to access the disassembly again.
+--Sig_/B4jPmG7BV93__j4jOfyeuyx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I reproduced the bug on perf 5.11.22 (Ubuntu 20.04.3 LTS) and 5.16.rc8
-with the following testcase (compile with gcc recursive.c -o recursive).
-To reproduce:
-- perf record ./recursive
-- perf report
-- enter fibonacci and annotate it
-- move the cursor on one of the "callq fibonacci" instructions and press enter
-  - at this point there will be two copies of the function in the disassembly
-- go back by pressing q, and perf will crash
+Hi all,
 
-#include <stdio.h>
+Today's linux-next merge of the input tree got a conflict in:
 
-int fibonacci(int n)
-{
-    if(n <= 2) return 1;
-    return fibonacci(n-1) + fibonacci(n-2);
-}
+  drivers/input/misc/axp20x-pek.c
 
-int main()
-{
-    printf("%d\n", fibonacci(40));
-}
+between commit:
 
-This patch addresses the issue by annotating a function and freeing the
-associated memory on exit only if no annotation is already present,
-so that a recursive function is only annotated on entry.
+  5ecc1e947822 ("Input: axp20x-pek - Use new soc_intel_is_cht() helper")
 
-Signed-off-by: Dario Petrillo <dario.pk1@gmail.com>
+from Linus' tree and commit:
 
----
- tools/perf/ui/browsers/annotate.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+  8a78050ee257 ("Input: axp20x-pek - revert "always register interrupt hand=
+lers" change")
 
-diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
-index e81c2493efdf..44ba900828f6 100644
---- a/tools/perf/ui/browsers/annotate.c
-+++ b/tools/perf/ui/browsers/annotate.c
-@@ -966,6 +966,7 @@ int symbol__tui_annotate(struct map_symbol *ms, struct evsel *evsel,
- 		.opts = opts,
- 	};
- 	int ret = -1, err;
-+	int not_annotated = list_empty(&notes->src->source);
- 
- 	if (sym == NULL)
- 		return -1;
-@@ -973,13 +974,15 @@ int symbol__tui_annotate(struct map_symbol *ms, struct evsel *evsel,
- 	if (ms->map->dso->annotate_warned)
- 		return -1;
- 
--	err = symbol__annotate2(ms, evsel, opts, &browser.arch);
--	if (err) {
--		char msg[BUFSIZ];
--		ms->map->dso->annotate_warned = true;
--		symbol__strerror_disassemble(ms, err, msg, sizeof(msg));
--		ui__error("Couldn't annotate %s:\n%s", sym->name, msg);
--		goto out_free_offsets;
-+	if (not_annotated) {
-+		err = symbol__annotate2(ms, evsel, opts, &browser.arch);
-+		if (err) {
-+			char msg[BUFSIZ];
-+			ms->map->dso->annotate_warned = true;
-+			symbol__strerror_disassemble(ms, err, msg, sizeof(msg));
-+			ui__error("Couldn't annotate %s:\n%s", sym->name, msg);
-+			goto out_free_offsets;
-+		}
- 	}
- 
- 	ui_helpline__push("Press ESC to exit");
-@@ -994,9 +997,11 @@ int symbol__tui_annotate(struct map_symbol *ms, struct evsel *evsel,
- 
- 	ret = annotate_browser__run(&browser, evsel, hbt);
- 
--	annotated_source__purge(notes->src);
-+	if(not_annotated)
-+		annotated_source__purge(notes->src);
- 
- out_free_offsets:
--	zfree(&notes->offsets);
-+	if(not_annotated)
-+		zfree(&notes->offsets);
- 	return ret;
- }
--- 
-2.25.1
+from the input tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/input/misc/axp20x-pek.c
+index e09b1fae42e1,c8f87df93a50..000000000000
+--- a/drivers/input/misc/axp20x-pek.c
++++ b/drivers/input/misc/axp20x-pek.c
+@@@ -293,19 -339,7 +323,7 @@@ static int axp20x_pek_probe(struct plat
+ =20
+  	axp20x_pek->axp20x =3D dev_get_drvdata(pdev->dev.parent);
+ =20
+- 	axp20x_pek->irq_dbr =3D platform_get_irq_byname(pdev, "PEK_DBR");
+- 	if (axp20x_pek->irq_dbr < 0)
+- 		return axp20x_pek->irq_dbr;
+- 	axp20x_pek->irq_dbr =3D regmap_irq_get_virq(
+- 			axp20x_pek->axp20x->regmap_irqc, axp20x_pek->irq_dbr);
+-=20
+- 	axp20x_pek->irq_dbf =3D platform_get_irq_byname(pdev, "PEK_DBF");
+- 	if (axp20x_pek->irq_dbf < 0)
+- 		return axp20x_pek->irq_dbf;
+- 	axp20x_pek->irq_dbf =3D regmap_irq_get_virq(
+- 			axp20x_pek->axp20x->regmap_irqc, axp20x_pek->irq_dbf);
+-=20
+ -	if (axp20x_pek_should_register_input(axp20x_pek, pdev)) {
+ +	if (axp20x_pek_should_register_input(axp20x_pek)) {
+  		error =3D axp20x_pek_probe_input_device(axp20x_pek, pdev);
+  		if (error)
+  			return error;
+
+--Sig_/B4jPmG7BV93__j4jOfyeuyx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHbdZEACgkQAVBC80lX
+0Gy6MAf7B7vlT/RHE/J/wW8hpRCF+OfmexcNzxdIpkP4dwzLbj4EQc73CFtiSp6i
+gORpfyFEW00ixLmKUVzWDMAHGiKz8l62GKiCSJu7i3buQLdyNpQKeXawQ4V+01a/
+q0WBiPlVqhklObqq6kptApvYAXfHccqyv5aX2XdoTFdq7HqzByhuecQGHFpPFBrN
+feqFKbAq779fw5nqM3Ag/FDmRoXFnAww5XteobHAt6RyiVX2CddKzjmENMXYlrGZ
+UfIPhQeH1SeeVI6SRiIV+BkJcuwq8dZn+K/DAHF9dvyNeCwChru5/OTb2XcP1X/4
+xqiF281nsY/DH6ub91lUty7b8xGFug==
+=0Q2q
+-----END PGP SIGNATURE-----
+
+--Sig_/B4jPmG7BV93__j4jOfyeuyx--

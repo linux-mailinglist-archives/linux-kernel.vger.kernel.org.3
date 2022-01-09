@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E32E2488C22
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437D2488C26
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 20:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbiAITsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 14:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S236844AbiAITvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 14:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbiAITsH (ORCPT
+        with ESMTP id S230452AbiAITvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 14:48:07 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31868C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 11:48:07 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id v11so8952069pfu.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 11:48:07 -0800 (PST)
+        Sun, 9 Jan 2022 14:51:32 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29130C06173F;
+        Sun,  9 Jan 2022 11:51:32 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id l10so22844823wrh.7;
+        Sun, 09 Jan 2022 11:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JyqLjQnkJpIxD8QTaBOhLwMadk8N68x8plAXpy9Hz0c=;
-        b=wlXDxSwWI+cU/jDX6EPuCXko8qAEyfTr/XvemTHjVyrH8tQJ+erL/GO9C9svhL6FPT
-         6Gc3OZs9vxDPI1BfDW/FAza1teZ8+10EHnk20ZcxHs/OO78y01q4KTkPAhcIbXPtxFK6
-         KKfAkKQrZeOvgXCnCFSdeMNbPlRlD6WQWqwtlqHtXD2rT80XWhfnRMxFBRz7LtXS2R2/
-         KIOlc22iKAeDZ5bYPGyXfhw+XbmBw8XPd5fhsGUjDVVDooZzZCrcCXezOM4kT7avIoPl
-         n9ODPvqnocR8sb2leSniR9IJYU2ZEMEfv4Tl/XBFi3hTNz7rg5hLiCr04efMLWhp/mhc
-         Ag9w==
+        bh=p1AMiJvHNkryIw3zq3NggfXLhQA0Q2EvdEfeBbUqQJk=;
+        b=aHe7mNIczcm7TCfDxqBQG2VIjLxWDMqx/qbHztIUodmkRcpR0c/nzNuApL4Q9K4Mdj
+         16Axw2LGRfw5uaRPWd5uJBfyCgxXAON9phKk8ZIO+N/VbSsqL6I6yCxDF9fO3H3P21ew
+         4L4DQFLYzJaYHG1HnmrENGenh+7h+/v9kELHvblwdyQn/obdp4+Bfw0qzlIFrx302OLu
+         E8yy9UpOUGHnt6O2QvnkyffXJ+zOSzOu0wGtKqwGMU03Bdzc65xzV6BMxqh+xpzJ0ens
+         3v+ihWU7UaMO0RTLgyTzfwekIDtyOoe3Mp4FCgyk8420yBFTKcceUH+i0Pqxj2RYl5Qb
+         Eb2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=JyqLjQnkJpIxD8QTaBOhLwMadk8N68x8plAXpy9Hz0c=;
-        b=atB8i7ygcsXTRn2Jp7aawZk6MamO2vD2O1vFj/ym4xP5BaylhpRGp02Jb8RYZ3llKa
-         rnYskifASiZ6aRL5JtRbCE1nDEflFFIWiU3FbBmf2Oum4pclCgHgAyarlnTNz57xQG66
-         hEY1CNFOwbmukXkpydzB2kpIlRX6KYCydcQk4UIGTqgUsAbyCaymqNGiL1V3CJDT4HBc
-         ZHVLTDHAx9Fq7hk0Wgfg36L/LilhlwCcu4LNXcB+lZHujhjdpjgSG8XE0ex+0VaEaE0c
-         tyGFH+QPXVIn/o/6ss9r85MXaLJ8IB462vEgf1tG1CkpVD3wxAnwev5boyBJtzFYqjFk
-         sw/Q==
-X-Gm-Message-State: AOAM533jki2gRkOxziAz2C9BUrKfRV3Lv4U9XFVRl0ZPcxl+pghNZku/
-        GdV5reqtA4WJYjyaagyjxuR7Aw==
-X-Google-Smtp-Source: ABdhPJwu+d4+2ofEkpi1W3WNzWjp7vIYF0vd9QvzESYvxs7HnIN7MVX0KSrgkszCVogy/ZsxBkTSSg==
-X-Received: by 2002:a63:9602:: with SMTP id c2mr48737508pge.538.1641757686425;
-        Sun, 09 Jan 2022 11:48:06 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id s14sm1213780pfw.33.2022.01.09.11.48.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p1AMiJvHNkryIw3zq3NggfXLhQA0Q2EvdEfeBbUqQJk=;
+        b=teyAfkG/iVI7uRdR3F0li5XwXEmpEayP11MTL08J4465B6w4trYQ2168pbq5rZJb27
+         IIXYpBfcZid/pp6hSbYW4FcRBVgtYKD30RNau1ICwrISfHBUuyJBwxSqRLlwAF5vDlYz
+         tpViUdpqdlqxktvV/sG83QO8Y+38l1VkBLnhe71kI5sDDC8rOT3AAAsi4ihjrxgfgV4c
+         rViZ/mxOKpEkg2oWI1+C3Lsy/lMqi7SKHGoeNYNMaDRdIGKWkdJvDQavEnqkCw8pS4lj
+         JxZsE8fwtJtNrt1sqaalDOQ/naqlhKfMr5OZ9hq4J/i1RRK2ihbKa620k01U0igHK+en
+         gf4A==
+X-Gm-Message-State: AOAM5306KlQZsLsjIrXL73OIEu8JXKGkjE00wE+gaeiUw5rD76jRFOaR
+        MfQmkWycjPY19Q1Rk1kk/Kk=
+X-Google-Smtp-Source: ABdhPJxjZVTMHT+0k4EdM0whztncj82t+8E6deuAW+u7Dda4nR1z+UqDqS9/1mLW8rO7FS80wkxrXQ==
+X-Received: by 2002:adf:d1c9:: with SMTP id b9mr21664358wrd.560.1641757890760;
+        Sun, 09 Jan 2022 11:51:30 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 5sm5411820wrb.77.2022.01.09.11.51.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 11:48:06 -0800 (PST)
-Date:   Sun, 09 Jan 2022 11:48:06 -0800 (PST)
-X-Google-Original-Date: Sun, 09 Jan 2022 11:47:30 PST (-0800)
-Subject:     Re: [PATCH 0/5] riscv: misc clean up
-In-Reply-To: <20211128160741.2122-1-jszhang@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        anup@brainfault.org, atishp@atishpatra.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jszhang@kernel.org
-Message-ID: <mhng-4e157e52-f315-48ee-ac92-03628c35cbde@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sun, 09 Jan 2022 11:51:30 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: atomisp: make array idx_map static const
+Date:   Sun,  9 Jan 2022 19:51:29 +0000
+Message-Id: <20220109195129.46118-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Nov 2021 08:07:36 PST (-0800), jszhang@kernel.org wrote:
-> This series is a misc clean up: clean up useless LoCs, or make some
-> functions static, or mark function pointer as __initdata, or remove
-> one function().
->
-> Jisheng Zhang (5):
->   riscv: remove cpu_stop()
->   riscv: head: make secondary_start_common() static
->   riscv: kvm: make kvm_riscv_vcpu_fp_clean() static
+Don't populate the read-only array idx_map on the stack but
+instead it static const. Also makes the object code a little smaller.
 
-Probably best to split out the KVM patches, as they go in via a 
-different tree.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ .../atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5.host.c  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->   riscv: errata: alternative: mark vendor_patch_func __initdata
->   riscv: head: remove useless __PAGE_ALIGNED_BSS and .balign
->
->  arch/riscv/errata/alternative.c | 3 ++-
->  arch/riscv/include/asm/smp.h    | 2 --
->  arch/riscv/kernel/cpu-hotplug.c | 8 +-------
->  arch/riscv/kernel/head.S        | 9 ++-------
->  arch/riscv/kvm/vcpu_fp.c        | 2 +-
->  5 files changed, 6 insertions(+), 18 deletions(-)
-
-These are on for-next (aside from the KVM one, which Anup has already 
-picked up).
-
-Thanks!
-
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5.host.c
+index 562662ab8a44..a70bce1179da 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/macc/macc1_5/ia_css_macc1_5.host.c
+@@ -44,7 +44,7 @@ ia_css_macc1_5_vmem_encode(
+     unsigned int size)
+ {
+ 	unsigned int i, j, k, idx;
+-	unsigned int idx_map[] = {
++	static const unsigned int idx_map[] = {
+ 		0, 1, 3, 2, 6, 7, 5, 4, 12, 13, 15, 14, 10, 11, 9, 8
+ 	};
+ 
+-- 
+2.32.0
 

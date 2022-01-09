@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4432488850
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 08:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5451488857
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 09:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbiAIH31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 02:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiAIH30 (ORCPT
+        id S232132AbiAIIVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 03:21:34 -0500
+Received: from srvc114.turhost.com ([109.232.216.117]:55955 "EHLO
+        srvc114.turhost.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229867AbiAIIVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 02:29:26 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6431FC06173F;
-        Sat,  8 Jan 2022 23:29:26 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so18746525pjf.3;
-        Sat, 08 Jan 2022 23:29:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=ABpe723VdAG++mLmVJtQgfj7bdVAG98VviWIXnTdgFs=;
-        b=ShMud7Z/8D2OTfAfGGcEKU7KgASpM7hXksFB6AYWLaTxPnau4Expe7kkW/MUSmXbls
-         /G/t23YJN6P8kMGDaEP7ZxgBSNJ/JmxHQNSSbDieN6OZle9oUIpYJh3RQarh7SWc4H5J
-         DIXs9WQR1L8Uwaiu7gaOO0QHQvNL9gZDugfc02hYYbzBh+M9gEzLCCKAVg+Ut30LjZyA
-         xIB6ZnJiuHvW1BHAQ0nYhFdrabNAYu0t4wUmiV2/2tze0nWpWSk6q9ShcBbg1RJCJ3mA
-         0mVRVxgwbxjE46im0kXtWJuCUTUkeUgM5mVGlx4OVCYM+ktRhnKxdzDz6G8eVucWpUW5
-         1UxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ABpe723VdAG++mLmVJtQgfj7bdVAG98VviWIXnTdgFs=;
-        b=a36XotZjl+8ttvklsPumLt1AahL1Sr5qWWt5UxsFrj/I/hnsK/6e/n1ut/Q+4jWDD4
-         eX2+P1LreZhEJ2D+8DUba0KF2opv9WphxOShf+ymEqHfnZwBNcXCJ4fl5SDoeF4N0xfF
-         PQCReE//togprV61ZkLXvDZ90Fz+GF8+yv1p3kRNNNADI/KPtqRTUiWTQtb2W2v1FuBx
-         frrUOKClcA4oQum0H83DImO3CyUhlgbKv4MdAvivxdVo3mKCJxz5RKc/dYKuKikx7b0D
-         he5RvnSEB8m16YFPWMvrPdlmmrSHvMWOqhzGyt8FfJHHYQ9abP+acMiQWNnarAQGQSI8
-         b8XA==
-X-Gm-Message-State: AOAM532sTqfCQqQOdLgVkO1QSzWHFkhPHzrhbQ4KhihiI4RGo5diQyIc
-        z+uHAeotn0+b1Cu4istZb5w=
-X-Google-Smtp-Source: ABdhPJxh8aDsuNV3cqiVjXy2QBqDupJcQl44+BzuswPxChCYjaYIa6osngPfXnCWVAvYizROVzDhjg==
-X-Received: by 2002:a17:90b:4ad2:: with SMTP id mh18mr24441490pjb.197.1641713365790;
-        Sat, 08 Jan 2022 23:29:25 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:1402:d240:ab6c:2258])
-        by smtp.gmail.com with ESMTPSA id b2sm3079880pfl.138.2022.01.08.23.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 23:29:24 -0800 (PST)
-Date:   Sat, 8 Jan 2022 23:29:22 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [git pull] Input updates for v5.16-rc8
-Message-ID: <YdqO0p960x1KT/bo@google.com>
+        Sun, 9 Jan 2022 03:21:33 -0500
+X-Greylist: delayed 2528 seconds by postgrey-1.27 at vger.kernel.org; Sun, 09 Jan 2022 03:21:33 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=ercanersoy.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        Message-ID:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=G04Y8GSoLZmUnCgXdMDlJFKF6Vl2a2TJL3PA/6fHimM=; b=seqfPa+Mxw3r9SMlxxi+A7gZOh
+        79/muAG+WWUuOk/HltZDQ5S6srOVxLypdl2CmivevITnhP6RRytWaxgzZLuHdv0mm3mb47Jf9ZZIU
+        XWo+k32v7HBzMc15T664RjlLpH2qtnuGH2GOzxRePjpBZTCZdVOfjr2QvHDAnGlbq2XL6ROrXS5WC
+        o7Mib6C0DNXqA4Lam88BjvOz/Il1+65H0wm7x9Pxp0qJYOkM6AnxRPLos+FaysLaxt1aGbweXq4Do
+        38/AH9agLiTNzmVoac3IzrWkxBH6KYL5NrpSuQzakIn47DD3DLtDxHnCLgoszO8hXioRQlyrZxejP
+        w7RN4G+w==;
+Received: from [::1] (port=39612 helo=srvc114.turhost.com)
+        by srvc114.turhost.com with esmtpa (Exim 4.94.2)
+        (envelope-from <ercanersoy@ercanersoy.net>)
+        id 1n6SnQ-008UXK-S9; Sun, 09 Jan 2022 10:39:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Date:   Sun, 09 Jan 2022 10:39:19 +0300
+From:   Ercan Ersoy <ercanersoy@ercanersoy.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org
+Subject: [PATCH 2/2] Fix assgining cma_area_count
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <775ae3ba4f7034a78769559fa1a3542a@ercanersoy.net>
+X-Sender: ercanersoy@ercanersoy.net
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - srvc114.turhost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - ercanersoy.net
+X-Get-Message-Sender-Via: srvc114.turhost.com: authenticated_id: ercanersoy@ercanersoy.net
+X-Authenticated-Sender: srvc114.turhost.com: ercanersoy@ercanersoy.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Please pull from:
+I have patched "Contiguous Memory Allocator" of Linux kernel.
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git for-linus
+This fix of patch is for cma_init_reserved_mem function in
+mm/cma.c source file as creating area without specific name.
 
-to receive updates for the input subsystem. You will get a small fixup
-to Zinitix touchscreen driver to avoid enabling IRQ line before we
-successfully requested it.
+Without fix may be a problem a lot of cma as next cma2147483647 naming.
+Without fix may be a problem huge memory systems.
 
-Changelog:
----------
+I think after "cma2147483647" naming is "cma-2147483648".
 
-Nikita Travkin (1):
-      Input: zinitix - make sure the IRQ is allocated before it gets enabled
+Thanks for interesting,
+Ercan
 
-Diffstat:
---------
+--- START PATCH ---
+ From 5d3d01a3a0f7339617d1df945c0bd0ec1ab91ae3 Mon Sep 17 00:00:00 2001
+ From: Ercan Ersoy <ercanersoy@ercanersoy.net>
+Date: Sun, 9 Jan 2022 10:01:14 +0300
+Subject: [PATCH 2/2] Fix assgining cma_area_count
 
- drivers/input/touchscreen/zinitix.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Fix assigning to cma->name in cma_init_reserved_mem function
+in mm/cma.c source file.
 
-Thanks.
+Signed-off-by: Ercan Ersoy <ercanersoy@ercanersoy.net>
+---
+  mm/cma.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/mm/cma.c b/mm/cma.c
+index bc9ca8f3c487..03f01d1f1b57 100644
+--- a/mm/cma.c
++++ b/mm/cma.c
+@@ -199,7 +199,7 @@ int __init cma_init_reserved_mem(phys_addr_t base, 
+phys_addr_t size,
+  	if (name)
+  		snprintf(cma->name, CMA_MAX_NAME, name);
+  	else
+-		snprintf(cma->name, CMA_MAX_NAME,  "cma%d\n", cma_area_count);
++		snprintf(cma->name, CMA_MAX_NAME,  "cma%u\n", cma_area_count);
 
+  	cma->base_pfn = PFN_DOWN(base);
+  	cma->count = size >> PAGE_SHIFT;
 -- 
-Dmitry
+2.30.2
+
+
+--- END PATCH ---

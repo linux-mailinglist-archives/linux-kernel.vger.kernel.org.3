@@ -2,79 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D673488B39
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981F7488B03
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbiAIReE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:34:04 -0500
-Received: from slot0.bluewaterleisure.com ([194.99.46.63]:42411 "EHLO
-        slot0.bluewaterleisure.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234436AbiAIReD (ORCPT
+        id S234359AbiAIRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:25:23 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:33326 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232409AbiAIRZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:34:03 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Sun, 09 Jan 2022 12:34:02 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
- bh=ueYdB49Qt2xwM8LCS8y+24E9APk=;
- b=LPpDfxqVlvsb+fGMuS3cKJuLx5n4C1+vyLGO2egUGsClQX7RBDpF1FZam8fkIjBj5/k3i5YkvSdw
-   XGIYs2bVFQD27yKj4hMgy5HWrfCFKJ/umsVdSFQce8J0TKzN3Isv0kabfvE7Ew6soEbujn1PuR5+
-   ue8n1qBxh4c18GYu1+wA3KAyZZnKU95yOhHljR6x2hJKx6uHk1+ExmHAFg34atDHq59TIeOrcU9r
-   Axg2LiYwQo2AcmvfSo98t24avrydUiBQOd57D18jcdKhhS22SH4jY5MgtADLlQSw0liHZXU39YKD
-   8LJ6Pn4JH3aD9hLQqK/QOR1xs+pgdTlN/rWM7Q==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
- b=IrB/gMSG4svtqGnjWmZ1o/iX2pgJn8C5jcbQXk2xzQh049BYU3I11nHnQyLNApaRZ5JoSwTD2GRb
-   Opg+ex3E+rvwskkBz6mvly/ouhxuTVMS/COl0WAe6Qs0GQpicxDhtLTelegnFfK0GXe6m/muMDXd
-   sxR3OLNze2RAWqN7kU/Vijzq7owm1mozJSmfLDZLb/cpln+/wji4l+0Tcc7imz9YcnRTq5Y6loIR
-   iuTSmn0WCRM6WN1Vp9IBmFYFVgWbuVsRF9TwadlZ91EbJ21ipsAVdmG78X8n0OQ3X4r3WIjNqToc
-   RyNArs8eC+49t7mLFbFJya/cyq28knl8xnOsAw==;
-Reply-To: ayvazmustafa231@gmail.com
-From:   "Mustafa Ayvaz" <ker.mon@bluewaterleisure.com>
-To:     linux-kernel@vger.kernel.org
-Subject: Attn
-Date:   9 Jan 2022 18:23:58 +0100
-Message-ID: <20220109181844.DA68B8B53FEBCD69@bluewaterleisure.com>
+        Sun, 9 Jan 2022 12:25:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641749122; x=1673285122;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=pY/vgC3mibUTksylngWUfaDZ+uO3n7is8v7CToQVCw4=;
+  b=vk6mjJcCerO2hmAoyrNutr/Zo4vmVNEr7EXKXteKrVLxEPCNfqy9AbPy
+   MdKdugrvb0Y6IyXn8KTgxqVKvF2yZRUxh0UMCmIedvWN7bnfC91NHPbmf
+   IGggL2cSIBo/Z+Xac5zsCYppkolGk5wnpj8dKH1fOlyQ71EKOA4penyoK
+   w=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 09 Jan 2022 09:25:22 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 09:25:21 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 9 Jan 2022 09:25:21 -0800
+Received: from mkshah-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 9 Jan 2022 09:25:17 -0800
+From:   Maulik Shah <quic_mkshah@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <ulf.hansson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <quic_lsrao@quicinc.com>,
+        <quic_rjendra@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>
+Subject: [PATCH 00/10] Add APSS RSC to Cluster power domain
+Date:   Sun, 9 Jan 2022 22:54:57 +0530
+Message-ID: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear linux-kernel,
+This series patches 1 to 4 adds/corrects the cpuidle states/
+apps_rsc TCS configuration to make it same as downstream kernel.
 
-I am Barrister Mustafa Ayvaz, a personal attorney to late Mr.=20
-Anderson, who died due to Coronavirus Disease, which he=20
-contracted during his business trip in China. I want you to be=20
-kind and=C2=A0
-work with me in securing the money he left behind in the Bank=20
-here in Turkey, which is $3,390,000.00 =C2=A0
-(Three Million Three Hundred and Ninety Thousand Dollar USD),=20
-left by him.
+The patches 5, 6 and 7 adds apps_rsc device to cluster power domain such
+that when cluster is going to power down the cluster pre off notification
+will program the 'sleep' and 'wake' votes in SLEEP TCS and WAKE TCSes.
 
-I have searched for the Next Of Kin to my deceased=20
-client, but have failed as I do not have his current residence=20
-and contact details. As I was searching, I bumped into your=20
-profile having the same last name and in the same locality with=20
-the Next Of Kin. I decided to contact you and use you as the=20
-Bonafide Next Of Kin.
+The patches 8, 9 and 10 are to program the next wakeup in CONTROL_TCS.
 
-I solicit your consent to produce you as the Next Of Kin to my=20
-deceased client since both of you bear the same last name. The=20
-funds will then be transferred to you as the beneficiary and=20
-shared according to a proposed sharing pattern/ratio of 60:40=20
-that is 60% for me and 40% for you. Kindly=20
-contact me immediately for more information. 
+[1], [2] was older way of programming CONTROL_TCS (exporting an API and
+calling when last CPU was entering deeper low power mode). Now with patch
+number 5,6 and 7 the apps RSC is added to to cluster power domain and hence
+these patches are no longer needed with this series.
 
-After which I will send you the details of how the transaction=20
-will commence, Contact me back for more information through my=20
-email addresses below.
+The series is tested on SM8250 with latest linux-next tag next-20220107.
 
-Regards
-Mustafa Ayvaz
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/20190218140210.14631-3-rplsssn@codeaurora.org/
+[2] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=59613
 
-Thanks
-Mustafa Ayvaz
-Email: mustafa.ayvaz@ayvazburosu.com=20
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0or=20
-=C2=A0 =C2=A0 =C2=A0 =C2=A0ayvazmustafa231@gmail.com
+Lina Iyer (1):
+  soc: qcom: rpmh-rsc: Attach RSC to cluster PM domain
+
+Maulik Shah (9):
+  arm64: dts: qcom: sm8150: Correct TCS configuration for apps rsc
+  arm64: dts: qcom: sm8250: Add cpuidle states
+  arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
+  arm64: dts: qcom: sm8450: Update cpuidle states parameters
+  dt-bindings: soc: qcom: Update devicetree binding document for
+    rpmh-rsc
+  arm64: dts: qcom: Add power-domains property for apps_rsc
+  PM: domains: Store the closest hrtimer event of the domain CPUs
+  soc: qcom: rpmh-rsc: Save base address of drv
+  soc: qcom: rpmh-rsc: Write CONTROL_TCS with next timer wakeup
+
+ .../devicetree/bindings/soc/qcom/rpmh-rsc.txt      |   6 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |   7 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 106 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |   3 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  29 ++---
+ drivers/base/power/domain_governor.c               |   1 +
+ drivers/soc/qcom/rpmh-internal.h                   |   9 +-
+ drivers/soc/qcom/rpmh-rsc.c                        | 138 +++++++++++++++++++--
+ drivers/soc/qcom/rpmh.c                            |   4 +-
+ include/linux/pm_domain.h                          |   1 +
+ 10 files changed, 271 insertions(+), 33 deletions(-)
+
+-- 
+2.7.4
+

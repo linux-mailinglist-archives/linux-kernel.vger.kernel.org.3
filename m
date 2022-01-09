@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3A34888E3
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7198F4888E6
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiAILh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 06:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbiAILh0 (ORCPT
+        id S235310AbiAILl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 06:41:29 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37417 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229945AbiAILl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 06:37:26 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E54CC06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 03:37:25 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n6WVj-0001G8-2u; Sun, 09 Jan 2022 12:37:19 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-a4a9-3301-a0d2-087c.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:a4a9:3301:a0d2:87c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D0C46D3E59;
-        Sun,  9 Jan 2022 11:37:17 +0000 (UTC)
-Date:   Sun, 9 Jan 2022 12:37:16 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring
- parameters
-Message-ID: <20220109113716.r4l432ixsjbbcwtu@pengutronix.de>
-References: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com>
- <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
- <CABGWkvoGs_VBGD-7dt18LY9NV=63w50OceKjmaKYeqDe_WJk9g@mail.gmail.com>
+        Sun, 9 Jan 2022 06:41:28 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2F07658017F;
+        Sun,  9 Jan 2022 06:41:28 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 09 Jan 2022 06:41:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:content-type:mime-version
+        :content-transfer-encoding; s=fm3; bh=1iO9Xacgo2IEiAUwgTfhkQCJyw
+        B+vMt9GrLcUsFja0U=; b=AbxB4VaIT2geck4+hTBATJ2n4MoLscgC767PQZXopH
+        Mz/oe8QJnumSQDJH08/z+ZGOB382BLTk3LPU2CEWkEl0VyumURASmf5uMFwrVrM4
+        hxuGck3Jwh25vwVAfpoLx/Rtveu/A5XI4Jm6LsvmIhp0035DxGjOtuZkBSqmq5Nc
+        iLAVAV2tPLk5ed8Y9yO8/fwQw9bF8dfuzuHINgGfWpvctvjsqUAPY9Qgl4SaeNZN
+        QbUIAFpqb4MBLkt669pb2W49l77Mn4/9cr3JEzynsYVlSgjWUkqL9yu6E4AAv/rj
+        JZiLM5wUH/xRpR5Qg13UDKTr1uJdISKCgZWbMDImZbxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=1iO9Xa
+        cgo2IEiAUwgTfhkQCJywB+vMt9GrLcUsFja0U=; b=NrlfcFgbOtu48Hj0N1ZLnl
+        rzXj314N//bo2GW0hBpRc7moR/rU2agot92JP0c+u3XpjSgL201+z5I5kmge+vuD
+        hbjti3jnUDukk06vlcVWb3hJaR/fi4WTeDy/ZB21fVD/LESRY9BHxYXvU6BW1F9d
+        oQOWzmPXiv6IS0H96myWDGo4WLiOTEZjIp+sSC+Wa7vv3rHKcGtguVOOEPiX13YG
+        D/K7Tc6XzHS9ODwdm29ERjnihltm+8jS3CDS0J/rua1cho5X0FHbx2jHIv/O2uZS
+        8J36IObsQQ7gxcVgEmttNVQfJjc0is2YbPYl3nV2gCYRI6xmam+kTZaifw+ZQsdg
+        ==
+X-ME-Sender: <xms:58naYeQbGgHDd-qVcmVOlBCgFWt1540zjAjmvIQX0o3fcgrNmvEsmA>
+    <xme:58naYTzUUqODWhjKsEB-sD-_O0gW8ovwTnAM-xr3HUmfbb1JvAnvvoxAcREvwFpkc
+    a1xnoK2g3OffdyiWjQ>
+X-ME-Received: <xmr:58naYb2dopvlZFbtuMHPRvEQQ9uxlMUIFGUxTgNIW-KIBZA-sFDH_o1g5bfnJQgceI1vzB2HYpv0mYsWmJ5sogiWEBKagHndER0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudegkedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgtggfgsehtqhertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepheetfefgjeeuje
+    dtgedvgfeghfeigfehffdvffduveevteejudfhudekudetveejnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:58naYaBjFPPXnWBRaxM6HyzaTX47xMoamCGsVCdlaO8_jMZgNiuj5A>
+    <xmx:58naYXjv86S3s92NbABe1R0ILnTrvIpLV8huCIOACTkY40-xzziuKA>
+    <xmx:58naYWpiibhj0NAjG5HT-zwR_3nBr4yq68TAR24odmXAKdHc4uJ0Nw>
+    <xmx:6MnaYarjRIShryYNXqkVgqYvos5qeCUg8Z29ce-kPiq55h0-Y_0AYA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 9 Jan 2022 06:41:22 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        shawnguo@kernel.org, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, s.hauer@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH 0/2] watchdog: imx_wdt2: Enable ping on suspend support
+Date:   Sun,  9 Jan 2022 21:41:18 +1000
+Message-Id: <20220109114120.386013-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rzgzvcem3jngzhan"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvoGs_VBGD-7dt18LY9NV=63w50OceKjmaKYeqDe_WJk9g@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---rzgzvcem3jngzhan
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 09.01.2022 12:22:54, Dario Binacchi wrote:
-> > >  static const struct ethtool_ops flexcan_ethtool_ops =3D {
-> > > +     .get_ringparam =3D flexcan_get_ringparam,
-> > >       .get_sset_count =3D flexcan_get_sset_count,
-> > >       .get_strings =3D flexcan_get_strings,
-> > >       .get_priv_flags =3D flexcan_get_priv_flags,
-> >
-> > BTW: If you're looking for more TX performance, this can be done by
-> > using more than one TX buffer.
->=20
-> I didn't expect only one message buffer to be used for transmission
-
-It was easier to implement, but now we've sorted it out how to implement
-multiple TX buffers race free and lock-less. Have a look at the
-mcp251xfd driver.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---rzgzvcem3jngzhan
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHayOgACgkQqclaivrt
-76nPQgf/an5RfIK7HvAVii+TyXj7m/vfw+8gGayLUQxfMEeCZsdHBk25wsM76unP
-Mu4faJe15cxzs3whPcdpbDfMFC2t8zXSOjf2vlCcbjmqS0IOfxFIijYodI7KCFpO
-KPa13t6DDuJRLVzKi4TEEw/GgVNKQMbjN6TDpFLxgEf6Iz7V+DWf2brvyqRDRy5M
-+2qF/6403FycAUzgyo230UXGhLxdWn8Ac1XUx84xnqzXKs7v94iN2WR0HxynEL70
-bZz2FBDCpVwSnoL3iL7Kw5gKoXmVHJHXrV/MrAbEaEovT/axW+SMNr/lX5n7tYVj
-wt03+WrvEkPkMoA3fIRWvXv3WCXUTg==
-=M/Pi
------END PGP SIGNATURE-----
-
---rzgzvcem3jngzhan--
+When running Linux on the reMarkable2 tablet the device reboots two=0D
+minutes after suspend. This is because we don't go into low power=0D
+mode so the watchdog timer is still running and triggers a reboot.=0D
+=0D
+This series adds optional support for ping on suspend for the=0D
+i.MX watchdog timer and then enables it for the reMarkable2 tablet.=0D
+=0D
+Alistair Francis (2):=0D
+  watchdog: imx2_wdg: Alow ping on suspend=0D
+  ARM: dts: imx7d: remarkable2: set ping-during-suspend for watchdog=0D
+=0D
+ .../bindings/watchdog/fsl-imx-wdt.yaml        |  7 ++++++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       |  1 +=0D
+ drivers/watchdog/imx2_wdt.c                   | 22 +++++++++++++------=0D
+ 3 files changed, 23 insertions(+), 7 deletions(-)=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D

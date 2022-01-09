@@ -2,212 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA8748892F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 13:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AEEB488931
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 13:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiAIMBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 07:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S235433AbiAIMBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 07:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiAIMBM (ORCPT
+        with ESMTP id S235423AbiAIMBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 07:01:12 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA89C06173F;
-        Sun,  9 Jan 2022 04:01:12 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id w22so3359555iov.3;
-        Sun, 09 Jan 2022 04:01:12 -0800 (PST)
+        Sun, 9 Jan 2022 07:01:37 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A0DC061748
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 04:01:37 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id u21so19546322edd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 04:01:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=spkLu4uIr0v4idqd3BcQfFaA/zlQoV1DfA8cSo6CIKU=;
-        b=m8va4gCSJncMYbF5p4Ng95n4ZpMoZfJL1ws1RWZZA0DiCT6LWFpaLTpXCWSbNTpQkV
-         ds/2kKAb2sB0sE9YSIZ8fliTk5xvsd3NaXnFpocQVSIZY/rfV5XdX+jygk8DnbAqzxQC
-         eKTdQa8wJdIG1E3IUZuKa5o4EhSpmEKwYEVrL67uWmv3XssokJO9CCR0GMlKKZ6ATo3W
-         oTkOsfTpSvwJwTaq4QChHt+1vFlvUIcJqefnPW2sH4eV2uCcQYZUyDML98j4Ki0f7dzO
-         pi6owWZ+c2anwpYnahcp/T8xSTtJjmYTmZsEHH/EmSbQZjsty21UIiFuCX9TbOeVwmIh
-         sInA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=R37iilTiqaAK+1IsJ48/wL6jgQMJYIa0UQSSHwlopog=;
+        b=TupFSisWLZFcQHjUpB3golOqIcbJAoie2ba6Ia+5DQrg7bzAWjuGbqmuQreVGivoqH
+         Sjxm7tijNckh43gKOuUnA0xE2DQ37e2cqC/eCwhdXsZA9J7Nbb5bsag8A5O//69yTrSm
+         HtoHIydzR7bU2WrsNfCtr/o9yit1tPZW5/NOhYX0SvownqjIwr03Qc9h+mBzVYi4/vBc
+         +jjwtaOgjwd5TxALLa7zDhLqlqXI2Gts3wSjKAcQ2RGcWdibz77zeCCC0Jie7vhbZ341
+         1WeGr/TPvnkEOoIJQGq3U1SBDUDxAYK+TlzPFt5BmUMa0GoaAIxFjJtiKfA4MfYlscBs
+         NAOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=spkLu4uIr0v4idqd3BcQfFaA/zlQoV1DfA8cSo6CIKU=;
-        b=O3H3zgd5FOjqShKDfwXJ7qnSKWGCD2AKHFmoZNJXmOw8aaEBL/RHihb9OqS0BxW4WE
-         DWyUQfBcx3CXE1kfoT6CUZytJQ51Q2UcTypdqDA0AGzp+92rnXyzQcKOHzeO91Nn3hCK
-         7lsWU19FMm2wti5Surtcrn01ovuLdIEXNCPYyoJ9cPHh7IS7nPf2fq5NJsOimD2b1E24
-         cTtaO23hJClPogmOw6nmCGFPlizQQVpQA6aAWjs4aMwx+B3kgtBVQl+E/CJ2sgHnp9SB
-         SW+1aoASCIaww6/dzN1iO4JeyTjj+2MPsBSR54tg9SRW3LI9XCSZHMkXaGztyPV5+c7L
-         uR9A==
-X-Gm-Message-State: AOAM531wX9F0DV0BF/KmrNm/xnaiP4xduIUzFOvE6rAIYNwHCzu2xRNW
-        Es5Chv4dhJevv/dAwzud3qMuHDx2qJME2w37eeo=
-X-Google-Smtp-Source: ABdhPJy0DMSC8QDWbRPi8FsckA21vkZbQHA/1KkLQojh2VCkH7A6aNmT1QdcnBw+wmVV81jq64FSCwx2wxNozNHc1mo=
-X-Received: by 2002:a05:6638:204c:: with SMTP id t12mr32094554jaj.169.1641729671949;
- Sun, 09 Jan 2022 04:01:11 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=R37iilTiqaAK+1IsJ48/wL6jgQMJYIa0UQSSHwlopog=;
+        b=jG74P/epsrjiq1rSgUO2k9RxnEOu9CMv0MEAFNivAdh7Dm+HCLdm4gII0MkVAc8sdr
+         Db7JYe+l/GTnhYVr7geltTIWQKUgO8jUZRSaqeKH4Y2xAnwqoKCVf9mpG00W6F3ZoJUK
+         HnvEfD8wg9L4Qks8wNKFJV9psgZ/NJpaLeswb0yTimdxLcVj4Z3+TFQkW8iAjSVMfbVB
+         sqKEmIXSgFKc1fG/KkY/euEXGFI+DqrTDYy8UP2hnabTzwJh2XQS9uImw8e6DtwBM1CU
+         9Z+GoiJ9gAsw8V9a4HID/9U4XrAvhVWMRAP8W5JroVdkMIyzEw9IJX9h9pqYq3dYsZdl
+         SFpg==
+X-Gm-Message-State: AOAM532UJDYq16gyiQzduqxzQdmY1HQfUJZ8HzqhljPiiJXqMdrKts+D
+        AO0fMOkA7xd3SvG7a6OqxcGehSxgOC6legt48ds=
+X-Google-Smtp-Source: ABdhPJwtwwalX3V1+u64YrB1RgsSBmC0kDvUB/FEzdqdpQNftr6XHMGMsg90ENl27Yq9aCngWn09cIisvWrwN9nMsAI=
+X-Received: by 2002:a17:906:3a55:: with SMTP id a21mr55045820ejf.274.1641729695473;
+ Sun, 09 Jan 2022 04:01:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222124603.326920-1-alistair@alistair23.me> <37291fe7-7028-cd9e-7fde-01d13f85f0d9@sholland.org>
-In-Reply-To: <37291fe7-7028-cd9e-7fde-01d13f85f0d9@sholland.org>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Sun, 9 Jan 2022 22:00:45 +1000
-Message-ID: <CAKmqyKOpO-PemwbQN-PL+miZjV1aq2zzipwMqwVXMJvH=10=Tw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Add support for the Cypress cyttsp5
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Andreas Kemnade <andreas@kemnade.info>
+Received: by 2002:a05:6402:430a:0:0:0:0 with HTTP; Sun, 9 Jan 2022 04:01:34
+ -0800 (PST)
+Reply-To: jesspayne72@gmail.com
+From:   Jess Payne <bassirdiallo99@gmail.com>
+Date:   Sun, 9 Jan 2022 04:01:34 -0800
+Message-ID: <CAN=-YmzOA98asykRLALOCx0sue784JqSf7eeb94a4TJV+e1gGQ@mail.gmail.com>
+Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5YqpIC8gSSBuZWVkIHlvdXIgYXNzaXN0YW5jZQ==?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 3:49 PM Samuel Holland <samuel@sholland.org> wrote:
->
-> Hello!
->
-> On 12/22/21 6:45 AM, Alistair Francis wrote:
-> > This patch series builds on top of [1] and adds support for the cyttsp5
-> > touchscreen controller for the reMarkable 2.
-> >
-> > I first tried to add an I2C HID device. Although the cyttsp5 has some H=
-ID
-> > looking aspects it is not HID compatible. Just in trying to probe the d=
-evice
-> > I found:
-> >  - The HID descriptor has extra padding
-> >  - The HID descriptor sets the high bytes of the descriptor length
-> >  - The HID descriptor has extra unrecognised tags
-> >  - The HID reset command doesn't appear to work
-> >
-> > I don't think there is a way to use the I2C HID framework with the cytt=
-sp5.
-> > For anyone interested you can see the work here [2]. In that branch tho=
-ugh I
-> > can only obtain a HID descriptor, nothing else works without more core
-> > changes.
-> >
-> > So instead I rebased the series from [1]. Converted to the new yaml DTS
-> > documentation, added regulator support and fixed a x/y miscalculation b=
-ug.
->
-> I am working on the PineNote, which also uses a cyttsp5 touchscreen. I at=
-tempted
-
-Hey! That's great! PineNote support would be awesome
-
-> to use the driver from this series, but I could not get it to work. I fou=
-nd that
-> the cyttsp5_sensing_conf_data was filled with all zeroes, so every touch =
-failed
-> the max_tch check. I noticed that cmd_done was being completed by empty
-> responses (which explains why the response buffer was zeroes), but I got =
-stuck
-> after that.
-
-Hmm... That's annoying. This series now works with the rM2 and a kobo
-device, so I don't understand why it wouldn't work on the PineNote.
-
-I just sent a v5 (sorry, I forgot to CC you) that has some code
-cleanups, but I don't expect it to fix the issues you are seeing.
-
->
-> So I looked back at the thread you linked below, and tried to implement t=
-he
-> workarounds described there, and those above, plus some others, and I was=
- able
-> to get the touchscreen working with i2c_hid. Here are the changes I made =
-to i2c_hid:
-> https://github.com/smaeul/linux/commit/a1e07425a6c4
->
-> In summary:
->  - Perform a 2-byte dummy read before reading the HID descriptor.
->    This is required to clear the two-byte empty message.
->  - Split command/response into multiple I2C transactions.
->    This is probably some sort of timing issue.
->    Without these first two, HID descriptor reads return "02 00".
->  - Chop 2 bytes out of the HID descriptor, as per the thread below.
->  - Similarly, chop 3 bytes out of the report descriptor.
->  - Skip the reset command, as above. Otherwise, the touchscreen
->    sends a different, short, unusable (partial?) report descriptor.
-
-Cool! I'm impressed you got this working!
-
->
-> I reused the the existing i2c_hid_of_goodix driver to handle toggling the=
- reset
-> line, which is required. That existing binding is almost identical to the=
- one in
-> this series. Here's the glue I added:
-> https://github.com/smaeul/linux/commit/65d9250d3899
->
-> And here is the result, from dmesg and debugfs:
-> https://gist.github.com/smaeul/60b4b0f784bfff8bb8ce3ee3b4483be9
->
-> So far, the quirks only appear to affect probing the device. The touchscr=
-een
-> works normally after that.
-
-If the PineNote and eInk setups are different (they probably are if
-this series isn't working for you) then there might be other changes
-as well.
-
->
-> What do you think of this approach? It certainly seems cleaner than parsi=
-ng the
-> HID reports/responses by hand. But I don't know if all of the quirks are
-> acceptable for i2c_hid.
-
-I'll leave that for an I2C HID maintainer to answer.
-
->
-> One additional quirk that I haven't handled yet is the missing min/max fo=
-r ABS_*
-> axes in the report descriptor. This prevents libinput from working, but o=
-ther
-> evdev users appear to work fine. The driver in this series appears to get=
- that
-> information from some vendor-specific command, and I am not sure where to=
- hook
-> that up.
-
-We will need that won't we? So then i2c_hid would have to implement
-that as well?
-
-Alistair
-
->
-> Regards,
-> Samuel
->
-> > 1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josser=
-and@bootlin.com/
-> > 2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid
-> >
-> > Alistair Francis (2):
-> >   ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
-> >   ARM: dts: imx7d-remarkable2: Enable the cyttsp5
-> >
-> > Myl=C3=A8ne Josserand (2):
-> >   Input: Add driver for Cypress Generation 5 touchscreen
-> >   dt-bindings: input: Add Cypress TT2100 touchscreen controller
-> >
-> >  .../input/touchscreen/cypress,tt21000.yaml    |  92 ++
-> >  arch/arm/boot/dts/imx7d-remarkable2.dts       |  89 ++
-> >  arch/arm/configs/imx_v6_v7_defconfig          |   1 +
-> >  drivers/input/touchscreen/Kconfig             |  14 +
-> >  drivers/input/touchscreen/Makefile            |   1 +
-> >  drivers/input/touchscreen/cyttsp5.c           | 922 ++++++++++++++++++
-> >  6 files changed, 1119 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/input/touchscreen=
-/cypress,tt21000.yaml
-> >  create mode 100644 drivers/input/touchscreen/cyttsp5.c
-> >
->
+5oiR5biM5pyb5L2g6IO955CG6Kej6L+Z5p2h5L+h5oGv77yM5Zug5Li65oiR5q2j5Zyo5Yip55So
+57+76K+R57uZ5L2g5YaZ5L+h44CCDQoNCuaIkeaYr+adsOilv+S9qeaBqeS4reWjq+Wkq+S6uuOA
+gg0KDQrlnKjnvo7lm73pmYblhpvnmoTlhpvkuovpg6jpl6jjgILnvo7lm73vvIzkuIDlkI3kuK3l
+o6vvvIwzMiDlsoHvvIzmiJHljZXouqvvvIzmnaXoh6rnvo7lm73nlLDnurPopb/lt57lhYvliKnl
+pKvlhbDvvIznm67liY3pqbvmiY7lnKjliKnmr5Tkuprnj63liqDopb/vvIzkuI7mgZDmgJbkuLvk
+uYnkvZzmiJjjgILmiJHnmoTljZXkvY3mmK/nrKw05oqk55CG6Zif56ysNzgy5peF5L+d6Zqc6JCl
+44CCDQoNCuaIkeaYr+S4gOS4quWFhea7oeeIseW/g+OAgeivmuWunuWSjOa3seaDheeahOS6uu+8
+jOWFt+acieiJr+WlveeahOW5vem7mOaEn++8jOaIkeWWnOasoue7k+ivhuaWsOaci+WPi+W5tuS6
+huino+S7luS7rOeahOeUn+a0u+aWueW8j++8jOaIkeWWnOasoueci+WIsOWkp+a1t+eahOazoua1
+quWSjOWxseiEieeahOe+juS4veS7peWPiuWkp+iHqueEtuaJgOaLpeacieeahOS4gOWIh+aPkOS+
+m+OAguW+iOmrmOWFtOiDveabtOWkmuWcsOS6huino+aCqO+8jOaIkeiupOS4uuaIkeS7rOWPr+S7
+peW7uueri+iJr+WlveeahOWVhuS4muWPi+iwiuOAgg0KDQrmiJHkuIDnm7TlvojkuI3lvIDlv4Pv
+vIzlm6DkuLrov5nkupvlubTmnaXnlJ/mtLvlr7nmiJHkuI3lhazlubPvvJvmiJHlnKggMjEg5bKB
+5pe25aSx5Y675LqG54i25q+N44CC5oiR54i25Lqy5Y+rIFBhdHJpY2UgUGF5bmXvvIzmiJHmr43k
+urLlj6sgTWFyeQ0KUGF5bmXjgILmsqHmnInkurrmnaXluK7liqnmiJHvvIzkvYbmiJHlvojpq5jl
+hbTmiJHnu4jkuo7lnKjnvo7lhpvkuK3mib7liLDkuoboh6rlt7HjgIINCg0K5oiR57uT5ama55Sf
+5LqG5a2p5a2Q77yM5L2G5LuW5q275LqG77yM5LiN5LmF5oiR5LiI5aSr5byA5aeL5qy66aqX5oiR
+77yM5omA5Lul5oiR5LiN5b6X5LiN5pS+5byD5ama5ae744CCDQoNCuaIkeS5n+W+iOW5uOi/kO+8
+jOWcqOaIkeeahOWbveWutue+juWbveWSjOWIqeavlOS6muePreWKoOilv+i/memHjOaLpeacieaI
+keeUn+a0u+S4reaJgOmcgOeahOS4gOWIh++8jOS9huayoeacieS6uuS4uuaIkeaPkOS+m+W7uuiu
+ruOAguaIkemcgOimgeS4gOS4quivmuWunueahOS6uuadpeS/oeS7u++8jOS7luS5n+S8muWwseWm
+guS9leaKlei1hOWQkeaIkeaPkOS+m+W7uuiuruOAguWboOS4uuaIkeaYr+aIkeeItuavjeWcqOS7
+luS7rOWOu+S4luWJjeeUn+S4i+eahOWUr+S4gOWls+WtqeOAgg0KDQrmiJHkuI3orqTor4bkvaDm
+nKzkurrvvIzkvYbmiJHorqTkuLrmnInkuIDkuKrlgLzlvpfkv6HotZbnmoTlpb3kurrvvIzku5bl
+j6/ku6Xlu7rnq4vnnJ/mraPnmoTkv6Hku7vlkozoia/lpb3nmoTllYbkuJrlj4vosIrvvIzlpoLm
+npzkvaDnnJ/nmoTmnInkuIDkuKror5rlrp7nmoTlkI3lrZfvvIzmiJHkuZ/mnInkuIDkupvkuJzo
+pb/opoHlkozkvaDliIbkuqvnm7jkv6HjgILlnKjkvaDouqvkuIrvvIzlm6DkuLrmiJHpnIDopoHk
+vaDnmoTluK7liqnjgILmiJHmi6XmnInmiJHlnKjliKnmr5Tkuprnj63liqDopb/ov5nph4zotZrl
+iLDnmoTmgLvpop3vvIg0NzANCuS4h+e+juWFg++8ieOAguaIkeS8muWcqOS4i+S4gOWwgeeUteWt
+kOmCruS7tuS4reWRiuivieS9oOaIkeaYr+WmguS9leWBmuWIsOeahO+8jOS4jeimgeaDiuaFjO+8
+jOS7luS7rOayoeaciemjjumZqe+8jOiAjOS4lOaIkei/mOWcqOS4jiBSZWQNCuacieiBlOezu+ea
+hOS6uumBk+S4u+S5ieWMu+eUn+eahOW4ruWKqeS4i+Wwhui/meeslOmSseWtmOWFpeS6humTtuih
+jOOAguaIkeW4jOacm+aCqOWwhuiHquW3seS9nOS4uuaIkeeahOWPl+ebiuS6uuadpeaOpeaUtuWf
+uumHkeW5tuWcqOaIkeWcqOi/memHjOWujOaIkOWQjuehruS/neWug+eahOWuieWFqOW5tuiOt+W+
+l+aIkeeahOWGm+S6i+mAmuihjOivgeS7peWcqOaCqOeahOWbveWutuS4juaCqOS8mumdou+8m+S4
+jeimgeWus+aAlemTtuihjOS8mumAmui/h+eUteaxh+Wwhui1hOmHkei9rOe7meaCqO+8jOi/meWv
+ueaIkeS7rOadpeivtOaXouWuieWFqOWPiOW/q+aNt+OAgg0KDQrnrJTorrA75oiR5LiN55+l6YGT
+5oiR5Lus6KaB5Zyo6L+Z6YeM5ZGG5aSa5LmF77yM5oiR55qE5ZG96L+Q77yM5Zug5Li65oiR5Zyo
+6L+Z6YeM5Lik5qyh54K45by56KKt5Ye75Lit5bm45a2Y5LiL5p2l77yM6L+Z5a+86Ie05oiR5a+7
+5om+5LiA5Liq5YC85b6X5L+h6LWW55qE5Lq65p2l5biu5Yqp5oiR5o6l5pS25ZKM5oqV6LWE5Z+6
+6YeR77yM5Zug5Li65oiR5bCG5p2l5Yiw5L2g5Lus55qE5Zu95a625Ye66Lqr5oqV6LWE77yM5byA
+5aeL5paw55Sf5rS777yM5LiN5YaN5b2T5YW144CCDQoNCuWmguaenOaCqOaEv+aEj+iwqOaFjuWk
+hOeQhu+8jOivt+WbnuWkjeaIkeOAguaIkeS8muWRiuivieS9oOS4i+S4gOatpeeahOa1geeoi++8
+jOW5tue7meS9oOWPkemAgeabtOWkmuWFs+S6juWfuumHkeWtmOWFpemTtuihjOeahOS/oeaBr+OA
+guS7peWPiumTtuihjOWwhuWmguS9leW4ruWKqeaIkeS7rOmAmui/h+eUteaxh+Wwhui1hOmHkei9
+rOenu+WIsOaCqOeahOWbveWuti/lnLDljLrjgILoi6XmnInlhbTotqPor7fogZTns7vmnKzkurrj
+gIINCg==

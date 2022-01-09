@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 428F3488A95
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 17:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD485488A9D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 17:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbiAIQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 11:33:14 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:39485 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiAIQdN (ORCPT
+        id S236020AbiAIQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 11:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230389AbiAIQhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 11:33:13 -0500
-Received: by mail-ot1-f48.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso3261828otr.6;
-        Sun, 09 Jan 2022 08:33:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=6aQP76L17zZIifS48mJSyI2JpkFOM8CJyj+hC/CiesE=;
-        b=SAeXACI8IJbntaLQmRUSoStSnUl/wC0E5rKRw8V7FyhpCMdoSN2YrXGMJ5qHo0IkR7
-         mKIeihpeZBWazgUDY2/rkc6iVzUXvoo0fxHQUnwvRAgDQcTK/N94wH8BcFBjjkpU9wQK
-         kC+idPSRnDonJd3uAmdQSu0KVXOlBFngBZwmUqGc9Qo2ZINAykRoW+dFuKiBzG0YQABK
-         umL9xf9LedepjkKHArrqTArfWC3RRmkXI6hRZp9G/T/bgDz58BE4t1DPVFguLtndUqxR
-         zhaol/uDtxxsEwGJI9mqcDOgX73SiYbO7n1Wa0FiqxHiDdx8hSshUQM8G606ZBqV84tK
-         FyIw==
-X-Gm-Message-State: AOAM532r/d0+6YWwI7+2o9bJSqPxkm9OFxXkQcalH3spV0sJ66A4zG2Y
-        U7oCo6UA+wcwv2MakCclS9WLoqoC3A==
-X-Google-Smtp-Source: ABdhPJyjNrFptPbU7HtswyOghK5ZNW41xftu9unOvQFYSHzdWpB2VWJ/iT1O1WH3Rms7hoEFc6T7aQ==
-X-Received: by 2002:a9d:4d8d:: with SMTP id u13mr14022539otk.246.1641745993000;
-        Sun, 09 Jan 2022 08:33:13 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q65sm759252oih.45.2022.01.09.08.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 08:33:12 -0800 (PST)
-Received: (nullmailer pid 3263068 invoked by uid 1000);
-        Sun, 09 Jan 2022 16:33:11 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>
-In-Reply-To: <20220107155215.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
-References: <20220107235320.965497-1-briannorris@chromium.org> <20220107155215.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
-Subject: Re: [PATCH 01/10] dt-bindings: devfreq: rk3399_dmc: Convert to YAML
-Date:   Sun, 09 Jan 2022 10:33:11 -0600
-Message-Id: <1641745991.444665.3263067.nullmailer@robh.at.kernel.org>
+        Sun, 9 Jan 2022 11:37:12 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55372C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 08:37:12 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: alyssa)
+        with ESMTPSA id 18ACB1F40359
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641746230;
+        bh=Bpd8xUWxmA4RJkcYDjsNYwzlEV49TfkepVOznECnw28=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IwHI5SxXa6IK50lOAd01j8xpiNxe9ME6gjZKJB7s+Gdoy5w01gG4TLecGFhBPh5BR
+         5qGULy+bAlSoDWMPiV9/5eg+24Crk383DkbJpUn5e/90KFSZc/ywIeZSbFOppZEOm7
+         X7GdEapzd72VqfOVLPMM7JsTugxLnzZ7GdBtbsA7Bd2Gf3pJCRS617EzIfVQ5z3CSq
+         DirQdnwO6Xb+2Avs51HpdkemVEjgvuOgeECjeHcdA/Swiijy13ww4Kj5Th3GzVK/ww
+         QDZdqgv+GgbiFpPejtfUDvCeX1c+7R18LtzGdZoQ28yP7pvxfsw3JIJ5PxUnNFsbq6
+         6YG8u/c/VT9fA==
+From:   Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panfrost: Update create_bo flags comment
+Date:   Sun,  9 Jan 2022 11:37:04 -0500
+Message-Id: <20220109163704.2564-1-alyssa.rosenzweig@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jan 2022 15:53:11 -0800, Brian Norris wrote:
-> I want to add, deprecate, and bugfix some properties, as well as add the
-> first users. This is easier with a proper schema.
-> 
-> The transformation is mostly straightforward, plus a few notable tweaks:
-> 
->  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
->    driver code and the example matched, but the description was
->    different. I went with the implementation.
-> 
->  * Drop upthreshold and downdifferential properties from the example.
->    These were undocumented (so, wouldn't pass validation), but were
->    representing software properties (governor tweaks). I drop them from
->    the driver in subsequent patches.
-> 
->  * Rename clock from pclk_ddr_mon to dmc_clk. The driver, DT example,
->    and all downstream users matched -- the binding definition was the
->    exception. Anyway, "dmc_clk" is a more appropriately generic name.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
-> 
->  .../bindings/devfreq/rk3399_dmc.txt           | 212 -------------
->  .../bindings/devfreq/rk3399_dmc.yaml          | 297 ++++++++++++++++++
->  2 files changed, 297 insertions(+), 212 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
->  create mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-> 
+Update a comment stating create_bo took no flags, since it now takes a
+bit mask of optional flags NOEXEC and HEAP.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+---
+ include/uapi/drm/panfrost_drm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml:37:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1577007
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/include/uapi/drm/panfrost_drm.h b/include/uapi/drm/panfrost_drm.h
+index 061e700dd06c..9e40277d8185 100644
+--- a/include/uapi/drm/panfrost_drm.h
++++ b/include/uapi/drm/panfrost_drm.h
+@@ -84,14 +84,14 @@ struct drm_panfrost_wait_bo {
+ 	__s64 timeout_ns;	/* absolute */
+ };
+ 
++/* Valid flags to pass to drm_panfrost_create_bo */
+ #define PANFROST_BO_NOEXEC	1
+ #define PANFROST_BO_HEAP	2
+ 
+ /**
+  * struct drm_panfrost_create_bo - ioctl argument for creating Panfrost BOs.
+  *
+- * There are currently no values for the flags argument, but it may be
+- * used in a future extension.
++ * The flags argument is a bit mask of PANFROST_BO_* flags.
+  */
+ struct drm_panfrost_create_bo {
+ 	__u32 size;
+-- 
+2.34.1
 

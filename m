@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 814414889B6
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4914889B9
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiAINxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiAINxQ (ORCPT
+        id S235740AbiAINxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 08:53:34 -0500
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:64260 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232637AbiAINxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:53:16 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF42C06173F;
-        Sun,  9 Jan 2022 05:53:16 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id e5so7092487wmq.1;
-        Sun, 09 Jan 2022 05:53:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Ex7Zn4g/KLxuIHq6btV1mmIDVP8gvgYQS50c7e6XZCM=;
-        b=Y9tFmhjkaVTR1OZ0465bvtWCHKY9ji1L/82QN/Tjr4UWoITPXRz0cc0i2f3QO3PD0u
-         MKHW+fX0dF6bdAROMEUn76EgbQ9qj7lellclHw5Aw2CNyHaJh4CvT91vkjVzdI9DfUwP
-         rKjyyb4ZIySm1LxdC68fCMj+o8+V/g0RoQhhXCnKUYM5oiERRE1ssHD4EY9kvnPEApWe
-         UMv8stcWX2q84qET0/dWS5YAfhxR+Njbm/UwoGcVAyuHoUigeaKQLNlGSMYrYe94yNVA
-         i0xEzifgcZ+mATzMyExiKuZNZ2DU0ufZ6rxWsYFk2wQM3a5GfVxFkpeovDQyzdJXwBDG
-         w/3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Ex7Zn4g/KLxuIHq6btV1mmIDVP8gvgYQS50c7e6XZCM=;
-        b=U0rLbmPs6PDepALqE8rs7iWCf12GhPvte/r4cABSXWZPT4oWwh/1PhVTMkChbc15cF
-         nwXsCnum/i94JSwudec+QKnhogs0tjQzq93pDvyyCNz+S1WrZhzlvlR/i1stRAIRiJA0
-         +otpERP1m6BGWgarDkjVU1jSXqy3a5ECmgfPYYkf208MuUkJEQ7yuMcg8rQWiq/zkFXz
-         TWMkgCv/wsXhBX2evbH0pLHxKL22CQ6T6T46r29sc8mQqPjS4Nvh7DX0BEK4Qof/8Ab7
-         3T7DtkJm0Oe1+iVqLS/XMdbTol256xwvfouSApbjSsxep3WyWVPtxWyR2Stx6/npK80z
-         rBFQ==
-X-Gm-Message-State: AOAM530xJwWnM+nq8SuYarMeWtM1R6HpCFZorQ5Hs7U+/ogmlKZNRJhJ
-        iGDfotdNVZ9Fbswk5tM0Acg=
-X-Google-Smtp-Source: ABdhPJwjuFZ0Px0kr8+UVRzj0mPDyiqhL4jgAmnpyETWPUGR+0Zal2yA0RrPW9ky7QqL9Uvws+Qdpg==
-X-Received: by 2002:a05:600c:3caa:: with SMTP id bg42mr18434795wmb.106.1641736394985;
-        Sun, 09 Jan 2022 05:53:14 -0800 (PST)
-Received: from standask-GA-A55M-S2HP ([188.123.115.255])
-        by smtp.gmail.com with ESMTPSA id l14sm4293077wrr.53.2022.01.09.05.53.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 05:53:14 -0800 (PST)
-Date:   Sun, 9 Jan 2022 14:53:12 +0100
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] dt-bindings: vendor-prefixes: add Wingtech
-Message-ID: <20220109135312.GA4900@standask-GA-A55M-S2HP>
+        Sun, 9 Jan 2022 08:53:33 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 6YdXnCf5oUujj6YdXnIXeC; Sun, 09 Jan 2022 14:53:32 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 09 Jan 2022 14:53:32 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org
+Subject: [PATCH] cxgb4: Remove useless DMA-32 fallback configuration
+Date:   Sun,  9 Jan 2022 14:53:27 +0100
+Message-Id: <56db10d53be0897ff1be5f37d64b91cb7e1d932c.1641736387.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vendor prefix for Wingtech (http://www.wingtech.com/en)
+As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+So, if dma_set_mask_and_coherent() succeeds, 'highdma' is known to be true.
+
+Simplify code and remove some dead code accordingly.
+
+[1]: https://lkml.org/lkml/2021/6/7/398
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index a13d6a19c2b4..419c565ba01c 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1332,6 +1332,8 @@ patternProperties:
-     description: Wiligear, Ltd.
-   "^winbond,.*":
-     description: Winbond Electronics corp.
-+  "^wingtech,.*":
-+    description: Wingtech Technology Co., Ltd.
-   "^winlink,.*":
-     description: WinLink Co., Ltd
-   "^winstar,.*":
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
+index dde1cf51d0ab..0c78c0db8937 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
+@@ -6608,7 +6608,6 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	static int adap_idx = 1;
+ 	int s_qpp, qpp, num_seg;
+ 	struct port_info *pi;
+-	bool highdma = false;
+ 	enum chip_type chip;
+ 	void __iomem *regs;
+ 	int func, chip_ver;
+@@ -6687,14 +6686,10 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		return 0;
+ 	}
+ 
+-	if (!dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64))) {
+-		highdma = true;
+-	} else {
+-		err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+-		if (err) {
+-			dev_err(&pdev->dev, "no usable DMA configuration\n");
+-			goto out_free_adapter;
+-		}
++	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
++	if (err) {
++		dev_err(&pdev->dev, "no usable DMA configuration\n");
++		goto out_free_adapter;
+ 	}
+ 
+ 	pci_enable_pcie_error_reporting(pdev);
+@@ -6823,7 +6818,7 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 			NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
+ 			NETIF_F_RXCSUM | NETIF_F_RXHASH | NETIF_F_GRO |
+ 			NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_HW_VLAN_CTAG_RX |
+-			NETIF_F_HW_TC | NETIF_F_NTUPLE;
++			NETIF_F_HW_TC | NETIF_F_NTUPLE | NETIF_F_HIGHDMA;
+ 
+ 		if (chip_ver > CHELSIO_T5) {
+ 			netdev->hw_enc_features |= NETIF_F_IP_CSUM |
+@@ -6841,8 +6836,6 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 				netdev->udp_tunnel_nic_info = &cxgb_udp_tunnels;
+ 		}
+ 
+-		if (highdma)
+-			netdev->hw_features |= NETIF_F_HIGHDMA;
+ 		netdev->features |= netdev->hw_features;
+ 		netdev->vlan_features = netdev->features & VLAN_FEAT;
+ #if IS_ENABLED(CONFIG_CHELSIO_TLS_DEVICE)
 -- 
-2.25.1
+2.32.0
 

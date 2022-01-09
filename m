@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 126BD488B90
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946D3488B97
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbiAISQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 13:16:20 -0500
-Received: from conuserg-09.nifty.com ([210.131.2.76]:31210 "EHLO
-        conuserg-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbiAISQL (ORCPT
+        id S236422AbiAISXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 13:23:22 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:61586 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236181AbiAISXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 13:16:11 -0500
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 209IFWa3030890;
-        Mon, 10 Jan 2022 03:15:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 209IFWa3030890
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1641752135;
-        bh=Cu3YE2A7ALH4pSGxfiHg4KjbUfWBLKzo5JgyS2XgMEQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZqoPYuzkXzJa4Zt/6B7uxrVshmqnK0KwATcdFFXsvlEMc0BmnIpk0cNK5klHUxuLG
-         yKiMbz1oVSxNzty2zc1RAY1sBBVxlU5CPtKZsFw8cTYMMO4D8Wk+xcnLpIIJZM34by
-         iCrylWkBNHd59pgrGU2umnVpKMTBHxH7o4eAcxPfTXWxnvabfbQDLahBEIoIkIecyM
-         v2rkhFPWjg/V9gHkYf8QUL2fKm4IsPDlqHGSgNhK1V6JeMZy02zFIEDJyysTPLrhxj
-         HMkeloFcTmy/+UOH26p0dG4H7OKOsEJLMo0wp15VEj8W2jU/rRDrkb07SrAVboPa8j
-         xz4BFWe4oqvEQ==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 5/5] kbuild: add cmd_file_size
-Date:   Mon, 10 Jan 2022 03:15:29 +0900
-Message-Id: <20220109181529.351420-5-masahiroy@kernel.org>
+        Sun, 9 Jan 2022 13:23:14 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 6cqUnvsI8soWh6cqUnw2qu; Sun, 09 Jan 2022 19:23:12 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 09 Jan 2022 19:23:12 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christoph Hellwig <hch@lst.de>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH] e1000e: Remove useless DMA-32 fallback configuration
+Date:   Sun,  9 Jan 2022 19:23:04 +0100
+Message-Id: <5549ec8837b3a6fab83e92c5206cc100ffd23d85.1641752508.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220109181529.351420-1-masahiroy@kernel.org>
-References: <20220109181529.351420-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some architectures support self-extracting kernel, which embeds the
-compressed vmlinux.
+As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-It has 4 byte data at the end so the decompressor can know the vmlinux
-size beforehand.
+So, if dma_set_mask_and_coherent() succeeds, 'pci_using_dac' is known to be
+1.
 
-GZIP natively has it in the trailer, but for the other compression
-algorithms, the hand-crafted trailer is added.
+Simplify code and remove some dead code accordingly.
 
-It is unneeded to generate such _corrupted_ compressed files because
-it is possible to pass the size data separately.
+[1]: https://lkml.org/lkml/2021/6/7/398
 
-For example, the assembly code:
-
-     .incbin "compressed-vmlinux-with-size-data-appended"
-
-can be transformed to:
-
-     .incbin "compressed-vmlinux"
-     .incbin "size-data"
-
-My hope is, after some reworks of the decompressors, the macros
-cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22} will go away.
-
-This new macro, cmd_file_size, will be useful to generate a separate
-size-data file.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
+ drivers/net/ethernet/intel/e1000e/netdev.c | 22 +++++++---------------
+ 1 file changed, 7 insertions(+), 15 deletions(-)
 
- scripts/Makefile.lib | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 4207a72d429f..05ca77706f6b 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -394,6 +394,9 @@ printf "%08x\n" $$dec_size |						\
- 	}								\
- )
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index 635a95927e93..4f6ee5c44f75 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -7385,9 +7385,9 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	resource_size_t flash_start, flash_len;
+ 	static int cards_found;
+ 	u16 aspm_disable_flag = 0;
+-	int bars, i, err, pci_using_dac;
+ 	u16 eeprom_data = 0;
+ 	u16 eeprom_apme_mask = E1000_EEPROM_APME;
++	int bars, i, err;
+ 	s32 ret_val = 0;
  
-+quiet_cmd_file_size = GEN     $@
-+      cmd_file_size = $(size_append) > $@
-+
- quiet_cmd_bzip2 = BZIP2   $@
-       cmd_bzip2 = cat $(real-prereqs) | $(KBZIP2) -9 > $@
+ 	if (ei->flags2 & FLAG2_DISABLE_ASPM_L0S)
+@@ -7401,17 +7401,11 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (err)
+ 		return err;
  
+-	pci_using_dac = 0;
+ 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+-	if (!err) {
+-		pci_using_dac = 1;
+-	} else {
+-		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+-		if (err) {
+-			dev_err(&pdev->dev,
+-				"No usable DMA configuration, aborting\n");
+-			goto err_dma;
+-		}
++	if (err) {
++		dev_err(&pdev->dev,
++			"No usable DMA configuration, aborting\n");
++		goto err_dma;
+ 	}
+ 
+ 	bars = pci_select_bars(pdev, IORESOURCE_MEM);
+@@ -7547,10 +7541,8 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	netdev->priv_flags |= IFF_UNICAST_FLT;
+ 
+-	if (pci_using_dac) {
+-		netdev->features |= NETIF_F_HIGHDMA;
+-		netdev->vlan_features |= NETIF_F_HIGHDMA;
+-	}
++	netdev->features |= NETIF_F_HIGHDMA;
++	netdev->vlan_features |= NETIF_F_HIGHDMA;
+ 
+ 	/* MTU range: 68 - max_hw_frame_size */
+ 	netdev->min_mtu = ETH_MIN_MTU;
 -- 
 2.32.0
 

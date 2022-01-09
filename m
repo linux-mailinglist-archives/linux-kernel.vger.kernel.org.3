@@ -2,137 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B839C48879A
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 05:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D977E48879F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 05:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiAIELC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 23:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S233609AbiAIETP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 23:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiAIELA (ORCPT
+        with ESMTP id S232702AbiAIETO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 23:11:00 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3332C06173F;
-        Sat,  8 Jan 2022 20:10:59 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id d1so28878544ybh.6;
-        Sat, 08 Jan 2022 20:10:59 -0800 (PST)
+        Sat, 8 Jan 2022 23:19:14 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17EEC06173F;
+        Sat,  8 Jan 2022 20:19:13 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id q3so10630291qvc.7;
+        Sat, 08 Jan 2022 20:19:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kHWv8vCmQocf8j1ncOVYaNumvu4dAkTmLmQDF+t6hvw=;
-        b=fD0jHymcSp6lveuK1mk4zEK8mW+PVfq/FLlMF6dVhdDen99sh3Z13dyrn+FnUE5zZ8
-         /d9D2KfdX6To+qF1DsMVg1Z8Dp38H0NQXDVYk9W+cddI3lhiPbgeiYOWPrlI+wlZc4SR
-         wVQaNDyV/nh0AqhDSXsoWWgHI1zC98WeNGwZo7RlVFcmeZgFWInKYog9OUH1d++5pB9X
-         yOE+IGWJT3vaPLCAo1Nx1pmghUp8y5ji4Q9wtQoSKrMvcKMMK+sfwXLs2cBkxQBfrLpE
-         ohE/EKeregrhuU/UOd7/o40nxiSeW+Rvf5g6o22yryl43USzBXoX/cpAnsA0xW6T9rSb
-         fkpw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Pv1VMB3UK5CE8tf/eD+Si73gNpKIJQe0lW8e2LuK7OA=;
+        b=KA0XOyBS24UXGIoDjBBsqVRIpGbnE09XxMfnWoU4dzJNawi3xI3EzTkws4qDOYogMU
+         6oDcLXGQruLxVP5kd8bL1bH0DCeU3UZN7+dIce9Y7NCNAn0TA9n1+B39xLMRsMRBxXlE
+         TGRCX9vq3kv1BaoGGpY2CqreAqpQi9nAZvao2BRMpnszweMiM02uhFS8NCzwrYwEn3uq
+         UPp67ge/YouYGFTXegYhk6kXOsL4pK+sJjhrTYqtXu5tKMm7ZCMJeoZcMQcCTYo9d2mz
+         yxOyR0J9qAnt4T1iIfnPSm7F+9YN2ul3H4a9gr4QtTirjMkzPDgo4DjT7Hym+3wryLns
+         itpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kHWv8vCmQocf8j1ncOVYaNumvu4dAkTmLmQDF+t6hvw=;
-        b=HZH0YC1jpbuNsmGA/RngUnwOKVy1LPJuNNRc5yyBYAzOSByxKueAITzA2hUr2aymYV
-         VvnZSzILc7mjsMftJzag4v0hrX3SuZ3ZKZxZrDM7TgxEHqFP/hSB0oBsFeZoXTBX0wMp
-         7yMG4dxxHkKSO8PLQfRHEs3ylFlxA+Q7zfsDCJVHrNGdZ102ya58Gi6wSVq33UKKMDnT
-         6/GwgHOVI3/wHY1CGEGtMma15cgV0yofiwvierIfXnhHXL/0gvlH2nt2dLFlFr3v+U4O
-         U9lXQW0w3+IKdbV+grtvV98SnwJ+1VS8RoDXStAMaxIv5cOiWAdkSAM29cISIt+DdQzG
-         q4kA==
-X-Gm-Message-State: AOAM531zYtWOftJgiNA+PKgejaVlGkX2BSLvxQAD9pIBbjhEkxYCXhUo
-        qiK9Mexy1dHC+c6dEEQ4OFAgvwxPipxKZPXO3SHXjqe0ftU=
-X-Google-Smtp-Source: ABdhPJzPWCq3pnVvWBRCL9v7fe6zdCxN8v63iDGAaqF3AeVneP6THpvAsobSRDdoFEIU0fGzxgvaeYgM/BJc3tFv+gQ=
-X-Received: by 2002:a25:500f:: with SMTP id e15mr86479940ybb.312.1641701458923;
- Sat, 08 Jan 2022 20:10:58 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Pv1VMB3UK5CE8tf/eD+Si73gNpKIJQe0lW8e2LuK7OA=;
+        b=Ljw6dXQuq3w7NnRJ4qpcMrw8+F4mErfsBPgmwlsVROk/ODlfhb9fWhDgJvqG67hfA2
+         j7ZcgLo8+w5hk/mIK/KY8h0nYEZaR74anrHJDoNhZO8t8xIrfcBMJpAFqc3pZPIsd5cE
+         /Mw3mMRzyXicjqTBPXYJWUTfgfl7l/pu9aH8CQon18kPUTRgBGbglMzQDRRYvwt2Uqab
+         G3n+QujJBpfjDaRfMekJTSbqcNkttzfouBH+pjA2kGFwXTBWDUEzDMqWee9Mc4Givj0R
+         HOeQni+OgHcEp5GnbynZ9h58Dkbak0/jrDYfqWMgtCKXEh4fkC73ayI4vrwuE/DgVum4
+         pwqQ==
+X-Gm-Message-State: AOAM5331332L+ojX2/WiwHWhXXPhlgCcY79haWSLnVAxwQyi4rTzCLyc
+        SltmoZIuDofIkSLQu6V2ABX5w9ccJ3c1bg==
+X-Google-Smtp-Source: ABdhPJyUHziSgOWO472h30fHVOjV7z4WhGGiABOcemLxocK2U3SiZq6DIbG1uHbE6l4B/NXcwPeFug==
+X-Received: by 2002:a05:6214:20e8:: with SMTP id 8mr60396985qvk.67.1641701952989;
+        Sat, 08 Jan 2022 20:19:12 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id v12sm2142965qkl.50.2022.01.08.20.19.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 20:19:12 -0800 (PST)
+Date:   Sat, 8 Jan 2022 23:19:05 -0500
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Kamil Rakoczy <krakoczy@antmicro.com>,
+        Maciej Dudek <mdudek@internships.antmicro.com>,
+        Paul Mackerras <paulus@ozlabs.org>, rdunlap@infradead.org,
+        andy.shevchenko@gmail.com
+Subject: Re: [PATCH v9 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+Message-ID: <YdpiOaJLJN7lOadu@glsvmlin.ini.cmu.edu>
+References: <20220108161134.2419279-1-gsomlo@gmail.com>
+ <20220109025042.1537-1-hdanton@sina.com>
 MIME-Version: 1.0
-References: <CAKXUXMzZkQvHJ35nwVhcJe+DrtEXGw+eKGVD04=xRJkVUC2sPA@mail.gmail.com>
- <35cebb4b-3a1d-fa47-4d49-1a516f36af4f@oracle.com>
-In-Reply-To: <35cebb4b-3a1d-fa47-4d49-1a516f36af4f@oracle.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Sun, 9 Jan 2022 05:10:48 +0100
-Message-ID: <CAKXUXMwQE6Z1EFYOtixwA+8nLZySxdHH9xHiOkGhcy5p0sr9xQ@mail.gmail.com>
-Subject: Re: Observation of a memory leak with commit 314001f0bf92 ("af_unix:
- Add OOB support")
-To:     Shoaib Rao <rao.shoaib@oracle.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220109025042.1537-1-hdanton@sina.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 6:55 PM Shoaib Rao <rao.shoaib@oracle.com> wrote:
->
-> Hi Lukas,
->
-> I took a look at the patch and I fail to see how prepare_creds() could
-> be impacted by the patch. The only reference to a cred in the patch is
-> via maybe_add_creds().
->
-> prepare_creds() is called to make a copy of the current creds which will
-> be later modified. If there is any leak it would be in the caller not
-> releasing the memory. The patch does not do anything with creds.
->
-> If there is any more information that can help identify the issue, I
-> will be happy to look into it.
->
+On Sun, Jan 09, 2022 at 10:50:42AM +0800, Hillf Danton wrote:
+> On Sat,  8 Jan 2022 11:11:34 -0500 Gabriel Somlo wrote:
+> > +
+> > +	/* LiteSDCard can support 64-bit DMA addressing */
+> > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	host->buf_size = mmc->max_req_size * 2;
+> > +	host->buffer = dmam_alloc_coherent(dev, host->buf_size,
+> > +					   &host->dma, GFP_DMA);
+> 
+> GFP_DMA can not make much sence given the above comment.
 
-Here is more information:
-
-Here are all crash reports:
-
-https://elisa-builder-00.iol.unh.edu/syzkaller-next/crash?id=1dcac8539d69ad9eb94ab2c8c0d99c11a0b516a3
-
-and here at the bottom of the page is a C program that shows the
-memory leak with the typical memory leak detections switched on:
-
-https://elisa-builder-00.iol.unh.edu/syzkaller-next/report?id=1dcac8539d69ad9eb94ab2c8c0d99c11a0b516a3
-
-Please try to reproduce this on your machine. If you need more
-instructions on how to set up the kernel to get this program to
-reproduce the issue, please let us know.
-
-> Note that a lot of bugs are timing related, so while it might seem that
-> a change is causing the problem, it may not be the cause, it may just be
-> changing the environment for the bug to show up.
->
-
-Well, we are pretty sure that this commit makes it show up and
-disappear depending on where it is included or reverted, respectively,
-tested now on multiple kernel versions. So, to resolve the issue, we
-just need to revert the commit.
-
-Lukas
-
-> Shoaib
->
-> On 1/6/22 22:48, Lukas Bulwahn wrote:
-> > Dear Rao and David,
-> >
-> >
-> > In our syzkaller instance running on linux-next,
-> > https://urldefense.com/v3/__https://elisa-builder-00.iol.unh.edu/syzkaller-next/__;!!ACWV5N9M2RV99hQ!YR_lD5j1kvA5QfrbPcM5nMVZZkWNcF-UEE4vKA20TPkslzzGDVPqpL-6heEhBZ_e$ , we have been
-> > observing a memory leak in prepare_creds,
-> > https://urldefense.com/v3/__https://elisa-builder-00.iol.unh.edu/syzkaller-next/report?id=1dcac8539d69ad9eb94ab2c8c0d99c11a0b516a3__;!!ACWV5N9M2RV99hQ!YR_lD5j1kvA5QfrbPcM5nMVZZkWNcF-UEE4vKA20TPkslzzGDVPqpL-6hS1luOMv$ ,
-> > for quite some time.
-> >
-> > It is reproducible on v5.15-rc1, v5.15, v5.16-rc8 and next-20220104.
-> > So, it is in mainline, was released and has not been fixed in
-> > linux-next yet.
-> >
-> > As syzkaller also provides a reproducer, we bisected this memory leak
-> > to be introduced with  commit 314001f0bf92 ("af_unix: Add OOB
-> > support").
-> >
-> > We also tested that reverting this commit on torvalds' current tree
-> > made the memory leak with the reproducer go away.
-> >
-> > Could you please have a look how your commit introduces this memory
-> > leak? We will gladly support testing your fix in case help is needed.
-> >
-> >
-> > Best regards,
-> >
-> > Lukas
+I'll change it to GFP_KERNEL in v10. Thanks for catching that,
+--Gabriel

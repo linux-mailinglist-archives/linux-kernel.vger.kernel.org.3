@@ -2,235 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FD04888CF
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 737144888D8
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 12:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiAILLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 06:11:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S235298AbiAILXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 06:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiAILLd (ORCPT
+        with ESMTP id S232010AbiAILXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 06:11:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C79C06173F;
-        Sun,  9 Jan 2022 03:11:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBA0A60EC8;
-        Sun,  9 Jan 2022 11:11:31 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 6014BC36AEB;
-        Sun,  9 Jan 2022 11:11:28 +0000 (UTC)
-Date:   Sun, 9 Jan 2022 11:17:18 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Iain Hunter <drhunter95@gmail.com>
-Cc:     iain@hunterembedded.co.uk, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] Add binding for ti,adc1018. It allows selection
- of channel as a Device Tree property
-Message-ID: <20220109111718.49d2d2cb@jic23-huawei>
-In-Reply-To: <20211231131951.1245508-1-drhunter95@gmail.com>
-References: <20211231131951.1245508-1-drhunter95@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 9 Jan 2022 06:23:12 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D99C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 03:23:07 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g11so34051833lfu.2
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 03:23:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/VuyKoLpWpEEZox/0t1toTPqDMCC65viZRvg9Agp6Rc=;
+        b=dJPaZcxnQDoggqCqDo8SgAfO7tb06gDGic1MlpIuAl1WKAb1IrZyFWhx4ySSrIWNyJ
+         qWJ6FrK8U+m+QW4qoDRndMDgG8p564Lt49T0onB8wBboILu+sjsS7VqS1UIErAg4zhn/
+         aUCXP6JgTQq/tdxHxNMCmbydvDrjg1E6eYGAc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/VuyKoLpWpEEZox/0t1toTPqDMCC65viZRvg9Agp6Rc=;
+        b=LGANLftvECUmKw+1EyfdyrntOy3uJgsMaGiARt9DMrxJTZ+FE6zJ2E7zSja5vSd7IE
+         1DwdnkeCyPGskSxd9VT5fz2iUeQee3qeGYN2/zcrgVmGpFuhYdfX1K5IZe3ODJd56WDP
+         a6Z0TYhl64PJrR8s+xheB1W7YBKtxVZiMO0Eu0AuHeThxSLD+sTvZwYabngdY5nOudev
+         yNdivmrx8lVk6QZSCsV6eiiX3AfMmBWMZtLZT3l6os6KtboUJjHAVgu6xFXYkmeZNqfF
+         PiTWhhuwWz6HtiFoYl/j4kO8t2YfETKEJIvRRNh+rBu5aWtvxaz6mo7Jm2QKX+iEaJoD
+         mYrQ==
+X-Gm-Message-State: AOAM531sKfX+XKwkZ1sI2sNnDMwYynJpdhmgqhhZ4KVZrh6LV7PlU9IL
+        ZZ7zkm9/tjNpgek8fuoXVK9Wwtp/Ayvl5rAjQfdDG7wHP3dC3w==
+X-Google-Smtp-Source: ABdhPJz+5GwtyaN/5n8Jbaloti4ZQbWg5UCqS9v3FH2+ZEJYOcidZDDjriHT2NrEphgQkiv8v8+L/snICziKs2BJanM=
+X-Received: by 2002:a05:651c:145:: with SMTP id c5mr57989978ljd.237.1641727385719;
+ Sun, 09 Jan 2022 03:23:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com> <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
+In-Reply-To: <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Sun, 9 Jan 2022 12:22:54 +0100
+Message-ID: <CABGWkvoGs_VBGD-7dt18LY9NV=63w50OceKjmaKYeqDe_WJk9g@mail.gmail.com>
+Subject: Re: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring parameters
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Dec 2021 13:19:15 +0000
-Iain Hunter <drhunter95@gmail.com> wrote:
+On Sat, Jan 8, 2022 at 9:16 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 08.01.2022 19:16:33, Dario Binacchi wrote:
+> > Adds ethtool support to get the number of message buffers configured for
+> > reception/transmission, which may also depends on runtime configurations
+> > such as the 'rx-rtr' flag state.
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > ---
+> >
+> >  drivers/net/can/flexcan/flexcan-ethtool.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> >
+> > diff --git a/drivers/net/can/flexcan/flexcan-ethtool.c b/drivers/net/can/flexcan/flexcan-ethtool.c
+> > index 5bb45653e1ac..d119bca584f6 100644
+> > --- a/drivers/net/can/flexcan/flexcan-ethtool.c
+> > +++ b/drivers/net/can/flexcan/flexcan-ethtool.c
+> > @@ -80,7 +80,24 @@ static int flexcan_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> >       return 0;
+> >  }
+> >
+> > +static void flexcan_get_ringparam(struct net_device *ndev,
+> > +                               struct ethtool_ringparam *ring)
+>
+> This doesn't compile on net-next/master, as the prototype of the
+> get_ringparam callback changed, fixed this while applying.
+>
+> > +{
+> > +     struct flexcan_priv *priv = netdev_priv(ndev);
+> > +
+> > +     ring->rx_max_pending = priv->mb_count;
+> > +     ring->tx_max_pending = priv->mb_count;
+> > +
+> > +     if (priv->devtype_data.quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)
+> > +             ring->rx_pending = __sw_hweight64(priv->rx_mask);
+>
+> I've replaced the hamming weight calculation by the simpler:
+>
+> |               ring->rx_pending = priv->offload.mb_last -
+> |                       priv->offload.mb_first + 1;
+>
+> > +     else
+> > +             ring->rx_pending = 6;
+> > +
+> > +     ring->tx_pending = __sw_hweight64(priv->tx_mask);
+>
+> ...and here I added a hardcoded "1", as the driver currently only
+> support on TX buffer.
+>
+> > +}
+> > +
+> >  static const struct ethtool_ops flexcan_ethtool_ops = {
+> > +     .get_ringparam = flexcan_get_ringparam,
+> >       .get_sset_count = flexcan_get_sset_count,
+> >       .get_strings = flexcan_get_strings,
+> >       .get_priv_flags = flexcan_get_priv_flags,
+>
+> BTW: If you're looking for more TX performance, this can be done by
+> using more than one TX buffer.
 
-> New binding file uses the adc.yaml to define channel selection 
-> 
-> Signed-off-by: Iain Hunter <drhunter95@gmail.com>
-Hi Iain,
+I didn't expect only one message buffer to be used for transmission
 
-A few comments in addition to those Rob sent.
-It's worth noting that there is a lot of 'history' in IIO bindings so
-sometimes copying stuff from an existing binding is no longer the way
-things should be done.
+thanks and regards,
+Dario
 
-Jonathan
+> It's also possible to configure the
+> number of RX and TX buffers via ethtool during runtime. I'm currently
+> preparing a patch set for the mcp251xfd to implement this.
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> ---
->  .../bindings/iio/adc/ti,ads1018.yaml          | 126 ++++++++++++++++++
->  1 file changed, 126 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
-> new file mode 100644
-> index 000000000000..a65fee9d83dd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
-> @@ -0,0 +1,126 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/ti,ads1018.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI ADS1018 4 channel I2C analog to digital converter
-> +
-> +maintainers:
-> +  - Iain Hunter <iain@hunterembedded.co.uk>
-> +
-> +description: |
-> +  Datasheet at: https://www.ti.com/lit/gpn/ads1018
-> +  Supports both single ended and differential channels.
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,ads1018
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  "#io-channel-cells":
-> +    const: 1
-> +
-> +  spi-max-frequency: true
-> +  spi-cpol: true
-> +  spi-cpha: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - spi-cpha
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-> +  "^channel@([0-3])$":
-> +    $ref: "adc.yaml"
-> +    type: object
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +            Must be 0, actual channel selected in ti,adc-channels for single ended
-> +            or ti-adc-channels-diff for differential
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0]
 
-No.  Should be some sort of index value. If I recall correctly, existing use is reg == channel
-number when single ended and more loosely defined for differential.  In many cases first of the
-pair, but that's not always guaranteed to be unique (e.g. 0-1 and 0-3 in this case).
 
-> +
-> +      ti,adc-channels:
-> +        description: |
-> +          List of single-ended channels muxed for this ADC. It can have up to 4
-> +          channels numbered 0-3
+-- 
 
-This is a new binding, so how can we have deprecated properties?
-Also seems very odd indeed to have a list of channels defined inside a per channel node.
+Dario Binacchi
 
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        deprecated: true
-> +
-> +      ti,adc-diff-channels:
+Embedded Linux Developer
 
-Can this use diff-channels in the standard adc binding:
-Documentation/devicetree/bindings/iio/adc/adc.yaml
+dario.binacchi@amarulasolutions.com
 
-> +        description: |
-> +          List of differential channels muxed for this ADC between the pins vinp
-> +          and vinn. The 4 possible options are:
-> +          vinp=0, vinn=1
-> +          vinp=0, vinn=3
-> +          vinp=1, vinn=3
-> +          vinp=2, vinn=3
-> +
-> +          They are listed in a pair <vinp vinn>.
-> +
-> +          Note: At least one of "ti,adc-channels" or "ti,adc-diff-channels" is
-> +          required.
-> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +        items:
-> +          items:
-> +            - description: |
-> +                "vinp" indicates positive input number
-> +              minimum: 0
-> +              maximum: 2
-> +            - description: |
-> +                "vinn" indicates negative input number
-> +              minimum: 1
-> +              maximum: 3
+__________________________________
 
-This should be a pair based constraint as not all options possible. Something like
-          oneOf:
-            - items:
-                - const: 0
-                - const: 1
-            - items:
-                - enum: [0, 1, 2]
-		- const: 3
 
-> +
-> +
-> +    required:
-> +      - reg
-> +
-> +examples:
-> +  - |
-> +    // example on SPI1 with single ended channel 1
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        adc@1 {
-> +            compatible = "ti,ads1018";
-> +            reg = <0x0>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            spi-cpha;
-> +            ti,adc-channels = <1>;
+Amarula Solutions SRL
 
-More recent approach to this is the one you've used for differential channels
-- 1 child node per channel.
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
 
-> +        };
-> +    };
-> +  - |
-> +    // example on SPI0 with differential between inputs 0 and 3
+T. +39 042 243 5310
+info@amarulasolutions.com
 
-The SPI0 vs 1 is correctly not part of this example, so drop that from
-the comment.
-
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        adc@0 {
-> +            compatible = "ti,ads1018";
-> +            reg = <0x0>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            spi-cpha;
-> +            ti,adc-diff-channels = <0 3>;
-
-This doesn't obey the schema you have above at all. Would looks something like
-               channel@0 {
-                 diff-channels = <0 3>;
-               }
-
-> +        };
-> +    };
-> +
-> +...
-
+www.amarulasolutions.com

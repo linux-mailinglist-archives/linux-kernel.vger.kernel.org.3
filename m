@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FC2488C54
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 21:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7C3488C57
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 21:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236979AbiAIUpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 15:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiAIUpH (ORCPT
+        id S236989AbiAIUpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 15:45:40 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:43286 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236981AbiAIUpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 15:45:07 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518EDC06173F;
-        Sun,  9 Jan 2022 12:45:07 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id c126-20020a1c9a84000000b00346f9ebee43so6093832wme.4;
-        Sun, 09 Jan 2022 12:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Gi9wdT5oBY51uN+zY1MwVpQ/L/Lhj3gJuhU6uQRdk/w=;
-        b=m1su08LbeO1QD13eo/+OKp3M9WjRJAE8Kaz45RmW61zZ/KHLJTuFEEGlr7OdcQdp6Y
-         LRmE73W+JHeQGv9q1Jc3LbukOGWJNs7Anulqo+3FQZHPyShZnUppB4Xhntozni6/NXlU
-         Ti6qB0FPK64y6jUD2meZdwvdm6/5BIwLEAU4WwqeDqtKOqvTMnCSDcdanbU1siPDSJlR
-         luqBwyH5jm5f5m/0FyUei0zfhnfHze72CEYD/IHeb4ONc8HupgopkR9BxFf5WjokM4M0
-         eTRxuIyv2Jayi8ZmUfMdfg1yRZInYNod1HgV0VRmPTZx26GCAadz7olmnd07QVarAku1
-         7CVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Gi9wdT5oBY51uN+zY1MwVpQ/L/Lhj3gJuhU6uQRdk/w=;
-        b=InMX340hjm6HFJ6MO0T6qGNRrkd3lfsmSetED3Fu/o0atveQw/SHmbrFI7hIjTqkWC
-         UqsIRFHlI1Pcnsf4VNtYLocYLHMejjdgZhYQCfRUXw82eme2jUQ3/qk0OhVmmmGrPybz
-         zjzZvjt3/ktxzf8rrIvVYeu1O1XVeLoBxzJqYgli7ITKD7vBRLnYQcPTDQ2nXsrLZtxf
-         7zEX0Yut/NNWDZU0lv3+oBv8bEmwNW03cVDJyDMImOJgRf3jJ8itnbVTgSxlhKY9pTiE
-         M2Rk8+FTzvWRQsSnEDFy8HCJrwmTlk3dVLqP5e4mGfdl/VsK8Z+fMvHlucz2lb3rooM4
-         h34g==
-X-Gm-Message-State: AOAM531HFgjlm8UcrCLnphGuXyjK5I91fRmhyGMklBojAAKjyig7hIzZ
-        TxjHeO+OidHq56L4WbWa++w=
-X-Google-Smtp-Source: ABdhPJxaNhA2ItZzKI6DN4P4iEVQQrkjsiqKEKfNL810ixld5yhvQDHS1ieLOJEQh6FXCWW/mskzSg==
-X-Received: by 2002:a7b:c931:: with SMTP id h17mr2675642wml.49.1641761105763;
-        Sun, 09 Jan 2022 12:45:05 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id l14sm5030936wrr.53.2022.01.09.12.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 12:45:05 -0800 (PST)
-Date:   Sun, 9 Jan 2022 21:45:01 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     conleylee@foxmail.com
-Cc:     davem@davemloft.net, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] sun4i-emac.c: enable emac tx dma
-Message-ID: <YdtJTQJJ4aEUcp/D@Red>
-References: <YdLhQjUTobcLq73j@Red>
- <tencent_E4BA4D6105A46CCC1E8AEF48057EA5FE5B08@qq.com>
+        Sun, 9 Jan 2022 15:45:39 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 9AA9F72C905;
+        Sun,  9 Jan 2022 23:45:37 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 4E7644A46EA;
+        Sun,  9 Jan 2022 23:45:37 +0300 (MSK)
+Date:   Sun, 9 Jan 2022 23:45:37 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
+Message-ID: <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+ <20211202215507.298415-5-zohar@linux.ibm.com>
+ <YalDvGjq0inMFKln@sol.localdomain>
+ <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
+ <YdYrw4eiQPryOMkZ@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_E4BA4D6105A46CCC1E8AEF48057EA5FE5B08@qq.com>
+In-Reply-To: <YdYrw4eiQPryOMkZ@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Sun, Jan 09, 2022 at 05:17:55PM +0800, conleylee@foxmail.com a écrit :
-> From: conley <conleylee@foxmail.com>
+Eric,
+
+On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
+> On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
+> > On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
+> > > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
+> > > >  	case IMA_VERITY_DIGSIG:
+> > > > -		fallthrough;
+> > > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+> > > > +
+> > > > +		/*
+> > > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
+> > > > +		 * and the fs-verity file digest, not directly on the
+> > > > +		 * fs-verity file digest.  Both digests should probably be
+> > > > +		 * included in the IMA measurement list, but for now this
+> > > > +		 * digest is only used for verifying the IMA signature.
+> > > > +		 */
+> > > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
+> > > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
+> > > > +		       iint->ima_hash->length);
+> > > > +
+> > > > +		hash.hdr.algo = iint->ima_hash->algo;
+> > > > +		hash.hdr.length = iint->ima_hash->length;
+> > > 
+> > > This is still wrong because the bytes being signed don't include the hash
+> > > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
+> > > supports SHA-512 too, and it may support other hash algorithms in the future.
+> > 
+> > IMA assumes that the file hash algorithm and the signature algorithm
+> > are the same.   If they're not the same, for whatever reason, the
+> > signature verification would simply fail.
+> > 
+> > Based on the v2 signature header 'type' field, IMA can differentiate
+> > between regular IMA file hash based signatures and fs-verity file
+> > digest based signatures.  The digest field (d-ng) in the IMA
+> > meausrement list prefixes the digest with the hash algorithm. I'm
+> > missing the reason for needing to hash fs-verity's file digest with
+> > other metadata, and sign that hash rather than fs-verity's file digest
+> > directly.
 > 
-> Hello
-> I am reading the R40 user manual and trying to create a new path to enable
-> emac tx dma channel. According to the figure 8-21(TX Operation Diagram),
-> I try to enable emac tx dma channel by the follow steps:
-> 1. enable tx dma mode
-> 2. set packet lengths
-> 2. move data from skb to tx fifo by using dma in xmit function.
-> 3. start transfer from tx fifo to phy in dma tx done callback
+> Because if someone signs a raw hash, then they also implicitly sign the same
+> hash value for all supported hash algorithms that produce the same length hash.
+
+Unless there is broken hash algorithm allowing for preimage attacks this
+is irrelevant. If there is two broken algorithms allowing for collisions,
+colliding hashes could be prepared even if algo id is hashed too.
+
+Thanks,
+
+> Signing a raw hash is only appropriate when there is only 1 supported algorithm.
 > 
-> But it doesn't work. emac tx interrupt and dma finished interrupt are
-> raised, but no packets are transmitted (I test it by tcpdump).
-> Do you know how to configure the emac tx dma correctly? Thanks ~
+> All the other stuff you mentioned is irrelevant.
 > 
-
-Hello
-
-Here are my thoughts to help you:
-- Your email is not a real patch, but an ask for help, so you should not use [ PATCH ] in the subject.
-- If it was a patch, "v1" is not necessary
-- Your patch below is doing too many unrelated different things, it is hard to see the DMA TX enable part
-- I think you could first send a preliminary patch which adds all EMAC_INT_CTL_TX_xxx which are already used by the driver (to reduce the diff)
-- Without the DTB change, it is hard to see the whole picture, did you correctly use the right dma number for an easy example.
-- Knowing also the board (and so PHY, modes etc...) could help
-- I think your priority should not to add TX, but to fix reported problems to your initial patch (build warnings/error https://marc.info/?l=linux-arm-kernel&m=164159846213585&w=2) since your work on TX will need to be applied after this.
-- For the previous point, always build test with at least 2 different 32/64 arch. And if possible a total different arch (like x86_64).
-
-Anyway, I will try to test your patch on my a10 board
-
-Regards
+> - Eric

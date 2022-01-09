@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 689C5488B36
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981EE488B6B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbiAIRdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S234549AbiAIRkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234371AbiAIRdF (ORCPT
+        with ESMTP id S234088AbiAIRkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:33:05 -0500
+        Sun, 9 Jan 2022 12:40:42 -0500
 Received: from haggis.mythic-beasts.com (haggis.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8961EC06173F;
-        Sun,  9 Jan 2022 09:33:05 -0800 (PST)
-Received: from [81.101.6.87] (port=47180 helo=jic23-huawei)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02047C06173F;
+        Sun,  9 Jan 2022 09:40:41 -0800 (PST)
+Received: from [81.101.6.87] (port=47182 helo=jic23-huawei)
         by haggis.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n6c3x-0006sT-IU; Sun, 09 Jan 2022 17:33:01 +0000
-Date:   Sun, 9 Jan 2022 17:38:53 +0000
+        id 1n6cBJ-0008Uy-Rs; Sun, 09 Jan 2022 17:40:38 +0000
+Date:   Sun, 9 Jan 2022 17:46:33 +0000
 From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
 To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
 Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] Documentation:ABI:testing:admv1014: add ABI docs
-Message-ID: <20220109173853.3f9192ec@jic23-huawei>
-In-Reply-To: <20220103092201.21576-4-antoniu.miclaus@analog.com>
+Subject: Re: [PATCH 2/3] dt-bindings:iio:frequency: add admv1014 doc
+Message-ID: <20220109174625.7f5d8ff7@jic23-huawei>
+In-Reply-To: <20220103092201.21576-3-antoniu.miclaus@analog.com>
 References: <20220103092201.21576-1-antoniu.miclaus@analog.com>
-        <20220103092201.21576-4-antoniu.miclaus@analog.com>
+        <20220103092201.21576-3-antoniu.miclaus@analog.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -40,64 +40,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jan 2022 11:22:01 +0200
+On Mon, 3 Jan 2022 11:22:00 +0200
 Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
 
-> Add documentation for the use of the Digital Attenuator gain.
+binding rather than doc.  Yaml is code a well as documentation afterall.
+
+> Add device tree bindings for the ADMV1014 Upconverter.
 > 
 > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 > ---
->  .../testing/sysfs-bus-iio-frequency-admv1014  | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+>  .../bindings/iio/frequency/adi,admv1014.yaml  | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+> diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
 > new file mode 100644
-> index 000000000000..385bf5b4b399
+> index 000000000000..a3e5e61c8ade
 > --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
-> @@ -0,0 +1,23 @@
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_gain_coarse
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_I) with coarse steps.
+> +++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_gain_coarse
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_Q) with coarse steps.
+> +title: ADMV1014 Microwave Downconverter
 > +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_gain_fine
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_I) with fine steps.
+> +maintainers:
+> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
 > +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_gain_fine
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Read/write value for the digital attenuator gain (IF_Q) with fine steps.
+> +description: |
+> +   Wideband, microwave downconverter optimized for point to point microwave
+> +   radio designs operating in the 24 GHz to 44 GHz frequency range.
+> +
+> +   https://www.analog.com/en/products/admv1014.html
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,admv1014
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 1000000
+> +
+> +  clocks:
+> +    description:
+> +      Definition of the external clock.
 
-I guess it's horribly optimistic to wonder if these can be expressed as a single gain?
+Not a particularly helpful way of describing it.  
+This is the local oscillator input.  I'd put the description
+in clock-names rather than here as then it's obvious what lo_in
+means.
 
-I'm going to guess no as they are basically 'twiddle' functions with frequency dependent
-gain characteristics. 
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: lo_in
+> +
+> +  vcm-supply:
+> +    description:
+> +      Analog voltage regulator.
 
-My gut feeling is these are meant for for calibration tweaking so is calibbscale
-as currently defined applicable?
-"
-		Hardware applied calibration scale factor (assumed to fix
-		production inaccuracies).  If shared across all channels,
-		<type>_calibscale is used.
-"
-you'd still need the fine and coarse postfix unfortunately.
+There seem to be a whole load of other VCC_X supplies from the datasheet.
+They should all be here. 
 
-A nice thing about calibscale is it's defined unit free as it's normally a tweak
-on an input amplifier or similar.
+> +
+> +  adi,input-mode:
+> +    description:
+> +      Select the input mode.
+> +      iq - in-phase quadrature (I/Q) input
+> +      if - complex intermediate frequency (IF) input
+> +    enum: [iq, if]
+> +
+> +  adi,detector-enable:
+> +    description:
+> +      Digital Rx Detector Enable. The Square Law Detector output is
+> +      available at output pin VDET.
+> +    type: boolean
+> +
+> +  adi,p1db-comp-enable:
+> +    description:
+> +      Turn on bits to optimize P1dB.
 
-Jonathan
+Expand comp to compensation perhaps as not a totally clear abbreviation.
 
+> +    type: boolean
+> +
+> +  adi,quad-se-mode:
+> +    description:
+> +      Switch the LO path from differential to single-ended operation.
+> +      se-neg - Single-Ended Mode, Negative Side Disabled.
+> +      se-pos - Single-Ended Mode, Positive Side Disabled.
+> +      diff - Differential Mode.
+> +    enum: [se-neg, se-pos, diff]
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - vcm-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      admv1014@0{
+> +        compatible = "adi,admv1014";
+> +        reg = <0>;
+> +        spi-max-frequency = <1000000>;
+> +        clocks = <&admv1014_lo>;
+> +        clock-names = "lo_in";
+> +        vcm-supply = <&vcm>;
+> +        adi,quad-se-mode = "diff";
+> +        adi,detector-enable;
+> +        adi,p1db-comp-enable;
+> +      };
+> +    };
+> +...
 

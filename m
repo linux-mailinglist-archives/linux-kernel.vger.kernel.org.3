@@ -2,131 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EEC488CBB
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 22:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44052488CC0
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 22:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234752AbiAIV4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 16:56:33 -0500
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:56986 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234686AbiAIV4c (ORCPT
+        id S237213AbiAIV5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 16:57:31 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30154 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234756AbiAIV5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 16:56:32 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6gArnkF9ZqYov6gArnGEU7; Sun, 09 Jan 2022 22:56:30 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 09 Jan 2022 22:56:30 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Alistar Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Guenter Roeck <linux@roeck-us.net>, linux-fsi@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH v3] fsi: Aspeed: Fix a potential double free
-Date:   Sun,  9 Jan 2022 22:56:10 +0100
-Message-Id: <2c123f8b0a40dc1a061fae982169fe030b4f47e6.1641765339.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 9 Jan 2022 16:57:30 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209KbAl1005236;
+        Sun, 9 Jan 2022 21:57:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=L3fKmgfU9ORlrY2FwPy6xnlArN1TwmZZ/E0/yc+J1+0=;
+ b=XNH8jdFFrIoqNYXUO5woJtnbvncUoswoqZ2MrUx+fPW98Eosj7bW9qf5XbPAm2gJG9h2
+ 2xdDzuhjVLQBSyxaeTKQH8pS7Ef2TyGlIVqjj9USlUjY8PoOLKd2nMIsGQhLEmysdcSR
+ lx85ndnMbQPJM/P7V2/d/W0XCS1P2y7R1o2Grw5WnE8mvR3D0YQbLvpGZPJFEytPIzxa
+ f8o19bHEf5zsmWrC6Xo44LpxuRr4zssCCS9aL0MPP1NCpF4auuaJZdnxnvpFXQQdJl7W
+ wwmDR/suhCIsA94iQI0t528g2zFNT4Eq6Mb4YGUN7X8obtOo588LcXknWqqGvrq0+v+8 bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3v4vph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 21:57:16 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 209LvFe2032722;
+        Sun, 9 Jan 2022 21:57:15 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3v4vnq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 21:57:15 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 209LpsQB024890;
+        Sun, 9 Jan 2022 21:57:12 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3df288pjr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 21:57:12 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 209LvAom47513988
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 9 Jan 2022 21:57:10 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1097852050;
+        Sun,  9 Jan 2022 21:57:10 +0000 (GMT)
+Received: from sig-9-65-69-17.ibm.com (unknown [9.65.69.17])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 202795204E;
+        Sun,  9 Jan 2022 21:57:08 +0000 (GMT)
+Message-ID: <883da244c04fcb07add9984859a09d7b1827880a.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
+ machine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, ardb@kernel.org, jarkko@kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
+        keescook@chromium.org, torvalds@linux-foundation.org,
+        weiyongjun1@huawei.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Sun, 09 Jan 2022 16:57:06 -0500
+In-Reply-To: <20220105235012.2497118-3-eric.snowberg@oracle.com>
+References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
+         <20220105235012.2497118-3-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: X7Ua14-XMGOndLkiXqxVi_WSFHppt9J4
+X-Proofpoint-GUID: 42z3FCIrIyrz9lyEafzePYIc17mSaGXp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-09_09,2022-01-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201090156
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A struct device can never be devm_alloc()'ed.
-Here, it is embedded in "struct fsi_master", and "struct fsi_master" is
-embedded in "struct fsi_master_aspeed".
+On Wed, 2022-01-05 at 18:50 -0500, Eric Snowberg wrote:
+> Many UEFI Linux distributions boot using shim.  The UEFI shim provides
+> what is called Machine Owner Keys (MOK). Shim uses both the UEFI Secure
+> Boot DB and MOK keys to validate the next step in the boot chain.  The
+> MOK facility can be used to import user generated keys.  These keys can
+> be used to sign an end-users development kernel build.  When Linux
+> boots, both UEFI Secure Boot DB and MOK keys get loaded in the Linux
+> .platform keyring.
+> 
+> Define a new Linux keyring called machine.  This keyring shall contain just
+> MOK CA keys and not the remaining keys in the platform keyring. This new
+> machine keyring will be used in follow on patches.  Unlike keys in the
+> platform keyring, keys contained in the machine keyring will be trusted
+> within the kernel if the end-user has chosen to do so.
 
-Since "struct device" is embedded, the data structure embedding it must be
-released with the release function, as is already done here.
+True, from an IMA perspective only the CA keys should be loaded onto
+the .machine keyring, but this version (v9) of the patch set does not
+enforce that.  The patch set and this paragraph are out of sync.
 
-So use kzalloc() instead of devm_kzalloc() when allocating "aspeed" and
-update all error handling branches accordingly.
+Jarkko, my concern is that once this version of the patch set is
+upstreamed, would limiting which keys may be loaded onto the .machine
+keyring be considered a regression?
 
-This prevent a potential double free().
+thanks,
 
-This also fix another issue if opb_readl() fails. Instead of a direct
-return, it now jumps in the error handling path.
+Mimi
 
-Fixes: 606397d67f41 ("fsi: Add ast2600 master driver")
-Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-v2: Keep the release function which is correct
-    s/devm_kzalloc()/kzalloc()/ instead
-
-v3: Update the error handling path to free "aspeed" [Guenter Roeck]
-    Fix another issue when opb_readl() fails [Guenter Roeck]
-
-I hope that fixing both issues in the same patch is ok. It makes no sense
-to me not to update the goto to the correct label if opb_readl() fails.
----
- drivers/fsi/fsi-master-aspeed.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
-index 8606e55c1721..0bed2fab8055 100644
---- a/drivers/fsi/fsi-master-aspeed.c
-+++ b/drivers/fsi/fsi-master-aspeed.c
-@@ -542,25 +542,28 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 		return rc;
- 	}
- 
--	aspeed = devm_kzalloc(&pdev->dev, sizeof(*aspeed), GFP_KERNEL);
-+	aspeed = kzalloc(sizeof(*aspeed), GFP_KERNEL);
- 	if (!aspeed)
- 		return -ENOMEM;
- 
- 	aspeed->dev = &pdev->dev;
- 
- 	aspeed->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(aspeed->base))
--		return PTR_ERR(aspeed->base);
-+	if (IS_ERR(aspeed->base)) {
-+		rc = PTR_ERR(aspeed->base);
-+		goto err_free_aspeed;
-+	}
- 
- 	aspeed->clk = devm_clk_get(aspeed->dev, NULL);
- 	if (IS_ERR(aspeed->clk)) {
- 		dev_err(aspeed->dev, "couldn't get clock\n");
--		return PTR_ERR(aspeed->clk);
-+		rc = PTR_ERR(aspeed->clk);
-+		goto err_free_aspeed;
- 	}
- 	rc = clk_prepare_enable(aspeed->clk);
- 	if (rc) {
- 		dev_err(aspeed->dev, "couldn't enable clock\n");
--		return rc;
-+		goto err_free_aspeed;
- 	}
- 
- 	rc = setup_cfam_reset(aspeed);
-@@ -595,7 +598,7 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 	rc = opb_readl(aspeed, ctrl_base + FSI_MVER, &raw);
- 	if (rc) {
- 		dev_err(&pdev->dev, "failed to read hub version\n");
--		return rc;
-+		goto err_release;
- 	}
- 
- 	reg = be32_to_cpu(raw);
-@@ -634,6 +637,8 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 
- err_release:
- 	clk_disable_unprepare(aspeed->clk);
-+err_free_aspeed:
-+	kfree(aspeed);
- 	return rc;
- }
- 
--- 
-2.32.0
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+> v1: Initial version
+> v2: Removed destory keyring code
+> v3: Unmodified from v2
+> v4: Add Kconfig, merged in "integrity: add add_to_mok_keyring" 
+> v5: Rename to machine keyring
+> v6: Depend on EFI in kconfig  (suggested by Mimi)
+>     Test to see if ".platform" keyring is configured in
+>       add_to_machine_keyring (suggested by Mimi)
+> v7: Depend on LOAD_UEFI_KEYS instead EFI for mokvar code
+> v8: Code unmodified from v7 added Mimi's Reviewed-by
+> v9: Removed Reviewed-by. Prevent IMA from being able to
+>      use the machine keyring since the CA restrictions
+>      have been removed.
 

@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A61D488978
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40725488987
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbiAINCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiAINCj (ORCPT
+        id S235619AbiAINPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 08:15:18 -0500
+Received: from pv50p00im-hyfv10011601.me.com ([17.58.6.43]:53226 "EHLO
+        pv50p00im-hyfv10011601.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230321AbiAINPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:02:39 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD7DC06173F;
-        Sun,  9 Jan 2022 05:02:39 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id m4so1039648edb.10;
-        Sun, 09 Jan 2022 05:02:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I86LEEvrQ/QcdOpqixMeebdWSFgBbeMYSxutXt26E0g=;
-        b=fz8Jg6XfMGpzpdlC3drISYB7O5aPfYJP+pD330axQ93b32bKVlmOancdUiBXeUa+IG
-         dkde3+XzAdl6i9cWCKX9MxSUDjAK0GPWjEmOZYPcBDZBOgY/IiPOzj1J/U+HpHQwlSZA
-         O3LJHdftp1b+RLIfeiMRziy2yMsk0ALuRuezNk5xQxoYPztqh1lYjihLtseYjMRvfwwH
-         MKU9jpw+tG40CkiZhlLBCPWJlnDB+SWjKLLdDMfM+YmrmgH+bk7Iq98dosnIAV2J1nMU
-         7Vg3/pZaf+UH7ZjDUiYJZYGtR2fWEGrNWuRIBmda/28bLqoyU1046GaTWBjL0M0raODO
-         uEfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I86LEEvrQ/QcdOpqixMeebdWSFgBbeMYSxutXt26E0g=;
-        b=I76LcFvzfDDtiUc7bHDi/eXVWnLIWxfM5BK66vxq/nejfBrp+lrdrHx75dy+QXCbhy
-         S95fYtqc2+YYCsPL83iABZ/oHbXaORyl8NwqTiDWfufUAmADbCILiu+6C54f0CcLukgy
-         P6nucftcdPYd0pQFTQHnxkoekT2N3STMsp1zdV9L7TIDDbYScVxMUhv6JpNS8h7S8ykN
-         TtOVD1N3V6OkZ8HE0wcWvri91fu1l5RX1/BGtImV8Log/qiW9NS0msmMRI/phU5JgPvA
-         kHrNuywfmdoDx3e17FUA6WjqiXbhIU63R87xAFKtzbmFI1luCxkiCjZWUvFHpLJfNTIm
-         UA8A==
-X-Gm-Message-State: AOAM533QWO6X/lXfJHKmj4Gs1KEErVFdIrIrBDI2pndW7OCsSsLV9IAY
-        VDSEYcf32xfvNif/5KL398PsHUb6S/IEIxwP6eg=
-X-Google-Smtp-Source: ABdhPJxjELSLk5Z9rzw2AIT6D+g+7h7MuSM6BMs6aqHVYx9RCIJm+iK+Ok/msWIqu/m82mURNUlqRiO0QPD24K9j9q0=
-X-Received: by 2002:a17:906:e0d9:: with SMTP id gl25mr4934446ejb.44.1641733357745;
- Sun, 09 Jan 2022 05:02:37 -0800 (PST)
+        Sun, 9 Jan 2022 08:15:17 -0500
+X-Greylist: delayed 579 seconds by postgrey-1.27 at vger.kernel.org; Sun, 09 Jan 2022 08:15:17 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1641733538; bh=Pa3d1sSuEEMcS6MIUinhQIpzwlyMz3dkhDvMnS4GXFQ=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=nRtTdQOYVfyDUjIThebLuxCHdZIcoVH1/lBWyly41egO75IBXQHd2WQ1BGuvtpdZF
+         OcyIoD2jV8E+7mWwvbQa7JZzJFMLvq5tB10GuEv8MBBvrosKFzGXDdYv2Oa9h9T2MY
+         fmhnm2H2wsExB/j4MnhWJuEzCAGKTkK5RLMcaE9kh14xGHrnCWobmnKZVP6wwgmAz/
+         1vsFw/XdZeYx6F4Jb2xRUEU6BIOMekA1FaL21J2trQ/NJFlcBD7NOv9hKnHPgmPsKt
+         5IjBEdym8NMLB6kKgXyDvDyCOYAWvQelq0yRX/570fJxpnNCtPnP/ASit/MgxGOQ00
+         WXOKGqYl5yfIg==
+Received: from xiongwei.. (unknown [120.245.2.119])
+        by pv50p00im-hyfv10011601.me.com (Postfix) with ESMTPSA id D21CD96016F;
+        Sun,  9 Jan 2022 13:05:33 +0000 (UTC)
+From:   sxwjean@me.com
+To:     akpm@linux-foundation.org, david@redhat.com, mhocko@suse.com,
+        dan.j.williams@intel.com, osalvador@suse.de,
+        naoya.horiguchi@nec.com, thunder.leizhen@huawei.com
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>
+Subject: [PATCH 0/2] Add support for getting page info of ZONE_DEVICE by /proc/kpage*
+Date:   Sun,  9 Jan 2022 21:05:13 +0800
+Message-Id: <20220109130515.140092-1-sxwjean@me.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220108205319.2046348-1-liambeguin@gmail.com> <20220108205319.2046348-10-liambeguin@gmail.com>
-In-Reply-To: <20220108205319.2046348-10-liambeguin@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 9 Jan 2022 15:02:01 +0200
-Message-ID: <CAHp75Vd-FOV7BL0VjhGLyC5fhYXbW3x-hC5J1VvMT9W3Kfc_0Q@mail.gmail.com>
-Subject: Re: [PATCH v12 09/16] iio: afe: rescale: fix accuracy for small
- fractional scales
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
+ definitions=2022-01-09_04:2022-01-06,2022-01-09 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=417 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2009150000 definitions=main-2201090096
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
->
-> The approximation caused by integer divisions can be costly on smaller
-> scale values since the decimal part is significant compared to the
-> integer part. Switch to an IIO_VAL_INT_PLUS_NANO scale type in such
-> cases to maintain accuracy.
+From: Xiongwei Song <sxwjean@gmail.com>
 
-...
+Patch 1 is adding pfn_to_devmap_page() function to get page of ZONE_DEVICE
+by pfn. It checks the sections that is offline but valid or is online but
+parts of pfns is offline. Then checks if dev_pagemap is valid, if yes,
+return page pointer.
 
-> +               tmp = 1 << *val2;
+Patch 2 is finishing supporting /proc/kpage* in exposing pages info of
+ZONE_DEVICE to userspace.
 
-Unfortunately, potential UB is still here. I think you missed a subtle
-detail in the implementation of BIT()/BIT_ULL(). Let's put it here:
+The unit test has been done by "page-types -r", which ran in qemu with the
+below arguments:
+    -object memory-backend-file,id=mem2,share,mem-path=./virtio_pmem.img,size=2G
+    -device virtio-pmem-pci,memdev=mem2,id=nv1
+, which is used to emulate pmem device with 2G memory space.
 
-  #define BIT(nr) (UL(1) << (nr))
+As we know, the pages in ZONE_DEVICE are only set PG_reserved flag. So
+before the serires,
+	run "page-types -r", the result is:
+	             flags      page-count       MB  symbolic-flags                     long-symbolic-flags
+	0x0000000100000000           24377       95  ___________________________r________________       reserved
+	, which means the only PG_reserved set of pages in system wide have 24377.
+	
+	run "cat /proc/zoneinfo" to get the ZONE_DEVICE info:
+	Node 1, zone   Device
+	    pages free     0
+	    boost    0
+	    min      0
+	    low      0
+	    high     0
+	    spanned  0
+	    present  0
+	    managed  0
+	    cma      0
+	    protection: (0, 0, 0, 0, 0)
 
-where
+After this series,
+	run "page-types -r", the result is:
+	             flags      page-count       MB  symbolic-flags                     long-symbolic-flags
+	0x0000000100000000          548665     2143  ___________________________r________________       reserved
+	, which means the only PG_reserved set of pages in system wide have 548665.
+	
+	Run "cat /proc/zoneinfo" to get the ZONE_DEVICE info:
+	Node 1, zone   Device
+	pages free     0
+	    boost    0
+	    min      0
+	    low      0
+	    high     0
+	    spanned  524288
+	    present  0
+	    managed  0
+	    cma      0
+	    protection: (0, 0, 0, 0, 0)
 
-  #define UL(x) (_UL(x))
-  #define _UL(x) (_AC(x, UL))
+, these added pages number is 524288 in ZONE_DEVICE as spanned field
+showed. Meanwhile, we can do 548665 - 24377 = 524288 that is increment
+of the reserved pages, it equals to the spanned field of ZONE_DEVICE.
+Hence it looks like the patchset works well.
 
-For non-assembler case
+Xiongwei Song (2):
+  mm/memremap.c: Add pfn_to_devmap_page() to get page in ZONE_DEVICE
+  proc: Add getting pages info of ZONE_DEVICE support
 
-  #define __AC(X,Y) (X##Y)
-  #define _AC(X,Y) __AC(X,Y)
-
-Now you may easily see the difference.
-
-...
-
-> +               rem2 = *val % (int)tmp;
-> +               *val = *val / (int)tmp;
-> +
-> +               *val2 = rem / (int)tmp;
-
-Hmm... You divide s64 by 10^9, which means that the maximum value can
-be ~10^10 / 2 (because 2^64-1 ~= 10^19), but this _might_ be bigger
-than 'int' can hold. Can you confirm that tmp can't be so big?
+ fs/proc/page.c           | 35 ++++++++++++++++++++-------------
+ include/linux/memremap.h |  8 ++++++++
+ mm/memremap.c            | 42 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 72 insertions(+), 13 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.30.2
+

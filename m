@@ -2,126 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2520488B5D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55163488B61
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234486AbiAIRf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:35:28 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:55512 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbiAIRep (ORCPT
+        id S233738AbiAIRhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbiAIRhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:34:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=jKkyxnGwzGV4p7nLvEOr9O3+lau8jipB5oVXKa38NbA=; b=phF9f8BGcPP6mOtisSbc9ZjAFe
-        zvPOpvGuABroC2TbHvhOsyQRSMdT5unVUNJZSM6Lr1dg7GFM7ANG7PqJlaGcnyJvOOX9JWTDVbPuZ
-        wQ5hldoiiCTZ8epcMSxY0XjfwoloyzUO87VZJCVLjEjoeV9Wa3rjTNrw2fzVcmt/CwsXI2c7+0JHO
-        rZxW4ipY51ltWVTtl9LQ4cwAywHl6o+xSkb4+SL8PNBNTBJKvcIy3rFTwhHNoIR8Z8MpCmGKnkOwA
-        34R48Zf+l+s3o2hWD0nGXUxG/ZgbbBk/70wu5TTJ6TNisdHAhdxY8l7Lfmm7hoW/vImbKa+GedSlc
-        xvLg9saw==;
-Received: from [165.90.113.117] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1n6c5X-0000JS-6T; Sun, 09 Jan 2022 18:34:39 +0100
-Date:   Sun, 9 Jan 2022 16:34:27 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     emma@anholt.net, airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/v3d/v3d_drv: Check for error num after setting mask
-Message-ID: <20220109173349.m4aug62q7e232r5r@mail.igalia.com>
-References: <20220106025539.2597562-1-jiasheng@iscas.ac.cn>
- <20220106101757.4sd7d3nvoeatjzuq@mail.igalia.com>
+        Sun, 9 Jan 2022 12:37:18 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB89C061748
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 09:37:18 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id 2so5236036ilj.4
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 09:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=bODOj2iY3281uNiwPt+MJVU4a89V+UJ+UJjJJrO9Fss=;
+        b=2jUIhvux0YeD6RwsfY9TYfiTTCrZC/XkWBXPY6d4SSwtcWoudBsnmtW77Zo8j81Byv
+         M8XhUvHBQ7mEe4C1J8+ZKq2ow/tSXRsPgmfb0WHkksx8+YMZv4kbgmE/WreyNqdwf9W3
+         EzYpWN+PCl1usIO0RX5fwDQvohttuTUKY+9yq0t/D5s2zpzPtuW5sjnxiVS7SGkJR+5x
+         RqPS7AjuNrbPc+U0kMY6YmLxfNRoiFD/0CSFoU6wE9JBOFgemm9JAUwJa0m5bUgocD98
+         Nr6iwQs1GxG2+Bc0U3Yb0iycZ7stWNSSNHcTZfZ7XF4wal6YY29N2gQkIVKGyMCMiqhV
+         q8Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=bODOj2iY3281uNiwPt+MJVU4a89V+UJ+UJjJJrO9Fss=;
+        b=7euSoQvByJMiS6LKj8AFm7g7jeJh+euLmbnGSOeZFdPZG6tkf1deANcU/pDbShJlfu
+         8/p7MkEpo9G41oxrZp38gPXf8cr7PCVoBqg9P8MNzqpDT4uQS/Avrqm+MEwnsp8dxoJt
+         hkDQiTla4hlwRbLsJg7DCpwLlk3xZ/OW42EC7N9DIY2DYv5tLlYi9IEriCQtjSk3HHrD
+         Oo7ezMkt1gtT4ww4BuYc20WY0hgVmxmlze6Ul4VBwq24nd0sy0sV/jdJX4V+EDgqgvFT
+         Fd4gaaRbLsXsMD9e294qFLxl1ZNkJwFWjUGaNyHTl0BlMrjIDkbhajCWCKTBVkaCe4z3
+         G6GQ==
+X-Gm-Message-State: AOAM532D3ng86TLPNLSOOzuEGWdhpzdkQB3m8pBgKYIUztOE4/Rr82nF
+        GDbVmUPrbMIyZCIlKLOPF6QABBd6ZYEm8g==
+X-Google-Smtp-Source: ABdhPJzhgT9GoDuxD82LpzWq8JlymoPqHojM6SncquisHWWAsIZsqGdPvlwlCE6um9UeCQbTaZ44VA==
+X-Received: by 2002:a92:de0a:: with SMTP id x10mr3078309ilm.309.1641749837966;
+        Sun, 09 Jan 2022 09:37:17 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id g5sm2991212iok.52.2022.01.09.09.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 09:37:17 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+In-Reply-To: <20220107005228.103927-1-yang.lee@linux.alibaba.com>
+References: <20220107005228.103927-1-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH -next] block: fix old-style declaration
+Message-Id: <164174983619.77550.9171818584702975669.b4-ty@kernel.dk>
+Date:   Sun, 09 Jan 2022 10:37:16 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uuxyqiolxrfgc5yh"
-Content-Disposition: inline
-In-Reply-To: <20220106101757.4sd7d3nvoeatjzuq@mail.igalia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 7 Jan 2022 08:52:28 +0800, Yang Li wrote:
+> Move the 'inline' keyword to the front of 'void'.
+> 
+> Remove a warning found by clang(make W=1 LLVM=1)
+> ./include/linux/blk-mq.h:259:1: warning: ‘inline’ is not at beginning of
+> declaration
+> 
+> 
+> [...]
 
---uuxyqiolxrfgc5yh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On 01/06, Melissa Wen wrote:
-> On 01/06, Jiasheng Jiang wrote:
-> > Because of the possible failure of the dma_supported(), the
-> > dma_set_mask_and_coherent() may return error num.
-> > Therefore, it should be better to check it and return the error if
-> > fails.
-> >=20
-> > Fixes: 334dd38a3878 ("drm/v3d: Set dma_mask as well as coherent_dma_mas=
-k")
-> > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > ---
-> >  drivers/gpu/drm/v3d/v3d_drv.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_dr=
-v.c
-> > index 99e22beea90b..bedd52195723 100644
-> > --- a/drivers/gpu/drm/v3d/v3d_drv.c
-> > +++ b/drivers/gpu/drm/v3d/v3d_drv.c
-> > @@ -232,8 +232,11 @@ static int v3d_platform_drm_probe(struct platform_=
-device *pdev)
-> >  		return ret;
-> > =20
-> >  	mmu_debug =3D V3D_READ(V3D_MMU_DEBUG_INFO);
-> > -	dma_set_mask_and_coherent(dev,
-> > +	ret =3D dma_set_mask_and_coherent(dev,
-> >  		DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH)));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> lgtm, thanks!
->=20
-Checkpatch complains when I was about to apply this change.
-As the current code already has an alignment issue, here is a good
-opportunity to clean it properly. I suggest to create a variable for
-the mask to solve this parenthesis alignment issue.
+[1/1] block: fix old-style declaration
+      commit: 292c33c95defd0b814fec1fc8cd60d16556cf7b8
 
-When submitting the next version, add my r-b, please.
-
-Thanks, Melissa
-
-> Reviewed-by: Melissa Wen <mwen@igalia.com>
->=20
-> >  	v3d->va_width =3D 30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_VA_WIDTH);
-> > =20
-> >  	ident1 =3D V3D_READ(V3D_HUB_IDENT1);
-> > --=20
-> > 2.25.1
-> >=20
+Best regards,
+-- 
+Jens Axboe
 
 
-
---uuxyqiolxrfgc5yh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHbHKMACgkQwqF3j0dL
-ehwFiBAAmA1/GCzqdyEEBqEOnkl0yH/Em8Srikam6fyX16m7MxqK8LQ0sIi4P3VY
-yggzvKXzwheMFu1H9WOQLsxF3HbSWqPSchrTPuJu3A06nHnt1xPILastDXOMP+1B
-9DA89jRhm1QIHfm3JmcJZRl8zyObZYVkTmDERSVJP57NNCAvx8AVFnYMfB7v+g/+
-7pr9yzsSNOI9bktcE1p5xzhoBBfporKBaVDTaiThZHbzHUha9u5FDHs6agNCSW1L
-2p+SHINf5+pWlaXNywiAohYPhR0NMLMzu4EhxWXjbO7FAJ+lPaxPC50QG9ZhAgtf
-BuB2WbjMLEzTIFw//PrNC4KnIuM7QbHnS5QpCnchQpFhHbRjPnuiANcy5FmyZ1Ol
-AZVlGI2ZpOtLcQnOLuduRVvylOei7OMSTcE1Bvo/ZT6nquOdvXu6ee/ZgIWqWaXX
-sBKLbfvm5iTmuG6YKZuY872IbsEr69Le58tYYWDVuY3/clXKsvu2zfonLa/AOnyc
-n13HFeYXBYy5vkW2uv7gsEFD3Arq6lfYviMXNUH3tOncZeEgkPREtLLuRQibsIF0
-IEzXpqccrqWbkWzojO+QNjtywdXAiEiVQmq/aS63/gdBzxIc6d6hGASPSmaYOS2/
-uTnJzRPRxjiV1CzT5L5dJsKFCDuMYCO5J/HmSELnXlpDY8WnZ2M=
-=POyl
------END PGP SIGNATURE-----
-
---uuxyqiolxrfgc5yh--

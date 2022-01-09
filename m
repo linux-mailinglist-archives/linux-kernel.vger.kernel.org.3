@@ -2,79 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35128488999
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE2D4889B3
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiAIN0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:26:52 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:42931 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231201AbiAIN0v (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:26:51 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V1Il5dP_1641734775;
-Received: from fdadf40dcbca.tbsite.net(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V1Il5dP_1641734775)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 09 Jan 2022 21:26:48 +0800
-From:   Heyi Guo <guoheyi@linux.alibaba.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Heyi Guo <guoheyi@linux.alibaba.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
-Date:   Sun,  9 Jan 2022 21:26:13 +0800
-Message-Id: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
+        id S235719AbiAINwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 08:52:23 -0500
+Received: from dns.cumbytel.com ([208.101.213.20]:45302 "EHLO dns.cumbytel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235704AbiAINwR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 08:52:17 -0500
+X-Greylist: delayed 710 seconds by postgrey-1.27 at vger.kernel.org; Sun, 09 Jan 2022 08:52:16 EST
+Received: from cumbytel.com (localhost [127.0.0.1])
+        by dns.cumbytel.com (Postfix) with ESMTP id 16674A04ED;
+        Sun,  9 Jan 2022 07:36:20 -0600 (CST)
+Received: from 38.70.11.144
+        (SquirrelMail authenticated user blachnitt@cumbytel.com)
+        by cumbytel.com with HTTP;
+        Sun, 9 Jan 2022 07:36:20 -0600
+Message-ID: <daa80ace9ee3f128b3770e6a12840a10.squirrel@cumbytel.com>
+Date:   Sun, 9 Jan 2022 07:36:20 -0600
+Subject: What do you seek in life?
+From:   "Oriri Temple" <blachnitt@cumbytel.com>
+Reply-To: templeoriri@gmail.com
+User-Agent: SquirrelMail/1.4.23 [SVN]-1.el7.20190710
+MIME-Version: 1.0
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory will be freed by the caller if transfer timeout occurs,
-then it would trigger kernel panic if the peer device responds with
-something after timeout and triggers the interrupt handler of aspeed
-i2c driver.
-
-Set the msgs pointer to NULL to avoid invalid memory reference after
-timeout to fix this potential kernel panic.
-
-Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
-
--------
-
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-i2c@vger.kernel.org
-Cc: openbmc@lists.ozlabs.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-aspeed@lists.ozlabs.org
----
- drivers/i2c/busses/i2c-aspeed.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 67e8b97c0c950..3ab0396168680 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
- 		spin_lock_irqsave(&bus->lock, flags);
- 		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
- 			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
-+		/*
-+		 * All the buffers may be freed after returning to caller, so
-+		 * set msgs to NULL to avoid memory reference after freeing.
-+		 */
-+		bus->msgs = NULL;
- 		spin_unlock_irqrestore(&bus->lock, flags);
- 
- 		return -ETIMEDOUT;
--- 
-2.17.1
+Do you seek for riches, life partner, Cure For Diabetes, Commitment spell,
+Healing spell, Revenge Spell, bring back your ex husband/wife/lover,
+success in business spell, gamble spell, break generational curse, break
+up spell, Favor Spell, Bank Loan Spell ,jackpot spell, Visa spell, Soul
+mate Spell, Promotion spell, Protection spell, make marriage work, get
+back to me. For more information visit us using the link below.
+https://oriritemple.yolasite.com/
 

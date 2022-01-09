@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F3648884D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 08:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4432488850
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 08:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbiAIHZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 02:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S235245AbiAIH31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 02:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiAIHZ4 (ORCPT
+        with ESMTP id S230106AbiAIH30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 02:25:56 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FBFC06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 23:25:56 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p14so9552006plf.3
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 23:25:56 -0800 (PST)
+        Sun, 9 Jan 2022 02:29:26 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6431FC06173F;
+        Sat,  8 Jan 2022 23:29:26 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so18746525pjf.3;
+        Sat, 08 Jan 2022 23:29:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=diyJJCapjwWwuZdOgRzv/HASqU3BBDHkCO/M0zGXsZo=;
-        b=dqxJd99aGbdZTlbjS5+wJ7NXTiVh57PMP4sq1EvM4szMryE176yChyN0AdI7sKCEFD
-         S4s9GPayeZg/dcZC2mWClIWZFOB+8pCG0IeZvWwIXRqzFaznUZn+h0zQ1y+/Rv4KfJka
-         Vc/0eWOiDK7m0Y5ssvIWgc842L6NOCEyV3vV1GYFuEmbHYbgcauCx8ByZK4FmjGK6vTY
-         yZdAj4sRQW/kekcT+jklft1HBiyEF/EeXPPSG1yuyRtYu7JYGBkKuV4W8zMx5+9KgWA7
-         5wZV22EBv1eM4qiVbmcj7WM3jq1KiI90o/xIuxJxgJQcs2BP/PoR85IfO1jqErHHxBLl
-         o3GQ==
+        bh=ABpe723VdAG++mLmVJtQgfj7bdVAG98VviWIXnTdgFs=;
+        b=ShMud7Z/8D2OTfAfGGcEKU7KgASpM7hXksFB6AYWLaTxPnau4Expe7kkW/MUSmXbls
+         /G/t23YJN6P8kMGDaEP7ZxgBSNJ/JmxHQNSSbDieN6OZle9oUIpYJh3RQarh7SWc4H5J
+         DIXs9WQR1L8Uwaiu7gaOO0QHQvNL9gZDugfc02hYYbzBh+M9gEzLCCKAVg+Ut30LjZyA
+         xIB6ZnJiuHvW1BHAQ0nYhFdrabNAYu0t4wUmiV2/2tze0nWpWSk6q9ShcBbg1RJCJ3mA
+         0mVRVxgwbxjE46im0kXtWJuCUTUkeUgM5mVGlx4OVCYM+ktRhnKxdzDz6G8eVucWpUW5
+         1UxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=diyJJCapjwWwuZdOgRzv/HASqU3BBDHkCO/M0zGXsZo=;
-        b=5uHGnUSO5Egws9d5OgeKD8shsdj64p4STDk8tbNeAiYJj6pzDEaA8MP6XHPdBSpK8y
-         rvu66QBDkJiQe/ZUL1D0orZTu4emL+eUlH3hYy3k8DO0+d94kGF0eI2jf8cnLpvmawPo
-         DGUSwumpbuld5R51KiWR1SSTPs7k+h3/E2iIM6W9RxjTBt3Yc/LDqga866OOigcINstt
-         bkzrauJEJaHJrFzMqC5Lq7aQCcUmDRx7vzYqINikOOlC2x1rGLJfoR/wcB0sJRM7bNht
-         TygVXmvPb9wwvxJ9tvCloMZr3QsV86zFxse5/o2h9QTSq1BemvmCw2B2qBrfkOd1RnJ7
-         AXaA==
-X-Gm-Message-State: AOAM532+QfsiKjWjEO2gCTK0hBq+sPwq1xqXUKhstzA6g+9y828191tM
-        5ueqIrSuVZamXg6l77FsubhKvUH9K3mETQ==
-X-Google-Smtp-Source: ABdhPJzMHwfUmgDL0s0ubRGDt8UKWVjl2HQp9XAwNqAdC8n8WiJrNqSi5Ij4gfIUZfOpaE1TVxL00A==
-X-Received: by 2002:a17:90a:ac0f:: with SMTP id o15mr18906445pjq.145.1641713155540;
-        Sat, 08 Jan 2022 23:25:55 -0800 (PST)
-Received: from localhost (99-152-116-91.lightspeed.sntcca.sbcglobal.net. [99.152.116.91])
-        by smtp.gmail.com with ESMTPSA id ke3sm4964658pjb.46.2022.01.08.23.25.54
+        bh=ABpe723VdAG++mLmVJtQgfj7bdVAG98VviWIXnTdgFs=;
+        b=a36XotZjl+8ttvklsPumLt1AahL1Sr5qWWt5UxsFrj/I/hnsK/6e/n1ut/Q+4jWDD4
+         eX2+P1LreZhEJ2D+8DUba0KF2opv9WphxOShf+ymEqHfnZwBNcXCJ4fl5SDoeF4N0xfF
+         PQCReE//togprV61ZkLXvDZ90Fz+GF8+yv1p3kRNNNADI/KPtqRTUiWTQtb2W2v1FuBx
+         frrUOKClcA4oQum0H83DImO3CyUhlgbKv4MdAvivxdVo3mKCJxz5RKc/dYKuKikx7b0D
+         he5RvnSEB8m16YFPWMvrPdlmmrSHvMWOqhzGyt8FfJHHYQ9abP+acMiQWNnarAQGQSI8
+         b8XA==
+X-Gm-Message-State: AOAM532sTqfCQqQOdLgVkO1QSzWHFkhPHzrhbQ4KhihiI4RGo5diQyIc
+        z+uHAeotn0+b1Cu4istZb5w=
+X-Google-Smtp-Source: ABdhPJxh8aDsuNV3cqiVjXy2QBqDupJcQl44+BzuswPxChCYjaYIa6osngPfXnCWVAvYizROVzDhjg==
+X-Received: by 2002:a17:90b:4ad2:: with SMTP id mh18mr24441490pjb.197.1641713365790;
+        Sat, 08 Jan 2022 23:29:25 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:1402:d240:ab6c:2258])
+        by smtp.gmail.com with ESMTPSA id b2sm3079880pfl.138.2022.01.08.23.29.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 23:25:54 -0800 (PST)
-Date:   Sat, 8 Jan 2022 23:25:40 -0800
-From:   Olof Johansson <olof@lixom.net>
-To:     torvalds@linux-foundation.org
-Cc:     olof@lixom.net, soc@lixom.net,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] SoC: One more fix for 5.16
-Message-ID: <YdqN9GxRTQYVA/f4@lx2k>
+        Sat, 08 Jan 2022 23:29:24 -0800 (PST)
+Date:   Sat, 8 Jan 2022 23:29:22 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [git pull] Input updates for v5.16-rc8
+Message-ID: <YdqO0p960x1KT/bo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,34 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
 Hi Linus,
 
+Please pull from:
 
-The following changes since commit 8922bb6526ac4b20bd8de7f47d6e77808670f6c4:
+	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git for-linus
 
-  Merge tag 'socfpga_fix_for_v5.16_part_3' of git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into arm/fixes (2022-01-05 16:18:50 -0800)
+to receive updates for the input subsystem. You will get a small fixup
+to Zinitix touchscreen driver to avoid enabling IRQ line before we
+successfully requested it.
 
-are available in the Git repository at:
+Changelog:
+---------
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-5.16-5
+Nikita Travkin (1):
+      Input: zinitix - make sure the IRQ is allocated before it gets enabled
 
-for you to fetch changes up to c8013355ead68dce152cf426686f8a5f80d88b40:
+Diffstat:
+--------
 
-  ARM: dts: gpio-ranges property is now required (2022-01-08 13:28:28 -0800)
+ drivers/input/touchscreen/zinitix.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-----------------------------------------------------------------
-SoC: One more fix for 5.16
+Thanks.
 
-I had missed one patch when I sent up what I thought was the last batch
-of fixes for this release. This one fixes issues on the Raspberry Pi
-platforms due to gpio init changes this release, so hopefully we can get
-it merged before final release is cut.
 
-----------------------------------------------------------------
-Phil Elwell (1):
-      ARM: dts: gpio-ranges property is now required
-
- arch/arm/boot/dts/bcm2711.dtsi | 2 ++
- arch/arm/boot/dts/bcm283x.dtsi | 2 ++
- 2 files changed, 4 insertions(+)
+-- 
+Dmitry

@@ -2,307 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681D44889F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 15:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D361D488A01
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 15:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235821AbiAIOy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 09:54:59 -0500
-Received: from polaris.svanheule.net ([84.16.241.116]:58430 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiAIOyy (ORCPT
+        id S232725AbiAIO4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 09:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231432AbiAIO4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 09:54:54 -0500
-Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:f20a:f473:2021:45ec])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id EE23528EE29;
-        Sun,  9 Jan 2022 15:54:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1641740093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uLgZN6PHIuC/rHIO+5SRTARegBDS1AEMFX7pPCfaVYM=;
-        b=QNu/LSFWfIJswwo9BaCNZtxPrOGYiPOUCeSBXIlwpo/sXKB5KmqZYRRl2+NDSfYzrdFet0
-        TlLmN1+umMVskSHh8xi9Yoh9NmtC8vMTT4ubcch0p7Mm3J840Hs0ec8EuuE+nm/F/jx2r/
-        Ixqr+AMM+7yjMRe3NyN36HapKDK4XXLr8MtU+1cwQ1i48sXOoIuYB+XdNzTwhq9aRmI5Aq
-        cHwa1cPSgL4PMVLuyBqFlD/woW2Syfiqrkhz2Kx/+Ar6Pg56/zoSieGc4myGRS/JZnBkBv
-        NUFxsHlXNiqparL2x9SsQed4vZqKx3j7fuJE3pynrvSW0BZ+2EGrWWiK8eVLfw==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v3 6/6] irqchip/realtek-rtl: use per-parent domains
-Date:   Sun,  9 Jan 2022 15:54:37 +0100
-Message-Id: <8767ed87be03570ae9f1969bc3dd312d5f2caf2c.1641739718.git.sander@svanheule.net>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1641739718.git.sander@svanheule.net>
-References: <cover.1641739718.git.sander@svanheule.net>
+        Sun, 9 Jan 2022 09:56:44 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F83EC06173F;
+        Sun,  9 Jan 2022 06:56:44 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id y17so11673803qtx.9;
+        Sun, 09 Jan 2022 06:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xAXeFiiVNVIK/L6O9iQk5MZxNRPujsgl/kQJ0rnj7Zk=;
+        b=E+rOFzocJFzyKCkPBN5TJiiekrLfXctVFYRRR8ZAHlSTyeTpGvfTgh/ZJIGU5uotT4
+         KPa5ebR0yomxOg/P/eQ9zgga3qAji2pT2r1CNoJyOC593E4X6EydJqSucz+3aISk03wP
+         PAI2ScbIUyr6jOj576jl0MVWP0u3BbZAQuDaerpImuSy+dkU6m6v6My+LRSXukp1QceX
+         qKBqRdObGSyj7ZYZlerAk4qk5T0DQg+dSasPuZp2MaODP4bOmLmO2aZ+d+mxH6j+CYck
+         yPW2YqLRciuj33xgK0Mk0PO2RuQUPNWWUMaWfNJRDZ/wLhWFKq2sEKmIKaQ34Va8DeEm
+         YftA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xAXeFiiVNVIK/L6O9iQk5MZxNRPujsgl/kQJ0rnj7Zk=;
+        b=VVKExDKVD756AWgQLgM1M8SUF04waB2c6Y19KdgoG290b39XD/o2RTiwHulMP0m2Iz
+         PnuEpavfpZ67w5sd0C9QH53+3+xxth0Eb8IX5nmsSY+z9C050a+dfTPFRfoQZokj9RG1
+         3bpISklhEQPz4v1d75Ox89ayXZ1V5GL5Ecj/aRjxyxJm2AaEjx6SjFUPWhkWcv1V1I3Y
+         /ClGxzw2RGGrrvqovtQa04nEwapcnEVqf2FWBFecgYJuzSIrjSCnp71u/RklAUL/u2Ee
+         XjrA4LEX59c5yqUyKJZd1pKy2kdKhupeEL4nQKheTfWs4aoSts0I+Zs4myDOx4OPLuaV
+         SMeA==
+X-Gm-Message-State: AOAM530BeSQ9naGs+sNJcZFU9r4Kun8CqPHZwPCUyNvvjwosYilwzgkO
+        N2nRAc8sI6en2I0pHkv1dCdGnMVqdMzFjA==
+X-Google-Smtp-Source: ABdhPJwe19kCprGjd/4DLvq8EOtzLjEOFsd49aYXWWkMJXHUKfUrr1uO5VtlInoxVxoXsvvmaRvLsg==
+X-Received: by 2002:a05:622a:1456:: with SMTP id v22mr7917190qtx.310.1641740203155;
+        Sun, 09 Jan 2022 06:56:43 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id j22sm420341qko.117.2022.01.09.06.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 06:56:42 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
+        shorne@gmail.com, geert@linux-m68k.org,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        rdunlap@infradead.org, andy.shevchenko@gmail.com, hdanton@sina.com
+Subject: [PATCH v10 0/3] mmc: Add LiteSDCard mmc driver
+Date:   Sun,  9 Jan 2022 09:56:34 -0500
+Message-Id: <20220109145637.2506583-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt router can connect each of its inputs to one of the parent
-interrupts. These parent interrupts may be handled differently by their
-interrupt controller. SoC interrupts should be treated per-parent, to
-maintain this expected behaviour for routed child interrupts.
+Add support for the LiteX SD-Card device, LiteSDCard.
 
-Rework the driver to use a separate domain for each output, using all
-available parents interrupts (as specified in the devicetree).
+LiteSDCard is a simple SD-Card interface available as part of the LiteX
+environment, used with various RISC-V and other FPGA based SoCs.
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
----
- drivers/irqchip/irq-realtek-rtl.c | 150 ++++++++++++++++++++++++------
- 1 file changed, 124 insertions(+), 26 deletions(-)
+New in v10:
+drivers/mmc/host/litex_mmc.c:
+  - group `linux/mmc/*` includes by themselves
+  - clean-up of `return` style (multiple locations throughout source)
+  - create `mmc_free_host()` wrapper for use with
+    `devm_add_action_or_reset()`
+  - use GFP_KERNEL with `dmam_alloc_coherent()`
 
-diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
-index 388f4a7bfb80..868eb9b25e84 100644
---- a/drivers/irqchip/irq-realtek-rtl.c
-+++ b/drivers/irqchip/irq-realtek-rtl.c
-@@ -22,12 +22,22 @@
- #define RTL_ICTL_IRR3		0x14
- 
- #define RTL_ICTL_NUM_INPUTS	32
-+#define RTL_ICTL_NUM_OUTPUTS	15
- 
- #define REG(x)		(realtek_ictl_base + x)
- 
- static DEFINE_RAW_SPINLOCK(irq_lock);
- static void __iomem *realtek_ictl_base;
- 
-+struct realtek_ictl_output {
-+	/* IRQ controller data */
-+	struct fwnode_handle *fwnode;
-+	/* Output specific data */
-+	unsigned int output_index;
-+	struct irq_domain *domain;
-+	u32 child_mask;
-+};
-+
- /*
-  * IRR0-IRR3 store 4 bits per interrupt, but Realtek uses inverted numbering,
-  * placing IRQ 31 in the first four bits. A routing value of '0' means the
-@@ -37,6 +47,11 @@ static void __iomem *realtek_ictl_base;
- #define IRR_OFFSET(idx)		(4 * (3 - (idx * 4) / 32))
- #define IRR_SHIFT(idx)		((idx * 4) % 32)
- 
-+static inline u32 read_irr(void __iomem *irr0, int idx)
-+{
-+	return (readl(irr0 + IRR_OFFSET(idx)) >> IRR_SHIFT(idx)) & 0xf;
-+}
-+
- static inline void write_irr(void __iomem *irr0, int idx, u32 value)
- {
- 	unsigned int offset = IRR_OFFSET(idx);
-@@ -84,51 +99,128 @@ static struct irq_chip realtek_ictl_irq = {
- 
- static int intc_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
- {
-+	struct realtek_ictl_output *output = d->host_data;
- 	unsigned long flags;
-+	u32 routing_old;
-+	int err = 0;
-+
-+	raw_spin_lock_irqsave(&irq_lock, flags);
-+
-+	/*
-+	 * Inputs can only be routed to one output, so they shouldn't end up in
-+	 * multiple domains. Perform this check in the same atomic context as
-+	 * configuring the routing to prevent races.
-+	 */
-+	routing_old = read_irr(REG(RTL_ICTL_IRR0), hw);
-+	if (routing_old && output->output_index != routing_old - 1) {
-+		pr_err("int %ld already routed to output %d\n",
-+			hw, routing_old - 1);
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
-+	output->child_mask |= BIT(hw);
-+	write_irr(REG(RTL_ICTL_IRR0), hw, output->output_index + 1);
- 
- 	irq_set_chip_and_handler(irq, &realtek_ictl_irq, handle_level_irq);
- 
--	raw_spin_lock_irqsave(&irq_lock, flags);
--	write_irr(REG(RTL_ICTL_IRR0), hw, 1);
-+out:
- 	raw_spin_unlock_irqrestore(&irq_lock, flags);
- 
--	return 0;
-+	return err;
-+}
-+
-+static int intc_select(struct irq_domain *d, struct irq_fwspec *fwspec,
-+	enum irq_domain_bus_token bus_token)
-+{
-+	struct realtek_ictl_output *output = d->host_data;
-+
-+	if (fwspec->fwnode != output->fwnode)
-+		return false;
-+
-+	/* Original specifiers only had one parameter */
-+	if (WARN_ON_ONCE(fwspec->param_count < 2))
-+		return true;
-+
-+	return fwspec->param[1] == output->output_index;
- }
- 
- static const struct irq_domain_ops irq_domain_ops = {
- 	.map = intc_map,
-+	.select = intc_select,
- 	.xlate = irq_domain_xlate_onecell,
- };
- 
- static void realtek_irq_dispatch(struct irq_desc *desc)
- {
-+	struct realtek_ictl_output *output = irq_desc_get_handler_data(desc);
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
--	struct irq_domain *domain;
- 	unsigned long pending;
- 	unsigned int soc_int;
- 
- 	chained_irq_enter(chip, desc);
--	pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR));
-+	pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR))
-+		& output->child_mask;
- 
- 	if (unlikely(!pending)) {
- 		spurious_interrupt();
- 		goto out;
- 	}
- 
--	domain = irq_desc_get_handler_data(desc);
--	for_each_set_bit(soc_int, &pending, 32)
--		generic_handle_domain_irq(domain, soc_int);
-+	for_each_set_bit(soc_int, &pending, RTL_ICTL_NUM_INPUTS)
-+		generic_handle_domain_irq(output->domain, soc_int);
- 
- out:
- 	chained_irq_exit(chip, desc);
- }
- 
-+static int __init setup_parent_interrupts(struct device_node *node, int *parents,
-+	unsigned int num_parents)
-+{
-+	struct realtek_ictl_output *outputs;
-+	struct realtek_ictl_output *output;
-+	struct irq_domain *domain;
-+	unsigned int p;
-+
-+	outputs = kcalloc(num_parents, sizeof(*outputs), GFP_KERNEL);
-+	if (!outputs)
-+		return -ENOMEM;
-+
-+	for (p = 0; p < num_parents; p++) {
-+		output = outputs + p;
-+
-+		domain = irq_domain_add_simple(node, RTL_ICTL_NUM_INPUTS, 0,
-+					       &irq_domain_ops, output);
-+		if (!domain)
-+			goto domain_err;
-+
-+		output->fwnode = of_node_to_fwnode(node);
-+		output->output_index = p;
-+		output->domain = domain;
-+
-+		irq_set_chained_handler_and_data(parents[p], realtek_irq_dispatch, output);
-+	}
-+
-+	return 0;
-+
-+domain_err:
-+	while (p--) {
-+		irq_set_chained_handler_and_data(parents[p], NULL, NULL);
-+		irq_domain_remove(outputs[p].domain);
-+	}
-+
-+	kfree(outputs);
-+
-+	return -ENOMEM;
-+}
-+
- static int __init realtek_rtl_of_init(struct device_node *node, struct device_node *parent)
- {
-+	int parent_irqs[RTL_ICTL_NUM_OUTPUTS];
- 	struct of_phandle_args oirq;
--	struct irq_domain *domain;
-+	unsigned int num_parents;
- 	unsigned int soc_irq;
--	int parent_irq;
-+	unsigned int p;
- 
- 	realtek_ictl_base = of_iomap(node, 0);
- 	if (!realtek_ictl_base)
-@@ -139,37 +231,43 @@ static int __init realtek_rtl_of_init(struct device_node *node, struct device_no
- 	for (soc_irq = 0; soc_irq < RTL_ICTL_NUM_INPUTS; soc_irq++)
- 		write_irr(REG(RTL_ICTL_IRR0), soc_irq, 0);
- 
--	if (WARN_ON(!of_irq_count(node))) {
-+	num_parents = of_irq_count(node);
-+	if (num_parents > RTL_ICTL_NUM_OUTPUTS) {
-+		pr_err("too many parent interrupts\n");
-+		return -EINVAL;
-+	}
-+
-+	for (p = 0; p < num_parents; p++)
-+		parent_irqs[p] = of_irq_get(node, p);
-+
-+	if (WARN_ON(!num_parents)) {
- 		/*
- 		 * If DT contains no parent interrupts, assume MIPS CPU IRQ 2
- 		 * (HW0) is connected to the first output. This is the case for
- 		 * all known hardware anyway. "interrupt-map" is deprecated, so
- 		 * don't bother trying to parse that.
-+		 * Since this is to account for old devicetrees with one-cell
-+		 * interrupt specifiers, only one output domain is needed.
- 		 */
- 		oirq.np = of_find_compatible_node(NULL, NULL, "mti,cpu-interrupt-controller");
- 		oirq.args_count = 1;
- 		oirq.args[0] = 2;
- 
--		parent_irq = irq_create_of_mapping(&oirq);
-+		parent_irqs[0] = irq_create_of_mapping(&oirq);
-+		num_parents = 1;
- 
- 		of_node_put(oirq.np);
--	} else {
--		parent_irq = of_irq_get(node, 0);
- 	}
- 
--	if (parent_irq < 0)
--		return parent_irq;
--	else if (!parent_irq)
--		return -ENODEV;
--
--	domain = irq_domain_add_simple(node, RTL_ICTL_NUM_INPUTS, 0,
--				       &irq_domain_ops, NULL);
--	if (!domain)
--		return -ENOMEM;
--
--	irq_set_chained_handler_and_data(parent_irq, realtek_irq_dispatch, domain);
-+	/* Ensure we haven't collected any errors before proceeding */
-+	for (p = 0; p < num_parents; p++) {
-+		if (parent_irqs[p] < 0)
-+			return parent_irqs[p];
-+		if (!parent_irqs[p])
-+			return -ENODEV;
-+	}
- 
--	return 0;
-+	return setup_parent_interrupts(node, &parent_irqs[0], num_parents);
- }
- 
- IRQCHIP_DECLARE(realtek_rtl_intc, "realtek,rtl-intc", realtek_rtl_of_init);
+>New in v9:
+>drivers/mmc/host/Kconfig:
+>  - fix OF dependency
+>drivers/mmc/host/litex_mmc.c:
+>  - remove `linux/of.h` include, no longer needed since dropping
+>    `of_match_ptr()`
+>  - add `linux/mod_devicetable.h` include
+>  - use devm_action_or_reset() to devm-ify mmc_alloc_host(), and obviate
+>    the need to call mmc_free_host() explicitly during either probe()
+>    error path or during remove()
+>
+>>New in v8:
+>>commit blurbs:
+>>  - cosmetic editing of descriptions
+>>  - removed `Cc:` lines
+>>drivers/mmc/host/litex_mmc.c:
+>>  - fix file header comment (for real, this time)
+>>  - add explicit `bits.h` include
+>>  - remove `of_match_ptr()` wrapper from around .of_match_table argument
+>>  - fix devm ordering issues: use `devm_request_irq()`, which precludes
+>>    the need to call `free_irq()` on `probe()` error path or from `remove()`
+>>
+>>>New in v7:
+>>>
+>>>drivers/mmc/host/Kconfig:
+>>>  - added module name in LiteSDCard Kconfig entry
+>>>
+>>>drivers/mmc/host/litex_mmc.c:
+>>>  - fixed comment formatting, ordering, and capitalization throughout
+>>>    the entire file
+>>>  - sorted header #include statements
+>>>  - removed redundant parantheses in readx_poll_timeout() condition
+>>>  - explicit handling of readx_poll_timeout() timeout scenarios
+>>>  - dev_err() used in litex_mmc_sdcard_wait_done()
+>>>  - use memcpy_fromio() to grab command response
+>>>  - no need to apply 0xffff mask to a 32-bit value right-shifted by 16
+>>>    (host->resp[3])
+>>>  - use clamp() instead of min(max(...)...)
+>>>  - reworked platform_get_irq_optional() error handling logic
+>>>  - no need to explicitly zero host->irq, kzalloc() does that already
+>>>  - added missing free_irq() in litex_mmc_probe() error path
+>>>  - reordered calls inside litex_mmc_remove() (calling mmc_free_host()
+>>>    before free_irq()
+>>>
+>>>>New in v6:
+>>>>
+>>>>drivers/mmc/host/litex_mmc.c:
+>>>>  - fix handling of deferred probe vs. platform_get_irq_optional()
+>>>>  - don't #ifdef dma_set_mask_and_coherent(), since it automatically
+>>>>    does the right thing on both 32- and 64-bit DMA capable arches
+>>>>  - remove MMC_CAP2_FULL_PWR_CYCLE, add MMC_CAP2_NO_MMC to list of
+>>>>    hardcoded capabilities during litex_mmc_probe()
+>>>>  - hardcode mmc->ocr_avail to the full 2.7-3.6V range allowed by the
+>>>>    SDCard spec (the LiteSDCard device doesn't accept software
+>>>>    configuration)
+>>>>
+>>>>>New in v5:
+>>>>>
+>>>>>MAINTAINERS:
+>>>>>
+>>>>>  - picked up a/b Mateusz
+>>>>>
+>>>>>Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>>>>
+>>>>>  - picked up r/b Rob, Joel
+>>>>>
+>>>>>drivers/mmc/host/litex_mmc.c:
+>>>>>
+>>>>>  - shorten #define constant names (cosmetic, make them less unwieldy)
+>>>>>  - picked up r/b Joel
+>>>>>
+>>>>>>New in v4:
+>>>>>>
+>>>>>>Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>>>>>
+>>>>>>  - fixed `dt_binding_check` errors uncovered by Rob's script
+>>>>>>
+>>>>>>drivers/mmc/host/litex_mmc.c:
+>>>>>>
+>>>>>>  - struct litex_mmc_host fields re-ordered so that `pahole` reports
+>>>>>>    no holes in either 32- or 64-bit builds
+>>>>>>  - litex_mmc_set_bus_width() now encapsulates check for
+>>>>>>    host->is_bus_width_set
+>>>>>>  - litex_mmc_request() - factor out dma data setup into separate
+>>>>>>    helper function: litex_mmc_do_dma()
+>>>>>>
+>>>>>>>New in v3:
+>>>>>>>
+>>>>>>>  MAINTAINERS:
+>>>>>>>
+>>>>>>>  - picked up acked-by Joel
+>>>>>>>  - added listing for liteeth driver
+>>>>>>>  - added Joel as additional co-maintainer (thanks!)
+>>>>>>>
+>>>>>>>  Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>>>>>>
+>>>>>>>  - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
+>>>>>>>    bindings document (please let me know if that was premature, and
+>>>>>>>    happy to take further review if needed :)
+>>>>>>>  - add dedicated DT property for source clock frequency
+>>>>>>>
+>>>>>>>  drivers/mmc/host/litex_mmc.c:
+>>>>>>>
+>>>>>>>  - fixed function signature (no line split), and naming (litex_mmc_*)
+>>>>>>>  - more informative MODULE_AUTHOR() entries
+>>>>>>>    - also added matching "Copyright" entries in file header
+>>>>>>>  - fixed description in Kconfig
+>>>>>>>  - fixed DT documentation
+>>>>>>>  - removed magic constants
+>>>>>>>  - removed litex_map_status(), have sdcard_wait_done() return *real*
+>>>>>>>    error codes directly instead.
+>>>>>>>  - streamlined litex_mmc_reponse_len()
+>>>>>>>  - call litex_mmc_set_bus_width() only once, and ensure it returns
+>>>>>>>    correct error code(s)
+>>>>>>>  - use readx_poll_timeout() -- more concise -- instead of
+>>>>>>>    read_poll_timeout()
+>>>>>>>  - use dev_err() in litex_mmc_send_cmd() (instead of pr_err())
+>>>>>>>  - litex_mmc_setclk() will update host->clock before returning
+>>>>>>>  - separate irq initialization into its own function,
+>>>>>>>    litex_mmc_irq_init()
+>>>>>>>  - document rationale for f_min, f_max
+>>>>>>>  - use dmam_alloc_coherent(), which simplifies cleanup significantly
+>>>>>>>  - large `if (data) { ... }` block in litex_mmc_request() left as-is,
+>>>>>>>    there are too many variables shared with the rest of the parent
+>>>>>>>    function body to easily separate (e.g., `len`, `transfer`, `direct`).
+>>>>>>>    If this is indeed a blocker, I can take another shot at refactoring
+>>>>>>>    it in a future revision!
+>>>>>>>  - bump dma_set_mask_and_coherent() to 64-bits on suitable
+>>>>>>>    architectures
+>>>>>>>  - clock source picked up from dedicated DT clock reference property
+>>>>>>>  - remove gpio card-detect logic (needs testing and a dt binding
+>>>>>>>    example before being eligible for upstream inclusion)
+>>>>>>>
+>>>>>>>> New in v2:
+>>>>>>>>   - reword info message in litex_set_clk()
+>>>>>>>>   - streamline code in litex_map_status()
+>>>>>>>>   - fix typos in Kconfig (thanks Randy Dunlap <rdunlap@infradead.org>)
+>>>>>>>>   - improvements suggested by Stafford Horne <shorne@gmail.com>
+>>>>>>>>     - allow COMPILE_TEST in Kconfig
+>>>>>>>>     - use read_poll_timeout() when waiting for cmd/data/DMA
+>>>>>>>>       xfer completion
+>>>>>>>>   - include interrupt.h (thanks kernel test robot <lkp@intel.com>)
+
+Gabriel Somlo (3):
+  MAINTAINERS: co-maintain LiteX platform
+  dt-bindings: mmc: Add bindings for LiteSDCard
+  mmc: Add driver for LiteX's LiteSDCard interface
+
+ .../devicetree/bindings/mmc/litex,mmc.yaml    |  72 ++
+ MAINTAINERS                                   |   9 +-
+ drivers/mmc/host/Kconfig                      |   9 +
+ drivers/mmc/host/Makefile                     |   1 +
+ drivers/mmc/host/litex_mmc.c                  | 655 ++++++++++++++++++
+ 5 files changed, 744 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+ create mode 100644 drivers/mmc/host/litex_mmc.c
+
 -- 
-2.33.1
+2.31.1
 

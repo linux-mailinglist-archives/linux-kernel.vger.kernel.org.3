@@ -2,111 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 946D3488B97
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275F5488BA3
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 19:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbiAISXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 13:23:22 -0500
-Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:61586 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236181AbiAISXO (ORCPT
+        id S236487AbiAISar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 13:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236473AbiAISap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 13:23:14 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 6cqUnvsI8soWh6cqUnw2qu; Sun, 09 Jan 2022 19:23:12 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 09 Jan 2022 19:23:12 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christoph Hellwig <hch@lst.de>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
-Subject: [PATCH] e1000e: Remove useless DMA-32 fallback configuration
-Date:   Sun,  9 Jan 2022 19:23:04 +0100
-Message-Id: <5549ec8837b3a6fab83e92c5206cc100ffd23d85.1641752508.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 9 Jan 2022 13:30:45 -0500
+X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Jan 2022 10:30:44 PST
+Received: from biche.re (biche.re [IPv6:2607:5300:201:3100::6c88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2559C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 10:30:44 -0800 (PST)
+From:   Victorien Molle <biche@biche.re>
+DKIM-Filter: OpenDKIM Filter v2.11.0 biche.re 46FBC40F84
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=biche.re; s=biche;
+        t=1641752648; bh=HmvLkz1mVjyAOwxpC8spDiTxpZx+nArauSp2vpV1ec0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tYQmiAzQTcNCv7TVJPB6fuahrJxmDXY9zHelOTr/0V0z62ek/RkOsJ0VsT234APEf
+         vX9fBgllZtbmCiXfowMItimDkMp6EsYX8B2ABCOsTHR8hk1ZpqdhmE6UEhwe5cDPri
+         9YQlio51DXcHO/F9+Y3o42YZrxuQxiotwiJ/W2kRxVPO0IxHOmxm0vdljFbt8fupXP
+         YH8Q6dg/7cbKr754Skv0ykaItSgW3BkZkKjsX8W+ZpASc9GaZzHo9sYtwnGugsD2Q7
+         R94LrA5xkVI1GrPB/sLMDLFgOoBIssOxvqN7tQtmsfdvwzooed407WrL25Tjhcy7BN
+         f1n9nTNGTabZA==
+To:     linux-kernel@vger.kernel.org
+Cc:     Victorien Molle <biche@biche.re>
+Subject: [PATCH] KVM: x86: Add support for basic RAPL (Running Average Power Limit) metrics
+Date:   Sun,  9 Jan 2022 19:23:17 +0100
+Message-Id: <20220109182317.1075762-1-biche@biche.re>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+Current KVM code handles two MSR registers,
+which are used to store RAPL values:
+    - MSR_RAPL_POWER_UNIT
+    - MSR_PKG_ENERGY_STATUS
 
-So, if dma_set_mask_and_coherent() succeeds, 'pci_using_dac' is known to be
-1.
+However, these two registers are currently not accessible for writing
+and always return 0.
+This patch enables the possibility to set these two MSR registers
+and get the written values from guest.
+It also adds support of the following MSR registers,
+used to store RAPL values:
+    - MSR_PKG_POWER_LIMIT
+    - MSR_AMD_RAPL_POWER_UNIT
+    - MSR_AMD_PKG_ENERGY_STATUS
 
-Simplify code and remove some dead code accordingly.
+Writing value into one of these MSR registers causes,
+if there are multiple vCPUs, the value to be saved for all active vCPUs.
 
-[1]: https://lkml.org/lkml/2021/6/7/398
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Signed-off-by: Victorien Molle <biche@biche.re>
 ---
- drivers/net/ethernet/intel/e1000e/netdev.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ arch/x86/include/asm/kvm_host.h |  5 +++++
+ arch/x86/kvm/vmx/pmu_intel.c    |  3 +++
+ arch/x86/kvm/x86.c              | 35 +++++++++++++++++++++++++++++++--
+ arch/x86/xen/pmu.c              |  6 ++++++
+ 4 files changed, 47 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index 635a95927e93..4f6ee5c44f75 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -7385,9 +7385,9 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	resource_size_t flash_start, flash_len;
- 	static int cards_found;
- 	u16 aspm_disable_flag = 0;
--	int bars, i, err, pci_using_dac;
- 	u16 eeprom_data = 0;
- 	u16 eeprom_apme_mask = E1000_EEPROM_APME;
-+	int bars, i, err;
- 	s32 ret_val = 0;
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 555f4de47ef2..56182daadf88 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -908,6 +908,11 @@ struct kvm_vcpu_arch {
+ #if IS_ENABLED(CONFIG_HYPERV)
+ 	hpa_t hv_root_tdp;
+ #endif
++
++	/* RAPL values */
++	u64 power_unit;
++	u64 power_limit;
++	u64 energy_status;
+ };
  
- 	if (ei->flags2 & FLAG2_DISABLE_ASPM_L0S)
-@@ -7401,17 +7401,11 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (err)
- 		return err;
+ struct kvm_lpage_info {
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 1b7456b2177b..e741f73d35ea 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -217,6 +217,9 @@ static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+ 	case MSR_CORE_PERF_GLOBAL_STATUS:
+ 	case MSR_CORE_PERF_GLOBAL_CTRL:
+ 	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
++	case MSR_RAPL_POWER_UNIT:
++	case MSR_PKG_POWER_LIMIT:
++	case MSR_PKG_ENERGY_STATUS:
+ 		ret = pmu->version > 1;
+ 		break;
+ 	default:
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e50e97ac4408..bc32b87a7989 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1359,6 +1359,9 @@ static const u32 msrs_to_save_all[] = {
+ 	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
+ 	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
+ 	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
++
++	MSR_RAPL_POWER_UNIT, MSR_PKG_POWER_LIMIT, MSR_PKG_ENERGY_STATUS,
++	MSR_AMD_RAPL_POWER_UNIT, MSR_AMD_PKG_ENERGY_STATUS,
+ };
  
--	pci_using_dac = 0;
- 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
--	if (!err) {
--		pci_using_dac = 1;
--	} else {
--		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
--		if (err) {
--			dev_err(&pdev->dev,
--				"No usable DMA configuration, aborting\n");
--			goto err_dma;
--		}
-+	if (err) {
-+		dev_err(&pdev->dev,
-+			"No usable DMA configuration, aborting\n");
-+		goto err_dma;
- 	}
+ static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_all)];
+@@ -3383,6 +3386,7 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
+ 	bool pr = false;
++	u16 it = 0;
+ 	u32 msr = msr_info->index;
+ 	u64 data = msr_info->data;
  
- 	bars = pci_select_bars(pdev, IORESOURCE_MEM);
-@@ -7547,10 +7541,8 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -3669,6 +3673,23 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			return 1;
+ 		vcpu->arch.msr_misc_features_enables = data;
+ 		break;
++	case MSR_RAPL_POWER_UNIT:
++	case MSR_AMD_RAPL_POWER_UNIT:
++		/* Apply the value on all vCPUs */
++		for (; it < vcpu->kvm->created_vcpus; ++it)
++			vcpu->kvm->vcpus[it]->arch.power_unit = data;
++		break;
++	case MSR_PKG_POWER_LIMIT:
++		/* Apply the value on all vCPUs */
++		for (; it < vcpu->kvm->created_vcpus; ++it)
++			vcpu->kvm->vcpus[it]->arch.power_limit = data;
++		break;
++	case MSR_PKG_ENERGY_STATUS:
++	case MSR_AMD_PKG_ENERGY_STATUS:
++		/* Apply the value on all vCPUs */
++		for (; it < vcpu->kvm->created_vcpus; ++it)
++			vcpu->kvm->vcpus[it]->arch.energy_status = data;
++		break;
+ 	default:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr))
+ 			return kvm_pmu_set_msr(vcpu, msr_info);
+@@ -3742,13 +3763,23 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	 * data here. Do not conditionalize this on CPUID, as KVM does not do
+ 	 * so for existing CPU-specific MSRs.
+ 	 */
+-	case MSR_RAPL_POWER_UNIT:
+ 	case MSR_PP0_ENERGY_STATUS:	/* Power plane 0 (core) */
+ 	case MSR_PP1_ENERGY_STATUS:	/* Power plane 1 (graphics uncore) */
+-	case MSR_PKG_ENERGY_STATUS:	/* Total package */
+ 	case MSR_DRAM_ENERGY_STATUS:	/* DRAM controller */
++		kvm_pmu_is_valid_msr(vcpu, msr_info->index);
+ 		msr_info->data = 0;
+ 		break;
++	case MSR_RAPL_POWER_UNIT:
++	case MSR_AMD_RAPL_POWER_UNIT:
++		msr_info->data = vcpu->arch.power_unit;
++		break;
++	case MSR_PKG_POWER_LIMIT:
++		msr_info->data = vcpu->arch.power_limit;
++		break;
++	case MSR_PKG_ENERGY_STATUS:	/* Total package */
++	case MSR_AMD_PKG_ENERGY_STATUS:
++		msr_info->data = vcpu->arch.energy_status;
++		break;
+ 	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+ 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
+ 			return kvm_pmu_get_msr(vcpu, msr_info);
+diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
+index e13b0b49fcdf..c3baaa34836b 100644
+--- a/arch/x86/xen/pmu.c
++++ b/arch/x86/xen/pmu.c
+@@ -157,6 +157,12 @@ static int is_intel_pmu_msr(u32 msr_index, int *type, int *index)
+ 		*type = MSR_TYPE_GLOBAL;
+ 		return true;
  
- 	netdev->priv_flags |= IFF_UNICAST_FLT;
++	case MSR_RAPL_POWER_UNIT:
++	case MSR_PKG_POWER_LIMIT:
++	case MSR_PKG_ENERGY_STATUS:
++		*type = MSR_TYPE_GLOBAL;
++		return true;
++
+ 	default:
  
--	if (pci_using_dac) {
--		netdev->features |= NETIF_F_HIGHDMA;
--		netdev->vlan_features |= NETIF_F_HIGHDMA;
--	}
-+	netdev->features |= NETIF_F_HIGHDMA;
-+	netdev->vlan_features |= NETIF_F_HIGHDMA;
- 
- 	/* MTU range: 68 - max_hw_frame_size */
- 	netdev->min_mtu = ETH_MIN_MTU;
+ 		if ((msr_index >= MSR_CORE_PERF_FIXED_CTR0) &&
 -- 
-2.32.0
+2.34.1
 

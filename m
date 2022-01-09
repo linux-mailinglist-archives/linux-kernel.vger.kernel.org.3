@@ -2,82 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44265488974
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A61D488978
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiAINAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:00:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42178 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiAINAm (ORCPT
+        id S235567AbiAINCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 08:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231394AbiAINCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:00:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 816D6B80C0A;
-        Sun,  9 Jan 2022 13:00:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5BFC36AEB;
-        Sun,  9 Jan 2022 13:00:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641733240;
-        bh=WtX0uHMrTl6GQCiIyE80DYzIRiuSy/mJPnIzH5+0T7g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2a03L2/+ZxRA+eL8HRnqm9eJPyfYoyV3/rU6rjiaB28Z6ZIKqynBXUlggwgudWMIJ
-         UxR4jDtERguJiV7KcO16Xmn0A8Qr7J+oSezdcBilH+9n8FOK4FLgEHpkCStPEwmch5
-         KB464ZLrUOxxV1c4QrkF6NsXN1fju8RfU6RJIOqo=
-Date:   Sun, 9 Jan 2022 14:00:37 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     aayush.a.agarwal@oracle.com
-Cc:     stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [External] : Re: [PATCH 4.14] phonet: refcount leak in
- pep_sock_accep
-Message-ID: <Ydrcdfc/ZUn2jCay@kroah.com>
-References: <20220107105332.61347-1-aayush.a.agarwal@oracle.com>
- <Ydgi0qF/7GwoCh96@kroah.com>
- <baa2a339-2917-fc6b-6cc5-c4174c20f533@oracle.com>
+        Sun, 9 Jan 2022 08:02:39 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD7DC06173F;
+        Sun,  9 Jan 2022 05:02:39 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id m4so1039648edb.10;
+        Sun, 09 Jan 2022 05:02:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I86LEEvrQ/QcdOpqixMeebdWSFgBbeMYSxutXt26E0g=;
+        b=fz8Jg6XfMGpzpdlC3drISYB7O5aPfYJP+pD330axQ93b32bKVlmOancdUiBXeUa+IG
+         dkde3+XzAdl6i9cWCKX9MxSUDjAK0GPWjEmOZYPcBDZBOgY/IiPOzj1J/U+HpHQwlSZA
+         O3LJHdftp1b+RLIfeiMRziy2yMsk0ALuRuezNk5xQxoYPztqh1lYjihLtseYjMRvfwwH
+         MKU9jpw+tG40CkiZhlLBCPWJlnDB+SWjKLLdDMfM+YmrmgH+bk7Iq98dosnIAV2J1nMU
+         7Vg3/pZaf+UH7ZjDUiYJZYGtR2fWEGrNWuRIBmda/28bLqoyU1046GaTWBjL0M0raODO
+         uEfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I86LEEvrQ/QcdOpqixMeebdWSFgBbeMYSxutXt26E0g=;
+        b=I76LcFvzfDDtiUc7bHDi/eXVWnLIWxfM5BK66vxq/nejfBrp+lrdrHx75dy+QXCbhy
+         S95fYtqc2+YYCsPL83iABZ/oHbXaORyl8NwqTiDWfufUAmADbCILiu+6C54f0CcLukgy
+         P6nucftcdPYd0pQFTQHnxkoekT2N3STMsp1zdV9L7TIDDbYScVxMUhv6JpNS8h7S8ykN
+         TtOVD1N3V6OkZ8HE0wcWvri91fu1l5RX1/BGtImV8Log/qiW9NS0msmMRI/phU5JgPvA
+         kHrNuywfmdoDx3e17FUA6WjqiXbhIU63R87xAFKtzbmFI1luCxkiCjZWUvFHpLJfNTIm
+         UA8A==
+X-Gm-Message-State: AOAM533QWO6X/lXfJHKmj4Gs1KEErVFdIrIrBDI2pndW7OCsSsLV9IAY
+        VDSEYcf32xfvNif/5KL398PsHUb6S/IEIxwP6eg=
+X-Google-Smtp-Source: ABdhPJxjELSLk5Z9rzw2AIT6D+g+7h7MuSM6BMs6aqHVYx9RCIJm+iK+Ok/msWIqu/m82mURNUlqRiO0QPD24K9j9q0=
+X-Received: by 2002:a17:906:e0d9:: with SMTP id gl25mr4934446ejb.44.1641733357745;
+ Sun, 09 Jan 2022 05:02:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <baa2a339-2917-fc6b-6cc5-c4174c20f533@oracle.com>
+References: <20220108205319.2046348-1-liambeguin@gmail.com> <20220108205319.2046348-10-liambeguin@gmail.com>
+In-Reply-To: <20220108205319.2046348-10-liambeguin@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 9 Jan 2022 15:02:01 +0200
+Message-ID: <CAHp75Vd-FOV7BL0VjhGLyC5fhYXbW3x-hC5J1VvMT9W3Kfc_0Q@mail.gmail.com>
+Subject: Re: [PATCH v12 09/16] iio: afe: rescale: fix accuracy for small
+ fractional scales
+To:     Liam Beguin <liambeguin@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 10:24:53PM +0530, aayush.a.agarwal@oracle.com wrote:
-> 
-> On 07/01/22 4:54 pm, Greg KH wrote:
-> > On Fri, Jan 07, 2022 at 02:53:32AM -0800, Aayush Agarwal wrote:
-> > > From: Hangyu Hua <hbh25y@gmail.com>
-> > > 
-> > > commit bcd0f9335332 ("phonet: refcount leak in pep_sock_accep")
-> > > upstream.
-> > > 
-> > > sock_hold(sk) is invoked in pep_sock_accept(), but __sock_put(sk) is not
-> > > invoked in subsequent failure branches(pep_accept_conn() != 0).
-> > > 
-> > > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> > > Link: https://urldefense.com/v3/__https://lore.kernel.org/r/20211209082839.33985-1-hbh25y@gmail.com__;!!ACWV5N9M2RV99hQ!Znc0Oy9gtZZ18UDMwcZiYrfjj4GUibhEq5WJZ44m6azDWCC1hrZpkFh9AmGOqqS94cqz-A$
-> > > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> > > Signed-off-by: Aayush Agarwal <aayush.a.agarwal@oracle.com>
-> > > ---
-> > >   net/phonet/pep.c | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > What about releases 5.15.y, 5.10.y, 5.4.y, and 4.19.y?  Is this also
-> > relevant for those trees?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> It's relevant for all currently supported stable releases: 4.4.y, 4.9.y,
-> 4.14.y, 4.19.y, 5.4.y, 5.10.y, 5.15.y . I missed adding the tag "Cc:
-> stable@viger.kernel.org #4.4+". Should I send the patch again?
+On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
+>
+> The approximation caused by integer divisions can be costly on smaller
+> scale values since the decimal part is significant compared to the
+> integer part. Switch to an IIO_VAL_INT_PLUS_NANO scale type in such
+> cases to maintain accuracy.
 
-No need, I've queued it up everywhere now, thanks!
+...
 
-greg k-h
+> +               tmp = 1 << *val2;
+
+Unfortunately, potential UB is still here. I think you missed a subtle
+detail in the implementation of BIT()/BIT_ULL(). Let's put it here:
+
+  #define BIT(nr) (UL(1) << (nr))
+
+where
+
+  #define UL(x) (_UL(x))
+  #define _UL(x) (_AC(x, UL))
+
+For non-assembler case
+
+  #define __AC(X,Y) (X##Y)
+  #define _AC(X,Y) __AC(X,Y)
+
+Now you may easily see the difference.
+
+...
+
+> +               rem2 = *val % (int)tmp;
+> +               *val = *val / (int)tmp;
+> +
+> +               *val2 = rem / (int)tmp;
+
+Hmm... You divide s64 by 10^9, which means that the maximum value can
+be ~10^10 / 2 (because 2^64-1 ~= 10^19), but this _might_ be bigger
+than 'int' can hold. Can you confirm that tmp can't be so big?
+
+-- 
+With Best Regards,
+Andy Shevchenko

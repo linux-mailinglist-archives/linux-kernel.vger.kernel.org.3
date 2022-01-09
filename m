@@ -2,103 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE427488997
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35128488999
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235659AbiAINYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:24:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49524 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235686AbiAINYk (ORCPT
+        id S235662AbiAIN0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 08:26:52 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:42931 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231201AbiAIN0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:24:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641734678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AZlBRd0JMxq9ZctAhfgPWRyXb0BQdSnupf+1wrqOpX0=;
-        b=e1ByI8QECwyHUUUG/z3tcqQYYm7Tcc+omDx6klHaJ9fPZSFmyf+LIGoFvLrpC9Zkg6IZoZ
-        y9EoXNzblbZQtAJwRbSBJqjSypiKAMPVFhRoECeu9UR20z/Y1nC2aUbauYwTltUnAVyUJ7
-        g4dA77ydMj7wNCtGfqkMzJvCQukLOxQ=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-ghvzuI7-Mre-lpOdgU-GaA-1; Sun, 09 Jan 2022 08:24:37 -0500
-X-MC-Unique: ghvzuI7-Mre-lpOdgU-GaA-1
-Received: by mail-oo1-f71.google.com with SMTP id z20-20020a4a8e54000000b002c632ba3a12so7593330ook.7
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 05:24:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AZlBRd0JMxq9ZctAhfgPWRyXb0BQdSnupf+1wrqOpX0=;
-        b=uFmHlYo8NSpaZl/a1cziRd7yvLoU/9E+Rp6hA328H8RUfNh+1/bcFQ+rAd2+AHTBOs
-         C8czbQopUetCE1ic0BYaqsIytrbqntAEFO5AuyeZRwcSvCBc/YG0QMK8sRdxwH96HwGZ
-         oaDKatMMIKQGTDKfPIozsiRNbyCA3uANezq29b0+vLLYJpS8R41Ij3qINJNN4c3vcoQO
-         29r8usktdvrZVb/81I2EabvCP1/jomattFkN3Je1AIkzf6uVxpnjO3/6TOBRnjXfxeAV
-         oomjg/P8C4jF1XqF2XCeUL7jcP+uBH12cVegXmh78KEFJyLSqbjJ+AgoVDUPj0l5yfpS
-         vn3w==
-X-Gm-Message-State: AOAM533nPTt/qKd9vBZTqy/vElEZqrxjAaS1CweuHXe6+mQELbbXoKR4
-        vPS3ucuccE049cdwV+ifFTyUvgerZ36g0OIPaqgKiRhFt1L0jqG0hzwzO9G9RAiq3iySqjK1u1r
-        QJ/Ee9lZZMtPJNbfpSeUPJR4o
-X-Received: by 2002:a05:6808:16a3:: with SMTP id bb35mr16188273oib.72.1641734676923;
-        Sun, 09 Jan 2022 05:24:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyRNNjtG5LHg2Okptt9Knjyucoxh60fPJHzQFLTjipnYG1hpu83IQxMw1yEfTI7lHDR08UpxA==
-X-Received: by 2002:a05:6808:16a3:: with SMTP id bb35mr16188253oib.72.1641734676704;
-        Sun, 09 Jan 2022 05:24:36 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id 4sm924228otl.26.2022.01.09.05.24.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 05:24:36 -0800 (PST)
-From:   trix@redhat.com
-To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com,
-        parav@nvidia.com, si-wei.liu@oracle.com, xieyongji@bytedance.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] vdpa/mlx5: simplfy error handler in mlx5_vdpa_dev_add()
-Date:   Sun,  9 Jan 2022 05:24:22 -0800
-Message-Id: <20220109132422.4047425-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 9 Jan 2022 08:26:51 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V1Il5dP_1641734775;
+Received: from fdadf40dcbca.tbsite.net(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V1Il5dP_1641734775)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 09 Jan 2022 21:26:48 +0800
+From:   Heyi Guo <guoheyi@linux.alibaba.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Heyi Guo <guoheyi@linux.alibaba.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Subject: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
+Date:   Sun,  9 Jan 2022 21:26:13 +0800
+Message-Id: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+The memory will be freed by the caller if transfer timeout occurs,
+then it would trigger kernel panic if the peer device responds with
+something after timeout and triggers the interrupt handler of aspeed
+i2c driver.
 
-The use of pfmdev is protected by two calls to is_zero_ether_add().
-The second call in the error handler can be replaced by
-checking if pfmdev was set as part of the earlier call.
+Set the msgs pointer to NULL to avoid invalid memory reference after
+timeout to fix this potential kernel panic.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
+
+-------
+
+Cc: Brendan Higgins <brendanhiggins@google.com>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Joel Stanley <joel@jms.id.au>
+Cc: Andrew Jeffery <andrew@aj.id.au>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-i2c@vger.kernel.org
+Cc: openbmc@lists.ozlabs.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-aspeed@lists.ozlabs.org
 ---
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-aspeed.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 37220f6db7ad7..2d38b8fe9305e 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -2530,7 +2530,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- {
- 	struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
- 	struct virtio_net_config *config;
--	struct mlx5_core_dev *pfmdev;
-+	struct mlx5_core_dev *pfmdev = NULL;
- 	struct mlx5_vdpa_dev *mvdev;
- 	struct mlx5_vdpa_net *ndev;
- 	struct mlx5_core_dev *mdev;
-@@ -2654,7 +2654,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- err_res:
- 	mlx5_vdpa_free_resources(&ndev->mvdev);
- err_mpfs:
--	if (!is_zero_ether_addr(config->mac))
-+	if (pfmdev)
- 		mlx5_mpfs_del_mac(pfmdev, config->mac);
- err_mtu:
- 	mutex_destroy(&ndev->reslock);
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 67e8b97c0c950..3ab0396168680 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+ 		spin_lock_irqsave(&bus->lock, flags);
+ 		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
+ 			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
++		/*
++		 * All the buffers may be freed after returning to caller, so
++		 * set msgs to NULL to avoid memory reference after freeing.
++		 */
++		bus->msgs = NULL;
+ 		spin_unlock_irqrestore(&bus->lock, flags);
+ 
+ 		return -ETIMEDOUT;
 -- 
-2.26.3
+2.17.1
 

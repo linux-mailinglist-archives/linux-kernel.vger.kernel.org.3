@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFB248882D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 07:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EBC48882F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 07:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbiAIGDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 01:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiAIGDL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 01:03:11 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131B3C06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 22:03:11 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id c71so28406188edf.6
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 22:03:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=KHcWV4zSsq2PqN20f8EeHPXMVayTO8KS5bdiyuIRLEE=;
-        b=k0fdWqEsgCpnEmUUMA9wJ0uzf9fHE1/FsTac0eUignUdtDFImgsmqxmzlkWNRj8TtF
-         2nKFNKPZvzlH2lwh30ZFxguHbecL538BJczRHNxN4dqC4DHrDPZpkofLIvHcHga9s29U
-         DCR4idEgo3QyJpV0eZVhp0Tx8Nuip+MfpWlGlE9fWmqwU4B5aWWl38G8zNWLI59leXvi
-         tRJw+yqYkHwT6EbiIkYyTcnTpAdL74mVtCS1Ow7zIRi9q+XnarzuXYp2BCzOjRGOuE0f
-         i8+l1YM/FQ7YzvMTaRr9NnJ81BwiDp+uX4Yss7Am1qSSWKV+lg+PygjAxXV9Dam89v9I
-         2Rgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=KHcWV4zSsq2PqN20f8EeHPXMVayTO8KS5bdiyuIRLEE=;
-        b=oRJIzh5yWwfrSNB6dsDr2sCcCqFMm23rQks9+Lr+yPP8uXcT0OYzkBg3ctiehqg6IZ
-         imaPBw/K+tQTagPhVo5t4YEsb5yQahphBwv6x3SuE7IhXORxyFbepmlmB5GaVVSaTM5+
-         kyfOl8epw28jisetFngzELxNbun2kjQsnsQ1s4lkqekYq+pI6YGphYmjK9cuDuzKUlqt
-         qmyrReeT+VZJtDth2WAfLebbfG0q4/dk2CCMVSLQvW5xvKvwMfk24ErNtbGh2s7M5uAl
-         YnwJxJWeTC6/o0YvZD4bhvMfMJCCNZnqBOf3ZsoLwTF1bs0lopsUnwb3geEtn97np74/
-         0jsg==
-X-Gm-Message-State: AOAM530rqf0FXBO3APrWt8VIGOgQ3DIe0BbkKOC60LXTdEpSO+xcbIDX
-        q5TlVwyuv6pGUBbXy4kFyLWWKu1kEk+WpKy6GPs=
-X-Google-Smtp-Source: ABdhPJxXR2mTk+bDicf93DtxBgrj0jbRJSmhoCnJUvtHO0/EGcBEpoV7M9yutlKZWZXQvXVKvRk1BWRGj1nWt97pTwE=
-X-Received: by 2002:a05:6402:7c6:: with SMTP id u6mr10863540edy.160.1641708189451;
- Sat, 08 Jan 2022 22:03:09 -0800 (PST)
-MIME-Version: 1.0
-Sender: fedexdiliveringcompany@gmail.com
-Received: by 2002:a50:248a:0:0:0:0:0 with HTTP; Sat, 8 Jan 2022 22:03:08 -0800 (PST)
-From:   Jackie Fowler <jackiefowler597@gmail.com>
-Date:   Sun, 9 Jan 2022 06:03:08 +0000
-X-Google-Sender-Auth: W0CfFOx1XIkiwx3HvlJMp8qP8Og
-Message-ID: <CAMzF8Fn0M5vRY8J_VTpuMMsc80CWcaXnnbqv4e5bhroOHmNT5A@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S235196AbiAIGFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 01:05:40 -0500
+Received: from mga12.intel.com ([192.55.52.136]:7587 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229960AbiAIGFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 01:05:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641708339; x=1673244339;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=PcEkNSTfdx04O272Wzze1eduouNaT4rvO4OOP/8Sqyk=;
+  b=nBr0dC5cMNb32oeg65R9vJtDMA6fOFzDzQ4Y4WSZxcbNXD7JZ+60uf2M
+   RAX14Pg3O+Fm0QA+123F10zMNclmUrVURwhVsWCZjop8fWXFrdhdH3yPL
+   PJ8i1iDT0zD/TO/4iq+rm4lwzlMomFH6XIahcfrBFyEcib1HpcJFkHoeX
+   c8P4EkXg0bVgdTraYc5h1mFzPrfc54OFKWnJAGoyv9TfGH3qyIv6OcTrn
+   KQ8ETKnOxMm72KwZNlHGBELL2fvaYPkFHLIlpDMhpD20p4tm0bp2lI3x8
+   NMPzcpqTmoAYqAQsEkzL+Lsg2Ba5LBNsDao8VDMENz3bxDcXEZLP/DScK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10221"; a="223048671"
+X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
+   d="scan'208";a="223048671"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2022 22:05:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,273,1635231600"; 
+   d="scan'208";a="471727718"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga003.jf.intel.com with ESMTP; 08 Jan 2022 22:05:38 -0800
+Received: from lcsmsx602.ger.corp.intel.com (10.109.210.11) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 8 Jan 2022 22:05:37 -0800
+Received: from lcsmsx602.ger.corp.intel.com (10.109.210.11) by
+ LCSMSX602.ger.corp.intel.com (10.109.210.11) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 9 Jan 2022 08:05:35 +0200
+Received: from lcsmsx602.ger.corp.intel.com ([10.109.210.11]) by
+ LCSMSX602.ger.corp.intel.com ([10.109.210.11]) with mapi id 15.01.2308.020;
+ Sun, 9 Jan 2022 08:05:35 +0200
+From:   "Winkler, Tomas" <tomas.winkler@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "Usyskin, Alexander" <alexander.usyskin@intel.com>
+Subject: RE: [PATCH] mei: me: Use dma_set_mask_and_coherent() and simplify
+ code
+Thread-Topic: [PATCH] mei: me: Use dma_set_mask_and_coherent() and simplify
+ code
+Thread-Index: AQHYBFwhZZz1KUNKp068RyPxOX5Wq6xaNL3g
+Date:   Sun, 9 Jan 2022 06:05:35 +0000
+Message-ID: <210864289c574c65b1c7e5ad5b913b9c@intel.com>
+References: <67ddcec656194153830684e6ff4513114e8859d6.1641624544.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <67ddcec656194153830684e6ff4513114e8859d6.1641624544.git.christophe.jaillet@wanadoo.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.22.254.132]
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gooday,
 
+>=20
+> Use dma_set_mask_and_coherent() instead of unrolling it with some
+> dma_set_mask()+dma_set_coherent_mask().
+>=20
+> Moreover, as stated in [1], dma_set_mask() with a 64-bit mask will never =
+fail
+> if dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+>=20
+> Simplify code and remove some dead code accordingly.
+>=20
+>=20
+> While at it, include directly <linux/dma-mapping.h> instead on relying on
+> indirect inclusion.
+>=20
+> [1]: https://lkml.org/lkml/2021/6/7/398
+>=20
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Tomas Winkler <tomas.winkler@intel.com>
+> ---
+>  drivers/misc/mei/pci-me.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/misc/mei/pci-me.c b/drivers/misc/mei/pci-me.c index
+> 3a45aaf002ac..a05cdb25d0c4 100644
+> --- a/drivers/misc/mei/pci-me.c
+> +++ b/drivers/misc/mei/pci-me.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/types.h>
+>  #include <linux/pci.h>
+> +#include <linux/dma-mapping.h>
+>  #include <linux/sched.h>
+>  #include <linux/interrupt.h>
+>=20
+> @@ -192,14 +193,7 @@ static int mei_me_probe(struct pci_dev *pdev,
+> const struct pci_device_id *ent)
+>  		goto end;
+>  	}
+>=20
+> -	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(64)) ||
+> -	    dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64))) {
+> -
+> -		err =3D dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+> -		if (err)
+> -			err =3D dma_set_coherent_mask(&pdev->dev,
+> -						    DMA_BIT_MASK(32));
+> -	}
+> +	err =3D dma_set_mask_and_coherent(&pdev->dev,
+> DMA_BIT_MASK(64));
+>  	if (err) {
+>  		dev_err(&pdev->dev, "No usable DMA configuration,
+> aborting\n");
+>  		goto end;
+> --
+> 2.32.0
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs.Fowler Jackie.a widow and citizen of
-Canada. I am suffering from a long time brain tumor, It has defiled
-all forms of medical treatment, and right now I have about a few
-months to leave, according to medical experts.
-
- The situation has gotten complicated recently with my inability to
-hear proper, am communicating with you with the help of the chief
-nurse herein the hospital, from all indication my conditions is really
-deteriorating and it is quite obvious that, according to my doctors
-they have advised me that I may not live too long, Because this
-illness has gotten to a very bad stage. I plead that you will not
-expose or betray this trust and confidence that I am about to repose
-on you for the mutual benefit of the orphans and the less privilege. I
-have some funds I inherited from my late husband, the sum of ($
-12,500,000.00 Dollars).Having known my condition, I decided to donate
-this fund to you believing that you will utilize it the way i am going
-to instruct herein.
- I need you to assist me and reclaim this money and use it for Charity
-works, for orphanages and gives justice and help to the poor, needy
-and widows says The Lord." Jeremiah 22:15-16.=E2=80=9C and also build schoo=
-ls
-for less privilege that will be named after my late husband if
-possible and to promote the word of God and the effort that the house
-of God is maintained. I do not want a situation where this money will
-be used in an ungodly manner. That's why I'm taking this decision. I'm
-not afraid of death, so I know where I'm going.
- I accept this decision because I do not have any child who will
-inherit this money after I die. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
-I'm waiting for your immediate reply.
-May God Bless you,
-Best Regards.
-Mrs.Jackie Fowler

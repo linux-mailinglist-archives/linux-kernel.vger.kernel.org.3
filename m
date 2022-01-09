@@ -2,380 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5C9488C90
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 22:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722B1488C93
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 22:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237125AbiAIVeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 16:34:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40075 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237113AbiAIVeg (ORCPT
+        id S237138AbiAIVgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 16:36:44 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62888 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233873AbiAIVgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 16:34:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641764075;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RZo/mS1YRUkF0P0IR1ox6IJGta7I0Xu80Y6iLk/SeCY=;
-        b=hWYQaF0wF1AElLW/5ZY03uVNvB6Ko4dG7PsSL7bOHnj4JZ81REEr/O9sJjQOLcR+x8wP+n
-        ad5lyFr4N51sZWg3k74TEPrxuZzxueheRHNlFnTEdkPwIsvwlGa0mkEnHz77mtXDKYfQHN
-        Ji87t6+N0L5i5K68K1XLqvODab4+Uv0=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-k6Rmc6v_NSGmezUUszJemA-1; Sun, 09 Jan 2022 16:34:34 -0500
-X-MC-Unique: k6Rmc6v_NSGmezUUszJemA-1
-Received: by mail-ot1-f69.google.com with SMTP id t17-20020a0568301e3100b0055c78bc02a2so2280022otr.19
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 13:34:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=RZo/mS1YRUkF0P0IR1ox6IJGta7I0Xu80Y6iLk/SeCY=;
-        b=TeSQGhNirXO1/cgyI5GtfqrHuPQ/5lZ+xn/hnYY4BDjLC+EykkOF0sQagvdC2iuIbY
-         X3/OZ/lc22PnB1qa0jHHBzsU1svVRN0OAKeuVdUlbAl4JrVNbeVwYCx97L0lLjz9NgOm
-         Pc9CHz7Aixr3Ip/heq4ScgEZLvEqPNdMH01+pOcP2gX328N+zcf30nBtP6wEfI4pqhDm
-         NWdkVkyqwhJQ9lMLgfdd0BaaBFwHJl7OMnLQRFQp2H2DTL9wM0YYh0l1p4MRdaNBgqU1
-         Mg4IugNQpK2wCWjF41M1m9Zq4ssTqsFae1n6hlzJ/3O+gCv6+1alBqTcLmH0bOWozw54
-         wYig==
-X-Gm-Message-State: AOAM533EUXca/Hbs4fJanOSg67Jkj2kJ4aKcKlm8hZ4onjikAU/sgDzy
-        wF6wVd0QwGgEiObUwsuN9hyQxeuQ+h9/cx9DMKVSZu/jDPeF6GNaFTShzFbh1x8DmnJoQKkE29b
-        EejXHTYNRbibeMIQ8Fbk+XGuV
-X-Received: by 2002:a05:6808:4d0:: with SMTP id a16mr17025208oie.93.1641764073388;
-        Sun, 09 Jan 2022 13:34:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz6flItpOqFgKh/7DikndT5+yS3dj5mWAEWfeDZYr73HFd7brf1kqyWY3TBUMmvjXi142tYnQ==
-X-Received: by 2002:a05:6808:4d0:: with SMTP id a16mr17025202oie.93.1641764073176;
-        Sun, 09 Jan 2022 13:34:33 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id i2sm786529oii.55.2022.01.09.13.34.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 13:34:32 -0800 (PST)
-Subject: Re: [PATCH V4 XRT Alveo Infrastructure 5/5] fpga: xrt: management
- physical function driver
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, dwmw2@infradead.org,
-        Max Zhen <max.zhen@xilinx.com>
-References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
- <20220105225013.1567871-6-lizhi.hou@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <bb959aab-4de0-3e47-8ed8-761ae80e8ec0@redhat.com>
-Date:   Sun, 9 Jan 2022 13:34:30 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 9 Jan 2022 16:36:43 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209G6t30019537;
+        Sun, 9 Jan 2022 21:36:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=bjVFy4e/dTyFvJDD8SHxBSGEDpnz2rkKYHQyHr2XUKs=;
+ b=bn/MX7bP9erQgY6bF1a2xNNxpyV3f/62tPXtqB+Bd+SCbgRrRs4m0B6/ykgGQLfAU+99
+ BlEUgERYme2glWwClOjZIDQf7ej09cTu9IZWzyfz25+/4QjrqG/9iG7/l6JBihmxQObv
+ NNY1VOyDLu3ebfhFkfmlzVxLqciC+02RxcuHCRaeV5GocnAwAVPKbPAvvf19cAzMEwnW
+ frV338+/87uGtyoxjQhSrSadEWwPCvDjOckN1HGtCVY07P3Rf/kwzcQHZF2D90RTpg6r
+ aPOXiABwg1eKx7Ch6wC6YiSmWpJWmqAHAiiqhzjlgVD7cuiDiD7FYOoh3ZMuuoWbfNan eA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dfm044nxy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 21:36:41 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 209LQBhH005785;
+        Sun, 9 Jan 2022 21:36:41 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dfm044nxq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 21:36:40 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 209LXn2C028281;
+        Sun, 9 Jan 2022 21:36:39 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3df1vhxmug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 09 Jan 2022 21:36:39 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 209LaZV447186382
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 9 Jan 2022 21:36:35 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C02DFA405F;
+        Sun,  9 Jan 2022 21:36:35 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22FD6A4054;
+        Sun,  9 Jan 2022 21:36:35 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.37.42])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Sun,  9 Jan 2022 21:36:35 +0000 (GMT)
+Date:   Sun, 9 Jan 2022 22:36:32 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
+        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v17 09/15] s390/vfio-ap: allow hot plug/unplug of AP
+ resources using mdev device
+Message-ID: <20220109223632.03830576.pasic@linux.ibm.com>
+In-Reply-To: <20211021152332.70455-10-akrowiak@linux.ibm.com>
+References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
+        <20211021152332.70455-10-akrowiak@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20220105225013.1567871-6-lizhi.hou@xilinx.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: L_UdoSJFgxHFImM8OJwzbiPUdR1OaNEa
+X-Proofpoint-ORIG-GUID: dJrNuTbFu9vwAuGtbs6S_dPbAi-AvYa-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-09_10,2022-01-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 priorityscore=1501 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201090156
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 21 Oct 2021 11:23:26 -0400
+Tony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-On 1/5/22 2:50 PM, Lizhi Hou wrote:
-> The PCIE device driver which attaches to management function on Alveo
-> devices. It instantiates one or more partition. Each partition consists
-> a set of hardward endpoints. A flat device tree is associated with each
-> partition. The first version of this driver uses test version flat device
-> tree and call xrt lib API to unflatten it.
->
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> ---
->   drivers/fpga/Makefile             |   1 +
->   drivers/fpga/xrt/Kconfig          |   1 +
->   drivers/fpga/xrt/mgmt/Kconfig     |  14 +++
->   drivers/fpga/xrt/mgmt/Makefile    |  16 +++
->   drivers/fpga/xrt/mgmt/dt-test.dts |  12 +++
->   drivers/fpga/xrt/mgmt/dt-test.h   |  15 +++
->   drivers/fpga/xrt/mgmt/xmgmt-drv.c | 158 ++++++++++++++++++++++++++++++
->   7 files changed, 217 insertions(+)
->   create mode 100644 drivers/fpga/xrt/mgmt/Kconfig
->   create mode 100644 drivers/fpga/xrt/mgmt/Makefile
->   create mode 100644 drivers/fpga/xrt/mgmt/dt-test.dts
->   create mode 100644 drivers/fpga/xrt/mgmt/dt-test.h
->   create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-drv.c
->
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 5bd41cf4c7ec..544e2144878f 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -52,3 +52,4 @@ obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
->   
->   # XRT drivers for Alveo
->   obj-$(CONFIG_FPGA_XRT_LIB)		+= xrt/lib/
-> +obj-$(CONFIG_FPGA_XRT_XMGMT)		+= xrt/mgmt/
-> diff --git a/drivers/fpga/xrt/Kconfig b/drivers/fpga/xrt/Kconfig
-> index 04c3bb5aaf4f..50422f77c6df 100644
-> --- a/drivers/fpga/xrt/Kconfig
-> +++ b/drivers/fpga/xrt/Kconfig
-> @@ -4,3 +4,4 @@
->   #
->   
->   source "drivers/fpga/xrt/lib/Kconfig"
-> +source "drivers/fpga/xrt/mgmt/Kconfig"
-> diff --git a/drivers/fpga/xrt/mgmt/Kconfig b/drivers/fpga/xrt/mgmt/Kconfig
-> new file mode 100644
-> index 000000000000..a978747482be
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Xilinx XRT FPGA device configuration
-> +#
-> +
-> +config FPGA_XRT_XMGMT
-> +	tristate "Xilinx Alveo Management Driver"
-> +	depends on FPGA_XRT_LIB
-> +	select FPGA_BRIDGE
-> +	select FPGA_REGION
-> +	help
-> +	  Select this option to enable XRT PCIe driver for Xilinx Alveo FPGA.
-> +	  This driver provides interfaces for userspace application to access
-> +	  Alveo FPGA device.
-> diff --git a/drivers/fpga/xrt/mgmt/Makefile b/drivers/fpga/xrt/mgmt/Makefile
-> new file mode 100644
-> index 000000000000..c5134bf71cca
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/Makefile
-> @@ -0,0 +1,16 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2020-2022 Xilinx, Inc. All rights reserved.
-> +#
-> +# Authors: Sonal.Santan@xilinx.com
-> +#
-> +
-> +FULL_XRT_PATH=$(srctree)/$(src)/..
-> +
-> +obj-$(CONFIG_FPGA_XRT_LIB) += xrt-mgmt.o
-> +
-> +xrt-mgmt-objs :=		\
-> +	xmgmt-drv.o		\
-> +	dt-test.dtb.o
-> +
-> +ccflags-y := -I$(FULL_XRT_PATH)/include
-> diff --git a/drivers/fpga/xrt/mgmt/dt-test.dts b/drivers/fpga/xrt/mgmt/dt-test.dts
-> new file mode 100644
-> index 000000000000..68dbcb7fd79d
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/dt-test.dts
-> @@ -0,0 +1,12 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/dts-v1/;
-> +
-> +/ {
-> +	compatible = "xlnx,alveo-partition", "simple-bus";
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +	pr_isolate_ulp@0,41000 {
-> +		compatible = "xlnx,alveo-pr-isolation";
-> +		reg = <0x0 0x41000 0x0 0x1000>;
-> +	};
-> +};
-> diff --git a/drivers/fpga/xrt/mgmt/dt-test.h b/drivers/fpga/xrt/mgmt/dt-test.h
-> new file mode 100644
-> index 000000000000..6ec4203afbd2
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/dt-test.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Lizhi Hou <lizhih@xilinx.com>
-> + */
-> +
-> +#ifndef _DT_TEST_H_
-> +#define _DT_TEST_H_
-> +
-> +extern u8 __dtb_dt_test_begin[];
-> +extern u8 __dtb_dt_test_end[];
-these externs are also in lib-drv.h, this could be a duplicate file
-> +
-> +#endif	/* _DT_TEST_H_ */
-> diff --git a/drivers/fpga/xrt/mgmt/xmgmt-drv.c b/drivers/fpga/xrt/mgmt/xmgmt-drv.c
-> new file mode 100644
-> index 000000000000..87abe5b86e0b
-> --- /dev/null
-> +++ b/drivers/fpga/xrt/mgmt/xmgmt-drv.c
-> @@ -0,0 +1,158 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Xilinx Alveo Management Function Driver
-> + *
-> + * Copyright (C) 2020-2022 Xilinx, Inc.
-> + *
-> + * Authors:
-> + *	Cheng Zhen <maxz@xilinx.com>
-> + *	Lizhi Hou <lizhih@xilinx.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/aer.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/delay.h>
-> +#include "xpartition.h"
-> +#include "dt-test.h"
-> +
-> +#define XMGMT_MODULE_NAME	"xrt-mgmt"
-> +
-> +#define XMGMT_PDEV(xm)		((xm)->pdev)
-> +#define XMGMT_DEV(xm)		(&(XMGMT_PDEV(xm)->dev))
-> +#define xmgmt_err(xm, fmt, args...)	\
-> +	dev_err(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
-> +#define xmgmt_warn(xm, fmt, args...)	\
-> +	dev_warn(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
-> +#define xmgmt_info(xm, fmt, args...)	\
-> +	dev_info(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
-> +#define xmgmt_dbg(xm, fmt, args...)	\
-> +	dev_dbg(XMGMT_DEV(xm), "%s: " fmt, __func__, ##args)
-> +#define XMGMT_DEV_ID(_pcidev)			\
-> +	({ typeof(_pcidev) (pcidev) = (_pcidev);	\
-> +	((pci_domain_nr((pcidev)->bus) << 16) |	\
-> +	PCI_DEVID((pcidev)->bus->number, (pcidev)->devfn)); })
-> +
-> +#define XRT_MAX_READRQ		512
-> +
-> +/* PCI Device IDs */
-> +#define PCI_DEVICE_ID_U50		0x5020
-> +static const struct pci_device_id xmgmt_pci_ids[] = {
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_XILINX, PCI_DEVICE_ID_U50), }, /* Alveo U50 */
-> +	{ 0, }
-> +};
-> +
-> +struct xmgmt {
-> +	struct pci_dev *pdev;
-> +	void *base_partition;
-> +
-remove empty nl
-> +	bool ready;
-> +};
-> +
-> +static int xmgmt_config_pci(struct xmgmt *xm)
-> +{
-> +	struct pci_dev *pdev = XMGMT_PDEV(xm);
-> +	int rc;
-> +
-> +	rc = pcim_enable_device(pdev);
-> +	if (rc < 0) {
-> +		xmgmt_err(xm, "failed to enable device: %d", rc);
-> +		return rc;
-> +	}
-> +
-> +	rc = pci_enable_pcie_error_reporting(pdev);
-> +	if (rc)
-> +		xmgmt_warn(xm, "failed to enable AER: %d", rc);
-> +
-> +	pci_set_master(pdev);
-> +
-> +	rc = pcie_get_readrq(pdev);
-> +	if (rc > XRT_MAX_READRQ)
-> +		pcie_set_readrq(pdev, XRT_MAX_READRQ);
-> +	return 0;
-> +}
-> +
-> +static int xmgmt_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> +{
-> +	struct xrt_partition_range ranges[PCI_NUM_RESOURCES];
-> +	struct xrt_partition_info xp_info = { 0 };
-> +	struct device *dev = &pdev->dev;
-> +	int ret, i, idx = 0;
-> +	struct xmgmt *xm;
-> +
-> +	xm = devm_kzalloc(dev, sizeof(*xm), GFP_KERNEL);
-> +	if (!xm)
-> +		return -ENOMEM;
-> +	xm->pdev = pdev;
-> +	pci_set_drvdata(pdev, xm);
-> +
-> +	ret = xmgmt_config_pci(xm);
-> +	if (ret)
-> +		goto failed;
-> +
-> +	for (i = 0; i < PCI_NUM_RESOURCES; i++) {
-> +		if (pci_resource_len(pdev, i) > 0) {
-> +			ranges[idx].bar_idx = i;
-> +			ranges[idx].base = pci_resource_start(pdev, i);
-> +			ranges[idx].size = pci_resource_len(pdev, i);
-> +			idx++;
-> +		}
-> +	}
-> +	xp_info.num_range = idx;
-> +	xp_info.ranges = ranges;
-> +	xp_info.fdt = __dtb_dt_test_begin;
-> +	xp_info.fdt_len = (u32)(__dtb_dt_test_end - __dtb_dt_test_begin);
-> +	ret = xrt_partition_create(&pdev->dev, &xp_info, &xm->base_partition);
-> +	if (ret)
-> +		goto failed;
-> +
-> +	xmgmt_info(xm, "%s started successfully", XMGMT_MODULE_NAME);
-> +	return 0;
-> +
-> +failed:
-> +	if (xm->base_partition)
+> Keep in mind that the kvm->lock must be taken outside of the
+> matrix_mdev->lock to avoid circular lock dependencies (i.e., a lockdep
+> splat). This will necessitate taking the matrix_dev->guests_lock in order
+> to find the guest(s) in the matrix_dev->guests list to which the affected
+> APQN(s) may be assigned. The kvm->lock can then be taken prior to the
+> matrix_dev->lock and the APCB plugged into the guest without any problem.
 
-This if-check and xrt_partition can be removed.
+IMHO correct and sane locking is one of the key points we have to
+resolve. Frankly, I'm having trouble understanding the why behind some
+of your changes, compared to v16, and I suspect that looking for a good
+locking scheme might have played a role.
 
-xm->base_partition is only set when xrt_partition_create is successful
+In the beginning, I was not very keen on taking the kvm->lock first
+and the matrix_dev->lock, but the more I think about it the more I
+become convinced that this is probably the simplest way to resolve the
+problem in a satisfactory manner. I don't like the idea of
+hogging the kvm->lock and potentially stalling out some core kvm code
+because there is contention on matrix_dev->lock. And it is kind of up to
+the user-space and the guests, how much pressure is put on the
+matrix_dev->lock. And I'm still worried about that, but when I went
+through the alternatives, my mood turned form bad to worse. Because of
+that, I'm fine with this solution, provided some of the KVM/s390
+maintainers ack it as well. I don't feel comfortable making a call on
+this alone.
 
-> +		xrt_partition_destroy(xm->base_partition);
-> +	pci_set_drvdata(pdev, NULL);
-> +	return ret;
-> +}
-> +
-> +static void xmgmt_remove(struct pci_dev *pdev)
-> +{
-> +	struct xmgmt *xm = pci_get_drvdata(pdev);
-> +
-> +	xrt_partition_destroy(xm->base_partition);
-> +	pci_disable_pcie_error_reporting(xm->pdev);
-> +	xmgmt_info(xm, "%s cleaned up successfully", XMGMT_MODULE_NAME);
-> +}
-> +
-> +static struct pci_driver xmgmt_driver = {
-> +	.name = XMGMT_MODULE_NAME,
-> +	.id_table = xmgmt_pci_ids,
-> +	.probe = xmgmt_probe,
-> +	.remove = xmgmt_remove,
-> +};
-> +
-> +static int __init xmgmt_init(void)
-> +{
-> +	int res = 0;
+That said, let me also sum up my thoughts on alternatives and
+non-alternatives, hopefully for the benefit of other reviewers.
 
-This is a dead assignment, keep if you want.
+1) I deeply regret that I used to argue against handling PQAP in
+userspace with an ioctl as Pierre originally proposed. I was unaware of
+the kvm->lock vcpu->lock locking order. Back then we didn't use to
+have that sequence, but the rule was already there. I guess we could
+still go back to that scheme of handling PQAP if QEMU were to support
+it, and thus break the circle, but that would result in a very ugly
+dependency (we would need QEMU support for dynamic, and we would have
+to handle the case of an old QEMU). Technically it is still possible, but
+very ugly.
+2) I've contemplated if it is possible to simulate the userspace exit
+and re-entry via ioctl in KVM. But looking at the code, it does not
+look like a sane option to me.
+3) I also considered using a read-write lock for matrix_dev->lock. In
+theory a read-write lock that favors reads in a sense that a steady
+stream of readers can starve the writers would work. But rwsem can't be
+used in this situation because rwsem is fair, in a sense that a waiting
+writers may effectively block readers that try to acquire the lock while
+the lock is held as a read lock. So while rwsem in practice does allow
+for more parallelism regarding lock dependency circles it does not
+provide any benefits over a mutex.
+4) I considered srcu as well. But rcu is a very different beast and does
+not seem to be a great fit for what we are trying to do here. We are
+not not fine with working with a stale copy of the matrix in most of the
+situations.
+5) I also contemplated, if relaxing the mutual exclusion is possible.
+PQAP only needs the CRYCB matrix to check whether the queue is in the
+config or not. So maybe we could get away without taking the
+matrix_dev->lock and doing separate locking for the queue in question,
+and instead of delaying any updates to the CRYCB while processing AQIC,
+we could just work with whatever we see in the CRYCB. Since the setting
+up of the interrupts is asynchronous with respect to the instruction
+requesting it (PQAP/AQIC) and the CRYCB masks are relevant in the
+instruction context... So I was thinking: if we were to introduce a
+separate lock for the AQIC state, and find the queue without taking
+the matrix_dev->lock, we could actually process the PQAP/AQIC without
+the matrix_dev->lock. But then because we would have vcpu->lock -->
+vfio_ap_queue->lock, we would have to avoid ending up with a circle
+on the cleanup path, and also avoid races on the cleanup path. I'm not
+sure how tricky that would end up being, if at all possible.
+6) We could practically implement that unfair read-write lock with
+a mutex and condition variables (and a waitqueue), but that wouldn't
+simplify things either. Still if we want to avoid taking kvm->lock
+before taking the vfio_ap lock, it may be the most straight forward
+alternative.
 
-Tom
+At the end let me also state, that my understanding of some of the
+details is still incomplete.
 
-> +
-> +	res = pci_register_driver(&xmgmt_driver);
-> +	if (res)
-> +		return res;
-> +
-> +	return 0;
-> +}
-> +
-> +static __exit void xmgmt_exit(void)
-> +{
-> +	pci_unregister_driver(&xmgmt_driver);
-> +}
-> +
-> +module_init(xmgmt_init);
-> +module_exit(xmgmt_exit);
-> +
-> +MODULE_DEVICE_TABLE(pci, xmgmt_pci_ids);
-> +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
-> +MODULE_DESCRIPTION("Xilinx Alveo management function driver");
-> +MODULE_LICENSE("GPL v2");
+Regards,
+Halil
+
+
 

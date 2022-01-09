@@ -2,104 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24291488753
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 02:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A848488763
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 03:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233704AbiAIBsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 20:48:05 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31874 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231803AbiAIBsD (ORCPT
+        id S235090AbiAICq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 21:46:56 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:54232 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232210AbiAICqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 20:48:03 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 209126Ku014139;
-        Sun, 9 Jan 2022 01:47:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=OZR+ah/EEcHp0R5Lc27Qcjl4B+yDvahQO8yI+JoAnaY=;
- b=CaJKfgJoNxcxjdSBCN/yA+6gCE5OoxksgVVBRk8FRDpwf3Apy5AQmtOu1GTgmpsSwayi
- uZ66G5c8YkPKL/XcpfUZZGvF/PMOKxuHHrNkD5uiEnGa0cwzKjn0XwPeKhgBX0fbCYz6
- hX/zbZf8cEhlg6FMLs6sPwCTvmm46duOrcC3mDBN56bn7rPHBRpmqGJp8L6wh/6imZkf
- kPCNtW6rs42HbNhc1oMSNS/QHuo61hXMO9xv9+gEjmy3c6SEjna1It1iwcrZtYgbQSPZ
- hye0EBvneOQFlMhcni6zMhipDSWNjOmXP/miQWQDlM8sU4llE7FEUy8iwA7ODhbMDIqy ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmpm10c0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 01:47:29 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2091lTGo012003;
-        Sun, 9 Jan 2022 01:47:29 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmpm10be-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 01:47:29 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2091lPVr026565;
-        Sun, 9 Jan 2022 01:47:26 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3df1vhunaf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 09 Jan 2022 01:47:26 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2091lOn430802382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 9 Jan 2022 01:47:24 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3BDEE11C050;
-        Sun,  9 Jan 2022 01:47:24 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3CA5011C04C;
-        Sun,  9 Jan 2022 01:47:22 +0000 (GMT)
-Received: from sig-9-65-90-30.ibm.com (unknown [9.65.90.30])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  9 Jan 2022 01:47:22 +0000 (GMT)
-Message-ID: <2aa9e4b290424c869afe983ed63b5a0c4d12df36.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 8/8] integrity: Only use machine keyring when
- uefi_check_trust_mok_keys is true
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        keescook@chromium.org, torvalds@linux-foundation.org,
-        weiyongjun1@huawei.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Date:   Sat, 08 Jan 2022 20:47:21 -0500
-In-Reply-To: <YdoQbKD/jJompy6I@iki.fi>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
-         <20220105235012.2497118-9-eric.snowberg@oracle.com>
-         <YdoQbKD/jJompy6I@iki.fi>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Sat, 8 Jan 2022 21:46:55 -0500
+X-UUID: 76def63b6d2841baa0155eb7c3a2a142-20220109
+X-UUID: 76def63b6d2841baa0155eb7c3a2a142-20220109
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 474611172; Sun, 09 Jan 2022 10:46:51 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sun, 9 Jan 2022 10:46:50 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 9 Jan 2022 10:46:49 +0800
+Message-ID: <214831c674c23d6733d372b5970d8c6754d55b1d.camel@mediatek.com>
+Subject: Re: [PATCH v3 26/33] iommu/mediatek: Add mtk_iommu_bank_data
+ structure
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>, <chao.hao@mediatek.com>,
+        <yen-chang.chen@mediatek.com>
+Date:   Sun, 9 Jan 2022 10:46:49 +0800
+In-Reply-To: <5ac9dd6b-43cd-0f76-eb34-906ab84196c1@collabora.com>
+References: <20210923115840.17813-1-yong.wu@mediatek.com>
+         <20210923115840.17813-27-yong.wu@mediatek.com>
+         <5ac9dd6b-43cd-0f76-eb34-906ab84196c1@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9oUeFJysa5sv7YWHrbFnSWMq5XgGhiSC
-X-Proofpoint-ORIG-GUID: 5zwOrCfCPgD-ovmE2lzA6sA08F2T0i_0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-08_09,2022-01-07_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 priorityscore=1501 phishscore=0
- malwarescore=0 bulkscore=0 clxscore=1011 impostorscore=0 mlxscore=0
- spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201090008
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-01-09 at 00:30 +0200, Jarkko Sakkinen wrote:
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Hi AngeloGioacchino,
+
+Thanks very much for reviewing whole the patchset.
+
+On Tue, 2022-01-04 at 16:53 +0100, AngeloGioacchino Del Regno wrote:
+> Il 23/09/21 13:58, Yong Wu ha scritto:
+> > Prepare for supporting multi-banks for the IOMMU HW, No functional
+> > change.
+> > 
+> > Add a new structure(mtk_iommu_bank_data) for each a bank. Each a
+> > bank have
+> > the independent HW base/IRQ/tlb-range ops, and each a bank has its
+> > special
+> > iommu-domain(independent pgtable), thus, also move the domain
+> > information
+> > into it.
+> > 
+> > In previous SoC, we have only one bank which could be treated as
+> > bank0(
+> > bankid always is 0 for the previous SoC).
+> > 
+> > After adding this structure, the tlb operations and irq could use
+> > bank_data as parameter.
+> > 
+> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > ---
+
+[...]
+  
+> > -struct mtk_iommu_data {
+> > +struct mtk_iommu_bank_data {
+> >   	void __iomem			*base;
+> >   	int				irq;
+> > +	unsigned int			id;
+> > +	struct device			*pdev;
 > 
-> Mimi, have you tested these patches already?
+> `pdev` may be a bit misleading, as it's conventionally read as
+> "platform device"
+> and not as the intended "parent device"... perhaps calling it
+> parent_dev would be
+> more appropriate.
 
-Sorry, not yet this version this of the patch set.  Planning to test
-shortly.
+will rename it. Thanks.
 
-Mimi
+> 
+> > +	struct mtk_iommu_data		*pdata;   /* parent data */
+> 
+> Same here, pdata -> parent_data
+
+Will fix.
+
+> 
+> > +	spinlock_t			tlb_lock; /* lock for tlb range
+> > flush */
+> > +	struct mtk_iommu_domain		*m4u_dom; /* Each bank has
+> > a domain */
+> > +};
+> > +
+> > +struct mtk_iommu_data {
+> > +	union {
+> > +		struct { /* only for gen1 */
+> > +			void __iomem		*base;
+> > +			int			irq;
+> > +			struct mtk_iommu_domain	*m4u_dom;
+> > +		};
+> > +
+> > +		/* only for gen2 that support multi-banks */
+> > +		struct mtk_iommu_bank_data	bank[MTK_IOMMU_BANK_MAX];
+> > +	};
+> 
+> Sorry, but I really don't like this union... please, update
+> mtk_iommu_v1 to always
+> use bank[0] or, more appropriately, dynamically allocate the bank
+> array with a
+> devm_kzalloc call (as to not waste memory on platforms with less
+> available banks).
+> 
+> In that case, you would have...
+> 
+> >   	struct device			*dev;
+> >   	struct clk			*bclk;
+> >   	phys_addr_t			protect_base; /* protect memory
+> > base */
+> >   	struct mtk_iommu_suspend_reg	reg;
+> > -	struct mtk_iommu_domain		*m4u_dom;
+> >   	struct iommu_group		*m4u_group[MTK_IOMMU_GROUP_MAX];
+> >   	bool                            enable_4GB;
+> > -	spinlock_t			tlb_lock; /* lock for tlb range
+> > flush */
+> 
+> 	struct mtk_iommu_bank_data	*banks;
+> 	u8				num_banks;
+> 
+> ... where `num_banks` gets copied from the same in
+> mtk_iommu_plat_data, defined
+> for each SoC, and where `banks` is dynamically allocated in
+> mtk_iommu.c and
+> mtk_iommu_v1.c's probe() callback.
+
+Thanks for this idea. I will try this to see if the code will be too
+complicate after changing this. If it is, I will use bank[0] always in
+mtk_iommu_v1, this looks simpler.
+
+> 
+> >   
+> >   	struct iommu_device		iommu;
+> >   	const struct mtk_iommu_plat_data *plat_data;
+> > 
+> 
+> 
 

@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC9B488B71
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F71488B72
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 18:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236300AbiAIRsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 12:48:43 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:48836 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbiAIRsm (ORCPT
+        id S236333AbiAIRtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 12:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236320AbiAIRtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 12:48:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Ta5u1tMcVsHVM2qpoxG/0Wgw3v/CyJYs5Hd40n8EmEo=; b=ilcLSD15Roeid0rJLBvlCL63wR
-        z9ySoC3aSX89Dut632+zJEkhvCtxLAYHzeuyrg6JBb67WmI39kJQREy/MeskUcEa/qPCRSTboOfQz
-        mFDcP0H0TVgYbbj1N10y21vN/jHGuR2PHlxodCmp8YGf7LMqY2zEissNq66kjnXQETF4xLxTERB6o
-        4gbEkmHs9CQm3obgSPq2kpl7tjQR0iXg9y1T54yiCA5LlvO5XMC8fUJFh3YYYUz63OaDFSUw58MCZ
-        pjA0sSL0zxLE84RRoOGWDsQzCelQjbbRGmd2eThS8ooFULja1Mu9m/8SMNLLBDf5ELsCIU1HtCB66
-        VYkzjDwg==;
-Received: from [165.90.113.117] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1n6cJ4-0000Zy-Fy; Sun, 09 Jan 2022 18:48:38 +0100
-Date:   Sun, 9 Jan 2022 16:48:17 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     dave.stevenson@raspberrypi.com, emma@anholt.net, airlied@linux.ie,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        eric@anholt.net
-Subject: Re: [PATCH v2] drm/v3d: Fix PM disable depth imbalance in
- v3d_platform_drm_probe
-Message-ID: <20220109174817.drma7zfckeywvndc@mail.igalia.com>
-References: <CAPY8ntAdknutH=OmV1dWPbez1ZqLgaOj-BoQQkZAu0WbhbE6nQ@mail.gmail.com>
- <20220106124657.32737-1-linmq006@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ee43ywlavjqsjxzn"
-Content-Disposition: inline
-In-Reply-To: <20220106124657.32737-1-linmq006@gmail.com>
+        Sun, 9 Jan 2022 12:49:08 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E96C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 09:49:08 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so19674367pjf.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 09:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xsoAWNosIdPVJ1Fl9G5Tr80hXNfNjq7TugQVBy3FAk0=;
+        b=oB5Sz94wLdR3j1q+l51Yresn0Y1jPQCTUvZzCkBx8kTi0BXQIaHv1dQCgnpM6FUhah
+         cIbTMO4JJZyxU+ZPTAR3b2K5a1uRM+nG41E+pHWWFWAKnFZedM3ZvpPHeIdg7N5+GZAu
+         yJM+tOEtuQ+HqNqFz7gAUdNfnS4hZBYR9nT6dnuTbFcU0jFW8HT8Gewi1SAFzkgQESz6
+         GnGbP5o1zd6rN2qjM4BXIiq5U81ffSH1zsXdYGkzw0duZo6VzgahPpMfMTtpdbyNiMug
+         X40PqNh0hSsRryVBLZbSbRZWvYgAxS2dGfdjIcA3Nb6ICHP2l41XspelCIPKb2wvEqnR
+         VYsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=xsoAWNosIdPVJ1Fl9G5Tr80hXNfNjq7TugQVBy3FAk0=;
+        b=V4rfyrtuxAJ9qO3SlqI3zyiLG8Rzszpt6Yt2hfX63C4uMejUOu0UNM2OflGcz6Q7oV
+         uUgL/S+fe+0NJuHCvPq7BOVMkGx7QeGYzOmDXmBgwSK49hjabYSB5g50+akCVKcZ72F3
+         eShLHTMw/U6gq9zPtLMJ3cTw40iuZk/Gf9uejMa5dUwcuDH8LnWel/IEBCw1uE/9b8QG
+         lvVBrPnZo0KfNXj5pp62C6ZX8MDoqHh+b2YQ1c+Huh2eaAD4rXwzqwdeqdOvYimxOqnc
+         8C4+3m6BdcSLeTS21wQuhaDgAsw1b4LGhXcjWNWfq5Hhf3/CjG5DWHauGFU6jg67fE0P
+         jggA==
+X-Gm-Message-State: AOAM5319zNh0QMyMdVivAclyuHNb7VPawpT5DO7uNwqX3vmZB3mM99KY
+        kx5SHrnL+ffrtWExHol/5MMhsg==
+X-Google-Smtp-Source: ABdhPJzLR2V3yUS3diDRA3uXEy46KKw/VEQ1VoyJDxcEBGTsI1UFlJLGwKJ/AmQ1aXC3HVOqqwc+Yw==
+X-Received: by 2002:a17:90b:4b8d:: with SMTP id lr13mr26715780pjb.0.1641750547751;
+        Sun, 09 Jan 2022 09:49:07 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id 20sm507953pge.68.2022.01.09.09.49.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 09:49:07 -0800 (PST)
+Date:   Sun, 09 Jan 2022 09:49:07 -0800 (PST)
+X-Google-Original-Date: Sun, 09 Jan 2022 09:48:38 PST (-0800)
+Subject:     Re: [PATCH -next 0/2] riscv/mm: Enable THP migration
+In-Reply-To: <3c9ba160-74b2-a933-e8e5-9fd5359dc2cc@huawei.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        palmerdabbelt@google.com, wangkefeng.wang@huawei.com,
+        anup@brainfault.org, alex@ghiti.fr, jszhang@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     sunnanyong@huawei.com
+Message-ID: <mhng-518b6eb2-d3e2-4ff8-b960-f0598473152c@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 29 Dec 2021 22:45:57 PST (-0800), sunnanyong@huawei.com wrote:
+> Hi Palmer,
+>
+> This patchset has been sent for one month ago, I was wondering if you could
+>
+> have a review and give a feedback please, thanks.
 
---ee43ywlavjqsjxzn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for being slow, the queue got long over the holidays and I'm still 
+trying to dig out.  I was kind of worried about losing some bits, but I 
+don't think it's actually that big of a deal -- it's not like there's 
+really any user ABI here, aside from being able to use less swap.  If 
+someone wants to fix that I'm all ears, but I don't think it's worth 
+waiting.
 
-On 01/06, Miaoqian Lin wrote:
-> The pm_runtime_enable will increase power disable depth.
-> If the probe fails, we should use pm_runtime_disable() to balance
-> pm_runtime_enable().
->=20
-> Fixes: 57692c9 ("drm/v3d: Introduce a new DRM driver for Broadcom V3D V3.=
-x+")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> Changes in v2
-> - put pm_runtime_disable before dma_free_wc
-> - rename dma_free to pm_disable
-> ---
->  drivers/gpu/drm/v3d/v3d_drv.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
-> index bd46396a1ae0..7d500dd5314e 100644
-> --- a/drivers/gpu/drm/v3d/v3d_drv.c
-> +++ b/drivers/gpu/drm/v3d/v3d_drv.c
-> @@ -282,7 +282,7 @@ static int v3d_platform_drm_probe(struct platform_dev=
-ice *pdev)
-> =20
->  	ret =3D v3d_gem_init(drm);
->  	if (ret)
-> -		goto dma_free;
-> +		goto pm_disable;
-> =20
->  	ret =3D v3d_irq_init(v3d);
->  	if (ret)
-> @@ -298,7 +298,8 @@ static int v3d_platform_drm_probe(struct platform_dev=
-ice *pdev)
->  	v3d_irq_disable(v3d);
->  gem_destroy:
->  	v3d_gem_destroy(drm);
-> -dma_free:
-> +pm_disable:
-> +	pm_runtime_disable(dev);
+This is on for-next.
 
-Hi,
+Thanks!
 
-I see this pm_runtime_disable balancing is also missing for
-v3d_platform_drm_remove(), right?
-
-BR,
-
-Melissa
->  	dma_free_wc(dev, 4096, v3d->mmu_scratch, v3d->mmu_scratch_paddr);
->  	return ret;
->  }
-> --=20
-> 2.17.1
->=20
-
---ee43ywlavjqsjxzn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHbH9wACgkQwqF3j0dL
-ehwfGw//UjlDJVwtU17AnsPL+/W4lUJyxKJ8A34ElKhICjWegLZpByNFW3uxTjdS
-hDNKBP5EnBthGwy4zk/gdqbl4s38d7p2PuFDX2DTofhbTkYOuV1TpgkdeVtAlKQR
-7ktsKfZ7KHnSxQptfhywPpV4DXu3021rMY2FDqBU+ncJStrhMn4Q84ZNTatObjG3
-pbVDL9r6RU03heGR/KrKJFdSAQx1D10JoChnnLBHdwIpgj786EN5cft4eKDRnyr7
-kqN3Zov4BE2X02XFoLs2WpLam+f9se/cSPZLTT6E7KwYv9GnFeW/UuWsd3FLjM1D
-aJUgVSXvE5PPpSNbMob1rkm31aToQlSEVztEW+wi4DxmQtIwHOWs4yFalpyjGoDS
-/i4N9KCLIv2M2lThwXWzkp8PE0qFVGhxH0Hlx2j6WHw+8vMAiIxhL5O3R8pRDSRv
-hRA87ag+GISXnRK14M4Q+86TrUKnzasrB/mGgN/UI7CQJNOA5gmQHKIsjSsnQeG2
-1sgbznJ8VQTruLQ0qAjx07LMu+2ISiFgis6o7H/xdeZ0z6GuLTyntvm3VZ4IaiHu
-37s2QQPyAD7GO7L/4kUjKjNGSHiu0x3kX/wuZ53lE0anE2X9JVUlfEXR0+GJmYbc
-WYTCPgk9g9ZnQgvNJNP1tb7KLbnuvKxsV4gGTLGBQY46HfqTVlM=
-=84uP
------END PGP SIGNATURE-----
-
---ee43ywlavjqsjxzn--
+> On 2021/11/23 22:06, Nanyong Sun wrote:
+>> This series enables THP migration on riscv via ARCH_ENABLE_THP_MIGRATION.
+>> But first this adjusts PAGE_PROT_NONE to satisfy generic memory semantics
+>> like the behavior of pmd_present() and pmd_trans_huge() when in
+>> THP splitting or migration.
+>>
+>> This feature can reduce the time of THP migration by not splits THP
+>> before migration and can guarantee the pages after migration are still
+>> contiguous.[1]
+>>
+>> I have tested the below test case on qemu based on riscv after
+>> enabling this feature, the throughput of THP migration gains 13x
+>> performance improvement:
+>> https://github.com/x-y-z/thp-migration-bench
+>>
+>> I also have tested and passed the test cases under
+>> tools/testing/selftests/vm.
+>>
+>> [1]: https://lwn.net/Articles/723764/
+>>
+>> Nanyong Sun (2):
+>>    riscv/mm: Adjust PAGE_PROT_NONE to comply with THP semantics
+>>    riscv/mm: Enable THP migration
+>>
+>>   arch/riscv/Kconfig                    |  1 +
+>>   arch/riscv/include/asm/pgtable-bits.h |  2 +-
+>>   arch/riscv/include/asm/pgtable.h      | 16 +++++++++++-----
+>>   3 files changed, 13 insertions(+), 6 deletions(-)
+>>

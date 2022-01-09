@@ -2,125 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C59AC488780
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 03:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA35B488784
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 04:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbiAICsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Jan 2022 21:48:33 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:56190 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233718AbiAICsc (ORCPT
+        id S233768AbiAIDBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Jan 2022 22:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230425AbiAIDBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Jan 2022 21:48:32 -0500
-X-UUID: aa644fda6f2f4c9294059b61c4946042-20220109
-X-UUID: aa644fda6f2f4c9294059b61c4946042-20220109
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 862979138; Sun, 09 Jan 2022 10:48:30 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sun, 9 Jan 2022 10:48:28 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 9 Jan 2022 10:48:27 +0800
-Message-ID: <22faee018a36a49e4a507b69d087432c8cd689ec.camel@mediatek.com>
-Subject: Re: [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in
- tlb_sync_all
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
-        <anan.sun@mediatek.com>, <chao.hao@mediatek.com>,
-        <yen-chang.chen@mediatek.com>
-Date:   Sun, 9 Jan 2022 10:48:27 +0800
-In-Reply-To: <bfa33e94-c2e5-5dab-c9af-b674e1669daa@collabora.com>
-References: <20210923115840.17813-1-yong.wu@mediatek.com>
-         <20210923115840.17813-10-yong.wu@mediatek.com>
-         <bfa33e94-c2e5-5dab-c9af-b674e1669daa@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sat, 8 Jan 2022 22:01:43 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBEFC06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Jan 2022 19:01:43 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id g11so31256178lfu.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Jan 2022 19:01:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=epw5fsJKvpKo01BuQhMwYrk6Zimo6UwKmX1WcXHr/ZQ=;
+        b=cCrWMfN9F4g5YYsJYQqJxovw3PyIVDSADAnov5xeixEA6wWdM/KV2wpxIbVZX0WvCl
+         QclNhZmexUAKjSTg/+DIakllVGhyvxBD+9eTXZUFKWqP3CprcBxkwIyJVa+dOPWcgCTQ
+         Am25P6LvyCJgCkcvdgSKIFeniI2bYiQelfP6WozTLKTohZ+aHSv6ga3jwg2Trqm5YElZ
+         5uiK0fvq7dFJGlQHWCL4KYg9ZSn1f+rLs52jbIqKMV+MbUJVUBeiOAt99RC1PVAmKquA
+         qRnqBKVj2ykQrBUlECW50qaEHtTfF1SsJjTHYlop9jAnXGx5lwhJCnhla6I/VN3vCo2x
+         l02A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=epw5fsJKvpKo01BuQhMwYrk6Zimo6UwKmX1WcXHr/ZQ=;
+        b=YofCt1u2XSw67tyDUD/psZwI1aFZfGV7UrKaLgyxIBYTMvnbLdT4Pf50BR2llLsHP0
+         rlLUcaQKcJqLQwzr0X4lBRJuA5fMymNmhV3+P/1t0LptaVNhtUDvgdoGhndVJQEffqdV
+         YyyP2aEdWg8hB9RQwyr3wZw5WHz7B8VPTFY90z8RYoZZlRhCpvyHPRoyrJjZGyEc1cSi
+         SccZw+9/Do5e5dmKY8FvDr5JYgC6zSTnhXk6VSHe6o3v2ZAMDlKvMmu4TaWvoEw7GF52
+         iCozgkOkbVWSPTvLRopu6T/SaPbwnRS6gFqCnoBQIn8lh6wUw3wyMuXxQ8CmWHcwOkHE
+         woNw==
+X-Gm-Message-State: AOAM531lulhsqkabaOYcHF/SBE0tCeULTp5wK+lfHf6/fKwlBJwgQxWE
+        TogXF1f8PGUEfU+ZgizZXWpx2hPsFcOr1zJKGrqaSQ==
+X-Google-Smtp-Source: ABdhPJxzdjlVC+XeXO+ZliebQIkvMOA7YypjyefFfJHHgEU4h95iPyjI9q9FbY8qO7kQz2NR5JhDcI5pq6mX/WjjqEk=
+X-Received: by 2002:a05:6512:224c:: with SMTP id i12mr35392lfu.13.1641697301236;
+ Sat, 08 Jan 2022 19:01:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+References: <20220106024518.8161-1-yinxin.x@bytedance.com> <20220106024518.8161-2-yinxin.x@bytedance.com>
+ <CAD+ocbx2e06YoESJM7m5ra-6so0ijWsYyN1L1ZFTXqxedMMoNw@mail.gmail.com>
+ <CAK896s4EgEPU4FyyXczW79uFhVDido-Cwc=X-6jJ3kz2LXwBqw@mail.gmail.com> <CAD+ocbzn4gopc_ohSe66WxiZ-yz4e=XKF+_tHTVQ6JWXd_T8kA@mail.gmail.com>
+In-Reply-To: <CAD+ocbzn4gopc_ohSe66WxiZ-yz4e=XKF+_tHTVQ6JWXd_T8kA@mail.gmail.com>
+From:   Xin Yin <yinxin.x@bytedance.com>
+Date:   Sun, 9 Jan 2022 11:01:30 +0800
+Message-ID: <CAK896s6i1y5KhesNj5niyc0WdVCYGAJCoPdG-s1au2rF0QXhjg@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH 1/2] ext4: prevent used blocks from being
+ allocated during fast commit replay
+To:     harshad shirwadkar <harshadshirwadkar@gmail.com>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-04 at 16:55 +0100, AngeloGioacchino Del Regno wrote:
-> Il 23/09/21 13:58, Yong Wu ha scritto:
-> > The tlb_sync_all is called from these three functions:
-> > a) flush_iotlb_all: it will be called for each a iommu HW.
-> > b) tlb_flush_range_sync: it already has for_each_m4u.
-> > c) in irq: When IOMMU HW translation fault, Only need flush itself.
-> > 
-> > Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
-> > 
-> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> > ---
-> >   drivers/iommu/mtk_iommu.c | 18 +++++++-----------
-> >   1 file changed, 7 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> > index 6f4f6624e3ac..0b4c30baa864 100644
-> > --- a/drivers/iommu/mtk_iommu.c
-> > +++ b/drivers/iommu/mtk_iommu.c
-> > @@ -206,19 +206,15 @@ static struct mtk_iommu_domain
-> > *to_mtk_domain(struct iommu_domain *dom)
-> >   
-> >   static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
-> >   {
-> > -	struct list_head *head = data->hw_list;
-> > -
-> > -	for_each_m4u(data, head) {
-> > -		if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> > -			continue;
-> > +	if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> > +		return;
-> >   
-> > -		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-> > -			       data->base + data->plat_data-
-> > >inv_sel_reg);
-> > -		writel_relaxed(F_ALL_INVLD, data->base +
-> > REG_MMU_INVALIDATE);
-> > -		wmb(); /* Make sure the tlb flush all done */
-> > +	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-> > +		       data->base + data->plat_data->inv_sel_reg);
-> > +	writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
-> > +	wmb(); /* Make sure the tlb flush all done */
-> 
-> There aren't a lot of writes here - not anymore, since you are no
-> longer doing
-> this for_each_m4u()...
-> ...so, please change writel_relaxed() to writel() calls, allowing you
-> to also
-> remove the write barrier at the end (since in the non relaxed
-> version, order is already ensured).
+Yes , this is a little tricky, I will add some comments for it, and
+send a v2 patches set
 
-In the "writel", the "__iowmb()" runs before "write_relaxed". Then how
-to guarantee the last register was wrote into the HW. Here the flush
-all don't have sync(waiting it complete)
+Thanks,
+Xin Yin
 
-> 
-> >   
-> > -		pm_runtime_put(data->dev);
-> > -	}
-> > +	pm_runtime_put(data->dev);
-> >   }
-> >   
-> >   static void mtk_iommu_tlb_flush_range_sync(unsigned long iova,
-> > size_t size,
-> > 
-
+On Sat, Jan 8, 2022 at 2:05 PM harshad shirwadkar
+<harshadshirwadkar@gmail.com> wrote:
+>
+> Ah, I see okay. Yeah, that makes sense. We do need to update
+> fc_regions_valid for every addition during the replay phase. I think
+> it may be helpful to add some comments describing this behavior in the
+> code. But other than that, I think what you're doing is fine.
+>
+> Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+>
+> On Fri, Jan 7, 2022 at 6:09 PM Xin Yin <yinxin.x@bytedance.com> wrote:
+> >
+> > On Sat, Jan 8, 2022 at 4:26 AM harshad shirwadkar
+> > <harshadshirwadkar@gmail.com> wrote:
+> > >
+> > > On Wed, Jan 5, 2022 at 6:45 PM Xin Yin <yinxin.x@bytedance.com> wrote:
+> > > >
+> > > > during fast commit replay procedure, we clear inode blocks bitmap in
+> > > > ext4_ext_clear_bb(), this may cause ext4_mb_new_blocks_simple() allocate
+> > > > blocks still in use.
+> > > >
+> > > > make ext4_fc_record_regions() also record physical disk regions used by
+> > > > inodes during replay procedure. Then ext4_mb_new_blocks_simple() can
+> > > > excludes these blocks in use.
+> > > >
+> > > > Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+> > > > ---
+> > > >  fs/ext4/ext4.h        |  2 ++
+> > > >  fs/ext4/extents.c     |  4 ++++
+> > > >  fs/ext4/fast_commit.c | 11 ++++++++---
+> > > >  3 files changed, 14 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> > > > index 82fa51d6f145..7b0686758691 100644
+> > > > --- a/fs/ext4/ext4.h
+> > > > +++ b/fs/ext4/ext4.h
+> > > > @@ -2932,6 +2932,8 @@ bool ext4_fc_replay_check_excluded(struct super_block *sb, ext4_fsblk_t block);
+> > > >  void ext4_fc_replay_cleanup(struct super_block *sb);
+> > > >  int ext4_fc_commit(journal_t *journal, tid_t commit_tid);
+> > > >  int __init ext4_fc_init_dentry_cache(void);
+> > > > +int ext4_fc_record_regions(struct super_block *sb, int ino,
+> > > > +                    ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay);
+> > > >
+> > > >  /* mballoc.c */
+> > > >  extern const struct seq_operations ext4_mb_seq_groups_ops;
+> > > > diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> > > > index c3e76a5de661..9b6c76629c93 100644
+> > > > --- a/fs/ext4/extents.c
+> > > > +++ b/fs/ext4/extents.c
+> > > > @@ -6096,11 +6096,15 @@ int ext4_ext_clear_bb(struct inode *inode)
+> > > >
+> > > >                                         ext4_mb_mark_bb(inode->i_sb,
+> > > >                                                         path[j].p_block, 1, 0);
+> > > > +                                       ext4_fc_record_regions(inode->i_sb, inode->i_ino,
+> > > > +                                                       0, path[j].p_block, 1, 1);
+> > > >                                 }
+> > > >                                 ext4_ext_drop_refs(path);
+> > > >                                 kfree(path);
+> > > >                         }
+> > > >                         ext4_mb_mark_bb(inode->i_sb, map.m_pblk, map.m_len, 0);
+> > > > +                       ext4_fc_record_regions(inode->i_sb, inode->i_ino,
+> > > > +                                       map.m_lblk, map.m_pblk, map.m_len, 1);
+> > > >                 }
+> > > >                 cur = cur + map.m_len;
+> > > >         }
+> > > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> > > > index 23d13983a281..f0cd20f5fe5e 100644
+> > > > --- a/fs/ext4/fast_commit.c
+> > > > +++ b/fs/ext4/fast_commit.c
+> > > > @@ -1567,13 +1567,15 @@ static int ext4_fc_replay_create(struct super_block *sb, struct ext4_fc_tl *tl,
+> > > >   * Record physical disk regions which are in use as per fast commit area. Our
+> > > >   * simple replay phase allocator excludes these regions from allocation.
+> > > >   */
+> > > > -static int ext4_fc_record_regions(struct super_block *sb, int ino,
+> > > > -               ext4_lblk_t lblk, ext4_fsblk_t pblk, int len)
+> > > > +int ext4_fc_record_regions(struct super_block *sb, int ino,
+> > > > +               ext4_lblk_t lblk, ext4_fsblk_t pblk, int len, int replay)
+> > > Can you explain a bit why this replay parameter is needed here? This
+> > > function simply reallocs the regions array if it doesn't have enough
+> > > space. I am not sure why we need to change that behavior.
+> >
+> > ext4_fc_record_regions() originally only used during scan phase,  and
+> > set fc_regions_valid = fc_regions_use when getting a TAIL tag. Now we
+> > also use it during the replay phase,   and need to update
+> > fc_regions_valid in this case, because ext4_fc_replay_check_excluded()
+> > uses fc_regions_valid for regions checking.
+> > Please correct me if I'm wrong.
+> >
+> > > >  {
+> > > >         struct ext4_fc_replay_state *state;
+> > > >         struct ext4_fc_alloc_region *region;
+> > > >
+> > > >         state = &EXT4_SB(sb)->s_fc_replay_state;
+> > > > +       if (replay && state->fc_regions_used != state->fc_regions_valid)
+> > > > +               state->fc_regions_used = state->fc_regions_valid;
+> > > >         if (state->fc_regions_used == state->fc_regions_size) {
+> > > >                 state->fc_regions_size +=
+> > > >                         EXT4_FC_REPLAY_REALLOC_INCREMENT;
+> > > > @@ -1591,6 +1593,9 @@ static int ext4_fc_record_regions(struct super_block *sb, int ino,
+> > > >         region->pblk = pblk;
+> > > >         region->len = len;
+> > > >
+> > > > +       if (replay)
+> > > > +               state->fc_regions_valid++;
+> > > > +
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > @@ -1938,7 +1943,7 @@ static int ext4_fc_replay_scan(journal_t *journal,
+> > > >                         ret = ext4_fc_record_regions(sb,
+> > > >                                 le32_to_cpu(ext.fc_ino),
+> > > >                                 le32_to_cpu(ex->ee_block), ext4_ext_pblock(ex),
+> > > > -                               ext4_ext_get_actual_len(ex));
+> > > > +                               ext4_ext_get_actual_len(ex), 0);
+> > > >                         if (ret < 0)
+> > > >                                 break;
+> > > >                         ret = JBD2_FC_REPLAY_CONTINUE;
+> > > > --
+> > > > 2.20.1
+> > > >

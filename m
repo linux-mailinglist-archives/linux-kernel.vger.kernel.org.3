@@ -2,88 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C015A48897D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE19048897F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Jan 2022 14:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiAINIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 08:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S235598AbiAINJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 08:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiAINIi (ORCPT
+        with ESMTP id S234067AbiAINJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 08:08:38 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417BAC06173F;
-        Sun,  9 Jan 2022 05:08:36 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id 30so40946672edv.3;
-        Sun, 09 Jan 2022 05:08:36 -0800 (PST)
+        Sun, 9 Jan 2022 08:09:02 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D140C06173F;
+        Sun,  9 Jan 2022 05:09:02 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id i30so8970302pgl.0;
+        Sun, 09 Jan 2022 05:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UWHbjPtcVR2yLhFXLToA2Y4vWx0ZPRaE9GL7xijArNU=;
-        b=YLvZj1lGzDkVk7NA++e4C0k7gNYL3JHbkm4aMLEnE7pZG323V5dRn+Ilu3/LFWO2jI
-         bBGmvygwElsUYg3j0ghKbtKN/ahoscH02zxRc791burgP4kArywUr1lu3iEAK0ValPV0
-         OybGeDt3j3jjYPNt2FrPREoDlgGAMRnmqwn4oqx5Mt+viTFJ3IxnmmpebzNMiyVsbsym
-         I3FRKT7JsexGzOhA81G5+METWIqhQBLpJAjUPhcpW3J79ZjQWS9F67+5S+jXf+2Mwro3
-         ZhtJLXIiMBDOsLUnc2Ji8opXREkBxMJUWE2xkRpvrjOn6DanF0pNhwp+YUYcMsymafSX
-         5IXw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=arpw+ljAljq5NB0O7Qtm3OVFeIt6QFUH4U9kJ3gcQts=;
+        b=cLqToY/ebl6ZpwjWFuu1/yKSspKy6/p+fsr5CU2YMQV2/FMU+3Lx/FXV16Y89jXLNy
+         LUqXghbIXQLP7ZOH7K5yWivB7ZfS069TY5RiTordnZ9vLVNAJolXUjeNyhl5X2gWmLFN
+         kwYKsQOncpXzp4YKPcCv8cJcTPOiq4H9PYMLj8HVqMZpnKAxccJBvrlVVR5d3J2SFPK2
+         +IMbTDJSpJSq9l5AL5FVsbV9COsfinCJdixjtMT8bS0jJV3uTCK9HF+KbewPey7bwTAa
+         Iyby5AOlsaA08lU28GydpnfboK0+bMruWOEz9FQj8oMECRK3lerBMYgLhWIMSKHj649b
+         X43w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UWHbjPtcVR2yLhFXLToA2Y4vWx0ZPRaE9GL7xijArNU=;
-        b=5p2oLHxYsVjXfK2mSnYCbJPT6sLw6XtXb8Krg16vzrwhjFEu3PriW7Q1f/rSubWk59
-         5EWeYbbT2zmky2ouS9YuuoCwQe17bQHxQ/VnTjoVfdECgBFg9jXkImfRac0ZMHeAVzr/
-         niQFXWxVpVwkW8LADZ/1/eWJyDK8vclcRwS8PUuoXpCYgWU/DjQZ+RxWmOG2t5EyOh8t
-         z3HdlNvPrN9ldWxTVr6LOhJb7NR9mJZY59xUJClm7kqDVwAnheJWUKIs1MFN4T3ltiao
-         jbRdtzg8E8qwgi+GGXgxSdVqUYnB3/XRCyPQI8G71A9zdfCj+j8bLyjZn+xUieartL7T
-         RjaQ==
-X-Gm-Message-State: AOAM531j12EzZHFwrEOcSfLFg85d/hpf+hjg0WHWsN01yzqLTnMR2vHM
-        ZU/5vua6UYbB9ygo3HBVVqJyjQKgykR5rJKMDZc=
-X-Google-Smtp-Source: ABdhPJy0uP18acDGeCB7QGpmvkx1E+SfpYGdZtXncQG/FkPZcziciKjJI0nUlX1gpN2icsnJnEms4UfGwuzCjWRBEFc=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr8127490ejc.639.1641733714836;
- Sun, 09 Jan 2022 05:08:34 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=arpw+ljAljq5NB0O7Qtm3OVFeIt6QFUH4U9kJ3gcQts=;
+        b=8HnCBKGfKOp06ug471/olUAPp+CT/aMogMiEGTh3PUcQoMwdTSQ1W6ekcCgrj5WIFc
+         b8UEjALn8oxVQyBAsA5bIwWQjYFTQdo3XqqwFKF10X27w/+leMe3J2JV+TyKD2N93eP2
+         /U5o/1XlbR7ne0Y7C0zMejZWnalSqd9gTjMOvu9AX2LzkYzYfGQw8gV665qYvtXVU/Nu
+         WjbdoTHAd4eswtHW+jtZC5flWPAN+Iui1v2SCceIHZhRRi1HrD7wQsepAZggyxQ64qZh
+         h7qZswpq27sBJIkoqayc65I3jm/MiPB2RZG//NDo4HWIUMmYd+jaUXV48b0UPFC+Ba9/
+         HJAQ==
+X-Gm-Message-State: AOAM531lg2vw+OoNKOkpsYKzlD/51MhViAJUoBQQnFz78Eo77VDFMqoI
+        zx3nHcL43rtmYa+J5McLtEI=
+X-Google-Smtp-Source: ABdhPJw90YE57koiEht2HXw4VLhAqSoeHWpus+R0aMIn9BFDmU+7vYicDfVziCgfUteaK2KnKKNRAg==
+X-Received: by 2002:a63:b905:: with SMTP id z5mr46556966pge.245.1641733741931;
+        Sun, 09 Jan 2022 05:09:01 -0800 (PST)
+Received: from fedora.. ([101.229.48.173])
+        by smtp.gmail.com with ESMTPSA id r26sm1157020pgu.65.2022.01.09.05.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 05:09:01 -0800 (PST)
+From:   Benjamin Yim <yan2228598786@gmail.com>
+To:     kuba@kernel.org
+Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Yim <yan2228598786@gmail.com>
+Subject: [PATCH] tcp: tcp_send_challenge_ack delete useless param `skb`
+Date:   Sun,  9 Jan 2022 21:08:24 +0800
+Message-Id: <20220109130824.2776-1-yan2228598786@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220108205319.2046348-1-liambeguin@gmail.com> <20220108205319.2046348-7-liambeguin@gmail.com>
-In-Reply-To: <20220108205319.2046348-7-liambeguin@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 9 Jan 2022 15:07:58 +0200
-Message-ID: <CAHp75VdVBQPG0Qbo9H5Sro0-Uhr683WhWor9P2MXZ5a18HfRgA@mail.gmail.com>
-Subject: Re: [PATCH v12 06/16] iio: afe: rescale: expose scale processing function
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
->
-> In preparation for the addition of kunit tests, expose the logic
-> responsible for combining channel scales.
+After this parameter is passed in, there is no usage, and deleting it will
+ not bring any impact.
 
-...
+Signed-off-by: Benjamin Yim <yan2228598786@gmail.com>
+---
+ net/ipv4/tcp_input.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> +/*
-> + * Copyright (C) 2021 Liam Beguin <liambeguin@gmail.com>
-> + */
-
-Despite the Rb tag by the author of the code the above is wrong.
-Please do not steal others work :-) (The smiley due to my believe that
-you have done this undeliberately)
-
- * IIO rescale driver
- *
- * Copyright (C) 2018 Axentia Technologies AB
- *
- * Author: Peter Rosin <peda@axentia.se>
-
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 8010583f868b..dc49a3d551eb 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -3601,7 +3601,7 @@ bool tcp_oow_rate_limited(struct net *net, const struct sk_buff *skb,
+ }
+ 
+ /* RFC 5961 7 [ACK Throttling] */
+-static void tcp_send_challenge_ack(struct sock *sk, const struct sk_buff *skb)
++static void tcp_send_challenge_ack(struct sock *sk)
+ {
+ 	/* unprotected vars, we dont care of overwrites */
+ 	static u32 challenge_timestamp;
+@@ -3763,7 +3763,7 @@ static int tcp_ack(struct sock *sk, const struct sk_buff *skb, int flag)
+ 		/* RFC 5961 5.2 [Blind Data Injection Attack].[Mitigation] */
+ 		if (before(ack, prior_snd_una - tp->max_window)) {
+ 			if (!(flag & FLAG_NO_CHALLENGE_ACK))
+-				tcp_send_challenge_ack(sk, skb);
++				tcp_send_challenge_ack(sk);
+ 			return -1;
+ 		}
+ 		goto old_ack;
+@@ -5726,7 +5726,7 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
+ 			if (tp->syn_fastopen && !tp->data_segs_in &&
+ 			    sk->sk_state == TCP_ESTABLISHED)
+ 				tcp_fastopen_active_disable(sk);
+-			tcp_send_challenge_ack(sk, skb);
++			tcp_send_challenge_ack(sk);
+ 		}
+ 		goto discard;
+ 	}
+@@ -5741,7 +5741,7 @@ static bool tcp_validate_incoming(struct sock *sk, struct sk_buff *skb,
+ 		if (syn_inerr)
+ 			TCP_INC_STATS(sock_net(sk), TCP_MIB_INERRS);
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPSYNCHALLENGE);
+-		tcp_send_challenge_ack(sk, skb);
++		tcp_send_challenge_ack(sk);
+ 		goto discard;
+ 	}
+ 
+@@ -6456,7 +6456,7 @@ int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb)
+ 	if (!acceptable) {
+ 		if (sk->sk_state == TCP_SYN_RECV)
+ 			return 1;	/* send one RST */
+-		tcp_send_challenge_ack(sk, skb);
++		tcp_send_challenge_ack(sk);
+ 		goto discard;
+ 	}
+ 	switch (sk->sk_state) {
 -- 
-With Best Regards,
-Andy Shevchenko
+2.33.1
+

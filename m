@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60788489FE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDFC489FEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243217AbiAJTJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S241508AbiAJTKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242355AbiAJTJU (ORCPT
+        with ESMTP id S240195AbiAJTKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:09:20 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131D4C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:09:20 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id w80so19961766oie.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:09:20 -0800 (PST)
+        Mon, 10 Jan 2022 14:10:39 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E602C06173F;
+        Mon, 10 Jan 2022 11:10:39 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id h30so2372886ila.12;
+        Mon, 10 Jan 2022 11:10:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=idN74tibQylFiXutvVDrzwyT0hxfY8VT8xXi4bT3S8Q=;
-        b=AxcLtTAanTiUqsMqD/BViiv8NMCDHdJymo3vnBBv/sbOrEjz3/YMNe96CERt12zOCD
-         VpqmHUvgdxRqxRxGtzLv5o8X5CvxrSBkauFpFmpMX2oCuNExFHmaVP/gfqtbiflOcv30
-         tHlI5hRk/Cmel0Cr7PxBazPCBh41tdGU7lqh96KSDUoTURxESUFEkyc7z+nRD9wrtwJu
-         AMHl3iAx3NzRr1qoC56cxtA9gY0+1q4iwwQ6/s+AA9EyUxiylMg+HhHR/XEtGqcsyoQ3
-         368yn+E9ASAoVsbiWUdCM/LcInNrIldhvPD6FHhVh7jVBcacW2QL6o1dlBSa4seaP+5T
-         NgeQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=mBwNCC1Jx7+fhUj2wj9RmdYP9OBbVW/RNMLHjwHDXaQ=;
+        b=Tvibpb75nNeM2GA9qWsETzrEyGNM9SNXlIw0vEwRXXDzZsYM2qPOmrFFlky2xxJna5
+         8hb79B2glfQkGqRK7/WrBQI3LiE3wQvmq6no3DC9n89eh2j+64ZI1J/2rwIKmVlOXw8N
+         VT7Oh0BZbClcBHubMJbnDrP/mrs53VkTEzCYCkxSpASDwkldkfBovPRHD01HsBHQinhu
+         6XFALtn1MuviUeV7Vc5jyim00rbUcsfsu6J+ks2a+LYFg0NVCO2Qw2kDcpZwJvQw+L3R
+         6vHdCyMGWzey8S8hzvO+FQ/Vg7btqwxgfITINKeY9dL4EOHIzAOwWhMBczSUNQLEJro5
+         AqZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=idN74tibQylFiXutvVDrzwyT0hxfY8VT8xXi4bT3S8Q=;
-        b=k7/074U7rZyb2pD9qbnHm/edypTL8DYfdutueJOghIqFX9B4jKFnACLVGA5loq4tz5
-         ofH85DUOexgkBIHxDjjwFqQjWnizmda4ZDmF4FKooIWGI66I/FmKrJU/OsmfzDBbaLt0
-         FVH3fE3Wj+AmxloU244Hybifcc2wsySMzaAjtO1LXw5oA1+gH4GIYDtsJcYC+NkYxdmC
-         s+AZ0huPGwEenH+8JBdJOE/jb9DQAp/AFtCV9IVd4hIqKghwjxoATc4IxkGzzDAmj9WE
-         JSH1IvkRcw5wXj3J82J+q7hZwe8BPDgyjOqTIJVZRCI9czyIslvhOvBtggaLuWv55+uR
-         pKmA==
-X-Gm-Message-State: AOAM5330qPRe2aVwEqyjcalPy0Um5y4q3ptosmILz0MEJtCIKiL5SqjA
-        TZ7ONFG7n0PmjlQCq4lUx2qZvA==
-X-Google-Smtp-Source: ABdhPJyvKczm5X8Lm4wBPiUcnfxxpBfrfp1f7Bb+mt8WT8A/QQJ1WOgRkJ01srv4AUDzr5lWtIHRMw==
-X-Received: by 2002:a54:468b:: with SMTP id k11mr655957oic.105.1641841759427;
-        Mon, 10 Jan 2022 11:09:19 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 2sm1636619otm.41.2022.01.10.11.09.18
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=mBwNCC1Jx7+fhUj2wj9RmdYP9OBbVW/RNMLHjwHDXaQ=;
+        b=DaecXcolEh0Pm4Y8upSYFvVmG6gTdO07yatPO8QotEg3F+qKJd0ljRNgt8tWwwmFgw
+         Lu1nffa2fnVAqiH0GNbbPxj1P2RTHsF/qBzbiGIumCveObZDO6T7ymlr6pGl8Qm3gCFn
+         FBgLXsL9GTVvOlYZwn+SkI/QBg193jdDle/NKWAx80sTeu9jt1tGdv4U2ur0XTmTMWji
+         IvpktC0XznWyXG/Nml2kWUah32UhGCgA+JQj8l81Z4aLSiupmXbl5Iek3ywtU7rFD71W
+         M9Dr/7eKhSUHbiiO3zDuC2xmjaqraS2fh2882jhbl/K30OZPHatk+pQG5J4lUiaoz2oP
+         4NaQ==
+X-Gm-Message-State: AOAM532krtlS/KGtgLt/yv+9XOzEDoWn/Zv8STLE78faTSCp/bWZ1r9u
+        4iVdraqySCTE9sC0l+okxfWRi5lcnwW8RGQxIJ0=
+X-Google-Smtp-Source: ABdhPJzN08oSDlK0JZh4CzLfsX+eRl0C57xOBnTHfR+sdIHFnXYDWVgQI4P2h+PVi1/5LxsNKkH0Gw==
+X-Received: by 2002:a92:1e0a:: with SMTP id e10mr721863ile.28.1641841837969;
+        Mon, 10 Jan 2022 11:10:37 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id g20sm5007485iov.35.2022.01.10.11.10.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 11:09:18 -0800 (PST)
-Date:   Mon, 10 Jan 2022 11:10:03 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v2] arm64: qcom: sc7280: Move USB2 controller nodes from
- common dtsi to SKU1
-Message-ID: <YdyEi2I0XFp6DPh1@ripper>
-References: <1638422248-24221-1-git-send-email-quic_c_sanm@quicinc.com>
- <CAE-0n51S7gPnkgL40Lqj-8dgZ-jjfCmNGtnUDgqJ_Kw5dzc_sg@mail.gmail.com>
- <e605c057-a7a4-657a-06ee-f872e13e116e@quicinc.com>
- <135e8171-c210-1f70-e26f-167f8fdfcc74@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <135e8171-c210-1f70-e26f-167f8fdfcc74@quicinc.com>
+        Mon, 10 Jan 2022 11:10:37 -0800 (PST)
+Message-ID: <61dc84ad.1c69fb81.a19fb.597f@mx.google.com>
+Date:   Mon, 10 Jan 2022 11:10:37 -0800 (PST)
+X-Google-Original-Date: Mon, 10 Jan 2022 19:10:35 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/43] 5.10.91-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 09 Jan 20:56 PST 2022, Sandeep Maheswaram wrote:
-
-> Hi Bjorn,
+On Mon, 10 Jan 2022 08:22:57 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.91 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On 12/15/2021 11:18 AM, Sandeep Maheswaram wrote:
-> > Hi Bjorn,
-> > 
-> > On 12/3/2021 4:22 AM, Stephen Boyd wrote:
-> > > Quoting Sandeep Maheswaram (2021-12-01 21:17:28)
-> > > > Move USB2 controller and phy nodes from common dtsi file as it is
-> > > > required only for SKU1 board and change the mode to host mode as
-> > > > it will be used in host mode for SKU1.
-> > > > 
-> > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > > ---
-> > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> > Can you merge this change in qcom tree?
+> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
+> Anything received after that time might be too late.
 > 
-> Is this patch merged in qcom tree ? If not can you please do so.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.91-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 > 
 
-Sorry, I seem to have missed this in the patch list. Will pick it up for
-v5.18.
+5.10.91-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Thanks,
-Bjorn

@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BDD489B93
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D085489B9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiAJOtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:49:50 -0500
-Received: from shark1.inbox.lv ([194.152.32.81]:45432 "EHLO shark1.inbox.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230426AbiAJOtt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:49:49 -0500
-Received: from shark1.inbox.lv (localhost [127.0.0.1])
-        by shark1-out.inbox.lv (Postfix) with ESMTP id 048B61118140;
-        Mon, 10 Jan 2022 16:49:48 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
-        t=1641826188; bh=v8M5awXlRgm8CQPFWrxz5Yn/2aXPYkjUaIMnTlnA2j4=;
-        h=Date:From:To:Subject:Message-ID:In-Reply-To:References:
-         Content-Type:X-ESPOL:from:date;
-        b=ETkKyFBSqlmwxhHpOAPlyeai+0JG5EsOAxPGfHaxqA+mKrNVrafW5wHuqE9QQOdMj
-         fkYp9FiHF5ouPE742u0Z4OYws+vdRodvMKwZg4yPdnwSk2m8KG7fxrtK2j6yOU0Fju
-         hYNdJxDDysBQmZCy8v1k5aZExcslKHO6gl19u3Sw=
-Received: from localhost (localhost [127.0.0.1])
-        by shark1-in.inbox.lv (Postfix) with ESMTP id EDA2011180B4;
-        Mon, 10 Jan 2022 16:49:47 +0200 (EET)
-Received: from shark1.inbox.lv ([127.0.0.1])
-        by localhost (shark1.inbox.lv [127.0.0.1]) (spamfilter, port 35)
-        with ESMTP id 49NQ99mX1Zp1; Mon, 10 Jan 2022 16:49:47 +0200 (EET)
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-        by shark1-in.inbox.lv (Postfix) with ESMTP id 9C3971118085;
-        Mon, 10 Jan 2022 16:49:47 +0200 (EET)
-Date:   Mon, 10 Jan 2022 23:49:32 +0900
-From:   Alexey Avramov <hakavlad@inbox.lv>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org, hakavlad@gmail.com
-Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
-Message-ID: <20220110234932.6eb6c356@mail.inbox.lv>
-In-Reply-To: <20220104202227.2903605-1-yuzhao@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S235751AbiAJOwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:52:44 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:51807 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230426AbiAJOwo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 09:52:44 -0500
+Received: from [192.168.100.1] ([82.142.23.158]) by mrelayeu.kundenserver.de
+ (mreue011 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MeToK-1mWmP81TXQ-00aRXa; Mon, 10 Jan 2022 15:52:34 +0100
+Message-ID: <1f913c8f-45fd-32fe-d456-ba4d1920efdf@vivier.eu>
+Date:   Mon, 10 Jan 2022 15:52:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: OK
-X-ESPOL: AJqEQH8B6gpL2qWiUuRh4Or6x9a2SFs9vyXmrMk96HRYtbrGu9h2dXPmZYmvRkKl
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: fr
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20220110084239.1597511-1-laurent@vivier.eu>
+ <20220110084239.1597511-2-laurent@vivier.eu>
+ <CAMuHMdWtEZ3WqFw0ihSAAcTP76TdR+jtqjkX+=UwOi+=04xOWQ@mail.gmail.com>
+From:   Laurent Vivier <laurent@vivier.eu>
+Subject: Re: [PATCH v3 1/2] m68k: add asm/config.h
+In-Reply-To: <CAMuHMdWtEZ3WqFw0ihSAAcTP76TdR+jtqjkX+=UwOi+=04xOWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:pwxq2Gx2x8vc53pmPfpEgSzldrEnE5D0fyO+eWrLhdfIug4ipJS
+ GkxsEeGQ6/RCfRgpKLlLaJPgQd0WqSF9Py52Q+4u3pl1rWs/yJWIuy4sKCUOYqOVp3eXuZ5
+ jF5anYDTsuIeqsU2+oK4n1brmy081jA59uAdavLED6IU1/H2EOfR6odHtijGTKOJbMec9JQ
+ jqxaCfgZGHjIFNd/Cxcww==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:S/cSx/aWVMQ=:Zg+EmJdOn+s2t88DIxvWo/
+ oZggx5Bu91er/IA3Hd/1oZGy+6xEhN4Ogc6PE/tGCMpUfyIOFlOhUVbbsvVlZ4aJ87VZGxnV3
+ k9jqr9BuF3BzwN8ErrWcGLBOaAIbo0Odpc4uGKLtRm2mHHkjzvyC/qlb8qYZ9NHzBGWnmtKdH
+ VON4p80B6+4FWt8eUfaXSvDp3xLkNym9yPegZLAfx0sLqnFN4vWtzKaPwWGu5eWLnp+RN+Bjm
+ GzgFXK1Z7d+kGG7R0MJ+nbsaMdizl+qMCC17Ek7AElVFBbJ2snKQn3M00n7PIKuUELJ4xlc00
+ NpHrnNEg1JgykqxPlWbOEK+SGqpNV7IPZoZ8cxOLBiGHJMyNDIke5tMuUbe9AcsRNzmEDYnJj
+ SYUGl9fkksZCmmlGAnBGT0XM7GQcbveIt8Z1kcrXhar7nvj6gusosdmjVmXRuesx2SxsB04YV
+ 7tDHO1vUJCybJolx8QmSVRXZ6YiRl5yEbd3h50acIC/9XeW6cjeYr1nI0mqgrZ9HOZvQio5ck
+ p5DWKuYIOc5oPMQjFO9DjHU1Uhd/I0NI4Q0D85N3l9n5w/kvpOdjBQmPV3hfUHcwKLAdhJwfb
+ icB3MJ4piMa62OnHOKCfVW3pT/s/cRjLECsZISCScdIIU0i3IfNqKnDjwNhjObFbx7dqY1IyK
+ MKdz1A6Pyel/5Ffq/jYjAgzQksOHOTCNDtzemJudW9TQ4lghShefnOlP3hDZFYFQPXcU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note that with vm.swappiness=0, the vm.watermark_scale_factor value does
-not affect the swap possibility: MGLRU ignores sc->file_is_tiny.
+Le 10/01/2022 à 15:21, Geert Uytterhoeven a écrit :
+> Hi Laurent,
+> 
+> On Mon, Jan 10, 2022 at 9:42 AM Laurent Vivier <laurent@vivier.eu> wrote:
+>> To avoid 'warning: no previous prototype for' error, declare all
+>> the parse_bootinfo and config functions prototypes into asm/config.h
+>> and include it in arch/m68k/kernel/setup_mm.c and arch/m68k/*/config.c
+>>
+>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> 
+> Thanks for your patch!
+> 
+>> --- /dev/null
+>> +++ b/arch/m68k/include/asm/config.h
+>> @@ -0,0 +1,33 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+> 
+> scripts/checkpatch.pl says this is the wrong one.
 
-With the classic 2-gen LRU swapping goes well at swappiness=0 and
-high vm.watermark_scale_factor, which is expected according to the
-documentation:
-"At 0, the kernel will not initiate swap until the amount of free and
-file-backed pages is less than the high watermark in a zone." [1]
+I'm going to add a pre-commit git hook to run checkpatch.pl in the future...
 
-With vm.swappiness=0, no swap occurs with any vm.watermark_scale_factor
-value with MGLRU.
+> 
+>> +
+>> +/*
+>> + * This file contains prototypes provided by each m68k machine
+>> + * to parse bootinfo datastructure and to configure the machine
+> 
+> data structures
+> 
+>> + */
+>> +
+>> +#ifndef _M68K_CONFIG_H
+>> +#define _M68K_CONFIG_H
+>> +
+>> +extern int amiga_parse_bootinfo(const struct bi_record *);
+>> +extern int atari_parse_bootinfo(const struct bi_record *);
+>> +extern int mac_parse_bootinfo(const struct bi_record *);
+>> +extern int q40_parse_bootinfo(const struct bi_record *);
+>> +extern int bvme6000_parse_bootinfo(const struct bi_record *);
+>> +extern int mvme16x_parse_bootinfo(const struct bi_record *);
+>> +extern int mvme147_parse_bootinfo(const struct bi_record *);
+>> +extern int hp300_parse_bootinfo(const struct bi_record *);
+>> +extern int apollo_parse_bootinfo(const struct bi_record *);
+> 
+> Missing parameter names.
+> 
+> I can fix those while applying.
 
-I used to see in practice (with MGLRU v3) the impossibility of swapping 
-when vm.swappiness=0 and vm.watermark_scale_factor=1000.
+Please, do.
 
-At a minimum, this will require updating the documentation for
-vm.swappiness.
+> 
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> i.e. will queue in the m68k for-v5.18 branch.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
 
-BTW, why MGLRU doesn't use something like sc->file_is_tiny?
+Thanks,
+Laurent
 
-[1] https://github.com/torvalds/linux/blob/v5.16/Documentation/admin-guide/sysctl/vm.rst#swappiness

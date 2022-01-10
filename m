@@ -2,107 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFA74891BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71BB4890D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240830AbiAJHgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240355AbiAJH3z (ORCPT
+        id S239547AbiAJH0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:26:10 -0500
+Received: from out162-62-57-210.mail.qq.com ([162.62.57.210]:51619 "EHLO
+        out162-62-57-210.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239322AbiAJHYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:29:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF8AC028BFA;
-        Sun,  9 Jan 2022 23:27:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8178CB81161;
-        Mon, 10 Jan 2022 07:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24F0C36AE9;
-        Mon, 10 Jan 2022 07:27:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799630;
-        bh=SpT8iyIODNYO93lTTSNKXblLyQcmyZA84JzizvJXAyA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0obQkCDJvVfALmWNJNFcC30JXtc48AuSYuONLo/dqH3z6yKJXkPWG0H5mCCIfc+gm
-         Ygc6dl5ebAdk4u4UCjsp0eb4ybhyRaKLe0aScdkXnO0W7Ey1kaNPVd03Yrzjqi6l79
-         q4TZ7aXQP4SVSdMbZQvCXN7U0ErwssXbGdgCqWQU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 08/21] ipv6: Check attribute length for RTA_GATEWAY in multipath route
-Date:   Mon, 10 Jan 2022 08:23:09 +0100
-Message-Id: <20220110071814.232226952@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 10 Jan 2022 02:24:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1641799470;
+        bh=qnDuLkInDd7H3HP9HBO/tRxoGCJl57LHYRdQZPrsjsM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hJ8BjBz6b4lvLJfTrNjIyxY4FN2fQmeyoK/T51K0UpRNnX5akTKO3QaQ3QJsZ94LW
+         hWdB00griLhUuues9Njx++wzpa0jJhlCgxtT0TjMnSxCWFgbzfW5mykGjEPOyxqdkg
+         7K2UiUCfYtSvA2KtGOTYaym1+5Q9+xXs58cupgpw=
+Received: from fedora.. ([119.32.47.91])
+        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
+        id 5CD80CD5; Mon, 10 Jan 2022 15:23:13 +0800
+X-QQ-mid: xmsmtpt1641799399tgimq3pd8
+Message-ID: <tencent_DEA0AF54608BBD29ADC09D0DCA83E85DA205@qq.com>
+X-QQ-XMAILINFO: OZ7HbAk7YCRiLu20qljPu1APmkzChkgm7N3Nyupk1yvU2sKbc9YzbYD5/Jwajb
+         7btfAo8/+9G0BVjKSKzYnpt1vOWIiri6Cbb/MUI+JVpb9xth0u3TmXkqmXq/DgO2cNZs3Pp4BbFt
+         4FqbVOs2DuE+bfjiPdUKUogmFUOuWYEQ6g0rdubvTG9FbNqhAY7WfyfIYHllbM4XMlot9vcXseNO
+         urEP+phZkPU2L/cknfkw8Dp3FJIkWt4C3b1rF3+p6wwhaUIsH5Mqjd9xznYOLx96aRETbAVUFwpv
+         O0WrU/hd1kIn9v3DMwQfIocAaLRFrCrehL88VyhW06vqvTVEQOiaqxRYJfU6QRRoFgzmTBKvb2Xm
+         1f1pNWsnybvYG5J6I6aY1GoRa48PNsD67WXr8zCKdO1/esBKFB33s3Gxzf6yMVzBh93na3uXFNMj
+         jVFIIRuVRRJGsjZefqFJ3hTngkWapvsUMAlc/Zf40V488q21c/tcwJXHSSqKrmdlox9l0KSd6bjM
+         nxBOqnWzYUTKFjMWSSokttQRyCaSsp8i86UhDIfMxPa1JfRpI4y+/RWyVWXU2T7yQs4DiTWoFcLr
+         bAS40S+4Td7iWB2sAK87disisLeLd6tcGXbJnzW+5K7Ve8otSQeUE558esA9lIGo6Tz1VKBxGRaz
+         iaRgLFhnOvvrYBsS/I76FKuw7pnYTruLlxzxQi11n0RYd4b6g0oSbhdOIveEEBt2vAh0X6WJpCtm
+         8nmIpG+7omUAim87jmC9mlOz8PBY3gdli69GcL57iAD3+3mN6SY4CCZYV148AZ88ih1L1b0Mp6uP
+         tvXu7xThzbP6lwDJZ/WUKLRnA1sKZxUlG+aJBW1YodaldxtFpf4Tx601SeeNAAP/ExWCtPUZ4coN
+         YKsk2d2zhEY7P+F9hWP1MSt9J5I+QctEHhzQlZWU8w
+From:   conleylee@foxmail.com
+To:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
+        wens@csie.org
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, conley <conleylee@foxmail.com>
+Subject: [PATCH 2/2] sun4i-emac.c: replace magic number with macro
+Date:   Mon, 10 Jan 2022 15:23:09 +0800
+X-OQ-MSGID: <20220110072309.2259523-3-conleylee@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220110072309.2259523-1-conleylee@foxmail.com>
+References: <20220110072309.2259523-1-conleylee@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: conley <conleylee@foxmail.com>
 
-commit 4619bcf91399f00a40885100fb61d594d8454033 upstream.
-
-Commit referenced in the Fixes tag used nla_memcpy for RTA_GATEWAY as
-does the current nla_get_in6_addr. nla_memcpy protects against accessing
-memory greater than what is in the attribute, but there is no check
-requiring the attribute to have an IPv6 address. Add it.
-
-Fixes: 51ebd3181572 ("ipv6: add support of equal cost multipath (ECMP)")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: conley <conleylee@foxmail.com>
 ---
- net/ipv6/route.c |   21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/allwinner/sun4i-emac.c | 26 ++++++++++-----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -4413,6 +4413,19 @@ static void ip6_route_mpath_notify(struc
- 		inet6_rt_notify(RTM_NEWROUTE, rt, info, nlflags);
+diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.c b/drivers/net/ethernet/allwinner/sun4i-emac.c
+index 849de4564709..cf9d8e9a4d9f 100644
+--- a/drivers/net/ethernet/allwinner/sun4i-emac.c
++++ b/drivers/net/ethernet/allwinner/sun4i-emac.c
+@@ -106,9 +106,9 @@ static void emac_update_speed(struct net_device *dev)
+ 
+ 	/* set EMAC SPEED, depend on PHY  */
+ 	reg_val = readl(db->membase + EMAC_MAC_SUPP_REG);
+-	reg_val &= ~(0x1 << 8);
++	reg_val &= ~EMAC_MAC_SUPP_100M;
+ 	if (db->speed == SPEED_100)
+-		reg_val |= 1 << 8;
++		reg_val |= EMAC_MAC_SUPP_100M;
+ 	writel(reg_val, db->membase + EMAC_MAC_SUPP_REG);
  }
  
-+static int fib6_gw_from_attr(struct in6_addr *gw, struct nlattr *nla,
-+			     struct netlink_ext_ack *extack)
-+{
-+	if (nla_len(nla) < sizeof(*gw)) {
-+		NL_SET_ERR_MSG(extack, "Invalid IPv6 address in RTA_GATEWAY");
-+		return -EINVAL;
-+	}
-+
-+	*gw = nla_get_in6_addr(nla);
-+
-+	return 0;
-+}
-+
- static int ip6_route_multipath_add(struct fib6_config *cfg,
- 				   struct netlink_ext_ack *extack)
- {
-@@ -4453,7 +4466,13 @@ static int ip6_route_multipath_add(struc
+@@ -264,7 +264,7 @@ static void emac_dma_done_callback(void *arg)
  
- 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
- 			if (nla) {
--				r_cfg.fc_gateway = nla_get_in6_addr(nla);
-+				int ret;
-+
-+				ret = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
-+							extack);
-+				if (ret)
-+					return ret;
-+
- 				r_cfg.fc_flags |= RTF_GATEWAY;
- 			}
- 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
-
+ 	/* re enable interrupt */
+ 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+-	reg_val |= (0x01 << 8);
++	reg_val |= EMAC_INT_CTL_RX_EN;
+ 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
+ 
+ 	db->emacrx_completed_flag = 1;
+@@ -429,7 +429,7 @@ static unsigned int emac_powerup(struct net_device *ndev)
+ 	/* initial EMAC */
+ 	/* flush RX FIFO */
+ 	reg_val = readl(db->membase + EMAC_RX_CTL_REG);
+-	reg_val |= 0x8;
++	reg_val |= EMAC_RX_CTL_FLUSH_FIFO;
+ 	writel(reg_val, db->membase + EMAC_RX_CTL_REG);
+ 	udelay(1);
+ 
+@@ -441,8 +441,8 @@ static unsigned int emac_powerup(struct net_device *ndev)
+ 
+ 	/* set MII clock */
+ 	reg_val = readl(db->membase + EMAC_MAC_MCFG_REG);
+-	reg_val &= (~(0xf << 2));
+-	reg_val |= (0xD << 2);
++	reg_val &=~ EMAC_MAC_MCFG_MII_CLKD_MASK;
++	reg_val |= EMAC_MAC_MCFG_MII_CLKD_72;
+ 	writel(reg_val, db->membase + EMAC_MAC_MCFG_REG);
+ 
+ 	/* clear RX counter */
+@@ -506,7 +506,7 @@ static void emac_init_device(struct net_device *dev)
+ 
+ 	/* enable RX/TX0/RX Hlevel interrup */
+ 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+-	reg_val |= (0xf << 0) | (0x01 << 8);
++	reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
+ 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
+ 
+ 	spin_unlock_irqrestore(&db->lock, flags);
+@@ -637,7 +637,7 @@ static void emac_rx(struct net_device *dev)
+ 		if (!rxcount) {
+ 			db->emacrx_completed_flag = 1;
+ 			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+-			reg_val |= (0xf << 0) | (0x01 << 8);
++			reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
+ 			writel(reg_val, db->membase + EMAC_INT_CTL_REG);
+ 
+ 			/* had one stuck? */
+@@ -669,7 +669,7 @@ static void emac_rx(struct net_device *dev)
+ 			writel(reg_val | EMAC_CTL_RX_EN,
+ 			       db->membase + EMAC_CTL_REG);
+ 			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+-			reg_val |= (0xf << 0) | (0x01 << 8);
++			reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
+ 			writel(reg_val, db->membase + EMAC_INT_CTL_REG);
+ 
+ 			db->emacrx_completed_flag = 1;
+@@ -783,20 +783,20 @@ static irqreturn_t emac_interrupt(int irq, void *dev_id)
+ 	}
+ 
+ 	/* Transmit Interrupt check */
+-	if (int_status & (0x01 | 0x02))
++	if (int_status & EMAC_INT_STA_TX_COMPLETE)
+ 		emac_tx_done(dev, db, int_status);
+ 
+-	if (int_status & (0x04 | 0x08))
++	if (int_status & EMAC_INT_STA_TX_ABRT)
+ 		netdev_info(dev, " ab : %x\n", int_status);
+ 
+ 	/* Re-enable interrupt mask */
+ 	if (db->emacrx_completed_flag == 1) {
+ 		reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+-		reg_val |= (0xf << 0) | (0x01 << 8);
++		reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
+ 		writel(reg_val, db->membase + EMAC_INT_CTL_REG);
+ 	} else {
+ 		reg_val = readl(db->membase + EMAC_INT_CTL_REG);
+-		reg_val |= (0xf << 0);
++		reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN);
+ 		writel(reg_val, db->membase + EMAC_INT_CTL_REG);
+ 	}
+ 
+-- 
+2.31.1
 

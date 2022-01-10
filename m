@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDC84892AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B07C148921D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241906AbiAJHq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240407AbiAJHgR (ORCPT
+        id S240646AbiAJHi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:38:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60428 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239596AbiAJHcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:36:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB1C028BFA;
-        Sun,  9 Jan 2022 23:31:39 -0800 (PST)
+        Mon, 10 Jan 2022 02:32:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F0ABB81204;
-        Mon, 10 Jan 2022 07:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638DEC36AE9;
-        Mon, 10 Jan 2022 07:31:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58828B81212;
+        Mon, 10 Jan 2022 07:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D285C36AF2;
+        Mon, 10 Jan 2022 07:32:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799896;
-        bh=lh3yShjx/46d/M0GAxDLwzAg5b4SKTEqcxr8exdbcr4=;
+        s=korg; t=1641799929;
+        bh=amkLwSEaFB8ELixfHTAcmT95x8/YFpi2ur/98Fmnou8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c4GFM0af7is7ryBngzeOVwQJnGgGEz9qwARo5TfW08ulHl6ItmbQOM7Db2LmonZo1
-         alq6WgfVzulZvPRFrIuWuzbMVSLdcFWCbfrT96pYvDIRzph4frdahv6P7319LjcaBg
-         cevMhsLZsDNY1IV6nn2fka/PcleDlkjAyjKzQkUo=
+        b=CSp5CLipA5jXkm6/bfzx13a5Z086+UvXwpwPIJ0y5XYe9ZRpiA2ApRBcr0oHRjUds
+         4x8OJR0DBd8QKedyo2IvtUqzSgAsk3HRPAibpg5pfU9kPbW70LfJmnMhPn7qJo7Vfn
+         JWmEDBGaBZmbLFGwrsDrtxBZV48MLB5yMUa3lmAw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeffrey E Altman <jaltman@auristor.com>
-Subject: [PATCH 5.15 01/72] fscache_cookie_enabled: check cookie is valid before accessing it
-Date:   Mon, 10 Jan 2022 08:22:38 +0100
-Message-Id: <20220110071821.549570773@linuxfoundation.org>
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH 5.15 02/72] selftests: x86: fix [-Wstringop-overread] warn in test_process_vm_readv()
+Date:   Mon, 10 Jan 2022 08:22:39 +0100
+Message-Id: <20220110071821.589550032@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
 References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,33 +45,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominique Martinet <asmadeus@codewreck.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-commit 0dc54bd4d6e03be1f0b678c4297170b79f1a44ab upstream.
+commit dd40f44eabe1e122c6852fabb298aac05b083fce upstream.
 
-fscache_cookie_enabled() could be called on NULL cookies and cause a
-null pointer dereference when accessing cookie flags: just make sure
-the cookie is valid first
+Fix the following [-Wstringop-overread] by passing in the variable
+instead of the value.
 
-Suggested-by: David Howells <dhowells@redhat.com>
-Acked-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-Cc: Jeffrey E Altman <jaltman@auristor.com>
+test_vsyscall.c: In function ‘test_process_vm_readv’:
+test_vsyscall.c:500:22: warning: ‘__builtin_memcmp_eq’ specified bound 4096 exceeds source size 0 [-Wstringop-overread]
+  500 |                 if (!memcmp(buf, (const void *)0xffffffffff600000, 4096)) {
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/fscache.h |    2 +-
+ tools/testing/selftests/x86/test_vsyscall.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/linux/fscache.h
-+++ b/include/linux/fscache.h
-@@ -167,7 +167,7 @@ struct fscache_cookie {
+--- a/tools/testing/selftests/x86/test_vsyscall.c
++++ b/tools/testing/selftests/x86/test_vsyscall.c
+@@ -497,7 +497,7 @@ static int test_process_vm_readv(void)
+ 	}
  
- static inline bool fscache_cookie_enabled(struct fscache_cookie *cookie)
- {
--	return test_bit(FSCACHE_COOKIE_ENABLED, &cookie->flags);
-+	return fscache_cookie_valid(cookie) && test_bit(FSCACHE_COOKIE_ENABLED, &cookie->flags);
- }
- 
- /*
+ 	if (vsyscall_map_r) {
+-		if (!memcmp(buf, (const void *)0xffffffffff600000, 4096)) {
++		if (!memcmp(buf, remote.iov_base, sizeof(buf))) {
+ 			printf("[OK]\tIt worked and read correct data\n");
+ 		} else {
+ 			printf("[FAIL]\tIt worked but returned incorrect data\n");
 
 

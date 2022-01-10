@@ -2,102 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57948A299
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D82D48A29C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345321AbiAJWSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241425AbiAJWSq (ORCPT
+        id S1345330AbiAJWTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:19:04 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:34584 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233977AbiAJWTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:18:46 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FE9C06173F;
-        Mon, 10 Jan 2022 14:18:46 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id w16so59455560edc.11;
-        Mon, 10 Jan 2022 14:18:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2wuC4QBxAL4gvA6QWC/OGqzBQ+FgoNoq9qXBNAbilkI=;
-        b=gZ5zUOlenO/ly7lxX8d963S/GMOXF/nLk7n0jgUAQYWSAm4MrJKvTEoKVOpyYY6MJp
-         rl4P8gQiJS17IhwHvT71WS8RbtlCGRn2oyHv1iDxLSARz2tItN6biu6sW4CEl/4F92ae
-         tU+0NGvG6M1E2i6hhrcvxAog5jE2suyYwCJJsmbozyynu/Wt3oIfNaEBuIXies72Fznj
-         +e4hnU6hGbiwt/5WVpc+iOE016WEi4N+kPqMVYMMBAkb0AgMfaFwn7o770IYAv5tbIUU
-         ddV6C+vaIlsMuFUSrXm2ED/PmV5XAIVYkQtnQCovbW7o4yQszXBvqv46+gO9Ock/UBCv
-         sBzA==
+        Mon, 10 Jan 2022 17:19:03 -0500
+Received: by mail-oi1-f172.google.com with SMTP id r131so20557643oig.1;
+        Mon, 10 Jan 2022 14:19:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2wuC4QBxAL4gvA6QWC/OGqzBQ+FgoNoq9qXBNAbilkI=;
-        b=Qdnug6h5SUmiJIiwgJ3JX8Qby7V9wfIYyL2QSHbKnQM8lgqthI6fSWuR8Q3nLbEDKD
-         VNRu18vC6JG7oS9t92foaKT5CStYbIObaKmxVEW2Mj53iriNiZi5BqWITR2iu47hZ6e+
-         U/KtWciyBYGBbK+7pjcp7DF4YCI3KMWiDpOrl3j+kXJOd8BK0GStZs/hBEFPS+y5+Mn/
-         HHs+rXyxa1lTyf7ff1zhFAzoAIcZBSUDQ7w/nk9FX87Q+yeUaDuPMH/mKfveEaedAnFo
-         J7vawOCYy8EeeNttYqOpMwvPwDlv1WOrsfS6IGxF4lbPBD+XRFX+D0WkgluVA1wItwSa
-         i1+g==
-X-Gm-Message-State: AOAM530gloa/T6jUjf5yJmgVC3sg6vQ1afUvOp9uwL2NGG/Y/attgNRz
-        L4WuCktrUqi6AnNnrQZan44Bo0BjG0zPLp7TMyM=
-X-Google-Smtp-Source: ABdhPJztnzSCV1UM5hQ3Y8AKb2QMmivElfcK6mKeONxweu0vrWguEgxTqC0RXmTiKv6H2RbGvdC+3F2oZ4GCJf7mt0g=
-X-Received: by 2002:a17:906:519b:: with SMTP id y27mr1329857ejk.649.1641853124571;
- Mon, 10 Jan 2022 14:18:44 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4fI2fNIwN0HoAziyHrYlHNkRkROkw7ilQQ3nQUt41GU=;
+        b=Fvez5mZeUUTmA1abRRFR5T7DL/8+ljKiSk6y3Hlw6Zb3VRRrEMMpSqrwQ0u6JMnodE
+         QxF9ox22+y12JJ/b0jzqv9smaumiZ/npMBbO8BaQrPYwijTeEmrZ7WwLoz84DTC2wI+f
+         znr/UlVSl0M38suX15f+2kFquJ9edQx5CpNBQ6UBKAlVwHfkcT8f6n8auR4r+U0gmUME
+         DZc9yM69Acts4GDYLbdV1zVcUmNOIl+wATi3pMaBz8PtpaxPOMybS232QyAa8Xz1DEp0
+         zw4uHQ3Meu2SjJBI9tQ/Oa/yKjMVp8plxWZI/ENnAp4D+bgev9p66/9sikdLo+dbUAfB
+         v4NQ==
+X-Gm-Message-State: AOAM533GFS1Sl/kdmNfAcK7wL9EGsS/zZDVjsmB5w1sWTkunRZStq6Fk
+        KGxHHpNQuzBnWIQmO3zsTmiXf3Qv9Q==
+X-Google-Smtp-Source: ABdhPJzQUAjvmuKjO91qlwzuYoMB9qXz0jc5g3WW3QfhlYUW6DDCO+pr1K0W6HgeJ43cm88/4t+K+A==
+X-Received: by 2002:a05:6808:144f:: with SMTP id x15mr1055430oiv.166.1641853142440;
+        Mon, 10 Jan 2022 14:19:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id y10sm1735448oto.44.2022.01.10.14.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 14:19:01 -0800 (PST)
+Received: (nullmailer pid 1625991 invoked by uid 1000);
+        Mon, 10 Jan 2022 22:19:01 -0000
+Date:   Mon, 10 Jan 2022 16:19:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
+        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, lh.kuo@sunplus.com,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v3 2/2] devicetree bindings I2C Add bindings doc for
+ Sunplus SP7021
+Message-ID: <Ydyw1bMJB41Cyflb@robh.at.kernel.org>
+References: <cover.1641188699.git.lhjeff911@gmail.com>
+ <9831c3acbbd34ad0d82eec67916f51bff68ae7fe.1641188699.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-References: <20220107150512.614423-1-narmstrong@baylibre.com>
- <20220107150512.614423-2-narmstrong@baylibre.com> <CAFBinCDRx6VaaAubr6VRLnX=G4Ez8cGg-=6e-9GWrH8FwwBs-g@mail.gmail.com>
- <fad140b9-2940-a24a-ba70-9849bacf617d@baylibre.com>
-In-Reply-To: <fad140b9-2940-a24a-ba70-9849bacf617d@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 10 Jan 2022 23:18:33 +0100
-Message-ID: <CAFBinCC7wfPjLGVe87E0H7WYXwrFw0e0k_2epF1dDaWKkSvRyQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: phy: add Amlogic G12A Analog MIPI
- D-PHY bindings
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     kishon@ti.com, vkoul@kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9831c3acbbd34ad0d82eec67916f51bff68ae7fe.1641188699.git.lhjeff911@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+On Mon, Jan 03, 2022 at 01:49:23PM +0800, Li-hao Kuo wrote:
+> Add devicetree bindings I2C Add bindings doc for Sunplus SP7021
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v3:
+>  - Addressed all comments from Mr. Rob Herring.
+>  - Modified the structure and register access method.
+>  - Modifiedthe the YAML file.
+> 
+>  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 72 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> new file mode 100644
+> index 0000000..ac03041
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/i2c-sunplus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus I2C controller
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +maintainers:
+> +  - Li-hao Kuo <lhjeff911@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,sp7021-i2cm
+> +      - sunplus,q645-i2cm
+> +
+> +  reg:
+> +    items:
+> +      - description: I2C registers
+> +      - description: I2C DMA registers
+> +      - description: I2C DMA power registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: i2cm
+> +      - const: i2cmdma
+> +      - const: i2cdmapower
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +  - pinctrl-names
+> +  - pinctrl-0
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sp-sp7021.h>
+> +    #include <dt-bindings/reset/sp-sp7021.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c@9C004600 {
+> +        compatible = "sunplus,sp7021-i2cm";
+> +			reg = <0x9c004600 0x80>, <0x9c004680 0x80>, <0x9c000000 0x80>;
+> +			reg-names = "i2cm", "i2cmdma", "i2cdmapower";
 
-On Mon, Jan 10, 2022 at 10:25 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> On 07/01/2022 23:13, Martin Blumenstingl wrote:
-> > Hi Neil,
-> >
-> > On Fri, Jan 7, 2022 at 4:05 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
-> > [...]
-> >> +required:
-> >> +  - compatible
-> >> +  - reg
-> >> +  - "#phy-cells"
-> > I also found a "MIPI DSI PHY clock" and "MIPI DSI PHY interrupt" in
-> > the datasheet.
-> > I'm no expert on this and I'm just asking in case you have missed one of these:
-> > Can you confirm that these belong to some other IP?
->
-> Indeed the name is misleading, both go to the DSI Transceiver IP (dw-mipi-dsi)
-Thank you for clarifying this!
+Indentation is messed up. Use spaces.
 
-I just found an old comment from Rob on v2 of this series: [0]
-He mentions:
-"If this is a child of something else, then put a $ref to this schema
-and the example in the parent schema."
-
-To be honest: I completely forgot about that comment until now.
-If I had remembered it (and assuming that his comment is still valid)
-then I would have had to NACK my own
-Documentation/devicetree/bindings/phy/amlogic,meson8-hdmi-tx-phy.yaml
-For today it's already late so I'll look into this more tomorrow.
-
-
-Best regards,
-Martin
-
-
-[0] https://lore.kernel.org/all/20210210165118.GA2311581@robh.at.kernel.org/
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clkc I2CM0>;
+> +        resets = <&rstc RST_I2CM0>;
+> +        clock-frequency = <100000>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&i2cm0_pins>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a06993b..2b8fa55 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18246,6 +18246,7 @@ SUNPLUS I2C CONTROLLER INTERFACE DRIVER
+>  M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+>  F:	drivers/i2c/busses/i2c-sunplus.c
+>  
+>  SUPERH
+> -- 
+> 2.7.4
+> 
+> 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78B6489144
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A74F489178
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239676AbiAJHak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:30:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37184 "EHLO
+        id S239999AbiAJHc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:32:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38236 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239497AbiAJH1W (ORCPT
+        with ESMTP id S239692AbiAJH2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:27:22 -0500
+        Mon, 10 Jan 2022 02:28:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B5F611B9;
-        Mon, 10 Jan 2022 07:27:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1622C36AE9;
-        Mon, 10 Jan 2022 07:27:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C5D8611D9;
+        Mon, 10 Jan 2022 07:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B740C36B05;
+        Mon, 10 Jan 2022 07:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799641;
-        bh=oW7SX6sqfjaQ3jE8DPtXe+hyra05TsoG2/m6gHOLZjA=;
+        s=korg; t=1641799724;
+        bh=jkEXWI9Pmo/l/YUG1s/FNZV4BToj0sgLXf6XuL/YJzs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iP1j7RxoIX74QFZJjDHLzTifF3Sc6PL2jk65+Q9CZqVhGSjTK+G8DkBd01fZx2bR9
-         UJ+z188vqBThYXUWZqbY87iOUnSlhkIhvMXd4XZQbU+wWlLYBH5CQNJHx6+jhc+06O
-         zkdcNr1Sy0gDCBC6r5vm703qFs2Up5VqhsYI6lpI=
+        b=I72a7uVeI/odY3hEp451dQ5mnTlfWt3yoVIfx+Y0JBgX+3If2+zIEYKHujBN4uRZx
+         guLmcAGzBytLbS4mASqqIM2b8zcBgX63Oz9MXpdvg9Je0Qe5CAiN7sm2U4FTsTV5w3
+         AFdpk6yBTPF9bc/vccqvE2UjDxEu+Qb6PH/uhD4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, yangxingwu <xingwu.yang@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 20/21] net: udp: fix alignment problem in udp4_seq_show()
-Date:   Mon, 10 Jan 2022 08:23:21 +0100
-Message-Id: <20220110071814.615293887@linuxfoundation.org>
+Subject: [PATCH 5.4 27/34] ipv6: Continue processing multipath route even if gateway attribute is invalid
+Date:   Mon, 10 Jan 2022 08:23:22 +0100
+Message-Id: <20220110071816.582688860@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,46 +47,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: yangxingwu <xingwu.yang@gmail.com>
+From: David Ahern <dsahern@kernel.org>
 
-[ Upstream commit 6c25449e1a32c594d743df8e8258e8ef870b6a77 ]
+[ Upstream commit e30a845b0376eb51c9c94f56bbd53b2e08ba822f ]
 
-$ cat /pro/net/udp
+ip6_route_multipath_del loop continues processing the multipath
+attribute even if delete of a nexthop path fails. For consistency,
+do the same if the gateway attribute is invalid.
 
-before:
-
-  sl  local_address rem_address   st tx_queue rx_queue tr tm->when
-26050: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000
-26320: 0100007F:0143 00000000:0000 07 00000000:00000000 00:00000000
-27135: 00000000:8472 00000000:0000 07 00000000:00000000 00:00000000
-
-after:
-
-   sl  local_address rem_address   st tx_queue rx_queue tr tm->when
-26050: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000
-26320: 0100007F:0143 00000000:0000 07 00000000:00000000 00:00000000
-27135: 00000000:8472 00000000:0000 07 00000000:00000000 00:00000000
-
-Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 1ff15a710a86 ("ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route")
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Acked-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Link: https://lore.kernel.org/r/20220103171911.94739-1-dsahern@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/udp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv6/route.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index fce32f3e42b54..b7acb6afdbce6 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2845,7 +2845,7 @@ int udp4_seq_show(struct seq_file *seq, void *v)
- {
- 	seq_setwidth(seq, 127);
- 	if (v == SEQ_START_TOKEN)
--		seq_puts(seq, "  sl  local_address rem_address   st tx_queue "
-+		seq_puts(seq, "   sl  local_address rem_address   st tx_queue "
- 			   "rx_queue tr tm->when retrnsmt   uid  timeout "
- 			   "inode ref pointer drops");
- 	else {
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 53861f9c8ce0a..56f0783df5896 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5313,8 +5313,10 @@ static int ip6_route_multipath_del(struct fib6_config *cfg,
+ 			if (nla) {
+ 				err = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
+ 							extack);
+-				if (err)
+-					return err;
++				if (err) {
++					last_err = err;
++					goto next_rtnh;
++				}
+ 
+ 				r_cfg.fc_flags |= RTF_GATEWAY;
+ 			}
+@@ -5323,6 +5325,7 @@ static int ip6_route_multipath_del(struct fib6_config *cfg,
+ 		if (err)
+ 			last_err = err;
+ 
++next_rtnh:
+ 		rtnh = rtnh_next(rtnh, &remaining);
+ 	}
+ 
 -- 
 2.34.1
 

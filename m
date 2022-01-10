@@ -2,220 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABB448A1D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B36AF48A1D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343897AbiAJVXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
+        id S1343901AbiAJVXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241795AbiAJVW6 (ORCPT
+        with ESMTP id S241601AbiAJVXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:22:58 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A1AC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:22:57 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s30so21315421lfo.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:22:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gD7CSDwfxy/Lif/7IpTLd88iEhqR78uzddJXBpdBxoI=;
-        b=J7l6MTe7Bv1qp+GA1nNeDfDzSVvgtYWd5VNznpN9Y2YSIsJyb6QDDwTf1NsqpGsDIW
-         eHPdcQz5lB2cZ9Mauqv4YsF60i2viwrvzLwCGAm+0sGEk55WL9gCZYmM89KyPUDF3C7A
-         dLLZY4GsiCuH2gfj8vYzfU/5ud7lpj9Mvf2bpVWJxJpJgtvxLnRX7T0rtCVh37UYFNqo
-         rHPoL0My+JOlDorgaXhXV8tnrS4zwry4BtrTjwpmts5MLCTw7M4mpxlwJIFdiMKIXXZn
-         9BoL7RDYDVGOg+1xMUMx/yOBOAieHPv2O1QRYfuCJ0EHb079ElSHhDEg4hA5jJSgXrds
-         dxig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gD7CSDwfxy/Lif/7IpTLd88iEhqR78uzddJXBpdBxoI=;
-        b=V+oE6LhBc9a/RFNcUzbXes5/TloFoNkmtlBpEnfPGradS/DcpUQYqBCFTYvJB9BmSq
-         pDZko+aM0Fwm+FQg3/X0aaRVRXwPrjHAUmUDhH8qBQ1tjez10eiPf+73hXGrs8EMnVoc
-         FGhuga+WB7p3goamh8hTtL8huEquS8o3cmJq/B7+OL+ejiA8i0N12weg6ivicYHdKF6C
-         VZbjcAj8fz+F7eAmwQX0qxV7wcA4NlDw+3k84nRxPh107YhM3HJS+t5jtyFT1KDujrvn
-         boXdysUz2tVwrWxnjZ0GQniilyVLB1N0xZ/+mvOZdRaCzcRrDT12vu/GzCRJbh5NJWg5
-         muhg==
-X-Gm-Message-State: AOAM533Z9fZ3vhBTKJ00fGXcAsPJxw3UafGXYfcNmEvBCzTRTwYrcnZ7
-        bQNcxYGA5Q9s3gdEIrx+KKSY8LpBKvRNzkVn0b2pJw==
-X-Google-Smtp-Source: ABdhPJzLjIY8fVRDt8uU5TNENsCoG+YvyzB8/FtAQ+ws5z4mSnYa4ns1JadsuKfZW2ucp34oTJJ8E7ncPRGtz6qLoWE=
-X-Received: by 2002:a05:6512:1192:: with SMTP id g18mr738593lfr.523.1641849776060;
- Mon, 10 Jan 2022 13:22:56 -0800 (PST)
+        Mon, 10 Jan 2022 16:23:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A99C06173F;
+        Mon, 10 Jan 2022 13:23:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B89061411;
+        Mon, 10 Jan 2022 21:23:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3265AC36AE3;
+        Mon, 10 Jan 2022 21:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641849792;
+        bh=T9STf5hUbuB72JEkabZ1MTPiweQMf+1BwcjOmv6V1bc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HoL751Cw9VmnYLk760NDJxU3pkRbkUHgUXybd56l0VVq/KLDM5r4QI+hBZoMmftuC
+         noQLxy8wRCeeUceikQkLHA35zCX1PrBS7tZhYcyksF4I/jRPusWkReN3+5ljiiQOjn
+         eSiNr4zm9t4skSBpYGpm5fSYDVgFcA9LF8n3PX6MkvoXolPZPuioPhrBI65i4YJJJa
+         3bfhMWthqt6AK43hyM00issEvIPfCuXWQRjzZqbIyK82BwQmlTHg1K4Dz8FmBVoGDQ
+         VDSCt8OLUdE6krLryBTSjmV5gxFE6Pe3e807cjN7M26ZN0Pte4Kpm213H0b9HHzImR
+         6Ld68IJQ8xaSQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7BE9240714; Mon, 10 Jan 2022 18:23:09 -0300 (-03)
+Date:   Mon, 10 Jan 2022 18:23:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Subject: Re: [PATCH v3 06/48] perf cpumap: Switch cpu_map__build_map to cpu
+ function
+Message-ID: <Ydyjvcma/wMTPwbn@kernel.org>
+References: <20211230072030.302559-1-irogers@google.com>
+ <20211230072030.302559-8-irogers@google.com>
+ <YdybPJKjqx6zb28/@kernel.org>
+ <YdyfCN1/JWJtJHTO@kernel.org>
 MIME-Version: 1.0
-References: <202201081852.uTfBqS4b-lkp@intel.com> <CAHp75VfS-4B1AwzawCR7VVAxopK6ACcY63ig07OqY32MswfoOQ@mail.gmail.com>
- <CAKwvOdk9XFOL2RAh5+FKWMR9jWFwrS=J+ogwUPj5OOLXcr-iSQ@mail.gmail.com> <YdybwqL1NtF39Wyd@smile.fi.intel.com>
-In-Reply-To: <YdybwqL1NtF39Wyd@smile.fi.intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 10 Jan 2022 13:22:43 -0800
-Message-ID: <CAKwvOdnAXBLE-MjMS6=0jZmkK_3MYTxD2OQjdnxbcnTL9rH_fw@mail.gmail.com>
-Subject: Re: drivers/media/v4l2-core/v4l2-ioctl.c:303:28: warning: taking
- address of packed member 'pixelformat' of class or structure
- 'v4l2_pix_format_mplane' may result in an unaligned pointer value
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Nick Desaulniers <nick.desaulniers@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Roman Lebedev <lebedev.ri@gmail.com>,
-        Richard Smith <richard@metafoo.co.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdyfCN1/JWJtJHTO@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 12:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Jan 10, 2022 at 11:44:12AM -0800, Nick Desaulniers wrote:
-> > On Sun, Jan 9, 2022 at 6:26 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > +Nick Desaulniers
-> > >
-> > > Any ideas on how to fix this?
-> >
-> > Not obviously.
->
-> Thanks for looking into this!
->
-> > This code probably will trigger a splat when run with
-> > UBSan though.
-> >
-> > I'm curious if the structure needs to be packed for interfacing with
-> > hardware or some ABI, or whether we could add an explicit alignment to
-> > the member if that would be ok (which may add back some padding)?
->
-> Looking into it I think removing packed attribute brings a regression
-> immediately on 64-bit platforms since u32 member followed by u8.
->
-> > Otherwise, I suspect to actually access this properly we may have
-> > macros for performing underaligned loads and stores?  I suspect you'd
-> > read potentially unaligned data into an aligned copy, then do
-> > operations on that, at which point printing the address of the copy is
-> > legal, but perhaps useless.
->
-> Current code does this:
->
->         val = *fourcc & ~BIT(31);
->         ...
->         for (i = 0; i < sizeof(*fourcc); i++) {
->         ...
->         strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
->         ...
->         p = special_hex_number(p, output + sizeof(output) - 2, *fourcc, sizeof(u32));
->
-> If unaligned access is not good it will crash on some architectures AFAIU.
->
-> So, it should use get_unaligned() in the first place.
+Em Mon, Jan 10, 2022 at 06:03:04PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Jan 10, 2022 at 05:46:52PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Wed, Dec 29, 2021 at 11:19:48PM -0800, Ian Rogers escreveu:
+> > > Avoid error prone cpu_map + idx variant. Remove now unused functions.
+> > 
+> > At this point we need to remove the now unused perf_env__get_cpu(), and
+> > then deal with the fallout in the following patches that needlessly
+> > modify this unused function.
+> > 
+> > Doing that now.
+> 
+> Done, force pushed to tmp.perf/perf_cpu, now it is going again thru the
+> build containers, a better start now:
+> 
+> [perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.100.2/perf/perf-5.16.0.tar.xz
+> [perfbuilder@five ~]$ time dm
+>    1    95.61 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+>    2    56.18 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
+>    3: alpine:3.5
+> 
 
-Regardless of your unaligned access patch
-(https://lore.kernel.org/lkml/20220110205049.11696-1-andriy.shevchenko@linux.intel.com/),
-taking the address of a packed member will still have a warning:
-https://godbolt.org/z/8r1rcocPY
+So far so good:
 
-So it looks like packing a struct sets the alignment of members to 1,
-ie. under-aligning them.  You need to restore the alignment of the
-members you plan to take the address of.
+[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.100.2/perf/perf-5.16.0.tar.xz
+[perfbuilder@five ~]$ time dm
+   1    95.61 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+   2    56.18 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
+   3    54.98 alpine:3.5                    : Ok   gcc (Alpine 6.2.1) 6.2.1 20160822 , clang version 3.8.1 (tags/RELEASE_381/final)
+   4    57.69 alpine:3.6                    : Ok   gcc (Alpine 6.3.0) 6.3.0 , clang version 4.0.0 (tags/RELEASE_400/final)
+   5    63.62 alpine:3.7                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.0 (tags/RELEASE_500/final) (based on LLVM 5.0.0)
+   6    64.52 alpine:3.8                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.1 (tags/RELEASE_501/final) (based on LLVM 5.0.1)
+   7    66.54 alpine:3.9                    : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 5.0.1 (tags/RELEASE_502/final) (based on LLVM 5.0.1)
+   8    91.91 alpine:3.10                   : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
+   9   104.93 alpine:3.11                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 9.0.0 (https://git.alpinelinux.org/aports f7f0d2c2b8bcd6a5843401a9a702029556492689) (based on LLVM 9.0.0)
+  10   107.97 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+  11   115.98 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
+  12   101.73 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
+  13   103.35 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
+  14   104.43 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128 , Alpine clang version 12.0.1
+  15    51.06 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
 
-ie.
+Building with:
 
-struct w {
-  char x, y, z;
-} __attribute__((packed));
+build_perf_gcc() {
+	set -o xtrace
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" -C tools/perf O=/tmp/build/perf || exit 1
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" NO_LIBELF=1 -C tools/perf O=/tmp/build/perf || exit 1
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" NO_LIBBPF=1 -C tools/perf O=/tmp/build/perf || exit 1
+	if [ -d /usr/include/traceevent/ ] ; then
+		make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" LIBTRACEEVENT_DYNAMIC=1 -C tools/perf O=/tmp/build/perf || exit 1
+	fi
+	set +o xtrace
+}
 
-is equivalent in layout and alignment to:
+build_perf_clang() {
+	set -o xtrace
 
-struct w {
-  char __attribute__((aligned(1))) x;
-  char __attribute__((aligned(1))) y;
-  char __attribute__((aligned(1))) z;
-} __attribute__((aligned(1)));
+	if [ ! $NO_BUILD_BPF_SKEL ] ; then
+		rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+		make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" BUILD_BPF_SKEL=1 -C tools/perf O=/tmp/build/perf || exit 1
+	fi
 
-For `struct v4l2_pix_format_mplane` we probably want the trailing
-char's to have alignment 1, rather than every member. We can either be
-explicit with __aligned(1) on them, or __aligned(4) on the uint
-members and retain __packed.
-
->
-> > Perhaps:
-> >
-> > -       __u32                           pixelformat;
-> > +       __u32                           pixelformat __aligned(4);
->
-> This looks weird, however I can't immediately see any side effects of it.
-> What if the address of the entire structure is unaligned, would we have a
-> gap here? In any case I wouldn't go this way.
->
-> >         __u32                           field;
-> >         __u32                           colorspace;
-> >
-> > Perhaps we could tighten up this warning in clang; we don't have any
-> > holes before this member, so I _wouldn't_ have assumed
-> > __attribute__((packed)) would have caused the address of pixelformat
-> > member of an instance of struct v4l2_pix_format_mplane to ever be
-> > underaligned.
-> >
-> > > On Sun, Jan 9, 2022 at 3:53 PM kernel test robot <lkp@intel.com> wrote:
-> > > >
-> > > > Hi Sakari,
-> > > >
-> > > > FYI, the error/warning still remains.
-> > > >
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
-> > > > commit: e927e1e0f0dd3e353d5556503a71484008692c82 v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
-> > > > date:   11 months ago
-> > > > config: mips-buildonly-randconfig-r002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081852.uTfBqS4b-lkp@intel.com/config)
-> > > > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # install mips cross compiling tool for clang build
-> > > >         # apt-get install binutils-mips-linux-gnu
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e927e1e0f0dd3e353d5556503a71484008692c82
-> > > >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > > >         git fetch --no-tags linus master
-> > > >         git checkout e927e1e0f0dd3e353d5556503a71484008692c82
-> > > >         # save the config file to linux build tree
-> > > >         mkdir build_dir
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/media/v4l2-core/ fs/
-> > > >
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All warnings (new ones prefixed by >>):
-> > > >
-> > > > >> drivers/media/v4l2-core/v4l2-ioctl.c:303:28: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> > > >                            mp->width, mp->height, &mp->pixelformat,
-> > > >                                                    ^~~~~~~~~~~~~~~
-> > > >    include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
-> > > >            printk(KERN_CONT fmt, ##__VA_ARGS__)
-> > > >                                    ^~~~~~~~~~~
-> > > > >> drivers/media/v4l2-core/v4l2-ioctl.c:347:37: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_sdr_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> > > >                    pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
-> > > >                                                      ^~~~~~~~~~~~~~~~
-> > > >    include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
-> > > >            printk(KERN_CONT fmt, ##__VA_ARGS__)
-> > > >                                    ^~~~~~~~~~~
-> > > > >> drivers/media/v4l2-core/v4l2-ioctl.c:353:5: warning: taking address of packed member 'dataformat' of class or structure 'v4l2_meta_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> > > >                            &meta->dataformat, meta->buffersize);
-> > > >                             ^~~~~~~~~~~~~~~~
-> > > >    include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
-> > > >            printk(KERN_CONT fmt, ##__VA_ARGS__)
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" -C tools/perf O=/tmp/build/perf CC=clang || exit 1
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" NO_LIBELF=1 -C tools/perf O=/tmp/build/perf CC=clang || exit 1
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" NO_LIBBPF=1 -C tools/perf O=/tmp/build/perf CC=clang || exit 1
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" LIBCLANGLLVM=1 -C tools/perf O=/tmp/build/perf CC=clang || exit 1
+	rm -rf /tmp/build/perf ; mkdir /tmp/build/perf
+	make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" LIBCLANGLLVM=1 -C tools/perf O=/tmp/build/perf || exit 1
+	if [ -d /usr/include/traceevent/ ] ; then
+		make $EXTRA_MAKE_ARGS ARCH=$ARCH CROSS_COMPILE=$CROSS_COMPILE EXTRA_CFLAGS="$EXTRA_CFLAGS" LIBTRACEEVENT_DYNAMIC=1 -C tools/perf O=/tmp/build/perf || exit 1
+	fi
+	set +o xtrace
+}

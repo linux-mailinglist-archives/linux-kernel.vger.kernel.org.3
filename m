@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 489BA48923B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3EB489225
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242405AbiAJHkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240444AbiAJHai (ORCPT
+        id S241705AbiAJHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:39:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60580 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240691AbiAJHc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:30:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C28C02548B;
-        Sun,  9 Jan 2022 23:28:19 -0800 (PST)
+        Mon, 10 Jan 2022 02:32:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 329FF611E4;
-        Mon, 10 Jan 2022 07:28:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E81C36AE9;
-        Mon, 10 Jan 2022 07:28:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55900B81202;
+        Mon, 10 Jan 2022 07:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D360C36AED;
+        Mon, 10 Jan 2022 07:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799698;
-        bh=W1D9UO82cgAo6aiHdohcnepskgBlIB9uzCRajtDZ34M=;
+        s=korg; t=1641799943;
+        bh=cKjPmRM8ypJylgsOOQD2RqjrD5l7FMaIltUJJ/AFrVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BgzfmhmnkXOsJk7XQx/E3hjh5SMLBuY/g3aNqaOpeE0a6x2sfaKTOZfG03wNURMg7
-         eMdjmM9XfNAMeeepUe8eg4LfGVNa0WDr2nBTOheXXhUlmGvU3wrq8WWSKGms7UwulE
-         IR+ntOCShAKpoHVuSO6KjWQzyp/O1V1FSP+cUN3M=
+        b=JjaSWbaVOh8i3SpgkFAksBxXayJV+qo03aT7vGLQHW2h1H8eLUBpC8Zs9XpZy3zas
+         WnKMtaciY4WiPoKnfegzQREpkBSLAkwvRKQDHlAW4iZpfP5Afme2gryOF9D6rayOQs
+         BoiewBNOPPVl2+DGduot31OeFY50tmHZ6qQqGaco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Potapenko <glider@google.com>,
-        Alexander Aring <aahringo@redhat.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 5.4 06/34] ieee802154: atusb: fix uninit value in atusb_set_extended_addr
+        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 24/72] lwtunnel: Validate RTA_ENCAP_TYPE attribute length
 Date:   Mon, 10 Jan 2022 08:23:01 +0100
-Message-Id: <20220110071815.866447868@linuxfoundation.org>
+Message-Id: <20220110071822.385374355@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
-References: <20220110071815.647309738@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,65 +45,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: David Ahern <dsahern@kernel.org>
 
-commit 754e4382354f7908923a1949d8dc8d05f82f09cb upstream.
+commit 8bda81a4d400cf8a72e554012f0d8c45e07a3904 upstream.
 
-Alexander reported a use of uninitialized value in
-atusb_set_extended_addr(), that is caused by reading 0 bytes via
-usb_control_msg().
+lwtunnel_valid_encap_type_attr is used to validate encap attributes
+within a multipath route. Add length validation checking to the type.
 
-Fix it by validating if the number of bytes transferred is actually
-correct, since usb_control_msg() may read less bytes, than was requested
-by caller.
+lwtunnel_valid_encap_type_attr is called converting attributes to
+fib{6,}_config struct which means it is used before fib_get_nhs,
+ip6_route_multipath_add, and ip6_route_multipath_del - other
+locations that use rtnh_ok and then nla_get_u16 on RTA_ENCAP_TYPE
+attribute.
 
-Fail log:
+Fixes: 9ed59592e3e3 ("lwtunnel: fix autoload of lwt modules")
 
-BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
-BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
-BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
-Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
- ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
- atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
- atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
- usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
-
-Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
-Reported-by: Alexander Potapenko <glider@google.com>
-Acked-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Link: https://lore.kernel.org/r/20220104182806.7188-1-paskripkin@gmail.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ieee802154/atusb.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ net/core/lwtunnel.c      |    4 ++++
+ net/ipv4/fib_semantics.c |    3 +++
+ net/ipv6/route.c         |    4 ++++
+ 3 files changed, 11 insertions(+)
 
---- a/drivers/net/ieee802154/atusb.c
-+++ b/drivers/net/ieee802154/atusb.c
-@@ -93,7 +93,9 @@ static int atusb_control_msg(struct atus
+--- a/net/core/lwtunnel.c
++++ b/net/core/lwtunnel.c
+@@ -197,6 +197,10 @@ int lwtunnel_valid_encap_type_attr(struc
+ 			nla_entype = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
  
- 	ret = usb_control_msg(usb_dev, pipe, request, requesttype,
- 			      value, index, data, size, timeout);
--	if (ret < 0) {
-+	if (ret < size) {
-+		ret = ret < 0 ? ret : -ENODATA;
+ 			if (nla_entype) {
++				if (nla_len(nla_entype) < sizeof(u16)) {
++					NL_SET_ERR_MSG(extack, "Invalid RTA_ENCAP_TYPE");
++					return -EINVAL;
++				}
+ 				encap_type = nla_get_u16(nla_entype);
+ 
+ 				if (lwtunnel_valid_encap_type(encap_type,
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -740,6 +740,9 @@ static int fib_get_nhs(struct fib_info *
+ 			}
+ 
+ 			fib_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
++			/* RTA_ENCAP_TYPE length checked in
++			 * lwtunnel_valid_encap_type_attr
++			 */
+ 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
+ 			if (nla)
+ 				fib_cfg.fc_encap_type = nla_get_u16(nla);
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5287,6 +5287,10 @@ static int ip6_route_multipath_add(struc
+ 				r_cfg.fc_flags |= RTF_GATEWAY;
+ 			}
+ 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
 +
- 		atusb->err = ret;
- 		dev_err(&usb_dev->dev,
- 			"%s: req 0x%02x val 0x%x idx 0x%x, error %d\n",
-@@ -861,9 +863,9 @@ static int atusb_get_and_show_build(stru
- 	if (!build)
- 		return -ENOMEM;
- 
--	ret = atusb_control_msg(atusb, usb_rcvctrlpipe(usb_dev, 0),
--				ATUSB_BUILD, ATUSB_REQ_FROM_DEV, 0, 0,
--				build, ATUSB_BUILD_SIZE, 1000);
-+	/* We cannot call atusb_control_msg() here, since this request may read various length data */
-+	ret = usb_control_msg(atusb->usb_dev, usb_rcvctrlpipe(usb_dev, 0), ATUSB_BUILD,
-+			      ATUSB_REQ_FROM_DEV, 0, 0, build, ATUSB_BUILD_SIZE, 1000);
- 	if (ret >= 0) {
- 		build[ret] = 0;
- 		dev_info(&usb_dev->dev, "Firmware: build %s\n", build);
++			/* RTA_ENCAP_TYPE length checked in
++			 * lwtunnel_valid_encap_type_attr
++			 */
+ 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
+ 			if (nla)
+ 				r_cfg.fc_encap_type = nla_get_u16(nla);
 
 

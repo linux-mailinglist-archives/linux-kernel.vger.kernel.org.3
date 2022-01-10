@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2282C4895CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDBA4895D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243524AbiAJJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:57:31 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39580 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243528AbiAJJ4w (ORCPT
+        id S243481AbiAJJ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243497AbiAJJ5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:56:52 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E343F210F8;
-        Mon, 10 Jan 2022 09:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641808610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Peyc15H1SETBUtd+31GRO+DFq6eD7xJCJluuluBn8Eg=;
-        b=leFsN63Lt32lIpzXXz8w+p04Hwb1cNFlYsFtaQiN1RizJz6xgdp7q3gi5SEDrInCJQSE6y
-        EsYHYjcjph7Ph/lgU2nbpczxKsbQCeDzbkxheTmxEujLM+96YXKhmxkx1zLz1BWUvxQ+TU
-        KPYdpWPKUhg975XETWrhennQ48/NlDU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641808610;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Peyc15H1SETBUtd+31GRO+DFq6eD7xJCJluuluBn8Eg=;
-        b=1VqLoq6jM5wFTDBhwjqLTpuCS4sCSSnRlEVS8jHr84r+y4O1EuDFqc0YuQdcpxmajYx6os
-        K+Lm8Ak4FAam8eCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CBC5513CCB;
-        Mon, 10 Jan 2022 09:56:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id F/AOMOIC3GFHPgAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 09:56:50 +0000
-Date:   Mon, 10 Jan 2022 10:56:55 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/fpu for v5.17
-Message-ID: <YdwC58lduSOILPmq@zn.tnic>
+        Mon, 10 Jan 2022 04:57:11 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E6C06175B;
+        Mon, 10 Jan 2022 01:57:09 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id g80so36618724ybf.0;
+        Mon, 10 Jan 2022 01:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=d84IyUOyurvFvSv5LzCsSavV50bnV4A3aqd5IY6z158=;
+        b=n1Jwkx5Mf+1c/hDk5wx8AYKZgxTS6CYqlAM7OC1v31FwzX531Hlcs9476ZzHKmdlZU
+         k4e5Y91Uk//wMKAsqYLASYVHz6P71GAwTYUl35aE1cCQzd5cHZA+JohWXsbDX9ZFKiUe
+         irXq+j+Qr+7pFmbqsPAxPOLJLAq9NseoTbJJmQZpVd3Wi6s60d0yq6QQVvEBuj4pFZzt
+         9JNOAN/OgBw40Yit0zzmGq+z+fIdS31USLtnG8qbBrjeV6EoGzBfc++t6ilg7qL/JenG
+         obEFoTkA2+Y7VoKRC+a/K97LLWWanngUgJt7iT7I4jkCQsX/HawrhzZ2QBgTy627Haw2
+         F8oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=d84IyUOyurvFvSv5LzCsSavV50bnV4A3aqd5IY6z158=;
+        b=6/nVe41EhxIabXyOZi4QmteV28PyMT70Uy9zK6lLBJclHOek38l+Gc7ND4mo4fMbU7
+         mc1g1cS7Vr+fZlOG15col8PPzqZDu3cKVV/n0K9WKUL1F8whKJZXxPWb9NnzQcQJ1HYP
+         NeUGIX9QCUSohSE30iKdasgj3nAAK6iXKrPwVqc3TQtzBO/SDs5aOJ073u2YLRuQDqBe
+         X/SaMO8WuGVkUOwQQwSUzj38njZOfStE5aaMdfdwFOEFgXB662aOs8u3aP2S8TTr1nwI
+         vIQCJ2yAA7/rQixJMJJ8ukWm+AAuEEF0tW8oQjJ6LddRG0unQQDwNRZvz293+3jpbipr
+         MvUA==
+X-Gm-Message-State: AOAM533oORwwN3XcuyIrsw7ep7lJGRkkJzHdg5H2tCYX+m6lgFp3NSx5
+        6dAY/Ja55qU2RVX8WpxhijgmDWl2K6WB7Q1eKMA=
+X-Google-Smtp-Source: ABdhPJwVwWhfyHOvXBVycLJMUGG08bR7R08yhc/BPFfD/PcUUlXSuZShmbXi6vZjjPs/eKeTTdwAOc72VwRW/Jizwy0=
+X-Received: by 2002:a25:d44:: with SMTP id 65mr83645207ybn.510.1641808628617;
+ Mon, 10 Jan 2022 01:57:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 10 Jan 2022 10:56:58 +0100
+Message-ID: <CAKXUXMy8ywQXqqmOvvm9wKL_ikixRJOFgCcgu4OdPUPhjq6MhA@mail.gmail.com>
+Subject: GPL-1.0-licensed code for files drivers/clk/mediatek/clk-mt7986*
+ included with commit ec97d23c8e22 ("clk: mediatek: add mt7986 clock support")
+To:     Sam Shih <sam.shih@mediatek.com>, Ryder Lee <ryder.lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-spdx@vger.kernel.org,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Dear Sam,
 
-please pull a single x86/fpu update for 5.17.
 
-Thx.
+Thanks for contributing the mt7986 clock support to the kernel
+repository with commit ec97d23c8e22 ("clk: mediatek: add mt7986 clock
+support").
 
----
+You have marked the files below with the GPL-1.0 License, which
+./scripts/spdxcheck.py identifies and warns about:
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+drivers/clk/mediatek/clk-mt7986-apmixed.c: 1:28 Invalid License ID: GPL-1.0
+drivers/clk/mediatek/clk-mt7986-infracfg.c: 1:28 Invalid License ID: GPL-1.0
+drivers/clk/mediatek/clk-mt7986-topckgen.c: 1:28 Invalid License ID: GPL-1.0
 
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+The kernel's licensing rules are described here:
 
-are available in the Git repository at:
+https://www.kernel.org/doc/html/latest/process/license-rules.html#kernel-licensing
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_fpu_for_v5.17_rc1
+The GPL-1.0 is a deprecated license in the kernel repository.
 
-for you to fetch changes up to 0fe4ff885f8a50082d9dc241b657472894caba16:
+Driver code that is licensed with GPL-1.0 might not be compatible with
+GPL-2.0. I am not a lawyer, and we probably do not want to require all
+users of your driver code to needlessly involve a lawyer to get such a
+statement on license compatibility.
 
-  x86/fpu: Correct AVX512 state tracking (2021-11-16 17:19:41 +0100)
+Do you really intend to license this code under GPL-1.0 and are you
+aware of all the consequences for other developers and users? Or is
+this a mistake and you intend to license it under the kernel's
+standard GPL-2.0 license?
 
-----------------------------------------------------------------
-- Exclude AVX opmask registers use from AVX512 state tracking as they
-don't contribute to frequency throttling
 
-----------------------------------------------------------------
-Noah Goldstein (1):
-      x86/fpu: Correct AVX512 state tracking
+Best regards,
 
- arch/x86/kernel/fpu/core.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Lukas

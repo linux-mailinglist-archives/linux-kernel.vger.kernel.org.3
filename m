@@ -2,163 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD01648931C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE04F489322
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239875AbiAJIOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbiAJIOj (ORCPT
+        id S239949AbiAJIQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:16:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32438 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231458AbiAJIQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:14:39 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDD3C06173F;
-        Mon, 10 Jan 2022 00:14:39 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso20018404pjm.4;
-        Mon, 10 Jan 2022 00:14:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xN1vtAyh+kwI83JTVy+mkGHjlZGHaJa9aANamWLa06M=;
-        b=TIDkriRBhYYvmbd1QbK8yfZ29G2Ssa6/Il2alwx/UJko/44M150ltIrZd9tlsExply
-         EPe9GwL9vkk8hpeVzZlB7Ftr1tJF57o2aD2NSpf9oj90G7V9BuL51rYr/fis5aA+Slgf
-         totHpWMOjsYh5vbG9GN5baAL1uvAalyN8jXxju9PKiLAWzsUKNgn3/FTj7prFqaQp0OP
-         IvGily4+3Jcqc7vj8dCx72ehwAL/K4Db0UjJlcxjzofaZL4JeVn6R2kwdb2v5ktG3Cqv
-         QsQMLq+V0oOmFy+GovSpGFu4ctiQQvDNn4L05LtDibHjnxummFPmbqnYV8jCi6uv5poa
-         7M3Q==
+        Mon, 10 Jan 2022 03:16:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641802584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6DXb2Qdot0WJqkZ8hEt07gD3PLBZLtkyHeR+k71iLxo=;
+        b=JBKBwkoivI7qvfC2+NxfIbhkwNKsmOSitJRcMzBR5ubY+MyDYpxHRwhujvTGEyAY3iAMMe
+        un0+AT4H2eqBkeIHZkIcus2DybrAM31cBDrrU4sR1JtNx/x+i/jwE4wx0rm1ErY2yIqbfb
+        HsijQ3I09BM+XDA8d3tVuL5tIqKT/fY=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-265-rSbnhDuFPQmGsC2qfxcG2Q-1; Mon, 10 Jan 2022 03:16:22 -0500
+X-MC-Unique: rSbnhDuFPQmGsC2qfxcG2Q-1
+Received: by mail-ed1-f69.google.com with SMTP id s7-20020a056402520700b003f841380832so9483486edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:16:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xN1vtAyh+kwI83JTVy+mkGHjlZGHaJa9aANamWLa06M=;
-        b=29ebhFDSlIa3ceh1wRdDgeS7UmgK97G1ycSLWnJUr0uK1guP04l9zwcG0P4C8ZixWH
-         e29NTJhQ52dBfPNoTBnol4o2x4dz4KFI6laeVAvC5Vs+Bhvi9hha4wF7ci2MGdjTa24U
-         9g37Ny6AeytdYt2wOwnvZ1urFv4jsx4yHpjo0DBHdy/jzDvI76xNp1RTQR9xpXhd5t49
-         0yeL9lrFGwdHic4E73zwaT+FNv+UoalP0JXaAtJUaTGok5Dq0vzLka10POvSX40bY34G
-         Hj2/H7rndKUHhEpMMbqFVVOHkBylTtblXn2/EquzewiABd/0CqZkNn8QTWiStWKUf9sd
-         HHGA==
-X-Gm-Message-State: AOAM533+GpxLHXmHOYCUZGFR6KCVCOV+JDpbrtMZ/FzsWtAqXwxp4Gfn
-        rr70GTHCRFDjYaB6QfhUxb0=
-X-Google-Smtp-Source: ABdhPJxOsLGlBEucz1/2525I+3enC/3LGB3tNEm52E/BDyRSXKVPxCxb8353YYhp9dRuvYgv1nZmZw==
-X-Received: by 2002:a17:90a:6c05:: with SMTP id x5mr10454391pjj.61.1641802478491;
-        Mon, 10 Jan 2022 00:14:38 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:1d28:509e:281:5bca])
-        by smtp.gmail.com with ESMTPSA id a3sm5929723pfv.47.2022.01.10.00.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 00:14:36 -0800 (PST)
-Date:   Mon, 10 Jan 2022 00:14:34 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Sean O'Brien <seobrien@chromium.org>,
-        Ting Shen <phoenixshen@google.com>,
-        Stephen Boyd <swboyd@google.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: vivaldi: fix handling devices not using numbered
- reports
-Message-ID: <Ydvq6sgHzNzAy0ud@google.com>
-References: <YdieAFj0ppmAtQxS@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=6DXb2Qdot0WJqkZ8hEt07gD3PLBZLtkyHeR+k71iLxo=;
+        b=WZW1yp78zcfGqRVwmDzyExZfvSSUW/jguqP8I8JSeYenoe5asFctXIdBewyZ2Z2KRf
+         0DMA3Cei0fY4LBv1aIe/h/Fs1PWkAWCNLd95Ko1+Qth5haZ6zJz5brnHanXsr2zHQICY
+         DqiIgxPfK2K3zPaw4+fYNFq1XVBHrXpSciyJynUZoljoqEBr3o/73uaOakNFBFGQl5qY
+         LEF/I8ogvOQbwnCvDZUE8ke6oYfl7o4ijNcUtwcnMhkHesPrZrYVZQNrEtT96FoIEPlN
+         Yvn+4iytMH8UPUuxuIJ2DXeg3LqiZX5L6ikLmc5M6U3X2R/I2TNSzKoY2L0KjDjqVHp/
+         j17A==
+X-Gm-Message-State: AOAM531EQoUgphjCxvEnlM9oB27GQlqUtPGP8drylT2Qjq8InZ5kaKAy
+        yl6Rela2XykTNNwnfDwQhxtPbEGn7S/Zij5p7dL735GnqJPsEIMPlhGfAvip3KhjRToeBxf0Alh
+        ndpdDEofZfMANYibmVFPFqvtr
+X-Received: by 2002:a17:907:6da0:: with SMTP id sb32mr4805833ejc.455.1641802581517;
+        Mon, 10 Jan 2022 00:16:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxng77QYf5XAHe4Ds2nAHQWNTds07aUYSF1+NQLW6VnRIrXWSP6tbZZhTPAWIzZvUhxiRRfgQ==
+X-Received: by 2002:a17:907:6da0:: with SMTP id sb32mr4805813ejc.455.1641802581236;
+        Mon, 10 Jan 2022 00:16:21 -0800 (PST)
+Received: from ?IPV6:2003:cb:c701:cf00:ac25:f2e3:db05:65c3? (p200300cbc701cf00ac25f2e3db0565c3.dip0.t-ipconnect.de. [2003:cb:c701:cf00:ac25:f2e3:db05:65c3])
+        by smtp.gmail.com with ESMTPSA id f15sm3191568edq.33.2022.01.10.00.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 00:16:20 -0800 (PST)
+Message-ID: <93865d07-1cc6-8cad-c14a-7fcded63e954@redhat.com>
+Date:   Mon, 10 Jan 2022 09:16:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdieAFj0ppmAtQxS@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/2] mm/memremap.c: Add pfn_to_devmap_page() to get page
+ in ZONE_DEVICE
+Content-Language: en-US
+To:     sxwjean@me.com, akpm@linux-foundation.org, mhocko@suse.com,
+        dan.j.williams@intel.com, osalvador@suse.de,
+        naoya.horiguchi@nec.com, thunder.leizhen@huawei.com
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>
+References: <20220109130515.140092-1-sxwjean@me.com>
+ <20220109130515.140092-2-sxwjean@me.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220109130515.140092-2-sxwjean@me.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 12:09:36PM -0800, Dmitry Torokhov wrote:
-> Unfortunately details of USB HID transport bled into HID core and
-> handling of numbered/unnumbered reports is quite a mess, with
-> hid_report_len() calculating the length according to USB rules,
-> and hid_hw_raw_request() adding report ID to the buffer for both
-> numbered and unnumbered reports.
+On 09.01.22 14:05, sxwjean@me.com wrote:
+> From: Xiongwei Song <sxwjean@gmail.com>
 > 
-> Untangling it all requres a lot of changes in HID, so for now let's
-> handle this in the driver.
+> when requesting page information by /proc/kpage*, the pages in ZONE_DEVICE
+> were missed. We need a function to help on this.
 > 
-> Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> The pfn_to_devmap_page() function like pfn_to_online_page(), but only
+> concerns the pages in ZONE_DEVICE.
+> 
+> Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
 > ---
+>  include/linux/memremap.h |  8 ++++++++
+>  mm/memremap.c            | 42 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 50 insertions(+)
 > 
-> CrOS folks, please help testing this as I do not have the affected
-> hardware.
-> 
-> Thanks!
-> 
->  drivers/hid/hid-vivaldi.c | 34 ++++++++++++++++++++++++++++------
->  1 file changed, 28 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
-> index cd7ada48b1d9..1804de1ef9b8 100644
-> --- a/drivers/hid/hid-vivaldi.c
-> +++ b/drivers/hid/hid-vivaldi.c
-> @@ -71,10 +71,11 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
->  				    struct hid_usage *usage)
+> diff --git a/include/linux/memremap.h b/include/linux/memremap.h
+> index c0e9d35889e8..621723e9c4a5 100644
+> --- a/include/linux/memremap.h
+> +++ b/include/linux/memremap.h
+> @@ -137,6 +137,8 @@ void *devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap);
+>  void devm_memunmap_pages(struct device *dev, struct dev_pagemap *pgmap);
+>  struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
+>  		struct dev_pagemap *pgmap);
+> +struct page *pfn_to_devmap_page(unsigned long pfn,
+> +		struct dev_pagemap **pgmap);
+>  bool pgmap_pfn_valid(struct dev_pagemap *pgmap, unsigned long pfn);
+>  
+>  unsigned long vmem_altmap_offset(struct vmem_altmap *altmap);
+> @@ -166,6 +168,12 @@ static inline struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
+>  	return NULL;
+>  }
+>  
+> +static inline struct page *pfn_to_devmap_page(unsigned long pfn,
+> +		struct dev_pagemap **pgmap)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline bool pgmap_pfn_valid(struct dev_pagemap *pgmap, unsigned long pfn)
 >  {
->  	struct vivaldi_data *drvdata = hid_get_drvdata(hdev);
-> +	struct hid_report *report = field->report;
->  	int fn_key;
->  	int ret;
->  	u32 report_len;
-> -	u8 *buf;
-> +	u8 *report_data, *buf;
+>  	return false;
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index 5a66a71ab591..072dbe6ab81c 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -494,6 +494,48 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
+>  }
+>  EXPORT_SYMBOL_GPL(get_dev_pagemap);
 >  
->  	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
->  	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
-> @@ -86,12 +87,24 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
->  	if (fn_key > drvdata->max_function_row_key)
->  		drvdata->max_function_row_key = fn_key;
->  
-> -	buf = hid_alloc_report_buf(field->report, GFP_KERNEL);
-> -	if (!buf)
-> +	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
-> +	if (!report_data)
->  		return;
->  
-> -	report_len = hid_report_len(field->report);
-> -	ret = hid_hw_raw_request(hdev, field->report->id, buf,
-> +	report_len = hid_report_len(report);
-> +	if (!report->id) {
-> +		/*
-> +		 * hid_hw_raw_request() will stuff report ID (which will be 0)
-> +		 * into the first byte of the buffer even for unnumbered
-> +		 * reports, so we need to account for this to avoid getting
-> +		 * -EOVERFLOW in return.
-> +		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
-> +		 * so we can safely say that we have space for an extra byte.
-> +		 */
-> +		report_len++;
-> +	}
+> +/**
+> + * pfn_to_devmap_page - get page pointer which belongs to dev_pagemap by @pfn
+> + * @pfn: page frame number to lookup page_map
+> + * @pgmap: to save pgmap address which is for putting reference
+> + *
+> + * If @pgmap is non-NULL, then pfn is on ZONE_DEVICE and return page pointer.
+> + */
+> +struct page *pfn_to_devmap_page(unsigned long pfn, struct dev_pagemap **pgmap)
+> +{
+> +	unsigned long nr = pfn_to_section_nr(pfn);
+> +	struct mem_section *ms;
+> +	struct page *page = NULL;
 > +
-> +	ret = hid_hw_raw_request(hdev, field->report->id, report_data,
-
-This can be changed to "report->id", sorry I missed it.
-
->  				 report_len, HID_FEATURE_REPORT,
->  				 HID_REQ_GET_REPORT);
->  	if (ret < 0) {
-> @@ -100,7 +113,16 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
->  		goto out;
->  	}
->  
-> -	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, buf,
-> +	if (!report->id) {
-> +		/*
-> +		 * Undo the damage from hid_hw_raw_request() for unnumbered
-> +		 * reports.
-> +		 */
-> +		report_data++;
-> +		report_len--;
-> +	}
+> +	if (nr >= NR_MEM_SECTIONS)
+> +		return NULL;
 > +
-> +	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
->  				   report_len, 0);
->  	if (ret) {
->  		dev_warn(&hdev->dev, "failed to report feature %d\n",
+> +	if (IS_ENABLED(CONFIG_HAVE_ARCH_PFN_VALID) && !pfn_valid(pfn))
+> +		return NULL;
+> +
+> +	ms = __nr_to_section(nr);
+> +	if (!valid_section(ms))
+> +		return NULL;
+> +	if (!pfn_section_valid(ms, pfn))
+> +		return NULL;
+> +
+> +	/*
+> +	 * Two types of sections may include valid pfns:
+> +	 * - The pfns of section belong to ZONE_DEVICE and ZONE_{NORMAL,MOVABLE}
+> +	 *   at the same time.
+> +	 * - All pfns in one section are offline but valid.
+> +	 */
+> +	if (!online_device_section(ms) && online_section(ms))
+> +		return NULL;
+> +
+> +	*pgmap = get_dev_pagemap(pfn, NULL);
+> +	if (*pgmap)
+> +		page = pfn_to_page(pfn);
+> +
+> +	return page;
+> +}
+> +EXPORT_SYMBOL_GPL(pfn_to_devmap_page);
 
-Thanks.
+Is this complexity really required?
+
+Take a look at mm/memory-failure.c
+
+p = pfn_to_online_page(pfn);
+if (!p) {
+	if (pfn_valid(pfn)) {
+		pgmap = get_dev_pagemap(pfn, NULL);
+		if (pgmap)
+			// success
+		// error
+	}
+	// error
+}
+
+
+Also, why do we need the export?
 
 -- 
-Dmitry
+Thanks,
+
+David / dhildenb
+

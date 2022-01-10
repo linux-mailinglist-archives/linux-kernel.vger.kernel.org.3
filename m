@@ -2,81 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F2548993B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1175489948
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiAJNGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:06:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42942 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiAJNGt (ORCPT
+        id S230061AbiAJNKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbiAJNKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:06:49 -0500
-Date:   Mon, 10 Jan 2022 13:06:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641820008;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k3RXTUrusYm+sz81iYsi3GrAcD2CmTtAlKUpJjLn/U0=;
-        b=1hHLzUj5ViGJl1KNk68siIMVgrEc1KXwfNuJzumDkinOyIETR4VzHJu6D0rf70fhU8gftd
-        xWfOUzceyn83+0Zd8NSN/v7DNtpRZZuqyV2peKCj8w0FUJmP9GQU91t3T4vNCT6DKCEGfr
-        RlubPMYZ25nYEQE3/YWqOO+RuZvayB80GTT/ZB42EG/RbRh2YA8OSl/okwBn3DXqqXjd9S
-        Ccwhf+CYvhu5pU3scFt0f7ZEZjs0ty0esd+wI+3JkgB1V1VLe5W+mLoJIPKmBdrkCmDWKI
-        ZKlM8SoIepy8CGSyi+9RVpCUOeScems8Sl/5PPH1cQp2B4VFskJwDIVqliKOag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641820008;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k3RXTUrusYm+sz81iYsi3GrAcD2CmTtAlKUpJjLn/U0=;
-        b=5JuBoj5HncrijPh/fbE6vNAh/ASznyxyh4IGIKs6sqIkAADIC9bemVAaGQNHzngCD09PRD
-        kzj6kExG3jQoDMBw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] Merge branch 'clocksource' of
- git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu into
- timers/core
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220105001723.GA536708@paulmck-ThinkPad-P17-Gen-1>
-References: <20220105001723.GA536708@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 10 Jan 2022 08:10:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521CAC06173F;
+        Mon, 10 Jan 2022 05:10:13 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EB8BAA50;
+        Mon, 10 Jan 2022 14:10:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1641820211;
+        bh=Fna0wLddmr3E8+mQ81rjjeN/vZO9WTU86IGbkwkoOd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c6ZogK1zM27hxkdVFWaXQWk/l5aPT//hA9fzBjVnl6SE9D5mMAzuQvdh4FcrDVBdS
+         1ghYtebLbUsfveHaJGJWiCDRS7uaGI/L1feayaIylMLcuQ0Qv+RPANERjaiObaHUxw
+         8rGdzBRtv7T9Q9bZ0SrDYeN0UJ8U4xkmdzY2V7Vk=
+Date:   Mon, 10 Jan 2022 15:10:02 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
+        geert@linux-m68k.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] dt-binding: media: hynix,hi846: use
+ $defs/port-base port description
+Message-ID: <YdwwKXrw+qICwIaW@pendragon.ideasonboard.com>
+References: <20220110123804.377944-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Message-ID: <164182000711.16921.14224452347823356080.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220110123804.377944-1-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+Hi Martin,
 
-Commit-ID:     35e13e9da9afbce13c1d36465504ece4e65f24fe
-Gitweb:        https://git.kernel.org/tip/35e13e9da9afbce13c1d36465504ece4e65f24fe
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 10 Jan 2022 13:57:17 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 10 Jan 2022 13:57:17 +01:00
+Thank you for the patch.
 
-Merge branch 'clocksource' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu into timers/core
+On Mon, Jan 10, 2022 at 01:38:03PM +0100, Martin Kepplinger wrote:
+> This is supposed to fix "make dt_binding_check":
+> 
+>     Documentation/devicetree/bindings/media/i2c/hynix,hi846.example.dt.yaml:
+> camera@20: port:endpoint: Unevaluated properties are not allowed
+> ('link-frequencies', 'data-lanes' were unexpected)
+>     From schema: Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> 
+> Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+> 
+> Link:
+> https://lore.kernel.org/linux-media/CAL_JsqKzaZC0A4OwnMyAuEWm2pCcHyQxHyrBVtkiPNUeMDd+oA@mail.gmail.com/
+> 
+>  Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> index 85a8877c2f38..e61255cf3fb9 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> @@ -49,7 +49,7 @@ properties:
+>      description: Definition of the regulator used for the VDDD power supply.
+>  
+>    port:
+> -    $ref: /schemas/graph.yaml#/properties/port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
 
-Pull clocksource watchdog updates from Paul McKenney:
+You also need to add
 
- - Avoid accidental unstable marking of clocksources by rejecting
-   clocksource measurements where the source of the skew is the delay
-   reading reference clocksource itself.  This change avoids many of the
-   current false positives caused by epic cache-thrashing workloads.
+    unevaluatedProperties: false
 
- - Reduce the default clocksource_watchdog() retries to 2, thus offsetting
-   the increased overhead due to #1 above rereading the reference
-   clocksource.
+to reject any property that isn't defined in either port-base or in this
+schema. Otherwise any extra property in the port node will be accepted.
 
-Link: https://lore.kernel.org/lkml/20220105001723.GA536708@paulmck-ThinkPad-P17-Gen-1
----
+>  
+>      properties:
+>        endpoint:
+
+-- 
+Regards,
+
+Laurent Pinchart

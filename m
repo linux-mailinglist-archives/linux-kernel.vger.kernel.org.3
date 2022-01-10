@@ -2,114 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A173489820
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CD548982B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245084AbiAJL4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:56:20 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]:43546 "EHLO
-        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239786AbiAJL4L (ORCPT
+        id S245120AbiAJL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245094AbiAJL6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:56:11 -0500
-Received: by mail-wr1-f49.google.com with SMTP id o3so26250437wrh.10;
-        Mon, 10 Jan 2022 03:56:10 -0800 (PST)
+        Mon, 10 Jan 2022 06:58:51 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D0CC061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:58:50 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id d3so17071691lfv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vAXIYuNH/ABiPfxXuFwD6hgcp+PMFzZ1M3jPIGte8RQ=;
+        b=NJ/1KfGQ48zcYiEWUDeXEubmTWTNVNFMx+ELOnyY6J+LpNXaV8IC5nwRla3xErpV/s
+         TD3hTj+tjN5UDqdhhH1Fwv1KeGp+wSi9yu/hUyLr13SBtxex8FCmU0IkQcz4NZA3haNA
+         sskjdqxUaOqcgQl1CXZrfiNtUG4RvqEFEydULZ9huWWhkfyUcuOITbZ/wXmBEgjIMtEe
+         dkjXZE0Bn6DsBearqgyC3xlueG6vynTLnXe8Ymf+I3pkfAVZkNv0dnAWWg1Byc3UYwRA
+         3PefZz7HTTY6TmTTSy5bWJGzXf6+/dtgPJzNuuoh5iIm+mroxAgS/jfW4o1aLrqxU9hN
+         o0EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5JGHooFXj2iz4QcgazfHEbKsX6GW7+vX5suOZ5p/SDM=;
-        b=B5auyrNEqwfRdl75fjeIdWOx2w9nxkmZf4CQcNfYir5X0gmUHUOv6jeGh7AYkmKEyn
-         oB83vsX7g+7J3fXCFCVyozb9ZnJ3alrjuOsIErhjparEPhGDCfXwSV855vSaquEtMNLg
-         mb9k1P858V8IG8Bf5uQ644STdsSkYoQszKiuVh5nKnyeYL6JfkWV0zKJ+r0ix7zwAvl8
-         FWC4Qu8Jh5mv9ehA6BsO5ju5bClVUwBsD3hc90H5LHM8e1fHfGTqUjn9VjE+Fcn0UaTC
-         JjGKz4+A7FMLc/fBGLPxKyitei5Hldk3gGQ9mPRPX9U/wSwPAjWLBrbac+y+f9fV+E+f
-         OctA==
-X-Gm-Message-State: AOAM531+hO+HvqfU71aFVgiTTDC18OoW2RnRdMGntVYpOs6lD6m8h49s
-        nzOhtzXvqnGFByxJm5w9iCw=
-X-Google-Smtp-Source: ABdhPJxZBnLQMX3PWtG+rxuni0SASXbD4BM0W6Jr8VzSIuO8sHUMTwXE4vb7scyOzRBBUjBISGyLpA==
-X-Received: by 2002:a5d:5847:: with SMTP id i7mr50225249wrf.450.1641815770104;
-        Mon, 10 Jan 2022 03:56:10 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id x21sm6307469wmc.24.2022.01.10.03.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 03:56:09 -0800 (PST)
-Date:   Mon, 10 Jan 2022 11:56:08 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Juan Vazquez <juvazq@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, mikelley@microsoft.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianyu.lan@microsoft.com,
-        longli@microsoft.com
-Subject: Re: [PATCH] scsi: storvsc: Fix storvsc_queuecommand() memory leak
-Message-ID: <20220110115608.sdsbnof5gtc6gu74@liuwe-devbox-debian-v2>
-References: <20220109001758.6401-1-juvazq@linux.microsoft.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vAXIYuNH/ABiPfxXuFwD6hgcp+PMFzZ1M3jPIGte8RQ=;
+        b=TBfR54A9kCQUN1FkBTYlL3hBv2jiFA1zD6ZUA4OWkkoZGc40zEri6LkUgFvgUHsnt1
+         w+0AQt+evCn/Pmys2ZBtQY+YMoQBxfMlzMMJaNeMlUOGSoplrvaoH+vcGfyS27gRuKEO
+         OJsR4F8txfI8te6bjHJpPhnptDdnA10K5C3QH5hOTQETNzqxr3mv0F8Op3EpL+M6yvJP
+         5kPfIeWhBd8qrpzurXkmtJZVpwiQIpr6Q9RCCM8o5g3ar3KI0cjRd+lXOhYn7IC8P/ze
+         9XXRvNzVYqFpvoPGxakYI4LU90/8ty5RE40+MgIzNEe1TYhxVWRi+0jabklExILhNJkX
+         vrqg==
+X-Gm-Message-State: AOAM531t3iagPXqQT0GujFgMmbb7vBxUhKIQeOBM1bgptlWPCLr4MAre
+        Hx8MjFXvn5WhuyRdO0wNVLRhehP/ot7d68XHNOu06g==
+X-Google-Smtp-Source: ABdhPJyvU0aPWAbZNBBTFMu8lAzaFaDMBdxzeezJqVEtf7JUnEGWH30MbzadfScGxijR2bznfgG5kndzKGGMa/VaCeE=
+X-Received: by 2002:a05:6512:4021:: with SMTP id br33mr4147162lfb.233.1641815928741;
+ Mon, 10 Jan 2022 03:58:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220109001758.6401-1-juvazq@linux.microsoft.com>
+References: <20220107181723.54392-1-paul@crapouillou.net> <20220107181723.54392-2-paul@crapouillou.net>
+In-Reply-To: <20220107181723.54392-2-paul@crapouillou.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 10 Jan 2022 12:58:12 +0100
+Message-ID: <CAPDyKFobtZ_WGtbzhHdBRDT4RjQ8M_NXF+FmqXg2ZHTX=Z1frg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 04:17:58PM -0800, Juan Vazquez wrote:
-> Fix possible memory leak in error path of storvsc_queuecommand() when
-> DMA mapping fails.
-> 
-> Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc driver")
-> Signed-off-by: Juan Vazquez <juvazq@linux.microsoft.com>
+On Fri, 7 Jan 2022 at 19:17, Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided callbacks
+> for both runtime PM and system sleep, which is very likely to be a
+> mistake, as a system sleep can be triggered while a given device is
+> already PM-suspended, which would cause the suspend callback to be
+> called twice.
+>
+> The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+> occurences) compared to the number of places where
+> SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() and
+> pm_runtime_force_resume(), which makes me think that none of these cases
+> are actually valid.
+>
+> As the new macro DEFINE_UNIVERSAL_DEV_PM_OPS() which was introduced to
+> replace UNIVERSAL_DEV_PM_OPS() is currently unused, remove it before
+> someone starts to use it in yet another invalid case.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Martin, I can pick this up since the offending commit is not yet in
-Linus' tree.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Tianyu, Long and Michael, the change makes sense to me but can you give
-an ack or review here?
+Kind regards
+Uffe
+
 
 > ---
->  drivers/scsi/storvsc_drv.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> index 2273b843d9d2..9a0bba5a51a7 100644
-> --- a/drivers/scsi/storvsc_drv.c
-> +++ b/drivers/scsi/storvsc_drv.c
-> @@ -1850,8 +1850,10 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
->  		payload->range.offset = offset_in_hvpg;
->  
->  		sg_count = scsi_dma_map(scmnd);
-> -		if (sg_count < 0)
-> -			return SCSI_MLQUEUE_DEVICE_BUSY;
-> +		if (sg_count < 0) {
-> +			ret = SCSI_MLQUEUE_DEVICE_BUSY;
-> +			goto err_free_payload;
-> +		}
->  
->  		for_each_sg(sgl, sg, sg_count, j) {
->  			/*
-> @@ -1886,13 +1888,18 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
->  	put_cpu();
->  
->  	if (ret == -EAGAIN) {
-> -		if (payload_sz > sizeof(cmd_request->mpb))
-> -			kfree(payload);
->  		/* no more space */
-> -		return SCSI_MLQUEUE_DEVICE_BUSY;
-> +		ret = SCSI_MLQUEUE_DEVICE_BUSY;
-> +		goto err_free_payload;
->  	}
->  
->  	return 0;
-> +
-> +err_free_payload:
-> +	if (payload_sz > sizeof(cmd_request->mpb))
-> +		kfree(payload);
-> +
-> +	return ret;
+>
+> Notes:
+>     v2: No change
+>     v3: - Keep UNIVERSAL_DEV_PM_OPS deprecated
+>         - Rework commit message
+>
+>  include/linux/pm.h | 21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index e1e9402180b9..02f059d814bb 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
 >  }
->  
->  static struct scsi_host_template scsi_driver = {
-> -- 
-> 2.32.0
-> 
+>
+> +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +const struct dev_pm_ops __maybe_unused name = { \
+> +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +}
+> +
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+>   * (system suspend, hibernation or runtime PM).
+> @@ -378,20 +384,9 @@ static const struct dev_pm_ops name = { \
+>   * suspend and "early" resume callback pointers, .suspend_late() and
+>   * .resume_early(), to the same routines as .runtime_suspend() and
+>   * .runtime_resume(), respectively (and analogously for hibernation).
+> + *
+> + * Deprecated. You most likely don't want this macro.
+>   */
+> -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+> -static const struct dev_pm_ops name = { \
+> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops __maybe_unused name = { \
+> -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
+>  #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+>  const struct dev_pm_ops __maybe_unused name = { \
+>         SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> --
+> 2.34.1
+>

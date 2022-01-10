@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FED14894E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D624894F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242730AbiAJJMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:12:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
+        id S243050AbiAJJNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242655AbiAJJMO (ORCPT
+        with ESMTP id S242642AbiAJJMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:12:14 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D453CC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:12:08 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id k30so7815340wrd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:12:08 -0800 (PST)
+        Mon, 10 Jan 2022 04:12:34 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9529EC034004
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:12:32 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso21772651pje.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :references:in-reply-to;
-        bh=ptBUqKqYUor3+uJEeWktW1rjE7PNlwZQbPztX5rGNLY=;
-        b=Mn7cThCLpaSBcVo9wbe5Szihfa4qjUFVxRnLgyZhR86s2gs70+/hveyYl9+yCfvTWI
-         l1xYpj2vHRhjw+yrsH1hAXDzP0AckPOSGedV4v7gdK5DYbF+Y0eIVuPig8cwYas/N34E
-         5o26V3KmjDQyNIMnPlgUNnlUZOKW+Bl+TGu2w=
+        bh=Sy9vnpFAawEJpQ+oMLY5H+h2gTwCZjmtQR0nO3aeb7E=;
+        b=X3lcda9giheiZ31sShTD3qeEUBLX67v+0iaG2c7qIKolFUfNDHrGL5z+7X+1PcYe/a
+         fhFi4hHezAg0M6opRii+Rm2QpHfVdXG9YyjJb25YM2QWh9VPdp+4CrozDQNwTX8doeh7
+         31rgjSnuLkBegiv9JOZT6fKJ1GeOX/4vf2CIw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:references:in-reply-to;
-        bh=ptBUqKqYUor3+uJEeWktW1rjE7PNlwZQbPztX5rGNLY=;
-        b=G/GJ4kJsMMOTEvjDj9NtJX4D0BsdB4QLUsr6rOIjjXzhXze41atnysh5nf3o/zpr3l
-         nEv8f21j3WuJE8N0BPlS3c+YEHg0rsYeCGXJaCsdo53XOOiYtqIgwHROWCFkRCJR8f1V
-         p0qXkPLLFdarsz+uLPBeoqOU5+mMx2qGN9QsPBUcwFBY5uzfZ4ipLjocoIYZtA+zWZ04
-         0w6yd45EwwF8O3425H3cfFLPTrtF/07ZxLNxYY4z4pRf2ScoBxJD7Kf4qHqMF029vuV6
-         b6xocU8kok6xiCLeAe6xQnJ+n7k0LnLxA/4iP60aYhOpEuMMvhm/UHst2ri8f2L7q2d5
-         1vHQ==
-X-Gm-Message-State: AOAM533GfpCbsx2ZCWtmEehsI2gF9E5VkAheFFBMNWhXGWYsEpywCJSH
-        MMfpJo7VapZtw90Wk4HiBvRH9g==
-X-Google-Smtp-Source: ABdhPJzyhagBCqErAah7InvdCzT466zzYtOBPwKqsv/Bar+WnzOfftC5NywfS1M8jbmJKO/8Y4NjZg==
-X-Received: by 2002:adf:ee8b:: with SMTP id b11mr11015456wro.88.1641805927430;
-        Mon, 10 Jan 2022 01:12:07 -0800 (PST)
-Received: from [10.230.32.81] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id n12sm6683187wrf.29.2022.01.10.01.12.05
+        bh=Sy9vnpFAawEJpQ+oMLY5H+h2gTwCZjmtQR0nO3aeb7E=;
+        b=r5ThHu+u17CFrJY7oG7jaR1VzKSWZ6oSXdSLH0sX0+WCe9KdEpiP+A2+zEEcTjHbh+
+         kj0ZQXzgpFc7elTWQ7zc2VNKmd0Cwt3ol5zfGLTOl0g4BgZnN/zlGIoN8kOFI0sFkopF
+         iTWIri/w44JY3RK1mC7SGAMVP3nCYj3sdVUOKwXSRghg1ZpzAgVixb6H48BdevvzbVnu
+         Yk5sP+pSnX+KBTX9XMoA4Qe1KjmBv+I6XxqwoTk5k8Q2hy1QMlq7zpXjH0ZEgV1CKDBd
+         pv7HU0QWlF6HiSBsFOX51GKFcp5/iyiJWRucNqomxcRA296EKnYs4YYcGslEWUUMxk2m
+         c8wg==
+X-Gm-Message-State: AOAM533CUuMkEp0AeNIulPYeNpNNo+GK1O7bIPIZAUPKLIjIcOTm662C
+        SurzvQh/cfhL6TgN3HdC95v2qQ==
+X-Google-Smtp-Source: ABdhPJy/zLDmry8ZTfi89ndotmSF6BPZlybQzNNrVvR3+I+wEdZQ8A4TwIimPaFHZnpODijxwJXRvw==
+X-Received: by 2002:a17:902:7c98:b0:14a:145f:3c88 with SMTP id y24-20020a1709027c9800b0014a145f3c88mr10844378pll.35.1641805952102;
+        Mon, 10 Jan 2022 01:12:32 -0800 (PST)
+Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id d5sm6180903pfj.188.2022.01.10.01.12.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 01:12:06 -0800 (PST)
-Message-ID: <67630b95-2b1a-a922-bdf1-21a1accde60b@broadcom.com>
-Date:   Mon, 10 Jan 2022 10:12:04 +0100
+        Mon, 10 Jan 2022 01:12:31 -0800 (PST)
+Message-ID: <e402280b-1e8d-7071-78d5-c10cda7a47ba@broadcom.com>
+Date:   Mon, 10 Jan 2022 10:12:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
 From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: Re: [PATCH v2 18/35] brcmfmac: pcie: Add IDs/properties for BCM4355
+Subject: Re: [PATCH v2 19/35] brcmfmac: pcie: Add IDs/properties for BCM4377
 To:     Hector Martin <marcan@marcan.st>,
         Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -80,15 +80,15 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
         SHA-cyfmac-dev-list@infineon.com
 References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-19-marcan@marcan.st>
-In-Reply-To: <20220104072658.69756-19-marcan@marcan.st>
+ <20220104072658.69756-20-marcan@marcan.st>
+In-Reply-To: <20220104072658.69756-20-marcan@marcan.st>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001bb4e705d536bb98"
+        boundary="00000000000094c0b305d536bc22"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001bb4e705d536bb98
+--00000000000094c0b305d536bc22
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
@@ -96,45 +96,20 @@ Content-Transfer-Encoding: 7bit
 On 1/4/2022 8:26 AM, Hector Martin wrote:
 > This chip is present on at least these Apple T2 Macs:
 > 
-> * hawaii: MacBook Air 13" (Late 2018)
-> * hawaii: MacBook Air 13" (True Tone, 2019)
+> * tahiti:  MacBook Pro 13" (2020, 2 TB3)
+> * formosa: MacBook Pro 13" (Touch/2019)
+> * fiji:    MacBook Air 13" (Scissor, 2020)
 
 Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
 > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c   | 1 +
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c   | 8 ++++++++
->   .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 2 ++
->   3 files changed, 11 insertions(+)
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c       | 1 +
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 4 ++++
+>   drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 2 ++
+>   3 files changed, 7 insertions(+)
 
-[...]
-
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> index a8cccfbea20b..fdba2b5b46f0 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> @@ -49,6 +49,7 @@ enum brcmf_pcie_state {
->   BRCMF_FW_DEF(43602, "brcmfmac43602-pcie");
->   BRCMF_FW_DEF(4350, "brcmfmac4350-pcie");
->   BRCMF_FW_DEF(4350C, "brcmfmac4350c2-pcie");
-> +BRCMF_FW_CLM_DEF(4355C1, "brcmfmac4355c1-pcie");
->   BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
->   BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
->   BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
-> @@ -75,6 +76,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->   	BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
->   	BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
->   	BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
-> +	BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355C1), /* 12 */
-
-still intrigued what that trailing number means ;-)
-
->   	BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
->   	BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
->   	BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
-
---0000000000001bb4e705d536bb98
+--00000000000094c0b305d536bc22
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -205,14 +180,14 @@ aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
 OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
 UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
 YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCSdLPZut26JW5wCRyJ
-oK8kf3rEhnJ0QV2xOdkvysAOBTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMTAwOTEyMDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAdlby50l09eB99Ob26
+9zvk3LBRUIExAyzeBnTQU4eCiTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMTAwOTEyMzJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
 AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASN3sbamDxsLdAuhq1ukaWR/A6GAwYt6rav9u
-TTdGdrQiDNW99l9w/fuDKMoUwk9C+oRA/GrDRiXDpGXq0cSE3E4MUu90cEmKI6aOLLLDrkoh2nVT
-zs4TD7m/X/tbJGZU89yDPhHx1VhhAmKG/LXHZ3PlQIgSEvOFC++msrOBsYL/pfzMevTZgjtI0r0W
-sKXFGmE9VRHi6/rOMLXXocC4rMigApjUf75xvwSF1pZTv2F6Lh9bW0aRSwLvuwuBDY54eBK55mTr
-hOJD8h5KxM1d+ay3d7XdoCC58jXx7+6LeV+EbVEegtNmWiGfmuqG1KhDSy7862xE8+6HC+oeXM8c
-aw==
---0000000000001bb4e705d536bb98--
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAIdyxnXHNPPOJnpM/VxRiF8bmDeV162xa/iOP
++3+XNBPejGcbsLBH3Xdaq5ADM7A+BY3H0jmzdK+QBTCDh78UsOMQDKnzqZP3o0ToLGd1DUk5PsTC
+hXnC0DLXbAzWjErQiY9g1KgGS0aCQQfX88SQbTyM9Ni1YLsu38drU70gYPmkHRA189ENWWONenaa
+GPcI7ARMoUrC1dIla/aWADoeiYl6nSMjVvc10bq0LT03Ee0dFVdBswSdNwuo8gQyhVDoQBLYSCw4
+1q3z2SSK8Ba5D8zAqfPGMd3NgRpCmEVUBEXBP6MYjbXb01Pq9BmO05BE4J18otD9DcJEMyxAJmYa
+bQ==
+--00000000000094c0b305d536bc22--

@@ -2,130 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7656489B50
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F292489B53
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbiAJOeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:34:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235567AbiAJOeW (ORCPT
+        id S235601AbiAJOe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:34:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40580 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235567AbiAJOe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:34:22 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C93C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:34:22 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id jr5so3635682qvb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:34:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=KzYKjySaNA8gCwHGzl2FyGGW1Nu0aUpHbWQZPToIi38=;
-        b=BhRvhK/w4tJaYtkJGmat1mS0fsTGROYWJEh6tPRgBZAj/SGfz0bmMMGl/5UgrbYBz6
-         6jpGItoVz8qvhkKVzFxwI9gA1dAYCWIFYGhL6VcXOE/SU/wHzlO5E2hB4YlALUIrTKs7
-         has8g65OJGSKuTCV3XZuwtO6msLzX7Xm0rPaI4XeM9ly4MVkDD3Zs+fw1i4tNgNBSgA6
-         aXZbRJb0soxVB4kmOFHXP+aSpn/opjQjN95WPvkC4oECvAJ7eRCzqapDbJLc6kBI41HQ
-         IhPRZOHr7uZvYC3MOWwoqh8Qy8mvZiSWdywAGVoOayk3np8Y94qmBIEWeilo80OTvhAN
-         pY7A==
+        Mon, 10 Jan 2022 09:34:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641825265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0pdJvkaxaICLWqFTDyGX/FRGk93JW9C93pZSDi04sCM=;
+        b=cHL6R8IppPCV1gelJOXYm/yQs1vAf0PbWA0Rbv/BkfdaajDpCi08vISYTvpCbVSGCwTiwJ
+        yz8G2XW5RC6Y+IunVIp8oDqfze1YctuVXDuF5RHPArg8xu0L0TDjyus062khct7LF4oa4J
+        PGTgWKAWy3xqv93WIxoyxDnHWLZrOMo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-K-_o-cEpNHuGuTZ-GMP48A-1; Mon, 10 Jan 2022 09:34:24 -0500
+X-MC-Unique: K-_o-cEpNHuGuTZ-GMP48A-1
+Received: by mail-ed1-f70.google.com with SMTP id g11-20020a056402090b00b003f8fd1ac475so10297063edz.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:34:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=KzYKjySaNA8gCwHGzl2FyGGW1Nu0aUpHbWQZPToIi38=;
-        b=Ia+f4GCHbbn6vSqq+oJE/IA/mA4H7Yk/ybYpsRbVjk1O6D5fQeJb4DwizFt8RJTLft
-         0jq/tZ/coyIk+4U+2App+8P5FyR7oUk4q0MnndZo0gSCfz4IXo2y+3/S3gN6E89ftTwH
-         rlSvOqNaUPRuGk1nHyxhMZRUUucNEr8Wi2GzqWcE16ANU+C3Fq98sfQBYeToreHUvMG+
-         7AY+qJ/6Jg/L9lz/oF5DRj5ipPXBBaW3l8s6GMfEcd/QJqWYvXj6IXAU5DilP+KmX3T+
-         Tmh5i98+hi/ugD3JfVXgCd6Rz4JjBB4lyvPhReoD6u/9YS2TXLwKkMOjiu5zPMNrVnHq
-         BJ2A==
-X-Gm-Message-State: AOAM531KYBIQzihidPCk9ePsLOSnOSXH/LDtuN5gSeHXUHG0rlGZwBGq
-        73+YFWgviRYNqcVCe5eeB3vbMg==
-X-Google-Smtp-Source: ABdhPJwVssi4btKUH8E3kzLUaS3f99Ib3fKwcC7InqMA3lS6sRmydZeLeFDbpXNA457FvCYcbz/t8w==
-X-Received: by 2002:a05:6214:301:: with SMTP id i1mr3166053qvu.7.1641825261119;
-        Mon, 10 Jan 2022 06:34:21 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id u6sm4642565qki.129.2022.01.10.06.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 06:34:20 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n6vkZ-00Do5L-Qp; Mon, 10 Jan 2022 10:34:19 -0400
-Date:   Mon, 10 Jan 2022 10:34:19 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
-        "aharonl@nvidia.com" <aharonl@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
-        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
-Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
- in responder side
-Message-ID: <20220110143419.GF6467@ziepe.ca>
-References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
- <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
- <20220106002804.GS6467@ziepe.ca>
- <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
- <20220106173346.GU6467@ziepe.ca>
- <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=0pdJvkaxaICLWqFTDyGX/FRGk93JW9C93pZSDi04sCM=;
+        b=jEAnzoIGj86uyx3ofXAjtgafjoJDGHpGW+qrcTJJbn8LKzptN1ZvoznXuQ7tR+zFRz
+         4uW4eDU6j8Yj7fSDPSi7bIIbti7bPEC8ZIj0EzGtp2pYuBhQh7Qjz/umzruWpaNoI53h
+         NKec/q/RVrqwZcIQ7H4oT0ap7AN596Xss2rYtHW9ceGrr/7tceFsu34gk3PHCF7AVQPZ
+         fBzwAD/QrwoNmRp4cvsksrk8eXX/8hgnGsy2Zhfe1wZwqQ8BGLhONmJn/mOxCi+26fNJ
+         WR4ac6n7wlJ9ANkgS4VChw34rOakUpv4Uf+ZOOCBYYoJX6/uo4Go/AW1SVucPGB3hCCr
+         C/rw==
+X-Gm-Message-State: AOAM532iWigscIuNwVCZCQdw0IODTYFLlIS1XhZJUiIJSUO1N+Zx1iof
+        gHn/33RTe+ezm8tyrhycydn94hclMQ0ncDn4ZRrmbKQysP4ZWnFgd8WPo8S71zExzm9X2+UoeC/
+        65VDng+Ry8XbeJSvtA2O+b65r
+X-Received: by 2002:a17:907:3e1b:: with SMTP id hp27mr29496ejc.686.1641825262860;
+        Mon, 10 Jan 2022 06:34:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzZ2+s8QwI/3ARaTXW/ZkaHnJbTUJ8rqKsbIr6UBeAbkwrR/OK7SfljCqSgZ1QwRnS97L2OLA==
+X-Received: by 2002:a17:907:3e1b:: with SMTP id hp27mr29483ejc.686.1641825262606;
+        Mon, 10 Jan 2022 06:34:22 -0800 (PST)
+Received: from ?IPV6:2003:cb:c701:cf00:ac25:f2e3:db05:65c3? (p200300cbc701cf00ac25f2e3db0565c3.dip0.t-ipconnect.de. [2003:cb:c701:cf00:ac25:f2e3:db05:65c3])
+        by smtp.gmail.com with ESMTPSA id 2sm2496382ejt.224.2022.01.10.06.34.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 06:34:22 -0800 (PST)
+Message-ID: <da578a75-5cee-5c16-b63c-be6ba2b9ba5d@redhat.com>
+Date:   Mon, 10 Jan 2022 15:34:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     sxwjean@me.com, akpm@linux-foundation.org, mhocko@suse.com,
+        dan.j.williams@intel.com, osalvador@suse.de,
+        naoya.horiguchi@nec.com, thunder.leizhen@huawei.com
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>
+References: <20220110141957.259022-1-sxwjean@me.com>
+ <20220110141957.259022-3-sxwjean@me.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 2/2] proc: Add getting pages info of ZONE_DEVICE
+ support
+In-Reply-To: <20220110141957.259022-3-sxwjean@me.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 05:45:47AM +0000, lizhijian@fujitsu.com wrote:
-> Hi Jason
+On 10.01.22 15:19, sxwjean@me.com wrote:
+> From: Xiongwei Song <sxwjean@gmail.com>
 > 
-> 
-> On 07/01/2022 01:33, Jason Gunthorpe wrote:
-> > On Thu, Jan 06, 2022 at 06:42:57AM +0000, lizhijian@fujitsu.com wrote:
-> >>
-> >> On 06/01/2022 08:28, Jason Gunthorpe wrote:
-> >>> On Tue, Dec 28, 2021 at 04:07:15PM +0800, Li Zhijian wrote:
-> >>>> +	while (length > 0) {
-> >>>> +		va	= (u8 *)(uintptr_t)buf->addr + offset;
-> >>>> +		bytes	= buf->size - offset;
-> >>>> +
-> >>>> +		if (bytes > length)
-> >>>> +			bytes = length;
-> >>>> +
-> >>>> +		arch_wb_cache_pmem(va, bytes);
-> >>> So why did we need to check that the va was pmem to call this?
-> >> Sorry, i didn't get you.
-> >>
-> >> I didn't check whether va is pmem, since only MR registered with PERSISTENCE(only pmem can
-> >> register this access flag) can reach here.
-> > Yes, that is what I mean,
-> 
-> I'm not sure I understand the *check* you mentioned above.
-> 
-> Current code just dose something like:
-> 
-> if (!sanity_check())
->      return;
-> if (requested_plt == PERSISTENCE)
->      va = iova_to_va(iova);
->      arch_wb_cache_pmem(va, bytes);
->      wmb;
-> else if (requested_plt == GLOBAL_VISIBILITY)
->      wmb();
-> 
-> 
-> > why did we need to check anything to call
-> > this API
-> As above pseudo code,  it didn't *check* anything as what you said i think.
+> When requesting pages info by /proc/kpage*, the pages in ZONE_DEVICE were
+> missed.
+>
 
-I mean when you created the MR in the first place you checked for pmem
-before even allowing the persitent access flag.
+The "missed" part makes it sound like this was done by accident. On the
+contrary, for now we decided to not expose these pages that way, for
+example, because determining if the memmap was already properly
+initialized isn't quite easy.
 
-Jason
+
+> The pfn_to_devmap_page() function can help to get page that belongs to
+> ZONE_DEVICE.
+
+What's the main motivation for this?
+
+> 
+> Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
+> ---
+>  fs/proc/page.c | 35 ++++++++++++++++++++++-------------
+>  1 file changed, 22 insertions(+), 13 deletions(-)
+> 
+> diff --git a/fs/proc/page.c b/fs/proc/page.c
+> index 9f1077d94cde..2cdc2b315ff8 100644
+> --- a/fs/proc/page.c
+> +++ b/fs/proc/page.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/page_idle.h>
+>  #include <linux/kernel-page-flags.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/memremap.h>
+>  #include "internal.h"
+>  
+>  #define KPMSIZE sizeof(u64)
+> @@ -46,6 +47,7 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
+>  {
+>  	const unsigned long max_dump_pfn = get_max_dump_pfn();
+>  	u64 __user *out = (u64 __user *)buf;
+> +	struct dev_pagemap *pgmap = NULL;
+>  	struct page *ppage;
+>  	unsigned long src = *ppos;
+>  	unsigned long pfn;
+> @@ -60,17 +62,18 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
+>  	count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
+>  
+>  	while (count > 0) {
+> -		/*
+> -		 * TODO: ZONE_DEVICE support requires to identify
+> -		 * memmaps that were actually initialized.
+> -		 */
+>  		ppage = pfn_to_online_page(pfn);
+> +		if (!ppage)
+> +			ppage = pfn_to_devmap_page(pfn, &pgmap);
+>  
+>  		if (!ppage || PageSlab(ppage) || page_has_type(ppage))
+>  			pcount = 0;
+>  		else
+>  			pcount = page_mapcount(ppage);
+>  
+> +		if (pgmap)
+> +			put_dev_pagemap(pgmap);
+
+Ehm, don't you have to reset pgmap back to NULL? Otherwise during the
+next iteration, you'll see pgmap != NULL again.
+
+> +
+>  		if (put_user(pcount, out)) {
+>  			ret = -EFAULT;
+>  			break;
+> @@ -229,10 +232,12 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
+>  {
+>  	const unsigned long max_dump_pfn = get_max_dump_pfn();
+>  	u64 __user *out = (u64 __user *)buf;
+> +	struct dev_pagemap *pgmap = NULL;
+>  	struct page *ppage;
+>  	unsigned long src = *ppos;
+>  	unsigned long pfn;
+>  	ssize_t ret = 0;
+> +	u64 flags;
+>  
+>  	pfn = src / KPMSIZE;
+>  	if (src & KPMMASK || count & KPMMASK)
+> @@ -242,13 +247,15 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
+>  	count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
+>  
+>  	while (count > 0) {
+> -		/*
+> -		 * TODO: ZONE_DEVICE support requires to identify
+> -		 * memmaps that were actually initialized.
+> -		 */
+>  		ppage = pfn_to_online_page(pfn);
+> +		if (!ppage)
+> +			ppage = pfn_to_devmap_page(pfn, &pgmap);
+> +
+> +		flags = stable_page_flags(ppage);
+> +		if (pgmap)
+> +			put_dev_pagemap(pgmap);
+
+Similar comment.
+
+>  
+> -		if (put_user(stable_page_flags(ppage), out)) {
+> +		if (put_user(flags, out)) {
+>  			ret = -EFAULT;
+>  			break;
+>  		}
+> @@ -277,6 +284,7 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
+>  {
+>  	const unsigned long max_dump_pfn = get_max_dump_pfn();
+>  	u64 __user *out = (u64 __user *)buf;
+> +	struct dev_pagemap *pgmap = NULL;
+>  	struct page *ppage;
+>  	unsigned long src = *ppos;
+>  	unsigned long pfn;
+> @@ -291,17 +299,18 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
+>  	count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
+>  
+>  	while (count > 0) {
+> -		/*
+> -		 * TODO: ZONE_DEVICE support requires to identify
+> -		 * memmaps that were actually initialized.
+> -		 */
+>  		ppage = pfn_to_online_page(pfn);
+> +		if (!ppage)
+> +			ppage = pfn_to_devmap_page(pfn, &pgmap);
+>  
+>  		if (ppage)
+>  			ino = page_cgroup_ino(ppage);
+>  		else
+>  			ino = 0;
+>  
+> +		if (pgmap)
+> +			put_dev_pagemap(pgmap);
+
+Similar comment.
+
+
+IIRC, we might still stumble over uninitialized devmap memmaps that
+essentially contain garbage -- I recall it might be the device metadata.
+I wonder if we at least have to check pgmap_pfn_valid().
+
+-- 
+Thanks,
+
+David / dhildenb
+

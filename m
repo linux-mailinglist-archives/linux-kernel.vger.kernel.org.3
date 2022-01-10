@@ -2,236 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70179489D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FC5489D13
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbiAJQEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:04:24 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42896 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236654AbiAJQEX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:04:23 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AEU3qh027158;
-        Mon, 10 Jan 2022 16:04:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XompZQzLtbkmqUW9fdSlx7i0OnbVCLoGBZmZzeSsJ7U=;
- b=FAlkU51Z5OTfIlTgm+ydTYh2fRFYr2XEKMOGs8OBUHNzeNNVHRMYg2If66+2s1suCLyV
- wkULHBz5skm9EV7fe/O0fU9RhlrfyajNA9fWn56tNqMqPfwO1VslNqbb4c2VE8CP/fk8
- O+lEb3aXfgOEu6/L6O5rTVMoYn9gp/SjkPFT8gzco2t7dGc7Ll4EbujVY0l4xktfuDh5
- IuxuEYBzOB7gJ/MdjS/ysm3NRfc1iF8CS+hUulFlXKxfc2g4Wf2pJIF0vaJq7liPtjLK
- 1KY8f0u39+IV+NXu1YdI0BQGcgCSGPtUsA5JBpmTH0f6y/WOEzc+ZVRNZdsK9DMgKdFP Iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmje67fk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 16:04:15 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20AEgAX6040822;
-        Mon, 10 Jan 2022 16:04:15 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmje67e8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 16:04:15 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20AFvc6K021202;
-        Mon, 10 Jan 2022 16:04:13 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma02wdc.us.ibm.com with ESMTP id 3df289r2ff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 16:04:13 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20AG4Ccm35520958
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 16:04:12 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E262124053;
-        Mon, 10 Jan 2022 16:04:12 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D243212405A;
-        Mon, 10 Jan 2022 16:04:08 +0000 (GMT)
-Received: from [9.211.85.241] (unknown [9.211.85.241])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jan 2022 16:04:08 +0000 (GMT)
-Message-ID: <e29dc7de-b656-7c27-2294-fb4936e99e69@linux.vnet.ibm.com>
-Date:   Mon, 10 Jan 2022 11:04:07 -0500
+        id S236934AbiAJQFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:05:53 -0500
+Received: from mail-bn8nam11on2049.outbound.protection.outlook.com ([40.107.236.49]:59360
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236654AbiAJQFw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 11:05:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jCa8ffmW//3yx/Aknbh5/VWez3KZNnIJIHQwubskgw7BwaADiqLp6+XjVC032t5G4iAENbgTjp6jA7AuAoZPa+2pO4Z4xrpezRTF1UwEVvxIe6j3+Dlwd9D7irrGFoMVWx3YZfmAR24phwekNGK4BBZf7QA1nD04lyTxKMpalMZiBqZIapQeJzHigbiyl0NMFctM4XYZaV5vcj3Qt2ckGSoK2h/9KJx3ZE4BTDuu/o4q5Alj5BI7CzicSgZOw8ShzOl2mOauLk7lr1MAilSeapaQP/L77ObClfrvkDDW+gaNTcxBmSivLoaSse+fyZ4w393y0xE3cWnVwJoyovqTyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kJJWPm9bNJArnMndhKep3T8z6NESKmamZWLojV7y1Uk=;
+ b=mGmfmiBeXl28esHtkwNwRQVOt5hZsAJ3HlXPlkNYBJi2L0A/SfxBrtj1MA6a0mfJjDXwpW1ytLJTDgvF3D69gBnxH2qkJp11u8aiN+HE1uIYIBHNshcZDokLmMyWiLJzn8MPaY7tFImO1KGIMsXVwfEN0IhhDGxlZF//HbXKLNluoma/jvOHiYWY8VMswAndx1J5IL9o5o3OCgkkD/RWBAkhim0cMc5+rha4YiKgDUr9zUNBCsNOXUWjNayAguS7h0/nH1siclDbSkV9iQuUcaZmGon8s42mdL2pfl/MiKLPGXymHxN+PqyWSdIIYLwsDlGeQoku+ldiuswrZ3tXGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kJJWPm9bNJArnMndhKep3T8z6NESKmamZWLojV7y1Uk=;
+ b=KrsaAyWrL53sbIeaSbAHc5z7CfGDV78RdTHNJhza5HbF8GcowQdVje5NmTsYdQcS8lgV1KXcVw08TNmaohr6gKdu31fyL3JSd3FOWvELd46tFrmg7CNzKqPfK8OJItCX7e9BT4dUhmMLjWM/tOsW11FTW5lW57DatmZIoM6YfIdXDvo382cTsZtZHhEY12GaU330C0pwOTE7zQeCLxPD2AF/HCYKjA9HPrDayVP4LE77Tab/jV7ZtCj+JSMjJ6GBjZlYhSFT8Vk0GkDpaOscV6KdwGaWOGD0ttNYIVX+0daEjfNQuUKueUeo/OZifVJHpEk7aoducCJk8gvtRT9Y2A==
+Received: from DS7PR03CA0152.namprd03.prod.outlook.com (2603:10b6:5:3b2::7) by
+ DM4PR12MB5056.namprd12.prod.outlook.com (2603:10b6:5:38b::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4867.7; Mon, 10 Jan 2022 16:05:49 +0000
+Received: from DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b2:cafe::f) by DS7PR03CA0152.outlook.office365.com
+ (2603:10b6:5:3b2::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.10 via Frontend
+ Transport; Mon, 10 Jan 2022 16:05:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT005.mail.protection.outlook.com (10.13.172.238) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4867.7 via Frontend Transport; Mon, 10 Jan 2022 16:05:49 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 10 Jan
+ 2022 16:05:49 +0000
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 10 Jan
+ 2022 08:05:48 -0800
+Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Mon, 10 Jan 2022 16:05:45 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <dan.j.williams@intel.com>, <devicetree@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <kyarlagadda@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <p.zabel@pengutronix.de>, <rgumasta@nvidia.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <vkoul@kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH v16 0/4] Add NVIDIA Tegra GPC-DMA driver
+Date:   Mon, 10 Jan 2022 21:35:14 +0530
+Message-ID: <1641830718-23650-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-Content-Language: en-US
-To:     Yael Tiomkin <yaelt@google.com>, linux-integrity@vger.kernel.org
-Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20211229215330.4134835-1-yaelt@google.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <20211229215330.4134835-1-yaelt@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rvYTunM6SwFx0tMPkf96ME1jB3uonZAg
-X-Proofpoint-ORIG-GUID: nVUIIj41yyDo438Gf_bBG2i6eYwNwFzu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_06,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 suspectscore=0 phishscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1011
- mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201100113
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aa03c537-efd4-445b-cf8a-08d9d45311ef
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5056:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5056577DE996DD91BBE38446C0509@DM4PR12MB5056.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mkJz1tgE3gTEkGttmudJRNW/sIrFWGISjLLbrU161luLaPiR4NW9ymWdcKTHWQwnyBvXqjMgfPOIfzrmJTOB2fuo3alOjayGoz1O9Jg0o2/L6QnO1e7ukBorKra7+UpWx4WD8BapH2g8se8zfU+GuATf4Bq2ZdSPGUKunhWC6NMLrcGg2i5LAD2bnfYP86px3fON/hQziDnPrVKfBvtuiBL2Odx/1uG+04lnzN5tp8hHZrAhffs+ZgMWsJal1uobxir5ws7RVziezu8/BIPjrv5e2Uss7DW6yA/vSAkX/0/uRA6p++Fkr9IuLI09si56CcGvgaUoThulzA4yoVSYZMMTMb6BgBbJpDNQKrxkZoUpG/Y8N3VfasDh3Qjfasaal6CXsbw+nUQggq9wtJ/zxXDK9Xym0gC9Rb1KPQOwHB70OPzScvvq9dwIdoEO4Bq+e5TeUCNyNWnpBhTHixcYZ35xx8W5MLwAs9xPaNinRJ4O1XAvItNCJhxO5yeOCyKaR+6I3xSmorNY/cPwVr3eHHxsLMWgcNM0eOYvkGjd7WgJWaoLO/KjkUiTsy4GBMS8L1o2KJZGEKCxtixP+SwT4FGq4+7Cz0hmIRkj6WOEVC9Ws9SS2Wvr58IB2naG6tbPnIhqj/iVTvfE3+FukKNTApPlGLsosSiZzLYsYlcCZeYmfRq7HMFbvwfhZcBvupKlrB5t5XoMX9Ur0YCV6Sl4EP9lwUJtgvbfutLthFD3cFyVrGCqleUFyN7MEbhSLse8Ut7RC8C9AvgEgak5dpwry/wdzinRHsaur6SfNPE0QjnQwC60XwjC8altao+66spzIAdRVYvwnAFq0OmoDSuGX06zO+5ZaMbg0WxeTiUstE/eaLlI4r7eLKPauHT7T+fvPVwJi1enJLaQwTJgiuY3lSubHHoI1KRzxO01E7kZCPp6RDItAZcvXyxBVrvsRTT6
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(86362001)(316002)(426003)(5660300002)(966005)(921005)(7696005)(26005)(8676002)(40460700001)(336012)(186003)(2616005)(508600001)(6666004)(2906002)(81166007)(82310400004)(110136005)(70586007)(70206006)(4326008)(107886003)(356005)(47076005)(8936002)(83380400001)(36756003)(36860700001)(36900700001)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 16:05:49.5751
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa03c537-efd4-445b-cf8a-08d9d45311ef
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5056
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for NVIDIA Tegra general purpose DMA driver for
+Tegra186 and Tegra194 platform.
 
-On 12/29/21 16:53, Yael Tiomkin wrote:
-> The encrypted.c class supports instantiation of encrypted keys with
-> either an already-encrypted key material, or by generating new key
-> material based on random numbers. This patch defines a new datablob
-> format: [<format>] <master-key name> <decrypted data length>
-> <decrypted data> that allows to instantiate encrypted keys using
-> user-provided decrypted data, and therefore allows to perform key
-> encryption from userspace. The decrypted key material will be
-> inaccessible from userspace.
->
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Yael Tiomkin <yaelt@google.com>
-> ---
->
-> Notes:
->      v -> v2: fixed compilation error.
->      
->      v2 -> v3: modified documentation.
->      
->      v3 -> v4: modified commit message.
->
->   .../security/keys/trusted-encrypted.rst       | 25 ++++++--
->   security/keys/encrypted-keys/encrypted.c      | 62 +++++++++++++------
->   2 files changed, 63 insertions(+), 24 deletions(-)
->
-> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-> index 80d5a5af62a1..f614dad7de12 100644
-> --- a/Documentation/security/keys/trusted-encrypted.rst
-> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> @@ -107,12 +107,13 @@ Encrypted Keys
->   --------------
->   
->   Encrypted keys do not depend on a trust source, and are faster, as they use AES
-> -for encryption/decryption. New keys are created from kernel-generated random
-> -numbers, and are encrypted/decrypted using a specified ‘master’ key. The
-> -‘master’ key can either be a trusted-key or user-key type. The main disadvantage
-> -of encrypted keys is that if they are not rooted in a trusted key, they are only
-> -as secure as the user key encrypting them. The master user key should therefore
-> -be loaded in as secure a way as possible, preferably early in boot.
-> +for encryption/decryption. New keys are created either from kernel-generated
-> +random numbers or user-provided decrypted data, and are encrypted/decrypted
-> +using a specified ‘master’ key. The ‘master’ key can either be a trusted-key or
-> +user-key type. The main disadvantage of encrypted keys is that if they are not
-> +rooted in a trusted key, they are only as secure as the user key encrypting
-> +them. The master user key should therefore be loaded in as secure a way as
-> +possible, preferably early in boot.
->   
->   
->   Usage
-> @@ -199,6 +200,8 @@ Usage::
->   
->       keyctl add encrypted name "new [format] key-type:master-key-name keylen"
->           ring
-> +    keyctl add encrypted name "new [format] key-type:master-key-name keylen
-> +        decrypted-data" ring
->       keyctl add encrypted name "load hex_blob" ring
->       keyctl update keyid "update key-type:master-key-name"
->   
-> @@ -303,6 +306,16 @@ Load an encrypted key "evm" from saved blob::
->       82dbbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e0
->       24717c64 5972dcb82ab2dde83376d82b2e3c09ffc
->   
-> +Instantiate an encrypted key "evm" using user-provided decrypted data::
-> +
-> +    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm_decrypted_data.blob`" @u
-> +    794890253
-> +
-> +    $ keyctl print 794890253
-> +    default user:kmk 32 2375725ad57798846a9bbd240de8906f006e66c03af53b1b382d
-> +    bbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e0247
-> +    17c64 5972dcb82ab2dde83376d82b2e3c09ffc
-> +
->   Other uses for trusted and encrypted keys, such as for disk and file encryption
->   are anticipated.  In particular the new format 'ecryptfs' has been defined
->   in order to use encrypted keys to mount an eCryptfs filesystem.  More details
-> diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
-> index 87432b35d771..baf6fba5e05e 100644
-> --- a/security/keys/encrypted-keys/encrypted.c
-> +++ b/security/keys/encrypted-keys/encrypted.c
-> @@ -159,6 +159,7 @@ static int valid_master_desc(const char *new_desc, const char *orig_desc)
->    *
->    * datablob format:
->    * new [<format>] <master-key name> <decrypted data length>
-> + * new [<format>] <master-key name> <decrypted data length> <decrypted data>
->    * load [<format>] <master-key name> <decrypted data length>
->    *     <encrypted iv + data>
->    * update <new-master-key name>
-> @@ -170,7 +171,7 @@ static int valid_master_desc(const char *new_desc, const char *orig_desc)
->    */
->   static int datablob_parse(char *datablob, const char **format,
->   			  char **master_desc, char **decrypted_datalen,
-> -			  char **hex_encoded_iv)
-> +			  char **hex_encoded_iv, char **decrypted_data)
->   {
->   	substring_t args[MAX_OPT_ARGS];
->   	int ret = -EINVAL;
-> @@ -231,6 +232,8 @@ static int datablob_parse(char *datablob, const char **format,
->   				"when called from .update method\n", keyword);
->   			break;
->   		}
-> +		*decrypted_data = strsep(&datablob, " \t");
-> +
->   		ret = 0;
->   		break;
->   	case Opt_load:
-> @@ -595,7 +598,8 @@ static int derived_key_decrypt(struct encrypted_key_payload *epayload,
->   static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
->   							 const char *format,
->   							 const char *master_desc,
-> -							 const char *datalen)
-> +							 const char *datalen,
-> +							 const char *decrypted_data)
->   {
->   	struct encrypted_key_payload *epayload = NULL;
->   	unsigned short datablob_len;
-> @@ -604,6 +608,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
->   	unsigned int encrypted_datalen;
->   	unsigned int format_len;
->   	long dlen;
-> +	int i;
->   	int ret;
->   
->   	ret = kstrtol(datalen, 10, &dlen);
-> @@ -613,6 +618,20 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
->   	format_len = (!format) ? strlen(key_format_default) : strlen(format);
->   	decrypted_datalen = dlen;
->   	payload_datalen = decrypted_datalen;
-> +
-> +	if (decrypted_data) {
-> +		if (strlen(decrypted_data) != decrypted_datalen) {
-> +			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +		for (i = 0; i < strlen(decrypted_data); i++) {
-> +			if (!isalnum(decrypted_data[i])) {
+v15 -> v16:
+  * Added cyclic mode support
+  * Added device pause and resume
+  * Added sg_req array to handle multiple sgs
+  * Request irq only when a dma chan is allocated
+  * Removed locks and busy flag
+  * Updates in terminate_all callback
 
-User-provided decrypted data may have special characters, commonly used 
-in passwords or key phrases, apart from alphanumeric.  Replace isalnum 
-with !iscntrl() to validate against control characters but allow special 
-characters.
+v15 - https://lkml.org/lkml/2021/12/16/905
 
-Thanks & Regards,
+The additional changes were added to align with the features that got
+added in the interim.
+Keeping "Reviewed-by: Jon Hunter <jonathanh@nvidia.com>" as the changes
+were reviewed internally.
 
-      - Nayna
+Akhil R (4):
+  dt-bindings: dmaengine: Add doc for tegra gpcdma
+  dmaengine: tegra: Add tegra gpcdma driver
+  arm64: defconfig: tegra: Enable GPCDMA
+  arm64: tegra: Add GPCDMA node for tegra186 and tegra194
+
+ .../bindings/dma/nvidia,tegra186-gpc-dma.yaml      |  110 ++
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |   42 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   43 +
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/dma/Kconfig                                |   11 +
+ drivers/dma/Makefile                               |    1 +
+ drivers/dma/tegra186-gpc-dma.c                     | 1464 ++++++++++++++++++++
+ 7 files changed, 1672 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+ create mode 100644 drivers/dma/tegra186-gpc-dma.c
+
+-- 
+2.7.4
 

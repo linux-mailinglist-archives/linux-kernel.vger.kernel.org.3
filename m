@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B2C48A363
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465D048A368
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345616AbiAJXGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S1345631AbiAJXH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242456AbiAJXGu (ORCPT
+        with ESMTP id S242456AbiAJXHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:06:50 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA47CC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:06:49 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q14so14382070plx.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:06:49 -0800 (PST)
+        Mon, 10 Jan 2022 18:07:25 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B66BC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:07:25 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id m6so32032266ybc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:07:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y+VBsHBfwIdG2OzWHPdI/WIqfhyYeKNFkPIFzGKgGjs=;
-        b=X/BYePGBzH1Y0U06VN7h0LTAx5XkiSMJkjX4bzEruFI1kwOUOCZ/UQD5Hz1I4ruAQl
-         PKrgHenyxeASQaRZZvzIOgMnuzQdonH1VvyAbdvdjbchbZ2+uMZc22CuQapKF6//7uez
-         U7SEtzQCYOhll5kuSGrRuD3424eXtMM1K2q20cLcgofjiBKZpwYAGGu/G+SgPu+Ah0Ai
-         cMXFe7zrtF2HSeLvPaMRp85OO6XQzOWT5yW68a8WQ+brErvfPeLpyOXHT8jSayE1ssES
-         B/xCP4larnCmFQsqFp3LTl28pqvPRHXZOcO2unNP2YugKO4xbE5RD1x5r36xyKuMboWr
-         viJg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WXezCkJjRPkDROjmNSEXw8KrMNSVatQHflVa4NcIBZ4=;
+        b=lT7ThlTt++QvhmmkculwEqKL3uXY7KHRlY1gZM6+NQiGlRD9ipXMMx4+mWy7E0i6H2
+         YFeTMNWGyf/XiOMdm8cZbbHWziX6fKd2IX5qBjQCbpvC07ja4ugEzBJKzn05hpgC1SRR
+         AekdfWmGnZEjHKsImuXfvSQZ+rOmhk9vwUrAEUMpqVXfV6b9OOJ/ps8P9VpNpvoHUrbT
+         BzHh3EIH2sdChxnhiwiBSPlCNDGMnSqOv2qNVaeHVb7nIwPjGi/tvwQnkAh8FxtL726/
+         Y35AUh+AK0fQZVMkhY7LAhlUFPIqR4ls8dFOHnDz2cos6MHdV42xAgbIurK7je8UGI33
+         1ONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y+VBsHBfwIdG2OzWHPdI/WIqfhyYeKNFkPIFzGKgGjs=;
-        b=P7Q+VVJCYSLS/Z3NbXXrkZG/hW/2fSS43jvcrHKZqOEkOzqVzgzLBkI37jjMZsxYcp
-         2YV8POmF1L2113giycHG6F9+hKuRk7UUbxXOJVcfhQooYBb5dYQ5pl2S28svAob7Q3dW
-         osvlpy3eQFoIHOyD2l0fpOJD3t2wmsOdfxWHIBytPUFkmcdsZlLPXzCoZXeQt7UqGpA+
-         TOiUCSZA/jjfTzDUrxPzTMSsQj3BpRQof/QhrMAnZB+deeIehWlJ13vD7XBAKeogOdjF
-         /3UYgg5xtH4Ps0O/e3Cwfm4bO4YGcbUgnqlUOz9fxkq4IZx9RRZtsyU3lQwxa7VHTST5
-         AfVg==
-X-Gm-Message-State: AOAM533z2P5WSaxC+ckwauvXO5MKZ27TSrPHIl4o+ArV7Lbo3RjNq9tY
-        ZnSs57+myA0cu8AxHMhUwE0nAQ==
-X-Google-Smtp-Source: ABdhPJwuqul2WTZrr6xhkm1p+58Y11+q37mOxYmOZK51ca5s/4q/F/MIfrRIm+VTh9ySZMN7V9F+qQ==
-X-Received: by 2002:a17:90a:d90b:: with SMTP id c11mr37450pjv.211.1641856009160;
-        Mon, 10 Jan 2022 15:06:49 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d1sm4554170pgd.66.2022.01.10.15.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 15:06:48 -0800 (PST)
-Date:   Mon, 10 Jan 2022 23:06:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
-        tglx@linutronix.de, Marc Zyngier <maz@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WXezCkJjRPkDROjmNSEXw8KrMNSVatQHflVa4NcIBZ4=;
+        b=1F6eaCTe4/aBi2lIlildp1YqxipivpWSZdEyeMaAElMriXKOnTS0RTwYBZaOildkv/
+         rSpAeJDsA/Nd7BXNCtVdrcVCDxOucMtksAoUP6OEQ3xZ9edBAAIVQPJ33COh/S7E8Tkh
+         8Bu8roUHXGa6U/eALqRh/RB89BPN2rLudHAzdT+qA3SPtrU91GQNbr3FIO1jBgVk+rdc
+         w4Q8fSal5w4MNS7FIluNDG56giKqz3g82qo/uLsxW6xI6yFfXEO+uRnhEV0NU+t8YmT7
+         I0T8N2Vs8mmXrvibYLQXoLBtVPSa1/lie5Tf7LW6cH+uLWy79lbh+Appw3vkhMF8L7I5
+         RWXQ==
+X-Gm-Message-State: AOAM531x3rA1bjI4p0ppmWh6U0GBCZ56/NPComZTLFQ7eaoyC+08uiXP
+        sjwGzp55VjLXOMY+gcjOBNU2DrhMjF0sff67yXyZBMvvYiA=
+X-Google-Smtp-Source: ABdhPJzBJzORsUZLGXrxCBMovCLT/oathXNs3w20UB7mc6qHjBQPdClWy2y/DJ7ReGsZVPvGVSjnvALfMbExKTvbbuk=
+X-Received: by 2002:a25:b9d2:: with SMTP id y18mr1128156ybj.615.1641856044191;
+ Mon, 10 Jan 2022 15:07:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+ <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+ <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com> <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+In-Reply-To: <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 10 Jan 2022 15:07:13 -0800
+Message-ID: <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 3/6] KVM: Remove opaque from
- kvm_arch_check_processor_compat
-Message-ID: <Ydy8BCfE0jhJd5uE@google.com>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-4-chao.gao@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227081515.2088920-4-chao.gao@intel.com>
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021, Chao Gao wrote:
-> No arch implementation uses this opaque now.
+On Fri, Jan 7, 2022 at 4:05 PM Jim Mattson <jmattson@google.com> wrote:
+>
+> On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > Hi Reiji,
+> >
+> > On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
+> > >
+> > > Hi Raghu,
+> > >
+> > > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
+> > > <rananta@google.com> wrote:
+> > > >
+> > > > Capture the start of the KVM VM, which is basically the
+> > > > start of any vCPU run. This state of the VM is helpful
+> > > > in the upcoming patches to prevent user-space from
+> > > > configuring certain VM features after the VM has started
+> > > > running.
+>
+> What about live migration, where the VM has already technically been
+> started before the first call to KVM_RUN?
 
-Except for the RISC-V part, this can be a pure revert of commit b99040853738 ("KVM:
-Pass kvm_init()'s opaque param to additional arch funcs").  I think it makes sense
-to process it as a revert, with a short blurb in the changelog to note that RISC-V
-is manually modified as RISC-V support came along in the interim.
+My understanding is that a new 'struct kvm' is created on the target
+machine and this flag should be reset, which would allow the VMM to
+restore the firmware registers. However, we would be running KVM_RUN
+for the first time on the target machine, thus setting the flag.
+So, you are right; It's more of a resume operation from the guest's
+point of view. I guess the name of the variable is what's confusing
+here.
+
+Thanks,
+Raghavendra

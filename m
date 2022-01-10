@@ -2,223 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB57F489BA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E603489BAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbiAJOzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiAJOzU (ORCPT
+        id S235782AbiAJO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:56:03 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:43629 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235769AbiAJO4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:55:20 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8E4C06173F;
-        Mon, 10 Jan 2022 06:55:20 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id j83so38773368ybg.2;
-        Mon, 10 Jan 2022 06:55:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dEL+PwUNJ7VeDav8Vkg9ZEihg+obXr9BMf+UZGECSME=;
-        b=WMmkNgc4gd0Com5/mH7FQrgGMn6uv9XH3VFL4H6JkCFziFz7n7vr/ThIe9LF7iNK9l
-         x/F3Rhn09XlmkvucTt0lqtsAVsw6kcIhfJM8cSMpuafwVc6/YUgtVEDpTkuW+p6BmuJ6
-         MNdiXaNftD7MnCMfFz5Ft9Wi2jh22JspVyDpqb01naJBxK1LgGpMFKoeL011q/QHNzHp
-         Bpm+ZhgRQHgDhGSzcAoX0EBCYfTY0hKWpI+vauCSKbvgQzwqp2CLOQMHgUAzAu/7lIE/
-         IDBx77XRa09Oq/cnWxyjiW/tzn6vwI/tsAkDH84Eu3UVwSER/dy8nFhvglkmxNK88QTn
-         1MsA==
+        Mon, 10 Jan 2022 09:56:01 -0500
+Received: by mail-qk1-f171.google.com with SMTP id f138so15013948qke.10;
+        Mon, 10 Jan 2022 06:56:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dEL+PwUNJ7VeDav8Vkg9ZEihg+obXr9BMf+UZGECSME=;
-        b=rzc8Fbla7Spg2Fanb4pVILA9kdg7yHAATHbMqPB1OjpqJTUzLA/8t3GcpnYDkW75wQ
-         XzVtGqWB7h+PlxogBnF7N5WckaKv5CHVrUaNyFoj6apv/2zCeqX4Rm8PzcWzdAD3T1jy
-         xMu0H4Q+23/omT3SCCT2nf5YLzsYpqlkYSnLIHUCStcH2N5EB8dMuzeisN9LSIri0bz0
-         aCMYBaU0FH1+nxOLo/6h+Ji4ZGrC+gRbxojaFJ2oDzUMgRseCGijXv7X00muC8u+pBok
-         LzNYSErxSD514TGnDBsFmOmD8G1YI4GyXU8slCvyPSaIKjwT9aQk5u/Rs7QwgN37BrZi
-         C8eQ==
-X-Gm-Message-State: AOAM530jwqvZ/JXnXPpeonrASGRHgdWzfM7qg1bMoC8bTdbqciKsJbk3
-        WfRl1ROd28D/dyD5PuX/Czx42tVrzG20qMsoaww=
-X-Google-Smtp-Source: ABdhPJycNKY8aWsJngqsCoXDYCvWAp/H3WkDOYKEoF7w0cRVsqvGaw4y822DqflQ0PMlIrF/yCHekML/FrBGNfrNq2E=
-X-Received: by 2002:a25:98c6:: with SMTP id m6mr4482853ybo.494.1641826519183;
- Mon, 10 Jan 2022 06:55:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L3beBrNOg3nuBaTtpl+UOIFPH3z+4rFJ8EtzyRQDCqA=;
+        b=ESGJHrpZKFlpLalyjhF0qxU8uMwK+CMumj+W/8VNxFkWjwwIdVhP7CDkMPCGqCZHYo
+         IWJ8qGruQLF05ZMdhGHZvN8Dn9iHjC/sygI9Gj6I0g0B969wOweUX2AZlub8/PDxNvFw
+         irieMbHtG72W975ks5VZ5wimmNTnIE6f4AIO0G++sOPDhCEXoDgacDZdU4tIpBUfLSoi
+         Od5r/qrQDxx5gWBpRglFOF379d/h2pY3lyahER5pvWBUQMZBNnUfpTRze4WMjO6BIOU4
+         DZYk7cMTiqO81Bvr7Tmq5Dnq68RTmqzvscLk45qFjAKiocdO3u6uQvwQ7IRxBKTmxMq1
+         RDOQ==
+X-Gm-Message-State: AOAM5329MYfDDkB9LsnKFlHM5XRTod5zYlVnZjBUv+gbBltl+f8rbaDA
+        Kr7gYlQRp2thdI++KW85Zoo=
+X-Google-Smtp-Source: ABdhPJzFvAsCF2kXeHrEyboneBZ+Y7lG9bomaFt7c9MDvgK0pQVBWw08I+MccZhaYxYjK9wgpsUe3w==
+X-Received: by 2002:a05:620a:1a08:: with SMTP id bk8mr11861qkb.195.1641826560971;
+        Mon, 10 Jan 2022 06:56:00 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-011.fbsv.net. [2a03:2880:20ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id v12sm4835415qtx.80.2022.01.10.06.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 06:56:00 -0800 (PST)
+Date:   Mon, 10 Jan 2022 06:55:59 -0800
+From:   David Vernet <void@manifault.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Song Liu <song@kernel.org>, live-patching@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
+        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com
+Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
+Message-ID: <YdxI/xFf1btdIhLl@dev0025.ash9.facebook.com>
+References: <20211229215646.830451-1-void@manifault.com>
+ <CAPhsuW5PL1w_72Hrbsp2b3jA-SGyzv5oLfgybkq=s8J5KL6kmw@mail.gmail.com>
+ <Ydf3MBet/B+lUdRv@alley>
 MIME-Version: 1.0
-References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
- <1641578854-14232-1-git-send-email-quic_pintu@quicinc.com>
- <19cce51e24584c2a8090b618c580a0bd@AcuMS.aculab.com> <CAOuPNLh-WLxJ7w=_C7zKXArgZLbO7OahHHhuwAyN9E1yZvNTdQ@mail.gmail.com>
- <5aa1e8c55cf84436b35ee5557a508e8d@AcuMS.aculab.com>
-In-Reply-To: <5aa1e8c55cf84436b35ee5557a508e8d@AcuMS.aculab.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Mon, 10 Jan 2022 20:25:07 +0530
-Message-ID: <CAOuPNLiKU6EkacELA-ioewBADGLV3g-m=5Cd5vE8RsSNyOkVzA@mail.gmail.com>
-Subject: Re: [PATCH v2] sysinfo: include availram field in sysinfo struct
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Pintu Kumar <quic_pintu@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "legion@kernel.org" <legion@kernel.org>,
-        "sashal@kernel.org" <sashal@kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "ccross@google.com" <ccross@google.com>,
-        "pcc@google.com" <pcc@google.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "caoxiaofeng@yulong.com" <caoxiaofeng@yulong.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydf3MBet/B+lUdRv@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 9 Jan 2022 at 04:05, David Laight <David.Laight@aculab.com> wrote:
->
-> From: Pintu Agarwal
-> > Sent: 08 January 2022 16:53
-> >
-> > On Sat, 8 Jan 2022 at 03:52, David Laight <David.Laight@aculab.com> wrote:
-> > >
-> > > From: Pintu Kumar
-> > > > Sent: 07 January 2022 18:08
-> > > >
-> > > > The sysinfo member does not have any "available ram" field and
-> > > > the bufferram field is not much helpful either, to get a rough
-> > > > estimate of available ram needed for allocation.
-> > > >
-> > > > One needs to parse MemAvailable field separately from /proc/meminfo
-> > > > to get this info instead of directly getting if from sysinfo itself.
-> > > >
-> > > > Thus, this patch introduce a new field as availram in sysinfo
-> > > > so that all the info total/free/available can be retrieved from
-> > > > one place itself.
-> > > >
-> > > ...
-> > > > diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
-> > > > index 435d5c2..fe84c6a 100644
-> > > > --- a/include/uapi/linux/sysinfo.h
-> > > > +++ b/include/uapi/linux/sysinfo.h
-> > > > @@ -19,7 +19,8 @@ struct sysinfo {
-> > > >       __kernel_ulong_t totalhigh;     /* Total high memory size */
-> > > >       __kernel_ulong_t freehigh;      /* Available high memory size */
-> > > >       __u32 mem_unit;                 /* Memory unit size in bytes */
-> > > > -     char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
-> > >
-> > > There are 4 pad bytes here on most 64bit architectures.
-> > >
-> > > > +     __kernel_ulong_t availram;      /* Memory available for allocation */
-> > > > +     char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
-> > > >  };
-> > >
-> > > You've not compile-time tested the size of the structure.
-> > >
-> > With "32" instead of "20" in padding I get these size of sysinfo:
-> > In x86-64 kernel, with app 64-bit: Size of sysinfo = 128
-> > In x86-64 kernel, with app 32-bit:: Size of sysinfo = 76
-> > In arm-64 kernel, with app 32-bit: Size of sysinfo = 76
->
-> You need to compare the sizes before and after your patch
-> to ensure it doesn't change on any architecture.
+Petr Mladek <pmladek@suse.com> wrote on Fri [2022-Jan-07 09:17:52 +0100]:
+> On Thu 2022-01-06 16:21:18, Song Liu wrote:
+> > PS: Do we observe livepatch takes a longer time to load after this change?
+> > (I believe longer time shouldn't be a problem at all. Just curious.)
+> 
+> It should depend on the load of the system and the number of patched
+> symbols. The module is typically loaded with a normal priority
+> process.
+> 
+> The commit message talks about 1.3 seconds delay of ksoftirq. In
+> principle, the change caused that this 1.3 sec of a single CPU time
+> was interleaved with other scheduled tasks on the same CPU. I would
+> expect that it prolonged the load just by a couple of seconds in
+> the described use case.
 
-Without the changes:
-On 32-bit, the size of structure = 64
-On 64-bit, the size of structure = 112
+Just to add a data point here for the record, I didn't observe any increase
+in latency when applying a livepatch with this change. It took roughly ~2
++/- ~.5 seconds both with and without the change. Obviously that number
+doesn't mean much without knowing the specifics of the patch and what
+workloads were running on the host, but in general the invocations to
+cond_resched() patch did not seem to materially affect the overhead of
+livepatching.
 
-With the addition of my new field (availram) if I try to fix the size
-issue on one arch, the other arch gets disturbed.
-I could fix the same size issue on 64-bit with below changes:
-
-        __kernel_ulong_t freeswap;      /* swap space still available */
-        __u16 procs;                    /* Number of current processes */
-        __u16 pad;                      /* Explicit padding for m68k */
-+       __u32 mem_unit;                 /* Memory unit size in bytes
-*/        ============> Move the mem_unit up to adjust the padding
-        __kernel_ulong_t totalhigh;     /* Total high memory size */
-        __kernel_ulong_t freehigh;      /* Available high memory size */
--       __u32 mem_unit;                 /* Memory unit size in bytes */
-+       __kernel_ulong_t availram;      /* Memory available for
-allocation */   ========> Add the new field here
--        char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /*
-Padding: libc5 uses this.. */
-+       char _f[28-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /*
-Padding: libc5 uses this.. */   ====> Increase the size to 28 (thus _f
-becomes 0 like original)
-+       //char _f[4];
- };
-
-Output with 64-bit build:
-$ gcc test-sysinfo.c ; ./a.out
-Total RAM: 32715804 kB
-Free RAM: 1111296 kB
-Size of sysinfo = 112
-Size of sysinfo uptime = 8
-Size of sysinfo loads = 24
-Size of sysinfo totalram = 8
-Size of sysinfo pad = 2
-Size of sysinfo memunit = 4
-Size of sysinfo _f = 0
-
-Output with 32-bit build:
-$ gcc test-sysinfo.c -m32 ; ./a.out
-Total RAM: 7987 kB
-Free RAM: 271 kB
-Size of sysinfo = 72
-Size of sysinfo uptime = 4
-Size of sysinfo loads = 12
-Size of sysinfo totalram = 4
-Size of sysinfo pad = 2
-Size of sysinfo memunit = 4
-Size of sysinfo _f = 12
-
-Are there any more suggestions/ideas to experiment with padding
-changes before we give-up ?
-Can we handle it using : __arch64__ check ?
-Or, the only option is to add one more, say: sysinfo64 ?
-
-
-> > Okay the sys robot reported some issue in 64-bit build.
-> > {{{
-> > >> include/uapi/linux/sysinfo.h:23:14: error: size of array '_f' is too large
-> > >>    23 |         char _f[20-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses
-> > this.. */
-> > >>       |              ^~
-> > }}}
-> >
-> > Also, I got the same issue while building for arm64, so I tried to
-> > adjust like this:
-> > char _f[32-3*sizeof(__kernel_ulong_t)-sizeof(__u32)];
-> >
-> > With this the build works on both 32/64 but output fails when running
-> > 32-bit program on 64-bit kernel.
-> > Also, the free command on 64-bit reports "stack smashing error"..
-> >
-> > How do we resolve this issue to make it work on both arch ?
-> > Also, I don't really understand the significance of that number "20"
-> > in padding ?
->
-> My guess is that someone added a char _f[20] pad to allow for expansion.
-> Then two __kernel_ulong_t and one __u32 field were added, so the
-> size of the pad was reduced.
-> When __kernel_ulong_t is 64bit then it seems to be char _f[0]
-> - which might generate a compile warning since you are supposed
-> to use char _f[] to indicate an extensible structure.
-> There is, however, 4 bytes of pad after the _f[] on most 64bit
-> architectures.
->
-Thanks, yes even I guessed the same.
-
-> So actually there isn't enough space to anything useful at all.
->
-Is this problem does not exist in other UAPI structures ?
-Seems like nothing can be done to allow future expansion without
-breaking existing things and without developing the new one.
-
-Thanks,
-Pintu
+The only time I would expect it to cause longer livepatches is when there
+are a lot of tasks that need the CPU, which is dependent on system load as
+Petr said. I'd argue that in this case, the patch would be working as
+intended as hogging the CPU for 1 or more seconds seems like a recipe for
+problems.

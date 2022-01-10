@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F2E489286
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191644892A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240315AbiAJHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S243542AbiAJHpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240992AbiAJHeb (ORCPT
+        with ESMTP id S240572AbiAJHiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:34:31 -0500
+        Mon, 10 Jan 2022 02:38:18 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3EDC0253B2;
-        Sun,  9 Jan 2022 23:30:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA80C028BA8;
+        Sun,  9 Jan 2022 23:32:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04D84B811F5;
-        Mon, 10 Jan 2022 07:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6F9C36AE9;
-        Mon, 10 Jan 2022 07:30:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AADCFB81204;
+        Mon, 10 Jan 2022 07:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE43C36AED;
+        Mon, 10 Jan 2022 07:32:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799805;
-        bh=Z+zCmTEq1nUUaLCcSgs4oup25kLMn11yeAWlNCsjOKs=;
+        s=korg; t=1641799954;
+        bh=ITblwZ2ADn0VPZZJdOsjLdDtAN52vSlPSF1hbAWXnMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FtHKTV8Ixjf4foW3h352WTx8pd3hrECx/4+7C7tSUCq90D9UF5sHvRCLe3F3Ycya+
-         IgpBt0WFRTLh7Wv0sPNFltkNPHHZ0co3sYw75i7mG50VeshQ+6s8GopzTiDD9llqJq
-         NZeqRuQCl8Rtkp3YE84Guoh2cbPqJo8rEr5YD2ks=
+        b=iqRWYAzBAKM9yXlU7Nr0IWj/UDayTi6QdZMybUw+yvgAx/IzpZ7Fk8qbFzMueJzEf
+         gi0j+NUArSlsisTkEJKairACp1Iqkx6eVKG+4kMZjIKa0FGyKlMROlM+ICdjTNwBe8
+         p31rpc74oIKB/K5fNleqRdEZj0z8UuMARKNsYuAM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.10 08/43] RDMA/core: Dont infoleak GRH fields
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 28/72] sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
 Date:   Mon, 10 Jan 2022 08:23:05 +0100
-Message-Id: <20220110071817.631453319@linuxfoundation.org>
+Message-Id: <20220110071822.517882112@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-References: <20220110071817.337619922@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,64 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit b35a0f4dd544eaa6162b6d2f13a2557a121ae5fd upstream.
+commit 7d18a07897d07495ee140dd319b0e9265c0f68ba upstream.
 
-If dst->is_global field is not set, the GRH fields are not cleared
-and the following infoleak is reported.
+tx_queue_len can be set to ~0U, we need to be more
+careful about overflows.
 
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
- instrument_copy_to_user include/linux/instrumented.h:121 [inline]
- _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
- copy_to_user include/linux/uaccess.h:209 [inline]
- ucma_init_qp_attr+0x8c7/0xb10 drivers/infiniband/core/ucma.c:1242
- ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
- vfs_write+0x8ce/0x2030 fs/read_write.c:588
- ksys_write+0x28b/0x510 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+__fls(0) is undefined, as this report shows:
 
-Local variable resp created at:
- ucma_init_qp_attr+0xa4/0xb10 drivers/infiniband/core/ucma.c:1214
- ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
-
-Bytes 40-59 of 144 are uninitialized
-Memory access of size 144 starts at ffff888167523b00
-Data copied to user address 0000000020000100
-
-CPU: 1 PID: 25910 Comm: syz-executor.1 Not tainted 5.16.0-rc5-syzkaller #0
+UBSAN: shift-out-of-bounds in net/sched/sch_qfq.c:1430:24
+shift exponent 51770272 is too large for 32-bit type 'int'
+CPU: 0 PID: 25574 Comm: syz-executor.0 Not tainted 5.16.0-rc7-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x201/0x2d8 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x494/0x530 lib/ubsan.c:330
+ qfq_init_qdisc+0x43f/0x450 net/sched/sch_qfq.c:1430
+ qdisc_create+0x895/0x1430 net/sched/sch_api.c:1253
+ tc_modify_qdisc+0x9d9/0x1e20 net/sched/sch_api.c:1660
+ rtnetlink_rcv_msg+0x934/0xe60 net/core/rtnetlink.c:5571
+ netlink_rcv_skb+0x200/0x470 net/netlink/af_netlink.c:2496
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x814/0x9f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0xaea/0xe60 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ ____sys_sendmsg+0x5b9/0x910 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ __sys_sendmsg+0x280/0x370 net/socket.c:2492
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Fixes: 4ba66093bdc6 ("IB/core: Check for global flag when using ah_attr")
-Link: https://lore.kernel.org/r/0e9dd51f93410b7b2f4f5562f52befc878b71afa.1641298868.git.leonro@nvidia.com
-Reported-by: syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 462dbc9101ac ("pkt_sched: QFQ Plus: fair-queueing service at DRR cost")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/core/uverbs_marshall.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/sched/sch_qfq.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/infiniband/core/uverbs_marshall.c
-+++ b/drivers/infiniband/core/uverbs_marshall.c
-@@ -66,7 +66,7 @@ void ib_copy_ah_attr_to_user(struct ib_d
- 	struct rdma_ah_attr *src = ah_attr;
- 	struct rdma_ah_attr conv_ah;
+--- a/net/sched/sch_qfq.c
++++ b/net/sched/sch_qfq.c
+@@ -1422,10 +1422,8 @@ static int qfq_init_qdisc(struct Qdisc *
+ 	if (err < 0)
+ 		return err;
  
--	memset(&dst->grh.reserved, 0, sizeof(dst->grh.reserved));
-+	memset(&dst->grh, 0, sizeof(dst->grh));
- 
- 	if ((ah_attr->type == RDMA_AH_ATTR_TYPE_OPA) &&
- 	    (rdma_ah_get_dlid(ah_attr) > be16_to_cpu(IB_LID_PERMISSIVE)) &&
+-	if (qdisc_dev(sch)->tx_queue_len + 1 > QFQ_MAX_AGG_CLASSES)
+-		max_classes = QFQ_MAX_AGG_CLASSES;
+-	else
+-		max_classes = qdisc_dev(sch)->tx_queue_len + 1;
++	max_classes = min_t(u64, (u64)qdisc_dev(sch)->tx_queue_len + 1,
++			    QFQ_MAX_AGG_CLASSES);
+ 	/* max_cl_shift = floor(log_2(max_classes)) */
+ 	max_cl_shift = __fls(max_classes);
+ 	q->max_agg_classes = 1<<max_cl_shift;
 
 

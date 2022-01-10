@@ -2,102 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0659C48A0B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 21:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E14648A0B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 21:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245370AbiAJUKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 15:10:16 -0500
-Received: from mga06.intel.com ([134.134.136.31]:21424 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243576AbiAJUKP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 15:10:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641845415; x=1673381415;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MddOv9rNWzwfEHFQm02jD0qYMPPpUJ+02HSYd6O59A8=;
-  b=FHEskh7Z1tasmZeS/g3J+0q3WIhqgFq+RXsYtV5bNzI3aMCbt3Axoldr
-   61NVunxVmJR3a68fqAyoudRU5pdk8ShgMxLnTSYpzC7Ri8hAblcbsfAYX
-   juQ4xEiDGdyImXoI2NLRAIpurSmpCJYxw8PDw4dPha4+wWNW1DyWujRK4
-   J0nIllKlxbfA8eJ8Et7catrpyODScrbztpYSTKrrkI63co0Z0zLd0yTin
-   S4c0r1GxPbz6sJ+OyJfL3eswgHAcON2GjFiiFL6auPC31Oxsh3GbT/Ukc
-   VRi7tBOfyqqzMT55pTBviohrGGuBcs1tD2N5Qa2bH4KyLTX59wB+rU9Zw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="304050890"
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="304050890"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 12:10:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="474248797"
-Received: from sandiko-mobl1.amr.corp.intel.com (HELO [10.209.94.191]) ([10.209.94.191])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 12:10:14 -0800
-Message-ID: <265db742-0539-a66f-ff00-2b18cb2add88@intel.com>
-Date:   Mon, 10 Jan 2022 12:10:01 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [GIT PULL] x86/cpu for v5.17
-Content-Language: en-US
-To:     Borislav Petkov <bp@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        id S245702AbiAJULq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 15:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245676AbiAJULp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 15:11:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B5CC061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 12:11:44 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n70zq-0000Jr-8q; Mon, 10 Jan 2022 21:10:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n70zg-009aNt-0Y; Mon, 10 Jan 2022 21:10:15 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n70ze-0007V8-8f; Mon, 10 Jan 2022 21:10:14 +0100
+Date:   Mon, 10 Jan 2022 21:10:14 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Robert Richter <rric@kernel.org>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
         Tony Luck <tony.luck@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-References: <YdwVl0H54fmUIux0@zn.tnic>
- <CAHk-=wh+UbGrgH4CzKSoTYGPidyv5isiLMxJKAqnV3NFTiRdaQ@mail.gmail.com>
- <Ydx8fUCotPI++UEW@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Ydx8fUCotPI++UEW@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="brvee3afuyivhyph"
+Content-Disposition: inline
+In-Reply-To: <20220110195449.12448-2-s.shtylyov@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/22 10:35, Borislav Petkov wrote:
->>
->> Not a big deal, I just thought I'd mention it since I reacted to it.
->> And we don't seem to have those vendor checks in any of the other code
->> that uses MSR_CSTAR (just grepping for that and seeing it mentioned in
->> kvm code etc)
-> Right, the only point for doing the vendor check I see here is, well,
-> because it is Intel who doesn't have CSTAR, let's check for Intel. But
-> yeah, we do avoid the vendor checks if it can be helped.
-> 
-> We can do a synthetic X86_FEATURE flag but that would be a waste. So the
-> _safe thing and keep the comment sounds optimal to me.
-> 
-> I can whip up a patch ontop if people agree.
 
-There are four basic options here for TDX:
+--brvee3afuyivhyph
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1. Paper over the #VE in the #VE handler itself
-2. Do a check for TDX at the wrmsr(MSR_CSTAR) site
-3. Do a check for X86_VENDOR_INTEL at the wrmsr(MSR_CSTAR) site
-4. Use wrmsr*_safe() and rely on #VE -> fixup_exception()
+Hello,
 
-TDX originally did #1, passed over #2 and settled on #3 because of a 
-comment:
+On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> This patch is based on the former Andy Shevchenko's patch:
+>=20
+> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@lin=
+ux.intel.com/
+>=20
+> Currently platform_get_irq_optional() returns an error code even if IRQ
+> resource simply has not been found. It prevents the callers from being
+> error code agnostic in their error handling:
+>=20
+> 	ret =3D platform_get_irq_optional(...);
+> 	if (ret < 0 && ret !=3D -ENXIO)
+> 		return ret; // respect deferred probe
+> 	if (ret > 0)
+> 		...we get an IRQ...
+>=20
+> All other *_optional() APIs seem to return 0 or NULL in case an optional
+> resource is not available. Let's follow this good example, so that the
+> callers would look like:
+>=20
+> 	ret =3D platform_get_irq_optional(...);
+> 	if (ret < 0)
+> 		return ret;
+> 	if (ret > 0)
+> 		...we get an IRQ...
 
-	It's an obvious optimization (avoiding the WRMSR with a
-	conditional) without TDX because the write is pointless
-	independent of TDX." [1]
+The difference to gpiod_get_optional (and most other *_optional) is that
+you can use the NULL value as if it were a valid GPIO.
 
-I think doing wrmsr*_safe() is OK.  But, on TDX systems, it will end up 
-taking a weird route:
+As this isn't given with for irqs, I don't think changing the return
+value has much sense. In my eyes the problem with platform_get_irq() and
+platform_get_irq_optional() is that someone considered it was a good
+idea that a global function emits an error message. The problem is,
+that's only true most of the time. (Sometimes the caller can handle an
+error (here: the absence of an irq) just fine, sometimes the generic
+error message just isn't as good as a message by the caller could be.
+(here: The caller could emit "TX irq not found" which is a much nicer
+message than "IRQ index 5 not found".)
 
-       WRMSR -> #VE -> hypercall -> ve_raise_fault() -> fixup_exception()
+My suggestion would be to keep the return value of
+platform_get_irq_optional() as is, but rename it to
+platform_get_irq_silent() to get rid of the expectation invoked by the
+naming similarity that motivated you to change
+platform_get_irq_optional().
 
-instead of the "normal" _safe route which goes:
+Best regards
+Uwe
 
-       WRMSR -> #GP -> ... -> fixup_exception()
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-So, we should probably make sure wrmsr*_safe() is fine on TDX before we 
-subject ourselves to any additional churn.  Kirill, can you test that out?
+--brvee3afuyivhyph
+Content-Type: application/pgp-signature; name="signature.asc"
 
-1. https://lore.kernel.org/all/87sfvljf5q.ffs@tglx/
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHckpoACgkQwfwUeK3K
+7AmPEAf/e1sLmVHBLqGY9M4YYn2aUPQflQncGGvDAcCOcOjWhjj61Z53oAw8B/Eb
+3J5RoNwe8DIoUyLHQa6DtxFAk+dFhxCCt/6oJngstFQmZYKw3pdpADTY7EDtYA8+
+mYdn6pcScMhpA6OBtI9ybuLy2WaUubn5rCr+NsldDY9GS9GaUvCNWcayugGDQSH1
+uHWNiupkgORajRdaD+ENzFqUohu0HSr6CPy0mid1+4h/9xcykRE38sjcmQ1n+7qs
+/Rpe0taiRj94Ut9mV/MW8nEARhxt+bRH/oI91P369tNKqaWP2IdMcyB04zJvNeLc
+YLmkZv+MpI9lIZU3TrRVSk9UVwA0BQ==
+=/ril
+-----END PGP SIGNATURE-----
+
+--brvee3afuyivhyph--

@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7257348A258
+	by mail.lfdr.de (Postfix) with ESMTP id EA63948A259
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345204AbiAJWFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:05:10 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:35276 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345176AbiAJWFB (ORCPT
+        id S1345165AbiAJWFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345138AbiAJWFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 17:05:01 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlXia026175;
-        Mon, 10 Jan 2022 22:04:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=4in3AMt3jaCUmPeKg8seTKw1eAv3x+yzF7EJj+rf53M=;
- b=PFaMcr7OaVJA5SF6f2IHSpRInJe/i2XPc9t+zcMKs1FaQlkYG/9PwswIjLk+GnBBvwZH
- XuBeA5W5raaPTduuf53zX+3ytT/y6gekP+6mx4nG4nFFNpy7EQsue4mqAs1ncyeUlcJT
- Dht+TINdfGLFSdYErZgbIy1t2ejKHBCBuW7lLK1j7BOu02aBF5yqKXk2oldo1BcyLUES
- SnYOwHY3LP6kTky53kBNi2ammVrnePTzvdCnaOyMN2TDI36Lg3qcQlzDT26kfoTfoSYq
- xpDgMpn1HkVGRZ/Jh19nS3/n2WBMvTgu5KqSYEouk8cO0dyiB8u2lkbPJZv2629a1WF4 /Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dgjtg9svw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:04:56 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20ALtvFV138983;
-        Mon, 10 Jan 2022 22:04:55 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3df2e3vqyn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:04:55 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20AM4iCG174082;
-        Mon, 10 Jan 2022 22:04:55 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3df2e3vqp8-10;
-        Mon, 10 Jan 2022 22:04:54 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kashyap.desai@broadcom.com, linux-scsi@vger.kernel.org,
-        jejb@linux.ibm.com, sumit.saxena@broadcom.com,
-        sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        mpi3mr-linuxdrv.pdl@broadcom.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] scsi: mpi3mr: Fix formatting problems in some kernel-doc comments
-Date:   Mon, 10 Jan 2022 17:04:42 -0500
-Message-Id: <164182835585.13635.8928543266313865543.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211231082350.19315-1-yang.lee@linux.alibaba.com>
-References: <20211231082350.19315-1-yang.lee@linux.alibaba.com>
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCE5C061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:05:01 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id j124so20516619oih.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UXhKTZ4OmGBgXBdJL0PZRRw2ubmb4jJBTwXOgNZ8A90=;
+        b=X2L2lkhAJJf8PQOu8rul77EN8CMf9uins0JWD0AM9eGDgLeHUP+trxehOq5EoF+KaJ
+         4ibiE7afHrDr75OrcpIaruIGoDgypdYwFaaEhMLdy9y3pjT36qRLhac/IavU/kRU/dHl
+         Ekvar5nEGXu4vtLu6tau/TiWs8Cs6HNZH9PE0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UXhKTZ4OmGBgXBdJL0PZRRw2ubmb4jJBTwXOgNZ8A90=;
+        b=SekXeC5gvgoygKPNYjsG5wvRGfv/I0RIdEtvni8GpLNI+IJG7V8x9pW8nMZ+9mXecR
+         3b11rswen3iNxz8XBIccgrmLMVhR6kXHu7gzJnZJNbCQ4mlscB6di64RhTsE4WhJmSqP
+         pofKTdoDZN/xOaM8xDS1gSrDxoYF8JVeyKbgyzzdDeajXVLVzDn2PDQRobkll/WOuNvo
+         MC8cOVUHCCuMlMGT18A5F/0EUSnubPWkuVsk/F46WB5l9eNJjTlKo/OHjA5ZuF35g7IZ
+         OOqQpyaIo+bneCJMCYhzI2seE8gtHxgFVmN/y9/FgBFCUgRar/mW34JMxjaz8u2b22g1
+         Dp0Q==
+X-Gm-Message-State: AOAM530cqQsirmpZ2zlIbJ6V8jkeq21ydQhDytgxQfPfTrACEiuquEOf
+        JAyxxwnGf3UgJh0FlnpnwmLX3EPtFDTNaOY1QYrRXg==
+X-Google-Smtp-Source: ABdhPJw1mAmmTWAyagLxfDd96trE4G+y2z1zCFYZwKPClOuJcQEAyqFg88OvuNfI5qTIiUq15pTeY5AbNDh4aioWP2M=
+X-Received: by 2002:a54:410a:: with SMTP id l10mr1047264oic.128.1641852298114;
+ Mon, 10 Jan 2022 14:04:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: I6zea8lgF9fdojf7dHMGCrY_oq1XVq7S
-X-Proofpoint-ORIG-GUID: I6zea8lgF9fdojf7dHMGCrY_oq1XVq7S
+References: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
+ <CAHk-=wg9hDde_L3bK9tAfdJ4N=TJJ+SjO3ZDONqH5=bVoy_Mzg@mail.gmail.com>
+In-Reply-To: <CAHk-=wg9hDde_L3bK9tAfdJ4N=TJJ+SjO3ZDONqH5=bVoy_Mzg@mail.gmail.com>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Mon, 10 Jan 2022 23:04:46 +0100
+Message-ID: <CAKMK7uEag=v-g6ygHPcT-uQJJx+5KOh2ZRzC2QtM-MCjjW67TA@mail.gmail.com>
+Subject: Re: [git pull] drm for 5.17-rc1 (pre-merge window pull)
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        "Wentland, Harry" <harry.wentland@amd.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        "Koenig, Christian" <christian.koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Dec 2021 16:23:50 +0800, Yang Li wrote:
+On Mon, Jan 10, 2022 at 10:30 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Thu, Jan 6, 2022 at 10:12 PM Dave Airlie <airlied@gmail.com> wrote:
+> >
+> >   git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-01-07
+>
+> Gaah. I merged things and it built cleanly, and I pushed it out.
+>
+> But then I actually *booted* it, and that's not pretty.
+>
+> It *works", but it's almost unusable because of random scanline
+> flickering.  I'm not sure how to explain it, but it's as if there
+> wasn't quite enough bandwidth on the scan-out, so you get these lines
+> of noise and/or shifted output. They are temporary - so the
+> framebuffer contents themselves is not damaged (although I don't know
+> how the compositor works - maybe the problem happens before scanout).
+>
+> This is on the same Radeon device:
+>
+>    49:00.0 VGA compatible controller: Advanced Micro Devices, Inc.
+> [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X/590] (rev e7)
+>
+> with dual 4k monitors.
+>
+> Any idea?
 
-> Remove some warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
-> drivers/scsi/mpi3mr/mpi3mr_fw.c:2188: warning: Function parameter or
-> member 'reason_code' not described in 'mpi3mr_check_rh_fault_ioc'
-> drivers/scsi/mpi3mr/mpi3mr_fw.c:3650: warning: Excess function parameter
-> 'init_type' description in 'mpi3mr_init_ioc'
-> drivers/scsi/mpi3mr/mpi3mr_fw.c:4177: warning: bad line
-> 
-> [...]
-
-Applied to 5.17/scsi-queue, thanks!
-
-[1/1] scsi: mpi3mr: Fix formatting problems in some kernel-doc comments
-      https://git.kernel.org/mkp/scsi/c/3bb3c24e268a
-
+Since Christian is mostly the compute/memory side, adding some display
+folks for this.
+-Daniel
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

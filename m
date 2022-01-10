@@ -2,223 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3261488F82
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F59C488F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238640AbiAJFPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 00:15:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:30407 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238608AbiAJFPx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 00:15:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641791753; x=1673327753;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9DGsroFEDApKRkXloowZigcGqaCtT60D7QsMoKnb/cQ=;
-  b=Jozs/FRjIA8WeNhBjVlhiXHMBfvF397NMD5zg2+kJZX7ZwDJ/QZ1RZEd
-   B2Rw/1kWNI0f6pqCvMJARtgzuWvnd5oO0oCUs/eeR5p39Yn7rxJPdjgUw
-   BCdEhmI4YWr7rggTkSUbZYdGYrAgAg/P1PDcz82H3IyN9qs7y0VBxA9EN
-   0ZaJVoqwxzeGDCzhmkzLsIYt0Gh+rNkZbVr+sShZz9lNB6s5pj4Uy+6II
-   kP0bjgGmRo3XHqiVzrI1yF/70JNHmlqGYgJf7aUfwLJBR3HED532DJQ9b
-   7KxJ4FYfidLf0duqe6E2+1psixV6ZmTkZQRhO5TvKLB6LpPh8NoHFylbD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="329495849"
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="329495849"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 21:15:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="527850984"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jan 2022 21:15:53 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 9 Jan 2022 21:15:53 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 9 Jan 2022 21:15:52 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Sun, 9 Jan 2022 21:15:52 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Sun, 9 Jan 2022 21:15:49 -0800
+        id S238662AbiAJFRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 00:17:34 -0500
+Received: from mail-bn8nam11on2076.outbound.protection.outlook.com ([40.107.236.76]:25697
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238633AbiAJFRa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 00:17:30 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kB42A3BNySmpV9Wkr3tV/AxXiEbRam9zlrX9eCtM6iaILiSdVWg9TKhXUILruIvB+A4B3EUaFLVgunpKP/9MaT5uK1j8/praHnNKJIGGgnIkWK12OkW1goScWOsF56PEaHrZoQOtkyIESn+1jBMqw5ySxg+8qiMiyLLD7WwjFS8qc9LMm1bJ25cjtHQSNUZuEa8ZxGCj9Je4O9wORGAkIsSWgcirIGTDaJIiQh/qGmXL1t/8FlFcTjutSHQSEvPa76Bmfs6hKjswiGhW6aR7hoc15MXqr1dPsU0Ex/+I3UMEWc5t5zfoGMXpxOfwQ1UvEJk5ERsxGmCjthYS75+72w==
+ b=U9zvXLN3AJJM6ncOxBojaSYAECmKYpoZDcfTZn8psg+SPEoMrAjgn3XLxN5lO2iv1aEhtxHCgYf7qD7goBP4bk0Y/wBguUvl77iPQo2bFXHx5ArhsqAGxJmb+Esj4y4r1tBlt1iMfnjQ7oYfsPTwo1l84AqWYUKTa8u+QaOJWkqX5jI5RFnFZuOYJrEdWMJhnNQruy3q/KSfPP7Z6C94MTbyFKdN1J2XYHbmjxgJIwNxNHCTm73Rca75XEnv1OZqUWe6m8qIN4skHpnOFkQyGAYHWjY0svzgLC4RM8dLW3hr/Lr54KziSbBtIYSlvKpI0A3GNr8MTxVI1sGTLaVIcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9DGsroFEDApKRkXloowZigcGqaCtT60D7QsMoKnb/cQ=;
- b=Em0bvuS6TGHIjo5TzdU1T2RhJYA4D4m4MpNfYJycB3qiEFo64lfR2Ivx/ElFPxepo1Alx0YYyByC6kQTIxHWjwaUBiG5tUqmlRnGhktUyULGAeUcm4xcknWAOy4IUBq2LlTQrsbHSuJEBsz1q4jLu42xKMmWe5UIJjXPMSPE+MMtzuzn+npP4ybXwG9lJOCbNqYq3kS7UFiBjFIrXnbqdVjUYDyaL7Bi2MN6iCtg3xmaSJ1CjgOB1qbmXYgcqlfPMjgHCERaR6R9Ad2T7w2vJ5RgAZqjteg5uOP8HBrlGHvyNhlMQ+sril22or6E5jMWNxNiSy84ry1Lx73iQWnFag==
+ bh=tSj8yCeiU2q4yj3tR9DkoRoILFHCMxlRBUEU/a0i6Ik=;
+ b=Wo1RaQ9AbPGAep1TYJ80Mm90kp+sia6UoAP85zoFCua0j0EP/DmVgM3W9ypmfuGTvhpgpHgUL/t4snVbxG//tXhVEoQO+0zrBlP5MapRvsrFP7CDKg0yvLlHGGEMNkSz0bd/QvSsHb8wesj21hsRw9xkYU+Pkaskdnp7fk5aXwqtCuqBxvB6MGG0pbwzlhmEAdBg1Riq3ZTElCrRSjHThmlTGEjOf0sooN4zvFRx0ijeIhoD+vgAOiqmgX8AgpXD8GX08bK/1AcDb+UBpUixejmWsNGF2BxWAGa6w+kVZq0aDX/WKoe58k79pmt7Ui4WapPpwSTqLfQCmI9VnuUv8g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (13.101.156.242) by
- BN7PR11MB2708.namprd11.prod.outlook.com (52.135.252.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4867.7; Mon, 10 Jan 2022 05:15:44 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
- 05:15:44 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Paolo Bonzini <pbonzini@redhat.com>
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tSj8yCeiU2q4yj3tR9DkoRoILFHCMxlRBUEU/a0i6Ik=;
+ b=FsCKlS/iHM8iVpZh3ug8YP1z8nPRpHFMRnzuHsRR5D99B3TtXe3Nwvdhsr+Y5mDFxvDXUhRzfLjqeTe4hV/IMFjtcFMDNsdNV8Hr8exBqT9VihtXKhkLsGWCf1F1k1K4t52zifrmyCjLe6WgIQ3NCipwciLsb4pso5DHmw4PKvQ=
+Received: from BY5PR02MB6916.namprd02.prod.outlook.com (2603:10b6:a03:234::18)
+ by SJ0PR02MB7247.namprd02.prod.outlook.com (2603:10b6:a03:29b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Mon, 10 Jan
+ 2022 05:17:27 +0000
+Received: from BY5PR02MB6916.namprd02.prod.outlook.com
+ ([fe80::d9bd:e183:6827:b40d]) by BY5PR02MB6916.namprd02.prod.outlook.com
+ ([fe80::d9bd:e183:6827:b40d%5]) with mapi id 15.20.4867.012; Mon, 10 Jan 2022
+ 05:17:26 +0000
+From:   Anand Ashok Dumbre <ANANDASH@xilinx.com>
+To:     Jonathan Cameron <jic23@kernel.org>
 CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: RE: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
- __fpstate_reset() a function argument
-Thread-Topic: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
- __fpstate_reset() a function argument
-Thread-Index: AQHYA/gpzyW8+ydO5UO/RNIfEDi71KxX9ceAgAO5JdA=
-Date:   Mon, 10 Jan 2022 05:15:44 +0000
-Message-ID: <BN9PR11MB527688406C0BDCF093C718858C509@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220107185512.25321-1-pbonzini@redhat.com>
- <20220107185512.25321-6-pbonzini@redhat.com> <YdiX5y4KxQ7GY7xn@zn.tnic>
-In-Reply-To: <YdiX5y4KxQ7GY7xn@zn.tnic>
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        git <git@xilinx.com>, Michal Simek <michals@xilinx.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        'Anand Dumbre' <ananddumbre8@gmail.com>
+Subject: RE: [PATCH v12 0/5] Add Xilinx AMS Driver
+Thread-Topic: [PATCH v12 0/5] Add Xilinx AMS Driver
+Thread-Index: AQHX6IwflNA+ZWcGRkSBPHlmcIY+IKwzh/sQgAGJe4CAJt/eAA==
+Date:   Mon, 10 Jan 2022 05:17:26 +0000
+Message-ID: <BY5PR02MB6916F611A1B0511B814D840EA9509@BY5PR02MB6916.namprd02.prod.outlook.com>
+References: <20211203212358.31444-1-anand.ashok.dumbre@xilinx.com>
+        <BY5PR02MB691657682B94F4D3DBDA007EA9769@BY5PR02MB6916.namprd02.prod.outlook.com>
+ <20211216113717.1c0e43dc@jic23-huawei>
+In-Reply-To: <20211216113717.1c0e43dc@jic23-huawei>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: efd64367-9051-4a96-d2d3-08d9d3f840c5
-x-ms-traffictypediagnostic: BN7PR11MB2708:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN7PR11MB27089AF3F994634F9C9FDA838C509@BN7PR11MB2708.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-office365-filtering-correlation-id: 49f6ec37-1393-4276-adab-08d9d3f87e07
+x-ms-traffictypediagnostic: SJ0PR02MB7247:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <SJ0PR02MB7247195B660F1246D4D5279FA9509@SJ0PR02MB7247.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cxCdxhZJYdfmACS9D1XImlq5f393rCruwz9LpMT9YNJmvVSBUzvXcTmG7lUOkSIPhEhB2Gl+7OVQQdmrVaBpYR3NIZfUnSpymJoYG03oxKun/BdcVU8cV0AWmsLomC2rJt7H5nGkmSs/xqc4pdkNCHnW7k9rlLf4rkby2AHUvWXQuKQY0l4UL7JBDW9KF0pLcUxgchq+CuNBZ68c07U2w8DZjt8Snw/YPsVBWGrmUjq1AhGkIFL6bE6gtjcMjF7T0c0811mnKXKDfd4VyKgx4s+imwNvD5dy8SFxaRMQMlVTHv1cu7XqSRFKWkdBwJOleGboiBG/soVHYMjtt4mWnLFwHnFG79kQh7wERq4ScDlerXbrR4UVEq1f4Yl+Q3OHZaI0CrKpky5rUxcBWBhHsVpw0jFPMokxY5YtP8tTOkVhPUDCfiGaycRDiGUeBnHYPmkP1lIME4w3+tiVMtoagAnZvV+NDmUroetrV/tYp5nQlRbWqI4KIOlSLlWhROmUdxjyk18jsyQ2jRqi+CFZ+lTF5lX3bcADWTLFs1lm8hAJawREbBSUfC016+95VP5Cw3Zij76qB1BT0FAfSByvBB0+0XPUF9bxGvx4Nrq4N7rE+Hn+L39YV1DY1etZl96OprW+SFOigGXCJbsOcT4xtIFr/we6AyHqJ8NQlInej1X4Hteda+iGUb6g1nwTfZrTDrwt3qFydb3tT+BTmCoBfkNLCT5Yex1PyAzkBuzKom5KgDs6PIHAp3c/YEXqg5SJP7Ko1jw3Kk2/GPW5uKs6q/U3Zy0jrKodgdPXvB2lu9w=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(107886003)(55016003)(8676002)(186003)(7696005)(86362001)(52536014)(71200400001)(110136005)(6506007)(66556008)(76116006)(66946007)(64756008)(66446008)(2906002)(66476007)(54906003)(9686003)(508600001)(26005)(8936002)(83380400001)(38070700005)(316002)(38100700002)(122000001)(82960400001)(33656002)(4326008)(966005)(5660300002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: AVXo2uU6oV3xIR7Jcnx1DlLaJL4ZamBgA4MiGjocy65ykZg5jxxFSKVXSbdLOcI+81uO2VJAxlk8yl7faZDTESn6uI37Rvh/g71wQjQZfjevQr7s/MYdy9A0xb3obr+RkUxIo9jKjZ8t2ghmSuDcghte/rcRPxY79qFKr7qEsusZOIwbP8oiTSGKYQjdysIZMXPs44Gb8gWRvSIPBmPgJi7/06G6tpKvTWA9u0/P8heXmpETvZW2EjCbVkcZ2hjZLljLkY3Rht9VWza/zQ1HVTaY5RHiDf4nbophrDtsdJn9PPflAxab2tiE1LEfgv2JIud4uWig/Y4oWEoXL9WA4tCd2Dg2cSTV0OC7MWxztyGvXs9N5zi28iDvlg9ifj0mkqMyaK58u4aG8WE6T06T6aWfdvj80OnJ0Ykp5Oq+vas6ozC8aaikN+6O+VKsCLzBeobmjB9ov/0CsBRGQ+GbOq8KjJXn+YffNVnhFJ7CNKB9YsGxV7EAJQXSApwwsUuSCBoxZIsB3IwahHovhU60bbG4eJePGME2ra35o/cWQre0bm9wRl803xOy/A0Iyv/uSsbVw+tsDgqnCCaYOxs/XwC7bE3MBkmtruHIB2SHzdnBXdGrsgTepmd+gEblygIR8aHglwejF41yrHQvwsvwYsBW/4E9jNmKeUZwPHuTy0AY12Yqq1OywSeyGGMXBhnWtB6/WLlQvVtsVK7tU1k3gQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR02MB6916.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(6916009)(7416002)(38070700005)(66446008)(66946007)(316002)(76116006)(52536014)(38100700002)(66476007)(64756008)(86362001)(83380400001)(122000001)(33656002)(9686003)(4326008)(6506007)(53546011)(55016003)(54906003)(508600001)(26005)(5660300002)(186003)(71200400001)(8676002)(8936002)(2906002)(7696005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzdDQ1BDK2RaV0VDVDZDRnB5UEMwQ1FPRDB4eFNVcGNHOGRQQ2hLWDl5VTR3?=
- =?utf-8?B?Kzc1RUtQcW5Ld0kyL3NUeW0yb2M4UnpveGR4Ny9McWdXS255eWlvZnJCV3h5?=
- =?utf-8?B?SFZ1eGxCTU1mT3hOZjBTUG8wSjQ2UFFQSkNJdWhWcUlKT3BpaTRjckxTbk03?=
- =?utf-8?B?MEU5THhCZS9PRHd6anloZWk4c2pUODIvNlVVQlY3WkdMOGEzTXFGVVRXeHhR?=
- =?utf-8?B?dGt1N3hIT1c4eGUvR2dxUVQyQ0VLdGt0d3hSeVpWOHh3cnF6UkdPWUM4RWsw?=
- =?utf-8?B?d0F6eG9RYUVBUXhEMFpjOGk3aDJXeXNNQjdONDREbzRFai9zTEczakdsdk9y?=
- =?utf-8?B?U1ZjbUxtMUIzSkVzaURveGoycWtYQm9JaW1udG9TRnpadjcvdWkyemdaSVQ3?=
- =?utf-8?B?dy94dm53SVJ1WVJSeVVOcmZ0cnBFQ0tnT1lUcmNVcTNBZlZkclNuZzV0eDVp?=
- =?utf-8?B?MHRvQUVmUDJMQVVpR1prU3IrYlFRV2YvZVg4bE0weUZWSlVqTENjeStBdEJB?=
- =?utf-8?B?U0FtSVFoZmx5ZWtXM3Nqc0I0UVhmT3BmZmJ0Z0FMNmdQckZhTmdwMXh2b0Mw?=
- =?utf-8?B?UDkyd0JtcVQvRkY5dWdWZ2tmSkxNT0R2eTlEbkZhOWY5Mm9vRjlZUkdQbFZR?=
- =?utf-8?B?VkMyWlpiZ0FNbEkxVUxnZTFiWmxJaTMrdkp0c3czRElWb1djak5mRzV2Wldt?=
- =?utf-8?B?M0gxUEZrTkJBbVJTd3hSYXRNL0hKVVAyYUJkam1SZWt0Z21rWmMyT3FZeXNY?=
- =?utf-8?B?MHpkWEd1MHBNN0R0RW13eTlOaDlTemNBVWRjMkVBbHhtcUc1NDhrdnB4VDBq?=
- =?utf-8?B?SmlrcWZ5b1NYaU9wSlYzRmc4VnBCUUJydnZ6M3kzMXkxQ3VhaTZPS05Bazlv?=
- =?utf-8?B?eHF2SUEzbjU2eVJZWVQraHJRUFV3VUNabG1KdUNmb1BadzFUMk5hbFRoRnFy?=
- =?utf-8?B?K2F2WHFJWUNRTVdTYklmWWNkSEVUK3lpVWFxcCtoeDhJYTBSKzVPNmFBY3h2?=
- =?utf-8?B?VUdCRThhWUNJZjZvakJlZFp2cHJXMjdiVjd2dzlGUmlBbFdEZDJDb291Q3RC?=
- =?utf-8?B?QXR0UUgxL0ZTRi92T0oxVkJ6M3NQQUdEQTYrOXd2YVpsbTYyc3lES21tdkNC?=
- =?utf-8?B?OW1ZVWtFSUUvcGZiZXp3YXdSZWRPTjFoTDZpY0huc0hJZkRjQkRWa2MyaU15?=
- =?utf-8?B?WDRZVWFWdDJRY2dkeGlJNFpJWlVGdUFCQ0JqZFBlMVRRN3hiakdnYmNGKytK?=
- =?utf-8?B?V2JnOWRkdGQ2UWdCT2FGdVl0WE1HOERZZ3cvZG5pcmFuTm8rZU5VU1ZPcHdz?=
- =?utf-8?B?ZStuV3lKUEhLY1RDOGNRMmZFRnJDUjRqdGhPUmJ2R3ZtOC9nZTJUQWNyMnph?=
- =?utf-8?B?LzVLcXdMY0VobFJxY3o2QUpqSlhuNSsya0JzZjhTZytUaktCSnNiT3FIaFI4?=
- =?utf-8?B?a0VlMzRQZDE0d0YzRWNIT3RSeURIMWI0T2xYdDh4V1kwd00xWDNvSmVqK0d1?=
- =?utf-8?B?L3hkbTVtMUpRWjZyVGI0UXp1MTJGUmZEZUMvb1FaUGtweDhIYUdkVUpWWXRl?=
- =?utf-8?B?ajRGRGxmR0JHdnNpbEdLNUNMcGU3OUlpZlptZDdyT3UwQldZaFhLS1NQMzhM?=
- =?utf-8?B?S2RySmowZDV3TkNLa2IraXJ4SEF3SmhrYkxublYremRLQ1ROWXRvUkFXUkZl?=
- =?utf-8?B?WFlIMlRET0hUMjZlaEZFclFNTTN2Mmc5TnZEVzQxeWw2amN5RWRVdFZIaFN5?=
- =?utf-8?B?VUdlcy9kd1M3TkNod2dveHU0T0I2Tk5ncElSN3NpT2xGVlhQd1ZvTHNaWUJM?=
- =?utf-8?B?WGVlR3JhL1lueGhUdVJ4Tnk0VzNVMzk3U1VQeHB5YmtONW5Cd3ZSWVBPVm9P?=
- =?utf-8?B?SVp0QTd2L1hwdE50MnIvQ1dsOUY4amJTdHpybmRWL2NVeUhwZ3Z6UkV2cE4y?=
- =?utf-8?B?cGR1bURzaUMyRmxaQXlHWVhTUmNYVDFCNnlmU3UrUjF5LzQvYzJidHFDTXZF?=
- =?utf-8?B?dXM4Q2pRdlljc2JNcHFvaGM5SjJIOGJ4R1Y1UDBLdWVlMnFOZ2JQYVJXSjBJ?=
- =?utf-8?B?aU9kdUFKbm45dVZ0WWlHMlZCMklKRS9LcS95OWg3OUE0d0E2cjRIWG50Y3B6?=
- =?utf-8?B?bE1vdURBRVozSjhoNE5iWDJZRlFhM1pjWGFaSURjNW9rSEdKT29pTGJiN1Bo?=
- =?utf-8?Q?D1TRMDjjzpZnKuWL83gqJOM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?o/u+Wsw1G/SdJ+MsS1X53A1N4RgwvbZwQ0bAL5PcCqAiHl+Gu1uOdrj6Hbdk?=
+ =?us-ascii?Q?13F39BRYLqKH9I2rIeHqT9bn/9nxm7xupJrUa/533nzpOwFh0VJ4HNgc6qMf?=
+ =?us-ascii?Q?1Az2Yn1NkQMAbeFYXpAboXfsaSnK0rGkJkbFgxgvXXAgFBeGSsRja6N7AMtl?=
+ =?us-ascii?Q?ssGQidohHlTJXvDcTcIwtxUtizMHDqVIkBIhrJonXlxo4qEfihKlsi508Mdv?=
+ =?us-ascii?Q?O6ztbrpFj0Wmyi8MtZQPt4Ui0gp+AsLwg76rTVIlv7HuoqKy9oyFC+VTsQPd?=
+ =?us-ascii?Q?aVkJkL4djZPzRXSbRLhPpj2BfQN7KIlyL0ngqnUV1zGGctqF1s4XVAGgRd56?=
+ =?us-ascii?Q?FJO0b5hCf0ZPNtCXYAqorybk23f+7NepYsFsZkgJmSlkszG6srjJSKL5Lb+c?=
+ =?us-ascii?Q?6g7ilGAMRET4YDdm0m8fqNOjAQheBH07JcagWR3fb1ucyK2nsDoP+NJNhZOw?=
+ =?us-ascii?Q?aM9ZqvClrCKi78Mn/PlYdpIRpTHZfEoYIWjnAq5gYMn0hTK9JtsjyrF1geWw?=
+ =?us-ascii?Q?EehdH71v9MoRjIMhVmYP2EFX93tR6Vr1juu9Np1t7TFH9Z1PgwbxdNo9w3Df?=
+ =?us-ascii?Q?7e2tJzsq7gtPLZJbfbg4f0x3TnvBX53Wru2SxzhYI/X8Fg1XlmslIDyb7zss?=
+ =?us-ascii?Q?wSjK+DsrE41cEky/zmptM/vR4mTojti4zVxYRw2z4lCWtyfUgiM0IM/LaIk+?=
+ =?us-ascii?Q?KsX9Lch+HjfcnYLZwfNj4LqfVm4fgN5zAle4F8LY6vD9hMGEEsRpc3Tzqjvd?=
+ =?us-ascii?Q?mjLM2UkHxFjHQ1nYjvhyYPLXRw8F/EZLdzVKziRXrT9nurSuYQAHe4KOnl0y?=
+ =?us-ascii?Q?z6GAhiLc1L0zgZUwYdiaUQwvRE/OwbEJ7Xqbhilcy6yknbHbnG3Uss2ADUTT?=
+ =?us-ascii?Q?8slq5/vguBBdV4ZUKBCSyrHXWkh+Q5OSpLkGRQ3edmfmHU2P3MgfYf9aSWqw?=
+ =?us-ascii?Q?x4SzC6CIs9zTpTGNsMdeFWOzV4bFcQn7C4BP9xzF8jt4y70o/zVUOsuDxYL5?=
+ =?us-ascii?Q?HjHFBo0K1hQimDBewbr5WV21lek/BTdqnAD3F2PjwMySqNZJVu4IIXyq3zMl?=
+ =?us-ascii?Q?st2STmWWb0vp6YTX3YAlvJvTUrYThbNILwvlkCI8AuQ3WS5dDmutsKXla4WD?=
+ =?us-ascii?Q?Kye9wJFYtz7rhml7beSfYHSmTlULy2+93uN9vj45lEbnEWqdsZ4Zl3fKKDAm?=
+ =?us-ascii?Q?D3TPszbIQzYcAW8eknJFWwXMY62SS3TTtAm1S3kBphQ/1wE/GFu6VDKjzncD?=
+ =?us-ascii?Q?LE/5oc/+R7VczNbnfik/M0UYaMFTYup/i3VKM17aJyJzJD71hh++Up+rxvd/?=
+ =?us-ascii?Q?FnWPpvM+INQySsPOkVWqkv4++JHfEj88EZA3rj1b8MEVGFLs0AxrSRw/LN87?=
+ =?us-ascii?Q?4PzjUFIf91xAlXpDxgLS6tflS/y8GZVmY38rMg7gkO+CmzC74e0qgLliiWJK?=
+ =?us-ascii?Q?3x8orBQQl5aA+Y628SYyb2BaBGTWkGewUy3S5vP63kYCtuttWAysDyKblerR?=
+ =?us-ascii?Q?55xLnKZOP5imLrl2WBlBszMFWBS+Hjf7kE3rGCNfRSDdLAaJ+Lin96Nxsu8z?=
+ =?us-ascii?Q?S33CIaPgmmwnjAQWvc3W9QLH5EorccuudsgoHKgYMIvI/GHJSUlpFwIVLKfN?=
+ =?us-ascii?Q?6LjDUlygdbaZBz2Px4mTJHk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efd64367-9051-4a96-d2d3-08d9d3f840c5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 05:15:44.0169
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB6916.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49f6ec37-1393-4276-adab-08d9d3f87e07
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 05:17:26.6905
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YgA0NQl8wo8QuLqO7VzBzdITRGsJwTV5ZxcbWJblTMxvsJckoAeZlFRbJ5GzoCSVzztU85KR57SfTvQ3eKq9BA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2708
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-userprincipalname: i6F+BPE+c78KTornXUXaFCJC6tYcx6kpvliL4p7CZp/eB3sY4Wey78EQUId0klTgmCCgiGM0gHTySyUsahj82g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7247
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBCb3Jpc2xhdiBQZXRrb3YgPGJwQGFsaWVuOC5kZT4NCj4gU2VudDogU2F0dXJkYXks
-IEphbnVhcnkgOCwgMjAyMiAzOjQ0IEFNDQo+IA0KPiBPbiBGcmksIEphbiAwNywgMjAyMiBhdCAw
-MTo1NDo1NlBNIC0wNTAwLCBQYW9sbyBCb256aW5pIHdyb3RlOg0KPiA+IEZyb206IEppbmcgTGl1
-IDxqaW5nMi5saXVAaW50ZWwuY29tPg0KPiA+DQo+ID4gdkNQVSB0aHJlYWRzIGFyZSBkaWZmZXJl
-bnQgZnJvbSBuYXRpdmUgdGFza3MgcmVnYXJkaW5nIHRvIHRoZSBpbml0aWFsIFhGRA0KPiA+IHZh
-bHVlLiBXaGlsZSBhbGwgbmF0aXZlIHRhc2tzIGZvbGxvdyBhIGZpeGVkIHZhbHVlIChpbml0X2Zw
-c3RhdGU6OnhmZCkNCj4gPiBlc3RhYmxpc2hlZCBieSB0aGUgRlBVIGNvcmUgYXQgYm9vdCwgdkNQ
-VSB0aHJlYWRzIG5lZWQgdG8gb2JleSB0aGUgcmVzZXQNCj4gPiB2YWx1ZSAoaS5lLiBaRVJPKSBk
-ZWZpbmVkIGJ5IHRoZSBzcGVjaWZpY2F0aW9uLCB0byBtZWV0IHRoZSBleHBlY3RhdGlvbiBvZg0K
-PiA+IHRoZSBndWVzdC4NCj4gPg0KPiA+IExldCB0aGUgY2FsbGVyIHN1cHBseSBhbiBhcmd1bWVu
-dCBhbmQgYWRqdXN0IHRoZSBob3N0IGFuZCBndWVzdCByZWxhdGVkDQo+ID4gaW52b2NhdGlvbnMg
-YWNjb3JkaW5nbHkuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgR2xlaXhuZXIgPHRn
-bHhAbGludXRyb25peC5kZT4NCj4gDQo+IElmIEppbmcgaXMgYXV0aG9yLCB0aGVuIHRnbHgncyBT
-T0Igc2hvdWxkIGNvbWUgYWZ0ZXIgSmluZydzIHRvIG1lYW4sDQo+IHRnbHggaGFuZGxlZCBpdCBm
-dXJ0aGVyLg0KPiANCj4gQXMgaXQgaXMgbm93LCBpdCBsb29rcyB3cm9uZy4NCg0KVGhhbmtzIGZv
-ciBwb2ludGluZyBpdCBvdXQhIEFjdHVhbGx5IHRoaXMgaXMgb25lIGFyZWEgd2hpY2ggd2UgZGlk
-bid0IGdldA0KYSBjbGVhciBhbnN3ZXIgZnJvbSAnc3VibWl0dGluZy1wYXRjaGVzLnJzdCcgYW5k
-IG5vdyBwb3NzaWJseSBhIGdvb2QNCmNoYW5jZSB0byBnZXQgaXQgY2xhcmlmaWVkLg0KDQpUaGlz
-IHBhdGNoIHdhcyBoYW5kbGVkIGluIGFuIGludGVyZXN0aW5nIHdheSBkdWUgdG8gSmluZydzIHR3
-byBhYnNlbmNlczoNCg0KSW50ZXJuYWwgdmVyc2lvbjogSmluZyB3YXMgdGhlIG9yaWdpbmFsIGF1
-dGhvcg0KDQoJU2lnbmVkLW9mZi1ieTogSmluZyBMaXUgPGppbmcyLmxpdUBpbnRlbC5jb20+DQoN
-Ci0tLSBKaW5nJ3MgZmlyc3QgYWJzZW5jZSAtLS0NCg0KdjE6IFlhbmcgd2FzIHRoZSBzdWJtaXR0
-ZXI6DQoNCglTaWduZWQtb2ZmLWJ5OiBKaW5nIExpdSA8amluZzIubGl1QGludGVsLmNvbT4NCglT
-aWduZWQtb2ZmLWJ5OiBZYW5nIFpob25nIDx5YW5nLnpob25nQGludGVsLmNvbT4NCg0KVGhvbWFz
-IHVwZGF0ZWQgaXQgaW4gaGlzIHBlcnNvbmFsIGJyYW5jaCB3aGVuIHJldmlld2luZyB2MToNCg0K
-CUZyb206IEppbmcgTGl1IDxqaW5nMi5saXVAaW50ZWwuY29tPg0KDQoJU2lnbmVkLW9mZi1ieTog
-SmluZyBMaXUgPGppbmcyLmxpdUBpbnRlbC5jb20+DQoJU2lnbmVkLW9mZi1ieTogWWFuZyBaaG9u
-ZyA8eWFuZy56aG9uZ0BpbnRlbC5jb20+DQoJU2lnbmVkLW9mZi1ieTogVGhvbWFzIEdsZWl4bmVy
-IDx0Z2x4QGxpbnV0cm9uaXguZGU+DQoNCi0tLSBKaW5nIHdhcyBiYWNrIC0tLQ0KDQp2Mi12Mzog
-SmluZyB3YXMgdGhlIHN1Ym1pdHRlcjoNCg0KVGhlIG9wZW4gaGVyZSBpcyB3aGV0aGVyIEppbmcg
-c2hvdWxkIGNoYW5nZSB0aGUgU29CIG9yZGVyOg0KDQoJU2lnbmVkLW9mZi1ieTogWWFuZyBaaG9u
-ZyA8eWFuZy56aG9uZ0BpbnRlbC5jb20+DQoJU2lnbmVkLW9mZi1ieTogVGhvbWFzIEdsZWl4bmVy
-IDx0Z2x4QGxpbnV0cm9uaXguZGU+DQoJU2lnbmVkLW9mZi1ieTogSmluZyBMaXUgPGppbmcyLmxp
-dUBpbnRlbC5jb20+DQoNCm9yIGp1c3QgYXBwZW5kIGhlciBuYW1lIGFnYWluOg0KDQoJU2lnbmVk
-LW9mZi1ieTogSmluZyBMaXUgPGppbmcyLmxpdUBpbnRlbC5jb20+DQoJU2lnbmVkLW9mZi1ieTog
-WWFuZyBaaG9uZyA8eWFuZy56aG9uZ0BpbnRlbC5jb20+DQoJU2lnbmVkLW9mZi1ieTogVGhvbWFz
-IEdsZWl4bmVyIDx0Z2x4QGxpbnV0cm9uaXguZGU+DQoJU2lnbmVkLW9mZi1ieTogSmluZyBMaXUg
-PGppbmcyLmxpdUBpbnRlbC5jb20+DQoNClRoZSBmb3JtZXIgd2FzIHNlbGVjdGVkIGZvciB0aGlz
-IHBhdGNoLg0KDQotLS0gSmluZydzIDJuZCBhYnNlbmNlIC0tLQ0KDQp2NC12NTogWWFuZyB3YXMg
-dGhlIHN1Ym1pdHRlci4NCg0KU29CIG9yZGVyIHdhcyBwYXJ0aWFsbHkgY2hhbmdlZCAoZm9yIFlh
-bmcncyBTb0IpIGJ1dCBmb3Jnb3QgdG8gbWFrZSBKaW5nJ3MNClNvQiBhcyB0aGUgZmlyc3QuIEl0
-IHNob3VsZCBiZToNCg0KCUZyb206IEppbmcgTGl1IDxqaW5nMi5saXVAaW50ZWwuY29tPg0KDQoJ
-U2lnbmVkLW9mZi1ieTogSmluZyBMaXUgPGppbmcyLmxpdUBpbnRlbC5jb20+DQoJU2lnbmVkLW9m
-Zi1ieTogVGhvbWFzIEdsZWl4bmVyIDx0Z2x4QGxpbnV0cm9uaXguZGU+DQoJU2lnbmVkLW9mZi1i
-eTogWWFuZyBaaG9uZyA8eWFuZy56aG9uZ0BpbnRlbC5jb20+DQoNCklmIHRoZSBydWxlIGlzIHRo
-YXQgU29CIG9yZGVyIHNob3VsZCBub3QgYmUgY2hhbmdlZCwgdGhlbiBpdCB3aWxsIGJlOg0KDQoJ
-RnJvbTogSmluZyBMaXUgPGppbmcyLmxpdUBpbnRlbC5jb20+DQoNCglTaWduZWQtb2ZmLWJ5OiBK
-aW5nIExpdSA8amluZzIubGl1QGludGVsLmNvbT4NCglTaWduZWQtb2ZmLWJ5OiBZYW5nIFpob25n
-IDx5YW5nLnpob25nQGludGVsLmNvbT4NCglTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgR2xlaXhuZXIg
-PHRnbHhAbGludXRyb25peC5kZT4NCglTaWduZWQtb2ZmLWJ5OiBKaW5nIExpdSA8amluZzIubGl1
-QGludGVsLmNvbT4NCglTaWduZWQtb2ZmLWJ5OiBZYW5nIFpob25nIDx5YW5nLnpob25nQGludGVs
-LmNvbT4NCg0KPiANCj4gRGl0dG8gZm9yIHBhdGNoZXMgMTAsIDExLCAxMiwgMTMuDQo+IA0KPiBB
-bHNvLCBJIHdvbmRlciBpZiBhbGwgdGhvc2UgU2lnbmVkLW9mZi1ieSdzIGRvIG1lYW4gImhhbmRs
-ZWQiIG9yDQo+IENvLWRldmVsb3BlZC1ieSBidXQgSSBoYXZlbid0IHRyYWNrZWQgdGhhdCBwYXJ0
-aWN1bGFyIHBpbGUgc28uLi4NCj4gDQo+ID4gU2lnbmVkLW9mZi1ieTogSmluZyBMaXUgPGppbmcy
-LmxpdUBpbnRlbC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogWWFuZyBaaG9uZyA8eWFuZy56aG9u
-Z0BpbnRlbC5jb20+DQo+ID4gTWVzc2FnZS1JZDogPDIwMjIwMTA1MTIzNTMyLjEyNTg2LTYteWFu
-Zy56aG9uZ0BpbnRlbC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogUGFvbG8gQm9uemluaSA8cGJv
-bnppbmlAcmVkaGF0LmNvbT4NCj4gDQo+IC0tDQo+IFJlZ2FyZHMvR3J1c3MsDQo+ICAgICBCb3Jp
-cy4NCj4gDQo+IGh0dHBzOi8vcGVvcGxlLmtlcm5lbC5vcmcvdGdseC9ub3Rlcy1hYm91dC1uZXRp
-cXVldHRlDQo=
+Hi Cameron,
+
+I see in the patchwork that the patches have been accepted.=20
+When can I expect to see the driver in mainline?
+
+Thanks,
+Anand
+
+> -----Original Message-----
+> From: Jonathan Cameron <jic23@kernel.org>
+> Sent: Thursday 16 December 2021 5:07 PM
+> To: Anand Ashok Dumbre <ANANDASH@xilinx.com>
+> Cc: linux-kernel@vger.kernel.org; lars@metafoo.de; linux-
+> iio@vger.kernel.org; git <git@xilinx.com>; Michal Simek
+> <michals@xilinx.com>; gregkh@linuxfoundation.org; rafael@kernel.org;
+> linux-acpi@vger.kernel.org; heikki.krogerus@linux.intel.com; Andy
+> Shevchenko <andriy.shevchenko@linux.intel.com>; 'Anand Dumbre'
+> <ananddumbre8@gmail.com>
+> Subject: Re: [PATCH v12 0/5] Add Xilinx AMS Driver
+>=20
+> On Wed, 15 Dec 2021 12:11:21 +0000
+> Anand Ashok Dumbre <ANANDASH@xilinx.com> wrote:
+>=20
+> > Ping!
+>=20
+> Other than ideally getting a few more eyes on the stuff in drivers/base I=
+'m
+> fine with this series.
+>=20
+> Thanks,
+>=20
+> Jonathan
+>=20
+> >
+> > > -----Original Message-----
+> > > From: Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
+> > > Sent: Friday 3 December 2021 9:24 PM
+> > > To: linux-kernel@vger.kernel.org; jic23@kernel.org; lars@metafoo.de;
+> > > linux- iio@vger.kernel.org; git <git@xilinx.com>; Michal Simek
+> > > <michals@xilinx.com>; gregkh@linuxfoundation.org; rafael@kernel.org;
+> > > linux-acpi@vger.kernel.org; heikki.krogerus@linux.intel.com
+> > > Cc: Anand Ashok Dumbre <ANANDASH@xilinx.com>
+> > > Subject: [PATCH v12 0/5] Add Xilinx AMS Driver
+> > >
+> > > Add Xilinx AMS driver which is used for Xilinx's ZynqMP AMS controlle=
+r.
+> > > This AMS driver is used to report various interface voltages and
+> > > temperatures across the system.
+> > > This driver will be used by iio-hwmon to repport voltages and
+> > > temperatures across the system by using various channel interfaces.
+> > > This driver handles AMS module including PS-Sysmon & PL-Sysmon. The
+> > > binding documentation is added for understanding of AMS, PS, PL
+> > > Sysmon Channels.
+> > >
+> > > Changes in v2:
+> > > 	- Added documentation for sysfs (Patch-2)
+> > > 	- Addressed code style review comments
+> > > 	- Patch-2 (Now it is Patch-3)
+> > > 		- Arranged the includes in alphabetical order
+> > > 		- Removed the wrapper 'ams_pl_write_reg()' and used writel
+> > > 		  instead
+> > > 		- Removed the unnecessary delay of 1ms and used polling of
+> EOC
+> > > 		  instead
+> > > 		- Removed spin_lock and used mutex only.
+> > > 		- Used request_irq() instead of devm_request_irq() and
+> handled
+> > > 		  respective error conditions
+> > > 		- Moved contents of xilinx-ams.h to inline with xilinx-ams.c
+> > > 	- Patch-1
+> > > 		- Addressed Documentation style comments
+> > >
+> > > Changes in v3:
+> > > 	- Updated bindings document with the suggested modification in v2
+> > > review
+> > > 	- Removed documentation for sysfs
+> > > 	- Removed extended names for channels in the Xilinx AMS driver
+> > > 	- Modified dts to use ranges for child nodes
+> > > 	- Reduced address and size cells to 32-bit instead of 64-bit
+> > >
+> > > Changes in v4:
+> > > 	- Updated bindings document with the suggested modification in v3
+> > > review
+> > > 	- Changed the Device Tree property 'ranges' for child nodes
+> > > 	- Used Channel Numbers as 'reg' value in DT to avoid confusion
+> > > 	- Removed unused NULL arguments as suggested in v3 patch review
+> > > 	- Addressed comments on Device Tree property naming
+> > >
+> > > Changes in v5:
+> > > 	- Updated bindings document to the YAML format
+> > > 	- Updated bindings document with the suggested modification in v4
+> > > review
+> > > 	- Renamed iio_pl_info struct to iio_ams_info in Xilinx AMS driver
+> > > 	- Updated the Xilinx AMS driver to not use iio_priv_to_dev function
+> > > 	- Updated Xilinx AMS node to reflect the changes in bindings
+> > > document
+> > > 	- Update MAINTAINERS file
+> > >
+> > > Changes in v6:
+> > > 	- Removed all tabs from bindings document.
+> > > 	- Removed the xlnx,ext-channels node from the device tree since
+> > > 	  it is not neeeded.
+> > > 	- Fixed unit addresses for ps-ams and pl-ams.
+> > > 	- Removed the names property from bindings.
+> > > 	- Fixed warnings from checkpatch.pl in the driver.
+> > > 	- devm_add_action_or_reset() used for exit/error path.
+> > > 	- devm_request_irq() for managed irq request instead of
+> > > 	  request_irq()
+> > >
+> > > Changes in v7:
+> > > 	- Added use of FIELD_PREP and FIELD_GET.
+> > > 	- Added the spinlocks back the v1 which were removed in v2 for
+> > > 	  no justifiable reason and replaced with the same mutex. This
+> > > 	  caused deadlocks.
+> > > 	- Removed the buffered mode information from channel config.
+> > > 	- Usage of wrapper functions for devm_add_action_or_reset
+> > > 	  callbacks to avoid typecasting functions.
+> > > 	- Usage of devm_platform_iremap_resource().
+> > > 	- Handled platform_get_irq() return values.
+> > > 	- Removed the remove() callback.
+> > > 	- Fixed the dt-bindings.
+> > >
+> > > Changes in v8:
+> > > 	- Replaced *_of_() APIs with fwnode.
+> > > 	- Added missing headers.
+> > > 	- Fixed documentation.
+> > > 	- Added devm_add_action_or_reset() for iounmap.
+> > > 	- Restructured read_raw function.
+> > > 	- Added helper functions.
+> > > 	- Usage of GENMASK for all masks.
+> > > 	- Added defaults for most switch cases. Some can't be added
+> > > 	  since the default will never occur.
+> > >
+> > > Changes in v9:
+> > > 	- Added a fwnode_iomap().
+> > > 	- Fixed Kconfig indentation.
+> > > 	- Added the overflow checks before memory allocation.
+> > > 	- Usage of fwnode_iomap() instead of iomap().
+> > > 	- Rename ams_parse_dt() to ams_parse_firmware().
+> > >
+> > > Changes in v10:
+> > > 	- Fixed licence in zynqmp.dtsi.
+> > > 	- Changed the macros to use BIT().
+> > > 	- Realign some code to fit within 100 chars.
+> > > 	- Modified readl_poll_timeout usage.
+> > > 	- Usage of array_size() instead of check_mul_overflow().
+> > > 	- Usage of dev_err_probe() instead of dev_err().
+> > > 	- Usage of kcalloc instead of kzalloc()
+> > >
+> > > Changes in v11:
+> > > 	- Added missing bitfield.h.
+> > > 	- Fixed AMS_ALARM_THR_MIN macro.
+> > > 	- Added terminators to enums where necessary.
+> > > 	- Added explicit values as suggested to enums.
+> > > 	- Removed redundant macros.
+> > > 	- Added delay value for readl_poll_timeout.
+> > > 	- Corrected shadowed error return.
+> > > 	- Corrected formatting errors.
+> > > 	- Added default cases where missing.
+> > > 	- Made ams_parse_firmware() a single parameter functions.
+> > > 	- Usage of devm_kcalloc() and devm_krealloc().
+> > > 	- Directly returning from dev_err_probe().
+> > > 	- Renamed masked_alarm to current_masked_alarm.
+> > >
+> > > Changes in v12:
+> > > 	- GENMASK_ULL usage for 64bit values.
+> > > 	- Added ams_iounmap_ps and amsiomap_pl instead of generic
+> > > 	  function.
+> > > 	- Hex values to use all capital letters.
+> > > 	- Fixed a case of wrong kernel doc.
+> > > 	- Modified macro voltage names to reflect the scale.
+> > > 	- Maximize single line usage wherever possible.
+> > > 	- Handling of fwnode_iomap when CONFIG_OF_ADDRESS is not
+> > > 	  enabled.
+> > > 	- ams_read_raw() - Reduce the size of switch statements by
+> > > 	  using helper functions for IIO_CHAN_INFO_SCALE.
+> > > 	- ams_read_raw() - Mutex unlocking in a single place using goto.
+> > >
+> > > Anand Ashok Dumbre (5):
+> > >   device property: Add fwnode_iomap()
+> > >   arm64: zynqmp: DT: Add Xilinx AMS node
+> > >   iio: adc: Add Xilinx AMS driver
+> > >   dt-bindings: iio: adc: Add Xilinx AMS binding documentation
+> > >   MAINTAINERS: Add maintainer for xilinx-ams
+> > >
+> > >  .../bindings/iio/adc/xlnx,zynqmp-ams.yaml     |  227 +++
+> > >  MAINTAINERS                                   |    7 +
+> > >  arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   24 +
+> > >  drivers/base/property.c                       |   16 +
+> > >  drivers/iio/adc/Kconfig                       |   15 +
+> > >  drivers/iio/adc/Makefile                      |    1 +
+> > >  drivers/iio/adc/xilinx-ams.c                  | 1450 +++++++++++++++=
+++
+> > >  include/linux/property.h                      |    2 +
+> > >  8 files changed, 1742 insertions(+)  create mode 100644
+> > > Documentation/devicetree/bindings/iio/adc/xlnx,zynqmp-ams.yaml
+> > >  create mode 100644 drivers/iio/adc/xilinx-ams.c
+> > >
+> > > --
+> > > 2.17.1
+> >
+

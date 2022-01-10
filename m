@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA904488F04
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 04:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6672F488F0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 04:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238399AbiAJDr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 22:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        id S238416AbiAJDwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 22:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiAJDr5 (ORCPT
+        with ESMTP id S232923AbiAJDwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 22:47:57 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57F3C06173F;
-        Sun,  9 Jan 2022 19:47:57 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id 78so1527384pfu.10;
-        Sun, 09 Jan 2022 19:47:57 -0800 (PST)
+        Sun, 9 Jan 2022 22:52:03 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF06FC061748
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 19:52:02 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id i6so10853402pla.0
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 19:52:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pbRI1T2l3Qets8v52jJPGd5CiuQtZXN6jFwWiPsneXQ=;
-        b=ZQrHf3jO6LZaTeDXee6HHvFaG63VScf3A579kXtpX+vWMW89xqhJtHSavilLKTZl51
-         NzGWoTpFw5kZpbBh53spzudlfCV5cxMfKWnNNRQlvfFc4Kj6/OKQw5ugyo1Afdkzy5Xs
-         RDIlmpoyadyfpqnzFuOuzsaaB2sopn2/+UGWQikvhGiNQfdS5NqcOWVfQ4n79biFp1wo
-         18ibrr7YMTqPIiqHPoaTatCKvDUod8BXRae4PZfEm6hC2sgGmy6+fawymfsfSd1ks4ko
-         bXwRUeGq3aBWmTh5591jivivDCbvOY0de1atWIYOPRQQg7C7vJRb4qztSrR5R+XPsQjj
-         CTqg==
+        bh=PAvG8D3Inyp/sgIhRNvq2JrQif2n8c7Fqe5EJWWRaBI=;
+        b=2/ar0G5+FYyUMpoFnsHSG5TabDwOQBU9NpCC+r+0W8u94UawaOGuynAifvr5zX9aia
+         zwHPWCl8JnJ15v1zbydOjJ6fm1JVNWz2pOAHTdE2/OJAI6sxTjjXvVTINonbtHYzcEoX
+         tKJstdvOopxubpWF4j7KMIcNOXo6Eca8M5nx9JzPOvqsKvtxRgIoIvgLGJQH+e5dMPB5
+         Dz9/supPxQege0wjKbxYc4XSkYDgRYKi9nEHnVguHutdegCCY5Dgt0qbWNLyB2Kj7Akx
+         OmfcJKkCsnnWCUJmlS0kRzK+HZ9Zl+9I0brt6unxGzEOrWej8f50GgT38Ls5Us6DdQke
+         yP2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pbRI1T2l3Qets8v52jJPGd5CiuQtZXN6jFwWiPsneXQ=;
-        b=TJolqRozm+vEyWc8rP4X8n+yEJZPPdatMLYzZOEMJVBDhD89vMzIPzrqL65WReA6Sh
-         hddae0TYh9ec6xCZLt54W9hIwTDnOHgvkYYJFAegxKmGsoM5fX82KdrV4nkSkkp6NzBp
-         QmkIUgZUdha7q2jNs3QO1XJSPisrLhn3gMf/ZSgxZWkPjrKs6i1hJLoBowPgnKElQPvF
-         GrJ+knzj1xTjdBi3NiAAn+B53tgGbyuIdvWLptZmr2H4GkW8H3Oi3pojv36+fYy1snR6
-         xGovqF+kQ8bdtpeLsfAK76GRqbeUIJF8DcsSswd6wsd4/0ZRzRdR33Av1jCvSz3HJsDt
-         886w==
-X-Gm-Message-State: AOAM531wJquWcRURme4da9Bnub8EZtmQiweJSdoQE55srHFIA2Or7TQQ
-        Y2jy+oyD/9NtBhACf2f7B8E=
-X-Google-Smtp-Source: ABdhPJzl1NMgZcIY8d5zzP0k4fAzrUgdzf8ewwbTJFYPcTSl9+pX/TDHiD3BnvEAZyn4BqAB+i0FbQ==
-X-Received: by 2002:a63:2056:: with SMTP id r22mr63042594pgm.460.1641786477305;
-        Sun, 09 Jan 2022 19:47:57 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id s5sm4607660pfe.117.2022.01.09.19.47.54
+        bh=PAvG8D3Inyp/sgIhRNvq2JrQif2n8c7Fqe5EJWWRaBI=;
+        b=zQqiALVMKzrloqO2oePa35XWZZMrORUcXAJWkP7HPrhzQdTE0eAuJDoJ+0mNcQguik
+         Y5M6HbHl+UEVS0E1NBbwU9sacbc1FhToVqU6ZiXT/6CFE8tH572Ijqy/h9Nc+nmmNTsN
+         Vpbqm+B2I9N/iB9ep+l/qOL6HS7VAuydKD7r7vBex9wDGYnQ0IKyGbvIcXxd8WSVP0p2
+         bz0sSdnhIZAnRbOnhY3POqGoZMPhnV8s5vDK1FxIklZWJOHyaHo8zDMYzadkBOAL0x8I
+         2E1eMohzy4NAg1W2AoKVj9fR5ofWGLVmaKAx7WJ0AE4cAKy4DkV+RI4hfqNiawYn58xu
+         YQEQ==
+X-Gm-Message-State: AOAM533U36KlnbNqf8mKBrR3RUaoIn0leT/xZXoP31xjURIsoh2TDGkD
+        IyQSU3Rfa/BVySHTQFSbWJWHoA==
+X-Google-Smtp-Source: ABdhPJz3HDi3p8Cyv2kCwbk9c2Gn8hmSeJeq6WMWip1pm3Vmydv7ftgLsq1xCmaeSl0hYzmJ/f7kOg==
+X-Received: by 2002:a17:903:2493:b0:14a:766:a89d with SMTP id p19-20020a170903249300b0014a0766a89dmr12886053plw.112.1641786722468;
+        Sun, 09 Jan 2022 19:52:02 -0800 (PST)
+Received: from yinxin.bytedance.net ([139.177.225.251])
+        by smtp.gmail.com with ESMTPSA id h3sm6772748pjk.48.2022.01.09.19.51.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 19:47:56 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
-Date:   Mon, 10 Jan 2022 11:47:47 +0800
-Message-Id: <20220110034747.30498-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
+        Sun, 09 Jan 2022 19:52:02 -0800 (PST)
+From:   Xin Yin <yinxin.x@bytedance.com>
+To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xin Yin <yinxin.x@bytedance.com>
+Subject: [PATCH v2 0/2] fix blocks allocate issue during fast commit replay
+Date:   Mon, 10 Jan 2022 11:51:39 +0800
+Message-Id: <20220110035141.1980-1-yinxin.x@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+when test fast_commit with xfstests generic/455, one failed case is 
+after fast commit replay, fsck raise ’multiply-claimed blocks‘ issue.
+one inode's etb block may share with other file.
 
-Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
-Tracing, it exposes details about the asynchronous events, when they are
-generated, and when their corresponding software event handler completes
-execution) cannot be safely and fully emulated by the KVM, especially
-emulating the simultaneous writing of guest PT packets generated by
-the KVM to the guest PT buffer.
+fast commit replay procedure may allocate etb blocks for inodes, but
+it may allocate blocks in use. This patch set fix this issue.
 
-For KVM, it's better to advertise currently supported features based on
-the "static struct pt_cap_desc" implemented in the host PT driver and
-ignore _all_ unknown features before they have been investigated one by
-one and supported in a safe manner, leaving the rest as system-wide-only
-tracing capabilities.
-
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
 ---
-v1 -> v2 Changelog:
-- Be safe and ignore _all_ unknown capabilities. (Paolo)
+v2: add comments for behavior change of ext4_fc_record_regions().
 
-Previous:
-https://lore.kernel.org/kvm/20220106085533.84356-1-likexu@tencent.com/
+Xin Yin (2):
+  ext4: prevent used blocks from being allocated during fast commit
+    replay
+  ext4: modify the logic of ext4_mb_new_blocks_simple
 
- arch/x86/kvm/cpuid.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/ext4/ext4.h        |  2 ++
+ fs/ext4/extents.c     |  4 ++++
+ fs/ext4/fast_commit.c | 11 ++++++++---
+ fs/ext4/mballoc.c     | 26 +++++++++++++++++---------
+ 4 files changed, 31 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 0b920e12bb6d..439b93359848 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			break;
- 		}
- 
-+		/* It's better to be safe and ignore _all_ unknown capabilities. */
-+		entry->ebx &= GENMASK(5, 0);
- 		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
- 			if (!do_host_cpuid(array, function, i))
- 				goto out;
 -- 
-2.33.1
+2.20.1
 

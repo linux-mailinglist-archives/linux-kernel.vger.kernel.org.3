@@ -2,91 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C78548A09B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 21:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D624548A0A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 21:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245338AbiAJUCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 15:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243444AbiAJUCY (ORCPT
+        id S245492AbiAJUDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 15:03:53 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57814 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243444AbiAJUDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 15:02:24 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD067C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 12:02:23 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id h11so3722637uar.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 12:02:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R+U0DyIqIB0Bf4/3JRRlP9EF8f0ETQTc0Wmkp/Mb/64=;
-        b=DzC8kC/ku1j1Ab1a2zVeX27jPtl4vZrkRtfN//MRx2IYDUi9K1Rflt3RbueaA/VYDS
-         OZkvldB5/WTC1UMjJ1GXCSrHxH6Lvwee85VglqaJdoYKNlP+v1y8OIMDqVP8Tyoj7J7/
-         V8iE4QJdH7hDY3y4YvWmM6i8/aoU08sw6dm2swPk+V63VnlTJcl4+55dgLZTTnAeAby6
-         sEt8Nl60swK6VFbkS4kyi56VKAMuRJM1omO1GEUPqpWoFd0kzdt7l8g8aizk7uSMLDOZ
-         d46WGZoorFisW4ZbSDCQVR41E5BSz8XJ6ijtn69+rvNkp0yasv3M4aLzWuMBSYEgCtcA
-         7+6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R+U0DyIqIB0Bf4/3JRRlP9EF8f0ETQTc0Wmkp/Mb/64=;
-        b=cHIukvCNbHkuZE2eZ+uh+2LtaO2Ca74L7WNU8jYuA1/ZgNwrrPDAxniifrnmMpoSjq
-         KsFfN4OPu7SAb5AcFhnntg2VLpy7NCrnv0cQxBlIdrniS+sR2GwXO6kDwBLvlpqoVKNG
-         WcvGnJzk1pfjKZnky02WPRr80b8IOvg0msgDYgVHSaW8a0XWBE9S2MqjZMDU/YV808UR
-         qGZfpcwH18W/hR/Rak9r3cq2tu/fc11tpx8Hb5ShbqBM57iINjv/lxryjjfv5ltVvtXW
-         HaS8bh2o1zaGTLBJxtxTgyVXqDsp7Wjzxr5P1uBN6U5Y3UsApd48ziG520hbY6h5bkQS
-         +lYg==
-X-Gm-Message-State: AOAM533r3ROlxiS1OGKo/htmtGkp9hHV69mc+a3dBG21LnMl0SBFXXUi
-        FlHZQ8V7lqyFcb5TxmqcLE8hjQbi1jceCg==
-X-Google-Smtp-Source: ABdhPJz09WzDlkXUAn6XJQ250fOk4IffYTOXQOkXpY6OkcUHC3cSK0/6HTjcvHie1dcHkrDNTbyhMA==
-X-Received: by 2002:a05:6102:3f07:: with SMTP id k7mr606477vsv.13.1641844942991;
-        Mon, 10 Jan 2022 12:02:22 -0800 (PST)
-Received: from thinkpad.localdomain ([2804:14d:5cd1:5d03:3a68:93ff:fe5d:d3e7])
-        by smtp.gmail.com with ESMTPSA id y27sm3323733vkn.11.2022.01.10.12.02.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 12:02:22 -0800 (PST)
-From:   Luiz Sampaio <sampaio.ime@gmail.com>
-To:     zbr@ioremap.net
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        Luiz Sampaio <sampaio.ime@gmail.com>
-Subject: Implementing overdrive communication in w1
-Date:   Mon, 10 Jan 2022 17:02:59 -0300
-Message-Id: <20220110200259.23276-1-sampaio.ime@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 10 Jan 2022 15:03:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A41461188;
+        Mon, 10 Jan 2022 20:03:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5878EC36AE9;
+        Mon, 10 Jan 2022 20:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641845032;
+        bh=hD4mpAS69xuPCy7YISmoK+8+EVJhB9YWQdEtGX21PAI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tN3d1jDo/TNRMNUSgQPGRf/NvMZR3tRfOr01Qt9FOs9baEGsqV2JkSUKvOhO5oUYg
+         pu7Xb5Owk79VCouUxm0+rsN4wG/J2crjNG4PCsoHPdaT6JhYY0vdv08S1JXZCF3PwH
+         BHx8tCZrmYAa3nsJDOV5mNBw7unq2vI5dC3I5x5se+yXkv6NaxX4I2u3CzY3igIce/
+         3VNIj/SyGvqOPr4mLoDuizftbGKW88pARGbNNGmnczGsOvTVFALzfyhFdKJVd+5Ure
+         ANtl6eo2LpUMvTMcC2vGuywgcYXdwLsETglBS3Qxnb+mNs6OgWFmqIAKUUiNVoIbn7
+         rmThEIqKmGNhg==
+Date:   Mon, 10 Jan 2022 13:03:46 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdyRIgnG6jlL0HHx@archlinux-ax161>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
+ <YdTvXkKFzA0pOjFf@gmail.com>
+ <YdYQu9YxNw0CxJRn@archlinux-ax161>
+ <Ydl6MATrfA1GA0G+@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydl6MATrfA1GA0G+@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, all
+On Sat, Jan 08, 2022 at 12:49:04PM +0100, Ingo Molnar wrote:
+> 
+> * Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > 5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
+> > 
+> > With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
+> > 
+> > $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
+> > 
+> > $ scripts/config -e LTO_CLANG_THIN
+> > 
+> > $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
+> > ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
+> > >>> .macro __put, val, name
+> > >>> ^
+> > make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
+> > 
+> > I was not able to figure out the exact include chain but CONFIG_LTO
+> > causes asm/alternative-macros.h to be included in asm/rwonce.h, which
+> > eventually gets included in either asm/cache.h or asm/memory.h.
+> > 
+> > I managed to solve this with the following diff but I am not sure if
+> > there is a better or cleaner way to do that.
+> > 
+> > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
+> > index 1bce62fa908a..e19572a205d0 100644
+> > --- a/arch/arm64/include/asm/rwonce.h
+> > +++ b/arch/arm64/include/asm/rwonce.h
+> > @@ -5,7 +5,7 @@
+> >  #ifndef __ASM_RWONCE_H
+> >  #define __ASM_RWONCE_H
+> >  
+> > -#ifdef CONFIG_LTO
+> > +#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
+> >  
+> >  #include <linux/compiler_types.h>
+> >  #include <asm/alternative-macros.h>
+> > @@ -66,7 +66,7 @@
+> >  })
+> >  
+> >  #endif	/* !BUILD_VDSO */
+> > -#endif	/* CONFIG_LTO */
+> > +#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
+> 
+> So the error message suggests that the linker script somehow ends up 
+> including asm-generic/export.h:
+> 
+>   kepler:~/mingo.tip.git> git grep 'macro __put'
+>   include/asm-generic/export.h:.macro __put, val, name
+> 
+> ?
 
-Recently, I had to use the w1-gpio driver to access an EEPROM w1 slave.
-The problem is that the slave only supported overdrive speed, and
-w1-gpio is using standard communication. I checked the delays and
-confirmed in the Maxim website:
+Correct.
 
-www.maximintegrated.com/en/design/technical-documents/app-notes/1/126.html
+> But I'd guess that similar to the __ASSEMBLY__ patterns we have in headers, 
+> not including the rwonce.h bits if LINKER_SCRIPT is defined is probably 
+> close to the right solution - but it would also know how such a low level 
+> header ended up in a linker script. Might have been to pick up some offset 
+> or size definition somewhere?
+> 
+> I.e. how did the build end up including asm/rwonce.h?
+> 
+> You can generally debug such weird dependency chains by putting a
+> debug #warning into the affected header - such as the patch below.
+> 
+> This prints a stack of the header dependencies:
+> 
+>     CC      kernel/sched/core.o
+>   In file included from ./include/linux/compiler.h:263,
+>                  from ./include/linux/static_call_types.h:7,
+>                  from ./include/linux/kernel.h:6,
+>                  from ./include/linux/highmem.h:5,
+>                  from kernel/sched/core.c:9:
+>   ./arch/arm64/include/asm/rwonce.h:8:2: warning: #warning debug [-Wcpp]
+>       8 | #warning debug
+> 
+> ... and should in principle also work in the linker script context.
 
-Back then, I changed the w1_io.c driver in order to support it, but I
-want to make a patch to be able to choose between standard and overdrive
-speeds. Maybe set this in the w1-gpio device tree, if the user wants
-overdrive mode (adding "w1-overdrive", for instance, not to break the
-already working standard speed mode).
+Neat trick! I added
 
-Do you have some orientation in the path that I have to follow? I
-thought I could add a parameter (bool?) in the struct w1_bus_master in
-linux/w1.h, and test the value of this parameter where delays are used
-in drivers/w1/w1_io.c. This is the best approach? How can I know if this
-would break something?
+#ifdef LINKER_SCRIPT
+#warning debug
+#endif
 
-Is there some effort to add support to this already that I could help?
+to arch/arm64/include/asm/rwonce.h and built with ThinLTO, which reveals:
 
-Best regards,
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
 
--- 
-2.34.1
+$ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
 
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/
+In file included from arch/arm64/kvm/hyp/nvhe/hyp.lds.S:12:
+In file included from ./arch/arm64/include/asm/memory.h:18:
+In file included from ./arch/arm64/include/asm/thread_info.h:11:
+In file included from ./include/linux/compiler.h:263:
+./arch/arm64/include/asm/rwonce.h:9:2: warning: debug [-W#warnings]
+#warning debug
+ ^
+1 warning generated.
+
+I wonder if the compiler.h include could be broken up? I removed it
+altogether just to see what would break and defconfig, defconfig +
+CONFIG_LTO_CLANG_THIN=y, and allmodconfig all continue to build.
+
+Cheers,
+Nathan

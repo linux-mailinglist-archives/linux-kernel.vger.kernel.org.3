@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CDB489289
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC1C489114
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243146AbiAJHos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:44:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42676 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241051AbiAJHei (ORCPT
+        id S239441AbiAJH24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:28:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57010 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239639AbiAJH02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:34:38 -0500
+        Mon, 10 Jan 2022 02:26:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EC1C60C07;
-        Mon, 10 Jan 2022 07:34:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61561C36AED;
-        Mon, 10 Jan 2022 07:34:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADFADB811F9;
+        Mon, 10 Jan 2022 07:26:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01713C36AE9;
+        Mon, 10 Jan 2022 07:26:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641800074;
-        bh=MCsFaAiWm6my6sUnZa4K4kkGh4YU1t59pdeAwZ6QeJY=;
+        s=korg; t=1641799585;
+        bh=Ryn0r3NAKNZ9E1Jqj6JP6t4Ph3g8R6NUFHrMJ/x8N4I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E0s75Qs2/v/hVUtW3oWfUSTWNpTcAPBKbWNEPcP2uPVPOeikv/BMZ3/4JttY+p0JI
-         4TIz72/4RMIponQ0X1qonkAlVzY7wDsOO3ycUuqRYbsq1ByqQmdNTn5g7YI+9W5vMv
-         y/qQ55ILmE7hQ3Y8WqbRGPsRyKk6eENJVieL307U=
+        b=09/BL/TvDcCfcQHndnFM5AloGj0QVxWXNzKeRpEtby9D6Wv9j96qQafB0hdb7/SLM
+         j6RO+z5a9gexwIacuddyjmA8PVPUNkfvHg7L3owE+VGIn0YhdcHuhCcZ3jGoBbUMAz
+         0VYDhA/0SlWYOcb3DAG/8CrB+GLPvvYqz2EpWqJY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.15 38/72] Revert "i2c: core: support bus regulator controlling in adapter"
+        stable@vger.kernel.org, wolfgang huang <huangjinhui@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 22/22] mISDN: change function names to avoid conflicts
 Date:   Mon, 10 Jan 2022 08:23:15 +0100
-Message-Id: <20220110071822.844018002@linuxfoundation.org>
+Message-Id: <20220110071814.999521774@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071814.261471354@linuxfoundation.org>
+References: <20220110071814.261471354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,177 +47,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wolfram Sang <wsa@kernel.org>
+From: wolfgang huang <huangjinhui@kylinos.cn>
 
-commit a19f75de73c220b4496d2aefb7a605dd032f7c01 upstream.
+[ Upstream commit 8b5fdfc57cc2471179d1c51081424ded833c16c8 ]
 
-This largely reverts commit 5a7b95fb993ec399c8a685552aa6a8fc995c40bd. It
-breaks suspend with AMD GPUs, and we couldn't incrementally fix it. So,
-let's remove the code and go back to the drawing board. We keep the
-header extension to not break drivers already populating the regulator.
-We expect to re-add the code handling it soon.
+As we build for mips, we meet following error. l1_init error with
+multiple definition. Some architecture devices usually marked with
+l1, l2, lxx as the start-up phase. so we change the mISDN function
+names, align with Isdnl2_xxx.
 
-Fixes: 5a7b95fb993e ("i2c: core: support bus regulator controlling in adapter")
-Reported-by: "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-Link: https://lore.kernel.org/r/1295184560.182511.1639075777725@mail.yahoo.com
-Reported-by: Konstantin Kharlamov <hi-angel@yandex.ru>
-Link: https://lore.kernel.org/r/7143a7147978f4104171072d9f5225d2ce355ec1.camel@yandex.ru
-BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1850
-Tested-by: "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-Tested-by: Konstantin Kharlamov <hi-angel@yandex.ru>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Cc: <stable@vger.kernel.org> # 5.14+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+mips-linux-gnu-ld: drivers/isdn/mISDN/layer1.o: in function `l1_init':
+(.text+0x890): multiple definition of `l1_init'; \
+arch/mips/kernel/bmips_5xxx_init.o:(.text+0xf0): first defined here
+make[1]: *** [home/mips/kernel-build/linux/Makefile:1161: vmlinux] Error 1
+
+Signed-off-by: wolfgang huang <huangjinhui@kylinos.cn>
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/i2c-core-base.c |   95 --------------------------------------------
- 1 file changed, 95 deletions(-)
+ drivers/isdn/mISDN/core.c   | 6 +++---
+ drivers/isdn/mISDN/core.h   | 4 ++--
+ drivers/isdn/mISDN/layer1.c | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -466,14 +466,12 @@ static int i2c_smbus_host_notify_to_irq(
- static int i2c_device_probe(struct device *dev)
+diff --git a/drivers/isdn/mISDN/core.c b/drivers/isdn/mISDN/core.c
+index faf505462a4f5..f5a06a6fb297f 100644
+--- a/drivers/isdn/mISDN/core.c
++++ b/drivers/isdn/mISDN/core.c
+@@ -390,7 +390,7 @@ mISDNInit(void)
+ 	err = mISDN_inittimer(&debug);
+ 	if (err)
+ 		goto error2;
+-	err = l1_init(&debug);
++	err = Isdnl1_Init(&debug);
+ 	if (err)
+ 		goto error3;
+ 	err = Isdnl2_Init(&debug);
+@@ -404,7 +404,7 @@ mISDNInit(void)
+ error5:
+ 	Isdnl2_cleanup();
+ error4:
+-	l1_cleanup();
++	Isdnl1_cleanup();
+ error3:
+ 	mISDN_timer_cleanup();
+ error2:
+@@ -417,7 +417,7 @@ static void mISDN_cleanup(void)
  {
- 	struct i2c_client	*client = i2c_verify_client(dev);
--	struct i2c_adapter	*adap;
- 	struct i2c_driver	*driver;
- 	int status;
+ 	misdn_sock_cleanup();
+ 	Isdnl2_cleanup();
+-	l1_cleanup();
++	Isdnl1_cleanup();
+ 	mISDN_timer_cleanup();
+ 	class_unregister(&mISDN_class);
  
- 	if (!client)
- 		return 0;
+diff --git a/drivers/isdn/mISDN/core.h b/drivers/isdn/mISDN/core.h
+index 52695bb81ee7a..3c039b6ade2e1 100644
+--- a/drivers/isdn/mISDN/core.h
++++ b/drivers/isdn/mISDN/core.h
+@@ -69,8 +69,8 @@ struct Bprotocol	*get_Bprotocol4id(u_int);
+ extern int	mISDN_inittimer(u_int *);
+ extern void	mISDN_timer_cleanup(void);
  
--	adap = client->adapter;
- 	client->irq = client->init_irq;
+-extern int	l1_init(u_int *);
+-extern void	l1_cleanup(void);
++extern int	Isdnl1_Init(u_int *);
++extern void	Isdnl1_cleanup(void);
+ extern int	Isdnl2_Init(u_int *);
+ extern void	Isdnl2_cleanup(void);
  
- 	if (!client->irq) {
-@@ -539,14 +537,6 @@ static int i2c_device_probe(struct devic
+diff --git a/drivers/isdn/mISDN/layer1.c b/drivers/isdn/mISDN/layer1.c
+index 3192b0eb39445..284d3a9c7df7d 100644
+--- a/drivers/isdn/mISDN/layer1.c
++++ b/drivers/isdn/mISDN/layer1.c
+@@ -407,7 +407,7 @@ create_l1(struct dchannel *dch, dchannel_l1callback *dcb) {
+ EXPORT_SYMBOL(create_l1);
  
- 	dev_dbg(dev, "probe\n");
- 
--	if (adap->bus_regulator) {
--		status = regulator_enable(adap->bus_regulator);
--		if (status < 0) {
--			dev_err(&adap->dev, "Failed to enable bus regulator\n");
--			goto err_clear_wakeup_irq;
--		}
--	}
--
- 	status = of_clk_set_defaults(dev->of_node, false);
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
-@@ -604,10 +594,8 @@ put_sync_adapter:
- static void i2c_device_remove(struct device *dev)
+ int
+-l1_init(u_int *deb)
++Isdnl1_Init(u_int *deb)
  {
- 	struct i2c_client	*client = to_i2c_client(dev);
--	struct i2c_adapter      *adap;
- 	struct i2c_driver	*driver;
- 
--	adap = client->adapter;
- 	driver = to_i2c_driver(dev->driver);
- 	if (driver->remove) {
- 		int status;
-@@ -622,8 +610,6 @@ static void i2c_device_remove(struct dev
- 	devres_release_group(&client->dev, client->devres_group_id);
- 
- 	dev_pm_domain_detach(&client->dev, true);
--	if (!pm_runtime_status_suspended(&client->dev) && adap->bus_regulator)
--		regulator_disable(adap->bus_regulator);
- 
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-@@ -633,86 +619,6 @@ static void i2c_device_remove(struct dev
- 		pm_runtime_put(&client->adapter->dev);
+ 	debug = deb;
+ 	l1fsm_s.state_count = L1S_STATE_COUNT;
+@@ -418,7 +418,7 @@ l1_init(u_int *deb)
  }
  
--#ifdef CONFIG_PM_SLEEP
--static int i2c_resume_early(struct device *dev)
--{
--	struct i2c_client *client = i2c_verify_client(dev);
--	int err;
--
--	if (!client)
--		return 0;
--
--	if (pm_runtime_status_suspended(&client->dev) &&
--		client->adapter->bus_regulator) {
--		err = regulator_enable(client->adapter->bus_regulator);
--		if (err)
--			return err;
--	}
--
--	return pm_generic_resume_early(&client->dev);
--}
--
--static int i2c_suspend_late(struct device *dev)
--{
--	struct i2c_client *client = i2c_verify_client(dev);
--	int err;
--
--	if (!client)
--		return 0;
--
--	err = pm_generic_suspend_late(&client->dev);
--	if (err)
--		return err;
--
--	if (!pm_runtime_status_suspended(&client->dev) &&
--		client->adapter->bus_regulator)
--		return regulator_disable(client->adapter->bus_regulator);
--
--	return 0;
--}
--#endif
--
--#ifdef CONFIG_PM
--static int i2c_runtime_resume(struct device *dev)
--{
--	struct i2c_client *client = i2c_verify_client(dev);
--	int err;
--
--	if (!client)
--		return 0;
--
--	if (client->adapter->bus_regulator) {
--		err = regulator_enable(client->adapter->bus_regulator);
--		if (err)
--			return err;
--	}
--
--	return pm_generic_runtime_resume(&client->dev);
--}
--
--static int i2c_runtime_suspend(struct device *dev)
--{
--	struct i2c_client *client = i2c_verify_client(dev);
--	int err;
--
--	if (!client)
--		return 0;
--
--	err = pm_generic_runtime_suspend(&client->dev);
--	if (err)
--		return err;
--
--	if (client->adapter->bus_regulator)
--		return regulator_disable(client->adapter->bus_regulator);
--	return 0;
--}
--#endif
--
--static const struct dev_pm_ops i2c_device_pm = {
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
--	SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
--};
--
- static void i2c_device_shutdown(struct device *dev)
+ void
+-l1_cleanup(void)
++Isdnl1_cleanup(void)
  {
- 	struct i2c_client *client = i2c_verify_client(dev);
-@@ -772,7 +678,6 @@ struct bus_type i2c_bus_type = {
- 	.probe		= i2c_device_probe,
- 	.remove		= i2c_device_remove,
- 	.shutdown	= i2c_device_shutdown,
--	.pm		= &i2c_device_pm,
- };
- EXPORT_SYMBOL_GPL(i2c_bus_type);
- 
+ 	mISDN_FsmFree(&l1fsm_s);
+ }
+-- 
+2.34.1
+
 
 

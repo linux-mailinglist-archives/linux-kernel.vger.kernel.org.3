@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6116D489F90
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB0C489F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242397AbiAJSuQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 13:50:16 -0500
-Received: from mxchg01.rrz.uni-hamburg.de ([134.100.38.111]:38967 "EHLO
-        mxchg01.rrz.uni-hamburg.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242083AbiAJSuJ (ORCPT
+        id S242024AbiAJSoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:44:21 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:56948 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241010AbiAJSoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:50:09 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mxchg01.rrz.uni-hamburg.de (Postfix) with ESMTP id 6034EA1636;
-        Mon, 10 Jan 2022 19:44:18 +0100 (CET)
-X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
-Received: from mxchg04.rrz.uni-hamburg.de (mxchg04.rrz.uni-hamburg.de [134.100.38.114])
-        by mxchg01.rrz.uni-hamburg.de (Postfix) with ESMTPS;
-        Mon, 10 Jan 2022 19:44:18 +0100 (CET)
-X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
-Received: from exchange.uni-hamburg.de (UN-EX-MR08.uni-hamburg.de [134.100.84.75])
-        by mxchg04.rrz.uni-hamburg.de (Postfix) with ESMTPS;
-        Mon, 10 Jan 2022 19:44:18 +0100 (CET)
-Received: from plasteblaster (89.244.206.250) by UN-EX-MR08.uni-hamburg.de
- (134.100.84.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 10 Jan
- 2022 19:44:18 +0100
-Date:   Mon, 10 Jan 2022 19:44:17 +0100
-From:   "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
-To:     Balbir Singh <bsingharora@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] taskstats: version 11 with tgid
-Message-ID: <20220110194417.147d4eff@plasteblaster>
-Organization: =?UTF-8?B?VW5pdmVyc2l0w6R0?= Hamburg
-X-Mailer: Claws Mail (x86_64-pc-linux-gnu)
+        Mon, 10 Jan 2022 13:44:20 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 7D4E61C0B76; Mon, 10 Jan 2022 19:44:19 +0100 (CET)
+Date:   Mon, 10 Jan 2022 19:44:19 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Pavel Machek <pavel@denx.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/5] ASoC: sh: rz-ssi: Drop calling rz_ssi_pio_recv()
+ recursively
+Message-ID: <20220110184418.GE3396@duo.ucw.cz>
+References: <20220110094711.8574-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220110094711.8574-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <2f338a37-f2ca-33e4-284e-5d263f7b93da@intel.com>
+ <CA+V-a8vz25B=cw_C4YMBRdDxeq7mi8Zc+noqpdHqfMP8eNHYFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [89.244.206.250]
-X-ClientProxiedBy: UN-EX-MR05.uni-hamburg.de (134.100.84.72) To
- UN-EX-MR08.uni-hamburg.de (134.100.84.75)
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="OZkY3AIuv2LYvjdk"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8vz25B=cw_C4YMBRdDxeq7mi8Zc+noqpdHqfMP8eNHYFg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 9d3d915c4e0c1e4ff3a54d73851cedb613c7df44 Mon Sep 17 00:00:00 2001
-From: "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
-Date: Mon, 10 Jan 2022 17:10:41 +0100
-Subject: [PATCH 1/2] taskstats: version 11 with tgid
 
-This adds the ac_tgid field to the taskstats struct, to be able to tell
-apart (additional) threads and processes when a client application monitors
-task exit events.
+--OZkY3AIuv2LYvjdk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I need this for giving HPC users an overview over how many instances of
-which programs they ran and how much resources each one used, including
-the distinction between multithreaded programs (parallelized scientific
-applications) and many process instances (script calling lots of
-short-running programs). It is nice to get this information accurately via
-taskstats with a data set once for each task that exits, as opposed to
-expensive/inaccurate sampling of any sort.
+Hi!
 
-There are process ID and parent process ID already in the struct. The
-thread group ID seems like something that should accompany those, anyway.
+> > On 2022-01-10 10:47 AM, Lad Prabhakar wrote:
+> > > Instead of recursively calling rz_ssi_pio_recv() use a while loop
+> > > to read the samples from RX fifo.
+> >
+> > Recursion and loops are means for doing something repeatedly. Could you
+> > specify _why_ such change was made i.e. the conversion from one method
+> > into the other? I bet the code is not being changed for the sake of
+> > changing it, the reason is simply missing in the commit message.
+> >
+> I had feedback from Pavel "recursion is unwelcome in kernel due to
+> limited stack use." which I did agree with as a result I have come up
+> with this patch. Also to add this driver will later be used on Renesas
+> RZ/A2 SoC's which runs with limited memory.
+>=20
+> > Please note that refactoring below function into while-loop has a side
+> > effect: everything had to be indented by additional tab. Generally,
+> > readability increases if function is shaped 'linearly'.
+> >
+> I do agree, my initial patch just added a jump back to the start of
+> the function if there are more samples, but Biju suggested to use a
+> while loop instead.
 
-base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
+Yes, loop is better.
 
-Signed-off-by: Dr. Thomas Orgis <thomas.orgis@uni-hamburg.de>
----
- include/uapi/linux/taskstats.h | 4 +++-
- kernel/tsacct.c                | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
+I'd actually do while(true) and avoid using the done variable.
 
-diff --git a/include/uapi/linux/taskstats.h b/include/uapi/linux/taskstats.h
-index ccbd08709321..9248dc6bcb4a 100644
---- a/include/uapi/linux/taskstats.h
-+++ b/include/uapi/linux/taskstats.h
-@@ -34,7 +34,7 @@
-  */
- 
- 
--#define TASKSTATS_VERSION	10
-+#define TASKSTATS_VERSION	11
- #define TS_COMM_LEN		32	/* should be >= TASK_COMM_LEN
- 					 * in linux/sched.h */
- 
-@@ -172,6 +172,8 @@ struct taskstats {
- 
- 	/* v10: 64-bit btime to avoid overflow */
- 	__u64	ac_btime64;		/* 64-bit begin time */
-+	/* v11: thread group ID to identify process vs. (non-leader) thread */
-+	__u32   ac_tgid;
- };
- 
- 
-diff --git a/kernel/tsacct.c b/kernel/tsacct.c
-index f00de83d0246..959ae3a26f1b 100644
---- a/kernel/tsacct.c
-+++ b/kernel/tsacct.c
-@@ -52,6 +52,7 @@ void bacct_add_tsk(struct user_namespace *user_ns,
- 	stats->ac_nice	 = task_nice(tsk);
- 	stats->ac_sched	 = tsk->policy;
- 	stats->ac_pid	 = task_pid_nr_ns(tsk, pid_ns);
-+	stats->ac_tgid   = task_tgid_nr_ns(tsk, pid_ns);
- 	rcu_read_lock();
- 	tcred = __task_cred(tsk);
- 	stats->ac_uid	 = from_kuid_munged(user_ns, tcred->uid);
+    if (!(!frames_left && fifo_samples >=3D runtime->channels))
+              break;
 
-base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
--- 
-2.29.2
+will do the trick. Better yet, do
 
+    if (frames_left || fifo_samples < runtime->channels)
+              break;
 
+because double negation is quite confusing and looks like typo.
 
--- 
-Dr. Thomas Orgis
-HPC @ Universität Hamburg
+Best regards,
+								Pavel
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--OZkY3AIuv2LYvjdk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYdx+ggAKCRAw5/Bqldv6
+8iWeAJwMFgmovkkcykQkiCov9xgLKwcKjACfRihbqO9B2VDa06HpO5bEfLl222U=
+=AYcv
+-----END PGP SIGNATURE-----
+
+--OZkY3AIuv2LYvjdk--

@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276154891D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D26348926B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240100AbiAJHgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:36:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39458 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239582AbiAJHa2 (ORCPT
+        id S240956AbiAJHma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:42:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33970 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240186AbiAJHdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:30:28 -0500
+        Mon, 10 Jan 2022 02:33:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB723611DA;
-        Mon, 10 Jan 2022 07:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED47C36AE9;
-        Mon, 10 Jan 2022 07:30:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B172B8120C;
+        Mon, 10 Jan 2022 07:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD818C36AED;
+        Mon, 10 Jan 2022 07:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799825;
-        bh=AWkoo0UJSVGidasizP+wqQC4M68bJulON4pKMzqYRps=;
+        s=korg; t=1641800009;
+        bh=nV4sVNXe+91kbTnlCc0Bt4RlIYFySXGdtdmIaZEf19Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1z/4HvDNAzar3qn2zazSWwPdlBWifx7Lcs7gzBEG1AdeJt1Yr5Zsru6BR61PFJdin
-         pr414xUjfByy8gqCuwPvbb0vQLVyJyKeIlGX57EMcX8kgUOcMqwFm/3aK5sYugUbSJ
-         e6yq124WZb1Zgn6lgtN3o0/rIn4PU78s+9RCbhWw=
+        b=tn3pmHAqkXKOEtfVHjoKHNz8Ck8J5Cfulpf56ohXbFDLctU2TjJ6yCOkJu0WTSo/Z
+         BsJZo8UKhifKGvE2U6kLV6HjJl4U0SgdacVc91tqlVp6Wp4YbwbAiWQHRbuygNTYsY
+         x6Ustfp6RWiE1/QCGWVVF2qw7KcjFoJWt90upUBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH 5.10 28/43] power: reset: ltc2952: Fix use of floating point literals
+        stable@vger.kernel.org, Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 48/72] fbdev: fbmem: add a helper to determine if an aperture is used by a fw fb
 Date:   Mon, 10 Jan 2022 08:23:25 +0100
-Message-Id: <20220110071818.293128380@linuxfoundation.org>
+Message-Id: <20220110071823.172955307@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-References: <20220110071817.337619922@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,58 +44,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit 644106cdb89844be2496b21175b7c0c2e0fab381 upstream.
+commit 9a45ac2320d0a6ae01880a30d4b86025fce4061b upstream.
 
-A new commit in LLVM causes an error on the use of 'long double' when
-'-mno-x87' is used, which the kernel does through an alias,
-'-mno-80387' (see the LLVM commit below for more details around why it
-does this).
+Add a function for drivers to check if the a firmware initialized
+fb is corresponds to their aperture.  This allows drivers to check if the
+device corresponds to what the firmware set up as the display device.
 
-drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-        data->wde_interval = 300L * 1E6L;
-                                  ^
-drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-        data->wde_interval = 300L * 1E6L;
-                           ^
-drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-        data->trigger_delay = ktime_set(2, 500L*1E6L);
-                                               ^
-3 errors generated.
-
-This happens due to the use of a 'long double' literal. The 'E6' part of
-'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-it to 'long double'.
-
-There is no visible reason for floating point values in this driver, as
-the values are only assigned to integer types. Use NSEC_PER_MSEC, which
-is the same integer value as '1E6L', to avoid changing functionality but
-fix the error.
-
-Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=215203
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1840
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/power/reset/ltc2952-poweroff.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/video/fbdev/core/fbmem.c |   47 +++++++++++++++++++++++++++++++++++++++
+ include/linux/fb.h               |    1 
+ 2 files changed, 48 insertions(+)
 
---- a/drivers/power/reset/ltc2952-poweroff.c
-+++ b/drivers/power/reset/ltc2952-poweroff.c
-@@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1760,6 +1760,53 @@ int remove_conflicting_framebuffers(stru
+ EXPORT_SYMBOL(remove_conflicting_framebuffers);
  
- static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
- {
--	data->wde_interval = 300L * 1E6L;
--	data->trigger_delay = ktime_set(2, 500L*1E6L);
-+	data->wde_interval = 300L * NSEC_PER_MSEC;
-+	data->trigger_delay = ktime_set(2, 500L * NSEC_PER_MSEC);
- 
- 	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+ /**
++ * is_firmware_framebuffer - detect if firmware-configured framebuffer matches
++ * @a: memory range, users of which are to be checked
++ *
++ * This function checks framebuffer devices (initialized by firmware/bootloader)
++ * which use memory range described by @a. If @a matchesm the function returns
++ * true, otherwise false.
++ */
++bool is_firmware_framebuffer(struct apertures_struct *a)
++{
++	bool do_free = false;
++	bool found = false;
++	int i;
++
++	if (!a) {
++		a = alloc_apertures(1);
++		if (!a)
++			return false;
++
++		a->ranges[0].base = 0;
++		a->ranges[0].size = ~0;
++		do_free = true;
++	}
++
++	mutex_lock(&registration_lock);
++	/* check all firmware fbs and kick off if the base addr overlaps */
++	for_each_registered_fb(i) {
++		struct apertures_struct *gen_aper;
++
++		if (!(registered_fb[i]->flags & FBINFO_MISC_FIRMWARE))
++			continue;
++
++		gen_aper = registered_fb[i]->apertures;
++		if (fb_do_apertures_overlap(gen_aper, a)) {
++			found = true;
++			break;
++		}
++	}
++	mutex_unlock(&registration_lock);
++
++	if (do_free)
++		kfree(a);
++
++	return found;
++}
++EXPORT_SYMBOL(is_firmware_framebuffer);
++
++/**
+  * remove_conflicting_pci_framebuffers - remove firmware-configured framebuffers for PCI devices
+  * @pdev: PCI device
+  * @name: requesting driver name
+--- a/include/linux/fb.h
++++ b/include/linux/fb.h
+@@ -610,6 +610,7 @@ extern int remove_conflicting_pci_frameb
+ 					       const char *name);
+ extern int remove_conflicting_framebuffers(struct apertures_struct *a,
+ 					   const char *name, bool primary);
++extern bool is_firmware_framebuffer(struct apertures_struct *a);
+ extern int fb_prepare_logo(struct fb_info *fb_info, int rotate);
+ extern int fb_show_logo(struct fb_info *fb_info, int rotate);
+ extern char* fb_get_buffer_offset(struct fb_info *info, struct fb_pixmap *buf, u32 size);
 
 

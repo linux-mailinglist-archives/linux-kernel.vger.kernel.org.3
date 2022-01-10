@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B6F489498
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C47B489499
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242634AbiAJJAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:00:48 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:52571 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242036AbiAJI6s (ORCPT
+        id S242668AbiAJJA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242664AbiAJI7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:58:48 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 10 Jan 2022 03:59:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD91C06173F;
+        Mon, 10 Jan 2022 00:59:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXSRT2PDtz4y4Z;
-        Mon, 10 Jan 2022 19:58:45 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641805125;
-        bh=R24FBnuWNPJfvfg1NosQCQTFGwsK5/KBKgGWM0Ld1f8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jtML7XlxaRko5BrjYiatxljUcMHIAgahYBtgnQibGGyDNew5nCSuWVyPVzt+ztYzm
-         zcxSTtKuR+f1Tt1peHKhTZAxFe7NTvRia+CHn2YpqMT7p6mkkoQe+/ocWNe9U+iSqo
-         03ohRgH7mP393dgzKdwKdE/GyHE5AIJPb3oK68f12Kn0Jd9tlZWY8uutUWbggoruvi
-         5vtJ7spsm97QolMA2/lh1DVUR9PYKZ6eXFaKu4ptovYjGffcgViXG28UoJYssHD4Is
-         aGiSGpK/ehaPADxSRZZfbHMJU2bL2wGPSjrxk473wqEgHToJbgZ8p9E3113jpv8cV0
-         CTVlCeWD1eMGg==
-Date:   Mon, 10 Jan 2022 19:58:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Guang Zeng <guang.zeng@intel.com>, Jing Liu <jing2.liu@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Yang Zhong <yang.zhong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the kvm tree
-Message-ID: <20220110195844.7de09681@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4C4BxWxtIge57R94iiy5EJL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82275611DE;
+        Mon, 10 Jan 2022 08:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7DEC36AED;
+        Mon, 10 Jan 2022 08:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641805194;
+        bh=D9e71CZd9yBY1wgr0WN43xn6xQSym6Q0DjGYoPqsfCk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gQW0hvtIj+lNAbd8rSX06xXBAwDll8i1+b/MJpcHVyu6y8ZyyWdbtzEumaBIlj2gP
+         IKYpOO9fQyZrybXsm9rvwk9pIwrzlJ1AsSy9r7C1H3uBYdb/1Msw4McJQHjpEw/rfS
+         b2zIGttqlbOU9PpDedZDxlx3S2R5Wqb7PJXOHqiYFcivHj1q81W4Kdw3SvaM+YR5oc
+         TSatpkHgNUKewdJ41Nc0qFUa9H71yPIYefoMoXRE1VVNyYw3apsYXrHHJuMyGhjHQz
+         XBO+8/BA1Zr/is2kdvbND3UfmFJLrurH+ieJacT0KJxjq3IkvwBxXvCwja5p42opar
+         2xmTaYQxXdjsA==
+From:   SeongJae Park <sj@kernel.org>
+To:     ojeda@kernel.org
+Cc:     alex.gaynor@gmail.com, wedsonaf@google.com,
+        akpm@linux-foundation.org, wei.liu@kernel.org,
+        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: [PATCH v2 for-rust-for-linux] init/Kconfig: Specify the interpreter for rust-version.sh
+Date:   Mon, 10 Jan 2022 08:59:52 +0000
+Message-Id: <20220110085952.6137-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/4C4BxWxtIge57R94iiy5EJL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Some common tools like 'diff' don't support permissions of the files.
+Due to that, 'rust-version.sh' in some trees including '-mm' result in
+having no execution permission, and therefore build fails like below:
 
-Hi all,
+    $ make O=../linux.out/ olddefconfig
+    make[1]: Entering directory 'linux.out'
+      GEN     Makefile
+    sh: 1: linux/scripts/rust-version.sh: Permission denied
+    init/Kconfig:71: syntax error
+    init/Kconfig:70: invalid statement
+    linux/scripts/kconfig/Makefile:77: recipe for target 'olddefconfig' failed
+    make[2]: *** [olddefconfig] Error 1
+    linux/Makefile:666: recipe for target 'olddefconfig' failed
+    make[1]: *** [olddefconfig] Error 2
+    make[1]: Leaving directory 'linux.out'
+    Makefile:226: recipe for target '__sub-make' failed
+    make: *** [__sub-make] Error 2
 
-After merging the kvm tree, today's linux-next build (htmldocs) produced
-this warning:
+It's not a big deal, but not so fun.  This commit works around the issue
+by specifying the interpreter for 'rust-version.sh' in the Kconfig file.
+The ugly work around wouldn't be needed once 'rust-version.sh' file is
+merged in the mainline with the execution permission.
 
-Documentation/virt/kvm/api.rst:5549: WARNING: Title underline too short.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
+---
+Changes from v1
+(https://lore.kernel.org/all/20220106123357.16220-1-sj@kernel.org/)
+- Collect 'Reviewed-by:' from Wei Liu
+- Specify that this is temporal workaround and when it can be reverted
+  (Miguel Ojeda)
 
-4.42 KVM_GET_XSAVE2
-------------------
+ init/Kconfig | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Introduced by commit
+diff --git a/init/Kconfig b/init/Kconfig
+index cd23faa163d1..d3707b9f222c 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -67,7 +67,13 @@ config HAS_RUST
+ config RUSTC_VERSION
+ 	depends on HAS_RUST
+ 	int
+-	default $(shell,$(srctree)/scripts/rust-version.sh $(RUSTC))
++	# Because some common tools like 'diff' don't support permissions of
++	# the files, 'rust-version.sh' in some trees that managed with such
++	# tools result in having no execution permission.  As a temporal work
++	# around, we specify the interpreter ('/bin/sh').  It will be unneeded
++	# once 'rust-version.sh' is merged in the mainline with its execution
++	# permission.
++	default $(shell,/bin/sh $(srctree)/scripts/rust-version.sh $(RUSTC))
+ 
+ config CC_CAN_LINK
+ 	bool
+-- 
+2.17.1
 
-  16786d406fe8 ("kvm: x86: Add support for getting/setting expanded xstate =
-buffer")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4C4BxWxtIge57R94iiy5EJL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHb9UQACgkQAVBC80lX
-0Gy0Bwf/ccjEHDcjRMn5LJuKO9LbYxlvmOgdwL7/pN6XodM3qa6+Eu3LIsPEMHWs
-I5VM3RqEQzXHRHdC1V39KBdU1UZ9J8YUVMuISwdVfr3LycJsiDyS4qrP0bCR77H0
-fyOU9erOhvycWBf/oKYVipG6pV0gXBguWS8T54ay+w4/y6QsvUcKnxF30++nTvNA
-UOPBhCC0sa9Q8lBtVR5cSyO54xN3MVkTdiiEdPbUljGPNM8VLx2xnZpYTeVRXPjo
-c9Wg9O+oFmSzIgv99wtHWLt5bY/VlP9fTSFGjTrTA3La8H01QqxtH68ho128I6x/
-ZWt52XprkJdtCo/1gfp7rAJlEO6Arg==
-=V5n6
------END PGP SIGNATURE-----
-
---Sig_/4C4BxWxtIge57R94iiy5EJL--

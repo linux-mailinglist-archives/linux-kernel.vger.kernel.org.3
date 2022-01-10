@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 232FE489F79
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2496489F7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242072AbiAJSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S242167AbiAJSqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241206AbiAJSpe (ORCPT
+        with ESMTP id S239534AbiAJSqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:45:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49963C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:45:34 -0800 (PST)
+        Mon, 10 Jan 2022 13:46:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BDDC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:46:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ttn+yS73TigEPGpcw2iqzr9CnaebrsST4PVtbMFaqN0=; b=KsFSWNgo4t73Sb74XHFILkTFLp
-        eQfaEjBlx8U9z6Z4isrZ6ltYnzBzsuV7f5K8AaPiFmA8W11fB6AwP3o1bR6IRuyCU/gTC7U9SXirn
-        9a10lf/iK1/tPtZsq3ZgVwzjsYYrx2y3FTT/pDC8LlfkZ6c6cII/syS/1NbbtWQIDv7yZIcO8heeU
-        HWwIjRRrjyoorgyHIez7YHr9BCjvvHGEGfV0zO/i6rlQcrbVvqncq/RR1Qd22Hqe8WLfX/x2r+zdZ
-        D6e9X1VpcSAKfCsYLWzxrOnghBrupzPK+IMr6sl5N+pKx6wU7ITnbNDMiz6vlVkf9zmavFSBKX+yX
-        S5XNJ/lw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6zfR-002eHC-TG; Mon, 10 Jan 2022 18:45:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9ACF0300079;
-        Mon, 10 Jan 2022 19:45:15 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 846AE284872AC; Mon, 10 Jan 2022 19:45:15 +0100 (CET)
-Date:   Mon, 10 Jan 2022 19:45:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Tim Murray <timmurray@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
-Message-ID: <Ydx+u9YpzS8AZHrl@hirez.programming.kicks-ass.net>
-References: <20220108164617.3130175-1-jaegeuk@kernel.org>
- <YdvoxkAAquI17UbX@infradead.org>
- <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=H3KF2prjYBSwrnfLvzejhzHVkMgjeD7cUDDGRAfx4vA=; b=IjTRj51FE8xpAGBh+cH4TWcHvJ
+        MG2wJzSHRW7gAwyqyfkfXu/m/zYZ36/rsok84KGSDXK4tGnSckzORdQ1zgYiq/HVtAw5nYzZw8DUy
+        IRCXKirqM7NrzeqsyuhAa06TJJ2jci8Dpi8KFiYL264JB4bqvtCDKhF+0zn4jDOmw786KKHjUS4TT
+        lF4mgOAiHXJLtxCu9Z8/CyJZJgEj/Jscz5tM8SG6VLdqIKswqVG4UVAUeZLezohknH6ceuHht7+aU
+        7ZENsFD1jIkWeFLbo2NQcrFAM34IBeBJD/xoGZSPnoSjAs3bK+BmnZkQm+W8iQk/zp+h5VlWiLttq
+        8CQC5sBw==;
+Received: from [2001:4bb8:18c:6af6:7014:844b:d20b:2d30] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6zgC-00CqCn-Cb; Mon, 10 Jan 2022 18:46:04 +0000
+Date:   Mon, 10 Jan 2022 19:46:02 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: [GIT PULL] dma-mapping updates for Linux 5.17
+Message-ID: <Ydx+6rmjq2giOC/b@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:18:27AM -0500, Waiman Long wrote:
-> 
-> On 1/10/22 03:05, Christoph Hellwig wrote:
-> > Adding the locking primitive maintainers to this patch adding open coded
-> > locking primitives..
-> > 
-> > On Sat, Jan 08, 2022 at 08:46:17AM -0800, Jaegeuk Kim wrote:
-> > > From: Tim Murray <timmurray@google.com>
-> > > 
-> > > f2fs rw_semaphores work better if writers can starve readers,
-> > > especially for the checkpoint thread, because writers are strictly
-> > > more important than reader threads. This prevents significant priority
-> > > inversion between low-priority readers that blocked while trying to
-> > > acquire the read lock and a second acquisition of the write lock that
-> > > might be blocking high priority work.
-> > > 
-> > > Signed-off-by: Tim Murray <timmurray@google.com>
-> > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> 
-> We could certainly implement a down_read() variant (e.g.
-> down_read_lowprio()) with its own slowpath function to do this within the
-> rwsem code as long as there is a good use-case for this kind of
-> functionality.
+The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 
-I think _unfair() or something along those lines is a *much* better
-naming that _lowprio(). Consider a RT task ending up calling _lowprio().
-That just doesn't make conceptual sense.
+  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 
-And then there's the lockdep angle; the thing being unfair will lead to
-scenarios where lockdep will give a false positive because it expects
-the r-w-r order to block things, which won't happen. A position needs to
-be taken a-prioriy.
+are available in the Git repository at:
 
-But before all that, a sane problem description. Can't propose solutions
-without having a problem.
+  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.17
+
+for you to fetch changes up to f857acfc457ea63fa5b862d77f055665d863acfe:
+
+  lib/scatterlist: cleanup macros into static inline functions (2021-12-22 09:21:43 +0100)
+
+----------------------------------------------------------------
+dma-mapping updates for Linux 5.17
+
+ - refactor the dma-direct coherent allocator
+ - turn an macro into an inline in scatterlist.h (Logan Gunthorpe)
+
+----------------------------------------------------------------
+Christoph Hellwig (11):
+      dma-direct: factor out dma_set_{de,en}crypted helpers
+      dma-direct: don't call dma_set_decrypted for remapped allocations
+      dma-direct: always leak memory that can't be re-encrypted
+      dma-direct: clean up the remapping checks in dma_direct_alloc
+      dma-direct: factor out a helper for DMA_ATTR_NO_KERNEL_MAPPING allocations
+      dma-direct: refactor the !coherent checks in dma_direct_alloc
+      dma-direct: fail allocations that can't be made coherent
+      dma-direct: warn if there is no pool for force unencrypted allocations
+      dma-direct: drop two CONFIG_DMA_RESTRICTED_POOL conditionals
+      dma-direct: factor the swiotlb code out of __dma_direct_alloc_pages
+      dma-direct: add a dma_direct_use_pool helper
+
+Logan Gunthorpe (1):
+      lib/scatterlist: cleanup macros into static inline functions
+
+ include/linux/scatterlist.h |  29 ++++--
+ kernel/dma/direct.c         | 240 ++++++++++++++++++++++++++------------------
+ 2 files changed, 163 insertions(+), 106 deletions(-)

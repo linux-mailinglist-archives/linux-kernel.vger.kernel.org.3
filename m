@@ -2,179 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC57489A02
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78574489A00
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbiAJNeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:34:03 -0500
-Received: from mga17.intel.com ([192.55.52.151]:13575 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232469AbiAJNd7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:33:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641821639; x=1673357639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BLaGhAWIehRQcM1U5/7DpGlbIBtYb8hXB5v9pg/fvnw=;
-  b=dfoODDyzwM3r0CvX3N7sMg2w6DZx5YJQat+BBuXuUSDLcVOFx37oCCJq
-   iuU3XjWFPLFl+OTyNWmbrEpEbdKzbTbpIbQepH6+6YKKfE/yCEXz895CF
-   ZYdBahhyE2nPGIgcp/R7jTWWFc5i0k79L+vGroKMs+9YCf/LpQCZSIVgd
-   pdxndgi5Qi/IUbKa3INjpzJqkflte39qI6vszRM3hoMvsYwYae4nm5ns9
-   7CkMM+m4Oklittc7bNmezCoEwSQvbbxQmfo6cza5xX2uSl8ywU9LDUSvQ
-   d+E1reZnz0tIfM5FQnsG8NRtFcMnV7Oi3n0QueYdE/F5/lxFMCM0BZk1V
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="223918193"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="223918193"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 05:33:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="474129435"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2022 05:33:57 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6uo8-0003Ws-L8; Mon, 10 Jan 2022 13:33:56 +0000
-Date:   Mon, 10 Jan 2022 21:33:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, tyreld@linux.ibm.com,
-        Nathan Lynch <nathanl@linux.ibm.com>
-Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
-Message-ID: <202201102154.a95OQEPr-lkp@intel.com>
-References: <20220106161339.74656-1-ldufour@linux.ibm.com>
+        id S232540AbiAJNdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232495AbiAJNdn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 08:33:43 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A109C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:33:43 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id s1so26829494wra.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wykY6RVdYGo3LCViVwH8y47ACjO/I+ljCrJ3y0UU7JI=;
+        b=v1Zcv9HlWrtnmwH4thsDg6vrRCwzTZ5N6M/GatTtutfPZRit5EBvmKTBFZPCgPTJKW
+         ovkE2K8C4JhfsZPyursJLwrLenN+sCROvchDrLPWtois83nNe6YYbIe/BCDgQcK+0l/p
+         tTIDGwkBM8KEPu415OviYoXRz8J1Z1kCPc0bqLx/PlI/4s8PxAovVHHB+l8qXpsKgRQL
+         wBDQYezTgMUITDf96ffPgD+YzjzwSGEcIzcoTGVRnZJIvAC+PsFiacF21s/8pDE3ngmT
+         46HZdvjWelj18UoR1KCCNUrAaU//W3ki8ACtpxocSZOpGzpDxp3KsRx1sE1oE08S/plk
+         +57A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wykY6RVdYGo3LCViVwH8y47ACjO/I+ljCrJ3y0UU7JI=;
+        b=Z2F1NuzJPner0Cb0TJRqy74qqBJ9klz7HfkSOu6PprqWbATAadJkHoHQoLmHuy3FJN
+         DkEO+fjiUlSoztfPCiP328P25XBYYLJWQIcLxzS/fsT/b4WdCJz3WNlwF3iJLP5vsNlR
+         crXJLnbqAEZQ47+q2oI+ZCznr+6I078O0gFopzHxc8rmlB7GEK8qM1p0S1b+HPtmMIbe
+         iJmxC1BQUQlHjpb7NIuKtkiRf8Nnx1xvUKmx/loZCkKCUNdnrI03yZb9nDo4NzNTgYiN
+         qqJ4JhVyLTzLisDxvfNFZe01PF7fdY4yAU8iSiCIyhBvv3VkhG3pUGJzrG13e9oQZCkl
+         cpuQ==
+X-Gm-Message-State: AOAM530ix9kQ7P1cLKXSNpY0Hu7moC1O7HeFAWqfjyLy8wY24+ZDqh5C
+        tFx755DM5yOZkqpNOgT1Sq1ElA==
+X-Google-Smtp-Source: ABdhPJx1Hj2+aXURh9tvHBF3KCs98lyOQJ6RXC4QdC+VRwtBLAb5wjpVXh0T8OgzHl7S46JpaQ8bpg==
+X-Received: by 2002:a05:6000:18a5:: with SMTP id b5mr66369168wri.267.1641821621565;
+        Mon, 10 Jan 2022 05:33:41 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:18f0:2692:14f:d8fd? ([2a01:e34:ed2f:f020:18f0:2692:14f:d8fd])
+        by smtp.googlemail.com with ESMTPSA id 5sm7563904wrb.77.2022.01.10.05.33.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 05:33:40 -0800 (PST)
+Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
+ to data section
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-2-daniel.lezcano@linaro.org>
+ <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
+ <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
+ <CAPDyKFpWtVFoqhFrhMQOgHUjggvg_GPYwmeK-jkphQpA7KQZRw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <a4581b79-c2b2-c2bd-b96c-98389ea15a1e@linaro.org>
+Date:   Mon, 10 Jan 2022 14:33:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106161339.74656-1-ldufour@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAPDyKFpWtVFoqhFrhMQOgHUjggvg_GPYwmeK-jkphQpA7KQZRw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On 07/01/2022 15:49, Ulf Hansson wrote:
+> On Fri, 7 Jan 2022 at 14:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 31/12/2021 14:33, Ulf Hansson wrote:
+>>> On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> The dtpm table is used to let the different dtpm backends to register
+>>>> their setup callbacks in a single place and preventing to export
+>>>> multiple functions all around the kernel. That allows the dtpm code to
+>>>> be self-encapsulated.
+>>>
+>>> Well, that's not entirely true. The dtpm code and its backends (or
+>>> ops, whatever we call them) are already maintained from a single
+>>> place, the /drivers/powercap/* directory. I assume we intend to keep
+>>> it like this going forward too, right?
+>>>
+>>> That is also what patch4 with the devfreq backend continues to conform to.
+>>>
+>>>>
+>>>> The dtpm hierarchy will be passed as a parameter by a platform
+>>>> specific code and that will lead to the creation of the different dtpm
+>>>> nodes.
+>>>>
+>>>> The function creating the hierarchy could be called from a module at
+>>>> init time or when it is loaded. However, at this moment the table is
+>>>> already freed as it belongs to the init section and the creation will
+>>>> lead to a invalid memory access.
+>>>>
+>>>> Fix this by moving the table to the data section.
+>>>
+>>> With the above said, I find it a bit odd to put a table in the data
+>>> section like this. Especially, since the only remaining argument for
+>>> why, is to avoid exporting functions, which isn't needed anyway.
+>>>
+>>> I mean, it would be silly if we should continue to put subsystem
+>>> specific tables in here, to just let them contain a set of subsystem
+>>> specific callbacks.
+>>
+>> So I tried to change the approach and right now I was not able to find
+>> an alternative keeping the code self-encapsulate and without introducing
+>> cyclic dependencies.
+>>
+>> I suggest to keep the patch as it is and double check if it makes sense
+>> to change it after adding more dtpm backends
+>>
+>> Alternatively I can copy the table to a dynamically allocated table.
+> 
+> I am not sure I understand the problem. You don't need a "table of
+> callbacks" at all, at least to start with.
+> 
+> Instead, what you need is to make a call to a function, or actually
+> one call per supported dtpm type from dtpm_setup_dt() (introduced in
+> patch2).
+> 
+> For CPUs, you would simply call dtpm_cpu_setup() (introduced in
+> patch3) from dtpm_setup_dt(), rather than walking the dtpm table an
+> invoking the ->setup() callback.
+>
+> Did that make sense to you?
 
-Thank you for the patch! Perhaps something to improve:
+Yeah, I already got the point ;)
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on linux/master linus/master v5.16 next-20220110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Laurent-Dufour/powerpc-pseries-read-the-lpar-name-from-the-firmware/20220107-001503
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc64-randconfig-r026-20220106 (https://download.01.org/0day-ci/archive/20220110/202201102154.a95OQEPr-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5cf0dea6e919e93ff3088f87acd40e84608a6861
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Laurent-Dufour/powerpc-pseries-read-the-lpar-name-from-the-firmware/20220107-001503
-        git checkout 5cf0dea6e919e93ff3088f87acd40e84608a6861
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/pseries/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/powerpc/platforms/pseries/lparcfg.c:257: warning: Function parameter or member 'm' not described in 'parse_mpp_data'
-   arch/powerpc/platforms/pseries/lparcfg.c:295: warning: Function parameter or member 'm' not described in 'parse_mpp_x_data'
-   arch/powerpc/platforms/pseries/lparcfg.c:334: warning: Function parameter or member 'm' not described in 'read_RTAS_lpar_name'
->> arch/powerpc/platforms/pseries/lparcfg.c:334: warning: expecting prototype for Read the lpar name using the RTAS ibm,get-system(). Prototype was for read_RTAS_lpar_name() instead
->> arch/powerpc/platforms/pseries/lparcfg.c:378: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Read the LPAR name from the Device Tree.
-   arch/powerpc/platforms/pseries/lparcfg.c:678: warning: Function parameter or member 'entitlement' not described in 'update_mpp'
-   arch/powerpc/platforms/pseries/lparcfg.c:678: warning: Function parameter or member 'weight' not described in 'update_mpp'
+I'll convert it to something else, and we will see in the future if that
+needs to be converted back to the table.
 
 
-vim +334 arch/powerpc/platforms/pseries/lparcfg.c
+> Going forward, when we decide to introduce the option to add/remove
+> support for dtpm types dynamically, you can then convert to a
+> dynamically allocated table.
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
+> 
 
-   323	
-   324	/**
-   325	 * Read the lpar name using the RTAS ibm,get-system-parameter call.
-   326	 *
-   327	 * The name read through this call is updated if changes are made by the end
-   328	 * user on the hypervisor side.
-   329	 *
-   330	 * Some hypervisor (like Qemu) may not provide this value. In that case, a non
-   331	 * null value is returned.
-   332	 */
-   333	static int read_RTAS_lpar_name(struct seq_file *m)
- > 334	{
-   335		int rc, len, token;
-   336		union {
-   337			char raw_buffer[GET_SYS_PARM_BUF_SIZE];
-   338			struct {
-   339				__be16 len;
-   340				char name[GET_SYS_PARM_BUF_SIZE-2];
-   341			};
-   342		} *local_buffer;
-   343	
-   344		token = rtas_token("ibm,get-system-parameter");
-   345		if (token == RTAS_UNKNOWN_SERVICE)
-   346			return -EINVAL;
-   347	
-   348		local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
-   349		if (!local_buffer)
-   350			return -ENOMEM;
-   351	
-   352		do {
-   353			spin_lock(&rtas_data_buf_lock);
-   354			memset(rtas_data_buf, 0, sizeof(*local_buffer));
-   355			rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
-   356				       __pa(rtas_data_buf), sizeof(*local_buffer));
-   357			if (!rc)
-   358				memcpy(local_buffer->raw_buffer, rtas_data_buf,
-   359				       sizeof(local_buffer->raw_buffer));
-   360			spin_unlock(&rtas_data_buf_lock);
-   361		} while (rtas_busy_delay(rc));
-   362	
-   363		if (!rc) {
-   364			/* Force end of string */
-   365			len = min((int) be16_to_cpu(local_buffer->len),
-   366				  (int) sizeof(local_buffer->name)-1);
-   367			local_buffer->name[len] = '\0';
-   368	
-   369			seq_printf(m, "partition_name=%s\n", local_buffer->name);
-   370		} else
-   371			rc = -ENODATA;
-   372	
-   373		kfree(local_buffer);
-   374		return rc;
-   375	}
-   376	
-   377	/**
- > 378	 * Read the LPAR name from the Device Tree.
-   379	 *
-   380	 * The value read in the DT is not updated if the end-user is touching the LPAR
-   381	 * name on the hypervisor side.
-   382	 */
-   383	static int read_DT_lpar_name(struct seq_file *m)
-   384	{
-   385		struct device_node *rootdn;
-   386		const char *name;
-   387	
-   388		rootdn = of_find_node_by_path("/");
-   389		if (!rootdn)
-   390			return -ENOENT;
-   391	
-   392		name = of_get_property(rootdn, "ibm,partition-name", NULL);
-   393		if (!name)
-   394			return -ENOENT;
-   395	
-   396		seq_printf(m, "partition_name=%s\n", name);
-   397		return 0;
-   398	}
-   399	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

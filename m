@@ -2,378 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AF0489C1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E05D489C1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236115AbiAJPYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S232628AbiAJPYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbiAJPYo (ORCPT
+        with ESMTP id S236118AbiAJPYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:24:44 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF49C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:24:44 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id k21so45681529lfu.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:24:44 -0800 (PST)
+        Mon, 10 Jan 2022 10:24:53 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E4BC061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:24:53 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id 30so53360125edv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:24:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SmGpIUYPGfq7r0tjUD14kvvapZq1RugGUrx8T+t9NVs=;
-        b=HNyARwMotY1CcWJrXm65UidpPjhRPwmfqRkAuugcPvb91YnppgEmeP/FsIp7drwrEP
-         QvWz1P9xhBmC9AsUtQhpedA50GdcYiUbOpqgn3gybiM5tUOkJwrHyoF1d6KzQKGI6Lh1
-         OsLhF0M/lZxgb2TDq4U8pWdC9LzlA49gEVnPcQXmUrxmDMfhE3rd3K0dssOUYVzq8XuK
-         o5l9aKTTXbyrUXx8DgvxBdyndDcbO+rDC+HbrLHtDrhGjt2Err/s18rnJmMCQZvOVAbI
-         HOkqH5mWSkkdp85+/wgTkg2LUhhzAv+2boAfx2G2GGRvmjsK5Tjp1eTiCfku+VpKSfA1
-         d46A==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Uz7H82wmAArl7fSroH8Zwvc58fiFt6Y8AKx2abF1okU=;
+        b=yW+xlYWsp6YuKbRVJ3m+8ZOfhN62/bCBbtGssiGCJB8vlf1fAv0dbmlYPvL6q4n+Ea
+         nPb7GrWV6e03Us51Tiw2EhBfVxotFJwxe8ZtQa08HUUv60tnVTPhWWvaEQFW4DZ5dHm+
+         SJoOAJbZZ3n/1zAoQBhXAQucdvwdl0IxcroWq70ztUJZvuOS/8uwUqrVsodsfoF0E1hv
+         KkT+aOwpAdqwmZ65hsJKPH71UZXw90Y0x1r1Kn9zomGyc+azmAot4Nm6wCYXRa5RNsfK
+         fIPgCW+NLG+XuYKch8vx+zqTnfLDdhR93vIscfYKJv8Z7zNOWWFcU/OoamlU+GS7G/9j
+         sjMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SmGpIUYPGfq7r0tjUD14kvvapZq1RugGUrx8T+t9NVs=;
-        b=BOX+zBFr3iPCORJG9vSNzCHfHta3zKo9TW9mEhP+LfAodlbbUeFo8hV39a+wqu/6xd
-         K7UE5QNxxbhUBMUXb1sTUJqyEP0qWgbhCIrkNYFy+Tw0P1+j1Umh355fJvN82ZleSQ2b
-         uEGq8poE4GwTFn3s1KRS5Whq0CIwSro3Y/3GGWlaV9ocYrX5vkN+KfDMlE8WQLF3Os7Y
-         gHvyG0I5mKr/a7KbJBt7vQYX82eEsRk04c5e0vubum7fAGOiuhaOEalRYgvaHE09l970
-         oTHXRAuC/dIlZWxS8fAOIR8oFM8YlEBZL1ZfS2+znTVclRWeVp2aLomawOX4Gpf+DpiA
-         zbnQ==
-X-Gm-Message-State: AOAM531S413S2sifXQFwrQ1PCvo2AwuSKY6I6hIpJIYZ0vYw8AsWX/bK
-        9UOgd1n9ytcESo9ImwAuByrkkw==
-X-Google-Smtp-Source: ABdhPJxdSDIVQeu3eljLHQE1q/Js5/7IxmPE8FzBmt8cxK6iezuX3zTSkpZmazscP3puhQNR+eWiAA==
-X-Received: by 2002:a05:6512:3f17:: with SMTP id y23mr186018lfa.176.1641828282428;
-        Mon, 10 Jan 2022 07:24:42 -0800 (PST)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id x14sm1081732ljh.15.2022.01.10.07.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 07:24:41 -0800 (PST)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <caihuoqing@baidu.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH v3] iio: st_sensors: don't always auto-enable I2C and SPI interface drivers
-Date:   Mon, 10 Jan 2022 18:24:32 +0300
-Message-Id: <20220110152432.3799227-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Uz7H82wmAArl7fSroH8Zwvc58fiFt6Y8AKx2abF1okU=;
+        b=vL+EXZbuTkRK7o3fai2z0pfJkWREiAjeKpj45HJJemSAavzs3VDhYW0DiUtaU/B9II
+         NdOFppmipxSchsllTaLsutB8YAhtO2DeeVNMfaA5drp2/odvi8866athRJNxjPEt2NTa
+         d2wnDWhSxCoEPtvHCBdAY20J8PFj86yYD8tQ07rQC8von4DlOwc6vr+T5pJ1B3ZPCb8I
+         bZfstuec75JUZ0BhFvGiEGH9LrAp77MZ2adhoP9h/+msZTMMb29xJMaORHtqhEAXI5Zu
+         ImxlGQfcRX88iryRGENhMuS6GWByRpDlaXSK+ndTArmcN0/q8D7zSu5vsekqehdiA3c/
+         8FxQ==
+X-Gm-Message-State: AOAM532qG/HhtaGhCj6VP8G2E5lrlrOdx6miFBWxAfFjEKEmw8AJ0FQT
+        ACJTT7c2v8qkVVvv1YovkBbawOEK6CzAi5LSA7lV
+X-Google-Smtp-Source: ABdhPJxWc7Bx8VLhIHQS3wJbAlcpFOcvxY2PVIQaF1OaZfuWPMRHUePDwW0PsHzzOXUU3GVAxIYcBiOATO+er4Tf/LI=
+X-Received: by 2002:a17:907:1b11:: with SMTP id mp17mr215607ejc.374.1641828291620;
+ Mon, 10 Jan 2022 07:24:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210830141737.181-1-xieyongji@bytedance.com> <20220110075546-mutt-send-email-mst@kernel.org>
+ <CACycT3v1aEViw7vV4x5qeGVPrSrO-BTDvQshEX35rx_X0Au2vw@mail.gmail.com> <20220110100911-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220110100911-mutt-send-email-mst@kernel.org>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Mon, 10 Jan 2022 23:24:40 +0800
+Message-ID: <CACycT3v6jo3-8ATWUzf659vV94a2oRrm-zQtGNDZd6OQr-MENA@mail.gmail.com>
+Subject: Re: [PATCH v12 00/13] Introduce VDUSE - vDPA Device in Userspace
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, bcrl@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mika.penttila@nextfour.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>, joro@8bytes.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        He Zhe <zhe.he@windriver.com>,
+        Liu Xiaodong <xiaodong.liu@intel.com>,
+        Joe Perches <joe@perches.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        John Garry <john.garry@huawei.com>, songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Netdev <netdev@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch makes I2C and SPI interface drivers for STMicroelectronics
-sensor chips individually selectable via Kconfig.
+On Mon, Jan 10, 2022 at 11:10 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Jan 10, 2022 at 09:54:08PM +0800, Yongji Xie wrote:
+> > On Mon, Jan 10, 2022 at 8:57 PM Michael S. Tsirkin <mst@redhat.com> wro=
+te:
+> > >
+> > > On Mon, Aug 30, 2021 at 10:17:24PM +0800, Xie Yongji wrote:
+> > > > This series introduces a framework that makes it possible to implem=
+ent
+> > > > software-emulated vDPA devices in userspace. And to make the device
+> > > > emulation more secure, the emulated vDPA device's control path is h=
+andled
+> > > > in the kernel and only the data path is implemented in the userspac=
+e.
+> > > >
+> > > > Since the emuldated vDPA device's control path is handled in the ke=
+rnel,
+> > > > a message mechnism is introduced to make userspace be aware of the =
+data
+> > > > path related changes. Userspace can use read()/write() to receive/r=
+eply
+> > > > the control messages.
+> > > >
+> > > > In the data path, the core is mapping dma buffer into VDUSE daemon'=
+s
+> > > > address space, which can be implemented in different ways depending=
+ on
+> > > > the vdpa bus to which the vDPA device is attached.
+> > > >
+> > > > In virtio-vdpa case, we implements a MMU-based software IOTLB with
+> > > > bounce-buffering mechanism to achieve that. And in vhost-vdpa case,=
+ the dma
+> > > > buffer is reside in a userspace memory region which can be shared t=
+o the
+> > > > VDUSE userspace processs via transferring the shmfd.
+> > > >
+> > > > The details and our user case is shown below:
+> > > >
+> > > > ------------------------    -------------------------   -----------=
+-----------------------------------
+> > > > |            Container |    |              QEMU(VM) |   |          =
+                     VDUSE daemon |
+> > > > |       ---------      |    |  -------------------  |   | ---------=
+---------------- ---------------- |
+> > > > |       |dev/vdx|      |    |  |/dev/vhost-vdpa-x|  |   | | vDPA de=
+vice emulation | | block driver | |
+> > > > ------------+-----------     -----------+------------   -----------=
+--+----------------------+---------
+> > > >             |                           |                          =
+  |                      |
+> > > >             |                           |                          =
+  |                      |
+> > > > ------------+---------------------------+--------------------------=
+--+----------------------+---------
+> > > > |    | block device |           |  vhost device |            | vdus=
+e driver |          | TCP/IP |    |
+> > > > |    -------+--------           --------+--------            ------=
+-+--------          -----+----    |
+> > > > |           |                           |                          =
+ |                       |        |
+> > > > | ----------+----------       ----------+-----------         ------=
+-+-------                |        |
+> > > > | | virtio-blk driver |       |  vhost-vdpa driver |         | vdpa=
+ device |                |        |
+> > > > | ----------+----------       ----------+-----------         ------=
+-+-------                |        |
+> > > > |           |      virtio bus           |                          =
+ |                       |        |
+> > > > |   --------+----+-----------           |                          =
+ |                       |        |
+> > > > |                |                      |                          =
+ |                       |        |
+> > > > |      ----------+----------            |                          =
+ |                       |        |
+> > > > |      | virtio-blk device |            |                          =
+ |                       |        |
+> > > > |      ----------+----------            |                          =
+ |                       |        |
+> > > > |                |                      |                          =
+ |                       |        |
+> > > > |     -----------+-----------           |                          =
+ |                       |        |
+> > > > |     |  virtio-vdpa driver |           |                          =
+ |                       |        |
+> > > > |     -----------+-----------           |                          =
+ |                       |        |
+> > > > |                |                      |                          =
+ |    vdpa bus           |        |
+> > > > |     -----------+----------------------+--------------------------=
+-+------------           |        |
+> > > > |                                                                  =
+                      ---+---     |
+> > > > -------------------------------------------------------------------=
+----------------------| NIC |------
+> > > >                                                                    =
+                      ---+---
+> > > >                                                                    =
+                         |
+> > > >                                                                    =
+                ---------+---------
+> > > >                                                                    =
+                | Remote Storages |
+> > > >                                                                    =
+                -------------------
+> > > >
+> > > > We make use of it to implement a block device connecting to
+> > > > our distributed storage, which can be used both in containers and
+> > > > VMs. Thus, we can have an unified technology stack in this two case=
+s.
+> > > >
+> > > > To test it with null-blk:
+> > > >
+> > > >   $ qemu-storage-daemon \
+> > > >       --chardev socket,id=3Dcharmonitor,path=3D/tmp/qmp.sock,server=
+,nowait \
+> > > >       --monitor chardev=3Dcharmonitor \
+> > > >       --blockdev driver=3Dhost_device,cache.direct=3Don,aio=3Dnativ=
+e,filename=3D/dev/nullb0,node-name=3Ddisk0 \
+> > > >       --export type=3Dvduse-blk,id=3Dtest,node-name=3Ddisk0,writabl=
+e=3Don,name=3Dvduse-null,num-queues=3D16,queue-size=3D128
+> > > >
+> > > > The qemu-storage-daemon can be found at https://github.com/bytedanc=
+e/qemu/tree/vduse
+> > >
+> > > It's been half a year - any plans to upstream this?
+> >
+> > Yeah, this is on my to-do list this month.
+> >
+> > Sorry for taking so long... I've been working on another project
+> > enabling userspace RDMA with VDUSE for the past few months. So I
+> > didn't have much time for this. Anyway, I will submit the first
+> > version as soon as possible.
+> >
+> > Thanks,
+> > Yongji
+>
+> Oh fun. You mean like virtio-rdma? Or RDMA as a backend for regular
+> virtio?
+>
 
-The default is kept unchanged - I2C and SPI interface drivers are still
-selected by default if the corresponding bus support is available.
+Yes, like virtio-rdma. Then we can develop something like userspace
+rxe=E3=80=81siw or custom protocol with VDUSE.
 
-However, the patch makes it possible to explicitly disable drivers
-that are not needed for a particular target.
-
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
----
-Changes since v2:
-- fix subject and spelling in the commit message
-Changes since v1:
-- use "default XXX" instead of "default y if XXX", per suggestion by
-  Arnd Bergmann
-
- drivers/iio/accel/Kconfig             | 35 ++++++++++++++-----------
- drivers/iio/common/st_sensors/Kconfig |  2 --
- drivers/iio/gyro/Kconfig              | 37 ++++++++++++++++-----------
- drivers/iio/imu/st_lsm9ds0/Kconfig    | 28 +++++++++++++++-----
- drivers/iio/magnetometer/Kconfig      | 35 ++++++++++++++-----------
- drivers/iio/pressure/Kconfig          | 35 ++++++++++++++-----------
- 6 files changed, 104 insertions(+), 68 deletions(-)
-
-diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
-index 49587c992a6d..eb17ca40e08a 100644
---- a/drivers/iio/accel/Kconfig
-+++ b/drivers/iio/accel/Kconfig
-@@ -349,8 +349,6 @@ config IIO_ST_ACCEL_3AXIS
- 	depends on !SENSORS_LIS3_I2C
- 	depends on !SENSORS_LIS3_SPI
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_ACCEL_I2C_3AXIS if (I2C)
--	select IIO_ST_ACCEL_SPI_3AXIS if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics accelerometers:
-@@ -358,23 +356,30 @@ config IIO_ST_ACCEL_3AXIS
- 	  LIS331DLH, LSM303DL, LSM303DLM, LSM330, LIS2DH12, H3LIS331DL,
- 	  LNG2DM, LIS3DE, LIS2DE12, LIS2HH12
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_accel (core functions for the driver [it is mandatory]);
--	  - st_accel_i2c (necessary for the I2C devices [optional*]);
--	  - st_accel_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_ACCEL_I2C_3AXIS
--	tristate
--	depends on IIO_ST_ACCEL_3AXIS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics accelerometers 3-Axis I2C Interface"
-+	depends on I2C && IIO_ST_ACCEL_3AXIS
-+	default I2C && IIO_ST_ACCEL_3AXIS
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics accelerometers I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_accel_i2c.
- 
- config IIO_ST_ACCEL_SPI_3AXIS
--	tristate
--	depends on IIO_ST_ACCEL_3AXIS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics accelerometers 3-Axis SPI Interface"
-+	depends on SPI_MASTER && IIO_ST_ACCEL_3AXIS
-+	default SPI_MASTER && IIO_ST_ACCEL_3AXIS
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics accelerometers SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_accel_spi.
- 
- config KXSD9
- 	tristate "Kionix KXSD9 Accelerometer Driver"
-diff --git a/drivers/iio/common/st_sensors/Kconfig b/drivers/iio/common/st_sensors/Kconfig
-index 9364ec7a811f..eda8f347fda5 100644
---- a/drivers/iio/common/st_sensors/Kconfig
-+++ b/drivers/iio/common/st_sensors/Kconfig
-@@ -13,5 +13,3 @@ config IIO_ST_SENSORS_SPI
- 
- config IIO_ST_SENSORS_CORE
- 	tristate
--	select IIO_ST_SENSORS_I2C if I2C
--	select IIO_ST_SENSORS_SPI if SPI_MASTER
-diff --git a/drivers/iio/gyro/Kconfig b/drivers/iio/gyro/Kconfig
-index a672f7d12bbb..97b86c4a53a6 100644
---- a/drivers/iio/gyro/Kconfig
-+++ b/drivers/iio/gyro/Kconfig
-@@ -139,30 +139,37 @@ config IIO_ST_GYRO_3AXIS
- 	tristate "STMicroelectronics gyroscopes 3-Axis Driver"
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_GYRO_I2C_3AXIS if (I2C)
--	select IIO_ST_GYRO_SPI_3AXIS if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics gyroscopes:
- 	  L3G4200D, LSM330DL, L3GD20, LSM330DLC, L3G4IS, LSM330, LSM9DS0.
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_gyro (core functions for the driver [it is mandatory]);
--	  - st_gyro_i2c (necessary for the I2C devices [optional*]);
--	  - st_gyro_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_GYRO_I2C_3AXIS
--	tristate
--	depends on IIO_ST_GYRO_3AXIS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics gyroscopes 3-Axis I2C Interface"
-+	depends on I2C && IIO_ST_GYRO_3AXIS
-+	default I2C && IIO_ST_GYRO_3AXIS
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics gyroscopes I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_gyro_i2c.
-+
- 
- config IIO_ST_GYRO_SPI_3AXIS
--	tristate
--	depends on IIO_ST_GYRO_3AXIS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics gyroscopes 3-Axis SPI Interface"
-+	depends on SPI_MASTER && IIO_ST_GYRO_3AXIS
-+	default SPI_MASTER && IIO_ST_GYRO_3AXIS
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics gyroscopes SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_gyro_spi.
-+
- 
- config ITG3200
- 	tristate "InvenSense ITG3200 Digital 3-Axis Gyroscope I2C driver"
-diff --git a/drivers/iio/imu/st_lsm9ds0/Kconfig b/drivers/iio/imu/st_lsm9ds0/Kconfig
-index 53b7017014f8..d29558edee60 100644
---- a/drivers/iio/imu/st_lsm9ds0/Kconfig
-+++ b/drivers/iio/imu/st_lsm9ds0/Kconfig
-@@ -5,8 +5,6 @@ config IIO_ST_LSM9DS0
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	depends on !SENSORS_LIS3_I2C
- 	depends on !SENSORS_LIS3_SPI
--	select IIO_ST_LSM9DS0_I2C if I2C
--	select IIO_ST_LSM9DS0_SPI if SPI_MASTER
- 	select IIO_ST_ACCEL_3AXIS
- 	select IIO_ST_MAGN_3AXIS
- 
-@@ -17,12 +15,30 @@ config IIO_ST_LSM9DS0
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called st_lsm9ds0.
- 
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+
- config IIO_ST_LSM9DS0_I2C
--	tristate
--	depends on IIO_ST_LSM9DS0
-+	tristate "STMicroelectronics LSM9DS0 IMU I2C interface"
-+	depends on I2C && IIO_ST_LSM9DS0
-+	default I2C && IIO_ST_LSM9DS0
-+	select IIO_ST_ACCEL_I2C_3AXIS
-+	select IIO_ST_MAGN_I2C_3AXIS
- 	select REGMAP_I2C
-+	help
-+	  Build support for STMicroelectronics LSM9DS0 IMU I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_lsm9ds0_i2c.
- 
- config IIO_ST_LSM9DS0_SPI
--	tristate
--	depends on IIO_ST_LSM9DS0
-+	tristate "STMicroelectronics LSM9DS0 IMU SPI interface"
-+	depends on SPI_MASTER && IIO_ST_LSM9DS0
-+	default SPI_MASTER && IIO_ST_LSM9DS0
-+	select IIO_ST_ACCEL_SPI_3AXIS
-+	select IIO_ST_MAGN_SPI_3AXIS
- 	select REGMAP_SPI
-+	help
-+	  Build support for STMicroelectronics LSM9DS0 IMU I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_lsm9ds0_spi.
-diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
-index 565ee41ccb3a..54445365c4bc 100644
---- a/drivers/iio/magnetometer/Kconfig
-+++ b/drivers/iio/magnetometer/Kconfig
-@@ -117,30 +117,35 @@ config IIO_ST_MAGN_3AXIS
- 	tristate "STMicroelectronics magnetometers 3-Axis Driver"
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_MAGN_I2C_3AXIS if (I2C)
--	select IIO_ST_MAGN_SPI_3AXIS if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics magnetometers:
- 	  LSM303DLHC, LSM303DLM, LIS3MDL.
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_magn (core functions for the driver [it is mandatory]);
--	  - st_magn_i2c (necessary for the I2C devices [optional*]);
--	  - st_magn_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_MAGN_I2C_3AXIS
--	tristate
--	depends on IIO_ST_MAGN_3AXIS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics magnetometers 3-Axis I2C Interface"
-+	depends on I2C && IIO_ST_MAGN_3AXIS
-+	default I2C && IIO_ST_MAGN_3AXIS
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics magnetometers I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_magn_i2c.
- 
- config IIO_ST_MAGN_SPI_3AXIS
--	tristate
--	depends on IIO_ST_MAGN_3AXIS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics magnetometers 3-Axis SPI Interface"
-+	depends on SPI_MASTER && IIO_ST_MAGN_3AXIS
-+	default SPI_MASTER && IIO_ST_MAGN_3AXIS
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics magnetometers SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_magn_spi.
- 
- config SENSORS_HMC5843
- 	tristate
-diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
-index fc0d3cfca418..0ff756cea63a 100644
---- a/drivers/iio/pressure/Kconfig
-+++ b/drivers/iio/pressure/Kconfig
-@@ -194,30 +194,35 @@ config IIO_ST_PRESS
- 	tristate "STMicroelectronics pressure sensor Driver"
- 	depends on (I2C || SPI_MASTER) && SYSFS
- 	select IIO_ST_SENSORS_CORE
--	select IIO_ST_PRESS_I2C if (I2C)
--	select IIO_ST_PRESS_SPI if (SPI_MASTER)
- 	select IIO_TRIGGERED_BUFFER if (IIO_BUFFER)
- 	help
- 	  Say yes here to build support for STMicroelectronics pressure
- 	  sensors: LPS001WP, LPS25H, LPS331AP, LPS22HB, LPS22HH.
- 
--	  This driver can also be built as a module. If so, these modules
--	  will be created:
--	  - st_pressure (core functions for the driver [it is mandatory]);
--	  - st_pressure_i2c (necessary for the I2C devices [optional*]);
--	  - st_pressure_spi (necessary for the SPI devices [optional*]);
--
--	  (*) one of these is necessary to do something.
-+	  Also need to enable at least one of I2C and SPI interface drivers
-+	  below.
- 
- config IIO_ST_PRESS_I2C
--	tristate
--	depends on IIO_ST_PRESS
--	depends on IIO_ST_SENSORS_I2C
-+	tristate "STMicroelectronics pressure sensor I2C Interface"
-+	depends on I2C && IIO_ST_PRESS
-+	default I2C && IIO_ST_PRESS
-+	select IIO_ST_SENSORS_I2C
-+	help
-+	  Build support for STMicroelectronics pressure sensor I2C interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_pressure_i2c.
- 
- config IIO_ST_PRESS_SPI
--	tristate
--	depends on IIO_ST_PRESS
--	depends on IIO_ST_SENSORS_SPI
-+	tristate "STMicroelectronics pressure sensor SPI Interface"
-+	depends on SPI_MASTER && IIO_ST_PRESS
-+	default SPI_MASTER && IIO_ST_PRESS
-+	select IIO_ST_SENSORS_SPI
-+	help
-+	  Build support for STMicroelectronics pressure sensor SPI interface.
-+
-+	  To compile this driver as a module, choose M here. The module
-+	  will be called st_pressure_spi.
- 
- config T5403
- 	tristate "EPCOS T5403 digital barometric pressure sensor driver"
--- 
-2.30.2
-
+Thanks,
+Yongji

@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E7A48920F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E09489242
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241443AbiAJHiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:38:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59994 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240190AbiAJHbY (ORCPT
+        id S241535AbiAJHlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240689AbiAJHe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:31:24 -0500
+        Mon, 10 Jan 2022 02:34:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F649C0253F3;
+        Sun,  9 Jan 2022 23:29:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B4A9B811F9;
-        Mon, 10 Jan 2022 07:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52DD9C36AED;
-        Mon, 10 Jan 2022 07:31:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1C19611B8;
+        Mon, 10 Jan 2022 07:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BDDC36AE9;
+        Mon, 10 Jan 2022 07:29:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799881;
-        bh=2pfskG3xd5gnNddhXGV28wFIlf1Cv6P6HIl4FJpN97A=;
+        s=korg; t=1641799766;
+        bh=T4ILPO1fB42eaV/zg5w/6VGIqmncqSWYw9giVFpEtpE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FGbSk1YSWT39mUISuj79MvU1DLxrCGw5ako5It5VO7H5N29MKvO5efydt/bTJjoGu
-         uVP8sbL9p0G6MtBdB6QSEFE++ZWsExiLjwAxMRhio1l/gpZnn9OmEGyQpdHkd1SPpU
-         7zKOqewURKQA4bJRzC3kJMJQLlToo3jQR8DUEkvc=
+        b=IzpW+4B3lfEAQpg6/Q0KXXuWjAvbt3sdqRrVjUcxPFGektBE7ZQsHZ7dBmVenxhD6
+         3z4ncF+AhLnDWV/vf57Z/TuMtN/Rut+nv9as0OH80Scy93XmaWW9ySZ7wNuoT08d+z
+         qQj39I8otaEAWrbPlex7qvuy/3C+Jw5JBtT/5J+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 21/43] lwtunnel: Validate RTA_ENCAP_TYPE attribute length
+        stable@vger.kernel.org, Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 5.4 23/34] power: supply: core: Break capacity loop
 Date:   Mon, 10 Jan 2022 08:23:18 +0100
-Message-Id: <20220110071818.057582556@linuxfoundation.org>
+Message-Id: <20220110071816.436348315@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-References: <20220110071817.337619922@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,67 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit 8bda81a4d400cf8a72e554012f0d8c45e07a3904 upstream.
+commit 51c7b6a0398f54b9120795796a4cff4fc9634f7d upstream.
 
-lwtunnel_valid_encap_type_attr is used to validate encap attributes
-within a multipath route. Add length validation checking to the type.
+We should not go on looking for more capacity tables after
+we realize we have looked at the last one in
+power_supply_find_ocv2cap_table().
 
-lwtunnel_valid_encap_type_attr is called converting attributes to
-fib{6,}_config struct which means it is used before fib_get_nhs,
-ip6_route_multipath_add, and ip6_route_multipath_del - other
-locations that use rtnh_ok and then nla_get_u16 on RTA_ENCAP_TYPE
-attribute.
-
-Fixes: 9ed59592e3e3 ("lwtunnel: fix autoload of lwt modules")
-
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 3afb50d7125b ("power: supply: core: Add some helpers to use the battery OCV capacity table")
+Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/lwtunnel.c      |    4 ++++
- net/ipv4/fib_semantics.c |    3 +++
- net/ipv6/route.c         |    4 ++++
- 3 files changed, 11 insertions(+)
+ drivers/power/supply/power_supply_core.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/net/core/lwtunnel.c
-+++ b/net/core/lwtunnel.c
-@@ -192,6 +192,10 @@ int lwtunnel_valid_encap_type_attr(struc
- 			nla_entype = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -742,6 +742,10 @@ power_supply_find_ocv2cap_table(struct p
+ 		return NULL;
  
- 			if (nla_entype) {
-+				if (nla_len(nla_entype) < sizeof(u16)) {
-+					NL_SET_ERR_MSG(extack, "Invalid RTA_ENCAP_TYPE");
-+					return -EINVAL;
-+				}
- 				encap_type = nla_get_u16(nla_entype);
- 
- 				if (lwtunnel_valid_encap_type(encap_type,
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -741,6 +741,9 @@ static int fib_get_nhs(struct fib_info *
- 			}
- 
- 			fib_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
-+			/* RTA_ENCAP_TYPE length checked in
-+			 * lwtunnel_valid_encap_type_attr
-+			 */
- 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
- 			if (nla)
- 				fib_cfg.fc_encap_type = nla_get_u16(nla);
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -5176,6 +5176,10 @@ static int ip6_route_multipath_add(struc
- 				r_cfg.fc_flags |= RTF_GATEWAY;
- 			}
- 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
+ 	for (i = 0; i < POWER_SUPPLY_OCV_TEMP_MAX; i++) {
++		/* Out of capacity tables */
++		if (!info->ocv_table[i])
++			break;
 +
-+			/* RTA_ENCAP_TYPE length checked in
-+			 * lwtunnel_valid_encap_type_attr
-+			 */
- 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
- 			if (nla)
- 				r_cfg.fc_encap_type = nla_get_u16(nla);
+ 		temp_diff = abs(info->ocv_temp[i] - temp);
+ 
+ 		if (temp_diff < best_temp_diff) {
 
 

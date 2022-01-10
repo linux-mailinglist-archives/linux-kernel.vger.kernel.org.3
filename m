@@ -2,229 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D73488E8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 03:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512E3488E8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 03:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238132AbiAJCAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 21:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S238144AbiAJCE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 21:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238125AbiAJCAu (ORCPT
+        with ESMTP id S238125AbiAJCE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 21:00:50 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178B2C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 18:00:50 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h10so13752522wrb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 18:00:50 -0800 (PST)
+        Sun, 9 Jan 2022 21:04:57 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E22C06173F;
+        Sun,  9 Jan 2022 18:04:57 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id y70so15641344iof.2;
+        Sun, 09 Jan 2022 18:04:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jUQbMhLHdNK/9lp67bZllvKEzRmLoDwxJTqw4ktkG9s=;
-        b=Efgkksg1NElOtfMl4UrueFiZH1d/QvdkdyZpSA5sV41zTPxnEOsbnl0sjJN4roZtkn
-         r6FCd3Rb/8E7iCZgKDHbjsdrFYyKJlyjeoTbKV4yeZeLh+YcxkXFB1aMB13v8wdGepft
-         mGBtkj/94hGc8dU2x6yt9qazWiPJg8yueJpeDj7EDz3Zc6t3GNDR+51SNRUwFPivaUIo
-         mIAFJalPh7YtZNxTaFZimqNG5wPRpGa6/potucHt57E7C6/XvoMuAxgqcRhcdq4n6dbV
-         8IhttKdMhXeGPHMAtKfa1crZgia7FYM7AZ2RVxWpcUEjiIOUu8lwVXYyo6JOu2NM9cCa
-         zIRQ==
+        bh=8l1Nw+9feNI9I+xJlgSlKIK03FhT3WbqUTtWCf+KU4M=;
+        b=HOix9AIWi8jjOngrlgdZ3U68ALIGoDnhP9YJAqHM+iv7BtmYDllTlm5M3QPfIwbaX6
+         Q8swj8e+C1eOPJ+PZ668u4TqG3p7pJeENl7nTRcZ5zc4mQKMroAC60pTzkZ3ZiC0HiZk
+         8VDnEwe5/dC0h8u8Uz8RGXkS4TPUP3wvYztqSged8D/Ohn6i7yFak22fA5JCLfxGnhQD
+         +Ai9kiVWaH1Q3mx3XH+ot7r1oe5oPu2iNlu0jzd70X3Jw/RUyzj4lIXgXL8JuFtSFICG
+         ilzz12BW1V/hkAOyEej51KI3vWA6OxBdpbXkNcbptXK8HtK1XefMF6N0i5RxyIwvXC7A
+         9u4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jUQbMhLHdNK/9lp67bZllvKEzRmLoDwxJTqw4ktkG9s=;
-        b=0pVTgM1MN+DPJ0x26edStAnn05TeT0RMB/Y0Uw6PoooI2KhuAI+yyBsTb7F9ytBrNh
-         590sp3NfjF9VDfNZ2SwpW6j0GOiFKBr5xY3zMuai8RdoAut1OJWjr0TYx7IwFy9JO9Ip
-         W/Xb9Lv/dr3LLBQB0YF1fbHs0ijM8rC1ivj8PIkHcwWNDKDPm3JKfNqEs+N4O3UuvMOY
-         jnaqo7NS6hWpQJXoO8NaVcXj5kkV9cEZ3RjdKA9rrxKDzvAPJe+plKtxrOwst6e0quV9
-         c3tHAYCPrIIUby6cg5zpIhbQbA2u42MxzFzBw3YkV702e7UwVoL9/Xvx6uvJ7BVCHZFl
-         FO9A==
-X-Gm-Message-State: AOAM531k0K2xL3vORtDA05pKamKU29IskKmkTBZhbpNd6WvxRtIJuJnE
-        mGqo7YV7A6Q/RdDzBzfkGNDigwEgIYIbSLXSqET0PjCBUPXluCPk
-X-Google-Smtp-Source: ABdhPJxmTMxPrTg9v736mkR7O4jiyAFhNlsp7bftuoUgSmwINMsd1yitPPYMlLn4dxSy+a94+6ElKHILWAblmG9zQEY=
-X-Received: by 2002:a05:6000:11c9:: with SMTP id i9mr4875509wrx.544.1641780048703;
- Sun, 09 Jan 2022 18:00:48 -0800 (PST)
+        bh=8l1Nw+9feNI9I+xJlgSlKIK03FhT3WbqUTtWCf+KU4M=;
+        b=s4Xbvyf+q/u4iDrBLYC+iaqYsveBcFl8taO+K6gBxAyMw5Lj/Pwy5brfuk/9lM9Nba
+         74zv3oClc/Rj78YI7RKY4SItnMl1qztvqvIqjPnHQjpDPIiRPqsbdfe/T26Jed/2gcTl
+         z7WZgBILshh4UI1HUU91qhRHqTpG7QE52uBXvmZopYMSoQFFNCTXcf0msbqHDtOvVTtD
+         w+EHBqNfP4Gs4AoDLYM/2mD2YKrm0waBeUPx3kzU7HheWUEgUFXLViX4QeCsmowtXHv5
+         jcWRFvTRuZDdu4bMLsIqKVoQSVQDtB3p4wKpwN1CaaGzmuOzEYmuw3J6uJZZ9fNL1M56
+         mIwg==
+X-Gm-Message-State: AOAM531NGsOqcVJGb20nbCI7qwtppICDY5Vv+Mhb6tQinEAqX8mnBT0B
+        iWsMDW8nrtgnoDj8Wr538B9gO5mmZ1qXUZ6xWSc=
+X-Google-Smtp-Source: ABdhPJwTugb7dC8k7QyTRBDp2qZlid1PnqdNY/KFNAbtHPKpliHovRCOoZJdvH2tbwbxBwNHuWJ8AjphI0vCD7Noc/k=
+X-Received: by 2002:a05:6638:1193:: with SMTP id f19mr34798572jas.237.1641780296933;
+ Sun, 09 Jan 2022 18:04:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20211129164951.220511-1-xiehuan09@gmail.com> <20211129164951.220511-2-xiehuan09@gmail.com>
- <20211217135149.db5ee4b1b110c845739106d4@kernel.org> <CAEr6+EAn3+vWvp46mheO=MTetLyHXy-GDENtN8O6y+5T+Y-N7w@mail.gmail.com>
- <20211219120723.df2a892e2b4b7caec8905503@kernel.org> <20220107192114.3389b5a0@gandalf.local.home>
-In-Reply-To: <20220107192114.3389b5a0@gandalf.local.home>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 10 Jan 2022 10:00:37 +0800
-Message-ID: <CAEr6+EAn3NZ+1P+yD6HHMmLHBtASOdVXHd64hY2xQyrLNddb-Q@mail.gmail.com>
-Subject: Re: [RFC][PATCH v6 1/5] trace: Add trace any kernel object
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220108084008.1053111-1-fuweid89@gmail.com>
+In-Reply-To: <20220108084008.1053111-1-fuweid89@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sun, 9 Jan 2022 18:04:45 -0800
+Message-ID: <CAEf4Bzag+qQOs86t2ESmYvTY8xCip+_GTKqXa0m7MQWjDMO5Mg@mail.gmail.com>
+Subject: Re: [PATCH bpf] tools/bpf: only set obj->skeleton without err
+To:     Wei Fu <fuweid89@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+On Sat, Jan 8, 2022 at 12:40 AM Wei Fu <fuweid89@gmail.com> wrote:
+>
+> After `bpftool gen skeleton`, the ${bpf_app}.skel.h will provide that
+> ${bpf_app_name}__open helper to load bpf. If there is some error
+> like ENOMEM, the ${bpf_app_name}__open will rollback(free) the allocated
+> object, including `bpf_object_skeleton`.
+>
+> Since the ${bpf_app_name}__create_skeleton set the obj->skeleton first
+> and not rollback it when error, it will cause double-free in
+> ${bpf_app_name}__destory at ${bpf_app_name}__open. Therefore, we should
+> set the obj->skeleton before return 0;
+>
+> Signed-off-by: Wei Fu <fuweid89@gmail.com>
+> ---
+>  tools/bpf/bpftool/gen.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
 
-Welcome back and look forward to playing this patch set with you again
-in 2022 ;-)
+Great catch! Added (please add it yourself in the future):
 
-Thank you and Masima for your guidance on this patchset in 2021. I
-learned a lot.
+Fixes: 5dc7a8b21144 ("bpftool, selftests/bpf: Embed object file inside
+skeleton")
 
+Also reworded the subject a bit. Pushed to bpf-next.
 
-On Sat, Jan 8, 2022 at 8:21 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index 5c18351290f0..e61e08f524da 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -928,7 +928,6 @@ static int do_skeleton(int argc, char **argv)
+>                         s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));\n\
+>                         if (!s)                                             \n\
+>                                 goto err;                                   \n\
+> -                       obj->skeleton = s;                                  \n\
+>                                                                             \n\
+>                         s->sz = sizeof(*s);                                 \n\
+>                         s->name = \"%1$s\";                                 \n\
+> @@ -1001,6 +1000,8 @@ static int do_skeleton(int argc, char **argv)
+>                                                                             \n\
+>                         s->data = (void *)%2$s__elf_bytes(&s->data_sz);     \n\
+>                                                                             \n\
+> +                       obj->skeleton = s;                                  \n\
+> +                                                                           \n\
+>                         return 0;                                           \n\
+>                 err:                                                        \n\
+>                         bpf_object__destroy_skeleton(s);                    \n\
+> --
+> 2.25.1
 >
-> Sorry for the late reply, I'm currently unemployed (for another week) and
-> was spending all my time renovating my office. I finished my office and I'm
-> now trying to get back up to speed.
->
-> On Sun, 19 Dec 2021 12:07:23 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
->
-> > > > > +#include "trace_output.h"
-> > > > > +#include <linux/freelist.h>
-> > > > > +
-> > > > > +static DEFINE_PER_CPU(atomic_t, trace_object_event_disable);
-> > > >
-> > > > atomic_t is for atomic operation which must be shared among cpus. On the
-> > > > other hand, per-cpu variable is used for the core-local storage or flags,
-> > > > other cpus never touch it. Thus the per-cpu atomic_t is very strange.
-> > > >
-> > >
-> > > From the patch V1, I cloned it from the  function_test_events_call()
-> > > in kernel/trace/trace_events.c
-> > >
-> > > commit: 9ea21c1ecdb35ecdcac5fd9d95f62a1f6a7ffec0
-> > > tracing/events: perform function tracing in event selftests
-> > > Author:     Steven Rostedt <srostedt@redhat.com>
-> >
-> > Hmm, OK.
->
-> Ug, showing me my skeletons in my closet! That commit is from 2009, where I
-> didn't know any better ;-)
->
-> >
-> > >
-> > > It should be to prevent being preempted by the interrupt context in
-> > > the process of adding one
-> >
-> > Yeah, I think so.
-> >
-> > The commit says "some bugs" but it is not sure what actually needs to be
-> > cared.
-> >
-> >     tracing/events: perform function tracing in event selftests
-> >
-> >     We can find some bugs in the trace events if we stress the writes as well.
-> >     The function tracer is a good way to stress the events.
-> >
-> > Steve, can you tell me what was the problem?
-> >
-> > I think we don't need per-cpu atomic_t because the counter is increment
-> > and decrement. Thus when quiting the nested ftrace handler on the same CPU,
-> > the counter comes back to the same value. We don't need to care about
-> > atomic increment.
-> >
-> > I mean, if we use the normal per-cpu "unsigned int" as a counter, the
-> > operation of "counter++" becomes;
->
-> Yes, that was from the days of being extra paranoid. A simple counter would
-> work, with a barrier() in place such that gcc doesn't cause any issues.
->
-> I may have to go back and revisit all that code and clean it up a bit.
->
-> >
-> > load counter to reg1
-> > [1]
-> > reg1 = reg1 + 1
-> > store reg1 to counter
-> >
-> > And if an interrupt occurs at [1], the following happens.
-> >
-> > load counter to reg1 # counter = 0
-> >
-> >   (interrupt - save reg1)
-> >   load counter to reg1  # counter = 0
-> >   reg1 = reg1 + 1
-> >   store reg1 to counter  # counter = 1
-> >   ...
-> >   load counter to reg1  # counter = 1
-> >   reg1 = reg1 - 1
-> >   store reg1 to counter  # counter = 0
-> >   (iret - restore reg1)
-> >
-> > reg1 = reg1 + 1
-> > store reg1 to counter
-> >
-> > So, even if the operation is not atomic, there seems no problem.
-> > What else scenario we have to worry?
-> >
-> > (BTW, what is the ftrace_test_recursion_trylock()? Is that also
-> > for detecting nesting case??)
->
-> Yes, the ftrace_test_recursion_trylock() is for finding recursions.
->
-> The above code is from the early days of ftrace, and was only used in
-> testing at boot up. It's not something to copy from ;-)
->
-> >
-> > > > > +static DEFINE_RAW_SPINLOCK(object_spin_lock);
-> > > > > +static struct trace_event_file event_trace_file;
-> > > > > +static const int max_args_num = 6;
-> > > > > +static const int max_obj_pool = 10;
-> > > > > +static atomic_t trace_object_ref;
-> > > > > +static int exit_trace_object(void);
-> > > > > +static int init_trace_object(void);
-> > > > > +
-> > > >
-> > > > Please add more comments to the code itself. Explain why this is needed
-> > > > and how it works for which case. That will lead deeper understanding.
-> > > >
-> > >
-> > > I agree, I will add more comments in the next version.
-> > >
-> > > > > +struct object_instance {
-> > > > > +     void *object;
-> > > > > +     struct freelist_node free_list;
-> > > > > +     struct list_head active_list;
-> > > > > +};
-> > > > > +
-> > > > > +struct obj_pool {
-> > > > > +     struct freelist_head free_list;
-> > > > > +     struct list_head active_list;
-> > > > > +};
-> > > > > +static struct obj_pool *obj_pool;
-> > > > > +
-> > > > > +static bool object_exist(void *obj)
-> > > > > +{
-> > > > > +     struct object_instance *inst;
-> > > > > +     bool ret = false;
-> > > > > +
-> > > > > +     list_for_each_entry_rcu(inst, &obj_pool->active_list, active_list) {
-> > > > > +             if (inst->object == obj) {
-> > > > > +                     ret = true;
-> > > > > +                     goto out;
-> > > > > +             }
-> > > > > +     }
-> > > > > +out:
-> > > > > +     return ret;
->
-> BTW, the above really should be:
->
-> static bool object_exist(void *obj)
-> {
->         struct object_instance *inst;
->
->         list_for_each_entry_rcu(inst, &obj_pool->active_list, active_list) {
->                 if (inst->object == obj)
->                         return true;
->         }
->         return false;
-> }
-
-Thanks. Masami suggested that it is better to use fixed-size array,
-I will be ready to send the next version.
-
-> -- Steve
->
----
-JeffXie

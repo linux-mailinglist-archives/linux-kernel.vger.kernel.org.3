@@ -2,91 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BD6489640
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BF748963B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243893AbiAJKXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239415AbiAJKXB (ORCPT
+        id S243850AbiAJKVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:21:51 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:43822 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239415AbiAJKVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:23:01 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84DFC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:23:00 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z22so6444007edd.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:23:00 -0800 (PST)
+        Mon, 10 Jan 2022 05:21:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M0nrXkjvT8Y2JTsBxE15ySAcNK2QPiRrQi7yxt+5z/k=;
-        b=bZfdedTaBlISxsnA+HjOnZ2STTnliWILpWqzvyQ6qQWMHBDbqJEEzOrRd7Z209N+wV
-         Pt7u7gf1aCvV8qAsRsq66SlB7ZDSM81mOI0eXQscqDfQv76/Retg+8ieV2cdXTVCUNjb
-         g4vH1O+eIUoj+skY/jI67sxujc+a9xhj6NpSqTtbfLNAVq+qdFEeEDKW3F6/f4alCMU8
-         8L29OhGE3C74CBXs0JFnCg3y8HxUbE/DzEziHguagP7ZjFEC8l2IaEP/MmuLunKjutas
-         4ep7CN06F9nNM9u7F+wgRgi2rt+tZT+31rYGvYIdT1lKg5Mp1aohyE5cQW58dtnP3Qos
-         qAUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M0nrXkjvT8Y2JTsBxE15ySAcNK2QPiRrQi7yxt+5z/k=;
-        b=6W1eZ0lIl/jkTrwGywYTzzYhwviU5fBt0zhFFdrPPt91ZuGhgCK2nsfHw4TRGTLu53
-         bebK/7Do5umTrhzbnDRhb6lp8s9OxaP4umhcOpLjL+TtjkXbyQoPrQ1x1qE8YFMHniCS
-         KgybA5k/VELcCDpQzDNHtaUajbQrQhRnyM/pdfkFOmcjTYRv0ZqTemu2QDatbYAYlFiu
-         W4NbZVbOucCArPJhuOSc4y22mEc798rPmFmadsjnLsWgHZ4fCWHLYHqrfxwK5tT+I2Yh
-         9eVkwwsakeLJcy1YAxUgznXmjfVIN1H4MXDqdTzqYb/gYS8/UNUYBls7xOV1qq4dM2CR
-         I6qg==
-X-Gm-Message-State: AOAM530MRuaXLw89FDMd+gMinP7yw3zP5BMKsfRoBB2PqQUurI1Ou3YZ
-        x7UV7SHwog9TocFspQPMr4kynidmSWqXl6e74OA=
-X-Google-Smtp-Source: ABdhPJwECqRHbXYE3+1gJLeWik7SnLbktBiu0AZzxvMVObvaegtHQCjFwf0DmV1UNgLl9J6yU9U5sFqr0U6pNjyMLGM=
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr57649438ejc.497.1641810179272;
- Mon, 10 Jan 2022 02:22:59 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641810109; x=1673346109;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=cn8ybiiW41FpTma7MjwJcBGcMQ9qfeGxIA4V4UXizXc=;
+  b=M6/N5HX2OeWT3QTR9viIbtoQysiN6IhmkeQNQ1/yq70/DeFMon0TE16g
+   RN+iliiuUcTTVnCyq7mqVHwzPsDCvm9zHdOpIfryBKvS3WJ+SSnsj75Zz
+   D5S1jhRwMWlG5y3o53Foy2SBYsKjG5lA/QRSPbiNx5SHM/SXCc8e13z/W
+   c=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 10 Jan 2022 02:21:48 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 02:21:47 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 10 Jan 2022 02:21:47 -0800
+Received: from [10.216.41.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 10 Jan
+ 2022 02:21:43 -0800
+Subject: Re: [PATCH v3 RESEND] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
+ for shmem
+To:     Mark Hemment <markhemm@googlemail.com>
+CC:     <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>, <vbabka@suse.cz>,
+        <rientjes@google.com>, <mhocko@suse.com>, <surenb@google.com>,
+        <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Charan Teja Reddy <charante@codeaurora.org>
+References: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
+ <CANe_+UipVZRZeWqzXezacPaVb9UeC6a_ZhQp8GkrvftbRktotg@mail.gmail.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+Message-ID: <2c66ba2e-1c65-3bdd-b91e-eb8391ec6dbf@quicinc.com>
+Date:   Mon, 10 Jan 2022 15:51:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220108140756.3985487-1-trix@redhat.com> <CAHp75VfbSmgeyi=8q1_he7mpGrNxYAOewKYWD=h8BSuxz2XWOw@mail.gmail.com>
- <0c0926d9-9b72-1519-7e22-e90ffc229940@redhat.com>
-In-Reply-To: <0c0926d9-9b72-1519-7e22-e90ffc229940@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Jan 2022 12:21:11 +0200
-Message-ID: <CAHp75VdJOzYR0HsZ2LWn-iAMwcM3s0NNDKQdXZZudcEB9RwE9A@mail.gmail.com>
-Subject: Re: [PATCH] ALSA: hda: cs35l41: fix double free in cs35l41_hda_probe()
-To:     Tom Rix <trix@redhat.com>
-Cc:     "james.schulman@cirrus.com" <james.schulman@cirrus.com>,
-        "david.rhodes@cirrus.com" <david.rhodes@cirrus.com>,
-        "tanureal@opensource.cirrus.com" <tanureal@opensource.cirrus.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CANe_+UipVZRZeWqzXezacPaVb9UeC6a_ZhQp8GkrvftbRktotg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 2:37 AM Tom Rix <trix@redhat.com> wrote:
-> On 1/9/22 2:33 PM, Andy Shevchenko wrote:
-> On Saturday, January 8, 2022, <trix@redhat.com> wrote:
+Thanks Mark for the review!!
 
-...
+On 1/7/2022 5:40 PM, Mark Hemment wrote:
+> On Thu, 6 Jan 2022 at 17:06, Charan Teja Reddy
+> <quic_charante@quicinc.com> wrote:
+>>
+>> From: Charan Teja Reddy <charante@codeaurora.org>
+>>
+>> Currently fadvise(2) is supported only for the files that doesn't
+>> associated with noop_backing_dev_info thus for the files, like shmem,
+>> fadvise results into NOP. But then there is file_operations->fadvise()
+>> that lets the file systems to implement their own fadvise
+>> implementation. Use this support to implement some of the POSIX_FADV_XXX
+>> functionality for shmem files.
+>>
+>> [snip]
+> 
+>> +static int shmem_fadvise_willneed(struct address_space *mapping,
+>> +                                pgoff_t start, pgoff_t long end)
+>> +{
+>> +       XA_STATE(xas, &mapping->i_pages, start);
+>> +       struct page *page;
+>> +
+>> +       rcu_read_lock();
+>> +       xas_for_each(&xas, page, end) {
+>> +               if (!xa_is_value(page))
+>> +                       continue;
+>> +               xas_pause(&xas);
+>> +               rcu_read_unlock();
+>> +
+>> +               page = shmem_read_mapping_page(mapping, xas.xa_index);
+>> +               if (!IS_ERR(page))
+>> +                       put_page(page);
+>> +
+>> +               rcu_read_lock();
+>> +               if (need_resched()) {
+>> +                       xas_pause(&xas);
+>> +                       cond_resched_rcu();
+>> +               }
+>> +       }
+>> +       rcu_read_unlock();
+>> +
+>> +       return 0;
+> 
+> I have a doubt on referencing xa_index after calling xas_pause().
+> xas_pause() walks xa_index forward, so will not be the value expected
+> for the current page.
 
->> +       if (unlikely(ret)) {
->
-> This is double weird. First of all, wtf unlikely is here? Second, I commented on the patch that does something with this driver and pointed out to the return 0 in some cases. This one seems a band aid.
->
-> Unlikely to have an error.
+Agree here. I should have the better test case to verify my changes.
 
-We don't use likely() and unlikely() here and there, you need to
-provide a very good justification of its use.
+> Also, not necessary to re-call xas_pause() before cond_resched (it is
+> a no-op).
 
-For the record, I forwarded you my review against the code where you
-can find much more issues with it that are subject to fix / amend.
+In the event when CONFIG_DEBUG_ATOMIC_SLEEP is enabled users may still
+need to call the xas_pause(), as we are dropping the rcu lock. NO?
 
--- 
-With Best Regards,
-Andy Shevchenko
+static inline void cond_resched_rcu(void)
+{
+#if defined(CONFIG_DEBUG_ATOMIC_SLEEP) || !defined(CONFIG_PREEMPT_RCU)
+        rcu_read_unlock();
+        cond_resched();
+        rcu_read_lock();
+#endif
+}
+
+> Would be better to check need_resched() before
+> rcu_read_lock().
+
+Okay, I can directly use cond_resched() if used before rcu_read_lock().
+
+> 
+> As this loop may call xas_pause() for most iterations, should consider
+> using xa_for_each() instead (I *think* - still getting up to speed
+> with XArray).
+
+Even the xarray documentation says that: If most entries found during a
+walk require you to call xas_pause(), the xa_for_each() iterator may be
+more appropriate.
+
+Since every value entry found in the xarray requires me to do the
+xas_pause(), I do agree that xa_for_each() is the appropriate call here.
+Will switch to this in the next spin. Waiting for further review
+comments on this patch.
+
+> 
+> Mark
+> 

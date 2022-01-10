@@ -2,103 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30104489E4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E53489E4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238194AbiAJRYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S238218AbiAJRYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238139AbiAJRYk (ORCPT
+        with ESMTP id S238202AbiAJRYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:24:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E5EC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:24:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72496B811D9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 17:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F49C36AE9;
-        Mon, 10 Jan 2022 17:24:37 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 12:24:36 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH v2] tracing: Add test for user space strings when
- filtering on  string pointers
-Message-ID: <20220110122436.5302128f@gandalf.local.home>
-In-Reply-To: <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
-References: <20220110115532.536088fd@gandalf.local.home>
-        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 10 Jan 2022 12:24:45 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC97C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:24:45 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id j1so8619067iob.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7HvrHSTboUI1IGJewPJVxkFYCzomNnN15wMAIs6y9PI=;
+        b=VqV0XSJWDby+erMxC5BtF8BnGkSUdmzahsbBa7ajF4Vm2a1RA6S29u1Y+6byRf94K1
+         cxoG8F28n4gXCDJ0ShNjqmtfncbGFaAqj3ONa3MjooTZCtQwIaKluGXsDjJ5GW894WNp
+         P71eT5gNuWA7FZ1ZkTLr7Qsta/m0ssgKQz+V7e6YABf3SkgkNkuyi9GOoDdGvyK8v5jH
+         czrrQNqlqVK+W34h+VTVSKkEcu9Zl9G3XqHSPMqshaVRu7Y0NEsQCGfm//XV6GxHHLMO
+         OB6eTY3AIx+23BIuktEKN6RV/SCwqh0N9WyWjJkDpLy4hB13trbrbfg8NMG7hV88/7oi
+         AbNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7HvrHSTboUI1IGJewPJVxkFYCzomNnN15wMAIs6y9PI=;
+        b=HRUVfACu9dfilIV4uS6SJ0IYjiFSDJtTc1O1kIWrV1bK0tQ5eESiRhkH+hRVryHRtx
+         KIdmlEyQUlMW/6SRudXyEaEXw4BY/B00PXaRldPwBdL2raQvTxXwu6mcxGKB5MSHMcby
+         B40ghrA5EB0eoZDlSsJWQOkyqmznC3ZWA1VXVVIFtuikm0paC1PeieO1hfTySJdp1n4E
+         X5pjzW2tlwALvNAlMdGUgM/vwljhMdL4LzQ5trfyOO9Wf3nQtegUJAIktUki8IKEsgzh
+         edApYrZdYIUs6fpnGNjqAyo+wvXDfjs45c3PquAYl+G2gqrcRYq4DBQmXr9L2mJvYbf8
+         EDQw==
+X-Gm-Message-State: AOAM532dlDUHxl/8j1RxJ5RDjIQ2uTBeIibc70V2ajc3R915Tv96B5P/
+        pTDPI0bEIz54D8/envaghDwNuyjjMNtFOQHM4J8=
+X-Google-Smtp-Source: ABdhPJwRKQRT/vo5dDnJhRJyJjtAXfbxdKVi2iSDueHKq8r3+cNhbxzsT2dHirMt+jPuPM6TCqCPNtYRFfXnqX3pvMA=
+X-Received: by 2002:a6b:1452:: with SMTP id 79mr308459iou.62.1641835484823;
+ Mon, 10 Jan 2022 09:24:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6638:2385:0:0:0:0 with HTTP; Mon, 10 Jan 2022 09:24:44
+ -0800 (PST)
+Reply-To: headofficedirectorbank@gmail.com
+From:   WU Bank Directoroffice <db.banktg@gmail.com>
+Date:   Mon, 10 Jan 2022 17:24:44 +0000
+Message-ID: <CAFDfEeaAb-iworb38=X5-LuPoQTsUVya-4N7SBRHM-aZ73ctfQ@mail.gmail.com>
+Subject: Hello
+To:     db.banktg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 17:11:52 +0000
-David Laight <David.Laight@ACULAB.COM> wrote:
+--=20
 
-> From: Steven Rostedt
-> > Sent: 10 January 2022 16:56
-> > 
-> > From: Steven Rostedt <rostedt@goodmis.org>
-> > 
-> > Pingfan reported that the following causes a fault:
-> > 
-> >   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
-> >   echo 1 > events/syscalls/sys_enter_at/enable
-> > 
-> > The reason is that trace event filter treats the user space pointer
-> > defined by "filename" as a normal pointer to compare against the "cpu"
-> > string. If the string is not loaded into memory yet, it will trigger a
-> > fault in kernel space:  
-> 
-> If a userspace pointer can end up the kernel structure then presumably
-> a 'dodgy' user program can supply an arbitrary kernel address instead?
-> This may give the user the ability to read arbitrary kernel addresses
-> (including ones that are mapped to PCIe IO addresses).
-> Doesn't sound good at all.
+Irod=C3=A1nk el=C3=A9rhet=C5=91s=C3=A9ge: 2554 Road Of Kpalime Face Pharmac=
+y Bet, Lome, Gulf.
 
-Only root has access to the information read here. All tracing requires
-root or those explicitly given access to the tracing data, which pretty
-much allows all access to kernel internals (including all memory). So
-nothing to worry about here ;-)
+Ez a WU bank igazgat=C3=B3ja =C3=A9rtes=C3=ADtse =C3=96nt arr=C3=B3l, hogy =
+a nemzetk=C3=B6zi
+Valutaalap (IMF), aki 850 000,00 USD =C3=B6sszeg=C5=B1 k=C3=A1rt=C3=A9r=C3=
+=ADt=C3=A9st kap, mert
+megtal=C3=A1lt=C3=A1k az =C3=96n e-mail c=C3=ADm=C3=A9t a csal=C3=A1s =C3=
+=A1ldozatainak list=C3=A1j=C3=A1n. Ugye
+hajland=C3=B3 megszerezni ezt az alapot vagy sem?
 
-> 
-> ...
-> > +	if (likely((unsigned long)str >= TASK_SIZE)) {
-> > +		/* For safety, do not trust the string pointer */
-> > +		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
-> > +			return NULL;
-> > +	} else {
-> > +		/* user space address? */
-> > +		ustr = (char __user *)str;
-> > +		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
-> > +			return NULL;  
-> 
-> Is that check against TASK_SIZE even correct for all architectures?
-> copy_to/from_user() uses access_ok() - which is architecture dependant.
+S=C3=BCrg=C5=91sen v=C3=A1rjuk a h=C3=ADrt.
 
-The problem with access_ok() (which I tried first) is that it can't be used
-from interrupt context, and this check can happen in interrupt context.
-Either way, if we pick the wrong one for the arch, the only thing bad that
-can happen is that it returns "fault" and the filter fails, just like if
-the pointer was to bad memory.
-
-> 
-> I think you need to remember where the pointer came from.
-> 
-
-Why?
-
--- Steve
+Tisztelettel
+Tony Albert
+BANKIGAZGAT=C3=93

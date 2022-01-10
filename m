@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A213489275
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED1B489245
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240600AbiAJHnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240068AbiAJHaa (ORCPT
+        id S240849AbiAJHlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:41:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41338 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241095AbiAJHep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:30:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE3CC028BB8;
-        Sun,  9 Jan 2022 23:27:48 -0800 (PST)
+        Mon, 10 Jan 2022 02:34:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98D80B811FE;
-        Mon, 10 Jan 2022 07:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E9FC36AE9;
-        Mon, 10 Jan 2022 07:27:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1346A61192;
+        Mon, 10 Jan 2022 07:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7ACBC36AED;
+        Mon, 10 Jan 2022 07:34:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799667;
-        bh=ZITSXJpqyzXFFGqs6E0wZpm/00mLeMXlZhAJ7ccawaA=;
+        s=korg; t=1641800083;
+        bh=zENv4HK7dy6g+eUa3yM2KKt4TG/axtrDyosh4Wfu/bc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n0IKrJU8FiYWBIIl2b7AMoXjTXhpA3rHprcPMyHDsSoQWIl/Tgsok0S/YsYUZkhB9
-         EmXPUG0nN2UB/rhnw8kPq4MnYczEn4eeVq2N5LZDq5jYro0/MvwVMlQ5LBlk75LdDV
-         OrJVS6t4+cYLYSYNeDD9i7wf5QdqstywApa0JKro=
+        b=haLgdJpsuYepRWj90RrH32WATPi1ls8+akQoKZpL0yR8csysu4EQ5pus/uyBkJ0z6
+         h9wF+My/jBRDdaBDnx6RDQo4tQyMcLEkcKOamSGMAnhT3OrahhWZl7ayb39noGgq6i
+         bwqJwqWGA91DkBWOyJJcOIeKbNzjqVfULODaSazo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 16/21] ipv6: Do cleanup if attribute validation fails in multipath route
-Date:   Mon, 10 Jan 2022 08:23:17 +0100
-Message-Id: <20220110071814.479947128@linuxfoundation.org>
+        stable@vger.kernel.org, Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 5.15 41/72] power: supply: core: Break capacity loop
+Date:   Mon, 10 Jan 2022 08:23:18 +0100
+Message-Id: <20220110071822.952583458@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,46 +47,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit 95bdba23b5b4aa75fe3e6c84335e638641c707bb ]
+commit 51c7b6a0398f54b9120795796a4cff4fc9634f7d upstream.
 
-As Nicolas noted, if gateway validation fails walking the multipath
-attribute the code should jump to the cleanup to free previously
-allocated memory.
+We should not go on looking for more capacity tables after
+we realize we have looked at the last one in
+power_supply_find_ocv2cap_table().
 
-Fixes: 1ff15a710a86 ("ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Acked-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Link: https://lore.kernel.org/r/20220103170555.94638-1-dsahern@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 3afb50d7125b ("power: supply: core: Add some helpers to use the battery OCV capacity table")
+Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/route.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/power/supply/power_supply_core.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 8a437c20eeccd..7e3ab23fc995c 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -4466,12 +4466,10 @@ static int ip6_route_multipath_add(struct fib6_config *cfg,
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -853,6 +853,10 @@ power_supply_find_ocv2cap_table(struct p
+ 		return NULL;
  
- 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
- 			if (nla) {
--				int ret;
--
--				ret = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
-+				err = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
- 							extack);
--				if (ret)
--					return ret;
-+				if (err)
-+					goto cleanup;
+ 	for (i = 0; i < POWER_SUPPLY_OCV_TEMP_MAX; i++) {
++		/* Out of capacity tables */
++		if (!info->ocv_table[i])
++			break;
++
+ 		temp_diff = abs(info->ocv_temp[i] - temp);
  
- 				r_cfg.fc_flags |= RTF_GATEWAY;
- 			}
--- 
-2.34.1
-
+ 		if (temp_diff < best_temp_diff) {
 
 

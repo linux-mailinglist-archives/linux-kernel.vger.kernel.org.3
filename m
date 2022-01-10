@@ -2,237 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C4D48A3D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7928848A3D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345713AbiAJXlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242645AbiAJXl3 (ORCPT
+        id S242786AbiAJXmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:42:45 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:26870 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242645AbiAJXmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:41:29 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F371C06173F;
-        Mon, 10 Jan 2022 15:41:29 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so667928pjl.0;
-        Mon, 10 Jan 2022 15:41:29 -0800 (PST)
+        Mon, 10 Jan 2022 18:42:44 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlemw026231;
+        Mon, 10 Jan 2022 23:42:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=byI9fxx/7g7jCbqukRc88AahNkdfKg/+C/zq+bTSmvA=;
+ b=g16hoY/F/WtGSZaY3zDIQoOVKCvj/uEOTR6zI/v8j+3yyliYE+rtoVvrbJ4DhaP4ngug
+ m/v/dgd9n4DPiDwxTXAaGRtJQw3L8+6WBF9QJyl73AR6Tr/wGRm08vmeLFcBI7cQRIgX
+ 8unAX0tN7xyhamZKqcO+FedhBTkzxvAQRWWEx8lHlBVv33+IF5TgIIquIc6zMqqTUnMs
+ k/9md4Q97Qw4XeHGHy7lXu/ynESMKHRc5WTPuxbaP2HyvmxjZzp6cqwEJ5sMFbaQRRli
+ SnCHQlFzKJJYCBw9LBZeIjJhtd671QZbE19OUS8HXAKeBnVy5P5+jrEMFpofTBDVxHp0 ig== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dgjtg9xps-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jan 2022 23:42:40 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20ANUPRw083595;
+        Mon, 10 Jan 2022 23:42:40 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
+        by aserp3030.oracle.com with ESMTP id 3df0nd8md7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jan 2022 23:42:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P/PnU0KtfXKVhsdOSL13z7kMn79lfhN7z3Z3klOmH0KcqPHNFqAX59trSkbM6K0QWHjLd+OoNwDF49z4ZJX/ZVYpIzDHUgD2+YPceaWyLIn9dOMYBZTHukbCXf+P/hJ/oKWUMUJtN7JFwr6dbl+zM4RBXJOBQ3yS1qBQ9c05kEQl43FXxCQnzDK5U/2zm8X23R2/uxv9jiEjyzfM30CA57SDspwJ+gvzDZu615eldb/4YgfndBVnE8FGOYIa+5t/UlGnaM0jnIzeArv0KR8/KekcI8i3YUhboebW16Ur048huSPBcY/EP2jN2qf3PWvZ0xPcFh9ES4iD3PzN/mnCug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=byI9fxx/7g7jCbqukRc88AahNkdfKg/+C/zq+bTSmvA=;
+ b=QsXMwBAkcBvs1EetfoXmgj5NfgL8pOD1UZgzw6C567NzSFsU9nUFjt69M5GBJ/5UbOpf7q1NIF9wSgBThsOavcTQ59TGOYjElJ+imnm0GOZFM82eR7Gy2Boi+rKzAyfXkp2EN4ztDeJZDDpxQucu7DBM/j44PF8U7wt+dIDiahWFh52uegNVDX6v9ZP2G87lkA5Fkpud4r4lb5L4TU5bRjNHkuhz86XGUiGVMs15YViHfde+6hOnaOgQ2RsFSIK1E2tQdAVbSCSTcBr5ScdvJ8/GU00sreg4R4TojEGYl8alJRhwV3g2FCHG5IoNfan7bUcrGiQE3c80B3fAn8fr2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b7rF/+7zNEi6PfcE9UdoT64bvFiZXuAW5zsuDsfPwMw=;
-        b=LuUtRw5yJpt/krw5bEDY+gsyWKSiiWxF+QJ6h1ggw9X7zAgXfRqoORbS3TWI/PyiZE
-         LqmynqrYWSb4T2V0gnYQHo84m4YTUt3oFFiT7uI9UdrBD5eRROmFzQ0rN8kfXBMdUjt+
-         U+3pa5LN9x+c90l7OPcxOXN9/TLjCm959JVMZUpBdtUuFsSu1bRHnvOz6G+mZY6nwCBh
-         VOrQsIisAZhpP7iRkdm6CDSxxnn56siqOLHw9tYvf80TuWHLR8SjbBZbsSBog63eBLs3
-         ZYfmOIk5NAqQ9+v6t1QJgvSetoCa/dGCpkjiHm38x7zCxykP7X+xhsDwXHp0NqIF4Z9e
-         Kkbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b7rF/+7zNEi6PfcE9UdoT64bvFiZXuAW5zsuDsfPwMw=;
-        b=cUZPFV4IbQ47L9GzVtB8uX8deBYgCi8jyjdmy+4XfefatXPiOcnSGXU50BEha7GpV3
-         eb5uxqWAxZGQRM/cfGKrFEpk7zvQZg9hUJucvGMYp4i5pCzEnUvfI3CMbPhs4KUaSAIv
-         5mm/YhhMibenJwHFckF1nmNmkSkKeDsXF5tAMA3QJqcYuB/vDUsScgAaQBtv+LwLlgGB
-         JWvAkjDF2lat++TpCEEAlljbj9U9U73DMqWyvg3kL7bv2WEo+4+gKWD3XvtbQPU89cr2
-         HfdGk9uRN0cqxspKGdmxOsMrWkNhZoCkeMMlixr4vXg/PCFlGzxbm4abx0LtVVGx7B/b
-         6qtA==
-X-Gm-Message-State: AOAM531ffrEiNo9txR74G4CuLBwz/HuSv6DC+Q6NEQbgXNWX6iT4oKWZ
-        pAmlw4BeJ5ORxFoE4fkIhFE=
-X-Google-Smtp-Source: ABdhPJybys/dSkECYSOhCUzYQMxDSVohMnWvXs9u6q9JVsqRzOVaeK+Ywrdj4OL8Lu20UVT4znlMxw==
-X-Received: by 2002:a17:902:c215:b0:148:af14:6e96 with SMTP id 21-20020a170902c21500b00148af146e96mr1764021pll.80.1641858089003;
-        Mon, 10 Jan 2022 15:41:29 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id kt19sm124551pjb.50.2022.01.10.15.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 15:41:27 -0800 (PST)
-Date:   Tue, 11 Jan 2022 08:41:26 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, kgugala@antmicro.com,
-        mholenko@antmicro.com, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
-        geert@linux-m68k.org, david.abdurachmanov@sifive.com,
-        florent@enjoy-digital.fr, rdunlap@infradead.org,
-        andy.shevchenko@gmail.com, hdanton@sina.com
-Subject: Re: [PATCH v11 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-Message-ID: <YdzEJijn2JbSFzxF@antec>
-References: <20220109232003.2573924-1-gsomlo@gmail.com>
- <20220109232003.2573924-4-gsomlo@gmail.com>
- <YdywDhEbYyzm7Rri@antec>
- <Ydy1qCc3CXOWKv/O@errol.ini.cmu.edu>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=byI9fxx/7g7jCbqukRc88AahNkdfKg/+C/zq+bTSmvA=;
+ b=V4GTwl27KPwVyP2mx/JlL3KuelW9O/esEgXAguzTvPjQC6qRYk6gCdcgo0VjoUOVabS8X9JUWIAE0INA7bnUa9i/p1S3rS6B7SJ2y2PWENr0QAWYXy/W4xezVnLBHa3Qc9dx1246VNeKEwGvTClAZj8+iaHqxKWqrORI06CKlCY=
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
+ by MW4PR10MB5752.namprd10.prod.outlook.com (2603:10b6:303:18d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
+ 2022 23:42:38 +0000
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::d17e:432c:af45:248a]) by CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::d17e:432c:af45:248a%6]) with mapi id 15.20.4867.012; Mon, 10 Jan 2022
+ 23:42:38 +0000
+Message-ID: <989749c4-bae9-8055-39b4-ffc1cb6fc20b@oracle.com>
+Date:   Tue, 11 Jan 2022 10:42:31 +1100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [RFC PATCH v2 1/2] kernfs: use kernfs_node specific mutex and
+ spinlock.
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
+References: <20220103084544.1109829-1-imran.f.khan@oracle.com>
+ <20220103084544.1109829-2-imran.f.khan@oracle.com>
+ <YdLH6qQNxa11YmRO@kroah.com>
+ <719eb5d2-680c-e596-1446-3ca8f47c3aea@oracle.com>
+ <YdP57ij4JxahpdnC@kroah.com> <YddRVH4r6uNHt3xa@slm.duckdns.org>
+ <03cb9939-efbb-1ce8-42f5-c167ac5246da@oracle.com>
+ <YdivuA12i3VU8zO/@slm.duckdns.org>
+From:   Imran Khan <imran.f.khan@oracle.com>
+In-Reply-To: <YdivuA12i3VU8zO/@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0181.namprd11.prod.outlook.com
+ (2603:10b6:806:1bc::6) To CO1PR10MB4468.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydy1qCc3CXOWKv/O@errol.ini.cmu.edu>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 23713194-2af3-49cb-d428-08d9d492e282
+X-MS-TrafficTypeDiagnostic: MW4PR10MB5752:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR10MB5752B38DF2B95CBF7C85C268B0509@MW4PR10MB5752.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zpiEGKwZcs48xcTtQLP0ES6PXZ972DQm9NAqjp8uWvBJLswr9kdI03me2l5wKPmrj7hwV5kHJkQ75a/VJmvNpjAGczZUfzBv8KZlf8xhFennUQxYSVGxMoeUO+zMs26xtedBP7JkyhuTZCA7ySvZ80xrKdd9lk2pAlQ4YXpgvx6y/NVdcGUF/twqkjUz08YejrhkNBajf/LA3euk9WZEI3PZ0iFTm2bbfz/crnLetLxEQpM4WrScFNZW4uw73l1T9hcVIdTlq584mqqpi0C+I+s731lsUaqoggAPUTbJAilAj2A1CTiI/ZHY/Xk3ZH6FnP/2tqZkpPSYEdd2WFqMJWZgNqvF3AmTKYniKl+6VagoJzF0PpGZjikNPtC4SdneJ4/gSAMw9IbAuEvDhMBlghq4I1LeChS/zl1W87ay+gTXe1+VpYxBBrqwrRia+UAGzodol8E/rP69G/atffulfnY79tJrqNWU9QR1l5NXnuVf47b93SFaPTTPqVOmW6VlaRAvBTgRwMqwCElTKGd1s5RLXimGsVvYyfPUR6JPZ9Jv8buPEffbRortuBsOqltJMBrxRRM5EthTxmEmC5rMdTZ6LInZ6zAe9AgfwK683tF7/RH47oJuHcteo5ELlXzq7muJYArJLDSQ1WVlUBYONq4AZ98CWj4zL0afNDd+7K4rB8dB2GwQ/1WJABXqI5gP7rM7V7C/Fuv+EnKfhabVw9+d4D7K2XKB+0zJLcxsK3g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31696002)(508600001)(186003)(6506007)(53546011)(316002)(6916009)(83380400001)(66946007)(8676002)(6512007)(2906002)(36756003)(6486002)(26005)(38100700002)(66476007)(2616005)(8936002)(4326008)(6666004)(86362001)(66556008)(5660300002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmtaSmMyZzU1cjByYU5pZ3d6ZFVwMFBkNExGcmpCVGlwS21kc3F0Y0p3czFN?=
+ =?utf-8?B?MjVaVTVKUEFzKzBsWjI3VWxTay9jS3lVdi9ZWTBPbTkwT2dPbzYxMXNwTk96?=
+ =?utf-8?B?TjQwNStSbncyQ2dCbDR0UUpvc1ZCeGRGNURGYTR4bkFHV2ZHWVN4YXVOWGVZ?=
+ =?utf-8?B?QWNKQzlaUlFGQ2tzRlo0Q2p6dUxTZkhCQjRHT0JTREpTQnBnTHE2VnhpKzlF?=
+ =?utf-8?B?em8xRUg0S1ljS1BqYlg0akRJbXpiNTJVNndXaXNQVForZnlEN040cGtVakNo?=
+ =?utf-8?B?NVp4N0djZ3luRDJZS0laUFFZVmR6RksxV3RsM0wwK1JUckNWS1BoWUFTd29D?=
+ =?utf-8?B?S1F1aWVKTDMxUlY5NWVDTm5KOTNjemtjR0VSWlJRTkVBZ0gxYUFMYWdORWRF?=
+ =?utf-8?B?cWgxZkZVdU94ZW1RRXd2VTViWlR2ZkRPWTJrZGh3dU1ocjZmR0UwbXVHRWNL?=
+ =?utf-8?B?N3dWMmFIVXFUVmhCTkt3VVVKNHUwUEpUZU0zQjdtbFRneXlHMHJEa2orbndG?=
+ =?utf-8?B?Y0RKMDZobjVzSG0yZUdYaXplZXhwUEdCNXFUcHlSK0VNNXAvOFRFL3pVUjk3?=
+ =?utf-8?B?VFpMam5GUzMyaDFvamZDd1ZoQ0ZxdkRpWEtudFdaLzAzeXdLNVVqYUIxZHFv?=
+ =?utf-8?B?bnpycnpsWE5oVkVJZ2VkRXBSM0lFcW9sYk1EejFubnI5ajVhdC9ZMVlHcENF?=
+ =?utf-8?B?VjBybVdFQUJqZG5GMUV6dnVvcjhSYVN4MHBSMW40cTk0djN5V01VVWVWWW1N?=
+ =?utf-8?B?MVlKTm9FcnhlNkxLcFdDSlpYdnJTU0JreWpJSWdnQXNYakliOVR1RnRNNFNF?=
+ =?utf-8?B?YWJJZndpRkdSR0xUbUo0aUVhbTgwR1NNVWh0NHNGd1dXQ0lRSk0rbUIzN2lw?=
+ =?utf-8?B?NWMvb0FiTEY4NGNjTDRXaGFJUkQ5THZHTm84UzZteEVrNHNuWG9QT3F2bXpv?=
+ =?utf-8?B?REQ0NUI2QmtRMmtCblIyUFhWMnVQS2MxT2VPVldSeFMyQkVIMVBIcmJTblJt?=
+ =?utf-8?B?RStTR0dlMDFPL0NNYmxRNTlFUVlLZm9FUmY0OWx3SUQ1N2tmSkg0M0VEb2VE?=
+ =?utf-8?B?ZFUxdDFwN2lUQUp0RDRXWHcxdWVucU1GeEtCOTNlcXNPL3hUUyt4SUEvQjh3?=
+ =?utf-8?B?T2M0Wk5YQmZPYllySnovc2NYaytoRlUvMmF5UXpaaHJFM3ZOa1JuMnJqdWtH?=
+ =?utf-8?B?S3dCMC9hSU56RGx5RHEvVXo2eGowbUlxWnNoVUY1dDlwUGhuU3o4YkFrMFlQ?=
+ =?utf-8?B?cnhKR01udC9Ram8yYkpXQWFBM3k0RGhDNXFobjdNSUhlblN2ajlLM3lUSmJx?=
+ =?utf-8?B?SlovcG9sR0tnS3JqMW1nRmI1anJDTGY3NXVLakxZYkRVOHZKK0t6R3c3MkRj?=
+ =?utf-8?B?MGV0VXRUUCtlNWZrN2dwZ3FPVTlDSHFmNlIvWm9pN0FkYnBMTGZRYW1sRFR5?=
+ =?utf-8?B?eHc0RjN2S1FhMzBRcjFESE5zbWJ5d1o2S0xKUnl1TFB6L0hZVDRZeUV3d0dl?=
+ =?utf-8?B?R2pHNFdUemRmdTRXMThqcnFDS0swN0R2aG11a3A5NGozOXFUTDNmb1NVbnBQ?=
+ =?utf-8?B?VUVFbVd5L2NHaklwU0U1Um5ISGhiMHg5QlpiNVpGWTZCWW1sbWhLdllRUlFD?=
+ =?utf-8?B?YUhrSFJlbGlmV1QweWZpY3BJVEIrS25GNGw0VGJRcFFzTkNDc2R3dmt6VENk?=
+ =?utf-8?B?UURFUWRUdVhVc2pEazlKY3J2aE8vUzQ4S0cxalk2aGlJSjJYb011Mjd6bGs2?=
+ =?utf-8?B?YzdVbzlCTjZOcUliQzRlbUVOcjdUdnp5eUM2UStFQ3JGb3l1aHFvTWcyaGUw?=
+ =?utf-8?B?Um9ZaU9kaEFLdnVYRkZMRmQvNDlXTCs3V1FKTjYreXJnTURNUmZ4YVlpRXNh?=
+ =?utf-8?B?TlRBQjJaUUQ5cmlTbWVDZTU2K3JkK0d5cWpVVlIzSWRmRldxMVFia0t0V3Zk?=
+ =?utf-8?B?a1dwZFpIbGdvalVBU21ESEZLc0U3N3ZyZ2p2UTBkbnpiZlhMSUpPUEtObFRt?=
+ =?utf-8?B?dVQ1dkJTc0ptNzh6bHZ3cVhnWktnWG9IQy9OV2lqM1RwNFpEcDZPZkN2V2xy?=
+ =?utf-8?B?VXVxYnQ3NGdXZVN0MzBSZkZLUjhKSXM4NDEvaWViWW1SWE1FSkcwZmc4UVFC?=
+ =?utf-8?B?d0JJMzV4N1A3bVlIWUE5WHhMc29WZ3l5RGxmVmlGYjJtOGZhZVJMbGNoRnA2?=
+ =?utf-8?Q?wCLsUalmcUabF6EEmMLmFFI=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23713194-2af3-49cb-d428-08d9d492e282
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 23:42:38.3467
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ymhegclBh1hR3iGD9cheTOjkSoIeiiSjUKbHKNCbTA7A2qJK1dCMK/8XtNXXNuNgKpqXeRnPTPm+5FBeKq6UfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5752
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10223 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ phishscore=0 adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201100150
+X-Proofpoint-GUID: -rkI6abyS14dFPGFo1SSZ1reUJr7L466
+X-Proofpoint-ORIG-GUID: -rkI6abyS14dFPGFo1SSZ1reUJr7L466
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 05:39:36PM -0500, Gabriel L. Somlo wrote:
-> On Tue, Jan 11, 2022 at 07:15:42AM +0900, Stafford Horne wrote:
-> > On Sun, Jan 09, 2022 at 06:20:03PM -0500, Gabriel Somlo wrote:
-> > > LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
-> > > that targets FPGAs. LiteSDCard is a small footprint, configurable
-> > > SDCard core commonly used in LiteX designs.
-> > > 
-> > > The driver was first written in May 2020 and has been maintained
-> > > cooperatively by the LiteX community. Thanks to all contributors!
-> > > 
-> > > Co-developed-by: Kamil Rakoczy <krakoczy@antmicro.com>
-> > > Signed-off-by: Kamil Rakoczy <krakoczy@antmicro.com>
-> > > Co-developed-by: Maciej Dudek <mdudek@internships.antmicro.com>
-> > > Signed-off-by: Maciej Dudek <mdudek@internships.antmicro.com>
-> > > Co-developed-by: Paul Mackerras <paulus@ozlabs.org>
-> > > Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
-> > > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> > > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > > ---
-> > > 
-> > ...
-> > > +static int litex_mmc_probe(struct platform_device *pdev)
-> > > +{
-> > > +	struct device *dev = &pdev->dev;
-> > > +	struct litex_mmc_host *host;
-> > > +	struct mmc_host *mmc;
-> > > +	struct clk *clk;
-> > > +	int ret;
-> > > +
-> > > +	/*
-> > > +	 * NOTE: defaults to max_[req,seg]_size=PAGE_SIZE, max_blk_size=512,
-> > > +	 * and max_blk_count accordingly set to 8;
-> > > +	 * If for some reason we need to modify max_blk_count, we must also
-> > > +	 * re-calculate `max_[req,seg]_size = max_blk_size * max_blk_count;`
-> > > +	 */
-> > > +	mmc = mmc_alloc_host(sizeof(struct litex_mmc_host), dev);
-> > > +	if (!mmc)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ret = devm_add_action_or_reset(dev, litex_mmc_free_host_wrapper, mmc);
-> > > +	if (ret)
-> > > +		return dev_err_probe(dev, ret,
-> > > +				     "Can't register mmc_free_host action\n");
-> > > +
-> > > +	host = mmc_priv(mmc);
-> > > +	host->mmc = mmc;
-> > > +
-> > > +	/* Initialize clock source */
-> > > +	clk = devm_clk_get(dev, NULL);
-> > > +	if (IS_ERR(clk))
-> > > +		return dev_err_probe(dev, PTR_ERR(clk), "can't get clock\n");
-> > > +	host->ref_clk = clk_get_rate(clk);
-> > > +	host->sd_clk = 0;
-> > > +
-> > > +	/*
-> > > +	 * LiteSDCard only supports 4-bit bus width; therefore, we MUST inject
-> > > +	 * a SET_BUS_WIDTH (acmd6) before the very first data transfer, earlier
-> > > +	 * than when the mmc subsystem would normally get around to it!
-> > > +	 */
-> > > +	host->is_bus_width_set = false;
-> > > +	host->app_cmd = false;
-> > > +
-> > > +	/* LiteSDCard can support 64-bit DMA addressing */
-> > > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	host->buf_size = mmc->max_req_size * 2;
-> > > +	host->buffer = dmam_alloc_coherent(dev, host->buf_size,
-> > > +					   &host->dma, GFP_KERNEL);
-> > > +	if (host->buffer == NULL)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	host->sdphy = devm_platform_ioremap_resource_byname(pdev, "phy");
-> > > +	if (IS_ERR(host->sdphy))
-> > > +		return PTR_ERR(host->sdphy);
-> > > +
-> > > +	host->sdcore = devm_platform_ioremap_resource_byname(pdev, "core");
-> > > +	if (IS_ERR(host->sdcore))
-> > > +		return PTR_ERR(host->sdcore);
-> > > +
-> > > +	host->sdreader = devm_platform_ioremap_resource_byname(pdev, "reader");
-> > > +	if (IS_ERR(host->sdreader))
-> > > +		return PTR_ERR(host->sdreader);
-> > > +
-> > > +	host->sdwriter = devm_platform_ioremap_resource_byname(pdev, "writer");
-> > > +	if (IS_ERR(host->sdwriter))
-> > > +		return PTR_ERR(host->sdwriter);
-> > > +
-> > > +	/* Ensure DMA bus masters are disabled */
-> > > +	litex_write8(host->sdreader + LITEX_BLK2MEM_ENA, 0);
-> > > +	litex_write8(host->sdwriter + LITEX_MEM2BLK_ENA, 0);
-> > > +
-> > > +	init_completion(&host->cmd_done);
-> > > +	ret = litex_mmc_irq_init(pdev, host);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	/* Allow full generic 2.7-3.6V range; no software tuning available */
-> > > +	mmc->ocr_avail = LITEX_MMC_OCR;
-> > > +
-> > > +	mmc->ops = &litex_mmc_ops;
-> > > +
-> > > +	/*
-> > > +	 * Set default sd_clk frequency range based on empirical observations
-> > > +	 * of LiteSDCard gateware behavior on typical SDCard media
-> > > +	 */
-> > > +	mmc->f_min = 12.5e6;
-> > > +	mmc->f_max = 50e6;
-> > > +
-> > > +	ret = mmc_of_parse(mmc);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	/* Force 4-bit bus_width (only width supported by hardware) */
-> > > +	mmc->caps &= ~MMC_CAP_8_BIT_DATA;
-> > > +	mmc->caps |= MMC_CAP_4_BIT_DATA;
-> > > +
-> > > +	/* Set default capabilities */
-> > > +	mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY |
-> > > +		     MMC_CAP_DRIVER_TYPE_D |
-> > > +		     MMC_CAP_CMD23;
-> > > +	mmc->caps2 |= MMC_CAP2_NO_WRITE_PROTECT |
-> > > +		      MMC_CAP2_NO_SDIO |
-> > > +		      MMC_CAP2_NO_MMC;
-> > > +
-> > > +	platform_set_drvdata(pdev, host);
-> > 
-> > One more thing here. Or somewhere, should we add:
-> > 
-> > 	dev_info(dev, "Litex MMC controller initialized");
-> > 
-> > I was having a hard time debugging probing of this and having no printk's made
-> > it a bit difficult.
-> > 
-> > Though I was able to get most of the debug statements I needed using:
-> > 
-> > 	"debug initcall_debug dyndbg=\"file drivers/* +p\" loglevel=8"
-> > 
-> > -Stafford
-> > 
-> > > +	return mmc_add_host(mmc);
-> 
-> I'd prefer to declare victory *after* calling mmc_add_host(), so if
-> there are no objections I'd prefer to do the following in v12:
-> 
->         ... 
->         platform_set_drvdata(pdev, host);
->  
-> -       return mmc_add_host(mmc);
-> +       ret = mmc_add_host(mmc);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "LiteX MMC probe failed!\n");
-> +
-> +       dev_info(dev, "LiteX MMC controller initialized.\n");
-> +
-> +       return 0;
->  }
+Hi Tejun,
 
-Yes, that is what I was thinking too.
+On 8/1/22 8:25 am, Tejun Heo wrote:
+> Hello,
+> 
+> On Fri, Jan 07, 2022 at 11:01:55PM +1100, Imran Khan wrote:
+>> Could you please suggest me some current users of hashed locks ? I can
+>> check that code and modify my patches accordingly.
+> 
+> include/linux/blockgroup_lock.h seems to be one.
+> 
 
--Stafford
+Thanks for this.
+
+>> As of now I have not found any standard benchmarks/workloads to show the
+>> impact of this contention. We have some in house DB applications where
+>> the impact can be easily seen.  Of course those applications can be
+>> modified to get the needed data from somewhere else or access sysfs less
+>> frequently but nonetheless I am trying to make the current locking
+>> scheme more scalable.
+> 
+> I don't think it needs to show up in one of the common benchmarks but what
+> the application does should make some sense. Which files are involved in the
+> contentions?
+> 
+
+The database application has a health monitoring component which
+regularly collects stats from sysfs. With small number of databases this
+was not an issue but recently several customers did some consolidation
+and ended up having hundreds of databases, all running on the same
+server and in those setups the contention became more and more evident.
+As more and more customers are consolidating we have started to get more
+occurences of this issue and in this case it all depends on number of
+running databases on the server.
+
+I will have to reach out to application team to get a list of all sysfs
+files being accessed but one of them is
+"/sys/class/infiniband/<device>/ports/<port number>/gids/<gid index>".
+
+Thanks
+-- Imran
+

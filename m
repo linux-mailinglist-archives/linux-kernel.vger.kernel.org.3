@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A7F4895AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B004895B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243222AbiAJJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:50:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52916 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243435AbiAJJt1 (ORCPT
+        id S243306AbiAJJvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243278AbiAJJvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:49:27 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFD1A611BC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:49:26 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2378F60E76;
-        Mon, 10 Jan 2022 09:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641808166;
-        bh=uSHXY6zedzH8cNlswrAkR727GYB0CEqmB4IEIQdk2pA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=K7ouA7RMtF6Ol6AKEdZ1i6aXKAx2mnmouSfGO8db4QFp5OWzNh5XmoEy+s7P/X+Z6
-         hltcrr9yMvXa3px+cZDA/v9ayt8MegEBz0qCOLPiDO47t++2OGA5U+dupr8JGGzM6H
-         p7q5Qfz66w9e5s1GIWk+cJiwiEEw9qXqOD3YEy58hGDuh2Zq6pUVClbV/CCwd1lC6K
-         0GUGqLxi8RBoH7w6dOnn2gcM3livSMqB/pofeTFvL39NliF3Fox3eZrXf9J4OcL/nQ
-         m3AH+K1JIGSnX3Ik/AMzXwVMqpswGAblXsGLA2tfr61DYs5n6Uyog25mR8SxGwiRWm
-         Sv13O8nzLEzAA==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 7BE493C0CB7; Mon, 10 Jan 2022 10:49:24 +0100 (CET)
-Date:   Mon, 10 Jan 2022 10:49:24 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hsi changes for hsi-5.17
-Message-ID: <20220110094924.2s4tczld5jjroeu5@earth.universe>
+        Mon, 10 Jan 2022 04:51:19 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60B5C061751
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:51:18 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id i31so42152103lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:51:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=y1r7qcOoxLZVNoNmodA97gVRJbmjeeiduf9oclYMPMY=;
+        b=GkNRzS9JnRVDO4SJtw3qITFR6O6XE/EmPXJo7mF4L6zmtmlGM7Kf5tG+e7zmxm5qjM
+         oJ6osP1n0iVoKWDDXGO6iKPJS6Md/eY3NT685gXL8tehou/HD2k5FMiM9IDVXFIveK4W
+         0UhKnKJCJVc6MgQoIWwORD+ovxepjTg4axf95PaziB6rU14UnhghLkpa2Fzfc7FoN/yV
+         pKe/aYi2XxwE/NJmVxh9BvmjLZ5uLPn+hdetoC6v2zj+qHiDx0ZN8VamWq+tx9ZPKNEC
+         R4zWSWLIDbCJVnTkKZtDVp+pttHIZd64NdLKcBL8eDIYYLRxKxjBoEDib76Zbdtt6SYX
+         gAWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=y1r7qcOoxLZVNoNmodA97gVRJbmjeeiduf9oclYMPMY=;
+        b=sbqPo2erbACZrpq0F403OgFImwBRcr7L/clO+Xp8+jpGybkM2iRADhkpiUY1q6Yowr
+         mZvtkVusaVjqHiVyzUdwNh97tFiMyy4v3ZEMAq5EOh6EfVDvnmtxbkH3DW119Q/mC0tF
+         GgMIvDo4YW+aLnpAhLhj8LqUwgtfGKnuS/dSSeXRA0oBs5r7Xkj5mW7YS8LCpaTVCkGs
+         JLlngb0W0ypsl0anASRMZYLumk6LIHYgYdsGXqCBzBz+eQEeQpbsQqwpzNy36UaafwXJ
+         kn2W/Osco9QOLIJfa9v0S5IAAQ9OUYrWDvc/UJWJZFBYFqOIaymBaU4f2ocdlSt8uQ1F
+         LeuA==
+X-Gm-Message-State: AOAM531zOUaNTWZz4+8nrBbTebOa7+ajl5pLLsuUfYXO3SUrtHYCN8JI
+        pIwj7lNhju6Oe2NTrYiYl47ylg==
+X-Google-Smtp-Source: ABdhPJx9+x3Kh4QAiAZKohB0Ymdo5sIsdfS73XLp2isfah2UyRZmm/Bmrm23jXAq5hL/eYGESPsaQw==
+X-Received: by 2002:a2e:2e18:: with SMTP id u24mr32442126lju.492.1641808277016;
+        Mon, 10 Jan 2022 01:51:17 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id z13sm871888lfu.255.2022.01.10.01.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 01:51:16 -0800 (PST)
+Message-ID: <fbabf712-ea2a-5bd4-56d4-70cf4d7f72f6@cogentembedded.com>
+Date:   Mon, 10 Jan 2022 12:51:15 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j75kbuwu4g4kouva"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
+ <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
+ <CAMuHMdVHMzZipXaUE_SrkHtj6edZATefC908P1ngLrnOry8KCA@mail.gmail.com>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+In-Reply-To: <CAMuHMdVHMzZipXaUE_SrkHtj6edZATefC908P1ngLrnOry8KCA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
---j75kbuwu4g4kouva
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> i.e. will queue in renesas-devel for v5.18.
 
-Hi Linus,
-
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-hsi.git tags/hsi-for-5.17
-
-for you to fetch changes up to a1ee1c08fcd5af03187dcd41dcab12fd5b379555:
-
-  HSI: core: Fix return freed object in hsi_new_client (2021-11-26 00:27:06 +0100)
-
-----------------------------------------------------------------
-HSI changes for the 5.17 series
-
-* avoid returning free'd object in hsi_new_client error path
-
-----------------------------------------------------------------
-Chengfeng Ye (1):
-      HSI: core: Fix return freed object in hsi_new_client
-
- drivers/hsi/hsi_core.c | 1 +
- 1 file changed, 1 insertion(+)
-
---j75kbuwu4g4kouva
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmHcASQACgkQ2O7X88g7
-+prPaA/9Fgszpk96BQCmQM3vMXLpofx+DB+IA6Oo5azIEisfaqIvtOqL1ATXLzD1
-jTaK0XYPjITM0uPfE6PQCzZCrmtwjmj82ERsvD3Dsjo5GKjlB30uRfvBPt+nt4Tk
-uurX2/WDVDLOGt45lyiYH7k6D0h7CRoX/vgx2FrzNbkApl3wbkuMz6ZolUbidVMb
-hTGQp32MV5cf22r0UbUhmeTPG5FYkcjQYSxQk9GJCq4iGJPKl4yRZVflfEVu2964
-Qv4ka7wGe/5wRZZ5l2cassIKauLpMmNOzk0j+55IsTygaLYwf7wvf2EPnU3x6fdi
-kAcNr48ff8iaoWOEwAmIW37IeA3JWyebmgf/7zGLg6c2tx/mwxFRYPs5GgsvYa7l
-si56vOgT1uHMRxRi1Cihf0rq7d5rnDQYza/waPKQZxmLSI2CvTHxcNR5EBtB5jgX
-YPVRsRKWiKPuHx/QkNIyp3VoqC7kI0WXRGgOaz3ltIIj/IPkgFpgmMCv2ALtcUET
-aesPgSuIAyZTGPaHWMOSl+URMOeB6h7vaNLpGgYgcfE0+saYnWObTlbENLL3oRMa
-J9Dd5fQfPELNWiIZp4IXtNYUA+6Ts0rUDgV1RilBvirOe4YYE9lKippoDrP2s2Ur
-KMPBnmbEnPf9OQyF9lGkKgsEd9iPVINUGkXoRBqvTnvDXE/NtnA=
-=cA4T
------END PGP SIGNATURE-----
-
---j75kbuwu4g4kouva--
+that is, for current + 2 ?

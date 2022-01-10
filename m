@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E2C489237
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78B6489144
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242313AbiAJHkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:40:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33842 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239765AbiAJHdU (ORCPT
+        id S239676AbiAJHak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:30:40 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37184 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239497AbiAJH1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:33:20 -0500
+        Mon, 10 Jan 2022 02:27:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3134B811E3;
-        Mon, 10 Jan 2022 07:33:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4796BC36AE9;
-        Mon, 10 Jan 2022 07:33:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B5F611B9;
+        Mon, 10 Jan 2022 07:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1622C36AE9;
+        Mon, 10 Jan 2022 07:27:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799997;
-        bh=1PC9Oavmy3rDsCgNb2kVCXK643NTyi/TUNXya1Ck5Og=;
+        s=korg; t=1641799641;
+        bh=oW7SX6sqfjaQ3jE8DPtXe+hyra05TsoG2/m6gHOLZjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rDfubeFC/zHJUcWD+HUN57AOhKUOBHXuEA06hr9fOuMqyTiwO+qcwGT5GvqDkwjsE
-         xwSZPHnk1GSPkdWmqfNUw/qPZ2bYjyLrlslNGgZ4s+ER87Ey2p/ZodCjshp4U1Xbdg
-         Ia9wt9UfDbmlJtw0176TSxPX8rXQc3tpO8X60ZII=
+        b=iP1j7RxoIX74QFZJjDHLzTifF3Sc6PL2jk65+Q9CZqVhGSjTK+G8DkBd01fZx2bR9
+         UJ+z188vqBThYXUWZqbY87iOUnSlhkIhvMXd4XZQbU+wWlLYBH5CQNJHx6+jhc+06O
+         zkdcNr1Sy0gDCBC6r5vm703qFs2Up5VqhsYI6lpI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Toye <thomas@toye.io>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 44/72] rndis_host: support Hytera digital radios
+        stable@vger.kernel.org, yangxingwu <xingwu.yang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 20/21] net: udp: fix alignment problem in udp4_seq_show()
 Date:   Mon, 10 Jan 2022 08:23:21 +0100
-Message-Id: <20220110071823.047094456@linuxfoundation.org>
+Message-Id: <20220110071814.615293887@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
+References: <20220110071813.967414697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +46,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Toye <thomas@toye.io>
+From: yangxingwu <xingwu.yang@gmail.com>
 
-commit 29262e1f773b4b6a43711120be564c57fca07cfb upstream.
+[ Upstream commit 6c25449e1a32c594d743df8e8258e8ef870b6a77 ]
 
-Hytera makes a range of digital (DMR) radios. These radios can be
-programmed to a allow a computer to control them over Ethernet over USB,
-either using NCM or RNDIS.
+$ cat /pro/net/udp
 
-This commit adds support for RNDIS for Hytera radios. I tested with a
-Hytera PD785 and a Hytera MD785G. When these radios are programmed to
-set up a Radio to PC Network using RNDIS, an USB interface will be added
-with class 2 (Communications), subclass 2 (Abstract Modem Control) and
-an interface protocol of 255 ("vendor specific" - lsusb even hints "MSFT
-RNDIS?").
+before:
 
-This patch is similar to the solution of this StackOverflow user, but
-that only works for the Hytera MD785:
-https://stackoverflow.com/a/53550858
+  sl  local_address rem_address   st tx_queue rx_queue tr tm->when
+26050: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000
+26320: 0100007F:0143 00000000:0000 07 00000000:00000000 00:00000000
+27135: 00000000:8472 00000000:0000 07 00000000:00000000 00:00000000
 
-To use the "Radio to PC Network" functionality of Hytera DMR radios, the
-radios need to be programmed correctly in CPS (Hytera's Customer
-Programming Software). "Forward to PC" should be checked in "Network"
-(under "General Setting" in "Conventional") and the "USB Network
-Communication Protocol" should be set to RNDIS.
+after:
 
-Signed-off-by: Thomas Toye <thomas@toye.io>
+   sl  local_address rem_address   st tx_queue rx_queue tr tm->when
+26050: 0100007F:0035 00000000:0000 07 00000000:00000000 00:00000000
+26320: 0100007F:0143 00000000:0000 07 00000000:00000000 00:00000000
+27135: 00000000:8472 00000000:0000 07 00000000:00000000 00:00000000
+
+Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/rndis_host.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ net/ipv4/udp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/rndis_host.c
-+++ b/drivers/net/usb/rndis_host.c
-@@ -609,6 +609,11 @@ static const struct usb_device_id	produc
- 				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
- 	.driver_info = (unsigned long) &rndis_poll_status_info,
- }, {
-+	/* Hytera Communications DMR radios' "Radio to PC Network" */
-+	USB_VENDOR_AND_INTERFACE_INFO(0x238b,
-+				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
-+	.driver_info = (unsigned long)&rndis_info,
-+}, {
- 	/* RNDIS is MSFT's un-official variant of CDC ACM */
- 	USB_INTERFACE_INFO(USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
- 	.driver_info = (unsigned long) &rndis_info,
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index fce32f3e42b54..b7acb6afdbce6 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2845,7 +2845,7 @@ int udp4_seq_show(struct seq_file *seq, void *v)
+ {
+ 	seq_setwidth(seq, 127);
+ 	if (v == SEQ_START_TOKEN)
+-		seq_puts(seq, "  sl  local_address rem_address   st tx_queue "
++		seq_puts(seq, "   sl  local_address rem_address   st tx_queue "
+ 			   "rx_queue tr tm->when retrnsmt   uid  timeout "
+ 			   "inode ref pointer drops");
+ 	else {
+-- 
+2.34.1
+
 
 

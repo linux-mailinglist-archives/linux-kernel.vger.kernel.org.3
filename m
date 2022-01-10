@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 371A6489D8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BE9489D95
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbiAJQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:29:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50358 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237471AbiAJQ3x (ORCPT
+        id S237514AbiAJQae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237471AbiAJQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:29:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6930B8165F;
-        Mon, 10 Jan 2022 16:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D1FC36AE3;
-        Mon, 10 Jan 2022 16:29:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641832190;
-        bh=fQExllmMl+dj2jTx2YMZ1O6mpZuoE8POpJVdkmjVsxg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ilYOMpIgLD+9OxTa8dbe43JdsXgf+Dbdn5x4LowsmAyEse7F2sH9hhuYESf2pcRVA
-         LeMbupc1+563Tej1CHOi9Z8e50PhY4k/642DEm8E7b9sbsiPSZlJgL+q8cioKBQ1P2
-         XRvloaF69nxoF9vfheyz3WJXaKxBBfXJk83rGykNY9DUJRZ6esExe8WUMdCP/f6HBs
-         cxwrd7J4nP8zvLpJgwHfX9y3GMxAiDHVU0Jykzin+kGLtt22Xat69FViPX/gP02ACL
-         od7dSmcaKf+YCPrAy6iYN0s5TgDQqiNNSAJFlV1hUfxHmhKAaTKffvhur+plBDTRHU
-         jioOaRkvvLNew==
-Date:   Mon, 10 Jan 2022 08:29:49 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Rao Shoaib <rao.shoaib@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Mon, 10 Jan 2022 11:30:33 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC4FC06173F;
+        Mon, 10 Jan 2022 08:30:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FcxY0AcFPqarLpf7v6qBIQEnVP2lYCe9YcoGjVtbp+8=; b=SL36wzarhDHVddRltdQMBE23mc
+        IYPjRqt9vGY0hJ+O+Pt3NEqD67mWrggl+Kcy1i5E2WG+1iqDNtWzO3HC/XwfYRx7bn+A8vl1wAMlR
+        jJF/C/E/+CmlYA+C8nThER7ESllKofjjGS3LhOQJ3lUtfXVXooRzugIYkVM6c8vMbLTs0Ib0wiuOq
+        R+qMAkH4rOmFnEGrUA+gCI23C1IzFu9o1LHaapJtTqjl/mUj8SztpVPqoLTuBjDAwLZWdKHpclSEJ
+        jd3tIyorl/yiIgBq0aTkeP40xm5NyR+Igcsmef/uUBVA1QoP7zKSzRdVQ2wnbCjie1Fv69PYUgreC
+        QBcFRXOw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6xYm-00CMnJ-8F; Mon, 10 Jan 2022 16:30:16 +0000
+Date:   Mon, 10 Jan 2022 08:30:16 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        regressions@lists.linux.dev
-Subject: Re: Observation of a memory leak with commit 314001f0bf92
- ("af_unix: Add OOB support")
-Message-ID: <20220110082949.3a14a738@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <CAKXUXMygcVJ2v5enu-KY9_2reC6+aAk8F9q5RiwwNp4wO-prug@mail.gmail.com>
-References: <CAKXUXMzZkQvHJ35nwVhcJe+DrtEXGw+eKGVD04=xRJkVUC2sPA@mail.gmail.com>
-        <20220109132038.38f8ae4f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <a754b7d0-8a20-9730-c439-1660994005d0@leemhuis.info>
-        <CAKXUXMygcVJ2v5enu-KY9_2reC6+aAk8F9q5RiwwNp4wO-prug@mail.gmail.com>
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH V2 03/17] asm-generic: fcntl: compat: Remove duplicate
+ definitions
+Message-ID: <YdxfGMDJh2ZVq8jc@infradead.org>
+References: <20211228143958.3409187-1-guoren@kernel.org>
+ <20211228143958.3409187-4-guoren@kernel.org>
+ <CAK8P3a2zn9M6X09WsjJ9HYiS9WnO_YPCvJLSBk+HaH+yZHQqfA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2zn9M6X09WsjJ9HYiS9WnO_YPCvJLSBk+HaH+yZHQqfA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 17:19:56 +0100 Lukas Bulwahn wrote:
-> It's a regression if some application or practical use case running fine on one
-> Linux kernel works worse or not at all with a newer version compiled using a
-> similar configuration.
+On Mon, Jan 10, 2022 at 02:35:19PM +0100, Arnd Bergmann wrote:
+> > +#if !defined(CONFIG_64BIT) || defined(CONFIG_COMPAT)
+> >  #ifndef F_GETLK64
+> >  #define F_GETLK64      12      /*  using 'struct flock64' */
+> >  #define F_SETLK64      13
 > 
-> The af_unix functionality without oob support works before
-> 314001f0bf92 ("af_unix: Add OOB support").
-> The af_unix functionality without oob support works after 314001f0bf92
-> ("af_unix: Add OOB support").
-> The af_unix with oob support after the new feature with 314001f0bf92
-> ("af_unix: Add OOB support") makes a memory leak visible; we do not
-> know if this feature even triggers it or just makes it visible.
+> The problem here is that include/uapi/ headers cannot contain checks for
+> CONFIG_* symbols because those may have different meanings in user space
+> compared to kernel.
 > 
-> Now, if we disable oob support we get a kernel without an observable
-> memory leak. However, oob support is added by default, and this makes
-> this memory leak visible. So, if oob support is turned into a
-> non-default option or nobody ever made use of the oob support before,
-> it really does not count as regression at all. The oob support did not
-> work before and now it works but just leaks a bit of memory---it is
-> potentially a bug, but not a regression. Of course, maybe oob support
-> is also just intended to make this memory leak observable, who knows?
-> Then, it is not even a bug, but a feature.
+> This is a preexisting problem in the header, but I think the change
+> makes it worse.
 
-I see, thanks for the explanation. It wasn't clear from the "does not
-repro on 5.15, does repro on net-next" type of wording that the repro
-actually uses the new functionality.
+FYI, this is what I did in my old branch, which also sidesteps the
+duplicate value problem on parisc. The rebase is untested so far,
+but I can spend some cycles on finishing it:
 
-> Thorsten's database is still quite empty, so let us keep tracking the
-> progress with regzbot. I guess we cannot mark "issues" in regzbot as a
-> true regression or as a bug (an issue that appears with a new
-> feature).
-> 
-> Also, this reproducer is automatically generated, so it barely
-> qualifies as "some application or practical use case", but at best as
-> some derived "stress test program" or "micro benchmark".
-> 
-> The syzbot CI and kernel CI database are also planning to track such
-> things (once all databases and all the interfaces all work smoothly),
-> so in the long term, such issues as this one would not qualify for
-> regzbot. For now, many things in these pipelines are still manual and
-> hence, triggering and investigation is manual effort, as well as
-> manually informing the involved developers, which also means that
-> tracking remains manual effort, for which regzbot is probably the
-> right new tool for now.
-
-Right, that was my thinking.
-
-> We will learn what should go into regzbot's tracker and what should
-> not---as we move on in the community: various information from other
-> systems (syzbot, kernel CI, kernel test robot etc.) and their reports
-> are also still difficult to add, find, track, bisect etc.
+http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/fcntl-asm-generic-cleanup

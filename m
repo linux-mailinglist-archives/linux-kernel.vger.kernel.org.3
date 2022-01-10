@@ -2,34 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB294897D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3454897D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245050AbiAJLpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S245109AbiAJLqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245047AbiAJLnw (ORCPT
+        with ESMTP id S244944AbiAJLoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:43:52 -0500
+        Mon, 10 Jan 2022 06:44:18 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9CFC034000;
-        Mon, 10 Jan 2022 03:43:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2FCC06173F;
+        Mon, 10 Jan 2022 03:44:17 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 820AD1F41050
+        with ESMTPSA id 1EC331F436F1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641815029;
-        bh=uuV0Epzk3gnedbGM5nYSmM92AIVHPp2psXKWjNKXehw=;
+        s=mail; t=1641815056;
+        bh=sVloC0dkqoMasFv1fJjOkQcxMXUqU480+H//BOCz3X0=;
         h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=WREfHH3VNKZ3seg60JNQO3Fi3Dk/N7tcQ33MIfJeskUq2VJAqGKk7Udgz2sEjQp3i
-         2e80eQSixi7eeAV7Z3NXxPVYylvhsRvqbKuPqa0kUNUmu1EaUr6zhIr7+a781648fM
-         aPvHxOL7meGaspCUQ6woaS8+t74/0YJ40zPraeA1IIhSwNsXO8IcFS9jery6X4QaLi
-         uG1Vo3JZ8TysSP1YaDmpUyWSlcUYSS6V5K6u8v/Eqwt/B+gasmiKhbD3B7k/IX2GhP
-         H2kj3+sN9R20jQnWhJ91HGAX9m/pUlEs7W2zp6XBkzfnjV7VtTkXwSgEZx795Ii7nT
-         JDU+TlY+gNUXQ==
-Subject: Re: [PATCH v2 3/5] iommu/mediatek: Remove the power status checking
- in tlb flush all
+        b=gM6CRcbhHFtc5HMOBQ5/CcpPa4EH3fQGSibLTqHMNkxNxLpQvmXB0fFppV7fZZtDo
+         6FMDayfy9xdsTnLnFkjx2rvqAzif9y2iVKpvqPCoyGKIlv09LnpYWD4GXxMvsdVwmS
+         L+WWUeyNJI46qvxMzvCHUWaF3P3Po8Pug6cgzAxuTRVmKYIVRZwQrhVuDaB+mamr/a
+         6WZDQjT6UAnU4HNwFeMEafcUR+BTACjY9V55Jm0TSNw4WEn8aCSH4a9f4TUakQ4e+E
+         g5EVhNBIPIzMvohnjhtRq2bapylkjzIdtUrvU8DekyP7h0B0Hx4SNZyEPirXY3EHoU
+         nFwfwq/z2janw==
+Subject: Re: [PATCH v2 4/5] iommu/mediatek: Add tlb_lock in tlb_flush_all
 To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
@@ -41,15 +40,15 @@ To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         open list <linux-kernel@vger.kernel.org>, kernel@collabora.com,
         linux-media@vger.kernel.org, sebastian.reichel@collabora.com
 References: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
- <20211208120744.2415-4-dafna.hirschfeld@collabora.com>
+ <20211208120744.2415-5-dafna.hirschfeld@collabora.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <10ca4eae-2959-a697-6818-308e04f88e14@collabora.com>
-Date:   Mon, 10 Jan 2022 12:43:46 +0100
+Message-ID: <283e584d-ab72-a3cb-f97e-71eeb16f7834@collabora.com>
+Date:   Mon, 10 Jan 2022 12:44:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211208120744.2415-4-dafna.hirschfeld@collabora.com>
+In-Reply-To: <20211208120744.2415-5-dafna.hirschfeld@collabora.com>
 Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -60,22 +59,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Il 08/12/21 13:07, Dafna Hirschfeld ha scritto:
 > From: Yong Wu <yong.wu@mediatek.com>
 > 
-> To simplify the code, Remove the power status checking in the
-> tlb_flush_all, remove this:
->     if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> 	    continue;
-> 
-> The mtk_iommu_tlb_flush_all is called from
-> a) isr
-> b) tlb flush range fail case
-> c) iommu_create_device_direct_mappings
-> 
-> In first two cases, the power and clock are always enabled.
-> In the third case tlb flush is unnecessary because in a later patch
-> in the series a full flush from the pm_runtime_resume callback is added.
-> 
-> In addition, writing the tlb control register when the iommu is not resumed
-> is ok and the write is ignored.
+> The tlb_flush_all touches the registers controlling tlb operations.
+> Protect it with the tlb_lock spinlock.
+> This also require the range_sync func to release that spinlock before
+> calling tlb_flush_all.
 > 
 > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 > [refactor commit log]

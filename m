@@ -2,135 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116D3488F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81F1488FBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiAJFYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 00:24:09 -0500
-Received: from mail-mw2nam08on2066.outbound.protection.outlook.com ([40.107.101.66]:18016
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230407AbiAJFYH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 00:24:07 -0500
+        id S238693AbiAJFZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 00:25:21 -0500
+Received: from mga11.intel.com ([192.55.52.93]:63271 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230407AbiAJFZS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 00:25:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641792318; x=1673328318;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Dg52vI7Zzph7SANnogz1zjWx6H95Svdva7PP5uUm/3I=;
+  b=m+hk50sb8GxeJ44J1iEkrK3aQt1voF+ZMQ6R+qEtnXZ7xpc3Wj5eM2Bg
+   9jrq21X6RQQewuDonCo+PAfc6V7ZpG64xNC8zmvvl6K9FqlNboE5EcqGN
+   cX8UTQvORWkdc0PSsEkBcW6N3ItLPL5F6WqvyoYAYnyvrwV47GpRX1Ei6
+   wLGncEAbxmvA0DqjEi8Nrp54URAcMWjk8RnxRiPYrQd2KeMY4EV+ob+cA
+   nXY2p85AaIge0RATQ9VyBVdPRs415mWDe6v4kcI2YjqbYJJqFJn/oaGkG
+   /6InMQhkbqPjBpMuedFvphGttOPthEqTFxejXAC2nCW8UERsgRSQBXCRL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="240705645"
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="240705645"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 21:25:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="557874842"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jan 2022 21:25:17 -0800
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 9 Jan 2022 21:25:17 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Sun, 9 Jan 2022 21:25:17 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Sun, 9 Jan 2022 21:25:17 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IODTP1/n1fZODiZQPt4VO9THOQl3EOzYZb5+d74zaRIcQR+Do7O7XR9mV/zrGUa/NTnmXGTSOlqa7WJKJ2aTlrtnNAAVsRTMcwI9xuq2qXZB6JFEiRkGTjPM9mUwuwjrrv3IJ7BhP/HOHR/Gbtu7q2lRawMybhYVlocDZIk1OBfqp//nn9cDHnJyw84GBIkpu/F13zAFUCFamrcvjLZWZilojmQmv/8Hy0viGNh3VKmEI+QwyevJB/7N194pWk/OTclU95vKBWqAXm0/3MIcFSMXP1EbmR0XqKKLLpdszuEPprAZr+AKKKCaAzONOKc8oSr82J3cMMBy8OD/SOx0EQ==
+ b=U6zv3rsRDmlRLho7TN4UvxHXU8SrZ/khQi9taDQiOd/fL5WE6tAUJRvOnoAGShR6Of3Q1Dp2bi9WtmB+gr3zcuYpkgQfdvYyVogEwFAHN0kOJ50YnHhfBfFLl42r7oityj4bYh1jFbTk+ZhlFUmswfTA4hH6AsE07hINscZ6iN5izp/dT7Ot3PtjHwKCbIiKFI/iH3HcK1/PA4HCh/kmagdUC8FXf7JX6AhSiUvTZTMLLOPi58GqSZRFNlL/0fib0M6Uc3T9NwnJlZ8f+Ci6FjS/xyQdtgjjFrFiUq3NEB02wNnvlj6DOQfp7lhF6vgYqUc/E06B1FNpONGLd5pslg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=veDKtIyJv0NQSDbx7ywSgd8B1GfVkS52+INfA29V71s=;
- b=Uue8BJoGTxDNBF5cPMHJzNvNddUtMRMygF2UylciZEpqTKtB5P+mT1r7OkisMcxKuWA0IbJX8a9Bh+JnEpSgJrcZuboNNDDVWfEnF/8ILLYgXDPyc6DEU+N1LL5OEtVvyq6N2iv12qYtY9QrcnKM91enqbg+31hx/o82EahNEY18aF03T7y/lL/KIgPHnt+OIOsjhCbWQ4+WafHp1PUciE0aDtfLbVYAmntiI+QlTmEjQeGclHMDGcVlG5xlA4fBuSNdkMPKWZXtpZ3cT+eq3vXCr5kh330hnw5zVt3tvAK3iHU+qFrlvZyEUGtSJ/+DQBawQJLqkI93ifYwTwWWfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=veDKtIyJv0NQSDbx7ywSgd8B1GfVkS52+INfA29V71s=;
- b=bzADLV3uDoIa3dLSyev9xm/25ypWtnIKtGlnT9iVteHElZb3MJQgeQITSAKxQ3AS9GaAulLMe9LNcL9ZnoWUKHn1ItWwVu3lH8NBkJBWQpoosTKdfQbEwU+YvBOVV+Bkqz1u1Gqh4ttk0STqbXA5Z6N4ewN+F5lqhLkQdSuFY6k3bXt2BBFBEudKgVhU0X5lTM5c22oTht5cWETwtFg+5/D9tFBbhJd5dVLsf2vgkblcrPY6tqSmKlUXFRqSyXeuuyxehWEsmR743G1G88Rn2cwstdhnZ/MfWLYyTqT/ytYV4FoMLhTlbtUA80d+a8/DoI6J+rUmsvk+wf9G3lpq7g==
-Received: from CO1PR15CA0053.namprd15.prod.outlook.com (2603:10b6:101:1f::21)
- by SN6PR12MB4718.namprd12.prod.outlook.com (2603:10b6:805:ee::20) with
+ bh=XHgmG7vf6e8yT2idli02GCnA5fjtGU4DpbYXHk8Sllo=;
+ b=g0s0/mRYliEvLfUOfD7KuH0KIsVCcHcyRrgYcSdiLr+SGwGMgriEO2Ihlbu4l3QZtkDE+uCK1b2w5REWq7PFljhQhlP/L5Lbym3PhlDc6GYShBdDkKMfUluTFmP7AwVia3hfs5RkFjuHbgj4KJAiUJTBV0slD8gCCnLkjGM56G9nOv5BUex5MzYEJMiDySyoBBCsZuv6+ra1kZSRfCetqT4cUFxPJol287p0yzkf/1B2M0B2lxzBAM/sB6cSLBrbLvf8YQ81bV/SoilXCKEzrEMuz6Zoh54pnt9bWIrkm5YL2+Mu4Rrmt5IFQztbDyUYE18vTMd3VzxDnJvPgM8EaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN9PR11MB5451.namprd11.prod.outlook.com (2603:10b6:408:100::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
- 2022 05:24:05 +0000
-Received: from CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:101:1f:cafe::f7) by CO1PR15CA0053.outlook.office365.com
- (2603:10b6:101:1f::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9 via Frontend
- Transport; Mon, 10 Jan 2022 05:24:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT014.mail.protection.outlook.com (10.13.175.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4867.7 via Frontend Transport; Mon, 10 Jan 2022 05:24:04 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 10 Jan
- 2022 05:24:04 +0000
-Received: from mtl-vdi-166.wap.labs.mlnx (10.126.231.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9;
- Sun, 9 Jan 2022 21:24:02 -0800
-Date:   Mon, 10 Jan 2022 07:23:58 +0200
-From:   Eli Cohen <elic@nvidia.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>,
-        "Jason Wang" <jasowang@redhat.com>,
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH] vdpa/mlx5: fix endian-ness for max vqs
-Message-ID: <20220110052358.GA99650@mtl-vdi-166.wap.labs.mlnx>
-References: <20220108180041.4601-1-mst@redhat.com>
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Mon, 10 Jan
+ 2022 05:25:14 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 05:25:14 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "Zeng, Guang" <guang.zeng@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+Subject: RE: [PATCH v6 07/21] x86/fpu: Provide fpu_enable_guest_xfd_features()
+ for KVM
+Thread-Topic: [PATCH v6 07/21] x86/fpu: Provide
+ fpu_enable_guest_xfd_features() for KVM
+Thread-Index: AQHYA/gqbksPM+WOB0GCv7Jt5r6c6Kxbu3ZA
+Date:   Mon, 10 Jan 2022 05:25:14 +0000
+Message-ID: <BN9PR11MB527688C6B00A14C61B97ABE08C509@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220107185512.25321-1-pbonzini@redhat.com>
+ <20220107185512.25321-8-pbonzini@redhat.com>
+In-Reply-To: <20220107185512.25321-8-pbonzini@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fbf94ab1-bc82-41aa-6d13-08d9d3f994ab
+x-ms-traffictypediagnostic: BN9PR11MB5451:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN9PR11MB5451757B74FCF13AB89B089D8C509@BN9PR11MB5451.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2803;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +VZi5OxPIVGA4FkmlublYI55cZX9NCA/gLRUKopMo536Wl1UOvF3/SksuFHv/jPQhLToQp1Dj17JEdzdTQSHZGVoTaWExnZMtWajB21TIkKDwPRzys66WK+LStJ2MnpDQOgZB5ELyJuoZVK5w2XdCFdnx7ScmHOkbBYvd1bPtdC6cO6buYYv6/DX3qJTuUbnPpVJbTuB+Nx+StgJveQWO44p/qs8T4iTcwjBChzJoYqHUkoVxOq5IHQ1Pvb+/+RAqhbV3ya7M78bcRGzW/wdE9q2W2A69HPjAi4ZRBhJ1c2HTsq00N9LDpLEgaO+Ss9EwvJbcsClAdcilWzcY1+EBg+Fb2zI0zA5YgzDOc3wnmXjbvV2xtNjX92/5K8x9ezBJa2UzJDTq71kqRikVLyRAOewGDh6ojzHep4wgiR3BQij6ZG6DNLTSQIK8BTl/bbTnYsywqe/Qrhri4KAKamrwj4xXyaYeiY2zpNJODKcv4eBDwjMqqekqnJCNNzfUrweHKEPK7YpKHRtDeGf3VvpZ5HNCVWs9PESRgSaycEL0nahvF8M/IKHHhSUNQwfB9QMc/6jASgq9a3OHYnGx2EQsRsOhoPY50HOsHVGiF3TDnSzsWbc5ug/V+9+Wnq5IXph6oFo4fnstDUu/u7lho/CN70v/zpaJLb7kN+WEgILTUKcjzd/HXj6Zn2aaDpeV48TlE259cL9p2/U8Kayx9Cdew==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(38100700002)(38070700005)(33656002)(4326008)(7696005)(83380400001)(71200400001)(6506007)(316002)(110136005)(107886003)(82960400001)(54906003)(4744005)(2906002)(508600001)(76116006)(52536014)(26005)(9686003)(64756008)(66556008)(55016003)(66446008)(8676002)(86362001)(8936002)(66476007)(186003)(66946007)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6kR6dFaonRvktbueKxZ5JdXyvhY1IJmZmna38Qb+jskb5dQ0mwyLTlH/zpuU?=
+ =?us-ascii?Q?8jMqvoLFkEL7uD2hRY5M703U5/ofWod9Jy/tGrX+otpUadQWUi+xMImHo6lb?=
+ =?us-ascii?Q?b5yDPXUx+A4pFu687TnOvOXVAzo2xSXD1P3oYFzKzqC9D1hOV14D9PuyMIPB?=
+ =?us-ascii?Q?4AeSUhsWHvydFLGARrzopxs1E6oqCpeNzx1u4pe1GPeTIQCP1nU8RcV6qRXe?=
+ =?us-ascii?Q?dl3jltpk/eoCYK6QrBJt5keAX/WsoCl19OqHRmg014+bPBDP8QB0ESidhdX6?=
+ =?us-ascii?Q?sFN+HCjhv9DflwHXCwDqCMLvpBwN4BfgEstrWk17cKLBnimLSe0ITk6geSEJ?=
+ =?us-ascii?Q?yZodGnyXvyjV7DRTm2NBHbyOzJAhKPDRwbhbyJ8/N7ATYkoT/5K75Had3V91?=
+ =?us-ascii?Q?6o6eDqABYniChrL/EWGR8/XYszTEwDp/Uhdst7hngzsC2kBkw1M25IIfHQY/?=
+ =?us-ascii?Q?oGScTLT5CK9YeMY7bYRJ6qNoO1f1jw7f5SkANrfAsO7O5Pz4FBZPtEoQzjx7?=
+ =?us-ascii?Q?b9gu3B9afzQTdUMfLWAi6ls/cbhKCeUmqir7Br6lf0xarLh5zjIS2Z4G8jWo?=
+ =?us-ascii?Q?qeO2gBVd+F+Un0a7w7fgSTG6aZaDaglYx1gcdTr8h/cOBeGncm2+czkg/nJo?=
+ =?us-ascii?Q?1dWr1qvR6HjTMODTY3KBQPHeF2VXwn0or86Ax2P5ivACDmXMI+mIlk0HCE70?=
+ =?us-ascii?Q?BxqJbfH5QEAX5KAyf9KbOBD24R1BSP449o9SZtjkSu0VxGvedldvVrat3CxJ?=
+ =?us-ascii?Q?1ozDQf1h0fkOFtfPHL+Gm0CIKV3aZ01kT0Fm9OkbJX2HX1hKEhehQ3k7pnvx?=
+ =?us-ascii?Q?GlMB7kehkBpQlh3NmDoOOYTNj/vGxotHRt65d6/BVpoL6cnJeyY8EYLdZhXj?=
+ =?us-ascii?Q?QzKdk2q5ZxhItVRLLSn/Aq3c1Z26LkTV9Qf9EnEIPpzwX/Es0LPBnKsmMTpd?=
+ =?us-ascii?Q?DV+cE5Wlty8GM/d3ZziBZhd76ZlcfbLnVTG7rBXhiBvLTuyaVwDpS4omqSI5?=
+ =?us-ascii?Q?nYnm9oEkTmeZBewvR5fEyi2egxRX6i6LHU8gUszwd0up39KJC3ta5ENLg1b7?=
+ =?us-ascii?Q?T7E2ZDiSSEaZ98kUwKym1doBC56UMI42zuaHNb2dJqJLXlrrYbJS3XaCTwQR?=
+ =?us-ascii?Q?Zpr2BuM/ihYxm5JcPtyrL8Ypk5aUwuajgyrAcNTbCUWaBIiMmLaYAlGP4sa2?=
+ =?us-ascii?Q?cSc/wjW/tsrlhk5GvSBpup3jploIMuexAFxuOtdJ26FKNLUPtBfrcT51JVt/?=
+ =?us-ascii?Q?73V93yjlyMFtVebtEYXtKcWnrCv91b+LnCa97/ZRtvB+06/nDaYr9q5xMmQ7?=
+ =?us-ascii?Q?HiaQNaoYiP+0fHJGywdKEYMW7yh7Q+x/GOXZEwz+aWD88g0eWj+IhSxVxtVI?=
+ =?us-ascii?Q?rTCnaC1yVB1mYWtmyNwqEJS/15r6xGBPeVOxmUUw9HDs8MTuli/mB1XOVURD?=
+ =?us-ascii?Q?CWMicwl24YBCjyZHKiEso46UB9ZGvELMMPrTzNUtBZlLPkUHSWZiCgsM59w9?=
+ =?us-ascii?Q?7IMmcz5c9vF9HBxQZpgv4ZzYGP7ttgihnSIx+tz76E3vYd9WqHUMb6OFA84F?=
+ =?us-ascii?Q?6zC/7oWoA2tyi3rlAziMdevavVX0V8BVhvpenw5bMx/3q84uy0mpzaTstOyx?=
+ =?us-ascii?Q?N4QTrLnJt369ckmgJ6AwFgk=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220108180041.4601-1-mst@redhat.com>
-User-Agent: Mutt/1.9.5 (bf161cf53efb) (2018-04-13)
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e35aa70-79be-407e-d936-08d9d3f96b59
-X-MS-TrafficTypeDiagnostic: SN6PR12MB4718:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB47182DDDC5DCFA2C808062CDAB509@SN6PR12MB4718.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K69C65CHvk4jlGZCj8uIeR0ncQjc1s1IVzVyV9wFfwX8EVGzYLRo5uDQ0WZLtgchHnB4/svwVgKsSU78CH8uPvKuZ7ZFMEe8KX+7v8x/Lnhd6jbIzSj23lpz3v2om1ZSyMUhy86l3S4ccR4uwiyn1bNcQ8LjOEyd39cYrzf6v/m3LhGx2eRLpke8otRDvWZaOryqTHY8c8sFg4Cnh5ZgKH/dWGkMe93H0E1yaGF+mkf9/bjNUt2v98RiPPek0MHZIoykGrr/4EcKivU9aOLTMkb7tOQIIV7i+e4WB2jA3su8U/BIcP/whNqxQ3R+dQGTKbxfmD7ApGpFZeNqwkr42Z2iSgfAHZVIwvGni7rMvK6sHk8N1ESPjbVTnRN1NQUnIq6mFuzgMD1CUktWGJE4qeoyNGGn/abcfkYXRz7r/r1n1L3y8AnjaSxVixXiKuClDj7UbPJ+ETovREj/bDDR848Usd+Nt8Yh6BHUS+G9wcE/awrQ9vzUh3J+Q/FiQxViOVX3DF/3tr15O6STR2lB8Vf50zL+JHYwM9MiJSDeYyFYaVuMfEfvUrv/e5I7sHT7Hnkl7l/lNzCqODQo6Ccmxwtb/gwg6Dax63zqGAqqzs9yTu6DuBemgPL8i1WpXcX/CbNBLY3W/Ok+Z851blB8cTY6R/IRDuCL+DYNNI6h3FtNYV9tvcZR0WZmnfbbCD7DQLaq9lM9qHV/NMK+ZKxFzpxVet6IePZkSl1VDa9FPzx2jxoAChnC+lklClSqtveO5WvhFkYz/SWBbLEFCs2x3T1KccYT5Syr0S4dW0BKAQw=
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(55016003)(26005)(2906002)(82310400004)(508600001)(426003)(16526019)(186003)(336012)(5660300002)(33656002)(9686003)(4326008)(86362001)(1076003)(8936002)(70586007)(356005)(6666004)(83380400001)(6916009)(36860700001)(81166007)(54906003)(316002)(40460700001)(7696005)(70206006)(8676002)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 05:24:04.9753
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbf94ab1-bc82-41aa-6d13-08d9d3f994ab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 05:25:14.2184
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e35aa70-79be-407e-d936-08d9d3f96b59
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4718
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: p1Qwdf2wfimDwZlJ9L1Mi4qxqmoUUdn0w5waCbhfpx4ITBEgDywnKhPWNPpPfWk/dTYey/r9NS7i24GVuvRESg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5451
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 01:00:43PM -0500, Michael S. Tsirkin wrote:
-> sparse warnings: (new ones prefixed by >>)
-> >> drivers/vdpa/mlx5/net/mlx5_vnet.c:1247:23: sparse: sparse: cast to restricted __le16
-> >> drivers/vdpa/mlx5/net/mlx5_vnet.c:1247:23: sparse: sparse: cast from restricted __virtio16
-> 
-> > 1247                  num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
-> 
-> Address this using the appropriate wrapper.
-> 
-> Fixes: 7620d51af29a ("vdpa/mlx5: Support configuring max data virtqueue")
-> Cc: "Eli Cohen" <elic@nvidia.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
+Hi, Paolo,
 
-Reviewed-by: Eli Cohen <elic@nvidia.com>
+> From: Paolo Bonzini <pbonzini@redhat.com>
+> Sent: Saturday, January 8, 2022 2:55 AM
+>=20
+> +/*
+> +  * fpu_enable_guest_xfd_features - Check xfeatures against guest perm
+> and enable
+> +  * @guest_fpu:         Pointer to the guest FPU container
+> +  * @xfeatures:         Features requested by guest CPUID
+> +  *
+> +  * Enable all dynamic xfeatures according to guest perm and requested
+> CPUID.
+> +  *
+> +  * Return: 0 on success, error code otherwise
+> +  */
 
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index 84b1919015ce..d1ff65065fb1 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -1242,7 +1242,8 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
->  	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
->  		num = 1;
->  	else
-> -		num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
-> +		num = mlx5vdpa16_to_cpu(&ndev->mvdev,
-> +					ndev->config.max_virtqueue_pairs);
->  
->  	max_rqt = min_t(int, roundup_pow_of_two(num),
->  			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
-> -- 
-> MST
-> 
+Just a NIT. This function itself has nothing to do with guest CPUID
+which is a caller-side policy. It simply enable xfeatures per request.
+
+Thanks
+Kevin

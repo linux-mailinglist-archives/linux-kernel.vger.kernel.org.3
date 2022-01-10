@@ -2,92 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CD748A01F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF28C48A02B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243404AbiAJTat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241847AbiAJTar (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:30:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32BCC06173F;
-        Mon, 10 Jan 2022 11:30:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97BEB61416;
-        Mon, 10 Jan 2022 19:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009DEC36AF5;
-        Mon, 10 Jan 2022 19:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641843046;
-        bh=YmviK5RZSlP89MSfpfdgfDv26eVqjbSGZFEAexfUax0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WQJdGeIw03IxhjkyOh/oHy0/xhGEqu6Yzf6vNo9uP74UezpnSgGWRZgeGnJHCNAJ1
-         a+gZU004fsbLe0PVty+dm+DCWa21lrdv1U6mZ7gvXR57Aolr+JFgWbTHPpyp3W9TSD
-         0a5lp9fYYLOhOr7Juj5uPePAYMHtQpcIqi59+v6WrrevdQOzJRhVXKzl9Z69k4o0R1
-         IPWG2yCUeTeMu4lKPkburPZWQtbEzLu8WCd+zbDG0yr06Jy+XkyFyAY9gC64hsxdfz
-         HYPVxqgvHJveZOwObNUU8xmh9sey1RsCfGXtW2kEXvXSmgCnSwvOr3WYU65STQjun3
-         D2/kGMcUEl7Mw==
-Received: by mail-yb1-f180.google.com with SMTP id j83so40987037ybg.2;
-        Mon, 10 Jan 2022 11:30:45 -0800 (PST)
-X-Gm-Message-State: AOAM530pdSqU1maeEwEXflyzhswb+rIFtZ3H7BmFI/PXlMYsbM1l+lGf
-        vg/YANdgSSUktLG5rmdJeuDavagzUicDdmvID34=
-X-Google-Smtp-Source: ABdhPJxi1+kIoliozeFn6h+zQk5GRTM/v/LZ+hjQz3ZA5kzu+flR3VAEV7Vvspv6IoLYEidim73AuXuTQCbYgYwvXts=
-X-Received: by 2002:a25:287:: with SMTP id 129mr1482739ybc.670.1641843044963;
- Mon, 10 Jan 2022 11:30:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20220107180314.1816515-1-marcel@ziswiler.com> <20220107180314.1816515-5-marcel@ziswiler.com>
-In-Reply-To: <20220107180314.1816515-5-marcel@ziswiler.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 10 Jan 2022 11:30:34 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6sewYKBbCh+EcY-6PcwQV_+4-Pm1bmgXcZepzoAH=Z6g@mail.gmail.com>
-Message-ID: <CAPhsuW6sewYKBbCh+EcY-6PcwQV_+4-Pm1bmgXcZepzoAH=Z6g@mail.gmail.com>
-Subject: Re: [PATCH v1 04/14] arm64: defconfig: enable bpf/cgroup firewalling
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
+        id S243616AbiAJTbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:31:04 -0500
+Received: from mga04.intel.com ([192.55.52.120]:21940 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243510AbiAJTbB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 14:31:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641843061; x=1673379061;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RxYOq7hNnHUydTJret/bzJJ7FKiRggRskn0+xuXTnOE=;
+  b=TBkZKP2xzBxML5bc5guYljwagQXDdA7nsuC0W5R6gLcD/huvw7gKE1KE
+   rcwyBR35zogUF+PUnbAJwmkiDtLF0uA6sRLNqN8PI63UNYVY1i79HTtJC
+   mP0ZzEABNqOBqheu5n2Q2bw+X+m1b11esr0OhpDT0/NAidt3MA0DgkZfB
+   rqXU57TLJQpdPSFpcjZEcDx5pvDWWJpzt4wsGZz+Hef5Ez9uuj36oCO1v
+   J34uu+PJAz71O0JdWdLWUQI6vJOUCthqqcptcBSu2Xaxh6cRk+2IIFT4z
+   7oTfxexsHOdZJY7wsNbvlChMnTxre2xR9yDewOrwvdSHbXEkzWkYRIOrA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="242118803"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="242118803"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 11:31:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="592450674"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Jan 2022 11:30:57 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 17955120; Mon, 10 Jan 2022 21:31:08 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Olof Johansson <olof@lixom.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Rosin <peda@axentia.se>
+Subject: [PATCH v2 1/5] math.h: Introduce data types for fractional numbers
+Date:   Mon, 10 Jan 2022 21:31:00 +0200
+Message-Id: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 10:06 AM Marcel Ziswiler <marcel@ziswiler.com> wrote:
->
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
->
-> This avoids the following systemd warning:
->
-> [    2.618538] systemd[1]: system-getty.slice: unit configures an IP
->  firewall, but the local system does not support BPF/cgroup firewalling.
-> [    2.630916] systemd[1]: (This warning is only shown for the first
->  unit using IP firewalling.)
->
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Introduce a macro to produce data types like
 
-Acked-by: Song Liu <songliubraving@fb.com>
+	struct TYPE_fract {
+		__TYPE numerator;
+		__TYPE denominator;
+	};
+
+to be used in the code wherever it's needed.
+
+In the following changes convert some users to it.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+
+May be pulled via IIO tree.
+
+v2: no changes
+
+ include/linux/math.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/include/linux/math.h b/include/linux/math.h
+index 53674a327e39..439b8f0b9ebd 100644
+--- a/include/linux/math.h
++++ b/include/linux/math.h
+@@ -2,6 +2,7 @@
+ #ifndef _LINUX_MATH_H
+ #define _LINUX_MATH_H
+ 
++#include <linux/types.h>
+ #include <asm/div64.h>
+ #include <uapi/linux/kernel.h>
+ 
+@@ -106,6 +107,17 @@
+ }							\
+ )
+ 
++#define __STRUCT_FRACT(type)				\
++struct type##_fract {					\
++	__##type numerator;				\
++	__##type denominator;				\
++};
++__STRUCT_FRACT(s16)
++__STRUCT_FRACT(u16)
++__STRUCT_FRACT(s32)
++__STRUCT_FRACT(u32)
++#undef __STRUCT_FRACT
++
+ /*
+  * Multiplies an integer by a fraction, while avoiding unnecessary
+  * overflow or loss of precision.
+-- 
+2.34.1
+

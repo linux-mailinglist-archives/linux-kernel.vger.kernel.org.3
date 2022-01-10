@@ -2,138 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C66F48977E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B8A489783
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244772AbiAJLcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244737AbiAJLbv (ORCPT
+        id S244805AbiAJLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:32:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60604 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244745AbiAJLcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:31:51 -0500
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3440DC06173F;
-        Mon, 10 Jan 2022 03:31:51 -0800 (PST)
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Mon, 10 Jan 2022 12:31:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1641814309; bh=+3+XudVZJVlSF4hofBLXncn1knHit7hhlLwg5tcx9vE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E/k8e89+sCIX3aQ0iNCG3Pv2AvcHnHHe1kto/10wnFFkObLqwkmG5UqCMWq21o25Z
-         G/dJhs9B+2UaJMDL6RHQS9OoIAJIfm42P/ZBldUjsEqKing+VVnBFnEDch2uBPbYYJ
-         2T67DnuPXcNunSXonHWi41dvqQ0zjYBFsdjrrI5k=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 3962D80514;
-        Mon, 10 Jan 2022 12:31:49 +0100 (CET)
-Date:   Mon, 10 Jan 2022 12:31:48 +0100
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/5] sh: rename suffix-y to suffix_y
-Message-ID: <YdwZJO/ar+GHuBd1@buildd.core.avm.de>
-References: <20220109181529.351420-1-masahiroy@kernel.org>
+        Mon, 10 Jan 2022 06:32:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641814332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hrEu87EnXQ6Fg7UvjXggUKw0Jcqes+nBaSmxrmpEEwU=;
+        b=Na8Keg6S0hqNWI8biY0r3XqJygy1yo4X8MajVtNkrjYZ7JkaXEna/RStvL72BrXpcu7NDE
+        XahOiI33eyfF1WIjMQZJ9ZlpcYoRcS8vofZumTqYfCqx7D2HeAtseCkpg848WsjfAVtRto
+        sktfokk7YYiNjV5SS9r2udAHrSKZgjA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-MsPtVj76MgWGNWERMB4MZg-1; Mon, 10 Jan 2022 06:32:09 -0500
+X-MC-Unique: MsPtVj76MgWGNWERMB4MZg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E8BB1898292;
+        Mon, 10 Jan 2022 11:32:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F9507B6C9;
+        Mon, 10 Jan 2022 11:31:55 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Ydvl8Dk8z0mF0KFl@infradead.org>
+References: <Ydvl8Dk8z0mF0KFl@infradead.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk> <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com> <Ydk6jWmFH6TZLPZq@casper.infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        Amir Goldstein <amir73il@gmail.com>, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        ceph-devel <ceph-devel@vger.kernel.org>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 38/68] vfs, cachefiles: Mark a backing file in use with an inode flag
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220109181529.351420-1-masahiroy@kernel.org>
-X-purgate-ID: 149429::1641814309-0000056E-303CD523/0/0
-X-purgate-type: clean
-X-purgate-size: 3575
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3735738.1641814315.1@warthog.procyon.org.uk>
+Date:   Mon, 10 Jan 2022 11:31:55 +0000
+Message-ID: <3735739.1641814315@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 03:15:25AM +0900, Masahiro Yamada wrote:
-> 'export suffix-y' does not work reliably because hyphens are disallowed
-> in shell variables.
-> 
-> A similar issue was fixed by commit 2bfbe7881ee0 ("kbuild: Do not use
-> hyphen in exported variable name").
-> 
-> If I do similar in dash, ARCH=sh fails to build.
-> 
->   $ mv linux linux~
->   $ cd linux~
->   $ dash
->   $ make O=foo/bar ARCH=sh CROSS_COMPILE=sh4-linux-gnu- defconfig all
->   make[1]: Entering directory '/home/masahiro/linux~/foo/bar'
->     [ snip ]
->   make[4]: *** No rule to make target 'arch/sh/boot/compressed/vmlinux.bin.', needed by 'arch/sh/boot/compressed/piggy.o'.  Stop.
->   make[3]: *** [/home/masahiro/linux~/arch/sh/boot/Makefile:40: arch/sh/boot/compressed/vmlinux] Error 2
->   make[2]: *** [/home/masahiro/linux~/arch/sh/Makefile:194: zImage] Error 2
->   make[1]: *** [/home/masahiro/linux~/Makefile:350: __build_one_by_one] Error 2
->   make[1]: Leaving directory '/home/masahiro/linux~/foo/bar'
->   make: *** [Makefile:219: __sub-make] Error 2
-> 
-> The maintainer of GNU Make stated that there is no consistent way to
-> export variables that do not meet the shell's naming criteria.
-> (https://savannah.gnu.org/bugs/?55719)
-> 
-> Consequently, you cannot use hyphens in exported variables.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+Christoph Hellwig <hch@infradead.org> wrote:
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+> So let's name it that way.  We have plenty of files in kernel use using
+> filp_open and this flag very obviously means something else.
 
-> 
->  arch/sh/boot/Makefile            | 16 ++++++++--------
->  arch/sh/boot/compressed/Makefile |  2 +-
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/sh/boot/Makefile b/arch/sh/boot/Makefile
-> index 5c123f5b2797..1f5d2df3c7e0 100644
-> --- a/arch/sh/boot/Makefile
-> +++ b/arch/sh/boot/Makefile
-> @@ -19,12 +19,12 @@ CONFIG_ZERO_PAGE_OFFSET	?= 0x00001000
->  CONFIG_ENTRY_OFFSET	?= 0x00001000
->  CONFIG_PHYSICAL_START	?= $(CONFIG_MEMORY_START)
->  
-> -suffix-y := bin
-> -suffix-$(CONFIG_KERNEL_GZIP)	:= gz
-> -suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
-> -suffix-$(CONFIG_KERNEL_LZMA)	:= lzma
-> -suffix-$(CONFIG_KERNEL_XZ)	:= xz
-> -suffix-$(CONFIG_KERNEL_LZO)	:= lzo
-> +suffix_y := bin
-> +suffix_$(CONFIG_KERNEL_GZIP)	:= gz
-> +suffix_$(CONFIG_KERNEL_BZIP2)	:= bz2
-> +suffix_$(CONFIG_KERNEL_LZMA)	:= lzma
-> +suffix_$(CONFIG_KERNEL_XZ)	:= xz
-> +suffix_$(CONFIG_KERNEL_LZO)	:= lzo
->  
->  targets := zImage vmlinux.srec romImage uImage uImage.srec uImage.gz \
->  	   uImage.bz2 uImage.lzma uImage.xz uImage.lzo uImage.bin \
-> @@ -106,10 +106,10 @@ OBJCOPYFLAGS_uImage.srec := -I binary -O srec
->  $(obj)/uImage.srec: $(obj)/uImage FORCE
->  	$(call if_changed,objcopy)
->  
-> -$(obj)/uImage: $(obj)/uImage.$(suffix-y)
-> +$(obj)/uImage: $(obj)/uImage.$(suffix_y)
->  	@ln -sf $(notdir $<) $@
->  	@echo '  Image $@ is ready'
->  
->  export CONFIG_PAGE_OFFSET CONFIG_MEMORY_START CONFIG_BOOT_LINK_OFFSET \
->         CONFIG_PHYSICAL_START CONFIG_ZERO_PAGE_OFFSET CONFIG_ENTRY_OFFSET \
-> -       KERNEL_MEMORY suffix-y
-> +       KERNEL_MEMORY suffix_y
-> diff --git a/arch/sh/boot/compressed/Makefile b/arch/sh/boot/compressed/Makefile
-> index cf3174df7859..c1eb9a62de55 100644
-> --- a/arch/sh/boot/compressed/Makefile
-> +++ b/arch/sh/boot/compressed/Makefile
-> @@ -64,5 +64,5 @@ OBJCOPYFLAGS += -R .empty_zero_page
->  
->  LDFLAGS_piggy.o := -r --format binary --oformat $(ld-bfd) -T
->  
-> -$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix-y) FORCE
-> +$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix_y) FORCE
->  	$(call if_changed,ld)
-> -- 
-> 2.32.0
-> 
+S_KERNEL_LOCK?
+
+David
+

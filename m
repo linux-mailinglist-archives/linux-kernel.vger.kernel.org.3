@@ -2,90 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF09489897
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4484A48989B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245476AbiAJM3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245488AbiAJM3e (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:29:34 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A8BC06173F;
-        Mon, 10 Jan 2022 04:29:34 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so6838673pja.1;
-        Mon, 10 Jan 2022 04:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rBfRzRO7n13YTizN2EeFImg/FwnKSMH4zlIbjLIB3Iw=;
-        b=edRxPRwRwzOSpdTmZxLrLLZyT2oPGeI/wY2NAnbPvNEDSwEJwp2e8WoQKfQy9oZeT2
-         f9TfFmwT+8Vj8hDyRLnCTa6HfpyGXg1Jb3/8fUl37nhSEDHetHIycGqyRhqFudzyT986
-         /oiQjg1QR1Op5R7hi8tQ2sHdOnjpHoAR/ONXpnb3jPe3gAglNGT4giHy9yRi3DRsZ24t
-         55t2Ti4XH4zxeHbgITVHtgX0TcJC0aoflX9giyA4L8bpqR4/BS55RdxG3GtC7DCDU41n
-         ImQsyzzi+vFETZK/UP6/Q1PZQbqKen8ynucqb7Na3XxN9GrVbzGeHPSuuuGmjTETdH6Z
-         dBWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rBfRzRO7n13YTizN2EeFImg/FwnKSMH4zlIbjLIB3Iw=;
-        b=fiSzPJxWu6A4wt6mL6S1nDDTW0a2JdPky2w5ofml4cgt9MW6ecFcnhUKVLOYZ4A1tu
-         kuHUyytcOhOV+8Fg8+ynrev/yCwbUL9c4mFGRMK5Elf1nQx3ezZ3HZfW2V68fv3Fctba
-         b3U4Tg2KIPQCSlqcQO4SkJnju1TCULhmMHkXPc7LKU9q6r7kLwtr69gEchQm7QVnAzj8
-         QHerqayLghGgz+yj9FlOlksv1olt/gdlLsOqIbiwVmDjZR2aDMUicVm6RI110XEoWc7D
-         cX5BMWmMgdtf7sAPsxiBnYwQaXyBb+nzcmZ2DEqdYoQSb5XpmG3mn4TsAcg3Qj7Tow/n
-         RsDQ==
-X-Gm-Message-State: AOAM532eJdUnLHVPEKGJmHwli+FrYSXkC0bxTmfk0j00dUexSNb3N8A/
-        gbtYm0MdtD4gvhdwdZYgClk=
-X-Google-Smtp-Source: ABdhPJw2X6GVrl8WgOo8PMcCuQqkff+R4SkYON+2Ndpxxs0vtLuF1KG8qbrCdchruPrZNb2CtfYAhA==
-X-Received: by 2002:a17:90b:4f82:: with SMTP id qe2mr29843162pjb.128.1641817773951;
-        Mon, 10 Jan 2022 04:29:33 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f10sm7426565pfj.145.2022.01.10.04.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 04:29:33 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     alexs@kernel.org
-Cc:     xu.xin16@zte.com.cn, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] Add four translated documents for KSM
-Date:   Mon, 10 Jan 2022 12:29:29 +0000
-Message-Id: <20220110122929.647573-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S245491AbiAJM3x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 07:29:53 -0500
+Received: from mail-eopbgr90059.outbound.protection.outlook.com ([40.107.9.59]:21136
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S245497AbiAJM3p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 07:29:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E9eDdsG6yfBPZtvm2tcEiYbjLOA2/R3jU7fDjzcEhUGBNJTVBQ0KPLlzqQY1z9R4RsUxqAuFeklQP5xST6bQWpV8903yXTO+o8TKmsM15kWcLYAELoOkCKbQYnhuPDhSKpAjJmX39pmnRk8CbqZJPboxTyr2vsjU93P6sZfbi2mxp4spVmoYK5ALMipM+oIeaGn7uX3i8kQzi0rCcSefL8c9RtpIYBs29+4VG6k/fImcAdastwJ/ksCyZBA7ohXT12JNi7m3m9jn8VV6MOO8P07ZhyDVNaJP928rJbQRvdEWjj3iHI4mFzQ3mjxJ0yn56cQqoHZkDbsTlelUXK4jMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f7eit1O/BcqaXly1S25IVo+FbOhPgEoDa53w9hWTgkY=;
+ b=GZjdtESFs8K3bNRQ2vgMUzQdSSRwy2VyEgIGB3E4voqDckHme9VkNs93QljKx8ogV/UckkJW+W6O8gJzeUdIaZsq05F76uNa5o3rZqB2/+bW7fX/gwzqxJpyixv7hbwBoIG/w6RkFr3Vztl+/Nk2cr1ndyvQSWOzZlNs0M1hAvJU0wAmI2nyRa4aEREmGwSHjcSa8A2aYwboo+FwL06RbKRNIwASDrEc/I5ydkWHOS02v1viPPOfdf6VeS+H5vKBPTdCNjFuU68NdvbHhCNLrEz/8iqGEj852MyKR7DHonguRQs/Aex4mapcINRop7o7fLmjG8Tlx3HlybAwf6xdIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRXP264MB0552.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:1e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
+ 2022 12:29:42 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9d4f:1090:9b36:3fc5]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9d4f:1090:9b36:3fc5%4]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 12:29:42 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
+Subject: [PATCH] powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and
+ TMP_REG when possible
+Thread-Topic: [PATCH] powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and
+ TMP_REG when possible
+Thread-Index: AQHYBh2+PoHCxCSIk0C7aiUG8hGF4Q==
+Date:   Mon, 10 Jan 2022 12:29:42 +0000
+Message-ID: <b04c246874b716911139c04bc004b3b14eed07ef.1641817763.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ea293112-d8d9-476a-5d3d-08d9d434e0d5
+x-ms-traffictypediagnostic: MRXP264MB0552:EE_
+x-microsoft-antispam-prvs: <MRXP264MB0552EB02EBE512A75CA52399ED509@MRXP264MB0552.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:923;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kvKMGz2OfdXoHhK8xEBDP/WnMBNw9KsLZpYgf0NzBxyN1sSfW7qUReMjXwC7WSvgNkd6XGoDHdb1cvb7/fq4+j7hsygpNfwM3ei6Q5i2/Xsvcs0JHJ50+0p93hZaWBajjVHQNnOyk3+ej4nDJVaya/l6xT69lDQBHgYq7eswZuI3Nj8Y5DqyAnRrWZ8nvTmeh/JGiixM0OgrzHzXZGv92qBTuElhfHbSbW0JR1wYtMfFspnogfcD/4mZiwXSGht2eMJWl+5FdBAXDb/0D7FUdEMQ2OSVlJx+nIzuYRJZqoPTI7PDQP/9ETIiT3mXfLBgScDoBnuSKDEE+xTFO+zudEA9h8jn9JA4VrIirEulA0MuMT4EbuXqO+1FGzFOAv9Si1iP2vPilQTWjGvlLS3jO4XZFJzWv7eCOdOyTrHx75bKwsSkh9zE2l5MrpDOAVqEoTF5wQyVp+bXDlu7eXNWrxMlYjEqLs0C3YF6NRWAElvxLX0mOYDHrXfH8c1VkCsBMfrukM8bwzzI7IK0IWr4orS2kPTvolig9tpg9Qc/i0lbqIMo4007TVIOZ0WRP4sPXxR+5gHx7dcMX8FhRunUsbqpTdAYnCA4QxljGs6dZ7RyeSykphS7FVAwQ357QlSKPw34ySygXdzqD3SGNCTyX5nVrf/MXWmSZkPVbCVqUJKGbEABvKzHEXhy1UAgb6J/wxHijFVrQXNWgKkROy4bpQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(76116006)(110136005)(26005)(5660300002)(508600001)(38100700002)(38070700005)(2906002)(54906003)(83380400001)(36756003)(6506007)(316002)(6512007)(86362001)(8936002)(4326008)(91956017)(122000001)(6486002)(2616005)(71200400001)(66946007)(44832011)(66446008)(64756008)(66556008)(66476007)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?FbnoQd3avsHkdBPAvpYzw2OzHn0A7KojETnsuF9HdWBAFi/4NkDESwv0OU?=
+ =?iso-8859-1?Q?N9C5n4+ZECx2HWbPYnGnkJIDygtbMc4HODeBPTYCBiaXBI0KiiZw4lZhQ0?=
+ =?iso-8859-1?Q?nMkh+oG3+nrPV9DJLupaiNcPOQX9DczJ2A2fFNo2pEWkb2E1kqkT+A4v01?=
+ =?iso-8859-1?Q?ICtLfTlnJZ21XLh/Ef0kA0/doXmx5qPab6TmhscfjSm3ylv542Un7iYNM4?=
+ =?iso-8859-1?Q?jU0Q8KQ+o4P+0D3u9h6dhtQ5V2vgEDQl7XxvhkD66mni+RrXux2Pi8e8Oe?=
+ =?iso-8859-1?Q?wWyv1DUA7i2RW1w56E//jnRkkug8B+V++Q0qqkL0hheSAqWYeSdb21Mj2e?=
+ =?iso-8859-1?Q?0jD/O09xuVvRDL4VFv2jFrkZT1v/KKxFMAlnfklhJaH+2AmhU2LSPlGSLy?=
+ =?iso-8859-1?Q?cNBnyoaBnk+D3P2/sRkSLZWd8L3ZmeSEf9vnV06tpkYhRTVStxPBMUtqsF?=
+ =?iso-8859-1?Q?meuvHnP7DoeeB9swSoz00koDb8QMFillGm6ooLgaRtYfP5xnbVt9g8MezJ?=
+ =?iso-8859-1?Q?BXAyzfUDIrwVD2g8UFy1fB9/OwFBaFW1TkiatPrg5n4CuqnsebxIfozIR8?=
+ =?iso-8859-1?Q?WodqscPVH1EJhwsMRFdfHH23nRKXCarN7diPssubhzpBzr14Tnr582SoOf?=
+ =?iso-8859-1?Q?3HK57Vo19rSi7AgLy8ATG4gt7lZpxPoqhiWrbX7IbE1BgZS30fTS182YLk?=
+ =?iso-8859-1?Q?N5AJ4IZdECdNeTo2xwQ0UD1N1GNettgmVa55YsyxcYgFNTuNt2wyhXwFGh?=
+ =?iso-8859-1?Q?dNu2lBv4kGn8I3lRyPHHmyDe9Ns5UoTiw75OatN9bOaDnA/DopP3JY9aUE?=
+ =?iso-8859-1?Q?ZbKfFie9yeg6QLE6TV5JGYzs3GlI0NIJeJkQgDFuUkV6xSZl5n1KkZUKyg?=
+ =?iso-8859-1?Q?c5v918U+fPgyja0QcfBD6HVihd9Ff6AGCGMQ75jHt90iWBJneCgad/+RBS?=
+ =?iso-8859-1?Q?/jtCpm//saoLZIXsA8Ek4Y4nOKsL7x3A7KP79BaoNx2ISAtkBgXcvYohmx?=
+ =?iso-8859-1?Q?CPRsuITM9JTWIn5ySzJKEm0QCh0UZqDOPpbr36UXngqfpPJGav2yDXPlw9?=
+ =?iso-8859-1?Q?5c1HDZtlWpGHKN1QAmbTzR/oAVccq14z962gdIgX4N5qfAaO3x6lzd3vzK?=
+ =?iso-8859-1?Q?XWCfvSXuAxm6In1aKT1E10luaIxLB7PQTO3KjZ/g19CCvCiGCKyGnb97mk?=
+ =?iso-8859-1?Q?csb1P3Kz/Zk62Zg5bHJQg4HtfZlZKM5AwtyWLCrEuhUrVAq8EdKfjMyxpQ?=
+ =?iso-8859-1?Q?O9d8etp6mwkeHZyaS9GoMxg2PEXfeS2SbMvSJeLaRShp+Xj5O/uGyRBVhL?=
+ =?iso-8859-1?Q?ZQzWGBVUou7btwFTzflhLu0qKxO7X3jEvFVo2sdIrQwLDBQft+Gz3tU9re?=
+ =?iso-8859-1?Q?hRPTIhCV3N09uLq/ZAhraxYSWH/M16VKY0iueaor/1MD59tn94XK+urq64?=
+ =?iso-8859-1?Q?xa4fi3eDqPt43bPyffX8BlFBPQ/P/PpVk51pxxFuqBYMVRdMonFaS/Rey5?=
+ =?iso-8859-1?Q?UAccAmZeoZWbNzUqAux9PqsG1v2E0dd/jiEtj6+DCzjN8w8P9Oqd9IyeEu?=
+ =?iso-8859-1?Q?JAHB2Z7DUs4IL8Ums4KFRSbyQXSgbRnDyM/BB3Chx2Ru2hL5TjLOc9mbQb?=
+ =?iso-8859-1?Q?QCLIn1a7C+HgdNCc1ABYACRRBnmSaYvEozSaEWqnIeJAjT+W1bt6kyWLpN?=
+ =?iso-8859-1?Q?ClLooGKP9hLUjgRv8XyAkQRwdQ0aOt4qfeq3XftBMvB8gUVqo0rt1OlZJU?=
+ =?iso-8859-1?Q?tJKRANCsoofLYts2zsRuaK1d4=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea293112-d8d9-476a-5d3d-08d9d434e0d5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 12:29:42.4165
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: le+zUe7fjsdW6zZGR6FoDYk8rhD0b9K5TfPAEdVWG2gmM2qL+UYHUJo4vxijsSW8wCOozMIK+Z+ZhRassC1Gr8UQT7q228RFEDH/jxKnJWk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0552
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+BPF_REG_5, BPF_REG_AX and TMP_REG are mapped on non volatile registers
+because there are not enough volatile registers, but they don't need
+to be preserved on function calls.
 
-Add four Chinese translation documents about KSM. They are
-1. admin-guide/mm/ksm.rst
-2. admin-guide/mm/index.rst
-3. vm/index.rst
-4. vm/ksm.rst
+So when some volatile registers become available, those registers can
+always be reallocated regardless of whether SEEN_FUNC is set or not.
 
-xu xin (4):
-  Add zh_CN/admin-guide/mm/ksm.rst
-  Add zh_CN/admin-guide/mm/index.rst
-  Add zh_CN/vm/index.rst
-  Add zh_CN/vm/ksm.rst
+Suggested-by: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/net/bpf_jit.h        |  3 ---
+ arch/powerpc/net/bpf_jit_comp32.c | 14 +++++++++++---
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
- .../translations/zh_CN/admin-guide/mm/index.rst    |  47 +++++++
- .../translations/zh_CN/admin-guide/mm/ksm.rst      | 156 +++++++++++++++++++++
- Documentation/translations/zh_CN/vm/index.rst      |  49 +++++++
- Documentation/translations/zh_CN/vm/ksm.rst        |  77 ++++++++++
- 4 files changed, 329 insertions(+)
- create mode 100644 Documentation/translations/zh_CN/admin-guide/mm/index.rst
- create mode 100644 Documentation/translations/zh_CN/admin-guide/mm/ksm.rst
- create mode 100644 Documentation/translations/zh_CN/vm/index.rst
- create mode 100644 Documentation/translations/zh_CN/vm/ksm.rst
-
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index b20a2a83a6e7..b75507fc8f6b 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -127,9 +127,6 @@
+ #define SEEN_FUNC	0x20000000 /* might call external helpers */
+ #define SEEN_TAILCALL	0x40000000 /* uses tail calls */
+ 
+-#define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
+-#define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
+-
+ #ifdef CONFIG_PPC64
+ extern const int b2p[MAX_BPF_JIT_REG + 2];
+ #else
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index d3a52cd42f53..cfec42c8a511 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -77,14 +77,22 @@ static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
+ 	return BPF_PPC_STACKFRAME(ctx) - 4;
+ }
+ 
++#define SEEN_VREG_MASK		0x1ff80000 /* Volatile registers r3-r12 */
++#define SEEN_NVREG_FULL_MASK	0x0003ffff /* Non volatile registers r14-r31 */
++#define SEEN_NVREG_TEMP_MASK	0x00001e01 /* BPF_REG_5, BPF_REG_AX, TMP_REG */
++
+ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
++	unsigned int nvreg_mask;
++
+ 	if (ctx->seen & SEEN_FUNC)
+-		return;
++		nvreg_mask = SEEN_NVREG_TEMP_MASK;
++	else
++		nvreg_mask = SEEN_NVREG_FULL_MASK;
+ 
+-	while (ctx->seen & SEEN_NVREG_MASK &&
++	while (ctx->seen & nvreg_mask &&
+ 	      (ctx->seen & SEEN_VREG_MASK) != SEEN_VREG_MASK) {
+-		int old = 32 - fls(ctx->seen & (SEEN_NVREG_MASK & 0xaaaaaaab));
++		int old = 32 - fls(ctx->seen & (nvreg_mask & 0xaaaaaaab));
+ 		int new = 32 - fls(~ctx->seen & (SEEN_VREG_MASK & 0xaaaaaaaa));
+ 		int i;
+ 
 -- 
-2.15.2
+2.33.1

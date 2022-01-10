@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6775D489D8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371A6489D8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237460AbiAJQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:29:31 -0500
-Received: from foss.arm.com ([217.140.110.172]:36256 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237466AbiAJQ3a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:29:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27B052B;
-        Mon, 10 Jan 2022 08:29:30 -0800 (PST)
-Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C90D63F5A1;
-        Mon, 10 Jan 2022 08:29:28 -0800 (PST)
-Date:   Mon, 10 Jan 2022 16:29:19 +0000
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Valentin.Schneider@arm.com, Morten.Rasmussen@arm.com,
-        qperret@google.com
-Subject: Re: [PATCH 2/3] sched/fair: Fix newidle_balance() for overutilized
- systems
-Message-ID: <YdxeoRUeZhl2D+dK@FVFF7649Q05P>
-References: <20211220114323.22811-1-vincent.donnefort@arm.com>
- <20211220114323.22811-3-vincent.donnefort@arm.com>
- <CAKfTPtCJPHfoiuspYMGPARHdOuLJ6g0oUx2EQjdEPz729NrDPA@mail.gmail.com>
+        id S237482AbiAJQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:29:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50358 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237471AbiAJQ3x (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 11:29:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6930B8165F;
+        Mon, 10 Jan 2022 16:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D1FC36AE3;
+        Mon, 10 Jan 2022 16:29:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641832190;
+        bh=fQExllmMl+dj2jTx2YMZ1O6mpZuoE8POpJVdkmjVsxg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ilYOMpIgLD+9OxTa8dbe43JdsXgf+Dbdn5x4LowsmAyEse7F2sH9hhuYESf2pcRVA
+         LeMbupc1+563Tej1CHOi9Z8e50PhY4k/642DEm8E7b9sbsiPSZlJgL+q8cioKBQ1P2
+         XRvloaF69nxoF9vfheyz3WJXaKxBBfXJk83rGykNY9DUJRZ6esExe8WUMdCP/f6HBs
+         cxwrd7J4nP8zvLpJgwHfX9y3GMxAiDHVU0Jykzin+kGLtt22Xat69FViPX/gP02ACL
+         od7dSmcaKf+YCPrAy6iYN0s5TgDQqiNNSAJFlV1hUfxHmhKAaTKffvhur+plBDTRHU
+         jioOaRkvvLNew==
+Date:   Mon, 10 Jan 2022 08:29:49 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Rao Shoaib <rao.shoaib@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
+        regressions@lists.linux.dev
+Subject: Re: Observation of a memory leak with commit 314001f0bf92
+ ("af_unix: Add OOB support")
+Message-ID: <20220110082949.3a14a738@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <CAKXUXMygcVJ2v5enu-KY9_2reC6+aAk8F9q5RiwwNp4wO-prug@mail.gmail.com>
+References: <CAKXUXMzZkQvHJ35nwVhcJe+DrtEXGw+eKGVD04=xRJkVUC2sPA@mail.gmail.com>
+        <20220109132038.38f8ae4f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <a754b7d0-8a20-9730-c439-1660994005d0@leemhuis.info>
+        <CAKXUXMygcVJ2v5enu-KY9_2reC6+aAk8F9q5RiwwNp4wO-prug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCJPHfoiuspYMGPARHdOuLJ6g0oUx2EQjdEPz729NrDPA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
+On Mon, 10 Jan 2022 17:19:56 +0100 Lukas Bulwahn wrote:
+> It's a regression if some application or practical use case running fine on one
+> Linux kernel works worse or not at all with a newer version compiled using a
+> similar configuration.
 > 
-> > can spuriously maintain overutilized for a long period of time.
-> >
-> > We then need newidle_balance() to proceed with balancing if the system is
-> > overutilized.
+> The af_unix functionality without oob support works before
+> 314001f0bf92 ("af_unix: Add OOB support").
+> The af_unix functionality without oob support works after 314001f0bf92
+> ("af_unix: Add OOB support").
+> The af_unix with oob support after the new feature with 314001f0bf92
+> ("af_unix: Add OOB support") makes a memory leak visible; we do not
+> know if this feature even triggers it or just makes it visible.
 > 
-> Always triggering a costly newidle_balance when you are already
-> overutilized for the sole purpose of clearing overutilized seems to be
-> a bit overkill.
+> Now, if we disable oob support we get a kernel without an observable
+> memory leak. However, oob support is added by default, and this makes
+> this memory leak visible. So, if oob support is turned into a
+> non-default option or nobody ever made use of the oob support before,
+> it really does not count as regression at all. The oob support did not
+> work before and now it works but just leaks a bit of memory---it is
+> potentially a bug, but not a regression. Of course, maybe oob support
+> is also just intended to make this memory leak observable, who knows?
+> Then, it is not even a bug, but a feature.
 
-But the only cases where newidle_balance() would now run while it used not to,
-are when overutilized is set but overload is not. Which is either a transient
-state for which we do not anticipate more than one stat update or it is the
-situation where one of the biggest CPU is overutilized while having nr_running <
-2.
+I see, thanks for the explanation. It wasn't clear from the "does not
+repro on 5.15, does repro on net-next" type of wording that the repro
+actually uses the new functionality.
 
-It can indeed add some additional costly calls to newidle_balance, but they
-will not be plentiful, especially with the other patch from this series: 
-
-  "sched/fair: Do not raise overutilized for idle CPUs"
-
+> Thorsten's database is still quite empty, so let us keep tracking the
+> progress with regzbot. I guess we cannot mark "issues" in regzbot as a
+> true regression or as a bug (an issue that appears with a new
+> feature).
 > 
-> Furthermore, nothing prevents us to abort newidle_balance before
-> reaching the root domain
-
-should_we_balance() always return true in the case of newidle. So I suppose you
-refer to max_newidle_lb_cost?
-
+> Also, this reproducer is automatically generated, so it barely
+> qualifies as "some application or practical use case", but at best as
+> some derived "stress test program" or "micro benchmark".
 > 
-> So this doesn't seem like the good way to proceed
+> The syzbot CI and kernel CI database are also planning to track such
+> things (once all databases and all the interfaces all work smoothly),
+> so in the long term, such issues as this one would not qualify for
+> regzbot. For now, many things in these pipelines are still manual and
+> hence, triggering and investigation is manual effort, as well as
+> manually informing the involved developers, which also means that
+> tracking remains manual effort, for which regzbot is probably the
+> right new tool for now.
 
-What are our other options?
+Right, that was my thinking.
 
-Resolving it in the nohz balancer would need to change should_we_balance().
-
-I also tried solely to not raise overutilized when the CPU is idle but this is
-not a solution either as when a task migration is pending, you can end-up with
-a !idle CPU but with nr_running < 2, so once again overutilized set, overload
-not.
-
-> 
-> >
-> > Fixes: 2802bf3cd936 ("sched/fair: Add over-utilization/tipping point indicator")
-> > Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index e2f6fa14e5e7..51f6f55abb37 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -10849,7 +10849,8 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf)
-> >         rcu_read_lock();
-> >         sd = rcu_dereference_check_sched_domain(this_rq->sd);
-> >
-> > -       if (!READ_ONCE(this_rq->rd->overload) ||
-> > +       if ((!READ_ONCE(this_rq->rd->overload) &&
-> > +           !READ_ONCE(this_rq->rd->overutilized)) ||
-> >             (sd && this_rq->avg_idle < sd->max_newidle_lb_cost)) {
-> >
-> >                 if (sd)
-> > --
-> > 2.25.1
-> >
+> We will learn what should go into regzbot's tracker and what should
+> not---as we move on in the community: various information from other
+> systems (syzbot, kernel CI, kernel test robot etc.) and their reports
+> are also still difficult to add, find, track, bisect etc.

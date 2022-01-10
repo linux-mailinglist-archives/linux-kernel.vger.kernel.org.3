@@ -2,66 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B00BD48A06C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC6848A06E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244726AbiAJTse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:48:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48210 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244809AbiAJTsd (ORCPT
+        id S241042AbiAJTtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:49:36 -0500
+Received: from mail-lf1-f46.google.com ([209.85.167.46]:40801 "EHLO
+        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239916AbiAJTtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:48:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 451FBB81642
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:48:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 165D7C36AF8;
-        Mon, 10 Jan 2022 19:48:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641844111;
-        bh=2RbJfb7LWa/K2z+bgLm171zPDegAFsBByDvnQ0BKv8s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Rh3vZX6xtOirI8XIkj/6R5yoPPIVA27nSjPQ+3+252rQnZqAajY9OEu7r8lJdohoc
-         i9qYg9Uj56DfEwX+RFAOEPboEdsWHyjgcAynsHJQHT11D6euvXZOFQY7PrEr7qFgZZ
-         x77Ma0igJfhVqlnb2pDd6hu9x7XyfeiaQeEb4Y85+f34+AqY9pgRLBGALrmS8sY/9E
-         +b4bc3XCW3LgIwORI5/90TJ96SHozwVdwgQw/z4Te9GvC5Nv7GjanczS68WcEq82hs
-         Jzl9NaaZGpvd2PP3rmit6yvTUZ0dtpWGM8S+Fu1Xx+ILJF+MC+KiaR3wtIYY3x4YBH
-         F25+bu7Wsdedw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02957F6078D;
-        Mon, 10 Jan 2022 19:48:31 +0000 (UTC)
-Subject: Re: [GIT PULL] core/entry for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YdyBj2BpUyFa5ux8@zn.tnic>
-References: <YdyBj2BpUyFa5ux8@zn.tnic>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YdyBj2BpUyFa5ux8@zn.tnic>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/core_entry_for_v5.17_rc1
-X-PR-Tracked-Commit-Id: 985faa78687de6e583cfd8b8094d87dcb80c33a6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 48a60bdb2be807767eba6878fdf2fe5bea5d8d27
-Message-Id: <164184411100.23269.4410621972603155028.pr-tracker-bot@kernel.org>
-Date:   Mon, 10 Jan 2022 19:48:31 +0000
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+        Mon, 10 Jan 2022 14:49:35 -0500
+Received: by mail-lf1-f46.google.com with SMTP id s30so20480415lfo.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:49:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cBC7ur9q8uCn3+fYNxbDAjBWUMfYxRVgK+nrhQ/hAA0=;
+        b=oLeYvtjjBv6ObUdVJcT0IrOhgHPZfoXtrAgWSao5kQKPfd2SAmInef8+BdKxh/qC91
+         IBsCdN3v8LmJ0EOl2mv7zflhALRabZQdRcIYZreUBpnjMpW7l66VPD8aOqd3JmbdArIN
+         O1J8PpZKlY1uLds174E6kn8Li8+V1paEM6beePuTGTsCjHP1kJFgnCZoEAtAc5rwhu/h
+         0w9fdSWXEQAWIaXCCzPOl9Z8BiKxncCPNeYJQlxbNg+E9TtDrC0xrsOdtK7GM/yyICFn
+         xhW+QHzH8vHbiyJzHIiDtV2qIVL9eIh59LI9XGsYrMaZ5Sagv10EHo6vcbV9bXhExuy5
+         5Z0g==
+X-Gm-Message-State: AOAM531NTSFothk09KgTALRPc4Sg22WA4NEy5l7fvoSCS+2yY74WwbFc
+        3O+0wPV438QoXjXCLGHKvsFweAikKndiumpvNzQ=
+X-Google-Smtp-Source: ABdhPJxrDpHfZFk8hTVowuDtiIKYHMVkE7JTEc9K7AVKPZhX0SLk+inUNhxFf/N3uoIRWvsdOKesIEOkjbpjKig+pX8=
+X-Received: by 2002:a05:651c:a09:: with SMTP id k9mr689016ljq.180.1641844173631;
+ Mon, 10 Jan 2022 11:49:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20211213232224.2023465-1-namhyung@kernel.org> <CANpmjNPuDUwrLH9GKEs6BgeRiL6uZ_tqa5NX_6J83E121+CUqg@mail.gmail.com>
+In-Reply-To: <CANpmjNPuDUwrLH9GKEs6BgeRiL6uZ_tqa5NX_6J83E121+CUqg@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 10 Jan 2022 11:49:22 -0800
+Message-ID: <CAM9d7ci-xAWYJEspm8VXRy257vG9r7HDVuQ0Uoej49OG4f5qKQ@mail.gmail.com>
+Subject: Re: [PATCH v3] perf/core: Fix cgroup event list management
+To:     Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 10 Jan 2022 19:57:19 +0100:
+Hi Marco,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/core_entry_for_v5.17_rc1
+On Mon, Jan 10, 2022 at 12:58 AM Marco Elver <elver@google.com> wrote:
+>
+> On Tue, 14 Dec 2021 at 00:22, Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > The active cgroup events are managed in the per-cpu cgrp_cpuctx_list.
+> > This list is only accessed from current cpu and not protected by any
+> > locks.  But from the commit ef54c1a476ae ("perf: Rework
+> > perf_event_exit_event()"), it's possible to access (actually modify)
+> > the list from another cpu.
+> >
+> > In the perf_remove_from_context(), it can remove an event from the
+> > context without an IPI when the context is not active.  This is not
+> > safe with cgroup events which can have some active events in the
+> > context even if ctx->is_active is 0 at the moment.  The target cpu
+> > might be in the middle of list iteration at the same time.
+> >
+> > If the event is enabled when it's about to be closed, it might call
+> > perf_cgroup_event_disable() and list_del() with the cgrp_cpuctx_list
+> > on a different cpu.
+> >
+> > This resulted in a crash due to an invalid list pointer access during
+> > the cgroup list traversal on the cpu which the event belongs to.
+> >
+> > Let's fallback to IPI to access the cgrp_cpuctx_list from that cpu.
+> > Similarly, perf_install_in_context() should use IPI for the cgroup
+> > events too.
+> >
+> > Cc: Marco Elver <elver@google.com>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>
+> The final version needs:
+>
+> Fixes: ef54c1a476ae ("perf: Rework perf_event_exit_event()")
+>
+> so stable kernels will see it, unless this has already been picked up
+> in which case we need to email stable.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/48a60bdb2be807767eba6878fdf2fe5bea5d8d27
+Right, it should go to the stable tree.
 
-Thank you!
+Peter, do you want me to resend a new version?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Namhyung

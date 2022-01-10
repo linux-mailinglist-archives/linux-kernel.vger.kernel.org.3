@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 067EA489239
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0764892C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbiAJHkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:40:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58326 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240134AbiAJHaw (ORCPT
+        id S240175AbiAJHsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241989AbiAJHkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:30:52 -0500
+        Mon, 10 Jan 2022 02:40:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6237C0251BD;
+        Sun,  9 Jan 2022 23:33:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 363DCB81219;
-        Mon, 10 Jan 2022 07:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6063AC36AFB;
-        Mon, 10 Jan 2022 07:30:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75A5F60B63;
+        Mon, 10 Jan 2022 07:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1DBC36AE9;
+        Mon, 10 Jan 2022 07:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799847;
-        bh=31yQ4M//QHOHNxcA+8askJI836thsVQc74Z6+Lo2RIA=;
+        s=korg; t=1641800031;
+        bh=miwMnJgVOnR+9E9/tWDy+mlTU5eoEgWYT3bcqx54edA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gTobP+B3xV8UhqzB2ytIFwXGLPyYPbwn1vu8UVFVoH5wwI/mMndgoBoO+UuTtiQ40
-         jMuOEF91XH754kWdjLrdRPRytQo+af1yXWOO/kbppuN0Bu4SW/lnlZ0BJKnhWHOS3m
-         uUAPE+1EsyQvvmmpdDO/nChvAVEpzorziuz56zhc=
+        b=sMObtAg1IjmerI1bPycudQJIwTFHLH9aY0on+dc4OBKX6uLmaqNVwEvA5SKI+el7A
+         NZI+ELaW369UhSgWecq161e70oYH9kpgj1RsEak54xF2Fw++6CbXnqgtv7MBE/Uigt
+         S9N0Rr12sGPHG9+AbaDvD8V09Xwe/jEvLAUbnWl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Tixiong <lutianxiong@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        Lixiaokeng <lixiaokeng@huawei.com>,
-        Linfeilong <linfeilong@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 35/43] scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+Subject: [PATCH 5.15 55/72] drm/amd/pm: Fix xgmi link control on aldebaran
 Date:   Mon, 10 Jan 2022 08:23:32 +0100
-Message-Id: <20220110071818.531046233@linuxfoundation.org>
+Message-Id: <20220110071823.419565546@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-References: <20220110071817.337619922@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,65 +50,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lixiaokeng <lixiaokeng@huawei.com>
+From: Lijo Lazar <lijo.lazar@amd.com>
 
-[ Upstream commit 1b8d0300a3e9f216ae4901bab886db7299899ec6 ]
+[ Upstream commit 19e66d512e4182a0461530fa3159638e0f55d97e ]
 
-|- iscsi_if_destroy_conn            |-dev_attr_show
- |-iscsi_conn_teardown
-  |-spin_lock_bh                     |-iscsi_sw_tcp_conn_get_param
+Fix the message argument.
+	0: Allow power down
+	1: Disallow power down
 
-  |-kfree(conn->persistent_address)   |-iscsi_conn_get_param
-  |-kfree(conn->local_ipaddr)
-                                       ==>|-read persistent_address
-                                       ==>|-read local_ipaddr
-  |-spin_unlock_bh
-
-When iscsi_conn_teardown() and iscsi_conn_get_param() happen in parallel, a
-UAF may be triggered.
-
-Link: https://lore.kernel.org/r/046ec8a0-ce95-d3fc-3235-666a7c65b224@huawei.com
-Reported-by: Lu Tixiong <lutianxiong@huawei.com>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Lixiaokeng <lixiaokeng@huawei.com>
-Signed-off-by: Linfeilong <linfeilong@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libiscsi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 30d27b6706746..d4e66c595eb87 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -2950,6 +2950,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
+index 5019903db492a..c9cfeb094750d 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
+@@ -1619,7 +1619,7 @@ static int aldebaran_allow_xgmi_power_down(struct smu_context *smu, bool en)
  {
- 	struct iscsi_conn *conn = cls_conn->dd_data;
- 	struct iscsi_session *session = conn->session;
-+	char *tmp_persistent_address = conn->persistent_address;
-+	char *tmp_local_ipaddr = conn->local_ipaddr;
- 
- 	del_timer_sync(&conn->transport_timer);
- 
-@@ -2971,8 +2973,6 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	spin_lock_bh(&session->frwd_lock);
- 	free_pages((unsigned long) conn->data,
- 		   get_order(ISCSI_DEF_MAX_RECV_SEG_LEN));
--	kfree(conn->persistent_address);
--	kfree(conn->local_ipaddr);
- 	/* regular RX path uses back_lock */
- 	spin_lock_bh(&session->back_lock);
- 	kfifo_in(&session->cmdpool.queue, (void*)&conn->login_task,
-@@ -2984,6 +2984,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	mutex_unlock(&session->eh_mutex);
- 
- 	iscsi_destroy_conn(cls_conn);
-+	kfree(tmp_persistent_address);
-+	kfree(tmp_local_ipaddr);
+ 	return smu_cmn_send_smc_msg_with_param(smu,
+ 					       SMU_MSG_GmiPwrDnControl,
+-					       en ? 1 : 0,
++					       en ? 0 : 1,
+ 					       NULL);
  }
- EXPORT_SYMBOL_GPL(iscsi_conn_teardown);
  
 -- 
 2.34.1

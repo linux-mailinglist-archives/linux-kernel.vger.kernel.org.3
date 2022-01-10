@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BE4489B4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7656489B50
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235561AbiAJOd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:33:56 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39154 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiAJOdz (ORCPT
+        id S235577AbiAJOeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235567AbiAJOeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:33:55 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6EC9B1F393;
-        Mon, 10 Jan 2022 14:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641825234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=nIdYnUKKHSYPz1SXjOAJXSBQBLUMF5SXe7Kpd5udxW4=;
-        b=A1FspWCAyGfwjMoY6lOS4wE0nn98w7K6PRnOFYkm1O72I0HvanG3Yj3ZKWAIBpHE+C2ugY
-        Crnaf1f03/mqL1TDUjTlPhJfZO9EldBCSNaSO+oUYdN9braD1axgNEf5wlYTkXigpgclf+
-        d3/DhiiSzDnxVieVvYGLZiH41jMzBzA=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F40EAA3B84;
-        Mon, 10 Jan 2022 14:33:53 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 15:33:50 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] printk for 5.17
-Message-ID: <YdxDzgijikydIwOP@alley>
+        Mon, 10 Jan 2022 09:34:22 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C93C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:34:22 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id jr5so3635682qvb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=KzYKjySaNA8gCwHGzl2FyGGW1Nu0aUpHbWQZPToIi38=;
+        b=BhRvhK/w4tJaYtkJGmat1mS0fsTGROYWJEh6tPRgBZAj/SGfz0bmMMGl/5UgrbYBz6
+         6jpGItoVz8qvhkKVzFxwI9gA1dAYCWIFYGhL6VcXOE/SU/wHzlO5E2hB4YlALUIrTKs7
+         has8g65OJGSKuTCV3XZuwtO6msLzX7Xm0rPaI4XeM9ly4MVkDD3Zs+fw1i4tNgNBSgA6
+         aXZbRJb0soxVB4kmOFHXP+aSpn/opjQjN95WPvkC4oECvAJ7eRCzqapDbJLc6kBI41HQ
+         IhPRZOHr7uZvYC3MOWwoqh8Qy8mvZiSWdywAGVoOayk3np8Y94qmBIEWeilo80OTvhAN
+         pY7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=KzYKjySaNA8gCwHGzl2FyGGW1Nu0aUpHbWQZPToIi38=;
+        b=Ia+f4GCHbbn6vSqq+oJE/IA/mA4H7Yk/ybYpsRbVjk1O6D5fQeJb4DwizFt8RJTLft
+         0jq/tZ/coyIk+4U+2App+8P5FyR7oUk4q0MnndZo0gSCfz4IXo2y+3/S3gN6E89ftTwH
+         rlSvOqNaUPRuGk1nHyxhMZRUUucNEr8Wi2GzqWcE16ANU+C3Fq98sfQBYeToreHUvMG+
+         7AY+qJ/6Jg/L9lz/oF5DRj5ipPXBBaW3l8s6GMfEcd/QJqWYvXj6IXAU5DilP+KmX3T+
+         Tmh5i98+hi/ugD3JfVXgCd6Rz4JjBB4lyvPhReoD6u/9YS2TXLwKkMOjiu5zPMNrVnHq
+         BJ2A==
+X-Gm-Message-State: AOAM531KYBIQzihidPCk9ePsLOSnOSXH/LDtuN5gSeHXUHG0rlGZwBGq
+        73+YFWgviRYNqcVCe5eeB3vbMg==
+X-Google-Smtp-Source: ABdhPJwVssi4btKUH8E3kzLUaS3f99Ib3fKwcC7InqMA3lS6sRmydZeLeFDbpXNA457FvCYcbz/t8w==
+X-Received: by 2002:a05:6214:301:: with SMTP id i1mr3166053qvu.7.1641825261119;
+        Mon, 10 Jan 2022 06:34:21 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id u6sm4642565qki.129.2022.01.10.06.34.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 06:34:20 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1n6vkZ-00Do5L-Qp; Mon, 10 Jan 2022 10:34:19 -0400
+Date:   Mon, 10 Jan 2022 10:34:19 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
+ in responder side
+Message-ID: <20220110143419.GF6467@ziepe.ca>
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
+ <20220106002804.GS6467@ziepe.ca>
+ <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
+ <20220106173346.GU6467@ziepe.ca>
+ <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Jan 10, 2022 at 05:45:47AM +0000, lizhijian@fujitsu.com wrote:
+> Hi Jason
+> 
+> 
+> On 07/01/2022 01:33, Jason Gunthorpe wrote:
+> > On Thu, Jan 06, 2022 at 06:42:57AM +0000, lizhijian@fujitsu.com wrote:
+> >>
+> >> On 06/01/2022 08:28, Jason Gunthorpe wrote:
+> >>> On Tue, Dec 28, 2021 at 04:07:15PM +0800, Li Zhijian wrote:
+> >>>> +	while (length > 0) {
+> >>>> +		va	= (u8 *)(uintptr_t)buf->addr + offset;
+> >>>> +		bytes	= buf->size - offset;
+> >>>> +
+> >>>> +		if (bytes > length)
+> >>>> +			bytes = length;
+> >>>> +
+> >>>> +		arch_wb_cache_pmem(va, bytes);
+> >>> So why did we need to check that the va was pmem to call this?
+> >> Sorry, i didn't get you.
+> >>
+> >> I didn't check whether va is pmem, since only MR registered with PERSISTENCE(only pmem can
+> >> register this access flag) can reach here.
+> > Yes, that is what I mean,
+> 
+> I'm not sure I understand the *check* you mentioned above.
+> 
+> Current code just dose something like:
+> 
+> if (!sanity_check())
+>      return;
+> if (requested_plt == PERSISTENCE)
+>      va = iova_to_va(iova);
+>      arch_wb_cache_pmem(va, bytes);
+>      wmb;
+> else if (requested_plt == GLOBAL_VISIBILITY)
+>      wmb();
+> 
+> 
+> > why did we need to check anything to call
+> > this API
+> As above pseudo code,  it didn't *check* anything as what you said i think.
 
-please pull the latest printk changes from
+I mean when you created the MR in the first place you checked for pmem
+before even allowing the persitent access flag.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.17
-
-============================================
-
-- Remove some twists in the console registration code. It does not change
-  the existing behavior except for one corner case. The proper default
-  console (with tty binding) will be registered again even when it has
-  been removed in the meantime. It is actually a bug fix. Anyway, this
-  modified behavior requires some manual interaction.
-
-- Optimize gdb extension for huge ring buffers.
-
-- Do not use atomic operations for a local bitmap variable.
-
-- Update git links in MAINTAINERS.
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      vsprintf: Use non-atomic bitmap API when applicable
-
-John Ogness (1):
-      scripts/gdb: lx-dmesg: read records individually
-
-Petr Mladek (8):
-      printk/console: Split out code that enables default console
-      printk/console: Rename has_preferred_console to need_default_console
-      printk/console: Remove unnecessary need_default_console manipulation
-      printk/console: Remove need_default_console variable
-      printk/console: Clean up boot console handling in register_console()
-      MAINTAINERS/vsprintf: Update link to printk git tree
-      MAINTAIERS/printk: Add link to printk git
-      Merge branch 'console-registration-cleanup' into for-linus
-
- MAINTAINERS                |   3 +-
- kernel/printk/printk.c     | 104 +++++++++++++++++++++++++--------------------
- lib/vsprintf.c             |   4 +-
- scripts/gdb/linux/dmesg.py |  35 +++++++--------
- 4 files changed, 80 insertions(+), 66 deletions(-)
+Jason

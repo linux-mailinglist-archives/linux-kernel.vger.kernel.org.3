@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CDE488DE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55B7488DE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbiAJBBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 20:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiAJBAQ (ORCPT
+        id S234964AbiAJBCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 20:02:21 -0500
+Received: from mail-oo1-f45.google.com ([209.85.161.45]:46055 "EHLO
+        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237701AbiAJBBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 20:00:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06768C061756;
-        Sun,  9 Jan 2022 17:00:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C61CEB8107A;
-        Mon, 10 Jan 2022 01:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98C90C36AEF;
-        Mon, 10 Jan 2022 01:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641776413;
-        bh=oe9gaJp5URaghApbTlnONTTll1LYPSKNFJ49ITzjjtY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=P15Z7/kIH9ENZ4WluXgYtabrs1J696H2twDznCPOCqxbCQ9Mt8PXbqRZ+GMjaHFhs
-         WwwcMi3rdTZ5CrnXk2pML/P/EnmSuOQlY2x5QsqU9HB1kMAtsm9jIMvVWAscSsbUiv
-         xreYdRXqCM/VPNEV3nAd6T5LZ+Ygb3RcC2m3yeyHLBdO5X0+6cJA5uSbZ3KvM2u5Wv
-         /PpZbnRAeSMMWQJ2se/rHeBqdcN/5gw2fYA3XCWixVMVunWeEm3ZMuKvJ53f0/vMDJ
-         D2Y68be9pqArJuIHBKabdMXWn5zdmuXQzrRAnypMkVrW5c/xtl2hEzDmwbbMUMafT1
-         5NrKebGRnrO+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8776BF60790;
-        Mon, 10 Jan 2022 01:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 9 Jan 2022 20:01:53 -0500
+Received: by mail-oo1-f45.google.com with SMTP id l10-20020a4a840a000000b002dc09752694so3200077oog.12;
+        Sun, 09 Jan 2022 17:01:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KWpmkjiUIyUY2lA1KsnFQOkJyry+8M6U0ghEbesXMkQ=;
+        b=GzqxDmHEDhYbhMCrSkcw2r9W3O1TeFcusyMuyT/tDfzA/wl1eEzxMYWH9Wn2lCYMIo
+         DBqL4uzEnajNzKHapsTseq7MQmK3yIIlEiVw2J2PhPqKI6LjoEPLyCpvPhhup2DDdKEP
+         cVKusDBQCl9fc3evEahB9gOTMWD5tUf5TExa2Ah51FxigLl3SU+G2ovgJbniBiqFduWr
+         Kd50YKck4GuOE2OO8hkzd1/6h3YppvtI5IODsia59FjTEQ59CXDntzNiDr63NXLGxlN0
+         ZfnYP4b2r1niLkGC77fgmWw7uH93zkOejq/y1r3LSXCMzZIKL3oQne1swZvKrG/zwkMm
+         Q/LA==
+X-Gm-Message-State: AOAM532uGrqaX/c0Cbt7TjVUum3XSagAThwby9eNq5RC8yeq754R9/N5
+        kUyPse5Ox1yo3fSGLRTFXbkuZ8VjSQ==
+X-Google-Smtp-Source: ABdhPJzSwu+MA9PPmYKot8/OcE6YcFe0MvStp77rt6t8Xs5z1by7C/Lg7ygERL0JMpiwW7ax1OAuIg==
+X-Received: by 2002:a4a:2a1b:: with SMTP id k27mr46565083oof.97.1641776513030;
+        Sun, 09 Jan 2022 17:01:53 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id k9sm1172261otp.71.2022.01.09.17.01.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 17:01:52 -0800 (PST)
+Received: (nullmailer pid 3955438 invoked by uid 1000);
+        Mon, 10 Jan 2022 01:01:51 -0000
+Date:   Sun, 9 Jan 2022 19:01:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <joabreu@synopsys.com>
+Subject: Re: [PATCH] dt-bindings: net: snps,dwmac: Enable burst length
+ properties for more compatibles
+Message-ID: <YduFfyejCrjxqW4v@robh.at.kernel.org>
+References: <20211206174147.2296770-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] hinic: Remove useless DMA-32 fallback configuration
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164177641354.18208.14590154615391558393.git-patchwork-notify@kernel.org>
-Date:   Mon, 10 Jan 2022 01:00:13 +0000
-References: <23541c28df8d0dcd3663b5dbe0f76af71e70e9cc.1641743855.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <23541c28df8d0dcd3663b5dbe0f76af71e70e9cc.1641743855.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206174147.2296770-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun,  9 Jan 2022 16:57:50 +0100 you wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
+On Mon, 06 Dec 2021 11:41:47 -0600, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the properties
+> 'snps,pbl', 'snps,txpbl', and 'snps,rxpbl' are not allowed in the
+> examples for some of the DWMAC versions:
 > 
-> Simplify code and remove some dead code accordingly.
+> Documentation/devicetree/bindings/net/intel,dwmac-plat.example.dt.yaml: ethernet@3a000000: Unevaluated properties are not allowed ('snps,pbl', 'mdio0' were unexpected)
+> Documentation/devicetree/bindings/net/stm32-dwmac.example.dt.yaml: ethernet@5800a000: Unevaluated properties are not allowed ('reg-names', 'snps,pbl' were unexpected)
+> Documentation/devicetree/bindings/net/stm32-dwmac.example.dt.yaml: ethernet@40028000: Unevaluated properties are not allowed ('reg-names', 'snps,pbl' were unexpected)
+> Documentation/devicetree/bindings/net/stm32-dwmac.example.dt.yaml: ethernet@40027000: Unevaluated properties are not allowed ('reg-names', 'snps,pbl' were unexpected)
+> Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.example.dt.yaml: ethernet@28000000: Unevaluated properties are not allowed ('snps,txpbl', 'snps,rxpbl', 'mdio0' were unexpected)
 > 
-> [1]: https://lkml.org/lkml/2021/6/7/398
+> This appears to be an oversight, so fix it by allowing the properties
+> on the v3.50a, v4.10a, and v4.20a versions of the DWMAC.
 > 
-> [...]
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+> Cc: Jose Abreu <joabreu@synopsys.com>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-Here is the summary with links:
-  - hinic: Remove useless DMA-32 fallback configuration
-    https://git.kernel.org/netdev/net-next/c/004464835bfc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Applied, thanks!

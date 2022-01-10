@@ -2,260 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C1B489764
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA30F489766
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244687AbiAJL0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244682AbiAJL0V (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:26:21 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C5EC061756
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:26:21 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id i30so10882792pgl.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:26:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=jac9XDmq0Ho3A9/0gjXMrTRzbQyyZzjk6mwoXzdLKs8=;
-        b=hAVLrTMYq0Je5/p/49IDFFqq/PxZvrUC3uhinNOOe8O0kA7E3KjPm4aqe8E8PDnvD5
-         RocdCJvPm1hYpL5/1vHUHyI1gy1TksDDRRnnILOAXNFMZUdN0ebGvs8N98irT4fDb/tU
-         uxJ1azs7LUSe8LeUBPBSvE9yEklyANwv5812I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=jac9XDmq0Ho3A9/0gjXMrTRzbQyyZzjk6mwoXzdLKs8=;
-        b=5H5lw8Nb7kvUfGUx/JP9mNEKljPpbmK2CZaxZ/5Anpda99FlJKsbHjL4TK8VIIex4M
-         FhzInoY40nyhit1FarL6plLCHzhFhpAV9DCRD2qN3ygkBeTXAU0qxz7SbaCxoq7yb/w6
-         tPcIBYq5aobzqJl3fxbKJMon2NdAh5/2pqduI7/EnAs9q/6HhnUgt77hs57Nchj4Irro
-         Lq4BSIa6ZFoH68sDEVtlRlJmNtM0VtNBB6JkbybYdkYuBoSjnYAZ90qRArIJUO0A7kOI
-         v05S+0a+QqM/dmFZ3M5HsXP14QQnpmJKithHahrpxxqo5dSNGzN1BcvhiFrbv2+9n0rW
-         hzSg==
-X-Gm-Message-State: AOAM531qWBHmJ15IfSoSZb+VWtucZJZSUx1Y6DLFu1s5MCUjhPJPZhO4
-        6mWRfyhremXRNxL0HQOgS7aoWQ==
-X-Google-Smtp-Source: ABdhPJyLgj9HvtdqraoJgeK9Kc2v7CG2uiPxLxoBQVj1I3D4oJ38HdSEziC+h3mCqyYZEtQsQlDSvg==
-X-Received: by 2002:a05:6a00:14c9:b0:4bb:62ca:4e1c with SMTP id w9-20020a056a0014c900b004bb62ca4e1cmr74467264pfu.28.1641813980682;
-        Mon, 10 Jan 2022 03:26:20 -0800 (PST)
-Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id s30sm6594384pfw.195.2022.01.10.03.26.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 03:26:18 -0800 (PST)
-Message-ID: <bdee859c-35fd-0ded-6a87-3948f6e792e2@broadcom.com>
-Date:   Mon, 10 Jan 2022 12:26:09 +0100
+        id S244682AbiAJL1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:27:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:33070 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244686AbiAJL0p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:26:45 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 869FB2B;
+        Mon, 10 Jan 2022 03:26:35 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.11.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E39EB3F5A1;
+        Mon, 10 Jan 2022 03:26:33 -0800 (PST)
+Date:   Mon, 10 Jan 2022 11:26:29 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     He Ying <heying24@huawei.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, marcan@marcan.st,
+        maz@kernel.org, joey.gouly@arm.com, pcc@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: Make CONFIG_ARM64_PSEUDO_NMI macro wrap all the
+ pseudo-NMI code
+Message-ID: <YdwX5RTVbw8veM98@FVFF77S0Q05N>
+References: <20220107085536.214501-1-heying24@huawei.com>
+ <Ydg939btY/bzEAe4@FVFF77S0Q05N>
+ <bd82d240-34d7-4df9-650b-c039555f05e3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 16/35] brcmfmac: acpi: Add support for fetching Apple
- ACPI properties
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-17-marcan@marcan.st>
- <d72bf3e4-1a49-d354-9439-5f52334d2698@broadcom.com>
- <908a6ded-08fb-647f-ffa2-1a5182d2f075@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <908a6ded-08fb-647f-ffa2-1a5182d2f075@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002058c805d5389b7b"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bd82d240-34d7-4df9-650b-c039555f05e3@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002058c805d5389b7b
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 1/10/2022 12:07 PM, Hector Martin wrote:
-> On 2022/01/10 18:11, Arend van Spriel wrote:
->> On 1/4/2022 8:26 AM, Hector Martin wrote:
->>> On DT platforms, the module-instance and antenna-sku-info properties
->>> are passed in the DT. On ACPI platforms, module-instance is passed via
->>> the analogous Apple device property mechanism, while the antenna SKU
->>> info is instead obtained via an ACPI method that grabs it from
->>> non-volatile storage.
->>>
->>> Add support for this, to allow proper firmware selection on Apple
->>> platforms.
->>>
->>> Signed-off-by: Hector Martin <marcan@marcan.st>
->>> ---
->>>    .../broadcom/brcm80211/brcmfmac/Makefile      |  2 +
->>>    .../broadcom/brcm80211/brcmfmac/acpi.c        | 47 +++++++++++++++++++
->>>    .../broadcom/brcm80211/brcmfmac/common.c      |  1 +
->>>    .../broadcom/brcm80211/brcmfmac/common.h      |  9 ++++
->>>    4 files changed, 59 insertions(+)
->>>    create mode 100644 drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
->>
->> [...]
->>
->>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
->>> new file mode 100644
->>> index 000000000000..2b1a4448b291
->>> --- /dev/null
->>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
->>> @@ -0,0 +1,47 @@
->>> +// SPDX-License-Identifier: ISC
->>> +/*
->>> + * Copyright The Asahi Linux Contributors
->>> + */
->>> +
->>> +#include <linux/acpi.h>
->>> +#include "debug.h"
->>> +#include "core.h"
->>> +#include "common.h"
->>> +
->>> +void brcmf_acpi_probe(struct device *dev, enum brcmf_bus_type bus_type,
->>> +		      struct brcmf_mp_device *settings)
->>> +{
->>> +	acpi_status status;
->>> +	const union acpi_object *o;
->>> +	struct acpi_buffer buf = {ACPI_ALLOCATE_BUFFER, NULL};
->>> +	struct acpi_device *adev = ACPI_COMPANION(dev);
->>> +
->>> +	if (!adev)
->>> +		return;
->>> +
->>> +	if (!ACPI_FAILURE(acpi_dev_get_property(adev, "module-instance",
->>> +						ACPI_TYPE_STRING, &o))) {
->>> +		brcmf_dbg(INFO, "ACPI module-instance=%s\n", o->string.pointer);
->>> +		settings->board_type = devm_kasprintf(dev, GFP_KERNEL,
->>> +						      "apple,%s",
->>> +						      o->string.pointer);
->>> +	} else {
->>> +		brcmf_dbg(INFO, "No ACPI module-instance\n");
->>
->> Do you need to obtain the antenna-sku when there is no module-instance?
+On Mon, Jan 10, 2022 at 11:00:43AM +0800, He Ying wrote:
+> Hi Mark,
 > 
-> In principle I don't think any machines would have antenna-sku and no
-> module-instance, though the firmware selection will still work without
-> it (it'll just end up using the DMI machine name instead).
-
-Right. That was my assumption as well. I would bail out here and skip 
-obtaining the antenna-sku.
-
->>
->>> +	}
->>> +
->>> +	status = acpi_evaluate_object(adev->handle, "RWCV", NULL, &buf);
->>
->> Can you clarify what the above does? What does the "RWCV" mean?
+> I'm just back from the weekend and sorry for the delayed reply.
 > 
-> No idea what it *means* :-)
 > 
-> What it is, though, is the ACPI method name to get the antenna-sku.
+> 在 2022/1/7 21:19, Mark Rutland 写道:
+> > On Fri, Jan 07, 2022 at 03:55:36AM -0500, He Ying wrote:
+> > > Our product has been updating its kernel from 4.4 to 5.10 recently and
+> > > found a performance issue. We do a bussiness test called ARP test, which
+> > > tests the latency for a ping-pong packets traffic with a certain payload.
+> > > The result is as following.
+> > > 
+> > >   - 4.4 kernel: avg = ~20s
+> > >   - 5.10 kernel (CONFIG_ARM64_PSEUDO_NMI is not set): avg = ~40s
+> > Have you tested with a recent mainline kernel, e.g. v5.15?
+> 
+> Actuallly no, that's because this test is only available for the product
+> environment and
+> 
+> we don't have an available 5.15 kernel for it yet.
 
-Wow. So much for meaning-full naming ;-)
+Ok; do you see anything comparable with any tests available to upstream
+developers? e.g. hackbench or `perf bench sched` ?
 
---0000000000002058c805d5389b7b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> > Is this test publicly available, and can you say which hardrware (e.g. which
+> > CPU implementation) you're testing with?
+> 
+> Actually no. The test is only available for our product environment now. We
+> are testing
+> 
+> with hisilicon 1213 (4 ARM Cortex-A72 cores).
 
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCApPVUj9EIxJasExeeD
-R9dddmi5PnKi4nLzM8C1Y/2CyTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMTAxMTI2MjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAT7gq4iK9XoXCGevdYJYT2A31WqRkFNaQNjkv
-KUzjO/lAZuKx9d78m0pn1JvU5LMRgUN5imTXSvhJ79l295WwRqzwzDFiF0j1B0zSVXTaXm4Ana3m
-BDWagAzHVkufOXN36lnBIPidWAAVoej4+i1ZA0wsT+/GjGWgXbTTrppFT88s6erKSwQbEz07GXId
-8d0SK4YOc2qQJaxMNhLFDP3lZoHBhFfvl9LHkc0BsFLe8hyibHyoll9f5YqEBh7lAq9KO1ibmS7s
-LiHbeBA4PE7VYSO8C2Q8C+gWITMhlJ+6PGCyRI30qYqvmiTOaYjiTa/w9kP4ysu25tJyyB3GITA5
-Eg==
---0000000000002058c805d5389b7b--
+Thanks for the CPU info; there are a number of other Cortex-A72 platforms out
+there, so it might be possible to reproduce the behaviour elsewhere.
+
+> > > I have been just learning arm64 pseudo-NMI code and have a question,
+> > > why is the related code not wrapped by CONFIG_ARM64_PSEUDO_NMI?
+> > The code in question is all patched via alternatives, and when
+> > CONFIG_ARM64_PSEUDO_NMI is not selected, the code was expected to only have the
+> > overhead of the regular DAIF manipulation.
+> I don't understand alernatives very well and I'll apreciate it if you can
+> explain it a bit more.
+
+Code using alternatives is patched at runtime, so for:
+
+	ALTERNATIVE(x, y, cap)
+
+... the `x` instructions will be inline in the code, and the `y` instructions
+will be placed in a separate linker section. If the `cap` capability is
+detected, the `y` instructions will be copied over the `x` instructions.
+
+So for:
+
+| asm volatile(ALTERNATIVE(
+|         "msr    daifclr, #3             // arch_local_irq_enable",
+|         __msr_s(SYS_ICC_PMR_EL1, "%0"),
+|         ARM64_HAS_IRQ_PRIO_MASKING)
+|         :
+|         : "r" ((unsigned long) GIC_PRIO_IRQON)
+|         : "memory");
+
+... where ARM64_HAS_IRQ_PRIO_MASKING is not detected, the inline instructions
+will be:
+
+| msr    daifclr, #3             // arch_local_irq_enable 
+
+A separate linker section will contain:
+... and a separate linker section will contain:
+
+| __msr_s(SYS_ICC_PMR_EL1, "%0"
+
+... and some metadata will be recorded in a `struct alt_instr`, which will be
+unused and will take some space, but should have no runtime overhead -- the
+runtime cost should only be the `msr daifclr, #3` instruction.
+
+> > > I wonder if this brings some performance regression.
+> > > 
+> > > First, I make this patch and then do the test again. Here's the result.
+> > > 
+> > >   - 5.10 kernel with this patch not applied: avg = ~40s
+> > >   - 5.10 kernel with this patch applied: avg = ~23s
+> > > 
+> > > Amazing! Note that all kernel is built with CONFIG_ARM64_PSEUDO_NMI not
+> > > set. It seems the pseudo-NMI feature actually brings some overhead to
+> > > performance event if CONFIG_ARM64_PSEUDO_NMI is not set.
+> > I'm surprised the overhead is so significant; as above this is all patched in
+> > and so the overhead when this is disabled is expected to be *extremely* small.
+> > 
+> > For example, wjen CONFIG_ARM64_PSEUDO_NMI, in arch_local_irq_enable():
+> > 
+> > * The portion under the system_has_prio_mask_debugging() test will be removed
+> >    entirely by the compiler, as this internally checks
+> >    IS_ENABLED(CONFIG_ARM64_PSEUDO_NMI).
+> > 
+> > * The assembly will be left as a write to DAIFClr. The only additional cost
+> >    should be that of generating GIC_PRIO_IRQON into a register.
+> > 
+> > * The pmr_sync() will be removed entirely by the compiler as is defined
+> >    conditionally dependent on CONFIG_ARM64_PSEUDO_NMI.
+> > 
+> > I can't spot an obvious issue with that or ther other cases. In the common case
+> > those add no new instructions, and in the worst case they only add NOPs.
+> 
+> Thanks for your detailed explaination! Actually I can't understand the
+> result exactly.
+> 
+> I build two 5.10 kernel images with this patch applied or not and objdump
+> them. Indeed, the disassembles of 'arch_local_irq_restore' are the same. Do
+> you have any ideas how we can find the root cause why this patch improves the
+> performance so much?
+> 
+> However, the test result is trustworthy because we do it many times and the
+> result is always repeatable.
+
+Due to the large numbers, I suspect this must be due to a specific fast-path,
+and it's possible that this is due to secondary factors (e.g. alignment of
+code) rather than the pseudo-NMK code itself.
+
+We need to narrow down *where* time is being spent. Since it appears that this
+is related to the local IRQ state management, it isn't likely that we can
+determine that reliably with the PMU. Given that, I think the first step is to
+reproduce the result elsewhere, for which we will need some plublicly available
+test-case.
+
+> > > Furthermore, I find the feature also brings some overhead to vmlinux size.
+> > > I build 5.10 kernel with this patch applied or not while
+> > > CONFIG_ARM64_PSEUDO_NMI is not set.
+> > > 
+> > >   - 5.10 kernel with this patch not applied: vmlinux size is 384060600 Bytes.
+> > >   - 5.10 kernel with this patch applied: vmlinux size is 383842936 Bytes.
+> > > 
+> > > That means arm64 pseudo-NMI feature may bring ~200KB overhead to
+> > > vmlinux size.
+> > I suspect that's just the (unused) alternatives, and we could improve that by
+> > passing the config into the alternative blocks.
+> 
+> Do you mean the sections generated by the alternatives? I don't understand
+> alernatives very well and I'll apreciate it if you can explain it a bit
+> more.
+
+Yes; I meant the sections generated to hold the alternatives code and the
+alternatives metadata.
+
+
+> > > Above all, arm64 pseudo-NMI feature brings some overhead to vmlinux size
+> > > and performance even if config is not set. To avoid it, add macro control
+> > > all around the related code.
+> > > 
+> > > Signed-off-by: He Ying <heying24@huawei.com>
+> > > ---
+> > >   arch/arm64/include/asm/irqflags.h | 38 +++++++++++++++++++++++++++++--
+> > >   arch/arm64/kernel/entry.S         |  4 ++++
+> > >   2 files changed, 40 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/arm64/include/asm/irqflags.h b/arch/arm64/include/asm/irqflags.h
+> > > index b57b9b1e4344..82f771b41cf5 100644
+> > > --- a/arch/arm64/include/asm/irqflags.h
+> > > +++ b/arch/arm64/include/asm/irqflags.h
+> > > @@ -26,6 +26,7 @@
+> > >    */
+> > >   static inline void arch_local_irq_enable(void)
+> > >   {
+> > > +#ifdef CONFIG_ARM64_PSEUDO_NMI
+> > >   	if (system_has_prio_mask_debugging()) {
+> > >   		u32 pmr = read_sysreg_s(SYS_ICC_PMR_EL1);
+> > > @@ -41,10 +42,18 @@ static inline void arch_local_irq_enable(void)
+> > >   		: "memory");
+> > >   	pmr_sync();
+> > > +#else
+> > > +	asm volatile(
+> > > +		"msr	daifclr, #3		// arch_local_irq_enable"
+> > > +		:
+> > > +		:
+> > > +		: "memory");
+> > > +#endif
+> > I'm happy to rework this to improve matters, but I am very much not happy with
+> > duplicating the logic for the !PSEUDO_NMI case. Adding more ifdeffery and
+> > copies of that is not acceptable.
+> I agree. Adding these ifdeffery is a bit ugly. Let's see if there are some
+> better ways.
+> > 
+> > Instead, can you please try changing the alternative to also take the config,
+> > e.g. here have:
+> > 
+> > |       asm volatile(ALTERNATIVE(
+> > |               "msr    daifclr, #3             // arch_local_irq_enable",
+> > |               __msr_s(SYS_ICC_PMR_EL1, "%0"),
+> > |               ARM64_HAS_IRQ_PRIO_MASKING,
+> > |               CONFIG_ARM64_PSEUDO_NMI)
+> > |               :
+> > |               : "r" ((unsigned long) GIC_PRIO_IRQON)
+> > |               : "memory");
+> > 
+> > ... and see if that makes a significant difference?
+> > 
+> > Likewise for the other casees.
+> 
+> OK, I'll try it. But I have some questions. Here's the comment of
+> ALERNATIVE:
+> 
+> /*
+>  * Usage: asm(ALTERNATIVE(oldinstr, newinstr, feature));
+>  *
+>  * Usage: asm(ALTERNATIVE(oldinstr, newinstr, feature, CONFIG_FOO));
+>  * N.B. If CONFIG_FOO is specified, but not selected, the whole block
+>  *      will be omitted, including oldinstr.
+>  */
+> 
+> If CONFIG_FOO is not selected, the whole block will be omitted including
+> oldinstr.
+> 
+> But we still want the oldinstr in this situation. Do I misunderstand
+> something?
+
+Sorry; you are right, and my suggestion was broken.
+
+I'll need to have a think about this; we might be able to rework this to use a
+static key instead, but IIRC last time I tried there were issues with that
+approach. I have some (old) work-in-progress patches at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/daif-rework
+
+I suspect I won't have time to renew that in the near future, but an approach
+like that might be worthwhile.
+
+Thanks,
+Mark.

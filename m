@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 421AC489D8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6775D489D8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237443AbiAJQ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237384AbiAJQ3H (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:29:07 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2A7C06173F;
-        Mon, 10 Jan 2022 08:29:07 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id m4so14278537edb.10;
-        Mon, 10 Jan 2022 08:29:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tb2UIfWjrHZNv93aEu9rRuoPC63dB0IOjiFEuqXiHHs=;
-        b=YP+mwUSIyxtVNPh+ciU4S/WCAbXK/HhJUvPwvlKSflyMPB4tHCq97iawOHhC6pbuP6
-         WaQdHHYJN/uksFJZ7eqSqMeTPoIVy1tz63153EscV/aKw+sFO/lJA8sp2Ye+FrzMuYxE
-         c+VOEPMjuIWSV2+k7rHygm8iINBc0p/KRaCMX/r1b+n/Vd6MkJgH2Z8SNOUAz1nHj7G9
-         4B0IkNV3YUOBgm2dr2yPluTAgauCmQd0J3A7A9fxs5WLA8Hk58L6XyunJ5TLmZnhlf5z
-         d6gIb8m1tOpHyPaiVPTkSNXaVRgxFeMWOj/lEgHkvnkkd7IodoFU2Pcj8QlPEvCLKHNf
-         ivYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tb2UIfWjrHZNv93aEu9rRuoPC63dB0IOjiFEuqXiHHs=;
-        b=G7se0q/gRveRXF60SlxNSHz7+wvHcfj0xApmapPyqFwVlfMib7UIpoQTunWakNMVDb
-         TPZ3tMvWz/SCYGnJAl/iDEOc2kLzxIqMctiZFzPDKAwhsgJE4V4ZB9SDCOLnhCFPoWDX
-         kk8GLOVVkGZC92NpFd51afAiBrWiOk30xZ6bHXBTHSqyfzVZQy5Bu15LxJ8jdMlhhJMV
-         kxw+No6nFvKMVtl1lxRCf8p3PssN+GUqPrvcsb3xWgQfXdym7Ldn7bQ+tDh2KWk4qdrw
-         eVpZe+roPXrfDiOiT06jakKFi8OEPvNVu1wE8ol64wCm/4KXKblGehomZAQN4dwYW4x8
-         a1kw==
-X-Gm-Message-State: AOAM533DtrJER38h4hP0DaKvBbT6GjdQwMTw14O2jGaDwQJAmSDX6rmA
-        14U1CmtsnzaUxKHcPUaaJhHiize9EflXdbOFLZU=
-X-Google-Smtp-Source: ABdhPJy2HJD38OHa/NU4I45gvByn7J2E8iqhT1RF1Wdjsys5HacppqFQGZAZlwUn1KMRt+/9HVp+ZBcIzaDyTEqvu9U=
-X-Received: by 2002:a50:ef11:: with SMTP id m17mr409353eds.77.1641832145876;
- Mon, 10 Jan 2022 08:29:05 -0800 (PST)
+        id S237460AbiAJQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:29:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:36256 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237466AbiAJQ3a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 11:29:30 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27B052B;
+        Mon, 10 Jan 2022 08:29:30 -0800 (PST)
+Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C90D63F5A1;
+        Mon, 10 Jan 2022 08:29:28 -0800 (PST)
+Date:   Mon, 10 Jan 2022 16:29:19 +0000
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        Valentin.Schneider@arm.com, Morten.Rasmussen@arm.com,
+        qperret@google.com
+Subject: Re: [PATCH 2/3] sched/fair: Fix newidle_balance() for overutilized
+ systems
+Message-ID: <YdxeoRUeZhl2D+dK@FVFF7649Q05P>
+References: <20211220114323.22811-1-vincent.donnefort@arm.com>
+ <20211220114323.22811-3-vincent.donnefort@arm.com>
+ <CAKfTPtCJPHfoiuspYMGPARHdOuLJ6g0oUx2EQjdEPz729NrDPA@mail.gmail.com>
 MIME-Version: 1.0
-References: <YSy/PFrem+a7npBy@gmail.com> <CAOMZO5D0m1xCfgFifKz1H+oYQSfxsfuZp4U39rPMACmzv1fvjQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5D0m1xCfgFifKz1H+oYQSfxsfuZp4U39rPMACmzv1fvjQ@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 10 Jan 2022 13:28:54 -0300
-Message-ID: <CAOMZO5BkFf1HYbe86nGjnx=w6Lj16fP2u=t233aBv85LAokdmA@mail.gmail.com>
-Subject: Re: HRNG in CAAM isn't working properly on IMX6 SoloX
-To:     Fredrik Yhlen <fredrik.yhlen@endian.se>,
-        Horia Geanta Neag <horia.geanta@nxp.com>
-Cc:     Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Heiko Schocher <hs@denx.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCJPHfoiuspYMGPARHdOuLJ6g0oUx2EQjdEPz729NrDPA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horia,
+[...]
 
-On Mon, Aug 30, 2021 at 8:49 AM Fabio Estevam <festevam@gmail.com> wrote:
+> 
+> > can spuriously maintain overutilized for a long period of time.
+> >
+> > We then need newidle_balance() to proceed with balancing if the system is
+> > overutilized.
+> 
+> Always triggering a costly newidle_balance when you are already
+> overutilized for the sole purpose of clearing overutilized seems to be
+> a bit overkill.
 
-> We also observe this issue.
->
-> Heiko on Cc tried increasing the RTSDCTL_ENT_DLY_MIN value
-> and this seems to help:
->
-> diff --git a/drivers/crypto/caam/regs.h b/drivers/crypto/caam/regs.h
-> index af61f3a2c0d4..53c9fa04a24c 100644
-> --- a/drivers/crypto/caam/regs.h
-> +++ b/drivers/crypto/caam/regs.h
-> @@ -513,7 +513,7 @@ struct rng4tst {
->   };
->  #define RTSDCTL_ENT_DLY_SHIFT 16
->  #define RTSDCTL_ENT_DLY_MASK (0xffff << RTSDCTL_ENT_DLY_SHIFT)
-> -#define RTSDCTL_ENT_DLY_MIN 3200
-> +#define RTSDCTL_ENT_DLY_MIN 4800
->  #define RTSDCTL_ENT_DLY_MAX 12800
->   u32 rtsdctl; /* seed control register */
->   union {
+But the only cases where newidle_balance() would now run while it used not to,
+are when overutilized is set but overload is not. Which is either a transient
+state for which we do not anticipate more than one stat update or it is the
+situation where one of the biggest CPU is overutilized while having nr_running <
+2.
 
-Even with the change above we get the following errors on a
-imx6sx-based board running 5.10.y:
+It can indeed add some additional costly calls to newidle_balance, but they
+will not be plentiful, especially with the other patch from this series: 
 
-[    0.918126] caam 2100000.crypto: registering rng-caam
-[   22.598192] caam_jr 2101000.jr: 2000025b: CCB: desc idx 2: RNG:
-Hardware error
-[   22.598260] caam_jr 2101000.jr: 20003c5b: CCB: desc idx 60: RNG:
-Hardware error
-[   22.598324] caam_jr 2101000.jr: 20003c5b: CCB: desc idx 60: RNG:
-Hardware error
-[   22.598368] caam_jr 2101000.jr: 20003c5b: CCB: desc idx 60: RNG:
-Hardware error
+  "sched/fair: Do not raise overutilized for idle CPUs"
 
-What is the proper way to fix this issue?
+> 
+> Furthermore, nothing prevents us to abort newidle_balance before
+> reaching the root domain
 
-Thanks,
+should_we_balance() always return true in the case of newidle. So I suppose you
+refer to max_newidle_lb_cost?
 
-Fabio Estevam
+> 
+> So this doesn't seem like the good way to proceed
+
+What are our other options?
+
+Resolving it in the nohz balancer would need to change should_we_balance().
+
+I also tried solely to not raise overutilized when the CPU is idle but this is
+not a solution either as when a task migration is pending, you can end-up with
+a !idle CPU but with nr_running < 2, so once again overutilized set, overload
+not.
+
+> 
+> >
+> > Fixes: 2802bf3cd936 ("sched/fair: Add over-utilization/tipping point indicator")
+> > Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index e2f6fa14e5e7..51f6f55abb37 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -10849,7 +10849,8 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf)
+> >         rcu_read_lock();
+> >         sd = rcu_dereference_check_sched_domain(this_rq->sd);
+> >
+> > -       if (!READ_ONCE(this_rq->rd->overload) ||
+> > +       if ((!READ_ONCE(this_rq->rd->overload) &&
+> > +           !READ_ONCE(this_rq->rd->overutilized)) ||
+> >             (sd && this_rq->avg_idle < sd->max_newidle_lb_cost)) {
+> >
+> >                 if (sd)
+> > --
+> > 2.25.1
+> >

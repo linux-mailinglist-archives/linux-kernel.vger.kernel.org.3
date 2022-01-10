@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF911489659
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5674D48965B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243925AbiAJKaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:30:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:59592 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235505AbiAJKaY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:30:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DED3DED1;
-        Mon, 10 Jan 2022 02:30:23 -0800 (PST)
-Received: from [10.57.34.253] (unknown [10.57.34.253])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23B4D3F5A1;
-        Mon, 10 Jan 2022 02:30:23 -0800 (PST)
-Subject: Re: linux-next: Fixes tag needs some work in the jc_docs tree
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220107103649.53774b30@canb.auug.org.au>
- <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
- <2359d7d0-3530-c849-5a52-d7b362df2dd1@infradead.org>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <527649a0-9c1e-f9cf-62aa-d13af10930e7@arm.com>
-Date:   Mon, 10 Jan 2022 10:30:21 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S243936AbiAJKan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:30:43 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:42732 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235505AbiAJKak (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 05:30:40 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3689B21108;
+        Mon, 10 Jan 2022 10:30:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641810639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=77L+gjQ4NobeEwnYjyPWAkLhsp5uQeDQyUT2GPoSEXI=;
+        b=sKNRDyBazgeOluVV+IsxDKjqS8J35bLWiNhz0RxRcWs0XJ2vWqUHjMEjswpCZO1BKtpY5w
+        /eZ9F1ZVDtRYAS6K/pEgpA+J3dEaGPqyRzt65UgD1AceFWH2TxCxinoe5lKcWZ/vKX6HX9
+        MD0+wC+08hxUFAHqJiS2t2BxvJ1uY2M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641810639;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=77L+gjQ4NobeEwnYjyPWAkLhsp5uQeDQyUT2GPoSEXI=;
+        b=vY/3VX6jI8o/gCDtJoFeNRucfHO7zerWDctMbXYsNshpWlpVwXd3dqoDEsMLVjI+XrzuHC
+        ziSrL0S2xRO0FpBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F01913CCB;
+        Mon, 10 Jan 2022 10:30:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ux11Bs8K3GHEUAAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 10:30:39 +0000
+Date:   Mon, 10 Jan 2022 11:30:46 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?utf-8?B?SsO2cmcgUsO2ZGVs?= <joro@8bytes.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/sev for v5.17
+Message-ID: <YdwK1rME5ufAJdHG@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <2359d7d0-3530-c849-5a52-d7b362df2dd1@infradead.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+please pull the accumulated pile of x86/sev generalizations and cleanups,
+for 5.17.
 
-On 07/01/2022 16:19, Randy Dunlap wrote:
-> Hi James,
-> 
-> First of all, don't always believe what checkpatch says.
-> Just take it as a hint.
-> 
-> On 1/7/22 02:25, James Clark wrote:
->>
->>
->> On 06/01/2022 23:36, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> In commit
->>>
->>>   e94f43ea200a ("docs: automarkup.py: Fix invalid HTML link output and broken URI fragments")
->>>
->>> Fixes tag
->>>
->>>   Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
->>>
->>> has these problem(s):
->>>
->>>   - Subject has leading but no trailing parentheses
->>>   - Subject has leading but no trailing quotes
->>
->> Hi Stephen,
->>
->> Which validator are you using for this output? checkpatch.pl has a validator for commit references
->> and it actually complains _more_ if it's not wrapped at 75 chars. At least for ones in the
->> body of the commit rather than the fixes reference. Which is a bit confusing if there is
->> a difference in the rule.
->>
->>>
->>> Please do not split Fixes tags across more than one line.
->>>
->>
->> Is this just for the fixes tag and not for the one in the body? Would you consider adding
->> this check to checkpatch.pl and submitting-patches.rst as I don't see that rule mentioned there.
-> 
-> submitting-patches.rst says:
-> 
-> If your patch fixes a bug in a specific commit, e.g. you found an issue using
-> ``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
-> the SHA-1 ID, and the one line summary.  Do not split the tag across multiple
-> lines, tags are exempt from the "wrap at 75 columns" rule in order to simplify
-> parsing scripts.  For example::
+Thx.
 
-Thanks I missed that bit.
-> 
-> 	Fixes: 54a4f0239f2e ("KVM: MMU: make kvm_mmu_zap_page() return the number of pages it actually freed")
-> 
-> 
-> Yes, checkpatch warns about that. Just ignore it.
+---
 
-I looked into adding a line break warning in checkpatch for 'Fixes:' but it's not easy because it seems like
-the fixes field is more permissive than the other one:
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-	o Fixes: style doesn't require ("<commit_description>")
-	parentheses and double quotes like other uses of
-	git commit ID and description.
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-> 
->> @Jonathan, I'm happy to resubmit with the changes, but it might be easier if you just
->> make the fix in place.
->>
->> Thanks
->> James
-> 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sev_for_v5.17_rc1
+
+for you to fetch changes up to 20f07a044a76aebaaa0603038857229b5c460d69:
+
+  x86/sev: Move common memory encryption code to mem_encrypt.c (2021-12-08 16:49:53 +0100)
+
+----------------------------------------------------------------
+- Share the SEV string unrolling logic with TDX as TDX guests need it too
+
+- Cleanups and generalzation of code shared by SEV and TDX
+
+----------------------------------------------------------------
+Borislav Petkov (3):
+      x86/sev: Get rid of excessive use of defines
+      x86/head64: Carve out the guest encryption postprocessing into a helper
+      x86/sev: Remove do_early_exception() forward declarations
+
+Brijesh Singh (1):
+      x86/sev: Shorten GHCB terminate macro names
+
+Kirill A. Shutemov (1):
+      x86/sev: Move common memory encryption code to mem_encrypt.c
+
+Kuppuswamy Sathyanarayanan (2):
+      x86/sev: Use CC_ATTR attribute to generalize string I/O unroll
+      x86/sev: Rename mem_encrypt.c to mem_encrypt_amd.c
+
+ arch/x86/Kconfig                  |  10 +-
+ arch/x86/boot/compressed/sev.c    |   6 +-
+ arch/x86/include/asm/io.h         |  20 +-
+ arch/x86/include/asm/sev-common.h |  55 ++---
+ arch/x86/kernel/cc_platform.c     |   8 +
+ arch/x86/kernel/head64.c          |  60 +++---
+ arch/x86/kernel/sev-shared.c      |   2 +-
+ arch/x86/kernel/sev.c             |  11 +-
+ arch/x86/mm/Makefile              |   7 +-
+ arch/x86/mm/mem_encrypt.c         | 441 +-------------------------------------
+ arch/x86/mm/mem_encrypt_amd.c     | 438 +++++++++++++++++++++++++++++++++++++
+ include/linux/cc_platform.h       |  11 +
+ 12 files changed, 545 insertions(+), 524 deletions(-)
+ create mode 100644 arch/x86/mm/mem_encrypt_amd.c
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

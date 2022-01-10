@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC03489800
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA3F489802
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245256AbiAJLv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S245280AbiAJLvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245093AbiAJLth (ORCPT
+        with ESMTP id S245094AbiAJLti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:49:37 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721EAC06175B;
+        Mon, 10 Jan 2022 06:49:38 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997E7C06175C;
         Mon, 10 Jan 2022 03:49:37 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id x4so1061063wru.7;
+Received: by mail-wm1-x32f.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso9099947wmj.2;
         Mon, 10 Jan 2022 03:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6RA5/HJJmVlMA5txu/YniwjTRZxIND85s5ggXhBk9yU=;
-        b=hab8/uh0IJZLbdjLdpPTpa7bZzxs6tSzo/t4MddfVwKGrmNwr27pBzkn6oVpkCl1Ae
-         RzWRcGGoDIMi2yvJVkjG0a/zT4bdwPB5CbDJ2UsEMeXM0i8Vayj4oqsbsFHd/aa2o1tJ
-         hADFsem9NxuMBriyOO7ZUZZXfXj0W7MM+8QIciIkK+Y0tFuCjzmDDfWaiz1t6Vlf/Yj7
-         TBrIyez/Ap6GTDYkVckwWEJ7qIxOsyo0DI/hayg2lpmRVjo3aJFuHDIbCBwIoSijQcvZ
-         CIKKp+3hwR7KgJ5KK1IwpgfobgrJHLR+eWA/f/D0/Nl7GeWwgmc8BkeDhpNZI/dWvJnA
-         aaZw==
+        bh=MQX3WExGOS3qStO9Hx8ccBSuVV1T9JyvQiyN4+V/nRc=;
+        b=PogcFR9W1HoqcfZ20kfe+5S9ByTka/NL24Zh7qDZn7hfe/LF5EJZJ0OBRFMcKUe/Hx
+         OfSxOcSXT66vQnF2Nx4TFoiAT9Azweigo6rr7MzBnKeTUZIk3sUXEniHkEasCtbxLcxh
+         jdhnB/S3XApCCaulQTNJ1NpohN+hecwmWVshKc3sFst9Nii1N9XgkP+kzBH+k+nXDOto
+         vtNtkU38xCsGuwWnFu23ndOxsBgG/9aqYqoqFXVJAPDPVEFLYKBpAo9UaG6WM9770APZ
+         eWsfPn4HLeQB4iMqu/wAlZgQtskc29rHcpODK+gF+GjG/Bsw2/uGc32oPCJg6Clo0ToI
+         Xbng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6RA5/HJJmVlMA5txu/YniwjTRZxIND85s5ggXhBk9yU=;
-        b=aher3cxutKIEVQFAHjeCrTu65irSGhOTdpnZaPR7zUb3vLvZaNmKnb8uGr01NVOW7d
-         kDyOgHe9YVd4lzNI7TbtTEcdlx4m75jTBaRHYfwO1SyIQMYJGaZj9jViyeBmEuEBvVCh
-         eJ4fKL1CXxeK90/dCgH5e88za4gH6zDfLyB4QKQI+aylHhjSOkaZQ0Qa+w8nW+udJKrj
-         02Z8lB5g2UsqItFQtE2aoU+gbGUOmpTo9+ExUDWCpjriSq8EApy9/zPkqYNyVGUTBcK0
-         tSPNvuoQAr9SBWiBgZqFvXgGRRRZF2pGufFLQeaYuagPtCOYeTBRWwza7ZflKOh/wxoW
-         lBZQ==
-X-Gm-Message-State: AOAM532/RiTVmUqOg1ReOJ831cg8tYRJHvmRhsCeJCYvxar2shbuARDP
-        dfsVi/sSQmnp+xu6bYWnJmVRVmK9h47Tdw==
-X-Google-Smtp-Source: ABdhPJw1/pLJqo/haicWXi1EcmsfpsK9GX+kjxiMkCdLXaTAg9GL8dmaFWRwHoNhpuQDCAbyKhp76w==
-X-Received: by 2002:adf:ebc5:: with SMTP id v5mr64843552wrn.194.1641815375091;
+        bh=MQX3WExGOS3qStO9Hx8ccBSuVV1T9JyvQiyN4+V/nRc=;
+        b=Akex1dtWsabGB8PLsoKJuBdjbkDOVvPl6bsQc3sPgtF4haCNBSXZ98vX6weXS0bS/O
+         QTzUcXpShmk4qHKfgy8rQkwV/4gwXVJpx76YtT/5wY3uYxEUDMC32v/b8fFj7/xW9eey
+         XawMbhMZRiqmUQ1P78UcmwZmInmexoNb76Un775hEO3duhevR0pc+vwaOSkqE1hUsNVk
+         uBHW7qTI6ROQvhee3snii628Co+uKD5Yfb1jg6D4VCm3+dFFhf9zDGwd/anHuFUTvgCQ
+         NMA42s0ecNw/M0VOYi9LxOxFBR7FDDMKtwTXCdJKaUg96U6v6a9HRBwmFvqnMV/17hzL
+         Hm2g==
+X-Gm-Message-State: AOAM531U6uqMnBzRgqtUopkQ/vHVICop5nD02XIBlaEMMXrux7u5PReT
+        0YUjkT6IR0AFznQQflTXTb57ywkkyHceAA==
+X-Google-Smtp-Source: ABdhPJy5rMFXGoG/k0FjA6pDF7/FfquNZhZpzmCKcHzd+PjnCx3jj2I4s+Aq58cmupYcO+HfEN6h9A==
+X-Received: by 2002:a05:600c:287:: with SMTP id 7mr754217wmk.98.1641815375956;
         Mon, 10 Jan 2022 03:49:35 -0800 (PST)
 Received: from localhost.localdomain (198.red-81-44-130.dynamicip.rima-tde.net. [81.44.130.198])
-        by smtp.gmail.com with ESMTPSA id 9sm8090252wrz.90.2022.01.10.03.49.34
+        by smtp.gmail.com with ESMTPSA id 9sm8090252wrz.90.2022.01.10.03.49.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 03:49:34 -0800 (PST)
+        Mon, 10 Jan 2022 03:49:35 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     linux-clk@vger.kernel.org
 Cc:     john@phrozen.org, linux-staging@lists.linux.dev,
         gregkh@linuxfoundation.org, neil@brown.name,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         sboyd@kernel.org
-Subject: [PATCH v8 3/4] clk: ralink: make system controller node a reset provider
-Date:   Mon, 10 Jan 2022 12:49:29 +0100
-Message-Id: <20220110114930.1406665-4-sergio.paracuellos@gmail.com>
+Subject: [PATCH v8 4/4] staging: mt7621-dts: align resets with binding documentation
+Date:   Mon, 10 Jan 2022 12:49:30 +0100
+Message-Id: <20220110114930.1406665-5-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
 References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
@@ -66,147 +66,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT7621 system controller node is already providing the clocks for the whole
-system but must also serve as a reset provider. Hence, add reset controller
-related code to the clock driver itself. To get resets properly ready for
-the rest of the world we need to move platform driver initialization process
-to 'arch_initcall'.
+Binding documentation for compatible 'mediatek,mt7621-sysc' has been updated
+to be used as a reset provider. Align reset related bits and system controller
+node with binding documentation along the dtsi file.
 
-CC: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- drivers/clk/ralink/clk-mt7621.c | 92 ++++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 1 deletion(-)
+ drivers/staging/mt7621-dts/mt7621.dtsi | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/clk/ralink/clk-mt7621.c b/drivers/clk/ralink/clk-mt7621.c
-index a2c045390f00..99256659dd96 100644
---- a/drivers/clk/ralink/clk-mt7621.c
-+++ b/drivers/clk/ralink/clk-mt7621.c
-@@ -11,14 +11,17 @@
- #include <linux/mfd/syscon.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/reset-controller.h>
- #include <linux/slab.h>
+diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
+index 644a65d1a6a1..d72673c91dc2 100644
+--- a/drivers/staging/mt7621-dts/mt7621.dtsi
++++ b/drivers/staging/mt7621-dts/mt7621.dtsi
+@@ -2,6 +2,7 @@
+ #include <dt-bindings/interrupt-controller/mips-gic.h>
+ #include <dt-bindings/gpio/gpio.h>
  #include <dt-bindings/clock/mt7621-clk.h>
 +#include <dt-bindings/reset/mt7621-reset.h>
  
- /* Configuration registers */
- #define SYSC_REG_SYSTEM_CONFIG0         0x10
- #define SYSC_REG_SYSTEM_CONFIG1         0x14
- #define SYSC_REG_CLKCFG0		0x2c
- #define SYSC_REG_CLKCFG1		0x30
-+#define SYSC_REG_RESET_CTRL		0x34
- #define SYSC_REG_CUR_CLK_STS		0x44
- #define MEMC_REG_CPU_PLL		0x648
+ / {
+ 	#address-cells = <1>;
+@@ -67,6 +68,7 @@ sysc: syscon@0 {
+ 			compatible = "mediatek,mt7621-sysc", "syscon";
+ 			reg = <0x0 0x100>;
+ 			#clock-cells = <1>;
++			#reset-cells = <1>;
+ 			ralink,memctl = <&memc>;
+ 			clock-output-names = "xtal", "cpu", "bus",
+ 					     "50m", "125m", "150m",
+@@ -96,7 +98,7 @@ i2c: i2c@900 {
  
-@@ -398,6 +401,82 @@ static void __init mt7621_clk_init(struct device_node *node)
- }
- CLK_OF_DECLARE_DRIVER(mt7621_clk, "mediatek,mt7621-sysc", mt7621_clk_init);
+ 			clocks = <&sysc MT7621_CLK_I2C>;
+ 			clock-names = "i2c";
+-			resets = <&rstctrl 16>;
++			resets = <&sysc MT7621_RST_I2C>;
+ 			reset-names = "i2c";
  
-+struct mt7621_rst {
-+	struct reset_controller_dev rcdev;
-+	struct regmap *sysc;
-+};
-+
-+static struct mt7621_rst *to_mt7621_rst(struct reset_controller_dev *dev)
-+{
-+	return container_of(dev, struct mt7621_rst, rcdev);
-+}
-+
-+static int mt7621_assert_device(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	struct mt7621_rst *data = to_mt7621_rst(rcdev);
-+	struct regmap *sysc = data->sysc;
-+
-+	return regmap_update_bits(sysc, SYSC_REG_RESET_CTRL, BIT(id), BIT(id));
-+}
-+
-+static int mt7621_deassert_device(struct reset_controller_dev *rcdev,
-+				  unsigned long id)
-+{
-+	struct mt7621_rst *data = to_mt7621_rst(rcdev);
-+	struct regmap *sysc = data->sysc;
-+
-+	return regmap_update_bits(sysc, SYSC_REG_RESET_CTRL, BIT(id), 0);
-+}
-+
-+static int mt7621_reset_device(struct reset_controller_dev *rcdev,
-+			       unsigned long id)
-+{
-+	int ret;
-+
-+	ret = mt7621_assert_device(rcdev, id);
-+	if (ret < 0)
-+		return ret;
-+
-+	return mt7621_deassert_device(rcdev, id);
-+}
-+
-+static int mt7621_rst_xlate(struct reset_controller_dev *rcdev,
-+			    const struct of_phandle_args *reset_spec)
-+{
-+	unsigned long id = reset_spec->args[0];
-+
-+	if (id == MT7621_RST_SYS || id >= rcdev->nr_resets)
-+		return -EINVAL;
-+
-+	return id;
-+}
-+
-+static const struct reset_control_ops reset_ops = {
-+	.reset = mt7621_reset_device,
-+	.assert = mt7621_assert_device,
-+	.deassert = mt7621_deassert_device
-+};
-+
-+static int mt7621_reset_init(struct device *dev, struct regmap *sysc)
-+{
-+	struct mt7621_rst *rst_data;
-+
-+	rst_data = devm_kzalloc(dev, sizeof(*rst_data), GFP_KERNEL);
-+	if (!rst_data)
-+		return -ENOMEM;
-+
-+	rst_data->sysc = sysc;
-+	rst_data->rcdev.ops = &reset_ops;
-+	rst_data->rcdev.owner = THIS_MODULE;
-+	rst_data->rcdev.nr_resets = 32;
-+	rst_data->rcdev.of_reset_n_cells = 1;
-+	rst_data->rcdev.of_xlate = mt7621_rst_xlate;
-+	rst_data->rcdev.of_node = dev_of_node(dev);
-+
-+	return devm_reset_controller_register(dev, &rst_data->rcdev);
-+}
-+
- static int mt7621_clk_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-@@ -424,6 +503,12 @@ static int mt7621_clk_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+ 			#address-cells = <1>;
+@@ -137,7 +139,7 @@ spi0: spi@b00 {
+ 			clocks = <&sysc MT7621_CLK_SPI>;
+ 			clock-names = "spi";
  
-+	ret = mt7621_reset_init(dev, priv->sysc);
-+	if (ret) {
-+		dev_err(dev, "Could not init reset controller\n");
-+		return ret;
-+	}
-+
- 	count = ARRAY_SIZE(mt7621_clks_base) +
- 		ARRAY_SIZE(mt7621_fixed_clks) + ARRAY_SIZE(mt7621_gates);
- 	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, count),
-@@ -485,4 +570,9 @@ static struct platform_driver mt7621_clk_driver = {
- 		.of_match_table = mt7621_clk_of_match,
- 	},
- };
--builtin_platform_driver(mt7621_clk_driver);
-+
-+static int __init mt7621_clk_reset_init(void)
-+{
-+	return platform_driver_register(&mt7621_clk_driver);
-+}
-+arch_initcall(mt7621_clk_reset_init);
+-			resets = <&rstctrl 18>;
++			resets = <&sysc MT7621_RST_SPI>;
+ 			reset-names = "spi";
+ 
+ 			#address-cells = <1>;
+@@ -234,11 +236,6 @@ pinmux {
+ 		};
+ 	};
+ 
+-	rstctrl: rstctrl {
+-		compatible = "ralink,rt2880-reset";
+-		#reset-cells = <1>;
+-	};
+-
+ 	sdhci: sdhci@1e130000 {
+ 		status = "disabled";
+ 
+@@ -317,7 +314,7 @@ ethernet: ethernet@1e100000 {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		resets = <&rstctrl 6 &rstctrl 23>;
++		resets = <&sysc MT7621_RST_FE &sysc MT7621_RST_ETH>;
+ 		reset-names = "fe", "eth";
+ 
+ 		interrupt-parent = <&gic>;
+@@ -362,7 +359,7 @@ switch0: switch0@0 {
+ 				#size-cells = <0>;
+ 				reg = <0>;
+ 				mediatek,mcm;
+-				resets = <&rstctrl 2>;
++				resets = <&sysc MT7621_RST_MCM>;
+ 				reset-names = "mcm";
+ 				interrupt-controller;
+ 				#interrupt-cells = <1>;
+@@ -448,7 +445,7 @@ pcie@0,0 {
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0>;
+ 			interrupt-map = <0 0 0 0 &gic GIC_SHARED 4 IRQ_TYPE_LEVEL_HIGH>;
+-			resets = <&rstctrl 24>;
++			resets = <&sysc MT7621_RST_PCIE0>;
+ 			clocks = <&sysc MT7621_CLK_PCIE0>;
+ 			phys = <&pcie0_phy 1>;
+ 			phy-names = "pcie-phy0";
+@@ -463,7 +460,7 @@ pcie@1,0 {
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0>;
+ 			interrupt-map = <0 0 0 0 &gic GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>;
+-			resets = <&rstctrl 25>;
++			resets = <&sysc MT7621_RST_PCIE1>;
+ 			clocks = <&sysc MT7621_CLK_PCIE1>;
+ 			phys = <&pcie0_phy 1>;
+ 			phy-names = "pcie-phy1";
+@@ -478,7 +475,7 @@ pcie@2,0 {
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0>;
+ 			interrupt-map = <0 0 0 0 &gic GIC_SHARED 25 IRQ_TYPE_LEVEL_HIGH>;
+-			resets = <&rstctrl 26>;
++			resets = <&sysc MT7621_RST_PCIE2>;
+ 			clocks = <&sysc MT7621_CLK_PCIE2>;
+ 			phys = <&pcie2_phy 0>;
+ 			phy-names = "pcie-phy2";
 -- 
 2.25.1
 

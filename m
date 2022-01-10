@@ -2,80 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E43D489CB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4598D489CB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbiAJPul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236615AbiAJPud (ORCPT
+        id S236609AbiAJPuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:50:44 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38572 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236632AbiAJPum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:50:33 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB9FC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:50:33 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id c15so14377472qtc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=taJK4990Hf5ggLF7x5d/tJzG7fwO4y08TUkbCKMXkXM=;
-        b=SU3mKDe+NFt3ELa2q1426sexnDWTv18yKIPDP2du70kd2dvXb52pbMprOX3r4vXwnT
-         RbL/u0D3fPqnhE75Zta7ky5PgQl+H7WlhwgI11Y9Dz1SlLlNyp1vZelvZQfiKOIBLikl
-         9VdKprbwittxaamxOVCN3EL4GuHf/srjHctuYUzkQ2alUkCvKBgXraQVXsc11RTekBnu
-         iacR1txVlA/jNx6GNjsFWSQwvPhSc/uJHfJ/mKUmnB7DVKYliIoB4dEZciKewszMijkI
-         vO1LhdxWqyO0YGpmagOxmsqhoVMgkRSsEN7ww+ni+rjYhOHFPPU2YpgW1eD0xXLut+sY
-         VFOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=taJK4990Hf5ggLF7x5d/tJzG7fwO4y08TUkbCKMXkXM=;
-        b=x2nyI3G0QTMqSJAF2epWYngWrGKRxIiANeBplk5kokEazzV859X0QDa6PkQwJJ21lW
-         ZKu6FoYwJMCpeVAl0ShEsvR6FGZ6qXYa//qqfO7zJkTR2dvH7jRxzuXI6E5uvvPmuuH6
-         AMpj/N1kgzMsaRuGlc75MJxUb+HIyQw9N6CyxMNm4VZPEq2tSfaZDjA4Geqjd9uKjuwu
-         A5sQ4qMSOZaK9i65taJ1OenxfUhSGt2CIXUqwUZnYYNoU8ettVcPGKAj89u5WT/L/XOk
-         UB3YiAe2xHp2jFKdjZrC9dCLvlXfruU2C49rd56y3cA9E+dirH4zqYHN6MAwSkvu7A6p
-         VhMQ==
-X-Gm-Message-State: AOAM532rHt1BN7WP8oxi2fJloX+gvpLhTLzgcpiQcHtfodJkkzBeB9ua
-        HYT111WkoZDfZrLAC7YwZ2k7e9AqiMefew==
-X-Google-Smtp-Source: ABdhPJxBj0ZyPgNVhc4jPK7tenIAOTO7n8CuI533poIMXs6L4y67rXu3AheljFk+wuxJDExcGtdWCQ==
-X-Received: by 2002:ac8:74c6:: with SMTP id j6mr229936qtr.557.1641829832895;
-        Mon, 10 Jan 2022 07:50:32 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id r4sm900398qta.51.2022.01.10.07.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 07:50:32 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n6wwJ-00DpQ8-Ir; Mon, 10 Jan 2022 11:50:31 -0400
-Date:   Mon, 10 Jan 2022 11:50:31 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH] IB/mthca: Remove useless DMA-32 fallback configuration
-Message-ID: <20220110155031.GI6467@ziepe.ca>
-References: <4aeb3dcf39490334acf583e723a08ea7262b0912.1641716983.git.christophe.jaillet@wanadoo.fr>
+        Mon, 10 Jan 2022 10:50:42 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B3FE91F43321
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641829841;
+        bh=6/zAzRnOeziEg/t5fiEim35KaWTuX68SxoEub32prlI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GW3Dg4Rw20Hg99jcjFlDX54Ot1QMlbkQrEFbUjMG/t9RtxJySOh0ukk+h+5dfStGq
+         scqaQ9FCp5AeUbe8tp5UCEijojFV193Bijw385i2iWw0fLdcxdf2tiS+rSCb3xO4eh
+         UOBU6YPwl+lpB77MDoRH4NVXJhrQXAsAtw3CVcuwPo8MHilBc7ptr4NFbmF11iCp7Z
+         OIXkwWy2zEfw6ztJDREhkj/ywpau/chRiMEwONxoWDZa3rif5dt04OfQ6Ae7lfKind
+         mA0fHYJ8G8YIaNndzkA1iygNUZwLqWfr52mIvKnVGxH7E3i7zYLJHOqmf6pBUN5++f
+         OS4MoSbn6Hq2Q==
+Subject: Re: [v1 06/16] clk: mediatek: Add MT8186 apmixedsys clock support
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220110134416.5191-1-chun-jie.chen@mediatek.com>
+ <20220110134416.5191-7-chun-jie.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <9f15a4ea-9a45-9c8c-92c8-401144bab929@collabora.com>
+Date:   Mon, 10 Jan 2022 16:50:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4aeb3dcf39490334acf583e723a08ea7262b0912.1641716983.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220110134416.5191-7-chun-jie.chen@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 09, 2022 at 09:30:09AM +0100, Christophe JAILLET wrote:
-> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
+Il 10/01/22 14:44, Chun-Jie Chen ha scritto:
+> Add MT8186 apmixedsys clock controller which provides Plls
+> generated from SoC.
 > 
-> Simplify code and remove some dead code accordingly.
-> 
-> [1]: https://lkml.org/lkml/2021/6/7/398
+> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
 
-Can you use lore links please?
-
-Jason
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

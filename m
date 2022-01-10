@@ -2,92 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E26489DC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47D4489DC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbiAJQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:40:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:36378 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237627AbiAJQkc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:40:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B01292B;
-        Mon, 10 Jan 2022 08:40:31 -0800 (PST)
-Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FD583F5A1;
-        Mon, 10 Jan 2022 08:40:30 -0800 (PST)
-Date:   Mon, 10 Jan 2022 16:40:27 +0000
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Valentin.Schneider@arm.com, Morten.Rasmussen@arm.com,
-        qperret@google.com
-Subject: Re: [PATCH 3/3] sched/fair: Do not raise overutilized for idle CPUs
-Message-ID: <Ydxhe7wkHsq5U6Gk@FVFF7649Q05P>
-References: <20211220114323.22811-1-vincent.donnefort@arm.com>
- <20211220114323.22811-4-vincent.donnefort@arm.com>
- <CAKfTPtDjVdPimPbOes5Oix=3NYi3ZWY1dvQjZY3hoMfYbxXuDw@mail.gmail.com>
+        id S237654AbiAJQnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:43:23 -0500
+Received: from bmailout2.hostsharing.net ([83.223.78.240]:54269 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231379AbiAJQnW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 11:43:22 -0500
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 152262800B3C7;
+        Mon, 10 Jan 2022 17:43:21 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id EBEB955BEF; Mon, 10 Jan 2022 17:43:20 +0100 (CET)
+Date:   Mon, 10 Jan 2022 17:43:20 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
+Cc:     "Koenig, Christian" <Christian.Koenig@amd.com>,
+        Len Brown <lenb@kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "Chen, Guchun" <Guchun.Chen@amd.com>,
+        "Grodzovsky, Andrey" <Andrey.Grodzovsky@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH REGRESSION] Revert "drm/amdgpu: stop scheduler when
+ calling hw_fini (v2)"
+Message-ID: <20220110164320.GA21246@wunner.de>
+References: <8ab406c8bb2e58969668a806a529d5988b447530.1641750730.git.len.brown@intel.com>
+ <BL1PR12MB514403767AC6BC6CD617674DF7509@BL1PR12MB5144.namprd12.prod.outlook.com>
+ <2e3fbfe8-e7a1-2483-dbbd-ebb3824fc886@amd.com>
+ <BL1PR12MB51441B895F9846A11D6268E2F7509@BL1PR12MB5144.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtDjVdPimPbOes5Oix=3NYi3ZWY1dvQjZY3hoMfYbxXuDw@mail.gmail.com>
+In-Reply-To: <BL1PR12MB51441B895F9846A11D6268E2F7509@BL1PR12MB5144.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 09:20:17AM +0100, Vincent Guittot wrote:
-> On Mon, 20 Dec 2021 at 12:43, Vincent Donnefort
-> <vincent.donnefort@arm.com> wrote:
-> >
-> > During a migration, the lock for the previous runqueue is not taken and
-> > hence, the task contribution isn't directly removed from that runqueue
-> > utilization but instead temporarily saved, until the next PELT signals
-> > update where it would be accounted. There is then a window in which a
-> > CPU can ben idle be nonetheless overutilized.
-> >
-> > The load balancer wouldn't be able to do anything to help a sleeping CPU,
-> > it brings then no gain to raise overutilized there, only the risk of
-> > spuriously doing it.
-> 
-> But how do you make the difference between a very short idle time of
-> an overutilized CPU and a idle cpu with outdated utilization
+On Mon, Jan 10, 2022 at 04:25:51PM +0000, Deucher, Alexander wrote:
+> Thanks.  I'll wait for feedback from Guchun and Andrey and if they are
+> ok with it, I'll apply the revert.
 
-No distinction here, but if the CPU is idle there's nothing to pull, so the load
-balance wouldn't do anything with this information.
-
-> 
-> Being idle is not a good reason for not being overutilized (ie ~80% of
-> average utilisation)
-> 
-> >
-> > Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 51f6f55abb37..37f737c5f0b8 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -8641,26 +8641,28 @@ static inline void update_sg_lb_stats(struct lb_env *env,
-> >
-> >                 nr_running = rq->nr_running;
-> >                 sgs->sum_nr_running += nr_running;
-> > -
-> > -               if (nr_running > 1)
-> > -                       *sg_status |= SG_OVERLOAD;
-> > -
-> > -               if (cpu_overutilized(i))
-> > -                       *sg_status |= SG_OVERUTILIZED;
-> > -
-> >  #ifdef CONFIG_NUMA_BALANCING
-> >                 sgs->nr_numa_running += rq->nr_numa_running;
-> >                 sgs->nr_preferred_running += rq->nr_preferred_running;
-> >  #endif
-> > +               if (nr_running > 1)
-> > +                       *sg_status |= SG_OVERLOAD;
-> 
-> Why do you move this code related to overload ?
-
-This was a cosmetic change to put the NUMA related stats next to the other ones.
-
-[...]
+Linus already picked it up yesterday, it's in v5.16.

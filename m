@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2CD4892D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E99489234
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiAJHv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241344AbiAJHlp (ORCPT
+        id S242209AbiAJHkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:40:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33814 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239720AbiAJHdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:41:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEC3C033278;
-        Sun,  9 Jan 2022 23:34:48 -0800 (PST)
+        Mon, 10 Jan 2022 02:33:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D55EB81201;
-        Mon, 10 Jan 2022 07:34:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD9EC36AED;
-        Mon, 10 Jan 2022 07:34:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 247E3B81211;
+        Mon, 10 Jan 2022 07:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D028C36AEF;
+        Mon, 10 Jan 2022 07:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641800086;
-        bh=8wjOwa4D01rmIjZQtarB7Bx2PnNYdpk5SUwRRUGxoMU=;
+        s=korg; t=1641799995;
+        bh=ZTHZRmQnobjicwLrjjyL8/R91C9QzgP8gTl+50ubP0o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QLuVgkGfI1mmczosuCrsnMBIomJ0vYhNhoMyObFEOHWaclMg532kkJW2aiVh6mkFF
-         WEA4aqzimIpEKqWBDHnIsBpNaROEHy8t2QSX6Y5GJt3DFXq6p8XgJu0dnZZhbnfTXf
-         dC4B7p9ABli9QCU6jPDlVOqYV3b+Z4pIBYSqCE2M=
+        b=IUKdf59LhuyTMPx/xhRXPbuh9rOViQ2OgGC1gJNI7c8arNhvz5HcHP05Ff8YdSzQt
+         cquEwvo18myWYpnq1ijrbiVRp8GhJkym0piDaYu1DW7N+w0E1hqlLdUfLm62kBzJJd
+         XmMEFMVEirCyAsXJ/ajtKBPJm0TKjSvSH5fK4R8c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH 5.15 42/72] power: reset: ltc2952: Fix use of floating point literals
-Date:   Mon, 10 Jan 2022 08:23:19 +0100
-Message-Id: <20220110071822.983678521@linuxfoundation.org>
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH 5.15 43/72] reset: renesas: Fix Runtime PM usage
+Date:   Mon, 10 Jan 2022 08:23:20 +0100
+Message-Id: <20220110071823.015359869@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
 References: <20220110071821.500480371@linuxfoundation.org>
@@ -49,58 +46,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-commit 644106cdb89844be2496b21175b7c0c2e0fab381 upstream.
+commit 92c959bae2e54ba1e2540ba5f813f7752bd76be1 upstream.
 
-A new commit in LLVM causes an error on the use of 'long double' when
-'-mno-x87' is used, which the kernel does through an alias,
-'-mno-80387' (see the LLVM commit below for more details around why it
-does this).
+If pm_runtime_resume_and_get() fails then it returns w/o the RPM usage
+counter being incremented. In this case call pm_runtime_put() in
+remove() will result in a usage counter imbalance. Therefore check the
+return code of pm_runtime_resume_and_get() and bail out in case of error.
 
-drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-        data->wde_interval = 300L * 1E6L;
-                                  ^
-drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-        data->wde_interval = 300L * 1E6L;
-                           ^
-drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-        data->trigger_delay = ktime_set(2, 500L*1E6L);
-                                               ^
-3 errors generated.
-
-This happens due to the use of a 'long double' literal. The 'E6' part of
-'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-it to 'long double'.
-
-There is no visible reason for floating point values in this driver, as
-the values are only assigned to integer types. Use NSEC_PER_MSEC, which
-is the same integer value as '1E6L', to avoid changing functionality but
-fix the error.
-
-Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: bee08559701f ("reset: renesas: Add RZ/G2L usbphy control driver")
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+Link: https://lore.kernel.org/r/ec24e13f-0530-b091-7a08-864577b9b3be@gmail.com
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/power/reset/ltc2952-poweroff.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/power/reset/ltc2952-poweroff.c
-+++ b/drivers/power/reset/ltc2952-poweroff.c
-@@ -161,8 +161,8 @@ static void ltc2952_poweroff_kill(void)
+--- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
++++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+@@ -137,7 +137,12 @@ static int rzg2l_usbphy_ctrl_probe(struc
+ 	dev_set_drvdata(dev, priv);
  
- static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
- {
--	data->wde_interval = 300L * 1E6L;
--	data->trigger_delay = ktime_set(2, 500L*1E6L);
-+	data->wde_interval = 300L * NSEC_PER_MSEC;
-+	data->trigger_delay = ktime_set(2, 500L * NSEC_PER_MSEC);
+ 	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_resume_and_get(&pdev->dev);
++	error = pm_runtime_resume_and_get(&pdev->dev);
++	if (error < 0) {
++		pm_runtime_disable(&pdev->dev);
++		reset_control_assert(priv->rstc);
++		return dev_err_probe(&pdev->dev, error, "pm_runtime_resume_and_get failed");
++	}
  
- 	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+ 	/* put pll and phy into reset state */
+ 	spin_lock_irqsave(&priv->lock, flags);
 
 

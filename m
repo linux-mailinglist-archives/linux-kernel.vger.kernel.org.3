@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9E3489B74
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E45489B77
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbiAJOkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:40:45 -0500
-Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:53301 "EHLO
-        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231196AbiAJOko (ORCPT
+        id S235686AbiAJOkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:40:49 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:13349 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235678AbiAJOks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:40:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641825640;
-        bh=XedwP+iNO0nilHdgO1plTP2iIBF+Vm/O4VtBN+afGmI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=MgsMPXESmcpqPI12C6aaMYc3Uoh4Vg/0FhuHnzeph76f7fwZ/YxK7lIhZ2QYaUnVi
-         pETN5g2KS4y1Ab7XgthLzfsZL0tNegkUoTTt+8oQckhYyrqFHkzOrkU9xoqGKkIRyv
-         SA/tp1Z8P9YmWRdsqFy5ABV4se1nvlmpXty7QTqo=
-Received: from localhost ([119.32.47.91])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id A26B40E0; Mon, 10 Jan 2022 22:40:38 +0800
-X-QQ-mid: xmsmtpt1641825638t6fz0uysb
-Message-ID: <tencent_0C9377D282B45298ADD426820211360E8F07@qq.com>
-X-QQ-XMAILINFO: MgAERLP4sJkUEQnYpOWuVgMj2GOpMqUigaUYhzPzTk9iNKTiN6uJ90QLX5xYoI
-         mA9PSt8Z2SpJPk/vSsS2IQKDECq/cogSlxDfgc+an/PjgWcsnMCr0D9dKOsK/fb1kIKM+OPJhTDS
-         cxK1LVT4Sr3qRxJLyTBIrm3XSUfApSO+gjLSQPlaE2sCa0bioDN182eXFbNeyTScqkLmthWaJ2j2
-         x3Ir/K4P3WD9n1jqhDzZO81ni59L464Vmb0Yms3LC1LcRt8vjF+rNz65+/5SQZv0xg2uUJz2ETOL
-         fxegnSd/FkDsc05QDM8H98cTD8+5GY+VEMLNADKCvQl3EUiM991K8ManNjPc+5oad+Ci8v/Uo++O
-         x9UEo5KIs02WHOGX8oArE8FotItNfr9VYtyMXG7wKeNUMGXT2s9qZ3SX5mQj2Q0BuUGew+lb8hSn
-         A6wAm5YRbNha7IK1HMMJVsVSx2+e470zy3lw6RXY3bAx4fOZeQGoWYSQQV1YZAWTH+39+60pAYKV
-         KmsN9NrJLXKp/ha2LYYd5bBe1uO3wanbWYZpkdQn0WNQh6D6IJwqt6bIG4NNDwlwX5paddTqP7Mm
-         AWU6Rng0PHsEg7T/m/5HFodnmPGp84wK0pkW5xC8FFY7L5CvjZlz/fCLRXprUHR8icuSiVuFgPBt
-         To2v24CJ+YQhktMYd/V1VUPNZaQ0z+KHq7OHvEewucbZlQktLjohdj0uW69bZO19ypwkJxpANgRB
-         q1jjNmP8rGRC6y92oVpS8PsR47qQSP7NM3EP7vNkjVQRNPZOtp96Qf+SG1AZEwbweTo/MiDUg8Wm
-         kvY94yOtgfCqXbLf/HOcEG6NmzSoFyK6RAMQixBDRe7OOVWvEIiQffS9rIZPUZ/I4o7FYgbTIBtQ
-         ==
-Date:   Mon, 10 Jan 2022 22:40:38 +0800
-From:   Conley Lee <conleylee@foxmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org, clabbe.montjoie@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: ethernet: sun4i-emac: replace magic number with
- macro
-X-OQ-MSGID: <YdxFZpzzvX0jxtNi@fedora>
-References: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
- <tencent_AEEE0573A5455BBE4D5C05226C6C1E3AEF08@qq.com>
- <Ydw1MOcmS6fZ6J8d@lunn.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ydw1MOcmS6fZ6J8d@lunn.ch>
+        Mon, 10 Jan 2022 09:40:48 -0500
+X-IronPort-AV: E=Sophos;i="5.88,277,1635174000"; 
+   d="scan'208";a="106017083"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 10 Jan 2022 23:40:47 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id F3829400194A;
+        Mon, 10 Jan 2022 23:40:44 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] thermal: rcar_thermal: Use platform_get_irq_optional() to get the interrupt
+Date:   Mon, 10 Jan 2022 14:40:39 +0000
+Message-Id: <20220110144039.5810-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/10/22 at 02:31下午, Andrew Lunn wrote:
-> Date: Mon, 10 Jan 2022 14:31:28 +0100
-> From: Andrew Lunn <andrew@lunn.ch>
-> To: Conley Lee <conleylee@foxmail.com>
-> Cc: davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
->  wens@csie.org, clabbe.montjoie@gmail.com, netdev@vger.kernel.org,
->  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v2] net: ethernet: sun4i-emac: replace magic number
->  with macro
-> 
-> > @@ -637,7 +637,9 @@ static void emac_rx(struct net_device *dev)
-> >  		if (!rxcount) {
-> >  			db->emacrx_completed_flag = 1;
-> >  			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
-> > -			reg_val |= (0xf << 0) | (0x01 << 8);
-> > +			reg_val |=
-> > +				(EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN |
-> > +				 EMAC_INT_CTL_RX_EN);
-> 
-> Putting the first value on the next line is a bit odd. This would be
-> preferred:
-> 
-> +			reg_val |= (EMAC_INT_CTL_TX_EN |
-> +                                   EMAC_INT_CTL_TX_ABRT_EN |
-> +				    EMAC_INT_CTL_RX_EN);
-> 
-> I also have to wonder why two | have become three? (0x01 << 8) is
-> clearly a single value. (0xf << 0) should either be a single macro, or
-> 4 macros since 0xf is four bits. Without looking into the details, i
-> cannot say this is wrong, but it does look strange.
-> 
->        Andrew
-> 
-Thanks for your suggestion. The (0xf << 0) mask enable tx finish and tx abort
-interrupts at hardware level. And the reason this mask has 4 bits is that
-sun4i emac has 2 tx channels. I reduce it into two macros EMAC_INT_CTL_TX_EN 
-and EMAC_INT_CTL_TX_ABRT_EN, this may be more readable, since we always
-enable both tx channels in the driver.
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
+
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq_optional().
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v3->v4:
+* Updated check as suggested by Andy
+
+v2->v3:
+* Fixed review comment pointed by Andy
+
+v1->v2
+* Simplified checking error code
+* Break loop earlier if no interrupts are seen
+
+v1: https://lkml.org/lkml/2021/12/18/163
+---
+ drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+index b49f04daaf47..1d729ed4d685 100644
+--- a/drivers/thermal/rcar_thermal.c
++++ b/drivers/thermal/rcar_thermal.c
+@@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 	struct rcar_thermal_common *common;
+ 	struct rcar_thermal_priv *priv;
+ 	struct device *dev = &pdev->dev;
+-	struct resource *res, *irq;
++	struct resource *res;
+ 	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+ 	int mres = 0;
+ 	int i;
+@@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 	pm_runtime_get_sync(dev);
+ 
+ 	for (i = 0; i < chip->nirqs; i++) {
+-		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+-		if (!irq)
+-			continue;
++		int irq;
++
++		ret = platform_get_irq_optional(pdev, i);
++		if (ret < 0 && ret != -ENXIO)
++			goto error_unregister;
++		if (ret > 0)
++			irq = ret;
++		else
++			break;
++
+ 		if (!common->base) {
+ 			/*
+ 			 * platform has IRQ support.
+@@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 			idle = 0; /* polling delay is not needed */
+ 		}
+ 
+-		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
++		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+ 				       IRQF_SHARED, dev_name(dev), common);
+ 		if (ret) {
+ 			dev_err(dev, "irq request failed\n ");
+-- 
+2.17.1
+

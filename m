@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F79F489220
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B4E4890F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241099AbiAJHjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:39:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40998 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiAJHcP (ORCPT
+        id S239979AbiAJH15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239412AbiAJHZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:32:15 -0500
+        Mon, 10 Jan 2022 02:25:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB70C034001;
+        Sun,  9 Jan 2022 23:24:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56B046066C;
-        Mon, 10 Jan 2022 07:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D5D3C36AED;
-        Mon, 10 Jan 2022 07:32:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B94B1B811FE;
+        Mon, 10 Jan 2022 07:24:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6B6C36AE9;
+        Mon, 10 Jan 2022 07:24:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799934;
-        bh=Fg09m/mCPd1Mc5MQ5ehZXYmVp5soqYL9q9NmgVntLis=;
+        s=korg; t=1641799492;
+        bh=aJTMa753pVCb24+LWmO/riXKBIPRQ8WrVh53YMaVTAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=larjxkVmYlvNCePsqmd2myBEYrjMU5Utpih0Jgxi7UcJc5RA5MM8etJMiS96HGA9X
-         kZ7ZM48YRAOBPDBCFqYqPxR41KDtzQDXoIzue2jZf0wmjHyk0Gd6HQmT1fUmuxp2PI
-         8pfffo3ctPDWYHWYHMw+LI5aTqzjxZBCUMqZrLQY=
+        b=CMxztVp7UPFeQv/aJ8DRNsJUbQxaAw0lsGW6wlEjJRABT2NZXp4waXKUrrPDzVgpU
+         1ZJgaV+PTGJY/BHnU+/0RAXVACEgBWBaLbyUFlnlx91p1Nw7Wkz08p4RR/dfg5RhAK
+         hUWKBjgitGUOQFD7zzegWBQ+TCYJnCv+UIw0XKbk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 21/72] ipv4: Check attribute length for RTA_FLOW in multipath route
-Date:   Mon, 10 Jan 2022 08:22:58 +0100
-Message-Id: <20220110071822.290525529@linuxfoundation.org>
+        stable@vger.kernel.org, Will Deacon <will.deacon@arm.com>,
+        Stefan Traby <stefan@hello-penguin.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 4.9 12/21] arm64: Remove a redundancy in sysreg.h
+Date:   Mon, 10 Jan 2022 08:22:59 +0100
+Message-Id: <20220110071813.214703564@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071812.806606886@linuxfoundation.org>
+References: <20220110071812.806606886@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,53 +50,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Stefan Traby <stefan@hello-penguin.com>
 
-commit 664b9c4b7392ce723b013201843264bf95481ce5 upstream.
+commit d38338e396ee0571b3502962fd2fbaec4d2d9a8f upstream.
 
-Make sure RTA_FLOW is at least 4B before using.
+This is really trivial; there is a dup (1 << 16) in the code
 
-Fixes: 4e902c57417c ("[IPv4]: FIB configuration using struct fib_config")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Acked-by: Will Deacon <will.deacon@arm.com>
+Signed-off-by: Stefan Traby <stefan@hello-penguin.com>
+Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/fib_semantics.c |   17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ arch/arm64/include/asm/sysreg.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -731,8 +731,13 @@ static int fib_get_nhs(struct fib_info *
- 			}
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -95,8 +95,8 @@
+ #define SCTLR_ELx_M	1
  
- 			nla = nla_find(attrs, attrlen, RTA_FLOW);
--			if (nla)
-+			if (nla) {
-+				if (nla_len(nla) < sizeof(u32)) {
-+					NL_SET_ERR_MSG(extack, "Invalid RTA_FLOW");
-+					return -EINVAL;
-+				}
- 				fib_cfg.fc_flow = nla_get_u32(nla);
-+			}
+ #define SCTLR_EL2_RES1	((1 << 4)  | (1 << 5)  | (1 << 11) | (1 << 16) | \
+-			 (1 << 16) | (1 << 18) | (1 << 22) | (1 << 23) | \
+-			 (1 << 28) | (1 << 29))
++			 (1 << 18) | (1 << 22) | (1 << 23) | (1 << 28) | \
++			 (1 << 29))
  
- 			fib_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
- 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
-@@ -963,8 +968,14 @@ int fib_nh_match(struct net *net, struct
- 
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 			nla = nla_find(attrs, attrlen, RTA_FLOW);
--			if (nla && nla_get_u32(nla) != nh->nh_tclassid)
--				return 1;
-+			if (nla) {
-+				if (nla_len(nla) < sizeof(u32)) {
-+					NL_SET_ERR_MSG(extack, "Invalid RTA_FLOW");
-+					return -EINVAL;
-+				}
-+				if (nla_get_u32(nla) != nh->nh_tclassid)
-+					return 1;
-+			}
- #endif
- 		}
- 
+ #define SCTLR_ELx_FLAGS	(SCTLR_ELx_M | SCTLR_ELx_A | SCTLR_ELx_C | \
+ 			 SCTLR_ELx_SA | SCTLR_ELx_I)
 
 

@@ -2,104 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C554892D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E184892E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243448AbiAJHwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:52:40 -0500
-Received: from out162-62-57-252.mail.qq.com ([162.62.57.252]:53329 "EHLO
-        out162-62-57-252.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243461AbiAJHub (ORCPT
+        id S240056AbiAJIAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241648AbiAJH63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:50:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641801027;
-        bh=4/D9bsQYTExfGj/Kw0XJPUykeRczvoxzNQdeTQGgfuU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=YtJ8CrACJqpV78bbfEXJsna9tuAQlgX/axMCKG2BPXwBRAvjAv9r1j5C4hg58eUdr
-         xM7TCBHXR4tLU5KckQPo3jGUDXx/0/yUyPi85f2ggHkv6kcdSMmDQQNXLvOjCFwFBJ
-         QtJvOkBUBI3kfzt5Sy4BVItbzyeKTNYdDE4BxH34=
-Received: from localhost ([119.32.47.91])
-        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
-        id BC28D21C; Mon, 10 Jan 2022 15:47:02 +0800
-X-QQ-mid: xmsmtpt1641800822tp8masu2j
-Message-ID: <tencent_15A7824636308FBA779482A8D296ADB0A607@qq.com>
-X-QQ-XMAILINFO: OfSYiviZO9YdmdcN850B6VCN5Oun1MpScidBKLKEp7n/KUBzvVWUy7r/3bu2W7
-         +6drgSgykPAuOjYqgg5zL+lFC9XKXiYNILxmjF6UYaFDITEVjM4RFT5CbZme/Ntb2O1+e/nLh5bS
-         OltW0hy1Q7GeBLvee725G75N6/AqIlWNXcP6H/WRcTpZRvcVukwJhBN+f96s/OvR2sAyOXPm5L3b
-         mXLpdbmUgIHNSMDluBc0RN4cSUrzj/YDlPW+GXBPChp5QUawTbA463xv/ltFXEKfWbpp8YAbihz9
-         YJnaAnwWmxPQFVCGvv1Ns8tcOEQIZIrX60OOg8g8w9xLTPg0nEXC6+im/vE1cYcZbU0/UdrYNK29
-         drzBGlNd+UwAsgaFOI34xhYNypwov/Kaw9Ri9OGkuERcIUypQV2mWmoX20mbmkuE7KVZgkoAkPP0
-         ku3I4v41RHbq44WEe8Fq+zdzi5sPaebxlayMqWk5JzfbUSChamgWc4IrOxqNiACWf1+FizIIu1nJ
-         48PxKoWzxjs4DjSsaNxo2gophzwmdhjy4G1Q9C4snwN8mNPqp/kBCd2/E8d0PDYAiX3qbqStwEDg
-         3cnPfZsYVWB2vZ/EK1QDOHrHQPyGqk5PatjgnZHxOw/0qgLq0FilBDCrL7hOKUTz0ZtFsffw/Gg7
-         m07cABaDstdZAz6wgieiGzrn9a2T2dePd9WiP2TxKW1P2sA/6MyWOJHp3N5u69okDU3RuX1GNmSQ
-         6EmoQHbU1H8CoykI4rraXuAE8Zbh9guwoQdYLDxqc1pRaGNpldgBfyT/U9bb9P+9HDfaR0yvMes8
-         lyiw4B98NOAm9NUDOhkVmuAnE1Mi8nGr3ONlNhi/3bSN6/pckAnihbmXueKCsD9N5PrCIyLH3baO
-         zzjXf6ATYN
-Date:   Mon, 10 Jan 2022 15:47:02 +0800
-From:   Conley Lee <conleylee@foxmail.com>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     davem@davemloft.net, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] sun4i-emac.c: enable emac tx dma
-X-OQ-MSGID: <Ydvkdjh+uL0wALF5@fedora>
-References: <YdLhQjUTobcLq73j@Red>
- <tencent_E4BA4D6105A46CCC1E8AEF48057EA5FE5B08@qq.com>
- <YdtJTQJJ4aEUcp/D@Red>
+        Mon, 10 Jan 2022 02:58:29 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC037C0258C3
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 23:52:42 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id w22so5878630iov.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 23:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8uuvNrklz44TutTPkbSZOO+2P9HnTPtUduKM5mz5kGM=;
+        b=B81U/7vI0soum7bnRSWk0SEuqLr16sQqCnvhfqNvP+h14tkyj6yfKQ3EdHzQqquRf8
+         BbhmJtvbh/1BOyIz07Utdob4cPn20Pn681DVgg0AFB/I85/B/fJZJ7sRn5Fub/o4voly
+         x/6tYud+IY4WGH8+iFt5cxvryRN0OlwYD37WGc3RWUS+Xv0nIshfaygK3E2bS/fLZ8Tl
+         hMBvpBUVG+xLhMLWDevMhac6YA99CL6EGS8v4rZ42WaWSQGX/Jtippvvu7sdlKSj3Ixw
+         5ceqAZsK0TqbkhzS3HV4Lx46q/S8LvhI48eGbDz+HzkjeV6Pkc9YEhSkMdr2uUCOMZt+
+         BxOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8uuvNrklz44TutTPkbSZOO+2P9HnTPtUduKM5mz5kGM=;
+        b=TebMycC1sA3LQGd1n+bdhdqByyhCeWcpeyILlI/lMbo81QOCnxbedIatopa20aZHNL
+         PjSXwqkYPYtyVs6mCb4S1/gIZgZjX/+g2vJUICxKZN1PoVpkCA5I2v5EIb7QHvvBVJW6
+         TYRTtioqkaEd0cD/Xh+DsOCVyVVyvTi4K0U1q7RnPlFf81khgTCgbPo6MtSreZBjCgzj
+         7u3CQWPgcqP5ALW697QRRykGTqkvora9FQxHGHeKO1BAvEKesokfq8oECmhaNov72RK8
+         YywFZcWoFMXqLci5KWHKgnLQpWTrW4qT0nQOdbM1ow2Enak89YHs50OvTqrRLBWQhYZH
+         7v/A==
+X-Gm-Message-State: AOAM532oosAGBiaiZ2RQ/w+CopqAehgnDML0im6hS9V9PvMtP9GnfCNs
+        P0Iy0q4ewLtlM71ohPMyTRWmfxI/cCywQjqPbnM=
+X-Google-Smtp-Source: ABdhPJzE5Relg87oVskosQwigQW8UWedTo1WkRmvgcB+n2+qSTm7b39pFh2boZ/La5ptiMt+EyNiHo0R6kuZ1bnSlH8=
+X-Received: by 2002:a6b:fd19:: with SMTP id c25mr33050971ioi.49.1641801162201;
+ Sun, 09 Jan 2022 23:52:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdtJTQJJ4aEUcp/D@Red>
+Received: by 2002:ac0:dd02:0:0:0:0:0 with HTTP; Sun, 9 Jan 2022 23:52:41 -0800 (PST)
+Reply-To: pennylawso1n@gmail.com
+From:   peeny lawson <peenylawson9@gmail.com>
+Date:   Mon, 10 Jan 2022 09:52:41 +0200
+Message-ID: <CAHGZfdeyK3M_q_za8tC-jPM0-87-xsVH5Okkf1Z8GBSSBcTVNA@mail.gmail.com>
+Subject: You seek funding
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/22 at 09:45下午, Corentin Labbe wrote:
-> Date: Sun, 9 Jan 2022 21:45:01 +0100
-> From: Corentin Labbe <clabbe.montjoie@gmail.com>
-> To: conleylee@foxmail.com
-> Cc: davem@davemloft.net, mripard@kernel.org, wens@csie.org,
->  jernej.skrabec@gmail.com, netdev@vger.kernel.org,
->  linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
->  linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v1] sun4i-emac.c: enable emac tx dma
-> 
-> Le Sun, Jan 09, 2022 at 05:17:55PM +0800, conleylee@foxmail.com a écrit :
-> > From: conley <conleylee@foxmail.com>
-> > 
-> > Hello
-> > I am reading the R40 user manual and trying to create a new path to enable
-> > emac tx dma channel. According to the figure 8-21(TX Operation Diagram),
-> > I try to enable emac tx dma channel by the follow steps:
-> > 1. enable tx dma mode
-> > 2. set packet lengths
-> > 2. move data from skb to tx fifo by using dma in xmit function.
-> > 3. start transfer from tx fifo to phy in dma tx done callback
-> > 
-> > But it doesn't work. emac tx interrupt and dma finished interrupt are
-> > raised, but no packets are transmitted (I test it by tcpdump).
-> > Do you know how to configure the emac tx dma correctly? Thanks ~
-> > 
-> 
-> Hello
-> 
-> Here are my thoughts to help you:
-> - Your email is not a real patch, but an ask for help, so you should not use [ PATCH ] in the subject.
-> - If it was a patch, "v1" is not necessary
-> - Your patch below is doing too many unrelated different things, it is hard to see the DMA TX enable part
-> - I think you could first send a preliminary patch which adds all EMAC_INT_CTL_TX_xxx which are already used by the driver (to reduce the diff)
-> - Without the DTB change, it is hard to see the whole picture, did you correctly use the right dma number for an easy example.
-> - Knowing also the board (and so PHY, modes etc...) could help
-> - I think your priority should not to add TX, but to fix reported problems to your initial patch (build warnings/error https://marc.info/?l=linux-arm-kernel&m=164159846213585&w=2) since your work on TX will need to be applied after this.
-> - For the previous point, always build test with at least 2 different 32/64 arch. And if possible a total different arch (like x86_64).
-> 
-> Anyway, I will try to test your patch on my a10 board
-> 
-> Regards
-Thanks a lot for your help ~ I will submit an patch which add all
-register related. By the way, the build warnings problems have been fixed
-by Jakub Kicinski <kuba@kernel.org>.
+-- 
+You seek funding for your businesses or looking to expand in your current
+or other venture?
+Then look no further because Brics NDB Private Bank is willing assist you
+to secure this
+funding effortlessly. Contact our business consultant Mrs. Penny Lawson
+pennylawso1n@gmail.com for more info

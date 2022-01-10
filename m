@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41577489FA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ED0489FB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242626AbiAJSzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:55:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31149 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242539AbiAJSzo (ORCPT
+        id S242670AbiAJS4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242641AbiAJS4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:55:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641840944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RYyRRXLaDdfZNoFNwWil/ubp0G98nyL4pk/ZhirIiec=;
-        b=NgAP1BvUziL7KK5xyuEKccaSeENWCe/pEXP2kvznPtrGI1/M+WCgXC7T2pSVI1VGBTDB0b
-        w6T/yBl+rbJmePV+1wmZMDGs7HUSELCvi/nXGXJnKxNNnPUTAJ1tDm2c7STajLUlqUtVCd
-        tRKXG1KniFZWNSQut5hTwce78OTmIlc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-496-zN2sO1w4MN2h1t1oAxhBQA-1; Mon, 10 Jan 2022 13:55:38 -0500
-X-MC-Unique: zN2sO1w4MN2h1t1oAxhBQA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57E3A1023F4D;
-        Mon, 10 Jan 2022 18:55:37 +0000 (UTC)
-Received: from [10.22.8.96] (unknown [10.22.8.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 481018276C;
-        Mon, 10 Jan 2022 18:55:36 +0000 (UTC)
-Message-ID: <8ef383e2-b34c-6fae-7f60-ae507303b5bd@redhat.com>
-Date:   Mon, 10 Jan 2022 13:55:35 -0500
+        Mon, 10 Jan 2022 13:56:35 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673E9C061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:56:35 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id hv15so7440452pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F3TJb2qvODPhHuRvG+TSwWDhsfj5NbPsF0sZDWvDjV8=;
+        b=VVrxc6G1UyjfjixQPFTXAnXytT0rtVC0yUleq43ySfEpyI5PXPj++eTsnK+1xNNqEj
+         LRkCIdKxZvhDw5Mrzzede2zM3/eN0NUWuhXDygJyroL7kbEPLJHJezJmLnz4wtHiCAbo
+         1+SO/K8OuCdYH4Pb4LKWaVOz8WzGpLCgl5L5MUMYIDvoj3sxzZaZY1ndkN3640F0GMY1
+         NNoAnWdTQJFyda53AFffCr8zzLio8VOkmarztNO3E7IDdlLkd3GVqG3ypkil2mOpn7AN
+         QpyB15xSueh/orIaGVePALu3OyubyN6/Xgladb9OsSJqkO35n4yzWwyqJgi5QRc2sPe3
+         LTkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F3TJb2qvODPhHuRvG+TSwWDhsfj5NbPsF0sZDWvDjV8=;
+        b=D3ovRPxnJWvpnMob0oxQdU2NyzZ4qoULNbJy7Qp98WW2sRY4EHAa6jXYr16+Eyg3YA
+         eO7MA2CQgzVX4BSaYj4DyoPzLlLtQfikNuRAL8mpTMNRTmAOUl3QM0Kq0ePdTlFzF0ZK
+         KlTxCz4wiWCyXr6kogAwVbvVcXFFwGkwFPG2c0+fm0tyVu2FKkHGwoxcBlqq1hafBK47
+         19FUbfZvVAWuYoXPhRrJm1gGN3pNVBMI6GljU3cIQ7z0fz/Mxm09/rYZVZp0mXGEo6PQ
+         BDmEf44GtgovuPipfG0j736Icrm0mh7zXBola47KoeVwwHHHDf2TjVGodP3Jg+163huZ
+         p98w==
+X-Gm-Message-State: AOAM530F7HoRaIQDgxGu/lYa27f4SWQbuJRbin0kgTBiHP9mrFg/nTKU
+        O6cQh2Ash6iTDoHdWGyTMgPszTiSAVSkiNAf/+nftA==
+X-Google-Smtp-Source: ABdhPJx0ER/XnFGs6RwNR0p32T+YpaO4KIdMZAv76wC88OXH6TXAMO8VMymRinLrAmzAvnuo5aYWEunKKvriNsas24c=
+X-Received: by 2002:a17:90a:bb05:: with SMTP id u5mr16623129pjr.64.1641840994602;
+ Mon, 10 Jan 2022 10:56:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Tim Murray <timmurray@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <20220108164617.3130175-1-jaegeuk@kernel.org>
- <YdvoxkAAquI17UbX@infradead.org>
- <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
- <Ydx+u9YpzS8AZHrl@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Ydx+u9YpzS8AZHrl@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+References: <20210210230800.30291-2-sakari.ailus@linux.intel.com>
+ <20211007022527.2448652-1-rajatja@google.com> <YW3XwDxwBsJdFslA@paasikivi.fi.intel.com>
+In-Reply-To: <YW3XwDxwBsJdFslA@paasikivi.fi.intel.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Mon, 10 Jan 2022 10:55:58 -0800
+Message-ID: <CACK8Z6FcBusdMMsu2vKZT8vx6yvcWS7Gh7bDyYqdB1ikspEHDA@mail.gmail.com>
+Subject: Re: ACPI: scan: Obtain device's desired enumeration power state
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
+        devel@acpica.org, rajatxjain@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++Bingbu Cao +arec.kao@intel.com
 
-On 1/10/22 13:45, Peter Zijlstra wrote:
-> On Mon, Jan 10, 2022 at 11:18:27AM -0500, Waiman Long wrote:
->> On 1/10/22 03:05, Christoph Hellwig wrote:
->>> Adding the locking primitive maintainers to this patch adding open coded
->>> locking primitives..
->>>
->>> On Sat, Jan 08, 2022 at 08:46:17AM -0800, Jaegeuk Kim wrote:
->>>> From: Tim Murray <timmurray@google.com>
->>>>
->>>> f2fs rw_semaphores work better if writers can starve readers,
->>>> especially for the checkpoint thread, because writers are strictly
->>>> more important than reader threads. This prevents significant priority
->>>> inversion between low-priority readers that blocked while trying to
->>>> acquire the read lock and a second acquisition of the write lock that
->>>> might be blocking high priority work.
->>>>
->>>> Signed-off-by: Tim Murray <timmurray@google.com>
->>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->> We could certainly implement a down_read() variant (e.g.
->> down_read_lowprio()) with its own slowpath function to do this within the
->> rwsem code as long as there is a good use-case for this kind of
->> functionality.
-> I think _unfair() or something along those lines is a *much* better
-> naming that _lowprio(). Consider a RT task ending up calling _lowprio().
-> That just doesn't make conceptual sense.
-I am fine with the _unfair() name as I am not good at naming:-)
+Hello Sakari,
+
+On Mon, Oct 18, 2021 at 1:23 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
 >
-> And then there's the lockdep angle; the thing being unfair will lead to
-> scenarios where lockdep will give a false positive because it expects
-> the r-w-r order to block things, which won't happen. A position needs to
-> be taken a-prioriy.
+> Hi Rajit,
+>
+> On Wed, Oct 06, 2021 at 07:25:27PM -0700, Rajat Jain wrote:
+> >
+> > Hello,
+> >
+> > Now that we have landed the ACPI object for _DSC in the spec:
+> > https://lore.kernel.org/linux-acpi/CAJZ5v0gwDEjC9T7wfCqDr7R0q_ptz2nVU52_8i8noXHPEign1g@mail.gmail.com/T/
+> >
+> > I was wondering what is happening with the corresponding kernel patchset:
+> > https://lore.kernel.org/linux-acpi/20210210230800.30291-1-sakari.ailus@linux.intel.com/T/#m24e9f51119cbe6eb39f31c097ea3941d00a0baeb
+> >
+> > I didn't see any pending comments, so is there a reason it did not land?
+>
+> Thanks for the ping.
+>
+> I've rebased the set and switched to _DSC so I believe it is ready to be
+> merged now:
+>
+>         <URL:https://lore.kernel.org/linux-media/20211018121729.6357-1-sakari.ailus@linux.intel.com/T/#t>
+>
+> I dropped the ov5670 patch from the set to avoid a conflict, I'll get this
+> merged through the media tree when the rest have landed there.
 
-Right, we may need to twist lockdep to match the new behavior if we are 
-going to provide such a functionality.
 
-Cheers,
-Longman
+Thanks, I see that your patches series has been merged. Can you please
+also line up this follow up series by Bingbu for inclusion into the
+mainline kernel?
 
+https://patchwork.kernel.org/project/linux-media/list/?series=595925
+
+Thanks,
+
+Rajat
+
+
+>
+> --
+> Regards,
+>
+> Sakari Ailus

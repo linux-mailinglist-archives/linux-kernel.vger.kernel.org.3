@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95428489913
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3E7489911
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiAJNBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:01:34 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42826 "EHLO
+        id S235491AbiAJNBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:01:32 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42838 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiAJNAA (ORCPT
+        with ESMTP id S234011AbiAJNAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 08:00:00 -0500
-Date:   Mon, 10 Jan 2022 12:59:56 -0000
+Date:   Mon, 10 Jan 2022 12:59:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641819597;
+        s=2020; t=1641819598;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NQNKOwqodvSC184pmDbn6fSHDlBt0JpNXeJ0d8tnpQg=;
-        b=zDBAPNp5rSuR2PDOwwdc4QSfsJQcFCRPZBXLf5WRAXC/hQCikN3fNVbwGd8IIgpt1QcG+h
-        qjASTvJ9Zlx/urpi6vsWRIVgZlOn9kIguzFbnbq9TqEYZ9DgPod91LQPEgaOVo/wnpq6HB
-        LEYZw0cvSrYp31kQGdlEWAG3e9rnuRN+t/XNPBoYCieWewS0KFqqBh7YR25a4h9CmyxGsM
-        BDGcUZ67UB+r7271ewpWocvwzy7hrvCciyatLlO+5Cqy8yzdWivgOjBRp6EmMoQwfg74ct
-        d72Zu0ZmsOk2g2r38nNK2LP+sFOo/wasGq6Pcc/63ZFteKSv/di3KkC/cYwCRQ==
+        bh=wJ6Ye0uuFdMst4rEudlCTppY20fijxX/9cct2ksf7Sw=;
+        b=NPckK+Dm2BwGwXfLaQwMn/k9W48Y8CMJcCy4xfgTeHfxxZwyCNsf+8TqXr7vrrrc7g7kbU
+        faJBcUx93J1SsAwm0Un+bu0DERvdwsrZhLtZBJfsJJ9igDqpZ6M7/F5Huu8YOrYr9jNgQL
+        NKBQ6KnQzgjC+9fy4BrVFvO/TL1VCoS1mLA9ekyUIBD8E0XMdG1MPOhGMlxiTFpCoK7UGd
+        HNOMcp0GO0U9owH9IZVh1AkeJccYumsSLzgwLBoalXZYYU4jyAwXyKxmcu8aoDe19idmyj
+        Ghyp41NiUjPdhBml0bwXCIQ1o5W+LmL4axIHjy5TjvGosdJ+5vmswILGnULDvA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641819597;
+        s=2020e; t=1641819598;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NQNKOwqodvSC184pmDbn6fSHDlBt0JpNXeJ0d8tnpQg=;
-        b=NKQK6sv1rAKHCVD/LUu3OT5wb9KZrP0QnRxKvAQRap7kcOxsQFyB4z7rryMTUH0CIEjJcr
-        E9qIhvCYN3NzSADw==
+        bh=wJ6Ye0uuFdMst4rEudlCTppY20fijxX/9cct2ksf7Sw=;
+        b=09GCh5YCSpiumtTqOxH5OfXo965CnNuOMz5Nn+LUWWGcpkuPvuOp1Gip9OvAGm8L7r64Bd
+        6tyHSYEbqYtVZQDw==
 From:   "tip-bot2 for Biju Das" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/renesas-ostm: Add RZ/G2L OSTM support
+Subject: [tip: timers/core] dt-bindings: timer: renesas: ostm: Document
+ Renesas RZ/G2L OSTM
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211112184413.4391-4-biju.das.jz@bp.renesas.com>
-References: <20211112184413.4391-4-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20211112184413.4391-3-biju.das.jz@bp.renesas.com>
+References: <20211112184413.4391-3-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Message-ID: <164181959653.16921.6754213596034751626.tip-bot2@tip-bot2>
+Message-ID: <164181959725.16921.15084822049529058224.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,108 +62,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     3a3e9f23c2cae907677a236fa547610ca747e6fb
-Gitweb:        https://git.kernel.org/tip/3a3e9f23c2cae907677a236fa547610ca747e6fb
+Commit-ID:     92d06a3f67ad809649d26aa7698e4d42362585a8
+Gitweb:        https://git.kernel.org/tip/92d06a3f67ad809649d26aa7698e4d42362585a8
 Author:        Biju Das <biju.das.jz@bp.renesas.com>
-AuthorDate:    Fri, 12 Nov 2021 18:44:12 
+AuthorDate:    Fri, 12 Nov 2021 18:44:11 
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 09 Dec 2021 14:05:20 +01:00
 
-clocksource/drivers/renesas-ostm: Add RZ/G2L OSTM support
+dt-bindings: timer: renesas: ostm: Document Renesas RZ/G2L OSTM
 
-RZ/G2L SoC has Generic Timer Module(a.k.a OSTM) which needs to
-deassert the reset line before accessing any registers.
-
-This patch adds an entry point for RZ/G2L so that we can deassert
-the reset line in probe callback.
+Document the General Timer Module(a.k.a OSTM) found on the RZ/G2L SoC.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211112184413.4391-4-biju.das.jz@bp.renesas.com
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20211112184413.4391-3-biju.das.jz@bp.renesas.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/renesas-ostm.c | 39 ++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/timer/renesas,ostm.yaml | 20 +++++--
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clocksource/renesas-ostm.c b/drivers/clocksource/renesas-ostm.c
-index 3d06ba6..21d1392 100644
---- a/drivers/clocksource/renesas-ostm.c
-+++ b/drivers/clocksource/renesas-ostm.c
-@@ -9,6 +9,8 @@
- #include <linux/clk.h>
- #include <linux/clockchips.h>
- #include <linux/interrupt.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
- #include <linux/sched_clock.h>
- #include <linux/slab.h>
+diff --git a/Documentation/devicetree/bindings/timer/renesas,ostm.yaml b/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
+index 600d47a..7fa7f97 100644
+--- a/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
++++ b/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
+@@ -21,9 +21,10 @@ properties:
+   compatible:
+     items:
+       - enum:
+-          - renesas,r7s72100-ostm # RZ/A1H
+-          - renesas,r7s9210-ostm  # RZ/A2M
+-      - const: renesas,ostm       # Generic
++          - renesas,r7s72100-ostm  # RZ/A1H
++          - renesas,r7s9210-ostm   # RZ/A2M
++          - renesas,r9a07g044-ostm # RZ/G2{L,LC}
++      - const: renesas,ostm        # Generic
  
-@@ -159,6 +161,7 @@ static int __init ostm_init_clkevt(struct timer_of *to)
+   reg:
+     maxItems: 1
+@@ -37,6 +38,9 @@ properties:
+   power-domains:
+     maxItems: 1
  
- static int __init ostm_init(struct device_node *np)
- {
-+	struct reset_control *rstc;
- 	struct timer_of *to;
- 	int ret;
- 
-@@ -166,6 +169,14 @@ static int __init ostm_init(struct device_node *np)
- 	if (!to)
- 		return -ENOMEM;
- 
-+	rstc = of_reset_control_get_optional_exclusive(np, NULL);
-+	if (IS_ERR(rstc)) {
-+		ret = PTR_ERR(rstc);
-+		goto err_free;
-+	}
++  resets:
++    maxItems: 1
 +
-+	reset_control_deassert(rstc);
-+
- 	to->flags = TIMER_OF_BASE | TIMER_OF_CLOCK;
- 	if (system_clock) {
- 		/*
-@@ -178,7 +189,7 @@ static int __init ostm_init(struct device_node *np)
+ required:
+   - compatible
+   - reg
+@@ -44,6 +48,16 @@ required:
+   - clocks
+   - power-domains
  
- 	ret = timer_of_init(np, to);
- 	if (ret)
--		goto err_free;
-+		goto err_reset;
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - renesas,r9a07g044-ostm
++then:
++  required:
++    - resets
++
+ additionalProperties: false
  
- 	/*
- 	 * First probed device will be used as system clocksource. Any
-@@ -203,9 +214,35 @@ static int __init ostm_init(struct device_node *np)
- 
- err_cleanup:
- 	timer_of_cleanup(to);
-+err_reset:
-+	reset_control_assert(rstc);
-+	reset_control_put(rstc);
- err_free:
- 	kfree(to);
- 	return ret;
- }
- 
- TIMER_OF_DECLARE(ostm, "renesas,ostm", ostm_init);
-+
-+#ifdef CONFIG_ARCH_R9A07G044
-+static int __init ostm_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+
-+	return ostm_init(dev->of_node);
-+}
-+
-+static const struct of_device_id ostm_of_table[] = {
-+	{ .compatible = "renesas,ostm", },
-+	{ /* sentinel */ }
-+};
-+
-+static struct platform_driver ostm_device_driver = {
-+	.driver = {
-+		.name = "renesas_ostm",
-+		.of_match_table = of_match_ptr(ostm_of_table),
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+builtin_platform_driver_probe(ostm_device_driver, ostm_probe);
-+#endif
+ examples:

@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA63489537
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA24448953E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242943AbiAJJ2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:28:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242933AbiAJJ2A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:28:00 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C26FC061757
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:27:59 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id k30so7896269wrd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:27:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3JIe/AziNkL7QWWwzr2FGj9H5QSbDRRWwjLKOVDugLY=;
-        b=4e/NgOncPGsI6zL82IKBGE3RBzWcjd1sdmMoSfIeMMq+biJ+zFQ12dPnmoHrSyF1xK
-         2BkUZwWICKVO4SteHjvVLKvJB9ATXfg51nfZSwlQq77s9g/hwyC0nnsO+bgfBdq3Akoi
-         9e9nLREII4Uc+KUJYMZIIrhyna9Auemz9XbYnL3XGgstSUhh8UVLVs7YFxTMgZ8G5kg7
-         +wnIIgQQWV9Pgr6kXgJ1ZobbydhZ4DCcxn60Xesojt8EiL71Ks0IfMv5sJdgP4QmAfqC
-         MZIoS2QQfVrwjuXnj/U8qkecb5Pt5ggMsicb56e2GCFt+t1i648g0w0JUmIQ/nARiuNg
-         kYaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=3JIe/AziNkL7QWWwzr2FGj9H5QSbDRRWwjLKOVDugLY=;
-        b=CUAOPH+aFRlaG1gstj1a8z4sa2nuGjEdM15jxzJ2Pw7kYHFEoOksWxGRjLj+8FiYRc
-         GbKaiNM/SdkO60h7FmffyJivtGNNIb5+IfQNgfQP1ynkyf/uTJfDTLRVUqPfgo/74xut
-         GLnWmYVHkcO4woVSrcNcQE9Ww8PLglddeSSSL+uqVw1JMyusp7KSvpFFnVkBT5sPTenm
-         oOSTxpD/JA+9rVho4qBmTy0ZCXLrAfzG9h2ApfFlaME2NZY3OillBUWM58TXoS+O/kNQ
-         BRSRC1teut6KAO0kUqUIMQRIzAIt2X6HDR/op8s2Dc8UDf604pSHQkP02Ntg6hRoSrzX
-         LMeg==
-X-Gm-Message-State: AOAM531K9u8jV64Qov7cVoik4Xz7LAvOhJCdZECIOvon7YrjhJ9WaMKW
-        E1o6ou507beHAp4tf3b+731/IQ==
-X-Google-Smtp-Source: ABdhPJxif1cXTO0qc4AtrxnBYKdw1S+IGnZNRgcQM96lZpohEhKLaAGAuc9lRusoIkLi0vPyC0k68A==
-X-Received: by 2002:a05:6000:1569:: with SMTP id 9mr63539563wrz.127.1641806878077;
-        Mon, 10 Jan 2022 01:27:58 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:94e5:2e36:6bcc:a9f1? ([2001:861:44c0:66c0:94e5:2e36:6bcc:a9f1])
-        by smtp.gmail.com with ESMTPSA id m6sm7068700wrx.36.2022.01.10.01.27.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 01:27:57 -0800 (PST)
-Subject: Re: [PATCH V4 0/5] the UART driver compatible with
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220110085604.18042-1-yu.tu@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <1f4b9288-c7ff-c895-425c-187d058642b9@baylibre.com>
-Date:   Mon, 10 Jan 2022 10:27:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S242955AbiAJJaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:30:09 -0500
+Received: from mail-eopbgr1300110.outbound.protection.outlook.com ([40.107.130.110]:64880
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242963AbiAJJ3x (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 04:29:53 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GE1Z+gyFtUvkYwTQVSO0YRq8+q0an6wmk8zbgenPOwFLv7bHRRhl6SONYykOBOXOZy8xs5cyrY0WEVjxgQ3DwGiiRYUAYpxuNHsdnxFUu+mKQDD0kgT8S9r7AQUcurnoNOcD/YTSPBjYiaoLH7EYZR4KWTjGjbzwkWbps52bK9Q+2w8Xc7C0q/PFktWEmdAU7VRV2iBwA038c3RFbLysNYlFeHYEGxnYkb4xqfw3nEfA15w6geHmgIxHAWExklib9OTc55qGCXqVuXqSO4v8rVUZhBbBa0DzRc7bRe1atqdWMqBETVG5OlX7ZulvFR3l6Ky77/xpfRNagDf8pvVq7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Aj5xeNC7KyrO3V6mDWmv0Ty/hO5Qa6OMG+wPez+oJrQ=;
+ b=OMczSWvFnrje63DLwm+TQsCOHhh7b1t6O7CwH+DBGQBnB0lQd5kRYDSQzK9mgtENsxTUfJ68U8NXgWdq7BX3wA3T93VorQeWQiTM2FFbIJiWHQU2XAC1+cLyXEflL9PEE0mebIz6UteHjpXRDZUu/IxBg8tTZW8CNxKTqy0I6TuESEK+5jvCMjpph5JTRHNOGme40q0ukuKvWqq40/+726nHZAJ0P36w6NtE7EyUiZxEvwyntVIiSWRJqfPCpg0bLnBTook78NjpDRbLU+f4I+6AVY2Zfyx52NR+xNmV+qx0042RljgXhZNn/zt+QVmUyc3nqi+gYAMu077eXfSreQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Aj5xeNC7KyrO3V6mDWmv0Ty/hO5Qa6OMG+wPez+oJrQ=;
+ b=VNbC9XtWNHYdM2ZYt5Po+JEgla58DohRB2jPO/aR3cI91Y/7TiuXRuXOglJaFEL19C3inTW5x11kQ3QIufR0in+5AJyGfqqg0UtrlR+/H+zkX05lYwFvb9A3NRn+daDsITmnYncLAYazkDEJJ20nOsdj7LO9AsztJzrCLBVmBEc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ SG2PR06MB3451.apcprd06.prod.outlook.com (2603:1096:4:a0::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4867.9; Mon, 10 Jan 2022 09:29:47 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::ac83:c27d:7c9:74ba]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::ac83:c27d:7c9:74ba%6]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 09:29:46 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jiabing.wan@qq.com, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] regulator: qcom_smd: Add of_node_put() before return
+Date:   Mon, 10 Jan 2022 17:29:14 +0800
+Message-Id: <20220110092915.1444044-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR03CA0098.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::14) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-In-Reply-To: <20220110085604.18042-1-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 40f1a26b-a01d-42b7-c7ef-08d9d41bbda1
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3451:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB3451691E6C4A50ECACEF2C39AB509@SG2PR06MB3451.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yMF7vOk5j8Sr5Fl07PgX8wPKjyH9ReX3l9+HbpRoZW0L/4fr1sVzRLa3YhzvxJqyYeincsH941nK6wzjvxGmBvP21bGxEJZ/+zna+qImjPr0uxe7bNdppxb2EZZ6wLGeKKTMxtpdqflr8+YOaiIx57u4YyxqbZ5b7040gW/aZ76B+NWfjM4gHlbEyr3Q7uGgqY5EUlu0f4TzasKivbBZK9xR72SxYK0cXlAGgoMuAXEeFBnu/Nzipey4vU/JtcChJ5XEbu0iqhJlVcw85Hd1jwt3BPavjLggyCaPubKXMig+zaKJLPRz9yZRhV3JSKtpfnagQI27nYPoyvdFUZklTLSx1ERUHjH15nFq3ZmvKo5Mft5tI1BuJYQV+qUoRYw0EOrUVK+z2LjcTckhdkRf6+ncXaXtMR6v03i+DBENThbdSgYo8+9Rfs2OI+uT4IdPV+Q/7ZInMosoRY5V8L1gwOZSkP2DJyPAurA7Zh2/M+yzzy4a57c1Sq9R1FgySPokeRQVxQgXuuJzhYZ/9y2L+Z342dEIPiSaDm341wmAZf2m0N/RHok7EKubdy3TXzazocNVTGh1r1TQeY19Tiycynw+twkNk2ukrvlNuYFsnwAABTJ3eUmkElFcPa+VOhrHwWH0IFAnrM4R2iyqLTfFHARMgNzrNzrL1RlHAFLfG7wD3Pjy3WDYxFlsW20J0p29
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(8676002)(8936002)(6512007)(38350700002)(110136005)(2616005)(52116002)(6486002)(66946007)(66476007)(5660300002)(66556008)(1076003)(6666004)(508600001)(107886003)(2906002)(4744005)(4326008)(6506007)(26005)(316002)(38100700002)(186003)(36756003)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TuO1Klo69svqQWEgqWqjidtqXozOUQPKl/7qKogTBRk2ptXbL+bBR5S+PHOh?=
+ =?us-ascii?Q?W5jISkXycJhlNzLNUjcyGRF1NfEGnVDWcadDw/Jpx+zRYqwdHgXJEMY6Zigp?=
+ =?us-ascii?Q?IcVtWFN0+csM/MXge1SuGcXtZ8IaJxrPVGWPe/PSMPKJvaRuRQ0fmK0qRUU6?=
+ =?us-ascii?Q?Xrq3B6VmuLnG1aXLkKtpVNNcUv0wDspQ5TH8lwSD+wFbcCns8FZbttt7UR59?=
+ =?us-ascii?Q?4dU0ONQSot3YlJBJSmAwlh6uobmHmR5H/soUCq/mNdVcSl5SFwA2jm+JSnpS?=
+ =?us-ascii?Q?uMmOws1SdsgjL1ybZAIUEtQlTd33g5eG+IFKdKNt17L7TQwDYUF5W6BmtGyh?=
+ =?us-ascii?Q?BzQ1LhP6SRpUaVCi+xHIiAG/Jc3sLTcJA1bfa4K8/+7ekNhhu9zXGWF+++jX?=
+ =?us-ascii?Q?DLBhUYFnao6aA49FMJNeesvKaIeLbIU1YFRLV17bSutXVE6TzhVLtEkwEuWm?=
+ =?us-ascii?Q?6C9UIpjbouAcwvbyzYl5saBPJcc9O5KrjzJXhgz1Qs99FTor1GCR2FdQeD66?=
+ =?us-ascii?Q?kz3Y8zUXxhHrS8SCYJbRyG99lzW6ICsffFvr6D7w59CHsJnYsuTtV35WuNmq?=
+ =?us-ascii?Q?uCT7tGqPOHsHSQRc8LgKjhjpBStMXIFfRR+DVMyqL8mywyVEHsRfZLLYBave?=
+ =?us-ascii?Q?KZnmS7JgrWWSLsBNrkGgfvRCdHzp0Bzz2ZnBuZdn/lMdYjQgzZk88ldP+rLt?=
+ =?us-ascii?Q?v5CI3UmRPCrgr3h0vrejkeWskEDkBu5icB3Xk7EvzGxB+8w4JpcBFU5bJFQy?=
+ =?us-ascii?Q?nOoF3JEOaOoQssfzk3vNdziashuDUJFrtfIAisX9RvBK8FjuEBV+ugccENNc?=
+ =?us-ascii?Q?HCI02V8tRHVgHLDWBbw4WPExRPg9GAbC8JOmVepCqNAmvEtmN5gbYBImTHYe?=
+ =?us-ascii?Q?lDbr8gpSAecNory8puM92HNStyKCf6r3CPTL7J+xBWeJD9/niqm10egPJpHv?=
+ =?us-ascii?Q?cYvzR9rQuYV9o5ZUjJZCwe7kh2gmSYgzmiLueAgrhK8nn51BfH1dAiiWYKMi?=
+ =?us-ascii?Q?I9McXi5EJuS85WXO2W7oXnbdKwVXm+LcH7V89hNszCP4rtbZTcOxecF4ZbQu?=
+ =?us-ascii?Q?2B83Zh+rK7A/eYWrWWQVTjeO/NIvDOGlov9jS1PLxhdRzrSsRkVULDYhW60s?=
+ =?us-ascii?Q?CIMrZeJ9P5J0Y96AB/N5uUyFBrVR3in4qEVOOMvwh1/LH3hAVSPKtgG3Kp9Y?=
+ =?us-ascii?Q?kOGxSHiHJb/z8MyhGWsQi0QeKQ/WNS60bIDYIhtwDOc1XnH4BerWvvsAYcJm?=
+ =?us-ascii?Q?EV//qIHu4YJF+Gp2Pmm4J+jV3HpvkOJi9NqqQN+A2/p5i/43ATM/lTsfCTsx?=
+ =?us-ascii?Q?licmvxjIjlSRTZbXCg0EBN/5k69aa50Z4k81QsvalIsVURAZVEFKrslZAovn?=
+ =?us-ascii?Q?Ktb1Y1AGPr88bIZizXFyU1xMioGTTk/v2WR+tN4m6wboPga81hcmlbeS0a2A?=
+ =?us-ascii?Q?e1grMWhvsBnLG00XyA9Ks8FRKhdNne9V9zZoGSX+9hJI5VoueTkVqyKLlgRq?=
+ =?us-ascii?Q?0EMrKypVmYgEMGR16Ih+tKxB2bftZfVdF5ZYTDkWJDqnXn6KejG1HBTG1qlB?=
+ =?us-ascii?Q?nLVksBBeaB49S5jg326fWwzfqW7tGodQojohhznRlSxqVbq93l/oVzmi8ukK?=
+ =?us-ascii?Q?lV8Xvj7Zn5gdHBfqKmsV1fc=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40f1a26b-a01d-42b7-c7ef-08d9d41bbda1
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 09:29:46.5181
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ON3qzlTbwE7nUB0LhvPUBqyxMXw85s91W6Mfu3CjNlniTzujeLwyeMSlzNh4kJS2mVwU9l9tkZJDtWGTVXVHmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3451
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fix following coccicheck warning:
+./drivers/regulator/qcom_smd-regulator.c:1318:1-33: WARNING: Function
+for_each_available_child_of_node should have of_node_put() before return.
 
-On 10/01/2022 09:55, Yu Tu wrote:
-> Using the common Clock code to describe the UART baud rate
-> clock makes it easier for the UART driver to be compatible
-> with the baud rate requirements of the UART IP on different
-> meson chips. Add Meson S4 SoC compatible.
-> 
-> Yu Tu (5):
->   dt-bindings: serial: meson: Drop compatible = amlogic,meson-gx-uart.
->   tty: serial: meson: Request the register region in meson_uart_probe()
->   tty: serial: meson: The UART baud rate calculation is described using
->     the common clock code.
->   tty: serial: meson: Make the bit24 and bit [26,27] of the UART_REG5
->     register writable
->   tty: serial: meson: Added S4 SOC compatibility.
+Early exits from for_each_available_child_of_node should decrement the
+node reference counter.
 
-Weird, the subjects are fine in the cover letter but are all truncated in the email thread:
-[PATCH V4 0/5] the UART driver compatible with
-[PATCH V4 1/5] dt-bindings: serial: meson: Drop
-[PATCH V4 2/5] tty: serial: meson: Request the register
-...
-Only the last one is OK.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/regulator/qcom_smd-regulator.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
-> 
-> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
-> discussed in the email
-> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
-> the DTS before it can be deleted
-> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
-> in the email.
-> 
-> Link:https://lore.kernel.org/linux-amlogic/20211230102110.3861-4-yu.tu@amlogic.com/
-> 
->  .../bindings/serial/amlogic,meson-uart.yaml   |  10 +-
->  drivers/tty/serial/meson_uart.c               | 244 ++++++++++++------
->  2 files changed, 177 insertions(+), 77 deletions(-)
-> 
+diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+index 9fc666107a06..8490aa8eecb1 100644
+--- a/drivers/regulator/qcom_smd-regulator.c
++++ b/drivers/regulator/qcom_smd-regulator.c
+@@ -1317,8 +1317,10 @@ static int rpm_reg_probe(struct platform_device *pdev)
+ 
+ 	for_each_available_child_of_node(dev->of_node, node) {
+ 		vreg = devm_kzalloc(&pdev->dev, sizeof(*vreg), GFP_KERNEL);
+-		if (!vreg)
++		if (!vreg) {
++			of_node_put(node);
+ 			return -ENOMEM;
++		}
+ 
+ 		ret = rpm_regulator_init_vreg(vreg, dev, node, rpm, vreg_data);
+ 
+-- 
+2.34.1
 

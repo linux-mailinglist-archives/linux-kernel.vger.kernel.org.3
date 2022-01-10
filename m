@@ -2,107 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76ED488D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39821488D8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237609AbiAJArm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 19:47:42 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:34124 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiAJArk (ORCPT
+        id S237615AbiAJAuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 19:50:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46892 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237612AbiAJAuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 19:47:40 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 4C9C872C905;
-        Mon, 10 Jan 2022 03:47:38 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 347B04A46EA;
-        Mon, 10 Jan 2022 03:47:38 +0300 (MSK)
-Date:   Mon, 10 Jan 2022 03:47:38 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] fs-verity: define a function to return the
- integrity protected file digest
-Message-ID: <20220110004738.kzhzyastvq5rn2g5@altlinux.org>
-References: <20220109185517.312280-1-zohar@linux.ibm.com>
- <20220109185517.312280-3-zohar@linux.ibm.com>
+        Sun, 9 Jan 2022 19:50:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFE20B81050;
+        Mon, 10 Jan 2022 00:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C568C36AEF;
+        Mon, 10 Jan 2022 00:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641775810;
+        bh=PO7EGVGxZquF4FQkwG98p2MytiUwzHUeyTW++z/65Zs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=l/DHUHb6WMJ1Z/2QtnTQoJBpSPxhTBmRCfiv2SJ/KYWgZQv4KuBPt1Sf9Ot2RFElP
+         vy64iwauY7RbWMbj72ImceO9Lc1vjUqpgLGMYeONkNM1TxmCCzfOQP2Hzn8R2S4u6k
+         2mmPRas/mztgwi60GCKayCnzlDsTDZF7PNdwmaaMESjagt1c0Sjo5mgRvL/FLqxri2
+         TqvNyYdUHxzp5ZSn8KU98f5+eCwZHSea139jV90P+RV/NGIHdJWBfLxnV9tWFjJJv8
+         ZTqiqxA8qxxcoTxIdbxFr+nGbncFazNu2W/9pY/smILKpjmqdPThlVjadTcEz4lmU+
+         9/hQi4naz1hEA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6F96DF6078F;
+        Mon, 10 Jan 2022 00:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20220109185517.312280-3-zohar@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 net-next 0/3] net: skb: introduce kfree_skb_with_reason()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164177581045.14212.13471905867793638959.git-patchwork-notify@kernel.org>
+Date:   Mon, 10 Jan 2022 00:50:10 +0000
+References: <20220109063628.526990-1-imagedong@tencent.com>
+In-Reply-To: <20220109063628.526990-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     rostedt@goodmis.org, dsahern@kernel.org, mingo@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, nhorman@tuxdriver.com,
+        edumazet@google.com, yoshfuji@linux-ipv6.org, alobakin@pm.me,
+        willemb@google.com, cong.wang@bytedance.com, keescook@chromium.org,
+        pabeni@redhat.com, talalahmad@google.com, haokexin@gmail.com,
+        ilias.apalodimas@linaro.org, memxor@gmail.com, atenart@kernel.org,
+        bigeasy@linutronix.de, weiwan@google.com, arnd@arndb.de,
+        vvs@virtuozzo.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, jonathan.lemon@gmail.com,
+        imagedong@tencent.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mimi,
+Hello:
 
-On Sun, Jan 09, 2022 at 01:55:13PM -0500, Mimi Zohar wrote:
-> Define a function named fsverity_get_digest() to return the verity file
-> digest and the associated hash algorithm (enum hash_algo).
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sun,  9 Jan 2022 14:36:25 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  fs/verity/Kconfig            |  1 +
->  fs/verity/fsverity_private.h |  7 -------
->  fs/verity/measure.c          | 40 ++++++++++++++++++++++++++++++++++++
->  include/linux/fsverity.h     | 18 ++++++++++++++++
->  4 files changed, 59 insertions(+), 7 deletions(-)
+> In this series patch, the interface kfree_skb_with_reason() is
+> introduced(), which is used to collect skb drop reason, and pass
+> it to 'kfree_skb' tracepoint. Therefor, 'drop_monitor' or eBPF is
+> able to monitor abnormal skb with detail reason.
 > 
-> diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-> index f0d7b30c62db..52906b2e5811 100644
-> --- a/fs/verity/measure.c
-> +++ b/fs/verity/measure.c
-> @@ -57,3 +57,43 @@ int fsverity_ioctl_measure(struct file *filp, void __user *_uarg)
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(fsverity_ioctl_measure);
-> +
-> +/**
-> + * fsverity_get_digest() - get a verity file's digest
-> + * @inode: inode to get digest of
-> + * @digest: (out) pointer to the digest
-> + * @alg: (out) pointer to the hash algorithm enumeration
-> + *
-> + * Return the file hash algorithm and digest of an fsverity protected file.
-> + *
-> + * Return: 0 on success, -errno on failure
-> + */
-> +int fsverity_get_digest(struct inode *inode,
-> +			    u8 digest[FS_VERITY_MAX_DIGEST_SIZE],
-> +			    enum hash_algo *alg)
-> +{
-> +	const struct fsverity_info *vi;
-> +	const struct fsverity_hash_alg *hash_alg;
-> +	int i;
-> +
-> +	vi = fsverity_get_info(inode);
-> +	if (!vi)
-> +		return -ENODATA; /* not a verity file */
-> +
-> +	hash_alg = vi->tree_params.hash_alg;
-> +	memset(digest, 0, FS_VERITY_MAX_DIGEST_SIZE);
-> +	*alg = HASH_ALGO__LAST;
+> [...]
 
-Perhaps this line is redundant (*alg is overwritten later) and would
-needlessly mangle output value in case of -EINVAL while it's being
-untouched on -ENODATA.
+Here is the summary with links:
+  - [v4,net-next,1/3] net: skb: introduce kfree_skb_reason()
+    https://git.kernel.org/netdev/net-next/c/c504e5c2f964
+  - [v4,net-next,2/3] net: skb: use kfree_skb_reason() in tcp_v4_rcv()
+    https://git.kernel.org/netdev/net-next/c/85125597419a
+  - [v4,net-next,3/3] net: skb: use kfree_skb_reason() in __udp4_lib_rcv()
+    https://git.kernel.org/netdev/net-next/c/1c7fab70df08
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +
-> +	/* convert hash algorithm to hash_algo_name */
-> +	i = match_string(hash_algo_name, HASH_ALGO__LAST, hash_alg->name);
-> +	if (i < 0)
-> +		return -EINVAL;
-> +	*alg = i;
-> +
-> +	memcpy(digest, vi->file_digest, hash_alg->digest_size);
-> +
-> +	pr_debug("file digest %s:%*phN\n", hash_algo_name[*alg],
-> +		  hash_digest_size[*alg], digest);
-> +
-> +	return 0;
-> +}
+

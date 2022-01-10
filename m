@@ -2,191 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29903489DB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D908A489DBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237604AbiAJQiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S237621AbiAJQjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237552AbiAJQiN (ORCPT
+        with ESMTP id S237627AbiAJQji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:38:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4E1C06173F;
-        Mon, 10 Jan 2022 08:38:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEB79B816ED;
-        Mon, 10 Jan 2022 16:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5584C36AE3;
-        Mon, 10 Jan 2022 16:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641832690;
-        bh=cJK7EpVCPGt1/Ax6wVPF/b0WeLje0bMc0HnxDb/Z9eo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=toWvs/SAlHa1M+zENhsFKRwqRzlTtqxldE15qo7skLG7+B5D2uUWLbBTGFYwXO8jX
-         GfQpfrQXIQG8p3yd+Ig9lAqvmWPB/02VwVXdJ5bJBbH9tHMrE2nTR0ypm7FkmHYy48
-         wlqlbrDS5tbA/YfvJXn+wehO9Z29ChfJiv21DJ1FSwd+61EYZDFDkUsCyWuKDH0tT5
-         aV2DRamlyXhH3JnovFFa8xx8bsr/VgdGen1P1mp4vHDG6XuCN5E8IqaREPUb4Uzf2j
-         sH2iEcvDuMJWbzxz3ocAh2DBVufAGcAPv8rZ9cCulCbYLuzEJsANKT0KSwuZeeL2dW
-         /ea6+ZASPbtKA==
-Received: by mail-wm1-f48.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso10098173wmc.3;
-        Mon, 10 Jan 2022 08:38:10 -0800 (PST)
-X-Gm-Message-State: AOAM530IRCYT5or93BVYMghDZLpWWt3sKASDMxQ6pJmJDaD3RrIw1XVS
-        8HVykvXm77fjy9bx51zRU/T345DnbfrzUFh42YI=
-X-Google-Smtp-Source: ABdhPJyEPMgbjybWI2XBKABrfgMkth3MB9/f52zAgU2nVWQiFANd8qZvID153NkO1Hxh7uUimznWzPjpshF+YB8oe8s=
-X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr242340wmq.25.1641832688965;
- Mon, 10 Jan 2022 08:38:08 -0800 (PST)
+        Mon, 10 Jan 2022 11:39:38 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C863DC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:39:38 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id oa15so13218751pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6Jg4jmTbD3eHzMlZt+T+Mw7SGeOkM/SAyjyO1r35dWg=;
+        b=Oe6vL3o8xeI6T80YuOFuDQHVzD3yowpB7LnCM/cz/laAj73/xa0fvML8tNtStwmUqm
+         XrSBq4C9NeKnTZ3QDrt1fd9U/ieVrckyoLxjyw8P36k6gXozytdhCQkgwxtWsvhKTMBR
+         r5QCJdq2bekwtJXoEKiIR54oBpVTWNviThaJnj8mAVsuD85p7qRRVRI8FsvMNLx/q8E3
+         wbbGoQQh5uJTaAAsFXXEL0bfjnSbkimm3Hp1BHlNyIUZWXVMJ9vYSCdRPuqjOktS4nTR
+         UAL6kq212FIhH/9AhZTjNUrIt5On0WzxcrKK6T9yemLHsNagaOGonPu29D/69NNmQQ/F
+         PlCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Jg4jmTbD3eHzMlZt+T+Mw7SGeOkM/SAyjyO1r35dWg=;
+        b=5cPTx57gB3aLcuUCk5jxfgxOmwvFcFb+/JRwvU4zfXI5jpHN+cqc7x5X9LdZjr6G5j
+         V04UPjed/nZGUb/LrSgZEohNe4aYuipGJ0qz5UhDDMfPL9VgnGVMc/1wcy2JEuwuoG/E
+         vT07Tmj0d8I+WgQyg6wVqUAWrl57w25AHKu8mDTWdwssL78uzWd/C3mDHEicWbYM6Af0
+         Cj+WYDlXmmxVhLWMGDnF8vW3SWOALHm5n23ONxaiFO2gS7sDmzd8VCVvALyimHpRG8R3
+         CkHoVpBv3z5znIZAJ3P0g5szIxXzZl7ocVhVg5NRyU0QQe1kiIxWMnL6rJwCL30LMnZV
+         yYcA==
+X-Gm-Message-State: AOAM531n3C9WqVcBEqKxF7d57s917MZ076ms1FUjcttzGmIuXGLBoNmC
+        +CMFErz9hWq5ZxNVuFZMvlA=
+X-Google-Smtp-Source: ABdhPJyzE5X/G7q5Gib/WOXInZm3xvhg/39L17HCNkohZF0cMXCqurzAE9rwIPSmkNEPo+uHwcaigQ==
+X-Received: by 2002:aa7:9098:0:b0:4bd:65b5:fcf3 with SMTP id i24-20020aa79098000000b004bd65b5fcf3mr365080pfa.72.1641832778337;
+        Mon, 10 Jan 2022 08:39:38 -0800 (PST)
+Received: from [192.168.1.26] (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
+        by smtp.gmail.com with ESMTPSA id j8sm6027602pgf.21.2022.01.10.08.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 08:39:38 -0800 (PST)
+Message-ID: <39a00fdf-e6fd-f421-ccc5-73aec33595e1@gmail.com>
+Date:   Mon, 10 Jan 2022 08:39:36 -0800
 MIME-Version: 1.0
-References: <6D757C75-65B1-468B-842D-10410081A8E4@live.com>
- <CAMj1kXETPO9iJoFm26v5gof2xpakHkvz3YV4ahet7BLjX5m5FQ@mail.gmail.com> <D3B9962F-F6F0-4622-9E0F-A3EABACAD471@live.com>
-In-Reply-To: <D3B9962F-F6F0-4622-9E0F-A3EABACAD471@live.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 10 Jan 2022 17:37:57 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGem3QB0rj-b57xrcDYkCv6Moi=RX1OUspj3s4vMtsdug@mail.gmail.com>
-Message-ID: <CAMj1kXGem3QB0rj-b57xrcDYkCv6Moi=RX1OUspj3s4vMtsdug@mail.gmail.com>
-Subject: Re: [BUG][SEVERE] Enabling EFI runtime services causes panics in the
- T2 security chip on Macs equipped with it.
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
-        "jk@ozlabs.org" <jk@ozlabs.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [mkp-scsi:for-next 67/132] drivers/scsi/elx/libefc/efc_els.c:73
+ efc_els_io_alloc_size() warn: sleeping in atomic context
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <202201082354.iAG3UuiL-lkp@intel.com>
+ <20220110071104.GA625@lst.de>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20220110071104.GA625@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 at 17:28, Aditya Garg <gargaditya08@live.com> wrote:
->
->
-> > As far as I can tell, what we need here is a DMI quirk that just
-> > disables EFI runtime support on these platforms.
->
-> If that=E2=80=99s the last option, please propose a patch for the same.
->
+On 1/9/2022 11:11 PM, Christoph Hellwig wrote:
+> So while this warning is correct, it is not new.  GFP_DMA can sleep
+> just like GFP_KERNEL. Someone was already trying to give this a spin
+> on the linux-scsi list, but we really need maintainer helper here.
 
-As the EFI maintainer for Linux, I'd be happy to merge a patch that
-implements this. But I don't have time to write it, nor do I have
-access to a recent Intel Mac, so I wouldn't be able to test it either.
+Yep - I'll go look at it.
 
-So I suggest that you escalate this issue to whoever is providing
-support for running Linux on your hardware, and I'm sure they will be
-happy to employ someone to fix this problem for you.
-
-
-
-> >
-> >> Using efi=3Dnoruntine (or noefi) as a kernel parameter seems to fix th=
-e issue. Also, making NVRAM read-only makes kernels boot. A fix for that wo=
-uld be appreciated.
-> >>
-> >> Link :- https://bugzilla.kernel.org/show_bug.cgi?id=3D215277
-> >>
-> >> We believe kernel only fails to boot if something is set up to write t=
-o nvram at boot, it can boot fine on a MacBookPro16,1 as long as I don't ha=
-ve anything writing to nvram (deleting and reading variables is fine).
-> >>
-> >> The t2 security chip handles nvram and loading bootloaders on these
-> >> macs. Its bridgeOS had an update that was bundled with macOS Catalina
-> >> (this can't be downgraded, and some computers shipped with macOS
-> >> Catalina), that made writing to nvram from Linux cause an invalid
-> >> opcode error and a frozen system:
-> >>
-> >> invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> >> CPU: 9 PID: 135 Comm: kworker/u24:2 Tainted: G S   U   C        5.16.0=
--rc4-00054-g6c3ecb47bb75-dirty #72
-> >> Hardware name: Apple Inc. MacBookPro16,1/Mac-E1008331FDC96864, BIOS 17=
-15.40.15.0.0 (iBridge: 19.16.10548.0.0,0) 10/03/2021
-> >> Workqueue: efi_rts_wq efi_call_rts
-> >> RIP: 0010:0xfffffffeefc46877
-> >> Code: 8b 58 18 0f b6 0d e1 09 00 00 48 c1 e1 04 e8 30 03 00 00 48 89 0=
-5 d9 09 00 00 80 3d a2 09 00 00 01 75 09 48 c7 07 00 10 00 00 <0f> 0b 48 8b=
- 05 a8 07 00 00 8b 40 08 48 83 c0 f0 48 89 07 48 c7 06
-> >> RSP: 0018:ffff998d40513dd0 EFLAGS: 00010246
-> >> RAX: ffff998d40513eb0 RBX: ffff998d43f17dd8 RCX: 0000000000000007
-> >> RDX: ffff998d43f17dc8 RSI: ffff998d43f17dd8 RDI: ffff998d43f17dc8
-> >> RBP: ffff998d40513e00 R08: ffff998d43f17dd0 R09: ffff998d43f17dd8
-> >> R10: ffff998d40513c80 R11: ffffffff9b4cabe8 R12: ffff998d43f17dc8
-> >> R13: ffff998d43f17dd0 R14: 0000000000000246 R15: 0000000000000048
-> >> FS:  0000000000000000(0000) GS:ffff8cf8bec40000(0000) knlGS:0000000000=
-000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: 00007f9133594374 CR3: 0000000100200005 CR4: 00000000003706e0
-> >> Call Trace:
-> >> <TASK>
-> >> ? _printk+0x58/0x6f
-> >> __efi_call+0x28/0x30
-> >> efi_call_rts.cold+0x83/0x104
-> >> process_one_work+0x219/0x3f0
-> >> worker_thread+0x4d/0x3d0
-> >> ? rescuer_thread+0x390/0x390
-> >> kthread+0x15c/0x180
-> >> ? set_kthread_struct+0x40/0x40
-> >> ret_from_fork+0x22/0x30
-> >> </TASK>
-> >> Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT n=
-f_reject_ipv4 xt_tcpudp nft_compat amdgpu nft_chain_nat nf_nat nf_conntrack=
- nf_defrag_ipv6 nf_defrag_ipv4 nft_counter nf_tables n
-> >> sysimgblt fb_sys_fops cec crc16 intel_pch_thermal sbs ecdh_generic ecc=
- rfkill apple_bl video acpi_tad mac_hid sbshc pkcs8_key_parser drm fuse cry=
-pto_user bpf_preload ip_tables x_tables crct10dif_pcl
-> >> ---[ end trace 22f8aad91761cc4a ]---
-> >> RIP: 0010:0xfffffffeefc46877
-> >> Code: 8b 58 18 0f b6 0d e1 09 00 00 48 c1 e1 04 e8 30 03 00 00 48 89 0=
-5 d9 09 00 00 80 3d a2 09 00 00 01 75 09 48 c7 07 00 10 00 00 <0f> 0b 48 8b=
- 05 a8 07 00 00 8b 40 08 48 83 c0 f0 48 89 07 48 c7 06
-> >> RSP: 0018:ffff998d40513dd0 EFLAGS: 00010246
-> >> RAX: ffff998d40513eb0 RBX: ffff998d43f17dd8 RCX: 0000000000000007
-> >> RDX: ffff998d43f17dc8 RSI: ffff998d43f17dd8 RDI: ffff998d43f17dc8
-> >> RBP: ffff998d40513e00 R08: ffff998d43f17dd0 R09: ffff998d43f17dd8
-> >> R10: ffff998d40513c80 R11: ffffffff9b4cabe8 R12: ffff998d43f17dc8
-> >> R13: ffff998d43f17dd0 R14: 0000000000000246 R15: 0000000000000048
-> >> FS:  0000000000000000(0000) GS:ffff8cf8bec40000(0000) knlGS:0000000000=
-000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: 00007f9133594374 CR3: 0000000100200005 CR4: 00000000003706e0
-> >> BUG: kernel NULL pointer dereference, address: 0000000000000008
-> >> #PF: supervisor write access in kernel mode
-> >> #PF: error_code(0x0002) - not-present page
-> >>
-> >> This seems to be triggered by EFI_QUERY_VARIABLE_INFO here
-> >>
-> >
-> > This is interesting. QueryVariableInfo() was introduced in EFI 2.00,
-> > and for a very long time, Intel MACs would claim to implement EFI 1.10
-> > only. This means Linux would never attempt to use QueryVariableInfo()
-> > on such platforms.
-> >
-> > Can you please check your boot log which revision it claims to implemen=
-t now?
-> >
-> > Mine says
-> >
-> > efi: EFI v1.10 by Apple
->
-> Mine says
->
-> efi: EFI v2.40 by Apple
->
-> >
-> > near the start of the kernel log.
-> >
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/firmware/efi/runtime-wrappers.c#n220
-> >> and within that section, the invalid opcode seems to be occurring in
-> >> this bit of assembly:
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/arch/x86/platform/efi/efi_stub_64.S
-> >>
-> >
-> > Ehm no. __efi_call() is just a trampoline to call into the firmware,
-> > and the opcodes in question are firmware code not Linux code.
->
+-- james

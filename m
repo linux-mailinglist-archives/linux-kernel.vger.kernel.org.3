@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1418B48A238
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F381548A23C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345105AbiAJVyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:54:44 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:40615 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345093AbiAJVym (ORCPT
+        id S1345108AbiAJVzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:55:06 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:46846 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345088AbiAJVzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:54:42 -0500
-Received: by mail-ot1-f47.google.com with SMTP id h5-20020a9d6a45000000b005908066fa64so15706438otn.7;
-        Mon, 10 Jan 2022 13:54:41 -0800 (PST)
+        Mon, 10 Jan 2022 16:55:05 -0500
+Received: by mail-oi1-f170.google.com with SMTP id y128so14108374oia.13;
+        Mon, 10 Jan 2022 13:55:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+4nxlXrVkZoJFNXZQPBsDKZ5qkXAjMHB7WgcTcJz1MA=;
-        b=ZiWYxLtstLWUfjXbecPxHIr/1fJr/HOMs89aRTyYWf+bvyxipNTJR9424FuFHLOiCm
-         eSok2n0ozNJaKehfUytcJfNTfbv4aLf9ne4g30ZReHZsKY3zhUPacwmtfOWgEp5Xr4cy
-         chACeUq/KtlA/QJuTD9Ux/XTn785LY9wr/OMf51PZHNpSfMarNfmVVG1Bl9MAaEUmhyf
-         iohyidZaeM54ya4HFUEBzbn40QN3NPLruvEPg8HikmxUux2a9jn/BbXpVbzteiZgX30T
-         zPzcRLwbsM3FUdl1nHnN7bQVGUD8bpver9IDdOMdMWKPVTTIvwoBaqlT6xDMsr5DYQn8
-         714A==
-X-Gm-Message-State: AOAM5331lFCl7Ic/0P/cgVK/TSXN4x63b71fmSjdjGBqskFvljCtDJoV
-        62pOB4ahNaLwg6R4XU1Y/9OLFhGuVg==
-X-Google-Smtp-Source: ABdhPJxocQDv8shH6doB7pKaIo4RiJOnq4JEo+/NIcaL4siK4t6vPBKdquiu21q85zgnj8vr8z+SVg==
-X-Received: by 2002:a9d:c49:: with SMTP id 67mr1290639otr.351.1641851681337;
-        Mon, 10 Jan 2022 13:54:41 -0800 (PST)
+        bh=ibH96/TSKICVU4X5gL1f5xl54raErpDQg8IypccovFA=;
+        b=YEwIf6OjqDz4yuR7w6C1gcwqB5ok1UKzjoIFbI9d829+V3oZu9/MiQM4rXzyhP+mm1
+         CtUzuhM9seB+v6YFoYdHO8UFxMCGfxOYOTYW7Lh/xJYybZoFgbRffBhJP4kt5len508R
+         FJGKIgU/M/A2OshKvlKHC3ryH/yZnqeXj/UtqjWqAWbi+8yThrRI62JcOdPI7qtGM8nQ
+         K6g2kYE9RYdAKQyBQlGnjEGOZ+oHRVorkUmNUszzgwAPvTUglBMSuTVP77JnV+N4PCjk
+         dPR4AEcZrEWmAxm0Emc7iePhgKYbuXx59BsmzfYuSwaUpi6b76Ngz25G8DrY40x7XC4K
+         pEFQ==
+X-Gm-Message-State: AOAM531hsxRL3W14aOChV66aCLCNGP/+9NZEZm7I13JS6pL9eKBBQhGc
+        MlvymFkIc41l0Ab2XS3Jlw==
+X-Google-Smtp-Source: ABdhPJwCROu92cIX39O/03JiC9nasKDJP081eZeaA7oR2oT/a1IW8Io4AWMiWQQfgx4gV+11+SQAVg==
+X-Received: by 2002:aca:ad57:: with SMTP id w84mr19167184oie.69.1641851704641;
+        Mon, 10 Jan 2022 13:55:04 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k20sm1670140otb.50.2022.01.10.13.54.40
+        by smtp.gmail.com with ESMTPSA id e19sm1731317otk.47.2022.01.10.13.55.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 13:54:40 -0800 (PST)
-Received: (nullmailer pid 1583846 invoked by uid 1000);
-        Mon, 10 Jan 2022 21:54:39 -0000
-Date:   Mon, 10 Jan 2022 15:54:39 -0600
+        Mon, 10 Jan 2022 13:55:03 -0800 (PST)
+Received: (nullmailer pid 1584617 invoked by uid 1000);
+        Mon, 10 Jan 2022 21:55:02 -0000
+Date:   Mon, 10 Jan 2022 15:55:02 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>, linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH 5/8] dt-bindings: clock: samsung: extend Exynos7 bindings
- with UFS
-Message-ID: <YdyrH3WspngOp6ag@robh.at.kernel.org>
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 6/8] dt-bindings: clock: samsung: convert Exynos5260 to
+ dtschema
+Message-ID: <YdyrNv79Eepm31ty@robh.at.kernel.org>
 References: <20220102115356.75796-1-krzysztof.kozlowski@canonical.com>
- <20220102115356.75796-5-krzysztof.kozlowski@canonical.com>
+ <20220102115356.75796-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220102115356.75796-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220102115356.75796-6-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 02 Jan 2022 12:53:53 +0100, Krzysztof Kozlowski wrote:
-> The UFS for Exynos7 SoC clock controller requires additional input
-> clocks for the FSYS1 clock controller.  Update the bindings to reflect
-> this, at least in theory.  In practice, these input clocks are ignored,
-> so it is rather adjusting of bindings to existing DTS, without affecting
-> any real users.  I understand that is not how it should be done,
-> though...
+On Sun, 02 Jan 2022 12:53:54 +0100, Krzysztof Kozlowski wrote:
+> Convert Samsung Exynos5260 SoC clock controller bindings to DT schema
+> format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../devicetree/bindings/clock/samsung,exynos7-clock.yaml   | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  .../bindings/clock/exynos5260-clock.txt       | 190 ---------
+>  .../clock/samsung,exynos5260-clock.yaml       | 382 ++++++++++++++++++
+>  2 files changed, 382 insertions(+), 190 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/exynos5260-clock.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos5260-clock.yaml
 > 
 
 Applied, thanks!

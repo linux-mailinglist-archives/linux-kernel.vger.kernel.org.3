@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2E8489441
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF82489445
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242035AbiAJIvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S242441AbiAJIvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242005AbiAJItY (ORCPT
+        with ESMTP id S242016AbiAJIt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:49:24 -0500
+        Mon, 10 Jan 2022 03:49:28 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E0CC061763;
-        Mon, 10 Jan 2022 00:47:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B72C02982F;
+        Mon, 10 Jan 2022 00:48:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=ItzrFL0LbXYE3K8hHEYz/NPzV1
-        e0sf0Ay6eH3EXDtU2tbuKdvpSbrrUefbW2SzFWtbcIRvGOtniu3Gjsv4Vd4Ilq6RHDVyUzzxB2QKa
-        NxxErBy/EpKyMGjZO8p3Bjoep+vJe5h4NwJfqQmWPCUet4jvGXY5FSILDeAvGOuFN78PfKUEG2fPO
-        jZuP/TKFTuTdN9O0XxrMwu2WT4ckRqRimEs9jHJnotQ7UYqhTuiqVv0FhJWiK4od/3O3YtrOE/o2E
-        pAREbHVEmjuatv0RmnX1w9ofuOHO9nJFpX+BwvuQQDSclJhS+ewnqZfUm8lQb8KqvjNvLIl9Wn+AZ
-        aomQMCFQ==;
+        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=JilVrNRN2CPQ5GOttA5vJd8GKj
+        rAqlhmrMZhPWmJCRMHNYc2VbpHZAHA8u+rEGGVdsg0SlOxPcVpt4wtCpXDh4EROWQK2yIkg/fPjLT
+        LdFIQBrzdfuXHrr8/vfUkjoDgzIlYogahHNCeY03Woezacz1htO5YmKFL0lHT81gmcvHhyEMpJMj9
+        HW2xua/Y+V1JUj5kSi0HaJ4BnFEe0nICMDQusldvngQlCnXU0nGKgHyEkL9mhZRNYAOxCD1N7dOCX
+        0CHfVHjGBTlX3oYV+AZlL3KAwZaoF6uTcpdKLtGECdVld4W/CkDXwAWHRof3qa8+tEp9+u87hKwDb
+        Hp+37Dgg==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6qLD-00A1TY-BI; Mon, 10 Jan 2022 08:47:47 +0000
-Date:   Mon, 10 Jan 2022 00:47:47 -0800
+        id 1n6qLR-00A1ce-JS; Mon, 10 Jan 2022 08:48:01 +0000
+Date:   Mon, 10 Jan 2022 00:48:01 -0800
 From:   Christoph Hellwig <hch@infradead.org>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
@@ -35,14 +35,15 @@ Cc:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
         suganath-prabu.subramani@broadcom.com,
         MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 12/16] scsi: mptbase: Use dma_alloc_coherent()
-Message-ID: <Ydvys5OJUd8DgesQ@infradead.org>
+Subject: Re: [PATCH 13/16] scsi: mptsas: Use dma_alloc_coherent() in
+ mptsas_exp_repmanufacture_info()
+Message-ID: <YdvywZI+Hm8sIpSz@infradead.org>
 References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
- <3bea2452deb8cc8be65982e87efa4c6861caa01c.1641500561.git.christophe.jaillet@wanadoo.fr>
+ <d78d4a5b096897932808ed7e3a4540db1687c25d.1641500561.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3bea2452deb8cc8be65982e87efa4c6861caa01c.1641500561.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <d78d4a5b096897932808ed7e3a4540db1687c25d.1641500561.git.christophe.jaillet@wanadoo.fr>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>

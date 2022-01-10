@@ -2,133 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A1D489727
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13961489729
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244509AbiAJLQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244536AbiAJLPx (ORCPT
+        id S244548AbiAJLQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:16:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:41688 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244532AbiAJLQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:15:53 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651B0C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:15:52 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id t28so19296883wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3zCZeq1YfrwfNpurPrffAnuWbNebuZkXvppZ0HJsuMM=;
-        b=IytnJCooamEpvXhz5Zg+VCWZomAiLY8bvHFqu0uZFs/rNmd6uRMnnZ+17ginoyqJBr
-         piA7Kc4HdGUlZcIiAla1M8tXtTCSzTzsZyKjrkdUILsEQthDnf0k7iMaJKxenFEv2jnm
-         58h5RCR0rYbvMaILmZE8lIll/wZZosf2w+czrSjmK/wMd+PNcqDpqp7MOjw9Wlf0Tj6a
-         JEh+Z31qW25QMoyyr/q/tc//hAMoiZ6R2qqMyXddsalytpqt23xyQP3KBEiBmvNo7X4k
-         6ZCr/YuvL5iSdVFLnym5HPF7QOlf+R6i/3gt069FX2tueLsNDAFMcQVkmUunUoZCVwEu
-         rcEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3zCZeq1YfrwfNpurPrffAnuWbNebuZkXvppZ0HJsuMM=;
-        b=XwBGooGTr9pKeLiHgwQRqKjLRF7gxHGTMO9i0CcmXe/cL3iAe/Ahr8KC0oNM5wlTu3
-         MZ0H6ZMidLcIAYPkuzBMQl6W3GEdi4UKRopkrqZwvHg2huVeSmhYbzI2j9vn5LZYEP+O
-         /xNFlp3VsvAMteyhEQDlCi9UoCSEm1fkvAIZwircF7GcrLDm4umbmsEc2qx0EQuw3nfA
-         MrDFBDpBCUkAaQRSDYrrKfZn+EleJ9L8GqimLgGeOMtu00/n9HbprdIoCjCkkclDh+Tf
-         6Hc8AUhRibuDendGksHo29Fp6LUIiian5/SBKytpwUZJbIMslNjJPKaoRffmsyVUnuVB
-         OebA==
-X-Gm-Message-State: AOAM531kv8Rj3w9XIUCOQebj3S8wECdqZRK8nbo8kyS2vSfQbY+hNWT6
-        sIo33yK2bS3mhpIsgWUfZiN4LA==
-X-Google-Smtp-Source: ABdhPJyKXoZRZJL3WRFJ1cFt3/bsFsemHXkhNpXIzbV0Kd7MaZgee97OkQsgoE15KZcFCt9vs9dpyA==
-X-Received: by 2002:a5d:4609:: with SMTP id t9mr6926861wrq.551.1641813350970;
-        Mon, 10 Jan 2022 03:15:50 -0800 (PST)
-Received: from google.com ([31.124.24.179])
-        by smtp.gmail.com with ESMTPSA id m7sm825551wmi.13.2022.01.10.03.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 03:15:50 -0800 (PST)
-Date:   Mon, 10 Jan 2022 11:15:55 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     kvartet <xyru1999@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Anand Khoje <anand.a.khoje@oracle.com>,
-        Gal Pressman <galpress@amazon.com>,
-        Haakon Bugge <haakon.bugge@oracle.com>,
-        Mark Bloch <mbloch@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        sunhao.th@gmail.com
-Subject: Re: INFO: task hung in add_one_compat_dev
-Message-ID: <YdwVaxb1Qsf31lxK@google.com>
-References: <CAFkrUsizocCypDTb059euzP9g0WEq+MOsjYEOZRpk17-=eDW_g@mail.gmail.com>
+        Mon, 10 Jan 2022 06:16:35 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 60D151F395;
+        Mon, 10 Jan 2022 11:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641813391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PkG0S8Obfn4LZ8Nij0a2iJKd0/TlcnmRiNdvI8v+zc8=;
+        b=vbXNAmy2SjVCR43y0X6sodkroBAv8DRiex4zBa1P5JtQvTrKK8tJwQE8licsRscwjtCLX0
+        BiLRZq/EvQ4u9ntNhchd5sdRxsV4ucM79zb/1ZV+tNufSn5oPbLIO19SuWjz/C4Z29T5QA
+        2U8K0Y0QsvXrErGTKygn1FAqZnpO5/o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641813391;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PkG0S8Obfn4LZ8Nij0a2iJKd0/TlcnmRiNdvI8v+zc8=;
+        b=LrY0qiNx0li7nfrJ9AOSuE8oIfqaeoNzcJQWjjEJkLMKzjCoDVln4sSE3hmv2P3SV9W3M5
+        2GK+5OZjI3kzKUBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AEE313D2A;
+        Mon, 10 Jan 2022 11:16:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HAysEI8V3GFSawAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:16:31 +0000
+Date:   Mon, 10 Jan 2022 12:16:39 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/cpu for v5.17
+Message-ID: <YdwVl0H54fmUIux0@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFkrUsizocCypDTb059euzP9g0WEq+MOsjYEOZRpk17-=eDW_g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Jan 2022, kvartet wrote:
+Hi Linus,
 
-> Hello,
-> 
-> When using Syzkaller to fuzz the latest Linux kernel, the following
-> crash was triggered.
+please pull two x86/cpu updates for 5.17.
 
-Why was this sent to me?
+Thx.
 
-> HEAD commit: a7904a538933 Linux 5.16-rc6
-> git tree: upstream
-> console output: https://paste.ubuntu.com/p/b6z4q5NnV6/plain/
-> kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
-> 
-> Sorry, I don't have a reproducer for this crash, hope the symbolized
-> report can help.
-> 
-> If you fix this issue, please add the following tag to the commit:
-> Reported-by: Yiru Xu <xyru1999@gmail.com>
-> 
-> 
-> INFO: task syz-executor.5:32436 blocked for more than 143 seconds.
->       Not tainted 5.16.0-rc6 #9
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor.5  state:D stack:24768 pid:32436 ppid:  6788 flags:0x00004000
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xcd9/0x2530 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
->  __mutex_lock_common kernel/locking/mutex.c:680 [inline]
->  __mutex_lock+0xc48/0x1610 kernel/locking/mutex.c:740
->  add_one_compat_dev drivers/infiniband/core/device.c:942 [inline]
->  add_one_compat_dev+0xea/0x7f0 drivers/infiniband/core/device.c:919
->  rdma_dev_init_net+0x28b/0x480 drivers/infiniband/core/device.c:1184
->  ops_init+0xaf/0x420 net/core/net_namespace.c:140
->  setup_net+0x415/0xa40 net/core/net_namespace.c:326
->  copy_net_ns+0x2d9/0x660 net/core/net_namespace.c:470
->  create_new_namespaces.isra.0+0x3cb/0xae0 kernel/nsproxy.c:110
->  copy_namespaces+0x391/0x450 kernel/nsproxy.c:178
->  copy_process+0x2d37/0x73e0 kernel/fork.c:2194
->  kernel_clone+0xe7/0x10c0 kernel/fork.c:2582
->  __do_sys_clone3+0x1c9/0x2e0 kernel/fork.c:2857
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7ff4fe91489d
-> RSP: 002b:00007ff4fd285c28 EFLAGS: 00000246 ORIG_RAX: 00000000000001b3
-> RAX: ffffffffffffffda RBX: 00007ff4fea33f60 RCX: 00007ff4fe91489d
-> RDX: 0000000000000000 RSI: 0000000000000058 RDI: 0000000020000440
-> RBP: 00007ff4fe98100d R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007fff3b67e98f R14: 00007ff4fea33f60 R15: 00007ff4fd285dc0
+---
+
+The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
+
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cpu_for_v5.17_rc1
+
+for you to fetch changes up to 244122b4d2e5221e6abd6e21d6a58170104db781:
+
+  x86/lib: Add fast-short-rep-movs check to copy_user_enhanced_fast_string() (2021-12-29 13:46:02 +0100)
+
+----------------------------------------------------------------
+- Enable the short string copies for CPUs which support them, in
+copy_user_enhanced_fast_string()
+
+- Avoid writing MSR_CSTAR on Intel due to TDX guests raising a #VE trap
+
+----------------------------------------------------------------
+Andi Kleen (1):
+      x86/cpu: Don't write CSTAR MSR on Intel CPUs
+
+Tony Luck (1):
+      x86/lib: Add fast-short-rep-movs check to copy_user_enhanced_fast_string()
+
+ arch/x86/kernel/cpu/common.c | 15 +++++++++++++--
+ arch/x86/lib/copy_user_64.S  |  4 ++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

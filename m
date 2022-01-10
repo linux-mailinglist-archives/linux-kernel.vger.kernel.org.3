@@ -2,44 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2674890F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582FE489166
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239380AbiAJH1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239336AbiAJHZd (ORCPT
+        id S240303AbiAJHbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:31:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36182 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240012AbiAJH2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:25:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54283C0611FF;
-        Sun,  9 Jan 2022 23:24:49 -0800 (PST)
+        Mon, 10 Jan 2022 02:28:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06980B81202;
-        Mon, 10 Jan 2022 07:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364EFC36AE9;
-        Mon, 10 Jan 2022 07:24:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D05A0611AA;
+        Mon, 10 Jan 2022 07:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E91C36AED;
+        Mon, 10 Jan 2022 07:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799486;
-        bh=rAS4fHT6eZGIEhe+JfzVzimrTbWOmVmKKFOXps3/43g=;
+        s=korg; t=1641799687;
+        bh=iiwAMT1Wz0s8M/2Kfjrbib1DKw7Qzm0d8p/EiP5o7YY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tNPzGmHjaFdzJTFGYVHVq3FncagyFchM7+bE1PelOm4+7BR2dis53Y00I9cpwc7tr
-         /Pw7IyJRfEBYSowaBWGggDW5twOMjunqEBE4zp+YEBAg3ldgsO2fV0XXYgn6PKsNkD
-         tz4FTBHLH9AO0udht7tspa1LeQJljdc1OF3F/g48=
+        b=tca9mFyEOR+X9pbf6kHQela3sw4fa3hGbjUrVFwxhOpIsznJ9tvVwKQVmk7yQlPDq
+         /pzlIZh42Dr5iygAoyBtLGHleOi7ZKCGQA5oAtOj0eH0WPRzdZe6MP5EUO8uX14SdN
+         6MC36Ix3yELsyqd+sR2i0wF+LBdB4TCopNNj3rYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Toye <thomas@toye.io>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 10/21] rndis_host: support Hytera digital radios
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.4 02/34] Input: touchscreen - Fix backport of a02dcde595f7cbd240ccd64de96034ad91cffc40
 Date:   Mon, 10 Jan 2022 08:22:57 +0100
-Message-Id: <20220110071813.146399645@linuxfoundation.org>
+Message-Id: <20220110071815.735904662@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071812.806606886@linuxfoundation.org>
-References: <20220110071812.806606886@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +44,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Toye <thomas@toye.io>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 29262e1f773b4b6a43711120be564c57fca07cfb upstream.
+Upstream commit a02dcde595f7 ("Input: touchscreen - avoid bitwise vs
+logical OR warning") was applied as commit f6e9e7be9b80 ("Input:
+touchscreen - avoid bitwise vs logical OR warning") in linux-5.4.y but
+it did not properly account for commit d9265e8a878a ("Input:
+of_touchscreen - add support for touchscreen-min-x|y"), which means the
+warning mentioned in the commit message is not fully fixed:
 
-Hytera makes a range of digital (DMR) radios. These radios can be
-programmed to a allow a computer to control them over Ethernet over USB,
-either using NCM or RNDIS.
+drivers/input/touchscreen/of_touchscreen.c:78:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/input/touchscreen/of_touchscreen.c:78:17: note: cast one or both operands to int to silence this warning
+drivers/input/touchscreen/of_touchscreen.c:92:17: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+        data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-y",
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/input/touchscreen/of_touchscreen.c:92:17: note: cast one or both operands to int to silence this warning
+2 warnings generated.
 
-This commit adds support for RNDIS for Hytera radios. I tested with a
-Hytera PD785 and a Hytera MD785G. When these radios are programmed to
-set up a Radio to PC Network using RNDIS, an USB interface will be added
-with class 2 (Communications), subclass 2 (Abstract Modem Control) and
-an interface protocol of 255 ("vendor specific" - lsusb even hints "MSFT
-RNDIS?").
+It seems like the 4.19 backport was applied to the 5.4 tree, which did
+not have any conflicts so no issue was noticed at that point.
 
-This patch is similar to the solution of this StackOverflow user, but
-that only works for the Hytera MD785:
-https://stackoverflow.com/a/53550858
+Fix up the backport to bring it more in line with the upstream version
+so that there is no warning.
 
-To use the "Radio to PC Network" functionality of Hytera DMR radios, the
-radios need to be programmed correctly in CPS (Hytera's Customer
-Programming Software). "Forward to PC" should be checked in "Network"
-(under "General Setting" in "Conventional") and the "USB Network
-Communication Protocol" should be set to RNDIS.
-
-Signed-off-by: Thomas Toye <thomas@toye.io>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: f6e9e7be9b80 ("Input: touchscreen - avoid bitwise vs logical OR warning")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/rndis_host.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/input/touchscreen/of_touchscreen.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/usb/rndis_host.c
-+++ b/drivers/net/usb/rndis_host.c
-@@ -620,6 +620,11 @@ static const struct usb_device_id	produc
- 				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
- 	.driver_info = (unsigned long) &rndis_poll_status_info,
- }, {
-+	/* Hytera Communications DMR radios' "Radio to PC Network" */
-+	USB_VENDOR_AND_INTERFACE_INFO(0x238b,
-+				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
-+	.driver_info = (unsigned long)&rndis_info,
-+}, {
- 	/* RNDIS is MSFT's un-official variant of CDC ACM */
- 	USB_INTERFACE_INFO(USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
- 	.driver_info = (unsigned long) &rndis_info,
+--- a/drivers/input/touchscreen/of_touchscreen.c
++++ b/drivers/input/touchscreen/of_touchscreen.c
+@@ -77,8 +77,8 @@ void touchscreen_parse_properties(struct
+ 	axis = multitouch ? ABS_MT_POSITION_X : ABS_X;
+ 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-x",
+ 						input_abs_get_min(input, axis),
+-						&minimum) |
+-		       touchscreen_get_prop_u32(dev, "touchscreen-size-x",
++						&minimum);
++	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-size-x",
+ 						input_abs_get_max(input,
+ 								  axis) + 1,
+ 						&maximum);
+@@ -91,8 +91,8 @@ void touchscreen_parse_properties(struct
+ 	axis = multitouch ? ABS_MT_POSITION_Y : ABS_Y;
+ 	data_present = touchscreen_get_prop_u32(dev, "touchscreen-min-y",
+ 						input_abs_get_min(input, axis),
+-						&minimum) |
+-		       touchscreen_get_prop_u32(dev, "touchscreen-size-y",
++						&minimum);
++	data_present |= touchscreen_get_prop_u32(dev, "touchscreen-size-y",
+ 						input_abs_get_max(input,
+ 								  axis) + 1,
+ 						&maximum);
 
 

@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA4D489549
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2DF489551
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243005AbiAJJfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:35:44 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57422 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242952AbiAJJfk (ORCPT
+        id S243077AbiAJJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:36:19 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:6280 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243047AbiAJJfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:35:40 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 87CB01F398;
-        Mon, 10 Jan 2022 09:35:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641807337; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sizo3rC1sGmkVBeFS1L7qMfzgPXpZrS3YdS+cYJGvCI=;
-        b=WXrQ3prBZpjmS980/GSIwfwUgLCg94tGn2x012O1oLBNKOVTJzEDwUK04LdLmMSt+CAYts
-        mdakGnV5wHBYbz17gBLYfogWdpsECK9TtfV8dWiY++MKnDH4OJFmiHhAhpiI28XXSk3119
-        atzJFFeGhuNnzAIPHHgdFBMSHPtbKeU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641807337;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sizo3rC1sGmkVBeFS1L7qMfzgPXpZrS3YdS+cYJGvCI=;
-        b=lY5iBfNZTuxtNpP08pSM+Pbxf+IFq6nWp7IDTbBDnD3LzR6HXdLKuB3P5l8A9FQNv961Ut
-        vOPoLBfaOfRIIABg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7131F13CAF;
-        Mon, 10 Jan 2022 09:35:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id C4k7Gun922EXMwAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 09:35:37 +0000
-Date:   Mon, 10 Jan 2022 10:35:40 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for v5.17
-Message-ID: <Ydv97EG//cs7Xo99@zn.tnic>
+        Mon, 10 Jan 2022 04:35:55 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 10 Jan
+ 2022 17:35:51 +0800
+Message-ID: <a19771e6-d1d4-d1ef-9819-21e2147aad16@amlogic.com>
+Date:   Mon, 10 Jan 2022 17:35:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V4 0/5] the UART driver compatible with
+Content-Language: en-US
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220110085604.18042-1-yu.tu@amlogic.com>
+ <1f4b9288-c7ff-c895-425c-187d058642b9@baylibre.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <1f4b9288-c7ff-c895-425c-187d058642b9@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Neil,
+	Thank you very much for your reply.
 
-please pull the collected pile of EDAC updates for v5.17.
-
-Thx.
-
----
-
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
-
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.17_rc1
-
-for you to fetch changes up to da0119a9123c73269657fc61f537223d6affef02:
-
-  Merge branches 'edac-misc' and 'edac-amd64' into edac-updates-for-v5.17 (2022-01-10 10:07:00 +0100)
-
-----------------------------------------------------------------
-- Add support for version 3 of the Synopsys DDR controller to synopsys_edac
-
-- Add support for DRR5 and new models 0x10-0x1f and 0x50-0x5f of AMD
-  family 0x19 CPUs to amd64_edac
-
-- The usual set of fixes and cleanups
-
-----------------------------------------------------------------
-Borislav Petkov (1):
-      Merge branches 'edac-misc' and 'edac-amd64' into edac-updates-for-v5.17
-
-Colin Ian King (1):
-      EDAC/sb_edac: Remove redundant initialization of variable rc
-
-Dinh Nguyen (4):
-      EDAC/synopsys: Use the quirk for version instead of ddr version
-      EDAC/synopsys: Add support for version 3 of the Synopsys EDAC DDR
-      EDAC/synopsys: Enable the driver on Intel's N5X platform
-      dt-bindings: memory: Add entry for version 3.80a
-
-Jason Wang (1):
-      RAS/CEC: Remove a repeated 'an' in a comment
-
-Marc Bevand (1):
-      EDAC/amd64: Add support for family 19h, models 50h-5fh
-
-Randy Dunlap (1):
-      EDAC/sifive: Fix non-kernel-doc comment
-
-Yazen Ghannam (2):
-      EDAC: Add RDDR5 and LRDDR5 memory types
-      EDAC/amd64: Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh
-
- .../memory-controllers/synopsys,ddrc-ecc.yaml      |  1 +
- drivers/edac/Kconfig                               |  2 +-
- drivers/edac/amd64_edac.c                          | 36 ++++++++++++++-
- drivers/edac/amd64_edac.h                          |  8 +++-
- drivers/edac/edac_mc.c                             |  2 +
- drivers/edac/sb_edac.c                             |  2 +-
- drivers/edac/sifive_edac.c                         |  2 +-
- drivers/edac/synopsys_edac.c                       | 52 ++++++++++++++++++----
- drivers/ras/cec.c                                  |  2 +-
- include/linux/edac.h                               |  6 +++
- 10 files changed, 98 insertions(+), 15 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+On 2022/1/10 17:27, Neil Armstrong wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> Hi,
+> 
+> On 10/01/2022 09:55, Yu Tu wrote:
+>> Using the common Clock code to describe the UART baud rate
+>> clock makes it easier for the UART driver to be compatible
+>> with the baud rate requirements of the UART IP on different
+>> meson chips. Add Meson S4 SoC compatible.
+>>
+>> Yu Tu (5):
+>>    dt-bindings: serial: meson: Drop compatible = amlogic,meson-gx-uart.
+>>    tty: serial: meson: Request the register region in meson_uart_probe()
+>>    tty: serial: meson: The UART baud rate calculation is described using
+>>      the common clock code.
+>>    tty: serial: meson: Make the bit24 and bit [26,27] of the UART_REG5
+>>      register writable
+>>    tty: serial: meson: Added S4 SOC compatibility.
+> 
+> Weird, the subjects are fine in the cover letter but are all truncated in the email thread:
+> [PATCH V4 0/5] the UART driver compatible with
+> [PATCH V4 1/5] dt-bindings: serial: meson: Drop
+> [PATCH V4 2/5] tty: serial: meson: Request the register
+> ...
+> Only the last one is OK.
+> 
+I saw the subject was a little long, I changed it manually, do I need to 
+regenerate and send?
+> 
+>>
+>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
+>> discussed in the email
+>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
+>> the DTS before it can be deleted
+>> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
+>> in the email.
+>>
+>> Link:https://lore.kernel.org/linux-amlogic/20211230102110.3861-4-yu.tu@amlogic.com/
+>>
+>>   .../bindings/serial/amlogic,meson-uart.yaml   |  10 +-
+>>   drivers/tty/serial/meson_uart.c               | 244 ++++++++++++------
+>>   2 files changed, 177 insertions(+), 77 deletions(-)
+>>
+> 

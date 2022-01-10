@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DA048A377
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A2148A378
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345656AbiAJXN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:13:28 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45798 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242143AbiAJXN1 (ORCPT
+        id S1345666AbiAJXOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:14:01 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45954 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242143AbiAJXN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:13:27 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AM2g4I006099;
-        Mon, 10 Jan 2022 23:13:13 GMT
+        Mon, 10 Jan 2022 18:13:59 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AMFoPM027207;
+        Mon, 10 Jan 2022 23:13:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=nL1zNfOtg2xDTBWto4WY5EGHjN9yJR41TReQXGIiyc4=;
- b=hVOxYeCQsYN+jaQjYY3bCrj0SdV4aQATLEwEM9TMZPO196mnKkmd0xma7u8UfeR4MA3t
- ibV8uRDg3T6O771On97DoqEmJCm/HTmtaG8ILiMhs9cIEa/DrC7W5pYL9RSIKflqX1ni
- KCp+X/evzpyIeLlmJ7krTV0QfqYtMr8EV4DAGup+tCHdEB7+lFKJj0mQWss8Mm3jZSnt
- H4bpB0C8uKreASI5Fp3vAG2qMcy1W1ASvjIjgQSbpFRNlaAJaPac11Hum7Wl6SkDWkDq
- m7L4CY50LU8V23PUfQw5pucT1V8+OJ4TJdFiyDSBtzEEBbgHdy9E0t60v24tjlzFl/DI pg== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm5s74d4-1
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=D8siIzkqJoeELYJGDLZe7vaow3udbOOslyt1pFw8ES8=;
+ b=k67tpk/hY5mae+2V7Uo+WRuHf3Dmwrs1YliXvyv14pdPTsZgp/Dzd+ZmmiP3QLAxfaEq
+ dXrDY8p8KK7B5MMU843LnHMkdID1A0J5uqeb8SiK8sBjmwMIfAep8YLEiung8xVYHN3O
+ DTz274+jDI7f53LXv3AhusODNFl0qjEbfJNiFRboZH7IeIVaiClhrZikcGdLLp43qjsm
+ W5GVHIKasAqBYWSrPq/ahbKWjhGqvCvrqWb/z3pCIsIZtr/OIgm6t+9D36TMOq0Uj8TY
+ mch+Nec0OBZ6pZ84jcmKlbnqKg6MUhjya2AKvDZi7UiRIUe5/YIA/64gXPXZRS8XoU4p uQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmjee4yv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 23:13:12 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ANC3Jl026832;
-        Mon, 10 Jan 2022 23:13:11 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma01dal.us.ibm.com with ESMTP id 3df28a10a0-1
+        Mon, 10 Jan 2022 23:13:48 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ANBiFw006853;
+        Mon, 10 Jan 2022 23:13:47 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma02dal.us.ibm.com with ESMTP id 3df28a0y51-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 23:13:11 +0000
+        Mon, 10 Jan 2022 23:13:47 +0000
 Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20AND8Er34079008
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ANDkA430277904
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 23:13:08 GMT
+        Mon, 10 Jan 2022 23:13:46 GMT
 Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31630B2068;
-        Mon, 10 Jan 2022 23:13:08 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 7B05AB2065;
+        Mon, 10 Jan 2022 23:13:46 +0000 (GMT)
 Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80BADB2067;
-        Mon, 10 Jan 2022 23:13:07 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id B6DC1B2064;
+        Mon, 10 Jan 2022 23:13:45 +0000 (GMT)
 Received: from [9.211.117.94] (unknown [9.211.117.94])
         by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jan 2022 23:13:07 +0000 (GMT)
-Message-ID: <e4435a87-da52-e781-4833-c7095a890275@linux.ibm.com>
-Date:   Mon, 10 Jan 2022 17:13:06 -0600
+        Mon, 10 Jan 2022 23:13:45 +0000 (GMT)
+Message-ID: <82083174-fccb-a9e2-616f-7a706958e2da@linux.ibm.com>
+Date:   Mon, 10 Jan 2022 17:13:45 -0600
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH 1/2] fsi: scom: Fix error handling
+Subject: Re: [PATCH 2/2] fsi: scom: Remove retries in indirect scoms
 Content-Language: en-US
 To:     Joel Stanley <joel@jms.id.au>, Jeremy Kerr <jk@ozlabs.org>,
         Alistar Popple <alistair@popple.id.au>
@@ -60,53 +61,42 @@ Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Greg KH <gregkh@linuxfoundation.org>
 References: <20211207033811.518981-1-joel@jms.id.au>
- <20211207033811.518981-2-joel@jms.id.au>
+ <20211207033811.518981-3-joel@jms.id.au>
 From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20211207033811.518981-2-joel@jms.id.au>
+In-Reply-To: <20211207033811.518981-3-joel@jms.id.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LI1Ggpa-NFf0UnhjiqFzGvQSEYUtr-yQ
-X-Proofpoint-ORIG-GUID: LI1Ggpa-NFf0UnhjiqFzGvQSEYUtr-yQ
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: a-k1DRH2rNje-KbDslh399ah-GnPtvmF
+X-Proofpoint-ORIG-GUID: a-k1DRH2rNje-KbDslh399ah-GnPtvmF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-10_10,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- adultscore=0 clxscore=1011 impostorscore=0 spamscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201100148
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201100148
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 12/6/21 21:38, Joel Stanley wrote:
-> SCOM error handling is made complex by trying to pass around two bits of
-> information: the function return code, and a status parameter that
-> represents the CFAM error status register.
+> In commit f72ddbe1d7b7 ("fsi: scom: Remove retries") the retries were
+> removed from get and put scoms. That patch missed the retires in get and
+> put indirect scom.
 >
-> The commit f72ddbe1d7b7 ("fsi: scom: Remove retries") removed the
-> "hidden" retries in the SCOM driver, in preference of allowing the
-> calling code (userspace or driver) to decide how to handle a failed
-> SCOM. However it introduced a bug by attempting to be smart about the
-> return codes that were "errors" and which were ok to fall through to the
-> status register parsing.
+> For the same reason, remove them from the scom driver to allow the
+> caller to decide to retry.
 >
-> We get the following errors:
+> This removes the following special case which would have caused the
+> retry code to return early:
 >
->   - EINVAL or ENXIO, for indirect scoms where the value is invalid
->   - EINVAL, where the size or address is incorrect
->   - EIO or ETIMEOUT, where FSI write failed (aspeed master)
->   - EAGAIN, where the master detected a crc error (GPIO master only)
->   - EBUSY, where the bus is disabled (GPIO master in external mode)
+>   -       if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
+>   -               return 0;
 >
-> In all of these cases we should fail the SCOM read/write and return the
-> error.
->
-> Thanks to Dan Carpenter for the detailed bug report.
+> I believe this case is handled.
 
 
 Reviewed-by: Eddie James <eajames@linux.ibm.com>
@@ -114,32 +104,85 @@ Reviewed-by: Eddie James <eajames@linux.ibm.com>
 
 >
 > Fixes: f72ddbe1d7b7 ("fsi: scom: Remove retries")
-> Link: https://lists.ozlabs.org/pipermail/linux-fsi/2021-November/000235.html
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 > Signed-off-by: Joel Stanley <joel@jms.id.au>
 > ---
->   drivers/fsi/fsi-scom.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/fsi/fsi-scom.c | 41 +++++++++++++++--------------------------
+>   1 file changed, 15 insertions(+), 26 deletions(-)
 >
 > diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-> index da1486bb6a14..3b427f7e9027 100644
+> index 3b427f7e9027..bcb756dc9866 100644
 > --- a/drivers/fsi/fsi-scom.c
 > +++ b/drivers/fsi/fsi-scom.c
-> @@ -289,7 +289,7 @@ static int put_scom(struct scom_device *scom, uint64_t value,
->   	int rc;
+> @@ -145,7 +145,7 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
+>   				   uint64_t addr, uint32_t *status)
+>   {
+>   	uint64_t ind_data, ind_addr;
+> -	int rc, retries, err = 0;
+> +	int rc, err;
 >   
->   	rc = raw_put_scom(scom, value, addr, &status);
-> -	if (rc == -ENODEV)
-> +	if (rc)
+>   	if (value & ~XSCOM_DATA_IND_DATA)
+>   		return -EINVAL;
+> @@ -156,19 +156,14 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
+>   	if (rc || (*status & SCOM_STATUS_ANY_ERR))
 >   		return rc;
 >   
->   	rc = handle_fsi2pib_status(scom, status);
-> @@ -308,7 +308,7 @@ static int get_scom(struct scom_device *scom, uint64_t *value,
->   	int rc;
+> -	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
+> -		rc = __get_scom(scom, &ind_data, addr, status);
+> -		if (rc || (*status & SCOM_STATUS_ANY_ERR))
+> -			return rc;
+> +	rc = __get_scom(scom, &ind_data, addr, status);
+> +	if (rc || (*status & SCOM_STATUS_ANY_ERR))
+> +		return rc;
 >   
->   	rc = raw_get_scom(scom, value, addr, &status);
-> -	if (rc == -ENODEV)
-> +	if (rc)
+> -		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
+> -		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+> -		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
+> -			return 0;
+> +	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
+> +	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+>   
+> -		msleep(1);
+> -	}
+> -	return rc;
+> +	return 0;
+>   }
+>   
+>   static int put_indirect_scom_form1(struct scom_device *scom, uint64_t value,
+> @@ -188,7 +183,7 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
+>   				   uint64_t addr, uint32_t *status)
+>   {
+>   	uint64_t ind_data, ind_addr;
+> -	int rc, retries, err = 0;
+> +	int rc, err;
+>   
+>   	ind_addr = addr & XSCOM_ADDR_DIRECT_PART;
+>   	ind_data = (addr & XSCOM_ADDR_INDIRECT_PART) | XSCOM_DATA_IND_READ;
+> @@ -196,21 +191,15 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
+>   	if (rc || (*status & SCOM_STATUS_ANY_ERR))
 >   		return rc;
 >   
->   	rc = handle_fsi2pib_status(scom, status);
+> -	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
+> -		rc = __get_scom(scom, &ind_data, addr, status);
+> -		if (rc || (*status & SCOM_STATUS_ANY_ERR))
+> -			return rc;
+> -
+> -		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
+> -		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+> -		*value = ind_data & XSCOM_DATA_IND_DATA;
+> +	rc = __get_scom(scom, &ind_data, addr, status);
+> +	if (rc || (*status & SCOM_STATUS_ANY_ERR))
+> +		return rc;
+>   
+> -		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
+> -			return 0;
+> +	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
+> +	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
+> +	*value = ind_data & XSCOM_DATA_IND_DATA;
+>   
+> -		msleep(1);
+> -	}
+> -	return rc;
+> +	return 0;
+>   }
+>   
+>   static int raw_put_scom(struct scom_device *scom, uint64_t value,

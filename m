@@ -2,120 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FA2489DFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ABA489E04
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbiAJREk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237655AbiAJREj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:04:39 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C978AC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:04:38 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g11so46672989lfu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OucdhFM6jmRjO7w+OrNatwgwUpKYYH6g9Yld4XK2Xmc=;
-        b=g1AU2ibnkdn+3RKmRbjZoA1vqG851dJHx0gr8btWYcOcLUTzGwsXLY3UO/bT6XQmbf
-         Pzc9ywoA8RT3kjR4zow5XwhZJQFBermQ0sVfsz6NFY8cZM2KuGlJikJAERPMjPwpx0ji
-         hjFcUujoeKs1BHcc5f5sB+V7mkL1A8KQxxFjjA/KSY+KqaZOmB6d3LD/Pl3rMuMxuo3x
-         sGCcdrGkbdNYjnKD/T6qYm5SVcD0UAT8dHjouwt83j4DfbrZkZfKp2p6IVuQcenLr7hB
-         kG681C+JY/4xwdm90Lk3TyiQYB4A5Q73twENVIJ/H/IAJ7ixYxPbiWZlmPupxjH0x+2W
-         wACg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OucdhFM6jmRjO7w+OrNatwgwUpKYYH6g9Yld4XK2Xmc=;
-        b=DDNw7SoLA8RZIWyJqF4wid6RQ4H8atJz30PdIYYeugfbMSWPdosR4Kl4sfm4LA4DG/
-         5urFL3OenSS0RxmHAp/XUgU9EmT3Krq5odrJW+SQ0ogzBVmeUIPJ1Yk+WY23wkOyj+BM
-         aRilRtyZEM0mnQnNf5Ot1ghZ6YKKUTcQYhOEHNolJN9KofdDusTdnjUYKgCDFC06Wc9Y
-         aSUeIZTP9DcMKwT8slPJ/Yjq2HsFPzckwCVD1XlZn5OQalzdNIuhGAjP4XM9sJMtiDlX
-         V7H3SOzeoO+0TegA/CB8qZdASEiiwaSGi+8V5uf5AG4lvvEow4esxkKL2jT1aDVGzW9u
-         eNow==
-X-Gm-Message-State: AOAM530Bl/+ROq1RXL2WWnMPIEqFTMRQGzP06zidDcQtSZC8gZBLbMpQ
-        23uMB5zHA68HlpOg9bw0ilP40w==
-X-Google-Smtp-Source: ABdhPJzwHX4zS4POTMojF63lfj+cMn0gL12hekHszIWUXM6zc+DtvhI8YpaygfUI77VoNFID8vpetw==
-X-Received: by 2002:a05:651c:994:: with SMTP id b20mr291726ljq.70.1641834276991;
-        Mon, 10 Jan 2022 09:04:36 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id y7sm1079782lfb.272.2022.01.10.09.04.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 09:04:36 -0800 (PST)
-Message-ID: <0f7d5c44-2119-97ba-5a3e-7f0f40d41605@cogentembedded.com>
-Date:   Mon, 10 Jan 2022 20:04:35 +0300
+        id S237909AbiAJRII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:08:08 -0500
+Received: from mga04.intel.com ([192.55.52.120]:8331 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237655AbiAJRIH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 12:08:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641834487; x=1673370487;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+inpjhusQ191r/uaq3Nr5tdFQJRGkxrtus5P5NLh/H8=;
+  b=f1K2tfTUmGWqrNOh8fcw2ujqWXT4HoZuk09caKO/znicaSipe4UCCS1W
+   d0ykGnoA0d7rgTSL9+MkAs8c5x7jzhQh4opXA5wofsHKhbIXlWdqMiwYN
+   Qo/V5swOq+oUsVZJcUOaQNywKppuF5x2walNvackQRVMyPx4jpUAYc0ez
+   sVLPs/KMCtCwQiZ8PMUiF1VRYniICZ91vlbBlkpVEmZEUMQZdhg4wHDqi
+   oN8ToApAYSthyN9laobiJ/Ob8ZsL9svv2HCE9neoDcDqFl23pqhprLfrm
+   MXYP7aHmtvjLj2PFa2mHhsftWFMmG1q97X5su+ARG5UgvVatzPUeWxi2s
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="242083836"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="242083836"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 09:08:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="690639374"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 09:08:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6y9N-0003lW-FY; Mon, 10 Jan 2022 17:08:05 +0000
+Date:   Tue, 11 Jan 2022 01:07:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vijayanand Jitta <vjitta@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Yogesh Lal <quic_ylal@quicinc.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 1117/2545] (.rodata+0x0): multiple definition of `__crc_si_swapinfo';
+ arch/s390/appldata/appldata_base.o:(.rodata+0x0): first defined here
+Message-ID: <202201110124.G2WaFCMn-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3] iio: st_sensors: don't always auto-enable I2C and SPI
- interface drivers
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220110152432.3799227-1-nikita.yoush@cogentembedded.com>
- <YdxWZEz1GXXxQ+7h@smile.fi.intel.com>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-In-Reply-To: <YdxWZEz1GXXxQ+7h@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   23c5cc871466520099bda5e999e14b98dd8f44da
+commit: eb03ee118ab0680aebda709b5c3e32a3e3b4c99c [1117/2545] ANDROID: mm: Export si_swapinfo
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20220111/202201110124.G2WaFCMn-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/eb03ee118ab0680aebda709b5c3e32a3e3b4c99c
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout eb03ee118ab0680aebda709b5c3e32a3e3b4c99c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-10.01.2022 18:53, Andy Shevchenko wrote:
-> On Mon, Jan 10, 2022 at 06:24:32PM +0300, Nikita Yushchenko wrote:
->> This patch makes I2C and SPI interface drivers for STMicroelectronics
->> sensor chips individually selectable via Kconfig.
->>
->> The default is kept unchanged - I2C and SPI interface drivers are still
->> selected by default if the corresponding bus support is available.
->>
->> However, the patch makes it possible to explicitly disable drivers
->> that are not needed for a particular target.
-> 
-> ...
-> 
-> The same question as per v2.
-> 
->> +	default I2C && IIO_ST_ACCEL_3AXIS
-> 
-> What will be the results when I2C=y and the second ones =m?
+All errors (new ones prefixed by >>):
 
-$ grep CONFIG_I2C= .config
-CONFIG_I2C=y
-$ grep IIO_ST_ACCEL .config
-CONFIG_IIO_ST_ACCEL_3AXIS=m
-CONFIG_IIO_ST_ACCEL_I2C_3AXIS=m
-# CONFIG_IIO_ST_ACCEL_SPI_3AXIS is not set
+   s390-linux-ld: mm/swapfile.o: in function `__crc_si_swapinfo':
+>> (.rodata+0x0): multiple definition of `__crc_si_swapinfo'; arch/s390/appldata/appldata_base.o:(.rodata+0x0): first defined here
 
-$ vim .config
-<remove CONFIG_IIO_ST_ACCEL_I2C_3AXIS line>
-$ grep IIO_ST_ACCEL .config
-CONFIG_IIO_ST_ACCEL_3AXIS=m
-# CONFIG_IIO_ST_ACCEL_SPI_3AXIS is not set
-
-$ make menuconfig
-<immediately exit>
-
-$ grep IIO_ST_ACCEL .config
-CONFIG_IIO_ST_ACCEL_3AXIS=m
-CONFIG_IIO_ST_ACCEL_I2C_3AXIS=m
-# CONFIG_IIO_ST_ACCEL_SPI_3AXIS is not set
-
-CONFIG_IIO_ST_ACCEL_I2C_3AXIS was set to =m by default. I believe this is correct behavior.
-
-Nikita
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

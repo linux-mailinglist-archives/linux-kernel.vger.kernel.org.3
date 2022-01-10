@@ -2,171 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F9648A2A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A705E48A2AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345356AbiAJWVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S1345390AbiAJWWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242105AbiAJWVx (ORCPT
+        with ESMTP id S1345367AbiAJWWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:21:53 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BAEC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:21:53 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id pj2so14186436pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:21:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dpEgaA7tQQxRTXpViippoUOAKxED1oc92U+eN95LNGs=;
-        b=Hn++l73OqhxLfme2ErG2NqRu9ncAa+tUVLdIKUfHhZxaidp4c7iue3e8A5v7PyIFIG
-         QmO+PYhfi5xJoqAWLdAvi3zyIXYfDeLbcd2v8rWPgHzM0Gkk5OjEkoKCiCJCUiCorRmJ
-         c9CCKtbz4SERrhgz1qeXtCFRuQVC9YbVKmqNu1SnfNWoLFSo4BTJGzP99+iNa1NJfvTn
-         3g7MwaTneEG1gIRuUaF+CbS8VTj0/L2LkNgVSy6ILJhHv7EPCX8ITbeOh3BWo+nuIXmP
-         zEhsFaVwFTD0zo2zi39CbHch1gVGB47ATJVfKbdItybJZnCPl2hB6hK55QIIM76/OEWf
-         A1tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dpEgaA7tQQxRTXpViippoUOAKxED1oc92U+eN95LNGs=;
-        b=ZH2RPHQph2Mc2LznXlHOk/N93w/xXbjBu962mqAdd11+aiqXJQkqMvBRSpzMDT3ps6
-         qaCtEq42ywHk/5zl8s3rS0qdW1bQx7F06pOg5r5HIGHgntlIn3pvnZvrCb0Rcjat+gIc
-         WhKGgkxrwIcF4QRvObG13TG3oQvepv11RwYLE4FcUEEZoEYA/fhyjm1q4l6AFZ1tuUa4
-         SgnP9WUEdlTxmso47LHgbbkDEGm6bPDNjBtLC55Jor6EWgl7ZZTaCElDoX/dQQdVaC+J
-         21Pk0dySnW13LwEoa5gO7Lo6YCC2oIuGM4DwMQyd0LhqiiFDepGh3IqUyPZMtxz0ZckI
-         T//w==
-X-Gm-Message-State: AOAM532j3TFqfH3vD1GkfjjSB/YyZy4/+umtWCfJOiOJICV2NDxj7WRW
-        XdfXQABgmWDyBaQAu4axUa+JOOu2x7mEjoAwN/vptQI65IK73flb
-X-Google-Smtp-Source: ABdhPJzU68WaUrCxAJr0XWxbBe2huF8ZD7GWtX8Nh04kLOHZS3nCqLkZsig9aqAB5u3s7goLMXyUd0Ng5bYukv2mPdM=
-X-Received: by 2002:a62:80c2:0:b0:4bb:47a:6983 with SMTP id
- j185-20020a6280c2000000b004bb047a6983mr1823271pfd.24.1641853312838; Mon, 10
- Jan 2022 14:21:52 -0800 (PST)
+        Mon, 10 Jan 2022 17:22:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE29C061751;
+        Mon, 10 Jan 2022 14:22:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01D77B8180E;
+        Mon, 10 Jan 2022 22:22:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956F2C36AEF;
+        Mon, 10 Jan 2022 22:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641853327;
+        bh=nZkaYKHFOdV7Q8Fp1n6WNBX4Yk9/H6nzbskM4qlf/e0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NY7FymS14WUzj4avmFazuFYRl/oGGUdTlb8lyrAZnnR0NTHtakr7wULLh4+mu1rRc
+         E/Hxc5PfXx6YYMfO86+C9Y999/jjRQ1bBzDZSX2cZDkPaHe0zC2NlYce28rNldBEnM
+         HUjg6DXge6gYWK6A7o8aNRXUsi5cDyVB9ovT0uG/iLMGOHHEoEMtH3fcR/x5gBlkAE
+         3mVJsRxRMMXnEcrEesZkW5IagVomgfwZwbGuUmU89cV0m2XX7OsStiCM7kAeH/fjUV
+         U1SI2VwytyjVvR+wjz3c1XHo48sScyfi2sTPHx/7OCcIPDj627MxDsvOS0rUG4Xupw
+         Rbi2NRk7S4lSg==
+Received: by mail-yb1-f173.google.com with SMTP id d1so42100186ybh.6;
+        Mon, 10 Jan 2022 14:22:07 -0800 (PST)
+X-Gm-Message-State: AOAM532xPMX9mSXg4VuLCRml4STKeNzcyMWskuKkxysvdY/EkLG5Zpp8
+        gwSoCovumv6DTA2NQanftJLnE5PYQGg+wVcq5rM=
+X-Google-Smtp-Source: ABdhPJwZH/DyO8E3u0XvP1BAo0vaLRN2AtOZrD/fa3LqP03NFGEPKRurGXJDM2jxiq3cLt7HnKX4H6nKCFqomMgn5wU=
+X-Received: by 2002:a25:8b85:: with SMTP id j5mr2297231ybl.558.1641853326749;
+ Mon, 10 Jan 2022 14:22:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-3-dlatypov@google.com>
-In-Reply-To: <20220108012304.1049587-3-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 10 Jan 2022 17:21:41 -0500
-Message-ID: <CAFd5g45HcdzB_CTNRRpH8BFbBvG0nDS4_6VUj3Tqx8XOuVTNOQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] kunit: move check if assertion passed into the macros
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+References: <20220108051121.28632-1-yichun@openresty.com>
+In-Reply-To: <20220108051121.28632-1-yichun@openresty.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 10 Jan 2022 14:21:55 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5+zCh2ZE6zUq2T=83Z6Ce93z_ojxrqGN9iYN9Qvyq_YQ@mail.gmail.com>
+Message-ID: <CAPhsuW5+zCh2ZE6zUq2T=83Z6Ce93z_ojxrqGN9iYN9Qvyq_YQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: core: Fix the call ins's offset s32 -> s16 truncation
+To:     "Yichun Zhang (agentzh)" <yichun@openresty.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 8:23 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Jan 7, 2022 at 9:11 PM Yichun Zhang (agentzh)
+<yichun@openresty.com> wrote:
 >
-> Currently the code always calls kunit_do_assertion() even though it does
-> nothing when `pass` is true.
+> The BPF interpreter always truncates the BPF CALL instruction's 32-bit
+> jump offset to 16-bit. Large BPF programs run by the interpreter often
+> hit this issue and result in weird behaviors when jumping to the wrong
+> destination instructions.
 >
-> This change moves the `if(!(pass))` check into the macro instead
-> and renames the function to kunit_failed_assertion().
-> I feel this a  bit easier to read and understand.
+> The BPF JIT compiler does not have this bug.
 >
-> This has the potential upside of avoiding a function call that does
-> nothing most of the time (assuming your tests are passing) but comes
-> with the downside of generating a bit more code and branches.
->
-> This also means we don't have to initialize structs that we don't need,
-> which will become a tiny bit more expensive if we switch over to using
-> static variables to try and reduce stack usage. (There's runtime code
-> to check if the variable has been initialized yet or not).
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Fixes: 1ea47e01ad6ea ("bpf: add support for bpf_call to interpreter")
+> Signed-off-by: Yichun Zhang (agentzh) <yichun@openresty.com>
 
-Tiny nit, see below. Otherwise:
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-> ---
->  include/kunit/test.h | 20 ++++++++++----------
->  lib/kunit/test.c     | 13 ++++---------
->  2 files changed, 14 insertions(+), 19 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b26400731c02..690a28dfc795 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -770,18 +770,18 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
->   */
->  #define KUNIT_SUCCEED(test) do {} while (0)
->
-> -void kunit_do_assertion(struct kunit *test,
-> -                       struct kunit_assert *assert,
-> -                       bool pass,
-> -                       const char *fmt, ...);
-> +void kunit_failed_assertion(struct kunit *test,
-> +                           struct kunit_assert *assert,
-> +                           const char *fmt, ...);
-
-Tiny nit: I think this should be kunit_fail_assertion. I think
-functions should be in the active tense, imperative mood since when
-you call a function you are telling it to do something.
-
-Also, do we need to worry about this getting confused with KUNIT_FAIL,
-or KUNIT_FAIL_ASSERTION:
-
-https://elixir.bootlin.com/linux/v5.16/source/include/kunit/test.h#L788
-
-?
-
->  #define KUNIT_ASSERTION(test, pass, assert_class, INITIALIZER, fmt, ...) do {  \
-> -       struct assert_class __assertion = INITIALIZER;                         \
-> -       kunit_do_assertion(test,                                               \
-> -                          &__assertion.assert,                                \
-> -                          pass,                                               \
-> -                          fmt,                                                \
-> -                          ##__VA_ARGS__);                                     \
-> +       if (!(pass)) {                                                         \
-> +               struct assert_class __assertion = INITIALIZER;                 \
-> +               kunit_failed_assertion(test,                                   \
-> +                                      &__assertion.assert,                    \
-> +                                      fmt,                                    \
-> +                                      ##__VA_ARGS__);                         \
-> +       }                                                                      \
->  } while (0)
->
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index c7ed4aabec04..5ad671745483 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -275,16 +275,11 @@ static void __noreturn kunit_abort(struct kunit *test)
->         WARN_ONCE(true, "Throw could not abort from test!\n");
->  }
->
-> -void kunit_do_assertion(struct kunit *test,
-> -                       struct kunit_assert *assert,
-> -                       bool pass,
-> -                       const char *fmt, ...)
-> +void kunit_failed_assertion(struct kunit *test,
-> +                           struct kunit_assert *assert,
-> +                           const char *fmt, ...)
->  {
->         va_list args;
-> -
-> -       if (pass)
-> -               return;
-> -
->         va_start(args, fmt);
->
->         assert->message.fmt = fmt;
-> @@ -297,7 +292,7 @@ void kunit_do_assertion(struct kunit *test,
->         if (assert->type == KUNIT_ASSERTION)
->                 kunit_abort(test);
->  }
-> -EXPORT_SYMBOL_GPL(kunit_do_assertion);
-> +EXPORT_SYMBOL_GPL(kunit_failed_assertion);
->
->  void kunit_init_test(struct kunit *test, const char *name, char *log)
->  {
-> --
-> 2.34.1.575.g55b058a8bb-goog
->
+Acked-by: Song Liu <songliubraving@fb.com>

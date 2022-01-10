@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE796489919
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667D1489908
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbiAJNBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:01:41 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42766 "EHLO
+        id S229803AbiAJNBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:01:04 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42786 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiAJM7z (ORCPT
+        with ESMTP id S231656AbiAJM7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 07:59:55 -0500
-Date:   Mon, 10 Jan 2022 12:59:51 -0000
+Date:   Mon, 10 Jan 2022 12:59:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641819592;
+        s=2020; t=1641819594;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dcwCfiu/fiSGKnBT2ZOYS66fD907lvVbHbp9ziG1DMA=;
-        b=Y/mPzwyhiulO8cbGfyJNNMkSXDDQOUuhqDCOWc6nUNoZFpHKSELHcwkSLtJg2elivJZDP4
-        ZzW8+BNFo+K7ZrP8DQPRWvF1okxEOXvoiAUNLPvvqBh1J2Q+tAXrisC6R9Z5x7fNLo0qT/
-        vnQbzexXkk7oP//D/mktfnumLr3HHL2/jFoqH4jAfD3iXAPr0pM2wV05JfwwHFCrC+rSKO
-        bPBdrXucluhfWFSIxJSV9hBp0Hz2RFSo5RD1sPf/IXEdeFJE8TryBiYYSAQQRpIV7JeDWJ
-        Da5sHaf1nmLNT4b3xKbC8rSqPixABXa7oYAiVSA0KaHEOOJJ48AVai9iMKOJpw==
+        bh=UjeqJ4GSwfqdPtR2mocifLg0mCvhNuJqOxta26ebrDY=;
+        b=rbf8cSN3gfRlCZ3WxvVFEq9DvKcFTT1tN84QInp5uTqZUkxEa2gHY+uCZYf0nyDdzlGvVN
+        yXvOjL/c++kQLTvp4vxfVCaXkvABueCJDgNiixUU/3MRwcafvGDi/x2nAWB+gwa3yKVME1
+        2r2A2FYLGf6dCi14QjRkdY38qXJ+VPgQ4Sguj4MnG1TmWSFClrYcPPBnpDvOErtEUI5AhG
+        DJVBk4JHPmSChx5APTkvPl9nnhtcm/Zyf3WAqEZt5RkMTN9GJORkUGzhDFtozod+X6NKm/
+        gEcRmhxyAV1PscRofuF2qYn5tGlGfuHehZ2M3taLXtcmrvw3r76kw63fa2Hgow==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641819592;
+        s=2020e; t=1641819594;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dcwCfiu/fiSGKnBT2ZOYS66fD907lvVbHbp9ziG1DMA=;
-        b=iBwIgCHZ1ZDxV80u0uZBeZvwOUUnYcjgFVpTSBelgSYjLUW6lQyTWq/4+FBqkxTFldS/V7
-        du+yVJhFt8KHv1Cw==
-From:   "tip-bot2 for Romain Perier" <tip-bot2@linutronix.de>
+        bh=UjeqJ4GSwfqdPtR2mocifLg0mCvhNuJqOxta26ebrDY=;
+        b=Hj7OoFcxR5u7MMo/2mNXCxqRpvGjWel4bsGQ7lQ8j8oi8SWynrcjusjzmaT840WY3sxP5o
+        9jvr0oEAleMaNkDA==
+From:   "tip-bot2 for Drew Fustini" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/msc313e: Add support for
- ssd20xd-based platforms
-Cc:     Romain Perier <romain.perier@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
+Subject: [tip: timers/core] clocksource/drivers/pistachio: Fix
+ -Wunused-but-set-variable warning
+Cc:     kernel test robot <lkp@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Drew Fustini <dfustini@baylibre.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211217195727.8955-3-romain.perier@gmail.com>
-References: <20211217195727.8955-3-romain.perier@gmail.com>
+In-Reply-To: <20211123192524.1038304-1-dfustini@baylibre.com>
+References: <20211123192524.1038304-1-dfustini@baylibre.com>
 MIME-Version: 1.0
-Message-ID: <164181959194.16921.8949016580691527548.tip-bot2@tip-bot2>
+Message-ID: <164181959340.16921.12441384820128333820.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,65 +60,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     e64da64f410cf4f9697e25ab76cdfc679f4fb6db
-Gitweb:        https://git.kernel.org/tip/e64da64f410cf4f9697e25ab76cdfc679f4fb6db
-Author:        Romain Perier <romain.perier@gmail.com>
-AuthorDate:    Fri, 17 Dec 2021 20:57:23 +01:00
+Commit-ID:     0642fb4ba68f7158f7a6d92190b3090cf0c7fac6
+Gitweb:        https://git.kernel.org/tip/0642fb4ba68f7158f7a6d92190b3090cf0c7fac6
+Author:        Drew Fustini <dfustini@baylibre.com>
+AuthorDate:    Tue, 23 Nov 2021 11:25:24 -08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 20 Dec 2021 13:28:39 +01:00
+CommitterDate: Tue, 14 Dec 2021 10:17:36 +01:00
 
-clocksource/drivers/msc313e: Add support for ssd20xd-based platforms
+clocksource/drivers/pistachio: Fix -Wunused-but-set-variable warning
 
-On SSD20X family SoCs the timers are connected to a 432MHz clock instead
-of 12MHz that all the previous chips used. There is no way to reduce or
-divide these clocks in the clktree yet as we do not know exactly where
-the 432MHz clock comes from but it is enabled at boot.
+Variable 'overflow' set but not used, but this is the intended behavior.
+The hardware only updates the counter register after the overflow
+register read. However, the value of overflow is not actually needed.
 
-The SSD20X timers have an input clock divider within the timer itself
-to configure the frequency. timer0 is preconfigured at power up to run
-at 12MHz so it is backwards compatible and doesn't need special handling
-right now. timer1 and timer2 run at 432Mhz at power up so are not
-backward compatible.
-
-This commit adds support for the input clock divider register and sets
-timer1 and timer2 to run at 48Mhz for clockevents.
-
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
-Link: https://lore.kernel.org/r/20211217195727.8955-3-romain.perier@gmail.com
+Link: https://lore.kernel.org/lkml/202111200402.afQsussU-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+Link: https://lore.kernel.org/r/20211123192524.1038304-1-dfustini@baylibre.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/timer-msc313e.c |  9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/clocksource/timer-pistachio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/timer-msc313e.c b/drivers/clocksource/timer-msc313e.c
-index 154e734..54c54ca 100644
---- a/drivers/clocksource/timer-msc313e.c
-+++ b/drivers/clocksource/timer-msc313e.c
-@@ -33,7 +33,9 @@
- #define MSC313E_REG_TIMER_MAX_HIGH	0x0c
- #define MSC313E_REG_COUNTER_LOW		0x10
- #define MSC313E_REG_COUNTER_HIGH	0x14
-+#define MSC313E_REG_TIMER_DIVIDE	0x18
+diff --git a/drivers/clocksource/timer-pistachio.c b/drivers/clocksource/timer-pistachio.c
+index 6f37181..69c069e 100644
+--- a/drivers/clocksource/timer-pistachio.c
++++ b/drivers/clocksource/timer-pistachio.c
+@@ -71,7 +71,8 @@ static u64 notrace
+ pistachio_clocksource_read_cycles(struct clocksource *cs)
+ {
+ 	struct pistachio_clocksource *pcs = to_pistachio_clocksource(cs);
+-	u32 counter, overflow;
++	__maybe_unused u32 overflow;
++	u32 counter;
+ 	unsigned long flags;
  
-+#define MSC313E_CLK_DIVIDER		9
- #define TIMER_SYNC_TICKS		3
- 
- #ifdef CONFIG_ARM
-@@ -179,6 +181,12 @@ static int __init msc313e_clkevt_init(struct device_node *np)
- 	if (ret)
- 		return ret;
- 
-+	if (of_device_is_compatible(np, "sstar,ssd20xd-timer")) {
-+		to->of_clk.rate = clk_get_rate(to->of_clk.clk) / MSC313E_CLK_DIVIDER;
-+		to->of_clk.period = DIV_ROUND_UP(to->of_clk.rate, HZ);
-+		writew(MSC313E_CLK_DIVIDER - 1, timer_of_base(to) + MSC313E_REG_TIMER_DIVIDE);
-+	}
-+
- 	msc313e_clkevt.cpumask = cpu_possible_mask;
- 	msc313e_clkevt.irq = to->of_irq.irq;
- 	to->clkevt = msc313e_clkevt;
-@@ -242,3 +250,4 @@ static int __init msc313e_timer_init(struct device_node *np)
- }
- 
- TIMER_OF_DECLARE(msc313, "mstar,msc313e-timer", msc313e_timer_init);
-+TIMER_OF_DECLARE(ssd20xd, "sstar,ssd20xd-timer", msc313e_timer_init);
+ 	/*

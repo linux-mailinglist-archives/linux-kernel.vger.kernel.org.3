@@ -2,95 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 239834897BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2896C4897B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244993AbiAJLnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:43:21 -0500
-Received: from mga07.intel.com ([134.134.136.100]:47836 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244977AbiAJLlp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:41:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641814905; x=1673350905;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FmoJ3y7OcdqB18NHcTkTeuKKIfdDfKWzmCti7xacieg=;
-  b=J5YOlX5FoBGlk2f4q6FOhwHstLln+woYgH+hSjE1HgpEl2zfjRZW2oSr
-   gfwMgQNvCdZDsS2XvZMNBzbEBsU84GePZb2QZR+ej2sjlu/lGOQamGy+R
-   NtUcC5SStWdRbaI/BKu5iI+CM2jGRm3O+PTY5X+Y/kj01bFlOYArbcuBL
-   OvrTZGoqT7el2Jvy4OoDIYZZruN41qkLHYRTbOuDxj+pGqLuBtNrJEw1d
-   xVBFTp3cvrnRzw8KxsywXkGnn3fF8+LqlnWSv0t6JUJyibWL63dq28/ed
-   wNxF5PAWBcMtab1Y0HNN9WWOJ4fZncPUsp/N+KuMlBVOLvmBHRrBYUsN/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="306563048"
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="306563048"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 03:41:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="690549113"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 03:41:40 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6t3T-00038Q-LQ; Mon, 10 Jan 2022 11:41:39 +0000
-Date:   Mon, 10 Jan 2022 19:40:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li-hao Kuo <lhjeff911@gmail.com>, p.zabel@pengutronix.de,
-        broonie@kernel.org, andyshevchenko@gmail.com, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com, lh.kuo@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: Re: [PATCH v5 1/2] SPI: Add SPI driver for Sunplus SP7021
-Message-ID: <202201101911.hSqY5DkA-lkp@intel.com>
-References: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
+        id S244941AbiAJLlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244875AbiAJLkx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:40:53 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9511AC06173F;
+        Mon, 10 Jan 2022 03:40:52 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n6t2f-000747-Ab; Mon, 10 Jan 2022 12:40:49 +0100
+Message-ID: <4398ddfe-9db4-bf67-902d-e0416b815878@leemhuis.info>
+Date:   Mon, 10 Jan 2022 12:40:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-BS
+To:     Matthias Brugger <mbrugger@suse.com>, linux-doc@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <cover.1641565030.git.linux@leemhuis.info>
+ <f71246e0999520d681c7b35d24f7eed2f53ee2b4.1641565030.git.linux@leemhuis.info>
+ <28b56512-d681-4a3a-98f0-a2eae34a217e@suse.com>
+ <1126ce91-f22b-c397-4d1e-13d290a424a5@leemhuis.info>
+ <8e6f07ef-10fe-381c-3a8d-db497492036c@suse.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [RFC PATCH v2 1/2] docs: add a document about regression handling
+In-Reply-To: <8e6f07ef-10fe-381c-3a8d-db497492036c@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641814852;ff1feeda;
+X-HE-SMSGID: 1n6t2f-000747-Ab
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li-hao,
+On 07.01.22 18:44, Matthias Brugger wrote:
+> On 07/01/2022 17:51, Thorsten Leemhuis wrote:
+>> On 07.01.22 16:37, Matthias Brugger wrote:
+>>> On 07/01/2022 15:21, Thorsten Leemhuis wrote:
+>>>> Create a document explaining various aspects around regression handling
+>>>> and tracking both for users and developers. Among others describe the
+>>>> first rule of Linux kernel development and what it means in practice.
+>>>> Also explain what a regression actually is and how to report one
+>>>> properly. The text additionally provides a brief introduction to the
+>>>> bot
+>>>> the kernel's regression tracker uses to facilitate his work. To sum
+>>>> things up, provide a few quotes from Linus to show how serious he takes
+>>>> regressions.
+>>>>
+>>>> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+>>> [...]
+>>>> +The important bits for people fixing regressions
+>>>> +================================================
+>>>> +
+>>>> +When receiving regression reports by mail, check if the reporter CCed
+>>>> `the
+>>>> +regression mailing list <https://lore.kernel.org/regressions/>`_
+>>>> +(regressions@lists.linux.dev). If not, forward or bounce the report
+>>>> to the Linux
+>>>> +kernel's regression tracker (regressions@leemhuis.info), unless you
+>>>> plan on
+>>>
+>>> I would have expected it to be the same mailing list
+>>> (regressions@lists.linux.dev), is this a typo maybe?
+>>
+>> Thx for taking a look. Hmm. That's possible, but I (and the grep call I
+>> just ran) fail to spot the typo.
+>>
+>> Maybe the wording is to confusing: regressions@lists.linux.dev is the
+>> list, regressions@leemhuis.info is a dedicated email address I (the
+>> kernel's regression tracker) use for regression tracking (which reminds
+>> me: maybe I should ask for a alias like regressions@kernel.org or
+>> regression-tracker@kernel.org).
+> 
+> Yes it's the wording then :)
+> Anyway I just wonder why you we should send the regression to the
+> regressions email list, but only to the tracker email address. For me
+> that's the confusing part. I'd expect to send it to the list as well and
+> the tracker takes it from there. If for any reason someone does not want
+> to send a regression to the list, then he can send it to the tracker
+> directly. That's my understanding of how this works. If that's correct
+> then I'd say we should just explain the difference.
 
-I love your patch! Yet something to improve:
+You comments made be revisit the section and made me spot a few other
+issues I found less than ideal. So I rewrote it over the weekend (more
+than once, to be precise...). I hope this clears things up.
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on pza/reset/next robh/for-next linus/master v5.16]
-[cannot apply to next-20220110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+```
+The important bits for people fixing regressions
+================================================
 
-url:    https://github.com/0day-ci/linux/commits/Li-hao-Kuo/Add-SPI-control-driver-for-Sunplus-SP7021-SoC/20220110-144745
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220110/202201101911.hSqY5DkA-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/53da1eda2d6e7a04e09dcb37a029ec3b384b7afb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Li-hao-Kuo/Add-SPI-control-driver-for-Sunplus-SP7021-SoC/20220110-144745
-        git checkout 53da1eda2d6e7a04e09dcb37a029ec3b384b7afb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+When submitting fixes for regressions, add "Link:" tags pointing to all
+places where the issue was reported, as tools like the Linux kernel
+regression bot 'regzbot' heavily rely on these; these pointers are also
+of great value for people looking into the issue some time in the
+future, as explained in `Documentation/process/submitting-patches.rst`
+and :ref:`Documentation/process/5.Posting.rst <development_posting>`::
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+       Link:
+https://lore.kernel.org/r/30th.anniversary.repost@klaava.Helsinki.FI/
+       Link: https://bugzilla.kernel.org/show_bug.cgi?id=1234567890
 
-All errors (new ones prefixed by >>):
+Let the Linux kernel's regression tracker and all other subscribers of
+the `regression mailing list <https://lore.kernel.org/regressions/>`_
+(regressions@lists.linux.dev) quickly known about newly reported
+regressions:
 
->> make[3]: *** No rule to make target 'drivers/spi/spi-sunplus-sp7021.o', needed by 'drivers/spi/built-in.a'.
-   make[3]: Target '__build' not remade because of errors.
+ * When receiving a mailed report that did not CC the list, immediately
+send at least a brief "Reply-all" with the list CCed to get it into the
+loop; also ensure its CCed on all future replies, in case it got lost.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ * If you receive a report from a bug tracker, forward or bounce the
+report to the list, unless the reporter followed
+`Documentation/admin-guide/reporting-issues.rst` instructions and did it
+already.
+
+[Optional] Ensure the Linux kernel regression bot 'regzbot' tracks the
+issue:
+
+ * For mailed reports, check if the reporter included a 'regzbot
+command' like the ``#regzbot introduced v5.13..v5.14-rc1`` described
+above. If not, send a reply with the regressions list in CC, which
+includes a paragraph like the following:
+
+       #regzbot ^introduced v5.13..v5.14-rc1
+
+  Note, in this case there is a caret (^) before the `introduced` to
+make regzbot treat the parent mail (the one you reply to) as the report
+for the regression you want to see tracked.
+
+  Instead of specifying a version range you can also state a commit-id,
+in case the reporter identified the culprit.
+
+ * When receiving a report from a bug tracker and forwarding it to the
+regressions list (see above), include a paragraph like this:
+
+       #regzbot introduced: v5.13..v5.14-rc1
+       #regzbot from: Some N. Ice Human <some.human@example.com>
+       #regzbot monitor:
+http://some.bugtracker.example.com/ticket?id=123456789
+```
+
+Note, regzbot does not yet support "#regzbot from" and "#regzbot monitor
+<bugtracker>", but I wanted to work on that soon anyway -- and this text
+will likely take weeks before it hits mailine, so this shouldn't be a
+problem.
+
+Ciao, Thorsten

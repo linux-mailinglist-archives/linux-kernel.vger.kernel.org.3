@@ -2,190 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB099489540
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C455489543
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242928AbiAJJbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S242976AbiAJJcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242989AbiAJJaj (ORCPT
+        with ESMTP id S242972AbiAJJbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:30:39 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355B3C06175D;
-        Mon, 10 Jan 2022 01:30:39 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id f8so10629845pgf.8;
-        Mon, 10 Jan 2022 01:30:39 -0800 (PST)
+        Mon, 10 Jan 2022 04:31:35 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3260C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:31:34 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id d14so10821838ila.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DxO/8OuuzNR7eAf6IsgCq5fEtto/kobpAG04hHqPo08=;
-        b=nf/2LAaUFsu7lPTzEiAvsOr9is2lxLZ8pyVoAYpAfDZIc0ANGrxVT7rysPnRhj5NeR
-         2aHYuzXf9Rvq54UyCLLy9pyOt2AubFHNIJjl/drNZvL24p3/OdsBI9NEIkUL+gCI6sFe
-         QuK0jc8LiufJ2AyPp0Zc4R7HOq9PZoFtiqnujVjzj7IjYpP/+NBTVR1vepeCVBBo+/0s
-         fYMhRiFIpg53DKqRhAnA/A6s2xmlDG2cu26ZBF7TwZV7diCjqeHC4c9V5IPUXLCwmxRL
-         iuN39F664SnQp8Kr0bdT8N/N7GS9A6AgfWicwAjMbsV0PLSKdZc0zHs9aYTFtVgI6Bla
-         SdJQ==
+        bh=lpHgw6UpVVG5H52/tvDsDE4I8M6x/y865h/7HwVLG7U=;
+        b=JfDVm3uBcevT4eiLNGWsg9uSDxPmCKimiFap3zfcV3/T9N49KhP2MALeypetQXArbW
+         0Vi9mlmqTS4f1svjgFH2eGMfRuZWav4m3iw+4y2l2z6lrIkVIuHrMw9A0QA+tRWNsgjI
+         eGK3EMqvkBrFWzU2qfRW89LEROefsrlSiZx+w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DxO/8OuuzNR7eAf6IsgCq5fEtto/kobpAG04hHqPo08=;
-        b=aDDVMBLOI+RedkWBYQ8i3kMyv/bZZ+dsFc86AWMoMEcaMVrnXZoPOA2QLFODx/CBPv
-         77nf+mTV6G+t4JUe1GjUTYh/zkJbdtWgQFlSi4HEYM2SHWZAd2mUS5WNu4tSuX9w8ihN
-         nXTBOoPOXHbgotImnCnvsngBbkXdh5BkpvBAY+lyLhY0CrnrqTlWm3VDM9BS0hcyhaNV
-         K3juwxGRr7Xk1xdgvFSJEo7UkFYeSoqWvV6WUKsyP8jlE65B+TI5NaeSccGDp7G0T/8x
-         nU9ho6anKpMurL3Dz9dgeO+uCn2T6SaBOp3MndiZQsOvmYQ1Zbpxyf6OetaREIU5mpGp
-         hw1w==
-X-Gm-Message-State: AOAM530aXKopMZIpN06X0ugQsmux7cQgENUuEvFNCR7Ysg/P92zfZJPW
-        Ed0gmAuvqFFQ49ql/cvVa1r7caYqHvlqKkcjhlw=
-X-Google-Smtp-Source: ABdhPJxOtheUd0dFkFcpmwhGW3MMVd/CG47IT8aulC8XANK8sGoRQ0THeQgVJY1qXF2MVqkTQWjnMzhU5BwppuZG2NU=
-X-Received: by 2002:aa7:8f06:0:b0:4be:3e7f:cbe1 with SMTP id
- x6-20020aa78f06000000b004be3e7fcbe1mr4319032pfr.73.1641807038692; Mon, 10 Jan
- 2022 01:30:38 -0800 (PST)
+        bh=lpHgw6UpVVG5H52/tvDsDE4I8M6x/y865h/7HwVLG7U=;
+        b=miG6TQhIw/jPu2hcEg+TKJNRJoTVHztrWOJR5ML6SCqmwUoSsgOOz36ag2zDj5RrlJ
+         gfAE4NpmnCbuN/o5G3uwj2DNN6wcGAZ3/eu6mxA6TjYrAeC+A5VxsWcqCXZJXSxnPNKR
+         V/wCUdoU2gxb69An44ZXxXPbigcoP/auKJyhm7KPn/Kj23mvvD/xRkrax87R44ovIenk
+         qE1HHLobOp4Njm8zxNctk7RPbp+Q61x1cxSTHxUMR+oZs7cAQFsfpqNETSqiEMz3YUQX
+         oa5Kuq/gGZk8r17fAmR+BhQ2iy4vBYd4aObou434UTXjT4db6Ssjkve+8ZPAWa0L9z+j
+         7WNA==
+X-Gm-Message-State: AOAM533daQt3VkAAGfzQKQFQCoYDifMCVQj8xH0vAbNofMClvvK9YKtW
+        JPfCUB/VOyIWqJvBNh7zSuO0P1bohh06CyNgvEuTqQ==
+X-Google-Smtp-Source: ABdhPJzgHOZExtCPA3Jb6BdJBdMMzFv4mrZHCv73Xpy8ayJyi9Rweur1v7bUrxh6WNniiAAD0yhQksZuIuk8J3Sd0bU=
+X-Received: by 2002:a92:6f09:: with SMTP id k9mr8744870ilc.61.1641807094384;
+ Mon, 10 Jan 2022 01:31:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20220109130515.140092-1-sxwjean@me.com> <20220109130515.140092-2-sxwjean@me.com>
- <93865d07-1cc6-8cad-c14a-7fcded63e954@redhat.com>
-In-Reply-To: <93865d07-1cc6-8cad-c14a-7fcded63e954@redhat.com>
-From:   Xiongwei Song <sxwjean@gmail.com>
-Date:   Mon, 10 Jan 2022 17:30:12 +0800
-Message-ID: <CAEVVKH-oUtcmXutS4jQa06ZX4q8S7dKaTmvFzHWyUFgB-agbew@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm/memremap.c: Add pfn_to_devmap_page() to get page
- in ZONE_DEVICE
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Xiongwei Song <sxwjean@me.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, dan.j.williams@intel.com, osalvador@suse.de,
-        naoya.horiguchi@nec.com, thunder.leizhen@huawei.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220105220653.122451-1-gwendal@chromium.org> <CAE_wzQ_DTnrU9QbADZuNyt4fszAiTwa04D9muC-xE_S3MM9eGQ@mail.gmail.com>
+ <CAPUE2uu3FPvxHHGYGbckxR=QmWt3=KwFk3DYoqBSmaQd+AO0QA@mail.gmail.com> <20220106110558.49dd6f26@coco.lan>
+In-Reply-To: <20220106110558.49dd6f26@coco.lan>
+From:   Gwendal Grignou <gwendal@chromium.org>
+Date:   Mon, 10 Jan 2022 01:31:23 -0800
+Message-ID: <CAPUE2usF1m8rmE1_Nrdv_B5SfXExzKzGnhcZrmcSHFSMQzyjiw@mail.gmail.com>
+Subject: Re: [PATCH 00/17] Add export symbol namespace PL_CHROMEOS
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Dmitry Torokhov <dtor@chromium.org>, bleung@chromium.org,
+        groeck@chromium.org, myungjoo.ham@samsung.com,
+        cw00.choi@samsung.com, benjamin.tissoires@redhat.com,
+        hverkuil-cisco@xs4all.nl, lee.jones@linaro.org,
+        pmalani@chromium.org, sre@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lgirdwood@gmail.com,
+        a.zummo@towertech.it, cychiang@chromium.org, perex@perex.cz,
+        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On Mon, Jan 10, 2022 at 4:16 PM David Hildenbrand <david@redhat.com> wrote:
+On Thu, Jan 6, 2022 at 2:06 AM Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
 >
-> On 09.01.22 14:05, sxwjean@me.com wrote:
-> > From: Xiongwei Song <sxwjean@gmail.com>
-> >
-> > when requesting page information by /proc/kpage*, the pages in ZONE_DEVICE
-> > were missed. We need a function to help on this.
-> >
-> > The pfn_to_devmap_page() function like pfn_to_online_page(), but only
-> > concerns the pages in ZONE_DEVICE.
-> >
-> > Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
-> > ---
-> >  include/linux/memremap.h |  8 ++++++++
-> >  mm/memremap.c            | 42 ++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 50 insertions(+)
-> >
-> > diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-> > index c0e9d35889e8..621723e9c4a5 100644
-> > --- a/include/linux/memremap.h
-> > +++ b/include/linux/memremap.h
-> > @@ -137,6 +137,8 @@ void *devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap);
-> >  void devm_memunmap_pages(struct device *dev, struct dev_pagemap *pgmap);
-> >  struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
-> >               struct dev_pagemap *pgmap);
-> > +struct page *pfn_to_devmap_page(unsigned long pfn,
-> > +             struct dev_pagemap **pgmap);
-> >  bool pgmap_pfn_valid(struct dev_pagemap *pgmap, unsigned long pfn);
-> >
-> >  unsigned long vmem_altmap_offset(struct vmem_altmap *altmap);
-> > @@ -166,6 +168,12 @@ static inline struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
-> >       return NULL;
-> >  }
-> >
-> > +static inline struct page *pfn_to_devmap_page(unsigned long pfn,
-> > +             struct dev_pagemap **pgmap)
-> > +{
-> > +     return NULL;
-> > +}
-> > +
-> >  static inline bool pgmap_pfn_valid(struct dev_pagemap *pgmap, unsigned long pfn)
-> >  {
-> >       return false;
-> > diff --git a/mm/memremap.c b/mm/memremap.c
-> > index 5a66a71ab591..072dbe6ab81c 100644
-> > --- a/mm/memremap.c
-> > +++ b/mm/memremap.c
-> > @@ -494,6 +494,48 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
-> >  }
-> >  EXPORT_SYMBOL_GPL(get_dev_pagemap);
-> >
-> > +/**
-> > + * pfn_to_devmap_page - get page pointer which belongs to dev_pagemap by @pfn
-> > + * @pfn: page frame number to lookup page_map
-> > + * @pgmap: to save pgmap address which is for putting reference
-> > + *
-> > + * If @pgmap is non-NULL, then pfn is on ZONE_DEVICE and return page pointer.
-> > + */
-> > +struct page *pfn_to_devmap_page(unsigned long pfn, struct dev_pagemap **pgmap)
-> > +{
-> > +     unsigned long nr = pfn_to_section_nr(pfn);
-> > +     struct mem_section *ms;
-> > +     struct page *page = NULL;
-> > +
-> > +     if (nr >= NR_MEM_SECTIONS)
-> > +             return NULL;
-> > +
-> > +     if (IS_ENABLED(CONFIG_HAVE_ARCH_PFN_VALID) && !pfn_valid(pfn))
-> > +             return NULL;
-> > +
-> > +     ms = __nr_to_section(nr);
-> > +     if (!valid_section(ms))
-> > +             return NULL;
-> > +     if (!pfn_section_valid(ms, pfn))
-> > +             return NULL;
-> > +
-> > +     /*
-> > +      * Two types of sections may include valid pfns:
-> > +      * - The pfns of section belong to ZONE_DEVICE and ZONE_{NORMAL,MOVABLE}
-> > +      *   at the same time.
-> > +      * - All pfns in one section are offline but valid.
-> > +      */
-> > +     if (!online_device_section(ms) && online_section(ms))
-> > +             return NULL;
-> > +
-> > +     *pgmap = get_dev_pagemap(pfn, NULL);
-> > +     if (*pgmap)
-> > +             page = pfn_to_page(pfn);
-> > +
-> > +     return page;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pfn_to_devmap_page);
+> Em Wed, 5 Jan 2022 20:26:36 -0800
+> Gwendal Grignou <gwendal@chromium.org> escreveu:
 >
-> Is this complexity really required?
+> > On Wed, Jan 5, 2022 at 2:58 PM Dmitry Torokhov <dtor@chromium.org> wrote:
+> > >
+> > > Hi Gwendal,
+> > >
+> > > On Wed, Jan 5, 2022 at 2:07 PM Gwendal Grignou <gwendal@chromium.org> wrote:
+> > > >
+> > > > Add a symbol namespace for functions exported by the plaform chromeos
+> > > > subsystem.
+> > >
+> > > It would be great to explain why this is needed/desirable. What are
+> > > the benefits of introducing this namespace? What problem are you
+> > > trying to solve?
+> > The issue came when reviewing an iio sensor
+> > (https://www.spinics.net/lists/linux-iio/msg66280.html). I wanted to
+> > be ahead of the curve (for once).
 >
-> Take a look at mm/memory-failure.c
+> Patch 01 should clearly document the reason why this is needed.
+> Yet, see below.
 >
-> p = pfn_to_online_page(pfn);
-> if (!p) {
->         if (pfn_valid(pfn)) {
->                 pgmap = get_dev_pagemap(pfn, NULL);
->                 if (pgmap)
->                         // success
->                 // error
->         }
->         // error
-> }
-
-Yes, this method is much simpler than mine. Will do this in v2.
-
+> While I see value on using namespaces, we should have extra care when
+> this is used for kAPIs designed for a product/system. I mean, what
+> prevents that the affected drivers won't support some day different
+> non-ChromeOS products? We have a media driver originally written to
+> work with the One Laptop Per Children hardware, that used some
+> product-specific kAPIs, that were extended a couple years later to
+> cover different types of hardware.
 >
+> What happens if some day, a driver introduced to be used on a ChromeOS
+> hardware would also be used by a non-ChromeOS hardware? This could
+> become messy as times goes by.
 >
-> Also, why do we need the export?
+> Instead, IMO, it would make sense to have per-subsystem namespaces.
+> So, for instance, placing iio under an IIO-specific namespace
+> (and the same for other subsystems) makes more sense on my
+> eyes, as the namespace boundary will be clearer, and an IIO driver
+> will always be IIO, no matter on what hardware such driver would
+> be used.
+I based this patchset on the current/future use in the IIO subsystem,
+where the namespaces are used for small subsystem like HID,
+IIO_HID_ATTRIBUTES, or code shared among sensors drivers of the same
+vendor (LTC2497, more to come).
+Since the usage of namespace in the kernel is not clearly defined yet,
+I wait for the dust to settle and more usage to emerge before tuning
+this patchset.
 
-Ah, no strong reason. Will remove that in v2.
-
-Would you mind adding "Suggested-by" for this patch?
-
-Thank you for your time.
-
-Regards,
-Xiongwei
+Thanks,
+Gwendal.
+>
+> Thanks,
+> Mauro

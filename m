@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12057488F43
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9479F488F42
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiAJEZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 23:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S238807AbiAJEZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 23:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238514AbiAJEY2 (ORCPT
+        with ESMTP id S238518AbiAJEY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 23:24:28 -0500
+        Sun, 9 Jan 2022 23:24:29 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89152C061751
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:24:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACC3C061756
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:24:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=c2L1I+DzBtehfPSZQn1qXS87cPLZWHt8WVa3GahCeM4=; b=WhYNzq+abSf+DUdGbT06fryP5p
-        A5gEECuziNmmmvjZtYtEVBw+1u1k8J0jgA2UTtxwb1WU5m4AWRWjITYcBOAtAbZGdgONFTRBnlqxP
-        vVZCpMzCJnfU+GLw/t8ehhC8lScO6nCcc5B4C2x2f1MkaHZwaS67xacLkWs/37pnB3Xrt+Mwsn/2V
-        FKujHyPyMjTX8wxDIFqTS5q6/8eDI5SAkqSTYtKZEOiZP5caVDAjCt09YH0KRwItbsmKKNtLXd60B
-        wiwQV8h6MXtL3EXAxlRaqAPMLBtDxyofQ9Deow4ba4wMW7lYM5IxXuSWsIjLV/RBfNgioHY7pO8QH
-        0ffMLnJg==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=rKKpy0oluulkvLBfnA/9hhQL753tZQacHkRyC1WeJU0=; b=sGdCDh4ZVcVD4kmjTA+PY/SRmA
+        Xy0yRyA5WDiywX9swJnbRDtdRVp/t9tnbO0FbJIbD8klaRw1FSmjZ6aQ3s87Zqfm83GSNw9+W6EBB
+        jUEqlKQg87FdYHfliSejnX27WaWwrifLIdLGxqtuIivNfw8F47wH/NJVLGNkh9RiWTPp/jc+Mjpr/
+        4OzgBeACGD0VX+bJqHy4Oh3gbqvvXQK2HdoX5rjTR92I/QwNL951f1izvcp4+2VZw0t66GoH8Pp2c
+        dzDjq+odwp2UsO4gda+0abuQYve0KMcJcKKClan7zrqcmr/MWnR0NbwZfC0BJO5Z0xGFZMxeKcQML
+        SErKzKMg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6mE7-0025wQ-P4; Mon, 10 Jan 2022 04:24:11 +0000
+        id 1n6mE7-0025wS-Uo; Mon, 10 Jan 2022 04:24:11 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
@@ -34,100 +34,63 @@ Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Christoph Hellwig <hch@infradead.org>,
         William Kucharski <william.kucharski@oracle.com>,
         linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [PATCH v2 00/28] Convert GUP to folios
-Date:   Mon, 10 Jan 2022 04:23:38 +0000
-Message-Id: <20220110042406.499429-1-willy@infradead.org>
+Subject: [PATCH v2 01/28] gup: Remove for_each_compound_range()
+Date:   Mon, 10 Jan 2022 04:23:39 +0000
+Message-Id: <20220110042406.499429-2-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220110042406.499429-1-willy@infradead.org>
+References: <20220110042406.499429-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series is against my current folio for-next branch.  I know
-it won't apply to sfr's next tree, and it's not for-next material yet.
-I intend to submit it for 5.18 after I've rebased it to one of the
-5.17-rc releases.
+This macro doesn't simplify the users; it's easier to just call
+compound_range_next() inside the loop.
 
-The overall effect of this (ignoring the primary "preparing for folios
-that are not PAGE or PMD sized" purpose) is to reduce the size of gup.o
-by ~700 bytes in the config I normally test with.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ mm/gup.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-This patchset just converts existing implementations to use folios.
-There's no new API for consumers here to provide information in a more
-efficient (address, length) format.  That will be a separate patchset.
-
-In v2, I've tried to address all the comments from the reviews I got
-on v1.  Apologies if I missed anything; I got a lot of good feedback.
-Primarily I separated out the folio changes (later) from the "While
-I'm looking at this ..." changes (earlier).  I'm not sure the story
-of the patchset is necessarily coherent this way, but it should be
-easier to review.
-
-Another big change is that compound_pincount is now available to all
-compound pages, not just those that are order-2-or-higher.  Patch 11.
-
-I did notice one bug in my original patchset which I'm disappointed GCC
-didn't diagnose:
-
-		pages[nr++] = nth_page(page, nr);
-
-Given the massive reorg of the patchset, I didn't feel right using
-anyone's SoB from v1 on any of the patches.  But, despite the increased
-number of patches, I hope it's easier to review than v1.
-
-And I'd dearly love a better name than 'folio_nth'.  page_nth() is
-a temporary construct, so doesn't need a better name.  If you need
-context, it's in the gup_folio_range_next() patch and its job
-is to tell you, given a page and a folio, what # page it is within
-a folio (so a number between [0 and folio_nr_pages())).
-
-Matthew Wilcox (Oracle) (28):
-  gup: Remove for_each_compound_range()
-  gup: Remove for_each_compound_head()
-  gup: Change the calling convention for compound_range_next()
-  gup: Optimise compound_range_next()
-  gup: Change the calling convention for compound_next()
-  gup: Fix some contiguous memmap assumptions
-  gup: Remove an assumption of a contiguous memmap
-  gup: Handle page split race more efficiently
-  gup: Turn hpage_pincount_add() into page_pincount_add()
-  gup: Turn hpage_pincount_sub() into page_pincount_sub()
-  mm: Make compound_pincount always available
-  mm: Add folio_put_refs()
-  mm: Add folio_pincount_ptr()
-  mm: Convert page_maybe_dma_pinned() to use a folio
-  gup: Add try_get_folio() and try_grab_folio()
-  mm: Remove page_cache_add_speculative() and
-    page_cache_get_speculative()
-  gup: Add gup_put_folio()
-  hugetlb: Use try_grab_folio() instead of try_grab_compound_head()
-  gup: Convert try_grab_page() to call try_grab_folio()
-  gup: Convert gup_pte_range() to use a folio
-  gup: Convert gup_hugepte() to use a folio
-  gup: Convert gup_huge_pmd() to use a folio
-  gup: Convert gup_huge_pud() to use a folio
-  gup: Convert gup_huge_pgd() to use a folio
-  gup: Convert compound_next() to gup_folio_next()
-  gup: Convert compound_range_next() to gup_folio_range_next()
-  mm: Add isolate_lru_folio()
-  gup: Convert check_and_migrate_movable_pages() to use a folio
-
- Documentation/core-api/pin_user_pages.rst |  18 +-
- arch/powerpc/include/asm/mmu_context.h    |   1 -
- include/linux/mm.h                        |  70 +++--
- include/linux/mm_types.h                  |  13 +-
- include/linux/pagemap.h                   |  11 -
- mm/debug.c                                |  14 +-
- mm/folio-compat.c                         |   8 +
- mm/gup.c                                  | 359 ++++++++++------------
- mm/hugetlb.c                              |   7 +-
- mm/internal.h                             |   8 +-
- mm/page_alloc.c                           |   3 +-
- mm/rmap.c                                 |   6 +-
- mm/vmscan.c                               |  43 ++-
- 13 files changed, 263 insertions(+), 298 deletions(-)
-
+diff --git a/mm/gup.c b/mm/gup.c
+index 2c51e9748a6a..7a07e0c00bf5 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -236,9 +236,6 @@ static inline void compound_range_next(unsigned long i, unsigned long npages,
+ 	struct page *next, *page;
+ 	unsigned int nr = 1;
+ 
+-	if (i >= npages)
+-		return;
+-
+ 	next = *list + i;
+ 	page = compound_head(next);
+ 	if (PageCompound(page) && compound_order(page) >= 1)
+@@ -249,12 +246,6 @@ static inline void compound_range_next(unsigned long i, unsigned long npages,
+ 	*ntails = nr;
+ }
+ 
+-#define for_each_compound_range(__i, __list, __npages, __head, __ntails) \
+-	for (__i = 0, \
+-	     compound_range_next(__i, __npages, __list, &(__head), &(__ntails)); \
+-	     __i < __npages; __i += __ntails, \
+-	     compound_range_next(__i, __npages, __list, &(__head), &(__ntails)))
+-
+ static inline void compound_next(unsigned long i, unsigned long npages,
+ 				 struct page **list, struct page **head,
+ 				 unsigned int *ntails)
+@@ -371,7 +362,8 @@ void unpin_user_page_range_dirty_lock(struct page *page, unsigned long npages,
+ 	struct page *head;
+ 	unsigned int ntails;
+ 
+-	for_each_compound_range(index, &page, npages, head, ntails) {
++	for (index = 0; index < npages; index += ntails) {
++		compound_range_next(index, npages, &page, &head, &ntails);
+ 		if (make_dirty && !PageDirty(head))
+ 			set_page_dirty_lock(head);
+ 		put_compound_head(head, ntails, FOLL_PIN);
 -- 
 2.33.0
 

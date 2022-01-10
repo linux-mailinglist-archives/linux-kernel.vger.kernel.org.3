@@ -2,135 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84055489F8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D19489F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbiAJStz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S242441AbiAJSuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240226AbiAJSty (ORCPT
+        with ESMTP id S242379AbiAJSuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:49:54 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47CAC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:49:53 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id j11so47719741lfg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:49:53 -0800 (PST)
+        Mon, 10 Jan 2022 13:50:09 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DF8C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:50:08 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id pf13so6082724pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:50:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=jaXzWb8RIYggtumZsRquSImyXJVvqgGVeqysl2CjfNs=;
-        b=IwCpV9hqvo50xIXYGoYiOow1RTXRzZo7PKZJjfCTn13mW8l9wl9EInMYf83Pb1KtHW
-         q6rPtrMCBguxNQp3+UIOrQNBOEaNW4z1jwOHmFqeHxloxBdSljnRwDnXJ61BFjJtOspl
-         mzqfZnx8aoXoI7XsciYTiGZDlgigps74TTbqySregXY0YMT3tPBBXCpnr9YrTc5L+oaw
-         wVENgAQd7zOxIM1/atqXqxF5tivHgQdvYRqGp1okLa68fUduUXgezhkKAWxcu6TFfJoF
-         7Wk7ZfdSJiTxnEbdOw1JU04j1NXecY2ufE3JCOMOYGYHuhvFCAr0WuZZhI+M5HU/T9OI
-         7Ang==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JPHyMSD0Hht+l6xGbfoQXW2mPjKndXPFFsASkcOJqDE=;
+        b=fym04tJGsUWhlyvnXG+ODJIBt4l3YTTIY5vplWKORvFwUS2mBRmbwMf1oavotirIwy
+         a1EgN9CS3DnDpCTqXMzK1TNojevcXuGBmHwXVt/5aHpJgFqld5Aj73ipV3DTaND4UF9I
+         eDqtcLy9E7Y2zdPK3P4sYzN0FzsRIvQrjO4tlVAVSh/Cb13nVrD8ZVZtPPfDj7TlLSUW
+         MkyTRAhTfGo3dQgBuz0J1gsoBOeB3dlRRtfpjxCXsDCI5XuJe2I9vBaHrJhSdlsJTqBO
+         3ndEey8gTKCEJ5SWFD7O2be66F17xuGNg0x9bqjk1djDe24FaFL64amnfiCPtNUvrwGU
+         XDOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=jaXzWb8RIYggtumZsRquSImyXJVvqgGVeqysl2CjfNs=;
-        b=QGapHaZlA0UxE6rbFwR6nt6SKErSS5P7MZQyQDCWzOUffU/9TaEjO0EXm6z8fSkFmW
-         fbmgNz3zTIopB35kqhQ+UhMvCkQKU0wm+tKeX88fOWDyx5eWZIOFavVKUU5JeyElx/cX
-         ciXRhOPvU+PalT/Uyi6c7kx+IqOgrcdp9kGn8F9eu+UtgRUarJ1bAFXwrrzUUrRr4HHK
-         Qf3j8mo+T/2EB/bHE0iVWI2AeFOwtf2Rbt4cwyBv2ySolryRxhKh3CM703AtSt09vvg+
-         3zXy4aV+n4CMDdXoh6KDaFkQHVvFPpgh1VwF1/gOL8YXTQmdbGXsbXhzok4iqJwYjBiJ
-         YpDg==
-X-Gm-Message-State: AOAM531a05H3dHSsFBpZZOoT9Si+AT59YI3jnXXfoOVST/KsgzW8zYp/
-        Lzwg8eFXvg8oKZNQmhl0ioCRVjKkgIZ6G3loh97KQBisrJLdaSyw
-X-Google-Smtp-Source: ABdhPJwjegyxg0bdZ8Zl85KkHVjwm9LjDPonIAZnkNAkwCS/RJdKgnpG5w9l+AAc6SdkIJXrkrRu1/12whOyHhCbSgU=
-X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr735334lfg.253.1641840592002;
- Mon, 10 Jan 2022 10:49:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JPHyMSD0Hht+l6xGbfoQXW2mPjKndXPFFsASkcOJqDE=;
+        b=l4ivGraVMafE4kFvbMgz3e4vXTG9o1inMXhRXFA43s1zbxKS/Swh1Gew9xZpaILPwQ
+         v8M7Yx1iPMpv5oZ/ow5kXbyVO7VkVJ1OX36VVcdELCrRajwtDE/mwUZ1JM2lJVahvIJ7
+         P+tKNZTxX8l0TLTztycAqSZuAGykOHuHZYSabywwsBh7ksm/cqpp84Rrg3rLgWLD1W4W
+         aOC5ou/Le3z1rPKXVromziVLVFKQ5bbIrlUaDXsEcWS/ruLWv34WFXq9uw6kHb4Hp78r
+         6mPr7ydv5qaxvblRZwIr5EA/rOXhiZ6v94zfeyA79DRDyVntRps9vfa+QRK7bSDoMmxX
+         X9aA==
+X-Gm-Message-State: AOAM5308iyizgRXVV6WZX+dvFp9sbStUuv86D+2cf7n1nA+uPRcxRtCW
+        xahlr9VJ4ssAtNbKxk5If2vasg==
+X-Google-Smtp-Source: ABdhPJz9g5NFlzk/aqJ4LkDssTD+y6Hb+i2qg5eiqe1RGdzWYdRbqxVkbV2SsRHuBtU9LrtnPxuCjA==
+X-Received: by 2002:a17:90a:c917:: with SMTP id v23mr8207612pjt.49.1641840608234;
+        Mon, 10 Jan 2022 10:50:08 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id w6sm6026449pga.25.2022.01.10.10.50.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 10:50:07 -0800 (PST)
+Date:   Mon, 10 Jan 2022 18:50:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kechen Lu <kechenl@nvidia.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, wanpengli@tencent.com,
+        vkuznets@redhat.com, mst@redhat.com, somduttar@nvidia.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/3] KVM: x86: only allow exits disable before
+ vCPUs created
+Message-ID: <Ydx/21chyOGW8hoZ@google.com>
+References: <20211221090449.15337-1-kechenl@nvidia.com>
+ <20211221090449.15337-2-kechenl@nvidia.com>
 MIME-Version: 1.0
-From:   Kelly Rossmoyer <krossmo@google.com>
-Date:   Mon, 10 Jan 2022 10:49:15 -0800
-Message-ID: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
-Subject: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Vijay Nayak <nayakvij@google.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221090449.15337-2-kechenl@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-# Introduction
+On Tue, Dec 21, 2021, Kechen Lu wrote:
+> Since VMX and SVM both would never update the control bits if exits
+> are disable after vCPUs are created, only allow setting exits
+> disable flag before vCPU creation.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-To aid optimization, troubleshooting, and attribution of battery life, the
-Android kernel currently includes a set of patches which provide enhanced
-visibility into kernel suspend/resume/abort behaviors.  The capabilities
-and implementation of this feature have evolved significantly since an
-unsuccessful attempt to upstream the original code
-(https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
-conversation about upstreaming, starting with the central question: is
-there support for upstreaming this set of features?
+For this to carry my SOB, I should be attributed as the author, or add a
+Co-developed-by: for me.  I'm also totally ok with a Suggested-by: or Reported-by:
 
-# Motivation
+And we should at least have
 
-Of the many factors influencing battery life on Linux-powered mobile
-devices, kernel suspend tends to be amongst the most impactful.  Maximizing
-time spent in suspend and minimizing the frequency of net-negative suspend
-cycles are both important contributors to battery life optimization.  But
-enabling that optimization - and troubleshooting when things go wrong -
-requires more observability of suspend/resume/abort behavior than Linux
-currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
-wakeup_source stats are useful, they are incomplete and scattered.  The
-Android kernel wakeup reason patches implement significant improvements in
-that area.
+  Fixes: 4d5422cea3b6 ("KVM: X86: Provide a capability to disable MWAIT intercepts")
 
-# Features
+andy maybe Cc: stable@vger.kernel.org, though I'm not entirely sure this is stable
+material as it could in theory do more harm than good if there's a busted userspace
+out there.
 
-As of today, the active set of patches surface the following
-suspend-related data:
+If this doesn't carry my SOB...
 
-* wakeup IRQs, including:
-   * multiple IRQs if more than one is pending during resume flow
-   * unmapped HW IRQs (wakeup-capable in HW) that should not be
-     occurring
-   * misconfigured IRQs (e.g. both enable_irq_wake() and
-     IRQF_NO_SUSPEND)
-   * threaded IRQs (not just the parent chip's IRQ)
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-* non-IRQ wakeups, including:
-   * wakeups caused by an IRQ that was consumed by lower-level SW
-   * wakeups from SOC architecture that don't manifest as IRQs
-
-* abort reasons, including:
-   * wakeup_source activity
-   * failure to freeze userspace
-   * failure to suspend devices
-   * failed syscore_suspend callback
-
-* durations from the most recent cycle, including:
-   * time spent doing suspend/resume work
-   * time spent in suspend
-
-In addition to battery life optimization and troubleshooting, some of these
-capabilities also lay the groundwork for efforts around improving
-attribution of wakeups/aborts (e.g. to specific processes, device features,
-external devices, etc).
-
-# Shortcomings
-
-While the core implementation (see below) is relatively straightforward and
-localized, calls into that core are somewhat widely spread in order to
-capture the breadth of events of interest.  The pervasiveness of those
-hooks is clearly an area where improvement would be beneficial, especially
-if a cleaner solution preserved equivalent capabilities.
-
-# Existing Code
-
-As a reference for how Android currently implements the core code for these
-features (which would need a bit of work before submission even if all
-features were included), see the following link:
-
-https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
-
-
---
-
-Kelly Rossmoyer | Software Engineer | krossmo@google.com
+> Signed-off-by: Kechen Lu <kechenl@nvidia.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 1 +
+>  arch/x86/kvm/x86.c             | 6 ++++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index aeeb071c7688..d1c50b95bbc1 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6581,6 +6581,7 @@ branch to guests' 0x200 interrupt vector.
+>  :Architectures: x86
+>  :Parameters: args[0] defines which exits are disabled
+>  :Returns: 0 on success, -EINVAL when args[0] contains invalid exits
+> +          or if any vCPU has already been created
+>  
+>  Valid bits in args[0] are::
+>  
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0cf1082455df..37529c0c279d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5764,6 +5764,10 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		if (cap->args[0] & ~KVM_X86_DISABLE_VALID_EXITS)
+>  			break;
+>  
+> +		mutex_lock(&kvm->lock);
+> +		if (kvm->created_vcpus)
+> +			goto disable_exits_unlock;
+> +
+>  		if ((cap->args[0] & KVM_X86_DISABLE_EXITS_MWAIT) &&
+>  			kvm_can_mwait_in_guest())
+>  			kvm->arch.mwait_in_guest = true;
+> @@ -5774,6 +5778,8 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		if (cap->args[0] & KVM_X86_DISABLE_EXITS_CSTATE)
+>  			kvm->arch.cstate_in_guest = true;
+>  		r = 0;
+> +disable_exits_unlock:
+> +		mutex_unlock(&kvm->lock);
+>  		break;
+>  	case KVM_CAP_MSR_PLATFORM_INFO:
+>  		kvm->arch.guest_can_read_msr_platform_info = cap->args[0];
+> -- 
+> 2.30.2
+> 

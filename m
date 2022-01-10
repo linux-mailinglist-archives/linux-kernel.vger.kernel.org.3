@@ -2,256 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCA9489B5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473A7489B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235602AbiAJOgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:36:38 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:50862 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230078AbiAJOgh (ORCPT
+        id S235627AbiAJOgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:36:41 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37600 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235608AbiAJOgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:36:37 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20A8JQgr026633;
-        Mon, 10 Jan 2022 08:36:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- references : in-reply-to : subject : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=vXlTDALDxvmNiVSmOPhcdB9hLicJ1Rl8w2GVP9FnXR4=;
- b=T2h6n+kDigL1k8nIo5Yk0r8bCNgcCpjcJM/ouuA/K1Qg7aZL0hDH9wIzE7AL88KYKFPb
- AEcz5kv1vBEqf7vtfYNzPRipO9JneHNjuRfMvfeSdVt3Iy5yox88LyzoBDWm78EPLWMa
- KD+yfTATWfOEK8AdUhcuW8hln9qfUzoJXVv8X++ndclxa6S3/CgF8glaAhdWNZ7jWU0T
- BEeq9gm60nVZofM2A4fuFAw7jPJINAzjl7jiW8/Lv42I1eJXfR9EELm200YuopKBR6/n
- Yv1WGRfAZWhJGt9oPRt18nRNf+MqbFM6oXIN8mzX/g+IjXh73YxVE2H6CPfz/0Os2psn 9A== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dgfearc12-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 10 Jan 2022 08:36:32 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 10 Jan
- 2022 14:36:31 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 10 Jan 2022 14:36:31 +0000
-Received: from LONN2DGDQ73 (unknown [198.90.238.73])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id EEAFE46D;
-        Mon, 10 Jan 2022 14:36:30 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     'Hans de Goede' <hdegoede@redhat.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        "'Rafael J . Wysocki'" <rafael@kernel.org>,
-        'Len Brown' <lenb@kernel.org>,
-        'Mark Gross' <markgross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20211210154050.3713-1-sbinding@opensource.cirrus.com> <20211210154050.3713-7-sbinding@opensource.cirrus.com> <c311642f-38ab-4914-cf92-852e6a20cfc9@redhat.com>
-In-Reply-To: <c311642f-38ab-4914-cf92-852e6a20cfc9@redhat.com>
-Subject: RE: [PATCH v2 6/6] ACPI: bus-multi-instantiate: Add SPI support
-Date:   Mon, 10 Jan 2022 14:36:31 +0000
-Message-ID: <00af01d8062f$75aed010$610c7030$@opensource.cirrus.com>
+        Mon, 10 Jan 2022 09:36:39 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 094D71F43880
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641825397;
+        bh=sPMEaHzrlyJz2hbJef7Mpl4Bv5tFXyVrTWSbB97vkfo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=VFo7toPkxXSSLfY+VasyKPW08pEP5HFmBM8Ry0OAHZTy3NgVvFITsXodK47K6OuPv
+         O/Ch59xUaV1AcL47MLH/fcJcwv5G697eIb9iO8eVWPmcpDNuKXHrYd+tI3iaVXU4o8
+         bbkvYGfG6zSJT+XDL9DuoUqsmTxn5+Ew24cOaSgV8ChiwMoAMqb+rOVjVXB3id6Ofp
+         seOwaAT5rNKRDnJ87Ur+2VLdXOwL+mxNoxJ89/goz7Jv+W3l6RaVp0fd3Jw0ft6+12
+         rJM6NYBZkgXsygk8OAz+bYvKMU/NcQDUdWjBNKy82BxWZCetFjLcvDqkVhGB/oMkW6
+         pI+aBJGpHWTSA==
+Subject: Re: [v2 3/3] clk: mediatek: Integrate vppsys with mtk-mmsys in MT8195
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220110005902.27148-1-chun-jie.chen@mediatek.com>
+ <20220110005902.27148-4-chun-jie.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <e5ca60a0-4fee-0d6b-0714-77dc51f5a7cf@collabora.com>
+Date:   Mon, 10 Jan 2022 15:36:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQHKVo1VqSuCeo4owGzltFIRzsdrTwJOwqyRAiYSAMGsVAklYA==
-X-Proofpoint-ORIG-GUID: Rur5_MhejF781VNlZkeEmeaVDujI3-6_
-X-Proofpoint-GUID: Rur5_MhejF781VNlZkeEmeaVDujI3-6_
-X-Proofpoint-Spam-Reason: safe
+In-Reply-To: <20220110005902.27148-4-chun-jie.chen@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Il 10/01/22 01:59, Chun-Jie Chen ha scritto:
+> Integrate vpp0 and vpp1 with mtk-mmsys driver which
+> will populate device by platform_device_register_data
+> to start vppsys clock driver.
+> 
+> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
 
-> -----Original Message-----
-> From: Hans de Goede <hdegoede@redhat.com>
-> Sent: 21 December 2021 18:32
-> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
-> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len =
-Brown
-> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>
-> Cc: linux-kernel@vger.kernel.org; linux-spi@vger.kernel.org; linux-
-> acpi@vger.kernel.org; platform-driver-x86@vger.kernel.org;
-> patches@opensource.cirrus.com
-> Subject: Re: [PATCH v2 6/6] ACPI: bus-multi-instantiate: Add SPI =
-support
+Hello Chun-Jie,
 
-> > +	ret =3D bmi_spi_count_resources(adev);
-> > +	if (ret <=3D 0)
-> > +		return ret;
-> > +	count =3D ret;
->=20
-> Ok, so why not do the following here instead (and drop a whole bunch =
-of
-> functions above):
->=20
-> 	ret =3D acpi_dev_get_resources(adev, &r, bmi_spi_count, &count);
-> 	if (ret < 0)
-> 		return ret;
->=20
-> 	if (count <=3D 0) {
-> 		acpi_dev_free_resource_list(&r);
-> 		return count;
-> 	}
->=20
-> 	/* Note we are not freeing the resource list yet here !!! */
->=20
-> > +
-> > +	bmi->spi_devs =3D devm_kcalloc(dev, count, sizeof(*bmi->spi_devs),
-> GFP_KERNEL);
-> > +	if (!bmi->spi_devs)
-> > +		return -ENOMEM;
-> > +
-> > +	acpi_data =3D bmi_spi_get_resources(dev, adev, count);
-> > +	if (!acpi_data)
-> > +		return -ENOMEM;
->=20
-> Remove the bmi_spi_get_resources() call here.
->=20
-> > +
-> > +	for (i =3D 0; i < count && inst_array[i].type; i++) {
->=20
-> Write a new:
->=20
-> int bmi_get_spi_resource_by_index(list_head *resource_list, struct
-> acpi_resource_spi_serialbus *sb_ret, int index)
-> {}
->=20
-> Helper which walks the list and fills in *sb_ret with the Nth =
-(matching index)
-> SpiSerialBus resource found in the
-> list.
->=20
-> And then do:
->=20
-> 		ret =3D bmi_get_spi_resource_by_index(&r, &sb, i);
-> 		if (ret)
-> 			return ret;
->=20
-> 		ctrl =3D
-> bmi_find_spi_controller(sb.resource_source.string_ptr);
->=20
->=20
-> > +		ctlr =3D bmi_find_spi_controller(acpi_data-
-> >acpi_data[i].resource_source);
-> > +		if (!ctlr) {
-> > +			ret =3D -EPROBE_DEFER;
-> > +			goto error;
-> > +		}
-> > +
-> > +		spi_dev =3D spi_alloc_device(ctlr);
-> > +		if (!spi_dev) {
-> > +			dev_err(&ctlr->dev, "failed to allocate SPI device for
-> %s\n",
-> > +				dev_name(&adev->dev));
-> > +			ret =3D -ENOMEM;
-> > +			goto error;
-> > +		}
-> > +
-> > +		strscpy(spi_dev->modalias, inst_array[i].type,
-> sizeof(spi_dev->modalias));
-> > +
->=20
-> And replace all the "acpi_data->acpi_data[i].sb." reference below with
-> simple "sb.".
->=20
->=20
-> > +		if (ctlr->fw_translate_cs) {
-> > +			ret =3D ctlr->fw_translate_cs(ctlr,
-> > +						    acpi_data-
-> >acpi_data[i].sb.device_selection);
-> > +			if (ret < 0) {
-> > +				spi_dev_put(spi_dev);
-> > +				goto error;
-> > +			}
-> > +			spi_dev->chip_select =3D ret;
-> > +		} else {
-> > +			spi_dev->chip_select =3D acpi_data-
-> >acpi_data[i].sb.device_selection;
-> > +		}
-> > +
-> > +		spi_dev->max_speed_hz =3D acpi_data-
-> >acpi_data[i].sb.connection_speed;
-> > +		spi_dev->bits_per_word =3D acpi_data-
-> >acpi_data[i].sb.data_bit_length;
-> > +
-> > +		if (acpi_data->acpi_data[i].sb.clock_phase =3D=3D
-> ACPI_SPI_SECOND_PHASE)
-> > +			spi_dev->mode |=3D SPI_CPHA;
-> > +		if (acpi_data->acpi_data[i].sb.clock_polarity =3D=3D
-> ACPI_SPI_START_HIGH)
-> > +			spi_dev->mode |=3D SPI_CPOL;
-> > +		if (acpi_data->acpi_data[i].sb.device_polarity =3D=3D
-> ACPI_SPI_ACTIVE_HIGH)
-> > +			spi_dev->mode |=3D SPI_CS_HIGH;
-> > +
-> > +		ret =3D bmi_get_irq(pdev, adev, &inst_array[i]);
-> > +		if (ret < 0) {
-> > +			spi_dev_put(spi_dev);
-> > +			goto error;
-> > +		}
-> > +		spi_dev->irq =3D ret;
-> > +
-> > +		snprintf(name, sizeof(name), "%s-%s-%s.%d",
-> dev_name(&ctlr->dev), dev_name(dev),
-> > +			 inst_array[i].type, i);
-> > +		spi_dev->dev.init_name =3D name;
-> > +
-> > +		ret =3D spi_add_device(spi_dev);
-> > +		if (ret) {
-> > +			dev_err(&ctlr->dev, "failed to add SPI device %s from
-> ACPI: %d\n",
-> > +				dev_name(&adev->dev), ret);
-> > +			spi_dev_put(spi_dev);
-> > +			goto error;
-> > +		}
-> > +
-> > +		dev_dbg(dev, "SPI device %s using chip select %u", name,
-> spi_dev->chip_select);
-> > +
-> > +		bmi->spi_devs[i] =3D spi_dev;
-> > +		bmi->spi_num++;
-> > +	}
-> > +
-> > +	if (bmi->spi_num < count) {
-> > +		dev_err(dev, "Error finding driver, idx %d\n", i);
-> > +		ret =3D -ENODEV;
-> > +		goto error;
-> > +	}
-> > +
-> > +	dev_info(dev, "Instantiate %d SPI devices.\n", bmi->spi_num);
->=20
-> And here replace the bmi_spi_res_free(acpi_data); call in both exit =
-paths
-> with:
-> acpi_dev_free_resource_list(&r); .
->=20
-> To me this way, simply using the already allocated resources from the =
-list,
-> rather then making a temp copy of them and throwing that away seems =
-like
-> a simpler solution ?
->=20
-> If you go this route, please also remove the struct bmi_spi_acpi and
-> struct bmi_spi_sb_acpi data types which you now no longer need.
->=20
+I agree with this series and I would be happy to give you my R-b, but
+this patch will make these clocks to *never* probe in in the targeted
+kernel version.
 
-I tried to implement this idea, and reuse the resource list, but I hit =
-an issue.=20
-The resources saved in the list are not "struct acpi_resource", but =
-instead the=20
-generic "struct resource".
-We need the acpi_resource structure to pull the parameters from to be =
-able to
-create the spi devices.
-As far as I know there is no way to convert the "struct resource" into a
-"struct acpi_resource". Is there another way to do this?
+You forgot to mention that this patch will break vpp0/vpp1 clocks entirely
+unless applied on top of patch series [1].
 
-Thanks,
-Stefan
+Please, either mention that said series is *required* for this one to work
+as expected, or move series [1], patches 6 and 7 to this series instead;
+since the MDP3 driver will need quite a while to get merged, I would suggest
+to move the patches here, as to get something "complete" to merge.
 
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=568283
+
+> ---
+>   drivers/clk/mediatek/clk-mt8195-vpp0.c | 42 +++++++++++++++++---------
+>   drivers/clk/mediatek/clk-mt8195-vpp1.c | 42 +++++++++++++++++---------
+>   2 files changed, 56 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mt8195-vpp0.c b/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> index c3241466a8d0..68c375bfce8b 100644
+> --- a/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> +++ b/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> @@ -86,25 +86,39 @@ static const struct mtk_gate vpp0_clks[] = {
+>   	GATE_VPP0_2(CLK_VPP0_WARP1_MDP_DL_ASYNC, "vpp0_warp1_mdp_dl_async", "top_wpe_vpp", 3),
+>   };
+>   
+> -static const struct mtk_clk_desc vpp0_desc = {
+> -	.clks = vpp0_clks,
+> -	.num_clks = ARRAY_SIZE(vpp0_clks),
+> -};
+> +static int clk_mt8195_vpp0_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *node = dev->parent->of_node;
+> +	struct clk_onecell_data *clk_data;
+> +	int r;
+>   
+> -static const struct of_device_id of_match_clk_mt8195_vpp0[] = {
+> -	{
+> -		.compatible = "mediatek,mt8195-vppsys0",
+> -		.data = &vpp0_desc,
+> -	}, {
+> -		/* sentinel */
+> -	}
+> -};
+> +	clk_data = mtk_alloc_clk_data(CLK_VPP0_NR_CLK);
+> +	if (!clk_data)
+> +		return -ENOMEM;
+> +
+> +	r = mtk_clk_register_gates(node, vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
+> +	if (r)
+> +		goto free_vpp0_data;
+> +
+> +	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+> +	if (r)
+> +		goto unregister_clk;
+> +
+> +	return r;
+> +
+> +unregister_clk:
+> +	mtk_clk_unregister(clk_data);
+> +
+> +free_vpp0_data:
+> +	mtk_free_clk_data(clk_data);
+> +	return r;
+> +}
+>   
+>   static struct platform_driver clk_mt8195_vpp0_drv = {
+> -	.probe = mtk_clk_simple_probe,
+> +	.probe = clk_mt8195_vpp0_probe,
+>   	.driver = {
+>   		.name = "clk-mt8195-vpp0",
+> -		.of_match_table = of_match_clk_mt8195_vpp0,
+>   	},
+>   };
+>   builtin_platform_driver(clk_mt8195_vpp0_drv);
+> diff --git a/drivers/clk/mediatek/clk-mt8195-vpp1.c b/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> index ce0b9a40a179..237077c60f54 100644
+> --- a/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> +++ b/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> @@ -84,25 +84,39 @@ static const struct mtk_gate vpp1_clks[] = {
+>   	GATE_VPP1_1(CLK_VPP1_VPP_SPLIT_26M, "vpp1_vpp_split_26m", "clk26m", 26),
+>   };
+>   
+> -static const struct mtk_clk_desc vpp1_desc = {
+> -	.clks = vpp1_clks,
+> -	.num_clks = ARRAY_SIZE(vpp1_clks),
+> -};
+> +static int clk_mt8195_vpp1_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *node = dev->parent->of_node;
+> +	struct clk_onecell_data *clk_data;
+> +	int r;
+>   
+> -static const struct of_device_id of_match_clk_mt8195_vpp1[] = {
+> -	{
+> -		.compatible = "mediatek,mt8195-vppsys1",
+> -		.data = &vpp1_desc,
+> -	}, {
+> -		/* sentinel */
+> -	}
+> -};
+> +	clk_data = mtk_alloc_clk_data(CLK_VPP1_NR_CLK);
+> +	if (!clk_data)
+> +		return -ENOMEM;
+> +
+> +	r = mtk_clk_register_gates(node, vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
+> +	if (r)
+> +		goto free_vpp1_data;
+> +
+> +	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+> +	if (r)
+> +		goto unregister_clk;
+> +
+> +	return r;
+> +
+> +unregister_clk:
+> +	mtk_clk_unregister(clk_data);
+> +
+> +free_vpp1_data:
+> +	mtk_free_clk_data(clk_data);
+> +	return r;
+> +}
+>   
+>   static struct platform_driver clk_mt8195_vpp1_drv = {
+> -	.probe = mtk_clk_simple_probe,
+> +	.probe = clk_mt8195_vpp1_probe,
+>   	.driver = {
+>   		.name = "clk-mt8195-vpp1",
+> -		.of_match_table = of_match_clk_mt8195_vpp1,
+>   	},
+>   };
+>   builtin_platform_driver(clk_mt8195_vpp1_drv);
+> 
+
+
+-- 
+AngeloGioacchino Del Regno
+Software Engineer
+
+Collabora Ltd.
+Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718

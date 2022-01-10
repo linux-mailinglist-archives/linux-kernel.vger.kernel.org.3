@@ -2,108 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6D4489B14
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006AE489B19
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiAJOMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S235330AbiAJOMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235090AbiAJOMG (ORCPT
+        with ESMTP id S235309AbiAJOMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:12:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F372C06173F;
-        Mon, 10 Jan 2022 06:12:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F17F4612AB;
-        Mon, 10 Jan 2022 14:12:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A1EC36AED;
-        Mon, 10 Jan 2022 14:12:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="k8NDemed"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641823921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GX2k7uQXVQpUQl+kBLAGP4Opu2SoZDxZonCVnuuw5sM=;
-        b=k8NDemedMIAgkZmLaJabs5JJ/pEnkbqf8QfV+Oo+IUeuy9Kaw948UwW53+fBvr2iJP5pCd
-        LCPE69ebWzEuRdtgQTKnc6lCWKX4tnr8dwXkW+TUwnKGPKjSH9JrPexll80l1c3Ky2UeeA
-        G2pYNsVdNYL3B83NEQe66Mp5K7GgbFE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cda53c52 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 10 Jan 2022 14:12:01 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id c6so36287339ybk.3;
-        Mon, 10 Jan 2022 06:12:00 -0800 (PST)
-X-Gm-Message-State: AOAM531ABhGEEZalY+Xwo82081WCqlClLUq0epBFVLb0BKzBFgTs/ijS
-        2tOYdJssWk+Q07BbVZ5EPXQxBFJ4akkeIgtGxoU=
-X-Google-Smtp-Source: ABdhPJzeA+FjAC2WVqODfgMXBLyh/ucFa3dZnR0nCU0ZyPW4ClAFyIj53nTFNHmggUJIhDDbbi+MtRBeZbpSpW9b8Ok=
-X-Received: by 2002:a05:6902:150d:: with SMTP id q13mr56829072ybu.113.1641823917354;
- Mon, 10 Jan 2022 06:11:57 -0800 (PST)
+        Mon, 10 Jan 2022 09:12:30 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215E3C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:12:30 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id t66so14920907qkb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:12:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4DQvnQ3Cgyp1i2b8VzPQ4ffSeU79jX0QQNrlOvytV+k=;
+        b=OUoKQA5Bq99RZPfc/HvGf3IC0D0ABjqCwC4nhlM5NAzpqqcuigYGd2HXdBYHHsC9sG
+         iK9MHGCKPpDTicEzbuKas1BW+7NlK5CttyrOGXV2O9hE/9CmP780h/Qr8WZzGY6m29xf
+         xBQjrx7OzvS/2SMa3KpRiXvuJ+eZlhfnwAKEcFGlBG1kdSJ/M4S/oqatBIdq9C6ufCfp
+         OMhkMCm7mM5YPt2QFK0gXY6mfj9JU1atLPNdpibcHx75wcKvggfl2hj1u17ww/f7nXDG
+         1ZfE/83az1RzrQI1DH4o5qquWTFw0CRNkEA2MjWyVMuliSpZ0Mtr3VyUjIiX7mrJhYUq
+         ZXOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4DQvnQ3Cgyp1i2b8VzPQ4ffSeU79jX0QQNrlOvytV+k=;
+        b=Axjv6UdTYezwYdXiP7v2UzdIu5fqJpkJPbBbZcUmqaTkCRDvvZ1TlS37nzvuG7aphH
+         /kZzaWg6IQWgQBwfNcwSd4c9sOXqtGkYiImRj0AuXEb2LTf9pKZXnHDcGGP6lQByUx9b
+         LYv+pwruLWy5lqje8wZKKLmdlhoAZEeCbVxEoBQDZRDuoL2ZW6ScQvSaDgb/g6SyN5/l
+         VvjtcKEWYOZTPAgtxoAkKy9bNQi9odFNDSh8hnNBqFaCEt3779zOEoYtx6GfJsXVu6HL
+         j3wmuNaZOtiUYVXtdeXh4UjW6t8ljETgGb34/e5MV+f6bLqRu/mkr/OUD5oyNo7MxZru
+         luRQ==
+X-Gm-Message-State: AOAM530NzqKCYRHfXSmrsokowrzSJRq/4JunpmqWJTet8UF++k5InDH8
+        qHHN2RvIWGbzwB5d/0UOZS9+LkcETPfavmigq9UCBz+ln+c=
+X-Google-Smtp-Source: ABdhPJwc8URm7uyLRQ1JKPTzT8ft0eFiJWdpt88+kIZ845z3s0s9BABfuWZHZDyFD3Yj2xexfrVnVs0bMA5zP14V0ow=
+X-Received: by 2002:a05:620a:1e1:: with SMTP id x1mr11386078qkn.363.1641823948169;
+ Mon, 10 Jan 2022 06:12:28 -0800 (PST)
 MIME-Version: 1.0
-References: <YaT+9MueQIa5p8xr@kroah.com> <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
- <YaYvYdnSaAvS8MAk@kroah.com> <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
- <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com> <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
- <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
- <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
- <20211210014337.xmin2lu5rhhe3b3t@valinor> <20220110132349.siplwka7yhe2tmwc@valinor>
-In-Reply-To: <20220110132349.siplwka7yhe2tmwc@valinor>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 10 Jan 2022 15:11:46 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
-Message-ID: <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-To:     Marcelo Henrique Cerri <marcelo.cerri@canonical.com>
-Cc:     Simo Sorce <simo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
+References: <1641819337-17037-1-git-send-email-quic_rajeevny@quicinc.com> <1641819337-17037-3-git-send-email-quic_rajeevny@quicinc.com>
+In-Reply-To: <1641819337-17037-3-git-send-email-quic_rajeevny@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 10 Jan 2022 17:12:17 +0300
+Message-ID: <CAA8EJpr_iEvv3oM-KteT7or3HyMk45Z8mzWyKwZ=rnASm-hNXA@mail.gmail.com>
+Subject: Re: [v2 2/3] drm/msm/dsi: Add dsi phy tuning configuration support
+To:     Rajeev Nandan <quic_rajeevny@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
+        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
+        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
+        jonathan@marek.ca, airlied@linux.ie, daniel@ffwll.ch,
+        swboyd@chromium.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcelo,
-
-On Mon, Jan 10, 2022 at 2:24 PM Marcelo Henrique Cerri
-<marcelo.cerri@canonical.com> wrote:
-> Hoping that might help with the discussion and to explain why I do
-> consider those solutions a "hack", that's the patch we've been using
-> so far to achieve SP 800-90B compliance:
+On Mon, 10 Jan 2022 at 15:56, Rajeev Nandan <quic_rajeevny@quicinc.com> wrote:
 >
-> https://kernel.ubuntu.com/~mhcerri/0001-UBUNTU-SAUCE-random-Use-Crypto-API-DRBG-for-urandom-.patch
+> Add support for MSM DSI PHY tuning configuration. Current design is
+> to support drive strength and drive level/amplitude tuning for
+> 10nm PHY version, but this can be extended to other PHY versions.
+>
+> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
+> ---
+>
+> Changes in v2:
+>  - New.
+>  - Split into generic code and 10nm-specific part (Dmitry Baryshkov)
+>
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.c |  3 +++
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.h | 16 ++++++++++++++++
+>  2 files changed, 19 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> index 8c65ef6..ee3739d 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> @@ -739,6 +739,9 @@ static int dsi_phy_driver_probe(struct platform_device *pdev)
+>                 }
+>         }
+>
+> +       if (phy->cfg->ops.tuning_cfg_init)
+> +               phy->cfg->ops.tuning_cfg_init(phy);
 
-Thanks for sending this in response to my request for it in our private thread.
+Please rename to parse_dt_properties() or something like that.
 
-Just to confirm, this little patch here gives you FIPS certification?
+> +
+>         ret = dsi_phy_regulator_init(phy);
+>         if (ret)
+>                 goto fail;
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> index b91303a..b559a2b 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> @@ -25,6 +25,7 @@ struct msm_dsi_phy_ops {
+>         void (*save_pll_state)(struct msm_dsi_phy *phy);
+>         int (*restore_pll_state)(struct msm_dsi_phy *phy);
+>         bool (*set_continuous_clock)(struct msm_dsi_phy *phy, bool enable);
+> +       void (*tuning_cfg_init)(struct msm_dsi_phy *phy);
+>  };
+>
+>  struct msm_dsi_phy_cfg {
+> @@ -81,6 +82,20 @@ struct msm_dsi_dphy_timing {
+>  #define DSI_PIXEL_PLL_CLK              1
+>  #define NUM_PROVIDED_CLKS              2
+>
+> +#define DSI_LANE_MAX                   5
+> +
+> +/**
+> + * struct msm_dsi_phy_tuning_cfg - Holds PHY tuning config parameters.
+> + * @rescode_offset_top: Offset for pull-up legs rescode.
+> + * @rescode_offset_bot: Offset for pull-down legs rescode.
+> + * @vreg_ctrl: vreg ctrl to drive LDO level
+> + */
+> +struct msm_dsi_phy_tuning_cfg {
+> +       u8 rescode_offset_top[DSI_LANE_MAX];
+> +       u8 rescode_offset_bot[DSI_LANE_MAX];
+> +       u8 vreg_ctrl;
+> +};
 
-Jason
+How generic is this? In other words, you are adding a struct with the
+generic name to the generic structure. I'd expect that it would be
+common to several PHY generations.
+
+> +
+>  struct msm_dsi_phy {
+>         struct platform_device *pdev;
+>         void __iomem *base;
+> @@ -98,6 +113,7 @@ struct msm_dsi_phy {
+>
+>         struct msm_dsi_dphy_timing timing;
+>         const struct msm_dsi_phy_cfg *cfg;
+> +       struct msm_dsi_phy_tuning_cfg tuning_cfg;
+>
+>         enum msm_dsi_phy_usecase usecase;
+>         bool regulator_ldo_mode;
+> --
+> 2.7.4
+>
+
+
+-- 
+With best wishes
+Dmitry

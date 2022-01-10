@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330014896F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444594896F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244393AbiAJLEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:04:43 -0500
-Received: from marcansoft.com ([212.63.210.85]:47138 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244377AbiAJLEl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:04:41 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        id S244397AbiAJLE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:04:57 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47414 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244396AbiAJLE4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:04:56 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9E6693FA5E;
-        Mon, 10 Jan 2022 11:04:29 +0000 (UTC)
-Message-ID: <7f124c47-9bc8-0a5a-8590-bed352538453@marcan.st>
-Date:   Mon, 10 Jan 2022 20:04:26 +0900
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0955521127;
+        Mon, 10 Jan 2022 11:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641812695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4S7c0FKwsET0W+q3yfTL2dN8Zp2p8wCdYWNs8YkmYiI=;
+        b=ftSRycgP5an1NZ1ggTAwiGqpgR1NJVsIXIKWu69+2KJ/3aw3JJ8F0gbJOeWBnzhCFJHYsg
+        UzPhSHCBcEizycXTZWyYSFdBNL70k4nmaAqUUoztB1R4d7sbYA9WqGY6MolNsaWhnvc8ql
+        WJzwH3sFfr/pZsvDx2Ypv8kyaK/Vhm4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641812695;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4S7c0FKwsET0W+q3yfTL2dN8Zp2p8wCdYWNs8YkmYiI=;
+        b=3o16tLX12yGJ6T32JpXNvVfZqAAZfv//hBP0mRu7633ewor8BNYCTnY0MVy71I3DI742bm
+        ngMI4TXbAO4vKCBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6CEF13A98;
+        Mon, 10 Jan 2022 11:04:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UjvGNtYS3GGMYwAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:04:54 +0000
+Date:   Mon, 10 Jan 2022 12:05:02 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/misc for v5.17
+Message-ID: <YdwS3jGM29IWz5vq@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 14/35] brcmfmac: pcie: Add IDs/properties for BCM4378
-Content-Language: en-US
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-15-marcan@marcan.st>
- <b652e98b-1b09-4639-95c4-779fb6cc989f@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <b652e98b-1b09-4639-95c4-779fb6cc989f@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/10 18:10, Arend van Spriel wrote:
-> On 1/4/2022 8:26 AM, Hector Martin wrote:
->> This chip is present on Apple M1 (t8103) platforms:
->>
->> * atlantisb (apple,j274): Mac mini (M1, 2020)
->> * honshu    (apple,j293): MacBook Pro (13-inch, M1, 2020)
->> * shikoku   (apple,j313): MacBook Air (M1, 2020)
->> * capri     (apple,j456): iMac (24-inch, 4x USB-C, M1, 2020)
->> * santorini (apple,j457): iMac (24-inch, 2x USB-C, M1, 2020)
-> 
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c   | 2 ++
->>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c   | 8 ++++++++
->>   .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 2 ++
->>   3 files changed, 12 insertions(+)
-> 
-> [...]
-> 
->> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> index f3744e806157..cc76f00724e6 100644
->> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> @@ -58,6 +58,7 @@ BRCMF_FW_DEF(4365C, "brcmfmac4365c-pcie");
->>   BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
->>   BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
->>   BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
->> +BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
->>   
->>   /* firmware config files */
->>   MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
->> @@ -87,6 +88,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->>   	BRCMF_FW_ENTRY(BRCM_CC_43664_CHIP_ID, 0xFFFFFFF0, 4366C),
->>   	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
->>   	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
->> +	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* 3 */
-> 
-> what does the trailing comment reflect?
+Hi Linus,
 
-PCI revision IDs seen in the wild. The mask currently accepts all of
-them, but B1 specifically seems to map to rev3. This is important for
-4364 since there are two revisions in the wild, and so that one has more
-selective masks. I can change it to "rev3" to make it more obvious.
+please pull the pile which we cannot find the proper topic for so we
+stick it in x86/misc, for 5.17.
 
-I'm actually not sure what the best approach for the masks is. We could
-also only accept known exact revisions; that would be better if a newer
-revision is incompatible, but worse if it is and would otherwise just work.
+Thx.
+
+---
+
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_misc_for_v5.17_rc1
+
+for you to fetch changes up to 4d5cff69fbddbbefef2903faa48263cc5d3ca382:
+
+  x86/mtrr: Remove the mtrr_bp_init() stub (2021-12-22 19:50:26 +0100)
+
+----------------------------------------------------------------
+- Add support for decoding instructions which do MMIO accesses in order
+to use it in SEV and TDX guests
+
+- An include fix and reorg to allow for removing set_fs in UML later
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      x86/mtrr: Remove the mtrr_bp_init() stub
+
+Kirill A. Shutemov (4):
+      x86/insn-eval: Handle insn_get_opcode() failure
+      x86/insn-eval: Introduce insn_get_modrm_reg_ptr()
+      x86/insn-eval: Introduce insn_decode_mmio()
+      x86/sev-es: Use insn_decode_mmio() for MMIO implementation
+
+ arch/x86/include/asm/insn-eval.h |  13 +++
+ arch/x86/include/asm/mtrr.h      |   8 +-
+ arch/x86/kernel/setup.c          |   7 +-
+ arch/x86/kernel/sev.c            | 172 ++++++++++-----------------------------
+ arch/x86/kvm/mmu/spte.c          |   1 +
+ arch/x86/lib/insn-eval.c         | 109 ++++++++++++++++++++++++-
+ 6 files changed, 169 insertions(+), 141 deletions(-)
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

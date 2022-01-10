@@ -2,209 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD0348A221
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C363B48A214
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345057AbiAJVqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:46:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345050AbiAJVqg (ORCPT
+        id S1345038AbiAJVpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:45:03 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:37710 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244460AbiAJVpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:46:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCD7C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:46:36 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n72TM-0001u6-SR; Mon, 10 Jan 2022 22:45:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n72TB-009atw-Vd; Mon, 10 Jan 2022 22:44:49 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n72TA-0003wz-UN; Mon, 10 Jan 2022 22:44:48 +0100
-Date:   Mon, 10 Jan 2022 22:44:48 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Jaroslav Kysela <perex@perex.cz>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <20220110214448.rp4pcjlaqbjlggvj@pengutronix.de>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <Ydyf93VD8FrV7GH+@smile.fi.intel.com>
+        Mon, 10 Jan 2022 16:45:02 -0500
+Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:f8d5:1373:c8a9:137f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id F1D8F28F83E;
+        Mon, 10 Jan 2022 22:45:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1641851101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mVZW6zUymC2sipnx6azNKWOw5trf7B7bHjG5CmzfceM=;
+        b=Lew0sfyaHHxB22tG5Do3OtZTmU1SO43VLP6k4C0Ut8B07s7iTSByVWFPbrXG38Hj5nZhl8
+        JdJ+B0BgmDi9PDzLBYDsFiDEBcAx0uCejT7Xr+jcEK/cjjKJITAZpXtaJgrGYX3x1Y8fPr
+        JR/u6G/SWCpGtwl0jtlXR8PsQ7ExI9TC8eEInNKHnhVWKcsf1GSXzxSuujAvVq7q9GzNoq
+        o1p2l6k3IrEEUFWA0bOr28WBrmnY9vgGedQQS9Ye5VQzhA4dA9vs6ChRFPRHpFdpUZU47Y
+        s/ZbPXnBdyoLalt+NG9CVR2ScaxCUCQw6cmVgBxkleli1UO61u6eahBY0sM0CQ==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>
+Subject: [PATCH] dt-bindings: power: reset: gpio-restart: Correct default priority
+Date:   Mon, 10 Jan 2022 22:44:56 +0100
+Message-Id: <20220110214456.67087-1-sander@svanheule.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e2is76odjewy3gr2"
-Content-Disposition: inline
-In-Reply-To: <Ydyf93VD8FrV7GH+@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
+slightly") changed the default restart priority 129, but did not update
+the documentation. Correct this, so the driver and documentation have
+the same default value.
 
---e2is76odjewy3gr2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+---
+This is a resubmission of RFC:
+https://lore.kernel.org/all/cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net/
 
-On Mon, Jan 10, 2022 at 11:07:03PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
-> > > This patch is based on the former Andy Shevchenko's patch:
-> > >=20
-> > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko=
-@linux.intel.com/
-> > >=20
-> > > Currently platform_get_irq_optional() returns an error code even if I=
-RQ
-> > > resource simply has not been found. It prevents the callers from being
-> > > error code agnostic in their error handling:
-> > >=20
-> > > 	ret =3D platform_get_irq_optional(...);
-> > > 	if (ret < 0 && ret !=3D -ENXIO)
-> > > 		return ret; // respect deferred probe
-> > > 	if (ret > 0)
-> > > 		...we get an IRQ...
-> > >=20
-> > > All other *_optional() APIs seem to return 0 or NULL in case an optio=
-nal
-> > > resource is not available. Let's follow this good example, so that the
-> > > callers would look like:
-> > >=20
-> > > 	ret =3D platform_get_irq_optional(...);
-> > > 	if (ret < 0)
-> > > 		return ret;
-> > > 	if (ret > 0)
-> > > 		...we get an IRQ...
-> >=20
-> > The difference to gpiod_get_optional (and most other *_optional) is that
-> > you can use the NULL value as if it were a valid GPIO.
->=20
-> The problem is not only there, but also in the platform_get_irq() and that
-> problem is called vIRQ0. Or as Linus put it "_cookie_" for IRQ, which nev=
-er
-> ever should be 0.
+The commit message for bcd56fe1aa97 mentions that it is a workaround for
+rk3288-veryon boards. However, commit e28ea9dbc52d3 ("ARM: dts:
+rockchip: add shared rk3288-veyron files") later adds a gpio-restart
+node with a priority value of <200> for those boards, effectively
+rendering bcd56fe1aa97 obsolete (for their use case).
 
-IMHO it's best to avoid yielding zero for a value that should be
-interpreted as an (virtual) irq. Then callers don't even have to
-consider if it's a valid value or not.
+Perhaps bcd56fe1aa97 could just be reverted instead of updating the
+documentation.
 
-> > As this isn't given with for irqs, I don't think changing the return
-> > value has much sense. In my eyes the problem with platform_get_irq() and
-> > platform_get_irq_optional() is that someone considered it was a good
-> > idea that a global function emits an error message. The problem is,
-> > that's only true most of the time. (Sometimes the caller can handle an
-> > error (here: the absence of an irq) just fine, sometimes the generic
-> > error message just isn't as good as a message by the caller could be.
-> > (here: The caller could emit "TX irq not found" which is a much nicer
-> > message than "IRQ index 5 not found".)
-> >=20
-> > My suggestion would be to keep the return value of
-> > platform_get_irq_optional() as is, but rename it to
-> > platform_get_irq_silent() to get rid of the expectation invoked by the
-> > naming similarity that motivated you to change
-> > platform_get_irq_optional().
->=20
-> This won't fix the issue with vIRQ0.
+An argument against reverting (a 6 year old patch) is that other boards
+may have come to depend on the default value of 129. I don't know about
+out-of-tree user of gpio-restart, but there are a few in-tree users of
+gpio-restart /without/ an explicit priority:
 
-Is the patch about vIRQ0, or did you only start to consider it when I
-said that for gpio NULL is a dummy value? If the former, the commit log
-should better mention that.
+arch/arm/boot/dts/imx53-ppd.dts (commit 2952d67637716)
+  DTS submitted after changed default, but DTS copyright predates the
+  changed default.
 
-Anyhow, I still think renaming platform_get_irq_optional() to
-platform_get_irq_silent() is a good idea and the patches in this thread
-are not.
+arch/microblaze/boot/dts/system.dts (commit 7cca9b8b7c5bc)
+  The original DTS commit predates the changed default, but didn't use
+  gpio-restart. The commit adding gpio-restart appears to indicate no
+  other restart handlers are present on this platform, although it could
+  be these were just being shadowed by the custom restart code.
 
-Best regards
-Uwe
+arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts (commit 0a91330b2af9f)
+  Recently added board; couldn't find any obvious alternative restart
+  handlers.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Best,
+Sander
 
---e2is76odjewy3gr2
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../devicetree/bindings/power/reset/gpio-restart.yaml         | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
+index 3dd22220cb5f..a72d5c721516 100644
+--- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
++++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
+@@ -43,7 +43,7 @@ properties:
+   priority:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: |
+-      A priority ranging from 0 to 255 (default 128) according to the following guidelines:
++      A priority ranging from 0 to 255 (default 129) according to the following guidelines:
+ 
+         0:   Restart handler of last resort, with limited restart capabilities.
+         128: Default restart handler; use if no other restart handler is expected to be available,
+@@ -51,7 +51,7 @@ properties:
+         255: Highest priority restart handler, will preempt all other restart handlers.
+     minimum: 0
+     maximum: 255
+-    default: 128
++    default: 129
+ 
+   active-delay:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-- 
+2.33.1
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHcqM0ACgkQwfwUeK3K
-7Amxygf+NmX8BzaqLoc9m8fsv49CkQqQKbXt9a0l2gES1hAm8NL2nbgjydEJDcPs
-QJ5X1TL08pb9wPoYcUF7uSwjJx2Vp0f+FEiMtDk2kj5xI38T+86tnyuQw1tNg4Ss
-52foCYQJVIIgIAeMyIvWk14oUMsy4JV/SuT+GZImMq+aM/5+wIF02NZoGzXofThL
-mUNzp+vgTNNhZpF7c0D4orD7SDOCOn2fA/uu2UGk1Nh6m+lgW5qIw5Z0KFPTalKH
-kU/JuEOBD6kdEr84D9EM6SB2l+dOBVJ20F5DL1JItM4qkAK9thM+3ecLPF610K1e
-+N5e1XZXSLS6gpWGBjS9bxMbdZ6Qpg==
-=FQR4
------END PGP SIGNATURE-----
-
---e2is76odjewy3gr2--

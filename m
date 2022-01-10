@@ -2,182 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B535488FE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B87488FE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbiAJFp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 00:45:57 -0500
-Received: from esa16.fujitsucc.c3s2.iphmx.com ([216.71.158.33]:27540 "EHLO
-        esa16.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233436AbiAJFpz (ORCPT
+        id S238843AbiAJFuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 00:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233436AbiAJFuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 00:45:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1641793556; x=1673329556;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=d690KY5TpgTvfWh+HZXFOQ+zs+9Swv233tHKJg9Yr6g=;
-  b=HBWHPH3v3aWDf3yah4qrzBmlSPoZRRK86VFbEJfe4mUC97f8Z62zWij5
-   KUvBHYxYkCwh6zZqGOky6nUzmiAEukCGGZp+wffGLlI4gS6uiDwy3jpv0
-   atiAbhsfFo3AR3pgZ8Z8BTTK3fEbYSBQxR8+YxK6JTurXjvEVbaFl9bnL
-   J8T5oyfA/W/nt3R0rRh8SA/tcWjN4WvYC8fxQs0w6AJKb0CuoyOF1fKDk
-   uaKJjj0C6PMA3PPAd8Vur7h+UvDkLZRGsV0mCT/D4D1kh+5hE1DjS3JUk
-   F43gj0LBaNKW0fArfp6v/0D88+TCFo6cbr4x4fCX5qpPFGjiAPudkgPtj
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="47260953"
-X-IronPort-AV: E=Sophos;i="5.88,276,1635174000"; 
-   d="scan'208";a="47260953"
-Received: from mail-os0jpn01lp2107.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.107])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 14:45:52 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WThQHXAv+Jeep/ahg388+Kl0DgC8xmp6tmYH5Bvd/8SjVnmxRmd2klrLthqE7xWiuETInWnL7+u5pNKukTFCEs1EcpXZF3W4u+0rPDe5yxUgvv6qwnJtP6nUmbtj1o77B7EgIx0GJlskjWPTxsUV4HiYPTtOhuTApZSCWi9mpstcrKFZViFDOmFA9U9r0LJ5yRwfzP7DLHNtq2bGd8vrdVicmyU6rzkWV6wWr/FlR5tJpNBHibfuukF8cebB+oY5yVFYKSIPK1VOvfTxRlBEevJsOrIo08sutLxfaZE3G3Er9Y5Bp2g6iE+agWKlSgi3rpwSfhvi9TFAZZr1MvEKVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d690KY5TpgTvfWh+HZXFOQ+zs+9Swv233tHKJg9Yr6g=;
- b=cMox1/uFMh0wjtR3IrzBofh/ezyMuRxOKBilL4i4CVkRRfOc6RhI8Wyx99QoNLR9AC6iJ5oJmsIZNDBOQ/FzxRSix/yldurApW9f28/ZtcZsLrKIMb0ku7AhvQpPH8Sm2ik74kSP+Lf8T7ZDa64D8hFGVBwmiO2+agXbi7WQ9OJrqTAACSCCG7J1/lhK9nv2a0wPsNQLusQopo4W+govrCX83QPCbcCY2CwZ4PFgjQAUaBs1IcweBm8DdJ6NDUc4UaACZcYEsWI0/WJ3FsYTTZr0EWeg2F8WNye6SkvC3GZr6CjJYHdUsFa9g367JfYcjFrppRDr95PGxXaouMBGlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
+        Mon, 10 Jan 2022 00:50:01 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C98C061748
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 21:50:01 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id w9so3041122iol.13
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 21:50:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d690KY5TpgTvfWh+HZXFOQ+zs+9Swv233tHKJg9Yr6g=;
- b=QHTP/JaVO6PQptJKkRciTdUiNVRiRhkhaEPOmUhqTjXBprFL6txXhqD4t7Yj24EHbdR2QoJtH3PuMc8GV6RyumJMx6l1ALsWZAtK9XLQntJjK4CI59cT6uR1k/whxAGzqPYZ34bEWneJPdb2nnXfHgdZpiQaddVnX5+tLDmndb0=
-Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com (2603:1096:400:196::10)
- by TYCPR01MB8421.jpnprd01.prod.outlook.com (2603:1096:400:13b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Mon, 10 Jan
- 2022 05:45:48 +0000
-Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com
- ([fe80::8110:65ae:1467:2141]) by TYCPR01MB9305.jpnprd01.prod.outlook.com
- ([fe80::8110:65ae:1467:2141%4]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
- 05:45:48 +0000
-From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
-        "aharonl@nvidia.com" <aharonl@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
-        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
-Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
- in responder side
-Thread-Topic: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
- in responder side
-Thread-Index: AQHX+8ExNgnDPI7BNEiFy0xj9MaxG6xVMQcAgABoxYCAALXOAIAFg4eA
-Date:   Mon, 10 Jan 2022 05:45:47 +0000
-Message-ID: <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
-References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
- <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
- <20220106002804.GS6467@ziepe.ca>
- <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
- <20220106173346.GU6467@ziepe.ca>
-In-Reply-To: <20220106173346.GU6467@ziepe.ca>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 99a8db24-3713-4b92-59d5-08d9d3fc7471
-x-ms-traffictypediagnostic: TYCPR01MB8421:EE_
-x-microsoft-antispam-prvs: <TYCPR01MB8421AB81A1AB00147408D801A5509@TYCPR01MB8421.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1388;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G6oUL5YcvWH1dAUuneH4jsfnLlTkkoTW5/7rzG4rx4Yh11wk1jqk65qfC5bQ7uHFO2gupKVIZzwpGcroUFNFzdxZ4ZytcV619AetvqnriOH/hpLWzevqd6jPTwd3NoQPug9E8lWxMjsTG+Qpf/5tSYOMgl6meun+1jNCf8RgBXELUsZXpzdeyyiAdQf4OK0SlX8b6j+IWEwoDJcdbRldqmVoVct7rke9QfSlOOWiYT7sr+fNeyyGbpABPgyMOX5Ubprc/+17fElisVyNafWr45RBR5CgMBWBZB7WBuwvRE+8iz8xVm1e2sUIwyXiDmVTPt5tS4RKqkfEbmkwpcYfGaidSZLWP9C0l5nouxkkTIj2KtJ5wSbXkCiLp8LIQEb4goLGVApkfI8rfa9QhJkNJIFDwscQu8sSzpLlZIfKqRcLjWdkxzzPiSKuh9HiifH1Y/631yT66CRIEsC7zjte88x5WapggRFAn3u58cGY69bKJPGn5I+YxbXqbUJzn4qwJwADVh7ikopRC6LOM5yxNQH81ngRGAadPp8KlsW3CKbJwbzAGqmfllUTw4uMl802zW7vL/nFqNkFzcsQ46pA8PvTr8wKOfw9+/AaM/Z4UlP7DHWl4gU0tBqdsgx1Z80GXzES8KdLtDUKktFzANzHXiEBREl/XTWIzjafPCiNU0FKfnsBMFZLwPhaNwxqiDCq5YJDM+mKzeehDjdumuyUNMmVpUKGzjKHlNO4YKJ+rtEMpuyfJbJqfOKgZkbesiPuQF3QqhCTBLWf6K4EX3XLvw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB9305.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(66556008)(71200400001)(85182001)(2616005)(64756008)(122000001)(5660300002)(66946007)(66446008)(31686004)(38070700005)(66476007)(31696002)(82960400001)(107886003)(2906002)(6486002)(83380400001)(53546011)(6916009)(76116006)(36756003)(8936002)(91956017)(26005)(4326008)(186003)(316002)(8676002)(6512007)(6506007)(54906003)(508600001)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YlJSTStnNGM1MlhhTW1YTHF5UGhGeXdPazhGclYrLysycFZVU2VQK2xIbi9U?=
- =?utf-8?B?RnU4UzdwQnYwTWphZ0x6UHd0S2hRRGxUMnBtYTdTSSsyOS9aSmJsNGNITmxw?=
- =?utf-8?B?MWZCYVBFdkxVQkpBbGtYNm1EdVI3QUZzTFFieVpBMGxULzhmaEFQa1BabjMx?=
- =?utf-8?B?cU1MOUVJZm5TVHB0Q0VST29oRWxrY0hySjlyUExweUJNM1d0VDVGSVhOb0Nq?=
- =?utf-8?B?dHBUcE15MS96VXJVKzJnWTV2TXVIa1JNeGV0V2FaSnpjSVFON0h0TitSU2Nv?=
- =?utf-8?B?WjFmRVZPYUljSjJhVW1FRlptMU9VemVBWitvd3RkQnhlanNpUVNuRW9EQ0U0?=
- =?utf-8?B?ZUlSNmNuMVJybnBjWVh1dDZKSzNhVVoyekdXbk9KaFhLMDdpVnhrVUtKU2M4?=
- =?utf-8?B?aU5oeGdNL0l1dXorNEV6dEJ6TkVpbzVHYjdnVE9paXUwTmRHZE9JUGNtVzll?=
- =?utf-8?B?ZkFZNDBKSmh6T042OGE3ODZjMTV2b1NrZ2FWeWxQVkozL0Q4dkRNd2ZhWUpC?=
- =?utf-8?B?VFNXTjZsL3I1VjlLR21HdlBhbEpSSW5GdFFJWk1ZVWE0dWdjVmx0bWZXbEdD?=
- =?utf-8?B?bEx6Kzh1WVBMOGZSSTlqeE5BSkJoOUhZdmFNcllVUHVnRHJvT2lyWHIrdTZk?=
- =?utf-8?B?OHZiZldtMGlaQlFUcnVKQ3F6b2ROYWtNYWRZUEZremtwWDd0ajIxZVQ2aXpy?=
- =?utf-8?B?eDBaeEdlUm5YaVVKaEllbGszZU5IcHVwNjZRTTNoYllYK1BFSmk0eFB2UWs5?=
- =?utf-8?B?eHlzc2dmNWc3c1craVVaUnZUQjhoQ0IzUnhnUVJnRE1wcXFhUnpkemdjaHdB?=
- =?utf-8?B?S1ZiK2xBRmFkYmc4eTNNS1oyVzBYOWw2K0dvWVdteUMzYW5OK1MyTFFPd0wv?=
- =?utf-8?B?WnJxcTRDSmpkdkIwNGZjRG0vWkdlOGlhWFFUWHZ3eVJ5WldhTTlLUWtaT1Az?=
- =?utf-8?B?eXJIUkNVdEE0dm43ZlM3L1ZsdkswYkFVUE90NzRhSDV6eFp1dGZzNC96Z1g2?=
- =?utf-8?B?NlYxTWV2UG9tMGJwWFpJQ3pHakt2RjgwS2ozUlhlQ1pYNFEzUzVLOVJNUFhu?=
- =?utf-8?B?S2tMZnNvOFppZGpQWllTVjVNd05sRkttc3M1OU9ucnBJYkRzL1UxSHZ6Mm1q?=
- =?utf-8?B?c0h0Q1IzeGdsd3VHbVFITjJZU2hnRE0wNWlITWJESFcvVjhHVE1OVHVoeVZ5?=
- =?utf-8?B?NHY5cnd1WmhlVzh5YnBWcldFbnloSEE3QUFaWkRZcjRNZlZXWG9BMk9SVzJ5?=
- =?utf-8?B?eTczSzdtZUFzQTljdm9aR1V5MUtnREkwMkFDL25KVU1paTMzNGZ6VmhOUUtM?=
- =?utf-8?B?U2RNQ1ZEZzZCV1ZXdmk5dWVRUTVrYWJwN043Z1RKbkFlSXVUbHRSUHFYT1lo?=
- =?utf-8?B?TG9hZjAwcVQ2UElSUmtOOXRXVHE2ZlRMaU40UlFxRlpaQjlTZitid3ZmakZK?=
- =?utf-8?B?eUNQQ0Nkak1oOHR1RWpKaUZBdmU5WlBvVGxNQWJVL3NJNHl0M3dyc1Fldkoy?=
- =?utf-8?B?RjAvQVNXcTgzd0ZXUkNUSVpKNTVQRmFkOE9Wd2VoY3JhUFFnUzJyMVAzd2s0?=
- =?utf-8?B?aktmbUFZY0wyQThiOUZ4N2lmSmJORWJ2TnZ3cldFbFVmTmF0akVBSTdNUU4v?=
- =?utf-8?B?djhXcXlRdVRpNGp1TDNBSTNua0wyS3IwanFkdjAzTUFDZW1zbmxWZ1g5WlhJ?=
- =?utf-8?B?T3cyU2MzU3Y2YWtJYXFBb1I5QVBma1RSTUVWTnh5QjBiNXlFUC9DamI3bnFO?=
- =?utf-8?B?UnNxWG5GWW5RVEVVREE5bm9BVzE4akNvVytNd0lHZmpsbUNDTUFjcFNtUGJQ?=
- =?utf-8?B?Z0RrMnJCUEw5RHBTT2EvelBBdGFPcmxmQnF3bGRBWkM1QmNGS25oajJHM1hp?=
- =?utf-8?B?MmpHRFRNdHM4eHdBUnkxVmk2R0UwV2NuRER3ZkxpcEFLMmFMUUgzc1h4MURj?=
- =?utf-8?B?cHdvV1hyQmNVR3pDQXN2dkQwUm96cEp2VFVmQ2Z0YmNFbFliL000WFBFZjlF?=
- =?utf-8?B?VEU2WERrcitUT0xPbXVkZ2drRG02a2R1NFVmU01vaEpCVDNOem8zM0NHTk42?=
- =?utf-8?B?OVVTbmgxaGJleEdBMjJ3TTNKNUdGbkZzcVl5THo2QUxOek12WlRvNnFhSEVn?=
- =?utf-8?B?citweEt2OHEvWDRIQUpkaWVlbTMvQzUybjJ0K0VnaC9lYjZyZjdjUHA3QXlB?=
- =?utf-8?Q?vIMErAhP3Kfm/02a2PyTzqw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F34763ADCDEA9949AB9617AE63C0EC95@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ALvm4nc74eB2Wd9VAb2s3UJ9R4m/+S/oxilpPbRkW3A=;
+        b=UrVsrwQso0IJkVO6QF2YQtW9l/A725oNGGJf+YZ/359fCEopGJ9XwrL1CWRtZNAX4v
+         MwF0Xd2DBUEH9EbSo1XKsyMm8McJL8SeQ02ajzi1HxW+0KOlPkrAAr0bTdcaeAtdmoJz
+         aBDV5TU8gK/tCTMmzcBu1MXhyNvRGA18grlWPGPUifNoxBP4kOWuGPycAXj8FD72+uYr
+         8rXfbC7m1EL8+Aw4ZpLZJodpVn/4rQpZHQxEiMrYmKveM9cexzEWW12in1QnvHlEUYwk
+         A6Fwxvie9bfqoP9g4cnbL5M4kMavDnk80S7DYn/Ukf2vFa3SCE7FZMqCwooNfQs/tD+x
+         LAuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ALvm4nc74eB2Wd9VAb2s3UJ9R4m/+S/oxilpPbRkW3A=;
+        b=1qAKRQyMat0W6nNPbcpQJZM1KimRutyU0TfRFpXxGWkZfcIpl434TS+rhif+x+NY+D
+         2ElduS+xO4C+J+OUp2/BAL7SU6SvQ4bAD6GsFLM5fE+wnetbF5p80dpLek4cHcCtLNFI
+         2biu7Vb7SyUVTJqQdqHOdph2Fz/tYttujeoqFqh6TWI9eWzJu0GTUi2otOTfDNN1LNr0
+         4Uib33xZW7vzVeFvIacDIhzEBgjnVsfZlfJEozjRlTEe7xa7ddAC46npXGupVWPwQbtQ
+         uc3QKR/PD2BrLpr0IXHE71DA8ilPfVkabJlDpOueW9P2FGCfchEY9v3AKDo3dDrQXX5L
+         NNEw==
+X-Gm-Message-State: AOAM5307KFlc3vWTjxTBXErVAI+YT+H3JPFHLUNYAepnkcpY1IHsNOo3
+        Jk6dF2oVxiVriKxms1rUHsSmY6sLzmTeMtnu3cDXqg==
+X-Google-Smtp-Source: ABdhPJxOtknTyji3ATIF1Q9X5pyoX9JjwnRiihSAmLOCzQLNETeSKhBU3GP9sUJllE6Gs+j+DrTgUhjvnM+2DhvNGms=
+X-Received: by 2002:a05:6602:2b8b:: with SMTP id r11mr14683655iov.97.1641793800714;
+ Sun, 09 Jan 2022 21:50:00 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB9305.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99a8db24-3713-4b92-59d5-08d9d3fc7471
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 05:45:48.6096
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zB3HUofp6vtHA6JN7Ai7hFNe95/kMPIusc+wMVEo5Cmu2U5uwZoSghItXR9Yq+n6gLe6AgDQwjbLounUIhP9+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8421
+References: <20220105061351.120843-1-irogers@google.com> <20220105061351.120843-27-irogers@google.com>
+ <Ydsp1d58t/gp/GHd@krava>
+In-Reply-To: <Ydsp1d58t/gp/GHd@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sun, 9 Jan 2022 21:49:48 -0800
+Message-ID: <CAP-5=fU77-qjcooX5B7qmimUoyNp-nXKNtnGQE9F6TH8Qsx+4A@mail.gmail.com>
+Subject: Re: [PATCH v4 26/48] perf evsel: Derive CPUs and threads in alloc_counts
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmFzb24NCg0KDQpPbiAwNy8wMS8yMDIyIDAxOjMzLCBKYXNvbiBHdW50aG9ycGUgd3JvdGU6
-DQo+IE9uIFRodSwgSmFuIDA2LCAyMDIyIGF0IDA2OjQyOjU3QU0gKzAwMDAsIGxpemhpamlhbkBm
-dWppdHN1LmNvbSB3cm90ZToNCj4+DQo+PiBPbiAwNi8wMS8yMDIyIDA4OjI4LCBKYXNvbiBHdW50
-aG9ycGUgd3JvdGU6DQo+Pj4gT24gVHVlLCBEZWMgMjgsIDIwMjEgYXQgMDQ6MDc6MTVQTSArMDgw
-MCwgTGkgWmhpamlhbiB3cm90ZToNCj4+Pj4gKwl3aGlsZSAobGVuZ3RoID4gMCkgew0KPj4+PiAr
-CQl2YQk9ICh1OCAqKSh1aW50cHRyX3QpYnVmLT5hZGRyICsgb2Zmc2V0Ow0KPj4+PiArCQlieXRl
-cwk9IGJ1Zi0+c2l6ZSAtIG9mZnNldDsNCj4+Pj4gKw0KPj4+PiArCQlpZiAoYnl0ZXMgPiBsZW5n
-dGgpDQo+Pj4+ICsJCQlieXRlcyA9IGxlbmd0aDsNCj4+Pj4gKw0KPj4+PiArCQlhcmNoX3diX2Nh
-Y2hlX3BtZW0odmEsIGJ5dGVzKTsNCj4+PiBTbyB3aHkgZGlkIHdlIG5lZWQgdG8gY2hlY2sgdGhh
-dCB0aGUgdmEgd2FzIHBtZW0gdG8gY2FsbCB0aGlzPw0KPj4gU29ycnksIGkgZGlkbid0IGdldCB5
-b3UuDQo+Pg0KPj4gSSBkaWRuJ3QgY2hlY2sgd2hldGhlciB2YSBpcyBwbWVtLCBzaW5jZSBvbmx5
-IE1SIHJlZ2lzdGVyZWQgd2l0aCBQRVJTSVNURU5DRShvbmx5IHBtZW0gY2FuDQo+PiByZWdpc3Rl
-ciB0aGlzIGFjY2VzcyBmbGFnKSBjYW4gcmVhY2ggaGVyZS4NCj4gWWVzLCB0aGF0IGlzIHdoYXQg
-SSBtZWFuLA0KDQpJJ20gbm90IHN1cmUgSSB1bmRlcnN0YW5kIHRoZSAqY2hlY2sqIHlvdSBtZW50
-aW9uZWQgYWJvdmUuDQoNCkN1cnJlbnQgY29kZSBqdXN0IGRvc2Ugc29tZXRoaW5nIGxpa2U6DQoN
-CmlmICghc2FuaXR5X2NoZWNrKCkpDQogwqDCoMKgIHJldHVybjsNCmlmIChyZXF1ZXN0ZWRfcGx0
-ID09IFBFUlNJU1RFTkNFKQ0KIMKgwqDCoCB2YSA9IGlvdmFfdG9fdmEoaW92YSk7DQogwqDCoMKg
-IGFyY2hfd2JfY2FjaGVfcG1lbSh2YSwgYnl0ZXMpOw0KIMKgwqDCoCB3bWI7DQplbHNlIGlmIChy
-ZXF1ZXN0ZWRfcGx0ID09IEdMT0JBTF9WSVNJQklMSVRZKQ0KIMKgwqDCoCB3bWIoKTsNCg0KDQo+
-IHdoeSBkaWQgd2UgbmVlZCB0byBjaGVjayBhbnl0aGluZyB0byBjYWxsDQo+IHRoaXMgQVBJDQpB
-cyBhYm92ZSBwc2V1ZG8gY29kZSzCoCBpdCBkaWRuJ3QgKmNoZWNrKiBhbnl0aGluZyBhcyB3aGF0
-IHlvdSBzYWlkIGkgdGhpbmsuDQoNCg0KPiAtIGl0IHNob3VsZCB3b3JrIG9uIGFueSBDUFUgbWFw
-cGVkIGFkZHJlc3MuDQpPZiBjb3Vyc2UsIGFyY2hfd2JfY2FjaGVfcG1lbSh2YSwgYnl0ZXMpIHdv
-cmtzIG9uIENQVSBtYXBwZWQgYWRkcmVzcyBiYWNraW5nIHRvIGJvdGggZGltbSBhbmQgbnZkaW1t
-LA0KYnV0IG5vdCBhIGlvdmEgdGhhdCBjb3VsZCByZWZlcnMgdG8gdXNlciBzcGFjZSBhZGRyZXNz
-Lg0KDQoNClRoYW5rcw0KWmhpamlhbg0KDQoNCg0KPg0KPiBKYXNvbg0K
+On Sun, Jan 9, 2022 at 10:30 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Tue, Jan 04, 2022 at 10:13:29PM -0800, Ian Rogers wrote:
+>
+> SNIP
+>
+> > diff --git a/tools/perf/util/counts.h b/tools/perf/util/counts.h
+> > index 7ff36bf6d644..3e275e9c60d1 100644
+> > --- a/tools/perf/util/counts.h
+> > +++ b/tools/perf/util/counts.h
+> > @@ -40,7 +40,7 @@ void perf_counts__delete(struct perf_counts *counts);
+> >  void perf_counts__reset(struct perf_counts *counts);
+> >
+> >  void evsel__reset_counts(struct evsel *evsel);
+> > -int evsel__alloc_counts(struct evsel *evsel, int ncpus, int nthreads);
+> > +int evsel__alloc_counts(struct evsel *evsel);
+> >  void evsel__free_counts(struct evsel *evsel);
+> >
+> >  #endif /* __PERF_COUNTS_H */
+> > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> > index 656c30b988ce..6c9af21776e6 100644
+> > --- a/tools/perf/util/evsel.c
+> > +++ b/tools/perf/util/evsel.c
+> > @@ -1578,7 +1578,7 @@ int __evsel__read_on_cpu(struct evsel *evsel, int cpu, int thread, bool scale)
+> >       if (FD(evsel, cpu, thread) < 0)
+> >               return -EINVAL;
+> >
+> > -     if (evsel->counts == NULL && evsel__alloc_counts(evsel, cpu + 1, thread + 1) < 0)
+> > +     if (evsel->counts == NULL && evsel__alloc_counts(evsel) < 0)
+>
+> ugh, nice.. good that it's used only from test code ;-)
+>
+> btw I noticed evsel__read_on_cpu_scaled is not used at all
+
+I'd noticed that too, but wanted to stay away from making the patch
+set larger.  You end up removing the argument to
+__evsel__read_on_cpu, etc. Definitely worth cleaning up, but maybe we
+can do it later.
+
+Thanks,
+Ian
+
+> jirka
+>
+> >               return -ENOMEM;
+> >
+> >       if (readn(FD(evsel, cpu, thread), &count, nv * sizeof(u64)) <= 0)
+> > diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> > index c69b221f5e3e..995cb5003133 100644
+> > --- a/tools/perf/util/stat.c
+> > +++ b/tools/perf/util/stat.c
+> > @@ -152,11 +152,13 @@ static void evsel__free_stat_priv(struct evsel *evsel)
+> >       zfree(&evsel->stats);
+> >  }
+> >
+> > -static int evsel__alloc_prev_raw_counts(struct evsel *evsel, int ncpus, int nthreads)
+> > +static int evsel__alloc_prev_raw_counts(struct evsel *evsel)
+> >  {
+> > +     int cpu_map_nr = evsel__nr_cpus(evsel);
+> > +     int nthreads = perf_thread_map__nr(evsel->core.threads);
+> >       struct perf_counts *counts;
+> >
+> > -     counts = perf_counts__new(ncpus, nthreads);
+> > +     counts = perf_counts__new(cpu_map_nr, nthreads);
+> >       if (counts)
+> >               evsel->prev_raw_counts = counts;
+> >
+> > @@ -177,12 +179,9 @@ static void evsel__reset_prev_raw_counts(struct evsel *evsel)
+> >
+> >  static int evsel__alloc_stats(struct evsel *evsel, bool alloc_raw)
+> >  {
+> > -     int ncpus = evsel__nr_cpus(evsel);
+> > -     int nthreads = perf_thread_map__nr(evsel->core.threads);
+> > -
+> >       if (evsel__alloc_stat_priv(evsel) < 0 ||
+> > -         evsel__alloc_counts(evsel, ncpus, nthreads) < 0 ||
+> > -         (alloc_raw && evsel__alloc_prev_raw_counts(evsel, ncpus, nthreads) < 0))
+> > +         evsel__alloc_counts(evsel) < 0 ||
+> > +         (alloc_raw && evsel__alloc_prev_raw_counts(evsel) < 0))
+> >               return -ENOMEM;
+> >
+> >       return 0;
+> > --
+> > 2.34.1.448.ga2b2bfdf31-goog
+> >
+>

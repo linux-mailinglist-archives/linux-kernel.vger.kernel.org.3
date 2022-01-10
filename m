@@ -2,321 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94736488EF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 04:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FF4488EF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 04:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbiAJDcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 22:32:55 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:54580 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236129AbiAJDcy (ORCPT
+        id S238383AbiAJDjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 22:39:36 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53928
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236129AbiAJDjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 22:32:54 -0500
-Received: from [10.28.39.84] (10.28.39.84) by mail-sz.amlogic.com (10.28.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 10 Jan
- 2022 11:32:52 +0800
-Message-ID: <b3e5cec5-9eed-a2cd-ee0b-7e49672cc9f6@amlogic.com>
-Date:   Mon, 10 Jan 2022 11:32:52 +0800
+        Sun, 9 Jan 2022 22:39:35 -0500
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E0A7F406EA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641785973;
+        bh=pQ19/9SUWFmu9QWaYJWAgIjttlL4E8YQab0OKaz5DsA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=q2ptJYO0ewt7UUY7kt1GbShK1W0z0kKUwbRBZu6eR+mUYTm6U7TmxRrjFGRQ0p/oi
+         J1+kjTpKauoqglTasIXygBnMIg49eYRcpnyG96oDKrkmQnYewO3qHhjGxaGgjxlCPf
+         miUwWYzBAIbqYBm0pHPKeridO1fm1ub+Glm7RXv2OAIgbVfrgrZfwvGiGUimx16N2v
+         /lLSsBwvDqBdjglcD0qaurme8Miw9JPqhFb8N/8aJw5jfpmQ2XtkZHokm2xOiN9ZkE
+         OXeFDyfP0I67dh0ggxDheLnE7xSmSBWwuFf9fw9r8I0MorXhqPidL+P7Arz1PZkbC/
+         7DnHcK9eAfhcw==
+Received: by mail-oo1-f69.google.com with SMTP id b8-20020a4a9bc8000000b002c5d4b37b30so7959730ook.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 19:39:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pQ19/9SUWFmu9QWaYJWAgIjttlL4E8YQab0OKaz5DsA=;
+        b=wNPk7bftDcOU0a774HpVQeZvSlBX2bw4uHvlCPQJ44NIYJs4Kt6SQAceLQavhXTHCQ
+         Ig7H0JjLuejXx2T8Og4Vck+iETKkPfw3cA3Ay4opLwWKjl3P4ncmn12ssTGj8V+fg4Pd
+         9vo1bANvxqVuNGst78JM/ZN50LZgm4PllVf9CY1Nw7OuguwK+OjVqKIBl2e+otTqlxUk
+         4XZpKcaVQiUEp9vGkmJVvUYL0rXCH7fJ+tEuclO9y3HkghhElQQoX72a98nSCnn1Pxjr
+         JQ95iGkCAV+hOZ9YO6BeGf0FkyDFxjnhcnP/4RQhJA8AFOUm0ZeGtrVGttaaLCx7Qgf6
+         go5g==
+X-Gm-Message-State: AOAM5304sdko4U/CrIuhox1FSNnQnE4z1N8vy2cVa0Ap7ybAKkXSRPiu
+        0YulLIuGt1dsaJjKIPlG4ap+GA01ogVtVmmGrTz0/BWsO/qSUC1Kc6zM0DrJ4/BM3pQwOPo1s0q
+        9Ie17UL+VNCh8UrP5vQzvKSBTxAOdL6sHCpAAkAVVAK1RE9f5/DcGb0vUVw==
+X-Received: by 2002:a05:6808:198c:: with SMTP id bj12mr3768728oib.146.1641785972687;
+        Sun, 09 Jan 2022 19:39:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz05xk4ZBJfcYO9IQwZKVBtMGSiPz0jY4s034Wxc925wwPuDP2ai5KfuJBp99zDtCJRoyXhOt6lcdvyHA9pNDU=
+X-Received: by 2002:a05:6808:198c:: with SMTP id bj12mr3768719oib.146.1641785972457;
+ Sun, 09 Jan 2022 19:39:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] mtd: rawnand: meson: fix the clock after discarding
- sd_emmc_c_clkc
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <linux-mtd@lists.infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20220106032504.23310-1-liang.yang@amlogic.com>
- <20220106090832.42225c49@xps13>
- <9c7b1d77-cff1-b40c-6d02-f67ca8b9b683@amlogic.com>
- <1jh7agou4i.fsf@starbuckisacylon.baylibre.com>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <1jh7agou4i.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.28.39.84]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
+References: <20220105151427.8373-1-aaron.ma@canonical.com> <YdXVoNFB/Asq6bc/@lunn.ch>
+ <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com> <YdYbZne6pBZzxSxA@lunn.ch>
+ <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
+ <YdbuXbtc64+Knbhm@lunn.ch> <CAAd53p5YnQZ0fDiwwo-q3bNMVFTJSMLcdkUuH-7=OSaRrW954Q@mail.gmail.com>
+ <YdhA6QqOKQ19uKWG@lunn.ch>
+In-Reply-To: <YdhA6QqOKQ19uKWG@lunn.ch>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 10 Jan 2022 11:39:21 +0800
+Message-ID: <CAAd53p7C_j6FTfnRK9L-UDmMrbkm75-mYN50_NpPiE2Y=Zgj1g@mail.gmail.com>
+Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough address
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jerome,
+On Fri, Jan 7, 2022 at 9:32 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > > You should be thinking of this in more general terms. You want to
+> > > design a system that will work for any vendors laptop and dock.
+> > >
+> > > You need to describe the two interfaces using some sort of bus
+> > > address, be it PCIe, USB, or a platform device address as used by
+> > > device tree etc.
+> > >
+> > > Let the kernel do whatever it wants with MAC addresses for these two
+> > > interfaces. The only requirement you have is that the laptop internal
+> > > interface gets the vendor allocated MAC address, and that the dock get
+> > > some sort of MAC address, even if it is random.
+> >
+> > Those laptops and docks are designed to have duplicated MACs. I don't
+> > understand why but that's why Dell/HP/Lenovo did.
+>
+> But it also sounds like the design is broken. So the question is, is
+> it possible to actually implement it correctly, without breaking
+> networking for others with sane laptop/docks/USB dongles.
 
-On 2022/1/7 15:54, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Fri 07 Jan 2022 at 10:40, Liang Yang <liang.yang@amlogic.com> wrote:
-> 
->> Hi Miquel,
->>
->> Meson NFC clock depends on the implementation of sd_emmc_c_clkc, but i
->> don't find the commit in
->> linux mainline. then the information i got from [jianxin.pan@amlogic.com]
->> is the rejection of
->> serial patches. I just look into the corresponding emails in link:
->>
->> https://lore.kernel.org/all/86789d73-5a6c-7729-ecd1-dcd342b2fcde@amlogic.com/
->> it seems the patch never go on since V6, so [jianxin.pan@amlogic.com],
->> could you help to clear it?
->> let us address the discussion in another email from
->> [jbrunet@baylibre.com].
-> 
-> That V6 was "rejected" because some comments from thre V5 were still not
-> addressed.
-> 
-em, we decide to continue to work on sd_emmc_c_clkc and it already has a 
-longer trip, see this link <https://lkml.org/lkml/2019/1/8/441>. thanks.
+It's possible, just stick to whitelist and never over generalize the
+device matching rule.
 
->>
->> On 2022/1/6 16:08, Miquel Raynal wrote:
->>> [ EXTERNAL EMAIL ]
->>> Hi Liang,
->>> liang.yang@amlogic.com wrote on Thu, 6 Jan 2022 11:25:04 +0800:
->>>
->>>> Because EMMC and NAND have the same control clock register, so we
->>>> implement a 'sd_emmc_c_clkc'. Previously DTS is defined as below:
->>>>
->>>> 	sd_emmc_c_clkc: mmc@7000 {
->>>> 		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
->>>> 		reg = <0x0 0x7000 0x0 0x800>;
->>>> 	};
->>>>
->>>> 	nand-controller@7800 {
->>>> 		......
->>>>
->>>> 		clocks = <&clkc CLKID_SD_EMMC_C>,
->>>> 			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
->>>> 			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
->>>> 			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
->>>> 		clock-names = "core", "device", "rx", "tx";
->>>> 		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
->>>>
->>>> 		......
->>>> 	}
->>>>
->>>> but in fact, above implementation is rejected. so now registering
->>>> a nand_divider.
->>> What is rejected?
->>> Why is it rejected?
->>> What is nand_divider?
->> i simplify our clock framework below, so nand divider is SD_EMMC_CLOCK[5:0]
->> here.
->> 			   -----          -----		    -----
->> 	   the other------|	\        |     |	   |	 |
->>           		  | mux	| -----  |  N  | ----------| NFC/|
->> 	   FCLK_DIV2------|     |        |     |	   | EMMC|
->> 			   -----/         ----- 	    -----
->> 		    SD_EMMC_CLOCK[7:6] SD_EMMC_CLOCK[5:0]
->>>
->>>>
->>>> Change-Id: Ibeb4c7ff886f5886aac4d6c664d7bbd1b1bcb997
->>> Change Ids are not expected in the upstream kernel.
->>> But if you fix something you should have a Fixes:.
->>>
->>>> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
->>>> ---
->>>>    drivers/mtd/nand/raw/meson_nand.c | 88 +++++++++++++++++--------------
->>>>    1 file changed, 49 insertions(+), 39 deletions(-)
->>>>
->>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->>>> index ac3be92872d0..4472363059c2 100644
->>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>> @@ -2,7 +2,7 @@
->>>>    /*
->>>>     * Amlogic Meson Nand Flash Controller Driver
->>>>     *
->>>> - * Copyright (c) 2018 Amlogic, inc.
->>>> + * Copyright (c) 2018-2021 Amlogic, inc.
->>>>     * Author: Liang Yang <liang.yang@amlogic.com>
->>>>     */
->>>>    @@ -10,6 +10,7 @@
->>>>    #include <linux/dma-mapping.h>
->>>>    #include <linux/interrupt.h>
->>>>    #include <linux/clk.h>
->>>> +#include <linux/clk-provider.h>
->>>>    #include <linux/mtd/rawnand.h>
->>>>    #include <linux/mtd/mtd.h>
->>>>    #include <linux/mfd/syscon.h>
->>>> @@ -55,6 +56,7 @@
->>>>    #define NFC_REG_VER		0x38
->>>>      #define NFC_RB_IRQ_EN		BIT(21)
->>>> +#define NFC_CMD_FIFO_RESET	BIT(31)
->>>>      #define CMDRWGEN(cmd_dir, ran, bch, short_mode, page_size, pages)
->>>> \
->>>>    	(								\
->>>> @@ -104,6 +106,9 @@
->>>>      #define PER_INFO_BYTE		8
->>>>    +#define CLK_DIV_SHIFT		0
->>>> +#define CLK_DIV_WIDTH		6
->>>> +
->>>>    struct meson_nfc_nand_chip {
->>>>    	struct list_head node;
->>>>    	struct nand_chip nand;
->>>> @@ -151,15 +156,15 @@ struct meson_nfc {
->>>>    	struct nand_controller controller;
->>>>    	struct clk *core_clk;
->>>>    	struct clk *device_clk;
->>>> -	struct clk *phase_tx;
->>>> -	struct clk *phase_rx;
->>>> +	struct clk *nand_clk;
->>>> +	struct clk_divider nand_divider;
->>>>      	unsigned long clk_rate;
->>>>    	u32 bus_timing;
->>>>      	struct device *dev;
->>>>    	void __iomem *reg_base;
->>>> -	struct regmap *reg_clk;
->>>> +	void __iomem *reg_clk;
->>>>    	struct completion completion;
->>>>    	struct list_head chips;
->>>>    	const struct meson_nfc_data *data;
->>>> @@ -406,12 +411,14 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
->>>>    	cmd = NFC_CMD_RB | NFC_CMD_RB_INT
->>>>    		| nfc->param.chip_select | nfc->timing.tbers_max;
->>>>    	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>> -
->>>> +	meson_nfc_drain_cmd(nfc);
->>>>    	ret = wait_for_completion_timeout(&nfc->completion,
->>>>    					  msecs_to_jiffies(timeout_ms));
->>>>    	if (ret == 0)
->>>>    		ret = -1;
->>>>    +	/* reset command fifo to avoid lock */
->>>> +	writel(NFC_CMD_FIFO_RESET, nfc->reg_base + NFC_REG_CMD);
->>>>    	return ret;
->>>>    }
->>>>    @@ -988,8 +995,9 @@ static const struct mtd_ooblayout_ops
->>>> meson_ooblayout_ops = {
->>>>    static int meson_nfc_clk_init(struct meson_nfc *nfc)
->>>>    {
->>>>    	int ret;
->>>> +	struct clk_init_data init = {0};
->>>> +	const char *fix_div2_pll_name[1];
->>>>    -	/* request core clock */
->>>>    	nfc->core_clk = devm_clk_get(nfc->dev, "core");
->>>>    	if (IS_ERR(nfc->core_clk)) {
->>>>    		dev_err(nfc->dev, "failed to get core clock\n");
->>>> @@ -1002,21 +1010,25 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
->>>>    		return PTR_ERR(nfc->device_clk);
->>>>    	}
->>>>    -	nfc->phase_tx = devm_clk_get(nfc->dev, "tx");
->>>> -	if (IS_ERR(nfc->phase_tx)) {
->>>> -		dev_err(nfc->dev, "failed to get TX clk\n");
->>>> -		return PTR_ERR(nfc->phase_tx);
->>>> -	}
->>>> -
->>>> -	nfc->phase_rx = devm_clk_get(nfc->dev, "rx");
->>>> -	if (IS_ERR(nfc->phase_rx)) {
->>>> -		dev_err(nfc->dev, "failed to get RX clk\n");
->>>> -		return PTR_ERR(nfc->phase_rx);
->>>> -	}
->>>> +	init.name = devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
->>>> +	init.ops = &clk_divider_ops;
->>>> +	fix_div2_pll_name[0] = __clk_get_name(nfc->device_clk);
->>>> +	init.parent_names = fix_div2_pll_name;
->>>> +	init.num_parents = 1;
->>>> +	nfc->nand_divider.reg = nfc->reg_clk;
->>>> +	nfc->nand_divider.shift = CLK_DIV_SHIFT;
->>>> +	nfc->nand_divider.width = CLK_DIV_WIDTH;
->>>> +	nfc->nand_divider.hw.init = &init;
->>>> +	nfc->nand_divider.flags = CLK_DIVIDER_ONE_BASED |
->>>> +				  CLK_DIVIDER_ROUND_CLOSEST |
->>>> +          			  CLK_DIVIDER_ALLOW_ZERO;
->>>> +
->>>> +	nfc->nand_clk = devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
->>>> +	if (IS_ERR(nfc->nand_clk))
->>>> +		return PTR_ERR(nfc->nand_clk);
->>>>      	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
->>>> -	regmap_update_bits(nfc->reg_clk,
->>>> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
->>>> +	writel(CLK_SELECT_NAND | readl(nfc->reg_clk), nfc->reg_clk);
->>>>      	ret = clk_prepare_enable(nfc->core_clk);
->>>>    	if (ret) {
->>>> @@ -1030,29 +1042,21 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
->>>>    		goto err_device_clk;
->>>>    	}
->>>>    -	ret = clk_prepare_enable(nfc->phase_tx);
->>>> +	ret = clk_prepare_enable(nfc->nand_clk);
->>>>    	if (ret) {
->>>> -		dev_err(nfc->dev, "failed to enable TX clock\n");
->>>> -		goto err_phase_tx;
->>>> -	}
->>>> -
->>>> -	ret = clk_prepare_enable(nfc->phase_rx);
->>>> -	if (ret) {
->>>> -		dev_err(nfc->dev, "failed to enable RX clock\n");
->>>> -		goto err_phase_rx;
->>>> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
->>>> +		goto err_nand_clk;
->>>>    	}
->>>>      	ret = clk_set_rate(nfc->device_clk, 24000000);
->>>>    	if (ret)
->>>> -		goto err_disable_rx;
->>>> +		goto err_disable_clk;
->>>>      	return 0;
->>>>    -err_disable_rx:
->>>> -	clk_disable_unprepare(nfc->phase_rx);
->>>> -err_phase_rx:
->>>> -	clk_disable_unprepare(nfc->phase_tx);
->>>> -err_phase_tx:
->>>> +err_disable_clk:
->>>> +	clk_disable_unprepare(nfc->nand_clk);
->>>> +err_nand_clk:
->>>>    	clk_disable_unprepare(nfc->device_clk);
->>>>    err_device_clk:
->>>>    	clk_disable_unprepare(nfc->core_clk);
->>>> @@ -1061,8 +1065,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
->>>>      static void meson_nfc_disable_clk(struct meson_nfc *nfc)
->>>>    {
->>>> -	clk_disable_unprepare(nfc->phase_rx);
->>>> -	clk_disable_unprepare(nfc->phase_tx);
->>>> +	clk_disable_unprepare(nfc->nand_clk);
->>>>    	clk_disable_unprepare(nfc->device_clk);
->>>>    	clk_disable_unprepare(nfc->core_clk);
->>>>    }
->>>> @@ -1375,6 +1378,7 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>>>    	struct device *dev = &pdev->dev;
->>>>    	struct meson_nfc *nfc;
->>>>    	struct resource *res;
->>>> +	u32 ext_clk_reg;
->>>>    	int ret, irq;
->>>>      	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
->>>> @@ -1396,9 +1400,15 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>>>    	if (IS_ERR(nfc->reg_base))
->>>>    		return PTR_ERR(nfc->reg_base);
->>>>    -	nfc->reg_clk =
->>>> -		syscon_regmap_lookup_by_phandle(dev->of_node,
->>>> -						"amlogic,mmc-syscon");
->>>> +	ret = of_property_read_u32(pdev->dev.of_node,
->>>> +				   "sd_emmc_c_clkc",
->>>> +				   &ext_clk_reg);
->>>> +	if (ret) {
->>>> +		dev_err(dev, "failed to get NAND external clock register\n");
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	nfc->reg_clk = devm_ioremap(&pdev->dev, ext_clk_reg, sizeof(int));
->>>>    	if (IS_ERR(nfc->reg_clk)) {
->>>>    		dev_err(dev, "Failed to lookup clock base\n");
->>>>    		return PTR_ERR(nfc->reg_clk);
->>>
->>> Thanks,
->>> Miquèl
->>> .
-> 
-> .
+>
+> > What if the kernel just abstract the hardware/firmware as intended, no
+> > matter how stupid it is, and let userspace to make the right policy?
+>
+> Which is exactly what is being suggested here. The kernel gives the
+> laptop internal interface its MAC address from ACPI or where ever, and
+> the dock which has no MAC address gets a random MAC address. That is
+> the normal kernel abstract. Userspace, in the form of udev, can then
+> change the MAC addresses in whatever way it wants.
+
+That's not what I mean. I mean the kernel should do what
+firmware/hardware expects kernel should do - copy the MAC from ACPI to
+the external NIC in the dock.
+Then the userspace can assign a random MAC to external interface if
+internal interface is already up.
+
+>
+> > But power users may also need to use corporate network to work as
+> > Aaron mentioned.
+> > Packets from unregistered MAC can be filtered under corporate network,
+> > and that's why MAC pass-through is a useful feature that many business
+> > laptops have.
+>
+> Depends on the cooperate network, but power users generally know more
+> than the IT department, and will just make their machine work, copying
+> the 802.3x certificate where ever it needs to go, us ebtables to
+> mangle the MAC address, build their own little network with an RPi
+> acting as a gateway doing NAT and MAC address translation, etc.
+
+That's true, but as someone who work closely with other Distro folks,
+we really should make this feature works for (hopefully) everyone.
+
+Kai-Heng
+
+>
+>        Andrew

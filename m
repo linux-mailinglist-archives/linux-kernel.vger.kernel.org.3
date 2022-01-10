@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7764897C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1474897CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245024AbiAJLnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244865AbiAJLmo (ORCPT
+        id S245022AbiAJLpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:45:24 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:47905 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245002AbiAJLna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:42:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F99BC061759;
-        Mon, 10 Jan 2022 03:42:44 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id ADF631F436AA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641814962;
-        bh=aqM6eqxL/59SPD0eLrWoMsGRIH1ySplA/RdbUjqnt8U=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=GrzWeHv93tECgVuNmZxUxZC4fPMVBCiQo7mvSPzNZ3hg2p+QGENhVRjmQkSEDJfnW
-         lKx0Ea9CeFfhLAThUhzRSS6ojKyuybjnRBt2Y7KoTUZ7tPAM9OcdAzFeRvGhNBMPqR
-         QDEqwtA5Nh7h0AjAXkZ4bzrOXS7noHPeoHxbDybSDiMozZQkXMOfAD8ui/xgBR6KVH
-         k/9yaqnBJdcEOaF9qtn94YIRutW5mQ+YKWBzxWpaYsMOaW/Pr9rV1E2fLyKTp9Wy0T
-         FX58Lx66RLgCKxItga/eNE3Jm1mKdortyVFI7xCbTtGwWecg2JhsIJDjE9Jn6gIAdL
-         7BXriwcntmLKw==
-Subject: Re: [PATCH v2 1/5] iommu/mediatek: Remove for_each_m4u in
- tlb_sync_all
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:MEDIATEK IOMMU DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>, kernel@collabora.com,
-        linux-media@vger.kernel.org, sebastian.reichel@collabora.com
-References: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
- <20211208120744.2415-2-dafna.hirschfeld@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <41c17006-af5d-19ec-210e-f6f12542eb75@collabora.com>
-Date:   Mon, 10 Jan 2022 12:42:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 10 Jan 2022 06:43:30 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MlbPO-1mhCz0102k-00ikU9; Mon, 10 Jan 2022 12:43:24 +0100
+Received: by mail-wr1-f44.google.com with SMTP id x4so1027657wru.7;
+        Mon, 10 Jan 2022 03:43:24 -0800 (PST)
+X-Gm-Message-State: AOAM532cJ9YupYp5rv8tKPmIheJoY7X4QmkcE3vWoQQYsa0bkqTHzigf
+        8WPRdoJ7E9PyVsphGN03UXBrneNCeEzEgJ7Rf74=
+X-Google-Smtp-Source: ABdhPJzLcQEl2WnX1Puj9mlVNbd4vaTr3cFkZQMjDOmTeJ+poLBbKI4XZ3sC+IOr25uQ9in4zKpCyj1iJaRs8pYrhxQ=
+X-Received: by 2002:adf:fd46:: with SMTP id h6mr1566034wrs.192.1641815003810;
+ Mon, 10 Jan 2022 03:43:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211208120744.2415-2-dafna.hirschfeld@collabora.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-2-guoren@kernel.org>
+In-Reply-To: <20211228143958.3409187-2-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 10 Jan 2022 12:43:07 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0E+2=BnKienWp_VuT2g=YcEfP81SJmgbrLWZbdhRXXrA@mail.gmail.com>
+Message-ID: <CAK8P3a0E+2=BnKienWp_VuT2g=YcEfP81SJmgbrLWZbdhRXXrA@mail.gmail.com>
+Subject: Re: [PATCH V2 01/17] kconfig: Add SYSVIPC_COMPAT for all architectures
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:gutJNwyMuuTtGpDlfeICZuij2FOpsCzptA9h7G3xYohePOG8wKa
+ qLxKJ4cSljVVu53YMy4KjvsBLQp6JzHVB5xgM5u7sKr8Li3uOQGuGolvY+AP18ofbAUYtEn
+ 17QIiccD7/rATL7HkGsYkc1VAivZ6REBlXybI/+YaL//Ll0zotVZqqyqfRpfNkNVz3C1YeM
+ NHXHlq3+dgA6ndJsz0R5Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lIN9WQRIHgU=:w3Mgy0NJruiLGOp8UgCTRy
+ DwAfYFVcA2r6tMoTf7wKf+wr86VTzN6lilV4UIlVq3UkdLC1VS18A7f9LztizjXGNu7ty8rGs
+ zzCHNhnqaebVjPf+mvnyxUypKUv60af+F1jqSSxFS0pb++TkTZzdUzlHWUQauhWKEw+fODzXZ
+ O/lhb1Pdd9rcjpk+rR1z4tGrbAp69CAUjb9iCmQ9F3tTGwrOkk4NrsIcTNt8pgkvK3AwmrSjB
+ TFE36mGbyRrpaqby3AQLBTduwb6YdNaMQpFsjy5hWNQQeSj3wDZ0TZ1u/DtG7OF73truS+TnB
+ 0s/pKf07mel9631+weh3fOuk5fe4i49kyguCJ21NuN/Nv270I0N58iJ00Px370VxUWshXnGBj
+ E34D1oVgRdqaOw+LLSEt3cfFuBp7s/vUwJvJf8nHsr2wvK1WWhMoCW1PwkDsphNuI4h2k6Unf
+ aws0Ikhe/tBPbeqi7ZX7sMvCuYWuc49bLojb3jnFkRqHsp8krBz4/CvH1BsDBOytTspYu4KAG
+ 0uFQyf+ypSvcfWET6c9Zib1eQKQdNTwYZVcTPsWxxf1r4/Tp+/c0fEtJONnuvwUldBfsQ5rtQ
+ PbleS2KTKPD/ZxGlzU32bdob65SBnqlCcbVhSx3WaVZZqsR0WwTs9psxPMNYnBXbwZeRyfJwZ
+ nXyylD/cS34+Zx7B20UKnCG+ksFoq+h1c/i2U+qpkbMKuFNKpi0Q0eaHU0HJgAM0ldtvDHngX
+ Adj69Jln3pU2Pa9K9LyvfAdWtNC27hHVsLOoN6Ax8+pL5NBrdz6Gd3Yr6PSVXTdxl4qC8B3Cg
+ VzXcMU68MLDnNULfiqyGSnQZnXC0STc6g2OzgLtJp3ibWoMGYc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/12/21 13:07, Dafna Hirschfeld ha scritto:
-> From: Yong Wu <yong.wu@mediatek.com>
-> 
-> The tlb_sync_all is called from these three functions:
-> a) flush_iotlb_all: it will be called for each a iommu HW.
-> b) tlb_flush_range_sync: it already has for_each_m4u.
-> c) in irq: When IOMMU HW translation fault, Only need flush itself.
-> 
-> Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+On Tue, Dec 28, 2021 at 3:39 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The existing per-arch definitions are pretty much historic cruft.
+> Move SYSVIPC_COMPAT into init/Kconfig.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Christoph Hellwig <hch@infradead.org>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>

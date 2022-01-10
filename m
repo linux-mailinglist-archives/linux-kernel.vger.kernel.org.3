@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FE0489F53
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86E1489F5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241408AbiAJShs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238734AbiAJShr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:37:47 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14DFC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:37:46 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so15932683otu.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:37:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7RDlnoeMMtaCidCqn8V2aaFhuGEcHAhns4iW4e9qdnM=;
-        b=VjFp/WLcs6GbIfJmypSr2K7VuO1ew6VCjVRgmHxGjIea/Cm3msMQzGm1VjEuN251zy
-         faFdW6V3W2CNHCys3PjbHhczDEuuB8TeZCZWemA49uf4TAEk05szO2Cswf0nu/bZxsYA
-         iKYF7hXT/N6tjdvrf6Jmu8Hp3zTmpWd1TdpjNyc+FBBGznkem8PTKpGS+DcaccOAN1IS
-         AcXVq7Z0uMVC15Xm+eTgOTe0MaKag1D+wrRu4rnjpo00yqB+Mq2qVawOK13KA807RRH1
-         +5DVHyLJ8K+QHMR6b7xJPuKIZRmpBzh6D/mRLwCoWpXNfsGDR5rjyYKW6tZ/X8pGY2Dm
-         NFsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7RDlnoeMMtaCidCqn8V2aaFhuGEcHAhns4iW4e9qdnM=;
-        b=tHoh50+lvJFVOgaWZYbanN/8MXyHQ+YqU7P0PKdEhJ09EOFK3aChbdqItsrO7/Jmv/
-         MSogN4nEjWzm7HQVlgXzBDEU7tphM6D4j/26Q83SYR7RgwQwfVcxau+/0TI8EkR31x+t
-         mY8/DmoyipmE8CYfF2qbzmzrknKkwaXfWqj40+SJOlr5T2HPhv3vJvanWGt0f8vsCjuw
-         ZrIlLOElfZUZRtWfBo33Eu0pZ1ylBqak7lqSWIQZq7IdTeClE5Yf48oWg3sXjTd2f02d
-         1wCycMzu5MD91LdX/zUHwwctJTcyM5AHfiTBGlu8vqitZMFClwhqET4yJJqbWGLNkfJo
-         sZAQ==
-X-Gm-Message-State: AOAM531teRx/XR3zEY4Jw1YkhSVd45v2vp7CdIl+PVTCmhh0HYLg+Hvs
-        1O2ilinBj2e2sKFSS4aGiveU8quJLqb8DDYm3qE=
-X-Google-Smtp-Source: ABdhPJxg2UhJ+8PlYBDJNAgt4LXO7EPhRJbjnm22Ybn0KY7F3AAAM5Whi/nHt7mQ5Dz0kggNNlLjgFB1qLbBjrHVsHo=
-X-Received: by 2002:a9d:f09:: with SMTP id 9mr833994ott.299.1641839866004;
- Mon, 10 Jan 2022 10:37:46 -0800 (PST)
+        id S241468AbiAJSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:40:14 -0500
+Received: from mga07.intel.com ([134.134.136.100]:18445 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238734AbiAJSkN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 13:40:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641840013; x=1673376013;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U+Glj/h5tYRthQXKeKVdr/rRhv+kw5dVVIG5/MTuWRQ=;
+  b=BWzqYv+/Gx/9ySS1uKc7g105Qhg0GhGlDz8hOnH1FL56dMNsmA//bdRF
+   f/XH7y4XcHBcAoRYZljiZ0yAviW1EHT39Q0VYX1rPmI7UiKYQeiPqt3U7
+   Kq0oBMPn82oskIXq1rZJMWtiYmHw5MwSvH77BbETMNV2Ux61fd2mjQC3h
+   6qFRMCKHZPh7CWbn+ny7B4Za/GyQ9YmScuv6BcCfehorTnYMVBJz0pnMv
+   SoI3mombkGss6ruyBfPRvJweQwn3Ivd+XSW8UbiidokiZ/lvQt0Y9YR3J
+   InchGmmkUVbofzEhJYVfH24zfsVwqtaL3AIhnUwhDfi2CZOuGH3QS3T3e
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="306649253"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="306649253"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 10:40:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="690672972"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 10:40:09 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6zaS-0003px-HT; Mon, 10 Jan 2022 18:40:08 +0000
+Date:   Tue, 11 Jan 2022 02:39:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [v1 03/16] clk: mediatek: Add MT8186 mcusys clock support
+Message-ID: <202201110231.DNu9pn4H-lkp@intel.com>
+References: <20220110134416.5191-4-chun-jie.chen@mediatek.com>
 MIME-Version: 1.0
-References: <20220109184245.124850-1-jose.exposito89@gmail.com> <139784cd-6cb7-18e0-bb09-b35113bd83ef@amd.com>
-In-Reply-To: <139784cd-6cb7-18e0-bb09-b35113bd83ef@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 10 Jan 2022 13:37:34 -0500
-Message-ID: <CADnq5_N1-kKfhZ9mttcRq7RON0DsEjs1cpvxo4M7jJN3M8Sx9w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: invalid parameter check in dmub_hpd_callback
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Jude Shih <shenshih@amd.com>,
-        Anson Jacob <Anson.Jacob@amd.com>,
-        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "Kazlauskas, Nicholas" <nicholas.kazlauskas@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110134416.5191-4-chun-jie.chen@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi Chun-Jie,
 
-Alex
+Thank you for the patch! Yet something to improve:
 
-On Mon, Jan 10, 2022 at 11:34 AM Harry Wentland <harry.wentland@amd.com> wr=
-ote:
->
-> On 2022-01-09 13:42, Jos=C3=A9 Exp=C3=B3sito wrote:
-> > The function performs a check on the "adev" input parameter, however, i=
-t
-> > is used before the check.
-> >
-> > Initialize the "dev" variable after the sanity check to avoid a possibl=
-e
-> > NULL pointer dereference.
-> >
-> > Fixes: e27c41d5b0681 ("drm/amd/display: Support for DMUB HPD interrupt =
-handling")
-> > Addresses-Coverity-ID: 1493909 ("Null pointer dereference")
-> > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
->
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->
-> Harry
->
-> > ---
-> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/driver=
-s/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > index e727f1dd2a9a..7fbded7a6d9c 100644
-> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > @@ -656,7 +656,7 @@ void dmub_hpd_callback(struct amdgpu_device *adev, =
-struct dmub_notification *not
-> >       struct drm_connector_list_iter iter;
-> >       struct dc_link *link;
-> >       uint8_t link_index =3D 0;
-> > -     struct drm_device *dev =3D adev->dm.ddev;
-> > +     struct drm_device *dev;
-> >
-> >       if (adev =3D=3D NULL)
-> >               return;
-> > @@ -673,6 +673,7 @@ void dmub_hpd_callback(struct amdgpu_device *adev, =
-struct dmub_notification *not
-> >
-> >       link_index =3D notify->link_index;
-> >       link =3D adev->dm.dc->links[link_index];
-> > +     dev =3D adev->dm.ddev;
-> >
-> >       drm_connector_list_iter_begin(dev, &iter);
-> >       drm_for_each_connector_iter(connector, &iter) {
->
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on robh/for-next v5.16 next-20220110]
+[cannot apply to mbgg-mediatek/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Chun-Jie-Chen/dt-bindings-ARM-Mediatek-Add-new-document-bindings-of-MT8186-clock/20220110-224451
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220111/202201110231.DNu9pn4H-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d28b64e80990fd336192ccdd31676120bf4e2696
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Chun-Jie-Chen/dt-bindings-ARM-Mediatek-Add-new-document-bindings-of-MT8186-clock/20220110-224451
+        git checkout d28b64e80990fd336192ccdd31676120bf4e2696
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/clk/mediatek/clk-mt8186-mcu.c: In function 'clk_mt8186_mcu_probe':
+>> drivers/clk/mediatek/clk-mt8186-mcu.c:74:9: error: implicit declaration of function 'mtk_clk_unregister'; did you mean 'devm_clk_unregister'? [-Werror=implicit-function-declaration]
+      74 |         mtk_clk_unregister(clk_data);
+         |         ^~~~~~~~~~~~~~~~~~
+         |         devm_clk_unregister
+   cc1: some warnings being treated as errors
+
+
+vim +74 drivers/clk/mediatek/clk-mt8186-mcu.c
+
+    48	
+    49	static int clk_mt8186_mcu_probe(struct platform_device *pdev)
+    50	{
+    51		struct clk_onecell_data *clk_data;
+    52		struct device_node *node = pdev->dev.of_node;
+    53		int r;
+    54		void __iomem *base;
+    55	
+    56		base = devm_platform_ioremap_resource(pdev, 0);
+    57		if (IS_ERR(base))
+    58			return PTR_ERR(base);
+    59	
+    60		clk_data = mtk_alloc_clk_data(CLK_MCU_NR_CLK);
+    61		if (!clk_data)
+    62			return -ENOMEM;
+    63	
+    64		mtk_clk_register_composites(mcu_muxes, ARRAY_SIZE(mcu_muxes), base,
+    65					    &mt8186_clk_lock, clk_data);
+    66	
+    67		r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+    68		if (r)
+    69			goto unregister_clk;
+    70	
+    71		return r;
+    72	
+    73	unregister_clk:
+  > 74		mtk_clk_unregister(clk_data);
+    75		mtk_free_clk_data(clk_data);
+    76		return r;
+    77	}
+    78	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

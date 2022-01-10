@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8609848904A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAA348904C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239067AbiAJGmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 01:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiAJGmE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 01:42:04 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1288EC06173F;
-        Sun,  9 Jan 2022 22:42:04 -0800 (PST)
-Date:   Mon, 10 Jan 2022 07:42:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1641796921;
-        bh=qB4/ZCkV6Yn/0QFbhDvz9VnMhyqQ35EHcQ8g/7n7MsI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WsMCCy1xHZJ7XnMbHsjqDmZsY0gjn3x2ZvHi7pdzwb1petcrQghPZ6pWVKfhVDQyD
-         IEt1giuJdidx64WOrPCYmaCEcNhX4wIHTXml05yeayVD5vgFBEx3FM8Efzf0jQfzXp
-         UGDlhTbgSOJNCzJ7LJNGgEkJNbd0TEqaxgM4AGq4=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stefano Stabellini <stefano@aporeto.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] 9p/trans_fd: split into dedicated module
-Message-ID: <a168c7a0-aeb5-4eb1-8b26-751c0560b7ed@t-8ch.de>
-References: <20211103193823.111007-1-linux@weissschuh.net>
- <20211103193823.111007-3-linux@weissschuh.net>
- <YduEira4sB0+ESYp@codewreck.org>
+        id S233652AbiAJGnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 01:43:37 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:44270 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229991AbiAJGng (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 01:43:36 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABHTp501dthqI8dBg--.18516S2;
+        Mon, 10 Jan 2022 14:43:00 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     srinivas.kandagatla@linaro.org, bgoswami@codeaurora.org,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ASoC: codecs: lpass-wsa-macro: Check for error pointer after calling devm_regmap_init_mmio
+Date:   Mon, 10 Jan 2022 14:42:59 +0800
+Message-Id: <20220110064259.4175705-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YduEira4sB0+ESYp@codewreck.org>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-CM-TRANSID: qwCowABHTp501dthqI8dBg--.18516S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xr4kWF4DAFy8Cr45XF1UZFb_yoWkJrg_Ga
+        s5ur4kZa40gr9rXr1Dtr40yFs8tF1ayr4rtr48t3Z3J34DJr1fXryUCrnxu3yDursY9a43
+        GFWvqr4Sqry7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJV
+        W0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU-J5rUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dominique,
+The devm_regmap_init_mmio() may return error pointer in some cases, for
+example the possible failure of the kzalloc() in
+regmap_mmio_gen_context().
+Then the wsa->regmap will be error pointer and be used in
+wsa_macro_mclk_enable().
+Therefore, it should be better to check it in order to avoid the
+dereference of the error pointer.
 
-On 2022-01-10 09:57+0900, Dominique Martinet wrote:
-> Hi Thomas,
-> 
-> it's been a while but I had a second look as I intend on submitting this
-> next week, just a small fixup on the Kconfig entry
-> 
-> Thomas Weißschuh wrote on Wed, Nov 03, 2021 at 08:38:21PM +0100:
-> > diff --git a/net/9p/Kconfig b/net/9p/Kconfig
-> > index 64468c49791f..af601129f1bb 100644
-> > --- a/net/9p/Kconfig
-> > +++ b/net/9p/Kconfig
-> > @@ -15,6 +15,13 @@ menuconfig NET_9P
-> >  
-> >  if NET_9P
-> >  
-> > +config NET_9P_FD
-> > +	depends on VIRTIO
-> 
-> I think that's just a copypaste leftover from NET_9P_VIRTIO ?
-> Since it used to be code within NET_9P and it's within a if NET_9P it
-> shouldn't depend on anything.
-> 
-> Also for compatibility I'd suggest we keep it on by default at this
-> point, e.g. add 'default NET_9P' to this block:
+Fixes: 809bcbcecebf ("ASoC: codecs: lpass-wsa-macro: Add support to WSA Macro")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ sound/soc/codecs/lpass-wsa-macro.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yes, you are correct on both points.
+diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
+index d3ac318fd6b6..dd1a8b7bc794 100644
+--- a/sound/soc/codecs/lpass-wsa-macro.c
++++ b/sound/soc/codecs/lpass-wsa-macro.c
+@@ -2405,6 +2405,8 @@ static int wsa_macro_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
+ 
+ 	wsa->regmap = devm_regmap_init_mmio(dev, base, &wsa_regmap_config);
++	if (IS_ERR(wsa->regmap))
++		return PTR_ERR(wsa->regmap);
+ 
+ 	dev_set_drvdata(dev, wsa);
+ 
+-- 
+2.25.1
 
-> diff --git a/net/9p/Kconfig b/net/9p/Kconfig
-> index af601129f1bb..deabbd376cb1 100644
-> --- a/net/9p/Kconfig
-> +++ b/net/9p/Kconfig
-> @@ -16,7 +16,7 @@ menuconfig NET_9P
->  if NET_9P
->  
->  config NET_9P_FD
-> -       depends on VIRTIO
-> +       default NET_9P
->         tristate "9P FD Transport"
->         help
->           This builds support for transports over TCP, Unix sockets and
-> 
-> 
-> I'll just fixup the commit with a word in the message unless you have a
-> problem with it, please let me know! :)
-
-Looks good, thanks!
-
-Thomas

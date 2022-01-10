@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B8A489783
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC1F489789
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244805AbiAJLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:32:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60604 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244745AbiAJLcN (ORCPT
+        id S244796AbiAJLc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:32:58 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:45060 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244737AbiAJLcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:32:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641814332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hrEu87EnXQ6Fg7UvjXggUKw0Jcqes+nBaSmxrmpEEwU=;
-        b=Na8Keg6S0hqNWI8biY0r3XqJygy1yo4X8MajVtNkrjYZ7JkaXEna/RStvL72BrXpcu7NDE
-        XahOiI33eyfF1WIjMQZJ9ZlpcYoRcS8vofZumTqYfCqx7D2HeAtseCkpg848WsjfAVtRto
-        sktfokk7YYiNjV5SS9r2udAHrSKZgjA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-MsPtVj76MgWGNWERMB4MZg-1; Mon, 10 Jan 2022 06:32:09 -0500
-X-MC-Unique: MsPtVj76MgWGNWERMB4MZg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 10 Jan 2022 06:32:24 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E8BB1898292;
-        Mon, 10 Jan 2022 11:32:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F9507B6C9;
-        Mon, 10 Jan 2022 11:31:55 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Ydvl8Dk8z0mF0KFl@infradead.org>
-References: <Ydvl8Dk8z0mF0KFl@infradead.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021541207.640689.564689725898537127.stgit@warthog.procyon.org.uk> <CAOQ4uxjEcvffv=rNXS-r+NLz+=6yk4abRuX_AMq9v-M4nf_PtA@mail.gmail.com> <Ydk6jWmFH6TZLPZq@casper.infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        Amir Goldstein <amir73il@gmail.com>, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 38/68] vfs, cachefiles: Mark a backing file in use with an inode flag
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 92B891F39D;
+        Mon, 10 Jan 2022 11:32:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641814343; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5yczoqJ4BQg2WL0fyAH+pYH9xmK8XAHtm1nKm+BOQPg=;
+        b=hfDPkNvQadiYfysoJqbMBBilYpiPfZ+TNVx5ycRY9qL5zvqrpr8fw8UqsBEI4ZdcS7WeYZ
+        oIXTHrrDH0ssgW7u4HDj5fRNWHPes6JqvGQqbp/6fiuOC4Rt00E3p0AahKWG42AM19kmh+
+        Z9Xsk1d1tU2vUAOqDZl5gBQayZvCnrc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641814343;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5yczoqJ4BQg2WL0fyAH+pYH9xmK8XAHtm1nKm+BOQPg=;
+        b=ixrDC86H4UxFyog5/mx/RsSXkmRVtJXUw/lNYrJAXOZvuoeOrtW0snePz5XjHI/TSDKHvy
+        LaZBGiaiGhFJz2Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BF07139ED;
+        Mon, 10 Jan 2022 11:32:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sN/PHEcZ3GFvdAAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:32:23 +0000
+Date:   Mon, 10 Jan 2022 12:32:26 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/vdso for v5.17
+Message-ID: <YdwZStOiA4hwQsLg@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3735738.1641814315.1@warthog.procyon.org.uk>
-Date:   Mon, 10 Jan 2022 11:31:55 +0000
-Message-ID: <3735739.1641814315@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+Hi Linus,
 
-> So let's name it that way.  We have plenty of files in kernel use using
-> filp_open and this flag very obviously means something else.
+please pull two x86/vdso build fixes for 5.17.
 
-S_KERNEL_LOCK?
+Thx.
 
-David
+---
 
+The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+
+  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_vdso_for_v5.17_rc1
+
+for you to fetch changes up to 9102fa34604159642625f42d7f801f1e04d9ca12:
+
+  x86/purgatory: Remove -nostdlib compiler flag (2021-12-30 14:13:06 +0100)
+
+----------------------------------------------------------------
+- Remove -nostdlib compiler flag now that the vDSO uses the linker
+instead of the compiler driver to link files
+
+----------------------------------------------------------------
+Masahiro Yamada (2):
+      x86/vdso: Remove -nostdlib compiler flag
+      x86/purgatory: Remove -nostdlib compiler flag
+
+ arch/x86/entry/vdso/Makefile | 2 +-
+ arch/x86/purgatory/Makefile  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

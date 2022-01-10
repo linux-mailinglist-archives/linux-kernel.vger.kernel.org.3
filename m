@@ -2,122 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D17488D64
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 00:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6586C488D6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiAIXx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 18:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S237493AbiAJAEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 19:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbiAIXx5 (ORCPT
+        with ESMTP id S235810AbiAJAET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 18:53:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED410C06173F;
-        Sun,  9 Jan 2022 15:53:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 9 Jan 2022 19:04:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F22FC06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 16:04:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXDLp2WQ2z4xtf;
-        Mon, 10 Jan 2022 10:53:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641772434;
-        bh=6HOUCmNugf2XGu363vjtyjbKWU7Ib45fZOI78YJ+wv8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YF9aYkSSYUK1cvGVU+CdhzFbHinVIV8eafOS6KGmvEr1g354uUuLuXzA7FZME8sHy
-         vvmmbQmOUaA46c+g8Q4NQ2RN9VuJRci4RHotfxEVzRXQrVVED1KyXDSZ5CGK7AmIgu
-         ShXUNGQBQbpINt5lKb9d/15k+UqnOodG2KwfEPkagWoX86J3i6/kYY5o38m8GgUIg8
-         5SAWDJVH0ud2Ak64y9BKDHkOvl5c+bVBo8iK32yDz3Rn/uxUXi68ST1eySiktDQkJj
-         F4C+oyfMuAxC8ttAtV9Pqy2W4JVTsSTSS/g7e2oiZjymXXWpN8sR3Rr6RjwXAWLMAS
-         pKdswjxbo3TQA==
-Date:   Mon, 10 Jan 2022 10:53:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the input tree with Linus' tree
-Message-ID: <20220110105353.266873fb@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/B4jPmG7BV93__j4jOfyeuyx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AAC260FD9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAF0C36AE3;
+        Mon, 10 Jan 2022 00:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641773056;
+        bh=58LDqfXkxF6/L/AdUWOUj9Y/5z6CxQ2olP2VZ704bRE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K7sbpY01nmlymY9+aw5kZ6L9Ef+cQLw9BwDT0Uyus5rJekgYRkeof7FxeIL2q2dGe
+         PkNk9V3ooH/84wxerY+dCXl8hn+Lpv+5v+y3sfc2PxhNjH0Tvkiu2cSsldz4/9QmRA
+         KoHzAP7cdydkXzej38yEay92dhyS+yFVFo1RQov0J+BcGoB8b1fp3xjdvZc9YT4nuJ
+         Irx+NhYYv2t7O0fYwBV6UuuQHUFpdQUXOH6PuI6f0P7iuWNN1V0F7w+7aZ9sB7y/Bg
+         GZwWESgXPG35yOoFzD+t3x51Z6VySL3ujcjnYUmbZXM/tMNripzmBGNOzowP0/5LZ2
+         eDfBmD131p17w==
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/6] tracing: Add and use event_command parsing func helpers
+Date:   Sun,  9 Jan 2022 18:04:04 -0600
+Message-Id: <cover.1641772259.git.zanussi@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/B4jPmG7BV93__j4jOfyeuyx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+With more event commands being implemented, it's been pointed out that
+it would make sense to clean up the existing ones and make it easier
+to implement new ones without copying a lot of boilerplate.  The main
+culprit here is the event_command.func() callback - the rest of the
+event_command infrastructure has default implementations that work for
+most implementations.  The func() callback is a little different in
+that every new command needs to customize parsing to some extent.
 
-Hi all,
+This patchset attempts to help clean that up and make it easier for
+new users to deal with.
 
-Today's linux-next merge of the input tree got a conflict in:
+v6:
 
-  drivers/input/misc/axp20x-pek.c
+    Fixed warning for an uninitialized trigger_ops local in
+    event_trigger_parse() pointed out by Steve and the kernel test
+    robot. This was done by removing the need for the local by
+    removing the redundant trigger_ops params in [PATCH v6 3/6]
+    tracing: Remove ops param from event_command reg()/unreg()
+    callbacks.
 
-between commit:
+    Also added a follow-on patch to remove all the other instances of
+    redundant trigger_ops in [PATCH v6 6/6] tracing: Remove redundant
+    trigger_ops params
 
-  5ecc1e947822 ("Input: axp20x-pek - Use new soc_intel_is_cht() helper")
+v5: Changed the parsing helper function example components param and
+    filter to reflect only the param and filter components, and added
+    param_and_filter which now appears in the functions.
 
-from Linus' tree and commit:
+    Removed the check for a NULL *param following the strsep
+    separating the param from the filter in
+    event_trigger_separate_filter() because it will never be true due
+    to the previous check for NULL param_and_filter previously.
 
-  8a78050ee257 ("Input: axp20x-pek - revert "always register interrupt hand=
-lers" change")
+    Changed the param name from trigger to param and updated the
+    function documentation in event_trigger_parse_num().
 
-from the input tree.
+v4: Added two patches changing the names of event_command.func() and
+    event_trigger_ops.func() to make them reflect their functions.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    Added back missing kfree(trigger_data) in event_trigger_callback().
 
---=20
-Cheers,
-Stephen Rothwell
+    Changed char *param to const char *param in
+    event_trigger_check_remove() and event_trigger_empty_param().
 
-diff --cc drivers/input/misc/axp20x-pek.c
-index e09b1fae42e1,c8f87df93a50..000000000000
---- a/drivers/input/misc/axp20x-pek.c
-+++ b/drivers/input/misc/axp20x-pek.c
-@@@ -293,19 -339,7 +323,7 @@@ static int axp20x_pek_probe(struct plat
- =20
-  	axp20x_pek->axp20x =3D dev_get_drvdata(pdev->dev.parent);
- =20
-- 	axp20x_pek->irq_dbr =3D platform_get_irq_byname(pdev, "PEK_DBR");
-- 	if (axp20x_pek->irq_dbr < 0)
-- 		return axp20x_pek->irq_dbr;
-- 	axp20x_pek->irq_dbr =3D regmap_irq_get_virq(
-- 			axp20x_pek->axp20x->regmap_irqc, axp20x_pek->irq_dbr);
--=20
-- 	axp20x_pek->irq_dbf =3D platform_get_irq_byname(pdev, "PEK_DBF");
-- 	if (axp20x_pek->irq_dbf < 0)
-- 		return axp20x_pek->irq_dbf;
-- 	axp20x_pek->irq_dbf =3D regmap_irq_get_virq(
-- 			axp20x_pek->axp20x->regmap_irqc, axp20x_pek->irq_dbf);
--=20
- -	if (axp20x_pek_should_register_input(axp20x_pek, pdev)) {
- +	if (axp20x_pek_should_register_input(axp20x_pek)) {
-  		error =3D axp20x_pek_probe_input_device(axp20x_pek, pdev);
-  		if (error)
-  			return error;
+    Changed event_trigger_separate_filter() to use separate param and
+    filter outparams, and changed the name of the param inparam to
+    param_and_filter to better reflect its contents and avoid the
+    clash with new param outparam.  Changed all parse()
+    implementations to use this new scheme.
 
---Sig_/B4jPmG7BV93__j4jOfyeuyx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    Fixed some typos and added more extensive comments with examples
+    explaining various things that were mentioned as causing confusion
+    and just in general tried to clarify things with respect to the
+    callbacks and parameters.
 
------BEGIN PGP SIGNATURE-----
+v3: broke up event_trigger_check() into smaller functions instead of
+    parameterizing it, and added function documentation.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHbdZEACgkQAVBC80lX
-0Gy6MAf7B7vlT/RHE/J/wW8hpRCF+OfmexcNzxdIpkP4dwzLbj4EQc73CFtiSp6i
-gORpfyFEW00ixLmKUVzWDMAHGiKz8l62GKiCSJu7i3buQLdyNpQKeXawQ4V+01a/
-q0WBiPlVqhklObqq6kptApvYAXfHccqyv5aX2XdoTFdq7HqzByhuecQGHFpPFBrN
-feqFKbAq779fw5nqM3Ag/FDmRoXFnAww5XteobHAt6RyiVX2CddKzjmENMXYlrGZ
-UfIPhQeH1SeeVI6SRiIV+BkJcuwq8dZn+K/DAHF9dvyNeCwChru5/OTb2XcP1X/4
-xqiF281nsY/DH6ub91lUty7b8xGFug==
-=0Q2q
------END PGP SIGNATURE-----
+v2: removed unused event_trigger_remove(). No change in functionality.
 
---Sig_/B4jPmG7BV93__j4jOfyeuyx--
+The following changes since commit a6ed2aee54644cfa2d04ca86308767f5c3a087e8:
+
+  tracing: Switch to kvfree_rcu() API (2021-12-06 17:53:50 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git ftrace/cleanup-hist-func-v6
+
+Tom Zanussi (6):
+  tracing: Change event_command func() to parse()
+  tracing: Change event_trigger_ops func() to trigger()
+  tracing: Remove ops param from event_command reg()/unreg() callbacks
+  tracing: Add helper functions to simplify event_command.parse()
+    callback handling
+  tracing: Have existing event_command.parse() implementations use
+    helpers
+  tracing: Remove redundant trigger_ops params
+
+ kernel/trace/trace.h                |  81 ++--
+ kernel/trace/trace_eprobe.c         |  30 +-
+ kernel/trace/trace_events_hist.c    | 145 +++----
+ kernel/trace/trace_events_trigger.c | 626 +++++++++++++++++++---------
+ 4 files changed, 565 insertions(+), 317 deletions(-)
+
+-- 
+2.17.1
+

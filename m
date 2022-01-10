@@ -2,138 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D6F488FCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCF3488FD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbiAJFhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 00:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiAJFhB (ORCPT
+        id S238782AbiAJFiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 00:38:03 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59000 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233330AbiAJFh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 00:37:01 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE07C06173F;
-        Sun,  9 Jan 2022 21:37:01 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id w7so10915906plp.13;
-        Sun, 09 Jan 2022 21:37:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XzgijtCVnpWWb3j5iItG13/d5JVIpcL83JQiv8SrL4U=;
-        b=fpQIOC9XwhRefOwF8OMBFEc95nRHlXccjoFsoHgDZhgaANuVfyoqLdk05EJPhL3mSV
-         aoJLBLEV86Aigy3rSXJc/GpOd1zb301ZwJXmP2A8Ao8Gij6kppAXmY8lp30yue0Tmg4V
-         OSaiATcTIQVkxMkp/rwFDb2mrKVWTj/1+uXIUJLm0/kPLA28wvdSiRFd6KISY47SRL8s
-         rA4w6jwJpoH/z07TmBFSXWNVbJ0aJQzg1Y/yqNJUahDIH9R/ZofOGa9H4e8mBqpHg/ny
-         BpyGbCx/aIjhHJRrjjsrcJpmapY3sQnNBKRTb4KCDEBiO3KfS/Ahx2pNH2outeM1x4xZ
-         yo9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XzgijtCVnpWWb3j5iItG13/d5JVIpcL83JQiv8SrL4U=;
-        b=CDEKR+WgtkU+MmLV4/CADJX6XNStj1JemB7Sk7qYOd7skaOAZbjdehZIhRXMyCph0J
-         tMcTXvNXuov+TzV1yRmMAqR9s2EN20fSIE+wmEqBoGqqoe+qXj3MoaFRzPyNcNfXI9gE
-         hY2+DIxs/ck0vDGy+3sCFId1KagFeRAShhHa8eRAcrmGUg3MzKZ5Po+DQP62O9rPASbU
-         4JS0ov4Sy+Lc/c2Ucd3BlqY2d4Qm1aCQsFNiu5oCB+NsUaweBoSM3ExaBPmJ4ZUNjAxN
-         tAP/CWjHQxD1aVInZtsXcL30xsuHEpCe7La4WB7W7Sg967qVY0slGReQAw/N2ghultwS
-         vW7w==
-X-Gm-Message-State: AOAM531S1jhr8nT4Z8Gbn4ayRx0jfazSQcTfOuzj/DG4GcOD5bFWxoaT
-        W83bjIgnQXv/rNe/zxEYSEo=
-X-Google-Smtp-Source: ABdhPJzmW1fXWA9i1bXgccJWzMMXxot0p+bBuTLZc7rK9tfwPrana8thmUbJGddowe5hON5Jzme5Qw==
-X-Received: by 2002:a17:902:e84c:b0:14a:421f:1670 with SMTP id t12-20020a170902e84c00b0014a421f1670mr1091683plg.21.1641793021249;
-        Sun, 09 Jan 2022 21:37:01 -0800 (PST)
-Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
-        by smtp.gmail.com with ESMTPSA id my5sm8435238pjb.5.2022.01.09.21.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 21:37:00 -0800 (PST)
-Date:   Mon, 10 Jan 2022 14:36:54 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Jonathan.Cameron@huawei.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Syed Nayyar Waris <syednwaris@gmail.com>
-Subject: Re: [PATCH] counter: 104-quad-8: Add COMPILE_TEST depends
-Message-ID: <YdvF0teoR/ymJJ7e@shinobu>
-References: <20220105094137.259111-1-vilhelm.gray@gmail.com>
- <20220109212251.xzwilquctuij5lev@pengutronix.de>
+        Mon, 10 Jan 2022 00:37:58 -0500
+X-UUID: 9fad2947063448acb76e17ffc44dc617-20220110
+X-UUID: 9fad2947063448acb76e17ffc44dc617-20220110
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1261780878; Mon, 10 Jan 2022 13:37:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 10 Jan 2022 13:37:52 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 10 Jan 2022 13:37:52 +0800
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        Leilk Liu <leilk.liu@mediatek.com>
+Subject: [PATCH 1/2] dt-bindings: spi: Convert spi-mt65xx & spi-slave-mt27xx to json-schema
+Date:   Mon, 10 Jan 2022 13:37:43 +0800
+Message-ID: <20220110053744.30323-1-leilk.liu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ANM/I4XkLOKhQBIc"
-Content-Disposition: inline
-In-Reply-To: <20220109212251.xzwilquctuij5lev@pengutronix.de>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert Mediatek ARM SOC's SPI Master & Slave controller binding
+to json-schema format.
 
---ANM/I4XkLOKhQBIc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+---
+ .../bindings/spi/mediatek,spi-mt65xx.yaml     | 96 +++++++++++++++++++
+ .../spi/mediatek,spi-slave-mt27xx.yaml        | 69 +++++++++++++
+ .../devicetree/bindings/spi/spi-mt65xx.txt    | 68 -------------
+ .../bindings/spi/spi-slave-mt27xx.txt         | 33 -------
+ 4 files changed, 165 insertions(+), 101 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
 
-On Sun, Jan 09, 2022 at 10:22:51PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> On Wed, Jan 05, 2022 at 06:41:37PM +0900, William Breathitt Gray wrote:
-> > 104_QUAD_8 depends on X86, but compiles fine on ARCH=3Darm. This patch
-> > adds support for COMPILE_TEST which is useful for compile testing code
-> > changes to the driver and Counter subsystem.
-> >=20
-> > Suggested-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > Cc: Syed Nayyar Waris <syednwaris@gmail.com>
-> > Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-> > ---
-> >  drivers/counter/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
-> > index 3dcdb681c4e4..5edd155f1911 100644
-> > --- a/drivers/counter/Kconfig
-> > +++ b/drivers/counter/Kconfig
-> > @@ -14,7 +14,7 @@ if COUNTER
-> > =20
-> >  config 104_QUAD_8
-> >  	tristate "ACCES 104-QUAD-8 driver"
-> > -	depends on PC104 && X86
-> > +	depends on (PC104 && X86) || COMPILE_TEST
->=20
-> The driver uses inb and friends. Without looking I wonder if there is
-> something like HAVE_IO or similar this needs to depend on for that?
->=20
-> Best regards
-> Uwe
->=20
-> --=20
-> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
-     |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+new file mode 100644
+index 000000000000..cfa36977eea1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+@@ -0,0 +1,96 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/mediatek,spi-mt65xx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SPI Bus controller for MediaTek ARM SoCs
++
++maintainers:
++  - Leilk Liu <leilk.liu@mediatek.com>
++
++allOf:
++  - $ref: /spi/spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - mediatek,mt7629-spi
++          - const: mediatek,mt7622-spi
++      - items:
++          - enum:
++              - mediatek,mt8516-spi
++          - const: mediatek,mt2712-spi
++      - items:
++          - enum:
++              - mediatek,mt6779-spi
++              - mediatek,mt8192-spi
++              - mediatek,mt8195-spi
++          - const: mediatek,mt6765-spi
++      - const: mediatek,mt2701-spi
++      - const: mediatek,mt6589-spi
++      - const: mediatek,mt6893-spi
++      - const: mediatek,mt8135-spi
++      - const: mediatek,mt8173-spi
++      - const: mediatek,mt8183-spi
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: clock used for the parent clock
++      - description: clock used for the muxes clock
++      - description: clock used for the clock gate
++
++  clock-names:
++    items:
++      - const: parent-clk
++      - const: sel-clk
++      - const: spi-clk
++
++  mediatek,pad-select:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 4
++    items:
++      enum: [0, 1, 2, 3]
++    description:
++      specify which pins group(ck/mi/mo/cs) spi controller used.
++      This is an array.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - '#address-cells'
++  - '#size-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    spi@1100a000 {
++      compatible = "mediatek,mt8173-spi";
++      #address-cells = <1>;
++      #size-cells = <0>;
++      reg = <0x1100a000 0x1000>;
++      interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>;
++      clocks = <&topckgen CLK_TOP_SYSPLL3_D2>,
++               <&topckgen CLK_TOP_SPI_SEL>,
++               <&pericfg CLK_PERI_SPI0>;
++      clock-names = "parent-clk", "sel-clk", "spi-clk";
++      cs-gpios = <&pio 105 GPIO_ACTIVE_LOW>, <&pio 72 GPIO_ACTIVE_LOW>;
++      mediatek,pad-select = <1>, <0>;
++    };
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+new file mode 100644
+index 000000000000..783b16c52928
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/mediatek,spi-slave-mt27xx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SPI Slave controller for MediaTek ARM SoCs
++
++maintainers:
++  - Leilk Liu <leilk.liu@mediatek.com>
++
++allOf:
++  - $ref: /spi/spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: mediatek,mt2712-spi-slave
++      - const: mediatek,mt8195-spi-slave
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: clock used for the clock gate
++
++  clock-names:
++    items:
++      - const: spi
++
++  assigned-clocks:
++    maxItems: 1
++    description: |
++      The mux clock for the given platform.
++
++  assigned-clock-parents:
++    maxItems: 1
++    description: |
++      The parent of mux clock for the given platform.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt2712-clk.h>
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    spi@10013000 {
++      compatible = "mediatek,mt2712-spi-slave";
++      reg = <0x10013000 0x100>;
++      interrupts = <GIC_SPI 283 IRQ_TYPE_LEVEL_LOW>;
++      clocks = <&infracfg CLK_INFRA_AO_SPI1>;
++      clock-names = "spi";
++      assigned-clocks = <&topckgen CLK_TOP_SPISLV_SEL>;
++      assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL1_D2>;
++    };
+diff --git a/Documentation/devicetree/bindings/spi/spi-mt65xx.txt b/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+deleted file mode 100644
+index 2a24969159cc..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
++++ /dev/null
+@@ -1,68 +0,0 @@
+-Binding for MTK SPI controller
+-
+-Required properties:
+-- compatible: should be one of the following.
+-    - mediatek,mt2701-spi: for mt2701 platforms
+-    - mediatek,mt2712-spi: for mt2712 platforms
+-    - mediatek,mt6589-spi: for mt6589 platforms
+-    - mediatek,mt6765-spi: for mt6765 platforms
+-    - mediatek,mt7622-spi: for mt7622 platforms
+-    - "mediatek,mt7629-spi", "mediatek,mt7622-spi": for mt7629 platforms
+-    - mediatek,mt8135-spi: for mt8135 platforms
+-    - mediatek,mt8173-spi: for mt8173 platforms
+-    - mediatek,mt8183-spi: for mt8183 platforms
+-    - mediatek,mt6893-spi: for mt6893 platforms
+-    - "mediatek,mt8192-spi", "mediatek,mt6765-spi": for mt8192 platforms
+-    - "mediatek,mt8195-spi", "mediatek,mt6765-spi": for mt8195 platforms
+-    - "mediatek,mt8516-spi", "mediatek,mt2712-spi": for mt8516 platforms
+-    - "mediatek,mt6779-spi", "mediatek,mt6765-spi": for mt6779 platforms
+-
+-- #address-cells: should be 1.
+-
+-- #size-cells: should be 0.
+-
+-- reg: Address and length of the register set for the device
+-
+-- interrupts: Should contain spi interrupt
+-
+-- clocks: phandles to input clocks.
+-  The first should be one of the following. It's PLL.
+-   -  <&clk26m>: specify parent clock 26MHZ.
+-   -  <&topckgen CLK_TOP_SYSPLL3_D2>: specify parent clock 109MHZ.
+-				      It's the default one.
+-   -  <&topckgen CLK_TOP_SYSPLL4_D2>: specify parent clock 78MHZ.
+-   -  <&topckgen CLK_TOP_UNIVPLL2_D4>: specify parent clock 104MHZ.
+-   -  <&topckgen CLK_TOP_UNIVPLL1_D8>: specify parent clock 78MHZ.
+-  The second should be <&topckgen CLK_TOP_SPI_SEL>. It's clock mux.
+-  The third is <&pericfg CLK_PERI_SPI0>. It's clock gate.
+-
+-- clock-names: shall be "parent-clk" for the parent clock, "sel-clk" for the
+-  muxes clock, and "spi-clk" for the clock gate.
+-
+-Optional properties:
+--cs-gpios: see spi-bus.txt.
+-
+-- mediatek,pad-select: specify which pins group(ck/mi/mo/cs) spi
+-  controller used. This is an array, the element value should be 0~3,
+-  only required for MT8173.
+-    0: specify GPIO69,70,71,72 for spi pins.
+-    1: specify GPIO102,103,104,105 for spi pins.
+-    2: specify GPIO128,129,130,131 for spi pins.
+-    3: specify GPIO5,6,7,8 for spi pins.
+-
+-Example:
+-
+-- SoC Specific Portion:
+-spi: spi@1100a000 {
+-	compatible = "mediatek,mt8173-spi";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	reg = <0 0x1100a000 0 0x1000>;
+-	interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>;
+-	clocks = <&topckgen CLK_TOP_SYSPLL3_D2>,
+-		 <&topckgen CLK_TOP_SPI_SEL>,
+-		 <&pericfg CLK_PERI_SPI0>;
+-	clock-names = "parent-clk", "sel-clk", "spi-clk";
+-	cs-gpios = <&pio 105 GPIO_ACTIVE_LOW>, <&pio 72 GPIO_ACTIVE_LOW>;
+-	mediatek,pad-select = <1>, <0>;
+-};
+diff --git a/Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt b/Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
+deleted file mode 100644
+index 9192724540fd..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
++++ /dev/null
+@@ -1,33 +0,0 @@
+-Binding for MTK SPI Slave controller
+-
+-Required properties:
+-- compatible: should be one of the following.
+-    - mediatek,mt2712-spi-slave: for mt2712 platforms
+-    - mediatek,mt8195-spi-slave: for mt8195 platforms
+-- reg: Address and length of the register set for the device.
+-- interrupts: Should contain spi interrupt.
+-- clocks: phandles to input clocks.
+-  It's clock gate, and should be <&infracfg CLK_INFRA_AO_SPI1>.
+-- clock-names: should be "spi" for the clock gate.
+-
+-Optional properties:
+-- assigned-clocks: it's mux clock, should be <&topckgen CLK_TOP_SPISLV_SEL>.
+-- assigned-clock-parents: parent of mux clock.
+-  It's PLL, and should be one of the following.
+-   -  <&topckgen CLK_TOP_UNIVPLL1_D2>: specify parent clock 312MHZ.
+-				       It's the default one.
+-   -  <&topckgen CLK_TOP_UNIVPLL1_D4>: specify parent clock 156MHZ.
+-   -  <&topckgen CLK_TOP_UNIVPLL2_D4>: specify parent clock 104MHZ.
+-   -  <&topckgen CLK_TOP_UNIVPLL1_D8>: specify parent clock 78MHZ.
+-
+-Example:
+-- SoC Specific Portion:
+-spis1: spi@10013000 {
+-	compatible = "mediatek,mt2712-spi-slave";
+-	reg = <0 0x10013000 0 0x100>;
+-	interrupts = <GIC_SPI 283 IRQ_TYPE_LEVEL_LOW>;
+-	clocks = <&infracfg CLK_INFRA_AO_SPI1>;
+-	clock-names = "spi";
+-	assigned-clocks = <&topckgen CLK_TOP_SPISLV_SEL>;
+-	assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL1_D2>;
+-};
+-- 
+2.25.1
 
-If I'm not mistaken, on unsupported architectures include/linux/io.h
-will pull in include/asm-generic/io.h which has default implementations
-for inb and friends if they are not otherwise defined. It doesn't look
-like these default implementations are guarded by a Kconfig setting so
-we should be fine in this case.
-
-William Breathitt Gray
-
---ANM/I4XkLOKhQBIc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHbxfYACgkQhvpINdm7
-VJLyVBAAoJe+migjeZDIOiRWJUsmvSxd9df68w7iRU2LfCGeoX+kDWx9txgsnWyD
-MjBzxiILN+I20JxtG+TOZDLfGkN74s8kBnE+tnPp4YEnFtpCbJ1atk5VF1pS82g9
-+Ki/RBEVILRM/HsA0Ej/7HbeoQQYp0QO/rSYRvQlp980f6uVeIoHt29DCyGXuzfK
-fQEmIrlwC2Tlz/tVmK+ZdHB9Cvo11labhayeuUWt7LSZMIw7Covi3aJBraQPvw1P
-/bPEYBTql6Xq0qGsq8jRjWQi0ObU85w+ZxItPEcP89P7ik0GU3O270NSolhEnQpm
-1I8w8bgZ1sKc30xrvNHtkSgkEvpfgAgLweRnIPWoYpPZLYrww92lTPwMGwgDYlef
-KxF78ljboTCbQfwizDbKVESolRfkN5bHKOVXhpswoN3wWdgpXnqX4YkCizjiB3rH
-OxXGHgpk9PiecxP5pyLs/hiT681FEf9k5x4t9uH5zUXoEzFTybYnZfdWYRxzhCdn
-JxuD6toO5Xu1b0v84hRD9u3p1XBI1HMC3NqRer8ePJjXcsWegCQ71t8/MS8U1G2G
-3y1AKma8Mjx4O7vmA1uPsWumSp8DysdsnK56L11M16W2QsLk4ha4oCbuTwqyg1bN
-0aIk0bF5y2jVMCRgnrEdgrKVEMK8gta2LhrpK+FZdJOijXds1zg=
-=ll8+
------END PGP SIGNATURE-----
-
---ANM/I4XkLOKhQBIc--

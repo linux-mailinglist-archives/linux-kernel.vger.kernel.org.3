@@ -2,83 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0638489DCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C8C489DD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237684AbiAJQsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiAJQsG (ORCPT
+        id S237718AbiAJQtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:49:04 -0500
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:43992 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237707AbiAJQtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:48:06 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197A7C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:48:06 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id o6so56057743edc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1as2ORVFGAUPz82GACIBpegMjn+JCuCyTRlbW8CfXN8=;
-        b=QFtyR/r9smMnqiKzjW9tRSQpEdzB65FWrdr0jE+xD+pxb0PYYJhdBEot8djPPLnEtn
-         Axgwkc+vukNyahS9U3cmNi8OJhE+ZSddUqFMIpBIFpPv5v0ZhZhI+skhCfH5Mqsf0bLN
-         WxiqSn1daWffv/HhOKs+KLh8svAYUWUBYXP6k=
+        Mon, 10 Jan 2022 11:49:03 -0500
+Received: by mail-oo1-f54.google.com with SMTP id z20-20020a4a3054000000b002dbfaf0b568so3698992ooz.10;
+        Mon, 10 Jan 2022 08:49:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1as2ORVFGAUPz82GACIBpegMjn+JCuCyTRlbW8CfXN8=;
-        b=tQO7Za6utiI5GBKhS9KV7uz5xzxLIzxVm5XqUtW+AZ7QkSekJVRyYJduML1kU5U9Op
-         lgPv8NoQgzk+kmAQlIpSxOIdwsr4a9GLRm+KuXhFDr1cXQW6guOdQnhu4B+OCdjuBeMr
-         8PwNaC9w/D9VLwggf+qVfh1aW2ajEDzDLNIsCR3IAnSd0Yfv76nRKPnFEbJLMRWhNBaj
-         Uk/GCN8ATuFl2CmvEPiDJsRg1TzH5dbAVebEYo0RfcEOMJPRXDiy+fPcCLthziFtmY00
-         QUl2zKJNNf2k+hGlH9KhFigLn3loR+1cE9zF+GIaY9UDaMjVO2E3FyCDUpqDD4b2fn//
-         U4ZA==
-X-Gm-Message-State: AOAM532dCIGYOZ5cJIICUkxT8Aq/bcEAVfX1N/oDvBlQPdncju2kwocd
-        BQS/ff9LaGfOgwXuhtQbDRDePtY1NId6A1TmYcY=
-X-Google-Smtp-Source: ABdhPJzJ9IYRlYqeXur+7/+4M6StSRKT59aI5HpQ6jPsoIKZg9N/tKv5RfbXJa6LKONefOBVlD1CcA==
-X-Received: by 2002:a05:6402:35d6:: with SMTP id z22mr510129edc.334.1641833284455;
-        Mon, 10 Jan 2022 08:48:04 -0800 (PST)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id o3sm2612876ejm.77.2022.01.10.08.48.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 08:48:04 -0800 (PST)
-Received: by mail-wm1-f53.google.com with SMTP id v123so9196308wme.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:48:03 -0800 (PST)
-X-Received: by 2002:a1c:19c6:: with SMTP id 189mr19704237wmz.155.1641833283772;
- Mon, 10 Jan 2022 08:48:03 -0800 (PST)
-MIME-Version: 1.0
-References: <CAPM=9twJOj8+cfEPArF7N_TZpVM8vN+S4s2mMM7phsS-ZOgmJA@mail.gmail.com>
- <163789349650.12632.8523698126811716771.pr-tracker-bot@kernel.org> <CAMuHMdXEKbc9ovGPqtO8v-xRCoSKF=KZ-53g+7vRKnDZMCmeGA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXEKbc9ovGPqtO8v-xRCoSKF=KZ-53g+7vRKnDZMCmeGA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 10 Jan 2022 08:47:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgWQ0mYz_yt9cn3KDr+6eQ5F3wvJ_cGp-E3A5PW+aeuuw@mail.gmail.com>
-Message-ID: <CAHk-=wgWQ0mYz_yt9cn3KDr+6eQ5F3wvJ_cGp-E3A5PW+aeuuw@mail.gmail.com>
-Subject: Re: [git pull] drm fixes for 5.16-rc3
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=UE8yD5Ct/F6dHlrHLAV9VNma1gP2lMc+7CQcqBSce8s=;
+        b=3Dy13qjlJ345E0CJorSgZChrd79+LrcrEHqQFt67/ViERIDxm7zggJJ9CGlp6+9J5M
+         LKWTJfKsJmUIiWMM8ruMgx1xh9D23qFHF+MRYpkXtT1GyL70dRjIsvPjkrQku16mCqfx
+         ie85B2P8c4ezv5w8Vi0j7eBduefTWdStI++OuKdsz5IfkHNY75kkzOECpw5Hk1GWwOyz
+         uDgCQTyV/wP7wPp0kzxUvQXYZHeucG3R56UHDWwGgQH3Zonjy4laIJWaqsxvG0xxZHk5
+         6v0XpGBUmShGpHhp0JU2hNfAlsc5QkAYikVD9zmXLygDTrfZbAwBx2s5mLwhX15TLFHo
+         nhgA==
+X-Gm-Message-State: AOAM533tlSUFNf/W8GFras+GA2wowePA0832bgJekYV8cj5lJw3w707Q
+        az+I9XCR/pAE1ReKZirfaA==
+X-Google-Smtp-Source: ABdhPJyAQKG9qcTs+ZJVuMZ/jvEd8orfRKAYQTVMvMNX+7d4dfJqitUbb9xMHJqKbaljkyvpyqBEgQ==
+X-Received: by 2002:a4a:51c5:: with SMTP id s188mr441999ooa.44.1641833342522;
+        Mon, 10 Jan 2022 08:49:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id v23sm1585676otn.42.2022.01.10.08.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 08:49:01 -0800 (PST)
+Received: (nullmailer pid 1067454 invoked by uid 1000);
+        Mon, 10 Jan 2022 16:48:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org
+In-Reply-To: <20220110053744.30323-1-leilk.liu@mediatek.com>
+References: <20220110053744.30323-1-leilk.liu@mediatek.com>
+Subject: Re: [PATCH 1/2] dt-bindings: spi: Convert spi-mt65xx & spi-slave-mt27xx to json-schema
+Date:   Mon, 10 Jan 2022 10:48:59 -0600
+Message-Id: <1641833339.690847.1067453.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 9, 2022 at 11:38 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> The commit that merged this branch made a seemingly innocent change to
-> the top Makefile:
+On Mon, 10 Jan 2022 13:37:43 +0800, Leilk Liu wrote:
+> Convert Mediatek ARM SOC's SPI Master & Slave controller binding
+> to json-schema format.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  .../bindings/spi/mediatek,spi-mt65xx.yaml     | 96 +++++++++++++++++++
+>  .../spi/mediatek,spi-slave-mt27xx.yaml        | 69 +++++++++++++
+>  .../devicetree/bindings/spi/spi-mt65xx.txt    | 68 -------------
+>  .../bindings/spi/spi-slave-mt27xx.txt         | 33 -------
+>  4 files changed, 165 insertions(+), 101 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
+> 
 
-"Seemingly" innocent?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Or something darker and more sinister, related to the unrelenting
-slaughter of flightless fowl?
+yamllint warnings/errors:
 
-You be the judge.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml: properties:compatible:oneOf: [{'const': 'mediatek,mt2712-spi-slave'}, {'const': 'mediatek,mt8195-spi-slave'}] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
+	hint: Use 'enum' rather than 'oneOf' + 'const' entries
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml: ignoring, error in schema: properties: compatible: oneOf
+Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.example.dt.yaml:0:0: /example-0/spi@10013000: failed to match any schema with compatible: ['mediatek,mt2712-spi-slave']
 
-             Linus
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1577767
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

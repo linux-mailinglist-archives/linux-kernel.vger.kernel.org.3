@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7826489777
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C66F48977E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244761AbiAJLas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:30:48 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:47375 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244760AbiAJL3t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:29:49 -0500
-Received: from [192.168.0.5] (ip5f5aece2.dynamic.kabel-deutschland.de [95.90.236.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 879DE61E5FE02;
-        Mon, 10 Jan 2022 12:29:44 +0100 (CET)
-Message-ID: <b177cb21-aa01-2408-9b26-164c028b6593@molgen.mpg.de>
-Date:   Mon, 10 Jan 2022 12:29:44 +0100
+        id S244772AbiAJLcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244737AbiAJLbv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:31:51 -0500
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3440DC06173F;
+        Mon, 10 Jan 2022 03:31:51 -0800 (PST)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Mon, 10 Jan 2022 12:31:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1641814309; bh=+3+XudVZJVlSF4hofBLXncn1knHit7hhlLwg5tcx9vE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E/k8e89+sCIX3aQ0iNCG3Pv2AvcHnHHe1kto/10wnFFkObLqwkmG5UqCMWq21o25Z
+         G/dJhs9B+2UaJMDL6RHQS9OoIAJIfm42P/ZBldUjsEqKing+VVnBFnEDch2uBPbYYJ
+         2T67DnuPXcNunSXonHWi41dvqQ0zjYBFsdjrrI5k=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 3962D80514;
+        Mon, 10 Jan 2022 12:31:49 +0100 (CET)
+Date:   Mon, 10 Jan 2022 12:31:48 +0100
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 1/5] sh: rename suffix-y to suffix_y
+Message-ID: <YdwZJO/ar+GHuBd1@buildd.core.avm.de>
+References: <20220109181529.351420-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: 100 ms boot time increase regression in acpi_init()/acpi_scan_bus()
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        regressions@lists.linux.dev
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220109181529.351420-1-masahiroy@kernel.org>
+X-purgate-ID: 149429::1641814309-0000056E-303CD523/0/0
+X-purgate-type: clean
+X-purgate-size: 3575
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#regzbot introduced: v5.13..v5.14-rc1
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215419
+On Mon, Jan 10, 2022 at 03:15:25AM +0900, Masahiro Yamada wrote:
+> 'export suffix-y' does not work reliably because hyphens are disallowed
+> in shell variables.
+> 
+> A similar issue was fixed by commit 2bfbe7881ee0 ("kbuild: Do not use
+> hyphen in exported variable name").
+> 
+> If I do similar in dash, ARCH=sh fails to build.
+> 
+>   $ mv linux linux~
+>   $ cd linux~
+>   $ dash
+>   $ make O=foo/bar ARCH=sh CROSS_COMPILE=sh4-linux-gnu- defconfig all
+>   make[1]: Entering directory '/home/masahiro/linux~/foo/bar'
+>     [ snip ]
+>   make[4]: *** No rule to make target 'arch/sh/boot/compressed/vmlinux.bin.', needed by 'arch/sh/boot/compressed/piggy.o'.  Stop.
+>   make[3]: *** [/home/masahiro/linux~/arch/sh/boot/Makefile:40: arch/sh/boot/compressed/vmlinux] Error 2
+>   make[2]: *** [/home/masahiro/linux~/arch/sh/Makefile:194: zImage] Error 2
+>   make[1]: *** [/home/masahiro/linux~/Makefile:350: __build_one_by_one] Error 2
+>   make[1]: Leaving directory '/home/masahiro/linux~/foo/bar'
+>   make: *** [Makefile:219: __sub-make] Error 2
+> 
+> The maintainer of GNU Make stated that there is no consistent way to
+> export variables that do not meet the shell's naming criteria.
+> (https://savannah.gnu.org/bugs/?55719)
+> 
+> Consequently, you cannot use hyphens in exported variables.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
 
-Dear Linux folks,
-
-
-On the Intel T4500 laptop Acer TravelMate 5735Z with Debian 
-sid/unstable, there is a 100 ms introduced between Linux 5.10.46 and 
-5.13.9, and is still present in Linux 5.15.5.
-
-     [    0.000000] microcode: microcode updated early to revision 
-0xa0b, date = 2010-09-28
-     [    0.000000] Linux version 5.15.0-2-amd64 
-(debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-13) 11.2.0, GNU 
-ld (GNU Binutils for Debian) 2.37) #1 SMP Debian 5.15.5-2 (2021-12-18)
-     [    0.000000] Command line: 
-BOOT_IMAGE=/boot/vmlinuz-5.15.0-2-amd64 
-root=UUID=e17cec4f-d2b8-4cc3-bd39-39a10ed422f4 ro quiet noisapnp 
-cryptomgr.notests random.trust_cpu=on initcall_debug log_buf_len=4M
-     […]
-     [    0.262243] calling  acpi_init+0x0/0x487 @ 1
-     […]
-     [    0.281655] ACPI: Enabled 15 GPEs in block 00 to 3F
-     [    0.394855] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
-     […]
-     [    0.570908] initcall acpi_init+0x0/0x487 returned 0 after 300781 
-usecs
-
-I attached all the log files to the Kernel.org Bugzilla bug report 
-#215419 [1].
-
-Unfortunately, I am unable to bisect the issue, as it’s not my machine, 
-and I do not have a lot of access to it.
-
-Using ftrace, unfortunately, I didn’t save all of them, I think the path is
-
-     acpi_init() → acpi_scan_init() → acpi_bus_scan(ACPI_ROOT_OBJECT)
-
-But this path hasn’t changed as far as I can see. Anyway, from that 
-path, somehow
-
-     acpi_bus_check_add_1() → acpi_bus_check_add() → … → 
-acpi_bus_check_add() → acpi_add_single_object() → acpi_bus_get_status()
-
-is called, and the `acpi_bus_get_status()` call takes 100 ms on the 
-system – also the cause for bug #208705 [2] –, but that code path wasn’t 
-taken before.
-
-Do you know from the top of your head, what changed? I am going to have 
-short access to the system every two weeks or so, so debugging is 
-unfortunately quite hard.
-
-What is already on my to-do list:
-
-1.  Use dynamic debug `drivers/acpi/scan.c`
-2.  Trace older Linux kernel (5.10.46) to see the differences
-3.  Booting some GNU/Linux system to test 5.11 (Ubuntu 20.10) and 5.12
-4.  Unrelated to the regression, but trace `acpi_bus_get_status()` to 
-understand the 100 ms delay to solve bug #208705 [2]
-
-
-Kind regards,
-
-Paul
-
-
-PS: Do you know of GNU/Linux live systems that are available for all 
-Linux kernel releases and have an initrd, that just stores/uploads the 
-output of `dmesg`?
-
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=215419
-      "100 ms regression in boottime before `ACPI: PCI Root Bridge [PCI0]"
-[2]: https://bugzilla.kernel.org/show_bug.cgi?id=208705
-      "boot performance: 100 ms delay in PCI initialization - Acer 
-TravelMate 5735Z"
+> 
+>  arch/sh/boot/Makefile            | 16 ++++++++--------
+>  arch/sh/boot/compressed/Makefile |  2 +-
+>  2 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/sh/boot/Makefile b/arch/sh/boot/Makefile
+> index 5c123f5b2797..1f5d2df3c7e0 100644
+> --- a/arch/sh/boot/Makefile
+> +++ b/arch/sh/boot/Makefile
+> @@ -19,12 +19,12 @@ CONFIG_ZERO_PAGE_OFFSET	?= 0x00001000
+>  CONFIG_ENTRY_OFFSET	?= 0x00001000
+>  CONFIG_PHYSICAL_START	?= $(CONFIG_MEMORY_START)
+>  
+> -suffix-y := bin
+> -suffix-$(CONFIG_KERNEL_GZIP)	:= gz
+> -suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
+> -suffix-$(CONFIG_KERNEL_LZMA)	:= lzma
+> -suffix-$(CONFIG_KERNEL_XZ)	:= xz
+> -suffix-$(CONFIG_KERNEL_LZO)	:= lzo
+> +suffix_y := bin
+> +suffix_$(CONFIG_KERNEL_GZIP)	:= gz
+> +suffix_$(CONFIG_KERNEL_BZIP2)	:= bz2
+> +suffix_$(CONFIG_KERNEL_LZMA)	:= lzma
+> +suffix_$(CONFIG_KERNEL_XZ)	:= xz
+> +suffix_$(CONFIG_KERNEL_LZO)	:= lzo
+>  
+>  targets := zImage vmlinux.srec romImage uImage uImage.srec uImage.gz \
+>  	   uImage.bz2 uImage.lzma uImage.xz uImage.lzo uImage.bin \
+> @@ -106,10 +106,10 @@ OBJCOPYFLAGS_uImage.srec := -I binary -O srec
+>  $(obj)/uImage.srec: $(obj)/uImage FORCE
+>  	$(call if_changed,objcopy)
+>  
+> -$(obj)/uImage: $(obj)/uImage.$(suffix-y)
+> +$(obj)/uImage: $(obj)/uImage.$(suffix_y)
+>  	@ln -sf $(notdir $<) $@
+>  	@echo '  Image $@ is ready'
+>  
+>  export CONFIG_PAGE_OFFSET CONFIG_MEMORY_START CONFIG_BOOT_LINK_OFFSET \
+>         CONFIG_PHYSICAL_START CONFIG_ZERO_PAGE_OFFSET CONFIG_ENTRY_OFFSET \
+> -       KERNEL_MEMORY suffix-y
+> +       KERNEL_MEMORY suffix_y
+> diff --git a/arch/sh/boot/compressed/Makefile b/arch/sh/boot/compressed/Makefile
+> index cf3174df7859..c1eb9a62de55 100644
+> --- a/arch/sh/boot/compressed/Makefile
+> +++ b/arch/sh/boot/compressed/Makefile
+> @@ -64,5 +64,5 @@ OBJCOPYFLAGS += -R .empty_zero_page
+>  
+>  LDFLAGS_piggy.o := -r --format binary --oformat $(ld-bfd) -T
+>  
+> -$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix-y) FORCE
+> +$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix_y) FORCE
+>  	$(call if_changed,ld)
+> -- 
+> 2.32.0
+> 

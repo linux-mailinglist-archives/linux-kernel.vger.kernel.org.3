@@ -2,92 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D4F48947C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574A848948C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242254AbiAJI5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:57:40 -0500
-Received: from proxima.lasnet.de ([78.47.171.185]:54072 "EHLO
-        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241968AbiAJI5G (ORCPT
+        id S242550AbiAJI7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:59:24 -0500
+Received: from mail-vk1-f172.google.com ([209.85.221.172]:37455 "EHLO
+        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242566AbiAJI6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:57:06 -0500
-Received: from [IPV6:2003:e9:d726:98fc:cdf9:bc0b:bacf:e07a] (p200300e9d72698fccdf9bc0bbacfe07a.dip0.t-ipconnect.de [IPv6:2003:e9:d726:98fc:cdf9:bc0b:bacf:e07a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id 4E392C05A1;
-        Mon, 10 Jan 2022 09:57:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1641805022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IaYI1Hh+FARrQFhEF0cAj1myGc5Q4XmWUc/d7YCm7jg=;
-        b=BKDixR9k/4qpycMv7rQ/G7RH+cpCQMhfg2Acg7w/IGD1+rdGc5GseTOKD1i5UytXMKqtya
-        P9+m/lrTcpfV8t+WRUlMGlNtdTfnCBT3W8oaWT/c/QANHfS8NRCf5jFbZ8zLkQKvCLOOed
-        yGN/gBkqLSKlNjs5VwU5jbRUgT9G9/ug6FAbjZjNAuIT5fsTHyNvRRkC436soN+aEoRniV
-        fSJBQsh9SDom8Jd1MGrnbTkQiNUoyVzEIweKsN+YisIWze//bFrVeLV78xblj6gwoFbxoe
-        L4XDfc5zqgf30t6x3WHLdxo49ceKt7ZOybXOlcFfw7OJj9A8fL1NUhfAbNhaRw==
-Message-ID: <871f2181-6356-8bfd-47cb-0872d70b2cd9@datenfreihafen.org>
-Date:   Mon, 10 Jan 2022 09:57:01 +0100
+        Mon, 10 Jan 2022 03:58:05 -0500
+Received: by mail-vk1-f172.google.com with SMTP id l68so7685417vkh.4;
+        Mon, 10 Jan 2022 00:58:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vzvAQJe2veQdg4DaRkaqygFL5jyj5pSAthDAblQ6LsI=;
+        b=ygGulsMb4AZV9jyJCbG3UVjOkNQhjFoMIk+Pha8O9zwDymvq+YNb6kEE7tTKrlILcB
+         heAERqjG8azMDc+lV+lnwjRGQVEFGvR9SBVETLLstfxO4vMWbUkKbhmKD0hrIdSqsQKC
+         6ao4qQqxYE8jRRuD2eGig9s9BebKVsG7lDbQA9Yge7UfoVTvaLr1xVriGey+ynftWuR+
+         C0+GBUP/jRec3XhmTGs6VONryKIQz/w0QZjrlK9dfO1ry0UQUj9rd7sZKNtqycDlZRmG
+         M8cyUpcVxe7DML7m/yew9rz7tBbj5CdH3sBxm8zEjPhiIi+765EpkDS1IJLmZaF3+Ozf
+         3CLQ==
+X-Gm-Message-State: AOAM532mkdx6b8MGdpGJi6UJkeiW8yLY51NjYkLyO+hLSiPW9sCrZQsy
+        RPIT32n8oFjn9GJtokHTT/hwETQWe1Jrbw==
+X-Google-Smtp-Source: ABdhPJxsE6CWgbUAtb+8rUvw8031kWWFZ1ZdP3vEmegnNDkcrpZln+zkwVwSBRfEp0UfGDmoiPV7Mw==
+X-Received: by 2002:a1f:2ad0:: with SMTP id q199mr7134321vkq.29.1641805084009;
+        Mon, 10 Jan 2022 00:58:04 -0800 (PST)
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
+        by smtp.gmail.com with ESMTPSA id o12sm3504802uae.1.2022.01.10.00.58.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 00:58:03 -0800 (PST)
+Received: by mail-vk1-f182.google.com with SMTP id l68so7685388vkh.4;
+        Mon, 10 Jan 2022 00:58:02 -0800 (PST)
+X-Received: by 2002:a1f:1bd0:: with SMTP id b199mr13248764vkb.33.1641805082754;
+ Mon, 10 Jan 2022 00:58:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH -next v2] ieee802154: atusb: move to new USB API
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, alex.aring@gmail.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <2439d9ab-133f-0338-24f9-a9a5cd2065a3@datenfreihafen.org>
- <20220108131838.12321-1-paskripkin@gmail.com>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <20220108131838.12321-1-paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1641289490.git.zong.li@sifive.com> <5a7786cff08d55d0e084cd28bc2800565fa2dce7.1641289490.git.zong.li@sifive.com>
+In-Reply-To: <5a7786cff08d55d0e084cd28bc2800565fa2dce7.1641289490.git.zong.li@sifive.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jan 2022 09:57:51 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV5gbeaaXPfJ4EuYur0NChp3iurdzNzC_UOLDrGP7rZNA@mail.gmail.com>
+Message-ID: <CAMuHMdV5gbeaaXPfJ4EuYur0NChp3iurdzNzC_UOLDrGP7rZNA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dmaengine: sf-pdma: Get number of channel by device tree
+To:     Zong Li <zong.li@sifive.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Bin Meng <bin.meng@windriver.com>, green.wan@sifive.com,
+        Vinod <vkoul@kernel.org>, dmaengine <dmaengine@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Zong,
 
-Hello.
+On Wed, Jan 5, 2022 at 6:44 AM Zong Li <zong.li@sifive.com> wrote:
+> It currently assumes that there are four channels by default, it might
+> cause the error if there is actually less than four channels. Change
+> that by getting number of channel from device tree.
+>
+> Signed-off-by: Zong Li <zong.li@sifive.com>
 
-On 08.01.22 14:18, Pavel Skripkin wrote:
-> Old USB API is prone to uninit value bugs if error handling is not
-> correct. Let's move atusb to use new USB API to
-> 
-> 	1) Make code more simple, since new API does not require memory
-> 	   to be allocates via kmalloc()
-> 
-> 	2) Defend driver from usb-related uninit value bugs.
-> 
-> 	3) Make code more modern and simple
-> 
-> This patch removes atusb usb wrappers as Greg suggested [0], this will make
-> code more obvious and easier to understand over time, and replaces old
-> API calls with new ones.
-> 
-> Also this patch adds and updates usb related error handling to prevent
-> possible uninit value bugs in future
-> 
-> Link: https://lore.kernel.org/all/YdL0GPxy4TdGDzOO@kroah.com/ [0]
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> ---
-> 
-> Changes in v2:
-> 	- Fixed logic bug in atusb_get_and_conf_chip()
-> 	- Renamed rc variable to reg in atusb_read_subreg()
-> 
-> ---
->   drivers/net/ieee802154/atusb.c | 186 ++++++++++++---------------------
->   1 file changed, 67 insertions(+), 119 deletions(-)
+Thanks for your patch!
 
+> --- a/drivers/dma/sf-pdma/sf-pdma.c
+> +++ b/drivers/dma/sf-pdma/sf-pdma.c
+> @@ -484,21 +484,24 @@ static int sf_pdma_probe(struct platform_device *pdev)
+>         struct sf_pdma *pdma;
+>         struct sf_pdma_chan *chan;
+>         struct resource *res;
+> -       int len, chans;
+> -       int ret;
+> +       int len, ret;
+>         const enum dma_slave_buswidth widths =
+>                 DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
+>                 DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
+>                 DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
+>                 DMA_SLAVE_BUSWIDTH_64_BYTES;
+>
+> -       chans = PDMA_NR_CH;
+> -       len = sizeof(*pdma) + sizeof(*chan) * chans;
+> +       len = sizeof(*pdma) + sizeof(*chan) * PDMA_MAX_NR_CH;
+>         pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+>         if (!pdma)
+>                 return -ENOMEM;
+>
+> -       pdma->n_chans = chans;
+> +       ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
+> +                                  &pdma->n_chans);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "failed to read dma-channels\n");
+> +               return ret;
 
-This patch has been applied to the wpan-next tree and will be
-part of the next pull request to net-next. Thanks!
+Note that this is not backwards-compatible with existing DTBs, which
+lack the "dma-channels" property.
+Perhaps you want to fallback to a default of 4 instead?
 
-regards
-Stefan Schmidt
+> +       }
+>
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>         pdma->membase = devm_ioremap_resource(&pdev->dev, res);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

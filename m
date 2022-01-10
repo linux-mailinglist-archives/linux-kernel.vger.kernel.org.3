@@ -2,123 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B64F7489A01
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC57489A02
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbiAJNeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:34:01 -0500
+        id S232616AbiAJNeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:34:03 -0500
 Received: from mga17.intel.com ([192.55.52.151]:13575 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232329AbiAJNd7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S232469AbiAJNd7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 08:33:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641821639; x=1673357639;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FHH3ntuwOU335ek4Jx/BvjAW6jSw4WkOdxb71pgB48M=;
-  b=NsnoEaDOWnG5aJkhI9iWgjwB+tCSdecBfrY63LlAT+whgdc75F00Zs9a
-   faOw72WTMQ8AtprkOYT7rkrgwGAW/p+6phuEYr6wn2p7oXtAxfjn+GRtN
-   nrUis9ZMDZI6SPbFOwIVDyQfrOC+vltNxE6oNNpKv7650uYPUQpHHzOmv
-   mQlS7RA3mJMuo39sgOK39KbMTOu4n/sDTSohqTX7apYHILXzDFYjbHlOJ
-   QC83ei2TP6WnXNyV3sDnFUl1Ee6Jnnau55p1d3v7OwGSe4Yi6yuIK3sk+
-   1mFnFdJq+b7UFKN+xM2Of8/7RXU4US4UwMajbqIpFOLW/sInU+H5nVMln
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BLaGhAWIehRQcM1U5/7DpGlbIBtYb8hXB5v9pg/fvnw=;
+  b=dfoODDyzwM3r0CvX3N7sMg2w6DZx5YJQat+BBuXuUSDLcVOFx37oCCJq
+   iuU3XjWFPLFl+OTyNWmbrEpEbdKzbTbpIbQepH6+6YKKfE/yCEXz895CF
+   ZYdBahhyE2nPGIgcp/R7jTWWFc5i0k79L+vGroKMs+9YCf/LpQCZSIVgd
+   pdxndgi5Qi/IUbKa3INjpzJqkflte39qI6vszRM3hoMvsYwYae4nm5ns9
+   7CkMM+m4Oklittc7bNmezCoEwSQvbbxQmfo6cza5xX2uSl8ywU9LDUSvQ
+   d+E1reZnz0tIfM5FQnsG8NRtFcMnV7Oi3n0QueYdE/F5/lxFMCM0BZk1V
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="223918192"
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="223918193"
 X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="223918192"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
+   d="scan'208";a="223918193"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 05:33:59 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="557984992"
+   d="scan'208";a="474129435"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 10 Jan 2022 05:33:57 -0800
+  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2022 05:33:57 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n6uo8-0003Wx-O2; Mon, 10 Jan 2022 13:33:56 +0000
-Date:   Mon, 10 Jan 2022 21:32:57 +0800
+        id 1n6uo8-0003Ws-L8; Mon, 10 Jan 2022 13:33:56 +0000
+Date:   Mon, 10 Jan 2022 21:33:00 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kajol Jain <kjain@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: [acme:perf/core 45/46] include/uapi/linux/perf_event.h:1339:18:
- error: 'PERF_MEM_HOPS_2' undeclared; did you mean 'PERF_MEM_HOPS_0'?
-Message-ID: <202201102122.s9aPc0vp-lkp@intel.com>
+To:     Laurent Dufour <ldufour@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, tyreld@linux.ibm.com,
+        Nathan Lynch <nathanl@linux.ibm.com>
+Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
+Message-ID: <202201102154.a95OQEPr-lkp@intel.com>
+References: <20220106161339.74656-1-ldufour@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220106161339.74656-1-ldufour@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
-head:   65f8d08cf838df3c3d728cdef908090237931496
-commit: af2b24f228a0373ac65eb7a502e0bc31e2c0269d [45/46] perf powerpc: Add data source encodings for power10 platform
-config: powerpc64-buildonly-randconfig-r003-20220109 (https://download.01.org/0day-ci/archive/20220110/202201102122.s9aPc0vp-lkp@intel.com/config)
+Hi Laurent,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on linux/master linus/master v5.16 next-20220110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Laurent-Dufour/powerpc-pseries-read-the-lpar-name-from-the-firmware/20220107-001503
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc64-randconfig-r026-20220106 (https://download.01.org/0day-ci/archive/20220110/202201102154.a95OQEPr-lkp@intel.com/config)
 compiler: powerpc64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?id=af2b24f228a0373ac65eb7a502e0bc31e2c0269d
-        git remote add acme https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
-        git fetch --no-tags acme perf/core
-        git checkout af2b24f228a0373ac65eb7a502e0bc31e2c0269d
+        # https://github.com/0day-ci/linux/commit/5cf0dea6e919e93ff3088f87acd40e84608a6861
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Laurent-Dufour/powerpc-pseries-read-the-lpar-name-from-the-firmware/20220107-001503
+        git checkout 5cf0dea6e919e93ff3088f87acd40e84608a6861
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/perf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/pseries/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/perf_event.h:17,
-                    from arch/powerpc/perf/isa207-common.h:12,
-                    from arch/powerpc/perf/isa207-common.c:9:
-   arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
->> include/uapi/linux/perf_event.h:1339:18: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
-    1339 |         (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-         |                  ^~~~~~~~~
-   arch/powerpc/perf/isa207-common.h:273:41: note: in expansion of macro 'PERF_MEM_S'
-     273 | #define P(a, b)                         PERF_MEM_S(a, b)
-         |                                         ^~~~~~~~~~
-   arch/powerpc/perf/isa207-common.c:240:79: note: in expansion of macro 'P'
-     240 |                                 ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-         |                                                                               ^
-   include/uapi/linux/perf_event.h:1339:18: note: each undeclared identifier is reported only once for each function it appears in
-    1339 |         (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-         |                  ^~~~~~~~~
-   arch/powerpc/perf/isa207-common.h:273:41: note: in expansion of macro 'PERF_MEM_S'
-     273 | #define P(a, b)                         PERF_MEM_S(a, b)
-         |                                         ^~~~~~~~~~
-   arch/powerpc/perf/isa207-common.c:240:79: note: in expansion of macro 'P'
-     240 |                                 ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-         |                                                                               ^
->> include/uapi/linux/perf_event.h:1339:18: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
-    1339 |         (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-         |                  ^~~~~~~~~
-   arch/powerpc/perf/isa207-common.h:273:41: note: in expansion of macro 'PERF_MEM_S'
-     273 | #define P(a, b)                         PERF_MEM_S(a, b)
-         |                                         ^~~~~~~~~~
-   arch/powerpc/perf/isa207-common.c:244:79: note: in expansion of macro 'P'
-     244 |                                 ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
-         |                                                                               ^
+   arch/powerpc/platforms/pseries/lparcfg.c:257: warning: Function parameter or member 'm' not described in 'parse_mpp_data'
+   arch/powerpc/platforms/pseries/lparcfg.c:295: warning: Function parameter or member 'm' not described in 'parse_mpp_x_data'
+   arch/powerpc/platforms/pseries/lparcfg.c:334: warning: Function parameter or member 'm' not described in 'read_RTAS_lpar_name'
+>> arch/powerpc/platforms/pseries/lparcfg.c:334: warning: expecting prototype for Read the lpar name using the RTAS ibm,get-system(). Prototype was for read_RTAS_lpar_name() instead
+>> arch/powerpc/platforms/pseries/lparcfg.c:378: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Read the LPAR name from the Device Tree.
+   arch/powerpc/platforms/pseries/lparcfg.c:678: warning: Function parameter or member 'entitlement' not described in 'update_mpp'
+   arch/powerpc/platforms/pseries/lparcfg.c:678: warning: Function parameter or member 'weight' not described in 'update_mpp'
 
 
-vim +1339 include/uapi/linux/perf_event.h
+vim +334 arch/powerpc/platforms/pseries/lparcfg.c
 
-fec9cc6175d0ec Kajol Jain       2021-10-06  1337  
-d6be9ad6c960f4 Stephane Eranian 2013-01-24  1338  #define PERF_MEM_S(a, s) \
-0d9dfc23f4d8c1 Mike Frysinger   2014-01-23 @1339  	(((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-d6be9ad6c960f4 Stephane Eranian 2013-01-24  1340  
-
-:::::: The code at line 1339 was first introduced by commit
-:::::: 0d9dfc23f4d8c17365c84eb48ecca28b963ba192 uapi: convert u64 to __u64 in exported headers
-
-:::::: TO: Mike Frysinger <vapier@gentoo.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+   323	
+   324	/**
+   325	 * Read the lpar name using the RTAS ibm,get-system-parameter call.
+   326	 *
+   327	 * The name read through this call is updated if changes are made by the end
+   328	 * user on the hypervisor side.
+   329	 *
+   330	 * Some hypervisor (like Qemu) may not provide this value. In that case, a non
+   331	 * null value is returned.
+   332	 */
+   333	static int read_RTAS_lpar_name(struct seq_file *m)
+ > 334	{
+   335		int rc, len, token;
+   336		union {
+   337			char raw_buffer[GET_SYS_PARM_BUF_SIZE];
+   338			struct {
+   339				__be16 len;
+   340				char name[GET_SYS_PARM_BUF_SIZE-2];
+   341			};
+   342		} *local_buffer;
+   343	
+   344		token = rtas_token("ibm,get-system-parameter");
+   345		if (token == RTAS_UNKNOWN_SERVICE)
+   346			return -EINVAL;
+   347	
+   348		local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
+   349		if (!local_buffer)
+   350			return -ENOMEM;
+   351	
+   352		do {
+   353			spin_lock(&rtas_data_buf_lock);
+   354			memset(rtas_data_buf, 0, sizeof(*local_buffer));
+   355			rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
+   356				       __pa(rtas_data_buf), sizeof(*local_buffer));
+   357			if (!rc)
+   358				memcpy(local_buffer->raw_buffer, rtas_data_buf,
+   359				       sizeof(local_buffer->raw_buffer));
+   360			spin_unlock(&rtas_data_buf_lock);
+   361		} while (rtas_busy_delay(rc));
+   362	
+   363		if (!rc) {
+   364			/* Force end of string */
+   365			len = min((int) be16_to_cpu(local_buffer->len),
+   366				  (int) sizeof(local_buffer->name)-1);
+   367			local_buffer->name[len] = '\0';
+   368	
+   369			seq_printf(m, "partition_name=%s\n", local_buffer->name);
+   370		} else
+   371			rc = -ENODATA;
+   372	
+   373		kfree(local_buffer);
+   374		return rc;
+   375	}
+   376	
+   377	/**
+ > 378	 * Read the LPAR name from the Device Tree.
+   379	 *
+   380	 * The value read in the DT is not updated if the end-user is touching the LPAR
+   381	 * name on the hypervisor side.
+   382	 */
+   383	static int read_DT_lpar_name(struct seq_file *m)
+   384	{
+   385		struct device_node *rootdn;
+   386		const char *name;
+   387	
+   388		rootdn = of_find_node_by_path("/");
+   389		if (!rootdn)
+   390			return -ENOENT;
+   391	
+   392		name = of_get_property(rootdn, "ibm,partition-name", NULL);
+   393		if (!name)
+   394			return -ENOENT;
+   395	
+   396		seq_printf(m, "partition_name=%s\n", name);
+   397		return 0;
+   398	}
+   399	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

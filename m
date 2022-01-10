@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFD74892A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FA9489175
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243853AbiAJHp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:45:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241748AbiAJHiS (ORCPT
+        id S239985AbiAJHcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:32:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57920 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239998AbiAJH2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:38:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FBEC028BB1;
-        Sun,  9 Jan 2022 23:32:45 -0800 (PST)
+        Mon, 10 Jan 2022 02:28:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5C6BB81213;
-        Mon, 10 Jan 2022 07:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAF0C36AED;
-        Mon, 10 Jan 2022 07:32:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFF62B81205;
+        Mon, 10 Jan 2022 07:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9B2C36AE9;
+        Mon, 10 Jan 2022 07:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799963;
-        bh=5ucqwL7Dxkwj99euF0edW3rqp3iP71cRd2u/ZGk/uBs=;
+        s=korg; t=1641799681;
+        bh=/UEPMbtShXn5pcYLecF9tRLU9B6bfwJpFLPXCUE1fes=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Joj5pbsBMUEXkr2g6F/IyqexB9vdYtZsk2oJZUFmBRoZWXlcRF/UnIW8jnce2nvfR
-         OpPyn5uVUj5j75sKuXNEfcLUBm81xgK9568XFc01KpeTO31ayqzVPNJZryBPdUK2aN
-         mRWdsyK4GRdvwfq3owvFNbPGQfUCZ4Qby/fRLrZQ=
+        b=Mwbw8H3r/3Fl69O57dAvj88O3VBkzVXykrJx0t3ibsh9i+dLMeVpKHkmALVAlHSbk
+         K+D1EXN2lqclATNksjmCfuujlzFJuIZp9+ExnYWrazq8XQIaxw1IFkV4HXCDFJKNYV
+         h0cAt4XsTbC1rmD6kkid0vFp2CnOUraO84mhiNto=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arthur Kiyanovski <akiyano@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 30/72] net: ena: Fix wrong rx request id by resetting device
+        stable@vger.kernel.org,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.4 12/34] i40e: Fix for displaying message regarding NVM version
 Date:   Mon, 10 Jan 2022 08:23:07 +0100
-Message-Id: <20220110071822.580753572@linuxfoundation.org>
+Message-Id: <20220110071816.059667607@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,50 +47,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arthur Kiyanovski <akiyano@amazon.com>
+From: Mateusz Palczewski <mateusz.palczewski@intel.com>
 
-commit cb3d4f98f0b26eafa0b913ac3716e4714254a747 upstream.
+commit 40feded8a247f95957a0de9abd100085fb320a2f upstream.
 
-A wrong request id received from the device is a sign that
-something is wrong with it, therefore trigger a device reset.
+When loading the i40e driver, it prints a message like: 'The driver for the
+device detected a newer version of the NVM image v1.x than expected v1.y.
+Please install the most recent version of the network driver.' This is
+misleading as the driver is working as expected.
 
-Also add some debug info to the "Page is NULL" print to make
-it easier to debug.
+Fix that by removing the second part of message and changing it from
+dev_info to dev_dbg.
 
-Fixes: 1738cd3ed342 ("net: ena: Add a driver for Amazon Elastic Network Adapters (ENA)")
-Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 4fb29bddb57f ("i40e: The driver now prints the API version in error message")
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/amazon/ena/ena_netdev.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -1428,6 +1428,7 @@ static struct sk_buff *ena_rx_skb(struct
- 				  u16 *next_to_clean)
- {
- 	struct ena_rx_buffer *rx_info;
-+	struct ena_adapter *adapter;
- 	u16 len, req_id, buf = 0;
- 	struct sk_buff *skb;
- 	void *page_addr;
-@@ -1440,8 +1441,14 @@ static struct sk_buff *ena_rx_skb(struct
- 	rx_info = &rx_ring->rx_buffer_info[req_id];
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -15036,8 +15036,8 @@ static int i40e_probe(struct pci_dev *pd
  
- 	if (unlikely(!rx_info->page)) {
--		netif_err(rx_ring->adapter, rx_err, rx_ring->netdev,
--			  "Page is NULL\n");
-+		adapter = rx_ring->adapter;
-+		netif_err(adapter, rx_err, rx_ring->netdev,
-+			  "Page is NULL. qid %u req_id %u\n", rx_ring->qid, req_id);
-+		ena_increase_stat(&rx_ring->rx_stats.bad_req_id, 1, &rx_ring->syncp);
-+		adapter->reset_reason = ENA_REGS_RESET_INV_RX_REQ_ID;
-+		/* Make sure reset reason is set before triggering the reset */
-+		smp_mb__before_atomic();
-+		set_bit(ENA_FLAG_TRIGGER_RESET, &adapter->flags);
- 		return NULL;
- 	}
- 
+ 	if (hw->aq.api_maj_ver == I40E_FW_API_VERSION_MAJOR &&
+ 	    hw->aq.api_min_ver > I40E_FW_MINOR_VERSION(hw))
+-		dev_info(&pdev->dev,
+-			 "The driver for the device detected a newer version of the NVM image v%u.%u than expected v%u.%u. Please install the most recent version of the network driver.\n",
++		dev_dbg(&pdev->dev,
++			"The driver for the device detected a newer version of the NVM image v%u.%u than v%u.%u.\n",
+ 			 hw->aq.api_maj_ver,
+ 			 hw->aq.api_min_ver,
+ 			 I40E_FW_API_VERSION_MAJOR,
 
 

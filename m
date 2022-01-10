@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF71A489F07
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FEE489F0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238948AbiAJSSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238877AbiAJSSI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:18:08 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E647AC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:18:07 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso1122047pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:18:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=NWKMZ//AyFWFbpFk6FF66OtPadVuan7a1ybZS8hGNR8=;
-        b=Ll4iRykqdcl9PvRslbNFUWjKaHZgk3tyMrO5VUIxPPqFD689FO4kq+Jyfw8os17WfJ
-         iNnIEY8OTH1dZLBkorN5rtUP6GUmPLoWw7UqlQeVF08KokKtiUBMtTLazYtujkTZm1qt
-         c/lvS5kYQyxkrbLCTWxtEABkowHVw5eJu7AVs99cUhqqKolyqeL8xniMqLptx1wo/81y
-         4x5Ft9UIxwg/xO2nKE/Vkpxzhsk+mjERc418MampyPnLLtZLO8WxH+j+prXa9FiB5KeM
-         ZYSpvK51HgpMrXivLgT0P7IWLgLWl+DQ4uZMIRQXyFk2eUxA2558JXEdelkh9m5XQ2fM
-         mCsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=NWKMZ//AyFWFbpFk6FF66OtPadVuan7a1ybZS8hGNR8=;
-        b=ACwD/ahWy2NPhuIOurYPfqM9s2yGED8BmYSyc7U16EvuSsEYesNYjoFYAPRrCHViCi
-         sH9NOoCSwmiu50ZMCJaRkKWWt2ANmG+jonb/NWiAY8OTbYCvIL76n3dt17RVTfeRozhi
-         KibGjRx8uzkXEsL1rYPN841WA00t1ZIrbyA0v1IRCUCm+xsaJhMI+5Ua76V7uAo4TctY
-         xoBAkQ/1da+LLlD7PdUzLWcnDMqr3ff0rbRRoI8zCVnPX4KPCa6ItlWYm+hDFPi+930b
-         V3VhNdo/RzAKYnFSrrHtSKP91B1wjFPn4nU8kOZ4RNpRmcbvmv+mYe86s26xTHOwAQja
-         +DKA==
-X-Gm-Message-State: AOAM531GMIcQpGnfVF6xhtMa2r14JZkHNht/ZIeKHwt6KyGAMdTHbpDP
-        9TADLRIvmsYZdyTorR4PoLJjcesNU9kRoBlqVSw=
-X-Google-Smtp-Source: ABdhPJxhv7ofoeMtqWshj+IyU4gddIct4nsnGP6mEmvLuFepmElBcnv0/dTZ8Q0uJUBTERqUFfE3OtJlhuR+XJRh/Ho=
-X-Received: by 2002:a62:8855:0:b0:4bd:e21c:1f14 with SMTP id
- l82-20020a628855000000b004bde21c1f14mr879682pfd.76.1641838687237; Mon, 10 Jan
- 2022 10:18:07 -0800 (PST)
+        id S239015AbiAJSSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:18:48 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:35268 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238877AbiAJSSr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 13:18:47 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 820621EC058B;
+        Mon, 10 Jan 2022 19:18:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641838721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=7SbeRV6UEdUsXzvAGrPNWS2oF82v/3ZWPDmaBetCX9c=;
+        b=ORgY9flUVYOk47K8WIQ8w68tUAPNMKH/4Sq7uiwWHrmp7bXvKDgJD0ipPkSLf3UqvlekCJ
+        A0nxvwrQVDbdVWi8w/VoeQ0m4MjmBCRWmoC2ZcWlaOjsAlSG6LxAwsU2opp0i+KVwnaMUF
+        tCF5jeqa2HaoDUojVfWp4WobIGJYvtI=
+Date:   Mon, 10 Jan 2022 19:18:49 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+Subject: Re: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
+ __fpstate_reset() a function argument
+Message-ID: <Ydx4icAIOY6MFhLj@zn.tnic>
+References: <20220107185512.25321-1-pbonzini@redhat.com>
+ <20220107185512.25321-6-pbonzini@redhat.com>
+ <YdiX5y4KxQ7GY7xn@zn.tnic>
+ <BN9PR11MB527688406C0BDCF093C718858C509@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Ydvz0g+Bdys5JyS9@zn.tnic>
+ <761a554a-d13f-f1fb-4faf-ca7ed28d4d3a@redhat.com>
+ <YdxP0FVWEJa/vrPk@zn.tnic>
+ <7994877a-0c46-07a5-eab0-0a8dd6244e9a@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:cac1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 10:18:06
- -0800 (PST)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <uchekalu0211@gmail.com>
-Date:   Mon, 10 Jan 2022 10:18:06 -0800
-Message-ID: <CADXpZ38ABPfqvJUUWh+pH5zZqS_7-pQ__jo1G2L+yd+zQ5jvEQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7994877a-0c46-07a5-eab0-0a8dd6244e9a@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention Please,
+On Mon, Jan 10, 2022 at 04:55:01PM +0100, Paolo Bonzini wrote:
+> So this means that "the author must be the first SoB" is not an absolute
+> rule.  In the case of this patch we had:
+> 
+> From: Jing Liu <jing2.liu@intel.com>
+> ...
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Jing Liu <jing2.liu@intel.com>
+> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 
-I am Bar. uchenna ilobi ,  How are you, I hope you are fine and
-healthy? This is to inform you that i have concluded the transaction
-successfully with the help of a new partner from Venezuela and now the
-fund has been transferred to Venezuela into the bank account of the
-new partner.
+Looking at Kevin's explanation, that should be:
 
-Meanwhile, I have decided to compensate you with the sum of
-US$350,000.00 (thiree Hundred and Fifty Thousand United States
-Dollars) due to your past effort, though you disappointed me along the
-line. But nevertheless I am very happy for the successful ending of
-the transaction without any problem and that is the reason why i have
-decided to compensate you with the sum of US$350,000.00 so that you
-will share the joy with me.
+Signed-off-by: Jing Liu <jing2.liu@intel.com>		# author
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>	# v1 submitter
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>	# handler/reviewer
+Signed-off-by: Jing Liu <jing2.liu@intel.com>		# v2-v3 submitter
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>	# v4-v5 submitter
 
-I advise you to contact my secretary for Atm Card of US$350.000.00,
-which I kept for you. Contact him now without any delay.
+> and the possibilities could be:
+> 
+> 1) have two SoB lines for Jing (before and after Thomas)
+> 
+> 2) add a Co-developed-by for Thomas as the first line
 
-Name: solomon brandy
+If Thomas would prefer. But then it becomes:
 
-Email:solomonbrandyfiveone@gmail.com
+Signed-off-by: Jing Liu <jing2.liu@intel.com>           # author
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>        # v1 submitter
+Co-developed-by: Thomas Gleixner <tglx@linutronix.de>	# co-author
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>     # handler/reviewer
+Signed-off-by: Jing Liu <jing2.liu@intel.com>           # v2-v3 submitter
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>        # v4-v5 submitter
 
-Kindly reconfirm to him the following below information:
+and that means, Thomas worked on that patch *after* Yang submitted v1.
+Which is the exact chronological order, as Kevin writes.
 
-Your full name_________________________
-Your address__________________________
-Your country___________________________
-Your age______________________________
-Your occupation________________________
-Your cell Phone number______________________
+> 3) do exactly what the gang did ("remain practical and do only an SOB
+> chain")
 
-Note that if you did not send him the above information complete, he
-will not release the Atm card to you because he has to be sure that it
-is you. Ask him to send you the total sum of ($350.000.00 ) Atm card,
-which I kept for you.
+Yes, but not change the SOB order.
 
-Best regards,
+Because if you do that, then it doesn't state what the exact path was
+the patch took and how it ended up upstream. And due to past fun stories
+with SCO, we want to track exactly how a patch ended up upstream. And I
+think this is the most important aspect of those SOB chains.
 
-Mr. uchenna ilobi
+IMNSVHO.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

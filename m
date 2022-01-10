@@ -2,270 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68865489CD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BFA489CD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236751AbiAJPxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236509AbiAJPxk (ORCPT
+        id S236772AbiAJPzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:55:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43042 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236627AbiAJPzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:53:40 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BA8C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:53:40 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id o12so45963738lfk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HBW2OstPq6azV/zG0QKD1KFJzNdbnl//l+gZEX+L2L8=;
-        b=vrC3hVwjcCaUDWw5jb78HZ4FzrSNFlxZ0FUww4GgyKBYhps+btO0anMO9oav5HGyjG
-         /edmtHUWYKJw477iyFlVwSn/VsQDrh9MUnY7Gftf+jYpJH6ls9GtOlfbgZ73Q8w3/az3
-         rCow8p3MF6oTstrOqUPTfRfNP/GTUoYon9eJztDZu59YpU0jLhV0a+VPEemor02sg4V5
-         IsaMYE9NvCuWkPU7sCfvmbszHUGjD1mFzR2mR0/KNd+W6/Q9cuhvS6HueI6n9y9hqrMt
-         SyxKDyo6g4f7a/9eHJ7wwe8Y9AU+E1/Us+DAPsq19cVQOfz6RLw/cSmZfaUcPk0UaR8d
-         oOAA==
+        Mon, 10 Jan 2022 10:55:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641830105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XpYeQhiPDirU0G/PVNqCRwCNkTCrk6kfnonmEcbmwc0=;
+        b=E/yBzizbMv7rbMQZGRgL0VvkVvQzrvafPxs6f+N5xUvzlHgz3XqToId7Gh118y3bCmYsqa
+        Q/LotjiJESAzjb16kxaiPyn8p2WG88CM57exGTtVsqFX5r6As0WIdmkMc16lHpFwSyqQQV
+        kDDZVe/mtc+cillgpCzd3pZXk2/K3gM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-8axmZRznMheJy1_FMJsaMw-1; Mon, 10 Jan 2022 10:55:04 -0500
+X-MC-Unique: 8axmZRznMheJy1_FMJsaMw-1
+Received: by mail-ed1-f70.google.com with SMTP id c8-20020a05640227c800b003fdc1684cdeso2476846ede.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:55:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HBW2OstPq6azV/zG0QKD1KFJzNdbnl//l+gZEX+L2L8=;
-        b=fooUEnd/3SW422Lzz3K8oRg1jyuG1R4keX3XtMfJoStGcR+MomzKAwvSUPYIIufqZr
-         Gv9u4wXfECKnclbJYFpdo+1gLDwNR0+M9yX1XC12FX39XhKDdGQqxjdqXUSCwI28xlk1
-         wkDl+eix2yqKa73pQ2ey0oxYuqLSAaJcaocPTTzghFQqVKyf/Qb7kGqn8oXRQAAWC0+T
-         FzSxkW/LDrLl4BBo5Ysz/o2zifvRn0j4EJhLpsDQQGVMlqHoPGfE7oL7lqnzoShJmvCM
-         4Yy0pAxM94LtqswACyxrQ4cdC7mH6WnoxKj0+PmQiUyxa/RBJJNLu7QK3sR4681gqQ7h
-         6Mzg==
-X-Gm-Message-State: AOAM530SMCx1enQA5XIkYrUCRaALP7U0BCn6Kwf4IFz6PW3tu5xDJvXh
-        7NjBYsL7bv9d1RIGmW1feogWBSd+0Ovr1E7Trdq8IA==
-X-Google-Smtp-Source: ABdhPJzteGZSDWns/A/lze9IkSw0eMh8Iv5GOOjAqEZmg0bejCnQby2U46cKetQAVFQdgDmMzryQrUIDGGhwq6ww8i4=
-X-Received: by 2002:a05:6512:1593:: with SMTP id bp19mr238516lfb.645.1641830018433;
- Mon, 10 Jan 2022 07:53:38 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XpYeQhiPDirU0G/PVNqCRwCNkTCrk6kfnonmEcbmwc0=;
+        b=MpcAMxM1SIXu/VaSmcK0nH9GtOQ6L9ra1V3rQS7QOZ+JY8sajjADDvy5GlX8eimpxJ
+         R/71VXnSMDSR0hEVWT85ECPbFSbDeQLJXQdh0VaQ5mYmXHqjpbbuhOJkziUAIdRR0sVJ
+         6uhlUtKgDlkiJ4Ecs52/C3RSMluOOhp7+tdL8e1d13KwkSxjgOufm0tjFHKrkzl3VQF9
+         hX0G2+UnSj+bzuqibIIBR64pa4VWEcTBp05rqIi8hTNgWPgp4LnO81Mx+/q32lJmAgp/
+         0q1Fawr0aqot4HsbSC8j7jdY2OCSsqoXu7jC5JrrYfgOC/WueeV8WHl6a7sCn85LetSX
+         O8zg==
+X-Gm-Message-State: AOAM532pmgPUCR4bRvfYyqofsnyfozD+ht0VDioi19zvzQXC+8ZK3kXh
+        1SqW6gMjbdJRn4uKX90YWHiDbnam7TLnZUD/jCpvz1roX5QXGq1lQ6mgKYpA5lTXALRbnNPDfM1
+        lOI1fb3f3jlSMf++ERUgfH+81
+X-Received: by 2002:a17:906:2559:: with SMTP id j25mr309160ejb.416.1641830103369;
+        Mon, 10 Jan 2022 07:55:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7T5q1x9hsc3bVzo1lfPD24rVEwbE8/18ZOdEUfUvWPhR6gTWcqSFxJrCNFXChTF5aB6OI2A==
+X-Received: by 2002:a17:906:2559:: with SMTP id j25mr309144ejb.416.1641830103124;
+        Mon, 10 Jan 2022 07:55:03 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id he35sm2582404ejc.135.2022.01.10.07.55.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 07:55:02 -0800 (PST)
+Message-ID: <7994877a-0c46-07a5-eab0-0a8dd6244e9a@redhat.com>
+Date:   Mon, 10 Jan 2022 16:55:01 +0100
 MIME-Version: 1.0
-References: <20211210093307.31701-1-mgorman@techsingularity.net>
- <20211210093307.31701-3-mgorman@techsingularity.net> <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
- <20211213130131.GQ3366@techsingularity.net> <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
- <YbnW/vLgE8MmQopN@BLR-5CG11610CF.amd.com> <20211215122550.GR3366@techsingularity.net>
- <YbuGYtxRSqVkOdbj@BLR-5CG11610CF.amd.com> <20211220111243.GS3366@techsingularity.net>
- <CAKfTPtARUODOnL9X-X+09cCu_BeMbZsW9U=kHX2vrXor7Du6qQ@mail.gmail.com> <20220105104207.GV3366@techsingularity.net>
-In-Reply-To: <20220105104207.GV3366@techsingularity.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 10 Jan 2022 16:53:26 +0100
-Message-ID: <CAKfTPtBCdgKb7gBDoFo3ictVYhgQGcneHViEtYj8o=WVH3kTaA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
+ __fpstate_reset() a function argument
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+References: <20220107185512.25321-1-pbonzini@redhat.com>
+ <20220107185512.25321-6-pbonzini@redhat.com> <YdiX5y4KxQ7GY7xn@zn.tnic>
+ <BN9PR11MB527688406C0BDCF093C718858C509@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Ydvz0g+Bdys5JyS9@zn.tnic> <761a554a-d13f-f1fb-4faf-ca7ed28d4d3a@redhat.com>
+ <YdxP0FVWEJa/vrPk@zn.tnic>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YdxP0FVWEJa/vrPk@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 at 11:42, Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> On Tue, Dec 21, 2021 at 06:13:15PM +0100, Vincent Guittot wrote:
-> > > <SNIP>
-> > >
-> > > @@ -9050,9 +9054,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
-> > >   * This is an approximation as the number of running tasks may not be
-> > >   * related to the number of busy CPUs due to sched_setaffinity.
-> > >   */
-> > > -static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
-> > > +static inline bool allow_numa_imbalance(int dst_running, int imb_numa_nr)
-> > >  {
-> > > -       return (dst_running < (dst_weight >> 2));
-> > > +       return dst_running < imb_numa_nr;
-> > >  }
-> > >
-> > >  /*
-> > >
-> > > <SNIP>
-> > >
-> > > @@ -9280,19 +9285,13 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
-> > >         }
-> > >  }
-> > >
-> > > -#define NUMA_IMBALANCE_MIN 2
-> > > -
-> > >  static inline long adjust_numa_imbalance(int imbalance,
-> > > -                               int dst_running, int dst_weight)
-> > > +                               int dst_running, int imb_numa_nr)
-> > >  {
-> > > -       if (!allow_numa_imbalance(dst_running, dst_weight))
-> > > +       if (!allow_numa_imbalance(dst_running, imb_numa_nr))
-> > >                 return imbalance;
-> > >
-> > > -       /*
-> > > -        * Allow a small imbalance based on a simple pair of communicating
-> > > -        * tasks that remain local when the destination is lightly loaded.
-> > > -        */
-> > > -       if (imbalance <= NUMA_IMBALANCE_MIN)
-> > > +       if (imbalance <= imb_numa_nr)
-> >
-> > Isn't this always true ?
-> >
-> > imbalance is "always" < dst_running as imbalance is usually the number
-> > of these tasks that we would like to migrate
-> >
->
-> It's not necessarily true. allow_numa_imbalanced is checking if
-> dst_running < imb_numa_nr and adjust_numa_imbalance is checking the
-> imbalance.
->
-> imb_numa_nr = 4
-> dst_running = 2
-> imbalance   = 1
->
-> In that case, imbalance of 1 is ok, but 2 is not.
+On 1/10/22 16:25, Borislav Petkov wrote:
+> "Standard sign-off procedure applies, i.e. the ordering of
+> Signed-off-by: tags should reflect the chronological history of
+> the patch insofar as possible, regardless of whether the author
+> is attributed via From: or Co-developed-by:. Notably, the last
+> Signed-off-by: must always be that of the developer submitting the
+> patch."
 
-I don't catch your example. Why is imbalance = 2 not ok in your
-example above ? allow_numa_imbalance still returns true (dst-running <
-imb_numa_nr) and we still have imbalance <= imb_numa_nr
+So this means that "the author must be the first SoB" is not an absolute 
+rule.  In the case of this patch we had:
 
-Also the name dst_running is quite confusing; In the case of
-calculate_imbalance, busiest->nr_running is passed as dst_running
-argument. But the busiest group is the src not the dst of the balance
+From: Jing Liu <jing2.liu@intel.com>
+...
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Jing Liu <jing2.liu@intel.com>
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 
-Then,  imbalance < busiest->nr_running in load_balance because we try
-to even the number of task running in each groups without emptying it
-and allow_numa_imbalance checks that dst_running < imb_numa_nr. So we
-have imbalance < dst_running < imb_numa_nr
 
->
-> >
-> > >                 return 0;
-> > >
-> > >         return imbalance;
-> > > @@ -9397,7 +9396,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
-> > >                 /* Consider allowing a small imbalance between NUMA groups */
-> > >                 if (env->sd->flags & SD_NUMA) {
-> > >                         env->imbalance = adjust_numa_imbalance(env->imbalance,
-> > > -                               busiest->sum_nr_running, env->sd->span_weight);
-> > > +                               busiest->sum_nr_running, env->sd->imb_numa_nr);
-> > >                 }
-> > >
-> > >                 return;
-> > > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > > index d201a7052a29..1fa3e977521d 100644
-> > > --- a/kernel/sched/topology.c
-> > > +++ b/kernel/sched/topology.c
-> > > @@ -2242,6 +2242,55 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
-> > >                 }
-> > >         }
-> > >
-> > > +       /*
-> > > +        * Calculate an allowed NUMA imbalance such that LLCs do not get
-> > > +        * imbalanced.
-> > > +        */
-> > > +       for_each_cpu(i, cpu_map) {
-> > > +               unsigned int imb = 0;
-> > > +               unsigned int imb_span = 1;
-> > > +
-> > > +               for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
-> > > +                       struct sched_domain *child = sd->child;
-> > > +
-> > > +                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
-> > > +                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
-> >
-> > sched_domains have not been degenerated yet so you found here the DIE domain
-> >
->
-> Yes
->
-> > > +                               struct sched_domain *top, *top_p;
-> > > +                               unsigned int llc_sq;
-> > > +
-> > > +                               /*
-> > > +                                * nr_llcs = (sd->span_weight / llc_weight);
-> > > +                                * imb = (llc_weight / nr_llcs) >> 2
-> >
-> > it would be good to add a comment to explain why 25% of LLC weight /
-> > number of LLC in a node is the right value.
->
-> This?
->
->                                  * The 25% imbalance is an arbitrary cutoff
->                                  * based on SMT-2 to balance between memory
->                                  * bandwidth and avoiding premature sharing
->                                  * of HT resources and SMT-4 or SMT-8 *may*
->                                  * benefit from a different cutoff. nr_llcs
->                                  * are accounted for to mitigate premature
->                                  * cache eviction due to multiple tasks
->                                  * using one cache while a sibling cache
->                                  * remains relatively idle.
->
-> > For example, why is it better than just 25% of the LLC weight ?
->
-> Because lets say there are 2 LLCs then an imbalance based on just the LLC
-> weight might allow 2 tasks to share one cache while another is idle. This
-> is the original problem whereby the vanilla imbalance allowed multiple
-> LLCs on the same node to be overloaded which hurt workloads that prefer
-> to spread wide.
+and the possibilities could be:
 
-In this case, shouldn't it be (llc_weight >> 2) * nr_llcs to fill each
-llc up to 25%  ? instead of dividing by nr_llcs
+1) have two SoB lines for Jing (before and after Thomas)
 
-As an example, you have
-1 node with 1 LLC with 128 CPUs will get an imb_numa_nr = 32
-1 node with 2 LLC with 64 CPUs each will get an imb_numa_nr = 8
-1 node with 4 LLC with 32 CPUs each will get an imb_numa_nr = 2
+2) add a Co-developed-by for Thomas as the first line
 
-sd->imb_numa_nr is used at NUMA level so the more LLC you have the
-lower imbalance is allowed
+3) do exactly what the gang did ("remain practical and do only an SOB 
+chain")
 
->
-> > Do you want to allow the same imbalance at node level whatever the
-> > number of LLC in the node ?
-> >
->
-> At this point, it's less clear how the larger domains should be
-> balanced and the initial scaling is as good an option as any.
->
-> > > +                                *
-> > > +                                * is equivalent to
-> > > +                                *
-> > > +                                * imb = (llc_weight^2 / sd->span_weight) >> 2
-> > > +                                *
-> > > +                                */
-> > > +                               llc_sq = child->span_weight * child->span_weight;
-> > > +
-> > > +                               imb = max(2U, ((llc_sq / sd->span_weight) >> 2));
-> > > +                               sd->imb_numa_nr = imb;
-> > > +
-> > > +                               /*
-> > > +                                * Set span based on top domain that places
-> > > +                                * tasks in sibling domains.
-> > > +                                */
-> > > +                               top = sd;
-> > > +                               top_p = top->parent;
-> > > +                               while (top_p && (top_p->flags & SD_PREFER_SIBLING)) {
-> >
-> > Why are you looping on SD_PREFER_SIBLING  instead of SD_NUMA  ?
->
-> Because on AMD Zen3, I saw inconsistent treatment of SD_NUMA prior to
-> degeneration depending on whether it was NPS-1, NPS-2 or NPS-4 and only
-> SD_PREFER_SIBLING gave the current results.
+Paolo
 
-SD_PREFER_SIBLING is not mandatory in childs of NUMA node (look at
-heterogenous system as an example) so relying of this flag seems quite
-fragile
-The fact that you see inconsistency with SD_NUMA depending of NPS-1,
-NPS-2 or NPS-4 topology probably means that you don't looks for the
-right domain level or you try to compensate side effect of your
-formula above
-
->
-> --
-> Mel Gorman
-> SUSE Labs

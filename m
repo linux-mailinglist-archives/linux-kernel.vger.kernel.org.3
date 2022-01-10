@@ -2,144 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B392489580
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A06B489585
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243183AbiAJJnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S243196AbiAJJqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243074AbiAJJnF (ORCPT
+        with ESMTP id S243074AbiAJJqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:43:05 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30BC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:43:04 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id k30so7977595wrd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:43:04 -0800 (PST)
+        Mon, 10 Jan 2022 04:46:01 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D3EC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:46:01 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id e5so8308809wmq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:46:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=subject:to:cc:references:from:organization:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Rzhy6yEPJVlT7RLq5OS2aYkHYtU0ICRm0bniQL4KIpc=;
-        b=gGJCnpebj8VuX8+ZFZDudraazK3ixsOrmItH9h/ZjnnxVHz4RBuyDwMhG80kB2gBSm
-         YyaD7Dde6eXTnhBze161WX2Aw3Rcft7scBrj0AtOFwmbqhAjLNdIBbSVM/KhJkHFg4ua
-         YyTIyZMAp5NzYSv3sEgki0yq+bQLS4IHiWplx0osb5Ih38TQPadm6wSZF+UEZfJPYPxk
-         bvLoVDT/lxL4pna7BRn+ar7mbo+fNPO45xfa76D5jsk00IHp8FFdInVfrxtT9+v8zXE6
-         lCzukCMUMaa5dOi2ID8+bMVC4wZBvaXngcovPX9ZdQkEXReIosSGnyIJ3VDB0IQgb/kd
-         +tvg==
+        bh=Eacw/tyhjTY73nKE+OAvPP936rhHlBL8K/HAn04RZx8=;
+        b=5yHruTufsx2YyQ9ACpftxElp7YafCGeJeRbmvO6bkBA8J5ZL0UJO84gtytWcClAiOJ
+         manvwG83Kft7Saxv6ZZI7TZVBy9kn+5aG6w3GvoLmn6iGUdPaU9XL3tjz5NyXV8L8MjW
+         JBZisXE/LWM8eJoQ6/M6vkgu64lplvvNSYnjGNYqgfMUSr2CN12oRdiiGDHekIKqmZzD
+         Ijj1DFGghFh++6uE+jHR11vE+pwJtW8Bq1x5a19SN84vUjXA7gzqkeQW+mQ6cYgf9QN5
+         uqU1rcTiX8QlZPMaW6qKstcmAztEBYKKyGc17WM+tjrSxyh44qqEeOoGkEqEuATcmxnx
+         gSnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Rzhy6yEPJVlT7RLq5OS2aYkHYtU0ICRm0bniQL4KIpc=;
-        b=bkwJAEbXN4pKW5Blq8wTHaHbJgaHJJyPT/mBW+a4IFI3/4zm5Bt9lp2POBXRyYE+4q
-         PMLXiKoBGH4wf484fM9kQmlgUx4RvjjZPggyzmjH1lOY907vCTJN9Ytf5s1HuGijhks3
-         ZmcWSTgxZ1UqYQHMPUVLx1SmryLyhIlXLYCqma7cmIauXyMyMrAwd8d6itdhJSxbnBjt
-         5pV2cDFAaZsGo7pqZJl7VAMlU8vXgIF9vBU2OLbGgOCuEppfsqQKq52w40DUsc3GdsEj
-         fxj/Vb0lmKFWyyhBTImW8td4XUSxkhy88hAGMobdV1DbPagPnYepU5R6eETnqOvCiurR
-         Dnew==
-X-Gm-Message-State: AOAM530CF2dakf4aR+jgZjErUcxvkP2uK5vuXao74ijWcsVgGZ1PtFLE
-        COgYJw57/eaxShW+TwqIG3s/Bg==
-X-Google-Smtp-Source: ABdhPJxNhr//nhb1+5lbwdo8C/T3TotD1T9N8DhX4EvRDmin16/DX9D97BInHHOT1C6UgTytdSAN5g==
-X-Received: by 2002:adf:d0c2:: with SMTP id z2mr2788363wrh.335.1641807783340;
-        Mon, 10 Jan 2022 01:43:03 -0800 (PST)
+        bh=Eacw/tyhjTY73nKE+OAvPP936rhHlBL8K/HAn04RZx8=;
+        b=ztegJVziw3WIcaGRxCRYhJ+6NUrCeh2qEkK872pAZBy2CBKsnul9p2MYbsp2Oa3P1J
+         OIEUGNShZWoylDrn6WqUvhDeVXiH0lzod9LdUm9FuZOpxOHz6te/THGhOKjiTcSx37H1
+         SQYWELFGlDEsIz/MGWvZXj/6OcvIxxooWYoIy8l/HNHn2yeskTY9gr1CZmYdzCE5uI8P
+         0typYdapOkoy4NeRdpun+Dla1AM39AzIOixtvE4BRgn5SUMTVKwa1kvpxj632JjoxKMo
+         DsZsiXLxuJbuyanIN0NbIsgZqug58stWwWD3Fo2xzrztsfpdW2Iw5E5dXgmBwshiKAy+
+         n5dQ==
+X-Gm-Message-State: AOAM5328QyBduChP9jZyfgO3k8MyBJDLaw4LOIKW4ZUIu0pvT1znttKf
+        rM9s7WYYLBvUSICSn4NxLV5ztdC2tZ/AQw==
+X-Google-Smtp-Source: ABdhPJzrUKFjgDnkaX/O5vXtjiHHwkmXO4NlmMNAvu986vJGYFnR96tPDGiPyVJv+4AGLYsqxlPPiQ==
+X-Received: by 2002:a05:600c:3ba7:: with SMTP id n39mr21842082wms.88.1641807959521;
+        Mon, 10 Jan 2022 01:45:59 -0800 (PST)
 Received: from ?IPv6:2001:861:44c0:66c0:94e5:2e36:6bcc:a9f1? ([2001:861:44c0:66c0:94e5:2e36:6bcc:a9f1])
-        by smtp.gmail.com with ESMTPSA id q14sm6373285wro.58.2022.01.10.01.43.02
+        by smtp.gmail.com with ESMTPSA id g12sm6807309wrd.71.2022.01.10.01.45.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 01:43:03 -0800 (PST)
-Subject: Re: [PATCH V4 0/5] the UART driver compatible with
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220110085604.18042-1-yu.tu@amlogic.com>
- <1f4b9288-c7ff-c895-425c-187d058642b9@baylibre.com>
- <a19771e6-d1d4-d1ef-9819-21e2147aad16@amlogic.com>
+        Mon, 10 Jan 2022 01:45:59 -0800 (PST)
+Subject: Re: [PATCH 3/6] drm/meson: venc: add ENCL encoder setup for MIPI-DSI
+ output
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220107145515.613009-1-narmstrong@baylibre.com>
+ <20220107145515.613009-4-narmstrong@baylibre.com>
+ <CAFBinCA-df8Sedqh8Arh_BsMCHYv6-Kb3owrkFBd=W_EY2qxSA@mail.gmail.com>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Organization: Baylibre
-Message-ID: <d14fdcd5-99c2-6aa0-085e-5355ecc0febf@baylibre.com>
-Date:   Mon, 10 Jan 2022 10:43:02 +0100
+Message-ID: <6f62eeaa-1feb-274a-e1e8-377c582c428f@baylibre.com>
+Date:   Mon, 10 Jan 2022 10:45:58 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <a19771e6-d1d4-d1ef-9819-21e2147aad16@amlogic.com>
+In-Reply-To: <CAFBinCA-df8Sedqh8Arh_BsMCHYv6-Kb3owrkFBd=W_EY2qxSA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2022 10:35, Yu Tu wrote:
-> Hi Neil,
->     Thank you very much for your reply.
+On 07/01/2022 23:33, Martin Blumenstingl wrote:
+>  Hi Neil,
 > 
-> On 2022/1/10 17:27, Neil Armstrong wrote:
->> [ EXTERNAL EMAIL ]
+> On Fri, Jan 7, 2022 at 3:57 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
 >>
->> Hi,
->>
->> On 10/01/2022 09:55, Yu Tu wrote:
->>> Using the common Clock code to describe the UART baud rate
->>> clock makes it easier for the UART driver to be compatible
->>> with the baud rate requirements of the UART IP on different
->>> meson chips. Add Meson S4 SoC compatible.
->>>
->>> Yu Tu (5):
->>>    dt-bindings: serial: meson: Drop compatible = amlogic,meson-gx-uart.
->>>    tty: serial: meson: Request the register region in meson_uart_probe()
->>>    tty: serial: meson: The UART baud rate calculation is described using
->>>      the common clock code.
->>>    tty: serial: meson: Make the bit24 and bit [26,27] of the UART_REG5
->>>      register writable
->>>    tty: serial: meson: Added S4 SOC compatibility.
->>
->> Weird, the subjects are fine in the cover letter but are all truncated in the email thread:
->> [PATCH V4 0/5] the UART driver compatible with
->> [PATCH V4 1/5] dt-bindings: serial: meson: Drop
->> [PATCH V4 2/5] tty: serial: meson: Request the register
->> ...
->> Only the last one is OK.
->>
-> I saw the subject was a little long, I changed it manually, do I need to regenerate and send?
+>> This adds supports for the ENCL encoder connected to a MIPI-DSI transceiver on the
+>> Amlogic AXG SoCs> Should this be "AXG and newer SoCs" or is this really AXG specific?
 
-yes please, the mail subject will be the commit title so it must be short but descriptive enough.
+Yup should be, thanks for noting
 
-"dt-bindings: serial: meson: Drop" is too short.
+> 
+> [...]
+>> +#define GAMMA_VCOM_POL    7     /* RW */
+>> +#define GAMMA_RVS_OUT     6     /* RW */
+>> +#define ADR_RDY           5     /* Read Only */
+>> +#define WR_RDY            4     /* Read Only */
+>> +#define RD_RDY            3     /* Read Only */
+>> +#define GAMMA_TR          2     /* RW */
+>> +#define GAMMA_SET         1     /* RW */
+>> +#define GAMMA_EN          0     /* RW */
+>> +
+>> +#define H_RD              12
+>> +#define H_AUTO_INC        11
+>> +#define H_SEL_R           10
+>> +#define H_SEL_G           9
+>> +#define H_SEL_B           8
+> I think all values above can be wrapped in the BIT() macro, then you
+> don't need that below.
 
-"dt-bindings: serial: meson: Drop compatible = amlogic,meson-gx-uart" is ok but formulation is wrong,
-and remove special characters like "=", "[", "]"...
+yep
 
-The best title could be :
-"dt-bindings: serial: meson: Drop legacy amlogic,meson-gx-uart compatible"
+> 
+>> +#define HADR_MSB          7            /* 7:0 */
+>> +#define HADR              0            /* 7:0 */
+> Here GENMASK(7, 0) can be used for HADR
+> 
+> Also I think prefixing all macros above with their register name
+> (L_GAMMA_CNTL_PORT_ or L_GAMMA_ADDR_PORT_) will make the code easier
+> to read.
+> 
+> [...]
+>> +       writel_relaxed(0x8000, priv->io_base + _REG(ENCL_VIDEO_MODE));
+> The public S905 datasheet calls 0x8000 ENCL_PX_LN_CNT_SHADOW_EN
 
-If the subject it too long, reduce it and enhance the commit message with the details.
+Thanks for searching !
+
+> 
+>> +       writel_relaxed(0x0418, priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
+> According to the public S905 datasheet this is:
+> - BIT(3): ENCL_VIDEO_MODE_ADV_VFIFO_EN
+> - BIT(4): ENCL_VIDEO_MODE_ADV_GAIN_HDTV
+> - BIT(10): ENCL_SEL_GAMMA_RGB_IN
+> 
+>> +       writel_relaxed(0x1000, priv->io_base + _REG(ENCL_VIDEO_FILT_CTRL));
+> I don't know the exact name but the 32-bit vendor kernel sources have
+> a comment [0] saying that 0x1000 is "bypass filter"
+> But maybe we can simply call it ENCL_VIDEO_FILT_CTRL_BYPASS_FILTER
+
+Yep
+
+> 
+> [...]
+>> +       writel_relaxed(3, priv->io_base + _REG(ENCL_VIDEO_RGBIN_CTRL));
+> The public S905 datasheet says:
+> - BIT(0): USE RGB data from VIU, furthermore a comment in the 3.10
+> kernel sources make this more clear: bit[0] 1:RGB, 0:YUV
+> - BIT(1): CFG_VIDEO_RGBIN_ZBLK
+> 
+>> +       /* default black pattern */
+>> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_MDSEL));
+>> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_Y));
+>> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_CB));
+>> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_CR));
+>> +       writel_relaxed(1, priv->io_base + _REG(ENCL_TST_EN));
+>> +       writel_bits_relaxed(BIT(3), 0, priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
+> same as above: ENCL_VIDEO_MODE_ADV_VFIFO_EN
+> 
+>> +
+>> +       writel_relaxed(1, priv->io_base + _REG(ENCL_VIDEO_EN));
+>> +
+>> +       writel_relaxed(0, priv->io_base + _REG(L_RGB_BASE_ADDR));
+>> +       writel_relaxed(0x400, priv->io_base + _REG(L_RGB_COEFF_ADDR));
+> note to self: L_RGB_COEFF_ADDR seems to contain some "magic" value,
+> there's no further info in the 3.10 kernel sources or datasheet
+> 
+>> +       writel_relaxed(0x400, priv->io_base + _REG(L_DITH_CNTL_ADDR));
+> According to the public S905 datasheet BIT(10) is DITH10_EN (10-bits
+> Dithering to 8 Bits Enable).
+> I am not sure if this would belong to the selected video mode/bit depth.
+> I'll let other reviewers decide if this is relevant or not because I don't know.
+
+
+it would probably for pre-GXL when the pipeline was 8bit, would probably need to add
+a comment if someone wants to us DPI/LVDS on pre-GXL.
+
+> 
+> [...]
+>> +       writel_relaxed(0, priv->io_base + _REG(L_INV_CNT_ADDR));
+>> +       writel_relaxed(BIT(4) | BIT(5),
+>> +                      priv->io_base + _REG(L_TCON_MISC_SEL_ADDR));
+> the public S905 datasheet states:
+> - BIT(4): STV1_SEL (STV1 is frame Signal)
+> - BIT(5): STV2_SEL (STV2 is frame Signal)
+> This doesn't seem helpful to me though, but maybe you can still create
+> preprocessor macros for this (for consistency)?
+
+yep
+
+> 
+> [...]
+>> +       switch (priv->venc.current_mode) {
+>> +       case MESON_VENC_MODE_MIPI_DSI:
+>> +               writel_relaxed(0x200,
+>> +                              priv->io_base + _REG(VENC_INTCTRL));
+> the public S905 datasheet documents this as:
+> - BIT(9): ENCP_LNRST_INT_EN (Progressive encoder filed change interrupt enable)
+> Please add a preprocessor macro to make it consistent with
+> VENC_INTCTRL_ENCI_LNRST_INT_EN which already exists and is used below.
+
+Yep
+
+Thanks for the review :-)
 
 Neil
 
->>
->>>
->>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
->>> discussed in the email
->>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
->>> the DTS before it can be deleted
->>> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
->>> in the email.
->>>
->>> Link:https://lore.kernel.org/linux-amlogic/20211230102110.3861-4-yu.tu@amlogic.com/
->>>
->>>   .../bindings/serial/amlogic,meson-uart.yaml   |  10 +-
->>>   drivers/tty/serial/meson_uart.c               | 244 ++++++++++++------
->>>   2 files changed, 177 insertions(+), 77 deletions(-)
->>>
->>
+> 
+> 
+> Best regards,
+> Martin
+> 
 

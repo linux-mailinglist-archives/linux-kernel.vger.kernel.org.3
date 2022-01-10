@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE42489D2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C21B489D31
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237035AbiAJQJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:09:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbiAJQJl (ORCPT
+        id S237045AbiAJQLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:11:21 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:54722 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236654AbiAJQLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:09:41 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2DCC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fFL6D2+bbDAotHksx495ldG8WoFs1p5F5jvOQSuWync=; b=q/E8nH8n3z3FfAND8IHjjxt6zA
-        1HRUcEKuhCVUr1u43/h0IF0Df9rd1c/RzuWqn4G9cnkOdhGSaRVYKWgootqldZ1+XIEpfd/2xMNun
-        pIV5s5/6OAuBJ82njTYtazpI/J6justp8wiRIwLHRdKRb23un13yn87DwuhVSxPfAnUV72Eiv70Jm
-        D/+iBVyElfJgYZlOUgYH5OVu/gIIz/lFBssEPigri99WRHkid7bFXXkZXGdUqpuPIzRUvgRGd/1Te
-        ot+hKtk6dve/ph0otzY9Tw0nRysThJFPiKrhdegqBluJXPtre9oWcTcMAv7tj3AvYZQrJ6WLnREjy
-        gReTaM+g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6xEh-002YSJ-6L; Mon, 10 Jan 2022 16:09:31 +0000
-Date:   Mon, 10 Jan 2022 16:09:31 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-mm@kvack.org, John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/28] Convert GUP to folios
-Message-ID: <YdxaO7nAj0oGXtm9@casper.infradead.org>
-References: <20220110042406.499429-1-willy@infradead.org>
- <20220110153103.GH6467@ziepe.ca>
+        Mon, 10 Jan 2022 11:11:20 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20ADo8Tj021602;
+        Mon, 10 Jan 2022 17:11:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=G0yUSQsLfDcfZw5v2vGpXxdzo++cGRi64INcl+rPjA4=;
+ b=QFtqsp6QQ3IVh9a/ajeAsDwe9Txg/0e1+JRjSF3obXv8sHCiF4QLXgL0ho5Geh7VDfhS
+ 72YslM6blIQaSSKJKJEgbFzunW8EFfmSu9bRsqHwirUXXDXclZN4yC+kD1/LfgqGYAin
+ x8/fj8btxe1g8ffS6X0jYx5KC6WGs3vAXOLT4qPTvVgkZHzPttbNQRvJ81kJ4SQp7FtY
+ NKvgSJddKG+kRv+uduspI/9KzWtPf01gQONc8vpFSkNuMyaUvADJjFx7xNssE2lgpr3C
+ CmMT+SlSwsBB/KmCJkQzTRGUKrXavfGOY+HxIlFVQxfO28u2kSuAWbbg/pXmP0+iY5ZJ dA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dgh6uj1x0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jan 2022 17:11:03 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9971110002A;
+        Mon, 10 Jan 2022 17:11:02 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8EA9A20757D;
+        Mon, 10 Jan 2022 17:11:02 +0100 (CET)
+Received: from lmecxl0995.lme.st.com (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 10 Jan
+ 2022 17:11:01 +0100
+Subject: Re: [Linux-stm32] [PATCH] dmaengine: stm32-dmamux: Fix PM disable
+ depth imbalance in stm32_dmamux_probe
+To:     Miaoqian Lin <linmq006@gmail.com>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        <linux-kernel@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220108085336.11992-1-linmq006@gmail.com>
+From:   Amelie DELAUNAY <amelie.delaunay@foss.st.com>
+Message-ID: <37a66156-a616-058d-b3c0-6d2ca22a12ed@foss.st.com>
+Date:   Mon, 10 Jan 2022 17:11:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110153103.GH6467@ziepe.ca>
+In-Reply-To: <20220108085336.11992-1-linmq006@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-10_07,2022-01-10_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:31:03AM -0400, Jason Gunthorpe wrote:
+On 1/8/22 9:53 AM, Miaoqian Lin wrote:
+> The pm_runtime_enable will increase power disable depth.
+> If the probe fails, we should use pm_runtime_disable() to balance
+> pm_runtime_enable().
 > 
-> On Mon, Jan 10, 2022 at 04:23:38AM +0000, Matthew Wilcox (Oracle) wrote:
-> > This patch series is against my current folio for-next branch.  I know
-> > it won't apply to sfr's next tree, and it's not for-next material yet.
-> > I intend to submit it for 5.18 after I've rebased it to one of the
-> > 5.17-rc releases.
-> > 
-> > The overall effect of this (ignoring the primary "preparing for folios
-> > that are not PAGE or PMD sized" purpose) is to reduce the size of gup.o
-> > by ~700 bytes in the config I normally test with.
-> > 
-> > This patchset just converts existing implementations to use folios.
-> > There's no new API for consumers here to provide information in a more
-> > efficient (address, length) format.  That will be a separate patchset.
-> > 
-> > In v2, I've tried to address all the comments from the reviews I got
-> > on v1.  Apologies if I missed anything; I got a lot of good feedback.
-> > Primarily I separated out the folio changes (later) from the "While
-> > I'm looking at this ..." changes (earlier).  I'm not sure the story
-> > of the patchset is necessarily coherent this way, but it should be
-> > easier to review.
-> > 
-> > Another big change is that compound_pincount is now available to all
-> > compound pages, not just those that are order-2-or-higher.  Patch 11.
-> > 
-> > I did notice one bug in my original patchset which I'm disappointed GCC
-> > didn't diagnose:
-> > 
-> > 		pages[nr++] = nth_page(page, nr);
-> > 
-> > Given the massive reorg of the patchset, I didn't feel right using
-> > anyone's SoB from v1 on any of the patches.  But, despite the increased
-> > number of patches, I hope it's easier to review than v1.
-> > 
-> > And I'd dearly love a better name than 'folio_nth'.  page_nth() is
-> > a temporary construct, so doesn't need a better name.  If you need
-> > context, it's in the gup_folio_range_next() patch and its job
-> > is to tell you, given a page and a folio, what # page it is within
-> > a folio (so a number between [0 and folio_nr_pages())).
+> Fixes: 4f3ceca254e0 ("dmaengine: stm32-dmamux: Add PM Runtime support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+
+Thanks for your patch,
+
+Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+
+> ---
+>   drivers/dma/stm32-dmamux.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> folio_tail_index() ?
-
-I'm a little wary of "index" because folios are used to cache file data,
-and folio->index means offset of the folio within the file.  We could
-make the argument for folio_page_index() (since it might be the head
-page, not a tail page), and argue this is the index into the folio,
-not the index into the file.
-
-It's better than folio_nth ;-)
-
-> Series still looks good to me, though I checked each patch
-> carefully than the prior series:
+> diff --git a/drivers/dma/stm32-dmamux.c b/drivers/dma/stm32-dmamux.c
+> index a42164389ebc..d5d55732adba 100644
+> --- a/drivers/dma/stm32-dmamux.c
+> +++ b/drivers/dma/stm32-dmamux.c
+> @@ -292,10 +292,12 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
+>   	ret = of_dma_router_register(node, stm32_dmamux_route_allocate,
+>   				     &stm32_dmamux->dmarouter);
+>   	if (ret)
+> -		goto err_clk;
+> +		goto pm_disable;
+>   
+>   	return 0;
+>   
+> +pm_disable:
+> +	pm_runtime_disable(&pdev->dev);
+>   err_clk:
+>   	clk_disable_unprepare(stm32_dmamux->clk);
+>   
 > 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Thanks!

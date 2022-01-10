@@ -2,107 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 006BF489F44
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D55D489F47
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240254AbiAJS3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:29:04 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44542 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242055AbiAJS2p (ORCPT
+        id S240451AbiAJS3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:29:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44698 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240335AbiAJS3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:28:45 -0500
-Date:   Mon, 10 Jan 2022 18:28:42 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641839323;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2KFflniNiCZwXCgWFWhEWdhZx8Ljlv0rCoRqVa8swhw=;
-        b=4jCDZ6yhb4vzy/8dbL8riLnkQKtGajZ6RuWKypICx8zV1zyZBNg6n3wBMA/BeEQjivNMBK
-        T58fUeaiz1wIms5w5yrt+W1YoTjMKTXnswL3Dzp0D8og37WiKpKCXxInDOFaRQKW239VCD
-        omw+0o5m0ai8CiCsVk9bJTJhoAOqJW/zwzRxaxqE116cr98RhjgLtv+uObhyC+5fCWeB6O
-        LFnKXn84EBOWykxtSiBXt34MBgexHJoWNzDJpvpDO3VteSBbkVKgnsFwCDwNUK79VsMc1l
-        8A8vamIMfoMcP0BrRBvd4RiCk+rMZXIx87sYpu5RWoUA4gUsnwZKozKHPwsYmQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641839323;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2KFflniNiCZwXCgWFWhEWdhZx8Ljlv0rCoRqVa8swhw=;
-        b=WbfHsnwp32Z3msqwLK+lvdYEP/ycZhr/Uxlj/C/5Q0ZJ0D8eeY0gICN7EvkY1X0lnYdIsw
-        2aDx4abJX411srCw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Populate sysfs entry only once
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <87leznqx2a.ffs@tglx>
-References: <87leznqx2a.ffs@tglx>
+        Mon, 10 Jan 2022 13:29:40 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B944B81748;
+        Mon, 10 Jan 2022 18:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BECC36AE9;
+        Mon, 10 Jan 2022 18:29:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641839377;
+        bh=WbSXURwPnRNeBJeseas+oMhyvAiFryXuTHBY47HJAto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cQwPoSZcWxE5PSP4o5LRNm57bdcAY539P0GrHIrJmRKNAq7g/iU0Bwa+owTpTQoKY
+         Keu/ps/NqHFJFFyGnxvSwNoQ9rsLVGLTJY1a+R5j0h1Fq/bggrXWuHBHiRQgRWo+2k
+         KBqRJN4C6KAs5nkdkTk9EPg7Icm8QcQ6Czh4uEg1AWX6qShHN060MlgA/qjfVCI+kR
+         RBF5KeKS60Yhg7//tB+f1gW7M7KPttgUHIo7jTjV/1XYp8G7RGS9WRiURvOfPKTW9u
+         H1VclBy0Aa8r8eA6kRzRMFxfM9zih1BitKkvCitmdRF4kTsmMFdWw0XiZxJ3ZAKGa1
+         v2DXhQSL9uyPA==
+Date:   Mon, 10 Jan 2022 10:29:35 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Simo Sorce <simo@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Message-ID: <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+References: <YaZqVxI1C8RByq+w@gmail.com>
+ <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
+ <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
+ <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
+ <20211210014337.xmin2lu5rhhe3b3t@valinor>
+ <20220110132349.siplwka7yhe2tmwc@valinor>
+ <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
+ <YdxCsI3atPILABYe@mit.edu>
+ <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu>
 MIME-Version: 1.0
-Message-ID: <164183932244.16921.9315200768989413599.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydxu+KS5UkQ6hU9R@mit.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/msi branch of tip:
+On Mon, Jan 10, 2022 at 12:38:00PM -0500, Theodore Ts'o wrote:
+> If we want to add a CONFIG_RANDOM_SECURITY_THEATRE build option which
+> diverts getrandom and /dev/urandom to use crypto/drbg, I'm going to
+> think it's a waste of time, and there are some things about
+> crypto/drbg that I'm not psyched about such as the fact that only
+> reseed after 2**20 calls to drbg_generate(), and the drbg statemachine
+> will initialize itself from get_random_bytes() in early boot, when the
+> CRNG is least likely to be securely initialized.  So **I** wouldn't
+> want to use it for my own personal security, but if it allows Ubuntu
+> to sell into the US govnerment market, my only hope is that this
+> wouldn't be inflicted on all of their customers, but only those US
+> Government customers who care (and as near as I can tell, this is
+> *not* all USG customers).
+> 
 
-Commit-ID:     74a5257a0c175810d620b5e631c4e7554955ac25
-Gitweb:        https://git.kernel.org/tip/74a5257a0c175810d620b5e631c4e7554955ac25
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 10 Jan 2022 19:12:45 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 10 Jan 2022 19:22:10 +01:00
+So just a few thoughts:
 
-genirq/msi: Populate sysfs entry only once
+Ubuntu, Red Hat, and Oracle all have patches which do this.  They differ
+slightly; e.g., Ubuntu's patch only changes /dev/urandom while the others change
+/dev/random and getrandom() too.  But the idea is the same: the userspace
+interfaces to the RNG are changed to get output from a SP800-90A DRBG
+(crypto/drbg.c) rather than the Linux RNG directly.  The SP800-90A DRBG in turn
+is seeded from from two entropy sources combined: the Linux RNG
+(get_random_bytes()) and jitterentropy (crypto/jitterentropy.c).
 
-The MSI entries for multi-MSI are populated en bloc for the MSI descriptor,
-but the current code invokes the population inside the per interrupt loop
-which triggers a warning in the sysfs code and causes the interrupt
-allocation to fail.
+My understanding (and I could be totally wrong -- I am still trying to reverse
+engineer all the requirements for this certification stuff) is that the reason
+that these distros need this is they are certifying the whole kernel image as a
+FIPS cryptographic module, and that implies that cryptographic random numbers
+must conform to the SP800-90{A-C} documents.  The problem is that ChaCha20 isn't
+considered an approved DRBG algorithm, nor do Linux's entropy sources have
+SP800-90B continuous health-tests.  Therefore, get_random_bytes() is considered
+to provide no entropy.  crypto/drbg.c works around this by using an approved
+DRBG algorithm and by using jitterentropy which has SP800-90B tests.
 
-Move it outside of the loop so it works correctly for single and multi-MSI.
+I think the reason people are considering this to be a hack is because on paper
+it ignores Linux's main RNG.  It's still *used* as an extra entropy input, but
+on paper it's credited with no entropy.  That seems a bit odd.
 
-Fixes: bf5e758f02fc ("genirq/msi: Simplify sysfs handling")
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/87leznqx2a.ffs@tglx
----
- kernel/irq/msi.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+However, even Stephan's patchset has the same issues, IIUC.  Stephan's patchset
+still keeps get_random_bytes() using ChaCha20, and it provides an option to
+layer crypto/drbg.c on top of it for userspace output.  So I'm not sure how much
+of a hack it really is, if the supposed non-hack is basically the same.
 
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 173bc04..2bdfce5 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -887,12 +887,11 @@ int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
- 			ret = msi_init_virq(domain, virq + i, vflags);
- 			if (ret)
- 				return ret;
--
--			if (info->flags & MSI_FLAG_DEV_SYSFS) {
--				ret = msi_sysfs_populate_desc(dev, desc);
--				if (ret)
--					return ret;
--			}
-+		}
-+		if (info->flags & MSI_FLAG_DEV_SYSFS) {
-+			ret = msi_sysfs_populate_desc(dev, desc);
-+			if (ret)
-+				return ret;
- 		}
- 		allocated++;
- 	}
+Now, the idea of certifying the whole kernel as a FIPS cryptographic module is
+stupid, given that it prevents the kernel from being updated to fix security
+vulnerabilities.  However, I've been told that essentially the same RNG issues
+also arise for NIAP certification of mobile devices
+(https://www.niap-ccevs.org/MMO/PP/PP_MDF_V3.2.pdf), which looks at entropy
+system-wide.  NIAP similarly doesn't consider ChaCha20 to be an allowed DRBG
+algorithm, so they consider the entropy to be constantly depleting, and it "runs
+out".  (There have been devices that passed NIAP despite this, but I've been
+told that this was an oversight.)  Wiring up /dev/{u,}random and getrandom() to
+crypto/drbg.c would avoid this issue too.
+
+So again, I could be totally wrong, as I am trying to reverse engineer the
+requirements here --- but to me it seems that a small patch to provide an option
+to use crypto/drbg.c could solve both the FIPS and NIAP certification problems.
+
+If Stephan could elaborate on what his patchset does that is better (as far as
+certification is concerned, at least -- I know his patchset has some other
+advantages such as eliminating non-cryptographic entropy processing), that would
+be helpful to illuminate anything I may be missing.
+
+- Eric

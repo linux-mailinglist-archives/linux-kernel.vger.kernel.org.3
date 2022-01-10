@@ -2,240 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C11489DE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED30489DEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237813AbiAJQzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:55:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54028 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiAJQzg (ORCPT
+        id S237833AbiAJQzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237774AbiAJQzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:55:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E49B56133C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:55:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FCAFC36AE5;
-        Mon, 10 Jan 2022 16:55:34 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 11:55:32 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH v2] tracing: Add test for user space strings when filtering
- on  string pointers
-Message-ID: <20220110115532.536088fd@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 10 Jan 2022 11:55:53 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F6DC06173F;
+        Mon, 10 Jan 2022 08:55:53 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id a18so55048527edj.7;
+        Mon, 10 Jan 2022 08:55:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=98sup9AskCi3qrpoRgt3k45yyLCXHbNb1fOzgOiWQkI=;
+        b=Hp7as+pB7scND40+9zHOS+E/0vGqM6rA6MKw9Kg6M+3YOoLRyTiO09jylvzughqCNl
+         RPfQZ2HiuaX2I4ubtPFrSBUvi+TPKHDz1pitpJvJiAAy3UNORJFRVcN4Sgl2kdPRqRJO
+         IuyZfCS/R+kHZOADbXOH+WOqjqIUVlQUia3lWUTAO0f1FoY6Aw7fm/WSpZUGzeKVclQ5
+         x685KEGl2QewISnn7Hd4/q2cSYYwm1p65FAc3LPnrdhvq4dHN91opjguTjSQq/+3Xg1l
+         663z+AFaNqacmZna540Pt2maEFVge5sgBBOjmvw8tDS0yYyu9dysUhcUeQ8rELhf9h34
+         PQ3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=98sup9AskCi3qrpoRgt3k45yyLCXHbNb1fOzgOiWQkI=;
+        b=N2ibwQNb7UpUa01ma4f15AyBV9ArVN4sI7f4YAsxB6ubLJp04lHPP1qTwb4dtKVNuT
+         MDctBzErc7Y2PuJmyHGqggKGDkqBC1D3uvx1VQ/G3gtX4RrcjVMx++rWAswrErTGMbtf
+         +QCv5UdVDMiuGgt3CT6kkGbHoOo/h+pK7SxQgJpxzzDWuEFAN0OfusdLjfW6p/eknljH
+         undZf/S+5ZFNDXHRAp16chzTk3Su/T9LsRkbU4dbPBU7hVz+uXxIzd+x7Czsxxk5OT5n
+         qCzqZdkRjikMlHduoHw8d5c2g+K1SO56zQOI6lzYUJpNGwI6W+zabET+D1zaKkyWJf4V
+         Glzw==
+X-Gm-Message-State: AOAM532Hm6/1/crZOIhL2jCUoITGqnvhNZAxm5uAexi4CJmFRAgHOUA8
+        MqiHAzPGbPFdXa2lmWkkLjo=
+X-Google-Smtp-Source: ABdhPJycxsU5KRss6M8Wbj7exc5lQ/SLX2+xO6gdhTVoJNFRrXue40+X1zvsip5ZCR3B7BYXY6F5ig==
+X-Received: by 2002:a17:906:d78a:: with SMTP id pj10mr518641ejb.72.1641833751673;
+        Mon, 10 Jan 2022 08:55:51 -0800 (PST)
+Received: from [192.168.0.182] ([79.119.107.253])
+        by smtp.gmail.com with ESMTPSA id hs32sm2399662ejc.180.2022.01.10.08.55.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 08:55:51 -0800 (PST)
+Message-ID: <953f1539-a4fc-ab8e-bcf9-287ac91ba42b@gmail.com>
+Date:   Mon, 10 Jan 2022 18:55:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 3/3] iio: addac: ad74413r: correct comparator gpio getters
+ mask usage
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+References: <20220106062255.3208817-1-cosmin.tanislav@analog.com>
+ <20220106062255.3208817-3-cosmin.tanislav@analog.com>
+ <CAHp75Vcq76iaHHp2oXFsaE4d_+EGH87DxQRYu7Ys-adN_4mmUw@mail.gmail.com>
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+In-Reply-To: <CAHp75Vcq76iaHHp2oXFsaE4d_+EGH87DxQRYu7Ys-adN_4mmUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
 
-Pingfan reported that the following causes a fault:
 
-  echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
-  echo 1 > events/syscalls/sys_enter_at/enable
+On 1/9/22 14:13, Andy Shevchenko wrote:
+> On Fri, Jan 7, 2022 at 7:34 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+>>
+>> The value of the GPIOs is currently altered using offsets rather
+>> than masks. Make use the BIT macro to turn the offsets into masks.
+> 
+> of the
+> 
+> ...
+> 
+>> -       status &= AD74413R_DIN_COMP_OUT_SHIFT_X(real_offset);
+>> +       status &= BIT(real_offset);
+> 
+> But this is completely different.
 
-The reason is that trace event filter treats the user space pointer
-defined by "filename" as a normal pointer to compare against the "cpu"
-string. If the string is not loaded into memory yet, it will trigger a
-fault in kernel space:
+What do you mean by this is completely different?
 
- kvm-03-guest16 login: [72198.026181] BUG: unable to handle page fault for address: 00007fffaae8ef60
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0001) - permissions violation
- PGD 80000001008b7067 P4D 80000001008b7067 PUD 2393f1067 PMD 2393ec067 PTE 8000000108f47867
- Oops: 0001 [#1] PREEMPT SMP PTI
- CPU: 1 PID: 1 Comm: systemd Kdump: loaded Not tainted 5.14.0-32.el9.x86_64 #1
- Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
- RIP: 0010:strlen+0x0/0x20
- Code: 48 89 f9 74 09 48 83 c1 01 80 39 00 75 f7 31 d2 44 0f b6 04 16 44 88 04 11
-       48 83 c2 01 45 84 c0 75 ee c3 0f 1f 80 00 00 00 00 <80> 3f 00 74 10 48 89 f8
-       48 83 c0 01 80 38 00 75 f7 48 29 f8 c3 31
- RSP: 0018:ffffb5b900013e48 EFLAGS: 00010246
- RAX: 0000000000000018 RBX: ffff8fc1c49ede00 RCX: 0000000000000000
- RDX: 0000000000000020 RSI: ffff8fc1c02d601c RDI: 00007fffaae8ef60
- RBP: 00007fffaae8ef60 R08: 0005034f4ddb8ea4 R09: 0000000000000000
- R10: ffff8fc1c02d601c R11: 0000000000000000 R12: ffff8fc1c8a6e380
- R13: 0000000000000000 R14: ffff8fc1c02d6010 R15: ffff8fc1c00453c0
- FS:  00007fa86123db40(0000) GS:ffff8fc2ffd00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007fffaae8ef60 CR3: 0000000102880001 CR4: 00000000007706e0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- PKRU: 55555554
- Call Trace:
-  filter_pred_pchar+0x18/0x40
-  filter_match_preds+0x31/0x70
-  ftrace_syscall_enter+0x27a/0x2c0
-  syscall_trace_enter.constprop.0+0x1aa/0x1d0
-  do_syscall_64+0x16/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
- RIP: 0033:0x7fa861d88664
+It was broken before, it is fixed now. Indeed, I'm missing
+the Fixes tag, if that's what you meant.
 
-To be even more robust, test both kernel and user space strings. If the
-string fails to read, then simply have the filter fail.
+> 
+>> +       bitmap_zero(bits, chip->ngpio);
+>> +
+>>          for_each_set_bit(offset, mask, chip->ngpio) {
+>>                  unsigned int real_offset = st->comp_gpio_offsets[offset];
+>>
+>>                  if (val & BIT(real_offset))
+>> -                       *bits |= offset;
+>> +                       *bits |= BIT(offset);
+> 
+> So, how was it working before? If it fixes, it should go with the
+> Fixes tag and before patch 2.
+> 
+>>          }
+> 
+> On top of that, you may try to see if one of bitmap_*() APIs can be
+> suitable here to perform the above in a more optimal way.
+> (At least this conditional can be replaced with __asign_bit() call,
+> but I think refactoring the entire loop may reveal a better approach)
+> 
 
-Link: https://lore.kernel.org/all/20220107044951.22080-1-kernelfans@gmail.com/
-
-Cc: stable@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Reported-by: Pingfan Liu <kernelfans@gmail.com>
-Fixes: 87a342f5db69d ("tracing/filters: Support filtering for char * strings")
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
----
-Changes since v1: https://lkml.kernel.org/r/20220107225840.003487216@goodmis.org
-
-  - Up the size of temp buffer from 512 to 1024
-    Still less than PATH_MAX, but should be good enough in real systems.
-    If this is an issue, then we can add a way for users to updated it.
-
-  - Add documentation about the limit of comparing to string pointers.
-
-  - Add typecast from str to ustr to denote adding "__user"
-
-  - Allocate buffer only when comparing with string pointers.
-
-  - Only do the test on string pointers and not all string compares.
-
- Documentation/trace/events.rst     | 10 +++++
- kernel/trace/trace_events_filter.c | 59 ++++++++++++++++++++++++++++--
- 2 files changed, 66 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index 8ddb9b09451c..45e66a60a816 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -230,6 +230,16 @@ Currently the caret ('^') for an error always appears at the beginning of
- the filter string; the error message should still be useful though
- even without more accurate position info.
- 
-+5.2.1 Filter limitations
-+------------------------
-+
-+If a filter is placed on a string pointer ``(char *)`` that does not point
-+to a string on the ring buffer, but instead points to kernel or user space
-+memory, then, for safety reasons, at most 1024 bytes of the content is
-+copied onto a temporary buffer to do the compare. If the copy of the memory
-+faults (the pointer points to memory that should not be accessed), then the
-+string compare will be treated as not matching.
-+
- 5.3 Clearing filters
- --------------------
- 
-diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 996920ed1812..91352a64be09 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2009 Tom Zanussi <tzanussi@gmail.com>
-  */
- 
-+#include <linux/uaccess.h>
- #include <linux/module.h>
- #include <linux/ctype.h>
- #include <linux/mutex.h>
-@@ -654,6 +655,40 @@ DEFINE_EQUALITY_PRED(32);
- DEFINE_EQUALITY_PRED(16);
- DEFINE_EQUALITY_PRED(8);
- 
-+/* user space strings temp buffer */
-+#define USTRING_BUF_SIZE	1024
-+
-+struct ustring_buffer {
-+	char		buffer[USTRING_BUF_SIZE];
-+};
-+
-+static __percpu struct ustring_buffer *ustring_per_cpu;
-+
-+static __always_inline char *test_string(char *str)
-+{
-+	struct ustring_buffer *ubuf;
-+	char __user *ustr;
-+	char *kstr;
-+
-+	if (!ustring_per_cpu)
-+		return NULL;
-+
-+	ubuf = this_cpu_ptr(ustring_per_cpu);
-+	kstr = ubuf->buffer;
-+
-+	if (likely((unsigned long)str >= TASK_SIZE)) {
-+		/* For safety, do not trust the string pointer */
-+		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
-+			return NULL;
-+	} else {
-+		/* user space address? */
-+		ustr = (char __user *)str;
-+		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
-+			return NULL;
-+	}
-+	return kstr;
-+}
-+
- /* Filter predicate for fixed sized arrays of characters */
- static int filter_pred_string(struct filter_pred *pred, void *event)
- {
-@@ -671,10 +706,16 @@ static int filter_pred_string(struct filter_pred *pred, void *event)
- static int filter_pred_pchar(struct filter_pred *pred, void *event)
- {
- 	char **addr = (char **)(event + pred->offset);
-+	char *str;
- 	int cmp, match;
--	int len = strlen(*addr) + 1;	/* including tailing '\0' */
-+	int len;
- 
--	cmp = pred->regex.match(*addr, &pred->regex, len);
-+	str = test_string(*addr);
-+	if (!str)
-+		return 0;
-+
-+	len = strlen(str) + 1;	/* including tailing '\0' */
-+	cmp = pred->regex.match(str, &pred->regex, len);
- 
- 	match = cmp ^ pred->not;
- 
-@@ -1348,8 +1389,17 @@ static int parse_pred(const char *str, void *data,
- 			pred->fn = filter_pred_strloc;
- 		} else if (field->filter_type == FILTER_RDYN_STRING)
- 			pred->fn = filter_pred_strrelloc;
--		else
-+		else {
-+
-+			if (!ustring_per_cpu) {
-+				/* Once allocated, keep it around for good */
-+				ustring_per_cpu = alloc_percpu(struct ustring_buffer);
-+				if (!ustring_per_cpu)
-+					goto err_mem;
-+			}
-+
- 			pred->fn = filter_pred_pchar;
-+		}
- 		/* go past the last quote */
- 		i++;
- 
-@@ -1415,6 +1465,9 @@ static int parse_pred(const char *str, void *data,
- err_free:
- 	kfree(pred);
- 	return -EINVAL;
-+err_mem:
-+	kfree(pred);
-+	return -ENOMEM;
- }
- 
- enum {
--- 
-2.33.0
-
+I can replace the if and bitmap_zero with __assign_bit, as you
+suggested. I'm not familiar with bitmap APIs, do you have a suggestion?

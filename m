@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC9348A18B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6196948A18D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240693AbiAJVKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S241121AbiAJVKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240545AbiAJVKP (ORCPT
+        with ESMTP id S240545AbiAJVKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:10:15 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2BC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:15 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id oa15so14304684pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:15 -0800 (PST)
+        Mon, 10 Jan 2022 16:10:43 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC613C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:42 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id o6so58914559edc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wJc19i/SFb8fDASSOqMu23EH/ZlObMF2YEBy+h3uMCs=;
-        b=sx85pG28fY85G3zh5bIfPiPUegT10kTOfJRNx6ALvvXJTrw6QxF+CpSrehUnHxwZgE
-         xqy+86Xap/bcQxibYFcjqMdQBDpqi4/ZF8yZurwC2eHh5TUEs4nZEfzZi8hSoEg/xCe5
-         QFluQ47dESWQmdJdSl0pvPUvqYy3wmHatprOVaGCxTzx9TQNGpbOwS8epUyPuKHxT7Cj
-         9J3GogIGxVTSYoN3lOmhWyq8pHxPZV2kVy60x4/YgSKJXpvOOmFyZKw69gjj9KFC4w5z
-         +S7ckbrZyKupTlNs8x85m8MSoTRDEnFY0dP2rIcTjjW/ikLXkiYuhiCo573+9UlKsRdc
-         6NZw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CzOkmxOBSV9Ezr9QPrNTkWoWCCkUbqzV84f/9/7plj0=;
+        b=HeusBfk0oTBDWgN3Pioj3BEB2suB3d5lKrRk/Ukp7jPRk/AxG1lrmE9nQ7kYEV8933
+         Q5JqEBNN8aiGOkfspYZ61c6tdx2GgWSRszMJCSfzh5RmSWk5l3lewXQqwcuPK92M87dN
+         DMElE/fUtk/3I51/41iqEN4Yw9EJtZ7e1i2Zs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wJc19i/SFb8fDASSOqMu23EH/ZlObMF2YEBy+h3uMCs=;
-        b=RfGkP8L+crp4p+F1OHj227qo4TLwOm2PqIWHUb7AZgaXFEKWDfitOH2BOJxv7d6kCv
-         HG8UaQnvyqxfglHBjC5gIlOVnLMJeMSFlJCKIgmxiaEH/8MBj9c5o1lKiRVTB1JnxSeH
-         x4JmnzZIqsfloWVaoFTBMg4g0nYngsotmVbV8vJwDx1QO2JuDKaHXaG1Fdp6fFLt0liJ
-         gyc+CQppZ4L4Wo72C0+NgvM0o040aMVc33bTbsE/qCQcaguatci6HKwg4baqbRAM33MS
-         kr1S+G3e8cOIutQz7kmVKJDWGZfrWdYtzIbYr15A3L9iZXH5NwznfEJOGkCpo10pMgSn
-         Foxw==
-X-Gm-Message-State: AOAM533W25/j9vmaEjq0n7Bty26SyMpAEFEc9b2N+0VpBzHVa9yWMWn+
-        pUnjhd7SNpo5Uj1qpIRRleBsxg==
-X-Google-Smtp-Source: ABdhPJwOh9yRpqcK7UEYXGr9S8tX1kbo/tHV/l/RDtkP2w6cFx6T8QE6usDza6YAws00S39Vhr5EIQ==
-X-Received: by 2002:a63:194b:: with SMTP id 11mr1322457pgz.461.1641849014564;
-        Mon, 10 Jan 2022 13:10:14 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t207sm7332477pfc.205.2022.01.10.13.10.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 13:10:14 -0800 (PST)
-Date:   Mon, 10 Jan 2022 21:10:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
-        tglx@linutronix.de, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] KVM: x86: Use kvm_x86_ops in
- kvm_arch_check_processor_compat
-Message-ID: <YdygsjmoqmfwOVgv@google.com>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-3-chao.gao@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CzOkmxOBSV9Ezr9QPrNTkWoWCCkUbqzV84f/9/7plj0=;
+        b=sUZabK9y7rO2Z1CjQ4t2IYayOXbkONlHCwrmQskgxmSodSdSZ6y+IOxqoY4rmsqtEE
+         DYoo85P5UNEI18VjHiNdA77/zeIh1rEDfon0VPj42aMZAS2/uvlVZMc+s0SKQZaZjfjI
+         6IYY/oU0HEoivuASVci+DU8ZRr8M+Hb2vbLnVMO7nN0NSrffTj32Ca3SxN1pthuTc1uj
+         9AhBce0e3mpOiD1D2rfKNYikznGiso9zwgzr9zL0rOfvO0MzsFdUjTprqi8G3iJBy3VQ
+         1VW+YogptUb528N5jXU+gi5r5oIyKP8h/E9B/chLVc71Z3h0sUnWIo4QUB4nWB+b97r2
+         WZtQ==
+X-Gm-Message-State: AOAM530a3qnnFULNLRZItcR0Owh/v6Y9DOetcYekI3tP6pW/XBsu6Xad
+        a6P2SZQB6GLWvAiq72/8N30MdDIy0fpyKqY9HlQ=
+X-Google-Smtp-Source: ABdhPJwmuHD3FNJYuRoOGoeg1BJT+e/Lb/XMoX80EwDqfsQ6EcC7iohAfRSzJV9BClOIciemThyjDw==
+X-Received: by 2002:a17:906:1f51:: with SMTP id d17mr1144541ejk.759.1641849041136;
+        Mon, 10 Jan 2022 13:10:41 -0800 (PST)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id e4sm2927131ejs.13.2022.01.10.13.10.40
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 13:10:40 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id n19-20020a7bc5d3000000b003466ef16375so239377wmk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:40 -0800 (PST)
+X-Received: by 2002:a05:600c:4f49:: with SMTP id m9mr23532863wmq.8.1641849040053;
+ Mon, 10 Jan 2022 13:10:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227081515.2088920-3-chao.gao@intel.com>
+References: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
+In-Reply-To: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 10 Jan 2022 13:10:24 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjpsnsZwxNZoRRSocuKFJegvxYmz1+7X7WMAw=qN4ywRQ@mail.gmail.com>
+Message-ID: <CAHk-=wjpsnsZwxNZoRRSocuKFJegvxYmz1+7X7WMAw=qN4ywRQ@mail.gmail.com>
+Subject: Re: [git pull] drm for 5.17-rc1 (pre-merge window pull)
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021, Chao Gao wrote:
-> check_processor_compatibility() is a "runtime" ops now. Use
-> kvm_x86_ops directly such that kvm_arch_check_processor_compat
-> can be called at runtime.
-> 
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> ---
->  arch/x86/kvm/x86.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 6411417b6871..770b68e72391 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11383,7 +11383,6 @@ void kvm_arch_hardware_unsetup(void)
->  int kvm_arch_check_processor_compat(void *opaque)
->  {
->  	struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
-> -	struct kvm_x86_init_ops *ops = opaque;
->  
->  	WARN_ON(!irqs_disabled());
->  
-> @@ -11391,7 +11390,7 @@ int kvm_arch_check_processor_compat(void *opaque)
->  	    __cr4_reserved_bits(cpu_has, &boot_cpu_data))
->  		return -EIO;
->  
-> -	return ops->runtime_ops->check_processor_compatibility();
-> +	return kvm_x86_ops.check_processor_compatibility();
+On Thu, Jan 6, 2022 at 10:12 PM Dave Airlie <airlied@gmail.com> wrote:
+>
+> nouveau_fence.c is the only conflict I've seen and I've taken the result from
+> our rerere cache in the merge above. It's non trivial, would be good to have
+> Christian confirm it as well.
 
-I'd just squash this with patch 01.  And might as well make this a static_call().
+Thanks, that conflict really ended up being one that I would have done
+very differently without having had that pointer to your reference
+merge. And I would almost certainly have messed it up in the process.
 
->  }
->  
->  bool kvm_vcpu_is_reset_bsp(struct kvm_vcpu *vcpu)
-> -- 
-> 2.25.1
-> 
+So what I did was to look at your merge resolution (or possibly
+Christian's? I don't know how you guys share your trees and the origin
+of that rerere), and tried to understand it, and basically recreate
+it.
+
+It's not exactly the same (different whitespace and variable
+lifetimes), but I think I got the gist of it.
+
+Thanks for the pointer, and hopefully I didn't mess it up _despite_
+your merge showing me what I should aim for ;)
+
+               Linus

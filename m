@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E45489B77
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792ED489B79
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbiAJOkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:40:49 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:13349 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235678AbiAJOks (ORCPT
+        id S235690AbiAJOl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230013AbiAJOl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:40:48 -0500
-X-IronPort-AV: E=Sophos;i="5.88,277,1635174000"; 
-   d="scan'208";a="106017083"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 10 Jan 2022 23:40:47 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id F3829400194A;
-        Mon, 10 Jan 2022 23:40:44 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] thermal: rcar_thermal: Use platform_get_irq_optional() to get the interrupt
-Date:   Mon, 10 Jan 2022 14:40:39 +0000
-Message-Id: <20220110144039.5810-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 10 Jan 2022 09:41:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299A4C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:41:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBAF860E33
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A54CC36AE3;
+        Mon, 10 Jan 2022 14:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641825715;
+        bh=IRWKfarB7UT3aTZ8iGKekBjvvhb6auMLdXTsZCJAKhE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atyYrExP1quHK/+eNzi+g41s0OBEtNuzulk6ZJTphsXFDPrNO8m8RH6z9LlRZ8EdA
+         4lM/zxXN9UbiTTLTDuUpgEay+76ER0g39E07GcY0FFwny3LEc6Ygis1RhyRn8sDr/t
+         FRyM3hwIjJ/M9L+NlsnZHOA9rXmgNUZsetlJi6Td4pXKc6FlXfABgGgyp1HglFEy4r
+         E1c/IHOhyYbLt4A7T0ZKRAuZSE/kO7H9T5cm7Ouht/k3PyaGvmzAhFjfZ5rSLVPr8T
+         IqqY3oa8e6TnFxzzubB8lSFaycBFbCL7NNQuv3YEyf8KA9HSLK4Kdg81DxESX/Zl3I
+         lbPTl0rfedN3A==
+Date:   Mon, 10 Jan 2022 14:41:49 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        chi.minghao@zte.com.cn, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] sound/soc/codecs: remove redundant ret variable
+Message-ID: <YdxFrb3r/u/ZAAQi@sirena.org.uk>
+References: <20220110012833.643994-1-chi.minghao@zte.com.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ApzzE4PXBCVGL0Eu"
+Content-Disposition: inline
+In-Reply-To: <20220110012833.643994-1-chi.minghao@zte.com.cn>
+X-Cookie: Do you have lysdexia?
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+--ApzzE4PXBCVGL0Eu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v3->v4:
-* Updated check as suggested by Andy
+On Mon, Jan 10, 2022 at 01:28:33AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+>=20
+> Return value from devm_snd_soc_register_component() directly instead
+> of taking this in another redundant variable.
 
-v2->v3:
-* Fixed review comment pointed by Andy
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
-v1->v2
-* Simplified checking error code
-* Break loop earlier if no interrupts are seen
+Please don't ignore review comments, people are generally making them
+for a reason and are likely to have the same concerns if issues remain
+unaddressed.  Having to repeat the same comments can get repetitive and
+make people question the value of time spent reviewing.  If you disagree
+with the review comments that's fine but you need to reply and discuss
+your concerns so that the reviewer can understand your decisions.
 
-v1: https://lkml.org/lkml/2021/12/18/163
----
- drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+--ApzzE4PXBCVGL0Eu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-index b49f04daaf47..1d729ed4d685 100644
---- a/drivers/thermal/rcar_thermal.c
-+++ b/drivers/thermal/rcar_thermal.c
-@@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 	struct rcar_thermal_common *common;
- 	struct rcar_thermal_priv *priv;
- 	struct device *dev = &pdev->dev;
--	struct resource *res, *irq;
-+	struct resource *res;
- 	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
- 	int mres = 0;
- 	int i;
-@@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 	pm_runtime_get_sync(dev);
- 
- 	for (i = 0; i < chip->nirqs; i++) {
--		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
--		if (!irq)
--			continue;
-+		int irq;
-+
-+		ret = platform_get_irq_optional(pdev, i);
-+		if (ret < 0 && ret != -ENXIO)
-+			goto error_unregister;
-+		if (ret > 0)
-+			irq = ret;
-+		else
-+			break;
-+
- 		if (!common->base) {
- 			/*
- 			 * platform has IRQ support.
-@@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 			idle = 0; /* polling delay is not needed */
- 		}
- 
--		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
-+		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
- 				       IRQF_SHARED, dev_name(dev), common);
- 		if (ret) {
- 			dev_err(dev, "irq request failed\n ");
--- 
-2.17.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHcRawACgkQJNaLcl1U
+h9BkZQf+OAhTmjfoI/kZdafc7EFfjT30BWUXU4ml6hWzhuflKB6oA3mrXlJlWHGs
+u7r8Fn3Pb/oHQvYITKx+5kvbtNcya/d4dmCZ5cliRsVEy2SkcO9ndU3VtAVjiUt7
+WAh92fwhmQVbAuSyN3iZ3uU5fWUshXPNQrCWIWyqrnINiadaNwVUDY9XqgY0hUiV
+XGd3kMUHGRedOyPtstAla01QESWbWsDPGxCtatztmChooqf0MOzjsg1/kRIbJi24
+CkutHEBlTI04yp0Op3cwUtLneaf7DE4U0VonHwPPC27Ii1qVEg3HpnAT9oT6MLC1
+MpLp/D4ApBv9vr2/UD5dEWI9f1d91Q==
+=l4Mb
+-----END PGP SIGNATURE-----
+
+--ApzzE4PXBCVGL0Eu--

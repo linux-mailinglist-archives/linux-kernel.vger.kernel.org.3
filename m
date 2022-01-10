@@ -2,285 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C710489ABE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D667A489ADB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234734AbiAJNuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:50:20 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:36744 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiAJNuK (ORCPT
+        id S231816AbiAJNyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230145AbiAJNyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:50:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0DC7D212BB;
-        Mon, 10 Jan 2022 13:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641822608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y8UfsVs9ewQVYRAbN7Ug1IzhKfCrKnLEWfDZ94pDZQ8=;
-        b=mKenB4Clw5CYe+TAg15IUaDmLkwbLOVkUcU8tymww/MniKePlDSYxOY4aDwwfdbHke7Bgw
-        DWtBIuf/zidfvBtVfPMkZOO+XHaRnWdMWYwyoXPNS+FoDyy0aKTz2zKX1F0KVCtAIdXK8K
-        SNJVdWvN0kn9xPKJP/tQDfZsjx8dBS8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641822608;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y8UfsVs9ewQVYRAbN7Ug1IzhKfCrKnLEWfDZ94pDZQ8=;
-        b=tHBKSy4UOfGBis4IGWS254lpdyHkmiPEhyj48Ig1bycfLuI0amwmH5IgzM1xlooypS3zng
-        LK+y4Yd+6fGmSNDA==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id BB06EA3B8D;
-        Mon, 10 Jan 2022 13:50:07 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Cc:     Michal Suchanek <msuchanek@suse.de>, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v4 6/6] module: Move duplicate mod_check_sig users code to mod_parse_sig
-Date:   Mon, 10 Jan 2022 14:49:58 +0100
-Message-Id: <59d134a3eae4fa802ed9135385cee6fe4838ec01.1641822505.git.msuchanek@suse.de>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1641822505.git.msuchanek@suse.de>
-References: <cover.1641822505.git.msuchanek@suse.de>
+        Mon, 10 Jan 2022 08:54:20 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED73C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:54:20 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id a18so52839258edj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:54:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=djPW+e1c8spfYeyL5AbJ32h9GSIUYbKoLv2DLHaOq+0=;
+        b=bl9J2QtWDuUmQlp5N7WmOsJhVeMPiTX+NiVRwh9l87FNYClRzAhBufVdMy0MCqtNFV
+         dq4421mAxg0ILI2S2MCCP1ns1H4QhlZT4aWwoBhR0cZUmunXHRx+d+HuOX/d5PKXrzPG
+         TK+4Hu5xgpHlwxKj6pUbOw6pX2/G4EJ8DfXnXNMUesmDYorizgDzkPnVKpRJhctC8sUZ
+         B2ri5NpHRwtPw2fRocdZhxoBuaBCKzAjfaykJZay8LbVDX930o0CDQ/LHWyda4xFV+Hc
+         WugS89G4jBlr4VL2uypPxdIO8AzpqLxqh+es+3YLGWyAingktkoxMNPCyXb/hyfzuCo6
+         mj1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=djPW+e1c8spfYeyL5AbJ32h9GSIUYbKoLv2DLHaOq+0=;
+        b=0aD3uQdcp2P9Qo3JA/gt6ZW9dc3mnNzv9JMBNatnOAbDSYyPP8rMN608/+6J2NDjAI
+         FBaVAe/8TLxq/Q9pW0RaLHee73qjoeQyRfEfQMiiHEH5CiAmURiOeBDWPg1qF+h289ba
+         khuc2xfKCd8MjGa4MFhjqTKqdJBYvH3yKpvWiAM3v74UTBsXsGzTjqOIRuqEWcHm+TZW
+         P8hFf0IbW8QHUCvpcski7xQ6GjGyUtvOY9R/0DDZo7BKojfLscEvnIHFJ20NEW6q8zkp
+         fFyP+WlvKc+4Vv5rRd3l3pPih4wIWtgRfg1ljyCeT35Ri+Gg9O61t1rKYisiSSr3PGM9
+         KolA==
+X-Gm-Message-State: AOAM530+95xGQ3gr8JQDARvYrjD9TCGFkAAsKKjPhZmqPBv8NLn94pzQ
+        0Xh9qBUkcaQFWce0c37JjE4ErOw0Hwy3zvdtf43k
+X-Google-Smtp-Source: ABdhPJyFGnfUMGEnoNxRXvUJpCvABNYtlKdS/8DhFo1CC6qDSFOT+cL5Hg32zlVk43P8LVymiEdjB1533Wdjtj+EyFw=
+X-Received: by 2002:a05:6402:cbb:: with SMTP id cn27mr5089054edb.246.1641822858820;
+ Mon, 10 Jan 2022 05:54:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210830141737.181-1-xieyongji@bytedance.com> <20220110075546-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220110075546-mutt-send-email-mst@kernel.org>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Mon, 10 Jan 2022 21:54:08 +0800
+Message-ID: <CACycT3v1aEViw7vV4x5qeGVPrSrO-BTDvQshEX35rx_X0Au2vw@mail.gmail.com>
+Subject: Re: [PATCH v12 00/13] Introduce VDUSE - vDPA Device in Userspace
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, bcrl@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mika.penttila@nextfour.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>, joro@8bytes.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        He Zhe <zhe.he@windriver.com>,
+        Liu Xiaodong <xiaodong.liu@intel.com>,
+        Joe Perches <joe@perches.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        John Garry <john.garry@huawei.com>, songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Netdev <netdev@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Multiple users of mod_check_sig check for the marker, then call
-mod_check_sig, extract signature length, and remove the signature.
+On Mon, Jan 10, 2022 at 8:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Aug 30, 2021 at 10:17:24PM +0800, Xie Yongji wrote:
+> > This series introduces a framework that makes it possible to implement
+> > software-emulated vDPA devices in userspace. And to make the device
+> > emulation more secure, the emulated vDPA device's control path is handled
+> > in the kernel and only the data path is implemented in the userspace.
+> >
+> > Since the emuldated vDPA device's control path is handled in the kernel,
+> > a message mechnism is introduced to make userspace be aware of the data
+> > path related changes. Userspace can use read()/write() to receive/reply
+> > the control messages.
+> >
+> > In the data path, the core is mapping dma buffer into VDUSE daemon's
+> > address space, which can be implemented in different ways depending on
+> > the vdpa bus to which the vDPA device is attached.
+> >
+> > In virtio-vdpa case, we implements a MMU-based software IOTLB with
+> > bounce-buffering mechanism to achieve that. And in vhost-vdpa case, the dma
+> > buffer is reside in a userspace memory region which can be shared to the
+> > VDUSE userspace processs via transferring the shmfd.
+> >
+> > The details and our user case is shown below:
+> >
+> > ------------------------    -------------------------   ----------------------------------------------
+> > |            Container |    |              QEMU(VM) |   |                               VDUSE daemon |
+> > |       ---------      |    |  -------------------  |   | ------------------------- ---------------- |
+> > |       |dev/vdx|      |    |  |/dev/vhost-vdpa-x|  |   | | vDPA device emulation | | block driver | |
+> > ------------+-----------     -----------+------------   -------------+----------------------+---------
+> >             |                           |                            |                      |
+> >             |                           |                            |                      |
+> > ------------+---------------------------+----------------------------+----------------------+---------
+> > |    | block device |           |  vhost device |            | vduse driver |          | TCP/IP |    |
+> > |    -------+--------           --------+--------            -------+--------          -----+----    |
+> > |           |                           |                           |                       |        |
+> > | ----------+----------       ----------+-----------         -------+-------                |        |
+> > | | virtio-blk driver |       |  vhost-vdpa driver |         | vdpa device |                |        |
+> > | ----------+----------       ----------+-----------         -------+-------                |        |
+> > |           |      virtio bus           |                           |                       |        |
+> > |   --------+----+-----------           |                           |                       |        |
+> > |                |                      |                           |                       |        |
+> > |      ----------+----------            |                           |                       |        |
+> > |      | virtio-blk device |            |                           |                       |        |
+> > |      ----------+----------            |                           |                       |        |
+> > |                |                      |                           |                       |        |
+> > |     -----------+-----------           |                           |                       |        |
+> > |     |  virtio-vdpa driver |           |                           |                       |        |
+> > |     -----------+-----------           |                           |                       |        |
+> > |                |                      |                           |    vdpa bus           |        |
+> > |     -----------+----------------------+---------------------------+------------           |        |
+> > |                                                                                        ---+---     |
+> > -----------------------------------------------------------------------------------------| NIC |------
+> >                                                                                          ---+---
+> >                                                                                             |
+> >                                                                                    ---------+---------
+> >                                                                                    | Remote Storages |
+> >                                                                                    -------------------
+> >
+> > We make use of it to implement a block device connecting to
+> > our distributed storage, which can be used both in containers and
+> > VMs. Thus, we can have an unified technology stack in this two cases.
+> >
+> > To test it with null-blk:
+> >
+> >   $ qemu-storage-daemon \
+> >       --chardev socket,id=charmonitor,path=/tmp/qmp.sock,server,nowait \
+> >       --monitor chardev=charmonitor \
+> >       --blockdev driver=host_device,cache.direct=on,aio=native,filename=/dev/nullb0,node-name=disk0 \
+> >       --export type=vduse-blk,id=test,node-name=disk0,writable=on,name=vduse-null,num-queues=16,queue-size=128
+> >
+> > The qemu-storage-daemon can be found at https://github.com/bytedance/qemu/tree/vduse
+>
+> It's been half a year - any plans to upstream this?
 
-Put this code in one place together with mod_check_sig.
+Yeah, this is on my to-do list this month.
 
-This changes the error from ENOENT to ENODATA for ima_read_modsig in the
-case the signature marker is missing.
+Sorry for taking so long... I've been working on another project
+enabling userspace RDMA with VDUSE for the past few months. So I
+didn't have much time for this. Anyway, I will submit the first
+version as soon as possible.
 
-This also changes the buffer length in ima_read_modsig from size_t to
-unsigned long. This reduces the possible value range on 32bit but the
-length refers to kernel in-memory buffer which cannot be longer than
-ULONG_MAX.
-
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
-v3: - Philipp Rudo <prudo@redhat.com>: Update the commit with note about
-      change of raturn value
-    - Preserve the EBADMSG error code while moving code araound
-v4: - remove unused variable ms in module_signing
-    - note about buffer length
----
- include/linux/module_signature.h    |  1 +
- kernel/module_signature.c           | 56 ++++++++++++++++++++++++++++-
- kernel/module_signing.c             | 27 +++-----------
- security/integrity/ima/ima_modsig.c | 22 ++----------
- 4 files changed, 63 insertions(+), 43 deletions(-)
-
-diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
-index 7eb4b00381ac..1343879b72b3 100644
---- a/include/linux/module_signature.h
-+++ b/include/linux/module_signature.h
-@@ -42,5 +42,6 @@ struct module_signature {
- 
- int mod_check_sig(const struct module_signature *ms, size_t file_len,
- 		  const char *name);
-+int mod_parse_sig(const void *data, size_t *len, size_t *sig_len, const char *name);
- 
- #endif /* _LINUX_MODULE_SIGNATURE_H */
-diff --git a/kernel/module_signature.c b/kernel/module_signature.c
-index 00132d12487c..b8eb30182183 100644
---- a/kernel/module_signature.c
-+++ b/kernel/module_signature.c
-@@ -8,14 +8,36 @@
- 
- #include <linux/errno.h>
- #include <linux/printk.h>
-+#include <linux/string.h>
- #include <linux/module_signature.h>
- #include <asm/byteorder.h>
- 
-+/**
-+ * mod_check_sig_marker - check that the given data has signature marker at the end
-+ *
-+ * @data:	Data with appended signature
-+ * @len:	Length of data. Signature marker length is subtracted on success.
-+ */
-+static inline int mod_check_sig_marker(const void *data, size_t *len)
-+{
-+	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
-+
-+	if (markerlen > *len)
-+		return -ENODATA;
-+
-+	if (memcmp(data + *len - markerlen, MODULE_SIG_STRING,
-+		   markerlen))
-+		return -ENODATA;
-+
-+	*len -= markerlen;
-+	return 0;
-+}
-+
- /**
-  * mod_check_sig - check that the given signature is sane
-  *
-  * @ms:		Signature to check.
-- * @file_len:	Size of the file to which @ms is appended.
-+ * @file_len:	Size of the file to which @ms is appended (without the marker).
-  * @name:	What is being checked. Used for error messages.
-  */
- int mod_check_sig(const struct module_signature *ms, size_t file_len,
-@@ -44,3 +66,35 @@ int mod_check_sig(const struct module_signature *ms, size_t file_len,
- 
- 	return 0;
- }
-+
-+/**
-+ * mod_parse_sig - check that the given signature is sane and determine signature length
-+ *
-+ * @data:	Data with appended signature.
-+ * @len:	Length of data. Signature and marker length is subtracted on success.
-+ * @sig_len:	Length of signature. Filled on success.
-+ * @name:	What is being checked. Used for error messages.
-+ */
-+int mod_parse_sig(const void *data, size_t *len, size_t *sig_len, const char *name)
-+{
-+	const struct module_signature *sig;
-+	int rc;
-+
-+	rc = mod_check_sig_marker(data, len);
-+	if (rc)
-+		return rc;
-+
-+	if (*len < sizeof(*sig))
-+		return -EBADMSG;
-+
-+	sig = (const struct module_signature *)(data + (*len - sizeof(*sig)));
-+
-+	rc = mod_check_sig(sig, *len, name);
-+	if (rc)
-+		return rc;
-+
-+	*sig_len = be32_to_cpu(sig->sig_len);
-+	*len -= *sig_len + sizeof(*sig);
-+
-+	return 0;
-+}
-diff --git a/kernel/module_signing.c b/kernel/module_signing.c
-index 20857d2a15ca..1d4cb03cce21 100644
---- a/kernel/module_signing.c
-+++ b/kernel/module_signing.c
-@@ -25,35 +25,16 @@ int verify_appended_signature(const void *data, unsigned long *len,
- 			      struct key *trusted_keys,
- 			      enum key_being_used_for purpose)
- {
--	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
--	struct module_signature *ms;
--	unsigned long sig_len, modlen = *len;
-+	unsigned long sig_len;
- 	int ret;
- 
--	pr_devel("==>%s %s(,%lu)\n", __func__, key_being_used_for[purpose], modlen);
-+	pr_devel("==>%s %s(,%lu)\n", __func__, key_being_used_for[purpose], *len);
- 
--	if (markerlen > modlen)
--		return -ENODATA;
--
--	if (memcmp(data + modlen - markerlen, MODULE_SIG_STRING,
--		   markerlen))
--		return -ENODATA;
--	modlen -= markerlen;
--
--	if (modlen <= sizeof(*ms))
--		return -EBADMSG;
--
--	ms = data + modlen - sizeof(*ms);
--
--	ret = mod_check_sig(ms, modlen, key_being_used_for[purpose]);
-+	ret = mod_parse_sig(data, len, &sig_len, key_being_used_for[purpose]);
- 	if (ret)
- 		return ret;
- 
--	sig_len = be32_to_cpu(ms->sig_len);
--	modlen -= sig_len + sizeof(*ms);
--	*len = modlen;
--
--	return verify_pkcs7_signature(data, modlen, data + modlen, sig_len,
-+	return verify_pkcs7_signature(data, *len, data + *len, sig_len,
- 				      trusted_keys,
- 				      purpose,
- 				      NULL, NULL);
-diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
-index fb25723c65bc..b40c8fdf6139 100644
---- a/security/integrity/ima/ima_modsig.c
-+++ b/security/integrity/ima/ima_modsig.c
-@@ -37,33 +37,17 @@ struct modsig {
-  *
-  * Return: 0 on success, error code otherwise.
-  */
--int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
-+int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t len,
- 		    struct modsig **modsig)
- {
--	const size_t marker_len = strlen(MODULE_SIG_STRING);
--	const struct module_signature *sig;
- 	struct modsig *hdr;
--	size_t sig_len;
--	const void *p;
-+	unsigned long sig_len, buf_len = len;
- 	int rc;
- 
--	if (buf_len <= marker_len + sizeof(*sig))
--		return -ENOENT;
--
--	p = buf + buf_len - marker_len;
--	if (memcmp(p, MODULE_SIG_STRING, marker_len))
--		return -ENOENT;
--
--	buf_len -= marker_len;
--	sig = (const struct module_signature *)(p - sizeof(*sig));
--
--	rc = mod_check_sig(sig, buf_len, func_tokens[func]);
-+	rc = mod_parse_sig(buf, &buf_len, &sig_len, func_tokens[func]);
- 	if (rc)
- 		return rc;
- 
--	sig_len = be32_to_cpu(sig->sig_len);
--	buf_len -= sig_len + sizeof(*sig);
--
- 	/* Allocate sig_len additional bytes to hold the raw PKCS#7 data. */
- 	hdr = kzalloc(sizeof(*hdr) + sig_len, GFP_KERNEL);
- 	if (!hdr)
--- 
-2.31.1
-
+Thanks,
+Yongji

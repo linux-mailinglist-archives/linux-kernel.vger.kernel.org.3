@@ -2,159 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8728489861
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3F348985F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245417AbiAJMP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:15:27 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22168 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S245358AbiAJMNv (ORCPT
+        id S245332AbiAJMPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245345AbiAJMNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:13:51 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AC8hCG028776;
-        Mon, 10 Jan 2022 12:13:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Xak/CKLMnioeGOSndHD6lQ+kfo22g2B8NuO2kHa7z0E=;
- b=TmqMf5H6DVJ8wH7eTGzr6aWgdMp+Aa6moKzaVc28L9S385jSv7u7b3ngf90du0mNw+vM
- iTlhJvZ08BXo8d7Oz/PgsOgUihkujeRXVLvpb54RBIKHnYDhJZZfC5i5ja3j9mWeUDOx
- p0dv9+yLp9J5CR9ccZjz/W9/HVdoxlYR/SEvg4H338ho+p9gv5FAt4W1dU+nKzOjjEMV
- QKHN+p2KZGEBsLnN7hd1B4pY71DtNC16YaOzUIkU/Tami+kAlOMxe4Tw2X2bQWEnRz97
- fijKKPFpFhiJMcF72mSOsREdxPM/S3ZIf9xvqpFK1EifnRrm0mP8uqG8oMLa3fiwsm+b Sw== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3df37wv2yr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 12:13:42 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ACDR7p032182;
-        Mon, 10 Jan 2022 12:13:41 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3df288ukb2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 12:13:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ACDO5v43843854
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 12:13:24 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F09CBA405E;
-        Mon, 10 Jan 2022 12:13:23 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41957A4055;
-        Mon, 10 Jan 2022 12:13:23 +0000 (GMT)
-Received: from sig-9-65-93-173.ibm.com (unknown [9.65.93.173])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jan 2022 12:13:23 +0000 (GMT)
-Message-ID: <6361f769a41d319810f33c559f52938cf93607bb.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 2/6] fs-verity: define a function to return the
- integrity protected file digest
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 10 Jan 2022 07:13:22 -0500
-In-Reply-To: <20220110004738.kzhzyastvq5rn2g5@altlinux.org>
-References: <20220109185517.312280-1-zohar@linux.ibm.com>
-         <20220109185517.312280-3-zohar@linux.ibm.com>
-         <20220110004738.kzhzyastvq5rn2g5@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Mon, 10 Jan 2022 07:13:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61830C061757;
+        Mon, 10 Jan 2022 04:13:38 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id w7so11596736plp.13;
+        Mon, 10 Jan 2022 04:13:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fbOxJDANUz+2+2qCoHOMwGC4CRiXyfuTnOmOD9TcJf8=;
+        b=Fiu9MAGTT75MlG8IWMPFEkw/Jv7kqDLzkv89w8Q5fFB0QhTi/B1jkfS9DdkJnwhqPt
+         xAC77qsUbb2DkYKgUvJ22MKqRGe//xlyLxLxfukQLJKXSqsi+ElMZh4bxYp51S14FPeF
+         icpAJr1/qVXf5N8J33F8c5HWz8tvVJEpXm2nECjTZent7Q6N+fm68qX0GJEc1fSZgJzC
+         CRPwzgU7v8jznS/0gv9Phuno1gMG9oNv1I8QhgHqLA54r5UhbcGtQgGcWjgUfSFcrWXh
+         D2uPumGVVAHBZIkAHI43WT/GVnnNGrIiyb4kjCm0/wHblNWji7OeJX3e8uuAv9OWpu2k
+         HAnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fbOxJDANUz+2+2qCoHOMwGC4CRiXyfuTnOmOD9TcJf8=;
+        b=YZ7UgXNYwlSpSfAISkX145sfj+tZsB+r8aJDThCziD2N6ur4kqhvhZO3HZqGlFG6dA
+         8a/hOJTbyX5iG8/Ktoz7w7kwv5wEkUS8VuHmt0rWFDkI+0AxA+enO/rD5DQ6jfKz1HBj
+         Wy8D+8cHOAOpdFHKp/TVYEmkXqr9/5HdCVSHbJDSpAw4fgAKPBh9LXEd6CAad53H+vBm
+         mN6I1DM9gR33/gheQup2dmVm3OgdgAzux6EoH1FX+KzJiNY9rwQBWtTM6mT99pHDGVTQ
+         nQB3lLPh+me2O10crpuZBns0Da6/2zZCy0WBWg4IDdMvMDiMIwWaTvhYfeYxHT15sEy8
+         sxJw==
+X-Gm-Message-State: AOAM533aXks9+x2o5OW9sTurTrZFf90apYa8PmlHT7zUNhaAinEbZThf
+        8coiXynVub5OCR5mmm0biuKu6AGW5AzmSQ==
+X-Google-Smtp-Source: ABdhPJzyiTSpPFaIoc8j5dO5ENVip8t+1AYfxXd6TE9cyhN7D4KVg4OJJo1Ax5gT4Yq0JSWQxhJYFw==
+X-Received: by 2002:a62:6445:0:b0:4be:9d1:1342 with SMTP id y66-20020a626445000000b004be09d11342mr6745184pfb.29.1641816817966;
+        Mon, 10 Jan 2022 04:13:37 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
+        by smtp.gmail.com with ESMTPSA id g21sm6615528pfc.75.2022.01.10.04.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 04:13:37 -0800 (PST)
+Message-ID: <7354695e-a8dd-8c6c-ee7e-764280184863@gmail.com>
+Date:   Mon, 10 Jan 2022 20:13:33 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] scsi: storvsc: Fix storvsc_queuecommand() memory leak
+Content-Language: en-US
+To:     Juan Vazquez <juvazq@linux.microsoft.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, mikelley@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220109001758.6401-1-juvazq@linux.microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20220109001758.6401-1-juvazq@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8t7hD3g3bgukSVN8lyjGERRfOlEohop0
-X-Proofpoint-ORIG-GUID: 8t7hD3g3bgukSVN8lyjGERRfOlEohop0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_05,2022-01-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0 phishscore=0
- mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201100085
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vitaly,
-
-On Mon, 2022-01-10 at 03:47 +0300, Vitaly Chikunov wrote:
-> Mimi,
+On 1/9/2022 8:17 AM, Juan Vazquez wrote:
+> Fix possible memory leak in error path of storvsc_queuecommand() when
+> DMA mapping fails.
 > 
-> On Sun, Jan 09, 2022 at 01:55:13PM -0500, Mimi Zohar wrote:
-> > Define a function named fsverity_get_digest() to return the verity file
-> > digest and the associated hash algorithm (enum hash_algo).
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  fs/verity/Kconfig            |  1 +
-> >  fs/verity/fsverity_private.h |  7 -------
-> >  fs/verity/measure.c          | 40 ++++++++++++++++++++++++++++++++++++
-> >  include/linux/fsverity.h     | 18 ++++++++++++++++
-> >  4 files changed, 59 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-> > index f0d7b30c62db..52906b2e5811 100644
-> > --- a/fs/verity/measure.c
-> > +++ b/fs/verity/measure.c
-> > @@ -57,3 +57,43 @@ int fsverity_ioctl_measure(struct file *filp, void __user *_uarg)
-> >  	return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(fsverity_ioctl_measure);
-> > +
-> > +/**
-> > + * fsverity_get_digest() - get a verity file's digest
-> > + * @inode: inode to get digest of
-> > + * @digest: (out) pointer to the digest
-> > + * @alg: (out) pointer to the hash algorithm enumeration
-> > + *
-> > + * Return the file hash algorithm and digest of an fsverity protected file.
-> > + *
-> > + * Return: 0 on success, -errno on failure
-> > + */
-> > +int fsverity_get_digest(struct inode *inode,
-> > +			    u8 digest[FS_VERITY_MAX_DIGEST_SIZE],
-> > +			    enum hash_algo *alg)
-> > +{
-> > +	const struct fsverity_info *vi;
-> > +	const struct fsverity_hash_alg *hash_alg;
-> > +	int i;
-> > +
-> > +	vi = fsverity_get_info(inode);
-> > +	if (!vi)
-> > +		return -ENODATA; /* not a verity file */
-> > +
-> > +	hash_alg = vi->tree_params.hash_alg;
-> > +	memset(digest, 0, FS_VERITY_MAX_DIGEST_SIZE);
-> > +	*alg = HASH_ALGO__LAST;
+> Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for storvsc driver")
+> Signed-off-by: Juan Vazquez <juvazq@linux.microsoft.com>
+
+Looks good. Thanks for the fix patch.
+
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+
+> ---
+>   drivers/scsi/storvsc_drv.c | 17 ++++++++++++-----
+>   1 file changed, 12 insertions(+), 5 deletions(-)
 > 
-> Perhaps this line is redundant (*alg is overwritten later) and would
-> needlessly mangle output value in case of -EINVAL while it's being
-> untouched on -ENODATA.
-> 
-
-Thanks!
-
-Mimi
-
-> 
-> > +
-> > +	/* convert hash algorithm to hash_algo_name */
-> > +	i = match_string(hash_algo_name, HASH_ALGO__LAST, hash_alg->name);
-> > +	if (i < 0)
-> > +		return -EINVAL;
-> > +	*alg = i;
-> > +
-> > +	memcpy(digest, vi->file_digest, hash_alg->digest_size);
-> > +
-> > +	pr_debug("file digest %s:%*phN\n", hash_algo_name[*alg],
-> > +		  hash_digest_size[*alg], digest);
-> > +
-> > +	return 0;
-> > +}
-
-
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index 2273b843d9d2..9a0bba5a51a7 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -1850,8 +1850,10 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>   		payload->range.offset = offset_in_hvpg;
+>   
+>   		sg_count = scsi_dma_map(scmnd);
+> -		if (sg_count < 0)
+> -			return SCSI_MLQUEUE_DEVICE_BUSY;
+> +		if (sg_count < 0) {
+> +			ret = SCSI_MLQUEUE_DEVICE_BUSY;
+> +			goto err_free_payload;
+> +		}
+>   
+>   		for_each_sg(sgl, sg, sg_count, j) {
+>   			/*
+> @@ -1886,13 +1888,18 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
+>   	put_cpu();
+>   
+>   	if (ret == -EAGAIN) {
+> -		if (payload_sz > sizeof(cmd_request->mpb))
+> -			kfree(payload);
+>   		/* no more space */
+> -		return SCSI_MLQUEUE_DEVICE_BUSY;
+> +		ret = SCSI_MLQUEUE_DEVICE_BUSY;
+> +		goto err_free_payload;
+>   	}
+>   
+>   	return 0;
+> +
+> +err_free_payload:
+> +	if (payload_sz > sizeof(cmd_request->mpb))
+> +		kfree(payload);
+> +
+> +	return ret;
+>   }
+>   
+>   static struct scsi_host_template scsi_driver = {

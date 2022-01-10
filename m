@@ -2,151 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF748963B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDC048963F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243850AbiAJKVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:21:51 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:43822 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239415AbiAJKVt (ORCPT
+        id S243861AbiAJKW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:22:58 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:35710 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239415AbiAJKWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:21:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641810109; x=1673346109;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=cn8ybiiW41FpTma7MjwJcBGcMQ9qfeGxIA4V4UXizXc=;
-  b=M6/N5HX2OeWT3QTR9viIbtoQysiN6IhmkeQNQ1/yq70/DeFMon0TE16g
-   RN+iliiuUcTTVnCyq7mqVHwzPsDCvm9zHdOpIfryBKvS3WJ+SSnsj75Zz
-   D5S1jhRwMWlG5y3o53Foy2SBYsKjG5lA/QRSPbiNx5SHM/SXCc8e13z/W
-   c=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 10 Jan 2022 02:21:48 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 02:21:47 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 10 Jan 2022 02:21:47 -0800
-Received: from [10.216.41.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 10 Jan
- 2022 02:21:43 -0800
-Subject: Re: [PATCH v3 RESEND] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
-To:     Mark Hemment <markhemm@googlemail.com>
-CC:     <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>, <vbabka@suse.cz>,
-        <rientjes@google.com>, <mhocko@suse.com>, <surenb@google.com>,
-        <shakeelb@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Charan Teja Reddy <charante@codeaurora.org>
-References: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
- <CANe_+UipVZRZeWqzXezacPaVb9UeC6a_ZhQp8GkrvftbRktotg@mail.gmail.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-Message-ID: <2c66ba2e-1c65-3bdd-b91e-eb8391ec6dbf@quicinc.com>
-Date:   Mon, 10 Jan 2022 15:51:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 10 Jan 2022 05:22:52 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 88D171F395;
+        Mon, 10 Jan 2022 10:22:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641810171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zMv3xqVerfhA9GCi94XW3otM0bLE+4IMKxrSjv9VEk0=;
+        b=Qedm/NHtv3mR7ZK8/TrbzqVq5Ra/lbQoWUQgDRduvUsjY4FRqIp+dGpUn/dQx6NKIYCpfJ
+        Wap2MUHBB4jZPoPGSCV6GaLQLoekIMYtoIPXKkAkXfYRkqBfuVAUxjWRpr4yuQvsGlIZUE
+        V5JwZFfYEVHzcb2A+oSmW0ev/OtHgjI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641810171;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zMv3xqVerfhA9GCi94XW3otM0bLE+4IMKxrSjv9VEk0=;
+        b=ODLGeIdKubK00A1lTxxIkkhmkQDfJv9iqOAhwqhd9TXmfB4xE9DcHQdsF4iXEFTBxtCYd8
+        7Ha18DU4A5vfVjAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 730B813CCB;
+        Mon, 10 Jan 2022 10:22:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id P4ScGvsI3GGuTAAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 10:22:51 +0000
+Date:   Mon, 10 Jan 2022 11:22:59 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/platform for v5.17
+Message-ID: <YdwJAzTiMSIaGjsC@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <CANe_+UipVZRZeWqzXezacPaVb9UeC6a_ZhQp8GkrvftbRktotg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Mark for the review!!
+Hi Linus,
 
-On 1/7/2022 5:40 PM, Mark Hemment wrote:
-> On Thu, 6 Jan 2022 at 17:06, Charan Teja Reddy
-> <quic_charante@quicinc.com> wrote:
->>
->> From: Charan Teja Reddy <charante@codeaurora.org>
->>
->> Currently fadvise(2) is supported only for the files that doesn't
->> associated with noop_backing_dev_info thus for the files, like shmem,
->> fadvise results into NOP. But then there is file_operations->fadvise()
->> that lets the file systems to implement their own fadvise
->> implementation. Use this support to implement some of the POSIX_FADV_XXX
->> functionality for shmem files.
->>
->> [snip]
-> 
->> +static int shmem_fadvise_willneed(struct address_space *mapping,
->> +                                pgoff_t start, pgoff_t long end)
->> +{
->> +       XA_STATE(xas, &mapping->i_pages, start);
->> +       struct page *page;
->> +
->> +       rcu_read_lock();
->> +       xas_for_each(&xas, page, end) {
->> +               if (!xa_is_value(page))
->> +                       continue;
->> +               xas_pause(&xas);
->> +               rcu_read_unlock();
->> +
->> +               page = shmem_read_mapping_page(mapping, xas.xa_index);
->> +               if (!IS_ERR(page))
->> +                       put_page(page);
->> +
->> +               rcu_read_lock();
->> +               if (need_resched()) {
->> +                       xas_pause(&xas);
->> +                       cond_resched_rcu();
->> +               }
->> +       }
->> +       rcu_read_unlock();
->> +
->> +       return 0;
-> 
-> I have a doubt on referencing xa_index after calling xas_pause().
-> xas_pause() walks xa_index forward, so will not be the value expected
-> for the current page.
+please pull a single x86/platform fix for 5.17.
 
-Agree here. I should have the better test case to verify my changes.
+Thx.
 
-> Also, not necessary to re-call xas_pause() before cond_resched (it is
-> a no-op).
+---
 
-In the event when CONFIG_DEBUG_ATOMIC_SLEEP is enabled users may still
-need to call the xas_pause(), as we are dropping the rcu lock. NO?
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
 
-static inline void cond_resched_rcu(void)
-{
-#if defined(CONFIG_DEBUG_ATOMIC_SLEEP) || !defined(CONFIG_PREEMPT_RCU)
-        rcu_read_unlock();
-        cond_resched();
-        rcu_read_lock();
-#endif
-}
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
 
-> Would be better to check need_resched() before
-> rcu_read_lock().
+are available in the Git repository at:
 
-Okay, I can directly use cond_resched() if used before rcu_read_lock().
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_platform_for_v5.17_rc1
 
-> 
-> As this loop may call xas_pause() for most iterations, should consider
-> using xa_for_each() instead (I *think* - still getting up to speed
-> with XArray).
+for you to fetch changes up to 9e4d52a00a0217857fa40dc998971a375f861a61:
 
-Even the xarray documentation says that: If most entries found during a
-walk require you to call xas_pause(), the xa_for_each() iterator may be
-more appropriate.
+  x86/ce4100: Replace "ti,pcf8575" by "nxp,pcf8575" (2021-12-03 18:23:57 +0100)
 
-Since every value entry found in the xarray requires me to do the
-xas_pause(), I do agree that xa_for_each() is the appropriate call here.
-Will switch to this in the next spin. Waiting for further review
-comments on this patch.
+----------------------------------------------------------------
+- A DT compatibility fix for the Intel media processor CE4100 driver
 
-> 
-> Mark
-> 
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      x86/ce4100: Replace "ti,pcf8575" by "nxp,pcf8575"
+
+ arch/x86/platform/ce4100/falconfalls.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

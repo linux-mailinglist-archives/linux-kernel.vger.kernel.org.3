@@ -2,122 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7EE489884
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFFC489887
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245373AbiAJMXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:23:05 -0500
-Received: from mga04.intel.com ([192.55.52.120]:45866 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245353AbiAJMWw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:22:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641817372; x=1673353372;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gmL3tKEUDF2ZwVHFtsNVYcZn2op8HEU3muwCY7UW7MI=;
-  b=kgQWlMj0ktvyzG1cepOQZiNBRAlxy1oi7uhc81GY8Ljs5b73KECPdhGv
-   asWxIWnTzfVYVICEAwg3KK18MvBRuByCCY6dSGxBShnE/1d0zC3ipc7nT
-   pXkDveB3h5oeEStMzyNmUvIIBdgoq5T3w//pyn0b0QWEjdhyrDmRDMEc9
-   xVP4tipvl2zukm/aisjO4vhu7LbUevLl3VVWSjEzysNnKbKwznjwbYsJR
-   1AhJQ6h9zB6gcE4buBot1R06hibaiol4IYYlDD3xmSIu5hP4tdjfUVAGe
-   1favtSJhEiSVzC2vMs7VYtY7bGj1P20RwDih8NsAjkqZ+7MIZqHg3wi2y
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="242025013"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="242025013"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 04:21:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="669436824"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Jan 2022 04:21:46 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6tgI-0003JN-16; Mon, 10 Jan 2022 12:21:46 +0000
-Date:   Mon, 10 Jan 2022 20:21:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Colin Xu <colin.xu@intel.com>
-Subject: drivers/gpu/drm/i915/gvt/gtt.c:1152: warning: This comment starts
- with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202201102031.xPWND4ZH-lkp@intel.com>
+        id S245406AbiAJMXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245394AbiAJMXO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 07:23:14 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B33C061751
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:23:13 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id r9so24652194wrg.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:23:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=d5pQe12aMTp9K2Ar029wPLMoAM2l+tag/tJuNAihSfA=;
+        b=oJPzZWiJGiiJbT4/DpmWXxwLQYl6V3un3f2VMq9gR7xu1Vg0i7bZ927q0i6k6AQopH
+         EMyuitOKXW8UrzPrA8eOw7VIwHiup4VsiSBK70Fwh3ZHQOw8z80zEoQuv/4CO+GM9ivz
+         F5QUJ+ddCeY/O2IGHQoaAHfFjZBPVjvkv+z5R1r8GVyPWIRO/0eMm5lWFMJ9u0SODO/G
+         MdBs5h8FelfgOYX3f78MFfDQiSxzbfqga00uHApimjp9PagVhvMXJoFmnNYqNKov7brQ
+         vTMyqbYIDiV5KSYQLZHE20N7CHzkl+83RKoT9KdBiD7amP2upvF6OjdjXJB6L3Rolsqe
+         gmUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d5pQe12aMTp9K2Ar029wPLMoAM2l+tag/tJuNAihSfA=;
+        b=QN+UmTkzD3U2d7dutQbOY9inx1vKkqpScVgmOMnVDc7Mvd5d1ZTzDEJdsGAcKuZltl
+         +Mu8bf5xJRapocXeFG6WzP4pe/Hb9zA0Qt8COgRLSUsquLFnEB4ZXM14/k0PX9jHggGI
+         H6S3JHbuhp0rFuPQqkJIlGd1esKvXAgyR1SXROdXbPdx7hU27Mkhmavw7E2OUFxi/t1v
+         v3KJsOajBwDClUJqh2fm/9X3xZRddHEDuCqZkrO97JEKlXUfbAmhy1amiolARWydX2AG
+         obTmRZwq5jWamR6fgDm5AqtiusBNbTBC/M2Rz/GqTs2V/FqzxcfNmeuZdDUjQuk1QqXa
+         5SVQ==
+X-Gm-Message-State: AOAM530h+Y7ksDYoQpJ8S7bsyXm8Z08UfAU6HOm+Cg9yRMPevpX7gcEF
+        qdxpDvcynGnOoRMgwv6XPxkbfw==
+X-Google-Smtp-Source: ABdhPJxJTGBqADrh2dO8M5zq/V0efObTWO7ybtVGTQGANdUuw72l8ka3sOvJLzv6aUoWNXVdmQ1BEQ==
+X-Received: by 2002:adf:e2cc:: with SMTP id d12mr17686855wrj.107.1641817392300;
+        Mon, 10 Jan 2022 04:23:12 -0800 (PST)
+Received: from google.com ([31.124.24.179])
+        by smtp.gmail.com with ESMTPSA id l4sm6533168wrm.62.2022.01.10.04.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 04:23:11 -0800 (PST)
+Date:   Mon, 10 Jan 2022 12:23:09 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC v5 net-next 08/13] mfd: add interface to check whether a
+ device is mfd
+Message-ID: <YdwlLYFPU16roS8E@google.com>
+References: <20211218214954.109755-1-colin.foster@in-advantage.com>
+ <20211218214954.109755-9-colin.foster@in-advantage.com>
+ <Ycx+A4KNKiVmH2PJ@google.com>
+ <20211230020443.GB1347882@euler>
+ <Yc23mTo6g1tBiMjT@google.com>
+ <20211230201253.GA1484230@euler>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211230201253.GA1484230@euler>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhenyu,
+On Thu, 30 Dec 2021, Colin Foster wrote:
 
-First bad commit (maybe != root cause):
+> On Thu, Dec 30, 2021 at 01:43:53PM +0000, Lee Jones wrote:
+> > On Wed, 29 Dec 2021, Colin Foster wrote:
+> > 
+> > > On Wed, Dec 29, 2021 at 03:25:55PM +0000, Lee Jones wrote:
+> > > > On Sat, 18 Dec 2021, Colin Foster wrote:
+> > > > 
+> > > > > Some drivers will need to create regmaps differently based on whether they
+> > > > > are a child of an MFD or a standalone device. An example of this would be
+> > > > > if a regmap were directly memory-mapped or an external bus. In the
+> > > > > memory-mapped case a call to devm_regmap_init_mmio would return the correct
+> > > > > regmap. In the case of an MFD, the regmap would need to be requested from
+> > > > > the parent device.
+> > > > > 
+> > > > > This addition allows the driver to correctly reason about these scenarios.
+> > > > > 
+> > > > > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> > > > > ---
+> > > > >  drivers/mfd/mfd-core.c   |  5 +++++
+> > > > >  include/linux/mfd/core.h | 10 ++++++++++
+> > > > >  2 files changed, 15 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+> > > > > index 684a011a6396..905f508a31b4 100644
+> > > > > --- a/drivers/mfd/mfd-core.c
+> > > > > +++ b/drivers/mfd/mfd-core.c
+> > > > > @@ -33,6 +33,11 @@ static struct device_type mfd_dev_type = {
+> > > > >  	.name	= "mfd_device",
+> > > > >  };
+> > > > >  
+> > > > > +int device_is_mfd(struct platform_device *pdev)
+> > > > > +{
+> > > > > +	return (!strcmp(pdev->dev.type->name, mfd_dev_type.name));
+> > > > > +}
+> > > > > +
+> > > > 
+> > > > Why is this device different to any other that has ever been
+> > > > mainlined?
+> > > 
+> > > Hi Lee,
+> > > 
+> > > First, let me apologize for not responding to your response from the
+> > > related RFC from earlier this month. It had been blocked by my spam
+> > > filter and I had not seen it until just now. I'll have to check that
+> > > more diligently now.
+> > > 
+> > > Moving on...
+> > > 
+> > > That's a question I keep asking myself. Either there's something I'm
+> > > missing, or there's something new I'm doing.
+> > > 
+> > > This is taking existing drivers that work via MMIO regmaps and making
+> > > them interface-independent. As Vladimir pointed out here:
+> > > https://lore.kernel.org/all/20211204022037.dkipkk42qet4u7go@skbuf/T/
+> > > device_is_mfd could be dropped in lieu of an mfd-specific probe
+> > > function.
+> > > 
+> > > If there's something I'm missing, please let me know. But it feels like
+> > > devm_get_regmap_from_resource at the end of the day would be the best
+> > > solution to the design, and that doesn't exist. And implementing
+> > > something like that is a task that I feel I'm not capable of tackling at
+> > > this time.
+> > 
+> > I'm really not a fan of leaking any MFD API outside of drivers/mfd.
+> > MFD isn't a tangible thing.  It's a Linuxiusm, something we made up, a
+> > figment of your imagination.
+> > 
+> > What happens if you were to all dev_get_regmap() in the non-MFD case
+> > or when you call devm_regmap_init_mmio() when the driver was
+> > registered via the MFD framework?
+> 
+> I'd imagine dev_get_regmap in a non-MFD case would be the same as
+> dev_get_and_ioremap_resource() followed by devm_regmap_init_mmio().
+> 
+> In the MFD case it would possibly request the regmap from the parent,
+> which could reason about how to create the regmap. As you understand,
+> this is exactly the behavior I created in this patch set. I did it by
+> way of ocelot_get_regmap_from_resource, and admit it isn't the best way.
+> But it certainly seems there isn't an existing method that I'm missing.
+> 
+> I'm coming from a pretty narrow field of view, but believe my use-case
+> is a valid one. If that is true, and there isn't another design I should
+> use... this is the opportunity to create it. Implementing
+> ocelot_get_regmap_from_resource is a way to achieve my needs without
+> affecting anyone else. 
+> 
+> Going one step further and implementing mfd_get_regmap_from_parent (or
+> similar) would creep into the design of MFD. I don't know enough about
+> MFD and the users to suggest this. I wouldn't want to start venturing
+> down that path without blessing from the community. And this would
+> indirectly affect every MFD driver.
+> 
+> Going all in and implementing device_get_regmap_from_resource... I don't
+> know that I'd be comfortable even starting down that path knowing that
+> it would affect every device. Perhaps it would have to utilize something
+> like IORESOURCE_REG that seems to only get utilized in a handful of 
+> files:
+> https://elixir.bootlin.com/linux/v5.16-rc7/C/ident/IORESOURCE_REG
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   df0cc57e057f18e44dac8e6c18aba47ab53202f9
-commit: 145e06b58f8625becc61792a0554726314297a85 drm/i915/gvt: Move mdev attribute groups into kvmgt module
-date:   8 months ago
-config: x86_64-randconfig-a016-20210927 (https://download.01.org/0day-ci/archive/20220110/202201102031.xPWND4ZH-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145e06b58f8625becc61792a0554726314297a85
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 145e06b58f8625becc61792a0554726314297a85
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+Let's speak to Mark and see if he can provide any insight.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gvt/gtt.c:1152: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Check if can do 2M page
-   drivers/gpu/drm/i915/gvt/gtt.c:2209: warning: expecting prototype for intel_vgpu_emulate_gtt_mmio_read(). Prototype was for intel_vgpu_emulate_ggtt_mmio_read() instead
-
-
-vim +1152 drivers/gpu/drm/i915/gvt/gtt.c
-
-2707e44466881d Zhi Wang          2016-03-28  1150  
-b901b252b6cf5c Changbin Du       2018-05-15  1151  /**
-a752b070a67823 Zhenyu Wang       2018-07-31 @1152   * Check if can do 2M page
-a752b070a67823 Zhenyu Wang       2018-07-31  1153   * @vgpu: target vgpu
-a752b070a67823 Zhenyu Wang       2018-07-31  1154   * @entry: target pfn's gtt entry
-a752b070a67823 Zhenyu Wang       2018-07-31  1155   *
-9317f356df83a5 Bhaskar Chowdhury 2021-02-22  1156   * Return 1 if 2MB huge gtt shadowing is possible, 0 if miscondition,
-9317f356df83a5 Bhaskar Chowdhury 2021-02-22  1157   * negative if found err.
-b901b252b6cf5c Changbin Du       2018-05-15  1158   */
-b901b252b6cf5c Changbin Du       2018-05-15  1159  static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
-b901b252b6cf5c Changbin Du       2018-05-15  1160  	struct intel_gvt_gtt_entry *entry)
-b901b252b6cf5c Changbin Du       2018-05-15  1161  {
-b901b252b6cf5c Changbin Du       2018-05-15  1162  	struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
-b901b252b6cf5c Changbin Du       2018-05-15  1163  	unsigned long pfn;
-b901b252b6cf5c Changbin Du       2018-05-15  1164  
-a61ac1e75105a0 Chris Wilson      2020-03-06  1165  	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
-b901b252b6cf5c Changbin Du       2018-05-15  1166  		return 0;
-b901b252b6cf5c Changbin Du       2018-05-15  1167  
-b901b252b6cf5c Changbin Du       2018-05-15  1168  	pfn = intel_gvt_hypervisor_gfn_to_mfn(vgpu, ops->get_pfn(entry));
-b901b252b6cf5c Changbin Du       2018-05-15  1169  	if (pfn == INTEL_GVT_INVALID_ADDR)
-b901b252b6cf5c Changbin Du       2018-05-15  1170  		return -EINVAL;
-b901b252b6cf5c Changbin Du       2018-05-15  1171  
-b901b252b6cf5c Changbin Du       2018-05-15  1172  	return PageTransHuge(pfn_to_page(pfn));
-b901b252b6cf5c Changbin Du       2018-05-15  1173  }
-b901b252b6cf5c Changbin Du       2018-05-15  1174  
-
-:::::: The code at line 1152 was first introduced by commit
-:::::: a752b070a67823174565322cc48b2668daf9a8da drm/i915/gvt: Fix function comment doc errors
-
-:::::: TO: Zhenyu Wang <zhenyuw@linux.intel.com>
-:::::: CC: Zhenyu Wang <zhenyuw@linux.intel.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

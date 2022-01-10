@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47D4489DC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE13489DC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbiAJQnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:43:23 -0500
-Received: from bmailout2.hostsharing.net ([83.223.78.240]:54269 "EHLO
-        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiAJQnW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:43:22 -0500
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 152262800B3C7;
-        Mon, 10 Jan 2022 17:43:21 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id EBEB955BEF; Mon, 10 Jan 2022 17:43:20 +0100 (CET)
-Date:   Mon, 10 Jan 2022 17:43:20 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     "Koenig, Christian" <Christian.Koenig@amd.com>,
-        Len Brown <lenb@kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "Chen, Guchun" <Guchun.Chen@amd.com>,
-        "Grodzovsky, Andrey" <Andrey.Grodzovsky@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH REGRESSION] Revert "drm/amdgpu: stop scheduler when
- calling hw_fini (v2)"
-Message-ID: <20220110164320.GA21246@wunner.de>
-References: <8ab406c8bb2e58969668a806a529d5988b447530.1641750730.git.len.brown@intel.com>
- <BL1PR12MB514403767AC6BC6CD617674DF7509@BL1PR12MB5144.namprd12.prod.outlook.com>
- <2e3fbfe8-e7a1-2483-dbbd-ebb3824fc886@amd.com>
- <BL1PR12MB51441B895F9846A11D6268E2F7509@BL1PR12MB5144.namprd12.prod.outlook.com>
+        id S237679AbiAJQoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:44:23 -0500
+Received: from verein.lst.de ([213.95.11.211]:39328 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231379AbiAJQoV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 11:44:21 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1AEF868BEB; Mon, 10 Jan 2022 17:44:18 +0100 (CET)
+Date:   Mon, 10 Jan 2022 17:44:17 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     hch@lst.de, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Hannes Reinecke <hare@suse.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: pmcraid: Fix memory allocation in
+ 'pmcraid_alloc_sglist()'
+Message-ID: <20220110164417.GA7133@lst.de>
+References: <11a1bc98501de37baa5bcd10b61136f6e450b82e.1641816080.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL1PR12MB51441B895F9846A11D6268E2F7509@BL1PR12MB5144.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <11a1bc98501de37baa5bcd10b61136f6e450b82e.1641816080.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 04:25:51PM +0000, Deucher, Alexander wrote:
-> Thanks.  I'll wait for feedback from Guchun and Andrey and if they are
-> ok with it, I'll apply the revert.
+On Mon, Jan 10, 2022 at 01:02:53PM +0100, Christophe JAILLET wrote:
+> When the scatter list is allocated in 'pmcraid_alloc_sglist()', the
+> corresponding pointer should be stored in 'scatterlist' within the
+> 'pmcraid_sglist' structure. Otherwise, 'scatterlist' is NULL.
+> 
+> This leads to a potential memory leak and NULL pointer dereference.
+> 
+> Fixes: ed4414cef2ad ("scsi: pmcraid: Use sgl_alloc_order() and sgl_free_order()")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This patch is completely speculative and untested.
+> 
+> Should it be correct, I think that their should be some trouble somewhere.
+> Either NULL pointer dereference or incorrect behavior.
+> The patch that introduced this potential bug is from 2018-02. So, this
+> should have been spotted earlier.
+> 
+> So unless this driver is mostly unused, this looks odd to me.
+> Feedback appreciated.
 
-Linus already picked it up yesterday, it's in v5.16.
+The whole passthrough ioctl path looks completely broken to me.  For
+example it dma maps the scatterlist and after that copies data to it,
+which is prohibited by the DMA API contract.
+
+So I'd be tempted to just remove the PMCRAID_PASSTHROUGH_IOCTL ioctl
+implementation entirely, and if users for it do pop up we should
+reimplement it using the proper block layer request mapping helpers.
+
+If for some reason we don't want that and just fix the obvious
+problem without a way to test for it, your patch looks good to me:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>

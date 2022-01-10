@@ -2,121 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A60489EBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D5D489EBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238672AbiAJSBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:01:14 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50374 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238610AbiAJSBN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:01:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641837673; x=1673373673;
-  h=from:to:cc:subject:date:message-id;
-  bh=4R4m2JnlhOfFaMJ6bSzrdmzLSKSTs3kFRvVCKFiCpOc=;
-  b=dtLVX2/PylD3egEqgrdme298tulv43juQ3z/uNMbCoLq/AKOoTjfeifS
-   vQcOszpbJcH4OuwiQBtmInK9iMnTIFXGkl5jdN2gkY4XHH3BJM7FD8gsl
-   nXdgwCX/YhAQt3+ZfPi03ukLK66mV4N4aPnlqxQdtUjoreCDjtjngRoAX
-   90b2Lj7LfAhzPFQt2bNJTFMeCe4oonCczp1EIQte/1beowjmRcLvbEvZb
-   0vnc1GdGQxmQbigoUPwpC192JLFN+bDRMml6ba184gZvsz8asXCnfmnZR
-   7GAIltdFg5SE+5tMfo5W+BK1GQ0iKDUtBcaq72rLpCkrT3yeJZxuvb7ND
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="243079316"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="243079316"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 10:00:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="622754694"
-Received: from brillo-chrome.jf.intel.com ([10.54.77.27])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 10:00:51 -0800
-From:   Sanrio Alvares <sanrio.alvares@intel.com>
-To:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     mika.westerberg@linux.intel.com,
-        Sanrio Alvares <sanrio.alvares@intel.com>
-Subject: [PATCH v2] PCI / thunderbolt: Add quirk to handle incorrect Supported Link Speeds
-Date:   Mon, 10 Jan 2022 18:00:49 +0000
-Message-Id: <20220110180049.59403-1-sanrio.alvares@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S238684AbiAJSB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:01:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53788 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238674AbiAJSB1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 13:01:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B7F661138;
+        Mon, 10 Jan 2022 18:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F1AC36AE3;
+        Mon, 10 Jan 2022 18:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641837686;
+        bh=DoTf+6WY2kq8d+zpjxO2hPSikwhqOtZwZjBC82nH388=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FZEY6x8zqS7v0vB51A2XHPRLnEgw5WFHYE/h6K/Ps85eJz0w4AZt6O1As5AxyFeTs
+         wVuLKWpHVCU0yPycU4BLhEdRGK/bnHsZV9oTtzbwLbs0diL414j5YvAcC+JWToHJiR
+         hk7f/goo93DFtlkrzWjjezrlGwa/87/B2W4PHptcfF/jBNLpxBWPAnA6wWWymPKif0
+         AWwOqOTC6DPbclnwWsDXjQRE3mKC5LcnVwJ2STwg/FPm8jzmEMbrNBEO/L5JkUqMaa
+         /tGTjCYUHJtynrMpbzfY1zMQ9i+50YR2IBp9Y/YpUigIYjfKWe4zturx9VDRpywhMf
+         TPe7UNLGbJKFQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5EDF45C16E0; Mon, 10 Jan 2022 10:01:26 -0800 (PST)
+Date:   Mon, 10 Jan 2022 10:01:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     tglx@linutronix.de, mark.rutland@arm.com, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        rcu@vger.kernel.org, peterz@infradead.org, mtosatti@redhat.com,
+        frederic@kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v4 2/2] Documentation: core-api: entry: Add comments
+ about nesting
+Message-ID: <20220110180126.GF947480@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220110105044.94423-1-nsaenzju@redhat.com>
+ <20220110105044.94423-2-nsaenzju@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110105044.94423-2-nsaenzju@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In PCIe config space the "Supported Link Speeds" Vector value is 0x07,
-in all downstream ports for Intel Titan Ridge. Which means link
-supports Gen1, Gen2 and Gen3. While actually max link speed is 2.5GT/s
-so the value of this vector should be 0x01.
+On Mon, Jan 10, 2022 at 11:50:44AM +0100, Nicolas Saenz Julienne wrote:
+> The topic of nesting and reentrancy in the context of early entry code
+> hasn't been addressed so far. So do it.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 
-As a consequence of reporting >2.5GT/s, we need to delay the full 1s
-which makes resuming longer than needed.
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
-Signed-off-by: Sanrio Alvares <sanrio.alvares@intel.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-Changes from v1:
-- add static to quirk_intel_tbt_supported_link_speeds
----
- drivers/pci/pci.c    |  4 ++++
- drivers/pci/quirks.c | 14 ++++++++++++++
- include/linux/pci.h  |  1 +
- 3 files changed, 19 insertions(+)
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 3d2fb394986a..92401552d385 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -6136,6 +6136,10 @@ enum pci_bus_speed pcie_get_speed_cap(struct pci_dev *dev)
- {
- 	u32 lnkcap2, lnkcap;
- 
-+	/* Use overridden value of Supported Link Speed */
-+	if (dev->supported_link_speed)
-+		return dev->supported_link_speed;
-+
- 	/*
- 	 * Link Capabilities 2 was added in PCIe r3.0, sec 7.8.18.  The
- 	 * implementation note there recommends using the Supported Link
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 003950c738d2..2cbe0beeac08 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5293,6 +5293,20 @@ static void quirk_intel_qat_vf_cap(struct pci_dev *pdev)
- }
- DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x443, quirk_intel_qat_vf_cap);
- 
-+/*
-+ * Intel Titan Ridge returns incorrect Supported Link Speeds Vector
-+ * when max Link Speed is 2.5GT/s. This results in an extra 1s delay during
-+ * resume_noirq with pcie tunneling enabled. Override that value:
-+ */
-+static void quirk_intel_tbt_supported_link_speeds(struct pci_dev *pdev)
-+{
-+	pci_info(pdev, "applying Supported Link Speeds quirk\n");
-+	pdev->supported_link_speed = PCIE_SPEED_2_5GT;
-+}
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15e7, quirk_intel_tbt_supported_link_speeds);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ea, quirk_intel_tbt_supported_link_speeds);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ef, quirk_intel_tbt_supported_link_speeds);
-+
- /*
-  * FLR may cause the following to devices to hang:
-  *
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 18a75c8e615c..633e81e9fe3b 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -502,6 +502,7 @@ struct pci_dev {
- 	struct pci_p2pdma __rcu *p2pdma;
- #endif
- 	u16		acs_cap;	/* ACS Capability offset */
-+	u8		supported_link_speed; /* Override Supported Link Speed value from device */
- 	phys_addr_t	rom;		/* Physical address if not from BAR */
- 	size_t		romlen;		/* Length if not from BAR */
- 	char		*driver_override; /* Driver name to force a match */
--- 
-2.17.1
-
+> ---
+> 
+> Changes since v3:
+>  - Introduce Paul's rewording suggestions
+> 
+>  Documentation/core-api/entry.rst | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/Documentation/core-api/entry.rst b/Documentation/core-api/entry.rst
+> index c6f8e22c88fe..e12f22ab33c7 100644
+> --- a/Documentation/core-api/entry.rst
+> +++ b/Documentation/core-api/entry.rst
+> @@ -105,6 +105,8 @@ has to do extra work between the various steps. In such cases it has to
+>  ensure that enter_from_user_mode() is called first on entry and
+>  exit_to_user_mode() is called last on exit.
+>  
+> +Do not nest syscalls. Nested systcalls will cause RCU and/or context tracking
+> +to print a warning.
+>  
+>  KVM
+>  ---
+> @@ -121,6 +123,8 @@ Task work handling is done separately for guest at the boundary of the
+>  vcpu_run() loop via xfer_to_guest_mode_handle_work() which is a subset of
+>  the work handled on return to user space.
+>  
+> +Do not nest KVM entry/exit transitions because doing so is nonsensical.
+> +
+>  Interrupts and regular exceptions
+>  ---------------------------------
+>  
+> @@ -180,6 +184,16 @@ before it handles soft interrupts, whose handlers must run in BH context rather
+>  than irq-disabled context. In addition, irqentry_exit() might schedule, which
+>  also requires that HARDIRQ_OFFSET has been removed from the preemption count.
+>  
+> +Even though interrupt handlers are expected to run with local interrupts
+> +disabled, interrupt nesting is common from an entry/exit perspective. For
+> +example, softirq handling happens within an irqentry_{enter,exit}() block with
+> +local interrupts enabled. Also, although uncommon, nothing prevents an
+> +interrupt handler from re-enabling interrupts.
+> +
+> +Interrupt entry/exit code doesn't strictly need to handle reentrancy, since it
+> +runs with local interrupts disabled. But NMIs can happen anytime, and a lot of
+> +the entry code is shared between the two.
+> +
+>  NMI and NMI-like exceptions
+>  ---------------------------
+>  
+> @@ -259,3 +273,7 @@ and for e.g. a debug exception it can look like this:
+>  
+>  There is no combined irqentry_nmi_if_kernel() function available as the
+>  above cannot be handled in an exception-agnostic way.
+> +
+> +NMIs can happen in any context. For example, an NMI-like exception triggered
+> +while handling an NMI. So NMI entry code has to be reentrant and state updates
+> +need to handle nesting.
+> -- 
+> 2.34.1
+> 

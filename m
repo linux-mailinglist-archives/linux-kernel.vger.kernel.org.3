@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8938B489B2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B14B489B30
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235463AbiAJOVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:21:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50904 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235394AbiAJOVd (ORCPT
+        id S235479AbiAJOVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:21:53 -0500
+Received: from mail-vk1-f175.google.com ([209.85.221.175]:44784 "EHLO
+        mail-vk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235394AbiAJOVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:21:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E11CB811EC;
-        Mon, 10 Jan 2022 14:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C098DC36AE5;
-        Mon, 10 Jan 2022 14:21:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641824491;
-        bh=CSoMuGzkJ+TOL2oH/IXDb1JVobsttswFZJ+HvUGnneg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aNkHrpOr2VrlyCJo+Ghe0PZAXb5ivXNmYKpI1uhe48kqxR0bDG9SobuKO8w5KR3Qw
-         0JyBTZirXreOLlNTupqDpRb+jVd35xLfbAgsv7hQt0tWIssna0VcjrnuGJiebJnSFF
-         UHnkFBtNPYSdvBhHqG7Z8owDUXIrbV6GWz2Y/eSLO8TFpF+5ClsLhZXQBygyYe/9aP
-         waNz+2Xj49jP9XNoIeLSY+YNFH59QUJLacL2DwfSm8EVscFE2Xqim2gijySbdCZF/w
-         BDGbyDxUuXUWVBpwjiNr5NSWv6hMyUXiPu0bSqReh5XT5Hw601I8bpgJqYuxoN7ou9
-         E3KRUlQAO87bg==
-Date:   Mon, 10 Jan 2022 14:21:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
-        collinsd@codeaurora.org, subbaram@codeaurora.org,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 2/6] dt-bindings: regulator: Add pm8008 regulator
- bindings
-Message-ID: <YdxA5bwcwyJXcPDl@sirena.org.uk>
-References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
- <1637314953-4215-3-git-send-email-quic_c_skakit@quicinc.com>
- <YZ+qn2hA4MzNEqM+@sirena.org.uk>
- <30b21a08-f7f7-f3a6-a3ac-156c7f8964b1@quicinc.com>
- <Ya4UcxxEq9t+isxS@sirena.org.uk>
- <30ec6b4c-f2a8-d80e-a542-1c2b3f30c049@quicinc.com>
- <07dc5ba4-790b-0cb2-bc3e-2ce8d7e3e09d@quicinc.com>
+        Mon, 10 Jan 2022 09:21:52 -0500
+Received: by mail-vk1-f175.google.com with SMTP id b77so8193165vka.11;
+        Mon, 10 Jan 2022 06:21:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uKBRWv0ZtQW0j4K4yY6WOWacYW+WViNADP4qa506v6E=;
+        b=7UsacSWyVIdHt1TFcXaWZZled7iNSbz8JbVR4SEIpvvseilFt3dkA9x1/NoXNDvfTa
+         KxPXoPmfImV1KmkNogx+56BDDNjAw28JIhk2y1Jz05LMXMoK83TmQ/3qrQHhO2Z4Q5I0
+         Xz6BsF9JYQMQY0wSP98oDUqeaiyTlzFCXgshy04ORPxYCVUGOQlQZuU4uDMgGCubi2Vu
+         w/D+PrrVg0fYRsx9qEvUTzfcSgx/7MZ7b2TYKiGQv9DZuUoC3bV9ueNKsLP+7wpC0Vyn
+         pwNJE5v+eU0qfmhD1cZvJ2fIL7PAz6AXIi3IfUwxeB0ddUI8YtM8m4grVj5ts+Omc+hS
+         JDOw==
+X-Gm-Message-State: AOAM532Q0+ZPzfmMerWeOl1zqb9nMg7nrnCoz0srBEMVskumWpG+TeQL
+        4CIaR/tQqKEc6IG1fSneEmyyf0jfC8uYCw==
+X-Google-Smtp-Source: ABdhPJz2h1LsRjBdLs/6DYsdmW81rBdEI8Cwb5lms0AHxMdTFpg+d7I1STm3fHYpAZ2OM78T7L3lcg==
+X-Received: by 2002:a05:6122:99e:: with SMTP id g30mr28279649vkd.23.1641824511255;
+        Mon, 10 Jan 2022 06:21:51 -0800 (PST)
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
+        by smtp.gmail.com with ESMTPSA id x190sm3774404vkf.56.2022.01.10.06.21.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 06:21:51 -0800 (PST)
+Received: by mail-vk1-f170.google.com with SMTP id n124so3582754vke.6;
+        Mon, 10 Jan 2022 06:21:50 -0800 (PST)
+X-Received: by 2002:a1f:5702:: with SMTP id l2mr470497vkb.33.1641824510503;
+ Mon, 10 Jan 2022 06:21:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xt65ruTatPFVTIhX"
-Content-Disposition: inline
-In-Reply-To: <07dc5ba4-790b-0cb2-bc3e-2ce8d7e3e09d@quicinc.com>
-X-Cookie: Do you have lysdexia?
+References: <20220110084239.1597511-1-laurent@vivier.eu> <20220110084239.1597511-2-laurent@vivier.eu>
+In-Reply-To: <20220110084239.1597511-2-laurent@vivier.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 10 Jan 2022 15:21:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWtEZ3WqFw0ihSAAcTP76TdR+jtqjkX+=UwOi+=04xOWQ@mail.gmail.com>
+Message-ID: <CAMuHMdWtEZ3WqFw0ihSAAcTP76TdR+jtqjkX+=UwOi+=04xOWQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] m68k: add asm/config.h
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Laurent,
 
---xt65ruTatPFVTIhX
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 10, 2022 at 9:42 AM Laurent Vivier <laurent@vivier.eu> wrote:
+> To avoid 'warning: no previous prototype for' error, declare all
+> the parse_bootinfo and config functions prototypes into asm/config.h
+> and include it in arch/m68k/kernel/setup_mm.c and arch/m68k/*/config.c
+>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-On Mon, Jan 10, 2022 at 06:42:08PM +0530, Satya Priya Kakitapalli (Temp) wr=
-ote:
+Thanks for your patch!
 
-> To understand how other upstream mfd drivers are handling this I've gone
-> through some of them. Taking one example, mfd/stpmic1.c is a pmic=A0 mfd
-> device which has a regulators sub-node with separate compatible, and has =
-the
-> parent supplies listed under the regulators node.
+> --- /dev/null
+> +++ b/arch/m68k/include/asm/config.h
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0
 
-There are some devices that did get merged doing this, that doesn't mean
-it's a great idea though.
+scripts/checkpatch.pl says this is the wrong one.
 
---xt65ruTatPFVTIhX
-Content-Type: application/pgp-signature; name="signature.asc"
+> +
+> +/*
+> + * This file contains prototypes provided by each m68k machine
+> + * to parse bootinfo datastructure and to configure the machine
 
------BEGIN PGP SIGNATURE-----
+data structures
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHcQOQACgkQJNaLcl1U
-h9AcAgf/aAfps0Xv/1N167UQgoR5118bDWCVmsdfpk0/agFWosdoXzOJ/Bf6boYz
-fZzlKOe7PU9UWOhOKBxwE12hlMsaspuGSVQQABUAVh6ebEwQZrQg3UzL/ND/sJua
-cgSTkV6/zTVYbxgdkjDd4eDaStZ7mEFWm0OSI63Ki61gqOlB7WrCcz1zzNij4NSS
-5QdGIo8h+6R5aqvO7dZ6QRjpihfjNrexmxb/BSET1sFGtcoGMOtgyOc6mkrrak/z
-gzjB7qtrh2p4hhrVYAa07r/06tw87xBJOv+bswsCQDF60YiGdpUu7d5YEE5GdV4a
-KPSDyUHnWlCkDQF4s5SwH0je4RzivQ==
-=dbCf
------END PGP SIGNATURE-----
+> + */
+> +
+> +#ifndef _M68K_CONFIG_H
+> +#define _M68K_CONFIG_H
+> +
+> +extern int amiga_parse_bootinfo(const struct bi_record *);
+> +extern int atari_parse_bootinfo(const struct bi_record *);
+> +extern int mac_parse_bootinfo(const struct bi_record *);
+> +extern int q40_parse_bootinfo(const struct bi_record *);
+> +extern int bvme6000_parse_bootinfo(const struct bi_record *);
+> +extern int mvme16x_parse_bootinfo(const struct bi_record *);
+> +extern int mvme147_parse_bootinfo(const struct bi_record *);
+> +extern int hp300_parse_bootinfo(const struct bi_record *);
+> +extern int apollo_parse_bootinfo(const struct bi_record *);
 
---xt65ruTatPFVTIhX--
+Missing parameter names.
+
+I can fix those while applying.
+
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v5.18 branch.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

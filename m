@@ -2,569 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ADF489668
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAEB48966B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244039AbiAJKcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:32:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56131 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243970AbiAJKbu (ORCPT
+        id S244012AbiAJKdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:33:50 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:29309 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243967AbiAJKc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:31:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641810709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+0A/scVt6c932wkM7KxVkqVlEAj02fsE05rjd7ec6IU=;
-        b=OPS1Zyvjr2HibMCvIENGh3hSjnLgmF1GjSbhl401u+siQsvmpCyC3Sve2qsg8aVK0KoBp7
-        EU6IHzfAHtVpU/BB9p2XS8hdqnNy8uzJokPuYTbLDtFl/GtpEUZpKWnnW4zZKBHF/hHZ0x
-        QeLhs6n2J1KrjrAT4KX2zf3Dft32i+Y=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-278-NP9qpaczNJas2jFmSNxAZw-1; Mon, 10 Jan 2022 05:31:48 -0500
-X-MC-Unique: NP9qpaczNJas2jFmSNxAZw-1
-Received: by mail-ed1-f69.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so9757428edd.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:31:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=+0A/scVt6c932wkM7KxVkqVlEAj02fsE05rjd7ec6IU=;
-        b=wGE2cPX/wNzoYTZSU4PiRx9bqdRebLuG9MJKbXe0pJY2YKz8zQPU2xuOg5ewdtR9FT
-         4YqK7ImXfEogyI9HuGQLFwBYEE9+B0HiSvlNZnq+IwaV8rtoNFlAtacol5wMNTgvpBtT
-         w+ac1CbkJqrJeV35kdQp5vzODYtK8cEKa5LWP9D1AxVLGbrwpHKz/bMr1VMDWrfODFFl
-         MDV1wKA+lZF+UcnTcRuy09snnQA3zVAHYnl4pf6gmlSTxvwau5wK4GNKkpe7+BLZPZjM
-         YxFJm10N5riFBReuRT29A0PrFI8sYMgAw9+ZhITsfyBkz5R966kjPGpQbzdqciYdljzL
-         tz3Q==
-X-Gm-Message-State: AOAM532SJyuPby7e/uDFqmD5RwVBrhXldehH26ppw9DhnnY+ReZb/DW7
-        kySdtEz2KQa4aWe5vtyuFXBaBiNBRx64fWfjx0skNl1cflguSQf+6I9lsF5mVnu+FfQXazuUUCI
-        MG34MTA4NP8x7FkrWEvFHMbuw
-X-Received: by 2002:a05:6402:120e:: with SMTP id c14mr18521666edw.40.1641810706548;
-        Mon, 10 Jan 2022 02:31:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzskptq1tATHZmSnIs0f0jv3peR3H69UmufnwZNlIhty/Mhko7eZQc44VvYgfI2qZkdjIv6Mg==
-X-Received: by 2002:a05:6402:120e:: with SMTP id c14mr18521649edw.40.1641810706319;
-        Mon, 10 Jan 2022 02:31:46 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id c9sm2308972ejf.10.2022.01.10.02.31.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 02:31:45 -0800 (PST)
-Message-ID: <aea4c26b-25a1-9480-f780-7eb3502a4ce4@redhat.com>
-Date:   Mon, 10 Jan 2022 11:31:45 +0100
+        Mon, 10 Jan 2022 05:32:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641810778; x=1673346778;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=q/NsG5xjGofsvPGuUtnr/BxlHq/9+6EEkra6kjfR4F4=;
+  b=FQfxchG6z/dpNKEh1f2//s0Fu4HzYWOgWNF5M8psdh1txY0nGuVA0x5a
+   zlwyyLzi9Fe3FltcS4FJj/WWkfAlzGVSiF4pHkejOBndikSP9vI4eCJwm
+   sHlQXo+FJqevrjYfixb/nQjvo+p6Yk2EqN1JYBXXDr+Eabl95BazxoRvA
+   hKVW9MOqnAAKz584f37WS9ZOU0MUGOQkuqrjfojDeOqrrjc5gsYdxKbad
+   zu/26HwW6q5RB80XG1C6Wkh3l9Vxx5+/5qWJkDzkdy/36wInBii6cry4O
+   gPIHV8vRAZPJfC+lY6dypreFXkQGLe6qBwt9OEw29HsjHdT74AcIaSTaW
+   A==;
+IronPort-SDR: FCx85KwoT6l9P+wtKX4Q0HOqa03D3tVYs5AN5F342RL4AFZo3oMpwyYgjOVPk29a9pW5MwoMQr
+ h52xxaVCcfFKpPuE+ZP+J5Etj0vpesPbbBQx9OZx/NhyuJ/hz3Td6aOMfisVSyyorNkP5gxItf
+ e8NsCxvjiv0abgpCLqawW//j7zNdvguzX3WI4ocTK4jrkmS1uoiYu/t+8c1GFbjSENC3HpTWN1
+ x9rsO0S93aGJffOayQTaKmFk4VjIAICzhbm4+rkhRoDCyzEEW6Cta6tUWQCzcz0bStUASWPiPi
+ aoDO4Nde3HIhd7QjfF0diLxg
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="158067907"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Jan 2022 03:32:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 10 Jan 2022 03:32:57 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Mon, 10 Jan 2022 03:32:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GpipQt6FzPzChDEsb1fWQ424txsdZiHEO0kezzhgp0PlkVMWShP5nIumHO8H9y0P2lW6t0tXjY3ryO7FlVD22WZkw7P4GFx8fm9TJbiT7LH1ohSSWcx+/X81Fxm74a+JAQr/KD9yy60V1JYnmvGKwqCqe1+CNYH5AKrySIc6pKw7U5pkbFdWHZ7wCioniiJByqm9jZP181OLehNsbw3ro4p2wC600OD8cY6f4sXjtjFTJW9aVFovEDbfOZnX+Z+rxl5gnq8DGUxJVPm9+i3VL0/D2voW1Du3/G2ICpTa+mmYDYRuTa1k+tGzimjD/A9JN1wQgVjX1Kr17zwSxYsN5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q/NsG5xjGofsvPGuUtnr/BxlHq/9+6EEkra6kjfR4F4=;
+ b=hQG55DYeesvSpiITUYTyf0Mr0cmYn4icwXnQJGB248A5xbPdq7PGGotM1ThIup56p+PbvMka8FL6LwuUlt+ampPdoNlsxc/qXD0ym53+CaKjjfimqSeuhF1YJgocjeswqo7NLObQ4plh57DNlgbn0yCeTn35xOLMRMbtZhpzb/dwrO9nYFyNWN9H3XhlUtqT5sr9c6pMGFX6UU+tGocvbpyiXlRnIOvPoIUCaU2M++5+cLUBOI0Vs2DuFGkWjHxatcTNmdbfdVK2XAEr+4k+PfMw+KkTLILsQROAihgOXfukaxf+CwBB8gZ9OMLr3mMX88F3wXhfMF4R+5rJ7T46RA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q/NsG5xjGofsvPGuUtnr/BxlHq/9+6EEkra6kjfR4F4=;
+ b=iWDaDHM0oPFO4sNOyR3oqqKftz4q5l9eYIldSPy+EzWazASxB+2ZOxO9BAkRK1MsFPKG4gViuYimyuFpSoTuPs7S4JFhMYft0R7eJRmWor4oWpZ7zlqpmNOvSAUZUDNzdlHvy12c/R0vm2y+gYCFe464cDY8o4dxjLb8WEO9idg=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:95::7)
+ by MWHPR1101MB2367.namprd11.prod.outlook.com (2603:10b6:300:79::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
+ 2022 10:32:45 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::6032:bbb2:b522:2ac3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::6032:bbb2:b522:2ac3%6]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 10:32:45 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <arnd@arndb.de>
+CC:     <aou@eecs.berkeley.edu>, <olof@lixom.net>,
+        <Cyril.Jean@microchip.com>, <Daire.McNamara@microchip.com>,
+        <Lewis.Hanly@microchip.com>, <jassisinghbrar@gmail.com>,
+        <j.neuschaefer@gmx.net>, <sfr@canb.auug.org.au>,
+        <damien.lemoal@wdc.com>, <atishp@atishpatra.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Ludovic.Desroches@microchip.com>, <Claudiu.Beznea@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>
+Subject: Re: [PATCH v2 0/1] soc: add polarfire soc system controller
+Thread-Topic: [PATCH v2 0/1] soc: add polarfire soc system controller
+Thread-Index: AQHX9a/UoiOGRKIfI0yoKROyro43JqxcMCKA
+Date:   Mon, 10 Jan 2022 10:32:45 +0000
+Message-ID: <6924ec40-d253-0370-9e51-49552855f56d@microchip.com>
+References: <20211220144413.6798-1-conor.dooley@microchip.com>
+In-Reply-To: <20211220144413.6798-1-conor.dooley@microchip.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: be51c3f6-46ad-4807-c508-08d9d4248a9a
+x-ms-traffictypediagnostic: MWHPR1101MB2367:EE_
+x-microsoft-antispam-prvs: <MWHPR1101MB23671834D9F205151FC95F1A98509@MWHPR1101MB2367.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kNynOM8RAzCeSKa4c7G0ZkZF9yDdO1gsmwte/gf7CJoVQFUMN3ed0nJQd0WBRupwtQsxxtEhekGQ93KON1SWXHP3FqEbi9WyF/pT9zezJTf2UJwlBR2TOSPZuZVxFKaEgnsu1S7SPW2a3iGLxq5XR7y8bH0YNsP6Fcc8TaF3MPVV2l9MI9b4UemvilOwbRJ77mPC5H32g+Nsm4X/jg4QRrcjWGoPN7HF4W3GbyvZp54AKkEeYaTrKaSP48dRIpQ/6w+XZwRmsI1IoAZ1yPYfungAj+s7yYqExYXkkU9o/KUf4qSc7Q+4ljz+cF7bZek7/OhlI7Uqp5XrGpqTzScXJNrVTKZQnJOn4RDJ4PUi/4OlGAA3PjHCwJIu4H1wo9EbnZ9AZaqOm71TDLD4+iTZE6T/p8vDiFYDvKZ1aFkMhiCStVOpfj7+Zt6a78MuFhAmbZRrh5WHylkV1AD6Wa2lul0unAGQrcSSEILB08eypDu7ihMLPI0jY9N9tZVZXk4nfPnZi1daQsKqMZk9AvBmVHusDByriZp8VHcGIEkv1TehSrLhPBPPPahlg649j1ZV1oc9l8j8yVn8yLMZziNHLQPjmuNhwx8WzsWxCb308oXo87QXxKJP1/pMiWZ4OkRUFWZMtGI+FEDiBA/ZbViiTWFgqJeJskOjQ+y2A1DpfeTYPRUK0XBsL+NedJEnzJHetvkq3Uw4fs/rwDLrJRuEDeI7QbWbTfjj3DsDHi6OvRUpp4B22zUarX3/Syu/UtCib21+CSVDL1XUD0M7pXAXOXAHUVB33DqivEuHqEzkpQsWijX+pGAMgPxhW+41mQwRBMvudoIlzTba2Z4EO5m1ncFzTS2T5Q+inGkD8X3M6OAVGywDS+zfmO7ZRjoP4dAfBRY21zNLriCaF5AgTKKZzw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2906002)(8936002)(7416002)(26005)(2616005)(5660300002)(316002)(38070700005)(54906003)(86362001)(4326008)(36756003)(83380400001)(91956017)(66946007)(186003)(64756008)(66556008)(6486002)(76116006)(508600001)(966005)(6512007)(6506007)(122000001)(53546011)(8676002)(6916009)(31686004)(66476007)(31696002)(38100700002)(66446008)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aG1nUkhHQzlWYko1b0VTVTlab3prMS81WG1EajM4OGg4VUlLamtQTGJKeXdW?=
+ =?utf-8?B?OTV1alk4L2ljZlZFb0s1YVV0TUt0S0ZHL1lUN20vUFVXR0dyMlF6SFAvU3pC?=
+ =?utf-8?B?SUhYVCtXSy9xZGdQVGEwRnQyZC9ZOExzbDd2OGRXU0xPUUd2cWtsTE1EYkVQ?=
+ =?utf-8?B?dnEwTWNLbjV5WkExWnhsQ2VTZlRtSzgvTzJST0U0WkJCRW1jWUdHNjYrRDNY?=
+ =?utf-8?B?V2x3Nks3dVBHTWdsNmNYK3NPMmRUaHM1S2VCOGdiWXRib01JeVVvdTJqQ3Z5?=
+ =?utf-8?B?UzdOcXZNR1NWcUlVTnZLUHhYd0ZBMWN0NUtrcW1PWmJrbEdoVEpYcWdYVk4x?=
+ =?utf-8?B?RVE1VURsQTFya3ZGWHlmTkRjeHcyODh5WW5OTE04U0E2d2h2NUdaUWtXSHVa?=
+ =?utf-8?B?bHJKQ0kydFFGVTRKeFdpaXVHelI5d2ErNlVYNGp2L3d3RDFxYWtMb1d1QUox?=
+ =?utf-8?B?cjE5UW1ia2JXRFV6VE5YMlppVXJzZFdLSHlDL3VYUm9salFLM016c3ZYQVR4?=
+ =?utf-8?B?Q2Q1Tk1CM2JIWG83a2s5azA3MUxFOXZFWHRBbXpXRTFkdzBqVUVxUVd5eklQ?=
+ =?utf-8?B?MkV0TlUyRmpEV1RNZnFNVUlPVlZ2TVRtRjRQVTJSUU8wUHIxNFRBZ09wbEJS?=
+ =?utf-8?B?UlhjZ0pDbGQzeEJaY2o1M3RDdkN4VDZ6MEZWZ3d3Y0hoQkNrZXBkL3F4Ny85?=
+ =?utf-8?B?K2YzeWZHUjJsS2JXYTI5RjBOWFBSbXF0cE1nZEQvS0UwUlNZemNMREh5L2tB?=
+ =?utf-8?B?N2N3QzRTRzVOeHF4dE5Jc0I0dzFsTDJWK1B6ckhrZGppdjZEYmFocWxsOEJS?=
+ =?utf-8?B?UDd0d2hxbXY1dE1IR2pqSDEzYmQ2blpiMWY3T2pLZFNFV2xqaTZjRzhwZ0E0?=
+ =?utf-8?B?Z0FjY0w5VEc2SzNYeUlxZGppUzR3QjhlV0UyYkxWZDRwb3VRNlFqN3grSkhn?=
+ =?utf-8?B?RTZscThFZE1zdnlNZjRCaUpFU2Rsc0NPRUlHUnZDV1R5aHp3YTQ1VXkvR0tm?=
+ =?utf-8?B?RUFQMjJsVElPc0xPZ0VGc2VPc1FEYjJKMnlsNTN6bU1SRDBmRU5tcnhtZjRM?=
+ =?utf-8?B?cy9WY2xKUUx2R3M2eC84KzUvbXBJZEk5RGh3VC9qRnMwVWNWOHJHbW55ZUoy?=
+ =?utf-8?B?WnRBcjRJN2dXaEVEekJzZ1RMZ0haOXpJdXp0bHN3MUZmcnhkV1RKdU90NXVt?=
+ =?utf-8?B?Sys1U25QQkF2M3lGYTBqaFcwV3djV2JKR082UzFIY2J0dXBjNGNJOWYySkQ1?=
+ =?utf-8?B?cGdNVVZ5aTN1cEtPMWtMUlUvMWNDN09ETWd6bW5EbVZucmpWR0hJUnJGV0Fn?=
+ =?utf-8?B?Ry9tU3MxUUpFT2dPcUFTSm9lYmFCeDlibkZZVjlid1dId0xzSFB1ZDZpMXRt?=
+ =?utf-8?B?eVJHZFNkVDdBYitTWkxNQVJQYXNMdWdkejBOVERnQTBlQzZSdDc1Z01Md3hD?=
+ =?utf-8?B?eWkzRFpQU0tZUkN2Mng5SGxkVDVobkxWbllBMzA4cFZHemE0QzQ1QWVlVWtH?=
+ =?utf-8?B?SEU2Y2V2VUNIbFFvaitCaFUrUDBBaGtSc3BQK0JlSGdlZmxnNGd3ekxDUk1o?=
+ =?utf-8?B?NFdxdXlDcEIrQ3JQL3JVNm11YmZGdDF2bG1qR2RDc3RWMXBiaFkxQmRvLzlX?=
+ =?utf-8?B?ZnF3U1pVK2xwcEVLUjZNOFdCSzV1VkFYUTQ5dGtFYkpEb2pMYU5VNlNmZmJx?=
+ =?utf-8?B?WGJnd2R6elBrZUJRV210dG43TkNsNVBrYnB0RG9ZWmVUZi9lSlNyTFJ6aTBq?=
+ =?utf-8?B?R3hFOEU2UmVJbzVtbzUweG43Yi9Ma1E2NzZMWHNrajcvYlVjWWduenNMb2Qr?=
+ =?utf-8?B?TzNsN01XTkxzYWt2ZjZLTE5KR2NkWlhsRGhaSDhTelY0a0hXTFYwaTZrMys1?=
+ =?utf-8?B?NUtuVVZNQTNGUWl1dUkwQmdmaGEvbjhEL3dRV1dXdlFNaUFac2dtTHN6UFds?=
+ =?utf-8?B?aHNaT1lvRllZTSs4RFdBNEpBdHErSWdTMW5LSnR3M3BBNXVPOXRuV0dsS0w5?=
+ =?utf-8?B?MHdQamV2Yk5XV3VwaVpKT2R4QmgwRlBQSnF1Ykp0T3YycTkyTlJwS3c3Uk5s?=
+ =?utf-8?B?ME41NUV0SkdNamxGZkJWYk1WZnFPNHNwRGMxKzk1NHV0NXlka21BN09jQmhI?=
+ =?utf-8?B?Mi8zZ3c1YVdYK0RnT2ZzckxSVk1LM09yU0FZYnArc3QvRDQ1L2p5NThpRmta?=
+ =?utf-8?B?RUVONmEyUmN6b2VWQ0pxeXdLc1BUaXpreUN6NThDTS92U2dTZzFvMzk4ZXVY?=
+ =?utf-8?B?Yy82bnVDZEcxZUNrMHVrRFJpQ3RBPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E3AE3AEB61162746AC326186A3506C2F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 5.17-1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mark.gross@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be51c3f6-46ad-4807-c508-08d9d4248a9a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 10:32:45.7227
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xW4cCWfcXWq9rlZkFVbV2EdYp7IRqNfaNelFh6Y/rph0xeMOEDsh4sve9QeLIHArCvNEp+F6ZHwU1f/Ecwb5HX4F3iJy7W43k3vhTHMAp3A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2367
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Here is the main PDx86 PR for v5.17.
-
-Note this includes some ACPI and power-supply core changes which
-are deps of some of the pdx86 changes. These were merged through
-the pdx86 tree with Acks from their subsys maintainers.
-
-Highlights:
- - new drivers:
-   - asus-tf103c-dock
-   - intel_crystal_cove_charger
-   - lenovo-yogabook-wmi
-   - simatic-ipc platform-code + led driver + watchdog driver
-   - x86-android-tablets (kernel module to workaround DSDT bugs on these)
- - amd-pmc:
-   - bug-fixes
-   - smart trace buffer support
- - asus-wmi: support for custom fan curves
- - int3472 (camera info ACPI object for Intel IPU3/SkyCam cameras):
-   - ACPI core + int3472 changes to delay enumeration of camera sensor I2C
-     clients until the PMIC for the sensor has been fully probed
-   - Add support for board data (DSDT info is incomplete) for setting up
-     the tps68470 PMIC used on some boards with these cameras
-   - Add board data for the Microsoft Surface Go (original, v2 and v3)
- - thinkpad_acpi:
-   - various cleanups
-   - support for forced battery discharging (for battery calibration)
-   - support to inhibit battery charging
-   - this includes power_supply core changes to add new APIs for this
- - think_lmi: enhanced BIOS password support
- - various other small fixes and hardware-id additions
-
-Regards,
-
-Hans
-
-
-
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.17-1
-
-for you to fetch changes up to 3367d1bd738c01b2737eaab7d922bfe5f1a41f38:
-
-  power: supply: Provide stubs for charge_behaviour helpers (2022-01-08 16:56:01 +0100)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v5.17-1
-
-Highlights:
- - new drivers:
-   - asus-tf103c-dock
-   - intel_crystal_cove_charger
-   - lenovo-yogabook-wmi
-   - simatic-ipc platform-code + led driver + watchdog driver
-   - x86-android-tablets (kernel module to workaround DSDT bugs on these)
- - amd-pmc:
-   - bug-fixes
-   - smar trace buffer support
- - asus-wmi: support for custom fan curves
- - int3472 (camera info ACPI object for Intel IPU3/SkyCam cameras):
-   - ACPI core + int3472 changes to delay enumeration of camera sensor I2C
-     clients until the PMIC for the sensor has been fully probed
-   - Add support for board data (DSDT info is incomplete) for setting up
-     the tps68470 PMIC used on some boards with these cameras
-   - Add board data for the Microsoft Surface Go (original, v2 and v3)
- - thinkpad_acpi:
-   - various cleanups
-   - support for forced battery discharging (for battery calibration)
-   - support to inhibit battery charging
-   - this includes power_supply core changes to add new APIs for this
- - think_lmi: enhanced BIOS password support
- - various other small fixes and hardware-id additions
-
-The following is an automated git shortlog grouped by driver:
-
-ACPI:
- -  delay enumeration of devices with a _DEP pointing to an INT3472 device
-
-Add Asus TF103C dock driver:
- - Add Asus TF103C dock driver
-
-Add intel_crystal_cove_charger driver:
- - Add intel_crystal_cove_charger driver
-
-Documentation:
- -  syfs-class-firmware-attributes: Lenovo Opcode support
-
-Merge tag 'platform-drivers-x86-int3472-1' into review-hans:
- - Merge tag 'platform-drivers-x86-int3472-1' into review-hans
-
-amd-pmc:
- -  only use callbacks for suspend
- -  Add support for AMD Smart Trace Buffer
- -  Simplify error handling and store the pci_dev in amd_pmc_dev structure
- -  Fix s2idle failures on certain AMD laptops
- -  Make CONFIG_AMD_PMC depend on RTC_CLASS
-
-apple-gmux:
- -  use resource_size() with res
-
-asus-wmi:
- -  Reshuffle headers for better maintenance
- -  Split MODULE_AUTHOR() on per author basis
- -  Join string literals back
- -  remove unneeded semicolon
- -  Add support for custom fan curves
-
-dell-wmi-descriptor:
- -  disable by default
-
-hp_accel:
- -  Use SIMPLE_DEV_PM_OPS() for PM ops
- -  Fix an error handling path in 'lis3lv02d_probe()'
-
-i2c:
- -  acpi: Add i2c_acpi_new_device_by_fwnode() function
- -  acpi: Use acpi_dev_ready_for_enumeration() helper
-
-int3472:
- -  Add board data for Surface Go 3
- -  Deal with probe ordering issues
- -  Pass tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
- -  Pass tps68470_clk_platform_data to the tps68470-regulator MFD-cell
- -  Add get_sensor_adev_and_name() helper
- -  Split into 2 drivers
-
-intel-uncore-frequency:
- -  use default_groups in kobj_type
-
-intel_pmc_core:
- -  fix memleak on registration failure
-
-leds:
- -  simatic-ipc-leds: add new driver for Siemens Industial PCs
-
-lenovo-yogabook-wmi:
- -  Add support for hall sensor on the back
- -  Add driver for Lenovo Yoga Book
-
-lg-laptop:
- -  Recognize more models
-
-platform:
- -  surface: Propagate ACPI Dependency
-
-platform/mellanox:
- -  mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
- -  mlxreg-lc: fix error code in mlxreg_lc_create_static_devices()
-
-platform/surface:
- -  aggregator_registry: Rename device registration function
- -  aggregator_registry: Use generic client removal function
- -  aggregator: Make client device removal more generic
-
-platform/x86/intel:
- -  Remove X86_PLATFORM_DRIVERS_INTEL
- -  hid: add quirk to support Surface Go 3
-
-platform_data:
- -  Add linux/platform_data/tps68470.h file
-
-pmc_atom:
- -  improve critclk_systems matching for Siemens PCs
-
-power:
- -  supply: Provide stubs for charge_behaviour helpers
- -  supply: fix charge_behaviour attribute initialization
- -  supply: add helpers for charge_behaviour sysfs
- -  supply: add charge_behaviour attributes
-
-samsung-laptop:
- -  Fix typo in a comment
-
-simatic-ipc:
- -  add main driver for Siemens devices
-
-system76_acpi:
- -  Guard System76 EC specific functionality
-
-think-lmi:
- -  Prevent underflow in index_store()
- -  Simplify tlmi_analyze() error handling a bit
- -  Move kobject_init() call into tlmi_create_auth()
- -  Opcode support
- -  Abort probe on analyze failure
-
-thinkpad_acpi:
- -  support inhibit-charge
- -  support force-discharge
- -  Add lid_logo_dot to the list of safe LEDs
- -  Add LED_RETAIN_AT_SHUTDOWN to led_class_devs
- -  Remove unused sensors_pdev_attrs_registered flag
- -  Fix the hwmon sysfs-attr showing up in the wrong place
- -  tpacpi_attr_group contains driver attributes not device attrs
- -  Register tpacpi_pdriver after subdriver init
- -  Restore missing hotkey_tablet_mode and hotkey_radio_sw sysfs-attr
- -  Fix thermal_temp_input_attr sorting
- -  Remove "goto err_exit" from hotkey_init()
- -  Properly indent code in tpacpi_dytc_profile_init()
- -  Cleanup dytc_profile_available
- -  Simplify dytc_version handling
- -  Make *_init() functions return -ENODEV instead of 1
- -  Accept ibm_init_struct.init() returning -ENODEV
- -  Convert platform driver to use dev_groups
- -  fix documentation for adaptive keyboard
- -  Fix WWAN device disabled issue after S3 deep
- -  Add support for dual fan control
-
-tools/power/x86/intel-speed-select:
- -  v1.11 release
- -  Update max frequency
-
-touchscreen_dmi:
- -  Remove the Glavey TM800A550L entry
- -  Enable pen support on the Chuwi Hi10 Plus and Pro
- -  Correct min/max values for Chuwi Hi10 Pro (CWI529) tablet
- -  Add TrekStor SurfTab duo W1 touchscreen info
-
-watchdog:
- -  simatic-ipc-wdt: add new driver for Siemens Industrial PCs
-
-wmi:
- -  Add no_notify_data flag to struct wmi_driver
- -  Fix driver->notify() vs ->probe() race
- -  Replace read_takes_no_args with a flags field
-
-x86-android-tablets:
- -  Fix GPIO lookup leak on error-exit
- -  Add TM800A550L data
- -  Add Asus MeMO Pad 7 ME176C data
- -  Add Asus TF103C data
- -  Add support for preloading modules
- -  Add support for registering GPIO lookup tables
- -  Add support for instantiating serdevs
- -  Add support for instantiating platform-devs
- -  Add support for PMIC interrupts
- -  Don't return -EPROBE_DEFER from a non probe() function
- -  New driver for x86 Android tablets
-
-x86/platform/uv:
- -  use default_groups in kobj_type
-
-----------------------------------------------------------------
-Alex Hung (1):
-      platform/x86/intel: hid: add quirk to support Surface Go 3
-
-Alex Williamson (1):
-      platform/x86: think-lmi: Abort probe on analyze failure
-
-Andy Shevchenko (5):
-      platform/x86: hp_accel: Use SIMPLE_DEV_PM_OPS() for PM ops
-      platform/x86: asus-wmi: Join string literals back
-      platform/x86: asus-wmi: Split MODULE_AUTHOR() on per author basis
-      platform/x86: asus-wmi: Reshuffle headers for better maintenance
-      platform/x86/intel: Remove X86_PLATFORM_DRIVERS_INTEL
-
-Christophe JAILLET (1):
-      platform/x86: hp_accel: Fix an error handling path in 'lis3lv02d_probe()'
-
-Dan Carpenter (2):
-      platform/mellanox: mlxreg-lc: fix error code in mlxreg_lc_create_static_devices()
-      platform/x86: think-lmi: Prevent underflow in index_store()
-
-Daniel Scally (1):
-      platform/x86: int3472: Add board data for Surface Go 3
-
-Fabrizio Bertocci (1):
-      platform/x86: amd-pmc: Fix s2idle failures on certain AMD laptops
-
-Greg Kroah-Hartman (2):
-      x86/platform/uv: use default_groups in kobj_type
-      platform/x86: intel-uncore-frequency: use default_groups in kobj_type
-
-Hans de Goede (48):
-      platform/x86: amd-pmc: Make CONFIG_AMD_PMC depend on RTC_CLASS
-      platform/x86: think-lmi: Move kobject_init() call into tlmi_create_auth()
-      platform/x86: think-lmi: Simplify tlmi_analyze() error handling a bit
-      platform/x86: thinkpad_acpi: Accept ibm_init_struct.init() returning -ENODEV
-      platform/x86: thinkpad_acpi: Make *_init() functions return -ENODEV instead of 1
-      platform/x86: thinkpad_acpi: Simplify dytc_version handling
-      platform/x86: thinkpad_acpi: Cleanup dytc_profile_available
-      platform/x86: thinkpad_acpi: Properly indent code in tpacpi_dytc_profile_init()
-      platform/x86: thinkpad_acpi: Remove "goto err_exit" from hotkey_init()
-      platform/x86: thinkpad_acpi: Fix thermal_temp_input_attr sorting
-      platform/x86: thinkpad_acpi: Restore missing hotkey_tablet_mode and hotkey_radio_sw sysfs-attr
-      platform/x86: thinkpad_acpi: Register tpacpi_pdriver after subdriver init
-      platform/x86: thinkpad_acpi: tpacpi_attr_group contains driver attributes not device attrs
-      platform/x86: thinkpad_acpi: Fix the hwmon sysfs-attr showing up in the wrong place
-      platform/x86: thinkpad_acpi: Remove unused sensors_pdev_attrs_registered flag
-      platform/x86: thinkpad_acpi: Add LED_RETAIN_AT_SHUTDOWN to led_class_devs
-      platform/x86: thinkpad_acpi: Add lid_logo_dot to the list of safe LEDs
-      platform/x86: touchscreen_dmi: Add TrekStor SurfTab duo W1 touchscreen info
-      platform/x86: wmi: Replace read_takes_no_args with a flags field
-      platform/x86: wmi: Fix driver->notify() vs ->probe() race
-      platform/x86: wmi: Add no_notify_data flag to struct wmi_driver
-      platform/x86: lenovo-yogabook-wmi: Add support for hall sensor on the back
-      ACPI: delay enumeration of devices with a _DEP pointing to an INT3472 device
-      i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
-      i2c: acpi: Add i2c_acpi_new_device_by_fwnode() function
-      platform_data: Add linux/platform_data/tps68470.h file
-      platform/x86: int3472: Split into 2 drivers
-      platform/x86: int3472: Add get_sensor_adev_and_name() helper
-      platform/x86: int3472: Pass tps68470_clk_platform_data to the tps68470-regulator MFD-cell
-      platform/x86: int3472: Pass tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
-      platform/x86: int3472: Deal with probe ordering issues
-      Merge tag 'platform-drivers-x86-int3472-1' into review-hans
-      platform/x86: x86-android-tablets: New driver for x86 Android tablets
-      platform/x86: Add intel_crystal_cove_charger driver
-      platform/x86: touchscreen_dmi: Correct min/max values for Chuwi Hi10 Pro (CWI529) tablet
-      platform/x86: touchscreen_dmi: Enable pen support on the Chuwi Hi10 Plus and Pro
-      platform/x86: touchscreen_dmi: Remove the Glavey TM800A550L entry
-      platform/x86: x86-android-tablets: Don't return -EPROBE_DEFER from a non probe() function
-      platform/x86: x86-android-tablets: Add support for PMIC interrupts
-      platform/x86: x86-android-tablets: Add support for instantiating platform-devs
-      platform/x86: x86-android-tablets: Add support for instantiating serdevs
-      platform/x86: x86-android-tablets: Add support for registering GPIO lookup tables
-      platform/x86: x86-android-tablets: Add support for preloading modules
-      platform/x86: x86-android-tablets: Add Asus TF103C data
-      platform/x86: x86-android-tablets: Add Asus MeMO Pad 7 ME176C data
-      platform/x86: x86-android-tablets: Add TM800A550L data
-      platform/x86: Add Asus TF103C dock driver
-      platform/x86: x86-android-tablets: Fix GPIO lookup leak on error-exit
-
-Henning Schild (4):
-      platform/x86: simatic-ipc: add main driver for Siemens devices
-      leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
-      watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial PCs
-      platform/x86: pmc_atom: improve critclk_systems matching for Siemens PCs
-
-Jarrett Schultz (1):
-      platform: surface: Propagate ACPI Dependency
-
-Jason Wang (1):
-      platform/x86: samsung-laptop: Fix typo in a comment
-
-Jimmy Wang (1):
-      platform/x86: thinkpad_acpi: Add support for dual fan control
-
-Johan Hovold (1):
-      platform/x86: intel_pmc_core: fix memleak on registration failure
-
-Len Baker (1):
-      platform/x86: thinkpad_acpi: Convert platform driver to use dev_groups
-
-Luke D. Jones (1):
-      platform/x86: asus-wmi: Add support for custom fan curves
-
-Mario Limonciello (1):
-      platform/x86: amd-pmc: only use callbacks for suspend
-
-Mark Pearson (2):
-      Documentation: syfs-class-firmware-attributes: Lenovo Opcode support
-      platform/x86: think-lmi: Opcode support
-
-Matan Ziv-Av (1):
-      platform/x86: lg-laptop: Recognize more models
-
-Maximilian Luz (3):
-      platform/surface: aggregator: Make client device removal more generic
-      platform/surface: aggregator_registry: Use generic client removal function
-      platform/surface: aggregator_registry: Rename device registration function
-
-Miaoqian Lin (1):
-      platform/mellanox: mlxbf-pmc: Fix an IS_ERR() vs NULL bug in mlxbf_pmc_map_counters
-
-Sanket Goswami (2):
-      platform/x86: amd-pmc: Simplify error handling and store the pci_dev in amd_pmc_dev structure
-      platform/x86: amd-pmc: Add support for AMD Smart Trace Buffer
-
-Slark Xiao (1):
-      platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
-
-Srinivas Pandruvada (2):
-      tools/power/x86/intel-speed-select: Update max frequency
-      tools/power/x86/intel-speed-select: v1.11 release
-
-Thomas Weißschuh (7):
-      platform/x86: dell-wmi-descriptor: disable by default
-      power: supply: add charge_behaviour attributes
-      power: supply: add helpers for charge_behaviour sysfs
-      platform/x86: thinkpad_acpi: support force-discharge
-      platform/x86: thinkpad_acpi: support inhibit-charge
-      power: supply: fix charge_behaviour attribute initialization
-      power: supply: Provide stubs for charge_behaviour helpers
-
-Tim Crawford (1):
-      platform/x86: system76_acpi: Guard System76 EC specific functionality
-
-Vincent Bernat (1):
-      platform/x86: thinkpad_acpi: fix documentation for adaptive keyboard
-
-Wang Qing (1):
-      platform/x86: apple-gmux: use resource_size() with res
-
-Yang Li (1):
-      platform/x86: asus-wmi: remove unneeded semicolon
-
-Yauhen Kharuzhy (1):
-      platform/x86: lenovo-yogabook-wmi: Add driver for Lenovo Yoga Book
-
- .../ABI/testing/sysfs-class-firmware-attributes    |   32 +
- Documentation/ABI/testing/sysfs-class-power        |   14 +
- .../admin-guide/laptops/thinkpad-acpi.rst          |   12 +-
- MAINTAINERS                                        |   14 +
- drivers/acpi/scan.c                                |   37 +-
- drivers/i2c/i2c-core-acpi.c                        |   22 +-
- drivers/leds/Kconfig                               |    3 +
- drivers/leds/Makefile                              |    3 +
- drivers/leds/simple/Kconfig                        |   11 +
- drivers/leds/simple/Makefile                       |    2 +
- drivers/leds/simple/simatic-ipc-leds.c             |  202 ++++
- drivers/platform/mellanox/mlxbf-pmc.c              |    4 +-
- drivers/platform/mellanox/mlxreg-lc.c              |    5 +-
- drivers/platform/surface/Kconfig                   |    7 +-
- drivers/platform/surface/aggregator/Kconfig        |    1 +
- drivers/platform/surface/aggregator/bus.c          |   24 +-
- drivers/platform/surface/aggregator/bus.h          |    3 -
- drivers/platform/surface/aggregator/core.c         |    3 +-
- .../platform/surface/surface_aggregator_registry.c |   32 +-
- drivers/platform/x86/Kconfig                       |   63 +-
- drivers/platform/x86/Makefile                      |    8 +-
- drivers/platform/x86/amd-pmc.c                     |  165 +++-
- drivers/platform/x86/apple-gmux.c                  |    2 +-
- drivers/platform/x86/asus-tf103c-dock.c            |  945 ++++++++++++++++++
- drivers/platform/x86/asus-wmi.c                    |  605 +++++++++++-
- drivers/platform/x86/dell/Kconfig                  |    2 +-
- drivers/platform/x86/hp_accel.c                    |   29 +-
- drivers/platform/x86/intel/Kconfig                 |   15 -
- drivers/platform/x86/intel/Makefile                |    2 +
- drivers/platform/x86/intel/crystal_cove_charger.c  |  153 +++
- drivers/platform/x86/intel/hid.c                   |    7 +
- drivers/platform/x86/intel/int3472/Makefile        |    9 +-
- ...472_clk_and_regulator.c => clk_and_regulator.c} |    2 +-
- drivers/platform/x86/intel/int3472/common.c        |   82 ++
- .../{intel_skl_int3472_common.h => common.h}       |    6 +-
- .../{intel_skl_int3472_discrete.c => discrete.c}   |   51 +-
- .../x86/intel/int3472/intel_skl_int3472_common.c   |  106 --
- .../{intel_skl_int3472_tps68470.c => tps68470.c}   |   92 +-
- drivers/platform/x86/intel/int3472/tps68470.h      |   25 +
- .../x86/intel/int3472/tps68470_board_data.c        |  158 +++
- drivers/platform/x86/intel/pmc/pltdrv.c            |    2 +-
- drivers/platform/x86/intel/uncore-frequency.c      |    3 +-
- drivers/platform/x86/lenovo-yogabook-wmi.c         |  408 ++++++++
- drivers/platform/x86/lg-laptop.c                   |   12 +
- drivers/platform/x86/pmc_atom.c                    |   54 +-
- drivers/platform/x86/samsung-laptop.c              |    2 +-
- drivers/platform/x86/simatic-ipc.c                 |  176 ++++
- drivers/platform/x86/system76_acpi.c               |   58 +-
- drivers/platform/x86/think-lmi.c                   |  340 ++++++-
- drivers/platform/x86/think-lmi.h                   |   29 +-
- drivers/platform/x86/thinkpad_acpi.c               | 1019 +++++++++++---------
- drivers/platform/x86/touchscreen_dmi.c             |   56 +-
- drivers/platform/x86/uv_sysfs.c                    |    6 +-
- drivers/platform/x86/wmi.c                         |   27 +-
- drivers/platform/x86/x86-android-tablets.c         |  870 +++++++++++++++++
- drivers/power/supply/power_supply_sysfs.c          |   56 ++
- drivers/watchdog/Kconfig                           |   11 +
- drivers/watchdog/Makefile                          |    1 +
- drivers/watchdog/simatic-ipc-wdt.c                 |  228 +++++
- include/acpi/acpi_bus.h                            |    5 +-
- include/linux/i2c.h                                |   17 +-
- include/linux/platform_data/tps68470.h             |   35 +
- include/linux/platform_data/x86/asus-wmi.h         |    2 +
- include/linux/platform_data/x86/simatic-ipc-base.h |   29 +
- include/linux/platform_data/x86/simatic-ipc.h      |   72 ++
- include/linux/power_supply.h                       |   31 +
- include/linux/surface_aggregator/device.h          |    9 +
- include/linux/wmi.h                                |    1 +
- tools/power/x86/intel-speed-select/isst-config.c   |    4 +-
- 69 files changed, 5619 insertions(+), 902 deletions(-)
- create mode 100644 drivers/leds/simple/Kconfig
- create mode 100644 drivers/leds/simple/Makefile
- create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
- create mode 100644 drivers/platform/x86/asus-tf103c-dock.c
- create mode 100644 drivers/platform/x86/intel/crystal_cove_charger.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
- create mode 100644 drivers/platform/x86/intel/int3472/common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
- delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (56%)
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
- create mode 100644 drivers/platform/x86/lenovo-yogabook-wmi.c
- create mode 100644 drivers/platform/x86/simatic-ipc.c
- create mode 100644 drivers/platform/x86/x86-android-tablets.c
- create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
- create mode 100644 include/linux/platform_data/tps68470.h
- create mode 100644 include/linux/platform_data/x86/simatic-ipc-base.h
- create mode 100644 include/linux/platform_data/x86/simatic-ipc.h
-
+T24gMjAvMTIvMjAyMSAxNDo0NCwgY29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+
+IEZyb206IENvbm9yIERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQo+IA0KPiBD
+aGFuZ2VzIHNpbmNlIHYxOg0KPiAtIHN5c3RlbSBjb250cm9sbGVyIGlzIG5vdyBhbiBtZmQNCj4g
+LSBwYXJlbnRhZ2UgaXMgbm93IHVzZWQgdG8gZ2V0IHRoZSBkZXZpY2Ugbm9kZSBvbiB0aGUgc3lz
+dGVtIGNvbnRyb2xsZXINCj4gLSBtcGZzX3N5c19jb250cm9sbGVyX2dldCgpIG5vdyB1cGRhdGVz
+IHRoZSByZWZlcmVuY2UgY291bnQNCj4gLSAicG9sYXJmaXJlLXNvYyIgaW4gY29tcGF0IHN0cmlu
+ZyBjaGFuZ2VkIHRvICJtcGZzIg0KPiANCj4gRGVwZW5kcyBvbiBbMF0gdG8gY2hhbmdlIHRoZSBj
+b21wYXQgc3RyaW5nIGluIHRoZSBkdC1iaW5kaW5nLg0KPiANCkhleSBBcm5kLCBpZiB5b3UgY291
+bGQgdGFrZSBhIGxvb2sgYXQgdGhpcyBpdCdkIGJlIGdyZWF0DQo+IEBBcm5kIEJlcmdtYW5uOg0K
+PiBJIHNlbnQgdGhlIGZpcnN0IHZlcnNpb24gb2YgdGhpcyBwYXRjaCBpbiBOb3ZlbWJlciAmIHlv
+dSAoYWxvbmcgd2l0aA0KPiByZXF1ZXN0aW5nIHJlZmVyZW5jaW5nIGNvdW50aW5nKSB3YW50ZWQg
+bWUgdG8gY2hlY2sgaWYgdGhlIGRyaXZlciB3YXMNCj4gYm91bmQgdG8gdGhlIHNwZWNpZmljIGRl
+dmljZSBbMV0uIEkgaGF2ZSB0YWtlbiBhbm90aGVyIGxvb2sgYXQgdGhpcw0KPiBkcml2ZXIgbm93
+IGFuZCBJIGFtIHN0aWxsIG5vbmUgdGhlIHdpc2VyIGFzIHRvIGhvdyBJIHNob3VsZCBkbyB0aGlz
+Lg0KPiANCj4gQXMgSSBzYWlkIGluIHRoZSBwcmV2aW91cyB0aHJlYWQsIEkgY2hlY2tlZCBvdGhl
+ciBkcml2ZXJzIGJ1dCB3YXMgbm90DQo+IGFibGUgdG8gZmluZCBhbnkgZXhhbXBsZXMgb2Ygb2Zf
+ZmluZF9kZXZpY2VfYnlfbm9kZSgpIHdoZXJlIHRoZSBiaW5kaW5nDQo+IG9mIHRoZSBkcml2ZXIg
+d2FzIGNoZWNrZWQuIElmIHlvdSBjb3VsZCBwb2ludCBtZSB0b3dhcmRzIGFuIGV4YW1wbGUNCj4g
+dGhhdCB3b3VsZCBiZSBncmVhdC4NCj4gDQo+IFRoYW5rcywNCj4gQ29ub3IuDQo+IA0KPiBGb3Ig
+c29tZSBleHRyYSBjb250ZXh0LCB0aGUgZGV2aWNlIHRyZWUgZW50cnkgZm9yIHRoaXMgZHJpdmVy
+IHdpbGwgbG9vaw0KPiBsaWtlOg0KPiANCj4gc3lzY29udHJvbGxlcjogc3lzY29udHJvbGxlciB7
+DQo+IAljb21wYXRpYmxlID0gIm1pY3JvY2hpcCxtcGZzLXN5cy1jb250cm9sbGVyIiwgInNpbXBs
+ZS1tZmQiOw0KPiAJbWJveGVzID0gPCZtYm94IDA+Ow0KPiANCj4gCWh3cmFuZG9tOiBod3JhbmRv
+bSB7DQo+IAkJY29tcGF0aWJsZSA9ICJtaWNyb2NoaXAsbXBmcy1ybmciOw0KPiAJfTsNCj4gDQo+
+IAlzeXNzZXJ2OiBzeXNzZXJ2IHsNCj4gCQljb21wYXRpYmxlID0gIm1pY3JvY2hpcCxtcGZzLWdl
+bmVyaWMtc2VydmljZSI7DQo+IAl9Ow0KPiB9Ow0KPiANCj4gYW5kIHRoZSBtcGZzX3N5c19jb250
+cm9sbGVyX2dldCgpIGZ1bmN0aW9uIGlzIGNhbGxlZCBpbiwgZm9yIGV4YW1wbGUsDQo+IHRoZSBt
+cGZzLXJuZyBkcml2ZXI6DQo+IA0KPiBub2RlX3BvaW50ZXIgPSBvZl9nZXRfcGFyZW50KGRldi0+
+b2Zfbm9kZSk7DQo+IGlmICghbm9kZV9wb2ludGVyKSB7DQo+IAlkZXZfZXJyKCZwZGV2LT5kZXYs
+DQo+IAkJIkZhaWxlZCB0byBmaW5kIG1wZnMgc3lzdGVtIGNvbnRyb2xsZXIgbm9kZVxuIik7DQo+
+IAlyZXR1cm4gLUVOT0RFVjsNCj4gfQ0KPiANCj4gcm5nX3ByaXYtPnN5c19jb250cm9sbGVyID0g
+IG1wZnNfc3lzX2NvbnRyb2xsZXJfZ2V0KCZwZGV2LT5kZXYsIG5vZGVfcG9pbnRlcik7DQo+IA0K
+PiBbMF0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtcmlzY3YvQ0FNdUhNZFdUanJBaUhv
+c1UwY0d5SllrSz05SnpOZ0hiPXRqSFhQZFl4VFdta1Z6ZVlRQG1haWwuZ21haWwuY29tL1QvDQo+
+IFsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1yaXNjdi9DQUs4UDNhMW1fTGhPZzVK
+R01xUHo2c29oSmEyaFBaM0dOLWpRRFB4aWdaNURhcUFHeFFAbWFpbC5nbWFpbC5jb20vDQo+IA0K
+PiBDb25vciBEb29sZXkgKDEpOg0KPiAgICBzb2M6IGFkZCBwb2xhcmZpcmUgc29jIHN5c3RlbSBj
+b250cm9sbGVyDQo+IA0KPiAgIGRyaXZlcnMvc29jL0tjb25maWcgICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgIDEgKw0KPiAgIGRyaXZlcnMvc29jL01ha2VmaWxlICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgIDEgKw0KPiAgIGRyaXZlcnMvc29jL21pY3JvY2hpcC9LY29uZmlnICAgICAgICAg
+ICAgICAgfCAgMTAgKysNCj4gICBkcml2ZXJzL3NvYy9taWNyb2NoaXAvTWFrZWZpbGUgICAgICAg
+ICAgICAgIHwgICAxICsNCj4gICBkcml2ZXJzL3NvYy9taWNyb2NoaXAvbXBmcy1zeXMtY29udHJv
+bGxlci5jIHwgMTY5ICsrKysrKysrKysrKysrKysrKysrDQo+ICAgaW5jbHVkZS9zb2MvbWljcm9j
+aGlwL21wZnMuaCAgICAgICAgICAgICAgICB8ICAgMyArLQ0KPiAgIDYgZmlsZXMgY2hhbmdlZCwg
+MTg0IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
+ZHJpdmVycy9zb2MvbWljcm9jaGlwL0tjb25maWcNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJp
+dmVycy9zb2MvbWljcm9jaGlwL01ha2VmaWxlDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZl
+cnMvc29jL21pY3JvY2hpcC9tcGZzLXN5cy1jb250cm9sbGVyLmMNCj4gDQoNCg==

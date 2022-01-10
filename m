@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E99489234
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F1648928F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242209AbiAJHkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:40:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33814 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239720AbiAJHdR (ORCPT
+        id S243362AbiAJHpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241740AbiAJHgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:33:17 -0500
+        Mon, 10 Jan 2022 02:36:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9BC025275;
+        Sun,  9 Jan 2022 23:31:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 247E3B81211;
-        Mon, 10 Jan 2022 07:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D028C36AEF;
-        Mon, 10 Jan 2022 07:33:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FBB0B81204;
+        Mon, 10 Jan 2022 07:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC39EC36AED;
+        Mon, 10 Jan 2022 07:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799995;
-        bh=ZTHZRmQnobjicwLrjjyL8/R91C9QzgP8gTl+50ubP0o=;
+        s=korg; t=1641799887;
+        bh=hL96LzpfoO4m5GZoFJEaCllaxcBAZKgk4otdKobchbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IUKdf59LhuyTMPx/xhRXPbuh9rOViQ2OgGC1gJNI7c8arNhvz5HcHP05Ff8YdSzQt
-         cquEwvo18myWYpnq1ijrbiVRp8GhJkym0piDaYu1DW7N+w0E1hqlLdUfLm62kBzJJd
-         XmMEFMVEirCyAsXJ/ajtKBPJm0TKjSvSH5fK4R8c=
+        b=CtaaPmeJEVaf8fGlies6eTVbOjb1MIaE61hp0Jq1TXjHciohTB37vd1Kg4YVq8WTg
+         checZt+HwVRYHzzPqUudUwEiJSfnhDvvxzQh7Qtn1kwGZq0EB0TmGEMOx8cgnzfogz
+         t900G5ONCNzoDLBK6i7zP/zeiui6/Q9Uqr9UCEng=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH 5.15 43/72] reset: renesas: Fix Runtime PM usage
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 23/43] sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
 Date:   Mon, 10 Jan 2022 08:23:20 +0100
-Message-Id: <20220110071823.015359869@linuxfoundation.org>
+Message-Id: <20220110071818.131805409@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+References: <20220110071817.337619922@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,40 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 92c959bae2e54ba1e2540ba5f813f7752bd76be1 upstream.
+commit 7d18a07897d07495ee140dd319b0e9265c0f68ba upstream.
 
-If pm_runtime_resume_and_get() fails then it returns w/o the RPM usage
-counter being incremented. In this case call pm_runtime_put() in
-remove() will result in a usage counter imbalance. Therefore check the
-return code of pm_runtime_resume_and_get() and bail out in case of error.
+tx_queue_len can be set to ~0U, we need to be more
+careful about overflows.
 
-Fixes: bee08559701f ("reset: renesas: Add RZ/G2L usbphy control driver")
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-Link: https://lore.kernel.org/r/ec24e13f-0530-b091-7a08-864577b9b3be@gmail.com
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+__fls(0) is undefined, as this report shows:
+
+UBSAN: shift-out-of-bounds in net/sched/sch_qfq.c:1430:24
+shift exponent 51770272 is too large for 32-bit type 'int'
+CPU: 0 PID: 25574 Comm: syz-executor.0 Not tainted 5.16.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x201/0x2d8 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x494/0x530 lib/ubsan.c:330
+ qfq_init_qdisc+0x43f/0x450 net/sched/sch_qfq.c:1430
+ qdisc_create+0x895/0x1430 net/sched/sch_api.c:1253
+ tc_modify_qdisc+0x9d9/0x1e20 net/sched/sch_api.c:1660
+ rtnetlink_rcv_msg+0x934/0xe60 net/core/rtnetlink.c:5571
+ netlink_rcv_skb+0x200/0x470 net/netlink/af_netlink.c:2496
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x814/0x9f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0xaea/0xe60 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ ____sys_sendmsg+0x5b9/0x910 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ __sys_sendmsg+0x280/0x370 net/socket.c:2492
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Fixes: 462dbc9101ac ("pkt_sched: QFQ Plus: fair-queueing service at DRR cost")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/reset/reset-rzg2l-usbphy-ctrl.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/sched/sch_qfq.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-+++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-@@ -137,7 +137,12 @@ static int rzg2l_usbphy_ctrl_probe(struc
- 	dev_set_drvdata(dev, priv);
+--- a/net/sched/sch_qfq.c
++++ b/net/sched/sch_qfq.c
+@@ -1421,10 +1421,8 @@ static int qfq_init_qdisc(struct Qdisc *
+ 	if (err < 0)
+ 		return err;
  
- 	pm_runtime_enable(&pdev->dev);
--	pm_runtime_resume_and_get(&pdev->dev);
-+	error = pm_runtime_resume_and_get(&pdev->dev);
-+	if (error < 0) {
-+		pm_runtime_disable(&pdev->dev);
-+		reset_control_assert(priv->rstc);
-+		return dev_err_probe(&pdev->dev, error, "pm_runtime_resume_and_get failed");
-+	}
- 
- 	/* put pll and phy into reset state */
- 	spin_lock_irqsave(&priv->lock, flags);
+-	if (qdisc_dev(sch)->tx_queue_len + 1 > QFQ_MAX_AGG_CLASSES)
+-		max_classes = QFQ_MAX_AGG_CLASSES;
+-	else
+-		max_classes = qdisc_dev(sch)->tx_queue_len + 1;
++	max_classes = min_t(u64, (u64)qdisc_dev(sch)->tx_queue_len + 1,
++			    QFQ_MAX_AGG_CLASSES);
+ 	/* max_cl_shift = floor(log_2(max_classes)) */
+ 	max_cl_shift = __fls(max_classes);
+ 	q->max_agg_classes = 1<<max_cl_shift;
 
 

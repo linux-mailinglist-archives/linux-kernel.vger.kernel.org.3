@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC2448A035
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6AA48A03B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239720AbiAJTcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S240967AbiAJTfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbiAJTcq (ORCPT
+        with ESMTP id S231986AbiAJTe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:32:46 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3C3C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:32:46 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id u21so35286167edd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oy9tjlQ/BLaocnyNi1zxTSuYn4RmLGrxcg8evYZSOA8=;
-        b=TRxbF/w/MdpXNE2ymtpXjd6hlkB9A8U3pgXRUx/tz50zmXH23stt63qlOIU3yT89Ud
-         shFyW5NFjTLz01KQEHekGyCUs+AB4shVV/TMgJpHGznB10AH9dlbCE3h3CuzSqKR/REd
-         Oqgvc8POhfkJ8L9uctZfXqgbyV69kBbfPTFVY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oy9tjlQ/BLaocnyNi1zxTSuYn4RmLGrxcg8evYZSOA8=;
-        b=xxyOneP+CUtAj+LVt4GUElM2eyp7rtUjt7+bNRgwHNsxT38g95Hg3ieN2BY7VL2ReX
-         cdMjmGEhRozY53U3T4OS2zGMB5ehz4op7n/JJErBlbMpj+to27GuK0VouYvvWH9JMBkg
-         oh/3m3ur+t3WADCKWb14CryBSGmDaDBhatCVP44k/E8lPUuiu3/WjY5FrcNZqR5NPbs7
-         pwh2jPBdeHwazXebbMTmYQUy3C13gOlk02nqUps3VwSpn8LlFOGBL8zZI0b7C0Ag2RLs
-         2vf7H0gP5dpTvCHnMPphwLxgtCWIo01QMGqgL8oMLuQUB7rkQyVr7u9E3R2M3UfXnPXK
-         n+Vw==
-X-Gm-Message-State: AOAM532ZqqWtcPDfAT4+mRar5kKkmzRuesjUEyLvea79Bhv5fNXIBeEV
-        6iUh0BA5hMSp4VK4/eZ6k0uKJI0Luftx0Qy+owo=
-X-Google-Smtp-Source: ABdhPJyuDB0pcqlNJkbtaTR/L82uSdDZwo9XBb1rLyy8zFFKzP/EA9DaVc9/fAW2Vd55yLbb8kj9xw==
-X-Received: by 2002:a17:906:140e:: with SMTP id p14mr927781ejc.440.1641843164731;
-        Mon, 10 Jan 2022 11:32:44 -0800 (PST)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id 6sm2753895ejw.0.2022.01.10.11.32.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 11:32:44 -0800 (PST)
-Received: by mail-wr1-f45.google.com with SMTP id q8so28669379wra.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:32:43 -0800 (PST)
-X-Received: by 2002:adf:c74e:: with SMTP id b14mr911498wrh.97.1641843162805;
- Mon, 10 Jan 2022 11:32:42 -0800 (PST)
+        Mon, 10 Jan 2022 14:34:59 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC9CC06173F;
+        Mon, 10 Jan 2022 11:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ZFZ4QOFgcoyMCECZ3PkgL8BM+HFxPBx0EV0hU5cheCk=; b=kwTBNQ14Ajm4bb+p+yD8k57QkP
+        ag8IoWMx+ZceNrBHQIAX1qjPtJFmAq9bB3a4JnH2JpRIvuJYBtpHdys8Jq/5cenklNvLq/gPB+1Sg
+        2qgeP1b1J6H2Tv69ZZ1Dchmb2ZJjZjBKqVxc/SH3eNnBFhJ4iqYqyoAG6HKgY9R7CIH30swf1tj0Z
+        Gu8uqqBGWzCL6jiU7/viwFyhvJ/itxVSedkUZDGnUhNOWzn5QaeMXBfrtSKRCMeY14yLf8X1p6aFJ
+        T2ZJbBdfedchNNamYhhW0wNJ5GgzCiU5esGaF1uPdBB8x01ZyuwW4BYXYZcWtRvjnGo36PQEJY1Up
+        7sxipnQg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n70RN-002fyD-DM; Mon, 10 Jan 2022 19:34:49 +0000
+Date:   Mon, 10 Jan 2022 19:34:49 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nvdimm@lists.linux.dev
+Subject: Phyr Starter
+Message-ID: <YdyKWeU0HTv8m7wD@casper.infradead.org>
 MIME-Version: 1.0
-References: <YdwVl0H54fmUIux0@zn.tnic> <CAHk-=wh+UbGrgH4CzKSoTYGPidyv5isiLMxJKAqnV3NFTiRdaQ@mail.gmail.com>
- <Ydx8fUCotPI++UEW@zn.tnic>
-In-Reply-To: <Ydx8fUCotPI++UEW@zn.tnic>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 10 Jan 2022 11:32:26 -0800
-X-Gmail-Original-Message-ID: <CAHk-=who9Rebh4dU0NXWxroMshuf8nCX3vqhr-kk0Cen=ypOLA@mail.gmail.com>
-Message-ID: <CAHk-=who9Rebh4dU0NXWxroMshuf8nCX3vqhr-kk0Cen=ypOLA@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/cpu for v5.17
-To:     Borislav Petkov <bp@suse.de>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 10:35 AM Borislav Petkov <bp@suse.de> wrote:
->
-> Right, the only point for doing the vendor check I see here is, well,
-> because it is Intel who doesn't have CSTAR, let's check for Intel. But
-> yeah, we do avoid the vendor checks if it can be helped.
->
-> We can do a synthetic X86_FEATURE flag but that would be a waste. So the
-> _safe thing and keep the comment sounds optimal to me.
+TLDR: I want to introduce a new data type:
 
-I agree that a new feature flag for just this would seem a bit
-wasteful, and just using wrmsrl_safe() would seem to be the natural
-thing to do.
+struct phyr {
+        phys_addr_t addr;
+        size_t len;
+};
 
-Particularly since that's literally what the wrmsrl's around that
-thing do (ie MSR_IA32_SYSENTER_CS and friends). So that vendor check
-really stands out as being the odd man out.
+and use it to replace bio_vec as well as using it to replace the array
+of struct pages used by get_user_pages() and friends.
 
-               Linus
+---
+
+There are two distinct problems I want to address: doing I/O to memory
+which does not have a struct page and efficiently doing I/O to large
+blobs of physically contiguous memory, regardless of whether it has a
+struct page.  There are some other improvements which I regard as minor.
+
+There are many types of memory that one might want to do I/O to that do
+not have a struct page, some examples:
+ - Memory on a graphics card (or other PCI card, but gfx seems to be
+   the primary provider of DRAM on the PCI bus today)
+ - DAX, or other pmem (there are some fake pages today, but this is
+   mostly a workaround for the IO problem today)
+ - Guest memory being accessed from the hypervisor (KVM needs to
+   create structpages to make this happen.  Xen doesn't ...)
+All of these kinds of memories can be addressed by the CPU and so also
+by a bus master.  That is, there is a physical address that the CPU
+can use which will address this memory, and there is a way to convert
+that to a DMA address which can be programmed into another device.
+There's no intent here to support memory which can be accessed by a
+complex scheme like writing an address to a control register and then
+accessing the memory through a FIFO; this is for memory which can be
+accessed by DMA and CPU loads and stores.
+
+For get_user_pages() and friends, we currently fill an array of struct
+pages, each one representing PAGE_SIZE bytes.  For an application that
+is using 1GB hugepages, writing 2^18 entries is a significant overhead.
+It also makes drivers hard to write as they have to recoalesce the
+struct pages, even though the VM can tell it whether those 2^18 pages
+are contiguous.
+
+On the minor side, struct phyr can represent any mappable chunk of memory.
+A bio_vec is limited to 2^32 bytes, while on 64-bit machines a phyr
+can represent larger than 4GB.  A phyr is the same size as a bio_vec
+on 64 bit (16 bytes), and the same size for 32-bit with PAE (12 bytes).
+It is smaller for 32-bit machines without PAE (8 bytes instead of 12).
+
+Finally, it may be possible to stop using scatterlist to describe the
+input to the DMA-mapping operation.  We may be able to get struct
+scatterlist down to just dma_address and dma_length, with chaining
+handled through an enclosing struct.
+
+I would like to see phyr replace bio_vec everywhere it's currently used.
+I don't have time to do that work now because I'm busy with folios.
+If someone else wants to take that on, I shall cheer from the sidelines.
+What I do intend to do is:
+
+ - Add an interface to gup.c to pin/unpin N phyrs
+ - Add a sg_map_phyrs()
+   This will take an array of phyrs and allocate an sg for them
+ - Whatever else I need to do to make one RDMA driver happy with
+   this scheme
+
+At that point, I intend to stop and let others more familiar with this
+area of the kernel continue the conversion of drivers.
+
+P.S. If you've had the Prodigy song running through your head the whole
+time you've been reading this email ... I'm sorry / You're welcome.
+If people insist, we can rename this to phys_range or something boring,
+but I quite like the spelling of phyr with the pronunciation of "fire".

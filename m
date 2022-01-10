@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C76C489CD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E55489CD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiAJPy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:54:28 -0500
-Received: from mga01.intel.com ([192.55.52.88]:50108 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236627AbiAJPy0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:54:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641830066; x=1673366066;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rX4Yeo72fBejr7EJ901BTYv9hMR6JNoo7ubEPirAX/4=;
-  b=jRLP6ZF4dTgCf8yn7Nzdo4BSEIOfY5KupehSp510JoqvpHHeSvuNIyZf
-   gWT2mjEe6H530kNN4DABAjhxPQpv56/twoe5qbq09+ZVl2nY/AbWX9CMs
-   7W8zBjYQw4JPL/lXxoL/yvxSEYBNcPWusK1aipLbeywU5j71S9iAkUlTo
-   ZNVpeFH2Mriy2PWx/UFIna5fI3yvshygZWELbfl2b3dhqm+kVWW0M0wzp
-   QuclCLnOJFLkOefGp4oDHbmGs+NBqtl2UqOCgzVuN/iQAG2Fw751cpAVa
-   +Vpk7+5vElQUU36zcobRPlqArLm4/6LOS/GJbC3LYZFh4jQ7RpZ2O2usV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="267581623"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="267581623"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 07:54:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="490034711"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 07:54:23 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n6wyr-008v0u-2w;
-        Mon, 10 Jan 2022 17:53:09 +0200
-Date:   Mon, 10 Jan 2022 17:53:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] iio: st_sensors: don't always auto-enable I2C and SPI
- interface drivers
-Message-ID: <YdxWZEz1GXXxQ+7h@smile.fi.intel.com>
-References: <20220110152432.3799227-1-nikita.yoush@cogentembedded.com>
+        id S236743AbiAJPxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:53:18 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:50124 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236509AbiAJPxQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 10:53:16 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D76FD1F393;
+        Mon, 10 Jan 2022 15:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641829994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRM4BcmD9hfO5nbXPqn+DFkr64sSUqkyCYTzumTkKhk=;
+        b=HxSwhujHM56DgA0t1Mwoxptc4JAuP4ieSwDdElwSgSCdMLHrANAYh+Xq2Mz89veNpEywRh
+        xLKRVnKxWvT/r2wGY67JhgHwgZj5V/Ln80UK8nl4ZCmswxU5dczof6z6yjZB1q9FK5ouje
+        SH9vAhHd6H5gSmaX0MJBAV+TPWYj6Fc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641829994;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRM4BcmD9hfO5nbXPqn+DFkr64sSUqkyCYTzumTkKhk=;
+        b=C8T0d+w3VB+duw4c77N2MUtc/ZZeUErPQL5VoR4JCQ+vDD7zefO7e7wtelRDxU1+MjVEoK
+        mipfN5KN4heFkVDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5629513D88;
+        Mon, 10 Jan 2022 15:53:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Y+eyAmlW3GEWDgAAMHmgww
+        (envelope-from <colyli@suse.de>); Mon, 10 Jan 2022 15:53:13 +0000
+Message-ID: <97e5c59a-ac8e-ffee-b5d5-55883932b8df@suse.de>
+Date:   Mon, 10 Jan 2022 23:53:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110152432.3799227-1-nikita.yoush@cogentembedded.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] bcache: use default_groups in kobj_type
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220106100004.3277439-1-gregkh@linuxfoundation.org>
+ <7cbca83d-bcac-464e-d2e4-c54b2d53eead@suse.de> <YdlL4YAScYp9XxkI@kroah.com>
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <YdlL4YAScYp9XxkI@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 06:24:32PM +0300, Nikita Yushchenko wrote:
-> This patch makes I2C and SPI interface drivers for STMicroelectronics
-> sensor chips individually selectable via Kconfig.
-> 
-> The default is kept unchanged - I2C and SPI interface drivers are still
-> selected by default if the corresponding bus support is available.
-> 
-> However, the patch makes it possible to explicitly disable drivers
-> that are not needed for a particular target.
+On 1/8/22 4:31 PM, Greg Kroah-Hartman wrote:
+> On Sat, Jan 08, 2022 at 02:16:28PM +0800, Coly Li wrote:
+>> On 1/6/22 6:00 PM, Greg Kroah-Hartman wrote:
+>>> There are currently 2 ways to create a set of sysfs files for a
+>>> kobj_type, through the default_attrs field, and the default_groups
+>>> field.  Move the bcache sysfs code to use default_groups field which has
+>>> been the preferred way since aa30f47cf666 ("kobject: Add support for
+>>> default attribute groups to kobj_type") so that we can soon get rid of
+>>> the obsolete default_attrs field.
+>>>
+>>> Cc: Coly Li <colyli@suse.de>
+>>> Cc: Kent Overstreet <kent.overstreet@gmail.com>
+>>> Cc: linux-bcache@vger.kernel.org
+>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> It looks good to me.
+>>
+>> Acked-by: Coly Li <colyli@suse.de>
+>>
+>> I assume you may take this patch directly in your maintenance path, but if
+>> you want me to take this, just let me know. Thanks.
+> I can take it myself, or you can, which ever is easiest for you, just
+> let me know which you prefer.  Thanks for the review!
 
-...
+It will be faster for this patch goes into mainline in your path, I am 
+on vacation now and will have a latency...
 
-The same question as per v2.
+Thank you.
 
-> +	default I2C && IIO_ST_ACCEL_3AXIS
-
-What will be the results when I2C=y and the second ones =m?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Coly Li

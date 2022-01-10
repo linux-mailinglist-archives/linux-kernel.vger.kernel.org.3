@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1249E4896AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83754896AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244153AbiAJKrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S244186AbiAJKsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235222AbiAJKrC (ORCPT
+        with ESMTP id S235222AbiAJKry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:47:02 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B3FC06173F;
-        Mon, 10 Jan 2022 02:47:02 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id hv15so5699348pjb.5;
-        Mon, 10 Jan 2022 02:47:02 -0800 (PST)
+        Mon, 10 Jan 2022 05:47:54 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA90C06173F;
+        Mon, 10 Jan 2022 02:47:54 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id m13so12867159pji.3;
+        Mon, 10 Jan 2022 02:47:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pY10rB3otKHYN/zyCOaytbgVsZbjDHmRjoptsEgakk4=;
-        b=DlbdsL4/vcmWrhWDTfRizebiGQUO8oU7YSvF1AMp3Qs6/e9K2xp9Lr6Sd377V7dfzY
-         cObPvqBMdHDbUVJVrJc2glnLTAHnKAankmXDYNmkh9KoMH63tG7KHdahXqMHUJqNZ7KB
-         988UW3ii7fNuyVuiCH9EibqpkVKB//AXUPLj9vuIf/af7ij00ROK3XW2mjkW0xRgYFR6
-         9Sq2tsDbQhmPfgwMSSN2iYXqWstTloqnhGv8a+whKo38TocRRD+BS1GOjEIYSO43kGXz
-         JLaa1CEn0GM+c9KwzEkO6BunbcLDXVoX5MYhKABA8VLcdjyq50FQpdWXpovEsHpj+TWu
-         r+cQ==
+        bh=QoPQbPDSwmhcCclXn3wTkRYXJo86fSVvmFTmCUeMKdo=;
+        b=fjmbYiE4EINPTC/2l3ddI5ufeI2VGM2uRQC/awt/KKVrHw48JrS1CryzAMa81x7M1Q
+         bp0aScuAqPfZ4J48pityNe35L5ScCqkG+/gNGlTuBG70faN2mMDrU5VWRlOhZ15hSzaJ
+         5/MpGAbwqlA4BWayyJhdh8Ef3uRLVOpsC/QFyKuBxNdy7yJU5LduxEM+BPfyt7F7hrmP
+         2HcYkUrDumSud+F4/cRa7yH4mOfQv9dE8UDwPzYr6ZsDF1qb4xHkz8iXrkwcyiOQ8PJG
+         VyC1JiA11+6RNhiFYERPSZG15252PGD6RW/QuM02buY9bMGC1sazjiKMfRbp0ctvj1wP
+         9ndA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pY10rB3otKHYN/zyCOaytbgVsZbjDHmRjoptsEgakk4=;
-        b=Zk9FaaVz4VwS+Gk1C5pl9p+iC0+xOk+6Jyvj8uosGleW0pKIJEhKQheX/ObYgXWM4y
-         xlNkYsUZjKySduWjWxs81fZkdQ1xn8clkhxEuxLVPVPZM4EMmLh7u5OJ8pdrKs1sxFCu
-         yNu6LN1BP7kPXk8kThm9McK6i3i/jxFeUu/y7pLGi/lN2IGeYrt7rzUbYV1HW3O4/BsU
-         NrreJ31Dxr7wLH3OwIQOkPRG4nBKi4DfsKjbsOCYjegEnWsuwrfG1svP497AwL8YtkPS
-         5HsVLF1S2WNtSICCULZSU+4WMrkYfWg8wnQWBUswKaUd9su63m13nZYCr7H3HnGeeI67
-         ioKg==
-X-Gm-Message-State: AOAM530N+I0NFvrdRGXBFHK1o4+Ym7ONFqc6Ocpt2BwaQvD6FE9bbW7s
-        RUsJYUmlKq6lmE8zD+Z/BskZ8KD2PNg=
-X-Google-Smtp-Source: ABdhPJzFJTakr/Mtd3uTh0LT2vS9i9iNtOUr4VcCKhundTvvfs4Uf2zoApHQdOQVvslMbWwJEaeF/A==
-X-Received: by 2002:a17:90a:748e:: with SMTP id p14mr26973573pjk.231.1641811621723;
-        Mon, 10 Jan 2022 02:47:01 -0800 (PST)
+        bh=QoPQbPDSwmhcCclXn3wTkRYXJo86fSVvmFTmCUeMKdo=;
+        b=wVj4EivQo00auMyBFrahLXsqghXzIBmeyA7afcrxYA2cuUPxpoCjtkHCSqQvwGZwA6
+         dvFskGhbZ955Eis6hDsIHdvvJ1FawcSVln7NyAQREjsoJy3kf6uMoy9NVIYLQtd7lWD+
+         dIoxaT+eVyq2v3KMPjn+bUbOIOa8qcwgq4WmOgwNGc/H3eM8kYxfB36B/Mv2HTnvPdd6
+         0OxcwfJAqhbjqv5fNDOdbX4CuRQtwNkK0SBKLz8ghgvRCoQqqNnzgcxPYAp9dh2GrZob
+         DUu2adPyz7J3ibQi9Ocl2h3QddlNj5QfcXbiypIjiTrlRfG5lTLYNNooJHB6sqoH6cS9
+         G5RQ==
+X-Gm-Message-State: AOAM533onVBNICrDyNMnir1F1Dry02g2s/9ibnUwrFtda7Yxj3Oo2NnD
+        oN6WgDY67SQ6/W6sJzbDT+4=
+X-Google-Smtp-Source: ABdhPJw+g4r1x0H35i02mrlXLUcvFmFtV6s2lhQJGIluU3rhzIKyBu7BhAvb7M/NXzDsrqks8doznQ==
+X-Received: by 2002:a17:90a:9f95:: with SMTP id o21mr15744318pjp.44.1641811673860;
+        Mon, 10 Jan 2022 02:47:53 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b11sm5350574pge.84.2022.01.10.02.46.59
+        by smtp.gmail.com with ESMTPSA id h17sm6376122pfv.217.2022.01.10.02.47.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 02:47:01 -0800 (PST)
+        Mon, 10 Jan 2022 02:47:53 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jesse.brandeburg@intel.com
-Cc:     anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+To:     agross@kernel.org
+Cc:     bjorn.andersson@linaro.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] ethernet/intel: remove redundant ret variable
-Date:   Mon, 10 Jan 2022 10:46:56 +0000
-Message-Id: <20220110104656.646861-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] drivers/soundwire: remove redundant val variable
+Date:   Mon, 10 Jan 2022 10:47:49 +0000
+Message-Id: <20220110104749.646995-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,58 +69,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value directly instead of taking this in another redundant
-variable.
+Return value from SWRM_REG_VAL_PACK() directly instead
+of taking this in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/soundwire/qcom.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 504fea4e90fb..a138dc64b8b7 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -1517,7 +1517,6 @@ static void iavf_fill_rss_lut(struct iavf_adapter *adapter)
- static int iavf_init_rss(struct iavf_adapter *adapter)
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index 54813417ef8e..77f9c90370be 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -235,7 +235,6 @@ static int qcom_swrm_cpu_reg_write(struct qcom_swrm_ctrl *ctrl, int reg,
+ static u32 swrm_get_packed_reg_val(u8 *cmd_id, u8 cmd_data,
+ 				   u8 dev_addr, u16 reg_addr)
  {
- 	struct iavf_hw *hw = &adapter->hw;
--	int ret;
+-	u32 val;
+ 	u8 id = *cmd_id;
  
- 	if (!RSS_PF(adapter)) {
- 		/* Enable PCTYPES for RSS, TCP/UDP with IPv4/IPv6 */
-@@ -1533,9 +1532,8 @@ static int iavf_init_rss(struct iavf_adapter *adapter)
- 
- 	iavf_fill_rss_lut(adapter);
- 	netdev_rss_key_fill((void *)adapter->rss_key, adapter->rss_key_size);
--	ret = iavf_config_rss(adapter);
- 
--	return ret;
-+	return iavf_config_rss(adapter);
- }
- 
- /**
-@@ -4689,8 +4687,6 @@ static struct pci_driver iavf_driver = {
-  **/
- static int __init iavf_init_module(void)
- {
--	int ret;
--
- 	pr_info("iavf: %s\n", iavf_driver_string);
- 
- 	pr_info("%s\n", iavf_copyright);
-@@ -4701,8 +4697,7 @@ static int __init iavf_init_module(void)
- 		pr_err("%s: Failed to create workqueue\n", iavf_driver_name);
- 		return -ENOMEM;
+ 	if (id != SWR_BROADCAST_CMD_ID) {
+@@ -245,9 +244,8 @@ static u32 swrm_get_packed_reg_val(u8 *cmd_id, u8 cmd_data,
+ 			id = 0;
+ 		*cmd_id = id;
  	}
--	ret = pci_register_driver(&iavf_driver);
--	return ret;
-+	return pci_register_driver(&iavf_driver);
+-	val = SWRM_REG_VAL_PACK(cmd_data, dev_addr, id, reg_addr);
+ 
+-	return val;
++	return SWRM_REG_VAL_PACK(cmd_data, dev_addr, id, reg_addr);
  }
  
- module_init(iavf_init_module);
+ static int swrm_wait_for_rd_fifo_avail(struct qcom_swrm_ctrl *swrm)
 -- 
 2.25.1
 

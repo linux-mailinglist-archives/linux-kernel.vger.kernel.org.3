@@ -2,153 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6F7489881
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7EE489884
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245439AbiAJMVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245436AbiAJMU3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:20:29 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438E1C061757
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:20:28 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id x7so43588245lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:20:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e+gczxkrQRD/dQ/jBxW7gRFcfdkPGHbr2WDGhZJZLJk=;
-        b=DQ6s1LJZPoFp6X8JefkipbzDh1yGPvq/kl1jdeBlsANQVeciRIMsENC9zSQpWhq78S
-         DkLgBNC+TfpIiuLamGmaYI/Vw+fFUzv/+tb+8WxqADvgFfapxzYO4Y8o9htnFCBX5XVo
-         OkoRHRNuvnooWK+eUM4gZoQbnEN8JAsKaL10RXyO2vt8XnLdQYPDpo7tZCO6GM3DYVOm
-         tjfM6SUY+MOaFz4ShgbZ/qWOxrpITTHFtNmjLiv35EOj/NFFeExH71NRmpgJ5F8Tu46A
-         vdgmSyZmLYeu7KK0Gm99B96rrE4Ktc0hKeRwx7PDGEbuDL1cXCMk8lJnFm6c9CCgcdez
-         CFJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e+gczxkrQRD/dQ/jBxW7gRFcfdkPGHbr2WDGhZJZLJk=;
-        b=R+khfBzk+MpeaE8O/uz2gkMu14b63w8Yzgvr9ZEt/qAsI9ehbIwjaS6ajPw+UfL9rp
-         U2cht4KCdGUxX8lZ++NfD8AOW+hJPR/ApRgyPFl7T+daatdJg5q5ChO4olJgOLTwHIGT
-         X6MCEhlAzpP9MD1Xx+ZuyNhOaVCfo75/Mb5ypQjwWJI4mHE5Iy+MVHQt5KBBeXIAY4YR
-         1P0KaXgkM0kvbPNgDphSoykfswQyANvvnD6alBrps3aPSeAa+bOd3xZe3HBswvYo0SWR
-         e7zEapuByh0S+lAE7RWN5wFQrCf/QSBOtvZBXuoAn4F2rsH4m3lsTJvkkhQ31kCUxeMC
-         UTQw==
-X-Gm-Message-State: AOAM533ra30LHywp4qmAYzz4NlQjHnBYmOEyZs7e5MLwFPXp0htOsvDo
-        hyoDHzMrRg+jtKiv2HBrEVvct0sKx2vR5LYZ80XhvQ==
-X-Google-Smtp-Source: ABdhPJwHuXQxrdr9hK3bUVDPLAm90cjss/wNF/ISoPLrywRMtIzRfPeLJ7C3G8WRGhNdQHZCB3M+ZVJPLMsNh8wGOzg=
-X-Received: by 2002:a2e:9659:: with SMTP id z25mr59418630ljh.16.1641817226570;
- Mon, 10 Jan 2022 04:20:26 -0800 (PST)
+        id S245373AbiAJMXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:23:05 -0500
+Received: from mga04.intel.com ([192.55.52.120]:45866 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245353AbiAJMWw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 07:22:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641817372; x=1673353372;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gmL3tKEUDF2ZwVHFtsNVYcZn2op8HEU3muwCY7UW7MI=;
+  b=kgQWlMj0ktvyzG1cepOQZiNBRAlxy1oi7uhc81GY8Ljs5b73KECPdhGv
+   asWxIWnTzfVYVICEAwg3KK18MvBRuByCCY6dSGxBShnE/1d0zC3ipc7nT
+   pXkDveB3h5oeEStMzyNmUvIIBdgoq5T3w//pyn0b0QWEjdhyrDmRDMEc9
+   xVP4tipvl2zukm/aisjO4vhu7LbUevLl3VVWSjEzysNnKbKwznjwbYsJR
+   1AhJQ6h9zB6gcE4buBot1R06hibaiol4IYYlDD3xmSIu5hP4tdjfUVAGe
+   1favtSJhEiSVzC2vMs7VYtY7bGj1P20RwDih8NsAjkqZ+7MIZqHg3wi2y
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="242025013"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="242025013"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 04:21:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="669436824"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Jan 2022 04:21:46 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6tgI-0003JN-16; Mon, 10 Jan 2022 12:21:46 +0000
+Date:   Mon, 10 Jan 2022 20:21:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Colin Xu <colin.xu@intel.com>
+Subject: drivers/gpu/drm/i915/gvt/gtt.c:1152: warning: This comment starts
+ with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202201102031.xPWND4ZH-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220107181723.54392-1-paul@crapouillou.net> <20220107181723.54392-7-paul@crapouillou.net>
-In-Reply-To: <20220107181723.54392-7-paul@crapouillou.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 10 Jan 2022 13:19:50 +0100
-Message-ID: <CAPDyKFoA6Jj_xdRtvgahue7cSWrW1HOX=1=-9COwiZqRrRd7bw@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] iio: pressure: bmp280: Use new PM macros
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 at 19:18, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Use the new EXPORT_RUNTIME_DEV_PM_OPS() macro. It allows the underlying
-> dev_pm_ops struct as well as the suspend/resume callbacks to be detected
-> as dead code in the case where CONFIG_PM is disabled, without having to
-> wrap everything inside #ifdef CONFIG_PM guards.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Hi Zhenyu,
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+First bad commit (maybe != root cause):
 
-Kind regards
-Uffe
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   df0cc57e057f18e44dac8e6c18aba47ab53202f9
+commit: 145e06b58f8625becc61792a0554726314297a85 drm/i915/gvt: Move mdev attribute groups into kvmgt module
+date:   8 months ago
+config: x86_64-randconfig-a016-20210927 (https://download.01.org/0day-ci/archive/20220110/202201102031.xPWND4ZH-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145e06b58f8625becc61792a0554726314297a85
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 145e06b58f8625becc61792a0554726314297a85
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
 
-> ---
->
-> Notes:
->     v2: New patch
->     v3: No change
->
->  drivers/iio/pressure/bmp280-core.c | 11 ++---------
->  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
->  drivers/iio/pressure/bmp280-spi.c  |  2 +-
->  3 files changed, 4 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-> index 6b7da40f99c8..bf8167f43c56 100644
-> --- a/drivers/iio/pressure/bmp280-core.c
-> +++ b/drivers/iio/pressure/bmp280-core.c
-> @@ -1138,7 +1138,6 @@ int bmp280_common_probe(struct device *dev,
->  }
->  EXPORT_SYMBOL(bmp280_common_probe);
->
-> -#ifdef CONFIG_PM
->  static int bmp280_runtime_suspend(struct device *dev)
->  {
->         struct iio_dev *indio_dev = dev_get_drvdata(dev);
-> @@ -1159,15 +1158,9 @@ static int bmp280_runtime_resume(struct device *dev)
->         usleep_range(data->start_up_time, data->start_up_time + 100);
->         return data->chip_info->chip_config(data);
->  }
-> -#endif /* CONFIG_PM */
->
-> -const struct dev_pm_ops bmp280_dev_pm_ops = {
-> -       SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-> -                               pm_runtime_force_resume)
-> -       SET_RUNTIME_PM_OPS(bmp280_runtime_suspend,
-> -                          bmp280_runtime_resume, NULL)
-> -};
-> -EXPORT_SYMBOL(bmp280_dev_pm_ops);
-> +EXPORT_RUNTIME_DEV_PM_OPS(bmp280_dev_pm_ops, bmp280_runtime_suspend,
-> +                         bmp280_runtime_resume, NULL);
->
->  MODULE_AUTHOR("Vlad Dogaru <vlad.dogaru@intel.com>");
->  MODULE_DESCRIPTION("Driver for Bosch Sensortec BMP180/BMP280 pressure and temperature sensor");
-> diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
-> index 8b03ea15c0d0..35045bd92846 100644
-> --- a/drivers/iio/pressure/bmp280-i2c.c
-> +++ b/drivers/iio/pressure/bmp280-i2c.c
-> @@ -58,7 +58,7 @@ static struct i2c_driver bmp280_i2c_driver = {
->         .driver = {
->                 .name   = "bmp280",
->                 .of_match_table = bmp280_of_i2c_match,
-> -               .pm = &bmp280_dev_pm_ops,
-> +               .pm = pm_ptr(&bmp280_dev_pm_ops),
->         },
->         .probe          = bmp280_i2c_probe,
->         .id_table       = bmp280_i2c_id,
-> diff --git a/drivers/iio/pressure/bmp280-spi.c b/drivers/iio/pressure/bmp280-spi.c
-> index 625b86878ad8..41f6cc56d229 100644
-> --- a/drivers/iio/pressure/bmp280-spi.c
-> +++ b/drivers/iio/pressure/bmp280-spi.c
-> @@ -109,7 +109,7 @@ static struct spi_driver bmp280_spi_driver = {
->         .driver = {
->                 .name = "bmp280",
->                 .of_match_table = bmp280_of_spi_match,
-> -               .pm = &bmp280_dev_pm_ops,
-> +               .pm = pm_ptr(&bmp280_dev_pm_ops),
->         },
->         .id_table = bmp280_spi_id,
->         .probe = bmp280_spi_probe,
-> --
-> 2.34.1
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/gvt/gtt.c:1152: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Check if can do 2M page
+   drivers/gpu/drm/i915/gvt/gtt.c:2209: warning: expecting prototype for intel_vgpu_emulate_gtt_mmio_read(). Prototype was for intel_vgpu_emulate_ggtt_mmio_read() instead
+
+
+vim +1152 drivers/gpu/drm/i915/gvt/gtt.c
+
+2707e44466881d Zhi Wang          2016-03-28  1150  
+b901b252b6cf5c Changbin Du       2018-05-15  1151  /**
+a752b070a67823 Zhenyu Wang       2018-07-31 @1152   * Check if can do 2M page
+a752b070a67823 Zhenyu Wang       2018-07-31  1153   * @vgpu: target vgpu
+a752b070a67823 Zhenyu Wang       2018-07-31  1154   * @entry: target pfn's gtt entry
+a752b070a67823 Zhenyu Wang       2018-07-31  1155   *
+9317f356df83a5 Bhaskar Chowdhury 2021-02-22  1156   * Return 1 if 2MB huge gtt shadowing is possible, 0 if miscondition,
+9317f356df83a5 Bhaskar Chowdhury 2021-02-22  1157   * negative if found err.
+b901b252b6cf5c Changbin Du       2018-05-15  1158   */
+b901b252b6cf5c Changbin Du       2018-05-15  1159  static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
+b901b252b6cf5c Changbin Du       2018-05-15  1160  	struct intel_gvt_gtt_entry *entry)
+b901b252b6cf5c Changbin Du       2018-05-15  1161  {
+b901b252b6cf5c Changbin Du       2018-05-15  1162  	struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
+b901b252b6cf5c Changbin Du       2018-05-15  1163  	unsigned long pfn;
+b901b252b6cf5c Changbin Du       2018-05-15  1164  
+a61ac1e75105a0 Chris Wilson      2020-03-06  1165  	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
+b901b252b6cf5c Changbin Du       2018-05-15  1166  		return 0;
+b901b252b6cf5c Changbin Du       2018-05-15  1167  
+b901b252b6cf5c Changbin Du       2018-05-15  1168  	pfn = intel_gvt_hypervisor_gfn_to_mfn(vgpu, ops->get_pfn(entry));
+b901b252b6cf5c Changbin Du       2018-05-15  1169  	if (pfn == INTEL_GVT_INVALID_ADDR)
+b901b252b6cf5c Changbin Du       2018-05-15  1170  		return -EINVAL;
+b901b252b6cf5c Changbin Du       2018-05-15  1171  
+b901b252b6cf5c Changbin Du       2018-05-15  1172  	return PageTransHuge(pfn_to_page(pfn));
+b901b252b6cf5c Changbin Du       2018-05-15  1173  }
+b901b252b6cf5c Changbin Du       2018-05-15  1174  
+
+:::::: The code at line 1152 was first introduced by commit
+:::::: a752b070a67823174565322cc48b2668daf9a8da drm/i915/gvt: Fix function comment doc errors
+
+:::::: TO: Zhenyu Wang <zhenyuw@linux.intel.com>
+:::::: CC: Zhenyu Wang <zhenyuw@linux.intel.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,241 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EE9489E51
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C72B489E54
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238240AbiAJR1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:27:01 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:38298 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238230AbiAJR07 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:26:59 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AGtjOw015379;
-        Mon, 10 Jan 2022 17:26:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=e5klwX0l2CzYGnrxdt8ttxhWRxMgPyYlryOKsppws4s=;
- b=YB8IGmYyqgHPLLEdQ8w1c33l9/LBk9hbSdmIbPsZHBiJVvSxQQlAVcsAyRNs+wStab12
- FpWYKx4YpSDy+sAC9MnBCbqw2mou04JxstNmA34Cr8yQQGnaKEhwIkc9DTQ+wWlVFR1B
- d5YbVNnrGklvg3DsuEekyNbH9QeLb+AO3wIQYQZKqwxn6dPex8vUI/NDp9s+i0L2quk2
- BT6FQNO1jYDR2HISG0dqv3V9GCMUwgn3tAbGHoKurXjqd3VeYgQQ3ofsJdTgig5Pth5P
- ZwjMYIHXxGgg6MaIrH2fmYqlo9g5DPaDXUVVGCmqIxkZVXCiMeaCiPmZnG59lYwSw9vV Zw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dgjtg93vq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 17:26:40 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20AHPuK7140051;
-        Mon, 10 Jan 2022 17:26:40 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-        by aserp3020.oracle.com with ESMTP id 3df2e3jxmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 17:26:39 +0000
+        id S238258AbiAJR2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:28:01 -0500
+Received: from mail-eopbgr130053.outbound.protection.outlook.com ([40.107.13.53]:36958
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238230AbiAJR2A (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 12:28:00 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EPlX6PN8AvxKme0NQcagqM6a6TglLE1BV5H/cYOLsWTVDZmFdkAISdIwyVuIhuvvrmC2MgABEmwem1AKujfH8H0ndhif/BJ0MVm4vvW31DiiAyp2h88CggJkVPJfVnkugHL0n6kUdbzULxp1IEUY/qjPD5wSAlPCHiZhAD63wx15GDjAeeXMo/aQVb2en9/8qgECZutlBwz1P+uaebjyVHgngXHDTZaPi75mVL4w/pIxmjkZ25zFPoweuAMvRtYp2O+eo6Ti4slFQKdpX9nPRmncT2ULqxDTfJ78gRmdpFgeRBuuc42MzkSDrKISQOK/PPptj5JLjbsUcnWuKwRBJw==
+ b=IUu0xcG33CDPncBaYqS/ZraIR8+GhN1Gal8+Rl/UCipgTbTmgzAaXEmamVYJ1YyQ0Q30OFcCfKLOAR2KCJlBbm3dgzHTgHC/G4v+xGixW4iedm8zeFQdE0dCKFcqsbmbyLnL7fsfzsUb03AwSxLMQvOJsQsEK/PBLXDaposO4HmORpG5y4ztTp86lAeOo/Q3RB+MI4DuaOYdfaZpmVMo+yNSszmJiI23Kt83Xq7HZXeeKhxdDXmvQe+EfqI0MYMCt4xvUp+GQejuqf6PqaDsZmfJgbKjIgmizwSWbqtF8V2VQOkGvE9TY3UoA+mP8Ag3jqNvbEeQqOt3FC6RGHF2gA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e5klwX0l2CzYGnrxdt8ttxhWRxMgPyYlryOKsppws4s=;
- b=j7sMV8JYLZX3NC9svdtlu+nYsJuykzgule08MFHXP47YBIX1/FYwM3odZrXCAnDDLo/B0YA0EAWckIllZpFlvUdawjmHWyEskJksjQJyjWI4MOpUBLEIeIv8Or/GPqo7J2+4HEA3uH2c6yMCfGBxulGA4w3EnBZJSHCnZf6egcc4CdZIS58w6A+ESazwet1ICWydrq2eocWxcoRjIptqu5GVCmBDTg/hEig7dddtgC00mYxKG1C4GV6B/O2/ClkFOSP+D3ICXNT93H7vqMYH9zsh1JaEzXBd2XrjmTzhCys7Ef4cKZM1bUrnpY1l2GJAWgBmWAptiTNy04F1+urSrw==
+ bh=ourRemlVg5+zGuCHMvhZJiUWAeO+AlKD7yMY6z1v0S4=;
+ b=e+b8DGPCKZbtXKoJczVKquTn0Mso9a78Bt67aweFQJTzINXhsP6YEom6KQjTO7iTc7nuFGX1mrQokbO9Z+YjDsWcv0md5m8IzoQp5rpulTjKYf2XTi7Vns6CPiaywVdRYq0v0AT9PTC1d4Q2vPbAyFlm4fioewr+3ZSAznXIFPfCpwvBhT8mfqzyh0BNPOVKmv5HXv377foSpDOVLXaNYIuhwHByGe/8X2Ag0NF8dechyA5av4A71MDHZvUNq3lvFVCMfO4dvP8m84nf47sX4bL3ToKMWv6cf3qoDRFzjXWKmhh1w7iYq4vJOwfO1MHWX+LYgdZymMdj2N+vR2rWQA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e5klwX0l2CzYGnrxdt8ttxhWRxMgPyYlryOKsppws4s=;
- b=nHCKp0IzNiDJx3gPXIE1DOgUMlH8lxyJ9TDBNShSIqwfr1foccbi9XPcJ+bnWMX8fm7Hn1YKNjdaQu95C8cpRwU2Yghs7HmTQLHBtEg5JhLJ0niHGT+tx3oTGcf29GhmnfqZJ1xzw2fB94Tz1p7F5AN5Snf4/ZrTXVIuik11PHM=
-Received: from SN4PR10MB5559.namprd10.prod.outlook.com (2603:10b6:806:202::16)
- by SN6PR10MB2974.namprd10.prod.outlook.com (2603:10b6:805:cb::31) with
+ bh=ourRemlVg5+zGuCHMvhZJiUWAeO+AlKD7yMY6z1v0S4=;
+ b=XhWLiMPrYAfpSuXO2AW9QvOlsE7JuXlGcEpfLS71q/qKWOullr3iQPB+AdGHD4VYJL9aejlkqbxtitoT6X657LjAliiAeV09PaTljwlcSQxIVmLsubH2FrnUcTJV6VpcUdiayJLHSsqcVBu1ygw9f5sKdKaOFW4UXRFJmJ491CU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com (2603:10a6:102:232::18)
+ by PAXPR04MB9328.eurprd04.prod.outlook.com (2603:10a6:102:2b6::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
- 2022 17:26:37 +0000
-Received: from SN4PR10MB5559.namprd10.prod.outlook.com
- ([fe80::dcd7:5a68:adf7:5609]) by SN4PR10MB5559.namprd10.prod.outlook.com
- ([fe80::dcd7:5a68:adf7:5609%4]) with mapi id 15.20.4867.012; Mon, 10 Jan 2022
- 17:26:37 +0000
-From:   William Kucharski <william.kucharski@oracle.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 00/28] Convert GUP to folios
-Thread-Topic: [PATCH v2 00/28] Convert GUP to folios
-Thread-Index: AQHYBdn2hI+ZUYotwkGUZ4Lh+7mqm6xcgr2A
-Date:   Mon, 10 Jan 2022 17:26:37 +0000
-Message-ID: <93916EE0-3901-4DD8-B2A1-46230F16DB48@oracle.com>
-References: <20220110042406.499429-1-willy@infradead.org>
-In-Reply-To: <20220110042406.499429-1-willy@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.40.0.1.81)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: dc063c6d-e14c-476b-8452-08d9d45e5ba7
-x-ms-traffictypediagnostic: SN6PR10MB2974:EE_
-x-microsoft-antispam-prvs: <SN6PR10MB297412D695573997A877B65581509@SN6PR10MB2974.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wcOFQOX0/5lHjSLIrisDw8kLf8zg69hgh+xaizpOiggIwN3JbUAX0rGM8ZJR38/nXOBXbkW6ufi+4p9OAfI+qJM1b2XvgricEPDsW99ETZ7Vhtyglln51tLnWY6D1GgcO5+yfnnB6EyMEos/MmYKdGVPgvRpFqVWRlXiA3kKpQyotGKbvfaGDKQpaE7QlN1ND3D4k9J1K9i9ozERfR4sw/hvllsvW9UVZcornNDkXZNPF3teFl/QL3AqSWYY/AWeq+RHm9gpf0PxC5CH0/ywecC0L+Hfwem/k9MheJ/auIZyJWbACWfSwjs9vCXb0n7wQqhxOis1XWA+9O+w+XegY1Lkh82XqflSeV3T0hiHR73aP15SK5VNwLGdhb1RAiKq9Al/JiRZutS0ctUpZi23b5M3MPlY88HVLU085OKDlZpdhhhAEqn2nS2ZYopC/ukiBWh2PLrtS2du7ZnuKIzqYfDfqbmyoCBKINzsbsEpV7qQpm83mWQ1jszpooB1Mc7WB4mEk8LEFqx8IJ4sit4zrvv/a0hxzYdnHy0ZplO3T5MjHiOrGkR3QRXBK4eEQcz/ZWFRxSdGmV4BwrrATa00W4RkzAj0Rsit+J3LQryjHCq7QmYN7nYwuDqC5+GFPKHJnw8rAPQB2hvA3Q7ef3LA5d0b9Cn/s/mwRGGlBH+rl+9dAPAVgV6jfv3GZrFhvjewkf6A6S/xRWjET51UANSWJGsfdFuXA9K0x/vYGvBgCEsY8m5U2YjN4CbPu2AuBBmk
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR10MB5559.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6916009)(6486002)(53546011)(8676002)(6506007)(71200400001)(508600001)(2906002)(186003)(8936002)(64756008)(38070700005)(66556008)(36756003)(6512007)(66446008)(91956017)(5660300002)(66476007)(4326008)(66946007)(76116006)(33656002)(44832011)(2616005)(86362001)(122000001)(83380400001)(54906003)(316002)(38100700002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6wVorbMssLm13ll5LpePjyeTE4zPxLJ7yK8yqtL3hWP5X6QOc6dsuoJ9N9vc?=
- =?us-ascii?Q?MU07AXSZ1M0Ig4MJ4sl+BJF3A+qnpRvgrtjTTd/G3ur6tno682oVG2UwwSNi?=
- =?us-ascii?Q?xmrCWaf3bBsXleLsOTciys5YWxT6cfZQZeNOG+PhcpwPNHCkyjcvxAq2oVPl?=
- =?us-ascii?Q?NQ7kqmEVrDRYRZ8IE/9Li1uErp11BYEFmhvSeyaY6A96wCtHmlF+jC9WsM3N?=
- =?us-ascii?Q?QCMPp26t8Nog9lOjePTT10sDiLo1jQxLo3U0Vj64auoSDjlGuzXo778SxTAS?=
- =?us-ascii?Q?08mz5VcN+1B3S0/rdu+ozZqBCIUw+3UfjvgNaMxfYx/0w7egGfcnFHqDex48?=
- =?us-ascii?Q?1g0SjZLjS8CZqe6cd85LDxa7ZJ8SMefG++4n8R3dGsQoZ3PQY8+mZADjtTuD?=
- =?us-ascii?Q?HnZuvyX5mx4NcxS5AP1J4nmOOAkT9Xg3+nNN6z8WuxEhktey5M0K/T4gZSgl?=
- =?us-ascii?Q?Kru80x86hCc3eyq1SB5iDQavOcBi3ztYHRR7y65UushBtsnoxOksjYu/PQBS?=
- =?us-ascii?Q?1Lr+qYuGjIhLAakwr4yoMSqH4USzYdSjzslA37C68wqNcRUlJ+NP4RNDXO/p?=
- =?us-ascii?Q?WTwu1cgc2z1Tpg97JbPk9/07Ng0n+fA5UJK9qus+TtYopL9QR8moYEOP08+S?=
- =?us-ascii?Q?Le2cnGtXp8Vj0QZGMvMgMZcOqlabeOElialQumXXvBjp2oMCVwMMHVYU9Eki?=
- =?us-ascii?Q?orMfI8KJQdU3PiPvUpc7SGTo4Le3hZGegkTTmS/8AZz0MbDrbW1qzMWbdzwX?=
- =?us-ascii?Q?robsHT5d/u8OOp9cg+QXvqIqygET/zgu7CcmLrMl3F90qzy4esGucskcxym0?=
- =?us-ascii?Q?eikBP2qng/yFQ7ntmWSHrdQSaQazVLWl5SO54H8o8v6fR3KB6CtPGJec3HR0?=
- =?us-ascii?Q?VWd7QuThlKAkU1eBIFKW2ft1ZAZayQOvul3szGvba0UtDllTbSwW8uDCH5Zh?=
- =?us-ascii?Q?QvB7IwJ45A2gOhC9lY/ExBFCqOOcghRFLsFgDml8okM+CPqgSoi5FOMLQ5We?=
- =?us-ascii?Q?/YQHq0vItFgG5cj5iSm+/Ve17KEFlsQdjrwNVgeuyQClTCr86eJrtWWG2z4v?=
- =?us-ascii?Q?afvSV5vfzak+4d+CVld04bnfdBbNMNFoJ00iReonZxsnGKDwQxB/FCiMyblh?=
- =?us-ascii?Q?UUCsEVM1mdFNH/zYJwIjNTPtphk1chWBcC+ZeDwUbBF5q6QD+sJj3AY4MUIi?=
- =?us-ascii?Q?LPJJi7otMnZwupxZI/GFZsNTVC8o8Ok69cNUiW21JT2RJGsjcm6FpF1LCkVQ?=
- =?us-ascii?Q?+f9YkvZdV9Bu5Ntc5fwpX1xdZuz86trsin+9HUEjtpNrI3qnVhLmWIoai+r3?=
- =?us-ascii?Q?pKKZ58M8zmBW0OKKQw+KAIp2NsfS3k5Y8UrraCJrVhQb5bCu/Wmzn7ZZgg94?=
- =?us-ascii?Q?38FC1v7aDpU2UGSag1y/ZyynoIDlhZNDEIsPGARu9hkGlHLfoNWM7jT32/R/?=
- =?us-ascii?Q?MI3AKFBh0wG16yE5F1gggrhfl5TVuv4xfZyxqfONQG4KaniISLeQhxc20OZA?=
- =?us-ascii?Q?XmReqetYe/0f22PW5j8aJiRyIPdd5VP+tUkYENe842gW4IaOy0lMFc34A+Ps?=
- =?us-ascii?Q?aWXK77w5s72ZZn8G/OO81IW9WBRPyL4o22WsbNkPTtcezyb4m5mYciVEnX2e?=
- =?us-ascii?Q?m0e7dIr7JPoYhbD/7Nnnc8+SFFoWtCy1YDL1W9lV+/8TeD+B2ck2zmsYYKUo?=
- =?us-ascii?Q?HYt1FWj91HKKJOdbj4yZevsD6bAZAnAF3D6chXZLxq7LbEFpR7r4H24q/yLI?=
- =?us-ascii?Q?hV6E6fP1peF1jDgxJt/g78j4V/9Ksgs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <EDFE2C474CF6CE42B9E84F1878DAF320@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ 2022 17:27:58 +0000
+Received: from PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::21ff:7873:e75:7c51]) by PAXPR04MB9186.eurprd04.prod.outlook.com
+ ([fe80::21ff:7873:e75:7c51%8]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 17:27:58 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lznuaa@gmail.com
+Subject: [PATCH 1/1] usb: xhci-plat: fix crash when suspend if remote wake enable
+Date:   Mon, 10 Jan 2022 11:27:38 -0600
+Message-Id: <20220110172738.31686-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.24.0.rc1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0217.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::12) To PAXPR04MB9186.eurprd04.prod.outlook.com
+ (2603:10a6:102:232::18)
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 18c917dd-89bb-43b4-ae87-08d9d45e8aff
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9328:EE_
+X-Microsoft-Antispam-PRVS: <PAXPR04MB9328C4479A28D0B091074FC988509@PAXPR04MB9328.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:473;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7taq592X8M1jZyA04R/3y9HakScUf57sYI90HKPG4RRecDbVVDSoixWxj+WQtQlcPhGaWp0+MIfbz5KthPghyfCRmZ5FVKisLi6daqhFexdFzGT7legQZAuEVL/MkoOsIoUrVGKnBP7TqG6zRdx3C3lGCqUzGZouc3STmk3nZukVh/YGo4JiWnXj4FK11p6gKUPql5LVwUBFE9htZr8HmfklwDYuc2Hz4LbH94PWQYzX+Pv9GPeZj2vhFdELGIo7EHdJnEvFJqy5RkNcxBmB2lVBrkIYtB1gsFtLbfX1Q13kicC3p6K3ej98nQmcxY3jOx/PZNLiKkoJ/+TF7f9sJskgJH9b7GI5coOtR8ZwUEzJIT/Cx9EDt3HZuTgZaaiZ1LFjFXFdHfSIrZzcmLvl8QBRdfMR1zeOAzy2mrwpq6HmTov/TFjtA6LwY25KgcuwteGvcDIMBmzfsDvms6hEYJb/m3t7KNr90KuZE6KyaLYb+2ACYeYfD54itHkUvsiM+g/HAzlJEtYnrcMbtV+aQoiNZow7QiXQUbH3012kyniU/HfDvT2XjIMd4rcmcjJnfy7ZPFkGAxQZi2a+kyQLoNB8j8erA2NlqkoxmmgvD1MrjfFVyTIyF8j5mq5/5FOutbge8ecPNoWoUEZZuDwhlWQf7MDV8NyLdnHGORgVrz4Jxm7bwXV3tVlbV9Qu/Rs7qQ1M/Nz9gXl3jRfQlNcb9A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9186.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38350700002)(66946007)(6486002)(66556008)(66476007)(45080400002)(508600001)(26005)(6666004)(15650500001)(6506007)(8936002)(8676002)(5660300002)(2906002)(316002)(6512007)(1076003)(2616005)(38100700002)(52116002)(86362001)(83380400001)(36756003)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b/nc3V5NamyTP4Bbkf4ebnxyBR367OFKK5vwnX/uu73omkDNT/qJ4pxmMAs2?=
+ =?us-ascii?Q?5389BfYU3JmX57RxYXkn1NLRfbd4tCzNIZQqQGahoZu9C8u8AoexJJrOoH1M?=
+ =?us-ascii?Q?YZUOPrWjFT3gV04R+j38V2RPVGo6x5AObmyT6f0LXQivZwl3DD4pQ1eg74pc?=
+ =?us-ascii?Q?xzm+tXj0KVYEP8yNf9s4y8q7/BWgKMvKIj8O5GIysdQfrHLzmgt3DITpgrDi?=
+ =?us-ascii?Q?0mtw4QKnNtF3F+b8yzmDRsYFrWHkZq5/eettKeiUd70J4YKjVMMUpfoXptEa?=
+ =?us-ascii?Q?Gtguh/fw8S8yfncgxn8fhNBbhOOTWKb6afeq+N85jikBxh2gjns70AYHmJ0c?=
+ =?us-ascii?Q?DCQCanlbOtm5GxYGUikJcHPXvUOVEGfXEVSsbuu+Lokce6IkerZEdFQ30WC3?=
+ =?us-ascii?Q?8pR2lIkgrD/hBvV98CwaG9dO/wAW9Gaqq2fXsfB6D/4mS+SyVmbpQ3rm1fXu?=
+ =?us-ascii?Q?EGWzoFnWv57BrRDtJWxo5ZF85VSAXTcdnBuBvtP8MnUICHzMJfnNheBUrSbg?=
+ =?us-ascii?Q?iQlfsLWQoYXe+r742tXrAs4NufysD/NHRKMhw0x/LeNiV5wUiKnMw3Un3lsI?=
+ =?us-ascii?Q?HwihsNQ2Y52hbt8hzo5YD6zsjRBvM0QdQFebEnKruPvQ8z0dv8NetlJWgZ/5?=
+ =?us-ascii?Q?yRUk3cwFEflJiTOBIHto9OTxCu6/2NYKJQWDwWsGzHMYFxX4PFQc9VZlfAzS?=
+ =?us-ascii?Q?Oeaeq1mLS/i5IDla6TbcdeseBt2EhlSgqZiKT1a0gXdAfUpDmCUOgRyNBvL4?=
+ =?us-ascii?Q?XHG61o6IcBifib0CsP/DILJ5IZ1nq/sjz+W4kszo74YpL0sErOaLht0oO+z+?=
+ =?us-ascii?Q?FgWE9giMKjDDu2uLqWPx6Qts21SNgYhRK1fOP79uqIVXmqoRE5wFFduLvFLm?=
+ =?us-ascii?Q?y5m4IjNLgHQMe59dj/ox2SwK2UYBFUxlNBfC982+KFH30T9kTWWGiO8U2TDe?=
+ =?us-ascii?Q?Fz+iJEfHy426tRlAVNcmBSqtYhG2C2gSUdwCEC0AaGQRLxLU8f0fIObBVDMS?=
+ =?us-ascii?Q?8GhwIMsy4sTQhwY987he6e+MluJ4dtk7LoHjledwAjVU7Xhco+jVtwxc30Ld?=
+ =?us-ascii?Q?TCNKAp1cdwOj59AIwum0GxTdWealtA/Cc4/nEe5f4XqnTvDzTpTcy3k4Gbip?=
+ =?us-ascii?Q?P48pWI0tB2sVSMz/OSKR7Teg9oGp8BX1ngJkaVWI+NE61kpBKrGDSKB2o5vm?=
+ =?us-ascii?Q?SOUJOSMd8ILnFgoZRNoee+xlAclrB7OZBJbnNrygsCW3/XqVSRNE39MnqTJA?=
+ =?us-ascii?Q?Q3lLKQvaAdGd+4YmO5qfbphH/cYijsH8EK68Sh1ZW3As01O2LPnH7zMEn692?=
+ =?us-ascii?Q?3HqMBw1y3wlyOUwDy7FvZMmz+/KkDD0oHpT7nrTdu5XzIQszh5B41ocR2v1x?=
+ =?us-ascii?Q?2qXHOSXDiiopi9sWw1XZtsTOKILv4+hbWGdIqNzHVKLn0EElJ+9C+ajIQ5vI?=
+ =?us-ascii?Q?JfwEeZUc8WkchhJQHT2k2k5dq6GV7IHY29Kv8VL4mVkCDyXc8P11MYWQprIB?=
+ =?us-ascii?Q?wbql50aiMxVqblRrL2kHPZupE7UTTVFa3sG+NKc9m/SlkVf6V/rAWMy97+SP?=
+ =?us-ascii?Q?mshzUG9Grh5dgXpAU+ElElgAnU+spVTN8BaMpfWxQ60MoK6z51t1qiISWJ/A?=
+ =?us-ascii?Q?Q/ujq3lRjl81PhznfX+lQ4s=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18c917dd-89bb-43b4-ae87-08d9d45e8aff
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9186.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR10MB5559.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc063c6d-e14c-476b-8452-08d9d45e5ba7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 17:26:37.8574
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 17:27:57.9442
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: j2HGTfIK0kWPKJho2S1FjBS1z27gZ5CBFZao4iKhuquB4sJL5qrvXprRoOPoZZD7Isq0I6ipAcPO5Jo+RTwN++E0RE7VYfrLucbddpgsYrY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2974
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10223 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201100119
-X-Proofpoint-GUID: R40lgvUO6owBZrUuapjK6JSfptRnFIps
-X-Proofpoint-ORIG-GUID: R40lgvUO6owBZrUuapjK6JSfptRnFIps
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qro07vf3eLFZo6aFo1huPLxZQuNT8gOBF2z9+ELyZ0oerqqYFCaobE+7YYIjKsA80gJnmtJiLfkCbjuw+Xq+cA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9328
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Series still looks good.
+Crashed at i.mx8qm platform when suspend if enable remote wakeup
 
-Reviewed-by: William Kucharski <william.kucharski@oracle.com>
+Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 2 PID: 244 Comm: kworker/u12:6 Not tainted 5.15.5-dirty #12
+Hardware name: Freescale i.MX8QM MEK (DT)
+Workqueue: events_unbound async_run_entry_fn
+pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+lr : xhci_disable_hub_port_wake.isra.62+0x34/0xf8
+sp : ffff80001394bbf0
+x29: ffff80001394bbf0 x28: 0000000000000000 x27: ffff00081193b578
+x26: ffff00081193b570 x25: 0000000000000000 x24: 0000000000000000
+x23: ffff00081193a29c x22: 0000000000020001 x21: 0000000000000001
+x20: 0000000000000000 x19: ffff800014e90490 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+x11: 0000000000000000 x10: 0000000000000960 x9 : ffff80001394baa0
+x8 : ffff0008145d1780 x7 : ffff0008f95b8e80 x6 : 000000001853b453
+x5 : 0000000000000496 x4 : 0000000000000000 x3 : ffff00081193a29c
+x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff000814591620
+Call trace:
+ xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+ xhci_suspend+0x58/0x510
+ xhci_plat_suspend+0x50/0x78
+ platform_pm_suspend+0x2c/0x78
+ dpm_run_callback.isra.25+0x50/0xe8
+ __device_suspend+0x108/0x3c0
 
-> On Jan 9, 2022, at 9:23 PM, Matthew Wilcox (Oracle) <willy@infradead.org>=
- wrote:
->=20
-> This patch series is against my current folio for-next branch.  I know
-> it won't apply to sfr's next tree, and it's not for-next material yet.
-> I intend to submit it for 5.18 after I've rebased it to one of the
-> 5.17-rc releases.
->=20
-> The overall effect of this (ignoring the primary "preparing for folios
-> that are not PAGE or PMD sized" purpose) is to reduce the size of gup.o
-> by ~700 bytes in the config I normally test with.
->=20
-> This patchset just converts existing implementations to use folios.
-> There's no new API for consumers here to provide information in a more
-> efficient (address, length) format.  That will be a separate patchset.
->=20
-> In v2, I've tried to address all the comments from the reviews I got
-> on v1.  Apologies if I missed anything; I got a lot of good feedback.
-> Primarily I separated out the folio changes (later) from the "While
-> I'm looking at this ..." changes (earlier).  I'm not sure the story
-> of the patchset is necessarily coherent this way, but it should be
-> easier to review.
->=20
-> Another big change is that compound_pincount is now available to all
-> compound pages, not just those that are order-2-or-higher.  Patch 11.
->=20
-> I did notice one bug in my original patchset which I'm disappointed GCC
-> didn't diagnose:
->=20
-> 		pages[nr++] =3D nth_page(page, nr);
->=20
-> Given the massive reorg of the patchset, I didn't feel right using
-> anyone's SoB from v1 on any of the patches.  But, despite the increased
-> number of patches, I hope it's easier to review than v1.
->=20
-> And I'd dearly love a better name than 'folio_nth'.  page_nth() is
-> a temporary construct, so doesn't need a better name.  If you need
-> context, it's in the gup_folio_range_next() patch and its job
-> is to tell you, given a page and a folio, what # page it is within
-> a folio (so a number between [0 and folio_nr_pages())).
->=20
-> Matthew Wilcox (Oracle) (28):
->  gup: Remove for_each_compound_range()
->  gup: Remove for_each_compound_head()
->  gup: Change the calling convention for compound_range_next()
->  gup: Optimise compound_range_next()
->  gup: Change the calling convention for compound_next()
->  gup: Fix some contiguous memmap assumptions
->  gup: Remove an assumption of a contiguous memmap
->  gup: Handle page split race more efficiently
->  gup: Turn hpage_pincount_add() into page_pincount_add()
->  gup: Turn hpage_pincount_sub() into page_pincount_sub()
->  mm: Make compound_pincount always available
->  mm: Add folio_put_refs()
->  mm: Add folio_pincount_ptr()
->  mm: Convert page_maybe_dma_pinned() to use a folio
->  gup: Add try_get_folio() and try_grab_folio()
->  mm: Remove page_cache_add_speculative() and
->    page_cache_get_speculative()
->  gup: Add gup_put_folio()
->  hugetlb: Use try_grab_folio() instead of try_grab_compound_head()
->  gup: Convert try_grab_page() to call try_grab_folio()
->  gup: Convert gup_pte_range() to use a folio
->  gup: Convert gup_hugepte() to use a folio
->  gup: Convert gup_huge_pmd() to use a folio
->  gup: Convert gup_huge_pud() to use a folio
->  gup: Convert gup_huge_pgd() to use a folio
->  gup: Convert compound_next() to gup_folio_next()
->  gup: Convert compound_range_next() to gup_folio_range_next()
->  mm: Add isolate_lru_folio()
->  gup: Convert check_and_migrate_movable_pages() to use a folio
->=20
-> Documentation/core-api/pin_user_pages.rst |  18 +-
-> arch/powerpc/include/asm/mmu_context.h    |   1 -
-> include/linux/mm.h                        |  70 +++--
-> include/linux/mm_types.h                  |  13 +-
-> include/linux/pagemap.h                   |  11 -
-> mm/debug.c                                |  14 +-
-> mm/folio-compat.c                         |   8 +
-> mm/gup.c                                  | 359 ++++++++++------------
-> mm/hugetlb.c                              |   7 +-
-> mm/internal.h                             |   8 +-
-> mm/page_alloc.c                           |   3 +-
-> mm/rmap.c                                 |   6 +-
-> mm/vmscan.c                               |  43 ++-
-> 13 files changed, 263 insertions(+), 298 deletions(-)
->=20
-> --=20
-> 2.33.0
->=20
+The basic flow:
+	1. run time suspend call xhci_suspend, xhci parent devices gate the clock.
+        2. echo mem >/sys/power/state, system _device_suspend call xhci_suspend
+        3. xhci_suspend call xhci_disable_hub_port_wake, which access register,
+	   but clock already gated by run time suspend.
+
+This problem was hidden by power domain driver, which call run time resume before it.
+
+But the below commit remove it and make this issue happen.
+	commit c1df456d0f06e ("PM: domains: Don't runtime resume devices at genpd_prepare()")
+
+This patch call run time resume before suspend to make sure clock is on
+before access register.
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ drivers/usb/host/xhci-plat.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index c6b791a83ad18..7d2f665271310 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -442,6 +442,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+ 	int ret;
+ 
++	if (pm_runtime_suspended(dev))
++		pm_runtime_resume(dev);
++
+ 	ret = xhci_priv_suspend_quirk(hcd);
+ 	if (ret)
+ 		return ret;
+-- 
+2.24.0.rc1
 

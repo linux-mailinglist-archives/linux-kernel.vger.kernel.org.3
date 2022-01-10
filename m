@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1128F489298
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C27489230
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243736AbiAJHpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S242081AbiAJHkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241087AbiAJHjI (ORCPT
+        with ESMTP id S239645AbiAJHcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:39:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DFBC061763;
-        Sun,  9 Jan 2022 23:33:41 -0800 (PST)
+        Mon, 10 Jan 2022 02:32:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E76C02545C;
+        Sun,  9 Jan 2022 23:29:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1960F60B62;
-        Mon, 10 Jan 2022 07:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015DEC36AE9;
-        Mon, 10 Jan 2022 07:33:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EB45B811F5;
+        Mon, 10 Jan 2022 07:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7B0C36AE9;
+        Mon, 10 Jan 2022 07:29:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641800020;
-        bh=dZLDfgXpMHsQktAQ1CcOfPtuyA+EHT7IeIuECDDH3lo=;
+        s=korg; t=1641799746;
+        bh=/gdLnShWLpQP/o/mRaKeBqi4pXaE52yQZMGAJPcUVUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qML+ZvnHcc7qPZnvYeq1MCTLUkacUb7kTOCpCThDW5cB3b72nWp9GWMveK52oXkSq
-         odFcVEHsKG7c4EF7KTzp9q9g8mb+1niyIHJTNoHPzbZM6So1kNjF0d4tYIXghIyE6K
-         Pnw5Al5DtwechVU/D5ozl8W5wlK3gy7m0dLtxW9c=
+        b=TiGlZwBQmvyRGtsQUUG/nivBVHTBjJ2irwAw8I2gKDWiyGHsSdNGoR4QRq0RCL1hd
+         bZdnVyzC/8KiWo/iaYNuI2HW+93Ro3XYOMvmwHM082O+KqriIxDNFkkFLzztBtd9Y5
+         FHidQ0BMSkQAhngo+750bLy1Rha99NRQoYn1+9wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, wolfgang huang <huangjinhui@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 52/72] ipv6: Do cleanup if attribute validation fails in multipath route
+Subject: [PATCH 5.4 34/34] mISDN: change function names to avoid conflicts
 Date:   Mon, 10 Jan 2022 08:23:29 +0100
-Message-Id: <20220110071823.305562333@linuxfoundation.org>
+Message-Id: <20220110071816.831947133@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,44 +50,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: wolfgang huang <huangjinhui@kylinos.cn>
 
-[ Upstream commit 95bdba23b5b4aa75fe3e6c84335e638641c707bb ]
+[ Upstream commit 8b5fdfc57cc2471179d1c51081424ded833c16c8 ]
 
-As Nicolas noted, if gateway validation fails walking the multipath
-attribute the code should jump to the cleanup to free previously
-allocated memory.
+As we build for mips, we meet following error. l1_init error with
+multiple definition. Some architecture devices usually marked with
+l1, l2, lxx as the start-up phase. so we change the mISDN function
+names, align with Isdnl2_xxx.
 
-Fixes: 1ff15a710a86 ("ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Acked-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Link: https://lore.kernel.org/r/20220103170555.94638-1-dsahern@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+mips-linux-gnu-ld: drivers/isdn/mISDN/layer1.o: in function `l1_init':
+(.text+0x890): multiple definition of `l1_init'; \
+arch/mips/kernel/bmips_5xxx_init.o:(.text+0xf0): first defined here
+make[1]: *** [home/mips/kernel-build/linux/Makefile:1161: vmlinux] Error 1
+
+Signed-off-by: wolfgang huang <huangjinhui@kylinos.cn>
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/route.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/isdn/mISDN/core.c   | 6 +++---
+ drivers/isdn/mISDN/core.h   | 4 ++--
+ drivers/isdn/mISDN/layer1.c | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 0eceb0e88976b..0632382a5427b 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -5277,12 +5277,10 @@ static int ip6_route_multipath_add(struct fib6_config *cfg,
+diff --git a/drivers/isdn/mISDN/core.c b/drivers/isdn/mISDN/core.c
+index 55891e4204460..a41b4b2645941 100644
+--- a/drivers/isdn/mISDN/core.c
++++ b/drivers/isdn/mISDN/core.c
+@@ -381,7 +381,7 @@ mISDNInit(void)
+ 	err = mISDN_inittimer(&debug);
+ 	if (err)
+ 		goto error2;
+-	err = l1_init(&debug);
++	err = Isdnl1_Init(&debug);
+ 	if (err)
+ 		goto error3;
+ 	err = Isdnl2_Init(&debug);
+@@ -395,7 +395,7 @@ mISDNInit(void)
+ error5:
+ 	Isdnl2_cleanup();
+ error4:
+-	l1_cleanup();
++	Isdnl1_cleanup();
+ error3:
+ 	mISDN_timer_cleanup();
+ error2:
+@@ -408,7 +408,7 @@ static void mISDN_cleanup(void)
+ {
+ 	misdn_sock_cleanup();
+ 	Isdnl2_cleanup();
+-	l1_cleanup();
++	Isdnl1_cleanup();
+ 	mISDN_timer_cleanup();
+ 	class_unregister(&mISDN_class);
  
- 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
- 			if (nla) {
--				int ret;
--
--				ret = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
-+				err = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
- 							extack);
--				if (ret)
--					return ret;
-+				if (err)
-+					goto cleanup;
+diff --git a/drivers/isdn/mISDN/core.h b/drivers/isdn/mISDN/core.h
+index 23b44d3033279..42599f49c189d 100644
+--- a/drivers/isdn/mISDN/core.h
++++ b/drivers/isdn/mISDN/core.h
+@@ -60,8 +60,8 @@ struct Bprotocol	*get_Bprotocol4id(u_int);
+ extern int	mISDN_inittimer(u_int *);
+ extern void	mISDN_timer_cleanup(void);
  
- 				r_cfg.fc_flags |= RTF_GATEWAY;
- 			}
+-extern int	l1_init(u_int *);
+-extern void	l1_cleanup(void);
++extern int	Isdnl1_Init(u_int *);
++extern void	Isdnl1_cleanup(void);
+ extern int	Isdnl2_Init(u_int *);
+ extern void	Isdnl2_cleanup(void);
+ 
+diff --git a/drivers/isdn/mISDN/layer1.c b/drivers/isdn/mISDN/layer1.c
+index 98a3bc6c17009..7b31c25a550e3 100644
+--- a/drivers/isdn/mISDN/layer1.c
++++ b/drivers/isdn/mISDN/layer1.c
+@@ -398,7 +398,7 @@ create_l1(struct dchannel *dch, dchannel_l1callback *dcb) {
+ EXPORT_SYMBOL(create_l1);
+ 
+ int
+-l1_init(u_int *deb)
++Isdnl1_Init(u_int *deb)
+ {
+ 	debug = deb;
+ 	l1fsm_s.state_count = L1S_STATE_COUNT;
+@@ -409,7 +409,7 @@ l1_init(u_int *deb)
+ }
+ 
+ void
+-l1_cleanup(void)
++Isdnl1_cleanup(void)
+ {
+ 	mISDN_FsmFree(&l1fsm_s);
+ }
 -- 
 2.34.1
 

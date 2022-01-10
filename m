@@ -2,148 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F3948951B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D9448951F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242775AbiAJJVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:21:31 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:35082
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242733AbiAJJV2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:21:28 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2081E40710
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641806486;
-        bh=+nJaduhPmVzgxWjNKs+nFWjH5kVSJ3Nlk+J2KS381O0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=CIpeGV7pvbKME6OgLRczGvG1luKaRhZrytpJZV79q5nJPiMkH2D/q57wLIpEKa3k/
-         QAMx914OJZBwNPGpRKPnKd5Rr0rMFWDOWcjjcIGarCweWO9JMWNWtbI7j7lN/AqvNS
-         2aRiOHeNLJmZWza3lNpbdMkGM01o6Y1PjLoS/3oeFRX5TYMgUB19/JtyaX0spPBJBA
-         mEx4lasLaDihSrQljpMTXgIVFsLfwbrCmmoWJzBYw3cibvgsRArVVBr6huFKFtVFU/
-         fjL0ZEbaY0FXItmZHtjYzXfk4Ol1R7XMEkRUe9f7Vp+eGSDCr/jqH4afCd1+dS77jX
-         DgwSwI0KTWWHw==
-Received: by mail-ed1-f71.google.com with SMTP id c8-20020a05640227c800b003fdc1684cdeso1570046ede.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:21:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+nJaduhPmVzgxWjNKs+nFWjH5kVSJ3Nlk+J2KS381O0=;
-        b=u7NKL27ELIPKtuI1Dbv4QFSMQBSojN/TqJL90FyttW+Br2Tm6Fv39IGKt9kJFw3mPR
-         GFC7IXB733I8aXDLgMtElQwPgm5Rnk1PI81/USGpj6MjjVnMMG/iZTr4yfDDX5kovU5C
-         Dgznhz1um6b5ACsBbTTv0SQtCGXLKMngaPlO/XcMsaN8oTGLaD2YggN9ppXAWzq1ZXvU
-         0uxqnEzarO2S184n0HxXqGleNBEhXaCCLJcS2zj+URrl0Z/veX9BA9z/wcc7aGTNG2ty
-         gXmIr6v1pqNAkShZKKMbA3b3lOAC8xK+oVEmhekePN2Jf/SJtPTbnHb/7z42Y40F8Wyq
-         rMig==
-X-Gm-Message-State: AOAM532f76a8SQKE5qAfzIbnLX8KaRDhC+fIqojDima2u53LUxdieZzf
-        V0DX59chw7NcDaynESqKZ4G/RtiFKE3h1nDnNtuFn+DAH7Cs4znZ95jfxfrwaaI29icRUg7B2av
-        WJx+bJ9sCxLnk+fb5LF5/nVPrZBmxveWMvzbVL/Zp/Q==
-X-Received: by 2002:a50:cc07:: with SMTP id m7mr71953598edi.4.1641806485812;
-        Mon, 10 Jan 2022 01:21:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxmEmnXL1pZn58kxnt+WXeidMJmzjqQOx68VtLwlRjQqmdUwMASOr7ymat7HHWFkjneIavIrQ==
-X-Received: by 2002:a50:cc07:: with SMTP id m7mr71953588edi.4.1641806485641;
-        Mon, 10 Jan 2022 01:21:25 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 17sm1865199ejo.27.2022.01.10.01.21.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 01:21:25 -0800 (PST)
-Message-ID: <2ee68b52-bb73-e013-d722-0c033391b704@canonical.com>
-Date:   Mon, 10 Jan 2022 10:21:24 +0100
+        id S242853AbiAJJXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:23:07 -0500
+Received: from mail-dm3nam07on2063.outbound.protection.outlook.com ([40.107.95.63]:64065
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242821AbiAJJXE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 04:23:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hXU9iPGOqzF9nfWFOw7jcTZ1nyaPmSG59DLlmjnzWJfiIr4a5Z8Bh0kUYhQ3OloJOoznOuHsj0osz03ECajTRF1AqRtc0kTUNT3VammDgrusIKx1iXdh223AJvQ6SCcbqPdNZHS4FTSm+r/oShgu7Zd1dFUW2IwNZ4jUQM/31iShHN8UTBnH1i2UNyug1/0gRRnldln6mYKDWrEZYh4M2yaNN0fihuxPScmfnvLORTG/+e7gYwcwW/2Zweq4ni/tPKS0CGvvUx/+IToyN9cHiZ1ggcNul1mNJp4UD+PIq75W78z2BKMoTGtPbOlp+oZyajVEAV7lHbTcqeqhcuAZSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5QDoW4/NLNoejItU69c37B8/Ai+AUU2f4XFMIArRQAI=;
+ b=ZO1U/ZaIJJk6Wj0YZsoYPVZnMpJAHsVRLm0tao+xINLSYWl+YrhVY2CzXf68sV16GtOhvoacrnzKHkj7nSo5uKOtQR8XFO2xovNn1And7pkR98w3Vxd9KkFe+bHEHvAEmc5IoHrmlYCVKR20qrz7oC4fICV1XDkQZgjqL/saIRaCrHZWNmAl2HkaXJVbpqZdbT6zoQ+fG1RMHeaz5mqSXLTrBIpnS6VrgktndVtsAcxZwroXF5o+oArWi0qTdXcS+rH6fiZxpWpOQ2dB/4mcIZwzNKSDTQGj7b4e2hDRI7+MMiNB5jY7tDm1zDR2B7CbM3YBrir/SV6z+o8BQwq7Cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5QDoW4/NLNoejItU69c37B8/Ai+AUU2f4XFMIArRQAI=;
+ b=lnoUF65hbNvdvPxRlIffHHDvZYBX79DXSMcOLINk3ppiPzbLxPRk1leX8rEbM2n+mO66KFyQeaiqFwxeuuygt8PPjrBcOfiAC5iQJ0uLlVnUYH/0PcWrDG2Uz4PRI0XB8cH75jvyyX2dmssq2jCn3p86449lWoLUsnLO/l/Brd0=
+Received: from DM6PR02CA0061.namprd02.prod.outlook.com (2603:10b6:5:177::38)
+ by BN8PR12MB3075.namprd12.prod.outlook.com (2603:10b6:408:67::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
+ 2022 09:22:58 +0000
+Received: from DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:177:cafe::71) by DM6PR02CA0061.outlook.office365.com
+ (2603:10b6:5:177::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
+ Transport; Mon, 10 Jan 2022 09:22:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT023.mail.protection.outlook.com (10.13.173.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4867.7 via Frontend Transport; Mon, 10 Jan 2022 09:22:58 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 10 Jan
+ 2022 03:22:55 -0600
+Date:   Mon, 10 Jan 2022 10:22:53 +0100
+From:   Robert Richter <rrichter@amd.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Terry Bowman <Terry.Bowman@amd.com>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wim@linux-watchdog.org>, <ssg.sos.patches@amd.com>,
+        <sudheesh.mavila@amd.com>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>
+Subject: Re: [PATCH v2 3/4] Watchdog: sp5100_tco: Add EFCH SMBus controller
+ initialization using MMIO
+Message-ID: <Ydv67VKcrCk81Y9R@rric.localdomain>
+References: <20211103161521.43447-1-terry.bowman@amd.com>
+ <20211103161521.43447-4-terry.bowman@amd.com>
+ <20220106181809.GA240027@roeck-us.net>
+ <9afabe55-6429-2284-cafd-d59ce481f067@amd.com>
+ <YdgeU2p+i5hN1XCU@rric.localdomain>
+ <ac8e1173-3002-54f1-0264-6f0cdf26c475@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 0/7] arm/arm64: dts: Remove unused num-viewport from pcie
- node
-Content-Language: en-US
-To:     Mark Kettenis <mark.kettenis@xs4all.nl>
-Cc:     jszhang@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com,
-        robh+dt@kernel.org, linux@armlinux.org.uk, andrew@lunn.ch,
-        sebastian.hesselbarth@gmail.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20211229160245.1338-1-jszhang@kernel.org>
- <d3cb7b8439ee3d06@bloch.sibelius.xs4all.nl>
- <99115cc4-32f6-d217-68be-33256a6993a8@canonical.com>
- <d3cb933f371ab5b5@bloch.sibelius.xs4all.nl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <d3cb933f371ab5b5@bloch.sibelius.xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ac8e1173-3002-54f1-0264-6f0cdf26c475@roeck-us.net>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 91c126a9-5302-4deb-e3a8-08d9d41aca8f
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3075:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB30755F697B8069BBC4E050DD9C509@BN8PR12MB3075.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BjElTJPUGcWeU6Db2KtwBlnMigHMkoRzadeVxYO2YmZYEicx6QB6ghB5Fb6v1a6ZTjN42sfEOCS/WWlB30bbkZqzzBuIDqW8gaHoZkouGnRcm1DTMl0qTwJHH91+a0GDBs9bb3lBN0npDUnj+ktrB2/Sbsf0FWCJqSVyZldEomqfPx6hWlFRZkoBzuSfM6pGnV/hwK9/qCbmIxCXXTTgrMXAhIxZCTpNzWsdOC4sJLj05QA69WBADmlrbwtPSqDitKNpWs1zEHO+87i7wP8AQtPKXHdAtlYI8U5Poah3qGxskcqT7DrTv7gu5T3q5V+Hl7GnhBBGhU0ZikX8NW+UHqattzfLjsQmimMQE2h0sNqk1Eqw6CVTY/YzkyYNdQXhgPpzC20b96PmIdyNCtTQGicM6mGVIPgK2ADZWyFNmniMTkMwN/XhEV+sZpKZumicGDMr1ZSSepNhFOHMZj26+sKHtulxZOoupdIriQWnrGFJ19ke7HwqKZJKiLn2F+g0liwfZywaFI79WKa4bNSYlFgy6RPfRoi48Uhmb4Duf7JdASgEBNgIlKPj7eCNkxs/87hqBYtSxsuG7c/KmwLixdiFeZlZTERCV+M8yYjr4210z83FntnJCZw2GWFgTEG2LiChnj6POTYBnoUm/P5f0+ZwWiGY0GTWoCYZPhmRSgKqIk6nAoe2sB4phCeYL1FZzH49gX3OZXJub8gtCVR0dfAKioL1j/uKdpHWzAmj/vvpM00LeLiuKsMGm7HAC6Py+7wFyLruPwr05UJXcbLauAxM6rdtZmrop5y9YUF8GQGYaea6vcQzC45dafRy63i3OcKgkg/kiKJXcOpQu+8gfC03XJbOXfgV8zLyMJI9DfgalAp6sT/pgbcHSGu6sjFT
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(356005)(186003)(966005)(16526019)(8936002)(508600001)(26005)(426003)(81166007)(70206006)(70586007)(53546011)(7696005)(8676002)(336012)(4326008)(83380400001)(36860700001)(316002)(5660300002)(40460700001)(2906002)(47076005)(6916009)(9686003)(54906003)(55016003)(82310400004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 09:22:58.1520
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91c126a9-5302-4deb-e3a8-08d9d41aca8f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3075
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2022 20:39, Mark Kettenis wrote:
->> Date: Fri, 7 Jan 2022 13:47:03 +0100
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>
->> On 29/12/2021 17:50, Mark Kettenis wrote:
->>>> From: Jisheng Zhang <jszhang@kernel.org>
->>>> Date: Thu, 30 Dec 2021 00:02:38 +0800
->>>>
->>>> After commit 281f1f99cf3a("PCI: dwc: Detect number of iATU windows"),
->>>> the number of iATU windows is detected at runtime, what's more,
->>>> the 'num-viewport' property parsing has been removed, so remove the
->>>> unused num-viewport from pcie node(s).
->>>>
->>>> It's too late for linux-5.17-rc1, I will rebase and send out v2 if
->>>> necessary when 5.17-rc1 is released.
->>>
->>> Please no.  This only makes the device trees unnecessarily
->>> incompatible with older kernels
->>
->> Anyone who is running a new DTB with older kernel is doomed anyway, not
->> only because of this change but hundreds of other similar cleanups, e.g.
->> making DTS conforming to dtschema. Are you sure there are such use cases
->> of using new DTB with old kernel? I cannot imagine making a stable
->> product with such scenario...
+On 07.01.22 09:12:32, Guenter Roeck wrote:
+> On 1/7/22 3:05 AM, Robert Richter wrote:
+> > On 06.01.22 13:07:11, Terry Bowman wrote:
+> > > On 1/6/22 12:18 PM, Guenter Roeck wrote:
+> > > > On Wed, Nov 03, 2021 at 11:15:20AM -0500, Terry Bowman wrote:
+> > 
+> > > > > diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+> > > > > index 80ae42ae7aaa..4777e672a8ad 100644
+> > > > > --- a/drivers/watchdog/sp5100_tco.c
+> > > > > +++ b/drivers/watchdog/sp5100_tco.c
+> > > > > @@ -48,12 +48,14 @@
+> > > > >   /* internal variables */
+> > > > >   enum tco_reg_layout {
+> > > > > -	sp5100, sb800, efch
+> > > > > +	sp5100, sb800, efch, efch_mmio
+> > > > >   };
+> > > > >   struct sp5100_tco {
+> > > > >   	struct watchdog_device wdd;
+> > > > >   	void __iomem *tcobase;
+> > > > > +	void __iomem *addr;
+> > > > > +	struct resource *res;
+> > > > 
+> > > > I must admit that I really don't like this code. Both res and
+> > > > addr are only used during initialization, yet their presence suggests
+> > > > runtime usage. Any chance to reqork this to not require those variables ?
+> > 
+> > We did that in an earlier version, see struct efch_cfg of:
+> > 
+> >   https://patchwork.kernel.org/project/linux-watchdog/patch/20210813213216.54780-1-Terry.Bowman@amd.com/
+> > 
+> > The motivation of it was the same as you suggested to only use it
+> > during init.
+> > 
+> > Having it in struct sp5100_tco made things simpler esp. in the
+> > definition of the function interfaces where those new members are
+> > used.
+
+> So, no, I neither see the need for having the information in struct
+> sp5100_tco nor for keeping it in its own structure. If you'd merge
+> sp5100_request_region_mmio() and sp5100_release_region_mmio() into
+> sp5100_tco_setupdevice_mmio() you would not even need any pointers
+> to pass the values from sp5100_request_region_mmio(). Otherwise you
+> could have sp5100_request_region_mmio() return a pointer to res or
+> an ERR_PTR, and pass the address as pointer parameter.
+
+Yes, that is feasible, in fact it is option 2) I suggested.
+
+-Robert
+
+> > If that init vars are no longer in struct sp5100_tco then callers of
+> > efch_read_pm_reg8() and efch_update_pm_reg8() will need to carry a
+> > pointer to them. To avoid this I see those options:
+> > 
+> > 1) Implement them as global (or a single global struct) and possibly
+> > protect it by a mutex. There is only a single device anyway and we
+> > wouldn't need a protection.
+> > 
+> > 2) Have an own mmio implementation of tco_timer_enable() and/or
+> > sp5100_tco_timer_init().
+> > 
+> > > Yes, v3 will include refactoring to remove 'res' and 'addr'. I will also
+> > > correct the trailing newline you mentioned in an earlier email.
+> > > 
+> > > Regards,
+> > > Terry
+> > > 
+> > > > >   	enum tco_reg_layout tco_reg_layout;
+> > 
+> > While at it, tco_reg_layout is also only used during initialization
+> > and can be moved there too. This would raise option 3:
+> > 
+> > 3) Add a pointer of struct sp5100_tco to struct efch_cfg and use that
+> > struct instead in init funtions only. But that causes the most rework
+> > (which would be ok to me).
+> > 
+> > Going with 3) looks the cleanest way, I would try that. But all
+> > options have its advantages.
+> > 
+> > -Robert
+> > 
+> > > > >   };
 > 
-> Well, many of those changes just affect the node names, which aren't
-> part of the ABI.  And adding missing properties or compatibles doesn't
-> break things either.  But yes, we keep seeing diffs to "cleanup"
-> bindings and device trees, especially in the context of converting
-> them to dtschema.  And that's just wrong.  If old device trees don't
-> pass validation, the default assumption should be that the schema is
-> wrong; not the other way around.
-
-I cannot get how you reached a conclusion that old device tree could be
-good, but old bindings would be bad... Both were developed without
-consistency, sometimes without proper review. Simply both can be wrong
-and now we fix them - the bindings by converting to stricter schema and
-DTS files by aligning them with new schema.
-
-There was never a contract between us and users that OLD kernel will
-work with NEW DTB. The only contract we made was the other way around -
-NEW kernel will work with OLD DTB.
-
-I understand that it is useful to have new DTB working with old kernel.
-I consider it as a "nice to have" feature but:
-1. Still there are no real users of such pattern (new DTB with old
-kernel), around Linux kernel. If they are - I am repaeting - their Linux
-project is already broken.
-
-2. If Linux drivers or other projects depend on node names and anything
-not being part of bindings (the ABI), they are broken by design. They
-should either be fixed or accept that might get broken anytime soon
-because they do not use bindings but undocumented parts (which are not ABI).
-
-3. "Nice to have" should not stop us in improving out codebase and
-making it easier to maintain for us. We do not make these "dtschema
-align" changes for pure fun, but to make everything easier for us in the
-longterm. The dtschema checks I was running (and converting to dtschema)
-already found errors in DTS. These are real bugs which are fixed by this
-stricter dtschema.
-
-Best regards,
-Krzysztof

@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1BD489F6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6116D489F90
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241917AbiAJSoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:44:09 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:60530 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbiAJSoF (ORCPT
+        id S242397AbiAJSuQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 13:50:16 -0500
+Received: from mxchg01.rrz.uni-hamburg.de ([134.100.38.111]:38967 "EHLO
+        mxchg01.rrz.uni-hamburg.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242083AbiAJSuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:44:05 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20AIhwRD024096;
-        Mon, 10 Jan 2022 12:43:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641840238;
-        bh=GXFv+aD2Z2QpT9wkKsMxpEH3rvlER44XWUwe0K4BQGo=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Q19vHUXdIct9YXddCk9aYe0mYdaZr5u/dtOqG0+gTBRxSAJ7v2eLzAxZTwe1nncKv
-         HRudZ1ATy/XaLUflANitx63S+X/Eez2b8yLr8CjaesjjmT0aRoHEhgEHaE58Bwafgs
-         g/1Sw72x/HJIyNP2il0WJp4gUdPDcqFBZwzBCq3I=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20AIhwuF017932
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 10 Jan 2022 12:43:58 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 10
- Jan 2022 12:43:58 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 10 Jan 2022 12:43:58 -0600
-Received: from [10.249.36.164] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20AIhvjn023819;
-        Mon, 10 Jan 2022 12:43:57 -0600
-Subject: Re: [PATCH] iommu/omap: Fix missing put_device() call in
- omap_iommu_probe_device
-To:     Miaoqian Lin <linmq006@gmail.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        "Nagalla, Hari" <hnagalla@ti.com>
-References: <20220107080428.10873-1-linmq006@gmail.com>
- <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
- <20220110022531.GA61@VICKYMQLIN-NB1.localdomain>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <fd659736-2106-1be3-084b-7caddf2dc18e@ti.com>
-Date:   Mon, 10 Jan 2022 12:43:57 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 10 Jan 2022 13:50:09 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mxchg01.rrz.uni-hamburg.de (Postfix) with ESMTP id 6034EA1636;
+        Mon, 10 Jan 2022 19:44:18 +0100 (CET)
+X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
+Received: from mxchg04.rrz.uni-hamburg.de (mxchg04.rrz.uni-hamburg.de [134.100.38.114])
+        by mxchg01.rrz.uni-hamburg.de (Postfix) with ESMTPS;
+        Mon, 10 Jan 2022 19:44:18 +0100 (CET)
+X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
+Received: from exchange.uni-hamburg.de (UN-EX-MR08.uni-hamburg.de [134.100.84.75])
+        by mxchg04.rrz.uni-hamburg.de (Postfix) with ESMTPS;
+        Mon, 10 Jan 2022 19:44:18 +0100 (CET)
+Received: from plasteblaster (89.244.206.250) by UN-EX-MR08.uni-hamburg.de
+ (134.100.84.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 10 Jan
+ 2022 19:44:18 +0100
+Date:   Mon, 10 Jan 2022 19:44:17 +0100
+From:   "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
+To:     Balbir Singh <bsingharora@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] taskstats: version 11 with tgid
+Message-ID: <20220110194417.147d4eff@plasteblaster>
+Organization: =?UTF-8?B?VW5pdmVyc2l0w6R0?= Hamburg
+X-Mailer: Claws Mail (x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20220110022531.GA61@VICKYMQLIN-NB1.localdomain>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [89.244.206.250]
+X-ClientProxiedBy: UN-EX-MR05.uni-hamburg.de (134.100.84.72) To
+ UN-EX-MR08.uni-hamburg.de (134.100.84.75)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+From 9d3d915c4e0c1e4ff3a54d73851cedb613c7df44 Mon Sep 17 00:00:00 2001
+From: "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
+Date: Mon, 10 Jan 2022 17:10:41 +0100
+Subject: [PATCH 1/2] taskstats: version 11 with tgid
 
-On 1/9/22 8:43 PM, Miaoqian Lin wrote:
-> Hi Suman Anna,
-> On Fri, Jan 07, 2022 at 08:42:16AM -0600, Suman Anna wrote:
->> Hi Miaoqian,
->>
->>
->>> Add the corresponding 'put_device()' in the error handling paths.
->>
->> Also, need it in the regular path, not just in error handling path.
-> I think after calling platform_get_drvdata() normally, the
-> reference will be released in other functions, so don't need it in the
-> regular path.
-> 
+This adds the ac_tgid field to the taskstats struct, to be able to tell
+apart (additional) threads and processes when a client application monitors
+task exit events.
 
-No, it's a local reference and is acquired within omap_iommu_probe_device() and
-needs to be released within this function. What other function are you referring
-to here?
+I need this for giving HPC users an overview over how many instances of
+which programs they ran and how much resources each one used, including
+the distinction between multithreaded programs (parallelized scientific
+applications) and many process instances (script calling lots of
+short-running programs). It is nice to get this information accurately via
+taskstats with a data set once for each task that exits, as opposed to
+expensive/inaccurate sampling of any sort.
 
-regards
-Suman
+There are process ID and parent process ID already in the struct. The
+thread group ID seems like something that should accompany those, anyway.
 
+base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
+
+Signed-off-by: Dr. Thomas Orgis <thomas.orgis@uni-hamburg.de>
+---
+ include/uapi/linux/taskstats.h | 4 +++-
+ kernel/tsacct.c                | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/taskstats.h b/include/uapi/linux/taskstats.h
+index ccbd08709321..9248dc6bcb4a 100644
+--- a/include/uapi/linux/taskstats.h
++++ b/include/uapi/linux/taskstats.h
+@@ -34,7 +34,7 @@
+  */
+ 
+ 
+-#define TASKSTATS_VERSION	10
++#define TASKSTATS_VERSION	11
+ #define TS_COMM_LEN		32	/* should be >= TASK_COMM_LEN
+ 					 * in linux/sched.h */
+ 
+@@ -172,6 +172,8 @@ struct taskstats {
+ 
+ 	/* v10: 64-bit btime to avoid overflow */
+ 	__u64	ac_btime64;		/* 64-bit begin time */
++	/* v11: thread group ID to identify process vs. (non-leader) thread */
++	__u32   ac_tgid;
+ };
+ 
+ 
+diff --git a/kernel/tsacct.c b/kernel/tsacct.c
+index f00de83d0246..959ae3a26f1b 100644
+--- a/kernel/tsacct.c
++++ b/kernel/tsacct.c
+@@ -52,6 +52,7 @@ void bacct_add_tsk(struct user_namespace *user_ns,
+ 	stats->ac_nice	 = task_nice(tsk);
+ 	stats->ac_sched	 = tsk->policy;
+ 	stats->ac_pid	 = task_pid_nr_ns(tsk, pid_ns);
++	stats->ac_tgid   = task_tgid_nr_ns(tsk, pid_ns);
+ 	rcu_read_lock();
+ 	tcred = __task_cred(tsk);
+ 	stats->ac_uid	 = from_kuid_munged(user_ns, tcred->uid);
+
+base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
+-- 
+2.29.2
+
+
+
+-- 
+Dr. Thomas Orgis
+HPC @ Universität Hamburg

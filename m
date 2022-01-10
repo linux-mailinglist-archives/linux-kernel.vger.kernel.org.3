@@ -2,162 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B71BB4890D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88FC489229
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239547AbiAJH0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:26:10 -0500
-Received: from out162-62-57-210.mail.qq.com ([162.62.57.210]:51619 "EHLO
-        out162-62-57-210.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239322AbiAJHYi (ORCPT
+        id S241879AbiAJHjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:39:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60872 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240857AbiAJHcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:24:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641799470;
-        bh=qnDuLkInDd7H3HP9HBO/tRxoGCJl57LHYRdQZPrsjsM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hJ8BjBz6b4lvLJfTrNjIyxY4FN2fQmeyoK/T51K0UpRNnX5akTKO3QaQ3QJsZ94LW
-         hWdB00griLhUuues9Njx++wzpa0jJhlCgxtT0TjMnSxCWFgbzfW5mykGjEPOyxqdkg
-         7K2UiUCfYtSvA2KtGOTYaym1+5Q9+xXs58cupgpw=
-Received: from fedora.. ([119.32.47.91])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id 5CD80CD5; Mon, 10 Jan 2022 15:23:13 +0800
-X-QQ-mid: xmsmtpt1641799399tgimq3pd8
-Message-ID: <tencent_DEA0AF54608BBD29ADC09D0DCA83E85DA205@qq.com>
-X-QQ-XMAILINFO: OZ7HbAk7YCRiLu20qljPu1APmkzChkgm7N3Nyupk1yvU2sKbc9YzbYD5/Jwajb
-         7btfAo8/+9G0BVjKSKzYnpt1vOWIiri6Cbb/MUI+JVpb9xth0u3TmXkqmXq/DgO2cNZs3Pp4BbFt
-         4FqbVOs2DuE+bfjiPdUKUogmFUOuWYEQ6g0rdubvTG9FbNqhAY7WfyfIYHllbM4XMlot9vcXseNO
-         urEP+phZkPU2L/cknfkw8Dp3FJIkWt4C3b1rF3+p6wwhaUIsH5Mqjd9xznYOLx96aRETbAVUFwpv
-         O0WrU/hd1kIn9v3DMwQfIocAaLRFrCrehL88VyhW06vqvTVEQOiaqxRYJfU6QRRoFgzmTBKvb2Xm
-         1f1pNWsnybvYG5J6I6aY1GoRa48PNsD67WXr8zCKdO1/esBKFB33s3Gxzf6yMVzBh93na3uXFNMj
-         jVFIIRuVRRJGsjZefqFJ3hTngkWapvsUMAlc/Zf40V488q21c/tcwJXHSSqKrmdlox9l0KSd6bjM
-         nxBOqnWzYUTKFjMWSSokttQRyCaSsp8i86UhDIfMxPa1JfRpI4y+/RWyVWXU2T7yQs4DiTWoFcLr
-         bAS40S+4Td7iWB2sAK87disisLeLd6tcGXbJnzW+5K7Ve8otSQeUE558esA9lIGo6Tz1VKBxGRaz
-         iaRgLFhnOvvrYBsS/I76FKuw7pnYTruLlxzxQi11n0RYd4b6g0oSbhdOIveEEBt2vAh0X6WJpCtm
-         8nmIpG+7omUAim87jmC9mlOz8PBY3gdli69GcL57iAD3+3mN6SY4CCZYV148AZ88ih1L1b0Mp6uP
-         tvXu7xThzbP6lwDJZ/WUKLRnA1sKZxUlG+aJBW1YodaldxtFpf4Tx601SeeNAAP/ExWCtPUZ4coN
-         YKsk2d2zhEY7P+F9hWP1MSt9J5I+QctEHhzQlZWU8w
-From:   conleylee@foxmail.com
-To:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, conley <conleylee@foxmail.com>
-Subject: [PATCH 2/2] sun4i-emac.c: replace magic number with macro
-Date:   Mon, 10 Jan 2022 15:23:09 +0800
-X-OQ-MSGID: <20220110072309.2259523-3-conleylee@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220110072309.2259523-1-conleylee@foxmail.com>
-References: <20220110072309.2259523-1-conleylee@foxmail.com>
+        Mon, 10 Jan 2022 02:32:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42255B81213;
+        Mon, 10 Jan 2022 07:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73241C36AED;
+        Mon, 10 Jan 2022 07:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641799969;
+        bh=V3CsWTO+/8vOVLZMCWRNWCH1UqB2p2pJz3ESHO5hvxM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UrnsTAKrWkM7rQ/A1c/vibaDl8j7ZM2BiO+8ic2f9b5NUKR0UmADfkjNe3ts8lq+J
+         NJkosHiv43FA+qZw/+lBb2hAf7ZsMEA16VPqAEb7RuCjC2BRBXj3ROxIW+QhgORntG
+         hD3dgajQ72sPOMmZMl4F86t1UL+ipjRW3SEhRZp0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Jens Axboe <axboe@kernel.dk>,
+        Norbert Warmuth <nwarmuth@t-online.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 5.15 32/72] md/raid1: fix missing bitmap update w/o WriteMostly devices
+Date:   Mon, 10 Jan 2022 08:23:09 +0100
+Message-Id: <20220110071822.642410774@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: conley <conleylee@foxmail.com>
+From: Song Liu <song@kernel.org>
 
-Signed-off-by: conley <conleylee@foxmail.com>
+commit 46669e8616c649c71c4cfcd712fd3d107e771380 upstream.
+
+commit [1] causes missing bitmap updates when there isn't any WriteMostly
+devices.
+
+Detailed steps to reproduce by Norbert (which somehow didn't make to lore):
+
+   # setup md10 (raid1) with two drives (1 GByte sparse files)
+   dd if=/dev/zero of=disk1 bs=1024k seek=1024 count=0
+   dd if=/dev/zero of=disk2 bs=1024k seek=1024 count=0
+
+   losetup /dev/loop11 disk1
+   losetup /dev/loop12 disk2
+
+   mdadm --create /dev/md10 --level=1 --raid-devices=2 /dev/loop11 /dev/loop12
+
+   # add bitmap (aka write-intent log)
+   mdadm /dev/md10 --grow --bitmap=internal
+
+   echo check > /sys/block/md10/md/sync_action
+
+   root:# cat /sys/block/md10/md/mismatch_cnt
+   0
+   root:#
+
+   # remove member drive disk2 (loop12)
+   mdadm /dev/md10 -f loop12 ; mdadm /dev/md10 -r loop12
+
+   # modify degraded md device
+   dd if=/dev/urandom of=/dev/md10 bs=512 count=1
+
+   # no blocks recorded as out of sync on the remaining member disk1/loop11
+   root:# mdadm -X /dev/loop11 | grep Bitmap
+             Bitmap : 16 bits (chunks), 0 dirty (0.0%)
+   root:#
+
+   # re-add disk2, nothing synced because of empty bitmap
+   mdadm /dev/md10 --re-add /dev/loop12
+
+   # check integrity again
+   echo check > /sys/block/md10/md/sync_action
+
+   # disk1 and disk2 are no longer in sync, reads return differend data
+   root:# cat /sys/block/md10/md/mismatch_cnt
+   128
+   root:#
+
+   # clean up
+   mdadm -S /dev/md10
+   losetup -d /dev/loop11
+   losetup -d /dev/loop12
+   rm disk1 disk2
+
+Fix this by moving the WriteMostly check to the if condition for
+alloc_behind_master_bio().
+
+[1] commit fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
+Fixes: fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
+Cc: stable@vger.kernel.org # v5.12+
+Cc: Guoqing Jiang <guoqing.jiang@linux.dev>
+Cc: Jens Axboe <axboe@kernel.dk>
+Reported-by: Norbert Warmuth <nwarmuth@t-online.de>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/allwinner/sun4i-emac.c | 26 ++++++++++-----------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/md/raid1.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.c b/drivers/net/ethernet/allwinner/sun4i-emac.c
-index 849de4564709..cf9d8e9a4d9f 100644
---- a/drivers/net/ethernet/allwinner/sun4i-emac.c
-+++ b/drivers/net/ethernet/allwinner/sun4i-emac.c
-@@ -106,9 +106,9 @@ static void emac_update_speed(struct net_device *dev)
+--- a/drivers/md/raid1.c
++++ b/drivers/md/raid1.c
+@@ -1496,12 +1496,13 @@ static void raid1_write_request(struct m
+ 		if (!r1_bio->bios[i])
+ 			continue;
  
- 	/* set EMAC SPEED, depend on PHY  */
- 	reg_val = readl(db->membase + EMAC_MAC_SUPP_REG);
--	reg_val &= ~(0x1 << 8);
-+	reg_val &= ~EMAC_MAC_SUPP_100M;
- 	if (db->speed == SPEED_100)
--		reg_val |= 1 << 8;
-+		reg_val |= EMAC_MAC_SUPP_100M;
- 	writel(reg_val, db->membase + EMAC_MAC_SUPP_REG);
- }
- 
-@@ -264,7 +264,7 @@ static void emac_dma_done_callback(void *arg)
- 
- 	/* re enable interrupt */
- 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--	reg_val |= (0x01 << 8);
-+	reg_val |= EMAC_INT_CTL_RX_EN;
- 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 	db->emacrx_completed_flag = 1;
-@@ -429,7 +429,7 @@ static unsigned int emac_powerup(struct net_device *ndev)
- 	/* initial EMAC */
- 	/* flush RX FIFO */
- 	reg_val = readl(db->membase + EMAC_RX_CTL_REG);
--	reg_val |= 0x8;
-+	reg_val |= EMAC_RX_CTL_FLUSH_FIFO;
- 	writel(reg_val, db->membase + EMAC_RX_CTL_REG);
- 	udelay(1);
- 
-@@ -441,8 +441,8 @@ static unsigned int emac_powerup(struct net_device *ndev)
- 
- 	/* set MII clock */
- 	reg_val = readl(db->membase + EMAC_MAC_MCFG_REG);
--	reg_val &= (~(0xf << 2));
--	reg_val |= (0xD << 2);
-+	reg_val &=~ EMAC_MAC_MCFG_MII_CLKD_MASK;
-+	reg_val |= EMAC_MAC_MCFG_MII_CLKD_72;
- 	writel(reg_val, db->membase + EMAC_MAC_MCFG_REG);
- 
- 	/* clear RX counter */
-@@ -506,7 +506,7 @@ static void emac_init_device(struct net_device *dev)
- 
- 	/* enable RX/TX0/RX Hlevel interrup */
- 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--	reg_val |= (0xf << 0) | (0x01 << 8);
-+	reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
- 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 	spin_unlock_irqrestore(&db->lock, flags);
-@@ -637,7 +637,7 @@ static void emac_rx(struct net_device *dev)
- 		if (!rxcount) {
- 			db->emacrx_completed_flag = 1;
- 			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--			reg_val |= (0xf << 0) | (0x01 << 8);
-+			reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
- 			writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 			/* had one stuck? */
-@@ -669,7 +669,7 @@ static void emac_rx(struct net_device *dev)
- 			writel(reg_val | EMAC_CTL_RX_EN,
- 			       db->membase + EMAC_CTL_REG);
- 			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--			reg_val |= (0xf << 0) | (0x01 << 8);
-+			reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
- 			writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 			db->emacrx_completed_flag = 1;
-@@ -783,20 +783,20 @@ static irqreturn_t emac_interrupt(int irq, void *dev_id)
- 	}
- 
- 	/* Transmit Interrupt check */
--	if (int_status & (0x01 | 0x02))
-+	if (int_status & EMAC_INT_STA_TX_COMPLETE)
- 		emac_tx_done(dev, db, int_status);
- 
--	if (int_status & (0x04 | 0x08))
-+	if (int_status & EMAC_INT_STA_TX_ABRT)
- 		netdev_info(dev, " ab : %x\n", int_status);
- 
- 	/* Re-enable interrupt mask */
- 	if (db->emacrx_completed_flag == 1) {
- 		reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--		reg_val |= (0xf << 0) | (0x01 << 8);
-+		reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
- 		writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 	} else {
- 		reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--		reg_val |= (0xf << 0);
-+		reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN);
- 		writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 	}
- 
--- 
-2.31.1
+-		if (first_clone && test_bit(WriteMostly, &rdev->flags)) {
++		if (first_clone) {
+ 			/* do behind I/O ?
+ 			 * Not if there are too many, or cannot
+ 			 * allocate memory, or a reader on WriteMostly
+ 			 * is waiting for behind writes to flush */
+ 			if (bitmap &&
++			    test_bit(WriteMostly, &rdev->flags) &&
+ 			    (atomic_read(&bitmap->behind_writes)
+ 			     < mddev->bitmap_info.max_write_behind) &&
+ 			    !waitqueue_active(&bitmap->behind_wait)) {
+
 

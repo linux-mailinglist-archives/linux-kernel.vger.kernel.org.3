@@ -2,154 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFCF4897AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239834897BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244911AbiAJLki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:40:38 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35524 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245005AbiAJLkY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:40:24 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 9D1F51F43693
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641814821;
-        bh=lLxFaS/8aNgFTDG93PFGJERkDDxVogAZUBbb9F4WqdU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MQVvmQFhlNkHIT6EFY6BU6mQ7hNNnjke+8GDhqJBH7RTD3jyiy+0Eye6V26RlLgRI
-         6qxmoy5nClr5TJMh33Bh+GxeFHgwZP+oHf71M/Ysyi4e7dF1jyKaO7VqWcJXPSgdh2
-         R3LYs7OQ8mq2M7XbmckDX5lovlbVYbNsiIOrRAhc3cpymfxaKrjzC1EMNg0jn2EmeH
-         5LDGtbgI3CButWUiiR6vt/WOzSySeDzuoH/KGlV4gGooO4tyzOhHGPpoAEo3G+XatM
-         Ef5zn1aUrEpdj/KGid+5n7dOqS5H6l9MzNLFQHTlq2BEB8DX/UI+9MCzxc4A/8BpdM
-         slt+nUAYauYiw==
-Subject: Re: [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in
- tlb_sync_all
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, yen-chang.chen@mediatek.com
-References: <20210923115840.17813-1-yong.wu@mediatek.com>
- <20210923115840.17813-10-yong.wu@mediatek.com>
- <bfa33e94-c2e5-5dab-c9af-b674e1669daa@collabora.com>
- <22faee018a36a49e4a507b69d087432c8cd689ec.camel@mediatek.com>
- <85987e9a-dfb0-c241-1dde-43c050a78b51@collabora.com>
- <83400d36640fc6256972041c882d080ce9aa5fdd.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <114af71c-58d0-982f-d362-19184a55fb85@collabora.com>
-Date:   Mon, 10 Jan 2022 12:40:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S244993AbiAJLnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:43:21 -0500
+Received: from mga07.intel.com ([134.134.136.100]:47836 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244977AbiAJLlp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:41:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641814905; x=1673350905;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FmoJ3y7OcdqB18NHcTkTeuKKIfdDfKWzmCti7xacieg=;
+  b=J5YOlX5FoBGlk2f4q6FOhwHstLln+woYgH+hSjE1HgpEl2zfjRZW2oSr
+   gfwMgQNvCdZDsS2XvZMNBzbEBsU84GePZb2QZR+ej2sjlu/lGOQamGy+R
+   NtUcC5SStWdRbaI/BKu5iI+CM2jGRm3O+PTY5X+Y/kj01bFlOYArbcuBL
+   OvrTZGoqT7el2Jvy4OoDIYZZruN41qkLHYRTbOuDxj+pGqLuBtNrJEw1d
+   xVBFTp3cvrnRzw8KxsywXkGnn3fF8+LqlnWSv0t6JUJyibWL63dq28/ed
+   wNxF5PAWBcMtab1Y0HNN9WWOJ4fZncPUsp/N+KuMlBVOLvmBHRrBYUsN/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="306563048"
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="306563048"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 03:41:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="690549113"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 03:41:40 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6t3T-00038Q-LQ; Mon, 10 Jan 2022 11:41:39 +0000
+Date:   Mon, 10 Jan 2022 19:40:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li-hao Kuo <lhjeff911@gmail.com>, p.zabel@pengutronix.de,
+        broonie@kernel.org, andyshevchenko@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: Re: [PATCH v5 1/2] SPI: Add SPI driver for Sunplus SP7021
+Message-ID: <202201101911.hSqY5DkA-lkp@intel.com>
+References: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <83400d36640fc6256972041c882d080ce9aa5fdd.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/01/22 11:59, Yong Wu ha scritto:
-> On Mon, 2022-01-10 at 10:16 +0100, AngeloGioacchino Del Regno wrote:
->> Il 09/01/22 03:48, Yong Wu ha scritto:
->>> On Tue, 2022-01-04 at 16:55 +0100, AngeloGioacchino Del Regno
->>> wrote:
->>>> Il 23/09/21 13:58, Yong Wu ha scritto:
->>>>> The tlb_sync_all is called from these three functions:
->>>>> a) flush_iotlb_all: it will be called for each a iommu HW.
->>>>> b) tlb_flush_range_sync: it already has for_each_m4u.
->>>>> c) in irq: When IOMMU HW translation fault, Only need flush
->>>>> itself.
->>>>>
->>>>> Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
->>>>>
->>>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>>>> ---
->>>>>     drivers/iommu/mtk_iommu.c | 18 +++++++-----------
->>>>>     1 file changed, 7 insertions(+), 11 deletions(-)
->>>>>
->>>>> diff --git a/drivers/iommu/mtk_iommu.c
->>>>> b/drivers/iommu/mtk_iommu.c
->>>>> index 6f4f6624e3ac..0b4c30baa864 100644
->>>>> --- a/drivers/iommu/mtk_iommu.c
->>>>> +++ b/drivers/iommu/mtk_iommu.c
->>>>> @@ -206,19 +206,15 @@ static struct mtk_iommu_domain
->>>>> *to_mtk_domain(struct iommu_domain *dom)
->>>>>     
->>>>>     static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data
->>>>> *data)
->>>>>     {
->>>>> -	struct list_head *head = data->hw_list;
->>>>> -
->>>>> -	for_each_m4u(data, head) {
->>>>> -		if (pm_runtime_get_if_in_use(data->dev) <= 0)
->>>>> -			continue;
->>>>> +	if (pm_runtime_get_if_in_use(data->dev) <= 0)
->>>>> +		return;
->>>>>     
->>>>> -		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
->>>>> -			       data->base + data->plat_data-
->>>>>> inv_sel_reg);
->>>>>
->>>>> -		writel_relaxed(F_ALL_INVLD, data->base +
->>>>> REG_MMU_INVALIDATE);
->>>>> -		wmb(); /* Make sure the tlb flush all done */
->>>>> +	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
->>>>> +		       data->base + data->plat_data-
->>>>>> inv_sel_reg);
->>>>> +	writel_relaxed(F_ALL_INVLD, data->base +
->>>>> REG_MMU_INVALIDATE);
->>>>> +	wmb(); /* Make sure the tlb flush all done */
->>>>
->>>> There aren't a lot of writes here - not anymore, since you are no
->>>> longer doing
->>>> this for_each_m4u()...
->>>> ...so, please change writel_relaxed() to writel() calls, allowing
->>>> you
->>>> to also
->>>> remove the write barrier at the end (since in the non relaxed
->>>> version, order is already ensured).
->>>
->>> In the "writel", the "__iowmb()" runs before "write_relaxed". Then
->>> how
->>> to guarantee the last register was wrote into the HW. Here the
->>> flush
->>> all don't have sync(waiting it complete)
->>>
->>
->> That's right, I'm sorry for the invalid proposal.
->>
->> Though, there's something else to mention here... if writing
->> (F_INVLD_EN1 | F_INVLD_EN0) to inv_sel_reg is *required* to happen
->> before
->> writing F_ALL_INVLD to REG_MMU_INVALIDATE (which I think is exactly
->> the
->> case here), then, in order to ensure write ordering, you should still
->> use
->> writel() instead of the relaxed accessor; after which, since (as you
->> mentioned)
->> there is no sync readback loop, you can keep that wmb() at the end.
-> 
-> The writel_relaxed also makes sure the order. I did try this:
-> 
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/1570627143-29441-3-git-send-email-yong.wu@mediatek.com/
-> 
+Hi Li-hao,
 
-Ok, that's fair. Means that this patch is fine as it is.
-I'll release by R-b on Dafna's patch, as suggested.
+I love your patch! Yet something to improve:
 
-Thank you,
-- Angelo
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on pza/reset/next robh/for-next linus/master v5.16]
+[cannot apply to next-20220110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Li-hao-Kuo/Add-SPI-control-driver-for-Sunplus-SP7021-SoC/20220110-144745
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220110/202201101911.hSqY5DkA-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/53da1eda2d6e7a04e09dcb37a029ec3b384b7afb
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Li-hao-Kuo/Add-SPI-control-driver-for-Sunplus-SP7021-SoC/20220110-144745
+        git checkout 53da1eda2d6e7a04e09dcb37a029ec3b384b7afb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> make[3]: *** No rule to make target 'drivers/spi/spi-sunplus-sp7021.o', needed by 'drivers/spi/built-in.a'.
+   make[3]: Target '__build' not remade because of errors.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

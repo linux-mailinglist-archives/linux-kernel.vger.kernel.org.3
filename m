@@ -2,133 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE51489BE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCE6489BF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbiAJPLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:11:08 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51676
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233484AbiAJPLG (ORCPT
+        id S236021AbiAJPOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:14:17 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:60348 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232537AbiAJPOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:11:06 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E9AF03F175
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641827464;
-        bh=tX3h7hnt8kxt/dVYtcBgB0Ej6aT/jkR+7hhXYExraYQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=VRNIOMSc9fRPCfyp7K/daqpYan+Ee/kNEhKUgh45UKsHQQDvYLLR3tyYTkf4r6KWD
-         dYY/uA9YRL57i3o8McZLGnsiZWPbruN+6ZBDqX7130HoN3HQiqIqtgWJwzx2jqTXP2
-         JjEm600NgVj32BX3qXC60+a37uuz7uDANnIpoiFRvpReORIUVToAo0hkMA8zH7GUoh
-         btiei24pNnsYrjb5yki3ZxxyUbEqNOeQHU9nECk02Qk4+uSUFvxy3cueEU/7TCiB8q
-         duA5+qja7jAn3PtOE4SHHQplIdcsp5KRwce6sHacd1Kda6gKu2XInVxbO6VmhTN7a6
-         LyM6jdklTnTjA==
-Received: by mail-ed1-f70.google.com with SMTP id c8-20020a05640227c800b003fdc1684cdeso2349523ede.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:11:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tX3h7hnt8kxt/dVYtcBgB0Ej6aT/jkR+7hhXYExraYQ=;
-        b=KqnlpfMnzb0UtHC1yZqTytvBEh6PtO8VN/IVSTo4afdW6RsEuSMPrnNxNFFt2fNg/V
-         sxXoIYoiaz0tqkiOtfMapMTRTajmxjsv39t53xdWl9IUMzLfs7A7Ufc9wrhLnuP9mXjW
-         4lSTHIc2/V1UvREd/elhqk13DtnYX6iKIJNCc+0JeMWw7RG24DQJuQ5J+U2et5fEigWA
-         CINZq+xgveXNshObuoODirsA0fg7j4GP0H0Xt977KnVqxNU3tfzzFxdf4Zn0RM0FLbxq
-         X5VPoxZUBJ29lohi62im22HaiKr5x4NMcjQI8v7eSrrgmZy/H3Gq2QuMzTxHd9gL0Kxw
-         rTTg==
-X-Gm-Message-State: AOAM531Pgs0UY35CiTJL4T7bE3Kmnhhec/ymKVSB3EQ8Mv4Yo1sSE+SC
-        UznTKzrAIEicLh0LfYW9/1huauzdfYfFzlX+ctL96fK6HBWAJXW0UvfbqgvBSEmud0HTgj7nRJc
-        DZlCbLsw4FzdExjpmdzkteLEJWkYnfgQ/OQ40N/ehdA==
-X-Received: by 2002:a05:6402:2756:: with SMTP id z22mr74493edd.255.1641827460976;
-        Mon, 10 Jan 2022 07:11:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxwxpZo2R3+fpKQFtBTyG7e4TaBBMrhOqAuzK/7sAzUdh6Cil2bZ3WxmZvF685+f8JUGO5VTA==
-X-Received: by 2002:a05:6402:2756:: with SMTP id z22mr74475edd.255.1641827460801;
-        Mon, 10 Jan 2022 07:11:00 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id c1sm2548737ejf.92.2022.01.10.07.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 07:11:00 -0800 (PST)
-Message-ID: <372040ab-6ada-62e9-727f-6daeba8e73f8@canonical.com>
-Date:   Mon, 10 Jan 2022 16:10:59 +0100
+        Mon, 10 Jan 2022 10:14:16 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20A7Vg4W026419;
+        Mon, 10 Jan 2022 10:14:15 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3df8d8d9aa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jan 2022 10:14:14 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 20AFED0O057081
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Jan 2022 10:14:13 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 10 Jan 2022 10:14:12 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 10 Jan 2022 10:14:12 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 10 Jan 2022 10:14:12 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.181])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20AFE3Cc010248;
+        Mon, 10 Jan 2022 10:14:06 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH v2 2/3] dt-bindings:iio:frequency: add admv1014 binding
+Date:   Mon, 10 Jan 2022 17:13:49 +0200
+Message-ID: <20220110151350.164095-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 2/2] spi: dt-bindings: samsung: convert to dtschema
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220102155807.42758-1-krzysztof.kozlowski@canonical.com>
- <20220102155807.42758-2-krzysztof.kozlowski@canonical.com>
- <CAPLW+4miCOwFR11gdaU1nMQZdk8zVcWOcSK=Wjd3AaCagGLyug@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAPLW+4miCOwFR11gdaU1nMQZdk8zVcWOcSK=Wjd3AaCagGLyug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: zvwojolg-i4W05_jH0OYlFtvfri0OHer
+X-Proofpoint-GUID: zvwojolg-i4W05_jH0OYlFtvfri0OHer
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-10_06,2022-01-10_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 impostorscore=0 clxscore=1011
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201100107
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 15:41, Sam Protsenko wrote:
-> On Sun, 2 Jan 2022 at 17:58, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
->> controller bindings to DT schema format
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
->>  .../devicetree/bindings/spi/samsung,spi.yaml  | 220 ++++++++++++++++++
->>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ----------
->>  MAINTAINERS                                   |   2 +-
->>  3 files changed, 221 insertions(+), 123 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
->>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
->>
->> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
->> new file mode 100644
->> index 000000000000..195bfafe05fd
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
->> @@ -0,0 +1,220 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/samsung,spi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Samsung S3C/S5P/Exynos SoC SPI controller
->> +
->> +maintainers:
->> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> +
->> +description:
->> +  All the SPI controller nodes should be represented in the aliases node using
->> +  the following format 'spi{n}' where n is a unique number for the alias.
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - enum:
->> +          - samsung,s3c2443-spi
-> 
-> Maybe add the list of supported platforms for each compatible (in a
-> comment on the same line), like it was done in .txt binding?
-> 
-> Other than that:
-> 
+Add device tree bindings for the ADMV1014 Upconverter.
 
-Sure.
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+changes in v2:
+ - move clock description unde `clock-names` section
+ - expand `p1db-comp-enable` to `p1db-compensation-enable`
+ - add regulators for all VCC_* supplies, as suggested
+ .../bindings/iio/frequency/adi,admv1014.yaml  | 129 ++++++++++++++++++
+ 1 file changed, 129 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
 
+diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+new file mode 100644
+index 000000000000..9c43cec72560
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+@@ -0,0 +1,129 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ADMV1014 Microwave Downconverter
++
++maintainers:
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++
++description: |
++   Wideband, microwave downconverter optimized for point to point microwave
++   radio designs operating in the 24 GHz to 44 GHz frequency range.
++
++   https://www.analog.com/en/products/admv1014.html
++
++properties:
++  compatible:
++    enum:
++      - adi,admv1014
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 1000000
++
++  clocks:
++    minItems: 1
++
++  clock-names:
++    items:
++      - const: lo_in
++    description:
++      Definition of the external clock that serves as input Local Oscillator.
++
++  vcm-supply:
++    description:
++      Common-mode voltage regulator.
++
++  vcc-if-bb-supply:
++    description:
++      BB and IF supply voltage regulator.
++
++  vcc-vga-supply:
++    description:
++      RF Amplifier supply voltage regulator.
++
++  vcc-vva-supply:
++    description:
++      VVA Control Circuit supply voltage regulator.
++
++  vcc-lna-3p3-supply:
++    description:
++      Low Noise Amplifier 3.3V supply voltage regulator.
++
++  vcc-lna-1p5-supply:
++    description:
++      Low Noise Amplifier 1.5V supply voltage regulator.
++
++  vcc-bg-supply:
++    description:
++      Band Gap Circuit supply voltage regulator.
++
++  vcc-quad-supply:
++    description:
++      Quadruple supply voltage regulator.
++
++  vcc-mixer-supply:
++    description:
++      Mixer supply voltage regulator.
++
++  adi,input-mode:
++    description:
++      Select the input mode.
++      iq - in-phase quadrature (I/Q) input
++      if - complex intermediate frequency (IF) input
++    enum: [iq, if]
++
++  adi,detector-enable:
++    description:
++      Digital Rx Detector Enable. The Square Law Detector output is
++      available at output pin VDET.
++    type: boolean
++
++  adi,p1db-compensation-enable:
++    description:
++      Turn on bits to optimize P1dB.
++    type: boolean
++
++  adi,quad-se-mode:
++    description:
++      Switch the LO path from differential to single-ended operation.
++      se-neg - Single-Ended Mode, Negative Side Disabled.
++      se-pos - Single-Ended Mode, Positive Side Disabled.
++      diff - Differential Mode.
++    enum: [se-neg, se-pos, diff]
++
++  '#clock-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - vcm-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      admv1014@0{
++        compatible = "adi,admv1014";
++        reg = <0>;
++        spi-max-frequency = <1000000>;
++        clocks = <&admv1014_lo>;
++        clock-names = "lo_in";
++        vcm-supply = <&vcm>;
++        adi,quad-se-mode = "diff";
++        adi,detector-enable;
++        adi,p1db-compensation-enable;
++      };
++    };
++...
+-- 
+2.34.1
 
-Best regards,
-Krzysztof

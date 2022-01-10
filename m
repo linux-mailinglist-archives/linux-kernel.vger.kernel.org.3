@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7CF489EB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A60489EBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238649AbiAJRzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238640AbiAJRzb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:55:31 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ED3C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:55:31 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id f9so14459747qtk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:55:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OPxLFOIrpoh4nUbYG2apHuVRt5Z2LQbPaOlOMgIRdT0=;
-        b=x+wlq7/2QJoYQN8uElQpdlrB8Z+Gs7ujr9BS1xq4RU2Begqpgl2J/+1dIitEVyJ32N
-         fiylYY6Ka/2CNv+nqQEizBSk5QwMBq27GUCIOQ69cXkTqcfx9MQIGfCaGssrE9v/kchZ
-         MItNd+qeV+9x6wzar6ZxXvuXfH5MdeS66sD62Pp1pHgRWe5inh20gIrIrvEefDQEhSvn
-         cm3vnSMNMMnRjrdFH78RaaHo1Fb6f0Ls4ghOBUg3eImCa3pxF+5xLQA5JTtdoOStvJSp
-         Z0U064YQ7VFWfxNZhdQnsiD6vwpwjtPzisQU8YfAZA2ld3g9gSBCjMg4WsLWVN+olBy9
-         5H0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OPxLFOIrpoh4nUbYG2apHuVRt5Z2LQbPaOlOMgIRdT0=;
-        b=xmzOxloF7Odp2O83rkR1oalxiz6qRQv64ku+sA1K/ur+YkM6ROv2XDC2iG743Vhzau
-         Hr28icBG2nmIDr8+pnkQvXqgnNwjF92QlrNIYluc/0Pc99G/4aD3lNlwiLH9+g63emNO
-         JyZeUp3myrap4WNhqSXJLbQCXT1WtbXOFSOimNq9L069LTbuHiepHOMCL1G7L+s7MfW5
-         s1/D6Zcq44SNtN3PznxuAxwhZO7BZBM0o2KiKoChKcXPm23wpk5ZPjrifUkIwhMCLbOI
-         vD5t+Eg1Kvrnf7wCl23fTka8CPw+4XyZz2Vw8xL+gHkkVq6c8XJvoX/dNdbZfP7gs0IW
-         IdIA==
-X-Gm-Message-State: AOAM5308lVUOTWGNm+jTVBP6EZYRZM9aFqAq4gdGLAETGX6HlgZJ3pG6
-        VXJ8N19Zhq4cr2V3OAfdJvy7sFzr2nyvUQ==
-X-Google-Smtp-Source: ABdhPJw5wvb7OIGKy3+SoJSgtMVVjrlmIQyxa5s8brLBA/XIh9bwCmkYEK7NSRv0NdpCuvXqRCMAfw==
-X-Received: by 2002:ac8:5809:: with SMTP id g9mr743740qtg.312.1641837329670;
-        Mon, 10 Jan 2022 09:55:29 -0800 (PST)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id bj26sm4795667qkb.58.2022.01.10.09.55.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 09:55:28 -0800 (PST)
-Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
- is disabled
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>, thara.gopinath@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <cf34f77e-587b-7f97-619f-dcbf431332ff@linaro.org>
-Date:   Mon, 10 Jan 2022 12:55:27 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S238672AbiAJSBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:01:14 -0500
+Received: from mga09.intel.com ([134.134.136.24]:50374 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238610AbiAJSBN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 13:01:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641837673; x=1673373673;
+  h=from:to:cc:subject:date:message-id;
+  bh=4R4m2JnlhOfFaMJ6bSzrdmzLSKSTs3kFRvVCKFiCpOc=;
+  b=dtLVX2/PylD3egEqgrdme298tulv43juQ3z/uNMbCoLq/AKOoTjfeifS
+   vQcOszpbJcH4OuwiQBtmInK9iMnTIFXGkl5jdN2gkY4XHH3BJM7FD8gsl
+   nXdgwCX/YhAQt3+ZfPi03ukLK66mV4N4aPnlqxQdtUjoreCDjtjngRoAX
+   90b2Lj7LfAhzPFQt2bNJTFMeCe4oonCczp1EIQte/1beowjmRcLvbEvZb
+   0vnc1GdGQxmQbigoUPwpC192JLFN+bDRMml6ba184gZvsz8asXCnfmnZR
+   7GAIltdFg5SE+5tMfo5W+BK1GQ0iKDUtBcaq72rLpCkrT3yeJZxuvb7ND
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="243079316"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="243079316"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 10:00:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="622754694"
+Received: from brillo-chrome.jf.intel.com ([10.54.77.27])
+  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 10:00:51 -0800
+From:   Sanrio Alvares <sanrio.alvares@intel.com>
+To:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     mika.westerberg@linux.intel.com,
+        Sanrio Alvares <sanrio.alvares@intel.com>
+Subject: [PATCH v2] PCI / thunderbolt: Add quirk to handle incorrect Supported Link Speeds
+Date:   Mon, 10 Jan 2022 18:00:49 +0000
+Message-Id: <20220110180049.59403-1-sanrio.alvares@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manaf,
+In PCIe config space the "Supported Link Speeds" Vector value is 0x07,
+in all downstream ports for Intel Titan Ridge. Which means link
+supports Gen1, Gen2 and Gen3. While actually max link speed is 2.5GT/s
+so the value of this vector should be 0x01.
 
-On 1/7/22 1:56 PM, Manaf Meethalavalappu Pallikunhi wrote:
-> Whenever a thermal zone is in trip violated state, there is a chance
-> that the same thermal zone mode can be disabled either via thermal
-> core API or via thermal zone sysfs. Once it is disabled, the framework
-> bails out any re-evaluation of thermal zone. It leads to a case where
-> if it is already in mitigation state, it will stay the same state
-> until it is re-enabled.
-> 
-> To avoid above mentioned issue, on thermal zone disable request
-> reset thermal zone and clear mitigation for each trip explicitly.
-> 
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> ---
->   drivers/thermal/thermal_core.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 51374f4..e288c82 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->   
->   	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->   
-> -	if (mode == THERMAL_DEVICE_ENABLED)
-> +	if (mode == THERMAL_DEVICE_ENABLED) {
->   		thermal_notify_tz_enable(tz->id);
-> -	else
-> +	} else {
-> +		int trip;
-> +
-> +		/* make sure all previous throttlings are cleared */
-> +		thermal_zone_device_init(tz);
+As a consequence of reporting >2.5GT/s, we need to delay the full 1s
+which makes resuming longer than needed.
 
-It looks weird to do a init when you are actually disabling the thermal 
-zone.
+Signed-off-by: Sanrio Alvares <sanrio.alvares@intel.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+Changes from v1:
+- add static to quirk_intel_tbt_supported_link_speeds
+---
+ drivers/pci/pci.c    |  4 ++++
+ drivers/pci/quirks.c | 14 ++++++++++++++
+ include/linux/pci.h  |  1 +
+ 3 files changed, 19 insertions(+)
 
-
-> +		for (trip = 0; trip < tz->trips; trip++)
-> +			handle_thermal_trip(tz, trip);
-
-So this is exactly what thermal_zone_device_update does except that 
-thermal_zone_device_update checks for the mode and bails out if the zone 
-is disabled.
-This will work because as you explained in v2, the temperature is reset 
-in thermal_zone_device_init and handle_thermal_trip will remove the 
-mitigation if any.
-
-My two cents here (Rafael and Daniel can comment more on this).
-
-I think it will be cleaner if we can have a third mode 
-THERMAL_DEVICE_DISABLING and have thermal_zone_device_update handle 
-clearing the mitigation. So this will look like
-if (mode == THERMAL_DEVICE_DISABLED)
-	tz->mode = THERMAL_DEVICE_DISABLING;
-else
-	tz->mode = mode;
-
-thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-
-if (mode == THERMAL_DEVICE_DISABLED)
-	tz->mode = mode;
-
-You will have to update update_temperature to set tz->temperature = 
-THERMAL_TEMP_INVALID and thermal_zone_set_trips to set 
-tz->prev_low_trip = -INT_MAX and tz->prev_high_trip = INT_MAX for
-THERMAL_DEVICE_DISABLING mode.
-
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 3d2fb394986a..92401552d385 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -6136,6 +6136,10 @@ enum pci_bus_speed pcie_get_speed_cap(struct pci_dev *dev)
+ {
+ 	u32 lnkcap2, lnkcap;
+ 
++	/* Use overridden value of Supported Link Speed */
++	if (dev->supported_link_speed)
++		return dev->supported_link_speed;
++
+ 	/*
+ 	 * Link Capabilities 2 was added in PCIe r3.0, sec 7.8.18.  The
+ 	 * implementation note there recommends using the Supported Link
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 003950c738d2..2cbe0beeac08 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5293,6 +5293,20 @@ static void quirk_intel_qat_vf_cap(struct pci_dev *pdev)
+ }
+ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x443, quirk_intel_qat_vf_cap);
+ 
++/*
++ * Intel Titan Ridge returns incorrect Supported Link Speeds Vector
++ * when max Link Speed is 2.5GT/s. This results in an extra 1s delay during
++ * resume_noirq with pcie tunneling enabled. Override that value:
++ */
++static void quirk_intel_tbt_supported_link_speeds(struct pci_dev *pdev)
++{
++	pci_info(pdev, "applying Supported Link Speeds quirk\n");
++	pdev->supported_link_speed = PCIE_SPEED_2_5GT;
++}
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15e7, quirk_intel_tbt_supported_link_speeds);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ea, quirk_intel_tbt_supported_link_speeds);
++DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0x15ef, quirk_intel_tbt_supported_link_speeds);
++
+ /*
+  * FLR may cause the following to devices to hang:
+  *
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 18a75c8e615c..633e81e9fe3b 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -502,6 +502,7 @@ struct pci_dev {
+ 	struct pci_p2pdma __rcu *p2pdma;
+ #endif
+ 	u16		acs_cap;	/* ACS Capability offset */
++	u8		supported_link_speed; /* Override Supported Link Speed value from device */
+ 	phys_addr_t	rom;		/* Physical address if not from BAR */
+ 	size_t		romlen;		/* Length if not from BAR */
+ 	char		*driver_override; /* Driver name to force a match */
 -- 
-Warm Regards
-Thara (She/Her/Hers)
-> +
->   		thermal_notify_tz_disable(tz->id);
-> +	}
->   
->   	return ret;
->   }
-> 
+2.17.1
 

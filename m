@@ -2,108 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E222C489504
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4049848951D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242845AbiAJJQY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 04:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243161AbiAJJOQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:14:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83D1C03327B
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:13:29 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1n6qjz-0003vJ-SF; Mon, 10 Jan 2022 10:13:23 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1n6qjx-0005OS-Hr; Mon, 10 Jan 2022 10:13:21 +0100
-Message-ID: <5368e89c391e1329ed2be6496655f1bb50acfd19.camel@pengutronix.de>
-Subject: Re: [PATCH v6 3/4] clk: ralink: make system controller node a reset
- provider
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-clk@vger.kernel.org
-Cc:     john@phrozen.org, linux-staging@lists.linux.dev,
-        gregkh@linuxfoundation.org, neil@brown.name,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org
-Date:   Mon, 10 Jan 2022 10:13:21 +0100
-In-Reply-To: <20220110083910.1351020-4-sergio.paracuellos@gmail.com>
-References: <20220110083910.1351020-1-sergio.paracuellos@gmail.com>
-         <20220110083910.1351020-4-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        id S242826AbiAJJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:22:43 -0500
+Received: from mail.turdin.pl ([192.36.61.133]:38242 "EHLO mail.turdin.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242821AbiAJJWi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 04:22:38 -0500
+X-Greylist: delayed 417 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Jan 2022 04:22:38 EST
+Received: by mail.turdin.pl (Postfix, from userid 1001)
+        id 5B8DF40CB3; Mon, 10 Jan 2022 10:15:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=turdin.pl; s=mail;
+        t=1641806139; bh=mDPUA9BWGElhOOIPBq3AtAUAXg2Eb8f+lcBS3Ychme4=;
+        h=Date:From:To:Subject:From;
+        b=J2UxkZX8x1B35pXS3ETCcsZmxsqK8wC3R0a1T50AEUy3t+FnuMr77/ADYRmhxjYBw
+         2R5X7Ps0Sw0p7A3Tsys4E3omsJLAhf+d/dDklnaOElQ3svtVK6MwcuVcCFcNBq4cmS
+         bV+HNS/oT+0CXWSt+suwyZa26Bs5PgFWhHwJnfHGzE1CSWQ+6vVgZzUkE7D+ufdyuL
+         f0KPLGZrDAagfZgePlqGAbBgou+lMXHTnjAKHXuvPopBlx5K9IWctNw7oQSvfqdqeA
+         J1pBg0RPGmoFHs5Ev+Bs9US4Y6GaJYLIFjxTIgM98/g19acqePqKkMF/iUCrHwGoK7
+         oEaxhu2Jj1yqw==
+Received: by mail.turdin.pl for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:15:25 GMT
+Message-ID: <20220110084500-0.1.12.32g0.0.jm3kqs90hs@turdin.pl>
+Date:   Mon, 10 Jan 2022 09:15:25 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Lewandowski" ?= 
+        <mikolaj.lewandowski@turdin.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?Rachunek_za_pr=C4=85d?=
+X-Mailer: mail.turdin.pl
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergio,
+Dzie=C5=84 dobry,
 
-On Mon, 2022-01-10 at 09:39 +0100, Sergio Paracuellos wrote:
-> +static int mt7621_assert_device(struct reset_controller_dev *rcdev,
-> +				unsigned long id)
-> +{
-> +	struct mt7621_rst *data = to_mt7621_rst(rcdev);
-> +	struct regmap *sysc = data->sysc;
-> +
-> +	if (id == MT7621_RST_SYS)
-> +		return -EINVAL;
+jak ju=C5=BC z pewno=C5=9Bci=C4=85 Pa=C5=84stwo wiedz=C4=85, mo=C5=BCemy =
+spodziewa=C4=87 si=C4=99 sporej podwy=C5=BCki cen pr=C4=85du od 2022.
 
-Better implement the .of_xlate callback and check there instead.
+Ceny energii gwa=C5=82townie rosn=C4=85 w ca=C5=82ej Europie, dlatego jes=
+t to odpowiedni moment, aby rozwa=C5=BCy=C4=87 instalacj=C4=99 paneli s=C5=
+=82onecznych.=20
 
-That way it would fail on reset_control_get() rather than handing out a
-valid reset controller that just doesn't work.
+Fotowoltaika to obecnie szansa, kt=C3=B3ra zminimalizuje skutki podwy=C5=BC=
+ek, o kt=C3=B3re ju=C5=BC zawnioskowali najwi=C4=99ksi dostawcy pr=C4=85d=
+u w Polsce.=20
 
-> +
-> +	return regmap_update_bits(sysc, SYSC_REG_RESET_CTRL, BIT(id), BIT(id));
-> +}
-> +
-> +static int mt7621_deassert_device(struct reset_controller_dev *rcdev,
-> +				  unsigned long id)
-> +{
-> +	struct mt7621_rst *data = to_mt7621_rst(rcdev);
-> +	struct regmap *sysc = data->sysc;
-> +
-> +	if (id == MT7621_RST_SYS)
-> +		return -EINVAL;
+Czy chcieliby Pa=C5=84stwo rozwa=C5=BCy=C4=87 instalacj=C4=99 odnawialnyc=
+h =C5=BAr=C3=B3de=C5=82 energii w swoim obiekcie?
 
-Same as above.
 
-> +	return regmap_update_bits(sysc, SYSC_REG_RESET_CTRL, BIT(id), 0);
-> +}
-> +
-> +static int mt7621_reset_device(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	int ret;
-> +
-> +	ret = mt7621_assert_device(rcdev, id);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return mt7621_deassert_device(rcdev, id);
-> +}
-
-Is this known to work for all possible users, without delay between
-assert and deassert?
-
-Are there any users of the reset_control_reset() API at all? This API
-was added for self-clearing reset bits, so if there are no users that
-need to pretend this is a reset pulse at the hardware level (there may
-be), I'd prefer if this was just left out.
-
-Apart from this, this looks good to me.
-
-regards
-Philipp
+Pozdrawiam
+Miko=C5=82aj Lewandowski

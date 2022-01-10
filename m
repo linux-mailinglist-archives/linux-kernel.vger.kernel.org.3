@@ -2,175 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843A6488E19
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4BF488E1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237868AbiAJBgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 20:36:07 -0500
-Received: from mga01.intel.com ([192.55.52.88]:36192 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237853AbiAJBgF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 20:36:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641778565; x=1673314565;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QE8bNZMszeD42Sg+GicP4A7fdI2QzmXFDe6QcHkZS3o=;
-  b=MzuBgOvkB/l+9yafQnAaT4TmJSHgWBbgOZjbsz7LPXPUkBiu5msa67aY
-   ufJzmgb83hi4++dYcp2kYyR2j5hyCWKaRiah922He7sWuCoWoa4AABehu
-   RYk+tRZMRbBpNRURo1/GxXypimhlTuNb++aSCqMGVxXZYiRvPXzw1NhGR
-   hDFFMHouwPCaUPI9Gy1rkhyqHDban/VyagCXYUv1E53ELWOihhCBVGfXH
-   h05y1aaxTB3q6P0VKdX3FLrrK4RWq6ywrJQ4KHeM2bzUNiFhGaEM6o8gn
-   Fq5EzhRaihAM5VPMn4+Vcq+O3CvvyFT3JJn2obuu3fTsXzRmZvwp3Ssxe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="267455567"
-X-IronPort-AV: E=Sophos;i="5.88,275,1635231600"; 
-   d="scan'208";a="267455567"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 17:36:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,275,1635231600"; 
-   d="scan'208";a="471917757"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Jan 2022 17:36:01 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6jbN-00022V-38; Mon, 10 Jan 2022 01:36:01 +0000
-Date:   Mon, 10 Jan 2022 09:35:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] staging: r8188eu: convert DBG_88E calls in
- core/rtw_mlme_ext.c
-Message-ID: <202201100935.4h1VYxmR-lkp@intel.com>
-References: <20220109215427.887-7-phil@philpotter.co.uk>
+        id S237904AbiAJBiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 20:38:54 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:53968 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237901AbiAJBix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 20:38:53 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADHzQEBjtthk6juBQ--.52987S2;
+        Mon, 10 Jan 2022 09:38:09 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     mwen@igalia.com
+Cc:     emma@anholt.net, airlied@linux.ie, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] drm/v3d/v3d_drv: Check for error num after setting mask
+Date:   Mon, 10 Jan 2022 09:38:07 +0800
+Message-Id: <20220110013807.4105270-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220109215427.887-7-phil@philpotter.co.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHzQEBjtthk6juBQ--.52987S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw4UJr1ktFWxCF1rJFWxtFb_yoW8Xw4Dpa
+        1UGFy5KrW8tF1Fg3s7AFZ8ZF1aq3sIqa929FWUC3s7u345JF1DZr98AFyjqr1kJFy7Cr4a
+        qrs0ka9Y9r1ayFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU5kucDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
+Because of the possible failure of the dma_supported(), the
+dma_set_mask_and_coherent() may return error num.
+Therefore, it should be better to check it and return the error if
+fails.
+Also, we can create a variable for the mask to solve the
+alignment issue.
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on staging/staging-testing]
-
-url:    https://github.com/0day-ci/linux/commits/Phillip-Potter/staging-r8188eu-further-per-file-DBG_88E-cleanups/20220110-055642
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git fa783154524a71ab74e293cd8251155e5971952b
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20220110/202201100935.4h1VYxmR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/cc951de8ec99ed47dd19c0c276799a9ac0d679d4
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Phillip-Potter/staging-r8188eu-further-per-file-DBG_88E-cleanups/20220110-055642
-        git checkout cc951de8ec99ed47dd19c0c276799a9ac0d679d4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/r8188eu/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/staging/r8188eu/core/rtw_mlme_ext.c:7105:1: error: expected statement
-   }
-   ^
-   1 error generated.
-
-
-vim +7105 drivers/staging/r8188eu/core/rtw_mlme_ext.c
-
-15865124feed88 Phillip Potter  2021-07-28  7028  
-15865124feed88 Phillip Potter  2021-07-28  7029  void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
-15865124feed88 Phillip Potter  2021-07-28  7030  {
-15865124feed88 Phillip Potter  2021-07-28  7031  	struct sta_info		*psta, *psta_bmc;
-15865124feed88 Phillip Potter  2021-07-28  7032  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
-3b522a11b50476 Michael Straube 2021-08-09  7033  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
-3b522a11b50476 Michael Straube 2021-08-09  7034  	struct wlan_bssid_ex *cur_network = &pmlmeinfo->network;
-15865124feed88 Phillip Potter  2021-07-28  7035  	struct sta_priv		*pstapriv = &padapter->stapriv;
-15865124feed88 Phillip Potter  2021-07-28  7036  	u8 join_type;
-15865124feed88 Phillip Potter  2021-07-28  7037  	u16 media_status;
-15865124feed88 Phillip Potter  2021-07-28  7038  
-15865124feed88 Phillip Potter  2021-07-28  7039  	if (join_res < 0) {
-15865124feed88 Phillip Potter  2021-07-28  7040  		join_type = 1;
-461c4776856c15 Michael Straube 2021-10-07  7041  		SetHwReg8188EU(padapter, HW_VAR_MLME_JOIN, (u8 *)(&join_type));
-461c4776856c15 Michael Straube 2021-10-07  7042  		SetHwReg8188EU(padapter, HW_VAR_BSSID, null_addr);
-15865124feed88 Phillip Potter  2021-07-28  7043  
-15865124feed88 Phillip Potter  2021-07-28  7044  		/* restore to initial setting. */
-15865124feed88 Phillip Potter  2021-07-28  7045  		update_tx_basic_rate(padapter, padapter->registrypriv.wireless_mode);
-15865124feed88 Phillip Potter  2021-07-28  7046  
-15865124feed88 Phillip Potter  2021-07-28  7047  		goto exit_mlmeext_joinbss_event_callback;
-15865124feed88 Phillip Potter  2021-07-28  7048  	}
-15865124feed88 Phillip Potter  2021-07-28  7049  
-15865124feed88 Phillip Potter  2021-07-28  7050  	if ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) {
-15865124feed88 Phillip Potter  2021-07-28  7051  		/* for bc/mc */
-15865124feed88 Phillip Potter  2021-07-28  7052  		psta_bmc = rtw_get_bcmc_stainfo(padapter);
-15865124feed88 Phillip Potter  2021-07-28  7053  		if (psta_bmc) {
-15865124feed88 Phillip Potter  2021-07-28  7054  			pmlmeinfo->FW_sta_info[psta_bmc->mac_id].psta = psta_bmc;
-15865124feed88 Phillip Potter  2021-07-28  7055  			update_bmc_sta_support_rate(padapter, psta_bmc->mac_id);
-15865124feed88 Phillip Potter  2021-07-28  7056  			Update_RA_Entry(padapter, psta_bmc->mac_id);
-15865124feed88 Phillip Potter  2021-07-28  7057  		}
-15865124feed88 Phillip Potter  2021-07-28  7058  	}
-15865124feed88 Phillip Potter  2021-07-28  7059  
-15865124feed88 Phillip Potter  2021-07-28  7060  	/* turn on dynamic functions */
-15865124feed88 Phillip Potter  2021-07-28  7061  	Switch_DM_Func(padapter, DYNAMIC_ALL_FUNC_ENABLE, true);
-15865124feed88 Phillip Potter  2021-07-28  7062  
-15865124feed88 Phillip Potter  2021-07-28  7063  	/*  update IOT-releated issue */
-15865124feed88 Phillip Potter  2021-07-28  7064  	update_IOT_info(padapter);
-15865124feed88 Phillip Potter  2021-07-28  7065  
-461c4776856c15 Michael Straube 2021-10-07  7066  	SetHwReg8188EU(padapter, HW_VAR_BASIC_RATE, cur_network->SupportedRates);
-15865124feed88 Phillip Potter  2021-07-28  7067  
-15865124feed88 Phillip Potter  2021-07-28  7068  	/* BCN interval */
-461c4776856c15 Michael Straube 2021-10-07  7069  	SetHwReg8188EU(padapter, HW_VAR_BEACON_INTERVAL, (u8 *)(&pmlmeinfo->bcn_interval));
-15865124feed88 Phillip Potter  2021-07-28  7070  
-15865124feed88 Phillip Potter  2021-07-28  7071  	/* udpate capability */
-15865124feed88 Phillip Potter  2021-07-28  7072  	update_capinfo(padapter, pmlmeinfo->capability);
-15865124feed88 Phillip Potter  2021-07-28  7073  
-15865124feed88 Phillip Potter  2021-07-28  7074  	/* WMM, Update EDCA param */
-15865124feed88 Phillip Potter  2021-07-28  7075  	WMMOnAssocRsp(padapter);
-15865124feed88 Phillip Potter  2021-07-28  7076  
-15865124feed88 Phillip Potter  2021-07-28  7077  	/* HT */
-15865124feed88 Phillip Potter  2021-07-28  7078  	HTOnAssocRsp(padapter);
-15865124feed88 Phillip Potter  2021-07-28  7079  
-15865124feed88 Phillip Potter  2021-07-28  7080  	set_channel_bwmode(padapter, pmlmeext->cur_channel, pmlmeext->cur_ch_offset, pmlmeext->cur_bwmode);
-15865124feed88 Phillip Potter  2021-07-28  7081  
-15865124feed88 Phillip Potter  2021-07-28  7082  	psta = rtw_get_stainfo(pstapriv, cur_network->MacAddress);
-15865124feed88 Phillip Potter  2021-07-28  7083  	if (psta) { /* only for infra. mode */
-15865124feed88 Phillip Potter  2021-07-28  7084  		pmlmeinfo->FW_sta_info[psta->mac_id].psta = psta;
-15865124feed88 Phillip Potter  2021-07-28  7085  
-15865124feed88 Phillip Potter  2021-07-28  7086  		psta->wireless_mode = pmlmeext->cur_wireless_mode;
-15865124feed88 Phillip Potter  2021-07-28  7087  
-15865124feed88 Phillip Potter  2021-07-28  7088  		/* set per sta rate after updating HT cap. */
-15865124feed88 Phillip Potter  2021-07-28  7089  		set_sta_rate(padapter, psta);
-461c4776856c15 Michael Straube 2021-10-07  7090  		SetHwReg8188EU(padapter, HW_VAR_TX_RPT_MAX_MACID, (u8 *)&psta->mac_id);
-15865124feed88 Phillip Potter  2021-07-28  7091  		media_status = (psta->mac_id << 8) | 1; /*   MACID|OPMODE: 1 means connect */
-461c4776856c15 Michael Straube 2021-10-07  7092  		SetHwReg8188EU(padapter, HW_VAR_H2C_MEDIA_STATUS_RPT, (u8 *)&media_status);
-15865124feed88 Phillip Potter  2021-07-28  7093  	}
-15865124feed88 Phillip Potter  2021-07-28  7094  
-15865124feed88 Phillip Potter  2021-07-28  7095  	join_type = 2;
-461c4776856c15 Michael Straube 2021-10-07  7096  	SetHwReg8188EU(padapter, HW_VAR_MLME_JOIN, (u8 *)(&join_type));
-15865124feed88 Phillip Potter  2021-07-28  7097  
-15865124feed88 Phillip Potter  2021-07-28  7098  	if ((pmlmeinfo->state & 0x03) == WIFI_FW_STATION_STATE) {
-15865124feed88 Phillip Potter  2021-07-28  7099  		/*  correcting TSF */
-15865124feed88 Phillip Potter  2021-07-28  7100  		correct_TSF(padapter, pmlmeext);
-15865124feed88 Phillip Potter  2021-07-28  7101  	}
-15865124feed88 Phillip Potter  2021-07-28  7102  	rtw_lps_ctrl_wk_cmd(padapter, LPS_CTRL_CONNECT, 0);
-15865124feed88 Phillip Potter  2021-07-28  7103  
-15865124feed88 Phillip Potter  2021-07-28  7104  exit_mlmeext_joinbss_event_callback:
-15865124feed88 Phillip Potter  2021-07-28 @7105  }
-15865124feed88 Phillip Potter  2021-07-28  7106  
-
+Fixes: 334dd38a3878 ("drm/v3d: Set dma_mask as well as coherent_dma_mask")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Melissa Wen <mwen@igalia.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changelog:
+
+v1 -> v2
+
+* Change 1. Add a variable for the mask.
+---
+ drivers/gpu/drm/v3d/v3d_drv.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+index 9403c3b36aca..6407a006d6ec 100644
+--- a/drivers/gpu/drm/v3d/v3d_drv.c
++++ b/drivers/gpu/drm/v3d/v3d_drv.c
+@@ -221,6 +221,7 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+ 	int ret;
+ 	u32 mmu_debug;
+ 	u32 ident1;
++	u64 mask;
+ 
+ 
+ 	v3d = devm_drm_dev_alloc(dev, &v3d_drm_driver, struct v3d_dev, drm);
+@@ -240,8 +241,11 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	mmu_debug = V3D_READ(V3D_MMU_DEBUG_INFO);
+-	dma_set_mask_and_coherent(dev,
+-		DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH)));
++	mask = DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH));
++	ret = dma_set_mask_and_coherent(dev, mask);
++	if (ret)
++		return ret;
++
+ 	v3d->va_width = 30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_VA_WIDTH);
+ 
+ 	ident1 = V3D_READ(V3D_HUB_IDENT1);
+-- 
+2.25.1
+

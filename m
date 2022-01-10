@@ -2,498 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E440E4894F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CFC4894C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243186AbiAJJO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S242474AbiAJJLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242771AbiAJJMj (ORCPT
+        with ESMTP id S242515AbiAJJLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:12:39 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F448C061751;
-        Mon, 10 Jan 2022 01:12:39 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id x27so1437935pfu.3;
-        Mon, 10 Jan 2022 01:12:39 -0800 (PST)
+        Mon, 10 Jan 2022 04:11:02 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0CEC061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:11:01 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i129so2823793pfe.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:11:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=pUKMXuo3xVxEWKXjp7ogKF7zeSoPw2PTqo2WG9e7EOA=;
-        b=Di3cCvIIY239IGt/c0tGqMqgvAASPuPHbHmpXojKoUTCVBMW1LRI5K5Roe/rkjJJF5
-         J9zueerHJSCCjyTJL7jLXgEl3GnSNljmqfAhm5b86Un2Lhyu1CZI+IoZI+cLDaREx7ri
-         7DOjA8EMIZ9c4wsmiRsBmKHm1YQC05orPwzfSvK4qdSEeaHiZqm0Yb7LfuRfcqAXiQoQ
-         YoNBwOAsaXc8AfJLJ/mhZlZJeGB/6uev3KQXCfIt95hf8/gYJGcNrIWmWKncgMK6cTrD
-         9d/3iH2t7PymWGE2CFZkWszqlDUNpTYE9FX/H1+UVFS+ZMOLoKzrJzdjGjxEpJ/L0WSF
-         mHRw==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:in-reply-to;
+        bh=LH5NlIHJHuta64DamRFx+/uEJCq1/1hcYhPhtJxeuTc=;
+        b=RftJcavg/pHc1Lwu5P3+pbzRPMPeDmVfL1/BWTDFvH4ZOt/94AqkF8pW7aiV3TY8Gz
+         I1O/aqykFJv9I0a39XlV9H2+Qe/XPN6afV3LJ5/WgOHgd3o6e4SZgHUrwQNVJKvszoR6
+         78CSlcPJ8bWkMRE85Xez+A8cNaJ+cMWFXftqM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=pUKMXuo3xVxEWKXjp7ogKF7zeSoPw2PTqo2WG9e7EOA=;
-        b=sYKBh/sQBKE65L7dT9XjRuXBUOE5JVe9FKCkaDDZgRXG8n6eovY9iVPzH5ggXyLD8d
-         ZWEpXW2ZmkT1umkg1cUFlZ3E9hN9RLeJFrnOY7IJUR0xnHEpZUbW0RUVIWXYykTqDikw
-         w6P3CR2nZHNtkvDeyNlUwmelQ34LiXwxtCP3x1+wP2QymBa4rEzFvXFePMgEvL5nqQw6
-         6c23goeFyqhoeMuQ+uEfNOPFUDqQ84zQ031+2C2h+A70cpDcnSgtildcxQDYZzff4MRA
-         c+9UJxrI4CKohFOkjC4P2uJdi04ISYTQDOTQeSaLoMnphEqdyVtKQblFGxUqeyauO1s5
-         s6fw==
-X-Gm-Message-State: AOAM5327DVwdJJSAKID+/bOH/Q9WGE1XI3hUekDKRJHd3Ctx6saRv3/R
-        FcEoq8Wdb9+C0OawNbGtNCQ=
-X-Google-Smtp-Source: ABdhPJzcUoj3Y6lu927itTNWfKF9jZHJw6//ZclzBXChG2+gGlTakfZDxB2artybUeJ0b5BbTvueRw==
-X-Received: by 2002:a05:6a00:1351:b0:4bc:edbf:7acd with SMTP id k17-20020a056a00135100b004bcedbf7acdmr18006227pfu.41.1641805958867;
-        Mon, 10 Jan 2022 01:12:38 -0800 (PST)
-Received: from localhost.localdomain ([162.219.34.250])
-        by smtp.gmail.com with ESMTPSA id j22sm6293910pfj.29.2022.01.10.01.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 01:12:38 -0800 (PST)
-From:   Wang Jianchao <jianchao.wan9@gmail.com>
-To:     axboe@kernel.dk
-Cc:     jbacik@fb.com, tj@kernel.org, bvanassche@acm.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] blk: introduce iostat per cgroup module
-Date:   Mon, 10 Jan 2022 17:10:46 +0800
-Message-Id: <20220110091046.17010-14-jianchao.wan9@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220110091046.17010-1-jianchao.wan9@gmail.com>
-References: <20220110091046.17010-1-jianchao.wan9@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:in-reply-to;
+        bh=LH5NlIHJHuta64DamRFx+/uEJCq1/1hcYhPhtJxeuTc=;
+        b=P9QeXGZ1QYiAhVRvxjIQrJS4uQCmnM8hWELTsgOheyLC1jO3WCLdLe6bMVrgpP73h9
+         C8avCMtctKRjud+uGUVTL+JIFxdgoO2NlHPcSOu8JzjAtIc7slJIDnBb5Q7c+S8Cqc/B
+         v/Oy1mHb+ikWkzN8mxmA+Bd+WQl6Vo1DpW1MdC+iHtC999KmKjeLtpC2jEM57Ll7IFko
+         LIG+HWW2089lgCHwq5wOgtYNb1djONvVYsmpxLFdOGccSi+NcnL65WUi4kj8+wip3cfx
+         g5uGt9lt0zUPTVSMVY3BsE5b/K/xLpmR2qUhn1WixKVYrdVrhKdtCkLXa2grCjWBSVnK
+         o04g==
+X-Gm-Message-State: AOAM533jouGJnZu0xJP/fd6C9QXlTdDEpk75nSQUuRnVokKvs3aurDwg
+        J7L7V2m3wh+E7i4qKysvdkXdfQ==
+X-Google-Smtp-Source: ABdhPJwJNOfWpwtoDOvscRB2ZxXYN1zpQP7w9untHAVM+kD4vhwTsg2uFMEvtSKGaZbw0WYPry4CAA==
+X-Received: by 2002:a63:a741:: with SMTP id w1mr12091214pgo.620.1641805861004;
+        Mon, 10 Jan 2022 01:11:01 -0800 (PST)
+Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id e20sm6076038pfv.219.2022.01.10.01.10.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 01:11:00 -0800 (PST)
+Message-ID: <b652e98b-1b09-4639-95c4-779fb6cc989f@broadcom.com>
+Date:   Mon, 10 Jan 2022 10:10:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+Subject: Re: [PATCH v2 14/35] brcmfmac: pcie: Add IDs/properties for BCM4378
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-15-marcan@marcan.st>
+In-Reply-To: <20220104072658.69756-15-marcan@marcan.st>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000027b1c005d536b724"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Jianchao <wangjianchao@kuaishou.com>
+--00000000000027b1c005d536b724
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-iostat can only track the whole device's io statistics. This patch
-introduces iostat per cgroup based on blk-rq-qos framework which
-can track bw, iops, queue latency and device latency and distinguish
-regular or meta data. The blkio.iostat per cgroup output in following
-format,
-vda-data bytes iops queue_lat dev_lat [ditto]  [ditto]
-    meta   \___________ ______________/    |        |
-	               v                   v        v
-	             read               write   discard
-In particular, the blkio.iostat of root only output the statistics
-of IOs from root cgroup. However, the non-root blkio.iostat outputs
-all of the children cgroups. With meta stats in root cgroup, hope
-to observe the performace of fs metadata.
+On 1/4/2022 8:26 AM, Hector Martin wrote:
+> This chip is present on Apple M1 (t8103) platforms:
+> 
+> * atlantisb (apple,j274): Mac mini (M1, 2020)
+> * honshu    (apple,j293): MacBook Pro (13-inch, M1, 2020)
+> * shikoku   (apple,j313): MacBook Air (M1, 2020)
+> * capri     (apple,j456): iMac (24-inch, 4x USB-C, M1, 2020)
+> * santorini (apple,j457): iMac (24-inch, 2x USB-C, M1, 2020)
 
-Signed-off-by: Wang Jianchao <wangjianchao@kuaishou.com>
----
- block/Kconfig          |   9 ++
- block/Makefile         |   2 +
- block/blk-iostat.c     | 356 +++++++++++++++++++++++++++++++++++++++++
- include/linux/blkdev.h |   2 +-
- 4 files changed, 368 insertions(+), 1 deletion(-)
- create mode 100644 block/blk-iostat.c
+Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c   | 2 ++
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c   | 8 ++++++++
+>   .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 2 ++
+>   3 files changed, 12 insertions(+)
 
-diff --git a/block/Kconfig b/block/Kconfig
-index ea612cb5c8ee..35f24db3ec92 100644
---- a/block/Kconfig
-+++ b/block/Kconfig
-@@ -156,6 +156,15 @@ config BLK_CGROUP_IOPRIO
- 	scheduler and block devices process requests. Only some I/O schedulers
- 	and some block devices support I/O priorities.
- 
-+config BLK_CGROUP_IOSTAT
-+	tristate "IO statistics monitor per cgroup"
-+	select BLK_RQ_BLKCG_GQ
-+	select BLK_RQ_ALLOC_TIME
-+	depends on BLK_CGROUP
-+	help
-+	Monitor IO statistics, including bw, iops, queue latency and device
-+	latency, in per-cgroup level.
-+
- config BLK_DEBUG_FS
- 	bool "Block layer debugging information in debugfs"
- 	default y
-diff --git a/block/Makefile b/block/Makefile
-index 3f76836076b2..ad89015e37ce 100644
---- a/block/Makefile
-+++ b/block/Makefile
-@@ -23,6 +23,8 @@ iolat-y 				:= blk-iolatency.o
- obj-$(CONFIG_BLK_CGROUP_IOLATENCY)	+= iolat.o
- iocost-y 			:= blk-iocost.o
- obj-$(CONFIG_BLK_CGROUP_IOCOST)	+= iocost.o
-+iostat-y 			:= blk-iostat.o
-+obj-$(CONFIG_BLK_CGROUP_IOSTAT)	+= iostat.o
- obj-$(CONFIG_MQ_IOSCHED_DEADLINE)	+= mq-deadline.o
- obj-$(CONFIG_MQ_IOSCHED_KYBER)	+= kyber-iosched.o
- bfq-y				:= bfq-iosched.o bfq-wf2q.o bfq-cgroup.o
-diff --git a/block/blk-iostat.c b/block/blk-iostat.c
-new file mode 100644
-index 000000000000..3c6bcb6ab055
---- /dev/null
-+++ b/block/blk-iostat.c
-@@ -0,0 +1,356 @@
-+#include <linux/kernel.h>
-+#include <linux/blk_types.h>
-+#include <linux/module.h>
-+#include <linux/blk-cgroup.h>
-+#include <linux/bio.h>
-+#include <linux/spinlock.h>
-+
-+#include "blk.h"
-+#include "blk-rq-qos.h"
-+
-+enum {
-+	IOSTAT_READ = 0,
-+	IOSTAT_WRITE,
-+	IOSTAT_DISCARD,
-+	IOSTAT_MAX,
-+};
-+
-+struct iostat_data {
-+	u64 bytes[IOSTAT_MAX];
-+	u64 ios[IOSTAT_MAX];
-+	u64 queue_lat[IOSTAT_MAX];
-+	u64 dev_lat[IOSTAT_MAX];
-+};
-+
-+struct iostat_queue {
-+	struct rq_qos rqos;
-+};
-+
-+struct iostat_gq {
-+	struct blkg_policy_data pd;
-+	char disk_name[DISK_NAME_LEN];
-+	struct {
-+		struct iostat_data __percpu *data;
-+		struct iostat_data __percpu *meta;
-+	} stat;
-+};
-+
-+struct iostat_cgrp {
-+	struct blkcg_policy_data cpd;
-+};
-+
-+DEFINE_MUTEX(iostat_mutex);
-+
-+static struct blkcg_policy blkcg_policy_iostat;
-+
-+static inline struct iostat_gq *pd_to_ist(struct blkg_policy_data *pd)
-+{
-+	return pd ? container_of(pd, struct iostat_gq, pd) : NULL;
-+}
-+
-+static inline struct iostat_gq *blkg_to_ist(struct blkcg_gq *blkg)
-+{
-+	return pd_to_ist(blkg_to_pd(blkg, &blkcg_policy_iostat));
-+}
-+
-+static inline bool req_is_meta(struct request *req)
-+{
-+	return req->cmd_flags & REQ_META;
-+}
-+
-+static inline int iostat_op(struct request *req)
-+{
-+	int op;
-+
-+	if (unlikely(op_is_discard(req_op(req))))
-+		op = IOSTAT_DISCARD;
-+	else if (op_is_write(req_op(req)))
-+		op = IOSTAT_WRITE;
-+	else
-+		op = IOSTAT_READ;
-+
-+	return op;
-+}
-+
-+static void __iostat_issue(struct rq_qos *rqos,
-+		struct iostat_gq *is, struct request *req)
-+{
-+	struct iostat_data *stat;
-+	int op = iostat_op(req);
-+
-+	/*
-+	 * blk_mq_start_request() inherents bio_issue_time() when BLK_CGROUP
-+	 * to avoid overhead of readtsc.
-+	 */
-+	req->io_start_time_ns = ktime_get_ns();
-+	if (req_is_meta(req))
-+		stat = get_cpu_ptr(is->stat.meta);
-+	else
-+		stat = get_cpu_ptr(is->stat.data);
-+	/*
-+	 * alloc_time_ns is get before get tag, we use it monitor depth,
-+	 * tag waits and in queue time.
-+	 */
-+	stat->queue_lat[op] += req->io_start_time_ns - req->alloc_time_ns;
-+	stat->ios[op]++;
-+	stat->bytes[op] += blk_rq_bytes(req);
-+	put_cpu_ptr(stat);
-+}
-+
-+static void iostat_issue(struct rq_qos *rqos, struct request *req)
-+{
-+	struct iostat_gq *is;
-+
-+	if (unlikely(!req->bio))
-+		return;
-+
-+	is = blkg_to_ist(req->blkg);
-+	/*
-+	 * Most of time, bios from submit_bio would have the valid bi_blkg,
-+	 * however, blk_execute_rq case is an exception.
-+	 */
-+	if (is)
-+		__iostat_issue(rqos, is, req);
-+}
-+
-+static void __iostat_done(struct rq_qos *rq_qos,
-+		struct iostat_gq *is, struct request *req)
-+{
-+	struct iostat_data *stat;
-+	int op = iostat_op(req);
-+
-+	if (req_is_meta(req))
-+		stat = get_cpu_ptr(is->stat.meta);
-+	else
-+		stat = get_cpu_ptr(is->stat.data);
-+	if (req->io_start_time_ns)
-+		stat->dev_lat[op] += ktime_get_ns() - req->io_start_time_ns;
-+	put_cpu_ptr(stat);
-+}
-+
-+static void iostat_done(struct rq_qos *rqos, struct request *req)
-+{
-+	struct iostat_gq *is = blkg_to_ist(req->blkg);
-+
-+	if (is)
-+		__iostat_done(rqos, is, req);
-+}
-+
-+static void iostat_exit(struct rq_qos *rqos)
-+{
-+	struct iostat_queue *isq = container_of(rqos, struct iostat_queue, rqos);
-+
-+	blkcg_deactivate_policy(rqos->q, &blkcg_policy_iostat);
-+	rq_qos_deactivate(rqos);
-+	kfree(isq);
-+}
-+
-+static int iostat_init(struct request_queue *q);
-+
-+struct rq_qos_ops iostat_rq_ops = {
-+#if IS_MODULE(CONFIG_BLK_CGROUP_IOLATENCY)
-+	.owner = THIS_MODULE,
-+#endif
-+	.name = "iostat",
-+	.flags = RQOS_FLAG_CGRP_POL | RQOS_FLAG_RQ_ALLOC_TIME,
-+	.issue = iostat_issue,
-+	.done = iostat_done,
-+	.exit = iostat_exit,
-+	.init = iostat_init,
-+};
-+
-+static int iostat_init(struct request_queue *q)
-+{
-+	struct iostat_queue *isq;
-+	struct rq_qos *rqos;
-+	int ret;
-+
-+	isq = kzalloc_node(sizeof(*isq), GFP_KERNEL, q->node);
-+	if (!isq) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	blk_queue_flag_set(QUEUE_FLAG_RQ_ALLOC_TIME, q);
-+	rqos = &isq->rqos;
-+	rq_qos_activate(q, rqos, &iostat_rq_ops);
-+
-+	ret = blkcg_activate_policy(q, &blkcg_policy_iostat);
-+	if (ret) {
-+		rq_qos_deactivate(rqos);
-+		kfree(isq);
-+	}
-+out:
-+	return ret;
-+}
-+
-+static void iostat_sum(struct blkcg_gq *blkg,
-+		struct iostat_data *sum, bool meta)
-+{
-+	struct iostat_gq *is = blkg_to_ist(blkg);
-+	struct iostat_data *stat;
-+	int cpu, i;
-+
-+	for_each_possible_cpu(cpu) {
-+		if (meta)
-+			stat = per_cpu_ptr(is->stat.meta, cpu);
-+		else
-+			stat = per_cpu_ptr(is->stat.data, cpu);
-+		for (i = 0; i < IOSTAT_MAX; i++) {
-+			sum->bytes[i] += stat->bytes[i];
-+			sum->ios[i] += stat->ios[i];
-+			sum->dev_lat[i] += stat->dev_lat[i];
-+			sum->queue_lat[i] += stat->queue_lat[i];
-+		}
-+	}
-+}
-+
-+static int iostat_show(struct seq_file *sf, void *v)
-+{
-+	struct blkcg *blkcg = css_to_blkcg(seq_css(sf));
-+	struct cgroup_subsys_state *pos_css;
-+	struct iostat_gq *is;
-+	struct blkcg_gq *blkg, *pos_blkg;
-+	struct iostat_data data_sum, meta_sum;
-+	int i;
-+
-+	rcu_read_lock();
-+	hlist_for_each_entry_rcu(blkg, &blkcg->blkg_list, blkcg_node) {
-+		is = blkg_to_ist(blkg);
-+		/*
-+		 * The is activated on demand so iostat may be NULL
-+		 */
-+		if (!is)
-+			continue;
-+
-+		memset(&data_sum, 0, sizeof(data_sum));
-+		memset(&meta_sum, 0, sizeof(meta_sum));
-+		if (blkg == blkg->q->root_blkg) {
-+			iostat_sum(blkg, &data_sum, false);
-+			iostat_sum(blkg, &meta_sum, true);
-+		} else {
-+			/*
-+			 * Iterate every children blkg to agregate statistics
-+			 */
-+			blkg_for_each_descendant_pre(pos_blkg, pos_css, blkg) {
-+				if (!pos_blkg->online)
-+					continue;
-+				iostat_sum(pos_blkg, &data_sum, false);
-+				iostat_sum(pos_blkg, &meta_sum, true);
-+			}
-+		}
-+
-+		seq_printf(sf, "%s-data ", is->disk_name);
-+		for (i = 0; i < IOSTAT_MAX; i++)
-+			seq_printf(sf, "%llu %llu %llu %llu ",
-+				data_sum.bytes[i], data_sum.ios[i],
-+				data_sum.queue_lat[i], data_sum.dev_lat[i]);
-+		seq_printf(sf, "\n");
-+		seq_printf(sf, "%s-meta ", is->disk_name);
-+		for (i = 0; i < IOSTAT_MAX; i++)
-+			seq_printf(sf, "%llu %llu %llu %llu ",
-+				meta_sum.bytes[i], meta_sum.ios[i],
-+				meta_sum.queue_lat[i], meta_sum.dev_lat[i]);
-+		seq_printf(sf, "\n");
-+	}
-+	rcu_read_unlock();
-+
-+	return 0;
-+}
-+
-+static struct cftype iostat_files[] = {
-+	{
-+		.name = "iostat",
-+		.seq_show = iostat_show,
-+	},
-+	{}
-+};
-+
-+static struct cftype iostat_legacy_files[] = {
-+	{
-+		.name = "iostat",
-+		.seq_show = iostat_show,
-+	},
-+	{}
-+};
-+
-+static void iostat_pd_free(struct blkg_policy_data *pd)
-+{
-+	struct iostat_gq *is = pd_to_ist(pd);
-+
-+	if (is->stat.data)
-+		free_percpu(is->stat.data);
-+
-+	if (is->stat.meta)
-+		free_percpu(is->stat.meta);
-+
-+	kfree(is);
-+}
-+
-+static struct blkg_policy_data *iostat_pd_alloc(gfp_t gfp,
-+		struct request_queue *q, struct blkcg *blkcg)
-+{
-+	struct iostat_gq *is;
-+
-+	is = kzalloc_node(sizeof(*is), gfp, q->node);
-+	if (!is)
-+		return NULL;
-+
-+	is->stat.data = __alloc_percpu_gfp(sizeof(struct iostat_data),
-+			__alignof__(struct iostat_data), gfp);
-+	if (!is->stat.data)
-+		goto out_free;
-+
-+	is->stat.meta = __alloc_percpu_gfp(sizeof(struct iostat_data),
-+			__alignof__(struct iostat_data), gfp);
-+	if (!is->stat.meta)
-+		goto out_free;
-+	/*
-+	 * request_queue.kobj's parent is gendisk
-+	 */
-+	strlcpy(is->disk_name,
-+		kobject_name(q->kobj.parent),
-+		DISK_NAME_LEN);
-+	return &is->pd;
-+out_free:
-+	if (is->stat.data)
-+		free_percpu(is->stat.data);
-+	iostat_pd_free(&is->pd);
-+	return NULL;
-+}
-+
-+static struct blkcg_policy blkcg_policy_iostat = {
-+	.dfl_cftypes	= iostat_files,
-+	.legacy_cftypes	= iostat_legacy_files,
-+	.pd_alloc_fn	= iostat_pd_alloc,
-+	.pd_free_fn	= iostat_pd_free,
-+};
-+
-+static int __init iostat_mod_init(void)
-+{
-+	int ret;
-+
-+	ret = rq_qos_register(&iostat_rq_ops);
-+	if (ret)
-+		return ret;
-+
-+	ret = blkcg_policy_register(&blkcg_policy_iostat);
-+	if (ret) {
-+		rq_qos_unregister(&iostat_rq_ops);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit iostat_mod_exit(void)
-+{
-+	rq_qos_unregister(&iostat_rq_ops);
-+	blkcg_policy_unregister(&blkcg_policy_iostat);
-+}
-+
-+module_init(iostat_mod_init);
-+module_exit(iostat_mod_exit);
-+MODULE_AUTHOR("Wang Jianchao");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Block Statistics per Cgroup");
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index ed30b3c3fee7..75026cf54384 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -42,7 +42,7 @@ struct blk_crypto_profile;
-  * Maximum number of blkcg policies allowed to be registered concurrently.
-  * Defined here to simplify include dependency.
-  */
--#define BLKCG_MAX_POLS		6
-+#define BLKCG_MAX_POLS		7
- /*
-  * Non blk-rq-qos blkcg policies include blk-throttle and bfq
-  */
--- 
-2.17.1
+[...]
 
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index f3744e806157..cc76f00724e6 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -58,6 +58,7 @@ BRCMF_FW_DEF(4365C, "brcmfmac4365c-pcie");
+>   BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
+>   BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
+>   BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
+> +BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
+>   
+>   /* firmware config files */
+>   MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
+> @@ -87,6 +88,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>   	BRCMF_FW_ENTRY(BRCM_CC_43664_CHIP_ID, 0xFFFFFFF0, 4366C),
+>   	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
+>   	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
+> +	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* 3 */
+
+what does the trailing comment reflect?
+
+>   };
+>   
+>   #define BRCMF_PCIE_FW_UP_TIMEOUT		5000 /* msec */
+
+--00000000000027b1c005d536b724
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDCLj6agJAZCEXFxTsF
+N7JlNDLKDKgeBDB7TD8pkUxkKDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMTAwOTExMDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAdaArcvG2iJjF3qvav9eq1Wz/XeBQlfeFoQX1
+cQwgZRJJrJ3kKZCbUgXcwJQyysbc8rF2wLXpOd1NlBmxbHr3FJzXOkk0GH8QWZnKCZashY1E7uNW
+FqwJRJzjRLx2A1iVjclNfPPWiCq3zt0gWPUD4VVd43SBRrZ+b1O/cF+meni/4Wd+qkoURMldU+0E
+s0PxHZLmQGCbmj6zv2Afh/pUBTmFdLzwfYS3Uj/8eFR3IfALkefiQ1rrypkmlL36JIdz3P7M7wID
+Q5y6S/zEbo16n3TlIlZMRXXrJ+UH5XExm/Bgb4r12mhZtC+KNyFdZZ24n2BLkrYe5F16y63GLeeJ
+Ng==
+--00000000000027b1c005d536b724--

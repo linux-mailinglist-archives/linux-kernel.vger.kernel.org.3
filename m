@@ -2,75 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3488489E79
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5B7489E7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbiAJRgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:36:05 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:35333 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238197AbiAJRgE (ORCPT
+        id S238437AbiAJRgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238197AbiAJRgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:36:04 -0500
-Received: by mail-oi1-f174.google.com with SMTP id s127so19689355oig.2;
-        Mon, 10 Jan 2022 09:36:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/Bf2rJ2DJql2aQa2+Vma/SpLlbuseiEOmq8cakFAHq8=;
-        b=MuYjgJlOS5k3i7bVAoOYDpE3FUfuTr1eE3uVyLAdH0UznEOAZDAmI48nVDy4I3gGAI
-         S1ukvkQuakCTI6U2UDg5eC8t8nlUOq1QPRkT01BXiHCSqE2pTFb4pWIhIu8PkTasf6ME
-         QCLMd6QHdIqG3SzIkCwKNKtUIC7tSozIjLexh5S9uVQ1ar/03h8SK0zHNUrEJbWytobk
-         ehRyBFuatXO2+OViMB3N6/mHUMbH/+k/AxxZf8eriuUa0IYyWVUpINP/NVnvs3QS2iQG
-         MvDi7eEEwzYVptD/Pfqexz5rOOrz3+BqEVYbvYYjQjO2nrvDHAyrXcHPpb2xbbDIXlDI
-         GGKg==
-X-Gm-Message-State: AOAM5302caVHs5iRq3zL+85LVl/WgBH7WXknEm5bdyrXMNeDfWwJ9rWg
-        STjLcl05L/UrL9mw3BvRa/YKEkzdhg==
-X-Google-Smtp-Source: ABdhPJzUImWVhQdDrEhCGyspSNZ0EeJ0vMDkP3nWD4h9/ykAYPqH+VuRa1QmFsAVU6opb5zP1jUgrA==
-X-Received: by 2002:aca:3046:: with SMTP id w67mr402820oiw.20.1641836163812;
-        Mon, 10 Jan 2022 09:36:03 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f9sm1549006oto.56.2022.01.10.09.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 09:36:03 -0800 (PST)
-Received: (nullmailer pid 1150878 invoked by uid 1000);
-        Mon, 10 Jan 2022 17:36:02 -0000
-Date:   Mon, 10 Jan 2022 11:36:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zelong Dong <zelong.dong@amlogic.com>
-Cc:     jbrunet@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        narmstrong@baylibre.com, robh+dt@kernel.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        khilman@baylibre.com, martin.blumenstingl@googlemail.com
-Subject: Re: [PATCH 2/3] dt-bindings: reset: add bindings for the Meson-S4
- SoC Reset Controller
-Message-ID: <YdxugtL5PsrwsT6D@robh.at.kernel.org>
-References: <20220107023931.13251-1-zelong.dong@amlogic.com>
- <20220107023931.13251-3-zelong.dong@amlogic.com>
+        Mon, 10 Jan 2022 12:36:33 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A13FC06173F;
+        Mon, 10 Jan 2022 09:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Cg6PTGtJDlAWiPThvj1wyyJNeW5hKDAPzKITicALVW8=; b=C4oP80EqKgM2rhrX+cvp+y2fgY
+        kqbIl79WkupMAOt9fAfN3aSo4HzcvzfRWHXZWd3TVvkycbbSuusQtl859H0/oE8lbtb9dNHL8vFrd
+        Rt4Pehqpr7z52juZub+IcTkKsf98o3yVcEkVsGAziu5ZgDvDnp9sQ3lfnqdw+BSKUtq9rT7sTw3VR
+        wS5bmujkO+3YgANbsijQvDlRZGUF1R3M2nqsY6JW1v/96RHbZrhANLF37HhQxE/bWH/2HLE/8QjP2
+        7si4nX2wnlP+YM6BHEmE6VE6GAovGdc4ghTdaJ6lnyC0WOpGxMnLGFouEtgN2KmpCS5xPz5CTNqlM
+        Xzc+Y+pg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6yap-00CapK-PY; Mon, 10 Jan 2022 17:36:27 +0000
+Date:   Mon, 10 Jan 2022 09:36:27 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Wang Jianchao <jianchao.wan9@gmail.com>
+Cc:     axboe@kernel.dk, jbacik@fb.com, tj@kernel.org, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/13] blk: make blk-rq-qos policies pluggable and modular
+Message-ID: <Ydxum/2iwp6hDw68@infradead.org>
+References: <20220110091046.17010-1-jianchao.wan9@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107023931.13251-3-zelong.dong@amlogic.com>
+In-Reply-To: <20220110091046.17010-1-jianchao.wan9@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jan 2022 10:39:30 +0800, Zelong Dong wrote:
-> Add DT bindings for the Meson-S4 SoC Reset Controller include file.
-> 
-> Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
-> ---
->  .../reset/amlogic,meson-s4-reset.h            | 125 ++++++++++++++++++
->  1 file changed, 125 insertions(+)
->  create mode 100644 include/dt-bindings/reset/amlogic,meson-s4-reset.h
-> 
+On Mon, Jan 10, 2022 at 05:10:33PM +0800, Wang Jianchao wrote:
+> This patchset attempts to make blk-rq-qos framework pluggable and modular.
 
-
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
+I really don't think making them policies modular is a good thing, and
+your new exports/APIs are a very good sign for why it is not a good
+idea.

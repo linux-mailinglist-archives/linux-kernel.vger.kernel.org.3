@@ -2,95 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD0448979B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3514A48979D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244840AbiAJLh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244839AbiAJLgW (ORCPT
+        id S244877AbiAJLiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:38:09 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:45302 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244837AbiAJLgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:36:22 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3865C061757;
-        Mon, 10 Jan 2022 03:36:21 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id c36so22682706uae.13;
-        Mon, 10 Jan 2022 03:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eOYKOMNdn7daGbU6jgLJi3oEFCH812Tr1mFTkATHWbM=;
-        b=dv9b9/vqTHZPdaEMYargHBS4A5dlQeWoYXCDzcpobdFebh23GRb+8bw4rxhay5OVzV
-         q4iOrsoS4Ma220UPt9kVVfLFDY7aaMwyQbvGvuzdP8gtm/9xP0RNgpBFRtTqDeEogJJ/
-         SVGrNAGMBWnBrNA2/t4+GtG3Lpkwf9SXTf2+SMKckYYuqb8CX33CH4cBnyLfcJw3sFmV
-         ym9FiSbQdE6tjguw7B08w1VNejUWXNg9jPz/uZi7EBD9ghjMczdSwJGfOKLUhLGP3Fp8
-         B4GS5WrvQJFi8XZx/YkevkMwgUxo0y6IwkTr49n2IyuGlqCwIYZrYItAsYFDjZXlKWBm
-         Ct4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eOYKOMNdn7daGbU6jgLJi3oEFCH812Tr1mFTkATHWbM=;
-        b=gUEU2c+DRiwzOFEh3YeXrW71xtmKsU9I7zzKXDKlkznUecCfXvNwdyEy/ls6V3SxiJ
-         0grTL0oSfDjhse9bW6v3FOMfsSugaLbD4KXge3CnLz0WARekm0bL6b9/oObox9cGtmr1
-         lQs0NtUYQknWfWfAQ0ttH+qvPi9R4Kjx9swXoIlJ6wowycppjxzENReJlri3afBSKqr9
-         42zy7wuK8bPV3BQnFFWj5XlszsLk0xbrasTQWdVfZfdhu7tipcn+7tHWUFUGz6e07UGn
-         v5rizan/1SxBzh+NZYdfrYnKxrWpiAsuaahFrxemoT1heiTSnpBlNk81JqpuJHkG0P2z
-         pF4Q==
-X-Gm-Message-State: AOAM532DnsmzqCKc0sCq+lkytqqqKH3gt9/NiJ4x34vzs9kjEzp/dhf5
-        vK5wbrCxh/JL72hXa5rQIRQZIHm7xwgzmuaTe5M=
-X-Google-Smtp-Source: ABdhPJzEk8+MsRvQw2gNjyoxD8tAuUiiVmNCo//Sj2gLzgGnTvbK9GC8gICCOiEg70gNF+dajIqVuSVB1vNGZ/vlMG4=
-X-Received: by 2002:a05:6102:dc9:: with SMTP id e9mr24344482vst.17.1641814580785;
- Mon, 10 Jan 2022 03:36:20 -0800 (PST)
+        Mon, 10 Jan 2022 06:36:46 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D126C1F395;
+        Mon, 10 Jan 2022 11:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641814605; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uAD9DJ0MQoyTuyFy6X2dhuK2MO+0lKFW6l+xo1ezmLQ=;
+        b=MllJ6h9cEzSdxdR2Muh7zT43r2az9KmD+5ttxSBJMIYvKjH7HayyE6NDYI7T9l9hRbXi+l
+        dH3V9Z+pzxodL/OMnvIEaHlWALAZJXOnJqZZKpwmU7kiK+FIdqQ7jxEqXj/fZW71cL1Xn0
+        CW1ZyfThOEqW6YjOTpuJOHLjCUhydPw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641814605;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uAD9DJ0MQoyTuyFy6X2dhuK2MO+0lKFW6l+xo1ezmLQ=;
+        b=qtus/VVwAMjHhNqKHhwF3v/BRghE9vbjnjmLUzI6QCR3echFPyOWNadYvclYvOgsPRpGQ8
+        40JiOJB0SqFUg3Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AF5DF139ED;
+        Mon, 10 Jan 2022 11:36:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DVVQKU0a3GGTdgAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:36:45 +0000
+Date:   Mon, 10 Jan 2022 12:36:53 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] ras/core for v5.17
+Message-ID: <YdwaVT1HCfqZZRFr@zn.tnic>
 MIME-Version: 1.0
-References: <20220110111036.1380288-1-sergio.paracuellos@gmail.com>
- <20220110111036.1380288-5-sergio.paracuellos@gmail.com> <4b32313d0642a4043709ef98339497662dafb211.camel@pengutronix.de>
-In-Reply-To: <4b32313d0642a4043709ef98339497662dafb211.camel@pengutronix.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 10 Jan 2022 12:36:09 +0100
-Message-ID: <CAMhs-H9QC1MdiA7ShntQ7hOasRrZRbBok-zTqFMUPQjtdnwezQ@mail.gmail.com>
-Subject: Re: [PATCH v7 4/4] staging: mt7621-dts: align resets with binding documentation
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp,
+Hi Linus,
 
-On Mon, Jan 10, 2022 at 12:28 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
->
-> On Mon, 2022-01-10 at 12:10 +0100, Sergio Paracuellos wrote:
-> > Binding documentation for compatible 'mediatek,mt7621-sysc' has been updated
-> > to be used as a reset provider. Align reset related bits and system controller
-> > node with binding documentation along the dtsi file.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
->
-> Is this patch is missing the gdma and hsdma resets?
-> I only looked at v5.16, there those reference &rstctrl as well
+please pull what looks like a relatively big amount of movements in
+RAS-land this time around, for 5.17.
 
-Associated drivers are already removed in staging tree since are not
-used al all and no effort for mainline them has appeared in a while..
-See:
+Thx.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=53a2f33caaeacb820f554899f0780387b1b4381b
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=87dd67f496f71c3693431a236b2b542793d786ff
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=5bfc10690c6c590a972be014ed8595e77e1e2dea
+---
 
-Best regards,
-    Sergio Paracuellos
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/ras_core_for_v5.17_rc1
+
+for you to fetch changes up to 3376136300a00df9a864b88fa969177d6c3be8e5:
+
+  x86/mce: Reduce number of machine checks taken during recovery (2021-12-31 18:22:32 +0100)
+
+----------------------------------------------------------------
+- First part of a series to move the AMD address translation code from
+arch/x86/ to amd64_edac as that is its only user anyway
+
+- Some MCE error injection improvements to the AMD side
+
+- Reorganization of the #MC handler code and the facilities it calls to
+make it noinstr-safe
+
+- Add support for new AMD MCA bank types and non-uniform banks layout
+
+- The usual set of cleanups and fixes
+
+----------------------------------------------------------------
+Borislav Petkov (13):
+      x86/mce: Do not use memset to clear the banks bitmaps
+      x86/mce: Remove function-local cpus variables
+      x86/mce: Use mce_rdmsrl() in severity checking code
+      x86/mce: Remove noinstr annotation from mce_setup()
+      x86/mce: Allow instrumentation during task work queueing
+      x86/mce: Prevent severity computation from being instrumented
+      x86/mce: Mark mce_panic() noinstr
+      x86/mce: Mark mce_end() noinstr
+      x86/mce: Mark mce_read_aux() noinstr
+      x86/mce: Move the tainting outside of the noinstr region
+      x86/mce: Mark mce_timed_out() noinstr
+      x86/mce: Mark mce_start() noinstr
+      x86/mce: Check regs before accessing it
+
+Smita Koralahalli (2):
+      x86/mce/inject: Check if a bank is populated before injecting
+      x86/mce/inject: Set the valid bit in MCA_STATUS before error injection
+
+Yazen Ghannam (6):
+      x86/MCE/AMD, EDAC/amd64: Move address translation to AMD64 EDAC
+      x86/amd_nb, EDAC/amd64: Move DF Indirect Read to AMD64 EDAC
+      EDAC/amd64: Allow for DF Indirect Broadcast reads
+      EDAC/amd64: Add context struct
+      x86/MCE/AMD, EDAC/mce_amd: Add new SMCA bank types
+      x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA bank type enumeration
+
+Youquan Song (1):
+      x86/mce: Reduce number of machine checks taken during recovery
+
+Zhang Zixun (1):
+      x86/mce/inject: Avoid out-of-bounds write when setting flags
+
+Zhaolong Zhang (1):
+      x86/mce: Get rid of cpu_missing
+
+ arch/x86/include/asm/amd_nb.h           |   1 -
+ arch/x86/include/asm/mce.h              |  28 +---
+ arch/x86/kernel/amd_nb.c                |  49 +-----
+ arch/x86/kernel/cpu/mce/amd.c           | 280 ++++++--------------------------
+ arch/x86/kernel/cpu/mce/core.c          | 149 ++++++++++++-----
+ arch/x86/kernel/cpu/mce/inject.c        |  46 +++++-
+ arch/x86/kernel/cpu/mce/internal.h      |   2 +
+ arch/x86/kernel/cpu/mce/severity.c      |  41 +++--
+ arch/x86/lib/copy_user_64.S             |   9 +
+ drivers/edac/amd64_edac.c               | 275 +++++++++++++++++++++++++++++++
+ drivers/edac/mce_amd.c                  | 146 +++++++++++++++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |   2 +-
+ 12 files changed, 653 insertions(+), 375 deletions(-)
 
 
->
-> regards
-> Philipp
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

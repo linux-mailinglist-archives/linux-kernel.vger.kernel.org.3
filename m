@@ -2,86 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8ACB4893DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D004893E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241765AbiAJInX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:43:23 -0500
-Received: from mail-ed1-f54.google.com ([209.85.208.54]:38554 "EHLO
-        mail-ed1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241730AbiAJIl2 (ORCPT
+        id S241867AbiAJIoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241837AbiAJImF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:41:28 -0500
-Received: by mail-ed1-f54.google.com with SMTP id u21so27909844edd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:41:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=octVJ0pssmy99DE7X4+pfHU8MHVH/s7bmvq4/iF5viY=;
-        b=eq0Rwc1t6CLFL1jkHvHPfUG9ZvKm4H0c2OiLBfXJO4agAwnfAF0PddoF340G6ZIMD0
-         64ntfIQGQr7mtBEtphLcU/qmhLntSDXUYMHVhul1h50FQp6nWY+qRupFp7R9cBFeyg6t
-         23itI+WAvXYSCCaAVIk2jtaG9le/2VtIsva3ELo48UefY0ZwhUQDOiqNv8iOIi12plRR
-         aNmlm5jVA2YOL26gND1/qORhfTysfCV4LwaPmyJgGSP32n/2k2WonRo0ftEBkqmi3SSg
-         7rTMWq62oB89fVSa55x3sRlLLO60sZFqvYFcZJf07CdwJKvSJ/K312w7DD3HENxl4u9Q
-         gcQg==
-X-Gm-Message-State: AOAM530VD1uaZAOVQtyb1IAFB4CQEkxxV98jbxYgimWYaG6MEV+NdxqC
-        jBNJC6ApB+hyswgAz9gBhXs=
-X-Google-Smtp-Source: ABdhPJxzIcQI6Y42frVfr5VdpEkr62hLsmfmvRrDIJ6HRBdgvwLMFmI9R33cdBfHz8rnYuF+UMYgpA==
-X-Received: by 2002:a17:906:3acc:: with SMTP id z12mr56442861ejd.10.1641804087132;
-        Mon, 10 Jan 2022 00:41:27 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id g16sm2144561ejt.202.2022.01.10.00.41.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 00:41:26 -0800 (PST)
-Message-ID: <e6575bd5-ba9f-546f-ce82-162f19c14cad@kernel.org>
-Date:   Mon, 10 Jan 2022 09:41:25 +0100
+        Mon, 10 Jan 2022 03:42:05 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0884C029818
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=UQAps8BDvjs2WdEKtXNE0HXviK
+        GNBg2bMBbfspkE/i22At0l4AsAkFjA6Mh4N4n09DKbJX0Z5NB2tRKaQbIp9DRoPwgWsjp8dLhbShj
+        Lhb4eE/3ucIHCHekaDNdsnDs2keYxNQPGWy7s5vMg55pUATB5fdj4lYnqojSj7friwSpO42eDQEmz
+        8DIH6yHzPDzunDVQlGPT17GgBk4jgiwp6ooqnJ/2+j51iX53IV4rORhW1QVcf4Rtwa5qDavrCbUo2
+        wxw1DCbHLAO6kKzUT4CmVaAOaOncuwulyYnGtNkxdRA3c087xwNxX2/Qt/qJuXQtkuKnSZlus1N+O
+        WhkUnrug==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6qFd-009yRR-A4; Mon, 10 Jan 2022 08:42:01 +0000
+Date:   Mon, 10 Jan 2022 00:42:01 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 27/28] mm: Add isolate_lru_folio()
+Message-ID: <YdvxWexCYxNecLIs@infradead.org>
+References: <20220110042406.499429-1-willy@infradead.org>
+ <20220110042406.499429-28-willy@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v1 08/14] arm64: defconfig: build lm75 temperature sensor
- driver as a module
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel@ziswiler.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
-        Olof Johansson <olof@lixom.net>,
-        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220107180314.1816515-1-marcel@ziswiler.com>
- <20220107180314.1816515-9-marcel@ziswiler.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220107180314.1816515-9-marcel@ziswiler.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110042406.499429-28-willy@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2022 19:03, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> Build Maxim Integrated LM75 temperature sensor driver as a module.
+Looks good,
 
-Why?
-
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> ---
-> 
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Christoph Hellwig <hch@lst.de>

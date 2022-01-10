@@ -2,90 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 337F14897BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A252D4897BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244973AbiAJLnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244923AbiAJLlp (ORCPT
+        id S244943AbiAJLnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:43:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34811 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244925AbiAJLlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:41:45 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26C6C061748;
-        Mon, 10 Jan 2022 03:41:40 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id l68so7933157vkh.4;
-        Mon, 10 Jan 2022 03:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o514X0rKQeZG8KSvRY+nluj6/Uqn5RzfGG2pNIWGbz4=;
-        b=RpCR4VRmypfzEIS8sdD+1MhtREHywwBRPMt1/4Vdazr0+FzTXAt38nFlsbttcS8Wvi
-         TRYpoJG0BrtM7IohqSEz2/6nlqsWxxyQ9MliDTfrU3U3bdc3GkSnFtP2xqF/anNxLXx1
-         h0XwTGzjpWFiPHTkLDRA5dZcApaQicti+hCmqjoLaA8UgAQBm+Q+Td/nICeoAMLQ6pdy
-         v1x8txQ7cL3puqHqS9fVtaFUsuTYATEjkOzWmtKIbKvksqHXcrx8LOF9FVTVxbf7cAVv
-         /4DShyncvzHu0mzERufmEgc5EB0z9saOD56LzfCy4StafwXbSug3q/3mR1CkZLjPGVH6
-         MKTQ==
+        Mon, 10 Jan 2022 06:41:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641814901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SsWQC8aTb+0uRe3yU+LwCtHB9iia3Osu0BBlRAz4Dj0=;
+        b=futY8jD0bx8u3ZSMnv4xgVIkFqrhmEe+8+MLM0VPZ3PsOL/6dk0pboyomFGeZd1a74uiu0
+        m+FwRJZPjaSuc8phiWgxZo3dFjL4tLc7fKpsb2qqPFc6SubbUA9M7f3crgEtNdlRCHF1ei
+        tNY8L593iJCCbF0goOuMUNWzHjTpnEA=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-qwlPu5dvOY6QkLgcx-fLhQ-1; Mon, 10 Jan 2022 06:41:40 -0500
+X-MC-Unique: qwlPu5dvOY6QkLgcx-fLhQ-1
+Received: by mail-ed1-f72.google.com with SMTP id h6-20020a056402280600b003f9967993aeso9889950ede.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:41:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o514X0rKQeZG8KSvRY+nluj6/Uqn5RzfGG2pNIWGbz4=;
-        b=XmLy2yZJeVGc+RkBEmximTRYsHJ70f96uTrYHpPUmIw55BgrBhaKEH+dj82SGENHL/
-         9Ik6peIlrT2kzLjxp5YEoBpZp4f3QgTPIcxmscGBYBGba0aiCXywaK4CvPBnyCcW9sPm
-         ezhKN3eyZ6SKEcA2LrsB3oYwPyYgE6C/6sXAoZ8FE35ObQ24wsJkWqzhfGjFMO+ZKPFF
-         uqWkFP4HpN46xGDc2QPH/cLACN5UKkDgxbY4ew0LeOBYF81PbVrSLafUeiHHYyqiNkpb
-         EjHw4V2yqVHyrvwPHYoUbICQtx9s/qVwVIqJ+O470ecHISS9aZcDVgWzkqiL7gFyuvaL
-         PToQ==
-X-Gm-Message-State: AOAM530222oUalvcpgdPMaUknLqzebwVbDQlo9ctBJJ44QcbhTW85HUn
-        +/bUMGSWEwWH05jLKkA9W4or892ABmpt+DizMbc=
-X-Google-Smtp-Source: ABdhPJwGvgloBmQRKWa/zPp77xHXFYqA0ZwE902jyWdNhXjMW3gmdy6XXREboy+aLz0EFPk6dJtdPde83fOIupvAaj0=
-X-Received: by 2002:a05:6122:513:: with SMTP id x19mr15038756vko.19.1641814900003;
- Mon, 10 Jan 2022 03:41:40 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SsWQC8aTb+0uRe3yU+LwCtHB9iia3Osu0BBlRAz4Dj0=;
+        b=ZOBQDC2LUWe3CNWT4GDFetexuDiQYN7PC0kgUuVjKj7RUdGIvQA/FTESvXIP+f9vVL
+         G68pcaMvIlgTqmOEW6+BNoEFRhQjDFCg4JEintMaI/nsIE8btduny5U4fFDxfQkV16Ur
+         qZCTN2cpm8vcLA7zZ2Qb5SbAqsC0wwn0AVDlZ9D8zGfLnG6flCAdlcWSiOIcwItE5bEI
+         h2PGp3jMGnwH9l7CZjCR6lOrICbyMzkL1a2gLAezhJl489Nq7ozMPBXkN12NnxNYiimY
+         L12jGPoJrlRuQNGMMUHU7zAb+g1kf/4CLeJOd2jK6+PwO0v1KyGSBBH69VS6I6ArXcXF
+         Nd2A==
+X-Gm-Message-State: AOAM5308hnl6CH6630bIMkE5hI9ESuFY8t5Vd++7joy1+7XrTbk1/Tjk
+        CKYsnA2fvlx9JCdc5g+bDmwIBXxyRHg92Tw5q26nnxDXzJI30uS0MlGRtFNAZBKnfAR9muXVyzE
+        bduWGrxJSJTa6kPEfohllOl2C
+X-Received: by 2002:a17:907:a420:: with SMTP id sg32mr1390945ejc.310.1641814899128;
+        Mon, 10 Jan 2022 03:41:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwa47UJCAu9cZOZqhb8987Jy+Gr9KRUjqDbs/oRBNFOeATkg186ylFpwptic1AlmBR/yUCuXg==
+X-Received: by 2002:a17:907:a420:: with SMTP id sg32mr1390927ejc.310.1641814898923;
+        Mon, 10 Jan 2022 03:41:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id j21sm2321879ejj.133.2022.01.10.03.41.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 03:41:38 -0800 (PST)
+Message-ID: <c992ece7-6878-a39e-0386-5a499265c4cb@redhat.com>
+Date:   Mon, 10 Jan 2022 12:41:37 +0100
 MIME-Version: 1.0
-References: <20220110111036.1380288-1-sergio.paracuellos@gmail.com>
- <20220110111036.1380288-4-sergio.paracuellos@gmail.com> <c88e81067826f04e2301b52eddb84ec84bbd1c9d.camel@pengutronix.de>
-In-Reply-To: <c88e81067826f04e2301b52eddb84ec84bbd1c9d.camel@pengutronix.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 10 Jan 2022 12:41:28 +0100
-Message-ID: <CAMhs-H9q=hP2GMU5QEU5791HfcCchrek6m9L4UdKzMyLg4nZBw@mail.gmail.com>
-Subject: Re: [PATCH v7 3/4] clk: ralink: make system controller node a reset provider
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6] x86/PCI: Ignore E820 reservations for bridge windows
+ on newer systems
+Content-Language: en-US
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, stable@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20211217141348.379461-1-hdegoede@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211217141348.379461-1-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 12:37 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
->
-> On Mon, 2022-01-10 at 12:10 +0100, Sergio Paracuellos wrote:
-> [...]
-> > +static int mt7621_rst_xlate(struct reset_controller_dev *rcdev,
-> > +                         const struct of_phandle_args *reset_spec)
-> > +{
-> > +     unsigned long id = reset_spec->args[0];
-> > +
-> > +     if (id == MT7621_RST_SYS)
->
->         if (id == MT7621_RST_SYS || id >= rcdev->nr_resets)
->
-> I forgot to mention that with .of_xlate set, the driver needs to check
-> whether id < nr_resets on its own.
+Hi All,
 
-Oh, ok. I checked 'drivers/reset/reset-k210.c' as example and there
-was only a similar check that I sent. Let me add this also and send
-v8.
+On 12/17/21 15:13, Hans de Goede wrote:
+> Some BIOS-es contain a bug where they add addresses which map to system
+> RAM in the PCI host bridge window returned by the ACPI _CRS method, see
+> commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
+> space").
+> 
+> To work around this bug Linux excludes E820 reserved addresses when
+> allocating addresses from the PCI host bridge window since 2010.
+> 
+> Recently (2019) some systems have shown-up with E820 reservations which
+> cover the entire _CRS returned PCI bridge memory window, causing all
+> attempts to assign memory to PCI BARs which have not been setup by the
+> BIOS to fail. For example here are the relevant dmesg bits from a
+> Lenovo IdeaPad 3 15IIL 81WE:
+> 
+>  [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+> 
+> The ACPI specifications appear to allow this new behavior:
+> 
+> The relationship between E820 and ACPI _CRS is not really very clear.
+> ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
+> 
+>   This range of addresses is in use or reserved by the system and is
+>   not to be included in the allocatable memory pool of the operating
+>   system's memory manager.
+> 
+> and it may be used when:
+> 
+>   The address range is in use by a memory-mapped system device.
+> 
+> Furthermore, sec 15.2 says:
+> 
+>   Address ranges defined for baseboard memory-mapped I/O devices, such
+>   as APICs, are returned as reserved.
+> 
+> A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
+> and its apertures are in use and certainly should not be included in
+> the general allocatable pool, so the fact that some BIOS-es reports
+> the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
+> 
+> So it seems that the excluding of E820 reserved addresses is a mistake.
+> 
+> Ideally Linux would fully stop excluding E820 reserved addresses,
+> but then the old systems this was added for will regress.
+> Instead keep the old behavior for old systems, while ignoring
+> the E820 reservations for any systems from now on.
+> 
+> Old systems are defined here as BIOS year < 2018, this was chosen to make
+> sure that E820 reservations will not be used on the currently affected
+> systems, while at the same time also taking into account that the systems
+> for which the E820 checking was originally added may have received BIOS
+> updates for quite a while (esp. CVE related ones), giving them a more
+> recent BIOS year then 2010.
+> 
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+> BugLink: https://bugs.launchpad.net/bugs/1878279
+> BugLink: https://bugs.launchpad.net/bugs/1931715
+> BugLink: https://bugs.launchpad.net/bugs/1932069
+> BugLink: https://bugs.launchpad.net/bugs/1921649
+> Cc: Benoit Grégoire <benoitg@coeus.ca>
+> Cc: Hui Wang <hui.wang@canonical.com>
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> Changes in v6:
+> - Remove the possibility to change the behavior from the commandline
+>   because of worries that users may use this to paper over other problems
 
-Best regards,
-    Sergio Paracuellos
->
-> regards
-> Philipp
+ping ?
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
+> Changes in v5:
+> - Drop mention of Windows behavior from the commit msg, replace with a
+>   reference to the specs
+> - Improve documentation in Documentation/admin-guide/kernel-parameters.txt
+> - Reword the big comment added, use "PCI host bridge window" in it and drop
+>   all refences to Windows
+> 
+> Changes in v4:
+> - Rewrap the big comment block to fit in 80 columns
+> - Add Rafael's Acked-by
+> - Add Cc: stable@vger.kernel.org
+> 
+> Changes in v3:
+> - Commit msg tweaks (drop dmesg timestamps, typo fix)
+> - Use "defined(CONFIG_...)" instead of "defined CONFIG_..."
+> - Add Mika's Reviewed-by
+> 
+> Changes in v2:
+> - Replace the per model DMI quirk approach with disabling E820 reservations
+>   checking for all systems with a BIOS year >= 2018
+> - Add documentation for the new kernel-parameters to
+>   Documentation/admin-guide/kernel-parameters.txt
+> ---
+> Other patches trying to address the same issue:
+> https://lore.kernel.org/r/20210624095324.34906-1-hui.wang@canonical.com
+> https://lore.kernel.org/r/20200617164734.84845-1-mika.westerberg@linux.intel.com
+> V1 patch:
+> https://lore.kernel.org/r/20211005150956.303707-1-hdegoede@redhat.com
+> ---
+>  arch/x86/kernel/resource.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+> index 9b9fb7882c20..9ae64f9af956 100644
+> --- a/arch/x86/kernel/resource.c
+> +++ b/arch/x86/kernel/resource.c
+> @@ -1,4 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <linux/dmi.h>
+>  #include <linux/ioport.h>
+>  #include <asm/e820/api.h>
+>  
+> @@ -23,11 +24,31 @@ static void resource_clip(struct resource *res, resource_size_t start,
+>  		res->start = end + 1;
+>  }
+>  
+> +/*
+> + * Some BIOS-es contain a bug where they add addresses which map to
+> + * system RAM in the PCI host bridge window returned by the ACPI _CRS
+> + * method, see commit 4dc2287c1805 ("x86: avoid E820 regions when
+> + * allocating address space"). To avoid this Linux by default excludes
+> + * E820 reservations when allocating addresses since 2010.
+> + * In 2019 some systems have shown-up with E820 reservations which cover
+> + * the entire _CRS returned PCI host bridge window, causing all attempts
+> + * to assign memory to PCI BARs to fail if Linux uses E820 reservations.
+> + *
+> + * Ideally Linux would fully stop using E820 reservations, but then
+> + * the old systems this was added for will regress.
+> + * Instead keep the old behavior for old systems, while ignoring the
+> + * E820 reservations for any systems from now on.
+> + */
+>  static void remove_e820_regions(struct resource *avail)
+>  {
+> -	int i;
+> +	int i, year = dmi_get_bios_year();
+>  	struct e820_entry *entry;
+>  
+> +	if (year >= 2018)
+> +		return;
+> +
+> +	pr_info_once("PCI: Removing E820 reservations from host bridge windows\n");
+> +
+>  	for (i = 0; i < e820_table->nr_entries; i++) {
+>  		entry = &e820_table->entries[i];
+>  
+> 
+

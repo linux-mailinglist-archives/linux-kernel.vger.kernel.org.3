@@ -2,104 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C754894AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56204894B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242808AbiAJJCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242580AbiAJJA3 (ORCPT
+        id S242624AbiAJJF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:05:26 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:42260 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S242926AbiAJJEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:00:29 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606C6C034001
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:00:28 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso9245433wmc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 01:00:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Hv6GKoLKoAgQtrfvNhQxv0aNjpwK6o2iQIchk0LCYiA=;
-        b=pv5fF+gLctrVTwbNNZ2zuqzuAl7dn8cXteKEnxPcbzhPDmDWMeb/WLa4ZyIq4dt0N7
-         lWqFpmYILgGSQLLLc35UPFjCSToboH32HUaQoT599I9ubGjctI7BNCxQJ/KLhCpQvJNI
-         WvK6E5wO7LcnMq6u5/Af8LXNHHp+/t+Yhj4f5byuCBQYaEjUV3PtOHF/Ywxi5tACDwya
-         DlcwBe32rTaKgzAJKpyC/Ab+HRBmwFNfj+NX1no2EqXntbtmkwAHqpLxWDm17xEu/PJq
-         qdlqqljoYdP37xfSefYeiAmOz7iRzJruIWhloJs42Zs9MsT06WBEK6e0yNHOnIpNEvvv
-         csag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Hv6GKoLKoAgQtrfvNhQxv0aNjpwK6o2iQIchk0LCYiA=;
-        b=lVdaYyXUagerswFLUOLqcJ3k8Au2PijzpUhYRxit0XvzoZ94vDkzQt8BdwwJdS++rE
-         csbb8ZeMWBEAptFJoqO7aDeXuqQHKUj87fPBDBAlFfTDMp6lFN2pibz6EwKBN6NuT9lw
-         ObqFuhzB0q14FZHx8Igg19CtUlOblleg30IEZDQRrq2Qd4DOVT1vSfG6245XDvbINqhO
-         OszR+aSmiprcy/0gV+pY/13Gd2BjDW1Aaf3YWXIm7lx/1nKNaFKhaStP1WLmqrnRryWN
-         VYrOqx4OFnmsUBWySPlRgJhE1NClDC2+TwP3GBA7jSqNz1hQ/5jO5uDo13i0MKz83qyE
-         DcRA==
-X-Gm-Message-State: AOAM531NE50UrEBPQ6xTepRFrxOTUkdNO3LDxhiwworpEieE/uKorIH2
-        S/AGD6+zQB/SGE2DFUOqjbydiQ==
-X-Google-Smtp-Source: ABdhPJwODe+jUhhnYVxYqigggVQ7Uv68lwjain+B3p60pQcnC9n4UvnwEK0O6wFIcXmZ/CBMnZzPDw==
-X-Received: by 2002:a05:600c:19d0:: with SMTP id u16mr20980802wmq.148.1641805227026;
-        Mon, 10 Jan 2022 01:00:27 -0800 (PST)
-Received: from localhost.localdomain (3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16::3])
-        by smtp.gmail.com with ESMTPSA id m15sm6263287wmq.6.2022.01.10.01.00.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 01:00:26 -0800 (PST)
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] staging: r8188eu: convert DBG_88E calls in core/rtw_sta_mgt.c
-Date:   Mon, 10 Jan 2022 09:00:20 +0000
-Message-Id: <20220110090020.6800-8-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220110090020.6800-1-phil@philpotter.co.uk>
-References: <20220110090020.6800-1-phil@philpotter.co.uk>
+        Mon, 10 Jan 2022 04:04:49 -0500
+HMM_SOURCE_IP: 172.18.0.218:40496.657948967
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 92D48280114;
+        Mon, 10 Jan 2022 17:04:31 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 8f2e6f7d82494e7baa53aeed8090a6a0 for j.vosburgh@gmail.com;
+        Mon, 10 Jan 2022 17:04:34 CST
+X-Transaction-ID: 8f2e6f7d82494e7baa53aeed8090a6a0
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyd12@chinatelecom.cn
+Subject: [RESEND PATCH v5] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+Date:   Mon, 10 Jan 2022 04:04:10 -0500
+Message-Id: <20220110090410.70176-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the DBG_88E macro calls in core/rtw_sta_mgt.c to use pr_debug,
-as their information may be useful to observers, and this gets the
-driver closer to the point of being able to remove DBG_88E itself.
+Since ipv6 neighbor solicitation and advertisement messages
+isn't handled gracefully in bonding6 driver, we can see packet
+drop due to inconsistency bewteen mac address in the option
+message and source MAC .
 
-These calls are at points in the call chain where use of dev_dbg or
-netdev_dbg isn't possible due to lack of device pointer, so plain
-pr_debug is appropriate here.
+Another examples is ipv6 neighbor solicitation and advertisement
+messages from VM via tap attached to host brighe, the src mac
+mighe be changed through balance-alb mode, but it is not synced
+with Link-layer address in the option message.
 
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+The patch implements bond6's tx handle for ipv6 neighbor
+solicitation and advertisement messages.
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 ---
- drivers/staging/r8188eu/core/rtw_sta_mgt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_alb.c | 149 +++++++++++++++++++++++++++++++++
+ 1 file changed, 149 insertions(+)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_sta_mgt.c b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-index 54561ff239a0..de5406a5870c 100644
---- a/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-+++ b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-@@ -104,7 +104,7 @@ inline int rtw_stainfo_offset(struct sta_priv *stapriv, struct sta_info *sta)
- 	int offset = (((u8 *)sta) - stapriv->pstainfo_buf) / sizeof(struct sta_info);
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..485e4863a365 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -22,6 +22,8 @@
+ #include <asm/byteorder.h>
+ #include <net/bonding.h>
+ #include <net/bond_alb.h>
++#include <net/ndisc.h>
++#include <net/ip6_checksum.h>
  
- 	if (!stainfo_offset_valid(offset))
--		DBG_88E("%s invalid offset(%d), out of range!!!", __func__, offset);
-+		pr_debug("invalid offset(%d), out of range!!!", offset);
- 
- 	return offset;
+ static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned = {
+ 	0x33, 0x33, 0x00, 0x00, 0x00, 0x01
+@@ -1269,6 +1271,137 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+ 	return res;
  }
-@@ -112,7 +112,7 @@ inline int rtw_stainfo_offset(struct sta_priv *stapriv, struct sta_info *sta)
- inline struct sta_info *rtw_get_stainfo_by_offset(struct sta_priv *stapriv, int offset)
- {
- 	if (!stainfo_offset_valid(offset))
--		DBG_88E("%s invalid offset(%d), out of range!!!", __func__, offset);
-+		pr_debug("invalid offset(%d), out of range!!!", offset);
  
- 	return (struct sta_info *)(stapriv->pstainfo_buf + offset * sizeof(struct sta_info));
++/*determine if the packet is NA or NS*/
++static bool __alb_determine_nd(struct icmp6hdr *hdr)
++{
++	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
++		return true;
++	}
++
++	return false;
++}
++
++static void alb_change_nd_option(struct sk_buff *skb, void *data)
++{
++	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
++	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
++	struct net_device *dev = skb->dev;
++	struct icmp6hdr *icmp6h = icmp6_hdr(skb);
++	struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
++	u8 *lladdr = NULL;
++	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
++				offsetof(struct nd_msg, opt));
++
++	while (ndoptlen) {
++		int l;
++
++		switch (nd_opt->nd_opt_type) {
++		case ND_OPT_SOURCE_LL_ADDR:
++		case ND_OPT_TARGET_LL_ADDR:
++			lladdr = ndisc_opt_addr_data(nd_opt, dev);
++			break;
++
++		default:
++			lladdr = NULL;
++			break;
++		}
++
++		l = nd_opt->nd_opt_len << 3;
++
++		if (ndoptlen < l || l == 0)
++			return;
++
++		if (lladdr) {
++			memcpy(lladdr, data, dev->addr_len);
++			icmp6h->icmp6_cksum = 0;
++
++			icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
++							      &ip6hdr->daddr,
++						ntohs(ip6hdr->payload_len),
++						IPPROTO_ICMPV6,
++						csum_partial(icmp6h,
++							     ntohs(ip6hdr->payload_len), 0));
++			return;
++		}
++		ndoptlen -= l;
++		nd_opt = ((void *)nd_opt) + l;
++	}
++}
++
++static u8 *alb_get_lladdr(struct sk_buff *skb)
++{
++	struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
++	struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
++	struct net_device *dev = skb->dev;
++	u8 *lladdr = NULL;
++	u32 ndoptlen = skb_tail_pointer(skb) - (skb_transport_header(skb) +
++				offsetof(struct nd_msg, opt));
++
++	while (ndoptlen) {
++		int l;
++
++		switch (nd_opt->nd_opt_type) {
++		case ND_OPT_SOURCE_LL_ADDR:
++		case ND_OPT_TARGET_LL_ADDR:
++			lladdr = ndisc_opt_addr_data(nd_opt, dev);
++			break;
++
++		default:
++			break;
++		}
++
++		l = nd_opt->nd_opt_len << 3;
++
++		if (ndoptlen < l || l == 0)
++			return NULL;
++
++		if (lladdr)
++			return lladdr;
++
++		ndoptlen -= l;
++		nd_opt = ((void *)nd_opt) + l;
++	}
++
++	return lladdr;
++}
++
++static void alb_set_nd_option(struct sk_buff *skb, struct bonding *bond,
++			      struct slave *tx_slave)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		if (tx_slave && tx_slave !=
++		    rcu_access_pointer(bond->curr_active_slave)) {
++			ip6hdr = ipv6_hdr(skb);
++			if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++				hdr = icmp6_hdr(skb);
++				if (__alb_determine_nd(hdr))
++					alb_change_nd_option(skb, tx_slave->dev->dev_addr);
++			}
++		}
++	}
++}
++
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		ip6hdr = ipv6_hdr(skb);
++		if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++			hdr = icmp6_hdr(skb);
++			if (__alb_determine_nd(hdr))
++				return true;
++		}
++	}
++
++	return false;
++}
++
+ /************************ exported alb functions ************************/
+ 
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+@@ -1350,6 +1483,9 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 		switch (skb->protocol) {
+ 		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond,
+@@ -1446,6 +1582,18 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+ 			break;
+ 		}
+ 
++		if (alb_determine_nd(skb, bond)) {
++			u8 *lladdr;
++
++			lladdr = alb_get_lladdr(skb);
++			if (lladdr) {
++				if (!bond_slave_has_mac_rx(bond, lladdr)) {
++					do_tx_balance = false;
++					break;
++				}
++			}
++		}
++
+ 		hash_start = (char *)&ip6hdr->daddr;
+ 		hash_size = sizeof(ip6hdr->daddr);
+ 		break;
+@@ -1489,6 +1637,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, struct net_device *bond_dev)
+ 	struct slave *tx_slave = NULL;
+ 
+ 	tx_slave = bond_xmit_alb_slave_get(bond, skb);
++	alb_set_nd_option(skb, bond, tx_slave);
+ 	return bond_do_alb_xmit(skb, bond, tx_slave);
  }
+ 
+
+base-commit: 7a29b11da9651ef6a970e2f6bfd276f053aeb06a
 -- 
-2.33.1
+2.27.0
 

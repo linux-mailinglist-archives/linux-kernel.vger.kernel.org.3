@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DB4489493
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D4F48947C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242567AbiAJJAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:00:24 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:24076 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242177AbiAJI6S (ORCPT
+        id S242254AbiAJI5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:57:40 -0500
+Received: from proxima.lasnet.de ([78.47.171.185]:54072 "EHLO
+        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241968AbiAJI5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:58:18 -0500
-Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Mon, 10 Jan 2022
- 16:58:06 +0800
-From:   Yu Tu <yu.tu@amlogic.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Tu <yu.tu@amlogic.com>
-Subject: [PATCH V4 5/5] tty: serial: meson: Added S4 SOC compatibility.
-Date:   Mon, 10 Jan 2022 16:56:04 +0800
-Message-ID: <20220110085604.18042-6-yu.tu@amlogic.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220110085604.18042-1-yu.tu@amlogic.com>
-References: <20220110085604.18042-1-yu.tu@amlogic.com>
+        Mon, 10 Jan 2022 03:57:06 -0500
+Received: from [IPV6:2003:e9:d726:98fc:cdf9:bc0b:bacf:e07a] (p200300e9d72698fccdf9bc0bbacfe07a.dip0.t-ipconnect.de [IPv6:2003:e9:d726:98fc:cdf9:bc0b:bacf:e07a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 4E392C05A1;
+        Mon, 10 Jan 2022 09:57:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1641805022;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IaYI1Hh+FARrQFhEF0cAj1myGc5Q4XmWUc/d7YCm7jg=;
+        b=BKDixR9k/4qpycMv7rQ/G7RH+cpCQMhfg2Acg7w/IGD1+rdGc5GseTOKD1i5UytXMKqtya
+        P9+m/lrTcpfV8t+WRUlMGlNtdTfnCBT3W8oaWT/c/QANHfS8NRCf5jFbZ8zLkQKvCLOOed
+        yGN/gBkqLSKlNjs5VwU5jbRUgT9G9/ug6FAbjZjNAuIT5fsTHyNvRRkC436soN+aEoRniV
+        fSJBQsh9SDom8Jd1MGrnbTkQiNUoyVzEIweKsN+YisIWze//bFrVeLV78xblj6gwoFbxoe
+        L4XDfc5zqgf30t6x3WHLdxo49ceKt7ZOybXOlcFfw7OJj9A8fL1NUhfAbNhaRw==
+Message-ID: <871f2181-6356-8bfd-47cb-0872d70b2cd9@datenfreihafen.org>
+Date:   Mon, 10 Jan 2022 09:57:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.18.11.248]
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH -next v2] ieee802154: atusb: move to new USB API
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, alex.aring@gmail.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <2439d9ab-133f-0338-24f9-a9a5cd2065a3@datenfreihafen.org>
+ <20220108131838.12321-1-paskripkin@gmail.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220108131838.12321-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make UART driver compatible with S4 SOC UART.
 
-Signed-off-by: Yu Tu <yu.tu@amlogic.com>
----
- drivers/tty/serial/meson_uart.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Hello.
 
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index fd128878e91a..d6aa04cc31ba 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -863,6 +863,10 @@ static const struct of_device_id meson_uart_dt_match[] = {
- 		.compatible = "amlogic,meson-g12a-uart",
- 		.data = (void *)true,
- 	},
-+	{
-+		.compatible = "amlogic,meson-s4-uart",
-+		.data = (void *)true,
-+	},
- 	/*
- 	 * deprecated, don't use anymore because it doesn't differentiate
- 	 * between GXBB, GXL and G12A which have different revisions
--- 
-2.33.1
+On 08.01.22 14:18, Pavel Skripkin wrote:
+> Old USB API is prone to uninit value bugs if error handling is not
+> correct. Let's move atusb to use new USB API to
+> 
+> 	1) Make code more simple, since new API does not require memory
+> 	   to be allocates via kmalloc()
+> 
+> 	2) Defend driver from usb-related uninit value bugs.
+> 
+> 	3) Make code more modern and simple
+> 
+> This patch removes atusb usb wrappers as Greg suggested [0], this will make
+> code more obvious and easier to understand over time, and replaces old
+> API calls with new ones.
+> 
+> Also this patch adds and updates usb related error handling to prevent
+> possible uninit value bugs in future
+> 
+> Link: https://lore.kernel.org/all/YdL0GPxy4TdGDzOO@kroah.com/ [0]
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+> 
+> Changes in v2:
+> 	- Fixed logic bug in atusb_get_and_conf_chip()
+> 	- Renamed rc variable to reg in atusb_read_subreg()
+> 
+> ---
+>   drivers/net/ieee802154/atusb.c | 186 ++++++++++++---------------------
+>   1 file changed, 67 insertions(+), 119 deletions(-)
 
+
+This patch has been applied to the wpan-next tree and will be
+part of the next pull request to net-next. Thanks!
+
+regards
+Stefan Schmidt

@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D541E489634
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BD6489640
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243833AbiAJKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:19:47 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:41794 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243876AbiAJKTo (ORCPT
+        id S243893AbiAJKXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239415AbiAJKXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:19:44 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 444C121135;
-        Mon, 10 Jan 2022 10:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641809982; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+LCDWjMEypMIcQ17dTOOXlNuaUdA9I/4trNEFTuG+vM=;
-        b=lD5Dj1bevCdaaJkHYtxqyekh/3THahxBhFdLcZSNXxJ8K3gHvHTnUUEBQ16p4C12EWOkJY
-        8ryf6AtEohCPmiUEkFqDhldCiNGJFIa4nfyjHfJiV8c0Bzg1sboIjjvMRzs7ssHfPOTxsA
-        GQR5IrOBoksMHSSdt2G+TnOUCx8Y+Qs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641809982;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+LCDWjMEypMIcQ17dTOOXlNuaUdA9I/4trNEFTuG+vM=;
-        b=egVx6WM3loz8AGOLjQIXXKSxkyOVWzedy2jzxx1kprVlmDPlx7dBFWU5FgaaTFZei0GiVe
-        HRjnGezmgMXpYOBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2986E13CCB;
-        Mon, 10 Jan 2022 10:19:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aneXCT4I3GEPSwAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 10:19:42 +0000
-Date:   Mon, 10 Jan 2022 11:19:45 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/paravirt for v5.17
-Message-ID: <YdwIQXX4xbfkeOT7@zn.tnic>
+        Mon, 10 Jan 2022 05:23:01 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84DFC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:23:00 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z22so6444007edd.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:23:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M0nrXkjvT8Y2JTsBxE15ySAcNK2QPiRrQi7yxt+5z/k=;
+        b=bZfdedTaBlISxsnA+HjOnZ2STTnliWILpWqzvyQ6qQWMHBDbqJEEzOrRd7Z209N+wV
+         Pt7u7gf1aCvV8qAsRsq66SlB7ZDSM81mOI0eXQscqDfQv76/Retg+8ieV2cdXTVCUNjb
+         g4vH1O+eIUoj+skY/jI67sxujc+a9xhj6NpSqTtbfLNAVq+qdFEeEDKW3F6/f4alCMU8
+         8L29OhGE3C74CBXs0JFnCg3y8HxUbE/DzEziHguagP7ZjFEC8l2IaEP/MmuLunKjutas
+         4ep7CN06F9nNM9u7F+wgRgi2rt+tZT+31rYGvYIdT1lKg5Mp1aohyE5cQW58dtnP3Qos
+         qAUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M0nrXkjvT8Y2JTsBxE15ySAcNK2QPiRrQi7yxt+5z/k=;
+        b=6W1eZ0lIl/jkTrwGywYTzzYhwviU5fBt0zhFFdrPPt91ZuGhgCK2nsfHw4TRGTLu53
+         bebK/7Do5umTrhzbnDRhb6lp8s9OxaP4umhcOpLjL+TtjkXbyQoPrQ1x1qE8YFMHniCS
+         KgybA5k/VELcCDpQzDNHtaUajbQrQhRnyM/pdfkFOmcjTYRv0ZqTemu2QDatbYAYlFiu
+         W4NbZVbOucCArPJhuOSc4y22mEc798rPmFmadsjnLsWgHZ4fCWHLYHqrfxwK5tT+I2Yh
+         9eVkwwsakeLJcy1YAxUgznXmjfVIN1H4MXDqdTzqYb/gYS8/UNUYBls7xOV1qq4dM2CR
+         I6qg==
+X-Gm-Message-State: AOAM530MRuaXLw89FDMd+gMinP7yw3zP5BMKsfRoBB2PqQUurI1Ou3YZ
+        x7UV7SHwog9TocFspQPMr4kynidmSWqXl6e74OA=
+X-Google-Smtp-Source: ABdhPJwECqRHbXYE3+1gJLeWik7SnLbktBiu0AZzxvMVObvaegtHQCjFwf0DmV1UNgLl9J6yU9U5sFqr0U6pNjyMLGM=
+X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr57649438ejc.497.1641810179272;
+ Mon, 10 Jan 2022 02:22:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20220108140756.3985487-1-trix@redhat.com> <CAHp75VfbSmgeyi=8q1_he7mpGrNxYAOewKYWD=h8BSuxz2XWOw@mail.gmail.com>
+ <0c0926d9-9b72-1519-7e22-e90ffc229940@redhat.com>
+In-Reply-To: <0c0926d9-9b72-1519-7e22-e90ffc229940@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 10 Jan 2022 12:21:11 +0200
+Message-ID: <CAHp75VdJOzYR0HsZ2LWn-iAMwcM3s0NNDKQdXZZudcEB9RwE9A@mail.gmail.com>
+Subject: Re: [PATCH] ALSA: hda: cs35l41: fix double free in cs35l41_hda_probe()
+To:     Tom Rix <trix@redhat.com>
+Cc:     "james.schulman@cirrus.com" <james.schulman@cirrus.com>,
+        "david.rhodes@cirrus.com" <david.rhodes@cirrus.com>,
+        "tanureal@opensource.cirrus.com" <tanureal@opensource.cirrus.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Jan 10, 2022 at 2:37 AM Tom Rix <trix@redhat.com> wrote:
+> On 1/9/22 2:33 PM, Andy Shevchenko wrote:
+> On Saturday, January 8, 2022, <trix@redhat.com> wrote:
 
-please pull a single x86/paravirt fix for 5.17.
+...
 
-Thx.
+>> +       if (unlikely(ret)) {
+>
+> This is double weird. First of all, wtf unlikely is here? Second, I commented on the patch that does something with this driver and pointed out to the return 0 in some cases. This one seems a band aid.
+>
+> Unlikely to have an error.
 
----
+We don't use likely() and unlikely() here and there, you need to
+provide a very good justification of its use.
 
-The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
-
-  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_paravirt_for_v5.17_rc1
-
-for you to fetch changes up to 6da5175dbe1c2f02f1301b6d987e3ce24742bfd4:
-
-  x86/paravirt: Fix build PARAVIRT_XXL=y without XEN_PV (2021-11-30 13:50:26 -0800)
-
-----------------------------------------------------------------
-- Define the INTERRUPT_RETURN macro only when CONFIG_XEN_PV is enabled
-as it is its only user
-
-----------------------------------------------------------------
-Kirill A. Shutemov (1):
-      x86/paravirt: Fix build PARAVIRT_XXL=y without XEN_PV
-
- arch/x86/include/asm/irqflags.h | 7 +++++--
- arch/x86/include/asm/paravirt.h | 5 -----
- 2 files changed, 5 insertions(+), 7 deletions(-)
+For the record, I forwarded you my review against the code where you
+can find much more issues with it that are subject to fix / amend.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+With Best Regards,
+Andy Shevchenko

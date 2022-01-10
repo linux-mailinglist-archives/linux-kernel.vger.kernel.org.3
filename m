@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 574A848948C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A115489497
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242550AbiAJI7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:59:24 -0500
-Received: from mail-vk1-f172.google.com ([209.85.221.172]:37455 "EHLO
-        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242566AbiAJI6F (ORCPT
+        id S242180AbiAJJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242456AbiAJI6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:58:05 -0500
-Received: by mail-vk1-f172.google.com with SMTP id l68so7685417vkh.4;
-        Mon, 10 Jan 2022 00:58:04 -0800 (PST)
+        Mon, 10 Jan 2022 03:58:37 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51262C034007
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:58:36 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x6so41753848lfa.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Pqk1BZUjJr6GePpivx5SbVQCLLHcBuWWSQmMASNOalQ=;
+        b=Eq1wu1eHl9pTqvJMugMq4SHkTObBT2pGw5mUG/TlHHMm3ck9BqsUt09EiHVUyslBEl
+         mIF+LJHvVtyflwVq4bhTCb5Zcav8QBd+aufRRtbajQ/T4DH0llJsJIqEljmSp6qcaKRH
+         a0Dzs1tobZj3u27/Kqzccu9IU882D6tniJovqo98P304t8sxEbZ5wKbSm4m0Sm8c2Xs2
+         wIT67Z+fetKd/E+I4dlKcLKrid8FcC/pn1hFKksTRskgj7XfzalAZcrM0C1JcWpNcKef
+         rL77R5LWqU1nhz1/bs1O4iscPH/mO6ez6TBd1mw2bdAuA2SZNtbWaDsklG5ejseZoctB
+         aIKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vzvAQJe2veQdg4DaRkaqygFL5jyj5pSAthDAblQ6LsI=;
-        b=ygGulsMb4AZV9jyJCbG3UVjOkNQhjFoMIk+Pha8O9zwDymvq+YNb6kEE7tTKrlILcB
-         heAERqjG8azMDc+lV+lnwjRGQVEFGvR9SBVETLLstfxO4vMWbUkKbhmKD0hrIdSqsQKC
-         6ao4qQqxYE8jRRuD2eGig9s9BebKVsG7lDbQA9Yge7UfoVTvaLr1xVriGey+ynftWuR+
-         C0+GBUP/jRec3XhmTGs6VONryKIQz/w0QZjrlK9dfO1ry0UQUj9rd7sZKNtqycDlZRmG
-         M8cyUpcVxe7DML7m/yew9rz7tBbj5CdH3sBxm8zEjPhiIi+765EpkDS1IJLmZaF3+Ozf
-         3CLQ==
-X-Gm-Message-State: AOAM532mkdx6b8MGdpGJi6UJkeiW8yLY51NjYkLyO+hLSiPW9sCrZQsy
-        RPIT32n8oFjn9GJtokHTT/hwETQWe1Jrbw==
-X-Google-Smtp-Source: ABdhPJxsE6CWgbUAtb+8rUvw8031kWWFZ1ZdP3vEmegnNDkcrpZln+zkwVwSBRfEp0UfGDmoiPV7Mw==
-X-Received: by 2002:a1f:2ad0:: with SMTP id q199mr7134321vkq.29.1641805084009;
-        Mon, 10 Jan 2022 00:58:04 -0800 (PST)
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
-        by smtp.gmail.com with ESMTPSA id o12sm3504802uae.1.2022.01.10.00.58.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 00:58:03 -0800 (PST)
-Received: by mail-vk1-f182.google.com with SMTP id l68so7685388vkh.4;
-        Mon, 10 Jan 2022 00:58:02 -0800 (PST)
-X-Received: by 2002:a1f:1bd0:: with SMTP id b199mr13248764vkb.33.1641805082754;
- Mon, 10 Jan 2022 00:58:02 -0800 (PST)
+        bh=Pqk1BZUjJr6GePpivx5SbVQCLLHcBuWWSQmMASNOalQ=;
+        b=19bvQnaTBVCrqjP1e6mr3ZVeg7+Z5LcIlSGqPzMp7Cb4f4qBOEd3OHBNzej5M7dwhp
+         54bUhYBNWhXXXho/fLGSmNJM8iGrTM83mlvX0skANxQzCWIgBvz5+f+UJKluinR6Sv0u
+         EW4l5L5LI4y2Sce0fOD83tV1jE4CwKVfq4SgeQa8k77mBJshtdB4e53tfKRUvkwfKDgc
+         m1jbOdAxPQKt0DdQxaJRdSa5gpqktyr/Siy9bmswRZWHj+dWCbuw2+/7SMKN973UJf4V
+         GGFjav7JZ00QX7SWFFnPywWL5kFsWG29tQalKPVIPFqTNF7K0Q/X8qv9gErcv/hv+gL7
+         g5fw==
+X-Gm-Message-State: AOAM530iN49Cu5n3xzfFXDDxcE2uIkUl31D2rNE/A9HW/jK6UHr9my+g
+        s7HFzBtgRNu9my+G1QMfDA+7F0PAMC3eYiW+h8upufzuIitumA==
+X-Google-Smtp-Source: ABdhPJw/AKGwgUGYBuAwj2uFM9qju4HAfWCZS2wef6UxtsGrKV1KXsER1HnSvPOzSR67xwziNAnCDXx4q+wBywOEfMM=
+X-Received: by 2002:a05:651c:1508:: with SMTP id e8mr55769779ljf.313.1641805114163;
+ Mon, 10 Jan 2022 00:58:34 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1641289490.git.zong.li@sifive.com> <5a7786cff08d55d0e084cd28bc2800565fa2dce7.1641289490.git.zong.li@sifive.com>
-In-Reply-To: <5a7786cff08d55d0e084cd28bc2800565fa2dce7.1641289490.git.zong.li@sifive.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jan 2022 09:57:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV5gbeaaXPfJ4EuYur0NChp3iurdzNzC_UOLDrGP7rZNA@mail.gmail.com>
-Message-ID: <CAMuHMdV5gbeaaXPfJ4EuYur0NChp3iurdzNzC_UOLDrGP7rZNA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dmaengine: sf-pdma: Get number of channel by device tree
-To:     Zong Li <zong.li@sifive.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Bin Meng <bin.meng@windriver.com>, green.wan@sifive.com,
-        Vinod <vkoul@kernel.org>, dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+References: <20211213232224.2023465-1-namhyung@kernel.org>
+In-Reply-To: <20211213232224.2023465-1-namhyung@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 10 Jan 2022 09:58:23 +0100
+Message-ID: <CANpmjNPuDUwrLH9GKEs6BgeRiL6uZ_tqa5NX_6J83E121+CUqg@mail.gmail.com>
+Subject: Re: [PATCH v3] perf/core: Fix cgroup event list management
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zong,
-
-On Wed, Jan 5, 2022 at 6:44 AM Zong Li <zong.li@sifive.com> wrote:
-> It currently assumes that there are four channels by default, it might
-> cause the error if there is actually less than four channels. Change
-> that by getting number of channel from device tree.
+On Tue, 14 Dec 2021 at 00:22, Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-
-Thanks for your patch!
-
-> --- a/drivers/dma/sf-pdma/sf-pdma.c
-> +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> @@ -484,21 +484,24 @@ static int sf_pdma_probe(struct platform_device *pdev)
->         struct sf_pdma *pdma;
->         struct sf_pdma_chan *chan;
->         struct resource *res;
-> -       int len, chans;
-> -       int ret;
-> +       int len, ret;
->         const enum dma_slave_buswidth widths =
->                 DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
->                 DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
->                 DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
->                 DMA_SLAVE_BUSWIDTH_64_BYTES;
+> The active cgroup events are managed in the per-cpu cgrp_cpuctx_list.
+> This list is only accessed from current cpu and not protected by any
+> locks.  But from the commit ef54c1a476ae ("perf: Rework
+> perf_event_exit_event()"), it's possible to access (actually modify)
+> the list from another cpu.
 >
-> -       chans = PDMA_NR_CH;
-> -       len = sizeof(*pdma) + sizeof(*chan) * chans;
-> +       len = sizeof(*pdma) + sizeof(*chan) * PDMA_MAX_NR_CH;
->         pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
->         if (!pdma)
->                 return -ENOMEM;
+> In the perf_remove_from_context(), it can remove an event from the
+> context without an IPI when the context is not active.  This is not
+> safe with cgroup events which can have some active events in the
+> context even if ctx->is_active is 0 at the moment.  The target cpu
+> might be in the middle of list iteration at the same time.
 >
-> -       pdma->n_chans = chans;
-> +       ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> +                                  &pdma->n_chans);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "failed to read dma-channels\n");
-> +               return ret;
-
-Note that this is not backwards-compatible with existing DTBs, which
-lack the "dma-channels" property.
-Perhaps you want to fallback to a default of 4 instead?
-
-> +       }
+> If the event is enabled when it's about to be closed, it might call
+> perf_cgroup_event_disable() and list_del() with the cgrp_cpuctx_list
+> on a different cpu.
 >
->         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->         pdma->membase = devm_ioremap_resource(&pdev->dev, res);
+> This resulted in a crash due to an invalid list pointer access during
+> the cgroup list traversal on the cpu which the event belongs to.
+>
+> Let's fallback to IPI to access the cgrp_cpuctx_list from that cpu.
+> Similarly, perf_install_in_context() should use IPI for the cgroup
+> events too.
+>
+> Cc: Marco Elver <elver@google.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Gr{oetje,eeting}s,
+The final version needs:
 
-                        Geert
+Fixes: ef54c1a476ae ("perf: Rework perf_event_exit_event()")
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+so stable kernels will see it, unless this has already been picked up
+in which case we need to email stable.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+-- Marco

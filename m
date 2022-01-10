@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6E048913C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A4748915B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240288AbiAJHaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:30:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35794 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239438AbiAJH1D (ORCPT
+        id S240559AbiAJHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240038AbiAJH2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:27:03 -0500
+        Mon, 10 Jan 2022 02:28:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8699C028C15;
+        Sun,  9 Jan 2022 23:26:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB9146112C;
-        Mon, 10 Jan 2022 07:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0768C36AED;
-        Mon, 10 Jan 2022 07:27:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F003B811F5;
+        Mon, 10 Jan 2022 07:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2481C36AED;
+        Mon, 10 Jan 2022 07:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799622;
-        bh=ABb9HQYoH/NUN601GUG7xf/rxAOJub+ZNfbG40KpJXk=;
+        s=korg; t=1641799560;
+        bh=CBugiHPHZg6lZpps82R7WUuao6slXg+9R6CaYlQp5g8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m6u1AikpcHJmspOV/eIgmnCJ+eLDf1si/Hsp5IMum5yPijTsRY61M4rxIL6mGIWQh
-         O5DB0yJEgqCK+PCk4rNB8MzPrOh246DB1NIXQOk5bQLe8bofz8tAQPvupOb4oLK4yL
-         NMd3FCCiWaEsZrgYk1lujIIbRcmTpnzK/RiCHQOY=
+        b=WYz0XAQ9mSpDC/IiaRQv4H3HMSHBpOXtkq5vb00029VRN8IJdmtrVUloI1o8fEsd6
+         G79aFlh46UtQofgisRhRTyRxcrkpbbH9PldNgkaVBWegMUUv8mlphR4LXljyOB259b
+         VxNpGpF2jzs3q+YaKyDzQcFjeuPUomG/menhh2IQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.19 05/21] mac80211: initialize variable have_higher_than_11mbit
-Date:   Mon, 10 Jan 2022 08:23:06 +0100
-Message-Id: <20220110071814.142173470@linuxfoundation.org>
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 4.14 14/22] power: reset: ltc2952: Fix use of floating point literals
+Date:   Mon, 10 Jan 2022 08:23:07 +0100
+Message-Id: <20220110071814.738855790@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
+In-Reply-To: <20220110071814.261471354@linuxfoundation.org>
+References: <20220110071814.261471354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,41 +49,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 68a18ad71378a56858141c4449e02a30c829763e upstream.
+commit 644106cdb89844be2496b21175b7c0c2e0fab381 upstream.
 
-Clang static analysis reports this warnings
+A new commit in LLVM causes an error on the use of 'long double' when
+'-mno-x87' is used, which the kernel does through an alias,
+'-mno-80387' (see the LLVM commit below for more details around why it
+does this).
 
-mlme.c:5332:7: warning: Branch condition evaluates to a
-  garbage value
-    have_higher_than_11mbit)
-    ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+        data->wde_interval = 300L * 1E6L;
+                                  ^
+drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+        data->wde_interval = 300L * 1E6L;
+                           ^
+drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+        data->trigger_delay = ktime_set(2, 500L*1E6L);
+                                               ^
+3 errors generated.
 
-have_higher_than_11mbit is only set to true some of the time in
-ieee80211_get_rates() but is checked all of the time.  So
-have_higher_than_11mbit needs to be initialized to false.
+This happens due to the use of a 'long double' literal. The 'E6' part of
+'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+it to 'long double'.
 
-Fixes: 5d6a1b069b7f ("mac80211: set basic rates earlier")
-Signed-off-by: Tom Rix <trix@redhat.com>
+There is no visible reason for floating point values in this driver, as
+the values are only assigned to integer types. Use NSEC_PER_MSEC, which
+is the same integer value as '1E6L', to avoid changing functionality but
+fix the error.
+
+Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20211223162848.3243702-1-trix@redhat.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/mlme.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/power/reset/ltc2952-poweroff.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/mac80211/mlme.c
-+++ b/net/mac80211/mlme.c
-@@ -4788,7 +4788,7 @@ static int ieee80211_prep_connection(str
- 	 */
- 	if (new_sta) {
- 		u32 rates = 0, basic_rates = 0;
--		bool have_higher_than_11mbit;
-+		bool have_higher_than_11mbit = false;
- 		int min_rate = INT_MAX, min_rate_index = -1;
- 		const struct cfg80211_bss_ies *ies;
- 		int shift = ieee80211_vif_get_shift(&sdata->vif);
+--- a/drivers/power/reset/ltc2952-poweroff.c
++++ b/drivers/power/reset/ltc2952-poweroff.c
+@@ -169,8 +169,8 @@ static void ltc2952_poweroff_kill(void)
+ 
+ static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+ {
+-	data->wde_interval = 300L * 1E6L;
+-	data->trigger_delay = ktime_set(2, 500L*1E6L);
++	data->wde_interval = 300L * NSEC_PER_MSEC;
++	data->trigger_delay = ktime_set(2, 500L * NSEC_PER_MSEC);
+ 
+ 	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
 
 

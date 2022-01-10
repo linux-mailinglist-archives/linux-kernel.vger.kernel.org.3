@@ -2,115 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16313489D4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DA7489D55
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbiAJQQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:16:25 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:34377 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiAJQQY (ORCPT
+        id S237194AbiAJQRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:17:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40077 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237212AbiAJQRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:16:24 -0500
-Received: by mail-il1-f198.google.com with SMTP id a18-20020a923312000000b002b384dccc91so6351342ilf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:16:24 -0800 (PST)
+        Mon, 10 Jan 2022 11:17:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641831422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+YjTLY75U3Rr/IBjHhdFVsX4vnS2z8mb10E/ypAsx9o=;
+        b=NKvrG1Ff/BReEbNZCSIxAwyvB4pMuBxFjEPcWornGzwdPqjkZbt0RQpICANewlujbWtkKf
+        8c5wpr5AHOpznYuZnXhUiaf/J/X7noNp2zHSUxDf6rNVER/zQkJnbUxKNuVjuzWrtCfOJ5
+        zqkL8D/k3OQswA5rh8rpc9zD5SRYF+Q=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-125-_va0i5i4OT6THJv7bWwAcQ-1; Mon, 10 Jan 2022 11:17:00 -0500
+X-MC-Unique: _va0i5i4OT6THJv7bWwAcQ-1
+Received: by mail-qt1-f199.google.com with SMTP id 4-20020ac85744000000b002b2f329efc2so11137623qtx.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:17:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=+IuiwBmD1/QY3GSRuTwaawG8oRAV143g489IiDGe0jo=;
-        b=QBc/vqcOxC6X4Y7hhOeV83oUEcNkjZjATesYWyqfpk5Lwa1XZ1m3/ELSOCOdKoSFW/
-         Qt6fbnhp9Q9eSwSzM/2sMOG9hDcuL8MrGFN3aDH9MwwZK7SnjcfzaI2o6UsvsRYHv5/H
-         BvqW+MmY571jzMkWkaisnT2/JGxTVxAO1BlnORoANp0yESRctuDE50xVU6tXyVELmlRU
-         m26XM4k72EhcjW1RxFmsyYhGcyTcWaATkBlXizp6HeI1umQhmN3lt6Zm9OY6EiNRBTQi
-         0+fwlr16P5zpcGS/gJIB7821GvSHRECuOQlKifptPxoiPk/gl1YMSqCZ18cYc+uiHSfr
-         sBDw==
-X-Gm-Message-State: AOAM532JfV1KbJV8mGXXQ1lMtwjlNVtS1qzaEj7cggxkdKUhLNLnNiOz
-        6E3Gjw9fU8SnLnW7t5Ktjhdc7Pdn4LgHZfEPjLcPsRDEdw0a
-X-Google-Smtp-Source: ABdhPJya6Aex3XB8Zmgqnu+l176k2/B5jS08DGhSr8A9/AG1c1V4rtY7OfzXyZvbSFkNfAdRV9eMhrVDUi8ifFOfstq6VWxhmPpp
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+YjTLY75U3Rr/IBjHhdFVsX4vnS2z8mb10E/ypAsx9o=;
+        b=ADbLsvEMEJtQ+NI8o4aQoM//u93UF2MgW2/fu+6m2c9/9Pxaqe/798y1E6PDrXS+OZ
+         XqFI3tbZJNzu2YrMgSgtALrOulLl5PgXcjmStJH4PpuYcQz1BU7t/S6rHGCfYzmPo6yy
+         KKsmjjZf02dd3u8Azk/x41N9SaRRzAL+uT860hkjcQ1DVVpQd7vtIE+1Hc1pwaW4fVWM
+         1xs2ms/Rar7nPNJTmYH5swZ3v0hJLCnirYqiNicXdts8synUuFMSCJhG9rx+8rCB8M2A
+         Spg8Gs4rlqYJ4sxl+RsX6P9avYf1YExkH0b+ScalqnAozpbw/F1ijAa34EIv9O1lame3
+         yYmQ==
+X-Gm-Message-State: AOAM531TbyotcdzfA/piHPEqWddpRr6zncZ6gRDNdYEfuX11Bj5xNUUD
+        C2n4HEcUyXBdZ2+uqebHier9ZzKRW5XO66RkqlMXw5OcbINu62u0zJg8G9Z7w2B6K4Fum/eXv93
+        rompmtIxsrBB/yZMy5DB2loD2
+X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr377042qta.620.1641831420240;
+        Mon, 10 Jan 2022 08:17:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyAUtzH3EEX9Ff3ydZLCMZTFVjkkVjbUCwm51dfml+s1g3fpFnx//1UUzWe5M/akiYa/jS9DA==
+X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr377024qta.620.1641831420013;
+        Mon, 10 Jan 2022 08:17:00 -0800 (PST)
+Received: from [192.168.1.9] (pool-68-163-101-245.bstnma.fios.verizon.net. [68.163.101.245])
+        by smtp.gmail.com with ESMTPSA id v13sm3080842qtk.93.2022.01.10.08.16.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 08:16:59 -0800 (PST)
+Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
+To:     Song Liu <song@kernel.org>
+Cc:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
+        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz
+References: <20211229215646.830451-1-void@manifault.com>
+ <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
+ <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <4df1f9a0-3b26-903b-fe63-af5e75ed98d4@redhat.com>
+Date:   Mon, 10 Jan 2022 11:16:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:bb0b:: with SMTP id y11mr209283jan.286.1641831383889;
- Mon, 10 Jan 2022 08:16:23 -0800 (PST)
-Date:   Mon, 10 Jan 2022 08:16:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006afc5805d53ca868@google.com>
-Subject: [syzbot] BUG: "hc->tx_t_ipi == NUM" holds (exception!) at net/dccp/ccids/ccid3.c:LINE/ccid3_update_send_interval()
-From:   syzbot <syzbot+94641ba6c1d768b1e35e@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dccp@vger.kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/7/22 11:46 AM, Song Liu wrote:
+> On Fri, Jan 7, 2022 at 6:13 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
+>>
+>> On 12/29/21 4:56 PM, David Vernet wrote:
+>>> For example, under certain workloads, enabling a KLP patch with
+>>> many objects or functions may cause ksoftirqd to be starved, and thus for
+>>> interrupts to be backlogged and delayed.
+>>
+>> Just curious, approximately how many objects/functions does it take to
+>> hit this condition?  While the livepatching kselftests are more about
+>> API and kernel correctness, this sounds like an interesting test case
+>> for some of the other (out of tree) test suites.
+> 
+> Not many patched functions. We only do small fixes at the moment. In the recent
+> example, we hit the issue with ~10 patched functions. Another version
+> with 2 to 3
+> patched function seems fine.
+> 
+> Yes, I think this is an important test case.
+> 
 
-syzbot found the following issue on:
+Thanks, Song.  If you can share any test setup details, I'll pass those
+along to our internal QE group.  And once merged, we'll be adding this
+one to the list of backports for our distro.
 
-HEAD commit:    82192cb497f9 Merge branch 'ena-capabilities-field-and-cosm..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12ec95c7b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=322a0a6462d9ff7d
-dashboard link: https://syzkaller.appspot.com/bug?extid=94641ba6c1d768b1e35e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100ea4e3b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13977b73b00000
+-- 
+Joe
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13698c63b00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10e98c63b00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17698c63b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+94641ba6c1d768b1e35e@syzkaller.appspotmail.com
-
-BUG: "hc->tx_t_ipi == 0" holds (exception!) at net/dccp/ccids/ccid3.c:90/ccid3_update_send_interval()
-CPU: 0 PID: 29976 Comm: syz-executor890 Not tainted 5.16.0-rc8-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ccid3_update_send_interval net/dccp/ccids/ccid3.c:90 [inline]
- ccid3_update_send_interval.cold+0x87/0x93 net/dccp/ccids/ccid3.c:86
- ccid3_hc_tx_update_s net/dccp/ccids/ccid3.c:169 [inline]
- ccid3_hc_tx_packet_sent+0x12e/0x160 net/dccp/ccids/ccid3.c:353
- ccid_hc_tx_packet_sent net/dccp/ccid.h:175 [inline]
- dccp_xmit_packet+0x2f2/0x750 net/dccp/output.c:289
- dccp_write_xmit+0x16d/0x1d0 net/dccp/output.c:366
- dccp_sendmsg+0x922/0xc90 net/dccp/proto.c:783
- inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:819
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x331/0x810 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmmsg+0x195/0x470 net/socket.c:2553
- __do_sys_sendmmsg net/socket.c:2582 [inline]
- __se_sys_sendmmsg net/socket.c:2579 [inline]
- __x64_sys_sendmmsg+0x99/0x100 net/socket.c:2579
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f2cf5f36da9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2cf5ee4308 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f2cf5f36da9
-RDX: 0000000000000001 RSI: 000000002000bf40 RDI: 0000000000000004
-RBP: 00007f2cf5fbf4c8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f2cf5fbf4c0
-R13: 00007f2cf5f8c5dc R14: 00007f2cf5ee4400 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

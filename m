@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC344893F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB474893E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241173AbiAJIpv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 03:45:51 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:41339 "EHLO
+        id S241308AbiAJIpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:45:44 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:59045 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241148AbiAJImw (ORCPT
+        with ESMTP id S232475AbiAJImw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 03:42:52 -0500
 Received: from quad ([82.142.23.158]) by mrelayeu.kundenserver.de (mreue107
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1N0F9t-1mBhbi1Yox-00xGOd; Mon, 10
- Jan 2022 09:42:41 +0100
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MGQzj-1n9pLr09Gv-00GtQD; Mon, 10
+ Jan 2022 09:42:42 +0100
 From:   Laurent Vivier <laurent@vivier.eu>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-m68k@lists.linux-m68k.org,
@@ -22,162 +22,242 @@ Cc:     linux-m68k@lists.linux-m68k.org,
         linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v3 0/2] m68k: Add Virtual M68k Machine
-Date:   Mon, 10 Jan 2022 09:42:37 +0100
-Message-Id: <20220110084239.1597511-1-laurent@vivier.eu>
+Subject: [PATCH v3 1/2] m68k: add asm/config.h
+Date:   Mon, 10 Jan 2022 09:42:38 +0100
+Message-Id: <20220110084239.1597511-2-laurent@vivier.eu>
 X-Mailer: git-send-email 2.33.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220110084239.1597511-1-laurent@vivier.eu>
+References: <20220110084239.1597511-1-laurent@vivier.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:A2qcckiWWYccsW4cUyvRL7Pc4bYkTSfLAzR/YtZ5WFdDxri5UOV
- Fhqt1uW3n5fVe03EFrEHIlv7LBsObEMQDJuis4MJM142Omb1jqwWp1XiPTd/YpaJWy6oz4O
- xsNGkp5dc6Zg4j+jgywJSQyDeZb3i6ExtEhD6/eNJQUBTI2DhV6LuyoTons0uURzoCR/b5O
- 2vRLHwrW6oHICETmTYP3g==
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:mL4Xz69wPo3xRMMtSWWjQeec9/9Hkv8ScwFc2aD2gAeqAdrEK/3
+ TILLiQ0BE5S+YzPS11qnYBWyoDUXrpLMi1pMi0bXQcFOCK0FSrrCTRbOaU9FgeBeWFBeNMw
+ kXPlwcyCauYhbav988WCNAJ1DkZvWOwVj9+DKNWQdewUiFHm78mIDs9CP2ZteVodot4bIqe
+ udUlAsy7kg6iKIJTtr9zQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5O0RbQcP2Tw=:EJ3gpm0hrk1GecD2yvaBtB
- UlWoN/ANHavZTHojVEiglYVjQlwlf+W1L7LE/DS5QXglbb0DQHZaZ+gU+UcKE1HRq6wBh9Rab
- c2mXaro8O74USFyK0Xf5ufJfGNKmY5p/je8elW1Q2Ec0XC22jRYDjlymVN4eDqB+pVIHh93+H
- C6g7CwmAqK4wiM+GvOqAx9GP/4VGsfLJvsNcLDIW7HYtn+cAUKxf032d3kUR+KnE88ODLxSEJ
- w2s84gvoknfYmbiN7ogDmwxVLyfDbQVIcEpe+1+vGpHvG1SnupE0DXP9E4Vdzjhz4u4j6+JQR
- 2XVpWm3MUVRMMSZ+Bq39/URRl6Su3IlsS5I3eEDfmvC4Xp1J7Al6SzTJMlw+DDAr1kuuvvjV8
- t++2JP5ZsuZUc9SNN9wSYS+L/JgNbbS1FhebaO62Dbe1AeP13nBjXwr25/d8TbFrS8XrXDIjO
- VmBGv+gIKovRKvQq70FReMzzaSCajNzxfNqKNVehNZ5vJpsBSbwZk9bOa5U9cowTpE9iyXO7Q
- xJ8NKuYnNPKH+hMpVJul639p4miQOTQf5j/LnHvY69x38zuljtb07oNpehCL5iQLkwKnwqfaX
- SeSRlM3D7ckZ8SEIb2G7jOArRatS5SB25hotP2C9fR38EebMHnJc+s4/14O50NTGglNNTI8zs
- ex5u+PXeoisEsqZXo/XBJmfvl8yrT2b2anFAo0+J7mrjNPN5vJ2JHklcCI5umwB3sfxw=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g0d+pyZf8E8=:Q+7RyzKIXS9ov8WQRRJ5NO
+ 8ssE4xWWW4J06ce7leaj9zux0Ikn5+VLhUZ7+1K4g9538WS9pD7Mvb2fPjxF+99l6eFjHh559
+ S1DL0wgX2fIVli9nMWcKWVaAPXw1hoy5BRKc/FpEHIkyK0v+YpoTU6MdVHM/bN0eh0qdZZOu5
+ mlwH3xrGSObgQqNxfNJa/gFbKBT/4hpT94+gQotBxxru0LINzp4cEzL9vMTm9oELhcmtJ6Yiv
+ Z5kkBN6AFrUUlZfVCkuxQRsj0LeN5biVBleIiLlquFgq/pNbKiL1bmMa7qSDEozsSoi+MlKul
+ esHsoP87rraEFqEbBX8u0smdmjoE23jKbh1MMOFEdc464p4pgZ/9LCWCOuMaqWb+WJ0ePzPJh
+ grt6c2Ed6PHiaJP/KM2QHMfAZjCEsooYuxCggbzg8zn5bdz4odH7Lz7/ew3cYV762cAbB2M3z
+ 6rZ4jm60dbjpplu9lWIWE6tsAahlR1STC/tI4jBGLf5/WcQWraXMyg12Yw1Nb2ddKV27lSVLh
+ WtIeafK/HwTjBQk/Kpi7uDHIwRoqdu5c1rzYAiiF1xAfkbeopSeOozL343cfelrea0Rcc14Ys
+ H0jvQOwPPZ4D1/gFZemLiIqnQ0bYiCchmxGw0eFJvOAnIFP2HSc8UVl9NovR1Ah9n56yDZaGm
+ 2RePwxNtdUF6Lgd0flWDAcMCl4tPC/V9HeVCD6AsXVD7mDfMXi7aubAL6Y6I1wZvTPgQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The most powerful m68k machine emulated by QEMU is a Quadra 800,
-but this machine is very limited: only 1 GiB of memory and only some
-specific interfaces, with no DMA.
+To avoid 'warning: no previous prototype for' error, declare all
+the parse_bootinfo and config functions prototypes into asm/config.h
+and include it in arch/m68k/kernel/setup_mm.c and arch/m68k/*/config.c
 
-The Virtual M68k Machine is based on Goldfish interfaces defined by Google
-for Android simulator. It uses Goldfish-rtc (timer and RTC),
-Goldfish-pic (PIC) and Goldfish-tty (for early tty).
-
-The machine is created with 128 virtio-mmio buses, and they can
-be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
-
-The virtual m68k machine has been merged in QEMU and will be available
-with the release 6.0.
-
-This series introduces the support of this new machine in the linux kernel.
-
-If you want to try:
-
-- Configure and build latest QEMU with (or download qemu 6.0 binary):
-
-  .../configure --target-list=m68k-softmmu --enable-virglrenderer
-  make
-
-- Configure and build linux with:
-
-  make virt_defconfig
-  make vmlinux
-
-A pre-installed qcow2 disk image is available at:
-
-http://vivier.eu/debian-10.0.qcow2
-
-You can run the machine with something like:
-
-qemu-system-m68k -M virt \
-  -m 3G \
-  -chardev stdio,signal=off,mux=on,id=char0 \
-  -mon chardev=char0,mode=readline \
-  -kernel vmlinux \
-  -append "console=hvc0 root=/dev/vda2" \
-  -blockdev node-name=system,driver=file,filename=debian-10.0.qcow2 \
-  -blockdev node-name=drive0,driver=qcow2,file=system \
-  -device virtio-blk-device,drive=drive0 \
-  -serial chardev:char0 \
-  -device virtio-net-device,netdev=hostnet0 \
-  -netdev bridge,id=hostnet0,br=virbr0,helper=/usr/libexec/qemu-bridge-helper \
-  -device virtio-serial-device \
-  -device virtio-gpu-device \
-  -device virtconsole,chardev=char0 \
-  -device virtio-keyboard-device \
-  -device virtio-mouse-device
-
-You can watch a presentation about the machine on the Planet m68k channel:
-
-    https://youtu.be/s_ve0bCC9q4
-    [Demo at 38:00]
-
-v3:
-- introduce config.h to export prototypes to arch/m68k/kernel/setup_mm.c
-- define virt_nmi_handler as static
-
-v2:
-- Remove VIRTO_MENU set y
-- sort the selects
-- add CONFIG_LOCALVERSION="-virt"
-- generate virt_defconfig using "make savedefconfig"
-- rename MACH_VIRTONLY to MACH_VIRT_ONLY
-- add a test_notvirt label in head.S
-- rework iounmap() to use two separate #ifdefs
-- use %u in virt_get_model()
-- drop show_registers() in config.c
-- drop pr_err() from config_virt()
-- sort includes in ints.c
-- call virt_irq_enable() in virt_irq_startup()
-- drop virt_irq_shutdown() and use virt_irq_disable()
-- move in_nmi into virt_nmi_handler()
-- use pr_warn() in virt_nmi_handler()
-- rework goldfish_pic_irq() IRQ scan
-- copy goldfish-pic IRQs related information from QEMU hw/m68k/virt
-- add a comment to "min_low_pfn = 0"
-- use platform_device_register_simple()
-- use goldfish_timer_read(), upper_32_bits() and lower_32_bits()
-
-Thanks,
-Laurent
-
-Laurent Vivier (2):
-  m68k: add asm/config.h
-  m68k: introduce a virtual m68k machine
-
- arch/m68k/Kbuild                           |   1 +
- arch/m68k/Kconfig.machine                  |  16 +++
- arch/m68k/amiga/config.c                   |   1 +
- arch/m68k/apollo/config.c                  |   1 +
- arch/m68k/atari/config.c                   |   1 +
- arch/m68k/bvme6000/config.c                |   1 +
- arch/m68k/configs/virt_defconfig           |  65 +++++++++++
- arch/m68k/hp300/config.c                   |   1 +
- arch/m68k/include/asm/config.h             |  35 ++++++
- arch/m68k/include/asm/irq.h                |   3 +-
- arch/m68k/include/asm/pgtable_mm.h         |   7 ++
- arch/m68k/include/asm/setup.h              |  44 ++++++--
- arch/m68k/include/asm/virt.h               |  26 +++++
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
- arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
- arch/m68k/kernel/Makefile                  |   1 +
- arch/m68k/kernel/head.S                    |  31 ++++++
- arch/m68k/kernel/setup_mm.c                |  30 ++----
- arch/m68k/mac/config.c                     |   1 +
- arch/m68k/mm/kmap.c                        |  23 ++--
- arch/m68k/mvme147/config.c                 |   1 +
- arch/m68k/mvme16x/config.c                 |   1 +
- arch/m68k/q40/config.c                     |   1 +
- arch/m68k/virt/Makefile                    |   6 ++
- arch/m68k/virt/config.c                    | 112 +++++++++++++++++++
- arch/m68k/virt/ints.c                      | 120 +++++++++++++++++++++
- arch/m68k/virt/platform.c                  |  72 +++++++++++++
- arch/m68k/virt/timer.c                     |  90 ++++++++++++++++
- 28 files changed, 670 insertions(+), 40 deletions(-)
- create mode 100644 arch/m68k/configs/virt_defconfig
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ arch/m68k/amiga/config.c       |  1 +
+ arch/m68k/apollo/config.c      |  1 +
+ arch/m68k/atari/config.c       |  1 +
+ arch/m68k/bvme6000/config.c    |  1 +
+ arch/m68k/hp300/config.c       |  1 +
+ arch/m68k/include/asm/config.h | 33 +++++++++++++++++++++++++++++++++
+ arch/m68k/kernel/setup_mm.c    | 23 +----------------------
+ arch/m68k/mac/config.c         |  1 +
+ arch/m68k/mvme147/config.c     |  1 +
+ arch/m68k/mvme16x/config.c     |  1 +
+ arch/m68k/q40/config.c         |  1 +
+ 11 files changed, 43 insertions(+), 22 deletions(-)
  create mode 100644 arch/m68k/include/asm/config.h
- create mode 100644 arch/m68k/include/asm/virt.h
- create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
- create mode 100644 arch/m68k/virt/Makefile
- create mode 100644 arch/m68k/virt/config.c
- create mode 100644 arch/m68k/virt/ints.c
- create mode 100644 arch/m68k/virt/platform.c
- create mode 100644 arch/m68k/virt/timer.c
 
+diff --git a/arch/m68k/amiga/config.c b/arch/m68k/amiga/config.c
+index be2dfab48fd4..3137b45750df 100644
+--- a/arch/m68k/amiga/config.c
++++ b/arch/m68k/amiga/config.c
+@@ -37,6 +37,7 @@
+ #include <asm/irq.h>
+ #include <asm/machdep.h>
+ #include <asm/io.h>
++#include <asm/config.h>
+ 
+ static unsigned long amiga_model;
+ 
+diff --git a/arch/m68k/apollo/config.c b/arch/m68k/apollo/config.c
+index 581a5f68d102..42a8b8e2b664 100644
+--- a/arch/m68k/apollo/config.c
++++ b/arch/m68k/apollo/config.c
+@@ -16,6 +16,7 @@
+ #include <asm/apollohw.h>
+ #include <asm/irq.h>
+ #include <asm/machdep.h>
++#include <asm/config.h>
+ 
+ u_long sio01_physaddr;
+ u_long sio23_physaddr;
+diff --git a/arch/m68k/atari/config.c b/arch/m68k/atari/config.c
+index 261a0f57cc9a..38a7c0578105 100644
+--- a/arch/m68k/atari/config.c
++++ b/arch/m68k/atari/config.c
+@@ -46,6 +46,7 @@
+ #include <asm/machdep.h>
+ #include <asm/hwtest.h>
+ #include <asm/io.h>
++#include <asm/config.h>
+ 
+ u_long atari_mch_cookie;
+ EXPORT_SYMBOL(atari_mch_cookie);
+diff --git a/arch/m68k/bvme6000/config.c b/arch/m68k/bvme6000/config.c
+index 0c6feafbbd11..9b060d466e03 100644
+--- a/arch/m68k/bvme6000/config.c
++++ b/arch/m68k/bvme6000/config.c
+@@ -36,6 +36,7 @@
+ #include <asm/traps.h>
+ #include <asm/machdep.h>
+ #include <asm/bvme6000hw.h>
++#include <asm/config.h>
+ 
+ static void bvme6000_get_model(char *model);
+ extern void bvme6000_sched_init(void);
+diff --git a/arch/m68k/hp300/config.c b/arch/m68k/hp300/config.c
+index ce1eb3d3d55d..2c92843397c3 100644
+--- a/arch/m68k/hp300/config.c
++++ b/arch/m68k/hp300/config.c
+@@ -22,6 +22,7 @@
+ #include <asm/blinken.h>
+ #include <asm/io.h>                               /* readb() and writeb() */
+ #include <asm/hp300hw.h>
++#include <asm/config.h>
+ 
+ #include "time.h"
+ 
+diff --git a/arch/m68k/include/asm/config.h b/arch/m68k/include/asm/config.h
+new file mode 100644
+index 000000000000..cdbf8aec7d27
+--- /dev/null
++++ b/arch/m68k/include/asm/config.h
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * This file contains prototypes provided by each m68k machine
++ * to parse bootinfo datastructure and to configure the machine
++ */
++
++#ifndef _M68K_CONFIG_H
++#define _M68K_CONFIG_H
++
++extern int amiga_parse_bootinfo(const struct bi_record *);
++extern int atari_parse_bootinfo(const struct bi_record *);
++extern int mac_parse_bootinfo(const struct bi_record *);
++extern int q40_parse_bootinfo(const struct bi_record *);
++extern int bvme6000_parse_bootinfo(const struct bi_record *);
++extern int mvme16x_parse_bootinfo(const struct bi_record *);
++extern int mvme147_parse_bootinfo(const struct bi_record *);
++extern int hp300_parse_bootinfo(const struct bi_record *);
++extern int apollo_parse_bootinfo(const struct bi_record *);
++
++extern void config_amiga(void);
++extern void config_atari(void);
++extern void config_mac(void);
++extern void config_sun3(void);
++extern void config_apollo(void);
++extern void config_mvme147(void);
++extern void config_mvme16x(void);
++extern void config_bvme6000(void);
++extern void config_hp300(void);
++extern void config_q40(void);
++extern void config_sun3x(void);
++
++#endif /* _M68K_CONFIG_H */
+diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+index 4b51bfd38e5f..226dc3750397 100644
+--- a/arch/m68k/kernel/setup_mm.c
++++ b/arch/m68k/kernel/setup_mm.c
+@@ -47,6 +47,7 @@
+ #endif
+ #include <asm/macintosh.h>
+ #include <asm/natfeat.h>
++#include <asm/config.h>
+ 
+ #if !FPSTATESIZE || !NR_IRQS
+ #warning No CPU/platform type selected, your kernel will not work!
+@@ -113,28 +114,6 @@ EXPORT_SYMBOL(isa_type);
+ EXPORT_SYMBOL(isa_sex);
+ #endif
+ 
+-extern int amiga_parse_bootinfo(const struct bi_record *);
+-extern int atari_parse_bootinfo(const struct bi_record *);
+-extern int mac_parse_bootinfo(const struct bi_record *);
+-extern int q40_parse_bootinfo(const struct bi_record *);
+-extern int bvme6000_parse_bootinfo(const struct bi_record *);
+-extern int mvme16x_parse_bootinfo(const struct bi_record *);
+-extern int mvme147_parse_bootinfo(const struct bi_record *);
+-extern int hp300_parse_bootinfo(const struct bi_record *);
+-extern int apollo_parse_bootinfo(const struct bi_record *);
+-
+-extern void config_amiga(void);
+-extern void config_atari(void);
+-extern void config_mac(void);
+-extern void config_sun3(void);
+-extern void config_apollo(void);
+-extern void config_mvme147(void);
+-extern void config_mvme16x(void);
+-extern void config_bvme6000(void);
+-extern void config_hp300(void);
+-extern void config_q40(void);
+-extern void config_sun3x(void);
+-
+ #define MASK_256K 0xfffc0000
+ 
+ extern void paging_init(void);
+diff --git a/arch/m68k/mac/config.c b/arch/m68k/mac/config.c
+index 5d16f9b47aa9..65d124ec80bb 100644
+--- a/arch/m68k/mac/config.c
++++ b/arch/m68k/mac/config.c
+@@ -47,6 +47,7 @@
+ #include <asm/mac_via.h>
+ #include <asm/mac_oss.h>
+ #include <asm/mac_psc.h>
++#include <asm/config.h>
+ 
+ /* Mac bootinfo struct */
+ struct mac_booter_data mac_bi_data;
+diff --git a/arch/m68k/mvme147/config.c b/arch/m68k/mvme147/config.c
+index dfd6202fd403..b96ea7c76a19 100644
+--- a/arch/m68k/mvme147/config.c
++++ b/arch/m68k/mvme147/config.c
+@@ -34,6 +34,7 @@
+ #include <asm/traps.h>
+ #include <asm/machdep.h>
+ #include <asm/mvme147hw.h>
++#include <asm/config.h>
+ 
+ 
+ static void mvme147_get_model(char *model);
+diff --git a/arch/m68k/mvme16x/config.c b/arch/m68k/mvme16x/config.c
+index b4422c2dfbbf..88cbdc10925b 100644
+--- a/arch/m68k/mvme16x/config.c
++++ b/arch/m68k/mvme16x/config.c
+@@ -37,6 +37,7 @@
+ #include <asm/traps.h>
+ #include <asm/machdep.h>
+ #include <asm/mvme16xhw.h>
++#include <asm/config.h>
+ 
+ extern t_bdid mvme_bdid;
+ 
+diff --git a/arch/m68k/q40/config.c b/arch/m68k/q40/config.c
+index 5caf1e5be1c2..9237243077ce 100644
+--- a/arch/m68k/q40/config.c
++++ b/arch/m68k/q40/config.c
+@@ -34,6 +34,7 @@
+ #include <asm/traps.h>
+ #include <asm/machdep.h>
+ #include <asm/q40_master.h>
++#include <asm/config.h>
+ 
+ extern void q40_init_IRQ(void);
+ static void q40_get_model(char *model);
 -- 
 2.33.1
 

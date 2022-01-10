@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9B048929C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5730F48923E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237123AbiAJHq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241810AbiAJHjm (ORCPT
+        id S242475AbiAJHks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:40:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34106 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240195AbiAJHdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:39:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3536C02549D;
-        Sun,  9 Jan 2022 23:33:47 -0800 (PST)
+        Mon, 10 Jan 2022 02:33:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B154B81216;
-        Mon, 10 Jan 2022 07:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CD8C36AED;
-        Mon, 10 Jan 2022 07:33:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3320CB81217;
+        Mon, 10 Jan 2022 07:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5FEC36AED;
+        Mon, 10 Jan 2022 07:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641800026;
-        bh=zw1NdbOtkyijo7fXN+XvLZTKIYt/6pYw8B0XdMToLBU=;
+        s=korg; t=1641800029;
+        bh=o5kFP8oQmTF+hd+jHzzz40Ex04sUdxCwM94ZL0yWrWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hy01yk+N8eZJNkZyRtZ3YTqamMFVT/5EcNfKOiBIgYyMbTR1kGbytAX4E8+0SIP5k
-         lyfLR0Kcmlbcdh9+l4x9zl6kk9FJs7R5/LIZU5Dl8GqspVEnzzr9pxLyMMpge2g26q
-         6sRlbQJaMuOgZxqvw5AMGGGXpypPJ0NTzsO10JdA=
+        b=p2MtzxQo5IewBVuBZhVHZQTWJhN9HGLt38Rh7trxgkJOPLyeZX46AJDvdYLTE8Kjd
+         vRSWkMSFDRo7HWSnvH/R69keXoFEQ4zUGnz55rulqfvNBaLJpqI2jsgGhX8G0SH5ay
+         cQyMBfAOKWEchFYbHaqKNxUE7ATMRNdcNhRm5ydw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 53/72] auxdisplay: charlcd: checking for pointer reference before dereferencing
-Date:   Mon, 10 Jan 2022 08:23:30 +0100
-Message-Id: <20220110071823.336401449@linuxfoundation.org>
+Subject: [PATCH 5.15 54/72] drm/amdgpu: fix dropped backing store handling in amdgpu_dma_buf_move_notify
+Date:   Mon, 10 Jan 2022 08:23:31 +0100
+Message-Id: <20220110071823.381194092@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
 References: <20220110071821.500480371@linuxfoundation.org>
@@ -49,37 +47,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Sampaio <sampaio.ime@gmail.com>
+From: Christian König <ckoenig.leichtzumerken@gmail.com>
 
-[ Upstream commit 4daa9ff89ef27be43c15995412d6aee393a78200 ]
+[ Upstream commit fc74881c28d314b10efac016ef49df4ff40b8b97 ]
 
-Check if the pointer lcd->ops->init_display exists before dereferencing it.
-If a driver called charlcd_init() without defining the ops, this would
-return segmentation fault, as happened to me when implementing a charlcd
-driver.  Checking the pointer before dereferencing protects from
-segmentation fault.
+bo->tbo.resource can now be NULL.
 
-Signed-off-by: Luiz Sampaio <sampaio.ime@gmail.com>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1811
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211210083927.1754-1-christian.koenig@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/auxdisplay/charlcd.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/auxdisplay/charlcd.c b/drivers/auxdisplay/charlcd.c
-index 304accde365c8..6c010d4efa4ae 100644
---- a/drivers/auxdisplay/charlcd.c
-+++ b/drivers/auxdisplay/charlcd.c
-@@ -578,6 +578,9 @@ static int charlcd_init(struct charlcd *lcd)
- 	 * Since charlcd_init_display() needs to write data, we have to
- 	 * enable mark the LCD initialized just before.
- 	 */
-+	if (WARN_ON(!lcd->ops->init_display))
-+		return -EINVAL;
-+
- 	ret = lcd->ops->init_display(lcd);
- 	if (ret)
- 		return ret;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+index ae6ab93c868b8..7444484a12bf8 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+@@ -384,7 +384,7 @@ amdgpu_dma_buf_move_notify(struct dma_buf_attachment *attach)
+ 	struct amdgpu_vm_bo_base *bo_base;
+ 	int r;
+ 
+-	if (bo->tbo.resource->mem_type == TTM_PL_SYSTEM)
++	if (!bo->tbo.resource || bo->tbo.resource->mem_type == TTM_PL_SYSTEM)
+ 		return;
+ 
+ 	r = ttm_bo_validate(&bo->tbo, &placement, &ctx);
 -- 
 2.34.1
 

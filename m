@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 112C6489773
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7826489777
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244723AbiAJLad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:30:33 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:44730 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244749AbiAJL3O (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:29:14 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 77AF01F393;
-        Mon, 10 Jan 2022 11:29:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641814153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P4Y9waJZt1lwkwMGC5NX1ZOU/0fHRLCabIgyT9MAeO8=;
-        b=EKT0/1FDJljjONvWJxpAmvQK9C0s3pjm0A2W6cv+J4FEYqron/F7ebV1PoL8BIByOIndEI
-        lT6o7ubZdPGiZg9gEBSUDdyrUIHW+JgjGwOegnyKLfPd2moy2WJXesRsDjz603jb2rRNru
-        +g3s+9HUVMLwYe838uqZJdbgf4rX2Bg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641814153;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P4Y9waJZt1lwkwMGC5NX1ZOU/0fHRLCabIgyT9MAeO8=;
-        b=KmQ3XY3RCeHLNzphjU60e6qM+S6vM+MeODiNLfokn62/VCZWcjC9vrQnC/j0YYDqvQ3vTp
-        nMe25VHqj1n6l3BQ==
-Received: from quack3.suse.cz (unknown [10.100.200.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S244761AbiAJLas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:30:48 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:47375 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S244760AbiAJL3t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:29:49 -0500
+Received: from [192.168.0.5] (ip5f5aece2.dynamic.kabel-deutschland.de [95.90.236.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6366FA3B87;
-        Mon, 10 Jan 2022 11:29:13 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 22C66A045E; Mon, 10 Jan 2022 12:29:13 +0100 (CET)
-Date:   Mon, 10 Jan 2022 12:29:13 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     tytso@mit.edu, jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] ext4: Fix jbd2_journal_shrink_scan() and
- jbd2_journal_shrink_count() kernel-doc comment
-Message-ID: <20220110112913.uzf3qhxf5tppc2ej@quack3.lan>
-References: <20220110030229.19864-1-yang.lee@linux.alibaba.com>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 879DE61E5FE02;
+        Mon, 10 Jan 2022 12:29:44 +0100 (CET)
+Message-ID: <b177cb21-aa01-2408-9b26-164c028b6593@molgen.mpg.de>
+Date:   Mon, 10 Jan 2022 12:29:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110030229.19864-1-yang.lee@linux.alibaba.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: 100 ms boot time increase regression in acpi_init()/acpi_scan_bus()
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        regressions@lists.linux.dev
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 10-01-22 11:02:29, Yang Li wrote:
-> Add the description of @shrink and @sc in jbd2_journal_shrink_scan() and
-> jbd2_journal_shrink_count() kernel-doc comment to remove warnings found
-> by running scripts/kernel-doc, which is caused by using 'make W=1'.
-> fs/jbd2/journal.c:1296: warning: Function parameter or member 'shrink'
-> not described in 'jbd2_journal_shrink_scan'
-> fs/jbd2/journal.c:1296: warning: Function parameter or member 'sc' not
-> described in 'jbd2_journal_shrink_scan'
-> fs/jbd2/journal.c:1320: warning: Function parameter or member 'shrink'
-> not described in 'jbd2_journal_shrink_count'
-> fs/jbd2/journal.c:1320: warning: Function parameter or member 'sc' not
-> described in 'jbd2_journal_shrink_count'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+#regzbot introduced: v5.13..v5.14-rc1
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215419
 
-Thanks for the fix! Just one comment below:
 
->  /**
->   * jbd2_journal_shrink_scan()
-> + * @shrink: A callback you can register to apply pressure to ageable caches.
-> + * @sc: pass information from page reclaim to the shrinkers.
->   *
->   * Scan the checkpointed buffer on the checkpoint list and release the
->   * journal_head.
-> @@ -1312,6 +1314,8 @@ static unsigned long jbd2_journal_shrink_scan(struct shrinker *shrink,
->  
->  /**
->   * jbd2_journal_shrink_count()
-> + * @shrink: A callback you can register to apply pressure to ageable caches.
-> + * @sc: pass information from page reclaim to the shrinkers.
->   *
->   * Count the number of checkpoint buffers on the checkpoint list.
->   */
+Dear Linux folks,
 
-I think the comments are unnecessarily verbose and not really helping much.
-Maybe just something like:
 
- * @shrink: shrinker to work on
- * @sc: reclaim request to process
+On the Intel T4500 laptop Acer TravelMate 5735Z with Debian 
+sid/unstable, there is a 100 ms introduced between Linux 5.10.46 and 
+5.13.9, and is still present in Linux 5.15.5.
 
-								Honza
+     [    0.000000] microcode: microcode updated early to revision 
+0xa0b, date = 2010-09-28
+     [    0.000000] Linux version 5.15.0-2-amd64 
+(debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-13) 11.2.0, GNU 
+ld (GNU Binutils for Debian) 2.37) #1 SMP Debian 5.15.5-2 (2021-12-18)
+     [    0.000000] Command line: 
+BOOT_IMAGE=/boot/vmlinuz-5.15.0-2-amd64 
+root=UUID=e17cec4f-d2b8-4cc3-bd39-39a10ed422f4 ro quiet noisapnp 
+cryptomgr.notests random.trust_cpu=on initcall_debug log_buf_len=4M
+     […]
+     [    0.262243] calling  acpi_init+0x0/0x487 @ 1
+     […]
+     [    0.281655] ACPI: Enabled 15 GPEs in block 00 to 3F
+     [    0.394855] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+     […]
+     [    0.570908] initcall acpi_init+0x0/0x487 returned 0 after 300781 
+usecs
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I attached all the log files to the Kernel.org Bugzilla bug report 
+#215419 [1].
+
+Unfortunately, I am unable to bisect the issue, as it’s not my machine, 
+and I do not have a lot of access to it.
+
+Using ftrace, unfortunately, I didn’t save all of them, I think the path is
+
+     acpi_init() → acpi_scan_init() → acpi_bus_scan(ACPI_ROOT_OBJECT)
+
+But this path hasn’t changed as far as I can see. Anyway, from that 
+path, somehow
+
+     acpi_bus_check_add_1() → acpi_bus_check_add() → … → 
+acpi_bus_check_add() → acpi_add_single_object() → acpi_bus_get_status()
+
+is called, and the `acpi_bus_get_status()` call takes 100 ms on the 
+system – also the cause for bug #208705 [2] –, but that code path wasn’t 
+taken before.
+
+Do you know from the top of your head, what changed? I am going to have 
+short access to the system every two weeks or so, so debugging is 
+unfortunately quite hard.
+
+What is already on my to-do list:
+
+1.  Use dynamic debug `drivers/acpi/scan.c`
+2.  Trace older Linux kernel (5.10.46) to see the differences
+3.  Booting some GNU/Linux system to test 5.11 (Ubuntu 20.10) and 5.12
+4.  Unrelated to the regression, but trace `acpi_bus_get_status()` to 
+understand the 100 ms delay to solve bug #208705 [2]
+
+
+Kind regards,
+
+Paul
+
+
+PS: Do you know of GNU/Linux live systems that are available for all 
+Linux kernel releases and have an initrd, that just stores/uploads the 
+output of `dmesg`?
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=215419
+      "100 ms regression in boottime before `ACPI: PCI Root Bridge [PCI0]"
+[2]: https://bugzilla.kernel.org/show_bug.cgi?id=208705
+      "boot performance: 100 ms delay in PCI initialization - Acer 
+TravelMate 5735Z"

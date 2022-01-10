@@ -2,173 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FF1489B2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8938B489B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbiAJOUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:20:52 -0500
-Received: from pv50p00im-ztdg10021901.me.com ([17.58.6.55]:51936 "EHLO
-        pv50p00im-ztdg10021901.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235443AbiAJOUt (ORCPT
+        id S235463AbiAJOVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:21:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50904 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235394AbiAJOVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:20:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1641824447; bh=9XqLQAg2WYNjySdUZ9g0g99XYS7qmt4n0TDjaRPnSgk=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=viRzUp4WgCaiK0t30P2U3F+EEiYr+8TI0UaU90duNnuZr/B1LPRh1Sef+4RuGsyOD
-         SKEEM3QmLLyvnU4/O3t4MoyEmDi8FlsZhcdVusQipS1PxLSjeGCGP1mOTHdlzP9nuC
-         gFhyGcW9azRWGAe6M6VqO0Bow/G1NiiGubAmo8PcEBBrKwVtfKPWgjcE1Z/lbGR6P7
-         CqLUgDr10qx3ZFQRMl8yTGlf0iz5SE90cMHeJltAeoVsluo+HP9rZ83kIAKScyeWaa
-         wNWv9CMGU72N6MhJw7KJs9q5j0beIYgQSXAyEmbV6MY1IpkA39XhSCcL+DMUXBfj6Y
-         75KEflw+my8nw==
-Received: from xiongwei.. (unknown [120.245.2.119])
-        by pv50p00im-ztdg10021901.me.com (Postfix) with ESMTPSA id CF7B2814B5;
-        Mon, 10 Jan 2022 14:20:42 +0000 (UTC)
-From:   sxwjean@me.com
-To:     akpm@linux-foundation.org, david@redhat.com, mhocko@suse.com,
-        dan.j.williams@intel.com, osalvador@suse.de,
-        naoya.horiguchi@nec.com, thunder.leizhen@huawei.com
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiongwei Song <sxwjean@gmail.com>
-Subject: [PATCH v2 2/2] proc: Add getting pages info of ZONE_DEVICE support
-Date:   Mon, 10 Jan 2022 22:19:57 +0800
-Message-Id: <20220110141957.259022-3-sxwjean@me.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220110141957.259022-1-sxwjean@me.com>
-References: <20220110141957.259022-1-sxwjean@me.com>
+        Mon, 10 Jan 2022 09:21:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E11CB811EC;
+        Mon, 10 Jan 2022 14:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C098DC36AE5;
+        Mon, 10 Jan 2022 14:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641824491;
+        bh=CSoMuGzkJ+TOL2oH/IXDb1JVobsttswFZJ+HvUGnneg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aNkHrpOr2VrlyCJo+Ghe0PZAXb5ivXNmYKpI1uhe48kqxR0bDG9SobuKO8w5KR3Qw
+         0JyBTZirXreOLlNTupqDpRb+jVd35xLfbAgsv7hQt0tWIssna0VcjrnuGJiebJnSFF
+         UHnkFBtNPYSdvBhHqG7Z8owDUXIrbV6GWz2Y/eSLO8TFpF+5ClsLhZXQBygyYe/9aP
+         waNz+2Xj49jP9XNoIeLSY+YNFH59QUJLacL2DwfSm8EVscFE2Xqim2gijySbdCZF/w
+         BDGbyDxUuXUWVBpwjiNr5NSWv6hMyUXiPu0bSqReh5XT5Hw601I8bpgJqYuxoN7ou9
+         E3KRUlQAO87bg==
+Date:   Mon, 10 Jan 2022 14:21:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
+        collinsd@codeaurora.org, subbaram@codeaurora.org,
+        Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 2/6] dt-bindings: regulator: Add pm8008 regulator
+ bindings
+Message-ID: <YdxA5bwcwyJXcPDl@sirena.org.uk>
+References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1637314953-4215-3-git-send-email-quic_c_skakit@quicinc.com>
+ <YZ+qn2hA4MzNEqM+@sirena.org.uk>
+ <30b21a08-f7f7-f3a6-a3ac-156c7f8964b1@quicinc.com>
+ <Ya4UcxxEq9t+isxS@sirena.org.uk>
+ <30ec6b4c-f2a8-d80e-a542-1c2b3f30c049@quicinc.com>
+ <07dc5ba4-790b-0cb2-bc3e-2ce8d7e3e09d@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2022-01-10_06:2022-01-10,2022-01-10 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=798 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2009150000 definitions=main-2201100101
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xt65ruTatPFVTIhX"
+Content-Disposition: inline
+In-Reply-To: <07dc5ba4-790b-0cb2-bc3e-2ce8d7e3e09d@quicinc.com>
+X-Cookie: Do you have lysdexia?
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongwei Song <sxwjean@gmail.com>
 
-When requesting pages info by /proc/kpage*, the pages in ZONE_DEVICE were
-missed.
+--xt65ruTatPFVTIhX
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The pfn_to_devmap_page() function can help to get page that belongs to
-ZONE_DEVICE.
+On Mon, Jan 10, 2022 at 06:42:08PM +0530, Satya Priya Kakitapalli (Temp) wr=
+ote:
 
-Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
----
- fs/proc/page.c | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+> To understand how other upstream mfd drivers are handling this I've gone
+> through some of them. Taking one example, mfd/stpmic1.c is a pmic=A0 mfd
+> device which has a regulators sub-node with separate compatible, and has =
+the
+> parent supplies listed under the regulators node.
 
-diff --git a/fs/proc/page.c b/fs/proc/page.c
-index 9f1077d94cde..2cdc2b315ff8 100644
---- a/fs/proc/page.c
-+++ b/fs/proc/page.c
-@@ -15,6 +15,7 @@
- #include <linux/page_idle.h>
- #include <linux/kernel-page-flags.h>
- #include <linux/uaccess.h>
-+#include <linux/memremap.h>
- #include "internal.h"
- 
- #define KPMSIZE sizeof(u64)
-@@ -46,6 +47,7 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
- {
- 	const unsigned long max_dump_pfn = get_max_dump_pfn();
- 	u64 __user *out = (u64 __user *)buf;
-+	struct dev_pagemap *pgmap = NULL;
- 	struct page *ppage;
- 	unsigned long src = *ppos;
- 	unsigned long pfn;
-@@ -60,17 +62,18 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
- 	count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
- 
- 	while (count > 0) {
--		/*
--		 * TODO: ZONE_DEVICE support requires to identify
--		 * memmaps that were actually initialized.
--		 */
- 		ppage = pfn_to_online_page(pfn);
-+		if (!ppage)
-+			ppage = pfn_to_devmap_page(pfn, &pgmap);
- 
- 		if (!ppage || PageSlab(ppage) || page_has_type(ppage))
- 			pcount = 0;
- 		else
- 			pcount = page_mapcount(ppage);
- 
-+		if (pgmap)
-+			put_dev_pagemap(pgmap);
-+
- 		if (put_user(pcount, out)) {
- 			ret = -EFAULT;
- 			break;
-@@ -229,10 +232,12 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
- {
- 	const unsigned long max_dump_pfn = get_max_dump_pfn();
- 	u64 __user *out = (u64 __user *)buf;
-+	struct dev_pagemap *pgmap = NULL;
- 	struct page *ppage;
- 	unsigned long src = *ppos;
- 	unsigned long pfn;
- 	ssize_t ret = 0;
-+	u64 flags;
- 
- 	pfn = src / KPMSIZE;
- 	if (src & KPMMASK || count & KPMMASK)
-@@ -242,13 +247,15 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
- 	count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
- 
- 	while (count > 0) {
--		/*
--		 * TODO: ZONE_DEVICE support requires to identify
--		 * memmaps that were actually initialized.
--		 */
- 		ppage = pfn_to_online_page(pfn);
-+		if (!ppage)
-+			ppage = pfn_to_devmap_page(pfn, &pgmap);
-+
-+		flags = stable_page_flags(ppage);
-+		if (pgmap)
-+			put_dev_pagemap(pgmap);
- 
--		if (put_user(stable_page_flags(ppage), out)) {
-+		if (put_user(flags, out)) {
- 			ret = -EFAULT;
- 			break;
- 		}
-@@ -277,6 +284,7 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
- {
- 	const unsigned long max_dump_pfn = get_max_dump_pfn();
- 	u64 __user *out = (u64 __user *)buf;
-+	struct dev_pagemap *pgmap = NULL;
- 	struct page *ppage;
- 	unsigned long src = *ppos;
- 	unsigned long pfn;
-@@ -291,17 +299,18 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
- 	count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
- 
- 	while (count > 0) {
--		/*
--		 * TODO: ZONE_DEVICE support requires to identify
--		 * memmaps that were actually initialized.
--		 */
- 		ppage = pfn_to_online_page(pfn);
-+		if (!ppage)
-+			ppage = pfn_to_devmap_page(pfn, &pgmap);
- 
- 		if (ppage)
- 			ino = page_cgroup_ino(ppage);
- 		else
- 			ino = 0;
- 
-+		if (pgmap)
-+			put_dev_pagemap(pgmap);
-+
- 		if (put_user(ino, out)) {
- 			ret = -EFAULT;
- 			break;
--- 
-2.30.2
+There are some devices that did get merged doing this, that doesn't mean
+it's a great idea though.
 
+--xt65ruTatPFVTIhX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHcQOQACgkQJNaLcl1U
+h9AcAgf/aAfps0Xv/1N167UQgoR5118bDWCVmsdfpk0/agFWosdoXzOJ/Bf6boYz
+fZzlKOe7PU9UWOhOKBxwE12hlMsaspuGSVQQABUAVh6ebEwQZrQg3UzL/ND/sJua
+cgSTkV6/zTVYbxgdkjDd4eDaStZ7mEFWm0OSI63Ki61gqOlB7WrCcz1zzNij4NSS
+5QdGIo8h+6R5aqvO7dZ6QRjpihfjNrexmxb/BSET1sFGtcoGMOtgyOc6mkrrak/z
+gzjB7qtrh2p4hhrVYAa07r/06tw87xBJOv+bswsCQDF60YiGdpUu7d5YEE5GdV4a
+KPSDyUHnWlCkDQF4s5SwH0je4RzivQ==
+=dbCf
+-----END PGP SIGNATURE-----
+
+--xt65ruTatPFVTIhX--

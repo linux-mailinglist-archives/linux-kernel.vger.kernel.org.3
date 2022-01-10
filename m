@@ -2,95 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDBA4895D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 10:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B79F4895E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243481AbiAJJ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 04:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S243538AbiAJJ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 04:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243497AbiAJJ5L (ORCPT
+        with ESMTP id S243577AbiAJJ7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:57:11 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E6C06175B;
-        Mon, 10 Jan 2022 01:57:09 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id g80so36618724ybf.0;
-        Mon, 10 Jan 2022 01:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=d84IyUOyurvFvSv5LzCsSavV50bnV4A3aqd5IY6z158=;
-        b=n1Jwkx5Mf+1c/hDk5wx8AYKZgxTS6CYqlAM7OC1v31FwzX531Hlcs9476ZzHKmdlZU
-         k4e5Y91Uk//wMKAsqYLASYVHz6P71GAwTYUl35aE1cCQzd5cHZA+JohWXsbDX9ZFKiUe
-         irXq+j+Qr+7pFmbqsPAxPOLJLAq9NseoTbJJmQZpVd3Wi6s60d0yq6QQVvEBuj4pFZzt
-         9JNOAN/OgBw40Yit0zzmGq+z+fIdS31USLtnG8qbBrjeV6EoGzBfc++t6ilg7qL/JenG
-         obEFoTkA2+Y7VoKRC+a/K97LLWWanngUgJt7iT7I4jkCQsX/HawrhzZ2QBgTy627Haw2
-         F8oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=d84IyUOyurvFvSv5LzCsSavV50bnV4A3aqd5IY6z158=;
-        b=6/nVe41EhxIabXyOZi4QmteV28PyMT70Uy9zK6lLBJclHOek38l+Gc7ND4mo4fMbU7
-         mc1g1cS7Vr+fZlOG15col8PPzqZDu3cKVV/n0K9WKUL1F8whKJZXxPWb9NnzQcQJ1HYP
-         NeUGIX9QCUSohSE30iKdasgj3nAAK6iXKrPwVqc3TQtzBO/SDs5aOJ073u2YLRuQDqBe
-         X/SaMO8WuGVkUOwQQwSUzj38njZOfStE5aaMdfdwFOEFgXB662aOs8u3aP2S8TTr1nwI
-         vIQCJ2yAA7/rQixJMJJ8ukWm+AAuEEF0tW8oQjJ6LddRG0unQQDwNRZvz293+3jpbipr
-         MvUA==
-X-Gm-Message-State: AOAM533oORwwN3XcuyIrsw7ep7lJGRkkJzHdg5H2tCYX+m6lgFp3NSx5
-        6dAY/Ja55qU2RVX8WpxhijgmDWl2K6WB7Q1eKMA=
-X-Google-Smtp-Source: ABdhPJwVwWhfyHOvXBVycLJMUGG08bR7R08yhc/BPFfD/PcUUlXSuZShmbXi6vZjjPs/eKeTTdwAOc72VwRW/Jizwy0=
-X-Received: by 2002:a25:d44:: with SMTP id 65mr83645207ybn.510.1641808628617;
- Mon, 10 Jan 2022 01:57:08 -0800 (PST)
+        Mon, 10 Jan 2022 04:59:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F77C061751;
+        Mon, 10 Jan 2022 01:59:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 743FB6123D;
+        Mon, 10 Jan 2022 09:59:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9EFC36AED;
+        Mon, 10 Jan 2022 09:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641808781;
+        bh=9Ee0ff4Qp1c7d4QxMmb6qnqRRmqMvh/DUDbTOfKY4gU=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=du8UeFOKDrGkuHEFUi+BTHuDP2crO5/CdmhSu0A0wtqwe2vRb+BRtm6ZTc8j/vVZN
+         Njhf2M2b+To4bLKP4F/rk7lrv0vqaAO3LPIOCo0QXyPYjgMnUpJ0lz+0/6I5og3Iit
+         /e/5B9k5IR0cou7OfrBX8t7WZiIIdkhsoD9u6eGUJVZS2Bs6dmiVFl2ArpYO5MtIFX
+         XkSH0q6E19DoUlP36FzMQNyifP8BuR4OGWOrsrQ0/nS5cDkyox5Sf0iWxOnVPvVkyh
+         fLk1E7i72OUC8r+UPVnSIXjM3gVftuoSVRgqAqPpa2QqdW8Ogpya5TA6Gp0pPNC6im
+         Xtltb1msfN6OQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?utf-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "Daniel \(Deognyoun\) Kim" <dekim@broadcom.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi\@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "brcm80211-dev-list.pdl\@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list\@infineon.com" 
+        <SHA-cyfmac-dev-list@infineon.com>
+Subject: Re: [PATCH 16/34] brcmfmac: acpi: Add support for fetching Apple ACPI properties
+References: <20211226153624.162281-1-marcan@marcan.st>
+        <20211226153624.162281-17-marcan@marcan.st>
+        <CAHp75VcZcJ+zCDL-J+w8gEeKXGYdJajjLoa1JTj_kkJixrV12Q@mail.gmail.com>
+Date:   Mon, 10 Jan 2022 11:59:31 +0200
+In-Reply-To: <CAHp75VcZcJ+zCDL-J+w8gEeKXGYdJajjLoa1JTj_kkJixrV12Q@mail.gmail.com>
+        (Andy Shevchenko's message of "Mon, 3 Jan 2022 18:20:47 +0200")
+Message-ID: <87y23nvrlo.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 10 Jan 2022 10:56:58 +0100
-Message-ID: <CAKXUXMy8ywQXqqmOvvm9wKL_ikixRJOFgCcgu4OdPUPhjq6MhA@mail.gmail.com>
-Subject: GPL-1.0-licensed code for files drivers/clk/mediatek/clk-mt7986*
- included with commit ec97d23c8e22 ("clk: mediatek: add mt7986 clock support")
-To:     Sam Shih <sam.shih@mediatek.com>, Ryder Lee <ryder.lee@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-spdx@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sam,
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
+> On Sunday, December 26, 2021, Hector Martin <marcan@marcan.st> wrote:
+>
+>  On DT platforms, the module-instance and antenna-sku-info properties
+>  are passed in the DT. On ACPI platforms, module-instance is passed via
+>  the analogous Apple device property mechanism, while the antenna SKU
+>  info is instead obtained via an ACPI method that grabs it from
+>  non-volatile storage.
+>
+>  Add support for this, to allow proper firmware selection on Apple
+>  platforms.
+>
+>  Signed-off-by: Hector Martin <marcan@marcan.st>
+>  ---
+>   .../broadcom/brcm80211/brcmfmac/Makefile      |  2 +
+>   .../broadcom/brcm80211/brcmfmac/acpi.c        | 51 +++++++++++++++++++
+>   .../broadcom/brcm80211/brcmfmac/common.c      |  1 +
+>   .../broadcom/brcm80211/brcmfmac/common.h      |  9 ++++
+>   4 files changed, 63 insertions(+)
+>   create mode 100644 drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+>
+>  diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+>  b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+>  index 13c13504a6e8..19009eb9db93 100644
+>  --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+>  +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+>  @@ -47,3 +47,5 @@ brcmfmac-$(CONFIG_OF) += \
+>                  of.o
+>   brcmfmac-$(CONFIG_DMI) += \
+>                  dmi.o
+>  +brcmfmac-$(CONFIG_ACPI) += \
+>  +               acpi.o
+>  diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+>  b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+>  new file mode 100644
+>  index 000000000000..3e56dc7a8db2
+>  --- /dev/null
+>  +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+>  @@ -0,0 +1,51 @@
+>  +// SPDX-License-Identifier: ISC
+>  +/*
+>  + * Copyright The Asahi Linux Contributors
+>  + */
+>  +
+>  +#include <linux/acpi.h>
+>  +#include "debug.h"
+>  +#include "core.h"
+>  +#include "common.h"
+>  +
+>  +void brcmf_acpi_probe(struct device *dev, enum brcmf_bus_type bus_type,
+>  +                     struct brcmf_mp_device *settings)
+>  +{
+>  +       acpi_status status;
+>  +       struct acpi_device *adev = ACPI_COMPANION(dev);
+>
+> Please, move the assignment closer to its first user 
 
-Thanks for contributing the mt7986 clock support to the kernel
-repository with commit ec97d23c8e22 ("clk: mediatek: add mt7986 clock
-support").
+Andy, your email was formatted in HTML. I'm sure you know this already,
+but our mailing lists drop all HTML emails so other people (and
+patchwork) don't see your comments.
 
-You have marked the files below with the GPL-1.0 License, which
-./scripts/spdxcheck.py identifies and warns about:
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-drivers/clk/mediatek/clk-mt7986-apmixed.c: 1:28 Invalid License ID: GPL-1.0
-drivers/clk/mediatek/clk-mt7986-infracfg.c: 1:28 Invalid License ID: GPL-1.0
-drivers/clk/mediatek/clk-mt7986-topckgen.c: 1:28 Invalid License ID: GPL-1.0
-
-The kernel's licensing rules are described here:
-
-https://www.kernel.org/doc/html/latest/process/license-rules.html#kernel-licensing
-
-The GPL-1.0 is a deprecated license in the kernel repository.
-
-Driver code that is licensed with GPL-1.0 might not be compatible with
-GPL-2.0. I am not a lawyer, and we probably do not want to require all
-users of your driver code to needlessly involve a lawyer to get such a
-statement on license compatibility.
-
-Do you really intend to license this code under GPL-1.0 and are you
-aware of all the consequences for other developers and users? Or is
-this a mistake and you intend to license it under the kernel's
-standard GPL-2.0 license?
-
-
-Best regards,
-
-Lukas
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

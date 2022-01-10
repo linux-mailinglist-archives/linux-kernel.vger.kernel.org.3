@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A97448A243
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9EB48A244
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240359AbiAJWCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:02:13 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47198 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230413AbiAJWCL (ORCPT
+        id S241239AbiAJWDY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 17:03:24 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:29018 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230413AbiAJWDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:02:11 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AKK4vH032508;
-        Mon, 10 Jan 2022 22:02:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=ZimozMTB7scDCoA+g9ix770IWUghSN5d/1b2wWBEsF4=;
- b=AY3+boBU7EMI3sriJJcYZ1yWun8yGWCIOOOs9ZItTwiX2s4mfw2oXu6vwz11T5YzRra7
- 18Mi9u6iHgzlfyYQv/TKKl+JqXKqD5NrJMP3QBkuYdUuylvqylRLZTrzZiL5dmOILVuU
- 89TRY6yrCpFDTLXKLshdoaVvHdSpSJWJgXxtpkXxjKMquc9XJWqi5CqZXKHZvb+STTKS
- jjaiX/eTMQLfm/em6lOjL6QXfokW7TV3CAYUHMc1POQsTlF9fQiUy5zGxERFCnHWKwyZ
- XOyc5kDSHMa9gTrvTfxouqBC48b5PotiZl4t4qA7hSfMU8miNZzveK8Ffg3Nc7eN7ki+ 4w== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3vvqmg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 22:02:08 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ALvtrf007323;
-        Mon, 10 Jan 2022 22:02:06 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vhrsne-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 22:02:06 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20AM23St41419078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:02:03 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6BA6B52051;
-        Mon, 10 Jan 2022 22:02:03 +0000 (GMT)
-Received: from sig-9-65-93-173.ibm.com (unknown [9.65.93.173])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 99B755205F;
-        Mon, 10 Jan 2022 22:02:02 +0000 (GMT)
-Message-ID: <41707c7dd9705b8bb04a6d56aee349ff17c4af50.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity subsystem updates for v5.17
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Mon, 10 Jan 2022 17:02:02 -0500
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 60Pkw2xZq5eV53gis3jdKLqZ-PFG5QnZ
-X-Proofpoint-GUID: 60Pkw2xZq5eV53gis3jdKLqZ-PFG5QnZ
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 10 Jan 2022 17:03:23 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-306-BDOvgji-O6a6MU242vGWhA-1; Mon, 10 Jan 2022 22:03:21 +0000
+X-MC-Unique: BDOvgji-O6a6MU242vGWhA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 10 Jan 2022 22:03:21 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 10 Jan 2022 22:03:21 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Steven Rostedt' <rostedt@goodmis.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: RE: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Thread-Topic: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Thread-Index: AQHYBkLm7AQ+C6qOvkCW4jNyMLz0qKxce3DQgAAF6wCAAEzL0A==
+Date:   Mon, 10 Jan 2022 22:03:20 +0000
+Message-ID: <7c2789f990394df5b7907287fc0e1232@AcuMS.aculab.com>
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+ <20220110122436.5302128f@gandalf.local.home>
+In-Reply-To: <20220110122436.5302128f@gandalf.local.home>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_10,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201100144
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Steven Rostedt
+> Sent: 10 January 2022 17:25
+> 
+> On Mon, 10 Jan 2022 17:11:52 +0000
+> David Laight <David.Laight@ACULAB.COM> wrote:
+> 
+> > From: Steven Rostedt
+> > > Sent: 10 January 2022 16:56
+> > >
+> > > From: Steven Rostedt <rostedt@goodmis.org>
+> > >
+> > > Pingfan reported that the following causes a fault:
+> > >
+> > >   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
+> > >   echo 1 > events/syscalls/sys_enter_at/enable
+> > >
+> > > The reason is that trace event filter treats the user space pointer
+> > > defined by "filename" as a normal pointer to compare against the "cpu"
+> > > string. If the string is not loaded into memory yet, it will trigger a
+> > > fault in kernel space:
+> >
+> > If a userspace pointer can end up the kernel structure then presumably
+> > a 'dodgy' user program can supply an arbitrary kernel address instead?
+> > This may give the user the ability to read arbitrary kernel addresses
+> > (including ones that are mapped to PCIe IO addresses).
+> > Doesn't sound good at all.
+> 
+> Only root has access to the information read here. All tracing requires
+> root or those explicitly given access to the tracing data, which pretty
+> much allows all access to kernel internals (including all memory). So
+> nothing to worry about here ;-)
 
-The few changes are all kexec related:
+Is this filtering trace using a filename passed to a system call by a user program?
+In which case a user program can set up a system call that normally fails
+(because the copy_from_user() errors) but if root tries to run a system
+call event trace on that process can read arbitrary addresses and
+thus crash the system?
 
-- The MOK keys are loaded onto the .platform keyring in order to verify
-the kexec kernel image signature.  However, the MOK keys should only be
-trusted when secure boot is enable.  Before loading the MOK keys onto
-the .platform keyring, make sure the system is booted in secure boot
-mode.
+While unlikely root might be persuaded to try to run the trace.
 
-- When carrying the IMA measurement list across kexec, limit dumping
-the measurement list to when dynamic debug or CONFIG_DEBUG is enabled.
+	David
 
-- kselftest: add kexec_file_load selftest support for PowerNV and other
-cleanup.
-
-thanks,
-
-Mimi
-
-
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
-
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.17
-
-for you to fetch changes up to 65e38e32a959dbbb0bf5cf1ae699789f81759be6:
-
-  selftests/kexec: Enable secureboot tests for PowerPC (2022-01-05 11:44:57 -0500)
-
-----------------------------------------------------------------
-integrity-v5.17
-
-----------------------------------------------------------------
-Bruno Meneguele (1):
-      ima: silence measurement list hexdump during kexec
-
-Lee, Chun-Yi (1):
-      integrity: Do not load MOK and MOKx when secure boot be disabled
-
-Mimi Zohar (2):
-      selftest/kexec: fix "ignored null byte in input" warning
-      selftests/kexec: update searching for the Kconfig
-
-Nageswara R Sastry (1):
-      selftests/kexec: Enable secureboot tests for PowerPC
-
-Takashi Iwai (1):
-      ima: Fix undefined arch_ima_get_secureboot() and co
-
- include/linux/ima.h                                | 30 ++++++-------
- security/integrity/ima/ima_kexec.c                 |  6 +--
- security/integrity/platform_certs/load_uefi.c      |  5 +++
- tools/testing/selftests/kexec/Makefile             |  2 +-
- tools/testing/selftests/kexec/kexec_common_lib.sh  | 51 +++++++++++++++++-----
- .../selftests/kexec/test_kexec_file_load.sh        | 13 ++++--
- 6 files changed, 74 insertions(+), 33 deletions(-)
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

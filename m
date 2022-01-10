@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E7E488E87
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B24CA488E8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238113AbiAJB7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 20:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S238120AbiAJB7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 20:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiAJB7B (ORCPT
+        with ESMTP id S238118AbiAJB7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 20:59:01 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4195C061751
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 17:59:01 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id f4so1599811ilr.9
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 17:59:01 -0800 (PST)
+        Sun, 9 Jan 2022 20:59:40 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D52C061756
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 17:59:40 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id w22so5082238iov.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 17:59:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XRSlWSOwl4Vpt5hVHwQzwHcS4ZVgPWX/VD2cJFBVCLA=;
-        b=jHNJpwwLSWzzMj4sNlQWK3Xz/rGxRKUVu7eIRnVnCLMhDMaKe0UmGzqOLXl+qtrfT1
-         lo+lWvm8MqNyBVIOHrolWJBsiH64TPV3y2uqR+pEMRtPvgAlY8aFLpY3dNB9zeJRqU5o
-         8PZf7Al8pSjYiNuYjzDXsKWYOJKnwRqshTZ0ylTEVizQuHuL9LKRUbg9+6Q4MEyxhVsh
-         Gf8zXX/2N17+8pZVAz9w9/vWjchEbRGwC+g0gwZqPZYYtnDEds46KKn2oFTfazCovWCd
-         4g5jPifCPsMhOPZfrE1iBSmF9cvKb/9iUclMSllRdLNuofg/JI75XhWxnPqMdb6aY2KP
-         FhDw==
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=X1XWCuDCwP2Vi5jZjH2p1KzFJ1LWZqjX5NlnfaMgBKU=;
+        b=hINncY3uYTC83lQS15HGGd9lnWsX3ziGG2R7V5dGktSlsRC+6nBPuPTOh2zduhn/m8
+         Iw+Q3cX0BUfEFhzSvTwJc6KjVifhrrlqVF4SETxF7pdPCwFQ9cKi9OQJg66T8Ac+J2e4
+         r0tkOEc52i4lRZU0NhNFXVEYtGc+a7AKmQwLAzpl/ubLtZc8Qc9oiyXg3h8xcP27gszC
+         smcotpVYNj/YzQx5ZfCmVahvb+eEhH+MJhKECYYsNtRGv9V+twuuabnPv9VgasywcMmC
+         Skwc1xU9FmLn1Se2bcJPCkWihKiioGrrkWQCEPIkEFdy8X9mmu5i9kl9uvdqP9by/Sfy
+         WUPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XRSlWSOwl4Vpt5hVHwQzwHcS4ZVgPWX/VD2cJFBVCLA=;
-        b=7V4MiwD5lg/CrGhkjXN6ILD8Jn6WBTkA9qxoXg48iFHJIVGHFnta1cIfplY3X660gh
-         g9LFUKrhZ0018HpbF9Dufi2JE4R807Y2d/Fx9kn2M8KeLpIdAoRnEl+QvxuKPyzt6YwC
-         gS1IKJ/xc/+qcnXfqPzbsT+IG6cxZFfWsRML1NBgXg/bPgEXnbaYE46IfaJomYgbkuDn
-         WGqSiw9Qm/JuMXpxrdGWJqQKZZ4EWfCi16g4NP06T7RNu5VUixMDWfAeqn1/U99sB0Gg
-         AJH005j4jc4qIJDWbsOLVIamLYTQoZkPixbVnusOFH7KjwIVg+s1qwQxLrJN+sJv6SL3
-         OX/w==
-X-Gm-Message-State: AOAM533UEyhv0Av4r/aHfKEbgQv5/vgJ9JOTuZCnAqwwEQ74PqcfZX4k
-        MLZXSdNbdEdcz9nUjLKOW+5OrNl/2EURAw==
-X-Google-Smtp-Source: ABdhPJxbva2uyCGNav/0mBTbzA1NRPx9JpqffAXn1gwCOuny6jQxJkr5MKyo/hJha2pgxvwFovaJNg==
-X-Received: by 2002:a92:c685:: with SMTP id o5mr34948623ilg.152.1641779940894;
-        Sun, 09 Jan 2022 17:59:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=X1XWCuDCwP2Vi5jZjH2p1KzFJ1LWZqjX5NlnfaMgBKU=;
+        b=5eoeEzOOqPP6hqb2EQmU1HAu1l5mRJJa6jb57NVQUE7TYKxXPt3tLxMnpewp2CaP+n
+         HBWeqHcUZoofSHfBXbLgiwT4TQ1HBQPq2xpN00Jh+M0UNQ+zx1GfJ1tlWP0scbgg5MHy
+         PIEAX21u/m02faOBA3PL9hvPda2XvdEYcvOnhGoxbZswQMtYqQdWqQPYBRY28iJlwCZ3
+         v0fDsJF/KUsYhBeB8XZFuiQfroKYyOJ3SBar01iLTvtVmGfgzA6kG1dVv7jhYHnzYz6s
+         5C40NPxNcwnmyh9SCBl/Tl3Ko7v4w+OzadUJ3KoTD/SkPqKvESh2aad1WqQpYG1np9kp
+         4sYg==
+X-Gm-Message-State: AOAM530sb91nVjDDC+mAH81ZuVAGYTGpLXSTDlWcAuKld3s4mvsPTrtF
+        7DcOGIkAKX7BItLZWddHtkt+454gD8PY5w==
+X-Google-Smtp-Source: ABdhPJywjwK1mGzwUiV8AsYEFVjPuTCfwaBPnYXlxGJFIrbABsReecIdn6e6r0hg98xnc59Yu675Ug==
+X-Received: by 2002:a5d:9582:: with SMTP id a2mr34171969ioo.81.1641779979403;
+        Sun, 09 Jan 2022 17:59:39 -0800 (PST)
 Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id j2sm3352550ilr.71.2022.01.09.17.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 17:59:00 -0800 (PST)
-Subject: Re: [PATCH v3 0/8] docs: consolidate sysfs-block into
- Documentation/ABI/
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org,
+        by smtp.gmail.com with ESMTPSA id l14sm3705382ios.24.2022.01.09.17.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 17:59:38 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20211209003833.6396-1-ebiggers@kernel.org>
 References: <20211209003833.6396-1-ebiggers@kernel.org>
- <YcH1uxfdTRHIwl7Y@quark> <YdMQ6rfSZWSOLptA@quark>
- <YddiJFr+ba7Veh82@sol.localdomain>
- <65376e36-579b-76c4-0642-4582d6679914@acm.org>
- <ef487b83-a1cc-d8a5-8a45-d0fec5eed94b@kernel.dk>
- <YdtS3x0M1qFcN3R1@sol.localdomain>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <fff11146-f759-2887-5c80-6449dbc16717@kernel.dk>
-Date:   Sun, 9 Jan 2022 18:58:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: Re: [PATCH v3 0/8] docs: consolidate sysfs-block into Documentation/ABI/
+Message-Id: <164177997844.87165.14602607472364382040.b4-ty@kernel.dk>
+Date:   Sun, 09 Jan 2022 18:59:38 -0700
 MIME-Version: 1.0
-In-Reply-To: <YdtS3x0M1qFcN3R1@sol.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/22 2:25 PM, Eric Biggers wrote:
-> On Sun, Jan 09, 2022 at 10:01:11AM -0700, Jens Axboe wrote:
->> On 1/7/22 1:58 PM, Bart Van Assche wrote:
->>> On 1/6/22 13:41, Eric Biggers wrote:
->>>> Jens, any reason you haven't applied this series yet?  It looks like you've been
->>>> applying other patches.  To be clear, I've been expecting that this would go in
->>>> through the block tree, rather than the docs tree.
->>>
->>> We are close to the v5.17 merge window so this is not a good time for a maintainer to
->>> apply a large patch series. If Jens does not reply I propose to repost this patch
->>> series after the v5.17 merge window has closed (three weeks from now?).
->>
->> I'm fine with it, but it should probably just go through the doc tree.
+On Wed, 8 Dec 2021 16:38:25 -0800, Eric Biggers wrote:
+> This series consolidates the documentation for /sys/block/<disk>/queue/
+> into Documentation/ABI/, where it is supposed to go (as per Greg KH:
+> https://lore.kernel.org/r/YaXXpEAwVGTLjp1e@kroah.com).
 > 
-> I think it makes much more sense for subsystems to be responsible for
-> their own documentation; that's why patch 8 in this series adds the
-> block layer documentation to the block layer MAINTAINERS entry.  Do
-> you disagree with that?
+> This series also updates MAINTAINERS to associate the block
+> documentation with the block layer.
+> 
+> [...]
 
-I agree, but then we often end up with merge conflicts between the doc
-tree and others. That's why it's usually punted there. As a maintainer,
-any conflicts is a pain in the butt to deal with, something the
-contributor doesn't necessarily see or understand.
+Applied, thanks!
 
-If there are no conflicts this time around, I can queue them up.
+[1/8] docs: sysfs-block: move to stable directory
+      commit: ae7a7a53498f452eb927cd4b4eed0bccded85ebf
+[2/8] docs: sysfs-block: sort alphabetically
+      commit: 07c9093c429361dd405499b1e433e4170b81551f
+[3/8] docs: sysfs-block: add contact for nomerges
+      commit: 8b0551a74b4a9396a7f6ddb0c5f6f3c8465e9d45
+[4/8] docs: sysfs-block: fill in missing documentation from queue-sysfs.rst
+      commit: 849ab826e10531f106846e8e9eeae8d00a198f6e
+[5/8] docs: sysfs-block: document stable_writes
+      commit: 1163010418a7f0c60c309743498cb6c5cd828ecc
+[6/8] docs: sysfs-block: document virt_boundary_mask
+      commit: 8bc2f7c67061cb39e317a45ad9870f529b1fb190
+[7/8] docs: block: remove queue-sysfs.rst
+      commit: 208e4f9c0028e9181220460600b1df0bc677e796
+[8/8] MAINTAINERS: add entries for block layer documentation
+      commit: f029cedb9bb5bab7f1bb3042be348f2dac0ee66e
 
+Best regards,
 -- 
 Jens Axboe
+
 

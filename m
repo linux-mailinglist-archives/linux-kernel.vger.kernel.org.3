@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD88489215
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74772489290
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240573AbiAJHiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:38:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40590 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiAJHbn (ORCPT
+        id S243383AbiAJHpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240541AbiAJHgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:31:43 -0500
+        Mon, 10 Jan 2022 02:36:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB29C02518D;
+        Sun,  9 Jan 2022 23:31:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 267E360B9F;
-        Mon, 10 Jan 2022 07:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0956DC36AEF;
-        Mon, 10 Jan 2022 07:31:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1B8860B6E;
+        Mon, 10 Jan 2022 07:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2144C36AF4;
+        Mon, 10 Jan 2022 07:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799902;
-        bh=lcHfSChScLvyGOU8GsHzTVoEVeZZVhOFXm8cepE1HTo=;
+        s=korg; t=1641799905;
+        bh=X2wDFP56moBYtbS6wX69NSgzas0ikE8pK/yrZsQ/Dx8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BM0rmaF/mdPSM3kmb9dnLnogb1jsxnnsHkxCrE1WD9ec6hLm9V2Ja1+SZ+pmBzW6C
-         tbfZ5Wbs7NhwVQk7oOGUqJPB7zMqG2n1XleTD3iA6+jPvkGvfjsNw2zsMvn+fXKUvn
-         rKSr2uiswp9acKkJJR7hE0Az54HjefQM2xhCnRIs=
+        b=YBkTsNyBnOuKj7z6BCMv9/652maxM8LOsCV9qBIISAdr7qN6jiOP5lKd2GF6zq1sF
+         EKuNs9AYOc2zEIJFMLvpNFhD1IaQHoxAge2bfNcJfhs43WB1cql7nPiZ8jiTLE1MaR
+         dURGz38MT8eQiFwchanZk/LVAfVMKe3VyLwL0VxI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 11/72] netrom: fix copying in user data in nr_setsockopt
-Date:   Mon, 10 Jan 2022 08:22:48 +0100
-Message-Id: <20220110071821.925775387@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.15 12/72] RDMA/uverbs: Check for null return of kmalloc_array
+Date:   Mon, 10 Jan 2022 08:22:49 +0100
+Message-Id: <20220110071821.964439878@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
 References: <20220110071821.500480371@linuxfoundation.org>
@@ -46,32 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 3087a6f36ee028ec095c04a8531d7d33899b7fed upstream.
+commit 7694a7de22c53a312ea98960fcafc6ec62046531 upstream.
 
-This code used to copy in an unsigned long worth of data before
-the sockptr_t conversion, so restore that.
+Because of the possible failure of the allocation, data might be NULL
+pointer and will cause the dereference of the NULL pointer later.
+Therefore, it might be better to check it and return -ENOMEM.
 
-Fixes: a7b75c5a8c41 ("net: pass a sockptr_t into ->setsockopt")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 6884c6c4bd09 ("RDMA/verbs: Store the write/write_ex uapi entry points in the uverbs_api")
+Link: https://lore.kernel.org/r/20211231093315.1917667-1-jiasheng@iscas.ac.cn
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netrom/af_netrom.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/core/uverbs_uapi.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/net/netrom/af_netrom.c
-+++ b/net/netrom/af_netrom.c
-@@ -306,7 +306,7 @@ static int nr_setsockopt(struct socket *
- 	if (optlen < sizeof(unsigned int))
- 		return -EINVAL;
- 
--	if (copy_from_sockptr(&opt, optval, sizeof(unsigned int)))
-+	if (copy_from_sockptr(&opt, optval, sizeof(unsigned long)))
- 		return -EFAULT;
- 
- 	switch (optname) {
+--- a/drivers/infiniband/core/uverbs_uapi.c
++++ b/drivers/infiniband/core/uverbs_uapi.c
+@@ -447,6 +447,9 @@ static int uapi_finalize(struct uverbs_a
+ 	uapi->num_write_ex = max_write_ex + 1;
+ 	data = kmalloc_array(uapi->num_write + uapi->num_write_ex,
+ 			     sizeof(*uapi->write_methods), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
+ 	for (i = 0; i != uapi->num_write + uapi->num_write_ex; i++)
+ 		data[i] = &uapi->notsupp_method;
+ 	uapi->write_methods = data;
 
 

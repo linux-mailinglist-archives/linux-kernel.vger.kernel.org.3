@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FF4488EF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 04:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA904488F04
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 04:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238383AbiAJDjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 22:39:36 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53928
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236129AbiAJDjf (ORCPT
+        id S238399AbiAJDr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 22:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235727AbiAJDr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 22:39:35 -0500
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E0A7F406EA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:39:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641785973;
-        bh=pQ19/9SUWFmu9QWaYJWAgIjttlL4E8YQab0OKaz5DsA=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=q2ptJYO0ewt7UUY7kt1GbShK1W0z0kKUwbRBZu6eR+mUYTm6U7TmxRrjFGRQ0p/oi
-         J1+kjTpKauoqglTasIXygBnMIg49eYRcpnyG96oDKrkmQnYewO3qHhjGxaGgjxlCPf
-         miUwWYzBAIbqYBm0pHPKeridO1fm1ub+Glm7RXv2OAIgbVfrgrZfwvGiGUimx16N2v
-         /lLSsBwvDqBdjglcD0qaurme8Miw9JPqhFb8N/8aJw5jfpmQ2XtkZHokm2xOiN9ZkE
-         OXeFDyfP0I67dh0ggxDheLnE7xSmSBWwuFf9fw9r8I0MorXhqPidL+P7Arz1PZkbC/
-         7DnHcK9eAfhcw==
-Received: by mail-oo1-f69.google.com with SMTP id b8-20020a4a9bc8000000b002c5d4b37b30so7959730ook.3
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 19:39:33 -0800 (PST)
+        Sun, 9 Jan 2022 22:47:57 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57F3C06173F;
+        Sun,  9 Jan 2022 19:47:57 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id 78so1527384pfu.10;
+        Sun, 09 Jan 2022 19:47:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pbRI1T2l3Qets8v52jJPGd5CiuQtZXN6jFwWiPsneXQ=;
+        b=ZQrHf3jO6LZaTeDXee6HHvFaG63VScf3A579kXtpX+vWMW89xqhJtHSavilLKTZl51
+         NzGWoTpFw5kZpbBh53spzudlfCV5cxMfKWnNNRQlvfFc4Kj6/OKQw5ugyo1Afdkzy5Xs
+         RDIlmpoyadyfpqnzFuOuzsaaB2sopn2/+UGWQikvhGiNQfdS5NqcOWVfQ4n79biFp1wo
+         18ibrr7YMTqPIiqHPoaTatCKvDUod8BXRae4PZfEm6hC2sgGmy6+fawymfsfSd1ks4ko
+         bXwRUeGq3aBWmTh5591jivivDCbvOY0de1atWIYOPRQQg7C7vJRb4qztSrR5R+XPsQjj
+         CTqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pQ19/9SUWFmu9QWaYJWAgIjttlL4E8YQab0OKaz5DsA=;
-        b=wNPk7bftDcOU0a774HpVQeZvSlBX2bw4uHvlCPQJ44NIYJs4Kt6SQAceLQavhXTHCQ
-         Ig7H0JjLuejXx2T8Og4Vck+iETKkPfw3cA3Ay4opLwWKjl3P4ncmn12ssTGj8V+fg4Pd
-         9vo1bANvxqVuNGst78JM/ZN50LZgm4PllVf9CY1Nw7OuguwK+OjVqKIBl2e+otTqlxUk
-         4XZpKcaVQiUEp9vGkmJVvUYL0rXCH7fJ+tEuclO9y3HkghhElQQoX72a98nSCnn1Pxjr
-         JQ95iGkCAV+hOZ9YO6BeGf0FkyDFxjnhcnP/4RQhJA8AFOUm0ZeGtrVGttaaLCx7Qgf6
-         go5g==
-X-Gm-Message-State: AOAM5304sdko4U/CrIuhox1FSNnQnE4z1N8vy2cVa0Ap7ybAKkXSRPiu
-        0YulLIuGt1dsaJjKIPlG4ap+GA01ogVtVmmGrTz0/BWsO/qSUC1Kc6zM0DrJ4/BM3pQwOPo1s0q
-        9Ie17UL+VNCh8UrP5vQzvKSBTxAOdL6sHCpAAkAVVAK1RE9f5/DcGb0vUVw==
-X-Received: by 2002:a05:6808:198c:: with SMTP id bj12mr3768728oib.146.1641785972687;
-        Sun, 09 Jan 2022 19:39:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz05xk4ZBJfcYO9IQwZKVBtMGSiPz0jY4s034Wxc925wwPuDP2ai5KfuJBp99zDtCJRoyXhOt6lcdvyHA9pNDU=
-X-Received: by 2002:a05:6808:198c:: with SMTP id bj12mr3768719oib.146.1641785972457;
- Sun, 09 Jan 2022 19:39:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pbRI1T2l3Qets8v52jJPGd5CiuQtZXN6jFwWiPsneXQ=;
+        b=TJolqRozm+vEyWc8rP4X8n+yEJZPPdatMLYzZOEMJVBDhD89vMzIPzrqL65WReA6Sh
+         hddae0TYh9ec6xCZLt54W9hIwTDnOHgvkYYJFAegxKmGsoM5fX82KdrV4nkSkkp6NzBp
+         QmkIUgZUdha7q2jNs3QO1XJSPisrLhn3gMf/ZSgxZWkPjrKs6i1hJLoBowPgnKElQPvF
+         GrJ+knzj1xTjdBi3NiAAn+B53tgGbyuIdvWLptZmr2H4GkW8H3Oi3pojv36+fYy1snR6
+         xGovqF+kQ8bdtpeLsfAK76GRqbeUIJF8DcsSswd6wsd4/0ZRzRdR33Av1jCvSz3HJsDt
+         886w==
+X-Gm-Message-State: AOAM531wJquWcRURme4da9Bnub8EZtmQiweJSdoQE55srHFIA2Or7TQQ
+        Y2jy+oyD/9NtBhACf2f7B8E=
+X-Google-Smtp-Source: ABdhPJzl1NMgZcIY8d5zzP0k4fAzrUgdzf8ewwbTJFYPcTSl9+pX/TDHiD3BnvEAZyn4BqAB+i0FbQ==
+X-Received: by 2002:a63:2056:: with SMTP id r22mr63042594pgm.460.1641786477305;
+        Sun, 09 Jan 2022 19:47:57 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id s5sm4607660pfe.117.2022.01.09.19.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 19:47:56 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
+Date:   Mon, 10 Jan 2022 11:47:47 +0800
+Message-Id: <20220110034747.30498-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220105151427.8373-1-aaron.ma@canonical.com> <YdXVoNFB/Asq6bc/@lunn.ch>
- <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com> <YdYbZne6pBZzxSxA@lunn.ch>
- <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
- <YdbuXbtc64+Knbhm@lunn.ch> <CAAd53p5YnQZ0fDiwwo-q3bNMVFTJSMLcdkUuH-7=OSaRrW954Q@mail.gmail.com>
- <YdhA6QqOKQ19uKWG@lunn.ch>
-In-Reply-To: <YdhA6QqOKQ19uKWG@lunn.ch>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 10 Jan 2022 11:39:21 +0800
-Message-ID: <CAAd53p7C_j6FTfnRK9L-UDmMrbkm75-mYN50_NpPiE2Y=Zgj1g@mail.gmail.com>
-Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough address
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 9:32 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> > > You should be thinking of this in more general terms. You want to
-> > > design a system that will work for any vendors laptop and dock.
-> > >
-> > > You need to describe the two interfaces using some sort of bus
-> > > address, be it PCIe, USB, or a platform device address as used by
-> > > device tree etc.
-> > >
-> > > Let the kernel do whatever it wants with MAC addresses for these two
-> > > interfaces. The only requirement you have is that the laptop internal
-> > > interface gets the vendor allocated MAC address, and that the dock get
-> > > some sort of MAC address, even if it is random.
-> >
-> > Those laptops and docks are designed to have duplicated MACs. I don't
-> > understand why but that's why Dell/HP/Lenovo did.
->
-> But it also sounds like the design is broken. So the question is, is
-> it possible to actually implement it correctly, without breaking
-> networking for others with sane laptop/docks/USB dongles.
+From: Like Xu <likexu@tencent.com>
 
-It's possible, just stick to whitelist and never over generalize the
-device matching rule.
+Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
+Tracing, it exposes details about the asynchronous events, when they are
+generated, and when their corresponding software event handler completes
+execution) cannot be safely and fully emulated by the KVM, especially
+emulating the simultaneous writing of guest PT packets generated by
+the KVM to the guest PT buffer.
 
->
-> > What if the kernel just abstract the hardware/firmware as intended, no
-> > matter how stupid it is, and let userspace to make the right policy?
->
-> Which is exactly what is being suggested here. The kernel gives the
-> laptop internal interface its MAC address from ACPI or where ever, and
-> the dock which has no MAC address gets a random MAC address. That is
-> the normal kernel abstract. Userspace, in the form of udev, can then
-> change the MAC addresses in whatever way it wants.
+For KVM, it's better to advertise currently supported features based on
+the "static struct pt_cap_desc" implemented in the host PT driver and
+ignore _all_ unknown features before they have been investigated one by
+one and supported in a safe manner, leaving the rest as system-wide-only
+tracing capabilities.
 
-That's not what I mean. I mean the kernel should do what
-firmware/hardware expects kernel should do - copy the MAC from ACPI to
-the external NIC in the dock.
-Then the userspace can assign a random MAC to external interface if
-internal interface is already up.
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+v1 -> v2 Changelog:
+- Be safe and ignore _all_ unknown capabilities. (Paolo)
 
->
-> > But power users may also need to use corporate network to work as
-> > Aaron mentioned.
-> > Packets from unregistered MAC can be filtered under corporate network,
-> > and that's why MAC pass-through is a useful feature that many business
-> > laptops have.
->
-> Depends on the cooperate network, but power users generally know more
-> than the IT department, and will just make their machine work, copying
-> the 802.3x certificate where ever it needs to go, us ebtables to
-> mangle the MAC address, build their own little network with an RPi
-> acting as a gateway doing NAT and MAC address translation, etc.
+Previous:
+https://lore.kernel.org/kvm/20220106085533.84356-1-likexu@tencent.com/
 
-That's true, but as someone who work closely with other Distro folks,
-we really should make this feature works for (hopefully) everyone.
+ arch/x86/kvm/cpuid.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Kai-Heng
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0b920e12bb6d..439b93359848 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 			break;
+ 		}
+ 
++		/* It's better to be safe and ignore _all_ unknown capabilities. */
++		entry->ebx &= GENMASK(5, 0);
+ 		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+ 			if (!do_host_cpuid(array, function, i))
+ 				goto out;
+-- 
+2.33.1
 
->
->        Andrew

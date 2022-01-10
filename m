@@ -2,96 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50030488DF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84016488DF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbiAJBLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 20:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S232757AbiAJBMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 20:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiAJBL3 (ORCPT
+        with ESMTP id S232660AbiAJBML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 20:11:29 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCAFC06173F;
-        Sun,  9 Jan 2022 17:11:28 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id t204so17175962oie.7;
-        Sun, 09 Jan 2022 17:11:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F6urcwiu2eUOJWSMLNJN+g7iFfO+F3fQ+xSPdkGivsU=;
-        b=i1NboyVOoXP7d8zeEGiKH71dQVdT+b3sik2aZQvmr5V4h/yGFicfqYsFIskErXzgGz
-         AAu+ZWCixjtM140UQ59LvHcAGpBJvjEBvISFWBRX+uK9p+dpgE4VhiHCos6otcjyQpU4
-         fod9Tth3xnd8EGCLLOgPMNc0eefzXbNkljFdEkJ12UWaaJzFuJ1QutUMvuiv63Oh1/M2
-         GC1bIdQzLR989luRb1WH6b7+OcnHXzwEhSnLBCsJxVxBzyiaVRS7Us7U9WulnnXfUfnc
-         nBeALM9HSMwcyqHxhLZ25Ruh5dzbwKoMTbXGyLjrz2Kbn2KbE/nZ/Fbvy60lnX2Zgake
-         E4kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=F6urcwiu2eUOJWSMLNJN+g7iFfO+F3fQ+xSPdkGivsU=;
-        b=IXJHA85IJmvmS9TnAIlCSZ9AHmHDdIOV/PdxvbL35pVML/jJuM9OP9JA5OvB8IkKLA
-         hTnwRL+SB32M4hOTnimIgTXAGxuxf8AO7+ftqx28Eu+iPhuAGr+SPbGPrRQcYVin+LnF
-         AFOqAToGyZd/kWsERoSL3/Ppe2TcYIG/7EHksFKxd8oL5d4iZisQS62/LCB1x+wlfIpb
-         YM0ls1OQCmZlQYV1ZiZNRSvAXfw8Q56V4zRHudZhwLVJq6NtKg0B5NWOa03JUB6l6d+c
-         Fq71xzlcP+zs+WNkiqi3fzyOVw+h6KHYp/54Ah7eKDgtJC23aNo/udAPjY4DkR2gmlnU
-         CT7Q==
-X-Gm-Message-State: AOAM530WLsnNbWZvik/EaV/GEHAVWUyaC2PX7/3Lo99vtF+5Xd1BA5E5
-        8C3ZPGZ/oDYyzl/xkV1dRv8=
-X-Google-Smtp-Source: ABdhPJxpbKB5Y78UBzmf/TRkogz4RExWkq7xaURE9tcac2IeGrvBrM4DUofkEAV3vldfVEfqZ52Fug==
-X-Received: by 2002:a05:6808:b0e:: with SMTP id s14mr7521871oij.61.1641777088121;
-        Sun, 09 Jan 2022 17:11:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o145sm1056686ooo.1.2022.01.09.17.11.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 17:11:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 9 Jan 2022 17:11:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Aleksandr Mezin <mezin.alexander@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] hwmon: nzxt-smart2: make array detect_fans_report
- static const
-Message-ID: <20220110011125.GA841668@roeck-us.net>
-References: <20220109194558.45811-1-colin.i.king@gmail.com>
+        Sun, 9 Jan 2022 20:12:11 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4326C06173F;
+        Sun,  9 Jan 2022 17:12:10 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXG526KP9z4xdd;
+        Mon, 10 Jan 2022 12:12:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641777129;
+        bh=+EEgq+InNwGoZQSeDBe5vynY7rMJF9rZjCwUWpyr6T4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=l5B80r/2NpiXiHcetH/5zPuh7AjPfLKKsHHMUjA4rLHElGlu1cWF2D6TlWPqcsxFI
+         gPEW2cFz4qIZ9165jA6MeP4p8SRL8gnTOpeH4NayuQMG65eSrMRswhTNN7Wa2iPjF7
+         y6yl33tfb03TD5E9cfV+u2uNg24D3E4AZHzTJT+8pIMDHM+5PvuRdupD72ls6QGftG
+         DcyZKWqudGwDB//ipJFgZqxVdKGEZL04lX8vp4bJ2EYLLesTVdgR2vy3bjsaI3SkPq
+         24B+R6i18LT5YIL+UUMIOF7FeqZWTwm7vk+FyEweNhcXcWLqtKt+FK3x+EahJ/gO5e
+         42ebDH9p51J+g==
+Date:   Mon, 10 Jan 2022 12:12:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nitesh Narayan Lal <nitesh@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>
+Subject: linux-next: manual merge of the tip tree with the net-next tree
+Message-ID: <20220110121205.1bf54032@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220109194558.45811-1-colin.i.king@gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/9G=xNMZ2T_tZk4A5hv9ic5b";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 09, 2022 at 07:45:58PM +0000, Colin Ian King wrote:
-> Don't populate the read-only array detect_fans_report on the stack but
-> instead it static const. Also makes the object code a little smaller.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+--Sig_/9G=xNMZ2T_tZk4A5hv9ic5b
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied.
+Hi all,
 
-Thanks,
-Guenter
+Today's linux-next merge of the tip tree got a conflict in:
 
-> ---
->  drivers/hwmon/nzxt-smart2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 6e67da766969..dd892ff5a3e8 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -583,7 +583,7 @@ static int set_update_interval(struct drvdata *drvdata, long val)
->  static int init_device(struct drvdata *drvdata, long update_interval)
->  {
->  	int ret;
-> -	u8 detect_fans_report[] = {
-> +	static const u8 detect_fans_report[] = {
->  		OUTPUT_REPORT_ID_INIT_COMMAND,
->  		INIT_COMMAND_DETECT_FANS,
->  	};
+  drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+
+between commit:
+
+  5256a46bf538 ("net/mlx5: Introduce control IRQ request API")
+  30c6afa735db ("net/mlx5: Move affinity assignment into irq_request")
+
+from the net-next tree and commits:
+
+  7451e9ea8e20 ("net/mlx5: Use irq_set_affinity_and_hint()")
+  0422fe2666ae ("Merge branch 'linus' into irq/core, to fix conflict")
+
+from the tip tree.
+
+I fixed it up (I think, see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+index 90fec0649ef5,fd7a671eda33..000000000000
+--- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+@@@ -236,10 -244,6 +236,10 @@@ struct mlx5_irq *mlx5_irq_alloc(struct=20
+  		err =3D -ENOMEM;
+  		goto err_cpumask;
+  	}
+ +	if (affinity) {
+ +		cpumask_copy(irq->mask, affinity);
+- 		irq_set_affinity_hint(irq->irqn, irq->mask);
+++		irq_set_affinity_and_hint(irq->irqn, irq->mask);
+ +	}
+  	irq->pool =3D pool;
+  	irq->refcount =3D 1;
+  	irq->index =3D i;
+@@@ -251,7 -255,6 +251,7 @@@
+  	}
+  	return irq;
+  err_xa:
+- 	irq_set_affinity_hint(irq->irqn, NULL);
+++	irq_set_affinity_and_hint(irq->irqn, NULL);
+  	free_cpumask_var(irq->mask);
+  err_cpumask:
+  	free_irq(irq->irqn, &irq->nh);
+
+--Sig_/9G=xNMZ2T_tZk4A5hv9ic5b
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHbh+UACgkQAVBC80lX
+0GzbOQf/fmez3TTY/hreb4bHbcNvGU91IBdl68jHtumY0ZbiDNBs2Q9aCWDBq1b9
+NZBJzF1k7qW77L4efAkhwRxzJHmIlxqPTVJezmBA75OvwrKiDqll53nQiAvvlxA+
+v3f0HbzxAAVZhHYYDdYwAsJN0Zy+4CWPMM+fcRw6Pvu2y0UzzdaOY5W8/lIVQ9li
+lpMGUTdVuv74cr/E+otx9YOUYDJPPpp2iVh7LKbVjT8ohDJT8ZYHstHTY6jJSlYm
+fPqfI2Ipkf+SLYzcemwyH1TjTxkVIho5jRI7bLuZdZrDF+C1x0AimXqjGTyEKhqp
++muNUnZdRL3y638+tRXNO6hoF5EeTw==
+=feda
+-----END PGP SIGNATURE-----
+
+--Sig_/9G=xNMZ2T_tZk4A5hv9ic5b--

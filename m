@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 945D0488F47
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04FD488F4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238673AbiAJE0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 23:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S233002AbiAJE1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 23:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238569AbiAJEYg (ORCPT
+        with ESMTP id S238709AbiAJEZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 23:24:36 -0500
+        Sun, 9 Jan 2022 23:25:04 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5D9C061748
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:24:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E198C061759
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:24:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=pr6dwM9p32xFGkENVfW8ccHIrI0fREnA+ZakTJ73Pp8=; b=diLvaBxsmnGNc0FH5T2NoqikDX
-        Q4Ygnsy6APbDxF2yhgPg/bUDT/ZZl5VKG73fA3Wb/qUY1yr/6zw06e9ozJDWRpziaMw2g2IVFIu6U
-        QnHwvyE3ecy9hBMdhQhrtNPVBoIQRVfVsI3wVBFTXIjA17sjB/F36yzkUY1r2uMTg8eCIyjpcgs9o
-        HERYwayFGxgm8bF0MKu0UBGFNSiWSAGYzZjJQKryikGkg7Sgy50thISU/Y4S9hK8usWe9Zha3lydG
-        neZjS1K3jtVAYFKarLfjPxhFpKfl6hIaB5iteXtDUv2QkKsgaiFuxpgj50rTbXDia0Jtfj3fRnA79
-        jjHXkc7g==;
+        bh=w+88rodVOkiUqMds1CDDO2rnbx+ZzvbF6EDnhZLZjHk=; b=MHde1Qleuqe7Nk4xqACcAx7HEl
+        D8kJGZeV3c227mQCZyDaXVLZZyyzsX283wSRbmVtVux8gfh65uIkUe9PKbmG7LiN8Av1rGrz0b64n
+        wzKrvVfSE8faTN1k0nH9mOXqLhoC2As+LH2ynMSk2GovVwLBt8PhprrxJGMwurHMoQN0j2e5UdE3d
+        matAxpEXJXnrEz0GvItCgqQ/YSIzOpNc1FmFeBXxfCgj1n7Krq20kEMmHbbFFHodTHPqMzuBEJkbu
+        +GVmJzrwFRfYm5SfWSxrlFJy1tI2FcZk9l8FDXj+mYCMLNpfQV739wpVskuIZrwIK6yfdqEQ/AdN7
+        fNaNMXMw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6mE8-0025wo-Pi; Mon, 10 Jan 2022 04:24:12 +0000
+        id 1n6mE8-0025wq-SO; Mon, 10 Jan 2022 04:24:12 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
@@ -34,9 +34,9 @@ Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Christoph Hellwig <hch@infradead.org>,
         William Kucharski <william.kucharski@oracle.com>,
         linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [PATCH v2 12/28] mm: Add folio_put_refs()
-Date:   Mon, 10 Jan 2022 04:23:50 +0000
-Message-Id: <20220110042406.499429-13-willy@infradead.org>
+Subject: [PATCH v2 13/28] mm: Add folio_pincount_ptr()
+Date:   Mon, 10 Jan 2022 04:23:51 +0000
+Message-Id: <20220110042406.499429-14-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220110042406.499429-1-willy@infradead.org>
 References: <20220110042406.499429-1-willy@infradead.org>
@@ -46,46 +46,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is like folio_put(), but puts N references at once instead of
-just one.  It's like put_page_refs(), but does one atomic operation
-instead of two, and is available to more than just gup.c.
+This is the folio equivalent of compound_pincount_ptr().
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/mm.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ include/linux/mm_types.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 598be27d4d2e..bf9624ca61c3 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1234,6 +1234,26 @@ static inline void folio_put(struct folio *folio)
- 		__put_page(&folio->page);
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 60e4595eaf63..34c7114ea9e9 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -312,6 +312,12 @@ static inline atomic_t *compound_mapcount_ptr(struct page *page)
+ 	return &page[1].compound_mapcount;
  }
  
-+/**
-+ * folio_put_refs - Reduce the reference count on a folio.
-+ * @folio: The folio.
-+ * @refs: The number of references to reduce.
-+ *
-+ * If the folio's reference count reaches zero, the memory will be
-+ * released back to the page allocator and may be used by another
-+ * allocation immediately.  Do not access the memory or the struct folio
-+ * after calling folio_put_refs() unless you can be sure that these weren't
-+ * the last references.
-+ *
-+ * Context: May be called in process or interrupt context, but not in NMI
-+ * context.  May be called while holding a spinlock.
-+ */
-+static inline void folio_put_refs(struct folio *folio, int refs)
++static inline atomic_t *folio_pincount_ptr(struct folio *folio)
 +{
-+	if (folio_ref_sub_and_test(folio, refs))
-+		__put_page(&folio->page);
++	struct page *tail = &folio->page + 1;
++	return &tail->compound_pincount;
 +}
 +
- static inline void put_page(struct page *page)
+ static inline atomic_t *compound_pincount_ptr(struct page *page)
  {
- 	struct folio *folio = page_folio(page);
+ 	return &page[1].compound_pincount;
 -- 
 2.33.0
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F1648928F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AC0489226
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243362AbiAJHpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S241796AbiAJHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241740AbiAJHgG (ORCPT
+        with ESMTP id S240718AbiAJHc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:36:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9BC025275;
-        Sun,  9 Jan 2022 23:31:29 -0800 (PST)
+        Mon, 10 Jan 2022 02:32:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E197C033268;
+        Sun,  9 Jan 2022 23:28:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FBB0B81204;
-        Mon, 10 Jan 2022 07:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC39EC36AED;
-        Mon, 10 Jan 2022 07:31:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3C3D611C6;
+        Mon, 10 Jan 2022 07:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD479C36AE9;
+        Mon, 10 Jan 2022 07:28:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799887;
-        bh=hL96LzpfoO4m5GZoFJEaCllaxcBAZKgk4otdKobchbs=;
+        s=korg; t=1641799718;
+        bh=1PC9Oavmy3rDsCgNb2kVCXK643NTyi/TUNXya1Ck5Og=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CtaaPmeJEVaf8fGlies6eTVbOjb1MIaE61hp0Jq1TXjHciohTB37vd1Kg4YVq8WTg
-         checZt+HwVRYHzzPqUudUwEiJSfnhDvvxzQh7Qtn1kwGZq0EB0TmGEMOx8cgnzfogz
-         t900G5ONCNzoDLBK6i7zP/zeiui6/Q9Uqr9UCEng=
+        b=0avR3S91AzwTGPRuv37uSKsEgMrt9qShCfUA2ivERg54Jdi9TlwV1hRn2rpF/PpqJ
+         yM9zQuZnp75ECrFUcVXnJWmJxSj9FVQBAWzqutZReFEOJ3pQh37z+UlvOndk/Ztekj
+         xZEUgXDePL02QWhaj1o7uC/sSbJNPGCKniVDuyYg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
+        stable@vger.kernel.org, Thomas Toye <thomas@toye.io>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 23/43] sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
+Subject: [PATCH 5.4 25/34] rndis_host: support Hytera digital radios
 Date:   Mon, 10 Jan 2022 08:23:20 +0100
-Message-Id: <20220110071818.131805409@linuxfoundation.org>
+Message-Id: <20220110071816.513121363@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-References: <20220110071817.337619922@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,65 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Thomas Toye <thomas@toye.io>
 
-commit 7d18a07897d07495ee140dd319b0e9265c0f68ba upstream.
+commit 29262e1f773b4b6a43711120be564c57fca07cfb upstream.
 
-tx_queue_len can be set to ~0U, we need to be more
-careful about overflows.
+Hytera makes a range of digital (DMR) radios. These radios can be
+programmed to a allow a computer to control them over Ethernet over USB,
+either using NCM or RNDIS.
 
-__fls(0) is undefined, as this report shows:
+This commit adds support for RNDIS for Hytera radios. I tested with a
+Hytera PD785 and a Hytera MD785G. When these radios are programmed to
+set up a Radio to PC Network using RNDIS, an USB interface will be added
+with class 2 (Communications), subclass 2 (Abstract Modem Control) and
+an interface protocol of 255 ("vendor specific" - lsusb even hints "MSFT
+RNDIS?").
 
-UBSAN: shift-out-of-bounds in net/sched/sch_qfq.c:1430:24
-shift exponent 51770272 is too large for 32-bit type 'int'
-CPU: 0 PID: 25574 Comm: syz-executor.0 Not tainted 5.16.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x201/0x2d8 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x494/0x530 lib/ubsan.c:330
- qfq_init_qdisc+0x43f/0x450 net/sched/sch_qfq.c:1430
- qdisc_create+0x895/0x1430 net/sched/sch_api.c:1253
- tc_modify_qdisc+0x9d9/0x1e20 net/sched/sch_api.c:1660
- rtnetlink_rcv_msg+0x934/0xe60 net/core/rtnetlink.c:5571
- netlink_rcv_skb+0x200/0x470 net/netlink/af_netlink.c:2496
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x814/0x9f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0xaea/0xe60 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0x5b9/0x910 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x280/0x370 net/socket.c:2492
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+This patch is similar to the solution of this StackOverflow user, but
+that only works for the Hytera MD785:
+https://stackoverflow.com/a/53550858
 
-Fixes: 462dbc9101ac ("pkt_sched: QFQ Plus: fair-queueing service at DRR cost")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
+To use the "Radio to PC Network" functionality of Hytera DMR radios, the
+radios need to be programmed correctly in CPS (Hytera's Customer
+Programming Software). "Forward to PC" should be checked in "Network"
+(under "General Setting" in "Conventional") and the "USB Network
+Communication Protocol" should be set to RNDIS.
+
+Signed-off-by: Thomas Toye <thomas@toye.io>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/sch_qfq.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/usb/rndis_host.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/net/sched/sch_qfq.c
-+++ b/net/sched/sch_qfq.c
-@@ -1421,10 +1421,8 @@ static int qfq_init_qdisc(struct Qdisc *
- 	if (err < 0)
- 		return err;
- 
--	if (qdisc_dev(sch)->tx_queue_len + 1 > QFQ_MAX_AGG_CLASSES)
--		max_classes = QFQ_MAX_AGG_CLASSES;
--	else
--		max_classes = qdisc_dev(sch)->tx_queue_len + 1;
-+	max_classes = min_t(u64, (u64)qdisc_dev(sch)->tx_queue_len + 1,
-+			    QFQ_MAX_AGG_CLASSES);
- 	/* max_cl_shift = floor(log_2(max_classes)) */
- 	max_cl_shift = __fls(max_classes);
- 	q->max_agg_classes = 1<<max_cl_shift;
+--- a/drivers/net/usb/rndis_host.c
++++ b/drivers/net/usb/rndis_host.c
+@@ -609,6 +609,11 @@ static const struct usb_device_id	produc
+ 				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
+ 	.driver_info = (unsigned long) &rndis_poll_status_info,
+ }, {
++	/* Hytera Communications DMR radios' "Radio to PC Network" */
++	USB_VENDOR_AND_INTERFACE_INFO(0x238b,
++				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
++	.driver_info = (unsigned long)&rndis_info,
++}, {
+ 	/* RNDIS is MSFT's un-official variant of CDC ACM */
+ 	USB_INTERFACE_INFO(USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
+ 	.driver_info = (unsigned long) &rndis_info,
 
 

@@ -2,121 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F83489FCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E60B489FCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243062AbiAJTEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:04:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57838 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242133AbiAJTEK (ORCPT
+        id S243023AbiAJTDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242133AbiAJTDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:04:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55CF061371;
-        Mon, 10 Jan 2022 19:04:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF16C36AE9;
-        Mon, 10 Jan 2022 19:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641841449;
-        bh=cdjGtgT7hFFoUrAC32QBfLrZvKnHOeTvpFGV2AAGOFs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E7XMICfaoJ1MVoUOhRdUcUDzBhr76wkrRK6dgRH3uWfb6zHaZM9/flUzmSvoUOPk0
-         c2ozT8wl6dGVfPpbfpTQqohi+/NdXCZhe/kyiPo7uZN/M8O34FgZ3b96YKL7GY/tO9
-         6Vet8VSpeA+x/0FKRLxEmOTGBCDNJGGyKj62+2SfIscXmcVFP3hqTUThOPyR83SHg1
-         tI7/cunPxNR1AWWknYE2G1TZxdVJ7bDI+4FWFBUJZapDVAYtfwX14omWZ3YvdFhhSr
-         TlNh4q6W0lbzg8bjDW0Fp978vbi6fmfCRWiq/QaUxYkdDWVx/hA+Ww5J/l//xG5X++
-         FfcGc7CmCSysQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 101B540B92; Mon, 10 Jan 2022 16:04:08 -0300 (-03)
-Date:   Mon, 10 Jan 2022 16:04:08 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
-        eranian@google.com
-Subject: Re: [PATCH v4 17/48] perf cpumap: Remove cpu_map__cpu, use libperf
- function.
-Message-ID: <YdyDKAZY+m0rRW2H@kernel.org>
-References: <20220105061351.120843-1-irogers@google.com>
- <20220105061351.120843-18-irogers@google.com>
- <YdyC2VdqizF6prb4@kernel.org>
+        Mon, 10 Jan 2022 14:03:48 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675B7C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:03:48 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id v124so12713839oie.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 11:03:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y16qkHkmMgHKa/qlQyvw80tWKaz+7fnpKnVdmj4S/8c=;
+        b=X+GPSmQD3Zrq45sIoMCWgpLgJOjHekms6/ZMEeD6FskaA9IdsHzwI6xF5sMs/aELjR
+         7/Mj5BYK5iJauOy4OpTCjhaKlXrsKeYqNdWYoyppe5YKDPC3v1adKckjQ/G5CZdMKZSK
+         pqqvPrmuaWhBQDKyv5gfEF8Q7fkrR7rxk+Y7Ne7ZTIMkUFtpS16kkIe9T+W9/3viEHcY
+         vTAl73Y2S25o1fvxYW7/gAWAU2D+VtUzYDSMrYUPPn7vTgMeNRAYxQjKRah4YCatM7mB
+         baNOTr/1rEsTjrB7n1EoyBWBgEYCVzkUJA0f+7Z1ZwfuilNc9Send2Bs+5RCXjG0t14h
+         mdxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y16qkHkmMgHKa/qlQyvw80tWKaz+7fnpKnVdmj4S/8c=;
+        b=3c6LT5v/QrCMNrsS0dWG/JqDqIkWpztPlRoljvtFg+trDNqDYxuLAxY8ykvrtZT7Ug
+         K8Chiyo4duF+azWApbB0J2Rmc3qQneQ3lClHkHK7Rx11CnaK0gTigIHtOTNxnGkuswP5
+         epG7zXp8x6Xrv3YVgtPLgk6KsqdTtM8aJckv9nFejoHoGZ0PYC9r2XdpOEUQ2b4/Wuqu
+         TcbXYsYzUjKVfbvbvYFLjiZtcaWukIYlGf/wybjCWsbHlXxPfUd+jxthClWfUrY3VsfD
+         GmDNnjjjN6Yeygafp7Qoa9ayaXOYdgHtLbQ+7Vn61GNUXK16HDYdqAZU9IGLW3vAIsay
+         1w2g==
+X-Gm-Message-State: AOAM532LML3P3tYahM7GkpDZJxCzvO40eo9VAO0RfyOdireT4h4J7Zg7
+        kUR/JBnZt0jSb1B7k/BwCb6ygg==
+X-Google-Smtp-Source: ABdhPJzU96q+WoahiaFezz1nwyszlSfmra0cuq4XBj9AHQdCk6lCFnoCGiKmZMe46+7TH+X0lg8T1g==
+X-Received: by 2002:a05:6808:15a5:: with SMTP id t37mr12164342oiw.124.1641841427684;
+        Mon, 10 Jan 2022 11:03:47 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k101sm1585041otk.60.2022.01.10.11.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 11:03:47 -0800 (PST)
+Date:   Mon, 10 Jan 2022 11:04:31 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: msm8960: Sort out rpm node duplication
+Message-ID: <YdyDPwYh6xJbco2F@ripper>
+References: <20220109200332.41474-1-david@ixit.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdyC2VdqizF6prb4@kernel.org>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220109200332.41474-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 10, 2022 at 04:02:49PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Jan 04, 2022 at 10:13:20PM -0800, Ian Rogers escreveu:
-> > Switch the remaining few users of cpu_map__cpu to perf_cpu_map__cpu and
-> > remove the function.
-> > 
-> > Reviewed-by: James Clark <james.clark@arm.com>
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> 
-> util/bpf_ftrace.c: In function ‘perf_ftrace__latency_prepare_bpf’:
-> util/bpf_ftrace.c:66:31: error: implicit declaration of function ‘cpu_map__cpu’; did you mean ‘cpu_map__has’? [-Werror=implicit-function-declaration]
->    66 |                         cpu = cpu_map__cpu(ftrace->evlist->core.cpus, i);
->       |                               ^~~~~~~~~~~~
->       |                               cpu_map__has
-> cc1: all warnings being treated as errors
-> make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf_ftrace.o] Error 1
-> make[4]: *** Waiting for unfinished jobs....
->   LD      /tmp/build/perf/ui/browsers/perf-in.o
->   LD      /tmp/build/perf/ui/perf-in.o
->   LD      /tmp/build/perf/util/scripting-engines/perf-in.o
-> make[3]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
-> make[2]: *** [Makefile.perf:665: /tmp/build/perf/perf-in.o] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [Makefile.perf:240: sub-make] Error 2
-> make: *** [Makefile:113: install-bin] Error 2
-> make: Leaving directory '/var/home/acme/git/perf/tools/perf'
-> 
->  Performance counter stats for 'make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin':
-> 
->    163,635,422,196      cycles:u                                                    
->    213,602,262,800      instructions:u            #    1.31  insn per cycle         
-> 
->        3.804738555 seconds time elapsed
-> 
->       40.622581000 seconds user
->        6.589980000 seconds sys
-> 
-> 
-> ⬢[acme@toolbox perf]$ git log --oneline -1
-> dfe103e757aeff79 (HEAD) perf cpumap: Remove cpu_map__cpu, use libperf function.
-> 
-> This is the first breakage, trying to fix now.
+On Sun 09 Jan 12:03 PST 2022, David Heidelberg wrote:
 
-⬢[acme@toolbox perf]$ find tools/perf/ -name "*.c" | xargs grep -w cpu_map__cpu
-tools/perf/util/bpf_ftrace.c:			cpu = cpu_map__cpu(ftrace->evlist->core.cpus, i);
-⬢[acme@toolbox perf]$
+> On other platforms are usually regulators enumerated in platform and
+> used in devices, follow the pattern on MSM8960 too.
 
-Only this one remaining, so just moving to perf_cpu_map__cpu() like done
-elsewhere in this patch.
+I used to be a proponent of this, but as we grew the number of devices
+supported we noticed that not everyone uses the same set of PMICs.
+And then we have cases where non-Qualcomm people drew the schematics and
+picked different names for the regulator lines - which we want to be
+able to represent in the labels.
 
-- Arnaldo
+As such, I would prefer if we moved those other platforms towards
+specifying the regulators in the board dts instead of platform dtsi.
+Even though it does imply that there's some level of duplication.
+
+Regards,
+Bjorn
+
+> 
+> No functional changes.
+> 
+> Original author: Bjorn Andersson
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  arch/arm/boot/dts/qcom-msm8960-cdp.dts | 73 +++++++++++++-------------
+>  arch/arm/boot/dts/qcom-msm8960.dtsi    | 43 +++++++++++++++
+>  2 files changed, 79 insertions(+), 37 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-msm8960-cdp.dts b/arch/arm/boot/dts/qcom-msm8960-cdp.dts
+> index 830703759466..7c4c3cb79d05 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960-cdp.dts
+> +++ b/arch/arm/boot/dts/qcom-msm8960-cdp.dts
+> @@ -49,7 +49,6 @@ sdcc3: mmc@12180000 {
+>  
+>  		rpm@108000 {
+>  			regulators {
+> -				compatible = "qcom,rpm-pm8921-regulators";
+>  				vin_lvs1_3_6-supply = <&pm8921_s4>;
+>  				vin_lvs2-supply = <&pm8921_s4>;
+>  				vin_lvs4_5_7-supply = <&pm8921_s4>;
+> @@ -62,7 +61,7 @@ regulators {
+>  				vdd_l28-supply = <&pm8921_s7>;
+>  
+>  				/* Buck SMPS */
+> -				pm8921_s1: s1 {
+> +				s1 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1225000>;
+>  					regulator-max-microvolt = <1225000>;
+> @@ -70,21 +69,21 @@ pm8921_s1: s1 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_s2: s2 {
+> +				s2 {
+>  					regulator-min-microvolt = <1300000>;
+>  					regulator-max-microvolt = <1300000>;
+>  					qcom,switch-mode-frequency = <1600000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_s3: s3 {
+> +				s3 {
+>  					regulator-min-microvolt = <500000>;
+>  					regulator-max-microvolt = <1150000>;
+>  					qcom,switch-mode-frequency = <4800000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_s4: s4 {
+> +				s4 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <1800000>;
+> @@ -93,14 +92,14 @@ pm8921_s4: s4 {
+>  					qcom,force-mode = <QCOM_RPM_FORCE_MODE_AUTO>;
+>  				};
+>  
+> -				pm8921_s7: s7 {
+> +				s7 {
+>  					regulator-min-microvolt = <1150000>;
+>  					regulator-max-microvolt = <1150000>;
+>  					qcom,switch-mode-frequency = <3200000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_s8: s8 {
+> +				s8 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <2050000>;
+>  					regulator-max-microvolt = <2050000>;
+> @@ -109,137 +108,137 @@ pm8921_s8: s8 {
+>  				};
+>  
+>  				/* PMOS LDO */
+> -				pm8921_l1: l1 {
+> +				l1 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1050000>;
+>  					regulator-max-microvolt = <1050000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l2: l2 {
+> +				l2 {
+>  					regulator-min-microvolt = <1200000>;
+>  					regulator-max-microvolt = <1200000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l3: l3 {
+> +				l3 {
+>  					regulator-min-microvolt = <3075000>;
+>  					regulator-max-microvolt = <3075000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l4: l4 {
+> +				l4 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <1800000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l5: l5 {
+> +				l5 {
+>  					regulator-min-microvolt = <2950000>;
+>  					regulator-max-microvolt = <2950000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l6: l6 {
+> +				l6 {
+>  					regulator-min-microvolt = <2950000>;
+>  					regulator-max-microvolt = <2950000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l7: l7 {
+> +				l7 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1850000>;
+>  					regulator-max-microvolt = <2950000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l8: l8 {
+> +				l8 {
+>  					regulator-min-microvolt = <2800000>;
+>  					regulator-max-microvolt = <3000000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l9: l9 {
+> +				l9 {
+>  					regulator-min-microvolt = <3000000>;
+>  					regulator-max-microvolt = <3000000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l10: l10 {
+> +				l10 {
+>  					regulator-min-microvolt = <3000000>;
+>  					regulator-max-microvolt = <3000000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l11: l11 {
+> +				l11 {
+>  					regulator-min-microvolt = <2850000>;
+>  					regulator-max-microvolt = <2850000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l12: l12 {
+> +				l12 {
+>  					regulator-min-microvolt = <1200000>;
+>  					regulator-max-microvolt = <1200000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l14: l14 {
+> +				l14 {
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <1800000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l15: l15 {
+> +				l15 {
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <2950000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l16: l16 {
+> +				l16 {
+>  					regulator-min-microvolt = <2800000>;
+>  					regulator-max-microvolt = <2800000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l17: l17 {
+> +				l17 {
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <2950000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l18: l18 {
+> +				l18 {
+>  					regulator-min-microvolt = <1300000>;
+>  					regulator-max-microvolt = <1300000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l21: l21 {
+> +				l21 {
+>  					regulator-min-microvolt = <1900000>;
+>  					regulator-max-microvolt = <1900000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l22: l22 {
+> +				l22 {
+>  					regulator-min-microvolt = <2750000>;
+>  					regulator-max-microvolt = <2750000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l23: l23 {
+> +				l23 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <1800000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l24: l24 {
+> +				l24 {
+>  					regulator-min-microvolt = <750000>;
+>  					regulator-max-microvolt = <1150000>;
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_l25: l25 {
+> +				l25 {
+>  					regulator-always-on;
+>  					regulator-min-microvolt = <1250000>;
+>  					regulator-max-microvolt = <1250000>;
+> @@ -247,35 +246,35 @@ pm8921_l25: l25 {
+>  				};
+>  
+>  				/* Low Voltage Switch */
+> -				pm8921_lvs1: lvs1 {
+> +				lvs1 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_lvs2: lvs2 {
+> +				lvs2 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_lvs3: lvs3 {
+> +				lvs3 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_lvs4: lvs4 {
+> +				lvs4 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_lvs5: lvs5 {
+> +				lvs5 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_lvs6: lvs6 {
+> +				lvs6 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_lvs7: lvs7 {
+> +				lvs7 {
+>  					bias-pull-down;
+>  				};
+>  
+> -				pm8921_ncp: ncp {
+> +				ncp {
+>  					regulator-min-microvolt = <1800000>;
+>  					regulator-max-microvolt = <1800000>;
+>  					qcom,switch-mode-frequency = <1600000>;
+> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> index d9033912c7f3..ffedc60f9ec1 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> @@ -154,6 +154,49 @@ rpm@108000 {
+>  
+>  			regulators {
+>  				compatible = "qcom,rpm-pm8921-regulators";
+> +
+> +				/* Buck SMPS */
+> +				pm8921_s1: s1 {};
+> +				pm8921_s2: s2 {};
+> +				pm8921_s3: s3 {};
+> +				pm8921_s4: s4 {};
+> +				pm8921_s7: s7 {};
+> +				pm8921_s8: s8 {};
+> +
+> +				/* PMOS LDO */
+> +				pm8921_l1: l1 {};
+> +				pm8921_l2: l2 {};
+> +				pm8921_l3: l3 {};
+> +				pm8921_l4: l4 {};
+> +				pm8921_l5: l5 {};
+> +				pm8921_l6: l6 {};
+> +				pm8921_l7: l7 {};
+> +				pm8921_l8: l8 {};
+> +				pm8921_l9: l9 {};
+> +				pm8921_l10: l10 {};
+> +				pm8921_l11: l11 {};
+> +				pm8921_l12: l12 {};
+> +				pm8921_l14: l14 {};
+> +				pm8921_l15: l15 {};
+> +				pm8921_l16: l16 {};
+> +				pm8921_l17: l17 {};
+> +				pm8921_l18: l18 {};
+> +				pm8921_l21: l21 {};
+> +				pm8921_l22: l22 {};
+> +				pm8921_l23: l23 {};
+> +				pm8921_l24: l24 {};
+> +				pm8921_l25: l25 {};
+> +
+> +				/* Low Voltage Switch */
+> +				pm8921_lvs1: lvs1 {};
+> +				pm8921_lvs2: lvs2 {};
+> +				pm8921_lvs3: lvs3 {};
+> +				pm8921_lvs4: lvs4 {};
+> +				pm8921_lvs5: lvs5 {};
+> +				pm8921_lvs6: lvs6 {};
+> +				pm8921_lvs7: lvs7 {};
+> +
+> +				pm8921_ncp: ncp {};
+>  			};
+>  		};
+>  
+> -- 
+> 2.34.1
+> 

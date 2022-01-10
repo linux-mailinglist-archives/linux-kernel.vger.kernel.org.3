@@ -2,191 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFFC489887
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99F3489888
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245406AbiAJMXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245394AbiAJMXO (ORCPT
+        id S245426AbiAJMYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:24:35 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:52584 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245392AbiAJMYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:23:14 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B33C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:23:13 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id r9so24652194wrg.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:23:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=d5pQe12aMTp9K2Ar029wPLMoAM2l+tag/tJuNAihSfA=;
-        b=oJPzZWiJGiiJbT4/DpmWXxwLQYl6V3un3f2VMq9gR7xu1Vg0i7bZ927q0i6k6AQopH
-         EMyuitOKXW8UrzPrA8eOw7VIwHiup4VsiSBK70Fwh3ZHQOw8z80zEoQuv/4CO+GM9ivz
-         F5QUJ+ddCeY/O2IGHQoaAHfFjZBPVjvkv+z5R1r8GVyPWIRO/0eMm5lWFMJ9u0SODO/G
-         MdBs5h8FelfgOYX3f78MFfDQiSxzbfqga00uHApimjp9PagVhvMXJoFmnNYqNKov7brQ
-         vTMyqbYIDiV5KSYQLZHE20N7CHzkl+83RKoT9KdBiD7amP2upvF6OjdjXJB6L3Rolsqe
-         gmUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=d5pQe12aMTp9K2Ar029wPLMoAM2l+tag/tJuNAihSfA=;
-        b=QN+UmTkzD3U2d7dutQbOY9inx1vKkqpScVgmOMnVDc7Mvd5d1ZTzDEJdsGAcKuZltl
-         +Mu8bf5xJRapocXeFG6WzP4pe/Hb9zA0Qt8COgRLSUsquLFnEB4ZXM14/k0PX9jHggGI
-         H6S3JHbuhp0rFuPQqkJIlGd1esKvXAgyR1SXROdXbPdx7hU27Mkhmavw7E2OUFxi/t1v
-         v3KJsOajBwDClUJqh2fm/9X3xZRddHEDuCqZkrO97JEKlXUfbAmhy1amiolARWydX2AG
-         obTmRZwq5jWamR6fgDm5AqtiusBNbTBC/M2Rz/GqTs2V/FqzxcfNmeuZdDUjQuk1QqXa
-         5SVQ==
-X-Gm-Message-State: AOAM530h+Y7ksDYoQpJ8S7bsyXm8Z08UfAU6HOm+Cg9yRMPevpX7gcEF
-        qdxpDvcynGnOoRMgwv6XPxkbfw==
-X-Google-Smtp-Source: ABdhPJxJTGBqADrh2dO8M5zq/V0efObTWO7ybtVGTQGANdUuw72l8ka3sOvJLzv6aUoWNXVdmQ1BEQ==
-X-Received: by 2002:adf:e2cc:: with SMTP id d12mr17686855wrj.107.1641817392300;
-        Mon, 10 Jan 2022 04:23:12 -0800 (PST)
-Received: from google.com ([31.124.24.179])
-        by smtp.gmail.com with ESMTPSA id l4sm6533168wrm.62.2022.01.10.04.23.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 04:23:11 -0800 (PST)
-Date:   Mon, 10 Jan 2022 12:23:09 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [RFC v5 net-next 08/13] mfd: add interface to check whether a
- device is mfd
-Message-ID: <YdwlLYFPU16roS8E@google.com>
-References: <20211218214954.109755-1-colin.foster@in-advantage.com>
- <20211218214954.109755-9-colin.foster@in-advantage.com>
- <Ycx+A4KNKiVmH2PJ@google.com>
- <20211230020443.GB1347882@euler>
- <Yc23mTo6g1tBiMjT@google.com>
- <20211230201253.GA1484230@euler>
+        Mon, 10 Jan 2022 07:24:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tV+aFHC5/3ebeEinWddoq0ybUZobbAPSWYP9SJGYPLw=; b=RgdlBsV4Px/x5GOovwle3JNiba
+        sonLerR8GKItcz2A8EhjVqzMFZ1CUGJLXQyTNAOGwpOcdAlbs9TQU0HCR1Omddf3KfE7WEEDshWw3
+        lCzec7Ak5pNXdokm07NMpDElDXLuetvgcKziaR9OKKQdcCF7deUK+b0gDvfjqYOsUL1Op+RGGoq+M
+        pXPBNYOMZlPgLS+tjEhrJcGWG9qkXnuPKbBzccZ7VJtJNlQkKi/CfTlsSsncyJyOKZircAYBAeE2r
+        r4UzslPYqD4DgXtCU19nK04HgnmiQhWZRv9ZB0nqmCpcYfwzvj8deymaM35WPuVJpIcWukk+2J9mf
+        +ajc7Dzg==;
+Received: from [179.113.53.20] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n6tir-0001N8-Hs; Mon, 10 Jan 2022 13:24:25 +0100
+Message-ID: <d1769d1c-9f0d-5aa7-d5c6-d0f9d2b3dba8@igalia.com>
+Date:   Mon, 10 Jan 2022 09:24:12 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211230201253.GA1484230@euler>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] sysctl: documentation: fix table format warning
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+References: <20220109055635.6999-1-rdunlap@infradead.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220109055635.6999-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Dec 2021, Colin Foster wrote:
+On 09/01/2022 02:56, Randy Dunlap wrote:
+> Fix malformed table warning in sysctl documentation:
+> (don't use ':'s)
+> 
+> Documentation/admin-guide/sysctl/kernel.rst:798: WARNING: Malformed table.
+> Text in column margin in table line 7.
+> 
+> =====  ============================================
+> bit 0  print all tasks info
+> bit 1  print system memory info
+> bit 2  print timer info
+> bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+> bit 4  print ftrace buffer
+> bit 5: print all printk messages in buffer
+> bit 6: print all CPUs backtrace (if available in the arch)
+> 
+> Fixes: 934d51cad60c ("docs: sysctl/kernel: add missing bit to panic_print")
+> Fixes: addc64999934 ("panic: add option to dump all CPUs backtraces in panic_print")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> ---
+>  Documentation/admin-guide/sysctl/kernel.rst |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- linux-next-20220107.orig/Documentation/admin-guide/sysctl/kernel.rst
+> +++ linux-next-20220107/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -795,8 +795,8 @@ bit 1  print system memory info
+>  bit 2  print timer info
+>  bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+>  bit 4  print ftrace buffer
+> -bit 5: print all printk messages in buffer
+> -bit 6: print all CPUs backtrace (if available in the arch)
+> +bit 5  print all printk messages in buffer
+> +bit 6  print all CPUs backtrace (if available in the arch)
+>  =====  ============================================
+>  
+>  So for example to print tasks and memory info on panic, user can::
 
-> On Thu, Dec 30, 2021 at 01:43:53PM +0000, Lee Jones wrote:
-> > On Wed, 29 Dec 2021, Colin Foster wrote:
-> > 
-> > > On Wed, Dec 29, 2021 at 03:25:55PM +0000, Lee Jones wrote:
-> > > > On Sat, 18 Dec 2021, Colin Foster wrote:
-> > > > 
-> > > > > Some drivers will need to create regmaps differently based on whether they
-> > > > > are a child of an MFD or a standalone device. An example of this would be
-> > > > > if a regmap were directly memory-mapped or an external bus. In the
-> > > > > memory-mapped case a call to devm_regmap_init_mmio would return the correct
-> > > > > regmap. In the case of an MFD, the regmap would need to be requested from
-> > > > > the parent device.
-> > > > > 
-> > > > > This addition allows the driver to correctly reason about these scenarios.
-> > > > > 
-> > > > > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > > > > ---
-> > > > >  drivers/mfd/mfd-core.c   |  5 +++++
-> > > > >  include/linux/mfd/core.h | 10 ++++++++++
-> > > > >  2 files changed, 15 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
-> > > > > index 684a011a6396..905f508a31b4 100644
-> > > > > --- a/drivers/mfd/mfd-core.c
-> > > > > +++ b/drivers/mfd/mfd-core.c
-> > > > > @@ -33,6 +33,11 @@ static struct device_type mfd_dev_type = {
-> > > > >  	.name	= "mfd_device",
-> > > > >  };
-> > > > >  
-> > > > > +int device_is_mfd(struct platform_device *pdev)
-> > > > > +{
-> > > > > +	return (!strcmp(pdev->dev.type->name, mfd_dev_type.name));
-> > > > > +}
-> > > > > +
-> > > > 
-> > > > Why is this device different to any other that has ever been
-> > > > mainlined?
-> > > 
-> > > Hi Lee,
-> > > 
-> > > First, let me apologize for not responding to your response from the
-> > > related RFC from earlier this month. It had been blocked by my spam
-> > > filter and I had not seen it until just now. I'll have to check that
-> > > more diligently now.
-> > > 
-> > > Moving on...
-> > > 
-> > > That's a question I keep asking myself. Either there's something I'm
-> > > missing, or there's something new I'm doing.
-> > > 
-> > > This is taking existing drivers that work via MMIO regmaps and making
-> > > them interface-independent. As Vladimir pointed out here:
-> > > https://lore.kernel.org/all/20211204022037.dkipkk42qet4u7go@skbuf/T/
-> > > device_is_mfd could be dropped in lieu of an mfd-specific probe
-> > > function.
-> > > 
-> > > If there's something I'm missing, please let me know. But it feels like
-> > > devm_get_regmap_from_resource at the end of the day would be the best
-> > > solution to the design, and that doesn't exist. And implementing
-> > > something like that is a task that I feel I'm not capable of tackling at
-> > > this time.
-> > 
-> > I'm really not a fan of leaking any MFD API outside of drivers/mfd.
-> > MFD isn't a tangible thing.  It's a Linuxiusm, something we made up, a
-> > figment of your imagination.
-> > 
-> > What happens if you were to all dev_get_regmap() in the non-MFD case
-> > or when you call devm_regmap_init_mmio() when the driver was
-> > registered via the MFD framework?
-> 
-> I'd imagine dev_get_regmap in a non-MFD case would be the same as
-> dev_get_and_ioremap_resource() followed by devm_regmap_init_mmio().
-> 
-> In the MFD case it would possibly request the regmap from the parent,
-> which could reason about how to create the regmap. As you understand,
-> this is exactly the behavior I created in this patch set. I did it by
-> way of ocelot_get_regmap_from_resource, and admit it isn't the best way.
-> But it certainly seems there isn't an existing method that I'm missing.
-> 
-> I'm coming from a pretty narrow field of view, but believe my use-case
-> is a valid one. If that is true, and there isn't another design I should
-> use... this is the opportunity to create it. Implementing
-> ocelot_get_regmap_from_resource is a way to achieve my needs without
-> affecting anyone else. 
-> 
-> Going one step further and implementing mfd_get_regmap_from_parent (or
-> similar) would creep into the design of MFD. I don't know enough about
-> MFD and the users to suggest this. I wouldn't want to start venturing
-> down that path without blessing from the community. And this would
-> indirectly affect every MFD driver.
-> 
-> Going all in and implementing device_get_regmap_from_resource... I don't
-> know that I'd be comfortable even starting down that path knowing that
-> it would affect every device. Perhaps it would have to utilize something
-> like IORESOURCE_REG that seems to only get utilized in a handful of 
-> files:
-> https://elixir.bootlin.com/linux/v5.16-rc7/C/ident/IORESOURCE_REG
+Thanks a lot Randy and Stephen!
 
-Let's speak to Mark and see if he can provide any insight.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Reviewed-by: Guilherme G. Piccoli <gpiccoli@igalia.com>

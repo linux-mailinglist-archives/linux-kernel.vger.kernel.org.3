@@ -2,135 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9F1489037
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9393248903C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239034AbiAJGbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 01:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234930AbiAJGbu (ORCPT
+        id S239052AbiAJGfx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 01:35:53 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:51113 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239038AbiAJGfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 01:31:50 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B77C06173F;
-        Sun,  9 Jan 2022 22:31:50 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id bj47so2477223vkb.13;
-        Sun, 09 Jan 2022 22:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hZzd9srfJg0sRysUCYuH0L2R2O31L83ni9EMVLSvk6o=;
-        b=CK57ykFCY0qvPnBtUyV62MrYaX3TXTcUB6bsUUIT4lIFv5DN2PGAZj4SupJUfjSq2s
-         DRANo9MnDw3s4V7ic+SUCvFFg/EUri6QUIUC6KLVR7WWAic+hV5PwtSm5ixGQl2kHv0B
-         q4ZpO/4DEruQAHdfnkg1pLi4EtnpPwnS2sQ03A8PEcu2FmX3lRvNctNxnJvdkYslp52I
-         WtL9Ac9e4PC46vNQbWOTkZTrrMq6sWu85fhigyewQvl46qe8rjD7wYBFuK5wjXICk2nq
-         Mw4DnTJT1anZ7aQMzgdl+yPGDKhb+op8PbrVCEmmvC0ZJWdAZA9QMZ36y4EDjm1JHM/m
-         UB9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hZzd9srfJg0sRysUCYuH0L2R2O31L83ni9EMVLSvk6o=;
-        b=mRKAazGjq9BGeLHhfZImFsWXE+IEa1R8lGkE1C0fyUxcgvF6WsDyPj+ARpygdVZGA1
-         U/HyXVvzryRn86SSu0aTXYdfgm5VutlPUy6GdVzVBE6vWkknoNBDJ0D2eetqYkrPgYKc
-         xjBD3iYmgnhxmS2nDL5M7OymMPpNo76Ie9iz0ZTmoUG9kBL7AqrozV/OIeRcTxEFC0uV
-         y7mVNoeRcpuwKn8pviDOxCToVOD7X+RA3hFE80uFWfzPJMxW0VD23y3fheUvkLnlq2g8
-         bgYBgtjMcShz/U4X2XjyNRf2NyAxsyhFoFhhMnSXgbxG9fD5w5SbgZqz+p1kcF1U5pjB
-         6tkg==
-X-Gm-Message-State: AOAM530LdKjWdw6Hot8PQXJYtju3MkhdCvYP+hqccejMcQFSpz1Ed+EH
-        FysG+la3t3LIoQJQs0XZvKhMjPGDwxW5uN1ZR9s=
-X-Google-Smtp-Source: ABdhPJwIxdDHtNSAl0aUtbd6IW+MthJ3qEfuhE9cVqBxFzEgncOmC0MEsw2sNo4twwWvQ18b1lmDcuS5brOiTlyTRvI=
-X-Received: by 2002:a05:6122:2009:: with SMTP id l9mr27528442vkd.4.1641796309392;
- Sun, 09 Jan 2022 22:31:49 -0800 (PST)
+        Mon, 10 Jan 2022 01:35:47 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-674-wqWs10RDN0iqQO3K92HJVQ-1; Mon, 10 Jan 2022 01:35:42 -0500
+X-MC-Unique: wqWs10RDN0iqQO3K92HJVQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F73C81CCB4;
+        Mon, 10 Jan 2022 06:35:41 +0000 (UTC)
+Received: from bzdocha.local (unknown [10.43.2.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1C3E85E4A3;
+        Mon, 10 Jan 2022 06:35:22 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lubomir Rintel <lkundrak@v3.sk>
+Subject: [PATCH] platform/x86: x86-android-tablets: Fix the buttons on CZC P10T tablet
+Date:   Mon, 10 Jan 2022 07:35:12 +0100
+Message-Id: <20220110063512.273252-1-lkundrak@v3.sk>
 MIME-Version: 1.0
-References: <20211107074200.18911-1-sergio.paracuellos@gmail.com>
- <CAMhs-H81xnaFqgTJT3jiNy_BBCuHhrA-t0A+0wMnp5Y0kFjGUQ@mail.gmail.com> <20220107021030.E932AC36AE3@smtp.kernel.org>
-In-Reply-To: <20220107021030.E932AC36AE3@smtp.kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 10 Jan 2022 07:31:38 +0100
-Message-ID: <CAMhs-H9SHk8aMm2RX0sA9zC3ktHQSmCtNbKe2ERg0Fg7-Tdk3Q@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] clk: ralink: make system controller a reset provider
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     COMMON CLK FRAMEWORK <linux-clk@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=lkundrak@v3.sk
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: v3.sk
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+This switches the P10T tablet to "Android" mode, where the Home button
+sends a single sancode instead of a Windows-specific key combination and
+the other button doesn't disable the Wi-Fi.
 
-On Fri, Jan 7, 2022 at 3:10 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Sergio Paracuellos (2021-12-13 04:00:17)
-> > Hi Stephen,
-> >
-> > On Sun, Nov 7, 2021 at 8:42 AM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > This patch series add minimal change to provide mt7621 resets properly
-> > > defining them in the 'mediatek,mt7621-sysc' node which is the system
-> > > controller of the SoC and is already providing clocks to the rest of
-> > > the world.
-> > >
-> > > There is shared architecture code for all ralink platforms in 'reset.c'
-> > > file located in 'arch/mips/ralink' but the correct thing to do to align
-> > > hardware with software seems to define and add related reset code to the
-> > > already mainlined clock driver.
-> > >
-> > > After this changes, we can get rid of the useless reset controller node
-> > > in the device tree and use system controller node instead where the property
-> > > '#reset-cells' has been added. Binding documentation for this nodeq has
-> > > been updated with the new property accordly.
-> > >
-> > > This series also provide a bindings include header where all related
-> > > reset bits for the MT7621 SoC are defined.
-> > >
-> > > Also, please take a look to this review [0] to understand better motivation
->
-> Is [0] a link?
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+This applies on top of v5.16-rc8-792-gf3a343366741, commit
+f3a3433667418e ("platform/x86: x86-android-tablets: Workaround Lenovo
+Yoga Tablet 2 1050 poweroff hang) from
+<https://github.com/jwrdegoede/linux-sunxi>.
 
-Yes, sorry it was not included:
+ drivers/platform/x86/x86-android-tablets.c | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-[0]: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20210926145931.14603-3-sergio.paracuellos@gmail.com/
+diff --git a/drivers/platform/x86/x86-android-tablets.c b/drivers/platform/x86/x86-android-tablets.c
+index 9333bbec33e9..c3d0714b588a 100644
+--- a/drivers/platform/x86/x86-android-tablets.c
++++ b/drivers/platform/x86/x86-android-tablets.c
+@@ -776,6 +776,39 @@ static const struct x86_dev_info xiaomi_mipad2_info __initconst = {
+ 	.i2c_client_count = ARRAY_SIZE(xiaomi_mipad2_i2c_clients),
+ };
+ 
++#define CZC_EC_EXTRA_PORT	0x68
++#define CZC_EC_ANDROID_KEYS	0x63
++
++static int __init x86_czc_p10t_init(void)
++{
++	/*
++	 * The device boots up in "Windows 7" mode, when the home button sends a
++	 * Windows specific key sequence (Left Meta + D) and the second button
++	 * sends an unknown one while also toggling the Radio Kill Switch.
++	 * This is a surprising behavior when the second button is labeled "Back".
++	 *
++	 * The vendor-supplied Android-x86 build switches the device to a "Android"
++	 * mode by writing value 0x63 to the I/O port 0x68. This just seems to just
++	 * set bit 6 on address 0x96 in the EC region; switching the bit directly
++	 * seems to achieve the same result. It uses a "p10t_switcher" to do the
++	 * job. It doesn't seem to be able to do anything else, and no other use
++	 * of the port 0x68 is known.
++	 *
++	 * In the Android mode, the home button sends just a single scancode,
++	 * which can be handled in Linux userspace more reasonably and the back
++	 * button only sends a scancode without toggling the kill switch.
++	 * The scancode can then be mapped either to Back or RF Kill functionality
++	 * in userspace, depending on how the button is labeled on that particular
++	 * model.
++	 */
++	outb(CZC_EC_ANDROID_KEYS, CZC_EC_EXTRA_PORT);
++	return 0;
++}
++
++static const struct x86_dev_info czc_p10t __initconst = {
++	.init = x86_czc_p10t_init,
++};
++
+ static const struct dmi_system_id x86_android_tablet_ids[] __initconst = {
+ 	{
+ 		/* Asus MeMO Pad 7 ME176C */
+@@ -803,6 +836,24 @@ static const struct dmi_system_id x86_android_tablet_ids[] __initconst = {
+ 		},
+ 		.driver_data = (void *)&chuwi_hi8_info,
+ 	},
++	{
++		/* CZC P10T */
++		.ident = "CZC ODEON TPC-10 (\"P10T\")",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "CZC"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ODEON*TPC-10"),
++		},
++		.driver_data = (void *)&czc_p10t,
++	},
++	{
++		/* A variant of CZC P10T */
++		.ident = "ViewSonic ViewPad 10",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ViewSonic"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "VPAD10"),
++		},
++		.driver_data = (void *)&czc_p10t,
++	},
+ 	{
+ 		/* Lenovo Yoga Tablet 1050F/L */
+ 		.matches = {
+-- 
+2.34.1
 
->
-> > > for this series.
-> > >
-> > > Regarding the way of merging this:
-> > >  - I'd like patches 1 and 4 which are related going through staging tree.
-> > >  - The other two (patches 2 and 3) can perfectly go through the clock tree.
-> > >
-> > > Thanks in advance for your feedback.
-> > >
-> > > Changes in v5:
-> > >  - Move platform driver init process into 'arch_initcall' to be sure the
-> > >    rest of the world can get the resets available when needed (since PCIe
-> > >    controller driver has been moved from staging into 'drivers/pci/controller'
-> > >    is probed earlier and reset was not available so it was returning
-> > >    -EPROBE_DEFER on firt try. Moving into 'arch_initcall' avoids the 'a bit
-> > >    anoying' PCI first failed log trace.
-> >
-> > Gentle ping on this series.
-> >
->
-> It looks to largely be a reset controller patch series. Can you get
-> review from the reset maintainer?
->
-> RESET CONTROLLER FRAMEWORK
-> M:      Philipp Zabel <p.zabel@pengutronix.de>
-> S:      Maintained
-
-Ok, I'll rebase and resend the series including Philipp Zabel for
-reviewing this.
-
-Thanks,
-    Sergio Paracuellos

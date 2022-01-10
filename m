@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 658B848A189
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC9348A18B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240853AbiAJVKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S240693AbiAJVKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240910AbiAJVJx (ORCPT
+        with ESMTP id S240545AbiAJVKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:09:53 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132DCC061751
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:09:53 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id r131so20355477oig.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:09:53 -0800 (PST)
+        Mon, 10 Jan 2022 16:10:15 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2BC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:15 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id oa15so14304684pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:10:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=B8Wl1/0bYCLBh9KqS7zg3u3DS1RzQkdf13GtspqUjvQ=;
-        b=dSnhflHblnBTSid8mWTYk0a8FMa/B+P5wdp8qpMAVbJShFtNIH2UbvuJulg75r9p8U
-         20L7parFFg/RtcPpg0iNhmr+2bRcao/vDiJnUk4vmDfVwyV0+ClRGbQDrxYdo4gKRgWM
-         gNwtJ+MX8N0K1gbTd0Q+n7Sj6jVXLntMTPQyU=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wJc19i/SFb8fDASSOqMu23EH/ZlObMF2YEBy+h3uMCs=;
+        b=sx85pG28fY85G3zh5bIfPiPUegT10kTOfJRNx6ALvvXJTrw6QxF+CpSrehUnHxwZgE
+         xqy+86Xap/bcQxibYFcjqMdQBDpqi4/ZF8yZurwC2eHh5TUEs4nZEfzZi8hSoEg/xCe5
+         QFluQ47dESWQmdJdSl0pvPUvqYy3wmHatprOVaGCxTzx9TQNGpbOwS8epUyPuKHxT7Cj
+         9J3GogIGxVTSYoN3lOmhWyq8pHxPZV2kVy60x4/YgSKJXpvOOmFyZKw69gjj9KFC4w5z
+         +S7ckbrZyKupTlNs8x85m8MSoTRDEnFY0dP2rIcTjjW/ikLXkiYuhiCo573+9UlKsRdc
+         6NZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=B8Wl1/0bYCLBh9KqS7zg3u3DS1RzQkdf13GtspqUjvQ=;
-        b=Npz/IyyB1MejG9EQB+GXnZybKmlCRGSX8cPn88SEpQgb19K/Hw2/OwLUDApViTayYC
-         gno8EE4iQvnpxI4d9nXya/Bj4y4xPzsa/cadyVCDEiLYOyX6nBHcdTa4+mYoRZyvWfO+
-         Ob/xnAOoJf6+dphBTaZ4pZAz4rUt9Qpk0vowkzi6kW4Sxc6cOsvC6meBeoCQD7wizTx7
-         nHqmsXN3gwsTNYq87PP9OT1AOhPx5JQYFXMFazXAf6yCrQsuU8JsETeADN1kg8VBWsGu
-         yluZrl2mo7vZi/mjUWHxvjyQe5yDSLI8Ig0bjpROBBIEostUoLHs/NTonjxOPTk48vgu
-         cJtw==
-X-Gm-Message-State: AOAM532z2X8D7eUoxELjQBXj66fUOJLT7uq84Uxc0d01t8SyEuhig3VB
-        4sldJyUXkGkUZDJ8uTtDMYVUW8vep01GkNxAc22504McUbI=
-X-Google-Smtp-Source: ABdhPJwejN3MyvH7ILYNTDkIH/wZ7fWRrkpxLcDY1zkCrPhyq9EpbZgVh+JKpD1vyKcYODwPoikaF7z1RMjK0aeaiOw=
-X-Received: by 2002:aca:a953:: with SMTP id s80mr19911594oie.164.1641848992455;
- Mon, 10 Jan 2022 13:09:52 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 10 Jan 2022 13:09:52 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wJc19i/SFb8fDASSOqMu23EH/ZlObMF2YEBy+h3uMCs=;
+        b=RfGkP8L+crp4p+F1OHj227qo4TLwOm2PqIWHUb7AZgaXFEKWDfitOH2BOJxv7d6kCv
+         HG8UaQnvyqxfglHBjC5gIlOVnLMJeMSFlJCKIgmxiaEH/8MBj9c5o1lKiRVTB1JnxSeH
+         x4JmnzZIqsfloWVaoFTBMg4g0nYngsotmVbV8vJwDx1QO2JuDKaHXaG1Fdp6fFLt0liJ
+         gyc+CQppZ4L4Wo72C0+NgvM0o040aMVc33bTbsE/qCQcaguatci6HKwg4baqbRAM33MS
+         kr1S+G3e8cOIutQz7kmVKJDWGZfrWdYtzIbYr15A3L9iZXH5NwznfEJOGkCpo10pMgSn
+         Foxw==
+X-Gm-Message-State: AOAM533W25/j9vmaEjq0n7Bty26SyMpAEFEc9b2N+0VpBzHVa9yWMWn+
+        pUnjhd7SNpo5Uj1qpIRRleBsxg==
+X-Google-Smtp-Source: ABdhPJwOh9yRpqcK7UEYXGr9S8tX1kbo/tHV/l/RDtkP2w6cFx6T8QE6usDza6YAws00S39Vhr5EIQ==
+X-Received: by 2002:a63:194b:: with SMTP id 11mr1322457pgz.461.1641849014564;
+        Mon, 10 Jan 2022 13:10:14 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t207sm7332477pfc.205.2022.01.10.13.10.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 13:10:14 -0800 (PST)
+Date:   Mon, 10 Jan 2022 21:10:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
+        tglx@linutronix.de, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] KVM: x86: Use kvm_x86_ops in
+ kvm_arch_check_processor_compat
+Message-ID: <YdygsjmoqmfwOVgv@google.com>
+References: <20211227081515.2088920-1-chao.gao@intel.com>
+ <20211227081515.2088920-3-chao.gao@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220110104706.v6.2.Idde68b05b88d4a2e6e54766c653f3a6d9e419ce6@changeid>
-References: <20220110104706.v6.1.Iaac908f3e3149a89190ce006ba166e2d3fd247a3@changeid>
- <20220110104706.v6.2.Idde68b05b88d4a2e6e54766c653f3a6d9e419ce6@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Mon, 10 Jan 2022 13:09:52 -0800
-Message-ID: <CAE-0n52qZkNQzQHnWrm=JCxoEYvEm-aWrtDpi4q=HEWSOxaT+Q@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] rpmsg: char: Fix race between the release of
- rpmsg_eptdev and cdev
-To:     Andy Gross <agross@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>
-Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Sujit Kautkar <sujitka@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227081515.2088920-3-chao.gao@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Matthias Kaehlcke (2022-01-10 10:47:37)
-> struct rpmsg_eptdev contains a struct cdev. The current code frees
-> the rpmsg_eptdev struct in rpmsg_eptdev_destroy(), but the cdev is
-> a managed object, therefore its release is not predictable and the
-> rpmsg_eptdev could be freed before the cdev is entirely released.
->
-> The cdev_device_add/del() API was created to address this issue
-> (see commit 233ed09d7fda), use it instead of cdev add/del().
->
-> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
-> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+On Mon, Dec 27, 2021, Chao Gao wrote:
+> check_processor_compatibility() is a "runtime" ops now. Use
+> kvm_x86_ops directly such that kvm_arch_check_processor_compat
+> can be called at runtime.
+> 
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
 > ---
+>  arch/x86/kvm/x86.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 6411417b6871..770b68e72391 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11383,7 +11383,6 @@ void kvm_arch_hardware_unsetup(void)
+>  int kvm_arch_check_processor_compat(void *opaque)
+>  {
+>  	struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
+> -	struct kvm_x86_init_ops *ops = opaque;
+>  
+>  	WARN_ON(!irqs_disabled());
+>  
+> @@ -11391,7 +11390,7 @@ int kvm_arch_check_processor_compat(void *opaque)
+>  	    __cr4_reserved_bits(cpu_has, &boot_cpu_data))
+>  		return -EIO;
+>  
+> -	return ops->runtime_ops->check_processor_compatibility();
+> +	return kvm_x86_ops.check_processor_compatibility();
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+I'd just squash this with patch 01.  And might as well make this a static_call().
+
+>  }
+>  
+>  bool kvm_vcpu_is_reset_bsp(struct kvm_vcpu *vcpu)
+> -- 
+> 2.25.1
+> 

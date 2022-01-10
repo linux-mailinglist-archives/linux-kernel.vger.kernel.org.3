@@ -2,183 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD20489688
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0683448968C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244101AbiAJKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:38:51 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:44980 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244063AbiAJKiE (ORCPT
+        id S244085AbiAJKkM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 05:40:12 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:51485 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244040AbiAJKkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:38:04 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20A9V4IQ030680;
-        Mon, 10 Jan 2022 11:37:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=ltuKY3JbZ9a8gnDMbB/xLmLbXhMhu4XfcFmrhNwLzSU=;
- b=puEdB7FwTo5ZqfbW9w6h8VvccFHdyT7TqxDMeKo8OWELlPslVpd/OcpdjmcDrHTi9/yt
- X3nKp4jkAK8ZgZj79voIn9XBnsumcaJ/a0kOQOZFxy5xluMeV/LSpP1HmHndwlHIJhq+
- Kb9ha/tS7d33SGyHIh8gAze9WjZEiUoTtjymq5JCjwHO07tDvr9qESvqmAvSvDDZB8ow
- dwxPzdcWpEErcqH/k71R4FU9bU0bz60UHUakVhUwlCKDYicKXMDd0WahiMLnzro8zNB+
- 0B7AjqAgGJXNVkpSdCDymvgV10JFf/vxnlDWYqaEyljYOsS0FYnlIZGiW7cPqQasLMG7 TA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dgj85rakv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 11:37:42 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3896D10002A;
-        Mon, 10 Jan 2022 11:37:40 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2AFE9235F0F;
-        Mon, 10 Jan 2022 11:37:40 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 10 Jan 2022 11:37:39
- +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <hugues.fruchet@foss.st.com>, <mchehab@kernel.org>
-CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <alain.volmat@foss.st.com>
-Subject: [PATCH] media: stm32: dcmi: create a dma scatterlist based on DMA max_sg_burst value
-Date:   Mon, 10 Jan 2022 11:37:39 +0100
-Message-ID: <20220110103739.118426-1-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Jan 2022 05:40:09 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 616A6240011;
+        Mon, 10 Jan 2022 10:40:05 +0000 (UTC)
+Date:   Mon, 10 Jan 2022 11:40:03 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] mtd: Changes for 5.17
+Message-ID: <20220110114003.7f297088@xps13>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_04,2022-01-10_01,2021-12-02_01
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to submitting a transfer to the DMA, the client should first check
-the capabilities of the DMA channel in term of maximum of each segment.
-This is given by the max_sg_burst value reported by dma_get_slave_caps API.
-Based on that, if the transfer is larger than what can be handled by the
-DMA channel, we split the transfer into several scatterlist elements.
+Hello Linus,
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- drivers/media/platform/stm32/stm32-dcmi.c | 47 ++++++++++++++++++-----
- 1 file changed, 37 insertions(+), 10 deletions(-)
+This is the MTD PR for v5.17-rc1.
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index e1b17c05229c..ee170e999a88 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -113,7 +113,7 @@ struct dcmi_framesize {
- struct dcmi_buf {
- 	struct vb2_v4l2_buffer	vb;
- 	bool			prepared;
--	dma_addr_t		paddr;
-+	struct sg_table		sgt;
- 	size_t			size;
- 	struct list_head	list;
- };
-@@ -157,6 +157,7 @@ struct stm32_dcmi {
- 	enum state			state;
- 	struct dma_chan			*dma_chan;
- 	dma_cookie_t			dma_cookie;
-+	u32				dma_max_burst;
- 	u32				misr;
- 	int				errors_count;
- 	int				overrun_count;
-@@ -326,13 +327,11 @@ static int dcmi_start_dma(struct stm32_dcmi *dcmi,
- 	mutex_lock(&dcmi->dma_lock);
- 
- 	/* Prepare a DMA transaction */
--	desc = dmaengine_prep_slave_single(dcmi->dma_chan, buf->paddr,
--					   buf->size,
-+	desc = dmaengine_prep_slave_sg(dcmi->dma_chan, buf->sgt.sgl, buf->sgt.nents,
- 					   DMA_DEV_TO_MEM,
- 					   DMA_PREP_INTERRUPT);
- 	if (!desc) {
--		dev_err(dcmi->dev, "%s: DMA dmaengine_prep_slave_single failed for buffer phy=%pad size=%zu\n",
--			__func__, &buf->paddr, buf->size);
-+		dev_err(dcmi->dev, "%s: DMA dmaengine_prep_slave_sg failed\n", __func__);
- 		mutex_unlock(&dcmi->dma_lock);
- 		return -EINVAL;
- 	}
-@@ -524,6 +523,10 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 	struct dcmi_buf *buf = container_of(vbuf, struct dcmi_buf, vb);
- 	unsigned long size;
-+	unsigned int num_sgs = 1;
-+	dma_addr_t dma_buf;
-+	struct scatterlist *sg;
-+	int i, ret;
- 
- 	size = dcmi->fmt.fmt.pix.sizeimage;
- 
-@@ -537,15 +540,33 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
- 
- 	if (!buf->prepared) {
- 		/* Get memory addresses */
--		buf->paddr =
--			vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
- 		buf->size = vb2_plane_size(&buf->vb.vb2_buf, 0);
--		buf->prepared = true;
-+		if (buf->size > dcmi->dma_max_burst)
-+			num_sgs = DIV_ROUND_UP(buf->size, dcmi->dma_max_burst);
- 
--		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
-+		ret = sg_alloc_table(&buf->sgt, num_sgs, GFP_ATOMIC);
-+		if (ret) {
-+			dev_err(dcmi->dev, "sg table alloc failed\n");
-+			return ret;
-+		}
-+
-+		dma_buf = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
- 
- 		dev_dbg(dcmi->dev, "buffer[%d] phy=%pad size=%zu\n",
--			vb->index, &buf->paddr, buf->size);
-+			vb->index, &dma_buf, buf->size);
-+
-+		for_each_sg(buf->sgt.sgl, sg, num_sgs, i) {
-+			size_t bytes = min_t(size_t, size, dcmi->dma_max_burst);
-+
-+			sg_dma_address(sg) = dma_buf;
-+			sg_dma_len(sg) = bytes;
-+			dma_buf += bytes;
-+			size -= bytes;
-+		}
-+
-+		buf->prepared = true;
-+
-+		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
- 	}
- 
- 	return 0;
-@@ -1866,6 +1887,7 @@ static int dcmi_probe(struct platform_device *pdev)
- 	struct stm32_dcmi *dcmi;
- 	struct vb2_queue *q;
- 	struct dma_chan *chan;
-+	struct dma_slave_caps caps;
- 	struct clk *mclk;
- 	int irq;
- 	int ret = 0;
-@@ -1953,6 +1975,11 @@ static int dcmi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	dcmi->dma_max_burst = UINT_MAX;
-+	ret = dma_get_slave_caps(chan, &caps);
-+	if (!ret && caps.max_sg_burst)
-+		dcmi->dma_max_burst = caps.max_sg_burst	* DMA_SLAVE_BUSWIDTH_4_BYTES;
-+
- 	spin_lock_init(&dcmi->irqlock);
- 	mutex_init(&dcmi->lock);
- 	mutex_init(&dcmi->dma_lock);
--- 
-2.25.1
+Thanks,
+Miquèl
 
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/for-5.17
+
+for you to fetch changes up to 9ce47e43a0f088653aa25ca465836a84114e0940:
+
+  Merge tag 'nand/for-5.17' into mtd/next (2021-12-31 13:31:34 +0100)
+
+----------------------------------------------------------------
+MTD core changes:
+* mtdchar: Prevent unbounded allocation in MEMWRITE ioctl
+* gen_probe: Use bitmap_zalloc() when applicable
+* Introduce an expert mode for forensics and debugging purposes
+* Clear out unregistered devices a bit more
+* Provide unique name for nvmem device
+* Remove unused header file <linux/mtd/latch-addr-flash.h>
+* Fixed breaking list in __mtd_del_partition.
+
+MTD device changes:
+* sst25l, mchp48l640, mchp23k256, dataflash:
+  - Warn about failure to unregister mtd device
+
+Raw NAND core changes:
+* Export nand_read_page_hwecc_oob_first()
+
+GPMC memory controller for OMAP2 NAND controller changes:
+* GPMC:
+  - Add support for AM64 SoC and allow build on K3 platforms
+  - Use a compatible match table when checking for NAND controller
+  - Use platform_get_irq() to get the interrupt
+
+Raw NAND controller changes:
+* OMAP2 NAND controller:
+  - Document the missing 'rb-gpios' DT property
+  - Drop unused variable
+  - Fix force_8bit flag behaviour for DMA mode
+  - Move to exec_op interface
+  - Use platform_get_irq() to get the interrupt
+* Renesas:
+  - Add new NAND controller driver with its bindings and MAINTAINERS entry
+* Onenand:
+  - Remove redundant variable ooblen
+* MPC5121:
+  - Remove unused variable in ads5121_select_chip()
+* GPMI:
+  - Add ERR007117 protection for nfc_apply_timings
+  - Remove explicit default gpmi clock setting for i.MX6
+  - Use platform_get_irq_byname() to get the interrupt
+  - Remove unneeded variable
+* Ingenic:
+  - JZ4740 needs 'oob_first' read page function
+* Davinci:
+  - Rewrite function description
+  - Avoid duplicated page read
+  - Don't calculate ECC when reading page
+
+SPI NOR core changes:
+* Add Pratyush as SPI NOR co-maintainer.
+* Flash parameters initialization was done in a spaghetti way. Clean
+  flash parameters initialization.
+* Rework the flash_info flags and clarify where one should be used.
+* Initialize all flash parameters based on JESD216 SFDP where possible.
+  Flash parameters and settings that are SFDP discoverable should not be
+  duplicated via flash_info flags at flash declaration.
+* Remove debugfs entries that duplicate sysfs entries.
+
+SPI NOR manufacturer driver changes:
+* Use late_init() hook in various drivers to make it clear that those
+  flash parameters are either not declared in the JESD216 SFDP standard,
+  or the SFDP tables which define those flash parameters are not defined
+  by the flash.
+* Fix mtd size for s3an flashes.
+* Write 2 bytes when disabling Octal DTR mode: 1 byte long transactions are
+  not allowed in 8D-8D-8D mode.
+
+Hyperbus changes:
+* Couple of fixes in Renesas hyperbus rpc-if driver to avoid crash on
+  module remove and for missing check for error value in probe.
+
+----------------------------------------------------------------
+Andreas Oetken (1):
+      mtd: Fixed breaking list in __mtd_del_partition.
+
+Christian Eggers (1):
+      mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings
+
+Christophe JAILLET (1):
+      mtd: gen_probe: Use bitmap_zalloc() when applicable
+
+Colin Ian King (1):
+      mtd: onenand: remove redundant variable ooblen
+
+Flavio Suligoi (1):
+      mtd: spi-nor: core: Remove reference to spi-nor.c
+
+Geert Uytterhoeven (1):
+      mtd: rawnand: mpc5121: Remove unused variable in ads5121_select_chip()
+
+George G. Davis (1):
+      mtd: hyperbus: rpc-if: fix bug in rpcif_hb_remove
+
+Jonathan Corbet (1):
+      mtd: remove unused header file <linux/mtd/latch-addr-flash.h>
+
+Lad Prabhakar (4):
+      mtd: hyperbus: rpc-if: Check return value of rpcif_sw_init()
+      memory: omap-gpmc: Use platform_get_irq() to get the interrupt
+      mtd: rawnand: omap_elm: Use platform_get_irq() to get the interrupt
+      mtd: rawnand: gpmi: Use platform_get_irq_byname() to get the interrupt
+
+Michael Walle (1):
+      mtd: core: provide unique name for nvmem device
+
+Michał Kępień (1):
+      mtdchar: prevent unbounded allocation in MEMWRITE ioctl
+
+Minghao Chi (1):
+      mtd: rawnand: gpmi: remove unneeded variable
+
+Miquel Raynal (8):
+      mtd: Introduce an expert mode for forensics and debugging purposes
+      dt-bindings: mtd: renesas: Describe Renesas R-Car Gen3 & RZ/N1 NAND controller
+      mtd: rawnand: renesas: Add new NAND controller driver
+      MAINTAINERS: Add an entry for Renesas NAND controller
+      Merge tag 'memory-controller-drv-omap-5.17' into nand/next
+      Merge tag 'cfi/for-5.17' into mtd/next
+      Merge tag 'spi-nor/for-5.17' into mtd/next
+      Merge tag 'nand/for-5.17' into mtd/next
+
+Paul Cercueil (5):
+      mtd: rawnand: davinci: Don't calculate ECC when reading page
+      mtd: rawnand: davinci: Avoid duplicated page read
+      mtd: rawnand: davinci: Rewrite function description
+      mtd: rawnand: Export nand_read_page_hwecc_oob_first()
+      mtd: rawnand: ingenic: JZ4740 needs 'oob_first' read page function
+
+Pratyush Yadav (4):
+      MAINTAINERS: Add myself as SPI NOR co-maintainer
+      mtd: spi-nor: core: use 2 data bytes for template ops
+      mtd: spi-nor: spansion: write 2 bytes when disabling Octal DTR mode
+      mtd: spi-nor: micron-st: write 2 bytes when disabling Octal DTR mode
+
+Rob Herring (1):
+      dt-bindings: mtd: ti,gpmc-nand: Add missing 'rb-gpios'
+
+Roger Quadros (10):
+      dt-bindings: mtd: ti, gpmc-nand: Add compatible for AM64 NAND
+      mtd: rawnand: omap2: Allow build on K3 platforms
+      mtd: rawnand: omap2: move to exec_op interface
+      mtd: rawnand: omap2: Add compatible for AM64 SoC
+      mtd: rawnand: omap2: fix force_8bit flag behaviour for DMA mode
+      mtd: rawnand: omap2: drop unused variable
+      dt-bindings: memory-controllers: ti,gpmc: Add compatible for AM64
+      memory: omap-gpmc: Add support for GPMC on AM64 SoC
+      memory: omap-gpmc: Use a compatible match table when checking for NAND controller
+      mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
+
+Stefan Riedmueller (1):
+      mtd: rawnand: gpmi: Remove explicit default gpmi clock setting for i.MX6
+
+Tudor Ambarus (26):
+      mtd: spi-nor: core: Fix spi_nor_flash_parameter otp description
+      mtd: spi-nor: core: Use container_of to get the pointer to struct spi_nor
+      mtd: spi-nor: Get rid of nor->page_size
+      mtd: spi-nor: core: Introduce the late_init() hook
+      mtd: spi-nor: atmel: Use flash late_init() for locking
+      mtd: spi-nor: sst: Use flash late_init() for locking
+      mtd: spi-nor: winbond: Use manufacturer late_init() for OTP ops
+      mtd: spi-nor: xilinx: Use manufacturer late_init() to set setup method
+      mtd: spi-nor: sst: Use manufacturer late_init() to set _write()
+      mtd: spi-nor: spansion: Use manufacturer late_init()
+      mtd: spi-nor: Fix mtd size for s3an flashes
+      mtd: spi-nor: core: Don't use mtd_info in the NOR's probe sequence of calls
+      mtd: spi-nor: Introduce spi_nor_set_mtd_info()
+      mtd: spi-nor: core: Call spi_nor_post_sfdp_fixups() only when SFDP is defined
+      mtd: spi-nor: core: Introduce flash_info mfr_flags
+      mtd: spi-nor: Rework the flash_info flags
+      mtd: spi-nor: Introduce spi_nor_init_flags()
+      mtd: spi-nor: Introduce spi_nor_init_fixup_flags()
+      mtd: spi-nor: core: Init all flash parameters based on SFDP where possible
+      mtd: spi-nor: core: Move spi_nor_set_addr_width() in spi_nor_setup()
+      mtd: spi-nor: winbond: w25q256jvm: Init flash based on SFDP
+      mtd: spi-nor: spansion: s25fl256s0: Skip SFDP parsing
+      mtd: spi-nor: gigadevice: gd25q256: Init flash based on SFDP
+      mtd: spi-nor: issi: is25lp256: Init flash based on SFDP
+      mtd: spi-nor: Constify part specific fixup hooks
+      mtd: spi-nor: Remove debugfs entries that duplicate sysfs entries
+
+Uwe Kleine-König (4):
+      mtd: dataflash: Warn about failure to unregister mtd device
+      mtd: mchp23k256: Warn about failure to unregister mtd device
+      mtd: mchp48l640: Warn about failure to unregister mtd device
+      mtd: sst25l: Warn about failure to unregister mtd device
+
+Zev Weiss (1):
+      mtd: core: clear out unregistered devices a bit more
+
+ Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml |   23 +-
+ Documentation/devicetree/bindings/mtd/renesas-nandc.yaml          |   61 +++++
+ Documentation/devicetree/bindings/mtd/ti,gpmc-nand.yaml           |   10 +-
+ MAINTAINERS                                                       |   10 +-
+ drivers/memory/omap-gpmc.c                                        |   50 ++--
+ drivers/mtd/chips/gen_probe.c                                     |    9 +-
+ drivers/mtd/devices/mchp23k256.c                                  |    4 +-
+ drivers/mtd/devices/mchp48l640.c                                  |    4 +-
+ drivers/mtd/devices/mtd_dataflash.c                               |   10 +-
+ drivers/mtd/devices/sst25l.c                                      |    4 +-
+ drivers/mtd/hyperbus/rpc-if.c                                     |    8 +-
+ drivers/mtd/mtdchar.c                                             |  110 +++++++--
+ drivers/mtd/mtdcore.c                                             |   21 +-
+ drivers/mtd/mtdpart.c                                             |    2 +-
+ drivers/mtd/nand/core.c                                           |    3 +
+ drivers/mtd/nand/onenand/onenand_bbt.c                            |    4 +-
+ drivers/mtd/nand/raw/Kconfig                                      |   10 +-
+ drivers/mtd/nand/raw/Makefile                                     |    1 +
+ drivers/mtd/nand/raw/davinci_nand.c                               |   73 +-----
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c                        |   53 +++--
+ drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c                   |    5 +
+ drivers/mtd/nand/raw/mpc5121_nfc.c                                |    1 -
+ drivers/mtd/nand/raw/nand_base.c                                  |   70 ++++++
+ drivers/mtd/nand/raw/nand_bbt.c                                   |    3 +
+ drivers/mtd/nand/raw/omap2.c                                      |  507 ++++++++++++++++++-----------------------
+ drivers/mtd/nand/raw/omap_elm.c                                   |   16 +-
+ drivers/mtd/nand/raw/renesas-nand-controller.c                    | 1424 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/mtd/spi-nor/atmel.c                                       |   79 ++++---
+ drivers/mtd/spi-nor/catalyst.c                                    |   15 +-
+ drivers/mtd/spi-nor/core.c                                        |  556 +++++++++++++++++++++++++--------------------
+ drivers/mtd/spi-nor/core.h                                        |  209 ++++++++++-------
+ drivers/mtd/spi-nor/eon.c                                         |   33 +--
+ drivers/mtd/spi-nor/esmt.c                                        |   15 +-
+ drivers/mtd/spi-nor/everspin.c                                    |   12 +-
+ drivers/mtd/spi-nor/fujitsu.c                                     |    3 +-
+ drivers/mtd/spi-nor/gigadevice.c                                  |   59 ++---
+ drivers/mtd/spi-nor/intel.c                                       |   12 +-
+ drivers/mtd/spi-nor/issi.c                                        |   62 ++---
+ drivers/mtd/spi-nor/macronix.c                                    |  107 +++++----
+ drivers/mtd/spi-nor/micron-st.c                                   |  224 ++++++++++--------
+ drivers/mtd/spi-nor/otp.c                                         |    2 +-
+ drivers/mtd/spi-nor/sfdp.c                                        |   20 ++
+ drivers/mtd/spi-nor/spansion.c                                    |  184 ++++++++-------
+ drivers/mtd/spi-nor/sst.c                                         |   96 +++++---
+ drivers/mtd/spi-nor/swp.c                                         |    2 +-
+ drivers/mtd/spi-nor/winbond.c                                     |  168 ++++++++------
+ drivers/mtd/spi-nor/xilinx.c                                      |   21 +-
+ drivers/mtd/spi-nor/xmc.c                                         |   10 +-
+ include/linux/mtd/latch-addr-flash.h                              |   29 ---
+ include/linux/mtd/mtd.h                                           |    3 +
+ include/linux/mtd/rawnand.h                                       |    2 +
+ include/linux/mtd/spi-nor.h                                       |    2 -
+ include/linux/platform_data/mtd-nand-omap2.h                      |   10 +-
+ 53 files changed, 3124 insertions(+), 1307 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mtd/renesas-nandc.yaml
+ create mode 100644 drivers/mtd/nand/raw/renesas-nand-controller.c
+ delete mode 100644 include/linux/mtd/latch-addr-flash.h

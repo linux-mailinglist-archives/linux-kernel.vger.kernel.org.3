@@ -2,151 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A3748973C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85B248973B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244609AbiAJLUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:20:20 -0500
-Received: from marcansoft.com ([212.63.210.85]:51112 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244640AbiAJLUQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:20:16 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        id S244597AbiAJLUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:20:18 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:49480 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244617AbiAJLT7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:19:59 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 8CB3C41AC8;
-        Mon, 10 Jan 2022 11:20:04 +0000 (UTC)
-Message-ID: <fc945ba3-94b7-773d-4537-3408b10bfe92@marcan.st>
-Date:   Mon, 10 Jan 2022 20:20:02 +0900
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 31607210F8;
+        Mon, 10 Jan 2022 11:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641813597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GRbX85PkaWdijkdNXZXuaLkD9bKKSzcrXv8mpwNzSHA=;
+        b=ww/P3QBZR95J8sF4vK7yfLOOgGzwgKxTAssGXVwddI8sAaVPzt+YCXs/0i82WHstqTumYH
+        09PfI/REP3jHs86pseHryW3dJNqXuyR86bd2TYdfp1pny1NnH9vV6fmNHD9wKOH80fHvLx
+        /7oNnXBHsx2VzP7EoZlwjACrlnamgb0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641813597;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GRbX85PkaWdijkdNXZXuaLkD9bKKSzcrXv8mpwNzSHA=;
+        b=i/m07hGf6r1Hn2egk16bn2ilR3WuaQM3afZhxmr6zW6PPVQSxyuRw93/ftN+hq9iU2uIdT
+        euz/Wc+vbtqw9TDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A23E13D2A;
+        Mon, 10 Jan 2022 11:19:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id D8I9BV0W3GE+bQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:19:57 +0000
+Date:   Mon, 10 Jan 2022 12:20:05 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/build for v5.17
+Message-ID: <YdwWZeajNhOasI3U@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 20/35] brcmfmac: pcie: Perform correct BCM4364 firmware
- selection
-Content-Language: en-US
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-21-marcan@marcan.st>
- <3a957aa1-07f9-dff2-563e-656fffa0db6c@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <3a957aa1-07f9-dff2-563e-656fffa0db6c@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/10 18:12, Arend van Spriel wrote:
-> On 1/4/2022 8:26 AM, Hector Martin wrote:
->> This chip exists in two revisions (B2=r3 and B3=r4) on different
->> platforms, and was added without regard to doing proper firmware
->> selection or differentiating between them. Fix this to have proper
->> per-revision firmwares and support Apple NVRAM selection.
->>
->> Revision B2 is present on at least these Apple T2 Macs:
->>
->> kauai:    MacBook Pro 15" (Touch/2018-2019)
->> maui:     MacBook Pro 13" (Touch/2018-2019)
->> lanai:    Mac mini (Late 2018)
->> ekans:    iMac Pro 27" (5K, Late 2017)
->>
->> And these non-T2 Macs:
->>
->> nihau:    iMac 27" (5K, 2019)
->>
->> Revision B3 is present on at least these Apple T2 Macs:
->>
->> bali:     MacBook Pro 16" (2019)
->> trinidad: MacBook Pro 13" (2020, 4 TB3)
->> borneo:   MacBook Pro 16" (2019, 5600M)
->> kahana:   Mac Pro (2019)
->> kahana:   Mac Pro (2019, Rack)
->> hanauma:  iMac 27" (5K, 2020)
->> kure:     iMac 27" (5K, 2020, 5700/XT)
->>
->> Fixes: 24f0bd136264 ("brcmfmac: add the BRCM 4364 found in MacBook Pro 15,2")
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>   .../net/wireless/broadcom/brcm80211/brcmfmac/pcie.c   | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> index 87daabb15cd0..e4f2aff3c0d5 100644
->> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
->> @@ -54,7 +54,8 @@ BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
->>   BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
->>   BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
->>   BRCMF_FW_DEF(4359, "brcmfmac4359-pcie");
->> -BRCMF_FW_DEF(4364, "brcmfmac4364-pcie");
->> +BRCMF_FW_CLM_DEF(4364B2, "brcmfmac4364b2-pcie");
->> +BRCMF_FW_CLM_DEF(4364B3, "brcmfmac4364b3-pcie");
-> 
-> would this break things for people. Maybe better to keep the old name 
-> for the B2 variant.
+Hi Linus,
 
-Or the B3 variant... people have been using random copied firmwares with
-the same name, I guess. Probably even the wrong NVRAMs in some cases.
-And then I'd have to add a special case to the firmware extraction
-script to rename one of these two to not include the revision...
+please pull a single x86/build update for 5.17.
 
-Plus, newer firmwares require the random blob, so this only ever worked
-with old, obsolete firmwares... which I think have security
-vulnerabilities (there was an AWDL exploit recently IIRC).
+Thx.
 
-Honestly though, there are probably rather few people using upstream
-kernels on T2s. Certainly on the MacBooks, since the keyboard/touchpad
-aren't supported upstream yet... plus given that there was never any
-"official" firmware distributed under the revision-less name, none of
-this would work out of the box with upstream kernels anyway.
+---
 
-FWIW, I've been in contact with the t2linux folks and users have been
-testing this patchset (that's how I got it tested on all the chips), so
-at least some people are already aware of the story and how to get the
-firmware named properly :-)
+The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
 
->> -	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0xFFFFFFFF, 4364),
->> +	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0x0000000F, 4364B2), /* 3 */
->> +	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0xFFFFFFF0, 4364B3), /* 4 */
-> 
-> okay. so it is the numerical chip revision. If so, please drop that comment.
-> 
+  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
 
-I figured it would be useful to document this somewhere, since the
-alphanumeric code -> rev number mapping doesn't seem to be consistent
-from chip to chip, and we might have to add a new revision in the future
-for an existing chip (which would require knowing the rev for the old
-one). Do you have any ideas?
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_build_for_v5.17_rc1
+
+for you to fetch changes up to 5fe392ff9d1f7254a1fbb3f72d9893088e4d23eb:
+
+  x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS (2021-12-23 11:03:28 +0100)
+
+----------------------------------------------------------------
+- A fix for cross-compiling the compressed stub on arm64 with clang
+
+----------------------------------------------------------------
+Nathan Chancellor (1):
+      x86/boot/compressed: Move CLANG_FLAGS to beginning of KBUILD_CFLAGS
+
+ arch/x86/boot/compressed/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

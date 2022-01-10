@@ -2,109 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FDC489BB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45294489BB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiAJO7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:59:41 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47162 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbiAJO7k (ORCPT
+        id S235829AbiAJPBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:01:03 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:39910 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231561AbiAJPBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:59:40 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5522E210EB;
-        Mon, 10 Jan 2022 14:59:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641826779; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=5IGmEDQB1gqbYUy4bTS7iX+mODMr/cnbgsSGFDLQehk=;
-        b=yr040gj5ajnOFJIgdcOSLnh9UQbZVcsYhg4mLmDWMnr4Enlmu1HxLS/CP9mZbP22rIokKp
-        68MVgOX47QKU9NYDrBni2yVak1tsq2P4Dy75vlgg+KN0B8bzNdOwlVqLKs4bWBqpr143ey
-        zjxFeKctOJCL1Y57XbnRjQQypdh5J6E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641826779;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=5IGmEDQB1gqbYUy4bTS7iX+mODMr/cnbgsSGFDLQehk=;
-        b=hfAI3rPupOMJpDxw7A1LPst4D1kuaUB7qW5XiT3NL+m4BOcHgAQWu64pbmob3ruK68TQm2
-        quayCyltt/W8sLAg==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 4DD37A3B81;
-        Mon, 10 Jan 2022 14:59:39 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 17828)
-        id 4089D5192A3E; Mon, 10 Jan 2022 15:59:39 +0100 (CET)
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH] lpfc: Retry FLOGI if previous attempt was rejected with busy
-Date:   Mon, 10 Jan 2022 15:59:37 +0100
-Message-Id: <20220110145937.129224-1-dwagner@suse.de>
-X-Mailer: git-send-email 2.29.2
+        Mon, 10 Jan 2022 10:01:02 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:55338)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n6wAO-009Biv-G6; Mon, 10 Jan 2022 08:01:00 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:43782 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n6wAM-005OOe-Cx; Mon, 10 Jan 2022 08:01:00 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Kyle Huey" <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211208202532.16409-6-ebiederm@xmission.com>
+        <YdelKq9U86/dHPcm@zeniv-ca.linux.org.uk>
+        <87mtk6xegz.fsf@email.froward.int.ebiederm.org>
+        <160ab942f83043d4878719e5354925cc@AcuMS.aculab.com>
+Date:   Mon, 10 Jan 2022 09:00:31 -0600
+In-Reply-To: <160ab942f83043d4878719e5354925cc@AcuMS.aculab.com> (David
+        Laight's message of "Sat, 8 Jan 2022 22:44:33 +0000")
+Message-ID: <87fspvy6sw.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-XM-SPF: eid=1n6wAM-005OOe-Cx;;;mid=<87fspvy6sw.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19iILV5Sx5O5SU9tvllA/FEzgwOywGT/7E=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4963]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;David Laight <David.Laight@ACULAB.COM>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1453 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 10 (0.7%), b_tie_ro: 9 (0.6%), parse: 0.85 (0.1%),
+         extract_message_metadata: 14 (1.0%), get_uri_detail_list: 1.41 (0.1%),
+         tests_pri_-1000: 18 (1.3%), tests_pri_-950: 1.17 (0.1%),
+        tests_pri_-900: 0.97 (0.1%), tests_pri_-90: 89 (6.1%), check_bayes: 85
+        (5.9%), b_tokenize: 7 (0.5%), b_tok_get_all: 8 (0.5%), b_comp_prob:
+        3.1 (0.2%), b_tok_touch_all: 64 (4.4%), b_finish: 0.85 (0.1%),
+        tests_pri_0: 1305 (89.8%), check_dkim_signature: 0.48 (0.0%),
+        check_dkim_adsp: 3.2 (0.2%), poll_dns_idle: 0.65 (0.0%), tests_pri_10:
+        2.2 (0.2%), tests_pri_500: 8 (0.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 06/10] exit: Implement kthread_exit
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The login state machine stops at the first FLOGI attempt which fails
-marked as busy:
+David Laight <David.Laight@ACULAB.COM> writes:
 
-lpfc 0000:58:00.0: 1:(0):2858 FLOGI failure Status:x9/x50000 TMO:x14 Data x19140820 x0
+> From: Eric W. Biederman
+>> Sent: 08 January 2022 18:36
+>> 
+>> Al Viro <viro@zeniv.linux.org.uk> writes:
+>> 
+>> > IMO the right way to handle that would be
+>> > 	1) turn these two do_exit() into do_exit(0), to reduce
+>> > confusion
+>> > 	2) deal with all do_exit() in kthread payloads.  Your
+>> > name for the primitive is fine, IMO.
+>> > 	3) make that primitive pass the return value by way of
+>> > a field in struct kthread, adjusting kthread_stop() accordingly
+>> > and passing 0 to do_exit() in kthread_exit() itself.
+>> >
+>> > (2) is not as trivial as you seem to hope, though.  Your patches
+>> > in drivers/staging/rt*/ had papered over the problem in there,
+>> > but hadn't really solved it.
+>> >
+>> > thread_exit() should've been shot, all right, but it really ought
+>> > to have been complete_and_exit() there.  The thing is, complete()
+>> > + return does *not* guarantee that driver won't get unloaded before
+>> > the thread terminates.  Possibly freeing its .code and leaving
+>> > a thread to resume running in there as soon as it regains CPU.
+>> >
+>> > The point of complete_and_exit() is that it's noreturn *and* in
+>> > core kernel.  So it can be safely used in a modular kthread,
+>> > if paired with wait_for_completion() in or before module_exit.
+>> > complete() + do_exit() (or complete + return as you've gotten
+>> > there) doesn't give such guarantees at all.
+>> 
+>> 
+>> I think we are mostly in agreement here.
+>> 
+>> There are kernel threads started by modules that do:
+>> 	complete(...);
+>>         return 0;
+>> 
+>> That should be at a minimum calling complete_and_exit.  Possibly should
+>> be restructured to use kthread_stop().
+>
+> There is also module_put_and_exit(0);
+> Which must have an implied THIS_MODULE.
 
-Add the FLOGI cmd to the list of commands which are allowed to retry.
+Later in the patch series I change
+module_put_and_exit -> module_put_and_kthread_exit
+complete_and_exit -> complete_and_kthread_exit
 
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
+The problem that I understand all was seeing was where people should
+have been using complete_and_exit and were not.
 
-we observerd log below during failover operations. With this patch all
-is good. FLOGI is retried and succeeds eventually.
-
-lpfc 0000:58:00.0: 29: [  575.971250] 1:0392 Async Event: word0:x8010140, word1:x3204000, word2:x3, word3:xc0011000
-lpfc 0000:58:00.0: 30: [  575.971260] 1:2896 Async FC event - Speed:8000GBaud Topology:x1 LA Type:x1 Port Type:1 Port Number:0 Logical speed:8000Mbps Fault:0
-lpfc 0000:58:00.0: 31: [  575.971264] 1:(0):0354 Mbox cmd issue - Enqueue Data: x95 (x0/x0) x0 xc600 x2
-lpfc 0000:58:00.0: 32: [  575.971266] 1:(0):0355 Mailbox cmd x95 (x0/x0) issue Data: x0 xc700
-lpfc 0000:58:00.0: 33: [  575.971461] 1:(0):0307 Mailbox cmd x95 (x0/x0) Cmpl lpfc_mbx_cmpl_read_topology [lpfc] Data: x9500 x3 x2001 x1 x80 x277cd000 x44 x80002005 x200a x0 x76cf064 x0
-lpfc 0000:58:00.0: 34: [  575.971472] 1:(0):0354 Mbox cmd issue - Enqueue Data: x8d (x0/x0) x0 xc600 x2
-lpfc 0000:58:00.0: 35: [  575.971473] 1:(0):0354 Mbox cmd issue - Enqueue Data: x7 (x0/x0) x6 xc600 x2
-lpfc 0000:58:00.0: 36: [  575.971475] 1:(0):0355 Mailbox cmd x8d (x0/x0) issue Data: x6 xc700
-lpfc 0000:58:00.0: 37: [  575.971682] 1:(0):0355 Mailbox cmd x7 (x0/x0) issue Data: x6 xc700
-lpfc 0000:58:00.0: 38: [  575.971689] 1:(0):0307 Mailbox cmd x8d (x0/x0) Cmpl lpfc_mbx_cmpl_read_sparam [lpfc] Data: x8d00 x0 x0 x70 x277cd800 x44 x1 x0 x0 x0 x0 x0
-lpfc 0000:58:00.0: 39: [  575.971826] 1:(0):0307 Mailbox cmd x7 (x0/x0) Cmpl lpfc_mbx_cmpl_local_config_link [lpfc] Data: x700 x0 x0 x0 x7d0 x76c xa x0 xf x0 x1800 x0
-lpfc 0000:58:00.0: 40: [  575.971827] 1:(0):0354 Mbox cmd issue - Enqueue Data: x8d (x0/x0) x6 xc600 x2
-lpfc 0000:58:00.0: 41: [  575.971827] 1:(0):0355 Mailbox cmd x8d (x0/x0) issue Data: x6 xc700
-lpfc 0000:58:00.0: 42: [  575.972048] 1:(0):0307 Mailbox cmd x8d (x0/x0) Cmpl lpfc_mbx_cmpl_read_sparam [lpfc] Data: x8d00 x0 x0 x70 x277cd800 x44 x1 x0 x0 x0 x0 x0
-lpfc 0000:58:00.0: 43: [  575.972050] 1:(0):0247 Start Discovery Timer state x7 Data: x21 xffff8804c6b149e8 x0 x0
-lpfc 0000:58:00.0: 44: [  575.972051] 1:(0):0932 FIND node did xfffffe NOT FOUND.
-lpfc 0000:58:00.0: 45: [  575.972052] 1:0001 Allocated rpi:x0 max:x3000 lim:x3000
-lpfc 0000:58:00.0: 46: [  575.972053] 1:(0):0007 Init New ndlp xffff8804c715d000, rpi:x0 DID:fffffe flg:x0 refcnt:1
-lpfc 0000:58:00.0: 47: [  575.972055] 1:(0):0116 Xmit ELS command x4 to remote NPORT xfffffe I/O tag: x2fc0, port state:x7 rpi x0 fc_flag:x810114
-lpfc 0000:58:00.0: 48: [  575.972055] 1:(0):0247 Start Discovery Timer state x7 Data: x21 xffff8804c6b149e8 x0 x0
-lpfc 0000:58:00.0: 49: [  576.011558] 1:0357 ELS CQE error: status=x9: CQE: 2fc00900 00000000 00050000 80010000
-lpfc 0000:58:00.0: 50: [  576.011566] 1:0328 Rsp Ring 2 error: IOCB Data: x40000000 x277cd400 x44 x0 x50000 xfffffe x12fc0 x14428a96 x0 x0 x0 x0 x0 x0 x0 x0
-lpfc 0000:58:00.0: 1:(0):2858 FLOGI failure Status:x9/x50000 TMO:x14 Data x19140820 x0
-
-
- drivers/scsi/lpfc/lpfc_els.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index db5ccae1b63d..1880e95cb785 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4664,7 +4664,8 @@ lpfc_els_retry(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			break;
- 
- 		case LSRJT_LOGICAL_BSY:
--			if ((cmd == ELS_CMD_PLOGI) ||
-+			if ((cmd == ELS_CMD_FLOGI) ||
-+			    (cmd == ELS_CMD_PLOGI) ||
- 			    (cmd == ELS_CMD_PRLI) ||
- 			    (cmd == ELS_CMD_NVMEPRLI)) {
- 				delay = 1000;
--- 
-2.29.2
-
+Eric

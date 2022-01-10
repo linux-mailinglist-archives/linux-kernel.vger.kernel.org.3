@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B91DE48A071
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054E648A078
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243305AbiAJTvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239531AbiAJTvE (ORCPT
+        id S243654AbiAJTyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:54:53 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:38158 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239531AbiAJTyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:51:04 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F16C06173F;
-        Mon, 10 Jan 2022 11:51:04 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id pj2so13631348pjb.2;
-        Mon, 10 Jan 2022 11:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7nQwFvWnXEWIg2fQ1lx9zAVox3M6SG5MqAj2k1cYbzc=;
-        b=SLIePsHkyQTI7kSGSYbXczT8SLyE+S3bFu6wUYPBktqGnCZNU4DikRQdvp1NrA4TSn
-         L/ooJ76caUKQ+bUQKhPuGOXlHB8Vo3GGiyY8wLQq2IMZtgBYu8349qKGD+64RHBWb6oV
-         PeVRi1HV+6M3q8BfE8ebN7HDTPCkWMX/SdkC2DX9nKGqRnaYLG1klSRFrDVgAE1H538G
-         NyDkxOwCvWorGhhkIIgnq4cKSvFlUL0QB22LWVGmg9ssWxitgM3OlD3D6Ay0ejcFNAn0
-         zxpaaajda4BWkDJ2fzxugKjjWTSN6OHajX/ThDhPw9df8HfobtWditKiWXiIOMPvap6E
-         2TZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7nQwFvWnXEWIg2fQ1lx9zAVox3M6SG5MqAj2k1cYbzc=;
-        b=mH0aYGGgEKjsjoYz2k/0/8F6D5he/wLwI/iFYrS3QgimcgWbSnsSLYIKf05gXDeHKP
-         WREu/oPeFoSrDGv3O9AFBV2ZwxuUcdcnMTAfWu4blw3qERrwMP7EQb6X3ugDpG1yw0+T
-         UrW6KRNIEQS7OoMdizlUaj2OFo+gJTHCRlmVP77n8pn02XGvSxdwxbqp6gRa88PdsFvE
-         INPwB+sdhcfEfPCN8eIQn4PQ+PoEV5ssLBpk0y8i3xeqPZ12iSiKLEIuORaLiFdqm7wE
-         x33ZH90U4LfUFMXFp9Zd/QzL3WUmmifcc5gBMw18pSWITCCsu0jTOu3W00bHbDUV67xR
-         CAuA==
-X-Gm-Message-State: AOAM532w1BWZxIi/qowJD7CpCaF77VLAoN6PAPYr2Q1XQ/Kjr2ByfxJX
-        tF2nvvRlfRuMOVHEEc7YzRj/o327oCU=
-X-Google-Smtp-Source: ABdhPJxqtke/V21bxwhHLPeKsTlgT2qlrJ7w8RcHGbgvl5OZ88CpuTFpajH3dimOKTwce2eCdw+Y8g==
-X-Received: by 2002:a17:90a:a105:: with SMTP id s5mr1359942pjp.170.1641844263258;
-        Mon, 10 Jan 2022 11:51:03 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g16sm7900493pfv.159.2022.01.10.11.51.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 11:51:02 -0800 (PST)
-Subject: Re: [PATCH 5.10 00/43] 5.10.91-rc1 review
+        Mon, 10 Jan 2022 14:54:52 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 083BA20C045B
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220110071817.337619922@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <23b2e45d-b642-a5df-2b68-f4f11cb1b4f9@gmail.com>
-Date:   Mon, 10 Jan 2022 11:50:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 0/2] Make platform_get_irq[_byname]_optional() optional
+Date:   Mon, 10 Jan 2022 22:54:47 +0300
+Message-ID: <20220110195449.12448-1-s.shtylyov@omp.ru>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/22 11:22 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.91 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.91-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Here are 2 patches making platform_get_irq[_byname]_optional() return 0 on
+IRQ not being found, thus aligning those with the other *_optional() APIs;
+they are against the 'driver-core-linus' branch of GregKH's 'driver-core.git'
+repo plus the patch disallowing IRQ0 in platform_get_irq() and its ilk:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+https://lore.kernel.org/lkml/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+That patch was against the 'driver-core-linus' branch, so had to do these 2
+against that branch as well; tell me if I should rebase to 'driver-core-next'.
+
+Sergey Shtylyov (2):
+  platform: make platform_get_irq_optional() optional
+  platform: make platform_get_irq_byname_optional() optional
+
+ drivers/base/platform.c                       | 69 ++++++++++++-------
+ drivers/char/ipmi/bt-bmc.c                    |  8 ++-
+ drivers/counter/interrupt-cnt.c               |  4 +-
+ drivers/edac/xgene_edac.c                     |  2 +-
+ drivers/gpio/gpio-altera.c                    |  3 +-
+ drivers/gpio/gpio-mvebu.c                     |  2 +-
+ drivers/gpio/gpio-tqmx86.c                    |  2 +-
+ drivers/gpu/drm/lima/lima_device.c            |  2 +-
+ drivers/i2c/busses/i2c-brcmstb.c              |  8 +--
+ drivers/i2c/busses/i2c-ocores.c               |  4 +-
+ drivers/mailbox/tegra-hsp.c                   |  4 +-
+ drivers/mmc/host/sh_mmcif.c                   |  4 +-
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c      |  4 +-
+ drivers/net/can/rcar/rcar_canfd.c             |  4 +-
+ drivers/net/dsa/b53/b53_srab.c                |  2 +-
+ drivers/net/ethernet/davicom/dm9000.c         |  2 +-
+ drivers/net/ethernet/freescale/fec_main.c     |  2 +-
+ drivers/net/ethernet/freescale/fec_ptp.c      |  4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-stm32.c |  4 +-
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |  4 +-
+ .../pci/controller/dwc/pcie-designware-host.c |  2 +-
+ drivers/phy/renesas/phy-rcar-gen3-usb2.c      |  4 +-
+ drivers/platform/chrome/cros_ec_lpc.c         |  2 +-
+ drivers/platform/x86/intel/punit_ipc.c        |  2 +-
+ drivers/power/supply/mp2629_charger.c         |  4 +-
+ drivers/spi/spi-bcm-qspi.c                    |  2 +-
+ drivers/spi/spi-hisi-sfc-v3xx.c               |  2 +-
+ drivers/spi/spi-mtk-nor.c                     |  3 +-
+ drivers/spi/spi-rspi.c                        |  8 +--
+ drivers/thermal/rcar_gen3_thermal.c           |  2 +-
+ drivers/tty/serial/8250/8250_mtk.c            |  4 +-
+ drivers/tty/serial/sh-sci.c                   |  6 +-
+ drivers/uio/uio_pdrv_genirq.c                 |  2 +-
+ drivers/usb/cdns3/cdns3-plat.c                |  5 +-
+ drivers/usb/host/xhci-mtk.c                   |  2 +-
+ drivers/usb/mtu3/mtu3_core.c                  |  2 +-
+ drivers/vfio/platform/vfio_platform.c         |  6 +-
+ sound/soc/dwc/dwc-i2s.c                       |  4 +-
+ 38 files changed, 110 insertions(+), 90 deletions(-)
+
 -- 
-Florian
+2.26.3
+

@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 667D1489908
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C149489918
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiAJNBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:01:04 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42786 "EHLO
+        id S231398AbiAJNBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:01:39 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42794 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbiAJM7z (ORCPT
+        with ESMTP id S232828AbiAJM75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:59:55 -0500
-Date:   Mon, 10 Jan 2022 12:59:53 -0000
+        Mon, 10 Jan 2022 07:59:57 -0500
+Date:   Mon, 10 Jan 2022 12:59:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641819594;
+        s=2020; t=1641819595;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UjeqJ4GSwfqdPtR2mocifLg0mCvhNuJqOxta26ebrDY=;
-        b=rbf8cSN3gfRlCZ3WxvVFEq9DvKcFTT1tN84QInp5uTqZUkxEa2gHY+uCZYf0nyDdzlGvVN
-        yXvOjL/c++kQLTvp4vxfVCaXkvABueCJDgNiixUU/3MRwcafvGDi/x2nAWB+gwa3yKVME1
-        2r2A2FYLGf6dCi14QjRkdY38qXJ+VPgQ4Sguj4MnG1TmWSFClrYcPPBnpDvOErtEUI5AhG
-        DJVBk4JHPmSChx5APTkvPl9nnhtcm/Zyf3WAqEZt5RkMTN9GJORkUGzhDFtozod+X6NKm/
-        gEcRmhxyAV1PscRofuF2qYn5tGlGfuHehZ2M3taLXtcmrvw3r76kw63fa2Hgow==
+        bh=2tn2jfcG6fdJ+mRwxp+0+JGUeCb7d8ZmjfMHhih999U=;
+        b=hMAQBh7lpozElL3vR/iYK4GVxgI1Lih+btss1d7YzD4U39rx9Z/MEH+iSig5VDlaI97zhm
+        eAFvC3cmyKdfQb5qd2xpKamNCfNDjnBq+23d2ioUFvv3uVNkTX5BKIzkf+8tW5mMTcnHXm
+        K67vdvYHuVXdwtHfH16FYfjmcC39Dxu6OOAAxCMuckykQUv9DCPrlXS3DdjE8LINAhYnno
+        Eq4wQMn30V++Ik2wwgXVpIFwFP9aEB+xs3+6Le6GVdMWiRvJjAEbM5mP8NEn3voj8YKexA
+        3Cmur3knMUte6k9UAjoXD/kznqdnzgZCwP5dn1yHdcNE5up922gNSD6rr1JsKg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641819594;
+        s=2020e; t=1641819595;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UjeqJ4GSwfqdPtR2mocifLg0mCvhNuJqOxta26ebrDY=;
-        b=Hj7OoFcxR5u7MMo/2mNXCxqRpvGjWel4bsGQ7lQ8j8oi8SWynrcjusjzmaT840WY3sxP5o
-        9jvr0oEAleMaNkDA==
-From:   "tip-bot2 for Drew Fustini" <tip-bot2@linutronix.de>
+        bh=2tn2jfcG6fdJ+mRwxp+0+JGUeCb7d8ZmjfMHhih999U=;
+        b=UOrU6afmVGNANr6Aa+jAPeK9VfyaicaisRMuRrKP+ua9NXbCM9k8pjhvt9lHo3c+FWmbvv
+        vMDTbcL+mUht5fCA==
+From:   "tip-bot2 for Peng Fan" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/pistachio: Fix
- -Wunused-but-set-variable warning
-Cc:     kernel test robot <lkp@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Drew Fustini <dfustini@baylibre.com>, x86@kernel.org,
+Subject: [tip: timers/core] clocksource/drivers/timer-imx-sysctr: Set cpumask
+ to cpu_possible_mask
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211123192524.1038304-1-dfustini@baylibre.com>
-References: <20211123192524.1038304-1-dfustini@baylibre.com>
+In-Reply-To: <20211201125030.2307746-2-peng.fan@oss.nxp.com>
+References: <20211201125030.2307746-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Message-ID: <164181959340.16921.12441384820128333820.tip-bot2@tip-bot2>
+Message-ID: <164181959418.16921.2526564999400774440.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,40 +59,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     0642fb4ba68f7158f7a6d92190b3090cf0c7fac6
-Gitweb:        https://git.kernel.org/tip/0642fb4ba68f7158f7a6d92190b3090cf0c7fac6
-Author:        Drew Fustini <dfustini@baylibre.com>
-AuthorDate:    Tue, 23 Nov 2021 11:25:24 -08:00
+Commit-ID:     0ed9e4ebcebcb36bd1186e68cf2f72b3e0bfbac6
+Gitweb:        https://git.kernel.org/tip/0ed9e4ebcebcb36bd1186e68cf2f72b3e0bfbac6
+Author:        Peng Fan <peng.fan@nxp.com>
+AuthorDate:    Wed, 01 Dec 2021 20:50:30 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 14 Dec 2021 10:17:36 +01:00
+CommitterDate: Tue, 14 Dec 2021 10:17:27 +01:00
 
-clocksource/drivers/pistachio: Fix -Wunused-but-set-variable warning
+clocksource/drivers/timer-imx-sysctr: Set cpumask to cpu_possible_mask
 
-Variable 'overflow' set but not used, but this is the intended behavior.
-The hardware only updates the counter register after the overflow
-register read. However, the value of overflow is not actually needed.
+The syctr interrupt could set the affinity to any cores in the
+SoC. However, the default affinity is set to cpu 0.
 
-Link: https://lore.kernel.org/lkml/202111200402.afQsussU-lkp@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
-Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
-Link: https://lore.kernel.org/r/20211123192524.1038304-1-dfustini@baylibre.com
+This timer will be used as broadcast timer on all the i.MX
+SoCs. Because DYNIRQ flag is set, the core time framework will runtime
+set the interrupt affinity to the cores that needs to wake up and the
+cpumask will runtime set to the core that will be wake up. So even the
+sysctr initialization use cpumask 0, there is no issue, the current
+patch is just use cpu_possible_mask to show the fact that the timer
+supports routed to all the cpu cores and nothing else.
+
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/20211201125030.2307746-2-peng.fan@oss.nxp.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/timer-pistachio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clocksource/timer-imx-sysctr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/timer-pistachio.c b/drivers/clocksource/timer-pistachio.c
-index 6f37181..69c069e 100644
---- a/drivers/clocksource/timer-pistachio.c
-+++ b/drivers/clocksource/timer-pistachio.c
-@@ -71,7 +71,8 @@ static u64 notrace
- pistachio_clocksource_read_cycles(struct clocksource *cs)
- {
- 	struct pistachio_clocksource *pcs = to_pistachio_clocksource(cs);
--	u32 counter, overflow;
-+	__maybe_unused u32 overflow;
-+	u32 counter;
- 	unsigned long flags;
+diff --git a/drivers/clocksource/timer-imx-sysctr.c b/drivers/clocksource/timer-imx-sysctr.c
+index 2b309af..55a8e19 100644
+--- a/drivers/clocksource/timer-imx-sysctr.c
++++ b/drivers/clocksource/timer-imx-sysctr.c
+@@ -119,7 +119,7 @@ static struct timer_of to_sysctr = {
  
- 	/*
+ static void __init sysctr_clockevent_init(void)
+ {
+-	to_sysctr.clkevt.cpumask = cpumask_of(0);
++	to_sysctr.clkevt.cpumask = cpu_possible_mask;
+ 
+ 	clockevents_config_and_register(&to_sysctr.clkevt,
+ 					timer_of_rate(&to_sysctr),

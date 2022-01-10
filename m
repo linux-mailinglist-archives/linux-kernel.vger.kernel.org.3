@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE1948A1CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C490848A1CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240933AbiAJVVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:21:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45887 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240270AbiAJVVw (ORCPT
+        id S241335AbiAJVWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:22:21 -0500
+Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:45838
+        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241317AbiAJVWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:21:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641849712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=gHA8meZUmBSNpJu5bEvfBdiKNFm5MvkjuwdU2BAWhY8=;
-        b=FFqmhPnnIwG2jNEr1yAwV8vbcFMd8v8iseCo8WmdHXGIphzMOWhxjIgFJDCNF28kgugXSx
-        yL3LgaOP+77wErms6aKQcQnn4Mb/3ekkHG8sEitH+Xj4QUrFBrFsd2wFDW9pHh3D8REKN0
-        wq7qyjlG/Tfto6pTfhjFFOGwoddVfKw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-WE9ci8-4PqOOge6Sld6WUA-1; Mon, 10 Jan 2022 16:21:48 -0500
-X-MC-Unique: WE9ci8-4PqOOge6Sld6WUA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0D643835E22;
-        Mon, 10 Jan 2022 21:21:48 +0000 (UTC)
-Received: from redhat.com (unknown [10.15.80.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B672F5BE36;
-        Mon, 10 Jan 2022 21:21:47 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 15:21:45 -0600
-From:   David Teigland <teigland@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] dlm updates for 5.17
-Message-ID: <20220110212145.GA19682@redhat.com>
+        Mon, 10 Jan 2022 16:22:20 -0500
+Received: from integral2.. (unknown [180.242.102.163])
+        by gnuweeb.org (Postfix) with ESMTPSA id BF346C165A;
+        Mon, 10 Jan 2022 21:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
+        s=default; t=1641849738;
+        bh=VioQWJKP0JFibgNf6r3ecMTUwAMykd+0w2zRW0DEPbc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ATm98TvbFeLr1a5Zj1upVadR3qwhFUobqKdQ75Wm8GGNOdDAN57Jb7WzVSReNac/Q
+         y4y5Cf/Pj8kJUS27lEVl7I3CbxbjdAAahCvo/LKQeMnS3QkS0yFUjSogZc488yiHkY
+         HIKKRvBAkSCa00eXhTcQKKNcxAVmuKFcQUZ3yvRdS4GediKDWg+aW+1KW2wRENGW9H
+         sfGh8964Ctl2JgoEv8JNUuz5Qi6kiY+vfdcLCtvBTU4aXGeFWqQFfOCIRMC6M/qtxP
+         LqYxY3WrWucUee38HKjm0/m8uKPqAW/bkXGc/5MZpdhKDL2xClXiptm4uw6lQfNrKb
+         tlhwF9jIwvcAQ==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, Ingo Molnar <mingo@elte.hu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, x86ml <x86@kernel.org>,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>
+Subject: [PATCH v1] x86/delay: Fix the wrong asm constraint in `delay_loop()`
+Date:   Tue, 11 Jan 2022 04:21:59 +0700
+Message-Id: <20220110212159.1567280-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+The asm constraint does not reflect that the asm statement can modify
+the value of @loops. But the asm statement in delay_loop() does change
+the @loops.
 
-Please pull dlm updates from tag:
+If by any chance the compiler inlines this function, it may clobber
+random stuff (e.g. local variable, important temporary value in reg,
+etc.).
 
-git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-5.17
+Fortunately, delay_loop() is only called indirectly (so it can't
+inline), and then the register it clobbers is %rax (which is by the
+nature of the calling convention, it's a caller saved register), so it
+didn't yield any bug.
 
-This set includes the normal collection of minor fixes and
-cleanups, new kmem caches for network messaging structs,
-a start on some basic tracepoints, and some new debugfs
-files for inserting test messages.
+^ That shouldn't be an excuse for using the wrong constraint anyway.
 
-(I just noticed that I failed to rebase this after skipping the
-last merge window, but it appears to merge fine.)
+This changes "a" (as an input) to "+a" (as an input and output).
 
-Thanks,
-Dave
+Fixes: e01b70ef3eb3080fecc35e15f68cd274c0a48163 ("x86: fix bug in arch/i386/lib/delay.c file, delay_loop function")
+Cc: Ingo Molnar <mingo@elte.hu>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: lkml <linux-kernel@vger.kernel.org>
+Cc: x86ml <x86@kernel.org>
+Cc: GNU/Weeb Mailing List <gwml@gnuweeb.org>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ arch/x86/lib/delay.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/lib/delay.c b/arch/x86/lib/delay.c
+index 65d15df6212d..0e65d00e2339 100644
+--- a/arch/x86/lib/delay.c
++++ b/arch/x86/lib/delay.c
+@@ -54,8 +54,8 @@ static void delay_loop(u64 __loops)
+ 		"	jnz 2b		\n"
+ 		"3:	dec %0		\n"
+ 
+-		: /* we don't need output */
+-		:"a" (loops)
++		: "+a" (loops)
++		:
+ 	);
+ }
+ 
 
-Alexander Aring (31):
-      fs: dlm: remove obsolete INBUF define
-      fs: dlm: fix small lockspace typo
-      fs: dlm: debug improvements print nodeid
-      fs: dlm: remove check SCTP is loaded message
-      fs: dlm: move version conversion to compile time
-      fs: dlm: use dlm_recovery_stopped instead of test_bit
-      fs: dlm: use dlm_recovery_stopped in condition
-      fs: dlm: make dlm_callback_resume quite
-      fs: dlm: initial support for tracepoints
-      fs: dlm: trace socket handling
-      fs: dlm: requestqueue busy wait to event based wait
-      fs: dlm: ls_count busy wait to event based wait
-      fs: dlm: let handle callback data as void
-      fs: dlm: add debugfs rawmsg send functionality
-      fs: dlm: allow create lkb with specific id range
-      fs: dlm: add lkb debugfs functionality
-      fs: dlm: add lkb waiters debugfs functionality
-      fs: dlm: filter user dlm messages for kernel locks
-      fs: dlm: remove double list_first_entry call
-      fs: dlm: fix potential buffer overflow
-      fs: dlm: don't call kernel_getpeername() in error_report()
-      fs: dlm: replace use of socket sk_callback_lock with sock_lock
-      fs: dlm: fix build with CONFIG_IPV6 disabled
-      fs: dlm: use list_empty() to check last iteration
-      fs: dlm: check for pending users filling buffers
-      fs: dlm: use event based wait for pending remove
-      fs: dlm: remove wq_alloc mutex
-      fs: dlm: memory cache for midcomms hotpath
-      fs: dlm: memory cache for writequeue_entry
-      fs: dlm: memory cache for lowcomms hotpath
-      fs: dlm: print cluster addr if non-cluster node connects
-
-Zhang Mingyu (1):
-      fs: dlm:Remove unneeded semicolon
-
-
- fs/dlm/ast.c               |  16 ++-
- fs/dlm/debug_fs.c          |  96 ++++++++++++++++-
- fs/dlm/dir.c               |   3 +-
- fs/dlm/dlm_internal.h      |  12 +--
- fs/dlm/lock.c              | 109 +++++++++++++++++--
- fs/dlm/lock.h              |   4 +
- fs/dlm/lockspace.c         |  38 ++++---
- fs/dlm/lowcomms.c          | 209 +++++++++++++++++++-----------------
- fs/dlm/lowcomms.h          |   6 +-
- fs/dlm/main.c              |   3 +
- fs/dlm/member.c            |   3 +-
- fs/dlm/memory.c            |  68 +++++++++++-
- fs/dlm/memory.h            |   6 ++
- fs/dlm/midcomms.c          |  85 ++++++++++++---
- fs/dlm/midcomms.h          |   3 +
- fs/dlm/rcom.c              |   2 +-
- fs/dlm/recoverd.c          |   3 +-
- fs/dlm/requestqueue.c      |  17 ++-
- include/trace/events/dlm.h | 260 +++++++++++++++++++++++++++++++++++++++++++++
- 19 files changed, 770 insertions(+), 173 deletions(-)
- create mode 100644 include/trace/events/dlm.h
+base-commit: bf4eebf8cfa2cd50e20b7321dfb3effdcdc6e909
+-- 
+2.32.0
 

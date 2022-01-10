@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F0D489CE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D43E489CF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbiAJP5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:57:02 -0500
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:34702 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbiAJP45 (ORCPT
+        id S236834AbiAJP6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:58:37 -0500
+Received: from mail-ua1-f42.google.com ([209.85.222.42]:34594 "EHLO
+        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236654AbiAJP6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:56:57 -0500
-Received: by mail-ua1-f48.google.com with SMTP id y4so24281050uad.1;
-        Mon, 10 Jan 2022 07:56:57 -0800 (PST)
+        Mon, 10 Jan 2022 10:58:36 -0500
+Received: by mail-ua1-f42.google.com with SMTP id y4so24290577uad.1;
+        Mon, 10 Jan 2022 07:58:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HKrDGNi+gg98U9bw/lL+NYbJMypwOOc8TZbuy5d3uxA=;
-        b=hBz8IYd9oaiEiQbgO0QloKBXEr9LRsBXWzlU3fzqZNZcfvbWKzd3q+xL6vVMvnxrEs
-         CMHaIj5A1uTPg7Rcvgfff5JZJmpnJufAPJ/bGurfyAyCYUKVDCGx90CoZuqiO3zyZWty
-         WMNhCKRMxGZWMZIkvJiYw7xujzi3ekVKBSQz0f0NRBBSAequmy5CfFwXVP/Ybw2Qh0q6
-         rgkNCW49WjwnYJsTFvZTb9Rrr104Q4k4xh3zyGruFu8Vx7AZ4ESlzk7FHL07Vn0sTVD1
-         55GHHUOe0hhhneFvJkPblyTcQRiHx/fobzNz9xEfBdnx3eii6QY7GyDU8SWCF+rQ6gpl
-         vUCw==
-X-Gm-Message-State: AOAM533/qY3tlR8q24v+oaW1HITABCNL3wSxvPDlxFKsj9q7kIvvPedo
-        i3gG/EP6okfC+10UqGhJrKlAZmXef8dYgw==
-X-Google-Smtp-Source: ABdhPJzYq9Ekrgn9e4D+tWP1peUVNa6iZ+q7Jd2K/m2PegnQVzCKb30XEYZ9/326+Mwh5DjPKwOwqg==
-X-Received: by 2002:ab0:3402:: with SMTP id z2mr160179uap.56.1641830216926;
-        Mon, 10 Jan 2022 07:56:56 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id h2sm4449914vsj.5.2022.01.10.07.56.56
+        bh=YMgV+mDX/K3qcOomX1PVvdIm2AvlPzqwI7apstT0jDc=;
+        b=7hhJ89Z2m7jVUem1mmSgv5OGbK1KIILTVdyJgkcfcotL4TAnpAX2elh+GqW6eN13om
+         nTjHnxkHrN0dgEUmqaxy8gmblFIvSpneG3F10TBoJWOpkFEgTXO0ETARhdGQIfHdAJ5y
+         JUatgCxD5i0N/IxPuIokYqdj+7twIE1fZ2wBNNhywgeSZxBBk7M7fbv+H3NdFvYQ0N4i
+         llEN/5q+1g57UlBhD+gtj5ynzkLo2nSZ8kPAFbH/Xjg8lgoe3kZ5mGGZAGGD4eAqWRwk
+         Nkefu0zYX4pckkfr34KHCjXduLxWf+DhlvEEWouM9HpalK8q2mhY+oFYkEQ9ibozFw8y
+         yxfw==
+X-Gm-Message-State: AOAM530Xj9DJm+sV9orDZqjyp4zPszNLMwkwqemguz+fVn2rmIoDJL5V
+        u3oixoRtYQEGSZvS4+mxALACKEEIHpXclQ==
+X-Google-Smtp-Source: ABdhPJyWN4B4eZMiBcSg1cwVCQ7atzYk2KSZ/RugCIOb2Ux3wrz3PnhJ0UE2mkY0V7s9svpKlYCO1w==
+X-Received: by 2002:a67:cb0a:: with SMTP id b10mr235721vsl.0.1641830315145;
+        Mon, 10 Jan 2022 07:58:35 -0800 (PST)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id z8sm1399286vsi.15.2022.01.10.07.58.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 07:56:56 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id m15so9867992uap.6;
-        Mon, 10 Jan 2022 07:56:56 -0800 (PST)
-X-Received: by 2002:ab0:4d5a:: with SMTP id k26mr154723uag.122.1641830216111;
- Mon, 10 Jan 2022 07:56:56 -0800 (PST)
+        Mon, 10 Jan 2022 07:58:34 -0800 (PST)
+Received: by mail-ua1-f51.google.com with SMTP id r15so24296627uao.3;
+        Mon, 10 Jan 2022 07:58:34 -0800 (PST)
+X-Received: by 2002:a67:e985:: with SMTP id b5mr182967vso.77.1641830314339;
+ Mon, 10 Jan 2022 07:58:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226082530.2245198-4-nikita.yoush@cogentembedded.com> <20211226153349.2296024-1-nikita.yoush@cogentembedded.com>
-In-Reply-To: <20211226153349.2296024-1-nikita.yoush@cogentembedded.com>
+References: <20211226082530.2245198-1-nikita.yoush@cogentembedded.com> <20211226082530.2245198-2-nikita.yoush@cogentembedded.com>
+In-Reply-To: <20211226082530.2245198-2-nikita.yoush@cogentembedded.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jan 2022 16:56:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUJfq+nFFMoiPiTt1=Ny9zOm-O1EAmq3n56n4RJ6H8tdA@mail.gmail.com>
-Message-ID: <CAMuHMdUJfq+nFFMoiPiTt1=Ny9zOm-O1EAmq3n56n4RJ6H8tdA@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v2] arm64: dts: renesas: add MOST device
+Date:   Mon, 10 Jan 2022 16:58:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV+Yb1As-2fjq+1eeUEiTo21OH+aUQwEcSCAEErDh2A7w@mail.gmail.com>
+Message-ID: <CAMuHMdV+Yb1As-2fjq+1eeUEiTo21OH+aUQwEcSCAEErDh2A7w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] staging: most: dim2: update renesas compatible string
 To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,53 +62,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Nikita,
 
-On Sun, Dec 26, 2021 at 4:34 PM Nikita Yushchenko
+On Sun, Dec 26, 2021 at 9:25 AM Nikita Yushchenko
 <nikita.yoush@cogentembedded.com> wrote:
-> This patch adds mlp device to dtsi files for R-Car Gen3 SoCs that have
-> it.
+> Use "renesas,rcar-gen3-mlp" instead of "rcar,medialb-dim2"
+> - the documented vendor prefix for Renesas is "renesas,"
+> - existing r-car devices use "rcar-genN-XXX" pattern.
+>
+> There are currently no in-tree users to update.
 >
 > Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-> ---
-> Change from v1:
-> - fix power domain ids so all dtbs build properly
 
-Thanks for the update!
+Thanks for your patch!
 
-> --- a/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a77951.dtsi
-> @@ -2412,6 +2412,19 @@ ssi9: ssi-9 {
->                         };
->                 };
->
-> +               mlp: mlp@ec520000 {
-> +                       compatible = "renesas,rcar-gen3-mlp";
+> --- a/drivers/staging/most/dim2/dim2.c
+> +++ b/drivers/staging/most/dim2/dim2.c
+> @@ -1086,7 +1086,7 @@ static const struct of_device_id dim2_of_match[] = {
+>                 .data = plat_data + RCAR_H2
+>         },
+>         {
+> -               .compatible = "rcar,medialb-dim2",
+> +               .compatible = "renesas,rcar-gen3-mlp",
+>                 .data = plat_data + RCAR_M3
+>         },
 
-No SoC-specific compatible value?
+Looks sane, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> +                       reg = <0 0xec520000 0 0x800>;
-> +                       interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-> +                               <GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-> +                               <GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-> +                               <GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-> +                               <GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-
-What is the purpose of the various interrupts?
-Perhaps you need interrupt-names?
-The driver seems to use only the first two, which is strange, as
-the second and third interrupt handle different channels.
-
-> +                       clocks = <&cpg CPG_MOD 802>;
-> +                       power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-
-Missing resets property?
-
-> +                       status = "disabled";
-> +               };
-> +
-
-The rest looks sane to me.  But without any DT binding documentation
-for this hardware block, this is hard to validate, and not yet ready for
-upstream integration.
+But there is no DT binding documentation covering this block :-(
 
 Gr{oetje,eeting}s,
 

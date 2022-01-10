@@ -2,267 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA30F489766
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2C948976B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244682AbiAJL1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:27:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:33070 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244686AbiAJL0p (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:26:45 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 869FB2B;
-        Mon, 10 Jan 2022 03:26:35 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.11.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E39EB3F5A1;
-        Mon, 10 Jan 2022 03:26:33 -0800 (PST)
-Date:   Mon, 10 Jan 2022 11:26:29 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     He Ying <heying24@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, marcan@marcan.st,
-        maz@kernel.org, joey.gouly@arm.com, pcc@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: Make CONFIG_ARM64_PSEUDO_NMI macro wrap all the
- pseudo-NMI code
-Message-ID: <YdwX5RTVbw8veM98@FVFF77S0Q05N>
-References: <20220107085536.214501-1-heying24@huawei.com>
- <Ydg939btY/bzEAe4@FVFF77S0Q05N>
- <bd82d240-34d7-4df9-650b-c039555f05e3@huawei.com>
+        id S244721AbiAJL2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244686AbiAJL2R (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:28:17 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D455BC061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:28:16 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id t135so3192230pgb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:28:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=utemb18I4UmK2LrbPSfcPcD597jTk6VYT3mFOoKeaoc=;
+        b=ggsIRsnUq/mhV5aadr6iTBU3uJwfxa1thjfK7oUt+oDotjaU1rG+aQBu9Jff2KypYT
+         KjqW2P9Mqn6Qi4uO+u5pV5vvwMcAYbTP0pgKeylfySIIlTqrMbQSA92b6mTVSAD2Juzv
+         H8bE1zXjYCRHTeM2vOHo8wgHPSIvbZKPTxtIs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=utemb18I4UmK2LrbPSfcPcD597jTk6VYT3mFOoKeaoc=;
+        b=m1imZKhrU0qNuf5VwCBPeMRWYKp1emN06aGmxJCkBebLerTBZ+PZYXpbHKeftivVFw
+         8AyzYXfavJ8NwxLJx5Ci+/NJVL3934nD6sj5Z4YRmdfqBHcO8HcS1L3osXqNn2UkZ1g3
+         zJZTYBumLEqN9iuradFZ/gzfkgTgT3rPcKUBENQepzx39ajui8Y/TXFAx3eHvOaf8m0g
+         p0FslETyZQb0XrO4UUnoRZPfUTK8T/23nTl1pw+uPna7Hutr7lIIz5snCuxsKQLBKvsU
+         j4KicvKFCY5518yO1/nHEqi4Mwuf8XxFfAODIZM6piGcDMiXiT12G354v6qwI+fKUh2L
+         B0Lw==
+X-Gm-Message-State: AOAM530fEgWkuWRKheBX8XX3Q7L4b5g+S4rayIsuIT9s25cfMla/3wkv
+        /IJToqR8yOxzbVKH1e2KpTdlAg==
+X-Google-Smtp-Source: ABdhPJzoYoya0JSj5ipnincmbl8HOThk4gg0Tywzzy8HehjYJj+8YseXnmiR30r/+yK/uo0VPkiMBQ==
+X-Received: by 2002:a63:7c10:: with SMTP id x16mr24020734pgc.128.1641814096358;
+        Mon, 10 Jan 2022 03:28:16 -0800 (PST)
+Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id h19sm6572579pfh.30.2022.01.10.03.28.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 03:28:15 -0800 (PST)
+Message-ID: <86f0c8a6-5c58-e59f-9198-934ed2f12a7f@broadcom.com>
+Date:   Mon, 10 Jan 2022 12:28:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd82d240-34d7-4df9-650b-c039555f05e3@huawei.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 17/35] brcmfmac: pcie: Provide a buffer of random bytes
+ to the device
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-18-marcan@marcan.st>
+ <3844c03f-627b-8bf6-f526-8fda3e7892e0@broadcom.com>
+ <5785c77d-9746-4b3f-b1dc-63270a2b1e73@marcan.st>
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <5785c77d-9746-4b3f-b1dc-63270a2b1e73@marcan.st>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000000454c505d538a266"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:00:43AM +0800, He Ying wrote:
-> Hi Mark,
+--0000000000000454c505d538a266
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 1/10/2022 12:09 PM, Hector Martin wrote:
+> On 2022/01/10 18:11, Arend van Spriel wrote:
+>> On 1/4/2022 8:26 AM, Hector Martin wrote:
+>>> Newer Apple firmwares on chipsets without a hardware RNG require the
+>>> host to provide a buffer of 256 random bytes to the device on
+>>> initialization. This buffer is present immediately before NVRAM,
+>>> suffixed by a footer containing a magic number and the buffer length.
+>>>
+>>> This won't affect chips/firmwares that do not use this feature, so do it
+>>> unconditionally.
+>>
+>> Not sure what the general opinion is here, but pulling random bytes for
+>> naught seems wasteful to me. So if there is a way of knowing it is
+>> needed please make it conditional.
 > 
-> I'm just back from the weekend and sorry for the delayed reply.
+> We could gate it on specific chips only, if you don't mind maintaining a
+> list of those. AIUI that would be all the T2 platform chips or so (the
+> newer two don't seem to need it).
 > 
-> 
-> 在 2022/1/7 21:19, Mark Rutland 写道:
-> > On Fri, Jan 07, 2022 at 03:55:36AM -0500, He Ying wrote:
-> > > Our product has been updating its kernel from 4.4 to 5.10 recently and
-> > > found a performance issue. We do a bussiness test called ARP test, which
-> > > tests the latency for a ping-pong packets traffic with a certain payload.
-> > > The result is as following.
-> > > 
-> > >   - 4.4 kernel: avg = ~20s
-> > >   - 5.10 kernel (CONFIG_ARM64_PSEUDO_NMI is not set): avg = ~40s
-> > Have you tested with a recent mainline kernel, e.g. v5.15?
-> 
-> Actuallly no, that's because this test is only available for the product
-> environment and
-> 
-> we don't have an available 5.15 kernel for it yet.
+> Alternatively we could just do this only if an Apple OTP is detected.
+> That is already implicitly gated by the OTP offset chip list.
 
-Ok; do you see anything comparable with any tests available to upstream
-developers? e.g. hackbench or `perf bench sched` ?
+That sounds like a good approach.
 
-> > Is this test publicly available, and can you say which hardrware (e.g. which
-> > CPU implementation) you're testing with?
-> 
-> Actually no. The test is only available for our product environment now. We
-> are testing
-> 
-> with hisilicon 1213 (4 ARM Cortex-A72 cores).
+Regards,
+Arend
 
-Thanks for the CPU info; there are a number of other Cortex-A72 platforms out
-there, so it might be possible to reproduce the behaviour elsewhere.
+--0000000000000454c505d538a266
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> > > I have been just learning arm64 pseudo-NMI code and have a question,
-> > > why is the related code not wrapped by CONFIG_ARM64_PSEUDO_NMI?
-> > The code in question is all patched via alternatives, and when
-> > CONFIG_ARM64_PSEUDO_NMI is not selected, the code was expected to only have the
-> > overhead of the regular DAIF manipulation.
-> I don't understand alernatives very well and I'll apreciate it if you can
-> explain it a bit more.
-
-Code using alternatives is patched at runtime, so for:
-
-	ALTERNATIVE(x, y, cap)
-
-... the `x` instructions will be inline in the code, and the `y` instructions
-will be placed in a separate linker section. If the `cap` capability is
-detected, the `y` instructions will be copied over the `x` instructions.
-
-So for:
-
-| asm volatile(ALTERNATIVE(
-|         "msr    daifclr, #3             // arch_local_irq_enable",
-|         __msr_s(SYS_ICC_PMR_EL1, "%0"),
-|         ARM64_HAS_IRQ_PRIO_MASKING)
-|         :
-|         : "r" ((unsigned long) GIC_PRIO_IRQON)
-|         : "memory");
-
-... where ARM64_HAS_IRQ_PRIO_MASKING is not detected, the inline instructions
-will be:
-
-| msr    daifclr, #3             // arch_local_irq_enable 
-
-A separate linker section will contain:
-... and a separate linker section will contain:
-
-| __msr_s(SYS_ICC_PMR_EL1, "%0"
-
-... and some metadata will be recorded in a `struct alt_instr`, which will be
-unused and will take some space, but should have no runtime overhead -- the
-runtime cost should only be the `msr daifclr, #3` instruction.
-
-> > > I wonder if this brings some performance regression.
-> > > 
-> > > First, I make this patch and then do the test again. Here's the result.
-> > > 
-> > >   - 5.10 kernel with this patch not applied: avg = ~40s
-> > >   - 5.10 kernel with this patch applied: avg = ~23s
-> > > 
-> > > Amazing! Note that all kernel is built with CONFIG_ARM64_PSEUDO_NMI not
-> > > set. It seems the pseudo-NMI feature actually brings some overhead to
-> > > performance event if CONFIG_ARM64_PSEUDO_NMI is not set.
-> > I'm surprised the overhead is so significant; as above this is all patched in
-> > and so the overhead when this is disabled is expected to be *extremely* small.
-> > 
-> > For example, wjen CONFIG_ARM64_PSEUDO_NMI, in arch_local_irq_enable():
-> > 
-> > * The portion under the system_has_prio_mask_debugging() test will be removed
-> >    entirely by the compiler, as this internally checks
-> >    IS_ENABLED(CONFIG_ARM64_PSEUDO_NMI).
-> > 
-> > * The assembly will be left as a write to DAIFClr. The only additional cost
-> >    should be that of generating GIC_PRIO_IRQON into a register.
-> > 
-> > * The pmr_sync() will be removed entirely by the compiler as is defined
-> >    conditionally dependent on CONFIG_ARM64_PSEUDO_NMI.
-> > 
-> > I can't spot an obvious issue with that or ther other cases. In the common case
-> > those add no new instructions, and in the worst case they only add NOPs.
-> 
-> Thanks for your detailed explaination! Actually I can't understand the
-> result exactly.
-> 
-> I build two 5.10 kernel images with this patch applied or not and objdump
-> them. Indeed, the disassembles of 'arch_local_irq_restore' are the same. Do
-> you have any ideas how we can find the root cause why this patch improves the
-> performance so much?
-> 
-> However, the test result is trustworthy because we do it many times and the
-> result is always repeatable.
-
-Due to the large numbers, I suspect this must be due to a specific fast-path,
-and it's possible that this is due to secondary factors (e.g. alignment of
-code) rather than the pseudo-NMK code itself.
-
-We need to narrow down *where* time is being spent. Since it appears that this
-is related to the local IRQ state management, it isn't likely that we can
-determine that reliably with the PMU. Given that, I think the first step is to
-reproduce the result elsewhere, for which we will need some plublicly available
-test-case.
-
-> > > Furthermore, I find the feature also brings some overhead to vmlinux size.
-> > > I build 5.10 kernel with this patch applied or not while
-> > > CONFIG_ARM64_PSEUDO_NMI is not set.
-> > > 
-> > >   - 5.10 kernel with this patch not applied: vmlinux size is 384060600 Bytes.
-> > >   - 5.10 kernel with this patch applied: vmlinux size is 383842936 Bytes.
-> > > 
-> > > That means arm64 pseudo-NMI feature may bring ~200KB overhead to
-> > > vmlinux size.
-> > I suspect that's just the (unused) alternatives, and we could improve that by
-> > passing the config into the alternative blocks.
-> 
-> Do you mean the sections generated by the alternatives? I don't understand
-> alernatives very well and I'll apreciate it if you can explain it a bit
-> more.
-
-Yes; I meant the sections generated to hold the alternatives code and the
-alternatives metadata.
-
-
-> > > Above all, arm64 pseudo-NMI feature brings some overhead to vmlinux size
-> > > and performance even if config is not set. To avoid it, add macro control
-> > > all around the related code.
-> > > 
-> > > Signed-off-by: He Ying <heying24@huawei.com>
-> > > ---
-> > >   arch/arm64/include/asm/irqflags.h | 38 +++++++++++++++++++++++++++++--
-> > >   arch/arm64/kernel/entry.S         |  4 ++++
-> > >   2 files changed, 40 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/arch/arm64/include/asm/irqflags.h b/arch/arm64/include/asm/irqflags.h
-> > > index b57b9b1e4344..82f771b41cf5 100644
-> > > --- a/arch/arm64/include/asm/irqflags.h
-> > > +++ b/arch/arm64/include/asm/irqflags.h
-> > > @@ -26,6 +26,7 @@
-> > >    */
-> > >   static inline void arch_local_irq_enable(void)
-> > >   {
-> > > +#ifdef CONFIG_ARM64_PSEUDO_NMI
-> > >   	if (system_has_prio_mask_debugging()) {
-> > >   		u32 pmr = read_sysreg_s(SYS_ICC_PMR_EL1);
-> > > @@ -41,10 +42,18 @@ static inline void arch_local_irq_enable(void)
-> > >   		: "memory");
-> > >   	pmr_sync();
-> > > +#else
-> > > +	asm volatile(
-> > > +		"msr	daifclr, #3		// arch_local_irq_enable"
-> > > +		:
-> > > +		:
-> > > +		: "memory");
-> > > +#endif
-> > I'm happy to rework this to improve matters, but I am very much not happy with
-> > duplicating the logic for the !PSEUDO_NMI case. Adding more ifdeffery and
-> > copies of that is not acceptable.
-> I agree. Adding these ifdeffery is a bit ugly. Let's see if there are some
-> better ways.
-> > 
-> > Instead, can you please try changing the alternative to also take the config,
-> > e.g. here have:
-> > 
-> > |       asm volatile(ALTERNATIVE(
-> > |               "msr    daifclr, #3             // arch_local_irq_enable",
-> > |               __msr_s(SYS_ICC_PMR_EL1, "%0"),
-> > |               ARM64_HAS_IRQ_PRIO_MASKING,
-> > |               CONFIG_ARM64_PSEUDO_NMI)
-> > |               :
-> > |               : "r" ((unsigned long) GIC_PRIO_IRQON)
-> > |               : "memory");
-> > 
-> > ... and see if that makes a significant difference?
-> > 
-> > Likewise for the other casees.
-> 
-> OK, I'll try it. But I have some questions. Here's the comment of
-> ALERNATIVE:
-> 
-> /*
->  * Usage: asm(ALTERNATIVE(oldinstr, newinstr, feature));
->  *
->  * Usage: asm(ALTERNATIVE(oldinstr, newinstr, feature, CONFIG_FOO));
->  * N.B. If CONFIG_FOO is specified, but not selected, the whole block
->  *      will be omitted, including oldinstr.
->  */
-> 
-> If CONFIG_FOO is not selected, the whole block will be omitted including
-> oldinstr.
-> 
-> But we still want the oldinstr in this situation. Do I misunderstand
-> something?
-
-Sorry; you are right, and my suggestion was broken.
-
-I'll need to have a think about this; we might be able to rework this to use a
-static key instead, but IIRC last time I tried there were issues with that
-approach. I have some (old) work-in-progress patches at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/daif-rework
-
-I suspect I won't have time to renew that in the near future, but an approach
-like that might be worthwhile.
-
-Thanks,
-Mark.
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC4coLsW2rxE1YFy6ch
+hTw+pJgUec1mYHUHWBDcUbjVqzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMTAxMTI4MTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAIk8mzPq57bg3UL0tYS4E+MLUeMrikmyfKJva
+S24NHptyvfVP5zmLGzK6Wkdha39WQ5A933bxZA5/ODw+98GeLL/xJWiUWa/NLdxXWzr3li0nG8m0
+nmbu08MsfHB/8R0NKkXntNx/SZVXQ+mLCMrgshXeQ3CBdEHrCtgExCHbdvURy6gIPSalWLQFZtJF
+vDAJDwLYeReaMyKoR1rSlf1xWBQZFRlJuXaZL1psNN1jpMir/IQZwrZcKhCe50ybCvPBPUkKVDUm
+2TxX/Z8mWcSlZBj8frkgfoSoGEoy8knuqZKtdVCSAIkXNHAvzetyjECaEXGGPpu5DX5SI/S3VDcS
+Rg==
+--0000000000000454c505d538a266--

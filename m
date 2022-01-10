@@ -2,187 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A2148A378
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4393648A37B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345666AbiAJXOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:14:01 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45954 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242143AbiAJXN7 (ORCPT
+        id S1345674AbiAJXPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241981AbiAJXPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:13:59 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AMFoPM027207;
-        Mon, 10 Jan 2022 23:13:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=D8siIzkqJoeELYJGDLZe7vaow3udbOOslyt1pFw8ES8=;
- b=k67tpk/hY5mae+2V7Uo+WRuHf3Dmwrs1YliXvyv14pdPTsZgp/Dzd+ZmmiP3QLAxfaEq
- dXrDY8p8KK7B5MMU843LnHMkdID1A0J5uqeb8SiK8sBjmwMIfAep8YLEiung8xVYHN3O
- DTz274+jDI7f53LXv3AhusODNFl0qjEbfJNiFRboZH7IeIVaiClhrZikcGdLLp43qjsm
- W5GVHIKasAqBYWSrPq/ahbKWjhGqvCvrqWb/z3pCIsIZtr/OIgm6t+9D36TMOq0Uj8TY
- mch+Nec0OBZ6pZ84jcmKlbnqKg6MUhjya2AKvDZi7UiRIUe5/YIA/64gXPXZRS8XoU4p uQ== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmjee4yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 23:13:48 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ANBiFw006853;
-        Mon, 10 Jan 2022 23:13:47 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02dal.us.ibm.com with ESMTP id 3df28a0y51-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 23:13:47 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ANDkA430277904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 23:13:46 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7B05AB2065;
-        Mon, 10 Jan 2022 23:13:46 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6DC1B2064;
-        Mon, 10 Jan 2022 23:13:45 +0000 (GMT)
-Received: from [9.211.117.94] (unknown [9.211.117.94])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jan 2022 23:13:45 +0000 (GMT)
-Message-ID: <82083174-fccb-a9e2-616f-7a706958e2da@linux.ibm.com>
-Date:   Mon, 10 Jan 2022 17:13:45 -0600
+        Mon, 10 Jan 2022 18:15:02 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D960C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:15:02 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id h1so14385174pls.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tXD6ds/wJNNNR6+gsUz5E9zXmo4UgZdSVHvbR14gs+Y=;
+        b=YPI2hPSopRnZCPT/iL0sax0Wp52cZrLsqy1lEM2vxAmASicbqppqQjMXU58P3odr1A
+         rMKoe01Qp3ZoNKOytAZat0ly1xG5QHrYZj6s6tOJJaORR/N+EHIu/IVltY9Em74QRhjD
+         mh2sY2UOo/q85QYIHEHzeVDNpTzSJwcLoxkO4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tXD6ds/wJNNNR6+gsUz5E9zXmo4UgZdSVHvbR14gs+Y=;
+        b=v8sBBShH0zMGFAPUALEqS78ipvHrJ8ov41FeAFt3RwcjZRqdF9ht8ryhO15J6kdOfM
+         x9R4eWU444J2EnHB6bYvXxsiAbrHLt4VGDjAQh7HRc3ZOzPcPsGxI/dQvB04oLNNei1K
+         CO1tkeUgyJ0hcJl3C+smOdGsc9qDgc4/eRBl+S/A151r1tcAnTnYw1Vy1bJjZr3ZRjq5
+         W3JTp8Z/3ACgRC+3r96wSQXpML7HKFc02XqCyzW4/sOrJ/Gf75qP3c/5MvOlZpLuPRpW
+         6jiX7Yof3LY9zwWcSiOwXqdcSnRLa/chK1QnIF0gw+pK2anoJwatdHIlanvmSTW0VUxH
+         RKiw==
+X-Gm-Message-State: AOAM532PadcpjklyIFExbUc16kfEoQXCDV7WW/2R5nwWDVwwJ2J1UDLx
+        3Lwsf9oC2u2kGqtSemng55z3lQ==
+X-Google-Smtp-Source: ABdhPJyHLbP73irp3jUBms2zRagRvjxwRqg6bBuffJjq2JpKWCStbbVpNXQWTOgbjb+4N8+j+rRqDQ==
+X-Received: by 2002:a17:90a:948c:: with SMTP id s12mr109699pjo.106.1641856501976;
+        Mon, 10 Jan 2022 15:15:01 -0800 (PST)
+Received: from kuabhs-cdev.c.googlers.com.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id z12sm6123924pga.28.2022.01.10.15.15.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 15:15:01 -0800 (PST)
+From:   Abhishek Kumar <kuabhs@chromium.org>
+To:     kvalo@codeaurora.org, ath10k@lists.infradead.org
+Cc:     pillair@codeaurora.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuabhs@chromium.org,
+        dianders@chromium.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH v2 1/2] ath10k: search for default BDF name provided in DT
+Date:   Mon, 10 Jan 2022 23:14:14 +0000
+Message-Id: <20220110231255.v2.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 2/2] fsi: scom: Remove retries in indirect scoms
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>, Jeremy Kerr <jk@ozlabs.org>,
-        Alistar Popple <alistair@popple.id.au>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20211207033811.518981-1-joel@jms.id.au>
- <20211207033811.518981-3-joel@jms.id.au>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20211207033811.518981-3-joel@jms.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: a-k1DRH2rNje-KbDslh399ah-GnPtvmF
-X-Proofpoint-ORIG-GUID: a-k1DRH2rNje-KbDslh399ah-GnPtvmF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_10,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 suspectscore=0 phishscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201100148
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There can be cases where the board-2.bin does not contain
+any BDF matching the chip-id+board-id+variant combination.
+This causes the wlan probe to fail and renders wifi unusable.
+For e.g. if the board-2.bin has default BDF as:
+bus=snoc,qmi-board-id=67 but for some reason the board-id
+on the wlan chip is not programmed and read 0xff as the
+default value. In such cases there won't be any matching BDF
+because the board-2.bin will be searched with following:
+bus=snoc,qmi-board-id=ff
+To address these scenarios, there can be an option to provide
+fallback default BDF name in the device tree. If none of the
+BDF names match then the board-2.bin file can be searched with
+default BDF names assigned in the device tree.
 
-On 12/6/21 21:38, Joel Stanley wrote:
-> In commit f72ddbe1d7b7 ("fsi: scom: Remove retries") the retries were
-> removed from get and put scoms. That patch missed the retires in get and
-> put indirect scom.
->
-> For the same reason, remove them from the scom driver to allow the
-> caller to decide to retry.
->
-> This removes the following special case which would have caused the
-> retry code to return early:
->
->   -       if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
->   -               return 0;
->
-> I believe this case is handled.
+The default BDF name can be set as:
+wifi@a000000 {
+	status = "okay";
+	qcom,ath10k-default-bdf = "bus=snoc,qmi-board-id=67";
+};
 
+Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2-00696-QCAHLSWMTPL-1
+Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+---
 
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
+Changes in v2: Fix printf formatting issue.
 
+ drivers/net/wireless/ath/ath10k/core.c | 30 ++++++++++++++++++++++++++
+ drivers/net/wireless/ath/ath10k/core.h |  5 +++++
+ drivers/net/wireless/ath/ath10k/qmi.c  |  4 ++++
+ 3 files changed, 39 insertions(+)
 
->
-> Fixes: f72ddbe1d7b7 ("fsi: scom: Remove retries")
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->   drivers/fsi/fsi-scom.c | 41 +++++++++++++++--------------------------
->   1 file changed, 15 insertions(+), 26 deletions(-)
->
-> diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-> index 3b427f7e9027..bcb756dc9866 100644
-> --- a/drivers/fsi/fsi-scom.c
-> +++ b/drivers/fsi/fsi-scom.c
-> @@ -145,7 +145,7 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
->   				   uint64_t addr, uint32_t *status)
->   {
->   	uint64_t ind_data, ind_addr;
-> -	int rc, retries, err = 0;
-> +	int rc, err;
->   
->   	if (value & ~XSCOM_DATA_IND_DATA)
->   		return -EINVAL;
-> @@ -156,19 +156,14 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
->   	if (rc || (*status & SCOM_STATUS_ANY_ERR))
->   		return rc;
->   
-> -	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
-> -		rc = __get_scom(scom, &ind_data, addr, status);
-> -		if (rc || (*status & SCOM_STATUS_ANY_ERR))
-> -			return rc;
-> +	rc = __get_scom(scom, &ind_data, addr, status);
-> +	if (rc || (*status & SCOM_STATUS_ANY_ERR))
-> +		return rc;
->   
-> -		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-> -		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
-> -		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
-> -			return 0;
-> +	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-> +	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
->   
-> -		msleep(1);
-> -	}
-> -	return rc;
-> +	return 0;
->   }
->   
->   static int put_indirect_scom_form1(struct scom_device *scom, uint64_t value,
-> @@ -188,7 +183,7 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
->   				   uint64_t addr, uint32_t *status)
->   {
->   	uint64_t ind_data, ind_addr;
-> -	int rc, retries, err = 0;
-> +	int rc, err;
->   
->   	ind_addr = addr & XSCOM_ADDR_DIRECT_PART;
->   	ind_data = (addr & XSCOM_ADDR_INDIRECT_PART) | XSCOM_DATA_IND_READ;
-> @@ -196,21 +191,15 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
->   	if (rc || (*status & SCOM_STATUS_ANY_ERR))
->   		return rc;
->   
-> -	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
-> -		rc = __get_scom(scom, &ind_data, addr, status);
-> -		if (rc || (*status & SCOM_STATUS_ANY_ERR))
-> -			return rc;
-> -
-> -		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-> -		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
-> -		*value = ind_data & XSCOM_DATA_IND_DATA;
-> +	rc = __get_scom(scom, &ind_data, addr, status);
-> +	if (rc || (*status & SCOM_STATUS_ANY_ERR))
-> +		return rc;
->   
-> -		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
-> -			return 0;
-> +	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-> +	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
-> +	*value = ind_data & XSCOM_DATA_IND_DATA;
->   
-> -		msleep(1);
-> -	}
-> -	return rc;
-> +	return 0;
->   }
->   
->   static int raw_put_scom(struct scom_device *scom, uint64_t value,
+diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
+index 8f5b8eb368fa..756856a8eed3 100644
+--- a/drivers/net/wireless/ath/ath10k/core.c
++++ b/drivers/net/wireless/ath/ath10k/core.c
+@@ -1081,6 +1081,32 @@ int ath10k_core_check_dt(struct ath10k *ar)
+ }
+ EXPORT_SYMBOL(ath10k_core_check_dt);
+ 
++int ath10k_core_parse_default_bdf_dt(struct ath10k *ar)
++{
++	struct device_node *node;
++	const char *board_name = NULL;
++
++	ar->id.default_bdf[0] = '\0';
++
++	node = ar->dev->of_node;
++	if (!node)
++		return -ENOENT;
++
++	of_property_read_string(node, "qcom,ath10k-default-bdf",
++				&board_name);
++	if (!board_name)
++		return -ENODATA;
++
++	if (strscpy(ar->id.default_bdf,
++		    board_name, sizeof(ar->id.default_bdf)) < 0)
++		ath10k_warn(ar,
++			    "default board name is longer than allocated buffer, board_name: %s; allocated size: %ld\n",
++			    board_name, sizeof(ar->id.default_bdf));
++
++	return 0;
++}
++EXPORT_SYMBOL(ath10k_core_parse_default_bdf_dt);
++
+ static int ath10k_download_fw(struct ath10k *ar)
+ {
+ 	u32 address, data_len;
+@@ -1441,6 +1467,10 @@ static int ath10k_core_fetch_board_data_api_n(struct ath10k *ar,
+ 	if (ret == -ENOENT && fallback_boardname2)
+ 		ret = ath10k_core_search_bd(ar, fallback_boardname2, data, len);
+ 
++	/* check default BDF name if provided in device tree */
++	if (ret == -ENOENT && ar->id.default_bdf[0] != '\0')
++		ret = ath10k_core_search_bd(ar, ar->id.default_bdf, data, len);
++
+ 	if (ret == -ENOENT) {
+ 		ath10k_err(ar,
+ 			   "failed to fetch board data for %s from %s/%s\n",
+diff --git a/drivers/net/wireless/ath/ath10k/core.h b/drivers/net/wireless/ath/ath10k/core.h
+index 9f6680b3be0a..1201bb7bb8ab 100644
+--- a/drivers/net/wireless/ath/ath10k/core.h
++++ b/drivers/net/wireless/ath/ath10k/core.h
+@@ -79,6 +79,9 @@
+ /* The magic used by QCA spec */
+ #define ATH10K_SMBIOS_BDF_EXT_MAGIC "BDF_"
+ 
++/* Default BDF board name buffer size */
++#define ATH10K_DEFAULT_BDF_BUFFER_SIZE 0x40
++
+ /* Default Airtime weight multipler (Tuned for multiclient performance) */
+ #define ATH10K_AIRTIME_WEIGHT_MULTIPLIER  4
+ 
+@@ -1102,6 +1105,7 @@ struct ath10k {
+ 		bool ext_bid_supported;
+ 
+ 		char bdf_ext[ATH10K_SMBIOS_BDF_EXT_STR_LENGTH];
++		char default_bdf[ATH10K_DEFAULT_BDF_BUFFER_SIZE];
+ 	} id;
+ 
+ 	int fw_api;
+@@ -1342,6 +1346,7 @@ int ath10k_core_register(struct ath10k *ar,
+ void ath10k_core_unregister(struct ath10k *ar);
+ int ath10k_core_fetch_board_file(struct ath10k *ar, int bd_ie_type);
+ int ath10k_core_check_dt(struct ath10k *ar);
++int ath10k_core_parse_default_bdf_dt(struct ath10k *ar);
+ void ath10k_core_free_board_files(struct ath10k *ar);
+ 
+ #endif /* _CORE_H_ */
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index 80fcb917fe4e..a57675308014 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -831,6 +831,10 @@ static int ath10k_qmi_fetch_board_file(struct ath10k_qmi *qmi)
+ 	if (ret)
+ 		ath10k_dbg(ar, ATH10K_DBG_QMI, "DT bdf variant name not set.\n");
+ 
++	ret = ath10k_core_parse_default_bdf_dt(ar);
++	if (ret)
++		ath10k_dbg(ar, ATH10K_DBG_QMI, "Default BDF name not set in device tree.\n");
++
+ 	return ath10k_core_fetch_board_file(qmi->ar, ATH10K_BD_IE_BOARD);
+ }
+ 
+-- 
+2.34.1.575.g55b058a8bb-goog
+

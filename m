@@ -2,162 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1B54898AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63784898B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245604AbiAJMdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S245548AbiAJMgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245544AbiAJMdL (ORCPT
+        with ESMTP id S245525AbiAJMgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:33:11 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E567CC06173F;
-        Mon, 10 Jan 2022 04:33:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id pf13so4664701pjb.0;
-        Mon, 10 Jan 2022 04:33:10 -0800 (PST)
+        Mon, 10 Jan 2022 07:36:16 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31259C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:36:15 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id u6so23198469uaq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:36:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LmM4UPDvSTD8BLbbDOd9jP1H2HunbATjZDOgTYVCrug=;
-        b=XmiEHMH1QWcjjYuF2od/gxB2qV0YD1OgIkbLb5fp2lLK9Vj7zf9ZpPDI8mcyfPA/H8
-         wfooPeJgFYGFgXEiuoTq0xH9FilA5xpJYq9lfrNg0Gd3qWm47SLLcgCw+44qnR/H7E5T
-         5aKC/FUq0JeqdDeemF5KoB38RJsXUPDFmOZNj4vJd3XqGQcs1xmT6GSCetBNxigzWiMy
-         VrOCvgu7RufaR3A7U8CU3IWL95nEbXVXPWeNM6W0Xf3JawpcjeaOoCXfEYYllM51sL1s
-         EtyekhlffoiFstjchIotVCF3jGMavtk1RiBjKnA/J3uHiKM/UwSwHiLDMz1WSOCu9HXe
-         p8Rw==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qFOfaEvokfZV1EFTfIDgkQYCii1N7VmjLFzadFiYr08=;
+        b=OWQBLpWCvBUPWP+FHu4XAALHaLD+dPwxfeKnbhpD4AHdmHJDjhuo97g+3ZspdOwYQm
+         nTYlJ7DEJsS7W1UnkbxqPdomss0M8VD/H8tAzQkhtrcIZRT7uHyEva5ykUFpsiqbUsgK
+         ih+VzNHukOrJQkUjXET57SmdPwz7X7gVOgS3oCUz71Evv5QVX8lSD9YYw79q12YDm5p8
+         1PaohPR1UhkJcTX2SZ7VneYDxg5YRDhFYBmgHMeUSDixBNbtEub3SFIZF3Tvk2Vy34hD
+         XoFs12/ioEQ9Ohy+R+wPcp2xVurTM7zp+WSGlpyXkWV7dAKnRxzrkrwes99FCLw8UYny
+         L/vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LmM4UPDvSTD8BLbbDOd9jP1H2HunbATjZDOgTYVCrug=;
-        b=u5XSzSKNrncTdTjFfHwnYzE04FCsL5Q+2Xvekrn3Ju2WH35fJbsqiEISoLXQZfdZAH
-         k/NgsqdPtj6vAiwil+WfR9NnAtWlFZOleLHW7OTtKp4UKeFKCDu/8ag7vsU0bRiiZrgy
-         lYUX6S+pUmX+E0hKEnTj17WFa4f0NZjy3QQ00iXIdhALbobz/EBpJJY4vcZ/SY5jp8rT
-         0xMOrNecidmjbA+BOFBGWQjReWW51ixVLehUZZgjiuiyXWp4MPuK3j0WSS18v2/aPXGI
-         kwlLVgeCwJVh81XYtq60UNl0mnfwscHAwGPQUT97G7dgyRgjDZqal74d5zUizm6PQTVp
-         qSPQ==
-X-Gm-Message-State: AOAM531RD4gD5WkXcXo6gIOK4LCFe1SNe7TSMThkz/oqR5C3PuJtjnAm
-        ZWPgscw0e6CY7F82VnKYKHg=
-X-Google-Smtp-Source: ABdhPJx9W0ixkxAqFR4HnB+WyVagX2I2F4MQAGqy+Ez2qaahuICuLmf+XZ9uX/wgYw2WLPniVTDh/w==
-X-Received: by 2002:a17:90a:ce92:: with SMTP id g18mr5218961pju.204.1641817990449;
-        Mon, 10 Jan 2022 04:33:10 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h8sm1156521pfv.4.2022.01.10.04.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 04:33:10 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     alexs@kernel.org
-Cc:     xu.xin16@zte.com.cn, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH 4/4] docs/zh_CN: Add zh_CN/vm/ksm.rst
-Date:   Mon, 10 Jan 2022 12:33:07 +0000
-Message-Id: <20220110123307.647802-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220110122929.647573-1-xu.xin16@zte.com.cn>
-References: <20220110122929.647573-1-xu.xin16@zte.com.cn>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qFOfaEvokfZV1EFTfIDgkQYCii1N7VmjLFzadFiYr08=;
+        b=UxkQrlSS4/PGzhPMNbxCBh3sfy5NmL4wYSQvxsY4Usw9kvxvQIZIZKnzWnqcl8J0Rp
+         pkrb4seDh89eLV3SeKlt4SGaEJK+YA3JckFRVR1BpZr9jbRPALj4EkWc2FKaqeCDxSiL
+         uKLjwqJ+oPvdePNhJOtHbFDnZXBTMkjV/ZH3Un8Sj2vn0fZACZZJjX+oe5OSEruLqjb/
+         eae7MhSbr8QngisS81bwTM0+HYMbx91rlfjLa2xpsBC78J7sTY7EPDatBKtoYsghZygY
+         clz6zpwBC8tlo35YiM4TfMarLoI6kh3yzl8PI74ZayaIVy2dfXA5dArZIhM4VTFUijOd
+         MdoQ==
+X-Gm-Message-State: AOAM531BQFvMEEF+2OFTWmQEdTv4+6D7QBYqsMbO+LAQTeK6INIgcV06
+        r4/32VWYpPMSTRmwVbUUvMv0FXaPWGoF62ZWFRc=
+X-Google-Smtp-Source: ABdhPJyf8+4K1X40XYLX6CA6YiAMIijTYfrHswTWu60IzHY/qXu3L67uo3anH53hXnEVh7YwelBqF4tj/z+87r06yoI=
+X-Received: by 2002:a05:6102:3232:: with SMTP id x18mr1997159vsf.11.1641818174323;
+ Mon, 10 Jan 2022 04:36:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+References: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
+In-Reply-To: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
+From:   Mark Hemment <markhemm@googlemail.com>
+Date:   Mon, 10 Jan 2022 12:36:03 +0000
+Message-ID: <CANe_+UiDXHgPOZoqT9yxLgTwkVmjA7OiXduP1R0qO2vCt=KKWQ@mail.gmail.com>
+Subject: Re: [PATCH v3 RESEND] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
+ for shmem
+To:     Charan Teja Reddy <quic_charante@quicinc.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>, vbabka@suse.cz,
+        rientjes@google.com, mhocko@suse.com,
+        Suren Baghdasaryan <surenb@google.com>,
+        Shakeel Butt <shakeelb@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Charan Teja Reddy <charante@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On Thu, 6 Jan 2022 at 17:06, Charan Teja Reddy
+<quic_charante@quicinc.com> wrote:
+>
+> From: Charan Teja Reddy <charante@codeaurora.org>
+>
+> Currently fadvise(2) is supported only for the files that doesn't
+> associated with noop_backing_dev_info thus for the files, like shmem,
+> fadvise results into NOP. But then there is file_operations->fadvise()
+> that lets the file systems to implement their own fadvise
+> implementation. Use this support to implement some of the POSIX_FADV_XXX
+> functionality for shmem files.
+...
+> +static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
+> +                               loff_t end, struct list_head *list)
+> +{
+> +       XA_STATE(xas, &mapping->i_pages, start);
+> +       struct page *page;
+> +
+> +       rcu_read_lock();
+> +       xas_for_each(&xas, page, end) {
+> +               if (xas_retry(&xas, page))
+> +                       continue;
+> +               if (xa_is_value(page))
+> +                       continue;
+> +               if (!get_page_unless_zero(page))
+> +                       continue;
+> +               if (isolate_lru_page(page))
+> +                       continue;
 
-This add zh_CN/vm/ksm.rst.
+Need to unwind the get_page on failure to isolate.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- Documentation/translations/zh_CN/vm/ksm.rst | 77 +++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 Documentation/translations/zh_CN/vm/ksm.rst
+Should PageUnevicitable() pages (SHM_LOCK) be skipped?
+(That is, does SHM_LOCK override DONTNEED?)
 
-diff --git a/Documentation/translations/zh_CN/vm/ksm.rst b/Documentation/translations/zh_CN/vm/ksm.rst
-new file mode 100644
-index 0000000..952089b
---- /dev/null
-+++ b/Documentation/translations/zh_CN/vm/ksm.rst
-@@ -0,0 +1,77 @@
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:原文Original:    Documentation/vm/ksm.rst
-+
-+:译者Translator:  徐鑫 xu xin <xu.xin16@zte.com.cn>
-+
-+:校译Proofreader: 杨洋 Yang Yang <yang.yang29@zte.com.cn>
-+
-+.. _ksm:
-+
-+============
-+内核同页合并
-+============
-+
-+KSM 是一种节省内存的数据去重功能，由CONFIG_KSM=y启用，并在2.6.32版本时被添加
-+到Linux内核。详见 ``mm/ksm.c`` 的实现，以及http://lwn.net/Articles/306704和
-+https://lwn.net/Articles/330589
-+
-+KSM的用户空间的接口在 `Documentation/admin-guide/mm/ksm.rst <admin_guide_ksm>`
-+文档中有描述。
-+
-+设计
-+====
-+
-+概述
-+----
-+
-+.. kernel-doc:: mm/ksm.c
-+   :DOC: Overview
-+
-+逆映
-+------
-+KSM维护着稳定树中的KSM页的逆映射信息。
-+
-+当KSM页面的共享数小于 ``max_page_sharing`` 的虚拟内存区域(VMAs)时，则代表了
-+KSM页的稳定树其中的节点指向了一个rmap_item结构体类型的列表。同时，这个KSM页
-+的 ``page->mapping`` 指向了该稳定树节点。
-+
-+如果共享数超过了阈值，KSM将给稳定树添加第二个维度。稳定树就变成链接一个或多
-+个稳定树"副本"的"链"。每个副本都保留KSM页的逆映射信息，其中 ``page->mapping``
-+指向该"副本"。
-+
-+每个链以及链接到该链中的所有"副本"强制不变的是，它们代表了相同的写保护内存
-+内容，尽管任中一个"副本"是由同一片内存区的不同的KSM复制页所指向的。
-+
-+这样一来，相比与无限的逆映射链表，稳定树的查找计算复杂性不受影响。但在稳定树
-+本身中不能有重复的KSM页面内容仍然是强制要求。
-+
-+由 ``max_page_sharing`` 强制决定的数据去重限制是必要的，以此来避免虚拟内存
-+rmap链表变得过大。rmap的遍历具有O(N)的复杂度，其中N是共享页面的rmap_项（即
-+虚拟映射）的数量，而这个共享页面的节点数量又被 ``max_page_sharing`` 所限制。
-+因此，这有效地将线性O(N)计算复杂度从rmap遍历中分散到不同的KSM页面上。ksmd进
-+程在稳定节点"链"上的遍历也是O(N)，但这个N是稳定树"副本"的数量，而不是rmap项
-+的数量，因此它对ksmd性能没有显著影响。实际上，最佳稳定树"副本"的候选节点将
-+保留在"副本"列表的开头。
-+
-+``max_page_sharing`` 的值设置得高了会促使更快的内存合并（因为将有更少的稳定
-+树副本排队进入稳定节点chain->hlist）和更高的数据去重系数，但代价是在交换、压
-+缩、NUMA平衡和页面迁移过程中可能导致KSM页的最大rmap遍历速度较慢。
-+
-+``stable_node_dups/stable_node_chains`` 的比值还受 ``max_page_sharing`` 调控
-+的影响，高比值可能意味着稳定节点dup中存在碎片，这可以通过在ksmd中引入碎片算
-+法来解决，该算法将rmap项从一个稳定节点dup重定位到另一个稳定节点dup，以便释放
-+那些仅包含极少rmap项的稳定节点"dup"，但这可能会增加ksmd进程的CPU使用率，并可
-+能会减慢应用程序在KSM页面上的只读计算。
-+
-+KSM会定期扫描稳定节点"链"中链接的所有稳定树"副本"，以便删减过时了的稳定节点。
-+这种扫描的频率由 ``stable_node_chains_prune_millisecs`` 这个sysfs 接口定义。
-+
-+参考
-+====
-+.. kernel-doc:: mm/ksm.c
-+   :functions: mm_slot ksm_scan stable_node rmap_item
-+
-+--
-+徐鑫
-+2022年1月9日
+...
+> +static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
+> +                               loff_t end)
+> +{
+> +       int ret;
+> +       struct page *page;
+> +       LIST_HEAD(list);
+> +       struct writeback_control wbc = {
+> +               .sync_mode = WB_SYNC_NONE,
+> +               .nr_to_write = LONG_MAX,
+> +               .range_start = 0,
+> +               .range_end = LLONG_MAX,
+> +               .for_reclaim = 1,
+> +       };
+> +
+> +       if (!shmem_mapping(mapping))
+> +               return -EINVAL;
+> +
+> +       if (!total_swap_pages)
+> +               return 0;
+> +
+> +       lru_add_drain();
+> +       shmem_isolate_pages_range(mapping, start, end, &list);
+> +
+> +       while (!list_empty(&list)) {
+> +               page = lru_to_page(&list);
+> +               list_del(&page->lru);
+> +               if (page_mapped(page))
+> +                       goto keep;
+> +               if (!trylock_page(page))
+> +                       goto keep;
+> +               if (unlikely(PageTransHuge(page))) {
+> +                       if (split_huge_page_to_list(page, &list))
+> +                               goto keep;
+> +               }
 
+I don't know the shmem code and the lifecycle of a shm-page, so
+genuine questions;
+When the try-lock succeeds, should there be a test for PageWriteback()
+(page skipped if true)?  Also, does page->mapping need to be tested
+for NULL to prevent races with deletion from the page-cache?
+
+...
+> +
+> +               clear_page_dirty_for_io(page);
+> +               SetPageReclaim(page);
+> +               ret = shmem_writepage(page, &wbc);
+> +               if (ret || PageWriteback(page)) {
+> +                       if (ret)
+> +                               unlock_page(page);
+> +                       goto keep;
+> +               }
+> +
+> +               if (!PageWriteback(page))
+> +                       ClearPageReclaim(page);
+> +
+> +               /*
+> +                * shmem_writepage() place the page in the swapcache.
+> +                * Delete the page from the swapcache and release the
+> +                * page.
+> +                */
+> +               __mod_node_page_state(page_pgdat(page),
+> +                               NR_ISOLATED_ANON + page_is_file_lru(page), compound_nr(page));
+> +               lock_page(page);
+> +               delete_from_swap_cache(page);
+> +               unlock_page(page);
+> +               put_page(page);
+> +               continue;
+> +keep:
+> +               putback_lru_page(page);
+> +               __mod_node_page_state(page_pgdat(page),
+> +                               NR_ISOLATED_ANON + page_is_file_lru(page), compound_nr(page));
+> +       }
+
+The putback_lru_page() drops the last reference hold this code has on
+'page'.  Is it safe to use 'page' after dropping this reference?
+
+Cheers,
+Mark

@@ -2,108 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9482C4896DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9099F4896DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244340AbiAJK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244347AbiAJK7f (ORCPT
+        id S244356AbiAJK7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:59:50 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55386 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S244353AbiAJK7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:59:35 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF389C06173F;
-        Mon, 10 Jan 2022 02:59:34 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id h11so703100uar.5;
-        Mon, 10 Jan 2022 02:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Pyr2Zb4j02PsgvvNoNyOvWlod9U9+4JSnC74+5rak8Q=;
-        b=YyQ506hwqXXe8clqnSFa983M9zu/XTmA4qYrFQNJpM+4qoeJFvFIvdzPLl4VJVyctv
-         QqAXW2hrYyksTQGMFAXkpU91IH/VLZihHw79TpCMMAMgMJco1v9puEJXk7+lhemAKas1
-         V+NeVQ0iZyy7rRoR/Zu8CKDxjLP64FPfc8jbDNYsSqLD9XsXEEPtkOjoSyuGM9fkiS6u
-         Cy0LEZSSUmzaABRV0HfjrGMB30xYKwUSiksibyHJ29eQpavDM7+do/jySLVE5MIjOkDf
-         FowiZnoXk6zgwYHZvit5AxB0G83ZXFa3rmK5VmxrpfBGz+QK5Ol9Q7XUHMcfIl4kHSgH
-         jKIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pyr2Zb4j02PsgvvNoNyOvWlod9U9+4JSnC74+5rak8Q=;
-        b=1wlWjF0H7I9wTaE9qgc0JuNvTAC9bGumZCibpWEwPRmsmJ0/rMt7PHoupSVVME/HHf
-         /h8FRcMsJR1gCyRpEF657aFsC+if9ujL71bTffGD/89V7I91jfANptHUxuQCZD55ieep
-         O87TE0U/WC5B8lJJKdFUhskU6h0F0vkumbro/JFb5xP7YWKsTm2QdbaiWMxibOje4nqw
-         DaAj6AwgBIScdN5RlHYCMngfRVKYontS3uO+lrkc8DCc2JUrOdAfPcI+4TiPlJ9RG7PH
-         5j1F+KhyQFL2EXhkS0wce9YMsW37uOreJOi6SHtGMJRoH+KZKpr1vbbFW0tuXA9WKKTg
-         RcDg==
-X-Gm-Message-State: AOAM530sGryHtKbI0yUHMA92b+oNKqfsG6K0L6pK+w3sXOoRt/dCetlg
-        T1xUQ/9BWxq7nWQSZU1yZoEy/F9iJqfo19R521U=
-X-Google-Smtp-Source: ABdhPJzNC5Xto+6tTHLSaWjQV0UE4a2ufJIsEM38VWdwK4FT0ZrmU5mE9sbtMvpdllGygej3DVycShZmNO0+zFIeetc=
-X-Received: by 2002:a05:6102:dc9:: with SMTP id e9mr24288454vst.17.1641812374133;
- Mon, 10 Jan 2022 02:59:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20220110083910.1351020-1-sergio.paracuellos@gmail.com>
- <20220110083910.1351020-4-sergio.paracuellos@gmail.com> <5368e89c391e1329ed2be6496655f1bb50acfd19.camel@pengutronix.de>
- <CAMhs-H_gjW_6p6yBWf+k2PBym4N+k+rBEXR9S8c13NU-UWD4VQ@mail.gmail.com> <12b7e367e8323f6da7bb548dbbae0d342608e52b.camel@pengutronix.de>
-In-Reply-To: <12b7e367e8323f6da7bb548dbbae0d342608e52b.camel@pengutronix.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 10 Jan 2022 11:59:22 +0100
-Message-ID: <CAMhs-H_cCFsMs5VTrrNROBpfnwsXNLGGCFHSu2sJ8N-cxYV8aA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] clk: ralink: make system controller node a reset provider
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
+        Mon, 10 Jan 2022 05:59:47 -0500
+X-UUID: 395cc667b0e14575be2c58eb00d5c3b4-20220110
+X-UUID: 395cc667b0e14575be2c58eb00d5c3b4-20220110
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1957887219; Mon, 10 Jan 2022 18:59:44 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 10 Jan 2022 18:59:43 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 10 Jan 2022 18:59:42 +0800
+Message-ID: <83400d36640fc6256972041c882d080ce9aa5fdd.camel@mediatek.com>
+Subject: Re: [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in
+ tlb_sync_all
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>, <yen-chang.chen@mediatek.com>
+Date:   Mon, 10 Jan 2022 18:59:42 +0800
+In-Reply-To: <85987e9a-dfb0-c241-1dde-43c050a78b51@collabora.com>
+References: <20210923115840.17813-1-yong.wu@mediatek.com>
+         <20210923115840.17813-10-yong.wu@mediatek.com>
+         <bfa33e94-c2e5-5dab-c9af-b674e1669daa@collabora.com>
+         <22faee018a36a49e4a507b69d087432c8cd689ec.camel@mediatek.com>
+         <85987e9a-dfb0-c241-1dde-43c050a78b51@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:23 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
->
-> On Mon, 2022-01-10 at 10:39 +0100, Sergio Paracuellos wrote:
-> [...]
-> > > Is this known to work for all possible users, without delay between
-> > > assert and deassert?
-> >
-> > It seems it is. This is based on the original reset implementation for
-> > ralink. See:
-> >
-> > https://elixir.bootlin.com/linux/v5.16/source/arch/mips/ralink/reset.c#L55
-> >
-> > > Are there any users of the reset_control_reset() API at all? This API
-> > > was added for self-clearing reset bits, so if there are no users that
-> > > need to pretend this is a reset pulse at the hardware level (there may
-> > > be), I'd prefer if this was just left out.
-> >
-> > I am not following you here. What do you mean?
->
-> Looking at drivers/staging/mt7621-dts/mt7621.dtsi, it appears the
-> current reset users are:
->   mediatek,mt7621-i2c
->   ralink,mt7621-spi
->   ralink,rt3883-gdma
->   mediatek,mt7621-hsdma
->   mediatek,mt7621-eth
->   mediatek,mt7621
->   mediatek,mt7621-pci
->
-> Many of the corresponding drivers use device_reset(), which is a
-> shorthand for requesting a reset control and calling
-> reset_control_reset() on it. That will call mt7621_reset_device, so it
-> is indeed used.
->
+On Mon, 2022-01-10 at 10:16 +0100, AngeloGioacchino Del Regno wrote:
+> Il 09/01/22 03:48, Yong Wu ha scritto:
+> > On Tue, 2022-01-04 at 16:55 +0100, AngeloGioacchino Del Regno
+> > wrote:
+> > > Il 23/09/21 13:58, Yong Wu ha scritto:
+> > > > The tlb_sync_all is called from these three functions:
+> > > > a) flush_iotlb_all: it will be called for each a iommu HW.
+> > > > b) tlb_flush_range_sync: it already has for_each_m4u.
+> > > > c) in irq: When IOMMU HW translation fault, Only need flush
+> > > > itself.
+> > > > 
+> > > > Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
+> > > > 
+> > > > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > > > ---
+> > > >    drivers/iommu/mtk_iommu.c | 18 +++++++-----------
+> > > >    1 file changed, 7 insertions(+), 11 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iommu/mtk_iommu.c
+> > > > b/drivers/iommu/mtk_iommu.c
+> > > > index 6f4f6624e3ac..0b4c30baa864 100644
+> > > > --- a/drivers/iommu/mtk_iommu.c
+> > > > +++ b/drivers/iommu/mtk_iommu.c
+> > > > @@ -206,19 +206,15 @@ static struct mtk_iommu_domain
+> > > > *to_mtk_domain(struct iommu_domain *dom)
+> > > >    
+> > > >    static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data
+> > > > *data)
+> > > >    {
+> > > > -	struct list_head *head = data->hw_list;
+> > > > -
+> > > > -	for_each_m4u(data, head) {
+> > > > -		if (pm_runtime_get_if_in_use(data->dev) <= 0)
+> > > > -			continue;
+> > > > +	if (pm_runtime_get_if_in_use(data->dev) <= 0)
+> > > > +		return;
+> > > >    
+> > > > -		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+> > > > -			       data->base + data->plat_data-
+> > > > > inv_sel_reg);
+> > > > 
+> > > > -		writel_relaxed(F_ALL_INVLD, data->base +
+> > > > REG_MMU_INVALIDATE);
+> > > > -		wmb(); /* Make sure the tlb flush all done */
+> > > > +	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+> > > > +		       data->base + data->plat_data-
+> > > > >inv_sel_reg);
+> > > > +	writel_relaxed(F_ALL_INVLD, data->base +
+> > > > REG_MMU_INVALIDATE);
+> > > > +	wmb(); /* Make sure the tlb flush all done */
+> > > 
+> > > There aren't a lot of writes here - not anymore, since you are no
+> > > longer doing
+> > > this for_each_m4u()...
+> > > ...so, please change writel_relaxed() to writel() calls, allowing
+> > > you
+> > > to also
+> > > remove the write barrier at the end (since in the non relaxed
+> > > version, order is already ensured).
+> > 
+> > In the "writel", the "__iowmb()" runs before "write_relaxed". Then
+> > how
+> > to guarantee the last register was wrote into the HW. Here the
+> > flush
+> > all don't have sync(waiting it complete)
+> > 
+> 
+> That's right, I'm sorry for the invalid proposal.
+> 
+> Though, there's something else to mention here... if writing
+> (F_INVLD_EN1 | F_INVLD_EN0) to inv_sel_reg is *required* to happen
+> before
+> writing F_ALL_INVLD to REG_MMU_INVALIDATE (which I think is exactly
+> the
+> case here), then, in order to ensure write ordering, you should still
+> use
+> writel() instead of the relaxed accessor; after which, since (as you
+> mentioned)
+> there is no sync readback loop, you can keep that wmb() at the end.
 
-Ok, pretty clear now, thanks for clarification :).
+The writel_relaxed also makes sure the order. I did try this:
 
-> regards
-> Philipp
 
-Best regards,
-    Sergio Paracuellos
+https://patchwork.kernel.org/project/linux-mediatek/patch/1570627143-29441-3-git-send-email-yong.wu@mediatek.com/
+
+> 
+> > > 
+> > > >    
+> > > > -		pm_runtime_put(data->dev);
+> > > > -	}
+> > > > +	pm_runtime_put(data->dev);
+> > > >    }
+> > > >    
+> > > >    static void mtk_iommu_tlb_flush_range_sync(unsigned long
+> > > > iova,
+> > > > size_t size,
+> > > > 
+> 
+> 
+

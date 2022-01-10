@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38997489D69
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526E0489D71
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbiAJQVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:21:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38174 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237275AbiAJQVH (ORCPT
+        id S237307AbiAJQY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237275AbiAJQYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:21:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E59A612AF;
-        Mon, 10 Jan 2022 16:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792B5C36AE5;
-        Mon, 10 Jan 2022 16:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641831665;
-        bh=o9o0izpIfMYmc5M5r8xsUyttPDtVbrk5AEgPIjm4Cz4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UdNmWB3Q8lTXIk4NH18aWuogd1Ao8SEvloE0Ti9ODrM2vhwl4ynXGzfksP1Y6y3Fx
-         VTXk4VCZ7girEegwkuz4O1X4ckWh5BfYyCcUVetlz80ZQIamV4U9o7feYHZ8KNvf4K
-         PD+PXPvCW2p3JDzNRWwShLy8KfwHGTqu4UxJTp95C1GHkw5xXnkQyOKfm3gTg922ik
-         j4MBscKALpewawk886HaxHc2kSoCt66C5cOAKBR/t93MOyGN+T6sO9MnL3b/PeY7kv
-         WsSJjgiiGtnydCjO6uQXHmaOurfnMuDpu4mlwYzsvNHA9yeHmx+ZnW/UPP5034FQJC
-         RYehOzlVn26/A==
-Date:   Mon, 10 Jan 2022 08:21:04 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Rao Shoaib <rao.shoaib@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        regressions@lists.linux.dev
-Subject: Re: Observation of a memory leak with commit 314001f0bf92
- ("af_unix: Add OOB support")
-Message-ID: <20220110082104.2292d7ad@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <a754b7d0-8a20-9730-c439-1660994005d0@leemhuis.info>
-References: <CAKXUXMzZkQvHJ35nwVhcJe+DrtEXGw+eKGVD04=xRJkVUC2sPA@mail.gmail.com>
-        <20220109132038.38f8ae4f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <a754b7d0-8a20-9730-c439-1660994005d0@leemhuis.info>
+        Mon, 10 Jan 2022 11:24:25 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDD9C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:24:25 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id f4so3340086ilr.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:24:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=q2ANJ839hRNzgcOPa1cvYQeCETBEXCL51rijIVxmBrq75TeG7E+1BxmW0zKBjuPtLA
+         WAudyrMAUz+c41sx5mL0Bnroi5E/ej9O/qPsZJwZoh6cjjZIa0xyUhWQajbm4Khi4onG
+         UTXLEjDi41YsOA5gXOg9FU8eoLQDsjbJSYRGlQ2gHA/R7EY0WkckHTa8Xz6E6aSA0GkS
+         ewxBzYP1D0W4alIVCMbnWGXzDbldNzGyqXgUjfLDscadBFBu1jYgnVKLiFbdbLHkeFYR
+         6iiq1k/Y6lHm14Xs3FXEZ9+fh9+uQIUxtZNa4ja5CqJXnoV1+hwXUgZBnzvNkCXrCXWr
+         9TDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=NK6gwqcBkQN6IYeDzpz2dWoGwIwj8cD2V/CBLGdk19D2YUgjCFXzmCAHOPJnbi5ueC
+         neaMeGciljk2CXqVZK1brbQ7pwqNFkSq6Vyva7cI8rwZPGrQifNJBqSwE7i0CDPeVtlD
+         QmRaJ6n8y+AbDj4+i5QZACUcXISg+KNqmWi7onMr/1W5zxwmgP+qOyXwpIBzDJ3ZGEjH
+         x1ebVIEpy+RP4vocmbcPgKPgDdNJYnppbj3BXsHUhJuDxBcOrxgN6LtBblAjTmC5+Q4W
+         ydRGpUccci5SlZRYoUyCY1AGCgLJttkgXUcy8smhchOWmJm8zEuiMLyiu8Ru32aq30uk
+         jF7g==
+X-Gm-Message-State: AOAM532y6AV5KXuqTIPHN63HmaQlU4MxgDFAro0LOtd8GJS+9t0+1rUb
+        sETDBvrDM8AiPt96S9DCm/xK34EN1aPLjc8Cu0g=
+X-Google-Smtp-Source: ABdhPJzCZp54jFDLRduKUXK+NPweKGBgDTh+2fP6GP/o9S0yQEwqGEoX3R9QXNDQi//Wy0/fjmovzTRB9r4wOyFm9aw=
+X-Received: by 2002:a05:6e02:1a6c:: with SMTP id w12mr230648ilv.100.1641831864455;
+ Mon, 10 Jan 2022 08:24:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Reply-To: salkavar2@gmail.com
+Sender: mrmaxwellkojo@gmail.com
+Received: by 2002:a05:6638:1504:0:0:0:0 with HTTP; Mon, 10 Jan 2022 08:24:24
+ -0800 (PST)
+From:   "Mr.Sal kavar" <salkavar2@gmail.com>
+Date:   Mon, 10 Jan 2022 17:24:24 +0100
+X-Google-Sender-Auth: xbQV38cQpXz2guUNWbwEqvTA_Tg
+Message-ID: <CAKYa8HbyTm=JzN6h=3FW7w7AG+w2ifWH0DbxdfRkaW4oCJWtQw@mail.gmail.com>
+Subject: Yours Faithful,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 15:02:23 +0100 Thorsten Leemhuis wrote:
-> On 09.01.22 22:20, Jakub Kicinski wrote:
-> > On Fri, 7 Jan 2022 07:48:46 +0100 Lukas Bulwahn wrote:  
-> >> Dear Rao and David,
-> >>
-> >>
-> >> In our syzkaller instance running on linux-next,
-> >> https://elisa-builder-00.iol.unh.edu/syzkaller-next/, we have been
-> >> observing a memory leak in prepare_creds,
-> >> https://elisa-builder-00.iol.unh.edu/syzkaller-next/report?id=1dcac8539d69ad9eb94ab2c8c0d99c11a0b516a3,
-> >> for quite some time.
-> >>
-> >> It is reproducible on v5.15-rc1, v5.15, v5.16-rc8 and next-20220104.
-> >> So, it is in mainline, was released and has not been fixed in
-> >> linux-next yet.
-> >>
-> >> As syzkaller also provides a reproducer, we bisected this memory leak
-> >> to be introduced with  commit 314001f0bf92 ("af_unix: Add OOB
-> >> support").
-> >>
-> >> We also tested that reverting this commit on torvalds' current tree
-> >> made the memory leak with the reproducer go away.
-> >>
-> >> Could you please have a look how your commit introduces this memory
-> >> leak? We will gladly support testing your fix in case help is needed.  
-> > 
-> > Let's test the regression/bug report tracking bot :)
-> > 
-> > #regzbot introduced: 314001f0bf92  
-> 
-> Great, thx for trying, you only did a small mistake: it lacked a caret
-> (^) before the "introduced", which would have told regzbot that the
-> parent mail (the one you quoted) is the one containing the report (which
-> later is linked in patch descriptions of fixes and allows rezgbot to
-> connect things). That's why regzbot now thinks you reported the issue
-> and looks out for patches and commits that link to your mail. :-/
-> 
-> Don't worry, I just added it properly and now mark this as duplicate:
-> 
-> #regzbot dup-of:
-> https://lore.kernel.org/lkml/CAKXUXMzZkQvHJ35nwVhcJe%2BDrtEXGw%2BeKGVD04=xRJkVUC2sPA@mail.gmail.com/
-> 
-> Thx again for trying.
+I assume you and your family are in good health. I am the foreign
+operations Manager
 
-Ah, thanks for the fix up, I copy/pasted the example with the hash and
-forgot about the caret.
+This being a wide world in which it can be difficult to make new
+acquaintances and because it is virtually impossible to know who is
+trustworthy and who can be believed, i have decided to repose
+confidence in you after much fasting and prayer. It is only because of
+this that I have decided to confide in you and to share with you this
+confidential business.
 
-> I wonder if this mistake could be avoided. I came up with one idea while
-> walking the dog:
-> 
->  * if there is *no* parent mail, then "regzbot introduce" could consider
-> the current mail as the report
-> 
->  * if there *is* a parent mail, then "regzbot introduce" could consider
-> the parent as the report
-> 
-> Then regzbot would have done the right thing in this case. But there is
-> a "but": I wonder if such an approach would be too much black magic that
-> confuses more than it helps. What do you think?
+overdue and unclaimed sum of $15.5m, (Fifteen Million Five Hundred
+Thousand Dollars Only) when the account holder suddenly passed on, he
+left no beneficiary who would be entitled to the receipt of this fund.
+For this reason, I have found it expedient to transfer this fund to a
+trustworthy individual with capacity to act as foreign business
+partner.
 
-IMHO heuristics may do more harm than good. At least for maintainers.
+Thus i humbly request your assistance to claim this fund. Upon the
+transfer of this fund in your account, you will take 45% as your share
+from the total fund, 10% will be shared to Charity Organizations in
+both country and 45% will be for me.
+
+Yours Faithful,
+Mr.Sal Kavar.

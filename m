@@ -2,150 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 479AA4896E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330014896F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244373AbiAJLDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:03:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:60994 "EHLO foss.arm.com"
+        id S244393AbiAJLEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:04:43 -0500
+Received: from marcansoft.com ([212.63.210.85]:47138 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244358AbiAJLDI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:03:08 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05F002B;
-        Mon, 10 Jan 2022 03:03:08 -0800 (PST)
-Received: from [10.57.85.117] (unknown [10.57.85.117])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 970C03F5A1;
-        Mon, 10 Jan 2022 03:03:06 -0800 (PST)
-Message-ID: <0ce7622a-0c61-ea80-6c53-0388a8b620fe@arm.com>
-Date:   Mon, 10 Jan 2022 11:03:05 +0000
+        id S244377AbiAJLEl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:04:41 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 9E6693FA5E;
+        Mon, 10 Jan 2022 11:04:29 +0000 (UTC)
+Message-ID: <7f124c47-9bc8-0a5a-8590-bed352538453@marcan.st>
+Date:   Mon, 10 Jan 2022 20:04:26 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH V2 5/7] coresight: trbe: Work around the ignored system
- register writes
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641517808-5735-1-git-send-email-anshuman.khandual@arm.com>
- <1641517808-5735-6-git-send-email-anshuman.khandual@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1641517808-5735-6-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 14/35] brcmfmac: pcie: Add IDs/properties for BCM4378
+Content-Language: en-US
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-15-marcan@marcan.st>
+ <b652e98b-1b09-4639-95c4-779fb6cc989f@broadcom.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <b652e98b-1b09-4639-95c4-779fb6cc989f@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2022 01:10, Anshuman Khandual wrote:
-> TRBE implementations affected by Arm erratum #2064142 might fail to write
-> into certain system registers after the TRBE has been disabled. Under some
-> conditions after TRBE has been disabled, writes into certain TRBE registers
-> TRBLIMITR_EL1, TRBPTR_EL1, TRBBASER_EL1, TRBSR_EL1 and TRBTRG_EL1 will be
-> ignored and not be effected.
+On 2022/01/10 18:10, Arend van Spriel wrote:
+> On 1/4/2022 8:26 AM, Hector Martin wrote:
+>> This chip is present on Apple M1 (t8103) platforms:
+>>
+>> * atlantisb (apple,j274): Mac mini (M1, 2020)
+>> * honshu    (apple,j293): MacBook Pro (13-inch, M1, 2020)
+>> * shikoku   (apple,j313): MacBook Air (M1, 2020)
+>> * capri     (apple,j456): iMac (24-inch, 4x USB-C, M1, 2020)
+>> * santorini (apple,j457): iMac (24-inch, 2x USB-C, M1, 2020)
 > 
-> Work around this problem in the TRBE driver by executing TSB CSYNC and DSB
-> just after the trace collection has stopped and before performing a system
-> register write to one of the affected registers. This just updates the TRBE
-> driver as required.
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>> ---
+>>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c   | 2 ++
+>>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c   | 8 ++++++++
+>>   .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 2 ++
+>>   3 files changed, 12 insertions(+)
 > 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-> Cc: coresight@lists.linaro.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   arch/arm64/Kconfig                           |  2 +-
->   drivers/hwtracing/coresight/coresight-trbe.c | 54 ++++++++++++++------
->   drivers/hwtracing/coresight/coresight-trbe.h |  8 ---
->   3 files changed, 39 insertions(+), 25 deletions(-)
+> [...]
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index f1651cb71ef3..b6d62672bf7d 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -780,7 +780,7 @@ config ARM64_ERRATUM_2224489
->   
->   config ARM64_ERRATUM_2064142
->   	bool "Cortex-A510: 2064142: workaround TRBE register writes while disabled"
-> -	depends on COMPILE_TEST # Until the CoreSight TRBE driver changes are in
-> +	depends on CORESIGHT_TRBE
->   	default y
->   	help
->   	  This option adds the workaround for ARM Cortex-A510 erratum 2064142.
-> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
-> index 276862c07e32..850e9fca6847 100644
-> --- a/drivers/hwtracing/coresight/coresight-trbe.c
-> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
-> @@ -91,10 +91,12 @@ struct trbe_buf {
->    */
->   #define TRBE_WORKAROUND_OVERWRITE_FILL_MODE	0
->   #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE	1
-> +#define TRBE_NEEDS_DRAIN_AFTER_DISABLE		2
->   
->   static int trbe_errata_cpucaps[] = {
->   	[TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
->   	[TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
-> +	[TRBE_NEEDS_DRAIN_AFTER_DISABLE] = ARM64_WORKAROUND_2064142,
->   	-1,		/* Sentinel, must be the last entry */
->   };
->   
-> @@ -167,6 +169,11 @@ static inline bool trbe_may_write_out_of_range(struct trbe_cpudata *cpudata)
->   	return trbe_has_erratum(cpudata, TRBE_WORKAROUND_WRITE_OUT_OF_RANGE);
->   }
->   
-> +static inline bool trbe_needs_drain_after_disable(struct trbe_cpudata *cpudata)
-> +{
-> +	return trbe_has_erratum(cpudata, TRBE_NEEDS_DRAIN_AFTER_DISABLE);
-> +}
-> +
->   static int trbe_alloc_node(struct perf_event *event)
->   {
->   	if (event->cpu == -1)
-> @@ -174,30 +181,42 @@ static int trbe_alloc_node(struct perf_event *event)
->   	return cpu_to_node(event->cpu);
->   }
->   
-> -static void trbe_drain_buffer(void)
-> +static inline void trbe_drain_buffer(void)
->   {
->   	tsb_csync();
->   	dsb(nsh);
->   }
->   
-> -static void trbe_drain_and_disable_local(void)
-> +static inline void set_trbe_disabled(struct trbe_cpudata *cpudata)
->   {
->   	u64 trblimitr = read_sysreg_s(SYS_TRBLIMITR_EL1);
->   
-> -	trbe_drain_buffer();
-> -
->   	/*
->   	 * Disable the TRBE without clearing LIMITPTR which
->   	 * might be required for fetching the buffer limits.
->   	 */
->   	trblimitr &= ~TRBLIMITR_ENABLE;
->   	write_sysreg_s(trblimitr, SYS_TRBLIMITR_EL1);
-> +
-> +	/*
-> +	 * Errata affected TRBE implementation will need TSB CSYNC and
-> +	 * DSB in order to prevent subsequent writes into certain TRBE
-> +	 * system registers from being ignored and not effected.
-> +	 */
+>> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> index f3744e806157..cc76f00724e6 100644
+>> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+>> @@ -58,6 +58,7 @@ BRCMF_FW_DEF(4365C, "brcmfmac4365c-pcie");
+>>   BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
+>>   BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
+>>   BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
+>> +BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
+>>   
+>>   /* firmware config files */
+>>   MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
+>> @@ -87,6 +88,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>>   	BRCMF_FW_ENTRY(BRCM_CC_43664_CHIP_ID, 0xFFFFFFF0, 4366C),
+>>   	BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
+>>   	BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
+>> +	BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* 3 */
+> 
+> what does the trailing comment reflect?
 
-minor nit: This comment could be moved to the definition of the
-function "trbe_needs_drain_after_disable()" to make more sense.
-The name is implicit here indicating, why we are doing a drain.
+PCI revision IDs seen in the wild. The mask currently accepts all of
+them, but B1 specifically seems to map to rev3. This is important for
+4364 since there are two revisions in the wild, and so that one has more
+selective masks. I can change it to "rev3" to make it more obvious.
 
-Either ways:
+I'm actually not sure what the best approach for the masks is. We could
+also only accept known exact revisions; that would be better if a newer
+revision is incompatible, but worse if it is and would otherwise just work.
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

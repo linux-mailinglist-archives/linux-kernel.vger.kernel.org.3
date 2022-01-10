@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C55489187
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B320D489284
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240521AbiAJHdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S242908AbiAJHoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240120AbiAJH2b (ORCPT
+        with ESMTP id S240959AbiAJHeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:28:31 -0500
+        Mon, 10 Jan 2022 02:34:31 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF07C028BE8;
-        Sun,  9 Jan 2022 23:26:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1983C025398;
+        Sun,  9 Jan 2022 23:30:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3BE6B8120C;
-        Mon, 10 Jan 2022 07:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E648DC36AED;
-        Mon, 10 Jan 2022 07:26:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E162B81161;
+        Mon, 10 Jan 2022 07:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85905C36AED;
+        Mon, 10 Jan 2022 07:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799605;
-        bh=8djHihGT1fBxPDb4dfGke7sE406ckoNNOuXvoUFQ+UI=;
+        s=korg; t=1641799800;
+        bh=0FUZhdHdVFKJrJzvgVA+DV9XJpaKZoIrD4J9MFjxH2A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iTGP3jSwR64GwtN2CXWXo6LLuEG+r/RY58nOIpWCNvxmaxXuqMllX4TA9z1wrUkwt
-         8zus5+1NHtpZGO6zsoZ4DmXj2s/V/GyYfRvDslRa3m+N+85i2Th1Xu+otGRmhc3oLV
-         Anuz3hTj/oAga80FfTzhkdBNCFDstnUvuDhciudk=
+        b=EburqUk/+dGbOzU2gEbZgsmhLvcW3taC/xXafQ10eJNoLyHZdJiE+/o295OAzTl2O
+         DgQkJJtm8P0KtW4bZzBgMxSYtuDFSyiILVus91uGTV4NsckQD+p/AIlcCBYEYdkTnA
+         dXtKoIyLlt3U4aP0zv4FU8ci9MNGdclinGojGWvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 10/22] ipv6: Check attribute length for RTA_GATEWAY in multipath route
+        stable@vger.kernel.org,
+        Grzegorz Szczurek <grzegorzx.szczurek@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Paul M Stillwell Jr <paul.m.stillwell.jr@intel.com>,
+        Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+        Tony Brelinski <tony.brelinski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 06/43] i40e: Fix to not show opcode msg on unsuccessful VF MAC change
 Date:   Mon, 10 Jan 2022 08:23:03 +0100
-Message-Id: <20220110071814.607679301@linuxfoundation.org>
+Message-Id: <20220110071817.559412877@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071814.261471354@linuxfoundation.org>
-References: <20220110071814.261471354@linuxfoundation.org>
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+References: <20220110071817.337619922@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,60 +53,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Mateusz Palczewski <mateusz.palczewski@intel.com>
 
-commit 4619bcf91399f00a40885100fb61d594d8454033 upstream.
+commit 01cbf50877e602e2376af89e4a51c30bc574c618 upstream.
 
-Commit referenced in the Fixes tag used nla_memcpy for RTA_GATEWAY as
-does the current nla_get_in6_addr. nla_memcpy protects against accessing
-memory greater than what is in the attribute, but there is no check
-requiring the attribute to have an IPv6 address. Add it.
+Hide i40e opcode information sent during response to VF in case when
+untrusted VF tried to change MAC on the VF interface.
 
-Fixes: 51ebd3181572 ("ipv6: add support of equal cost multipath (ECMP)")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+This is implemented by adding an additional parameter 'hide' to the
+response sent to VF function that hides the display of error
+information, but forwards the error code to VF.
+
+Previously it was not possible to send response with some error code
+to VF without displaying opcode information.
+
+Fixes: 5c3c48ac6bf5 ("i40e: implement virtual device interface")
+Signed-off-by: Grzegorz Szczurek <grzegorzx.szczurek@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Reviewed-by: Paul M Stillwell Jr <paul.m.stillwell.jr@intel.com>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Tested-by: Tony Brelinski <tony.brelinski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/route.c |   21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |   40 ++++++++++++++++-----
+ 1 file changed, 32 insertions(+), 8 deletions(-)
 
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -3183,6 +3183,19 @@ static void ip6_route_mpath_notify(struc
- 		inet6_rt_notify(RTM_NEWROUTE, rt, info, nlflags);
+--- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
+@@ -1824,17 +1824,19 @@ sriov_configure_out:
+ /***********************virtual channel routines******************/
+ 
+ /**
+- * i40e_vc_send_msg_to_vf
++ * i40e_vc_send_msg_to_vf_ex
+  * @vf: pointer to the VF info
+  * @v_opcode: virtual channel opcode
+  * @v_retval: virtual channel return value
+  * @msg: pointer to the msg buffer
+  * @msglen: msg length
++ * @is_quiet: true for not printing unsuccessful return values, false otherwise
+  *
+  * send msg to VF
+  **/
+-static int i40e_vc_send_msg_to_vf(struct i40e_vf *vf, u32 v_opcode,
+-				  u32 v_retval, u8 *msg, u16 msglen)
++static int i40e_vc_send_msg_to_vf_ex(struct i40e_vf *vf, u32 v_opcode,
++				     u32 v_retval, u8 *msg, u16 msglen,
++				     bool is_quiet)
+ {
+ 	struct i40e_pf *pf;
+ 	struct i40e_hw *hw;
+@@ -1850,7 +1852,7 @@ static int i40e_vc_send_msg_to_vf(struct
+ 	abs_vf_id = vf->vf_id + hw->func_caps.vf_base_id;
+ 
+ 	/* single place to detect unsuccessful return values */
+-	if (v_retval) {
++	if (v_retval && !is_quiet) {
+ 		vf->num_invalid_msgs++;
+ 		dev_info(&pf->pdev->dev, "VF %d failed opcode %d, retval: %d\n",
+ 			 vf->vf_id, v_opcode, v_retval);
+@@ -1881,6 +1883,23 @@ static int i40e_vc_send_msg_to_vf(struct
  }
  
-+static int fib6_gw_from_attr(struct in6_addr *gw, struct nlattr *nla,
-+			     struct netlink_ext_ack *extack)
+ /**
++ * i40e_vc_send_msg_to_vf
++ * @vf: pointer to the VF info
++ * @v_opcode: virtual channel opcode
++ * @v_retval: virtual channel return value
++ * @msg: pointer to the msg buffer
++ * @msglen: msg length
++ *
++ * send msg to VF
++ **/
++static int i40e_vc_send_msg_to_vf(struct i40e_vf *vf, u32 v_opcode,
++				  u32 v_retval, u8 *msg, u16 msglen)
 +{
-+	if (nla_len(nla) < sizeof(*gw)) {
-+		NL_SET_ERR_MSG(extack, "Invalid IPv6 address in RTA_GATEWAY");
-+		return -EINVAL;
-+	}
-+
-+	*gw = nla_get_in6_addr(nla);
-+
-+	return 0;
++	return i40e_vc_send_msg_to_vf_ex(vf, v_opcode, v_retval,
++					 msg, msglen, false);
 +}
 +
- static int ip6_route_multipath_add(struct fib6_config *cfg,
- 				   struct netlink_ext_ack *extack)
++/**
+  * i40e_vc_send_resp_to_vf
+  * @vf: pointer to the VF info
+  * @opcode: operation code
+@@ -2641,6 +2660,7 @@ error_param:
+  * i40e_check_vf_permission
+  * @vf: pointer to the VF info
+  * @al: MAC address list from virtchnl
++ * @is_quiet: set true for printing msg without opcode info, false otherwise
+  *
+  * Check that the given list of MAC addresses is allowed. Will return -EPERM
+  * if any address in the list is not valid. Checks the following conditions:
+@@ -2655,13 +2675,15 @@ error_param:
+  * addresses might not be accurate.
+  **/
+ static inline int i40e_check_vf_permission(struct i40e_vf *vf,
+-					   struct virtchnl_ether_addr_list *al)
++					   struct virtchnl_ether_addr_list *al,
++					   bool *is_quiet)
  {
-@@ -3223,7 +3236,13 @@ static int ip6_route_multipath_add(struc
+ 	struct i40e_pf *pf = vf->pf;
+ 	struct i40e_vsi *vsi = pf->vsi[vf->lan_vsi_idx];
+ 	int mac2add_cnt = 0;
+ 	int i;
  
- 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
- 			if (nla) {
--				r_cfg.fc_gateway = nla_get_in6_addr(nla);
-+				int ret;
-+
-+				ret = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
-+							extack);
-+				if (ret)
-+					return ret;
-+
- 				r_cfg.fc_flags |= RTF_GATEWAY;
- 			}
- 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
++	*is_quiet = false;
+ 	for (i = 0; i < al->num_elements; i++) {
+ 		struct i40e_mac_filter *f;
+ 		u8 *addr = al->list[i].addr;
+@@ -2685,6 +2707,7 @@ static inline int i40e_check_vf_permissi
+ 		    !ether_addr_equal(addr, vf->default_lan_addr.addr)) {
+ 			dev_err(&pf->pdev->dev,
+ 				"VF attempting to override administratively set MAC address, bring down and up the VF interface to resume normal operation\n");
++			*is_quiet = true;
+ 			return -EPERM;
+ 		}
+ 
+@@ -2721,6 +2744,7 @@ static int i40e_vc_add_mac_addr_msg(stru
+ 	    (struct virtchnl_ether_addr_list *)msg;
+ 	struct i40e_pf *pf = vf->pf;
+ 	struct i40e_vsi *vsi = NULL;
++	bool is_quiet = false;
+ 	i40e_status ret = 0;
+ 	int i;
+ 
+@@ -2737,7 +2761,7 @@ static int i40e_vc_add_mac_addr_msg(stru
+ 	 */
+ 	spin_lock_bh(&vsi->mac_filter_hash_lock);
+ 
+-	ret = i40e_check_vf_permission(vf, al);
++	ret = i40e_check_vf_permission(vf, al, &is_quiet);
+ 	if (ret) {
+ 		spin_unlock_bh(&vsi->mac_filter_hash_lock);
+ 		goto error_param;
+@@ -2775,8 +2799,8 @@ static int i40e_vc_add_mac_addr_msg(stru
+ 
+ error_param:
+ 	/* send the response to the VF */
+-	return i40e_vc_send_resp_to_vf(vf, VIRTCHNL_OP_ADD_ETH_ADDR,
+-				       ret);
++	return i40e_vc_send_msg_to_vf_ex(vf, VIRTCHNL_OP_ADD_ETH_ADDR,
++				       ret, NULL, 0, is_quiet);
+ }
+ 
+ /**
 
 

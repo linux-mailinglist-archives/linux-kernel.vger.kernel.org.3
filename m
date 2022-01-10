@@ -2,221 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5040C4898C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD0448979B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245624AbiAJMlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:41:24 -0500
-Received: from xmbgsz7.mail.foxmail.com ([61.241.55.243]:44885 "EHLO
-        xmbgsz7.mail.foxmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245599AbiAJMlX (ORCPT
+        id S244840AbiAJLh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244839AbiAJLgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:41:23 -0500
-X-Greylist: delayed 98139 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Jan 2022 07:41:22 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641818478;
-        bh=g317dTPTpgSCEdP8ZINM18u9N7xoe3pAeREzosvRh0o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Uksghk2XXq/IobLR2p+oIM8TMmpMkoA0Ttf29TEd643sh69satFwUbaw2uxvW2mE+
-         YMUvGgdFBlAsKGkTCewB6xvkHst+DD75DLPQKVWKxJElv58wuBGr1JQkgRtShj1BT+
-         tmMkXVn6Z/iEyXcSatPgnbSyRxUmXkA135umrEj8=
-Received: from fedora.. ([119.32.47.91])
-        by newxmesmtplogicsvrsza7.qq.com (NewEsmtp) with SMTP
-        id 8F2BB215; Mon, 10 Jan 2022 19:35:50 +0800
-X-QQ-mid: xmsmtpt1641814550tadfo0vjb
-Message-ID: <tencent_AEEE0573A5455BBE4D5C05226C6C1E3AEF08@qq.com>
-X-QQ-XMAILINFO: Nw6Y/HeEb1MZpHgDiS7/LJhp8IFwyZJ3C+va4g8+G8duTO4HNq19H40VxVRsmZ
-         hK4yG/pKkgw6U4ntv2yxX2xIZs+nhAsRN9iaxZBzjIoVeN/TTs+rbUATOmObZIjRkZwNCY0Hqi3J
-         uz57tU6NVoURjeAxSQQSMxCyD8xo+eVla/YN3OdawDbOBDp9y0OFCA2AJ+adkuucqLGnDG90w09z
-         xwP7UsZmBX80hOK9FFEHhGRJsvXxVGvYPLWJNZdwjDhXxXHZEziODe1OQmb+aXwcsxDIvtD1pRFU
-         knn5SEFNbi3LgkAHDSjDzb2GDwP9gB5+zkcHWa9KZQX5419LWq6ic+9qenRFa+zTvNr3AhDeLcoS
-         UAYDYgk+eQVBAlfBLU0qOWgEKCnOM8vQlQvn9mPCk6t73aYuXa3CXd3DqPUL/iDySwPZB28RP86s
-         shTtjwrRh/PJWN1gIgMV19JBii9MJZwiIyGOuX+q1UOvZ5vIN/1YE3aHfSScILZ1fKl9Dpbh7sTt
-         SWfSNUbAhwbdtKNb8WhBpW4i84k6Hrdg/psmFI9yUz6hbItyBLmY0yJmwU+23CwM5tj/0rzyA2C5
-         GAFFB2OOLmVd81lQ7XkW0fznTeS3IdZIliQFRg6CSKKMzcdaSApka9FOvOflTDaL4r01zXrbKI3e
-         OnxBV5ll3rUylf6uwgsR3ZfiG2T3RM0Wv2TspUY7WUogV/2cBg72y3HeiqjAkiOlLagk2s3RxvRk
-         xFUBuaQefiMhwy8cA1ifPSKM/GNMuxFjBkqHvIv5KXi/veSt3Z9ttJzjEWuXVd3RGq1wiXlMVgRT
-         9ZXdFtRuMIB36gMzSTMx9l601k/qabR3NI0LLY1OAzlstIT7jCKvNHXZjFQq2yfQaAUPKLxOO+fy
-         aRZT5yEyr+tjoVuD01wwk1C9hFP6X3DkDwHlEr6kDGY4pCWzR0h7k23QQUo6/1EA==
-From:   Conley Lee <conleylee@foxmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org, clabbe.montjoie@gmail.com
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conley Lee <conleylee@foxmail.com>
-Subject: [PATCH v2] net: ethernet: sun4i-emac: replace magic number with macro
-Date:   Mon, 10 Jan 2022 19:35:49 +0800
-X-OQ-MSGID: <20220110113549.2297850-1-conleylee@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
-References: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
+        Mon, 10 Jan 2022 06:36:22 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3865C061757;
+        Mon, 10 Jan 2022 03:36:21 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id c36so22682706uae.13;
+        Mon, 10 Jan 2022 03:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eOYKOMNdn7daGbU6jgLJi3oEFCH812Tr1mFTkATHWbM=;
+        b=dv9b9/vqTHZPdaEMYargHBS4A5dlQeWoYXCDzcpobdFebh23GRb+8bw4rxhay5OVzV
+         q4iOrsoS4Ma220UPt9kVVfLFDY7aaMwyQbvGvuzdP8gtm/9xP0RNgpBFRtTqDeEogJJ/
+         SVGrNAGMBWnBrNA2/t4+GtG3Lpkwf9SXTf2+SMKckYYuqb8CX33CH4cBnyLfcJw3sFmV
+         ym9FiSbQdE6tjguw7B08w1VNejUWXNg9jPz/uZi7EBD9ghjMczdSwJGfOKLUhLGP3Fp8
+         B4GS5WrvQJFi8XZx/YkevkMwgUxo0y6IwkTr49n2IyuGlqCwIYZrYItAsYFDjZXlKWBm
+         Ct4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eOYKOMNdn7daGbU6jgLJi3oEFCH812Tr1mFTkATHWbM=;
+        b=gUEU2c+DRiwzOFEh3YeXrW71xtmKsU9I7zzKXDKlkznUecCfXvNwdyEy/ls6V3SxiJ
+         0grTL0oSfDjhse9bW6v3FOMfsSugaLbD4KXge3CnLz0WARekm0bL6b9/oObox9cGtmr1
+         lQs0NtUYQknWfWfAQ0ttH+qvPi9R4Kjx9swXoIlJ6wowycppjxzENReJlri3afBSKqr9
+         42zy7wuK8bPV3BQnFFWj5XlszsLk0xbrasTQWdVfZfdhu7tipcn+7tHWUFUGz6e07UGn
+         v5rizan/1SxBzh+NZYdfrYnKxrWpiAsuaahFrxemoT1heiTSnpBlNk81JqpuJHkG0P2z
+         pF4Q==
+X-Gm-Message-State: AOAM532DnsmzqCKc0sCq+lkytqqqKH3gt9/NiJ4x34vzs9kjEzp/dhf5
+        vK5wbrCxh/JL72hXa5rQIRQZIHm7xwgzmuaTe5M=
+X-Google-Smtp-Source: ABdhPJzEk8+MsRvQw2gNjyoxD8tAuUiiVmNCo//Sj2gLzgGnTvbK9GC8gICCOiEg70gNF+dajIqVuSVB1vNGZ/vlMG4=
+X-Received: by 2002:a05:6102:dc9:: with SMTP id e9mr24344482vst.17.1641814580785;
+ Mon, 10 Jan 2022 03:36:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220110111036.1380288-1-sergio.paracuellos@gmail.com>
+ <20220110111036.1380288-5-sergio.paracuellos@gmail.com> <4b32313d0642a4043709ef98339497662dafb211.camel@pengutronix.de>
+In-Reply-To: <4b32313d0642a4043709ef98339497662dafb211.camel@pengutronix.de>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 10 Jan 2022 12:36:09 +0100
+Message-ID: <CAMhs-H9QC1MdiA7ShntQ7hOasRrZRbBok-zTqFMUPQjtdnwezQ@mail.gmail.com>
+Subject: Re: [PATCH v7 4/4] staging: mt7621-dts: align resets with binding documentation
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch remove magic numbers in sun4i-emac.c and replace with macros
-defined in sun4i-emac.h
+Hi Philipp,
 
-Change since v1
----------------
-- reformat
-- merge commits
-- add commit message
+On Mon, Jan 10, 2022 at 12:28 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+>
+> On Mon, 2022-01-10 at 12:10 +0100, Sergio Paracuellos wrote:
+> > Binding documentation for compatible 'mediatek,mt7621-sysc' has been updated
+> > to be used as a reset provider. Align reset related bits and system controller
+> > node with binding documentation along the dtsi file.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+>
+> Is this patch is missing the gdma and hsdma resets?
+> I only looked at v5.16, there those reference &rstctrl as well
 
-Signed-off-by: Conley Lee <conleylee@foxmail.com>
----
- drivers/net/ethernet/allwinner/sun4i-emac.c | 30 ++++++++++++---------
- drivers/net/ethernet/allwinner/sun4i-emac.h | 18 +++++++++++++
- 2 files changed, 35 insertions(+), 13 deletions(-)
+Associated drivers are already removed in staging tree since are not
+used al all and no effort for mainline them has appeared in a while..
+See:
 
-diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.c b/drivers/net/ethernet/allwinner/sun4i-emac.c
-index 849de4564709..98fd98feb439 100644
---- a/drivers/net/ethernet/allwinner/sun4i-emac.c
-+++ b/drivers/net/ethernet/allwinner/sun4i-emac.c
-@@ -106,9 +106,9 @@ static void emac_update_speed(struct net_device *dev)
- 
- 	/* set EMAC SPEED, depend on PHY  */
- 	reg_val = readl(db->membase + EMAC_MAC_SUPP_REG);
--	reg_val &= ~(0x1 << 8);
-+	reg_val &= ~EMAC_MAC_SUPP_100M;
- 	if (db->speed == SPEED_100)
--		reg_val |= 1 << 8;
-+		reg_val |= EMAC_MAC_SUPP_100M;
- 	writel(reg_val, db->membase + EMAC_MAC_SUPP_REG);
- }
- 
-@@ -264,7 +264,7 @@ static void emac_dma_done_callback(void *arg)
- 
- 	/* re enable interrupt */
- 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--	reg_val |= (0x01 << 8);
-+	reg_val |= EMAC_INT_CTL_RX_EN;
- 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 	db->emacrx_completed_flag = 1;
-@@ -429,7 +429,7 @@ static unsigned int emac_powerup(struct net_device *ndev)
- 	/* initial EMAC */
- 	/* flush RX FIFO */
- 	reg_val = readl(db->membase + EMAC_RX_CTL_REG);
--	reg_val |= 0x8;
-+	reg_val |= EMAC_RX_CTL_FLUSH_FIFO;
- 	writel(reg_val, db->membase + EMAC_RX_CTL_REG);
- 	udelay(1);
- 
-@@ -441,8 +441,8 @@ static unsigned int emac_powerup(struct net_device *ndev)
- 
- 	/* set MII clock */
- 	reg_val = readl(db->membase + EMAC_MAC_MCFG_REG);
--	reg_val &= (~(0xf << 2));
--	reg_val |= (0xD << 2);
-+	reg_val &= ~EMAC_MAC_MCFG_MII_CLKD_MASK;
-+	reg_val |= EMAC_MAC_MCFG_MII_CLKD_72;
- 	writel(reg_val, db->membase + EMAC_MAC_MCFG_REG);
- 
- 	/* clear RX counter */
-@@ -506,7 +506,7 @@ static void emac_init_device(struct net_device *dev)
- 
- 	/* enable RX/TX0/RX Hlevel interrup */
- 	reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--	reg_val |= (0xf << 0) | (0x01 << 8);
-+	reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
- 	writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 	spin_unlock_irqrestore(&db->lock, flags);
-@@ -637,7 +637,9 @@ static void emac_rx(struct net_device *dev)
- 		if (!rxcount) {
- 			db->emacrx_completed_flag = 1;
- 			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--			reg_val |= (0xf << 0) | (0x01 << 8);
-+			reg_val |=
-+				(EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN |
-+				 EMAC_INT_CTL_RX_EN);
- 			writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 			/* had one stuck? */
-@@ -669,7 +671,9 @@ static void emac_rx(struct net_device *dev)
- 			writel(reg_val | EMAC_CTL_RX_EN,
- 			       db->membase + EMAC_CTL_REG);
- 			reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--			reg_val |= (0xf << 0) | (0x01 << 8);
-+			reg_val |=
-+				(EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN |
-+				 EMAC_INT_CTL_RX_EN);
- 			writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 
- 			db->emacrx_completed_flag = 1;
-@@ -783,20 +787,20 @@ static irqreturn_t emac_interrupt(int irq, void *dev_id)
- 	}
- 
- 	/* Transmit Interrupt check */
--	if (int_status & (0x01 | 0x02))
-+	if (int_status & EMAC_INT_STA_TX_COMPLETE)
- 		emac_tx_done(dev, db, int_status);
- 
--	if (int_status & (0x04 | 0x08))
-+	if (int_status & EMAC_INT_STA_TX_ABRT)
- 		netdev_info(dev, " ab : %x\n", int_status);
- 
- 	/* Re-enable interrupt mask */
- 	if (db->emacrx_completed_flag == 1) {
- 		reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--		reg_val |= (0xf << 0) | (0x01 << 8);
-+		reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN | EMAC_INT_CTL_RX_EN);
- 		writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 	} else {
- 		reg_val = readl(db->membase + EMAC_INT_CTL_REG);
--		reg_val |= (0xf << 0);
-+		reg_val |= (EMAC_INT_CTL_TX_EN | EMAC_INT_CTL_TX_ABRT_EN);
- 		writel(reg_val, db->membase + EMAC_INT_CTL_REG);
- 	}
- 
-diff --git a/drivers/net/ethernet/allwinner/sun4i-emac.h b/drivers/net/ethernet/allwinner/sun4i-emac.h
-index 38c72d9ec600..90bd9ad77607 100644
---- a/drivers/net/ethernet/allwinner/sun4i-emac.h
-+++ b/drivers/net/ethernet/allwinner/sun4i-emac.h
-@@ -38,6 +38,7 @@
- #define EMAC_RX_CTL_REG		(0x3c)
- #define EMAC_RX_CTL_AUTO_DRQ_EN		(1 << 1)
- #define EMAC_RX_CTL_DMA_EN		(1 << 2)
-+#define EMAC_RX_CTL_FLUSH_FIFO		(1 << 3)
- #define EMAC_RX_CTL_PASS_ALL_EN		(1 << 4)
- #define EMAC_RX_CTL_PASS_CTL_EN		(1 << 5)
- #define EMAC_RX_CTL_PASS_CRC_ERR_EN	(1 << 6)
-@@ -61,7 +62,21 @@
- #define EMAC_RX_IO_DATA_STATUS_OK	(1 << 7)
- #define EMAC_RX_FBC_REG		(0x50)
- #define EMAC_INT_CTL_REG	(0x54)
-+#define EMAC_INT_CTL_RX_EN	(1 << 8)
-+#define EMAC_INT_CTL_TX0_EN	(1)
-+#define EMAC_INT_CTL_TX1_EN	(1 << 1)
-+#define EMAC_INT_CTL_TX_EN	(EMAC_INT_CTL_TX0_EN | EMAC_INT_CTL_TX1_EN)
-+#define EMAC_INT_CTL_TX0_ABRT_EN	(0x1 << 2)
-+#define EMAC_INT_CTL_TX1_ABRT_EN	(0x1 << 3)
-+#define EMAC_INT_CTL_TX_ABRT_EN	(EMAC_INT_CTL_TX0_ABRT_EN | EMAC_INT_CTL_TX1_ABRT_EN)
- #define EMAC_INT_STA_REG	(0x58)
-+#define EMAC_INT_STA_TX0_COMPLETE	(0x1)
-+#define EMAC_INT_STA_TX1_COMPLETE	(0x1 << 1)
-+#define EMAC_INT_STA_TX_COMPLETE	(EMAC_INT_STA_TX0_COMPLETE | EMAC_INT_STA_TX1_COMPLETE)
-+#define EMAC_INT_STA_TX0_ABRT	(0x1 << 2)
-+#define EMAC_INT_STA_TX1_ABRT	(0x1 << 3)
-+#define EMAC_INT_STA_TX_ABRT	(EMAC_INT_STA_TX0_ABRT | EMAC_INT_STA_TX1_ABRT)
-+#define EMAC_INT_STA_RX_COMPLETE	(0x1 << 8)
- #define EMAC_MAC_CTL0_REG	(0x5c)
- #define EMAC_MAC_CTL0_RX_FLOW_CTL_EN	(1 << 2)
- #define EMAC_MAC_CTL0_TX_FLOW_CTL_EN	(1 << 3)
-@@ -87,8 +102,11 @@
- #define EMAC_MAC_CLRT_RM		(0x0f)
- #define EMAC_MAC_MAXF_REG	(0x70)
- #define EMAC_MAC_SUPP_REG	(0x74)
-+#define EMAC_MAC_SUPP_100M	(0x1 << 8)
- #define EMAC_MAC_TEST_REG	(0x78)
- #define EMAC_MAC_MCFG_REG	(0x7c)
-+#define EMAC_MAC_MCFG_MII_CLKD_MASK	(0xff << 2)
-+#define EMAC_MAC_MCFG_MII_CLKD_72	(0x0d << 2)
- #define EMAC_MAC_A0_REG		(0x98)
- #define EMAC_MAC_A1_REG		(0x9c)
- #define EMAC_MAC_A2_REG		(0xa0)
--- 
-2.31.1
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=53a2f33caaeacb820f554899f0780387b1b4381b
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=87dd67f496f71c3693431a236b2b542793d786ff
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-testing&id=5bfc10690c6c590a972be014ed8595e77e1e2dea
 
+Best regards,
+    Sergio Paracuellos
+
+
+>
+> regards
+> Philipp

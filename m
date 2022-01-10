@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAA5489219
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE6E48912F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240009AbiAJHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:38:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40806 "EHLO
+        id S239910AbiAJHaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:30:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36776 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239567AbiAJHb6 (ORCPT
+        with ESMTP id S239785AbiAJH0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:31:58 -0500
+        Mon, 10 Jan 2022 02:26:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 489E960B64;
-        Mon, 10 Jan 2022 07:31:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26682C36AED;
-        Mon, 10 Jan 2022 07:31:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D51B0611BC;
+        Mon, 10 Jan 2022 07:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB8FC36AED;
+        Mon, 10 Jan 2022 07:26:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799917;
-        bh=Z8LE9cYvSp0MC2X9ttEYDImaw6hZ2knRJoXOTpxtb18=;
+        s=korg; t=1641799608;
+        bh=nRf2YnszFlBRJ5SE2pq88CkT1YtF9Z2oYJoZxoIQuuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w2XcrcrHE5gcTWN8tEwBobCxmBNq3ZkwFQzKwT14esOGM0V3o6bX1mxgMmB5djO+p
-         kb6sSh244nF4uFIMjTm+jRe0XGvBWeCg7VX/dLC3abQaliAmOBLesCRD9D+fvTDGB9
-         IKDKUQrHAeCgHEr/Di840RxDM4o7BUUiSEaimG2k=
+        b=FxuN79tcVKZ7ekI9iUovXcnACo9rtpPh5ZqPjNHvIH9N0+ohrGmf8kQORFfsAFoAP
+         4+F6Z1wRsgBfdm0vSSXULHrKtr7Tzi5tN7hyVI6Ll6AxLIUD1FJ9BzA/LBRRpAFFFo
+         irnFzrIuF0D+pz2GwN3e6t7f+M3f/2CElV0LMvdg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Di Zhu <zhudi2@huawei.com>,
-        Rui Zhang <zhangrui182@huawei.com>,
-        Gurucharan G <gurucharanx.g@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 16/72] i40e: fix use-after-free in i40e_sync_filters_subtask()
-Date:   Mon, 10 Jan 2022 08:22:53 +0100
-Message-Id: <20220110071822.110037500@linuxfoundation.org>
+        stable@vger.kernel.org, Ivan Levshin <ivan.levshin@microfocus.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 4.14 01/22] Bluetooth: btusb: Apply QCA Rome patches for some ATH3012 models
+Date:   Mon, 10 Jan 2022 08:22:54 +0100
+Message-Id: <20220110071814.308754523@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071814.261471354@linuxfoundation.org>
+References: <20220110071814.261471354@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,138 +48,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Di Zhu <zhudi2@huawei.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 3116f59c12bd24c513194cd3acb3ec1f7d468954 upstream.
+commit 803cdb8ce584198cd45825822910cac7de6378cb upstream.
 
-Using ifconfig command to delete the ipv6 address will cause
-the i40e network card driver to delete its internal mac_filter and
-i40e_service_task kernel thread will concurrently access the mac_filter.
-These two processes are not protected by lock
-so causing the following use-after-free problems.
+In commit f44cb4b19ed4 ("Bluetooth: btusb: Fix quirk for Atheros
+1525/QCA6174") we tried to address the non-working Atheros BT devices
+by changing the quirk from BTUSB_ATH3012 to BTUSB_QCA_ROME.  This made
+such devices working while it turned out to break other existing chips
+with the very same USB ID, hence it was reverted afterwards.
 
- print_address_description+0x70/0x360
- ? vprintk_func+0x5e/0xf0
- kasan_report+0x1b2/0x330
- i40e_sync_vsi_filters+0x4f0/0x1850 [i40e]
- i40e_sync_filters_subtask+0xe3/0x130 [i40e]
- i40e_service_task+0x195/0x24c0 [i40e]
- process_one_work+0x3f5/0x7d0
- worker_thread+0x61/0x6c0
- ? process_one_work+0x7d0/0x7d0
- kthread+0x1c3/0x1f0
- ? kthread_park+0xc0/0xc0
- ret_from_fork+0x35/0x40
+This is another attempt to tackle the issue.  The essential point to
+use BTUSB_QCA_ROME is to apply the btusb_setup_qca() and do RAM-
+patching.  And the previous attempt failed because btusb_setup_qca()
+returns -ENODEV if the ROM version doesn't match with the expected
+ones.  For some devices that have already the "correct" ROM versions,
+we may just skip the setup procedure and continue the rest.
 
-Allocated by task 2279810:
- kasan_kmalloc+0xa0/0xd0
- kmem_cache_alloc_trace+0xf3/0x1e0
- i40e_add_filter+0x127/0x2b0 [i40e]
- i40e_add_mac_filter+0x156/0x190 [i40e]
- i40e_addr_sync+0x2d/0x40 [i40e]
- __hw_addr_sync_dev+0x154/0x210
- i40e_set_rx_mode+0x6d/0xf0 [i40e]
- __dev_set_rx_mode+0xfb/0x1f0
- __dev_mc_add+0x6c/0x90
- igmp6_group_added+0x214/0x230
- __ipv6_dev_mc_inc+0x338/0x4f0
- addrconf_join_solict.part.7+0xa2/0xd0
- addrconf_dad_work+0x500/0x980
- process_one_work+0x3f5/0x7d0
- worker_thread+0x61/0x6c0
- kthread+0x1c3/0x1f0
- ret_from_fork+0x35/0x40
+So, the first fix we'll need is to add a check of the ROM version in
+the function to skip the setup if the ROM version looks already sane,
+so that it can be applied for all ath devices.
 
-Freed by task 2547073:
- __kasan_slab_free+0x130/0x180
- kfree+0x90/0x1b0
- __i40e_del_filter+0xa3/0xf0 [i40e]
- i40e_del_mac_filter+0xf3/0x130 [i40e]
- i40e_addr_unsync+0x85/0xa0 [i40e]
- __hw_addr_sync_dev+0x9d/0x210
- i40e_set_rx_mode+0x6d/0xf0 [i40e]
- __dev_set_rx_mode+0xfb/0x1f0
- __dev_mc_del+0x69/0x80
- igmp6_group_dropped+0x279/0x510
- __ipv6_dev_mc_dec+0x174/0x220
- addrconf_leave_solict.part.8+0xa2/0xd0
- __ipv6_ifa_notify+0x4cd/0x570
- ipv6_ifa_notify+0x58/0x80
- ipv6_del_addr+0x259/0x4a0
- inet6_addr_del+0x188/0x260
- addrconf_del_ifaddr+0xcc/0x130
- inet6_ioctl+0x152/0x190
- sock_do_ioctl+0xd8/0x2b0
- sock_ioctl+0x2e5/0x4c0
- do_vfs_ioctl+0x14e/0xa80
- ksys_ioctl+0x7c/0xa0
- __x64_sys_ioctl+0x42/0x50
- do_syscall_64+0x98/0x2c0
- entry_SYSCALL_64_after_hwframe+0x65/0xca
+However, the world is a bit more complex than that simple solution.
+Since BTUSB_ATH3012 quirk checks the bcdDevice and bails out when it's
+0x0001 at the beginning of probing, so the device probe always aborts
+here.
 
-Fixes: 41c445ff0f48 ("i40e: main driver core")
-Signed-off-by: Di Zhu <zhudi2@huawei.com>
-Signed-off-by: Rui Zhang <zhangrui182@huawei.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+In this patch, we add another check of ROM version again, and if the
+device needs patching, the probe continues.  For that, a slight
+refactoring of btusb_qca_send_vendor_req() was required so that the
+probe function can pass usb_device pointer directly before allocating
+hci_dev stuff.
+
+Fixes: commit f44cb4b19ed4 ("Bluetooth: btusb: Fix quirk for Atheros 1525/QCA6174")
+Bugzilla: http://bugzilla.opensuse.org/show_bug.cgi?id=1082504
+Tested-by: Ivan Levshin <ivan.levshin@microfocus.com>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c |   24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/bluetooth/btusb.c |   32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -99,6 +99,24 @@ MODULE_LICENSE("GPL v2");
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2548,11 +2548,9 @@ static const struct qca_device_info qca_
+ 	{ 0x00000302, 28, 4, 18 }, /* Rome 3.2 */
+ };
  
- static struct workqueue_struct *i40e_wq;
+-static int btusb_qca_send_vendor_req(struct hci_dev *hdev, u8 request,
++static int btusb_qca_send_vendor_req(struct usb_device *udev, u8 request,
+ 				     void *data, u16 size)
+ {
+-	struct btusb_data *btdata = hci_get_drvdata(hdev);
+-	struct usb_device *udev = btdata->udev;
+ 	int pipe, err;
+ 	u8 *buf;
  
-+static void netdev_hw_addr_refcnt(struct i40e_mac_filter *f,
-+				  struct net_device *netdev, int delta)
+@@ -2567,7 +2565,7 @@ static int btusb_qca_send_vendor_req(str
+ 	err = usb_control_msg(udev, pipe, request, USB_TYPE_VENDOR | USB_DIR_IN,
+ 			      0, 0, buf, size, USB_CTRL_SET_TIMEOUT);
+ 	if (err < 0) {
+-		BT_ERR("%s: Failed to access otp area (%d)", hdev->name, err);
++		dev_err(&udev->dev, "Failed to access otp area (%d)", err);
+ 		goto done;
+ 	}
+ 
+@@ -2723,20 +2721,38 @@ static int btusb_setup_qca_load_nvm(stru
+ 	return err;
+ }
+ 
++/* identify the ROM version and check whether patches are needed */
++static bool btusb_qca_need_patch(struct usb_device *udev)
 +{
-+	struct netdev_hw_addr *ha;
++	struct qca_version ver;
 +
-+	if (!f || !netdev)
-+		return;
-+
-+	netdev_for_each_mc_addr(ha, netdev) {
-+		if (ether_addr_equal(ha->addr, f->macaddr)) {
-+			ha->refcount += delta;
-+			if (ha->refcount <= 0)
-+				ha->refcount = 1;
-+			break;
-+		}
-+	}
++	if (btusb_qca_send_vendor_req(udev, QCA_GET_TARGET_VERSION, &ver,
++				      sizeof(ver)) < 0)
++		return false;
++	/* only low ROM versions need patches */
++	return !(le32_to_cpu(ver.rom_version) & ~0xffffU);
 +}
 +
- /**
-  * i40e_allocate_dma_mem_d - OS specific memory alloc for shared code
-  * @hw:   pointer to the HW structure
-@@ -2036,6 +2054,7 @@ static void i40e_undo_add_filter_entries
- 	hlist_for_each_entry_safe(new, h, from, hlist) {
- 		/* We can simply free the wrapper structure */
- 		hlist_del(&new->hlist);
-+		netdev_hw_addr_refcnt(new->f, vsi->netdev, -1);
- 		kfree(new);
- 	}
- }
-@@ -2383,6 +2402,10 @@ int i40e_sync_vsi_filters(struct i40e_vs
- 						       &tmp_add_list,
- 						       &tmp_del_list,
- 						       vlan_filters);
-+
-+		hlist_for_each_entry(new, &tmp_add_list, hlist)
-+			netdev_hw_addr_refcnt(new->f, vsi->netdev, 1);
-+
- 		if (retval)
- 			goto err_no_memory_locked;
+ static int btusb_setup_qca(struct hci_dev *hdev)
+ {
++	struct btusb_data *btdata = hci_get_drvdata(hdev);
++	struct usb_device *udev = btdata->udev;
+ 	const struct qca_device_info *info = NULL;
+ 	struct qca_version ver;
+ 	u32 ver_rom;
+ 	u8 status;
+ 	int i, err;
  
-@@ -2515,6 +2538,7 @@ int i40e_sync_vsi_filters(struct i40e_vs
- 			if (new->f->state == I40E_FILTER_NEW)
- 				new->f->state = new->state;
- 			hlist_del(&new->hlist);
-+			netdev_hw_addr_refcnt(new->f, vsi->netdev, -1);
- 			kfree(new);
- 		}
- 		spin_unlock_bh(&vsi->mac_filter_hash_lock);
+-	err = btusb_qca_send_vendor_req(hdev, QCA_GET_TARGET_VERSION, &ver,
++	err = btusb_qca_send_vendor_req(udev, QCA_GET_TARGET_VERSION, &ver,
+ 					sizeof(ver));
+ 	if (err < 0)
+ 		return err;
+ 
+ 	ver_rom = le32_to_cpu(ver.rom_version);
++	/* Don't care about high ROM versions */
++	if (ver_rom & ~0xffffU)
++		return 0;
++
+ 	for (i = 0; i < ARRAY_SIZE(qca_devices_table); i++) {
+ 		if (ver_rom == qca_devices_table[i].rom_version)
+ 			info = &qca_devices_table[i];
+@@ -2747,7 +2763,7 @@ static int btusb_setup_qca(struct hci_de
+ 		return -ENODEV;
+ 	}
+ 
+-	err = btusb_qca_send_vendor_req(hdev, QCA_CHECK_STATUS, &status,
++	err = btusb_qca_send_vendor_req(udev, QCA_CHECK_STATUS, &status,
+ 					sizeof(status));
+ 	if (err < 0)
+ 		return err;
+@@ -2974,7 +2990,8 @@ static int btusb_probe(struct usb_interf
+ 		/* Old firmware would otherwise let ath3k driver load
+ 		 * patch and sysconfig files
+ 		 */
+-		if (le16_to_cpu(udev->descriptor.bcdDevice) <= 0x0001)
++		if (le16_to_cpu(udev->descriptor.bcdDevice) <= 0x0001 &&
++		    !btusb_qca_need_patch(udev))
+ 			return -ENODEV;
+ 	}
+ 
+@@ -3136,6 +3153,7 @@ static int btusb_probe(struct usb_interf
+ 	}
+ 
+ 	if (id->driver_info & BTUSB_ATH3012) {
++		data->setup_on_usb = btusb_setup_qca;
+ 		hdev->set_bdaddr = btusb_set_bdaddr_ath3012;
+ 		set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
+ 		set_bit(HCI_QUIRK_STRICT_DUPLICATE_FILTER, &hdev->quirks);
 
 

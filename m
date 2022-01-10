@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 965BB489C67
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667F3489C6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236377AbiAJPjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:39:55 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:51354 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236373AbiAJPjy (ORCPT
+        id S236386AbiAJPmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236361AbiAJPmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:39:54 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B460421124;
-        Mon, 10 Jan 2022 15:39:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641829192; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FpgD/z1tH1n4z25ssRiC8BwrRHCQmq0t20cgjahtksA=;
-        b=a5nL7FD8WAScsrFn7oClSv1bqemNsF2dJoGD/wehxxpMVPytSTcqwnKSQ5wCUv8KKG6s8k
-        yn3Yq4JQCE1YyY4GlQKkiO31jokIJkxJ8FCsP95m7oEwzL+LHmPqye4nUZny4PxI+IhEIx
-        Lmrz78siT39fe0YgQ6PngSztc4docRw=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 46A64A3B83;
-        Mon, 10 Jan 2022 15:39:52 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 16:39:51 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org
-Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
-Message-ID: <YdxTR4+FL08XyFuO@dhcp22.suse.cz>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <YdSuSHa/Vjl6bPkg@google.com>
- <YdgKClGAuHlkzVbQ@dhcp22.suse.cz>
- <YdiKVJlClB3h1Kmg@google.com>
+        Mon, 10 Jan 2022 10:42:16 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC32C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:42:16 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id s19so14750148qtc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 07:42:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DDN57VZ5dxd2+2ecHBrgkClEZHp+sgIvGNjxzq+ARR0=;
+        b=G3DPk4/fTlHo+oKZp/8aMtDAnQuoyrUUK5rQPsQuzpQAY3r19uOOSzQrYfj/M6Gigj
+         sArLVoXQsQFFdtBg06v8db1A/bkXcvCOochIku4VRDOhdNLntpv3xHMPMLDe3TbZjQlW
+         KRWrVE0pzbYAA/taQLahAxpTUGN9jdxuf7V/KuYUlHKW66PbL6aXxSieXmI5MIvEteUX
+         1e3ajgxV4omx+ZK/6xxRrH1IOM4nVxMxPXQut6cGX6Pj5+6l4d5nzuIp4elLKQ/PJxBU
+         RAICtb+laDO4uktMJyj01ks6/KS2iway1wfRQYaMIfIVoXkPCqNcWDbevtbPyoby4G7j
+         D3Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DDN57VZ5dxd2+2ecHBrgkClEZHp+sgIvGNjxzq+ARR0=;
+        b=zLZ4A0Ock2VRSwGWxSz+LGWWZWOLeqxzXPT39F/RrAfiZ9/l2ewsnCIZwaC2TiuEUk
+         dvG1BxVoOC5Azx8xppSe+MPF/eEBstjZuAO5g9Xd1if2AfOYfuV1KSJzjykt56HMAq4P
+         KhccNEJKeBm5Ce0mRx2tgvglhT23K82RjgHImorL4HyZDL9B6KsTymQwmkaCgi0lj7RL
+         oNfsazNY3IZjQl5tfXaxQ/wmzVHk/IUWUlLpSa///oms1b1Gq/9UYuBv6MUsrNp4G0IG
+         Jo3HM9EIIW4c8PVJHTbvhOlns98/j0jFEgXPH8HKtTzBr/ZE8UZ2a2IazsLuf8hLq+GV
+         rapQ==
+X-Gm-Message-State: AOAM532N5mHV+aI1oxHulY8JLmVRHMBstcs/3DVnEDRqrt59IINC/u8D
+        H4auuDw4br80twQxmGgUdhH76Ccctr2H13BiFOVMfYiTmP4=
+X-Google-Smtp-Source: ABdhPJzilu5eKKCnPAvRjZ+iSnCsvCDyVDuwUko3ioYoySqoWMaWxkQuhLvM2Cgo6p/1WrpqMN9x8WKhF8iNRWmwXps=
+X-Received: by 2002:a05:622a:2d5:: with SMTP id a21mr263977qtx.56.1641829335633;
+ Mon, 10 Jan 2022 07:42:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdiKVJlClB3h1Kmg@google.com>
+References: <000000000000be665505d4d9ebd6@google.com> <60e9caf1-7b9f-c5a4-a3e8-ff9135e16197@gmail.com>
+In-Reply-To: <60e9caf1-7b9f-c5a4-a3e8-ff9135e16197@gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 10 Jan 2022 16:41:39 +0100
+Message-ID: <CAG_fn=U_z-J2ZxVKD5CvTkOStfqtZ9eCx4qj0cJfzqz44EjFjA@mail.gmail.com>
+Subject: Re: [syzbot] KMSAN: kernel-usb-infoleak in usbnet_write_cmd (3)
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     syzbot <syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        johan@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 07-01-22 11:45:40, Yu Zhao wrote:
-[...]
-> Next, I argue that the benefits of this patchset outweigh its risks,
-> because, drawing from my past experience,
-> 1. There have been many larger and/or riskier patchsets taken; I'll
->    assemble a list if you disagree.
+On Thu, Jan 6, 2022 at 11:17 PM Pavel Skripkin <paskripkin@gmail.com> wrote=
+:
+>
+> On 1/5/22 21:28, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan=
+_in..
+> > git tree:       https://github.com/google/kmsan.git master
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D14a07163b00=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2d8b9a11641=
+dc9aa
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D003c0a286b9af=
+5412510
+> > compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-mo=
+norepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for =
+Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D100165dbb=
+00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D10c97e77b00=
+000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+> >
+>
+> Heh, I think, more reports like this will appear soon. Syzbot learned
+> how to tweak usb read functions return values, I guess?
 
-No question about that. Changes in the reclaim path are paved with
-failures and reverts and fine tuning on top of existing fine tuning.
-The difference from your patchset is that they tend to be much much
-smaller and go incremental and therefore easier to review.
+This has been possible long ago. I think these new reports are related
+to fresh KMSAN changes (and also the fact KMSAN was broken for a while
+last year, and is now catching up).
 
->    And this patchset is fully guarded
->    by #ifdef; Linus has also assessed on this point.
+> #syz test: https://github.com/google/kmsan.git master
+>
+>
+>
+> With regards,
+> Pavel Skripkin
 
-I appreciate you made the new behavior an opt-in and therefore existing
-workloads are less likely to regress. I do not think ifdefs help
-all that much, though, because a) realistically the config will
-likely be enabled for most distribution kernels and b) the parallel
-reclaim implementation adds a maintenance overhead regardless of those
-ifdef. The later point is especially worrying because the memory reclaim
-is a complex and hard to review beast already. Any future changes would
-need to consider both reclaim algorithms of course.
 
-Hence I argue we really need a wider consensus this is the right
-direction we want to pursue.
 
-> 2. There have been none that came with the testing/benchmarking
->    coverage as this one did. Please point me to some if I'm mistaken,
->    and I'll gladly match them.
+--=20
+Alexander Potapenko
+Software Engineer
 
-I do appreciate your numbers but you should realize that this is an area
-that is really hard to get any conclusive testing for. We keep learning
-about fallouts on workloads we haven't really anticipated or where the
-runtime effects happen to disagree with our intuition. So while those
-numbers are nice there are other important aspects to consider like the
-maintenance cost for example.
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-> The numbers might not materialize in the real world; the code is not
-> perfect; and many other risks... But all the top eight open source
-> memory hogs were covered, which is unprecedented; memcached and fio
-> showed significant improvements and it only takes a few commands to
-> see for yourselves.
-> 
-> Regarding the acks and the reviewed-bys, I certainly can ask people
-> who have reaped the benefits of this patchset to do them, if it's
-> required. But I see less fun in that. I prefer to provide empirical
-> evidence and convince people who are on the other side of the aisle.
-
-I like to hear from users who benefit from your work and that certainly
-gives more credit to it. But it will be the MM community to maintain the
-code and address future issues.
-
-We do not have a dedicated maintainer for the memory reclaim but
-certainly there are people who have helped shaping the existing code and
-have learned a lot from the past issues - like Johannes, Rik, Mel just
-to name few. If I were you I would be really looking into finding an
-agreement with them. I myself can help you with memcg and oom side of
-the things (we already have discussions about those).
-
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

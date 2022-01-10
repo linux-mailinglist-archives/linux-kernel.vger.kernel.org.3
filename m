@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB65C489871
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02BA489876
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245306AbiAJMTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
+        id S245362AbiAJMTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiAJMTP (ORCPT
+        with ESMTP id S245356AbiAJMTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:19:15 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB06C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:19:14 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id g26so43606258lfv.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:19:14 -0800 (PST)
+        Mon, 10 Jan 2022 07:19:37 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79BCC061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:19:36 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id x7so43580033lfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 04:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=m3cdTQamqwc5wvi/XQ/FOwI7VvBmgKes9aExDZLIFjA=;
-        b=gSOGJgj/TY6JNMK0G2JxMu/WZFwY7zR+ZYiKDN6iQ0Ra9n4bMKcvoREscljN5Zxf6+
-         Jv8XTn8e1ietgSFsjNrQvIkgg2RQRdFt1gPZd8OPutrgR3vV3KVsXoeFxCqakP7dQ5IK
-         tPgz5rE1t2ny6zDiI3eN0TDLS/iS+n9akUTmUr7Asu7W8+eAEMyLKMpkVxu+z1yP9o0W
-         2Pu4YGcelUcN+PmFXSgtdvkQJfZQZkaGTd+nwid/qg+z/8njXLMJ7XA1IE5HE61dtbrt
-         PYiZJCgdYYy1KqVmbiAjWa9OVsgX8vxo+MOuv1NNONCoDufVIuC0/s8fWegL93t7jZDt
-         XOHQ==
+        bh=oItLJqty6s53Y67BNr1LeaFk3C3IPxdqdZSq0A/p/Zc=;
+        b=W9E+tboVCcYCEqiAMgrWXq1sx+HJoOHmwwyVUKW3oIvCiUj9F28OcSPJFgzqPsM7Lz
+         CT0aMoC6lVCrPQ/LKJVLStgZL9rN+E9hEzCd3rrIqRsfgptvdazd3oS+o7YhjHJZKCyD
+         fCCR2YjUqTzxXnECAHaVWr/UBLKg/ap4yd3qYGecva/m9KXmcmLcnJvkHMESbhpxnMGd
+         mFPdCBFjBHw9tRWFwIBh7ZORM00dzMrofv02pDTo60LAWdxw93Euhe/7N6zAy3tEMmeD
+         x4PR+lJK3PoLaXi7pV2IjkEM0Wk9FjufWcrej8K0TPIlj8E0MbSMtlsN+zxRveJzrc2A
+         siPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=m3cdTQamqwc5wvi/XQ/FOwI7VvBmgKes9aExDZLIFjA=;
-        b=ClSXs/kINqFWVQWe5N12Mr4ekP8hMc7oyLDYrqVP0oEqEW3j7qULta74NwZvcdIcUd
-         QHoO0sXPKMd4kh0YKHWs5gh9tPofhri4y6aXb5MLWZgvPCpjYvCbBviYP8baeR22MPA/
-         oYewEZZTY+BFzB1bFPvk25CWN90UiauocJGHmVEEVuT7y4fhxIvLZaWU1mx4SClKWuds
-         SDo/7+YMmtwK+DT5fyAeQD5w0WGcpojPgCh85YwI7WcYZecSP7jdgUvO8cYT2nkVuepL
-         n9TY8ke6C0e02+rXEvmzZZiP6ebIvfxRLGD0ng58+Y7xU0T6UIIAr+QuQrfEk9RK40wt
-         dfnw==
-X-Gm-Message-State: AOAM532SvSXLboPhc4SYDSDM2uyrB02uzhiK1dj+NfZviUX0s2VO62JJ
-        StswA5/CJ0oC6kmcQbIGYlk7b++ilwUSeltsoPAQow==
-X-Google-Smtp-Source: ABdhPJxvPy8twDY+Ak+Q1oU4Zqi1NunN2lX57+GA7fBUxaLuRAj0pvnI5p/lmSlBQl36w0P/08dUpkNOXSvaTJemqeI=
-X-Received: by 2002:a05:6512:4021:: with SMTP id br33mr4206761lfb.233.1641817153127;
- Mon, 10 Jan 2022 04:19:13 -0800 (PST)
+        bh=oItLJqty6s53Y67BNr1LeaFk3C3IPxdqdZSq0A/p/Zc=;
+        b=2nIXAhMNmhyeqQ28Th3EtSCpBf3IUq8zkBTn8imKA4LHd3rqcCr8gu8n8FaLPr4m37
+         QJyAxHHG2qACizTnLYehd1zX9J29rFIlKO8Ximcw1dE684EeEQP0I8wjFEkWheoNl38i
+         vOHS6DRgYlGnKeP5qS4ZGcdassdTDEj4eZKT0DDp9JvXAPROQvzb6aLJjKNKczw5wcIJ
+         0agu946tNHDltLOEThkuX1cIYv0/q7S7ekXt1YgUYZL0U/QElsSLBwHgFxNOZVWgRhsu
+         Ngc7fuzj2Sg8sscchmZzRMjpCxKl+eUdsHl5kcqLRfxlxynAzZk9cif1UkCYpxBkm3hR
+         S1oQ==
+X-Gm-Message-State: AOAM531HxtYv39wiX2cxe7q/E66W4poRLbARFk+WReruvNZ0jtKh4OdY
+        7RB4NBQ2GFl27A9dvRVxW/GUx90OrRzY3SpcqtHVBA==
+X-Google-Smtp-Source: ABdhPJwbk3S2fn8ZFetKG19LQFq5sp0v346WOXX8vKHH85YoPDQzN7F39asaudOZFvvguHTzqSAZ/jCrqvB3OUXKqt0=
+X-Received: by 2002:a2e:7d08:: with SMTP id y8mr55330598ljc.273.1641817175137;
+ Mon, 10 Jan 2022 04:19:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20220107181723.54392-1-paul@crapouillou.net> <20220107181723.54392-4-paul@crapouillou.net>
-In-Reply-To: <20220107181723.54392-4-paul@crapouillou.net>
+References: <20220107181723.54392-1-paul@crapouillou.net> <20220107181723.54392-5-paul@crapouillou.net>
+In-Reply-To: <20220107181723.54392-5-paul@crapouillou.net>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 10 Jan 2022 13:18:36 +0100
-Message-ID: <CAPDyKFqkPT_uj4HE0y0hnGQza26JO=b7vOq8t3YVF4=QKDYa-w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+Date:   Mon, 10 Jan 2022 13:18:59 +0100
+Message-ID: <CAPDyKFqqF_YqQcKLSZvSrPcrNMOnRyq7KghR-o3uuw_udDZB=w@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>,
@@ -69,107 +69,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, 7 Jan 2022 at 19:17, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> These macros are defined conditionally, according to CONFIG_PM:
-> - if CONFIG_PM is enabled, these macros resolve to
->   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->   exported.
+> A lot of drivers create a dev_pm_ops struct with the system sleep
+> suspend/resume callbacks set to pm_runtime_force_suspend() and
+> pm_runtime_force_resume().
 >
-> - if CONFIG_PM is disabled, these macros will result in a dummy static
->   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
->   will then be discarded by the compiler, along with the provided
->   callback functions if they are not used anywhere else.
->
-> In the second case, the symbol is not exported, which should be
-> perfectly fine - users of the symbol should all use the pm_ptr() or
-> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> client's code will never be accessed.
+> These drivers can now use the DEFINE_RUNTIME_DEV_PM_OPS() macro, which
+> will use pm_runtime_force_{suspend,resume}() as the system sleep
+> callbacks, while having the same dead code removal characteristic that
+> is already provided by DEFINE_SIMPLE_DEV_PM_OPS().
 >
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Clearly this can be useful!
-
-My main concern is rather that the macros become a bit complicated
-(for understandable reasons) and that kind of continues while looking
-at patch4 and patch5 too. Hopefully that doesn't prevent users from
-adopting them, and the current situation deserves improvements, so I
-think this is worth a try!
 
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
 
-
 > ---
 >
 > Notes:
->     v2: Remove useless empty line
->     v3: - Reorder the code to have non-private macros together in the file
->         - Add comment about the necesity to use the new export macro when
->           the dev_pm_ops has to be exported
+>     v2-v3: No change
 >
->  include/linux/pm.h | 35 ++++++++++++++++++++++++++++++++---
->  1 file changed, 32 insertions(+), 3 deletions(-)
+>  include/linux/pm.h         |  3 ++-
+>  include/linux/pm_runtime.h | 14 ++++++++++++++
+>  2 files changed, 16 insertions(+), 1 deletion(-)
 >
 > diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 8e13387e70ec..8279af2c538a 100644
+> index 8279af2c538a..f7d2be686359 100644
 > --- a/include/linux/pm.h
 > +++ b/include/linux/pm.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_H
->  #define _LINUX_PM_H
->
-> +#include <linux/export.h>
->  #include <linux/list.h>
->  #include <linux/workqueue.h>
->  #include <linux/spinlock.h>
-> @@ -357,14 +358,42 @@ struct dev_pm_ops {
->  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->  #endif
->
-> +#define _DEFINE_DEV_PM_OPS(name, \
-> +                          suspend_fn, resume_fn, \
-> +                          runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +const struct dev_pm_ops name = { \
-> +       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +       RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +}
-> +
-> +#ifdef CONFIG_PM
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +                          runtime_resume_fn, idle_fn, sec) \
-> +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +                          runtime_resume_fn, idle_fn); \
-> +       _EXPORT_SYMBOL(name, sec)
-> +#else
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +                          runtime_resume_fn, idle_fn, sec) \
-> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> +                                        resume_fn, runtime_suspend_fn, \
-> +                                        runtime_resume_fn, idle_fn)
-> +#endif
-> +
->  /*
->   * Use this if you want to use the same suspend and resume callbacks for suspend
->   * to RAM and hibernation.
-> + *
-> + * If the underlying dev_pm_ops struct symbol has to be exported, use
-> + * EXPORT_SIMPLE_DEV_PM_OPS() or EXPORT_GPL_SIMPLE_DEV_PM_OPS() instead.
+> @@ -414,7 +414,8 @@ const struct dev_pm_ops __maybe_unused name = { \
+>   * .resume_early(), to the same routines as .runtime_suspend() and
+>   * .runtime_resume(), respectively (and analogously for hibernation).
+>   *
+> - * Deprecated. You most likely don't want this macro.
+> + * Deprecated. You most likely don't want this macro. Use
+> + * DEFINE_RUNTIME_DEV_PM_OPS() instead.
 >   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -const struct dev_pm_ops name = { \
-> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> -}
-> +       _DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-> +
-> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +       _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
+>  #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+>  const struct dev_pm_ops __maybe_unused name = { \
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 016de5776b6d..4af454d29281 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -22,6 +22,20 @@
+>                                             usage_count */
+>  #define RPM_AUTO               0x08    /* Use autosuspend_delay */
 >
->  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +/*
+> + * Use this for defining a set of PM operations to be used in all situations
+> + * (system suspend, hibernation or runtime PM).
+> + *
+> + * Note that the behaviour differs from the deprecated UNIVERSAL_DEV_PM_OPS()
+> + * macro, which uses the provided callbacks for both runtime PM and system
+> + * sleep, while DEFINE_RUNTIME_DEV_PM_OPS() uses pm_runtime_force_suspend()
+> + * and pm_runtime_force_resume() for its system sleep callbacks.
+> + */
+> +#define DEFINE_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+> +       _DEFINE_DEV_PM_OPS(name, pm_runtime_force_suspend, \
+> +                          pm_runtime_force_resume, suspend_fn, \
+> +                          resume_fn, idle_fn)
+> +
+>  #ifdef CONFIG_PM
+>  extern struct workqueue_struct *pm_wq;
+>
 > --
 > 2.34.1
 >

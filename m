@@ -2,182 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 277E748A306
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CB148A30F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242454AbiAJWfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S241179AbiAJWjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241651AbiAJWfU (ORCPT
+        with ESMTP id S1345506AbiAJWjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:35:20 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA22BC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:35:19 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id m4so18165475edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:35:19 -0800 (PST)
+        Mon, 10 Jan 2022 17:39:40 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19367C06173F;
+        Mon, 10 Jan 2022 14:39:40 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id v4so16671604qtk.0;
+        Mon, 10 Jan 2022 14:39:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FIoaAe6wgJZd3qm1nF2dHAaaGlyYQh1CajnW5xdMA2w=;
-        b=OckSHyXrNtkIKrrYwTqW69ql0bJSf9I72ojuSbCBY96noWyMXs+zYDzhAXBdDnch5J
-         zP8Xn3oOj6Q8/vxJ6/OlCNGg+YwBtwfbZvjWAlORdCtkbpV25m1FQt1601KXJpJhQKe8
-         D4X6yiORsfEcilXX4JGXNiZgplzxJiWxWCPTKwV/Jfdpq7rN1VgqUKhB0mwLgWvDgA05
-         69DpC3dhYQ5DY4cM5YQjFbQbNNuS53gkXzi8qlTNlZDN2y/qTlNY9cDcmDs6gcMPeXJ6
-         S0IhjEPrf5LNDz6TBZ2utYIk6kFSBSdIcaNIToR0534KfnFa8Oi8yljJH/ZFB4P9KzYg
-         iPCA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U7Xcs+BYeEzo4v4ItOzAWS5C4onZSpuAouYvzjPx/Ks=;
+        b=j79Lu00ifo0GoKKNIEZLrGCUYJP3/d7UKtitU3zJRoOvIKzUBX7jN0r6JSK29ZCSCG
+         4tSRR0wJ/SsysHB3hbunZVBYTPdtIO7yORr+qlZ7naUvzEGpK0SnS1o+O+SA7V7T9PDq
+         191dJiDYllkbR9D6/mtru4AltQufIBoqyViC1MVI9rdKZY+UMpP4bmVlJvwIduQS3Nb3
+         /JSfKiTxLZkjlKS9G/bOBJCeNgmTPAUq01VjW/Mcv7ogkdYI7OJlmrCj9ZV6fg3tHY0A
+         7jeJFXKX/i5AR8dttuDo7X3jgVpm0TSjcHlpyJwvm1F5iKzWTC3h7O7r9G3vVLAZAFNs
+         Kl5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FIoaAe6wgJZd3qm1nF2dHAaaGlyYQh1CajnW5xdMA2w=;
-        b=rF96H9VdyjsyL8A0jBIZi9ze6qVLWEXGI+7U8ld1u9j7T9KmTz738A8FtUtMAuMBBz
-         p8shQlsmOsryqsSfvcEcJNM7IkSB5Y4uBPtiIETKTEkG9UtNE+3qU2vGyiOHGOpwGtqn
-         W1Q0Cpj0ZFXrfk00AVpwEa04jFS5eQPB3m8VWrJyCOy2oGhzTw9yoUy/nvbuN2vtvneK
-         hJxS7aFCO5J4oq5UMEqHVBJWtEeYoyry2pVfDNMZuYFQxZho2e8P08BDWtexMzOx5bmz
-         /ShfKzULTdPnjVRm1Sl6gT3dMTaqgJhSJXfS7qcb5HXM3mlUTFXvwMQRgShIfkgt/wFN
-         UQIg==
-X-Gm-Message-State: AOAM532eY9ZLigrht057P0JfqFM/0ZKTU0QC8uPOd6r9VcGNNts8L221
-        ICyCsehYYDY8ULgJ8C5MTtXhXr8huMr4/X8vaur/2w==
-X-Google-Smtp-Source: ABdhPJyxvooGDQ3H+6iiSy4C4myE9fXj/RhizZEtbCeeJjgd5ehOfgdErTm+SeXlIzyQt7r+9HW1/MlKvb+vYjQKREI=
-X-Received: by 2002:a17:906:9b92:: with SMTP id dd18mr1388666ejc.425.1641854118098;
- Mon, 10 Jan 2022 14:35:18 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U7Xcs+BYeEzo4v4ItOzAWS5C4onZSpuAouYvzjPx/Ks=;
+        b=1vIw0miE6r2gYAQ7/t3SObkY691XCfsC3K9G1c376RYan1ikeBx3rC9Eyu1ZKRmk7V
+         SprniRz1W4QDcJwjSLRBqqZ/CfKzVy7jX/lidISttO0kPl9jqQ8/NHzFpzApB2FG2JSc
+         FzOmpVschvZUde1eFZDopvLoytgqGi/kFml76Ud72/cTbCA9RMjJeLeSt2+xPHT1GjjS
+         OlhFTTARAW+Y1ZxYgVgikgGhHjt0mLVVpQ09bLojEicTsUEbh39ikuOutaMDwMdUywAl
+         y9DppGFMqmOoSKipebEqy4jW5wx6IYZYuikosL2yE4TTjQhtrhDbWoCV7QE+yRyoJs20
+         CdcQ==
+X-Gm-Message-State: AOAM5314Z8cjnmDkrPq4IAGbdJRM11GCXA/ur+b590Uhk5tO1LJY6WR/
+        WfOCCFG2UNC1P2nesLq8+NU=
+X-Google-Smtp-Source: ABdhPJzyxG4h3fKDt9maOm01OCU9ijxVkR9u1vXdzBRJ/IIOEEZZDFQYvQ2bmqwmlz4yMOAjSGTFBw==
+X-Received: by 2002:ac8:7c96:: with SMTP id y22mr1597908qtv.329.1641854379050;
+        Mon, 10 Jan 2022 14:39:39 -0800 (PST)
+Received: from errol.ini.cmu.edu (pool-108-39-235-221.pitbpa.fios.verizon.net. [108.39.235.221])
+        by smtp.gmail.com with ESMTPSA id x62sm5078337qkb.70.2022.01.10.14.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 14:39:38 -0800 (PST)
+Date:   Mon, 10 Jan 2022 17:39:36 -0500
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, kgugala@antmicro.com,
+        mholenko@antmicro.com, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
+        geert@linux-m68k.org, david.abdurachmanov@sifive.com,
+        florent@enjoy-digital.fr, rdunlap@infradead.org,
+        andy.shevchenko@gmail.com, hdanton@sina.com
+Subject: Re: [PATCH v11 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+Message-ID: <Ydy1qCc3CXOWKv/O@errol.ini.cmu.edu>
+References: <20220109232003.2573924-1-gsomlo@gmail.com>
+ <20220109232003.2573924-4-gsomlo@gmail.com>
+ <YdywDhEbYyzm7Rri@antec>
 MIME-Version: 1.0
-References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-5-dlatypov@google.com>
- <CAFd5g47r8aQBWPtt6ffHokqqN2sMi10p1Q5QA3xGVLTVDQh98Q@mail.gmail.com>
-In-Reply-To: <CAFd5g47r8aQBWPtt6ffHokqqN2sMi10p1Q5QA3xGVLTVDQh98Q@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 10 Jan 2022 14:35:06 -0800
-Message-ID: <CAGS_qxqnxzm1+45Mbufsz51mkz0_2PUt0eQiviwdGEV0+=ywKg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] kunit: factor out kunit_base_assert_format() call
- into kunit_fail()
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdywDhEbYyzm7Rri@antec>
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 2:32 PM 'Brendan Higgins' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
->
-> On Fri, Jan 7, 2022 at 8:23 PM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > We call this function first thing for all the assertion `format()`
-> > functions.
-> > This is the part that prints the file and line number and assertion type
-> > (EXPECTATION, ASSERTION).
-> >
-> > Having it as part of the format functions lets us have the flexibility
-> > to not print that information (or print it differently) for new
-> > assertion types, but I think this we don't need that.
->
-> nit: drop the "this".
->
-> > And in the future, we'd like to consider factoring that data (file,
-> > line#, type) out of the kunit_assert struct and into a `static`
-> > variable, as Linus suggested [1], so we'd need to extract it anyways.
-> >
-> > [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Tue, Jan 11, 2022 at 07:15:42AM +0900, Stafford Horne wrote:
+> On Sun, Jan 09, 2022 at 06:20:03PM -0500, Gabriel Somlo wrote:
+> > LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
+> > that targets FPGAs. LiteSDCard is a small footprint, configurable
+> > SDCard core commonly used in LiteX designs.
+> > 
+> > The driver was first written in May 2020 and has been maintained
+> > cooperatively by the LiteX community. Thanks to all contributors!
+> > 
+> > Co-developed-by: Kamil Rakoczy <krakoczy@antmicro.com>
+> > Signed-off-by: Kamil Rakoczy <krakoczy@antmicro.com>
+> > Co-developed-by: Maciej Dudek <mdudek@internships.antmicro.com>
+> > Signed-off-by: Maciej Dudek <mdudek@internships.antmicro.com>
+> > Co-developed-by: Paul Mackerras <paulus@ozlabs.org>
+> > Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
+> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> > Reviewed-by: Joel Stanley <joel@jms.id.au>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 > > ---
-> >  lib/kunit/assert.c | 6 ------
-> >  lib/kunit/test.c   | 1 +
-> >  2 files changed, 1 insertion(+), 6 deletions(-)
-> >
-> > diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> > index b972bda61c0c..4d9a1295efc7 100644
-> > --- a/lib/kunit/assert.c
-> > +++ b/lib/kunit/assert.c
-> > @@ -40,7 +40,6 @@ EXPORT_SYMBOL_GPL(kunit_assert_print_msg);
-> >  void kunit_fail_assert_format(const struct kunit_assert *assert,
-> >                               struct string_stream *stream)
-> >  {
-> > -       kunit_base_assert_format(assert, stream);
-> >         string_stream_add(stream, "%pV", &assert->message);
-> >  }
-> >  EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
-> > @@ -52,7 +51,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
-> >
-> >         unary_assert = container_of(assert, struct kunit_unary_assert, assert);
-> >
-> > -       kunit_base_assert_format(assert, stream);
-> >         if (unary_assert->expected_true)
-> >                 string_stream_add(stream,
-> >                                   KUNIT_SUBTEST_INDENT "Expected %s to be true, but is false\n",
-> > @@ -73,7 +71,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-> >         ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
-> >                                   assert);
-> >
-> > -       kunit_base_assert_format(assert, stream);
-> >         if (!ptr_assert->value) {
-> >                 string_stream_add(stream,
-> >                                   KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
-> > @@ -119,7 +116,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
-> >         binary_assert = container_of(assert, struct kunit_binary_assert,
-> >                                      assert);
-> >
-> > -       kunit_base_assert_format(assert, stream);
-> >         string_stream_add(stream,
-> >                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> >                           binary_assert->left_text,
-> > @@ -147,7 +143,6 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-> >         binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
-> >                                      assert);
-> >
-> > -       kunit_base_assert_format(assert, stream);
-> >         string_stream_add(stream,
-> >                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> >                           binary_assert->left_text,
-> > @@ -187,7 +182,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-> >         binary_assert = container_of(assert, struct kunit_binary_str_assert,
-> >                                      assert);
-> >
-> > -       kunit_base_assert_format(assert, stream);
-> >         string_stream_add(stream,
-> >                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> >                           binary_assert->left_text,
-> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > index 5ad671745483..735c1b67d843 100644
-> > --- a/lib/kunit/test.c
-> > +++ b/lib/kunit/test.c
-> > @@ -255,6 +255,7 @@ static void kunit_fail(struct kunit *test, struct kunit_assert *assert)
-> >                 return;
-> >         }
-> >
-> > +       kunit_base_assert_format(assert, stream);
->
-> I think my thinking in having this function called by the other assert
-> functions was to take advantage of inheritance. I was treating
-> kunit_base_assert_format as the parent method that other methods were
-> inheriting from, so I wanted to have them inherit some of the common
-> behavior by calling the original function.
->
-> If you decide to make this change, I think it would be a good idea to
-> change the name of kunit_base_assert_format to not mislead to this
-> effect.
+> > 
+> ...
+> > +static int litex_mmc_probe(struct platform_device *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	struct litex_mmc_host *host;
+> > +	struct mmc_host *mmc;
+> > +	struct clk *clk;
+> > +	int ret;
+> > +
+> > +	/*
+> > +	 * NOTE: defaults to max_[req,seg]_size=PAGE_SIZE, max_blk_size=512,
+> > +	 * and max_blk_count accordingly set to 8;
+> > +	 * If for some reason we need to modify max_blk_count, we must also
+> > +	 * re-calculate `max_[req,seg]_size = max_blk_size * max_blk_count;`
+> > +	 */
+> > +	mmc = mmc_alloc_host(sizeof(struct litex_mmc_host), dev);
+> > +	if (!mmc)
+> > +		return -ENOMEM;
+> > +
+> > +	ret = devm_add_action_or_reset(dev, litex_mmc_free_host_wrapper, mmc);
+> > +	if (ret)
+> > +		return dev_err_probe(dev, ret,
+> > +				     "Can't register mmc_free_host action\n");
+> > +
+> > +	host = mmc_priv(mmc);
+> > +	host->mmc = mmc;
+> > +
+> > +	/* Initialize clock source */
+> > +	clk = devm_clk_get(dev, NULL);
+> > +	if (IS_ERR(clk))
+> > +		return dev_err_probe(dev, PTR_ERR(clk), "can't get clock\n");
+> > +	host->ref_clk = clk_get_rate(clk);
+> > +	host->sd_clk = 0;
+> > +
+> > +	/*
+> > +	 * LiteSDCard only supports 4-bit bus width; therefore, we MUST inject
+> > +	 * a SET_BUS_WIDTH (acmd6) before the very first data transfer, earlier
+> > +	 * than when the mmc subsystem would normally get around to it!
+> > +	 */
+> > +	host->is_bus_width_set = false;
+> > +	host->app_cmd = false;
+> > +
+> > +	/* LiteSDCard can support 64-bit DMA addressing */
+> > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	host->buf_size = mmc->max_req_size * 2;
+> > +	host->buffer = dmam_alloc_coherent(dev, host->buf_size,
+> > +					   &host->dma, GFP_KERNEL);
+> > +	if (host->buffer == NULL)
+> > +		return -ENOMEM;
+> > +
+> > +	host->sdphy = devm_platform_ioremap_resource_byname(pdev, "phy");
+> > +	if (IS_ERR(host->sdphy))
+> > +		return PTR_ERR(host->sdphy);
+> > +
+> > +	host->sdcore = devm_platform_ioremap_resource_byname(pdev, "core");
+> > +	if (IS_ERR(host->sdcore))
+> > +		return PTR_ERR(host->sdcore);
+> > +
+> > +	host->sdreader = devm_platform_ioremap_resource_byname(pdev, "reader");
+> > +	if (IS_ERR(host->sdreader))
+> > +		return PTR_ERR(host->sdreader);
+> > +
+> > +	host->sdwriter = devm_platform_ioremap_resource_byname(pdev, "writer");
+> > +	if (IS_ERR(host->sdwriter))
+> > +		return PTR_ERR(host->sdwriter);
+> > +
+> > +	/* Ensure DMA bus masters are disabled */
+> > +	litex_write8(host->sdreader + LITEX_BLK2MEM_ENA, 0);
+> > +	litex_write8(host->sdwriter + LITEX_MEM2BLK_ENA, 0);
+> > +
+> > +	init_completion(&host->cmd_done);
+> > +	ret = litex_mmc_irq_init(pdev, host);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Allow full generic 2.7-3.6V range; no software tuning available */
+> > +	mmc->ocr_avail = LITEX_MMC_OCR;
+> > +
+> > +	mmc->ops = &litex_mmc_ops;
+> > +
+> > +	/*
+> > +	 * Set default sd_clk frequency range based on empirical observations
+> > +	 * of LiteSDCard gateware behavior on typical SDCard media
+> > +	 */
+> > +	mmc->f_min = 12.5e6;
+> > +	mmc->f_max = 50e6;
+> > +
+> > +	ret = mmc_of_parse(mmc);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Force 4-bit bus_width (only width supported by hardware) */
+> > +	mmc->caps &= ~MMC_CAP_8_BIT_DATA;
+> > +	mmc->caps |= MMC_CAP_4_BIT_DATA;
+> > +
+> > +	/* Set default capabilities */
+> > +	mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY |
+> > +		     MMC_CAP_DRIVER_TYPE_D |
+> > +		     MMC_CAP_CMD23;
+> > +	mmc->caps2 |= MMC_CAP2_NO_WRITE_PROTECT |
+> > +		      MMC_CAP2_NO_SDIO |
+> > +		      MMC_CAP2_NO_MMC;
+> > +
+> > +	platform_set_drvdata(pdev, host);
+> 
+> One more thing here. Or somewhere, should we add:
+> 
+> 	dev_info(dev, "Litex MMC controller initialized");
+> 
+> I was having a hard time debugging probing of this and having no printk's made
+> it a bit difficult.
+> 
+> Though I was able to get most of the debug statements I needed using:
+> 
+> 	"debug initcall_debug dyndbg=\"file drivers/* +p\" loglevel=8"
+> 
+> -Stafford
+> 
+> > +	return mmc_add_host(mmc);
 
-The child patch renames it to kunit_assert_prologue().
-I can rename it in this change if you prefer.
+I'd prefer to declare victory *after* calling mmc_add_host(), so if
+there are no objections I'd prefer to do the following in v12:
 
-I had just initially left it with the same name to keep this diff a
-bit smaller and more focused.
-But now you point it out, I think it would be cleaner to rename it here.
+        ... 
+        platform_set_drvdata(pdev, host);
+ 
+-       return mmc_add_host(mmc);
++       ret = mmc_add_host(mmc);
++       if (ret)
++               return dev_err_probe(dev, ret, "LiteX MMC probe failed!\n");
++
++       dev_info(dev, "LiteX MMC controller initialized.\n");
++
++       return 0;
+ }
 
->
-> >         assert->format(assert, stream);
-> >
-> >         kunit_print_string_stream(test, stream);
-> > --
-> > 2.34.1.575.g55b058a8bb-goog
-> >
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/CAFd5g47r8aQBWPtt6ffHokqqN2sMi10p1Q5QA3xGVLTVDQh98Q%40mail.gmail.com.
+Thanks,
+--Gabriel

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 965D548990D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD7048990F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbiAJNBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:01:18 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42862 "EHLO
+        id S235422AbiAJNB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:01:26 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42878 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234233AbiAJNAD (ORCPT
+        with ESMTP id S235277AbiAJNAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:00:03 -0500
-Date:   Mon, 10 Jan 2022 13:00:00 -0000
+        Mon, 10 Jan 2022 08:00:04 -0500
+Date:   Mon, 10 Jan 2022 13:00:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641819601;
+        s=2020; t=1641819603;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/gg2hqLRpEfuycfD3SFXIH8uDH369qHJtBGbElKCyiw=;
-        b=lxo0AszhSTIdBodAqlHnff/Bdo02hwHHbkBWDzK+f8H65Za9YsYkGtuC9R7gnSUtlsThzR
-        Myp8jElllhYRiCaO/dutEcj9iKeqWL5YV/KeHFmOf+EWIfoFtM47RnElQC3ZpEeqUOiJ7X
-        JFU5ba19mgoykW6u6KVjFJBgHBCrQdl7xjjZ6Rry1/N8sdydN1f9HcsXlCO7PufF4mtIKZ
-        zjuZXYzMD6V5dPLJNL/oCELhMIJBU60Rpzqy+10yXvFkhJqt9sMb9YJKHEuhdr+DWUtKyR
-        2ddARP9HkpF+qJ5Vzj1sItb5Hf0vEJXdiszWCgsU4EJzEval7IiCfN9mLYaJqA==
+        bh=YKmFNFmPRnCpKoiJIKtqPlN4FAGbhd2Ydv8GErE1XLA=;
+        b=2VldjWK4H2DrXd4QCEmNo9y44kDDU5EFb2bL5/M3jiUtb7VBEbE5wv73dt3cOsOmAuDODK
+        IJUKPELp/TKG2/Z2vUmaICPtcctQsaCyvR8fvnto6lMex32eiWIMJDBup6AyDbM0PSii3k
+        mWkApFkHOLYkWJBITTXTQRyxp27msKNvbarY6D0ReyIfIO7nEVglbPi+zG6FBebJaGRPWm
+        U2TmblLJVfeNbylywroOYeiPBzdppJnhzfNrqMzIaBt08PvtxMnPMaRq0WLCzaLoABwaRv
+        FIYPOu6XflaFM7HmSH0tRCElGg6E1V+699kif7qgmAuNV6TfYJRrb/W3S4PvuA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641819601;
+        s=2020e; t=1641819603;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/gg2hqLRpEfuycfD3SFXIH8uDH369qHJtBGbElKCyiw=;
-        b=G7P/Usfj0SAPndldEl9qY6PxDcn1k3+DFh2i3d/vrX0jHi47y/mcU49GALq+Cd28ActZYS
-        N1BbU3KntVay94AQ==
-From:   "tip-bot2 for Biju Das" <tip-bot2@linutronix.de>
+        bh=YKmFNFmPRnCpKoiJIKtqPlN4FAGbhd2Ydv8GErE1XLA=;
+        b=cvBDudeLfaR5cvycHLSlYeA5WM4vTVzxCB1ZWCWbbaR1tY1XShPLyNLLY7bpb9lQMa4Elz
+        ycgy93NCDuzI1hCg==
+From:   "tip-bot2 for Johan Jonker" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] reset: Add of_reset_control_get_optional_exclusive()
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>, x86@kernel.org,
+Subject: [tip: timers/core] dt-bindings: timer: remove rockchip,rk3066-timer
+ compatible string from rockchip,rk-timer.yaml
+Cc:     Johan Jonker <jbx6244@gmail.com>, Rob Herring <robh@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211112184413.4391-2-biju.das.jz@bp.renesas.com>
-References: <20211112184413.4391-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20210824095637.2547-1-jbx6244@gmail.com>
+References: <20210824095637.2547-1-jbx6244@gmail.com>
 MIME-Version: 1.0
-Message-ID: <164181960008.16921.1670033423151054314.tip-bot2@tip-bot2>
+Message-ID: <164181960160.16921.4968926594343361131.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,56 +59,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     c4f5b30dda01f2f6979a9681142de454991182ee
-Gitweb:        https://git.kernel.org/tip/c4f5b30dda01f2f6979a9681142de454991182ee
-Author:        Biju Das <biju.das.jz@bp.renesas.com>
-AuthorDate:    Fri, 12 Nov 2021 18:44:10 
-Committer:     Philipp Zabel <p.zabel@pengutronix.de>
-CommitterDate: Fri, 19 Nov 2021 12:23:45 +01:00
+Commit-ID:     ad253b3dd79851d926154ef747a69427573233e4
+Gitweb:        https://git.kernel.org/tip/ad253b3dd79851d926154ef747a69427573233e4
+Author:        Johan Jonker <jbx6244@gmail.com>
+AuthorDate:    Tue, 24 Aug 2021 11:56:37 +02:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Fri, 12 Nov 2021 18:40:11 +01:00
 
-reset: Add of_reset_control_get_optional_exclusive()
+dt-bindings: timer: remove rockchip,rk3066-timer compatible string from rockchip,rk-timer.yaml
 
-Add optional variant of of_reset_control_get_exclusive(). If the
-requested reset is not specified in the device tree, this function
-returns NULL instead of an error.
+The Rockchip rk3066 timers have a different register layout then rk3288
+with only a 32 vs 64 bits timer channel. The timers in rk3066a.dtsi have
+"snps,dw-apb-timer" as compatible string, so remove the
+"rockchip,rk3066-timer" from rockchip,rk-timer.yaml
 
-Suggested-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211112184413.4391-2-biju.das.jz@bp.renesas.com
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20210824095637.2547-1-jbx6244@gmail.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- include/linux/reset.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/reset.h b/include/linux/reset.h
-index db0e611..8a21b57 100644
---- a/include/linux/reset.h
-+++ b/include/linux/reset.h
-@@ -455,6 +455,26 @@ static inline struct reset_control *of_reset_control_get_exclusive(
- }
- 
- /**
-+ * of_reset_control_get_optional_exclusive - Lookup and obtain an optional exclusive
-+ *                                           reference to a reset controller.
-+ * @node: device to be reset by the controller
-+ * @id: reset line name
-+ *
-+ * Optional variant of of_reset_control_get_exclusive(). If the requested reset
-+ * is not specified in the device tree, this function returns NULL instead of
-+ * an error.
-+ *
-+ * Returns a struct reset_control or IS_ERR() condition containing errno.
-+ *
-+ * Use of id names is optional.
-+ */
-+static inline struct reset_control *of_reset_control_get_optional_exclusive(
-+				struct device_node *node, const char *id)
-+{
-+	return __of_reset_control_get(node, id, 0, false, true, true);
-+}
-+
-+/**
-  * of_reset_control_get_shared - Lookup and obtain a shared reference
-  *                               to a reset controller.
-  * @node: device to be reset by the controller
+diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+index e26ecb5..5d157d8 100644
+--- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+@@ -18,7 +18,6 @@ properties:
+           - enum:
+               - rockchip,rv1108-timer
+               - rockchip,rk3036-timer
+-              - rockchip,rk3066-timer
+               - rockchip,rk3188-timer
+               - rockchip,rk3228-timer
+               - rockchip,rk3229-timer

@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DA6488DA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CA4488DAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237683AbiAJA75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 19:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
+        id S237684AbiAJBAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 20:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237665AbiAJA7y (ORCPT
+        with ESMTP id S234855AbiAJBAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 19:59:54 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A111C061748
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 16:59:54 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 78so1283496pfu.10
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 16:59:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=f1RtgNpw+cr0qCtlwj7zBk72DJd4uuPptxUBcq8PRqY=;
-        b=JVKJOSSA3nnC7MFHw220K0sO/FZEiuOUht9sVZTKOSDN8Dhv6azG/eJBxLZj9H0ZBO
-         MuNm/e+ilsdiVFGg0SBfVm1g/I5IJqJBZa7hGpqx1H4iOf45qGS2GwxZIg+swwXbsYPF
-         tiA21CDoP2kPDeXCE1yMuH4u/tkxtoDJ+kFydTV5vVEoppPLkDcQP8M3ICtLoCQEVk9t
-         rsHznLnyZAQ/0DsLGTfI6JooPXPQ3NDY05QRhZ5uYO9NvyATDgvin+/Vx8E/z0xN9JQI
-         ZTrE1xN52+l67f6XnYHONlfSW1e4VWRrjniiNSCIzHFa35JIXgIMFDj9DtUakDXHe+Tl
-         ts8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=f1RtgNpw+cr0qCtlwj7zBk72DJd4uuPptxUBcq8PRqY=;
-        b=pswzrkiGyS5F70CauoqxeWmHDko7IUWedu5Kdf4BNFG+EJjxlW1axarEQkyZTKOx6x
-         mtp2C0LogISjX2q3Bo9w790RWjxPI7mAF7l2tL6hrVMOXWdGauMHNgJBdX9AiNT01+Vg
-         Ys5HFoN/5eDQWTRMAvrm46Xwi3OJNPPCBodbHDWHNGLAmEVermR9q6xNmR+2xj06wPOb
-         7m8JMZRYiohYqHt0Nb/TECARpywQvBLudfSayywseNgDSx96yBVze+nzqVWL5AXJ6SnP
-         XGSRmgvv1NIxj1tPOc1FjPavI17yRQKPvbIEGw6RW7gOdR740TB7aGYH6+vC/suop4Q1
-         16Sw==
-X-Gm-Message-State: AOAM533ZRSMFDifThZgHeJd7Q/SGFzguXH/2PG3toEXpNJXj+DkGGjrH
-        YmzOxgjb9it9sjIRt2kmUY2EuTXQ1Uc896fpg7Q=
-X-Google-Smtp-Source: ABdhPJxIZJRVqQmAwhy+cTbE+/57ngBZ1jJ8gPmPA10kUzz38+ThsDrSFbu9q07T90LokRBy/c48gkDXU4MWkjKmFBg=
-X-Received: by 2002:a05:6a00:2356:b0:4ba:f28c:63da with SMTP id
- j22-20020a056a00235600b004baf28c63damr72962052pfj.50.1641776393559; Sun, 09
- Jan 2022 16:59:53 -0800 (PST)
+        Sun, 9 Jan 2022 20:00:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526D0C06173F;
+        Sun,  9 Jan 2022 17:00:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E073061042;
+        Mon, 10 Jan 2022 01:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 20AFDC36AE3;
+        Mon, 10 Jan 2022 01:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641776409;
+        bh=iOIfAqVkgml1lX6oMXE7USc/dEvwwudMzPWrQjP7u3k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WNlMM9BctELe2LwCTPc67v2ZTWgT3XasjeaAZktTnzYqfL9hSI+zF16yVh+vYIgo8
+         FXiYUjW49GMYIZU6sF2PEDNb2DGDYyrIgIC0sOzNh4EZCztAueAkG81U5N6oUNCLPC
+         d5GSuF+E9F7z3Bi5fzWMdBGjnbOSoa9ro7QG5KTu22fJyibED06BRpU5FOQKLcz/7+
+         R6WAi/JuFrKjuUWMAab5GV7PTavFvZkU67kRIQoEqn0XIqxH3mvk2HN7Ug6T/LagQ9
+         vmGtSwWogsOkVRoiaS25MG3kvDieY+WKM00IY5khlEKWP8tgDFSVrPJxIy6ceUtyqn
+         6ce6Mq8+Gt/Vw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 07981F6078F;
+        Mon, 10 Jan 2022 01:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:6a11:4a4:0:0:0:0 with HTTP; Sun, 9 Jan 2022 16:59:53
- -0800 (PST)
-Reply-To: fionahill.usa@outlook.com
-From:   Fiona Hill <tonyelumelu67@gmail.com>
-Date:   Sun, 9 Jan 2022 16:59:53 -0800
-Message-ID: <CAAVnhxJPpn9mRsGb7pL3ZzY2bebRXotY4xWB2_qoJZCQdYm6rA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: mcs7830: handle usb read errors properly
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164177640902.18208.15482694955918570197.git-patchwork-notify@kernel.org>
+Date:   Mon, 10 Jan 2022 01:00:09 +0000
+References: <20220106225716.7425-1-paskripkin@gmail.com>
+In-Reply-To: <20220106225716.7425-1-paskripkin@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, tanghui20@huawei.com,
+        andrew@lunn.ch, oneukum@suse.com, arnd@arndb.de,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
+Hello:
 
-Hello,
-Happy new year. Please  did you receive my message i send to you?
-.....
-Witaj,
-Szcz=C4=99=C5=9Bliwego Nowego Roku. Prosz=C4=99, czy otrzyma=C5=82e=C5=9B m=
-oj=C4=85 wiadomo=C5=9B=C4=87, kt=C3=B3r=C4=85
-do Ciebie wys=C5=82a=C5=82em?
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri,  7 Jan 2022 01:57:16 +0300 you wrote:
+> Syzbot reported uninit value in mcs7830_bind(). The problem was in
+> missing validation check for bytes read via usbnet_read_cmd().
+> 
+> usbnet_read_cmd() internally calls usb_control_msg(), that returns
+> number of bytes read. Code should validate that requested number of bytes
+> was actually read.
+> 
+> [...]
+
+Here is the summary with links:
+  - net: mcs7830: handle usb read errors properly
+    https://git.kernel.org/netdev/net/c/d668769eb9c5
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

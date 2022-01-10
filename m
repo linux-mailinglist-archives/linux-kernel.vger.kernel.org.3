@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F1D4891F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F114891B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240927AbiAJHhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239833AbiAJHac (ORCPT
+        id S240306AbiAJHgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:36:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56806 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240360AbiAJH34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:30:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F6AC03400D;
-        Sun,  9 Jan 2022 23:28:18 -0800 (PST)
+        Mon, 10 Jan 2022 02:29:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB75CB81211;
-        Mon, 10 Jan 2022 07:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB29C36AED;
-        Mon, 10 Jan 2022 07:28:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93FA1B81202;
+        Mon, 10 Jan 2022 07:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FB5C36AE9;
+        Mon, 10 Jan 2022 07:29:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799695;
-        bh=RxXpuPCzqJDSiPRGzezl/xdMQ8dF1lGzIWc0G/+zJ6I=;
+        s=korg; t=1641799794;
+        bh=IsNMZc8RKQRSTDpyDsA1lnZ9piQv3Yrxyp9sRVEBJlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d7Gi7TObNR7HMUCqPiS5U5fMmr3VyL1J9gMk/c7f6NViWeiKUdSQm0eo5WB4GLEM8
-         CRBGItoWeehYJ8nXBYoB1kIiSbruzauiYA5fqo2YudFvucTvXDpySlsbhvKH5YbO+5
-         ksHq9gEOM60EUno+yHrxdtRYoAYqf8L5zSJGLQ7Y=
+        b=1nrJhzfmzjbtD/bT14DnXuV/3JjOQtStMJH2J3r5p19uzFPN2Gas/+2JfYAA72Tgc
+         4m4Rc5W/AZ/cFhO0nuGo+5ClHEgxvuk/Uf1qkdzaF12yJ/BNbSDDT7XjproFnZsbJ8
+         Kd5ziiUHRQ30eHusinSQmF0yS2ksvvTaS4jVg8R8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 5.4 05/34] tracing: Tag trace_percpu_buffer as a percpu pointer
-Date:   Mon, 10 Jan 2022 08:23:00 +0100
-Message-Id: <20220110071815.833922638@linuxfoundation.org>
+Subject: [PATCH 5.10 04/43] tracing: Tag trace_percpu_buffer as a percpu pointer
+Date:   Mon, 10 Jan 2022 08:23:01 +0100
+Message-Id: <20220110071817.479474258@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
-References: <20220110071815.647309738@linuxfoundation.org>
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+References: <20220110071817.337619922@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -76,7 +73,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/kernel/trace/trace.c
 +++ b/kernel/trace/trace.c
-@@ -3007,7 +3007,7 @@ struct trace_buffer_struct {
+@@ -3134,7 +3134,7 @@ struct trace_buffer_struct {
  	char buffer[4][TRACE_BUF_SIZE];
  };
  
@@ -85,14 +82,14 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  /*
   * Thise allows for lockless recording.  If we're nested too deeply, then
-@@ -3036,7 +3036,7 @@ static void put_trace_buf(void)
+@@ -3163,7 +3163,7 @@ static void put_trace_buf(void)
  
  static int alloc_percpu_trace_buffer(void)
  {
 -	struct trace_buffer_struct *buffers;
 +	struct trace_buffer_struct __percpu *buffers;
  
- 	buffers = alloc_percpu(struct trace_buffer_struct);
- 	if (WARN(!buffers, "Could not allocate percpu trace_printk buffer"))
+ 	if (trace_percpu_buffer)
+ 		return 0;
 
 

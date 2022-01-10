@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EE7489233
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6EA489261
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242183AbiAJHka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240780AbiAJHcb (ORCPT
+        id S242539AbiAJHmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:42:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41718 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239828AbiAJHdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:32:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82968C0254B1;
-        Sun,  9 Jan 2022 23:29:04 -0800 (PST)
+        Mon, 10 Jan 2022 02:33:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 213A9611A3;
-        Mon, 10 Jan 2022 07:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE40C36AE9;
-        Mon, 10 Jan 2022 07:29:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF692611C0;
+        Mon, 10 Jan 2022 07:33:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97598C36AED;
+        Mon, 10 Jan 2022 07:33:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799743;
-        bh=AkrxHaMRo/TSJY2VFau0GMMQ6yV9ELrLc7kZ1D4eIFY=;
+        s=korg; t=1641799992;
+        bh=twezZ0T1oF934WqErVlqXAgbsR0+9X2fsgYIG7ynZOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NI2XH2S1WWbIU194i/3P5JBCm9idh1+eS516eR+DLYkhQe85T3slsqn8r2316bgOR
-         hqFNac+lc+j3LLoa0Amwz2jZ9XSv4m/bEcCunG52GMVUcE1d78hzJeYI7hcrnbK+h2
-         ocxR1Iv9WP58sxdUamgy4hnGSf5DQzMZ7hPzFkxY=
+        b=AzhUsT1myRIkUkcDr/S3b+o6IA0JSh91OpzPLA8hFG9GPtb3/UT7b8ol6iUoDRP7n
+         ipE8eNXV6Z4mYh4i7GuReOJX2lBGnNjlOV81tfaIZ7nKIoEm2aZOJjduVX+E7x7dxl
+         G/mlOMgACXWu4zUtwK8NYJI/OxRjkOjCjHF7BVhM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 16/34] ipv6: Check attribute length for RTA_GATEWAY in multipath route
+        stable@vger.kernel.org, Vasant Hegde <vasant.hegde@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 34/72] KVM: x86: Check for rmaps allocation
 Date:   Mon, 10 Jan 2022 08:23:11 +0100
-Message-Id: <20220110071816.202666833@linuxfoundation.org>
+Message-Id: <20220110071822.706749841@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
-References: <20220110071815.647309738@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,60 +48,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Nikunj A Dadhania <nikunj@amd.com>
 
-commit 4619bcf91399f00a40885100fb61d594d8454033 upstream.
+commit fffb5323780786c81ba005f8b8603d4a558aad28 upstream.
 
-Commit referenced in the Fixes tag used nla_memcpy for RTA_GATEWAY as
-does the current nla_get_in6_addr. nla_memcpy protects against accessing
-memory greater than what is in the attribute, but there is no check
-requiring the attribute to have an IPv6 address. Add it.
+With TDP MMU being the default now, access to mmu_rmaps_stat debugfs
+file causes following oops:
 
-Fixes: 51ebd3181572 ("ipv6: add support of equal cost multipath (ECMP)")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+PGD 0 P4D 0
+Oops: 0000 [#1] PREEMPT SMP NOPTI
+CPU: 7 PID: 3185 Comm: cat Not tainted 5.16.0-rc4+ #204
+RIP: 0010:pte_list_count+0x6/0x40
+ Call Trace:
+  <TASK>
+  ? kvm_mmu_rmaps_stat_show+0x15e/0x320
+  seq_read_iter+0x126/0x4b0
+  ? aa_file_perm+0x124/0x490
+  seq_read+0xf5/0x140
+  full_proxy_read+0x5c/0x80
+  vfs_read+0x9f/0x1a0
+  ksys_read+0x67/0xe0
+  __x64_sys_read+0x19/0x20
+  do_syscall_64+0x3b/0xc0
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7fca6fc13912
+
+Return early when rmaps are not present.
+
+Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+Tested-by: Vasant Hegde <vasant.hegde@amd.com>
+Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+Reviewed-by: Peter Xu <peterx@redhat.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220105040337.4234-1-nikunj@amd.com>
+Cc: stable@vger.kernel.org
+Fixes: 3bcd0662d66f ("KVM: X86: Introduce mmu_rmaps_stat per-vm debugfs file")
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/route.c |   21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ arch/x86/kvm/debugfs.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -5092,6 +5092,19 @@ static void ip6_route_mpath_notify(struc
- 		inet6_rt_notify(RTM_NEWROUTE, rt, info, nlflags);
- }
+--- a/arch/x86/kvm/debugfs.c
++++ b/arch/x86/kvm/debugfs.c
+@@ -95,6 +95,9 @@ static int kvm_mmu_rmaps_stat_show(struc
+ 	unsigned int *log[KVM_NR_PAGE_SIZES], *cur;
+ 	int i, j, k, l, ret;
  
-+static int fib6_gw_from_attr(struct in6_addr *gw, struct nlattr *nla,
-+			     struct netlink_ext_ack *extack)
-+{
-+	if (nla_len(nla) < sizeof(*gw)) {
-+		NL_SET_ERR_MSG(extack, "Invalid IPv6 address in RTA_GATEWAY");
-+		return -EINVAL;
-+	}
++	if (!kvm_memslots_have_rmaps(kvm))
++		return 0;
 +
-+	*gw = nla_get_in6_addr(nla);
-+
-+	return 0;
-+}
-+
- static int ip6_route_multipath_add(struct fib6_config *cfg,
- 				   struct netlink_ext_ack *extack)
- {
-@@ -5133,7 +5146,13 @@ static int ip6_route_multipath_add(struc
- 
- 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
- 			if (nla) {
--				r_cfg.fc_gateway = nla_get_in6_addr(nla);
-+				int ret;
-+
-+				ret = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
-+							extack);
-+				if (ret)
-+					return ret;
-+
- 				r_cfg.fc_flags |= RTF_GATEWAY;
- 			}
- 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
+ 	ret = -ENOMEM;
+ 	memset(log, 0, sizeof(log));
+ 	for (i = 0; i < KVM_NR_PAGE_SIZES; i++) {
 
 

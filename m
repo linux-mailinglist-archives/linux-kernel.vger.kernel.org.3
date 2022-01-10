@@ -2,121 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F342D489FD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DA2489FDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243115AbiAJTGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:06:43 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:33430 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243153AbiAJTGm (ORCPT
+        id S243196AbiAJTI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:08:27 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:42931 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242320AbiAJTIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:06:42 -0500
-Received: by mail-oi1-f171.google.com with SMTP id v124so12724165oie.0;
-        Mon, 10 Jan 2022 11:06:42 -0800 (PST)
+        Mon, 10 Jan 2022 14:08:25 -0500
+Received: by mail-ot1-f53.google.com with SMTP id s8-20020a0568301e0800b00590a1c8cc08so10159824otr.9;
+        Mon, 10 Jan 2022 11:08:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Wwk6x/ZR37nweD32vHsQk5bV8DeKWS9G1MuQnQEcbQM=;
-        b=RID7hQsGjXfnY+jTqoMDjNXaEjOJ6j2cCZz3CEqJN3aGzIJdy6+evg9D6AKIK+U4NZ
-         3nkhdHXiK8i7VtLUi4dxMatdmDZvheVGwsmnoHRItNqQdRbdELBw3/ljOH25SgKFyhw3
-         e5rEQFLfEzcp/GPjGkWUsZ0FnQJh5lpxK4Z7m0HXzduk+InrGQAcet9uPsmR3FqQigaL
-         eLqFhar52sO1Cvh7ucex24CCgdTPtq6DmrL8M5CBB+Zv3o10BZTz47MHlgkmxwfHoC07
-         tdoKCIFqSY8rPlKqaCWW79pS1zP74crIlshD23LwhWGt8jwk/j8PNTYgcr0Ph9pJYTP1
-         Xvww==
-X-Gm-Message-State: AOAM532rfj+LO6AZpE5wcvInYIL+8hZT7erq38kZYc+Sw8Nad+gy4pjz
-        7OIfnyFgZJ3SdxV05xy24MU/Iznd8w==
-X-Google-Smtp-Source: ABdhPJx5ZBjyXM4U8hax5nPjSCYA9zsja6YzyYe4DefjUE4k0aeTDsQSOoG5Ymd24O+VmO0kjBJV3w==
-X-Received: by 2002:a05:6808:1a1e:: with SMTP id bk30mr663998oib.26.1641841601494;
-        Mon, 10 Jan 2022 11:06:41 -0800 (PST)
+        bh=VQaqdEqj0uvNnL02FK4WQruusoOye7MsD6275qvZ2HI=;
+        b=tjL8iYMhtc6FmN/QVf+ScjAy27+Yk0lSa6iSIcWi2fMOs0MMt/b/Ca2uEUMK9KZ8Nc
+         2a8kgwFZGAVfsHb7Uali/68TDQgDmM64qKAYtMsyKNLR6prC2hl7z60UO6avGE22wn8i
+         ctst4LkwhsetOziY7Uq9HvLZLRR+P2dDVo8cOkUCeCLqhkQ680zMoghVaoLH7cuwkh+R
+         he/TuE19PMvSKE1nWakimJGZ4vjsU8a3y0G5gB2/mUy9CesSYiPVncakkEmybCPSvEtT
+         rMud82kiT5cNewAvepMdVHaEMLv0gPbIofdAu4MT5zBEa4hkAyZCIc0+2oSJ0vvT++bZ
+         G19A==
+X-Gm-Message-State: AOAM5300ciSRATN25iSCxW3yM7LHZDRAk/jtpHZcO0OUDJuVaqOgYqL8
+        HwNhkJ2EUMGXrXREKY6XeRAN2Qad7w==
+X-Google-Smtp-Source: ABdhPJyh68idIsWaVjFatJWDSoDu3pa/wyt86O7SAvPb2euLBWm43U/1/S5ZktsBM4pOAVTCqJQDrA==
+X-Received: by 2002:a05:6830:40ac:: with SMTP id x44mr929980ott.330.1641841703677;
+        Mon, 10 Jan 2022 11:08:23 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q189sm656483oib.8.2022.01.10.11.06.40
+        by smtp.gmail.com with ESMTPSA id i16sm1467979ood.41.2022.01.10.11.08.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 11:06:40 -0800 (PST)
-Received: (nullmailer pid 1302633 invoked by uid 1000);
-        Mon, 10 Jan 2022 19:06:39 -0000
-Date:   Mon, 10 Jan 2022 13:06:39 -0600
+        Mon, 10 Jan 2022 11:08:23 -0800 (PST)
+Received: (nullmailer pid 1305597 invoked by uid 1000);
+        Mon, 10 Jan 2022 19:08:22 -0000
+Date:   Mon, 10 Jan 2022 13:08:22 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH 1/8] of: base: add of_parse_phandle_with_optional_args()
-Message-ID: <YdyDv1/WbNi3CMbu@robh.at.kernel.org>
-References: <20211228142549.1275412-1-michael@walle.cc>
- <20211228142549.1275412-2-michael@walle.cc>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-leds@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH 2/4] dt-bindings: power: supply: maxim,max77693: convert
+ to dtschema
+Message-ID: <YdyEJqhArUszOQBW@robh.at.kernel.org>
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211228142549.1275412-2-michael@walle.cc>
+In-Reply-To: <20211228163930.35524-3-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 03:25:42PM +0100, Michael Walle wrote:
-> Add a new variant of the of_parse_phandle_with_args() which treats the
-> cells name as optional. If it's missing, it is assumed that the phandle
-> has no arguments.
+On Tue, 28 Dec 2021 17:39:28 +0100, Krzysztof Kozlowski wrote:
+> Convert the Charger bindings of Maxim MAX77693 MUIC to DT schema format.
+> The existing bindings were defined in ../bindings/mfd/max77693.txt.
 > 
-> Up until now, a nvmem node didn't have any arguments, so all the device
-> trees haven't any '#*-cells' property. But there is a need for an
-> additional argument for the phandle, for which we need a '#*-cells'
-> property. Therefore, we need to support nvmem nodes with and without
-> this property.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  drivers/of/base.c  | 23 +++++++++++++++++++++++
->  include/linux/of.h | 12 ++++++++++++
->  2 files changed, 35 insertions(+)
+>  .../bindings/power/supply/maxim,max77693.yaml | 70 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
 > 
-> diff --git a/drivers/of/base.c b/drivers/of/base.c
-> index 5b907600f5b0..fb28bb26276e 100644
-> --- a/drivers/of/base.c
-> +++ b/drivers/of/base.c
-> @@ -1543,6 +1543,29 @@ int of_parse_phandle_with_args(const struct device_node *np, const char *list_na
->  }
->  EXPORT_SYMBOL(of_parse_phandle_with_args);
->  
-> +/**
-> + * of_parse_phandle_with_optional_args() - Find a node pointed by phandle in a list
-> + *
-> + * Same as of_parse_phandle_args() except that if the cells_name property is
-> + * not found, cell_count of 0 is assumed.
-> + *
-> + * This is used to useful, if you have a phandle which didn't have arguments
-> + * before and thus doesn't have a '#*-cells' property but is now migrated to
-> + * having arguments while retaining backwards compatibility.
-> + */
-> +int of_parse_phandle_with_optional_args(const struct device_node *np,
-> +					const char *list_name,
-> +					const char *cells_name, int index,
-> +					struct of_phandle_args *out_args)
-> +{
-> +	if (index < 0)
-> +		return -EINVAL;
 
-I'm not sure why we didn't do this from the start, but just make index 
-unsigned and then this check is not needed.
-
-> +
-> +	return __of_parse_phandle_with_args(np, list_name, cells_name,
-> +					    0, index, out_args);
-> +}
-> +EXPORT_SYMBOL(of_parse_phandle_with_optional_args);
-
-
-With the above, just make this static inline. Bonus points if you want 
-to do the same changes on the other variants.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>

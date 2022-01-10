@@ -2,161 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9099F4896DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479AA4896E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244356AbiAJK7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:59:50 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55386 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244353AbiAJK7r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:59:47 -0500
-X-UUID: 395cc667b0e14575be2c58eb00d5c3b4-20220110
-X-UUID: 395cc667b0e14575be2c58eb00d5c3b4-20220110
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1957887219; Mon, 10 Jan 2022 18:59:44 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 10 Jan 2022 18:59:43 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 10 Jan 2022 18:59:42 +0800
-Message-ID: <83400d36640fc6256972041c882d080ce9aa5fdd.camel@mediatek.com>
-Subject: Re: [PATCH v3 09/33] iommu/mediatek: Remove for_each_m4u in
- tlb_sync_all
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
-        <anan.sun@mediatek.com>, <yen-chang.chen@mediatek.com>
-Date:   Mon, 10 Jan 2022 18:59:42 +0800
-In-Reply-To: <85987e9a-dfb0-c241-1dde-43c050a78b51@collabora.com>
-References: <20210923115840.17813-1-yong.wu@mediatek.com>
-         <20210923115840.17813-10-yong.wu@mediatek.com>
-         <bfa33e94-c2e5-5dab-c9af-b674e1669daa@collabora.com>
-         <22faee018a36a49e4a507b69d087432c8cd689ec.camel@mediatek.com>
-         <85987e9a-dfb0-c241-1dde-43c050a78b51@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S244373AbiAJLDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:03:09 -0500
+Received: from foss.arm.com ([217.140.110.172]:60994 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244358AbiAJLDI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:03:08 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05F002B;
+        Mon, 10 Jan 2022 03:03:08 -0800 (PST)
+Received: from [10.57.85.117] (unknown [10.57.85.117])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 970C03F5A1;
+        Mon, 10 Jan 2022 03:03:06 -0800 (PST)
+Message-ID: <0ce7622a-0c61-ea80-6c53-0388a8b620fe@arm.com>
+Date:   Mon, 10 Jan 2022 11:03:05 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH V2 5/7] coresight: trbe: Work around the ignored system
+ register writes
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641517808-5735-1-git-send-email-anshuman.khandual@arm.com>
+ <1641517808-5735-6-git-send-email-anshuman.khandual@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1641517808-5735-6-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-10 at 10:16 +0100, AngeloGioacchino Del Regno wrote:
-> Il 09/01/22 03:48, Yong Wu ha scritto:
-> > On Tue, 2022-01-04 at 16:55 +0100, AngeloGioacchino Del Regno
-> > wrote:
-> > > Il 23/09/21 13:58, Yong Wu ha scritto:
-> > > > The tlb_sync_all is called from these three functions:
-> > > > a) flush_iotlb_all: it will be called for each a iommu HW.
-> > > > b) tlb_flush_range_sync: it already has for_each_m4u.
-> > > > c) in irq: When IOMMU HW translation fault, Only need flush
-> > > > itself.
-> > > > 
-> > > > Thus, No need for_each_m4u in this tlb_sync_all. Remove it.
-> > > > 
-> > > > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> > > > ---
-> > > >    drivers/iommu/mtk_iommu.c | 18 +++++++-----------
-> > > >    1 file changed, 7 insertions(+), 11 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/iommu/mtk_iommu.c
-> > > > b/drivers/iommu/mtk_iommu.c
-> > > > index 6f4f6624e3ac..0b4c30baa864 100644
-> > > > --- a/drivers/iommu/mtk_iommu.c
-> > > > +++ b/drivers/iommu/mtk_iommu.c
-> > > > @@ -206,19 +206,15 @@ static struct mtk_iommu_domain
-> > > > *to_mtk_domain(struct iommu_domain *dom)
-> > > >    
-> > > >    static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data
-> > > > *data)
-> > > >    {
-> > > > -	struct list_head *head = data->hw_list;
-> > > > -
-> > > > -	for_each_m4u(data, head) {
-> > > > -		if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> > > > -			continue;
-> > > > +	if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> > > > +		return;
-> > > >    
-> > > > -		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-> > > > -			       data->base + data->plat_data-
-> > > > > inv_sel_reg);
-> > > > 
-> > > > -		writel_relaxed(F_ALL_INVLD, data->base +
-> > > > REG_MMU_INVALIDATE);
-> > > > -		wmb(); /* Make sure the tlb flush all done */
-> > > > +	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
-> > > > +		       data->base + data->plat_data-
-> > > > >inv_sel_reg);
-> > > > +	writel_relaxed(F_ALL_INVLD, data->base +
-> > > > REG_MMU_INVALIDATE);
-> > > > +	wmb(); /* Make sure the tlb flush all done */
-> > > 
-> > > There aren't a lot of writes here - not anymore, since you are no
-> > > longer doing
-> > > this for_each_m4u()...
-> > > ...so, please change writel_relaxed() to writel() calls, allowing
-> > > you
-> > > to also
-> > > remove the write barrier at the end (since in the non relaxed
-> > > version, order is already ensured).
-> > 
-> > In the "writel", the "__iowmb()" runs before "write_relaxed". Then
-> > how
-> > to guarantee the last register was wrote into the HW. Here the
-> > flush
-> > all don't have sync(waiting it complete)
-> > 
+On 07/01/2022 01:10, Anshuman Khandual wrote:
+> TRBE implementations affected by Arm erratum #2064142 might fail to write
+> into certain system registers after the TRBE has been disabled. Under some
+> conditions after TRBE has been disabled, writes into certain TRBE registers
+> TRBLIMITR_EL1, TRBPTR_EL1, TRBBASER_EL1, TRBSR_EL1 and TRBTRG_EL1 will be
+> ignored and not be effected.
 > 
-> That's right, I'm sorry for the invalid proposal.
+> Work around this problem in the TRBE driver by executing TSB CSYNC and DSB
+> just after the trace collection has stopped and before performing a system
+> register write to one of the affected registers. This just updates the TRBE
+> driver as required.
 > 
-> Though, there's something else to mention here... if writing
-> (F_INVLD_EN1 | F_INVLD_EN0) to inv_sel_reg is *required* to happen
-> before
-> writing F_ALL_INVLD to REG_MMU_INVALIDATE (which I think is exactly
-> the
-> case here), then, in order to ensure write ordering, you should still
-> use
-> writel() instead of the relaxed accessor; after which, since (as you
-> mentioned)
-> there is no sync readback loop, you can keep that wmb() at the end.
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>   arch/arm64/Kconfig                           |  2 +-
+>   drivers/hwtracing/coresight/coresight-trbe.c | 54 ++++++++++++++------
+>   drivers/hwtracing/coresight/coresight-trbe.h |  8 ---
+>   3 files changed, 39 insertions(+), 25 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index f1651cb71ef3..b6d62672bf7d 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -780,7 +780,7 @@ config ARM64_ERRATUM_2224489
+>   
+>   config ARM64_ERRATUM_2064142
+>   	bool "Cortex-A510: 2064142: workaround TRBE register writes while disabled"
+> -	depends on COMPILE_TEST # Until the CoreSight TRBE driver changes are in
+> +	depends on CORESIGHT_TRBE
+>   	default y
+>   	help
+>   	  This option adds the workaround for ARM Cortex-A510 erratum 2064142.
+> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
+> index 276862c07e32..850e9fca6847 100644
+> --- a/drivers/hwtracing/coresight/coresight-trbe.c
+> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
+> @@ -91,10 +91,12 @@ struct trbe_buf {
+>    */
+>   #define TRBE_WORKAROUND_OVERWRITE_FILL_MODE	0
+>   #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE	1
+> +#define TRBE_NEEDS_DRAIN_AFTER_DISABLE		2
+>   
+>   static int trbe_errata_cpucaps[] = {
+>   	[TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
+>   	[TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
+> +	[TRBE_NEEDS_DRAIN_AFTER_DISABLE] = ARM64_WORKAROUND_2064142,
+>   	-1,		/* Sentinel, must be the last entry */
+>   };
+>   
+> @@ -167,6 +169,11 @@ static inline bool trbe_may_write_out_of_range(struct trbe_cpudata *cpudata)
+>   	return trbe_has_erratum(cpudata, TRBE_WORKAROUND_WRITE_OUT_OF_RANGE);
+>   }
+>   
+> +static inline bool trbe_needs_drain_after_disable(struct trbe_cpudata *cpudata)
+> +{
+> +	return trbe_has_erratum(cpudata, TRBE_NEEDS_DRAIN_AFTER_DISABLE);
+> +}
+> +
+>   static int trbe_alloc_node(struct perf_event *event)
+>   {
+>   	if (event->cpu == -1)
+> @@ -174,30 +181,42 @@ static int trbe_alloc_node(struct perf_event *event)
+>   	return cpu_to_node(event->cpu);
+>   }
+>   
+> -static void trbe_drain_buffer(void)
+> +static inline void trbe_drain_buffer(void)
+>   {
+>   	tsb_csync();
+>   	dsb(nsh);
+>   }
+>   
+> -static void trbe_drain_and_disable_local(void)
+> +static inline void set_trbe_disabled(struct trbe_cpudata *cpudata)
+>   {
+>   	u64 trblimitr = read_sysreg_s(SYS_TRBLIMITR_EL1);
+>   
+> -	trbe_drain_buffer();
+> -
+>   	/*
+>   	 * Disable the TRBE without clearing LIMITPTR which
+>   	 * might be required for fetching the buffer limits.
+>   	 */
+>   	trblimitr &= ~TRBLIMITR_ENABLE;
+>   	write_sysreg_s(trblimitr, SYS_TRBLIMITR_EL1);
+> +
+> +	/*
+> +	 * Errata affected TRBE implementation will need TSB CSYNC and
+> +	 * DSB in order to prevent subsequent writes into certain TRBE
+> +	 * system registers from being ignored and not effected.
+> +	 */
 
-The writel_relaxed also makes sure the order. I did try this:
+minor nit: This comment could be moved to the definition of the
+function "trbe_needs_drain_after_disable()" to make more sense.
+The name is implicit here indicating, why we are doing a drain.
 
+Either ways:
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/1570627143-29441-3-git-send-email-yong.wu@mediatek.com/
-
-> 
-> > > 
-> > > >    
-> > > > -		pm_runtime_put(data->dev);
-> > > > -	}
-> > > > +	pm_runtime_put(data->dev);
-> > > >    }
-> > > >    
-> > > >    static void mtk_iommu_tlb_flush_range_sync(unsigned long
-> > > > iova,
-> > > > size_t size,
-> > > > 
-> 
-> 
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 

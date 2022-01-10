@@ -2,165 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D667A489ADB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F970489AE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbiAJNyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiAJNyU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:54:20 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED73C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:54:20 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id a18so52839258edj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:54:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=djPW+e1c8spfYeyL5AbJ32h9GSIUYbKoLv2DLHaOq+0=;
-        b=bl9J2QtWDuUmQlp5N7WmOsJhVeMPiTX+NiVRwh9l87FNYClRzAhBufVdMy0MCqtNFV
-         dq4421mAxg0ILI2S2MCCP1ns1H4QhlZT4aWwoBhR0cZUmunXHRx+d+HuOX/d5PKXrzPG
-         TK+4Hu5xgpHlwxKj6pUbOw6pX2/G4EJ8DfXnXNMUesmDYorizgDzkPnVKpRJhctC8sUZ
-         B2ri5NpHRwtPw2fRocdZhxoBuaBCKzAjfaykJZay8LbVDX930o0CDQ/LHWyda4xFV+Hc
-         WugS89G4jBlr4VL2uypPxdIO8AzpqLxqh+es+3YLGWyAingktkoxMNPCyXb/hyfzuCo6
-         mj1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=djPW+e1c8spfYeyL5AbJ32h9GSIUYbKoLv2DLHaOq+0=;
-        b=0aD3uQdcp2P9Qo3JA/gt6ZW9dc3mnNzv9JMBNatnOAbDSYyPP8rMN608/+6J2NDjAI
-         FBaVAe/8TLxq/Q9pW0RaLHee73qjoeQyRfEfQMiiHEH5CiAmURiOeBDWPg1qF+h289ba
-         khuc2xfKCd8MjGa4MFhjqTKqdJBYvH3yKpvWiAM3v74UTBsXsGzTjqOIRuqEWcHm+TZW
-         P8hFf0IbW8QHUCvpcski7xQ6GjGyUtvOY9R/0DDZo7BKojfLscEvnIHFJ20NEW6q8zkp
-         fFyP+WlvKc+4Vv5rRd3l3pPih4wIWtgRfg1ljyCeT35Ri+Gg9O61t1rKYisiSSr3PGM9
-         KolA==
-X-Gm-Message-State: AOAM530+95xGQ3gr8JQDARvYrjD9TCGFkAAsKKjPhZmqPBv8NLn94pzQ
-        0Xh9qBUkcaQFWce0c37JjE4ErOw0Hwy3zvdtf43k
-X-Google-Smtp-Source: ABdhPJyFGnfUMGEnoNxRXvUJpCvABNYtlKdS/8DhFo1CC6qDSFOT+cL5Hg32zlVk43P8LVymiEdjB1533Wdjtj+EyFw=
-X-Received: by 2002:a05:6402:cbb:: with SMTP id cn27mr5089054edb.246.1641822858820;
- Mon, 10 Jan 2022 05:54:18 -0800 (PST)
+        id S234695AbiAJNzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:55:07 -0500
+Received: from mga17.intel.com ([192.55.52.151]:14998 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233954AbiAJNzC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 08:55:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641822902; x=1673358902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cicLgHiEPGQOrIjOfgQxMbxQzmM/uxWwtuhfal7Bd1E=;
+  b=RV9w3h5YLKb0fQsezk6H+TVgvtg2POfb2gE3tTh9DeWqPfeyEV3150Ew
+   ug29tEtAQhcmFfFucYEGRS/zn9KNuJ5JrVcuA+M7K2/tPxAZvPIpP29RV
+   Uc3ni8H7Uhpg0x+iPtQwEerXTo7HooTCHfcIllet1PeDFIqVFR0TEa4QE
+   HuVe1JMMRdbAWbE4rnZ+gM+38nN98+wIKMapR5btpvHB0gIbyYnej75KJ
+   0pM6LH4LMQ5CfQdGy3t5eO1dfEfElvjD7nXtQRYtjGlsq/VA2TA7JnSiD
+   fHHLKu++CpYsAkRWPJBjuEvCVqmdLg93ZXqBd55LZdZel/39k/XGBcDZa
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="223921295"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="223921295"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 05:55:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="764520088"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Jan 2022 05:54:59 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6v8U-0003ZZ-I4; Mon, 10 Jan 2022 13:54:58 +0000
+Date:   Mon, 10 Jan 2022 21:54:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>
+Subject: Re: [PATCH v4 5/9] pinctrl: nuvoton: Add driver for WPCM450
+Message-ID: <202201102127.3Rm7ZYyP-lkp@intel.com>
+References: <20220109173000.1242703-6-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-References: <20210830141737.181-1-xieyongji@bytedance.com> <20220110075546-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220110075546-mutt-send-email-mst@kernel.org>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Mon, 10 Jan 2022 21:54:08 +0800
-Message-ID: <CACycT3v1aEViw7vV4x5qeGVPrSrO-BTDvQshEX35rx_X0Au2vw@mail.gmail.com>
-Subject: Re: [PATCH v12 00/13] Introduce VDUSE - vDPA Device in Userspace
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christian Brauner <christian.brauner@canonical.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, bcrl@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mika.penttila@nextfour.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>, joro@8bytes.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        He Zhe <zhe.he@windriver.com>,
-        Liu Xiaodong <xiaodong.liu@intel.com>,
-        Joe Perches <joe@perches.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        John Garry <john.garry@huawei.com>, songmuchun@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Netdev <netdev@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220109173000.1242703-6-j.neuschaefer@gmx.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Mon, Aug 30, 2021 at 10:17:24PM +0800, Xie Yongji wrote:
-> > This series introduces a framework that makes it possible to implement
-> > software-emulated vDPA devices in userspace. And to make the device
-> > emulation more secure, the emulated vDPA device's control path is handled
-> > in the kernel and only the data path is implemented in the userspace.
-> >
-> > Since the emuldated vDPA device's control path is handled in the kernel,
-> > a message mechnism is introduced to make userspace be aware of the data
-> > path related changes. Userspace can use read()/write() to receive/reply
-> > the control messages.
-> >
-> > In the data path, the core is mapping dma buffer into VDUSE daemon's
-> > address space, which can be implemented in different ways depending on
-> > the vdpa bus to which the vDPA device is attached.
-> >
-> > In virtio-vdpa case, we implements a MMU-based software IOTLB with
-> > bounce-buffering mechanism to achieve that. And in vhost-vdpa case, the dma
-> > buffer is reside in a userspace memory region which can be shared to the
-> > VDUSE userspace processs via transferring the shmfd.
-> >
-> > The details and our user case is shown below:
-> >
-> > ------------------------    -------------------------   ----------------------------------------------
-> > |            Container |    |              QEMU(VM) |   |                               VDUSE daemon |
-> > |       ---------      |    |  -------------------  |   | ------------------------- ---------------- |
-> > |       |dev/vdx|      |    |  |/dev/vhost-vdpa-x|  |   | | vDPA device emulation | | block driver | |
-> > ------------+-----------     -----------+------------   -------------+----------------------+---------
-> >             |                           |                            |                      |
-> >             |                           |                            |                      |
-> > ------------+---------------------------+----------------------------+----------------------+---------
-> > |    | block device |           |  vhost device |            | vduse driver |          | TCP/IP |    |
-> > |    -------+--------           --------+--------            -------+--------          -----+----    |
-> > |           |                           |                           |                       |        |
-> > | ----------+----------       ----------+-----------         -------+-------                |        |
-> > | | virtio-blk driver |       |  vhost-vdpa driver |         | vdpa device |                |        |
-> > | ----------+----------       ----------+-----------         -------+-------                |        |
-> > |           |      virtio bus           |                           |                       |        |
-> > |   --------+----+-----------           |                           |                       |        |
-> > |                |                      |                           |                       |        |
-> > |      ----------+----------            |                           |                       |        |
-> > |      | virtio-blk device |            |                           |                       |        |
-> > |      ----------+----------            |                           |                       |        |
-> > |                |                      |                           |                       |        |
-> > |     -----------+-----------           |                           |                       |        |
-> > |     |  virtio-vdpa driver |           |                           |                       |        |
-> > |     -----------+-----------           |                           |                       |        |
-> > |                |                      |                           |    vdpa bus           |        |
-> > |     -----------+----------------------+---------------------------+------------           |        |
-> > |                                                                                        ---+---     |
-> > -----------------------------------------------------------------------------------------| NIC |------
-> >                                                                                          ---+---
-> >                                                                                             |
-> >                                                                                    ---------+---------
-> >                                                                                    | Remote Storages |
-> >                                                                                    -------------------
-> >
-> > We make use of it to implement a block device connecting to
-> > our distributed storage, which can be used both in containers and
-> > VMs. Thus, we can have an unified technology stack in this two cases.
-> >
-> > To test it with null-blk:
-> >
-> >   $ qemu-storage-daemon \
-> >       --chardev socket,id=charmonitor,path=/tmp/qmp.sock,server,nowait \
-> >       --monitor chardev=charmonitor \
-> >       --blockdev driver=host_device,cache.direct=on,aio=native,filename=/dev/nullb0,node-name=disk0 \
-> >       --export type=vduse-blk,id=test,node-name=disk0,writable=on,name=vduse-null,num-queues=16,queue-size=128
-> >
-> > The qemu-storage-daemon can be found at https://github.com/bytedance/qemu/tree/vduse
->
-> It's been half a year - any plans to upstream this?
+Hi "Jonathan,
 
-Yeah, this is on my to-do list this month.
+I love your patch! Perhaps something to improve:
 
-Sorry for taking so long... I've been working on another project
-enabling userspace RDMA with VDUSE for the past few months. So I
-didn't have much time for this. Anyway, I will submit the first
-version as soon as possible.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v5.16 next-20220110]
+[cannot apply to linusw-pinctrl/devel]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks,
-Yongji
+url:    https://github.com/0day-ci/linux/commits/Jonathan-Neusch-fer/Nuvoton-WPCM450-pinctrl-and-GPIO-driver/20220110-013733
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-randconfig-r014-20220109 (https://download.01.org/0day-ci/archive/20220110/202201102127.3Rm7ZYyP-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/e62ece12931654ffea372713cc39fd64779c8b4a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jonathan-Neusch-fer/Nuvoton-WPCM450-pinctrl-and-GPIO-driver/20220110-013733
+        git checkout e62ece12931654ffea372713cc39fd64779c8b4a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/nuvoton/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:1564:41: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+           dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
+                                           ~~     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           %lu
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:46:25: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +1564 drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1559  
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1560  static int npcm7xx_get_groups_count(struct pinctrl_dev *pctldev)
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1561  {
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1562  	struct npcm7xx_pinctrl *npcm = pinctrl_dev_get_drvdata(pctldev);
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1563  
+3b588e43ee5c7a Tomer Maimon 2018-08-08 @1564  	dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1565  	return ARRAY_SIZE(npcm7xx_groups);
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1566  }
+3b588e43ee5c7a Tomer Maimon 2018-08-08  1567  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

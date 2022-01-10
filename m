@@ -2,78 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E53489E4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE63489E4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238218AbiAJRYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S238227AbiAJRZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiAJRYp (ORCPT
+        with ESMTP id S238203AbiAJRZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:24:45 -0500
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC97C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:24:45 -0800 (PST)
-Received: by mail-io1-xd42.google.com with SMTP id j1so8619067iob.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:24:45 -0800 (PST)
+        Mon, 10 Jan 2022 12:25:13 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152E2C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:25:13 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id h14so22535097ybe.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:25:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7HvrHSTboUI1IGJewPJVxkFYCzomNnN15wMAIs6y9PI=;
-        b=VqV0XSJWDby+erMxC5BtF8BnGkSUdmzahsbBa7ajF4Vm2a1RA6S29u1Y+6byRf94K1
-         cxoG8F28n4gXCDJ0ShNjqmtfncbGFaAqj3ONa3MjooTZCtQwIaKluGXsDjJ5GW894WNp
-         P71eT5gNuWA7FZ1ZkTLr7Qsta/m0ssgKQz+V7e6YABf3SkgkNkuyi9GOoDdGvyK8v5jH
-         czrrQNqlqVK+W34h+VTVSKkEcu9Zl9G3XqHSPMqshaVRu7Y0NEsQCGfm//XV6GxHHLMO
-         OB6eTY3AIx+23BIuktEKN6RV/SCwqh0N9WyWjJkDpLy4hB13trbrbfg8NMG7hV88/7oi
-         AbNw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S49UlxL/fsiTamxTIgefeURrqnW3PFqiJDDCzTc/0cc=;
+        b=VCdeKW3sNP+kY6RTFC/xDpcb6BGp9EFzyrlM8ZMqgpZHIL4xCzt4ONzlz0iXBKAs6A
+         QIzGQBKrqqzWhUm+c0djm+bbedLM7nFmAKNNYybG752cXjGeMmIQVF+QhPbltPM/2VhG
+         f7r/J8vEF3BxJ69LvJ+7jpkKy1u2C5VYnMZwlqnjVB2y1UCcgMDABX0/5ZKBQ1rj2pMF
+         V8NwgXcMILRZCjB2iqkYE31Kfyx6mgaFxTg7QrTjO3QzrKHOxEH4eAUCbMQAFxJQEGKx
+         9pzy7hWJSTWJNfq2JHUcfnNXUBLNxrE1X4INdXGewmaVJH9E3UKqi5VzUvxFB7oATIfI
+         C7UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7HvrHSTboUI1IGJewPJVxkFYCzomNnN15wMAIs6y9PI=;
-        b=HRUVfACu9dfilIV4uS6SJ0IYjiFSDJtTc1O1kIWrV1bK0tQ5eESiRhkH+hRVryHRtx
-         KIdmlEyQUlMW/6SRudXyEaEXw4BY/B00PXaRldPwBdL2raQvTxXwu6mcxGKB5MSHMcby
-         B40ghrA5EB0eoZDlSsJWQOkyqmznC3ZWA1VXVVIFtuikm0paC1PeieO1hfTySJdp1n4E
-         X5pjzW2tlwALvNAlMdGUgM/vwljhMdL4LzQ5trfyOO9Wf3nQtegUJAIktUki8IKEsgzh
-         edApYrZdYIUs6fpnGNjqAyo+wvXDfjs45c3PquAYl+G2gqrcRYq4DBQmXr9L2mJvYbf8
-         EDQw==
-X-Gm-Message-State: AOAM532dlDUHxl/8j1RxJ5RDjIQ2uTBeIibc70V2ajc3R915Tv96B5P/
-        pTDPI0bEIz54D8/envaghDwNuyjjMNtFOQHM4J8=
-X-Google-Smtp-Source: ABdhPJwRKQRT/vo5dDnJhRJyJjtAXfbxdKVi2iSDueHKq8r3+cNhbxzsT2dHirMt+jPuPM6TCqCPNtYRFfXnqX3pvMA=
-X-Received: by 2002:a6b:1452:: with SMTP id 79mr308459iou.62.1641835484823;
- Mon, 10 Jan 2022 09:24:44 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S49UlxL/fsiTamxTIgefeURrqnW3PFqiJDDCzTc/0cc=;
+        b=2qCJWWZ3zPXqN1t+phSZvbDwA6P658Er0lPPZYTNCsMMDZ3Ujins56ardtnKqMcd3u
+         IdKhQEVPsRqQTcCQmQnhrcQBnWkuX2TdcxZevgFeimH/BorwVjlBO+o2YLaLH2hkrMD8
+         AohkPOTnv0kGIxyWBwol0NgAVYqCkCxPytsCu9KC7OSU4EszO/nE/ZEIqasuNn5+VIgp
+         ShgK+qmNhcizUfy3J76JKp2oXd79AUr2/MKhEY0Y7gZnXTaaMD632X3FGsSlqtF5yA7k
+         fBM4Imag+mUQCh186iPQ4nlehvuPExFhJKC04A4VFLy4sjfOfPs6t8ujs58UMDPDjW4e
+         wL4w==
+X-Gm-Message-State: AOAM532nFAQvW7XWz1Q8SNTHpJAdD7nNzICuAMb4v0pj5uykiVWkmjHn
+        f5SEL1nWejtKCpcD6HreVhq0BwobMSuT9CSU/MTpRQ==
+X-Google-Smtp-Source: ABdhPJxGq+zYLLxC8sn7LZDUsLrH4GX6FkkADsYi2zUYF9m5j4rlWu6WSTZbP9nlpFwN9FhHCK4Gnu8L8/uSWMlf4HE=
+X-Received: by 2002:a05:6902:703:: with SMTP id k3mr758294ybt.225.1641835511962;
+ Mon, 10 Jan 2022 09:25:11 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6638:2385:0:0:0:0 with HTTP; Mon, 10 Jan 2022 09:24:44
- -0800 (PST)
-Reply-To: headofficedirectorbank@gmail.com
-From:   WU Bank Directoroffice <db.banktg@gmail.com>
-Date:   Mon, 10 Jan 2022 17:24:44 +0000
-Message-ID: <CAFDfEeaAb-iworb38=X5-LuPoQTsUVya-4N7SBRHM-aZ73ctfQ@mail.gmail.com>
-Subject: Hello
-To:     db.banktg@gmail.com
+References: <000000000000e8f8f505d0e479a5@google.com> <20211211015620.1793-1-hdanton@sina.com>
+ <YbQUSlq76Iv5L4cC@sol.localdomain> <YdW3WfHURBXRmn/6@sol.localdomain>
+ <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
+ <CAHk-=wjddvNbZBuvh9m_2VYFC1W7HvbP33mAzkPGOCHuVi5fJg@mail.gmail.com>
+ <CAHk-=wjn5xkLWaF2_4pMVEkZrTA=LiOH=_pQK0g-_BMSE-8Jxg@mail.gmail.com> <Ydw4hWCRjAhGfCAv@cmpxchg.org>
+In-Reply-To: <Ydw4hWCRjAhGfCAv@cmpxchg.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 10 Jan 2022 09:25:00 -0800
+Message-ID: <CAJuCfpHg=SPzx7SGUL75DVpMy0BDEwVj4o-SM0UKGmEJrOSdvg@mail.gmail.com>
+Subject: Re: psi_trigger_poll() is completely broken
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
+On Mon, Jan 10, 2022 at 5:45 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Wed, Jan 05, 2022 at 11:13:30AM -0800, Linus Torvalds wrote:
+> > On Wed, Jan 5, 2022 at 11:07 AM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
+> > >
+> > > Whoever came up with that stupid "replace existing trigger with a
+> > > write()" model should feel bad. It's garbage, and it's actively buggy
+> > > in multiple ways.
+> >
+> > What are the users? Can we make the rule for -EBUSY simply be that you
+> > can _install_ a trigger, but you can't replace an existing one (except
+> > with NULL, when you close it).
+>
+> Apologies for the delay, I'm traveling right now.
+>
+> The primary user of the poll interface is still Android userspace OOM
+> killing. I'm CCing Suren who is the most familiar with this usecase.
+>
+> Suren, the way the refcounting is written right now assumes that
+> poll_wait() is the actual blocking wait. That's not true, it just
+> queues the waiter and saves &t->event_wait, and the *caller* of
+> psi_trigger_poll() continues to interact with it afterwards.
 
-Irod=C3=A1nk el=C3=A9rhet=C5=91s=C3=A9ge: 2554 Road Of Kpalime Face Pharmac=
-y Bet, Lome, Gulf.
+Thanks for adding me, Johannes. I see where I made a mistake.
+Terribly sorry for the trouble this caused. I do feel bad.
 
-Ez a WU bank igazgat=C3=B3ja =C3=A9rtes=C3=ADtse =C3=96nt arr=C3=B3l, hogy =
-a nemzetk=C3=B6zi
-Valutaalap (IMF), aki 850 000,00 USD =C3=B6sszeg=C5=B1 k=C3=A1rt=C3=A9r=C3=
-=ADt=C3=A9st kap, mert
-megtal=C3=A1lt=C3=A1k az =C3=96n e-mail c=C3=ADm=C3=A9t a csal=C3=A1s =C3=
-=A1ldozatainak list=C3=A1j=C3=A1n. Ugye
-hajland=C3=B3 megszerezni ezt az alapot vagy sem?
+>
+> If at all possible, I would also prefer the simplicity of one trigger
+> setup per fd; if you need a new trigger, close the fd and open again.
+>
+> Can you please take a look if that is workable from the Android side?
 
-S=C3=BCrg=C5=91sen v=C3=A1rjuk a h=C3=ADrt.
+Yes, one trigger per fd would work fine for Android. That's how we
+intended to use it.
+I'm still catching up on this email thread. Once I digest it, will try
+to fix this with one-trigger-per-fd approach.
 
-Tisztelettel
-Tony Albert
-BANKIGAZGAT=C3=93
+About the issue of serializing concurrent writes for
+cgroup_pressure_write() similar to how psi_write() does. Doesn't
+of->mutex inside kernfs_fop_write_iter() serialize the writes to the
+same file: https://elixir.bootlin.com/linux/latest/source/fs/kernfs/file.c#L287
+?
+
+>
+> (I'm going to follow up on the static branch issue Linus pointed out,
+> later this week when I'm back home. I also think we should add Suren
+> as additional psi maintainer since the polling code is a good chunk of
+> the codebase and he shouldn't miss threads like these.)
+
+That would help me not to miss these emails and respond promptly.
+Thanks,
+Suren.
+
+>
+> > That would fix the poll() lifetime issue, and would make the
+> > psi_trigger_replace() races fairly easy to fix - just use
+> >
+> >         if (cmpxchg(trigger_ptr, NULL, new) != NULL) {
+> >                 ... free 'new', return -EBUSY ..
+> >
+> > to install the new one, instead of
+> >
+> >         rcu_assign_pointer(*trigger_ptr, new);
+> >
+> > or something like that. No locking necessary.
+> >
+> > But I assume people actually end up re-writing triggers, because
+> > people are perverse and have taken advantage of this completely broken
+> > API.
+> >
+> >                Linus

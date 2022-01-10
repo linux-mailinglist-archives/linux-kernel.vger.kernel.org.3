@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 818CC489F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7044489F68
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242146AbiAJSos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239534AbiAJSoo (ORCPT
+        id S241852AbiAJSna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:43:30 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4382 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241322AbiAJSn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:44:44 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C79C06173F;
-        Mon, 10 Jan 2022 10:44:44 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id w16so57282920edc.11;
-        Mon, 10 Jan 2022 10:44:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=jtE0Rv+bum5sJgWKzx4ASlY9bVyREWYzZIOQJxZM5iY=;
-        b=AhI2Gg6YdCwaIhrAu5mqDabtZ/GZlXpoGpgT6vvCGNXFP2dgdqap32qKD9Xpo7OMHJ
-         ylabTTmEvwqrb02HRKgXvdPXIDJqbaWiU1alJt0308qvtPfi2joy8NGpeu2ACyLBHKxh
-         5HYNCzZZq+aFByZLSgWJLAWUWMspRUOGVUS3b5eSqs6Lm0IR66CoDfjRfqMDuKH6VRZ+
-         kfaQuXNJYxDNZ3MDsLL7ARZTt1sFDOd+7nwmhm2fAgal0/I1hAUAAB15EoZkYyd8xogk
-         3xcCMAOElWqYC2+r7vzdYvQu7U4mDy9hfw424pYx1sqU+wzWrBIJ3VjRHVySYKsSt/4I
-         b4tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=jtE0Rv+bum5sJgWKzx4ASlY9bVyREWYzZIOQJxZM5iY=;
-        b=xfdHxF3dPSMUjgMwjK/AXmU/ARv5hlnRoBCShieRohE3zeAEu5nTe1yL7SrAdkvIFc
-         /LMZSqUa5hwNosQHh1yAAwsW7Bzg4ak/Z4GqfhAX4Z4udL2yHX7mYWiUvO9It9IMr6qN
-         IU17PKsnrPlmFWH8uLQZWAaBPcsd1sQJHXn0RyQPL+vUcjQohrV+q/D/xe4Sm8ttFSZv
-         sLuhCTs0fIkyIJ+/Xr2vDEgw4Vy2V+tQWMltgJCod2VcZJHb62OEiLZpTfkVAqjsxHVS
-         clI+af+SIVrFQAqRBM4Mr9x9XeRJHx2ervmSwL60Bs10FxJ+WkYcoozc88r/AWvIwLXL
-         X5jQ==
-X-Gm-Message-State: AOAM531FvrCGcePNHFjlQXgOLSTaVHxFLzx1uYIQGfdGg68uJEl1Ntt9
-        aNEHeBGtHXRRtSaBPVEyMw/vBLqLiNnvKMilfMk=
-X-Google-Smtp-Source: ABdhPJxmqyqaucGkcSzCFWyIp16vMFyJRkqtG9MqY7GjEaenhNbAZR5xixkY+sqGnW5/IK5vzwD4oPXNR2rXXVToc7s=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr773695ejc.639.1641840282660;
- Mon, 10 Jan 2022 10:44:42 -0800 (PST)
+        Mon, 10 Jan 2022 13:43:28 -0500
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JXjL339Pyz6H7Tm;
+        Tue, 11 Jan 2022 02:39:55 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 10 Jan 2022 19:43:25 +0100
+Received: from [10.47.24.251] (10.47.24.251) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 10 Jan
+ 2022 18:43:24 +0000
+Subject: Re: [PATCH v4 03/48] perf stat: Correct aggregation CPU map
+To:     Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
+        "Jiri Olsa" <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Vineet Singh" <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <zhengjun.xing@intel.com>
+CC:     <eranian@google.com>
+References: <20220105061351.120843-1-irogers@google.com>
+ <20220105061351.120843-4-irogers@google.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <1ae917ec-4d32-4ee7-0948-f91eb3bf35fb@huawei.com>
+Date:   Mon, 10 Jan 2022 18:43:08 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <1640331779-18277-1-git-send-email-wellslutw@gmail.com>
- <1640331779-18277-3-git-send-email-wellslutw@gmail.com> <CAHp75Vd3iMM+NteJXP_mMAyw5momk3xzp1Y2GX-YJZfFSAwo9A@mail.gmail.com>
- <0f6a382cd66d4d5d84201da0a29145a3@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <0f6a382cd66d4d5d84201da0a29145a3@sphcmbx02.sunplus.com.tw>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Jan 2022 20:42:55 +0200
-Message-ID: <CAHp75VftFc8DNnrKp0dGsPvyzTrp+1z0_JP79Dzv5i0HMtsoUA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] pinctrl: Add driver for Sunplus SP7021
-To:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Cc:     Wells Lu <wellslutw@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "dvorkin@tibbo.com" <dvorkin@tibbo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220105061351.120843-4-irogers@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.24.251]
+X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:16 PM Wells Lu =E5=91=82=E8=8A=B3=E9=A8=B0 <wells=
-.lu@sunplus.com> wrote:
->
-> Hi Andy,
->
-> Could you please answer my questions in previous mail?
-> I need your answers to proceed submission.
->
-> Sorry, I am not sure if my previous mail is lost or you are busy.
+On 05/01/2022 06:13, Ian Rogers wrote:
+> Switch the perf_cpu_map in aggr_update_shadow from
+> the evlist to the counter's cpu map, so the index is appropriate. This
+> addresses a problem where uncore counts, with a cpumap like:
+> $ cat /sys/devices/uncore_imc_0/cpumask
+> 0,18
+> Don't aggregate counts in CPUs based on the index of those values in the
+> cpumap (0 and 1) but on the actual CPU (0 and 18). Thereby correcting
+> metric calculations in per-socket mode for counters without a full
+> cpumask.
+> 
+> On a SkylakeX with a tweaked DRAM_BW_Use metric, to remove unnecessary
+> scaling, this gives:
+> 
+> Before:
+> $ /perf stat --per-socket -M DRAM_BW_Use -I 1000
+>       1.001102293 S0        1              27.01 MiB  uncore_imc/cas_count_write/ #   103.00 DRAM_BW_Use
+>       1.001102293 S0        1              30.22 MiB  uncore_imc/cas_count_read/
+>       1.001102293 S0        1      1,001,102,293 ns   duration_time
+>       1.001102293 S1        1              20.10 MiB  uncore_imc/cas_count_write/ #     0.00 DRAM_BW_Use
+>       1.001102293 S1        1              32.74 MiB  uncore_imc/cas_count_read/
+>       1.001102293 S1        0      <not counted> ns   duration_time
+>       2.003517973 S0        1              83.04 MiB  uncore_imc/cas_count_write/ #   920.00 DRAM_BW_Use
+>       2.003517973 S0        1             145.95 MiB  uncore_imc/cas_count_read/
+>       2.003517973 S0        1      1,002,415,680 ns   duration_time
+>       2.003517973 S1        1             302.45 MiB  uncore_imc/cas_count_write/ #     0.00 DRAM_BW_Use
+>       2.003517973 S1        1             290.99 MiB  uncore_imc/cas_count_read/
+>       2.003517973 S1        0      <not counted> ns   duration_time
+> 
+> After:
+> $ perf stat --per-socket -M DRAM_BW_Use -I 1000
+>       1.001080840 S0        1              24.96 MiB  uncore_imc/cas_count_write/ #    54.00 DRAM_BW_Use
+>       1.001080840 S0        1              33.64 MiB  uncore_imc/cas_count_read/
+>       1.001080840 S0        1      1,001,080,840 ns   duration_time
+>       1.001080840 S1        1              42.43 MiB  uncore_imc/cas_count_write/ #    84.00 DRAM_BW_Use
+>       1.001080840 S1        1              47.05 MiB  uncore_imc/cas_count_read/
+>       1.001080840 S1        0      <not counted> ns   duration_time
+> 
+> Signed-off-by: Ian Rogers<irogers@google.com>
 
-Please, do not top-post! Also remove unrelated context, make your
-message small enough and neat.
-
-I have answered your questions.
-
---=20
-With Best Regards,
-Andy Shevchenko
+Tested-by: John Garry <john.garry@huawei.com>

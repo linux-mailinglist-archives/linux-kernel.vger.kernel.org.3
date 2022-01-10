@@ -2,114 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4515E488D96
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEF4488D9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiAJA6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 19:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbiAJA6M (ORCPT
+        id S237653AbiAJA70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 19:59:26 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41196 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237643AbiAJA7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 19:58:12 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7A7C06173F;
-        Sun,  9 Jan 2022 16:58:12 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 6CB9EC009; Mon, 10 Jan 2022 01:58:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1641776289; bh=uRt8DC7aSOODc1J8lbTlNqkqIzph89yqmPrsx4NeG4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cHPqt7XNNOftLpstaYVnaGUIb9o7/kwYXWS5ral8oYtoOmfukwOYLGNPgTRGHK27B
-         GvUH0SCVElXLYs+qUldr6GmornA42UR5d8KJDzgwQNwmZR3Lr6+o7+Oe4JszwwxPdD
-         V2rBuGlcFoEZrD6l+1mazEDwNqoi9COXddfKzAsZDESvdCe7CWjwR5ooZCtBKHMXBn
-         4mfV1ihXWU3XmMNnRrR9uLh8zqBadN/eatHeSZyAvktzCKt0UmMm6XsF0xsRLe/tAb
-         BUJNYgELXsbQLVie6PcilCAO3Zbh3gnY0MoBLQHx/pG8vpioD96U5qs8+D5IE4b169
-         T0BoQynyYKmsA==
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on nautica.notk.org
-X-Spam-Level: 
-X-Spam-Status: No, score=0.0 required=5.0 tests=UNPARSEABLE_RELAY
-        autolearn=unavailable version=3.3.2
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 135C6C009;
-        Mon, 10 Jan 2022 01:58:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1641776288; bh=uRt8DC7aSOODc1J8lbTlNqkqIzph89yqmPrsx4NeG4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FeIl0b+QkCy2RI29bvXVS2zWPjDKARpjnKg9dDuj1cMtAEtjmKFQRSYJ2k08Xe7CF
-         CISXm6pNP1CrVinaJOZP3HMUSXXA36a4OCtLrysofIiAzzvTUu+fErDx1ohl1j3wLM
-         sx+IspaAn7GpOJUpe5D3CaOw+XdiUe8pVWwU3bhlVwlEaOLWqDumPc0YDe5+esQLwX
-         OB2Q36B9N/IUNLLBJvCEwE+4AiayGR+ksgZ5Y75joOGEibIaEbVgq73dtxthfw9cHA
-         UVacMY3Uhb4yCLGQl5L9BwJZDc/IZLUQFMbTa4aPo0lVUWh/Hg+nE38XJx7FGy+hwR
-         b5YJ6FWXVsxsw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id a5dcf08b;
-        Mon, 10 Jan 2022 00:58:01 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 09:57:46 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stefano Stabellini <stefano@aporeto.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] 9p/trans_fd: split into dedicated module
-Message-ID: <YduEira4sB0+ESYp@codewreck.org>
-References: <20211103193823.111007-1-linux@weissschuh.net>
- <20211103193823.111007-3-linux@weissschuh.net>
+        Sun, 9 Jan 2022 19:59:25 -0500
+X-UUID: 81431f3ba0ab4c5d960a72f087e75100-20220110
+X-UUID: 81431f3ba0ab4c5d960a72f087e75100-20220110
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2072794757; Mon, 10 Jan 2022 08:59:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 10 Jan 2022 08:59:18 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 10 Jan 2022 08:59:18 +0800
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [v2 0/3] Integrate vppsys with mtk-mmsys in MT8195
+Date:   Mon, 10 Jan 2022 08:58:59 +0800
+Message-ID: <20220110005902.27148-1-chun-jie.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211103193823.111007-3-linux@weissschuh.net>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+This patch series is based on 5.16-rc6.
 
-it's been a while but I had a second look as I intend on submitting this
-next week, just a small fixup on the Kconfig entry
+change since v1:
+- remove vppsys in clock document
+- unregister clock when fail to add clock provider
 
-Thomas Weißschuh wrote on Wed, Nov 03, 2021 at 08:38:21PM +0100:
-> diff --git a/net/9p/Kconfig b/net/9p/Kconfig
-> index 64468c49791f..af601129f1bb 100644
-> --- a/net/9p/Kconfig
-> +++ b/net/9p/Kconfig
-> @@ -15,6 +15,13 @@ menuconfig NET_9P
->  
->  if NET_9P
->  
-> +config NET_9P_FD
-> +	depends on VIRTIO
+Chun-Jie Chen (3):
+  clk: mediatek: Add error handle when fail to register clock provider
+  dt-bindings: ARM: Mediatek: Remove vppsys in MT8195 clock document
+  clk: mediatek: Integrate vppsys with mtk-mmsys in MT8195
 
-I think that's just a copypaste leftover from NET_9P_VIRTIO ?
-Since it used to be code within NET_9P and it's within a if NET_9P it
-shouldn't depend on anything.
+ .../arm/mediatek/mediatek,mt8195-clock.yaml   | 16 -------
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c  |  5 ++-
+ drivers/clk/mediatek/clk-mt8195-apusys_pll.c  |  5 ++-
+ drivers/clk/mediatek/clk-mt8195-topckgen.c    |  5 ++-
+ drivers/clk/mediatek/clk-mt8195-vdo0.c        |  5 ++-
+ drivers/clk/mediatek/clk-mt8195-vdo1.c        |  5 ++-
+ drivers/clk/mediatek/clk-mt8195-vpp0.c        | 42 ++++++++++++-------
+ drivers/clk/mediatek/clk-mt8195-vpp1.c        | 42 ++++++++++++-------
+ drivers/clk/mediatek/clk-mtk.c                | 14 ++++++-
+ drivers/clk/mediatek/clk-mtk.h                |  1 +
+ 10 files changed, 89 insertions(+), 51 deletions(-)
 
-Also for compatibility I'd suggest we keep it on by default at this
-point, e.g. add 'default NET_9P' to this block:
+--
+2.18.0
 
-
-diff --git a/net/9p/Kconfig b/net/9p/Kconfig
-index af601129f1bb..deabbd376cb1 100644
---- a/net/9p/Kconfig
-+++ b/net/9p/Kconfig
-@@ -16,7 +16,7 @@ menuconfig NET_9P
- if NET_9P
- 
- config NET_9P_FD
--       depends on VIRTIO
-+       default NET_9P
-        tristate "9P FD Transport"
-        help
-          This builds support for transports over TCP, Unix sockets and
-
-
-I'll just fixup the commit with a word in the message unless you have a
-problem with it, please let me know! :)
-
--- 
-Dominique

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C810489272
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D5B4891F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242703AbiAJHmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:42:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34018 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240513AbiAJHdk (ORCPT
+        id S239414AbiAJHhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:37:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39592 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240414AbiAJHae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:33:40 -0500
+        Mon, 10 Jan 2022 02:30:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3578FB81215;
-        Mon, 10 Jan 2022 07:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A622C36AE9;
-        Mon, 10 Jan 2022 07:33:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61D3F611C4;
+        Mon, 10 Jan 2022 07:30:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B24C36AE9;
+        Mon, 10 Jan 2022 07:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641800014;
+        s=korg; t=1641799833;
         bh=o+k6N9U2JrIm38Mm1wYeA64g57JqPN9hKHTLzztN/EA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGRrSGQLJE2XZOAlL8Sy1yWpbM59Ofq8EsE/kWLe8o28VlsCrZFUAiUZWjnxBakYh
-         vPLZAv6rjfSBsZaJrL9liT8kN1HywGzG+H+yeG+5OwDstsgJ6fvr0MKsNPjE+bfpRA
-         NRlIdYl4NaR8oT4SU5d5h5IvMmIzakX/lqOJ6g3w=
+        b=tNKXHhi4NQDqP2OtrsbfAcGTOwg8O1E2f01iXN/HKL1hkhgQFT5dVm/RgSKovuCnI
+         rL2+RDoCC3TX+Hzpt8YDJ+1+/td9XTEG6vSLhCO+vYhPcE5l7j5xmpPdzWVO60Gn4x
+         1stmTd7UR3Hq3mOzvPbz2KHVnQU5+050Rm82PEGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH 5.15 50/72] power: bq25890: Enable continuous conversion for ADC at charging
-Date:   Mon, 10 Jan 2022 08:23:27 +0100
-Message-Id: <20220110071823.241410554@linuxfoundation.org>
+Subject: [PATCH 5.10 31/43] power: bq25890: Enable continuous conversion for ADC at charging
+Date:   Mon, 10 Jan 2022 08:23:28 +0100
+Message-Id: <20220110071818.393356915@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+References: <20220110071817.337619922@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

@@ -2,137 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C86E1489F5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6F3489F67
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241468AbiAJSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:40:14 -0500
-Received: from mga07.intel.com ([134.134.136.100]:18445 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238734AbiAJSkN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:40:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641840013; x=1673376013;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U+Glj/h5tYRthQXKeKVdr/rRhv+kw5dVVIG5/MTuWRQ=;
-  b=BWzqYv+/Gx/9ySS1uKc7g105Qhg0GhGlDz8hOnH1FL56dMNsmA//bdRF
-   f/XH7y4XcHBcAoRYZljiZ0yAviW1EHT39Q0VYX1rPmI7UiKYQeiPqt3U7
-   Kq0oBMPn82oskIXq1rZJMWtiYmHw5MwSvH77BbETMNV2Ux61fd2mjQC3h
-   6qFRMCKHZPh7CWbn+ny7B4Za/GyQ9YmScuv6BcCfehorTnYMVBJz0pnMv
-   SoI3mombkGss6ruyBfPRvJweQwn3Ivd+XSW8UbiidokiZ/lvQt0Y9YR3J
-   InchGmmkUVbofzEhJYVfH24zfsVwqtaL3AIhnUwhDfi2CZOuGH3QS3T3e
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="306649253"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="306649253"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 10:40:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="690672972"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 10:40:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6zaS-0003px-HT; Mon, 10 Jan 2022 18:40:08 +0000
-Date:   Tue, 11 Jan 2022 02:39:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Subject: Re: [v1 03/16] clk: mediatek: Add MT8186 mcusys clock support
-Message-ID: <202201110231.DNu9pn4H-lkp@intel.com>
-References: <20220110134416.5191-4-chun-jie.chen@mediatek.com>
+        id S241889AbiAJSn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241852AbiAJSn1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 13:43:27 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ED6C06173F;
+        Mon, 10 Jan 2022 10:43:27 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id i5so3717675edf.9;
+        Mon, 10 Jan 2022 10:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ktWa16PHInydFUoIdRaEpmLgiNbk/GAQbHlU2gA4X+E=;
+        b=UTXtWU1SRqUKoqId3SFiqE+nwbfvzrdqPFdxJ3sOtpxCyoIPidhNNA8K8bghcoxZCC
+         2I9ijhlFlXmzrnn5xZYPqYZ559Nb/ZV5Hv18LjpdD2BhgfpmqTe0SHRcifNKMBYdk93+
+         H2jkGwqi5lQC9Wkz2t4v3VNhIbJ5cy7f31io8h7EhfLLUr5ghVUsXR0ycifnk7Q0X47/
+         3eiHLA3GEz4mpaBWLti7DSqzyDa/Q+RotIrMGjDKdwYkc9LxbDSoLKzNs/TwhBYHurqq
+         C9/+d194NKXMuhWlJ28506frmgoX45QbXDhhBJjTZiJwMwi7JzW/hL1P66yBu0fMNb6v
+         Hjtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ktWa16PHInydFUoIdRaEpmLgiNbk/GAQbHlU2gA4X+E=;
+        b=2zWp0NfpH9A0kpKGcLpRuz4ar0KYRvojzrjoCyQ0100ZtJURwIyGlNV0usycI9znMR
+         O6YEj6fFN3MunH36DWrHQ746piCfEy0gevMPnwwM5V+UQwWxkuS958qe0RWcdT88+/c2
+         hn1O+HTzsIaYvkt6ZgaXFKq743TtgViwqxXfkoSn+QMxmj5DCkUldyaCxM7g4MBezejd
+         Va17yjREj8/EKDrZokq4k0wPvlj0LgpVwe2iLtTTcJi7YqRnymW3+N/95KoxMOmAFYOj
+         C9xiAv/4LhJJcTcLmuuCgT38/j8irxN6xm6kOYOopHECZebqo4/9v5YRLAGp6oqSRNcZ
+         N3yw==
+X-Gm-Message-State: AOAM531CnYPMxdMMYGmdP49lnXoQ40/HlKxeWckyAPImyOLBMkijxbqd
+        AteqNz/UdKNsLeYcJYt95Lw779wfLnvcNAKNnoU=
+X-Google-Smtp-Source: ABdhPJw5NQ7WwbPQ44x/U8u6NJGKgs389IA8RlqoWZDkV1dVdAXLxnBzvO3aB0TappuObRxAgwj8FO3hxsKoz899Jk0=
+X-Received: by 2002:a05:6402:4c5:: with SMTP id n5mr985184edw.122.1641840205797;
+ Mon, 10 Jan 2022 10:43:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110134416.5191-4-chun-jie.chen@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <1640331779-18277-1-git-send-email-wellslutw@gmail.com>
+ <1640331779-18277-3-git-send-email-wellslutw@gmail.com> <CAHp75Vd3iMM+NteJXP_mMAyw5momk3xzp1Y2GX-YJZfFSAwo9A@mail.gmail.com>
+ <f87b21407ed44630a86b2661deab4a58@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <f87b21407ed44630a86b2661deab4a58@sphcmbx02.sunplus.com.tw>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 10 Jan 2022 20:41:37 +0200
+Message-ID: <CAHp75VcPB_K6RD8tnMarwGCeaOKcQ_knxvKEW9WNn_4ce41szw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] pinctrl: Add driver for Sunplus SP7021
+To:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Cc:     Wells Lu <wellslutw@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "dvorkin@tibbo.com" <dvorkin@tibbo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chun-Jie,
+On Tue, Dec 28, 2021 at 5:38 PM Wells Lu =E5=91=82=E8=8A=B3=E9=A8=B0 <wells=
+.lu@sunplus.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+...
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on robh/for-next v5.16 next-20220110]
-[cannot apply to mbgg-mediatek/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > > +       bool "Sunplus SP7021 PinMux and GPIO driver"
+> >
+> > Why bool and not tristate?
+>
+> Pinctrl driver is selected by many drivers in SP7021 platform.
+> We never build it as a module, but build-in to kernel.
+> So we use "bool".
+>
+> Should we set it to tristate?
 
-url:    https://github.com/0day-ci/linux/commits/Chun-Jie-Chen/dt-bindings-ARM-Mediatek-Add-new-document-bindings-of-MT8186-clock/20220110-224451
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220111/202201110231.DNu9pn4H-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d28b64e80990fd336192ccdd31676120bf4e2696
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Chun-Jie-Chen/dt-bindings-ARM-Mediatek-Add-new-document-bindings-of-MT8186-clock/20220110-224451
-        git checkout d28b64e80990fd336192ccdd31676120bf4e2696
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+You still haven't answered "why", so I can't tell you.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+...
 
-All errors (new ones prefixed by >>):
+> > > +               /*
+> > > +                * Upper 16-bit word is mask. Lower 16-bit word is va=
+lue.
+> > > +                * Refer to descriptions of function sppctl_master_ge=
+t().
+> > > +                */
+> > > +               reg_off =3D (offset / 16) * 4;
+> > > +               bit_off =3D offset % 16;
+> > > +               reg =3D BIT(bit_off + SPPCTL_GPIO_MASK_SHIFT) |
+> > > + BIT(bit_off);
+> >
+> > As I commented above use helper function which takes offset as input an=
+d returns you reg
+> > and reg_off.
+>
+> I'll modify code as shown below:
+>
+>                 reg =3D SPPCTL_SET_MOON_REG_BIT(bit_off);
+>
+> Sorry, I don't understand your meaning "returns you reg and reg_off".
+> The helper macro will return reg but not reg_off, right?
 
-   drivers/clk/mediatek/clk-mt8186-mcu.c: In function 'clk_mt8186_mcu_probe':
->> drivers/clk/mediatek/clk-mt8186-mcu.c:74:9: error: implicit declaration of function 'mtk_clk_unregister'; did you mean 'devm_clk_unregister'? [-Werror=implicit-function-declaration]
-      74 |         mtk_clk_unregister(clk_data);
-         |         ^~~~~~~~~~~~~~~~~~
-         |         devm_clk_unregister
-   cc1: some warnings being treated as errors
+Something like (fix types accordingly to your needs):
 
+static inline u32 sppctl_get_reg_and_offset(unsigned int offset, u32 *roff)
+{
+              u32 boff =3D offset % 16;
+              *roff =3D (offset / 16) * 4;
 
-vim +74 drivers/clk/mediatek/clk-mt8186-mcu.c
+               return  MY_COOL_MACRO(boff); // BIT(boff +
+SPPCTL_GPIO_MASK_SHIFT) | BIT(boff)
+}
 
-    48	
-    49	static int clk_mt8186_mcu_probe(struct platform_device *pdev)
-    50	{
-    51		struct clk_onecell_data *clk_data;
-    52		struct device_node *node = pdev->dev.of_node;
-    53		int r;
-    54		void __iomem *base;
-    55	
-    56		base = devm_platform_ioremap_resource(pdev, 0);
-    57		if (IS_ERR(base))
-    58			return PTR_ERR(base);
-    59	
-    60		clk_data = mtk_alloc_clk_data(CLK_MCU_NR_CLK);
-    61		if (!clk_data)
-    62			return -ENOMEM;
-    63	
-    64		mtk_clk_register_composites(mcu_muxes, ARRAY_SIZE(mcu_muxes), base,
-    65					    &mt8186_clk_lock, clk_data);
-    66	
-    67		r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-    68		if (r)
-    69			goto unregister_clk;
-    70	
-    71		return r;
-    72	
-    73	unregister_clk:
-  > 74		mtk_clk_unregister(clk_data);
-    75		mtk_free_clk_data(clk_data);
-    76		return r;
-    77	}
-    78	
+    reg =3D sppctl_get_reg_and_offset(offset, &reg_off);
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+...
+
+> > > +       if (!of_find_property(pdev->dev.of_node, "gpio-controller", N=
+ULL))
+> > > +               return dev_err_probe(&pdev->dev, -EINVAL, "Not a
+> > > + gpio-controller!\n");
+> >
+> > Why do you need this check for?
+>
+> By referring to other pinctrl driver, we check if property "gpio-controll=
+er" exists?
+> Will core help us check this?
+> Is this redundant?
+
+You should answer this question, not me.
+
+...
+
+> Should I also remove the assignment:
+>
+>                 gchip->base             =3D 0;
+
+Actually this is a good catch. Why do you use 0 as a base? In the new
+code we are supposed to have -1 to be assigned.
+
+...
+
+> > > +       case pinmux_type_fpmx:  /* fully-pinmux */
+> >
+> > Why do you need these comments?
+> > Shouldn't you rather to kernel doc your enum entries?
+>
+> I'll remove the comments.
+> Could you please tell me where I should write and put my kernel doc?
+> Is there any examples I can refer to?
+
+In the enum definition you do something like this (and read documentation):
+
+/**
+ * enum ...
+ * @pinmux_type_fpmx: fully pin muxing
+ * @pinmux_type_grp: group pin muxing
+ * ...
+ */
+
+...
+
+> > > +       if (unlikely(check_mul_overflow(sppctl->unq_grps_sz + 1,
+> > > +                                       sizeof(*sppctl->g2fp_maps), &=
+prod)))
+> > > +               return -EINVAL;
+> >
+> > What the point to check it after? What the point to use it with kcalloc=
+()? Please, do your
+> > homework, i.e. read the code which implements that.
+>
+> I'll remove the "if (unlikely(check_mul_overflow()...) return -EINVAL" st=
+atement next patch.
+>
+> I think I mis-understood your previous comment.
+> I thought I was asked to add check_mul_overflow() function for devm_kcall=
+oc(...).
+> Sorry for strange codes.
+
+There were basically two iterative comments, i.e.
+first one suggested adding a check, but second one suggested switching
+to kcalloc() API.
+
+> I should study devm_kcalloc() furthermore. Now I know devm_kcalloc(...) d=
+oes
+> multiplication overflow check for us. That's why we need to devm_kzalloc(=
+) with
+> devm_kcalloc().
+>
+> One question left in my mind is, in this case, even we have 10,000 pins,
+> we will never get overflow. It looks not so necessary.
+
+But it's not your issue, the kcalloc() does it for you for the good sake.
+
+...
+
+> > > +       struct device_node *np =3D of_node_get(pdev->dev.of_node);
+> >
+> > What's the role of of_node_get()?
+>
+> I'll remove the unused codes.
+> I think it was used to check if OF node exists.
+
+And if it doesn't, what is the difference?
+
+You are the author of this code, please be prepared to explain every line i=
+n it.
+
+...
+
+> > > +       dev_info(&pdev->dev, "SP7021 PinCtrl by Sunplus/Tibbo Tech.")=
+;
+> >
+> > Is it useful?
+>
+> I think yes. It tells users that Pinctrl driver has probed successfully.
+> If no this message, users don't know if Pinctrl driver has probed
+> successfully or not. For example, because that dts node of pinctrl is
+> "disabled" or Pinctrl driver is even not enabled.
+>
+> Can I keep this?
+
+You can, but I think it's not needed.
+Users may easily get this from other sources. Why do you need to have
+such noise in the valuable resource, i.e. kernel message buffer?
+
+...
+
+> > > + *    - mux_f_mux:  Select the pin to a fully-pinmux pin
+> > > + *    - mux_f_gpio: Select the pin to a GPIO or IOP pin
+> > > + *    - mux_f_keep: Don't change (keep intact)
+
+> > > +       mux_f_mux =3D 0,          /* select fully-pinmux       */
+> > > +       mux_f_gpio =3D 1,         /* select GPIO or IOP pinmux */
+> > > +       mux_f_keep =3D 2,         /* keep no change            */
+
+These comments are replaced by the kernel doc above, no need to keep them.
+
+...
+
+> > Why is this in the header?
+>
+> Do you mean I need to move this "struct sppctl_gpio_chip { ... }" declara=
+tion
+> to c file because it is only used by the c file?
+
+Yes.
+
+...
+
+> Your previous comments:
+> > > > > +static int sppctl_dt_node_to_map(struct pinctrl_dev *pctldev, st=
+ruct device_node *np_config,
+> > > > > +                                struct pinctrl_map **map, unsign=
+ed
+> > > > > +int *num_maps) {
+> > > >
+> > > > Looking into this rather quite big function why you can't use what =
+pin control core provides?
+> > >
+> > > No, we cannot use functions pin-control core provides.
+> > > Please refer to dt-bindings document, "pinctrl/sunplus,sp7021-pinctrl=
+.yaml".
+> > > We have more explanation there.
+> >
+> > Fine, can you reuse some library functions, etc? Please, consider refac=
+toring to make it more readable.
+>
+> Could you please share me your idea about "refactoring"?
+> Or could you give me some hints?
+> I think many times, but have no idea about refactoring.
+
+Just split it to a few logical parts so that code can be easier to read.
+
+--=20
+With Best Regards,
+Andy Shevchenko

@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADC848A40A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAAD48A40D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345776AbiAJX5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242630AbiAJX5M (ORCPT
+        id S1345762AbiAJX6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:58:16 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:42634 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242630AbiAJX6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:57:12 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E86DC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:57:12 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so4007579ooj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vSSSnrqTuvGyEJlGAFCeYpACHeVTMvACrp2X7lsYlbo=;
-        b=nNGZGb/fCIB2jDSCk/PIrO7Qauom/vxWfeoXRAUwsXGjTX6HlFoNaAe7E4j2jjz/iq
-         kTI7LDXzhhHRvjsTwUMV7ZQcXimqzFeJBGIDiNOw5Z8q/D+Mrdt5yhXH8t+6PKR9odPO
-         qiv7zA0RPNhX/VN6yJKVAlrhG1q5ZHCN0QqadS1Gnw0GjqkTxckyha+XTV9jAX9Kwo4L
-         AxKer6I6rT/aDJUmuyuAVVYtsQzhyYq9TAXFgL/+xMO84xDncNKTQZBRO0F/vQxfGhXx
-         Ww0JHxmJoBAXAIgYj1Uh75HxAWJpc6rq6zNyIW/DF7gGZ3b15XuUuSgM73T4U2bb0aak
-         YGkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vSSSnrqTuvGyEJlGAFCeYpACHeVTMvACrp2X7lsYlbo=;
-        b=Xj47oSPFsfBZZKRyLKCYxOIPxBnOWO9UlSXapbNwGenXiZMZ1MHXK59afQtjfzV5I4
-         nBSC2emIkfI0ZXtU9G3DJZ3OqY8ewmxefJlo6tkRroDvrbbM7HPoSLvxTc3we3Ws9fK3
-         rSMkUBgTlI4mf50zRfd3jYrvKc9Oak8Ioa5NRjadGn3JUsGEmNPRtdInwKvqLQqLWnJO
-         rmmRmlr1DPH1/0mJsRknyZed5fg22gNGRx+irhnvu0sEaDxbUC26aSA3Of9MPDWrglqy
-         lMD4m99T3pFmlTairGSX/naX9bYyn/y74LhptT2ynKgOFYB5dq+XXXkcAcK1ZDQUjU4O
-         tlAQ==
-X-Gm-Message-State: AOAM530xGy+8X76PbF+uN/grez4KoFBT6R8EGQ50STYlUShOjYUw8F1T
-        nli4qPHyEEljnuHbAUd6AoWpRWHmdg5xL+60lwaMEg==
-X-Google-Smtp-Source: ABdhPJybT9OWDGZiQuBy7ZZfZDdvwUtX2enEK8TtOnoWTNRfA6QdvKJLhoeaodRUZv+xWokigwspjYrcy/3TIUFdvD4=
-X-Received: by 2002:a4a:ac0a:: with SMTP id p10mr1471897oon.96.1641859031601;
- Mon, 10 Jan 2022 15:57:11 -0800 (PST)
+        Mon, 10 Jan 2022 18:58:15 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DB204894;
+        Tue, 11 Jan 2022 00:58:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1641859094;
+        bh=qnKz7LM757k8HkgtPk71VoFWL2HhNiN+9+eX50x2hTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wVO2SgGGIJjmaPAwKWPwGSomwcK9MlluE9oYupkK/k0zRN1k45nuRzl3qfzAJ6Qlm
+         lIozl+IdGJ4Ffpkqgucl2bFBjGSILloO3lTtkMp7kEn8tOXNPVC7+h15qHY4M+aZRy
+         JUcTR7DorZ4FDV/cvXc0wiiIMznTZQny4ooWJO3M=
+Date:   Tue, 11 Jan 2022 01:58:04 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oliver =?utf-8?Q?St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
+        Olof Johansson <olof@lixom.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 01/14] arm64: dts: imx8mm: fix strange hex notation
+Message-ID: <YdzIDNa0gHqbLChi@pendragon.ideasonboard.com>
+References: <20220107180314.1816515-1-marcel@ziswiler.com>
+ <20220107180314.1816515-2-marcel@ziswiler.com>
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
- <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
- <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com> <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
-In-Reply-To: <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 10 Jan 2022 15:57:00 -0800
-Message-ID: <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220107180314.1816515-2-marcel@ziswiler.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 3:07 PM Raghavendra Rao Ananta
-<rananta@google.com> wrote:
->
-> On Fri, Jan 7, 2022 at 4:05 PM Jim Mattson <jmattson@google.com> wrote:
-> >
-> > On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
-> > <rananta@google.com> wrote:
-> > >
-> > > Hi Reiji,
-> > >
-> > > On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
-> > > >
-> > > > Hi Raghu,
-> > > >
-> > > > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
-> > > > <rananta@google.com> wrote:
-> > > > >
-> > > > > Capture the start of the KVM VM, which is basically the
-> > > > > start of any vCPU run. This state of the VM is helpful
-> > > > > in the upcoming patches to prevent user-space from
-> > > > > configuring certain VM features after the VM has started
-> > > > > running.
-> >
-> > What about live migration, where the VM has already technically been
-> > started before the first call to KVM_RUN?
->
-> My understanding is that a new 'struct kvm' is created on the target
-> machine and this flag should be reset, which would allow the VMM to
-> restore the firmware registers. However, we would be running KVM_RUN
-> for the first time on the target machine, thus setting the flag.
-> So, you are right; It's more of a resume operation from the guest's
-> point of view. I guess the name of the variable is what's confusing
-> here.
+Hi Marcel,
 
-I was actually thinking that live migration gives userspace an easy
-way to circumvent your restriction. You said, "This state of the VM is
-helpful in the upcoming patches to prevent user-space from configuring
-certain VM features after the VM has started running." However, if you
-don't ensure that these VM features are configured the same way on the
-target machine as they were on the source machine, you have not
-actually accomplished your stated goal.
+Thank you for the patch.
 
-> Thanks,
-> Raghavendra
+On Fri, Jan 07, 2022 at 07:03:01PM +0100, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> Fix strange hex notation with mixed lower-case and upper-case letters.
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+> 
+>  arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h b/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
+> index a003e6af3353..c68a5e456025 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
+> @@ -279,7 +279,7 @@
+>  #define MX8MM_IOMUXC_SAI5_RXD2_SAI1_TX_DATA4                                0x150 0x3B8 0x000 0x1 0x0
+>  #define MX8MM_IOMUXC_SAI5_RXD2_SAI1_TX_SYNC                                 0x150 0x3B8 0x4CC 0x2 0x1
+>  #define MX8MM_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK                                 0x150 0x3B8 0x4E8 0x3 0x0
+> -#define MX8MM_IOMUXC_SAI5_RXD2_PDM_DATA2                                    0x150 0x3B8 0x53c 0x4 0x0
+> +#define MX8MM_IOMUXC_SAI5_RXD2_PDM_DATA2                                    0x150 0x3B8 0x53C 0x4 0x0
+>  #define MX8MM_IOMUXC_SAI5_RXD2_GPIO3_IO23                                   0x150 0x3B8 0x000 0x5 0x0
+>  #define MX8MM_IOMUXC_SAI5_RXD3_SAI5_RX_DATA3                                0x154 0x3BC 0x4E0 0x0 0x0
+>  #define MX8MM_IOMUXC_SAI5_RXD3_SAI1_TX_DATA5                                0x154 0x3BC 0x000 0x1 0x0
+> @@ -486,7 +486,7 @@
+>  #define MX8MM_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC                                 0x1D8 0x440 0x000 0x0 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXFS_GPT1_CAPTURE2                                0x1D8 0x440 0x000 0x1 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXFS_SAI5_RX_DATA1                                0x1D8 0x440 0x4D8 0x2 0x2
+> -#define MX8MM_IOMUXC_SAI3_TXFS_UART2_DCE_RX                                 0x1D8 0x440 0x4Fc 0x4 0x2
+> +#define MX8MM_IOMUXC_SAI3_TXFS_UART2_DCE_RX                                 0x1D8 0x440 0x4FC 0x4 0x2
+>  #define MX8MM_IOMUXC_SAI3_TXFS_UART2_DTE_TX                                 0x1D8 0x440 0x000 0x4 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXFS_GPIO4_IO31                                   0x1D8 0x440 0x000 0x5 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXFS_TPSMP_HDATA1                                 0x1D8 0x440 0x000 0x7 0x0
+> @@ -494,7 +494,7 @@
+>  #define MX8MM_IOMUXC_SAI3_TXC_GPT1_COMPARE2                                 0x1DC 0x444 0x000 0x1 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXC_SAI5_RX_DATA2                                 0x1DC 0x444 0x4DC 0x2 0x2
+>  #define MX8MM_IOMUXC_SAI3_TXC_UART2_DCE_TX                                  0x1DC 0x444 0x000 0x4 0x0
+> -#define MX8MM_IOMUXC_SAI3_TXC_UART2_DTE_RX                                  0x1DC 0x444 0x4Fc 0x4 0x3
+> +#define MX8MM_IOMUXC_SAI3_TXC_UART2_DTE_RX                                  0x1DC 0x444 0x4FC 0x4 0x3
+>  #define MX8MM_IOMUXC_SAI3_TXC_GPIO5_IO0                                     0x1DC 0x444 0x000 0x5 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXC_TPSMP_HDATA2                                  0x1DC 0x444 0x000 0x7 0x0
+>  #define MX8MM_IOMUXC_SAI3_TXD_SAI3_TX_DATA0                                 0x1E0 0x448 0x000 0x0 0x0
+
+-- 
+Regards,
+
+Laurent Pinchart

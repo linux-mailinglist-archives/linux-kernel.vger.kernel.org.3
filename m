@@ -2,202 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DFA489A9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B98BD489A19
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbiAJNsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:48:02 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:43016 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234435AbiAJNrq (ORCPT
+        id S232968AbiAJNhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:37:23 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:34893 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232919AbiAJNgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:47:46 -0500
-X-IronPort-AV: E=Sophos;i="5.88,277,1635174000"; 
-   d="scan'208";a="106014836"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 10 Jan 2022 22:47:45 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5666142E354B;
-        Mon, 10 Jan 2022 22:47:43 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 12/12] arm64: dts: renesas: Add support for r9a07g044c1/r9a07g054l1-smarc.dts
-Date:   Mon, 10 Jan 2022 13:46:59 +0000
-Message-Id: <20220110134659.30424-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 10 Jan 2022 08:36:49 -0500
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JXZbY2W4vzccTZ;
+        Mon, 10 Jan 2022 21:36:09 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 10 Jan 2022 21:36:47 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 10 Jan
+ 2022 21:36:46 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <mkoutny@suse.com>, <paulmck@kernel.org>, <tj@kernel.org>,
+        <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH v6 0/2] cancel all throttled bios in del_gendisk()
+Date:   Mon, 10 Jan 2022 21:47:56 +0800
+Message-ID: <20220110134758.2233758-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+If del_gendisk() is done when some io are still throttled, such io
+will not be handled until the throttle is done, which is not
+necessary.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v1->v2
-* None
----
- arch/arm64/boot/dts/renesas/Makefile          |  2 +
- .../boot/dts/renesas/r9a07g044c1-smarc.dts    | 99 +++++++++++++++++++
- .../boot/dts/renesas/r9a07g054l1-smarc.dts    | 25 +++++
- 3 files changed, 126 insertions(+)
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044c1-smarc.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g054l1-smarc.dts
+Changes in v2:
+ - move WARN_ON_ONCE() from throtl_rb_first() to it's caller
+ - merge some patches into one.
 
-diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
-index 2daba38d1161..8de5561a3902 100644
---- a/arch/arm64/boot/dts/renesas/Makefile
-+++ b/arch/arm64/boot/dts/renesas/Makefile
-@@ -77,4 +77,6 @@ dtb-$(CONFIG_ARCH_R8A77965) += r8a779m5-salvator-xs.dtb
- 
- dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc.dtb
- dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044c2-smarc.dtb
-+dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044c1-smarc.dtb
- dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc.dtb
-+dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l1-smarc.dtb
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044c1-smarc.dts b/arch/arm64/boot/dts/renesas/r9a07g044c1-smarc.dts
-new file mode 100644
-index 000000000000..43af14ef0103
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044c1-smarc.dts
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Device Tree Source for the RZ/G2LC SMARC EVK board
-+ *
-+ * Copyright (C) 2021 Renesas Electronics Corp.
-+ */
-+
-+/dts-v1/;
-+#include "r9a07g044c1.dtsi"
-+#include "rzg2lc-smarc-som.dtsi"
-+#include "rzg2lc-smarc-pinfunction.dtsi"
-+#include "rzg2l-smarc.dtsi"
-+
-+/ {
-+	model = "Renesas SMARC EVK based on r9a07g044c2";
-+	compatible = "renesas,smarc-evk", "renesas,r9a07g044c2", "renesas,r9a07g044";
-+
-+};
-+
-+&canfd {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&ehci0 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&ehci1 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&hsusb {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&i2c0 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&i2c1 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&i2c3 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&ohci0 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&ohci1 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&phyrst {
-+	status = "disabled";
-+};
-+
-+&scif2 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&sdhi1 {
-+	/delete-property/ pinctrl-0;
-+	/delete-property/ pinctrl-1;
-+	/delete-property/ vmmc-supply;
-+	status = "disabled";
-+};
-+
-+&spi1 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&ssi0 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&usb2_phy0 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-+
-+&usb2_phy1 {
-+	/delete-property/ pinctrl-0;
-+	status = "disabled";
-+};
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g054l1-smarc.dts b/arch/arm64/boot/dts/renesas/r9a07g054l1-smarc.dts
-new file mode 100644
-index 000000000000..2d9d397cef06
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/r9a07g054l1-smarc.dts
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Device Tree Source for the RZ/G2L SMARC EVK board
-+ *
-+ * Copyright (C) 2021 Renesas Electronics Corp.
-+ */
-+
-+/dts-v1/;
-+#include "r9a07g054l1.dtsi"
-+#include "rzg2l-smarc-som.dtsi"
-+#include "rzg2l-smarc-pinfunction.dtsi"
-+#include "rzg2l-smarc.dtsi"
-+
-+/ {
-+	model = "Renesas SMARC EVK based on r9a07g054l1";
-+	compatible = "renesas,smarc-evk", "renesas,r9a07g054l1", "renesas,r9a07g054";
-+};
-+
-+&pinctrl {
-+	/delete-node/ can0-stb;
-+	/delete-node/ can1-stb;
-+	/delete-node/ gpio-sd0-pwr-en-hog;
-+	/delete-node/ sd0-dev-sel-hog;
-+	/delete-node/ sd1-pwr-en-hog;
-+};
+Changes in v3:
+ - some code optimization in patch 1
+ - hold queue lock to cancel bios in patch 2
+
+Changes in v4:
+ - delete rcu_read_lock() and rcu_read_unlock() in patch 2
+
+Changes in v5:
+ - add comment about rcu lock
+
+Changes in v6:
+ - revert to include rcu lock with some comments.
+
+Jagan Teki (1):
+  ARM: dts: stm32: Enable LVDS panel on i.Core STM32MP1 EDIMM2.2
+
+Yu Kuai (1):
+  blk-throtl: move WARN_ON_ONCE() from throtl_rb_first() to it's caller
+
+Yu Kuai (2):
+  blk-throtl: move WARN_ON_ONCE() from throtl_rb_first() to it's caller
+  block: cancel all throttled bios in del_gendisk()
+
+ block/blk-throttle.c | 82 ++++++++++++++++++++++++++++++++++++++++++--
+ block/blk-throttle.h |  2 ++
+ block/genhd.c        |  2 ++
+ 3 files changed, 83 insertions(+), 3 deletions(-)
+
 -- 
-2.17.1
+2.31.1
 

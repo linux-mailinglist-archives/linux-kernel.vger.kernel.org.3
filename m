@@ -2,166 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B87488FE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 06:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B77488FF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238843AbiAJFuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 00:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiAJFuB (ORCPT
+        id S238875AbiAJGFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 01:05:08 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:43061 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238861AbiAJGFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 00:50:01 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C98C061748
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 21:50:01 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id w9so3041122iol.13
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 21:50:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ALvm4nc74eB2Wd9VAb2s3UJ9R4m/+S/oxilpPbRkW3A=;
-        b=UrVsrwQso0IJkVO6QF2YQtW9l/A725oNGGJf+YZ/359fCEopGJ9XwrL1CWRtZNAX4v
-         MwF0Xd2DBUEH9EbSo1XKsyMm8McJL8SeQ02ajzi1HxW+0KOlPkrAAr0bTdcaeAtdmoJz
-         aBDV5TU8gK/tCTMmzcBu1MXhyNvRGA18grlWPGPUifNoxBP4kOWuGPycAXj8FD72+uYr
-         8rXfbC7m1EL8+Aw4ZpLZJodpVn/4rQpZHQxEiMrYmKveM9cexzEWW12in1QnvHlEUYwk
-         A6Fwxvie9bfqoP9g4cnbL5M4kMavDnk80S7DYn/Ukf2vFa3SCE7FZMqCwooNfQs/tD+x
-         LAuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ALvm4nc74eB2Wd9VAb2s3UJ9R4m/+S/oxilpPbRkW3A=;
-        b=1qAKRQyMat0W6nNPbcpQJZM1KimRutyU0TfRFpXxGWkZfcIpl434TS+rhif+x+NY+D
-         2ElduS+xO4C+J+OUp2/BAL7SU6SvQ4bAD6GsFLM5fE+wnetbF5p80dpLek4cHcCtLNFI
-         2biu7Vb7SyUVTJqQdqHOdph2Fz/tYttujeoqFqh6TWI9eWzJu0GTUi2otOTfDNN1LNr0
-         4Uib33xZW7vzVeFvIacDIhzEBgjnVsfZlfJEozjRlTEe7xa7ddAC46npXGupVWPwQbtQ
-         uc3QKR/PD2BrLpr0IXHE71DA8ilPfVkabJlDpOueW9P2FGCfchEY9v3AKDo3dDrQXX5L
-         NNEw==
-X-Gm-Message-State: AOAM5307KFlc3vWTjxTBXErVAI+YT+H3JPFHLUNYAepnkcpY1IHsNOo3
-        Jk6dF2oVxiVriKxms1rUHsSmY6sLzmTeMtnu3cDXqg==
-X-Google-Smtp-Source: ABdhPJxOtknTyji3ATIF1Q9X5pyoX9JjwnRiihSAmLOCzQLNETeSKhBU3GP9sUJllE6Gs+j+DrTgUhjvnM+2DhvNGms=
-X-Received: by 2002:a05:6602:2b8b:: with SMTP id r11mr14683655iov.97.1641793800714;
- Sun, 09 Jan 2022 21:50:00 -0800 (PST)
+        Mon, 10 Jan 2022 01:05:04 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=shirong@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0V1LvBNz_1641794698;
+Received: from localhost.localdomain(mailfrom:shirong@linux.alibaba.com fp:SMTPD_---0V1LvBNz_1641794698)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 10 Jan 2022 14:05:00 +0800
+From:   Shirong Hao <shirong@linux.alibaba.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.co, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        brijesh.singh@amd.com, thomas.lendacky@amd.com, john.allen@amd.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        srutherford@google.com, ashish.kalra@amd.com, natet@google.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, zhang.jia@linux.alibaba.com,
+        Shirong Hao <shirong@linux.alibaba.com>
+Subject: [PATCH 0/3] Allow guest to query AMD SEV(-ES) runtime attestation evidence
+Date:   Mon, 10 Jan 2022 14:04:42 +0800
+Message-Id: <20220110060445.549800-1-shirong@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220105061351.120843-1-irogers@google.com> <20220105061351.120843-27-irogers@google.com>
- <Ydsp1d58t/gp/GHd@krava>
-In-Reply-To: <Ydsp1d58t/gp/GHd@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sun, 9 Jan 2022 21:49:48 -0800
-Message-ID: <CAP-5=fU77-qjcooX5B7qmimUoyNp-nXKNtnGQE9F6TH8Qsx+4A@mail.gmail.com>
-Subject: Re: [PATCH v4 26/48] perf evsel: Derive CPUs and threads in alloc_counts
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
-        eranian@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 9, 2022 at 10:30 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Tue, Jan 04, 2022 at 10:13:29PM -0800, Ian Rogers wrote:
->
-> SNIP
->
-> > diff --git a/tools/perf/util/counts.h b/tools/perf/util/counts.h
-> > index 7ff36bf6d644..3e275e9c60d1 100644
-> > --- a/tools/perf/util/counts.h
-> > +++ b/tools/perf/util/counts.h
-> > @@ -40,7 +40,7 @@ void perf_counts__delete(struct perf_counts *counts);
-> >  void perf_counts__reset(struct perf_counts *counts);
-> >
-> >  void evsel__reset_counts(struct evsel *evsel);
-> > -int evsel__alloc_counts(struct evsel *evsel, int ncpus, int nthreads);
-> > +int evsel__alloc_counts(struct evsel *evsel);
-> >  void evsel__free_counts(struct evsel *evsel);
-> >
-> >  #endif /* __PERF_COUNTS_H */
-> > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> > index 656c30b988ce..6c9af21776e6 100644
-> > --- a/tools/perf/util/evsel.c
-> > +++ b/tools/perf/util/evsel.c
-> > @@ -1578,7 +1578,7 @@ int __evsel__read_on_cpu(struct evsel *evsel, int cpu, int thread, bool scale)
-> >       if (FD(evsel, cpu, thread) < 0)
-> >               return -EINVAL;
-> >
-> > -     if (evsel->counts == NULL && evsel__alloc_counts(evsel, cpu + 1, thread + 1) < 0)
-> > +     if (evsel->counts == NULL && evsel__alloc_counts(evsel) < 0)
->
-> ugh, nice.. good that it's used only from test code ;-)
->
-> btw I noticed evsel__read_on_cpu_scaled is not used at all
+This patch series is provided to allow the guest application to query
+AMD SEV(-ES) runtime attestation evidence by communicating with the host
+service (Attestation Evidence Broker).
 
-I'd noticed that too, but wanted to stay away from making the patch
-set larger.  You end up removing the argument to
-__evsel__read_on_cpu, etc. Definitely worth cleaning up, but maybe we
-can do it later.
+The following is the design document.
 
-Thanks,
-Ian
+> Background
 
-> jirka
->
-> >               return -ENOMEM;
-> >
-> >       if (readn(FD(evsel, cpu, thread), &count, nv * sizeof(u64)) <= 0)
-> > diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-> > index c69b221f5e3e..995cb5003133 100644
-> > --- a/tools/perf/util/stat.c
-> > +++ b/tools/perf/util/stat.c
-> > @@ -152,11 +152,13 @@ static void evsel__free_stat_priv(struct evsel *evsel)
-> >       zfree(&evsel->stats);
-> >  }
-> >
-> > -static int evsel__alloc_prev_raw_counts(struct evsel *evsel, int ncpus, int nthreads)
-> > +static int evsel__alloc_prev_raw_counts(struct evsel *evsel)
-> >  {
-> > +     int cpu_map_nr = evsel__nr_cpus(evsel);
-> > +     int nthreads = perf_thread_map__nr(evsel->core.threads);
-> >       struct perf_counts *counts;
-> >
-> > -     counts = perf_counts__new(ncpus, nthreads);
-> > +     counts = perf_counts__new(cpu_map_nr, nthreads);
-> >       if (counts)
-> >               evsel->prev_raw_counts = counts;
-> >
-> > @@ -177,12 +179,9 @@ static void evsel__reset_prev_raw_counts(struct evsel *evsel)
-> >
-> >  static int evsel__alloc_stats(struct evsel *evsel, bool alloc_raw)
-> >  {
-> > -     int ncpus = evsel__nr_cpus(evsel);
-> > -     int nthreads = perf_thread_map__nr(evsel->core.threads);
-> > -
-> >       if (evsel__alloc_stat_priv(evsel) < 0 ||
-> > -         evsel__alloc_counts(evsel, ncpus, nthreads) < 0 ||
-> > -         (alloc_raw && evsel__alloc_prev_raw_counts(evsel, ncpus, nthreads) < 0))
-> > +         evsel__alloc_counts(evsel) < 0 ||
-> > +         (alloc_raw && evsel__alloc_prev_raw_counts(evsel) < 0))
-> >               return -ENOMEM;
-> >
-> >       return 0;
-> > --
-> > 2.34.1.448.ga2b2bfdf31-goog
-> >
->
+Compared with SEV-SNP and Intel TDX, the runtime attestation of
+SEV(-ES) does NOT support guest-provided data included in the
+attestation report [1,2]. In addition, SEV(-ES) also does NOT support
+the dynamic measurement. During runtime, it can only generate static
+attestation report with the constant launch digest reflecting the
+initial measurement.
+
+Although SEV(-ES) has above limitations, its runtime attestation is
+still useful. When the SEV(-ES) guest is running, it can report the
+attestation report with fixed launch digest as a heartbeat for trusted
+healthy check.
+
+SEV(-ES) runtime attestation includes two participants:
+attester and verifier.
+
+- The attester running in a SEV(-ES) guest is responsible for
+  collecting attestation evidence.
+- The verifier running in a trusted environment is responsible for
+  verifying the attestation evidence provided by the attester. Note
+  that the verifier can run on any platform even non-TEE.
+
+> SEV(-ES) Attestation Evidence
+
+Verifier uses the following SEV(-ES) certificate chains to verify the
+signature of the attestation report generated by the `ATTESTATION`
+command [2]:
+
+1. certificate chain for device identity:
+ARK -> ASK -> CEK -> PEK -> report
+2. certificate chain for platform owner identity:
+OCA -> PEK -> report
+
+- `foo -> bar` indicates using the public key of `foo` to verify the
+  signature of `bar`.
+- ARK is the root of trust of AMD and OCA is the root of trust for
+  platform owners. OCA has two ways:
+    1. Self-owned: The OCA Key Pair and self-signed OCA certificate
+       are automatically generated by the SEV(-ES) firmware.
+    2. Externally-owned: External users use OCA Key Pair to generate
+       self-signed OCA certificates in a trusted environment.
+
+Verifier needs to verify the attestation report with the certificate chain.
+ARK and ASK can be obtained directly from the AMD KDS server. CEK, PEK,
+OCA, and attestation report are related to the specific SEV(-ES) platform,
+therefore SEV(-ES) Attestation Evidence collected by attester should
+include attestation report (with the constant launch digest), PEK, CEK,
+and OCA certificate.
+
+| Contents of SEV(-ES) Attestation Evidence 	| SEV(-ES) firmware command	|
+| :-: | :-: |
+| attestation report				| ATTESTATION			|
+| CEK						| GET_ID			|
+| OCA,PEK					| PDH_CERT_EXPORT		|
+
+> Query SEV(-ES) Attestation Evidence
+
+According to the official feedback[3], SEV(-ES) firmware APIs don't support
+query attestation report in SEV(-ES) guest and there is no plan to support
+it in the future. Instead, this capability will be available in SEV-SNP.
+
+In some scenarios, the guest application needs to query the attestation
+report to establish an attested channel with the remote peer. There are
+two approaches for a guest application to query an attestation evidence:
+
+- Hypercall approach
+- VSOCK approach
+
+Considering time and cost, we only need to implement one of them.
+
+- Hypercall approach
+
+SEV(-ES) guest exits to VMM using `hypercall` and then interacts with SEV
+firmware to query the components composing an attestation evidence,
+including attestation report, PEK, CEK, OCA certificate. To build an
+attestation evidence, the steps include:
+
+1. The guest application requests a shared memory page, initiates a
+   hypercall, and switches from the guest mode to the host mode.
+2. In the host mode, KVM sends the `GET_ID, PDH_CERT_EXPORT, ATTESTATION`
+   command requests to SEV firmware.
+3. The shared memory page is filled with the data returned by the
+   SEV firmware.
+4. The guest application can obtain attestation evidence by reading the
+   data in the shared memory.
+
+Although this method can meet our requirements, it requires a lot of
+modifications to the guest kernel and KVM.
+
+- VSOCK approach
+
+In the current implementation, QEMU provides the QMP interface
+"query-sev-attestation-report" to query the attestation report in the host.
+ However, QEMU is not the only VMM. In order to support various VMM in
+different scenarios, it is necessary to design a general host service, such
+as attestation evidence Broker (AEB) to query attestation evidence from the
+host.
+
+The workflow of AEB is as followed:
+
+1. The user-level application in the guest sends a request
+   (including guest firmware handle) to AEB through VSOCK.
+2. AEB requests to query attestation report, PEK, CEK, OCA certificate by
+   calling multiple SEV firmware APIs (refer to the table above for
+   specific API commands) and assembles these information into the
+   attestation evidence.
+3. AEB returns the attestation evidence to the application in the guest.
+
+To query the attestation report in host with AEB, we provides three patches
+to achieve the following two goals.
+
+1. It is necessary to add a `SEV_GET_REPORT` interface in ccp driver so
+   that AEB can execute `ioctl` on the `/dev/sev` device and then call
+   the `SEV_GET_REPORT` interface to send the `ATTESTATION` command to
+   the SEV firmware to query attestation report.
+
+2. In order to obtain the guest handle required by the `ATTESTATION`
+   command to the SEV firmware, a new hypercall needs to be added to the
+   KVM. The application in the guest obtains the guest handle through this
+   newly added hypercal, and then sends it to the AEB service through
+   VSOCK. The AEB service uses the guest handle as the input parameter
+   of the `ATTESTATION` command to interact with the SEV firmware.
+
+Note that hypercall is not the only way to obtain the guest handle.
+Actually the qmp interface `query-sev` can query the guest handle as well.
+However, as mentioned previously, qemu is not the only VMM.
+
+> Communication protocol
+
+Below is the communication protocol between the guest application and AEB.
+
+```protobuf
+syntax = "proto3";
+...
+message RetrieveAttestationEvidenceSizeRequest{
+    uint32 guest_handle = 1;
+}
+message RetrieveAttestationEvidenceRequest{
+    uint32 guest_handle = 1;
+    uint32 evidence_size = 2;
+}
+message RetrieveAttestationEvidenceSizeResponse{
+    uint32 error_code = 1;
+    uint32 evidence_size = 2;
+}
+message RetrieveAttestationEvidenceResponse{
+    uint32 error_code = 1;
+    uint32 evidence_size = 2;
+    bytes evidence = 3;
+}
+service AEBService {
+    rpc RetrieveAttestationEvidenceSize
+         (RetrieveAttestationEvidenceSizeRequest)
+         returns (RetrieveAttestationEvidenceSizeResponse);
+    rpc RetrieveAttestationEvidence(RetrieveAttestationEvidenceRequest)
+         returns (RetrieveAttestationEvidenceResponse);
+}
+```
+
+> Reference
+
+[1] https://www.amd.com/system/files/TechDocs/
+55766_SEV-KM_API_Specification.pdf
+[2] https://www.amd.com/system/files/TechDocs/56860.pdf
+[3] https://github.com/AMDESE/AMDSEV/issues/71#issuecomment-926118314
+
+Shirong Hao (3):
+  KVM: X86: Introduce KVM_HC_VM_HANDLE hypercall
+  KVM/SVM: move the implementation of sev_get_attestation_report to ccp
+    driver
+  crypto: ccp: Implement SEV_GET_REPORT ioctl command
+
+ arch/x86/include/asm/kvm_host.h |  1 +
+ arch/x86/kvm/svm/sev.c          | 49 +++-------------------
+ arch/x86/kvm/svm/svm.c          | 11 +++++
+ arch/x86/kvm/x86.c              |  7 +++-
+ drivers/crypto/ccp/sev-dev.c    | 74 +++++++++++++++++++++++++++++++++
+ include/linux/psp-sev.h         |  7 ++++
+ include/uapi/linux/kvm_para.h   |  1 +
+ include/uapi/linux/psp-sev.h    | 17 ++++++++
+ 8 files changed, 123 insertions(+), 44 deletions(-)
+
+-- 
+2.27.0
+

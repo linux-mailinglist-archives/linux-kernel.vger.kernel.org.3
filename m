@@ -2,115 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A7A488D90
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFEC488D94
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237627AbiAJAue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 19:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237625AbiAJAu1 (ORCPT
+        id S237633AbiAJA4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 19:56:34 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:36769 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232114AbiAJA4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 19:50:27 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E87C061751;
-        Sun,  9 Jan 2022 16:50:25 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXFbz2bm5z4xdd;
-        Mon, 10 Jan 2022 11:50:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641775824;
-        bh=la3J+UN/pitFoUokaxHuZm+3w6axNczsn/rrvoi6yhY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FY6RBOyMPfsmbwJKTIiCB2FsNUZG7+nZB+F4nAeoIvG3h46QRnkLfuIajtslAWZv1
-         wRjNxjijtj3/Ljwn4GhIn9pParYtbfeHLXvRN0q7Jv/09SOEG+fQ75p5/f1Pwit84m
-         QI5NIMZx2o0zV00fn3eyRN418MpANpKRWK1Vuu97TjL6zOX5nrbBhXBQ6BpEmlj0L7
-         U2E4L21JhoJyKmRujA32hIwKFZMliq1/6NV+EDYObmOvAlUyzf+Fnq+oMcI8nHGIF5
-         ZOv7UDVDW4k2tKZzZrqvXVPb+IFmlY1AzPISEMWbWLELWcifbnIITVHqvuFfpQt5de
-         QlwN5eCq24X5A==
-Date:   Mon, 10 Jan 2022 11:50:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the pci tree
-Message-ID: <20220110115022.31223c61@canb.auug.org.au>
+        Sun, 9 Jan 2022 19:56:32 -0500
+Received: by mail-ot1-f52.google.com with SMTP id s21-20020a05683004d500b0058f585672efso13587596otd.3;
+        Sun, 09 Jan 2022 16:56:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8dmC09EiRPoAEtD5j7hv6yre/JW8aQu59sHFW+QrEpg=;
+        b=ksdrY7CV+bOq+p5X1iRfFiOmffrbCZcUVCfVEvOnNTLCupmmmR1klW8v2447sHe29Y
+         LL3UuyOS6w1GEpCczV/p5ip7xtDV6e8MJgGLe181PhlzXYaJoQNA4LrJJzRSPNDCtCXP
+         GKJB4Y6OWmRlLzNZiSgovjNi5gfntFGHlpFCLAYvwObRf+f/3h9enZas6gKj+1skmDk8
+         +ijzmME47p4PWLK0Mg5GL1ay7actbpvd6t1X5Ti1VbV20KIvMSeO1CrOf4tzdtrPqVe5
+         EIDw0j9HJ31Qm6C7vhUFAcP2jmEV9v979dE/8E9NjSbEKGDOFW23DpBBMmk+UrkYedv0
+         gxzA==
+X-Gm-Message-State: AOAM5324RUGLgh+ItndA03Oei4/Pdoua1Xv5x95jELERsjLN6KQV4jLZ
+        MAxyFgSg44KLDgSG2rYplQ==
+X-Google-Smtp-Source: ABdhPJyJ2SijgS3bWm2elHfdJ984rDl5g4FQIsaX+vfPHIpNe+6toryIbLDyunrUMSVRL1HMrGXXCQ==
+X-Received: by 2002:a9d:7295:: with SMTP id t21mr14116494otj.230.1641776192088;
+        Sun, 09 Jan 2022 16:56:32 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 5sm955286oip.17.2022.01.09.16.56.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jan 2022 16:56:31 -0800 (PST)
+Received: (nullmailer pid 3946821 invoked by uid 1000);
+        Mon, 10 Jan 2022 00:56:30 -0000
+Date:   Sun, 9 Jan 2022 18:56:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v7 01/10] dt-bindings: vendor-prefixes: Add Sunplus
+Message-ID: <YduEPlMoAR9KXoaa@robh.at.kernel.org>
+References: <cover.1640154492.git.qinjian@cqplus1.com>
+ <2e74a1339a5ea54d92fdc4d1998a2b169e23b82b.1640154492.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iRd.D+fAKOzVHMVrQz55E+j";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e74a1339a5ea54d92fdc4d1998a2b169e23b82b.1640154492.git.qinjian@cqplus1.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/iRd.D+fAKOzVHMVrQz55E+j
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Dec 22, 2021 at 03:05:57PM +0800, Qin Jian wrote:
+> Add vendor prefix for Sunplus Technology Co., Ltd. (http://www.sunplus.com)
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Hi all,
+As this one is a dependency for other series, applied for 5.17.
 
-Today's linux-next merge of the devicetree tree got a conflict in:
-
-  Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
-
-between commit:
-
-  d91e775e661f ("dt-bindings: PCI: ti,am65: Fix "ti,syscon-pcie-id"/"ti,sys=
-con-pcie-mode" to take argument")
-
-from the pci tree and commit:
-
-  dcd49679fb3a ("dt-bindings: PCI: Fix 'unevaluatedProperties' warnings")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
-index 98d933b792e7,a6896cb40e83..000000000000
---- a/Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
-+++ b/Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
-@@@ -69,9 -65,7 +69,7 @@@ examples
-                 <0x5506000 0x1000>;
-          reg-names =3D "app", "dbics", "addr_space", "atu";
-          power-domains =3D <&k3_pds 120 TI_SCI_PD_EXCLUSIVE>;
- -        ti,syscon-pcie-mode =3D <&pcie0_mode>;
- +        ti,syscon-pcie-mode =3D <&scm_conf 0x4060>;
--         num-ib-windows =3D <16>;
--         num-ob-windows =3D <16>;
-          max-link-speed =3D <2>;
-          dma-coherent;
-          interrupts =3D <GIC_SPI 340 IRQ_TYPE_EDGE_RISING>;
-
---Sig_/iRd.D+fAKOzVHMVrQz55E+j
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHbgs4ACgkQAVBC80lX
-0GxWYwf+NMjdpb/XK1ckWh2ES6NepZv68BAPHZ8oGEhiV2FNDlKoV1E3NJ/Uy9go
-+QDCwItsUkA/Eu1I1w0U8WCFnwRVVf82RA0xNjTLKbvgz6YzfhQ8Je4bQ2UTs+93
-tJ/eYnd0rOHLolJzQhDQgnYb1XCIArhCarMkyJVRd+epYYzbOvKDH4amF1tjMVdT
-pGBxBmUtP1Xo7D9GMoxpLT6CJ912W2GUZh2OI5MO9TzQ7KIdaT5b+h8/J4mtnmeu
-M8lpkZZYQgWhtdXddWjlTD9C1ZYrberE3zM+4h23mqz+aXEvLORWHsiv01SnZkZm
-4Tq+r/oOeLBzCSIUINLPXz9wHIuGOA==
-=IIOC
------END PGP SIGNATURE-----
-
---Sig_/iRd.D+fAKOzVHMVrQz55E+j--
+Rob

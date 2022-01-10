@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7B9489140
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E7A48920F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbiAJHai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:30:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35846 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239452AbiAJH1O (ORCPT
+        id S241443AbiAJHiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:38:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59994 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240190AbiAJHbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:27:14 -0500
+        Mon, 10 Jan 2022 02:31:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0312611BB;
-        Mon, 10 Jan 2022 07:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C4BC36AED;
-        Mon, 10 Jan 2022 07:27:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B4A9B811F9;
+        Mon, 10 Jan 2022 07:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52DD9C36AED;
+        Mon, 10 Jan 2022 07:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799633;
-        bh=3/dwJjTOfy7aBth/bsOx6Zpwo8PENZBu+h2VbuE/B4A=;
+        s=korg; t=1641799881;
+        bh=2pfskG3xd5gnNddhXGV28wFIlf1Cv6P6HIl4FJpN97A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s8SwMlrsnkZ5f444YPYPNlBc/tUgpE7gOM4HDSg0910c+0OscQ8t2QBb9+k72mT+X
-         FGrBdMxMj53pGgC4FqaWUha+Z+4F5ik7mz58lAD44js2+yO9ZNpBe4xpIa7miJrz1O
-         +jWanKYa0GsrSnZvhAJA9pvYuMduU3kVjoFwntwM=
+        b=FGbSk1YSWT39mUISuj79MvU1DLxrCGw5ako5It5VO7H5N29MKvO5efydt/bTJjoGu
+         uVP8sbL9p0G6MtBdB6QSEFE++ZWsExiLjwAxMRhio1l/gpZnn9OmEGyQpdHkd1SPpU
+         7zKOqewURKQA4bJRzC3kJMJQLlToo3jQR8DUEkvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 17/21] usb: mtu3: fix interval value for intr and isoc
+        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 21/43] lwtunnel: Validate RTA_ENCAP_TYPE attribute length
 Date:   Mon, 10 Jan 2022 08:23:18 +0100
-Message-Id: <20220110071814.517246143@linuxfoundation.org>
+Message-Id: <20220110071818.057582556@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+References: <20220110071817.337619922@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,47 +45,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+From: David Ahern <dsahern@kernel.org>
 
-[ Upstream commit e3d4621c22f90c33321ae6a6baab60cdb8e5a77c ]
+commit 8bda81a4d400cf8a72e554012f0d8c45e07a3904 upstream.
 
-Use the Interval value from isoc/intr endpoint descriptor, no need
-minus one. The original code doesn't cause transfer error for
-normal cases, but it may have side effect with respond time of ERDY
-or tPingTimeout.
+lwtunnel_valid_encap_type_attr is used to validate encap attributes
+within a multipath route. Add length validation checking to the type.
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/20211218095749.6250-1-chunfeng.yun@mediatek.com
+lwtunnel_valid_encap_type_attr is called converting attributes to
+fib{6,}_config struct which means it is used before fib_get_nhs,
+ip6_route_multipath_add, and ip6_route_multipath_del - other
+locations that use rtnh_ok and then nla_get_u16 on RTA_ENCAP_TYPE
+attribute.
+
+Fixes: 9ed59592e3e3 ("lwtunnel: fix autoload of lwt modules")
+
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/mtu3/mtu3_gadget.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/core/lwtunnel.c      |    4 ++++
+ net/ipv4/fib_semantics.c |    3 +++
+ net/ipv6/route.c         |    4 ++++
+ 3 files changed, 11 insertions(+)
 
-diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
-index 07a6ee8db6123..9f0c949820bf7 100644
---- a/drivers/usb/mtu3/mtu3_gadget.c
-+++ b/drivers/usb/mtu3/mtu3_gadget.c
-@@ -82,7 +82,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
- 		if (usb_endpoint_xfer_int(desc) ||
- 				usb_endpoint_xfer_isoc(desc)) {
- 			interval = desc->bInterval;
--			interval = clamp_val(interval, 1, 16) - 1;
-+			interval = clamp_val(interval, 1, 16);
- 			if (usb_endpoint_xfer_isoc(desc) && comp_desc)
- 				mult = comp_desc->bmAttributes;
- 		}
-@@ -94,7 +94,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
- 		if (usb_endpoint_xfer_isoc(desc) ||
- 				usb_endpoint_xfer_int(desc)) {
- 			interval = desc->bInterval;
--			interval = clamp_val(interval, 1, 16) - 1;
-+			interval = clamp_val(interval, 1, 16);
- 			mult = usb_endpoint_maxp_mult(desc) - 1;
- 		}
- 		break;
--- 
-2.34.1
-
+--- a/net/core/lwtunnel.c
++++ b/net/core/lwtunnel.c
+@@ -192,6 +192,10 @@ int lwtunnel_valid_encap_type_attr(struc
+ 			nla_entype = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
+ 
+ 			if (nla_entype) {
++				if (nla_len(nla_entype) < sizeof(u16)) {
++					NL_SET_ERR_MSG(extack, "Invalid RTA_ENCAP_TYPE");
++					return -EINVAL;
++				}
+ 				encap_type = nla_get_u16(nla_entype);
+ 
+ 				if (lwtunnel_valid_encap_type(encap_type,
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -741,6 +741,9 @@ static int fib_get_nhs(struct fib_info *
+ 			}
+ 
+ 			fib_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
++			/* RTA_ENCAP_TYPE length checked in
++			 * lwtunnel_valid_encap_type_attr
++			 */
+ 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
+ 			if (nla)
+ 				fib_cfg.fc_encap_type = nla_get_u16(nla);
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5176,6 +5176,10 @@ static int ip6_route_multipath_add(struc
+ 				r_cfg.fc_flags |= RTF_GATEWAY;
+ 			}
+ 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
++
++			/* RTA_ENCAP_TYPE length checked in
++			 * lwtunnel_valid_encap_type_attr
++			 */
+ 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
+ 			if (nla)
+ 				r_cfg.fc_encap_type = nla_get_u16(nla);
 
 

@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0BC489E86
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D57D489E87
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbiAJRi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S238480AbiAJRjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238197AbiAJRi5 (ORCPT
+        with ESMTP id S238491AbiAJRjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:38:57 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFA0C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:38:56 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id e5so9303627wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:38:56 -0800 (PST)
+        Mon, 10 Jan 2022 12:39:31 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82790C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:39:31 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id p18so2530015wmg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:39:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=xmz/AVm2b65EMdhMR5w60JDXhN2SbhtQinseC44HFwg=;
-        b=gKpTw5X2aIDIm2OQ32vcb3T/B6cBXsYNlTbg59TBnarzkHWId0PhllEO0NIVdnBVCp
-         OpJ3oN7wuN9JfsKKdb11ufTktWDVW2kh5+2iOuajRhGJmdxPIfEdYSwmhHxqpp0Ey88d
-         87qZrTlyR2+IkZxNCGasOUVaXgxGMMete5sYQMgfBdIb7Uy3SwNa9pTa3R+25zSdtGK0
-         XINCUOfQj55UDjNdcvD0ySp2v5dtPGSJuPhudsBcYezs+IKptJVBipaRe/GinLL2/BwX
-         sD4HcQWGqIftRPeKOZrTSg4wAc+n5O9NxlJgWVgVobZmiS/jy90wPZwz5rDEKML9S1wi
-         ugaw==
+        bh=O/zoD19T4vZt7Y0+pZu8hBQc8mpksUeLESRfmr/fYl8=;
+        b=kxcyvwBQlZoKMBhEA/ZQ6Ef87pYTzvn9qPt1PSdQ6YymCG+QM/76HVvy2qKx0KyL6W
+         qY4TgbJsl97tKRMFWbvFzx2o7MeLnvg3xkgJ1KZgFDkhf/DfsmatlDkv9J6N7iTeKTt9
+         8HtfCPjIYwuQ7mG0KLlC4CbsTohVuZpFdTtIqFRuRb9fUuULuPU9//xyke6oHZQAFvZ+
+         bSkrqsxSkzpUi97KiTraMZh0jWPxON3DwXHrVrLMxIaeHWt1xcbrFv/PzII4BEP3pw/T
+         /33ahRlorNm+XmIee5b5lU/+HfXyOE49K6JpoedEBhqi/VIZjsYI7nbsy7gp01M8rzzO
+         95iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=xmz/AVm2b65EMdhMR5w60JDXhN2SbhtQinseC44HFwg=;
-        b=ljA6dyV43WSKpLYexJMdna3F7Uj2kJb+lhJtwsiZWf1foUamEvKInFQJBysqGlaGSo
-         YCwaQZdzMdGiA1FGGTulJEPQyOwGX+mx5GvgRNYQsgmu27ERrdoPVtmA+hfgPi9dOzYh
-         d9QJ1jgfRTdWO2QFpohVo1lz8D0RDI03ugJkWTE+jpSGpRISoX6yJoi7lxPzO2vxMBSh
-         GBJb95P7nEftl7NL5P51//2q7kPDyPYaSYpm2m3luQvD/9PvoUBNJF3swOAE2fcCm6FS
-         nZTmfwSXXZaU6CtkNWgfRBOFG2Duu4J7x8gcXLSCeQutBDo6Ftz16FaRmuOdAhnRHsIG
-         E6fA==
-X-Gm-Message-State: AOAM531uLjoU7Y43OIR8JHiMsZpMh1qmQ/uWDzGN69PobB32QoP1Qy0R
-        xEQNEGz9lGhzEMjXxFt5w4dgeQ==
-X-Google-Smtp-Source: ABdhPJx4Zi50awrry1dqRyh2S33+cqRYmOAZJT9VAHZ53hbiauH0SbTW3I+AytzweGOZBwYFpodJ6Q==
-X-Received: by 2002:a05:600c:3783:: with SMTP id o3mr476146wmr.74.1641836335273;
-        Mon, 10 Jan 2022 09:38:55 -0800 (PST)
+        bh=O/zoD19T4vZt7Y0+pZu8hBQc8mpksUeLESRfmr/fYl8=;
+        b=z9MVhv645LPxMkYrR8LgbjHHE2NS2qZc6nQtMgBM2VjbAlw/82YR/B3heLSdZvabeb
+         ewueK77cBTAMnTZiIMN5YzqsGKgKmGocdiSea+0W+LU/jL7oIPHb5f8L0hFultdl6zcj
+         TskBT6Zihm7WA7LVErdo/7q7BqnKFqhgI0Lg4O/NLev81VDNtLftarkQrbGbbK85oNgY
+         YTLbrdnDHuKkgPflbREhFqqiUXQmCU0+4QbYngvsT4xKDIDO8Z0lt8FrYcPuniRrF8eu
+         8uNTkooQGG4md8URZPfwPr+1NiOdf6npb4QmaESBhcQbKyopnwMFxnSMCohnKh4axGRW
+         FXKw==
+X-Gm-Message-State: AOAM530U8YRjzxnxYT2KWz3d/6UdXRytY0G7VjMF2Xri0M0VKHSkcynW
+        7FYn09DE9kpcOXm0sA/AIUC56g==
+X-Google-Smtp-Source: ABdhPJxAOfUS+J3fkRCF9R/dUzNftxZ05snI2tXwY0t21tqOT5DQmlPdw6F1kusyDaHuLXkDtfUNiQ==
+X-Received: by 2002:a7b:ce94:: with SMTP id q20mr451394wmj.5.1641836369827;
+        Mon, 10 Jan 2022 09:39:29 -0800 (PST)
 Received: from google.com ([2a00:79e0:d:210:927:9b4:58f8:3bfa])
-        by smtp.gmail.com with ESMTPSA id u16sm7109466wrn.24.2022.01.10.09.38.54
+        by smtp.gmail.com with ESMTPSA id f10sm7674739wmg.43.2022.01.10.09.39.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 09:38:54 -0800 (PST)
-Date:   Mon, 10 Jan 2022 17:38:54 +0000
+        Mon, 10 Jan 2022 09:39:29 -0800 (PST)
+Date:   Mon, 10 Jan 2022 17:39:29 +0000
 From:   Matthias Maennich <maennich@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: Re: [PATCH] export: fix string handling of namespace in
- EXPORT_SYMBOL_NS
-Message-ID: <YdxvLkrVJA/oXyhM@google.com>
-References: <20220108140415.3360088-1-gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>
+Subject: Re: [PATCH] module.h: allow #define strings to work with
+ MODULE_IMPORT_NS
+Message-ID: <YdxvUYRejf2K6YJq@google.com>
+References: <20220108140657.3361237-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220108140415.3360088-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20220108140657.3361237-1-gregkh@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 03:04:15PM +0100, Greg Kroah-Hartman wrote:
->Commit c3a6cf19e695 ("export: avoid code duplication in
->include/linux/export.h") broke the ability for a defined string to be
->used as a namespace value.  Fix this up by adding another layer of
->indirection to preserve the previous functionality.
+On Sat, Jan 08, 2022 at 03:06:57PM +0100, Greg Kroah-Hartman wrote:
+>The MODULE_IMPORT_NS() macro does not allow defined strings to work
+>properly with it, so add a layer of indirection to allow this to happen.
 >
->Fixes: c3a6cf19e695 ("export: avoid code duplication in include/linux/export.h")
->Cc: Miroslav Benes <mbenes@suse.cz>
->Cc: Emil Velikov <emil.l.velikov@gmail.com>
+>Cc: Luis Chamberlain <mcgrof@kernel.org>
 >Cc: Jessica Yu <jeyu@kernel.org>
->Cc: Quentin Perret <qperret@google.com>
->Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 >Cc: Matthias Maennich <maennich@google.com>
 >Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
@@ -89,33 +80,34 @@ Cheers,
 Matthias
 
 >---
->Note, I found this while forward porting an out-of-tree Android kernel
->patch from 5.4 to 5.10 that used module namespaces to help wall-off vfs
->symbols from being used by non-filesystem modules.  This issue does not
->affect any in-kernel code, so I am not so sure if it really is needed
->here, but it does restore the previous functionality that was being used
->in older kernels so it might be good to put back in case others want to
->do much the same thing.
+>Note, there is no in-kernel user of this, I wrote this to help deal with
+>some module namespace issues that Android kernels were having where we
+>wanted to put the namespace name in a build #define to make things
+>easier over time when combined with the change at:
+>	https://lore.kernel.org/all/20220108140415.3360088-1-gregkh@linuxfoundation.org/
 >
-> include/linux/export.h | 6 ++++--
-> 1 file changed, 4 insertions(+), 2 deletions(-)
+>I can also see this be used in ways to make namespace names up "on the
+>fly at build time" when combined with the above-referenced change to
+>create a different namespace for every time the kernel is built to do a
+>poor-man's symbol mangling to make life harder for out-of-tree modules.
+>Not that I would ever suggest such a thing :)
 >
->diff --git a/include/linux/export.h b/include/linux/export.h
->index 27d848712b90..9a992809f57d 100644
->--- a/include/linux/export.h
->+++ b/include/linux/export.h
->@@ -162,8 +162,10 @@ struct kernel_symbol {
+> include/linux/module.h | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> #define EXPORT_SYMBOL(sym)		_EXPORT_SYMBOL(sym, "")
-> #define EXPORT_SYMBOL_GPL(sym)		_EXPORT_SYMBOL(sym, "_gpl")
->-#define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", #ns)
->-#define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", #ns)
->+#define _EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", #ns)
->+#define _EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", #ns)
->+#define EXPORT_SYMBOL_NS(sym, ns)	_EXPORT_SYMBOL_NS(sym, ns)
->+#define EXPORT_SYMBOL_NS_GPL(sym, ns)	_EXPORT_SYMBOL_NS_GPL(sym, ns)
+>diff --git a/include/linux/module.h b/include/linux/module.h
+>index c9f1200b2312..f4338235ed2c 100644
+>--- a/include/linux/module.h
+>+++ b/include/linux/module.h
+>@@ -290,7 +290,8 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
+>  * files require multiple MODULE_FIRMWARE() specifiers */
+> #define MODULE_FIRMWARE(_firmware) MODULE_INFO(firmware, _firmware)
 >
-> #endif /* !__ASSEMBLY__ */
+>-#define MODULE_IMPORT_NS(ns) MODULE_INFO(import_ns, #ns)
+>+#define _MODULE_IMPORT_NS(ns)	MODULE_INFO(import_ns, #ns)
+>+#define MODULE_IMPORT_NS(ns)	_MODULE_IMPORT_NS(ns)
+>
+> struct notifier_block;
 >
 >-- 
 >2.34.1

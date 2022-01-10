@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E5E489342
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4956248934B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240670AbiAJI1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:27:25 -0500
+        id S240758AbiAJI15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:27:57 -0500
 Received: from mail-sh.amlogic.com ([58.32.228.43]:8049 "EHLO
         mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240428AbiAJI1F (ORCPT
+        with ESMTP id S240565AbiAJI1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:27:05 -0500
+        Mon, 10 Jan 2022 03:27:20 -0500
 Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
  (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Mon, 10 Jan 2022
- 16:26:45 +0800
+ 16:26:47 +0800
 From:   Yu Tu <yu.tu@amlogic.com>
 To:     <linux-serial@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
@@ -28,9 +28,9 @@ CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Yu Tu <yu.tu@amlogic.com>
-Subject: [PATCH] tty: serial: meson: Change request_irq to devm_request_irq and move devm_request_irq to meson_uart_probe()
-Date:   Mon, 10 Jan 2022 16:26:10 +0800
-Message-ID: <20220110082616.13474-2-yu.tu@amlogic.com>
+Subject: [PATCH] tty: serial: meson: Make the bit24 and bit [26,27] of the UART_REG5 register writable
+Date:   Mon, 10 Jan 2022 16:26:11 +0800
+Message-ID: <20220110082616.13474-3-yu.tu@amlogic.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220110082616.13474-1-yu.tu@amlogic.com>
 References: <20220110082616.13474-1-yu.tu@amlogic.com>
@@ -42,70 +42,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because an interrupt error occurs when the user opens /dev/ttyAML* but
-don't close it, and then opens the same port again. This problem is
-encountered in actual projects.
+The UART_REG5 register defaults to 0. The console port is set in
+ROMCODE. But other UART ports default to 0, so make bit24 and
+bit[26,27] writable so that the UART can choose a more
+appropriate clock.
 
 Signed-off-by: Yu Tu <yu.tu@amlogic.com>
 ---
- drivers/tty/serial/meson_uart.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/tty/serial/meson_uart.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index 45e41f20cba3..0dd3f5b35768 100644
+index 7c3f30cea68e..b0551750dff8 100644
 --- a/drivers/tty/serial/meson_uart.c
 +++ b/drivers/tty/serial/meson_uart.c
-@@ -135,8 +135,6 @@ static void meson_uart_shutdown(struct uart_port *port)
- 	unsigned long flags;
- 	u32 val;
- 
--	free_irq(port->irq, port);
--
- 	spin_lock_irqsave(&port->lock, flags);
- 
- 	val = readl(port->membase + AML_UART_CONTROL);
-@@ -284,7 +282,6 @@ static void meson_uart_reset(struct uart_port *port)
- static int meson_uart_startup(struct uart_port *port)
- {
- 	u32 val;
--	int ret;
- 
- 	meson_uart_reset(port);
- 
-@@ -298,10 +295,7 @@ static int meson_uart_startup(struct uart_port *port)
- 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
- 	writel(val, port->membase + AML_UART_MISC);
- 
--	ret = request_irq(port->irq, meson_uart_interrupt, 0,
--			  port->name, port);
--
--	return ret;
-+	return 0;
- }
- 
- static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
-@@ -908,6 +902,14 @@ static int meson_uart_probe(struct platform_device *pdev)
- 	meson_ports[pdev->id] = port;
- 	platform_set_drvdata(pdev, port);
- 
-+	ret = devm_request_irq(&pdev->dev, port->irq, meson_uart_interrupt,
-+			       0, dev_name(&pdev->dev), port);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to request uart irq: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
- 	/* reset port before registering (and possibly registering console) */
- 	meson_uart_reset(port);
- 
+@@ -693,7 +693,7 @@ static int meson_uart_probe_clocks(struct uart_port *port)
+ 							CLK_SET_RATE_NO_REPARENT,
+ 							port->membase + AML_UART_REG5,
+ 							26, 2,
+-							CLK_DIVIDER_READ_ONLY,
++							CLK_DIVIDER_ROUND_CLOSEST,
+ 							xtal_div_table, NULL);
+ 		if (IS_ERR(hw))
+ 			return PTR_ERR(hw);
+@@ -719,7 +719,7 @@ static int meson_uart_probe_clocks(struct uart_port *port)
+ 					CLK_SET_RATE_PARENT,
+ 					port->membase + AML_UART_REG5,
+ 					24, 0x1,
+-					CLK_MUX_READ_ONLY,
++					CLK_MUX_ROUND_CLOSEST,
+ 					NULL, NULL);
+ 	if (IS_ERR(hw))
+ 		return PTR_ERR(hw);
 
-base-commit: b3a9e3b9622ae10064826dccb4f7a52bd88c7407
-prerequisite-patch-id: 97a514f3447511cb204179ce03ae99dc1d5902d9
+base-commit: 93a770b7e16772530196674ffc79bb13fa927dc6
+prerequisite-patch-id: 95191c926509964c8e9bf4128b8bbad8a277b84a
 prerequisite-patch-id: a2e4756ff85f0df0efe111d7e2cb51b8e26e226f
-prerequisite-patch-id: af9e3acc8f6ff7602d3a68a57c008e5ec362b353
-prerequisite-patch-id: 7af8c81b4c2163240725e96625b1487c280f4f30
-prerequisite-patch-id: 8791f6362b14e7c4ff4f85cce550f06abeb1af7a
+prerequisite-patch-id: 4e4d909acabcb7533da20e2207207be73454a88c
 -- 
 2.33.1
 

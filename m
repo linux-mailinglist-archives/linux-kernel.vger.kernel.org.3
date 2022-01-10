@@ -2,131 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6586C488D6A
+	by mail.lfdr.de (Postfix) with ESMTP id AEDFD488D6B
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 01:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbiAJAEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 19:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbiAJAET (ORCPT
+        id S237514AbiAJAEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 19:04:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35150 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237438AbiAJAEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 19:04:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F22FC06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 16:04:19 -0800 (PST)
+        Sun, 9 Jan 2022 19:04:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AAC260FD9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAF0C36AE3;
-        Mon, 10 Jan 2022 00:04:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EB28B80D84
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:04:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23A5C36AF3;
+        Mon, 10 Jan 2022 00:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641773056;
-        bh=58LDqfXkxF6/L/AdUWOUj9Y/5z6CxQ2olP2VZ704bRE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=K7sbpY01nmlymY9+aw5kZ6L9Ef+cQLw9BwDT0Uyus5rJekgYRkeof7FxeIL2q2dGe
-         PkNk9V3ooH/84wxerY+dCXl8hn+Lpv+5v+y3sfc2PxhNjH0Tvkiu2cSsldz4/9QmRA
-         KoHzAP7cdydkXzej38yEay92dhyS+yFVFo1RQov0J+BcGoB8b1fp3xjdvZc9YT4nuJ
-         Irx+NhYYv2t7O0fYwBV6UuuQHUFpdQUXOH6PuI6f0P7iuWNN1V0F7w+7aZ9sB7y/Bg
-         GZwWESgXPG35yOoFzD+t3x51Z6VySL3ujcjnYUmbZXM/tMNripzmBGNOzowP0/5LZ2
-         eDfBmD131p17w==
+        s=k20201202; t=1641773058;
+        bh=+ghuVjxt7IGWnTnXmpCM+zMDS9tD9lEnGr5PcOt4+E0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
+         References:From;
+        b=GbE5lnSZJfH3hRwBMxs8PSCgqbwheshSpJI4ZmC5qi4Ul4tWoMTLfom9iUCe3Vc91
+         gcfwabzMRO+IqBRxJhiJboP0KuHQEoN+vFoJsMDJgqMFB24RmamkO1x44/O9rlfsd+
+         36U0+ap6mWD9mAoXC+FGaLoC/1fU9JyObfdbaZIkmT+mYgN7Qm2wYQfC978IP6LgWw
+         qpVEpoJBSuf2bjFnsQ8FBZxqhj3yY97RsIL/HcV4XTvUf/2OXuCeeszJ63Hyp8Srdd
+         GwIz9WtnDpl1EG5vwIAttltj4EWaytGXtQJevzanxgcLrWkYeIYS8KkndGh2G1Rrns
+         julj8cNeciMbA==
 From:   Tom Zanussi <zanussi@kernel.org>
 To:     rostedt@goodmis.org
 Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/6] tracing: Add and use event_command parsing func helpers
-Date:   Sun,  9 Jan 2022 18:04:04 -0600
-Message-Id: <cover.1641772259.git.zanussi@kernel.org>
+Subject: [PATCH v6 1/6] tracing: Change event_command func() to parse()
+Date:   Sun,  9 Jan 2022 18:04:05 -0600
+Message-Id: <7784e321840752ed88aac0b349c0c685fc9247b1.1641772259.git.zanussi@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1641772259.git.zanussi@kernel.org>
+References: <cover.1641772259.git.zanussi@kernel.org>
+In-Reply-To: <cover.1641772259.git.zanussi@kernel.org>
+References: <cover.1641772259.git.zanussi@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With more event commands being implemented, it's been pointed out that
-it would make sense to clean up the existing ones and make it easier
-to implement new ones without copying a lot of boilerplate.  The main
-culprit here is the event_command.func() callback - the rest of the
-event_command infrastructure has default implementations that work for
-most implementations.  The func() callback is a little different in
-that every new command needs to customize parsing to some extent.
+The name of the func() callback on event_command is too generic and is
+easily confused with other callbacks with that name, so change it to
+something that reflects its actual purpose.
 
-This patchset attempts to help clean that up and make it easier for
-new users to deal with.
+In this case, the main purpose of the callback is to parse an event
+command, so call it parse() instead.
 
-v6:
+Signed-off-by: Tom Zanussi <zanussi@kernel.org>
+---
+ kernel/trace/trace.h                | 19 +++++++++++-------
+ kernel/trace/trace_eprobe.c         |  8 ++++----
+ kernel/trace/trace_events_hist.c    | 26 ++++++++++++-------------
+ kernel/trace/trace_events_trigger.c | 30 ++++++++++++++---------------
+ 4 files changed, 44 insertions(+), 39 deletions(-)
 
-    Fixed warning for an uninitialized trigger_ops local in
-    event_trigger_parse() pointed out by Steve and the kernel test
-    robot. This was done by removing the need for the local by
-    removing the redundant trigger_ops params in [PATCH v6 3/6]
-    tracing: Remove ops param from event_command reg()/unreg()
-    callbacks.
-
-    Also added a follow-on patch to remove all the other instances of
-    redundant trigger_ops in [PATCH v6 6/6] tracing: Remove redundant
-    trigger_ops params
-
-v5: Changed the parsing helper function example components param and
-    filter to reflect only the param and filter components, and added
-    param_and_filter which now appears in the functions.
-
-    Removed the check for a NULL *param following the strsep
-    separating the param from the filter in
-    event_trigger_separate_filter() because it will never be true due
-    to the previous check for NULL param_and_filter previously.
-
-    Changed the param name from trigger to param and updated the
-    function documentation in event_trigger_parse_num().
-
-v4: Added two patches changing the names of event_command.func() and
-    event_trigger_ops.func() to make them reflect their functions.
-
-    Added back missing kfree(trigger_data) in event_trigger_callback().
-
-    Changed char *param to const char *param in
-    event_trigger_check_remove() and event_trigger_empty_param().
-
-    Changed event_trigger_separate_filter() to use separate param and
-    filter outparams, and changed the name of the param inparam to
-    param_and_filter to better reflect its contents and avoid the
-    clash with new param outparam.  Changed all parse()
-    implementations to use this new scheme.
-
-    Fixed some typos and added more extensive comments with examples
-    explaining various things that were mentioned as causing confusion
-    and just in general tried to clarify things with respect to the
-    callbacks and parameters.
-
-v3: broke up event_trigger_check() into smaller functions instead of
-    parameterizing it, and added function documentation.
-
-v2: removed unused event_trigger_remove(). No change in functionality.
-
-The following changes since commit a6ed2aee54644cfa2d04ca86308767f5c3a087e8:
-
-  tracing: Switch to kvfree_rcu() API (2021-12-06 17:53:50 -0500)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git ftrace/cleanup-hist-func-v6
-
-Tom Zanussi (6):
-  tracing: Change event_command func() to parse()
-  tracing: Change event_trigger_ops func() to trigger()
-  tracing: Remove ops param from event_command reg()/unreg() callbacks
-  tracing: Add helper functions to simplify event_command.parse()
-    callback handling
-  tracing: Have existing event_command.parse() implementations use
-    helpers
-  tracing: Remove redundant trigger_ops params
-
- kernel/trace/trace.h                |  81 ++--
- kernel/trace/trace_eprobe.c         |  30 +-
- kernel/trace/trace_events_hist.c    | 145 +++----
- kernel/trace/trace_events_trigger.c | 626 +++++++++++++++++++---------
- 4 files changed, 565 insertions(+), 317 deletions(-)
-
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 8bd1a815ce90..25bd5706ef0b 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1578,9 +1578,9 @@ extern int event_enable_trigger_print(struct seq_file *m,
+ 				      struct event_trigger_data *data);
+ extern void event_enable_trigger_free(struct event_trigger_ops *ops,
+ 				      struct event_trigger_data *data);
+-extern int event_enable_trigger_func(struct event_command *cmd_ops,
+-				     struct trace_event_file *file,
+-				     char *glob, char *cmd, char *param);
++extern int event_enable_trigger_parse(struct event_command *cmd_ops,
++				      struct trace_event_file *file,
++				      char *glob, char *cmd, char *param);
+ extern int event_enable_register_trigger(char *glob,
+ 					 struct event_trigger_ops *ops,
+ 					 struct event_trigger_data *data,
+@@ -1702,7 +1702,7 @@ struct event_trigger_ops {
+  * All the methods below, except for @set_filter() and @unreg_all(),
+  * must be implemented.
+  *
+- * @func: The callback function responsible for parsing and
++ * @parse: The callback function responsible for parsing and
+  *	registering the trigger written to the 'trigger' file by the
+  *	user.  It allocates the trigger instance and registers it with
+  *	the appropriate trace event.  It makes use of the other
+@@ -1737,15 +1737,20 @@ struct event_trigger_ops {
+  *
+  * @get_trigger_ops: The callback function invoked to retrieve the
+  *	event_trigger_ops implementation associated with the command.
++ *	This callback function allows a single event_command to
++ *	support multiple trigger implementations via different sets of
++ *	event_trigger_ops, depending on the value of the @param
++ *	string.
+  */
+ struct event_command {
+ 	struct list_head	list;
+ 	char			*name;
+ 	enum event_trigger_type	trigger_type;
+ 	int			flags;
+-	int			(*func)(struct event_command *cmd_ops,
+-					struct trace_event_file *file,
+-					char *glob, char *cmd, char *params);
++	int			(*parse)(struct event_command *cmd_ops,
++					 struct trace_event_file *file,
++					 char *glob, char *cmd,
++					 char *param_and_filter);
+ 	int			(*reg)(char *glob,
+ 				       struct event_trigger_ops *ops,
+ 				       struct event_trigger_data *data,
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 88487752d307..84d5bfa34a99 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -549,9 +549,9 @@ static struct event_trigger_ops eprobe_trigger_ops = {
+ 	.free			= eprobe_trigger_free,
+ };
+ 
+-static int eprobe_trigger_cmd_func(struct event_command *cmd_ops,
+-				   struct trace_event_file *file,
+-				   char *glob, char *cmd, char *param)
++static int eprobe_trigger_cmd_parse(struct event_command *cmd_ops,
++				    struct trace_event_file *file,
++				    char *glob, char *cmd, char *param)
+ {
+ 	return -1;
+ }
+@@ -580,7 +580,7 @@ static struct event_command event_trigger_cmd = {
+ 	.name			= "eprobe",
+ 	.trigger_type		= ETT_EVENT_EPROBE,
+ 	.flags			= EVENT_CMD_FL_NEEDS_REC,
+-	.func			= eprobe_trigger_cmd_func,
++	.parse			= eprobe_trigger_cmd_parse,
+ 	.reg			= eprobe_trigger_reg_func,
+ 	.unreg			= eprobe_trigger_unreg_func,
+ 	.unreg_all		= NULL,
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 9b8da439149c..89bbbbd3a3f5 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -2761,9 +2761,9 @@ static char *find_trigger_filter(struct hist_trigger_data *hist_data,
+ }
+ 
+ static struct event_command trigger_hist_cmd;
+-static int event_hist_trigger_func(struct event_command *cmd_ops,
+-				   struct trace_event_file *file,
+-				   char *glob, char *cmd, char *param);
++static int event_hist_trigger_parse(struct event_command *cmd_ops,
++				    struct trace_event_file *file,
++				    char *glob, char *cmd, char *param);
+ 
+ static bool compatible_keys(struct hist_trigger_data *target_hist_data,
+ 			    struct hist_trigger_data *hist_data,
+@@ -2966,8 +2966,8 @@ create_field_var_hist(struct hist_trigger_data *target_hist_data,
+ 	var_hist->hist_data = hist_data;
+ 
+ 	/* Create the new histogram with our variable */
+-	ret = event_hist_trigger_func(&trigger_hist_cmd, file,
+-				      "", "hist", cmd);
++	ret = event_hist_trigger_parse(&trigger_hist_cmd, file,
++				       "", "hist", cmd);
+ 	if (ret) {
+ 		kfree(cmd);
+ 		kfree(var_hist->cmd);
+@@ -5729,8 +5729,8 @@ static void unregister_field_var_hists(struct hist_trigger_data *hist_data)
+ 	for (i = 0; i < hist_data->n_field_var_hists; i++) {
+ 		file = hist_data->field_var_hists[i]->hist_data->event_file;
+ 		cmd = hist_data->field_var_hists[i]->cmd;
+-		ret = event_hist_trigger_func(&trigger_hist_cmd, file,
+-					      "!hist", "hist", cmd);
++		ret = event_hist_trigger_parse(&trigger_hist_cmd, file,
++					       "!hist", "hist", cmd);
+ 		WARN_ON_ONCE(ret < 0);
+ 	}
+ }
+@@ -6146,9 +6146,9 @@ static void hist_unreg_all(struct trace_event_file *file)
+ 	}
+ }
+ 
+-static int event_hist_trigger_func(struct event_command *cmd_ops,
+-				   struct trace_event_file *file,
+-				   char *glob, char *cmd, char *param)
++static int event_hist_trigger_parse(struct event_command *cmd_ops,
++				    struct trace_event_file *file,
++				    char *glob, char *cmd, char *param)
+ {
+ 	unsigned int hist_trigger_bits = TRACING_MAP_BITS_DEFAULT;
+ 	struct event_trigger_data *trigger_data;
+@@ -6331,7 +6331,7 @@ static struct event_command trigger_hist_cmd = {
+ 	.name			= "hist",
+ 	.trigger_type		= ETT_EVENT_HIST,
+ 	.flags			= EVENT_CMD_FL_NEEDS_REC,
+-	.func			= event_hist_trigger_func,
++	.parse			= event_hist_trigger_parse,
+ 	.reg			= hist_register_trigger,
+ 	.unreg			= hist_unregister_trigger,
+ 	.unreg_all		= hist_unreg_all,
+@@ -6446,7 +6446,7 @@ static void hist_enable_unreg_all(struct trace_event_file *file)
+ static struct event_command trigger_hist_enable_cmd = {
+ 	.name			= ENABLE_HIST_STR,
+ 	.trigger_type		= ETT_HIST_ENABLE,
+-	.func			= event_enable_trigger_func,
++	.parse			= event_enable_trigger_parse,
+ 	.reg			= event_enable_register_trigger,
+ 	.unreg			= event_enable_unregister_trigger,
+ 	.unreg_all		= hist_enable_unreg_all,
+@@ -6457,7 +6457,7 @@ static struct event_command trigger_hist_enable_cmd = {
+ static struct event_command trigger_hist_disable_cmd = {
+ 	.name			= DISABLE_HIST_STR,
+ 	.trigger_type		= ETT_HIST_ENABLE,
+-	.func			= event_enable_trigger_func,
++	.parse			= event_enable_trigger_parse,
+ 	.reg			= event_enable_register_trigger,
+ 	.unreg			= event_enable_unregister_trigger,
+ 	.unreg_all		= hist_enable_unreg_all,
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index 3d5c07239a2a..15aae07cbe61 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -245,7 +245,7 @@ int trigger_process_regex(struct trace_event_file *file, char *buff)
+ 	mutex_lock(&trigger_cmd_mutex);
+ 	list_for_each_entry(p, &trigger_commands, list) {
+ 		if (strcmp(p->name, command) == 0) {
+-			ret = p->func(p, file, buff, command, next);
++			ret = p->parse(p, file, buff, command, next);
+ 			goto out_unlock;
+ 		}
+ 	}
+@@ -622,7 +622,7 @@ static void unregister_trigger(char *glob, struct event_trigger_ops *ops,
+ }
+ 
+ /**
+- * event_trigger_callback - Generic event_command @func implementation
++ * event_trigger_parse - Generic event_command @parse implementation
+  * @cmd_ops: The command ops, used for trigger registration
+  * @file: The trace_event_file associated with the event
+  * @glob: The raw string used to register the trigger
+@@ -632,15 +632,15 @@ static void unregister_trigger(char *glob, struct event_trigger_ops *ops,
+  * Common implementation for event command parsing and trigger
+  * instantiation.
+  *
+- * Usually used directly as the @func method in event command
++ * Usually used directly as the @parse method in event command
+  * implementations.
+  *
+  * Return: 0 on success, errno otherwise
+  */
+ static int
+-event_trigger_callback(struct event_command *cmd_ops,
+-		       struct trace_event_file *file,
+-		       char *glob, char *cmd, char *param)
++event_trigger_parse(struct event_command *cmd_ops,
++		    struct trace_event_file *file,
++		    char *glob, char *cmd, char *param)
+ {
+ 	struct event_trigger_data *trigger_data;
+ 	struct event_trigger_ops *trigger_ops;
+@@ -1069,7 +1069,7 @@ onoff_get_trigger_ops(char *cmd, char *param)
+ static struct event_command trigger_traceon_cmd = {
+ 	.name			= "traceon",
+ 	.trigger_type		= ETT_TRACE_ONOFF,
+-	.func			= event_trigger_callback,
++	.parse			= event_trigger_parse,
+ 	.reg			= register_trigger,
+ 	.unreg			= unregister_trigger,
+ 	.get_trigger_ops	= onoff_get_trigger_ops,
+@@ -1080,7 +1080,7 @@ static struct event_command trigger_traceoff_cmd = {
+ 	.name			= "traceoff",
+ 	.trigger_type		= ETT_TRACE_ONOFF,
+ 	.flags			= EVENT_CMD_FL_POST_TRIGGER,
+-	.func			= event_trigger_callback,
++	.parse			= event_trigger_parse,
+ 	.reg			= register_trigger,
+ 	.unreg			= unregister_trigger,
+ 	.get_trigger_ops	= onoff_get_trigger_ops,
+@@ -1157,7 +1157,7 @@ snapshot_get_trigger_ops(char *cmd, char *param)
+ static struct event_command trigger_snapshot_cmd = {
+ 	.name			= "snapshot",
+ 	.trigger_type		= ETT_SNAPSHOT,
+-	.func			= event_trigger_callback,
++	.parse			= event_trigger_parse,
+ 	.reg			= register_snapshot_trigger,
+ 	.unreg			= unregister_trigger,
+ 	.get_trigger_ops	= snapshot_get_trigger_ops,
+@@ -1249,7 +1249,7 @@ static struct event_command trigger_stacktrace_cmd = {
+ 	.name			= "stacktrace",
+ 	.trigger_type		= ETT_STACKTRACE,
+ 	.flags			= EVENT_CMD_FL_POST_TRIGGER,
+-	.func			= event_trigger_callback,
++	.parse			= event_trigger_parse,
+ 	.reg			= register_trigger,
+ 	.unreg			= unregister_trigger,
+ 	.get_trigger_ops	= stacktrace_get_trigger_ops,
+@@ -1380,9 +1380,9 @@ static struct event_trigger_ops event_disable_count_trigger_ops = {
+ 	.free			= event_enable_trigger_free,
+ };
+ 
+-int event_enable_trigger_func(struct event_command *cmd_ops,
+-			      struct trace_event_file *file,
+-			      char *glob, char *cmd, char *param)
++int event_enable_trigger_parse(struct event_command *cmd_ops,
++			       struct trace_event_file *file,
++			       char *glob, char *cmd, char *param)
+ {
+ 	struct trace_event_file *event_enable_file;
+ 	struct enable_trigger_data *enable_data;
+@@ -1628,7 +1628,7 @@ event_enable_get_trigger_ops(char *cmd, char *param)
+ static struct event_command trigger_enable_cmd = {
+ 	.name			= ENABLE_EVENT_STR,
+ 	.trigger_type		= ETT_EVENT_ENABLE,
+-	.func			= event_enable_trigger_func,
++	.parse			= event_enable_trigger_parse,
+ 	.reg			= event_enable_register_trigger,
+ 	.unreg			= event_enable_unregister_trigger,
+ 	.get_trigger_ops	= event_enable_get_trigger_ops,
+@@ -1638,7 +1638,7 @@ static struct event_command trigger_enable_cmd = {
+ static struct event_command trigger_disable_cmd = {
+ 	.name			= DISABLE_EVENT_STR,
+ 	.trigger_type		= ETT_EVENT_ENABLE,
+-	.func			= event_enable_trigger_func,
++	.parse			= event_enable_trigger_parse,
+ 	.reg			= event_enable_register_trigger,
+ 	.unreg			= event_enable_unregister_trigger,
+ 	.get_trigger_ops	= event_enable_get_trigger_ops,
 -- 
 2.17.1
 

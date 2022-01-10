@@ -2,174 +2,592 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 779244893D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F87A4893D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241966AbiAJIls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241070AbiAJIjU (ORCPT
+        id S241500AbiAJImE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:42:04 -0500
+Received: from mail-ed1-f43.google.com ([209.85.208.43]:46739 "EHLO
+        mail-ed1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241803AbiAJIjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:39:20 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79019C03327E;
-        Mon, 10 Jan 2022 00:39:17 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id t28so18474235wrb.4;
-        Mon, 10 Jan 2022 00:39:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MQX3WExGOS3qStO9Hx8ccBSuVV1T9JyvQiyN4+V/nRc=;
-        b=c9netRRW2LxFeVBediKeE6YWZo/dm+CKFboPq2WcnKK8AMUGmiQywSVslJX+pyn5u4
-         qrj3sYUa5amTZrQ41Cz/G7fQqglIBXZGXYV7CRBrbqX4uynhV5hKv1BhI2FGe7slVDF2
-         WPx3crRxcejxuvRm9RN8DZjaLxS8iX12+zVx0EveQgCnGTMYErjZuekUW6pOXEC3sMWA
-         +MrT23eRKoSMiWrtNs9crtEuI6SyUjO3dv96hglh7NXHkF1hk74BbFEXjgjpRvqOGZkM
-         xdJnlz8KZumk2LAPJIzA7oATEB29hI4kc2hZ4zFIk++AOofEjH6XWauf5zRNmxEKnbvg
-         tVvA==
+        Mon, 10 Jan 2022 03:39:36 -0500
+Received: by mail-ed1-f43.google.com with SMTP id k15so50300718edk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:39:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MQX3WExGOS3qStO9Hx8ccBSuVV1T9JyvQiyN4+V/nRc=;
-        b=fTghPg3mCHI56LhS81NOvXoWiQ7aN923QP8p0naKbzTvel3hwsi/vnVDCsmuHVN7AS
-         ONY7FpmHAsf73Wwfu14P4hhOEZg5+bObYQZyovSLC+rm6WcrpKjyxf/vgzdRFKhldAuB
-         N1azj3w1zC4U2rwYj265uu7E6p62JEgnsyOQP/L1tB5Fcw12fcVH7eLRkaF4/Kq+x8/L
-         V5sh0hJ/fuPRREQVQYEBjgSMNBBtZ4/LBugWczgT4qMC9NUsLKlO5ar+XN4kMLNxf5rA
-         290YxhWWOhggwCc/ux425DI2K4oiFlyhgJH1iVDyIBPfWzVkxJtIUVTseJw/SietKgZe
-         cu9g==
-X-Gm-Message-State: AOAM5309ZJFKAgTpCUWfHy1wPmZYioy3GI6sZCMqozqTalyOacKtbfBw
-        t1vj2lqS+dff0xB/Z6YWpfnWTUnFrKElUQ==
-X-Google-Smtp-Source: ABdhPJyJj/1wWKt72t/GoFO0JYub5kLiVdHSZg3NSmH2Ct9SZoL9OLrgpdgKk5fjGQoRg2StoUqDJw==
-X-Received: by 2002:a5d:588c:: with SMTP id n12mr64663636wrf.56.1641803955860;
-        Mon, 10 Jan 2022 00:39:15 -0800 (PST)
-Received: from localhost.localdomain (198.red-81-44-130.dynamicip.rima-tde.net. [81.44.130.198])
-        by smtp.gmail.com with ESMTPSA id m7sm508926wmi.13.2022.01.10.00.39.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 00:39:15 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     john@phrozen.org, linux-staging@lists.linux.dev,
-        gregkh@linuxfoundation.org, neil@brown.name,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org
-Subject: [PATCH v6 4/4] staging: mt7621-dts: align resets with binding documentation
-Date:   Mon, 10 Jan 2022 09:39:10 +0100
-Message-Id: <20220110083910.1351020-5-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220110083910.1351020-1-sergio.paracuellos@gmail.com>
-References: <20220110083910.1351020-1-sergio.paracuellos@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dARwTZNRZOLdjaAopIuVHu9/bfe72sTBBlZKG5Io9Ns=;
+        b=kU7dNnb2gD1i6CLHfFeyHPVgDrwBffFgko+9WaYNmG2gyRb3MP5RcaTFBZyMj3xfmy
+         Jn8her4NqkNj4kBprFR2dM/QhkpKan38xdn+M8gSPWjNSUZIlTjEQoo5rTh3PQn60Vi+
+         4DKVd/XbfdJOX5NOUR9p1VY0BMi/bF1M6wPcF/ueleIT7ZCx0u3cMyOOPdWVC2mFbmKX
+         51fEioWHbZrjFH1gtQUyl/x1/asFA9f+YwqP0W7c6KqeRlQs6WMXuIblAkVPPM8g3j/Z
+         lXY6QrnbTKoGy6uhcl9WJsF39BuVDKrWumbsTaIWY9gk2Uj6A5HuQxE5ciApeRxLxtXa
+         6WVA==
+X-Gm-Message-State: AOAM531sLona0IUCVUS1WO7HBUNV2/YSrrhknh77VWl+8djqXs/F8Pvj
+        olCicroHPsSS0t4CXSpdW4Q=
+X-Google-Smtp-Source: ABdhPJynv1G63lkPRNTj5G+hW+Tezh0mipCcWgA74UEAD+vJ7SaZsJJmePORw1vVNFJ33wZBurG9Zg==
+X-Received: by 2002:aa7:ccc7:: with SMTP id y7mr18748276edt.96.1641803974981;
+        Mon, 10 Jan 2022 00:39:34 -0800 (PST)
+Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id w7sm3209238ede.66.2022.01.10.00.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 00:39:34 -0800 (PST)
+Message-ID: <c0d9b876-ea21-2706-4330-5878ad1cdedd@kernel.org>
+Date:   Mon, 10 Jan 2022 09:39:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v1 03/14] arm64: defconfig: rebuild default configuration
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
+        Olof Johansson <olof@lixom.net>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220107180314.1816515-1-marcel@ziswiler.com>
+ <20220107180314.1816515-4-marcel@ziswiler.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220107180314.1816515-4-marcel@ziswiler.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Binding documentation for compatible 'mediatek,mt7621-sysc' has been updated
-to be used as a reset provider. Align reset related bits and system controller
-node with binding documentation along the dtsi file.
+On 07/01/2022 19:03, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> Run "make defconfig; make savedefconfig" to rebuild defconfig.
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> ---
+> 
+>  arch/arm64/configs/defconfig | 135 +++++++++++++----------------------
+>  1 file changed, 50 insertions(+), 85 deletions(-)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index cc5d3ba166b1..79e4bf9f4c2c 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -3,17 +3,14 @@ CONFIG_POSIX_MQUEUE=y
+>  CONFIG_AUDIT=y
+>  CONFIG_NO_HZ_IDLE=y
+>  CONFIG_HIGH_RES_TIMERS=y
+> -CONFIG_PREEMPT=y
+> +CONFIG_BPF_JIT=y
+>  CONFIG_IRQ_TIME_ACCOUNTING=y
+>  CONFIG_BSD_PROCESS_ACCT=y
+>  CONFIG_BSD_PROCESS_ACCT_V3=y
+> -CONFIG_TASK_XACCT=y
+> -CONFIG_TASK_IO_ACCOUNTING=y
+>  CONFIG_IKCONFIG=y
+>  CONFIG_IKCONFIG_PROC=y
+>  CONFIG_NUMA_BALANCING=y
+>  CONFIG_MEMCG=y
+> -CONFIG_MEMCG_SWAP=y
+>  CONFIG_BLK_CGROUP=y
+>  CONFIG_CGROUP_PIDS=y
+>  CONFIG_CGROUP_HUGETLB=y
+> @@ -66,7 +63,6 @@ CONFIG_ARM64_VA_BITS_48=y
+>  CONFIG_SCHED_MC=y
+>  CONFIG_SCHED_SMT=y
+>  CONFIG_NUMA=y
+> -CONFIG_SECCOMP=y
+>  CONFIG_KEXEC=y
+>  CONFIG_KEXEC_FILE=y
+>  CONFIG_CRASH_DUMP=y
+> @@ -84,7 +80,6 @@ CONFIG_CPU_FREQ_GOV_POWERSAVE=m
+>  CONFIG_CPU_FREQ_GOV_USERSPACE=y
+>  CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+>  CONFIG_CPU_FREQ_GOV_CONSERVATIVE=m
+> -CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
+>  CONFIG_CPUFREQ_DT=y
+>  CONFIG_ACPI_CPPC_CPUFREQ=m
+>  CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM=m
+> @@ -97,19 +92,9 @@ CONFIG_ARM_RASPBERRYPI_CPUFREQ=m
+>  CONFIG_ARM_SCMI_CPUFREQ=y
+>  CONFIG_ARM_TEGRA186_CPUFREQ=y
+>  CONFIG_QORIQ_CPUFREQ=y
+> -CONFIG_ARM_SCMI_PROTOCOL=y
+> -CONFIG_ARM_SCPI_PROTOCOL=y
+> -CONFIG_RASPBERRYPI_FIRMWARE=y
+> -CONFIG_INTEL_STRATIX10_SERVICE=y
+> -CONFIG_INTEL_STRATIX10_RSU=m
+> -CONFIG_QCOM_SCM=y
+> -CONFIG_EFI_CAPSULE_LOADER=y
+> -CONFIG_IMX_SCU=y
+> -CONFIG_IMX_SCU_PD=y
+>  CONFIG_ACPI=y
+>  CONFIG_ACPI_APEI=y
+>  CONFIG_ACPI_APEI_GHES=y
+> -CONFIG_ACPI_APEI_PCIEAER=y
+>  CONFIG_ACPI_APEI_MEMORY_FAILURE=y
+>  CONFIG_ACPI_APEI_EINJ=y
+>  CONFIG_VIRTUALIZATION=y
+> @@ -182,14 +167,12 @@ CONFIG_NET_ACT_GATE=m
+>  CONFIG_QRTR=m
+>  CONFIG_QRTR_SMD=m
+>  CONFIG_QRTR_TUN=m
+> -CONFIG_BPF_JIT=y
+>  CONFIG_CAN=m
+> +CONFIG_CAN_FLEXCAN=m
+>  CONFIG_CAN_RCAR=m
+>  CONFIG_CAN_RCAR_CANFD=m
+> -CONFIG_CAN_FLEXCAN=m
+>  CONFIG_BT=m
+>  CONFIG_BT_HIDP=m
+> -# CONFIG_BT_HS is not set
+>  # CONFIG_BT_LE is not set
+>  CONFIG_BT_LEDS=y
+>  # CONFIG_BT_DEBUGFS is not set
+> @@ -228,7 +211,6 @@ CONFIG_PCIE_ROCKCHIP_HOST=m
+>  CONFIG_PCIE_BRCMSTB=m
+>  CONFIG_PCI_IMX6=y
+>  CONFIG_PCI_LAYERSCAPE=y
+> -CONFIG_PCIE_LAYERSCAPE_GEN4=y
+>  CONFIG_PCI_HISI=y
+>  CONFIG_PCIE_QCOM=y
+>  CONFIG_PCIE_ARMADA_8K=y
+> @@ -236,6 +218,11 @@ CONFIG_PCIE_KIRIN=y
+>  CONFIG_PCIE_HISI_STB=y
+>  CONFIG_PCIE_TEGRA194_HOST=m
+>  CONFIG_PCIE_VISCONTI_HOST=y
+> +CONFIG_PCIE_LAYERSCAPE_GEN4=y
+> +CONFIG_PCIE_CADENCE_PLAT_HOST=y
+> +CONFIG_PCIE_CADENCE_PLAT_EP=y
+> +CONFIG_PCI_J721E_HOST=y
+> +CONFIG_PCI_J721E_EP=y
+>  CONFIG_PCI_ENDPOINT=y
+>  CONFIG_PCI_ENDPOINT_CONFIGFS=y
+>  CONFIG_PCI_EPF_TEST=m
+> @@ -243,8 +230,15 @@ CONFIG_DEVTMPFS=y
+>  CONFIG_DEVTMPFS_MOUNT=y
+>  CONFIG_FW_LOADER_USER_HELPER=y
+>  CONFIG_HISILICON_LPC=y
+> -CONFIG_FSL_MC_BUS=y
+>  CONFIG_TEGRA_ACONNECT=m
+> +CONFIG_ARM_SCMI_PROTOCOL=y
+> +CONFIG_ARM_SCPI_PROTOCOL=y
+> +CONFIG_RASPBERRYPI_FIRMWARE=y
+> +CONFIG_INTEL_STRATIX10_SERVICE=y
+> +CONFIG_INTEL_STRATIX10_RSU=m
+> +CONFIG_EFI_CAPSULE_LOADER=y
+> +CONFIG_IMX_SCU=y
+> +CONFIG_IMX_SCU_PD=y
+>  CONFIG_GNSS=m
+>  CONFIG_GNSS_MTK_SERIAL=m
+>  CONFIG_MTD=y
+> @@ -261,11 +255,10 @@ CONFIG_MTD_SST25L=y
+>  CONFIG_MTD_RAW_NAND=y
+>  CONFIG_MTD_NAND_DENALI_DT=y
+>  CONFIG_MTD_NAND_MARVELL=y
+> +CONFIG_MTD_NAND_BRCMNAND=m
+>  CONFIG_MTD_NAND_FSL_IFC=y
+>  CONFIG_MTD_NAND_QCOM=y
+>  CONFIG_MTD_SPI_NOR=y
+> -CONFIG_MTK_DEVAPC=m
+> -CONFIG_SPI_CADENCE_QUADSPI=y
+>  CONFIG_BLK_DEV_LOOP=y
+>  CONFIG_BLK_DEV_NBD=m
+>  CONFIG_VIRTIO_BLK=y
+> @@ -315,6 +308,7 @@ CONFIG_NET_XGENE=y
+>  CONFIG_ATL1C=m
+>  CONFIG_BCMGENET=m
+>  CONFIG_BNX2X=m
+> +CONFIG_SYSTEMPORT=m
+>  CONFIG_MACB=y
+>  CONFIG_THUNDER_NIC_PF=y
+>  CONFIG_FEC=y
+> @@ -351,13 +345,11 @@ CONFIG_SNI_NETSEC=y
+>  CONFIG_STMMAC_ETH=m
+>  CONFIG_TI_K3_AM65_CPSW_NUSS=y
+>  CONFIG_QCOM_IPA=m
+> -CONFIG_MDIO_BUS_MUX_MMIOREG=y
+> -CONFIG_MDIO_BUS_MUX_MULTIPLEXER=y
+> +CONFIG_MESON_GXL_PHY=m
+>  CONFIG_AQUANTIA_PHY=y
+>  CONFIG_BCM54140_PHY=m
+>  CONFIG_MARVELL_PHY=m
+>  CONFIG_MARVELL_10G_PHY=m
+> -CONFIG_MESON_GXL_PHY=m
+>  CONFIG_MICREL_PHY=y
+>  CONFIG_MICROSEMI_PHY=y
+>  CONFIG_AT803X_PHY=y
+> @@ -365,6 +357,8 @@ CONFIG_REALTEK_PHY=y
+>  CONFIG_ROCKCHIP_PHY=y
+>  CONFIG_DP83867_PHY=y
+>  CONFIG_VITESSE_PHY=y
+> +CONFIG_MDIO_BUS_MUX_MULTIPLEXER=y
+> +CONFIG_MDIO_BUS_MUX_MMIOREG=y
+>  CONFIG_USB_PEGASUS=m
+>  CONFIG_USB_RTL8150=m
+>  CONFIG_USB_RTL8152=m
+> @@ -406,6 +400,8 @@ CONFIG_SERIO_AMBAKMI=y
+>  CONFIG_LEGACY_PTY_COUNT=16
+>  CONFIG_SERIAL_8250=y
+>  CONFIG_SERIAL_8250_CONSOLE=y
+> +CONFIG_SERIAL_8250_NR_UARTS=16
+> +CONFIG_SERIAL_8250_RUNTIME_UARTS=16
+>  CONFIG_SERIAL_8250_EXTENDED=y
+>  CONFIG_SERIAL_8250_SHARE_IRQ=y
+>  CONFIG_SERIAL_8250_BCM2835AUX=y
+> @@ -472,6 +468,7 @@ CONFIG_SPI=y
+>  CONFIG_SPI_ARMADA_3700=y
+>  CONFIG_SPI_BCM2835=m
+>  CONFIG_SPI_BCM2835AUX=m
+> +CONFIG_SPI_CADENCE_QUADSPI=y
+>  CONFIG_SPI_DESIGNWARE=m
+>  CONFIG_SPI_DW_DMA=y
+>  CONFIG_SPI_DW_MMIO=m
+> @@ -507,22 +504,7 @@ CONFIG_PINCTRL_IMX8QM=y
+>  CONFIG_PINCTRL_IMX8QXP=y
+>  CONFIG_PINCTRL_IMX8DXL=y
+>  CONFIG_PINCTRL_IMX8ULP=y
+> -CONFIG_PINCTRL_MSM=y
+> -CONFIG_PINCTRL_IPQ8074=y
+> -CONFIG_PINCTRL_IPQ6018=y
+> -CONFIG_PINCTRL_MSM8916=y
+> -CONFIG_PINCTRL_MSM8994=y
+> -CONFIG_PINCTRL_MSM8996=y
+> -CONFIG_PINCTRL_MSM8998=y
+> -CONFIG_PINCTRL_QCS404=y
+> -CONFIG_PINCTRL_QDF2XXX=y
+>  CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
+> -CONFIG_PINCTRL_SC7180=y
+> -CONFIG_PINCTRL_SC7280=y
+> -CONFIG_PINCTRL_SDM845=y
+> -CONFIG_PINCTRL_SM8150=y
+> -CONFIG_PINCTRL_SM8250=y
+> -CONFIG_PINCTRL_SM8350=y
+>  CONFIG_PINCTRL_LPASS_LPI=m
+>  CONFIG_GPIO_ALTERA=m
+>  CONFIG_GPIO_DAVINCI=y
+> @@ -543,9 +525,6 @@ CONFIG_GPIO_PCA953X_IRQ=y
+>  CONFIG_GPIO_BD9571MWV=m
+>  CONFIG_GPIO_MAX77620=y
+>  CONFIG_GPIO_SL28CPLD=m
+> -CONFIG_POWER_AVS=y
+> -CONFIG_QCOM_CPR=y
+> -CONFIG_ROCKCHIP_IODOMAIN=y
+>  CONFIG_POWER_RESET_MSM=y
+>  CONFIG_POWER_RESET_QCOM_PON=m
+>  CONFIG_POWER_RESET_XGENE=y
+> @@ -553,10 +532,10 @@ CONFIG_POWER_RESET_SYSCON=y
+>  CONFIG_SYSCON_REBOOT_MODE=y
+>  CONFIG_BATTERY_SBS=m
+>  CONFIG_BATTERY_BQ27XXX=y
+> -CONFIG_SENSORS_ARM_SCMI=y
+>  CONFIG_BATTERY_MAX17042=m
+>  CONFIG_CHARGER_BQ25890=m
+>  CONFIG_CHARGER_BQ25980=m
+> +CONFIG_SENSORS_ARM_SCMI=y
+>  CONFIG_SENSORS_ARM_SCPI=y
+>  CONFIG_SENSORS_JC42=m
+>  CONFIG_SENSORS_LM90=m
+> @@ -568,10 +547,10 @@ CONFIG_SENSORS_INA3221=m
+>  CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+>  CONFIG_CPU_THERMAL=y
+>  CONFIG_THERMAL_EMULATION=y
+> -CONFIG_QORIQ_THERMAL=m
+> -CONFIG_SUN8I_THERMAL=y
+>  CONFIG_IMX_SC_THERMAL=m
+>  CONFIG_IMX8MM_THERMAL=m
+> +CONFIG_QORIQ_THERMAL=m
+> +CONFIG_SUN8I_THERMAL=y
+>  CONFIG_ROCKCHIP_THERMAL=m
+>  CONFIG_RCAR_THERMAL=y
+>  CONFIG_RCAR_GEN3_THERMAL=y
+> @@ -580,8 +559,8 @@ CONFIG_BCM2711_THERMAL=m
+>  CONFIG_BCM2835_THERMAL=m
+>  CONFIG_BRCMSTB_THERMAL=m
+>  CONFIG_EXYNOS_THERMAL=y
+> -CONFIG_TEGRA_BPMP_THERMAL=m
+>  CONFIG_TEGRA_SOCTHERM=m
+> +CONFIG_TEGRA_BPMP_THERMAL=m
+>  CONFIG_QCOM_TSENS=y
+>  CONFIG_QCOM_SPMI_TEMP_ALARM=m
+>  CONFIG_QCOM_LMH=m
+> @@ -590,7 +569,6 @@ CONFIG_WATCHDOG=y
+>  CONFIG_SL28CPLD_WATCHDOG=m
+>  CONFIG_ARM_SP805_WATCHDOG=y
+>  CONFIG_ARM_SBSA_WATCHDOG=y
+> -CONFIG_ARM_SMC_WATCHDOG=y
+>  CONFIG_S3C2410_WATCHDOG=y
+>  CONFIG_DW_WATCHDOG=y
+>  CONFIG_SUNXI_WATCHDOG=m
+> @@ -599,9 +577,11 @@ CONFIG_IMX_SC_WDT=m
+>  CONFIG_QCOM_WDT=m
+>  CONFIG_MESON_GXBB_WATCHDOG=m
+>  CONFIG_MESON_WATCHDOG=m
+> +CONFIG_ARM_SMC_WATCHDOG=y
+>  CONFIG_RENESAS_WDT=y
+>  CONFIG_UNIPHIER_WATCHDOG=y
+>  CONFIG_BCM2835_WDT=y
+> +CONFIG_BCM7038_WDT=m
+>  CONFIG_MFD_ALTERA_SYSMGR=y
+>  CONFIG_MFD_BD9571MWV=y
+>  CONFIG_MFD_AXP20X_I2C=y
+> @@ -651,13 +631,12 @@ CONFIG_MEDIA_CAMERA_SUPPORT=y
+>  CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
+>  CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
+>  CONFIG_MEDIA_SDR_SUPPORT=y
+> -CONFIG_MEDIA_CONTROLLER=y
+> -CONFIG_VIDEO_V4L2_SUBDEV_API=y
+>  CONFIG_MEDIA_PLATFORM_SUPPORT=y
+>  # CONFIG_DVB_NET is not set
+>  CONFIG_MEDIA_USB_SUPPORT=y
+>  CONFIG_USB_VIDEO_CLASS=m
+>  CONFIG_V4L_PLATFORM_DRIVERS=y
+> +CONFIG_VIDEO_QCOM_CAMSS=m
+>  CONFIG_VIDEO_RCAR_CSI2=m
+>  CONFIG_VIDEO_RCAR_VIN=m
+>  CONFIG_VIDEO_SUN6I_CSI=m
+> @@ -674,7 +653,6 @@ CONFIG_VIDEO_RCAR_DRIF=m
+>  CONFIG_VIDEO_IMX219=m
+>  CONFIG_VIDEO_OV5640=m
+>  CONFIG_VIDEO_OV5645=m
+> -CONFIG_VIDEO_QCOM_CAMSS=m
+>  CONFIG_DRM=m
+>  CONFIG_DRM_I2C_NXP_TDA998X=m
+>  CONFIG_DRM_MALI_DISPLAY=m
+> @@ -701,24 +679,23 @@ CONFIG_DRM_SUN8I_DW_HDMI=m
+>  CONFIG_DRM_SUN8I_MIXER=m
+>  CONFIG_DRM_MSM=m
+>  CONFIG_DRM_TEGRA=m
+> +CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=m
+>  CONFIG_DRM_PANEL_LVDS=m
+>  CONFIG_DRM_PANEL_SIMPLE=m
+>  CONFIG_DRM_PANEL_EDP=m
+> -CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=m
+>  CONFIG_DRM_PANEL_MANTIX_MLAF057WE51=m
+>  CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
+>  CONFIG_DRM_PANEL_SITRONIX_ST7703=m
+>  CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
+> -CONFIG_DRM_DISPLAY_CONNECTOR=m
+>  CONFIG_DRM_LONTIUM_LT8912B=m
+> -CONFIG_DRM_NWL_MIPI_DSI=m
+>  CONFIG_DRM_LONTIUM_LT9611=m
+> +CONFIG_DRM_LONTIUM_LT9611UXC=m
+> +CONFIG_DRM_NWL_MIPI_DSI=m
+>  CONFIG_DRM_PARADE_PS8640=m
+>  CONFIG_DRM_SII902X=m
+>  CONFIG_DRM_SIMPLE_BRIDGE=m
+>  CONFIG_DRM_THINE_THC63LVD1024=m
+>  CONFIG_DRM_TI_SN65DSI86=m
+> -CONFIG_DRM_LONTIUM_LT9611UXC=m
+>  CONFIG_DRM_I2C_ADV7511=m
+>  CONFIG_DRM_I2C_ADV7511_AUDIO=y
+>  CONFIG_DRM_DW_HDMI_AHB_AUDIO=m
+> @@ -749,15 +726,14 @@ CONFIG_SND_HDA_TEGRA=m
+>  CONFIG_SND_HDA_CODEC_HDMI=m
+>  CONFIG_SND_SOC=y
+>  CONFIG_SND_BCM2835_SOC_I2S=m
+> -CONFIG_SND_SOC_FSL_SAI=m
+>  CONFIG_SND_SOC_FSL_ASRC=m
+>  CONFIG_SND_SOC_FSL_MICFIL=m
+>  CONFIG_SND_SOC_FSL_EASRC=m
+>  CONFIG_SND_IMX_SOC=m
+>  CONFIG_SND_SOC_IMX_SGTL5000=m
+>  CONFIG_SND_SOC_IMX_SPDIF=m
+> -CONFIG_SND_SOC_IMX_AUDMIX=m
+>  CONFIG_SND_SOC_FSL_ASOC_CARD=m
+> +CONFIG_SND_SOC_IMX_AUDMIX=m
+>  CONFIG_SND_MESON_AXG_SOUND_CARD=m
+>  CONFIG_SND_MESON_GX_SOUND_CARD=m
+>  CONFIG_SND_SOC_QCOM=m
+> @@ -811,13 +787,12 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
+>  CONFIG_HID_MULTITOUCH=m
+>  CONFIG_I2C_HID_ACPI=m
+>  CONFIG_I2C_HID_OF=m
+> -CONFIG_USB_CONN_GPIO=m
+>  CONFIG_USB=y
+>  CONFIG_USB_OTG=y
+>  CONFIG_USB_XHCI_HCD=y
+> -CONFIG_USB_XHCI_PCI=m
+>  CONFIG_USB_XHCI_PCI_RENESAS=m
+>  CONFIG_USB_XHCI_TEGRA=y
+> +CONFIG_USB_BRCMSTB=m
+>  CONFIG_USB_EHCI_HCD=y
+>  CONFIG_USB_EHCI_EXYNOS=y
+>  CONFIG_USB_EHCI_HCD_PLATFORM=y
+> @@ -862,8 +837,8 @@ CONFIG_TYPEC=m
+>  CONFIG_TYPEC_TCPM=m
+>  CONFIG_TYPEC_TCPCI=m
+>  CONFIG_TYPEC_FUSB302=m
+> -CONFIG_TYPEC_HD3SS3220=m
+>  CONFIG_TYPEC_TPS6598X=m
+> +CONFIG_TYPEC_HD3SS3220=m
+>  CONFIG_MMC=y
+>  CONFIG_MMC_BLOCK_MINORS=32
+>  CONFIG_MMC_ARMMMCI=y
+> @@ -961,7 +936,6 @@ CONFIG_VIRTIO_BALLOON=y
+>  CONFIG_VIRTIO_MMIO=y
+>  CONFIG_XEN_GNTDEV=y
+>  CONFIG_XEN_GRANT_DEV_ALLOC=y
+> -CONFIG_MFD_CROS_EC_DEV=y
+>  CONFIG_STAGING=y
+>  CONFIG_STAGING_MEDIA=y
+>  CONFIG_VIDEO_HANTRO=m
+> @@ -971,15 +945,14 @@ CONFIG_CROS_EC=y
+>  CONFIG_CROS_EC_I2C=y
+>  CONFIG_CROS_EC_SPI=y
+>  CONFIG_CROS_EC_CHARDEV=m
+> -CONFIG_COMMON_CLK_SCMI=y
+>  CONFIG_COMMON_CLK_RK808=y
+> +CONFIG_COMMON_CLK_SCMI=y
+>  CONFIG_COMMON_CLK_SCPI=y
+>  CONFIG_COMMON_CLK_CS2000_CP=y
+>  CONFIG_COMMON_CLK_FSL_SAI=y
+>  CONFIG_COMMON_CLK_S2MPS11=y
+>  CONFIG_COMMON_CLK_PWM=y
+>  CONFIG_COMMON_CLK_VC5=y
+> -CONFIG_COMMON_CLK_ZYNQMP=y
+>  CONFIG_COMMON_CLK_BD718XX=m
+>  CONFIG_CLK_RASPBERRYPI=m
+>  CONFIG_CLK_IMX8MM=y
+> @@ -995,8 +968,8 @@ CONFIG_QCOM_CLK_APCS_MSM8916=y
+>  CONFIG_QCOM_CLK_APCC_MSM8996=y
+>  CONFIG_QCOM_CLK_SMD_RPM=y
+>  CONFIG_QCOM_CLK_RPMH=y
+> -CONFIG_IPQ_GCC_8074=y
+>  CONFIG_IPQ_GCC_6018=y
+> +CONFIG_IPQ_GCC_8074=y
+>  CONFIG_MSM_GCC_8916=y
+>  CONFIG_MSM_GCC_8994=y
+>  CONFIG_MSM_MMCC_8996=y
+> @@ -1005,16 +978,13 @@ CONFIG_QCS_GCC_404=y
+>  CONFIG_SC_GCC_7180=y
+>  CONFIG_SC_GCC_7280=y
+>  CONFIG_SDM_CAMCC_845=m
+> -CONFIG_SDM_GCC_845=y
+>  CONFIG_SDM_GPUCC_845=y
+>  CONFIG_SDM_VIDEOCC_845=y
+>  CONFIG_SDM_DISPCC_845=y
+> -CONFIG_SM_GCC_8150=y
+> -CONFIG_SM_GCC_8250=y
+> +CONFIG_SM_DISPCC_8250=y
+>  CONFIG_SM_GCC_8350=y
+>  CONFIG_SM_GPUCC_8150=y
+>  CONFIG_SM_GPUCC_8250=y
+> -CONFIG_SM_DISPCC_8250=y
+>  CONFIG_QCOM_HFPLL=y
+>  CONFIG_CLK_GFM_LPASS_SM8250=m
+>  CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
+> @@ -1048,9 +1018,11 @@ CONFIG_RASPBERRYPI_POWER=y
+>  CONFIG_FSL_DPAA=y
+>  CONFIG_FSL_MC_DPIO=y
+>  CONFIG_FSL_RCPM=y
+> +CONFIG_MTK_DEVAPC=m
+>  CONFIG_MTK_PMIC_WRAP=y
+>  CONFIG_QCOM_AOSS_QMP=y
+>  CONFIG_QCOM_COMMAND_DB=y
+> +CONFIG_QCOM_CPR=y
+>  CONFIG_QCOM_GENI_SE=y
+>  CONFIG_QCOM_RMTFS_MEM=m
+>  CONFIG_QCOM_RPMH=y
+> @@ -1061,24 +1033,21 @@ CONFIG_QCOM_SMD_RPM=y
+>  CONFIG_QCOM_SMP2P=y
+>  CONFIG_QCOM_SMSM=y
+>  CONFIG_QCOM_SOCINFO=m
+> -CONFIG_QCOM_WCNSS_CTRL=m
+>  CONFIG_QCOM_STATS=m
+> +CONFIG_QCOM_WCNSS_CTRL=m
+>  CONFIG_QCOM_APR=m
+> -CONFIG_ARCH_R8A774A1=y
+> -CONFIG_ARCH_R8A774B1=y
+> -CONFIG_ARCH_R8A774C0=y
+> -CONFIG_ARCH_R8A774E1=y
+> +CONFIG_ARCH_R8A77995=y
+> +CONFIG_ARCH_R8A77990=y
+>  CONFIG_ARCH_R8A77950=y
+>  CONFIG_ARCH_R8A77951=y
+> +CONFIG_ARCH_R8A77965=y
+>  CONFIG_ARCH_R8A77960=y
+>  CONFIG_ARCH_R8A77961=y
+> -CONFIG_ARCH_R8A77965=y
+> -CONFIG_ARCH_R8A77970=y
+>  CONFIG_ARCH_R8A77980=y
+> -CONFIG_ARCH_R8A77990=y
+> -CONFIG_ARCH_R8A77995=y
+> +CONFIG_ARCH_R8A77970=y
+>  CONFIG_ARCH_R8A779A0=y
+>  CONFIG_ARCH_R9A07G044=y
+> +CONFIG_ROCKCHIP_IODOMAIN=y
+>  CONFIG_ROCKCHIP_PM_DOMAINS=y
+>  CONFIG_ARCH_TEGRA_132_SOC=y
+>  CONFIG_ARCH_TEGRA_210_SOC=y
+> @@ -1157,13 +1126,13 @@ CONFIG_PHY_UNIPHIER_USB3=y
+>  CONFIG_PHY_TEGRA_XUSB=y
+>  CONFIG_ARM_SMMU_V3_PMU=m
+>  CONFIG_FSL_IMX8_DDR_PMU=m
+> -CONFIG_HISI_PMU=y
+>  CONFIG_QCOM_L2_PMU=y
+>  CONFIG_QCOM_L3_PMU=y
+> +CONFIG_HISI_PMU=y
+>  CONFIG_NVMEM_IMX_OCOTP=y
+>  CONFIG_NVMEM_IMX_OCOTP_SCU=y
+> -CONFIG_QCOM_QFPROM=y
+>  CONFIG_MTK_EFUSE=y
+> +CONFIG_QCOM_QFPROM=y
+>  CONFIG_ROCKCHIP_EFUSE=y
+>  CONFIG_NVMEM_SUNXI_SID=y
+>  CONFIG_UNIPHIER_EFUSE=y
+> @@ -1177,11 +1146,9 @@ CONFIG_FPGA_REGION=m
+>  CONFIG_OF_FPGA_REGION=m
+>  CONFIG_TEE=y
+>  CONFIG_OPTEE=y
+> -CONFIG_SLIMBUS=m
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/staging/mt7621-dts/mt7621.dtsi | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+NAK, blind savedefconfig is undesirable because it later might cause
+dropping of configs (see DEBUGFS case). We discussed it from time to time...
 
-diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
-index 644a65d1a6a1..d72673c91dc2 100644
---- a/drivers/staging/mt7621-dts/mt7621.dtsi
-+++ b/drivers/staging/mt7621-dts/mt7621.dtsi
-@@ -2,6 +2,7 @@
- #include <dt-bindings/interrupt-controller/mips-gic.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/clock/mt7621-clk.h>
-+#include <dt-bindings/reset/mt7621-reset.h>
- 
- / {
- 	#address-cells = <1>;
-@@ -67,6 +68,7 @@ sysc: syscon@0 {
- 			compatible = "mediatek,mt7621-sysc", "syscon";
- 			reg = <0x0 0x100>;
- 			#clock-cells = <1>;
-+			#reset-cells = <1>;
- 			ralink,memctl = <&memc>;
- 			clock-output-names = "xtal", "cpu", "bus",
- 					     "50m", "125m", "150m",
-@@ -96,7 +98,7 @@ i2c: i2c@900 {
- 
- 			clocks = <&sysc MT7621_CLK_I2C>;
- 			clock-names = "i2c";
--			resets = <&rstctrl 16>;
-+			resets = <&sysc MT7621_RST_I2C>;
- 			reset-names = "i2c";
- 
- 			#address-cells = <1>;
-@@ -137,7 +139,7 @@ spi0: spi@b00 {
- 			clocks = <&sysc MT7621_CLK_SPI>;
- 			clock-names = "spi";
- 
--			resets = <&rstctrl 18>;
-+			resets = <&sysc MT7621_RST_SPI>;
- 			reset-names = "spi";
- 
- 			#address-cells = <1>;
-@@ -234,11 +236,6 @@ pinmux {
- 		};
- 	};
- 
--	rstctrl: rstctrl {
--		compatible = "ralink,rt2880-reset";
--		#reset-cells = <1>;
--	};
--
- 	sdhci: sdhci@1e130000 {
- 		status = "disabled";
- 
-@@ -317,7 +314,7 @@ ethernet: ethernet@1e100000 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
--		resets = <&rstctrl 6 &rstctrl 23>;
-+		resets = <&sysc MT7621_RST_FE &sysc MT7621_RST_ETH>;
- 		reset-names = "fe", "eth";
- 
- 		interrupt-parent = <&gic>;
-@@ -362,7 +359,7 @@ switch0: switch0@0 {
- 				#size-cells = <0>;
- 				reg = <0>;
- 				mediatek,mcm;
--				resets = <&rstctrl 2>;
-+				resets = <&sysc MT7621_RST_MCM>;
- 				reset-names = "mcm";
- 				interrupt-controller;
- 				#interrupt-cells = <1>;
-@@ -448,7 +445,7 @@ pcie@0,0 {
- 			#interrupt-cells = <1>;
- 			interrupt-map-mask = <0 0 0 0>;
- 			interrupt-map = <0 0 0 0 &gic GIC_SHARED 4 IRQ_TYPE_LEVEL_HIGH>;
--			resets = <&rstctrl 24>;
-+			resets = <&sysc MT7621_RST_PCIE0>;
- 			clocks = <&sysc MT7621_CLK_PCIE0>;
- 			phys = <&pcie0_phy 1>;
- 			phy-names = "pcie-phy0";
-@@ -463,7 +460,7 @@ pcie@1,0 {
- 			#interrupt-cells = <1>;
- 			interrupt-map-mask = <0 0 0 0>;
- 			interrupt-map = <0 0 0 0 &gic GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>;
--			resets = <&rstctrl 25>;
-+			resets = <&sysc MT7621_RST_PCIE1>;
- 			clocks = <&sysc MT7621_CLK_PCIE1>;
- 			phys = <&pcie0_phy 1>;
- 			phy-names = "pcie-phy1";
-@@ -478,7 +475,7 @@ pcie@2,0 {
- 			#interrupt-cells = <1>;
- 			interrupt-map-mask = <0 0 0 0>;
- 			interrupt-map = <0 0 0 0 &gic GIC_SHARED 25 IRQ_TYPE_LEVEL_HIGH>;
--			resets = <&rstctrl 26>;
-+			resets = <&sysc MT7621_RST_PCIE2>;
- 			clocks = <&sysc MT7621_CLK_PCIE2>;
- 			phys = <&pcie2_phy 0>;
- 			phy-names = "pcie-phy2";
--- 
-2.25.1
+Basically you should never remove user-selectable options from defconfig.
 
+> +CONFIG_MUX_MMIO=y
+>  CONFIG_SLIM_QCOM_CTRL=m
+>  CONFIG_SLIM_QCOM_NGD_CTRL=m
+> -CONFIG_MUX_MMIO=y
+> -CONFIG_INTERCONNECT=y
+
+Same.
+
+>  CONFIG_INTERCONNECT_IMX=m
+>  CONFIG_INTERCONNECT_IMX8MM=m
+>  CONFIG_INTERCONNECT_IMX8MN=m
+> @@ -1209,7 +1176,6 @@ CONFIG_OVERLAY_FS=m
+>  CONFIG_VFAT_FS=y
+>  CONFIG_TMPFS_POSIX_ACL=y
+>  CONFIG_HUGETLBFS=y
+> -CONFIG_CONFIGFS_FS=y
+
+The same.
+
+There might be more of such. Don't run savedefconfig blindly.
+
+>  CONFIG_EFIVAR_FS=y
+>  CONFIG_SQUASHFS=y
+>  CONFIG_NFS_FS=y
+> @@ -1241,6 +1207,5 @@ CONFIG_MAGIC_SYSRQ=y
+>  CONFIG_DEBUG_FS=y
+>  CONFIG_DEBUG_KERNEL=y
+>  # CONFIG_SCHED_DEBUG is not set
+> -# CONFIG_DEBUG_PREEMPT is not set
+>  # CONFIG_FTRACE is not set
+>  CONFIG_MEMTEST=y
+> 
+
+
+Best regards,
+Krzysztof

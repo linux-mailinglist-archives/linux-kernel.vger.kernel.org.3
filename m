@@ -2,163 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C383489E63
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12145489E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238383AbiAJR3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S238357AbiAJR3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238350AbiAJR3H (ORCPT
+        with ESMTP id S237928AbiAJR3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:29:07 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC77C06173F;
-        Mon, 10 Jan 2022 09:29:06 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso6271961otr.6;
-        Mon, 10 Jan 2022 09:29:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3arUIq63vNkv0j9deYGRwsb6acRjeiR9Ll7tBXR1ckY=;
-        b=KfxnQt6E4jhETkBYRW6RgjpaOewUsqAv3+5n7Qbagdyen8Mo0Z70sbHSFse0rfEnvR
-         V5EBEMM1hvovVG0sNctLNgRJrlHf7TL2fqqVocdNtQqm5XWNqpT/pZjCetBOVYcXo3zl
-         f7MaDWmhUUwLcKjvc5c0Y8eBZ2T98TV55/fLF6kZrrQJRcfFTdGbOibVHo7tFms7MPWs
-         u+6PME91vyXW8R0SQ2MNO/tgMABtjhuEenFEgaFNItFoi6I/bz0PsfEWaY+xEozBfeUE
-         bklikwqZqo1lmxpH3ZK2yhi9EAaOPhTayWw8YsmHDRJ1nStfzzlag+9lycTy6SFiGZZw
-         jeQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=3arUIq63vNkv0j9deYGRwsb6acRjeiR9Ll7tBXR1ckY=;
-        b=OFPhj+urUuSzBQAcHCy8JIEMtD2msscL3P64jr5MVZsh2MioazR4ctyVtscF8AruIx
-         O2WjHVyz1Ehtsd0qyZcQDlU9Lblrku1KJ/Eei1DhLJgefWe67+26U4JDeE+MUqGDkqTc
-         BCno0Oi+51GK60K4sDH6bvxrbhw1GcDhSzA0a1ds9nOkFCCtTYfX73tG9wwLZ3hLLZwY
-         dIT835S+gPk+h4PN4hjEYidsNAg4/KFcOxYhp5yuCiIcVkH9l74fqKsvQYQtqXnmD55H
-         wRL2pHCM4lyvIH//W9hRNR0XA4sb7iyWj8+nrXQ7Y/ZZmMjm7X7XPThLcJeZ6VQbIOZQ
-         4anA==
-X-Gm-Message-State: AOAM53295ktTWkMwiwZCPRoPjmgJ3S0oQ1yFQSmnzGjXRaP6gwOwZsv2
-        c96KNoBe7xcmBZ3+kTFncSY39GW/RWM=
-X-Google-Smtp-Source: ABdhPJy31UYaR9emLBbPr2+/92GUNa+ayCindvUPDU4MVjEJzuglp0vPcFmpQBScXNM1OlIQA3I9fA==
-X-Received: by 2002:a05:6830:1e6b:: with SMTP id m11mr627285otr.29.1641835745772;
-        Mon, 10 Jan 2022 09:29:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3sm1274717oiw.52.2022.01.10.09.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 09:29:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Jean Delvare <khali@linux-fr.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/2] i2c: smbus: Send alert notifications to all devices if source not found
-Date:   Mon, 10 Jan 2022 09:28:57 -0800
-Message-Id: <20220110172857.2980523-3-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220110172857.2980523-1-linux@roeck-us.net>
-References: <20220110172857.2980523-1-linux@roeck-us.net>
+        Mon, 10 Jan 2022 12:29:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A36AC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 09:29:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6422AB815CB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 17:29:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6942EC36AE3;
+        Mon, 10 Jan 2022 17:29:39 +0000 (UTC)
+Date:   Mon, 10 Jan 2022 12:29:38 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Message-ID: <20220110122938.7b6a8847@gandalf.local.home>
+In-Reply-To: <20220110122436.5302128f@gandalf.local.home>
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+        <20220110122436.5302128f@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a SMBUs alert is received and the originating device is not found,
-the reason may be that the address reported on the SMBus alert address
-is corrupted, for example because multiple devices asserted alert and
-do not correctly implement SMBus arbitration.
+On Mon, 10 Jan 2022 12:24:36 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-If this happens, call alert handlers on all devices connected to the
-given I2C bus, in the hope that this cleans up the situation. Retry
-twice before giving up.
+> > > Pingfan reported that the following causes a fault:
+> > > 
+> > >   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
+> > >   echo 1 > events/syscalls/sys_enter_at/enable
+> > > 
+> > > The reason is that trace event filter treats the user space pointer
+> > > defined by "filename" as a normal pointer to compare against the "cpu"
+> > > string. If the string is not loaded into memory yet, it will trigger a
+> > > fault in kernel space:    
+> > 
+> > If a userspace pointer can end up the kernel structure then presumably
+> > a 'dodgy' user program can supply an arbitrary kernel address instead?
+> > This may give the user the ability to read arbitrary kernel addresses
+> > (including ones that are mapped to PCIe IO addresses).
+> > Doesn't sound good at all.  
+> 
+> Only root has access to the information read here. All tracing requires
+> root or those explicitly given access to the tracing data, which pretty
+> much allows all access to kernel internals (including all memory). So
+> nothing to worry about here ;-)
 
-This change reliably fixed the problem on a system with multiple devices
-on a single bus. Example log where the device on address 0x18 (ADM1021)
-and on address 0x4c (ADM7461A) both had the alert line asserted:
+BTW, this patch doesn't give any new access to anything. It only protects
+if the pointer is pointing someplace that will give a fault. The user could
+today point that pointer to anything in kernel memory and trace it (but
+only read it if you are root). And worse, if the pointer is to something
+that can fault, it will trigger a BUG(). This could happen if root creates
+the filter, and a non-privileged user sets that pointer to something bad.
+Which means anyone can cause the machine to fault if root does this kind
+of tracing. This is why I added the stable tag.
 
-smbus_alert 3-000c: SMBALERT# from dev 0x0c, flag 0
-smbus_alert 3-000c: no driver alert()!
-smbus_alert 3-000c: SMBALERT# from dev 0x0c, flag 0
-smbus_alert 3-000c: no driver alert()!
-lm90 3-0018: temp1 out of range, please check!
-lm90 3-0018: Disabling ALERT#
-lm90 3-0029: Everything OK
-lm90 3-002a: Everything OK
-lm90 3-004c: temp1 out of range, please check!
-lm90 3-004c: temp2 out of range, please check!
-lm90 3-004c: Disabling ALERT#
+This patch is to prevent that BUG() from happening.
 
-Fixes: b5527a7766f0 ("i2c: Add SMBus alert support")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/i2c/i2c-smbus.c | 38 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 533c885b99ac..f48cec19db41 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -65,6 +65,32 @@ static int smbus_do_alert(struct device *dev, void *addrp)
- 	return ret;
- }
- 
-+/* Same as above, but call back all drivers with alert handler */
-+
-+static int smbus_do_alert_force(struct device *dev, void *addrp)
-+{
-+	struct i2c_client *client = i2c_verify_client(dev);
-+	struct alert_data *data = addrp;
-+	struct i2c_driver *driver;
-+
-+	if (!client || (client->flags & I2C_CLIENT_TEN))
-+		return 0;
-+
-+	/*
-+	 * Drivers should either disable alerts, or provide at least
-+	 * a minimal handler. Lock so the driver won't change.
-+	 */
-+	device_lock(dev);
-+	if (client->dev.driver) {
-+		driver = to_i2c_driver(client->dev.driver);
-+		if (driver->alert)
-+			driver->alert(client, data->type, data->data);
-+	}
-+	device_unlock(dev);
-+
-+	return 0;
-+}
-+
- /*
-  * The alert IRQ handler needs to hand work off to a task which can issue
-  * SMBus calls, because those sleeping calls can't be made in IRQ context.
-@@ -74,6 +100,7 @@ static irqreturn_t smbus_alert(int irq, void *d)
- 	struct i2c_smbus_alert *alert = d;
- 	struct i2c_client *ara;
- 	unsigned short prev_addr = 0;	/* Not a valid address */
-+	int retries = 0;
- 
- 	ara = alert->ara;
- 
-@@ -111,8 +138,15 @@ static irqreturn_t smbus_alert(int irq, void *d)
- 		 * Note: This assumes that a driver with alert handler handles
- 		 * the alert properly and clears it if necessary.
- 		 */
--		if (data.addr == prev_addr && status != -EBUSY)
--			break;
-+		if (data.addr == prev_addr && status != -EBUSY) {
-+			/* retry once */
-+			if (retries++)
-+				break;
-+			device_for_each_child(&ara->adapter->dev, &data,
-+					      smbus_do_alert_force);
-+		} else {
-+			retries = 0;
-+		}
- 		prev_addr = data.addr;
- 	}
- 
--- 
-2.33.0
-
+-- Steve

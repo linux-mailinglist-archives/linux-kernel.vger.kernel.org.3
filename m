@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A8848971C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5615E48972F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244559AbiAJLOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:14:09 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16698 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244515AbiAJLNT (ORCPT
+        id S244574AbiAJLSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:18:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40066 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244565AbiAJLSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:13:19 -0500
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JXWLb2MMrzZf6f;
-        Mon, 10 Jan 2022 19:09:43 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 10 Jan 2022 19:13:17 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 10 Jan
- 2022 19:13:16 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>
-CC:     <hch@lst.de>, <james.smart@broadcom.com>,
-        <martin.petersen@oracle.com>
-Subject: [PATCH -next] scsi: efct: don't use GFP_KERNEL under spin lock
-Date:   Mon, 10 Jan 2022 19:18:38 +0800
-Message-ID: <20220110111838.965480-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Jan 2022 06:18:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641813529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a1mKixw3piLB47kAb+NgNKbQU1uo3Pje5s8quzB5jk0=;
+        b=EqaXD6pdaCfOOSB1dggh+mcmja7mdQvKdJG+AR+bsGJRVUX4MhZkt5KJVBiged528n88uk
+        xFdZQxTmqvXymi6sZQS4GctDtGTbuycR2l6DKsCa9wLtiUXblbWveDVEBAS59xfHtZxHXz
+        PLpMCtOYUN1KNQ6+ZksvVSiYrwjmYzc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-367-wSmpKZGjN6GuPbqk0EwnZQ-1; Mon, 10 Jan 2022 06:18:46 -0500
+X-MC-Unique: wSmpKZGjN6GuPbqk0EwnZQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C87ED1017965;
+        Mon, 10 Jan 2022 11:18:44 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 742B77D4D0;
+        Mon, 10 Jan 2022 11:18:43 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220110111444.926753-1-asmadeus@codewreck.org>
+References: <20220110111444.926753-1-asmadeus@codewreck.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     dhowells@redhat.com, v9fs-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, lucho@ionkov.net, ericvh@gmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] 9p: fix enodata when reading growing file
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3730530.1641813522.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 10 Jan 2022 11:18:42 +0000
+Message-ID: <3730531.1641813522@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GFP_KERNEL/GFP_DMA can't be used under a spin lock, according the
-comment of els_ios_lock, it's used to protect els ios list, so we
-can move down the spin lock to avoid using this flag under the lock.
+Dominique Martinet <asmadeus@codewreck.org> wrote:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 8f406ef72859 ("scsi: elx: libefc: Extended link Service I/O handling")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/scsi/elx/libefc/efc_els.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+> Reading from a file that was just extended by a write, but the write had
+> not yet reached the server would return ENODATA as illustrated by this
+> command:
+> $ xfs_io -c 'open -ft test' -c 'w 4096 1000' -c 'r 0 1000'
+> wrote 1000/1000 bytes at offset 4096
+> 1000.000000 bytes, 1 ops; 0.0001 sec (5.610 MiB/sec and 5882.3529 ops/se=
+c)
+> pread: No data available
+> =
 
-diff --git a/drivers/scsi/elx/libefc/efc_els.c b/drivers/scsi/elx/libefc/efc_els.c
-index 7bb4f9aad2c8..cec6a2f649b3 100644
---- a/drivers/scsi/elx/libefc/efc_els.c
-+++ b/drivers/scsi/elx/libefc/efc_els.c
-@@ -46,18 +46,14 @@ efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
- 
- 	efc = node->efc;
- 
--	spin_lock_irqsave(&node->els_ios_lock, flags);
--
- 	if (!node->els_io_enabled) {
- 		efc_log_err(efc, "els io alloc disabled\n");
--		spin_unlock_irqrestore(&node->els_ios_lock, flags);
- 		return NULL;
- 	}
- 
- 	els = mempool_alloc(efc->els_io_pool, GFP_ATOMIC);
- 	if (!els) {
- 		atomic_add_return(1, &efc->els_io_alloc_failed_count);
--		spin_unlock_irqrestore(&node->els_ios_lock, flags);
- 		return NULL;
- 	}
- 
-@@ -74,7 +70,6 @@ efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
- 					      &els->io.req.phys, GFP_KERNEL);
- 	if (!els->io.req.virt) {
- 		mempool_free(els, efc->els_io_pool);
--		spin_unlock_irqrestore(&node->els_ios_lock, flags);
- 		return NULL;
- 	}
- 
-@@ -88,6 +83,8 @@ efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
- 		els = NULL;
- 	}
- 
-+	spin_lock_irqsave(&node->els_ios_lock, flags);
-+
- 	if (els) {
- 		/* initialize fields */
- 		els->els_retries_remaining = EFC_FC_ELS_DEFAULT_RETRIES;
--- 
-2.25.1
+> Fix this case by having netfs assume zeroes when reads from server come
+> short like AFS and CEPH do
+> =
+
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> Co-authored-by: David Howells <dhowells@redhat.com>
+> Cc: stable@vger.kernel.org
+
+I think you want this also:
+
+Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do read=
+s and caching")
+
+Reviewed-by: David Howells <dhowells@redhat.com>
 

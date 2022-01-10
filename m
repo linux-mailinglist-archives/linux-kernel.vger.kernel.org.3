@@ -2,78 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E8148A26A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA5C48A250
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345259AbiAJWFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:05:41 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:30892 "EHLO
+        id S1345174AbiAJWFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:05:01 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:23724 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241701AbiAJWFd (ORCPT
+        by vger.kernel.org with ESMTP id S1345138AbiAJWE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:05:33 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlXpW026179;
-        Mon, 10 Jan 2022 22:04:51 GMT
+        Mon, 10 Jan 2022 17:04:56 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlWkx020711;
+        Mon, 10 Jan 2022 22:04:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=wGcp09mZhBF7/XPqabHSsScYVXwvFU4zogbZn4w8Jo0=;
- b=PNfrIQhmeMKNdwfaq2NsaMvc3xhsBkg0/e7HzhwUVUUB1UVsdQZsyYJ9WtwT8AQtttKM
- AWLDmE3MBPSg+jxO9CMOLlfatAH9EkxhhhECk9B5TonY0bg+nufI+1kco0OmDuqybW9C
- fpY35MtNVPS4QlswoHqHxoXuen55mKBCSx/UVJhBcn80lUfcXn154sUQgvWhbTFhnpmg
- 7r+ANABR0R0kVw52lzlTSnFfLelUNUnFxQ2UZWUDIl0vtGjA0EsQMLdCrGZq7T7GLIwv
- q5IPM3FrGckq6VOCs6veKNbHCmOIVb+Bwi2/WezWLnAIAal9Q2khT04+PZiZ78pYBiIi Dg== 
+ bh=N7Dxf+DcwX9/Y/Jtfs2m8P2aqSA45sl7OZmw324ZcVA=;
+ b=E885sKdeaP/MrpylFeeO9IYgaE04mVwhv9KPEN6yflg9LGTC1+ntpkRfR5ZAlHr3IBMf
+ 3Wl21UuOOfsBMqgen3Yfbyb3Y5XIRGOH8UkotK8PJmgOyKFbUJXwAkM4a6lHhlz397b+
+ DVsvd9ARnJmelehoNHRdbNesb36QrQmDMhUuND6qlkgPEvwHNuaEJqnTQ1CTcrreuavY
+ STT/A4RSqdi4dySsciu5w4I+9eywhpS4yHm76mWPfvt/mM8+Rtu7awbOMsoIOYO9rcZI
+ Y7mr8MUC3dUJ6S8Dx6shBEdVWPMx9OLZu5FRfxfDHcGryRUgbyAtkOLXP78tEodaq3Qi cg== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dgjtg9svh-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dgmk99hhq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:04:51 +0000
+        Mon, 10 Jan 2022 22:04:53 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20ALtvuh139009;
-        Mon, 10 Jan 2022 22:04:51 GMT
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20ALtw6V139092;
+        Mon, 10 Jan 2022 22:04:52 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3df2e3vqv5-1
+        by aserp3020.oracle.com with ESMTP id 3df2e3vqwd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:04:50 +0000
+        Mon, 10 Jan 2022 22:04:52 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20AM4iC8174082;
-        Mon, 10 Jan 2022 22:04:50 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20AM4iCA174082;
+        Mon, 10 Jan 2022 22:04:52 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3df2e3vqp8-6;
-        Mon, 10 Jan 2022 22:04:50 +0000
+        by aserp3020.oracle.com with ESMTP id 3df2e3vqp8-7;
+        Mon, 10 Jan 2022 22:04:51 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, jejb@linux.ibm.com,
-        skashyap@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jhasan@marvell.com, linux@armlinux.org.uk
+To:     Kees Cook <keescook@chromium.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] scsi: qedf: potential dereference of null pointer
-Date:   Mon, 10 Jan 2022 17:04:38 -0500
-Message-Id: <164182835583.13635.8893897852615126704.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-hardening@vger.kernel.org,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        megaraidlinux.pdl@broadcom.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][RESEND] scsi: megaraid: Avoid mismatched storage type sizes
+Date:   Mon, 10 Jan 2022 17:04:39 -0500
+Message-Id: <164182835586.13635.12443651708409705777.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211216101449.375953-1-jiasheng@iscas.ac.cn>
-References: <20211216101449.375953-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220105173633.2421129-1-keescook@chromium.org>
+References: <20220105173633.2421129-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: zmYrn3xPA90eC91y0V1gBAtVbL4Ywu8X
-X-Proofpoint-ORIG-GUID: zmYrn3xPA90eC91y0V1gBAtVbL4Ywu8X
+X-Proofpoint-GUID: wYHm0wyjssySoI76BHzSt0AUqnoe7zVd
+X-Proofpoint-ORIG-GUID: wYHm0wyjssySoI76BHzSt0AUqnoe7zVd
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 18:14:49 +0800, Jiasheng Jiang wrote:
+On Wed, 5 Jan 2022 09:36:33 -0800, Kees Cook wrote:
 
-> The return value of dma_alloc_coherent() needs to be checked.
-> To avoid use of null pointer in case of the failure of alloc.
+> Remove needless use of mbox_t, replacing with just struct
+> mbox_out. Silences compiler warnings under a -Warray-bounds build:
 > 
+> drivers/scsi/megaraid.c: In function 'megaraid_probe_one':
+> drivers/scsi/megaraid.c:3615:30: error: array subscript 'mbox_t[0]' is partly outside array bounds of 'unsigned char[15]' [-Werror=array-bounds]
+>  3615 |         mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
+>       |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/megaraid.c:3599:23: note: while referencing 'raw_mbox'
+>  3599 |         unsigned char raw_mbox[sizeof(struct mbox_out)];
+>       |                       ^~~~~~~~
 > 
+> [...]
 
 Applied to 5.17/scsi-queue, thanks!
 
-[1/1] scsi: qedf: potential dereference of null pointer
-      https://git.kernel.org/mkp/scsi/c/aa7069d840da
+[1/1] scsi: megaraid: Avoid mismatched storage type sizes
+      https://git.kernel.org/mkp/scsi/c/315d049ad195
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering

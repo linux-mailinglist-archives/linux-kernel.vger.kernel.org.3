@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D489D489150
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B845D489296
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiAJHa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:30:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37212 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239512AbiAJH10 (ORCPT
+        id S243637AbiAJHpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239977AbiAJHio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:27:26 -0500
+        Mon, 10 Jan 2022 02:38:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B350C0258D2;
+        Sun,  9 Jan 2022 23:33:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52FA5611C4;
-        Mon, 10 Jan 2022 07:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 316A8C36AED;
-        Mon, 10 Jan 2022 07:27:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D05B60BA2;
+        Mon, 10 Jan 2022 07:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23443C36AE9;
+        Mon, 10 Jan 2022 07:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799644;
-        bh=Ryn0r3NAKNZ9E1Jqj6JP6t4Ph3g8R6NUFHrMJ/x8N4I=;
+        s=korg; t=1641800000;
+        bh=+jzjg/PzAo7Yfk7QGyIdftfXX9dnjhS3pvZKkENn7Xc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ORcWM63Hb6LeUdrj8q1tbEJZg4GDfhZjavzEnfRS8GAIleYMScbsE6ukuMZ5OtN4g
-         x/Ttor9dTn35ATVHrXvPsL96rxGKha/crISAB4ADz2Ly5vEGiPTWP21W43xnTnreep
-         SNlS2yflkY8yDyO1o2//6uBdrgA6W3ez/Ce8i9sk=
+        b=ssewCUj1vLt8xr58l7KE3sGie/50pIZFCSwvbYf8sZuHETvRb6EDRj7qjeAQ0Fa3d
+         systYTqfGF5Npu0dv9n5R3XHi1QeZ4RpQafdYMkjJD9iTs7d2E0EdOe+kx0eH/S+Io
+         4KyZ46EFb1lifXG9J1aPaFK4RDRP4fDU+IRgz4EU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, wolfgang huang <huangjinhui@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 21/21] mISDN: change function names to avoid conflicts
+        stable@vger.kernel.org, Steven Lee <steven_lee@aspeedtech.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.15 45/72] gpio: gpio-aspeed-sgpio: Fix wrong hwirq base in irq handler
 Date:   Mon, 10 Jan 2022 08:23:22 +0100
-Message-Id: <20220110071814.646530840@linuxfoundation.org>
+Message-Id: <20220110071823.079201751@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,100 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wolfgang huang <huangjinhui@kylinos.cn>
+From: Steven Lee <steven_lee@aspeedtech.com>
 
-[ Upstream commit 8b5fdfc57cc2471179d1c51081424ded833c16c8 ]
+commit e5a7431f5a2d6dcff7d516ee9d178a3254b17b87 upstream.
 
-As we build for mips, we meet following error. l1_init error with
-multiple definition. Some architecture devices usually marked with
-l1, l2, lxx as the start-up phase. so we change the mISDN function
-names, align with Isdnl2_xxx.
+Each aspeed sgpio bank has 64 gpio pins(32 input pins and 32 output pins).
+The hwirq base for each sgpio bank should be multiples of 64 rather than
+multiples of 32.
 
-mips-linux-gnu-ld: drivers/isdn/mISDN/layer1.o: in function `l1_init':
-(.text+0x890): multiple definition of `l1_init'; \
-arch/mips/kernel/bmips_5xxx_init.o:(.text+0xf0): first defined here
-make[1]: *** [home/mips/kernel-build/linux/Makefile:1161: vmlinux] Error 1
-
-Signed-off-by: wolfgang huang <huangjinhui@kylinos.cn>
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Steven Lee <steven_lee@aspeedtech.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/isdn/mISDN/core.c   | 6 +++---
- drivers/isdn/mISDN/core.h   | 4 ++--
- drivers/isdn/mISDN/layer1.c | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/gpio/gpio-aspeed-sgpio.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/isdn/mISDN/core.c b/drivers/isdn/mISDN/core.c
-index faf505462a4f5..f5a06a6fb297f 100644
---- a/drivers/isdn/mISDN/core.c
-+++ b/drivers/isdn/mISDN/core.c
-@@ -390,7 +390,7 @@ mISDNInit(void)
- 	err = mISDN_inittimer(&debug);
- 	if (err)
- 		goto error2;
--	err = l1_init(&debug);
-+	err = Isdnl1_Init(&debug);
- 	if (err)
- 		goto error3;
- 	err = Isdnl2_Init(&debug);
-@@ -404,7 +404,7 @@ mISDNInit(void)
- error5:
- 	Isdnl2_cleanup();
- error4:
--	l1_cleanup();
-+	Isdnl1_cleanup();
- error3:
- 	mISDN_timer_cleanup();
- error2:
-@@ -417,7 +417,7 @@ static void mISDN_cleanup(void)
- {
- 	misdn_sock_cleanup();
- 	Isdnl2_cleanup();
--	l1_cleanup();
-+	Isdnl1_cleanup();
- 	mISDN_timer_cleanup();
- 	class_unregister(&mISDN_class);
+--- a/drivers/gpio/gpio-aspeed-sgpio.c
++++ b/drivers/gpio/gpio-aspeed-sgpio.c
+@@ -395,7 +395,7 @@ static void aspeed_sgpio_irq_handler(str
+ 		reg = ioread32(bank_reg(data, bank, reg_irq_status));
  
-diff --git a/drivers/isdn/mISDN/core.h b/drivers/isdn/mISDN/core.h
-index 52695bb81ee7a..3c039b6ade2e1 100644
---- a/drivers/isdn/mISDN/core.h
-+++ b/drivers/isdn/mISDN/core.h
-@@ -69,8 +69,8 @@ struct Bprotocol	*get_Bprotocol4id(u_int);
- extern int	mISDN_inittimer(u_int *);
- extern void	mISDN_timer_cleanup(void);
+ 		for_each_set_bit(p, &reg, 32)
+-			generic_handle_domain_irq(gc->irq.domain, i * 32 + p * 2);
++			generic_handle_domain_irq(gc->irq.domain, (i * 32 + p) * 2);
+ 	}
  
--extern int	l1_init(u_int *);
--extern void	l1_cleanup(void);
-+extern int	Isdnl1_Init(u_int *);
-+extern void	Isdnl1_cleanup(void);
- extern int	Isdnl2_Init(u_int *);
- extern void	Isdnl2_cleanup(void);
- 
-diff --git a/drivers/isdn/mISDN/layer1.c b/drivers/isdn/mISDN/layer1.c
-index 3192b0eb39445..284d3a9c7df7d 100644
---- a/drivers/isdn/mISDN/layer1.c
-+++ b/drivers/isdn/mISDN/layer1.c
-@@ -407,7 +407,7 @@ create_l1(struct dchannel *dch, dchannel_l1callback *dcb) {
- EXPORT_SYMBOL(create_l1);
- 
- int
--l1_init(u_int *deb)
-+Isdnl1_Init(u_int *deb)
- {
- 	debug = deb;
- 	l1fsm_s.state_count = L1S_STATE_COUNT;
-@@ -418,7 +418,7 @@ l1_init(u_int *deb)
- }
- 
- void
--l1_cleanup(void)
-+Isdnl1_cleanup(void)
- {
- 	mISDN_FsmFree(&l1fsm_s);
- }
--- 
-2.34.1
-
+ 	chained_irq_exit(ic, desc);
 
 

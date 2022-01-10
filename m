@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 125D14899EE
+	by mail.lfdr.de (Postfix) with ESMTP id 604B84899EF
 	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiAJN3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:29:00 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:7556 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230187AbiAJN27 (ORCPT
+        id S232314AbiAJN3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232263AbiAJN3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:28:59 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1RirBc_1641821326;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V1RirBc_1641821326)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 10 Jan 2022 21:28:46 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jack@suse.com
-Cc:     tytso@mit.edu, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next -v2] ext4: Fix jbd2_journal_shrink_scan() and jbd2_journal_shrink_count() kernel-doc comment
-Date:   Mon, 10 Jan 2022 21:28:41 +0800
-Message-Id: <20220110132841.34531-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 10 Jan 2022 08:29:00 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5DBC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:29:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bIvQ3iiBdG90qy5CiZJ/j6Ne9iVxuyc7lz8mhd/rS0c=; b=Wi7e7e53xjQVSyoM7SoAi03iCf
+        6Zhihcd5Q/URTY8byyLMah09OIcbpqBm7eJJFDDdWHBg4RuS+D6HwG4lXTjY5kMBzbwQEsEaugrUb
+        uZ4LedlfNsol3F/G8GMt86ejqnsCj4Sr+hbKkgBRMNKj+mvC9Xok3xIVhZOZdugu2DweFXmwNAjHS
+        PEJnb8HCVgRrK6ypTBNpjWiQqvOsQ6AkyPpcghQmnY06hwvUmb4kbcGx5P4foI04KjqPKmtoS2sW1
+        AKIWdVORgUW4eD+lJjmu0K/Y4um9XcbS+4aShcZbvP+0vpr3AA9fSMPOctpmW9Z75rBNXmyNuW4VL
+        09LuSPQg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6uj8-002SEg-0L; Mon, 10 Jan 2022 13:28:46 +0000
+Date:   Mon, 10 Jan 2022 13:28:45 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-mm@kvack.org, John Hubbard <jhubbard@nvidia.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 05/28] gup: Change the calling convention for
+ compound_next()
+Message-ID: <Ydw0jYsMYAie9+o8@casper.infradead.org>
+References: <20220110042406.499429-1-willy@infradead.org>
+ <20220110042406.499429-6-willy@infradead.org>
+ <Ydvt8TwenyRFClWG@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydvt8TwenyRFClWG@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the description of @shrink and @sc in jbd2_journal_shrink_scan() and
-jbd2_journal_shrink_count() kernel-doc comment to remove warnings found
-by running scripts/kernel-doc, which is caused by using 'make W=1'.
-fs/jbd2/journal.c:1296: warning: Function parameter or member 'shrink'
-not described in 'jbd2_journal_shrink_scan'
-fs/jbd2/journal.c:1296: warning: Function parameter or member 'sc' not
-described in 'jbd2_journal_shrink_scan'
-fs/jbd2/journal.c:1320: warning: Function parameter or member 'shrink'
-not described in 'jbd2_journal_shrink_count'
-fs/jbd2/journal.c:1320: warning: Function parameter or member 'sc' not
-described in 'jbd2_journal_shrink_count'
+On Mon, Jan 10, 2022 at 12:27:29AM -0800, Christoph Hellwig wrote:
+> On Mon, Jan 10, 2022 at 04:23:43AM +0000, Matthew Wilcox (Oracle) wrote:
+> > Return the head page instead of storing it to a passed parameter.
+> 
+> Looks good, but same comment about maybe passing list and npages first.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- fs/jbd2/journal.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
-index f13d548e4a7f..ad32fd92d251 100644
---- a/fs/jbd2/journal.c
-+++ b/fs/jbd2/journal.c
-@@ -1287,6 +1287,8 @@ static int jbd2_min_tag_size(void)
- 
- /**
-  * jbd2_journal_shrink_scan()
-+ * @shrink: shrinker to work on
-+ * @sc: reclaim request to process
-  *
-  * Scan the checkpointed buffer on the checkpoint list and release the
-  * journal_head.
-@@ -1312,6 +1314,8 @@ static unsigned long jbd2_journal_shrink_scan(struct shrinker *shrink,
- 
- /**
-  * jbd2_journal_shrink_count()
-+ * @shrink: shrinker to work on
-+ * @sc: reclaim request to process
-  *
-  * Count the number of checkpoint buffers on the checkpoint list.
-  */
--- 
-2.20.1.7.g153144c
-
+Done for both.

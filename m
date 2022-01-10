@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFC5489928
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C4D48992A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236086AbiAJNCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S236223AbiAJNC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbiAJNA7 (ORCPT
+        with ESMTP id S234718AbiAJNA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 08:00:59 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70ADC061751;
-        Mon, 10 Jan 2022 05:00:03 -0800 (PST)
-Date:   Mon, 10 Jan 2022 13:00:00 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB793C061756;
+        Mon, 10 Jan 2022 05:00:05 -0800 (PST)
+Date:   Mon, 10 Jan 2022 13:00:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641819601;
+        s=2020; t=1641819604;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+1AuXnZew9XqCqBDDfGs9K6JP9a5fJalwsLVipNrM/s=;
-        b=vr+ghMHRIiRWMfdHnTIKYWv0NqCMjMv5m+zNFY6ehMVjLE4am6rij25cW7qQ19ilRaI4Bt
-        sYY1RdHa0FAbyBlLUKHsmUwQmT4SzE8+yASpyaoTMG2CUro96dKYecvHd1o61z1nfeSOhG
-        gpwPMbzgqBlmQDmaBJE6i0bwk6Vsvdim/ajnr3daaVcTQdgpE1cz9d0YiDDD7MXVYCFr4A
-        WIG5qyDmfpvIY9hpRhYsP+n3GNND4Mh9QRS+bDPK1qVsmalYOOJfKmtY4ZhOMynSAo7DVX
-        k9FZaz4F+rhlLjlIwvF7duYXaAqDXi5KuFYJlis6+p6hlLrcV3dN4j4RRUWlVw==
+        bh=lCo07g1Znfpz0lYy1Qed2eAadMwCdwfxYlZqwyowRhk=;
+        b=spSOr2w5DBDpooRAKglYikxjntMG+mYDibk5DeGLVBYrEmBUwNVv279p7HERbRFjmuTy48
+        eIfG7xoCvZ/oGL1GFVLqLuk5keblVSFwSp/JNYADJE81jI+YlPYj9E9oicpqniI7EoM7LY
+        LabbboXMLUEmxvhghP+Ll1oosOmlkjKC0+4JCeFay5F9X+BT9PDC9sfNp+A6bv/NiObKMR
+        6kJV0mc6xV5ywMmvJmLGZcQqlZdZfwAseOhml3LgVF2Xq4uwADNiVotdZtzEOnRDJh2E+x
+        AvjnQWbC568QsL72nv1wul125wr/hZur3vd0fp45DRys2afWnWq+ytwzmsajCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641819601;
+        s=2020e; t=1641819604;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+1AuXnZew9XqCqBDDfGs9K6JP9a5fJalwsLVipNrM/s=;
-        b=Ocl++1udgR7FZeghIZskIUyoCsQzgXbDQ77/nhNI9pWDjmabmDVTk9YFNVSJWeIRmE5Dc/
-        sqNQICw9m5LBvABg==
-From:   "tip-bot2 for Marek Szyprowski" <tip-bot2@linutronix.de>
+        bh=lCo07g1Znfpz0lYy1Qed2eAadMwCdwfxYlZqwyowRhk=;
+        b=aIov/RAleIkSDGNYaKBxezxlyJaUF8kKRoNTFDf6tNY1c/aaUD2RWunSVpxHc+67MXh2qG
+        XMrhmSPgW99bHtCw==
+From:   "tip-bot2 for Michal Simek" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/exynos_mct: Refactor resources
- allocation
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
+Subject: [tip: timers/core] dt-bindings: timer: cadence_ttc: Add power-domains
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211101193531.15078-2-semen.protsenko@linaro.org>
-References: <20211101193531.15078-2-semen.protsenko@linaro.org>
+In-Reply-To: =?utf-8?q?=3Ccc655a72b20790f6d7408b1aaf81c4bf878aafb4=2E16342?=
+ =?utf-8?q?86552=2Egit=2Emichal=2Esimek=40xilinx=2Ecom=3E?=
+References: =?utf-8?q?=3Ccc655a72b20790f6d7408b1aaf81c4bf878aafb4=2E163428?=
+ =?utf-8?q?6552=2Egit=2Emichal=2Esimek=40xilinx=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <164181960085.16921.10867646157884848899.tip-bot2@tip-bot2>
+Message-ID: <164181960275.16921.16550710534449933629.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,110 +64,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     7cd925a8823d16de5614d3f0aabea9948747accd
-Gitweb:        https://git.kernel.org/tip/7cd925a8823d16de5614d3f0aabea9948747accd
-Author:        Marek Szyprowski <m.szyprowski@samsung.com>
-AuthorDate:    Mon, 01 Nov 2021 21:35:30 +02:00
+Commit-ID:     557804a81d256b15952dcd179280ede92a5bfae1
+Gitweb:        https://git.kernel.org/tip/557804a81d256b15952dcd179280ede92a5bfae1
+Author:        Michal Simek <michal.simek@xilinx.com>
+AuthorDate:    Fri, 15 Oct 2021 10:29:14 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Tue, 16 Nov 2021 16:12:00 +01:00
+CommitterDate: Tue, 02 Nov 2021 10:03:25 +01:00
 
-clocksource/drivers/exynos_mct: Refactor resources allocation
+dt-bindings: timer: cadence_ttc: Add power-domains
 
-Move interrupts allocation from exynos4_timer_resources() into separate
-function together with the interrupt number parsing code from
-mct_init_dt(), so the code for managing interrupts is kept together.
-While touching exynos4_timer_resources() function, move of_iomap() to it.
-No functional changes.
+Describe optional power-domain property to fix dts_check warnings.
+The similar change was done by commit 8c0aa567146b ("dt-bindings: gpio:
+fsl-imx-gpio: Add power-domains").
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Chanwoo Choi <cw00.choi@samsung.com>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Link: https://lore.kernel.org/r/20211101193531.15078-2-semen.protsenko@linaro.org
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/cc655a72b20790f6d7408b1aaf81c4bf878aafb4.1634286552.git.michal.simek@xilinx.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/exynos_mct.c | 50 ++++++++++++++++++-------------
- 1 file changed, 30 insertions(+), 20 deletions(-)
+ Documentation/devicetree/bindings/timer/cdns,ttc.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index 5e3e96d..857cf12 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -504,11 +504,14 @@ static int exynos4_mct_dying_cpu(unsigned int cpu)
- 	return 0;
- }
+diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+index 8615353..c338607 100644
+--- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
++++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+@@ -25,6 +25,9 @@ properties:
+   clocks:
+     maxItems: 1
  
--static int __init exynos4_timer_resources(struct device_node *np, void __iomem *base)
-+static int __init exynos4_timer_resources(struct device_node *np)
- {
--	int err, cpu;
- 	struct clk *mct_clk, *tick_clk;
- 
-+	reg_base = of_iomap(np, 0);
-+	if (!reg_base)
-+		panic("%s: unable to ioremap mct address space\n", __func__);
++  power-domains:
++    maxItems: 1
 +
- 	tick_clk = of_clk_get_by_name(np, "fin_pll");
- 	if (IS_ERR(tick_clk))
- 		panic("%s: unable to determine tick clock rate\n", __func__);
-@@ -519,9 +522,27 @@ static int __init exynos4_timer_resources(struct device_node *np, void __iomem *
- 		panic("%s: unable to retrieve mct clock instance\n", __func__);
- 	clk_prepare_enable(mct_clk);
- 
--	reg_base = base;
--	if (!reg_base)
--		panic("%s: unable to ioremap mct address space\n", __func__);
-+	return 0;
-+}
-+
-+static int __init exynos4_timer_interrupts(struct device_node *np,
-+					   unsigned int int_type)
-+{
-+	int nr_irqs, i, err, cpu;
-+
-+	mct_int_type = int_type;
-+
-+	/* This driver uses only one global timer interrupt */
-+	mct_irqs[MCT_G0_IRQ] = irq_of_parse_and_map(np, MCT_G0_IRQ);
-+
-+	/*
-+	 * Find out the number of local irqs specified. The local
-+	 * timer irqs are specified after the four global timer
-+	 * irqs are specified.
-+	 */
-+	nr_irqs = of_irq_count(np);
-+	for (i = MCT_L0_IRQ; i < nr_irqs; i++)
-+		mct_irqs[i] = irq_of_parse_and_map(np, i);
- 
- 	if (mct_int_type == MCT_INT_PPI) {
- 
-@@ -581,24 +602,13 @@ out_irq:
- 
- static int __init mct_init_dt(struct device_node *np, unsigned int int_type)
- {
--	u32 nr_irqs, i;
- 	int ret;
- 
--	mct_int_type = int_type;
--
--	/* This driver uses only one global timer interrupt */
--	mct_irqs[MCT_G0_IRQ] = irq_of_parse_and_map(np, MCT_G0_IRQ);
--
--	/*
--	 * Find out the number of local irqs specified. The local
--	 * timer irqs are specified after the four global timer
--	 * irqs are specified.
--	 */
--	nr_irqs = of_irq_count(np);
--	for (i = MCT_L0_IRQ; i < nr_irqs; i++)
--		mct_irqs[i] = irq_of_parse_and_map(np, i);
-+	ret = exynos4_timer_resources(np);
-+	if (ret)
-+		return ret;
- 
--	ret = exynos4_timer_resources(np, of_iomap(np, 0));
-+	ret = exynos4_timer_interrupts(np, int_type);
- 	if (ret)
- 		return ret;
- 
+   timer-width:
+     $ref: "/schemas/types.yaml#/definitions/uint32"
+     description: |

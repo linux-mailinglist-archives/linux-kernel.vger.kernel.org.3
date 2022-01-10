@@ -2,170 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 916EB489B0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6821D489B12
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiAJOGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S235275AbiAJOLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:11:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiAJOGR (ORCPT
+        with ESMTP id S235090AbiAJOLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:06:17 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83F9C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:06:17 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id q3so14546076qvc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 06:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sjf5HXREYSAp8OzfvPdpCVvaNZb3bh0YsVohsQS8etE=;
-        b=Ef1tKo1+J/Pet0Mz0h5QNoIi6PvtQ+1+fWb0HQUGQ4lEAMNbjcxRvAEU3DxMArWK9y
-         fzau/FkT+YZtL0NHiYwukbV7vep7KYQtQ4BzdaCtfR4qn6ShDwpYmA8mea77jpxkrlBu
-         bbSvxS851BIDcDBjpoecYmxSFv7n9EJdFi4oXDEI9dFknbedSu4LOF8MavDY5mI9i2CP
-         MVk8+Thbh2tM7WVZfSAwuG3LvWekXxBwssJ9IOI6kA4fd/xxAtbKHR21uu907zNSoQdV
-         SMeNnFppKyL4P/k3unU9iY9xzYsL0yH9od0CZztIF+oOKy38slsCiKUnvKfYYwH22n3a
-         WoMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sjf5HXREYSAp8OzfvPdpCVvaNZb3bh0YsVohsQS8etE=;
-        b=aE51dImyDiRzmajrfK8/LTuCEqT0wS0vTkJXHJAWOVTPLKhacjjMSnmn0a7wiSkMGT
-         rWuYXjN1QT7mXF7XSyR7d9UwoyZtDLgz/p0+Dn5uHXYuhszzw6Zwt1yrJhCwS4LdMAVK
-         hTiDf18xSu41IV+lBpQNH4RO6yYKSF6yDdPrgetcXoNUAj3M4ZIKcQVXAY79JelY++x1
-         jPiiIaTtqV13PMFYIZbEMqSkmYtS44SDfVebxCEO6m9dId283Z4UgNdyDdxq+tpPG9RR
-         4Cw+a6DCE/Y0/SMKx7T2WgQIOpEbMUs9SImMzjtyCl1u0E+HwPsGtBdolGUFM8DgjxJY
-         luSg==
-X-Gm-Message-State: AOAM53043jfGeetEi6bVgfjS+NLL4d4WrMMpzuMArfxHCFCBWM7nNqYV
-        yfvhfZ4j/75tDsUsy8+8L4Cqgoec4umcMpgJevWsEA==
-X-Google-Smtp-Source: ABdhPJx8iuBfCaDUP7d8M8nzd/iM43KRhC+lgLYLRyHPh8qfwLit/VE9Y1WQXgB0+afvUXwpQfzD7BGkAXGOVEotGy0=
-X-Received: by 2002:a05:6214:248a:: with SMTP id gi10mr67627781qvb.115.1641823576863;
- Mon, 10 Jan 2022 06:06:16 -0800 (PST)
+        Mon, 10 Jan 2022 09:11:30 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241CCC06173F;
+        Mon, 10 Jan 2022 06:11:30 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n6vOS-0006f9-IU; Mon, 10 Jan 2022 15:11:28 +0100
+Message-ID: <933e14cb-7fac-c4bf-39fc-77a7ef48d175@leemhuis.info>
+Date:   Mon, 10 Jan 2022 15:11:28 +0100
 MIME-Version: 1.0
-References: <1641819337-17037-1-git-send-email-quic_rajeevny@quicinc.com> <1641819337-17037-2-git-send-email-quic_rajeevny@quicinc.com>
-In-Reply-To: <1641819337-17037-2-git-send-email-quic_rajeevny@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 10 Jan 2022 17:06:03 +0300
-Message-ID: <CAA8EJprrRZK+ocW9zDY_eyeo_m_xbu+KmfWf8QmTYscAh5SxLw@mail.gmail.com>
-Subject: Re: [v2 1/3] dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
-To:     Rajeev Nandan <quic_rajeevny@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sean@poorly.run, robdclark@gmail.com,
-        robh+dt@kernel.org, robh@kernel.org, quic_abhinavk@quicinc.com,
-        quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
-        jonathan@marek.ca, airlied@linux.ie, daniel@ffwll.ch,
-        swboyd@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
+ machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+Content-Language: en-BS
+To:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641823890;8752d967;
+X-HE-SMSGID: 1n6vOS-0006f9-IU
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 at 15:56, Rajeev Nandan <quic_rajeevny@quicinc.com> wro=
-te:
->
-> In most cases, the default values of DSI PHY tuning registers should be
-> sufficient as they are fully optimized. However, in some cases where
-> extreme board parasitics cause the eye shape to degrade, the override
-> bits can be used to improve the signal quality.
->
-> The general guidelines for DSI PHY tuning include:
-> - High and moderate data rates may benefit from the drive strength and
->   drive level tuning.
-> - Drive strength tuning will affect the output impedance and may be used
->   for matching optimization.
-> - Drive level tuning will affect the output levels without affecting the
->   impedance.
->
-> The clock and data lanes have a calibration circuitry feature. The drive
-> strength tuning can be done by adjusting rescode offset for hstop/hsbot,
-> and the drive level tuning can be done by adjusting the LDO output level
-> for the HSTX drive.
->
-> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
-> ---
->
-> Changes in v2:
->  - More details in the commit text (Stephen Boyd)
->  - Use human understandable values (Stephen Boyd, Dmitry Baryshkov)
->  - Do not take values that are going to be unused (Dmitry Baryshkov)
->
->  .../bindings/display/msm/dsi-phy-10nm.yaml         | 33 ++++++++++++++++=
-++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.y=
-aml b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
-> index 4399715..d0eb8f6 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
-> @@ -35,6 +35,35 @@ properties:
->        Connected to DSI0_MIPI_DSI_PLL_VDDA0P9 pin for sc7180 target and
->        connected to VDDA_MIPI_DSI_0_PLL_0P9 pin for sdm845 target
+Hi, this is your Linux kernel regression tracker speaking.
 
-Generic note:
-I think these properties should be prefixed with "qcom," prefix.
+Top-posting for once, to make this easy accessible to everyone.
 
->
-> +  phy-rescode-offset-top:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 5
-> +    maxItems: 5
-> +    description:
-> +      Integer array of offset for pull-up legs rescode for all five lane=
-s.
-> +      To offset the drive strength from the calibrated value in an incre=
-asing
-> +      or decreasing manner, use 6 bit two=E2=80=99s complement values.
+TWIMC, the parent mail quoted below misses all the important people in
+To/CC. That was not the case in an earlier mail from the author that got
+rejected as it was HTML. There is a reply to that mail now that made it
+to the lists and everyone in the loop, hence it afaics is better to
+reply there instead if you consider to send one:
 
-dtc should support negative values, google hints that <(-2)> should work.
+https://lore.kernel.org/lkml/ff982786-4033-7450-c10c-8ce71c28d6eb@leemhuis.info/
 
-> +
-> +  phy-rescode-offset-bot:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 5
-> +    maxItems: 5
-> +    description:
-> +      Integer array of offset for pull-down legs rescode for all five la=
-nes.
-> +      To offset the drive strength from the calibrated value in an incre=
-asing
-> +      or decreasing manner, use 6 bit two=E2=80=99s complement values.
-> +
-> +  phy-drive-ldo-level:
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-> +    minimum: 0
-> +    maximum: 7
-> +    description:
-> +      The PHY LDO has an amplitude tuning feature to adjust the LDO outp=
-ut
-> +      for the HSTX drive. To offset the drive level from the default val=
-ue,
-> +      supported levels are with the following mapping:
-> +      0 =3D 375mV, 1 =3D 400mV, 2 =3D 425mV, 3 =3D 450mV, 4 =3D 475mV, 5=
- =3D 500mV,
-> +      6 =3D 500mV, 7 =3D 500mV
+Ciao, Thorsten
 
-No encoding please. Specify the values in the dts and convert them
-into the register values in the driver.
+P.S.: Trying to make regzbot handle this:
 
-> +
->  required:
->    - compatible
->    - reg
-> @@ -64,5 +93,9 @@ examples:
->           clocks =3D <&dispcc DISP_CC_MDSS_AHB_CLK>,
->                    <&rpmhcc RPMH_CXO_CLK>;
->           clock-names =3D "iface", "ref";
-> +
-> +         phy-resocde-offset-top =3D /bits/ 8 <0x0 0x0 0x0 0x0 0x0>;
-> +         phy-rescode-offset-bot =3D /bits/ 8 <0x0 0x0 0x0 0x0 0x0>;
-> +         phy-drive-ldo-level =3D /bits/ 8 <1>;
+#regzbot ^introduced 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+#regzbot title cifs: unable to shares that require NTLM or weaker
+authentication algorithms
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215375
+#regzbot monitor:
+https://lore.kernel.org/lkml/ff982786-4033-7450-c10c-8ce71c28d6eb@leemhuis.info/
 
---
-With best wishes
-Dmitry
+On 10.01.22 07:06, Davyd McColl wrote:
+> Good day
+> 
+> I'm following advice from the thread at
+> https://bugzilla.kernel.org/show_bug.cgi?id=215375 as to how to report
+> this, so please bear with me and redirect me as necessary.
+> 
+> Since commit 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c, I'm unable to
+> mount a CIFS 1.0 share ( from a media player: mede8er med600x3d, which
+> runs some older linux). Apparently I'm not the only one, according to
+> that thread, though the other affected party there is windows-based.
+> 
+> I first logged this in the Gentoo bugtracker
+> (https://bugs.gentoo.org/821895) and a reversion patch is available
+> there for the time being.
+> 
+> I understand that some of the encryption methods upon which the
+> original feature relied are to be removed and, as such, the ability to
+> mount these older shares was removed. This is sure to affect anyone
+> running older Windows virtual machines (or older, internally-visible
+> windows hosts) in addition to anyone attempting to connect to shares
+> from esoteric devices like mine.
+> 
+> Whilst I understand the desire to clean up code and remove dead
+> branches, I'd really appreciate it if this particular feature remains
+> available either by kernel configuration (which suits me fine, but is
+> likely to be a hassle for anyone running a binary distribution) or via
+> boot parameters. In the mean-time, I'm updating my own sync software
+> to support this older device because if I can't sync media to the
+> player, the device is not very useful to me.

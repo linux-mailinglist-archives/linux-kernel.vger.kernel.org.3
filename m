@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8A748936A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A8648936D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241085AbiAJIdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S240962AbiAJIdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241222AbiAJIbn (ORCPT
+        with ESMTP id S240594AbiAJIcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:31:43 -0500
+        Mon, 10 Jan 2022 03:32:09 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739F3C06118A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:31:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0723AC061751
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 00:32:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OfXH7HuA9nnmU4LMS967gWPUmYbFP+jE6Cczd4vRZXQ=; b=A0toOgDZ/7tlodAkcTYqYrCJ+G
-        oMha2mvB9ojaHKjRdf2iBCy+WyO3gEZwyN1G1FhtY2vxukiT9xMP0hatIeLHRRaXsYS8euIKXXZDC
-        Tmph31BEHsULn8/XL27zi4kj7STNC5VjsTi9nI8VQ7y0hisIf2x61aNJAIpWeTKvEGqQEBE3pkdxa
-        KG2Di90YQXGGtEJ0cjmWi6rR/cY2d3FpGWFHWDwyk97tpH0qZCIo1EDtLKULWlXLxA/GRKgbl5fB3
-        czPvl0talEq6ehY6Sclkfj42gS2QIkX4oSAidyG4IOe7uCOTDq4umD4hh1LTRrqcf54yCSzxaU8+b
-        emUxJvHA==;
+        bh=yMjG0MO8uve4Q8bknorzIEyXbkOAI9X93aj135DF1W0=; b=lO3XdbhOcfj9hU1fxBfkAzr0Pz
+        Suw2szJm6i+IRLRTJD29IVsf5EyMe0zgKnogUibONVa+vaCmI6y2qaZvlZOaqQACYmik/dL0Y3g1/
+        XIiy6FRmHfTUc4PwpG2u5h1CMwOIJLL3BeGXnurg4M4zpCwSVOIWhPVCTcn3fb2hSh3UJPt4g6gQi
+        75KkgZ5+gkhWrYFZ0zGVJMcH8H8QU+JOxn83+w+Wpper3vr5xs02JsIv53uI31BJu4ePG+HFEZ/pv
+        zXM5dsZ0FUyFUbN1wQwXTa5JEOkEVPO1YTdd+gH/WHuOec459CVf/OSrsxQoeklCJl1PUSk6MajKy
+        dQxsbyLQ==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n6q5b-009t3P-W8; Mon, 10 Jan 2022 08:31:40 +0000
-Date:   Mon, 10 Jan 2022 00:31:39 -0800
+        id 1n6q61-009tDJ-Iy; Mon, 10 Jan 2022 08:32:05 +0000
+Date:   Mon, 10 Jan 2022 00:32:05 -0800
 From:   Christoph Hellwig <hch@infradead.org>
 To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc:     linux-mm@kvack.org, John Hubbard <jhubbard@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
         William Kucharski <william.kucharski@oracle.com>,
         linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 09/28] gup: Turn hpage_pincount_add() into
- page_pincount_add()
-Message-ID: <Ydvu61c/6+DikC0/@infradead.org>
+Subject: Re: [PATCH v2 10/28] gup: Turn hpage_pincount_sub() into
+ page_pincount_sub()
+Message-ID: <YdvvBffXTIn9ei/v@infradead.org>
 References: <20220110042406.499429-1-willy@infradead.org>
- <20220110042406.499429-10-willy@infradead.org>
+ <20220110042406.499429-11-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220110042406.499429-10-willy@infradead.org>
+In-Reply-To: <20220110042406.499429-11-willy@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 04:23:47AM +0000, Matthew Wilcox (Oracle) wrote:
-> Simplify try_grab_compound_head() and remove an unnecessary
-> VM_BUG_ON by handling pages both with and without a pincount field in
-> page_pincount_add().
+On Mon, Jan 10, 2022 at 04:23:48AM +0000, Matthew Wilcox (Oracle) wrote:
+> Remove an unnecessary VM_BUG_ON by handling pages both with and without
+> a pincount field in page_pincount_sub().
 
-Nice:
+Looks good:
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>

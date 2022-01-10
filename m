@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C402489DEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A66489DF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237837AbiAJQ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:57:44 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55510 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237327AbiAJQ5m (ORCPT
+        id S237858AbiAJRAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:00:47 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4379 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237327AbiAJRAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:57:42 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CFA021F383;
-        Mon, 10 Jan 2022 16:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641833860; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Q3VneSzRzr1tMKys6OuzhnqfTODjqh+I/QGvIA7t4c=;
-        b=sjrJdQfK5ogRfjLj7zf+oKJm3J8qz0ZUW3JBjqps4bf+8+lgdxW0cNaMnBuIk7OaEZdt2d
-        vDuPgoJosJ++R+M8b9H236s8QmjpGCeQRBSj/MeNWcOLNOeAYIDIu0KKpJ2iJnGPn1ba8b
-        LQVCeMQWyiwofj/Lp3jt7kKerFGu0tM=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F0CD9A3B8F;
-        Mon, 10 Jan 2022 16:57:39 +0000 (UTC)
-Date:   Mon, 10 Jan 2022 17:57:39 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Ydxlg5rI4ZvODQvF@dhcp22.suse.cz>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
+        Mon, 10 Jan 2022 12:00:46 -0500
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JXg4T0Zxhz67x8s;
+        Tue, 11 Jan 2022 00:58:01 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 10 Jan 2022 18:00:44 +0100
+Received: from [10.47.24.251] (10.47.24.251) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 10 Jan
+ 2022 17:00:43 +0000
+Subject: Re: [PATCH v4 01/48] libperf: Add comments to perf_cpu_map.
+To:     Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
+        "Jiri Olsa" <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Vineet Singh" <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <zhengjun.xing@intel.com>
+CC:     <eranian@google.com>
+References: <20220105061351.120843-1-irogers@google.com>
+ <20220105061351.120843-2-irogers@google.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <aea97c61-b684-3322-05a2-f55a7877e1b9@huawei.com>
+Date:   Mon, 10 Jan 2022 17:00:27 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104202227.2903605-7-yuzhao@google.com>
+In-Reply-To: <20220105061351.120843-2-irogers@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.24.251]
+X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-[...]
-> +static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
-> +{
-> +	static const struct mm_walk_ops mm_walk_ops = {
-> +		.test_walk = should_skip_vma,
-> +		.p4d_entry = walk_pud_range,
-> +	};
-> +
-> +	int err;
-> +#ifdef CONFIG_MEMCG
-> +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-> +#endif
-> +
-> +	walk->next_addr = FIRST_USER_ADDRESS;
-> +
-> +	do {
-> +		unsigned long start = walk->next_addr;
-> +		unsigned long end = mm->highest_vm_end;
-> +
-> +		err = -EBUSY;
-> +
-> +		rcu_read_lock();
-> +#ifdef CONFIG_MEMCG
-> +		if (memcg && atomic_read(&memcg->moving_account))
-> +			goto contended;
-> +#endif
+On 05/01/2022 06:13, Ian Rogers wrote:
+> A particular observed problem is confusing the index with the CPU value,
+> documentation should hopefully reduce this type of problem.
+> 
+> Reviewed-by: James Clark<james.clark@arm.com>
+> Signed-off-by: Ian Rogers<irogers@google.com>
 
-Why do you need to check for moving_account?
--- 
-Michal Hocko
-SUSE Labs
+Reviewed-by: John Garry <john.garry@huawei.com>

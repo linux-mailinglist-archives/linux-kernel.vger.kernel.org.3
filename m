@@ -2,215 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCE6489BF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDBD489BF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbiAJPOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:14:17 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:60348 "EHLO
+        id S236031AbiAJPOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:14:19 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:64230 "EHLO
         mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232537AbiAJPOQ (ORCPT
+        by vger.kernel.org with ESMTP id S232537AbiAJPOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:14:16 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20A7Vg4W026419;
-        Mon, 10 Jan 2022 10:14:15 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3df8d8d9aa-1
+        Mon, 10 Jan 2022 10:14:18 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20A858vt023154;
+        Mon, 10 Jan 2022 10:14:17 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dggyqrya8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 10:14:14 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 20AFED0O057081
+        Mon, 10 Jan 2022 10:14:17 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 20AFEGJj007952
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 10 Jan 2022 10:14:13 -0500
+        Mon, 10 Jan 2022 10:14:16 -0500
 Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 10 Jan 2022 10:14:12 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ 15.2.986.14; Mon, 10 Jan 2022 10:14:15 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
  ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 10 Jan 2022 10:14:12 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 10 Jan 2022 10:14:12 -0500
+ 15.2.986.14; Mon, 10 Jan 2022 10:14:15 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 10 Jan 2022 10:14:15 -0500
 Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.181])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20AFE3Cc010248;
-        Mon, 10 Jan 2022 10:14:06 -0500
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20AFE3Cd010248;
+        Mon, 10 Jan 2022 10:14:10 -0500
 From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
 To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
         <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v2 2/3] dt-bindings:iio:frequency: add admv1014 binding
-Date:   Mon, 10 Jan 2022 17:13:49 +0200
-Message-ID: <20220110151350.164095-1-antoniu.miclaus@analog.com>
+Subject: [PATCH v2 3/3] Documentation:ABI:testing:admv1014: add ABI docs
+Date:   Mon, 10 Jan 2022 17:13:50 +0200
+Message-ID: <20220110151350.164095-2-antoniu.miclaus@analog.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220110151350.164095-1-antoniu.miclaus@analog.com>
+References: <20220110151350.164095-1-antoniu.miclaus@analog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: zvwojolg-i4W05_jH0OYlFtvfri0OHer
-X-Proofpoint-GUID: zvwojolg-i4W05_jH0OYlFtvfri0OHer
+X-Proofpoint-ORIG-GUID: rD1nN8M4TbmwRZyE79GRrVs9fLJWCNAk
+X-Proofpoint-GUID: rD1nN8M4TbmwRZyE79GRrVs9fLJWCNAk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-10_06,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- mlxscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- mlxlogscore=999 spamscore=0 adultscore=0 impostorscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
+ bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2201100107
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for the ADMV1014 Upconverter.
+Add documentation for the use of the Digital Attenuator gain.
 
 Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 ---
-changes in v2:
- - move clock description unde `clock-names` section
- - expand `p1db-comp-enable` to `p1db-compensation-enable`
- - add regulators for all VCC_* supplies, as suggested
- .../bindings/iio/frequency/adi,admv1014.yaml  | 129 ++++++++++++++++++
- 1 file changed, 129 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+ .../testing/sysfs-bus-iio-frequency-admv1014  | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
 
-diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
 new file mode 100644
-index 000000000000..9c43cec72560
+index 000000000000..5bcd96d77f45
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+@@ -0,0 +1,23 @@
++What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibscale_coarse
++KernelVersion:
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Read/write value for the digital attenuator gain (IF_I) with coarse steps.
 +
-+title: ADMV1014 Microwave Downconverter
++What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibscale_coarse
++KernelVersion:
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Read/write value for the digital attenuator gain (IF_Q) with coarse steps.
 +
-+maintainers:
-+  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibscale_fine
++KernelVersion:
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Read/write value for the digital attenuator gain (IF_I) with fine steps.
 +
-+description: |
-+   Wideband, microwave downconverter optimized for point to point microwave
-+   radio designs operating in the 24 GHz to 44 GHz frequency range.
-+
-+   https://www.analog.com/en/products/admv1014.html
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,admv1014
-+
-+  reg:
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    maximum: 1000000
-+
-+  clocks:
-+    minItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: lo_in
-+    description:
-+      Definition of the external clock that serves as input Local Oscillator.
-+
-+  vcm-supply:
-+    description:
-+      Common-mode voltage regulator.
-+
-+  vcc-if-bb-supply:
-+    description:
-+      BB and IF supply voltage regulator.
-+
-+  vcc-vga-supply:
-+    description:
-+      RF Amplifier supply voltage regulator.
-+
-+  vcc-vva-supply:
-+    description:
-+      VVA Control Circuit supply voltage regulator.
-+
-+  vcc-lna-3p3-supply:
-+    description:
-+      Low Noise Amplifier 3.3V supply voltage regulator.
-+
-+  vcc-lna-1p5-supply:
-+    description:
-+      Low Noise Amplifier 1.5V supply voltage regulator.
-+
-+  vcc-bg-supply:
-+    description:
-+      Band Gap Circuit supply voltage regulator.
-+
-+  vcc-quad-supply:
-+    description:
-+      Quadruple supply voltage regulator.
-+
-+  vcc-mixer-supply:
-+    description:
-+      Mixer supply voltage regulator.
-+
-+  adi,input-mode:
-+    description:
-+      Select the input mode.
-+      iq - in-phase quadrature (I/Q) input
-+      if - complex intermediate frequency (IF) input
-+    enum: [iq, if]
-+
-+  adi,detector-enable:
-+    description:
-+      Digital Rx Detector Enable. The Square Law Detector output is
-+      available at output pin VDET.
-+    type: boolean
-+
-+  adi,p1db-compensation-enable:
-+    description:
-+      Turn on bits to optimize P1dB.
-+    type: boolean
-+
-+  adi,quad-se-mode:
-+    description:
-+      Switch the LO path from differential to single-ended operation.
-+      se-neg - Single-Ended Mode, Negative Side Disabled.
-+      se-pos - Single-Ended Mode, Positive Side Disabled.
-+      diff - Differential Mode.
-+    enum: [se-neg, se-pos, diff]
-+
-+  '#clock-cells':
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - vcm-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      admv1014@0{
-+        compatible = "adi,admv1014";
-+        reg = <0>;
-+        spi-max-frequency = <1000000>;
-+        clocks = <&admv1014_lo>;
-+        clock-names = "lo_in";
-+        vcm-supply = <&vcm>;
-+        adi,quad-se-mode = "diff";
-+        adi,detector-enable;
-+        adi,p1db-compensation-enable;
-+      };
-+    };
-+...
++What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibscale_fine
++KernelVersion:
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Read/write value for the digital attenuator gain (IF_Q) with fine steps.
 -- 
 2.34.1
 

@@ -2,71 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE05A4890C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFD74892A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239422AbiAJHZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:25:35 -0500
-Received: from out162-62-57-252.mail.qq.com ([162.62.57.252]:56697 "EHLO
-        out162-62-57-252.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239314AbiAJHYb (ORCPT
+        id S243853AbiAJHp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241748AbiAJHiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:24:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641799466;
-        bh=9k1eFxwwZYjFKr+WJMD9o6mAxJi78ILGRPskXq6r9Nw=;
-        h=From:To:Cc:Subject:Date;
-        b=RvmkWRGgc9cJZOlbPuUmCGG/LdL5fUOJoTPfl8oMyQ+jmk1ZcwJjGgQKvgrTffT5J
-         uauZ4XBeIx3375NEPKKr8EuhOGbmH1ADEDrX/R7JG1kwMUTCxFHEkXq0ybFVbWTZzI
-         Wo4eMVsE6K7CE3T8RSh+J5d8VHnmc19VZdLafzIE=
-Received: from fedora.. ([119.32.47.91])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id 5CD80CD5; Mon, 10 Jan 2022 15:23:13 +0800
-X-QQ-mid: xmsmtpt1641799393t3g57ii7w
-Message-ID: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
-X-QQ-XMAILINFO: N9vFsJHELd5M78BrG7pkWX+iqbIqvE7AJmW7380o2BEH1iGng8N8iYDr23IHo0
-         2v85PrK3LhxPTuXuJTMpGt5FSAX55+vCRTUUfDQYQZjLzLS4wgqfsnyxOPKY88UZH+fq7B7SVDmr
-         dH8aN8VKngMlB7QGBWnJt0u1+pEJImetkN3N5snGKPgq1U+miR/dCgaVIkcJ8mKtb5SFwOClyDCO
-         1ALTtuzFg/Uk+7X0g1VjR2DFSkKdClV2kPEMM/BuB3nDc73VlTxFv1Zc+4sb/UaVT1KS3+UmQzW7
-         SZdETf3eXJEzCaeyQhDGd6NoE47AbbjaerHrLco3zt9rdIp02vBg6F4WhWnhMU9fZO/bCZVmhE/U
-         oyDnjZqCu9dgEAndmMq2pZT/z0zzPZUDkZOZKse1fstQJFKF6MoYtdHYa8PLmxPaXdTxlLY9vzQU
-         xkG2Sf/ZWYLnZ0F+lfbf04NnhAyMTYxk4gYU2l8JkxJjQuEa2rmV/NIBjBZI/0CjPTiSMTPKDLjm
-         O77kAoan5Tr+onw/dZr8S2dp94R2kG9EY3aD6rcgELmjDVTYaQW/HxwvUa1r+mlLtuSMBVS9dbKw
-         3sQ/2O/j5d3hwYJhbK4UsqrNBKVO9qP/tnjN4LNhKJIjqBb8aSW17lElY2zhO4dYAkrxU2YYYGFF
-         vazyiHqDHIErFFGWXpHG4DvdpRKA7Gq9ko07Ws8+l+R0bWBZ/PshiHfjOMQCORNXDpLpMM+bwvX/
-         0wxd/M6RtBRwDUfdt7F3qlx87LvmxJJKxOUkWL/npIg3mMEnSe/dKjQo46xRsM12qGqh6Jdvy66E
-         80C08x/3Iv+dLBVZFdgk2YMtFZ+/0kGganAlZ7YMRHudd1oMlUu1rTvXAjN+m1dbJWDKIGsyDr8D
-         aShgpCwK32DvezXFVayNBSM5dI48SCi9mMKMiu2YTEuXRBrJ2FGt8=
-From:   conleylee@foxmail.com
-To:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, conley <conleylee@foxmail.com>
-Subject: [PATCH 0/2] sun4i-emac: replace magic number with marcos
-Date:   Mon, 10 Jan 2022 15:23:07 +0800
-X-OQ-MSGID: <20220110072309.2259523-1-conleylee@foxmail.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 10 Jan 2022 02:38:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FBEC028BB1;
+        Sun,  9 Jan 2022 23:32:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5C6BB81213;
+        Mon, 10 Jan 2022 07:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAF0C36AED;
+        Mon, 10 Jan 2022 07:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641799963;
+        bh=5ucqwL7Dxkwj99euF0edW3rqp3iP71cRd2u/ZGk/uBs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Joj5pbsBMUEXkr2g6F/IyqexB9vdYtZsk2oJZUFmBRoZWXlcRF/UnIW8jnce2nvfR
+         OpPyn5uVUj5j75sKuXNEfcLUBm81xgK9568XFc01KpeTO31ayqzVPNJZryBPdUK2aN
+         mRWdsyK4GRdvwfq3owvFNbPGQfUCZ4Qby/fRLrZQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Arthur Kiyanovski <akiyano@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 30/72] net: ena: Fix wrong rx request id by resetting device
+Date:   Mon, 10 Jan 2022 08:23:07 +0100
+Message-Id: <20220110071822.580753572@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: conley <conleylee@foxmail.com>
+From: Arthur Kiyanovski <akiyano@amazon.com>
 
-- sun4i-emac.h: add register related marcos
-- sun4i-emac.c: replace magic number with marco
+commit cb3d4f98f0b26eafa0b913ac3716e4714254a747 upstream.
 
-*** BLURB HERE ***
+A wrong request id received from the device is a sign that
+something is wrong with it, therefore trigger a device reset.
 
-conley (2):
-  sun4i-emac.h: add register related marcos
-  sun4i-emac.c: replace magic number with macro
+Also add some debug info to the "Page is NULL" print to make
+it easier to debug.
 
- drivers/net/ethernet/allwinner/sun4i-emac.c | 26 ++++++++++-----------
- drivers/net/ethernet/allwinner/sun4i-emac.h | 18 ++++++++++++++
- 2 files changed, 31 insertions(+), 13 deletions(-)
+Fixes: 1738cd3ed342 ("net: ena: Add a driver for Amazon Elastic Network Adapters (ENA)")
+Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/net/ethernet/amazon/ena/ena_netdev.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
--- 
-2.31.1
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -1428,6 +1428,7 @@ static struct sk_buff *ena_rx_skb(struct
+ 				  u16 *next_to_clean)
+ {
+ 	struct ena_rx_buffer *rx_info;
++	struct ena_adapter *adapter;
+ 	u16 len, req_id, buf = 0;
+ 	struct sk_buff *skb;
+ 	void *page_addr;
+@@ -1440,8 +1441,14 @@ static struct sk_buff *ena_rx_skb(struct
+ 	rx_info = &rx_ring->rx_buffer_info[req_id];
+ 
+ 	if (unlikely(!rx_info->page)) {
+-		netif_err(rx_ring->adapter, rx_err, rx_ring->netdev,
+-			  "Page is NULL\n");
++		adapter = rx_ring->adapter;
++		netif_err(adapter, rx_err, rx_ring->netdev,
++			  "Page is NULL. qid %u req_id %u\n", rx_ring->qid, req_id);
++		ena_increase_stat(&rx_ring->rx_stats.bad_req_id, 1, &rx_ring->syncp);
++		adapter->reset_reason = ENA_REGS_RESET_INV_RX_REQ_ID;
++		/* Make sure reset reason is set before triggering the reset */
++		smp_mb__before_atomic();
++		set_bit(ENA_FLAG_TRIGGER_RESET, &adapter->flags);
+ 		return NULL;
+ 	}
+ 
+
 

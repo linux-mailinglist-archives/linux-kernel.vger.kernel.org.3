@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FF8489067
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D01648906B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 07:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbiAJGxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 01:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235016AbiAJGxW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 01:53:22 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D42C06173F;
-        Sun,  9 Jan 2022 22:53:22 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id l8so8841229plt.6;
-        Sun, 09 Jan 2022 22:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=y8qyK9Z1xdNQlga6YeRs4Ebp3n/3+IX2v6kqUk3/oSc=;
-        b=Cr7WEcflIJBG/7P3XHctuvDTTVxF9JqvZi0hyBxz6tEKEgJaAefi4qKIxkAFn0Drf6
-         UimMAPjrYQm3XhyWATzqAMX7bIlspftZHJZBhOY+mGhHI1ajEAiKcjU4I/hmu8x58QtW
-         o+egbDqiuRAdYIcaHY0/vcBI9Z+PapWwowh/PkKhqI19Wx/VDRNH8uuOrZYm9jTUGymF
-         vLvNNMaeOkuhBxwSt0Y6pk96ozOPK4DCDK1QDXK1PnjELkEFfWHcf+H8dXCJj20v1coy
-         +u2dsjMqC7Qizsr06eNEOo5IU1/fgqijb/UIiJ2Pw9HXghrJkyGG85U17q6ivzKGtZaO
-         +e0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=y8qyK9Z1xdNQlga6YeRs4Ebp3n/3+IX2v6kqUk3/oSc=;
-        b=CNyNm8EFx0mptmmmUWwz1ZTpcwBNiE9K1LZnpa1B0BgrB5bpqHanvTC331JYShi5kC
-         VlLdSCBOU7dGKi0C0H5bH3C7YvUgEX1e3XinnPPF1aG3KT6BSJrjiczclofokAqJUfFv
-         4j71PZGtyYKD2w96ypC2Ni7pgX7RdX8++8K/gIeQDZzYtXBv0x7LZHNZSYkZttdtYUfx
-         zaqLCMI+YrwcSb+cHXWPPQmr+Pgz4SBr6OxHQv48DPcf84vKdUG+FJUqUCgMHN0JnrtT
-         W/8YNzxHjzHRCKeUcMi2q9RPfo3GEnpscU2fltcW+vUYDTz/YCja9OTykZsWLUX9rQnT
-         aAPg==
-X-Gm-Message-State: AOAM530M+ibWYaEzc17KHaO98POcMyM1LeszoyFDIIXi4kgpiixoRYqR
-        S6BYrBOriGQ1gW1jDIALVqE=
-X-Google-Smtp-Source: ABdhPJyD/SU7nRKBl+/czf25l/KE05P6+YzALyMSx5Y1DQzALekriTvfDZTscUp1R64rAwbo6oWrig==
-X-Received: by 2002:a17:90b:1d8b:: with SMTP id pf11mr22900394pjb.119.1641797601781;
-        Sun, 09 Jan 2022 22:53:21 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id y16sm1083219pfi.7.2022.01.09.22.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 22:53:21 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/tegra: Fix reference leak in tegra_dsi_ganged_probe
-Date:   Mon, 10 Jan 2022 06:53:16 +0000
-Message-Id: <20220110065316.6023-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S235101AbiAJGzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 01:55:39 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:47840 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232399AbiAJGzf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 01:55:35 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAC3TaZL2Nthcq8dBg--.62136S2;
+        Mon, 10 Jan 2022 14:55:07 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        cuibixuan@huawei.com, yebin10@huawei.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ASoC: codecs: lpass-tx-macro: Check for error pointer after calling devm_regmap_init_mmio
+Date:   Mon, 10 Jan 2022 14:55:06 +0800
+Message-Id: <20220110065506.5311-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAC3TaZL2Nthcq8dBg--.62136S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xry8XF18ur4kXF1UZw1rCrg_yoWkAFg_C3
+        ykur4ruayUXFnFyr1DtrWxAr4kJFnIyrW3tr18t3s3J345Cw1fZryxCr13u3ykuwsa9a4x
+        WFZFvF4aqry3CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUb2Nt3UUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore. Add put_device() call to fix this.
+The devm_regmap_init_mmio() may return error pointer under certain
+circumstances, for example the possible failure of the kzalloc() in
+regmap_mmio_gen_context(), which is called by devm_regmap_init_mmio().
+Then the tx->regmap will be error pointer and be used in
+tx_macro_mclk_enable().
+Therefore, it should be better to check it in order to avoid the
+dereference of the error pointer.
 
-Fixes: e94236cde4d5 ("drm/tegra: dsi: Add ganged mode support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Fixes: c39667ddcfc5 ("ASoC: codecs: lpass-tx-macro: add support for lpass tx macro")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/gpu/drm/tegra/dsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/soc/codecs/lpass-tx-macro.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
-index f46d377f0c30..de1333dc0d86 100644
---- a/drivers/gpu/drm/tegra/dsi.c
-+++ b/drivers/gpu/drm/tegra/dsi.c
-@@ -1538,8 +1538,10 @@ static int tegra_dsi_ganged_probe(struct tegra_dsi *dsi)
- 		dsi->slave = platform_get_drvdata(gangster);
- 		of_node_put(np);
+diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
+index 27a0d5defd27..e4bbc6bd4925 100644
+--- a/sound/soc/codecs/lpass-tx-macro.c
++++ b/sound/soc/codecs/lpass-tx-macro.c
+@@ -1803,6 +1803,8 @@ static int tx_macro_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
  
--		if (!dsi->slave)
-+		if (!dsi->slave) {
-+			put_device(&gangster->dev);
- 			return -EPROBE_DEFER;
-+		}
+ 	tx->regmap = devm_regmap_init_mmio(dev, base, &tx_regmap_config);
++	if (IS_ERR(tx->regmap))
++		return PTR_ERR(tx->regmap);
  
- 		dsi->slave->master = dsi;
- 	}
+ 	dev_set_drvdata(dev, tx);
+ 
 -- 
-2.17.1
+2.25.1
 

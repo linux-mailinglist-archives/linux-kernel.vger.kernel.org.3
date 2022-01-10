@@ -2,127 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E480848A073
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3043248A06F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243433AbiAJTvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:51:18 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:49309 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S239531AbiAJTvP (ORCPT
+        id S243079AbiAJTuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:50:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50582 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239531AbiAJTut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:51:15 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 20AJnORK019332
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 14:49:25 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id D0A2A15C00C8; Mon, 10 Jan 2022 14:49:24 -0500 (EST)
-Date:   Mon, 10 Jan 2022 14:49:24 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Simo Sorce <simo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Message-ID: <YdyNxJzdBmSSEtDC@mit.edu>
-References: <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
- <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
- <20211210014337.xmin2lu5rhhe3b3t@valinor>
- <20220110132349.siplwka7yhe2tmwc@valinor>
- <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
- <YdxCsI3atPILABYe@mit.edu>
- <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
- <Ydxu+KS5UkQ6hU9R@mit.edu>
- <Ydx7D3H0PS0Zs9/B@sol.localdomain>
- <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+        Mon, 10 Jan 2022 14:50:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F746612C6;
+        Mon, 10 Jan 2022 19:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 639DDC36AE3;
+        Mon, 10 Jan 2022 19:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641844248;
+        bh=s7yyClaY5hOEwaxBzE0Enpf/zhXkDhA+9wtWbXWwSBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B32/LtDMMB4TsYjJXTaUDffYjM5fnNucxEFfk5an03h5Lb4r6k7IclbB4QCiMhX6t
+         JpvtnjCIcxajH0BFNHwe4zrXdIVmY8ayEUOk5OhhuP3zmnJmhU5Ryd6j19hujYwU7b
+         AWUGOw8Xb1Si8HSlEljwXIj43GRrROmgxO9WgNAX6YAQBiUsulengi8p0jrZ/kvZ9S
+         VLfP2DB6azQADYZtSw3ionIjoqq4WgW5RXWd5ubLga3+urPhFeQhiSwIFp5059mrlF
+         aAXOe4s3ADSSwtYsNjRgi0Aqrfux4TdmSpMboe/ZI4oAB2SzHIAS7cgIhtOrd6YblG
+         z4ABlcK71piIQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9648640714; Mon, 10 Jan 2022 16:50:45 -0300 (-03)
+Date:   Mon, 10 Jan 2022 16:50:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Subject: Re: [PATCH v4 48/48] perf cpumap: Give CPUs their own type.
+Message-ID: <YdyOFd8JJHbm1W+m@kernel.org>
+References: <20220105061351.120843-1-irogers@google.com>
+ <20220105061351.120843-49-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+In-Reply-To: <20220105061351.120843-49-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 07:44:23PM +0100, Jason A. Donenfeld wrote:
-> b) Userspace to use some other RNG.
-> 
-> (b) can be accomplished in userspace by just (i) disabling getrandom()
-> (making it return ENOSYS), and then (ii) replacing the /dev/urandom
-> path with a CUSE device or similar.
+Em Tue, Jan 04, 2022 at 10:13:51PM -0800, Ian Rogers escreveu:
+> A common problem is confusing CPU map indices with the CPU, by wrapping
+> the CPU with a struct then this is avoided. This approach is similar to
+> atomic_t.
 
-I don't think you even need to do this.  In general, you need FIPS
-certification for some specific use cases / application.  For example,
-if you're going for PCI compliance, then you might only need FIPS
-compliance for your OpenSSL library.  What the FIPS certification lab
-might consider acceptable for its entropy for its DRBG is an
-interesting question.  For some, simply having the OpenSSL library use
-RDSEED or RDRAND might be sufficient.  Or it could talk to an actual
-physical RNG device.
+This one needed this to build with BUILD_BPF_SKEL=1, please check, I'll
+soon push this to tmp.perf/perf_cpu so that you can take a look and test
+it.
 
-So disabling getrandom() is probably not necessary, just so long as
-you can demonstrate that the FIPS cryptographic module --- i.e., the
-OpenSSL library --- is getting its entropy from an acceptable source.
+- Arnaldo
 
-I suspect what's actually going on is that some enterprise customers
-have FIPS complaince on a check-off list, and they aren't actually
-getting a formal FIPS certification.  Or they only need something to
-wave under the noses of their PCI certification company, and so the
-question is what makes them happy.
-
-Going into the details of whether ChaCha20 is blessed by FIPS is
-probably more into technical weeds than most of the people who *say*
-they want FIPS certification actually will go.  After all, the
-in-kernel DRBG is using as its "entropy source" the timing
-instructions from a bunch of x86 assembly instructions which is
-**soooo** complicated that people are willing to drink from the snake
-oil and claim that it is secure.  Is it really?  Has FIPS said that
-it's OK?  Not any more than they've said anything about ChaCha20!
-
-And this is why some FIPS certification have gotten by just *fine*
-with a pure userspace OpenSSL library as their FIPS cryptographic
-module.  Where you draw the line between a "blessed" entropy source
-and one that's just hand-waving is really at the discretion of the
-certification lab.
-
-Personally, if I was doing something that I really, *really* wanted to
-be secure, I'd be mixing in several hardware RNG's.  Given that most
-server and client platforms have a TPM, or some other hardened
-security module, using that is probably the best bet of I was
-architecting some that *really* needed to be secure.  But of course,
-we're not talking about real security in this thread; we're talking
-about whatever security theater will make the FIPS certification labs,
-and the people who say they want FIPS on their check-off list, happy.  :-)
-
-    	       	       	    	      	       - Ted
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index 80d1a3a31052fe55..328479df5e16a638 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -540,7 +540,7 @@ static int bperf__load(struct evsel *evsel, struct target *target)
+ 		    filter_type == BPERF_FILTER_TGID)
+ 			key = evsel->core.threads->map[i].pid;
+ 		else if (filter_type == BPERF_FILTER_CPU)
+-			key = evsel->core.cpus->map[i];
++			key = evsel->core.cpus->map[i].cpu;
+ 		else
+ 			break;
+ 
+@@ -584,7 +584,7 @@ static int bperf_sync_counters(struct evsel *evsel)
+ 
+ 	num_cpu = all_cpu_map->nr;
+ 	for (i = 0; i < num_cpu; i++) {
+-		cpu = all_cpu_map->map[i];
++		cpu = all_cpu_map->map[i].cpu;
+ 		bperf_trigger_reading(evsel->bperf_leader_prog_fd, cpu);
+ 	}
+ 	return 0;
+@@ -605,7 +605,7 @@ static int bperf__disable(struct evsel *evsel)
+ static int bperf__read(struct evsel *evsel)
+ {
+ 	struct bperf_follower_bpf *skel = evsel->follower_skel;
+-	__u32 num_cpu_bpf = cpu__max_cpu();
++	__u32 num_cpu_bpf = cpu__max_cpu().cpu;
+ 	struct bpf_perf_event_value values[num_cpu_bpf];
+ 	int reading_map_fd, err = 0;
+ 	__u32 i;
+@@ -615,6 +615,7 @@ static int bperf__read(struct evsel *evsel)
+ 	reading_map_fd = bpf_map__fd(skel->maps.accum_readings);
+ 
+ 	for (i = 0; i < bpf_map__max_entries(skel->maps.accum_readings); i++) {
++		struct perf_cpu entry;
+ 		__u32 cpu;
+ 
+ 		err = bpf_map_lookup_elem(reading_map_fd, &i, values);
+@@ -624,14 +625,15 @@ static int bperf__read(struct evsel *evsel)
+ 		case BPERF_FILTER_GLOBAL:
+ 			assert(i == 0);
+ 
+-			perf_cpu_map__for_each_cpu(cpu, j, all_cpu_map) {
++			perf_cpu_map__for_each_cpu(entry, j, all_cpu_map) {
++				cpu = entry.cpu;
+ 				perf_counts(evsel->counts, cpu, 0)->val = values[cpu].counter;
+ 				perf_counts(evsel->counts, cpu, 0)->ena = values[cpu].enabled;
+ 				perf_counts(evsel->counts, cpu, 0)->run = values[cpu].running;
+ 			}
+ 			break;
+ 		case BPERF_FILTER_CPU:
+-			cpu = evsel->core.cpus->map[i];
++			cpu = evsel->core.cpus->map[i].cpu;
+ 			perf_counts(evsel->counts, i, 0)->val = values[cpu].counter;
+ 			perf_counts(evsel->counts, i, 0)->ena = values[cpu].enabled;
+ 			perf_counts(evsel->counts, i, 0)->run = values[cpu].running;
+diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+index cbc6c2bca488f6bf..631e34a0b66ff084 100644
+--- a/tools/perf/util/bpf_counter_cgroup.c
++++ b/tools/perf/util/bpf_counter_cgroup.c
+@@ -48,7 +48,7 @@ static int bperf_load_program(struct evlist *evlist)
+ 	struct cgroup *cgrp, *leader_cgrp;
+ 	__u32 i, cpu;
+ 	__u32 nr_cpus = evlist->core.all_cpus->nr;
+-	int total_cpus = cpu__max_cpu();
++	int total_cpus = cpu__max_cpu().cpu;
+ 	int map_size, map_fd;
+ 	int prog_fd, err;
+ 
+@@ -125,7 +125,7 @@ static int bperf_load_program(struct evlist *evlist)
+ 			for (cpu = 0; cpu < nr_cpus; cpu++) {
+ 				int fd = FD(evsel, cpu);
+ 				__u32 idx = evsel->core.idx * total_cpus +
+-					evlist->core.all_cpus->map[cpu];
++					evlist->core.all_cpus->map[cpu].cpu;
+ 
+ 				err = bpf_map_update_elem(map_fd, &idx, &fd,
+ 							  BPF_ANY);
+@@ -212,7 +212,7 @@ static int bperf_cgrp__sync_counters(struct evlist *evlist)
+ 	int prog_fd = bpf_program__fd(skel->progs.trigger_read);
+ 
+ 	for (i = 0; i < nr_cpus; i++) {
+-		cpu = evlist->core.all_cpus->map[i];
++		cpu = evlist->core.all_cpus->map[i].cpu;
+ 		bperf_trigger_reading(prog_fd, cpu);
+ 	}
+ 
+@@ -245,7 +245,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
+ {
+ 	struct evlist *evlist = evsel->evlist;
+ 	int i, cpu, nr_cpus = evlist->core.all_cpus->nr;
+-	int total_cpus = cpu__max_cpu();
++	int total_cpus = cpu__max_cpu().cpu;
+ 	struct perf_counts_values *counts;
+ 	struct bpf_perf_event_value *values;
+ 	int reading_map_fd, err = 0;
+@@ -272,7 +272,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
+ 		}
+ 
+ 		for (i = 0; i < nr_cpus; i++) {
+-			cpu = evlist->core.all_cpus->map[i];
++			cpu = evlist->core.all_cpus->map[i].cpu;
+ 
+ 			counts = perf_counts(evsel->counts, i, 0);
+ 			counts->val = values[cpu].counter;
+diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
+index 28dc4c60c7884818..d756cc66eef32ae8 100644
+--- a/tools/perf/util/bpf_ftrace.c
++++ b/tools/perf/util/bpf_ftrace.c
+@@ -63,7 +63,7 @@ int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
+ 		fd = bpf_map__fd(skel->maps.cpu_filter);
+ 
+ 		for (i = 0; i < ncpus; i++) {
+-			cpu = perf_cpu_map__cpu(ftrace->evlist->core.cpus, i);
++			cpu = perf_cpu_map__cpu(ftrace->evlist->core.cpus, i).cpu;
+ 			bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
+ 		}
+ 	}
+@@ -122,7 +122,7 @@ int perf_ftrace__latency_read_bpf(struct perf_ftrace *ftrace __maybe_unused,
+ 	int i, fd, err;
+ 	u32 idx;
+ 	u64 *hist;
+-	int ncpus = cpu__max_cpu();
++	int ncpus = cpu__max_cpu().cpu;
+ 
+ 	fd = bpf_map__fd(skel->maps.latency);
+ 

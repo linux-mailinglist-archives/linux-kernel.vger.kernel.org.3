@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F381548A23C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B08848A241
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345108AbiAJVzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:55:06 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:46846 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345088AbiAJVzF (ORCPT
+        id S237010AbiAJV6h convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 16:58:37 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:32480 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230413AbiAJV6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:55:05 -0500
-Received: by mail-oi1-f170.google.com with SMTP id y128so14108374oia.13;
-        Mon, 10 Jan 2022 13:55:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ibH96/TSKICVU4X5gL1f5xl54raErpDQg8IypccovFA=;
-        b=YEwIf6OjqDz4yuR7w6C1gcwqB5ok1UKzjoIFbI9d829+V3oZu9/MiQM4rXzyhP+mm1
-         CtUzuhM9seB+v6YFoYdHO8UFxMCGfxOYOTYW7Lh/xJYybZoFgbRffBhJP4kt5len508R
-         FJGKIgU/M/A2OshKvlKHC3ryH/yZnqeXj/UtqjWqAWbi+8yThrRI62JcOdPI7qtGM8nQ
-         K6g2kYE9RYdAKQyBQlGnjEGOZ+oHRVorkUmNUszzgwAPvTUglBMSuTVP77JnV+N4PCjk
-         dPR4AEcZrEWmAxm0Emc7iePhgKYbuXx59BsmzfYuSwaUpi6b76Ngz25G8DrY40x7XC4K
-         pEFQ==
-X-Gm-Message-State: AOAM531hsxRL3W14aOChV66aCLCNGP/+9NZEZm7I13JS6pL9eKBBQhGc
-        MlvymFkIc41l0Ab2XS3Jlw==
-X-Google-Smtp-Source: ABdhPJwCROu92cIX39O/03JiC9nasKDJP081eZeaA7oR2oT/a1IW8Io4AWMiWQQfgx4gV+11+SQAVg==
-X-Received: by 2002:aca:ad57:: with SMTP id w84mr19167184oie.69.1641851704641;
-        Mon, 10 Jan 2022 13:55:04 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e19sm1731317otk.47.2022.01.10.13.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 13:55:03 -0800 (PST)
-Received: (nullmailer pid 1584617 invoked by uid 1000);
-        Mon, 10 Jan 2022 21:55:02 -0000
-Date:   Mon, 10 Jan 2022 15:55:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH 6/8] dt-bindings: clock: samsung: convert Exynos5260 to
- dtschema
-Message-ID: <YdyrNv79Eepm31ty@robh.at.kernel.org>
-References: <20220102115356.75796-1-krzysztof.kozlowski@canonical.com>
- <20220102115356.75796-6-krzysztof.kozlowski@canonical.com>
+        Mon, 10 Jan 2022 16:58:36 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-218-zp8P4chpPGiKLNBRf0aWIg-1; Mon, 10 Jan 2022 21:58:33 +0000
+X-MC-Unique: zp8P4chpPGiKLNBRf0aWIg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 10 Jan 2022 21:58:33 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 10 Jan 2022 21:58:33 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Steven Rostedt' <rostedt@goodmis.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: RE: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Thread-Topic: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Thread-Index: AQHYBkLm7AQ+C6qOvkCW4jNyMLz0qKxce3DQgAAF6wCAAEoUEA==
+Date:   Mon, 10 Jan 2022 21:58:33 +0000
+Message-ID: <7a0fefb7ed3542b4a49dee1e78b1668b@AcuMS.aculab.com>
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+ <20220110122436.5302128f@gandalf.local.home>
+In-Reply-To: <20220110122436.5302128f@gandalf.local.home>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220102115356.75796-6-krzysztof.kozlowski@canonical.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 02 Jan 2022 12:53:54 +0100, Krzysztof Kozlowski wrote:
-> Convert Samsung Exynos5260 SoC clock controller bindings to DT schema
-> format.
+From: Steven Rostedt
+> Sent: 10 January 2022 17:25
+...
+> > ...
+> > > +	if (likely((unsigned long)str >= TASK_SIZE)) {
+> > > +		/* For safety, do not trust the string pointer */
+> > > +		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
+> > > +			return NULL;
+> > > +	} else {
+> > > +		/* user space address? */
+> > > +		ustr = (char __user *)str;
+> > > +		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
+> > > +			return NULL;
+> >
+> > Is that check against TASK_SIZE even correct for all architectures?
+> > copy_to/from_user() uses access_ok() - which is architecture dependant.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/clock/exynos5260-clock.txt       | 190 ---------
->  .../clock/samsung,exynos5260-clock.yaml       | 382 ++++++++++++++++++
->  2 files changed, 382 insertions(+), 190 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/exynos5260-clock.txt
->  create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos5260-clock.yaml
-> 
+> The problem with access_ok() (which I tried first) is that it can't be used
+> from interrupt context, and this check can happen in interrupt context.
+> Either way, if we pick the wrong one for the arch, the only thing bad that
+> can happen is that it returns "fault" and the filter fails, just like if
+> the pointer was to bad memory.
 
-Applied, thanks!
+Isn't there also at least one architecture where you can't differentiate
+between user and kernel pointers by looking at the address?
+(Something like sparc ASI is used for user accesses so both user
+and kernel get the full 4G address range. But it isn't sparc (or pdp/11))
+ISTR it causing issues with the code for kernel_setsockopt() and
+required a separate flag.
+
+Put that together with something that needs user_access_begin()
+to bracket user accesses and you probably fail big-time.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E700D489B7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BDD489B93
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 15:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbiAJOmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 09:42:14 -0500
-Received: from out162-62-57-87.mail.qq.com ([162.62.57.87]:58705 "EHLO
-        out162-62-57-87.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235700AbiAJOmN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 09:42:13 -0500
-X-Greylist: delayed 9174 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Jan 2022 09:42:10 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641825723;
-        bh=SInMYX8FQJcMH6GOvAqNHe5i9bED8l/qPkQmnz9JKnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ik2d4sUhWEz7YpEZywc8aiXSF0pXVi5yafkQF8bkafoQvB0BZLCSmHoyyUhHQ1OyQ
-         kCPmTTAJOtydRchWN3oX/0mw1tZiYK1A07zhQWistqOZ2dRlHNOwkb5dqdb/4yFj3t
-         i8cgjNYy0y/oOVN4Nb39cgXj1zFEwkr/eRNzWkjk=
-Received: from localhost ([119.32.47.91])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id A822FCF7; Mon, 10 Jan 2022 22:42:02 +0800
-X-QQ-mid: xmsmtpt1641825722t83hly730
-Message-ID: <tencent_6DDF530ADA4A09B6D49B4E0A8CD9F23D7809@qq.com>
-X-QQ-XMAILINFO: MdDuF0zFTqpBGSvl8dJqX0GI0XABVuqy0SrSRJYjycLK1i6n0bb9K8xa0WKCyU
-         kh7DjI4IhZuImH0dHAdDICpJMVIkxAkfeGoEUtxPm0dMUojw5AdsLxnvj/gUoHNxDn+SW307L7lI
-         3+5DVA47ZeaXl7EpHYTzR7aB/MNQGLhpIp0iPW8KPgpRVXlkuXtpFkZzuESrLPN1Rsb4IFwJe59b
-         VO3bOCPXVemKNUuOQCihmxWBkfhc7F7hJC5V+EFfNM4HNwQ2KpE0ZQmnHWG3yAX86X/7Flxsjl7Z
-         eJjpRvcIYDnCBVhiJudWIshCRierBboxD1MvicBlTuvxWn8OUny5BS/ZvBsK3eOnIdQ2RvznNV8r
-         17o1slEZx2t41u6fLfMXvXWfpKkWe7Deep8u1bbsENPz354/fTcJrQAmvIKPQYGIz9K+C2BS0Tix
-         CdC0HRrFK7wFqRo+BD4OijNzoRd74b0DsgkUWllGC19b2fyQ4zacURx1hubOHUEHczJ7L1GCm29g
-         tIfzNg2cIdObMJJg0Sw0Zvmj4eVE+Ix6ToS6xaPP/a155rtb24AfjFRNNE4XsWJPGohsx+vaoNB4
-         5nxi6aeWqYZMwILkycce02X89bjYoT+BrFI8iv4IWJPjWOB8qXrNNy9S3+S0Jh0Y7Ids7cuJtm77
-         M3h7FnnSZpmwuAEvO/LxZ0VDliH6eszYtQJ+mQ4HW53+LWxHVVMgYqRib/GoUbOQwrLsks3gWSoF
-         MB5zju8VEucFwTFqsl92jvXAmubKyBZR9O/YnsU6OBSRYHw3ShXLLooxHFiPpkzvpp2+ljq6VQkV
-         AQck9QAPDYPYm3oReU9Hg5IbKKGv4DL4maMzlDDv5JNFFSRR01TLrmu3xBP5YTpRYsYvMIVZy5DA
-         ==
-Date:   Mon, 10 Jan 2022 22:42:02 +0800
-From:   Conley Lee <conleylee@foxmail.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org, clabbe.montjoie@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: ethernet: sun4i-emac: replace magic number with
- macro
-X-OQ-MSGID: <YdxFullWXqeg8fmT@fedora>
-References: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
- <tencent_AEEE0573A5455BBE4D5C05226C6C1E3AEF08@qq.com>
- <YdwvEKiKd0JKpG9T@unreal>
+        id S235731AbiAJOtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 09:49:50 -0500
+Received: from shark1.inbox.lv ([194.152.32.81]:45432 "EHLO shark1.inbox.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230426AbiAJOtt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 09:49:49 -0500
+Received: from shark1.inbox.lv (localhost [127.0.0.1])
+        by shark1-out.inbox.lv (Postfix) with ESMTP id 048B61118140;
+        Mon, 10 Jan 2022 16:49:48 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
+        t=1641826188; bh=v8M5awXlRgm8CQPFWrxz5Yn/2aXPYkjUaIMnTlnA2j4=;
+        h=Date:From:To:Subject:Message-ID:In-Reply-To:References:
+         Content-Type:X-ESPOL:from:date;
+        b=ETkKyFBSqlmwxhHpOAPlyeai+0JG5EsOAxPGfHaxqA+mKrNVrafW5wHuqE9QQOdMj
+         fkYp9FiHF5ouPE742u0Z4OYws+vdRodvMKwZg4yPdnwSk2m8KG7fxrtK2j6yOU0Fju
+         hYNdJxDDysBQmZCy8v1k5aZExcslKHO6gl19u3Sw=
+Received: from localhost (localhost [127.0.0.1])
+        by shark1-in.inbox.lv (Postfix) with ESMTP id EDA2011180B4;
+        Mon, 10 Jan 2022 16:49:47 +0200 (EET)
+Received: from shark1.inbox.lv ([127.0.0.1])
+        by localhost (shark1.inbox.lv [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id 49NQ99mX1Zp1; Mon, 10 Jan 2022 16:49:47 +0200 (EET)
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+        by shark1-in.inbox.lv (Postfix) with ESMTP id 9C3971118085;
+        Mon, 10 Jan 2022 16:49:47 +0200 (EET)
+Date:   Mon, 10 Jan 2022 23:49:32 +0900
+From:   Alexey Avramov <hakavlad@inbox.lv>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org, hakavlad@gmail.com
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+Message-ID: <20220110234932.6eb6c356@mail.inbox.lv>
+In-Reply-To: <20220104202227.2903605-1-yuzhao@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdwvEKiKd0JKpG9T@unreal>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: OK
+X-ESPOL: AJqEQH8B6gpL2qWiUuRh4Or6x9a2SFs9vyXmrMk96HRYtbrGu9h2dXPmZYmvRkKl
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/10/22 at 03:05下午, Leon Romanovsky wrote:
-> Date: Mon, 10 Jan 2022 15:05:20 +0200
-> From: Leon Romanovsky <leon@kernel.org>
-> To: Conley Lee <conleylee@foxmail.com>
-> Cc: davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
->  wens@csie.org, clabbe.montjoie@gmail.com, netdev@vger.kernel.org,
->  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v2] net: ethernet: sun4i-emac: replace magic number
->  with macro
-> 
-> On Mon, Jan 10, 2022 at 07:35:49PM +0800, Conley Lee wrote:
-> > This patch remove magic numbers in sun4i-emac.c and replace with macros
-> > defined in sun4i-emac.h
-> > 
-> > Change since v1
-> > ---------------
-> > - reformat
-> > - merge commits
-> > - add commit message
-> 
-> This changelog should be placed after "---" below your SOB.
-> 
-> Thanks
-> 
-> > 
-> > Signed-off-by: Conley Lee <conleylee@foxmail.com>
-> > ---
-> >  drivers/net/ethernet/allwinner/sun4i-emac.c | 30 ++++++++++++---------
-> >  drivers/net/ethernet/allwinner/sun4i-emac.h | 18 +++++++++++++
-> >  2 files changed, 35 insertions(+), 13 deletions(-)
-I will reformat it and submit again, thanks ~
+Note that with vm.swappiness=0, the vm.watermark_scale_factor value does
+not affect the swap possibility: MGLRU ignores sc->file_is_tiny.
+
+With the classic 2-gen LRU swapping goes well at swappiness=0 and
+high vm.watermark_scale_factor, which is expected according to the
+documentation:
+"At 0, the kernel will not initiate swap until the amount of free and
+file-backed pages is less than the high watermark in a zone." [1]
+
+With vm.swappiness=0, no swap occurs with any vm.watermark_scale_factor
+value with MGLRU.
+
+I used to see in practice (with MGLRU v3) the impossibility of swapping 
+when vm.swappiness=0 and vm.watermark_scale_factor=1000.
+
+At a minimum, this will require updating the documentation for
+vm.swappiness.
+
+BTW, why MGLRU doesn't use something like sc->file_is_tiny?
+
+[1] https://github.com/torvalds/linux/blob/v5.16/Documentation/admin-guide/sysctl/vm.rst#swappiness

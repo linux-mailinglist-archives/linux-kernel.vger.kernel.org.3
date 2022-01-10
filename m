@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 037B7489C65
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965BB489C67
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbiAJPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:39:45 -0500
-Received: from mail-qv1-f47.google.com ([209.85.219.47]:46927 "EHLO
-        mail-qv1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiAJPjm (ORCPT
+        id S236377AbiAJPjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:39:55 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:51354 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236373AbiAJPjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:39:42 -0500
-Received: by mail-qv1-f47.google.com with SMTP id r6so14746567qvr.13;
-        Mon, 10 Jan 2022 07:39:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HrUqLYnp+EBghrZhAUPX70obMslHMCDhZEuASiV4UeM=;
-        b=aPqRo2tVFgy5ejkycuuE2RCuA2wchgNt3NDzkxNvr2CfGPHinCf6uWN+WeZ8x55Mco
-         y6B602y//KUayN+bkdU0LhPN2xoYnEjM4VLKDoO9l3I/nDTfgIvNbuS4w2LzsSu/eY8U
-         aGckrPplTRm8zOzRqVS3KS0nt1HO655GxjHpfViRNhyV2lcYdn3WX77MAdg5BsjrNhZD
-         y8SfRcoEqhNrK7K9dfwqYeym4/O0eSb4GJhhCmGgmwYUo/wQBuHY5ICvN1l+9ARYJEEL
-         2vGkTl0Pq0fPuhVRK4KUbfC/qgvhk9mmhVhmBt5ulyQ0Xj2Qwof0DnayJfB3WWeVeoiy
-         YgTg==
-X-Gm-Message-State: AOAM532heNwesyyRKA1a8VQiA5JXyHVVFJsQwy5ETJOmhDcZeReYaX1J
-        USgwyXkPxNINCDnkxvlswtep4KLTD68Vls9n7VTUGwxV
-X-Google-Smtp-Source: ABdhPJze83vnfcSiJmIhtzb6F6zbpyVwh+LYKhbWg3NN76UJypnrzMoWY3TD+e9UUogomhrrOaAgYt98zyI82BOx5Ls=
-X-Received: by 2002:a05:6214:20a2:: with SMTP id 2mr68120313qvd.52.1641829181417;
- Mon, 10 Jan 2022 07:39:41 -0800 (PST)
+        Mon, 10 Jan 2022 10:39:54 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B460421124;
+        Mon, 10 Jan 2022 15:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641829192; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FpgD/z1tH1n4z25ssRiC8BwrRHCQmq0t20cgjahtksA=;
+        b=a5nL7FD8WAScsrFn7oClSv1bqemNsF2dJoGD/wehxxpMVPytSTcqwnKSQ5wCUv8KKG6s8k
+        yn3Yq4JQCE1YyY4GlQKkiO31jokIJkxJ8FCsP95m7oEwzL+LHmPqye4nUZny4PxI+IhEIx
+        Lmrz78siT39fe0YgQ6PngSztc4docRw=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 46A64A3B83;
+        Mon, 10 Jan 2022 15:39:52 +0000 (UTC)
+Date:   Mon, 10 Jan 2022 16:39:51 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+Message-ID: <YdxTR4+FL08XyFuO@dhcp22.suse.cz>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <YdSuSHa/Vjl6bPkg@google.com>
+ <YdgKClGAuHlkzVbQ@dhcp22.suse.cz>
+ <YdiKVJlClB3h1Kmg@google.com>
 MIME-Version: 1.0
-References: <20220107073407.GG22086@kili> <20220107134617.GA895400@chenyu-desktop>
- <20220110061713.GA1951@kadam>
-In-Reply-To: <20220110061713.GA1951@kadam>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Jan 2022 16:39:30 +0100
-Message-ID: <CAJZ5v0gdB_y9MVasdGhMCUPKZBzNPo1NxxkHh_QeKjh1DwPPfA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: pfr_telemetry: Fix info leak in pfrt_log_ioctl()
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdiKVJlClB3h1Kmg@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 7:17 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Fri, Jan 07, 2022 at 09:46:17PM +0800, Chen Yu wrote:
-> > On Fri, Jan 07, 2022 at 10:34:07AM +0300, Dan Carpenter wrote:
-> > > The "data_info" struct is copied to the user.  It has a 4 byte struct
-> > > hole after the last struct member so we need to memset that to avoid
-> > > copying uninitialized stack data to the user.
-> > >
-> > > Fixes: b0013e037a8b ("ACPI: Introduce Platform Firmware Runtime Telemetry driver")
-> > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > > ---
-> > > When you're adding a new driver to the kernel then please use the new
-> > > driver's prefix instead of just the subsystem prefix.
-> > >
-> > >  Bad: ACPI: Introduce Platform Firmware Runtime Telemetry driver
-> > > Good: ACPI / pfr_telemetry: Introduce Platform Firmware Runtime Telemetry driver
-> > >
-> > Thanks for pointing this out.
-> > > Otherwise it's just up to me to guess what prefix you wanted.
-> > >
-> > >  drivers/acpi/pfr_telemetry.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/acpi/pfr_telemetry.c b/drivers/acpi/pfr_telemetry.c
-> > > index da50dd80192c..9abf350bd7a5 100644
-> > > --- a/drivers/acpi/pfr_telemetry.c
-> > > +++ b/drivers/acpi/pfr_telemetry.c
-> > > @@ -83,6 +83,7 @@ static int get_pfrt_log_data_info(struct pfrt_log_data_info *data_info,
-> > >     union acpi_object *out_obj, in_obj, in_buf;
-> > >     int ret = -EBUSY;
-> > >
-> > > +   memset(data_info, 0, sizeof(*data_info));
-> > Just one minor question, how about moving above before:
-> > data_info->status = out_obj->package.elements[LOG_STATUS_IDX].integer.value;
-> > after the sanity check of the _DSM result?
->
-> I guess I wanted to keep all the memsets together.  I feel like if the
-> data is invalid, then it's going to be a slow path and it's not worth
-> optimizing that case.  If the data is invalid then a little slow down is
-> the least of our concerns.
+On Fri 07-01-22 11:45:40, Yu Zhao wrote:
+[...]
+> Next, I argue that the benefits of this patchset outweigh its risks,
+> because, drawing from my past experience,
+> 1. There have been many larger and/or riskier patchsets taken; I'll
+>    assemble a list if you disagree.
 
-Patch applied, thanks!
+No question about that. Changes in the reclaim path are paved with
+failures and reverts and fine tuning on top of existing fine tuning.
+The difference from your patchset is that they tend to be much much
+smaller and go incremental and therefore easier to review.
 
-Yu, this series needs to spend a few days more in linux-next, because
-of the fixes against it sent lately.
+>    And this patchset is fully guarded
+>    by #ifdef; Linus has also assessed on this point.
+
+I appreciate you made the new behavior an opt-in and therefore existing
+workloads are less likely to regress. I do not think ifdefs help
+all that much, though, because a) realistically the config will
+likely be enabled for most distribution kernels and b) the parallel
+reclaim implementation adds a maintenance overhead regardless of those
+ifdef. The later point is especially worrying because the memory reclaim
+is a complex and hard to review beast already. Any future changes would
+need to consider both reclaim algorithms of course.
+
+Hence I argue we really need a wider consensus this is the right
+direction we want to pursue.
+
+> 2. There have been none that came with the testing/benchmarking
+>    coverage as this one did. Please point me to some if I'm mistaken,
+>    and I'll gladly match them.
+
+I do appreciate your numbers but you should realize that this is an area
+that is really hard to get any conclusive testing for. We keep learning
+about fallouts on workloads we haven't really anticipated or where the
+runtime effects happen to disagree with our intuition. So while those
+numbers are nice there are other important aspects to consider like the
+maintenance cost for example.
+
+> The numbers might not materialize in the real world; the code is not
+> perfect; and many other risks... But all the top eight open source
+> memory hogs were covered, which is unprecedented; memcached and fio
+> showed significant improvements and it only takes a few commands to
+> see for yourselves.
+> 
+> Regarding the acks and the reviewed-bys, I certainly can ask people
+> who have reaped the benefits of this patchset to do them, if it's
+> required. But I see less fun in that. I prefer to provide empirical
+> evidence and convince people who are on the other side of the aisle.
+
+I like to hear from users who benefit from your work and that certainly
+gives more credit to it. But it will be the MM community to maintain the
+code and address future issues.
+
+We do not have a dedicated maintainer for the memory reclaim but
+certainly there are people who have helped shaping the existing code and
+have learned a lot from the past issues - like Johannes, Rik, Mel just
+to name few. If I were you I would be really looking into finding an
+agreement with them. I myself can help you with memcg and oom side of
+the things (we already have discussions about those).
+
+Thanks!
+-- 
+Michal Hocko
+SUSE Labs

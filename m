@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2105C489D5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB9C489D5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237090AbiAJQST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbiAJQSS (ORCPT
+        id S237247AbiAJQSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:18:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46376 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237046AbiAJQSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:18:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54866C06173F;
-        Mon, 10 Jan 2022 08:18:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 10 Jan 2022 11:18:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641831513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZD+LOj5cUuiivVEnNNCtusx2ZUVNWQVbTXyULr5z3N0=;
+        b=Ufp+Jf4bYOdsKBFelxHDI7al5wrYq2rlaTqgyd/Pdd0cUdnl3cRxTTNWcG/7Yxc/FnZjQs
+        MgQTHWY1OEZUx4Z+H7R6VQaaT2dviqSLTxQUJrNhE5+8b1P4/n/ILBUGLybQU9ToOFRq2W
+        zbPs6Rh4/DvzFD5Sh4kDXowcWtLRE2k=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-186-XXSAueLMOjm4oOkgxkxvaQ-1; Mon, 10 Jan 2022 11:18:29 -0500
+X-MC-Unique: XXSAueLMOjm4oOkgxkxvaQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62522B81661;
-        Mon, 10 Jan 2022 16:18:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E420C36AF6;
-        Mon, 10 Jan 2022 16:18:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641831495;
-        bh=rS4V/WO3etbLxGRygeuWlcXQr4ydR1z6tfJWlu1EtTE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=d2mnaon2KYPN/QbKt30EQ243zPBjMmAIJ8VcqXYrjJ6ReupubGADw+v86TvDBoDCU
-         InpXP3k2Vj0uBubhUDqClgoiBbDd2SOcmUFC2Uy+xoMI48PpqcqIVAxv8JCIEBPpzf
-         AINBzxbMd3Y0jj8IaOsP5aQHkVMOazB5H63MjE5Zv+gbmIovnfvd7flys5uGVZoWkc
-         C7bNiXOFUMlIG6ZXHauoU4yiGlB6vPv8vAebmpwTB9dYmajQOXTma5eG4hHC4hOsNe
-         QMHM8vqJfjV3qMiRUTRqT0A/XElQr+9BS+XumDIWdilDv7aA5t+xOTezWvRxsFbNAO
-         syjdwTdIbx4Xw==
-Received: by mail-ed1-f51.google.com with SMTP id m4so14150904edb.10;
-        Mon, 10 Jan 2022 08:18:15 -0800 (PST)
-X-Gm-Message-State: AOAM531OXlqqBDeOWvFmuQ95YvHPPmfbiKrpaknvnvQwHT1FloalveWW
-        aqLLf9ZCIgH4py69USBD7IEzPYfL1IVQXrI4Sw==
-X-Google-Smtp-Source: ABdhPJxzI/V2iQ9Y/D5SfWoyQ05XpKPBwP6qYhOYyRpWpiYpvr4ivTJ/0gQCDjzplq09Hl8rg61Ix1TRefJ0/NcCXNM=
-X-Received: by 2002:aa7:ce88:: with SMTP id y8mr357803edv.303.1641831493386;
- Mon, 10 Jan 2022 08:18:13 -0800 (PST)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 88810839A44;
+        Mon, 10 Jan 2022 16:18:28 +0000 (UTC)
+Received: from [10.22.11.34] (unknown [10.22.11.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 86B047E8C8;
+        Mon, 10 Jan 2022 16:18:27 +0000 (UTC)
+Message-ID: <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
+Date:   Mon, 10 Jan 2022 11:18:27 -0500
 MIME-Version: 1.0
-References: <20220110104214.25321-1-yu.tu@amlogic.com> <20220110104214.25321-2-yu.tu@amlogic.com>
-In-Reply-To: <20220110104214.25321-2-yu.tu@amlogic.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 10 Jan 2022 10:18:02 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKFLnfc5eaUHeo6EkbS0kkpA94rh=Zuda9V9aCragdVxw@mail.gmail.com>
-Message-ID: <CAL_JsqKFLnfc5eaUHeo6EkbS0kkpA94rh=Zuda9V9aCragdVxw@mail.gmail.com>
-Subject: Re: [PATCH V5 1/5] dt-bindings: serial: meson: Drop legacy compatible.
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Tim Murray <timmurray@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <20220108164617.3130175-1-jaegeuk@kernel.org>
+ <YdvoxkAAquI17UbX@infradead.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YdvoxkAAquI17UbX@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 4:42 AM Yu Tu <yu.tu@amlogic.com> wrote:
+
+On 1/10/22 03:05, Christoph Hellwig wrote:
+> Adding the locking primitive maintainers to this patch adding open coded
+> locking primitives..
 >
-> Deprecated, don't use anymore because legacy amlogic,meson-gx-uart
-> compatible. Don't differentiate between GXBB, GXL and G12A which
-> have different revisions of the UART IP. So it's split into
-> GXBB,GXL and G12A.
+> On Sat, Jan 08, 2022 at 08:46:17AM -0800, Jaegeuk Kim wrote:
+>> From: Tim Murray <timmurray@google.com>
+>>
+>> f2fs rw_semaphores work better if writers can starve readers,
+>> especially for the checkpoint thread, because writers are strictly
+>> more important than reader threads. This prevents significant priority
+>> inversion between low-priority readers that blocked while trying to
+>> acquire the read lock and a second acquisition of the write lock that
+>> might be blocking high priority work.
+>>
+>> Signed-off-by: Tim Murray <timmurray@google.com>
+>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-You are breaking compatibility. If your dts is updated to use the new
-compatible, then a kernel without the change will not work anymore. It
-worked before without understanding the changes you are making. It
-should continue to. A compatible value like this would accomplish what
-you want:
+We could certainly implement a down_read() variant (e.g. 
+down_read_lowprio()) with its own slowpath function to do this within 
+the rwsem code as long as there is a good use-case for this kind of 
+functionality.
 
-"amlogic,meson-gxbb-uart", "amlogic,meson-gx-uart", "amlogic,meson-ao-uart"
+Cheers,
+Longman
 
-A new kernel will match on "amlogic,meson-gxbb-uart" or
-"amlogic,meson-gx-uart" depending if the dtb is updated or not. An old
-kernel will continue to match on "amlogic,meson-gx-uart".
-
-If you are going to go breaking things, the power domain distinction
-in the compatible is odd...
-
-
-Rob

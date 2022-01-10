@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B24AA4896FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D9F489704
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244425AbiAJLIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:08:04 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:41150 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244420AbiAJLHx (ORCPT
+        id S244440AbiAJLJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233981AbiAJLJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:07:53 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 10 Jan 2022 06:09:55 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09982C06173F;
+        Mon, 10 Jan 2022 03:09:55 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C2C261F393;
-        Mon, 10 Jan 2022 11:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641812872; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jZuELbu08OfY41gObPEz8xEE1M01ktEm+EkQwySqewM=;
-        b=WjaoSCWRUZdZH7YrHxPyTJmQ7a7t1y+2Ga00BF63QEiswAQOFB/g+jXXX+5ALBLbKg7JGk
-        glfXMpVFehGgiGljWfByV97JQLqwjQzJdYGYU2wSU/nZyQY5fLprV4MY2orx0C0NmMF6vv
-        vf2EQ/RsELmHZk10bAMOV3Zh1/ar9Bk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641812872;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jZuELbu08OfY41gObPEz8xEE1M01ktEm+EkQwySqewM=;
-        b=PA+7rv9vPjWgGev4gseCNYKbsC40Y6zCoe6Exqz03t0Qd9HYFQNPQbhzpc3AGWjrIziwLc
-        n2XWHuLoKtqNDEAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADB7513A98;
-        Mon, 10 Jan 2022 11:07:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YuAcKYgT3GHdZQAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:07:52 +0000
-Date:   Mon, 10 Jan 2022 12:08:00 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/cleanups for v5.17
-Message-ID: <YdwTkIqIyOtdWN/c@zn.tnic>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 660093FA5E;
+        Mon, 10 Jan 2022 11:09:44 +0000 (UTC)
+Message-ID: <5785c77d-9746-4b3f-b1dc-63270a2b1e73@marcan.st>
+Date:   Mon, 10 Jan 2022 20:09:42 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 17/35] brcmfmac: pcie: Provide a buffer of random bytes
+ to the device
+Content-Language: en-US
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-18-marcan@marcan.st>
+ <3844c03f-627b-8bf6-f526-8fda3e7892e0@broadcom.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <3844c03f-627b-8bf6-f526-8fda3e7892e0@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 2022/01/10 18:11, Arend van Spriel wrote:
+> On 1/4/2022 8:26 AM, Hector Martin wrote:
+>> Newer Apple firmwares on chipsets without a hardware RNG require the
+>> host to provide a buffer of 256 random bytes to the device on
+>> initialization. This buffer is present immediately before NVRAM,
+>> suffixed by a footer containing a magic number and the buffer length.
+>>
+>> This won't affect chips/firmwares that do not use this feature, so do it
+>> unconditionally.
+> 
+> Not sure what the general opinion is here, but pulling random bytes for 
+> naught seems wasteful to me. So if there is a way of knowing it is 
+> needed please make it conditional.
 
-please pull the garden variety of x86/cleanups for 5.17.
+We could gate it on specific chips only, if you don't mind maintaining a
+list of those. AIUI that would be all the T2 platform chips or so (the
+newer two don't seem to need it).
 
-Thx.
-
----
-
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
-
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cleanups_for_v5.17_rc1
-
-for you to fetch changes up to 0be4838f018c10d7f138a213c006d345db35ef5b:
-
-  x86/events/amd/iommu: Remove redundant assignment to variable shift (2021-12-28 21:30:05 +0100)
-
-----------------------------------------------------------------
-- The mandatory set of random minor cleanups all over tip
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      x86/events/amd/iommu: Remove redundant assignment to variable shift
-
-Kees Cook (2):
-      x86/uaccess: Move variable into switch case statement
-      x86/boot/string: Add missing function prototypes
-
-Shaokun Zhang (1):
-      x86/fpu: Remove duplicate copy_fpstate_to_sigframe() prototype
-
- arch/x86/boot/string.h            | 3 +++
- arch/x86/events/amd/iommu.c       | 2 +-
- arch/x86/include/asm/fpu/signal.h | 3 ---
- arch/x86/include/asm/uaccess.h    | 5 +++--
- 4 files changed, 7 insertions(+), 6 deletions(-)
+Alternatively we could just do this only if an Apple OTP is detected.
+That is already implicitly gated by the OTP offset chip list.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

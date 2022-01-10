@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 689F748923D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F6048919D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242449AbiAJHkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240044AbiAJHaa (ORCPT
+        id S239812AbiAJHeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:34:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38554 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239837AbiAJH3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:30:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64891C028BA2;
-        Sun,  9 Jan 2022 23:27:31 -0800 (PST)
+        Mon, 10 Jan 2022 02:29:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 058D3611AD;
-        Mon, 10 Jan 2022 07:27:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBEFFC36AED;
-        Mon, 10 Jan 2022 07:27:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B78856112C;
+        Mon, 10 Jan 2022 07:29:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0455C36AED;
+        Mon, 10 Jan 2022 07:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799650;
-        bh=AYGIfW94MQBnAGeV9cDSaBI/rEOKwJdLO5F0GReZ6KA=;
+        s=korg; t=1641799749;
+        bh=LdRVj9U1Q7raK3+ObByonpixbYpKgLaY3Ae1V00Q6L4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nGiuBvn5GewwGZrxRLtzxaqQlVZ89vbJ7TYt8wV7NmecTZPJbIFmtQ3xu3ZVOalW4
-         xREh4K+fCKAPAv4dnzyQuKSW19LmxYkt7qDaiNMWFae/4FeltKmhp5Y/Q/EUItsJ5k
-         e0b9x1PKx3SvvrYKJ63HhsuD9Lh+kFhskFYsPRog=
+        b=N27erKm4gOqYpiVtaSWy6k5MPpbn7pSU01A2WtXUZI2X2Yr1OqZ1PNmOJArAiYUTN
+         3jXoIb9YkJ6EU5F77jd+eXu6THXvSzF9lYW1W+1F9jCcGY+pmsT4u5vLlOhplPXnrN
+         +kQvGo+PK+Lu9hK55ekcKuf1JKxSWeBLO108Vg7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
+        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 10/21] sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
-Date:   Mon, 10 Jan 2022 08:23:11 +0100
-Message-Id: <20220110071814.294402969@linuxfoundation.org>
+Subject: [PATCH 5.4 17/34] ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route
+Date:   Mon, 10 Jan 2022 08:23:12 +0100
+Message-Id: <20220110071816.234285432@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071813.967414697@linuxfoundation.org>
-References: <20220110071813.967414697@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,65 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: David Ahern <dsahern@kernel.org>
 
-commit 7d18a07897d07495ee140dd319b0e9265c0f68ba upstream.
+commit 1ff15a710a862db1101b97810af14aedc835a86a upstream.
 
-tx_queue_len can be set to ~0U, we need to be more
-careful about overflows.
+Make sure RTA_GATEWAY for IPv6 multipath route has enough bytes to hold
+an IPv6 address.
 
-__fls(0) is undefined, as this report shows:
-
-UBSAN: shift-out-of-bounds in net/sched/sch_qfq.c:1430:24
-shift exponent 51770272 is too large for 32-bit type 'int'
-CPU: 0 PID: 25574 Comm: syz-executor.0 Not tainted 5.16.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x201/0x2d8 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x494/0x530 lib/ubsan.c:330
- qfq_init_qdisc+0x43f/0x450 net/sched/sch_qfq.c:1430
- qdisc_create+0x895/0x1430 net/sched/sch_api.c:1253
- tc_modify_qdisc+0x9d9/0x1e20 net/sched/sch_api.c:1660
- rtnetlink_rcv_msg+0x934/0xe60 net/core/rtnetlink.c:5571
- netlink_rcv_skb+0x200/0x470 net/netlink/af_netlink.c:2496
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x814/0x9f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0xaea/0xe60 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg net/socket.c:724 [inline]
- ____sys_sendmsg+0x5b9/0x910 net/socket.c:2409
- ___sys_sendmsg net/socket.c:2463 [inline]
- __sys_sendmsg+0x280/0x370 net/socket.c:2492
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: 462dbc9101ac ("pkt_sched: QFQ Plus: fair-queueing service at DRR cost")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
+Fixes: 6b9ea5a64ed5 ("ipv6: fix multipath route replace error recovery")
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Cc: Roopa Prabhu <roopa@nvidia.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/sch_qfq.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ net/ipv6/route.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/net/sched/sch_qfq.c
-+++ b/net/sched/sch_qfq.c
-@@ -1430,10 +1430,8 @@ static int qfq_init_qdisc(struct Qdisc *
- 	if (err < 0)
- 		return err;
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5307,7 +5307,11 @@ static int ip6_route_multipath_del(struc
  
--	if (qdisc_dev(sch)->tx_queue_len + 1 > QFQ_MAX_AGG_CLASSES)
--		max_classes = QFQ_MAX_AGG_CLASSES;
--	else
--		max_classes = qdisc_dev(sch)->tx_queue_len + 1;
-+	max_classes = min_t(u64, (u64)qdisc_dev(sch)->tx_queue_len + 1,
-+			    QFQ_MAX_AGG_CLASSES);
- 	/* max_cl_shift = floor(log_2(max_classes)) */
- 	max_cl_shift = __fls(max_classes);
- 	q->max_agg_classes = 1<<max_cl_shift;
+ 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
+ 			if (nla) {
+-				nla_memcpy(&r_cfg.fc_gateway, nla, 16);
++				err = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
++							extack);
++				if (err)
++					return err;
++
+ 				r_cfg.fc_flags |= RTF_GATEWAY;
+ 			}
+ 		}
 
 

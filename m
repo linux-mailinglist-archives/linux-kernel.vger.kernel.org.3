@@ -2,97 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4BF488E1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBEA488E55
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 02:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237904AbiAJBiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 20:38:54 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:53968 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237901AbiAJBix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 20:38:53 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowADHzQEBjtthk6juBQ--.52987S2;
-        Mon, 10 Jan 2022 09:38:09 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     mwen@igalia.com
-Cc:     emma@anholt.net, airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] drm/v3d/v3d_drv: Check for error num after setting mask
-Date:   Mon, 10 Jan 2022 09:38:07 +0800
-Message-Id: <20220110013807.4105270-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S238033AbiAJBve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 20:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238023AbiAJBvd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 9 Jan 2022 20:51:33 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFAEC06173F;
+        Sun,  9 Jan 2022 17:51:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXGyW3mS5z4xtf;
+        Mon, 10 Jan 2022 12:51:31 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kernel-janitors@vger.kernel.org
+In-Reply-To: <9e24eedeab44cbb840598bb188561a48811de845.1641119338.git.christophe.jaillet@wanadoo.fr>
+References: <9e24eedeab44cbb840598bb188561a48811de845.1641119338.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] floppy: Remove usage of the deprecated "pci-dma-compat.h" API
+Message-Id: <164177945707.1604045.13531607758042426524.b4-ty@ellerman.id.au>
+Date:   Mon, 10 Jan 2022 12:50:57 +1100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADHzQEBjtthk6juBQ--.52987S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw4UJr1ktFWxCF1rJFWxtFb_yoW8Xw4Dpa
-        1UGFy5KrW8tF1Fg3s7AFZ8ZF1aq3sIqa929FWUC3s7u345JF1DZr98AFyjqr1kJFy7Cr4a
-        qrs0ka9Y9r1ayFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU5kucDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
-Also, we can create a variable for the mask to solve the
-alignment issue.
+On Sun, 2 Jan 2022 11:29:54 +0100, Christophe JAILLET wrote:
+> In [1], Christoph Hellwig has proposed to remove the wrappers in
+> include/linux/pci-dma-compat.h.
+> 
+> Some reasons why this API should be removed have been given by Julia
+> Lawall in [2].
+> 
+> A coccinelle script has been used to perform the needed transformation
+> Only relevant parts are given below.
+> 
+> [...]
 
-Fixes: 334dd38a3878 ("drm/v3d: Set dma_mask as well as coherent_dma_mask")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Melissa Wen <mwen@igalia.com>
----
-Changelog:
+Applied to powerpc/next.
 
-v1 -> v2
+[1/1] floppy: Remove usage of the deprecated "pci-dma-compat.h" API
+      https://git.kernel.org/powerpc/c/e57c2fd6cdf8db581ac93b909b2664751e7cf30c
 
-* Change 1. Add a variable for the mask.
----
- drivers/gpu/drm/v3d/v3d_drv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
-index 9403c3b36aca..6407a006d6ec 100644
---- a/drivers/gpu/drm/v3d/v3d_drv.c
-+++ b/drivers/gpu/drm/v3d/v3d_drv.c
-@@ -221,6 +221,7 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
- 	int ret;
- 	u32 mmu_debug;
- 	u32 ident1;
-+	u64 mask;
- 
- 
- 	v3d = devm_drm_dev_alloc(dev, &v3d_drm_driver, struct v3d_dev, drm);
-@@ -240,8 +241,11 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	mmu_debug = V3D_READ(V3D_MMU_DEBUG_INFO);
--	dma_set_mask_and_coherent(dev,
--		DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH)));
-+	mask = DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH));
-+	ret = dma_set_mask_and_coherent(dev, mask);
-+	if (ret)
-+		return ret;
-+
- 	v3d->va_width = 30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_VA_WIDTH);
- 
- 	ident1 = V3D_READ(V3D_HUB_IDENT1);
--- 
-2.25.1
-
+cheers

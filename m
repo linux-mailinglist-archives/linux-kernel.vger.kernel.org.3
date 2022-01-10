@@ -2,207 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3043248A06F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91DE48A071
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 20:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243079AbiAJTuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 14:50:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50582 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239531AbiAJTut (ORCPT
+        id S243305AbiAJTvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 14:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239531AbiAJTvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 14:50:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F746612C6;
-        Mon, 10 Jan 2022 19:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 639DDC36AE3;
-        Mon, 10 Jan 2022 19:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641844248;
-        bh=s7yyClaY5hOEwaxBzE0Enpf/zhXkDhA+9wtWbXWwSBc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B32/LtDMMB4TsYjJXTaUDffYjM5fnNucxEFfk5an03h5Lb4r6k7IclbB4QCiMhX6t
-         JpvtnjCIcxajH0BFNHwe4zrXdIVmY8ayEUOk5OhhuP3zmnJmhU5Ryd6j19hujYwU7b
-         AWUGOw8Xb1Si8HSlEljwXIj43GRrROmgxO9WgNAX6YAQBiUsulengi8p0jrZ/kvZ9S
-         VLfP2DB6azQADYZtSw3ionIjoqq4WgW5RXWd5ubLga3+urPhFeQhiSwIFp5059mrlF
-         aAXOe4s3ADSSwtYsNjRgi0Aqrfux4TdmSpMboe/ZI4oAB2SzHIAS7cgIhtOrd6YblG
-         z4ABlcK71piIQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9648640714; Mon, 10 Jan 2022 16:50:45 -0300 (-03)
-Date:   Mon, 10 Jan 2022 16:50:45 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
-        eranian@google.com
-Subject: Re: [PATCH v4 48/48] perf cpumap: Give CPUs their own type.
-Message-ID: <YdyOFd8JJHbm1W+m@kernel.org>
-References: <20220105061351.120843-1-irogers@google.com>
- <20220105061351.120843-49-irogers@google.com>
+        Mon, 10 Jan 2022 14:51:04 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F16C06173F;
+        Mon, 10 Jan 2022 11:51:04 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id pj2so13631348pjb.2;
+        Mon, 10 Jan 2022 11:51:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7nQwFvWnXEWIg2fQ1lx9zAVox3M6SG5MqAj2k1cYbzc=;
+        b=SLIePsHkyQTI7kSGSYbXczT8SLyE+S3bFu6wUYPBktqGnCZNU4DikRQdvp1NrA4TSn
+         L/ooJ76caUKQ+bUQKhPuGOXlHB8Vo3GGiyY8wLQq2IMZtgBYu8349qKGD+64RHBWb6oV
+         PeVRi1HV+6M3q8BfE8ebN7HDTPCkWMX/SdkC2DX9nKGqRnaYLG1klSRFrDVgAE1H538G
+         NyDkxOwCvWorGhhkIIgnq4cKSvFlUL0QB22LWVGmg9ssWxitgM3OlD3D6Ay0ejcFNAn0
+         zxpaaajda4BWkDJ2fzxugKjjWTSN6OHajX/ThDhPw9df8HfobtWditKiWXiIOMPvap6E
+         2TZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7nQwFvWnXEWIg2fQ1lx9zAVox3M6SG5MqAj2k1cYbzc=;
+        b=mH0aYGGgEKjsjoYz2k/0/8F6D5he/wLwI/iFYrS3QgimcgWbSnsSLYIKf05gXDeHKP
+         WREu/oPeFoSrDGv3O9AFBV2ZwxuUcdcnMTAfWu4blw3qERrwMP7EQb6X3ugDpG1yw0+T
+         UrW6KRNIEQS7OoMdizlUaj2OFo+gJTHCRlmVP77n8pn02XGvSxdwxbqp6gRa88PdsFvE
+         INPwB+sdhcfEfPCN8eIQn4PQ+PoEV5ssLBpk0y8i3xeqPZ12iSiKLEIuORaLiFdqm7wE
+         x33ZH90U4LfUFMXFp9Zd/QzL3WUmmifcc5gBMw18pSWITCCsu0jTOu3W00bHbDUV67xR
+         CAuA==
+X-Gm-Message-State: AOAM532w1BWZxIi/qowJD7CpCaF77VLAoN6PAPYr2Q1XQ/Kjr2ByfxJX
+        tF2nvvRlfRuMOVHEEc7YzRj/o327oCU=
+X-Google-Smtp-Source: ABdhPJxqtke/V21bxwhHLPeKsTlgT2qlrJ7w8RcHGbgvl5OZ88CpuTFpajH3dimOKTwce2eCdw+Y8g==
+X-Received: by 2002:a17:90a:a105:: with SMTP id s5mr1359942pjp.170.1641844263258;
+        Mon, 10 Jan 2022 11:51:03 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id g16sm7900493pfv.159.2022.01.10.11.51.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 11:51:02 -0800 (PST)
+Subject: Re: [PATCH 5.10 00/43] 5.10.91-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20220110071817.337619922@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <23b2e45d-b642-a5df-2b68-f4f11cb1b4f9@gmail.com>
+Date:   Mon, 10 Jan 2022 11:50:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105061351.120843-49-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jan 04, 2022 at 10:13:51PM -0800, Ian Rogers escreveu:
-> A common problem is confusing CPU map indices with the CPU, by wrapping
-> the CPU with a struct then this is avoided. This approach is similar to
-> atomic_t.
+On 1/9/22 11:22 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.91 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.91-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-This one needed this to build with BUILD_BPF_SKEL=1, please check, I'll
-soon push this to tmp.perf/perf_cpu so that you can take a look and test
-it.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-- Arnaldo
-
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index 80d1a3a31052fe55..328479df5e16a638 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -540,7 +540,7 @@ static int bperf__load(struct evsel *evsel, struct target *target)
- 		    filter_type == BPERF_FILTER_TGID)
- 			key = evsel->core.threads->map[i].pid;
- 		else if (filter_type == BPERF_FILTER_CPU)
--			key = evsel->core.cpus->map[i];
-+			key = evsel->core.cpus->map[i].cpu;
- 		else
- 			break;
- 
-@@ -584,7 +584,7 @@ static int bperf_sync_counters(struct evsel *evsel)
- 
- 	num_cpu = all_cpu_map->nr;
- 	for (i = 0; i < num_cpu; i++) {
--		cpu = all_cpu_map->map[i];
-+		cpu = all_cpu_map->map[i].cpu;
- 		bperf_trigger_reading(evsel->bperf_leader_prog_fd, cpu);
- 	}
- 	return 0;
-@@ -605,7 +605,7 @@ static int bperf__disable(struct evsel *evsel)
- static int bperf__read(struct evsel *evsel)
- {
- 	struct bperf_follower_bpf *skel = evsel->follower_skel;
--	__u32 num_cpu_bpf = cpu__max_cpu();
-+	__u32 num_cpu_bpf = cpu__max_cpu().cpu;
- 	struct bpf_perf_event_value values[num_cpu_bpf];
- 	int reading_map_fd, err = 0;
- 	__u32 i;
-@@ -615,6 +615,7 @@ static int bperf__read(struct evsel *evsel)
- 	reading_map_fd = bpf_map__fd(skel->maps.accum_readings);
- 
- 	for (i = 0; i < bpf_map__max_entries(skel->maps.accum_readings); i++) {
-+		struct perf_cpu entry;
- 		__u32 cpu;
- 
- 		err = bpf_map_lookup_elem(reading_map_fd, &i, values);
-@@ -624,14 +625,15 @@ static int bperf__read(struct evsel *evsel)
- 		case BPERF_FILTER_GLOBAL:
- 			assert(i == 0);
- 
--			perf_cpu_map__for_each_cpu(cpu, j, all_cpu_map) {
-+			perf_cpu_map__for_each_cpu(entry, j, all_cpu_map) {
-+				cpu = entry.cpu;
- 				perf_counts(evsel->counts, cpu, 0)->val = values[cpu].counter;
- 				perf_counts(evsel->counts, cpu, 0)->ena = values[cpu].enabled;
- 				perf_counts(evsel->counts, cpu, 0)->run = values[cpu].running;
- 			}
- 			break;
- 		case BPERF_FILTER_CPU:
--			cpu = evsel->core.cpus->map[i];
-+			cpu = evsel->core.cpus->map[i].cpu;
- 			perf_counts(evsel->counts, i, 0)->val = values[cpu].counter;
- 			perf_counts(evsel->counts, i, 0)->ena = values[cpu].enabled;
- 			perf_counts(evsel->counts, i, 0)->run = values[cpu].running;
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index cbc6c2bca488f6bf..631e34a0b66ff084 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -48,7 +48,7 @@ static int bperf_load_program(struct evlist *evlist)
- 	struct cgroup *cgrp, *leader_cgrp;
- 	__u32 i, cpu;
- 	__u32 nr_cpus = evlist->core.all_cpus->nr;
--	int total_cpus = cpu__max_cpu();
-+	int total_cpus = cpu__max_cpu().cpu;
- 	int map_size, map_fd;
- 	int prog_fd, err;
- 
-@@ -125,7 +125,7 @@ static int bperf_load_program(struct evlist *evlist)
- 			for (cpu = 0; cpu < nr_cpus; cpu++) {
- 				int fd = FD(evsel, cpu);
- 				__u32 idx = evsel->core.idx * total_cpus +
--					evlist->core.all_cpus->map[cpu];
-+					evlist->core.all_cpus->map[cpu].cpu;
- 
- 				err = bpf_map_update_elem(map_fd, &idx, &fd,
- 							  BPF_ANY);
-@@ -212,7 +212,7 @@ static int bperf_cgrp__sync_counters(struct evlist *evlist)
- 	int prog_fd = bpf_program__fd(skel->progs.trigger_read);
- 
- 	for (i = 0; i < nr_cpus; i++) {
--		cpu = evlist->core.all_cpus->map[i];
-+		cpu = evlist->core.all_cpus->map[i].cpu;
- 		bperf_trigger_reading(prog_fd, cpu);
- 	}
- 
-@@ -245,7 +245,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
- {
- 	struct evlist *evlist = evsel->evlist;
- 	int i, cpu, nr_cpus = evlist->core.all_cpus->nr;
--	int total_cpus = cpu__max_cpu();
-+	int total_cpus = cpu__max_cpu().cpu;
- 	struct perf_counts_values *counts;
- 	struct bpf_perf_event_value *values;
- 	int reading_map_fd, err = 0;
-@@ -272,7 +272,7 @@ static int bperf_cgrp__read(struct evsel *evsel)
- 		}
- 
- 		for (i = 0; i < nr_cpus; i++) {
--			cpu = evlist->core.all_cpus->map[i];
-+			cpu = evlist->core.all_cpus->map[i].cpu;
- 
- 			counts = perf_counts(evsel->counts, i, 0);
- 			counts->val = values[cpu].counter;
-diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
-index 28dc4c60c7884818..d756cc66eef32ae8 100644
---- a/tools/perf/util/bpf_ftrace.c
-+++ b/tools/perf/util/bpf_ftrace.c
-@@ -63,7 +63,7 @@ int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
- 		fd = bpf_map__fd(skel->maps.cpu_filter);
- 
- 		for (i = 0; i < ncpus; i++) {
--			cpu = perf_cpu_map__cpu(ftrace->evlist->core.cpus, i);
-+			cpu = perf_cpu_map__cpu(ftrace->evlist->core.cpus, i).cpu;
- 			bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
- 		}
- 	}
-@@ -122,7 +122,7 @@ int perf_ftrace__latency_read_bpf(struct perf_ftrace *ftrace __maybe_unused,
- 	int i, fd, err;
- 	u32 idx;
- 	u64 *hist;
--	int ncpus = cpu__max_cpu();
-+	int ncpus = cpu__max_cpu().cpu;
- 
- 	fd = bpf_map__fd(skel->maps.latency);
- 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

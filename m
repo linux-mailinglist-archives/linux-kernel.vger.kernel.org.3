@@ -2,140 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45294489BB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5146489BB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 16:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiAJPBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 10:01:03 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:39910 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiAJPBC (ORCPT
+        id S235839AbiAJPBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 10:01:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58752 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231182AbiAJPBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 10:01:02 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:55338)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n6wAO-009Biv-G6; Mon, 10 Jan 2022 08:01:00 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:43782 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n6wAM-005OOe-Cx; Mon, 10 Jan 2022 08:01:00 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Kyle Huey" <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <20211208202532.16409-6-ebiederm@xmission.com>
-        <YdelKq9U86/dHPcm@zeniv-ca.linux.org.uk>
-        <87mtk6xegz.fsf@email.froward.int.ebiederm.org>
-        <160ab942f83043d4878719e5354925cc@AcuMS.aculab.com>
-Date:   Mon, 10 Jan 2022 09:00:31 -0600
-In-Reply-To: <160ab942f83043d4878719e5354925cc@AcuMS.aculab.com> (David
-        Laight's message of "Sat, 8 Jan 2022 22:44:33 +0000")
-Message-ID: <87fspvy6sw.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 10 Jan 2022 10:01:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14BFE612E5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:01:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75273C36AE5;
+        Mon, 10 Jan 2022 15:01:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641826872;
+        bh=chLPcOsfhco0xkJ/aJbDSk8HiD7VNC73iOy8eSfn9Dw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ABKKVgVwNLlna44GJxLxCXBaxXybnlRxFB4dBBpkRIOJhVUxQ37MrEu3UA9Akp2Xg
+         xeza6vpbBC1sNz3mwSGKepUbcxFdKYHgKkxGwgocxJo/1eh39XrcdfHwHsAQNldeKk
+         8ipG18cInQzN7a6nCi2MQrOSLkc1DJA7Zmz4tk+sn8jHRt3DVa7pnD5cTF2kQZXUct
+         7TYhzBK6QdRbWRTiDFvPnsbNYdyhY4DEvG9fT2dq6L4G8M49UV4xASqTPk/Xp4iLeZ
+         33rHBC3ID9SIEKQ/xMHvZyUmv45Ulz/HgcNMFzQdkcYB9jiczCBU0YNT5KXg+E+E9f
+         ML7d05geykR1g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1n6wAX-0000cB-Ab; Mon, 10 Jan 2022 16:01:09 +0100
+Date:   Mon, 10 Jan 2022 16:01:09 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] GNSS updates for 5.17-rc1
+Message-ID: <YdxKNTuKaZK0m9nl@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1n6wAM-005OOe-Cx;;;mid=<87fspvy6sw.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19iILV5Sx5O5SU9tvllA/FEzgwOywGT/7E=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
-        XM_B_SpammyWords autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4963]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;David Laight <David.Laight@ACULAB.COM>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1453 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 10 (0.7%), b_tie_ro: 9 (0.6%), parse: 0.85 (0.1%),
-         extract_message_metadata: 14 (1.0%), get_uri_detail_list: 1.41 (0.1%),
-         tests_pri_-1000: 18 (1.3%), tests_pri_-950: 1.17 (0.1%),
-        tests_pri_-900: 0.97 (0.1%), tests_pri_-90: 89 (6.1%), check_bayes: 85
-        (5.9%), b_tokenize: 7 (0.5%), b_tok_get_all: 8 (0.5%), b_comp_prob:
-        3.1 (0.2%), b_tok_touch_all: 64 (4.4%), b_finish: 0.85 (0.1%),
-        tests_pri_0: 1305 (89.8%), check_dkim_signature: 0.48 (0.0%),
-        check_dkim_adsp: 3.2 (0.2%), poll_dns_idle: 0.65 (0.0%), tests_pri_10:
-        2.2 (0.2%), tests_pri_500: 8 (0.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 06/10] exit: Implement kthread_exit
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Laight <David.Laight@ACULAB.COM> writes:
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-> From: Eric W. Biederman
->> Sent: 08 January 2022 18:36
->> 
->> Al Viro <viro@zeniv.linux.org.uk> writes:
->> 
->> > IMO the right way to handle that would be
->> > 	1) turn these two do_exit() into do_exit(0), to reduce
->> > confusion
->> > 	2) deal with all do_exit() in kthread payloads.  Your
->> > name for the primitive is fine, IMO.
->> > 	3) make that primitive pass the return value by way of
->> > a field in struct kthread, adjusting kthread_stop() accordingly
->> > and passing 0 to do_exit() in kthread_exit() itself.
->> >
->> > (2) is not as trivial as you seem to hope, though.  Your patches
->> > in drivers/staging/rt*/ had papered over the problem in there,
->> > but hadn't really solved it.
->> >
->> > thread_exit() should've been shot, all right, but it really ought
->> > to have been complete_and_exit() there.  The thing is, complete()
->> > + return does *not* guarantee that driver won't get unloaded before
->> > the thread terminates.  Possibly freeing its .code and leaving
->> > a thread to resume running in there as soon as it regains CPU.
->> >
->> > The point of complete_and_exit() is that it's noreturn *and* in
->> > core kernel.  So it can be safely used in a modular kthread,
->> > if paired with wait_for_completion() in or before module_exit.
->> > complete() + do_exit() (or complete + return as you've gotten
->> > there) doesn't give such guarantees at all.
->> 
->> 
->> I think we are mostly in agreement here.
->> 
->> There are kernel threads started by modules that do:
->> 	complete(...);
->>         return 0;
->> 
->> That should be at a minimum calling complete_and_exit.  Possibly should
->> be restructured to use kthread_stop().
->
-> There is also module_put_and_exit(0);
-> Which must have an implied THIS_MODULE.
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Later in the patch series I change
-module_put_and_exit -> module_put_and_kthread_exit
-complete_and_exit -> complete_and_kthread_exit
+are available in the Git repository at:
 
-The problem that I understand all was seeing was where people should
-have been using complete_and_exit and were not.
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/gnss.git tags/gnss-5.17-rc1
 
-Eric
+for you to fetch changes up to 547d2167c5c3cd879ed5e86e88cfa7daaf1228a5:
+
+  gnss: usb: add support for Sierra Wireless XM1210 (2021-12-22 15:38:12 +0100)
+
+----------------------------------------------------------------
+GNSS updates for 5.17-rc1
+
+Here are the GNSS updates for 5.17-rc1, including:
+
+ - support for GNSS receivers with USB interface
+ - support for Sierra Wireless XM1210
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Johan Hovold (3):
+      gnss: drop stray semicolons
+      gnss: add USB support
+      gnss: usb: add support for Sierra Wireless XM1210
+
+ drivers/gnss/Kconfig  |  11 +++
+ drivers/gnss/Makefile |   3 +
+ drivers/gnss/mtk.c    |   2 +-
+ drivers/gnss/serial.c |   2 +-
+ drivers/gnss/sirf.c   |   2 +-
+ drivers/gnss/ubx.c    |   2 +-
+ drivers/gnss/usb.c    | 214 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 232 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/gnss/usb.c

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB1E4898F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59108489901
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiAJM6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:58:24 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:61254 "EHLO
+        id S235516AbiAJNAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:00:04 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:18076 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343550AbiAJM4K (ORCPT
+        with ESMTP id S231394AbiAJM6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:56:10 -0500
+        Mon, 10 Jan 2022 07:58:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641819370; x=1673355370;
+  t=1641819490; x=1673355490;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=9t/Xu5PgIegcYhMGwAj50Sze7qm72rRfmBmOT9p3+WU=;
-  b=GV9zXUy1cNZMsS06f5tr4z7tzyBa2XRV0r/J4AFgRDuWbgQEUBPFNbOG
-   rnqd+jQ7o+alpZvbBsOvvKzHqn/kSgBDNIqaYVSa2wjkVTSeRp06zeRdw
-   6oo3tbOM/9BvK52vQ9I0CekLYFTwEihWpIsYKgK5sibBHnvSyqP5oUnok
-   0=;
+  bh=p+GfconfbCV29XFjTmFEjVwoR0nqMLcivRQLR9DnBfk=;
+  b=N+vJgC+l9XCvdVZ2vdpovuhg4UlyWjskWeXmDy+2RWEVQl8I5DqToYw/
+   rkEYzTftqxCv8DE3fZc0QlY4AE9qz9OopbonC2JziZa2rw0MbGjSJL5h6
+   BDbAxoyYMVp2jkfhi8LZq/ReWGnX23Vl7iiDxwvhF+GAMnj9Qy+qrXgB3
+   A=;
 Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 10 Jan 2022 04:56:09 -0800
+  by alexa-out.qualcomm.com with ESMTP; 10 Jan 2022 04:56:11 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Jan 2022 04:56:07 -0800
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Jan 2022 04:56:09 -0800
 X-QCInternal: smtphost
 Received: from rajeevny-linux.qualcomm.com ([10.204.66.121])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 10 Jan 2022 18:25:47 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 10 Jan 2022 18:25:48 +0530
 Received: by rajeevny-linux.qualcomm.com (Postfix, from userid 2363605)
-        id 4373A219F1; Mon, 10 Jan 2022 18:25:46 +0530 (IST)
+        id 2D491219EE; Mon, 10 Jan 2022 18:25:47 +0530 (IST)
 From:   Rajeev Nandan <quic_rajeevny@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -41,9 +41,9 @@ Cc:     Rajeev Nandan <quic_rajeevny@quicinc.com>,
         quic_kalyant@quicinc.com, quic_mkrishn@quicinc.com,
         jonathan@marek.ca, dmitry.baryshkov@linaro.org, airlied@linux.ie,
         daniel@ffwll.ch, swboyd@chromium.org
-Subject: [v2 2/3] drm/msm/dsi: Add dsi phy tuning configuration support
-Date:   Mon, 10 Jan 2022 18:25:36 +0530
-Message-Id: <1641819337-17037-3-git-send-email-quic_rajeevny@quicinc.com>
+Subject: [v2 3/3] drm/msm/dsi: Add 10nm dsi phy tuning configuration support
+Date:   Mon, 10 Jan 2022 18:25:37 +0530
+Message-Id: <1641819337-17037-4-git-send-email-quic_rajeevny@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1641819337-17037-1-git-send-email-quic_rajeevny@quicinc.com>
 References: <1641819337-17037-1-git-send-email-quic_rajeevny@quicinc.com>
@@ -51,76 +51,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for MSM DSI PHY tuning configuration. Current design is
-to support drive strength and drive level/amplitude tuning for
-10nm PHY version, but this can be extended to other PHY versions.
+The clock and data lanes of the DSI PHY have a calibration circuitry
+feature. As per the MSM DSI PHY tuning guidelines, the drive strength
+tuning can be done by adjusting rescode offset for hstop/hsbot, and
+the drive level tuning can be done by adjusting the LDO output level
+for the HSTX drive.
 
 Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
 ---
 
 Changes in v2:
- - New.
  - Split into generic code and 10nm-specific part (Dmitry Baryshkov)
+ - Fix the backward compatibility (Dmitry Baryshkov)
 
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.c |  3 +++
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.h | 16 ++++++++++++++++
- 2 files changed, 19 insertions(+)
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c | 51 ++++++++++++++++++++++++++----
+ 1 file changed, 45 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-index 8c65ef6..ee3739d 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-@@ -739,6 +739,9 @@ static int dsi_phy_driver_probe(struct platform_device *pdev)
- 		}
+diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+index d8128f5..40cd0f7 100644
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+@@ -775,10 +775,13 @@ static void dsi_phy_hw_v3_0_lane_settings(struct msm_dsi_phy *phy)
+ 		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG2(i), 0x0);
+ 		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_CFG3(i),
+ 			      i == 4 ? 0x80 : 0x0);
+-		dsi_phy_write(lane_base +
+-			      REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i), 0x0);
+-		dsi_phy_write(lane_base +
+-			      REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i), 0x0);
++
++		/* platform specific dsi phy drive strength adjustment */
++		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_TOP_CTRL(i),
++				phy->tuning_cfg.rescode_offset_top[i]);
++		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_OFFSET_BOT_CTRL(i),
++				phy->tuning_cfg.rescode_offset_bot[i]);
++
+ 		dsi_phy_write(lane_base + REG_DSI_10nm_PHY_LN_TX_DCTRL(i),
+ 			      tx_dctrl[i]);
  	}
+@@ -834,8 +837,9 @@ static int dsi_10nm_phy_enable(struct msm_dsi_phy *phy,
+ 	/* Select MS1 byte-clk */
+ 	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_GLBL_CTRL, 0x10);
  
-+	if (phy->cfg->ops.tuning_cfg_init)
-+		phy->cfg->ops.tuning_cfg_init(phy);
+-	/* Enable LDO */
+-	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL, 0x59);
++	/* Enable LDO with platform specific drive level/amplitude adjustment */
++	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_VREG_CTRL,
++		      phy->tuning_cfg.vreg_ctrl);
+ 
+ 	/* Configure PHY lane swap (TODO: we need to calculate this) */
+ 	dsi_phy_write(base + REG_DSI_10nm_PHY_CMN_LANE_CFG0, 0x21);
+@@ -922,6 +926,39 @@ static void dsi_10nm_phy_disable(struct msm_dsi_phy *phy)
+ 	DBG("DSI%d PHY disabled", phy->id);
+ }
+ 
++static void dsi_10nm_phy_tuning_cfg_init(struct msm_dsi_phy *phy)
++{
++	struct device *dev = &phy->pdev->dev;
++	u8 offset_top[DSI_LANE_MAX] = { 0 }; /* No offset */
++	u8 offset_bot[DSI_LANE_MAX] = { 0 }; /* No offset */
++	u8 ldo_level = 0x1; /* 400mV */
++	int ret, i;
 +
- 	ret = dsi_phy_regulator_init(phy);
- 	if (ret)
- 		goto fail;
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-index b91303a..b559a2b 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-@@ -25,6 +25,7 @@ struct msm_dsi_phy_ops {
- 	void (*save_pll_state)(struct msm_dsi_phy *phy);
- 	int (*restore_pll_state)(struct msm_dsi_phy *phy);
- 	bool (*set_continuous_clock)(struct msm_dsi_phy *phy, bool enable);
-+	void (*tuning_cfg_init)(struct msm_dsi_phy *phy);
- };
- 
- struct msm_dsi_phy_cfg {
-@@ -81,6 +82,20 @@ struct msm_dsi_dphy_timing {
- #define DSI_PIXEL_PLL_CLK		1
- #define NUM_PROVIDED_CLKS		2
- 
-+#define DSI_LANE_MAX			5
++	/* Drive strength adjustment parameters */
++	ret = of_property_read_u8_array(dev->of_node, "phy-resocde-offset-top",
++					offset_top, DSI_LANE_MAX);
++	if (ret && ret != -EINVAL)
++		DRM_DEV_ERROR(dev, "failed to parse phy-resocde-offset-top, %d\n", ret);
 +
-+/**
-+ * struct msm_dsi_phy_tuning_cfg - Holds PHY tuning config parameters.
-+ * @rescode_offset_top: Offset for pull-up legs rescode.
-+ * @rescode_offset_bot: Offset for pull-down legs rescode.
-+ * @vreg_ctrl: vreg ctrl to drive LDO level
-+ */
-+struct msm_dsi_phy_tuning_cfg {
-+	u8 rescode_offset_top[DSI_LANE_MAX];
-+	u8 rescode_offset_bot[DSI_LANE_MAX];
-+	u8 vreg_ctrl;
-+};
++	for (i = 0; i < DSI_LANE_MAX; i++)
++		phy->tuning_cfg.rescode_offset_top[i] = 0x3f & offset_top[i];
 +
- struct msm_dsi_phy {
- 	struct platform_device *pdev;
- 	void __iomem *base;
-@@ -98,6 +113,7 @@ struct msm_dsi_phy {
- 
- 	struct msm_dsi_dphy_timing timing;
- 	const struct msm_dsi_phy_cfg *cfg;
-+	struct msm_dsi_phy_tuning_cfg tuning_cfg;
- 
- 	enum msm_dsi_phy_usecase usecase;
- 	bool regulator_ldo_mode;
++	ret = of_property_read_u8_array(dev->of_node, "phy-resocde-offset-bot",
++					offset_bot, DSI_LANE_MAX);
++	if (ret && ret != -EINVAL)
++		DRM_DEV_ERROR(dev, "failed to parse phy-resocde-offset-bot, %d\n", ret);
++
++	for (i = 0; i < DSI_LANE_MAX; i++)
++		phy->tuning_cfg.rescode_offset_bot[i] = 0x3f & offset_bot[i];
++
++	/* Drive level/amplitude adjustment parameters */
++	ret = of_property_read_u8(dev->of_node, "phy-drive-ldo-level", &ldo_level);
++	if (ret && ret != -EINVAL)
++		DRM_DEV_ERROR(dev, "failed to parse phy-drive-ldo-level, %d\n", ret);
++
++	phy->tuning_cfg.vreg_ctrl = 0x58 | (0x7 & ldo_level);
++}
++
+ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
+ 	.has_phy_lane = true,
+ 	.reg_cfg = {
+@@ -936,6 +973,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs = {
+ 		.pll_init = dsi_pll_10nm_init,
+ 		.save_pll_state = dsi_10nm_pll_save_state,
+ 		.restore_pll_state = dsi_10nm_pll_restore_state,
++		.tuning_cfg_init = dsi_10nm_phy_tuning_cfg_init,
+ 	},
+ 	.min_pll_rate = 1000000000UL,
+ 	.max_pll_rate = 3500000000UL,
+@@ -957,6 +995,7 @@ const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs = {
+ 		.pll_init = dsi_pll_10nm_init,
+ 		.save_pll_state = dsi_10nm_pll_save_state,
+ 		.restore_pll_state = dsi_10nm_pll_restore_state,
++		.tuning_cfg_init = dsi_10nm_phy_tuning_cfg_init,
+ 	},
+ 	.min_pll_rate = 1000000000UL,
+ 	.max_pll_rate = 3500000000UL,
 -- 
 2.7.4
 

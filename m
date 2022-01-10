@@ -2,443 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBD5489D7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0CA489D82
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237371AbiAJQ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:26:40 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:58132 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237311AbiAJQ0k (ORCPT
+        id S237400AbiAJQ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:27:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26329 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237384AbiAJQ1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:26:40 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:49204)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n6xVD-009LjY-KR; Mon, 10 Jan 2022 09:26:36 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:47318 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n6xVC-005eir-3g; Mon, 10 Jan 2022 09:26:35 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Walsh <dwalsh@redhat.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Manfred Spraul <manfred@colorfullife.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        kernel test robot <lkp@intel.com>
-References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
-        <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
-Date:   Mon, 10 Jan 2022 10:26:26 -0600
-In-Reply-To: <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
-        (Alexey Gladkov's message of "Tue, 4 Jan 2022 12:51:06 +0100")
-Message-ID: <87tuebwo99.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 10 Jan 2022 11:27:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641832043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jeIheefqGaZ2GeSClHVA0Xt4+ifFFQupgVzVvNBmh9M=;
+        b=Pi480Z0asA4vSBivD65Wluk6xgLj0c9zI88z0zIe2xS8Al+DMoMjaZPVP2XlVZEsLVqtQ7
+        mqD/E1YF9sHZm8U+ZmIYhNJPaBYAmw6BjvllsOMCHhxuHEvOvrN2gFSKEQcJxFgXb8Z/Mx
+        jZ1u9mEUCC6SnPv8F/sjm9ZMgIi14n4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-VeIean_aMaGWOcVkngqFTw-1; Mon, 10 Jan 2022 11:27:22 -0500
+X-MC-Unique: VeIean_aMaGWOcVkngqFTw-1
+Received: by mail-wr1-f71.google.com with SMTP id o28-20020adfa11c000000b001a60fd79c21so2593163wro.19
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 08:27:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=jeIheefqGaZ2GeSClHVA0Xt4+ifFFQupgVzVvNBmh9M=;
+        b=jgWr8KIovu8Dn6RSuLT1pksVMQjqmiGyjPb0alWRIik8OMHLjTbrQ1YHa+Yw9K9hWi
+         DHkh3/nwpYtPAUbbMHzMrw1iHPCZydg95eiqfAUFeZFEeFVqFxJBzfALsUpvr28syJ3u
+         ulx4U/UEGt7mRoqQSUPCGhAPsfhpzXONxSzXU81gxDf0AXH7JaL9Hbr378qT66FXdT7J
+         6i2bGwbVn/9xAm9pbBMqtwzV+Qrgl3Z2YGugbUpXdqf6ytDe7IgtPL9aKaNzUZ3gaPKl
+         zI/js0UKM89Erx0uCLH4Gw0rPJEgPyiTZA3v0dwfHRmeHj99qSqrXiVS7VH1/0YI4ycI
+         AX2Q==
+X-Gm-Message-State: AOAM532E73m9WQUFf2iCJjAMN/ES1vnvfkZvLIF6xPgU9wBoy8oibjuV
+        AO1gSSIlMjneZ9cLl0Q2J6ORi7O/NIOujf15YvWRUerkn9cQlGgxjh9rsvvewILq4neycoZNXHR
+        9ymx34iFQVatJJACHQ0B9Je7r
+X-Received: by 2002:a05:600c:1c22:: with SMTP id j34mr3870360wms.116.1641832040370;
+        Mon, 10 Jan 2022 08:27:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw78/dFkceXP7vi+FCTgn09bLS0ejoLHTG16lQIhQ5MhHYjaxHo78dnCGmFqnQo+pPk89TDmg==
+X-Received: by 2002:a05:600c:1c22:: with SMTP id j34mr3870348wms.116.1641832040150;
+        Mon, 10 Jan 2022 08:27:20 -0800 (PST)
+Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
+        by smtp.gmail.com with ESMTPSA id e13sm7183050wmq.10.2022.01.10.08.27.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 08:27:19 -0800 (PST)
+Date:   Mon, 10 Jan 2022 16:27:17 +0000
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     Borislav Petkov <bp@suse.de>, Dov Murik <dovmurik@linux.ibm.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
+ secret area
+Message-ID: <YdxeZWmQxbfa+Fa2@work-vm>
+References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
+ <YdNHgtuVoLofL4cW@zn.tnic>
+ <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
+ <YdSRWmqdNY7jRcer@zn.tnic>
+ <YdWEXRt7Ixm6/+Dq@work-vm>
+ <YdXq9t75aYLJfb69@zn.tnic>
+ <YdX6aAwy0txT9Dk7@work-vm>
+ <YdgrDRCJOOg4k1Za@zn.tnic>
+ <CAMkAt6qCHPzUT=COb_HQ51rRKwtaCC3Zxgc6k6ivB_dZUKx5Hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1n6xVC-005eir-3g;;;mid=<87tuebwo99.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18rr2GOYbq36H9qfHFpHcwhS06Mxte5yNU=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong,XM_B_SpammyWords
-        autolearn=disabled version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Alexey Gladkov <legion@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 847 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.4 (0.5%), b_tie_ro: 3.0 (0.4%), parse: 1.82
-        (0.2%), extract_message_metadata: 13 (1.6%), get_uri_detail_list: 4.5
-        (0.5%), tests_pri_-1000: 4.0 (0.5%), tests_pri_-950: 1.03 (0.1%),
-        tests_pri_-900: 0.83 (0.1%), tests_pri_-90: 79 (9.3%), check_bayes: 77
-        (9.1%), b_tokenize: 16 (1.9%), b_tok_get_all: 13 (1.5%), b_comp_prob:
-        3.7 (0.4%), b_tok_touch_all: 42 (4.9%), b_finish: 0.75 (0.1%),
-        tests_pri_0: 662 (78.2%), check_dkim_signature: 0.54 (0.1%),
-        check_dkim_adsp: 2.3 (0.3%), poll_dns_idle: 59 (7.0%), tests_pri_10:
-        2.7 (0.3%), tests_pri_500: 74 (8.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2] ipc: Store mqueue sysctls in the ipc namespace
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMkAt6qCHPzUT=COb_HQ51rRKwtaCC3Zxgc6k6ivB_dZUKx5Hw@mail.gmail.com>
+User-Agent: Mutt/2.1.3 (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexey Gladkov <legion@kernel.org> writes:
+* Peter Gonda (pgonda@google.com) wrote:
+> On Fri, Jan 7, 2022 at 4:59 AM Borislav Petkov <bp@suse.de> wrote:
+> >
+> > On Wed, Jan 05, 2022 at 08:07:04PM +0000, Dr. David Alan Gilbert wrote:
+> > > I thought I saw something in their patch series where they also had a
+> > > secret that got passed down from EFI?
+> >
+> > Probably. I've seen so many TDX patchsets so that I'm completely
+> > confused what is what.
+> >
+> > > As I remember they had it with an ioctl and something; but it felt to
+> > > me if it would be great if it was shared.
+> >
+> > I guess we could try to share
+> >
+> > https://lore.kernel.org/r/20211210154332.11526-28-brijesh.singh@amd.com
+> >
+> > for SNP and TDX.
+> >
+> > > I'd love to hear from those other cloud vendors; I've not been able to
+> > > find any detail on how their SEV(-ES) systems actually work.
+> >
+> > Same here.
+> >
+> > > However, this aims to be just a comms mechanism to pass that secret;
+> > > so it's pretty low down in the stack and is there for them to use -
+> > > hopefully it's general enough.
+> >
+> > Exactly!
+> >
+> > > (An interesting question is what exactly gets passed in this key and
+> > > what it means).
+> > >
+> > > All the contentious stuff I've seen seems to be further up the stack - like
+> > > who does the attestation and where they get the secrets and how they
+> > > know what a valid measurement looks like.
+> >
+> > It would be much much better if all the parties involved would sit down
+> > and decide on a common scheme so that implementation can be shared but
+> > getting everybody to agree is likely hard...
+> 
+> I saw a request for other cloud provider input here.
 
-> Right now, the mqueue sysctls take ipc namespaces into account in a
-> rather hacky way. This works in most cases, but does not respect the
-> user namespace.
->
-> Within the user namespace, the user cannot change the /proc/sys/fs/mqueue/*
-> parametres. This poses a problem in the rootless containers.
->
-> To solve this I changed the implementation of the mqueue sysctls just
-> like some other sysctls.
->
-> Before this change:
->
-> $ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
-> tee: /proc/sys/fs/mqueue/msg_max: Permission denied
-> 5
->
-> After this change:
->
-> $ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
-> 5
->
-> v2:
-> * Fixed compilation problem if CONFIG_POSIX_MQUEUE_SYSCTL is not
->   specified.
+Thanks for the reply!
 
-Can you split this in two patches?
+> A little
+> background for our SEV VMs in GCE we rely on our vTPM for attestation,
+> we do this because of SEV security properties quoting from AMD being
+> to protect guests from a benign but vulnerable hypervisor. So a
+> benign/compliant hypervisor's vTPM wouldn't lie to the guest. So we
+> added a few bits in the PCRs to allow users to see their SEV status in
+> vTPM quotes.
 
-The first that converts mq_sysctl.c and ipc_sysctl.c to live in
-a per ipc namespace sysctl set.  That will just be a bug-fix/cleanup
-patch.  
+OK, so we're trying to protect from a malicious hypervisor - we don't
+trust anything on the host (other than the CPU, and it's got to be
+signing the attestation);  we don't think there's a way to do that with
+a vTPM on plain SEV/SEV-ES
 
-The second that modifies the permissions to allow root in the ipc
-namespace to change the parameters.  With that second patch
-we can have the discussion about when it is valid to allow
-the user namespace root that created the ipc namespace to be able
-to set the sysctls.
+> It would be very interesting to offer an attestation solution that
+> doesn't rely on our virtual TPM. But after reading through this cover
+> letter and the linked OVMF patches I am confused what's the high level
+> flow you are working towards? Are you loading in some OVMF using
+> LAUNCH_UPDATE_DATA, getting the measurement with LAUNCH_MEASURE, then
+> sending that to the customer who can then craft a "secret" (maybe say
+> SSH key) for injection with LAUNCH_SECRET? Thats sounds good but there
+> are a lot details left unattested there, how do you know you will boot
+> from the image loaded with the PSP into a known state? Do you have
+> some documentation I could read through to try and understand a little
+> more and apologies if I missed it.
 
-A few more comments below.
+I'll defer to Dov's reply on that.
 
+Dave
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> ---
->  include/linux/ipc_namespace.h |  18 ++++-
->  ipc/mq_sysctl.c               | 137 ++++++++++++++++++++--------------
->  ipc/mqueue.c                  |  10 +--
->  ipc/namespace.c               |   6 ++
->  4 files changed, 106 insertions(+), 65 deletions(-)
->
-> diff --git a/include/linux/ipc_namespace.h b/include/linux/ipc_namespace.h
-> index b75395ec8d52..bcedc86a6f1d 100644
-> --- a/include/linux/ipc_namespace.h
-> +++ b/include/linux/ipc_namespace.h
-> @@ -10,6 +10,7 @@
->  #include <linux/ns_common.h>
->  #include <linux/refcount.h>
->  #include <linux/rhashtable-types.h>
-> +#include <linux/sysctl.h>
->  
->  struct user_namespace;
->  
-> @@ -63,6 +64,11 @@ struct ipc_namespace {
->  	unsigned int    mq_msg_default;
->  	unsigned int    mq_msgsize_default;
->  
-> +#ifdef CONFIG_POSIX_MQUEUE_SYSCTL
-> +	struct ctl_table_set	set;
-> +	struct ctl_table_header *sysctls;
-> +#endif
-> +
+> >
+> > --
+> > Regards/Gruss,
+> >     Boris.
+> >
+> > SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+> >
+> 
+-- 
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
 
-Updating the code to handle all of the ipc sysctls should
-remove the need for the #ifdef here.
-
->  	/* user_ns which owns the ipc ns */
->  	struct user_namespace *user_ns;
->  	struct ucounts *ucounts;
-> @@ -169,14 +175,18 @@ static inline void put_ipc_ns(struct ipc_namespace *ns)
->  
->  #ifdef CONFIG_POSIX_MQUEUE_SYSCTL
->  
-> -struct ctl_table_header;
-> -extern struct ctl_table_header *mq_register_sysctl_table(void);
-> +void retire_mq_sysctls(struct ipc_namespace *ns);
-> +bool setup_mq_sysctls(struct ipc_namespace *ns);
->  
->  #else /* CONFIG_POSIX_MQUEUE_SYSCTL */
->  
-> -static inline struct ctl_table_header *mq_register_sysctl_table(void)
-> +static inline void retire_mq_sysctls(struct ipc_namespace *ns)
->  {
-> -	return NULL;
-> +}
-> +
-> +static inline bool setup_mq_sysctls(struct ipc_namespace *ns)
-> +{
-> +	return true;
->  }
->  
->  #endif /* CONFIG_POSIX_MQUEUE_SYSCTL */
-> diff --git a/ipc/mq_sysctl.c b/ipc/mq_sysctl.c
-> index 72a92a08c848..56afb0503296 100644
-> --- a/ipc/mq_sysctl.c
-> +++ b/ipc/mq_sysctl.c
-> @@ -9,39 +9,9 @@
->  #include <linux/ipc_namespace.h>
->  #include <linux/sysctl.h>
->  
-> -#ifdef CONFIG_PROC_SYSCTL
-> -static void *get_mq(struct ctl_table *table)
-> -{
-> -	char *which = table->data;
-> -	struct ipc_namespace *ipc_ns = current->nsproxy->ipc_ns;
-> -	which = (which - (char *)&init_ipc_ns) + (char *)ipc_ns;
-> -	return which;
-> -}
-> -
-> -static int proc_mq_dointvec(struct ctl_table *table, int write,
-> -			    void *buffer, size_t *lenp, loff_t *ppos)
-> -{
-> -	struct ctl_table mq_table;
-> -	memcpy(&mq_table, table, sizeof(mq_table));
-> -	mq_table.data = get_mq(table);
-> -
-> -	return proc_dointvec(&mq_table, write, buffer, lenp, ppos);
-> -}
-> -
-> -static int proc_mq_dointvec_minmax(struct ctl_table *table, int write,
-> -		void *buffer, size_t *lenp, loff_t *ppos)
-> -{
-> -	struct ctl_table mq_table;
-> -	memcpy(&mq_table, table, sizeof(mq_table));
-> -	mq_table.data = get_mq(table);
-> -
-> -	return proc_dointvec_minmax(&mq_table, write, buffer,
-> -					lenp, ppos);
-> -}
-> -#else
-> -#define proc_mq_dointvec NULL
-> -#define proc_mq_dointvec_minmax NULL
-> -#endif
-> +#include <linux/stat.h>
-> +#include <linux/capability.h>
-> +#include <linux/slab.h>
->  
->  static int msg_max_limit_min = MIN_MSGMAX;
->  static int msg_max_limit_max = HARD_MSGMAX;
-> @@ -55,14 +25,14 @@ static struct ctl_table mq_sysctls[] = {
->  		.data		= &init_ipc_ns.mq_queues_max,
->  		.maxlen		= sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_mq_dointvec,
-> +		.proc_handler	= proc_dointvec,
->  	},
->  	{
->  		.procname	= "msg_max",
->  		.data		= &init_ipc_ns.mq_msg_max,
->  		.maxlen		= sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_mq_dointvec_minmax,
-> +		.proc_handler	= proc_dointvec_minmax,
->  		.extra1		= &msg_max_limit_min,
->  		.extra2		= &msg_max_limit_max,
->  	},
-> @@ -71,7 +41,7 @@ static struct ctl_table mq_sysctls[] = {
->  		.data		= &init_ipc_ns.mq_msgsize_max,
->  		.maxlen		= sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_mq_dointvec_minmax,
-> +		.proc_handler	= proc_dointvec_minmax,
->  		.extra1		= &msg_maxsize_limit_min,
->  		.extra2		= &msg_maxsize_limit_max,
->  	},
-> @@ -80,7 +50,7 @@ static struct ctl_table mq_sysctls[] = {
->  		.data		= &init_ipc_ns.mq_msg_default,
->  		.maxlen		= sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_mq_dointvec_minmax,
-> +		.proc_handler	= proc_dointvec_minmax,
->  		.extra1		= &msg_max_limit_min,
->  		.extra2		= &msg_max_limit_max,
->  	},
-> @@ -89,32 +59,89 @@ static struct ctl_table mq_sysctls[] = {
->  		.data		= &init_ipc_ns.mq_msgsize_default,
->  		.maxlen		= sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_mq_dointvec_minmax,
-> +		.proc_handler	= proc_dointvec_minmax,
->  		.extra1		= &msg_maxsize_limit_min,
->  		.extra2		= &msg_maxsize_limit_max,
->  	},
->  	{}
->  };
->  
-> -static struct ctl_table mq_sysctl_dir[] = {
-> -	{
-> -		.procname	= "mqueue",
-> -		.mode		= 0555,
-> -		.child		= mq_sysctls,
-> -	},
-> -	{}
-> -};
-> +static struct ctl_table_set *
-> +set_lookup(struct ctl_table_root *root)
-> +{
-> +	return &current->nsproxy->ipc_ns->set;
-> +}
->  
-> -static struct ctl_table mq_sysctl_root[] = {
-> -	{
-> -		.procname	= "fs",
-> -		.mode		= 0555,
-> -		.child		= mq_sysctl_dir,
-> -	},
-> -	{}
-> +static int set_is_seen(struct ctl_table_set *set)
-> +{
-> +	return &current->nsproxy->ipc_ns->set == set;
-> +}
-> +
-> +static int set_permissions(struct ctl_table_header *head, struct ctl_table *table)
-> +{
-> +	struct ipc_namespace *ns = container_of(head->set, struct ipc_namespace, set);
-> +	int mode;
-> +
-> +	/* Allow users with CAP_SYS_RESOURCE unrestrained access */
-> +	if (ns_capable(ns->user_ns, CAP_SYS_RESOURCE))
-> +		mode = (table->mode & S_IRWXU) >> 6;
-> +	else
-> +	/* Allow all others at most read-only access */
-> +		mode = table->mode & S_IROTH;
-> +	return (mode << 6) | (mode << 3) | mode;
-> +}
-
-As a cleanup/bug-fix  please don't implemenet set_permissions.  If you
-don't the default permissions that we use today will apply.
-
-> +static struct ctl_table_root set_root = {
-> +	.lookup = set_lookup,
-> +	.permissions = set_permissions,
->  };
->  
-> -struct ctl_table_header *mq_register_sysctl_table(void)
-> +bool setup_mq_sysctls(struct ipc_namespace *ns)
->  {
-> -	return register_sysctl_table(mq_sysctl_root);
-> +	struct ctl_table *tbl;
-> +
-> +	setup_sysctl_set(&ns->set, &set_root, set_is_seen);
-> +
-> +	tbl = kmemdup(mq_sysctls, sizeof(mq_sysctls), GFP_KERNEL);
-> +	if (tbl) {
-> +		int i;
-> +
-> +		for (i = 0; i < ARRAY_SIZE(mq_sysctls); i++) {
-> +			if (tbl[i].data == &init_ipc_ns.mq_queues_max)
-> +				tbl[i].data = &ns->mq_queues_max;
-> +
-> +			else if (tbl[i].data == &init_ipc_ns.mq_msg_max)
-> +				tbl[i].data = &ns->mq_msg_max;
-> +
-> +			else if (tbl[i].data == &init_ipc_ns.mq_msgsize_max)
-> +				tbl[i].data = &ns->mq_msgsize_max;
-> +
-> +			else if (tbl[i].data == &init_ipc_ns.mq_msg_default)
-> +				tbl[i].data = &ns->mq_msg_default;
-> +
-> +			else if (tbl[i].data == &init_ipc_ns.mq_msgsize_default)
-> +				tbl[i].data = &ns->mq_msgsize_default;
-> +			else
-> +				tbl[i].data = NULL;
-> +		}
-> +
-> +		ns->sysctls = __register_sysctl_table(&ns->set, "fs/mqueue", tbl);
-> +	}
-> +	if (!ns->sysctls) {
-> +		kfree(tbl);
-> +		retire_sysctl_set(&ns->set);
-> +		return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +void retire_mq_sysctls(struct ipc_namespace *ns)
-> +{
-> +	struct ctl_table *tbl;
-> +
-> +	tbl = ns->sysctls->ctl_table_arg;
-> +	unregister_sysctl_table(ns->sysctls);
-> +	retire_sysctl_set(&ns->set);
-> +	kfree(tbl);
->  }
-> diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-> index 5becca9be867..1b4a3be71636 100644
-> --- a/ipc/mqueue.c
-> +++ b/ipc/mqueue.c
-> @@ -163,8 +163,6 @@ static void remove_notification(struct mqueue_inode_info *info);
->  
->  static struct kmem_cache *mqueue_inode_cachep;
->  
-> -static struct ctl_table_header *mq_sysctl_table;
-> -
->  static inline struct mqueue_inode_info *MQUEUE_I(struct inode *inode)
->  {
->  	return container_of(inode, struct mqueue_inode_info, vfs_inode);
-> @@ -1713,8 +1711,10 @@ static int __init init_mqueue_fs(void)
->  	if (mqueue_inode_cachep == NULL)
->  		return -ENOMEM;
->  
-> -	/* ignore failures - they are not fatal */
-> -	mq_sysctl_table = mq_register_sysctl_table();
-> +	if (!setup_mq_sysctls(&init_ipc_ns)) {
-> +		pr_warn("sysctl registration failed\n");
-> +		return -ENOMEM;
-> +	}
->  
->  	error = register_filesystem(&mqueue_fs_type);
->  	if (error)
-> @@ -1731,8 +1731,6 @@ static int __init init_mqueue_fs(void)
->  out_filesystem:
->  	unregister_filesystem(&mqueue_fs_type);
->  out_sysctl:
-> -	if (mq_sysctl_table)
-> -		unregister_sysctl_table(mq_sysctl_table);
->  	kmem_cache_destroy(mqueue_inode_cachep);
->  	return error;
->  }
-> diff --git a/ipc/namespace.c b/ipc/namespace.c
-> index ae83f0f2651b..f760243ca685 100644
-> --- a/ipc/namespace.c
-> +++ b/ipc/namespace.c
-> @@ -59,6 +59,10 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
->  	if (err)
->  		goto fail_put;
->  
-> +	err = -ENOMEM;
-> +	if (!setup_mq_sysctls(ns))
-> +		goto fail_put;
-> +
-Please make this handle all ipc sysctls not just the mq sysctls.
-
->  	sem_init_ns(ns);
->  	msg_init_ns(ns);
->  	shm_init_ns(ns);
-> @@ -125,6 +129,8 @@ static void free_ipc_ns(struct ipc_namespace *ns)
->  	msg_exit_ns(ns);
->  	shm_exit_ns(ns);
->  
-> +	retire_mq_sysctls(ns);
-> +
->  	dec_ipc_namespaces(ns->ucounts);
->  	put_user_ns(ns->user_ns);
->  	ns_free_inum(&ns->ns);
-
-Eric

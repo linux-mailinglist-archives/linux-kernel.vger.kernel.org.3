@@ -2,177 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDA548A3CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C4D48A3D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345706AbiAJXkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S1345713AbiAJXlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242645AbiAJXkr (ORCPT
+        with ESMTP id S242645AbiAJXl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:40:47 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C722C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:40:47 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id d1so42553921ybh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:40:47 -0800 (PST)
+        Mon, 10 Jan 2022 18:41:29 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F371C06173F;
+        Mon, 10 Jan 2022 15:41:29 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so667928pjl.0;
+        Mon, 10 Jan 2022 15:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qDGx4rPveudwE1vRW4I5CFIMkMb5URvZDsFlXmH9o6w=;
-        b=o+EU0nOsD+ZtFVMEDfBaLk5/YT0q9pC/SpmMwy14s0gakua6hifIB6k2Xj6m3iX+1S
-         BMYt1+ojCSX3t0ua86Q+GxiiyhEcmq1oYBYIqDV5gKshJy2P5jgPLAvBTNk+oSgrl9ZK
-         pvTsQttJJkS9nzBVld6M9FGwH27Bcjkuo4H4/+qcaOVCtGk/3z3NcxgN0Jc7TT4rUNb4
-         NXo4sVOg4isK1LNnG+dwaxcNqdTCs1TA3DJrcHSfiRbf1s9GYgTJVArz/NKkC+llvCnN
-         BNrCIJc4wYzG0UoC1Jp/oLXFyODb16L+QlTcyOhaYzSZRsnapZNMD/18hoziMEdmzhSY
-         iOUw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b7rF/+7zNEi6PfcE9UdoT64bvFiZXuAW5zsuDsfPwMw=;
+        b=LuUtRw5yJpt/krw5bEDY+gsyWKSiiWxF+QJ6h1ggw9X7zAgXfRqoORbS3TWI/PyiZE
+         LqmynqrYWSb4T2V0gnYQHo84m4YTUt3oFFiT7uI9UdrBD5eRROmFzQ0rN8kfXBMdUjt+
+         U+3pa5LN9x+c90l7OPcxOXN9/TLjCm959JVMZUpBdtUuFsSu1bRHnvOz6G+mZY6nwCBh
+         VOrQsIisAZhpP7iRkdm6CDSxxnn56siqOLHw9tYvf80TuWHLR8SjbBZbsSBog63eBLs3
+         ZYfmOIk5NAqQ9+v6t1QJgvSetoCa/dGCpkjiHm38x7zCxykP7X+xhsDwXHp0NqIF4Z9e
+         Kkbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qDGx4rPveudwE1vRW4I5CFIMkMb5URvZDsFlXmH9o6w=;
-        b=da1VtdkFHUD4y3f3UBxN8OItzL9Eu5MX50CFLtb9A4Pcm3tuSlr4OoyL1IvnqJGlLx
-         49zyUNx5/4I75oAFl1NeWnt/Aa93UmMYJErlR7SfuKJ5HLNw6KH3mAAx5oCKsh6jjJiy
-         05DzLdJLZruutoRht5L+qfrzTzcjXDocfLaFDeaGUvjsISfIUIjtP1I4cjcX/9HRJjj3
-         DMa7pEbleD9/6Kp4BWpwSZIOgHGPwoXieQ1XMKqej+WRFraCEma6oHoQ+Uk4UeQCNrgg
-         hRbHheXoL3Sfp7dhZkv7lLoJUIpFNywLr34vOdkvL5VxOq+5gXDI4yqA+4+8ON+ZxTnE
-         ORCg==
-X-Gm-Message-State: AOAM531V+lVQDxCTSB/LmimaDCTx8BPpNySkjAI6irHRVZ22/2P7DTj0
-        VLsHKWrrjwS5fWWvOAsLMKzS7jIrEJuQOeLFyGfWiDPNaKOfFA==
-X-Google-Smtp-Source: ABdhPJzIrPJFmkpkT1MmYvnvF/19vaa1rmG/3n9wA4uvNrhhiocvS0sMsPUM5NnLiqbCvThjitV3yXClYJU59u9WFNk=
-X-Received: by 2002:a25:244e:: with SMTP id k75mr2749219ybk.172.1641858046407;
- Mon, 10 Jan 2022 15:40:46 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b7rF/+7zNEi6PfcE9UdoT64bvFiZXuAW5zsuDsfPwMw=;
+        b=cUZPFV4IbQ47L9GzVtB8uX8deBYgCi8jyjdmy+4XfefatXPiOcnSGXU50BEha7GpV3
+         eb5uxqWAxZGQRM/cfGKrFEpk7zvQZg9hUJucvGMYp4i5pCzEnUvfI3CMbPhs4KUaSAIv
+         5mm/YhhMibenJwHFckF1nmNmkSkKeDsXF5tAMA3QJqcYuB/vDUsScgAaQBtv+LwLlgGB
+         JWvAkjDF2lat++TpCEEAlljbj9U9U73DMqWyvg3kL7bv2WEo+4+gKWD3XvtbQPU89cr2
+         HfdGk9uRN0cqxspKGdmxOsMrWkNhZoCkeMMlixr4vXg/PCFlGzxbm4abx0LtVVGx7B/b
+         6qtA==
+X-Gm-Message-State: AOAM531ffrEiNo9txR74G4CuLBwz/HuSv6DC+Q6NEQbgXNWX6iT4oKWZ
+        pAmlw4BeJ5ORxFoE4fkIhFE=
+X-Google-Smtp-Source: ABdhPJybys/dSkECYSOhCUzYQMxDSVohMnWvXs9u6q9JVsqRzOVaeK+Ywrdj4OL8Lu20UVT4znlMxw==
+X-Received: by 2002:a17:902:c215:b0:148:af14:6e96 with SMTP id 21-20020a170902c21500b00148af146e96mr1764021pll.80.1641858089003;
+        Mon, 10 Jan 2022 15:41:29 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id kt19sm124551pjb.50.2022.01.10.15.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 15:41:27 -0800 (PST)
+Date:   Tue, 11 Jan 2022 08:41:26 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, kgugala@antmicro.com,
+        mholenko@antmicro.com, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
+        geert@linux-m68k.org, david.abdurachmanov@sifive.com,
+        florent@enjoy-digital.fr, rdunlap@infradead.org,
+        andy.shevchenko@gmail.com, hdanton@sina.com
+Subject: Re: [PATCH v11 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+Message-ID: <YdzEJijn2JbSFzxF@antec>
+References: <20220109232003.2573924-1-gsomlo@gmail.com>
+ <20220109232003.2573924-4-gsomlo@gmail.com>
+ <YdywDhEbYyzm7Rri@antec>
+ <Ydy1qCc3CXOWKv/O@errol.ini.cmu.edu>
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-4-rananta@google.com>
- <CAAeT=FxCCD+H1z8+gfyBZNeibfAUqUenZZe56Vj_3fCghJjy=Q@mail.gmail.com>
-In-Reply-To: <CAAeT=FxCCD+H1z8+gfyBZNeibfAUqUenZZe56Vj_3fCghJjy=Q@mail.gmail.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 10 Jan 2022 15:40:35 -0800
-Message-ID: <CAJHc60yY9qH5_r09Tz2fhWr+tT+i7RnKhchBuEePCKnos52kwA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 03/11] KVM: Introduce KVM_CAP_ARM_HVC_FW_REG_BMAP
-To:     Reiji Watanabe <reijiw@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydy1qCc3CXOWKv/O@errol.ini.cmu.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 9:40 PM Reiji Watanabe <reijiw@google.com> wrote:
->
-> Hi Raghu,
->
-> On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
-> <rananta@google.com> wrote:
-> >
-> > Introduce the KVM ARM64 capability, KVM_CAP_ARM_HVC_FW_REG_BMAP,
-> > to indicate the support for psuedo-firmware bitmap extension.
-> > Each of these registers holds a feature-set exposed to the guest
-> > in the form of a bitmap. If supported, a simple 'read' of the
-> > capability should return the number of psuedo-firmware registers
-> > supported. User-space can utilize this to discover the registers.
-> > It can further explore or modify the features using the classical
-> > GET/SET_ONE_REG interface.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 21 +++++++++++++++++++++
-> >  include/uapi/linux/kvm.h       |  1 +
-> >  2 files changed, 22 insertions(+)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > index aeeb071c7688..646176537f2c 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -6925,6 +6925,27 @@ indicated by the fd to the VM this is called on.
-> >  This is intended to support intra-host migration of VMs between userspace VMMs,
-> >  upgrading the VMM process without interrupting the guest.
-> >
-> > +7.30 KVM_CAP_ARM_HVC_FW_REG_BMAP
->
-> IMHO, instead of including its format of the register in the name,
-> including its purpose/function in the name might be better.
-> e.g. KVM_CAP_ARM_HVC_FEATURE_REG ?
-> (Feature fields don't necessarily have to be in a bitmap format
->  if they don't fit well although I'm not sure if we have such fields.)
->
-Well we do have registers, KVM_REG_ARM_PSCI_VERSION for instance,
-that's not covered by this CAP. But sure, I can explicitly add
-'FEATURES' to the name. I also wanted to explicitly convey that we are
-covering the *bitmapped* firmware registers here. But not sure if
-appending 'BMAP' might give an impression that the CAP itself is
-bitmapped.
-Do you think KVM_CAP_ARM_HVC_BMAP_FEAT_REG is better?
+On Mon, Jan 10, 2022 at 05:39:36PM -0500, Gabriel L. Somlo wrote:
+> On Tue, Jan 11, 2022 at 07:15:42AM +0900, Stafford Horne wrote:
+> > On Sun, Jan 09, 2022 at 06:20:03PM -0500, Gabriel Somlo wrote:
+> > > LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
+> > > that targets FPGAs. LiteSDCard is a small footprint, configurable
+> > > SDCard core commonly used in LiteX designs.
+> > > 
+> > > The driver was first written in May 2020 and has been maintained
+> > > cooperatively by the LiteX community. Thanks to all contributors!
+> > > 
+> > > Co-developed-by: Kamil Rakoczy <krakoczy@antmicro.com>
+> > > Signed-off-by: Kamil Rakoczy <krakoczy@antmicro.com>
+> > > Co-developed-by: Maciej Dudek <mdudek@internships.antmicro.com>
+> > > Signed-off-by: Maciej Dudek <mdudek@internships.antmicro.com>
+> > > Co-developed-by: Paul Mackerras <paulus@ozlabs.org>
+> > > Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
+> > > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> > > Reviewed-by: Joel Stanley <joel@jms.id.au>
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > ---
+> > > 
+> > ...
+> > > +static int litex_mmc_probe(struct platform_device *pdev)
+> > > +{
+> > > +	struct device *dev = &pdev->dev;
+> > > +	struct litex_mmc_host *host;
+> > > +	struct mmc_host *mmc;
+> > > +	struct clk *clk;
+> > > +	int ret;
+> > > +
+> > > +	/*
+> > > +	 * NOTE: defaults to max_[req,seg]_size=PAGE_SIZE, max_blk_size=512,
+> > > +	 * and max_blk_count accordingly set to 8;
+> > > +	 * If for some reason we need to modify max_blk_count, we must also
+> > > +	 * re-calculate `max_[req,seg]_size = max_blk_size * max_blk_count;`
+> > > +	 */
+> > > +	mmc = mmc_alloc_host(sizeof(struct litex_mmc_host), dev);
+> > > +	if (!mmc)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	ret = devm_add_action_or_reset(dev, litex_mmc_free_host_wrapper, mmc);
+> > > +	if (ret)
+> > > +		return dev_err_probe(dev, ret,
+> > > +				     "Can't register mmc_free_host action\n");
+> > > +
+> > > +	host = mmc_priv(mmc);
+> > > +	host->mmc = mmc;
+> > > +
+> > > +	/* Initialize clock source */
+> > > +	clk = devm_clk_get(dev, NULL);
+> > > +	if (IS_ERR(clk))
+> > > +		return dev_err_probe(dev, PTR_ERR(clk), "can't get clock\n");
+> > > +	host->ref_clk = clk_get_rate(clk);
+> > > +	host->sd_clk = 0;
+> > > +
+> > > +	/*
+> > > +	 * LiteSDCard only supports 4-bit bus width; therefore, we MUST inject
+> > > +	 * a SET_BUS_WIDTH (acmd6) before the very first data transfer, earlier
+> > > +	 * than when the mmc subsystem would normally get around to it!
+> > > +	 */
+> > > +	host->is_bus_width_set = false;
+> > > +	host->app_cmd = false;
+> > > +
+> > > +	/* LiteSDCard can support 64-bit DMA addressing */
+> > > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	host->buf_size = mmc->max_req_size * 2;
+> > > +	host->buffer = dmam_alloc_coherent(dev, host->buf_size,
+> > > +					   &host->dma, GFP_KERNEL);
+> > > +	if (host->buffer == NULL)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	host->sdphy = devm_platform_ioremap_resource_byname(pdev, "phy");
+> > > +	if (IS_ERR(host->sdphy))
+> > > +		return PTR_ERR(host->sdphy);
+> > > +
+> > > +	host->sdcore = devm_platform_ioremap_resource_byname(pdev, "core");
+> > > +	if (IS_ERR(host->sdcore))
+> > > +		return PTR_ERR(host->sdcore);
+> > > +
+> > > +	host->sdreader = devm_platform_ioremap_resource_byname(pdev, "reader");
+> > > +	if (IS_ERR(host->sdreader))
+> > > +		return PTR_ERR(host->sdreader);
+> > > +
+> > > +	host->sdwriter = devm_platform_ioremap_resource_byname(pdev, "writer");
+> > > +	if (IS_ERR(host->sdwriter))
+> > > +		return PTR_ERR(host->sdwriter);
+> > > +
+> > > +	/* Ensure DMA bus masters are disabled */
+> > > +	litex_write8(host->sdreader + LITEX_BLK2MEM_ENA, 0);
+> > > +	litex_write8(host->sdwriter + LITEX_MEM2BLK_ENA, 0);
+> > > +
+> > > +	init_completion(&host->cmd_done);
+> > > +	ret = litex_mmc_irq_init(pdev, host);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	/* Allow full generic 2.7-3.6V range; no software tuning available */
+> > > +	mmc->ocr_avail = LITEX_MMC_OCR;
+> > > +
+> > > +	mmc->ops = &litex_mmc_ops;
+> > > +
+> > > +	/*
+> > > +	 * Set default sd_clk frequency range based on empirical observations
+> > > +	 * of LiteSDCard gateware behavior on typical SDCard media
+> > > +	 */
+> > > +	mmc->f_min = 12.5e6;
+> > > +	mmc->f_max = 50e6;
+> > > +
+> > > +	ret = mmc_of_parse(mmc);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	/* Force 4-bit bus_width (only width supported by hardware) */
+> > > +	mmc->caps &= ~MMC_CAP_8_BIT_DATA;
+> > > +	mmc->caps |= MMC_CAP_4_BIT_DATA;
+> > > +
+> > > +	/* Set default capabilities */
+> > > +	mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY |
+> > > +		     MMC_CAP_DRIVER_TYPE_D |
+> > > +		     MMC_CAP_CMD23;
+> > > +	mmc->caps2 |= MMC_CAP2_NO_WRITE_PROTECT |
+> > > +		      MMC_CAP2_NO_SDIO |
+> > > +		      MMC_CAP2_NO_MMC;
+> > > +
+> > > +	platform_set_drvdata(pdev, host);
+> > 
+> > One more thing here. Or somewhere, should we add:
+> > 
+> > 	dev_info(dev, "Litex MMC controller initialized");
+> > 
+> > I was having a hard time debugging probing of this and having no printk's made
+> > it a bit difficult.
+> > 
+> > Though I was able to get most of the debug statements I needed using:
+> > 
+> > 	"debug initcall_debug dyndbg=\"file drivers/* +p\" loglevel=8"
+> > 
+> > -Stafford
+> > 
+> > > +	return mmc_add_host(mmc);
+> 
+> I'd prefer to declare victory *after* calling mmc_add_host(), so if
+> there are no objections I'd prefer to do the following in v12:
+> 
+>         ... 
+>         platform_set_drvdata(pdev, host);
+>  
+> -       return mmc_add_host(mmc);
+> +       ret = mmc_add_host(mmc);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "LiteX MMC probe failed!\n");
+> +
+> +       dev_info(dev, "LiteX MMC controller initialized.\n");
+> +
+> +       return 0;
+>  }
 
-> > +
-> > +:Architectures: arm64
-> > +:Parameters: None
-> > +:Returns: Number of psuedo-firmware registers supported
->
-> Looking at patch-4, the return value of this would be the number of
-> pseudo-firmware *bitmap* registers supported.
-> BTW, "4.68 KVM_SET_ONE_REG" in the doc uses the word "arm64 firmware
-> pseudo-registers".  It would be nicer to use the same term.
->
-Nice catch. I'll fix it here in apr.rst.
-> > +
-> > +This capability indicates that KVM for arm64 supports the psuedo-firmware
-> > +register bitmap extension. Each of these registers represent the features
-> > +supported by a particular type in the form of a bitmap. By default, these
-> > +registers are set with the upper limit of the features that are supported.
-> > +
-> > +The registers can be accessed via the standard SET_ONE_REG and KVM_GET_ONE_REG
-> > +interfaces. The user-space is expected to read the number of these registers
-> > +available by reading KVM_CAP_ARM_HVC_FW_REG_BMAP, read the current bitmap
-> > +configuration via GET_ONE_REG for each register, and then write back the
-> > +desired bitmap of features that it wishes the guest to see via SET_ONE_REG.
-> > +
-> > +Note that KVM doesn't allow the user-space to modify these registers after
-> > +the VM (any of the vCPUs) has started running.
->
-> Since even if KVM_RUN fails, and the VM hasn't started yet,
-> it will get immutable. So, "after any of the vCPUs run KVM_RUN."
-> might be more clear ?
->
-Sure, that's probably more clear. I'll fix it.
+Yes, that is what I was thinking too.
 
-Regards,
-Raghavendra
-
-> Thanks,
-> Reiji
->
->
->
-> > +
-> >  8. Other capabilities.
-> >  ======================
-> >
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 1daa45268de2..209b43dbbc3c 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
-> >  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
-> >  #define KVM_CAP_ARM_MTE 205
-> >  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
-> > +#define KVM_CAP_ARM_HVC_FW_REG_BMAP 207
-> >
-> >  #ifdef KVM_CAP_IRQ_ROUTING
-> >
-> > --
-> > 2.34.1.448.ga2b2bfdf31-goog
-> >
+-Stafford

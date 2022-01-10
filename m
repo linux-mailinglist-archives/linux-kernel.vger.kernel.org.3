@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13961489729
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A8848971C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244548AbiAJLQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:16:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:41688 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244532AbiAJLQf (ORCPT
+        id S244559AbiAJLOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:14:09 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16698 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244515AbiAJLNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:16:35 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 60D151F395;
-        Mon, 10 Jan 2022 11:16:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641813391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PkG0S8Obfn4LZ8Nij0a2iJKd0/TlcnmRiNdvI8v+zc8=;
-        b=vbXNAmy2SjVCR43y0X6sodkroBAv8DRiex4zBa1P5JtQvTrKK8tJwQE8licsRscwjtCLX0
-        BiLRZq/EvQ4u9ntNhchd5sdRxsV4ucM79zb/1ZV+tNufSn5oPbLIO19SuWjz/C4Z29T5QA
-        2U8K0Y0QsvXrErGTKygn1FAqZnpO5/o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641813391;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PkG0S8Obfn4LZ8Nij0a2iJKd0/TlcnmRiNdvI8v+zc8=;
-        b=LrY0qiNx0li7nfrJ9AOSuE8oIfqaeoNzcJQWjjEJkLMKzjCoDVln4sSE3hmv2P3SV9W3M5
-        2GK+5OZjI3kzKUBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AEE313D2A;
-        Mon, 10 Jan 2022 11:16:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HAysEI8V3GFSawAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:16:31 +0000
-Date:   Mon, 10 Jan 2022 12:16:39 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/cpu for v5.17
-Message-ID: <YdwVl0H54fmUIux0@zn.tnic>
+        Mon, 10 Jan 2022 06:13:19 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JXWLb2MMrzZf6f;
+        Mon, 10 Jan 2022 19:09:43 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 10 Jan 2022 19:13:17 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 10 Jan
+ 2022 19:13:16 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+CC:     <hch@lst.de>, <james.smart@broadcom.com>,
+        <martin.petersen@oracle.com>
+Subject: [PATCH -next] scsi: efct: don't use GFP_KERNEL under spin lock
+Date:   Mon, 10 Jan 2022 19:18:38 +0800
+Message-ID: <20220110111838.965480-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+GFP_KERNEL/GFP_DMA can't be used under a spin lock, according the
+comment of els_ios_lock, it's used to protect els ios list, so we
+can move down the spin lock to avoid using this flag under the lock.
 
-please pull two x86/cpu updates for 5.17.
-
-Thx.
-
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 8f406ef72859 ("scsi: elx: libefc: Extended link Service I/O handling")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
+ drivers/scsi/elx/libefc/efc_els.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
-
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cpu_for_v5.17_rc1
-
-for you to fetch changes up to 244122b4d2e5221e6abd6e21d6a58170104db781:
-
-  x86/lib: Add fast-short-rep-movs check to copy_user_enhanced_fast_string() (2021-12-29 13:46:02 +0100)
-
-----------------------------------------------------------------
-- Enable the short string copies for CPUs which support them, in
-copy_user_enhanced_fast_string()
-
-- Avoid writing MSR_CSTAR on Intel due to TDX guests raising a #VE trap
-
-----------------------------------------------------------------
-Andi Kleen (1):
-      x86/cpu: Don't write CSTAR MSR on Intel CPUs
-
-Tony Luck (1):
-      x86/lib: Add fast-short-rep-movs check to copy_user_enhanced_fast_string()
-
- arch/x86/kernel/cpu/common.c | 15 +++++++++++++--
- arch/x86/lib/copy_user_64.S  |  4 ++--
- 2 files changed, 15 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/scsi/elx/libefc/efc_els.c b/drivers/scsi/elx/libefc/efc_els.c
+index 7bb4f9aad2c8..cec6a2f649b3 100644
+--- a/drivers/scsi/elx/libefc/efc_els.c
++++ b/drivers/scsi/elx/libefc/efc_els.c
+@@ -46,18 +46,14 @@ efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
+ 
+ 	efc = node->efc;
+ 
+-	spin_lock_irqsave(&node->els_ios_lock, flags);
+-
+ 	if (!node->els_io_enabled) {
+ 		efc_log_err(efc, "els io alloc disabled\n");
+-		spin_unlock_irqrestore(&node->els_ios_lock, flags);
+ 		return NULL;
+ 	}
+ 
+ 	els = mempool_alloc(efc->els_io_pool, GFP_ATOMIC);
+ 	if (!els) {
+ 		atomic_add_return(1, &efc->els_io_alloc_failed_count);
+-		spin_unlock_irqrestore(&node->els_ios_lock, flags);
+ 		return NULL;
+ 	}
+ 
+@@ -74,7 +70,6 @@ efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
+ 					      &els->io.req.phys, GFP_KERNEL);
+ 	if (!els->io.req.virt) {
+ 		mempool_free(els, efc->els_io_pool);
+-		spin_unlock_irqrestore(&node->els_ios_lock, flags);
+ 		return NULL;
+ 	}
+ 
+@@ -88,6 +83,8 @@ efc_els_io_alloc_size(struct efc_node *node, u32 reqlen, u32 rsplen)
+ 		els = NULL;
+ 	}
+ 
++	spin_lock_irqsave(&node->els_ios_lock, flags);
++
+ 	if (els) {
+ 		/* initialize fields */
+ 		els->els_retries_remaining = EFC_FC_ELS_DEFAULT_RETRIES;
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

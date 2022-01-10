@@ -2,222 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8513489723
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FA4489724
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244492AbiAJLPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:15:01 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39200 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244448AbiAJLOx (ORCPT
+        id S244543AbiAJLPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244449AbiAJLOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:14:53 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20A8pdMl027013;
-        Mon, 10 Jan 2022 11:14:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=5m+2mfDDyh0TlLkCF2Fr+/g8FUjpntfEtGsUAUREgiU=;
- b=A31BwOezhZp9Xz2t2BZNKPI+dpH4hQpioYfoRMJ6G5OlW3FuqZfZEXO9kngyKq0wSODr
- weEEQu/Y1CpJ4f3+/HPrHi1Y0MAzjMwDDkfN3yzMENK8vhkPijM6WsZjSIQ6AkRwgndA
- 1hKSGMYRN0HzS/m5GsPz9npArXcS6B+3NLul54ortSbfUhVNJ3E2r01dZYJ9n375oX8G
- vwpCDz9jmM8iE6aOdJXgNEF542oFaKWZJXSENPnvT6djGnB+uBGKcgsx9r8ROLTM/MKK
- YHpaXAIBpfbUgqFBmyuwQI95T8f5+87WyAMdfY/cqNS1MQ9m9Px2vVqgClUm738FJZV9 fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3vg3ya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 11:14:26 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20AB9vIZ025950;
-        Mon, 10 Jan 2022 11:14:25 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm3vg3y2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 11:14:25 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20AB7gpK026886;
-        Mon, 10 Jan 2022 11:14:24 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma02dal.us.ibm.com with ESMTP id 3df289grw8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 11:14:24 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ABENwx33554938
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 11:14:23 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07AA3C606C;
-        Mon, 10 Jan 2022 11:14:23 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB54FC6061;
-        Mon, 10 Jan 2022 11:14:17 +0000 (GMT)
-Received: from [9.65.224.158] (unknown [9.65.224.158])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Jan 2022 11:14:17 +0000 (GMT)
-Message-ID: <fec22c21-795a-82b8-0001-30648a22e792@linux.ibm.com>
-Date:   Mon, 10 Jan 2022 13:14:16 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
- secret area
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@suse.de>
-Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
- <YdNHgtuVoLofL4cW@zn.tnic>
- <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
- <YdSRWmqdNY7jRcer@zn.tnic> <YdWEXRt7Ixm6/+Dq@work-vm>
- <YdXq9t75aYLJfb69@zn.tnic> <YdX6aAwy0txT9Dk7@work-vm>
- <YdgrDRCJOOg4k1Za@zn.tnic>
- <CAMkAt6qCHPzUT=COb_HQ51rRKwtaCC3Zxgc6k6ivB_dZUKx5Hw@mail.gmail.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <CAMkAt6qCHPzUT=COb_HQ51rRKwtaCC3Zxgc6k6ivB_dZUKx5Hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XmEgR8upfN5kPEh08dJJxLHCi4XWNX4l
-X-Proofpoint-GUID: 7Ym9zYsGBX9O7Y1FyyCgl5ENs8NT4U4z
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 10 Jan 2022 06:14:54 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F962C06173F;
+        Mon, 10 Jan 2022 03:14:54 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 51B50C009; Mon, 10 Jan 2022 12:14:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1641813292; bh=/0pUiq7KFM+daYGEUE294c0IR+pDHWltFcA11lI6wFI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zci0CAI01UnYDfTTKu/Gesnzf/IXr0qPf+13clr5+FncGR4f9IPqQU/VIC4SO98As
+         xG1likKmvBAatcfkq2vGWLp4KBUELajCRoj+4pGBxCCe6Monfp9Xik7xkWNquyBhep
+         eCCze1JO6k0Z9Q0y9EYzMWTT0aYXPZ/CeIydVHjox6GnUxMd6/DtVb3eQ1IvKMWF89
+         vlcH5nOSRtboHs0DbfZVaaiaSDWRGDO8o/Bmr0xg+87WqMkRf+5aTq5Yl3F2XlbQ1m
+         VWJaxaL+OvdFJ9V64X9LCKcGzGHtC3Z//gfSPUc6bL1YMl8VpvrN5yHj5cfMDqDsvl
+         N1jJvOX1dXWUQ==
+X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on nautica.notk.org
+X-Spam-Level: 
+X-Spam-Status: No, score=0.0 required=5.0 tests=UNPARSEABLE_RELAY
+        autolearn=unavailable version=3.3.2
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 9B56FC009;
+        Mon, 10 Jan 2022 12:14:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1641813291; bh=/0pUiq7KFM+daYGEUE294c0IR+pDHWltFcA11lI6wFI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I+zMu7zaOc9j0Y0BzuDbaY6ben6dzBtUQn7spawp62JEkXCPZoWknW/jKZ0y+1F1W
+         f7mWyaUHXNX/gDsd0oV+O2kvJ1Gm0AxbCS/wo0Xomevc+GvLk9hlnlwaMWX3GW9raJ
+         6gC1PiSmZ7QVh6Yy0glPIhHRsqbs0Ze8NhJWNkfVoddWBvhYYAUrsLEFivvOJVYj2s
+         A7ikFWUAy52udEc9jU1yx56c4kB3kvauGK0OCHQ1kfXE6Y7fqfSTWgZzpZIty/Jm7D
+         QXI0i/VumGbbLemp5fYlKOkBVKDVx+QB+5qs8UTH0BB1svbOQNiWbfZxdGLu8VuRai
+         avVyRz1FWEGnw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id ad3c41fc;
+        Mon, 10 Jan 2022 11:14:45 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     dhowells@redhat.com, v9fs-developer@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org, lucho@ionkov.net, ericvh@gmail.com,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] 9p: fix enodata when reading growing file
+Date:   Mon, 10 Jan 2022 20:14:44 +0900
+Message-Id: <20220110111444.926753-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_04,2022-01-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201100074
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reading from a file that was just extended by a write, but the write had
+not yet reached the server would return ENODATA as illustrated by this
+command:
+$ xfs_io -c 'open -ft test' -c 'w 4096 1000' -c 'r 0 1000'
+wrote 1000/1000 bytes at offset 4096
+1000.000000 bytes, 1 ops; 0.0001 sec (5.610 MiB/sec and 5882.3529 ops/sec)
+pread: No data available
 
+Fix this case by having netfs assume zeroes when reads from server come
+short like AFS and CEPH do
 
-On 07/01/2022 21:16, Peter Gonda wrote:
-> On Fri, Jan 7, 2022 at 4:59 AM Borislav Petkov <bp@suse.de> wrote:
->>
->> On Wed, Jan 05, 2022 at 08:07:04PM +0000, Dr. David Alan Gilbert wrote:
->>> I thought I saw something in their patch series where they also had a
->>> secret that got passed down from EFI?
->>
->> Probably. I've seen so many TDX patchsets so that I'm completely
->> confused what is what.
->>
->>> As I remember they had it with an ioctl and something; but it felt to
->>> me if it would be great if it was shared.
->>
->> I guess we could try to share
->>
->> https://lore.kernel.org/r/20211210154332.11526-28-brijesh.singh@amd.com
->>
->> for SNP and TDX.
->>
->>> I'd love to hear from those other cloud vendors; I've not been able to
->>> find any detail on how their SEV(-ES) systems actually work.
->>
->> Same here.
->>
->>> However, this aims to be just a comms mechanism to pass that secret;
->>> so it's pretty low down in the stack and is there for them to use -
->>> hopefully it's general enough.
->>
->> Exactly!
->>
->>> (An interesting question is what exactly gets passed in this key and
->>> what it means).
->>>
->>> All the contentious stuff I've seen seems to be further up the stack - like
->>> who does the attestation and where they get the secrets and how they
->>> know what a valid measurement looks like.
->>
->> It would be much much better if all the parties involved would sit down
->> and decide on a common scheme so that implementation can be shared but
->> getting everybody to agree is likely hard...
-> 
-> I saw a request for other cloud provider input here. A little
-> background for our SEV VMs in GCE we rely on our vTPM for attestation,
-> we do this because of SEV security properties quoting from AMD being
-> to protect guests from a benign but vulnerable hypervisor. So a
-> benign/compliant hypervisor's vTPM wouldn't lie to the guest. So we
-> added a few bits in the PCRs to allow users to see their SEV status in
-> vTPM quotes.
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Co-authored-by: David Howells <dhowells@redhat.com>
+Cc: stable@vger.kernel.org
+---
+ fs/9p/vfs_addr.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks Peter for explaining the GCE approach.  If I understand correctly,
-if the hypervisor is malicious, it could lie to the vTPM and set those
-"few bits" so it'll look like the VM is running with SEV enabled (whereas
-in fact it is running without memory encryption).  But that's outside the
-scope, right?
+diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+index c72e9f8f5f32..9a10e68c5f30 100644
+--- a/fs/9p/vfs_addr.c
++++ b/fs/9p/vfs_addr.c
+@@ -43,6 +43,11 @@ static void v9fs_req_issue_op(struct netfs_read_subrequest *subreq)
+ 	iov_iter_xarray(&to, READ, &rreq->mapping->i_pages, pos, len);
+ 
+ 	total = p9_client_read(fid, pos, &to, &err);
++
++	/* if we just extended the file size, any portion not in
++	 * cache won't be on server and is zeroes */
++	__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
++
+ 	netfs_subreq_terminated(subreq, err ?: total, false);
+ }
+ 
+-- 
+2.33.1
 
-
-> 
-> It would be very interesting to offer an attestation solution that
-> doesn't rely on our virtual TPM. But after reading through this cover
-> letter and the linked OVMF patches I am confused what's the high level
-> flow you are working towards? Are you loading in some OVMF using
-> LAUNCH_UPDATE_DATA, getting the measurement with LAUNCH_MEASURE, then
-> sending that to the customer who can then craft a "secret" (maybe say
-> SSH key) for injection with LAUNCH_SECRET? Thats sounds good but there
-> are a lot details left unattested there, how do you know you will boot
-> from the image loaded with the PSP into a known state? Do you have
-> some documentation I could read through to try and understand a little
-> more and apologies if I missed it.
-> 
-
-We rely on the OvmfPkg/AmdSev build of OVMF, which is a stripped down
-firmware that can boot only in one of two ways:
-
-a. direct boot to kernel/initrd/cmdline whose hashes are included in
-   the LAUNCH_MEASURE data (see [1], [2], [3]).
-b. boot to embedded grub (in OVMF) which decrypts an encrypted boot drive
-   using a secret from LAUNCH_SECRET (see [4] and [5]).
-
-For the current series (efi_secret kernel module), method (a) is the relevant
-one.  The Cloud Provider boots a guest VM with OVMF, and -kernel/-initrd/-append. The
-content of OVMF and the hashes of kernel/initrd/cmdline are measured in LAUNCH_MEASURE
-and sent to the Guest Owner (=Customer).  If they match, the Guest Owner should perform 
-a LAUNCH_SECRET and inject the secret to a designated SEV launch secrets page.  
-
-Then the guest starts running; when the kernel starts the EFI driver saves the address
-of this page (patch 1), and later exposes the secrets in this page as files in
-securityfs (patch 3). The secrets can be used by the guest workload in whatever way
-it needs (examples discussed above: ssh private key; API key to obtain secrets;
-decryption key for some encrypted files; ...). 
-
-Any attempt of a malicious cloud provider to modify OVMF, kernel, initrd, or cmdline
-will cause the SEV measurement to be wrong. 
-
-Note again that the proposed kernel patch series has nothing to do with the measurement
-sequence -- it assumes the secrets page is already populated, and exposes it
-to userspace as files.
-
-Hope this explains our approach.
-
-
-[1] https://www.youtube.com/watch?v=jzP8RlTRErk
-[2] https://lore.kernel.org/qemu-devel/20210930054915.13252-1-dovmurik@linux.ibm.com/
-[3] https://lore.kernel.org/qemu-devel/20211111100048.3299424-1-dovmurik@linux.ibm.com/
-
-[4] https://www.youtube.com/watch?v=rCsIxzM6C_I
-[5] https://blog.hansenpartnership.com/deploying-encrypted-images-for-confidential-computing/
-
-
-
--Dov

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D137E48915A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FA3489228
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240534AbiAJHbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240041AbiAJH2Q (ORCPT
+        id S241850AbiAJHju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:39:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41404 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240848AbiAJHcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:28:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB01CC028C16;
-        Sun,  9 Jan 2022 23:26:04 -0800 (PST)
+        Mon, 10 Jan 2022 02:32:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52030B811F5;
-        Mon, 10 Jan 2022 07:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 836BAC36AE9;
-        Mon, 10 Jan 2022 07:26:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C204B611B6;
+        Mon, 10 Jan 2022 07:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6AE1C36AEF;
+        Mon, 10 Jan 2022 07:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799563;
-        bh=Nuuso2AXaPE/UBn6/+PB07a/l0ILU5dmO7RdO8QyR9k=;
+        s=korg; t=1641799966;
+        bh=Lu4XgzqD4Y66Q0usyFzBvUsYXS/nROphKLCsJuhY/Us=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HJKQ73dLDpHa77UDTTKt0kHZrpT+/e8Ie0XKOrd/OLJiZmUZukUe7OCVSZk2G9/41
-         KJPeDiRrmy1uZaGsslRD7uC2Njstaa5qv7J2CvdIuxFjw/1M0rpW/mM4/f61lHMA/e
-         pxXd8HxYywcM9xNGltce739/8WrId5tF144JaZ0s=
+        b=n4xt85kW5uLbzGpb9ajCodtMSNYFavvtmYp3kuo5ii3kHiq78v5yTehluZNSkwC2G
+         9spIkLcsE2WqKXFQiPl4AtDChJJQgP7Px1e8YpbDXnmZcr1mpglfz67noe4g9X4RHW
+         5UfRUJhBFlR5Kcv77xVE9o28wOT2HMl/DdYUY7PQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Toye <thomas@toye.io>,
+        stable@vger.kernel.org, Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 15/22] rndis_host: support Hytera digital radios
+Subject: [PATCH 5.15 31/72] net: ena: Fix error handling when calculating max IO queues number
 Date:   Mon, 10 Jan 2022 08:23:08 +0100
-Message-Id: <20220110071814.771012163@linuxfoundation.org>
+Message-Id: <20220110071822.610624488@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071814.261471354@linuxfoundation.org>
-References: <20220110071814.261471354@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Toye <thomas@toye.io>
+From: Arthur Kiyanovski <akiyano@amazon.com>
 
-commit 29262e1f773b4b6a43711120be564c57fca07cfb upstream.
+commit 5055dc0348b8b7c168e3296044bccd724e1ae6cd upstream.
 
-Hytera makes a range of digital (DMR) radios. These radios can be
-programmed to a allow a computer to control them over Ethernet over USB,
-either using NCM or RNDIS.
+The role of ena_calc_max_io_queue_num() is to return the number
+of queues supported by the device, which means the return value
+should be >=0.
 
-This commit adds support for RNDIS for Hytera radios. I tested with a
-Hytera PD785 and a Hytera MD785G. When these radios are programmed to
-set up a Radio to PC Network using RNDIS, an USB interface will be added
-with class 2 (Communications), subclass 2 (Abstract Modem Control) and
-an interface protocol of 255 ("vendor specific" - lsusb even hints "MSFT
-RNDIS?").
+The function that calls ena_calc_max_io_queue_num(), checks
+the return value. If it is 0, it means the device reported
+it supports 0 IO queues. This case is considered an error
+and is handled by the calling function accordingly.
 
-This patch is similar to the solution of this StackOverflow user, but
-that only works for the Hytera MD785:
-https://stackoverflow.com/a/53550858
+However the current implementation of ena_calc_max_io_queue_num()
+is wrong, since when it detects the device supports 0 IO queues,
+it returns -EFAULT.
 
-To use the "Radio to PC Network" functionality of Hytera DMR radios, the
-radios need to be programmed correctly in CPS (Hytera's Customer
-Programming Software). "Forward to PC" should be checked in "Network"
-(under "General Setting" in "Conventional") and the "USB Network
-Communication Protocol" should be set to RNDIS.
+In such a case the calling function doesn't detect the error,
+and therefore doesn't handle it.
 
-Signed-off-by: Thomas Toye <thomas@toye.io>
+This commit changes ena_calc_max_io_queue_num() to return 0
+in case the device reported it supports 0 queues, allowing the
+calling function to properly handle the error case.
+
+Fixes: 736ce3f414cc ("net: ena: make ethtool -l show correct max number of queues")
+Signed-off-by: Shay Agroskin <shayagr@amazon.com>
+Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/rndis_host.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/amazon/ena/ena_netdev.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
---- a/drivers/net/usb/rndis_host.c
-+++ b/drivers/net/usb/rndis_host.c
-@@ -621,6 +621,11 @@ static const struct usb_device_id	produc
- 				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
- 	.driver_info = (unsigned long) &rndis_poll_status_info,
- }, {
-+	/* Hytera Communications DMR radios' "Radio to PC Network" */
-+	USB_VENDOR_AND_INTERFACE_INFO(0x238b,
-+				      USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
-+	.driver_info = (unsigned long)&rndis_info,
-+}, {
- 	/* RNDIS is MSFT's un-official variant of CDC ACM */
- 	USB_INTERFACE_INFO(USB_CLASS_COMM, 2 /* ACM */, 0x0ff),
- 	.driver_info = (unsigned long) &rndis_info,
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -4026,10 +4026,6 @@ static u32 ena_calc_max_io_queue_num(str
+ 	max_num_io_queues = min_t(u32, max_num_io_queues, io_tx_cq_num);
+ 	/* 1 IRQ for mgmnt and 1 IRQs for each IO direction */
+ 	max_num_io_queues = min_t(u32, max_num_io_queues, pci_msix_vec_count(pdev) - 1);
+-	if (unlikely(!max_num_io_queues)) {
+-		dev_err(&pdev->dev, "The device doesn't have io queues\n");
+-		return -EFAULT;
+-	}
+ 
+ 	return max_num_io_queues;
+ }
 
 

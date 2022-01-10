@@ -2,139 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC79489A33
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07011489A39
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiAJNnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:43:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56608 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232695AbiAJNnG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:43:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641822186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pWO8bUpZLUYe86Yo5GKizn940aDxxY2uX8Eua9eNw/E=;
-        b=P8VDKf7md9bsBvDsZtM031TnKTLl7el8b5jHdHXIah7mKnQxQo6kKI+LFXqt8fDk06g/tX
-        2uP+VOVzObhPltjUlqRbb17iC6lbW5cuhWjxTwhiRWlZ2s8Xz/d7w1t/B8zgOIck6Tph7i
-        BRRaSW3xgesCGL05CcsAKXFgCYVtP+Q=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-536-ctDMfuRTM_y_9sfFajCd8g-1; Mon, 10 Jan 2022 08:43:05 -0500
-X-MC-Unique: ctDMfuRTM_y_9sfFajCd8g-1
-Received: by mail-oi1-f197.google.com with SMTP id e3-20020aca3703000000b002c1f9ecb392so10021298oia.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 05:43:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=pWO8bUpZLUYe86Yo5GKizn940aDxxY2uX8Eua9eNw/E=;
-        b=qfBPedxowtML8S6pV2U/vP+FSnYHRvZBH7VSBgR/kwaYTiBzAo/YkIDqOF7vg8t2VO
-         gwWwpFsBVK0sz6FqTYVSQlNrLKIJFswHFgYAH8flBa24OLBeZzTRxycjzUhXoKJ/cvEK
-         U/WEc+ZWc2H2tByn48ipikhuwHIbM4YLXB+2WLrTtT9QdUd9eSdWeH8wAoE8B6MdSgiq
-         qRtmOw4k6tSmkJKkCGpuIDt4+RrzlPbYBngPJs0kSc4fFgr15trpTdnRcf2qTlSwjE87
-         7JoTFmfXI9p7uJADWQDDTChFH57Cooi5oF4LS9Xb/S9M6mN1pAyJNFdv+wVFkb8FrpOS
-         RVmA==
-X-Gm-Message-State: AOAM533ovy+xnhJIMuJ2xL7yK7ilFi1S2iEiJpK4MwaJJV3OJLN5DN2Y
-        XETYubLbAjSzyXnK6x/zPVQtWIwNbCC2XrIuF9H+NTJa0d2jFI61Pbj1lXbbD+Qud+r7ISLsf/Z
-        FVmF0LBingzPUmn7HyI14LdpO
-X-Received: by 2002:a05:6830:4034:: with SMTP id i20mr7351275ots.243.1641822184453;
-        Mon, 10 Jan 2022 05:43:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwra7ExUsBTMUvid99Z4eMEaJDEt12JpY0FwhcWLFMOignU8NPtKadY96Va2EYt/fw8qI/dxQ==
-X-Received: by 2002:a05:6830:4034:: with SMTP id i20mr7351243ots.243.1641822183935;
-        Mon, 10 Jan 2022 05:43:03 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id z19sm661908oid.57.2022.01.10.05.43.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 05:43:03 -0800 (PST)
-Subject: Re: [PATCH] net: ethernet: mtk_eth_soc: fix error checking in
- mtk_mac_config()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
-        Mark-MC.Lee@mediatek.com, davem@davemloft.net,
-        matthias.bgg@gmail.com, linux@armlinux.org.uk, nathan@kernel.org,
-        ndesaulniers@google.com, opensource@vdorst.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20220108155003.3991055-1-trix@redhat.com>
- <20220109164333.61dc2e89@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <f3025d42-6ff0-8880-c0e6-3ee45a8556f7@redhat.com>
-Date:   Mon, 10 Jan 2022 05:43:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S233127AbiAJNoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:44:01 -0500
+Received: from mga11.intel.com ([192.55.52.93]:13332 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233056AbiAJNoB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 08:44:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641822241; x=1673358241;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ynoYZyK0TpFLkgNw8QEmZ5Yrt0U51SATxebbB80K5sw=;
+  b=nAkXsdm3wrDRjYj+C8gt4CLC+DhWh+LORxR1ANKTAWpMJULc1buHuHJA
+   ljWOhVUlaZ1bMKjZlYX6XFfY8BtdqHPCOKCkCqxvnYF4AsZWYPeGC7o70
+   9+hOglr8q6RiNxD76s0HeFTpp1xpscHkJoF8zC4UXWSCjjroiL+VnTVPH
+   PKw0IR249/C5WatA6uvGmvt1W0AxrHJbOxerFnjPI6JwBJOsbQRoxPVxC
+   opGRPeqfcGKYv1w6oMfkxIlb4ks3XOZR3rDKb7q27+AqLGtY+zxFIJkBd
+   2gfq0TWAHG/V8zCu5xlycxDRgiZT9l+w2US6lvk+QoQjCS+juRS4AmRLw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="240776835"
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="240776835"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 05:44:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
+   d="scan'208";a="474131630"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2022 05:43:58 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6uxq-0003YV-3g; Mon, 10 Jan 2022 13:43:58 +0000
+Date:   Mon, 10 Jan 2022 21:43:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 2055/2375] arch/mips/sibyte/sb1250/irq.c:76:29:
+ error: invalid use of undefined type 'struct irq_data'
+Message-ID: <202201102119.iZr8M5Ui-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220109164333.61dc2e89@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   391ce485ced0e47bf8d2ce8bc32bb87887e16656
+commit: 78e95e8ad607924f6b933eedfb11d434e964e7d7 [2055/2375] headers/deps: genirq: Optimize <linux/interrupt.h> dependencies, remove <linux/hardirq.h>
+config: mips-randconfig-r015-20220109 (https://download.01.org/0day-ci/archive/20220110/202201102119.iZr8M5Ui-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=78e95e8ad607924f6b933eedfb11d434e964e7d7
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout 78e95e8ad607924f6b933eedfb11d434e964e7d7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-On 1/9/22 4:43 PM, Jakub Kicinski wrote:
-> On Sat,  8 Jan 2022 07:50:03 -0800 trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> Clang static analysis reports this problem
->> mtk_eth_soc.c:394:7: warning: Branch condition evaluates
->>    to a garbage value
->>                  if (err)
->>                      ^~~
->>
->> err is not initialized and only conditionally set.
->> Check err consistently with the rest of mtk_mac_config(),
->> after even possible setting.
->>
->> Fixes: 7e538372694b ("net: ethernet: mediatek: Re-add support SGMII")
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   drivers/net/ethernet/mediatek/mtk_eth_soc.c | 12 +++++++-----
->>   1 file changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
->> index b67b4323cff08..a27e548488584 100644
->> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
->> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
->> @@ -385,14 +385,16 @@ static void mtk_mac_config(struct phylink_config *config, unsigned int mode,
->>   		       0 : mac->id;
->>   
->>   		/* Setup SGMIISYS with the determined property */
->> -		if (state->interface != PHY_INTERFACE_MODE_SGMII)
->> +		if (state->interface != PHY_INTERFACE_MODE_SGMII) {
->>   			err = mtk_sgmii_setup_mode_force(eth->sgmii, sid,
->>   							 state);
->> -		else if (phylink_autoneg_inband(mode))
->> +			if (err)
->> +				goto init_err;
->> +		} else if (phylink_autoneg_inband(mode)) {
->>   			err = mtk_sgmii_setup_mode_an(eth->sgmii, sid);
->> -
->> -		if (err)
->> -			goto init_err;
->> +			if (err)
->> +				goto init_err;
->> +		}
->>   
->>   		regmap_update_bits(eth->ethsys, ETHSYS_SYSCFG0,
->>   				   SYSCFG0_SGMII_MASK, val);
-> Why not init err to 0 before the if or add an else err = 0; branch?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This is the way I would have preferred to do it but the function's 
-existing error handling does it this way.
+All errors (new ones prefixed by >>):
 
-I'll respin the patch.
+   arch/mips/sibyte/sb1250/irq.c:72:39: warning: 'struct irq_data' declared inside parameter list will not be visible outside of this definition or declaration
+      72 | static int sb1250_set_affinity(struct irq_data *d, const struct cpumask *mask,
+         |                                       ^~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c: In function 'sb1250_set_affinity':
+>> arch/mips/sibyte/sb1250/irq.c:76:29: error: invalid use of undefined type 'struct irq_data'
+      76 |         unsigned int irq = d->irq;
+         |                             ^~
+   arch/mips/sibyte/sb1250/irq.c: At top level:
+   arch/mips/sibyte/sb1250/irq.c:114:39: warning: 'struct irq_data' declared inside parameter list will not be visible outside of this definition or declaration
+     114 | static void disable_sb1250_irq(struct irq_data *d)
+         |                                       ^~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c: In function 'disable_sb1250_irq':
+   arch/mips/sibyte/sb1250/irq.c:116:29: error: invalid use of undefined type 'struct irq_data'
+     116 |         unsigned int irq = d->irq;
+         |                             ^~
+   arch/mips/sibyte/sb1250/irq.c: At top level:
+   arch/mips/sibyte/sb1250/irq.c:121:38: warning: 'struct irq_data' declared inside parameter list will not be visible outside of this definition or declaration
+     121 | static void enable_sb1250_irq(struct irq_data *d)
+         |                                      ^~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c: In function 'enable_sb1250_irq':
+   arch/mips/sibyte/sb1250/irq.c:123:29: error: invalid use of undefined type 'struct irq_data'
+     123 |         unsigned int irq = d->irq;
+         |                             ^~
+   arch/mips/sibyte/sb1250/irq.c: At top level:
+   arch/mips/sibyte/sb1250/irq.c:129:35: warning: 'struct irq_data' declared inside parameter list will not be visible outside of this definition or declaration
+     129 | static void ack_sb1250_irq(struct irq_data *d)
+         |                                   ^~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c: In function 'ack_sb1250_irq':
+   arch/mips/sibyte/sb1250/irq.c:131:29: error: invalid use of undefined type 'struct irq_data'
+     131 |         unsigned int irq = d->irq;
+         |                             ^~
+   arch/mips/sibyte/sb1250/irq.c: At top level:
+>> arch/mips/sibyte/sb1250/irq.c:174:15: error: variable 'sb1250_irq_type' has initializer but incomplete type
+     174 | static struct irq_chip sb1250_irq_type = {
+         |               ^~~~~~~~
+>> arch/mips/sibyte/sb1250/irq.c:175:10: error: 'struct irq_chip' has no member named 'name'
+     175 |         .name = "SB1250-IMR",
+         |          ^~~~
+   arch/mips/sibyte/sb1250/irq.c:175:17: warning: excess elements in struct initializer
+     175 |         .name = "SB1250-IMR",
+         |                 ^~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:175:17: note: (near initialization for 'sb1250_irq_type')
+>> arch/mips/sibyte/sb1250/irq.c:176:10: error: 'struct irq_chip' has no member named 'irq_mask_ack'
+     176 |         .irq_mask_ack = ack_sb1250_irq,
+         |          ^~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:176:25: warning: excess elements in struct initializer
+     176 |         .irq_mask_ack = ack_sb1250_irq,
+         |                         ^~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:176:25: note: (near initialization for 'sb1250_irq_type')
+>> arch/mips/sibyte/sb1250/irq.c:177:10: error: 'struct irq_chip' has no member named 'irq_unmask'
+     177 |         .irq_unmask = enable_sb1250_irq,
+         |          ^~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:177:23: warning: excess elements in struct initializer
+     177 |         .irq_unmask = enable_sb1250_irq,
+         |                       ^~~~~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:177:23: note: (near initialization for 'sb1250_irq_type')
+>> arch/mips/sibyte/sb1250/irq.c:178:10: error: 'struct irq_chip' has no member named 'irq_mask'
+     178 |         .irq_mask = disable_sb1250_irq,
+         |          ^~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:178:21: warning: excess elements in struct initializer
+     178 |         .irq_mask = disable_sb1250_irq,
+         |                     ^~~~~~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:178:21: note: (near initialization for 'sb1250_irq_type')
+>> arch/mips/sibyte/sb1250/irq.c:180:10: error: 'struct irq_chip' has no member named 'irq_set_affinity'
+     180 |         .irq_set_affinity = sb1250_set_affinity
+         |          ^~~~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:180:29: warning: excess elements in struct initializer
+     180 |         .irq_set_affinity = sb1250_set_affinity
+         |                             ^~~~~~~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:180:29: note: (near initialization for 'sb1250_irq_type')
+   arch/mips/sibyte/sb1250/irq.c:184:13: warning: no previous prototype for 'init_sb1250_irqs' [-Wmissing-prototypes]
+     184 | void __init init_sb1250_irqs(void)
+         |             ^~~~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c: In function 'init_sb1250_irqs':
+>> arch/mips/sibyte/sb1250/irq.c:189:17: error: implicit declaration of function 'irq_set_chip_and_handler' [-Werror=implicit-function-declaration]
+     189 |                 irq_set_chip_and_handler(i, &sb1250_irq_type,
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/mips/sibyte/sb1250/irq.c:190:42: error: 'handle_level_irq' undeclared (first use in this function)
+     190 |                                          handle_level_irq);
+         |                                          ^~~~~~~~~~~~~~~~
+   arch/mips/sibyte/sb1250/irq.c:190:42: note: each undeclared identifier is reported only once for each function it appears in
+   arch/mips/sibyte/sb1250/irq.c: At top level:
+>> arch/mips/sibyte/sb1250/irq.c:174:24: error: storage size of 'sb1250_irq_type' isn't known
+     174 | static struct irq_chip sb1250_irq_type = {
+         |                        ^~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Tom
 
+vim +76 arch/mips/sibyte/sb1250/irq.c
 
->
+^1da177e4c3f41 Linus Torvalds    2005-04-16   70  
+^1da177e4c3f41 Linus Torvalds    2005-04-16   71  #ifdef CONFIG_SMP
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23   72  static int sb1250_set_affinity(struct irq_data *d, const struct cpumask *mask,
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23   73  			       bool force)
+^1da177e4c3f41 Linus Torvalds    2005-04-16   74  {
+^1da177e4c3f41 Linus Torvalds    2005-04-16   75  	int i = 0, old_cpu, cpu, int_on;
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  @76  	unsigned int irq = d->irq;
+^1da177e4c3f41 Linus Torvalds    2005-04-16   77  	u64 cur_ints;
+^1da177e4c3f41 Linus Torvalds    2005-04-16   78  	unsigned long flags;
+^1da177e4c3f41 Linus Torvalds    2005-04-16   79  
+421d1563c66204 Thomas Gleixner   2014-03-04   80  	i = cpumask_first_and(mask, cpu_online_mask);
+^1da177e4c3f41 Linus Torvalds    2005-04-16   81  
+^1da177e4c3f41 Linus Torvalds    2005-04-16   82  	/* Convert logical CPU to physical CPU */
+^1da177e4c3f41 Linus Torvalds    2005-04-16   83  	cpu = cpu_logical_map(i);
+^1da177e4c3f41 Linus Torvalds    2005-04-16   84  
+^1da177e4c3f41 Linus Torvalds    2005-04-16   85  	/* Protect against other affinity changers and IMR manipulation */
+5772f6deb6214a Ralf Baechle      2010-02-27   86  	raw_spin_lock_irqsave(&sb1250_imr_lock, flags);
+^1da177e4c3f41 Linus Torvalds    2005-04-16   87  
+^1da177e4c3f41 Linus Torvalds    2005-04-16   88  	/* Swizzle each CPU's IMR (but leave the IP selection alone) */
+^1da177e4c3f41 Linus Torvalds    2005-04-16   89  	old_cpu = sb1250_irq_owner[irq];
+65bda1a95d395c Maciej W. Rozycki 2005-02-22   90  	cur_ints = ____raw_readq(IOADDR(A_IMR_MAPPER(old_cpu) +
+^1da177e4c3f41 Linus Torvalds    2005-04-16   91  					R_IMR_INTERRUPT_MASK));
+^1da177e4c3f41 Linus Torvalds    2005-04-16   92  	int_on = !(cur_ints & (((u64) 1) << irq));
+^1da177e4c3f41 Linus Torvalds    2005-04-16   93  	if (int_on) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16   94  		/* If it was on, mask it */
+^1da177e4c3f41 Linus Torvalds    2005-04-16   95  		cur_ints |= (((u64) 1) << irq);
+65bda1a95d395c Maciej W. Rozycki 2005-02-22   96  		____raw_writeq(cur_ints, IOADDR(A_IMR_MAPPER(old_cpu) +
+^1da177e4c3f41 Linus Torvalds    2005-04-16   97  					R_IMR_INTERRUPT_MASK));
+^1da177e4c3f41 Linus Torvalds    2005-04-16   98  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16   99  	sb1250_irq_owner[irq] = cpu;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  100  	if (int_on) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  101  		/* unmask for the new CPU */
+65bda1a95d395c Maciej W. Rozycki 2005-02-22  102  		cur_ints = ____raw_readq(IOADDR(A_IMR_MAPPER(cpu) +
+^1da177e4c3f41 Linus Torvalds    2005-04-16  103  					R_IMR_INTERRUPT_MASK));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  104  		cur_ints &= ~(((u64) 1) << irq);
+65bda1a95d395c Maciej W. Rozycki 2005-02-22  105  		____raw_writeq(cur_ints, IOADDR(A_IMR_MAPPER(cpu) +
+^1da177e4c3f41 Linus Torvalds    2005-04-16  106  					R_IMR_INTERRUPT_MASK));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  107  	}
+5772f6deb6214a Ralf Baechle      2010-02-27  108  	raw_spin_unlock_irqrestore(&sb1250_imr_lock, flags);
+d5dedd4507d307 Yinghai Lu        2009-04-27  109  
+d5dedd4507d307 Yinghai Lu        2009-04-27  110  	return 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  111  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  112  #endif
+^1da177e4c3f41 Linus Torvalds    2005-04-16  113  
+1544129da2de9f Thomas Gleixner   2011-06-06  114  static void disable_sb1250_irq(struct irq_data *d)
+1544129da2de9f Thomas Gleixner   2011-06-06  115  {
+1544129da2de9f Thomas Gleixner   2011-06-06  116  	unsigned int irq = d->irq;
+1544129da2de9f Thomas Gleixner   2011-06-06  117  
+1544129da2de9f Thomas Gleixner   2011-06-06  118  	sb1250_mask_irq(sb1250_irq_owner[irq], irq);
+1544129da2de9f Thomas Gleixner   2011-06-06  119  }
+1544129da2de9f Thomas Gleixner   2011-06-06  120  
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  121  static void enable_sb1250_irq(struct irq_data *d)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  122  {
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  123  	unsigned int irq = d->irq;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  124  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  125  	sb1250_unmask_irq(sb1250_irq_owner[irq], irq);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  126  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  127  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  128  
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  129  static void ack_sb1250_irq(struct irq_data *d)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  130  {
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  131  	unsigned int irq = d->irq;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  132  #ifdef CONFIG_SIBYTE_HAS_LDT
+^1da177e4c3f41 Linus Torvalds    2005-04-16  133  	u64 pending;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  134  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  135  	/*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  136  	 * If the interrupt was an HT interrupt, now is the time to
+^1da177e4c3f41 Linus Torvalds    2005-04-16  137  	 * clear it.  NOTE: we assume the HT bridge was set up to
+^1da177e4c3f41 Linus Torvalds    2005-04-16  138  	 * deliver the interrupts to all CPUs (which makes affinity
+^1da177e4c3f41 Linus Torvalds    2005-04-16  139  	 * changing easier for us)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  140  	 */
+65bda1a95d395c Maciej W. Rozycki 2005-02-22  141  	pending = __raw_readq(IOADDR(A_IMR_REGISTER(sb1250_irq_owner[irq],
+^1da177e4c3f41 Linus Torvalds    2005-04-16  142  						    R_IMR_LDT_INTERRUPT)));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  143  	pending &= ((u64)1 << (irq));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  144  	if (pending) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  145  		int i;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  146  		for (i=0; i<NR_CPUS; i++) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  147  			int cpu;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  148  #ifdef CONFIG_SMP
+^1da177e4c3f41 Linus Torvalds    2005-04-16  149  			cpu = cpu_logical_map(i);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  150  #else
+^1da177e4c3f41 Linus Torvalds    2005-04-16  151  			cpu = i;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  152  #endif
+^1da177e4c3f41 Linus Torvalds    2005-04-16  153  			/*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  154  			 * Clear for all CPUs so an affinity switch
+^1da177e4c3f41 Linus Torvalds    2005-04-16  155  			 * doesn't find an old status
+^1da177e4c3f41 Linus Torvalds    2005-04-16  156  			 */
+65bda1a95d395c Maciej W. Rozycki 2005-02-22  157  			__raw_writeq(pending,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  158  				     IOADDR(A_IMR_REGISTER(cpu,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  159  						R_IMR_LDT_INTERRUPT_CLR)));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  160  		}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  161  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  162  		/*
+^1da177e4c3f41 Linus Torvalds    2005-04-16  163  		 * Generate EOI.  For Pass 1 parts, EOI is a nop.  For
+^1da177e4c3f41 Linus Torvalds    2005-04-16  164  		 * Pass 2, the LDT world may be edge-triggered, but
+^1da177e4c3f41 Linus Torvalds    2005-04-16  165  		 * this EOI shouldn't hurt.  If they are
+^1da177e4c3f41 Linus Torvalds    2005-04-16  166  		 * level-sensitive, the EOI is required.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  167  		 */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  168  		*(uint32_t *)(ldt_eoi_space+(irq<<16)+(7<<2)) = 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  169  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  170  #endif
+^1da177e4c3f41 Linus Torvalds    2005-04-16  171  	sb1250_mask_irq(sb1250_irq_owner[irq], irq);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  172  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  173  
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23 @174  static struct irq_chip sb1250_irq_type = {
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23 @175  	.name = "SB1250-IMR",
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23 @176  	.irq_mask_ack = ack_sb1250_irq,
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23 @177  	.irq_unmask = enable_sb1250_irq,
+1544129da2de9f Thomas Gleixner   2011-06-06 @178  	.irq_mask = disable_sb1250_irq,
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  179  #ifdef CONFIG_SMP
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23 @180  	.irq_set_affinity = sb1250_set_affinity
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  181  #endif
+d6d5d5c4afd4c8 Thomas Gleixner   2011-03-23  182  };
+^1da177e4c3f41 Linus Torvalds    2005-04-16  183  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  184  void __init init_sb1250_irqs(void)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  185  {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  186  	int i;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  187  
+1603b5aca4f15b Atsushi Nemoto    2006-11-02  188  	for (i = 0; i < SB1250_NR_IRQS; i++) {
+e4ec7989b4e55d Thomas Gleixner   2011-03-27 @189  		irq_set_chip_and_handler(i, &sb1250_irq_type,
+e4ec7989b4e55d Thomas Gleixner   2011-03-27 @190  					 handle_level_irq);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  191  		sb1250_irq_owner[i] = 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  192  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  193  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  194  
 
+:::::: The code at line 76 was first introduced by commit
+:::::: d6d5d5c4afd4c8bb4c5e3753a2141e9c3a874629 MIPS: Sibyte: Convert to new irq_chip functions
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

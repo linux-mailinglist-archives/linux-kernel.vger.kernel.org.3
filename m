@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2417E48945D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E55489463
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 09:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240574AbiAJIzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 03:55:32 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:37638 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242607AbiAJIwi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:52:38 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 200551EC057F;
-        Mon, 10 Jan 2022 09:52:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641804751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KbNkHqNnB4sF1Vlw447CuxYzeQqnfPld8QZoUvnjLdk=;
-        b=YpjGSjRV6yq177K7f/bMLhGrp0dLiM632/jLMNEjSED7wSUK2ZDRjCrzpPt/Xt59FPZaUp
-        2elDnpryvzt2aIZ+YQ4QTR/mtEqLC+C97nHhShvqald7nmAjqFH3spxgml96GN8Nc9lV9h
-        vy2lXYqBquIZmWHaTVhNoNhMQADu9Eg=
-Date:   Mon, 10 Jan 2022 09:52:34 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: Re: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
- __fpstate_reset() a function argument
-Message-ID: <Ydvz0g+Bdys5JyS9@zn.tnic>
-References: <20220107185512.25321-1-pbonzini@redhat.com>
- <20220107185512.25321-6-pbonzini@redhat.com>
- <YdiX5y4KxQ7GY7xn@zn.tnic>
- <BN9PR11MB527688406C0BDCF093C718858C509@BN9PR11MB5276.namprd11.prod.outlook.com>
+        id S242181AbiAJIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 03:55:44 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:19223 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242336AbiAJIyl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 03:54:41 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 10 Jan
+ 2022 16:54:39 +0800
+Message-ID: <f16843d4-c3c7-9b24-e262-3ca5472e07a7@amlogic.com>
+Date:   Mon, 10 Jan 2022 16:54:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB527688406C0BDCF093C718858C509@BN9PR11MB5276.namprd11.prod.outlook.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 1/2] dt-bindings: serial: meson: Drop compatible =
+ amlogic,meson-gx-uart.
+Content-Language: en-US
+To:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220110082616.13474-1-yu.tu@amlogic.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <20220110082616.13474-1-yu.tu@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 05:15:44AM +0000, Tian, Kevin wrote:
-> Thanks for pointing it out! Actually this is one area which we didn't get
-> a clear answer from 'submitting-patches.rst'
+Hi All,
+	I'm really sorry for sending the wrong specified file. Please ignore 
+the email. I will resend V4.
 
-Are you sure?
-
-I see
-
-"Any further SoBs (Signed-off-by:'s) following the author's SoB are from
-people handling and transporting the patch, but were not involved in its
-development. SoB chains should reflect the **real** route a patch took
-as it was propagated to the maintainers and ultimately to Linus, with
-the first SoB entry signalling primary authorship of a single author."
-
-Now, when you read that paragraph, what do you think is the answer to
-your question and why?
-
-And if that paragraph doesn't make it clear, we would have to improve
-it...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+On 2022/1/10 16:26, Yu Tu wrote:
+> Deprecated, don't use anymore because compatible =
+> amlogic,meson-gx-uart. Don't differentiate between GXBB, GXL
+> and G12A which have different revisions of the UART IP.
+> So it's split into GXBB, GXL and G12A.
+> 
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
+>   .../devicetree/bindings/serial/amlogic,meson-uart.yaml | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> index 72e8868db3e0..ad9f1f4537a0 100644
+> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> @@ -28,7 +28,10 @@ properties:
+>                 - amlogic,meson6-uart
+>                 - amlogic,meson8-uart
+>                 - amlogic,meson8b-uart
+> -              - amlogic,meson-gx-uart
+> +              - amlogic,meson-gx-uart # deprecated, use revision specific property below
+> +              - amlogic,meson-gxbb-uart
+> +              - amlogic,meson-gxl-uart
+> +              - amlogic,meson-g12a-uart
+>                 - amlogic,meson-s4-uart
+>             - const: amlogic,meson-ao-uart
+>         - description: Everything-Else power domain UART controller
+> @@ -36,7 +39,10 @@ properties:
+>             - amlogic,meson6-uart
+>             - amlogic,meson8-uart
+>             - amlogic,meson8b-uart
+> -          - amlogic,meson-gx-uart
+> +          - amlogic,meson-gx-uart # deprecated, use revision specific property below
+> +          - amlogic,meson-gxbb-uart
+> +          - amlogic,meson-gxl-uart
+> +          - amlogic,meson-g12a-uart
+>             - amlogic,meson-s4-uart
+>   
+>     reg:
+> 
+> base-commit: 99a507a8ea28542ec196e2dd80096708e2482735

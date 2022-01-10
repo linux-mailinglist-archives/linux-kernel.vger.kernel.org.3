@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3622C4897DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600374897D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245168AbiAJLqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:46:50 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:46837 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245057AbiAJLor (ORCPT
+        id S245148AbiAJLqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244969AbiAJLog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:44:47 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N6srB-1mIELs0cE3-018Ljf; Mon, 10 Jan 2022 12:44:43 +0100
-Received: by mail-wm1-f41.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso7100925wme.1;
-        Mon, 10 Jan 2022 03:44:42 -0800 (PST)
-X-Gm-Message-State: AOAM533rbW8I/zhbzzufvc7FVVKccYs2HyUks/Txze1jfZ/j7XE332Xm
-        Bk2YP3WYRRlkZiX6t5B/nD4R+yzhVNZCNnGIh7U=
-X-Google-Smtp-Source: ABdhPJxOkVX5X/eP4ROAMmqEcBQO9QsPU/GNla4UTfIaHqTpDouNC4IkJVmWSHu8Rit8nW/iWcW7PE1EcM2YzrteSLk=
-X-Received: by 2002:a05:600c:287:: with SMTP id 7mr738103wmk.98.1641815082604;
- Mon, 10 Jan 2022 03:44:42 -0800 (PST)
+        Mon, 10 Jan 2022 06:44:36 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C51FC061756;
+        Mon, 10 Jan 2022 03:44:36 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 9DDD61F436F1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641815075;
+        bh=bFgbf+SKJkohaV9z0g5mte5KBBwjvSAxwUBFmODWAhw=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=A36shmdnUkCoT+7gAJ2/CGJwPNCabWozqEZZ9fjIIuYwqcVPk/UMBvFRy2be4+kif
+         S5I0K/Iwz86gHF8Jgf723v59h823VxwMt7ma+AaJY51gSC9x26au8pPG6FljzkjG3v
+         dwuyNHdZJSBxuBW2lzEmTKIlGpsPwZs7qDd24ryylKt0dxtApNGE5kxriJngIilpOz
+         aYQFNR6wXZ1X3F5+/9Q4xIj2RaSMJA7ZM9cT9L403tggtJS4BsdvreAtjhW6NDQFWq
+         Znx+L7JLG9xCyjCLMxN5vByA+LB15SehaRO0wVwr2Smxl5oSP8kU5aDyL7tjaGkO4t
+         TiiGHl+BI6daA==
+Subject: Re: [PATCH v2 5/5] iommu/mediatek: Always tlb_flush_all when each PM
+ resume
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:MEDIATEK IOMMU DRIVER" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, kernel@collabora.com,
+        linux-media@vger.kernel.org, sebastian.reichel@collabora.com
+References: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
+ <20211208120744.2415-6-dafna.hirschfeld@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <02719a0f-9725-abc5-f5c4-acbb4bfac08d@collabora.com>
+Date:   Mon, 10 Jan 2022 12:44:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-3-guoren@kernel.org>
-In-Reply-To: <20211228143958.3409187-3-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 10 Jan 2022 12:44:26 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3RALe7ihmhZ-5jucrH_0CZm3VyPaVfT-nC-96=1pKTcQ@mail.gmail.com>
-Message-ID: <CAK8P3a3RALe7ihmhZ-5jucrH_0CZm3VyPaVfT-nC-96=1pKTcQ@mail.gmail.com>
-Subject: Re: [PATCH V2 02/17] fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QcdpajMVdqePgdZs3xa0JNoXkGWZsqEGyIW4ADogHwcH7sEw3sc
- B6Sdrms+G3BiHqA+1duROp8eIXF5HRkaiSYuyQ8n5o0Tgy8/Z2VI2ZYq5WzkvDflqkuWZA2
- WXt7FJmbO0Sfj8IuxngKGVl+wMGrGDmXYiYvIF29XIJaKk2wqtDfl6T5Vm0ldkRjsZpCzoy
- 09PG46k5SIvkQ+r5Cx6lg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/alrCxvyf30=:xd+QVZb4vLhBhl9WqKJCsl
- KHyain12c7ZXDs+xxhVJ+ZuondJEPviA2Y9XjboF+Z0SYK2zuSK0ZA5oJ92FGKocjul5mkzrR
- P/NWIWw6ni0hXK8zFOFyfYR+4wbaGshot7xigWvapHBvnYwfjAMOke7+RdruEkPBhpW78hBVJ
- KcVcLkxrryggCdZIgoGKQrkyf50Htvd3umV0Isp+dYG5FGVLT5IXuGneRgiSXWGi5FeMRm2F9
- kuXwcLCyqKaWsMrE5WRNgvFdpBZwUMC2G2T1GKKrvhts1DZy8+oRqOTxklOE+MdE3velfyPUP
- MpQ+0cMzifobCG3NMduXl0dPXH1v8jEaU0AvX9uHHncsNP7NmqIuK+xDHQvjpXq6JXM3k1fnC
- Ep30dBWoGgD8iKKzN5ycaWMDV7wfVp9YwCCpLuUFYi/zWEQLy0gRWW9F9EMX3BoV4Sj2af6Fo
- tR0qEibZ6OmWHwzN0Uh2OfYCggNGj65XGIS0GoALdHsXvMXCY5punoRClJ16yNFYaz25j0JrU
- RtUXH5jvSwX8XoF/6ak+ShK/KPPzynO21x/vz84ZY3NbAA8I3MmTFBtvZbLE5K0HJX0gwUBH5
- PLJfHSSPltQ+4PNDWwqC6RUN0XEu/z4e+zYp29euQJzlKHroZoX9pD+2jJK2aI9s/tgWEIVOL
- 2M66X8/3aSIKUmPfjF9oPoxnt4/X8V0KLkpuD3ViTZ/Z6OB3cNvtYLE6FAeAsHvC3axoZiUgk
- lsoKgitUGmAQkUjOue1ahu05yVml8G7orsz4294vomAvNIbJYSY6y3OqdW77Ul9Aagq9MEueG
- OrMvJ+pbN1Vl5uRFvAoHGnYk9GfLRHnr1rGVlDVvAU1dhr+VqA=
+In-Reply-To: <20211208120744.2415-6-dafna.hirschfeld@collabora.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 3:39 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> RISC-V doesn't neeed compat_stat, so using __ARCH_WANT_COMPAT_STAT
-> to exclude unnecessary SYSCALL functions.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
+Il 08/12/21 13:07, Dafna Hirschfeld ha scritto:
+> From: Yong Wu <yong.wu@mediatek.com>
+> 
+> Prepare for 2 HWs that sharing pgtable in different power-domains.
+> 
+> When there are 2 M4U HWs, it may has problem in the flush_range in which
+> we get the pm_status via the m4u dev, BUT that function don't reflect the
+> real power-domain status of the HW since there may be other HW also use
+> that power-domain.
+> 
+> DAM allocation is often done while the allocating device is runtime
+> suspended. In such a case the iommu will also be suspended and partial
+> flushing of the tlb will not be executed.
+> Therefore, we add a tlb_flush_all in the pm_runtime_resume to make
+> sure the tlb is always clean.
+> 
+> In other case, the iommu's power should be active via device
+> link with smi.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> [move the call to mtk_iommu_tlb_flush_all to the bottom of resume cb, improve doc/log]
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

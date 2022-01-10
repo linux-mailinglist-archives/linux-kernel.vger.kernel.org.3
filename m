@@ -2,106 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9EB48A244
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C621B48A246
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241239AbiAJWDY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 17:03:24 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:29018 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230413AbiAJWDX (ORCPT
+        id S241957AbiAJWER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:04:17 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:42581 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230413AbiAJWEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:03:23 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-306-BDOvgji-O6a6MU242vGWhA-1; Mon, 10 Jan 2022 22:03:21 +0000
-X-MC-Unique: BDOvgji-O6a6MU242vGWhA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Mon, 10 Jan 2022 22:03:21 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Mon, 10 Jan 2022 22:03:21 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: RE: [PATCH v2] tracing: Add test for user space strings when
- filtering on  string pointers
-Thread-Topic: [PATCH v2] tracing: Add test for user space strings when
- filtering on  string pointers
-Thread-Index: AQHYBkLm7AQ+C6qOvkCW4jNyMLz0qKxce3DQgAAF6wCAAEzL0A==
-Date:   Mon, 10 Jan 2022 22:03:20 +0000
-Message-ID: <7c2789f990394df5b7907287fc0e1232@AcuMS.aculab.com>
-References: <20220110115532.536088fd@gandalf.local.home>
-        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
- <20220110122436.5302128f@gandalf.local.home>
-In-Reply-To: <20220110122436.5302128f@gandalf.local.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 10 Jan 2022 17:04:15 -0500
+Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXXdn-1mrPQv1A5f-00Z2sF; Mon, 10 Jan 2022 23:04:14 +0100
+Received: by mail-wm1-f42.google.com with SMTP id n19-20020a7bc5d3000000b003466ef16375so308944wmk.1;
+        Mon, 10 Jan 2022 14:04:14 -0800 (PST)
+X-Gm-Message-State: AOAM5308Px2BSL92C/badE9AqS39ltRNxQ17XquJPIjyLlWuoibzJuuV
+        c4Ni4navSaTvhc2ajGRjBcWIT1DIPRDtsMcCJHk=
+X-Google-Smtp-Source: ABdhPJyciqcg2uvXeIfuwE7UNZzHXNuNt1HQPy9AJQg0ko57Ij4iRi/iwrgrOSmmVXTt1zVT/mtee43J2O0Y7jwucVI=
+X-Received: by 2002:a7b:ce96:: with SMTP id q22mr3334217wmj.82.1641852253858;
+ Mon, 10 Jan 2022 14:04:13 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <Ydm7ReZWQPrbIugn@gmail.com>
+In-Reply-To: <Ydm7ReZWQPrbIugn@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 10 Jan 2022 23:03:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1emGYHPcjTfLqd-yyU8_9w88=2g_B_vfhbKeDtDHMM-w@mail.gmail.com>
+Message-ID: <CAK8P3a1emGYHPcjTfLqd-yyU8_9w88=2g_B_vfhbKeDtDHMM-w@mail.gmail.com>
+Subject: Re: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:u9nyXwUNAqT1urpk/aR3aX4MZpsrEVsSfnNR162ErlLN5OMdeFp
+ Mo9UH4FJ3mm9UjuET6GuRcEDavhf2cEP4hHEUHbWT+xiVy4JinEbDoA4nIZFahhPoNV5FS9
+ tftdo0fDxRbXzcBOKLyMCWxosJ+EEB7kckDdnk/uhRRbYoA9Bc1zpUKp+wYw3EemxDUuprX
+ 1yZix46Nfl1WmffSFc2Qg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:djMmaCRJkno=:KHysov6eQzTRBkXpYHNGEE
+ isp9TGYS7fK0s5XW2+y20cM28Z7Gc6999vkXssNN5nouE1d1WlVwvyst9sBozGaQGIEmEbRMa
+ Oebg/pVQPbOyvTYWWi1S2PfY3zrCbn0tOSTp5cDSfW8rA3Ti2C+/QmKtwNgnbqoxfWgTE+KvY
+ i0/l321GHMaEzb8b+YCP8uXlr5qcpDZhbpIjs2IPfeT/MszxUbx8g5cV6IrYQrJKQoqWCcjrr
+ tThg6vYycM19E74MfKR8v80vfkr9BTcgDp8VNDGVJ2fGpJT96eJJyE4vMaRJfgMnTjriq+eLW
+ fr0CApSrL6cA+aBGSL2lsvVwt0A+6Su9YRg+uDpLrcnAUbeFldZCyyaI3b51chvlDVZnghg5D
+ Y8kLHCkn137SmHK8zb++5qFrwpmU4HHAK6D/7FJ5He97PjC+ZyQtVBcoN/xvCiuWG48LCKCIN
+ 3QO1NsJ1NzW5FHJ8uVW6MH7kfaNCdyXl2CKZkjQ8KruRX6Y472oMWkVqvvrHaHUdmS2UY51+O
+ JPWh+jGqbbWwB/KbuVcXNqBRACSuS7plf9Z9p0K7waMi8ErMz57MTAgrxOClK2cHNf/9iT+8m
+ c7Tn8Upmat3/XkKX5Dx9J5D14f7GJPQKiVQniQ3gOdUBhnyttHe9Am/sxKVftIyPHJx00u1dx
+ gQbMPrQo/doaldsFR1H0QpzBT34huIcxQRhmTc3M3SgFnBB7rV0ePDeUxtD05Jb3lwaU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt
-> Sent: 10 January 2022 17:25
-> 
-> On Mon, 10 Jan 2022 17:11:52 +0000
-> David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> > From: Steven Rostedt
-> > > Sent: 10 January 2022 16:56
-> > >
-> > > From: Steven Rostedt <rostedt@goodmis.org>
-> > >
-> > > Pingfan reported that the following causes a fault:
-> > >
-> > >   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
-> > >   echo 1 > events/syscalls/sys_enter_at/enable
-> > >
-> > > The reason is that trace event filter treats the user space pointer
-> > > defined by "filename" as a normal pointer to compare against the "cpu"
-> > > string. If the string is not loaded into memory yet, it will trigger a
-> > > fault in kernel space:
-> >
-> > If a userspace pointer can end up the kernel structure then presumably
-> > a 'dodgy' user program can supply an arbitrary kernel address instead?
-> > This may give the user the ability to read arbitrary kernel addresses
-> > (including ones that are mapped to PCIe IO addresses).
-> > Doesn't sound good at all.
-> 
-> Only root has access to the information read here. All tracing requires
-> root or those explicitly given access to the tracing data, which pretty
-> much allows all access to kernel internals (including all memory). So
-> nothing to worry about here ;-)
+On Sat, Jan 8, 2022 at 5:26 PM Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> I'm pleased to announce -v2 of the "Fast Kernel Headers" tree, which is a
+> comprehensive rework of the Linux kernel's header hierarchy & header
+> dependencies, with the dual goals of:
+>
+>  - speeding up the kernel build (both absolute and incremental build times)
+>
+>  - decoupling subsystem type & API definitions from each other
+>
+> The fast-headers tree consists of over 25 sub-trees internally, spanning
+> over 2,300 commits, which can be found at:
+>
+>    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+>
+>    # HEAD: 391ce485ced0 headers/deps: Introduce the CONFIG_FAST_HEADERS=y config option
 
-Is this filtering trace using a filename passed to a system call by a user program?
-In which case a user program can set up a system call that normally fails
-(because the copy_from_user() errors) but if root tries to run a system
-call event trace on that process can read arbitrary addresses and
-thus crash the system?
+I've started reading through it at last. I can't say that I'm
+reviewing every patch, but
+at least (almost all) the things I've looked at so far all seem really
+nice to me, mostly
+this is the same that I was planning to do as well, some things I
+would have done
+differently but I'm not complaining as you did the work, and some things seem
+unnecessary but might not be.
 
-While unlikely root might be persuaded to try to run the trace.
+I've started building randconfig kernels for arm64 and x86, and fixing
+up things that come up,
+a few things I have noticed out so far:
 
-	David
+* 2e98ec93d465 ("headers/prep: Rename constants: SOCK_DESTROY =>
+SOCK_DIAG_SOCK_DESTROY")
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+  This one looks wrong, as you are changing a uapi header, possibly
+breaking applications
+  at compile time. I think the other one should be renamed instead.
 
+* 04293522a8cb ("headers/deps: ipc/shm: Move the 'struct shmid_ds'
+definition to ipc/shm.c")
+  and related patches
+
+  Similarly, the IPC structures are uapi headers that I would not
+change here for the same reasons.
+  Even if nothing uses those any more with modern libc
+implementations, the structures belong into
+  uapi, unless we can prove that the old-style sysvipc interface is
+completely unused and we
+  remove the implementation from the kernel as well (I don't think we
+want that, but I have not
+  looked in depth at when it was last used by a libc)
+
+* changing any include/uapi headers to use "#include <uapi/linux/*.h>"
+is broken because
+  that makes the headers unusable from userspace, including any of
+tools/*/. I think we
+  can work around this in the headers_install.sh postprocessing step
+though, where we already
+  do unifdef etc.
+
+* For all the header additions to .c files, I assume you are using a
+set of script, so these could
+  probably be changed without much trouble. I would suggest applying
+them in sequence so
+   the headers remain sorted alphabetically in the end. It would
+probably make sense to
+   squash those all together to avoid patching certain files many
+times over, for the sake
+   of keeping a slightly saner git history.
+
+* The per-task stuff sounded a bit scary from your descriptions but
+looking at the actual
+   implementation I now get it, this looks like a really nice way of doing it.
+
+* I think it would be good to keep the include/linux/syscalls_api.h declarations
+   in the same header as the SYSCALL_DEFINE*() macros, to ensure that the
+   prototypes remain synchronized. Splitting them out will likely also
+cause sparse
+   warnings for missing prototypes (or maybe it should but doesn't at
+the moment).
+
+* include/linux/time64_types.h is not a good name, as these are now
+the default types
+   after we removed the time32 versions. I'd either rename it to
+linux/time_types.h
+   or split it up between linux/types.h and linux/ktime_types.h
+
+* arm64 needs  a couple of minor fixups, see
+https://pastebin.com/eSKhz4CL for what
+  I have so far, feel free to integrate any things that directly make sense.
+
+         Arnd

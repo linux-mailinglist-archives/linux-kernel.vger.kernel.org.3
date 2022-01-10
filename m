@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAB548A1A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0E948A1AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 22:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244299AbiAJVQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 16:16:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49119 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240441AbiAJVQN (ORCPT
+        id S1343851AbiAJVRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 16:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240441AbiAJVRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 16:16:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641849371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BgPggEUxpH9cg9HZbODYoC6wOKH8t1DwAM46PU3G64c=;
-        b=dcOMpZndiLDXIbUUhdmi6vMi3F831HO7isr5g3HFjWuujwRjUtOPcoLopn3vFAor7SRw+1
-        hUePxY3Kwa6XG8uIfjFm08J4zFAsISzlppZhOsWuDNzxWDE0zvNL3pNLlFkvLzHIdkRNak
-        wfaNGUlgQQSOuIDL87V45PfXOmD3WvI=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-Rsb0shE1OlaUKHpDv_VTHQ-1; Mon, 10 Jan 2022 16:16:10 -0500
-X-MC-Unique: Rsb0shE1OlaUKHpDv_VTHQ-1
-Received: by mail-qt1-f200.google.com with SMTP id b7-20020ac85bc7000000b002b65aee118bso11797578qtb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 13:16:10 -0800 (PST)
+        Mon, 10 Jan 2022 16:17:34 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798E8C06173F;
+        Mon, 10 Jan 2022 13:17:34 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id u8so19526389iol.5;
+        Mon, 10 Jan 2022 13:17:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=ddWPPw1otLBJON27NC68A271p9JwkTcpr/kcKwb5ceI=;
+        b=Pg9yrUyN0vOD6zAT86sKUKI+M6cSxQHTW6fF/3VHJXY2s3aWtxy/BegHyx2q0KERR7
+         a/wngwJlN/Q5G2E+ilO/wGJ1SuEviLXr40CmIOL1HROP4rMLqmtB+Pv2ce0j49i7DMCA
+         NnFOMclwwzr5kQkMz1zJFGxvOVdDQj9EKDPT5Nn/dfyALHAtf9sYjXUAEXrBcDfNRYR7
+         TrwwpPC4r7irSH2F2MW1NNWAGz82lNLl1W2G8MaDtl++dgReN5Z1Km1JRax8Ce4xCvw7
+         VzZOLoCYh/5LfHCYPSIUK7TfOdxvpMxTZNl5SGD0BSj7R+pKKVn1hQQj6XF0j/tgz6BL
+         TJTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BgPggEUxpH9cg9HZbODYoC6wOKH8t1DwAM46PU3G64c=;
-        b=wZlZCOI7B0WtFizQK4XdDlfDcz1C5cLwnCoDiS5qo9Jo/HTJgJ32lQ449HPtyrUTl0
-         mJ7XUzrXpE6Hznp9n4PlndPb5Sdgdn3zgeIwRzo8cz/PGiCb+O+Y61Gyn0Sl0IjbasEu
-         K23TlsjjdYYZG9FPN2JA2YU4PkL8ckOoFf5+nZDIwq4PUOwYQPD8zu1aW4qQ7m7D7gie
-         3QIaYwAVWuDYbH13uIPVkH7rTGSfjkMLZdofT2Y8ThvIx28DqzKSa8YT7kEr4qpLbqTq
-         SuUM+v50uGzuE7+Tdmk2khnHFG2oL896LESQiNki9rZ2JUOn5ZdoBxGLNPo7b21J7Ckk
-         G5SA==
-X-Gm-Message-State: AOAM5326p2iAtiaJ+v6+ppy2wfTbXlXtcerkDU6GJ2sbwrUcZ/H6RBRT
-        LWcClNtxEVXhy8JvCCGi+9o53MSiU72PTpy2RAjmld1jFHx/+rCFtCmwhG0q79D9SN3zQl8ZubO
-        jqnpXxZHl+leJv3O1jO9FOwrV
-X-Received: by 2002:a05:622a:1487:: with SMTP id t7mr1366531qtx.667.1641849370036;
-        Mon, 10 Jan 2022 13:16:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwFKk6kHX2QKZrJ8F+/zI+EDY+BYAjE/EL6wb5h/KgYqM5ja2uyTjcBT+7vfPQ0gRkLNd7c+g==
-X-Received: by 2002:a05:622a:1487:: with SMTP id t7mr1366494qtx.667.1641849369379;
-        Mon, 10 Jan 2022 13:16:09 -0800 (PST)
-Received: from optiplex-lnx (c-73-182-255-193.hsd1.nh.comcast.net. [73.182.255.193])
-        by smtp.gmail.com with ESMTPSA id r13sm5920370qtw.41.2022.01.10.13.16.08
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=ddWPPw1otLBJON27NC68A271p9JwkTcpr/kcKwb5ceI=;
+        b=4c1FDdS+xgHVdHGzPQMX+tDBdsTVMBuJz0ZzRgHYmFBwyckUWg7mb9g1XJlgKnPpz1
+         uKhDKO9X7th+fmIRGNyHhgywacu6iwBD5gLYi2JAY0jGFT1GaM9A7N6kr6SS6lkkSDqs
+         Rm3RSAo8A5VQVq6+cRUVEyxQqo1A+JVBc7GTFBidBqmRUfexv5RYGRkpN2hT7Z8XZrsY
+         G1E0eFY39LPTGXosrukyd9QT7WjCtmD69m4I27lV8zXV2TBnMT9AGcRDDLnaYI6b7QZd
+         1u04qKgKLoR6mesIfcJ3VlhdISc4hSNK8D7jP4i2GCtWP6MjEs6vsNhi6z/X0OAXEEGT
+         A3zg==
+X-Gm-Message-State: AOAM533w3ZM1eOAosxL4gbEYjKCCTq6y96+dW8633uZpYI9G0GtKhQb8
+        qP8QWX2eWBfpOdU1jrfmsIREhY1BfTXTcAcPoVo=
+X-Google-Smtp-Source: ABdhPJwfj9E7i+Lifw/WgBUJoxMQpmeiPXqoliocW2fdRGaWxO8QITudA3TV7qw5zAHzr8QB4sk0yQ==
+X-Received: by 2002:a05:6638:72e:: with SMTP id j14mr919096jad.246.1641849453123;
+        Mon, 10 Jan 2022 13:17:33 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id q11sm4738022ilu.57.2022.01.10.13.17.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 13:16:08 -0800 (PST)
-From:   Rafael Aquini <raquini@redhat.com>
-X-Google-Original-From: Rafael Aquini <raquini@optiplex-lnx>
-Date:   Mon, 10 Jan 2022 16:16:06 -0500
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH v2 0/4] mm, memory_hotplug: handle unitialized numa node
- gracefully
-Message-ID: <YdyiFq+A25Mg0odE@optiplex-lnx>
-References: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
- <20211214100732.26335-1-mhocko@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214100732.26335-1-mhocko@kernel.org>
+        Mon, 10 Jan 2022 13:17:32 -0800 (PST)
+Message-ID: <61dca26c.1c69fb81.47d8f.4cfe@mx.google.com>
+Date:   Mon, 10 Jan 2022 13:17:32 -0800 (PST)
+X-Google-Original-Date: Mon, 10 Jan 2022 21:17:31 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 00/72] 5.15.14-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:07:28AM +0100, Michal Hocko wrote:
-> Hi,
-> this should be the full bundle for now. I have ended up with 4 patches.
-> The primary fix is patch 2 (should be reasonably easy to backport to
-> older kernels if there is any need for that). Patches 3 and 4 are mere
-> clean ups.
->
-> I will repost once this can get some testing from Alexey. Shouldn't be
-> too much different from http://lkml.kernel.org/r/YbHfBgPQMkjtuHYF@dhcp22.suse.cz
-> with the follow up fix squashed in.
+On Mon, 10 Jan 2022 08:22:37 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.14 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I would really appreciate to hear more about http://lkml.kernel.org/r/YbMZsczMGpChaWz0@dhcp22.suse.cz
-> because I would like to add that information to the changelog as well.
+> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
+> Anything received after that time might be too late.
 > 
-> Thanks for the review and testing.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.14-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 > 
 
-FWIW, you can add my Acked-by on your repost Michal.
-
-I reviewed your patches and tested them against that PPC crash on boot 
-described at https://lore.kernel.org/all/YdxoXhTqCmVrT0R5@optiplex-fbsd/
-
-Everything has worked like a charm, AFAICT.
-
-Thank you for letting me know about these patches, and thanks for
-working on them as a follow-up to that problem reported by Nico.
-
--- Rafael
+5.15.14-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 

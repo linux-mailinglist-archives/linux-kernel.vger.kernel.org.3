@@ -2,49 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FD04890D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834634890EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238020AbiAJH0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239236AbiAJHYp (ORCPT
+        id S239844AbiAJH1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:27:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35512 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239397AbiAJHZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:24:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DEBC061212;
-        Sun,  9 Jan 2022 23:24:32 -0800 (PST)
+        Mon, 10 Jan 2022 02:25:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8AF4B81205;
-        Mon, 10 Jan 2022 07:24:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38EA6C36AF2;
-        Mon, 10 Jan 2022 07:24:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 011A8611B6;
+        Mon, 10 Jan 2022 07:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9ACAC36AED;
+        Mon, 10 Jan 2022 07:25:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799469;
-        bh=4EGK0cupgO/Up7OJsS5Gs0mvmW5A5oCJMYw8CH+TD0M=;
+        s=korg; t=1641799512;
+        bh=HoqZXLDcG04ouLzunelHoKLB46IbJ9W5ooL+4DphyIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v6+zHn9hm4fmK+X1fB5fXSYFJlahHOY21oBgFng9kSBQdWfBUm5hTRrp2Y6ubWZj5
-         XzKJNnlxxyDNFpcwkd5t2sS8hBNJARQlkLwSiv7+Ao6+MYKGRNpL4vQCmwk683td9W
-         zhisXmINtYHjH9c88dJpNJVAKY+xawvU0x25nA20=
+        b=zW3+XIbuUJzICTt8MwQbEDJRXayaJ2IrIHRBd7AI3ia3YIxdlD3pXLtKS0pBGXAG9
+         +9n/XDiTPrX6wz7szrd1VQ2ln2eLNZE0wJ5UbDN9qsvpDWDKQtWLaBRiVLD7ODuZsE
+         /Rd+QV179U0LA2k+B8s5f/OTeqyEN+9FvNlw7I5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Tixiong <lutianxiong@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        Lixiaokeng <lixiaokeng@huawei.com>,
-        Linfeilong <linfeilong@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 10/14] scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+        stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH 4.9 02/21] tracing: Fix check for trace_percpu_buffer validity in get_trace_buf()
 Date:   Mon, 10 Jan 2022 08:22:49 +0100
-Message-Id: <20220110071812.111657061@linuxfoundation.org>
+Message-Id: <20220110071812.889168188@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071811.779189823@linuxfoundation.org>
-References: <20220110071811.779189823@linuxfoundation.org>
+In-Reply-To: <20220110071812.806606886@linuxfoundation.org>
+References: <20220110071812.806606886@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,68 +46,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lixiaokeng <lixiaokeng@huawei.com>
+From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-[ Upstream commit 1b8d0300a3e9f216ae4901bab886db7299899ec6 ]
+commit 823e670f7ed616d0ce993075c8afe0217885f79d upstream.
 
-|- iscsi_if_destroy_conn            |-dev_attr_show
- |-iscsi_conn_teardown
-  |-spin_lock_bh                     |-iscsi_sw_tcp_conn_get_param
+With the new osnoise tracer, we are seeing the below splat:
+    Kernel attempted to read user page (c7d880000) - exploit attempt? (uid: 0)
+    BUG: Unable to handle kernel data access on read at 0xc7d880000
+    Faulting instruction address: 0xc0000000002ffa10
+    Oops: Kernel access of bad area, sig: 11 [#1]
+    LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+    ...
+    NIP [c0000000002ffa10] __trace_array_vprintk.part.0+0x70/0x2f0
+    LR [c0000000002ff9fc] __trace_array_vprintk.part.0+0x5c/0x2f0
+    Call Trace:
+    [c0000008bdd73b80] [c0000000001c49cc] put_prev_task_fair+0x3c/0x60 (unreliable)
+    [c0000008bdd73be0] [c000000000301430] trace_array_printk_buf+0x70/0x90
+    [c0000008bdd73c00] [c0000000003178b0] trace_sched_switch_callback+0x250/0x290
+    [c0000008bdd73c90] [c000000000e70d60] __schedule+0x410/0x710
+    [c0000008bdd73d40] [c000000000e710c0] schedule+0x60/0x130
+    [c0000008bdd73d70] [c000000000030614] interrupt_exit_user_prepare_main+0x264/0x270
+    [c0000008bdd73de0] [c000000000030a70] syscall_exit_prepare+0x150/0x180
+    [c0000008bdd73e10] [c00000000000c174] system_call_vectored_common+0xf4/0x278
 
-  |-kfree(conn->persistent_address)   |-iscsi_conn_get_param
-  |-kfree(conn->local_ipaddr)
-                                       ==>|-read persistent_address
-                                       ==>|-read local_ipaddr
-  |-spin_unlock_bh
+osnoise tracer on ppc64le is triggering osnoise_taint() for negative
+duration in get_int_safe_duration() called from
+trace_sched_switch_callback()->thread_exit().
 
-When iscsi_conn_teardown() and iscsi_conn_get_param() happen in parallel, a
-UAF may be triggered.
+The problem though is that the check for a valid trace_percpu_buffer is
+incorrect in get_trace_buf(). The check is being done after calculating
+the pointer for the current cpu, rather than on the main percpu pointer.
+Fix the check to be against trace_percpu_buffer.
 
-Link: https://lore.kernel.org/r/046ec8a0-ce95-d3fc-3235-666a7c65b224@huawei.com
-Reported-by: Lu Tixiong <lutianxiong@huawei.com>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Lixiaokeng <lixiaokeng@huawei.com>
-Signed-off-by: Linfeilong <linfeilong@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/a920e4272e0b0635cf20c444707cbce1b2c8973d.1640255304.git.naveen.n.rao@linux.vnet.ibm.com
+
+Cc: stable@vger.kernel.org
+Fixes: e2ace001176dc9 ("tracing: Choose static tp_printk buffer by explicit nesting count")
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/libiscsi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/trace/trace.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 0713d02cf1126..b1ef1aa4dd44b 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -2994,6 +2994,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -2364,7 +2364,7 @@ static char *get_trace_buf(void)
  {
- 	struct iscsi_conn *conn = cls_conn->dd_data;
- 	struct iscsi_session *session = conn->session;
-+	char *tmp_persistent_address = conn->persistent_address;
-+	char *tmp_local_ipaddr = conn->local_ipaddr;
+ 	struct trace_buffer_struct *buffer = this_cpu_ptr(trace_percpu_buffer);
  
- 	del_timer_sync(&conn->transport_timer);
+-	if (!buffer || buffer->nesting >= 4)
++	if (!trace_percpu_buffer || buffer->nesting >= 4)
+ 		return NULL;
  
-@@ -3015,8 +3017,6 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	spin_lock_bh(&session->frwd_lock);
- 	free_pages((unsigned long) conn->data,
- 		   get_order(ISCSI_DEF_MAX_RECV_SEG_LEN));
--	kfree(conn->persistent_address);
--	kfree(conn->local_ipaddr);
- 	/* regular RX path uses back_lock */
- 	spin_lock_bh(&session->back_lock);
- 	kfifo_in(&session->cmdpool.queue, (void*)&conn->login_task,
-@@ -3028,6 +3028,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	mutex_unlock(&session->eh_mutex);
- 
- 	iscsi_destroy_conn(cls_conn);
-+	kfree(tmp_persistent_address);
-+	kfree(tmp_local_ipaddr);
- }
- EXPORT_SYMBOL_GPL(iscsi_conn_teardown);
- 
--- 
-2.34.1
-
+ 	buffer->nesting++;
 
 

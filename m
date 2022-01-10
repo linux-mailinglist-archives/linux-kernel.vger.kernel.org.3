@@ -2,136 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F41E48A38A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9E248A38D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242763AbiAJXXu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Jan 2022 18:23:50 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:37904 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbiAJXXs (ORCPT
+        id S245322AbiAJXX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241114AbiAJXX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:23:48 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id A39DB62DA5E9;
-        Tue, 11 Jan 2022 00:23:46 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BniRRL-__YE9; Tue, 11 Jan 2022 00:23:45 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id C774F62DA5FB;
-        Tue, 11 Jan 2022 00:23:45 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id g8Rg32oBvwvf; Tue, 11 Jan 2022 00:23:45 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 98F0862DA5E9;
-        Tue, 11 Jan 2022 00:23:45 +0100 (CET)
-Date:   Tue, 11 Jan 2022 00:23:45 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     chengzhihao1 <chengzhihao1@huawei.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
-        kirill shutemov <kirill.shutemov@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <361758697.248157.1641857025490.JavaMail.zimbra@nod.at>
-In-Reply-To: <20211227032246.2886878-13-chengzhihao1@huawei.com>
-References: <20211227032246.2886878-1-chengzhihao1@huawei.com> <20211227032246.2886878-13-chengzhihao1@huawei.com>
-Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
- 'ai->fastmap' when fm->used_blocks>=2
+        Mon, 10 Jan 2022 18:23:59 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E01C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:23:58 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id m6so32124628ybc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:23:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2g1hbad4Ezo/DEI6dD8aLA+EdL+7wxXqyuFafbp6z7Q=;
+        b=oM55QpMEWMcvOqaoBxInuJtySCBl6PW7f7mAJVErZF/Edaw25Fs3NnxBEJGutKpThM
+         NaMCG+wYGHuROiIcWOSChJyZdCvgXhoIPl01LYbl3tcfPCyVLadaFRSVb3VoxGMW80D/
+         ZITS7pnXfImw/rEfW1PwvZMzxk43Vw9o6paseMqNBSYkkV0CrHC9eOmg8mdCrZ1ulUQm
+         hDge8Dig10AO1msI2UMUwgnnmnRU1I83ydBHfrFYy7asvInQuDd+xUhLhqYQg4u0W4Vm
+         rScD8sdocOnCM923CAOopu0+gVHJ2fr9/sFxjd/vmInLMWavXstJvLkA7DsctY0vjSxz
+         hKIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2g1hbad4Ezo/DEI6dD8aLA+EdL+7wxXqyuFafbp6z7Q=;
+        b=fDUWXCPduvJ+goYViD8vgbzLCT5ZlVOkDM1EBn7g3pNXiHZXW22owKTfI6fIebG5AK
+         XKnUbxZpBVgVL2AAmHy6cYMRrvt6AVSeHfGcV/zvA2MozN8pE4xay6+J/P13clEzqfQx
+         w492kJmpvIfpa8z41AEbdLmeRDKTp8OCfvaRFI7xgL1nxWwWVykWf9YitDH2dnTBiTw2
+         HwIUxAvv5oI/68douz0NfabmFqqVMXj/wch8Xr9fg2coiXb6UvQGJ6QJgxcvtkd7P/Xp
+         MwdimWyHYMucbImPPzO9ateNmPjofif5rTIjgQbBH2Z1eLMufjX7bNvkV38ulgvsYleA
+         +Bmg==
+X-Gm-Message-State: AOAM531nEGPilcnX9mW0AsgkzAyD9pxM/C8f6zIasDR24O2RQvYfKG+W
+        /pZbVA1tCPZ+xd2TzfthGtSuZt/+yg6FmnZ1g1kYAQ==
+X-Google-Smtp-Source: ABdhPJz5so6Chi1+nIiR5l3idPgrT/QBMsfnjZlAPbMETIEUAr95xu0h9jTnoe2QCZEdnEG9W/LLTv4gt3Ndz+8iVXU=
+X-Received: by 2002:a25:7e83:: with SMTP id z125mr2770391ybc.446.1641857037793;
+ Mon, 10 Jan 2022 15:23:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
-Thread-Topic: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
-Thread-Index: 51VyhLwOOPkpCJ1OyaFQh0d2LFOdvw==
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+ <Ydjje8qBOP3zDOZi@google.com>
+In-Reply-To: <Ydjje8qBOP3zDOZi@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 10 Jan 2022 15:23:46 -0800
+Message-ID: <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "chengzhihao1" <chengzhihao1@huawei.com>
-> An: "richard" <richard@nod.at>, "Miquel Raynal" <miquel.raynal@bootlin.com>, "Vignesh Raghavendra" <vigneshr@ti.com>,
-> "mcoquelin stm32" <mcoquelin.stm32@gmail.com>, "kirill shutemov" <kirill.shutemov@linux.intel.com>, "Sascha Hauer"
-> <s.hauer@pengutronix.de>
-> CC: "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
-> Gesendet: Montag, 27. Dezember 2021 04:22:43
-> Betreff: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
+On Fri, Jan 7, 2022 at 5:06 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Tue, Jan 04, 2022, Raghavendra Rao Ananta wrote:
+> > Capture the start of the KVM VM, which is basically the
+>
+> Please wrap at ~75 chars.
+>
+> > start of any vCPU run. This state of the VM is helpful
+> > in the upcoming patches to prevent user-space from
+> > configuring certain VM features after the VM has started
+> > running.
+>
+> Please provide context of how the flag will be used.  I glanced at the future
+> patches, and knowing very little about arm, I was unable to glean useful info
+> about exactly who is being prevented from doing what.
+>
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  include/linux/kvm_host.h | 3 +++
+> >  virt/kvm/kvm_main.c      | 9 +++++++++
+> >  2 files changed, 12 insertions(+)
+> >
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index c310648cc8f1..d0bd8f7a026c 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -623,6 +623,7 @@ struct kvm {
+> >       struct notifier_block pm_notifier;
+> >  #endif
+> >       char stats_id[KVM_STATS_NAME_SIZE];
+> > +     bool vm_started;
+> >  };
+> >
+> >  #define kvm_err(fmt, ...) \
+> > @@ -1666,6 +1667,8 @@ static inline bool kvm_check_request(int req, struct kvm_vcpu *vcpu)
+> >       }
+> >  }
+> >
+> > +#define kvm_vm_has_started(kvm) (kvm->vm_started)
+>
+> Needs parantheses around (kvm), but why bother with a macro?  This is the same
+> header that defines struct kvm.
+>
+No specific reason for creating a macro as such. I can remove it if it
+feels noisy.
+> > +
+> >  extern bool kvm_rebooting;
+> >
+> >  extern unsigned int halt_poll_ns;
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 72c4e6b39389..962b91ac2064 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -3686,6 +3686,7 @@ static long kvm_vcpu_ioctl(struct file *filp,
+> >       int r;
+> >       struct kvm_fpu *fpu = NULL;
+> >       struct kvm_sregs *kvm_sregs = NULL;
+> > +     struct kvm *kvm = vcpu->kvm;
+>
+> If you're going to bother grabbing kvm, replace the instances below that also do
+> vcpu->kvm.
+>
+> >
+> >       if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_dead)
+> >               return -EIO;
+> > @@ -3723,6 +3724,14 @@ static long kvm_vcpu_ioctl(struct file *filp,
+> >                       if (oldpid)
+> >                               synchronize_rcu();
+> >                       put_pid(oldpid);
+> > +
+> > +                     /*
+> > +                      * Since we land here even on the first vCPU run,
+> > +                      * we can mark that the VM has started running.
+>
+> Please avoid "we", "us", etc..
+>
+> "vm_started" is also ambiguous.  If we end up with a flag, then I would prefer a
+> much more literal name, a la created_vcpus, e.g. ran_vcpus or something.
+>
+> > +                      */
+> > +                     mutex_lock(&kvm->lock);
+>
+> This adds unnecessary lock contention when running vCPUs.  The naive solution
+> would be:
+>                         if (!kvm->vm_started) {
+>                                 ...
+>                         }
+>
+Not sure if I understood the solution..
 
-> Fastmap pebs(pnum >= UBI_FM_MAX_START) won't be added into 'ai->fastmap'
-> while attaching ubi device if 'fm->used_blocks' is greater than 2, which
-> may cause warning from 'ubi_assert(ubi->good_peb_count == found_pebs)':
-> 
->  UBI assert failed in ubi_wl_init at 1878 (pid 2409)
->  Call Trace:
->    ubi_wl_init.cold+0xae/0x2af [ubi]
->    ubi_attach+0x1b0/0x780 [ubi]
->    ubi_init+0x23a/0x3ad [ubi]
->    load_module+0x22d2/0x2430
-> 
-> Reproduce:
->  ID="0x20,0x33,0x00,0x00" # 16M 16KB PEB, 512 page
->  modprobe nandsim id_bytes=$ID
->  modprobe ubi mtd="0,0" fm_autoconvert  # Fastmap takes 2 pebs
->  rmmod ubi
->  modprobe ubi mtd="0,0" fm_autoconvert  # Attach by fastmap
-> 
-> Add all used fastmap pebs into list 'ai->fastmap' to make sure they can
-> be counted into 'found_pebs'.
-> 
-> Fixes: fdf10ed710c0aa ("ubi: Rework Fastmap attach base code")
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> ---
-> drivers/mtd/ubi/fastmap.c | 35 +++++------------------------------
-> 1 file changed, 5 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/mtd/ubi/fastmap.c b/drivers/mtd/ubi/fastmap.c
-> index 6b5f1ffd961b..01dcdd94c9d2 100644
-> --- a/drivers/mtd/ubi/fastmap.c
-> +++ b/drivers/mtd/ubi/fastmap.c
-> /**
->  * ubi_scan_fastmap - scan the fastmap.
->  * @ubi: UBI device object
-> @@ -865,7 +847,6 @@ int ubi_scan_fastmap(struct ubi_device *ubi, struct
-> ubi_attach_info *ai,
-> 	struct ubi_vid_hdr *vh;
-> 	struct ubi_ec_hdr *ech;
-> 	struct ubi_fastmap_layout *fm;
-> -	struct ubi_ainf_peb *aeb;
-> 	int i, used_blocks, pnum, fm_anchor, ret = 0;
-> 	size_t fm_size;
-> 	__be32 crc, tmp_crc;
-> @@ -875,17 +856,6 @@ int ubi_scan_fastmap(struct ubi_device *ubi, struct
-> ubi_attach_info *ai,
-> 	if (fm_anchor < 0)
-> 		return UBI_NO_FASTMAP;
-> 
-> -	/* Copy all (possible) fastmap blocks into our new attach structure. */
-> -	list_for_each_entry(aeb, &scan_ai->fastmap, u.list) {
-> -		struct ubi_ainf_peb *new;
-> -
-> -		new = clone_aeb(ai, aeb);
-> -		if (!new)
-> -			return -ENOMEM;
-> -
-> -		list_add(&new->u.list, &ai->fastmap);
-> -	}
-> -
+> > +                     kvm->vm_started = true;
+> > +                     mutex_unlock(&kvm->lock);
+>
+> Lastly, why is this in generic KVM?
+>
+The v1 of the series originally had it in the arm specific code.
+However, I was suggested to move it to the generic code since the book
+keeping is not arch specific and could be helpful to others too [1].
 
-scan_ai->fastmap may contain also old fastmap PEBs.
-In the area < UBI_FM_MAX_START you can find outdated fastmap PEBs.
-e.g. after power-cut.
-That's why scan_ai->fastmap is copied into ai->fastmap.
-Later in ubi_wl_init() these outdated PEBs will get erased.
-So, you cannot remove this code.
+Thanks for the review. I'll add your other comments as well.
 
-But I fully agree with you that the fm->used_blocks > 1 case is not correct.
-I fear if scan_ai->fastmap contains old fastmap PEBs and fm->used_blocks is > 1
-we need to fall back to scanning mode while attaching.
+Regards,
+Raghavendra
 
-Thanks,
-//richard
+[1]: https://lore.kernel.org/kvmarm/YYMKphExkqttn2w0@google.com/
+
+> >               }
+> >               r = kvm_arch_vcpu_ioctl_run(vcpu);
+> >               trace_kvm_userspace_exit(vcpu->run->exit_reason, r);
+> > --
+> > 2.34.1.448.ga2b2bfdf31-goog
+> >
+> > _______________________________________________
+> > kvmarm mailing list
+> > kvmarm@lists.cs.columbia.edu
+> > https://lists.cs.columbia.edu/mailman/listinfo/kvmarm

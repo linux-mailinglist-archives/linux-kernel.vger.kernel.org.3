@@ -2,174 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5404B4896E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9482C4896DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244364AbiAJLBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S244340AbiAJK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244344AbiAJLAy (ORCPT
+        with ESMTP id S244347AbiAJK7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:00:54 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E6C06173F;
-        Mon, 10 Jan 2022 03:00:54 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id 30so50306925edv.3;
-        Mon, 10 Jan 2022 03:00:54 -0800 (PST)
+        Mon, 10 Jan 2022 05:59:35 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF389C06173F;
+        Mon, 10 Jan 2022 02:59:34 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id h11so703100uar.5;
+        Mon, 10 Jan 2022 02:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=whE4KmnTtpH1LRN01z65fDsnjDV+xp8M0wHQj1JxF6k=;
-        b=Pt+V7HqzQeecUPMk4kRTh4zz+Gg4lC8R/dh27MRTlzULKpWIYjwnL4Bn8sJvi2BO3e
-         utmMjC84zYRzzaACJZ3F/jlTYQfniQnMnYIohuCkypRzBMKg6c2TAxt0U+qakj/JH6Iw
-         iXCGdN45gAUY/sSBk6+i0rStLY19qVvsKQYSm4oHqWOD4pWGUyRV4uSJMX5hILmGhDpw
-         1bj+5b6kfN41GnwymwZ1m4/qoDQaez8+9a69Xd0VnVjftr7PEe04YPd2LwFHqjmBJMIe
-         h8u9+d2KAV4P50WGv7HFBeko+9c7TDrtr6TCk1WNkZ+KRQpIbAcc9kbwcLlwKT2UvBJo
-         taeg==
+        bh=Pyr2Zb4j02PsgvvNoNyOvWlod9U9+4JSnC74+5rak8Q=;
+        b=YyQ506hwqXXe8clqnSFa983M9zu/XTmA4qYrFQNJpM+4qoeJFvFIvdzPLl4VJVyctv
+         QqAXW2hrYyksTQGMFAXkpU91IH/VLZihHw79TpCMMAMgMJco1v9puEJXk7+lhemAKas1
+         V+NeVQ0iZyy7rRoR/Zu8CKDxjLP64FPfc8jbDNYsSqLD9XsXEEPtkOjoSyuGM9fkiS6u
+         Cy0LEZSSUmzaABRV0HfjrGMB30xYKwUSiksibyHJ29eQpavDM7+do/jySLVE5MIjOkDf
+         FowiZnoXk6zgwYHZvit5AxB0G83ZXFa3rmK5VmxrpfBGz+QK5Ol9Q7XUHMcfIl4kHSgH
+         jKIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=whE4KmnTtpH1LRN01z65fDsnjDV+xp8M0wHQj1JxF6k=;
-        b=z0qf9ic3Ekxb/EWt58hMkghGFliI2dULUTxEoidL1iM4RIudfwjeW017ZYtAkgx5fG
-         0QJFWw9E/5HTb1akaOFJLqoslzb+Ad/vURfei/Lrkk0DikDlxDFH8BaWeChHIZ1EkbWp
-         g44FEveHJDXF1BTfSk2Mu8lepAx651y085n+Ctie2SEyQ64t3OleHs3xZgSKYkH4mbf4
-         jdvmpc5VYOuQ9y1Tjptx+kBmWHP6FT59Gu0FYa7aqrnCSeZ7cfYmP6bKdyCVsmx7uLFM
-         V7feXyjGGNaX5V9CoohUazzRUjO279LACZAG/qNmY5MnYnNKl7TxqAM45Cz/y1VmdH3X
-         TG7g==
-X-Gm-Message-State: AOAM531f6JiUHHjF2NFolp1RIJh2YSZIVka+Ag8bTClUGMzSsE/IC2u9
-        ebLbhBLwyMmot5M4TIPH6tKi+jxTVn28MK3TkN/RvU63E2sYOw==
-X-Google-Smtp-Source: ABdhPJzuwB3FGbGu10/VJm9BYMQTIgGWTCzQTw1Yt3trPKn7q0NZoUs6mHu2rRb7qt2QmE7N/cfe/nszD1coBHK6rwA=
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr57745851ejc.497.1641812444067;
- Mon, 10 Jan 2022 03:00:44 -0800 (PST)
+        bh=Pyr2Zb4j02PsgvvNoNyOvWlod9U9+4JSnC74+5rak8Q=;
+        b=1wlWjF0H7I9wTaE9qgc0JuNvTAC9bGumZCibpWEwPRmsmJ0/rMt7PHoupSVVME/HHf
+         /h8FRcMsJR1gCyRpEF657aFsC+if9ujL71bTffGD/89V7I91jfANptHUxuQCZD55ieep
+         O87TE0U/WC5B8lJJKdFUhskU6h0F0vkumbro/JFb5xP7YWKsTm2QdbaiWMxibOje4nqw
+         DaAj6AwgBIScdN5RlHYCMngfRVKYontS3uO+lrkc8DCc2JUrOdAfPcI+4TiPlJ9RG7PH
+         5j1F+KhyQFL2EXhkS0wce9YMsW37uOreJOi6SHtGMJRoH+KZKpr1vbbFW0tuXA9WKKTg
+         RcDg==
+X-Gm-Message-State: AOAM530sGryHtKbI0yUHMA92b+oNKqfsG6K0L6pK+w3sXOoRt/dCetlg
+        T1xUQ/9BWxq7nWQSZU1yZoEy/F9iJqfo19R521U=
+X-Google-Smtp-Source: ABdhPJzNC5Xto+6tTHLSaWjQV0UE4a2ufJIsEM38VWdwK4FT0ZrmU5mE9sbtMvpdllGygej3DVycShZmNO0+zFIeetc=
+X-Received: by 2002:a05:6102:dc9:: with SMTP id e9mr24288454vst.17.1641812374133;
+ Mon, 10 Jan 2022 02:59:34 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1641797029.git.lhjeff911@gmail.com> <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
-In-Reply-To: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Jan 2022 12:58:56 +0200
-Message-ID: <CAHp75VecMe_KxgV1adr5Z7_EDz0s9MWB_RNeS4nY0m6e_eZ9Yw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] SPI: Add SPI driver for Sunplus SP7021
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        "LH.Kuo" <lh.kuo@sunplus.com>
+References: <20220110083910.1351020-1-sergio.paracuellos@gmail.com>
+ <20220110083910.1351020-4-sergio.paracuellos@gmail.com> <5368e89c391e1329ed2be6496655f1bb50acfd19.camel@pengutronix.de>
+ <CAMhs-H_gjW_6p6yBWf+k2PBym4N+k+rBEXR9S8c13NU-UWD4VQ@mail.gmail.com> <12b7e367e8323f6da7bb548dbbae0d342608e52b.camel@pengutronix.de>
+In-Reply-To: <12b7e367e8323f6da7bb548dbbae0d342608e52b.camel@pengutronix.de>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 10 Jan 2022 11:59:22 +0100
+Message-ID: <CAMhs-H_cCFsMs5VTrrNROBpfnwsXNLGGCFHSu2sJ8N-cxYV8aA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] clk: ralink: make system controller node a reset provider
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:47 AM Li-hao Kuo <lhjeff911@gmail.com> wrote:
+On Mon, Jan 10, 2022 at 11:23 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
 >
-> Add SPI driver for Sunplus SP7021.
+> On Mon, 2022-01-10 at 10:39 +0100, Sergio Paracuellos wrote:
+> [...]
+> > > Is this known to work for all possible users, without delay between
+> > > assert and deassert?
+> >
+> > It seems it is. This is based on the original reset implementation for
+> > ralink. See:
+> >
+> > https://elixir.bootlin.com/linux/v5.16/source/arch/mips/ralink/reset.c#L55
+> >
+> > > Are there any users of the reset_control_reset() API at all? This API
+> > > was added for self-clearing reset bits, so if there are no users that
+> > > need to pretend this is a reset pulse at the hardware level (there may
+> > > be), I'd prefer if this was just left out.
+> >
+> > I am not following you here. What do you mean?
+>
+> Looking at drivers/staging/mt7621-dts/mt7621.dtsi, it appears the
+> current reset users are:
+>   mediatek,mt7621-i2c
+>   ralink,mt7621-spi
+>   ralink,rt3883-gdma
+>   mediatek,mt7621-hsdma
+>   mediatek,mt7621-eth
+>   mediatek,mt7621
+>   mediatek,mt7621-pci
+>
+> Many of the corresponding drivers use device_reset(), which is a
+> shorthand for requesting a reset control and calling
+> reset_control_reset() on it. That will call mt7621_reset_device, so it
+> is indeed used.
+>
 
-In the subject line use small letters in the prefix. Check with `git
-log -- drivers/spi` how people do.
+Ok, pretty clear now, thanks for clarification :).
 
-Common comment: Consider to use spi_controller_*() APIs over
-spi_master_*() ones. Also your SLA/MAS (and sla/mas) are a bit
-confusing: spell them in full and master --> controller or ctrl, slave
---> peripheral or alike.
+> regards
+> Philipp
 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
-> Changes in v5:
->  - Addressed comments from Mr. Mark Brown
->  - Addressed comments from Mr. Andy Shevchenko
-
-You need to elaborate what exactly you addressed.
-
-...
-
-> +               writel(readl(pspim->m_base + SP7021_INT_BUSY_REG)
-> +                       | SP7021_CLR_MAS_INT, pspim->m_base + SP7021_INT_BUSY_REG);
-
-It's better to read with temporary variable being used:
-
-             value = readl(pspim->m_base + SP7021_INT_BUSY_REG);
-             value |= SP7021_CLR_MAS_INT;
-             writel(value, pspim->m_base + SP7021_INT_BUSY_REG);
-
-...
-
-> +       writel(readl(pspim->m_base + SP7021_SPI_STATUS_REG) | SP7021_FD_SW_RST,
-> +              pspim->m_base + SP7021_SPI_STATUS_REG);
-
-Ditto. And for all other similar cases.
-
-...
-
-> +       pspim->xfer_conf |= ((clk_sel & 0xffff) << 16);
-
-Is xfer_conf bigger than 32-bit? If not, why do you need the ' & 0xffff' part?
-
-...
-
-> +               ret = 0;
-
-Is it necessary to do this under the lock?
-
-> +               if (pspim->xfer_conf & SP7021_CPOL_FD)
-> +                       writel(pspim->xfer_conf, pspim->m_base + SP7021_SPI_CONFIG_REG);
-> +
-> +               mutex_unlock(&pspim->buf_lock);
-
-...
-
-> +       if (spi_controller_is_slave(ctlr)) {
-
-Factor out this body to a function, it will increase readability.
-
-> +       }
-> +
-> +       spi_finalize_current_transfer(ctlr);
-> +       return ret;
-
-...
-
-> +       mode = SP7021_MASTER_MODE;
-
-This...
-
-> +       pdev->id = of_alias_get_id(pdev->dev.of_node, "sp_spi");
-
-> +       if (of_property_read_bool(pdev->dev.of_node, "spi-slave"))
-> +               mode = SP7021_SLAVE_MODE;
-
-...belongs to this condition, so do not interleave them.
-
-On top of that you may use device property API:
-
-    if (device_property_read_bool(&pdev->dev, "spi-slave"))
-        mode = SP7021_SLAVE_MODE;
-    else
-        mode = SP7021_MASTER_MODE;
-
-...
-
-> +       pm_runtime_enable(dev);
-> +       ret = spi_register_controller(ctlr);
-> +       if (ret) {
-> +               pm_runtime_disable(dev);
-> +               return dev_err_probe(dev, ret, "spi_register_master fail\n");
-> +       }
-> +
-> +       return ret;
-
-return 0;
-
-...
-
-> +MODULE_LICENSE("GPL v2");
-
-"GPL", the one you used is legacy.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+    Sergio Paracuellos

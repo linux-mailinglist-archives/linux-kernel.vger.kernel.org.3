@@ -2,99 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DC3489E01
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDF5489DFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 18:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237904AbiAJRFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 12:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237655AbiAJRFU (ORCPT
+        id S237873AbiAJRDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 12:03:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57352 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237327AbiAJRDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 12:05:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2ECDC06173F;
-        Mon, 10 Jan 2022 09:05:20 -0800 (PST)
+        Mon, 10 Jan 2022 12:03:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 529AE6133E;
-        Mon, 10 Jan 2022 17:05:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C0EC36AE5;
-        Mon, 10 Jan 2022 17:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641834319;
-        bh=UdWl8wuXbg1UuKvjSdkNKobDow52EvDCA/OGcUygQ/A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XJ/yRtAPWqZqjqWTSZ71bZIPdXqhZ8DKLpL9knwVx9Ug11TfhQsKEoUjAryftb85P
-         f1DXOl4Y8ESsSLSYUCCpIpL/TwliJNnl9+kPC8rTN9owRqd4KVyQlAZKCo34ekNNiQ
-         NymiGFChxwnQ8rc+PN1TzpZd3WH9nMq3JTgrCkxSztrtd8o+INWtNqzgTHmkMyWLg6
-         tdXPvorVIGwGQzSdACUW52BV0r97eXx+26IP5sFuIxalbNp1gJgh+gLklNcrNCKpFY
-         e2z1EVdEOjsjkXA5JMHXgbypDV+yh9NxR/cr1XYWVvQSFuBXt6abCGSrw3rLeD4Mfr
-         osfV4HyLqJHOg==
-Date:   Tue, 11 Jan 2022 00:57:50 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: Re: [PATCH riscv-next] riscv: bpf: Fix eBPF's exception tables
-Message-ID: <Ydxljv2Q4YNDYRTx@xhacker>
-References: <20220110165208.1826-1-jszhang@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B85E26133E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 17:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2325FC36AE5;
+        Mon, 10 Jan 2022 17:03:53 +0000 (UTC)
+Date:   Mon, 10 Jan 2022 12:03:51 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/migration: Add trace events for THP migrations
+Message-ID: <20220110120351.44e60aed@gandalf.local.home>
+In-Reply-To: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
+References: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220110165208.1826-1-jszhang@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 12:52:08AM +0800, Jisheng Zhang wrote:
-> eBPF's exception tables needs to be modified to relative synchronously.
+On Fri,  7 Jan 2022 10:29:35 +0530
+Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+
+> This adds two trace events for PMD based THP migration without split. These
+> events closely follow the implementation details like setting and removing
+> of PMD migration entries, which are essential operations for THP migration.
 > 
-> Suggested-by: Tong Tiangen <tongtiangen@huawei.com>
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+> Cc: John Hubbard <jhubbard@nvidia.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  arch/riscv/net/bpf_jit_comp64.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This applies on v5.16-rc8
 > 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 69bab7e28f91..44c97535bc15 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -498,7 +498,7 @@ static int add_exception_handler(const struct bpf_insn *insn,
->  	offset = pc - (long)&ex->insn;
->  	if (WARN_ON_ONCE(offset >= 0 || offset < INT_MIN))
->  		return -ERANGE;
-> -	ex->insn = pc;
-> +	ex->insn = offset;
-
-Hi Palmer,
-
-Tong pointed out this issue but there was something wrong with my email
-forwarding address, so I didn't get his reply. Today, I searched on
-lore.kernel.org just found his reply, sorry for inconvenience.
-
-Thanks
-
+> Changes in V1:
+> 
+> - Dropped mm, pmdp, page arguments from trace
+> - Updated trace argument names and output format
+> 
+> Changes in RFC:
+> 
+> https://lore.kernel.org/all/1640328398-20698-1-git-send-email-anshuman.khandual@arm.com/
+> 
+>  include/trace/events/thp.h | 37 +++++++++++++++++++++++++++++++++++++
+>  mm/huge_memory.c           |  5 +++++
+>  2 files changed, 42 insertions(+)
+> 
+> diff --git a/include/trace/events/thp.h b/include/trace/events/thp.h
+> index d7fbbe551841..193a555aa2ea 100644
+> --- a/include/trace/events/thp.h
+> +++ b/include/trace/events/thp.h
+> @@ -83,6 +83,43 @@ TRACE_EVENT(hugepage_splitting,
+>  		      __entry->addr, __entry->pte)
+>  );
 >  
->  	/*
->  	 * Since the extable follows the program, the fixup offset is always
-> -- 
-> 2.34.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> +TRACE_EVENT(set_migration_pmd,
+> +
+> +	TP_PROTO(unsigned long addr, unsigned long pmd),
+> +
+> +	TP_ARGS(addr, pmd),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, addr)
+> +		__field(unsigned long, pmd)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->addr = addr;
+> +		__entry->pmd = pmd;
+> +	),
+> +
+> +	TP_printk("create pmd migration entry addr=%lx, pmd=%lx", __entry->addr, __entry->pmd)
+> +);
+> +
+> +TRACE_EVENT(remove_migration_pmd,
+> +
+> +	TP_PROTO(unsigned long addr, unsigned long pmd),
+> +
+> +	TP_ARGS(addr, pmd),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, addr)
+> +		__field(unsigned long, pmd)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->addr = addr;
+> +		__entry->pmd = pmd;
+> +	),
+> +
+> +	TP_printk("remove pmd migration entry addr=%lx, val=%lx", __entry->addr, __entry->pmd)
+
+The two above are pretty much identical, except the first one has "pmd=%lx"
+for the pmd, and the second has "val=%lx" for the pmd. I'd suggest they
+both be the same, and then you could save memory by combining the two into
+DECLARE_EVENT_CLASS() / DEFINE_EVENT() macros:
+
+DECLARE_EVENT_CLASS(migration_pmd,
+
+	TP_PROTO(unsigned long addr, unsigned long pmd),
+
+	TP_ARGS(addr, pmd),
+
+	TP_STRUCT__entry(
+		__field(unsigned long, addr)
+		__field(unsigned long, pmd)
+	),
+
+	TP_fast_assign(
+		__entry->addr = addr;
+		__entry->pmd = pmd;
+	),
+
+	TP_printk("create pmd migration entry addr=%lx, pmd=%lx", __entry->addr, __entry->pmd)
+);
+
+DEFINE_EVENT(migration_pmd, set_migration_pmd,
+	TP_PROTO(unsigned long addr, unsigned long pmd),
+	TP_ARGS(addr, pmd)
+);
+
+DEFINE_EVENT(migration_pmd, remove_migration_pmd,
+	TP_PROTO(unsigned long addr, unsigned long pmd),
+	TP_ARGS(addr, pmd)
+);
+
+And then you have the same thing, but it combines the code which saves both
+data and text.
+
+-- Steve
+
+> +);
+>  #endif /* _TRACE_THP_H */
+>  
+>  /* This part must be outside protection */
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index e5483347291c..d0adc019afe0 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -39,6 +39,9 @@
+>  #include <asm/pgalloc.h>
+>  #include "internal.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/thp.h>
+> +
+>  /*
+>   * By default, transparent hugepage support is disabled in order to avoid
+>   * risking an increased memory footprint for applications that are not
+> @@ -3173,6 +3176,7 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>  	set_pmd_at(mm, address, pvmw->pmd, pmdswp);
+>  	page_remove_rmap(page, true);
+>  	put_page(page);
+> +	trace_set_migration_pmd(address, pmd_val(pmdswp));
+>  }
+>  
+>  void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+> @@ -3206,5 +3210,6 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+>  	if ((vma->vm_flags & VM_LOCKED) && !PageDoubleMap(new))
+>  		mlock_vma_page(new);
+>  	update_mmu_cache_pmd(vma, address, pvmw->pmd);
+> +	trace_remove_migration_pmd(address, pmd_val(pmde));
+>  }
+>  #endif
+

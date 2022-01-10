@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B56489177
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FE04892D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240699AbiAJHcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:32:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58194 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240141AbiAJH2f (ORCPT
+        id S241189AbiAJHvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241375AbiAJHlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:28:35 -0500
+        Mon, 10 Jan 2022 02:41:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12659C03327B;
+        Sun,  9 Jan 2022 23:34:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 013D5B81214;
-        Mon, 10 Jan 2022 07:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBDFC36AED;
-        Mon, 10 Jan 2022 07:28:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E1760BA2;
+        Mon, 10 Jan 2022 07:34:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F548C36AED;
+        Mon, 10 Jan 2022 07:34:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799712;
-        bh=Upww557qoDpoa1jzOBEP+FMpq/E5h48yyjle5fofuYs=;
+        s=korg; t=1641800089;
+        bh=/fvrGJS9mrvvCg2b3RyZrTxkGZGBKhvnZLQiQQLaMqA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xXgHW9poB70qiaybR/zjxni6gR+Zl6CDGV2gP8wnvqn1AWzloRmecRDkCwxh0q79W
-         NTc67OOQ+hKlwtbbHgo9UR+ebhnKv9HkSltZqD8432PfX7sur3s/mO8F1onp2F9j4h
-         Jhr252W4y2M57RiWHnDEAR++UzTrPf4A+fwsHD/M=
+        b=hrjZO+Ax1m+H+1yAEt3jWsRWVf3M4002vQwXf99WsaYPFDRYosl6UghIKLPDJbb96
+         tbYhauY8BkhbdlVJju9AXGA0FjSNeePR/fdJT9LJpmmoWD/MLGHNUM7Lc0TAXVzc5K
+         rKk4bc4s7rFBN4HoX/z2Wy6invJaNVlfG4sB8rlU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 15/34] ipv4: Check attribute length for RTA_FLOW in multipath route
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH 5.15 33/72] EDAC/i10nm: Release mdev/mbase when failing to detect HBM
 Date:   Mon, 10 Jan 2022 08:23:10 +0100
-Message-Id: <20220110071816.163016491@linuxfoundation.org>
+Message-Id: <20220110071822.674979135@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
-References: <20220110071815.647309738@linuxfoundation.org>
+In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+References: <20220110071821.500480371@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,53 +50,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-commit 664b9c4b7392ce723b013201843264bf95481ce5 upstream.
+commit c370baa328022cbd46c59c821d1b467a97f047be upstream.
 
-Make sure RTA_FLOW is at least 4B before using.
+On systems without HBM (High Bandwidth Memory) mdev/mbase are not
+released/unmapped.
 
-Fixes: 4e902c57417c ("[IPv4]: FIB configuration using struct fib_config")
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Add the code to release mdev/mbase when failing to detect HBM.
+
+[Tony: re-word commit message]
+
+Cc: <stable@vger.kernel.org>
+Fixes: c945088384d0 ("EDAC/i10nm: Add support for high bandwidth memory")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Link: https://lore.kernel.org/r/20211224091126.1246-1-qiuxu.zhuo@intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/fib_semantics.c |   17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ drivers/edac/i10nm_base.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -723,8 +723,13 @@ static int fib_get_nhs(struct fib_info *
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -358,6 +358,9 @@ static int i10nm_get_hbm_munits(void)
+ 
+ 			mbase = ioremap(base + off, I10NM_HBM_IMC_MMIO_SIZE);
+ 			if (!mbase) {
++				pci_dev_put(d->imc[lmc].mdev);
++				d->imc[lmc].mdev = NULL;
++
+ 				i10nm_printk(KERN_ERR, "Failed to ioremap for hbm mc 0x%llx\n",
+ 					     base + off);
+ 				return -ENOMEM;
+@@ -368,6 +371,12 @@ static int i10nm_get_hbm_munits(void)
+ 
+ 			mcmtr = I10NM_GET_MCMTR(&d->imc[lmc], 0);
+ 			if (!I10NM_IS_HBM_IMC(mcmtr)) {
++				iounmap(d->imc[lmc].mbase);
++				d->imc[lmc].mbase = NULL;
++				d->imc[lmc].hbm_mc = false;
++				pci_dev_put(d->imc[lmc].mdev);
++				d->imc[lmc].mdev = NULL;
++
+ 				i10nm_printk(KERN_ERR, "This isn't an hbm mc!\n");
+ 				return -ENODEV;
  			}
- 
- 			nla = nla_find(attrs, attrlen, RTA_FLOW);
--			if (nla)
-+			if (nla) {
-+				if (nla_len(nla) < sizeof(u32)) {
-+					NL_SET_ERR_MSG(extack, "Invalid RTA_FLOW");
-+					return -EINVAL;
-+				}
- 				fib_cfg.fc_flow = nla_get_u32(nla);
-+			}
- 
- 			fib_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
- 			nla = nla_find(attrs, attrlen, RTA_ENCAP_TYPE);
-@@ -955,8 +960,14 @@ int fib_nh_match(struct fib_config *cfg,
- 
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 			nla = nla_find(attrs, attrlen, RTA_FLOW);
--			if (nla && nla_get_u32(nla) != nh->nh_tclassid)
--				return 1;
-+			if (nla) {
-+				if (nla_len(nla) < sizeof(u32)) {
-+					NL_SET_ERR_MSG(extack, "Invalid RTA_FLOW");
-+					return -EINVAL;
-+				}
-+				if (nla_get_u32(nla) != nh->nh_tclassid)
-+					return 1;
-+			}
- #endif
- 		}
- 
 
 

@@ -2,107 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 465D048A368
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1400C48A374
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345631AbiAJXH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S1345645AbiAJXMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242456AbiAJXHZ (ORCPT
+        with ESMTP id S1345638AbiAJXMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:07:25 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B66BC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:07:25 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id m6so32032266ybc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:07:25 -0800 (PST)
+        Mon, 10 Jan 2022 18:12:17 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291BC061751
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:12:17 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id oa15so14685425pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 15:12:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WXezCkJjRPkDROjmNSEXw8KrMNSVatQHflVa4NcIBZ4=;
-        b=lT7ThlTt++QvhmmkculwEqKL3uXY7KHRlY1gZM6+NQiGlRD9ipXMMx4+mWy7E0i6H2
-         YFeTMNWGyf/XiOMdm8cZbbHWziX6fKd2IX5qBjQCbpvC07ja4ugEzBJKzn05hpgC1SRR
-         AekdfWmGnZEjHKsImuXfvSQZ+rOmhk9vwUrAEUMpqVXfV6b9OOJ/ps8P9VpNpvoHUrbT
-         BzHh3EIH2sdChxnhiwiBSPlCNDGMnSqOv2qNVaeHVb7nIwPjGi/tvwQnkAh8FxtL726/
-         Y35AUh+AK0fQZVMkhY7LAhlUFPIqR4ls8dFOHnDz2cos6MHdV42xAgbIurK7je8UGI33
-         1ONA==
+        bh=DE7tsoe/6VvMNz3ew9Qg9ku4Byq5CT/3Rryx+5ThdvU=;
+        b=G/PJ8UZWasPMFb3LtHmAndNVvfp9XhtZhWnXkgqWKLo8LWjhWMvSNmhqhWykQ6UWks
+         yvFbyGltOjYxwT5upM6jWHgBIsOU4j1ynKgC9QGK1mIOzRQWhxm/RnDOAoJr6YqeHsuR
+         Xd9AMqGlKFNlulCrTim6i+OWMSrXgboDACa1QT45P8OK+xQ0g8jN7IkagPySb6C7MzaK
+         HFBZSbh5cxkJYaEDEAdrH9/+MVhW3JFIBMM3qJRZfMed5dT94ZsEjOXD7cB58BSOfVkF
+         Gl1Oe/ZCYZmke/V70A9ZZEaSqSmHxaYhsQ/saAs6lfsg7Yt13i8YsFKlf27kG9aUwjNY
+         Gcig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WXezCkJjRPkDROjmNSEXw8KrMNSVatQHflVa4NcIBZ4=;
-        b=1F6eaCTe4/aBi2lIlildp1YqxipivpWSZdEyeMaAElMriXKOnTS0RTwYBZaOildkv/
-         rSpAeJDsA/Nd7BXNCtVdrcVCDxOucMtksAoUP6OEQ3xZ9edBAAIVQPJ33COh/S7E8Tkh
-         8Bu8roUHXGa6U/eALqRh/RB89BPN2rLudHAzdT+qA3SPtrU91GQNbr3FIO1jBgVk+rdc
-         w4Q8fSal5w4MNS7FIluNDG56giKqz3g82qo/uLsxW6xI6yFfXEO+uRnhEV0NU+t8YmT7
-         I0T8N2Vs8mmXrvibYLQXoLBtVPSa1/lie5Tf7LW6cH+uLWy79lbh+Appw3vkhMF8L7I5
-         RWXQ==
-X-Gm-Message-State: AOAM531x3rA1bjI4p0ppmWh6U0GBCZ56/NPComZTLFQ7eaoyC+08uiXP
-        sjwGzp55VjLXOMY+gcjOBNU2DrhMjF0sff67yXyZBMvvYiA=
-X-Google-Smtp-Source: ABdhPJzBJzORsUZLGXrxCBMovCLT/oathXNs3w20UB7mc6qHjBQPdClWy2y/DJ7ReGsZVPvGVSjnvALfMbExKTvbbuk=
-X-Received: by 2002:a25:b9d2:: with SMTP id y18mr1128156ybj.615.1641856044191;
- Mon, 10 Jan 2022 15:07:24 -0800 (PST)
+        bh=DE7tsoe/6VvMNz3ew9Qg9ku4Byq5CT/3Rryx+5ThdvU=;
+        b=AqacDryvdVStZM8KM4h1scgb+NWv9FvGqnJxsXGdUv1h3aPvsQYfzNmaHxe+9u2U0R
+         DJKqLFLCmHTVdJM43iAB+bC4eduEBWtT4OHgI8osZsIno/GWDTUY53fbaNNekXumoTv0
+         9pNwK4XNFzwf8g7StWzd+rwqulsjltNMB+JBTecmDm5tbMwBE8STnCjfMxQgVs0B0C9I
+         JIj1O3z4JPYpCbWc7KvitJb8/od0gwBSPSUHpH3j3PuTSQToM7T+tAhO7BnCX4XHnxsu
+         yF56vu5NOBjGxDppF4hdzI2ebWCM82D5hs+UDwSSq21r19Y8Cg7NZGCJ4wFeagFeJISB
+         9qvA==
+X-Gm-Message-State: AOAM530LXmI6iyFhGWp9ev7crax6s+A/L6sUNDgawSookHXLOwgWY+by
+        6JySDWjLyyNOkSGYAqoJPSOw2O6c0qHZFnm+s4em2Q==
+X-Google-Smtp-Source: ABdhPJxbW0VjZTQureAYIpMbt0/SCidcDDFE9MYbOdzkSsVvM76DPOE76TxrZ+KFIQPAJdu+w8O1FQQHrYw12HTwa8M=
+X-Received: by 2002:a17:90b:4b0e:: with SMTP id lx14mr103435pjb.66.1641856336561;
+ Mon, 10 Jan 2022 15:12:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
- <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com> <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
-In-Reply-To: <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 10 Jan 2022 15:07:13 -0800
-Message-ID: <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+References: <20210719082756.15733-1-ms@dev.tdt.de>
+In-Reply-To: <20210719082756.15733-1-ms@dev.tdt.de>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 10 Jan 2022 15:12:05 -0800
+Message-ID: <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
+ delay configuration
+To:     Martin Schiller <ms@dev.tdt.de>
+Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 4:05 PM Jim Mattson <jmattson@google.com> wrote:
+On Mon, Jul 19, 2021 at 2:07 AM Martin Schiller <ms@dev.tdt.de> wrote:
 >
-> On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
-> <rananta@google.com> wrote:
-> >
-> > Hi Reiji,
-> >
-> > On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
-> > >
-> > > Hi Raghu,
-> > >
-> > > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
-> > > <rananta@google.com> wrote:
-> > > >
-> > > > Capture the start of the KVM VM, which is basically the
-> > > > start of any vCPU run. This state of the VM is helpful
-> > > > in the upcoming patches to prevent user-space from
-> > > > configuring certain VM features after the VM has started
-> > > > running.
+> This adds the possibility to configure the RGMII RX/TX clock skew via
+> devicetree.
 >
-> What about live migration, where the VM has already technically been
-> started before the first call to KVM_RUN?
+> Simply set phy mode to "rgmii-id", "rgmii-rxid" or "rgmii-txid" and add
+> the "rx-internal-delay-ps" or "tx-internal-delay-ps" property to the
+> devicetree.
+>
+> Furthermore, a warning is now issued if the phy mode is configured to
+> "rgmii" and an internal delay is set in the phy (e.g. by pin-strapping),
+> as in the dp83867 driver.
+>
+> Signed-off-by: Martin Schiller <ms@dev.tdt.de>
+> ---
+>
+> Changes to v5:
+> o remove #if IS_ENABLED(CONFIG_OF_MDIO) check
+> o rename new function to xway_gphy_rgmii_init()
+>
+> Changes to v4:
+> o Fix Alignment to match open parenthesis
+>
+> Changes to v3:
+> o Fix typo in commit message
+> o use FIELD_PREP() and FIELD_GET() macros
+> o further code cleanups
+> o always mask rxskew AND txskew value in the register value
+>
+> Changes to v2:
+> o Fix missing whitespace in warning.
+>
+> Changes to v1:
+> o code cleanup and use phy_modify().
+> o use default of 2.0ns if delay property is absent instead of returning
+>   an error.
+>
+> ---
+>  drivers/net/phy/intel-xway.c | 78 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>
+> diff --git a/drivers/net/phy/intel-xway.c b/drivers/net/phy/intel-xway.c
+> index d453ec016168..fd7da2eeb963 100644
+> --- a/drivers/net/phy/intel-xway.c
+> +++ b/drivers/net/phy/intel-xway.c
+> @@ -8,11 +8,16 @@
+>  #include <linux/module.h>
+>  #include <linux/phy.h>
+>  #include <linux/of.h>
+> +#include <linux/bitfield.h>
+>
+> +#define XWAY_MDIO_MIICTRL              0x17    /* mii control */
+>  #define XWAY_MDIO_IMASK                        0x19    /* interrupt mask */
+>  #define XWAY_MDIO_ISTAT                        0x1A    /* interrupt status */
+>  #define XWAY_MDIO_LED                  0x1B    /* led control */
+>
+> +#define XWAY_MDIO_MIICTRL_RXSKEW_MASK  GENMASK(14, 12)
+> +#define XWAY_MDIO_MIICTRL_TXSKEW_MASK  GENMASK(10, 8)
+> +
+>  /* bit 15:12 are reserved */
+>  #define XWAY_MDIO_LED_LED3_EN          BIT(11) /* Enable the integrated function of LED3 */
+>  #define XWAY_MDIO_LED_LED2_EN          BIT(10) /* Enable the integrated function of LED2 */
+> @@ -157,6 +162,75 @@
+>  #define PHY_ID_PHY11G_VR9_1_2          0xD565A409
+>  #define PHY_ID_PHY22F_VR9_1_2          0xD565A419
+>
+> +static const int xway_internal_delay[] = {0, 500, 1000, 1500, 2000, 2500,
+> +                                        3000, 3500};
+> +
+> +static int xway_gphy_rgmii_init(struct phy_device *phydev)
+> +{
+> +       struct device *dev = &phydev->mdio.dev;
+> +       unsigned int delay_size = ARRAY_SIZE(xway_internal_delay);
+> +       s32 int_delay;
+> +       int val = 0;
+> +
+> +       if (!phy_interface_is_rgmii(phydev))
+> +               return 0;
+> +
+> +       /* Existing behavior was to use default pin strapping delay in rgmii
+> +        * mode, but rgmii should have meant no delay.  Warn existing users,
+> +        * but do not change anything at the moment.
+> +        */
+> +       if (phydev->interface == PHY_INTERFACE_MODE_RGMII) {
+> +               u16 txskew, rxskew;
+> +
+> +               val = phy_read(phydev, XWAY_MDIO_MIICTRL);
+> +               if (val < 0)
+> +                       return val;
+> +
+> +               txskew = FIELD_GET(XWAY_MDIO_MIICTRL_TXSKEW_MASK, val);
+> +               rxskew = FIELD_GET(XWAY_MDIO_MIICTRL_RXSKEW_MASK, val);
+> +
+> +               if (txskew > 0 || rxskew > 0)
+> +                       phydev_warn(phydev,
+> +                                   "PHY has delays (e.g. via pin strapping), but phy-mode = 'rgmii'\n"
+> +                                   "Should be 'rgmii-id' to use internal delays txskew:%d ps rxskew:%d ps\n",
+> +                                   xway_internal_delay[txskew],
+> +                                   xway_internal_delay[rxskew]);
+> +               return 0;
+> +       }
+> +
+> +       if (phydev->interface == PHY_INTERFACE_MODE_RGMII_ID ||
+> +           phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID) {
+> +               int_delay = phy_get_internal_delay(phydev, dev,
+> +                                                  xway_internal_delay,
+> +                                                  delay_size, true);
+> +
+> +               if (int_delay < 0) {
+> +                       phydev_warn(phydev, "rx-internal-delay-ps is missing, use default of 2.0 ns\n");
+> +                       int_delay = 4; /* 2000 ps */
+> +               }
+> +
+> +               val |= FIELD_PREP(XWAY_MDIO_MIICTRL_RXSKEW_MASK, int_delay);
+> +       }
+> +
+> +       if (phydev->interface == PHY_INTERFACE_MODE_RGMII_ID ||
+> +           phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID) {
+> +               int_delay = phy_get_internal_delay(phydev, dev,
+> +                                                  xway_internal_delay,
+> +                                                  delay_size, false);
+> +
+> +               if (int_delay < 0) {
+> +                       phydev_warn(phydev, "tx-internal-delay-ps is missing, use default of 2.0 ns\n");
+> +                       int_delay = 4; /* 2000 ps */
+> +               }
+> +
+> +               val |= FIELD_PREP(XWAY_MDIO_MIICTRL_TXSKEW_MASK, int_delay);
+> +       }
+> +
+> +       return phy_modify(phydev, XWAY_MDIO_MIICTRL,
+> +                         XWAY_MDIO_MIICTRL_RXSKEW_MASK |
+> +                         XWAY_MDIO_MIICTRL_TXSKEW_MASK, val);
+> +}
+> +
+>  static int xway_gphy_config_init(struct phy_device *phydev)
+>  {
+>         int err;
+> @@ -204,6 +278,10 @@ static int xway_gphy_config_init(struct phy_device *phydev)
+>         phy_write_mmd(phydev, MDIO_MMD_VEND2, XWAY_MMD_LED2H, ledxh);
+>         phy_write_mmd(phydev, MDIO_MMD_VEND2, XWAY_MMD_LED2L, ledxl);
+>
+> +       err = xway_gphy_rgmii_init(phydev);
+> +       if (err)
+> +               return err;
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.20.1
+>
 
-My understanding is that a new 'struct kvm' is created on the target
-machine and this flag should be reset, which would allow the VMM to
-restore the firmware registers. However, we would be running KVM_RUN
-for the first time on the target machine, thus setting the flag.
-So, you are right; It's more of a resume operation from the guest's
-point of view. I guess the name of the variable is what's confusing
-here.
+Martin,
 
-Thanks,
-Raghavendra
+I've got some boards with the GPY111 phy on them and I'm finding that
+modifying XWAY_MDIO_MIICTRL to change the skew has no effect unless I
+do a soft reset (BCMR_RESET) first. I don't see anything in the
+datasheet which specifies this to be the case so I'm interested it
+what you have found. Are you sure adjusting the skews like this
+without a soft (or hard pin based) reset actually works?
+
+Best regards,
+
+Tim

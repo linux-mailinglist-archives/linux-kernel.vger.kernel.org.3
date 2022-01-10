@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6965489DDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6A7489DD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 17:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237745AbiAJQtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 11:49:06 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:38648 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237724AbiAJQtF (ORCPT
+        id S237704AbiAJQtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 11:49:02 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:37655 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbiAJQtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 11:49:05 -0500
-Received: by mail-ot1-f46.google.com with SMTP id r7-20020a05683001c700b005906f5b0969so15659046ota.5;
-        Mon, 10 Jan 2022 08:49:04 -0800 (PST)
+        Mon, 10 Jan 2022 11:49:01 -0500
+Received: by mail-oi1-f180.google.com with SMTP id i9so19497836oih.4;
+        Mon, 10 Jan 2022 08:49:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=qDRfQflqgI0j3IFv1YfAD/jfGjPzZE2xk/OYXfhH8io=;
-        b=0NFtqbEnPd8L3nB6uYLQGcEzo5P2oXBCVkxpHj6aRTIjMK2sx9ZAz1QK9p2h1VD6Us
-         eo0w1PeWCudyvcLFxueggz8KWeaS/8y9qJojZ7GQQzjOzo9a7bwVqtHDBrhyDp92y1Dy
-         R+Sa5cIJalkUKJgXbZa20lRug/fSWOvY35+C8MICFo24XrQjTLmjCeIWQlg+XrkVpnhY
-         ozEqR6MLu/5YIOp2TpfIT3uYNpcOzuVNsGWd7x2F6ykcvavuA1RDvHbpX/DjNtJ3I9EK
-         D0OW+S75vOZfGxnX2Rj0K+Pg/HFNZl9z3ES/xc854LnWf++557vskz2OtS3tHVrQyFSm
-         QLXQ==
-X-Gm-Message-State: AOAM533qGjeZW5rR+pSPEpySwFyblwO3SmalVb48Ob3vO9rB7t+8LtYd
-        uVI9XQIFE+u8w/l1h5H+FQ==
-X-Google-Smtp-Source: ABdhPJyJeiZuCm18RR/zHJ1xaf3Vi0nrJE1jDK4z8CB/A8DygQapHCXq1kD5ADgN/3pUP5MHSBZHgQ==
-X-Received: by 2002:a05:6830:1bfc:: with SMTP id k28mr478325otb.39.1641833344450;
-        Mon, 10 Jan 2022 08:49:04 -0800 (PST)
+        bh=PcweNAAyqTtCgPxQQaHXUvqxCWk/Vwq0k3RGXJnNlJo=;
+        b=c+D1SPgv8VE+7ixpSITfmmHeVLUQLgaLdpNLlR01gH0I4RjQWIe/9Z+WKFhSfddq9b
+         uju12dslFksw/fhIfM6q18FZEtC4JnlFA1MQ3LkRTwilv4sBWpnwpMvee+ZIsO1P4GnC
+         ZDkI/DBqniUjerjUBoeOc7affBzYOcYSNnldJQHdlcqpYzE5PQSx8ytwJa+KIWHrBQxt
+         Bm+kfncjyoMTU2j1vnVtz0aQc74HVXeQ+hRuZ2riDAuiL99nZQljbLuBG8OBcW8jDGU5
+         /aBxhZQ5NNdg5mJKGhiG2QTyC8rDMdPLIrmRMCvdaliu8t4ncTotW1ykanV/e55upiiO
+         Xamg==
+X-Gm-Message-State: AOAM531KOaMGOpJ6l3DBd2w4Eeuy5eWkAiC8katRtAagaiLTv6QqvK1A
+        DiBnCX2SAdcJr0QmSIpQyg==
+X-Google-Smtp-Source: ABdhPJzmfBgp0bKgpoqASyCFdgI+r5ioWFa75FF5Ozek+i/mv86mQuy/p6hZZ6ozGyUSF/tQwF6kdg==
+X-Received: by 2002:aca:1811:: with SMTP id h17mr17991649oih.178.1641833341058;
+        Mon, 10 Jan 2022 08:49:01 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id z30sm1533929otj.1.2022.01.10.08.49.03
+        by smtp.gmail.com with ESMTPSA id c6sm1538169oto.19.2022.01.10.08.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 08:49:03 -0800 (PST)
-Received: (nullmailer pid 1067456 invoked by uid 1000);
+        Mon, 10 Jan 2022 08:49:00 -0800 (PST)
+Received: (nullmailer pid 1067451 invoked by uid 1000);
         Mon, 10 Jan 2022 16:48:59 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Rajeev Nandan <quic_rajeevny@quicinc.com>
-Cc:     daniel@ffwll.ch, robdclark@gmail.com, airlied@linux.ie,
-        linux-arm-msm@vger.kernel.org, quic_kalyant@quicinc.com,
-        robh+dt@kernel.org, quic_abhinavk@quicinc.com,
-        quic_mkrishn@quicinc.com, jonathan@marek.ca,
-        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, swboyd@chromium.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <1641819337-17037-2-git-send-email-quic_rajeevny@quicinc.com>
-References: <1641819337-17037-1-git-send-email-quic_rajeevny@quicinc.com> <1641819337-17037-2-git-send-email-quic_rajeevny@quicinc.com>
-Subject: Re: [v2 1/3] dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
+To:     Hari Nagalla <hnagalla@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220110040650.18186-2-hnagalla@ti.com>
+References: <20220110040650.18186-1-hnagalla@ti.com> <20220110040650.18186-2-hnagalla@ti.com>
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: k3-m4f: Add bindings for K3 AM64x SoCs
 Date:   Mon, 10 Jan 2022 10:48:59 -0600
-Message-Id: <1641833339.702532.1067455.nullmailer@robh.at.kernel.org>
+Message-Id: <1641833339.676351.1067450.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 18:25:35 +0530, Rajeev Nandan wrote:
-> In most cases, the default values of DSI PHY tuning registers should be
-> sufficient as they are fully optimized. However, in some cases where
-> extreme board parasitics cause the eye shape to degrade, the override
-> bits can be used to improve the signal quality.
+On Sun, 09 Jan 2022 22:06:49 -0600, Hari Nagalla wrote:
+> K3 AM64x SoC has a Cortex M4F subsystem in the MCU volatge domain.
+> The remote processor's life cycle management and IPC mechanisms are
+> similar across the R5F and M4F cores from remote processor driver
+> point of view. However, there are subtle differences in image loading
+> and starting the M4F subsystems.
 > 
-> The general guidelines for DSI PHY tuning include:
-> - High and moderate data rates may benefit from the drive strength and
->   drive level tuning.
-> - Drive strength tuning will affect the output impedance and may be used
->   for matching optimization.
-> - Drive level tuning will affect the output levels without affecting the
->   impedance.
+> The YAML binding document provides the various node properties to be
+> configured by the consumers of the M4F subsystem.
 > 
-> The clock and data lanes have a calibration circuitry feature. The drive
-> strength tuning can be done by adjusting rescode offset for hstop/hsbot,
-> and the drive level tuning can be done by adjusting the LDO output level
-> for the HSTX drive.
-> 
-> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
 > ---
-> 
-> Changes in v2:
->  - More details in the commit text (Stephen Boyd)
->  - Use human understandable values (Stephen Boyd, Dmitry Baryshkov)
->  - Do not take values that are going to be unused (Dmitry Baryshkov)
-> 
->  .../bindings/display/msm/dsi-phy-10nm.yaml         | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+>  .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml:63:54: [error] syntax error: mapping values are not allowed here (syntax)
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml:  mapping values are not allowed in this context
-  in "<unicode string>", line 63, column 54
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 46, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
-  in "<unicode string>", line 63, column 54
-make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml: ignoring, error parsing file
-make: *** [Makefile:1413: dt_binding_check] Error 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml: properties:memory-region: 'anyOf' conditional failed, one must be fixed:
+	'minItems' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'additionalItems' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'unevaluatedProperties' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	Additional properties are not allowed ('unevaluatedProperties' was unexpected)
+		hint: Arrays must be described with a combination of minItems/maxItems/items
+	'minItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	'maxItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	'additionalItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	'unevaluatedProperties' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	1 was expected
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml: ignoring, error in schema: properties: memory-region
+Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.example.dts:19.31-36.11: Warning (unit_address_vs_reg): /example-0/bus@f4000: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.example.dt.yaml:0:0: /example-0/bus@f4000/m4fss@5000000: failed to match any schema with compatible: ['ti,am64-m4fss']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1577891
+See https://patchwork.ozlabs.org/patch/1577759
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

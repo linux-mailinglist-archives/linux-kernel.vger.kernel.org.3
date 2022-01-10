@@ -2,68 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768594896D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C58E4896D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244329AbiAJK5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244301AbiAJK5k (ORCPT
+        id S244335AbiAJK6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:58:06 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:46800 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244301AbiAJK6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:57:40 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6DFC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:57:39 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id e17so2293593pgg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C/d//iXcvScFsS0QFG+KfjeysK3dVRYehHeXn/qZMF0=;
-        b=HS5Yr71lnN19txyrnE+hh7IH7NiptHECau7hysX67+PRmWzEEBssnq23eTWrUlDAWo
-         tzib9q2i8eh3HJZ0o9XyavdlX/t70lI/hpSLnOlqm9xQX8K366BpAhkThlHeaFDS2ARL
-         lGIG8GgAtRdTXHXJMld9sgD17TVt13nYOrBuW+kh+HGmmeta3X+CaeOwxh6vfFbxED7z
-         vy+1/S6rWiuT6iS7CW0NOdqgl1CnjOxzUU48/tmHkBGfPixXMX4SuFRGcN9VQZFvGiq7
-         4oS1k0dv6PDnR8gcsaeXVuKDyX+hGSzoQpZP6qjD/riOYy14RTHTyHekp2XqwuGt9Q9p
-         7MlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C/d//iXcvScFsS0QFG+KfjeysK3dVRYehHeXn/qZMF0=;
-        b=UtU0NSkC3ImlY4389/lC40dB4YMVIyjjPgmJ/K9OE36HuVzf6lIZfR9a8ExQRYGB3X
-         zeTGD3WS0b62LBaT7K1Pi8bTUUlwC1Jmu6Z3q/VDmFIl8shD5VnDoXfAn04jrjFKjWYH
-         OR6bzUP3JaieyABlVVg8gk+YIf0Qb2CKLQG5nmzF6x1mneXhoNSxLgwz47hAjA3KOcGl
-         6v9gIN09Hq+bUGv4/H8tRq9vzWvp5mi6PgwMTiND7mkeS3+YdZkn6iYb/dKNK9axSsuK
-         tvkvUdZaM5Lja/VnXypaoy2L8bWhpm+zCAI7GwKt96NVncxybWLshaygjqYd4tzcJmZN
-         IsMA==
-X-Gm-Message-State: AOAM532nPbXcptDbz9YM9UQTXydu9TKiL3aFaacJOjcZjmJq9/W8Djjo
-        Qjx9oBLnCFoP3lXs31z0CzruD2LreMdE5XHOI4B6Og==
-X-Google-Smtp-Source: ABdhPJxewZSFmncqdt+aIYkjVjxgUAgUZXseR9yJSWIN6IiOi/ELijCRc1d2oxYKYMgw46GSFH37ke9r4b1b5EIxjZM=
-X-Received: by 2002:a63:7c51:: with SMTP id l17mr4785548pgn.178.1641812258383;
- Mon, 10 Jan 2022 02:57:38 -0800 (PST)
+        Mon, 10 Jan 2022 05:58:03 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D15F621127;
+        Mon, 10 Jan 2022 10:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641812282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nBHGZKrvzpx27LUU5EbRQT8a0DqomXiI3hKsTWEbZ5Y=;
+        b=jD+SUF7CH8cX8gSrmXD+d0chcnVdNr0stZHr/LXSHokDm6xQE87epsb1f9biDxBP3b6s27
+        XjXMnBiPw0a42+etsAiUo/nW1mStRCTjIqHdpzU1UQvY9WJ5Of1IBRYTP3bxPKOEW07Kry
+        Pg8NQZwjFUafbMr/XwlnwXZrpPmwWAo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641812282;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nBHGZKrvzpx27LUU5EbRQT8a0DqomXiI3hKsTWEbZ5Y=;
+        b=mIV0lo/NlwmbfOap/8Mp0qHVBXwui0xETxwGVQ0Ivyo8NdJWQRuBSLHJuhFxUfURwWtEka
+        8wSAlRfJzxkrI4BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA1CD13A98;
+        Mon, 10 Jan 2022 10:58:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Q+EzLDoR3GGlXwAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 10:58:02 +0000
+Date:   Mon, 10 Jan 2022 11:58:10 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/mm for v5.17
+Message-ID: <YdwRQtklg28Rlwnf@zn.tnic>
 MIME-Version: 1.0
-References: <20220106100127.1862702-1-xji@analogixsemi.com> <20220106100127.1862702-3-xji@analogixsemi.com>
-In-Reply-To: <20220106100127.1862702-3-xji@analogixsemi.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 10 Jan 2022 11:57:27 +0100
-Message-ID: <CAG3jFytyKqwQkG8soz28tr75=xq76BR01ROoCoSM7qiioeBGBg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] drm/bridge: anx7625: add audio codec .get_eld support
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     andrzej.hajda@intel.com, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, bliang@analogixsemi.com,
-        qwen@analogixsemi.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied series to drm-misc-next
+Hi Linus,
+
+please pull the set of x86/mm changes for 5.17.
+
+Thx.
+
+---
+
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mm_for_v5.17_rc1
+
+for you to fetch changes up to b64dfcde1ca9cb82e38e573753f0c0db8fb841c2:
+
+  x86/mm: Prevent early boot triple-faults with instrumentation (2021-12-22 11:51:20 +0100)
+
+----------------------------------------------------------------
+- Flush *all* mappings from the TLB after switching to the trampoline
+pagetable to prevent any stale entries' presence
+
+- Flush global mappings from the TLB, in addition to the CR3-write,
+after switching off of the trampoline_pgd during boot to clear the
+identity mappings
+
+- Prevent instrumentation issues resulting from the above changes
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      x86/mm: Prevent early boot triple-faults with instrumentation
+
+Ingo Molnar (1):
+      x86/mm: Add missing <asm/cpufeatures.h> dependency to <asm/page_64.h>
+
+Joerg Roedel (3):
+      x86/realmode: Add comment for Global bit usage in trampoline_pgd
+      x86/mm/64: Flush global TLB on boot and AP bringup
+      x86/mm: Flush global TLB when switching to trampoline page-table
+
+Sebastian Andrzej Siewior (1):
+      x86/mm: Include spinlock_t definition in pgtable.
+
+ arch/x86/include/asm/page_64.h  |  1 +
+ arch/x86/include/asm/pgtable.h  |  1 +
+ arch/x86/include/asm/realmode.h |  1 +
+ arch/x86/include/asm/tlbflush.h |  5 +++++
+ arch/x86/kernel/cpu/common.c    |  2 +-
+ arch/x86/kernel/head64.c        | 14 ++++++++++++++
+ arch/x86/kernel/head_64.S       | 19 ++++++++++++++++++-
+ arch/x86/kernel/reboot.c        | 12 ++----------
+ arch/x86/mm/init.c              |  5 +++++
+ arch/x86/mm/tlb.c               |  8 ++------
+ arch/x86/realmode/init.c        | 26 ++++++++++++++++++++++++++
+ 11 files changed, 76 insertions(+), 18 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

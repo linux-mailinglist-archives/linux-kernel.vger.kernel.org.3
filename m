@@ -2,129 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9541489656
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA747489655
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243951AbiAJK2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:28:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:59558 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242027AbiAJK23 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:28:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FED8ED1;
-        Mon, 10 Jan 2022 02:28:28 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.11.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FD4F3F5A1;
+        id S243915AbiAJK2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239431AbiAJK21 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 05:28:27 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77ADC06173F;
         Mon, 10 Jan 2022 02:28:26 -0800 (PST)
-Date:   Mon, 10 Jan 2022 10:27:59 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] arm64: atomics: Dereference matching size
-Message-ID: <YdwKLwvDRfc59c8U@FVFF77S0Q05N>
-References: <20220107232746.1540130-1-keescook@chromium.org>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5ujuOQpALmWNb+JnVkNXks4oy9Vot+hJ1tVe7cai2Bo=; b=RgJAIg7QuUrS4CP360xltXYM/5
+        xP3V5zg+ztj1yY2vUCPu6g19KHW5lfiS0Pz/I+9EmlA5uMzORzL+eruuQh44UGXWT1fiCgP7nl1Ov
+        BzUOATcv42sXj1wuQ/nYPU30iLVzhAP27Pnj2QSU1lN+TFtJbraBYeodIHZg961mbkRHorL6wJ01P
+        IQ4IGFbppwBiP+x5tClglrj90RmSK43pkt1JemvPtb7rXc8k09gntq3o5Q4ISwhcW5zmDR+ZPQRn6
+        bPXbI9w8SLCiMQduYaisxsrzFWezgqVxFDcYNQcST+TUJ8Pk5X5hbH4YLstUYxHUBb3+zKWd0gKlu
+        z/zDfy9A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n6ruG-000Nph-Gd; Mon, 10 Jan 2022 10:28:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 23C43300237;
+        Mon, 10 Jan 2022 11:28:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BE06020195520; Mon, 10 Jan 2022 11:28:01 +0100 (CET)
+Date:   Mon, 10 Jan 2022 11:28:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdwKMfNkB7P1tm/m@hirez.programming.kicks-ass.net>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdLL0kaFhm6rp9NS@kroah.com>
+ <YdLaMvaM9vq4W6f1@gmail.com>
+ <YdL+IwQGTLFQyVz2@kroah.com>
+ <YdMkTjGSQFLEV5VB@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107232746.1540130-1-keescook@chromium.org>
+In-Reply-To: <YdMkTjGSQFLEV5VB@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
-
-On Fri, Jan 07, 2022 at 03:27:46PM -0800, Kees Cook wrote:
-> When building with -Warray-bounds (which is desired to be enabled
-> globally), the following warning is generated:
+On Mon, Jan 03, 2022 at 05:29:02PM +0100, Ingo Molnar wrote:
+> Yeah, so I *did* find this somewhat suboptimal too, and developed an 
+> earlier version that used linker section tricks to gain the field offsets 
+> more automatically.
 > 
-> In file included from ./arch/arm64/include/asm/lse.h:16,
->                  from ./arch/arm64/include/asm/cmpxchg.h:14,
->                  from ./arch/arm64/include/asm/atomic.h:16,
->                  from ./include/linux/atomic.h:7,
->                  from ./include/asm-generic/bitops/atomic.h:5,
->                  from ./arch/arm64/include/asm/bitops.h:25,
->                  from ./include/linux/bitops.h:33,
->                  from ./include/linux/kernel.h:22,
->                  from kernel/printk/printk.c:22:
-> ./arch/arm64/include/asm/atomic_lse.h:247:9: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'atomic_t[1]' [-Warray-bounds]
->   247 |         asm volatile(                                                   \
->       |         ^~~
-> ./arch/arm64/include/asm/atomic_lse.h:266:1: note: in expansion of macro '__CMPXCHG_CASE'
->   266 | __CMPXCHG_CASE(w,  , acq_, 32,  a, "memory")
->       | ^~~~~~~~~~~~~~
-> kernel/printk/printk.c:3606:17: note: while referencing 'printk_cpulock_owner'
->  3606 | static atomic_t printk_cpulock_owner = ATOMIC_INIT(-1);
->       |                 ^~~~~~~~~~~~~~~~~~~~
+> It was an unmitigated disaster: was fragile on x86 already (which has a zoo 
+> of linking quirks with no precedent of doing this before bounds.c 
+> processing), but on ARM64 and probably on most of the other RISC-ish 
+> architectures there was also a real runtime code generation cost of using 
+> linker tricks: 2-3 extra instructions per per_task() use - clearly 
+> unacceptable.
 > 
-> This is due to the compiler seeing an unsigned long * cast against
-> something (atomic_t) that is int sized. Replace the cast with the
-> matching size cast. This results in no change in binary output.
+> Found this out the hard way after making it boot & work on ARM64 and 
+> looking at the assembly output, trying to figure out why the generated code 
+> size increased. :-/
 
-Just to check, I assume both GCC and Clang are happy with this applied?
+Right, I suggested you do the per-cpu thing. And then Mark reported that
+code-gen issue on arm64.
 
-I recall that (historically at least) clang would warn about size mismatches
-for inline assembly and would sometimes require more care. I don't see anythign
-for which that would matter, but I just want to check.
+I'm still thinking the toolchains ought to look at fixing that. It'll be
+too late to use for per-task, but at least the current per-cpu usages
+will (eventually) get better code-gen.
 
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/arm64/include/asm/atomic_lse.h | 2 +-
->  arch/arm64/include/asm/cmpxchg.h    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
-> index d955ade5df7c..5d460f6b7675 100644
-> --- a/arch/arm64/include/asm/atomic_lse.h
-> +++ b/arch/arm64/include/asm/atomic_lse.h
-> @@ -249,7 +249,7 @@ __lse__cmpxchg_case_##name##sz(volatile void *ptr,			\
->  	"	mov	%" #w "[tmp], %" #w "[old]\n"			\
->  	"	cas" #mb #sfx "\t%" #w "[tmp], %" #w "[new], %[v]\n"	\
->  	"	mov	%" #w "[ret], %" #w "[tmp]"			\
-> -	: [ret] "+r" (x0), [v] "+Q" (*(unsigned long *)ptr),		\
-> +	: [ret] "+r" (x0), [v] "+Q" (*(u##sz *)ptr),			\
->  	  [tmp] "=&r" (tmp)						\
->  	: [old] "r" (x1), [new] "r" (x2)				\
->  	: cl);								\
 
-It might be worth nothing that __ll_sc__cmpxchg_case_##name##sz already uses
-the same constraint:
-
-	[v] "+Q" (*(u##sz *)ptr
-
-... since that explains why we only need to update the LSE form and not the
-LL/SC form, and indicates that this is unlikely to be problematic.
-
-Either way:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Thanks,
-Mark.
-
-> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
-> index f9bef42c1411..497acf134d99 100644
-> --- a/arch/arm64/include/asm/cmpxchg.h
-> +++ b/arch/arm64/include/asm/cmpxchg.h
-> @@ -243,7 +243,7 @@ static inline void __cmpwait_case_##sz(volatile void *ptr,		\
->  	"	cbnz	%" #w "[tmp], 1f\n"				\
->  	"	wfe\n"							\
->  	"1:"								\
-> -	: [tmp] "=&r" (tmp), [v] "+Q" (*(unsigned long *)ptr)		\
-> +	: [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)			\
->  	: [val] "r" (val));						\
->  }
->  
-> -- 
-> 2.30.2
-> 

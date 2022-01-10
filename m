@@ -2,193 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A10CC489757
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E203648975B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244668AbiAJLYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S244688AbiAJLY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:24:28 -0500
+Received: from mga06.intel.com ([134.134.136.31]:48914 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244669AbiAJLYY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 06:24:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25423 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239652AbiAJLYS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:24:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641813857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pBE0ggFKcl6guyW93VUOpb5auuAFCSHgSAnkBD22A74=;
-        b=ENJCFjxXHJVgXZ26ffA8y9akFCiypf8Y+oRrkbnLql1sxHuYrZHDZ30kSM//J+rV9diEfW
-        dj4OThvmI9dQ4ikQdUqxayqMc4qldgNEAeFgP2sDrGJfBSstWVEjY/Lo+3Irz6OBcUDSzo
-        OO6XKPyzO6AXQTl4cRmJdLmGr5Y2ueg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-ifoM8bW3PiGdB5m635b5WQ-1; Mon, 10 Jan 2022 06:24:16 -0500
-X-MC-Unique: ifoM8bW3PiGdB5m635b5WQ-1
-Received: by mail-ed1-f69.google.com with SMTP id t1-20020a056402524100b003f8500f6e35so9893137edd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 03:24:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pBE0ggFKcl6guyW93VUOpb5auuAFCSHgSAnkBD22A74=;
-        b=SGyHXSVrLRhq1xSkJZVFJkALyP3M3ZBsQtM5uce8/S5WlXQS/QRJXMYV0jBvdP2Nqa
-         fkTe82u7loedekemLZKcOB74uCAY3WPaZFEHvXnahgR326Oyr64IhVMpmvT53cPSf6Zr
-         9Rl4sFfdc6nM2Urj4PZnucw2gX4xbxJLOBm69GFFPUCORwaoyinNCiChW2aTshTQeEWt
-         rbXlts2v5YkmeYTy1qDEpiPhTh0EyOgm7S4yWB0i4nfYjxnY4D50UITRbd1NH6X38Fal
-         nuVVWYvbdwTfS6+cc3YN1Ouz88jXECeoDPOoMaNBF/bHP93e4o5HDQRsRDS/K3XZRnXv
-         ghmA==
-X-Gm-Message-State: AOAM533EBwpR7higNfN+TXJuqx/SHDNAMUYcV3l9h/1Cb7FOn+mAYyeP
-        V6kqw7FFZGs8am9Con610w5rXRE8spnD8G0zLpn0hboyZEx65ivQqbwsv+urNwUxaTRBgkdnwSS
-        OkQo3RSg+as8l6Aj+/06eFd/g
-X-Received: by 2002:a17:907:7fab:: with SMTP id qk43mr5393032ejc.624.1641813855595;
-        Mon, 10 Jan 2022 03:24:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyt9E0WS2MJysm3Twf1UdddP8U5gDgxMfL43JZ+JDuzamz/VprUYj4+VfxHHKVcF8DCP/SVOg==
-X-Received: by 2002:a17:907:7fab:: with SMTP id qk43mr5392997ejc.624.1641813855367;
-        Mon, 10 Jan 2022 03:24:15 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id i22sm2339975ejw.75.2022.01.10.03.24.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 03:24:15 -0800 (PST)
-Message-ID: <4ef79dee-b9d5-ee0c-56c5-0b3058b49ad5@redhat.com>
-Date:   Mon, 10 Jan 2022 12:24:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v5 1/3] drm/privacy_screen: Add drvdata in
- drm_privacy_screen
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641813864; x=1673349864;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ZnmTB+O910n4HIS+UUP3QCZ9s5Pq85b2OSKGaMHOF6g=;
+  b=BYwnSIqirV1puJFfN2nh2yA14rXc2uz1Tq9T3kAJy4upCv4ZJ/jlqAkP
+   n/h0GY5GhbVWRjH66pgzTx6AuUTKVMTEFww1CLjyO/RQIvJHkUYtW6FJr
+   Rvc/rlyrPrzuv8YS4e2iWv2+Qlotk8xlRBpZgKpSnR7SgEKjpe1oTBkre
+   lLKAucj6iZnneN2spjy/qbKFClphic6w8Z/hfijQ5ZqrRJJut+l8aiu4k
+   ku1BeoVbJeCoA29djwGg6gKg0T0P2K962Y/GmMFEYoVyQw57nIeQqbWX/
+   dCioeXpIlpgx2MFe/U1bmi4fn6J2Onw1YxVkGiPtulCCczR4O5tSmphx0
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="303945805"
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="303945805"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 03:24:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="669426604"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Jan 2022 03:24:23 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 10 Jan 2022 03:24:23 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 10 Jan 2022 03:24:23 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.47) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 10 Jan 2022 03:24:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VvwhB7gGRbgOFkSPPX+ucpPnAwr8XxQCl3QVWrb+1cfWiLl3uiJNWPQyLSjIUggbzXsYQQENnr/f1akpO41JwoijHCsFtZ7t5vYEmz8ED7AWMLG/QiGqA7syfKWPT5lUzrdcpSLn5jIpNl4FP0JLHbUFjIQtkiTyXon0ZNHBqFTDzD4tQ3eKfshnp7zXm+N9yu7+qM1UWvrp7GQKwCmuwdqfTuq/1iiO5pmxpWpwXtv8gzlZoBuH/+MYiPMu1XB6KMjUK9m1y0mBcML0vpuZpZs++YDXuuJfuawnRS4Wd8e3OIacpkSAroIEO9rdRlLTSt8TiOfnaml5fJgk1d9Kpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cs3JhYulJv6+HQD6HZzyKTsogK+bM+zLeud1TKH+G/E=;
+ b=EktPjVF55BcMRur5RvQnnNSnYxVDCL2bhvgbPogV5JWKZwGioAsbUpovw10yWeV3g3eOf4828xZAo385dHwljGoEamhUkxZkc35LVHcL+X2nxJGBlKNSnFotyla/zhK7swrGm2+nZFURA+lgVZnDo5LYrgLpQ7JoEXInI/AuLd1i5ad7hSn/3BTRxhJaORAY50nHy5wAkhIr7HOBrasIvbBer3Cz9VjR+ymnm3F65mESOdLnkiZK2wlT6Ay0dfv4yYpXLRsO9HW1aIWqf6XMwGX55Z+kbsEdFLO/6y9ZcgKBOmpgoNJelCOJTop78v2fjiT1JKcP2GA1Wbf16RMusw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB3292.namprd11.prod.outlook.com (2603:10b6:5:5a::21) by
+ DM6PR11MB3148.namprd11.prod.outlook.com (2603:10b6:5:6f::28) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4867.11; Mon, 10 Jan 2022 11:24:21 +0000
+Received: from DM6PR11MB3292.namprd11.prod.outlook.com
+ ([fe80::84b0:d849:dadf:e47f]) by DM6PR11MB3292.namprd11.prod.outlook.com
+ ([fe80::84b0:d849:dadf:e47f%3]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 11:24:21 +0000
+From:   "Bhandare, KiranX" <kiranx.bhandare@intel.com>
+To:     "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
+CC:     Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Brouer, Jesper" <brouer@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>
+Subject: RE: [Intel-wired-lan] [PATCH v4 net-next 2/9] i40e: respect metadata
+ on XSK Rx to skb
+Thread-Topic: [Intel-wired-lan] [PATCH v4 net-next 2/9] i40e: respect metadata
+ on XSK Rx to skb
+Thread-Index: AQHX7D0DcDEzIDRdw0+rfrddXiafC6xcUL0g
+Date:   Mon, 10 Jan 2022 11:24:21 +0000
+Message-ID: <DM6PR11MB32922FF17EC415EC54D541EFF1509@DM6PR11MB3292.namprd11.prod.outlook.com>
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com>
+ <20211208140702.642741-3-alexandr.lobakin@intel.com>
+In-Reply-To: <20211208140702.642741-3-alexandr.lobakin@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Rajat Jain <rajatja@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Benson Leung <bleung@chromium.org>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, gwendal@google.com,
-        seanpaul@google.com, marcheu@google.com, dtor@google.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benson Leung <bleung@google.com>
-Cc:     rajatxjain@gmail.com
-References: <20220107190208.95479-1-rajatja@google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220107190208.95479-1-rajatja@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e6abb3c6-01bc-4b3f-bec2-08d9d42bbfb9
+x-ms-traffictypediagnostic: DM6PR11MB3148:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR11MB314885FC3226C6F4273820BAF1509@DM6PR11MB3148.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: //HeDJGKCgdwQKS2rZ8fLiTh94nRWOR+DHz9y3neP2uf6TKGjbOgJCMBWS+ut+mL2J4LRJTuHsxFc4orSww8cJyAphRHFlsVui0LrJAFqCep58f1QrwJ0Zbm4qxs1uEytF2PCunvwSfdScFRhruNZlbbK3ZaRBuysSEiBJOc7pN302rC1ekF0Pr90P1QtI59ty7CXFhG9k3nQ+fRrmXXuGnWxSxuadfzWAR4F7n6co/BAhT9TDfThquL6ZHQECHqaoYFfRp3MN8oz8vPCs20kw4SI0y2HXj/JhyBU2TP+RbAb1TvCkb3Jw/quEGGOZR/Q/cUpqJ4wLxG7f9wZtcjC6uPp0Lq419hgfJm+kuEpBKwUvMQT8SHQGav/hErP72qrbnI12ZSif2MoVyPhLWEn0uyfxlEDd7ANIqmXqBYF1ubOITNg1yucMBht0QQU7ZgQifM8aweT5Pz50saF1jhKZ5p1aWrrMOdckGCf5HJLwoKmJbvNcRGHsVZycCWc40Qvu6QnjiPw/+bhkp2IlNUFMEpFBGegty8YtEcMAdKKSRlccUr8Q4Xx36ORf2UJjGlN2aAQzBAn9GKhVyK0KjaMsX4e0SpSWIS4U8G/lPi3SWDPhomC7iYizB3suRSpGDtHaosbsaaIt6DUFtMac7smE1IbxdW8d1EGQ8FJnjqs9NkOtIAYI8kWq+c4VtPZTSnFME5aJTQ3E4W38dPvO5eSQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3292.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(110136005)(54906003)(55016003)(508600001)(9686003)(122000001)(8676002)(53546011)(8936002)(2906002)(33656002)(316002)(26005)(6506007)(7416002)(71200400001)(76116006)(66446008)(4326008)(7696005)(66946007)(64756008)(186003)(66556008)(5660300002)(38100700002)(66574015)(38070700005)(83380400001)(82960400001)(66476007)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?NUoKY3h++9GLigaOdqgVlJ8E/LOgUFNmePcsxYkDWR3NuuO6xbG3uE24kd?=
+ =?iso-8859-1?Q?6TmJYNN979rwsOpyAagicsrYGHtmv//iepnwu5oO+NwUKAnKw+VxPtiSq/?=
+ =?iso-8859-1?Q?D4Enb0KNG8gt+RUbvNXolhXgmLdzti4vWmtTR04Zit+oyCaOhGUnMnPRuF?=
+ =?iso-8859-1?Q?0aTdOFs2uU8XJm1RO1P0nh1K2iQufGX3zRD1RM6PcANVQ/ET/kp1Ok8qS/?=
+ =?iso-8859-1?Q?6Uc0dC4PPxZpmIW7oD5Ly1kvxQ/vEFFDVY1utx+IYOLtbiZMfOIh9Ys7ab?=
+ =?iso-8859-1?Q?3DVdxZ8OqcSQjGNYMXRviVgYtqtHD8WGwICbG/Zr4ILEUgC2tEkCL/TgWd?=
+ =?iso-8859-1?Q?ooCRdzPCUstMnEDLLQoIcnqsPsYqazQL4BdYa+itsiJev0QnRNJrfcJf2T?=
+ =?iso-8859-1?Q?Y0l/ekB4o1G1aD4Le2dlbZVwyo/nqB12w9JDkoL1EcxDEVZ35C0U+Zg6/h?=
+ =?iso-8859-1?Q?THK8YrSVlnaUK1D4IYEDgXbOsNgDuODy1UiTsVjDbCjO1AB7Mq9d/1G5Rs?=
+ =?iso-8859-1?Q?RHASxeX6fKrQmej/eplQWnV8RSgO736dgd676lONnrYAyUp9jcJogoAScj?=
+ =?iso-8859-1?Q?yiQOyMqufWcgmuiZT/0Vk4rAFEdUHL0hjfqaJ7s0LWqlg/mE7qWjtj+LfS?=
+ =?iso-8859-1?Q?LvCMt/PShIIqMn8vwnU1L2ECbahQR8j5cMOpS49vdnds/xamBf8YKq9UO9?=
+ =?iso-8859-1?Q?fqcqibY1fI5PH7pNeQdzLyJcarosa6ScrE1/W1bMGTJ/IXKpcqnuORRNey?=
+ =?iso-8859-1?Q?/LK+zqd9nwjplzOEiQTYLCbcg8yWDCF8/mwr+cj5Wix+Ka8x2w1qPPwza6?=
+ =?iso-8859-1?Q?4MO33f5R04ohorbfZ9eSK0l/anIaxwn0Pe+wrYNZz9I0F+5Ankf2D7Q4m8?=
+ =?iso-8859-1?Q?icJca6SEmRHW/N5xJHBBfyle+8PYGpsKGMmWxVQscsnIYjGHTgE0JF3aCu?=
+ =?iso-8859-1?Q?bzNk3P1FniXH9gEP50Hfnl1V5P04ICrTajuTPuIn/WOBU0LSoOPkzwD1M9?=
+ =?iso-8859-1?Q?WWX6zs3EWg9Y8Fet1fUOSabDF6xQgDhWT/qhthkjehd+PhOFsPfb9hbB6G?=
+ =?iso-8859-1?Q?k4Lu1igQATW2TGeyV8ZNwui1gmSslByRZ+VlsQljz1I202a7k2EVbYCjFj?=
+ =?iso-8859-1?Q?JMilUWTxFgOdyR7Q5LMToEOCYLUHOlqzR0pX9e9B+idElrIOr/qkkpK8f/?=
+ =?iso-8859-1?Q?x4ptwFDmVhlq6XrAwkvhvXRC05M+duGVyuqUhLxf3SicJH+LHjpL3WaRlK?=
+ =?iso-8859-1?Q?/HiINyC8VS4sTK3atKMkj12JQoFPB+WlNoeyD/W/TK+8wllZt5xbWQFWKn?=
+ =?iso-8859-1?Q?0fou6S5IeoVkFn72K6sDLCXks4S34nKeOAd26/6pHJpXAbN/FrTRueBAvE?=
+ =?iso-8859-1?Q?l8gKdxvcPRL62JpUWYzoW/GHpZOykfBXEYBMGeVb9zPMJWHlvPTaeB+cxD?=
+ =?iso-8859-1?Q?tlENRlzGOSBlb+SgPtxmujjf9/E6QbVogfY4TnXFLld/xbnzM5/32H2//f?=
+ =?iso-8859-1?Q?lgrB4PeXXaW9LgdtoJPt+u4pu+/VjCARgkAq/kh5ysLlVTJO8kdI52LgpS?=
+ =?iso-8859-1?Q?GdCS7dfM5LyAwS6Ga1U8Gy2W2x+tiwGwU3nYwsWVOrY3sPNItY5q80xdTp?=
+ =?iso-8859-1?Q?/M4B72JzXNF96piwKg3ICC3UDuXjznEJHlSyDa6Bstk/2iVGDzFGBTrvFU?=
+ =?iso-8859-1?Q?1QfZtTEp972u0FfBiiKFMcK5SvfJnunFtCUhDdx1lSRRyUuUBLBJOcTQZi?=
+ =?iso-8859-1?Q?SexQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3292.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6abb3c6-01bc-4b3f-bec2-08d9d42bbfb9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 11:24:21.4158
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZqX4NUgd6nv2j/r/CDL45vjoLdy1mQ5e3HVvVnhQvFW7/SpZpcM6+N8jvnn9eAsAHN/UBEkbmp8ILAYJ3I4mfyFSCxwePJxXutJpd0GsdUw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3148
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
 
-On 1/7/22 20:02, Rajat Jain wrote:
-> Allow a privacy screen provider to stash its private data pointer in the
-> drm_privacy_screen, and update the drm_privacy_screen_register() call to
-> accept that. Also introduce a *_get_drvdata() so that it can retrieved
-> back when needed.
-> 
-> This also touches the IBM Thinkpad platform driver, the only user of
-> privacy screen today, to pass NULL for now to the updated API.
-> 
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-I've pushed this series to drm-misc-next now.
-
-Regards,
-
-Hans
-
-
-
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
+> Lobakin, Alexandr
+> Sent: Wednesday, December 8, 2021 7:37 PM
+> To: intel-wired-lan@lists.osuosl.org
+> Cc: Song Liu <songliubraving@fb.com>; Alexei Starovoitov <ast@kernel.org>=
+;
+> Andrii Nakryiko <andrii@kernel.org>; Daniel Borkmann
+> <daniel@iogearbox.net>; John Fastabend <john.fastabend@gmail.com>;
+> Brouer, Jesper <brouer@redhat.com>; Yonghong Song <yhs@fb.com>;
+> Jesper Dangaard Brouer <hawk@kernel.org>; KP Singh
+> <kpsingh@kernel.org>; Jakub Kicinski <kuba@kernel.org>;
+> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; David S. Miller
+> <davem@davemloft.net>; Bj=F6rn T=F6pel <bjorn@kernel.org>;
+> bpf@vger.kernel.org; Martin KaFai Lau <kafai@fb.com>
+> Subject: [Intel-wired-lan] [PATCH v4 net-next 2/9] i40e: respect metadata=
+ on
+> XSK Rx to skb
+>=20
+> For now, if the XDP prog returns XDP_PASS on XSK, the metadata will be lo=
+st
+> as it doesn't get copied to the skb.
+> Copy it along with the frame headers. Account its size on skb allocation,=
+ and
+> when copying just treat it as a part of the frame and do a pull after to =
+"move"
+> it to the "reserved" zone.
+> net_prefetch() xdp->data_meta and align the copy size to speed-up
+> memcpy() a little and better match i40e_costruct_skb().
+>=20
+> Fixes: 0a714186d3c0 ("i40e: add AF_XDP zero-copy Rx support")
+> Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 > ---
-> v5: Same as v4
-> v4: Added "Reviewed-by" from Hans
-> v3: Initial version. Came up due to review comments on v2 of other patches.
-> v2: No v2
-> v1: No v1
-> 
->  drivers/gpu/drm/drm_privacy_screen.c    |  5 ++++-
->  drivers/platform/x86/thinkpad_acpi.c    |  2 +-
->  include/drm/drm_privacy_screen_driver.h | 13 ++++++++++++-
->  3 files changed, 17 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_privacy_screen.c b/drivers/gpu/drm/drm_privacy_screen.c
-> index beaf99e9120a..03b149cc455b 100644
-> --- a/drivers/gpu/drm/drm_privacy_screen.c
-> +++ b/drivers/gpu/drm/drm_privacy_screen.c
-> @@ -387,7 +387,8 @@ static void drm_privacy_screen_device_release(struct device *dev)
->   * * An ERR_PTR(errno) on failure.
->   */
->  struct drm_privacy_screen *drm_privacy_screen_register(
-> -	struct device *parent, const struct drm_privacy_screen_ops *ops)
-> +	struct device *parent, const struct drm_privacy_screen_ops *ops,
-> +	void *data)
->  {
->  	struct drm_privacy_screen *priv;
->  	int ret;
-> @@ -404,6 +405,7 @@ struct drm_privacy_screen *drm_privacy_screen_register(
->  	priv->dev.parent = parent;
->  	priv->dev.release = drm_privacy_screen_device_release;
->  	dev_set_name(&priv->dev, "privacy_screen-%s", dev_name(parent));
-> +	priv->drvdata = data;
->  	priv->ops = ops;
->  
->  	priv->ops->get_hw_state(priv);
-> @@ -439,6 +441,7 @@ void drm_privacy_screen_unregister(struct drm_privacy_screen *priv)
->  	mutex_unlock(&drm_privacy_screen_devs_lock);
->  
->  	mutex_lock(&priv->lock);
-> +	priv->drvdata = NULL;
->  	priv->ops = NULL;
->  	mutex_unlock(&priv->lock);
->  
-> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-> index 341655d711ce..ccbfda2b0095 100644
-> --- a/drivers/platform/x86/thinkpad_acpi.c
-> +++ b/drivers/platform/x86/thinkpad_acpi.c
-> @@ -9782,7 +9782,7 @@ static int tpacpi_lcdshadow_init(struct ibm_init_struct *iibm)
->  		return 0;
->  
->  	lcdshadow_dev = drm_privacy_screen_register(&tpacpi_pdev->dev,
-> -						    &lcdshadow_ops);
-> +						    &lcdshadow_ops, NULL);
->  	if (IS_ERR(lcdshadow_dev))
->  		return PTR_ERR(lcdshadow_dev);
->  
-> diff --git a/include/drm/drm_privacy_screen_driver.h b/include/drm/drm_privacy_screen_driver.h
-> index 24591b607675..4ef246d5706f 100644
-> --- a/include/drm/drm_privacy_screen_driver.h
-> +++ b/include/drm/drm_privacy_screen_driver.h
-> @@ -73,10 +73,21 @@ struct drm_privacy_screen {
->  	 * for more info.
->  	 */
->  	enum drm_privacy_screen_status hw_state;
-> +	/**
-> +	 * @drvdata: Private data owned by the privacy screen provider
-> +	 */
-> +	void *drvdata;
->  };
->  
-> +static inline
-> +void *drm_privacy_screen_get_drvdata(struct drm_privacy_screen *priv)
-> +{
-> +	return priv->drvdata;
-> +}
-> +
->  struct drm_privacy_screen *drm_privacy_screen_register(
-> -	struct device *parent, const struct drm_privacy_screen_ops *ops);
-> +	struct device *parent, const struct drm_privacy_screen_ops *ops,
-> +	void *data);
->  void drm_privacy_screen_unregister(struct drm_privacy_screen *priv);
->  
->  void drm_privacy_screen_call_notifier_chain(struct drm_privacy_screen *priv);
-> 
+>  drivers/net/ethernet/intel/i40e/i40e_xsk.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+>=20
 
+Tested-by: Kiran Bhandare <kiranx.bhandare@intel.com>  A Contingent Worker =
+at Intel

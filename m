@@ -2,94 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDBB48961C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C892B489625
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243755AbiAJKPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239060AbiAJKPC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:15:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6EC06173F;
-        Mon, 10 Jan 2022 02:15:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AA476124F;
-        Mon, 10 Jan 2022 10:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9AC9C36AE9;
-        Mon, 10 Jan 2022 10:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641809700;
-        bh=TqPm7m1Wb0a6egGV5nH0SK7kmvwvQl7qaDYB8oW0lRI=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=I3cjis+qAfD7EQerPM4kuOUMwDEb3ZOZsqOYvntuzr1hkMELGVgFz2nvHuizhMVfZ
-         QjYt9GHQ7DHbOo8js2Fr3Jc2u0VGLIr5Bly6Dzko9F12sRFh5KlxyR+ENl/rDz7EEZ
-         40MVYplTsfpmduxc9qUSMv+tGMioliFZLmAQF7oflzipOrDlaqUg8ATHC/phjiD42V
-         cFBGydolIxzFam5/EAxsK9Lm+GLMSZxgtmylQYe1m4HZgCYcrtl170EUb0iYoCve54
-         H62LgEm/F7I3Lx+Lc6riTLV/STC+qiUXtHPJ1nVXMOImJGZRbUcqu0mBm4ktVwvMBT
-         wwqEGPt+Mm6cA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?utf-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-Subject: Re: [PATCH v2 00/35] brcmfmac: Support Apple T2 and M1 platforms
-References: <20220104072658.69756-1-marcan@marcan.st>
-Date:   Mon, 10 Jan 2022 12:14:51 +0200
-In-Reply-To: <20220104072658.69756-1-marcan@marcan.st> (Hector Martin's
-        message of "Tue, 4 Jan 2022 16:26:23 +0900")
-Message-ID: <87tuebvqw4.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S243751AbiAJKRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:17:02 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:39668 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243744AbiAJKQj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 05:16:39 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABnbFhnB9xheltfBQ--.36673S2;
+        Mon, 10 Jan 2022 18:16:07 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     geert@linux-m68k.org
+Cc:     vkoul@kernel.org, yoshihiro.shimoda.uh@renesas.com,
+        laurent.pinchart@ideasonboard.com,
+        wsa+renesas@sang-engineering.com, zou_wei@huawei.com,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] dmaengine: sh: rcar-dmac: Check for error num after setting mask
+Date:   Mon, 10 Jan 2022 18:16:06 +0800
+Message-Id: <20220110101606.429119-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABnbFhnB9xheltfBQ--.36673S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
+        c2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjfUonmRUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hector Martin <marcan@marcan.st> writes:
-
-> Hi everyone,
+On Mon, Jan 10, 2022 at 05:37:34PM +0800, Geert Uytterhoeven wrote:
+>> --- a/drivers/dma/sh/rcar-dmac.c
+>> +++ b/drivers/dma/sh/rcar-dmac.c
+>> @@ -1869,7 +1869,9 @@ static int rcar_dmac_probe(struct platform_device *pdev)
+>>         dmac->dev = &pdev->dev;
+>>         platform_set_drvdata(pdev, dmac);
+>>         dma_set_max_seg_size(dmac->dev, RCAR_DMATCR_MASK);
 >
-> Happy new year! This 35-patch series adds proper support for the
-> Broadcom FullMAC chips used on Apple T2 and M1 platforms:
->
-> - BCM4355C1
-> - BCM4364B2/B3
-> - BCM4377B3
-> - BCM4378B1
-> - BCM4387C2
+> dma_set_max_seg_size() can fail, too.
 
-35 patches is a lot to review. It would make things easier for reviewers
-if you can split this into smaller patchsets, 10-12 patches per set is
-what I usually recommend. More info in the wiki link below.
+Thanks for your reminder.
+I will submit another patch to fix it and add
+"Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>".
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Sincerely thanks,
+Jiang
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

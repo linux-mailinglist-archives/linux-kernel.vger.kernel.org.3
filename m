@@ -2,126 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CF34890E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A4C489176
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbiAJH0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:26:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35358 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239370AbiAJHY7 (ORCPT
+        id S240679AbiAJHcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239709AbiAJH2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:24:59 -0500
+        Mon, 10 Jan 2022 02:28:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDCDC028BF4;
+        Sun,  9 Jan 2022 23:27:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDADE61194;
-        Mon, 10 Jan 2022 07:24:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A074EC36AED;
-        Mon, 10 Jan 2022 07:24:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A7B7611B9;
+        Mon, 10 Jan 2022 07:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A055C36AE9;
+        Mon, 10 Jan 2022 07:27:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641799498;
-        bh=5AycrP6fhzyZWUTosB32ZZVjaR3QhOE2NrfcmR2OBgM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yy+8zGmFtgBn25kOEN92gjvDe4WCcmnKfizXADfwfoNStC8SCOTjIK4Wv8BjSxGo7
-         tLMiKYwj+tV7CviYjwf09kESPkMm/yJaQCvUqPe3mfQK41URMWIkO70SIXn6lvPFMA
-         g+AYq74/JaP+5BBEwnLp/sYfOnu1vlC63pbNo4cE=
+        s=korg; t=1641799627;
+        bh=PJOp4dFuN4gNhHSQ96n4gkNxu4wocz8p0mk9c67BfU0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U4kPYt3HOq1HrlFZfbDK+s9VKMwvIxav2k5/hYVvucCGFopGlVrXQFzIXl8aA2vWo
+         PXtH6eW5m9GHFKlMDmJZMvnbkeP6CJx43kQoW0R04//poWQsHkzPRtHWS5cRkkfJQL
+         eGA7rZ3eE1+7wQKbLFYU9sCB0Bi/r5n7lfr0LOgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 4.9 14/21] arm64: move !VHE work to end of el2_setup
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: [PATCH 4.19 00/21] 4.19.225-rc1 review
 Date:   Mon, 10 Jan 2022 08:23:01 +0100
-Message-Id: <20220110071813.280605016@linuxfoundation.org>
+Message-Id: <20220110071813.967414697@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071812.806606886@linuxfoundation.org>
-References: <20220110071812.806606886@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.225-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.225-rc1
+X-KernelTest-Deadline: 2022-01-12T07:18+00:00
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+This is the start of the stable review cycle for the 4.19.225 release.
+There are 21 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit d61c97a7773d0848b4bf5c4697855c7ce117362c upstream.
+Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
+Anything received after that time might be too late.
 
-We only need to initialise sctlr_el1 if we're installing an EL2 stub, so
-we may as well defer this until we're doing so. Similarly, we can defer
-intialising CPTR_EL2 until then, as we do not access any trapped
-functionality as part of el2_setup.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.225-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-This patch modified el2_setup accordingly, allowing us to remove a
-branch and simplify the code flow.
+thanks,
 
-Acked-by: Marc Zyngier <marc.zyngier@arm.com>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/arm64/kernel/head.S |   37 +++++++++++++++++--------------------
- 1 file changed, 17 insertions(+), 20 deletions(-)
+greg k-h
 
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -553,26 +553,6 @@ set_hcr:
- 	msr	vpidr_el2, x0
- 	msr	vmpidr_el2, x1
- 
--	/*
--	 * When VHE is not in use, early init of EL2 and EL1 needs to be
--	 * done here.
--	 * When VHE _is_ in use, EL1 will not be used in the host and
--	 * requires no configuration, and all non-hyp-specific EL2 setup
--	 * will be done via the _EL1 system register aliases in __cpu_setup.
--	 */
--	cbnz	x2, 1f
--
--	/* sctlr_el1 */
--	mov	x0, #0x0800			// Set/clear RES{1,0} bits
--CPU_BE(	movk	x0, #0x33d0, lsl #16	)	// Set EE and E0E on BE systems
--CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// Clear EE and E0E on LE systems
--	msr	sctlr_el1, x0
--
--	/* Coprocessor traps. */
--	mov	x0, #0x33ff
--	msr	cptr_el2, x0			// Disable copro. traps to EL2
--1:
--
- #ifdef CONFIG_COMPAT
- 	msr	hstr_el2, xzr			// Disable CP15 traps to EL2
- #endif
-@@ -598,6 +578,23 @@ CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// C
- 	ret
- 
- install_el2_stub:
-+	/*
-+	 * When VHE is not in use, early init of EL2 and EL1 needs to be
-+	 * done here.
-+	 * When VHE _is_ in use, EL1 will not be used in the host and
-+	 * requires no configuration, and all non-hyp-specific EL2 setup
-+	 * will be done via the _EL1 system register aliases in __cpu_setup.
-+	 */
-+	/* sctlr_el1 */
-+	mov	x0, #0x0800			// Set/clear RES{1,0} bits
-+CPU_BE(	movk	x0, #0x33d0, lsl #16	)	// Set EE and E0E on BE systems
-+CPU_LE(	movk	x0, #0x30d0, lsl #16	)	// Clear EE and E0E on LE systems
-+	msr	sctlr_el1, x0
-+
-+	/* Coprocessor traps. */
-+	mov	x0, #0x33ff
-+	msr	cptr_el2, x0			// Disable copro. traps to EL2
-+
- 	/* Hypervisor stub */
- 	adrp	x0, __hyp_stub_vectors
- 	add	x0, x0, #:lo12:__hyp_stub_vectors
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.225-rc1
+
+wolfgang huang <huangjinhui@kylinos.cn>
+    mISDN: change function names to avoid conflicts
+
+yangxingwu <xingwu.yang@gmail.com>
+    net: udp: fix alignment problem in udp4_seq_show()
+
+William Zhao <wizhao@redhat.com>
+    ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
+
+Lixiaokeng <lixiaokeng@huawei.com>
+    scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+
+Chunfeng Yun <chunfeng.yun@mediatek.com>
+    usb: mtu3: fix interval value for intr and isoc
+
+David Ahern <dsahern@kernel.org>
+    ipv6: Do cleanup if attribute validation fails in multipath route
+
+David Ahern <dsahern@kernel.org>
+    ipv6: Continue processing multipath route even if gateway attribute is invalid
+
+Hangyu Hua <hbh25y@gmail.com>
+    phonet: refcount leak in pep_sock_accep
+
+Thomas Toye <thomas@toye.io>
+    rndis_host: support Hytera digital radios
+
+Nathan Chancellor <nathan@kernel.org>
+    power: reset: ltc2952: Fix use of floating point literals
+
+Darrick J. Wong <djwong@kernel.org>
+    xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate
+
+Eric Dumazet <edumazet@google.com>
+    sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
+
+David Ahern <dsahern@kernel.org>
+    ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route
+
+David Ahern <dsahern@kernel.org>
+    ipv6: Check attribute length for RTA_GATEWAY in multipath route
+
+Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+    i40e: Fix incorrect netdev's real number of RX/TX queues
+
+Di Zhu <zhudi2@huawei.com>
+    i40e: fix use-after-free in i40e_sync_filters_subtask()
+
+Tom Rix <trix@redhat.com>
+    mac80211: initialize variable have_higher_than_11mbit
+
+Leon Romanovsky <leonro@nvidia.com>
+    RDMA/core: Don't infoleak GRH fields
+
+Pavel Skripkin <paskripkin@gmail.com>
+    ieee802154: atusb: fix uninit value in atusb_set_extended_addr
+
+Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+    tracing: Tag trace_percpu_buffer as a percpu pointer
+
+Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+    tracing: Fix check for trace_percpu_buffer validity in get_trace_buf()
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                    |  4 +--
+ drivers/infiniband/core/uverbs_marshall.c   |  2 +-
+ drivers/isdn/mISDN/core.c                   |  6 ++--
+ drivers/isdn/mISDN/core.h                   |  4 +--
+ drivers/isdn/mISDN/layer1.c                 |  4 +--
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 56 +++++++++++++++++++++++++----
+ drivers/net/ieee802154/atusb.c              | 10 +++---
+ drivers/net/usb/rndis_host.c                |  5 +++
+ drivers/power/reset/ltc2952-poweroff.c      |  4 +--
+ drivers/scsi/libiscsi.c                     |  6 ++--
+ drivers/usb/mtu3/mtu3_gadget.c              |  4 +--
+ fs/xfs/xfs_ioctl.c                          |  3 +-
+ kernel/trace/trace.c                        |  6 ++--
+ net/ipv4/udp.c                              |  2 +-
+ net/ipv6/ip6_vti.c                          |  2 ++
+ net/ipv6/route.c                            | 28 +++++++++++++--
+ net/mac80211/mlme.c                         |  2 +-
+ net/phonet/pep.c                            |  1 +
+ net/sched/sch_qfq.c                         |  6 ++--
+ 19 files changed, 116 insertions(+), 39 deletions(-)
 
 

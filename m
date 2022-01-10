@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FEE489F0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413BE489F0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 19:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbiAJSSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 13:18:48 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:35268 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238877AbiAJSSr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 13:18:47 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 820621EC058B;
-        Mon, 10 Jan 2022 19:18:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641838721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=7SbeRV6UEdUsXzvAGrPNWS2oF82v/3ZWPDmaBetCX9c=;
-        b=ORgY9flUVYOk47K8WIQ8w68tUAPNMKH/4Sq7uiwWHrmp7bXvKDgJD0ipPkSLf3UqvlekCJ
-        A0nxvwrQVDbdVWi8w/VoeQ0m4MjmBCRWmoC2ZcWlaOjsAlSG6LxAwsU2opp0i+KVwnaMUF
-        tCF5jeqa2HaoDUojVfWp4WobIGJYvtI=
-Date:   Mon, 10 Jan 2022 19:18:49 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>
-Subject: Re: [PATCH v6 05/21] x86/fpu: Make XFD initialization in
- __fpstate_reset() a function argument
-Message-ID: <Ydx4icAIOY6MFhLj@zn.tnic>
-References: <20220107185512.25321-1-pbonzini@redhat.com>
- <20220107185512.25321-6-pbonzini@redhat.com>
- <YdiX5y4KxQ7GY7xn@zn.tnic>
- <BN9PR11MB527688406C0BDCF093C718858C509@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Ydvz0g+Bdys5JyS9@zn.tnic>
- <761a554a-d13f-f1fb-4faf-ca7ed28d4d3a@redhat.com>
- <YdxP0FVWEJa/vrPk@zn.tnic>
- <7994877a-0c46-07a5-eab0-0a8dd6244e9a@redhat.com>
+        id S239053AbiAJSTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 13:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239002AbiAJSTN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 13:19:13 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FD0C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:19:13 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id d1so40360441ybh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 10:19:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ozjIGPdXpEGjhtrg7M9VDsi92b2yheJb0XVg1R0oCbg=;
+        b=fGaKbNq7gW4Ltg3I9MP05btVJ6khCEq4ydjLMoCyQ1T6LAiTW5HyVlirDB1nTJxqkK
+         CfkP3LlUCKOcCJQsUkVvhmBsfmyVbp4aJ55ti58tzyWVAL34R3Y4vsHdBy0Hj44hEZmR
+         f+V8kKf3bl1hHVTV8s8K+oNZty1euOaZobUa2bBroTP6JD8r0rU0MET/MnOifuNMjHr6
+         Q/umUsqZv3b320YCrj8og3k7n850WCE89aIEFeFXrM1czElniv0Go3sDUAkq7DCy+g2f
+         PkclGpD3DAXUcEHqa0NGndTEbmlZ3RpjJ1cCT7K4mz9CKrDe5Swpz0FNjY+0mFDK8YjN
+         flGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ozjIGPdXpEGjhtrg7M9VDsi92b2yheJb0XVg1R0oCbg=;
+        b=ZCX8eBoXSXsWt3GRd6qAEscbMVfcc5wFuyvSv8nak2LboOmiqaS5sNW4ifZwFIDLWQ
+         9fHYhsMYVthEbUqFWKcliXV02GewMx+pX44boktULTEOKwHyerVRuCrpA0FOWrR0PQnC
+         h9oLLo0+Cy4PVjBB52++Ey8wPreeseQXO4h/A6DPaJVzlJeQ8s0iW5UfvG8QklSk7/CJ
+         rMYvp0nZ2BLZSNM5tQqFRh7gwFXFhQC+qoktrkZYZZ3ODcTkx5Dee1esgpNsl5nnmMQN
+         Gu53f84iNT0V3FUq7OyquQHVCsAQx88ZDbx+BRkTXkVKSszkhFU7GL5aUUv5AcRwNN7Z
+         2FcA==
+X-Gm-Message-State: AOAM532hvcVoswEBdbBdGD/Bvhx1Dv4kRSp/Gz/HpB5TYlgyirUStLPn
+        JvijO8qzD7CJhS++y9dltq+PDWyeK5gFXaLssqx6kQ==
+X-Google-Smtp-Source: ABdhPJw5558XhgRjCcRfT/CqFjcX6F4tW6g3+lEt8isEvNJmqNNK9qXJpBoekCCbDpCmlDJ7K9OUxCe3STiF/6nmwSo=
+X-Received: by 2002:a05:6902:703:: with SMTP id k3mr1066936ybt.225.1641838752718;
+ Mon, 10 Jan 2022 10:19:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7994877a-0c46-07a5-eab0-0a8dd6244e9a@redhat.com>
+References: <000000000000e8f8f505d0e479a5@google.com> <20211211015620.1793-1-hdanton@sina.com>
+ <YbQUSlq76Iv5L4cC@sol.localdomain> <YdW3WfHURBXRmn/6@sol.localdomain>
+ <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
+ <CAHk-=wjddvNbZBuvh9m_2VYFC1W7HvbP33mAzkPGOCHuVi5fJg@mail.gmail.com>
+ <CAHk-=wjn5xkLWaF2_4pMVEkZrTA=LiOH=_pQK0g-_BMSE-8Jxg@mail.gmail.com>
+ <Ydw4hWCRjAhGfCAv@cmpxchg.org> <CAJuCfpHg=SPzx7SGUL75DVpMy0BDEwVj4o-SM0UKGmEJrOSdvg@mail.gmail.com>
+ <CAHk-=wiZ=oic3UfejGzy_31RYggtZWUeF1gE82_NHAA=ENY6Kw@mail.gmail.com>
+In-Reply-To: <CAHk-=wiZ=oic3UfejGzy_31RYggtZWUeF1gE82_NHAA=ENY6Kw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 10 Jan 2022 10:19:01 -0800
+Message-ID: <CAJuCfpFFQx525=d8odiiAyi6w5M6KKx-1726zvuV=eADPB8wKg@mail.gmail.com>
+Subject: Re: psi_trigger_poll() is completely broken
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 04:55:01PM +0100, Paolo Bonzini wrote:
-> So this means that "the author must be the first SoB" is not an absolute
-> rule.  In the case of this patch we had:
-> 
-> From: Jing Liu <jing2.liu@intel.com>
-> ...
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+On Mon, Jan 10, 2022 at 9:42 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Jan 10, 2022 at 9:25 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > About the issue of serializing concurrent writes for
+> > cgroup_pressure_write() similar to how psi_write() does. Doesn't
+> > of->mutex inside kernfs_fop_write_iter() serialize the writes to the
+> > same file?
+>
+> Ahh, yes, it looks like that does solve the serialization issue.
+> Sorry, I missed that because I'm not actually all that familiar with
+> the kernfs 'of' code.
+>
+> So the only issue is the trigger lifetime one, and if a single trigger
+> is sufficient and returning -EBUSY for trying to replace an existing
+> one is good, then I think that's the proper fix.
+>
+> I'm very busy with the merge window (and some upcoming travel and
+> family events), so I'm hoping somebody will write and test such a
+> patch. Please?
 
-Looking at Kevin's explanation, that should be:
+Yes, definitely. I'm on it. Will try posting it later today or
+tomorrow morning if testing reveals something unexpected.
+Thanks!
 
-Signed-off-by: Jing Liu <jing2.liu@intel.com>		# author
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>	# v1 submitter
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>	# handler/reviewer
-Signed-off-by: Jing Liu <jing2.liu@intel.com>		# v2-v3 submitter
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>	# v4-v5 submitter
-
-> and the possibilities could be:
-> 
-> 1) have two SoB lines for Jing (before and after Thomas)
-> 
-> 2) add a Co-developed-by for Thomas as the first line
-
-If Thomas would prefer. But then it becomes:
-
-Signed-off-by: Jing Liu <jing2.liu@intel.com>           # author
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>        # v1 submitter
-Co-developed-by: Thomas Gleixner <tglx@linutronix.de>	# co-author
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>     # handler/reviewer
-Signed-off-by: Jing Liu <jing2.liu@intel.com>           # v2-v3 submitter
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>        # v4-v5 submitter
-
-and that means, Thomas worked on that patch *after* Yang submitted v1.
-Which is the exact chronological order, as Kevin writes.
-
-> 3) do exactly what the gang did ("remain practical and do only an SOB
-> chain")
-
-Yes, but not change the SOB order.
-
-Because if you do that, then it doesn't state what the exact path was
-the patch took and how it ended up upstream. And due to past fun stories
-with SCO, we want to track exactly how a patch ended up upstream. And I
-think this is the most important aspect of those SOB chains.
-
-IMNSVHO.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+>                    Linus

@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8B348A3F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1714448A3F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345742AbiAJXuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S1345754AbiAJXu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242706AbiAJXuX (ORCPT
+        with ESMTP id S1345745AbiAJXu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:50:23 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2723C06173F;
-        Mon, 10 Jan 2022 15:50:23 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id u21so20744863oie.10;
-        Mon, 10 Jan 2022 15:50:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TqWMHXyzYXBteWFgxyAsvUsVtH9NFFnAXmy/nbXpjX8=;
-        b=kfTUat7pRfAF2myvx0wyp/q9LONyCS+kSS6EvWmuLP5M6V8sXI2lP4A/+jqZvSbzFI
-         EiWZxn3BDog/1OzQ60f6gAL03W8kIc2NrwVPEXczAzh5N2n59otivOr1xGAW3Zo5U4Et
-         H3Fnrczs3js/1SGDtScKalpw8oCuhkJV3WeLaHiWxtRAbsoYfgi2k8w7w9/c7jQbeV8X
-         9mOCBmjM1XSSaNaiRWB1Rijj2DkR41UTonk9TvhqTpLRRx9NTU+p0dUnqZ0RGagKj2w/
-         QHLppwRUxolI1wPAHX6b4Q/4ceCLZJAuLIQaEIwf9f8E8khW2y0H7LnxUwdTCtq+nke0
-         2hgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=TqWMHXyzYXBteWFgxyAsvUsVtH9NFFnAXmy/nbXpjX8=;
-        b=tePVHv/PLyGlSd5jHb8wltoq3ApJ49ZQkVQAvuyeTC4mD3KsX6LvNuzVIe2TRaSbUe
-         oSm6bEa6pCzufeaVZMFD9gQYpaXeL8utu7BK1iLguqqYh08ONhlVwf9zQZeSes6G3bnE
-         2qM5n2iBBjEfBqa54VPhWHhDT3GUCKBkwjycaKYD6/bedVpLspJTcl/0Y//viCLdsqiB
-         oBocDQltjskIftJRsuu5IGSdCpLkh5oONrJ01uuhO0TtXyoIPKtRROVWrWFzKy3OZBbp
-         c/hqrMCLp3aOeFfhKBDKB1DjyzcQPcahft16KQIIUgLNVZbLTUWwrJB5laOFQNpnRk/M
-         Ym/w==
-X-Gm-Message-State: AOAM532CMRUSx/Q/EP4UxA4V9+v3v1EiuvcfDhvqqo5sI2+MLFVVDHPa
-        3bpRnrDjEb3Yb9Jb66d6j76D9MK4UqU=
-X-Google-Smtp-Source: ABdhPJyYMSOZlcJ0s6nGpJGeaFdqxrqwwMhpmaRRMkdckC7Ug3aYwkRAXkAzrBMga2rhSdfXFiJq0A==
-X-Received: by 2002:a05:6808:1828:: with SMTP id bh40mr96861oib.105.1641858623152;
-        Mon, 10 Jan 2022 15:50:23 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i9sm1195516oik.48.2022.01.10.15.50.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 15:50:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 10 Jan 2022 15:50:21 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 00/43] 5.10.91-rc1 review
-Message-ID: <20220110235021.GF1633615@roeck-us.net>
-References: <20220110071817.337619922@linuxfoundation.org>
+        Mon, 10 Jan 2022 18:50:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FF9C061748;
+        Mon, 10 Jan 2022 15:50:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D0E5614A5;
+        Mon, 10 Jan 2022 23:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0530CC36AE9;
+        Mon, 10 Jan 2022 23:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641858624;
+        bh=5jg4ahzCQWXk36E+/pzngm/e3Ie4peBBN/TBo9UVz88=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pXcnv7fjWWdlRBeHFZgiMXyJN5XB35i5B+GdQgu8x+/oowZYdVpm5gP9iwgHoZ8cK
+         cuZ5ZkrPTia5x64NmESgGzImnrkRfDKlL5sbg2ph0m3Uxt1ATdQO8Eiv0gZCMJnCLU
+         17BrRQOuYTXShEuz6xEjolF9fawh7lbUSIFwNvdDUab/jbFY+0KAN7P1gmAnxaeQSo
+         F4ww7jL1wlGDiWY4hFWpJijonVrvzus5582rnuCBI0SZBc6OLJogaWkllxJfuU/xcw
+         aQuoHFkfg1HmkCYfsxxQRXCVMC1IL2BF0CtoMM5O/pE9iQabewoG0wXgboFqxYqXFF
+         KYr3ztYt5rn7A==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     ceph-devel@vger.kernel.org
+Cc:     idryomov@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] ceph: move CEPH_SUPER_MAGIC definition to magic.h
+Date:   Mon, 10 Jan 2022 18:50:22 -0500
+Message-Id: <20220110235022.138723-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 08:22:57AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.91 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
-> Anything received after that time might be too late.
-> 
+The uapi headers are missing the ceph definition. Move it there so
+userland apps can ID cephfs.
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 472 pass: 472 fail: 0
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/ceph/super.c            | 2 ++
+ fs/ceph/super.h            | 3 ---
+ include/uapi/linux/magic.h | 1 +
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+index bab61232dc5a..9679275c875d 100644
+--- a/fs/ceph/super.c
++++ b/fs/ceph/super.c
+@@ -27,6 +27,8 @@
+ #include <linux/ceph/auth.h>
+ #include <linux/ceph/debugfs.h>
+ 
++#include <uapi/linux/magic.h>
++
+ static DEFINE_SPINLOCK(ceph_fsc_lock);
+ static LIST_HEAD(ceph_fsc_list);
+ 
+diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+index ac331aa07cfa..97e150724291 100644
+--- a/fs/ceph/super.h
++++ b/fs/ceph/super.h
+@@ -25,9 +25,6 @@
+ #include <linux/fscache.h>
+ #endif
+ 
+-/* f_type in struct statfs */
+-#define CEPH_SUPER_MAGIC 0x00c36400
+-
+ /* large granularity for statfs utilization stats to facilitate
+  * large volume sizes on 32-bit machines. */
+ #define CEPH_BLOCK_SHIFT   22  /* 4 MB */
+diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+index 35687dcb1a42..53a3c20394cf 100644
+--- a/include/uapi/linux/magic.h
++++ b/include/uapi/linux/magic.h
+@@ -6,6 +6,7 @@
+ #define AFFS_SUPER_MAGIC	0xadff
+ #define AFS_SUPER_MAGIC                0x5346414F
+ #define AUTOFS_SUPER_MAGIC	0x0187
++#define CEPH_SUPER_MAGIC	0x00c36400
+ #define CODA_SUPER_MAGIC	0x73757245
+ #define CRAMFS_MAGIC		0x28cd3d45	/* some random number */
+ #define CRAMFS_MAGIC_WEND	0x453dcd28	/* magic number with the wrong endianess */
+-- 
+2.34.1
 
-Guenter

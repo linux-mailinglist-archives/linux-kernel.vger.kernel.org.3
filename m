@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6A0489850
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AEB489853
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 13:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245271AbiAJMNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 07:13:09 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:36744 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235772AbiAJMNC (ORCPT
+        id S245290AbiAJMNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 07:13:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245270AbiAJMNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:13:02 -0500
-X-UUID: 179ec19712d345d59e3d4d68b1dc6a93-20220110
-X-UUID: 179ec19712d345d59e3d4d68b1dc6a93-20220110
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 923755758; Mon, 10 Jan 2022 20:12:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 10 Jan 2022 20:12:57 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 10 Jan 2022 20:12:57 +0800
-Message-ID: <0f3836a37d36dece52213d4b33e2b666cb187fc2.camel@mediatek.com>
-Subject: Re: GPL-1.0-licensed code for files
- drivers/clk/mediatek/clk-mt7986* included with commit ec97d23c8e22 ("clk:
- mediatek: add mt7986 clock support")
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-spdx@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Mon, 10 Jan 2022 20:12:57 +0800
-In-Reply-To: <CAKXUXMy8ywQXqqmOvvm9wKL_ikixRJOFgCcgu4OdPUPhjq6MhA@mail.gmail.com>
-References: <CAKXUXMy8ywQXqqmOvvm9wKL_ikixRJOFgCcgu4OdPUPhjq6MhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 10 Jan 2022 07:13:12 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C4EC06173F;
+        Mon, 10 Jan 2022 04:13:11 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r10so18706017wrc.3;
+        Mon, 10 Jan 2022 04:13:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OOzBzIjFVN6u7BElcoEO6FkXJ9FWYf3IYXCFi7b2xh4=;
+        b=PRBS3100yx21XLaSTy7o0vC1OAHBG7s88Sx5bs8uRqBTPNgw9wKhpaORrxP9UiG4Vy
+         o2GvOnJc80ag/7xolxsPifxxGPBYThGC0PD1GeSsAAPCuGP7Oku3/33LO7RANN8KsDdX
+         nYRUGlsZUBYIcwVjnDnGv25N2CE98M75fx0YpDRt+665QFjhrSM66tM0u1vyBW5/V+ol
+         dhz1rUKPcAotMWlQlMgwl/jv6ak+wMEaJ6fh6ZcDjHzTSJ883q/2y3ZH7QJq+ibUZ/Rk
+         xdgs0VUmu2sd48T1pW+f2WkzLKGZJMEkAs6Mw6gtw0uZvdsxFRMsnVr25lVl5uvuaVbM
+         W5rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OOzBzIjFVN6u7BElcoEO6FkXJ9FWYf3IYXCFi7b2xh4=;
+        b=eKExryc5IzSAtKvNYK1+yp8FKx5ibJh/SGo15r9bs1BxRekJpjkdf3PO4MYCucHvor
+         h7gIWD5E2zxwmJSBQ19CjADqIbxc6pwe5FhK3iVVyLXirvC0QWtWF9fLRBsWO6mDVy62
+         Y+hl+vskorVT4Zuw4ZoJtp0rt7V5d4ko+412+f/eDGbbMXKaWZZazI5sFWpbJt2vmpHv
+         WsasW/wXTfDCH4vqsKhwUV1jMhYh7qpUIyIMIh0WTtLJ7+ijGX2G8LYqRChmyMxpwxa6
+         SmkQICjTeJmICeKph18E4vJtWsKTHbPu/WeKX60si2LLvfMxsJ25Pw7mPn2yxYY1FG12
+         uzMA==
+X-Gm-Message-State: AOAM533CYhCa1rYbM8Xb+Rkb1mrmghMiEbzV5Z3TAmSFhiytcDESltnQ
+        yuWuoRu3fau8nlzSUuZuNMyiaJs9iDc=
+X-Google-Smtp-Source: ABdhPJxw4SDUrC4jil/wgwV/DimbC98CLJ5B1fXVHcCv3ERHTE4W73PCauhOfIgvvVH1LawPmh5wig==
+X-Received: by 2002:adf:dd0d:: with SMTP id a13mr2543026wrm.610.1641816790070;
+        Mon, 10 Jan 2022 04:13:10 -0800 (PST)
+Received: from standask-GA-A55M-S2HP ([188.123.115.255])
+        by smtp.gmail.com with ESMTPSA id d5sm6222633wms.28.2022.01.10.04.13.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 04:13:09 -0800 (PST)
+Date:   Mon, 10 Jan 2022 13:13:07 +0100
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: vendor-prefixes: add Huawei
+Message-ID: <20220110121307.GA1894@standask-GA-A55M-S2HP>
+References: <20220109132311.GA2827@standask-GA-A55M-S2HP>
+ <20220110095543.00001ac0@Huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110095543.00001ac0@Huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luka/Stephen,
+On Mon, Jan 10, 2022 at 09:55:43AM +0000, Jonathan Cameron wrote:
+> On Sun, 9 Jan 2022 14:23:11 +0100
+> Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
+> 
+> > Add vendor prefix for Huawei (https://www.huawei.com/en/)
+> 
+> Patch description should say why...  Is there an existing binding
+> using a huawei vendor prefix?
 
-This is my mistake, I seem to use an old license header on it.
-Just like "clk-mt7986-eth.c" in the same patch series,
+Not sure about bindings, but there are device trees using the huawei 
+vendor prefix. I'm aware of at least these two:
+/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
+/arch/arm64/boot/dts/qcom/msm8994-angler-rev-101.dts
 
+Similar situation with the other vendor prefix patches I've sent yesterday.
 
-https://lore.kernel.org/all/20211217121148.6753-4-sam.shih@mediatek.com/
+Should I send a v2 with an updated patch description for this and
+the other patches?
 
-I intend to license "clk-mt7986-apmixed.c", "clk-mt7986-infracfg.c",
-and "clk-mt7986-topckgen" under the kernel's standard GPL-2.0.
+Thanks,
 
-Should I need to resend this patch?
-Or I can just send a follow-up patch to fix it?
+Stanislav
 
-Regards,
-Sam
-
-
-On Mon, 2022-01-10 at 10:56 +0100, Lukas Bulwahn wrote:
-> Dear Sam,
+> 
+> Thanks,
+> 
+> Jonathan
 > 
 > 
-> Thanks for contributing the mt7986 clock support to the kernel
-> repository with commit ec97d23c8e22 ("clk: mediatek: add mt7986 clock
-> support").
+> > 
+> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > index a13d6a19c2b4..18ffa2d7379f 100644
+> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > @@ -515,6 +515,8 @@ patternProperties:
+> >      description: HannStar Display Co.
+> >    "^holtek,.*":
+> >      description: Holtek Semiconductor, Inc.
+> > +  "^huawei,.*":
+> > +    description: Huawei Technologies Co., Ltd.
+> >    "^hugsun,.*":
+> >      description: Shenzhen Hugsun Technology Co. Ltd.
+> >    "^hwacom,.*":
 > 
-> You have marked the files below with the GPL-1.0 License, which
-> ./scripts/spdxcheck.py identifies and warns about:
-> 
-> drivers/clk/mediatek/clk-mt7986-apmixed.c: 1:28 Invalid License ID:
-> GPL-1.0
-> drivers/clk/mediatek/clk-mt7986-infracfg.c: 1:28 Invalid License ID:
-> GPL-1.0
-> drivers/clk/mediatek/clk-mt7986-topckgen.c: 1:28 Invalid License ID:
-> GPL-1.0
-> 
-> The kernel's licensing rules are described here:
-> 
-> 
-https://urldefense.com/v3/__https://www.kernel.org/doc/html/latest/process/license-rules.html*kernel-licensing__;Iw!!CTRNKA9wMg0ARbw!3vjYIYa2VqgzRgsUxjx-mwtOtidbamcTDphKaMUo-7ql0YlaB4Qi_Xc-1vDpFfju$
->  
-> 
-> The GPL-1.0 is a deprecated license in the kernel repository.
-> 
-> Driver code that is licensed with GPL-1.0 might not be compatible
-> with
-> GPL-2.0. I am not a lawyer, and we probably do not want to require
-> all
-> users of your driver code to needlessly involve a lawyer to get such
-> a
-> statement on license compatibility.
-> 
-> Do you really intend to license this code under GPL-1.0 and are you
-> aware of all the consequences for other developers and users? Or is
-> this a mistake and you intend to license it under the kernel's
-> standard GPL-2.0 license?
-> 
-> 
-> Best regards,
-> 
-> Lukas
-

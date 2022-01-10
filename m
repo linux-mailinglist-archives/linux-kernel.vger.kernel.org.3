@@ -2,137 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1591B48A260
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8196548A26D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345227AbiAJWF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:05:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:58899 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345088AbiAJWFZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:05:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641852325; x=1673388325;
-  h=to:cc:subject:references:date:mime-version:
-   content-transfer-encoding:from:message-id:in-reply-to;
-  bh=0GDhTqMrEZ06SvbRnviHwB73FbyvKmj7DMslxvGR4ZQ=;
-  b=G5HLZKone7cSRZ0hs0TwKpQoB4QVRnk06k1apFvch2L/N7CUFJ66OMQN
-   8M8AOxDH/D0Sy2v64QXaKhq6NW3Giis53aU1CSpsJIN5UxBWDMAmJR7S9
-   zAPaLgqV3RsBPSmo561XNEw/lHej5dmAK9FccsUfp5lB/40n6FiAwNveS
-   tpP6HUmgIub0ROFPFQihfAkVyYiA1MbCj1LfqSlaH+zivW0XmaXyw83Gn
-   uwugHDkOG2h+YVtD3Y8rK0Cr4lRxCDKOqS4yMciXQSeuzodTSWx5wluDg
-   FYY0ZZKHYPmsaMX4J7j00FgOyAmGl/KFxZTNIFxvkIYivjSOCVksIXlEQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="240887473"
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="240887473"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 14:05:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="528453748"
-Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.255.35.106])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 10 Jan 2022 14:05:22 -0800
-Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc:     "Reinette Chatre" <reinette.chatre@intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
-        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
-References: <YawAWmodeNaUbzV8@iki.fi>
- <a1b14f33-5142-8cab-3b5f-4cc79b62091e@intel.com>
- <a24bc46e4ba8a69938a7f73012019ce0f61005c2.camel@kernel.org>
- <f6a55943-13ef-41ef-609a-6406cffef513@intel.com> <YcsklLw1uFyppSji@iki.fi>
- <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com> <YdgvFTIRboHwTgRT@iki.fi>
- <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net> <YdmxpTVM1JG8nxQ3@iki.fi>
- <YdmzDy1BOHgh8CII@iki.fi> <Ydm6RiIwuh3IspRI@iki.fi>
-Date:   Mon, 10 Jan 2022 16:05:21 -0600
+        id S241725AbiAJWGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:06:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50110 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240960AbiAJWGS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 17:06:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E442B8180C;
+        Mon, 10 Jan 2022 22:06:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED69C36AE9;
+        Mon, 10 Jan 2022 22:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641852376;
+        bh=0EknUIecnauWxeDKBTherSAPBBzXTdCu/8DysfmHeQc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DsqDjduXjGcJL/m+4zf3/kFjC3DcMLMLNwFj0dWWsqNPDTYM7drDmVjN4x+gT+moN
+         OxaJCCJzAoWiIqK+n6olTqp5lbbyMliNYd4IO4FtiQIdVRCygo0t46BNRfZ1tib7jM
+         IZeqEamENLNSwPuO2GFN4odNOPoG9mct8MMdXQdpWil3qkQ5vpsHEeKaSvLqTjnSEu
+         XU2E3JtJEvsaHf+nVtDvxMN7CF1PZq9mP+8yg52hU5rSfnU/p78QFGPDErH4mfIKw7
+         55COssmfGNU3MHMtGo9BeZrbWmsGbIJn7xjooG7FL/mTNzj1mYpS351Cnw3HW48sTA
+         4s6hP982+u5+w==
+Date:   Mon, 10 Jan 2022 14:06:15 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+Subject: [GIT PULL] xfs: new code for 5.17
+Message-ID: <20220110220615.GA656707@magnolia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-From:   "Haitao Huang" <haitao.huang@linux.intel.com>
-Organization: Intel Corp
-Message-ID: <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
-In-Reply-To: <Ydm6RiIwuh3IspRI@iki.fi>
-User-Agent: Opera Mail/1.0 (Win32)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>  
-wrote:
+Hi Linus,
 
-> On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
->> On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
->> > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
->> > > > > > OK, so the question is: do we need both or would a mechanism  
->> just
->> > > > > to extend
->> > > > > > permissions be sufficient?
->> > > > >
->> > > > > I do believe that we need both in order to support pages having  
->> only
->> > > > > the permissions required to support their intended use during  
->> the
->> > > > > time the
->> > > > > particular access is required. While technically it is possible  
->> to grant
->> > > > > pages all permissions they may need during their lifetime it is  
->> safer to
->> > > > > remove permissions when no longer required.
->> > > >
->> > > > So if we imagine a run-time: how EMODPR would be useful, and how  
->> using it
->> > > > would make things safer?
->> > > >
->> > > In scenarios of JIT compilers, once code is generated into RW pages,
->> > > modifying both PTE and EPCM permissions to RX would be a good  
->> defensive
->> > > measure. In that case, EMODPR is useful.
->> >
->> > What is the exact threat we are talking about?
->>
->> To add: it should be *significantly* critical thread, given that not
->> supporting only EAUG would leave us only one complex call pattern with
->> EACCEPT involvement.
->>
->> I'd even go to suggest to leave EMODPR out of the patch set, and  
->> introduce
->> it when there is PoC code for any of the existing run-time that
->> demonstrates the demand for it. Right now this way too speculative.
->>
->> Supporting EMODPE is IMHO by factors more critical.
->
-> At least it does not protected against enclave code because an enclave  
-> can
-> always choose not to EACCEPT any of the EMODPR requests. I'm not only
-> confused here about the actual threat but also the potential adversary  
-> and
-> target.
->
-I'm not sure I follow your thoughts here. The sequence should be for  
-enclave to request  EMODPR in the first place through runtime to kernel,  
-then to verify with EACCEPT that the OS indeed has done EMODPR.
-If enclave does not verify with EACCEPT, then its own code has  
-vulnerability. But this does not justify OS not providing the mechanism to  
-request EMODPR.
+Please pull this new code for Linux 5.17.  The big new feature here is
+that the mount code now only bothers to try to free stale COW staging
+extents if the fs unmounted uncleanly.  This should reduce mount times,
+particularly on filesystems supporting reflink and containing a large
+number of allocation groups.
 
-Similar to how we don't want have RWX code pages for normal Linux  
-application, when an enclave loads code pages (either directly or JIT  
-compiled from high level code ) into EAUG'd page (which has RW), we do not  
-want leave pages to be RWX for code to be executable, hence the need of  
-EMODPR request OS to reduce the permissions to RX once the code is ready  
-to execute.
+Everything else this cycle are bugfixes, as the iomap folios conversion
+should be plenty enough excitement for anyone.  That and I ran out of
+brain bandwidth after Thanksgiving last year.
 
-I believe this is needed for LibOS runtimes (e.g.,Gramine) loading  
-unmodified app binaries, or an enclave with JIT compiler (I think Enarx in  
-this category?). Experts from those project can confirm or contradict.  
-Intel SDK currently also has implementation to reduce permissions of RELRO  
-sections in ELF binaries to ReadOnly after relocation is done. In our new  
-EDMM user support[1] based on this patch series, we also support flows to  
-reduce permissions using EMODPR in a generic way.
+The branch merges cleanly against upstream as of a few minutes ago.
+Please let me know if anything else strange happens during the merge
+process.  There will definitely be a second pull request coming with
+at least one more bug fix and most probably a full withdrawal of the
+recently troublesome ALLOCSP ioctl family.
 
-[1]https://github.com/intel/linux-sgx/pull/751
+--D
+
+The following changes since commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c:
+
+  Linux 5.16-rc5 (2021-12-12 14:53:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-2
+
+for you to fetch changes up to 7e937bb3cbe1f6b9840a43f879aa6e3f1a5e6537:
+
+  xfs: warn about inodes with project id of -1 (2022-01-06 10:43:30 -0800)
+
+----------------------------------------------------------------
+New code for 5.17:
+ - Fix log recovery with da btree buffers when metauuid is in use.
+ - Fix type coercion problems in xattr buffer size validation.
+ - Fix a bug in online scrub dir leaf bestcount checking.
+ - Only run COW recovery when recovering the log.
+ - Fix symlink target buffer UAF problems and symlink locking problems
+   by not exposing xfs innards to the VFS.
+ - Fix incorrect quotaoff lock usage.
+ - Don't let transactions cancel cleanly if they have deferred work
+   items attached.
+ - Fix a UAF when we're deciding if we need to relog an intent item.
+ - Reduce kvmalloc overhead for log shadow buffers.
+ - Clean up sysfs attr group usage.
+ - Fix a bug where scrub's bmap/rmap checking could race with a quota
+   file block allocation due to insufficient locking.
+ - Teach scrub to complain about invalid project ids.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      xfs: prevent a WARN_ONCE() in xfs_ioc_attr_list()
+
+Darrick J. Wong (8):
+      xfs: shut down filesystem if we xfs_trans_cancel with deferred work items
+      xfs: fix quotaoff mutex usage now that we don't support disabling it
+      xfs: don't expose internal symlink metadata buffers to the vfs
+      xfs: only run COW extent recovery when there are no live extents
+      xfs: fix a bug in the online fsck directory leaf1 bestcount check
+      xfs: prevent UAF in xfs_log_item_in_current_chkpt
+      xfs: hold quota inode ILOCK_EXCL until the end of dqalloc
+      xfs: warn about inodes with project id of -1
+
+Dave Chinner (2):
+      xfs: check sb_meta_uuid for dabuf buffer recovery
+      xfs: reduce kvmalloc overhead for CIL shadow buffers
+
+Greg Kroah-Hartman (1):
+      xfs: sysfs: use default_groups in kobj_type
+
+Jiapeng Chong (1):
+      xfs: Remove redundant assignment of mp
+
+Yang Xu (1):
+      xfs: Fix comments mentioning xfs_ialloc
+
+ fs/xfs/scrub/dir.c            | 15 +++++---
+ fs/xfs/scrub/inode.c          | 14 ++++++++
+ fs/xfs/scrub/quota.c          |  4 +--
+ fs/xfs/scrub/repair.c         |  3 ++
+ fs/xfs/scrub/scrub.c          |  4 ---
+ fs/xfs/scrub/scrub.h          |  1 -
+ fs/xfs/xfs_buf_item_recover.c |  2 +-
+ fs/xfs/xfs_dquot.c            | 79 +++++++++++++++----------------------------
+ fs/xfs/xfs_error.c            |  3 +-
+ fs/xfs/xfs_icache.c           |  3 +-
+ fs/xfs/xfs_ioctl.c            |  2 +-
+ fs/xfs/xfs_ioctl.h            |  5 +--
+ fs/xfs/xfs_iops.c             | 40 +++-------------------
+ fs/xfs/xfs_log_cil.c          | 52 ++++++++++++++++++++--------
+ fs/xfs/xfs_log_recover.c      | 26 ++++++++++++--
+ fs/xfs/xfs_mount.c            | 10 ------
+ fs/xfs/xfs_qm_syscalls.c      | 11 +-----
+ fs/xfs/xfs_reflink.c          |  5 ++-
+ fs/xfs/xfs_super.c            |  9 -----
+ fs/xfs/xfs_symlink.c          | 27 ++++++++++-----
+ fs/xfs/xfs_sysfs.c            | 16 +++++----
+ fs/xfs/xfs_trans.c            | 11 +++++-
+ 22 files changed, 175 insertions(+), 167 deletions(-)

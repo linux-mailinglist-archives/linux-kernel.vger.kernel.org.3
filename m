@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC1F489789
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F2148978D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 12:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244796AbiAJLc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 06:32:58 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:45060 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244737AbiAJLcY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 06:32:24 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 92B891F39D;
-        Mon, 10 Jan 2022 11:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641814343; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=5yczoqJ4BQg2WL0fyAH+pYH9xmK8XAHtm1nKm+BOQPg=;
-        b=hfDPkNvQadiYfysoJqbMBBilYpiPfZ+TNVx5ycRY9qL5zvqrpr8fw8UqsBEI4ZdcS7WeYZ
-        oIXTHrrDH0ssgW7u4HDj5fRNWHPes6JqvGQqbp/6fiuOC4Rt00E3p0AahKWG42AM19kmh+
-        Z9Xsk1d1tU2vUAOqDZl5gBQayZvCnrc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641814343;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=5yczoqJ4BQg2WL0fyAH+pYH9xmK8XAHtm1nKm+BOQPg=;
-        b=ixrDC86H4UxFyog5/mx/RsSXkmRVtJXUw/lNYrJAXOZvuoeOrtW0snePz5XjHI/TSDKHvy
-        LaZBGiaiGhFJz2Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BF07139ED;
-        Mon, 10 Jan 2022 11:32:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sN/PHEcZ3GFvdAAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 10 Jan 2022 11:32:23 +0000
-Date:   Mon, 10 Jan 2022 12:32:26 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/vdso for v5.17
-Message-ID: <YdwZStOiA4hwQsLg@zn.tnic>
+        id S244813AbiAJLeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 06:34:31 -0500
+Received: from mail.avm.de ([212.42.244.120]:52558 "EHLO mail.avm.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244792AbiAJLdL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:33:11 -0500
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Mon, 10 Jan 2022 12:32:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1641814376; bh=S/wl00Xao0HVzJ52aNpht4KYTslyk0FTwR5JzlsZwy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hIqnbQ4ihVbFXBy3q7sLNtB2QcQvhkD4KpMHcY7xAPw1u7KAMBDfFv6vb4uk+ShPk
+         DBYnVgIutjPKzElJO2ragMF0cxqOjZI+MjS35mHSL+RkqwznctSrrtUqw3Spddd1j/
+         NA3AfcV9nge1k5yTqHeX9pmSYIgYxphZJHOZLUAQ=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id B8DF480514;
+        Mon, 10 Jan 2022 12:32:56 +0100 (CET)
+Date:   Mon, 10 Jan 2022 12:32:55 +0100
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 2/5] kbuild: drop $(size_append) from cmd_zstd
+Message-ID: <YdwZZ+1RQ5tcQZrt@buildd.core.avm.de>
+References: <20220109181529.351420-1-masahiroy@kernel.org>
+ <20220109181529.351420-2-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220109181529.351420-2-masahiroy@kernel.org>
+X-purgate-ID: 149429::1641814376-00000568-3793358D/0/0
+X-purgate-type: clean
+X-purgate-size: 1645
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Jan 10, 2022 at 03:15:26AM +0900, Masahiro Yamada wrote:
+> The appended file size is only used by the decompressors, which some
+> architectures support.
+> 
+> As the comment "zstd22 is used for kernel compression" says, cmd_zstd22
+> is used in arch/{mips,s390,x86}/boot/compressed/Makefile.
+> 
+> On the other hand, there is no good reason to append the file size to
+> cmd_zstd since it is used for other purposes.
+> 
+> Actually cmd_zstd is only used in usr/Makefile, where the appended file
+> size is rather harmful.
+> 
+> The initramfs with its file size appended is considered as corrupted
+> data, so commit 65e00e04e5ae ("initramfs: refactor the initramfs build
+> rules") added 'override size_append := :' to make it no-op.
+> 
+> As a conclusion, this $(size_append) should not exist here.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-please pull two x86/vdso build fixes for 5.17.
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
 
-Thx.
 
----
-
-The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
-
-  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_vdso_for_v5.17_rc1
-
-for you to fetch changes up to 9102fa34604159642625f42d7f801f1e04d9ca12:
-
-  x86/purgatory: Remove -nostdlib compiler flag (2021-12-30 14:13:06 +0100)
-
-----------------------------------------------------------------
-- Remove -nostdlib compiler flag now that the vDSO uses the linker
-instead of the compiler driver to link files
-
-----------------------------------------------------------------
-Masahiro Yamada (2):
-      x86/vdso: Remove -nostdlib compiler flag
-      x86/purgatory: Remove -nostdlib compiler flag
-
- arch/x86/entry/vdso/Makefile | 2 +-
- arch/x86/purgatory/Makefile  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+> 
+>  scripts/Makefile.lib | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index d1f865b8c0cb..5366466ea0e4 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -473,7 +473,7 @@ quiet_cmd_xzmisc = XZMISC  $@
+>  # be used because it would require zstd to allocate a 128 MB buffer.
+>  
+>  quiet_cmd_zstd = ZSTD    $@
+> -      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } > $@
+> +      cmd_zstd = cat $(real-prereqs) | $(ZSTD) -19 > $@
+>  
+>  quiet_cmd_zstd22 = ZSTD22  $@
+>        cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) -22 --ultra; $(size_append); } > $@
+> -- 
+> 2.32.0
+> 

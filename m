@@ -2,169 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26014489ADF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FE7489AE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 14:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbiAJNzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 08:55:04 -0500
-Received: from mga03.intel.com ([134.134.136.65]:34264 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230145AbiAJNzB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:55:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641822901; x=1673358901;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2Zp7VMePQmtzmmh0s8Eo1QaSbTDDrEWbBROEmgXFs2I=;
-  b=jlSeRhnvIEKrTDD3bEb0rLES/FRCwl4TXUZKyHxmAmSVUbWfSxhc/Hr/
-   /CijFpmow8ogOi+h1fCHBBXNRYtGzx+aB1v48l4ZwxZehKERm6YYp/02F
-   PWXup1N2L8JLUL49NicGlbb5RSZFli1ktxzzK5wbkU+9WXFDyp4Uf7nX7
-   mZeSqFekGcCwtNE6+V1HtDnsVkfBKPjZsKMZHGccqYHEUa1uFVkphHVap
-   VCXJi9xYsGehe0Y2y+Q//6ADwso04sOIIhAdfo38NrhFkvDT0Vri3eTtN
-   BOEDETxukhP4H5F/j0bPpyGUf2zdvj/PncYdMfQhzCx5fCBAZRP/RW5il
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="243179109"
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="243179109"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 05:55:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,277,1635231600"; 
-   d="scan'208";a="622679026"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 05:54:59 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6v8U-0003Ze-KA; Mon, 10 Jan 2022 13:54:58 +0000
-Date:   Mon, 10 Jan 2022 21:54:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1518/2380]
- arch/powerpc/include/asm/book3s/64/hash.h:248:22: error: expected '=', ',',
- ';', 'asm' or '__attribute__' before 'hash__vmemmap_create_mapping'
-Message-ID: <202201102123.ZtrMza46-lkp@intel.com>
+        id S234915AbiAJNzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 08:55:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41362 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234685AbiAJNzH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 08:55:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFE8DB81654;
+        Mon, 10 Jan 2022 13:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BBDDC36AE5;
+        Mon, 10 Jan 2022 13:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641822904;
+        bh=rj4fKmBFoTHA0iE6ZmISK6tpcbjzpc6k3C0OppRQfXI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=mLOFKpfG5t6VcVdIo8HnBo4TNSUN0tKjo69CxcZVSODX4E/wp4Qq2JAJ/RDV2iBbg
+         18oBED1NTpckFJA7zbUwmTe1QZE4Wrro1ocg82W3n7wpQftGoLJTQU3AGP/LJ9nGtl
+         Q1izKRVSRFl6rZoA9r+DPbZMSAWeVNeOvLI1TwuOkyOMR0Vxizmi4PdQpSPxz5GxbU
+         IUGNwPnsHWCL6bNde0DXS2J3fJM+zoTRiiZyZjjXvYXH9EbYJcQEeV9hygDLBG7CEx
+         yorgSW3rmF3Zs+Ti399XXtPitqyOhR30/IelIneFxcNpCUNwpdPhrkyTKHSXYqYfRA
+         etY7UfhX/G3nQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?utf-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list\:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list\:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com
+Subject: Re: [PATCH v2 12/35] brcmfmac: pcie: Fix crashes due to early IRQs
+References: <20220104072658.69756-1-marcan@marcan.st>
+        <20220104072658.69756-13-marcan@marcan.st>
+        <CAHp75VdeNhmRUW1mFY-H5vyzTRHZ9Y2dv03eo+rfcTQKjn9tuQ@mail.gmail.com>
+        <759f46bd-bfc2-62c6-6257-a2a0d702e2b6@marcan.st>
+Date:   Mon, 10 Jan 2022 15:54:54 +0200
+In-Reply-To: <759f46bd-bfc2-62c6-6257-a2a0d702e2b6@marcan.st> (Hector Martin's
+        message of "Thu, 6 Jan 2022 22:10:45 +0900")
+Message-ID: <87bl0jlmq9.fsf@tynnyri.adurom.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   351bfbf7f1e8dce84b605c8007c98dd603c4ca4d
-commit: 2df1932116ea94f774804fbd4fcfc0eb60704764 [1518/2380] headers/deps: printk: Reduce <linux/printk.h> header dependencies
-config: powerpc64-randconfig-r001-20220109 (https://download.01.org/0day-ci/archive/20220110/202201102123.ZtrMza46-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=2df1932116ea94f774804fbd4fcfc0eb60704764
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 2df1932116ea94f774804fbd4fcfc0eb60704764
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc prepare
+Hector Martin <marcan@marcan.st> writes:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On 04/01/2022 23.12, Andy Shevchenko wrote:
+>> On Tue, Jan 4, 2022 at 9:29 AM Hector Martin <marcan@marcan.st> wrote:
+>>>
+>>> The driver was enabling IRQs before the message processing was
+>>> initialized. This could cause IRQs to come in too early and crash the
+>>> driver. Instead, move the IRQ enable and hostready to a bus preinit
+>>> function, at which point everything is properly initialized.
+>>>
+>>> Fixes: 9e37f045d5e7 ("brcmfmac: Adding PCIe bus layer support.")
+>> 
+>> You should gather fixes at the beginning of the series, and even
+>> possible to send them as a separate series. In the current state it's
+>> unclear if there are dependencies on your new feature (must not be for
+>> fixes that meant to be backported).
+>> 
+>
+> Thanks, I wasn't sure what order you wanted those in. I'll put them at
+> the top for v3. I think none of those should have any dependencies on
+> the rest of the patches, modulo some trivial rebase wrangling.
 
-All errors (new ones prefixed by >>):
+If there are no dependencies, please send the brcmfmac fixes separately
+so that I can apply them earlier.
 
-   In file included from arch/powerpc/include/asm/lppaca.h:46,
-                    from arch/powerpc/include/asm/paca.h:17,
-                    from arch/powerpc/include/asm/current.h:13,
-                    from include/linux/preempt.h:10,
-                    from arch/powerpc/kernel/asm-offsets.c:12:
-   arch/powerpc/include/asm/mmu.h: In function 'strict_kernel_rwx_enabled':
-   arch/powerpc/include/asm/mmu.h:340:16: error: 'rodata_enabled' undeclared (first use in this function); did you mean 'radix_enabled'?
-     340 |         return rodata_enabled;
-         |                ^~~~~~~~~~~~~~
-         |                radix_enabled
-   arch/powerpc/include/asm/mmu.h:340:16: note: each undeclared identifier is reported only once for each function it appears in
-   In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:299,
-                    from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                    from arch/powerpc/include/asm/book3s/64/mmu.h:33,
-                    from arch/powerpc/include/asm/mmu.h:395,
-                    from arch/powerpc/include/asm/lppaca.h:46,
-                    from arch/powerpc/include/asm/paca.h:17,
-                    from arch/powerpc/include/asm/current.h:13,
-                    from include/linux/preempt.h:10,
-                    from arch/powerpc/kernel/asm-offsets.c:12:
-   arch/powerpc/include/asm/book3s/64/hash.h: At top level:
->> arch/powerpc/include/asm/book3s/64/hash.h:248:22: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'hash__vmemmap_create_mapping'
-     248 | extern int __meminit hash__vmemmap_create_mapping(unsigned long start,
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:300,
-                    from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                    from arch/powerpc/include/asm/book3s/64/mmu.h:33,
-                    from arch/powerpc/include/asm/mmu.h:395,
-                    from arch/powerpc/include/asm/lppaca.h:46,
-                    from arch/powerpc/include/asm/paca.h:17,
-                    from arch/powerpc/include/asm/current.h:13,
-                    from include/linux/preempt.h:10,
-                    from arch/powerpc/kernel/asm-offsets.c:12:
->> arch/powerpc/include/asm/book3s/64/radix.h:289:22: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'radix__vmemmap_create_mapping'
-     289 | extern int __meminit radix__vmemmap_create_mapping(unsigned long start,
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                    from arch/powerpc/include/asm/book3s/64/mmu.h:33,
-                    from arch/powerpc/include/asm/mmu.h:395,
-                    from arch/powerpc/include/asm/lppaca.h:46,
-                    from arch/powerpc/include/asm/paca.h:17,
-                    from arch/powerpc/include/asm/current.h:13,
-                    from include/linux/preempt.h:10,
-                    from arch/powerpc/kernel/asm-offsets.c:12:
->> arch/powerpc/include/asm/book3s/64/pgtable.h:1085:29: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'vmemmap_create_mapping'
-    1085 | static inline int __meminit vmemmap_create_mapping(unsigned long start,
-         |                             ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/powerpc/include/asm/mmu.h:395,
-                    from arch/powerpc/include/asm/lppaca.h:46,
-                    from arch/powerpc/include/asm/paca.h:17,
-                    from arch/powerpc/include/asm/current.h:13,
-                    from include/linux/preempt.h:10,
-                    from arch/powerpc/kernel/asm-offsets.c:12:
->> arch/powerpc/include/asm/book3s/64/mmu.h:212:27: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'early_init_mmu'
-     212 | static inline void __init early_init_mmu(void)
-         |                           ^~~~~~~~~~~~~~
-   In file included from include/linux/sched.h:12,
-                    from include/linux/sched/thread_info_api.h:5,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from arch/powerpc/kernel/asm-offsets.c:12:
-   include/linux/sched/per_task.h:48:11: fatal error: generated/asm-offsets.h: No such file or directory
-      48 | # include <generated/asm-offsets.h>
-         |           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-   make[2]: *** [scripts/Makefile.build:121: arch/powerpc/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1197: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
-vim +248 arch/powerpc/include/asm/book3s/64/hash.h
-
-c605782b1c3f1c arch/powerpc/include/asm/pte-hash64.h     Benjamin Herrenschmidt 2009-03-10  245  
-31a14fae92b29b arch/powerpc/include/asm/book3s/64/hash.h Aneesh Kumar K.V       2016-04-29  246  
-c766ee72235d09 arch/powerpc/include/asm/book3s/64/hash.h Christophe Leroy       2018-10-09  247  int hash__map_kernel_page(unsigned long ea, unsigned long pa, pgprot_t prot);
-31a14fae92b29b arch/powerpc/include/asm/book3s/64/hash.h Aneesh Kumar K.V       2016-04-29 @248  extern int __meminit hash__vmemmap_create_mapping(unsigned long start,
-31a14fae92b29b arch/powerpc/include/asm/book3s/64/hash.h Aneesh Kumar K.V       2016-04-29  249  					      unsigned long page_size,
-31a14fae92b29b arch/powerpc/include/asm/book3s/64/hash.h Aneesh Kumar K.V       2016-04-29  250  					      unsigned long phys);
-31a14fae92b29b arch/powerpc/include/asm/book3s/64/hash.h Aneesh Kumar K.V       2016-04-29  251  extern void hash__vmemmap_remove_mapping(unsigned long start,
-31a14fae92b29b arch/powerpc/include/asm/book3s/64/hash.h Aneesh Kumar K.V       2016-04-29  252  				     unsigned long page_size);
-32b53c012e0bfe arch/powerpc/include/asm/book3s/64/hash.h Reza Arbab             2017-01-03  253  
-
-:::::: The code at line 248 was first introduced by commit
-:::::: 31a14fae92b29b7a7fcc65600f072bf448d3b0eb powerpc/mm: Abstraction for vmemmap and map_kernel_page()
-
-:::::: TO: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

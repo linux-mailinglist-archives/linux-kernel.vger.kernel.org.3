@@ -2,117 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E240C48967F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD20489688
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244087AbiAJKhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:37:35 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:45004 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244040AbiAJKhU (ORCPT
+        id S244101AbiAJKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:38:51 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:44980 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244063AbiAJKiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:37:20 -0500
-Received: by mail-io1-f70.google.com with SMTP id i188-20020a6b3bc5000000b00601decb6241so10756728ioa.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:37:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=cF9yMMM0LXw4+7p5DQb3zA2JCMu73Tc7rO6lZ4gxgdY=;
-        b=yV6ifNZWn6sH+KN6Pkk8ueQqCTYCMjflQHp6OGf8jl7+5GdkGqCb2uhYt0T6BbjnZE
-         bZBBGaEJ1U9bQUFyqdjnO9h8BfxqNb+vuEuVkeR4Xzc/RcTcExZQdFEc7mFtrWC19C/K
-         puxGAqKj7Hvk23Lw5WZDgAg/HkH+KwqcwaHA7FyM/nLhKPzi9dG8aLskPmDRL/MxDQQH
-         Z8g6oWqqziQqCzQt5rh0R8ywsp2Bb6xAZVjIQyVIoa5rDxV3SrAXioMi3AMiDHAmoxVV
-         wsyn1tRy5l/Lx6FRHGfjts7Md3yLAsMY+yR2GXtbcHXWjcgi+lTxOdkdzsENxpGXfY1C
-         ihSA==
-X-Gm-Message-State: AOAM533Au2R08wuqXTLQ4lCajn8zJw1J/nQcg+RKvT1QbqykDAo1kle8
-        NyPqbRpjCCoc4GDa7lejOBDSO3tr0eu+n1mnProNVWTl75hE
-X-Google-Smtp-Source: ABdhPJwK7h9XQeOTKKEbkI+yM+q6pIh7wdRTvuICG7cv2ZF8jJlbbXiqTqqpMvQjBMy0uXymJNvZ/e0uYFB5r8oI/hXaMC+dyQcP
+        Mon, 10 Jan 2022 05:38:04 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20A9V4IQ030680;
+        Mon, 10 Jan 2022 11:37:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=ltuKY3JbZ9a8gnDMbB/xLmLbXhMhu4XfcFmrhNwLzSU=;
+ b=puEdB7FwTo5ZqfbW9w6h8VvccFHdyT7TqxDMeKo8OWELlPslVpd/OcpdjmcDrHTi9/yt
+ X3nKp4jkAK8ZgZj79voIn9XBnsumcaJ/a0kOQOZFxy5xluMeV/LSpP1HmHndwlHIJhq+
+ Kb9ha/tS7d33SGyHIh8gAze9WjZEiUoTtjymq5JCjwHO07tDvr9qESvqmAvSvDDZB8ow
+ dwxPzdcWpEErcqH/k71R4FU9bU0bz60UHUakVhUwlCKDYicKXMDd0WahiMLnzro8zNB+
+ 0B7AjqAgGJXNVkpSdCDymvgV10JFf/vxnlDWYqaEyljYOsS0FYnlIZGiW7cPqQasLMG7 TA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dgj85rakv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jan 2022 11:37:42 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3896D10002A;
+        Mon, 10 Jan 2022 11:37:40 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2AFE9235F0F;
+        Mon, 10 Jan 2022 11:37:40 +0100 (CET)
+Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 10 Jan 2022 11:37:39
+ +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <hugues.fruchet@foss.st.com>, <mchehab@kernel.org>
+CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <alain.volmat@foss.st.com>
+Subject: [PATCH] media: stm32: dcmi: create a dma scatterlist based on DMA max_sg_burst value
+Date:   Mon, 10 Jan 2022 11:37:39 +0100
+Message-ID: <20220110103739.118426-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2507:: with SMTP id v7mr34538579jat.70.1641811039627;
- Mon, 10 Jan 2022 02:37:19 -0800 (PST)
-Date:   Mon, 10 Jan 2022 02:37:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ce327f05d537ebf7@google.com>
-Subject: [syzbot] WARNING: bad unlock balance in rxrpc_do_sendmsg
-From:   syzbot <syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com, kuba@kernel.org,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        marc.dionne@auristor.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-10_04,2022-01-10_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Prior to submitting a transfer to the DMA, the client should first check
+the capabilities of the DMA channel in term of maximum of each segment.
+This is given by the max_sg_burst value reported by dma_get_slave_caps API.
+Based on that, if the transfer is larger than what can be handled by the
+DMA channel, we split the transfer into several scatterlist elements.
 
-syzbot found the following issue on:
-
-HEAD commit:    438645193e59 Merge tag 'pinctrl-v5.16-3' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17046cfdb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=48863e33ecce99a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=7f0483225d0c94cb3441
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a9dd99b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fdd6fdb00000
-
-Bisection is inconclusive: the issue happens on the oldest tested release.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a5b595b00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15a5b595b00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a5b595b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com
-
-=====================================
-WARNING: bad unlock balance detected!
-5.16.0-rc6-syzkaller #0 Not tainted
--------------------------------------
-syz-executor011/3597 is trying to release lock (&call->user_mutex) at:
-[<ffffffff885163a3>] rxrpc_do_sendmsg+0xc13/0x1350 net/rxrpc/sendmsg.c:748
-but there are no more locks to release!
-
-other info that might help us debug this:
-no locks held by syz-executor011/3597.
-
-stack backtrace:
-CPU: 1 PID: 3597 Comm: syz-executor011 Not tainted 5.16.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_unlock_imbalance_bug include/trace/events/lock.h:58 [inline]
- __lock_release kernel/locking/lockdep.c:5306 [inline]
- lock_release.cold+0x49/0x4e kernel/locking/lockdep.c:5657
- __mutex_unlock_slowpath+0x99/0x5e0 kernel/locking/mutex.c:900
- rxrpc_do_sendmsg+0xc13/0x1350 net/rxrpc/sendmsg.c:748
- rxrpc_sendmsg+0x420/0x630 net/rxrpc/af_rxrpc.c:561
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:724
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f65339e7df9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f653399a318 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f6533a703e8 RCX: 00007f65339e7df9
-RDX: 00
-
-
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/media/platform/stm32/stm32-dcmi.c | 47 ++++++++++++++++++-----
+ 1 file changed, 37 insertions(+), 10 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index e1b17c05229c..ee170e999a88 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -113,7 +113,7 @@ struct dcmi_framesize {
+ struct dcmi_buf {
+ 	struct vb2_v4l2_buffer	vb;
+ 	bool			prepared;
+-	dma_addr_t		paddr;
++	struct sg_table		sgt;
+ 	size_t			size;
+ 	struct list_head	list;
+ };
+@@ -157,6 +157,7 @@ struct stm32_dcmi {
+ 	enum state			state;
+ 	struct dma_chan			*dma_chan;
+ 	dma_cookie_t			dma_cookie;
++	u32				dma_max_burst;
+ 	u32				misr;
+ 	int				errors_count;
+ 	int				overrun_count;
+@@ -326,13 +327,11 @@ static int dcmi_start_dma(struct stm32_dcmi *dcmi,
+ 	mutex_lock(&dcmi->dma_lock);
+ 
+ 	/* Prepare a DMA transaction */
+-	desc = dmaengine_prep_slave_single(dcmi->dma_chan, buf->paddr,
+-					   buf->size,
++	desc = dmaengine_prep_slave_sg(dcmi->dma_chan, buf->sgt.sgl, buf->sgt.nents,
+ 					   DMA_DEV_TO_MEM,
+ 					   DMA_PREP_INTERRUPT);
+ 	if (!desc) {
+-		dev_err(dcmi->dev, "%s: DMA dmaengine_prep_slave_single failed for buffer phy=%pad size=%zu\n",
+-			__func__, &buf->paddr, buf->size);
++		dev_err(dcmi->dev, "%s: DMA dmaengine_prep_slave_sg failed\n", __func__);
+ 		mutex_unlock(&dcmi->dma_lock);
+ 		return -EINVAL;
+ 	}
+@@ -524,6 +523,10 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+ 	struct dcmi_buf *buf = container_of(vbuf, struct dcmi_buf, vb);
+ 	unsigned long size;
++	unsigned int num_sgs = 1;
++	dma_addr_t dma_buf;
++	struct scatterlist *sg;
++	int i, ret;
+ 
+ 	size = dcmi->fmt.fmt.pix.sizeimage;
+ 
+@@ -537,15 +540,33 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+ 
+ 	if (!buf->prepared) {
+ 		/* Get memory addresses */
+-		buf->paddr =
+-			vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+ 		buf->size = vb2_plane_size(&buf->vb.vb2_buf, 0);
+-		buf->prepared = true;
++		if (buf->size > dcmi->dma_max_burst)
++			num_sgs = DIV_ROUND_UP(buf->size, dcmi->dma_max_burst);
+ 
+-		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
++		ret = sg_alloc_table(&buf->sgt, num_sgs, GFP_ATOMIC);
++		if (ret) {
++			dev_err(dcmi->dev, "sg table alloc failed\n");
++			return ret;
++		}
++
++		dma_buf = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+ 
+ 		dev_dbg(dcmi->dev, "buffer[%d] phy=%pad size=%zu\n",
+-			vb->index, &buf->paddr, buf->size);
++			vb->index, &dma_buf, buf->size);
++
++		for_each_sg(buf->sgt.sgl, sg, num_sgs, i) {
++			size_t bytes = min_t(size_t, size, dcmi->dma_max_burst);
++
++			sg_dma_address(sg) = dma_buf;
++			sg_dma_len(sg) = bytes;
++			dma_buf += bytes;
++			size -= bytes;
++		}
++
++		buf->prepared = true;
++
++		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
+ 	}
+ 
+ 	return 0;
+@@ -1866,6 +1887,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	struct stm32_dcmi *dcmi;
+ 	struct vb2_queue *q;
+ 	struct dma_chan *chan;
++	struct dma_slave_caps caps;
+ 	struct clk *mclk;
+ 	int irq;
+ 	int ret = 0;
+@@ -1953,6 +1975,11 @@ static int dcmi_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	dcmi->dma_max_burst = UINT_MAX;
++	ret = dma_get_slave_caps(chan, &caps);
++	if (!ret && caps.max_sg_burst)
++		dcmi->dma_max_burst = caps.max_sg_burst	* DMA_SLAVE_BUSWIDTH_4_BYTES;
++
+ 	spin_lock_init(&dcmi->irqlock);
+ 	mutex_init(&dcmi->lock);
+ 	mutex_init(&dcmi->dma_lock);
+-- 
+2.25.1
+

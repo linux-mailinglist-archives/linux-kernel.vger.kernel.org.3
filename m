@@ -2,80 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4073D488EB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 03:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD998488EBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 03:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbiAJCnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 21:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237100AbiAJCnS (ORCPT
+        id S238236AbiAJCoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 21:44:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42144 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238225AbiAJCof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 21:43:18 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C84C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 18:43:17 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p14so10718875plf.3
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 18:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qyKCKCCmcuULoAA1E8bR7TAp/hXUDe7XCt+iKUscsLk=;
-        b=d204BN7YeRalLSQLTofWmZ6ROqqMwa0ciqG++whwPpQZ8LnMOSnF622TXHwDxURXep
-         RIrcvqT9AQU09Lfw5mMe2Ip4VaO5vINC+TVSz8L2XCTzjKrrm5Fzatae3eT+9hocFK3w
-         MMkAu13bYACIkkU53ka3q6+el8HPWVkQIUm7IRExDGqM2QHr613LuUZTOneEw8j67LSB
-         cK8vcN4suSP+xcV1jmqO56uKFvmYV4yvPXvM90fgxEzw660DbCuDMjZ8Ez2rWe9hGZvL
-         TH5VHSl9lP8SNsRCrTbLYmymDTqXYLrLvJ4NKjHfhAXR/S4wRLMgrT8iNAxk+ndXg7AZ
-         yShg==
+        Sun, 9 Jan 2022 21:44:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641782674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SR5LJDR7Yuo7sdem+SKLe4DRKmUm4dsotpVpoRAp1vk=;
+        b=iDSoL5XpOh8awH2naZ9aIQH7nBMpW5+g3bOV4fN0CbCRWTB/TcEkvaAjHM6M47mYQ2PdWY
+        m5LDsqJDnXPYwpdXMhDaOjV0VPbVt4Ai/8wi2j1b2K2Ol5xLKzarJOWCaXYjkjbdBDiwGb
+        rxI+qRVuclLMwJSUaJUpZAyJQ0AhSec=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-0HnZodb4OJK3d9uMtFqh4Q-1; Sun, 09 Jan 2022 21:44:33 -0500
+X-MC-Unique: 0HnZodb4OJK3d9uMtFqh4Q-1
+Received: by mail-lf1-f72.google.com with SMTP id s16-20020a056512215000b0042bd76cb189so1994359lfr.6
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 18:44:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qyKCKCCmcuULoAA1E8bR7TAp/hXUDe7XCt+iKUscsLk=;
-        b=RT7vnCXsLMuuZZBJVF0vghmIdKtx+aH7A0xhV4IZuRQxD15Lw4oBMN6/M1iSJZ2kZs
-         9KdkOfT3VHkqpZMx3Tea+CzOshuQx22da9sn7fa50lgJvFayHlZRWps1EJ2WFtOdAUEl
-         ItFkNyX234dPIAlj56YWr6k/HYc4ryRTVhjN1v2EBiNqCpv5A9/AMqBkR8FiIw/s5bzY
-         tMYFeUbwxLLEW3nGsH9jRZGIEaRt6Csv2txb8i/8RjF72BbWYjtxNHsbUbzzH4gY07Qf
-         eFP0pjc0rpnnVkIeFkDwpRFeFKsVbFbYbRopLoH/TveXgsp6n+Gm0qXoKoB0hE0WxUrJ
-         RBIQ==
-X-Gm-Message-State: AOAM533WCH+JNpB5vt8MUvMpfI2LEXfQmMYykuwUP1d2+mmjZVQ3G/fu
-        vpjx3yueKuPBJ17cS8LRjGE=
-X-Google-Smtp-Source: ABdhPJzHvpcwy8jtSMlMuIpFbtSWWCI2itQfdxxE917XOCLsIRhv3vWHpnz1Tp+2gCkbVLApMuioeQ==
-X-Received: by 2002:a17:902:9a8b:b0:149:be04:40ab with SMTP id w11-20020a1709029a8b00b00149be0440abmr32242215plp.159.1641782596662;
-        Sun, 09 Jan 2022 18:43:16 -0800 (PST)
-Received: from VICKYMQLIN-NB1.localdomain ([159.226.95.33])
-        by smtp.gmail.com with ESMTPSA id o11sm4883817pfu.150.2022.01.09.18.43.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 09 Jan 2022 18:43:16 -0800 (PST)
-Date:   Mon, 10 Jan 2022 10:43:13 +0800
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        "Nagalla, Hari" <hnagalla@ti.com>
-Subject: Re: [PATCH] iommu/omap: Fix missing put_device() call in
- omap_iommu_probe_device
-Message-ID: <20220110022531.GA61@VICKYMQLIN-NB1.localdomain>
-References: <20220107080428.10873-1-linmq006@gmail.com>
- <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SR5LJDR7Yuo7sdem+SKLe4DRKmUm4dsotpVpoRAp1vk=;
+        b=D0g8jnZqo9RZm6StDbEq2Mc1Lcvd9gJGHHCh1d7SGQmJ7D/PhljxkyLWyABDzN86rr
+         rx95ZV9Y5PPjIooiAX+nE4L3uo1V+HexaJfexxm/9J/2OEyrUcmnKWmiQ6767BEyJa6m
+         OxOJyVloFXGRbHwlrNf4VqP00HD1iSZzifVzTQAP8pG0OQsStcZ1vHgOVhTxy2K2MeUp
+         FFeoQMwYeaO2CyNBJoBOqZ+BWgvVUpXbAMktLTRRdUkD1B90YGnOSajFM3cWbOzxN/zs
+         fVJ+dK64MJGzYeS5fow4/iLJ4bNngnxMhGTf6Aw04h1vfbCMFTzVzO+GMmr9twFtjaXt
+         sjvA==
+X-Gm-Message-State: AOAM531hv98CDpT/pLJLmD00aF6CWcfy4ZA8ZzUrzYVrLmS6BXZMF1a1
+        XNIDsrt+lU0UC/gDpkpmh+bRGjnpx6a6+E7SB8PZvfea0yTp/zjyqbSAfPNbcWL4RabrHPEX5et
+        QR8ysFW0YCjnjdvXSe/HOrRrc4GkU60PztEKyY9dI
+X-Received: by 2002:a2e:a40c:: with SMTP id p12mr60731337ljn.369.1641782672010;
+        Sun, 09 Jan 2022 18:44:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyn4yn6mbjfPrY7TWHh0U6HAgbKlHep+6bMRtnLiIJiqqtpsxe5AgSHe8T+kBeNVWG30nDbYW36WR7C6Guxyhg=
+X-Received: by 2002:a2e:a40c:: with SMTP id p12mr60731331ljn.369.1641782671854;
+ Sun, 09 Jan 2022 18:44:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220108180041.4601-1-mst@redhat.com>
+In-Reply-To: <20220108180041.4601-1-mst@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 10 Jan 2022 10:44:20 +0800
+Message-ID: <CACGkMEv4YY7z2eF2EHt=KvmJ+se5cAs3vRP0Wi2HdRYFhe80Hw@mail.gmail.com>
+Subject: Re: [PATCH] vdpa/mlx5: fix endian-ness for max vqs
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Eli Cohen <elic@nvidia.com>, kernel test robot <lkp@intel.com>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suman Anna,
-On Fri, Jan 07, 2022 at 08:42:16AM -0600, Suman Anna wrote:
-> Hi Miaoqian,
-> 
-> 
-> > Add the corresponding 'put_device()' in the error handling paths.
-> 
-> Also, need it in the regular path, not just in error handling path.
-I think after calling platform_get_drvdata() normally, the
-reference will be released in other functions, so don't need it in the
-regular path.
+On Sun, Jan 9, 2022 at 2:00 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> sparse warnings: (new ones prefixed by >>)
+> >> drivers/vdpa/mlx5/net/mlx5_vnet.c:1247:23: sparse: sparse: cast to restricted __le16
+> >> drivers/vdpa/mlx5/net/mlx5_vnet.c:1247:23: sparse: sparse: cast from restricted __virtio16
+>
+> > 1247                  num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
+>
+> Address this using the appropriate wrapper.
+>
+> Fixes: 7620d51af29a ("vdpa/mlx5: Support configuring max data virtqueue")
+> Cc: "Eli Cohen" <elic@nvidia.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 84b1919015ce..d1ff65065fb1 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -1242,7 +1242,8 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+>         if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+>                 num = 1;
+>         else
+> -               num = le16_to_cpu(ndev->config.max_virtqueue_pairs);
+> +               num = mlx5vdpa16_to_cpu(&ndev->mvdev,
+> +                                       ndev->config.max_virtqueue_pairs);
+>
+>         max_rqt = min_t(int, roundup_pow_of_two(num),
+>                         1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
+> --
+> MST
+>
+

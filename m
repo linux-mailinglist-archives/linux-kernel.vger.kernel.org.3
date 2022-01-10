@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C92E348967D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E240C48967F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 11:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244059AbiAJKhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 05:37:25 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:39924 "EHLO
+        id S244087AbiAJKhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 05:37:35 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:45004 "EHLO
         mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243947AbiAJKhT (ORCPT
+        with ESMTP id S244040AbiAJKhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 05:37:19 -0500
-Received: by mail-io1-f70.google.com with SMTP id p65-20020a6bbf44000000b00604c0757591so2289420iof.6
+        Mon, 10 Jan 2022 05:37:20 -0500
+Received: by mail-io1-f70.google.com with SMTP id i188-20020a6b3bc5000000b00601decb6241so10756728ioa.11
         for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 02:37:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=28Zn727PbkOa9e5z/Te0bGji+C0r00GDui6Opfz/fgY=;
-        b=i3iAkDgNKpC+uLEuKF2R8efLmfXJGv30nNMMcGL3mzK4Ku+5TU1hmKocgHjSXUwLuZ
-         Jec88P8SzlNlAgL8Db+OCrHylf7wrWenphIFeUiQ9o+j0B+gqUYpk3ydFumMb3EPtHIi
-         00rZS9eetcRYQ8Fa6Ei9rtei7XYbIJHlsQVqvaOgQ3gHHMV5rvTbny/LjH0utRWz3UyB
-         GCYwJLlMI9/jDXaJBgH28SiQsowCNhX3B1bClGpcWHvv6NBueyCXqOjB35yLWtbhixYh
-         AHTwA9L4qmNbU69aoZC/dHv9zAMdFLpqm9tGbekP3ZXfknFXM4MMDpXPF9ULw1uaLViw
-         ca/A==
-X-Gm-Message-State: AOAM530I7SVkf6eIXsPE1Q4I/SyAOhy6T31d/aFsQCEw+nwsP+4VSdVR
-        w6qXVel5wzB7ongnug9MzRq6BLKgVINFr/uUDI5ToeOBpuk5
-X-Google-Smtp-Source: ABdhPJxkWJglLMH3JYkAs5xRuRcpxjI7rYX9TuzOm255LBfzxK0nlisfIObbM2ncvDqJUr2+cbUo4jJfvo5yCLgKxSReC+qt7bFu
+        bh=cF9yMMM0LXw4+7p5DQb3zA2JCMu73Tc7rO6lZ4gxgdY=;
+        b=yV6ifNZWn6sH+KN6Pkk8ueQqCTYCMjflQHp6OGf8jl7+5GdkGqCb2uhYt0T6BbjnZE
+         bZBBGaEJ1U9bQUFyqdjnO9h8BfxqNb+vuEuVkeR4Xzc/RcTcExZQdFEc7mFtrWC19C/K
+         puxGAqKj7Hvk23Lw5WZDgAg/HkH+KwqcwaHA7FyM/nLhKPzi9dG8aLskPmDRL/MxDQQH
+         Z8g6oWqqziQqCzQt5rh0R8ywsp2Bb6xAZVjIQyVIoa5rDxV3SrAXioMi3AMiDHAmoxVV
+         wsyn1tRy5l/Lx6FRHGfjts7Md3yLAsMY+yR2GXtbcHXWjcgi+lTxOdkdzsENxpGXfY1C
+         ihSA==
+X-Gm-Message-State: AOAM533Au2R08wuqXTLQ4lCajn8zJw1J/nQcg+RKvT1QbqykDAo1kle8
+        NyPqbRpjCCoc4GDa7lejOBDSO3tr0eu+n1mnProNVWTl75hE
+X-Google-Smtp-Source: ABdhPJwK7h9XQeOTKKEbkI+yM+q6pIh7wdRTvuICG7cv2ZF8jJlbbXiqTqqpMvQjBMy0uXymJNvZ/e0uYFB5r8oI/hXaMC+dyQcP
 MIME-Version: 1.0
-X-Received: by 2002:a6b:ba05:: with SMTP id k5mr35882555iof.194.1641811039359;
+X-Received: by 2002:a05:6638:2507:: with SMTP id v7mr34538579jat.70.1641811039627;
  Mon, 10 Jan 2022 02:37:19 -0800 (PST)
 Date:   Mon, 10 Jan 2022 02:37:19 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ca1d2005d537ebac@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in __dev_queue_xmit
-From:   syzbot <syzbot+e163f2ff7c3f7efd8203@syzkaller.appspotmail.com>
-To:     a@unstable.cc, alobakin@pm.me, andrii@kernel.org, ast@kernel.org,
-        atenart@kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
-        bpf@vger.kernel.org, coreteam@netfilter.org, daniel@iogearbox.net,
-        davem@davemloft.net, fw@strlen.de, john.fastabend@gmail.com,
-        jonathan.lemon@gmail.com, kadlec@netfilter.org, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lukas@wunner.de, mareklindner@neomailbox.ch,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        pablo@netfilter.org, songliubraving@fb.com, sven@narfation.org,
-        sw@simonwunderlich.de, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Message-ID: <000000000000ce327f05d537ebf7@google.com>
+Subject: [syzbot] WARNING: bad unlock balance in rxrpc_do_sendmsg
+From:   syzbot <syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, kuba@kernel.org,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        marc.dionne@auristor.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -55,70 +49,61 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    4c375272fb0b Merge branch 'net-add-preliminary-netdev-refc..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=164749a9b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2b8e24e3a80e3875
-dashboard link: https://syzkaller.appspot.com/bug?extid=e163f2ff7c3f7efd8203
+HEAD commit:    438645193e59 Merge tag 'pinctrl-v5.16-3' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17046cfdb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=48863e33ecce99a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f0483225d0c94cb3441
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11493641b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ac6aceb00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a9dd99b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fdd6fdb00000
 
-The issue was bisected to:
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-commit 42df6e1d221dddc0f2acf2be37e68d553ad65f96
-Author: Lukas Wunner <lukas@wunner.de>
-Date:   Fri Oct 8 20:06:03 2021 +0000
-
-    netfilter: Introduce egress hook
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1236329db00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1136329db00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1636329db00000
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a5b595b00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15a5b595b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a5b595b00000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e163f2ff7c3f7efd8203@syzkaller.appspotmail.com
-Fixes: 42df6e1d221d ("netfilter: Introduce egress hook")
+Reported-by: syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com
 
-=============================
-WARNING: suspicious RCU usage
-5.16.0-rc3-syzkaller #0 Not tainted
------------------------------
-include/linux/netfilter_netdev.h:97 suspicious rcu_dereference_check() usage!
+=====================================
+WARNING: bad unlock balance detected!
+5.16.0-rc6-syzkaller #0 Not tainted
+-------------------------------------
+syz-executor011/3597 is trying to release lock (&call->user_mutex) at:
+[<ffffffff885163a3>] rxrpc_do_sendmsg+0xc13/0x1350 net/rxrpc/sendmsg.c:748
+but there are no more locks to release!
 
 other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-3 locks held by kworker/u4:2/49:
- #0: ffff88814b0fe938 ((wq_completion)bat_events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88814b0fe938 ((wq_completion)bat_events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88814b0fe938 ((wq_completion)bat_events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88814b0fe938 ((wq_completion)bat_events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88814b0fe938 ((wq_completion)bat_events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88814b0fe938 ((wq_completion)bat_events){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000119fdb0 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffffffff8bb83b00 (rcu_read_lock_bh){....}-{1:2}, at: __dev_queue_xmit+0x1e3/0x3640 net/core/dev.c:4036
+no locks held by syz-executor011/3597.
 
 stack backtrace:
-CPU: 1 PID: 49 Comm: kworker/u4:2 Not tainted 5.16.0-rc3-syzkaller #0
+CPU: 1 PID: 3597 Comm: syz-executor011 Not tainted 5.16.0-rc6-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: bat_events batadv_iv_send_outstanding_bat_ogm_packet
 Call Trace:
  <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nf_hook_egress include/linux/netfilter_netdev.h:97 [inline]
- __dev_queue_xmit+0x2eac/0x3640 net/core/dev.c:4053
- batadv_send_skb_packet+0x4a9/0x5f0 net/batman-adv/send.c:108
- batadv_iv_ogm_send_to_if net/batman-adv/bat_iv_ogm.c:393 [inline]
- batadv_iv_ogm_emit net/batman-adv/bat_iv_ogm.c:421 [inline]
- batadv_iv_send_outstanding_bat_ogm_packet+0x6d7/0x8e0 net/batman-adv/bat_iv_ogm.c:1701
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+ print_unlock_imbalance_bug include/trace/events/lock.h:58 [inline]
+ __lock_release kernel/locking/lockdep.c:5306 [inline]
+ lock_release.cold+0x49/0x4e kernel/locking/lockdep.c:5657
+ __mutex_unlock_slowpath+0x99/0x5e0 kernel/locking/mutex.c:900
+ rxrpc_do_sendmsg+0xc13/0x1350 net/rxrpc/sendmsg.c:748
+ rxrpc_sendmsg+0x420/0x630 net/rxrpc/af_rxrpc.c:561
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:724
+ ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f65339e7df9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f653399a318 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f6533a703e8 RCX: 00007f65339e7df9
+RDX: 00
 
 
 ---

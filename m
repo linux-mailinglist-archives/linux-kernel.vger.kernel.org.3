@@ -2,254 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDDD488F30
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1910C488F33
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238468AbiAJER1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 23:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S238481AbiAJEWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 23:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbiAJER0 (ORCPT
+        with ESMTP id S233106AbiAJEW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 23:17:26 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA7AC061748;
-        Sun,  9 Jan 2022 20:17:25 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id j124so17522573oih.12;
-        Sun, 09 Jan 2022 20:17:25 -0800 (PST)
+        Sun, 9 Jan 2022 23:22:28 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EC7C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:22:27 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id p44so1582242pfw.5
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 20:22:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2eSdA6bINjLjaKOrkpfhrlhMSEKuXou97Qn0nIJSQFA=;
-        b=hBlVhryIX6WEygLKBGvgrQ29EpSI0jmQ7o5qKRTlTSLjSzMwI2O585duyxvaSnqXHg
-         DL8YPWj2XoJLhAcq/xBK6FVAqCMfiA/djvMlZ8yn16D0RZjD4COrlEvluCbMaViQ5kuA
-         W6Uy+j+n5mM8XahGkvKr3dDa0jDHZA8TtF+iN2iCoHnFxTD4zY4o2lL+oh9o/C4hbttR
-         CBFE0z08Ketq3w/M7qDpoveLSuc0pKlDOasApwkODb9adsxis1zqCTOAqCHpC+WQQSKO
-         q7LAoGBj97WifaRHAtqA8X0ay0klej+NiD37CTsg1fz+Q3d5MTAmpb7EFU0r3dDw3aGm
-         /0XQ==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=WyfDXJ6AfYD5Wi27bgSv0f+lsggdE738NSw9SnqqQI4=;
+        b=em2IrTCkKyjS2abrIYzGq5C/MoeOgjqhlom4nQOYxDNkQvlRVVsLHXK/r/iWfqm0P+
+         HiaOecvKUBw7GyJIlBeAuPHC9YAh34dxhLQpMrHQXQe01q7gzp9tKDdtVo8hnwCPMZzw
+         BzBe76er2dJtdRwVNtW5tA1KVtWEOPTgR6obY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=2eSdA6bINjLjaKOrkpfhrlhMSEKuXou97Qn0nIJSQFA=;
-        b=m368N5I8dytPhcdbOu/r1SiCqhBHVT6aslrEVHQ1YL6f4RJEbI066bcf5qdHwfrQXT
-         O476B9Mz9VoQ3NaaX0hoK8IUP3Ayn28HqYqjyf+Syte75/GgjxNBitIXjXaU5FbtJSz/
-         ppL6CV7VBMPrybGyEAoEimfdMToFlFWFdA13gSu6vDFcN3kYBXMjaErBz8H/c51sZVCX
-         LaZA8pL0zndCecRRqQPpG7/Uxi2ZVYD0mL2Sos5gBNx/C56BFhg+3PVXrqBkLpMSZcvy
-         ultYEutU9auPnCZiHv78qx0/DnDjCoQ0m4He+OzO04WEpI3eRv2lol90trPOs0/f/knM
-         0MYQ==
-X-Gm-Message-State: AOAM530NfbSN9NNxIjhW6dsqNb2iAxoWjRbYrhYBViJ4MO2eo1bg2ICm
-        zR3lCuQkVUPJUsSwABt4tuVAYD1kU0w=
-X-Google-Smtp-Source: ABdhPJw7Bhs0R5hiZv/i1mKXdPOKzCc219z1LMuJl0aTE2Ytbt0kAVjl0u8Y06zGg+D8p9grC1aagw==
-X-Received: by 2002:aca:ebcb:: with SMTP id j194mr16942462oih.67.1641788244833;
-        Sun, 09 Jan 2022 20:17:24 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o145sm1125916ooo.1.2022.01.09.20.17.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=WyfDXJ6AfYD5Wi27bgSv0f+lsggdE738NSw9SnqqQI4=;
+        b=oJgs4b5V0Xu+BrFunRI0LuLTLS+CQhe0D7xgjb5R0eSNAJRBJkGhz/RcKCYZWFngbW
+         vBfvaV+M2qIKOCBMyAM8f9Q8XlqMyijQUcBdN+ii+3cXWSVTraj32bDolulu3znTda/j
+         aDD1OJ9LSg5AGAmGVCgkeHprPQiGPKKw1f/S15x9iBi3BlIRTKxhxyPiKDxaytC4eqUz
+         RqEml0MtukmbXEYGz4RSID5ANxfUoQaG4vNmzkqOrht6GotuzGl/unaD5TsWSpCiJ4hv
+         4CYaqOpTqHBFknFZ4cd9JcSpMwz7CVteOe024ZsgyRz1E30cQ8ajWcjdZXeq1YRJbh+p
+         zwkQ==
+X-Gm-Message-State: AOAM533mSfH0sXNt4W1+6Jgju+pSDx3puhTzvEXqo6N1CE4jGAPFiDM2
+        dHU7ZXuVlWeAbBmCfcL/yMcuLn+twT+Z7OfitqTBDA9Vt+bIJLwXmijuaiSZ8pNSkpeJ3Dszwq8
+        cWGdOvkd1BjPi7OwoGGouDqpFOOavUsfJ6qHwgZcCoNfcx5MOsMb/7oiMdLDlVXupbYjypufFbv
+        2qm65fZ4ny2Zpzp7M=
+X-Google-Smtp-Source: ABdhPJzGEVloRdYs26MbOVZ5x5SAN0qvoIPfv61xyWiUTkJg/7V8lUEi3Hi02ptK0T2gUtAhnLgLCA==
+X-Received: by 2002:a65:5a41:: with SMTP id z1mr64032849pgs.585.1641788546857;
+        Sun, 09 Jan 2022 20:22:26 -0800 (PST)
+Received: from ldt-sj3-komrakov.dhcp.broadcom.net ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id x2sm4024257pgo.2.2022.01.09.20.22.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 20:17:24 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v5.17
-Date:   Sun,  9 Jan 2022 20:17:22 -0800
-Message-Id: <20220110041722.2095990-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        Sun, 09 Jan 2022 20:22:25 -0800 (PST)
+From:   Alexander Komrakov <alexander.komrakov@broadcom.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     giometti@enneenne.com,
+        alexander komrakov <alexander.komrakov@broadcom.com>
+Subject: [PATCH 1/1] Calculate the monotonic clock from the timespec clock to generate PPS elapsed real-time event value and stores the result into /sys/class/pps/pps0/assert_elapsed.
+Date:   Sun,  9 Jan 2022 20:22:13 -0800
+Message-Id: <20220110042214.1289369-1-alexander.komrakov@broadcom.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000029ceec05d532afb2"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--00000000000029ceec05d532afb2
+Content-Type: text/plain; charset="US-ASCII"
 
-Please pull hwmon updates for Linux v5.17 from signed tag:
+From: alexander komrakov <alexander.komrakov@broadcom.com>
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17
+*** BLURB HERE ***
 
-You may see a trivial conflict in MAINTAINERSS (keep all changes)
-when pulling this update. Also, if commit "proc: remove PDE_DATA()
-completely" was already pulled, you'll need to update the dell-smm
-driver to change PDE_DATA to pde_data.
+alexander komrakov (1):
+  Signed-off-by: alexander komrakov <alexander.komrakov@broadcom.com>
+    Replacing ktime_get_ts64 by ktime_get_boottime_ts64 because
+    elapsedRealtime includes time spent in sleep and pps should be also
+    including sleep time.
 
-Thanks,
-Guenter
-------
+ drivers/pps/kapi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+-- 
+2.25.1
 
-  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
 
-are available in the Git repository at:
+-- 
+This electronic communication and the information and any files transmitted 
+with it, or attached to it, are confidential and are intended solely for 
+the use of the individual or entity to whom it is addressed and may contain 
+information that is confidential, legally privileged, protected by privacy 
+laws, or otherwise restricted from disclosure to anyone else. If you are 
+not the intended recipient or the person responsible for delivering the 
+e-mail to the intended recipient, you are hereby notified that any use, 
+copying, distributing, dissemination, forwarding, printing, or copying of 
+this e-mail is strictly prohibited. If you received this e-mail in error, 
+please return the e-mail to the sender, delete it from your computer, and 
+destroy any printed copy of it.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.17
+--00000000000029ceec05d532afb2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-for you to fetch changes up to 00f5117c5f785b95b13663e52dcdcf684a47d4e3:
-
-  hwmon: (nzxt-smart2) make array detect_fans_report static const (2022-01-09 17:10:58 -0800)
-
-----------------------------------------------------------------
-hwmon updates for v5.17
-
-New drivers:
-- PMBus driver for MPS Multi-phase mp5023
-- PMBus driver for Delta AHE-50DC fan control module
-- Driver for NZXT RGB&Fan Controller/Smart Device v2
-- Driver for Texas Instruments INA238
-- Driver to support X370 Asus WMI
-- Driver to support B550 Asus WMI
-
-Other notable changes:
-- Cleanup of ntc_thermistor driver, and added support for Samsung 1404-001221 NTC
-- Improve detection of LM84, MAX1617, and MAX1617A in adm1021 driver
-- Clean up tmp401 driver, and convert to with_info API
-- Add support for regulators and IR38060, IR38164 IR38263 to ir38064 PMBus driver
-- Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh to k10temp driver
-- Add support for F81966 to f71882fg driver
-- Add support for ONSEMI N34TS04 to jc42 driver
-- Clean up and simplify dell-smm driver
-- Add support for ROG STRIX B550-A/X570-I GAMING to nct6775 driver
-
-Various other minor improvements and fixes.
-
-----------------------------------------------------------------
-Aleksandr Mezin (2):
-      hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2.
-      hwmon: (nzxt-smart2) Fix "unused function" warning
-
-Armin Wolf (4):
-      hwmon: (raspberrypi) Exit immediately in case of error in init
-      hwmon: (dell-smm) Simplify ioctl handler
-      hwmon: (dell-smm) Unify i8k_ioctl() and i8k_ioctl_unlocked()
-      hwmon: (dell-smm) Pack the whole smm_regs struct
-
-Arseny Demidov (1):
-      hwmon: (mr75203) fix wrong power-up delay value
-
-Arthur Heymans (1):
-      hwmon/pmbus: (ir38064) Add of_match_table
-
-Babu Moger (3):
-      hwmon: (k10temp) Remove unused definitions
-      hwmon: (k10temp) Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh
-      hwmon: (k10temp) Support up to 12 CCDs on AMD Family of processors
-
-Colin Ian King (3):
-      hwmon: (adm1031) Remove redundant assignment to variable range
-      hwmon/pmbus: (ir38064) Fix spelling mistake "comaptible" -> "compatible"
-      hwmon: (nzxt-smart2) make array detect_fans_report static const
-
-Dan Carpenter (3):
-      hwmon: (asus_wmi_ec_sensors) fix array overflow
-      hwmon: (asus_wmi_sensors) fix an array overflow
-      hwmon: (nct6775) delete some extension lines
-
-David Mosberger-Tang (1):
-      hwmon: (sht4x) Add device tree match table
-
-Denis Pauk (4):
-      hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.
-      hwmon: (asus_wmi_sensors) Support X370 Asus WMI.
-      hwmon: (nct6775) add ROG STRIX B550-A/X570-I GAMING
-      hwmon: (nct6775) Additional check for ChipID before ASUS WMI usage
-
-Guenter Roeck (6):
-      hwmon: (tmp401) Simplify temperature register arrays
-      hwmon: (tmp401) Convert to _info API
-      hwmon: (tmp401) Use regmap
-      hwmon: (tmp401) Hide register write address differences in regmap code
-      hwmon: (adm1021) Improve detection of LM84, MAX1617, and MAX1617A
-      hwmon: (jc42) Add support for ONSEMI N34TS04
-
-Howard.Chiu@quantatw.com (1):
-      hwmon: (pmbus) Add support for MPS Multi-phase mp5023
-
-Linus Walleij (9):
-      hwmon: (ntc_thermistor) Merge platform data into driver
-      hwmon: (ntc_thermistor) Drop get_ohm()
-      hwmon: (ntc_thermistor) Drop read_uv() depend on OF and IIO
-      hwmon: (ntc_thermistor) Merge platform data
-      hwmon: (ntc_thermistor) Move and refactor DT parsing
-      hwmon: (ntc_thermistor) Switch to generic firmware props
-      hwmon: (ntc_thermistor) Move DT matches to the driver block
-      hwmon: (ntc_thermistor) Drop OF dependency
-      hwmon: (ntc_thermistor) Add Samsung 1404-001221 NTC
-
-Lukas Bulwahn (1):
-      hwmon: prefix kernel-doc comments for structs with struct
-
-Menghui Wu (1):
-      hwmon: (f71882fg) Add F81966 support
-
-Nathan Rossi (3):
-      dt-bindings: hwmon: ti,ina2xx: Document ti,ina238 compatible string
-      dt-bindings: hwmon: ti,ina2xx: Add ti,shunt-gain property
-      hwmon: Driver for Texas Instruments INA238
-
-Patrick Rudolph (2):
-      hwmon/pmbus: (ir38064) Add support for IR38060, IR38164 IR38263
-      hwmon/pmbus: (ir38064) Expose a regulator
-
-Peiwei Hu (1):
-      hwmon: (xgene-hwmon) Add free before exiting xgene_hwmon_probe
-
-Yazen Ghannam (1):
-      x86/amd_nb: Add AMD Family 19h Models (10h-1Fh) and (A0h-AFh) PCI IDs
-
-Zev Weiss (2):
-      hwmon: (pmbus) Add Delta AHE-50DC fan control module driver
-      dt-bindings: add Delta AHE-50DC fan control module
-
- .../devicetree/bindings/hwmon/ntc-thermistor.yaml  |   1 +
- .../devicetree/bindings/hwmon/ti,ina2xx.yaml       |  22 +
- .../devicetree/bindings/trivial-devices.yaml       |   8 +
- Documentation/hwmon/asus_wmi_ec_sensors.rst        |  38 +
- Documentation/hwmon/asus_wmi_sensors.rst           |  78 ++
- Documentation/hwmon/ina238.rst                     |  56 ++
- Documentation/hwmon/index.rst                      |   5 +
- Documentation/hwmon/ir38064.rst                    |  28 +-
- Documentation/hwmon/mp5023.rst                     |  84 ++
- Documentation/hwmon/nzxt-smart2.rst                |  62 ++
- MAINTAINERS                                        |  27 +
- arch/x86/kernel/amd_nb.c                           |   5 +
- drivers/hwmon/Kconfig                              |  51 +-
- drivers/hwmon/Makefile                             |   4 +
- drivers/hwmon/adm1021.c                            |  23 +-
- drivers/hwmon/adm1031.c                            |   3 +-
- drivers/hwmon/asus_wmi_ec_sensors.c                | 621 +++++++++++++++
- drivers/hwmon/asus_wmi_sensors.c                   | 664 ++++++++++++++++
- drivers/hwmon/dell-smm-hwmon.c                     |  70 +-
- drivers/hwmon/f71882fg.c                           |   2 +
- drivers/hwmon/ina238.c                             | 644 +++++++++++++++
- drivers/hwmon/jc42.c                               |   4 +
- drivers/hwmon/k10temp.c                            |  36 +-
- drivers/hwmon/mr75203.c                            |   2 +-
- drivers/hwmon/nct6775.c                            |  10 +-
- drivers/hwmon/ntc_thermistor.c                     | 299 ++++---
- drivers/hwmon/nzxt-smart2.c                        | 829 ++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig                        |  29 +-
- drivers/hwmon/pmbus/Makefile                       |   2 +
- drivers/hwmon/pmbus/delta-ahe50dc-fan.c            | 114 +++
- drivers/hwmon/pmbus/ir38064.c                      |  28 +-
- drivers/hwmon/pmbus/mp5023.c                       |  67 ++
- drivers/hwmon/raspberrypi-hwmon.c                  |   7 +-
- drivers/hwmon/sht4x.c                              |   7 +
- drivers/hwmon/tmp401.c                             | 863 ++++++++++-----------
- drivers/hwmon/xgene-hwmon.c                        |   6 +-
- include/linux/hwmon.h                              |   4 +-
- include/linux/pci_ids.h                            |   1 +
- include/linux/platform_data/ntc_thermistor.h       |  50 --
- 39 files changed, 4118 insertions(+), 736 deletions(-)
- create mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
- create mode 100644 Documentation/hwmon/asus_wmi_sensors.rst
- create mode 100644 Documentation/hwmon/ina238.rst
- create mode 100644 Documentation/hwmon/mp5023.rst
- create mode 100644 Documentation/hwmon/nzxt-smart2.rst
- create mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
- create mode 100644 drivers/hwmon/asus_wmi_sensors.c
- create mode 100644 drivers/hwmon/ina238.c
- create mode 100644 drivers/hwmon/nzxt-smart2.c
- create mode 100644 drivers/hwmon/pmbus/delta-ahe50dc-fan.c
- create mode 100644 drivers/hwmon/pmbus/mp5023.c
- delete mode 100644 include/linux/platform_data/ntc_thermistor.h
+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
+ZX2NhNnwh9gNMFxHdE5c6+G3LG7AHwFOPA6G1TuzZ35urQXh4HWGbGoCJPszKLgccfOBBHYaXyo6
+yiBn77ZVlo89La3IlKW/J8Bg1ZiYHcR6RtGGylxCCKgFDdESfV03AgMBAAGjggHgMIIB3DAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCoGA1UdEQQjMCGBH2FsZXhhbmRlci5rb21yYWtvdkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
+KwYBBQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFElfe2CJ
+evQgM+vs7qmUiI/AGUBAMA0GCSqGSIb3DQEBCwUAA4IBAQCmTMsF9VHjT0L2ycGjBg8eb/+aTBhL
+U6r4e4vaGj/xmDd1cWfvz4brxodjpmuSnjfyWvU/odcNIepLv17Xc91OiZBWGYgr4jNViUqunvaH
+DCnJlLbrD88ITE1uo7OCdlN/SS+Sskp2dDvL/Xlyorb+PaS7/AaIwEmuGyJv2uv1wQ+UZzPXXo1B
+vOM4N+PxiEKCkmmYhfeSVye92Bta6vjf0b+oDE2JT82+D+9nAfiyJ9P/SRVTTvLlSzcO2fqX6GOc
+37xY9F5HGjunD+cc5mqKM/r5PXyM/LEzWjdU1lVUVuvLRerUn+GNFgAPzpksTVYDv2kuseIFwRrF
+845kQxaRMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
+di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
+dggvSHLsW0JrSJrDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDlexjZT1R+BW87
+VdNjy01grb05NUx0j1kfwuAiMAseeTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
+DQEJBTEPFw0yMjAxMTAwNDIyMjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
+SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
+BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEArWO3Dr8VUsJmLgELwIjwlxA9DH5Rbas4
+6JnKWGSJ70NgTZngi6MR8BOJEIV5PAnEJ4mGEJ78Yh/m+Koe/N0qlFyfd3+6ar4pONcHHxHssiID
+Qglmk2TwnUHMt4yropcJBiEwWC/fQkHN2Tx5NhEdFDrgUAmbPTG4g0mJfyGlI/VLQhuvHWkeSjk3
+g+Vmnj0I/bAfLwrJ7+N83L3cjcHySFDOZrEqKXntVVv2le2y15Kui81E5YLuDxtd84UA5DQdKHvf
+pVbY+whUctEtSA2nDj9hkZ+/jl+P4Y5XE8607MmfrlYSRAlbMdJZgnCW8ctzZooQ2VH+LJ2XGaaT
++SAwYQ==
+--00000000000029ceec05d532afb2--

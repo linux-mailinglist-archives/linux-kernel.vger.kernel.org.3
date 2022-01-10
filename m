@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FE04892D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EE7489233
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 08:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241189AbiAJHvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 02:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
+        id S242183AbiAJHka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 02:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241375AbiAJHlp (ORCPT
+        with ESMTP id S240780AbiAJHcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 02:41:45 -0500
+        Mon, 10 Jan 2022 02:32:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12659C03327B;
-        Sun,  9 Jan 2022 23:34:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82968C0254B1;
+        Sun,  9 Jan 2022 23:29:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E1760BA2;
-        Mon, 10 Jan 2022 07:34:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F548C36AED;
-        Mon, 10 Jan 2022 07:34:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 213A9611A3;
+        Mon, 10 Jan 2022 07:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE40C36AE9;
+        Mon, 10 Jan 2022 07:29:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641800089;
-        bh=/fvrGJS9mrvvCg2b3RyZrTxkGZGBKhvnZLQiQQLaMqA=;
+        s=korg; t=1641799743;
+        bh=AkrxHaMRo/TSJY2VFau0GMMQ6yV9ELrLc7kZ1D4eIFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hrjZO+Ax1m+H+1yAEt3jWsRWVf3M4002vQwXf99WsaYPFDRYosl6UghIKLPDJbb96
-         tbYhauY8BkhbdlVJju9AXGA0FjSNeePR/fdJT9LJpmmoWD/MLGHNUM7Lc0TAXVzc5K
-         rKk4bc4s7rFBN4HoX/z2Wy6invJaNVlfG4sB8rlU=
+        b=NI2XH2S1WWbIU194i/3P5JBCm9idh1+eS516eR+DLYkhQe85T3slsqn8r2316bgOR
+         hqFNac+lc+j3LLoa0Amwz2jZ9XSv4m/bEcCunG52GMVUcE1d78hzJeYI7hcrnbK+h2
+         ocxR1Iv9WP58sxdUamgy4hnGSf5DQzMZ7hPzFkxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH 5.15 33/72] EDAC/i10nm: Release mdev/mbase when failing to detect HBM
-Date:   Mon, 10 Jan 2022 08:23:10 +0100
-Message-Id: <20220110071822.674979135@linuxfoundation.org>
+        stable@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 16/34] ipv6: Check attribute length for RTA_GATEWAY in multipath route
+Date:   Mon, 10 Jan 2022 08:23:11 +0100
+Message-Id: <20220110071816.202666833@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-References: <20220110071821.500480371@linuxfoundation.org>
+In-Reply-To: <20220110071815.647309738@linuxfoundation.org>
+References: <20220110071815.647309738@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,53 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+From: David Ahern <dsahern@kernel.org>
 
-commit c370baa328022cbd46c59c821d1b467a97f047be upstream.
+commit 4619bcf91399f00a40885100fb61d594d8454033 upstream.
 
-On systems without HBM (High Bandwidth Memory) mdev/mbase are not
-released/unmapped.
+Commit referenced in the Fixes tag used nla_memcpy for RTA_GATEWAY as
+does the current nla_get_in6_addr. nla_memcpy protects against accessing
+memory greater than what is in the attribute, but there is no check
+requiring the attribute to have an IPv6 address. Add it.
 
-Add the code to release mdev/mbase when failing to detect HBM.
-
-[Tony: re-word commit message]
-
-Cc: <stable@vger.kernel.org>
-Fixes: c945088384d0 ("EDAC/i10nm: Add support for high bandwidth memory")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/20211224091126.1246-1-qiuxu.zhuo@intel.com
+Fixes: 51ebd3181572 ("ipv6: add support of equal cost multipath (ECMP)")
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/edac/i10nm_base.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/ipv6/route.c |   21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -358,6 +358,9 @@ static int i10nm_get_hbm_munits(void)
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5092,6 +5092,19 @@ static void ip6_route_mpath_notify(struc
+ 		inet6_rt_notify(RTM_NEWROUTE, rt, info, nlflags);
+ }
  
- 			mbase = ioremap(base + off, I10NM_HBM_IMC_MMIO_SIZE);
- 			if (!mbase) {
-+				pci_dev_put(d->imc[lmc].mdev);
-+				d->imc[lmc].mdev = NULL;
++static int fib6_gw_from_attr(struct in6_addr *gw, struct nlattr *nla,
++			     struct netlink_ext_ack *extack)
++{
++	if (nla_len(nla) < sizeof(*gw)) {
++		NL_SET_ERR_MSG(extack, "Invalid IPv6 address in RTA_GATEWAY");
++		return -EINVAL;
++	}
 +
- 				i10nm_printk(KERN_ERR, "Failed to ioremap for hbm mc 0x%llx\n",
- 					     base + off);
- 				return -ENOMEM;
-@@ -368,6 +371,12 @@ static int i10nm_get_hbm_munits(void)
++	*gw = nla_get_in6_addr(nla);
++
++	return 0;
++}
++
+ static int ip6_route_multipath_add(struct fib6_config *cfg,
+ 				   struct netlink_ext_ack *extack)
+ {
+@@ -5133,7 +5146,13 @@ static int ip6_route_multipath_add(struc
  
- 			mcmtr = I10NM_GET_MCMTR(&d->imc[lmc], 0);
- 			if (!I10NM_IS_HBM_IMC(mcmtr)) {
-+				iounmap(d->imc[lmc].mbase);
-+				d->imc[lmc].mbase = NULL;
-+				d->imc[lmc].hbm_mc = false;
-+				pci_dev_put(d->imc[lmc].mdev);
-+				d->imc[lmc].mdev = NULL;
+ 			nla = nla_find(attrs, attrlen, RTA_GATEWAY);
+ 			if (nla) {
+-				r_cfg.fc_gateway = nla_get_in6_addr(nla);
++				int ret;
 +
- 				i10nm_printk(KERN_ERR, "This isn't an hbm mc!\n");
- 				return -ENODEV;
++				ret = fib6_gw_from_attr(&r_cfg.fc_gateway, nla,
++							extack);
++				if (ret)
++					return ret;
++
+ 				r_cfg.fc_flags |= RTF_GATEWAY;
  			}
+ 			r_cfg.fc_encap = nla_find(attrs, attrlen, RTA_ENCAP);
 
 

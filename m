@@ -2,272 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC2B48A2B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB20E48A2BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 23:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345412AbiAJW22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 17:28:28 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:35124 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345394AbiAJW21 (ORCPT
+        id S1345429AbiAJWaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 17:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345419AbiAJWaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:28:27 -0500
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlhbQ011416;
-        Mon, 10 Jan 2022 22:27:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=1Aq7V2S90CCkiUtYjNrVeW7xB7JHgsccxssyxcxk7VE=;
- b=Uj1nZP/UA+Lg96bwp1QRMqhnsqAklPyiP0+qPh6LaCm8klJL3yfAePQHAtXN2m7/uDEs
- 30xv1nYqCle9nT8V3hSVr3A0PYPpDUsQ11cUfFyAlfY3puUqQ7WkLAFLR16b5wY8ifnR
- Rj3M4+BqE9gwMsmlTwajYgR/sF4mMh/+fE8GKgV5WuA1jRy5whIzSosT6jPel3z+Ie9G
- ljwMhkDRsISoLdY0a00E+iPKPz3trN15E0fwgUII3GVmJNq5JPdMx50YkpOYIFOzg6vm
- Ul75lJxer3ZLbGo8vnxmJvnsCogbf4mrayYWes6vgRXmx84WW/PsNa1fMFKnQL7G8O4A 6g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dgjdbsv9y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:27:35 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20AMFvXF012826;
-        Mon, 10 Jan 2022 22:27:34 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
-        by aserp3020.oracle.com with ESMTP id 3df2e3wkx1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:27:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dz4sFvxlDCtqI87IvAj4pAH5YNr2KQhPmlZrYwW6tt2OpZk6dRDDR90JGyyYY/XAks4hOGDSrtr501KJ554e0/h4H5Mx8f2l6I5uE622eVDfc+RWPrJg6Soe+/7QUCpyXfxSN76FJassY9X6AxLVsBzCkbHRrnpNaixrN09EuM4K5MehZwCWS4tm8MxQxNHtRsWgoQHvs4t1KwoL5WCLz6NSDW8EuMZKfBZl6NkXQAdx2YgR94uxmkNGZHhLxq6dD9x7PekL1+OFfukxC9lRFxjNQzrw1oYDICOkJHr4aUUDJmtl6tCu9xDynTkbIdP0I9CYY53H2mNkH+bz4OY5Fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Aq7V2S90CCkiUtYjNrVeW7xB7JHgsccxssyxcxk7VE=;
- b=DH8F+T+QvBl+eSAeC8+npckR+g93xJU/aaKfXWFcuvG5ZPtGrZzL3Oa+gX9bDK9dwASOTFz8oDPyA2yLju0+HBL9l/jQ4n2gE8DSNrTsUh3q/574ya9HMC59PoLlnHWk0EdS+C8yvIMEPr1br/kWKtWQbi9nyv2jbWc5QI0DwMEF44xDzHE+t3IXbWiOq9hzwXJ4CwvfG0u9DDdy5JVyMDf6dCPQYArIEGowN+H47dwpZ1aglSjA+M6pxpg10osoVRV3K50hLNYSbaAKlI9qSgSdxOmCuSoaF0V5WVqzIkkLWM462A7cL3PBWtWbkRUCO/2xprTdLTVF4Kfx3qQ0Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 10 Jan 2022 17:30:11 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A69C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:30:11 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id l3so19715256iol.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 14:30:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Aq7V2S90CCkiUtYjNrVeW7xB7JHgsccxssyxcxk7VE=;
- b=iofO7UGMs74sCLu5tAxNi/yd7BTjINnByDVCklKUIPvOMO65OFWmyHFtzGwPQDeBYIBHvQsAusnb+o0a5Id9xgq2ZfbhxPcufBOPlMQjIjO8Jy1DCW+SVol9NvGsgODhn72FN1JwO8e2+veB/RS2dHqIK1rUb4FgQvPUpuG4d/I=
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com (2603:10b6:806:23e::20)
- by SN6PR10MB2510.namprd10.prod.outlook.com (2603:10b6:805:3f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
- 2022 22:27:31 +0000
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::9d38:21ba:a523:b34e]) by SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::9d38:21ba:a523:b34e%8]) with mapi id 15.20.4867.012; Mon, 10 Jan 2022
- 22:27:30 +0000
-Date:   Mon, 10 Jan 2022 17:27:25 -0500
-From:   Daniel Jordan <daniel.m.jordan@oracle.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alexander Duyck <alexanderduyck@fb.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Segall <bsegall@google.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Steve Sistare <steven.sistare@oracle.com>,
-        Tejun Heo <tj@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-mm@kvack.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: Re: [RFC 00/16] padata, vfio, sched: Multithreaded VFIO page pinning
-Message-ID: <20220110222725.paug7n5oznicceck@oracle.com>
-References: <20220106004656.126790-1-daniel.m.jordan@oracle.com>
- <20220106011306.GY2328285@nvidia.com>
- <20220107030330.2kcpekbtxn7xmsth@oracle.com>
- <20220107171248.GU2328285@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107171248.GU2328285@nvidia.com>
-X-ClientProxiedBy: MN2PR05CA0051.namprd05.prod.outlook.com
- (2603:10b6:208:236::20) To SA1PR10MB5711.namprd10.prod.outlook.com
- (2603:10b6:806:23e::20)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Q26z8z4a4M0tAL2eu3y79fIBATCBY9yrptGAL0QTbY=;
+        b=kwK8Rrc1iPChNRgoUecLLbmh7PVrnU1G43krcMUS+ykSs2gcr/1+cfShP/fznSpPux
+         pn7+bCOvEQqwVEFsGFbfKJGldDPQxm/H5sdQ9B2AvK5O02314Z2idjDKnkJRtEC3WJF0
+         YUr9KrTLL73niMG7lmUtkebAPlOenPEkLverVAo4k6wgOzvq7P6h2nl1DOFOXkQAFd2n
+         e8WRKXNvMHEKrXByJgXhAZhH2osRD7AVF4YYPhvemXO/0zxZJNqZmJg+Dp5DlBeQb+Kv
+         j7vKQy0j9gNgM8faLnpiWSHCmoCHb3dzngpZ+n7QcU1UrPb45+rbO4/P8M7mg/VMJATF
+         Zmjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Q26z8z4a4M0tAL2eu3y79fIBATCBY9yrptGAL0QTbY=;
+        b=4dWjltI1EPs/Swmca/x0BCtvqR+1ujnuZq94uXcrdGGRbuqZ6bChDseoIQ9xOuFAi0
+         nPz+98YmJjLkgpeKD0mn4m/30raxs7rE6HFwQbcR1ywhM6QAvIT0WGIyCVDDwFjHUACJ
+         YuEAcFsKtBvvjHaK59K1HyIaf2G44JUgOHH7xRDxpwcAOSnt/FmMagOpVWCXNhTE7QOK
+         vJG/BWISHeIaX/iCpZhADlK2mudfm5efkRtztTgLbinNqKSGqZV6Un/iMzbybyWemcbI
+         REbg0XhZQ/cUaWNYguwO2Q5IPt/xtXkJskvQVhholTXLb4uEvvVF1wkayIsWHFFKzEDY
+         T2Cg==
+X-Gm-Message-State: AOAM532gdak1/OZrY0GTG721uRX17G3N16BWFIeEpnmi050pr9Ezu0of
+        sMrsdz7p07LzchgJqANgPmGy8jkfd3aBlaZSolYqtA==
+X-Google-Smtp-Source: ABdhPJxq6i8JvWs8RAX+bvkimoaH2QVkmwEq01icMIJV5LKQrZy0k+X+bGSkwjj+Fwr0TyM9ZXopDOD4+xQyWBkOw24=
+X-Received: by 2002:a02:a414:: with SMTP id c20mr1058351jal.26.1641853810681;
+ Mon, 10 Jan 2022 14:30:10 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c77b6065-a497-4eca-7372-08d9d48863cd
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2510:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB25105E2D88056986DD60A35CD9509@SN6PR10MB2510.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0e4WuPE3DvTfCt85FzK1QfH/ThiDv0s3rrwL5Y4XxlwgqK50AD6TSZpivGrZsVgl/Is9erLhq+l8pMJDhDLdTK/eBB17QTxjhHntVW10Qn9E/f6trNi6l0CklSFtwn30kgI4hQ8urZPCts0syIh7VZR6ZZarJZ9Bvx0TShsuPUC7QCq/w4R54Kqnbd5scb0nTSyV1XIrd32wdDNqPMhoTzMNSFVVHitq2rUTKYi00/MFyUrA90fLIl0rxScx//tD+QiEVSM2xBJkTCesP9cG+cWqQ11xhW09Ymv79cOqGlsodLNHg+UzGTI3pIS3qEf9FIU8zSi56eoYefygUUcPuRkzCounc01+zM638ybVuSpEE+LGCtDgvd7015JNdJBh+kQ+KmgdJHmdXKYQP2wVymgOTvHZuvotQlKEsIqh0t5hwZ3Wn2B1e1oPhzYhaMDNkfp9xYF3tYSXP4/zD/3ZgvMsZep4o+4LkgqH9Y0Yp8VqiXQSClm1Cn8uhtuiuaaWhNArKdmtO0tmyig/XXh0jA1FD9krGh55yfNthM+6HnzngNz6XU76adFFCdJ4xPYhk+VvergkKzwy2My4SyeKbtFPlfQXrnP6ilD3uRfgFHvilCtTWb4PU2QYAKT1oEpvaozRTo8qXhX6x6LXTq1tZXD4V0K9qr85NH93KwF7LM7k7MIu2QKbTPtkROxDk1tARUhReMw4XxtIR01uL8yUSA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5711.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(7416002)(508600001)(54906003)(38350700002)(38100700002)(83380400001)(6506007)(316002)(36756003)(6916009)(2906002)(52116002)(2616005)(6666004)(66556008)(1076003)(66946007)(5660300002)(86362001)(6512007)(8676002)(66476007)(6486002)(4326008)(186003)(8936002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bhXKWfx/ue3loX72yMGWf5yw4xmvHx/hzoTOgd4iH0vdfThfIhCrujFEQqvg?=
- =?us-ascii?Q?hLDFpthbwyT7X8X3y8P5lEBkfWTWgtOuJ5Bak1S62riI7gXJNadZPXkClWMw?=
- =?us-ascii?Q?3O/bZlcZZqA1jVctkSLuZ5FEQA6VPwwzsWbagh9fUyRPXVC5snCiTbKfMb7E?=
- =?us-ascii?Q?kvP58ZL3ZmzLhRhrgrfEAWAD9mVqCRddtE0h7WJWEHwHVnaiem1iukSJeOPy?=
- =?us-ascii?Q?hYBvRyQMdtsQJXkUwDG2HFwVuNIbRWjnYiKqEr3Qt5ZqlNdkSKUdZozRWnSK?=
- =?us-ascii?Q?eFrhEeUT6DAETLKTfF0DLvV50JGjHOmi6QdSipafsR+lIGtInE03QyIEql6X?=
- =?us-ascii?Q?tMs41BZwwPThAUZMdKHRJ0USQjrQ+dkEQrmG5NYX3VDrJIHEdrIMYbSu3l7H?=
- =?us-ascii?Q?puhS9NdFpGctnJT+rnmezmwp41tkvtxHf++YOfdTYu6NeEv186uhLo5X2UJu?=
- =?us-ascii?Q?l2k/V2mNZnf55J4/CweO2CXy92+IeHKj++N8D2BQda/gL7bh6Yjx1JzAkFGW?=
- =?us-ascii?Q?7tr/rNGcWkiNyvTsn/15maQE136QZj+m4DsxIDG0k2iY474tPUkS9Ykkjvxk?=
- =?us-ascii?Q?V4thCaHe3FFkcGm32r2/eJHOIaC4tCw7uYQr4tEnx5eJDcjaKLzOnLF5PeTt?=
- =?us-ascii?Q?os6/RiKRyUL0gBRiGkp7S7wnC3ImOKeMjt47DrGy13rYOeTKEZjQKvnnlCyr?=
- =?us-ascii?Q?j/wOMZRBjiQM++J/9Hwp2hIev2utfUO7Xsc+TEZwkdRw7NaCcWHwzFiiK3EI?=
- =?us-ascii?Q?8iqEFNM3gZOiVHqoDJtL1duleIIQLj33PPkcV5X3Zhl/LTHuqW6anmTnlG9E?=
- =?us-ascii?Q?U4fIhy5OmxAJkeeOqg4NsbPrvB0m4Eo0ar0JEZ/YbjhvLVQV7lY6M484Phiy?=
- =?us-ascii?Q?hateiJG9OKK04Yu+K/Sc34Fgh+rCI4FIDbJ7XXgO3ahJb3+XjI1eNt+c3p+g?=
- =?us-ascii?Q?mdXErlbjhdc6+c3nHrBrfzMIY+tkR59H0uHvwLll+JDwcl7JTuMbuXq6KAS0?=
- =?us-ascii?Q?Eu4JZYRdyxzfT2nFQmbiIj1l3Cxv1lxY/rK2qaU5Z+dkTz5C+aUhlDoXtyDU?=
- =?us-ascii?Q?68pf/0yelCarp3/1qfP1E4avp/++3APXmI0yMwnEfTip8KnQiS7JoCYVLcMT?=
- =?us-ascii?Q?KS8Zgj9gag17uufIbdc+ctfXBFBYme9XPCKDtyAx4/uZgjVn3yVUGfmxTRZ3?=
- =?us-ascii?Q?MoBadj/MuAyE/n6+RR7krDqNEqcdk0faDJ19/fPasK9ON2G5jZmkcaObgpGR?=
- =?us-ascii?Q?FFnG/eaJBNk/dI6ojiEMkfGEFzLnZbzez/KQYskEupO1H17UUXPedrVf1cPC?=
- =?us-ascii?Q?76TiNkQRg9gBDQM218WiTVVsLJgQSfLs2vbxrmWtT2OIiwj+VMzJ2Hzcgc0u?=
- =?us-ascii?Q?Hpj40T2a7TjbUQdx8flhXJYBNWSV3PvGyZlc83ZbB20jZAQGiMtGNXAmXNYv?=
- =?us-ascii?Q?sLjRVQI7GI/M6vSpMhGOSj43CVDM9S85N/8cIvev28KCFvnP5CWzZDbetgBs?=
- =?us-ascii?Q?A8BKItBinPuyIq+tsmmyL5oa6hQhvzvKi+UGlr4OziCVkYwenYP3xOdAOFwe?=
- =?us-ascii?Q?7ebTKR8QkV+Cs410l3TyWi7stG25N8vBK+a7GLgBPMgW9K4UcAtmJ9Chwsh4?=
- =?us-ascii?Q?opfe5zYeBRkNL44GP5e9XJbsBCuclMCDHl6oJz6DAO1TcMlzxY7ZY5DlAbLF?=
- =?us-ascii?Q?GomU7w=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c77b6065-a497-4eca-7372-08d9d48863cd
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5711.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 22:27:30.8903
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Br3MiFv4/Xa41SmhZmQ0HO/PDsfNo0CpH0HqIc3dDCuu+NvB7VMXZmSV4JQvufKYpAczr4i86O34WDPOP2N29mO4Ik+W/6IcG6oTWdZe/z4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2510
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10223 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201100145
-X-Proofpoint-GUID: ZqhLWtfzeQI8DBuX-uyjY66UNSvH1Zbu
-X-Proofpoint-ORIG-GUID: ZqhLWtfzeQI8DBuX-uyjY66UNSvH1Zbu
+References: <20211230072030.302559-1-irogers@google.com> <20211230072030.302559-8-irogers@google.com>
+ <YdybPJKjqx6zb28/@kernel.org> <YdyfCN1/JWJtJHTO@kernel.org>
+ <Ydyjvcma/wMTPwbn@kernel.org> <Ydymdm/PoB0hQVUT@kernel.org>
+In-Reply-To: <Ydymdm/PoB0hQVUT@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 10 Jan 2022 14:29:58 -0800
+Message-ID: <CAP-5=fVAa3JVbdzNZg0LrVfw__9U9Q8PkHcro+TJiFVyvTho+A@mail.gmail.com>
+Subject: Re: [PATCH v3 06/48] perf cpumap: Switch cpu_map__build_map to cpu function
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 01:12:48PM -0400, Jason Gunthorpe wrote:
-> > The cuts aren't arbitrary, padata controls where they happen.  
-> 
-> Well, they are, you picked a PMD alignment if I recall.
-> 
-> If hugetlbfs is using PUD pages then this is the wrong alignment,
-> right?
-> 
-> I suppose it could compute the cuts differently to try to maximize
-> alignment at the cutpoints.. 
-
-Yes, this is what I was suggesting, increase the alignment.
-
-> > size.  If cuts in per-thread ranges are an issue, I *think* userspace
-> > has the same problem?
-> 
-> Userspace should know what it has done, if it is using hugetlbfs it
-> knows how big the pages are.
-
-Right, what I mean is both user and kernel threads can end up splitting
-a physically contiguous range of pages, however large the page size.
-
-> > Pinning itself, the only thing being optimized, improves 8.5x in that
-> > experiment, bringing the time from 1.8 seconds to .2 seconds.  That's a
-> > significant savings IMHO
-> 
-> And here is where I suspect we'd get similar results from folio's
-> based on the unpin performance uplift we already saw.
-> 
-> As long as PUP doesn't have to COW its work is largely proportional to
-> the number of struct pages it processes, so we should be expecting an
-> upper limit of 512x gains on the PUP alone with foliation.
+On Mon, Jan 10, 2022 at 1:34 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> This is in line with what we saw with the prior unpin work.
+> Em Mon, Jan 10, 2022 at 06:23:09PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Jan 10, 2022 at 06:03:04PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Mon, Jan 10, 2022 at 05:46:52PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > At this point we need to remove the now unused perf_env__get_cpu(), and
+> > > > then deal with the fallout in the following patches that needlessly
+> > > > modify this unused function.
+> > > >
+> > > > Doing that now.
+> > >
+> > > Done, force pushed to tmp.perf/perf_cpu, now it is going again thru the
+> > > build containers, a better start now:
+>
+> > So far so good:
+>
+> perf test ok, just that one that is failing, but before this series as
+> well:
+>
+>  89: perf all metricgroups test                                      : FAILED!
 
-"in line with what we saw"  Not following.  The unpin work had two
-optimizations, I think, 4.5x and 3.5x which together give 16x.  Why is
-that in line with the potential gains from pup?
+Could you add the verbose output? I suspect it is fixed by this:
+https://lore.kernel.org/lkml/20211223183948.3423989-1-irogers@google.com/
 
-Overall I see what you're saying, just curious what you meant here.
+Thanks,
+Ian
 
-> The other optimization that would help a lot here is to use
-> pin_user_pages_fast(), something like:
-> 
->   if (current->mm != remote_mm)
->      mmap_lock()
->      pin_user_pages_remote(..)
->      mmap_unlock()
->   else
->      pin_user_pages_fast(..)
-> 
-> But you can't get that gain with kernel-size parallization, right?
-> 
-> (I haven't dug into if gup_fast relies on current due to IPIs or not,
-> maybe pin_user_pages_remote_fast can exist?)
-
-Yeah, not sure.  I'll have a look.
-
-> > But, I'm skeptical that singlethreaded optimization alone will remove
-> > the bottleneck with the enormous memory sizes we use.  
-> 
-> I think you can get the 1.2x at least.
-> 
-> > scaling up the times from the unpin results with both optimizations (the
-> > IB specific one too, which would need to be done for vfio), 
-> 
-> Oh, I did the IB one already in iommufd...
-
-Ahead of the curve!
-
-> > a 1T guest would still take almost 2 seconds to pin/unpin.
-> 
-> Single threaded?
-
-Yes.
-
-> Isn't that excellent
-
-Depends on who you ask, I guess.
-
-> and completely dwarfed by the populate overhead?
-
-Well yes, but here we all are optimizing gup anyway :-)
-
-> > If people feel strongly that we should try optimizing other ways first,
-> > ok, but I think these are complementary approaches.  I'm coming at this
-> > problem this way because this is fundamentally a memory-intensive
-> > operation where more bandwidth can help, and there are other kernel
-> > paths we and others want this infrastructure for.
-> 
-> At least here I would like to see an apples to apples at least before
-> we have this complexity. Full user threading vs kernel auto threading.
-> 
-> Saying multithreaded kernel gets 8x over single threaded userspace is
-> nice, but sort of irrelevant because we can have multithreaded
-> userspace, right?
-
-One of my assumptions was that doing this in the kernel would benefit
-all vfio users, avoiding duplicating the same sort of multithreading
-logic across applications, including ones that didn't prefault.  Calling
-it irrelevant seems a bit strong.  Parallelizing in either layer has its
-upsides and downsides.
-
-My assumption going into this series was that multithreading VFIO page
-pinning in the kernel was a viable way forward given the positive
-feedback I got from the VFIO maintainer last time I posted this, which
-was admittedly a while ago, and I've since been focused on the other
-parts of this series rather than what's been happening in the mm lately.
-Anyway, your arguments are reasonable, so I'll go take a look at some of
-these optimizations and see where I get.
-
-Daniel
+> [acme@quaco perf]$ uname -a
+> Linux quaco 5.15.7-200.fc35.x86_64 #1 SMP Wed Dec 8 19:00:47 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+> [acme@quaco perf]$ git log --oneline -1
+> 16ed0580fb4d64bd (HEAD -> perf/core, seventh/perf/core, five/perf/core, acme.korg/tmp.perf/perf_cpu) perf cpumap: Give CPUs their own type
+> [acme@quaco perf]$ perf -v
+> perf version 5.16.g16ed0580fb4d
+> [acme@quaco perf]$ sudo su -
+> [sudo] password for acme:
+> [root@quaco ~]# perf -vv
+> perf version 5.16.g16ed0580fb4d
+>                  dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+>     dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+>                  glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+>          syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+>                 libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+>                 libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+>                libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+>                libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+>              libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+>               libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+>              libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+>              libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+>     libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+>                   zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+>                   lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+>              get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+>                    bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+>                    aio: [ on  ]  # HAVE_AIO_SUPPORT
+>                   zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+>                libpfm4: [ OFF ]  # HAVE_LIBPFM
+> [root@quaco ~]# perf test
+>   1: vmlinux symtab matches kallsyms                                 : Ok
+>   2: Detect openat syscall event                                     : Ok
+>   3: Detect openat syscall event on all cpus                         : Ok
+>   4: Read samples using the mmap interface                           : Ok
+>   5: Test data source output                                         : Ok
+>   6: Parse event definition strings                                  : Ok
+>   7: Simple expression parser                                        : Ok
+>   8: PERF_RECORD_* events & perf_sample fields                       : Ok
+>   9: Parse perf pmu format                                           : Ok
+>  10: PMU events                                                      :
+>  10.1: PMU event table sanity                                        : Ok
+>  10.2: PMU event map aliases                                         : Ok
+>  10.3: Parsing of PMU event table metrics                            : Ok
+>  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+>  11: DSO data read                                                   : Ok
+>  12: DSO data cache                                                  : Ok
+>  13: DSO data reopen                                                 : Ok
+>  14: Roundtrip evsel->name                                           : Ok
+>  15: Parse sched tracepoints fields                                  : Ok
+>  16: syscalls:sys_enter_openat event fields                          : Ok
+>  17: Setup struct perf_event_attr                                    : Ok
+>  18: Match and link multiple hists                                   : Ok
+>  19: 'import perf' in python                                         : Ok
+>  20: Breakpoint overflow signal handler                              : Ok
+>  21: Breakpoint overflow sampling                                    : Ok
+>  22: Breakpoint accounting                                           : Ok
+>  23: Watchpoint                                                      :
+>  23.1: Read Only Watchpoint                                          : Skip (missing hardware support)
+>  23.2: Write Only Watchpoint                                         : Ok
+>  23.3: Read / Write Watchpoint                                       : Ok
+>  23.4: Modify Watchpoint                                             : Ok
+>  24: Number of exit events of a simple workload                      : Ok
+>  25: Software clock events period values                             : Ok
+>  26: Object code reading                                             : Ok
+>  27: Sample parsing                                                  : Ok
+>  28: Use a dummy software event to keep tracking                     : Ok
+>  29: Parse with no sample_id_all bit set                             : Ok
+>  30: Filter hist entries                                             : Ok
+>  31: Lookup mmap thread                                              : Ok
+>  32: Share thread maps                                               : Ok
+>  33: Sort output of hist entries                                     : Ok
+>  34: Cumulate child hist entries                                     : Ok
+>  35: Track with sched_switch                                         : Ok
+>  36: Filter fds with revents mask in a fdarray                       : Ok
+>  37: Add fd to a fdarray, making it autogrow                         : Ok
+>  38: kmod_path__parse                                                : Ok
+>  39: Thread map                                                      : Ok
+>  40: LLVM search and compile                                         :
+>  40.1: Basic BPF llvm compile                                        : Ok
+>  40.2: kbuild searching                                              : Ok
+>  40.3: Compile source for BPF prologue generation                    : Ok
+>  40.4: Compile source for BPF relocation                             : Ok
+>  41: Session topology                                                : Ok
+>  42: BPF filter                                                      :
+>  42.1: Basic BPF filtering                                           : Ok
+>  42.2: BPF pinning                                                   : Ok
+>  42.3: BPF prologue generation                                       : Ok
+>  43: Synthesize thread map                                           : Ok
+>  44: Remove thread map                                               : Ok
+>  45: Synthesize cpu map                                              : Ok
+>  46: Synthesize stat config                                          : Ok
+>  47: Synthesize stat                                                 : Ok
+>  48: Synthesize stat round                                           : Ok
+>  49: Synthesize attr update                                          : Ok
+>  50: Event times                                                     : Ok
+>  51: Read backward ring buffer                                       : Ok
+>  52: Print cpu map                                                   : Ok
+>  53: Merge cpu map                                                   : Ok
+>  54: Probe SDT events                                                : Ok
+>  55: is_printable_array                                              : Ok
+>  56: Print bitmap                                                    : Ok
+>  57: perf hooks                                                      : Ok
+>  58: builtin clang support                                           :
+>  58.1: builtin clang compile C source to IR                          : Skip (not compiled in)
+>  58.2: builtin clang compile C source to ELF object                  : Skip (not compiled in)
+>  59: unit_number__scnprintf                                          : Ok
+>  60: mem2node                                                        : Ok
+>  61: time utils                                                      : Ok
+>  62: Test jit_write_elf                                              : Ok
+>  63: Test libpfm4 support                                            :
+>  63.1: test of individual --pfm-events                               : Skip (not compiled in)
+>  63.2: test groups of --pfm-events                                   : Skip (not compiled in)
+>  64: Test api io                                                     : Ok
+>  65: maps__merge_in                                                  : Ok
+>  66: Demangle Java                                                   : Ok
+>  67: Demangle OCaml                                                  : Ok
+>  68: Parse and process metrics                                       : Ok
+>  69: PE file support                                                 : Ok
+>  70: Event expansion for cgroups                                     : Ok
+>  71: Convert perf time to TSC                                        : Ok
+>  72: dlfilter C API                                                  : Ok
+>  73: Sigtrap                                                         : Ok
+>  74: x86 rdpmc                                                       : Ok
+>  75: Test dwarf unwind                                               : Ok
+>  76: x86 instruction decoder - new instructions                      : Ok
+>  77: Intel PT packet decoder                                         : Ok
+>  78: x86 bp modify                                                   : Ok
+>  79: x86 Sample parsing                                              : Ok
+>  80: build id cache operations                                       : Ok
+>  81: daemon operations                                               : Ok
+>  82: perf pipe recording and injection test                          : Ok
+>  83: Add vfs_getname probe to get syscall args filenames             : Ok
+>  84: probe libc's inet_pton & backtrace it with ping                 : Ok
+>  85: Use vfs_getname probe to get syscall args filenames             : Ok
+>  86: Zstd perf.data compression/decompression                        : Ok
+>  87: perf stat csv summary test                                      : Ok
+>  88: perf stat metrics (shadow stat) test                            : Ok
+>  89: perf all metricgroups test                                      : FAILED!
+>  90: perf all metrics test                                           : Ok
+>  91: perf all PMU test                                               : Ok
+>  92: perf stat --bpf-counters test                                   : Ok
+>  93: Check Arm CoreSight trace data recording and synthesized samples: Skip
+>  94: Check Arm SPE trace data recording and synthesized samples      : Skip
+>  95: Check open filename arg using perf trace + vfs_getname          : Ok
+> [root@quaco ~]#
+>
+> And the containers are ok so far:
+>
+> [perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.100.2/perf/perf-5.16.0.tar.xz
+> [perfbuilder@five ~]$ time dm
+>    1    95.61 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+>    2    56.18 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
+>    3    54.98 alpine:3.5                    : Ok   gcc (Alpine 6.2.1) 6.2.1 20160822 , clang version 3.8.1 (tags/RELEASE_381/final)
+>    4    57.69 alpine:3.6                    : Ok   gcc (Alpine 6.3.0) 6.3.0 , clang version 4.0.0 (tags/RELEASE_400/final)
+>    5    63.62 alpine:3.7                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.0 (tags/RELEASE_500/final) (based on LLVM 5.0.0)
+>    6    64.52 alpine:3.8                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.1 (tags/RELEASE_501/final) (based on LLVM 5.0.1)
+>    7    66.54 alpine:3.9                    : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 5.0.1 (tags/RELEASE_502/final) (based on LLVM 5.0.1)
+>    8    91.91 alpine:3.10                   : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
+>    9   104.93 alpine:3.11                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 9.0.0 (https://git.alpinelinux.org/aports f7f0d2c2b8bcd6a5843401a9a702029556492689) (based on LLVM 9.0.0)
+>   10   107.97 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+>   11   115.98 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
+>   12   101.73 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
+>   13   103.35 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
+>   14   104.43 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128 , Alpine clang version 12.0.1
+>   15    51.06 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+>   16    75.95 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+>   17    75.26 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+>   18    74.85 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20210911 (ALT Sisyphus 11.2.1-alt1) , ALT Linux Team clang version 12.0.1
+>   19    52.87 amazonlinux:1                 : Ok   gcc (GCC) 7.2.1 20170915 (Red Hat 7.2.1-2) , clang version 3.6.2 (tags/RELEASE_362/final)
+>   20    85.98 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
+>   21    79.77 archlinux:base                : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
+>   22    83.56 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
+>   23    98.02 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-3) , clang version 12.0.1 (Red Hat 12.0.1-2.module_el8.6.0+937+1cafe22c)
+>   24    27.67 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 11.2.1 20211228 releases/gcc-11.2.0-618-g3b2b18144c , clang version 11.1.0
+>   25    65.92 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 , clang version 3.8.1-24 (tags/RELEASE_381/final)
+>   26    62.20 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
+>   27: debian:11
+>

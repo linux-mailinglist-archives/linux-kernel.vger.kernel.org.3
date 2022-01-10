@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1910C488F33
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950E3488F34
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Jan 2022 05:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238481AbiAJEWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Jan 2022 23:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S238489AbiAJEWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Jan 2022 23:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbiAJEW2 (ORCPT
+        with ESMTP id S238483AbiAJEWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Jan 2022 23:22:28 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EC7C06173F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:22:27 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id p44so1582242pfw.5
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 20:22:27 -0800 (PST)
+        Sun, 9 Jan 2022 23:22:42 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C168C06173F
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Jan 2022 20:22:42 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id p14so10851888plf.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Jan 2022 20:22:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=WyfDXJ6AfYD5Wi27bgSv0f+lsggdE738NSw9SnqqQI4=;
-        b=em2IrTCkKyjS2abrIYzGq5C/MoeOgjqhlom4nQOYxDNkQvlRVVsLHXK/r/iWfqm0P+
-         HiaOecvKUBw7GyJIlBeAuPHC9YAh34dxhLQpMrHQXQe01q7gzp9tKDdtVo8hnwCPMZzw
-         BzBe76er2dJtdRwVNtW5tA1KVtWEOPTgR6obY=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=2tMVLcwqOwvdNbUwarTtkg+jpTBxZUsNlQmGjyUWQAI=;
+        b=ZVvL0Tl/4WjO5EibOz/XcczYAW/yC6ZMJs+NmD1bHvjoFkaZFO2+3muMMTrtV5kSyF
+         NCty9641O594k+RODiiyi+wDyTcnChyk9qEvABt/P2P6+KXqMAz1mRG7UOozvtrtCN5D
+         6JpE8dq8c/BjuOx3mBw6oLVC+hQsK5ncexd2k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=WyfDXJ6AfYD5Wi27bgSv0f+lsggdE738NSw9SnqqQI4=;
-        b=oJgs4b5V0Xu+BrFunRI0LuLTLS+CQhe0D7xgjb5R0eSNAJRBJkGhz/RcKCYZWFngbW
-         vBfvaV+M2qIKOCBMyAM8f9Q8XlqMyijQUcBdN+ii+3cXWSVTraj32bDolulu3znTda/j
-         aDD1OJ9LSg5AGAmGVCgkeHprPQiGPKKw1f/S15x9iBi3BlIRTKxhxyPiKDxaytC4eqUz
-         RqEml0MtukmbXEYGz4RSID5ANxfUoQaG4vNmzkqOrht6GotuzGl/unaD5TsWSpCiJ4hv
-         4CYaqOpTqHBFknFZ4cd9JcSpMwz7CVteOe024ZsgyRz1E30cQ8ajWcjdZXeq1YRJbh+p
-         zwkQ==
-X-Gm-Message-State: AOAM533mSfH0sXNt4W1+6Jgju+pSDx3puhTzvEXqo6N1CE4jGAPFiDM2
-        dHU7ZXuVlWeAbBmCfcL/yMcuLn+twT+Z7OfitqTBDA9Vt+bIJLwXmijuaiSZ8pNSkpeJ3Dszwq8
-        cWGdOvkd1BjPi7OwoGGouDqpFOOavUsfJ6qHwgZcCoNfcx5MOsMb/7oiMdLDlVXupbYjypufFbv
-        2qm65fZ4ny2Zpzp7M=
-X-Google-Smtp-Source: ABdhPJzGEVloRdYs26MbOVZ5x5SAN0qvoIPfv61xyWiUTkJg/7V8lUEi3Hi02ptK0T2gUtAhnLgLCA==
-X-Received: by 2002:a65:5a41:: with SMTP id z1mr64032849pgs.585.1641788546857;
-        Sun, 09 Jan 2022 20:22:26 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=2tMVLcwqOwvdNbUwarTtkg+jpTBxZUsNlQmGjyUWQAI=;
+        b=GLZj9TZNrHDUu3wci4E3w10fJ3Nh97UrrCfGNv8BalNSvlD3+9xOwo/HVxjXiLy06J
+         bkPaBShv10xOy/a+KMK7nsjq/oS9Wo1wF5XOoMJzwTePnQtmpg43U366OEO0mv0zTRGd
+         7kKuK7oewXyFyUjTRY93RYSBrlPRAUGF68LB6QDhiA64yBX/orRjeHD5M9j8+ywyfuPO
+         Vl5DKVLXKTw6aGSJzfA3CBf60EpVxvO0Q76zJPTjqh7IT6JIDdTdn2oBLPcarkWfzCuB
+         93kKjjfSa2XPecCUHyMIUf/euEpYiavwEsM6mf0FUklrIYNzluAYD3O6sB1hRVOnAx1x
+         Z6vQ==
+X-Gm-Message-State: AOAM531aI960GHte1nja4TzY70fvtTK9FNT3mwZj7RILzOQ7Nzz2U9xn
+        B22toxBlCUBD2pJX8mUUaloydEwOxazMhIiZ5AeejMsK0MKFIBZOyobJcoAcDw48JiaO9DUUzHh
+        CIu94gmARrm/mgyzuodo75fgTNub98uOoVq9LEtRjsQKQyqpHIO+Laez67ZHBjde5tGY7m9+ujB
+        MUqv0gsQOSh5cCi7M=
+X-Google-Smtp-Source: ABdhPJxeqzT9Iy/JuXzwRDo+Xq+a8eoV8hGOrkyzdYDO3f1mjkqpfThIPtY1lKS9pZxQf1YPFeYFCg==
+X-Received: by 2002:a17:90a:cb8b:: with SMTP id a11mr3538448pju.75.1641788561126;
+        Sun, 09 Jan 2022 20:22:41 -0800 (PST)
 Received: from ldt-sj3-komrakov.dhcp.broadcom.net ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id x2sm4024257pgo.2.2022.01.09.20.22.25
+        by smtp.gmail.com with ESMTPSA id x2sm4024257pgo.2.2022.01.09.20.22.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 20:22:25 -0800 (PST)
+        Sun, 09 Jan 2022 20:22:40 -0800 (PST)
 From:   Alexander Komrakov <alexander.komrakov@broadcom.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     giometti@enneenne.com,
         alexander komrakov <alexander.komrakov@broadcom.com>
-Subject: [PATCH 1/1] Calculate the monotonic clock from the timespec clock to generate PPS elapsed real-time event value and stores the result into /sys/class/pps/pps0/assert_elapsed.
-Date:   Sun,  9 Jan 2022 20:22:13 -0800
-Message-Id: <20220110042214.1289369-1-alexander.komrakov@broadcom.com>
+Subject: [PATCH 1/1] Signed-off-by: alexander komrakov <alexander.komrakov@broadcom.com> Replacing ktime_get_ts64 by ktime_get_boottime_ts64 because elapsedRealtime includes time spent in sleep and pps should be also including sleep time.
+Date:   Sun,  9 Jan 2022 20:22:14 -0800
+Message-Id: <20220110042214.1289369-2-alexander.komrakov@broadcom.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220110042214.1289369-1-alexander.komrakov@broadcom.com>
+References: <20220110042214.1289369-1-alexander.komrakov@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000029ceec05d532afb2"
+        boundary="000000000000033ae505d532b07d"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000029ceec05d532afb2
+--000000000000033ae505d532b07d
 Content-Type: text/plain; charset="US-ASCII"
 
 From: alexander komrakov <alexander.komrakov@broadcom.com>
 
-*** BLURB HERE ***
-
-alexander komrakov (1):
-  Signed-off-by: alexander komrakov <alexander.komrakov@broadcom.com>
-    Replacing ktime_get_ts64 by ktime_get_boottime_ts64 because
-    elapsedRealtime includes time spent in sleep and pps should be also
-    including sleep time.
-
+---
  drivers/pps/kapi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
+index 149c29e498fc..6d1fbe4a8c40 100644
+--- a/drivers/pps/kapi.c
++++ b/drivers/pps/kapi.c
+@@ -38,7 +38,7 @@ static __u64 clock_gettime(struct pps_ktime *kt)
+ {
+ 	struct timespec64 ts = { .tv_sec = 0, .tv_nsec = 0 };
+ 
+-	ktime_get_ts64(&ts);
++	ktime_get_boottime_ts64(&ts);
+ 	kt->sec = ts.tv_sec;
+ 	kt->nsec = ts.tv_nsec;
+ 	return (__u64) ts.tv_sec * NANOSEC_PER_SEC + ts.tv_nsec;
 -- 
 2.25.1
 
@@ -93,7 +103,7 @@ this e-mail is strictly prohibited. If you received this e-mail in error,
 please return the e-mail to the sender, delete it from your computer, and 
 destroy any printed copy of it.
 
---00000000000029ceec05d532afb2
+--000000000000033ae505d532b07d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -164,14 +174,14 @@ vOM4N+PxiEKCkmmYhfeSVye92Bta6vjf0b+oDE2JT82+D+9nAfiyJ9P/SRVTTvLlSzcO2fqX6GOc
 37xY9F5HGjunD+cc5mqKM/r5PXyM/LEzWjdU1lVUVuvLRerUn+GNFgAPzpksTVYDv2kuseIFwRrF
 845kQxaRMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
 di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
-dggvSHLsW0JrSJrDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDlexjZT1R+BW87
-VdNjy01grb05NUx0j1kfwuAiMAseeTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
-DQEJBTEPFw0yMjAxMTAwNDIyMjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
+dggvSHLsW0JrSJrDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDnp0iM/gv1H82L
+u8mn8w+sdfmx01gtgsamWfo2N+mrOjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
+DQEJBTEPFw0yMjAxMTAwNDIyNDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
 SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
-BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEArWO3Dr8VUsJmLgELwIjwlxA9DH5Rbas4
-6JnKWGSJ70NgTZngi6MR8BOJEIV5PAnEJ4mGEJ78Yh/m+Koe/N0qlFyfd3+6ar4pONcHHxHssiID
-Qglmk2TwnUHMt4yropcJBiEwWC/fQkHN2Tx5NhEdFDrgUAmbPTG4g0mJfyGlI/VLQhuvHWkeSjk3
-g+Vmnj0I/bAfLwrJ7+N83L3cjcHySFDOZrEqKXntVVv2le2y15Kui81E5YLuDxtd84UA5DQdKHvf
-pVbY+whUctEtSA2nDj9hkZ+/jl+P4Y5XE8607MmfrlYSRAlbMdJZgnCW8ctzZooQ2VH+LJ2XGaaT
-+SAwYQ==
---00000000000029ceec05d532afb2--
+BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAM0Lj+wFm/pAZH8cg7/Ce+kc35fBYVLrB
+LCItcrRO8QVtO53VJsdnDyF+/j/NzZlv75vqQOhS0furKeTTT+GBhehO6TI6U59nd6k7WwZLpD/C
+KIkEYAksrIAudS/bd7h+0cAkhM7XL7mWl1JKrPVBje/UasqT9HnfFm4KATe48AgMDrMd3MVEfP3R
+VxQRtiE8wpkfSWmp9eZ80U4XUadNUGSQWGrui95TI75H6Xmnulr3jA665NDODF87THi4IMLwWrdw
+quxrQRKiQ91AHwhG7KTkuIlMSckTA9jF/jO4WNrHDzeAjjNo+sRYFj62Y+MMsG86BzgONkl8F1gA
+8/o9Gw==
+--000000000000033ae505d532b07d--

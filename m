@@ -2,86 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E0648A3F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C6748A3F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 00:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345758AbiAJXut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 18:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242563AbiAJXus (ORCPT
+        id S1345761AbiAJXvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 18:51:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43034 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242563AbiAJXvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 18:50:48 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67153C06173F;
-        Mon, 10 Jan 2022 15:50:48 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id s73so20797460oie.5;
-        Mon, 10 Jan 2022 15:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f2MXYRXrZOQLazhFDn2ZOTFFNzCbZf5D9gOpdt/r0bU=;
-        b=a8OLmamOPvk3nVu0vA55PWenq7CXN37MEL02zeqyjSfgNwCJTaXuOxaSi2T4dmu5fF
-         1JcIy0x+yZN7QjNqCsnmY8SPSI2dj6NX2Xectb7g5Is8DUCTn/WWqbuzr00tBCKv1lAn
-         ykQROk6TTPxsai0keBHISbh1fmh5gY2mD/mtvbHUcicxdE6JA8PhzAZywYId2F60KfHB
-         lksJnGWZ3WC++arjq5etd6vYBqReFpwbThA8L/GbMAJK9CRr2jN2RLAAhJT/zDHrxQrH
-         hr/a/VBd5jsdW/3x+TVC8GqPE7hjN4vQGi75P+l3gt5CRNKjjddOdhU0SHH3v7JkF4OX
-         QPDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=f2MXYRXrZOQLazhFDn2ZOTFFNzCbZf5D9gOpdt/r0bU=;
-        b=jGwDGTewAAoErb6Fu2SSa3K0iO9H9YH2nOpN+age6SgSHSiBSZORgJDl01nvk4aZZP
-         AFatRke2qUHOYfu1Fg+LDkO/GxIxiRDScvZLi0LZ58N3zaLyhJF0ZCGJRK+EmwGYAQCP
-         hmFIIhQI26Kg4esHYY+2WXZt+tv7ebbON8wqjDJ30WwdAt539N02/JDHfugDn5K01zmh
-         qvvs2RoYyiAyBBcMtee2sqYqNtdNiJEVPBTaI1/ZU9NYTuuFMUFJ78UjeIcHZRjP9C6r
-         FmjCRsJpWxS0+8zJISutiMerl5U10p7ypQwFME/obGY1sLAL5EZVMeUwdDHOC6wk/pGB
-         vuCQ==
-X-Gm-Message-State: AOAM532sUunIqaTRPNn6IAdb+D/Od65KG2zGYcwpFWK+U4CJWNLVnWOb
-        MQmfkSPSWcyNQfSFPpJjc6k=
-X-Google-Smtp-Source: ABdhPJw/E2vIkSLcPEn2oZlFDMliIOImB05WyY4MnIFTxkm6EAJltdG0VzyhL4mc0IejQXNWISiPjA==
-X-Received: by 2002:a05:6808:258:: with SMTP id m24mr101817oie.145.1641858647861;
-        Mon, 10 Jan 2022 15:50:47 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v18sm1795458ott.28.2022.01.10.15.50.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 15:50:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 10 Jan 2022 15:50:46 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 00/72] 5.15.14-rc1 review
-Message-ID: <20220110235046.GG1633615@roeck-us.net>
-References: <20220110071821.500480371@linuxfoundation.org>
+        Mon, 10 Jan 2022 18:51:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2514C61499
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B622C36AE5;
+        Mon, 10 Jan 2022 23:51:02 +0000 (UTC)
+Date:   Mon, 10 Jan 2022 18:51:00 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: WARNING: modpost: vmlinux.o(.text.unlikely+0x2c44): Section
+ mismatch in reference from the function trace_define_generic_fields() to
+ the variable .init.data:initcall_level_names
+Message-ID: <20220110185100.6c4c226c@gandalf.local.home>
+In-Reply-To: <202112210114.CFpCHRci-lkp@intel.com>
+References: <202112210114.CFpCHRci-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 08:22:37AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.14 release.
-> There are 72 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 21 Dec 2021 01:12:12 +0800
+kernel test robot <lkp@intel.com> wrote:
+
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
 > 
-> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
-> Anything received after that time might be too late.
-> 
+> >> WARNING: modpost: vmlinux.o(.text.unlikely+0x2c44): Section mismatch in reference from the function trace_define_generic_fields() to the variable .init.data:initcall_level_names  
+> The function trace_define_generic_fields() references
+> the variable __initdata initcall_level_names.
+> This is often because trace_define_generic_fields lacks a __initdata
+> annotation or the annotation of initcall_level_names is wrong.
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 480 pass: 480 fail: 0
+I keep getting this, and it looks like a bug in the compiler not the kernel
+code.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+We have:
 
-Guenter
+int filter_assign_type(const char *type)
+{
+	if (strstr(type, "__data_loc") && strstr(type, "char"))
+		return FILTER_DYN_STRING;
+
+	if (strstr(type, "__rel_loc") && strstr(type, "char"))
+		return FILTER_RDYN_STRING;
+
+	if (strchr(type, '[') && strstr(type, "char"))
+		return FILTER_STATIC_STRING;
+
+	if (strcmp(type, "char *") == 0 || strcmp(type, "const char *") == 0)
+		return FILTER_PTR_STRING;
+
+	return FILTER_OTHER;
+}
+
+static int __trace_define_field(struct list_head *head, const char *type,
+				const char *name, int offset, int size,
+				int is_signed, int filter_type)
+{
+	struct ftrace_event_field *field;
+
+	field = kmem_cache_alloc(field_cachep, GFP_TRACE);
+	if (!field)
+		return -ENOMEM;
+
+	field->name = name;
+	field->type = type;
+
+	if (filter_type == FILTER_OTHER)
+		field->filter_type = filter_assign_type(type);
+	else
+		field->filter_type = filter_type;
+
+	field->offset = offset;
+	field->size = size;
+	field->is_signed = is_signed;
+
+	list_add(&field->link, head);
+
+	return 0;
+}
+
+#define is_signed_type(type)	(((type)(-1)) < (type)1)
+
+static LIST_HEAD(ftrace_generic_fields);
+
+#define __generic_field(type, item, filter_type)			\
+	ret = __trace_define_field(&ftrace_generic_fields, #type,	\
+				   #item, 0, 0, is_signed_type(type),	\
+				   filter_type);			\
+	if (ret)							\
+		return ret;
+
+
+static int trace_define_generic_fields(void)
+{
+	int ret;
+
+	__generic_field(int, CPU, FILTER_CPU);
+	__generic_field(int, cpu, FILTER_CPU);
+	__generic_field(char *, COMM, FILTER_COMM);
+	__generic_field(char *, comm, FILTER_COMM);
+
+	return ret;
+}
+
+
+Please tell me where initcall_level_names is being referenced?
+
+Either fix the compiler or tell me exactly what the bug is. Otherwise, stop
+sending me this.
+
+-- Steve

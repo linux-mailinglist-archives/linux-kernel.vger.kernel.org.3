@@ -2,150 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2369248A8F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895AB48A8EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348738AbiAKHxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:53:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42594 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236041AbiAKHw7 (ORCPT
+        id S1348732AbiAKHwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:52:53 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:44096 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236041AbiAKHww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:52:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641887577;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s3Y1O09JG5ePpg5LAktUzWgPzg+txuTZh+F8MesPjNg=;
-        b=Ww++8u8Lfli4VrVXozb1uNVMciHqzSWPpaxWqwOG7UDAAxj1Nx5qonH/hHrCSD0Bh9LKEr
-        BSQH1ZazZjHMHQZkn+2mjCgEoVrZMgSngK2g8O7EVQ6CrFkLjBH7twLx/V8vmJVk1B+I4G
-        IzFOAZmRf+iMp07VSt18DV2l+C4+/20=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-KZHLwfp_MiyHbBdYkyg6hQ-1; Tue, 11 Jan 2022 02:52:54 -0500
-X-MC-Unique: KZHLwfp_MiyHbBdYkyg6hQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E3F2A85EE62;
-        Tue, 11 Jan 2022 07:52:52 +0000 (UTC)
-Received: from [10.72.14.32] (ovpn-14-32.pek2.redhat.com [10.72.14.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95E207B9E2;
-        Tue, 11 Jan 2022 07:52:48 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v4 01/21] KVM: arm64: Introduce template for inline
- functions
-To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
-References: <20210815001352.81927-1-gshan@redhat.com>
- <20210815001352.81927-2-gshan@redhat.com>
- <5112b3ba-d038-f622-c67f-e53695cbef37@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <8b7d3a75-dbf8-c8b9-bbb6-bd89d9429802@redhat.com>
-Date:   Tue, 11 Jan 2022 15:52:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 11 Jan 2022 02:52:52 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id AD864614E2C4;
+        Tue, 11 Jan 2022 08:52:50 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 2ZT5CSczOSjH; Tue, 11 Jan 2022 08:52:50 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 2A582614E2CB;
+        Tue, 11 Jan 2022 08:52:50 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id D7MJJ8k-LbO6; Tue, 11 Jan 2022 08:52:50 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 0607E614E2C4;
+        Tue, 11 Jan 2022 08:52:50 +0100 (CET)
+Date:   Tue, 11 Jan 2022 08:52:49 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     torvalds <torvalds@linux-foundation.org>
+Cc:     linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <10132756.248426.1641887569979.JavaMail.zimbra@nod.at>
+Subject: [GIT PULL] UML updates for 5.17
 MIME-Version: 1.0
-In-Reply-To: <5112b3ba-d038-f622-c67f-e53695cbef37@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
+Thread-Index: RsIVnHqP6wx+gtlWtggyZBf0Dh/AXA==
+Thread-Topic: UML updates for 5.17
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Linus,
 
-On 11/9/21 11:26 PM, Eric Auger wrote:
-> On 8/15/21 2:13 AM, Gavin Shan wrote:
->> The inline functions used to get the SMCCC parameters have same
->> layout. It means these functions can be presented by a template,
->> to make the code simplified. Besides, this adds more similar inline
->> functions like smccc_get_arg{4,5,6,7,8}() to visit more SMCCC arguments,
->> which are needed by SDEI virtualization support.
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   include/kvm/arm_hypercalls.h | 34 +++++++++++++++-------------------
->>   1 file changed, 15 insertions(+), 19 deletions(-)
->>
->> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
->> index 0e2509d27910..ebecb6c68254 100644
->> --- a/include/kvm/arm_hypercalls.h
->> +++ b/include/kvm/arm_hypercalls.h
->> @@ -6,27 +6,21 @@
->>   
->>   #include <asm/kvm_emulate.h>
->>   
->> -int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
->> -
->> -static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
->> -{
->> -	return vcpu_get_reg(vcpu, 0);
->> +#define SMCCC_DECLARE_GET_FUNC(type, name, reg)			\
->> +static inline type smccc_get_##name(struct kvm_vcpu *vcpu)	\
->> +{								\
->> +	return vcpu_get_reg(vcpu, reg);				\
->>   }
->>   
->> -static inline unsigned long smccc_get_arg1(struct kvm_vcpu *vcpu)
->> -{
->> -	return vcpu_get_reg(vcpu, 1);
->> -}
->> -
->> -static inline unsigned long smccc_get_arg2(struct kvm_vcpu *vcpu)
->> -{
->> -	return vcpu_get_reg(vcpu, 2);
->> -}
->> -
->> -static inline unsigned long smccc_get_arg3(struct kvm_vcpu *vcpu)
->> -{
->> -	return vcpu_get_reg(vcpu, 3);
->> -}
->> +SMCCC_DECLARE_GET_FUNC(u32,           function, 0)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg1,     1)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg2,     2)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg3,     3)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg4,     4)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg5,     5)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg6,     6)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg7,     7)
->> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg8,     8)
-> I think I would keep smccc_get_function() and add macros to get the
-> 64-bit args. SMCCC_DECLARE_GET_FUNC is an odd macro name for a function
-> fetching an arg. I would suggest:
-> 
+The following changes since commit 1c3e979bf3e225e5b4b810b24712b16254d608b6:
 
-I agree. The code will be changed accordingly in next respin.
+  Merge branch 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid (2021-12-21 09:30:32 -0800)
 
->> +#define SMCCC_DECLARE_GET_ARG(reg)			\
->> +static inline unsigned long smccc_get_arg##reg(struct kvm_vcpu *vcpu)	\
->> +{								\
->> +	return vcpu_get_reg(vcpu, reg);				\
->>   }
->>   
->>   static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
->>   				    unsigned long a0,
->> @@ -40,4 +34,6 @@ static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
->>   	vcpu_set_reg(vcpu, 3, a3);
->>   }
->>   
->> +int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
->> +
-> spurious change?
+are available in the Git repository at:
 
-I thought the inline function would come before the exposed ones. However,
-I don't think it's necessary. I will drop the changes in next respin.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git tags/for-linus-5.17-rc1
 
->>   #endif
->>
+for you to fetch changes up to db0dd9cee82270e032123169ceff659eced5115d:
 
-Thanks,
-Gavin
+  um: virtio_uml: Allow probing from devicetree (2021-12-22 20:40:05 +0100)
 
+----------------------------------------------------------------
+This pull request contains the following changes for UML:
+
+- set_fs removal
+- Devicetree support
+- Many cleanups from Al
+- Various virtio and build related fixes
+
+----------------------------------------------------------------
+Al Viro (15):
+      uml: trim unused junk from arch/x86/um/sys_call_table_*.c
+      um: move amd64 variant of mmap(2) to arch/x86/um/syscalls_64.c
+      logic_io instance of iounmap() needs volatile on argument
+      um: stop polluting the namespace with registers.h contents
+      uml/i386: missing include in barrier.h
+      um: kill unused cpu()
+      um: remove a dangling extern of syscall_trace()
+      um: unexport handle_page_fault()
+      um, x86: bury crypto_tfm_ctx_offset
+      um: common-offsets.h debriding...
+      um: header debriding - activate_ipi()
+      um: header debriding - mem_user.h
+      um: header debriding - net_*.h
+      um: header debriding - os.h
+      um: header debriding - sigio.h
+
+Changcheng Deng (1):
+      um: Replace if (cond) BUG() with BUG_ON()
+
+Christoph Hellwig (1):
+      um: remove set_fs
+
+Johannes Berg (8):
+      um: fix ndelay/udelay defines
+      um: rename set_signals() to um_set_signals()
+      uml: x86: add FORCE to user_constants.h
+      um: gitignore: Add kernel/capflags.c
+      um: virt-pci: Fix 32-bit compile
+      lib/logic_iomem: Fix 32-bit build
+      lib/logic_iomem: Fix operation on 32-bit
+      um: virtio_uml: Fix time-travel external time propagation
+
+Randy Dunlap (1):
+      um: registers: Rename function names to avoid conflicts and build problems
+
+Sjoerd Simons (1):
+      hostfs: Fix writeback of dirty pages
+
+Vincent Whitchurch (3):
+      um: Extract load file helper from initrd.c
+      um: Add devicetree support
+      um: virtio_uml: Allow probing from devicetree
+
+Yang Guang (1):
+      um: Use swap() to make code cleaner
+
+ arch/um/.gitignore                      |  1 +
+ arch/um/Kconfig                         |  2 +-
+ arch/um/drivers/virt-pci.c              |  8 ++---
+ arch/um/drivers/virtio_uml.c            | 54 +++++++++++++++++++++++++++--
+ arch/um/include/asm/delay.h             |  4 +--
+ arch/um/include/asm/irqflags.h          |  4 +--
+ arch/um/include/asm/processor-generic.h |  2 +-
+ arch/um/include/asm/thread_info.h       |  4 ---
+ arch/um/include/asm/uaccess.h           | 21 ++++++++++--
+ arch/um/include/shared/common-offsets.h | 15 --------
+ arch/um/include/shared/irq_user.h       |  1 -
+ arch/um/include/shared/kern_util.h      |  2 --
+ arch/um/include/shared/longjmp.h        |  2 +-
+ arch/um/include/shared/mem_user.h       |  5 ---
+ arch/um/include/shared/net_kern.h       |  2 --
+ arch/um/include/shared/net_user.h       |  1 -
+ arch/um/include/shared/os.h             | 17 ++-------
+ arch/um/include/shared/registers.h      |  6 ++--
+ arch/um/include/shared/sigio.h          |  1 -
+ arch/um/kernel/Makefile                 |  4 ++-
+ arch/um/kernel/dtb.c                    | 41 ++++++++++++++++++++++
+ arch/um/kernel/exec.c                   |  1 +
+ arch/um/kernel/initrd.c                 | 48 +++-----------------------
+ arch/um/kernel/ksyms.c                  |  2 +-
+ arch/um/kernel/load_file.c              | 61 +++++++++++++++++++++++++++++++++
+ arch/um/kernel/mem.c                    |  3 +-
+ arch/um/kernel/process.c                |  6 +---
+ arch/um/kernel/skas/uaccess.c           | 25 --------------
+ arch/um/kernel/syscall.c                | 28 ---------------
+ arch/um/kernel/trap.c                   |  1 -
+ arch/um/kernel/um_arch.c                |  3 ++
+ arch/um/kernel/um_arch.h                | 14 ++++++++
+ arch/um/os-Linux/registers.c            |  4 +--
+ arch/um/os-Linux/sigio.c                | 13 ++++---
+ arch/um/os-Linux/signal.c               |  8 ++---
+ arch/um/os-Linux/start_up.c             |  2 +-
+ arch/x86/kernel/asm-offsets.c           |  3 --
+ arch/x86/um/Makefile                    |  2 +-
+ arch/x86/um/asm/barrier.h               |  1 +
+ arch/x86/um/asm/segment.h               |  8 -----
+ arch/x86/um/os-Linux/registers.c        |  1 +
+ arch/x86/um/ptrace_32.c                 |  1 +
+ arch/x86/um/ptrace_64.c                 |  1 +
+ arch/x86/um/shared/sysdep/syscalls_64.h |  3 --
+ arch/x86/um/signal.c                    |  1 +
+ arch/x86/um/sys_call_table_32.c         |  4 ---
+ arch/x86/um/sys_call_table_64.c         | 17 ---------
+ arch/x86/um/syscalls_64.c               | 14 +++++++-
+ fs/hostfs/hostfs_kern.c                 |  3 ++
+ include/asm-generic/logic_io.h          |  2 +-
+ lib/logic_iomem.c                       | 23 +++++++------
+ 51 files changed, 265 insertions(+), 235 deletions(-)
+ create mode 100644 arch/um/kernel/dtb.c
+ create mode 100644 arch/um/kernel/load_file.c
+ delete mode 100644 arch/um/kernel/syscall.c
+ create mode 100644 arch/um/kernel/um_arch.h

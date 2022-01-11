@@ -2,149 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDE248AB6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C19948AB75
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349054AbiAKKcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:32:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48742 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348912AbiAKKcJ (ORCPT
+        id S1349092AbiAKKeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237819AbiAKKeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:32:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18B0761577;
-        Tue, 11 Jan 2022 10:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A36BC36AE9;
-        Tue, 11 Jan 2022 10:32:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641897128;
-        bh=0rqIA4/jVYclQqB4xsgy2sHCQiJcK7V1GCT/RCzcwNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GiO8Clp3cKZA4rIZp4mXsEZtFZFQIjGujQZVsgjW3KUTthAM6Og1vdB3sEDH7qcmN
-         MIGhdJ+XFMo+Xg0jLuDpHnErkwvpSy67p/5UXrlZyHO+b74FlJL2hiPML5ZYg+vf8/
-         lGVi59S8akIRZPOpWFM7t9O1oUgnVqbuGgqRVPpxImW6qEFwAzqxvlTNAXseGOKGPa
-         izbV7cKz0VTB4NWpjIx+mayXjchu19ZHo5ODX54W1eWwi2mKJwW94XmnJ21tmy4sQF
-         BpyMsLHetjLj2AEGd9fmnUy1DjGjWtNTvqWy4yCMJKaOad/v4Rvlws90muDMMF0lE3
-         n4uyyryvSmreQ==
-Date:   Tue, 11 Jan 2022 12:31:58 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Frank van der Linden <fllinden@amazon.com>
-Cc:     linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        frowand.list@gmail.com, ardb@kernel.org, linux-mm@kvack.org,
-        devicetree@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, geert+renesas@glider.be
-Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory
- range
-Message-ID: <Yd1cnquQFZoNE7FP@kernel.org>
-References: <20220110210809.3528-1-fllinden@amazon.com>
- <20220110210809.3528-2-fllinden@amazon.com>
+        Tue, 11 Jan 2022 05:34:00 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC731C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:33:58 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id s1so32083762wra.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:33:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlvnTPe3lASdFY+T2t68uKlxKrbSmUU8V1J05NQSw6U=;
+        b=kFZHjxBqak04QecvDE2NLpVra0DHWksVsM+UYYxryGtHYHXrRSQWq1/xX9A+ZsO93M
+         rhwTwSrvVZrQkeHIRa1TxI4azHBBS0Zk6HLOjRdFBHyJHXYIMKAwOCchTXp35Qd2V8qd
+         /cZJXXl9E0B7ZMWaCVf19hdhB/drQhSEuY9rEEvWE/0HNNhg+4lJTlV+Zg4PoRCxVR1F
+         gt0qdlAskSDXGLVhdbk5nwi2G/xccxm/5fH6oLS+tZv8cMQeI6H+wTzrZ1pchceJj6Jk
+         x0croQongRyfddXEMEK0VaxWIeQQqMSMvF9X2hIlxWqCN0BunojhMGYG/77YcYElVabB
+         laOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlvnTPe3lASdFY+T2t68uKlxKrbSmUU8V1J05NQSw6U=;
+        b=0e/BZk0vZGEIJ65YIWaJHr2QLh70K1n9y70ZTGH6wxJDBg6HbMrJEQ6R/MW32m74Mc
+         G0ZfIRHM/Kr1K80i1eCFcaSY/YilM7U21eQW2iN+we00Z/5GVYOIJ36+eqvoq1qIcrQg
+         x9KlLxPkGpKskI50Bvq0vgWy9W0yAeCanTCJnSNlIZ1WscOvuSb96uE9BnzLk8YXjw2l
+         H+gdKllbYyJJhyuaybcujtZPQKI2u0rw7gL4f+Ow0b3KTPbvWhGLv424pjWH1dFebxKO
+         7cCN9CgJwy/EuJ6zTpp6nWG/djFO6E8X1lF8vaik595GBBsqC4C2ZmXDY1q2SDorrUE4
+         e28Q==
+X-Gm-Message-State: AOAM533xTD5GxWyDdKF+69EwbBC0C2KIrJ3J0EOEozNRCq8R2F33rDBH
+        ASODko0hrzz4pptuadM3Qb07Bw==
+X-Google-Smtp-Source: ABdhPJwTazpdHrgr+MgipqzrdPRu4Vt8uCoZ/sH/0PYCwESlfQYlVUTG3LeTI2N/8eVmiKSo9w/aEQ==
+X-Received: by 2002:a5d:588f:: with SMTP id n15mr3282791wrf.279.1641897237487;
+        Tue, 11 Jan 2022 02:33:57 -0800 (PST)
+Received: from xps-9300.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u16sm8803470wrn.24.2022.01.11.02.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 02:33:57 -0800 (PST)
+From:   Alexandre Bailon <abailon@baylibre.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org,
+        Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
+Date:   Tue, 11 Jan 2022 11:33:44 +0100
+Message-Id: <20220111103346.2660639-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110210809.3528-2-fllinden@amazon.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 09:08:07PM +0000, Frank van der Linden wrote:
-> Some architectures might limit the usable memory range based
-> on a firmware property, like "linux,usable-memory-range"
-> for ARM crash kernels. This limit needs to be enforced after
-> firmware memory map processing has been done, which might be
-> e.g. FDT or EFI, or both.
-> 
-> Define an interface for it that is firmware type agnostic.
-> 
-> Signed-off-by: Frank van der Linden <fllinden@amazon.com>
-> ---
->  include/linux/memblock.h |  2 ++
->  mm/memblock.c            | 37 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 39 insertions(+)
-> 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index 34de69b3b8ba..6128efa50d33 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -481,6 +481,8 @@ phys_addr_t memblock_reserved_size(void);
->  phys_addr_t memblock_start_of_DRAM(void);
->  phys_addr_t memblock_end_of_DRAM(void);
->  void memblock_enforce_memory_limit(phys_addr_t memory_limit);
-> +void memblock_set_usable_range(phys_addr_t base, phys_addr_t size);
-> +void memblock_enforce_usable_range(void);
->  void memblock_cap_memory_range(phys_addr_t base, phys_addr_t size);
->  void memblock_mem_limit_remove_map(phys_addr_t limit);
+This series add a virtual thermal sensor.
+It could be used to get a temperature using some thermal sensors.
+Currently, the supported operations are max, min and avg.
+The virtual sensor could be easily extended to support others operations.
 
-We already have 3 very similar interfaces that deal with memory capping.
-Now you suggest to add fourth that will "generically" solve a single use
-case of DT, EFI and kdump interaction on arm64.
+Changes in v2:
+- Fix some warnings / errors reported by kernel test robot
+- rename some struct and functions with a more accurate name
+- update the dt bindings: rename type attribute to aggregation-function
+- factorize a little bit the aggregation functions
+Changes in v3:
+- Aggregate thermal zone instead of thermal sensors
+- Use try_get_module / put_module to prevent thermal providers to be removed
+- Update the bindings, to be more accurate
+Changes in v4:
+- Fix two warnings reported by kernel test robot
 
-Looks like a workaround for a fundamental issue of incompatibility between
-DT and EFI wrt memory registration.
+Alexandre Bailon (2):
+  dt-bindings: Add DT bindings for the DT-based virtual sensor driver
+  thermal: add a virtual sensor to aggregate temperatures
 
->  bool memblock_is_memory(phys_addr_t addr);
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 5096500b2647..cb961965f3ad 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -101,6 +101,7 @@ unsigned long max_low_pfn;
->  unsigned long min_low_pfn;
->  unsigned long max_pfn;
->  unsigned long long max_possible_pfn;
-> +phys_addr_t usable_start, usable_size;
->
->  static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
->  static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
-> @@ -1715,6 +1716,42 @@ void __init memblock_cap_memory_range(phys_addr_t base, phys_addr_t size)
->  			base + size, PHYS_ADDR_MAX);
->  }
->  
-> +/**
-> + * memblock_set_usable_range - set usable memory range
-> + * @base: physical address that is the start of the range
-> + * @size: size of the range.
-> + *
-> + * Used when a firmware property limits the range of usable
-> + * memory, like for the linux,usable-memory-range property
-> + * used by ARM crash kernels.
-> + */
-> +void __init memblock_set_usable_range(phys_addr_t base, phys_addr_t size)
-> +{
-> +	usable_start = base;
-> +	usable_size = size;
-> +}
-> +
-> +/**
-> + * memblock_enforce_usable_range - cap memory ranges to usable range
-> + *
-> + * Some architectures call this during boot after firmware memory ranges
-> + * have been scanned, to make sure they fall within the usable range
-> + * set by memblock_set_usable_range.
-> + *
-> + * This may be called more than once if there are multiple firmware sources
-> + * for memory ranges.
-> + *
-> + * Avoid "no memory registered" warning - the warning itself is
-> + * useful, but we know this can be called with no registered
-> + * memory (e.g. when the synthetic DT for the crash kernel has
-> + * been parsed on EFI arm64 systems).
-> + */
-> +void __init memblock_enforce_usable_range(void)
-> +{
-> +	if (memblock_memory->total_size)
-> +		memblock_cap_memory_range(usable_start, usable_size);
-> +}
-> +
->  void __init memblock_mem_limit_remove_map(phys_addr_t limit)
->  {
->  	phys_addr_t max_addr;
-> -- 
-> 2.32.0
-> 
+Alexandre Bailon (2):
+  dt-bindings: Add DT bindings for the DT-based virtual sensor driver
+  thermal: add a virtual sensor to aggregate temperatures
+
+ .../thermal/virtual,thermal-sensor.yaml       |  86 +++++++
+ drivers/thermal/Kconfig                       |   8 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/virtual_thermal_sensor.c      | 218 ++++++++++++++++++
+ include/dt-bindings/thermal/virtual-sensor.h  |  15 ++
+ 5 files changed, 328 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
+ create mode 100644 drivers/thermal/virtual_thermal_sensor.c
+ create mode 100644 include/dt-bindings/thermal/virtual-sensor.h
 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+

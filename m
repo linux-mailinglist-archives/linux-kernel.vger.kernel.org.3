@@ -2,74 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4922748BAD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8D148BAD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245665AbiAKWbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:31:38 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:45672 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243642AbiAKWba (ORCPT
+        id S1343641AbiAKWju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233798AbiAKWjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:31:30 -0500
-Received: by mail-ot1-f50.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso414823otf.12;
-        Tue, 11 Jan 2022 14:31:30 -0800 (PST)
+        Tue, 11 Jan 2022 17:39:49 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A4C06173F;
+        Tue, 11 Jan 2022 14:39:49 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d10-20020a17090a498a00b001b33bc40d01so2614069pjh.1;
+        Tue, 11 Jan 2022 14:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=97CiwfAhfn4FTWlqHWf+0pyGh9oYYOmuavEzGO/cVo4=;
+        b=AT++p5EFQ3rBHReLFOVwo90beLjOF170qiYD5AgfHMibFYAka3sMANJc8EqPnhTCWB
+         2DLYI6HfKGOt3raxExK751GXSNjc5yPq3lhluAGRnEdL1Mz2qrsIAjYw94HnMn5YHIrQ
+         +Gt+eLVg0auXCgzh799ty0aHiRLJD//cEVFtZVfiPUNYWkFZvdp4bXMl5g7HtQ4hoAXV
+         NGzN/1HYYx1qzz0igxqrzBrFdEhiVa8ON388VECwol6/7wRsWLjhh5qwPF5G0EejGOqa
+         JMbyWzXjvCvKdwuWcx6EkFd7zyynZqUDIG1qxNbBVaw1GWU2/DDR7tf8Iz99QUz+/IQe
+         FCEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dJLOMebdKsEZ/wSKj4+QlW4PGs+CPb7OcliOl7AjxkI=;
-        b=v0Okei/dEiKsI0+iv/2o8wvUQpNwMivqX5wWeChNZeJy2I/m/lAG9QJyhFSwim9O2H
-         oLrqs75tWhhDURqwetaxF/PefgZCoQJxtzl39GNj+Lr8cKzepyDmoSsNKoYxEh7lrr72
-         bTjMOG58HXDooQ1gZxxtwzkjCbyVnDJ2V1IFinqiu6MsaTlQMbYZ9hjC3vLcmTIfGzWP
-         a8j/lMWZGyFvku7PpcEzfMhrAwhuJ6cIHIqR5eHBOB0XYdctgmk+YwjVgCUHpg+I0u8t
-         aJWSrJvHQd2CTUOrsjrqUY18anHE7pMIVuzWHb1K5VjqsL9JckOw1jG+3mJ/udOkAYve
-         DQGg==
-X-Gm-Message-State: AOAM531OhOVpTOFexhTTIM9xjiyn6PzwH8+W8IZk9nMm3JhPOUldbPBf
-        MLS1nkytsZm5aGfbBEll/A==
-X-Google-Smtp-Source: ABdhPJwNQkpF/69Ehm3O0ouMt1uRhpOS2eQpp3bOQviIYnRx4KAjGiUfsUX27SdtuOS908uqPWvp+w==
-X-Received: by 2002:a9d:37a2:: with SMTP id x31mr327281otb.51.1641940290055;
-        Tue, 11 Jan 2022 14:31:30 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g22sm2296330otj.0.2022.01.11.14.31.28
+        bh=97CiwfAhfn4FTWlqHWf+0pyGh9oYYOmuavEzGO/cVo4=;
+        b=GDW+6flTijvG1nXlca2LpPrzRWYYsiGp+nSq5l4nvhF4RLC1Yr1tn3l0KNzdpxOceo
+         i9kuaNLpYrG08Y0vC+aRk/7vBKhJGgYpAiTKpQ+Y2mLnHfr2WpLScbxXQ2CisX/Znv0N
+         JCxkgfQ6r7+5/JxVkItxe0glZjeRgn1iWjYoC3NnT3dDg1xiItFdFTqpNDkTsudfgMt+
+         JcSnTOjHLoX5dW5x9BVOZJy8gKAqhfEetSKUIRRTVlS9iHUEEWKtesEDERcInnlF5SRA
+         ZMCkx4qFtfY9eDoWlxUDk36UCLAfaIEMURIMDtnrU8UFy2W9qY9tMN27mzNsFsQUnhCO
+         mCCA==
+X-Gm-Message-State: AOAM532thJyRStwNu5i4NN3MGvfdyE0gs2+3oOa46hGM5QQqfsvRknjM
+        uLz41cVvnef+stI8/gd0Oy8=
+X-Google-Smtp-Source: ABdhPJwX+sM8+ky6mAch/Qbg57pfTU/WkxNRIA9uIATYx2hIMi6S+tRJ0U5wPwtrTkxX3X6C4CbZoA==
+X-Received: by 2002:a63:be49:: with SMTP id g9mr5767535pgo.375.1641940788546;
+        Tue, 11 Jan 2022 14:39:48 -0800 (PST)
+Received: from ast-mbp.lan ([2603:3023:16e:5000:1c05:63fe:2a0d:fa56])
+        by smtp.gmail.com with ESMTPSA id j18sm320893pgi.78.2022.01.11.14.39.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 14:31:29 -0800 (PST)
-Received: (nullmailer pid 3621764 invoked by uid 1000);
-        Tue, 11 Jan 2022 22:31:28 -0000
-Date:   Tue, 11 Jan 2022 16:31:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Javier Martinez Canillas <javier@dowhile0.org>,
-        linux-leds@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v2 3/3] dt-bindings: leds: common: fix unit address in
- max77693 example
-Message-ID: <Yd4FQL0mC65LGVgR@robh.at.kernel.org>
-References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
- <20220111175430.224421-4-krzysztof.kozlowski@canonical.com>
+        Tue, 11 Jan 2022 14:39:48 -0800 (PST)
+Date:   Tue, 11 Jan 2022 14:39:44 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH 0/6] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-ID: <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+ <164191321766.806991.7930388561276940676.stgit@devnote2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111175430.224421-4-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <164191321766.806991.7930388561276940676.stgit@devnote2>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 18:54:30 +0100, Krzysztof Kozlowski wrote:
-> The max77693 LED device node should not take an unit address, because it
-> is instantiated from a max77693 I2C parent device node.  This also
-> splits all examples to separate DTS examples because they are actually
-> independent.
+On Wed, Jan 12, 2022 at 12:00:17AM +0900, Masami Hiramatsu wrote:
+> Hi Jiri,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  Documentation/devicetree/bindings/leds/common.yaml | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> Here is a short series of patches, which shows what I replied
+> to your series.
 > 
+> This introduces the fprobe, the function entry/exit probe with
+> multiple probe point support. This also introduces the rethook
+> for hooking function return, which I cloned from kretprobe.
+> 
+> I also rewrite your [08/13] bpf patch to use this fprobe instead
+> of kprobes. I didn't tested that one, but the sample module seems
+> to work. Please test bpf part with your libbpf updates.
+> 
+> BTW, while implementing the fprobe, I introduced the per-probe
+> point private data, but I'm not sure why you need it. It seems
+> that data is not used from bpf...
+> 
+> If this is good for you, I would like to proceed this with
+> the rethook and rewrite the kretprobe to use the rethook to
+> hook the functions. That should be much cleaner (and easy to
+> prepare for the fgraph tracer integration)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+What is the speed of attach/detach of thousands fprobes?

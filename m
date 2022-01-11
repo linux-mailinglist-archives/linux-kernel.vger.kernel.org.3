@@ -2,159 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5496548B10B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF5448B110
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245754AbiAKPkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S244583AbiAKPlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiAKPkI (ORCPT
+        with ESMTP id S239797AbiAKPk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:40:08 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DF8C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:08 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id c36so30376452uae.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:08 -0800 (PST)
+        Tue, 11 Jan 2022 10:40:58 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB868C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:58 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 2-20020a251302000000b006118f867dadso1120610ybt.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MNebTMoFC3mE7Sb+no0J2oxGNQv4XmAbLVXLd+UEUyw=;
-        b=pXwP/jcIuLM+IcI980XIV7p4VTv5FB5nJnvayqGHsBeSl4jdL7hIC913ZrBKn7IuF3
-         ra+kEajmLo6eflU1DXVD5iOzlOB8O88saVLahQoak/bdn49bOy5OF7+XYHD/8uEcfJEV
-         Lh1O/zBkIWL78ZA7stBZ0soH6IfZDD0c1WHsVHx47PQiURfvG6WfS+qbNb4f6zo8Zn4V
-         oRorzM2K/QmQVmnPOb00ZhKU8YSEAJ5+s84XBM71eAywAnJ+seOCNyng1t2Dnf7vJp+J
-         3QjnFkR0yIAm1P/LZV9gpGqpEnQSFtYXs2s6kWtK5dTSdNAzi6/hBqxfeKQLwBLi/uUM
-         l7zg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=T42iHV28VeOQOSr6+/jPZLYHOPmxU90EiajYoOWkuKs=;
+        b=CXKrmFoMgA/idPVTdcgeKlKj97I4kSjTasFYbuJfvU0rRxnErMfkEWCGxaaLForzZ0
+         XD0jnj24uOAzP/cU4djQ4KSiZk0n7TN79KMPRxCB6FaRbX4BEk/Rklaggh0kzyPJ/1nS
+         VJOqmreHtxrx+85ZpjMO1csw4IhJvLpBDMFY1VSBkuQgDeNUS7Ru6n6aGxktaGbnithE
+         waFKcVc89ifkaMdq6kAu2mrI4chpPfpRS8XGw1nZsE+zQtjLzjhUZ6tOWsi+ljMQkWCs
+         807atYnm9TPYV3fEAOfABR1MpdLTWXNK/cTT2DjhiRXLdDXfrH5jDWVtUupDE3gsaZX9
+         HbJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MNebTMoFC3mE7Sb+no0J2oxGNQv4XmAbLVXLd+UEUyw=;
-        b=RHJu8wS/+y8QBdcJtNfLcdtnDcaCfYRLDDiCQTi7ClgZNm1UEXRfkgQQ4Sh6E8xpN8
-         Z+4IZ0Bb7wR/xHg3WYYQAX/lboIx0DcfRqcSgbAmkiU4UmXg0/7Viy83SMRT9y+amXjg
-         YjUNtFS1mOQetP+7O7ibCuODPdsKz3CWXyK4KmCjErqlSvFu+Vpbqy5VlPVZi61UzOpO
-         y48FTcTPcZ1NE1F8r/l0s0EUjSTDYYm3vuq2xLHJAtxGDbIZ/dVue7ZzAdO8uHGOHNNV
-         oXHOBJaAngpl7axypRtLr3iWAiFZwmVmu/Q+qcNi+AN7WHk/0EvC++HteQ/hlgpTVkjf
-         Zy+A==
-X-Gm-Message-State: AOAM530TxkDdh1nZzBD8deOgHACKT5rX3SbINScIlK2c3a0TtpmzdwBs
-        vQCjAJzqsYRjOEhfTLB6ER0djIENTBU=
-X-Google-Smtp-Source: ABdhPJweTWa5G61h0o1UY3SPTI90SGxdkDtkM1KpeJy4wq4EYgb5SUatlQYsIEWGTnczDCzVEMUevw==
-X-Received: by 2002:ab0:1543:: with SMTP id p3mr2196987uae.88.1641915607416;
-        Tue, 11 Jan 2022 07:40:07 -0800 (PST)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id j27sm5787060vkl.52.2022.01.11.07.40.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 07:40:06 -0800 (PST)
-Received: by mail-ua1-f43.google.com with SMTP id m90so15261426uam.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:06 -0800 (PST)
-X-Received: by 2002:a67:a409:: with SMTP id n9mr2204137vse.74.1641915606014;
- Tue, 11 Jan 2022 07:40:06 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1641863490.git.asml.silence@gmail.com> <07031c43d3e5c005fbfc76b60a58e30c66d7c620.1641863490.git.asml.silence@gmail.com>
-In-Reply-To: <07031c43d3e5c005fbfc76b60a58e30c66d7c620.1641863490.git.asml.silence@gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 11 Jan 2022 10:39:30 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSdJYwN=vxpj4nkpSxdyJ5_47PZuPTjQkRphYvLt47KdjQ@mail.gmail.com>
-Message-ID: <CA+FuTSdJYwN=vxpj4nkpSxdyJ5_47PZuPTjQkRphYvLt47KdjQ@mail.gmail.com>
-Subject: Re: [PATCH 09/14] ipv6: hand dst refs to cork setup
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=T42iHV28VeOQOSr6+/jPZLYHOPmxU90EiajYoOWkuKs=;
+        b=uejTHBkquymUb054TvS2lS1tl/4mlragde7dNTzmih+vhGm7oFT9RVdqLboG61kfYd
+         Q8Y6d3Y2kdccD5IBKTvnLXiNT1c064+ufGBqi/iGCiHoDATBKa/+TkX0Emam2p3lq41O
+         9OOYp5GhEabEafgYHP4YSMZzDFrQzm8X7CYHse5fY75fC1MJr05i4qH9+4RApJ5fi0xW
+         4G9DD1Etbf5i7lbmp7l6brniV6MNFLlG061vEAXgSVhQXpDRl9GZJ4CVN2z9KUQW7k4o
+         jw+VxtnaWEuFTRxA13tIhOPcWW7dcSFGbJFT1ktBLhXaC+1T65ZVY+v6M5NGIco9JVjn
+         sCdg==
+X-Gm-Message-State: AOAM533nCs6iDocXCXE3rhGtMxIpl3zYM9DJ5H89LlznryphfMZjchwn
+        iKiauzTMTfz+tJaCk+FsNTP47KdhDXI=
+X-Google-Smtp-Source: ABdhPJyxFwn9MvYTDU9n4J/DClDNTiWQjW15TZxBxG09HzMX1+Shm2icLskC2lCjrznUlV5XCw2DiSv9AT8=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:4f78:6ed1:42d2:b0a7])
+ (user=pgonda job=sendgmr) by 2002:a25:680e:: with SMTP id d14mr2781511ybc.522.1641915657861;
+ Tue, 11 Jan 2022 07:40:57 -0800 (PST)
+Date:   Tue, 11 Jan 2022 07:40:48 -0800
+Message-Id: <20220111154048.2108264-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
+Subject: [PATCH] KVM: SEV: Allow SEV intra-host migration of VM with mirrors
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:25 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
->
-> During cork->dst setup, ip6_make_skb() gets an additional reference to
-> a passed in dst. However, udpv6_sendmsg() doesn't need dst after calling
-> ip6_make_skb(), and so we can save two additional atomics by passing
-> dst references to ip6_make_skb(). udpv6_sendmsg() is the only caller, so
-> it's enough to make sure it doesn't use dst afterwards.
->
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> ---
+For SEV-ES VMs with mirrors to be intra-host migrated they need to be
+able to migrate with the mirror. This is due to that fact that all VMSAs
+need to be added into the VM with LAUNCH_UPDATE_VMSA before
+lAUNCH_FINISH. Allowing migration with mirrors allows users of SEV-ES to
+keep the mirror VMs VMSAs during migration.
 
-There are two patches 9/14
+Adds a list of mirror VMs for the original VM iterate through during its
+migration. During the iteration the owner pointers can be updated from
+the source to the destination. This fixes the ASID leaking issue which
+caused the blocking of migration of VMs with mirrors.
 
->  net/ipv6/ip6_output.c | 9 ++++++---
->  net/ipv6/udp.c        | 3 ++-
->  2 files changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-> index 0cc490f2cfbf..6a7bba4dd04d 100644
-> --- a/net/ipv6/ip6_output.c
-> +++ b/net/ipv6/ip6_output.c
-> @@ -1356,6 +1356,8 @@ static int ip6_setup_cork(struct sock *sk, struct inet_cork_full *cork,
->         unsigned int mtu;
->         struct ipv6_txoptions *nopt, *opt = ipc6->opt;
->
-> +       cork->base.dst = &rt->dst;
-> +
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/x86/kvm/svm/sev.c                        | 45 ++++++++++++-----
+ arch/x86/kvm/svm/svm.h                        |  4 ++
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  | 48 +++++++++++++------
+ 3 files changed, 70 insertions(+), 27 deletions(-)
 
-Is there a reason to move this up from its original location next to
-the other cork initialization assignments?
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 322553322202..e396ae04f891 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -258,6 +258,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+ 		goto e_free;
+ 
+ 	INIT_LIST_HEAD(&sev->regions_list);
++	INIT_LIST_HEAD(&sev->mirror_vms);
+ 
+ 	return 0;
+ 
+@@ -1623,22 +1624,41 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
+ 	}
+ }
+ 
+-static void sev_migrate_from(struct kvm_sev_info *dst,
+-			      struct kvm_sev_info *src)
++static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+ {
++	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
++	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
++	struct kvm_sev_info *mirror, *tmp;
++
+ 	dst->active = true;
+ 	dst->asid = src->asid;
+ 	dst->handle = src->handle;
+ 	dst->pages_locked = src->pages_locked;
+ 	dst->enc_context_owner = src->enc_context_owner;
++	dst->num_mirrored_vms = src->num_mirrored_vms;
+ 
+ 	src->asid = 0;
+ 	src->active = false;
+ 	src->handle = 0;
+ 	src->pages_locked = 0;
+ 	src->enc_context_owner = NULL;
++	src->num_mirrored_vms = 0;
+ 
+ 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
++	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
++
++	/*
++	 * If this VM has mirrors we need to update the KVM refcounts from the
++	 * source to the destination.
++	 */
++	if (dst->num_mirrored_vms > 0) {
++		list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
++					  mirror_entry) {
++			kvm_get_kvm(dst_kvm);
++			kvm_put_kvm(src_kvm);
++			mirror->enc_context_owner = dst_kvm;
++		}
++	}
+ }
+ 
+ static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+@@ -1708,15 +1728,6 @@ int svm_vm_migrate_from(struct kvm *kvm, unsigned int source_fd)
+ 
+ 	src_sev = &to_kvm_svm(source_kvm)->sev_info;
+ 
+-	/*
+-	 * VMs mirroring src's encryption context rely on it to keep the
+-	 * ASID allocated, but below we are clearing src_sev->asid.
+-	 */
+-	if (src_sev->num_mirrored_vms) {
+-		ret = -EBUSY;
+-		goto out_unlock;
+-	}
+-
+ 	dst_sev->misc_cg = get_current_misc_cg();
+ 	cg_cleanup_sev = dst_sev;
+ 	if (dst_sev->misc_cg != src_sev->misc_cg) {
+@@ -1738,7 +1749,7 @@ int svm_vm_migrate_from(struct kvm *kvm, unsigned int source_fd)
+ 		if (ret)
+ 			goto out_source_vcpu;
+ 	}
+-	sev_migrate_from(dst_sev, src_sev);
++	sev_migrate_from(kvm, source_kvm);
+ 	kvm_vm_dead(source_kvm);
+ 	cg_cleanup_sev = src_sev;
+ 	ret = 0;
+@@ -2009,9 +2020,10 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+ 	source_sev = &to_kvm_svm(source_kvm)->sev_info;
+ 	kvm_get_kvm(source_kvm);
+ 	source_sev->num_mirrored_vms++;
++	mirror_sev = &to_kvm_svm(kvm)->sev_info;
++	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
+ 
+ 	/* Set enc_context_owner and copy its encryption context over */
+-	mirror_sev = &to_kvm_svm(kvm)->sev_info;
+ 	mirror_sev->enc_context_owner = source_kvm;
+ 	mirror_sev->active = true;
+ 	mirror_sev->asid = source_sev->asid;
+@@ -2050,10 +2062,17 @@ void sev_vm_destroy(struct kvm *kvm)
+ 	if (is_mirroring_enc_context(kvm)) {
+ 		struct kvm *owner_kvm = sev->enc_context_owner;
+ 		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
++		struct kvm_sev_info *mirror, *tmp;
+ 
+ 		mutex_lock(&owner_kvm->lock);
+ 		if (!WARN_ON(!owner_sev->num_mirrored_vms))
+ 			owner_sev->num_mirrored_vms--;
++
++		list_for_each_entry_safe(mirror, tmp, &owner_sev->mirror_vms,
++					  mirror_entry)
++			if (mirror == sev)
++				list_del(&mirror->mirror_entry);
++
+ 		mutex_unlock(&owner_kvm->lock);
+ 		kvm_put_kvm(owner_kvm);
+ 		return;
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index daa8ca84afcc..b9f5e33d5232 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -81,6 +81,10 @@ struct kvm_sev_info {
+ 	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
+ 	struct kvm *enc_context_owner; /* Owner of copied encryption context */
+ 	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
++	union {
++		struct list_head mirror_vms; /* List of VMs mirroring */
++		struct list_head mirror_entry; /* Use as a list entry of mirrors */
++	};
+ 	struct misc_cg *misc_cg; /* For misc cgroup accounting */
+ 	atomic_t migration_in_progress;
+ };
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+index 80056bbbb003..cb1962c89945 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+@@ -341,37 +341,57 @@ static void test_sev_mirror_parameters(void)
+ 
+ static void test_sev_move_copy(void)
+ {
+-	struct kvm_vm *dst_vm, *sev_vm, *mirror_vm, *dst_mirror_vm;
+-	int ret;
++	struct kvm_vm *dst_vm, *dst2_vm, *dst3_vm, *sev_vm, *mirror_vm,
++		      *dst_mirror_vm, *dst2_mirror_vm, *dst3_mirror_vm;
+ 
+ 	sev_vm = sev_vm_create(/* es= */ false);
+ 	dst_vm = aux_vm_create(true);
++	dst2_vm = aux_vm_create(true);
++	dst3_vm = aux_vm_create(true);
+ 	mirror_vm = aux_vm_create(false);
+ 	dst_mirror_vm = aux_vm_create(false);
++	dst2_mirror_vm = aux_vm_create(false);
++	dst3_mirror_vm = aux_vm_create(false);
+ 
+ 	sev_mirror_create(mirror_vm->fd, sev_vm->fd);
+-	ret = __sev_migrate_from(dst_vm->fd, sev_vm->fd);
+-	TEST_ASSERT(ret == -1 && errno == EBUSY,
+-		    "Cannot migrate VM that has mirrors. ret %d, errno: %d\n", ret,
+-		    errno);
+ 
+-	/* The mirror itself can be migrated.  */
+ 	sev_migrate_from(dst_mirror_vm->fd, mirror_vm->fd);
+-	ret = __sev_migrate_from(dst_vm->fd, sev_vm->fd);
+-	TEST_ASSERT(ret == -1 && errno == EBUSY,
+-		    "Cannot migrate VM that has mirrors. ret %d, errno: %d\n", ret,
+-		    errno);
++	sev_migrate_from(dst_vm->fd, sev_vm->fd);
++
++	sev_migrate_from(dst2_vm->fd, dst_vm->fd);
++	sev_migrate_from(dst2_mirror_vm->fd, dst_mirror_vm->fd);
++
++	sev_migrate_from(dst3_mirror_vm->fd, dst2_mirror_vm->fd);
++	sev_migrate_from(dst3_vm->fd, dst2_vm->fd);
++
++	kvm_vm_free(dst_vm);
++	kvm_vm_free(sev_vm);
++	kvm_vm_free(dst2_vm);
++	kvm_vm_free(dst3_vm);
++	kvm_vm_free(mirror_vm);
++	kvm_vm_free(dst_mirror_vm);
++	kvm_vm_free(dst2_mirror_vm);
++	kvm_vm_free(dst3_mirror_vm);
+ 
+ 	/*
+-	 * mirror_vm is not a mirror anymore, dst_mirror_vm is.  Thus,
+-	 * the owner can be copied as soon as dst_mirror_vm is gone.
++	 * Run similar test be destroy mirrors before mirrored VMs to ensure
++	 * destruction is done safely.
+ 	 */
+-	kvm_vm_free(dst_mirror_vm);
++	sev_vm = sev_vm_create(/* es= */ false);
++	dst_vm = aux_vm_create(true);
++	mirror_vm = aux_vm_create(false);
++	dst_mirror_vm = aux_vm_create(false);
++
++	sev_mirror_create(mirror_vm->fd, sev_vm->fd);
++
++	sev_migrate_from(dst_mirror_vm->fd, mirror_vm->fd);
+ 	sev_migrate_from(dst_vm->fd, sev_vm->fd);
+ 
+ 	kvm_vm_free(mirror_vm);
++	kvm_vm_free(dst_mirror_vm);
+ 	kvm_vm_free(dst_vm);
+ 	kvm_vm_free(sev_vm);
++
+ }
+ 
+ int main(int argc, char *argv[])
+-- 
+2.34.1.575.g55b058a8bb-goog
 
-That the reference is taken in ip6_append_data for corked requests
-(once, in setup cork branch) and inherited from udpv6_send_skb
-otherwise is non-trivial. Worth a comment.
-
->         /*
->          * setup for corking
->          */
-> @@ -1389,8 +1391,6 @@ static int ip6_setup_cork(struct sock *sk, struct inet_cork_full *cork,
->
->                 /* need source address above miyazawa*/
->         }
-> -       dst_hold(&rt->dst);
-> -       cork->base.dst = &rt->dst;
->         v6_cork->hop_limit = ipc6->hlimit;
->         v6_cork->tclass = ipc6->tclass;
->         if (rt->dst.flags & DST_XFRM_TUNNEL)
-> @@ -1784,6 +1784,7 @@ int ip6_append_data(struct sock *sk,
->                 /*
->                  * setup for corking
->                  */
-> +               dst_hold(&rt->dst);
->                 err = ip6_setup_cork(sk, &inet->cork, &np->cork,
->                                      ipc6, rt);
->                 if (err)
-> @@ -1974,8 +1975,10 @@ struct sk_buff *ip6_make_skb(struct sock *sk,
->         int exthdrlen = (ipc6->opt ? ipc6->opt->opt_flen : 0);
->         int err;
->
-> -       if (flags & MSG_PROBE)
-> +       if (flags & MSG_PROBE) {
-> +               dst_release(&rt->dst);
->                 return NULL;
-> +       }
->
->         __skb_queue_head_init(&queue);
->
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index eec83e34ae27..3039dff7fe64 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -1541,7 +1541,8 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->                 err = PTR_ERR(skb);
->                 if (!IS_ERR_OR_NULL(skb))
->                         err = udp_v6_send_skb(skb, fl6, &cork.base);
-> -               goto out;
-> +               /* ip6_make_skb steals dst reference */
-> +               goto out_no_dst;
->         }
->
->         lock_sock(sk);
-> --
-> 2.34.1
->

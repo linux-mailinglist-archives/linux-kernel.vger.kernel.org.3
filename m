@@ -2,186 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DBF48B7A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49B448B7A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239778AbiAKTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        id S240158AbiAKTuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239082AbiAKTtN (ORCPT
+        with ESMTP id S239082AbiAKTuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:49:13 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F390EC061751
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:49:12 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id y17so433718qtx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:49:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=YqrRa12A2dOCgNRdJD8niKrGy7BorSiXU7Pz1gVSSqw=;
-        b=sYFJQYLkBAWGCMf7IJC8E0nfk9THaHhkHCaaJUxFXTYOlqpafhhRwpJXn5LZpqqBbk
-         eATWyLkamKg+bBaRAVN1gSTqLhaOE+Jny3X+bgRtl3E4O2J/KDY9Rl38HyjtDktOOmp2
-         shP6MzJ+xf2Vw52XEUOHpnuHexDLdkPfNWpBijuwk/T0u9ZJaFTmk2Opj4+dh6pXC+pr
-         jnZvLVNZrcD82fdVw96ZpbZR0M+aV5lE2113ue4Du6qz/Q55tWnzD7eMpsVKGWzfPPlE
-         x2pMXq4jKm1r4Za6xuhXk2sNdsGJeVsYcpkqAYvDoGfAGzFKWGMeQ3GX61FnYGekv9jP
-         xxhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=YqrRa12A2dOCgNRdJD8niKrGy7BorSiXU7Pz1gVSSqw=;
-        b=w0BdAjH328xTSkfTyX45UMjsSsjHZ2SqUTDIC7s3VeSVwPXloMGaT4RlhAdXOVov+P
-         zACuohytAvCuAY1eQuirDDI4X4O5R6T45Cuya536H9xhRG/4+VB2d6OLTLREAT87ZieP
-         kE+n+q33o50W+/OwnWd1FCAVJGeNsSu5u47ACOPMMFP1eQmcEoks8JQegLC2xt7C8nmL
-         +RqOUrP/NXqm6sFR6xHc1KjC20JPO++hFqSXeHTIKYDEYY086n8n+C5MgfBpHGlBFsOy
-         xC6m7Xy1Algy8SvfLU0LrL2+rsIUNREAIiqgtrxMV9/y8l3Q4imFjUntbTQCKYhRiImS
-         Qdgw==
-X-Gm-Message-State: AOAM533c2CHd2ZMKhCrLOJgDCD3bdSsG3nwXYVk74ZGgxLOwuMRlDmd6
-        v0qIs2ftiXJ0TNpnc5s0SA8O6w==
-X-Google-Smtp-Source: ABdhPJxn1aXvwlh12nmUzySizEvQ1SnqQ5KyJRZ/h/ecY76YDViQiteOu3/2rM79//oaZ2lpUdK73A==
-X-Received: by 2002:ac8:5b92:: with SMTP id a18mr5081449qta.262.1641930551687;
-        Tue, 11 Jan 2022 11:49:11 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
-        by smtp.gmail.com with ESMTPSA id j22sm5607330qko.46.2022.01.11.11.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 11:49:11 -0800 (PST)
-Message-ID: <8deeca52c1b482d738c9c888194c84549d00424f.camel@ndufresne.ca>
-Subject: Re: [PATCH 1/2] media: v4l2-ctrls: Add intra-refresh type control
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, ezequiel@collabora.com,
-        vgarodia@codeaurora.org, stanimir.varbanov@linaro.org
-Date:   Tue, 11 Jan 2022 14:49:08 -0500
-In-Reply-To: <1641561124-19476-2-git-send-email-quic_dikshita@quicinc.com>
-References: <1641561124-19476-1-git-send-email-quic_dikshita@quicinc.com>
-         <1641561124-19476-2-git-send-email-quic_dikshita@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Tue, 11 Jan 2022 14:50:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A517CC06173F;
+        Tue, 11 Jan 2022 11:50:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2341FB81C20;
+        Tue, 11 Jan 2022 19:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6924EC36AE9;
+        Tue, 11 Jan 2022 19:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641930597;
+        bh=yzpiOcIaZAFz66wpbSFV4nYHEJIrxjwnt4oQT6ol0bE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8P2vph61aomu1a2a9jgxWp+VHYfFVImR5japexIR3BdYwh6TqCUUu7SP1bef5Z/F
+         5xK3+h3cNFO3kxIrrDR5xbSHQxCa2T4JDHz+JLbBCuHZz0mvYGJTH070S/g/Dw2Uqp
+         TzmH+QhXgSuhY1KT5lvT5fF6MkI894N/YsPObu3podSQg57eLjq31Ko1KzGN79sRqc
+         3WUSfwoe8k2dUgLX6PhUek25SmNiRQEVXYymcHZXYjjbP1iES9Bh+yl2VCj1U3Oq1+
+         0ZsbLC3QwbMXhfU7wsSpLeRct9JgbYqsdf8gh6WfshnG9Z7mTUbwUBR+s7dshGlN/b
+         amKlNrcmoCjuA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C6F1940714; Tue, 11 Jan 2022 16:49:54 -0300 (-03)
+Date:   Tue, 11 Jan 2022 16:49:54 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Subject: Re: [PATCH v4 02/48] perf stat: Add aggr creators that are passed a
+ cpu.
+Message-ID: <Yd3fYqKi9X+fonEn@kernel.org>
+References: <20220105061351.120843-1-irogers@google.com>
+ <20220105061351.120843-3-irogers@google.com>
+ <Yd3bbelDA1qGPodk@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd3bbelDA1qGPodk@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 07 janvier 2022 à 18:42 +0530, Dikshita Agarwal a écrit :
-> Add a control to set intra-refresh type.
+Em Tue, Jan 11, 2022 at 04:33:01PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Jan 04, 2022 at 10:13:05PM -0800, Ian Rogers escreveu:
+> > The cpu_map and index can get confused. Add variants of the cpu_map__get
+> > routines that are passed a cpu. Make the existing cpu_map__get routines
+> > use the new functions with a view to remove them when no longer used.
+> > 
+> > Reviewed-by: James Clark <james.clark@arm.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/cpumap.c | 79 +++++++++++++++++++++++-----------------
+> >  tools/perf/util/cpumap.h |  6 ++-
+> >  2 files changed, 51 insertions(+), 34 deletions(-)
+> > 
+> > diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+> > index 87d3eca9b872..49fba2c53822 100644
+> > --- a/tools/perf/util/cpumap.c
+> > +++ b/tools/perf/util/cpumap.c
+> > @@ -128,21 +128,23 @@ int cpu_map__get_socket_id(int cpu)
+> >  	return ret ?: value;
+> >  }
+> >  
+> > -struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
+> > -					void *data __maybe_unused)
+> > +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_unused)
+> >  {
+> > -	int cpu;
+> >  	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> >  
+> > -	if (idx > map->nr)
+> > -		return id;
+> > -
+> > -	cpu = map->map[idx];
+> > -
+> >  	id.socket = cpu_map__get_socket_id(cpu);
+> >  	return id;
+> >  }
+> >  
+> > +struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
+> > +				       void *data)
+> > +{
+> > +	if (idx < 0 || idx > map->nr)
+> > +		return cpu_map__empty_aggr_cpu_id();
+> > +
+> > +	return cpu_map__get_socket_aggr_by_cpu(map->map[idx], data);
+> > +}
+> > +
 > 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 27 ++++++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          | 10 ++++++++
->  include/uapi/linux/v4l2-controls.h                 |  6 +++++
->  3 files changed, 43 insertions(+)
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index e141f0e..ce0201b 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -1180,6 +1180,33 @@ enum v4l2_mpeg_video_h264_entropy_mode -
->      is set to non zero value.
->      Applicable to H264, H263 and MPEG4 encoder.
->  
-> +``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE (enum)``
-> +
-> +enum v4l2_mpeg_video_intra_refresh_type -
-> +    Sets the type of intra refresh. The period to refresh
-> +    the whole frame is specified by V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
-> +    Note if the client sets this control to either ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
-> +    or ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC`` the ``V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB``
-> +    control shall be ignored.
-> +    If the client sets this control to ``V4L2_MPEG_VIDEO_INTRA_REFRESH_NONE`` the
-> +    V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB control shall not be ignored.
-> +    Applicable to H264, H263 and MPEG4 encoder. Possible values are:
-> +
-> +.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_NONE``
-> +      - Intra refresh is disabled.
+> This 'idx < 0' wasn't in the original code nor is described in the
+> comment log message, please avoid doing this, this may be harmless or
+> even a good hardening, but either way would be interesting to have it in
+> a separate patch. This eases review as in the end this code is just a
+> refactoring, moving things around but in the end should be equivalent code.
+> 
+> There are a few more, please consider this and if you agree, to speed
+> things up I can make the changes here, if I think this won't fallout in
+> changes to subsequent patches touching this area.
 
-Slight annoyance, we now have two mechanism to disable intra refresh. Disabling
-intra-refresh was previously documented as "Note that this control will not take
-effect when V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD control is set to non zero
-value."
+Nah, should be harmless, and its too much work already, so lets leave it
+as-is, but please consider this in the future.
 
-Perhaps we should drop this and add a similar line in this control documentation
-?
+- Arnaldo
+ 
+> - Arnaldo
+> 
+> >  static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
+> >  {
+> >  	struct aggr_cpu_id *a = (struct aggr_cpu_id *)a_pointer;
+> > @@ -200,15 +202,10 @@ int cpu_map__get_die_id(int cpu)
+> >  	return ret ?: value;
+> >  }
+> >  
+> > -struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data)
+> > +struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data)
+> >  {
+> > -	int cpu, die;
+> > -	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> > -
+> > -	if (idx > map->nr)
+> > -		return id;
+> > -
+> > -	cpu = map->map[idx];
+> > +	struct aggr_cpu_id id;
+> > +	int die;
+> >  
+> >  	die = cpu_map__get_die_id(cpu);
+> >  	/* There is no die_id on legacy system. */
+> > @@ -220,7 +217,7 @@ struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *dat
+> >  	 * with the socket ID and then add die to
+> >  	 * make a unique ID.
+> >  	 */
+> > -	id = cpu_map__get_socket(map, idx, data);
+> > +	id = cpu_map__get_socket_aggr_by_cpu(cpu, data);
+> >  	if (cpu_map__aggr_cpu_id_is_empty(id))
+> >  		return id;
+> >  
+> > @@ -228,6 +225,15 @@ struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *dat
+> >  	return id;
+> >  }
+> >  
+> > +struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx,
+> > +				    void *data)
+> > +{
+> > +	if (idx < 0 || idx > map->nr)
+> > +		return cpu_map__empty_aggr_cpu_id();
+> 
+> Ditto
+> 
+> > +
+> > +	return cpu_map__get_die_aggr_by_cpu(map->map[idx], data);
+> > +}
+> > +
+> >  int cpu_map__get_core_id(int cpu)
+> >  {
+> >  	int value, ret = cpu__get_topology_int(cpu, "core_id", &value);
+> > @@ -239,20 +245,13 @@ int cpu_map__get_node_id(int cpu)
+> >  	return cpu__get_node(cpu);
+> >  }
+> >  
+> > -struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data)
+> > +struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data)
+> >  {
+> > -	int cpu;
+> > -	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> > -
+> > -	if (idx > map->nr)
+> > -		return id;
+> > -
+> > -	cpu = map->map[idx];
+> > -
+> > -	cpu = cpu_map__get_core_id(cpu);
+> > +	struct aggr_cpu_id id;
+> > +	int core = cpu_map__get_core_id(cpu);
+> >  
+> >  	/* cpu_map__get_die returns a struct with socket and die set*/
+> > -	id = cpu_map__get_die(map, idx, data);
+> > +	id = cpu_map__get_die_aggr_by_cpu(cpu, data);
+> >  	if (cpu_map__aggr_cpu_id_is_empty(id))
+> >  		return id;
+> >  
+> > @@ -260,19 +259,33 @@ struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *da
+> >  	 * core_id is relative to socket and die, we need a global id.
+> >  	 * So we combine the result from cpu_map__get_die with the core id
+> >  	 */
+> > -	id.core = cpu;
+> > +	id.core = core;
+> >  	return id;
+> > +
+> >  }
+> >  
+> > -struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data __maybe_unused)
+> > +struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data)
+> > +{
+> > +	if (idx < 0 || idx > map->nr)
+> > +		return cpu_map__empty_aggr_cpu_id();
+> 
+> Ditto
+> 
+> > +
+> > +	return cpu_map__get_core_aggr_by_cpu(map->map[idx], data);
+> > +}
+> > +
+> > +struct aggr_cpu_id cpu_map__get_node_aggr_by_cpu(int cpu, void *data __maybe_unused)
+> >  {
+> >  	struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> >  
+> > +	id.node = cpu_map__get_node_id(cpu);
+> > +	return id;
+> > +}
+> > +
+> > +struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data)
+> > +{
+> >  	if (idx < 0 || idx >= map->nr)
+> > -		return id;
+> > +		return cpu_map__empty_aggr_cpu_id();
+> >  
+> > -	id.node = cpu_map__get_node_id(map->map[idx]);
+> > -	return id;
+> > +	return cpu_map__get_node_aggr_by_cpu(map->map[idx], data);
+> >  }
+> >  
+> >  int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp)
+> > diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+> > index a27eeaf086e8..c62d67704425 100644
+> > --- a/tools/perf/util/cpumap.h
+> > +++ b/tools/perf/util/cpumap.h
+> > @@ -31,13 +31,17 @@ size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size);
+> >  size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size);
+> >  size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp);
+> >  int cpu_map__get_socket_id(int cpu);
+> > +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data);
+> >  struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx, void *data);
+> >  int cpu_map__get_die_id(int cpu);
+> > +struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data);
+> >  struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data);
+> >  int cpu_map__get_core_id(int cpu);
+> > +struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data);
+> >  struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data);
+> >  int cpu_map__get_node_id(int cpu);
+> > -struct aggr_cpu_id  cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data);
+> > +struct aggr_cpu_id cpu_map__get_node_aggr_by_cpu(int cpu, void *data);
+> > +struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data);
+> >  int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp);
+> >  int cpu_map__build_die_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **diep);
+> >  int cpu_map__build_core_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **corep);
+> > -- 
+> > 2.34.1.448.ga2b2bfdf31-goog
+> 
+> -- 
+> 
+> - Arnaldo
 
-> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
-> +      - The whole frame is completely refreshed randomly
-> +      after the specified period.
-> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC``
-> +      - The whole frame MBs are completely refreshed in cyclic order
-> +      after the specified period.
-> +
->  ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
->      Intra macroblock refresh period. This sets the period to refresh
->      the whole frame. In other words, this defines the number of frames
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 54ca4e6..403c77b 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -572,6 +572,12 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
->  		"VBV/CPB Limit",
->  		NULL,
->  	};
-> +	static const char * const intra_refresh_type[] = {
-> +		"None"
-> +		"Random",
-> +		"Cyclic",
-> +		NULL,
-> +	};
->  
->  	switch (id) {
->  	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
-> @@ -705,6 +711,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
->  		return hevc_start_code;
->  	case V4L2_CID_CAMERA_ORIENTATION:
->  		return camera_orientation;
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
-> +		return intra_refresh_type;
->  	default:
->  		return NULL;
->  	}
-> @@ -834,6 +842,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
->  	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
->  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:		return "Intra Refresh Type";
->  	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
->  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
->  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
-> @@ -1360,6 +1369,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_STATELESS_H264_DECODE_MODE:
->  	case V4L2_CID_STATELESS_H264_START_CODE:
->  	case V4L2_CID_CAMERA_ORIENTATION:
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
->  		*type = V4L2_CTRL_TYPE_MENU;
->  		break;
->  	case V4L2_CID_LINK_FREQ:
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index c8e0f84..5429c25 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -443,6 +443,12 @@ enum v4l2_mpeg_video_multi_slice_mode {
->  #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
->  #define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
->  #define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
-> +#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE		(V4L2_CID_CODEC_BASE+237)
-> +enum v4l2_mpeg_video_intra_refresh_type {
-> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_NONE		= 0,
-> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM	= 1,
-> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_CYCLIC	= 2,
-> +};
->  
->  /* CIDs for the MPEG-2 Part 2 (H.262) codec */
->  #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+-- 
 
+- Arnaldo

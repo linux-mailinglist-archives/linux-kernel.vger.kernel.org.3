@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F93F48B79B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9FB48B7A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238853AbiAKTqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S240743AbiAKTxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiAKTqx (ORCPT
+        with ESMTP id S236475AbiAKTxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:46:53 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED25C061751
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:46:52 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id k21so592069lfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:46:52 -0800 (PST)
+        Tue, 11 Jan 2022 14:53:14 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572AC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:53:14 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id w188so494464oiw.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:53:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:user-agent:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=apllgcjqBKhHcPY4Sq8NPNisypZi4criwNIiRJZhedQ=;
-        b=DXpNeyKuZmuLb0+7GiV1ndEf+fbOh4LSggvF/lB4mjqSyH/QPDWvHKtW8+wfmRxaba
-         CMRbxQZXneFCfwegj3BP/5oSBWQReCyHOyGxajdzvQUBoc/sTr26Mziw45CgHIozWfbU
-         lxpsYR6UzLe9x1TAsegfCo9bZRPnIE6G6pQhLcO7CJTwjzQ457+Nhrkm/RVSlqtMK2VM
-         dK39vrS51bbgseP5/FX7eb/Z+dZxg009dY3os8jvlSn6J8p6UC3FJeRoQLnfCRCrijJI
-         YdG2tMitceKSqcEnJy5NTmwqx+p0WTFDeq24g7NLLLO4/LlAjF4KahWVH8c4X1I/QYZL
-         VGRg==
+        d=linuxtx.org; s=google;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Tjcdg3Ey3f8JqyyzT+Cl24fjuGmW4SbKqOF/PBidjqw=;
+        b=hi83Xs0ac2F2+QsZ7+i2Hvbx/N2A5elBXFw59+QgJjNTybr6QyoaM6Zfx7JgdZslxu
+         rYjHABxNI2z+2nxJQBInxUuqgV+q+FJc+NPZMSPAL/qaCRlnwZfY1+iWE+hugdo0Q3+j
+         jfNOQIMppS9rJOWHEeQkr+4yXDt0DhCdAzvp0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=apllgcjqBKhHcPY4Sq8NPNisypZi4criwNIiRJZhedQ=;
-        b=Cv0c44WrVc/LPlKM7sij6Xu+BdD6pMwqZ/+dtSSWeqrP2YFnBSGjiocK6m42hsklOv
-         4k8dPhlAxdP/CmiJ4mMRFTPk8KRniiRtYvlBQZ86GATTkzUaRgH1tzmjpAkcdvqeKsmd
-         oc1zr4vAFiyYorZi3Yz7ayvS+PsQSuVcI1KuD20ryZc9qgpf/+WFrHs2bwFbVMpBMy1/
-         sH3JZHbIBPouMDY+Fghde3KzgQkSdh9c3zwHomJuqDk4QZYzsuLsoblATWirwKzoEenb
-         wUuhj0RIF6sHDZ2MwQGCQjEgc26MgrKOVkzauzjyS4jl+40N5h/S+0NOKGRpJt/ZhIou
-         pmfg==
-X-Gm-Message-State: AOAM533I/Fx0Nca8/ML66U20uMzfTVvoHXbwOX+GcARINrrvt0AfmKIQ
-        U29HxhFlTTAk8QqgySBBIN0=
-X-Google-Smtp-Source: ABdhPJwoxw5c19Gb3/UWLAH/Kj/4pGO1pTvvZ3zzqg+dVKHuPS8luPJvCmfXz9PXtbHVwDmXmeLV8w==
-X-Received: by 2002:ac2:4f02:: with SMTP id k2mr4319120lfr.187.1641930410857;
-        Tue, 11 Jan 2022 11:46:50 -0800 (PST)
-Received: from localhost.localdomain (ntd06459.static.corbina.ru. [95.31.14.149])
-        by smtp.gmail.com with ESMTPSA id k12sm1372993ljq.91.2022.01.11.11.46.50
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 11 Jan 2022 11:46:50 -0800 (PST)
-Date:   Tue, 11 Jan 2022 22:52:29 +0300
-From:   Alexander Sergeyev <sergeev917@gmail.com>
-To:     Jeremy Szu <jeremy.szu@canonical.com>
-Cc:     tiwai@suse.com,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        Kailang Yang <kailang@realtek.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jian-Hong Pan <jhp@endlessos.org>,
-        Hui Wang <hui.wang@canonical.com>,
-        PeiSen Hou <pshou@realtek.com>
-Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
- G8
-Message-ID: <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
-User-Agent: mtt
-References: <20210519170357.58410-1-jeremy.szu@canonical.com>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Tjcdg3Ey3f8JqyyzT+Cl24fjuGmW4SbKqOF/PBidjqw=;
+        b=gMT+O7GhktA7ACAlYJZjg02sn+2vOq+iwkfx5DHnNcM18Fsrv62RUqM26WODWuGa1Y
+         neqh6knWxRKI38uG6q7UOt070+A+7rFYkxVa2nKJ3Gzix3Pi5rr8yPDMSIWw43m+gsvs
+         agz9NGxjuOzAvz+rlSQRhdTqLqpxehtzwf/1z515wxuvK+FR8h9L+41GukHQKU+bGi5v
+         HuWMiB6sbD9VrrXvb3Med8A2K7EQ1VdWN0a3cGb/tkxDJFNCyGqa8n5YSNS66hd3o0AF
+         x+R1BbFgtTTgZp0Xs0Pa4fQ4apX2ccvK8LRej2FbB+5irH/omH/aYOYFVO2Hi8N2ni24
+         zn/Q==
+X-Gm-Message-State: AOAM530Ig/1rW27AUpAM0UMoZD7wjgJ1q5bjFttpKHtZl1z4lp46u4tM
+        PLEzN1kovT137r9tZR+DBg66fkdcvF6Q0PcK
+X-Google-Smtp-Source: ABdhPJx4/yEP3bceehG7/01WrYo9pOVIDHPGvoHXeK1GTaH4YVVWOuoHDy92ZZExzuMV5qgkl5CD0g==
+X-Received: by 2002:a05:6808:169f:: with SMTP id bb31mr3002278oib.87.1641930793777;
+        Tue, 11 Jan 2022 11:53:13 -0800 (PST)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id bb20sm2178310oob.4.2022.01.11.11.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 11:53:12 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+From:   "Justin M. Forbes" <jforbes@fedoraproject.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jmforbes@linuxtx.org,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>
+Subject: [PATCH] lib/crypto: add prompts back to crypto libraries
+Date:   Tue, 11 Jan 2022 13:53:08 -0600
+Message-Id: <20220111195309.634965-1-jforbes@fedoraproject.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210519170357.58410-1-jeremy.szu@canonical.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Commit 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in") took
+away a number of prompt texts from other crypto libraries. This makes
+values flip from built-in to module when oldconfig runs, and causes
+problems when these crypto libs need to be built in for thingslike
+BIG_KEYS.
 
-On Thu, May 20, 2021 at 01:03:53AM +0800, Jeremy Szu wrote:
->The HP EliteBook 855 G8 Notebook PC is using ALC285 codec which needs
->ALC285_FIXUP_HP_MUTE_LED fixup to make it works. After applying the
->fixup, the mute/micmute LEDs work good.
+Fixes: 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in")
+Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
+---
+ lib/crypto/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I've recently got HP EliteBook 855 G8 and it happens that neither micmute LED 
-nor speakers work (except rare cases, more on that later) in 5.16.0. The 
-corresponding ALC285_FIXUP_HP_MUTE_LED fixup is definitely applied (verified by 
-adding a printk into alc285_fixup_hp_mute_led).
+diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+index 8620f38e117c..a3e41b7a8054 100644
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -40,7 +40,7 @@ config CRYPTO_LIB_CHACHA_GENERIC
+ 	  of CRYPTO_LIB_CHACHA.
 
-What is the most interesting, both micmute LED and speakers do work on rare 
-boots. I've written some scripts to pick up sound from speakers using a 
-known-good USB microphone. Out of 709 boots today only 16 ended up with working 
-micmute LED and speakers.
+ config CRYPTO_LIB_CHACHA
+-	tristate
++	tristate "ChaCha library interface"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	select CRYPTO_LIB_CHACHA_GENERIC if CRYPTO_ARCH_HAVE_LIB_CHACHA=n
+ 	help
+@@ -65,7 +65,7 @@ config CRYPTO_LIB_CURVE25519_GENERIC
+ 	  of CRYPTO_LIB_CURVE25519.
 
-Is there anything I can do to help with debugging of this problem?
+ config CRYPTO_LIB_CURVE25519
+-	tristate
++	tristate "Curve25519 scalar multiplication library"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
+ 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
+ 	help
+@@ -100,7 +100,7 @@ config CRYPTO_LIB_POLY1305_GENERIC
+ 	  of CRYPTO_LIB_POLY1305.
 
-Initially reported at https://bugzilla.kernel.org/show_bug.cgi?id=215466
+ config CRYPTO_LIB_POLY1305
+-	tristate
++	tristate "Poly1305 library interface"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
+ 	help
+@@ -109,7 +109,7 @@ config CRYPTO_LIB_POLY1305
+ 	  is available and enabled.
+
+ config CRYPTO_LIB_CHACHA20POLY1305
+-	tristate
++	tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	select CRYPTO_LIB_CHACHA
+-- 
+2.34.1
+

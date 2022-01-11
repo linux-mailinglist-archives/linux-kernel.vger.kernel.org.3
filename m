@@ -2,91 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 092D848AF3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7AE48AF3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241353AbiAKONw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:13:52 -0500
-Received: from mga11.intel.com ([192.55.52.93]:63115 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241298AbiAKONr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:13:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641910427; x=1673446427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lUBeKS4zuJaAQNtIFK9lHYyLpB7BElJSE0gdqqb7qJQ=;
-  b=LrhobFwI3A0mzTvH95McYtaeoUqoOYvYJ+i9S8EO50yyTGkpMhINZjVj
-   a+rgbyijH/P8lgDid9jQ/e+VcvcjiliAAFAFpgrQV2jrND+eGKKJhU/sT
-   MtIBZ84E5aJEwEphaYldZ156G411prci1TOnVFIziwA+AcWsoRVfSkad0
-   yl1Or/hF0RAKUl8eiusWF69kKaibZblqXX7i7ErCZikuaH0AMIpp5WiPT
-   9dcW+TVBqOZHaRfIOkWv4nms/4kdOKLLjWDVmaxsyyHfbIrmhLpeZSPtV
-   gNhwEDaVIDHtChUrGtsBQBiHaYKt1b8vVZdcGRY4DKLt2Gv6AhZvGvk0L
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="241044241"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="241044241"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 06:13:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="613227995"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 06:13:39 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id BE5C9202B9;
-        Tue, 11 Jan 2022 16:13:37 +0200 (EET)
-Date:   Tue, 11 Jan 2022 16:13:37 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v1 1/1] vsprintf: Fix potential unaligned access
-Message-ID: <Yd2QkVMnmZ57qXTH@paasikivi.fi.intel.com>
-References: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
- <YdyvXq8D2jsiM47E@paasikivi.fi.intel.com>
- <Yd1XlN0e23GRF9i6@smile.fi.intel.com>
- <Yd1h8c8Sk4fZ+h0A@paasikivi.fi.intel.com>
- <Yd1odcLqimcvSreV@smile.fi.intel.com>
+        id S241370AbiAKOO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238763AbiAKOO6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 09:14:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D614C06173F;
+        Tue, 11 Jan 2022 06:14:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E29F261665;
+        Tue, 11 Jan 2022 14:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5487C36AEB;
+        Tue, 11 Jan 2022 14:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641910497;
+        bh=TIwCoIo+wYfFyiYX/E8C5ej4SYpUVnhdmgm/W602+is=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xhWD9F2AXhgGPUEUXzteYw7ye+awGoEJbh4lPNufkIJrN5WGZXM0dw2hwdb9N9haI
+         ueMxRrpzP/H/uNnPoVhuoPEiBChbd3AjyVw7O5MP/KvoJVXfBYmCUq0LLAwxtwf8B1
+         470fujIYsd5m2D40bM57uj9d6vhqS+pYr8zxpyfI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.14.262
+Date:   Tue, 11 Jan 2022 15:14:53 +0100
+Message-Id: <16419104934282@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd1odcLqimcvSreV@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+I'm announcing the release of the 4.14.262 kernel.
 
-On Tue, Jan 11, 2022 at 01:22:29PM +0200, Andy Shevchenko wrote:
-> On Tue, Jan 11, 2022 at 12:54:41PM +0200, Sakari Ailus wrote:
-> > On Tue, Jan 11, 2022 at 12:10:28PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Jan 11, 2022 at 12:12:46AM +0200, Sakari Ailus wrote:
-> > > > On Mon, Jan 10, 2022 at 10:50:49PM +0200, Andy Shevchenko wrote:
-> > > > > The %p4cc specifier in some cases might get an unaligned pointer.
-> > > > > Due to this we need to make copy to local variable once to avoid
-> > > > > potential crashes on some architectures due to improper access.
-> > > > 
-> > > > I guess this problem exists virtually everywhere where pointers are being
-> > > > handled: the pointer could be unaligned.
-> > > 
-> > > True. And my patch improves the situation.
-> > > See, for example, 0f70fe605fad ("hexdump: fix for non-aligned buffers").
-> > 
-> > This is different since there's no guarantee of a void pointer's alignment.
-> > 
-> > The pixelformat used for %p4cc is a pointer to u32.
-> 
-> Oh, look at the %p, compiler doesn't know about the %p extensions and caller
-> may supply whatever they want, i.e. %p may take any address that can be kept
-> in void *. Actual argument _is_ void *. What you put there as u32 is just
-> personal expectation, and not the reality.
+All users of the 4.14 kernel series must upgrade.
 
-If you assume this, you should add get_unaligned() calls in all places
-where you're casting a type to another with higher alignment requirements.
+The updated 4.14.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
--- 
-Sakari Ailus
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                    |    2 -
+ drivers/bluetooth/btusb.c                   |   32 ++++++++++++----
+ drivers/infiniband/core/uverbs_marshall.c   |    2 -
+ drivers/isdn/mISDN/core.c                   |    6 +--
+ drivers/isdn/mISDN/core.h                   |    4 +-
+ drivers/isdn/mISDN/layer1.c                 |    4 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c |   56 ++++++++++++++++++++++++----
+ drivers/net/ieee802154/atusb.c              |   10 +++--
+ drivers/net/usb/rndis_host.c                |    5 ++
+ drivers/power/reset/ltc2952-poweroff.c      |    4 +-
+ drivers/scsi/libiscsi.c                     |    6 ++-
+ drivers/virtio/virtio_pci_common.c          |    7 +++
+ fs/xfs/xfs_ioctl.c                          |    3 +
+ kernel/trace/trace.c                        |    6 +--
+ net/ipv4/udp.c                              |    2 -
+ net/ipv6/ip6_vti.c                          |    2 +
+ net/ipv6/route.c                            |   28 +++++++++++++-
+ net/mac80211/mlme.c                         |    2 -
+ net/phonet/pep.c                            |    1 
+ net/sched/sch_qfq.c                         |    6 +--
+ 20 files changed, 145 insertions(+), 43 deletions(-)
+
+Darrick J. Wong (1):
+      xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate
+
+David Ahern (4):
+      ipv6: Check attribute length for RTA_GATEWAY in multipath route
+      ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route
+      ipv6: Continue processing multipath route even if gateway attribute is invalid
+      ipv6: Do cleanup if attribute validation fails in multipath route
+
+Di Zhu (1):
+      i40e: fix use-after-free in i40e_sync_filters_subtask()
+
+Eric Dumazet (1):
+      sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
+
+Greg Kroah-Hartman (1):
+      Linux 4.14.262
+
+Hangyu Hua (1):
+      phonet: refcount leak in pep_sock_accep
+
+Jedrzej Jagielski (1):
+      i40e: Fix incorrect netdev's real number of RX/TX queues
+
+Leon Romanovsky (1):
+      RDMA/core: Don't infoleak GRH fields
+
+Lixiaokeng (1):
+      scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+
+Nathan Chancellor (1):
+      power: reset: ltc2952: Fix use of floating point literals
+
+Naveen N. Rao (2):
+      tracing: Fix check for trace_percpu_buffer validity in get_trace_buf()
+      tracing: Tag trace_percpu_buffer as a percpu pointer
+
+Parav Pandit (1):
+      virtio_pci: Support surprise removal of virtio pci device
+
+Pavel Skripkin (1):
+      ieee802154: atusb: fix uninit value in atusb_set_extended_addr
+
+Takashi Iwai (1):
+      Bluetooth: btusb: Apply QCA Rome patches for some ATH3012 models
+
+Thomas Toye (1):
+      rndis_host: support Hytera digital radios
+
+Tom Rix (1):
+      mac80211: initialize variable have_higher_than_11mbit
+
+William Zhao (1):
+      ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
+
+wolfgang huang (1):
+      mISDN: change function names to avoid conflicts
+
+yangxingwu (1):
+      net: udp: fix alignment problem in udp4_seq_show()
+

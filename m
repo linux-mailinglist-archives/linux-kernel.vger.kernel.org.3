@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA1F48B132
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CA048B134
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349602AbiAKPqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:46:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4452 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349554AbiAKPqp (ORCPT
+        id S1349655AbiAKPrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:47:05 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:53358 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349554AbiAKPrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:46:45 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BEr320009999;
-        Tue, 11 Jan 2022 15:46:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=bmZkRCTW56iytS7KkqBciUVdH1HMRyfkjpT+RB5LSys=;
- b=r22l5XAwWnGwxbgSA5pXgJhXrwHCEnMI4uqSqakWWOSOo0K8QBOnjMv+NJbUtHLJR8mn
- xDwLgSSLFLj8nhbgw2ozip3jRTDKfB2Y4Cl3ZZfCe98+ZT2YqQg5DkbP1Gd+wwE42Ba6
- dryZcx9xBqQkFggPLtj6PFL6mu2+12Vst6YHckFd8Yv1kelkhbBa+6Fe+wxPdUYZ9xmc
- A3e8q1o+ILfe76WPkhrTDqFbXBIC5lSzM5RRblXqJTfFrJEWxInHpjgO8Q6kEuuIghYP
- RmlfmKod1sqoEFWAfkP0kOS0Tgm/8hxTyby4fOC9i62bIW+qPeNlZpXA75WY7sko9gyf pQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmjf11v7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 15:46:41 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BFVfCT016609;
-        Tue, 11 Jan 2022 15:46:41 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmjf11ud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 15:46:41 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BFkXlY018403;
-        Tue, 11 Jan 2022 15:46:39 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3df289ff4y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 15:46:39 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BFkbdv32506140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 15:46:37 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E94E84C05C;
-        Tue, 11 Jan 2022 15:46:36 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F0A54C040;
-        Tue, 11 Jan 2022 15:46:36 +0000 (GMT)
-Received: from [9.145.30.70] (unknown [9.145.30.70])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 15:46:36 +0000 (GMT)
-Message-ID: <3897d6e8-1191-b42b-9553-c2720f3a92eb@linux.ibm.com>
-Date:   Tue, 11 Jan 2022 16:46:38 +0100
+        Tue, 11 Jan 2022 10:47:02 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-213-RicbFyfrMCWpx8UYA-IVfw-1; Tue, 11 Jan 2022 15:46:57 +0000
+X-MC-Unique: RicbFyfrMCWpx8UYA-IVfw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Tue, 11 Jan 2022 15:46:56 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Tue, 11 Jan 2022 15:46:56 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Theodore Tso <tytso@mit.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Subject: RE: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
+Thread-Topic: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
+Thread-Index: AQHYBunGGyLRC02Uk06ON333WcASqqxd8NBA
+Date:   Tue, 11 Jan 2022 15:46:56 +0000
+Message-ID: <caed82818cdb466aade033501f57d183@AcuMS.aculab.com>
+References: <20211223141113.1240679-1-Jason@zx2c4.com>
+ <20211223141113.1240679-2-Jason@zx2c4.com>
+ <CAMuHMdU0spv9X_wErkBBWQ9kV9f1zE_YNcu5nPbTG_64Lh_h0w@mail.gmail.com>
+ <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
+ <Yd18+iQ8zicsSPa0@zx2c4.com>
+In-Reply-To: <Yd18+iQ8zicsSPa0@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH net 1/3] net/smc: Resolve the race between link group
- access and termination
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641806784-93141-1-git-send-email-guwen@linux.alibaba.com>
- <1641806784-93141-2-git-send-email-guwen@linux.alibaba.com>
- <8b720956-c8fe-0fe2-b019-70518d5c60c8@linux.ibm.com>
- <ee973642-6bae-e748-cea9-ed18bca461f0@linux.alibaba.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <ee973642-6bae-e748-cea9-ed18bca461f0@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JREUA0uLOstrKskTKdjQ3kIwUHuU2IGT
-X-Proofpoint-ORIG-GUID: xnT08N1T5Hlf1OLuWNN8Dcmjva-mJ1GW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 suspectscore=0 phishscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201110090
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 16:36, Wen Gu wrote:
-> Thanks for your review.
-> 
-> On 2022/1/11 4:23 pm, Karsten Graul wrote:
->> On 10/01/2022 10:26, Wen Gu wrote:
->>> We encountered some crashes caused by the race between the access
->>> and the termination of link groups.
->>>
->>
->> These waiters (seaparate ones for smcd and smcr) are used to wait for all lgrs
->> to be deleted when a module unload or reboot was triggered, so it must only be
->> woken up when the lgr is actually freed.
-> 
-> Thanks for your reminding, I will move the wake-up code to __smc_lgr_free().
-> 
-> And maybe the vlan put and device put of smcd are also need to be moved
-> to __smc_lgr_free()?, because it also seems to be more suitable to put these
-> resources when lgr is actually freed. What do you think?
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDExIEphbnVhcnkgMjAyMiAxMjo1MA0K
+PiANCj4gT24gVHVlLCBKYW4gMTEsIDIwMjIgYXQgMToyOCBQTSBKYXNvbiBBLiBEb25lbmZlbGQg
+PEphc29uQHp4MmM0LmNvbT4gd3JvdGU6DQo+ID4gSWYgeW91J3JlIHJlYWxseSBxdWl0ZSBjb25j
+ZXJuZWQgYWJvdXQgbTY4ayBjb2RlIHNpemUsIEkgY2FuIHByb2JhYmx5DQo+ID4gZG8gc29tZSB0
+aGluZ3MgdG8gcmVkdWNlIHRoYXQuIEZvciBleGFtcGxlLCBibGFrZTJzMjU2X2htYWMgaXMgb25s
+eQ0KPiA+IHVzZWQgYnkgd2lyZWd1YXJkIGFuZCBpdCBjb3VsZCBwcm9iYWJseSBiZSBtYWRlIGxv
+Y2FsIHRoZXJlLiBBbmQgd2l0aA0KPiA+IHNvbWUgdHJpdmlhbCBsb29wIHJlLXJvbGxpbmcsIEkg
+Y2FuIHNoYXZlIG9mZiBhbm90aGVyIDIzMDAgYnl0ZXMuIEFuZA0KPiA+IEkgYmV0IEkgY2FuIGZp
+bmQgYSBmZXcgb3RoZXIgdGhpbmdzIHRvby4gVGhlIHF1ZXN0aW9uIGlzOiBob3cNCj4gPiBpbXBv
+cnRhbnQgaXMgdGhpcyB0byB5b3U/DQo+IA0KPiBBbmQgd2l0aCBhbm90aGVyIHRyaWNrIChzZWUg
+YmVsb3cpLCBhbm90aGVyIGV4dHJhIDEwMDAgYnl0ZXMgb3Igc28NCj4gc2hhdmVkIG9mZi4gQXNp
+ZGUgZnJvbSBtb3ZpbmcgYmxha2UyczI1Nl9obWFjLCBJJ20gbm90IHJlYWxseSBzdXBlcg0KPiBl
+bnRodXNpYXN0aWMgYWJvdXQgbWFraW5nIHRoZXNlIGNoYW5nZXMsIGJ1dCBkZXBlbmRpbmcgb24g
+aG93IGltcG9ydGFudA0KPiB0aGlzIGlzIHRvIHlvdSwgbWF5YmUgd2UgY2FuIG1ha2Ugc29tZXRo
+aW5nIHdvcmsuIFRoZXJlIGFyZSBwcm9iYWJseQ0KPiBhZGRpdGlvbmFsIHBvc3NpYmlsaXRpZXMg
+dG9vIHdpdGggdGhlIGNvZGUuDQo+IA0KPiA9PT09DQo+IA0KPiBkaWZmIC0tZ2l0IGEvbGliL2Ny
+eXB0by9ibGFrZTJzLWdlbmVyaWMuYyBiL2xpYi9jcnlwdG8vYmxha2Uycy1nZW5lcmljLmMNCj4g
+aW5kZXggNzVjY2IzZTYzM2U2Li44ZTNjNjM3MjM2M2EgMTAwNjQ0DQo+IC0tLSBhL2xpYi9jcnlw
+dG8vYmxha2Uycy1nZW5lcmljLmMNCj4gKysrIGIvbGliL2NyeXB0by9ibGFrZTJzLWdlbmVyaWMu
+Yw0KPiBAQCAtNDYsNyArNDYsNyBAQCB2b2lkIGJsYWtlMnNfY29tcHJlc3NfZ2VuZXJpYyhzdHJ1
+Y3QgYmxha2Uyc19zdGF0ZSAqc3RhdGUsIGNvbnN0IHU4ICpibG9jaywNCj4gIHsNCj4gIAl1MzIg
+bVsxNl07DQo+ICAJdTMyIHZbMTZdOw0KPiAtCWludCBpOw0KPiArCWludCBpLCBqOw0KDQpVc2Ug
+dW5zaWduZWQgaW50IGksIGo7DQpFbnN1cmVzIHRoZSAnJSA0JyBhcmUgZG9uZSBhcyAnJiAzJyBh
+bmQgdGhlIGRpdmlkZXMgYXMgc2hpZnRzLg0KVW5sZXNzIHRoZSBjb21waWxlciBtYW5hZ2VzIHRv
+IHRyYWNrIHRoZSB2YWxpZCB2YWx1ZXMgdGhhdCB3aWxsDQpldmVuIGdlbmVyYXRlIGJldHRlciBj
+b2RlIG9uIHg4Ni02NC4NCihTYXZlcyBhIHNpZ24gZXh0ZW5zaW9uIHByaW9yIHRvIHRoZSBhcnJh
+eSBpbmRleGVzLikNCg0KPiAgCVdBUk5fT04oSVNfRU5BQkxFRChERUJVRykgJiYNCj4gIAkJKG5i
+bG9ja3MgPiAxICYmIGluYyAhPSBCTEFLRTJTX0JMT0NLX1NJWkUpKTsNCj4gQEAgLTc2LDI5ICs3
+NiwxMSBAQCB2b2lkIGJsYWtlMnNfY29tcHJlc3NfZ2VuZXJpYyhzdHJ1Y3QgYmxha2Uyc19zdGF0
+ZSAqc3RhdGUsIGNvbnN0IHU4ICpibG9jaywNCj4gIAliID0gcm9yMzIoYiBeIGMsIDcpOyBcDQo+
+ICB9IHdoaWxlICgwKQ0KPiANCj4gLSNkZWZpbmUgUk9VTkQocikgZG8geyBcDQo+IC0JRyhyLCAw
+LCB2WzBdLCB2WyA0XSwgdlsgOF0sIHZbMTJdKTsgXA0KPiAtCUcociwgMSwgdlsxXSwgdlsgNV0s
+IHZbIDldLCB2WzEzXSk7IFwNCj4gLQlHKHIsIDIsIHZbMl0sIHZbIDZdLCB2WzEwXSwgdlsxNF0p
+OyBcDQo+IC0JRyhyLCAzLCB2WzNdLCB2WyA3XSwgdlsxMV0sIHZbMTVdKTsgXA0KPiAtCUcociwg
+NCwgdlswXSwgdlsgNV0sIHZbMTBdLCB2WzE1XSk7IFwNCj4gLQlHKHIsIDUsIHZbMV0sIHZbIDZd
+LCB2WzExXSwgdlsxMl0pOyBcDQo+IC0JRyhyLCA2LCB2WzJdLCB2WyA3XSwgdlsgOF0sIHZbMTNd
+KTsgXA0KPiAtCUcociwgNywgdlszXSwgdlsgNF0sIHZbIDldLCB2WzE0XSk7IFwNCj4gLX0gd2hp
+bGUgKDApDQo+IC0JCVJPVU5EKDApOw0KPiAtCQlST1VORCgxKTsNCj4gLQkJUk9VTkQoMik7DQo+
+IC0JCVJPVU5EKDMpOw0KPiAtCQlST1VORCg0KTsNCj4gLQkJUk9VTkQoNSk7DQo+IC0JCVJPVU5E
+KDYpOw0KPiAtCQlST1VORCg3KTsNCj4gLQkJUk9VTkQoOCk7DQo+IC0JCVJPVU5EKDkpOw0KPiAt
+DQo+ICsJCWZvciAoaSA9IDA7IGkgPCAxMDsgKytpKSB7DQo+ICsJCQlmb3IgKGogPSAwOyBqIDwg
+ODsgKytqKQ0KPiArCQkJCUcoaSwgaiwgdltqICUgNF0sIHZbKChqICsgKGogLyA0KSkgJSA0KSAr
+IDRdLCB2WygoaiArIDIgKiAoaiAvIDQpKSAlIDQpICsgOF0sDQo+IHZbKChqICsgMyAqIChqIC8g
+NCkpICUgNCkgKyAxMl0pOw0KDQpJIHRoaW5rIEknZCBsb29rIGF0IGRvaW5nIFswLi4zXSB0aGVu
+IFs0Li43XSB0byBzYXZlIGV4ZWN1dGlvbiB0aW1lLg0KDQpJIGFjdHVhbGx5IHdvbmRlciBob3cg
+bGFyZ2UgYSBibG9jayB5b3UgbmVlZCB0byBiZSBwcm9jZXNzaW5nIHRvIGdldA0KYSBnYWluIGZy
+b20gYWxsIHRoYXQgdW5yb2xsaW5nIG9uIGFyY2hpdGVjdHVyZXMgbGlrZSB4ODYtNjQuDQpUaGUg
+J2NvbGQgY2FjaGUnIHRpbWluZyBtdXN0IGJlIGhvcnJpZC4NCk5ldmVyIG1pbmQgdGhlIHNpZGUg
+ZWZmZWN0cyBvZiBkaXNwbGFjaW5nIHRoYXQgbXVjaCBvdGhlciBjb2RlIGZyb20gdGhlIEktY2Fj
+aGUuDQoNClRoZXJlIGFyZW4ndCBlbm91Z2ggcmVnaXN0ZXJzIHRvIGhvbGQgYWxsIHRoZSB2W10g
+dmFsdWVzIHNvIHRoZXknbGwNCmFsbCBiZSBtZW1vcnkgcmVhZHMgLSBhbmQgdGhlcmUgYXJlIHBy
+b2JhYmx5IG90aGVycyBhcyB3ZWxsLg0KVGhlIG90aGVyIGluc3RydWN0aW9ucyB3aWxsIGhhcHBl
+biBpbiBwYXJhbGxlbCAtIGV2ZW4gMyBvciA0IGZvciBlYWNoIG1lbW9yeSByZWFkLg0KDQoJRGF2
+aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
+IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
+ODYgKFdhbGVzKQ0K
 
-Keep the calls to smc_ism_put_vlan() and put_device() in smc_lgr_free(),
-thats okay for SMC-D.

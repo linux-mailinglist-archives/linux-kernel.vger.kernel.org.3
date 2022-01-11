@@ -2,207 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB94A48BA73
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B26748BA79
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345713AbiAKWFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:05:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42248 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345691AbiAKWFa (ORCPT
+        id S1345754AbiAKWFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345739AbiAKWFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:05:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFE5B81D64;
-        Tue, 11 Jan 2022 22:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DED5C36AE9;
-        Tue, 11 Jan 2022 22:05:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="S3NV3SjU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641938725;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O7t1K3lQeoHUm9AoU+DjJ3MCcxGxvVz/RPJNEpctrWA=;
-        b=S3NV3SjUFiN9tMOjkT1zoy8sfMRJNBFcV7UX6nD1n4dBZ6JO9xrDB82HjlgbG84K3Q7Vu8
-        u1RMXjKSjc4lgKUNskhy8E6MWZx6l0ilzO5qQRGAJY7msoRVTlL/WFp6h8efFGTc+Mim1W
-        B8XGg830wMmjQvLWdeKXCAHSBjsZFX8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f9b0db15 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 11 Jan 2022 22:05:25 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, geert@linux-m68k.org, tytso@mit.edu,
-        gregkh@linuxfoundation.org, jeanphilippe.aumasson@gmail.com,
-        ardb@kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH crypto v3 2/2] lib/crypto: sha1: re-roll loops to reduce code size
-Date:   Tue, 11 Jan 2022 23:05:06 +0100
-Message-Id: <20220111220506.742067-3-Jason@zx2c4.com>
-In-Reply-To: <20220111220506.742067-1-Jason@zx2c4.com>
-References: <20220111181037.632969-1-Jason@zx2c4.com>
- <20220111220506.742067-1-Jason@zx2c4.com>
+        Tue, 11 Jan 2022 17:05:44 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02689C061756
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 14:05:43 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id e19so893556plc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 14:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2pZg0j1z31z4dOAHR0v7nBDp7zlxEyAkVFUFENElCB8=;
+        b=Q3Q9cgZpVUzHIhd8PSRDyNaoFL8ZmwZHfUxTsrOb9uxSVnZI5UKeJR/MwT9108Sh5+
+         4npaWvqPeHxFmu3SHD4Ik/RxhBstWlDlvUvR1owC+KAxT2MDhAxvPudsVb7FqI7CqCKL
+         geizo3KsG55e5q3+XbRecjvUKtorpRtOxYaTc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2pZg0j1z31z4dOAHR0v7nBDp7zlxEyAkVFUFENElCB8=;
+        b=TSGpRBuarG3GF7YcwE1B4ObvtgOAEEOb8UPQErL08lRDcij/cTFTHz/ObGTrGo7etT
+         ULNKNAM2m9A4WcR27rquz6eUZwgTfKrTFVzTYA5agDi3CRcml3oAIFifqoxaViC8x9Jk
+         PHqRQhpMsxLm6OzTtVFnckD/mGs0cXRqM386NWXXskfRj3wC7N+YycHMIM5UqPafG7nZ
+         f59gYcRy0DMTERpjn80tAclJRVzVQA57UGN4xn0JRuz0sVOG/H5g5Ugb/yURRWpe92Zb
+         iTSpGqz2eWMJNTPbt01BYZkcN5yNQo3jxTAmz9wkEVEThKALpwaNzpWH2g7jAY1Q2rc0
+         6ChA==
+X-Gm-Message-State: AOAM530JjqjDA+jdnY48Uk98YTzAAB/WpvtNDhTDIdu17WFAJquOz4ad
+        DDqxcfJkgXxHVSp/RwAFwj+gtA==
+X-Google-Smtp-Source: ABdhPJxyOF4Tw0NiPrnu7TMfn/9n7P7Kn8lS425Di9hUjXcgZkzQf3zhSVj1wX3Rnpks5wsTSJq/Fg==
+X-Received: by 2002:a05:6a00:2442:b0:4bc:e7ac:b5aa with SMTP id d2-20020a056a00244200b004bce7acb5aamr6529915pfj.56.1641938743547;
+        Tue, 11 Jan 2022 14:05:43 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:ce5:9cab:3523:b066])
+        by smtp.gmail.com with ESMTPSA id t207sm10700413pfc.205.2022.01.11.14.05.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 14:05:43 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: pinctrl: drive-strength doesn't default to 2 if unspecified
+Date:   Tue, 11 Jan 2022 14:05:21 -0800
+Message-Id: <20220111140519.1.Ie2662d6289af1e9758b14b37149703c846d5f509@changeid>
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With SHA-1 no longer being used for anything performance oriented, and
-also soon to be phased out entirely, we can make up for the space added
-by unrolled BLAKE2s by simply re-rolling SHA-1. Since SHA-1 is so much
-more complex, re-rolling it more or less takes care of the code size
-added by BLAKE2s. And eventually, hopefully we'll see SHA-1 removed
-entirely from most small kernel builds.
+If the drive-strength isn't specified in the device tree then it
+doesn't actually default to 2. Instead, it defaults to whatever the
+heck the BIOS left it at. If the BIOS doesn't touch it then that means
+it's whatever the heck the initial state of the pin was when the SoC
+booted.
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reported-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
- lib/sha1.c | 95 ++++++++----------------------------------------------
- 1 file changed, 14 insertions(+), 81 deletions(-)
 
-diff --git a/lib/sha1.c b/lib/sha1.c
-index 9bd1935a1472..0494766fc574 100644
---- a/lib/sha1.c
-+++ b/lib/sha1.c
-@@ -9,6 +9,7 @@
- #include <linux/kernel.h>
- #include <linux/export.h>
- #include <linux/bitops.h>
-+#include <linux/string.h>
- #include <crypto/sha1.h>
- #include <asm/unaligned.h>
+ Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
+index 3b37cf102d41..dac788bc9320 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
+@@ -70,7 +70,6 @@ $defs:
+     properties:
+       drive-strength:
+         enum: [2, 4, 6, 8, 10, 12, 14, 16]
+-        default: 2
+         description:
+           Selects the drive strength for the specified pins, in mA.
  
-@@ -55,7 +56,8 @@
- #define SHA_ROUND(t, input, fn, constant, A, B, C, D, E) do { \
- 	__u32 TEMP = input(t); setW(t, TEMP); \
- 	E += TEMP + rol32(A,5) + (fn) + (constant); \
--	B = ror32(B, 2); } while (0)
-+	B = ror32(B, 2); \
-+	TEMP = E; E = D; D = C; C = B; B = A; A = TEMP; } while (0)
- 
- #define T_0_15(t, A, B, C, D, E)  SHA_ROUND(t, SHA_SRC, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
- #define T_16_19(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
-@@ -84,6 +86,7 @@
- void sha1_transform(__u32 *digest, const char *data, __u32 *array)
- {
- 	__u32 A, B, C, D, E;
-+	unsigned int i = 0;
- 
- 	A = digest[0];
- 	B = digest[1];
-@@ -92,94 +95,24 @@ void sha1_transform(__u32 *digest, const char *data, __u32 *array)
- 	E = digest[4];
- 
- 	/* Round 1 - iterations 0-16 take their input from 'data' */
--	T_0_15( 0, A, B, C, D, E);
--	T_0_15( 1, E, A, B, C, D);
--	T_0_15( 2, D, E, A, B, C);
--	T_0_15( 3, C, D, E, A, B);
--	T_0_15( 4, B, C, D, E, A);
--	T_0_15( 5, A, B, C, D, E);
--	T_0_15( 6, E, A, B, C, D);
--	T_0_15( 7, D, E, A, B, C);
--	T_0_15( 8, C, D, E, A, B);
--	T_0_15( 9, B, C, D, E, A);
--	T_0_15(10, A, B, C, D, E);
--	T_0_15(11, E, A, B, C, D);
--	T_0_15(12, D, E, A, B, C);
--	T_0_15(13, C, D, E, A, B);
--	T_0_15(14, B, C, D, E, A);
--	T_0_15(15, A, B, C, D, E);
-+	for (; i < 16; ++i)
-+		T_0_15(i, A, B, C, D, E);
- 
- 	/* Round 1 - tail. Input from 512-bit mixing array */
--	T_16_19(16, E, A, B, C, D);
--	T_16_19(17, D, E, A, B, C);
--	T_16_19(18, C, D, E, A, B);
--	T_16_19(19, B, C, D, E, A);
-+	for (; i < 20; ++i)
-+		T_16_19(i, A, B, C, D, E);
- 
- 	/* Round 2 */
--	T_20_39(20, A, B, C, D, E);
--	T_20_39(21, E, A, B, C, D);
--	T_20_39(22, D, E, A, B, C);
--	T_20_39(23, C, D, E, A, B);
--	T_20_39(24, B, C, D, E, A);
--	T_20_39(25, A, B, C, D, E);
--	T_20_39(26, E, A, B, C, D);
--	T_20_39(27, D, E, A, B, C);
--	T_20_39(28, C, D, E, A, B);
--	T_20_39(29, B, C, D, E, A);
--	T_20_39(30, A, B, C, D, E);
--	T_20_39(31, E, A, B, C, D);
--	T_20_39(32, D, E, A, B, C);
--	T_20_39(33, C, D, E, A, B);
--	T_20_39(34, B, C, D, E, A);
--	T_20_39(35, A, B, C, D, E);
--	T_20_39(36, E, A, B, C, D);
--	T_20_39(37, D, E, A, B, C);
--	T_20_39(38, C, D, E, A, B);
--	T_20_39(39, B, C, D, E, A);
-+	for (; i < 40; ++i)
-+		T_20_39(i, A, B, C, D, E);
- 
- 	/* Round 3 */
--	T_40_59(40, A, B, C, D, E);
--	T_40_59(41, E, A, B, C, D);
--	T_40_59(42, D, E, A, B, C);
--	T_40_59(43, C, D, E, A, B);
--	T_40_59(44, B, C, D, E, A);
--	T_40_59(45, A, B, C, D, E);
--	T_40_59(46, E, A, B, C, D);
--	T_40_59(47, D, E, A, B, C);
--	T_40_59(48, C, D, E, A, B);
--	T_40_59(49, B, C, D, E, A);
--	T_40_59(50, A, B, C, D, E);
--	T_40_59(51, E, A, B, C, D);
--	T_40_59(52, D, E, A, B, C);
--	T_40_59(53, C, D, E, A, B);
--	T_40_59(54, B, C, D, E, A);
--	T_40_59(55, A, B, C, D, E);
--	T_40_59(56, E, A, B, C, D);
--	T_40_59(57, D, E, A, B, C);
--	T_40_59(58, C, D, E, A, B);
--	T_40_59(59, B, C, D, E, A);
-+	for (; i < 60; ++i)
-+		T_40_59(i, A, B, C, D, E);
- 
- 	/* Round 4 */
--	T_60_79(60, A, B, C, D, E);
--	T_60_79(61, E, A, B, C, D);
--	T_60_79(62, D, E, A, B, C);
--	T_60_79(63, C, D, E, A, B);
--	T_60_79(64, B, C, D, E, A);
--	T_60_79(65, A, B, C, D, E);
--	T_60_79(66, E, A, B, C, D);
--	T_60_79(67, D, E, A, B, C);
--	T_60_79(68, C, D, E, A, B);
--	T_60_79(69, B, C, D, E, A);
--	T_60_79(70, A, B, C, D, E);
--	T_60_79(71, E, A, B, C, D);
--	T_60_79(72, D, E, A, B, C);
--	T_60_79(73, C, D, E, A, B);
--	T_60_79(74, B, C, D, E, A);
--	T_60_79(75, A, B, C, D, E);
--	T_60_79(76, E, A, B, C, D);
--	T_60_79(77, D, E, A, B, C);
--	T_60_79(78, C, D, E, A, B);
--	T_60_79(79, B, C, D, E, A);
-+	for (; i < 80; ++i)
-+		T_60_79(i, A, B, C, D, E);
- 
- 	digest[0] += A;
- 	digest[1] += B;
 -- 
-2.34.1
+2.34.1.575.g55b058a8bb-goog
 

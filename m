@@ -2,59 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB8D48A4B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BB148A4B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346074AbiAKBFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 20:05:00 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:59584 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243225AbiAKBE7 (ORCPT
+        id S1346093AbiAKBFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 20:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243225AbiAKBFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 20:04:59 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V1WtPEy_1641863096;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V1WtPEy_1641863096)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 11 Jan 2022 09:04:57 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     anup@brainfault.org
-Cc:     atishp@atishpatra.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] RISC-V: KVM: remove unneeded semicolon
-Date:   Tue, 11 Jan 2022 09:04:54 +0800
-Message-Id: <20220111010454.126241-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 10 Jan 2022 20:05:37 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCF2C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 17:05:37 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so2852866pji.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 17:05:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q1R1PzpvGV/VojxQSiAa0bdqqqYycDMe3kAEirZNPdY=;
+        b=ZESbEMzMJBAVvuSkQjGbPSGJsUnccftXUOXcM0pM9sSRfKNKisoQEd8ypg8qvpwAVx
+         udQJ6ElRq7XD+djyuignDXBDWDBfpw5JxgNqVMSGwTzN4SOmjsxgs8wmqqZdeec+Zw5Y
+         RznC+ZJjeAkY5ovug5GZHwlHimGkOmqWIyQ5nTlIaijy/UgsfsjaZ85gaFR57xpwmSG0
+         0p7/wzE825snC5KenjZgDBdeCbcqYvSpWnBGX+JKXySINWmmChhu4jCARXHgOu+ZESBp
+         +2VNgIyBbWorDPRuSGXyDSMvvDOU8K8JPhfZJ+VXxtP8rj2n+pY23qcy56Ef1pI5a8ZY
+         V2NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q1R1PzpvGV/VojxQSiAa0bdqqqYycDMe3kAEirZNPdY=;
+        b=PykPa63hrKVD7OdBZ726i/YcI9Vh+cFkQaYcpDIlnzxOVLzhkB4kbU9AKStSgt4cWN
+         2Ycyo3IBgZ+iAMruTFy79jCR1ZvAHzMqYwvn1mEkHwcNeolvJaI5K9dRA72QZ6wGKfw8
+         +eSB3ahuOJ4XNKOC0y/xGmEj4+qHqcT6cBVXSWiaPdmjucudJ5wlBRdUj2TjBYkVsw5a
+         idrNlu6IVCGaA/H63pVB0yTVzuPpjvgBfbWZpIEaHwKZWLs8/Utn0qXG/9CZEvXANYNy
+         QyqpkdG24mdDMVL32x62mq9zg1bi6XMazlrUK/U6CF+TIGF/DrsAWRTVke7oAhC/L0JY
+         UHgQ==
+X-Gm-Message-State: AOAM530xYHpz9sRPCTGl5CnpLAw2X4CmOlWnHeqyHRFkYk3C9Wmfb/KF
+        GYZ7ey+tWkQMivM7owZNQzQ9ig==
+X-Google-Smtp-Source: ABdhPJzY/pkjKcqkaTs3n6wVHySOuAdgQewvLGOp/V9vsTfqwjdPrPNXXaklaP1HFYEan64rPHMzvw==
+X-Received: by 2002:a17:902:b414:b0:149:61c7:d550 with SMTP id x20-20020a170902b41400b0014961c7d550mr2078379plr.129.1641863136914;
+        Mon, 10 Jan 2022 17:05:36 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z15sm8400964pfh.201.2022.01.10.17.05.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 17:05:36 -0800 (PST)
+Date:   Tue, 11 Jan 2022 01:05:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Shirong Hao <shirong@linux.alibaba.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.co, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, brijesh.singh@amd.com,
+        thomas.lendacky@amd.com, john.allen@amd.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        srutherford@google.com, ashish.kalra@amd.com, natet@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, zhang.jia@linux.alibaba.com
+Subject: Re: [PATCH 1/3] KVM: X86: Introduce KVM_HC_VM_HANDLE hypercall
+Message-ID: <YdzX3AXqqbwYBRej@google.com>
+References: <20220110060445.549800-1-shirong@linux.alibaba.com>
+ <20220110060445.549800-2-shirong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110060445.549800-2-shirong@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the following coccicheck warning:
-./arch/riscv/kvm/vcpu_sbi_v01.c:117:2-3: Unneeded semicolon
+On Mon, Jan 10, 2022, Shirong Hao wrote:
+> This hypercall is used by the SEV guest to get the firmware handle.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- arch/riscv/kvm/vcpu_sbi_v01.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is completely insufficient to justify why KVM is providing host information
+to the guest, let alone why KVM is providing that information to guest _userspace_.
 
-diff --git a/arch/riscv/kvm/vcpu_sbi_v01.c b/arch/riscv/kvm/vcpu_sbi_v01.c
-index 4c7e13ec9ccc..9acc8fa21d1f 100644
---- a/arch/riscv/kvm/vcpu_sbi_v01.c
-+++ b/arch/riscv/kvm/vcpu_sbi_v01.c
-@@ -114,7 +114,7 @@ static int kvm_sbi_ext_v01_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 	default:
- 		ret = -EINVAL;
- 		break;
--	};
-+	}
- 
- 	return ret;
- }
--- 
-2.20.1.7.g153144c
+> +static int sev_vm_handle(struct kvm *kvm)
+> +{
+> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +
+> +	if (!sev_guest(kvm))
+> +		return -ENOTTY;
+> +
+> +	return sev->handle;
+> +}
+> +
+>  static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.name = "kvm_amd",
+>  
 
+...
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0cf1082455df..24acf0f2a539 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8906,7 +8906,7 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+>  		a3 &= 0xFFFFFFFF;
+>  	}
+>  
+> -	if (static_call(kvm_x86_get_cpl)(vcpu) != 0) {
+> +	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 && nr != KVM_HC_VM_HANDLE) {
+>  		ret = -KVM_EPERM;
+>  		goto out;
+>  	}

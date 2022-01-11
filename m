@@ -2,104 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FDE48BB40
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8001248BB43
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346736AbiAKXIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 18:08:43 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:50574 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244879AbiAKXIm (ORCPT
+        id S1346744AbiAKXJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 18:09:20 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:54739 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346739AbiAKXJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 18:08:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=TIGVeVRFFto9U8rrsZTboK3dXuBBSA/4ShVJmxcPczw=; b=afngLBoxuqvBzyZsmssqQ4P38X
-        mCM56+S28Ds9cs1MIIL9eX/nS4ypMjuVQq0SIolY3enG8whn4KmK8d1o5Z9ZiLel9JXrmvNVZ9FGE
-        Oxc0o8x++jBeY21fP2IHYVaSAr7LU+LYs6tiOM/+YBugMvcsjBcc5/PgRhP3zMMgpOtrojZpjpdUo
-        wpQOdhDtfYk5lOHhak8KS6SH5MGM/tbejrIZpgLr62nIHCe3KOvrhodPHLT50WnOGE5ZTURomJ8w4
-        Mz7VL2jqUKBSBKMyGmRBcoBnAB2dA4vNq2yjkPVIipPGH7BvqQgPRHLLReU9mBeOxiYq5I3UlOCQs
-        ClMyfHLg==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1n7QFo-009oCP-Cn; Tue, 11 Jan 2022 16:08:37 -0700
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nvdimm@lists.linux.dev
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
- <20220111004126.GJ2328285@nvidia.com> <Yd0IeK5s/E0fuWqn@casper.infradead.org>
- <20220111150142.GL2328285@nvidia.com> <Yd3Nle3YN063ZFVY@casper.infradead.org>
- <20220111202159.GO2328285@nvidia.com> <Yd311C45gpQ3LqaW@casper.infradead.org>
- <20220111225306.GR2328285@nvidia.com>
- <9fe2ada2-f406-778a-a5cd-264842906a31@deltatee.com>
- <20220111230224.GT2328285@nvidia.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <5c3dd9bd-abda-6c9b-8257-182f84f8f842@deltatee.com>
-Date:   Tue, 11 Jan 2022 16:08:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 11 Jan 2022 18:09:18 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYRGM713Wz4y41;
+        Wed, 12 Jan 2022 10:09:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641942556;
+        bh=08NokgJc73R+NC0VqWdeZC2r+IFiHVxfrx3GJGjwno8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RKIHenyqpTWsoks/OpkzuERZSVhUjCLDg3xmG3aGR2ntnltVFvQP6GoR1jrS1cuwz
+         rgebBwr7kOguO3ZBMU6br/FMNRO5FSKKtZEdEbgdSepIseyrpm19c1JPZNXMYJB1zn
+         Geqsv6ANg/nTvUwivVnmA+9vfaeA0NYS07fwdWP+f+/gfcojJU8VY7ICkKHUnmeSkQ
+         dA7wWPSnfeD8+koY4LzYN9NrKsHgKj1OMk8tSsHuJIuHgB6XpYulfs5fpyEQ7fxoe0
+         6/f73ZjAnwquAg4OvVMzvP3g8V39sig1THZUN47tK/kwEDGLDCgUZGCROcfwuaITgy
+         liH391Gy9+BHQ==
+Date:   Wed, 12 Jan 2022 10:09:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wenjing Liu <wenjing.liu@amd.com>
+Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
+Message-ID: <20220112100914.4354b1b3@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220111230224.GT2328285@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: nvdimm@lists.linux.dev, dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org, linux-block@vger.kernel.org, ming.lei@redhat.com, jhubbard@nvidia.com, joao.m.martins@oracle.com, hch@lst.de, linux-kernel@vger.kernel.org, willy@infradead.org, jgg@nvidia.com
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: Phyr Starter
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Type: multipart/signed; boundary="Sig_/fDpdK7j5YvSYin7AlwdO6JA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/fDpdK7j5YvSYin7AlwdO6JA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2022-01-11 4:02 p.m., Jason Gunthorpe wrote:
-> On Tue, Jan 11, 2022 at 03:57:07PM -0700, Logan Gunthorpe wrote:
->>
->>
->> On 2022-01-11 3:53 p.m., Jason Gunthorpe wrote:
->>> I just want to share the whole API that will have to exist to
->>> reasonably support this flexible array of intervals data structure..
->>
->> Is that really worth it? I feel like type safety justifies replicating a
->> bit of iteration and allocation infrastructure. Then there's no silly
->> mistakes of thinking one array is one thing when it is not.
-> 
-> If it is a 'a bit' then sure, but I suspect doing a good job here will
-> be a lot of code here.
-> 
-> Look at how big scatterlist is, for instance.
+Today's linux-next merge of the amdgpu tree got conflicts in:
 
-Yeah, but scatterlist has a ton of cruft; numerous ways to allocate,
-multiple iterators, developers using it in different ways, etc, etc.
-It's a big mess. bvec.h is much smaller (though includes stuff that
-wouldn't necessarily be appropriate here).
+  drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+  drivers/gpu/drm/amd/display/dc/inc/resource.h
 
-Also some things apply to one but not the other. eg: a memcpy to/from
-function might make sense for a phy_range but makes no sense for a
-dma_range.
+between commit:
 
-> Maybe we could have a generic 64 bit interval arry and then two type
-> wrappers that do dma and physaddr casting? IDK.
-> 
-> Not sure type safety of DMA vs CPU address is critical?
+  75b950ef6166 ("Revert "drm/amd/display: Fix for otg synchronization logic=
+"")
 
-I would argue it is. A DMA address is not a CPU address and should not
-be treated the same.
+from Linus' tree and commit:
 
-Logan
+  580013b2cef8 ("drm/amd/display: unhard code link to phy idx mapping in dc=
+ link and clean up")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+index de5c7d1e0267,b3912ff9dc91..000000000000
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+@@@ -3216,3 -3216,90 +3216,36 @@@ struct hpo_dp_link_encoder *resource_ge
+  	return hpo_dp_link_enc;
+  }
+  #endif
++=20
+ -void reset_syncd_pipes_from_disabled_pipes(struct dc *dc,
+ -		struct dc_state *context)
+ -{
+ -	int i, j;
+ -	struct pipe_ctx *pipe_ctx_old, *pipe_ctx, *pipe_ctx_syncd;
+ -
+ -	/* If pipe backend is reset, need to reset pipe syncd status */
+ -	for (i =3D 0; i < dc->res_pool->pipe_count; i++) {
+ -		pipe_ctx_old =3D	&dc->current_state->res_ctx.pipe_ctx[i];
+ -		pipe_ctx =3D &context->res_ctx.pipe_ctx[i];
+ -
+ -		if (!pipe_ctx_old->stream)
+ -			continue;
+ -
+ -		if (pipe_ctx_old->top_pipe || pipe_ctx_old->prev_odm_pipe)
+ -			continue;
+ -
+ -		if (!pipe_ctx->stream ||
+ -				pipe_need_reprogram(pipe_ctx_old, pipe_ctx)) {
+ -
+ -			/* Reset all the syncd pipes from the disabled pipe */
+ -			for (j =3D 0; j < dc->res_pool->pipe_count; j++) {
+ -				pipe_ctx_syncd =3D &context->res_ctx.pipe_ctx[j];
+ -				if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx_syncd) =3D=3D pipe_ctx_old->pi=
+pe_idx) ||
+ -					!IS_PIPE_SYNCD_VALID(pipe_ctx_syncd))
+ -					SET_PIPE_SYNCD_TO_PIPE(pipe_ctx_syncd, j);
+ -			}
+ -		}
+ -	}
+ -}
+ -
+ -void check_syncd_pipes_for_disabled_master_pipe(struct dc *dc,
+ -	struct dc_state *context,
+ -	uint8_t disabled_master_pipe_idx)
+ -{
+ -	int i;
+ -	struct pipe_ctx *pipe_ctx, *pipe_ctx_check;
+ -
+ -	pipe_ctx =3D &context->res_ctx.pipe_ctx[disabled_master_pipe_idx];
+ -	if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx) !=3D disabled_master_pipe_idx) ||
+ -		!IS_PIPE_SYNCD_VALID(pipe_ctx))
+ -		SET_PIPE_SYNCD_TO_PIPE(pipe_ctx, disabled_master_pipe_idx);
+ -
+ -	/* for the pipe disabled, check if any slave pipe exists and assert */
+ -	for (i =3D 0; i < dc->res_pool->pipe_count; i++) {
+ -		pipe_ctx_check =3D &context->res_ctx.pipe_ctx[i];
+ -
+ -		if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx_check) =3D=3D disabled_master_pi=
+pe_idx) &&
+ -			IS_PIPE_SYNCD_VALID(pipe_ctx_check) && (i !=3D disabled_master_pipe_id=
+x))
+ -			DC_ERR("DC: Failure: pipe_idx[%d] syncd with disabled master pipe_idx[=
+%d]\n",
+ -				i, disabled_master_pipe_idx);
+ -	}
+ -}
+ -
++ uint8_t resource_transmitter_to_phy_idx(const struct dc *dc, enum transmi=
+tter transmitter)
++ {
++ 	/* TODO - get transmitter to phy idx mapping from DMUB */
++ 	uint8_t phy_idx =3D transmitter - TRANSMITTER_UNIPHY_A;
++=20
++ #if defined(CONFIG_DRM_AMD_DC_DCN)
++ 	if (dc->ctx->dce_version =3D=3D DCN_VERSION_3_1 &&
++ 			dc->ctx->asic_id.hw_internal_rev =3D=3D YELLOW_CARP_B0) {
++ 		switch (transmitter) {
++ 		case TRANSMITTER_UNIPHY_A:
++ 			phy_idx =3D 0;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_B:
++ 			phy_idx =3D 1;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_C:
++ 			phy_idx =3D 5;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_D:
++ 			phy_idx =3D 6;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_E:
++ 			phy_idx =3D 4;
++ 			break;
++ 		default:
++ 			phy_idx =3D 0;
++ 			break;
++ 		}
++ 	}
++ #endif
++ 	return phy_idx;
++ }
+diff --cc drivers/gpu/drm/amd/display/dc/inc/resource.h
+index e589cbe67307,028180f58f71..000000000000
+--- a/drivers/gpu/drm/amd/display/dc/inc/resource.h
++++ b/drivers/gpu/drm/amd/display/dc/inc/resource.h
+@@@ -208,4 -212,12 +208,6 @@@ struct hpo_dp_link_encoder *resource_ge
+  		const struct dc_link *link);
+  #endif
+ =20
+ -void reset_syncd_pipes_from_disabled_pipes(struct dc *dc,
+ -	struct dc_state *context);
+ -
+ -void check_syncd_pipes_for_disabled_master_pipe(struct dc *dc,
+ -	struct dc_state *context,
+ -	uint8_t disabled_master_pipe_idx);
++ uint8_t resource_transmitter_to_phy_idx(const struct dc *dc, enum transmi=
+tter transmitter);
++=20
+  #endif /* DRIVERS_GPU_DRM_AMD_DC_DEV_DC_INC_RESOURCE_H_ */
+
+--Sig_/fDpdK7j5YvSYin7AlwdO6JA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHeDhoACgkQAVBC80lX
+0Gx9nggAkeyfUWS2XRe4IvuNePf6t2G0m+BlFBGeZO+p/0EgJhKzqtRiNGda499m
+jTqJaoik8+j0tH2SFWUP9PsgLPBtT6H07rt3RDLEZDgfWE1suyZ35uNWnjZmHRSj
+ViBMt6dcQRz+g+0+IgGpjSO57KYFiX0FzctB/t70ZyZeWkSU3BdwMF+wGdXcWmEJ
+V1KIibPEjzz7poMS1iyPeLhlr+Ro47KC7m4zTAuecvkVWEwLAu0yqL+nwv/fhsY1
+7sLF42MSYUcZV2UZTqqEHGMwAGmEaEGf/t8UyjLsOqR2Sf9Zragw21wofIun1gBJ
+CcXXLWUo0kq9LSo7B5+Wvvo9IisJxA==
+=LgwU
+-----END PGP SIGNATURE-----
+
+--Sig_/fDpdK7j5YvSYin7AlwdO6JA--

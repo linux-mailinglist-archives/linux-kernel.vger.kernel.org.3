@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ED448A6B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244F548A6B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347440AbiAKEIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiAKEIu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:08:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F62BC06173F;
-        Mon, 10 Jan 2022 20:08:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXxyR3L1Pz4y4c;
-        Tue, 11 Jan 2022 15:08:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641874128;
-        bh=AUuXzaLZAhyKaIShQ1tVhL+TJ7Ty1V/fGkqASMoF3GY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EGcjZr61k1SCAcptEzunnd2ky7oq39+ptpIEh0OvTjBVIHEP0Le3AidcyENPue5IC
-         maUZ23JZAAKl4AkqjTatzdLRKHb+wrApTANoZ4aL33I866wYXlCLOGTleTlykp25do
-         iS8jctowqf4Glx4OW6Oijown2qdhcm4Mo0ksIux79CfAJC4hQCLPM93NcS+/blwjkq
-         u6SOejj3jfXOnOloRgY80Sd2rePLQRJVyk5QWfAT+6AOIFiKkrlLY2k9ps6GvY7VW4
-         Y8/mPozRUv5DwZRQmeLFB3LgmroqTq1M2zTqviYA1skoHoQllBfQrfOu3h70gPTT4h
-         QhfWjfxsf0Jug==
-Date:   Tue, 11 Jan 2022 15:08:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Jiri Kosina <jkosina@suse.cz>, Joe Perches <joe@perches.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: linux-next: manual merge of the trivial tree with the jc_docs tree
-Message-ID: <20220111150846.563d051f@canb.auug.org.au>
+        id S1347456AbiAKEK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:10:26 -0500
+Received: from mga09.intel.com ([134.134.136.24]:6906 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234203AbiAKEKZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 23:10:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641874225; x=1673410225;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Fko5tSHAqkpnrbRvu4UMb7PHCxpyhJg0p+Ve7Au1TpI=;
+  b=GH2k6ahY2Ottai3Bc7QkNhsmEitl1290qkhTei74ajQ+MS4w5dS5I/Mc
+   ViEadSdtPFJT6gh7N0zgIvaQIKchjf01ylSjfubdhRW/na+aCFoOFYw0y
+   OSzxeI+WZ77iFeYiwuIfojxc+VkyfPlQCkbYroFLrlvfvpdo6PM1batrN
+   mdbt54DP7T5ykPwknZzf4YjN9Fiec438gxGmXIQ12g7axl7pKDC56E2Ko
+   XMGdVtx7oN6mz+i6Z5oDzCvbap1EMoICOOtEbJPNRQ8Xab5eKOvj3+PX9
+   ErWJdHqCO8/vnwQd075GV4K9w0cy13Rs5Zc20PAUorDINX3quclNuzlSz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="243194191"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="243194191"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 20:10:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="514937789"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 10 Jan 2022 20:10:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n78UI-0004JB-L6; Tue, 11 Jan 2022 04:10:22 +0000
+Date:   Tue, 11 Jan 2022 12:10:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 2564/2575] arch/arm64/kvm/hyp/nvhe/iommu/s2mpu.c:104: warning: This comment
+ starts with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202201111216.YaxndGDc-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   d52e3e4473075ddf199c9ae763e747302d729468
+commit: f6b90bb6f59d0dab524f623b255f29c149557270 [2564/2575] ANDROID: KVM: arm64: Enable S2MPUs in __pkvm_init_stage2_iommu
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220111/202201111216.YaxndGDc-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/f6b90bb6f59d0dab524f623b255f29c149557270
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout f6b90bb6f59d0dab524f623b255f29c149557270
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Hi all,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Today's linux-next merge of the trivial tree got a conflict in:
+All warnings (new ones prefixed by >>):
 
-  Documentation/process/submitting-patches.rst
+>> arch/arm64/kvm/hyp/nvhe/iommu/s2mpu.c:104: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Initialize S2MPU device and set all GB regions to 1G granularity with
 
-between commit:
 
-  6c5ccd24ff17 ("Remove mentions of the Trivial Patch Monkey")
+vim +104 arch/arm64/kvm/hyp/nvhe/iommu/s2mpu.c
 
-from the jc_docs tree and commit:
+   102	
+   103	/**
+ > 104	 * Initialize S2MPU device and set all GB regions to 1G granularity with
+   105	 * given protection bits.
+   106	 */
+   107	static void initialize_with_prot(struct s2mpu *dev, enum mpt_prot prot)
+   108	{
+   109		unsigned int gb, vid;
+   110	
+   111		/* Must write CONTEXT_CFG_VALID_VID before setting L1ENTRY registers. */
+   112		__set_context_ids(dev);
+   113	
+   114		for_each_gb_and_vid(gb, vid)
+   115			__set_l1entry_attr_with_prot(dev, gb, vid, prot);
+   116		__all_invalidation(dev);
+   117	
+   118		/* Set control registers, enable the S2MPU. */
+   119		__set_control_regs(dev);
+   120	}
+   121	
 
-  081c8919b02b ("Documentation: remove trivial tree")
-
-from the trivial tree.
-
-I fixed it up (it was just an empty line difference, I used the latter)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHdAs4ACgkQAVBC80lX
-0Gzc7ggAphwnAjkzJ55fag9g5mOUbUI8JERKoIO4Ttm8kLjBBl3451v4xFyakr4v
-r3AI/XOijuFbCKQzHh91aJN7HJK4cKLjigyDPoe27n/80W4JPbHNXZlEKKDqiYrH
-miOMycni91DZVtc89CX8t6RVJBHMgZQ94FsGJbn3PxoyOOFINyZZovGvkmJecGo6
-SRQIbuIuZPAfV8gSI38VkXlRy/b/hDUTaC0Iwgg6K6LybQwOg4wOj8+Rqd/LhA2k
-L2gv5z1V+Guzp8OR90Gv4gucbSkh+wbtNsPdEVDrjghjWKOzKHrynKA17d43YTHF
-Vliw/7OZ+2k0CZWRWP4OD6ghZY5f3w==
-=DGOX
------END PGP SIGNATURE-----
-
---Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,95 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD9848B9AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E998948B9BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245290AbiAKVcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:32:04 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:62766 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245271AbiAKVcD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:32:03 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1641936723; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=vyBK0LSqO0I5EQ5e4hsKAdcFelt6JTL0Ja4sPoT+Tlw=; b=KRuGvUxqbn/QmyPaKJ0Nj9zyhHHx3hvSCqiuhKGGqYRcOja3V4+S9Wiol1Rqrk1PYaZKJT5m
- GqEir53iRR77auARBnkmE8iGi7tyOtEzClmE9N2Gxd1doAn1A0hI87q1TMVkHPKMmp2CwucO
- AnWVxt2V5nsRrceDzr6dUkzE2kc=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 61ddf75069943108c513df46 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Jan 2022 21:32:00
- GMT
-Sender: quic_akhilpo=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DA053C4361A; Tue, 11 Jan 2022 21:31:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from hyd-lnxbld559.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akhilpo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A0DA3C43619;
-        Tue, 11 Jan 2022 21:31:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A0DA3C43619
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sean Paul <sean@poorly.run>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] drm/msm/adreno: Update the name of 7c3 gpu
-Date:   Wed, 12 Jan 2022 03:01:30 +0530
-Message-Id: <20220112030115.4.Idbc978090270c7b838387acc74d8a06a186a3cf4@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
-References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
+        id S245395AbiAKVfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 16:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245374AbiAKVff (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 16:35:35 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB689C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:35:34 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id h1so756541pls.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pdG2m53ETOlwMcbtFF/x/1vOl4+46+U/a5/nmfTE6Vk=;
+        b=EZz319cLAu+4PScX8dgMP6dU9/mgBBHAk2VG0B+wkbo0P93Jah9peK6qTQflxrJAHt
+         Qy0xc0znqWUeFq1tEsrf4wHS7ijNqxGnYyfaKhz+Z6OhkFD4L3VtHOgIBxKLZLub9zrs
+         RANnBjtsNi1+96VZDQFA33Y+Wwy7MCDDjvqjG0ZeNcYONwJikuipU3C0fbYT0shcqJ+y
+         2oGtld1THKjaI/FQOtCNySoylAI7Fh3ca1EwGnfvE2VHmqMKQ5yv5J7QYKn8EyPaAj6J
+         047GxbAt17M/QY9UmHx3USQvjdJ+cMWO30ZKhQ4S9KF1ZOgeF3LVejGFAQdSlWGvp3+6
+         7a/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pdG2m53ETOlwMcbtFF/x/1vOl4+46+U/a5/nmfTE6Vk=;
+        b=zFpKrIvWQ8QXAxcJit/N8xd5b3DB5CRcaHglZsZDLYjuE6TQR4chhFvspR5Q2wf+Ml
+         xkvzELXHdb2DGaJnMfClpbyiF2NiUwRaa1Kotj8lWArEsKuE+usrXPW/jC+AGjg1vG+Y
+         RfNMQatgHIIefU8Y+GM3H3YgbViT/Nyj/Rb3NL54Jd85N02Bu0ZeFfOTA4aX7gx67CIu
+         VgnAiwE/65BdQ/n3fJniLW0HX2STWPsUILjGn3FT+q8LwghhCv3Tj/czELhlZJppbwKE
+         ORcN9jaTDPEsitr1y4OhJfQ3tBfNscHpU0Y612jzm4YS+cJ5z+ofKm6LVGKDAIjfvjGI
+         qG+Q==
+X-Gm-Message-State: AOAM533G2d4mTmvjt1wCdY8ChD/U0dFbv8209qp3inVsrbRrFu5Ky5R8
+        grjop1fRr7XrmtfuyRlPL797l0usLwb+U8DsFpFkhw==
+X-Google-Smtp-Source: ABdhPJxL92ODFttquZ2LXPWMxI2KpYTx0d7CV4KWFXVh6NNJhSNI2N/vKK+FxD32zaVWJoRfCv3llDKqKsS7uuob7gA=
+X-Received: by 2002:a63:b942:: with SMTP id v2mr5588485pgo.407.1641936934044;
+ Tue, 11 Jan 2022 13:35:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20220111194231.1797841-1-dlatypov@google.com> <20220111194231.1797841-6-dlatypov@google.com>
+In-Reply-To: <20220111194231.1797841-6-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 11 Jan 2022 16:35:23 -0500
+Message-ID: <CAFd5g46bCr4DEqruLbtgcLOpuPQUgS32ePDicrezBwOXL_r5Hg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] kunit: split out part of kunit_assert into a
+ static const
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the name in the gpulist for 7c3 gpu as per the latest
-recommendation.
+On Tue, Jan 11, 2022 at 2:42 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> This is per Linus's suggestion in [1].
+>
+> The issue there is that every KUNIT_EXPECT/KUNIT_ASSERT puts a
+> kunit_assert object onto the stack. Normally we rely on compilers to
+> elide this, but when that doesn't work out, this blows up the stack
+> usage of kunit test functions.
+>
+> We can move some data off the stack by making it static.
+> This change introduces a new `struct kunit_loc` to hold the file and
+> line number and then just passing assert_type (EXPECT or ASSERT) as an
+> argument.
+>
+> In [1], it was suggested to also move out the format string as well, but
+> users could theoretically craft a format string at runtime, so we can't.
+>
+> This change leaves a copy of `assert_type` in kunit_assert for now
+> because cleaning up all the macros to not pass it around is a bit more
+> involved.
+>
+> Here's an example of the expanded code for KUNIT_FAIL():
+> if (__builtin_expect(!!(!(false)), 0)) {
+>   static const struct kunit_loc loc = { .file = ... };
+>   struct kunit_fail_assert __assertion = { .assert = { .type ...  };
+>   kunit_do_failed_assertion(test, &loc, KUNIT_EXPECTATION, &__assertion.assert, ...);
+> };
+>
+> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
+One question below, but other than that,
 
- drivers/gpu/drm/msm/adreno/adreno_device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-index f35c631..2f1cc56 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-@@ -330,7 +330,7 @@ static const struct adreno_info gpulist[] = {
- 		.hwcg = a660_hwcg,
- 	}, {
- 		.rev = ADRENO_REV(6, 3, 5, ANY_ID),
--		.name = "Adreno 7c Gen 3",
-+		.name = "Adreno 7c+ Gen 3",
- 		.fw = {
- 			[ADRENO_FW_SQE] = "a660_sqe.fw",
- 			[ADRENO_FW_GMU] = "a660_gmu.bin",
--- 
-2.7.4
+> ---
+>  include/kunit/assert.h | 25 ++++++++++++++++---------
+>  include/kunit/test.h   | 12 +++++++++++-
+>  lib/kunit/assert.c     |  9 +++++----
+>  lib/kunit/test.c       | 15 +++++++++------
+>  4 files changed, 41 insertions(+), 20 deletions(-)
+>
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 3da6c792496c..4f91dbdb886a 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -28,11 +28,21 @@ enum kunit_assert_type {
+>         KUNIT_EXPECTATION,
+>  };
+>
+> +/**
+> + * struct kunit_loc - Identifies the source location of a line of code.
+> + * @line: the line number in the file.
+> + * @file: the file name.
+> + */
+> +struct kunit_loc {
+> +       int line;
+> +       const char *file;
+> +};
+> +
+> +#define KUNIT_CURRENT_LOC { .file = __FILE__, .line = __LINE__ }
+> +
+>  /**
+>   * struct kunit_assert - Data for printing a failed assertion or expectation.
+>   * @type: the type (either an expectation or an assertion) of this kunit_assert.
+> - * @line: the source code line number that the expectation/assertion is at.
+> - * @file: the file path of the source file that the expectation/assertion is in.
+>   * @message: an optional message to provide additional context.
+>   * @format: a function which formats the data in this kunit_assert to a string.
+>   *
+> @@ -40,9 +50,7 @@ enum kunit_assert_type {
+>   * format a string to a user reporting the failure.
+>   */
+>  struct kunit_assert {
+> -       enum kunit_assert_type type;
+> -       int line;
+> -       const char *file;
+> +       enum kunit_assert_type type; // TODO(dlatypov@google.com): delete this
 
+Can you provide some context for this?
+
+>         struct va_format message;
+>         void (*format)(const struct kunit_assert *assert,
+>                        struct string_stream *stream);
+> @@ -65,14 +73,13 @@ struct kunit_assert {
+>   */
+>  #define KUNIT_INIT_ASSERT_STRUCT(assert_type, fmt) {                          \
+>         .type = assert_type,                                                   \
+> -       .file = __FILE__,                                                      \
+> -       .line = __LINE__,                                                      \
+>         .message = KUNIT_INIT_VA_FMT_NULL,                                     \
+>         .format = fmt                                                          \
+>  }
+>
+> -void kunit_base_assert_format(const struct kunit_assert *assert,
+> -                             struct string_stream *stream);
+> +void kunit_assert_prologue(const struct kunit_loc *loc,
+> +                          enum kunit_assert_type type,
+> +                          struct string_stream *stream);
+>
+>  void kunit_assert_print_msg(const struct kunit_assert *assert,
+>                             struct string_stream *stream);
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 25ea3bce6663..7b752175e614 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h

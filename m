@@ -2,157 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A496048B60D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9686648B60E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346282AbiAKSqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S1350115AbiAKSq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345929AbiAKSqv (ORCPT
+        with ESMTP id S1346390AbiAKSqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:46:51 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB230C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:46:51 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id h14so32630773ybe.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:46:51 -0800 (PST)
+        Tue, 11 Jan 2022 13:46:54 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FB0C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:46:54 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id h23so82060iol.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:46:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aFmLILnvpHUVz7ssSaFntznd0hUHj6gSC616E6Fkf3U=;
-        b=ePhCIqosOE3NORpI3w54xHfcf6puCuQ+ahHlVC9G+tLO1IGP+Wgo03UffIkLCD29C6
-         k0CRMWuU19THro9DlEhGP69zZBJFVhAePULjiWgpPP2+R248Tcm165947vP0aZi3s+z3
-         KJBzevL0NfgzA5F+Uc4oKmj+jYR+wZ55HEE+ti6ILLFigEbDJwP/lrOgXm0M24EPXvYm
-         4dtTAQF9+cItgcqoCCoSXLydPtnIrMJF1vzL8JO2vTdoooQUT9gSNNHz/Q2miLU8T7Ag
-         MZlAK/xMpFZL9y3rVVJXsoY8rl5Y5BvRXzGKK3g1FVPPKtyr0P1MbZ2vI5P2ZX9v2Gz3
-         y+SQ==
+        bh=2hbXHVCLNGmYtpg85HRQj1tStndWpfHPlukM67GllcY=;
+        b=PT7z42l9TocW0rBRoMNHny1aXx9qnV4VC/bduNOMV1uM84VQGJVqnX5lcR9VagMYAw
+         I0E2UyKIur6ocvM9WyuX0gxyhAhZRNlzWPACPY/+8wrxLGmThPCcZ03zBy0xT1YAg2Z5
+         veYdBeqwntFzyIKqsHUOqeIl/wB16tM9Q4RDcfJJWqrRj3mnKqdPM1Q+fSThdO9l3pDZ
+         CzTrfuHtm3A1TqePhus9QVI/k/CrVJJA/fuzYZLA5zol/6587EnlJChEMD/vBmxAvqoa
+         TTI1dip4H9cQqXGKzj1fDb6omPu4ph2vjoKBblTFXtOgPU+8B7OotpsniRSBVUn855ax
+         ttXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aFmLILnvpHUVz7ssSaFntznd0hUHj6gSC616E6Fkf3U=;
-        b=xkBGYzZlIp316vHu4IlYHxn2kVkUquosVqQ9CakXBnWIATqXL43PaMjhT0JXgAzTIR
-         99hWJ048sg7yww+6OarhLs/8DG8HFuD+o7VdZjyOGKRCObKKkzY4bTyGi2ZOyXnXvt7y
-         glgMGA5eEgym51k/2TCAHR9bIeam0rgB/KiOIFDmIEHgYQsj5caJXrm5Pqz9HoRdzrBp
-         yfM1621giF9wqUe0pTHDYMHSlKjyASgjJWNwo92Dxp4eSAENRwv6dyxUjsyjUXALgdox
-         P/BDrGM5/mYd4b7JJ9flWOAdt5bF5xYTBseZKI39rCo1ppd2u+JW6VHDdE/LTqnXTAzi
-         mBhQ==
-X-Gm-Message-State: AOAM53133lZHL0myF6YprUYxao0j1Uh9Br16QZPWaBttU9J8Gt7z9wpZ
-        1l3r10j48H3/YSCiJx0KF36e0c+YW3NDq9zedaQ4wg==
-X-Google-Smtp-Source: ABdhPJy2gg0pwgufffOlXPR//NYKBRRE7YQswq8GMY6HGu/DSmziIAnClGDP4sEu6YMRCb2AJB3uhS4DQuFcC/jbDPk=
-X-Received: by 2002:a25:d750:: with SMTP id o77mr7614846ybg.543.1641926810619;
- Tue, 11 Jan 2022 10:46:50 -0800 (PST)
+        bh=2hbXHVCLNGmYtpg85HRQj1tStndWpfHPlukM67GllcY=;
+        b=WnWGk+jzrOSFmTAtmRg2eiVVoL20DHuM/nBPCACfy2bDg6K9vIoOS6Ch0dqOPcOUR+
+         UHfBjYndJHDDVrJwtBnD7CFBmf2bY+MCzC/8Ik1Zr3AvJDs8N7m9FqVLOFon8lEocfRj
+         8Vw57asbLqLNrEgXk0v/xnPRxj5loy89wPZTURgbhcvzsHhRR1iE6BEz4fMU/OGJOjvF
+         jQ7xN64nMNBmyHDaDu4NtT8LJZGl0aD/6fp2PLWYSmMfBKNsg7KeSyx8m/GVtLOC+sgj
+         Br4UCmVMI///E8y0Nry8ll65ytOzUBwBN+Wub3w7cgqU+3kxPfR5EoilhJ2WF7iasNRT
+         zyNw==
+X-Gm-Message-State: AOAM532ut9UFSp2/WQoi9L9EVs2mD2zfr7xy7rf3qRSPz+hvMPcyZ2JN
+        xvaLuUNCbpXow/SFDOpyTEmWngAt9ArlQnbXAeg6+A==
+X-Google-Smtp-Source: ABdhPJyzFsWOVvDV15+T62OelOrluGd6cLRTECTNoFDVCLTUjNK3SFCT5CQrIA0zAG3J2JESN9VGPl3PW2msrBTB2xw=
+X-Received: by 2002:a5d:944a:: with SMTP id x10mr2890515ior.18.1641926813572;
+ Tue, 11 Jan 2022 10:46:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <Ydjje8qBOP3zDOZi@google.com> <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
- <Yd3AGRtkBgWSmGf2@google.com>
-In-Reply-To: <Yd3AGRtkBgWSmGf2@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 11 Jan 2022 10:46:40 -0800
-Message-ID: <CAJHc60w7vfHkg+9XkPw+38nZBWLLhETJj310ekM1HpQQTL_O0Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
+References: <20220105061351.120843-1-irogers@google.com> <20220105061351.120843-6-irogers@google.com>
+ <64d64526-7d3e-0c31-f43e-f03810f72ac2@huawei.com>
+In-Reply-To: <64d64526-7d3e-0c31-f43e-f03810f72ac2@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 11 Jan 2022 10:46:41 -0800
+Message-ID: <CAP-5=fW2JzePV=rQG=Ww1Omub0_r2gi38FUVyaG+a3L=44R9XA@mail.gmail.com>
+Subject: Re: [PATCH v4 05/48] perf stat: Switch to cpu version of cpu_map__get
+To:     John Garry <john.garry@huawei.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 9:36 AM Sean Christopherson <seanjc@google.com> wrote:
+On Mon, Jan 10, 2022 at 11:04 AM John Garry <john.garry@huawei.com> wrote:
 >
-> On Mon, Jan 10, 2022, Raghavendra Rao Ananta wrote:
-> > On Fri, Jan 7, 2022 at 5:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Tue, Jan 04, 2022, Raghavendra Rao Ananta wrote:
-> > > > +#define kvm_vm_has_started(kvm) (kvm->vm_started)
-> > >
-> > > Needs parantheses around (kvm), but why bother with a macro?  This is the same
-> > > header that defines struct kvm.
-> > >
-> > No specific reason for creating a macro as such. I can remove it if it
-> > feels noisy.
+> On 05/01/2022 06:13, Ian Rogers wrote:
+> > Avoid bugs where the wrong index is passed with the cpu_map.
 >
-> Please do.  In the future, don't use a macro unless there's a good reason to do
-> so.  Don't get me wrong, I love abusing macros, but for things like this they are
-> completely inferior to
->
->   static inline bool kvm_vm_has_started(struct kvm *kvm)
->   {
->         return kvm->vm_started;
->   }
->
-> because a helper function gives us type safety, doesn't suffer from concatenation
-> of tokens potentially doing weird things, is easier to extend to a multi-line
-> implementation, etc...
->
-> An example of when it's ok to use a macro is x86's
->
->   #define kvm_arch_vcpu_memslots_id(vcpu) ((vcpu)->arch.hflags & HF_SMM_MASK ? 1 : 0)
->
-> which uses a macro instead of a proper function to avoid a circular dependency
-> due to arch/x86/include/asm/kvm_host.h being included by include/linux/kvm_host.h
-> and thus x86's implementation of kvm_arch_vcpu_memslots_id() coming before the
-> definition of struct kvm_vcpu.  But that's very much an exception and done only
-> because the alternatives suck more.
->
-Understood. Thanks for the explanation! Will switch to an inline function.
+> nit: Don't you mean possible bugs?
 
-> > > > +                      */
-> > > > +                     mutex_lock(&kvm->lock);
-> > >
-> > > This adds unnecessary lock contention when running vCPUs.  The naive solution
-> > > would be:
-> > >                         if (!kvm->vm_started) {
-> > >                                 ...
-> > >                         }
-> > >
-> > Not sure if I understood the solution..
->
-> In your proposed patch, KVM_RUN will take kvm->lock _every_ time.  That introduces
-> unnecessary contention as it will serialize this bit of code if multiple vCPUs
-> are attempting KVM_RUN.  By checking !vm_started, only the "first" KVM_RUN for a
-> VM will acquire kvm->lock and thus avoid contention once the VM is up and running.
-> There's still a possibility that multiple vCPUs will contend for kvm->lock on their
-> first KVM_RUN, hence the quotes.  I called it "naive" because it's possible there's
-> a more elegant solution depending on the use case, e.g. a lockless approach might
-> work (or it might not).
->
-But is it safe to read kvm->vm_started without grabbing the lock in
-the first place? use atomic_t maybe for this?
-
-> > > > +                     kvm->vm_started = true;
-> > > > +                     mutex_unlock(&kvm->lock);
-> > >
-> > > Lastly, why is this in generic KVM?
-> > >
-> > The v1 of the series originally had it in the arm specific code.
-> > However, I was suggested to move it to the generic code since the book
-> > keeping is not arch specific and could be helpful to others too [1].
->
-> I'm definitely in favor of moving/adding thing to generic KVM when it makes sense,
-> but I'm skeptical in this particular case.  The code _is_ arch specific in that
-> arm64 apparently needs to acquire kvm->lock when checking if a vCPU has run, e.g.
-> versus a hypothetical x86 use case that might be completely ok with a lockless
-> implementation.  And it's not obvious that there's a plausible, safe use case
-> outside of arm64, e.g. on x86, there is very, very little that is truly shared
-> across the entire VM/system, most things are per-thread/core/package in some way,
-> shape, or form.  In other words, I'm a wary of providing something like this for
-> x86 because odds are good that any use will be functionally incorrect.
-I've been going back and forth on this. I've seen a couple of
-variables declared in the generic struct and used only in the arch
-code. vcpu->valid_wakeup for instance, which is used only by s390
-arch. Maybe I'm looking at it the wrong way as to what can and can't
-go in the generic kvm code.
+You are right. I'll watch myself doing this in the future.
 
 Thanks,
-Raghavendra
+Ian
+
+> >
+> > Reviewed-by: James Clark <james.clark@arm.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>

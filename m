@@ -2,155 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 213A048A6BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD09248A6BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347587AbiAKEPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:15:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56040 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347577AbiAKEPi (ORCPT
+        id S1347728AbiAKEUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229952AbiAKEUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:15:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641874537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+Yqomcw7FDLVwm1unnn5IoDr3lTZAcCMoRqqIKZgAeA=;
-        b=QLZWG7q+5Z4wRRU6pKA+/qO0IatarLtd68yp1nM4t9ipdihPVl5D564wRaC211oScjP8NV
-        v5jEhN5Q4Z6deGf+mmn7p3GIOcq651qvxZsRvy7VY+jvKeg0TGpKBLSO+XZwC878SrOOcH
-        hwO/pnj1Ie85GUZYFFlbUrRjgisxG04=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-rEvBisDbPraJbSP6cZHrJg-1; Mon, 10 Jan 2022 23:15:34 -0500
-X-MC-Unique: rEvBisDbPraJbSP6cZHrJg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32CE181CCB4;
-        Tue, 11 Jan 2022 04:15:33 +0000 (UTC)
-Received: from [10.22.16.145] (unknown [10.22.16.145])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 568821037F54;
-        Tue, 11 Jan 2022 04:15:28 +0000 (UTC)
-Message-ID: <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
-Date:   Mon, 10 Jan 2022 23:15:27 -0500
+        Mon, 10 Jan 2022 23:20:39 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E25C06173F;
+        Mon, 10 Jan 2022 20:20:39 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id x15so15272700plg.1;
+        Mon, 10 Jan 2022 20:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:organization:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Tto62C+VWnwHMjIZEt/IkjdeF/hUNskHa7hE32WUZWo=;
+        b=nGTZvLPVZhT+r0RT2Y/D+I8RG8YKSzE/wpDhxsSXL6ToEwD5+XL24LyirAjpM9Udi8
+         M0+Td9ZDbJ1+oHivltWchrBBw2jO++RQz2s52zf4kUd5YJHWJxUKAu/o5J9xjIAuyryW
+         +0hb2hMmoG3/uUR6T8yAwSptn6mFucCIGrQaqg2VJXlruJLi/e/FT+PTPouezh2VM7C+
+         sDNMmHgwIqW35Cgda6qPlN7ntOKaCY+XkpkQB44SIfjIo+KjNjcd2c7bIOhhyR4GVS+u
+         uQynCn/bUcfM9q5nIkrNqkOUcj2yafqb2PC3TkFs53nNAJQR+86jy6S7njJPOlk3+HcR
+         aSQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=Tto62C+VWnwHMjIZEt/IkjdeF/hUNskHa7hE32WUZWo=;
+        b=JYOlp+PYfZNqw/P2P7SthPyOFzvoFV5ka7wKy44oIPsL8RmmbbbQKEqezCiNit7rP4
+         7sZVGtVHzbJlamueyBoBO+vd7Ir0jHc8+YFtzYfzlvWY2/MSLW/UJLyGmEQU6mGjUOif
+         Q6Ybgw+v2PHxzg65mKOE4CtSX64rfCpauWe8ysaj0ux9+mQzXANvrBU9RnHolvqbG43J
+         jp4fSqXxVAZJS+jfuTGlWGqehDgGmaN8n5WuLEnwS32n+1lAK1+rD+Wu2FsVTIRd8AkB
+         498ONCBbAUA6xpwwKscajZOfwKkuc41OB4QiaydGybiUOHouIywdnkx8J3RYkLh9nkWN
+         AjQQ==
+X-Gm-Message-State: AOAM5333N4bQlnKWfc1/+mq+DTLvOtG2r14uSj3qfisx19Af/isTAmZu
+        Bg/dDo3Ca80kU858YQptm9w=
+X-Google-Smtp-Source: ABdhPJyCeAzKwRCAJCdxXI9tSlZrQtzB5EZyg4yJJ/9hoSTjTGV3tnt7nvk8rmjjXPCEDgSuyAt0qw==
+X-Received: by 2002:a17:90a:5893:: with SMTP id j19mr1198018pji.30.1641874838514;
+        Mon, 10 Jan 2022 20:20:38 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id w5sm8460312pfu.214.2022.01.10.20.20.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 20:20:38 -0800 (PST)
+Message-ID: <80b40829-0d25-eb84-7bd7-f21685daeb20@gmail.com>
+Date:   Tue, 11 Jan 2022 12:20:29 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
 Content-Language: en-US
-To:     Tim Murray <timmurray@google.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <20220108164617.3130175-1-jaegeuk@kernel.org>
- <YdvoxkAAquI17UbX@infradead.org>
- <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
- <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220110034747.30498-1-likexu@tencent.com>
+ <YdzV33X5w6+tCamI@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+Subject: Re: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
+In-Reply-To: <YdzV33X5w6+tCamI@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/1/2022 8:57 am, Sean Christopherson wrote:
+> On Mon, Jan 10, 2022, Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
+>> Tracing, it exposes details about the asynchronous events, when they are
+>> generated, and when their corresponding software event handler completes
+>> execution) cannot be safely and fully emulated by the KVM, especially
+>> emulating the simultaneous writing of guest PT packets generated by
+>> the KVM to the guest PT buffer.
+>>
+>> For KVM, it's better to advertise currently supported features based on
+>> the "static struct pt_cap_desc" implemented in the host PT driver and
+>> ignore _all_ unknown features before they have been investigated one by
+>> one and supported in a safe manner, leaving the rest as system-wide-only
+>> tracing capabilities.
+>>
+>> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>> v1 -> v2 Changelog:
+>> - Be safe and ignore _all_ unknown capabilities. (Paolo)
+>>
+>> Previous:
+>> https://lore.kernel.org/kvm/20220106085533.84356-1-likexu@tencent.com/
+>>
+>>   arch/x86/kvm/cpuid.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>> index 0b920e12bb6d..439b93359848 100644
+>> --- a/arch/x86/kvm/cpuid.c
+>> +++ b/arch/x86/kvm/cpuid.c
+>> @@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>>   			break;
+>>   		}
+>>   
+>> +		/* It's better to be safe and ignore _all_ unknown capabilities. */
+> 
+> No need to justify why unknown capabilities are hidden as that's very much (supposed
+> to be) standard KVM behavior.
+> 
+>> +		entry->ebx &= GENMASK(5, 0);
+> 
+> Please add a #define somewhere so that this is self-documenting, e.g. see
+> KVM_SUPPORTED_XCR0.
 
-On 1/10/22 14:41, Tim Murray wrote:
-> On Mon, Jan 10, 2022 at 7:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
->> Can we start by describing the actual problem?
-> Of course. Sorry, I didn't realize Jaegeuk was going to move so
-> quickly with this patch :)
->
-> We have a few thousand traces from internal Android devices where
-> large numbers of threads throughout the system end up blocked on
-> f2fs_issue_checkpoint(), which userspace code usually reaches via
-> fsync(). In the same traces, the f2fs-ckpt kthread is often blocked
-> around f2fs_write_checkpoint(), which does the actual fsync()
-> operation on behalf of some number of callers (coalescing multiple
-> fsync calls into a single checkpoint op). I think the problem is
-> something like:
->
-> 1. f2fs-ckpt thread is running f2fs_write_checkpoint(), holding the
-> cp_rwsem write lock while doing so via f2fs_lock_all() in
-> block_operations().
-> 2. Random very-low-priority thread A makes some other f2fs call that
-> tries to get the cp_rwsem read lock by atomically adding on the rwsem,
-> fails and deschedules in uninterruptible sleep. cp_rwsem now has a
-> non-zero reader count but is write-locked.
-That is not how rwsem works. A reader which fails to get the lock 
-because it is write-locked will remove its reader count before going to 
-sleep. So the reader count will be zero eventually. Of course, there is 
-a short period of time where the reader count will be non-zero until the 
-reader removes its own reader count. So if a new writer comes in at that 
-time, it will fail its initial trylock and probably go to optimistic 
-spinning mode. If the writer that owns the lock release it at the right 
-moment, the reader may acquire the read lock.
-> 3. f2fs-ckpt thread releases the cp_rwsem write lock. cp_rwsem now has
-> a non-zero reader count and is not write-locked, so is reader-locked.
+How about we define this macro in the <asm/intel_pt.h> so that the next PT 
+capability
+enabler can update the mask with minimal effort, considering that many pure kernel
+developers don't care about KVM code ?
 
-That is not true in general, but a suitable race window as discussed 
-above may make it looks like that.
+> 
+> And why just EBX?  ECX appears to enumerate features too, and EDX is presumably
+> reserved to enumerate yet more features when EBX/ECX run out of bits.
 
-> 4. Other threads call fsync(), which requests checkpoints from
-> f2fs-ckpt, and block on a completion event that f2fs-ckpt dispatches.
-> cp_rwsem still has a non-zero reader count because the low-prio thread
-> A from (2) has not been scheduled again yet.
-> 5. f2fs-ckpt wakes up to perform checkpoints, but it stalls on the
-> write lock via cmpxchg in block_operations() until the low-prio thread
-> A has run and released the cp_rwsem read lock. Because f2fs-ckpt can't
-> run, all fsync() callers are also effectively blocked by the
-> low-priority thread holding the read lock.
->
-> I think this is the rough shape of the problem (vs readers holding the
-> lock for too long or something like that) because the low-priority
-> thread is never run between when it is initially made runnable by
-> f2fs-ckpt and when it runs tens/hundreds of milliseconds later then
-> immediately unblocks f2fs-ckpt.
->
-> When there's a lot of oversubscription, threads running IO, etc, we
-> see f2fs-ckpt stalls of tens to hundreds of milliseconds per f2fs-ckpt
-> iteration. In one recent experiment of the immediate aftermath of
-> booting and unlocking a phone for the first time, over a 10s period,
-> we saw f2fs-ckpt blocked on the rwsem for 9.7s, running for <50ms over
-> 110 separate slices (so probably ~110 fsyncs), and blocked on IO
-> operations for <100ms. The worst 10s period I can find in a similar
-> experiment with the unfair reader approach has f2fs-ckpt blocked on
-> the rwsem for 130ms, running for 20ms over 95 slices, blocked on IO
-> for 40ms, and sleeping the rest of the time.
->
-> Unfair rwsems are rarely appropriate, but I think the lack of fairness
-> makes sense here because of the relative importance of f2fs-ckpt vs
-> any particular reader of that rwsem. The one concern I have about
-> down_read_unfair() is whether the fairness should be a property of the
-> down_read operation or the rw_semaphore itself. In the f2fs case, it
-> seems like all read locks of the rw_semaphores should be unfair and
-> that adding a single fair down_read() could introduce a similar
-> regression, but duplicating rw_semaphore also seems bad. If it does
-> make sense to make the fairness a property of the semaphore, could
-> that property be flagged in an init_unfair_rwsem() macro and then
-> checked in lockdep?
+Yes, how about this version:
 
-It is also possible to make unfair rwsem a property of the rwsem itself 
-instead of relying on a variant down_read() call. We can isolate a bit 
-in the owner word for this attribute and set it in the initialization 
-phrase to guide its behavior.
+diff --git a/arch/x86/include/asm/intel_pt.h b/arch/x86/include/asm/intel_pt.h
+index ebe8d2ea44fe..da94d0eeb9df 100644
+--- a/arch/x86/include/asm/intel_pt.h
++++ b/arch/x86/include/asm/intel_pt.h
+@@ -24,6 +24,12 @@ enum pt_capabilities {
+  	PT_CAP_psb_periods,
+  };
 
-I do have a question about the number of readers in such a case compared 
-with the number of writers. Are there a large number of low priority 
-hanging around? What is an average read lock hold time?
++#define GUEST_SUPPORTED_CPUID_14_EBX	\
++	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5))
++
++#define GUEST_SUPPORTED_CPUID_14_ECX	\
++	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(31))
++
+  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+  void cpu_emergency_stop_pt(void);
+  extern u32 intel_pt_validate_hw_cap(enum pt_capabilities cap);
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0b920e12bb6d..be8c9170f98e 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -19,6 +19,7 @@
+  #include <asm/user.h>
+  #include <asm/fpu/xstate.h>
+  #include <asm/sgx.h>
++#include <asm/intel_pt.h>
+  #include "cpuid.h"
+  #include "lapic.h"
+  #include "mmu.h"
+@@ -900,7 +901,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array 
+*array, u32 function)
+  			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+  			break;
+  		}
+-
++		entry->eax = min(entry->eax, 1u);
++		entry->ebx &= GUEST_SUPPORTED_CPUID_14_EBX;
++		entry->ecx &= GUEST_SUPPORTED_CPUID_14_ECX;
++		entry->edx = 0;
+  		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+  			if (!do_host_cpuid(array, function, i))
+  				goto out;
 
-Blocking for 9.7s for a write lock is quite excessive and we need to 
-figure out how this happen.,
+> 
+> And is there any possibility of a malicious user/guest using features to cause
+> problems in the host?  I.e. does KVM need to enforce that the guest can't enable
+> any unsupported features?
 
-Cheers,
-Longman
+If a user space is set up with features not supported by KVM, it owns the risk 
+itself.
 
+AFAI, the guest Intel PT introduces a great attack interface for the host and
+we only use the guest supported PT features in a highly trusted environment.
+
+I agree that more uncertainty and fixes can be triggered in the security motive,
+not expecting too much from this patch. :D
+
+> 
+>>   		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+>>   			if (!do_host_cpuid(array, function, i))
+>>   				goto out;
+>> -- 
+>> 2.33.1
+>>

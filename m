@@ -2,116 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D47948AB2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EF748AB30
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349108AbiAKKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:13:53 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:32776
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348800AbiAKKNs (ORCPT
+        id S237540AbiAKKOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236392AbiAKKOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:13:48 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2320740A89
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641896027;
-        bh=vkZ3shAsrts82aZQTD9Odzm7oGr7rqF0WKQDjTKTwd8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=AsSy6TnxbEX9P9XkYo75tUEdzUi/QNUnxZtzQQaEXG6LEu4gKkiGy4eVjmoLUcapY
-         6WhAAT6NaSssf2deKGqTP5U5jZYXk7hhw+U/cJS+iv0P+ORut60tC8iyd9b5uapSPx
-         kVWatiiAuxpf2eDOocJu1vVSgr6/QMbI4b9BkHbdOTPdWLB9QdvQR4T2ljnq+hHq9T
-         y5UOgs9lYQmmXx/3HWNlKNS6WOSjr84AFsVabhwUoHQS1AkBkX1MDXWF83j6I+e+fW
-         ocYfMXcQcrWTUjQb/Dn1WtERIg3u2lBlYQTU/ZmKWTLIy90/yagUddaoF1XJH3iLbE
-         Lt5i00s/sOUXQ==
-Received: by mail-ed1-f72.google.com with SMTP id x19-20020a05640226d300b003f8b80f5729so12762103edd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:13:47 -0800 (PST)
+        Tue, 11 Jan 2022 05:14:00 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3BFC06175D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:13:57 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id x4so6784628wru.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6PCA+vRYUe/AduahtIfH11YxAjqrR5aT6yWf1P1UjKM=;
+        b=xrnn7pfPtVk8GmZXH74suntUOfiJSbMkHTNai+3uNuBcbbzTXiKd42TVtluDU8+XvJ
+         eJguqBRQB3yNfFCspuEeUxuaG6YnNk1ykZ+ErK52kqvbSO2THosjeqXIyu7roja9Jt3y
+         MsDa3SCUlGcXd69wdtgbEgkZlmrL1rKbc/HyhQxseE8XYICgaXD/yt6QnZM+C/KPokj2
+         PohuiVjL8E5sb3VTAoeQwHQzWsRceX7zawKB65yMb5Ur5wvbTbjj5yCK9nGBVA/TVu+K
+         9sS3zrIT8iX5UtY2HUjey0tlfdUaQ3PfPub6AlX9ZaPMvLn4AzsfCh7pvQmGWEq+nCSQ
+         yFSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vkZ3shAsrts82aZQTD9Odzm7oGr7rqF0WKQDjTKTwd8=;
-        b=GTi6I9Jv4aHzQ7YKFCayswv8IUvdz/hJOAfPk8EDAucxRCMWxxVUCdHFNT0jBODrth
-         3lF67TIbhkaaX0A/brpK/Nh362TjrevtqY9RXF4/R5Bv1mis8QQXyTzzIEfGR7VpVznM
-         cVEGToTVD7cRYRom7hoFq4eXtwU+D5Rv3gEwkkJ/VpOT32wzMFTH9dVjnUBRZCjpTXDE
-         G1FNoo1AGMK63VoLwfK0hd7fANC7aTiVl1n0AHs1+eldllnXqvEjroTNtr3PMvhuSAn4
-         SribSvj2Mz7Gi1Ml1MfUcmkk+riFuThtb+VVuk/7kuOqfiIMv6v9NZZoTzS5h6qDjTU0
-         hVNw==
-X-Gm-Message-State: AOAM5337Uya1DA8Qsa036NSsj7whAd9FJD5WIxyqZ6TN+praYiweQ+oA
-        nprLMb69k1bOpn64cgflK+nv/B3osRuXd1stWs4v9LIvMURmvZ35RaifsMS1QXMXdcyc4ldfyxc
-        H25DwUInJD9wfAMmlkNVUKwYSl3S5pdDEn5TRdFi1pQ==
-X-Received: by 2002:a50:da48:: with SMTP id a8mr3517604edk.155.1641896026737;
-        Tue, 11 Jan 2022 02:13:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrMWwC4F5CYCPwNtrsTc93H/KSEUuKQ3dZ2KWyqGsikQRFJIiGNhQmyHnezI5HUpc6kJMojw==
-X-Received: by 2002:a50:da48:: with SMTP id a8mr3517597edk.155.1641896026571;
-        Tue, 11 Jan 2022 02:13:46 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 26sm3431268ejk.138.2022.01.11.02.13.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6PCA+vRYUe/AduahtIfH11YxAjqrR5aT6yWf1P1UjKM=;
+        b=E73BDC31FuoDzuDqNq9Tzq6HiHduqDAJ2gYjU+5nTRuQA5FX4SP2LseSYjwEy0pedo
+         hrvdl7afqMODgYDnxlil3snIEiVc8ZYr659ChxAMZ1++lBtewUIGkcoX9b+TfX6i6jRw
+         V98x4q6N2m4wuzQBRJLzAPgaoJ70h1jMVuqMcJsaMMnS8LCoUsYN7asAUPPFBIA89gYe
+         y0qY+vhHLFDgeak1j6U1jxA0Q2LQRzvVZoGZwYvgf7s1apX8aaHsIw3mLCPZNMCTAp5/
+         i4VLLMWumNnjnCINt9JIaJgAUGE88C97A8h4dEyNTSPW1Ou28so33WxUfIfhoPmKw7UN
+         H6xQ==
+X-Gm-Message-State: AOAM530722QXghmfuIfSBPJgH6zoe/pKGV01v6o8KzjHoHzq8fm583YN
+        iHadiNxh3JNScJ9JXsnPA2NSOw==
+X-Google-Smtp-Source: ABdhPJywTk9GhMWZxxqHvgfzFl2ehPAmWpoal5qpAaIBDxvx3IEGSmDLg3dQoXaJJEoI6VdA5mEzlQ==
+X-Received: by 2002:a5d:6b09:: with SMTP id v9mr3048585wrw.591.1641896036277;
+        Tue, 11 Jan 2022 02:13:56 -0800 (PST)
+Received: from google.com ([31.124.24.179])
+        by smtp.gmail.com with ESMTPSA id d22sm9158677wrb.83.2022.01.11.02.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 02:13:46 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 4/4] spi: s3c64xx: allow controller-data to be optional
-Date:   Tue, 11 Jan 2022 11:13:38 +0100
-Message-Id: <20220111101338.58630-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
-References: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
+        Tue, 11 Jan 2022 02:13:55 -0800 (PST)
+Date:   Tue, 11 Jan 2022 10:13:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     broonie@kernel.org, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC v5 net-next 01/13] mfd: ocelot: add support for external
+ mfd control over SPI for the VSC7512
+Message-ID: <Yd1YV+eUIaCnttYd@google.com>
+References: <20211218214954.109755-1-colin.foster@in-advantage.com>
+ <20211218214954.109755-2-colin.foster@in-advantage.com>
+ <Ycx9MMc+2ZhgXzvb@google.com>
+ <20211230014300.GA1347882@euler>
+ <Ydwju35sN9QJqJ/P@google.com>
+ <20220111003306.GA27854@COLIN-DESKTOP1.localdomain>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220111003306.GA27854@COLIN-DESKTOP1.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung SoC SPI driver requires to provide controller-data node
-for each of SPI peripheral device nodes.  Make this controller-data node
-optional, so DTS could be simpler.
+> > > > No magic numbers please.
+> > > 
+> > > I've gotten conflicting feedback on this. Several of the ocelot drivers
+> > > (drivers/net/dsa/ocelot/felix_vsc9959.c) have these ranges hard-coded.
+> > > Others (Documentation/devicetree/bindings/net/mscc-ocelot.txt) have them
+> > > all passed in through the device tree. 
+> > > 
+> > > https://lore.kernel.org/netdev/20211126213225.okrskqm26lgprxrk@skbuf/
+> > 
+> > Ref or quote?
+> > 
+> > I'm not brain grepping it searching for what you might be referring to.
+> > 
+> > I'm not sure what you're trying to say here.  I'm asking you to define
+> > this numbers please.
+> 
+> I'll define the numbers as you suggest.
+> 
+> The quote I was referring to is this:
+> 
+> > The last option I haven't put much consideration toward would be to
+> > move some of the decision making to the device tree. The main ocelot
+> > driver appears to leave a lot of these addresses out. For instance
+> > Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt.
+> > That added DT complexity could remove needs for lines like this:
+> > > > +              ocelot->map[GCB][GCB_MIIM_MII_STATUS & REG_MASK],
+> > But that would probably impose DT changes on Seville and Felix, which
+> > is the last thing I want to do.
+> 
+> The thing with putting the targets in the device tree is that you're
+> inflicting yourself unnecessary pain. Take a look at
+> Documentation/devicetree/bindings/net/mscc-ocelot.txt, and notice that
+> they mark the "ptp" target as optional because it wasn't needed when
+> they first published the device tree, and now they need to maintain
+> compatibility with those old blobs.
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/spi/spi-s3c64xx.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+I wasn't asking you to put it in DT, just to define the numbers.
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 8755cd85e83c..769d958a2f86 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	data_np = of_get_child_by_name(slave_np, "controller-data");
--	if (!data_np) {
--		dev_err(&spi->dev, "child node 'controller-data' not found\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
--	if (!cs) {
--		of_node_put(data_np);
-+	if (!cs)
- 		return ERR_PTR(-ENOMEM);
-+
-+	data_np = of_get_child_by_name(slave_np, "controller-data");
-+	if (!data_np) {
-+		dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
-+		return cs;
- 	}
- 
- 	of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
+> > > There's yet another complexity with these, and I'm not sure what the
+> > > answer is. Currently all regmaps are tied to the ocelot_spi device...
+> > > ocelot_spi calls devm_regmap_init. So those regmaps hang around if
+> > > they're created by a module that has been removed. At least until the
+> > > entire MFD module is removed. Maybe there's something I haven't seen yet
+> > > where the devres or similar has a reference count. I don't know the best
+> > > path forward on this one.
+> > 
+> > Why are you worrying about creating them 2 different ways?
+> > 
+> > If it's possible for them to all create and use their own regmaps,
+> > what's preventing you from just do that all the time?
+> 
+> There isn't really any worry, there just might be efficiencies to be
+> had if two children share the same regmap. But so long as any regmap is
+> created with unique names, there's no reason multiple regmaps can't
+> overlap the same regions. In those cases, maybe syscon would be the best
+> thing to implement if it becomes needed.
+> 
+> I have nothing against making every child regmap be unique if that's the
+> desire.
+
+Unless something has changed or my understanding is not correct,
+regmap does not support over-lapping register ranges.
+
+However, even if that is required, I still think we can come up with
+something cleaner than creating a whole API based around creating
+and fetching different regmap configurations depending on how the
+system was initialised.
+
 -- 
-2.32.0
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

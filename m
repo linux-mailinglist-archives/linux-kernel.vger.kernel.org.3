@@ -2,66 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B482048BAB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04E048BABC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346309AbiAKWYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:24:14 -0500
-Received: from mx1.uni-rostock.de ([139.30.22.71]:55465 "EHLO
-        mx1.uni-rostock.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiAKWYM (ORCPT
+        id S1346322AbiAKWZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:25:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49318 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229798AbiAKWZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:24:12 -0500
-DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmze; 
- t=1641939850; bh=IAh7VU2Gkazp79uYG+fTcN5f34huyPCK3e0lnHU6aJo=; h=
- "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
- a=ed25519-sha256; b=
- gXMd2WOCC7nLWEI7G/5WvnbXThp7Ut0DaDPRNTb/L5VtszMtuWP10W84nNZ33+j2DslA5frZm4mMmvUpgwY2Ag==
-DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmz; 
- t=1641939850; bh=IAh7VU2Gkazp79uYG+fTcN5f34huyPCK3e0lnHU6aJo=; h=
- "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
- a=rsa-sha256; b=
- hS11vuXSGo0+GMhNHR5k0mCklRNul+Mk9QUwTX2TcRkwCKFTw4i8Z0ofE6Q1+koLFxL/O/qSUFYQvS7c0/3wQ5xoEvAqCc6ifFNll0bxPFW9GkkxlSuWRIUEk9/j8vHFts7wiz0Neh8CHojExIJ9ALl0zjbjo5SvL70Etr+8Ow8=
-Received: from 139.30.22.83 by mx1.uni-rostock.de (Tls12, Aes256, Sha384,
- DiffieHellmanEllipticKey384); Tue, 11 Jan 2022 22:24:09 GMT
-Received: from meshdev.amd.e-technik.uni-rostock.de (139.30.202.104) by
- email3.uni-rostock.de (139.30.22.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 11 Jan 2022 23:24:09 +0100
-From:   Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>
-CC:     Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
-        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] um: add generated capflags.c to gitignore
-Date:   Tue, 11 Jan 2022 22:23:53 +0000
-Message-ID: <20220111222353.1501350-1-benjamin.beichler@uni-rostock.de>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jan 2022 17:25:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71643B81D54;
+        Tue, 11 Jan 2022 22:25:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19949C36AF7;
+        Tue, 11 Jan 2022 22:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641939910;
+        bh=bdl9ZWUE2YFPQAPy5Zln5X8OLbawG1tjQrF/OlhfxS0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qgaKKZDIT7rGpPuCD86aQkMKqBHupAztHDc1vFnPJYtSaTKzjua7iCvhHguQTKOx5
+         RdgSRc8v9lJY+kDklooFT5zGtZvpz+hoLirxshyS+HfpcjOkxpXrZnDsbkXpZeXRDf
+         N1OM6G9eiR0Oi+352bnmjo3TeCsLIhRYKL5Ywyq4KFixcbd+HeGH+7naUbi8qIPZs5
+         YSLT+8gsIOb/y76PxNiJdXaZ7STaBkYu2Wc6OLv0evWX8U/pvfR+/PEwURW2Zxu7lj
+         IvPmgZfUj6LWxuEXiNjC33lfre/qMen2F3oUf/Gu7rAV+gREQ3QCDflNp5hKq6+vsq
+         pKOaFUEHYgwtQ==
+Received: by mail-wm1-f42.google.com with SMTP id e5so334563wmq.1;
+        Tue, 11 Jan 2022 14:25:09 -0800 (PST)
+X-Gm-Message-State: AOAM533hZY+mBcoGNA3Ntc5oQQGrhBhNgRcU8uJ3cs4Erkc9JWBg5vc2
+        //qOcdieNJAIeHfVBbeK9ePDfP1cOyL/q9EPDuM=
+X-Google-Smtp-Source: ABdhPJy5gKoxJDNSKdsiVY5adN7z3x/9LXm/afgsLqkRSFvPL04IIWdIe0cwHy0e81EVKSCMpUSI9WNdIVmrqn6rsLI=
+X-Received: by 2002:a05:600c:3ac5:: with SMTP id d5mr4242329wms.32.1641939908284;
+ Tue, 11 Jan 2022 14:25:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.30.202.104]
-X-ClientProxiedBy: email3.uni-rostock.de (139.30.22.83) To
- email3.uni-rostock.de (139.30.22.83)
-X-TM-SNTS-SMTP: 662BD3255006C5AFA92FAB0F0DA8B68E75A66599E4E034722F26D9699A81144B2002:8
+References: <20220111195309.634965-1-jforbes@fedoraproject.org> <CAHmME9pi1Y7urg1VQeCi7L6MxHRUk5g4wc6VKDywo4yPh9h_6w@mail.gmail.com>
+In-Reply-To: <CAHmME9pi1Y7urg1VQeCi7L6MxHRUk5g4wc6VKDywo4yPh9h_6w@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 11 Jan 2022 23:24:57 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXH24ubv7yAqmbnzqe22cGh1L0-N8J6fiCT2NgU2HmeBJw@mail.gmail.com>
+Message-ID: <CAMj1kXH24ubv7yAqmbnzqe22cGh1L0-N8J6fiCT2NgU2HmeBJw@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: add prompts back to crypto libraries
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, jmforbes@linuxtx.org,
+        David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
----
- arch/um/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+On Tue, 11 Jan 2022 at 23:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Justin,
+>
+> These are library variables, which means they really have no sense in
+> being user selectable. Internal things to the kernel depend on them,
+> or they don't. They're always only dependencies.
+>
 
-diff --git a/arch/um/.gitignore b/arch/um/.gitignore
-index 6323e5571887..8168b3bc08b8 100644
---- a/arch/um/.gitignore
-+++ b/arch/um/.gitignore
-@@ -2,3 +2,4 @@
- kernel/config.c
- kernel/config.tmp
- kernel/vmlinux.lds
-+capflags.c
-\ No newline at end of file
--- 
-2.25.1
+But what does any of this have to do with blake2s? These are unrelated
+changes that are not even described in the commit log of the original
+patch, so let's just revert them now. If changes are needed here, we
+can discuss them on the linux-crypto mailing list after the merge
+window.
+
+
+> It sounds like CONFIG_BIG_KEYS might be declaring its dependencies
+> wrong, and that's actually where the bug is? CC'ing David Howells just
+> in case. Maybe things should be changed to:
+>
+> diff --git a/security/keys/Kconfig b/security/keys/Kconfig
+> index 64b81abd087e..2f1624c9eed9 100644
+> --- a/security/keys/Kconfig
+> +++ b/security/keys/Kconfig
+> @@ -60,7 +60,7 @@ config BIG_KEYS
+>   bool "Large payload keys"
+>   depends on KEYS
+>   depends on TMPFS
+> - depends on CRYPTO_LIB_CHACHA20POLY1305 = y
+> + select CRYPTO_LIB_CHACHA20POLY1305
+>   help
+>     This option provides support for holding large keys within the kernel
+>     (for example Kerberos ticket caches).  The data may be stored out to
+>
+>
+> Jason

@@ -2,88 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC4748B8AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C26F48B8AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239790AbiAKUcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:32:41 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:60938
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235522AbiAKUck (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:32:40 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4CDCC4076E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641933159;
-        bh=H5ZakS3zp5yKL3f7hqWLVBf3SwwkRAJ+CXCwTVqLnWY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=iFh1KQmQoxVb4CT/d1HpMimEYQzR/bcIPFSWJEKDCACjgAR9NIixb8GuPfTaZ3qq4
-         DzPKEc8xWB71IB6nXwKTD7tWzmW22hpztdLB5aU4EwfvxiCVZ8n15WkQIhkKNjpfCK
-         QRn/GzDUkt4yj2Yi3XT4e8F+i1npnbuDvcpTaPQMJ2c61lpIMv2H7yFd3oSG/tL4Ey
-         gEFz/Xlxiz2wCMqL89QNo1nYG5MxIJWjYjha9Mu4BZhMZHs6LVZ1Q8mTu8qP/emwiS
-         Hk8M/XQl0fWs0CmIWvMRIzkAtTfVINb6NKXSaf2gpXXqef3WfRxTEU8AJ3V7mAxFYw
-         fPuUy2BmxJCow==
-Received: by mail-ed1-f69.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so180466edd.21
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:32:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H5ZakS3zp5yKL3f7hqWLVBf3SwwkRAJ+CXCwTVqLnWY=;
-        b=UYsSCIAPhuMpJ/rX7qjKV4RWvXlbA+pI6PCtc+Wlw1zQWHpVS8jlpoZ9O8icy6vwqs
-         ErKBqvoDbca+P32xP7J6h2TLFQbp1LMdW2Gob0pj2GykvJFROkgcx3fkVGnaNtHn2l6s
-         Q+llHCiAPS3oT6AVkIvwyi33LZ1rAxQzHjLytI2r8sUF3sl5JfGt1/L+aR88ff3cFyP0
-         akcmLw5qnuRUBvY0s0zgrrL67fuojvHkop0G9zmxmi2dHVuP4pTiSUfqXZ1fYfojonC6
-         tkguaTk3a/GZA13Szeo8LjgXpCKwbNoITF8BH9gIvhowo2bZQl/7SSMUdF+dffvZly57
-         M18w==
-X-Gm-Message-State: AOAM5333k5MQj4W3S7MQNZEdgIqN/Cr6BrGJSkupgUysLO0mN8YYNlaY
-        QumO9PgDGwGL5rTRTrzmvf3pfrdwTu78ItE3vvVumVWL/WvVAdHO8PC04I8gkdaa0SQox+obkQq
-        WTgnlWjFUm9g64EaiaI8/F9AeWuyy/tV+jQTIBhB2AA==
-X-Received: by 2002:a17:906:2802:: with SMTP id r2mr5229480ejc.172.1641933158937;
-        Tue, 11 Jan 2022 12:32:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwxV0Tyf5mraBWtghCzj/1z3FU1wV/7RpELi8fE8HCTtlMZokp9yMWQiCnhFIdMrFQTwIAA2Q==
-X-Received: by 2002:a17:906:2802:: with SMTP id r2mr5229469ejc.172.1641933158801;
-        Tue, 11 Jan 2022 12:32:38 -0800 (PST)
-Received: from [192.168.0.26] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id gt20sm3963892ejc.11.2022.01.11.12.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 12:32:38 -0800 (PST)
-Message-ID: <c78b8062-20a8-262c-99de-8c6b481584cd@canonical.com>
-Date:   Tue, 11 Jan 2022 21:32:37 +0100
+        id S242142AbiAKUdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:33:33 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:57138 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231598AbiAKUdc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 15:33:32 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1n7NpY-00034Q-U7; Tue, 11 Jan 2022 21:33:20 +0100
+Message-ID: <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
+Date:   Tue, 11 Jan 2022 21:33:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [Patch V1 2/4] memory: tegra: Add interrupt mask
+ Thunderbird/91.4.0
 Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
-References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
- <1641926750-27544-3-git-send-email-amhetre@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1641926750-27544-3-git-send-email-amhetre@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        ebiggers@kernel.org, dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+In-Reply-To: <20220111180318.591029-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 19:45, Ashish Mhetre wrote:
-> Add interrupt masks for all supported interrupts on tegra MCs.
-> Update interrupt mask value for T186 and T194 as per supported interrupts.
+On 11.01.2022 19:03, Roberto Sassu wrote:
+> Support for PGP keys and signatures was proposed by David long time ago,
+> before the decision of using PKCS#7 for kernel modules signatures
+> verification was made. After that, there has been not enough interest to
+> support PGP too.
+> 
+> Lately, when discussing a proposal of introducing fsverity signatures in
+> Fedora [1], developers expressed their preference on not having a separate
+> key for signing, which would complicate the management of the distribution.
+> They would be more in favor of using the same PGP key, currently used for
+> signing RPM headers, also for file-based signatures (not only fsverity, but
+> also IMA ones).
 
-The commit subject is too generic. The commit description need to also
-describe why you are doing it and what you want achieve.
+Aren't PGP keys simply RSA / ECC / EdDSA keys with additional metadata?
+Can't they be unwrapped from their (complex) PGP format in userspace and
+loaded raw into the kernel, in a similar way as they are sometimes used
+for SSH authentication?
 
+This will save us from having to add complex parsers (a well-known source
+of bugs) into the kernel - I guess there aren't any plans to add an
+in-kernel PGP Web of Trust implementation.
 
-
-Best regards,
-Krzysztof
+Thanks,
+Maciej

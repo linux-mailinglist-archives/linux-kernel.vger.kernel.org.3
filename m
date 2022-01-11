@@ -2,110 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA1348BB8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87A448BB72
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244067AbiAKXkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 18:40:36 -0500
-Received: from dispatch1-us1.ppe-hosted.com ([148.163.129.52]:54834 "EHLO
-        dispatch1-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243308AbiAKXke (ORCPT
+        id S1346840AbiAKXcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 18:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233873AbiAKXcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 18:40:34 -0500
-X-Greylist: delayed 548 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Jan 2022 18:40:34 EST
-Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
-        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id AC4FD224E7A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:31:28 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.67.122])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id B3DCD1C007E;
-        Tue, 11 Jan 2022 23:31:25 +0000 (UTC)
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id D0A6540073;
-        Tue, 11 Jan 2022 23:31:24 +0000 (UTC)
-Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 11 Jan 2022 18:32:02 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC41C06173F;
+        Tue, 11 Jan 2022 15:32:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id 0D18A13C2B0;
-        Tue, 11 Jan 2022 15:31:24 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 0D18A13C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1641943884;
-        bh=Cjva8Ua9mKRM9CDkoS1tPMFTEcoAovDoxh2PNKu05/w=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=fvtmz02TvQHDUK+UJHIjvfJVMYY/A6JoSmMEaQgAijPgFPpclk78n/5CEbVfxkax5
-         rpIfMWcU44E2WR6+2FocEfzLV6r8ojFu2ThHSJ9VIEdVsoiOpnj3hL8m3MZCP0DPAU
-         0gFhyB3JJkjT3bHbfKACmWovs8waE+4IoCFc3WU8=
-Subject: Re: [Bug] mt7921e driver in 5.16 causes kernel panic
-To:     Khalid Aziz <khalid@gonehiking.org>, nbd@nbd.name,
-        lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <5cee9a36-b094-37a0-e961-d7404b3dafe2@gonehiking.org>
-From:   Ben Greear <greearb@candelatech.com>
-Organization: Candela Technologies
-Message-ID: <7b15fa7c-9130-db8c-875e-8c0eb1dcc530@candelatech.com>
-Date:   Tue, 11 Jan 2022 15:31:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYRmM5gZ5z4xmx;
+        Wed, 12 Jan 2022 10:31:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641943919;
+        bh=4Z3sqpGIFVL84J+SH3/JqcsCmk3/t539vZt80mjQAn0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CAL+VhB7tnGuerjBXg+KBrIXNM5L47Grr2Z7MctVembeA/rhXP/4Qlff+eCDzsasV
+         m07b4UblcBcm43Gt6g+CJaaPiTBASmT/8BpIYuXG0NheZif123+Jx3mSG4ghjD5Bnr
+         vKKAPvQRgL6gxoRfQc3w+t52HyU2Os/2DuZKOZTS1fOqFAoDtgP7C2312g4o2oCT9E
+         ERz+u6FsuLxtJw9CYnZASZbrKyZ1A31xsC+V69GzuN44Trb8RVnjGBHrbSpTbGiYjQ
+         FJEC1IE7aJxnO2oJnV8uNmJItDD1jVnRm6IH/ot9+21m/9tIAwlSSUqFWNTrs1TqXI
+         8mSVssM+Jlbjw==
+Date:   Wed, 12 Jan 2022 10:31:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Daire Byrne <daire@dneg.com>,
+        Dave Wysochanski <dwysocha@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Omar Sandoval <osandov@osandov.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        ceph-devel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] fscache, cachefiles: Rewrite
+Message-ID: <20220112103146.03c88319@canb.auug.org.au>
+In-Reply-To: <510611.1641942444@warthog.procyon.org.uk>
+References: <510611.1641942444@warthog.procyon.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <5cee9a36-b094-37a0-e961-d7404b3dafe2@gonehiking.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-MDID: 1641943886-ush-JagAYBMd
+Content-Type: multipart/signed; boundary="Sig_/TSD_6X.o4QL4mtle5E/6NvU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 3:17 PM, Khalid Aziz wrote:
-> I am seeing an intermittent bug in mt7921e driver. When the driver module is loaded
-> and is being initialized, almost every other time it seems to write to some wild
-> memory location. This results in driver failing to initialize with message
-> "Timeout for driver own" and at the same time I start to see "Bad page state" messages
-> for random processes. Here is the relevant part of dmesg:
+--Sig_/TSD_6X.o4QL4mtle5E/6NvU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please see if this helps?
+Hi David,
 
-From: Ben Greear <greearb@candelatech.com>
+On Tue, 11 Jan 2022 23:07:24 +0000 David Howells <dhowells@redhat.com> wrot=
+e:
+>
+>     I think also that a conflict[10] spotted by Stephen Rothwell between =
+my
+>     series and some changes that went in since the branching point
+>     shouldn't be an issue with this removed.
 
-If the nic fails to start, it is possible that the
-reset_work has already been scheduled.  Ensure the
-work item is canceled so we do not have use-after-free
-crash in case cleanup is called before the work item
-is executed.
+There is also this conflict against the pifdf tree (which may or may
+not be merged before this):
 
-This fixes crash on my x86_64 apu2 when mt7921k radio
-fails to work.  Radio still fails, but OS does not
-crash.
+https://lore.kernel.org/all/20211206090755.3c6f6fe4@canb.auug.org.au/
 
-Signed-off-by: Ben Greear <greearb@candelatech.com>
----
-  drivers/net/wireless/mediatek/mt76/mt7921/main.c | 1 +
-  1 file changed, 1 insertion(+)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/main.c b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-index 6073bedaa1c08..9b33002dcba4a 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-@@ -272,6 +272,7 @@ static void mt7921_stop(struct ieee80211_hw *hw)
+--Sig_/TSD_6X.o4QL4mtle5E/6NvU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-  	cancel_delayed_work_sync(&dev->pm.ps_work);
-  	cancel_work_sync(&dev->pm.wake_work);
-+	cancel_work_sync(&dev->reset_work);
-  	mt76_connac_free_pending_tx_skbs(&dev->pm, NULL);
+-----BEGIN PGP SIGNATURE-----
 
-  	mt7921_mutex_acquire(dev);
--- 
-2.26.3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHeE2IACgkQAVBC80lX
+0GykKgf+LY4OWHMyvWj+UkQIEcaKG5r9OhPcLyt0zfDe0PRZQmlxXnY3gTri4emO
+7Fj3IMkvEOSOP3VZlIRTpYauhwuCpB+yQDB/8X303z+a2aF9f/K1wrt0wvfGAqUY
+qlGXd0zwWB9XPkGCkYEMi5oVP6TbMKajCMkq5rFhZcQS7YfHrWS/uJhpcmeVU0gn
+BYKtZyQ5RBY8RImGGBnhGjQLxhXBn90mi729iNaFVPzeonasUxYQzZaiWSMGxWov
+a2RcKHhg+dwlj1BTgB3lEnny9EM57priTBX8HnJwconRDhrWaGBv+k973nnHHZq0
+x1fteziRSjCPvg4mlWtvA8XrBSjL1g==
+=alke
+-----END PGP SIGNATURE-----
 
-
-Thanks,
-Ben
-
-
--- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
-
+--Sig_/TSD_6X.o4QL4mtle5E/6NvU--

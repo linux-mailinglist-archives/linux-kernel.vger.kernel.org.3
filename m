@@ -2,219 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5DF48B7F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9806248B7FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241508AbiAKUO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S242428AbiAKUPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236743AbiAKUO5 (ORCPT
+        with ESMTP id S236743AbiAKUPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:14:57 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD9DC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:14:57 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id k15so729703edk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:14:57 -0800 (PST)
+        Tue, 11 Jan 2022 15:15:16 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F38C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:15:16 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i5so813497edf.9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:15:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Yz1QeCMypWRNHsaswZGWwNkZnFrocm7g8332CrVVw7w=;
-        b=joYOFYv/akVdeZNliDu9ngr4oF8Str+p+zfuE2UHLGo6eotnFohRy8qOVkHRoFprJf
-         4Z08fya2igdFtlQ71lBPGvGcmW1J+pbzEjfUj8mRmVLajVqcCvgK1uB+y2ipPy+3t77N
-         ivpO9cGtSyB5q9W65j7gQTgIIX1hvi/S+tJBE5W9zJU0HlDm00x4n4VBs19xteo/+OW2
-         3bTpqg9eFKyOf8jodMkbNGBT9w+t4ejaR9Umj5JxAgp3IRzyF3ly+CA18YFBh41s4qHP
-         ZG4xiRC1tdNqP7OWw4X59m+A1/eLHBm2lDX00a9F93bWZEZWDC5z2SUDQWhWWBSU3bv3
-         +muw==
+        bh=QIPHuIOvokpeNHmHUixV0mApYnjljbKFO0KUPR67zl4=;
+        b=WkUrQMItIdviW32gVxTME1qmG78cK09N/WFqLy9Iv0myOcHM0JJ6ekcU8JpQUo1c6s
+         EwUt9qH+HwlFUcOS9uJquiUQoS0opheUzJrb5L+hu3uiCv/lHpZjZUIRYpu+6riD7OVJ
+         g1sIlIT7CN1X65a9ArD4h2V5w+0vG4Ns+U5Lo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Yz1QeCMypWRNHsaswZGWwNkZnFrocm7g8332CrVVw7w=;
-        b=pr0Yzke9WYG5K280/7F5Lnt20mvYYi5MJ16pnzVTht9BlKk/m46HysoDNjiLV9z/Ga
-         IWdh+BP/WrNAtUJZIKIHuBJZs2WYD9oZvpE6YxzUTMgCMB1yqXENU1Yo55IQfIb5vAq9
-         JzZpFBZVb1MyTdtpAU5YGTTlBKDGD4Ap+XyL3G0dc7xVARfb2cxKeVXzSk2TuiKnw+ix
-         mdfiuFppBEVVquM1nlnn11f2eoptogxSzdn5FAClY4/8ZZkDyxwI1qpDOAwxkDqcIyo1
-         9gjsQ7y4Sjh0NYIGLHL3AIuC8QVZfYYq+d9m/9SPCTHLz8+zjVD+O+5BkWZHIjspAao4
-         J88A==
-X-Gm-Message-State: AOAM530pKFLokvztie+ymzJQmu0qDpi6QKFQBjNEXn0kE1/1C7BSGFVn
-        bRWhilGezrVdtSJa+SnWbiIRLLeCSLqUVXfsNStwjA==
-X-Google-Smtp-Source: ABdhPJzjbWryRfVW6tYMprX3pcitcY3S0LHecAMbw6En56cZDxaeTrpfssB6hszQpxXVXdRFwzyblHSlRK9kOS065/E=
-X-Received: by 2002:a05:6402:5214:: with SMTP id s20mr6013113edd.13.1641932095386;
- Tue, 11 Jan 2022 12:14:55 -0800 (PST)
+        bh=QIPHuIOvokpeNHmHUixV0mApYnjljbKFO0KUPR67zl4=;
+        b=XD1mi/LH8vR6Yf1a57G2PzbcbSEkz9Q12ENf49wK2dbdlxuJtUVEJMBGgRBy4f1w2Z
+         W9KL385e1lK7NYWvmEDAmlcJZbdSaf2tl4wjSOZIjYkPhWIkUvRev9Vu1R+c4n3gM55x
+         rxp5k3FuDYeO5wiaENg86QSUWsaKaDB0ixf0C/SxqcfepBbNci1pgLhNnVceHcWNBmvr
+         RbZoiubi1I5PC/78SKOzDYD2aNUd+l0fR/M8obpAgDODsdZ4wI2yR63vW6HvUUBUhBnT
+         1DpZuppjzxAXXq1pW2secLKVHjjuqKKKBr51MlZaeahMg5wKtRzjrkcs9Nn1yEtMRKu1
+         5Q+w==
+X-Gm-Message-State: AOAM530Bw4hkztt9m6WDauew/LspzM4ufhdJxlPxRkStuy3sp4KXeWdo
+        hjL1tHPyn9GSZOQAJ6+X+XUbFxNgeTAVWOdQsfU=
+X-Google-Smtp-Source: ABdhPJzWxhvxUP7vTEhq4O4iTlIGW3NpY2dS2h5dBem15BSaX3oZu5bMKzTAxKnuYYCL6DDpx18A9g==
+X-Received: by 2002:a17:907:7816:: with SMTP id la22mr5022217ejc.180.1641932114655;
+        Tue, 11 Jan 2022 12:15:14 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id k16sm5439367edq.70.2022.01.11.12.15.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 12:15:13 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id t28so341395wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:15:12 -0800 (PST)
+X-Received: by 2002:a5d:6083:: with SMTP id w3mr1708646wrt.281.1641932111796;
+ Tue, 11 Jan 2022 12:15:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215172349.388497-1-willmcvicker@google.com>
- <CAK7LNAT=U9xE5QTPThRTf3V=WEh3WmUh6w-89mm+APjnYp701Q@mail.gmail.com> <CABYd82YUpf5OCuE6q87UZ5+LiRtxqd2yiM25s85KQnxTFcyRzQ@mail.gmail.com>
-In-Reply-To: <CABYd82YUpf5OCuE6q87UZ5+LiRtxqd2yiM25s85KQnxTFcyRzQ@mail.gmail.com>
-From:   Will McVicker <willmcvicker@google.com>
-Date:   Tue, 11 Jan 2022 12:14:39 -0800
-Message-ID: <CABYd82YK=QVQAuJUrqsNXx33SvcX=1J2xNfHt-rTzMBmUh=_iA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] kbuild: install the modules.order for external modules
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220111071212.1210124-1-surenb@google.com> <Yd3RClhoz24rrU04@sol.localdomain>
+ <CAHk-=wgwb6pJjvHYmOMT-yp5RYvw0pbv810Wcxdm5S7dWc-s0g@mail.gmail.com> <Yd3dZklleDnJCQ46@gmail.com>
+In-Reply-To: <Yd3dZklleDnJCQ46@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 11 Jan 2022 12:14:55 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiQ-qzKU8vyhgm8xsWE8DG6rR4jmbvOfBvbjVYq4SKQMA@mail.gmail.com>
+Message-ID: <CAHk-=wiQ-qzKU8vyhgm8xsWE8DG6rR4jmbvOfBvbjVYq4SKQMA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:13 AM Will McVicker <willmcvicker@google.com> wrote:
+On Tue, Jan 11, 2022 at 11:41 AM Eric Biggers <ebiggers@kernel.org> wrote:
 >
-> On Fri, Dec 17, 2021 at 5:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > (Cc: Lucas De Marchi)
-> >
-> > On Thu, Dec 16, 2021 at 2:23 AM Will McVicker <willmcvicker@google.com> wrote:
-> > >
-> > > Add support to install the modules.order file for external modules
-> > > during module_install in order to retain the Makefile ordering
-> > > of external modules. This helps reduce the extra steps necessary to
-> > > properly order loading of external modules when there are multiple
-> > > kernel modules compiled within a given KBUILD_EXTMOD directory.
-> > >
-> > > To handle compiling multiple external modules within the same
-> > > INSTALL_MOD_DIR, kbuild will append a suffix to the installed
-> > > modules.order file defined like so:
-> > >
-> > >   echo ${KBUILD_EXTMOD} | sed 's:[./_]:_:g'
-> > >
-> > > Ex:
-> > >   KBUILD_EXTMOD=/mnt/a.b/c-d/my_driver results in:
-> > >   modules.order._mnt_a_b_c_d_my_driver
-> > >
-> > > The installed module.order.$(extmod_suffix) files can then be cat'd
-> > > together to create a single modules.order file which would define the
-> > > order to load all of the modules during boot.
-> >
-> >
-> > So, the user must do this manually?
-> >
-> > cat extra/modules.order._mnt_a_b_c_d_my_driver  \
-> >    extra/modules.order._mnt_e_f_g_h_my_driver \
-> >    >> modules.order
-> >
-> > This is so ugly, and incomplete.
-> >
-> > I cc'ed the kmod maintainer, who may have
-> > comments or better approach.
-> >
-> >
-> >
-> >
-> >
-> >
-> > > Signed-off-by: Will McVicker <willmcvicker@google.com>
-> > > ---
-> > >  scripts/Makefile.modinst | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >
-> > > diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> > > index ff9b09e4cfca..2e2e31696fd6 100644
-> > > --- a/scripts/Makefile.modinst
-> > > +++ b/scripts/Makefile.modinst
-> > > @@ -24,6 +24,10 @@ suffix-$(CONFIG_MODULE_COMPRESS_XZ)  := .xz
-> > >  suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)  := .zst
-> > >
-> > >  modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
-> > > +ifneq ($(KBUILD_EXTMOD),)
-> > > +extmod_suffix := $(subst /,_,$(subst .,_,$(subst -,_,$(KBUILD_EXTMOD))))
-> > > +modules += $(dst)/modules.order.$(extmod_suffix)
-> > > +endif
-> > >
-> > >  __modinst: $(modules)
-> > >         @:
-> > > @@ -82,6 +86,12 @@ $(dst)/%.ko: $(extmod_prefix)%.ko FORCE
-> > >         $(call cmd,strip)
-> > >         $(call cmd,sign)
-> > >
-> > > +ifneq ($(KBUILD_EXTMOD),)
-> > > +$(dst)/modules.order.$(extmod_suffix): $(MODORDER) FORCE
-> > > +       $(call cmd,install)
-> > > +       @sed -i "s:^$(KBUILD_EXTMOD):$(INSTALL_MOD_DIR):g" $@
-> > > +endif
-> > > +
-> > >  else
-> > >
-> > >  $(dst)/%.ko: FORCE
-> > > --
-> > > 2.34.1.173.g76aa8bc2d0-goog
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> >
->
-> Hi Masahiro,
->
-> Thanks for your response! I agree with you that this is ugly and would
-> love feedback on the direction to take this. With regards to
-> incompleteness, the existing kbuild implementation for external
-> modules is already incomplete in the sense that it doesn't even
-> attempt to install the already generated modules.order files to
-> INSTALL_MOD_DIR. I believe this patch gets us a little closer to
-> closing the gap, but agree it's nowhere complete. I would be happy to
-> fully close the gap if I knew that it would be accepted or welcomed.
-> Let me give you some insight on how we currently do this on Android
-> and how this patch changes that.
->
-> Currently, the Android build.sh script (which is used to compile the
-> Android Common Kernel) supports the build variable EXT_MODULES which
-> is a list of paths to external modules to be compiled. The build
-> script loops through this list and calls "make modules" and "make
-> modules_install" to compile and install the external modules. Then,
-> the build script creates the modules.order file like this:
->
-> cd ${MODLIB}
-> find extra -type f -name "*.ko" | sort >> modules.order
->
-> Sorting is used so that the modules.order file is deterministic. This
-> proposed patch allows us to use the Makefile defined ordering instead
-> of this sorted ordering. In Android the paths to external modules must
-> be relative to the kernel repository. For example, the kernel and all
-> external modules are all cloned within a root directory and the paths
-> in EXT_MODULES are all relative to the root directory. So our build.sh
-> script can use the relative path from the root directory as part of
-> INSTALL_MOD_DIR to get rid of the suffix ugliness. For example, we can
-> do this:
->
-> for EXT_MOD in ${EXT_MODULES}; do
->   # make modules
->   make -C ${EXT_MOD} ...
->   # make modules_install
->   make -C ${EXT_MOD} ...  INSTALL_MOD_DIR="extra/${EXT_MOD}" modules_install
-> done
->
-> for EXT_MOD in ${EXT_MODULES}; do
->   modules_order_file=$(ls ${MODLIB}/extra/${EXT_MOD}/modules.order.*)
->   cat ${modules_order_file} >> ${MODLIB}/modules.order
-> done
->
-> Since kbuild doesn't know about how many external modules there are
-> nor does it retain any information about each individual call to "make
-> modules" or "make modules_install", we can't do the concatenation
-> within the Makefile.modinst script. To close the gap, we could add an
-> additional make target that one could call after all of the external
-> modules have been installed to do this concatenation, but I wasn't
-> sure how open everyone would be to accepting this. Let me know your
-> thoughts on that.
->
-> Thanks,
-> Will
+> This is yet another case of "one time init".
 
-Friendly reminder on this patch now that most are back from the holiday break.
+Ehh. It's somewhat debatable.
 
-Lucas, could you comment please?
+For a flag that sets a value once, the rules are somewhat different.
+In that case, people may simply not care about memory ordering at all,
+because all they care about is the actual flag value, and - thanks to
+the one-time behavior - basically whether some transition had happened
+or not. That's not all that unusual.
 
-Thanks,
-Will
+But when you fetch a pointer, things are at least conceptually
+slightly different.
+
+Of course, you may use the existence of the pointer itself as a flag
+(ie just a "NULL or not"), in which case it's the same as any other
+one-time flag thing.
+
+But if you use it to dereference something, then _by_definition_
+you're not just fetching a one-time flag - even if the pointer is only
+set once. At that point, at a minimum, you require that that thing has
+been initialized.
+
+Now, it's then absolutely true that the stuff behind the pointer may
+then have other reasons not to care about memory ordering again, and
+you may be able to avoid memory ordering even then. If you're just
+switching the pointer around between different objects that has been
+statically allocated and initialized, then there is no memory ordering
+required, for example. You might be back to the "I just want one or
+the other of these two pointers".
+
+But if you have something that was initialized before the pointer was
+assigned, you really do hit the problem we had on alpha, where even if
+you order the pointer write side accesses, the dereferencing of the
+pointer may not be ordered on the read side.
+
+Now, alpha is basically dead, and we probably don't really care. Even
+on alpha, the whole "data dependency isn't a memory ordering" is
+almost impossible to trigger.
+
+And in fact, to avoid too much pain we ended up saying "screw alpha"
+and added a memory barrier to READ_ONCE(), so it turns out that
+smp_store_release -> READ_ONCE() does work because we just couldn't be
+bothered to try something more proper.
+
+So yeah, READ_ONCE() ends up making the "access through a pointer"
+thing safe, but that's less of a "it should be safe" and more of a "we
+can't waste time dealing with braindamage on platforms that don't
+matter".
+
+In general, I think the rule should be that READ_ONCE() is for things
+that simply don't care about memory ordering at all (or do whatever
+ordering they want explicitly). And yes, one such very common case is
+the "one-way flag" where once a certain state has been reached, it's
+idempotent.
+
+Of course, then we have the fact that READ_ONCE() can be more
+efficient than "smp_load_acquire()" on some platforms, so if something
+is *hugely* performance-critical, you might use READ_ONCE() even if
+it's not really technically the right thing.
+
+So it's complicated.
+
+A lot of READ_ONCE() users exist just for historical reasons because
+they predated smp_store_release/smp_load_acquire. They may well have
+been using ACCESS_ONCE() long ago.
+
+And some are there because it's a very critical piece of code, and
+it's very intentional.
+
+But if you don't have some huge reasons, I really would prefer people
+use "smp_store_release -> smp_load_acquire" as a very clear "handoff"
+event.
+
+              Linus

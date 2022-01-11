@@ -2,146 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 752CA48BA62
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E32648BA66
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345204AbiAKWBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343842AbiAKWB3 (ORCPT
+        id S1345268AbiAKWDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:03:00 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:34553 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343842AbiAKWC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:01:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F56C06173F;
-        Tue, 11 Jan 2022 14:01:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 09133CE1BAF;
-        Tue, 11 Jan 2022 22:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B65C36AE9;
-        Tue, 11 Jan 2022 22:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641938485;
-        bh=9lyo4a7wsSQoH9aAqy6csVZ0oeEb5XrusjosDq6bNi4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=egNfDjOvv46AdQ2B6ud2WT6mVIGPjavhSHH2PHK3HKIuE3aXsdg/GvBRDo5aALxka
-         escHHXylha6bDTT+aXPk0zU5ZeMF+cCnVR2mr7j+VllKY5KMOTr7PT6XAWLiFfEd7L
-         a3wgwPjM38ls+9dT0xcUJH+0sItn04wO7cr/RD4zj4UE2Wswy0PvGYlhlDt2PEWLCt
-         8C60co6m2EShIUQmgCkbNqCcO/RCSDR/ppwtmwKb810UvE2LBAXTBuMpw1yZNz9uIr
-         8HXQMl+aKlK9McFSuvr9BCzg2ELyww4xBTThCqczVXzDG3jFpdzYP1ba7W7wieSA2i
-         RBxvXUO41Xi2A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2675940714; Tue, 11 Jan 2022 19:01:23 -0300 (-03)
-Date:   Tue, 11 Jan 2022 19:01:23 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        kajoljain <kjain@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <Yd3+M+efH6bTEpP9@kernel.org>
-References: <20220106091921.3fa617bc@canb.auug.org.au>
- <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
- <20220112084553.2aa71f08@canb.auug.org.au>
+        Tue, 11 Jan 2022 17:02:59 -0500
+Received: by mail-oi1-f180.google.com with SMTP id r131so997868oig.1;
+        Tue, 11 Jan 2022 14:02:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SzcggNXrl+/nvnyNoDfUICfrCjf9o6dGiDjvwXyMqlU=;
+        b=ZHdHFKZdtX3TVcByzZ7iyNE8EDr1d9T2QnneDK46fS1chqSeCMyHmc8DRJ9varvfrw
+         hDtvdDqIwey/9yNBbNfK/y24LGaRQtAxTPtyeoaRILfKz27ftwez0ZChY/lN11H9GFk+
+         U1dghNJpUKo/XlfGNrcyw3P0IwJa2QAqFHySLy38+lvpm+917qIi2LZAzdGhsvbR7HYQ
+         C4ZnZnvrBIALRkl/TiOyPJWTq7ap/RnmYfxfMAlfn5ePeg/Rfd4FM46H+2DoFvCpUqKa
+         C9tUKKvhzO4pctTMXUuLEmYDY53U/zjM8vFX9urMn+X7Sn5DBrI1EDigQIJiZmZP9OCp
+         4fQg==
+X-Gm-Message-State: AOAM533sGu51+LhXZmTHx+s+UtdLaBO2wdWucw+fPdPbYhp98ammRNA4
+        cEaRZ9QB9bGxFid54EBLz0FIh8bK5g==
+X-Google-Smtp-Source: ABdhPJy9tSOjgmQ2GN+VKcOL/vf6bOsG38+XJvZa3GbKbRmrs5Uxp1HgGdX4SPbn93MDf9qW2pd3Cw==
+X-Received: by 2002:a05:6808:138e:: with SMTP id c14mr3307430oiw.55.1641938578643;
+        Tue, 11 Jan 2022 14:02:58 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l1sm2250342oti.51.2022.01.11.14.02.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 14:02:58 -0800 (PST)
+Received: (nullmailer pid 3582417 invoked by uid 1000);
+        Tue, 11 Jan 2022 22:02:57 -0000
+Date:   Tue, 11 Jan 2022 16:02:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Pop <cristian.pop@analog.com>
+Cc:     linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jic23@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: addac: one-bit-adc-dac yaml
+ documentation
+Message-ID: <Yd3+kSr5xtL53jUQ@robh.at.kernel.org>
+References: <20220111115919.14645-1-cristian.pop@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220112084553.2aa71f08@canb.auug.org.au>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220111115919.14645-1-cristian.pop@analog.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jan 12, 2022 at 08:45:53AM +1100, Stephen Rothwell escreveu:
-> Hi all,
+On Tue, Jan 11, 2022 at 01:59:18PM +0200, Cristian Pop wrote:
+> This adds device tree bindings for the one-bit-adc-dac.
+
+I have no idea what a one-bit-adc-dac is. Please describe or provide a 
+reference to what this h/w looks like.
+
 > 
-> On Fri, 7 Jan 2022 14:28:37 +0530 kajoljain <kjain@linux.ibm.com> wrote:
-> >
-> > On 1/6/22 3:49 AM, Stephen Rothwell wrote:
-> > > 
-> > > After merging the perf tree, today's linux-next build (powerpc
-> > > ppc64_defconfig) failed like this:
-> > > 
-> > > In file included from include/linux/perf_event.h:17,
-> > >                  from arch/powerpc/perf/isa207-common.h:12,
-> > >                  from arch/powerpc/perf/isa207-common.c:9:
-> > > arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
-> > > include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
-> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-> > >       |           ^~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
-> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
-> > >       |                    ^~~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
-> > >   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-> > >       |                                                   ^
-> > > include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier is reported only once for each function it appears in
-> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-> > >       |           ^~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
-> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
-> > >       |                    ^~~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
-> > >   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-> > >       |                                                   ^
-> > > include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
-> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-> > >       |           ^~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
-> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
-> > >       |                    ^~~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
-> > >   244 |     ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
-> > >       |                                                   ^
-> > > 
-> > > Caused by commit
-> > > 
-> > >   af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platform")
-> > > 
-> > > It looks like patch 1/4 of this series is missing ...  
-> > 
-> > Hi Stephen,
-> >      Yes you are right, original patch series contain 4 patches, where
-> > 1/4 patch contain kernel side changes for the same. Hence we are getting
-> > this error, as that patch is missing in the Arnaldo tree.
-> > 
-> > Link to the patchset: https://lkml.org/lkml/2021/12/6/143
-> > 
-> > That kernel side patch is taken by Michael Ellermen via powerpc git.
-> > 
-> > Link to the patchset on powerpc/next:
-> > 
-> > [1/4] perf: Add new macros for mem_hops field
-> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=cb1c4aba055f928ffae0c868e8dfe08eeab302e7
-> > 
-> > 
-> > [3/4] powerpc/perf: Add encodings to represent data based on newer
-> > composite PERF_MEM_LVLNUM* fields
-> >  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=4a20ee106154ac1765dea97932faad29f0ba57fc
-> > 
-> > [4/4] powerpc/perf: Add data source encodings for power10 platform
-> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=6ed05a8efda56e5be11081954929421de19cce88
-> > 
-> > Thanks,
-> > Kajol Jain
-> > 
-> > > 
-> > > I have used the perf tree from next-20220105 for today.
-> > >   
+> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
+> V1->V2                                                                     
+
+This belongs below the '---'
+
+>  - I am aware of the recommendation of rename/move this driver. Should we  
+>    consider "drivers/io/gpio.c"?                                           
+>  - Add .yaml file                                                          
+>  - Remove blank lines, remove unnecessary coma                             
+>  - Remove macros for channels                                              
+>  - Check if channel is input for write_raw                                 
+>  - Use labels instead of extend_name                                       
+>  - Fix channel indexing                                                    
+>  - Use "sizeof(*channels)" in devm_kcalloc()                               
+>  - Remove assignment: " indio_dev->dev.parent = &pdev->dev;"               
+>  - Remove "platform_set_drvdata"                                           
+>  - Remove "adi" from compatible string since is not ADI specific driver.
+> ---
+>  .../bindings/iio/addac/one-bit-adc-dac.yaml   | 89 +++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml
 > 
-> I am still getting this build failure.
+> diff --git a/Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml b/Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml
+> new file mode 100644
+> index 000000000000..dbed0f3b1ca4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml
+> @@ -0,0 +1,89 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2020 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/addac/one-bit-adc-dac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices one bit ADC DAC driver
+> +
+> +maintainers:
+> +  - Cristian Pop <cristian.pop@analog.com>
+> +
+> +description: |
+> +  One bit ADC DAC driver
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,one-bit-adc-dac
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  in-gpios:
+> +    description: Input GPIOs
+> +
+> +  out-gpios:
+> +    description: Output GPIOs
 
-Yeah, this patch shouldn't have been merged thru the perf _tools_ tree,
-my bad, it should have gone thru Michael PPC kernel tree.
+No constraints on how many GPIOs?
 
-It was a single series mixing up tools/ with kernel bits, I thought I
-had picked just the tools part but made a mistake.
+> +
+> +required:
+> +  - compatible
+> +  - in-gpios
+> +  - out-gpios
+> +
+> +patternProperties:
+> +  "^channel@([0-9]|1[0-5])$":
+> +    type: object
+> +    description: |
+> +      Represents the external channels which are connected to the ADDAC.
+> +
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +        description: |
+> +          The channel number.
+> +
+> +      label:
+> +        description: |
+> +          Unique name to identify which channel this is.
+> +
+> +    required:
+> +      - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    one-bit-adc-dac@0 {
+> +        compatible = "one-bit-adc-dac";
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        in-gpios = <&gpio 17 0>, <&gpio 27 0>;
+> +        out-gpios = <&gpio 23 0>, <&gpio 24 0>;
+> +
+> +        channel@0 {
+> +          reg = <0>;
 
-This should get resolved when the rest of the kernel bits go via
-Michael's powerpc tree, right?
+What does '0' correspond to?
 
-- Arnaldo
+> +          label = "i_17";
+
+Why is this needed? 'label' is supposed to correspond to physical 
+labelling of ports. IOW, for identification by humans looking at the 
+device.
+
+This all looks duplicated from information in in-gpios and out-gpios.
+
+> +        };
+> +
+> +        channel@1 {
+> +          reg = <1>;
+> +          label = "i_27";
+> +        };
+> +
+> +        channel@2 {
+> +          reg = <2>;
+> +          label = "o_23";
+> +        };
+> +
+> +        channel@3 {
+> +          reg = <3>;
+> +          label = "o_24";
+> +        };
+> +    };
+> -- 
+> 2.17.1
+> 
+> 

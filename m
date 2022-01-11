@@ -2,131 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D0248A641
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C0048A680
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235821AbiAKDZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 22:25:59 -0500
-Received: from mga02.intel.com ([134.134.136.20]:46706 "EHLO mga02.intel.com"
+        id S1347204AbiAKDjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 22:39:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:41278 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348042AbiAKDZl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 22:25:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641871541; x=1673407541;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7nvliX2pitYIn5elvcc0RhLaOrecvDNaby86k0Cd5T0=;
-  b=Z8R4a8gqmri5CRIyZyFd/3+1sjGCMoHO/rQGFJOQWEr9yvqG9Q/oB9V/
-   k/4u26IlrTqbiamJ40eRsTjX+ZOfpSTzolSTLnsZKc+NpynXamvqtXPWT
-   VIamvZXEIsoSTaeyqIMk/mPx6dWTYsAfAg1LEjxjFvISi3rB0/5MF0aJe
-   s6d1+EaqWrKvHi8C4AEiytAOMuOVvUEdYifwifcHkaemuhgTLq9avHAQK
-   hYOz/E9d6Y7Uq7qd1dl+rYAsesLKrwDAcq9RZXdOakkqJBQhsA4xVcyfR
-   8rP61hbI48T27bdLusu4C6MWIG2j1iw2jofseZNClVlO5WkgUz5Ujb+5R
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="230734096"
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="230734096"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 19:25:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="528546614"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 19:25:37 -0800
-Date:   Tue, 11 Jan 2022 11:36:30 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
-        tglx@linutronix.de, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] KVM: x86: Move check_processor_compatibility from
- init ops to runtime ops
-Message-ID: <20220111033629.GC2175@gao-cwp>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-2-chao.gao@intel.com>
- <YdzAzT5AqO0aCsHk@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdzAzT5AqO0aCsHk@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S244768AbiAKDjP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 22:39:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E42F76D;
+        Mon, 10 Jan 2022 19:39:14 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.72.238])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 030F03F774;
+        Mon, 10 Jan 2022 19:39:11 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/7] coresight: trbe: Workaround Cortex-A510 erratas
+Date:   Tue, 11 Jan 2022 09:08:59 +0530
+Message-Id: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:27:09PM +0000, Sean Christopherson wrote:
->On Mon, Dec 27, 2021, Chao Gao wrote:
->> so that KVM can do compatibility checks on hotplugged CPUs. Drop __init
->> from check_processor_compatibility() and its callees.
->
->Losing the __init annotation on all these helpers makes me a bit sad, more from a
->documentation perspective than a "but we could shave a few bytes" perspective.
+	This series adds three different workarounds in the TRBE driver for
+Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
+part number definition in the platform. This series applies on 5.16.
 
-This makes sense.
+Relevant errata documents can be found here.
 
->More than once I've wondered why some bit of code isn't __init, only to realize
->its used for hotplug.
+https://developer.arm.com/documentation/SDEN2397239/900
+https://developer.arm.com/documentation/SDEN2397589/900
 
-Same problem to some global data structures which can be __initdata if hotplug
-isn't supported.
+Changes in V3:
 
->
->What if we added an __init_or_hotplug annotation that is a nop if HOTPLUG_CPU=y?
+- Moved the comment inside trbe_needs_drain_after_disable()
+- Moved the comment inside trbe_needs_ctxt_sync_after_enable()
 
-Personally __init_or_hotplug is a little long as an annotation. How about
-__hotplug?
+Changes in V2:
 
-One concern is: is it acceptable to introduce a new annotation and use it in
-new code but not fix all places that should use it in existing code.
+https://lore.kernel.org/all/1641517808-5735-1-git-send-email-anshuman.khandual@arm.com/
 
-I think the right process is
-1. introduce a new annotation
-2. fix existing code to use this annotation
-3. add new code.
+Accommodated most review comments from the previous version.
 
-There is no doubt that #2 would take great effort. I'm not sure if it is really
-worth it.
+- Split all patches into CPU errata definition, detection and TRBE workarounds
+- s/TRBE_WORKAROUND_SYSREG_WRITE_FAILURE/TRBE_NEEDS_DRAIN_AFTER_DISABLE
+- s/TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE/TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE
+- s/trbe_may_fail_sysreg_write()/trbe_needs_drain_after_disable()
+- s/trbe_may_corrupt_with_enable()/trbe_needs_ctxt_sync_after_enable()
+- Updated Kconfig help message for config ARM64_ERRATUM_1902691
+- Updated error message for trbe_is_broken() detection
+- Added new trblimitr parameter to set_trbe_enabled(), improving performance
+- Added COMPILE_TEST dependency in the errata, until TRBE part is available
 
->At a glance, KVM could use that if the guts of kvm_online_cpu() were #idef'd out
->on !CONFIG_HOTPLUG_CPU.  That also give us a bit of test coverage for bots that
->build with SMP=n.
+Changes in V1:
 
-Will do with your suggested-by.
+https://lore.kernel.org/lkml/1641359159-22726-1-git-send-email-anshuman.khandual@arm.com/
 
->
->diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->index a80e3b0c11a8..30bbcb4f4057 100644
->--- a/arch/x86/kvm/x86.c
->+++ b/arch/x86/kvm/x86.c
->@@ -11380,7 +11380,7 @@ void kvm_arch_hardware_unsetup(void)
->        static_call(kvm_x86_hardware_unsetup)();
-> }
->
->-int kvm_arch_check_processor_compat(void)
->+int __init_or_hotplug kvm_arch_check_processor_compat(void)
-> {
->        struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
->
->diff --git a/include/linux/init.h b/include/linux/init.h
->index d82b4b2e1d25..33788b3c180a 100644
->--- a/include/linux/init.h
->+++ b/include/linux/init.h
->@@ -53,6 +53,12 @@
-> #define __exitdata     __section(".exit.data")
-> #define __exit_call    __used __section(".exitcall.exit")
->
->+#ifdef CONFIG_HOTPLUG_CPU
->+#define __init_or_hotplug
->+#else
->+#define __init_or_hotplug __init
->+#endif /* CONFIG_HOTPLUG_CPU
->+
-> /*
->  * modpost check for section mismatches during the kernel build.
->  * A section mismatch happens when there are references from a
->
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: coresight@lists.linaro.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (7):
+  arm64: Add Cortex-A510 CPU part definition
+  arm64: errata: Add detection for TRBE ignored system register writes
+  arm64: errata: Add detection for TRBE invalid prohibited states
+  arm64: errata: Add detection for TRBE trace data corruption
+  coresight: trbe: Work around the ignored system register writes
+  coresight: trbe: Work around the invalid prohibited states
+  coresight: trbe: Work around the trace data corruption
+
+ Documentation/arm64/silicon-errata.rst       |   6 +
+ arch/arm64/Kconfig                           |  59 ++++++++++
+ arch/arm64/include/asm/cputype.h             |   2 +
+ arch/arm64/kernel/cpu_errata.c               |  27 +++++
+ arch/arm64/tools/cpucaps                     |   3 +
+ drivers/hwtracing/coresight/coresight-trbe.c | 114 ++++++++++++++-----
+ drivers/hwtracing/coresight/coresight-trbe.h |   8 --
+ 7 files changed, 183 insertions(+), 36 deletions(-)
+
+-- 
+2.25.1
+

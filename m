@@ -2,70 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7C648AFFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59E948B016
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243113AbiAKO5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:57:40 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:51484 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbiAKO5j (ORCPT
+        id S243134AbiAKPAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:00:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57508 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242802AbiAKPAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:57:39 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 254C7212C5;
-        Tue, 11 Jan 2022 14:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641913058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZlxQNmr/ZNHAhEYAOVN3PDy1I660OQmhK5nAkm2oCWQ=;
-        b=HrqlaVXd1oBEoIOYpZ6TTolQmrdqFD4QDrAIF1CcUubAYpX+DbBldIif7Q8oR5bPIBAixc
-        /eyShwKkmkENXGbwjpQbDZdHKLsALWYJA0eLAVIzkc/GHyN2gJBiP4kDM8sC8U3ZQ5xv48
-        qlrQIvK+Jwy/Bb7PKvoQCP++1AVC4vQ=
-Received: from suse.cz (unknown [10.100.224.162])
+        Tue, 11 Jan 2022 10:00:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C860EA3B81;
-        Tue, 11 Jan 2022 14:57:37 +0000 (UTC)
-Date:   Tue, 11 Jan 2022 15:57:36 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] vsprintf: Fix potential unaligned access
-Message-ID: <Yd2a4MApVR8hexny@alley>
-References: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84FE8B81B2F;
+        Tue, 11 Jan 2022 15:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86CA2C36AE3;
+        Tue, 11 Jan 2022 15:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641913224;
+        bh=vc7azLNoekjPJ7ttnBna/PtB27oQO40d88goKeCy6ls=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tYffuG+LZ1PJ6cyAtMHefBpKjbdkhoFTOrLp4VRE8TmzdMGTa9K/qqufCYCCY2GJl
+         p79NfNYe4B9E7Qtu/EZA5ZJnpRtloBIc/7Erm0/zTwUhrgZvRzdbIuzuwVZzSM0AVc
+         6lYryHguaLS448+I9VKFN61hjzBcgve7GIFhbkEGUU4ikCys/qcZLIdzQjejjHE8CJ
+         cFQS1kMl2TlZ9Ov+ndmfKEAy/w9aFnV7FyMix6Ru/N4nUeWe7RvsVqyQPurUz8L2ml
+         HfcccV90JfloclxPFrkCj4B7dBvUnl9cLe3RHErWztXDd2DNuaoSPqoqCMi1JDZXxn
+         cSX574I3nGoyg==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [RFC PATCH 0/6] fprobe: Introduce fprobe function entry/exit probe 
+Date:   Wed, 12 Jan 2022 00:00:17 +0900
+Message-Id: <164191321766.806991.7930388561276940676.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220104080943.113249-1-jolsa@kernel.org>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-01-10 22:50:49, Andy Shevchenko wrote:
-> The %p4cc specifier in some cases might get an unaligned pointer.
-> Due to this we need to make copy to local variable once to avoid
-> potential crashes on some architectures due to improper access.
-> 
-> Fixes: af612e43de6d ("lib/vsprintf: Add support for printing V4L2 and DRM fourccs")
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Jiri,
 
-Looks good to me:
+Here is a short series of patches, which shows what I replied
+to your series.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+This introduces the fprobe, the function entry/exit probe with
+multiple probe point support. This also introduces the rethook
+for hooking function return, which I cloned from kretprobe.
 
-I have already sent pull request for 5.17. Could this wait
-for 5.18 or would you prefer to get it into 5.17, please?
+I also rewrite your [08/13] bpf patch to use this fprobe instead
+of kprobes. I didn't tested that one, but the sample module seems
+to work. Please test bpf part with your libbpf updates.
 
-My understanding of Sakari's reply is that the current callers
-provide aligned pointers. In that case it would not be urgent.
-But I might have gotten it wrong.
+BTW, while implementing the fprobe, I introduced the per-probe
+point private data, but I'm not sure why you need it. It seems
+that data is not used from bpf...
 
-Best Regards,
-Petr
+If this is good for you, I would like to proceed this with
+the rethook and rewrite the kretprobe to use the rethook to
+hook the functions. That should be much cleaner (and easy to
+prepare for the fgraph tracer integration)
+
+Thank you,
+
+---
+
+Jiri Olsa (1):
+      bpf: Add kprobe link for attaching raw kprobes
+
+Masami Hiramatsu (5):
+      fprobe: Add ftrace based probe APIs
+      rethook: Add a generic return hook
+      rethook: x86: Add rethook x86 implementation
+      fprobe: Add exit_handler support
+      fprobe: Add sample program for fprobe
+
+
+ arch/x86/Kconfig                |    1 
+ arch/x86/kernel/Makefile        |    1 
+ arch/x86/kernel/rethook.c       |  115 ++++++++++++++++++++
+ include/linux/bpf_types.h       |    1 
+ include/linux/fprobes.h         |   75 +++++++++++++
+ include/linux/rethook.h         |   74 +++++++++++++
+ include/linux/sched.h           |    3 +
+ include/uapi/linux/bpf.h        |   12 ++
+ kernel/bpf/syscall.c            |  199 +++++++++++++++++++++++++++++++++-
+ kernel/exit.c                   |    2 
+ kernel/fork.c                   |    3 +
+ kernel/trace/Kconfig            |   22 ++++
+ kernel/trace/Makefile           |    2 
+ kernel/trace/fprobes.c          |  187 ++++++++++++++++++++++++++++++++
+ kernel/trace/rethook.c          |  226 +++++++++++++++++++++++++++++++++++++++
+ samples/Kconfig                 |    6 +
+ samples/Makefile                |    1 
+ samples/fprobe/Makefile         |    3 +
+ samples/fprobe/fprobe_example.c |  103 ++++++++++++++++++
+ tools/include/uapi/linux/bpf.h  |   12 ++
+ 20 files changed, 1043 insertions(+), 5 deletions(-)
+ create mode 100644 arch/x86/kernel/rethook.c
+ create mode 100644 include/linux/fprobes.h
+ create mode 100644 include/linux/rethook.h
+ create mode 100644 kernel/trace/fprobes.c
+ create mode 100644 kernel/trace/rethook.c
+ create mode 100644 samples/fprobe/Makefile
+ create mode 100644 samples/fprobe/fprobe_example.c
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

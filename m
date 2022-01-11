@@ -2,131 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DF548A9C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2635848A9C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236346AbiAKIos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:44:48 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39252 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235048AbiAKIor (ORCPT
+        id S236783AbiAKIpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235048AbiAKIpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 03:44:47 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0A36C1F3B8;
-        Tue, 11 Jan 2022 08:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641890686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mbrh8o5uN1/tgvpBhMqXNUGgxMrcNwDYDBYIA0jYuaY=;
-        b=h6Bh2WrfzZxuKm0ypf4OxrSKB5htlBNyF36T2helWv0NY4KsJtc1cBZCaWiDHBdWe7XY2A
-        TZDxZ7UvmhbkPRcw6H+RnCVx5xXaXaNQmSh0jU14yD1xbyUK/ADD44SIlBAOkOhTDytzLM
-        y9kPJ3t+se/D1A1ozarFY5iBGTAuzFw=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CEA05A3B84;
-        Tue, 11 Jan 2022 08:44:45 +0000 (UTC)
-Date:   Tue, 11 Jan 2022 09:44:45 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        akpm@linux-foundation.org, shakeelb@google.com, guro@fb.com,
-        vbabka@suse.cz, willy@infradead.org, songmuchun@bytedance.com,
-        shy828301@gmail.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 4/4] mm/memcg: refine
- mem_cgroup_threshold_ary->current_threshold calculation
-Message-ID: <Yd1DffvquQeNM9V+@dhcp22.suse.cz>
-References: <20220111010302.8864-1-richard.weiyang@gmail.com>
- <20220111010302.8864-4-richard.weiyang@gmail.com>
+        Tue, 11 Jan 2022 03:45:39 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37035C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 00:45:39 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id e198so22484895ybf.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 00:45:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PYcl99Fm8/kZTZCIkQZdNWIBE3S2oaJ+VSNXHTVRIwo=;
+        b=H0U0Q07m3cpI8hDorxRqBT+rRu5PmdW1iCUTWPBDQTReZB1bBrToy+E3VCGbRHjWnV
+         gp6bbfCxQKTkTEwfJsUBa6qvU6pTfRGZLvraSMJURIse6SLpwiUVHKF1Lh5vltEbkS8h
+         CHQWjGXtQGLza59ayqQgka+vJFRJKJDSM69kjrFU3kc7JExKGy32e3jksup07XW7yxog
+         YJz7j1DDUzeZ+7hJaDUE6eTMyWFzXJEK+pRMdLoirigO90qbn598haN8H03P3jiCX3E/
+         3dboSGVcmzyuBu9G7vmgX1FAqV4c5PA3dNqkETX21Qcs05v7X5nxy0og6sf4zbbsmp/h
+         UN+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PYcl99Fm8/kZTZCIkQZdNWIBE3S2oaJ+VSNXHTVRIwo=;
+        b=I9jPy9I1SjYdTNxs6bGicMFkt/1UYfd1XACLdrWhN7j9drdbqnvgPbUfJu4AL/19/z
+         +7IT4XjxpQnVjGnaSmZgF3CyCGfrOUNQZ3zc2QXnCVIenWujh2B+Keed/qGDjCdI7Z9R
+         Y0ZrNcnxx1vKtQ4ITw/B0L2ygN42s6XFrY/nPoKh0dWpC0kJ9u1+V2FEjE3AYNr60E8Q
+         X3vRHcVVWLMSLs1ih0knZEux2jdNoOv4FUj/UUzgKeaROQG5steldRnci8I3hz1F2UR+
+         QK8ZI6MYeym0rGFM5uZcLp6BDzXTdmM+ae1HMerDBx6+mIajcqwsWOT01yZVNBDF2EK/
+         Y/PQ==
+X-Gm-Message-State: AOAM533QVqbhVQXPCro0C4lrNf9Of4ODJst9gkeX9WglyEowrAAG1Q7G
+        Ru+qFQ7zF7fdAv8OkBVZv52Ie2P2DuieJJTIJrd0Rw==
+X-Google-Smtp-Source: ABdhPJwEmN2GVa6cLp00OSGyI6rApxVwuBNwKQlgkhDs37nq+YaQYzkEoW9qbE+EDV0tPqJX0OGwh6Ta/v4Nl/G9iOg=
+X-Received: by 2002:a25:a04a:: with SMTP id x68mr4676438ybh.200.1641890738325;
+ Tue, 11 Jan 2022 00:45:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111010302.8864-4-richard.weiyang@gmail.com>
+References: <20220110071811.779189823@linuxfoundation.org>
+In-Reply-To: <20220110071811.779189823@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 11 Jan 2022 14:15:27 +0530
+Message-ID: <CA+G9fYvfmWve_hf=n+myvzouq=ihJ2nt0qu8r6+XKCdQoiNQLQ@mail.gmail.com>
+Subject: Re: [PATCH 4.4 00/14] 4.4.299-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 11-01-22 01:03:02, Wei Yang wrote:
-> mem_cgroup_threshold_ary->current_threshold points to the last entry
-> who's threshold is less or equal to usage.
-> 
-> Instead of iterating entries to get the correct index, we can leverage
-> primary->current_threshold to get it. If the threshold added is less or
-> equal to usage, current_threshold should increase by one. Otherwise, it
-> doesn't change.
+On Mon, 10 Jan 2022 at 12:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.4.299 release.
+> There are 14 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.4.299-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Why do we want/need this change?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
->  mm/memcontrol.c | 31 +++++++++++++++++--------------
->  1 file changed, 17 insertions(+), 14 deletions(-)
-> 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index a504616f904a..ce7060907df2 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -4161,7 +4161,7 @@ static int __mem_cgroup_usage_register_event(struct mem_cgroup *memcg,
->  	struct mem_cgroup_threshold_ary *new;
->  	unsigned long threshold;
->  	unsigned long usage;
-> -	int i, size, ret;
-> +	int size, ret;
->  
->  	ret = page_counter_memparse(args, "-1", &threshold);
->  	if (ret)
-> @@ -4193,9 +4193,13 @@ static int __mem_cgroup_usage_register_event(struct mem_cgroup *memcg,
->  	new->size = size;
->  
->  	/* Copy thresholds (if any) to new array */
-> -	if (thresholds->primary)
-> +	if (thresholds->primary) {
->  		memcpy(new->entries, thresholds->primary->entries,
->  		       flex_array_size(new, entries, size - 1));
-> +		new->current_threshold = thresholds->primary->current_threshold;
-> +	} else {
-> +		new->current_threshold = -1;
-> +	}
->  
->  	/* Add new threshold */
->  	new->entries[size - 1].eventfd = eventfd;
-> @@ -4205,18 +4209,17 @@ static int __mem_cgroup_usage_register_event(struct mem_cgroup *memcg,
->  	sort(new->entries, size, sizeof(*new->entries),
->  			compare_thresholds, NULL);
->  
-> -	/* Find current threshold */
-> -	new->current_threshold = -1;
-> -	for (i = 0; i < size; i++) {
-> -		if (new->entries[i].threshold <= usage) {
-> -			/*
-> -			 * new->current_threshold will not be used until
-> -			 * rcu_assign_pointer(), so it's safe to increment
-> -			 * it here.
-> -			 */
-> -			++new->current_threshold;
-> -		} else
-> -			break;
-> +	/*
-> +	 * If the threshold added here is less or equal to usage, this means
-> +	 * current_threshold need to increase by one.
-> +	 */
-> +	if (threshold <= usage) {
-> +		/*
-> +		 * new->current_threshold will not be used until
-> +		 * rcu_assign_pointer(), so it's safe to increment
-> +		 * it here.
-> +		 */
-> +		new->current_threshold++;
->  	}
->  
->  	/* Free old spare buffer and save old primary buffer as spare */
-> -- 
-> 2.33.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Michal Hocko
-SUSE Labs
+## Build
+* kernel: 4.4.299-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.4.y
+* git commit: 039b69cc9b1536ea691fb3f09f95f82e60cf96db
+* git describe: v4.4.298-15-g039b69cc9b15
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.2=
+98-15-g039b69cc9b15
+
+## Test Regressions (compared to v4.4.298)
+No test regressions found.
+
+## Metric Regressions (compared to v4.4.298)
+No metric regressions found.
+
+## Test Fixes (compared to v4.4.298)
+No test fixes found.
+
+## Metric Fixes (compared to v4.4.298)
+No metric fixes found.
+
+## Test result summary
+total: 32657, pass: 26024, fail: 62, skip: 5888, xfail: 683
+
+## Build Summary
+* arm: 129 total, 129 passed, 0 failed
+* arm64: 31 total, 31 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 30 total, 24 passed, 6 failed
+
+## Test suites summary
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* packetdrill
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

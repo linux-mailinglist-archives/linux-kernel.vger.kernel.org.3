@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB0348B1E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9F248B1E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343674AbiAKQSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S1343732AbiAKQUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbiAKQSs (ORCPT
+        with ESMTP id S240277AbiAKQT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:18:48 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5AEC06173F;
-        Tue, 11 Jan 2022 08:18:48 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id c71so57751099edf.6;
-        Tue, 11 Jan 2022 08:18:48 -0800 (PST)
+        Tue, 11 Jan 2022 11:19:57 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD89C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:19:56 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso1771489wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:19:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tPPpInGY7TAAKztaLRD1dh/MnSuVCfFHVpP83e0vftI=;
-        b=aFIB2cxig0LLlyPhlT7Jvyfb7FwdE4l3XGMHY+1SVxjIc8OTke7K4UcknrNqi+4uXC
-         ramodig305m2f07d6vODRohnPohO/KTRqq5Pg0zIEVlOdu91Wdyt35GLR5Kmc3Brz6dr
-         AUNh4+Kabg4rmDzbvdPl4lI+lSM41/dE8i4JJwYXeEtaNwC3MMixTHO7xyzeyoB4b31g
-         PVW1691/PdGgRZVF5VmEIl4lBjAmkNUqG/3vZ9/B40dtoBeYN1sUbsV6CDzBZYUosQLm
-         Me2PvoUy5glmNanQ47yimTjg1WO3Q8+18ZqHGq8fUp4N5nKagSwvInfqlD+Yqt7yvvbS
-         1jiw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RzDPDtmZcf1JkCwHy8uphmdNH63NACWxOruLcR+YRzM=;
+        b=UmQnQGZogndZaXUFhpJa03xTCx7fBNT8VNxoUmY+UsvAfzj2fADPRqOli9HxsLMq63
+         ii7NzDgjye4uYFOsiArqjt2pBrCwRqJWu+L6PSVLkB4Vg6cWL0pMnai7afMw/jDsuelo
+         bkT+80SKDY6lGWcvIk1Dw+S+iDmW2k1AH/0pPm276BNE+3f0TSK/jqh/pmP7ey54Gkcl
+         86HQUpAaF+jR7cMdQC1qI5PU4qJ5fGaLYBilnJ3lXBtp6zz4SXpxkYNBLtoFL4qBmBxp
+         7BxitiucJawRwU6Uc37H74zRW2xVNWkx3Zh3g0DQIOEXeqs4FmhAa0ttEvZlYT3JkwAd
+         dmLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tPPpInGY7TAAKztaLRD1dh/MnSuVCfFHVpP83e0vftI=;
-        b=yHakatNCocd4THnbkyI2tMgkpW+q5PueVfwCRDJ2UvTPNH7Tjf5KZWv8UHWRJe/1vy
-         W5ztzTM+uQcqCga57WSi0ZYXVAgULepbd2H+2SpauFz2PSVpO/YNSNmOGjQ8TWFETyiz
-         MZ+NftznnCTlTMMvBgamUZQ6CPDT+WhJ+BXrB4jpxO+ZE01Lgj3y6OXnNCm4s6rkJ71e
-         XiMVxRn1UphoGgv676LCEkJw69nJHk8GEcXxoV8VAaExmGUxouULte11txliUHA1KKnR
-         SeRJhFFAeiHYqsXkkUH830xlmleoXgmApttpT1wnpvhOpCh3Xb65BjRyO9CvN4RCi9MO
-         dmEw==
-X-Gm-Message-State: AOAM5309ZkUHpm4h2//8gJr6cgqJ3Kr83GA+C6DwAji5ABYuhN4jSqwN
-        N6oPGEqcMbFep+YVUwIPz7rtuD6j85rS3oZ3ntw=
-X-Google-Smtp-Source: ABdhPJx0e5XJ4dABvufzpa4e3kS7OLx9s7hSMzO2zrIR8K65YW+b3wr/Z7fNd6fLE4t0//aXakB3hwSKAk/8pcd2H9Q=
-X-Received: by 2002:a17:907:6e0b:: with SMTP id sd11mr4404413ejc.132.1641917927144;
- Tue, 11 Jan 2022 08:18:47 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RzDPDtmZcf1JkCwHy8uphmdNH63NACWxOruLcR+YRzM=;
+        b=r1s6mTlCUV9zyuP5+8bBzM/dfin485MsyyH79YCSSSgA/9mmh4BGyerACH4DQkwk4S
+         dA7wnkZ6Zsh87FhYdg9d7QO8/667RjdZ/r+JA0AdjXRJ0Ti2/LyE3b7kXQ5wjO3pMpW2
+         DWP5zsx6fW1offCdnkUPyalEYsMt/UmBuKfDzk50DjsYTP9Zqz1U4HioRsnkBH4JFD+q
+         96zd8bZc2d8dimn7eAvnkv5FRHfJLG1rJoKU4Zp+V3uYB8Ezu5ao/IkagzauUzXzsEqX
+         Uxplun7EFAzz+RM4RfFRu/g0i7mx4Eys5s7e7JU5pUAMwMKnD4rnqN8sqCKKMjPfhoW2
+         ZFQw==
+X-Gm-Message-State: AOAM532D2SH+TSBCbxRfhC3+801I2QBsMAyk5D/QYEOjjg//m/xlWP5o
+        SbddDOqBYongivF8Mu+Wyxs=
+X-Google-Smtp-Source: ABdhPJypQ2Df/GvB83RXg+sGXjQrR1aN+4Hk0+Gb5DM+pxwdBnFLVIiqG9IeU63qjXkcRKZNldxXjw==
+X-Received: by 2002:a1c:cc0f:: with SMTP id h15mr3129291wmb.38.1641917995256;
+        Tue, 11 Jan 2022 08:19:55 -0800 (PST)
+Received: from lb01399.fkb.profitbricks.net ([85.214.13.132])
+        by smtp.gmail.com with ESMTPSA id p18sm3012397wmq.0.2022.01.11.08.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 08:19:54 -0800 (PST)
+From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+To:     nvdimm@lists.linux.dev, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     dan.j.williams@intel.com, jmoyer@redhat.com, stefanha@redhat.com,
+        david@redhat.com, mst@redhat.com, cohuck@redhat.com,
+        vishal.l.verma@intel.com, dave.jiang@intel.com,
+        ira.weiny@intel.com, pankaj.gupta@ionos.com,
+        Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+Subject: [RFC v3 0/2] virtio-pmem: Asynchronous flush
+Date:   Tue, 11 Jan 2022 17:19:35 +0100
+Message-Id: <20220111161937.56272-1-pankaj.gupta.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210715221828.244536-1-Terry.Bowman@amd.com> <20210907183720.6e0be6b6@endymion>
- <20211105170550.746443b9@endymion> <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
- <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com> <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
- <YdoG+en5Z/MaS/wu@ninjato> <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
- <Yd16cw0AaYcf7eSf@kunai> <811d6ec7-7eac-dfd3-5927-4adcc2251fab@amd.com>
- <CAHp75Vfv9kgxu5u1YfjEuRmwj=jSybmZ92bpt30jB8MX4LFHaQ@mail.gmail.com>
- <CAHp75Vf3G1ftL6VrCchCTC7UbEyWD65wdjRjYOwxY9ONxZ=DCQ@mail.gmail.com> <74eb7c8f-7072-495a-fc26-b60bf0a1f51a@amd.com>
-In-Reply-To: <74eb7c8f-7072-495a-fc26-b60bf0a1f51a@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 11 Jan 2022 18:17:00 +0200
-Message-ID: <CAHp75Vee4yeGLz-ErS-fVmv2c5mxC7nLVzqTnPnOP8guN4TGCQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Robert Richter <rrichter@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 5:50 PM Terry Bowman <Terry.Bowman@amd.com> wrote:
-> On 1/11/22 8:54 AM, Andy Shevchenko wrote:
-> > On Tue, Jan 11, 2022 at 4:53 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> >> On Tue, Jan 11, 2022 at 4:13 PM Terry Bowman <Terry.Bowman@amd.com> wr=
-ote:
-> >>> The cd6h/cd7h port I/O can be disabled on recent AMD processors and t=
-hese
-> >>> changes replace the cd6h/cd7h port I/O accesses with with MMIO access=
-es.
-> >>> I can provide more details or answer questions.
-> >>
-> >> AFAIU the issue the list of questions looks like this (correct me, if
-> >> I'm wrong):
-> >> - some chips switched from I/O to MMIO
-> >> - the bus driver has shared resources with another (TCO) driver
-> >>
-> Correct
->
-> >> Now, technically what you are trying is to find a way to keep the
-> >> original functionality on old machines and support new ones without
-> >> much trouble.
-> >>
-> >> From what I see, the silver bullet may be the switch to regmap as we
-> >> have done in I2C DesignWare driver implementation.
-> >>
-> >> Yes, it's a much more invasive solution, but at the same time it's
-> >> much cleaner from my p.o.v. And you may easily split it to logical
-> >> parts (prepare drivers, switch to regmap, add a new functionality).
-> >>
-> >> I might be missing something and above not gonna work, please tell me
-> >> what I miss in that case.
+ Jeff reported preflush order issue with the existing implementation
+ of virtio pmem preflush. Dan suggested[1] to implement asynchronous flush
+ for virtio pmem using work queue as done in md/RAID. This patch series
+ intends to solve the preflush ordering issue and makes the flush asynchronous
+ for the submitting thread. Also, adds the flush coalscing logic.
 
-> > On top of that I'm wondering why slow I/O is used? Do we have anything
-> > that really needs that or is it simply a cargo-cult?
->
-> The efch SMBUS & WDT previously only supported a port I/O interface
-> (until recently) and thus dictated the HW access method.
+ Submitting this RFC v3 series for review. Thank You!
 
-I believe you didn't get my question. Sorry for that. Elaboration below.
+ RFC v2 -> RFC v3
+ - Improve commit log message - patch1.
+ - Improve return error handling for Async flush.
+ - declare'INIT_WORK' only once.
+ - More testing and bug fix.
 
-The code is using in*_p() and out*_p() accessors (pay attention to the _p p=
-art).
+ [1] https://marc.info/?l=linux-kernel&m=157446316409937&w=2
 
-My question is about that.
+Pankaj Gupta (2):
+  virtio-pmem: Async virtio-pmem flush
+  pmem: enable pmem_submit_bio for asynchronous flush
 
-> Wolfram pointed out some AMD laptops suffer from slow trackpad [1] and
-> this is part of the fix.
->
-> [1] https://lore.kernel.org/r/CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkz=
-zCiYJ-XQ@mail.gmail.com
+ drivers/nvdimm/nd_virtio.c   | 74 +++++++++++++++++++++++++++---------
+ drivers/nvdimm/pmem.c        | 15 ++++++--
+ drivers/nvdimm/region_devs.c |  4 +-
+ drivers/nvdimm/virtio_pmem.c | 10 +++++
+ drivers/nvdimm/virtio_pmem.h | 16 ++++++++
+ 5 files changed, 98 insertions(+), 21 deletions(-)
 
-I see, but still it never worked, correct?
+-- 
+2.25.1
 
-> >>> On 1/11/22 6:39 AM, Wolfram Sang wrote:
-> >>>>
-> >>>>> I have briefly read the discussion by the link you provided above i=
-n
-> >>>>> this thread. I'm not sure I understand the issue and if Intel hardw=
-are
-> >>>>> is affected. Is there any summary of the problem?
-> >>>>
-> >>>> I guess the original patch description should explain it. You can fi=
-nd
-> >>>> it here:
-> >>>>
-> >>>> https://nam11.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fp=
-atchwork.ozlabs.org%2Fproject%2Flinux-i2c%2Fpatch%2F20210715221828.244536-1=
--Terry.Bowman%40amd.com%2F&amp;data=3D04%7C01%7CTerry.Bowman%40amd.com%7C89=
-e551e0ebe94607beaf08d9d51288f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7=
-C637775097863907004%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2l=
-uMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DgvJ0FC9MVacQunc8uMJ6=
-oJEw0pGcisu9muQkE8u4rxY%3D&amp;reserved=3D0
-> >>>>
-> >>>> If this is not sufficient, hopefully Terry can provide more informat=
-ion?
-> >
-
-
-
---=20
-With Best Regards,
-Andy Shevchenko

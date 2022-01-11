@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7603348AF06
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D0148AF07
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238129AbiAKN7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S238242AbiAKN7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:59:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236079AbiAKN7V (ORCPT
+        with ESMTP id S236054AbiAKN7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:59:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6390C061751;
-        Tue, 11 Jan 2022 05:59:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF31BB81ACB;
-        Tue, 11 Jan 2022 13:59:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF141C36AEB;
-        Tue, 11 Jan 2022 13:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641909558;
-        bh=BwyiPXEw4zt5RVrk80VtkmDX6ZMVIH2jF8JVPiiLadI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DGIFLepw5b/281+u2ddmU5DwumUlyPQex7TifHtcg5mVl44P+TeVgktl3tARelokq
-         zD4J2Z/yx1F6W4tKeu6eBL88OKA2RDXKNOx5Lg0YCzPNVcyMRxzKo04A5Poy593jfU
-         +3/BVQlETU/Mh04vBlw5T0v8CrVojs6M4eINKDNcMmW8vCwAqUifzz76zAXYhCOx0p
-         6r+5fZtCGMGnQMLoku/4DFBADTBqaU9qZE0vhldmg3My9ZzENpHDJKB1XngJC56G0P
-         xB8tsUQEkwD4GBZORP3RwvB19QyLRTh3vnoTZBNyEvEW3dOefQRitMRTU5EkAOqX4x
-         U+sWgt4fpT8lg==
-Date:   Tue, 11 Jan 2022 13:59:12 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
-        collinsd@codeaurora.org, subbaram@codeaurora.org,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 2/6] dt-bindings: regulator: Add pm8008 regulator
- bindings
-Message-ID: <Yd2NMGywGq3efjc1@sirena.org.uk>
-References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
- <1637314953-4215-3-git-send-email-quic_c_skakit@quicinc.com>
- <YZ+qn2hA4MzNEqM+@sirena.org.uk>
- <30b21a08-f7f7-f3a6-a3ac-156c7f8964b1@quicinc.com>
- <Ya4UcxxEq9t+isxS@sirena.org.uk>
- <30ec6b4c-f2a8-d80e-a542-1c2b3f30c049@quicinc.com>
- <07dc5ba4-790b-0cb2-bc3e-2ce8d7e3e09d@quicinc.com>
- <YdxA5bwcwyJXcPDl@sirena.org.uk>
- <9c4a995d-2dc0-1731-cca0-a013483a4fc0@quicinc.com>
+        Tue, 11 Jan 2022 08:59:39 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D875AC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:59:38 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id i3so47478980ybh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:59:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=qoFhEWfzeCanmU1NlDxKMq9/mEUKswrPwi1OhL1zoLk=;
+        b=c1ZsC+FHej7LFdPA0Qfp8+x8O9IdX5Wq35vQQjlmDO7b06F0kP3uwCUx0NL97gAOOC
+         LqirAhxzsRitnjp4usJ6qSb5xhCFXCzuZZADicnjqxC+sLpYec8S+5NsizxGJ3mIbJY+
+         uoym4vJKVxnX+7fIYotRFjRQeKMyzf/XFNa+PQnIM6zTVejpOLYffmS9MKGHU0EfM02o
+         cl5n4dG50xW4yJ4fAl0fF565lvSL81GGcSKUU55F+FAMOGDQoJeO5iBHvgTKsWrAA1Yi
+         8pq61ftnAWSqUCQM/fXmz6Ma99rzVgX+9xSo8/FwFiKpPOtYKIDzHrnU+ct5ZSNPx+py
+         /vSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=qoFhEWfzeCanmU1NlDxKMq9/mEUKswrPwi1OhL1zoLk=;
+        b=wi9VvfSwDzBLUCvNhx4puF0kXSNeyaWNWyFIPxRBkwt1RGf96DJnxTXbQd7+hIqC6/
+         sx0w4EqO/VxURNS6PiYHF7GelFF+3VhYwa+JoZBSIR6ZMVR4ZlkGWX64FY4nfuVOXq2x
+         QbUl0HW/5IneiQMGjXJ5IUsOPUIjfr1cL7UWaM8n7sk/EvL5B5BWGm6caKfZXqG9dQCl
+         xqCjc2E4lhukr91bWxQqSsltJfRsjaO9AsuoUIlcOVHGrGnYZW4bYVTDVzLmDzroT4LW
+         1+C5+W8qwE1nC/k0o6lUeIKduFkAKz6SKwPsYalY3Mc4O2rCyTDMVtV/VxEZkjrH9VdW
+         5SuA==
+X-Gm-Message-State: AOAM533txCf2aiRwr1TM1+KcGRj11lSzE0a5Who6K3wtfzo5uJxMw0Nu
+        zfAVHcPmzC/Ib7XBedkO1MP0nfIpoUhvaVhNYaI=
+X-Google-Smtp-Source: ABdhPJxFv3QGesDchnOK1sXMCT+v8NcCbeDl1r0biIM3W8pocfrqLVF9RN1vbyyO6zVItONq1/r+W85MQQp4jP5k30c=
+X-Received: by 2002:a05:6902:100d:: with SMTP id w13mr6743776ybt.185.1641909578056;
+ Tue, 11 Jan 2022 05:59:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tgB8fPgClakrhZQc"
-Content-Disposition: inline
-In-Reply-To: <9c4a995d-2dc0-1731-cca0-a013483a4fc0@quicinc.com>
-X-Cookie: Many a family tree needs trimming.
+Sender: obinnaeke50@gmail.com
+Received: by 2002:a05:7000:6485:0:0:0:0 with HTTP; Tue, 11 Jan 2022 05:59:37
+ -0800 (PST)
+From:   Alary Jean Claude <claudealaryjean@gmail.com>
+Date:   Tue, 11 Jan 2022 13:59:37 +0000
+X-Google-Sender-Auth: tIkkDCaXePtJTj--BMHyJ0KOt2c
+Message-ID: <CAPPJqg8shr8haCsgNe-KRR9ccVs4o_zyGnUPVDS4GZgnRiuhYA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello My Beloved,
+With due respect to your person and much sincerity of purpose I wish
+to write to you today, seeking for your urgent assistance in this
+humanitarian investment project to be established in your country for
+the mutual benefit of the orphans and the less privileged ones. My
+names are Mrs.Alary Jean Claude, a dying widow hospitalized undergoing
+treatment for brain tumor disease, I hope that you will not expose or
+betray this belief and confidence that I am about to delegate to you
+for the mutual benefit of the orphans and the less privileged ones. My
+late husband made a substantial deposit with the Bank which I have
+Strong-Willed to hand over and entrust the sum of ($
+12,000.000,Dollar) in the account under your guardianship for you to
+invest it into any social charitable project in your country. Based on
+my present health status I am permanently indisposed to handle
+finances or any financial related project.
 
---tgB8fPgClakrhZQc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+With this intention, I am determined to contact you in order to
+sustain and assist me as my rightful beneficiary and claim the money
+for humanitarian purposes for the mutual benefits of the less
+privileged ones. Because If the fund remains unclaimed with the bank I
+pass away, those gluttonous bank executives will place the fund as an
+unclaimed Fund and share it among themselves for their selfish and
+worthless ventures. In this regard, I will be grateful for your kind
+acceptance to carry out this transaction and fulfill my final wish in
+implementing the charitable project in your country as it requires
+absolute trust and devotion without any failure. Meanwhile It will be
+my pleasure to compensate you as my Investment Manager/Partner with
+40% percent of the total amount as commission/share just for you to
+take this charitable project serious and handle it with sincerity of
+mind, showing honesty and attention in our communication and in every
+aspect of this project, While 60% of the money will be invested into
+the charity project.
 
-On Tue, Jan 11, 2022 at 05:45:16PM +0530, Satya Priya Kakitapalli (Temp) wrote:
-> On 1/10/2022 7:51 PM, Mark Brown wrote:
-
-> > There are some devices that did get merged doing this, that doesn't mean
-> > it's a great idea though.
-
-> In that case, it would be helpful if you could provide an example which has
-> the design you suggested.
-
-There's plenty of mfds that register child devices without using DT -
-off the top of my head wm8994 or arizona.
-
---tgB8fPgClakrhZQc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHdjTAACgkQJNaLcl1U
-h9B5NQf/cAVrtJjJosTSpLQN6dewv4VRADMuwyow8h6fz/3KGfMS5EnoRcB68NtM
-LrW80WT3Xhx2VBuSWcLJnD+zBqRUcHvskVNnrGo+GUHQQNDG+8xkIYBkudV5nQHv
-6tan07wUQ5vbTg6Ebk0MgTBdnwsPKehQGuMcIRl0zkszK69Q72Bv+O5M0ITBMxwf
-u6EDod4lJnPh41NTeZKl6S+drNkGEC3AJvYvHz7PnpN9SgqZJObpTi/lbUXvOGMj
-SYTv4UXuU1EbztUBIu6e+paVodOyERylht1+y4PXkfEzrfs5WLGaEyS3rbUA/Px5
-T7Armtpjqi+yJLDzQ0U47lhdPDbQiQ==
-=ghdz
------END PGP SIGNATURE-----
-
---tgB8fPgClakrhZQc--
+Thank you very much for your kind consideration and I will be happy to
+receive your prompt response for further correspondence.
+May the peace of God be with you.
+Yours beloved Sister in Christ Mrs. Alary Jean Claude.

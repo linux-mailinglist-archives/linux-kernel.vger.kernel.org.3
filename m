@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BC048B905
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A8A48B906
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiAKUyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234845AbiAKUyc (ORCPT
+        id S235844AbiAKU4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:56:21 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39702 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235721AbiAKU4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:54:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B866C034006
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=NaqWFVPD5yQIsLxFNwU6hznpj4Tbd38uPn6NrjndwIQ=; b=DxE8TozFpC4e4PdN9ZsDYZQEsD
-        9in9ykF5exZmMqNCTgn3/P9U3IDcpm4MKR4ZMMEnB1peH4kwrzmhSy4LmwxdMouHvPuFSaAx8mHS5
-        C88HpMq5plOaYlsTNBTy6x8zSZLF8Yu1nqTNZC8fqVoIZNoAslj3aTyWGU0EqnbxwZaPapsWNkUQB
-        eMJm32nZWGEqYg2apBhkf5doa+FFTZSbrKt8tgVoPO0Nr34l+/9eis4BCcDOEGd1Y4Nu6MDUFIRvy
-        pVoao7bgWPOGkaJv2edDjgnFAyjOaKgBZy4scIIWFQvK0HDHFSaUufEkr4U+mJvl8wZE+LK4fU3pr
-        dkT/yhuw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7O9l-003ZcZ-HI; Tue, 11 Jan 2022 20:54:14 +0000
-Message-ID: <172e8971-f160-b04e-3250-b8743f31c820@infradead.org>
-Date:   Tue, 11 Jan 2022 12:54:09 -0800
+        Tue, 11 Jan 2022 15:56:18 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BJfXX4020890;
+        Tue, 11 Jan 2022 20:56:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=svlmJbpUX2e8JK6OzGZT1TZV7gHvUC5eHWnRMvjIchs=;
+ b=RtL1CKY6rLVARY5ItP9PL1klRLWhPNOk1J7pOBoyHYmEfDW0cmb6Be+0Oxo93ntIZVOs
+ uvW7rSIIkF0RvCr+BhvG9YjS4kDfBe2C/ZBDATEkybSwqxWzRgGMfEPnFFbZYf8/4op9
+ DhdpcBSJ0HU6NQs8ezTGLL0EfsME+8U36iewBMvN9VcItqDo6nw2Lq9/P9fFGegCTD70
+ fZYzcndiOXhS0N3/J7TjI7TjLYYfq7kUh51yJ7KFr80nf565TCmigkjmnR31xkB+lQ3u
+ pmq+vFY/e+jYcjZKE/BXw65rMqmCJUX0QWYTTfkeJyA8dfupTMIQ1XUzn1TJmjfpdGac fg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh79m7e0u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 20:55:59 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BKrpC2012606;
+        Tue, 11 Jan 2022 20:55:59 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh79m7e07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 20:55:58 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BKYuik008572;
+        Tue, 11 Jan 2022 20:55:56 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3df2893ppj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 20:55:56 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BKtsHK39453182
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 20:55:54 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0FAC852051;
+        Tue, 11 Jan 2022 20:55:54 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id B99A75204F;
+        Tue, 11 Jan 2022 20:55:53 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     "'Steven Rostedt'" <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, hca@linux.ibm.com,
+        deller@gmx.de
+Subject: Re: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+        <20220110122436.5302128f@gandalf.local.home>
+        <7a0fefb7ed3542b4a49dee1e78b1668b@AcuMS.aculab.com>
+Date:   Tue, 11 Jan 2022 21:55:53 +0100
+In-Reply-To: <7a0fefb7ed3542b4a49dee1e78b1668b@AcuMS.aculab.com> (David
+        Laight's message of "Mon, 10 Jan 2022 21:58:33 +0000")
+Message-ID: <yt9d8rvmt2jq.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: Unable to unselect VGA_ARB (VGA Arbitration)
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <b72ad376-7a42-1ff2-701d-7fb2f3333c64@molgen.mpg.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <b72ad376-7a42-1ff2-701d-7fb2f3333c64@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: otBth3hfpkxLP2S9L--6Ygj5HsHcUx9P
+X-Proofpoint-ORIG-GUID: zHr6rvdlcGGuk4moORQc2G2gCg4CZOaX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ impostorscore=0 adultscore=0 mlxlogscore=940 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 clxscore=1011 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201110107
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+David Laight <David.Laight@ACULAB.COM> writes:
 
-On 1/11/22 12:28, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> I am using Linux 5.16, and I am unable to unset `VGA_ARB` in Kconfig (`make menuconfig`). I have an Asus F2A85-M PRO with an AMD A6-6400K APU (integrated Radeon graphics device), so no legacy stuff.
-> 
-> From `drivers/gpu/vga/Kconfig`:
-> 
-> ```
-> config VGA_ARB
->         bool "VGA Arbitration" if EXPERT
+> From: Steven Rostedt
+>> Sent: 10 January 2022 17:25
+> ...
+>> > ...
+>> > > +	if (likely((unsigned long)str >= TASK_SIZE)) {
+>> > > +		/* For safety, do not trust the string pointer */
+>> > > +		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
+>> > > +			return NULL;
+>> > > +	} else {
+>> > > +		/* user space address? */
+>> > > +		ustr = (char __user *)str;
+>> > > +		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
+>> > > +			return NULL;
+>> >
+>> > Is that check against TASK_SIZE even correct for all architectures?
+>> > copy_to/from_user() uses access_ok() - which is architecture dependant.
+>> 
+>> The problem with access_ok() (which I tried first) is that it can't be used
+>> from interrupt context, and this check can happen in interrupt context.
+>> Either way, if we pick the wrong one for the arch, the only thing bad that
+>> can happen is that it returns "fault" and the filter fails, just like if
+>> the pointer was to bad memory.
+>
+> Isn't there also at least one architecture where you can't differentiate
+> between user and kernel pointers by looking at the address?
+> (Something like sparc ASI is used for user accesses so both user
+> and kernel get the full 4G address range. But it isn't sparc (or pdp/11))
+> ISTR it causing issues with the code for kernel_setsockopt() and
+> required a separate flag.
 
-You can modify VGA_ARB if you set ^^^^^^ "EXPERT".
+On s390 TASK_SIZE is defined as -PAGE_SIZE, so with the patch above the
+kernel would always try to fetch it from user space. I think it would be
+the same for parisc.
 
->         default y
->         depends on (PCI && !S390)
->         help
->           […]
-> 
-> config VGA_ARB_MAX_GPUS
->         int "Maximum number of GPUs"
->         default 16
->         depends on VGA_ARB
->         help
->           […]
-> 
-> config VGA_SWITCHEROO
->         bool "Laptop Hybrid Graphics - GPU switching support"
->         depends on X86
->         depends on ACPI
->         depends on PCI
->         depends on (FRAMEBUFFER_CONSOLE=n || FB=y)
->         select VGA_ARB
->         help
->           […]
-> ```
-> 
-> But in `make menuconfig` I am unable to unselect it.
-> 
->     -*- VGA Arbitration
-> 
-> and the help says:
-> 
->     Symbol: VGA_ARB [=y]
->     Type  : bool
->       Depends on: HAS_IOMEM [=y] && PCI [=y] && !S390
->       Visible if: HAS_IOMEM [=y] && PCI [=y] && !S390 && EXPERT [=n]
->       Location:
->         Main menu
->          -> Device Drivers
->            -> Graphics support
->     Selected by [n]:
->       - VGA_SWITCHEROO [=n] && HAS_IOMEM [=y] && X86 [=y] && ACPI [=y] && PCI [=y] && (!FRAMEBUFFER_CONSOLE [=y] || FB [=y]=y)
-> 
-> So, VGA_SWITCHEROO is not set, and, therefore, as `Selected by [n]:` suggests, I thought I’d be able to deselect it.
-> 
-> It’d be great if you could help me out.
-> 
-> 
-> Kind regards,
-> 
-> Paul
-
--- 
-~Randy
+> Put that together with something that needs user_access_begin()
+> to bracket user accesses and you probably fail big-time.
+>
+> 	David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)

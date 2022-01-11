@@ -2,149 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB3F48A904
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E0C48A906
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348767AbiAKH7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235827AbiAKH7N (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:59:13 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78843C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:59:12 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id br17so22129280lfb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dNtpgItJBIUx2EsKxwE1qB9lXMXL7lSQrxOBWiGduBY=;
-        b=pbf6YpWeL4FRSePzvVTnQ1mPlJC9YYhEsysl24wHC8thv0FJEybikgqWhjqbbAhvnX
-         ccKMf+sdwlW7vrcc7q8UjKb4k2tr/rp3oshMReXm1RLT8Cz8oxh+fe9FU9xDX0o1OgJh
-         YwfH3yDGuAhZoFB0Z7PR2UQ5e5PkfLRMTnrtB+UcdbSzT8xZha5XFSFNoeLUf2ti65Fs
-         29SdQ2yxUKVuiyJukj+9GEsxPDoNLOmpqbYbUzoxbWNxn0sqKa6upTNuSG++0kspj4Sv
-         M143lbQGUS7D/G6ZpBgKEdk583/NKlACQ5AQvo5m34pmNOP66zxMMqQ6v8xzUspwhw++
-         YSKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dNtpgItJBIUx2EsKxwE1qB9lXMXL7lSQrxOBWiGduBY=;
-        b=QBbjuzK1Ku6GOY68MJbBhZQkTrAo7ny3OSxs3Rxnh6kq8QrSeZ1zbX56WRZJcyUKUF
-         N3nLO0SmY4WTiLTPclgosN1nxVnURvGC3/zoif7x9CJ6951Po5Ztjv9xYuKK8mjywoz+
-         Yh5r93iTWJBcyVoPrEOrlYgvh5i3DaKwhWWWOIWoTlorJsY9W1HzPditecIRxwI3786n
-         bXpb60OFcVS26YTN5lKdac8Z/9638ZNzyYhBgu2473FAPDdBBrlvW91CK91pOwEpY9NX
-         y4GDyuiLm+Nb2NY0DAUdqmB+EeLAMnu0zSIFhxkRiHICwBN6jz5PwO/XH9RCvQGOrYUq
-         9I1w==
-X-Gm-Message-State: AOAM5321NRwm+bA88Lm37vpC5jpEGhAja6KAr5ifot3Nv/cOTEUcpUuP
-        UYX9m6TS8gdDZlBQ+GFm/igRU0MFTZnVJquxecGeTw==
-X-Google-Smtp-Source: ABdhPJzfMr+A0PhrHu2XGLs1czrc3XQJZqSUNm+6v7LuAcKg5sEjALBTASL5kjDeWPAuHdLeccdWlVvQ0rgjeC/DsfQ=
-X-Received: by 2002:a2e:968a:: with SMTP id q10mr2054360lji.381.1641887950719;
- Mon, 10 Jan 2022 23:59:10 -0800 (PST)
+        id S1348777AbiAKH7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:59:49 -0500
+Received: from mga07.intel.com ([134.134.136.100]:18837 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235827AbiAKH7s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:59:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641887988; x=1673423988;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Afn//rSP4R9SsyZ6VJF11Y3rnLWXeO8abK+Y2aty1FU=;
+  b=T/J3mCJmP5TI7yIJ//cVCynxQnRdfPiu7HaeftkXfMD5z3b5ePyUUUB7
+   u2tm0AfyiNAngUFOKu32oJIsDKfWlzt56HD+5HxXh+U6P1YBMw9Hkcm2O
+   KoHr7UCVwY/zartTxpL7sE+NiOBIcTMcwUMAIG/6Y6lK5vdbpl+1y/u3e
+   tYVNc6RfJZUXyVaFIiMUxz7mYhsmTTpTiyvCiJ7Vc5bO9EqgP0uqhr3wE
+   01otaPfWQBY5DQEXGZLuA+BttJ35JECln9zZuPzVsq36VmAggOLBJSlrT
+   v0CGvMsXz4B3+5l987ds5P6c0lKWQy/8rGJ5/z2AeCJla+O5IBghxHCXj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="306779923"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="306779923"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 23:59:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="622983509"
+Received: from xiaoyaol-mobl.ccr.corp.intel.com (HELO [10.255.30.76]) ([10.255.30.76])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 23:59:45 -0800
+Message-ID: <8a6e5b96-1191-7693-314a-1714cb7c9c9c@intel.com>
+Date:   Tue, 11 Jan 2022 15:59:43 +0800
 MIME-Version: 1.0
-References: <20211211104324.95957-1-yangyicong@hisilicon.com>
- <CAKfTPtCaxGhpGk348Q8jGcEA13Xv4VHS+nX0aW4C+ba5df_4Lw@mail.gmail.com>
- <12315dc8-4b37-339d-3a41-f3a8b10344d7@huawei.com> <CAKfTPtCPRk+2L6wSHBpN-ewTX1Cj4U7a_m1itsSk9Yav-jE-9Q@mail.gmail.com>
- <a8f0d13a-c2a5-d896-d655-846d373427b8@huawei.com>
-In-Reply-To: <a8f0d13a-c2a5-d896-d655-846d373427b8@huawei.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 11 Jan 2022 08:58:59 +0100
-Message-ID: <CAKfTPtA9WG=nEPdNKgYQzf-Us3-i5+h=+vFcMzaT0yZBmxFeaA@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Track target domain's avg_scan_cost in select_idle_cpu
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     yangyicong@hisilicon.com, peterz@infradead.org, mingo@redhat.com,
-        juri.lelli@redhat.com, mgorman@techsingularity.net,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        prime.zeng@huawei.com, linuxarm@huawei.com, 21cnbao@gmail.com,
-        "tiantao (H)" <tiantao6@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220110034747.30498-1-likexu@tencent.com>
+ <YdzV33X5w6+tCamI@google.com>
+ <80b40829-0d25-eb84-7bd7-f21685daeb20@gmail.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <80b40829-0d25-eb84-7bd7-f21685daeb20@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 at 10:10, Yicong Yang <yangyicong@huawei.com> wrote:
->
-> On 2022/1/4 22:18, Vincent Guittot wrote:
-> > On Thu, 23 Dec 2021 at 09:23, Yicong Yang <yangyicong@huawei.com> wrote:
-> >>
-> >> On 2021/12/22 18:47, Vincent Guittot wrote:
-> >>> On Sat, 11 Dec 2021 at 11:43, Yicong Yang <yangyicong@hisilicon.com> wrote:
-> >>>>
-> >>>> We regulate the LLC domain scan in select_idle_cpu() by comparing
-> >>>> the average scan cost of this_sd against the average idle time of
-> >>>> this_rq. This is correct when the domain to scan is the LLC domain
-> >>>> of this cpu. But when the domain to scan is different from this
-> >>>> LLC domain, we'll have an inaccurate estimation of the scan cost
-> >>>> on the target domain as this_sd->avg_scan_cost contains contributions
-> >>>> of scanning other domains besides the target domain.
-> >>>>
-> >>>> Track the avg_scan_cost of the target domain to make the estimation
-> >>>> more accurate.
-> >>>>
-> >>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> >>>> ---
-> >>>>  kernel/sched/fair.c | 4 ++--
-> >>>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >>>> index 6e476f6d9435..6301740d98cb 100644
-> >>>> --- a/kernel/sched/fair.c
-> >>>> +++ b/kernel/sched/fair.c
-> >>>> @@ -6267,7 +6267,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
-> >>>>                 }
-> >>>>
-> >>>>                 avg_idle = this_rq->wake_avg_idle;
-> >>>> -               avg_cost = this_sd->avg_scan_cost + 1;
-> >>>> +               avg_cost = sd->avg_scan_cost + 1;
-> >>>>
-> >>>>                 span_avg = sd->span_weight * avg_idle;
-> >>>>                 if (span_avg > 4*avg_cost)
-> >>>> @@ -6305,7 +6305,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
-> >>>>                  */
-> >>>>                 this_rq->wake_avg_idle -= min(this_rq->wake_avg_idle, time);
-> >>>>
-> >>>> -               update_avg(&this_sd->avg_scan_cost, time);
-> >>>> +               update_avg(&sd->avg_scan_cost, time);
-> >>>
-> >>> But then you can have several cpus updating the same value simultaneously
-> >>>
-> >>
-> >> yes. sd->avg_scan_cost should includes the contributions of all the cpus scanned the sd.
-> >>
-> >> We regulated the scanning nr based on two things:
-> >> - avg_idle: to indicate how much time we can have for this time scanning
-> >> - avg_cost: to indicate how much time we'll spend for scanning the target domain based
-> >>             on the history cost
-> >>
-> >> Previously sd->avg_scan_cost may not reflect the cost as it count the scanning cost
-> >> on the domain of the scanner cpu, which may not be the domain the cpu scanned.
-> >> For example, cpu 0 on llc A scanned llc B and llc C, we'll count the cost of scanning B
-> >> and C on llc A's avg_scan_cost and we'll use this to estimate the cost for scanning
-> >> llc A, which is not accurate.
-> >
-> > I mean that you can now have several CPUs that will read, modify,
-> > write sd->avg_scan_cost simultaneously without any protection
-> >
->
-> uh I misunderstood. not sure I've missed something, but looks like we also have this problem
-> when updating &this_sd->avg_scan_cost?
+On 1/11/2022 12:20 PM, Like Xu wrote:
+> On 11/1/2022 8:57 am, Sean Christopherson wrote:
+>> On Mon, Jan 10, 2022, Like Xu wrote:
+>>> From: Like Xu <likexu@tencent.com>
+>>>
+>>> Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
+>>> Tracing, it exposes details about the asynchronous events, when they are
+>>> generated, and when their corresponding software event handler completes
+>>> execution) cannot be safely and fully emulated by the KVM, especially
+>>> emulating the simultaneous writing of guest PT packets generated by
+>>> the KVM to the guest PT buffer.
+>>>
+>>> For KVM, it's better to advertise currently supported features based on
+>>> the "static struct pt_cap_desc" implemented in the host PT driver and
+>>> ignore _all_ unknown features before they have been investigated one by
+>>> one and supported in a safe manner, leaving the rest as system-wide-only
+>>> tracing capabilities.
+>>>
+>>> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+>>> Signed-off-by: Like Xu <likexu@tencent.com>
+>>> ---
+>>> v1 -> v2 Changelog:
+>>> - Be safe and ignore _all_ unknown capabilities. (Paolo)
+>>>
+>>> Previous:
+>>> https://lore.kernel.org/kvm/20220106085533.84356-1-likexu@tencent.com/
+>>>
+>>>   arch/x86/kvm/cpuid.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>>> index 0b920e12bb6d..439b93359848 100644
+>>> --- a/arch/x86/kvm/cpuid.c
+>>> +++ b/arch/x86/kvm/cpuid.c
+>>> @@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct 
+>>> kvm_cpuid_array *array, u32 function)
+>>>               break;
+>>>           }
+>>> +        /* It's better to be safe and ignore _all_ unknown 
+>>> capabilities. */
+>>
+>> No need to justify why unknown capabilities are hidden as that's very 
+>> much (supposed
+>> to be) standard KVM behavior.
+>>
+>>> +        entry->ebx &= GENMASK(5, 0);
+>>
+>> Please add a #define somewhere so that this is self-documenting, e.g. see
+>> KVM_SUPPORTED_XCR0.
+> 
+> How about we define this macro in the <asm/intel_pt.h> so that the next 
+> PT capability
+> enabler can update the mask with minimal effort, considering that many 
+> pure kernel
+> developers don't care about KVM code ?
+> 
+>>
+>> And why just EBX?  ECX appears to enumerate features too, and EDX is 
+>> presumably
+>> reserved to enumerate yet more features when EBX/ECX run out of bits.
+> 
+> Yes, how about this version:
+> 
+> diff --git a/arch/x86/include/asm/intel_pt.h 
+> b/arch/x86/include/asm/intel_pt.h
+> index ebe8d2ea44fe..da94d0eeb9df 100644
+> --- a/arch/x86/include/asm/intel_pt.h
+> +++ b/arch/x86/include/asm/intel_pt.h
+> @@ -24,6 +24,12 @@ enum pt_capabilities {
+>       PT_CAP_psb_periods,
+>   };
+> 
+> +#define GUEST_SUPPORTED_CPUID_14_EBX    \
+> +    (BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5))
+> +
+> +#define GUEST_SUPPORTED_CPUID_14_ECX    \
+> +    (BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(31))
+> +
 
-No because this_sd->avg_scan_cost is only used by the local cpu so you
-don't have several cpus trying to update it simultaneously.
+I doubt BIT(3) of CPUID_14_ECX can be exposed to guest directly.
 
->
-> >>
-> >>>>         }
-> >>>>
-> >>>>         return idle_cpu;
-> >>>> --
-> >>>> 2.33.0
-> >>>>
-> >>> .
-> >>>
-> > .
-> >
+It means "output to Trace Transport Subsystem Supported". If I 
+understand correctly, it at least needs passthrough of the said 
+Transport Subsystem or emulation of it.
+
+>   #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+>   void cpu_emergency_stop_pt(void);
+>   extern u32 intel_pt_validate_hw_cap(enum pt_capabilities cap);
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 0b920e12bb6d..be8c9170f98e 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -19,6 +19,7 @@
+>   #include <asm/user.h>
+>   #include <asm/fpu/xstate.h>
+>   #include <asm/sgx.h>
+> +#include <asm/intel_pt.h>
+>   #include "cpuid.h"
+>   #include "lapic.h"
+>   #include "mmu.h"
+> @@ -900,7 +901,10 @@ static inline int __do_cpuid_func(struct 
+> kvm_cpuid_array *array, u32 function)
+>               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+>               break;
+>           }
+> -
+> +        entry->eax = min(entry->eax, 1u);
+> +        entry->ebx &= GUEST_SUPPORTED_CPUID_14_EBX;
+> +        entry->ecx &= GUEST_SUPPORTED_CPUID_14_ECX;
+> +        entry->edx = 0;
+>           for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+>               if (!do_host_cpuid(array, function, i))
+>                   goto out;

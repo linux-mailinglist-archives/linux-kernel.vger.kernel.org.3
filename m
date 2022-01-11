@@ -2,78 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC2348B208
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5937748B211
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349956AbiAKQXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:23:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33688 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349952AbiAKQXt (ORCPT
+        id S1349947AbiAKQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:26:16 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49858
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241083AbiAKQ0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:23:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 11 Jan 2022 11:26:15 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEE4B616CE;
-        Tue, 11 Jan 2022 16:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA26C36AEB;
-        Tue, 11 Jan 2022 16:23:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641918228;
-        bh=iT43KF0jKXBgSZE+OciUjd6hHjJUR7L0kvKPGKl7auQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=TvF1xsGbGzMVPDFeMhjz94V1sGJPbcpSrDftTUWEG15HSooUh1vA9bru/w+ejAS+g
-         AOStluoI5CImvL7+l+70/DIul7GAYclbhR/WgldjZg0ftzQ10ja3ePr9jH+AIBIY9B
-         sO5OLmkWGHYJmC9t/HyKINgNZv5hVyOFvdl/YsbW3t5hw/ioXdrHTRPkp680vKoLs3
-         uB0IYQMlId41+OKFSFah4awUfDFBOGxCkBGC8pOSs9yVPLj3dWLfgtL5FeAg+BCdMm
-         sSDyNdBrlISqVPS0gavUVS4tCh825XYUrXA+h5/k79QHNggq5iXw6Y2tVlrXVTbIcB
-         qXwhav8nO/mQw==
-Date:   Tue, 11 Jan 2022 10:23:46 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ming Wang <wangming01@loongson.cn>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] misc: pci_endpoint_test: Use a semicolon as the end
- of the statement.
-Message-ID: <20220111162346.GA146958@bhelgaas>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C54063F32E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 16:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641918373;
+        bh=puOvobGfY/I3hOBitRLCMcxZnTzU14JJR6HhloQSBP0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=e39H7Dw8YsS92DohieevTxyA69xVbUM0TbrXSpONEBvzSsoTnFJeutzTe/xv/RXf/
+         cBwIYrp/k5tb/x0tVTj/UZcmL2SqERVl9FL3l4W5ojpZ13BfupfQfiHuNBSzCe8/Gw
+         wkNFyXwHIGVUxCmPeI9Cc71iM2sIEdP7/uIItDVGd4Fhb0qUrYe2Bx/mcFpeDDYbCe
+         NwDETKOdg6TosX+tem+fJv4pXe7v/ZIWBGFGS0KE8Uksj4hDcpQKduQ1LXbVSSs31K
+         pqG/nrxNAguLEocQJSfrIXSoSWHB5+fzWZX9GEhLNN/Xn/WqZfC7QPzmDWVHHej2sg
+         WwEr2qpJ5BVKQ==
+Received: by mail-ed1-f69.google.com with SMTP id z10-20020a05640235ca00b003f8efab3342so13796213edc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:26:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=puOvobGfY/I3hOBitRLCMcxZnTzU14JJR6HhloQSBP0=;
+        b=VcRfDjma/lHP55MQ+hj6uSklkc91UIhwTXi1FideTMy3ygtY9maDloGqkKqGWyZl4n
+         KCVRItKI4W68EuphlGtMLpK8ec70x/X0XwqRGUZg22yT7pAMNLvdzNyxPGMzta3VDPtG
+         QBJGPinuTzxj9K0WDjE84+h+ywWUPEVKAqkpCZrRW6IVwo+N4pw3rvS0KUmc7eplcAAg
+         ZWp9cMKE+PNV+IiGQHa7u3HiKgwnd8DCRE+r8Sp3Z+9xkBWKgbrR6LcA8GepJzktys1P
+         g3O67ijTvukZTzgNP3inCLTF+9h5lmDmWbT71B45UCI4VxOtfxtK383GDKJC/YkmcMug
+         vsQg==
+X-Gm-Message-State: AOAM530lYuP4NsESNRGOqo+jGCegPjeXLdiPFXLS30/aDDb1Zhr7XUbn
+        eJn8sq3ANlg+CcWUuzqcQpgsgEl86J++/sUP7vavmU+JJ+0hCDcVGj+43A6Ha9YCiaebPTVGx3b
+        9/WQF0jIW1r7FgU4YPvLjcdxiDwZItal1krUVNTg+zw==
+X-Received: by 2002:a17:906:70b:: with SMTP id y11mr4245185ejb.364.1641918373508;
+        Tue, 11 Jan 2022 08:26:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw0WB7kXHdSOBmqAzj8OY2NGoRe81KUh+8ODpxEz+TNyF7Q2q490El0I+0sV/r9OOnYaBP5zg==
+X-Received: by 2002:a17:906:70b:: with SMTP id y11mr4245172ejb.364.1641918373301;
+        Tue, 11 Jan 2022 08:26:13 -0800 (PST)
+Received: from [192.168.0.25] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id e18sm5155101edq.77.2022.01.11.08.26.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 08:26:12 -0800 (PST)
+Message-ID: <585a7c40-ede2-cadb-6f64-04477b3d93e3@canonical.com>
+Date:   Tue, 11 Jan 2022 17:26:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1641632977-6588-1-git-send-email-wangming01@loongson.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 3/4] regulator: dt-bindings: maxim,max77693: convert to
+ dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-4-krzysztof.kozlowski@canonical.com>
+ <YdRn5cvksYXK4icV@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YdRn5cvksYXK4icV@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 05:09:37PM +0800, Ming Wang wrote:
-> Even so, there is no syntax error. But, this may be a
-> clerical error. ';' are more appropriate than ','.
+On 04/01/2022 16:29, Rob Herring wrote:
+> On Tue, Dec 28, 2021 at 05:39:29PM +0100, Krzysztof Kozlowski wrote:
+>> Convert the regulator bindings of Maxim MAX77693 MUIC to DT schema format.
+>> The existing bindings were defined in ../bindings/mfd/max77693.txt.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  .../bindings/regulator/maxim,max77693.yaml    | 49 +++++++++++++++++++
+>>  1 file changed, 49 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>> new file mode 100644
+>> index 000000000000..81242c8cd77c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>> @@ -0,0 +1,49 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/regulator/maxim,max77693.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim MAX77693 MicroUSB and Companion Power Management IC regulators
+>> +
+>> +maintainers:
+>> +  - Chanwoo Choi <cw00.choi@samsung.com>
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> +
+>> +description: |
+>> +  This is a part of device tree bindings for Maxim MAX77693 MicroUSB Integrated
+>> +  Circuit (MUIC).
+>> +
+>> +  See also Documentation/devicetree/bindings/mfd/maxim,max77693.yaml for
+>> +  additional information and example.
+>> +
+>> +patternProperties:
+>> +  "^ESAFEOUT[12]$":
+>> +    type: object
+>> +    $ref: regulator.yaml#
+>> +    unevaluatedProperties: false
+>> +    description: |
+>> +      Safeout LDO regulator.
+>> +
+>> +    properties:
+>> +      regulator-min-microvolt: true
+>> +      regulator-max-microvolt: true
 > 
-> Signed-off-by: Ming Wang <wangming01@loongson.cn>
+> If you want to define which properties are valid from regulator.yaml, 
+> then you need to define all of them (regulator-name is missing), and use 
+> 'additionalProperties: false'. Or you can just drop these. 
+> 
+>> +
+>> +    required:
+>> +      - regulator-name
+>> +
+>> +  "^CHARGER$":
+> 
+> Fixed string, not a pattern. Place under 'properties'.
+> 
 
-Applied to pci/misc for v5.17, thanks!
+Thanks, I'll fix both.
 
-> ---
->  drivers/misc/pci_endpoint_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-> index 2ed7e3a..8f786a2 100644
-> --- a/drivers/misc/pci_endpoint_test.c
-> +++ b/drivers/misc/pci_endpoint_test.c
-> @@ -865,7 +865,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
->  		goto err_release_irq;
->  	}
->  	misc_device->parent = &pdev->dev;
-> -	misc_device->fops = &pci_endpoint_test_fops,
-> +	misc_device->fops = &pci_endpoint_test_fops;
->  
->  	err = misc_register(misc_device);
->  	if (err) {
-> -- 
-> 1.8.3.1
-> 
+
+Best regards,
+Krzysztof

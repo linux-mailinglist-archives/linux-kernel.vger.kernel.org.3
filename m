@@ -2,152 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0383D48AA04
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B0948AA08
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349101AbiAKJAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236626AbiAKJAA (ORCPT
+        id S1349120AbiAKJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:00:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:41354 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349097AbiAKJAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:00:00 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEA6C06173F;
-        Tue, 11 Jan 2022 01:00:00 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id o3-20020a9d4043000000b0058f31f4312fso17907786oti.1;
-        Tue, 11 Jan 2022 01:00:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bpi5yDslZk96fGP0AiL8cVK6M5zVjolT/YXQK+TShT4=;
-        b=eFUOEGUfVwr+KA/dAq1Chz/htbufTyGyC7BwTd95/DvX090ijtoqnldGYGbSLkuQXR
-         oKJNgV4K47rMHkjMou5rvfrMuJuzjDE5uQezF+MDd7CDjmcIaU2JdeJ73owOQgvs86R3
-         ftz0GuTOdgUMqpVHms2F0Pnaiwy3byXKNnCACETNPdd+k2I9idlRXH91q3y67mRS6jeW
-         9JQEOTxitLAtNw2x2X1JUjZdv0GhshpHr47QX3jyb00sv/kvKQT/Z3RAGtjJ44lJ4dyv
-         BUIm1uUaV3u102hBloRdhg0b1QztiPlefiyGVOGhoMztdTG3JyhCCMd68lHZrDsBTG16
-         eNmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bpi5yDslZk96fGP0AiL8cVK6M5zVjolT/YXQK+TShT4=;
-        b=r7m9ueL9pK91lCrDK/B6KViuEmkGILXFpj1GwBeyvz+IEsPcLZDc7bC5w6RKlVD2/J
-         SqxGRq0qkKLCRTD1CBA62GwkjoNV3SkeU0oUL1kFmBunY+RSwz8uyHWLLgljvHzLKcHR
-         hIo3murZg71Vd0lq8hWZsciduYKm/AI/H/DowKuBaBsEzdB44hiUnrMkLZt0gYiLxHba
-         rA+h0uOmYEcri3gZDdlfnKyKzgsR/LKyh+toaIMfPDMXOLYaIn854TU+6tIM6c7ThhEu
-         erq4q4YhbimXD9Heqei3Gn5QfxH/8d7m62XZSE4Jmh90x+4nccCwKu0hD5MH9uM+799f
-         sW8g==
-X-Gm-Message-State: AOAM533xfb9j1u2gd0ej/DRhaMd3UyOkiQ3eWh7ZEQDQ256zOzQ2ldH/
-        zNiNTiP+clN4YjAzqRgqENcOqYKkDue82Up+5D0=
-X-Google-Smtp-Source: ABdhPJxBtMctMZ2FSy/SM0hSNvXMghYRzhYObXWQyWPEWXbR2jnbEHYpfydwBbZo6+51vTDmuc3Po1sBuk5I6P4MSkc=
-X-Received: by 2002:a9d:5190:: with SMTP id y16mr2674164otg.189.1641891599946;
- Tue, 11 Jan 2022 00:59:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20211210154332.11526-1-brijesh.singh@amd.com> <20211210154332.11526-25-brijesh.singh@amd.com>
- <cd8f3190-75b3-1fd5-000a-370e6c53f766@intel.com> <20211213154753.nkkxk6w25tdnagwt@amd.com>
-In-Reply-To: <20211213154753.nkkxk6w25tdnagwt@amd.com>
-From:   Chao Fan <fanchao.njupt@gmail.com>
-Date:   Tue, 11 Jan 2022 16:59:49 +0800
-Message-ID: <CAEdG=2VOcMkyRdDRy=L6NJ1728n_jUYWv_W6Y0-GaHStgGfsLw@mail.gmail.com>
-Subject: Re: [PATCH v8 24/40] x86/compressed/acpi: move EFI system table
- lookup to helper
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, fanc.fnst@cn.fujitsu.com,
-        j-nomura@ce.jp.nec.com, bp@suse.de,
-        Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Tue, 11 Jan 2022 04:00:35 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1CD5A1F3B6;
+        Tue, 11 Jan 2022 09:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641891634; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OeasfAigrOwxNyBh17klLqWDReCRAIT8+9bALhOBBTE=;
+        b=OMEOsmUPz8Sg5EGy0PNoyTTlWBHkVa2PxtC09u3JHkWldsYJD3LDsOF2LQXxRkUQ+wrIz9
+        kcASeAyImPhvK10QPGGJBnFhD4+6Ifeni3fz+rJutCz7kPryrVDu9fMuWjvffV0B/2cRYu
+        QcGlA6B7IXEkYO+V2VC7xQyW7LQxBQ4=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 49F73A3B9B;
+        Tue, 11 Jan 2022 09:00:33 +0000 (UTC)
+Date:   Tue, 11 Jan 2022 10:00:32 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <Yd1HMDqiySwVxbF7@dhcp22.suse.cz>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
+ <Ydg8AeE6JIUnC+ps@dhcp22.suse.cz>
+ <YdjOazilBEkdUT7x@google.com>
+ <YdxSUuDc3OC4pe+f@dhcp22.suse.cz>
+ <Ydza/zXKY9ATRoh6@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydza/zXKY9ATRoh6@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, I am this Chao Fan, and <fanc.fnst@cn.fujitsu.com> won't be used again.
-Please add me with fanchao.njupt@gmail.com
-Many thanks.
+On Mon 10-01-22 18:18:55, Yu Zhao wrote:
+> On Mon, Jan 10, 2022 at 04:35:46PM +0100, Michal Hocko wrote:
+> > On Fri 07-01-22 16:36:11, Yu Zhao wrote:
+> > > On Fri, Jan 07, 2022 at 02:11:29PM +0100, Michal Hocko wrote:
+> > > > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
+> > > > [...]
+> > > > > +static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
+> > > > > +{
+> > > > > +	struct mem_cgroup *memcg;
+> > > > > +	bool success = false;
+> > > > > +	unsigned long min_ttl = READ_ONCE(lru_gen_min_ttl);
+> > > > > +
+> > > > > +	VM_BUG_ON(!current_is_kswapd());
+> > > > > +
+> > > > > +	current->reclaim_state->mm_walk = &pgdat->mm_walk;
+> > > > > +
+> > > > > +	memcg = mem_cgroup_iter(NULL, NULL, NULL);
+> > > > > +	do {
+> > > > > +		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
+> > > > > +
+> > > > > +		if (age_lruvec(lruvec, sc, min_ttl))
+> > > > > +			success = true;
+> > > > > +
+> > > > > +		cond_resched();
+> > > > > +	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)));
+> > > > > +
+> > > > > +	if (!success && mutex_trylock(&oom_lock)) {
+> > > > > +		struct oom_control oc = {
+> > > > > +			.gfp_mask = sc->gfp_mask,
+> > > > > +			.order = sc->order,
+> > > > > +		};
+> > > > > +
+> > > > > +		if (!oom_reaping_in_progress())
+> > > > > +			out_of_memory(&oc);
+> > > > > +
+> > > > > +		mutex_unlock(&oom_lock);
+> > > > > +	}
+> > > > 
+> > > > Why do you need to trigger oom killer from this path? Why cannot you
+> > > > rely on the page allocator to do that like we do now?
+> > > 
+> > > This is per desktop users' (repeated) requests. The can't tolerate
+> > > thrashing as servers do because of UI lags; and they usually don't
+> > > have fancy tools like oomd.
+> > > 
+> > > Related discussions I saw:
+> > > https://github.com/zen-kernel/zen-kernel/issues/218
+> > > https://lore.kernel.org/lkml/20101028191523.GA14972@google.com/
+> > > https://lore.kernel.org/lkml/20211213051521.21f02dd2@mail.inbox.lv/
+> > > https://lore.kernel.org/lkml/54C2C89C.8080002@gmail.com/
+> > > https://lore.kernel.org/lkml/d9802b6a-949b-b327-c4a6-3dbca485ec20@gmx.com/
+> > 
+> > I do not really see any arguments why an userspace based trashing
+> > detection cannot be used for those. Could you clarify?
+> 
+> It definitely can be done. But who is going to do it for every distro
+> and all individual users? AFAIK, not a single distro provides such a
+> solution for desktop/laptop/phone users.
 
-Thanks,
-Chao Fan
+If existing interfaces provides sufficient information to make those
+calls then I would definitely prefer a userspace solution.
 
-Michael Roth <michael.roth@amd.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=8814=E6=
-=97=A5=E5=91=A8=E4=BA=8C 11:46=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Dec 10, 2021 at 10:54:35AM -0800, Dave Hansen wrote:
-> > On 12/10/21 7:43 AM, Brijesh Singh wrote:
-> > > +/*
-> > > + * Helpers for early access to EFI configuration table
-> > > + *
-> > > + * Copyright (C) 2021 Advanced Micro Devices, Inc.
-> > > + *
-> > > + * Author: Michael Roth <michael.roth@amd.com>
-> > > + */
-> >
-> > It doesn't seem quite right to slap this copyright on a file that's ful=
-l
-> > of content that came from other files.  It would be one thing if
-> > arch/x86/boot/compressed/acpi.c had this banner in it already.  Also, a
->
-> Yah, acpi.c didn't have any copyright banner so I used my 'default'
-> template for new files here to cover any additions, but that does give
-> a misleading impression.
->
-> I'm not sure how this is normally addressed, but I'm planning on just
-> continuing the acpi.c tradition of *not* adding copyright notices for new
-> code, and simply document that the contents of the file are mostly moveme=
-nt
-> from acpi.c
->
-> > arch/x86/boot/compressed/acpi.c had this banner in it already.  Also, a
-> > bunch of the lines in this file seem to come from:
-> >
-> >       commit 33f0df8d843deb9ec24116dcd79a40ca0ea8e8a9
-> >       Author: Chao Fan <fanc.fnst@cn.fujitsu.com>
-> >       Date:   Wed Jan 23 19:08:46 2019 +0800
->
-> AFAICT the full author list for the changes in question are, in
-> alphabetical order:
->
->   Chao Fan <fanc.fnst@cn.fujitsu.com>
->   Junichi Nomura <j-nomura@ce.jp.nec.com>
->   Borislav Petkov <bp@suse.de>
->
-> Chao, Junichi, Borislav,
->
-> If you would like to be listed as an author in efi.c (which is mainly jus=
-t a
-> movement of EFI config table parsing code from acpi.c into re-usable help=
-er
-> functions in efi.c), please let me know and I'll add you.
->
-> Otherwise, I'll plan on adopting the acpi.c precedent for this as well, w=
-hich
-> is to not list individual authors, since it doesn't seem right to add Aut=
-hor
-> fields retroactively without their permission.
+> And also there is the theoretical question how reliable a userspace
+> solution can be. What if this usespace solution itself gets stuck in
+> the direct reclaim path. I'm sure if nobody has done some search to
+> prove or debunk it.
+
+I have to confess I haven't checked oomd or other solutions but with a
+sufficient care (all the code mlocked in + no allocations done while
+collecting data) I believe this should be achieveable.
+
+> In addition, what exactly PSI values should be used on different
+> models of consumer electronics? Nobody knows. We have a team working
+> on this and we haven't figured it out for all our Chromebook models.
+
+I believe this is a matter of tuning for a specific deployment. We do
+not have only psi but also refault counters that can be used.
+
+> As Andrew said, "a blunt instrument like this would be useful".
+> https://lore.kernel.org/lkml/20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org/
+> 
+> I'd like to have less code in kernel too, but I've learned never to
+> walk over users. If I remove this and they come after me asking why,
+> I'd have a hard time convincing them.
+> 
+> > Also my question was pointing to why out_of_memory is called from the
+> > reclaim rather than the allocator (memcg charging path). It is the
+> > caller of the reclaim to control different reclaim strategies and tell
+> > when all the hopes are lost and the oom killer should be invoked. This
+> > allows for a different policies at the allocator level and this change
+> > will break that AFAICS. E.g. what if the underlying allocation context
+> > is __GFP_NORETRY?
+> 
+> This is called in kswapd only, and by default (min_ttl=0) it doesn't
+> do anything. So __GFP_NORETRY doesn't apply.
+
+My bad. I must have got lost when traversing the code but I can see you
+are enforcing that by a VM_BUG_ON. So the limited scope reclaim is not a
+problem indeed.
+
+> The question would be
+> more along the lines of long-term ABI support.
+> 
+> And I'll add the following comments, if you think we can keep this
+> logic:
+>    OOM kill if every generation from all memcgs is younger than min_ttl.
+>    Another theoretical possibility is all memcgs are either below min or
+>    ineligible at priority 0, but this isn't the main goal.
+> 
+> (Please read my reply at the bottom to decide whether we should keep
+>  it or not. Thanks.)
+> 
+> > > >From patch 8:
+> > >   Personal computers
+> > >   ------------------
+> > >   :Thrashing prevention: Write ``N`` to
+> > >    ``/sys/kernel/mm/lru_gen/min_ttl_ms`` to prevent the working set of
+> > >    ``N`` milliseconds from getting evicted. The OOM killer is invoked if
+> > >    this working set can't be kept in memory. Based on the average human
+> > >    detectable lag (~100ms), ``N=1000`` usually eliminates intolerable
+> > >    lags due to thrashing. Larger values like ``N=3000`` make lags less
+> > >    noticeable at the cost of more OOM kills.
+> > 
+> > This is a very good example of something that should be a self contained
+> > patch with its own justification.
+> 
+> Consider it done.
+> 
+> > TBH it is really not all that clear to
+> > me that we want to provide any user visible knob to control OOM behavior
+> > based on a time based QoS.
+> 
+> Agreed, and it didn't exist until v4, i.e., after I was demanded to
+> provide it for several times.
+> 
+> For example:
+> https://github.com/zen-kernel/zen-kernel/issues/223
+> 
+> And another example:
+>    Your Multigenerational LRU patchset is pretty complex and
+>    effective, but does not eliminate thrashing condition fully on an
+>    old PCs with slow HDD.
+> 
+>    I'm kindly asking you to cooperate with hakavlad if it's possible
+>    and maybe re-implement parts of le9 patch in your patchset wherever
+>    acceptable, as they are quite similar in the core concept.
+> 
+> This is excerpt of an email from iam@valdikss.org.ru, and he has
+> posted demo videos in this discussion:
+> https://lore.kernel.org/lkml/2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru/
+
+That is all an interesting feedback but we should be really craful about
+ABI constrains and future maintainability of the knob. I still stand
+behind my statement that kernel should implement such features only if
+it is clear that we cannot really implement a similar logic in the
+userspace.
+
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,118 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EAC48ADDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64E948ADED
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239861AbiAKMuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:50:09 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35736 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239820AbiAKMuI (ORCPT
+        id S240049AbiAKMwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238734AbiAKMwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:50:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70638B81A8F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0388C36AF2;
-        Tue, 11 Jan 2022 12:50:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UBAbYeA9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641905404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=erS4Z6OHpa1Qwgxxt0kXQo12tYB13k/8yMqTkzv/xOo=;
-        b=UBAbYeA9dy6d+8aXC1o/2Roz3bB8PFvxGd6n9IPc5v22UmnsSwxgUdkIPwVdc685s5o8lR
-        Q+e2MzMvNt4m3SF+PtXiONwSdqyG8HTkPk00e+0/55S5HgK4DsML3eq5a32gciIJCfk3Il
-        BKkKa3DYG6KFmdhKK3Jx82U6kr6vnII=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 43480a02 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 11 Jan 2022 12:50:04 +0000 (UTC)
-Date:   Tue, 11 Jan 2022 13:50:02 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Theodore Tso <tytso@mit.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
-Message-ID: <Yd18+iQ8zicsSPa0@zx2c4.com>
-References: <20211223141113.1240679-1-Jason@zx2c4.com>
- <20211223141113.1240679-2-Jason@zx2c4.com>
- <CAMuHMdU0spv9X_wErkBBWQ9kV9f1zE_YNcu5nPbTG_64Lh_h0w@mail.gmail.com>
- <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
+        Tue, 11 Jan 2022 07:52:03 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ADCC06173F;
+        Tue, 11 Jan 2022 04:52:02 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id w22so11711749iov.3;
+        Tue, 11 Jan 2022 04:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=L07VkrmeA+z0Dq25akT1C/42p2m2KsG0KFfXsB65F+E=;
+        b=KVbAxv4hk7g44+wTW1FXgIN0jc3529uBPErLALVFTHJd/01uNK378q2TjZEr3L7q4x
+         hZF675Rd2Y2LYGZoNTyV1m0y9LAtsTq7J7BzCqkmSaf4vN8Hz72D6m3Rskhp31itYOpq
+         EFWya65EHqwjV8rzEOCceEiTvQuOTQc9Z1Rxpmg32LlMv0Wm8rWuGifeD/Ji+f2DYYvb
+         CYJT2T2GQvZXKoLcB7wnoXRd8FTaE9DKgRj8sGZybYwdlDk07L7oBO0j5KtEW0+dMMDT
+         sJ35kKjDxqP1BURI/2bjfINynG3WOVC2dQ61glqr/F+C4SiTJ6p60Rf0IewAZgLr9EEs
+         mJwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L07VkrmeA+z0Dq25akT1C/42p2m2KsG0KFfXsB65F+E=;
+        b=p1Y7H8d3HQJUs3xqQAv8qShgqV5/1o8M9+M39JHKlMbDOVsJ/oN0aWjKqYh87aMrKR
+         rqfictauQEScc/pyWxbshFpZ5QTWPZOUMrpvk85FtMzcKXMs0gm50R3pkhB4LeOCuxtJ
+         4RGYZIpkpYsnVMloJCpeiBqOnvXqHflutL6IRju48MIB0EnHQhBQNeNJC7/G7akvYMM4
+         SMG0vg63Ih00fCI1jYTNjTU9PQ1hMD26nGxy3iLEZdrxwGyvpp3IhjxI3v0Z7Gr+nKVS
+         ZTx5pfV2HHSrCxziXgWlQgHR39mYaxPcV0IPeVRXiqVLNqLJO1u6NA2OfvaMdYBsr66E
+         jrXA==
+X-Gm-Message-State: AOAM532XiE7+Dli3O1RUIkuCZOMCKms+1P5iZWMDN2nsMp1rr92NHpRj
+        PgQzgpxsjNx25wTTm2pX7VFF0nzfUeqgj2nuoYI=
+X-Google-Smtp-Source: ABdhPJyxJfS2OANCnsOmhmWWIrzth6lFpAQfsgqnKXaXvlO0z7E1fpSrYnFTKTqgzVZmFvHTUGHckB3nRHSsYj2XP04=
+X-Received: by 2002:a5d:9496:: with SMTP id v22mr2066056ioj.36.1641905522150;
+ Tue, 11 Jan 2022 04:52:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
+References: <20220110122929.647573-1-xu.xin16@zte.com.cn> <20220110123256.647748-1-xu.xin16@zte.com.cn>
+In-Reply-To: <20220110123256.647748-1-xu.xin16@zte.com.cn>
+From:   Alex Shi <seakeel@gmail.com>
+Date:   Tue, 11 Jan 2022 20:51:26 +0800
+Message-ID: <CAJy-AmmhXGTctT050aqV4hvyx33pFb+sAMXRbm+wXxgv-XR5CQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] docs/zh_CN: Add zh_CN/vm/index.rst
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     Alex Shi <alexs@kernel.org>, xu.xin16@zte.com.cn,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 1:28 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> If you're really quite concerned about m68k code size, I can probably
-> do some things to reduce that. For example, blake2s256_hmac is only
-> used by wireguard and it could probably be made local there. And with
-> some trivial loop re-rolling, I can shave off another 2300 bytes. And
-> I bet I can find a few other things too. The question is: how
-> important is this to you?
+On Mon, Jan 10, 2022 at 8:33 PM <cgel.zte@gmail.com> wrote:
+>
+> From: xu xin <xu.xin16@zte.com.cn>
+>
+> This patch adds zh_CN/vm/index.rst.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> ---
+>  Documentation/translations/zh_CN/vm/index.rst | 49 +++++++++++++++++++++=
+++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/translations/zh_CN/vm/index.rst
+>
+> diff --git a/Documentation/translations/zh_CN/vm/index.rst b/Documentatio=
+n/translations/zh_CN/vm/index.rst
+> new file mode 100644
+> index 0000000..27f8405
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/vm/index.rst
+> @@ -0,0 +1,49 @@
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:=E5=8E=9F=E6=96=87Original:    Documentation/vm/index.rst
+> +
+> +:=E8=AF=91=E8=80=85Translator:  =E5=BE=90=E9=91=AB xu xin <xu.xin16@zte.=
+com.cn>
+> +
+> +:=E6=A0=A1=E8=AF=91Proofreader: =E6=9D=A8=E6=B4=8B Yang Yang <yang.yang2=
+9@zte.com.cn>
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Linux=E5=86=85=E5=AD=98=E7=AE=A1=E7=90=86=E7=9A=84=E6=96=87=E6=A1=A3
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +=E8=BF=99=E6=98=AF=E4=B8=80=E4=B8=AA=E5=85=B3=E4=BA=8ELinux=E5=86=85=E5=
+=AD=98=E7=AE=A1=E7=90=86=EF=BC=88mm=EF=BC=89=E5=AD=90=E7=B3=BB=E7=BB=9F=E7=
+=9A=84=E6=96=87=E6=A1=A3=E9=9B=86=E5=90=88=EF=BC=8C=E5=85=B6=E5=86=85=E9=83=
+=A8=E5=85=B7=E6=9C=89=E4=B8=8D=E5=90=8C=E5=B1=82=E7=BA=A7=E7=9A=84=E8=AF=A6=
+=E7=BB=86=E4=BF=A1=E6=81=AF=EF=BC=8C
+> +=E5=8C=85=E6=8B=AC=E6=B3=A8=E9=87=8A=E5=92=8C=E9=82=AE=E4=BB=B6=E5=88=97=
+=E8=A1=A8=EF=BC=8C=E7=94=A8=E4=BA=8E=E8=AF=A6=E7=BB=86=E6=8F=8F=E8=BF=B0=E6=
+=95=B0=E6=8D=AE=E7=BB=93=E6=9E=84=E5=92=8C=E7=AE=97=E6=B3=95=E3=80=82=E5=A6=
+=82=E6=9E=9C=E6=82=A8=E6=AD=A3=E5=9C=A8=E5=AF=BB=E6=89=BE=E6=9C=89=E5=85=B3=
+=E7=AE=80=E5=8D=95=E5=86=85=E5=AD=98=E5=88=86
+> +=E9=85=8D=E7=9A=84=E5=BB=BA=E8=AE=AE=EF=BC=8C=E8=AF=B7=E5=8F=82=E9=98=85=
+:ref:`memory_allocation` =E3=80=82=E6=9C=89=E5=85=B3=E6=8E=A7=E5=88=B6=E5=
+=92=8C=E8=B0=83=E6=95=B4=E6=8C=87=E5=8D=97=EF=BC=8C=E8=AF=B7=E5=8F=82=E9=98=
+=85
+> +:doc: `admin guide <../admin-guide/mm/index>` =E3=80=82
 
-And with another trick (see below), another extra 1000 bytes or so
-shaved off. Aside from moving blake2s256_hmac, I'm not really super
-enthusiastic about making these changes, but depending on how important
-this is to you, maybe we can make something work. There are probably
-additional possibilities too with the code.
+You have a Chinese version mm/index, link to it. :)
 
-====
+Thanks
+Alex
 
-diff --git a/lib/crypto/blake2s-generic.c b/lib/crypto/blake2s-generic.c
-index 75ccb3e633e6..8e3c6372363a 100644
---- a/lib/crypto/blake2s-generic.c
-+++ b/lib/crypto/blake2s-generic.c
-@@ -46,7 +46,7 @@ void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
- {
- 	u32 m[16];
- 	u32 v[16];
--	int i;
-+	int i, j;
- 
- 	WARN_ON(IS_ENABLED(DEBUG) &&
- 		(nblocks > 1 && inc != BLAKE2S_BLOCK_SIZE));
-@@ -76,29 +76,11 @@ void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
- 	b = ror32(b ^ c, 7); \
- } while (0)
- 
--#define ROUND(r) do { \
--	G(r, 0, v[0], v[ 4], v[ 8], v[12]); \
--	G(r, 1, v[1], v[ 5], v[ 9], v[13]); \
--	G(r, 2, v[2], v[ 6], v[10], v[14]); \
--	G(r, 3, v[3], v[ 7], v[11], v[15]); \
--	G(r, 4, v[0], v[ 5], v[10], v[15]); \
--	G(r, 5, v[1], v[ 6], v[11], v[12]); \
--	G(r, 6, v[2], v[ 7], v[ 8], v[13]); \
--	G(r, 7, v[3], v[ 4], v[ 9], v[14]); \
--} while (0)
--		ROUND(0);
--		ROUND(1);
--		ROUND(2);
--		ROUND(3);
--		ROUND(4);
--		ROUND(5);
--		ROUND(6);
--		ROUND(7);
--		ROUND(8);
--		ROUND(9);
--
-+		for (i = 0; i < 10; ++i) {
-+			for (j = 0; j < 8; ++j)
-+				G(i, j, v[j % 4], v[((j + (j / 4)) % 4) + 4], v[((j + 2 * (j / 4)) % 4) + 8], v[((j + 3 * (j / 4)) % 4) + 12]);
-+		}
- #undef G
--#undef ROUND
- 
- 		for (i = 0; i < 8; ++i)
- 			state->h[i] ^= v[i] ^ v[i + 8];
-
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   ksm
+> +
+> +Todolist:
+> +   active_mm
+> +   arch_pgtable_helpers
+> +   balance
+> +   damon/index
+> +   free_page_reporting
+> +   frontswap
+> +   highmem
+> +   hmm
+> +   hwpoison
+> +   hugetlbfs_reserv
+> +   memory-model
+> +   mmu_notifier
+> +   numa
+> +   overcommit-accounting
+> +   page_migration
+> +   page_frags
+> +   page_owner
+> +   page_table_check
+> +   remap_file_pages
+> +   slub
+> +   split_page_table_lock
+> +   transhuge
+> +   unevictable-lru
+> +   vmalloced-kernel-stacks
+> +   z3fold
+> +   zsmalloc
+> --
+> 2.15.2
+>
+>

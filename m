@@ -2,167 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C41848AF94
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A3A48AF9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242083AbiAKObD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:31:03 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:48328 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240845AbiAKObB (ORCPT
+        id S242148AbiAKOdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240845AbiAKOdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:31:01 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 48D621F3B8;
-        Tue, 11 Jan 2022 14:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641911460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1eW5ogIRA+3JJSpuPtEkeBh+OEyLoW7/5NuZZjnwaAw=;
-        b=ek/XVNEUf/iS5hOX5nxXhjB4npCGu9WGcTQezhzo19aHtAALQxs1e9vnyshShaWaf08WVi
-        Pm5DgGPrHc1yuKswS/h7Caal9Uie53D52FLt2nsCPGcnH4VXLzitynrnJaoj8w9cJ4oTs7
-        NAARLYDwTJIE5YdeEcEK8F4UibneD/g=
-Received: from alley.suse.cz (unknown [10.100.224.162])
-        by relay2.suse.de (Postfix) with ESMTP id F32B9A3B88;
-        Tue, 11 Jan 2022 14:30:59 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Chris Down <chris@chrisdown.name>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Scull <ascull@google.com>,
-        Will Deacon <will@kernel.org>, Jason Baron <jbaron@akamai.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [RFC 2/2] printk/bug: Remove cyclic dependency between bug.h and printk.h
-Date:   Tue, 11 Jan 2022 15:30:46 +0100
-Message-Id: <20220111143046.14680-3-pmladek@suse.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220111143046.14680-1-pmladek@suse.com>
-References: <20220111143046.14680-1-pmladek@suse.com>
+        Tue, 11 Jan 2022 09:33:43 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEDEC06173F;
+        Tue, 11 Jan 2022 06:33:43 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id fo11so18469066qvb.4;
+        Tue, 11 Jan 2022 06:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qB2djtGD1hxaP7G4jORmDPeGTXVhGoKRKBRlWclrIhQ=;
+        b=Te3hb8DmPGiSA2KdYMWN/gzL6+L5ZjxcE+Nc1AjO8Xt8pliJOMUugiSLC146zLEFH9
+         n34fRaesqq8N3VVRRUdyHSV3bply69Ytsdb66QFJvhV7kfPm+KZenM4ugLQuA2X8nogs
+         d/Kn1nlUrCEqDUXYBCrYKzq7ScY5A6wRq1B/Y7wxxCjc8719zTHXzy1oK9VZHXcY/Dew
+         ixKwcYlhFfL+aJoS5baGhVhkBJZarB5ey97T1qU0dgHRum+gs2FLCRvC/9BiO9SIhvA+
+         5Um2OIUJbZqnJk4p2OW7Py83ZMZl4xlZhncSKGNUqGyEpl41XqNh5JOGSWGD27sXu9Cz
+         eC1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qB2djtGD1hxaP7G4jORmDPeGTXVhGoKRKBRlWclrIhQ=;
+        b=zeE2WGenLsU5B03z/DPSMvfyxaLSasjTvjWGR5wU4azGT0x3UYSG0zV2quYtCcXpxG
+         TOk6N+TtIKqlsgH+KQ0rXogIS5G+8QK1XicWwtIKcYOhzmYCcHzPlYKBkOd1+K+d3abd
+         9kWJaoRLs79Jdj0g/XqT9IHf8TeRRzyykRMr7eBYaz2aT+3lpAxixHIIUAczkMyEMJTG
+         pu4SURc+zyidZmJFLRYXwcjS47R8emdRp2amNSzm0L22sc2V5+7tB93DZIdHMCw0Sj5N
+         hW5WCBq4UGTDMS1zNTNewdhxPBQJxP/UoNcJ44AH3WHHG7DxLokuo8tRDfxItreuw21p
+         TtMQ==
+X-Gm-Message-State: AOAM532EC9cCx0ImIa6fWNyjsgWcEBNSm8jbJmr3u0jLfTVb6byloONz
+        capW8i3kOU5aBoQwKqmuyyA=
+X-Google-Smtp-Source: ABdhPJwRDT+thhWsUzuSkCSHEmm6JDp8W5FFjDjHhHYNgAuu1e39JzqEStoEo1vuy0yxBb51btAd2A==
+X-Received: by 2002:ad4:596b:: with SMTP id eq11mr3867618qvb.16.1641911622049;
+        Tue, 11 Jan 2022 06:33:42 -0800 (PST)
+Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
+        by smtp.gmail.com with ESMTPSA id s21sm4768339qta.11.2022.01.11.06.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 06:33:41 -0800 (PST)
+Date:   Tue, 11 Jan 2022 09:33:38 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v12 07/16] iio: afe: rescale: add INT_PLUS_{MICRO,NANO}
+ support
+Message-ID: <Yd2VQkwle2+IiEAZ@shaak>
+References: <20220108205319.2046348-1-liambeguin@gmail.com>
+ <20220108205319.2046348-8-liambeguin@gmail.com>
+ <CAHp75Vdi2bvCEtxpezt5L5JhO=8D+Za++CbQ8AximFaLnxnqyg@mail.gmail.com>
+ <8046b39f-28c1-7e46-e27c-6b9bc8824e21@axentia.se>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8046b39f-28c1-7e46-e27c-6b9bc8824e21@axentia.se>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`make headerdep` reports many circular dependencies with the same
-pattern:
+On Sun, Jan 09, 2022 at 09:20:09PM +0100, Peter Rosin wrote:
+> Hi!
+> 
+> On 2022-01-09 13:48, Andy Shevchenko wrote:
+> > On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
+> >>
+> >> Some ADCs use IIO_VAL_INT_PLUS_{NANO,MICRO} scale types.
+> >> Add support for these to allow using the iio-rescaler with them.
+> > 
+> > ...
+> > 
+> >> +               mult = scale_type == IIO_VAL_INT_PLUS_NANO ? GIGA : MEGA;
+> >> +
+> >> +               /*
+> >> +                * For IIO_VAL_INT_PLUS_{MICRO,NANO} scale types if either *val
+> >> +                * OR *val2 is negative the schan scale is negative, i.e.
+> >> +                * *val = 1 and *val2 = -0.5 yields -1.5 not -0.5.
+> >> +                */
+> >> +               neg = *val < 0 || *val2 < 0;
+> >> +
+> >> +               tmp = (s64)abs(*val) * abs(rescale->numerator);
+> >> +               *val = div_s64_rem(tmp, abs(rescale->denominator), &rem);
+> >> +
+> >> +               tmp = (s64)rem * mult + (s64)abs(*val2) * abs(rescale->numerator);
+> >> +               tmp = div_s64(tmp, abs(rescale->denominator));
+> > 
+> > Isn't it too many repetitive abs() calls?
+> > 
+> > What about
+> > 
+> > // Create a macro and use for u16 (struct rn5t618_channel_ratios), s16
+> > (struct twl4030_prescale_divider_ratios), s32 (can be reused in struct
+> > rescale)
+> > struct u32_fract {
+> >   u32 numerator;
+> >   u32 denominator;
+> > };
+> > // (potential reuse in struct hclge_ptp_cycle) and so on...
+> > 
+> >   struct u32_fract fract = {
+> >     .numerator = abs(rescale->numerator),
+> >     .denominator = abs(rescale->denominator),
+> >   };
+> > 
+> > // obviously we can add a macro/inliner to abs() the fract struct and
+> > return original sign
+> > 
+> > and reuse fract.numerator, fract.denominator?
+> 
+> This feels a bit excessive when the "problem" is two extra abs calls.
+> I don't think the code will get any easier to read by changing
+> abs(rescale->denominator) into fract.denominator and with my maintainer
+> hat on, I vote for just letting the compiler exercise its CSE engine.
 
-In file included from linux/bug.h,
-                 from linux/jump_label.h:262
-                 from linux/dynamic_debug.h:6
-                 from linux/printk.h:504
-                 from asm-generic/bug.h:22
-                 from linux/bug.h:32 <-- here
+I agree with Peter here, and would rather keep it as is.
 
-It does not cause real problem because 'asm-generic/bug.h' uses only
-plain printk() and no_printk(). And these two functions are defined
-in 'printk.h' before 'dynamic_debug.h' is included.
+Liam
 
-There is no easy solution because all affected code does some inline
-tricks:
-
-  + printk() adds struct pi_entry metadata
-  + dynamic_pr_debug() adds struct _ddebug metadata
-  + static_branch_likely() adds assembly that realizes the jump
-  + BUG() prints __FILE__, __LINE__, __func__ where it is inlined
-
-One solution would be to modify BUG() and pass __FILE__, __LINE__,
-__func__ into a helper function implemented in a .c source file.
-It will not require including "printk.h" in "bug.h". The drawback
-is code complication.
-
-Alternative solution is to include "printk_core.h" and use the raw
-_printk(). The drawback is that the string will not be listed in
-printk index. But it will afftect only few architectires that do
-not define HAVE_ARCH_BUG.
-
-This patch uses the alternative solution because it seems to be
-easier to maintain. The BUG() definitions are already complicated
-enough thanks to all the ifdefs.
-
-Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- include/asm-generic/bug.h   |  4 ++--
- include/linux/printk.h      | 11 -----------
- include/linux/printk_core.h | 11 +++++++++++
- 3 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index edb0e2a602a8..140afb8bdfe7 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -19,7 +19,7 @@
- 
- #ifndef __ASSEMBLY__
- #include <linux/panic.h>
--#include <linux/printk.h>
-+#include <linux/printk_core.h>
- 
- #ifdef CONFIG_BUG
- 
-@@ -55,7 +55,7 @@ struct bug_entry {
-  */
- #ifndef HAVE_ARCH_BUG
- #define BUG() do { \
--	printk("BUG: failure at %s:%d/%s()!\n", __FILE__, __LINE__, __func__); \
-+	_printk("BUG: failure at %s:%d/%s()!\n", __FILE__, __LINE__, __func__); \
- 	barrier_before_unreachable(); \
- 	panic("BUG!"); \
- } while (0)
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index c20f55df7fa6..23530b0a2a07 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -123,17 +123,6 @@ struct va_format {
-  */
- #define DEPRECATED	"[Deprecated]: "
- 
--/*
-- * Dummy printk for disabled debugging statements to use whilst maintaining
-- * gcc's format checking.
-- */
--#define no_printk(fmt, ...)				\
--({							\
--	if (0)						\
--		printk(fmt, ##__VA_ARGS__);		\
--	0;						\
--})
--
- #ifdef CONFIG_EARLY_PRINTK
- extern asmlinkage __printf(1, 2)
- void early_printk(const char *fmt, ...);
-diff --git a/include/linux/printk_core.h b/include/linux/printk_core.h
-index a2b8727a2873..37fc0e13fdbd 100644
---- a/include/linux/printk_core.h
-+++ b/include/linux/printk_core.h
-@@ -6,6 +6,17 @@
- #include <linux/kern_levels.h>
- #include <linux/linkage.h>
- 
-+/*
-+ * Dummy printk for disabled debugging statements to use whilst maintaining
-+ * gcc's format checking.
-+ */
-+#define no_printk(fmt, ...)				\
-+({							\
-+	if (0)						\
-+		_printk(fmt, ##__VA_ARGS__);		\
-+	0;						\
-+})
-+
- /* Low level printk API. Use carefully! */
- 
- #ifdef CONFIG_PRINTK
--- 
-2.26.2
-
+> Cheers,
+> Peter

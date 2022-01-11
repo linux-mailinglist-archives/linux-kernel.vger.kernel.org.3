@@ -2,171 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C802748BB80
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F38E348BB85
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346865AbiAKXhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 18:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S1346875AbiAKXhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 18:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiAKXhJ (ORCPT
+        with ESMTP id S1346867AbiAKXht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 18:37:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC56AC06173F;
-        Tue, 11 Jan 2022 15:37:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49C1A615DA;
-        Tue, 11 Jan 2022 23:37:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4DEC36AF9;
-        Tue, 11 Jan 2022 23:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641944228;
-        bh=v20NyJnnrpRCSXRNC/bxgBQIPv65XMpppqdhmj/Hzvs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=s9qNkpwcKPVuanI5Kw+TTgMfk7JJRYxrLKhky2VaBe7JNusoldsDzVbrjJtz5IJls
-         Dsap4Rdhc6KW5naVyUP3cl1e1mVMROZxwCoexpiuLfl8u40GZbm3ya0Yw9twDUA7CB
-         8CkqCDJpa1VfiCFRLF3GovLW4tn4VdSbg+3mJTu/JPKY8eqLzxK4cO6GbhCwzoZ5pu
-         ybvTJ1zkHXn24U3x7EsUMl44HQiT6Nxp9pIRjH15EP6d6GaRUU4QitjRXpw30E+v6Z
-         /0XUi3/R0tE6lQvSGunHAc+KbF7DcXE9z9iWN3n3WPB+8oYnVy4gwT7gt7heV3QF15
-         MvdeUZUFYqkAQ==
-Received: by mail-ed1-f43.google.com with SMTP id 30so2735491edv.3;
-        Tue, 11 Jan 2022 15:37:08 -0800 (PST)
-X-Gm-Message-State: AOAM531Z/09Wy6LucirRNd3hU+TMoXyXH8YI9q+HwceU+zF07JgQe3sc
-        UB2HaVjQr0M4bt7qd+nG8Hjb8INSBhnNBi3Fng==
-X-Google-Smtp-Source: ABdhPJw710G1pZDb3HvgWDjTL63fkfcrpRHCZFpw//6sxrytQyY8zszFTXytk0jVWFHu0ZF1BEoxLUB6BT1sM9dzczw=
-X-Received: by 2002:a17:906:d184:: with SMTP id c4mr5387166ejz.20.1641944226855;
- Tue, 11 Jan 2022 15:37:06 -0800 (PST)
+        Tue, 11 Jan 2022 18:37:49 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30222C061751
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 15:37:49 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id d7so1532837ybo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 15:37:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y4s8SWu6oC0jBwQaJEtDME4KEjn8XnX1dHweILOZNLw=;
+        b=tSyF53acF27OqNgvWqbVMB4rrrAYr/G3ysoCmjIQ/DaL271SFRSP9RaoVkMOYsWjkG
+         ZAh/G8g1ZVadBZsGFH5qPak4LK4vm+smNDxvyfLbi93tZ18mFzO1F2hDPQMHLX5dBIsr
+         5d1kMzt3sJdE7pgOingjfcwZ+mEVWyW1qXaowK0H4IRT5I4jBEhjI3+h7nt/bjknrGED
+         gqlZPxyPkgn1taVWcOXcDy1aihgFYTIfS9B5uiZln7zNU/5M1LElC18H5MoMQC1Z6Jfb
+         serIeUcjt6cll+oqIu7J1g6Uh0ILigdyCTsbA81cViGAUm+Yvdjjz6KDrxShdp6XzC1I
+         hODQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y4s8SWu6oC0jBwQaJEtDME4KEjn8XnX1dHweILOZNLw=;
+        b=ve7pn0W11u4nHS5L41213FUoR9gl9Gprdawm5X1qoR4Bnh9HvqRYoFjr0D9yemBv+Q
+         zTq/uVwoqdC+Fb9jDRUm8SBWJNjIQRmrpDyVszNYpDLY+F6ZRapxcc4fzEmDUZqeI1FF
+         LtNSm5dPiGoRYmDa8l6om6O7EFX7Y2IZaiiXUFHE+buEp3tcBAh31hYGAN2v3upn1mzA
+         z0iZKRIPA0Mhw9hxvDJZoYfM/FLCIsMSpsZ+aP7lwXYISY8ecj7AN1iqW5CKzC9qyLRU
+         BB2+yO1bv4XWZUTVKvlG+8rWLuMT/CXKMKT+z722ftVIPZPwIGtLySYAoUpXFpNtff/Y
+         EjBQ==
+X-Gm-Message-State: AOAM533U1pyUw9CiE/heQdfpTNkXcHKK5JA7mvEvkOLLRN8poZQPkgM/
+        DpRJtbsUJfMLun22OGaK3UwIVj8SGzG3N99Syt0CnA==
+X-Google-Smtp-Source: ABdhPJyqLXKJ6gdjLMc9e2tpdFFZizV6Y14c+znv0Z5ZDaav7clivseLS2LsVXah/dHpL9Qrebnu61t1tKCpI8Oex8w=
+X-Received: by 2002:a25:c3c4:: with SMTP id t187mr8315382ybf.634.1641944268131;
+ Tue, 11 Jan 2022 15:37:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216055328.15953-1-biao.huang@mediatek.com>
- <20211216055328.15953-7-biao.huang@mediatek.com> <1639662782.987227.4004875.nullmailer@robh.at.kernel.org>
- <be023f9d2fb2a8f947bd0075e8732ba07cfd7b89.camel@mediatek.com>
-In-Reply-To: <be023f9d2fb2a8f947bd0075e8732ba07cfd7b89.camel@mediatek.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 11 Jan 2022 17:36:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLo7z-KWtwFx+Kng2aQuCpQwJaO6mHnyBzmCKCJDK5n+Q@mail.gmail.com>
-Message-ID: <CAL_JsqLo7z-KWtwFx+Kng2aQuCpQwJaO6mHnyBzmCKCJDK5n+Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v10 6/6] net: dt-bindings: dwmac: add support for mt8195
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     srv_heupstream <srv_heupstream@mediatek.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        David Miller <davem@davemloft.net>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        netdev <netdev@vger.kernel.org>, dkirjanov@suse.de,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+References: <20220111071212.1210124-1-surenb@google.com> <Yd3RClhoz24rrU04@sol.localdomain>
+ <CAHk-=wgwb6pJjvHYmOMT-yp5RYvw0pbv810Wcxdm5S7dWc-s0g@mail.gmail.com>
+ <Yd3dZklleDnJCQ46@gmail.com> <CAHk-=wiQ-qzKU8vyhgm8xsWE8DG6rR4jmbvOfBvbjVYq4SKQMA@mail.gmail.com>
+In-Reply-To: <CAHk-=wiQ-qzKU8vyhgm8xsWE8DG6rR4jmbvOfBvbjVYq4SKQMA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 11 Jan 2022 15:37:37 -0800
+Message-ID: <CAJuCfpGHgkgUVQY=FRGfpKDg1QbR2mMaYKbsF2RDiDkratwL_w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 8:06 PM Biao Huang <biao.huang@mediatek.com> wrote:
+On Tue, Jan 11, 2022 at 12:15 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Dear Rob,
->   Thanks for your comments~
+> On Tue, Jan 11, 2022 at 11:41 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > This is yet another case of "one time init".
 >
->   For mt8195, the eth device node will look like:
->   eth: ethernet@11021000 {
->     compatible = "mediatek,mt8195-gmac", "snps,dwmac-5.10a";
->     ...
->     clock-names = "axi",
->                   "apb",
->                   "mac_cg",
->                   "mac_main",
->                   "ptp_ref",
->                   "rmii_internal";
->     clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
->              <&pericfg_ao CLK_PERI_AO_ETHERNET_BUS>,
->              <&pericfg_ao CLK_PERI_AO_ETHERNET_MAC>,
->              <&topckgen CLK_TOP_SNPS_ETH_250M>,
->              <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
->              <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
->     ...
->   }
+> Ehh. It's somewhat debatable.
 >
-> 1. "rmii_internal" is a special clock only required for
->    RMII phy interface, dwmac-mediatek.c will enable clocks
->    invoking clk_bulk_prepare_enable(xx, 6) for RMII,
->    and clk_bulk_prepare_enable(xx, 5) for other phy interfaces.
->    so, mt2712/mt8195 all put "rmii_internal" clock to the
->    end of clock list to simplify clock handling.
+> For a flag that sets a value once, the rules are somewhat different.
+> In that case, people may simply not care about memory ordering at all,
+> because all they care about is the actual flag value, and - thanks to
+> the one-time behavior - basically whether some transition had happened
+> or not. That's not all that unusual.
 >
->    If I put mac_cg as described above, a if condition is required
-> for clocks description in dt-binding, just like what I do in v7 send:
->   - if:
->       properties:
->         compatible:
->           contains:
->             enum:
->               - mediatek,mt2712-gmac
+> But when you fetch a pointer, things are at least conceptually
+> slightly different.
 >
->     then:
->       properties:
->         clocks:
->           minItems: 5
->           items:
->             - description: AXI clock
->             - description: APB clock
->             - description: MAC Main clock
->             - description: PTP clock
->             - description: RMII reference clock provided by MAC
+> Of course, you may use the existence of the pointer itself as a flag
+> (ie just a "NULL or not"), in which case it's the same as any other
+> one-time flag thing.
 >
->         clock-names:
->           minItems: 5
->           items:
->             - const: axi
->             - const: apb
->             - const: mac_main
->             - const: ptp_ref
->             - const: rmii_internal
+> But if you use it to dereference something, then _by_definition_
+> you're not just fetching a one-time flag - even if the pointer is only
+> set once. At that point, at a minimum, you require that that thing has
+> been initialized.
 >
->   - if:
->       properties:
->         compatible:
->           contains:
->             enum:
->               - mediatek,mt8195-gmac
+> Now, it's then absolutely true that the stuff behind the pointer may
+> then have other reasons not to care about memory ordering again, and
+> you may be able to avoid memory ordering even then. If you're just
+> switching the pointer around between different objects that has been
+> statically allocated and initialized, then there is no memory ordering
+> required, for example. You might be back to the "I just want one or
+> the other of these two pointers".
 >
->     then:
->       properties:
->         clocks:
->           minItems: 6
->           items:
->             - description: AXI clock
->             - description: APB clock
->             - description: MAC clock gate
->             - description: MAC Main clock
->             - description: PTP clock
->             - description: RMII reference clock provided by MAC
+> But if you have something that was initialized before the pointer was
+> assigned, you really do hit the problem we had on alpha, where even if
+> you order the pointer write side accesses, the dereferencing of the
+> pointer may not be ordered on the read side.
 >
->    This introduces some duplicated description.
+> Now, alpha is basically dead, and we probably don't really care. Even
+> on alpha, the whole "data dependency isn't a memory ordering" is
+> almost impossible to trigger.
 >
-> 2. If I put "mac_cg" to the end of clock list,
->    the dt-binding file can be simple just like
->    what we do in this v10 patch(need fix warnings reported by "make
-> DT_CHECKER_FLAGS=-m dt_binding_check").
+> And in fact, to avoid too much pain we ended up saying "screw alpha"
+> and added a memory barrier to READ_ONCE(), so it turns out that
+> smp_store_release -> READ_ONCE() does work because we just couldn't be
+> bothered to try something more proper.
 >
->    But for mt8195:
->      the eth node in dts should be modified,
+> So yeah, READ_ONCE() ends up making the "access through a pointer"
+> thing safe, but that's less of a "it should be safe" and more of a "we
+> can't waste time dealing with braindamage on platforms that don't
+> matter".
+>
+> In general, I think the rule should be that READ_ONCE() is for things
+> that simply don't care about memory ordering at all (or do whatever
+> ordering they want explicitly). And yes, one such very common case is
+> the "one-way flag" where once a certain state has been reached, it's
+> idempotent.
+>
+> Of course, then we have the fact that READ_ONCE() can be more
+> efficient than "smp_load_acquire()" on some platforms, so if something
+> is *hugely* performance-critical, you might use READ_ONCE() even if
+> it's not really technically the right thing.
+>
+> So it's complicated.
+>
+> A lot of READ_ONCE() users exist just for historical reasons because
+> they predated smp_store_release/smp_load_acquire. They may well have
+> been using ACCESS_ONCE() long ago.
+>
+> And some are there because it's a very critical piece of code, and
+> it's very intentional.
+>
+> But if you don't have some huge reasons, I really would prefer people
+> use "smp_store_release -> smp_load_acquire" as a very clear "handoff"
+> event.
 
-I hope you are defining the binding before you use it... That's not
-good practice and not a valid argument.
+Posted v3 with smp_store_release/smp_load_acquire:
+https://lore.kernel.org/all/20220111232309.1786347-1-surenb@google.com
+Thanks!
 
->      and eth driver clock handling will be complex;
-
-How so?
-
-Rob
+>
+>               Linus

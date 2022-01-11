@@ -2,92 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CAB48A559
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C6E48A55B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346447AbiAKBxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 20:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S1346453AbiAKB4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 20:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344455AbiAKBxl (ORCPT
+        with ESMTP id S243617AbiAKB4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 20:53:41 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4674C06173F;
-        Mon, 10 Jan 2022 17:53:41 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so2115954pja.1;
-        Mon, 10 Jan 2022 17:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fC1ynA2u4tRiqaNY787Vx3CQu3oVC9Esks+wHoCfs3c=;
-        b=bcIfx1r8Ter1bbkChuxqNTV8CFWNomxYGXj0/9w+BOXPVPyV4FsH8uq+S62rHI8ete
-         aWsctPNDKpafHK2k+/NKEghTZmjXklcS9bWPRREOb9TzkAh8K17gIP1iefnqQ1KCcl8/
-         u0CefFFzG1RtmJc0wloxw3Nc72ECOqxzWsC6DhCA+BL7mNDN8PU2JNttGI8dpgInUS7p
-         umfD9XaXxpV5fD9RqFI2donO4WTCT6PeDFvL4V1QYpPEP3ZQqM7dmrNb/4G6n2vwQMHw
-         5mT4t0UF6pGBguKBtTGgle211AEoyZirqlZLGEEa48cFwUfnoUtwsdeOObzz/Hl+SLj7
-         ABHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fC1ynA2u4tRiqaNY787Vx3CQu3oVC9Esks+wHoCfs3c=;
-        b=wVdPa0/0Nf2GtqW37ypsq+uVoKPSFdZG55k4qpAeNoBwv59EnwKj2stG335kV+omU1
-         hTQ1q5N63Vh2wZWWMK1ncs6BvEaafai+lC78IJxf24nuVyBB4JRbGG1MkrcTje5k5yBN
-         Gv1PUyvt0jqOqHh+3OrwxC1/SGWTkq/UgpLLQ/kn8DUG4csG2pfrvksnNHiID83Q1Tnh
-         Sx3D3YTbcxeuYwuRYYmy7Om2a2ubi4lM0nhG14Jso3HYoYIFKceRIzOzEkHEIUf+DssL
-         XVWfeFPZ0faXYDubdZW61cmxHByqneObG4o/Bx9Ktx+RcsdLjhdresZDLnlfyee6+MVH
-         2QsQ==
-X-Gm-Message-State: AOAM531V0zQdkqZqz3LtPgE5jHjueKPssOYj4GuNkfUnjGh6Jg/tZMAO
-        4TysRYSUpZVw7sBDbtpsAPo=
-X-Google-Smtp-Source: ABdhPJy8Q4oqX52Fg+EVLq3363cNp3+i0TlppCcuKki5fKvVmIf78IUpjo1oZwCNTAwPJeBHwNbHlA==
-X-Received: by 2002:a63:f244:: with SMTP id d4mr2162298pgk.65.1641866021330;
-        Mon, 10 Jan 2022 17:53:41 -0800 (PST)
-Received: from [172.20.120.1] ([162.219.34.250])
-        by smtp.gmail.com with ESMTPSA id b21sm8093487pfv.74.2022.01.10.17.53.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 17:53:41 -0800 (PST)
-Message-ID: <2017d0ad-9e76-d1d9-666a-5f2cd7632b31@gmail.com>
-Date:   Tue, 11 Jan 2022 09:53:37 +0800
+        Mon, 10 Jan 2022 20:56:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3ADC06173F;
+        Mon, 10 Jan 2022 17:56:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DE76B81863;
+        Tue, 11 Jan 2022 01:56:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA6CC36AE9;
+        Tue, 11 Jan 2022 01:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641866167;
+        bh=LUIzm8IxmahvW2Xax4ug6aaevog4cRiWMg/G8y/4Qsw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CXvIEKbW4Uz6UFCJcp4nFncvE7tlgDKTJjr8UF7L81g4cOS7CfvWMvVC2DkhSu9h4
+         9RuaHYYhsxjR479sQWLa6Wn/2UB2NiKt/lBA/NSVIDCcVGLuhHSQfqb9P2e0dwVaCo
+         6vu5m74vUi7fiE9BeCmI+ib7NpFxOJMbIcAx+ixgrBxIBNpq8BRIF5+w91VAJP9wNO
+         AvKAJgQK0K6E352+WLtuxZepvFklkIqwlzuSTDK9dN9iG9KXny2HzijKk0i+stlj9W
+         floFilwdgmj+3mIMeF3kcZKMl3RAqk3XJWh8O4ClH968zd+fUHGgPU+oMAE1drj2E/
+         9jXJT2AN2CYPw==
+Date:   Tue, 11 Jan 2022 03:55:56 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YdzjrIxrVfgrlzWH@iki.fi>
+References: <f6a55943-13ef-41ef-609a-6406cffef513@intel.com>
+ <YcsklLw1uFyppSji@iki.fi>
+ <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
+ <YdgvFTIRboHwTgRT@iki.fi>
+ <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdmxpTVM1JG8nxQ3@iki.fi>
+ <YdmzDy1BOHgh8CII@iki.fi>
+ <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdzjEzjF0YKn+pZ6@iki.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH 0/13] blk: make blk-rq-qos policies pluggable and modular
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     axboe@kernel.dk, jbacik@fb.com, tj@kernel.org, bvanassche@acm.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220110091046.17010-1-jianchao.wan9@gmail.com>
- <Ydxum/2iwp6hDw68@infradead.org>
-From:   Wang Jianchao <jianchao.wan9@gmail.com>
-In-Reply-To: <Ydxum/2iwp6hDw68@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdzjEzjF0YKn+pZ6@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/1/11 1:36 上午, Christoph Hellwig wrote:
-> On Mon, Jan 10, 2022 at 05:10:33PM +0800, Wang Jianchao wrote:
->> This patchset attempts to make blk-rq-qos framework pluggable and modular.
+On Tue, Jan 11, 2022 at 03:53:26AM +0200, Jarkko Sakkinen wrote:
+> On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> > On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> > wrote:
+> > 
+> > > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
+> > > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
+> > > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
+> > > > > > > > > OK, so the question is: do we need both or would a
+> > > > mechanism just
+> > > > > > > > to extend
+> > > > > > > > > permissions be sufficient?
+> > > > > > > >
+> > > > > > > > I do believe that we need both in order to support pages
+> > > > having only
+> > > > > > > > the permissions required to support their intended use
+> > > > during the
+> > > > > > > > time the
+> > > > > > > > particular access is required. While technically it is
+> > > > possible to grant
+> > > > > > > > pages all permissions they may need during their lifetime it
+> > > > is safer to
+> > > > > > > > remove permissions when no longer required.
+> > > > > > >
+> > > > > > > So if we imagine a run-time: how EMODPR would be useful, and
+> > > > how using it
+> > > > > > > would make things safer?
+> > > > > > >
+> > > > > > In scenarios of JIT compilers, once code is generated into RW pages,
+> > > > > > modifying both PTE and EPCM permissions to RX would be a good
+> > > > defensive
+> > > > > > measure. In that case, EMODPR is useful.
+> > > > >
+> > > > > What is the exact threat we are talking about?
+> > > > 
+> > > > To add: it should be *significantly* critical thread, given that not
+> > > > supporting only EAUG would leave us only one complex call pattern with
+> > > > EACCEPT involvement.
+> > > > 
+> > > > I'd even go to suggest to leave EMODPR out of the patch set, and
+> > > > introduce
+> > > > it when there is PoC code for any of the existing run-time that
+> > > > demonstrates the demand for it. Right now this way too speculative.
+> > > > 
+> > > > Supporting EMODPE is IMHO by factors more critical.
+> > > 
+> > > At least it does not protected against enclave code because an enclave
+> > > can
+> > > always choose not to EACCEPT any of the EMODPR requests. I'm not only
+> > > confused here about the actual threat but also the potential adversary
+> > > and
+> > > target.
+> > > 
+> > I'm not sure I follow your thoughts here. The sequence should be for enclave
+> > to request  EMODPR in the first place through runtime to kernel, then to
+> > verify with EACCEPT that the OS indeed has done EMODPR.
+> > If enclave does not verify with EACCEPT, then its own code has
+> > vulnerability. But this does not justify OS not providing the mechanism to
+> > request EMODPR.
 > 
-> I really don't think making them policies modular is a good thing, and
-> your new exports/APIs are a very good sign for why it is not a good
-> idea.
+> The question is really simple: what is the threat scenario? In order to use
+> the word "vulnerability", you would need one.
+> 
+> Given the complexity of the whole dance with EMODPR it is mandatory to have
+> one, in order to ack it to the mainline.
+> 
+> > Similar to how we don't want have RWX code pages for normal Linux
+> > application, when an enclave loads code pages (either directly or JIT
+> > compiled from high level code ) into EAUG'd page (which has RW), we do not
+> > want leave pages to be RWX for code to be executable, hence the need of
+> > EMODPR request OS to reduce the permissions to RX once the code is ready to
+> > execute.
+> 
+> You cannot compare *enforced* permissions outside the enclave, and claim that
+> they would be equivalent to the permissions of the already sandboxed code
+> inside the enclave, with permissions that are not enforced but are based
+> on good will of the enclave code.
 
-Actually, before sent out this version,  I didn't make them modular but just
-pluggable, and yes, it was because I had to export those interfaces. However,
-when I made the patch to introduce a policy which support cgroup and had to
-increase the BLKCG_MAX_POLS, it seemed worthy to make the previous policies
-modular as we can release the blkcg slot when policy module is not installed.
+To add, you can already do "EMODPR" by simply adjusting VMA permissions to be
+more restrictive. How this would be worse than this collaboration based 
+thing?
 
-In addition, our own kernel uses the policies as module. When we recommend iocost
-to our customer, they love to see we needn't to reboot machine and even needn't to
-stop the IO workload if upgrading of iocost is needed
-
-Thanks
-Jianchao
+/Jarkko

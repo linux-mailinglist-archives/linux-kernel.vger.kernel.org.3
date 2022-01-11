@@ -2,125 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ACB48A8D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B4948A8E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348701AbiAKHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:50:22 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:32828 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbiAKHuV (ORCPT
+        id S1348718AbiAKHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235952AbiAKHv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:50:21 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B7C6F1F3B6;
-        Tue, 11 Jan 2022 07:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641887419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f3gaq6Fpe5yLaoONtNRasnCAJt2YNbe9vyw0v/wh8RM=;
-        b=Cr1hVVSDkKm8OAexg5DDB+dGf2zC7om6VHZeb89mGfgZairV5/zYM6qqomXYu703GAn+c7
-        KsXGU7mMbwD8CSnLwifyQrQgR2LHnrd5PcFRQjNN04bq2Ca9tFnDzW3Yitt7jty2FqlJvT
-        kKDgGz2RJseZzFFy2+9/pkBFvyKWyFE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641887419;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f3gaq6Fpe5yLaoONtNRasnCAJt2YNbe9vyw0v/wh8RM=;
-        b=aM2phZ+2niAVTXvv0kG1thwWspUyZUJkS7JegG6g8PcnsEHUIelzKess/CCVQQbsg57Z0y
-        UV7XEbV7GitE6iCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 37DC313638;
-        Tue, 11 Jan 2022 07:50:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OXZVCbs23WHEfwAAMHmgww
-        (envelope-from <nstange@suse.de>); Tue, 11 Jan 2022 07:50:19 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Stephan Mueller <smueller@chronox.de>,
-        Nicolai Stange <nstange@suse.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
-        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
-Subject: Re: [PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)
-In-Reply-To: <Yd0gInht+V+Kcsw2@gondor.apana.org.au> (Herbert Xu's message of
-        "Tue, 11 Jan 2022 17:13:54 +1100")
-References: <20211209090358.28231-1-nstange@suse.de> <87r1a7thy0.fsf@suse.de>
-        <YcvEkfS4cONDXXB9@gondor.apana.org.au>
-        <2468270.qO8rWLYou6@tauon.chronox.de>
-        <YdepEhTI/LB9wdJr@gondor.apana.org.au>
-        <Yd0gInht+V+Kcsw2@gondor.apana.org.au>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
-Date:   Tue, 11 Jan 2022 08:50:18 +0100
-Message-ID: <871r1eyamd.fsf@suse.de>
+        Tue, 11 Jan 2022 02:51:57 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F80DC06173F;
+        Mon, 10 Jan 2022 23:51:57 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so3593068pjf.3;
+        Mon, 10 Jan 2022 23:51:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ovARpfXZ3E1QyLpeh1mOwwW3EMNPu45OM4ENk9y2JM0=;
+        b=CiG96KAmRBAJfo3O1Y/aYyQxMF9hidKwCp3KFyQ0uFgGL0/v7hBZ4X4AR0GZnJFazO
+         aVtNfQiWNCpP5n4pBCAN5pkfUGq/A/exhy4HVDOg+MDBkPrPmXk6jgNeLggbHK2mw/ZH
+         3BTzyGhwLo5xosN4EiRlcQfJ/IlanQdFwCpmzjEPKfevSeXR2lvRDCAMOdyrSsrYk1Kb
+         YrN49O88GUT+cc63DIMfDVdHAj5v8mmVBGUsW0aYRu7VajGmhtWbOi2NlKGFG9y42AHa
+         RIQItk4XBXYakk6COUHUsT5cSFeLGjR+SB7zzOCSx6SkeQWtujGm0rM5aIreskwAe9Kz
+         u8Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ovARpfXZ3E1QyLpeh1mOwwW3EMNPu45OM4ENk9y2JM0=;
+        b=zPXmBNLTTtv4gN3O8+czDJwpUfsvbSJoLvEa/1njJfagqYxwH8Sa8EA/Awm7vqCio9
+         JMBKEKZKuE6jl4DSsCtL5w6+wIFQDch/1VEE6sAXqPwca/0EJXsTxP5t6c1s2P+E+edn
+         LLMq832wWn3BmzIN4pdrtkS9Z6g6qVv7b24COQkxVV82mboZOv2e2E9j+HCeqrlymhjX
+         TdPDLRmCBI3IoWK/mXmGqiz0xOFyIhQcj7z1hmQMu+GP0c6BMmUHnken/sXNm9ucZH9k
+         pYQNt/kgoUmjO7vRYKvDG602ns2Ef7skP0ZWOi2xp5MQFAIoqMu2Bj0fhIvzfIJv49m2
+         BhUw==
+X-Gm-Message-State: AOAM533mFk9QjkdCBl0+XJ2eshFgdKIQSH5vj1CTwT0NJ9YF3Xc0jQFr
+        TsqMbh/9xAB/Oiv2Mw2O7pL+RkrNf/GiWT02s8Q=
+X-Google-Smtp-Source: ABdhPJx5eq+Ru5g2oF06+KyVKVVM8d8Ydy0ELjjaf9c2hrlbzFb6ug2DAtfN/ZlAS/LzY843RaCllim7EQh5vMZ/P/k=
+X-Received: by 2002:a63:ae45:: with SMTP id e5mr3050350pgp.476.1641887517010;
+ Mon, 10 Jan 2022 23:51:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220110141957.259022-1-sxwjean@me.com> <20220110141957.259022-3-sxwjean@me.com>
+ <da578a75-5cee-5c16-b63c-be6ba2b9ba5d@redhat.com>
+In-Reply-To: <da578a75-5cee-5c16-b63c-be6ba2b9ba5d@redhat.com>
+From:   Xiongwei Song <sxwjean@gmail.com>
+Date:   Tue, 11 Jan 2022 15:51:30 +0800
+Message-ID: <CAEVVKH97F7zO7uaz=Qxk1w9+s4BiYMfXAsvBt1Qovxx7+Odrqg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] proc: Add getting pages info of ZONE_DEVICE support
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Xiongwei Song <sxwjean@me.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, dan.j.williams@intel.com, osalvador@suse.de,
+        naoya.horiguchi@nec.com, thunder.leizhen@huawei.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+Hi David,
 
-Herbert Xu <herbert@gondor.apana.org.au> writes:
-
-> On Fri, Jan 07, 2022 at 01:44:34PM +1100, Herbert Xu wrote:
->>
->> I'm already writing this up for sha1 anyway so let me polish it
->> off and I'll post it soon which you can then reuse it for dh.
+On Mon, Jan 10, 2022 at 10:34 PM David Hildenbrand <david@redhat.com> wrote:
 >
-> Here is something that seems to work for sha1/hmac.  Please let
-> me know if you see any issues with this approach for dh.
+> On 10.01.22 15:19, sxwjean@me.com wrote:
+> > From: Xiongwei Song <sxwjean@gmail.com>
+> >
+> > When requesting pages info by /proc/kpage*, the pages in ZONE_DEVICE were
+> > missed.
+> >
 >
-> Thanks,
->
-> ---8<---
-> Currently we do not distinguish between algorithms that fail on
-> the self-test vs. those which are disabled in FIPS mode (not allowed).
-> Both are marked as having failed the self-test.
->
-> As it has been requested that we need to disable sha1 in FIPS
-> mode while still allowing hmac(sha1) this approach needs to change.
->
-> This patch allows this scenario by adding a new flag FIPS_INTERNAL
-> to indicate those algorithms that have passed the self-test and are
-> not FIPS-allowed.  They can then be used for the self-testing of
-> other algorithms or by those that are explicitly allowed to use them
-> (currently just hmac).
-
-I haven't tried, but wouldn't this allow the instantiation of e.g.
-hmac(blake2s-256) in FIPS mode?
-
-Thanks,
-
-Nicolai
-
->
-> Note that as a side-effect of this patch algorithms which are not
-> FIPS-allowed will now return ENOENT instead of ELIBBAD.  Hopefully
-> this is not an issue as some people were relying on this already.
->
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> The "missed" part makes it sound like this was done by accident. On the
+> contrary, for now we decided to not expose these pages that way, for
+> example, because determining if the memmap was already properly
+> initialized isn't quite easy.
 >
 
---=20
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
-ermany
-(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev
+Understood. Thank you for the explanation.
+
+>
+> > The pfn_to_devmap_page() function can help to get page that belongs to
+> > ZONE_DEVICE.
+>
+> What's the main motivation for this?
+
+There is no special case. My customer wanted to check page flags in system wide.
+I tried to find the way and found there is no capability for pages of
+ZONE_DEVICE,
+so tried to make the patch and see if upstream needs it.
+
+>
+> >
+> > Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
+> > ---
+> >  fs/proc/page.c | 35 ++++++++++++++++++++++-------------
+> >  1 file changed, 22 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/fs/proc/page.c b/fs/proc/page.c
+> > index 9f1077d94cde..2cdc2b315ff8 100644
+> > --- a/fs/proc/page.c
+> > +++ b/fs/proc/page.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/page_idle.h>
+> >  #include <linux/kernel-page-flags.h>
+> >  #include <linux/uaccess.h>
+> > +#include <linux/memremap.h>
+> >  #include "internal.h"
+> >
+> >  #define KPMSIZE sizeof(u64)
+> > @@ -46,6 +47,7 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
+> >  {
+> >       const unsigned long max_dump_pfn = get_max_dump_pfn();
+> >       u64 __user *out = (u64 __user *)buf;
+> > +     struct dev_pagemap *pgmap = NULL;
+> >       struct page *ppage;
+> >       unsigned long src = *ppos;
+> >       unsigned long pfn;
+> > @@ -60,17 +62,18 @@ static ssize_t kpagecount_read(struct file *file, char __user *buf,
+> >       count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
+> >
+> >       while (count > 0) {
+> > -             /*
+> > -              * TODO: ZONE_DEVICE support requires to identify
+> > -              * memmaps that were actually initialized.
+> > -              */
+> >               ppage = pfn_to_online_page(pfn);
+> > +             if (!ppage)
+> > +                     ppage = pfn_to_devmap_page(pfn, &pgmap);
+> >
+> >               if (!ppage || PageSlab(ppage) || page_has_type(ppage))
+> >                       pcount = 0;
+> >               else
+> >                       pcount = page_mapcount(ppage);
+> >
+> > +             if (pgmap)
+> > +                     put_dev_pagemap(pgmap);
+>
+> Ehm, don't you have to reset pgmap back to NULL? Otherwise during the
+> next iteration, you'll see pgmap != NULL again.
+
+Oops. I totally agree. Will do this in the next version.
+
+>
+> > +
+> >               if (put_user(pcount, out)) {
+> >                       ret = -EFAULT;
+> >                       break;
+> > @@ -229,10 +232,12 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
+> >  {
+> >       const unsigned long max_dump_pfn = get_max_dump_pfn();
+> >       u64 __user *out = (u64 __user *)buf;
+> > +     struct dev_pagemap *pgmap = NULL;
+> >       struct page *ppage;
+> >       unsigned long src = *ppos;
+> >       unsigned long pfn;
+> >       ssize_t ret = 0;
+> > +     u64 flags;
+> >
+> >       pfn = src / KPMSIZE;
+> >       if (src & KPMMASK || count & KPMMASK)
+> > @@ -242,13 +247,15 @@ static ssize_t kpageflags_read(struct file *file, char __user *buf,
+> >       count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
+> >
+> >       while (count > 0) {
+> > -             /*
+> > -              * TODO: ZONE_DEVICE support requires to identify
+> > -              * memmaps that were actually initialized.
+> > -              */
+> >               ppage = pfn_to_online_page(pfn);
+> > +             if (!ppage)
+> > +                     ppage = pfn_to_devmap_page(pfn, &pgmap);
+> > +
+> > +             flags = stable_page_flags(ppage);
+> > +             if (pgmap)
+> > +                     put_dev_pagemap(pgmap);
+>
+> Similar comment.
+
+Okay.
+
+>
+> >
+> > -             if (put_user(stable_page_flags(ppage), out)) {
+> > +             if (put_user(flags, out)) {
+> >                       ret = -EFAULT;
+> >                       break;
+> >               }
+> > @@ -277,6 +284,7 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
+> >  {
+> >       const unsigned long max_dump_pfn = get_max_dump_pfn();
+> >       u64 __user *out = (u64 __user *)buf;
+> > +     struct dev_pagemap *pgmap = NULL;
+> >       struct page *ppage;
+> >       unsigned long src = *ppos;
+> >       unsigned long pfn;
+> > @@ -291,17 +299,18 @@ static ssize_t kpagecgroup_read(struct file *file, char __user *buf,
+> >       count = min_t(unsigned long, count, (max_dump_pfn * KPMSIZE) - src);
+> >
+> >       while (count > 0) {
+> > -             /*
+> > -              * TODO: ZONE_DEVICE support requires to identify
+> > -              * memmaps that were actually initialized.
+> > -              */
+> >               ppage = pfn_to_online_page(pfn);
+> > +             if (!ppage)
+> > +                     ppage = pfn_to_devmap_page(pfn, &pgmap);
+> >
+> >               if (ppage)
+> >                       ino = page_cgroup_ino(ppage);
+> >               else
+> >                       ino = 0;
+> >
+> > +             if (pgmap)
+> > +                     put_dev_pagemap(pgmap);
+>
+> Similar comment.
+
+Okay.
+
+>
+>
+> IIRC, we might still stumble over uninitialized devmap memmaps that
+> essentially contain garbage -- I recall it might be the device metadata.
+> I wonder if we at least have to check pgmap_pfn_valid().
+
+Oh, ok.  But how about putting pgmap_pfn_valid into pfn_to_devmap_page()?
+
+Appreciated your review.
+
+Regards,
+Xiongwei

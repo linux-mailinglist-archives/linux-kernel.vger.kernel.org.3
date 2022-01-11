@@ -2,338 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D85FB48BA5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1511F48BA5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343883AbiAKWAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:00:33 -0500
-Received: from ixit.cz ([94.230.151.217]:55958 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244860AbiAKWAc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:00:32 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 587A92243C;
-        Tue, 11 Jan 2022 23:00:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1641938429;
+        id S1344042AbiAKWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:01:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59130 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238155AbiAKWBO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 17:01:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641938473;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4zhT/ysWIbT+xx1ngqFOuJl/IBW0KTKzhLMm/a1CzzE=;
-        b=COVVj7Atobm4LGoKWJsrMb7rhAgh0z0WFmMK6RL590Q7UlTvOdgqCIPRFaEiuJetDtbaww
-        0SgiKXFOxcI9bI01BsFp+WEfUhe9yv79N7JT2pBoQhw/hDcqZLVI5Zvg1YlC1i1Y6u/W2Y
-        IbtCOW9YXh3TmrU51ZhjLBNwtYa1VNI=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        Caleb Connolly <caleb@connolly.tech>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC
-Date:   Tue, 11 Jan 2022 23:00:25 +0100
-Message-Id: <20220111220026.102838-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w2jxRqIBbW1BWS5wOVOFlHgZQrT7yiG10aXfva0H0PA=;
+        b=V0Y42/Sfze0yfIuUc5s+GDYRBgM2o5qKyQJYH6IrT/JVhccgcG6SLPzRrl/8cKcMLMmO5n
+        UdDhDS2VD74L+Qgxcw3q44n4FY1EMFGNb3om8uUL6fVE64gX/M7k9oxTBhBCNZ1290e8yf
+        aBTjbZ+Y73NM3+fnbUfP0Rknn1wxNgE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64---M5XwUAPpC8ia0ZVKJUgA-1; Tue, 11 Jan 2022 17:01:10 -0500
+X-MC-Unique: --M5XwUAPpC8ia0ZVKJUgA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6B2C1083F60;
+        Tue, 11 Jan 2022 22:01:08 +0000 (UTC)
+Received: from [10.22.17.167] (unknown [10.22.17.167])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 63A015ED29;
+        Tue, 11 Jan 2022 22:01:07 +0000 (UTC)
+Message-ID: <4a2352a9-42b4-56cd-423a-825faffcd801@redhat.com>
+Date:   Tue, 11 Jan 2022 17:01:06 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Tim Murray <timmurray@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <20220108164617.3130175-1-jaegeuk@kernel.org>
+ <YdvoxkAAquI17UbX@infradead.org>
+ <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
+ <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
+ <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
+ <CAEe=Sx=C8e7=A6ziy8dYC+FvkWvVYZ+o=XMCP_4vX0efsUPT4Q@mail.gmail.com>
+ <86891228-9c91-09f1-0e2d-0a3392649d52@redhat.com>
+ <Yd25SWaqEDSpR1vO@google.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yd25SWaqEDSpR1vO@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm SPMI PMIC binding to yaml format.
+On 1/11/22 12:07, Jaegeuk Kim wrote:
+> On 01/11, Waiman Long wrote:
+>> On 1/11/22 01:53, Tim Murray wrote:
+>>> On Mon, Jan 10, 2022 at 8:15 PM Waiman Long <longman@redhat.com> wrote:
+>>>> That is not how rwsem works. A reader which fails to get the lock
+>>>> because it is write-locked will remove its reader count before going to
+>>>> sleep. So the reader count will be zero eventually. Of course, there is
+>>>> a short period of time where the reader count will be non-zero until the
+>>>> reader removes its own reader count. So if a new writer comes in at that
+>>>> time, it will fail its initial trylock and probably go to optimistic
+>>>> spinning mode. If the writer that owns the lock release it at the right
+>>>> moment, the reader may acquire the read lock.
+>>> Thanks for the correction, that makes sense. I haven't spent too much
+>>> time on rwsem internals and I'm not confident about when flags are set
+>>> and cleared in sem->count; is there a case where sem->count after
+>>> up_write() could be nonzero?
+>>>
+>>> An example from one trace:
+>>>
+>>> 1. Low-priority userspace thread 4764 is blocked in f2fs_unlink,
+>>> probably at f2fs_lock_op, which is a wrapper around
+>>> down_read(cp_rwsem).
+>>> 2. f2fs-ckpt runs at t=0ms and wakes thread 4764, making it runnable.
+>>> 3. At t=1ms, f2fs-ckpt enters uninterruptible sleep and blocks at
+>>> rwsem_down_write_slowpath per sched_blocked_reason.
+>>> 4. At t=26ms, thread 4764 runs for the first time since being made
+>>> runnable. Within 40us, thread 4764 unblocks f2fs-ckpt and makes it
+>>> runnable.
+>>>
+>>> Since thread 4764 is awakened by f2fs-ckpt but never runs before it
+>>> unblocks f2fs-ckpt in down_write_slowpath(), the only idea I had is
+>>> that cp_rwsem->count is nonzero after f2fs-ckpt's up_write() in step 2
+>>> (maybe because of rwsem_mark_wake()?).
+>>>
+>>>> I do have a question about the number of readers in such a case compared
+>>>> with the number of writers. Are there a large number of low priority
+>>>> hanging around? What is an average read lock hold time?
+>>>>
+>>>> Blocking for 9.7s for a write lock is quite excessive and we need to
+>>>> figure out how this happen.,
+>>> Just to be 100% clear, it's not a single 9.7s stall, it's many smaller
+>>> stalls of 10-500+ms in f2fs-ckpt that add up to 9.7s over that range.
+>>>
+>>> f2fs is not my area of expertise, but my understanding is that
+>>> cp_rwsem in f2fs has many (potentially unbounded) readers and a single
+>>> writer. Arbitrary userspace work (fsync, creating/deleting/truncating
+>>> files, atomic writes) may grab the read lock, but assuming the
+>>> merge_checkpoint option is enabled, only f2fs-ckpt will ever grab the
+>>> write lock during normal operation. However, in this particular
+>>> example, it looks like there may have been 5-10 threads blocked on
+>>> f2fs-ckpt that were awakened alongside thread 4764 in step 2.
+>>>
+>>> I'll defer to the f2fs experts on the average duration that the read
+>>> lock is held.
+>> Thanks for the explanation.
+>>
+>> Another question that I have is whether the test result is based on the
+>> latest upstream kernel or earlier kernel version. We used to allow reader
+>> optimistic spinning which was then removed in later kernel. Reader
+>> optimistic spinning may further increase writer wait time.
+> It's on 5.10 kernel having all the upstream f2fs patches, and yes, we wanted
+> to get higher priority on writer over many readers since the writer, checkpoint,
+> is the  most latency-critical operation that can block all the other filesystem
+> operations.
 
-Additional changes:
- - filled many missing compatibles
+v5.10 kernel still have reader optimistic spinning enabled in rwsem 
+which may have worsen the writer wait time. Could you try with a more 
+up-to-date kernel or backport the relevant rwsem patches into your test 
+kernel to see how much it can help?
 
-Co-developed-by: Caleb Connolly <caleb@connolly.tech>
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
-to pass tests correctly
-depends on patch "arm64: dts: qcom: pms405: assign device specific compatible"
 
-v2:
- - changed author to myself, kept Caleb as co-author
- - moved nodename to properties
- - add nodenames for pm* with deprecated property
- - add ^$ to pattern properties
- - dropped interrupt-names property
- - added reg prop. to the nodes which have register in nodename
- - added compatible pmx55
+>> Anyway, AFAICS, this patch keeps readers out of the rwsem wait queue and so
+>> only writers can go into it. We can make an unfair rwsem to give preference
+>> to writers in the wait queue and wake up readers only if there is no more
+>> writers in the wait queue or even in the optimistic spinning queue. That
+>> should achieve the same effect as this patch.
+> Can we get a patch for the variant to test a bit? Meanwhile, I think we can
+> merge this patch to add a wraper first and switches to it later?
 
- .../bindings/mfd/qcom,spmi-pmic.txt           |  93 -----------
- .../bindings/mfd/qcom,spmi-pmic.yaml          | 156 ++++++++++++++++++
- 2 files changed, 156 insertions(+), 93 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+Give me a week or so and I can make a RFC patch to support unfair rwsem 
+for you to try out. You do need to try it on the latest kernel, though.
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
-deleted file mode 100644
-index 3810a80536f7..000000000000
---- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
-+++ /dev/null
-@@ -1,93 +0,0 @@
--          Qualcomm SPMI PMICs multi-function device bindings
--
--The Qualcomm SPMI series presently includes PM8941, PM8841 and PMA8084
--PMICs.  These PMICs use a QPNP scheme through SPMI interface.
--QPNP is effectively a partitioning scheme for dividing the SPMI extended
--register space up into logical pieces, and set of fixed register
--locations/definitions within these regions, with some of these regions
--specifically used for interrupt handling.
--
--The QPNP PMICs are used with the Qualcomm Snapdragon series SoCs, and are
--interfaced to the chip via the SPMI (System Power Management Interface) bus.
--Support for multiple independent functions are implemented by splitting the
--16-bit SPMI slave address space into 256 smaller fixed-size regions, 256 bytes
--each. A function can consume one or more of these fixed-size register regions.
--
--Required properties:
--- compatible:      Should contain one of:
--                   "qcom,pm660",
--                   "qcom,pm660l",
--                   "qcom,pm7325",
--                   "qcom,pm8004",
--                   "qcom,pm8005",
--                   "qcom,pm8019",
--                   "qcom,pm8028",
--                   "qcom,pm8110",
--                   "qcom,pm8150",
--                   "qcom,pm8150b",
--                   "qcom,pm8150c",
--                   "qcom,pm8150l",
--                   "qcom,pm8226",
--                   "qcom,pm8350c",
--                   "qcom,pm8841",
--                   "qcom,pm8901",
--                   "qcom,pm8909",
--                   "qcom,pm8916",
--                   "qcom,pm8941",
--                   "qcom,pm8950",
--                   "qcom,pm8994",
--                   "qcom,pm8998",
--                   "qcom,pma8084",
--                   "qcom,pmd9635",
--                   "qcom,pmi8950",
--                   "qcom,pmi8962",
--                   "qcom,pmi8994",
--                   "qcom,pmi8998",
--                   "qcom,pmk8002",
--                   "qcom,pmk8350",
--                   "qcom,pmr735a",
--                   "qcom,smb2351",
--                   or generalized "qcom,spmi-pmic".
--- reg:             Specifies the SPMI USID slave address for this device.
--                   For more information see:
--                   Documentation/devicetree/bindings/spmi/spmi.yaml
--
--Required properties for peripheral child nodes:
--- compatible:      Should contain "qcom,xxx", where "xxx" is a peripheral name.
--
--Optional properties for peripheral child nodes:
--- interrupts:      Interrupts are specified as a 4-tuple. For more information
--                   see:
--                   Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
--- interrupt-names: Corresponding interrupt name to the interrupts property
--
--Each child node of SPMI slave id represents a function of the PMIC. In the
--example below the rtc device node represents a peripheral of pm8941
--SID = 0. The regulator device node represents a peripheral of pm8941 SID = 1.
--
--Example:
--
--	spmi {
--		compatible = "qcom,spmi-pmic-arb";
--
--		pm8941@0 {
--			compatible = "qcom,pm8941", "qcom,spmi-pmic";
--			reg = <0x0 SPMI_USID>;
--
--			rtc {
--				compatible = "qcom,rtc";
--				interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
--				interrupt-names = "alarm";
--			};
--		};
--
--		pm8941@1 {
--			compatible = "qcom,pm8941", "qcom,spmi-pmic";
--			reg = <0x1 SPMI_USID>;
--
--			regulator {
--				compatible = "qcom,regulator";
--				regulator-name = "8941_boost";
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-new file mode 100644
-index 000000000000..595a22b185fd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-@@ -0,0 +1,156 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SPMI PMICs multi-function device
-+
-+description: |
-+  Some Qualcomm PMICs used with the Snapdragon series SoCs are interfaced
-+  to the chip via the SPMI (System Power Management Interface) bus.
-+  Support for multiple independent functions are implemented by splitting the
-+  16-bit SPMI peripheral address space into 256 smaller fixed-size regions, 256 bytes
-+  each. A function can consume one or more of these fixed-size register regions.
-+
-+  The Qualcomm SPMI series includes the PM8941, PM8841, PMA8084, PM8998 and other
-+  PMICs.  These PMICs use a "QPNP" scheme through SPMI interface.
-+  QPNP is effectively a partitioning scheme for dividing the SPMI extended
-+  register space up into logical pieces, and set of fixed register
-+  locations/definitions within these regions, with some of these regions
-+  specifically used for interrupt handling.
-+
-+maintainers:
-+  - Stephen Boyd <sboyd@kernel.org>
-+
-+properties:
-+  $nodename:
-+    oneOf:
-+      - pattern: '^pmic@.*$'
-+      - pattern: '^pm(a|s)?[0-9]*@.*$'
-+        deprecated: true
-+
-+  compatible:
-+    items:
-+      - enum:
-+          - qcom,pm660
-+          - qcom,pm660l
-+          - qcom,pm6150
-+          - qcom,pm6150l
-+          - qcom,pm6350
-+          - qcom,pm7325
-+          - qcom,pm8004
-+          - qcom,pm8005
-+          - qcom,pm8009
-+          - qcom,pm8019
-+          - qcom,pm8110
-+          - qcom,pm8150
-+          - qcom,pm8150b
-+          - qcom,pm8150l
-+          - qcom,pm8226
-+          - qcom,pm8350
-+          - qcom,pm8350b
-+          - qcom,pm8350c
-+          - qcom,pm8841
-+          - qcom,pm8909
-+          - qcom,pm8916
-+          - qcom,pm8941
-+          - qcom,pm8950
-+          - qcom,pm8994
-+          - qcom,pm8998
-+          - qcom,pma8084
-+          - qcom,pmd9635
-+          - qcom,pmi8950
-+          - qcom,pmi8962
-+          - qcom,pmi8994
-+          - qcom,pmi8998
-+          - qcom,pmk8350
-+          - qcom,pmm8155au
-+          - qcom,pmr735a
-+          - qcom,pmr735b
-+          - qcom,pms405
-+          - qcom,pmx55
-+          - qcom,smb2351
-+      - const: qcom,spmi-pmic
-+
-+  reg: true
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+
-+patternProperties:
-+  '^(labibb|([a-z][a-z0-9]+-)?regulators)$':
-+    type: object
-+
-+    required:
-+      - compatible
-+
-+  '@[0-9a-f]+$':
-+    type: object
-+    description: >
-+      Each child node of the PMIC represents a function of it.
-+
-+    properties:
-+      reg: true
-+
-+      interrupts:
-+        description: >
-+          Interrupts are specified as a 4-tuple. For more information see
-+          Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-+
-+    required:
-+      - compatible
-+
-+    additionalProperties: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/spmi/spmi.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    spmi@c440000 {
-+        compatible = "qcom,spmi-pmic-arb";
-+        reg = <0x0c440000 0x1100>,
-+              <0x0c600000 0x2000000>,
-+              <0x0e600000 0x100000>,
-+              <0x0e700000 0xa0000>,
-+              <0x0c40a000 0x26000>;
-+        reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
-+        interrupt-names = "periph_irq";
-+        interrupts = <GIC_SPI 481 IRQ_TYPE_LEVEL_HIGH>;
-+        qcom,ee = <0>;
-+        qcom,channel = <0>;
-+        #address-cells = <2>;
-+        #size-cells = <0>;
-+        interrupt-controller;
-+        #interrupt-cells = <4>;
-+        cell-index = <0>;
-+
-+        pmi8998_lsid0: pmic@2 {
-+            compatible = "qcom,pmi8998", "qcom,spmi-pmic";
-+            reg = <0x2 SPMI_USID>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            pmi8998_gpio: gpios@c000 {
-+                compatible = "qcom,pmi8998-gpio", "qcom,spmi-gpio";
-+                reg = <0xc000>;
-+                gpio-controller;
-+                gpio-ranges = <&pmi8998_gpio 0 0 14>;
-+                #gpio-cells = <2>;
-+                interrupt-controller;
-+                #interrupt-cells = <2>;
-+            };
-+        };
-+    };
--- 
-2.34.1
+Cheers,
+longman
 

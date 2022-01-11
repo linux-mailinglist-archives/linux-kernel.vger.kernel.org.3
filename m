@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0668448BB90
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02E648BB94
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346340AbiAKXwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 18:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245096AbiAKXwP (ORCPT
+        id S1346878AbiAKX7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 18:59:02 -0500
+Received: from mailout.easymail.ca ([64.68.200.34]:57102 "EHLO
+        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233810AbiAKX7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 18:52:15 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355C5C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 15:52:15 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id c10so1644775ybb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 15:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9wKkvOi6CL+CUKSws0OOxycjJbGOa3ISqmAvlKnxPaQ=;
-        b=WkGpcHKLJcXLClorQAecOFn9CNhS+bceFQ6mofBVna5AihqCPnuTRKd8T6lxX8NGx+
-         y9xr8KBnuX7ZQWwJ5bMx3duvt9LbVXxHmhKuodJ3ZTMCgS4Rwq+hYYXUd/Fpw7453nYg
-         qP5nSrkC7uPNjA/WMjZN1jxKQ/MejUGNUYgvtMvnCwBEI/8SjF0wLC/v4dqXuywNitA0
-         7PMsCuQ23uU9ZuNugxM4t/2r8p5zdFeHUzw6f+sDX9vE7shIFBZbGS0tmy4XI6dFrbla
-         HELillMj0V4a/2GYP9c3pupA/g94QCl3RwlNIWYwRNFhsAAZAPlLbWYeHjhMTTGCOqnq
-         BKkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9wKkvOi6CL+CUKSws0OOxycjJbGOa3ISqmAvlKnxPaQ=;
-        b=RTzuBMaHIL+TDX+FbOjtpGgmQizzmnQgz1VWPWVNHPuF57FY5lVS4pgbwb6a6BBkn7
-         Rga8QKtcfABon/4qMXr8rTe732LlSLogTsoWZOURjFIw9bt5/1cr7DgEs/Af69s7ih/F
-         YPqJMlDZKIujULEVCgEYO7HFoSO6Yz9JgcoXLLwXrvl6aKJ51TdCMkmnn1XoF6dni7KA
-         5vH2MNq5I3ZIB8B4AfymJfsrrquPeVgDidnmC6xEM8E/KXVMM/0xYEAXvKG4ZG5HLz0Q
-         ffTD6M2oD/g+4I9ul50G9UU93CZGsPWR9xfS56GsgV42ZT5iGFR0vz0UPcQOSQT6PYJE
-         xX9Q==
-X-Gm-Message-State: AOAM532e0Gfvo7DldwB3Q9XcIhUl9Oachi1nWImMNDmPyYrFmHLdosAm
-        dlTgQGeM5PXOkpwEjsiarym5Ye1+rYgWhUkU5PNUwA==
-X-Google-Smtp-Source: ABdhPJzDlxPB3uXYSLQwUwwUmkRZF91fpJVstFmxZ9CGHtzcqSLt0zalZaAMmtMF1ETT+psG4e1+UnBjKJFKQhStNPU=
-X-Received: by 2002:a25:9787:: with SMTP id i7mr2670803ybo.192.1641945133363;
- Tue, 11 Jan 2022 15:52:13 -0800 (PST)
+        Tue, 11 Jan 2022 18:59:01 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id 907B12D635;
+        Tue, 11 Jan 2022 23:59:00 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at emo02-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo02-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oRvSMt4fC-7F; Tue, 11 Jan 2022 23:59:00 +0000 (UTC)
+Received: from mail.gonehiking.org (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        by mailout.easymail.ca (Postfix) with ESMTPA id 497FA2D526;
+        Tue, 11 Jan 2022 23:59:00 +0000 (UTC)
+Received: from [192.168.1.4] (internal [192.168.1.4])
+        by mail.gonehiking.org (Postfix) with ESMTP id 45FEE3EE43;
+        Tue, 11 Jan 2022 16:58:59 -0700 (MST)
+Message-ID: <c3a66426-e6a0-4fd2-dc09-85181c96b755@gonehiking.org>
+Date:   Tue, 11 Jan 2022 16:58:59 -0700
 MIME-Version: 1.0
-References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com> <1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com>
-In-Reply-To: <1641894961-9241-2-git-send-email-CruzZhao@linux.alibaba.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Tue, 11 Jan 2022 15:52:02 -0800
-Message-ID: <CABk29NuX1XYUXj8uZrSjm83n=-uk1LUbRQSMpo2s6er2pTRmDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] sched/core: Accounting forceidle time for all
- tasks except idle task
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Reply-To: khalid@gonehiking.org
+Subject: Re: [Bug] mt7921e driver in 5.16 causes kernel panic
+Content-Language: en-US
+To:     Ben Greear <greearb@candelatech.com>, nbd@nbd.name,
+        lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
+        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <5cee9a36-b094-37a0-e961-d7404b3dafe2@gonehiking.org>
+ <7b15fa7c-9130-db8c-875e-8c0eb1dcc530@candelatech.com>
+From:   Khalid Aziz <khalid@gonehiking.org>
+In-Reply-To: <7b15fa7c-9130-db8c-875e-8c0eb1dcc530@candelatech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 1:56 AM Cruz Zhao <CruzZhao@linux.alibaba.com> wrote:
->
-> There are two types of forced idle time: forced idle time from cookie'd
-> task and forced idle time form uncookie'd task. The forced idle time from
-> uncookie'd task is actually caused by the cookie'd task in runqueue
-> indirectly, and it's more accurate to measure the capacity loss with the
-> sum of both.
->
-> Assuming cpu x and cpu y are a pair of SMT siblings, consider the
-> following scenarios:
->   1.There's a cookie'd task running on cpu x, and there're 4 uncookie'd
->     tasks running on cpu y. For cpu x, there will be 80% forced idle time
->     (from uncookie'd task); for cpu y, there will be 20% forced idle time
->     (from cookie'd task).
->   2.There's a uncookie'd task running on cpu x, and there're 4 cookie'd
->     tasks running on cpu y. For cpu x, there will be 80% forced idle time
->     (from cookie'd task); for cpu y, there will be 20% forced idle time
->     (from uncookie'd task).
->
-> The scenario1 can recurrent by stress-ng(scenario2 can recurrent similary):
->     (cookie'd)taskset -c x stress-ng -c 1 -l 100
->     (uncookie'd)taskset -c y stress-ng -c 4 -l 100
->
-> In the above two scenarios, the total capacity loss is 1 cpu, but in
-> scenario1, the cookie'd forced idle time tells us 20% cpu capacity loss, in
-> scenario2, the cookie'd forced idle time tells us 80% cpu capacity loss,
-> which are not accurate. It'll be more accurate to measure with cookie'd
-> forced idle time and uncookie'd forced idle time.
->
-> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+On 1/11/22 16:31, Ben Greear wrote:
+> On 1/11/22 3:17 PM, Khalid Aziz wrote:
+>> I am seeing an intermittent bug in mt7921e driver. When the driver 
+>> module is loaded
+>> and is being initialized, almost every other time it seems to write to 
+>> some wild
+>> memory location. This results in driver failing to initialize with 
+>> message
+>> "Timeout for driver own" and at the same time I start to see "Bad page 
+>> state" messages
+>> for random processes. Here is the relevant part of dmesg:
+> 
+> Please see if this helps?
+> 
+> From: Ben Greear <greearb@candelatech.com>
+> 
+> If the nic fails to start, it is possible that the
+> reset_work has already been scheduled.  Ensure the
+> work item is canceled so we do not have use-after-free
+> crash in case cleanup is called before the work item
+> is executed.
+> 
+> This fixes crash on my x86_64 apu2 when mt7921k radio
+> fails to work.  Radio still fails, but OS does not
+> crash.
+> 
+> Signed-off-by: Ben Greear <greearb@candelatech.com>
 > ---
+>   drivers/net/wireless/mediatek/mt76/mt7921/main.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/main.c 
+> b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+> index 6073bedaa1c08..9b33002dcba4a 100644
+> --- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+> +++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+> @@ -272,6 +272,7 @@ static void mt7921_stop(struct ieee80211_hw *hw)
+> 
+>       cancel_delayed_work_sync(&dev->pm.ps_work);
+>       cancel_work_sync(&dev->pm.wake_work);
+> +    cancel_work_sync(&dev->reset_work);
+>       mt76_connac_free_pending_tx_skbs(&dev->pm, NULL);
+> 
+>       mt7921_mutex_acquire(dev);
+
+Hi Ben,
+
+Unfortunately that did not help. I still saw the same messages and a 
+kernel panic. I do not see this bug if I power down the laptop before 
+booting it up, so mt7921_stop() would make sense as the reasonable place 
+to fix it.
 
 Thanks,
-
-Reviewed-by: Josh Don <joshdon@google.com>
+Khalid

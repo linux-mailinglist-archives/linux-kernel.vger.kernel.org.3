@@ -2,97 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A29CA48ADEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7468B48ADF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240036AbiAKMvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:51:51 -0500
-Received: from mail-vk1-f178.google.com ([209.85.221.178]:40449 "EHLO
-        mail-vk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbiAKMvt (ORCPT
+        id S239047AbiAKMxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:53:18 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:50956 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229958AbiAKMxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:51:49 -0500
-Received: by mail-vk1-f178.google.com with SMTP id 78so10253519vkz.7;
-        Tue, 11 Jan 2022 04:51:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ooKGf7RGEfbJN/l+F17gfotu+sbZFbeMAX/JFJAo0EQ=;
-        b=Lxdh9w0vleGQs/U4UYbeubaM4+WE8Yn3kK+FyxmRFP6uO8w1GyyzKrujrdflEOIvX3
-         2ofEwSJiz0P4eiuezh/dUD58xm6m293MHzytmsDbCQcRfRMQaTYwpRhT8fAtV2cECbVM
-         KzuIwQftBvi7y6H+HPpNiyT7jFx2VKk8ipe0OwEZgwyS3V8MMmAQU9pJzURjyL2vHr3R
-         fe8rJFZg3L8ROmAh8vk6dIfawG1iTVqEQZiQyz6RiXiyyKoIXpIxs/kJtzoMooW1X3mk
-         9AHNxaduMEarlBwAZM2kdQvCGPETQwme4OT1fysFAivRDTVKp5+tMIswUH8Et89O2+WG
-         oUGA==
-X-Gm-Message-State: AOAM530xsxbr/0VzNGN72iuCDV8gMBNRVi/SGXuHbTXChDTe40Gvn8ZJ
-        e+mOj6nEeTwFc5/Vhedg5bJDFpq0r5FdCw==
-X-Google-Smtp-Source: ABdhPJyR8U904KSrfsEa9jdjW9fTngvw5YpkTC9y/+eMa4iL4va6bRxrbN1d1JDwAOE9UWyiCc68Kw==
-X-Received: by 2002:a1f:3213:: with SMTP id y19mr1940708vky.7.1641905508697;
-        Tue, 11 Jan 2022 04:51:48 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id q11sm5823031uaj.4.2022.01.11.04.51.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 04:51:48 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id v12so29447222uar.7;
-        Tue, 11 Jan 2022 04:51:48 -0800 (PST)
-X-Received: by 2002:a05:6102:21dc:: with SMTP id r28mr1805314vsg.57.1641905507900;
- Tue, 11 Jan 2022 04:51:47 -0800 (PST)
+        Tue, 11 Jan 2022 07:53:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641905597; x=1673441597;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GPP2NwXKguVvQqgSRdC4tryu6NqbYiCAp/eYy5ky3f4=;
+  b=kGDhSY0icPySHXB59YmTZBjjy9wBBvLk6U2ywfSWkBM+w1RNIBU/h3mR
+   G54DROBJPl4XgH8fwC+bTyHR/65beRUJNzLDNR44QulDyZ29/LHrGjHi6
+   xOkfQ7EYkodCdd6WH5rGqWiPBU772Ex7ANHb22eNV15gtVn1JsZRpRxDi
+   kkVJRq5y4wsZh7uA7qr35/ueCw239OjUlsZucTQ5nl7+Yi2Ffi5hrNNtV
+   6XZhprX4d0kZuh0GMxJ3M2BcBpMUBpTGEmaqoW+wdZwm+VNE85y/WikfA
+   X4hsQV6u1e71AIiZTOPBRGVWT+5yDBimvP+UQKmI1uqlGnBzdV7gPZ0SL
+   w==;
+IronPort-SDR: SQxFJ4aFg5UtQOLBuS2YHAJgSeBvTIon2ycxzjn1Ukw+3k6NDK/SHZ2ezG+FPILV93VB5hZaOa
+ aeQcYYtwjBgO8HC6act/hAipfDK8cuYRT8FBntQHcjQgpHniHVDzWxjERPr9G4sZMZlJKYpRdA
+ gGHpSsOzgrKEIiPJYeMPDV0cudZwZuX7URF8VNaQrk93JNOoeLfHT5yAgoqcslyYI724Ppz2ZU
+ mWyZJ0hV44QfoXAY0I7/tmW4VGSajhQkKXD1MTr8lK/KIN1Fh+DewaU8sBo+cGcJzPrpIdD48y
+ xrAK+5zBwLTvif54I8Lap8F/
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="142326214"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2022 05:53:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 11 Jan 2022 05:53:16 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 11 Jan 2022 05:53:12 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <claudiu.beznea@microchip.com>
+CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
+        <rdunlap@infradead.org>, <unixbhaskar@gmail.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH] clk: at91: sama7g5: Allow MCK1 to be exported and referenced in DT
+Date:   Tue, 11 Jan 2022 14:53:10 +0200
+Message-ID: <20220111125310.902856-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211223141113.1240679-1-Jason@zx2c4.com> <20211223141113.1240679-2-Jason@zx2c4.com>
- <CAMuHMdU0spv9X_wErkBBWQ9kV9f1zE_YNcu5nPbTG_64Lh_h0w@mail.gmail.com> <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
-In-Reply-To: <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Jan 2022 13:51:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW+Od70XTNbnNxL3qXgetZ9QDLeett6u5vg9Wr6atxD=w@mail.gmail.com>
-Message-ID: <CAMuHMdW+Od70XTNbnNxL3qXgetZ9QDLeett6u5vg9Wr6atxD=w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Theodore Tso <tytso@mit.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+MCK1 feeds the External Bus Interface (EBI). EBI's clock rate is used
+to translate EBI's timmings to SMC timings, thus we need to handle MCK1
+in the EBI driver. Allow MCK1 to be referenced as a PMC_TYPE_CORE clock
+from phandle in DT.
 
-CC bpf, netdev
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+ drivers/clk/at91/sama7g5.c       | 8 +++++++-
+ include/dt-bindings/clock/at91.h | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-On Tue, Jan 11, 2022 at 1:28 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> On Tue, Jan 11, 2022 at 12:38 PM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > Unfortunately we cannot get rid of the sha1 code yet (lib/sha1.o is
-> > built-in unconditionally), as there are other users...
+diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
+index 369dfafabbca..e43458673afb 100644
+--- a/drivers/clk/at91/sama7g5.c
++++ b/drivers/clk/at91/sama7g5.c
+@@ -302,6 +302,7 @@ static const struct {
+  * @ep_count:		extra parents count
+  * @ep_mux_table:	mux table for extra parents
+  * @id:			clock id
++ * @eid:		export index in sama7g5->chws[] array
+  * @c:			true if clock is critical and cannot be disabled
+  */
+ static const struct {
+@@ -311,6 +312,7 @@ static const struct {
+ 	u8 ep_count;
+ 	u8 ep_mux_table[4];
+ 	u8 id;
++	u8 eid;
+ 	u8 c;
+ } sama7g5_mckx[] = {
+ 	{ .n = "mck1",
+@@ -319,6 +321,7 @@ static const struct {
+ 	  .ep_mux_table = { 5, },
+ 	  .ep_count = 1,
+ 	  .ep_chg_id = INT_MIN,
++	  .eid = PMC_MCK1,
+ 	  .c = 1, },
+ 
+ 	{ .n = "mck2",
+@@ -913,7 +916,7 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
+ 	if (IS_ERR(regmap))
+ 		return;
+ 
+-	sama7g5_pmc = pmc_data_allocate(PMC_CPU + 1,
++	sama7g5_pmc = pmc_data_allocate(PMC_MCK1 + 1,
+ 					nck(sama7g5_systemck),
+ 					nck(sama7g5_periphck),
+ 					nck(sama7g5_gck), 8);
+@@ -1027,6 +1030,9 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
+ 			goto err_free;
+ 
+ 		alloc_mem[alloc_mem_size++] = mux_table;
++
++		if (sama7g5_mckx[i].eid)
++			sama7g5_pmc->chws[sama7g5_mckx[i].eid] = hw;
+ 	}
+ 
+ 	hw = at91_clk_sama7g5_register_utmi(regmap, "utmick", "main_xtal");
+diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
+index 98e1b2ab6403..8498c0cd95fe 100644
+--- a/include/dt-bindings/clock/at91.h
++++ b/include/dt-bindings/clock/at91.h
+@@ -35,6 +35,7 @@
+ #define PMC_AUDIOIOPLL		(PMC_MAIN + 7)
+ #define PMC_ETHPLL		(PMC_MAIN + 8)
+ #define PMC_CPU			(PMC_MAIN + 9)
++#define PMC_MCK1		(PMC_MAIN + 10)
+ 
+ #ifndef AT91_PMC_MOSCS
+ #define AT91_PMC_MOSCS		0		/* MOSCS Flag */
+-- 
+2.25.1
 
-kernel/bpf/core.c and net/ipv6/addrconf.c
-Could they be switched to blake2s, too?
-
-> I think that's just how things go and a price for progress. We're not
-> going to stick with sha1, and blake2s has some nice properties that we
-> certainly want. In the future hopefully this can decrease in other
-> ways based on other future improvements. But that's where we are now.
->
-> If you're really quite concerned about m68k code size, I can probably
-> do some things to reduce that. For example, blake2s256_hmac is only
-> used by wireguard and it could probably be made local there. And with
-> some trivial loop re-rolling, I can shave off another 2300 bytes. And
-> I bet I can find a few other things too. The question is: how
-> important is this to you?
-
-No problem, I just try to report all measurable impact on kernel size,
-so there is some record of it.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

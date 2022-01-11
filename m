@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E987F48A61A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6837248A616
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbiAKDMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 22:12:02 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:53939 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229523AbiAKDMB (ORCPT
+        id S233431AbiAKDLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 22:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229523AbiAKDLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 22:12:01 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 20B3AFvn012506
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Jan 2022 22:10:15 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 22C2415C00C8; Mon, 10 Jan 2022 22:10:15 -0500 (EST)
-Date:   Mon, 10 Jan 2022 22:10:15 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Simo Sorce <simo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Message-ID: <Ydz1F/AqB1oO/qHF@mit.edu>
-References: <20220110132349.siplwka7yhe2tmwc@valinor>
- <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
- <YdxCsI3atPILABYe@mit.edu>
- <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
- <Ydxu+KS5UkQ6hU9R@mit.edu>
- <Ydx7D3H0PS0Zs9/B@sol.localdomain>
- <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
- <YdyNxJzdBmSSEtDC@mit.edu>
- <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
- <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
+        Mon, 10 Jan 2022 22:11:16 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4395C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:11:16 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id c3so15082633pls.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=zbUZ8MBTmVmuuh6nLO3oUSWnxXuwL880OdPfuGWzHYk=;
+        b=cxfkFqPRjJsidUYoFqrkjQu+rytMjDJUVHRqWFdLhQu7zfbmc+PGsEdtTH6lq0LnJU
+         f5llsTXt4jzLni4sIqAcUlN9VkfhJNiySYlWNNC80IBjoftWpG/WhY9heJDB24FqGmaG
+         FAS3RDxvyPRGi8juK2nJRGYUBftDRSHQ+GD618Yb/syIM7tg4DpnVWnGwkVuVZpKHeMW
+         kI7YgZVMdm3PbPuDtBH8+XvwzliKRslPcLotmZ3h2WyhJkvo/hZsHmLfpRfMPh1gQuLE
+         p+xbSvu4WniS0b8Q0UD2Rao/OuI6yO+l3p3GlSi1Xvgm2a356mk5UVFvDeoRQJeHQm6J
+         LT9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=zbUZ8MBTmVmuuh6nLO3oUSWnxXuwL880OdPfuGWzHYk=;
+        b=iYauQMkQS2nZ6Eyqdnq/PGmg2ncToPCtjHdL8evTrkfmSoqITxDi52AhFmrNQsUFVF
+         FtnP7XusZFBbkZhUr7xgDkryqmaPGNMTFdBd0I3F6dfy3XEZ1/CmRHJy0CI3zpXoJDPT
+         6ILvrKeBWnwndjllkEUyitkgZnGc13gZrPtTLpibu42wIs35nAlQaGsuJcJ2Zy0OXP74
+         WmtaVtoUFA4EZNN1zCimqhguSpnL0YyyKG4FBpqFlmo2T0qsvOp2zOQrS8sl5xrc78ZV
+         587CKlZnEno/Xb19JZpqTdwjXRZYz6bHQ5SpEAH6jkJdW347grXVWgu836XqkdfDECBP
+         +08A==
+X-Gm-Message-State: AOAM530B8VZJcWHJxQ4guHfAGLFwFCSQLFv7S69Pxq7mYnvSfnZxpJWv
+        tmFEqi+bIR0T0WmgI6BJ27c=
+X-Google-Smtp-Source: ABdhPJwvS1ggfWVk1+YTM2VQ1yaJh/hW9pOxZQQtZVk1N6qWAZQMXv//b71/0S/AB/keLx9+1yye6Q==
+X-Received: by 2002:a63:7a52:: with SMTP id j18mr2377642pgn.319.1641870676336;
+        Mon, 10 Jan 2022 19:11:16 -0800 (PST)
+Received: from localhost (124-171-74-95.tpgi.com.au. [124.171.74.95])
+        by smtp.gmail.com with ESMTPSA id g5sm8697284pfj.143.2022.01.10.19.11.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 19:11:16 -0800 (PST)
+Date:   Tue, 11 Jan 2022 13:11:11 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH] powerpc/time: Fix build failure due to
+ do_hard_irq_enable() on PPC32
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <247e01e0e10f4dbc59b5ff89e81702eb1ee7641e.1641828571.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <247e01e0e10f4dbc59b5ff89e81702eb1ee7641e.1641828571.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
+Message-Id: <1641870650.jvmi84hc0s.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 05:44:03PM -0800, Andy Lutomirski wrote:
-> 
-> So let’s solve it for real.  Have a driver (in a module) that
-> exposes a /dev/urandom compatible interface to the CryptoAPI DRBG.
-> We can do a really nice job of it, and maybe it’ll be 100 lines of
-> code.  People can do whatever they like with it in their container
-> manager or boot scripts. And if it has a problem (where it’s *less*
-> secure than the real urandom), we can say “I told you so”.
-> 
-> We can go one step farther: add an LSM hook to getrandom().  Then
-> someone can hack up a fips_t policy for SELinux that turns off
-> getrandom.
+Excerpts from Christophe Leroy's message of January 11, 2022 1:29 am:
+> 	  CC      arch/powerpc/kernel/time.o
+> 	In file included from <command-line>:
+> 	./arch/powerpc/include/asm/hw_irq.h: In function 'do_hard_irq_enable':
+> 	././include/linux/compiler_types.h:335:45: error: call to '__compiletime=
+_assert_35' declared with attribute error: BUILD_BUG failed
+> 	  335 |         _compiletime_assert(condition, msg, __compiletime_assert=
+_, __COUNTER__)
+> 	      |                                             ^
+> 	././include/linux/compiler_types.h:316:25: note: in definition of macro =
+'__compiletime_assert'
+> 	  316 |                         prefix ## suffix();                     =
+        \
+> 	      |                         ^~~~~~
+> 	././include/linux/compiler_types.h:335:9: note: in expansion of macro '_=
+compiletime_assert'
+> 	  335 |         _compiletime_assert(condition, msg, __compiletime_assert=
+_, __COUNTER__)
+> 	      |         ^~~~~~~~~~~~~~~~~~~
+> 	./include/linux/build_bug.h:39:37: note: in expansion of macro 'compilet=
+ime_assert'
+> 	   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), =
+msg)
+> 	      |                                     ^~~~~~~~~~~~~~~~~~
+> 	./include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BU=
+G_ON_MSG'
+> 	   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+> 	      |                     ^~~~~~~~~~~~~~~~
+> 	./arch/powerpc/include/asm/hw_irq.h:483:9: note: in expansion of macro '=
+BUILD_BUG'
+> 	  483 |         BUILD_BUG();
+> 	      |         ^~~~~~~~~
+>=20
+> should_hard_irq_enable() returns false on PPC32 so this BUILD_BUG() shoul=
+dn't trigger.
+>=20
+> Force inlining of should_hard_irq_enable()
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Fixes: 0faf20a1ad16 ("powerpc/64s/interrupt: Don't enable MSR[EE] in irq =
+handlers unless perf is in use")
+> Cc: Nicholas Piggin <npiggin@gmail.com>
 
-These are both dangerous.  The first means creating a new device node
-which effectively is /dev/drbg-random which could be bind mounted or
-mknod'ed to be /dev/urandom.  But if the user boots a kernel that
-doesn't support this new device node, it will mean opening
-/dev/urandom will get ENODEV.
+Acked-by: Nicholas Piggin <npiggin@gmail.com>
 
-Similarly, getrandom(2) never fails.  By allowing a SELinux policy to
-force it to fail with ENOSYS, or some other error, it means exposing
-userspace code to a failure path that may not be as well tested.
-Sure, *sane* code might fall back to opening /dev/urandom; but the
-whole point of getrandom(2) was that it was a dumb, stupid interface
-interface that could be safely used by application programmers.  Not
-paranoid OS crypto engineers that carefully check the error returns of
-all system calls, with appropriate fallbacks and making sure that code
-always "fails safe".
+Thanks,
+Nick
 
-Right now, the enterprise distros are doing their own thing, and quite
-frankly, I don't see a problem with that.  If it turns out DRBG is
-less secure (and there are some things that fill me with disquiet),
-then let them take the economic consequences, since they are the ones
-who are doing this for the economic advantages of trying to claim FIPS
-compliance.
-
-If we must support this in the upstream kernel, then configure it via
-CONFIG_RANDOM_SECURITY_THEATRE which redirects getrandom(2) and
-/dev/[u]random to DRBG.  I'd prefer that it be possible for someone to
-put "random_security_theatre=0" on the boot command line which would
-disable redirecting the interfaces to DRBG so if it turns out that
-DRBG *is* less secure, we can give advice on how to turn it off
-without requiring a patched kernel.  :-)
-
-						- Ted
+> ---
+>  arch/powerpc/include/asm/hw_irq.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm=
+/hw_irq.h
+> index a58fb4aa6c81..674e5aaafcbd 100644
+> --- a/arch/powerpc/include/asm/hw_irq.h
+> +++ b/arch/powerpc/include/asm/hw_irq.h
+> @@ -473,7 +473,7 @@ static inline bool arch_irq_disabled_regs(struct pt_r=
+egs *regs)
+>  	return !(regs->msr & MSR_EE);
+>  }
+> =20
+> -static inline bool should_hard_irq_enable(void)
+> +static __always_inline bool should_hard_irq_enable(void)
+>  {
+>  	return false;
+>  }
+> --=20
+> 2.33.1
+>=20

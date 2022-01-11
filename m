@@ -2,131 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A5748B79E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DBF48B7A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbiAKTsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:48:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S239778AbiAKTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiAKTso (ORCPT
+        with ESMTP id S239082AbiAKTtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:48:44 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4673AC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:48:44 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m13so740372pji.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:48:44 -0800 (PST)
+        Tue, 11 Jan 2022 14:49:13 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F390EC061751
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:49:12 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id y17so433718qtx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:49:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7IRa/e6NB6rFT1xeAvBSmwQEwtCIOQPPZwvTFtfT0gc=;
-        b=fPaHSQdE3mYpMCRD0r2jIiwqBbCuUNXUK+SmiuCkGo1uYDkdrP4XrRaJuzET6B82GC
-         cJaVzeUiT+8uDbOhaVn3hyIRSi5hnLR2Mjae6hQZc7liihRTJMw0XgBaF/+t/3JlL2aw
-         bg9eruXJohq2EJMV79RtIhjFiUv2Lr4TKmijfheulkSqXxhtEZuU5k1YcOW9jlP+0wDd
-         vWEf6UTOr49OJY+lqzZoRIsfBYe6jRQTEgcM8uM2TzD/oLE7DEypKVzTcko1h+VFigaj
-         hb9yjDedHw42DGApOkoSxOB9ueAr/OibAL5TRUGTis+x0l/2DfutaODvKEh7BNdHq+8f
-         4BnQ==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=YqrRa12A2dOCgNRdJD8niKrGy7BorSiXU7Pz1gVSSqw=;
+        b=sYFJQYLkBAWGCMf7IJC8E0nfk9THaHhkHCaaJUxFXTYOlqpafhhRwpJXn5LZpqqBbk
+         eATWyLkamKg+bBaRAVN1gSTqLhaOE+Jny3X+bgRtl3E4O2J/KDY9Rl38HyjtDktOOmp2
+         shP6MzJ+xf2Vw52XEUOHpnuHexDLdkPfNWpBijuwk/T0u9ZJaFTmk2Opj4+dh6pXC+pr
+         jnZvLVNZrcD82fdVw96ZpbZR0M+aV5lE2113ue4Du6qz/Q55tWnzD7eMpsVKGWzfPPlE
+         x2pMXq4jKm1r4Za6xuhXk2sNdsGJeVsYcpkqAYvDoGfAGzFKWGMeQ3GX61FnYGekv9jP
+         xxhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7IRa/e6NB6rFT1xeAvBSmwQEwtCIOQPPZwvTFtfT0gc=;
-        b=wa1+AuX9FMa0GUvm8KyZ+BwAOpUYJHjS26PRKqCEK6LHn4sHd2egKq6+NZdJFNySOW
-         ah37/AcEZiQMZXN1TBdJhBFnYbWVvtIKPHutwJMD04e/gR5XjLe26IitOnC4/F0FVP2K
-         mf+IbvM5CRuh12reYA0zVDXkPCa5twPKK2/p5UWns7ClN5EVBzs4GpJtDosbCF86tttz
-         VNy0F4cOygYMWY0S8RcGYIK1khWUNkKuA92xV5NshkUY20d4Df2miRglXIZv8O3+otfE
-         mUNUW3FWchRHIj2vMZdGTX/l8wbr/MQzOYsIgHJ4HTZs/byFkLIshy7j0j9+ctWb+GEL
-         5X/w==
-X-Gm-Message-State: AOAM5334K+lqPCAFSWl9xWfguUviyKH7nUphsJ5EMKtb23MdtE7zNDZ2
-        ThvZweSZ2xpt+xF9woQppxZNdg==
-X-Google-Smtp-Source: ABdhPJzztc3BodKbO8ZutiuVhb0R55InpNbOtbss/Y8nHomiSopp+EdSysJPbYytPupgW8FXq58MvA==
-X-Received: by 2002:a63:ab08:: with SMTP id p8mr5348543pgf.617.1641930523609;
-        Tue, 11 Jan 2022 11:48:43 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g5sm12210826pfj.143.2022.01.11.11.48.42
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=YqrRa12A2dOCgNRdJD8niKrGy7BorSiXU7Pz1gVSSqw=;
+        b=w0BdAjH328xTSkfTyX45UMjsSsjHZ2SqUTDIC7s3VeSVwPXloMGaT4RlhAdXOVov+P
+         zACuohytAvCuAY1eQuirDDI4X4O5R6T45Cuya536H9xhRG/4+VB2d6OLTLREAT87ZieP
+         kE+n+q33o50W+/OwnWd1FCAVJGeNsSu5u47ACOPMMFP1eQmcEoks8JQegLC2xt7C8nmL
+         +RqOUrP/NXqm6sFR6xHc1KjC20JPO++hFqSXeHTIKYDEYY086n8n+C5MgfBpHGlBFsOy
+         xC6m7Xy1Algy8SvfLU0LrL2+rsIUNREAIiqgtrxMV9/y8l3Q4imFjUntbTQCKYhRiImS
+         Qdgw==
+X-Gm-Message-State: AOAM533c2CHd2ZMKhCrLOJgDCD3bdSsG3nwXYVk74ZGgxLOwuMRlDmd6
+        v0qIs2ftiXJ0TNpnc5s0SA8O6w==
+X-Google-Smtp-Source: ABdhPJxn1aXvwlh12nmUzySizEvQ1SnqQ5KyJRZ/h/ecY76YDViQiteOu3/2rM79//oaZ2lpUdK73A==
+X-Received: by 2002:ac8:5b92:: with SMTP id a18mr5081449qta.262.1641930551687;
+        Tue, 11 Jan 2022 11:49:11 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
+        by smtp.gmail.com with ESMTPSA id j22sm5607330qko.46.2022.01.11.11.49.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 11:48:42 -0800 (PST)
-Date:   Tue, 11 Jan 2022 19:48:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Gao, Chao" <chao.gao@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] KVM: x86: Remove WARN_ON in
- kvm_arch_check_processor_compat
-Message-ID: <Yd3fFxg3IjWPUIqH@google.com>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-6-chao.gao@intel.com>
- <Ydy6aIyI3jFQvF0O@google.com>
- <BN9PR11MB5276DEA925C72AF585E7472C8C519@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Tue, 11 Jan 2022 11:49:11 -0800 (PST)
+Message-ID: <8deeca52c1b482d738c9c888194c84549d00424f.camel@ndufresne.ca>
+Subject: Re: [PATCH 1/2] media: v4l2-ctrls: Add intra-refresh type control
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     hverkuil-cisco@xs4all.nl, ezequiel@collabora.com,
+        vgarodia@codeaurora.org, stanimir.varbanov@linaro.org
+Date:   Tue, 11 Jan 2022 14:49:08 -0500
+In-Reply-To: <1641561124-19476-2-git-send-email-quic_dikshita@quicinc.com>
+References: <1641561124-19476-1-git-send-email-quic_dikshita@quicinc.com>
+         <1641561124-19476-2-git-send-email-quic_dikshita@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN9PR11MB5276DEA925C72AF585E7472C8C519@BN9PR11MB5276.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022, Tian, Kevin wrote:
-> > From: Sean Christopherson <seanjc@google.com>
-> > Sent: Tuesday, January 11, 2022 7:00 AM
-> > 
-> > On Mon, Dec 27, 2021, Chao Gao wrote:
-> > > kvm_arch_check_processor_compat() needn't be called with interrupt
-> > > disabled, as it only reads some CRs/MSRs which won't be clobbered
-> > > by interrupt handlers or softirq.
-> > >
-> > > What really needed is disabling preemption. No additional check is
-> > > added because if CONFIG_DEBUG_PREEMPT is enabled, smp_processor_id()
-> > > (right above the WARN_ON()) can help to detect any violation.
-> > 
-> > Hrm, IIRC, the assertion that IRQs are disabled was more about detecting
-> > improper usage with respect to KVM doing hardware enabling than it was
-> > about ensuring the current task isn't migrated.  E.g. as exhibited by patch
-> > 06, extra protections (disabling of hotplug in that case) are needed if
-> > this helper is called outside of the core KVM hardware enabling flow since
-> > hardware_enable_all() does its thing via SMP function call.
+Le vendredi 07 janvier 2022 à 18:42 +0530, Dikshita Agarwal a écrit :
+> Add a control to set intra-refresh type.
 > 
-> Looks the WARN_ON() was added by you. 😊
-
-Yeah, past me owes current me a beer.
-
-> commit f1cdecf5807b1a91829a2dc4f254bfe6bafd4776
-> Author: Sean Christopherson <sean.j.christopherson@intel.com>
-> Date:   Tue Dec 10 14:44:14 2019 -0800
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> ---
+>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 27 ++++++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c          | 10 ++++++++
+>  include/uapi/linux/v4l2-controls.h                 |  6 +++++
+>  3 files changed, 43 insertions(+)
 > 
->     KVM: x86: Ensure all logical CPUs have consistent reserved cr4 bits
-> 
->     Check the current CPU's reserved cr4 bits against the mask calculated
->     for the boot CPU to ensure consistent behavior across all CPUs.
-> 
->     Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
->     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> But it's unclear to me how this WARN_ON() is related to what the commit
-> msg tries to explain.
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index e141f0e..ce0201b 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -1180,6 +1180,33 @@ enum v4l2_mpeg_video_h264_entropy_mode -
+>      is set to non zero value.
+>      Applicable to H264, H263 and MPEG4 encoder.
+>  
+> +``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE (enum)``
+> +
+> +enum v4l2_mpeg_video_intra_refresh_type -
+> +    Sets the type of intra refresh. The period to refresh
+> +    the whole frame is specified by V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
+> +    Note if the client sets this control to either ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
+> +    or ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC`` the ``V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB``
+> +    control shall be ignored.
+> +    If the client sets this control to ``V4L2_MPEG_VIDEO_INTRA_REFRESH_NONE`` the
+> +    V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB control shall not be ignored.
+> +    Applicable to H264, H263 and MPEG4 encoder. Possible values are:
+> +
+> +.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_NONE``
+> +      - Intra refresh is disabled.
 
-Ya, the changelog and lack of a comment is awful.
+Slight annoyance, we now have two mechanism to disable intra refresh. Disabling
+intra-refresh was previously documented as "Note that this control will not take
+effect when V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD control is set to non zero
+value."
 
-> When I read this code it's more like a sanity check on the assumption that it
-> is currently called in SMP function call which runs the said function with
-> interrupt disabled.
+Perhaps we should drop this and add a similar line in this control documentation
+?
 
-Yes, and as above, that assertion was more about the helper not really being safe
-for general usage as opposed to wanting to detect use from preemptible context.
-If we end up keeping the WARN_ON, I'll happily write a comment explaining the
-point of the assertion.
+> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
+> +      - The whole frame is completely refreshed randomly
+> +      after the specified period.
+> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC``
+> +      - The whole frame MBs are completely refreshed in cyclic order
+> +      after the specified period.
+> +
+>  ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
+>      Intra macroblock refresh period. This sets the period to refresh
+>      the whole frame. In other words, this defines the number of frames
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> index 54ca4e6..403c77b 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> @@ -572,6 +572,12 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+>  		"VBV/CPB Limit",
+>  		NULL,
+>  	};
+> +	static const char * const intra_refresh_type[] = {
+> +		"None"
+> +		"Random",
+> +		"Cyclic",
+> +		NULL,
+> +	};
+>  
+>  	switch (id) {
+>  	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
+> @@ -705,6 +711,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+>  		return hevc_start_code;
+>  	case V4L2_CID_CAMERA_ORIENTATION:
+>  		return camera_orientation;
+> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
+> +		return intra_refresh_type;
+>  	default:
+>  		return NULL;
+>  	}
+> @@ -834,6 +842,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
+>  	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
+>  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
+> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:		return "Intra Refresh Type";
+>  	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
+>  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
+>  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
+> @@ -1360,6 +1369,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+>  	case V4L2_CID_STATELESS_H264_DECODE_MODE:
+>  	case V4L2_CID_STATELESS_H264_START_CODE:
+>  	case V4L2_CID_CAMERA_ORIENTATION:
+> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
+>  		*type = V4L2_CTRL_TYPE_MENU;
+>  		break;
+>  	case V4L2_CID_LINK_FREQ:
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> index c8e0f84..5429c25 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -443,6 +443,12 @@ enum v4l2_mpeg_video_multi_slice_mode {
+>  #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
+>  #define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
+>  #define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
+> +#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE		(V4L2_CID_CODEC_BASE+237)
+> +enum v4l2_mpeg_video_intra_refresh_type {
+> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_NONE		= 0,
+> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM	= 1,
+> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_CYCLIC	= 2,
+> +};
+>  
+>  /* CIDs for the MPEG-2 Part 2 (H.262) codec */
+>  #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+

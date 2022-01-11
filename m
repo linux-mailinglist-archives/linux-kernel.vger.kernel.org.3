@@ -2,156 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A193B48B269
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01E548B279
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350121AbiAKQjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:39:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51574 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350118AbiAKQjU (ORCPT
+        id S244179AbiAKQnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:43:25 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:58138
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240545AbiAKQnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:39:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 11 Jan 2022 11:43:24 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98CA9B81C01;
-        Tue, 11 Jan 2022 16:39:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122E2C36AED;
-        Tue, 11 Jan 2022 16:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641919158;
-        bh=61fwir8FuBBwmudkd+4p2vr90sj5PqTwWrjg0ksTNFc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=csBTAvxDTIiFkWxJ3vMmI/hhMNYLTn+pstEdKPJi88HdA6GNINC1GroXdvxNkV5s1
-         nNvyh2N/p9alJAE+5+0EOkbj3YzF9TCepFnlP5LYwwrCRCAFYwM3aT6NcPzKPFOriI
-         DBqEhao8yX+kmB6uHyO01h7yotaQSr8EqBQPas44oZ0YSizo+BJ7ErZjc4YBtLRiNr
-         1Yf895Pr6qPu0m2019accFl5LqbBmmFFMqkYx5uSC8T26I4q/XB2s7YBh/cRuDs6Vx
-         29II0iBLahpOMyo1BQqBc2/eLpfH20N6ynIQhSd6cEB9iX8ZIMHN6GAA8e9olIRH7g
-         qujsL/ds73Vyg==
-Date:   Tue, 11 Jan 2022 10:39:16 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, kw@linux.com,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajatxjain@gmail.com
-Subject: Re: [PATCH] pci: Make DWORD accesses while saving / restoring LTR
- state
-Message-ID: <20220111163916.GA148556@bhelgaas>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9240F4002A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 16:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641919403;
+        bh=7tovFhdsBRLFi8z4L+nr20D8IySCU7+t0s1+Rx0EAjs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=RrRagHzhjiEMonHo+l9W4aXCTWuBJ4miWs/OH8GtMTOqsIYBm72smPL7wY3x0R9EH
+         FIVxcNmHyaSMEVmLVqLOMHFFDFFMKLEr77HdANeZVObjYhK6sGHB8r0Hnmzzw8uE7G
+         DK8WwIdpKpHg96W2cXCyJHG7dBwurHMEWtL6Z7lesAHU5ZI3wsDlEINxcI4AWPRUJq
+         EonVwk3o9jZODj89Ve1MMUjA/q10JMxCXA1eYyX3iCVJpZxIL87e/fi6cugNE+i/FB
+         7N3CXYNhsE6jhmOjRCTrDAtZBGB5b4wZXVdNSVehzx7lKZj9kDyCs1J1jHPA0E/9yS
+         /MRJdHZbtk65w==
+Received: by mail-ed1-f69.google.com with SMTP id t1-20020a056402524100b003f8500f6e35so13889625edd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:43:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7tovFhdsBRLFi8z4L+nr20D8IySCU7+t0s1+Rx0EAjs=;
+        b=bqy5Z5nAishliGIQr8y09cDLZQl0uY+VhaUR1Ckd6dH9K7DGKVEGiZA3TTGqRr3wzY
+         R2wrzEH16Pt0XRX46lbC6N4aKMwIF9BdzQNsbNXWRtYEPdvxvT3ocm90Q8TZRfLg31Zc
+         mTHTPB3CpI6WA47jpeSlAY9jA5MAeRncojuOo5bULoP3TgA9yQw9P+bJ5k29mhyJffbK
+         o8Oq0lwzR0BjT+JHeNtxOzxk9OveZX2kjr1hm2HVgyTcGP2FJZsAQywlVH0iasu25Y74
+         kokBjtuFfLJTIkUb7eOjZBd69WHtC5dZnn3zDV/q8CXxYK5wZ/r7HBORpTlCc3DaZl7e
+         lpyA==
+X-Gm-Message-State: AOAM530GB6ij2OuIl/6Lmxj2BrDMD7ccwIkvGDStr3RzdXuWuc7LVSIL
+        e3hDfsTxHo2ZxP4lV+dqHEeJd1oG+2+FonSm4GRFDQEEvOGnCwGYGEhwXLYUeQSnE94jcty7JO+
+        2rtBnWpdnbSjecjXvDwyp3A7tBIRvlmx0bdBwHgllJA==
+X-Received: by 2002:aa7:d383:: with SMTP id x3mr5119040edq.392.1641919402847;
+        Tue, 11 Jan 2022 08:43:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzp8us62KWjAB+me6PcR6TH8dk+EOXoM7bcu94wmzxcAseIUSo3tny4V2OWWzjkd+I9QynjEg==
+X-Received: by 2002:aa7:d383:: with SMTP id x3mr5119027edq.392.1641919402631;
+        Tue, 11 Jan 2022 08:43:22 -0800 (PST)
+Received: from [192.168.0.25] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id kz3sm3715117ejc.71.2022.01.11.08.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 08:43:22 -0800 (PST)
+Message-ID: <a5feb8ad-e6af-0222-db07-eeaea184dbba@canonical.com>
+Date:   Tue, 11 Jan 2022 17:43:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222012105.3438916-1-rajatja@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 2/3] regulator: dt-bindings: maxim,max77802: Convert to
+ dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211228164305.35877-1-krzysztof.kozlowski@canonical.com>
+ <20211228164305.35877-3-krzysztof.kozlowski@canonical.com>
+ <YdRoyQsABBGen54D@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YdRoyQsABBGen54D@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 05:21:05PM -0800, Rajat Jain wrote:
-> Some devices have an errata such that they only support DWORD accesses
-> to some registers.
+On 04/01/2022 16:33, Rob Herring wrote:
+> On Tue, Dec 28, 2021 at 05:43:04PM +0100, Krzysztof Kozlowski wrote:
+>> Convert the regulators of Maxim MAX77802 PMIC to DT schema format.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  .../bindings/regulator/max77802.txt           | 111 ----------------
+>>  .../bindings/regulator/maxim,max77802.yaml    | 118 ++++++++++++++++++
+>>  2 files changed, 118 insertions(+), 111 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/regulator/max77802.txt
+>>  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/max77802.txt b/Documentation/devicetree/bindings/regulator/max77802.txt
+>> deleted file mode 100644
+>> index b82943d83677..000000000000
+>> --- a/Documentation/devicetree/bindings/regulator/max77802.txt
+>> +++ /dev/null
+>> @@ -1,111 +0,0 @@
+>> -Binding for Maxim MAX77802 regulators
+>> -
+>> -This is a part of device tree bindings of MAX77802 multi-function device.
+>> -More information can be found in bindings/mfd/max77802.txt file.
+>> -
+>> -The MAX77802 PMIC has 10 high-efficiency Buck and 32 Low-dropout (LDO)
+>> -regulators that can be controlled over I2C.
+>> -
+>> -Following properties should be present in main device node of the MFD chip.
+>> -
+>> -Optional properties:
+>> -- inb1-supply:  The input supply for BUCK1
+>> -- inb2-supply:  The input supply for BUCK2
+>> -- inb3-supply:  The input supply for BUCK3
+>> -- inb4-supply:  The input supply for BUCK4
+>> -- inb5-supply:  The input supply for BUCK5
+>> -- inb6-supply:  The input supply for BUCK6
+>> -- inb7-supply:  The input supply for BUCK7
+>> -- inb8-supply:  The input supply for BUCK8
+>> -- inb9-supply:  The input supply for BUCK9
+>> -- inb10-supply: The input supply for BUCK10
+>> -- inl1-supply:  The input supply for LDO8 and LDO15
+>> -- inl2-supply:  The input supply for LDO17, LDO27, LDO30 and LDO35
+>> -- inl3-supply:  The input supply for LDO3, LDO5, LDO6 and LDO7
+>> -- inl4-supply:  The input supply for LDO10, LDO11, LDO13 and LDO14
+>> -- inl5-supply:  The input supply for LDO9 and LDO19
+>> -- inl6-supply:  The input supply for LDO4, LDO21, LDO24 and LDO33
+>> -- inl7-supply:  The input supply for LDO18, LDO20, LDO28 and LDO29
+>> -- inl9-supply:  The input supply for LDO12, LDO23, LDO25, LDO26, LDO32 and LDO34
+>> -- inl10-supply: The input supply for LDO1 and LDO2
+>> -
+>> -Optional nodes:
+>> -- regulators : The regulators of max77802 have to be instantiated
+>> -  under subnode named "regulators" using the following format.
+>> -
+>> -	regulator-name {
+>> -		standard regulator constraints....
+>> -	};
+>> -	refer Documentation/devicetree/bindings/regulator/regulator.txt
+>> -
+>> -The regulator node name should be initialized with a string to get matched
+>> -with their hardware counterparts as follow. The valid names are:
+>> -
+>> -	-LDOn 	:	for LDOs, where n can lie in ranges 1-15, 17-21, 23-30
+>> -			and 32-35.
+>> -			example: LDO1, LDO2, LDO35.
+>> -	-BUCKn 	:	for BUCKs, where n can lie in range 1 to 10.
+>> -			example: BUCK1, BUCK5, BUCK10.
+>> -
+>> -The max77802 regulator supports two different operating modes: Normal and Low
+>> -Power Mode. Some regulators support the modes to be changed at startup or by
+>> -the consumers during normal operation while others only support to change the
+>> -mode during system suspend. The standard regulator suspend states binding can
+>> -be used to configure the regulator operating mode.
+>> -
+>> -The regulators that support the standard "regulator-initial-mode" property,
+>> -changing their mode during normal operation are: LDOs 1, 3, 20 and 21.
+>> -
+>> -The possible values for "regulator-initial-mode" and "regulator-mode" are:
+>> -	1: Normal regulator voltage output mode.
+>> -	3: Low Power which reduces the quiescent current down to only 1uA
+>> -
+>> -The valid modes list is defined in the dt-bindings/regulator/maxim,max77802.h
+>> -header and can be included by device tree source files.
+>> -
+>> -The standard "regulator-mode" property can only be used for regulators that
+>> -support changing their mode to Low Power Mode during suspend. These regulators
+>> -are: BUCKs 2-4 and LDOs 1-35. Also, it only takes effect if the regulator has
+>> -been enabled for the given suspend state using "regulator-on-in-suspend" and
+>> -has not been disabled for that state using "regulator-off-in-suspend".
+>> -
+>> -Example:
+>> -
+>> -	max77802@9 {
+>> -		compatible = "maxim,max77802";
+>> -		interrupt-parent = <&wakeup_eint>;
+>> -		interrupts = <26 0>;
+>> -		reg = <0x09>;
+>> -		#address-cells = <1>;
+>> -		#size-cells = <0>;
+>> -
+>> -		inb1-supply = <&parent_reg>;
+>> -
+>> -		regulators {
+>> -			ldo1_reg: LDO1 {
+>> -				regulator-name = "vdd_1v0";
+>> -				regulator-min-microvolt = <1000000>;
+>> -				regulator-max-microvolt = <1000000>;
+>> -				regulator-always-on;
+>> -				regulator-initial-mode = <MAX77802_OPMODE_LP>;
+>> -			};
+>> -
+>> -			ldo11_reg: LDO11 {
+>> -				regulator-name = "vdd_ldo11";
+>> -				regulator-min-microvolt = <1900000>;
+>> -				regulator-max-microvolt = <1900000>;
+>> -				regulator-always-on;
+>> -				regulator-state-mem {
+>> -					regulator-on-in-suspend;
+>> -					regulator-mode = <MAX77802_OPMODE_LP>;
+>> -				};
+>> -			};
+>> -
+>> -			buck1_reg: BUCK1 {
+>> -				regulator-name = "vdd_mif";
+>> -				regulator-min-microvolt = <950000>;
+>> -				regulator-max-microvolt = <1300000>;
+>> -				regulator-always-on;
+>> -				regulator-boot-on;
+>> -			};
+>> -	};
+>> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+>> new file mode 100644
+>> index 000000000000..01e1c40685ff
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+>> @@ -0,0 +1,118 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/regulator/maxim,max77802.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim MAX77802 Power Management IC regulators
+>> +
+>> +maintainers:
+>> +  - Javier Martinez Canillas <javier@dowhile0.org>
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> +
+>> +description: |
+>> +  This is a part of device tree bindings for Maxim MAX77802 Power Management
+>> +  Integrated Circuit (PMIC).
+>> +
+>> +  The Maxim MAX77686 provides 10 high-efficiency Buck and 32 Low-DropOut (LDO)
+>> +  regulators.
+>> +
+>> +  See also Documentation/devicetree/bindings/mfd/maxim,max77802.yaml for
+>> +  additional information and example.
+>> +
+>> +  Certain regulators support "regulator-initial-mode" and "regulator-mode".
+>> +  The valid modes list is defined in the dt-bindings/regulator/maxim,max77802.h
+>> +  and their meaning is:
+>> +    1 - Normal regulator voltage output mode.
+>> +    3 - Low Power which reduces the quiescent current down to only 1uA
+>> +
+>> +  The standard "regulator-mode" property can only be used for regulators that
+>> +  support changing their mode to Low Power Mode during suspend. These
+>> +  regulators are: bucks 2-4 and LDOs 1-35. Also, it only takes effect if the
+>> +  regulator has been enabled for the given suspend state using
+>> +  "regulator-on-in-suspend" and has not been disabled for that state using
+>> +  "regulator-off-in-suspend".
+>> +
+>> +patternProperties:
+>> +  # LDO1, LDO3, LDO20, LDO21
+>> +  "^LDO([13]|2[01])$":
+>> +    type: object
+>> +    $ref: regulator.yaml#
+>> +    unevaluatedProperties: false
+>> +    description:
+>> +      LDOs supporting the regulator-initial-mode property and changing their
+>> +      mode during normal operation.
+>> +
+>> +    properties:
+>> +      regulator-initial-mode: true
 > 
-> For e.g. this Bayhub O2 device ([VID:DID] = [0x1217:0x8621]) only
-> supports DWORD accesses to LTR latency registers and L1 PM substates
-> control registers:
-> https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
+> Same issues here as the other series.
+
+Right.
+
 > 
-> Since L1 PM substate control registers are DWORD sized, and hence their
-> access in the kernel is already DWORD sized, so we don't need to do
-> anything for them.
+>> +
+>> +    patternProperties:
+>> +      regulator-state-(standby|mem|disk):
+>> +        type: object
+>> +        properties:
+>> +          regulator-mode: true
 > 
-> However, the LTR registers being WORD sized, are in need of a solution.
-> This patch converts the WORD sized accesses to these registers, into
-> DWORD sized accesses, while saving and restoring them.
+> Is this the only valid property? 
 > 
-> Signed-off-by: Rajat Jain <rajatja@google.com>
+No. I will skip entire patternProperties for regulators where there are
+no constraints about other properties.
 
-Applied to pci/enumeration for v5.17, thanks, Rajat!
-
-The app note suggests that this erratum only affects the registers at
-0x234, 0x248, and 0x24c, i.e., the LTR snoop registers and the L1 SS
-control registers.
-
-Can you confirm that is true?  Byte and word accesses to other parts
-of config space work correctly?
-
-I *assume* the other parts work correctly, because if byte and word
-accesses were broken, all sorts of things would not work, like
-PCI_COMMAND, PCI_STATUS, searching the capability list, etc.
-
-Bjorn
-
-> ---
->  drivers/pci/pci.c       | 24 ++++++++++++++++--------
->  drivers/pci/pcie/aspm.c |  1 +
->  2 files changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 3d2fb394986a..efa8cd16827f 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1556,7 +1556,7 @@ static void pci_save_ltr_state(struct pci_dev *dev)
->  {
->  	int ltr;
->  	struct pci_cap_saved_state *save_state;
-> -	u16 *cap;
-> +	u32 *cap;
->  
->  	if (!pci_is_pcie(dev))
->  		return;
-> @@ -1571,25 +1571,33 @@ static void pci_save_ltr_state(struct pci_dev *dev)
->  		return;
->  	}
->  
-> -	cap = (u16 *)&save_state->cap.data[0];
-> -	pci_read_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap++);
-> -	pci_read_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, cap++);
-> +	/*
-> +	 * We deliberately do a dword access to save both PCI_LTR_MAX_SNOOP_LAT
-> +	 * and PCI_LTR_MAX_NOSNOOP_LAT together since some devices only support
-> +	 * dword accesses to these registers.
-> +	 */
-> +	cap = &save_state->cap.data[0];
-> +	pci_read_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap);
->  }
->  
->  static void pci_restore_ltr_state(struct pci_dev *dev)
->  {
->  	struct pci_cap_saved_state *save_state;
->  	int ltr;
-> -	u16 *cap;
-> +	u32 *cap;
->  
->  	save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
->  	ltr = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_LTR);
->  	if (!save_state || !ltr)
->  		return;
->  
-> -	cap = (u16 *)&save_state->cap.data[0];
-> -	pci_write_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap++);
-> -	pci_write_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, *cap++);
-> +	/*
-> +	 * We deliberately do a dword access to restore both
-> +	 * PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT together since
-> +	 * some devices only support dword accesses to these registers.
-> +	 */
-> +	cap = &save_state->cap.data[0];
-> +	pci_write_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap);
->  }
->  
->  /**
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 52c74682601a..083f47a7b69b 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -496,6 +496,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
->  	encode_l12_threshold(l1_2_threshold, &scale, &value);
->  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
->  
-> +	/* Always make DWORD sized accesses to these registers */
->  	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
->  	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, &pctl2);
->  	pci_read_config_dword(child, child->l1ss + PCI_L1SS_CTL1, &cctl1);
-> -- 
-> 2.34.1.307.g9b7440fafd-goog
-> 
+Best regards,
+Krzysztof

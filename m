@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D824848A70F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC1C48A71A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235916AbiAKFQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 00:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbiAKFQI (ORCPT
+        id S237174AbiAKFRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 00:17:31 -0500
+Received: from mail-4319.protonmail.ch ([185.70.43.19]:21215 "EHLO
+        mail-4319.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235370AbiAKFRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:16:08 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C046C061756
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:16:08 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so1144724wme.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
-        b=bSNX6pQ/gPr4FEh3I35IahXDeli5OYEUEUgSyYahM0RBqCz2HCrKkHdxBPgWHNu94r
-         /WBHXdiRvCVry+Yh0JS/FWbJzzsD9axM8rN+Rln/ZctuUTXTJZA/vHo0ZzKrezGBxr4C
-         aKEsRXsSEWTNd+YTFfkB+dFwaIzBAandwINO7N57+GDER3xSs8yyvkNYHhilAAR4RUOc
-         SPssizuxC22BRCyfsrI0D8rZvm3N7kmGb8li/PSIay0smLZQeThoVpIykohPtHtl7r8b
-         ll2henPGTyO+GD6aiOV7sbQCTOwD7rupSm3IYcbvNlrpiw2Z7grgF0e66xSByZX9yjsy
-         aT8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
-        b=JXBaXdum1K7ga4+fqYJdldM5UuSt7uyQgBnxiTi1STOKNhBolJ9RT2mrK3mSvpvG5R
-         EG5mAqMvH5sDO6Ory+aJimuWN6Lqq+cO89nmCO3FLr8bKsYqNJXd9/jdhtH47pA1CFoY
-         4BITPJDkY2BcQy/CyNLepLkzDevK0dPE5axKCtlfx/7NvziflLe4UGsoGxdnv2MVIJel
-         Zv1BCIOOaMl9+7W48HJa84n4FN/hBGkjqsNO+9Op57yo8Vsv91NXM3pvwex3CgxWlEd2
-         m75vOtNJlgQ91dPh924KN7VDf5FOpEUyYMr5Nr8KAAMpfSE6eVI6J6GwhqoWziTmfFj/
-         T1Ig==
-X-Gm-Message-State: AOAM533VMeGObmH7kcGNTD6zvtF4zzAavSECjds8iD2ID5CtgnRVRvJD
-        vbiHSsChHchiX7NMRDkEkxqNjIodgkEDvHAmJmI=
-X-Google-Smtp-Source: ABdhPJxZI0sL5WkNZkjLcPzlXq850Kv17cFxNIadwYuWoomnJAWw3WfPrhrOImo0YOA2ba+0JgLiacoMQkcDgIZWASc=
-X-Received: by 2002:a05:600c:384f:: with SMTP id s15mr867378wmr.179.1641878166919;
- Mon, 10 Jan 2022 21:16:06 -0800 (PST)
+        Tue, 11 Jan 2022 00:17:30 -0500
+Date:   Tue, 11 Jan 2022 05:17:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1641878248;
+        bh=cYRvPsRTbr0F5Cm8cyAJ/mKD2RTDDw1A0v/DzkSatCQ=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=hfA0/CRWFAyhXB6BLEJDd9HBXjUactsFBPdCpKVcrjAIcVgNcJdyx23xz9Qnfgt32
+         xCpqb0/AG5DkIoQtsv5BKLz1FlHTRkEYAtH0Hv3eMq4VU/4bLd+g2nnEu0I1RVE4vV
+         eO9OhuE1P3k2YfmFADDyrSKNeJK++Udxr+rOXa8DVpQEgyeSRaqRBumIA5IP0yBxZP
+         iHvL1DmNDI5cnVCptXkqDgOqRDJLjOhpSGx5NoXXuhH+PsMGW6dZaciDjWLgw7Gp9E
+         fGFloNx5Ajo3dciUiAkv5oMv/n84HymBdIl6g41/EGrlgPREUuKARGxloPqzK2Z9Sc
+         rbxR5qC1VlJ2w==
+To:     Ard Biesheuvel <ardb@kernel.org>
+From:   Orlando Chamberlain <redecorating@protonmail.com>
+Cc:     Aditya Garg <gargaditya08@live.com>,
+        "jk@ozlabs.org" <jk@ozlabs.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Reply-To: Orlando Chamberlain <redecorating@protonmail.com>
+Subject: Re: [BUG][SEVERE] Enabling EFI runtime services causes panics in the T2 security chip on Macs equipped with it.
+Message-ID: <20220111051717.25b86946@localhost>
+In-Reply-To: <CAMj1kXEjmJxS-_r4HK_v_Qm85y2oeawk+bWUpSY7mV5NLFCm4g@mail.gmail.com>
+References: <6D757C75-65B1-468B-842D-10410081A8E4@live.com> <CAMj1kXETPO9iJoFm26v5gof2xpakHkvz3YV4ahet7BLjX5m5FQ@mail.gmail.com> <D3B9962F-F6F0-4622-9E0F-A3EABACAD471@live.com> <CAMj1kXGem3QB0rj-b57xrcDYkCv6Moi=RX1OUspj3s4vMtsdug@mail.gmail.com> <CAMj1kXEjmJxS-_r4HK_v_Qm85y2oeawk+bWUpSY7mV5NLFCm4g@mail.gmail.com>
 MIME-Version: 1.0
-Sender: donnalouisemchince@gmail.com
-Received: by 2002:adf:e3c8:0:0:0:0:0 with HTTP; Mon, 10 Jan 2022 21:16:06
- -0800 (PST)
-From:   DINA MCKENNA <dinamckennahowley@gmail.com>
-Date:   Tue, 11 Jan 2022 05:16:06 +0000
-X-Google-Sender-Auth: kZD7G7PJX5WZVJp10iD8l2oOCLk
-Message-ID: <CA+4Ruvsk8FpA_BfBHxHwkiNgTSOwxA0jmzeeUdBC5EZekZOt6w@mail.gmail.com>
-Subject: Calvary greetings.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello my dear,
+On Tue, 11 Jan 2022 04:45:35 +1100
+"Ard Biesheuvel" <ardb@kernel.org> wrote:
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
-suffering from a long time brain tumor, It has defiled all forms of
-medical treatment, and right now I have about a few months to leave,
-according to medical experts. The situation has gotten complicated
-recently with my inability to hear proper, am communicating with you
-with the help of the chief nurse herein the hospital, from all
-indication my conditions is really deteriorating and it is quite
-obvious that, according to my doctors they have advised me that I may
-not live too long, Because this illness has gotten to a very bad
-stage. I plead that you will not expose or betray this trust and
-confidence that I am about to repose on you for the mutual benefit of
-the orphans and the less privilege. I have some funds I inherited from
-my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
-Having known my condition, I decided to donate this fund to you
-believing that you will utilize it the way i am going to instruct
-herein. I need you to assist me and reclaim this money and use it for
-Charity works therein your country  for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of God
-and the effort that the house of God is maintained. I do not want a
-situation where this money will be used in an ungodly manner. That's
-why I'm taking this decision. I'm not afraid of death, so I know where
-I'm going. I accept this decision because I do not have any child who
-will inherit this money after I die.. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
+> On Mon, 10 Jan 2022 at 17:37, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Mon, 10 Jan 2022 at 17:28, Aditya Garg <gargaditya08@live.com>
+> > wrote: =20
+> ...
+> > > >>
+> > > >> This seems to be triggered by EFI_QUERY_VARIABLE_INFO here
+> > > >> =20
+> > > >
+> > > > This is interesting. QueryVariableInfo() was introduced in EFI
+> > > > 2.00, and for a very long time, Intel MACs would claim to
+> > > > implement EFI 1.10 only. This means Linux would never attempt
+> > > > to use QueryVariableInfo() on such platforms.
+> > > >
+> > > > Can you please check your boot log which revision it claims to
+> > > > implement now?
+> > > >
+> > > > Mine says
+> > > >
+> > > > efi: EFI v1.10 by Apple =20
+> > >
+> > > Mine says
+> > >
+> > > efi: EFI v2.40 by Apple
+> > > =20
+>=20
+> Can you check whether things work as before after applying the change
+> below?
+>=20
+> diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
+> index 147c30a81f15..d7203355cc69 100644
+> --- a/arch/x86/platform/efi/efi.c
+> +++ b/arch/x86/platform/efi/efi.c
+> @@ -399,7 +399,7 @@ static int __init efi_systab_init(unsigned long
+> phys) efi_nr_tables           =3D systab32->nr_tables;
+>         }
+>=20
+> -       efi.runtime_version =3D hdr->revision;
+> +       efi.runtime_version =3D EFI_1_10_SYSTEM_TABLE_REVISION;
+>=20
+>         efi_systab_report_header(hdr, efi_fw_vendor);
+>         early_memunmap(p, size);
 
-I'm waiting for your immediate reply..
+This patch works for me, I was able to use `efibootmgr -t 2` without
+panics and the change to the boot timeout value persisted after a
+reboot. (I don't think the Apple firmware would actually use this
+timeout value for a timeout time, but it is an nvram vairable that i
+was able to write to)
 
-May God Bless you,
-Mrs. Dina. Howley Mckenna.
+efi: EFI v2.40 by Apple
+efi: ACPI=3D0x7affe000 ACPI 2.0=3D0x7affe014 SMBIOS=3D0x7aed0000 SMBIOS 3.0=
+=3D0x7aece000=20
+SMBIOS 3.1.1 present.
+DMI: Apple Inc. MacBookPro16,1/Mac-E1008331FDC96864, BIOS 1715.60.5.0.0 (iB=
+ridge: 19.16.10647.0.0,0) 11/16/2021
+
+("iBridge" might be something to use for a quirk, as it should cover
+all Macs with the T2 chip)
+
+
+--=20
+

@@ -2,114 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9A548AE9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A67248AE9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240678AbiAKNlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        id S240715AbiAKNld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239487AbiAKNlV (ORCPT
+        with ESMTP id S240670AbiAKNl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:41:21 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46362C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:41:21 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id 127so31144168ybb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:41:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=HTzNYPhPn+rJdzj2h7gh2tOi0RpfTjd6Fzh3+L8m+R0=;
-        b=e7Q+cEvkGdy3xRJy3L7qLIXk882ORtsZbd1Gg4anW1PMafkqSz+uu7AvaCVcB0Wfi8
-         SP/YvHa9r/yTMCbgZu/F4bMEbYfr6XUiwJzw7aXCusurSjGf7xZ6QL7zIp3dmh02RgcJ
-         eO82685JZX/SZ2BeHQI+nJc8rU2OoCeDZ20roeR8wLVlGt2XS/Dsxy8hwT9Zsh98Y/ZW
-         F31TMo2RqrJ4n7ngHnnN9kbye96tyZeP2JLivNBGCceEKqkQgpUxPorg1d91VQOJy0mu
-         cGUQ4ecHNW3KiI1AiJNGFGJYm2ewavZjKoMo1XcWD5WE0RcDeddvIJgH+btfh9DJLZOf
-         GwxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=HTzNYPhPn+rJdzj2h7gh2tOi0RpfTjd6Fzh3+L8m+R0=;
-        b=Pc9MUZzel1rcV/yQXW2T7/KNFr/IaK12vo8fEshRMzrI2JztlakMqMCCdkXTCy18YV
-         +D9C6aXVJqITmT5vcvwIVJazt0P0DAbdPfMTdoLWoDpJempp6TiAQrgDA4UGkShklFjs
-         U0xVET6or6Xozuk6fzSqjF6dKYdTsCI5Q5TuGV9xL4K8+q2ZPEKEJi5H8MRZqGCFqNXh
-         6sjzcdA11LMPxMpZTuyVplAP9OlGJO8iQgxq8NLLL6ucCDOIb891RQ/Jpk7L6paZ6RZ+
-         W1XHlaWzMIb7M8AcdgylSR5TE3tW9qDoz+p3/wuUJvZAWvQu5Y7TqgNIFViR4iuGyXQJ
-         329Q==
-X-Gm-Message-State: AOAM532g4l/9dGy6kiU4XafN8AEbmBCiSEnpLY9Wa2yEYHyrbRxoYKqH
-        Qzx0quBnmNqF8ske3xBpEVeeLlwcoq3pyMhQjco=
-X-Google-Smtp-Source: ABdhPJxmshD2FtRqLtpQFsxZMhEPWUNmmWhvVFItGkSz5Aq2VPpLmQNVEhXWfHuTY0yJyGsLu7vhKUfEMkzOAiBDW6U=
-X-Received: by 2002:a25:6942:: with SMTP id e63mr6087563ybc.602.1641908480551;
- Tue, 11 Jan 2022 05:41:20 -0800 (PST)
+        Tue, 11 Jan 2022 08:41:26 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADD2C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:41:25 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n7HOq-00066c-Cc; Tue, 11 Jan 2022 14:41:20 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n7HOp-00EMbL-Qc; Tue, 11 Jan 2022 14:41:19 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v2 1/1] iio: adc: tsc2046: add .read_raw support
+Date:   Tue, 11 Jan 2022 14:41:18 +0100
+Message-Id: <20220111134118.3423422-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-From:   Kaia Yadira <hypericumperforatum4444@gmail.com>
-Date:   Tue, 11 Jan 2022 21:41:09 +0800
-Message-ID: <CACDmwr_b0Z6JK2M6i6RZ4Qg3wb1uqG0NrybQ9mR2iw5QJT8XoA@mail.gmail.com>
-Subject: KCSAN: data-race in tick_nohz_stop_tick / tick_sched_timer
-To:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Cc:     sunhao.th@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add read_raw() support to make use of iio_hwmon and other iio clients.
 
-When using Syzkaller to fuzz the latest Linux kernel, the following
-crash was triggered.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/iio/adc/ti-tsc2046.c | 115 ++++++++++++++++++++++++++++-------
+ 1 file changed, 94 insertions(+), 21 deletions(-)
 
-HEAD commit: a7904a538933 Linux 5.16-rc6
-git tree: upstream
-console output: KCSAN: data-race in tick_nohz_stop_tick / tick_nohz_stop_tick
-kernel config: https://paste.ubuntu.com/p/QB39MJKWKb/plain/
-Syzlang reproducer: https://paste.ubuntu.com/p/T25kYMrytM/plain/
+diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
+index c373da11bff1..59ab6622d6a2 100644
+--- a/drivers/iio/adc/ti-tsc2046.c
++++ b/drivers/iio/adc/ti-tsc2046.c
+@@ -86,6 +86,7 @@
+ #define TI_TSC2046_EXT_POLL_CNT			3
+ #define TI_TSC2046_POLL_CNT \
+ 	(TI_TSC2046_MIN_POLL_CNT + TI_TSC2046_EXT_POLL_CNT)
++#define TI_TSC2046_INT_VREF			2500
+ 
+ /* Represents a HW sample */
+ struct tsc2046_adc_atom {
+@@ -166,9 +167,6 @@ struct tsc2046_adc_priv {
+ 	struct tsc2046_adc_atom *rx;
+ 	struct tsc2046_adc_atom *tx;
+ 
+-	struct tsc2046_adc_atom *rx_one;
+-	struct tsc2046_adc_atom *tx_one;
+-
+ 	unsigned int count;
+ 	unsigned int groups;
+ 	u32 effective_speed_hz;
+@@ -184,6 +182,8 @@ struct tsc2046_adc_priv {
+ 	.type = IIO_VOLTAGE,					\
+ 	.indexed = 1,						\
+ 	.channel = index,					\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
++	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
+ 	.datasheet_name = "#name",				\
+ 	.scan_index = index,					\
+ 	.scan_type = {						\
+@@ -247,6 +247,14 @@ static u8 tsc2046_adc_get_cmd(struct tsc2046_adc_priv *priv, int ch_idx,
+ 	else
+ 		pd = 0;
+ 
++	switch (ch_idx) {
++	case TI_TSC2046_ADDR_TEMP1:
++	case TI_TSC2046_ADDR_AUX:
++	case TI_TSC2046_ADDR_VBAT:
++	case TI_TSC2046_ADDR_TEMP0:
++		pd |= TI_TSC2046_SER | TI_TSC2046_PD1_VREF_ON;
++	}
++
+ 	return TI_TSC2046_START | FIELD_PREP(TI_TSC2046_ADDR, ch_idx) | pd;
+ }
+ 
+@@ -258,16 +266,47 @@ static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
+ static int tsc2046_adc_read_one(struct tsc2046_adc_priv *priv, int ch_idx,
+ 				u32 *effective_speed_hz)
+ {
++	struct tsc2046_adc_ch_cfg *ch = &priv->ch_cfg[ch_idx];
++	struct tsc2046_adc_atom *rx_buf, *tx_buf;
++	unsigned int val, val_normalized = 0;
++	int ret, i, count_skip = 0, max_count;
+ 	struct spi_transfer xfer;
+ 	struct spi_message msg;
+-	int ret;
++	u8 cmd;
++
++	if (!effective_speed_hz) {
++		count_skip = tsc2046_adc_time_to_count(priv, ch->settling_time_us);
++		max_count = count_skip + ch->oversampling_ratio;
++	} else {
++		max_count = 1;
++	}
++
++	tx_buf = kcalloc(max_count, sizeof(*tx_buf), GFP_KERNEL);
++	if (!tx_buf)
++		return -ENOMEM;
++
++	rx_buf = kcalloc(max_count, sizeof(*rx_buf), GFP_KERNEL);
++	if (!rx_buf) {
++		ret = -ENOMEM;
++		goto free_tx;
++	}
++
++	/*
++	 * Do not enable automatic power down on working samples. Otherwise the
++	 * plates will never be completely charged.
++	 */
++	cmd = tsc2046_adc_get_cmd(priv, ch_idx, true);
++
++	for (i = 0; i < max_count - 1; i++)
++		tx_buf[i].cmd = cmd;
++
++	/* automatically power down on last sample */
++	tx_buf[i].cmd = tsc2046_adc_get_cmd(priv, ch_idx, false);
+ 
+ 	memset(&xfer, 0, sizeof(xfer));
+-	priv->tx_one->cmd = tsc2046_adc_get_cmd(priv, ch_idx, false);
+-	priv->tx_one->data = 0;
+-	xfer.tx_buf = priv->tx_one;
+-	xfer.rx_buf = priv->rx_one;
+-	xfer.len = sizeof(*priv->tx_one);
++	xfer.tx_buf = tx_buf;
++	xfer.rx_buf = rx_buf;
++	xfer.len = sizeof(*tx_buf) * max_count;
+ 	spi_message_init_with_transfers(&msg, &xfer, 1);
+ 
+ 	/*
+@@ -278,13 +317,25 @@ static int tsc2046_adc_read_one(struct tsc2046_adc_priv *priv, int ch_idx,
+ 	if (ret) {
+ 		dev_err_ratelimited(&priv->spi->dev, "SPI transfer failed %pe\n",
+ 				    ERR_PTR(ret));
+-		return ret;
++		goto free_bufs;
+ 	}
+ 
+ 	if (effective_speed_hz)
+ 		*effective_speed_hz = xfer.effective_speed_hz;
+ 
+-	return tsc2046_adc_get_value(priv->rx_one);
++	for (i = 0; i < max_count - count_skip; i++) {
++		val = tsc2046_adc_get_value(&rx_buf[count_skip + i]);
++		val_normalized += val;
++	}
++
++	ret = DIV_ROUND_UP(val_normalized, max_count - count_skip);
++
++free_bufs:
++	kfree(rx_buf);
++free_tx:
++	kfree(tx_buf);
++
++	return ret;
+ }
+ 
+ static size_t tsc2046_adc_group_set_layout(struct tsc2046_adc_priv *priv,
+@@ -391,6 +442,37 @@ static irqreturn_t tsc2046_adc_trigger_handler(int irq, void *p)
+ 	return IRQ_HANDLED;
+ }
+ 
++static int tsc2046_adc_read_raw(struct iio_dev *indio_dev,
++				struct iio_chan_spec const *chan,
++				int *val, int *val2, long m)
++{
++	struct tsc2046_adc_priv *priv = iio_priv(indio_dev);
++	int ret;
++
++	switch (m) {
++	case IIO_CHAN_INFO_RAW:
++		ret = tsc2046_adc_read_one(priv, chan->channel, NULL);
++		if (ret < 0)
++			return ret;
++
++		*val = ret;
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++		/*
++		 * Note: the TSC2046 has internal voltage divider on the VBAT
++		 * line. This divider can be influenced by external divider.
++		 * So, it is better to use external voltage-divider driver
++		 * instead, which is calculating complete chain.
++		 */
++		*val = TI_TSC2046_INT_VREF;
++		*val2 = chan->scan_type.realbits;
++		return IIO_VAL_FRACTIONAL_LOG2;
++	}
++
++	return -EINVAL;
++}
++
+ static int tsc2046_adc_update_scan_mode(struct iio_dev *indio_dev,
+ 					const unsigned long *active_scan_mask)
+ {
+@@ -421,6 +503,7 @@ static int tsc2046_adc_update_scan_mode(struct iio_dev *indio_dev,
+ }
+ 
+ static const struct iio_info tsc2046_adc_info = {
++	.read_raw	  = tsc2046_adc_read_raw,
+ 	.update_scan_mode = tsc2046_adc_update_scan_mode,
+ };
+ 
+@@ -562,16 +645,6 @@ static int tsc2046_adc_setup_spi_msg(struct tsc2046_adc_priv *priv)
+ 	size_t size;
+ 	int ret;
+ 
+-	priv->tx_one = devm_kzalloc(&priv->spi->dev, sizeof(*priv->tx_one),
+-				    GFP_KERNEL);
+-	if (!priv->tx_one)
+-		return -ENOMEM;
+-
+-	priv->rx_one = devm_kzalloc(&priv->spi->dev, sizeof(*priv->rx_one),
+-				    GFP_KERNEL);
+-	if (!priv->rx_one)
+-		return -ENOMEM;
+-
+ 	/*
+ 	 * Make dummy read to set initial power state and get real SPI clock
+ 	 * freq. It seems to be not important which channel is used for this
+-- 
+2.30.2
 
-If you fix this issue, please add the following tag to the commit:
-
-Reported-by: Hypericum <hypericumperforatum4444@gmail.com>
-
-I think there are two threads visiting the variable tick_do_timer_cpu
-at kernel/time/tick-sched.c:191 and 872 without locking.
-
-reproducer log: https://paste.ubuntu.com/p/942c3QpFDJ/plain/
-report:
-==================================================================
-BUG: KCSAN: data-race in tick_nohz_stop_tick / tick_sched_timer
-
-write to 0xffffffff85ebf1e0 of 4 bytes by task 0 on cpu 6:
- tick_nohz_stop_tick+0xa5/0x410 kernel/time/tick-sched.c:873
- __tick_nohz_idle_stop_tick kernel/time/tick-sched.c:1062 [inline]
- tick_nohz_idle_stop_tick+0xde/0x1a0 kernel/time/tick-sched.c:1083
- cpuidle_idle_call kernel/sched/idle.c:192 [inline]
- do_idle+0xe3/0x250 kernel/sched/idle.c:306
- cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:403
- secondary_startup_64_no_verify+0xb1/0xbb
-
-read to 0xffffffff85ebf1e0 of 4 bytes by interrupt on cpu 1:
- tick_sched_do_timer kernel/time/tick-sched.c:187 [inline]
- tick_sched_timer+0x41/0x210 kernel/time/tick-sched.c:1421
- __run_hrtimer+0x133/0x420 kernel/time/hrtimer.c:1685
- __hrtimer_run_queues kernel/time/hrtimer.c:1749 [inline]
- hrtimer_interrupt+0x36e/0xa80 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
- __sysvec_apic_timer_interrupt+0xa3/0x250 arch/x86/kernel/apic/apic.c:1103
- sysvec_apic_timer_interrupt+0x88/0xb0 arch/x86/kernel/apic/apic.c:1097
- asm_sysvec_apic_timer_interrupt+0x12/0x20
- native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
- arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
- default_idle+0xb/0x10 arch/x86/kernel/process.c:733
- default_idle_call+0x28/0xd0 kernel/sched/idle.c:112
- cpuidle_idle_call kernel/sched/idle.c:194 [inline]
- do_idle+0xe8/0x250 kernel/sched/idle.c:306
- cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:403
- secondary_startup_64_no_verify+0xb1/0xbb
-
-value changed: 0x00000006 -> 0xffffffff
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.16.0-rc8+ #11
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-==================================================================

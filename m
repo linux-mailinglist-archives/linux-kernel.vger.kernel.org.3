@@ -2,339 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EED48ACEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A694448AD33
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239181AbiAKLrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 06:47:31 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:47422 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238505AbiAKLra (ORCPT
+        id S239451AbiAKMAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:00:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21784 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238920AbiAKMAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 06:47:30 -0500
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20B8B6EA009803;
-        Tue, 11 Jan 2022 06:47:28 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dggyquq9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 06:47:28 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 20BBlRSR032578
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Jan 2022 06:47:27 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 11 Jan
- 2022 06:47:26 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 11 Jan 2022 06:47:26 -0500
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20BBlFJr029369;
-        Tue, 11 Jan 2022 06:47:21 -0500
-From:   Cristian Pop <cristian.pop@analog.com>
-To:     <linux-iio@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <jic23@kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>, Cristian Pop <cristian.pop@analog.com>
-Subject: [PATCH v2 2/2] one-bit-adc-dac: Add initial version of one bit ADC-DAC
-Date:   Tue, 11 Jan 2022 13:59:19 +0200
-Message-ID: <20220111115919.14645-2-cristian.pop@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220111115919.14645-1-cristian.pop@analog.com>
-References: <20220111115919.14645-1-cristian.pop@analog.com>
+        Tue, 11 Jan 2022 07:00:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641902441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=THcNYoUiQXT0RGR+jY+YTB6YPm1T2/jKfNy70DiF97k=;
+        b=ej20bZKjLX6/ga11COTOcno3z+onDGV5h0wEyLWoDPdTxc17wyFuoby5dc7PSZohRD3+O5
+        3LHhSHvQOFvhY3DEr7OZ12WwB2EtXH8LrW3SuR+XdUXZD8wnjGYXx+VdtAYbGraqv/1Vdm
+        l1VgjlPWxaHZu9lN3K+0Xu855tIcyqE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-313-WNSfK5F_Nkqd6LHA_jV5Yw-1; Tue, 11 Jan 2022 07:00:40 -0500
+X-MC-Unique: WNSfK5F_Nkqd6LHA_jV5Yw-1
+Received: by mail-wr1-f69.google.com with SMTP id j19-20020adfa553000000b001a375e473d8so4811261wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 04:00:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=THcNYoUiQXT0RGR+jY+YTB6YPm1T2/jKfNy70DiF97k=;
+        b=RlJ70nxRXEunUk4TzIEY2hnSVGMojVtW75C6qjbLTVmvMEh7yTO7wRJZJZMDsLwUNp
+         yfSxyUruuhRzu3EBaznJpfBlbBPS/y2Whv79xIMSQIqahWEYEoVmnhhyu9mM5SOraSwl
+         qqDU7Z8ju8Sz/xuMgSknivPJ6/mszMoAkDClH++lc11MxJlsznRSbxFhkQdhLzenPqr3
+         t53Sjtfg6ZSXyJ3tthMINjIzDJ6g+xs+oni2o7Pe8g791q0wYYtzEfKkX82TfrMRn8xn
+         kYKCQ7P3xFuywi7UkCirCuBBFhcUhUkv0CqUvA4KmBdIhI7RDghWSvvUbyIMhBOHtxt1
+         IjvA==
+X-Gm-Message-State: AOAM532QoxZOmkTPc6XGo/jq2jwA8OSsAg+zKsCq3bbm/c7hVE3mvvD5
+        CMcqkXRS9aJ9UKsIB5CnK5+CytxIp7NmlFzm+tf9DNplc7Y4gitjIn76Gd+A5zSxgOrn8lPnn8j
+        hUF0SMWjVxp/+6DPiWGXVWhpz
+X-Received: by 2002:a05:6000:1002:: with SMTP id a2mr3421177wrx.157.1641902439251;
+        Tue, 11 Jan 2022 04:00:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz4YSuB/GqbCt19n6tpprmL7h3cgtRkKL8QSJzqOZK7rn30aslEqbzpa9pg+AInFiBei4efrA==
+X-Received: by 2002:a05:6000:1002:: with SMTP id a2mr3421156wrx.157.1641902438967;
+        Tue, 11 Jan 2022 04:00:38 -0800 (PST)
+Received: from redhat.com ([2.55.5.100])
+        by smtp.gmail.com with ESMTPSA id o3sm10569265wry.98.2022.01.11.04.00.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 04:00:38 -0800 (PST)
+Date:   Tue, 11 Jan 2022 07:00:34 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andrew Melnychenko <andrew@daynix.com>
+Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jasowang@redhat.com, yan@daynix.com, yuri.benditovich@daynix.com
+Subject: Re: [PATCH 2/4] drivers/net/virtio_net: Added basic RSS support.
+Message-ID: <20220111065539-mutt-send-email-mst@kernel.org>
+References: <20220109210659.2866740-1-andrew@daynix.com>
+ <20220109210659.2866740-3-andrew@daynix.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: dQLPrU3GIVfF0baYim7KR547hXodBC8_
-X-Proofpoint-GUID: dQLPrU3GIVfF0baYim7KR547hXodBC8_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
- bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110070
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220109210659.2866740-3-andrew@daynix.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows remote reading and writing of the GPIOs. This is useful in
-application that run on another PC, at system level, where multiple iio
-devices and GPIO devices are integrated together.
+On Sun, Jan 09, 2022 at 11:06:57PM +0200, Andrew Melnychenko wrote:
+> Added features for RSS.
+> Added initialization, RXHASH feature and ethtool ops.
+> By default RSS/RXHASH is disabled.
+> Virtio RSS "IPv6 extensions" hashes disabled.
+> Added ethtools ops to set key and indirection table.
+> 
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> ---
+>  drivers/net/virtio_net.c | 194 +++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 184 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 66439ca488f4..21794731fc75 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -169,6 +169,28 @@ struct receive_queue {
+>  	struct xdp_rxq_info xdp_rxq;
+>  };
+>  
+> +/* This structure can contain rss message with maximum settings for indirection table and keysize
+> + * Note, that default structure that describes RSS configuration virtio_net_rss_config
+> + * contains same info but can't handle table values.
+> + * In any case, structure would be passed to virtio hw through sg_buf split by parts
+> + * because table sizes may be differ according to the device configuration.
+> + */
+> +#define VIRTIO_NET_RSS_MAX_KEY_SIZE     40
+> +#define VIRTIO_NET_RSS_MAX_TABLE_LEN    128
+> +struct virtio_net_ctrl_rss {
+> +	struct {
+> +		__le32 hash_types;
+> +		__le16 indirection_table_mask;
+> +		__le16 unclassified_queue;
+> +	} __packed table_info;
+> +	u16 indirection_table[VIRTIO_NET_RSS_MAX_TABLE_LEN];
+> +	struct {
+> +		u16 max_tx_vq; /* queues */
+> +		u8 hash_key_length;
+> +	} __packed key_info;
+> +	u8 key[VIRTIO_NET_RSS_MAX_KEY_SIZE];
+> +};
+> +
 
-Signed-off-by: Cristian Pop <cristian.pop@analog.com>
----
- drivers/iio/addac/Kconfig           |   8 +
- drivers/iio/addac/Makefile          |   1 +
- drivers/iio/addac/one-bit-adc-dac.c | 229 ++++++++++++++++++++++++++++
- 3 files changed, 238 insertions(+)
- create mode 100644 drivers/iio/addac/one-bit-adc-dac.c
+Generally best to avoid __packed.
+I think it's not a bad idea to just follow the spec when
+you lay out the structures. Makes it easier to follow
+that it matches. Spec has just a single struct:
 
-diff --git a/drivers/iio/addac/Kconfig b/drivers/iio/addac/Kconfig
-index 138492362f20..5f311f4a747e 100644
---- a/drivers/iio/addac/Kconfig
-+++ b/drivers/iio/addac/Kconfig
-@@ -17,4 +17,12 @@ config AD74413R
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called ad74413r.
- 
-+config ONE_BIT_ADC_DAC
-+	tristate "ONE_BIT_ADC_DAC driver"
-+	help
-+	  Say yes here to build support for ONE_BIT_ADC_DAC driver.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called one-bit-adc-dac.
-+
- endmenu
-diff --git a/drivers/iio/addac/Makefile b/drivers/iio/addac/Makefile
-index cfd4bbe64ad3..0a33f0706b55 100644
---- a/drivers/iio/addac/Makefile
-+++ b/drivers/iio/addac/Makefile
-@@ -5,3 +5,4 @@
- 
- # When adding new entries keep the list in alphabetical order
- obj-$(CONFIG_AD74413R) += ad74413r.o
-+obj-$(CONFIG_ONE_BIT_ADC_DAC) += one-bit-adc-dac.o
-diff --git a/drivers/iio/addac/one-bit-adc-dac.c b/drivers/iio/addac/one-bit-adc-dac.c
-new file mode 100644
-index 000000000000..5680de594429
---- /dev/null
-+++ b/drivers/iio/addac/one-bit-adc-dac.c
-@@ -0,0 +1,229 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+/*
-+ * one-bit-adc-dac
-+ *
-+ * Copyright 2022 Analog Devices Inc.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/iio/iio.h>
-+#include <linux/platform_device.h>
-+#include <linux/gpio/consumer.h>
-+
-+enum ch_direction {
-+	CH_IN,
-+	CH_OUT,
-+};
-+
-+struct one_bit_adc_dac_state {
-+	int			in_num_ch;
-+	int			out_num_ch;
-+	struct platform_device  *pdev;
-+	struct gpio_descs       *in_gpio_descs;
-+	struct gpio_descs       *out_gpio_descs;
-+	const char		**labels;
-+};
-+
-+static int one_bit_adc_dac_read_raw(struct iio_dev *indio_dev,
-+	const struct iio_chan_spec *chan, int *val, int *val2, long info)
-+{
-+	struct one_bit_adc_dac_state *st = iio_priv(indio_dev);
-+	struct gpio_descs *descs;
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_RAW:
-+		if (chan->output)
-+			descs = st->out_gpio_descs;
-+		else
-+			descs = st->in_gpio_descs;
-+		*val = gpiod_get_value_cansleep(descs->desc[chan->channel]);
-+
-+		return IIO_VAL_INT;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int one_bit_adc_dac_write_raw(struct iio_dev *indio_dev,
-+			    struct iio_chan_spec const *chan,
-+			    int val,
-+			    int val2,
-+			    long info)
-+{
-+	struct one_bit_adc_dac_state *st = iio_priv(indio_dev);
-+	int channel = chan->channel;
-+
-+	if (!chan->output)
-+		return 0;
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_RAW:
-+		gpiod_set_value_cansleep(st->out_gpio_descs->desc[channel], val);
-+
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int one_bit_adc_dac_read_label(struct iio_dev *indio_dev,
-+	const struct iio_chan_spec *chan, char *label)
-+{
-+	struct one_bit_adc_dac_state *st = iio_priv(indio_dev);
-+	int ch;
-+
-+	if (chan->output)
-+		ch = chan->channel + st->in_num_ch;
-+	else
-+		ch = chan->channel;
-+
-+	return sprintf(label, "%s\n", st->labels[ch]);
-+}
-+
-+static const struct iio_info one_bit_adc_dac_info = {
-+	.read_raw = &one_bit_adc_dac_read_raw,
-+	.write_raw = &one_bit_adc_dac_write_raw,
-+	.read_label = &one_bit_adc_dac_read_label,
-+};
-+
-+static int one_bit_adc_dac_set_ch(struct iio_chan_spec *channels,
-+					int num_ch,
-+					enum ch_direction direction)
-+{
-+	int i;
-+
-+	for (i = 0; i < num_ch; i++) {
-+		channels[i].type = IIO_VOLTAGE;
-+		channels[i].indexed = 1;
-+		channels[i].channel = i;
-+		channels[i].info_mask_separate = BIT(IIO_CHAN_INFO_RAW);
-+		channels[i].output = direction;
-+	}
-+
-+	return 0;
-+}
-+
-+static int one_bit_adc_dac_set_channel_label(struct iio_dev *indio_dev,
-+						struct iio_chan_spec *channels,
-+						int num_channels)
-+{
-+	struct device *device = indio_dev->dev.parent;
-+	struct one_bit_adc_dac_state *st = iio_priv(indio_dev);
-+	struct fwnode_handle *fwnode;
-+	struct fwnode_handle *child;
-+	struct iio_chan_spec *chan;
-+	const char *label;
-+	int crt_ch = 0, child_num, i = 0;
-+
-+	fwnode = dev_fwnode(device);
-+	child_num = device_get_child_node_count(device);
-+
-+	st->labels = devm_kzalloc(device, sizeof(*st->labels) * child_num, GFP_KERNEL);
-+	if (!st->labels)
-+		return -ENOMEM;
-+
-+	i = child_num;
-+	fwnode_for_each_child_node(fwnode, child) {
-+		if (fwnode_property_read_u32(child, "reg", &crt_ch))
-+			continue;
-+
-+		if (crt_ch >= num_channels)
-+			continue;
-+
-+		if (fwnode_property_read_string(child, "label", &label))
-+			continue;
-+
-+		chan = &channels[crt_ch];
-+		st->labels[--i] = label;
-+	}
-+
-+	return 0;
-+}
-+
-+static int one_bit_adc_dac_parse_dt(struct iio_dev *indio_dev)
-+{
-+	struct one_bit_adc_dac_state *st = iio_priv(indio_dev);
-+	struct iio_chan_spec *channels;
-+	int ret, in_num_ch = 0, out_num_ch = 0;
-+
-+	st->in_gpio_descs = devm_gpiod_get_array_optional(&st->pdev->dev, "in", GPIOD_IN);
-+	if (IS_ERR(st->in_gpio_descs))
-+		return PTR_ERR(st->in_gpio_descs);
-+
-+	if (st->in_gpio_descs)
-+		in_num_ch = st->in_gpio_descs->ndescs;
-+
-+	st->out_gpio_descs = devm_gpiod_get_array_optional(&st->pdev->dev, "out", GPIOD_OUT_LOW);
-+	if (IS_ERR(st->out_gpio_descs))
-+		return PTR_ERR(st->out_gpio_descs);
-+
-+	if (st->out_gpio_descs)
-+		out_num_ch = st->out_gpio_descs->ndescs;
-+	st->in_num_ch = in_num_ch;
-+	st->out_num_ch = out_num_ch;
-+
-+	channels = devm_kcalloc(indio_dev->dev.parent, in_num_ch + out_num_ch,
-+				sizeof(*channels), GFP_KERNEL);
-+	if (!channels)
-+		return -ENOMEM;
-+
-+	ret = one_bit_adc_dac_set_ch(&channels[0], in_num_ch, CH_IN);
-+	if (ret)
-+		return ret;
-+
-+	ret = one_bit_adc_dac_set_ch(&channels[in_num_ch], out_num_ch, CH_OUT);
-+	if (ret)
-+		return ret;
-+
-+	ret = one_bit_adc_dac_set_channel_label(indio_dev, channels, in_num_ch + out_num_ch);
-+	if (ret)
-+		return ret;
-+
-+	indio_dev->channels = channels;
-+	indio_dev->num_channels = in_num_ch + out_num_ch;
-+
-+	return 0;
-+}
-+
-+static int one_bit_adc_dac_probe(struct platform_device *pdev)
-+{
-+	struct iio_dev *indio_dev;
-+	struct one_bit_adc_dac_state *st;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*st));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	st = iio_priv(indio_dev);
-+	st->pdev = pdev;
-+	indio_dev->name = "one-bit-adc-dac";
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->info = &one_bit_adc_dac_info;
-+
-+	ret = one_bit_adc_dac_parse_dt(indio_dev);
-+	if (ret)
-+		return ret;
-+
-+	return devm_iio_device_register(indio_dev->dev.parent, indio_dev);
-+}
-+
-+static const struct of_device_id one_bit_adc_dac_dt_match[] = {
-+	{ .compatible = "one-bit-adc-dac" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, one_bit_adc_dac_dt_match);
-+
-+static struct platform_driver one_bit_adc_dac_driver = {
-+	.driver = {
-+		.name = "one-bit-adc-dac",
-+		.of_match_table = one_bit_adc_dac_dt_match,
-+	},
-+	.probe = one_bit_adc_dac_probe,
-+};
-+module_platform_driver(one_bit_adc_dac_driver);
-+
-+MODULE_AUTHOR("Cristian Pop <cristian.pop@analog.com>");
-+MODULE_DESCRIPTION("One bit ADC DAC converter");
-+MODULE_LICENSE("Dual BSD/GPL");
-\ No newline at end of file
--- 
-2.17.1
+struct virtio_net_rss_config {
+    le32 hash_types;
+    le16 indirection_table_mask;
+    le16 unclassified_queue;
+    le16 indirection_table[indirection_table_length];
+    le16 max_tx_vq;
+    u8 hash_key_length;
+    u8 hash_key_data[hash_key_length];
+};
+
+and with this layout you don't need __packed.
+
+
+
+>  /* Control VQ buffers: protected by the rtnl lock */
+>  struct control_buf {
+>  	struct virtio_net_ctrl_hdr hdr;
+> @@ -178,6 +200,7 @@ struct control_buf {
+>  	u8 allmulti;
+>  	__virtio16 vid;
+>  	__virtio64 offloads;
+> +	struct virtio_net_ctrl_rss rss;
+>  };
+>  
+>  struct virtnet_info {
+> @@ -206,6 +229,12 @@ struct virtnet_info {
+>  	/* Host will merge rx buffers for big packets (shake it! shake it!) */
+>  	bool mergeable_rx_bufs;
+>  
+> +	/* Host supports rss and/or hash report */
+> +	bool has_rss;
+> +	u8 rss_key_size;
+> +	u16 rss_indir_table_size;
+> +	u32 rss_hash_types_supported;
+> +
+>  	/* Has control virtqueue */
+>  	bool has_cvq;
+>  
+> @@ -395,9 +424,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>  	hdr_p = p;
+>  
+>  	hdr_len = vi->hdr_len;
+> -	if (vi->has_rss_hash_report)
+> -		hdr_padded_len = sizeof(struct virtio_net_hdr_v1_hash);
+> -	else if (vi->mergeable_rx_bufs)
+> +	if (vi->mergeable_rx_bufs)
+>  		hdr_padded_len = sizeof(*hdr);
+>  	else
+>  		hdr_padded_len = sizeof(struct padded_vnet_hdr);
+> @@ -2184,6 +2211,55 @@ static void virtnet_get_ringparam(struct net_device *dev,
+>  	ring->tx_pending = ring->tx_max_pending;
+>  }
+>  
+> +static bool virtnet_commit_rss_command(struct virtnet_info *vi)
+> +{
+> +	struct net_device *dev = vi->dev;
+> +	struct scatterlist sgs[4];
+> +	unsigned int sg_buf_size;
+> +
+> +	/* prepare sgs */
+> +	sg_init_table(sgs, 4);
+> +
+> +	sg_buf_size = sizeof(vi->ctrl->rss.table_info);
+> +	sg_set_buf(&sgs[0], &vi->ctrl->rss.table_info, sg_buf_size);
+> +
+> +	sg_buf_size = sizeof(uint16_t) * vi->rss_indir_table_size;
+> +	sg_set_buf(&sgs[1], vi->ctrl->rss.indirection_table, sg_buf_size);
+> +
+> +	sg_buf_size = sizeof(vi->ctrl->rss.key_info);
+> +	sg_set_buf(&sgs[2], &vi->ctrl->rss.key_info, sg_buf_size);
+> +
+> +	sg_buf_size = vi->rss_key_size;
+> +	sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
+> +
+> +	if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
+> +				  VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
+> +		dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
+> +		return false;
+> +	}
+> +	return true;
+> +}
+> +
+> +static void virtnet_init_default_rss(struct virtnet_info *vi)
+> +{
+> +	u32 indir_val = 0;
+> +	int i = 0;
+> +
+> +	vi->ctrl->rss.table_info.hash_types = vi->rss_hash_types_supported;
+> +	vi->ctrl->rss.table_info.indirection_table_mask = vi->rss_indir_table_size - 1;
+> +	vi->ctrl->rss.table_info.unclassified_queue = 0;
+> +
+> +	for (; i < vi->rss_indir_table_size; ++i) {
+> +		indir_val = ethtool_rxfh_indir_default(i, vi->max_queue_pairs);
+> +		vi->ctrl->rss.indirection_table[i] = indir_val;
+> +	}
+> +
+> +	vi->ctrl->rss.key_info.max_tx_vq = vi->curr_queue_pairs;
+> +	vi->ctrl->rss.key_info.hash_key_length = vi->rss_key_size;
+> +
+> +	netdev_rss_key_fill(vi->ctrl->rss.key, vi->rss_key_size);
+> +}
+> +
+>  
+>  static void virtnet_get_drvinfo(struct net_device *dev,
+>  				struct ethtool_drvinfo *info)
+> @@ -2412,6 +2488,71 @@ static void virtnet_update_settings(struct virtnet_info *vi)
+>  		vi->duplex = duplex;
+>  }
+>  
+> +static u32 virtnet_get_rxfh_key_size(struct net_device *dev)
+> +{
+> +	return ((struct virtnet_info *)netdev_priv(dev))->rss_key_size;
+> +}
+> +
+> +static u32 virtnet_get_rxfh_indir_size(struct net_device *dev)
+> +{
+> +	return ((struct virtnet_info *)netdev_priv(dev))->rss_indir_table_size;
+> +}
+> +
+> +static int virtnet_get_rxfh(struct net_device *dev, u32 *indir, u8 *key, u8 *hfunc)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +	int i;
+> +
+> +	if (indir) {
+> +		for (i = 0; i < vi->rss_indir_table_size; ++i)
+> +			indir[i] = vi->ctrl->rss.indirection_table[i];
+> +	}
+> +
+> +	if (key)
+> +		memcpy(key, vi->ctrl->rss.key, vi->rss_key_size);
+> +
+> +	if (hfunc)
+> +		*hfunc = ETH_RSS_HASH_TOP;
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtnet_set_rxfh(struct net_device *dev, const u32 *indir, const u8 *key, const u8 hfunc)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +	int i;
+> +
+> +	if (hfunc != ETH_RSS_HASH_NO_CHANGE && hfunc != ETH_RSS_HASH_TOP)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (indir) {
+> +		for (i = 0; i < vi->rss_indir_table_size; ++i)
+> +			vi->ctrl->rss.indirection_table[i] = indir[i];
+> +	}
+> +	if (key)
+> +		memcpy(vi->ctrl->rss.key, key, vi->rss_key_size);
+> +
+> +	virtnet_commit_rss_command(vi);
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtnet_get_rxnfc(struct net_device *dev, struct ethtool_rxnfc *info, u32 *rule_locs)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +	int rc = 0;
+> +
+> +	switch (info->cmd) {
+> +	case ETHTOOL_GRXRINGS:
+> +		info->data = vi->curr_queue_pairs;
+> +		break;
+> +	default:
+> +		rc = -EOPNOTSUPP;
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+>  static const struct ethtool_ops virtnet_ethtool_ops = {
+>  	.supported_coalesce_params = ETHTOOL_COALESCE_MAX_FRAMES,
+>  	.get_drvinfo = virtnet_get_drvinfo,
+> @@ -2427,6 +2568,11 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
+>  	.set_link_ksettings = virtnet_set_link_ksettings,
+>  	.set_coalesce = virtnet_set_coalesce,
+>  	.get_coalesce = virtnet_get_coalesce,
+> +	.get_rxfh_key_size = virtnet_get_rxfh_key_size,
+> +	.get_rxfh_indir_size = virtnet_get_rxfh_indir_size,
+> +	.get_rxfh = virtnet_get_rxfh,
+> +	.set_rxfh = virtnet_set_rxfh,
+> +	.get_rxnfc = virtnet_get_rxnfc,
+>  };
+>  
+>  static void virtnet_freeze_down(struct virtio_device *vdev)
+> @@ -3073,7 +3219,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
+>  			     "VIRTIO_NET_F_CTRL_VQ") ||
+>  	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_MQ, "VIRTIO_NET_F_CTRL_VQ") ||
+>  	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
+> -			     "VIRTIO_NET_F_CTRL_VQ"))) {
+> +			     "VIRTIO_NET_F_CTRL_VQ") ||
+> +	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS, "VIRTIO_NET_F_RSS"))) {
+>  		return false;
+>  	}
+>  
+> @@ -3113,13 +3260,14 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	u16 max_queue_pairs;
+>  	int mtu;
+>  
+> -	/* Find if host supports multiqueue virtio_net device */
+> -	err = virtio_cread_feature(vdev, VIRTIO_NET_F_MQ,
+> -				   struct virtio_net_config,
+> -				   max_virtqueue_pairs, &max_queue_pairs);
+> +	/* Find if host supports multiqueue/rss virtio_net device */
+> +	max_queue_pairs = 0;
+> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_MQ) || virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
+> +		max_queue_pairs =
+> +		     virtio_cread16(vdev, offsetof(struct virtio_net_config, max_virtqueue_pairs));
+>  
+>  	/* We need at least 2 queue's */
+> -	if (err || max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
+> +	if (max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
+>  	    max_queue_pairs > VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MAX ||
+>  	    !virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_VQ))
+>  		max_queue_pairs = 1;
+> @@ -3207,6 +3355,25 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
+>  		vi->mergeable_rx_bufs = true;
+>  
+> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
+> +		vi->has_rss = true;
+> +		vi->rss_indir_table_size =
+> +			virtio_cread16(vdev, offsetof(struct virtio_net_config,
+> +						      rss_max_indirection_table_length));
+> +		vi->rss_key_size =
+> +			virtio_cread8(vdev, offsetof(struct virtio_net_config, rss_max_key_size));
+> +	}
+> +
+> +	if (vi->has_rss) {
+> +		vi->rss_hash_types_supported =
+> +		    virtio_cread32(vdev, offsetof(struct virtio_net_config, supported_hash_types));
+> +		vi->rss_hash_types_supported &=
+> +				~(VIRTIO_NET_RSS_HASH_TYPE_IP_EX |
+> +				  VIRTIO_NET_RSS_HASH_TYPE_TCP_EX |
+> +				  VIRTIO_NET_RSS_HASH_TYPE_UDP_EX);
+> +
+> +		dev->hw_features |= NETIF_F_RXHASH;
+> +	}
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+>  	    virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+>  		vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
+> @@ -3275,6 +3442,12 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  		}
+>  	}
+>  
+> +	if (vi->has_rss) {
+> +		rtnl_lock();
+> +		virtnet_init_default_rss(vi);
+> +		rtnl_unlock();
+> +	}
+> +
+>  	err = register_netdev(dev);
+>  	if (err) {
+>  		pr_debug("virtio_net: registering device failed\n");
+> @@ -3406,7 +3579,8 @@ static struct virtio_device_id id_table[] = {
+>  	VIRTIO_NET_F_GUEST_ANNOUNCE, VIRTIO_NET_F_MQ, \
+>  	VIRTIO_NET_F_CTRL_MAC_ADDR, \
+>  	VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
+> -	VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY
+> +	VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
+> +	VIRTIO_NET_F_RSS
+>  
+>  static unsigned int features[] = {
+>  	VIRTNET_FEATURES,
+> -- 
+> 2.34.1
 

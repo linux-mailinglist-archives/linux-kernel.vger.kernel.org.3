@@ -2,79 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216F548AFAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C2148AFBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242251AbiAKOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:36:40 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50992 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242179AbiAKOgi (ORCPT
+        id S242312AbiAKOlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:41:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40402 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242201AbiAKOlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:36:38 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 466931F44645
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641911796;
-        bh=dewZi1oCBM3pJh97E1Dyib+o1ce0sI8WMZt2GX/YFVc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vs9AwJwY3Dgc528+vc74CGjIyYO5WocgFvc3qu+AxRZf031L0MBB7Wy7GaSWzHfjS
-         z6+daa9G6CU/aDPJNbDxMv5k2Pt0t2yu+FquhoV6xr76gTai7rX00K+vE7FmMT2bAk
-         OIo7zdZ5lctF9Auy5zJTUB3JZRvzbqMSHp8s10qEky1o2wkszE55ahpzegLDRYRukQ
-         0qfV1wn50bdkazAHbjvKpG3Iw0ZiN9sDlRLzuicS3I5tP6AovozuFFOHuLXyuv8Aj4
-         xA8SXDBTET+iOBZBBtB3vsJwxeaHnuuUp2DjeN7/WrFAogSXtrR7YWdt3+agu9lFbA
-         UOZS/36MjdW+Q==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH 2/2] selftests/lkdtm: Add UBSAN config
-Date:   Tue, 11 Jan 2022 19:36:14 +0500
-Message-Id: <20220111143614.629452-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220111143614.629452-1-usama.anjum@collabora.com>
-References: <20220111143614.629452-1-usama.anjum@collabora.com>
+        Tue, 11 Jan 2022 09:41:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44B566165C;
+        Tue, 11 Jan 2022 14:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01741C36AEB;
+        Tue, 11 Jan 2022 14:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641912090;
+        bh=ZXSbrtZsWxxU3DOIleGM4uec6BEW+n8q+VC4Kb5+1Ns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xHR0sPqUH0j45P8vq3Bc7jTQXAFPdFHNVo4ZlMXT2xq4WCkjJiYL+aJuTRXlUrgjh
+         BQSbI8O+fhxuDjWegSi8VRBhgV2QLlAsNeA9MawOaTNjIwe7pdVqY1f3iomM+a8DP+
+         Xaf1HmVxwT1NVdpSOIl9RA8c6miEm7lUnCxxnA+I=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.4.171
+Date:   Tue, 11 Jan 2022 15:41:26 +0100
+Message-Id: <164191208648227@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBSAN_BOUNDS and UBSAN_TRAP depend on UBSAN config option.
-merge_config.sh script generates following warnings if parent config
-doesn't have UBSAN config already enabled and UBSAN_BOUNDS/UBSAN_TRAP
-config options don't get added to the parent config.
+I'm announcing the release of the 5.4.171 kernel.
 
-Value requested for CONFIG_UBSAN_BOUNDS not in final .config
-Requested value:  CONFIG_UBSAN_BOUNDS=y
-Actual value:
+All users of the 5.4 kernel series must upgrade.
 
-Value requested for CONFIG_UBSAN_TRAP not in final .config
-Requested value:  CONFIG_UBSAN_TRAP=y
-Actual value:
+The updated 5.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-Fix this by including UBSAN config.
+thanks,
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/lkdtm/config | 1 +
- 1 file changed, 1 insertion(+)
+greg k-h
 
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index a7a58f885f52..46f39ee76208 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -5,6 +5,7 @@ CONFIG_FORTIFY_SOURCE=y
- CONFIG_HARDENED_USERCOPY=y
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-+CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
- CONFIG_UBSAN_TRAP=y
- CONFIG_STACKPROTECTOR_STRONG=y
--- 
-2.30.2
+------------
+
+ Makefile                                         |    2 
+ drivers/infiniband/core/uverbs_marshall.c        |    2 
+ drivers/infiniband/core/uverbs_uapi.c            |    3 +
+ drivers/input/touchscreen/of_touchscreen.c       |    8 +--
+ drivers/isdn/mISDN/core.c                        |    6 +-
+ drivers/isdn/mISDN/core.h                        |    4 -
+ drivers/isdn/mISDN/layer1.c                      |    4 -
+ drivers/net/ethernet/aquantia/atlantic/aq_ring.c |    8 +++
+ drivers/net/ethernet/intel/i40e/i40e_main.c      |   60 +++++++++++++++++++----
+ drivers/net/ethernet/intel/iavf/iavf_main.c      |    5 +
+ drivers/net/ieee802154/atusb.c                   |   10 ++-
+ drivers/net/phy/micrel.c                         |    1 
+ drivers/net/usb/rndis_host.c                     |    5 +
+ drivers/power/reset/ltc2952-poweroff.c           |    4 -
+ drivers/power/supply/power_supply_core.c         |    4 +
+ drivers/scsi/libiscsi.c                          |    6 +-
+ drivers/usb/mtu3/mtu3_gadget.c                   |    4 -
+ fs/f2fs/checkpoint.c                             |    3 -
+ fs/xfs/xfs_ioctl.c                               |    3 -
+ kernel/trace/trace.c                             |    6 +-
+ net/batman-adv/multicast.c                       |   15 +++--
+ net/batman-adv/multicast.h                       |   10 ++-
+ net/batman-adv/soft-interface.c                  |    7 +-
+ net/core/lwtunnel.c                              |    4 +
+ net/ipv4/fib_semantics.c                         |   49 ++++++++++++++++--
+ net/ipv4/udp.c                                   |    2 
+ net/ipv6/ip6_vti.c                               |    2 
+ net/ipv6/route.c                                 |   32 +++++++++++-
+ net/mac80211/mlme.c                              |    2 
+ net/phonet/pep.c                                 |    1 
+ net/sched/sch_qfq.c                              |    6 --
+ tools/testing/selftests/x86/test_vsyscall.c      |    2 
+ 32 files changed, 216 insertions(+), 64 deletions(-)
+
+Chao Yu (1):
+      f2fs: quota: fix potential deadlock
+
+Christian Melki (1):
+      net: phy: micrel: set soft_reset callback to genphy_soft_reset for KSZ8081
+
+Chunfeng Yun (1):
+      usb: mtu3: fix interval value for intr and isoc
+
+Darrick J. Wong (1):
+      xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate
+
+David Ahern (7):
+      ipv4: Check attribute length for RTA_GATEWAY in multipath route
+      ipv4: Check attribute length for RTA_FLOW in multipath route
+      ipv6: Check attribute length for RTA_GATEWAY in multipath route
+      ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route
+      lwtunnel: Validate RTA_ENCAP_TYPE attribute length
+      ipv6: Continue processing multipath route even if gateway attribute is invalid
+      ipv6: Do cleanup if attribute validation fails in multipath route
+
+Di Zhu (1):
+      i40e: fix use-after-free in i40e_sync_filters_subtask()
+
+Eric Dumazet (1):
+      sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
+
+Greg Kroah-Hartman (1):
+      Linux 5.4.171
+
+Hangyu Hua (1):
+      phonet: refcount leak in pep_sock_accep
+
+Jedrzej Jagielski (1):
+      i40e: Fix incorrect netdev's real number of RX/TX queues
+
+Jiasheng Jiang (1):
+      RDMA/uverbs: Check for null return of kmalloc_array
+
+Karen Sornek (1):
+      iavf: Fix limit of total number of queues to active queues of VF
+
+Leon Romanovsky (1):
+      RDMA/core: Don't infoleak GRH fields
+
+Linus Lüssing (1):
+      batman-adv: mcast: don't send link-local multicast to mcast routers
+
+Linus Walleij (1):
+      power: supply: core: Break capacity loop
+
+Lixiaokeng (1):
+      scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+
+Mateusz Palczewski (1):
+      i40e: Fix for displaying message regarding NVM version
+
+Nathan Chancellor (2):
+      Input: touchscreen - Fix backport of a02dcde595f7cbd240ccd64de96034ad91cffc40
+      power: reset: ltc2952: Fix use of floating point literals
+
+Naveen N. Rao (2):
+      tracing: Fix check for trace_percpu_buffer validity in get_trace_buf()
+      tracing: Tag trace_percpu_buffer as a percpu pointer
+
+Pavel Skripkin (1):
+      ieee802154: atusb: fix uninit value in atusb_set_extended_addr
+
+Shuah Khan (1):
+      selftests: x86: fix [-Wstringop-overread] warn in test_process_vm_readv()
+
+Thomas Toye (1):
+      rndis_host: support Hytera digital radios
+
+Tom Rix (1):
+      mac80211: initialize variable have_higher_than_11mbit
+
+William Zhao (1):
+      ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
+
+Zekun Shen (1):
+      atlantic: Fix buff_ring OOB in aq_ring_rx_clean
+
+wolfgang huang (1):
+      mISDN: change function names to avoid conflicts
+
+yangxingwu (1):
+      net: udp: fix alignment problem in udp4_seq_show()
 

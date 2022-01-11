@@ -2,66 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2735F48A6EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352E448A6F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348134AbiAKEzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:55:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43668 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348118AbiAKEy7 (ORCPT
+        id S245469AbiAKE4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbiAKE4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:54:59 -0500
+        Mon, 10 Jan 2022 23:56:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E0EC06173F;
+        Mon, 10 Jan 2022 20:56:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1C83B818B1;
-        Tue, 11 Jan 2022 04:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5FF07C36AF9;
-        Tue, 11 Jan 2022 04:54:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB9BFB818AD;
+        Tue, 11 Jan 2022 04:56:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C17C36AE9;
+        Tue, 11 Jan 2022 04:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641876897;
-        bh=/T4YwNzkFbeekttAWXQFs09Gfr+kHLzNYLt30BVqcSQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=T6QhskWzeoQgXEyzr7WlulgkOwiXjEeYCTmE9MMZoYC05nAJeIAs0ipp2Cjyp8L7N
-         8nnp0ARVw9I9v9zDC+VN7BGbTSgHzMLgHoaPk24mVSH0nINV+O4OMv9U4DfI5xz5WN
-         8Ott3WTVX1Jd7KUll24HONiy+PwYYMXm3Vdsr5aiEHMrQLjgGE0AnG8FzdCluPir/N
-         K8V4aDV0ABkDne5Af9I34h+mK6u52mK4anrx1irCvlzakPwfeS9CJZHyg2qqGpsv5f
-         czY9Zlqg7cPGQAjNSKbqitN2Tw4NsqtzwWzLWCZFZTwH9lX1sc5RD/rn/zf6EsZiRC
-         7GbbPVYLZ0Q9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4F3FFF60794;
-        Tue, 11 Jan 2022 04:54:57 +0000 (UTC)
-Subject: Re: [GIT PULL] Device properties framework updates for v5.17-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0h20TNyM9MW2UCPg4u=3hBRxZH+f91GSxxP0V0m0Nf1ow@mail.gmail.com>
-References: <CAJZ5v0h20TNyM9MW2UCPg4u=3hBRxZH+f91GSxxP0V0m0Nf1ow@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0h20TNyM9MW2UCPg4u=3hBRxZH+f91GSxxP0V0m0Nf1ow@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git devprop-5.17-rc1
-X-PR-Tracked-Commit-Id: 3a571fc19673bc00c36b2cd8a2b9811c013115d7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fe8152b38d3a994c4c6fdbc0cd6551d569a5715a
-Message-Id: <164187689732.26750.12241617195557654169.pr-tracker-bot@kernel.org>
-Date:   Tue, 11 Jan 2022 04:54:57 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+        s=k20201202; t=1641876964;
+        bh=ZtbHei9hz8oON8dszReT8Cgs/y24l8HsmyySBpqXfMM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PdGI9hCOqKuKfWSwo/fBTloxdenVxgZLapHMXZFSxpC9FJnYmh7p4eeaqRd9vVOsH
+         WyBzKE9GmzOrentqoOvVq4haFGC5PMCvuqSg2Kktjw1mfWLAt+7+zrqD26oR0jlfS/
+         UpBcjvA61BjUxmKhhBJfLvdHrYt/6PqHvZB6XS+wCxtejbU7cHJKZKogbRu8N/abYV
+         JizzQqAs0XCu8fl2rj7q2556glzwStcTADwvAcvyVfGus5wY+wmkK/Ib/buOEQSCeN
+         NAphdHkw276sAsfnnPNfhxbQNgCgdtDflHpinyt2t28UyBE5Rr91R9WZqT5g63X0Pp
+         fj4P5yDI55OWA==
+Date:   Mon, 10 Jan 2022 20:56:03 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Networking for 5.17
+Message-ID: <20220110205603.6bc9b680@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <CAHk-=wg-pW=bRuRUvhGmm0DgqZ45A0KaH85V5KkVoxGKX170Xg@mail.gmail.com>
+References: <20220110025203.2545903-1-kuba@kernel.org>
+        <CAHk-=wg-pW=bRuRUvhGmm0DgqZ45A0KaH85V5KkVoxGKX170Xg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 10 Jan 2022 20:23:18 +0100:
+On Mon, 10 Jan 2022 19:31:30 -0800 Linus Torvalds wrote:
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git tags/5.17-net-next  
+> 
+> Merged. But I now note that this actually triggers an error when
+> building with clang:
+> 
+>   net/netfilter/nf_tables_api.c:8278:4: error: variable 'data_size' is
+> uninitialized when used here [-Werror,-Wuninitialized]
+>                           data_size += sizeof(*prule) + rule->dlen;
+>                           ^~~~~~~~~
+> 
+> and I think clang is entirely right.
+> 
+> Sadly, I didn't actually notice that before having done the merge, so
+> I'll have to do the fixup as a separate commit.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git devprop-5.17-rc1
+Damn it :/ Sorry.
+ 
+> I really wish we had more automation doing clang builds. Yes, some
+> parts of the kernel are still broken with clang, but a lot isn't, and
+> this isn't the first time my clang build setup has found issues.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fe8152b38d3a994c4c6fdbc0cd6551d569a5715a
+We have clang W=1 running on patchwork but the PR this came thru didn't
+register right. I'll build test with clang going forward.
 
-Thank you!
+> I also notice that NET_VENDOR_VERTEXCOM defaults to 'n'. That's fine
+> by me, but it seems unusual. Normally the 'enable vendor XYZ' tend to
+> default to 'y'. But for unusual (and new) vendors, maybe that 'n' is
+> the right thing to avoid unnecessary questions.
+> 
+> And maybe that NET_VENDOR_xyz thing has happened many times before,
+> and I just haven't happened to notice...
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+There is a patch posted to flip it back to 'y' already, I didn't think
+it was worth waiting for. That said I don't actually know why vendors
+default to y. The only explanation I can come up with it's that it was
+done so that people running olddefconfig right after the per-vendor
+split was introduced wouldn't lose all drivers. We'll fix vertexcom
+for consistency but may flip all the vendors' default to 'n' for 
+the next merge window.

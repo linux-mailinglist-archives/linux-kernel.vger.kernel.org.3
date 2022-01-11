@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B6048A6EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338C148A6EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347993AbiAKEzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348104AbiAKEyz (ORCPT
+        id S1348131AbiAKEzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:55:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43666 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348117AbiAKEy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:54:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E18C06173F;
-        Mon, 10 Jan 2022 20:54:55 -0800 (PST)
+        Mon, 10 Jan 2022 23:54:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA4F7611C6;
-        Tue, 11 Jan 2022 04:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A8CCC36AED;
-        Tue, 11 Jan 2022 04:54:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73D2EB817D4;
+        Tue, 11 Jan 2022 04:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45A25C36AE9;
+        Tue, 11 Jan 2022 04:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641876894;
-        bh=Jazq8kwTfHY32vDzgEyvmcSeSN1UUY6Zh08ZEsPgz70=;
+        s=k20201202; t=1641876897;
+        bh=l3D04WQcgiqYfVqmJu/Rd+fSWi9TCFEshgHuORrEbvM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ZXFLb/j45VjQD2cADD4UEO/X1YXFU4cdbR/8P6djQ4HtVK3RBHJSeTWAKVMD+UaA9
-         XEEsgeG02UPo6w9XRqxCG5tVqjW6nawuggq/hzf61weKbrRFit8dRVd10TbwSxkCOc
-         56do4NBDRxi0cscYNW+xB0GBj9RVm8nFdlEEddGuKI723YYcdAfkr0IVv1g99Ad/RN
-         5W81zlkI8OhnbbF88+qbgA0zVpehCtaXqqBemHTBEt7EzL4ZwkkA0MmXJVNNsrIDAT
-         sY1NIYYnK91CRkCN0h37WOxQ+9g4R6pLF/5NHKz70WhgEmo26WNLBQ0NkeVy5hySMI
-         VxfqbD4lNjYHg==
+        b=X1wZ2fxc6bMGG/Y/IXyOh43BrxiabUm2XiOGkMJ8Ew7JtFpyiNx3NHnB+brscRhZo
+         wFfUtYxWwi7ul/swWcRutNMpDDSsGFqvqAe6u1OgXJqS3GK0LHHQW4h8VlosbRb5kU
+         OLhq7KURas9ZdFvqB1drdrcDiQtShliAkJgrM0fMnlL+bm1WU+iMH5PDl9Gkwuygxb
+         iwyvy/bpnOdFMiSKOuiOCjLWRpnI76VhDC7rxGsZpBGMNpMT4GLGS82Nm0ICUmymqz
+         1/NRXjFXEn+jlUuduSFF/hsMz45d96tFe68YxdrwpEl8url7KN4czpmUqLdC1ALyuy
+         7xDovRo0b2bCg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 11436F6078A;
-        Tue, 11 Jan 2022 04:54:54 +0000 (UTC)
-Subject: Re: [GIT PULL] Thermal control updates for v5.17-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 318DAF6078D;
+        Tue, 11 Jan 2022 04:54:57 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI updates for v5.17-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0ipPn6up69zcR9RAS-=pPFwjpmEri680jgh8EtOP_A1+g@mail.gmail.com>
-References: <CAJZ5v0ipPn6up69zcR9RAS-=pPFwjpmEri680jgh8EtOP_A1+g@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0ipPn6up69zcR9RAS-=pPFwjpmEri680jgh8EtOP_A1+g@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.17-rc1
-X-PR-Tracked-Commit-Id: fff489ff0722bec127a05667bec00ea45cf9f77e
+In-Reply-To: <CAJZ5v0hHd+um2KOmHvLuixMUoTSmD3=OdcGuXz0oLizJ0m3B=g@mail.gmail.com>
+References: <CAJZ5v0hHd+um2KOmHvLuixMUoTSmD3=OdcGuXz0oLizJ0m3B=g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0hHd+um2KOmHvLuixMUoTSmD3=OdcGuXz0oLizJ0m3B=g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc1
+X-PR-Tracked-Commit-Id: 70df8e1bdc941431af2370270f5140291dcbb282
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fe2437ccbd278af683d32196fdea59a3b95f144e
-Message-Id: <164187689406.26750.9635055881759623663.pr-tracker-bot@kernel.org>
-Date:   Tue, 11 Jan 2022 04:54:54 +0000
+X-PR-Merge-Commit-Id: bca21755b9fc00dbe371994b53389eb5d70b8e72
+Message-Id: <164187689719.26750.17995351493606263285.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Jan 2022 04:54:57 +0000
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 10 Jan 2022 20:19:59 +0100:
+The pull request you sent on Mon, 10 Jan 2022 20:13:07 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.17-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fe2437ccbd278af683d32196fdea59a3b95f144e
+https://git.kernel.org/torvalds/c/bca21755b9fc00dbe371994b53389eb5d70b8e72
 
 Thank you!
 

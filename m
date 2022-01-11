@@ -2,94 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 169A748B8D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A3B48B8D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244365AbiAKUsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244133AbiAKUs2 (ORCPT
+        id S244432AbiAKUt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:49:27 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6972 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244133AbiAKUt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:48:28 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F83C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:48:28 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id g21so505771qtk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/CWoufOVy2cXdjaEmGa+laP4GrgKDj14h+owfIQdMZs=;
-        b=T4p447Ky43yc0e6jqjZUTLxWwyMD+RifYTHXhQWthxwJdkkY3/heOrpcVKpDozJwfy
-         0s6LnNiG9QSQWuKrkZHYrQCarAvlrnbL8KQi/Pob7jxRzbJbQakhOsYij1DlQ5+Tz5ZV
-         CtZwXWLfGz9mMRXM/KGlBgHSASh8oQ7xX1MquqvW1+98zciLXskpDQhrer5wWNzpYor4
-         ZRE6THCiZRtzs/eWgSiFpXANg44Cj/dJQjWLZQTQf/jTO5woLuqpyQ5bsBa1po8Oapql
-         t/7rSvqwvaAn/nqO4BZip78+Upu2OOPZAzLIIMWfolpbEe2nj1vlHiIzHy9XVyXrcvNf
-         +N8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/CWoufOVy2cXdjaEmGa+laP4GrgKDj14h+owfIQdMZs=;
-        b=sxSGAUaqSUpk4MJtuh9E49k34P1xuNwqo6xQCXIe1lhXNi49kD0XImRjGEtkZauWh6
-         BTPPADxWJI92DINkoxDASI1YXPp8RWqNep8j3LrXKwR4Eb1uTUgkAWvwhF+g35ulVLZg
-         LcsL5rXh4Dkcfg9vYIsL7I/IF+O9x33PGWbJUC9Scx+eq9Yc/ia6ZCF9ZGQ5i5jShBSF
-         DTwZjcg3rRhXd8Ht3XVLqGTqhqZSTbvuWS2wR8pA5zMWpB8huIXK8mqgNIeJhIiU8jeR
-         APsshDv7jr8veYJun7+Unul2mcPJeYoZUgiGpHSfCItcxYLmLUrgTst/IRejyRSwNYEP
-         +sGw==
-X-Gm-Message-State: AOAM533pM0UtQM36MA3Ab0y9UTnik1wDIZBIVzQuc+rM+8dToqNzFj0o
-        Gu8aTbMgwlLba7NFjstbHHDoFKRseZGHhQ==
-X-Google-Smtp-Source: ABdhPJzMRa844YMkoSJ5ymgGCoG9qKD53haefRWdKjKnzzPIHIlzH6vALyHzGbci6gn/HDSZys3VIw==
-X-Received: by 2002:a05:622a:13c8:: with SMTP id p8mr2879249qtk.506.1641934107744;
-        Tue, 11 Jan 2022 12:48:27 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id ay18sm2615665qkb.40.2022.01.11.12.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 12:48:27 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n7O4A-00EZLA-4l; Tue, 11 Jan 2022 16:48:26 -0400
-Date:   Tue, 11 Jan 2022 16:48:26 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
-        "aharonl@nvidia.com" <aharonl@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
-        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
-Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
- in responder side
-Message-ID: <20220111204826.GK6467@ziepe.ca>
-References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
- <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
- <20220106002804.GS6467@ziepe.ca>
- <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
- <20220106173346.GU6467@ziepe.ca>
- <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
- <20220110143419.GF6467@ziepe.ca>
- <56234596-cb7d-bdb2-fcfd-f1fe0f25c3e3@fujitsu.com>
+        Tue, 11 Jan 2022 15:49:26 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BJw48A025909;
+        Tue, 11 Jan 2022 20:49:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=o3avqyjwXEI91DdMmCszgg6jcrCz6nUJDl/zqgWuzcs=;
+ b=NizOnBJ70AJz/xtFmcjynRdh7yPH57aOELwPmD3OQkuHnS1FZzSaxs8XislMcKHWwx+h
+ XYw86hnMBmrO/+4bu3lZd1wlWfuwz0PZjsCNbQCRC8Gi4cKefPNsZmr1JykZideHFzDq
+ w20P4Q4lvfGYRFV0gYjmkqh9isxsyxGDnOewndDlwKWVzgy6HUPkLJg7XNu9JW3gQ/lJ
+ mTgv53NwSLUaftQ9Vwe9j2F0Qbpbqh9yxZWg7lmfQP0aR1Hw4eQ0yo0Txz36KV9rSFnf
+ ChxDSbgOKO6julcOCuxkq8+/7xOhSrSixCNZx5G4GjrpWhzeqfAxL8mxJ2UMcVJO66wr Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhgh18uut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 20:49:07 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BKaxfa003121;
+        Tue, 11 Jan 2022 20:49:07 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhgh18uub-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 20:49:07 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BKY0kh025691;
+        Tue, 11 Jan 2022 20:49:04 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3df28a291j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 20:49:04 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BKn1Rn47120642
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 20:49:01 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C66BCAE055;
+        Tue, 11 Jan 2022 20:49:01 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82592AE058;
+        Tue, 11 Jan 2022 20:49:01 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 11 Jan 2022 20:49:01 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org,
+        Pingfan Liu <kernelfans@gmail.com>
+Subject: Re: [PATCH 2/2] tracing: Add test for user space strings when
+ filtering on string pointers
+References: <20220107225655.647376947@goodmis.org>
+        <20220107225840.003487216@goodmis.org>
+Date:   Tue, 11 Jan 2022 21:49:01 +0100
+In-Reply-To: <20220107225840.003487216@goodmis.org> (Steven Rostedt's message
+        of "Fri, 07 Jan 2022 17:56:57 -0500")
+Message-ID: <yt9dczkyt2v6.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56234596-cb7d-bdb2-fcfd-f1fe0f25c3e3@fujitsu.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HrRNlRYq5xzOVqxasedEk3L3llRklEWD
+X-Proofpoint-GUID: EAKNwtcVpZGUwgai_6J1lzq1tgRLNq7n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=912 spamscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 clxscore=1011 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201110107
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 05:34:36AM +0000, lizhijian@fujitsu.com wrote:
+Hi Steve,
 
-> Yes, that's true. that's because only pmem has ability to persist data.
-> So do you mean we don't need to prevent user to create/register a persistent
-> access flag to a non-pmem MR? it would be a bit confusing if so.
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-Since these extensions seem to have a mode that is unrelated to
-persistent memory, I'm not sure it makes sense to link the two things.
+> From: Steven Rostedt <rostedt@goodmis.org>
+>
+> Pingfan reported that the following causes a fault:
+>
+>   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
+>   echo 1 > events/syscalls/sys_enter_at/enable
+>
 
-Jason
+[..]
+
+> +static __always_inline char *test_string(char *str)
+> +{
+> +	struct ustring_buffer *ubuf;
+> +	char __user *ustr;
+> +	char *kstr;
+> +
+> +	if (!ustring_per_cpu)
+> +		return NULL;
+> +
+> +	ubuf = this_cpu_ptr(ustring_per_cpu);
+> +	kstr = ubuf->buffer;
+> +
+> +	if (likely((unsigned long)str >= TASK_SIZE)) {
+
+I think that would not work on architectures where addresses for kernel
+and user space could overlap, i.e. with different address spaces?
+
+> +		/* For safety, do not trust the string pointer */
+> +		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
+> +			return NULL;
+> +	} else {
+> +		/* user space address? */
+> +		ustr = str;
+> +		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
+> +			return NULL;
+> +	}
+> +	return kstr;
+> +}

@@ -2,96 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D0148AF07
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515AB48AF0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238242AbiAKN7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S238763AbiAKOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236054AbiAKN7j (ORCPT
+        with ESMTP id S235352AbiAKOBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:59:39 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D875AC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:59:38 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id i3so47478980ybh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=qoFhEWfzeCanmU1NlDxKMq9/mEUKswrPwi1OhL1zoLk=;
-        b=c1ZsC+FHej7LFdPA0Qfp8+x8O9IdX5Wq35vQQjlmDO7b06F0kP3uwCUx0NL97gAOOC
-         LqirAhxzsRitnjp4usJ6qSb5xhCFXCzuZZADicnjqxC+sLpYec8S+5NsizxGJ3mIbJY+
-         uoym4vJKVxnX+7fIYotRFjRQeKMyzf/XFNa+PQnIM6zTVejpOLYffmS9MKGHU0EfM02o
-         cl5n4dG50xW4yJ4fAl0fF565lvSL81GGcSKUU55F+FAMOGDQoJeO5iBHvgTKsWrAA1Yi
-         8pq61ftnAWSqUCQM/fXmz6Ma99rzVgX+9xSo8/FwFiKpPOtYKIDzHrnU+ct5ZSNPx+py
-         /vSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=qoFhEWfzeCanmU1NlDxKMq9/mEUKswrPwi1OhL1zoLk=;
-        b=wi9VvfSwDzBLUCvNhx4puF0kXSNeyaWNWyFIPxRBkwt1RGf96DJnxTXbQd7+hIqC6/
-         sx0w4EqO/VxURNS6PiYHF7GelFF+3VhYwa+JoZBSIR6ZMVR4ZlkGWX64FY4nfuVOXq2x
-         QbUl0HW/5IneiQMGjXJ5IUsOPUIjfr1cL7UWaM8n7sk/EvL5B5BWGm6caKfZXqG9dQCl
-         xqCjc2E4lhukr91bWxQqSsltJfRsjaO9AsuoUIlcOVHGrGnYZW4bYVTDVzLmDzroT4LW
-         1+C5+W8qwE1nC/k0o6lUeIKduFkAKz6SKwPsYalY3Mc4O2rCyTDMVtV/VxEZkjrH9VdW
-         5SuA==
-X-Gm-Message-State: AOAM533txCf2aiRwr1TM1+KcGRj11lSzE0a5Who6K3wtfzo5uJxMw0Nu
-        zfAVHcPmzC/Ib7XBedkO1MP0nfIpoUhvaVhNYaI=
-X-Google-Smtp-Source: ABdhPJxFv3QGesDchnOK1sXMCT+v8NcCbeDl1r0biIM3W8pocfrqLVF9RN1vbyyO6zVItONq1/r+W85MQQp4jP5k30c=
-X-Received: by 2002:a05:6902:100d:: with SMTP id w13mr6743776ybt.185.1641909578056;
- Tue, 11 Jan 2022 05:59:38 -0800 (PST)
+        Tue, 11 Jan 2022 09:01:22 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5106C06173F;
+        Tue, 11 Jan 2022 06:01:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LF/mpBO5j1rUYISJ5kTuyMtADrx3r6gpROrYNypLtkw=; b=ve3hDqC3IqQ2LgppYwfdzXoY6L
+        94cU5qrji9ovRx53/JbeLkUzFgUGK/W5Ml4v53FUWv9U64eXrdTIFJjrlU50FtLUjA0HLjJukmRgP
+        oSiTNGxKDnbCl1OcOgro86+aPljLxTeQf7TUyiQldEqqNwih2GdrvLilg3TIf1m0UOaQlpNfJ6nz4
+        GTzVHHf8oeSCEvM4W5SHosSz4c7kAW9OtkN3pugOIguBCf4/YzktoWpU0xZpi/4EWan+TDW8LS2zQ
+        v8KaAtChv4JZF7/TsQ3TVSBIKkMEb48fzI/9DBiN0KYxGZc2Rx9IVODfiXezpHiOc0ns/oOiiS7I5
+        TCQdL+ag==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7Hi9-003Ipl-Pe; Tue, 11 Jan 2022 14:01:17 +0000
+Date:   Tue, 11 Jan 2022 14:01:17 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nvdimm@lists.linux.dev
+Subject: Re: Phyr Starter
+Message-ID: <Yd2NraXh3ka8PdrQ@casper.infradead.org>
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
+ <82989486-3780-f0aa-c13d-994e97d4ac89@nvidia.com>
 MIME-Version: 1.0
-Sender: obinnaeke50@gmail.com
-Received: by 2002:a05:7000:6485:0:0:0:0 with HTTP; Tue, 11 Jan 2022 05:59:37
- -0800 (PST)
-From:   Alary Jean Claude <claudealaryjean@gmail.com>
-Date:   Tue, 11 Jan 2022 13:59:37 +0000
-X-Google-Sender-Auth: tIkkDCaXePtJTj--BMHyJ0KOt2c
-Message-ID: <CAPPJqg8shr8haCsgNe-KRR9ccVs4o_zyGnUPVDS4GZgnRiuhYA@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82989486-3780-f0aa-c13d-994e97d4ac89@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Beloved,
-With due respect to your person and much sincerity of purpose I wish
-to write to you today, seeking for your urgent assistance in this
-humanitarian investment project to be established in your country for
-the mutual benefit of the orphans and the less privileged ones. My
-names are Mrs.Alary Jean Claude, a dying widow hospitalized undergoing
-treatment for brain tumor disease, I hope that you will not expose or
-betray this belief and confidence that I am about to delegate to you
-for the mutual benefit of the orphans and the less privileged ones. My
-late husband made a substantial deposit with the Bank which I have
-Strong-Willed to hand over and entrust the sum of ($
-12,000.000,Dollar) in the account under your guardianship for you to
-invest it into any social charitable project in your country. Based on
-my present health status I am permanently indisposed to handle
-finances or any financial related project.
+On Tue, Jan 11, 2022 at 12:17:18AM -0800, John Hubbard wrote:
+> Zooming in on the pinning aspect for a moment: last time I attempted to
+> convert O_DIRECT callers from gup to pup, I recall wanting very much to
+> record, in each bio_vec, whether these pages were acquired via FOLL_PIN,
+> or some non-FOLL_PIN method. Because at the end of the IO, it is not
+> easy to disentangle which pages require put_page() and which require
+> unpin_user_page*().
+> 
+> And changing the bio_vec for *that* purpose was not really acceptable.
+> 
+> But now that you're looking to change it in a big way (and with some
+> spare bits avaiable...oohh!), maybe I can go that direction after all.
+> 
+> Or, are you looking at a design in which any phyr is implicitly FOLL_PIN'd
+> if it exists at all?
 
-With this intention, I am determined to contact you in order to
-sustain and assist me as my rightful beneficiary and claim the money
-for humanitarian purposes for the mutual benefits of the less
-privileged ones. Because If the fund remains unclaimed with the bank I
-pass away, those gluttonous bank executives will place the fund as an
-unclaimed Fund and share it among themselves for their selfish and
-worthless ventures. In this regard, I will be grateful for your kind
-acceptance to carry out this transaction and fulfill my final wish in
-implementing the charitable project in your country as it requires
-absolute trust and devotion without any failure. Meanwhile It will be
-my pleasure to compensate you as my Investment Manager/Partner with
-40% percent of the total amount as commission/share just for you to
-take this charitable project serious and handle it with sincerity of
-mind, showing honesty and attention in our communication and in every
-aspect of this project, While 60% of the money will be invested into
-the charity project.
+That.  I think there's still good reasons to keep a single-page (or
+maybe dual-page) GUP around, but no reason to mix it with ranges.
 
-Thank you very much for your kind consideration and I will be happy to
-receive your prompt response for further correspondence.
-May the peace of God be with you.
-Yours beloved Sister in Christ Mrs. Alary Jean Claude.
+> Or any other thoughts in this area are very welcome.
+
+That's there's no support for unpinning part of a range.  You pin it,
+do the IO, unpin it.  That simplifies the accounting.
+

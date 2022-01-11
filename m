@@ -2,89 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C8648AAB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4B948AAB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbiAKJlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:41:35 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.169]:65055 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiAKJle (ORCPT
+        id S235449AbiAKJm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:42:56 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:45702 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229629AbiAKJmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:41:34 -0500
-X-KPN-MessageId: 1361e7e9-72c2-11ec-9abf-005056abad63
-Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 1361e7e9-72c2-11ec-9abf-005056abad63;
-        Tue, 11 Jan 2022 10:37:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=wx8es6Sa9R3UcDRmVMXh+J0gt+hanItmvkh9hiFzidA=;
-        b=qYo5XO4K2Rjo1gOKwp8+6anqIIHeXCM4fT4PnYe8fwqVKbF7/yYwYk6DqEj8XyeARArmH3VCAubTX
-         dETR3OjSJ47t7NAAk5yfCwCisPJATBm6hlUv4kOSaQ5lJjn0VKMw06y3ALjgt8sohvJWh0X4zOhxhv
-         QEQCuMn+VEOg5uJpcjcEckMMlgqKpO4y+eymQ7hF22/HrKQzAqgosxx226/wJZYPcInVLSP8OPNSfz
-         +gJmbKzv9WkuyoHJtgEh/7TqrxBI8rX6KjZdygZqkcgZQUHNxqgamLIn2N6829o93OLcA06zklDhnQ
-         dbPN3IK2C3rLYuSMjtuM80AFkn8L09A==
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|7RRAhfMlvMNJYg11WBWh7fsEFhTdvaun8Tj9AkDLsTb9IYq39A8DZ+a5JS+cLx3
- p5cmT2Dey3IeL1KENajadWA==
-X-Originating-IP: 193.91.129.219
-Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id a9071312-72c2-11ec-94d2-005056abf0db;
-        Tue, 11 Jan 2022 10:41:33 +0100 (CET)
-Message-ID: <5fd4efe8-2fa2-d691-adac-8c9272555d86@xs4all.nl>
-Date:   Tue, 11 Jan 2022 10:41:32 +0100
+        Tue, 11 Jan 2022 04:42:55 -0500
+Received: by mail-ua1-f43.google.com with SMTP id x33so27224006uad.12;
+        Tue, 11 Jan 2022 01:42:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YYoFhZpMdrKIinjBqjY4BJ47Yl1lAi9aD03OcFH30xQ=;
+        b=PFIY7PMVO4AJi9SCwbse3I0zalF/3ypRRIC/qfeeNO6jnDAyfwIeEottysxUoRz3QK
+         42rG68XKuBBOZIOyr/TV6a1yHE2owomY3Zw1Yvmi2dQc2yPyQNlbRiMTVmfzLPtLtnhW
+         IRqi7w5lm2jA9kD/Q4QmTkAa9eNVud1xRrLNU6ScoAqFEc5wd8sn6AG+yLlCOYZSrJD0
+         uzbQVmXN9FZMMDLuWOCtYDht7KzzgWOwZzWKcKaPobashFdXNEldrb4DoHn6bqbP53v6
+         9zys1piNFqcGL5Y4BCFIxZI5JyKzwaGeh4MAlnqTXW/eBsCFJYvpAcpjANIa62xbdkQk
+         /03Q==
+X-Gm-Message-State: AOAM532r9dwlYRLZOs8G2U+753KGaDOKaoCVIqvdIIKLA6Oo0pC7XrON
+        6VUPWR8oCfWV8UU0zcRgyEP14LPtVpPGcA==
+X-Google-Smtp-Source: ABdhPJxaChTMLOcDhW5LSEx1c4Tv6RLv+1yv/J57++sax1YelxnxpTCGA4SQcLpEjm4Ig6E9bgQMgQ==
+X-Received: by 2002:a9f:2acc:: with SMTP id d12mr1551139uaj.109.1641894174183;
+        Tue, 11 Jan 2022 01:42:54 -0800 (PST)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id c15sm5218266uaj.13.2022.01.11.01.42.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 01:42:53 -0800 (PST)
+Received: by mail-ua1-f43.google.com with SMTP id p1so28534018uap.9;
+        Tue, 11 Jan 2022 01:42:53 -0800 (PST)
+X-Received: by 2002:a05:6102:2329:: with SMTP id b9mr1668803vsa.5.1641894173002;
+ Tue, 11 Jan 2022 01:42:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.1
-Subject: Re: [PATCH v2] media: platform: Add brask to the match table
-Content-Language: en-US
-To:     Zhuohao Lee <zhuohao@chromium.org>, mchehab@kernel.org,
-        bleung@chromium.org, groeck@chromium.org, levinale@chromium.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211221095326.383055-1-zhuohao@chromium.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20211221095326.383055-1-zhuohao@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220111011239.452837-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220111011239.452837-1-jiasheng@iscas.ac.cn>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Jan 2022 10:42:41 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXr4aeTZmjgznunLtZFQusEW7Rw=q3FjTNa1jcgGwkoDQ@mail.gmail.com>
+Message-ID: <CAMuHMdXr4aeTZmjgznunLtZFQusEW7Rw=q3FjTNa1jcgGwkoDQ@mail.gmail.com>
+Subject: Re: [PATCH] dmaengine: sh: rcar-dmac: Check for error num after dma_set_max_seg_size
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     Vinod <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Zou Wei <zou_wei@huawei.com>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2021 10:53, Zhuohao Lee wrote:
-> The Google Brask device uses the same approach as the Google Fizz
-> which enables the HDMI CEC via the cros-ec-cec driver.
+On Tue, Jan 11, 2022 at 2:12 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+> As the possible failure of the dma_set_max_seg_size(), it should be
+> better to check the return value of the dma_set_max_seg_size().
+>
+> Fixes: 97d49c59e219 ("dmaengine: rcar-dmac: set scatter/gather max segment size")
+> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-For future reference, please add the driver name in the subject as well.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-A patch with just "media: platform:" as prefix suggests a patch that
-touches on many drivers in media/platform.
+Gr{oetje,eeting}s,
 
-I've manually updated the prefix, so no need for you to do anything.
+                        Geert
 
-Regards,
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-	Hans
-
-> 
-> Signed-off-by: Zhuohao Lee <zhuohao@chromium.org>
-> ---
->  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-> index 2d95e16cd248..8c8d8fc5e63e 100644
-> --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-> +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-> @@ -215,6 +215,8 @@ struct cec_dmi_match {
->  static const struct cec_dmi_match cec_dmi_match_table[] = {
->  	/* Google Fizz */
->  	{ "Google", "Fizz", "0000:00:02.0", "Port B" },
-> +	/* Google Brask */
-> +	{ "Google", "Brask", "0000:00:02.0", "Port B" },
->  };
->  
->  static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

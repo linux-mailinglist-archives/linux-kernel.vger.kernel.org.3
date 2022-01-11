@@ -2,87 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D89748B9A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADEC48B9A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245221AbiAKV2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:28:14 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55030 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245218AbiAKV2N (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:28:13 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        id S245235AbiAKVbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 16:31:48 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:36009 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236298AbiAKVbr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 16:31:47 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1641936707; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=gCZNJastbjYFHPXtfi5+BDLBCMuC79nUsj/TARVQfvA=; b=lHvLn3EC9mqVIXPw5+IjbvIWaCZzz6ZpTzXxRoAlF86NYdy7RWe9C/niLMgb/1IlkMYE/r2/
+ Bwnvjo7FcEkS08/V23BRcqFE20ix+Msa37h+4izSqtKlyiZeyGGuqkGAuB0UiWwqQCesFAiK
+ utkTISSSB6MI8dv5ztn8PGkxdes=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 61ddf742615db43885f7aac1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Jan 2022 21:31:46
+ GMT
+Sender: quic_akhilpo=quicinc.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5E827C4361C; Tue, 11 Jan 2022 21:31:46 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from hyd-lnxbld559.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 90B301F385;
-        Tue, 11 Jan 2022 21:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641936491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=11zMbRrBVlSd1cMlN8I5pipflLFwumZQPppQkq6GMck=;
-        b=cQ/0SV0tNvmI25UYI5jHj2b2yav0UXE2qyZZhd7+hHz3E0k/YXg921X+d023upofwTeM8w
-        /WmaKwGj6FtIg9S247ao2oCUULMeKc6NaEmScKNw17WlyK03Q90vG6c9SBhvLlWFI2BFSm
-        G2HKaBXrQ8Fr5Al2hmFEIXpnyuG9irA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641936491;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=11zMbRrBVlSd1cMlN8I5pipflLFwumZQPppQkq6GMck=;
-        b=2JV392hZwXF1YL9mNrmSsYYR1MvaU1EX0KKQt3gnFrSSJzZvQRmq/tic+JyFupwEn16LmX
-        NF2zSjRtMSNX0FAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78BF913DE9;
-        Tue, 11 Jan 2022 21:28:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FEFcHGv23WF2OAAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 11 Jan 2022 21:28:11 +0000
-Date:   Tue, 11 Jan 2022 22:28:15 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] perf/core for v5.17
-Message-ID: <Yd32b/VmTz4jpkkY@zn.tnic>
-References: <Yd2+Wqrl0ax2JQjg@zn.tnic>
- <Yd30zIQsKTJCyGgO@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yd30zIQsKTJCyGgO@google.com>
+        (Authenticated sender: akhilpo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0C384C4338F;
+        Tue, 11 Jan 2022 21:31:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 0C384C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eric Anholt <eric@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sean Paul <sean@poorly.run>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] drm/msm/adreno: Add support for Adreno 8c Gen 3
+Date:   Wed, 12 Jan 2022 03:01:27 +0530
+Message-Id: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 09:21:16PM +0000, Sean Christopherson wrote:
-> On Tue, Jan 11, 2022, Borislav Petkov wrote:
-> >       KVM: Move x86's perf guest info callbacks to generic KVM
-> 
-> This commit, e1bfc24577cc, introduces a new warning on arm64 with CONFIG_GUEST_PERF_EVENTS=n.
-> 
->   >> arch/arm64/kvm/arm.c:499:15: warning: no previous prototype for function 'kvm_arch_vcpu_get_ip' [-Wmissing-prototypes]
->      unsigned long kvm_arch_vcpu_get_ip(struct kvm_vcpu *vcpu)
-> 
-> I floated a potential fix[*], but we all lost track of it.  I assume the easiest
-> solution at this point is to post a proper patch to go on top?
+Add support for "Adreno 8c Gen 3" gpu along with the necessary speedbin
+support.
 
-Right, you could send it as a reply to this thread and Linus could
-simply pick it up directly, after he merges.Probably the easiest ...
+Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+---
 
-Thx.
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 21 +++++++++++++++++----
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 29 ++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h    | 10 ++++++++--
+ 3 files changed, 51 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 51b8377..9268ce3 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -10,7 +10,6 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/devfreq.h>
+-#include <linux/nvmem-consumer.h>
+ #include <linux/soc/qcom/llcc-qcom.h>
+ 
+ #define GPU_PAS_ID 13
+@@ -1734,6 +1733,18 @@ static u32 a618_get_speed_bin(u32 fuse)
+ 	return UINT_MAX;
+ }
+ 
++static u32 adreno_7c3_get_speed_bin(u32 fuse)
++{
++	if (fuse == 0)
++		return 0;
++	else if (fuse == 117)
++		return 0;
++	else if (fuse == 190)
++		return 1;
++
++	return UINT_MAX;
++}
++
+ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ {
+ 	u32 val = UINT_MAX;
+@@ -1741,6 +1752,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ 	if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
+ 		val = a618_get_speed_bin(fuse);
+ 
++	if (adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), rev))
++		val = adreno_7c3_get_speed_bin(fuse);
++
+ 	if (val == UINT_MAX) {
+ 		DRM_DEV_ERROR(dev,
+ 			"missing support for speed-bin: %u. Some OPPs may not be supported by hardware",
+@@ -1753,11 +1767,10 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ 
+ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
+ {
+-	u32 supp_hw = UINT_MAX;
+-	u32 speedbin;
++	u32 speedbin, supp_hw = UINT_MAX;
+ 	int ret;
+ 
+-	ret = nvmem_cell_read_variable_le_u32(dev, "speed_bin", &speedbin);
++	ret = adreno_read_speedbin(dev, &speedbin);
+ 	/*
+ 	 * -ENOENT means that the platform doesn't support speedbin which is
+ 	 * fine
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 9300583..f35c631 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -6,6 +6,7 @@
+  * Copyright (c) 2014,2017 The Linux Foundation. All rights reserved.
+  */
+ 
++#include <linux/nvmem-consumer.h>
+ #include "adreno_gpu.h"
+ 
+ bool hang_debug = false;
+@@ -317,6 +318,17 @@ static const struct adreno_info gpulist[] = {
+ 		.zapfw = "a660_zap.mdt",
+ 		.hwcg = a660_hwcg,
+ 	}, {
++		.rev = ADRENO_REV_SKU(6, 3, 5, ANY_ID, 190),
++		.name = "Adreno 8c Gen 3",
++		.fw = {
++			[ADRENO_FW_SQE] = "a660_sqe.fw",
++			[ADRENO_FW_GMU] = "a660_gmu.bin",
++		},
++		.gmem = SZ_512K,
++		.inactive_period = DRM_MSM_INACTIVE_PERIOD,
++		.init = a6xx_gpu_init,
++		.hwcg = a660_hwcg,
++	}, {
+ 		.rev = ADRENO_REV(6, 3, 5, ANY_ID),
+ 		.name = "Adreno 7c Gen 3",
+ 		.fw = {
+@@ -371,7 +383,8 @@ bool adreno_cmp_rev(struct adreno_rev rev1, struct adreno_rev rev2)
+ 	return _rev_match(rev1.core, rev2.core) &&
+ 		_rev_match(rev1.major, rev2.major) &&
+ 		_rev_match(rev1.minor, rev2.minor) &&
+-		_rev_match(rev1.patchid, rev2.patchid);
++		_rev_match(rev1.patchid, rev2.patchid) &&
++		_rev_match(rev1.sku, rev2.sku);
+ }
+ 
+ const struct adreno_info *adreno_info(struct adreno_rev rev)
+@@ -445,12 +458,17 @@ struct msm_gpu *adreno_load_gpu(struct drm_device *dev)
+ 	return gpu;
+ }
+ 
++int adreno_read_speedbin(struct device *dev, u32 *speedbin)
++{
++	return nvmem_cell_read_variable_le_u32(dev, "speed_bin", speedbin);
++}
++
+ static int find_chipid(struct device *dev, struct adreno_rev *rev)
+ {
+ 	struct device_node *node = dev->of_node;
+ 	const char *compat;
+ 	int ret;
+-	u32 chipid;
++	u32 chipid, speedbin;
+ 
+ 	/* first search the compat strings for qcom,adreno-XYZ.W: */
+ 	ret = of_property_read_string_index(node, "compatible", 0, &compat);
+@@ -466,7 +484,7 @@ static int find_chipid(struct device *dev, struct adreno_rev *rev)
+ 			rev->minor = r;
+ 			rev->patchid = patch;
+ 
+-			return 0;
++			goto done;
+ 		}
+ 	}
+ 
+@@ -486,6 +504,11 @@ static int find_chipid(struct device *dev, struct adreno_rev *rev)
+ 	dev_warn(dev, "Use compatible qcom,adreno-%u%u%u.%u instead.\n",
+ 		rev->core, rev->major, rev->minor, rev->patchid);
+ 
++done:
++	if (adreno_read_speedbin(dev, &speedbin))
++		speedbin = ANY_ID;
++
++	rev->sku = (uint16_t) (0xffff & speedbin);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+index cffabe7..52bd93a 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+@@ -40,12 +40,16 @@ struct adreno_rev {
+ 	uint8_t  major;
+ 	uint8_t  minor;
+ 	uint8_t  patchid;
++	uint16_t sku;
+ };
+ 
+-#define ANY_ID 0xff
++#define ANY_ID	0xff
++#define ANY_SKU 0xffff
+ 
+ #define ADRENO_REV(core, major, minor, patchid) \
+-	((struct adreno_rev){ core, major, minor, patchid })
++	((struct adreno_rev){ core, major, minor, patchid, ANY_SKU })
++#define ADRENO_REV_SKU(core, major, minor, patchid, sku) \
++	((struct adreno_rev){ core, major, minor, patchid, sku })
+ 
+ struct adreno_gpu_funcs {
+ 	struct msm_gpu_funcs base;
+@@ -324,6 +328,8 @@ adreno_iommu_create_address_space(struct msm_gpu *gpu,
+ 
+ void adreno_set_llc_attributes(struct iommu_domain *iommu);
+ 
++int adreno_read_speedbin(struct device *dev, u32 *speedbin);
++
+ /*
+  * For a5xx and a6xx targets load the zap shader that is used to pull the GPU
+  * out of secure mode
 -- 
-Regards/Gruss,
-    Boris.
+2.7.4
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

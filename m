@@ -2,292 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4F048B78D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870BD48B770
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238949AbiAKTnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S236859AbiAKTiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238383AbiAKTmw (ORCPT
+        with ESMTP id S236751AbiAKTiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:42:52 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B6AC061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:42:52 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id u185-20020a2560c2000000b0060fd98540f7so150786ybb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:42:52 -0800 (PST)
+        Tue, 11 Jan 2022 14:38:21 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E0CC06173F;
+        Tue, 11 Jan 2022 11:38:20 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g11so391536lfu.2;
+        Tue, 11 Jan 2022 11:38:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=njxZip906y8sbtXtB//R8uMp68/sA5bXENQX80k/Srk=;
-        b=pgaVZovcHu1KrMz6FM69+AY1yG/4j980SRhfQVG6QwMEMtghVw8m2q0kzrLv8OpMwj
-         dYm5c/lbDNUbBmSeRAnwCt99w2PwfOZRWj1cbpNv6n/nB1UXKHCxlw52Gayj/SL4VRnd
-         1LchSJFvnKWmaQducCuoajMvAvlhnZ0ngcKNxaf085NYFn938gBKm4xTKqXawG1d9ldr
-         TNRm+ZKf/h2PT+lUBAf0EyZpA3tsqd59lkfglYnKvweUUPEFUC8sBIfEGJHtHRZolpzH
-         cI6jQ8V1twj30jy484Y0KekoWZzP3N5v5UQBKt4IsBjXkTE1pxixOH5B9tm77XB1qtft
-         pgWQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=gCA03Y8txjZiDgmmkgC6vSFKPvusDQ96DqTHZL4jtHk=;
+        b=FZMSntPkSIzKrqITY9rAON0lmZYT/THkwcu2kSIZzsmU84vXUvnzLa2SFJA72IfETY
+         MTgCbXLIbwaNrhSG2AKYlDzxlQ1n4zobcbJ/M1Ju05R5ScvkiQnOhkxcd4boBc1JHypt
+         cgRIOJse4I07nEnsaZxBonFSnjCj6D3oe2E31JXK2a7X9oKvhUuqMkvqIrf+xqY1MbgD
+         Ie9x520HIONwTpEKJUAzBvsd+HOu2KaGJ4FQHcaSnEA0/t2pIi/Ds4UMu6Mu9+wZ1X6w
+         jNixV38ZnCM0PTyhuh5TFuZurIdJI4RJIsgzvL0qBkbQY+rtTS05a8UTgZ5cqe/GBLzv
+         liwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=njxZip906y8sbtXtB//R8uMp68/sA5bXENQX80k/Srk=;
-        b=kF7RJhrEmwFe6oLVfP5Wvp3fmEQ+ep9xB40i1BhLbi2x2LmxCzvYcLT67akC/koYk7
-         cLu3az+RVw4sAW7oajI0S8e0/WveTa/kQXtr4G/+wU3F8Y1zxLQPXBhnSzbj6nA9y/Wo
-         ii1ozg4c74DM9yTrxANF/y6Azx1VhnI/IaN2FMH/hBMpca6ryJxYMg6QHO15Km/8W+k8
-         zup6da8GhdBWIY3+EE+R/2Qp0Nm+zPQfZgRLysmXDXolAds4JRGTDNDZK6zqALOURpDb
-         Fm63SE30lQyBT9IsUkUHrFdpXoRrXSwp1raWHy7Ju0lF8zVNjyarl1Y7fRDtv+Q7fG2n
-         rlTw==
-X-Gm-Message-State: AOAM532e4EO8LsWki3vabweT8WQ6ryG9nYCP157gGVswpu0zBEHUxxrm
-        tM2Cxb5zcE3IORTLBJdYkmm91L1qNCPfSA==
-X-Google-Smtp-Source: ABdhPJzqmLf41D4hrwL52IQzu7lV1Y001ZUixSM5TOCzSUksWiYeMSuwhv/K72vYxYeFplp/THLgBxSReIn6yg==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8c76:9de0:1a30:7de8])
- (user=dlatypov job=sendgmr) by 2002:a25:c747:: with SMTP id
- w68mr4511513ybe.302.1641930171578; Tue, 11 Jan 2022 11:42:51 -0800 (PST)
-Date:   Tue, 11 Jan 2022 11:42:31 -0800
-In-Reply-To: <20220111194231.1797841-1-dlatypov@google.com>
-Message-Id: <20220111194231.1797841-7-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220111194231.1797841-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
-Subject: [PATCH v2 6/6] kunit: drop unused assert_type from kunit_assert and
- clean up macros
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        torvalds@linux-foundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=gCA03Y8txjZiDgmmkgC6vSFKPvusDQ96DqTHZL4jtHk=;
+        b=ulR0Ehpowy+Fgxj61QxPmOkMIdnsAf9ud0YrpN0Ncfs0ADP+T8CK2M340FeUs6cR4T
+         egnmRjT4h/UVQ50VJEFbVHAkqc8EcN2GYC5x+dCnND7aPGFer8YwetAjB29uXB6c8Re5
+         xRjzMmaiBjLJrIzTpZpH03r2GsNRPokPYDUV7r4RSeNWh7AEjm2dGhrjjQRqO2ItRyv9
+         iHGsSxCHWxPSEBYSN6zm0S+0+zzYKFiPjr7zYQh8eFMoGzuQ+LXt4yUx4gVkSdFFCT01
+         jXdHcMJ8AcbT1Dbnt4R+/6GmTPcDVAO+JS6bDnthuRQycS/hu1JzMJC3ICFTTSy/LfkT
+         j8nw==
+X-Gm-Message-State: AOAM530SHf/qs6weLau1NGts9x7sMffVxGus+voR7d2PomFxf8sGPBXb
+        m0kxzZ/7WLXRDOA1MhBw1Sg=
+X-Google-Smtp-Source: ABdhPJxuTBO7wEiTLvI+W/Xa1On/i+omE0wFswDUMxG8C6QIYgu8MpzMsLxU+w7zBoxbOx2/u4wQSA==
+X-Received: by 2002:a2e:9ec7:: with SMTP id h7mr292524ljk.394.1641929899202;
+        Tue, 11 Jan 2022 11:38:19 -0800 (PST)
+Received: from [10.0.0.42] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
+        by smtp.gmail.com with ESMTPSA id i16sm1427429lfe.273.2022.01.11.11.38.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 11:38:18 -0800 (PST)
+Message-ID: <83c51ee4-ac10-0e44-d1cc-f69cebcbf0b8@gmail.com>
+Date:   Tue, 11 Jan 2022 21:43:20 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v5] ASoC: dt-bindings: davinci-mcasp: convert McASP
+ bindings to yaml schema
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+To:     Jayesh Choudhary <j-choudhary@ti.com>, robh+dt@kernel.org
+Cc:     lgirdwood@gmail.com, broonie@kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220103074427.4233-1-j-choudhary@ti.com>
+ <2cf3c89c-169f-3421-25d4-c80a6c9737ae@gmail.com>
+In-Reply-To: <2cf3c89c-169f-3421-25d4-c80a6c9737ae@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This field has been split out from kunit_assert to make the struct less
-heavy along with the filename and line number.
 
-This change drops the assert_type field and cleans up all the macros
-that were plumbing assert_type into kunit_assert.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
- include/kunit/assert.h | 46 +++++++++++++-----------------------------
- include/kunit/test.h   | 14 +++++--------
- 2 files changed, 19 insertions(+), 41 deletions(-)
+On 1/11/22 21:21, Péter Ujfalusi wrote:
+> Hi Javesh,
+> 
+> On 03/01/2022 09:44, Jayesh Choudhary wrote:
+>> Convert the bindings for McASP controllers for TI SOCs from txt
+>> to YAML schema.
+>>
+>> Adds additional properties 'clocks', 'clock-names', 'power-domains',
+>> '#sound-dai-cells' and 'port' which were missing from the txt file.
+>> Removes properties 'sram-size-playback' and 'sram-size-capture'
+>> since they are not used.
+>> Adds 'dmas' and 'dma-names' in the example which were missing from
+>> the txt file.
+>> Changes 'interrupts' and 'interrupt-names' from optional to
+>> required properties.
+>> Changes 'op-modes', 'serial-dir' to optional properties as they are
+>> not needed if the McASP is used only as GPIO.
+>> Changes 'tdm-slots' to required property only for I2S operation mode.
+>>
+>> Adds the yaml file in the 'MAINTAINERS' under the heading 'TEXAS
+>> INSTRUMENTS ASoC DRIVERS'
+> 
+> I would have added description for the GPIO support as it is not obvious
+> that 2 is going to be for AXR2 or 29 is for ACLKR pin.
+> But I don't think this functionality is going to be used apart from the
+> one dra7 evm.
+> 
+> Thank you for the updates and the nice work!
+> 
+> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+> 
+...
 
-diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-index 4f91dbdb886a..21299232c120 100644
---- a/include/kunit/assert.h
-+++ b/include/kunit/assert.h
-@@ -42,7 +42,6 @@ struct kunit_loc {
- 
- /**
-  * struct kunit_assert - Data for printing a failed assertion or expectation.
-- * @type: the type (either an expectation or an assertion) of this kunit_assert.
-  * @message: an optional message to provide additional context.
-  * @format: a function which formats the data in this kunit_assert to a string.
-  *
-@@ -50,7 +49,6 @@ struct kunit_loc {
-  * format a string to a user reporting the failure.
-  */
- struct kunit_assert {
--	enum kunit_assert_type type; // TODO(dlatypov@google.com): delete this
- 	struct va_format message;
- 	void (*format)(const struct kunit_assert *assert,
- 		       struct string_stream *stream);
-@@ -66,13 +64,11 @@ struct kunit_assert {
- 
- /**
-  * KUNIT_INIT_ASSERT_STRUCT() - Initializer for a &struct kunit_assert.
-- * @assert_type: The type (assertion or expectation) of this kunit_assert.
-  * @fmt: The formatting function which builds a string out of this kunit_assert.
-  *
-  * The base initializer for a &struct kunit_assert.
-  */
--#define KUNIT_INIT_ASSERT_STRUCT(assert_type, fmt) {			       \
--	.type = assert_type,						       \
-+#define KUNIT_INIT_ASSERT_STRUCT(fmt) {					       \
- 	.message = KUNIT_INIT_VA_FMT_NULL,				       \
- 	.format = fmt							       \
- }
-@@ -98,15 +94,13 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
- 			      struct string_stream *stream);
- 
- /**
-- * KUNIT_INIT_FAIL_ASSERT_STRUCT() - Initializer for &struct kunit_fail_assert.
-- * @type: The type (assertion or expectation) of this kunit_assert.
-+ * KUNIT_INIT_FAIL_ASSERT_STRUCT - Initializer for &struct kunit_fail_assert.
-  *
-  * Initializes a &struct kunit_fail_assert. Intended to be used in
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
--#define KUNIT_INIT_FAIL_ASSERT_STRUCT(type) {			       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(type,			       \
--					   kunit_fail_assert_format)	       \
-+#define KUNIT_INIT_FAIL_ASSERT_STRUCT {					\
-+	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_fail_assert_format)	\
- }
- 
- /**
-@@ -130,16 +124,14 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
- 
- /**
-  * KUNIT_INIT_UNARY_ASSERT_STRUCT() - Initializes &struct kunit_unary_assert.
-- * @type: The type (assertion or expectation) of this kunit_assert.
-  * @cond: A string representation of the expression asserted true or false.
-  * @expect_true: True if of type KUNIT_{EXPECT|ASSERT}_TRUE, false otherwise.
-  *
-  * Initializes a &struct kunit_unary_assert. Intended to be used in
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
--#define KUNIT_INIT_UNARY_ASSERT_STRUCT(type, cond, expect_true) {	       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(type,			       \
--					   kunit_unary_assert_format),	       \
-+#define KUNIT_INIT_UNARY_ASSERT_STRUCT(cond, expect_true) {		       \
-+	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_unary_assert_format),	       \
- 	.condition = cond,						       \
- 	.expected_true = expect_true					       \
- }
-@@ -166,16 +158,14 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
- /**
-  * KUNIT_INIT_PTR_NOT_ERR_ASSERT_STRUCT() - Initializes a
-  *	&struct kunit_ptr_not_err_assert.
-- * @type: The type (assertion or expectation) of this kunit_assert.
-  * @txt: A string representation of the expression passed to the expectation.
-  * @val: The actual evaluated pointer value of the expression.
-  *
-  * Initializes a &struct kunit_ptr_not_err_assert. Intended to be used in
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
--#define KUNIT_INIT_PTR_NOT_ERR_STRUCT(type, txt, val) {			       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(type,			       \
--					   kunit_ptr_not_err_assert_format),   \
-+#define KUNIT_INIT_PTR_NOT_ERR_STRUCT(txt, val) {			       \
-+	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_ptr_not_err_assert_format),   \
- 	.text = txt,							       \
- 	.value = val							       \
- }
-@@ -209,7 +199,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- /**
-  * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a
-  *	&struct kunit_binary_assert.
-- * @type: The type (assertion or expectation) of this kunit_assert.
-  * @op_str: A string representation of the comparison operator (e.g. "==").
-  * @left_str: A string representation of the expression in the left slot.
-  * @left_val: The actual evaluated value of the expression in the left slot.
-@@ -219,14 +208,12 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
-  * Initializes a &struct kunit_binary_assert. Intended to be used in
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
--#define KUNIT_INIT_BINARY_ASSERT_STRUCT(type,				       \
--					op_str,				       \
-+#define KUNIT_INIT_BINARY_ASSERT_STRUCT(op_str,				       \
- 					left_str,			       \
- 					left_val,			       \
- 					right_str,			       \
- 					right_val) {			       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(type,			       \
--					   kunit_binary_assert_format),	       \
-+	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_binary_assert_format),	       \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-@@ -273,14 +260,12 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-  * Initializes a &struct kunit_binary_ptr_assert. Intended to be used in
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
--#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(type,			       \
--					    op_str,			       \
-+#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(op_str,			       \
- 					    left_str,			       \
- 					    left_val,			       \
- 					    right_str,			       \
- 					    right_val) {		       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(type,			       \
--					   kunit_binary_ptr_assert_format),    \
-+	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_binary_ptr_assert_format),    \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-@@ -317,7 +302,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- /**
-  * KUNIT_INIT_BINARY_STR_ASSERT_STRUCT() - Initializes a
-  *	&struct kunit_binary_str_assert.
-- * @type: The type (assertion or expectation) of this kunit_assert.
-  * @op_str: A string representation of the comparison operator (e.g. "==").
-  * @left_str: A string representation of the expression in the left slot.
-  * @left_val: The actual evaluated value of the expression in the left slot.
-@@ -327,14 +311,12 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-  * Initializes a &struct kunit_binary_str_assert. Intended to be used in
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
--#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(type,			       \
--					    op_str,			       \
-+#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(op_str,			       \
- 					    left_str,			       \
- 					    left_val,			       \
- 					    right_str,			       \
- 					    right_val) {		       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(type,			       \
--					   kunit_binary_str_assert_format),    \
-+	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_binary_str_assert_format),    \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 7b752175e614..5964af750d93 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -796,7 +796,7 @@ void kunit_do_failed_assertion(struct kunit *test,
- 			assert_type,					       \
- 			false,						       \
- 			kunit_fail_assert,				       \
--			KUNIT_INIT_FAIL_ASSERT_STRUCT(assert_type),      \
-+			KUNIT_INIT_FAIL_ASSERT_STRUCT,			       \
- 			fmt,						       \
- 			##__VA_ARGS__)
- 
-@@ -827,8 +827,7 @@ void kunit_do_failed_assertion(struct kunit *test,
- 			assert_type,					       \
- 			!!(condition) == !!expected_true,		       \
- 			kunit_unary_assert,				       \
--			KUNIT_INIT_UNARY_ASSERT_STRUCT(assert_type,	       \
--						       #condition,	       \
-+			KUNIT_INIT_UNARY_ASSERT_STRUCT(#condition,	       \
- 						       expected_true),	       \
- 			fmt,						       \
- 			##__VA_ARGS__)
-@@ -886,8 +885,7 @@ do {									       \
- 			assert_type,					       \
- 			__left op __right,				       \
- 			assert_class,					       \
--			ASSERT_CLASS_INIT(assert_type,			       \
--					  #op,				       \
-+			ASSERT_CLASS_INIT(#op,				       \
- 					  #left,			       \
- 					  __left,			       \
- 					  #right,			       \
-@@ -1241,8 +1239,7 @@ do {									       \
- 			assert_type,					       \
- 			strcmp(__left, __right) op 0,			       \
- 			kunit_binary_str_assert,			       \
--			KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(assert_type,       \
--							#op,		       \
-+			KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(#op,	       \
- 							#left,		       \
- 							__left,		       \
- 							#right,		       \
-@@ -1301,8 +1298,7 @@ do {									       \
- 			assert_type,					       \
- 			!IS_ERR_OR_NULL(__ptr),				       \
- 			kunit_ptr_not_err_assert,			       \
--			KUNIT_INIT_PTR_NOT_ERR_STRUCT(assert_type,	       \
--						      #ptr,		       \
-+			KUNIT_INIT_PTR_NOT_ERR_STRUCT(#ptr,		       \
- 						      __ptr),		       \
- 			fmt,						       \
- 			##__VA_ARGS__);					       \
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ti,dm646x-mcasp-audio
+>> +      - ti,da830-mcasp-audio
+>> +      - ti,am33xx-mcasp-audio
+>> +      - ti,dra7-mcasp-audio
+>> +      - ti,omap4-mcasp-audio
+
+This is the only thing which bugs me: the pointless '-audio' postfix for
+the compatible string...
+
 -- 
-2.34.1.575.g55b058a8bb-goog
-
+Péter

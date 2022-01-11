@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4157748B45A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC1E48B465
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235475AbiAKRsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:48:54 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:32928
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344578AbiAKRsw (ORCPT
+        id S1344682AbiAKRuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:50:10 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:35592 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242729AbiAKRuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:48:52 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E575040046
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641923330;
-        bh=b8unpukURFoj9tYv6hEHKZIOPqKdbI+UT8tS2dxzJ3A=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=feFkn4szcvNFN/VhwFtXLsTqOixJl5WHL7zaniP9SAo3AfMzLwDi6uTrPGuy7AwEn
-         h7Vyc4+y+0ZKG6R2EdlaNI9fwn7AiZ3NoOzXhx69i0fFZZSJcWhG53gx3Tvc0Qb9BB
-         Z7r4W049G9V3zO9Hy/ejS2H+gi7Rpg59oG9S4NPgZ0hXlf5PRKWLFH0z44A73WknXN
-         Stm81Fv00lnOh1jXRe3OxqMhr3pGb4SicDrVLu7Ex2FCLDQLXhxhsGf/IjTBvpEot6
-         l5xzXfY6x7CtN0AlgNVm+/pZh8J8dptAVeezLD6573EWFdJdDJx66mcOUXAduNemSY
-         zAh+bvHi49Yzg==
-Received: by mail-ed1-f70.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so14006598edd.11
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:48:50 -0800 (PST)
+        Tue, 11 Jan 2022 12:50:03 -0500
+Received: by mail-ot1-f47.google.com with SMTP id 60-20020a9d0142000000b0059103eb18d4so2287075otu.2;
+        Tue, 11 Jan 2022 09:50:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=b8unpukURFoj9tYv6hEHKZIOPqKdbI+UT8tS2dxzJ3A=;
-        b=i1K97yRSudkv76oI374VbtIbyiU+tbWxtcF0azVw0uAGvg0ah40jMfgZWapho7oR01
-         lK5rscFBlyRAcuaD/3pJUSkd4YS91U8JJ+YxgIC5EFRDn3AlQY7cvHygYBE8Rk6CGjZb
-         +RMxMyg+XG9iEdzcte7CY0PyAckZKMRcpogshXEQh3JZidkl07WTEy3M2ZY87aXQGshJ
-         WmZtarShR7PL+/prHXPETn3kHlobX91/eUQaiuHp6zP+MViEntxbJvRTSbRf4EI3KJFU
-         Ec0atC/7YuF/r49n+qXrolbuoaR7BvKai46o4ATvTh8GHpzRbO9FcXY2QqupVSz3BFIO
-         0uDQ==
-X-Gm-Message-State: AOAM533f6xftCUtUWBpZJRgAqYoZnRRpCAKZLyyyqh57LB6AALK7G8Ff
-        9Kn/tueNfqPD40jcxED4QBaAddlyfbknXAUrSsQ4h/grQejmxwxR19Fzpj8+2KN4jY5gQmo4CNb
-        /Mt5XvU6OpIzbwhTdtqN3LBK/KqwAZvDR67yU+EIuZg==
-X-Received: by 2002:a17:906:f214:: with SMTP id gt20mr4859168ejb.458.1641923330637;
-        Tue, 11 Jan 2022 09:48:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyAM0/Z9YVcu804le5q3yh75AgpsHjTUH68ArlTniLkfQouy/WQEvSuRTc1ZiHTwflEmE8bPg==
-X-Received: by 2002:a17:906:f214:: with SMTP id gt20mr4859157ejb.458.1641923330509;
-        Tue, 11 Jan 2022 09:48:50 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id i23sm5224489edt.93.2022.01.11.09.48.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SjRe+CkmRLZrog3sEydSnGtCTplRZpNfb1EM1oGQgQ4=;
+        b=VpDhPbtmTsDpSO8RJ/T769GIGq0qx9KiU8g2sfKVPyK3Fw8SIH6eaNPqxYq6ohbRW2
+         WR8ZknulM1wwDttDFiXuudfvPgM1URMfYh8UfwIViOQj5QMJzcGn59elrSyiOsZmn9hR
+         tolZrZFLllk3ycshjpKZv78XTKAPRt6242NfyOif+sPZzgTTWRE/nTYFI7WZrsvvN3Kz
+         PFerOIpdH+irJDNFzWIOpoRsymPV5zBu1USrlMNKCJznltsTRmt1Yogf64A6WQ8Wn5zf
+         0aj2/9NEnRzFlsFUkzEg+HMxirG7eA0KY7vMoAEFYffI1bkNhJk//PMAkidKaQt6XjfJ
+         2roQ==
+X-Gm-Message-State: AOAM532fCblmJ5jmwQPNkmBjqo1Yj2TwaChvePeJncolhKNs+HTN/s21
+        9cqqmcKQsZfCG2dVzv14r14U5MwoEA==
+X-Google-Smtp-Source: ABdhPJyvAbTpnK0keT5SZM33hy+udbBcmUmItmHAKcPEBi3qTSizv2gbfjVZO6wX/A1GeVzkHYMZJg==
+X-Received: by 2002:a05:6830:4127:: with SMTP id w39mr4058250ott.98.1641923402686;
+        Tue, 11 Jan 2022 09:50:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id z30sm2156546otj.1.2022.01.11.09.50.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:48:49 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 5/5] MAINTAINERS: mfd: cover MAX77843 by Maxim PMIC/MUIC for Exynos boards entry
-Date:   Tue, 11 Jan 2022 18:48:05 +0100
-Message-Id: <20220111174805.223732-6-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111174805.223732-1-krzysztof.kozlowski@canonical.com>
-References: <20220111174805.223732-1-krzysztof.kozlowski@canonical.com>
+        Tue, 11 Jan 2022 09:50:02 -0800 (PST)
+Received: (nullmailer pid 3225637 invoked by uid 1000);
+        Tue, 11 Jan 2022 17:50:01 -0000
+Date:   Tue, 11 Jan 2022 11:50:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: net: stm32-dwmac: Make each example a
+ separate entry
+Message-ID: <Yd3DSb6gJLgIcjxG@robh.at.kernel.org>
+References: <20220106182518.1435497-8-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106182518.1435497-8-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MAX77843 is used in Exynos5433-based TM2 boards and shares some
-parts of code with MAX77693 (regulator and haptic motor drivers).
-Include all MAX77843 drivers in the entry for Maxim PMIC/MUIC drivers
-for Exynos boards, so they will receive some dedicated review coverage.
+On Thu, 06 Jan 2022 12:25:16 -0600, Rob Herring wrote:
+> Each independent example should be a separate entry. This allows for
+> 'interrupts' to have different cell sizes.
+> 
+> The first example also has a phandle in 'interrupts', so drop the phandle.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e5f2758531bc..d1f8f312f322 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11693,8 +11693,10 @@ L:	linux-kernel@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
- F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
-+F:	Documentation/devicetree/bindings/*/maxim,max77843.yaml
- F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
- F:	Documentation/devicetree/bindings/mfd/max14577.txt
-+F:	drivers/*/*max77843.c
- F:	drivers/*/max14577*.c
- F:	drivers/*/max77686*.c
- F:	drivers/*/max77693*.c
--- 
-2.32.0
-
+Applied, thanks!

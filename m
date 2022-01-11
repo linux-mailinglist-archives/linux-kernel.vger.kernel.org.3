@@ -2,118 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 377E648B3E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B87748B3E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344241AbiAKRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:30:05 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58980 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241516AbiAKRaE (ORCPT
+        id S1344396AbiAKRbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:31:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45292 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241526AbiAKRbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:30:04 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BGA0Fh023333;
-        Tue, 11 Jan 2022 17:30:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=0pKoie7nQKiQsCsIxK/RQOJuHvRNFcldpzSGOsxu6vI=;
- b=rXq5+wartYvUB5j0+v/fc3+M8PWD9gUg1VdgRbukO9gk9GsUG1rsu5moOtUe7f4Pi+gU
- KUF/uQBySk6M3Oll3i9Znyc6V0CAqfFvUW+4DHPbvXeWZJ3KUKtbieBq9Oo3qlV720td
- 9ly/k23h3snfLxrgKblQjL7BC3fdTI6IP1Lx529fGjc8UQCmnGWmKs29XaTSr4mK6l1F
- W47i5NChLGRg34oNSS/C1/iHZxvA8cRyunYj/fE1cAmiq7kkjFXNsbdd+vP2GINO6dg7
- J2mDvj3AUkG5Ix8UzgKSawD3khKPYgMVAmLTxgQzwj3fAkleijbxEasje5PkJYIBZcMJ 4w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh6u1byg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:30:02 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BHU1w2014891;
-        Tue, 11 Jan 2022 17:30:01 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh6u1byfe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:30:01 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BHHivi024637;
-        Tue, 11 Jan 2022 17:30:00 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02wdc.us.ibm.com with ESMTP id 3df28ahmxn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:30:00 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BHTwku19464702
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 17:29:58 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADB7228074;
-        Tue, 11 Jan 2022 17:29:57 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23E802808A;
-        Tue, 11 Jan 2022 17:29:56 +0000 (GMT)
-Received: from [9.65.85.237] (unknown [9.65.85.237])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 17:29:55 +0000 (GMT)
-Message-ID: <2e26406f-0af8-af23-de7d-138ef81d3018@linux.ibm.com>
-Date:   Tue, 11 Jan 2022 12:29:55 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v17 01/15] s390/vfio-ap: Set pqap hook when vfio_ap module
- is loaded
-Content-Language: en-US
-To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
- <20211021152332.70455-2-akrowiak@linux.ibm.com>
- <47dc7326-b802-6023-6144-7bf4309756b4@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <47dc7326-b802-6023-6144-7bf4309756b4@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tDApdIYhEyItG-HboJw-vdJt_P9tQqJX
-X-Proofpoint-ORIG-GUID: IXJrwwB3stb-d5AbezbaLPOQn9PMudTc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
- bulkscore=0 impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110094
+        Tue, 11 Jan 2022 12:31:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82F67B81C04
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54CFBC36AE3;
+        Tue, 11 Jan 2022 17:31:14 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.95)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1n7KzJ-00324J-Cc;
+        Tue, 11 Jan 2022 12:31:13 -0500
+Message-ID: <20220111173030.999527342@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 11 Jan 2022 12:30:31 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [for-next][PATCH 00/31] tracing: Final updates for 5.17
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+for-next
+
+Head SHA1: 0a85bdad9ae1c5f68d83e16433f4b88c264843b2
 
 
-On 1/4/22 11:22, Jason J. Herne wrote:
-> On 10/21/21 11:23, Tony Krowiak wrote:
->
->> diff --git a/arch/s390/include/asm/kvm_host.h 
->> b/arch/s390/include/asm/kvm_host.h
->> index a604d51acfc8..05569d077d7f 100644
->> --- a/arch/s390/include/asm/kvm_host.h
->> +++ b/arch/s390/include/asm/kvm_host.h
->> @@ -799,16 +799,17 @@ struct kvm_s390_cpu_model {
->>       unsigned short ibc;
->>   };
->>   -typedef int (*crypto_hook)(struct kvm_vcpu *vcpu);
->> +struct kvm_s390_crypto_hook {
->> +    int (*fcn)(struct kvm_vcpu *vcpu);
->> +};
->
-> Why are we storing a single function pointer inside a struct? Seems 
-> simpler to just use a function pointer. What was the problem with the 
-> typedef that you are replacing?
+Daniel Bristot de Oliveira (14):
+      rtla: Real-Time Linux Analysis tool
+      rtla: Helper functions for rtla
+      rtla: Add osnoise tool
+      rtla/osnoise: Add osnoise top mode
+      rtla/osnoise: Add the hist mode
+      rtla: Add timerlat tool and timelart top mode
+      rtla/timerlat: Add timerlat hist mode
+      rtla: Add Documentation
+      rtla: Add rtla osnoise man page
+      rtla: Add rtla osnoise top documentation
+      rtla: Add rtla osnoise hist documentation
+      rtla: Add rtla timerlat documentation
+      rtla: Add rtla timerlat top documentation
+      rtla: Add rtla timerlat hist documentation
 
-In case you didn't see my response to Halil, the point is now moot 
-because I'm eliminating this patch.
+Geliang Tang (1):
+      tracing: Fix mismatched comment in __string_len
 
+Nikita Yushchenko (1):
+      tracing/osnoise: Properly unhook events if start_per_cpu_kthreads() fails
 
+Sebastian Andrzej Siewior (1):
+      tracing: Account bottom half disabled sections.
+
+Steven Rostedt (2):
+      tracing: Have syscall trace events use trace_event_buffer_lock_reserve()
+      tracing: Add test for user space strings when filtering on string pointers
+
+Steven Rostedt (VMware) (1):
+      ftrace: Add test to make sure compiled time sorts work
+
+Tom Zanussi (6):
+      tracing: Change event_command func() to parse()
+      tracing: Change event_trigger_ops func() to trigger()
+      tracing: Remove ops param from event_command reg()/unreg() callbacks
+      tracing: Add helper functions to simplify event_command.parse() callback handling
+      tracing: Have existing event_command.parse() implementations use helpers
+      tracing: Remove redundant trigger_ops params
+
+Xiangyang Zhang (1):
+      tracing/kprobes: 'nmissed' not showed correctly for kretprobe
+
+Xiaoke Wang (2):
+      tracing/uprobes: Check the return value of kstrdup() for tu->filename
+      tracing/probes: check the return value of kstrndup() for pbuf
+
+Yinan Liu (1):
+      scripts: ftrace - move the sort-processing in ftrace_init
+
+Yuntao Wang (1):
+      tracing: Remove duplicate warnings when calling trace_create_file()
+
+----
+ Documentation/tools/rtla/Makefile                  |   41 +
+ Documentation/tools/rtla/common_appendix.rst       |   12 +
+ Documentation/tools/rtla/common_hist_options.rst   |   23 +
+ Documentation/tools/rtla/common_options.rst        |   24 +
+ .../tools/rtla/common_osnoise_description.rst      |    8 +
+ .../tools/rtla/common_osnoise_options.rst          |   17 +
+ .../tools/rtla/common_timerlat_description.rst     |   10 +
+ .../tools/rtla/common_timerlat_options.rst         |   16 +
+ Documentation/tools/rtla/common_top_options.rst    |    3 +
+ Documentation/tools/rtla/rtla-osnoise-hist.rst     |   66 ++
+ Documentation/tools/rtla/rtla-osnoise-top.rst      |   61 ++
+ Documentation/tools/rtla/rtla-osnoise.rst          |   59 ++
+ Documentation/tools/rtla/rtla-timerlat-hist.rst    |  106 ++
+ Documentation/tools/rtla/rtla-timerlat-top.rst     |  145 +++
+ Documentation/tools/rtla/rtla-timerlat.rst         |   57 ++
+ Documentation/tools/rtla/rtla.rst                  |   48 +
+ Documentation/trace/events.rst                     |   10 +
+ include/linux/trace_events.h                       |    1 +
+ kernel/trace/Kconfig                               |   14 +
+ kernel/trace/ftrace.c                              |   34 +-
+ kernel/trace/trace.c                               |    6 +-
+ kernel/trace/trace.h                               |   81 +-
+ kernel/trace/trace_eprobe.c                        |   30 +-
+ kernel/trace/trace_events.c                        |   12 +-
+ kernel/trace/trace_events_filter.c                 |   59 +-
+ kernel/trace/trace_events_hist.c                   |  147 ++-
+ kernel/trace/trace_events_trigger.c                |  626 ++++++++----
+ kernel/trace/trace_kprobe.c                        |    5 +-
+ kernel/trace/trace_osnoise.c                       |   20 +-
+ kernel/trace/trace_output.c                        |    4 +
+ kernel/trace/trace_probe.c                         |    2 +
+ kernel/trace/trace_syscalls.c                      |    6 +-
+ kernel/trace/trace_uprobe.c                        |    5 +
+ samples/trace_events/trace-events-sample.h         |    2 +-
+ scripts/Makefile                                   |    6 +-
+ scripts/link-vmlinux.sh                            |    6 +-
+ scripts/sorttable.c                                |    2 +
+ scripts/sorttable.h                                |  120 ++-
+ tools/tracing/rtla/Makefile                        |  102 ++
+ tools/tracing/rtla/README.txt                      |   36 +
+ tools/tracing/rtla/src/osnoise.c                   | 1017 ++++++++++++++++++++
+ tools/tracing/rtla/src/osnoise.h                   |   96 ++
+ tools/tracing/rtla/src/osnoise_hist.c              |  799 +++++++++++++++
+ tools/tracing/rtla/src/osnoise_top.c               |  577 +++++++++++
+ tools/tracing/rtla/src/rtla.c                      |   87 ++
+ tools/tracing/rtla/src/timerlat.c                  |   72 ++
+ tools/tracing/rtla/src/timerlat.h                  |    4 +
+ tools/tracing/rtla/src/timerlat_hist.c             |  820 ++++++++++++++++
+ tools/tracing/rtla/src/timerlat_top.c              |  615 ++++++++++++
+ tools/tracing/rtla/src/trace.c                     |  192 ++++
+ tools/tracing/rtla/src/trace.h                     |   27 +
+ tools/tracing/rtla/src/utils.c                     |  433 +++++++++
+ tools/tracing/rtla/src/utils.h                     |   56 ++
+ 53 files changed, 6477 insertions(+), 350 deletions(-)
+ create mode 100644 Documentation/tools/rtla/Makefile
+ create mode 100644 Documentation/tools/rtla/common_appendix.rst
+ create mode 100644 Documentation/tools/rtla/common_hist_options.rst
+ create mode 100644 Documentation/tools/rtla/common_options.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_description.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
+ create mode 100644 Documentation/tools/rtla/common_top_options.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
+ create mode 100644 Documentation/tools/rtla/rtla.rst
+ create mode 100644 tools/tracing/rtla/Makefile
+ create mode 100644 tools/tracing/rtla/README.txt
+ create mode 100644 tools/tracing/rtla/src/osnoise.c
+ create mode 100644 tools/tracing/rtla/src/osnoise.h
+ create mode 100644 tools/tracing/rtla/src/osnoise_hist.c
+ create mode 100644 tools/tracing/rtla/src/osnoise_top.c
+ create mode 100644 tools/tracing/rtla/src/rtla.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.h
+ create mode 100644 tools/tracing/rtla/src/timerlat_hist.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_top.c
+ create mode 100644 tools/tracing/rtla/src/trace.c
+ create mode 100644 tools/tracing/rtla/src/trace.h
+ create mode 100644 tools/tracing/rtla/src/utils.c
+ create mode 100644 tools/tracing/rtla/src/utils.h

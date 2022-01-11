@@ -2,175 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C445848B5B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A386148B5BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345133AbiAKSeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:34:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S1345210AbiAKSe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242661AbiAKSeF (ORCPT
+        with ESMTP id S242309AbiAKSe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:34:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB837C06173F;
-        Tue, 11 Jan 2022 10:34:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eAKZlQsmjfI+koCxrlOr8+ragZ61WF+HNKacitVGsa4=; b=uwPUp9egKUiNPj/3oywvH0xvRN
-        4PPC5HjY8DzksQkP3NNIVA3wuap90vioZPUxvKU+U8l8TJ6L6kuRzplWIg5V6euZGII00kt6f/UEL
-        X2q3LxlpAQWQll8GNYuMSf8LfYeJ2Fpw45EvAB43k1sIrVDdYadiCu4uwSX0JrzmofoNvYfXV5VWv
-        YTPBq1Rdg1bV72nGunzOJ87kOf8gcKJMX8rFX2pF34koHZ0zaH6437jAi7WWFo8kzdDI3+nB0Agmi
-        NN4EprO5pS0q4lqzaUN6vTNXlZ3OmwYAD1pwVnFgdM1CwKwHtyY3020wqFB7otx3+ezOehhfR+vcn
-        jPz7KxVA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7Ly1-003U8D-O7; Tue, 11 Jan 2022 18:33:57 +0000
-Date:   Tue, 11 Jan 2022 18:33:57 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nvdimm@lists.linux.dev
-Subject: Re: Phyr Starter
-Message-ID: <Yd3Nle3YN063ZFVY@casper.infradead.org>
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
- <20220111004126.GJ2328285@nvidia.com>
- <Yd0IeK5s/E0fuWqn@casper.infradead.org>
- <20220111150142.GL2328285@nvidia.com>
+        Tue, 11 Jan 2022 13:34:26 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BCCC061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:34:26 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u25so70797617edf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KbcJr69eo4lbU4zhrQw9YdKDn5i2JTpJM9CjQKhnU08=;
+        b=D6oMv/3KxCor+0QrXJYT489/fgORrqWm+mSQ/sJBnsvcdNtGSFaPAVbCp+b+GKYUal
+         l3rRqEMKt6ejHbQaXKhJt87/bc3G6Xz2QP9kYL8BEO9/m/worSSZra/vRNlaqTxh/1bG
+         hqchk+8nlXMLtCuBKjbSHNuixJzydsFoVSZ9PQNhyvL2hgsc9Lp3x42skMLVdkqvPuzj
+         fnGNgfk27eylvR2SBuY3IKq+SlGwfRBIzni4cvAzK98jwYelE3saEM+OonsqKfTs7NZF
+         ds9H35AjEAsFV34WCjLwo6tz0VUpXz+NrSbN5fgNaqikn9KxRdiAyWAQwSx/0iefVpvJ
+         cYLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KbcJr69eo4lbU4zhrQw9YdKDn5i2JTpJM9CjQKhnU08=;
+        b=lHW5CNRl5mN9rJDkugVFAgMmT8auzzbdd00Nv7WIIB3tPfMGuQxRtk9bCB/XBkrz1s
+         qv8aGuXTgSO9sJOyNe8G2pVVij1AGleZp8gWHMav0/6zk9STeD3Au0jQwV6JKn+M6g8e
+         +TK2wqz0lgi7ZNGMKVwCtpHDO0PBVO5fmoz2FSvbwiTO93Gx9Irqo0dhe3itYoviPccC
+         xzFX8BZZnvC5aRAmkknvRhghFND616qnx8i1RO21RiDcAnB+RXH2jCj+SvZltHuRuja1
+         HUERw7ehtCPmP2trAS+1GqZK9k2nVBBqeP2e/DJrbhRNt8gXdUhsuHP6NLZ8INDyDXFE
+         ARJw==
+X-Gm-Message-State: AOAM533wnGKnAvD6EKIQUAXhYrfieroFFgzms/JRXpe+iiXuzm6yzur0
+        niTlUbHroZLOBrZ7bv77djTg8hvVdpvUV0UxHUzbyW1gcN+T2Q==
+X-Google-Smtp-Source: ABdhPJxqZOr6wztclNOl/uOgqeq9w+nyJjlLo1hy9SEyN9T5uaZt3WLH9SgPzY/2RaJ8zBNe8nP6IirH35xCzZKjDJM=
+X-Received: by 2002:a17:907:7f86:: with SMTP id qk6mr3200918ejc.425.1641926064066;
+ Tue, 11 Jan 2022 10:34:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111150142.GL2328285@nvidia.com>
+References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-4-dlatypov@google.com>
+ <CABVgOSmCNTrObvALYr-fg5GyAjkNigUwS+amwQqK3co1YYEDQQ@mail.gmail.com>
+In-Reply-To: <CABVgOSmCNTrObvALYr-fg5GyAjkNigUwS+amwQqK3co1YYEDQQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 11 Jan 2022 10:34:12 -0800
+Message-ID: <CAGS_qxoKyxWnnCq4C8ifoH70Cx5Q_LisbOPW-6x75BQaE8rm_g@mail.gmail.com>
+Subject: Re: [PATCH 3/6] kunit: drop unused kunit* field in kunit_assert
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:01:42AM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 11, 2022 at 04:32:56AM +0000, Matthew Wilcox wrote:
-> > On Mon, Jan 10, 2022 at 08:41:26PM -0400, Jason Gunthorpe wrote:
-> > > On Mon, Jan 10, 2022 at 07:34:49PM +0000, Matthew Wilcox wrote:
-> > > 
-> > > > Finally, it may be possible to stop using scatterlist to describe the
-> > > > input to the DMA-mapping operation.  We may be able to get struct
-> > > > scatterlist down to just dma_address and dma_length, with chaining
-> > > > handled through an enclosing struct.
-> > > 
-> > > Can you talk about this some more? IMHO one of the key properties of
-> > > the scatterlist is that it can hold huge amounts of pages without
-> > > having to do any kind of special allocation due to the chaining.
-> > > 
-> > > The same will be true of the phyr idea right?
-> > 
-> > My thinking is that we'd pass a relatively small array of phyr (maybe 16
-> > entries) to get_user_phyr().  If that turned out not to be big enough,
-> > then we have two options; one is to map those 16 ranges with sg and use
-> > the sg chaining functionality before throwing away the phyr and calling
-> > get_user_phyr() again. 
-> 
-> Then we are we using get_user_phyr() at all if we are just storing it
-> in a sg?
+On Mon, Jan 10, 2022 at 10:51 PM David Gow <davidgow@google.com> wrote:
+>
+> On Sat, Jan 8, 2022 at 9:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > The `struct kunit* test` field in kunit_assert is unused.
+> > Note: we have access to `test` where we need it via the string_stream
+> > object. I assume `test` in `kunit_assert` predates this and was leftover
+> > after some refactoring.
+>
+> Note that I don't like the idea of accessing 'test' via the string
+> stream in general, but we don't seem to ever actually do this (as far
+> as I can tell). Maybe if we wanted to be super nitpicky, rewording the
+> note to say "if we need it" rather than "where we need it" would be
+> clearer.
 
-I did consider just implementing get_user_sg() (actually 4 years ago),
-but that cements the use of sg as both an input and output data structure
-for DMA mapping, which I am under the impression we're trying to get
-away from.
+Ah, I had meant "where we need it" == "where string_stream needs it,
+as its the only user that doesn't get test passed as a parameter
+everywhere".
 
-> Also 16 entries is way to small, it should be at least a whole PMD
-> worth so we don't have to relock the PMD level each iteration.
-> 
-> I would like to see a flow more like:
-> 
->   cpu_phyr_list = get_user_phyr(uptr, 1G);
->   dma_phyr_list = dma_map_phyr(device, cpu_phyr_list);
->   [..]
->   dma_unmap_phyr(device, dma_phyr_list);
->   unpin_drity_free(cpu_phy_list);
-> 
-> Where dma_map_phyr() can build a temporary SGL for old iommu drivers
-> compatability. iommu drivers would want to implement natively, of
-> course.
-> 
-> ie no loops in drivers.
+Updated the wording to
+  Note: string_stream needs it, but it has its own `test` field.
 
-Let me just rewrite that for you ...
-
-	umem->phyrs = get_user_phyrs(addr, size, &umem->phyr_len);
-	umem->sgt = dma_map_phyrs(device, umem->phyrs, umem->phyr_len,
-			DMA_BIDIRECTIONAL, dma_attr);
-	...
-	dma_unmap_phyr(device, umem->phyrs, umem->phyr_len, umem->sgt->sgl,
-			umem->sgt->nents, DMA_BIDIRECTIONAL, dma_attr);
-	sg_free_table(umem->sgt);
-	free_user_phyrs(umem->phyrs, umem->phyr_len);
-
-> > The question is whether this is the right kind of optimisation to be
-> > doing.  I hear you that we want a dense format, but it's questionable
-> > whether the kind of thing you're suggesting is actually denser than this
-> > scheme.  For example, if we have 1GB pages and userspace happens to have
-> > allocated pages (3, 4, 5, 6, 7, 8, 9, 10) then this can be represented
-> > as a single phyr.  A power-of-two scheme would have us use four entries
-> > (3, 4-7, 8-9, 10).
-> 
-> That is not quite what I had in mind..
-> 
-> struct phyr_list {
->    unsigned int first_page_offset_bytes;
->    size_t total_length_bytes;
->    phys_addr_t min_alignment;
->    struct packed_phyr *list_of_pages;
-> };
-> 
-> Where each 'packed_phyr' is an aligned page of some kind. The packing
-> has to be able to represent any number of pfns, so we have four major
-> cases:
->  - 4k pfns (use 8 bytes)
->  - Natural order pfn (use 8 bytes)
->  - 4k aligned pfns, arbitary number (use 12 bytes)
->  - <4k aligned, arbitary length (use 16 bytes?)
-> 
-> In all cases the interior pages are fully used, only the first and
-> last page is sliced based on the two parameters in the phyr_list.
-
-This kind of representation works for a virtually contiguous range.
-Unfortunately, that's not sufficient for some bio users (as I discovered
-after getting a representation like this enshrined in the NVMe spec as
-the PRP List).
-
-> The last case is, perhaps, a possible route to completely replace
-> scatterlist. Few places need true byte granularity for interior pages,
-> so we can invent some coding to say 'this is 8 byte aligned, and n
-> bytes long' that only fits < 4k or something. Exceptional cases can
-> then still work. I'm not sure what block needs here - is it just 512?
-
-Replacing scatterlist is not my goal.  That seems like a lot more work
-for little gain.  I just want to delete page_link, offset and length
-from struct scatterlist.  Given the above sequence of calls, we're going
-to get sg lists that aren't chained.  They may have to be vmalloced,
-but they should be contiguous.
-
-> I would imagine a few steps to this process:
->  1) 'phyr_list' datastructure, with chaining, pre-allocation, etc
->  2) Wrapper around existing gup to get a phyr_list for user VA
->  3) Compat 'dma_map_phyr()' that coverts a phyr_list to a sgl and back
->     (However, with full performance for iommu passthrough)
->  4) Patches changing RDMA/VFIO/DRM to this API
->  5) Patches optimizing get_user_phyr()
->  6) Patches implementing dma_map_phyr in the AMD or Intel IOMMU driver
-
-I was thinking ...
-
-1. get_user_phyrs() & free_user_phyrs()
-2. dma_map_phyrs() and dma_unmap_phyrs() wrappers that create a
-   scatterlist from phyrs and call dma_map_sg() / dma_unmap_sg() to work
-   with current IOMMU drivers
-3. Convert umem to work with it
-4-n. Hand it off to people who can implement dma_map_phyrs() properly
-   and do the hard work of converting all the drivers.
-
+>
+> >
+> > This patch removes the field and cleans up the macros to avoid
+> > needlessly passing around `test`.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> Looks good, thanks!
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+>
+> >  include/kunit/assert.h | 45 ++++++++++++------------------------------
+> >  include/kunit/test.h   | 14 +++++--------
+> >  2 files changed, 18 insertions(+), 41 deletions(-)
+> >
+> > diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> > index ad889b539ab3..3da6c792496c 100644
+> > --- a/include/kunit/assert.h
+> > +++ b/include/kunit/assert.h
+> > @@ -30,7 +30,6 @@ enum kunit_assert_type {
+> >
+> >  /**
+> >   * struct kunit_assert - Data for printing a failed assertion or expectation.
+> > - * @test: the test case this expectation/assertion is associated with.
+> >   * @type: the type (either an expectation or an assertion) of this kunit_assert.
+> >   * @line: the source code line number that the expectation/assertion is at.
+> >   * @file: the file path of the source file that the expectation/assertion is in.
+> > @@ -41,7 +40,6 @@ enum kunit_assert_type {
+> >   * format a string to a user reporting the failure.
+> >   */
+> >  struct kunit_assert {
+> > -       struct kunit *test;
+> >         enum kunit_assert_type type;
+> >         int line;
+> >         const char *file;
+> > @@ -60,14 +58,12 @@ struct kunit_assert {
+> >
+> >  /**
+> >   * KUNIT_INIT_ASSERT_STRUCT() - Initializer for a &struct kunit_assert.
+> > - * @kunit: The test case that this expectation/assertion is associated with.
+> >   * @assert_type: The type (assertion or expectation) of this kunit_assert.
+> >   * @fmt: The formatting function which builds a string out of this kunit_assert.
+> >   *
+> >   * The base initializer for a &struct kunit_assert.
+> >   */
+> > -#define KUNIT_INIT_ASSERT_STRUCT(kunit, assert_type, fmt) {                   \
+> > -       .test = kunit,                                                         \
+> > +#define KUNIT_INIT_ASSERT_STRUCT(assert_type, fmt) {                          \
+> >         .type = assert_type,                                                   \
+> >         .file = __FILE__,                                                      \
+> >         .line = __LINE__,                                                      \
+> > @@ -96,15 +92,13 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
+> >
+> >  /**
+> >   * KUNIT_INIT_FAIL_ASSERT_STRUCT() - Initializer for &struct kunit_fail_assert.
+> > - * @test: The test case that this expectation/assertion is associated with.
+> >   * @type: The type (assertion or expectation) of this kunit_assert.
+> >   *
+> >   * Initializes a &struct kunit_fail_assert. Intended to be used in
+> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> >   */
+> > -#define KUNIT_INIT_FAIL_ASSERT_STRUCT(test, type) {                           \
+> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
+> > -                                          type,                               \
+> > +#define KUNIT_INIT_FAIL_ASSERT_STRUCT(type) {                         \
+> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
+> >                                            kunit_fail_assert_format)           \
+> >  }
+> >
+> > @@ -129,7 +123,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
+> >
+> >  /**
+> >   * KUNIT_INIT_UNARY_ASSERT_STRUCT() - Initializes &struct kunit_unary_assert.
+> > - * @test: The test case that this expectation/assertion is associated with.
+> >   * @type: The type (assertion or expectation) of this kunit_assert.
+> >   * @cond: A string representation of the expression asserted true or false.
+> >   * @expect_true: True if of type KUNIT_{EXPECT|ASSERT}_TRUE, false otherwise.
+> > @@ -137,9 +130,8 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
+> >   * Initializes a &struct kunit_unary_assert. Intended to be used in
+> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> >   */
+> > -#define KUNIT_INIT_UNARY_ASSERT_STRUCT(test, type, cond, expect_true) {               \
+> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
+> > -                                          type,                               \
+> > +#define KUNIT_INIT_UNARY_ASSERT_STRUCT(type, cond, expect_true) {             \
+> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
+> >                                            kunit_unary_assert_format),         \
+> >         .condition = cond,                                                     \
+> >         .expected_true = expect_true                                           \
+> > @@ -167,7 +159,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+> >  /**
+> >   * KUNIT_INIT_PTR_NOT_ERR_ASSERT_STRUCT() - Initializes a
+> >   *     &struct kunit_ptr_not_err_assert.
+> > - * @test: The test case that this expectation/assertion is associated with.
+> >   * @type: The type (assertion or expectation) of this kunit_assert.
+> >   * @txt: A string representation of the expression passed to the expectation.
+> >   * @val: The actual evaluated pointer value of the expression.
+> > @@ -175,9 +166,8 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+> >   * Initializes a &struct kunit_ptr_not_err_assert. Intended to be used in
+> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> >   */
+> > -#define KUNIT_INIT_PTR_NOT_ERR_STRUCT(test, type, txt, val) {                 \
+> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
+> > -                                          type,                               \
+> > +#define KUNIT_INIT_PTR_NOT_ERR_STRUCT(type, txt, val) {                               \
+> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
+> >                                            kunit_ptr_not_err_assert_format),   \
+> >         .text = txt,                                                           \
+> >         .value = val                                                           \
+> > @@ -212,7 +202,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+> >  /**
+> >   * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a
+> >   *     &struct kunit_binary_assert.
+> > - * @test: The test case that this expectation/assertion is associated with.
+> >   * @type: The type (assertion or expectation) of this kunit_assert.
+> >   * @op_str: A string representation of the comparison operator (e.g. "==").
+> >   * @left_str: A string representation of the expression in the left slot.
+> > @@ -223,15 +212,13 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+> >   * Initializes a &struct kunit_binary_assert. Intended to be used in
+> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> >   */
+> > -#define KUNIT_INIT_BINARY_ASSERT_STRUCT(test,                                 \
+> > -                                       type,                                  \
+> > +#define KUNIT_INIT_BINARY_ASSERT_STRUCT(type,                                 \
+> >                                         op_str,                                \
+> >                                         left_str,                              \
+> >                                         left_val,                              \
+> >                                         right_str,                             \
+> >                                         right_val) {                           \
+> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
+> > -                                          type,                               \
+> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
+> >                                            kunit_binary_assert_format),        \
+> >         .operation = op_str,                                                   \
+> >         .left_text = left_str,                                                 \
+> > @@ -269,7 +256,6 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+> >  /**
+> >   * KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT() - Initializes a
+> >   *     &struct kunit_binary_ptr_assert.
+> > - * @test: The test case that this expectation/assertion is associated with.
+> >   * @type: The type (assertion or expectation) of this kunit_assert.
+> >   * @op_str: A string representation of the comparison operator (e.g. "==").
+> >   * @left_str: A string representation of the expression in the left slot.
+> > @@ -280,15 +266,13 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+> >   * Initializes a &struct kunit_binary_ptr_assert. Intended to be used in
+> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> >   */
+> > -#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(test,                             \
+> > -                                           type,                              \
+> > +#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(type,                             \
+> >                                             op_str,                            \
+> >                                             left_str,                          \
+> >                                             left_val,                          \
+> >                                             right_str,                         \
+> >                                             right_val) {                       \
+> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
+> > -                                          type,                               \
+> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
+> >                                            kunit_binary_ptr_assert_format),    \
+> >         .operation = op_str,                                                   \
+> >         .left_text = left_str,                                                 \
+> > @@ -326,7 +310,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+> >  /**
+> >   * KUNIT_INIT_BINARY_STR_ASSERT_STRUCT() - Initializes a
+> >   *     &struct kunit_binary_str_assert.
+> > - * @test: The test case that this expectation/assertion is associated with.
+> >   * @type: The type (assertion or expectation) of this kunit_assert.
+> >   * @op_str: A string representation of the comparison operator (e.g. "==").
+> >   * @left_str: A string representation of the expression in the left slot.
+> > @@ -337,15 +320,13 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+> >   * Initializes a &struct kunit_binary_str_assert. Intended to be used in
+> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
+> >   */
+> > -#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(test,                             \
+> > -                                           type,                              \
+> > +#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(type,                             \
+> >                                             op_str,                            \
+> >                                             left_str,                          \
+> >                                             left_val,                          \
+> >                                             right_str,                         \
+> >                                             right_val) {                       \
+> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
+> > -                                          type,                               \
+> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
+> >                                            kunit_binary_str_assert_format),    \
+> >         .operation = op_str,                                                   \
+> >         .left_text = left_str,                                                 \
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 690a28dfc795..ebd45593321e 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -789,7 +789,7 @@ void kunit_failed_assertion(struct kunit *test,
+> >         KUNIT_ASSERTION(test,                                                  \
+> >                         false,                                                 \
+> >                         kunit_fail_assert,                                     \
+> > -                       KUNIT_INIT_FAIL_ASSERT_STRUCT(test, assert_type),      \
+> > +                       KUNIT_INIT_FAIL_ASSERT_STRUCT(assert_type),      \
+> >                         fmt,                                                   \
+> >                         ##__VA_ARGS__)
+> >
+> > @@ -819,8 +819,7 @@ void kunit_failed_assertion(struct kunit *test,
+> >         KUNIT_ASSERTION(test,                                                  \
+> >                         !!(condition) == !!expected_true,                      \
+> >                         kunit_unary_assert,                                    \
+> > -                       KUNIT_INIT_UNARY_ASSERT_STRUCT(test,                   \
+> > -                                                      assert_type,            \
+> > +                       KUNIT_INIT_UNARY_ASSERT_STRUCT(assert_type,            \
+> >                                                        #condition,             \
+> >                                                        expected_true),         \
+> >                         fmt,                                                   \
+> > @@ -878,8 +877,7 @@ do {                                                                               \
+> >         KUNIT_ASSERTION(test,                                                  \
+> >                         __left op __right,                                     \
+> >                         assert_class,                                          \
+> > -                       ASSERT_CLASS_INIT(test,                                \
+> > -                                         assert_type,                         \
+> > +                       ASSERT_CLASS_INIT(assert_type,                         \
+> >                                           #op,                                 \
+> >                                           #left,                               \
+> >                                           __left,                              \
+> > @@ -1233,8 +1231,7 @@ do {                                                                             \
+> >         KUNIT_ASSERTION(test,                                                  \
+> >                         strcmp(__left, __right) op 0,                          \
+> >                         kunit_binary_str_assert,                               \
+> > -                       KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(test,              \
+> > -                                                       assert_type,           \
+> > +                       KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(assert_type,       \
+> >                                                         #op,                   \
+> >                                                         #left,                 \
+> >                                                         __left,                \
+> > @@ -1293,8 +1290,7 @@ do {                                                                             \
+> >         KUNIT_ASSERTION(test,                                                  \
+> >                         !IS_ERR_OR_NULL(__ptr),                                \
+> >                         kunit_ptr_not_err_assert,                              \
+> > -                       KUNIT_INIT_PTR_NOT_ERR_STRUCT(test,                    \
+> > -                                                     assert_type,             \
+> > +                       KUNIT_INIT_PTR_NOT_ERR_STRUCT(assert_type,             \
+> >                                                       #ptr,                    \
+> >                                                       __ptr),                  \
+> >                         fmt,                                                   \
+> > --
+> > 2.34.1.575.g55b058a8bb-goog
+> >

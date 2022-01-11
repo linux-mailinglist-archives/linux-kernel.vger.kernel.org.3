@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC3E48A807
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AB148A80F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348367AbiAKG6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 01:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbiAKG6I (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 01:58:08 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF57BC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:58:07 -0800 (PST)
-Date:   Tue, 11 Jan 2022 15:57:56 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1641884285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kWv0f5f+fPdDGe3k1xHWjG81ExIIKRuEoGoQtrB/3SI=;
-        b=vvfPxJwWak84H/tM+eJWeI6hGtEjOgXqwK+Z0G1lvxct/n/ZXjZgWTazzHW6Mt98LnNvWo
-        cyYcq2iwyuCO3XgRH/N7IdUTeY3xyplPKF6B3GHZW37RJcK7t6kmT1LUdQp6lVphnX1b1s
-        fvMffVZcgT/erW1ffzUxVE1yrZSgWQw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/migration: Add trace events for THP migrations
-Message-ID: <20220111065756.GA808887@u2004>
-References: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
- <20220111015822.GA799985@u2004>
- <ee99799c-4e88-a7f5-0ec2-64cd710051e5@arm.com>
+        id S1348379AbiAKHAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:00:46 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:54544 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346666AbiAKHAp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:00:45 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAC3vVUIK91hxLwpBg--.44946S2;
+        Tue, 11 Jan 2022 15:00:24 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] fs/eventfd.c: Check error number after calling ida_simple_get
+Date:   Tue, 11 Jan 2022 15:00:23 +0800
+Message-Id: <20220111070023.566773-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ee99799c-4e88-a7f5-0ec2-64cd710051e5@arm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAC3vVUIK91hxLwpBg--.44946S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFy7WF1kGF43XF45XF18Krg_yoWfJwcEyr
+        4kCrn5uFW5tFna93srJrW5Ary09w4UAr1UJrsrKF17Wr9xK34DJrWDXryYyrW8AF42qryY
+        k3sFyrWxXw1avjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjKFAPUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:31:21AM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 1/11/22 7:28 AM, Naoya Horiguchi wrote:
-> > Hi Anshuman,
-> > 
-> > On Fri, Jan 07, 2022 at 10:29:35AM +0530, Anshuman Khandual wrote:
-> >> This adds two trace events for PMD based THP migration without split. These
-> >> events closely follow the implementation details like setting and removing
-> >> of PMD migration entries, which are essential operations for THP migration.
-> > 
-> > I often want to check which individual pages are migrated to which places
-> > (or not migrated) for testing, so these new tracepoints could help me.
-> > Maybe these can be much greater if they can handle other types of page
-> > migration for raw pages and hugetlb pages.  Is it hard to cover all such
-> > page migration events?
-> 
-> Are you suggesting to cover all migration entry transitions for normal
-> and HugeTLB pages as well ?
+As the possible failure of the allocation, the ida_simple_get() will
+return error number.
+And then ctx->id will be printed in eventfd_show_fdinfo().
+Therefore, it should be better to check it and return error if fails,
+like the other allocation.
 
-Yes if you like the idea. I think that some events listed below can be grouped
-into one tracepoint event with showing args like pgsize or read/write flags
-(or implementation detail is up to you).
+Fixes: b556db17b0e7 ("eventfd: present id to userspace via fdinfo")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ fs/eventfd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> 
-> migrate_pages()
-> 	unmap_and_move_huge_page()
-> 		try_to_migrate()
-> 			make_writable_migration_entry() <---
-> 			make_readable_migration_entry() <---
-> 		remove_migration_ptes() <---
-> 	unmap_and_move()
-> 		__unmap_and_move()
-> 			try_to_migrate()
-> 				make_writable_migration_entry() <---
-> 				make_readable_migration_entry() <---
-> 			remove_migration_ptes() <---
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index 3627dd7d25db..5ec1d998f3ac 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -424,6 +424,10 @@ static int do_eventfd(unsigned int count, int flags)
+ 	ctx->count = count;
+ 	ctx->flags = flags;
+ 	ctx->id = ida_simple_get(&eventfd_ida, 0, 0, GFP_KERNEL);
++	if (ctx->id) {
++		fd = ctx->id;
++		goto err;
++	}
+ 
+ 	flags &= EFD_SHARED_FCNTL_FLAGS;
+ 	flags |= O_RDWR;
+-- 
+2.25.1
 
-Thanks,
-Naoya Horiguchi

@@ -2,208 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BD048BA59
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85FB48BA5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343775AbiAKV6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:58:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16428 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229719AbiAKV6T (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:58:19 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BLAvVG001974;
-        Tue, 11 Jan 2022 21:58:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=9EeTXtdvEVZJPE8clELVEPcRNb4nDpYJAOUAGnpD18E=;
- b=AHJ47HcbsWqVPq3rjy43Ss5e4x3KrLCHIGCL2F0X1Q303cN75OEQk4FZ/z8LdKV2BlAE
- rNzGguTWzpwBfHA/vqVNsCgDCxhVyaxyZ/AMm4UvLb/On9X/Pqcq4cix+YnTkSfTk6iO
- pjWKPMfTbnciyPFd6XfhHPmA2QYRKswpwqGoaycPm/l7vB+o+OBEpz8kbMwAmckXymSB
- B3x8ThguvfLo/3CuTjf0j+yTR07xrQimWAoV9E0ZGYSwqAvGABFJpgY9QfPF95dRtRoB
- aXC/65nwL21N7X1bpGuCnIhVNXu213vZEo3006p+57nOjCLmYnKAhONigbOdRLe6ELgh 6w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhgxy1hyc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 21:58:17 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BLwGC9026617;
-        Tue, 11 Jan 2022 21:58:16 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhgxy1hy5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 21:58:16 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BLqMe9012370;
-        Tue, 11 Jan 2022 21:58:16 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04wdc.us.ibm.com with ESMTP id 3df28apbag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 21:58:15 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BLwFtO10093018
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 21:58:15 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4FAA28067;
-        Tue, 11 Jan 2022 21:58:14 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C48E028060;
-        Tue, 11 Jan 2022 21:58:13 +0000 (GMT)
-Received: from [9.65.85.237] (unknown [9.65.85.237])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 21:58:13 +0000 (GMT)
-Message-ID: <fcce7cc6-6ac7-b22a-a957-80e59a0f4e83@linux.ibm.com>
-Date:   Tue, 11 Jan 2022 16:58:13 -0500
+        id S1343883AbiAKWAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:00:33 -0500
+Received: from ixit.cz ([94.230.151.217]:55958 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244860AbiAKWAc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 17:00:32 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 587A92243C;
+        Tue, 11 Jan 2022 23:00:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1641938429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4zhT/ysWIbT+xx1ngqFOuJl/IBW0KTKzhLMm/a1CzzE=;
+        b=COVVj7Atobm4LGoKWJsrMb7rhAgh0z0WFmMK6RL590Q7UlTvOdgqCIPRFaEiuJetDtbaww
+        0SgiKXFOxcI9bI01BsFp+WEfUhe9yv79N7JT2pBoQhw/hDcqZLVI5Zvg1YlC1i1Y6u/W2Y
+        IbtCOW9YXh3TmrU51ZhjLBNwtYa1VNI=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        Caleb Connolly <caleb@connolly.tech>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC
+Date:   Tue, 11 Jan 2022 23:00:25 +0100
+Message-Id: <20220111220026.102838-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v17 08/15] s390/vfio-ap: keep track of active guests
-Content-Language: en-US
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
- <20211021152332.70455-9-akrowiak@linux.ibm.com>
- <20211230043322.2ba19bbd.pasic@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <20211230043322.2ba19bbd.pasic@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uiPt7voRNxJjkjHMej9jUbf_89r3wWlF
-X-Proofpoint-ORIG-GUID: TrUUSbQ4qftWyQU6y_m6rm0QqOdw6Mhx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 mlxscore=0 phishscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110111
+X-Spam: Yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert Qualcomm SPMI PMIC binding to yaml format.
 
+Additional changes:
+ - filled many missing compatibles
 
-On 12/29/21 22:33, Halil Pasic wrote:
-> On Thu, 21 Oct 2021 11:23:25 -0400
-> Tony Krowiak <akrowiak@linux.ibm.com> wrote:
->
->> The vfio_ap device driver registers for notification when the pointer to
->> the KVM object for a guest is set. Let's store the KVM pointer as well as
->> the pointer to the mediated device when the KVM pointer is set.
-> [..]
->
->
->> struct ap_matrix_dev {
->>          ...
->>          struct rw_semaphore guests_lock;
->>          struct list_head guests;
->>         ...
->> }
->>
->> The 'guests_lock' field is a r/w semaphore to control access to the
->> 'guests' field. The 'guests' field is a list of ap_guest
->> structures containing the KVM and matrix_mdev pointers for each active
->> guest. An ap_guest structure will be stored into the list whenever the
->> vfio_ap device driver is notified that the KVM pointer has been set and
->> removed when notified that the KVM pointer has been cleared.
->>
-> Is this about the field or about the list including all the nodes? This
-> reads lie guests_lock only protects the head element, which makes no
-> sense to me. Because of how these lists work.
+Co-developed-by: Caleb Connolly <caleb@connolly.tech>
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+to pass tests correctly
+depends on patch "arm64: dts: qcom: pms405: assign device specific compatible"
 
-It locks the list, I can rewrite the description.
+v2:
+ - changed author to myself, kept Caleb as co-author
+ - moved nodename to properties
+ - add nodenames for pm* with deprecated property
+ - add ^$ to pattern properties
+ - dropped interrupt-names property
+ - added reg prop. to the nodes which have register in nodename
+ - added compatible pmx55
 
->
-> The narrowest scope that could make sense is all the list_head stuff
-> in the entire list. I.e. one would only need the lock to traverse or
-> manipulate the list, while the payload would still be subject to
-> the matrix_dev->lock mutex.
+ .../bindings/mfd/qcom,spmi-pmic.txt           |  93 -----------
+ .../bindings/mfd/qcom,spmi-pmic.yaml          | 156 ++++++++++++++++++
+ 2 files changed, 156 insertions(+), 93 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
 
-The matrix_dev->guests lock is needed whenever the kvm->lock
-is needed because the struct ap_guest object is created and the
-struct kvm assigned to it when the kvm pointer is set
-(vfio_ap_mdev_set_kvm function). So, in order to access the
-ap_guest object and retrieve the kvm pointer, we have to ensure
-the ap_guest_object is still available. The fact we can get the
-kvm pointer from the ap_matrix_mdev object just makes things
-more efficient - i.e., we won't have to traverse the list.
-
-Whenever the kvm->lock and matrix_dev->lock mutexes must
-be held, the order is:
-
-     matrix_dev->guests_lock
-     matrix_dev->guests->kvm->lock
-     matrix_dev->lock
-
-There are times where all three locks are not required; for example,
-the handle_pqap and vfio_ap_mdev_probe/remove functions only
-require the matrix_dev->lock because it does not need to lock kvm.
-
->
-> [..]
->
->> +struct ap_guest {
->> +	struct kvm *kvm;
->> +	struct list_head node;
->> +};
->> +
->>   /**
->>    * struct ap_matrix_dev - Contains the data for the matrix device.
->>    *
->> @@ -39,6 +44,9 @@
->>    *		single ap_matrix_mdev device. It's quite coarse but we don't
->>    *		expect much contention.
->>    * @vfio_ap_drv: the vfio_ap device driver
->> + * @guests_lock: r/w semaphore for protecting access to @guests
->> + * @guests:	list of guests (struct ap_guest) using AP devices bound to the
->> + *		vfio_ap device driver.
-> Please compare the above. Also if it is only about the access to the
-> list, then you could drop the lock right after create, and not keep it
-> till the very end of vfio_ap_mdev_set_kvm(). Right?
-
-That would be true if it only controlled access to the list, but as I
-explained above, that is not its sole purpose.
-
->
-> In any case I'm skeptical about this whole struct ap_guest business. To
-> me, it looks like something that just makes things more obscure and
-> complicated without any real benefit.
-
-I'm open to other ideas, but you'll have to come up with a way
-to take the kvm->lock before the matrix_mdev->lock in the
-vfio_ap_mdev_probe_queue and vfio_ap_mdev_remove_queue
-functions where we don't have access to the ap_matrix_mdev
-object to which the APQN is assigned and has the pointer to the
-kvm object.
-
-In order to retrieve the matrix_mdev, we need the matrix_dev->lock.
-In order to hot plug/unplug the queue, we need the kvm->lock.
-There's your catch-22 that needs to be solved. This design is my
-attempt to solve that.
-
->
-> Regards,
-> Halil
->
->>    */
->>   struct ap_matrix_dev {
->>   	struct device device;
->> @@ -47,6 +55,8 @@ struct ap_matrix_dev {
->>   	struct list_head mdev_list;
->>   	struct mutex lock;
->>   	struct ap_driver  *vfio_ap_drv;
->> +	struct rw_semaphore guests_lock;
->> +	struct list_head guests;
->>   };
->>   
->>   extern struct ap_matrix_dev *matrix_dev;
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
+deleted file mode 100644
+index 3810a80536f7..000000000000
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
++++ /dev/null
+@@ -1,93 +0,0 @@
+-          Qualcomm SPMI PMICs multi-function device bindings
+-
+-The Qualcomm SPMI series presently includes PM8941, PM8841 and PMA8084
+-PMICs.  These PMICs use a QPNP scheme through SPMI interface.
+-QPNP is effectively a partitioning scheme for dividing the SPMI extended
+-register space up into logical pieces, and set of fixed register
+-locations/definitions within these regions, with some of these regions
+-specifically used for interrupt handling.
+-
+-The QPNP PMICs are used with the Qualcomm Snapdragon series SoCs, and are
+-interfaced to the chip via the SPMI (System Power Management Interface) bus.
+-Support for multiple independent functions are implemented by splitting the
+-16-bit SPMI slave address space into 256 smaller fixed-size regions, 256 bytes
+-each. A function can consume one or more of these fixed-size register regions.
+-
+-Required properties:
+-- compatible:      Should contain one of:
+-                   "qcom,pm660",
+-                   "qcom,pm660l",
+-                   "qcom,pm7325",
+-                   "qcom,pm8004",
+-                   "qcom,pm8005",
+-                   "qcom,pm8019",
+-                   "qcom,pm8028",
+-                   "qcom,pm8110",
+-                   "qcom,pm8150",
+-                   "qcom,pm8150b",
+-                   "qcom,pm8150c",
+-                   "qcom,pm8150l",
+-                   "qcom,pm8226",
+-                   "qcom,pm8350c",
+-                   "qcom,pm8841",
+-                   "qcom,pm8901",
+-                   "qcom,pm8909",
+-                   "qcom,pm8916",
+-                   "qcom,pm8941",
+-                   "qcom,pm8950",
+-                   "qcom,pm8994",
+-                   "qcom,pm8998",
+-                   "qcom,pma8084",
+-                   "qcom,pmd9635",
+-                   "qcom,pmi8950",
+-                   "qcom,pmi8962",
+-                   "qcom,pmi8994",
+-                   "qcom,pmi8998",
+-                   "qcom,pmk8002",
+-                   "qcom,pmk8350",
+-                   "qcom,pmr735a",
+-                   "qcom,smb2351",
+-                   or generalized "qcom,spmi-pmic".
+-- reg:             Specifies the SPMI USID slave address for this device.
+-                   For more information see:
+-                   Documentation/devicetree/bindings/spmi/spmi.yaml
+-
+-Required properties for peripheral child nodes:
+-- compatible:      Should contain "qcom,xxx", where "xxx" is a peripheral name.
+-
+-Optional properties for peripheral child nodes:
+-- interrupts:      Interrupts are specified as a 4-tuple. For more information
+-                   see:
+-                   Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+-- interrupt-names: Corresponding interrupt name to the interrupts property
+-
+-Each child node of SPMI slave id represents a function of the PMIC. In the
+-example below the rtc device node represents a peripheral of pm8941
+-SID = 0. The regulator device node represents a peripheral of pm8941 SID = 1.
+-
+-Example:
+-
+-	spmi {
+-		compatible = "qcom,spmi-pmic-arb";
+-
+-		pm8941@0 {
+-			compatible = "qcom,pm8941", "qcom,spmi-pmic";
+-			reg = <0x0 SPMI_USID>;
+-
+-			rtc {
+-				compatible = "qcom,rtc";
+-				interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+-				interrupt-names = "alarm";
+-			};
+-		};
+-
+-		pm8941@1 {
+-			compatible = "qcom,pm8941", "qcom,spmi-pmic";
+-			reg = <0x1 SPMI_USID>;
+-
+-			regulator {
+-				compatible = "qcom,regulator";
+-				regulator-name = "8941_boost";
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+new file mode 100644
+index 000000000000..595a22b185fd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -0,0 +1,156 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SPMI PMICs multi-function device
++
++description: |
++  Some Qualcomm PMICs used with the Snapdragon series SoCs are interfaced
++  to the chip via the SPMI (System Power Management Interface) bus.
++  Support for multiple independent functions are implemented by splitting the
++  16-bit SPMI peripheral address space into 256 smaller fixed-size regions, 256 bytes
++  each. A function can consume one or more of these fixed-size register regions.
++
++  The Qualcomm SPMI series includes the PM8941, PM8841, PMA8084, PM8998 and other
++  PMICs.  These PMICs use a "QPNP" scheme through SPMI interface.
++  QPNP is effectively a partitioning scheme for dividing the SPMI extended
++  register space up into logical pieces, and set of fixed register
++  locations/definitions within these regions, with some of these regions
++  specifically used for interrupt handling.
++
++maintainers:
++  - Stephen Boyd <sboyd@kernel.org>
++
++properties:
++  $nodename:
++    oneOf:
++      - pattern: '^pmic@.*$'
++      - pattern: '^pm(a|s)?[0-9]*@.*$'
++        deprecated: true
++
++  compatible:
++    items:
++      - enum:
++          - qcom,pm660
++          - qcom,pm660l
++          - qcom,pm6150
++          - qcom,pm6150l
++          - qcom,pm6350
++          - qcom,pm7325
++          - qcom,pm8004
++          - qcom,pm8005
++          - qcom,pm8009
++          - qcom,pm8019
++          - qcom,pm8110
++          - qcom,pm8150
++          - qcom,pm8150b
++          - qcom,pm8150l
++          - qcom,pm8226
++          - qcom,pm8350
++          - qcom,pm8350b
++          - qcom,pm8350c
++          - qcom,pm8841
++          - qcom,pm8909
++          - qcom,pm8916
++          - qcom,pm8941
++          - qcom,pm8950
++          - qcom,pm8994
++          - qcom,pm8998
++          - qcom,pma8084
++          - qcom,pmd9635
++          - qcom,pmi8950
++          - qcom,pmi8962
++          - qcom,pmi8994
++          - qcom,pmi8998
++          - qcom,pmk8350
++          - qcom,pmm8155au
++          - qcom,pmr735a
++          - qcom,pmr735b
++          - qcom,pms405
++          - qcom,pmx55
++          - qcom,smb2351
++      - const: qcom,spmi-pmic
++
++  reg: true
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++
++patternProperties:
++  '^(labibb|([a-z][a-z0-9]+-)?regulators)$':
++    type: object
++
++    required:
++      - compatible
++
++  '@[0-9a-f]+$':
++    type: object
++    description: >
++      Each child node of the PMIC represents a function of it.
++
++    properties:
++      reg: true
++
++      interrupts:
++        description: >
++          Interrupts are specified as a 4-tuple. For more information see
++          Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
++
++    required:
++      - compatible
++
++    additionalProperties: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/spmi/spmi.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    spmi@c440000 {
++        compatible = "qcom,spmi-pmic-arb";
++        reg = <0x0c440000 0x1100>,
++              <0x0c600000 0x2000000>,
++              <0x0e600000 0x100000>,
++              <0x0e700000 0xa0000>,
++              <0x0c40a000 0x26000>;
++        reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
++        interrupt-names = "periph_irq";
++        interrupts = <GIC_SPI 481 IRQ_TYPE_LEVEL_HIGH>;
++        qcom,ee = <0>;
++        qcom,channel = <0>;
++        #address-cells = <2>;
++        #size-cells = <0>;
++        interrupt-controller;
++        #interrupt-cells = <4>;
++        cell-index = <0>;
++
++        pmi8998_lsid0: pmic@2 {
++            compatible = "qcom,pmi8998", "qcom,spmi-pmic";
++            reg = <0x2 SPMI_USID>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            pmi8998_gpio: gpios@c000 {
++                compatible = "qcom,pmi8998-gpio", "qcom,spmi-gpio";
++                reg = <0xc000>;
++                gpio-controller;
++                gpio-ranges = <&pmi8998_gpio 0 0 14>;
++                #gpio-cells = <2>;
++                interrupt-controller;
++                #interrupt-cells = <2>;
++            };
++        };
++    };
+-- 
+2.34.1
 

@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC0848BB52
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFF748BB6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346772AbiAKXRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 18:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiAKXRC (ORCPT
+        id S1346820AbiAKX1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 18:27:21 -0500
+Received: from mailout.easymail.ca ([64.68.200.34]:49580 "EHLO
+        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233873AbiAKX1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 18:17:02 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AFFC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 15:17:02 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id v6so1093884iom.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 15:17:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+BNyhiKbMm4RyIg8JNrtqDxZgbHGdo0J7XNrf0piRew=;
-        b=iskzbXe5xMvIxCUIg2oP1wUuouDfhgLnCC+sQJPAAAZEHx/x1j5Al9PEfKyyAXPPL0
-         8cv4uckuhLYcffGBt04dCVj17g9Bx9b3LLN4XH14iZtpWuxjHsDC+6fM5paFu0GZ7ZOc
-         OPSe0TwDLDOQBnMk5VrrS2x7TJvIhgv9+SOESCKNl0sM50g+kb8sjRU9VXmsCgSlB7Pk
-         Sq0yuZLlWA/XbIf4jLqEv9rrIPGbRiXCNb/WHEkTua98LZ7UGm7jeNIauz9xcODpbM38
-         ONSBKKdQR8MmmejnouArJBl/1Vl4tiNj2Lkr5VwJyJE0IoBNbgSbtK2hLXLSf3//qmTk
-         nv1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+BNyhiKbMm4RyIg8JNrtqDxZgbHGdo0J7XNrf0piRew=;
-        b=7DwISMqcmggpGiYFYrZsGxZi4KXb/7EQ798kveroQJ08hL2ymRQ1ePZXhfsThtY1g/
-         XQpBVEAeLYIwgOrLBA6t8Uu+IeIldHJrnuvgHilNUcJweTYSyQ6WAi08ofuB0Ln73TV+
-         zo17alkb2xai5qmad14ZXDFFkg3ibimoHAg49dPiMEt4z7ciHC+Q27Sc5Lxme1+CJKJh
-         +EYRNpi/gP8DiMTXLKEOxvtV5pU9yYocH2gjTFGm0Fz+FnJpdyXn2seF918eCfxB5/i+
-         TJmNuN8iWsKPyPi2/SHHJ/yUU+wRhoV5iP7sYPo8l4xGkeyQGXHFmC7Hl+JtXLpoddW4
-         f+TQ==
-X-Gm-Message-State: AOAM5300NBOHV2P4tWvWj4vtCq02DvHYc0HWAjQjTzoB6u4OSbYxE1Nn
-        VyVo1OY3He0uGLXhMLFG2LZiUw==
-X-Google-Smtp-Source: ABdhPJyF9jePSeHs9NHaVjjmJYEtoTSK60Y5oIKEaaIgZtxgs/ZSrSvwH+4hyESidsEw5kW2XjQauQ==
-X-Received: by 2002:a02:aa10:: with SMTP id r16mr3590702jam.36.1641943021690;
-        Tue, 11 Jan 2022 15:17:01 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:b6b6:70f4:b540:6383])
-        by smtp.gmail.com with ESMTPSA id o12sm6722264ilu.86.2022.01.11.15.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 15:17:01 -0800 (PST)
-Date:   Tue, 11 Jan 2022 16:16:57 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Yd4P6bEJI8YlXq0H@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <YdcU4P+XWkbDUUoO@dhcp22.suse.cz>
- <YdxKORU9OWCv114O@dhcp22.suse.cz>
+        Tue, 11 Jan 2022 18:27:19 -0500
+X-Greylist: delayed 554 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Jan 2022 18:27:18 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id C7921731A6;
+        Tue, 11 Jan 2022 23:18:03 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at emo05-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo05-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id T9wjiQLbkDR3; Tue, 11 Jan 2022 23:18:03 +0000 (UTC)
+Received: from [10.90.1.74] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailout.easymail.ca (Postfix) with ESMTPSA id BCA0B73191;
+        Tue, 11 Jan 2022 23:18:02 +0000 (UTC)
+Message-ID: <5cee9a36-b094-37a0-e961-d7404b3dafe2@gonehiking.org>
+Date:   Tue, 11 Jan 2022 16:17:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdxKORU9OWCv114O@dhcp22.suse.cz>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Content-Language: en-US
+To:     nbd@nbd.name, lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
+        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+From:   Khalid Aziz <khalid@gonehiking.org>
+Subject: [Bug] mt7921e driver in 5.16 causes kernel panic
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 04:01:13PM +0100, Michal Hocko wrote:
-> On Thu 06-01-22 17:12:18, Michal Hocko wrote:
-> > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> > > +static struct lru_gen_mm_walk *alloc_mm_walk(void)
-> > > +{
-> > > +	if (!current->reclaim_state || !current->reclaim_state->mm_walk)
-> > > +		return kvzalloc(sizeof(struct lru_gen_mm_walk), GFP_KERNEL);
-> 
-> One thing I have overlooked completely.
+I am seeing an intermittent bug in mt7921e driver. When the driver module is loaded
+and is being initialized, almost every other time it seems to write to some wild
+memory location. This results in driver failing to initialize with message
+"Timeout for driver own" and at the same time I start to see "Bad page state" messages
+for random processes. Here is the relevant part of dmesg:
 
-I appreciate your attention to details but GFP_KERNEL is legit in the
-reclaim path. It's been used many years in our production, e.g.,
-  page reclaim
-    swap_writepage()
-      frontswap_store()
-        zswap_frontswap_store()
-          zswap_entry_cache_alloc(GFP_KERNEL)
+[OK] Found device SAMSUNG MZVLB1T0HBLR-000L7 6.
+[OK ]Found device SAMSUNG MZVLB1T0HBLR-000L7 SYSTEM.
+[OK] Listening on Load/Save RF Kill Switch Status /dev/rfkill Watch.
+Starting Cryptography Setup for nvme8n1p6_crypt...
+[  5.687489] mt7921e 0000:03:00.0: ASIC revision: 79610010
+Starting File System Check on /dev/disk/by-uuid/CCSA-8086...
+Please enter passphrase for disk SAMSUNG MZVLB1T0HBLR-000L7 (nvme8n1p6_crypt) on /home
+[  7.798962] mt7921e 0000:03:00.0: Timeout for driver own
+[  8.874863] mt7921e 0000:03:00.0: Timeout for driver own
+[  8.876266] BUG: Bad page state in process systemd-udevd  pfn:123848
+[  8.877953] BUG: Bad page state in process napi/phy8-8194  pfn:10a4a8
+[  9.958899] mt7921e 0000:03:00.0: Timeout for driver own
+[  9.961595] BUG: Bad page state in process systemd-udevd  pfn:1037e8
+[ 11.843129] mt7921e 0000:03:00.0: Timeout for driver own
+[ 11.845823] BUG: Bad page state in process systemd-udevd  pfn:104380
+[ 12.126922] mt7921e 0000:03:00.0: Timeout for driver own
+[ 12.128788] BUG: Bad page state in process systemd-udevd  pfn:10a050
+[ 13.287898] mt7921e 0000:03:00.0: Timeout for driver own
+[ 14.287827] mt7921e 0000:03:00.0: Timeout for driver own
+[ 14.288968] BUG: Bad page state in process systemd-udevd  pfn:109f51
+[ 14.298599] BUG: Bad page state in process systemd-udevd  pfn:105f60
+[ 14.292162] BUG: Bad page state in process systemd-udevd  pfn:10ac07
+[ 15.372501] mt7921e 0000:03:00.0: Timeout for driver own
+[ 16.454773] mt7921e 0000:03:00.0: Timeout for driver own
+[ 16.456238] BUG: Bad page state in process systemd-udevd pfn:1a0c00
+[ 16.515869) mt7921e 0000:03:00.0: hardware init failed
 
-(And I always test my changes with lockdep, kasan, DEBUG_VM, etc., no
- warnings ever seen from using GFP_KERNEL in the reclaim path.)
+These "Bad page state" messages continue until kernel finally panics with a page
+fault in a seemingly random place:
 
-> You cannot really use GFP_KERNEL
-> allocation here because the reclaim context can be constrained (e.g.
-> GFP_NOFS). This allocation will not do any reclaim as it is PF_MEMALLOC
-> but I suspect that the lockdep will complain anyway.
-> 
-> Also kvmalloc is not really great here. a) vmalloc path is never
-> executed for small objects and b) we do not really want to make a
-> dependency between vmalloc and the reclaim (by vmalloc -> reclaim ->
-> vmalloc).
-> 
-> Even if we rule out vmalloc and look at kmalloc alone. Is this really
-> safe? I do not see any recursion prevention in the SL.B code. Maybe this
-> just happens to work but the dependency should be really documented so
-> that future SL.B changes won't break the whole scheme. 
+[  17.544222] BUG: Bad page state in process apparmor_parser  pfn:1116f8
+[  OK  ] Finished Create Volatile Files and Directories
+          Starting Network Name Resolution...
+          Starting Network Time Synchronization...
+          Starting Update UTMP about System Boot/Shutdown...
+[  17.677144] BUG: unable to handle page fault for address: 0000396eb08090ec
+[  17.680395] #PF: supervisor read access in kernel mode
+[  17.681086] #PF: error code(0x0000) - not-present page
+[  17.681086] PGD 0 P4D 0
+[  17.681006] Opps: 0000 [#1] PREEMPT SMP NOPTI
+[  17.681006] CPU: 8 PID: 63 Con: ksoftirgd/8 Tainted: G  B  W        5.16.0 #3
+[  17.681606] Hardware name: LENOVO 20XF004WUS/20XF004WUS, BIOS R1NET44W (1.14) 11/08/2821
 
-Affirmative, as Vlastimil has clarified.
+Rest of the kernel stack trace is in form of a picture which I can send if it helps. Kernel
+is compiled from git tag "v5.16". Details of mediatek controller:
 
-Thanks!
+$ lspci -v -s 03:00.0
+03:00.0 Network controller: MEDIATEK Corp. Device 7961
+	Subsystem: Lenovo Device e0bc
+	Physical Slot: 0
+	Flags: bus master, fast devsel, latency 0, IRQ 85, IOMMU group 11
+	Memory at 870200000 (64-bit, prefetchable) [size=1M]
+	Memory at 870300000 (64-bit, prefetchable) [size=16K]
+	Memory at 870304000 (64-bit, prefetchable) [size=4K]
+	Capabilities: [80] Express Endpoint, MSI 00
+	Capabilities: [e0] MSI: Enable+ Count=1/32 Maskable+ 64bit+
+	Capabilities: [f8] Power Management version 3
+	Capabilities: [100] Vendor Specific Information: ID=1556 Rev=1 Len=008 <?>
+	Capabilities: [108] Latency Tolerance Reporting
+	Capabilities: [110] L1 PM Substates
+	Capabilities: [200] Advanced Error Reporting
+	Kernel driver in use: mt7921e
+	Kernel modules: mt7921e
+
+This is an intermittent problem and I did not see this with 5.16-rc6 kernel.
+Please let me know if you need more information.
+
+Thanks,
+Khalid
+

@@ -2,224 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E4348BAEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0823D48BAEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346631AbiAKWn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S243698AbiAKWsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:48:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346625AbiAKWn5 (ORCPT
+        with ESMTP id S230248AbiAKWsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:43:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED015C06173F;
-        Tue, 11 Jan 2022 14:43:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B21A612B3;
-        Tue, 11 Jan 2022 22:43:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32F1C36AF3;
-        Tue, 11 Jan 2022 22:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641941036;
-        bh=wxrYUHvNISoimR1FsjCGMOFkWf6WTEQzClLqZ2UhsHo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lHNIob6PZvEilgGx+9KeRZpLebkKkuJ8YnM0hWrSXSXfkXluqOjTbg94JN+AZ+AZU
-         IV5qfShvjLReJTJGiCBBZgy5ptafa5hZYxQrlSvj3u6BFUpICL8bXsqu4NXgo9fTTH
-         gflF2oLbecCMqwPeoPIgG+od1Hcav/vgVMtK4URzBDYHjL0ZttLaAQpjuHCk4GOD7q
-         v8yUWDYC5Z+XIw9SVVSkhAkTAjv7i0SN9fQl12zKGYNTnax/1QQvcMH/rJxz42UMTP
-         +m/R9DJ2J/SPn1exeTYse0u+zosTgIHXve8LDHuTUb8I0NQDGzfAswFkqmZMv4Xl2+
-         opTGhbuowsseg==
-Received: by mail-ed1-f48.google.com with SMTP id b13so2480597edn.0;
-        Tue, 11 Jan 2022 14:43:55 -0800 (PST)
-X-Gm-Message-State: AOAM531lN6d/+ZmG9VUzTdDygRk/NwfaZ+9uWWMZsS9evwO0B4/5am6P
-        2oEwGqYWeHRDTxvxLlqZKvDKBU1NkVh6hCgANw==
-X-Google-Smtp-Source: ABdhPJwFehAmi8eX6RJne8GZzz7WL+Rj5BQEQD0NZb84edRew4ZUHLuKENWdltSc4kIjXYc89P9V/+KWQzIic22CDs4=
-X-Received: by 2002:a05:6402:1756:: with SMTP id v22mr1707154edx.2.1641941034187;
- Tue, 11 Jan 2022 14:43:54 -0800 (PST)
+        Tue, 11 Jan 2022 17:48:35 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CED3C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 14:48:35 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso8215430pje.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 14:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kRh0KmEC8nqxVLtpCaTLHurm3e7u3dpl262Fuin05WE=;
+        b=lE+RzzYJyeEH2oenRhTopX0euye5+arj0LzRfgogHAlAdfSrKtvBrkRCz3qmKSmWMf
+         9poPw5rl4payrFi6NyNSnsQtNg7Gq9dktjt0lg6teCbN71rlnEQ9FZs8zivc9sQrBanq
+         JvjUAc6hQfrYm4bCoTd7Al5S+87Y8sNwGVBOIMuBejmycZHiKYrEvDoxuJaIke25un41
+         EwdyqTQQix5I65HExnatk8iJJTZ+6ujEuGlgACr8wQzFFzuHM6hRSWlR2lcv6YJBFzy3
+         fEBKASNz2lIipd/Ho/mVeld/AUmzq1LT83/vE5TWMq7ow0fFV2StJ7zxQmFk/CWSNwZp
+         1EnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kRh0KmEC8nqxVLtpCaTLHurm3e7u3dpl262Fuin05WE=;
+        b=OQdyWPl3TsxCeFgH+mXJx9qIav8zmWcDXg8YEUj/r/qKVb78sZBOcgIch24phJT89k
+         PThqNVk19rycC9PjWe9GOS23QKrzA17kX/hs4buOIlaJKbVQAu7D3WWbPFBKz416t24j
+         UXyeLL3GH11FVhl9gxVD3UOa5ikPF5FoXlqCZqS6bGtdgaTqCUwaGR7guRY9bnpjUtA0
+         rIl9aK6WCJl4/yTUjl2VlbeNPkZskB6WBG8X9TFtUa9PxUZBN1hXzq16Rvynz9JXV1a3
+         Wc343rjZR04h6yntPG7g3O8tJiLdMPsgvLERDVpbSUWu33+9XzUcheTSHARWzrb7nAhP
+         I5vw==
+X-Gm-Message-State: AOAM533/F4x48bSrVe4fgbedydf0of40ZX9vzcUKwXOVcp1NSGEYupKk
+        9gWlUVFQotZrVPTsjnyNrAq38Q==
+X-Google-Smtp-Source: ABdhPJwB0GI4JShk3x77Qj8KLVUZcZH2dNh6ZKRkuyHAEwPk6kmsb3+UeZlOsm4nsiA+3gmfKH4LuA==
+X-Received: by 2002:a63:9d46:: with SMTP id i67mr5820104pgd.441.1641941314951;
+        Tue, 11 Jan 2022 14:48:34 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 24sm341247pgv.60.2022.01.11.14.48.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 14:48:34 -0800 (PST)
+Date:   Tue, 11 Jan 2022 22:48:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>
+Subject: Re: [GIT PULL] x86/cpu for v5.17
+Message-ID: <Yd4JPvLiGioBFh0C@google.com>
+References: <YdwVl0H54fmUIux0@zn.tnic>
+ <CAHk-=wh+UbGrgH4CzKSoTYGPidyv5isiLMxJKAqnV3NFTiRdaQ@mail.gmail.com>
+ <Ydx8fUCotPI++UEW@zn.tnic>
+ <265db742-0539-a66f-ff00-2b18cb2add88@intel.com>
 MIME-Version: 1.0
-References: <20211214215630.4025090-1-robh@kernel.org>
-In-Reply-To: <20211214215630.4025090-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 11 Jan 2022 16:43:41 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLPMpBmLh40=HMF4FKT8UzvnNXX65Bet+rASUAzuXJgbA@mail.gmail.com>
-Message-ID: <CAL_JsqLPMpBmLh40=HMF4FKT8UzvnNXX65Bet+rASUAzuXJgbA@mail.gmail.com>
-Subject: Re: [PATCH v8] libperf: Add arm64 support to perf_mmap__read_self()
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <265db742-0539-a66f-ff00-2b18cb2add88@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 3:56 PM Rob Herring <robh@kernel.org> wrote:
->
-> Add the arm64 variants for read_perf_counter() and read_timestamp().
-> Unfortunately the counter number is encoded into the instruction, so the
-> code is a bit verbose to enumerate all possible counters.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v8:
->  - Set attr.config1 to request user access on arm64
-> v7:
->  - Move enabling of libperf user read test for arm64 to this patch
-> ---
->  tools/lib/perf/mmap.c             | 98 +++++++++++++++++++++++++++++++
->  tools/lib/perf/tests/test-evsel.c |  5 +-
->  2 files changed, 102 insertions(+), 1 deletion(-)
+On Mon, Jan 10, 2022, Dave Hansen wrote:
+> On 1/10/22 10:35, Borislav Petkov wrote:
+> > > 
+> > > Not a big deal, I just thought I'd mention it since I reacted to it.
+> > > And we don't seem to have those vendor checks in any of the other code
+> > > that uses MSR_CSTAR (just grepping for that and seeing it mentioned in
+> > > kvm code etc)
+> > Right, the only point for doing the vendor check I see here is, well,
+> > because it is Intel who doesn't have CSTAR, let's check for Intel. But
+> > yeah, we do avoid the vendor checks if it can be helped.
+> > 
+> > We can do a synthetic X86_FEATURE flag but that would be a waste. So the
+> > _safe thing and keep the comment sounds optimal to me.
+> > 
+> > I can whip up a patch ontop if people agree.
+> 
+> There are four basic options here for TDX:
+> 
+> 1. Paper over the #VE in the #VE handler itself
+> 2. Do a check for TDX at the wrmsr(MSR_CSTAR) site
+> 3. Do a check for X86_VENDOR_INTEL at the wrmsr(MSR_CSTAR) site
+> 4. Use wrmsr*_safe() and rely on #VE -> fixup_exception()
+> 
+> TDX originally did #1, passed over #2 and settled on #3 because of a
+> comment:
+> 
+> 	It's an obvious optimization (avoiding the WRMSR with a
+> 	conditional) without TDX because the write is pointless
+> 	independent of TDX." [1]
+> 
+> I think doing wrmsr*_safe() is OK.  But, on TDX systems, it will end up
+> taking a weird route:
+> 
+>       WRMSR -> #VE -> hypercall -> ve_raise_fault() -> fixup_exception()
+> 
+> instead of the "normal" _safe route which goes:
+> 
+>       WRMSR -> #GP -> ... -> fixup_exception()
+> 
+> So, we should probably make sure wrmsr*_safe() is fine on TDX before we
+> subject ourselves to any additional churn.  Kirill, can you test that out?
 
-Ping!
+wrmsr*_safe() isn't, uh, safe.  The issue is that the #VE -> hypercall will expose
+information about the guest kernel's layout (address of a kernel symbol) to the
+untrusted hypervisor, and in theory could be used to attack the guest.  Whether
+or not the kernel's layout is all that valuable of a secret is debatable, but it's
+hard to argue that the kernel should knowingly expose such information to the host.
 
->
-> diff --git a/tools/lib/perf/mmap.c b/tools/lib/perf/mmap.c
-> index c89dfa5f67b3..7ee3eb9f5e27 100644
-> --- a/tools/lib/perf/mmap.c
-> +++ b/tools/lib/perf/mmap.c
-> @@ -13,6 +13,7 @@
->  #include <internal/lib.h>
->  #include <linux/kernel.h>
->  #include <linux/math64.h>
-> +#include <linux/stringify.h>
->  #include "internal.h"
->
->  void perf_mmap__init(struct perf_mmap *map, struct perf_mmap *prev,
-> @@ -294,6 +295,103 @@ static u64 read_timestamp(void)
->
->         return low | ((u64)high) << 32;
->  }
-> +#elif defined(__aarch64__)
-> +#define read_sysreg(r) ({                                              \
-> +       u64 __val;                                                      \
-> +       asm volatile("mrs %0, " __stringify(r) : "=r" (__val));         \
-> +       __val;                                                          \
-> +})
-> +
-> +static u64 read_pmccntr(void)
-> +{
-> +       return read_sysreg(pmccntr_el0);
-> +}
-> +
-> +#define PMEVCNTR_READ(idx)                                     \
-> +       static u64 read_pmevcntr_##idx(void) {                  \
-> +               return read_sysreg(pmevcntr##idx##_el0);        \
-> +       }
-> +
-> +PMEVCNTR_READ(0);
-> +PMEVCNTR_READ(1);
-> +PMEVCNTR_READ(2);
-> +PMEVCNTR_READ(3);
-> +PMEVCNTR_READ(4);
-> +PMEVCNTR_READ(5);
-> +PMEVCNTR_READ(6);
-> +PMEVCNTR_READ(7);
-> +PMEVCNTR_READ(8);
-> +PMEVCNTR_READ(9);
-> +PMEVCNTR_READ(10);
-> +PMEVCNTR_READ(11);
-> +PMEVCNTR_READ(12);
-> +PMEVCNTR_READ(13);
-> +PMEVCNTR_READ(14);
-> +PMEVCNTR_READ(15);
-> +PMEVCNTR_READ(16);
-> +PMEVCNTR_READ(17);
-> +PMEVCNTR_READ(18);
-> +PMEVCNTR_READ(19);
-> +PMEVCNTR_READ(20);
-> +PMEVCNTR_READ(21);
-> +PMEVCNTR_READ(22);
-> +PMEVCNTR_READ(23);
-> +PMEVCNTR_READ(24);
-> +PMEVCNTR_READ(25);
-> +PMEVCNTR_READ(26);
-> +PMEVCNTR_READ(27);
-> +PMEVCNTR_READ(28);
-> +PMEVCNTR_READ(29);
-> +PMEVCNTR_READ(30);
-> +
-> +/*
-> + * Read a value direct from PMEVCNTR<idx>
-> + */
-> +static u64 read_perf_counter(unsigned int counter)
-> +{
-> +       static u64 (* const read_f[])(void) = {
-> +               read_pmevcntr_0,
-> +               read_pmevcntr_1,
-> +               read_pmevcntr_2,
-> +               read_pmevcntr_3,
-> +               read_pmevcntr_4,
-> +               read_pmevcntr_5,
-> +               read_pmevcntr_6,
-> +               read_pmevcntr_7,
-> +               read_pmevcntr_8,
-> +               read_pmevcntr_9,
-> +               read_pmevcntr_10,
-> +               read_pmevcntr_11,
-> +               read_pmevcntr_13,
-> +               read_pmevcntr_12,
-> +               read_pmevcntr_14,
-> +               read_pmevcntr_15,
-> +               read_pmevcntr_16,
-> +               read_pmevcntr_17,
-> +               read_pmevcntr_18,
-> +               read_pmevcntr_19,
-> +               read_pmevcntr_20,
-> +               read_pmevcntr_21,
-> +               read_pmevcntr_22,
-> +               read_pmevcntr_23,
-> +               read_pmevcntr_24,
-> +               read_pmevcntr_25,
-> +               read_pmevcntr_26,
-> +               read_pmevcntr_27,
-> +               read_pmevcntr_28,
-> +               read_pmevcntr_29,
-> +               read_pmevcntr_30,
-> +               read_pmccntr
-> +       };
-> +
-> +       if (counter < ARRAY_SIZE(read_f))
-> +               return (read_f[counter])();
-> +
-> +       return 0;
-> +}
-> +
-> +static u64 read_timestamp(void) { return read_sysreg(cntvct_el0); }
-> +
->  #else
->  static u64 read_perf_counter(unsigned int counter __maybe_unused) { return 0; }
->  static u64 read_timestamp(void) { return 0; }
-> diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
-> index 33ae9334861a..89be89afb24d 100644
-> --- a/tools/lib/perf/tests/test-evsel.c
-> +++ b/tools/lib/perf/tests/test-evsel.c
-> @@ -130,6 +130,9 @@ static int test_stat_user_read(int event)
->         struct perf_event_attr attr = {
->                 .type   = PERF_TYPE_HARDWARE,
->                 .config = event,
-> +#ifdef __aarch64__
-> +               .config1 = 0x2,         /* Request user access */
-> +#endif
->         };
->         int err, i;
->
-> @@ -150,7 +153,7 @@ static int test_stat_user_read(int event)
->         pc = perf_evsel__mmap_base(evsel, 0, 0);
->         __T("failed to get mmapped address", pc);
->
-> -#if defined(__i386__) || defined(__x86_64__)
-> +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
->         __T("userspace counter access not supported", pc->cap_user_rdpmc);
->         __T("userspace counter access not enabled", pc->index);
->         __T("userspace counter width not set", pc->pmc_width >= 32);
-> --
-> 2.32.0
->
+Most VMMs probably won't even signal failure on the hypercall, i.e. the kernel will
+never do fixup_exception(), the real motivation is to avoid the hypercall.
+
+The argument against papering over the fault in the #VE handler is that there's
+exactly one wrmsr(MSR_CSTAR) in the entire kernel, i.e. it's a wash from a code
+perspective, and avoiding the wrmsr entirely will allow the #VE handler to WARN
+if something else in the kernel ends up writing MSR_CSTAR.

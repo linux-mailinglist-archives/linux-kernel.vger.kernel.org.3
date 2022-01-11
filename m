@@ -2,962 +2,746 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5175648B11C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E95B48B123
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349496AbiAKPmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:42:08 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:47869 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240342AbiAKPmG (ORCPT
+        id S243216AbiAKPmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:42:33 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:41089 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242894AbiAKPmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:42:06 -0500
+        Tue, 11 Jan 2022 10:42:31 -0500
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 32B8B240012;
-        Tue, 11 Jan 2022 15:42:01 +0000 (UTC)
-Date:   Tue, 11 Jan 2022 16:43:01 +0100
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5EE9A60002;
+        Tue, 11 Jan 2022 15:42:26 +0000 (UTC)
+Date:   Tue, 11 Jan 2022 16:43:27 +0100
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Eugen Hristev <eugen.hristev@microchip.com>
 Cc:     linux-media@vger.kernel.org, robh+dt@kernel.org,
         laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, nicolas.ferre@microchip.com
-Subject: Re: [PATCH v3 03/23] media: atmel: introduce microchip csi2dc driver
-Message-ID: <20220111154301.35uv4dmjw567cmjm@uno.localdomain>
+Subject: Re: [PATCH v3 04/23] media: atmel: atmel-isc: split the clock code
+ into separate source file
+Message-ID: <20220111154327.jehoy33ajyxhqgu3@uno.localdomain>
 References: <20211213134940.324266-1-eugen.hristev@microchip.com>
- <20211213134940.324266-4-eugen.hristev@microchip.com>
+ <20211213134940.324266-5-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211213134940.324266-4-eugen.hristev@microchip.com>
+In-Reply-To: <20211213134940.324266-5-eugen.hristev@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Eugen
 
-On Mon, Dec 13, 2021 at 03:49:20PM +0200, Eugen Hristev wrote:
-> Microchip CSI2DC (CSI2 Demultiplexer Controller) is a misc bridge device
-> that converts a byte stream in IDI Synopsys format (coming from a CSI2HOST)
-> to a pixel stream that can be captured by a sensor controller.
+On Mon, Dec 13, 2021 at 03:49:21PM +0200, Eugen Hristev wrote:
+> The atmel-isc-base is getting crowded. Split the clock functions into
+> atmel-isc-clk.c.
 >
 > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 
-Thanks for addressing my comments on previous versions
 Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
 Thanks
   j
 
-
 > ---
 > Changes in v3:
-> - on set format, disable setting the source sink.
-> - removed useless request to pm_request_idle
-> - fixed YUV DT
-> - added last frame debug info
-> - removed writing read only VPCOL and VPROW registers
-> - minor cosmetic changes
+> - squash with maintainers, add patterns in maintainers
 >
-> Changes in v2:
-> - implement try formats
-> - added parallel mode
-> - moved to fwlink endpoints
-> - many other minor corrections from Jacopo's review
+>  MAINTAINERS                                   |   7 +-
+>  drivers/media/platform/atmel/Makefile         |   3 +-
+>  drivers/media/platform/atmel/atmel-isc-base.c | 295 -----------------
+>  drivers/media/platform/atmel/atmel-isc-clk.c  | 311 ++++++++++++++++++
+>  drivers/media/platform/atmel/atmel-isc.h      |   7 +
+>  5 files changed, 322 insertions(+), 301 deletions(-)
+>  create mode 100644 drivers/media/platform/atmel/atmel-isc-clk.c
 >
-> Changes in this revision:
-> - addressed comments by Jacopo and Laurent as in this thread:
-> https://www.spinics.net/lists/linux-media/msg181044.html
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index afb74460e5c1..6aa274129751 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12500,11 +12500,8 @@ L:	linux-media@vger.kernel.org
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/media/atmel,isc.yaml
+>  F:	Documentation/devicetree/bindings/media/microchip,xisc.yaml
+> -F:	drivers/media/platform/atmel/atmel-isc-base.c
+> -F:	drivers/media/platform/atmel/atmel-isc-regs.h
+> -F:	drivers/media/platform/atmel/atmel-isc.h
+> -F:	drivers/media/platform/atmel/atmel-sama5d2-isc.c
+> -F:	drivers/media/platform/atmel/atmel-sama7g5-isc.c
+> +F:	drivers/media/platform/atmel/atmel-isc*
+> +F:	drivers/media/platform/atmel/atmel-sama*-isc*
+>  F:	include/linux/atmel-isc-media.h
 >
-> Previous change log :
-> Changes in v5:
-> - only in bindings
->
-> Changes in v4:
-> - now using get_mbus_config ops to get data from the subdevice, like the
-> virtual channel id, and the clock type.
-> - now having possibility to select any of the RAW10 data modes
-> - at completion time, select which formats are also available in the subdevice,
-> and move to the dynamic list accordingly
-> - changed the pipeline integration, do not advertise subdev ready at probe time.
-> wait until completion is done, and then start a workqueue that will register
-> this device as a subdevice for the next element in pipeline.
-> - moved the s_power code into a different function called now csi2dc_power
-> that is called with CONFIG_PM functions. This is also called at completion,
-> to have the device ready in case CONFIG_PM is not selected on the platform.
-> - merged try_fmt into set_fmt
-> - driver cleanup, wrapped lines over 80 characters
->
-> Changes in v2:
-> - moved driver to platform/atmel
-> - fixed minor things as per Sakari's review
-> - still some things from v2 review are not yet addressed, to be followed up
->
->
->
->  drivers/media/platform/Makefile               |   1 +
->  drivers/media/platform/atmel/Kconfig          |  15 +
->  drivers/media/platform/atmel/Makefile         |   1 +
->  .../media/platform/atmel/microchip-csi2dc.c   | 806 ++++++++++++++++++
->  4 files changed, 823 insertions(+)
->  create mode 100644 drivers/media/platform/atmel/microchip-csi2dc.c
->
-> diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-> index 832357240e89..b18e5f704145 100644
-> --- a/drivers/media/platform/Makefile
-> +++ b/drivers/media/platform/Makefile
-> @@ -69,6 +69,7 @@ obj-$(CONFIG_VIDEO_RCAR_VIN)		+= rcar-vin/
->  obj-$(CONFIG_VIDEO_ATMEL_ISC)		+= atmel/
->  obj-$(CONFIG_VIDEO_ATMEL_ISI)		+= atmel/
->  obj-$(CONFIG_VIDEO_ATMEL_XISC)		+= atmel/
-> +obj-$(CONFIG_VIDEO_MICROCHIP_CSI2DC)	+= atmel/
->
->  obj-$(CONFIG_VIDEO_STM32_DCMI)		+= stm32/
->
-> diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
-> index dda2f27da317..f83bee373d82 100644
-> --- a/drivers/media/platform/atmel/Kconfig
-> +++ b/drivers/media/platform/atmel/Kconfig
-> @@ -40,3 +40,18 @@ config VIDEO_ATMEL_ISI
->  	help
->  	  This module makes the ATMEL Image Sensor Interface available
->  	  as a v4l2 device.
-> +
-> +config VIDEO_MICROCHIP_CSI2DC
-> +	tristate "Microchip CSI2 Demux Controller"
-> +	depends on VIDEO_V4L2 && COMMON_CLK && OF
-> +	depends on ARCH_AT91 || COMPILE_TEST
-> +	select MEDIA_CONTROLLER
-> +	select VIDEO_V4L2_SUBDEV_API
-> +	select V4L2_FWNODE
-> +	help
-> +	  CSI2 Demux Controller driver. CSI2DC is a helper chip
-> +	  that converts IDI interface byte stream to a parallel pixel stream.
-> +	  It supports various RAW formats as input.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called microchip-csi2dc.
+>  MICROCHIP ISI DRIVER
 > diff --git a/drivers/media/platform/atmel/Makefile b/drivers/media/platform/atmel/Makefile
-> index 46d264ab7948..39f0a7eba702 100644
+> index 39f0a7eba702..794e8f739287 100644
 > --- a/drivers/media/platform/atmel/Makefile
 > +++ b/drivers/media/platform/atmel/Makefile
-> @@ -6,3 +6,4 @@ obj-$(CONFIG_VIDEO_ATMEL_ISI) += atmel-isi.o
->  obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE) += atmel-isc-base.o
+> @@ -1,9 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  atmel-isc-objs = atmel-sama5d2-isc.o
+>  atmel-xisc-objs = atmel-sama7g5-isc.o
+> +atmel-isc-common-objs = atmel-isc-base.o atmel-isc-clk.o
+>
+>  obj-$(CONFIG_VIDEO_ATMEL_ISI) += atmel-isi.o
+> -obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE) += atmel-isc-base.o
+> +obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE) += atmel-isc-common.o
 >  obj-$(CONFIG_VIDEO_ATMEL_ISC) += atmel-isc.o
 >  obj-$(CONFIG_VIDEO_ATMEL_XISC) += atmel-xisc.o
-> +obj-$(CONFIG_VIDEO_MICROCHIP_CSI2DC) += microchip-csi2dc.o
-> diff --git a/drivers/media/platform/atmel/microchip-csi2dc.c b/drivers/media/platform/atmel/microchip-csi2dc.c
+>  obj-$(CONFIG_VIDEO_MICROCHIP_CSI2DC) += microchip-csi2dc.o
+> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+> index 660cd0ab6749..58f468d32613 100644
+> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+> @@ -8,10 +8,6 @@
+>   * Author: Eugen Hristev <eugen.hristev@microchip.com>
+>   *
+>   */
+> -
+> -#include <linux/clk.h>
+> -#include <linux/clkdev.h>
+> -#include <linux/clk-provider.h>
+>  #include <linux/delay.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/math64.h>
+> @@ -100,297 +96,6 @@ static inline void isc_reset_awb_ctrls(struct isc_device *isc)
+>  	}
+>  }
+>
+> -static int isc_wait_clk_stable(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	struct regmap *regmap = isc_clk->regmap;
+> -	unsigned long timeout = jiffies + usecs_to_jiffies(1000);
+> -	unsigned int status;
+> -
+> -	while (time_before(jiffies, timeout)) {
+> -		regmap_read(regmap, ISC_CLKSR, &status);
+> -		if (!(status & ISC_CLKSR_SIP))
+> -			return 0;
+> -
+> -		usleep_range(10, 250);
+> -	}
+> -
+> -	return -ETIMEDOUT;
+> -}
+> -
+> -static int isc_clk_prepare(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	int ret;
+> -
+> -	ret = pm_runtime_resume_and_get(isc_clk->dev);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	return isc_wait_clk_stable(hw);
+> -}
+> -
+> -static void isc_clk_unprepare(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -
+> -	isc_wait_clk_stable(hw);
+> -
+> -	pm_runtime_put_sync(isc_clk->dev);
+> -}
+> -
+> -static int isc_clk_enable(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	u32 id = isc_clk->id;
+> -	struct regmap *regmap = isc_clk->regmap;
+> -	unsigned long flags;
+> -	unsigned int status;
+> -
+> -	dev_dbg(isc_clk->dev, "ISC CLK: %s, id = %d, div = %d, parent id = %d\n",
+> -		__func__, id, isc_clk->div, isc_clk->parent_id);
+> -
+> -	spin_lock_irqsave(&isc_clk->lock, flags);
+> -	regmap_update_bits(regmap, ISC_CLKCFG,
+> -			   ISC_CLKCFG_DIV_MASK(id) | ISC_CLKCFG_SEL_MASK(id),
+> -			   (isc_clk->div << ISC_CLKCFG_DIV_SHIFT(id)) |
+> -			   (isc_clk->parent_id << ISC_CLKCFG_SEL_SHIFT(id)));
+> -
+> -	regmap_write(regmap, ISC_CLKEN, ISC_CLK(id));
+> -	spin_unlock_irqrestore(&isc_clk->lock, flags);
+> -
+> -	regmap_read(regmap, ISC_CLKSR, &status);
+> -	if (status & ISC_CLK(id))
+> -		return 0;
+> -	else
+> -		return -EINVAL;
+> -}
+> -
+> -static void isc_clk_disable(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	u32 id = isc_clk->id;
+> -	unsigned long flags;
+> -
+> -	spin_lock_irqsave(&isc_clk->lock, flags);
+> -	regmap_write(isc_clk->regmap, ISC_CLKDIS, ISC_CLK(id));
+> -	spin_unlock_irqrestore(&isc_clk->lock, flags);
+> -}
+> -
+> -static int isc_clk_is_enabled(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	u32 status;
+> -	int ret;
+> -
+> -	ret = pm_runtime_resume_and_get(isc_clk->dev);
+> -	if (ret < 0)
+> -		return 0;
+> -
+> -	regmap_read(isc_clk->regmap, ISC_CLKSR, &status);
+> -
+> -	pm_runtime_put_sync(isc_clk->dev);
+> -
+> -	return status & ISC_CLK(isc_clk->id) ? 1 : 0;
+> -}
+> -
+> -static unsigned long
+> -isc_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -
+> -	return DIV_ROUND_CLOSEST(parent_rate, isc_clk->div + 1);
+> -}
+> -
+> -static int isc_clk_determine_rate(struct clk_hw *hw,
+> -				   struct clk_rate_request *req)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	long best_rate = -EINVAL;
+> -	int best_diff = -1;
+> -	unsigned int i, div;
+> -
+> -	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
+> -		struct clk_hw *parent;
+> -		unsigned long parent_rate;
+> -
+> -		parent = clk_hw_get_parent_by_index(hw, i);
+> -		if (!parent)
+> -			continue;
+> -
+> -		parent_rate = clk_hw_get_rate(parent);
+> -		if (!parent_rate)
+> -			continue;
+> -
+> -		for (div = 1; div < ISC_CLK_MAX_DIV + 2; div++) {
+> -			unsigned long rate;
+> -			int diff;
+> -
+> -			rate = DIV_ROUND_CLOSEST(parent_rate, div);
+> -			diff = abs(req->rate - rate);
+> -
+> -			if (best_diff < 0 || best_diff > diff) {
+> -				best_rate = rate;
+> -				best_diff = diff;
+> -				req->best_parent_rate = parent_rate;
+> -				req->best_parent_hw = parent;
+> -			}
+> -
+> -			if (!best_diff || rate < req->rate)
+> -				break;
+> -		}
+> -
+> -		if (!best_diff)
+> -			break;
+> -	}
+> -
+> -	dev_dbg(isc_clk->dev,
+> -		"ISC CLK: %s, best_rate = %ld, parent clk: %s @ %ld\n",
+> -		__func__, best_rate,
+> -		__clk_get_name((req->best_parent_hw)->clk),
+> -		req->best_parent_rate);
+> -
+> -	if (best_rate < 0)
+> -		return best_rate;
+> -
+> -	req->rate = best_rate;
+> -
+> -	return 0;
+> -}
+> -
+> -static int isc_clk_set_parent(struct clk_hw *hw, u8 index)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -
+> -	if (index >= clk_hw_get_num_parents(hw))
+> -		return -EINVAL;
+> -
+> -	isc_clk->parent_id = index;
+> -
+> -	return 0;
+> -}
+> -
+> -static u8 isc_clk_get_parent(struct clk_hw *hw)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -
+> -	return isc_clk->parent_id;
+> -}
+> -
+> -static int isc_clk_set_rate(struct clk_hw *hw,
+> -			     unsigned long rate,
+> -			     unsigned long parent_rate)
+> -{
+> -	struct isc_clk *isc_clk = to_isc_clk(hw);
+> -	u32 div;
+> -
+> -	if (!rate)
+> -		return -EINVAL;
+> -
+> -	div = DIV_ROUND_CLOSEST(parent_rate, rate);
+> -	if (div > (ISC_CLK_MAX_DIV + 1) || !div)
+> -		return -EINVAL;
+> -
+> -	isc_clk->div = div - 1;
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct clk_ops isc_clk_ops = {
+> -	.prepare	= isc_clk_prepare,
+> -	.unprepare	= isc_clk_unprepare,
+> -	.enable		= isc_clk_enable,
+> -	.disable	= isc_clk_disable,
+> -	.is_enabled	= isc_clk_is_enabled,
+> -	.recalc_rate	= isc_clk_recalc_rate,
+> -	.determine_rate	= isc_clk_determine_rate,
+> -	.set_parent	= isc_clk_set_parent,
+> -	.get_parent	= isc_clk_get_parent,
+> -	.set_rate	= isc_clk_set_rate,
+> -};
+> -
+> -static int isc_clk_register(struct isc_device *isc, unsigned int id)
+> -{
+> -	struct regmap *regmap = isc->regmap;
+> -	struct device_node *np = isc->dev->of_node;
+> -	struct isc_clk *isc_clk;
+> -	struct clk_init_data init;
+> -	const char *clk_name = np->name;
+> -	const char *parent_names[3];
+> -	int num_parents;
+> -
+> -	if (id == ISC_ISPCK && !isc->ispck_required)
+> -		return 0;
+> -
+> -	num_parents = of_clk_get_parent_count(np);
+> -	if (num_parents < 1 || num_parents > 3)
+> -		return -EINVAL;
+> -
+> -	if (num_parents > 2 && id == ISC_ISPCK)
+> -		num_parents = 2;
+> -
+> -	of_clk_parent_fill(np, parent_names, num_parents);
+> -
+> -	if (id == ISC_MCK)
+> -		of_property_read_string(np, "clock-output-names", &clk_name);
+> -	else
+> -		clk_name = "isc-ispck";
+> -
+> -	init.parent_names	= parent_names;
+> -	init.num_parents	= num_parents;
+> -	init.name		= clk_name;
+> -	init.ops		= &isc_clk_ops;
+> -	init.flags		= CLK_SET_RATE_GATE | CLK_SET_PARENT_GATE;
+> -
+> -	isc_clk = &isc->isc_clks[id];
+> -	isc_clk->hw.init	= &init;
+> -	isc_clk->regmap		= regmap;
+> -	isc_clk->id		= id;
+> -	isc_clk->dev		= isc->dev;
+> -	spin_lock_init(&isc_clk->lock);
+> -
+> -	isc_clk->clk = clk_register(isc->dev, &isc_clk->hw);
+> -	if (IS_ERR(isc_clk->clk)) {
+> -		dev_err(isc->dev, "%s: clock register fail\n", clk_name);
+> -		return PTR_ERR(isc_clk->clk);
+> -	} else if (id == ISC_MCK)
+> -		of_clk_add_provider(np, of_clk_src_simple_get, isc_clk->clk);
+> -
+> -	return 0;
+> -}
+> -
+> -int isc_clk_init(struct isc_device *isc)
+> -{
+> -	unsigned int i;
+> -	int ret;
+> -
+> -	for (i = 0; i < ARRAY_SIZE(isc->isc_clks); i++)
+> -		isc->isc_clks[i].clk = ERR_PTR(-EINVAL);
+> -
+> -	for (i = 0; i < ARRAY_SIZE(isc->isc_clks); i++) {
+> -		ret = isc_clk_register(isc, i);
+> -		if (ret)
+> -			return ret;
+> -	}
+> -
+> -	return 0;
+> -}
+> -EXPORT_SYMBOL_GPL(isc_clk_init);
+> -
+> -void isc_clk_cleanup(struct isc_device *isc)
+> -{
+> -	unsigned int i;
+> -
+> -	of_clk_del_provider(isc->dev->of_node);
+> -
+> -	for (i = 0; i < ARRAY_SIZE(isc->isc_clks); i++) {
+> -		struct isc_clk *isc_clk = &isc->isc_clks[i];
+> -
+> -		if (!IS_ERR(isc_clk->clk))
+> -			clk_unregister(isc_clk->clk);
+> -	}
+> -}
+> -EXPORT_SYMBOL_GPL(isc_clk_cleanup);
+>
+>  static int isc_queue_setup(struct vb2_queue *vq,
+>  			    unsigned int *nbuffers, unsigned int *nplanes,
+> diff --git a/drivers/media/platform/atmel/atmel-isc-clk.c b/drivers/media/platform/atmel/atmel-isc-clk.c
 > new file mode 100644
-> index 000000000000..6bc549c28e05
+> index 000000000000..2059fe376b00
 > --- /dev/null
-> +++ b/drivers/media/platform/atmel/microchip-csi2dc.c
-> @@ -0,0 +1,806 @@
+> +++ b/drivers/media/platform/atmel/atmel-isc-clk.c
+> @@ -0,0 +1,311 @@
 > +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * Microchip CSI2 Demux Controller (CSI2DC) driver
+> + * Microchip Image Sensor Controller (ISC) common clock driver setup
 > + *
-> + * Copyright (C) 2018 Microchip Technology, Inc.
+> + * Copyright (C) 2016 Microchip Technology, Inc.
 > + *
+> + * Author: Songjun Wu
 > + * Author: Eugen Hristev <eugen.hristev@microchip.com>
 > + *
 > + */
-> +
 > +#include <linux/clk.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/of_graph.h>
-> +#include <linux/platform_device.h>
+> +#include <linux/clkdev.h>
+> +#include <linux/clk-provider.h>
 > +#include <linux/pm_runtime.h>
-> +#include <linux/videodev2.h>
+> +#include <linux/regmap.h>
 > +
-> +#include <media/v4l2-fwnode.h>
-> +#include <media/v4l2-subdev.h>
+> +#include "atmel-isc-regs.h"
+> +#include "atmel-isc.h"
 > +
-> +/* Global configuration register */
-> +#define CSI2DC_GCFG			0x0
-> +
-> +/* MIPI sensor pixel clock is free running */
-> +#define CSI2DC_GCFG_MIPIFRN		BIT(0)
-> +/* GPIO parallel interface selection */
-> +#define CSI2DC_GCFG_GPIOSEL		BIT(1)
-> +/* Output waveform inter-line minimum delay */
-> +#define CSI2DC_GCFG_HLC(v)		((v) << 4)
-> +#define CSI2DC_GCFG_HLC_MASK		GENMASK(7, 4)
-> +/* SAMA7G5 requires a HLC delay of 15 */
-> +#define SAMA7G5_HLC			(15)
-> +
-> +/* Global control register */
-> +#define CSI2DC_GCTLR			0x04
-> +#define CSI2DC_GCTLR_SWRST		BIT(0)
-> +
-> +/* Global status register */
-> +#define CSI2DC_GS			0x08
-> +
-> +/* SSP interrupt status register */
-> +#define CSI2DC_SSPIS			0x28
-> +/* Pipe update register */
-> +#define CSI2DC_PU			0xc0
-> +/* Video pipe attributes update */
-> +#define CSI2DC_PU_VP			BIT(0)
-> +
-> +/* Pipe update status register */
-> +#define CSI2DC_PUS			0xc4
-> +
-> +/* Video pipeline Interrupt Status Register */
-> +#define CSI2DC_VPISR			0xf4
-> +
-> +/* Video pipeline enable register */
-> +#define CSI2DC_VPE			0xf8
-> +#define CSI2DC_VPE_ENABLE		BIT(0)
-> +
-> +/* Video pipeline configuration register */
-> +#define CSI2DC_VPCFG			0xfc
-> +/* Data type */
-> +#define CSI2DC_VPCFG_DT(v)		((v) << 0)
-> +#define CSI2DC_VPCFG_DT_MASK		GENMASK(5, 0)
-> +/* Virtual channel identifier */
-> +#define CSI2DC_VPCFG_VC(v)		((v) << 6)
-> +#define CSI2DC_VPCFG_VC_MASK		GENMASK(7, 6)
-> +/* Decompression enable */
-> +#define CSI2DC_VPCFG_DE			BIT(8)
-> +/* Decoder mode */
-> +#define CSI2DC_VPCFG_DM(v)		((v) << 9)
-> +#define CSI2DC_VPCFG_DM_DECODER8TO12	0
-> +/* Decoder predictor 2 selection */
-> +#define CSI2DC_VPCFG_DP2		BIT(12)
-> +/* Recommended memory storage */
-> +#define CSI2DC_VPCFG_RMS		BIT(13)
-> +/* Post adjustment */
-> +#define CSI2DC_VPCFG_PA			BIT(14)
-> +
-> +/* Video pipeline column register */
-> +#define CSI2DC_VPCOL			0x100
-> +/* Column number */
-> +#define CSI2DC_VPCOL_COL(v)		((v) << 0)
-> +#define CSI2DC_VPCOL_COL_MASK		GENMASK(15, 0)
-> +
-> +/* Video pipeline row register */
-> +#define CSI2DC_VPROW			0x104
-> +/* Row number */
-> +#define CSI2DC_VPROW_ROW(v)		((v) << 0)
-> +#define CSI2DC_VPROW_ROW_MASK		GENMASK(15, 0)
-> +
-> +/* Version register */
-> +#define CSI2DC_VERSION			0x1fc
-> +
-> +/* register read/write helpers */
-> +#define csi2dc_readl(st, reg)		readl_relaxed((st)->base + (reg))
-> +#define csi2dc_writel(st, reg, val)	writel_relaxed((val), \
-> +					(st)->base + (reg))
-> +
-> +/* supported RAW data types */
-> +#define CSI2DC_DT_RAW6			0x28
-> +#define CSI2DC_DT_RAW7			0x29
-> +#define CSI2DC_DT_RAW8			0x2a
-> +#define CSI2DC_DT_RAW10			0x2b
-> +#define CSI2DC_DT_RAW12			0x2c
-> +#define CSI2DC_DT_RAW14			0x2d
-> +/* YUV data types */
-> +#define CSI2DC_DT_YUV422_8B		0x1e
-> +
-> +/*
-> + * struct csi2dc_format - CSI2DC format type struct
-> + * @mbus_code:		Media bus code for the format
-> + * @dt:			Data type constant for this format
-> + */
-> +struct csi2dc_format {
-> +	u32				mbus_code;
-> +	u32				dt;
-> +};
-> +
-> +static const struct csi2dc_format csi2dc_formats[] = {
-> +	{
-> +		.mbus_code =		MEDIA_BUS_FMT_SRGGB8_1X8,
-> +		.dt =			CSI2DC_DT_RAW8,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SBGGR8_1X8,
-> +		.dt =			CSI2DC_DT_RAW8,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SGRBG8_1X8,
-> +		.dt =			CSI2DC_DT_RAW8,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SGBRG8_1X8,
-> +		.dt =			CSI2DC_DT_RAW8,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SRGGB10_1X10,
-> +		.dt =			CSI2DC_DT_RAW10,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SBGGR10_1X10,
-> +		.dt =			CSI2DC_DT_RAW10,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SGRBG10_1X10,
-> +		.dt =			CSI2DC_DT_RAW10,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_SGBRG10_1X10,
-> +		.dt =			CSI2DC_DT_RAW10,
-> +	}, {
-> +		.mbus_code =		MEDIA_BUS_FMT_YUYV8_2X8,
-> +		.dt =			CSI2DC_DT_YUV422_8B,
-> +	},
-> +};
-> +
-> +enum mipi_csi_pads {
-> +	CSI2DC_PAD_SINK			= 0,
-> +	CSI2DC_PAD_SOURCE		= 1,
-> +	CSI2DC_PADS_NUM			= 2,
-> +};
-> +
-> +/*
-> + * struct csi2dc_device - CSI2DC device driver data/config struct
-> + * @base:		Register map base address
-> + * @csi2dc_sd:		v4l2 subdevice for the csi2dc device
-> + *			This is the subdevice that the csi2dc device itself
-> + *			registers in v4l2 subsystem
-> + * @dev:		struct device for this csi2dc device
-> + * @pclk:		Peripheral clock reference
-> + *			Input clock that clocks the hardware block internal
-> + *			logic
-> + * @scck:		Sensor Controller clock reference
-> + *			Input clock that is used to generate the pixel clock
-> + * @format:		Current saved format used in g/s fmt
-> + * @cur_fmt:		Current state format
-> + * @try_fmt:		Try format that is being tried
-> + * @pads:		Media entity pads for the csi2dc subdevice
-> + * @clk_gated:		Whether the clock is gated or free running
-> + * @video_pipe:		Whether video pipeline is configured
-> + * @parallel_mode:	The underlying subdevice is connected on a parallel bus
-> + * @vc:			Current set virtual channel
-> + * @notifier:		Async notifier that is used to bound the underlying
-> + *			subdevice to the csi2dc subdevice
-> + * @input_sd:		Reference to the underlying subdevice bound to the
-> + *			csi2dc subdevice
-> + * @remote_pad:		Pad number of the underlying subdevice that is linked
-> + *			to the csi2dc subdevice sink pad.
-> + */
-> +struct csi2dc_device {
-> +	void __iomem			*base;
-> +	struct v4l2_subdev		csi2dc_sd;
-> +	struct device			*dev;
-> +	struct clk			*pclk;
-> +	struct clk			*scck;
-> +
-> +	struct v4l2_mbus_framefmt	 format;
-> +
-> +	const struct csi2dc_format	*cur_fmt;
-> +	const struct csi2dc_format	*try_fmt;
-> +
-> +	struct media_pad		pads[CSI2DC_PADS_NUM];
-> +
-> +	bool				clk_gated;
-> +	bool				video_pipe;
-> +	bool				parallel_mode;
-> +	u32				vc;
-> +
-> +	struct v4l2_async_notifier	notifier;
-> +
-> +	struct v4l2_subdev		*input_sd;
-> +
-> +	u32				remote_pad;
-> +};
-> +
-> +static inline struct csi2dc_device *
-> +csi2dc_sd_to_csi2dc_device(struct v4l2_subdev *csi2dc_sd)
+> +static int isc_wait_clk_stable(struct clk_hw *hw)
 > +{
-> +	return container_of(csi2dc_sd, struct csi2dc_device, csi2dc_sd);
-> +}
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	struct regmap *regmap = isc_clk->regmap;
+> +	unsigned long timeout = jiffies + usecs_to_jiffies(1000);
+> +	unsigned int status;
 > +
-> +static int csi2dc_enum_mbus_code(struct v4l2_subdev *csi2dc_sd,
-> +				 struct v4l2_subdev_state *sd_state,
-> +				 struct v4l2_subdev_mbus_code_enum *code)
-> +{
-> +	if (code->index >= ARRAY_SIZE(csi2dc_formats))
-> +		return -EINVAL;
+> +	while (time_before(jiffies, timeout)) {
+> +		regmap_read(regmap, ISC_CLKSR, &status);
+> +		if (!(status & ISC_CLKSR_SIP))
+> +			return 0;
 > +
-> +	code->code = csi2dc_formats[code->index].mbus_code;
-> +
-> +	return 0;
-> +}
-> +
-> +static int csi2dc_get_fmt(struct v4l2_subdev *csi2dc_sd,
-> +			  struct v4l2_subdev_state *sd_state,
-> +			  struct v4l2_subdev_format *format)
-> +{
-> +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
-> +	struct v4l2_mbus_framefmt *v4l2_try_fmt;
-> +
-> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-> +		v4l2_try_fmt = v4l2_subdev_get_try_format(csi2dc_sd, sd_state,
-> +							  format->pad);
-> +		format->format = *v4l2_try_fmt;
-> +
-> +		return 0;
+> +		usleep_range(10, 250);
 > +	}
 > +
-> +	format->format = csi2dc->format;
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static int isc_clk_prepare(struct clk_hw *hw)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	int ret;
+> +
+> +	ret = pm_runtime_resume_and_get(isc_clk->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return isc_wait_clk_stable(hw);
+> +}
+> +
+> +static void isc_clk_unprepare(struct clk_hw *hw)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +
+> +	isc_wait_clk_stable(hw);
+> +
+> +	pm_runtime_put_sync(isc_clk->dev);
+> +}
+> +
+> +static int isc_clk_enable(struct clk_hw *hw)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	u32 id = isc_clk->id;
+> +	struct regmap *regmap = isc_clk->regmap;
+> +	unsigned long flags;
+> +	unsigned int status;
+> +
+> +	dev_dbg(isc_clk->dev, "ISC CLK: %s, id = %d, div = %d, parent id = %d\n",
+> +		__func__, id, isc_clk->div, isc_clk->parent_id);
+> +
+> +	spin_lock_irqsave(&isc_clk->lock, flags);
+> +	regmap_update_bits(regmap, ISC_CLKCFG,
+> +			   ISC_CLKCFG_DIV_MASK(id) | ISC_CLKCFG_SEL_MASK(id),
+> +			   (isc_clk->div << ISC_CLKCFG_DIV_SHIFT(id)) |
+> +			   (isc_clk->parent_id << ISC_CLKCFG_SEL_SHIFT(id)));
+> +
+> +	regmap_write(regmap, ISC_CLKEN, ISC_CLK(id));
+> +	spin_unlock_irqrestore(&isc_clk->lock, flags);
+> +
+> +	regmap_read(regmap, ISC_CLKSR, &status);
+> +	if (status & ISC_CLK(id))
+> +		return 0;
+> +	else
+> +		return -EINVAL;
+> +}
+> +
+> +static void isc_clk_disable(struct clk_hw *hw)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	u32 id = isc_clk->id;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&isc_clk->lock, flags);
+> +	regmap_write(isc_clk->regmap, ISC_CLKDIS, ISC_CLK(id));
+> +	spin_unlock_irqrestore(&isc_clk->lock, flags);
+> +}
+> +
+> +static int isc_clk_is_enabled(struct clk_hw *hw)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	u32 status;
+> +	int ret;
+> +
+> +	ret = pm_runtime_resume_and_get(isc_clk->dev);
+> +	if (ret < 0)
+> +		return 0;
+> +
+> +	regmap_read(isc_clk->regmap, ISC_CLKSR, &status);
+> +
+> +	pm_runtime_put_sync(isc_clk->dev);
+> +
+> +	return status & ISC_CLK(isc_clk->id) ? 1 : 0;
+> +}
+> +
+> +static unsigned long
+> +isc_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +
+> +	return DIV_ROUND_CLOSEST(parent_rate, isc_clk->div + 1);
+> +}
+> +
+> +static int isc_clk_determine_rate(struct clk_hw *hw,
+> +				  struct clk_rate_request *req)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	long best_rate = -EINVAL;
+> +	int best_diff = -1;
+> +	unsigned int i, div;
+> +
+> +	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
+> +		struct clk_hw *parent;
+> +		unsigned long parent_rate;
+> +
+> +		parent = clk_hw_get_parent_by_index(hw, i);
+> +		if (!parent)
+> +			continue;
+> +
+> +		parent_rate = clk_hw_get_rate(parent);
+> +		if (!parent_rate)
+> +			continue;
+> +
+> +		for (div = 1; div < ISC_CLK_MAX_DIV + 2; div++) {
+> +			unsigned long rate;
+> +			int diff;
+> +
+> +			rate = DIV_ROUND_CLOSEST(parent_rate, div);
+> +			diff = abs(req->rate - rate);
+> +
+> +			if (best_diff < 0 || best_diff > diff) {
+> +				best_rate = rate;
+> +				best_diff = diff;
+> +				req->best_parent_rate = parent_rate;
+> +				req->best_parent_hw = parent;
+> +			}
+> +
+> +			if (!best_diff || rate < req->rate)
+> +				break;
+> +		}
+> +
+> +		if (!best_diff)
+> +			break;
+> +	}
+> +
+> +	dev_dbg(isc_clk->dev,
+> +		"ISC CLK: %s, best_rate = %ld, parent clk: %s @ %ld\n",
+> +		__func__, best_rate,
+> +		__clk_get_name((req->best_parent_hw)->clk),
+> +		req->best_parent_rate);
+> +
+> +	if (best_rate < 0)
+> +		return best_rate;
+> +
+> +	req->rate = best_rate;
 > +
 > +	return 0;
 > +}
 > +
-> +static int csi2dc_set_fmt(struct v4l2_subdev *csi2dc_sd,
-> +			  struct v4l2_subdev_state *sd_state,
-> +			  struct v4l2_subdev_format *req_fmt)
+> +static int isc_clk_set_parent(struct clk_hw *hw, u8 index)
 > +{
-> +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
-> +	const struct csi2dc_format *fmt, *try_fmt = NULL;
-> +	struct v4l2_mbus_framefmt *v4l2_try_fmt;
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +
+> +	if (index >= clk_hw_get_num_parents(hw))
+> +		return -EINVAL;
+> +
+> +	isc_clk->parent_id = index;
+> +
+> +	return 0;
+> +}
+> +
+> +static u8 isc_clk_get_parent(struct clk_hw *hw)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +
+> +	return isc_clk->parent_id;
+> +}
+> +
+> +static int isc_clk_set_rate(struct clk_hw *hw,
+> +			    unsigned long rate,
+> +			    unsigned long parent_rate)
+> +{
+> +	struct isc_clk *isc_clk = to_isc_clk(hw);
+> +	u32 div;
+> +
+> +	if (!rate)
+> +		return -EINVAL;
+> +
+> +	div = DIV_ROUND_CLOSEST(parent_rate, rate);
+> +	if (div > (ISC_CLK_MAX_DIV + 1) || !div)
+> +		return -EINVAL;
+> +
+> +	isc_clk->div = div - 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct clk_ops isc_clk_ops = {
+> +	.prepare	= isc_clk_prepare,
+> +	.unprepare	= isc_clk_unprepare,
+> +	.enable		= isc_clk_enable,
+> +	.disable	= isc_clk_disable,
+> +	.is_enabled	= isc_clk_is_enabled,
+> +	.recalc_rate	= isc_clk_recalc_rate,
+> +	.determine_rate	= isc_clk_determine_rate,
+> +	.set_parent	= isc_clk_set_parent,
+> +	.get_parent	= isc_clk_get_parent,
+> +	.set_rate	= isc_clk_set_rate,
+> +};
+> +
+> +static int isc_clk_register(struct isc_device *isc, unsigned int id)
+> +{
+> +	struct regmap *regmap = isc->regmap;
+> +	struct device_node *np = isc->dev->of_node;
+> +	struct isc_clk *isc_clk;
+> +	struct clk_init_data init;
+> +	const char *clk_name = np->name;
+> +	const char *parent_names[3];
+> +	int num_parents;
+> +
+> +	if (id == ISC_ISPCK && !isc->ispck_required)
+> +		return 0;
+> +
+> +	num_parents = of_clk_get_parent_count(np);
+> +	if (num_parents < 1 || num_parents > 3)
+> +		return -EINVAL;
+> +
+> +	if (num_parents > 2 && id == ISC_ISPCK)
+> +		num_parents = 2;
+> +
+> +	of_clk_parent_fill(np, parent_names, num_parents);
+> +
+> +	if (id == ISC_MCK)
+> +		of_property_read_string(np, "clock-output-names", &clk_name);
+> +	else
+> +		clk_name = "isc-ispck";
+> +
+> +	init.parent_names	= parent_names;
+> +	init.num_parents	= num_parents;
+> +	init.name		= clk_name;
+> +	init.ops		= &isc_clk_ops;
+> +	init.flags		= CLK_SET_RATE_GATE | CLK_SET_PARENT_GATE;
+> +
+> +	isc_clk = &isc->isc_clks[id];
+> +	isc_clk->hw.init	= &init;
+> +	isc_clk->regmap		= regmap;
+> +	isc_clk->id		= id;
+> +	isc_clk->dev		= isc->dev;
+> +	spin_lock_init(&isc_clk->lock);
+> +
+> +	isc_clk->clk = clk_register(isc->dev, &isc_clk->hw);
+> +	if (IS_ERR(isc_clk->clk)) {
+> +		dev_err(isc->dev, "%s: clock register fail\n", clk_name);
+> +		return PTR_ERR(isc_clk->clk);
+> +	} else if (id == ISC_MCK) {
+> +		of_clk_add_provider(np, of_clk_src_simple_get, isc_clk->clk);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int isc_clk_init(struct isc_device *isc)
+> +{
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(isc->isc_clks); i++)
+> +		isc->isc_clks[i].clk = ERR_PTR(-EINVAL);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(isc->isc_clks); i++) {
+> +		ret = isc_clk_register(isc, i);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(isc_clk_init);
+> +
+> +void isc_clk_cleanup(struct isc_device *isc)
+> +{
 > +	unsigned int i;
 > +
-> +	/*
-> +	 * Setting the source pad is disabled.
-> +	 * The same format is being propagated from the sink to source.
-> +	 */
-> +	if (req_fmt->pad == CSI2DC_PAD_SOURCE)
-> +		return -EINVAL;
+> +	of_clk_del_provider(isc->dev->of_node);
 > +
-> +	for (i = 0; i < ARRAY_SIZE(csi2dc_formats);  i++) {
-> +		fmt = &csi2dc_formats[i];
-> +		if (req_fmt->format.code == fmt->mbus_code)
-> +			try_fmt = fmt;
-> +		fmt++;
+> +	for (i = 0; i < ARRAY_SIZE(isc->isc_clks); i++) {
+> +		struct isc_clk *isc_clk = &isc->isc_clks[i];
+> +
+> +		if (!IS_ERR(isc_clk->clk))
+> +			clk_unregister(isc_clk->clk);
 > +	}
-> +
-> +	/* in case we could not find the desired format, default to something */
-> +	if (!try_fmt) {
-> +		try_fmt = &csi2dc_formats[0];
-> +
-> +		dev_dbg(csi2dc->dev,
-> +			"CSI2DC unsupported format 0x%x, defaulting to 0x%x\n",
-> +			req_fmt->format.code, csi2dc_formats[0].mbus_code);
-> +	}
-> +
-> +	req_fmt->format.code = try_fmt->mbus_code;
-> +	req_fmt->format.colorspace = V4L2_COLORSPACE_SRGB;
-> +	req_fmt->format.field = V4L2_FIELD_NONE;
-> +
-> +	if (req_fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> +		v4l2_try_fmt = v4l2_subdev_get_try_format(csi2dc_sd, sd_state,
-> +							  req_fmt->pad);
-> +		*v4l2_try_fmt = req_fmt->format;
-> +		/* Trying on the sink pad makes the source pad change too */
-> +		v4l2_try_fmt = v4l2_subdev_get_try_format(csi2dc_sd,
-> +							  sd_state,
-> +							  CSI2DC_PAD_SOURCE);
-> +		*v4l2_try_fmt = req_fmt->format;
-> +
-> +		/* if we are just trying, we are done */
-> +		return 0;
-> +	}
-> +
-> +	/* save the format for later requests */
-> +	csi2dc->format = req_fmt->format;
-> +
-> +	/* update config */
-> +	csi2dc->cur_fmt = try_fmt;
-> +
-> +	dev_dbg(csi2dc->dev, "new format set: 0x%x @%dx%d\n",
-> +		csi2dc->format.code, csi2dc->format.width,
-> +		csi2dc->format.height);
-> +
-> +	return 0;
 > +}
-> +
-> +static int csi2dc_power(struct csi2dc_device *csi2dc, int on)
-> +{
-> +	int ret = 0;
-> +
-> +	if (on) {
-> +		ret = clk_prepare_enable(csi2dc->pclk);
-> +		if (ret) {
-> +			dev_err(csi2dc->dev, "failed to enable pclk:%d\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		ret = clk_prepare_enable(csi2dc->scck);
-> +		if (ret) {
-> +			dev_err(csi2dc->dev, "failed to enable scck:%d\n", ret);
-> +			clk_disable_unprepare(csi2dc->pclk);
-> +			return ret;
-> +		}
-> +
-> +		/* if powering up, deassert reset line */
-> +		csi2dc_writel(csi2dc, CSI2DC_GCTLR, CSI2DC_GCTLR_SWRST);
-> +	} else {
-> +		/* if powering down, assert reset line */
-> +		csi2dc_writel(csi2dc, CSI2DC_GCTLR, 0);
-> +
-> +		clk_disable_unprepare(csi2dc->scck);
-> +		clk_disable_unprepare(csi2dc->pclk);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int csi2dc_get_mbus_config(struct csi2dc_device *csi2dc)
-> +{
-> +	struct v4l2_mbus_config mbus_config = { 0 };
-> +	int ret;
-> +
-> +	ret = v4l2_subdev_call(csi2dc->input_sd, pad, get_mbus_config,
-> +			       csi2dc->remote_pad, &mbus_config);
-> +	if (ret == -ENOIOCTLCMD) {
-> +		dev_dbg(csi2dc->dev,
-> +			"no remote mbus configuration available\n");
-> +		goto csi2dc_get_mbus_config_defaults;
-> +	}
-> +
-> +	if (ret) {
-> +		dev_err(csi2dc->dev,
-> +			"failed to get remote mbus configuration\n");
-> +		goto csi2dc_get_mbus_config_defaults;
-> +	}
-> +
-> +	if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_0)
-> +		csi2dc->vc = 0;
-> +	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_1)
-> +		csi2dc->vc = 1;
-> +	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_2)
-> +		csi2dc->vc = 2;
-> +	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_3)
-> +		csi2dc->vc = 3;
-> +
-> +	dev_dbg(csi2dc->dev, "subdev sending on channel %d\n", csi2dc->vc);
-> +
-> +	csi2dc->clk_gated = mbus_config.flags &
-> +				V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
-> +
-> +	dev_dbg(csi2dc->dev, "mbus_config: %s clock\n",
-> +		csi2dc->clk_gated ? "gated" : "free running");
-> +
-> +	return 0;
-> +
-> +csi2dc_get_mbus_config_defaults:
-> +	csi2dc->vc = 0; /* Virtual ID 0 by default */
-> +
-> +	return 0;
-> +}
-> +
-> +static void csi2dc_vp_update(struct csi2dc_device *csi2dc)
-> +{
-> +	u32 vp, gcfg;
-> +
-> +	if (!csi2dc->video_pipe) {
-> +		dev_err(csi2dc->dev, "video pipeline unavailable\n");
-> +		return;
-> +	}
-> +
-> +	if (csi2dc->parallel_mode) {
-> +		/* In parallel mode, GPIO parallel interface must be selected */
-> +		gcfg = csi2dc_readl(csi2dc, CSI2DC_GCFG);
-> +		gcfg |= CSI2DC_GCFG_GPIOSEL;
-> +		csi2dc_writel(csi2dc, CSI2DC_GCFG, gcfg);
-> +		return;
-> +	}
-> +
-> +	/* serial video pipeline */
-> +
-> +	csi2dc_writel(csi2dc, CSI2DC_GCFG,
-> +		      (SAMA7G5_HLC & CSI2DC_GCFG_HLC_MASK) |
-> +		      (csi2dc->clk_gated ? 0 : CSI2DC_GCFG_MIPIFRN));
-> +
-> +	vp = CSI2DC_VPCFG_DT(csi2dc->cur_fmt->dt) & CSI2DC_VPCFG_DT_MASK;
-> +	vp |= CSI2DC_VPCFG_VC(csi2dc->vc) & CSI2DC_VPCFG_VC_MASK;
-> +	vp &= ~CSI2DC_VPCFG_DE;
-> +	vp |= CSI2DC_VPCFG_DM(CSI2DC_VPCFG_DM_DECODER8TO12);
-> +	vp &= ~CSI2DC_VPCFG_DP2;
-> +	vp &= ~CSI2DC_VPCFG_RMS;
-> +	vp |= CSI2DC_VPCFG_PA;
-> +
-> +	csi2dc_writel(csi2dc, CSI2DC_VPCFG, vp);
-> +	csi2dc_writel(csi2dc, CSI2DC_VPE, CSI2DC_VPE_ENABLE);
-> +	csi2dc_writel(csi2dc, CSI2DC_PU, CSI2DC_PU_VP);
-> +}
-> +
-> +static int csi2dc_s_stream(struct v4l2_subdev *csi2dc_sd, int enable)
-> +{
-> +	struct csi2dc_device *csi2dc = csi2dc_sd_to_csi2dc_device(csi2dc_sd);
-> +	int ret;
-> +
-> +	if (enable) {
-> +		ret = pm_runtime_resume_and_get(csi2dc->dev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		csi2dc_get_mbus_config(csi2dc);
-> +
-> +		csi2dc_vp_update(csi2dc);
-> +
-> +		return v4l2_subdev_call(csi2dc->input_sd, video, s_stream,
-> +					true);
-> +	}
-> +
-> +	dev_dbg(csi2dc->dev,
-> +		"Last frame received: VPCOLR = %u, VPROWR= %u, VPISR = %x\n",
-> +		csi2dc_readl(csi2dc, CSI2DC_VPCOL),
-> +		csi2dc_readl(csi2dc, CSI2DC_VPROW),
-> +		csi2dc_readl(csi2dc, CSI2DC_VPISR));
-> +
-> +	/* stop streaming scenario */
-> +	ret = v4l2_subdev_call(csi2dc->input_sd, video, s_stream, false);
-> +
-> +	pm_runtime_put_sync(csi2dc->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int csi2dc_init_cfg(struct v4l2_subdev *csi2dc_sd,
-> +			   struct v4l2_subdev_state *sd_state)
-> +{
-> +	struct v4l2_mbus_framefmt *v4l2_try_fmt =
-> +		v4l2_subdev_get_try_format(csi2dc_sd, sd_state, 0);
-> +
-> +	v4l2_try_fmt->height = 480;
-> +	v4l2_try_fmt->width = 640;
-> +	v4l2_try_fmt->code = csi2dc_formats[0].mbus_code;
-> +	v4l2_try_fmt->colorspace = V4L2_COLORSPACE_SRGB;
-> +	v4l2_try_fmt->field = V4L2_FIELD_NONE;
-> +	v4l2_try_fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> +	v4l2_try_fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
-> +	v4l2_try_fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct v4l2_subdev_pad_ops csi2dc_pad_ops = {
-> +	.enum_mbus_code = csi2dc_enum_mbus_code,
-> +	.set_fmt = csi2dc_set_fmt,
-> +	.get_fmt = csi2dc_get_fmt,
-> +	.init_cfg = csi2dc_init_cfg,
-> +};
-> +
-> +static const struct v4l2_subdev_video_ops csi2dc_video_ops = {
-> +	.s_stream = csi2dc_s_stream,
-> +};
-> +
-> +static const struct v4l2_subdev_ops csi2dc_subdev_ops = {
-> +	.pad = &csi2dc_pad_ops,
-> +	.video = &csi2dc_video_ops,
-> +};
-> +
-> +static int csi2dc_async_bound(struct v4l2_async_notifier *notifier,
-> +			      struct v4l2_subdev *subdev,
-> +			      struct v4l2_async_subdev *asd)
-> +{
-> +	struct csi2dc_device *csi2dc = container_of(notifier,
-> +						struct csi2dc_device, notifier);
-> +	int pad;
-> +	int ret;
-> +
-> +	csi2dc->input_sd = subdev;
-> +
-> +	pad = media_entity_get_fwnode_pad(&subdev->entity, asd->match.fwnode,
-> +					  MEDIA_PAD_FL_SOURCE);
-> +	if (pad < 0) {
-> +		dev_err(csi2dc->dev, "Failed to find pad for %s\n",
-> +			subdev->name);
-> +		return pad;
-> +	}
-> +
-> +	csi2dc->remote_pad = pad;
-> +
-> +	ret = media_create_pad_link(&csi2dc->input_sd->entity,
-> +				    csi2dc->remote_pad,
-> +				    &csi2dc->csi2dc_sd.entity, 0,
-> +				    MEDIA_LNK_FL_ENABLED);
-> +	if (ret) {
-> +		dev_err(csi2dc->dev,
-> +			"Failed to create pad link: %s to %s\n",
-> +			csi2dc->input_sd->entity.name,
-> +			csi2dc->csi2dc_sd.entity.name);
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(csi2dc->dev, "link with %s pad: %d\n",
-> +		csi2dc->input_sd->name, csi2dc->remote_pad);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct v4l2_async_notifier_operations csi2dc_async_ops = {
-> +	.bound = csi2dc_async_bound,
-> +};
-> +
-> +static int csi2dc_prepare_notifier(struct csi2dc_device *csi2dc,
-> +				   struct fwnode_handle *input_fwnode)
-> +{
-> +	struct v4l2_async_subdev *asd;
-> +	int ret = 0;
-> +
-> +	v4l2_async_nf_init(&csi2dc->notifier);
-> +
-> +	asd = v4l2_async_nf_add_fwnode_remote(&csi2dc->notifier,
-> +					      input_fwnode,
-> +					      struct v4l2_async_subdev);
-> +
-> +	fwnode_handle_put(input_fwnode);
-> +
-> +	if (IS_ERR(asd)) {
-> +		ret = PTR_ERR(asd);
-> +		dev_err(csi2dc->dev,
-> +			"failed to add async notifier for node %pOF: %d\n",
-> +			to_of_node(input_fwnode), ret);
-> +		v4l2_async_nf_cleanup(&csi2dc->notifier);
-> +		return ret;
-> +	}
-> +
-> +	csi2dc->notifier.ops = &csi2dc_async_ops;
-> +
-> +	ret = v4l2_async_subdev_nf_register(&csi2dc->csi2dc_sd,
-> +					    &csi2dc->notifier);
-> +	if (ret) {
-> +		dev_err(csi2dc->dev, "fail to register async notifier: %d\n",
-> +			ret);
-> +		v4l2_async_nf_cleanup(&csi2dc->notifier);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int csi2dc_of_parse(struct csi2dc_device *csi2dc,
-> +			   struct device_node *of_node)
-> +{
-> +	struct fwnode_handle *input_fwnode, *output_fwnode;
-> +	struct v4l2_fwnode_endpoint input_endpoint = { 0 },
-> +				    output_endpoint = { 0 };
-> +	int ret;
-> +
-> +	input_fwnode = fwnode_graph_get_next_endpoint(of_fwnode_handle(of_node),
-> +						      NULL);
-> +	if (!input_fwnode) {
-> +		dev_err(csi2dc->dev,
-> +			"missing port node at %pOF, input node is mandatory.\n",
-> +			of_node);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = v4l2_fwnode_endpoint_parse(input_fwnode, &input_endpoint);
-> +	if (ret) {
-> +		dev_err(csi2dc->dev, "endpoint not defined at %pOF\n", of_node);
-> +		goto csi2dc_of_parse_err;
-> +	}
-> +
-> +	if (input_endpoint.bus_type == V4L2_MBUS_PARALLEL ||
-> +	    input_endpoint.bus_type == V4L2_MBUS_BT656) {
-> +		csi2dc->parallel_mode = true;
-> +		dev_dbg(csi2dc->dev,
-> +			"subdevice connected on parallel interface\n");
-> +	}
-> +
-> +	if (input_endpoint.bus_type == V4L2_MBUS_CSI2_DPHY) {
-> +		csi2dc->clk_gated = input_endpoint.bus.mipi_csi2.flags &
-> +					V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
-> +		dev_dbg(csi2dc->dev,
-> +			"subdevice connected on serial interface\n");
-> +		dev_dbg(csi2dc->dev, "DT: %s clock\n",
-> +			csi2dc->clk_gated ? "gated" : "free running");
-> +	}
-> +
-> +	output_fwnode = fwnode_graph_get_next_endpoint
-> +				(of_fwnode_handle(of_node), input_fwnode);
-> +
-> +	if (output_fwnode)
-> +		ret = v4l2_fwnode_endpoint_parse(output_fwnode,
-> +						 &output_endpoint);
-> +
-> +	fwnode_handle_put(output_fwnode);
-> +
-> +	if (!output_fwnode || ret) {
-> +		dev_info(csi2dc->dev,
-> +			 "missing output node at %pOF, data pipe available only.\n",
-> +			 of_node);
-> +	} else {
-> +		if (output_endpoint.bus_type != V4L2_MBUS_PARALLEL &&
-> +		    output_endpoint.bus_type != V4L2_MBUS_BT656) {
-> +			dev_err(csi2dc->dev,
-> +				"output port must be parallel/bt656.\n");
-> +			ret = -EINVAL;
-> +			goto csi2dc_of_parse_err;
-> +		}
-> +
-> +		csi2dc->video_pipe = true;
-> +
-> +		dev_dbg(csi2dc->dev,
-> +			"block %pOF [%d.%d]->[%d.%d] video pipeline\n",
-> +			of_node, input_endpoint.base.port,
-> +			input_endpoint.base.id, output_endpoint.base.port,
-> +			output_endpoint.base.id);
-> +	}
-> +
-> +	/* prepare async notifier for subdevice completion */
-> +	return csi2dc_prepare_notifier(csi2dc, input_fwnode);
-> +
-> +csi2dc_of_parse_err:
-> +	fwnode_handle_put(input_fwnode);
-> +	return ret;
-> +}
-> +
-> +static void csi2dc_default_format(struct csi2dc_device *csi2dc)
-> +{
-> +	csi2dc->cur_fmt = &csi2dc_formats[0];
-> +
-> +	csi2dc->format.height = 480;
-> +	csi2dc->format.width = 640;
-> +	csi2dc->format.code = csi2dc_formats[0].mbus_code;
-> +	csi2dc->format.colorspace = V4L2_COLORSPACE_SRGB;
-> +	csi2dc->format.field = V4L2_FIELD_NONE;
-> +	csi2dc->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> +	csi2dc->format.quantization = V4L2_QUANTIZATION_DEFAULT;
-> +	csi2dc->format.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> +}
-> +
-> +static int csi2dc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct csi2dc_device *csi2dc;
-> +	int ret = 0;
-> +	u32 ver;
-> +
-> +	csi2dc = devm_kzalloc(dev, sizeof(*csi2dc), GFP_KERNEL);
-> +	if (!csi2dc)
-> +		return -ENOMEM;
-> +
-> +	csi2dc->dev = dev;
-> +
-> +	csi2dc->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(csi2dc->base)) {
-> +		dev_err(dev, "base address not set\n");
-> +		return PTR_ERR(csi2dc->base);
-> +	}
-> +
-> +	csi2dc->pclk = devm_clk_get(dev, "pclk");
-> +	if (IS_ERR(csi2dc->pclk)) {
-> +		ret = PTR_ERR(csi2dc->pclk);
-> +		dev_err(dev, "failed to get pclk: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	csi2dc->scck = devm_clk_get(dev, "scck");
-> +	if (IS_ERR(csi2dc->scck)) {
-> +		ret = PTR_ERR(csi2dc->scck);
-> +		dev_err(dev, "failed to get scck: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	v4l2_subdev_init(&csi2dc->csi2dc_sd, &csi2dc_subdev_ops);
-> +
-> +	csi2dc->csi2dc_sd.owner = THIS_MODULE;
-> +	csi2dc->csi2dc_sd.dev = dev;
-> +	snprintf(csi2dc->csi2dc_sd.name, sizeof(csi2dc->csi2dc_sd.name),
-> +		 "csi2dc");
-> +
-> +	csi2dc->csi2dc_sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	csi2dc->csi2dc_sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> +
-> +	platform_set_drvdata(pdev, csi2dc);
-> +
-> +	ret = csi2dc_of_parse(csi2dc, dev->of_node);
-> +	if (ret)
-> +		goto csi2dc_probe_cleanup_entity;
-> +
-> +	csi2dc->pads[CSI2DC_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
-> +	if (csi2dc->video_pipe)
-> +		csi2dc->pads[CSI2DC_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-> +
-> +	ret = media_entity_pads_init(&csi2dc->csi2dc_sd.entity,
-> +				     csi2dc->video_pipe ? CSI2DC_PADS_NUM : 1,
-> +				     csi2dc->pads);
-> +	if (ret < 0) {
-> +		dev_err(dev, "media entity init failed\n");
-> +		goto csi2dc_probe_cleanup_notifier;
-> +	}
-> +
-> +	csi2dc_default_format(csi2dc);
-> +
-> +	/* turn power on to validate capabilities */
-> +	ret = csi2dc_power(csi2dc, true);
-> +	if (ret < 0)
-> +		goto csi2dc_probe_cleanup_notifier;
-> +
-> +	pm_runtime_set_active(dev);
-> +	pm_runtime_enable(dev);
-> +	ver = csi2dc_readl(csi2dc, CSI2DC_VERSION);
-> +
-> +	/*
-> +	 * we must register the subdev after PM runtime has been requested,
-> +	 * otherwise we might bound immediately and request pm_runtime_resume
-> +	 * before runtime_enable.
-> +	 */
-> +	ret = v4l2_async_register_subdev(&csi2dc->csi2dc_sd);
-> +	if (ret) {
-> +		dev_err(csi2dc->dev, "failed to register the subdevice\n");
-> +		goto csi2dc_probe_cleanup_notifier;
-> +	}
-> +
-> +	dev_info(dev, "Microchip CSI2DC version %x\n", ver);
-> +
-> +	return 0;
-> +
-> +csi2dc_probe_cleanup_notifier:
-> +	v4l2_async_nf_cleanup(&csi2dc->notifier);
-> +csi2dc_probe_cleanup_entity:
-> +	media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
-> +
-> +	return ret;
-> +}
-> +
-> +static int csi2dc_remove(struct platform_device *pdev)
-> +{
-> +	struct csi2dc_device *csi2dc = platform_get_drvdata(pdev);
-> +
-> +	pm_runtime_disable(&pdev->dev);
-> +
-> +	v4l2_async_unregister_subdev(&csi2dc->csi2dc_sd);
-> +	v4l2_async_nf_unregister(&csi2dc->notifier);
-> +	v4l2_async_nf_cleanup(&csi2dc->notifier);
-> +	media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused csi2dc_runtime_suspend(struct device *dev)
-> +{
-> +	struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
-> +
-> +	return csi2dc_power(csi2dc, false);
-> +}
-> +
-> +static int __maybe_unused csi2dc_runtime_resume(struct device *dev)
-> +{
-> +	struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
-> +
-> +	return csi2dc_power(csi2dc, true);
-> +}
-> +
-> +static const struct dev_pm_ops csi2dc_dev_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(csi2dc_runtime_suspend, csi2dc_runtime_resume, NULL)
-> +};
-> +
-> +static const struct of_device_id csi2dc_of_match[] = {
-> +	{ .compatible = "microchip,sama7g5-csi2dc" },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, csi2dc_of_match);
-> +
-> +static struct platform_driver csi2dc_driver = {
-> +	.probe	= csi2dc_probe,
-> +	.remove = csi2dc_remove,
-> +	.driver = {
-> +		.name =			"microchip-csi2dc",
-> +		.pm =			&csi2dc_dev_pm_ops,
-> +		.of_match_table =	of_match_ptr(csi2dc_of_match),
-> +	},
-> +};
-> +
-> +module_platform_driver(csi2dc_driver);
-> +
-> +MODULE_AUTHOR("Eugen Hristev <eugen.hristev@microchip.com>");
-> +MODULE_DESCRIPTION("Microchip CSI2 Demux Controller driver");
-> +MODULE_LICENSE("GPL v2");
+> +EXPORT_SYMBOL_GPL(isc_clk_cleanup);
+> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
+> index 2bfcb135ef13..32448ccfc636 100644
+> --- a/drivers/media/platform/atmel/atmel-isc.h
+> +++ b/drivers/media/platform/atmel/atmel-isc.h
+> @@ -10,6 +10,13 @@
+>   */
+>  #ifndef _ATMEL_ISC_H_
+>
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/videobuf2-dma-contig.h>
+> +
+>  #define ISC_CLK_MAX_DIV		255
+>
+>  enum isc_clk_id {
 > --
 > 2.25.1
 >

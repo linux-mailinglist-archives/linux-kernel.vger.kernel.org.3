@@ -2,116 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9C948B42D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A798348B42F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344148AbiAKRmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:42:49 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18938 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S242080AbiAKRmq (ORCPT
+        id S1344514AbiAKRnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:43:08 -0500
+Received: from mail.efficios.com ([167.114.26.124]:49186 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344029AbiAKRnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:42:46 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BGSdPl017935;
-        Tue, 11 Jan 2022 17:42:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=U9DKN7yJOm6yWmgJE4uAJHZUxcEBhqMocB7Ph9SjtzY=;
- b=og64v9yN27fgaLDxBvViJnOr1+559p2oy3W+hKFy5OrfwU/hgCOqWAvjmsxlVw84EF+W
- Qlch2iv6WgZBSGO+ADBtYpP+reAO06M+BCbuTWgI8Wd2H+QADBgbLyOTbdbOtLZ1afmE
- Kvt5DeT7OmsgavdyCuV9QZ5DpccZmTxHHbq01D5ubRlDHNJbhahnSDLVw7qtw7q4O6hQ
- 5ro1BQaFcOmXNL7w4yYfNSbuZeWR4heZ01Ls/6eD9Fswmzwgluh5Pi+WLBAWlPnGtcmY
- lrMVwKzcM2NsiunVM3dwaciMBppjDce2j7wm4SHY9gTovoTWXGz7kZ+xIdCMf3/EvCIG rQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dhdeut2dx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:42:42 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BHYoag031285;
-        Tue, 11 Jan 2022 17:42:42 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dhdeut2dk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:42:42 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BHfsth019424;
-        Tue, 11 Jan 2022 17:42:40 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3df289jepx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:42:40 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BHgcFb45154638
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 17:42:38 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07BAA4C062;
-        Tue, 11 Jan 2022 17:42:38 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 92BE34C04A;
-        Tue, 11 Jan 2022 17:42:37 +0000 (GMT)
-Received: from [9.145.30.70] (unknown [9.145.30.70])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 17:42:37 +0000 (GMT)
-Message-ID: <e0282429-49b3-c22c-fa02-81d2e1aee8d8@linux.ibm.com>
-Date:   Tue, 11 Jan 2022 18:42:37 +0100
+        Tue, 11 Jan 2022 12:43:07 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id BF0849E0B2;
+        Tue, 11 Jan 2022 12:43:06 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id xUJmegCQTBfR; Tue, 11 Jan 2022 12:43:06 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 129E19E028;
+        Tue, 11 Jan 2022 12:43:06 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 129E19E028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1641922986;
+        bh=xBh+V9iay3cToS0t36FKQFANnpaQbWaUYYK4vn8gyhc=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=jkvNSj2pR4No50UgXn+NKaXeDld/g/F3K8ELsXWojlP5PrCT0BPMugHlS47TZrTbm
+         MIcsHF0qlD2BnYjvFcdQY31meuOFl/S4rI0oUODCGzL4uZf+aWjAivTV77HAREk2pl
+         NZoiN5X7gQkQN8hPg+Raqi83s2Hdyk8YIfX3mi3KwazT6rc0iUxoAu5xZfM2X5EGTs
+         uIyGPqqwIQFH229z9iBTTzwbXBgbx+9Tj3JjnqGGmMZcZGrRzA1cuWUazyUWkNd0MZ
+         4bBpYUW+AduMrER1Hl76Ssddpz2OfjIdSNvT73X6ARW0GcWxX/c1Gv80j8mE5y2hjk
+         uIrwt4ctSsZZA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id CsoC32ApfVrI; Tue, 11 Jan 2022 12:43:06 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id DCDDE9E23B;
+        Tue, 11 Jan 2022 12:43:05 -0500 (EST)
+Date:   Tue, 11 Jan 2022 12:43:05 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@ACULAB.COM>,
+        carlos <carlos@redhat.com>
+Message-ID: <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220111110556.inteixgtl5vpmka7@wittgenstein>
+References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com> <20220111110556.inteixgtl5vpmka7@wittgenstein>
+Subject: Re: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH net 3/3] net/smc: Resolve the race between SMC-R link
- access and clear
-Content-Language: en-US
-To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641806784-93141-1-git-send-email-guwen@linux.alibaba.com>
- <1641806784-93141-4-git-send-email-guwen@linux.alibaba.com>
- <8f13aa62-6360-8038-3041-86fd51b40a3e@linux.ibm.com>
- <fa057e34-7626-2b19-2c2e-acd4999e7fe5@linux.alibaba.com>
- <b1882268-d8bb-eee9-8238-e30962928034@linux.ibm.com>
- <eecadb47-92f3-c4cc-64d2-3954474e3c5f@linux.alibaba.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <eecadb47-92f3-c4cc-64d2-3954474e3c5f@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: G5WsMFeNbOUszKYjsl24twe_5-sbAiWZ
-X-Proofpoint-ORIG-GUID: mJVC8O5uzExzCsp5B8ZHb8w03Qkf2smh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 bulkscore=0 mlxscore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110095
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
+Thread-Topic: rseq: x86: implement abort-at-ip extension
+Thread-Index: gVz1eiEL8mZgJB0IBKSKfeVQDSFc0g==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 17:44, Wen Gu wrote:
-> 
-> 
-> On 2022/1/12 00:02, Karsten Graul wrote:
->> On 11/01/2022 16:49, Wen Gu wrote:
->>>
->>> OK, I will correct this as well.
->>>
->>> And similarly I want to move smc_ibdev_cnt_dec() and put_device() to
->>> __smcr_link_clear() as well to ensure that put link related resources
->>> only when link is actually cleared. What do you think?
->>
->> I think that's a good idea, yes.
-> 
-> Thank you.
-> 
-> Not in a hurry, just want to ask should I send a v2 with these changes
-> or continue to wait for subsequent review of v1?
-> 
+----- On Jan 11, 2022, at 6:05 AM, Christian Brauner brauner@kernel.org wrote:
 
-Yeah I think its time for a v2, thank you!
+> On Mon, Jan 10, 2022 at 12:16:10PM -0500, Mathieu Desnoyers wrote:
+>> Allow rseq critical section abort handlers to optionally figure out at
+>> which instruction pointer the rseq critical section was aborted.
+>> 
+>> This allows implementing rseq critical sections with loops containing
+>> the commit instruction, for which having the commit as last instruction
+>> of the sequence is not possible.  This is useful to implement adaptative
+>> mutexes aware of preemption in user-space. (see [1])
+>> 
+>> This also allows implementing rseq critical sections with multiple
+>> commit steps, and use the abort-at-ip information to figure out what
+>> needs to be undone in the abort handler.
+>> 
+>> Introduce the RSEQ_FLAG_QUERY_ABORT_AT_IP rseq system call flag.  This
+>> lets userspace query whether the kernel and architecture supports the
+>> abort-at-ip rseq extension.
+>> 
+>> Only provide this information for rseq critical sections for which the
+>> rseq_cs descriptor has the RSEQ_CS_FLAG_ABORT_AT_IP flag set.  Abort
+>> handlers for critical sections with this flag set need to readjust the
+>> stack pointer.  The abort-at-ip pointer is populated by the kernel on
+>> the top of stack on abort.  For x86-32, the abort handler of an
+>> abort-at-ip critical section needs to add 4 bytes to the stack pointer.
+>> For x86-64, the abort hanler needs to add 136 bytes to the stack
+>> pointer: 8 bytes to skip the abort-at-ip value, and 128 bytes to skip
+>> the x86-64 redzone for leaf functions.
+>> 
+>> [1]
+>> https://github.com/compudj/rseq-test/blob/adapt-lock-abort-at-ip/test-rseq-adaptative-lock.c#L80
+>> 
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> ---
+>> Changes since v1:
+>> - Use top of stack to place abort-at-ip value rather than ecx/rcx
+>>   register,
+>> - Skip redzone on x86-64.
+>> ---
+>>  arch/x86/include/asm/ptrace.h |  5 +++++
+>>  arch/x86/kernel/ptrace.c      | 12 ++++++++++++
+>>  include/uapi/linux/rseq.h     |  4 ++++
+>>  kernel/rseq.c                 | 28 ++++++++++++++++++++++++++++
+>>  4 files changed, 49 insertions(+)
+>> 
+>> diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+>> index 703663175a5a..c96eb2448110 100644
+>> --- a/arch/x86/include/asm/ptrace.h
+>> +++ b/arch/x86/include/asm/ptrace.h
+>> @@ -387,5 +387,10 @@ extern int do_set_thread_area(struct task_struct *p, int
+>> idx,
+>>  # define do_set_thread_area_64(p, s, t)	(0)
+>>  #endif
+>>  
+>> +#ifdef CONFIG_RSEQ
+>> +# define RSEQ_ARCH_HAS_ABORT_AT_IP
+>> +int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip);
+>> +#endif
+>> +
+>>  #endif /* !__ASSEMBLY__ */
+>>  #endif /* _ASM_X86_PTRACE_H */
+>> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+>> index 6d2244c94799..561ed98d12ba 100644
+>> --- a/arch/x86/kernel/ptrace.c
+>> +++ b/arch/x86/kernel/ptrace.c
+>> @@ -1368,3 +1368,15 @@ void user_single_step_report(struct pt_regs *regs)
+>>  {
+>>  	send_sigtrap(regs, 0, TRAP_BRKPT);
+>>  }
+>> +
+>> +int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip)
+>> +{
+>> +	if (user_64bit_mode(regs)) {
+>> +		/* Need to skip redzone for leaf functions. */
+>> +		regs->sp -= sizeof(u64) + 128;
+>> +		return put_user(ip, (u64 __user *)regs->sp);
+>> +	} else {
+>> +		regs->sp -= sizeof(u32);
+>> +		return put_user(ip, (u32 __user *)regs->sp);
+>> +	}
+> 
+> I think it would be really helpful if you added the full explanation for
+> sizeof(u64) + 128 or -sizeof(u32) into this codepath or provide
+> constants. For folks not familiar with stuff like this it'll look like
+> magic numbers. :)
 
+Good point, here is the planned update:
+
+int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip)
+{
+        if (user_64bit_mode(regs)) {
+                /*
+                 * rseq abort-at-ip x86-64 ABI: stack pointer is decremented to
+                 * skip the redzone (128 bytes on x86-64), and decremented of
+                 * the pointer size (8 bytes).  The aborted address (abort-at-ip)
+                 * is stored at this updated stack pointer location (top of stack).
+                 *
+                 * Skipping the redzone is needed to make sure not to corrupt
+                 * stack data when the rseq critical section is within a leaf
+                 * function.
+                 */
+                regs->sp -= sizeof(u64) + 128;
+                return put_user(ip, (u64 __user *)regs->sp);
+        } else {
+                /*
+                 * rseq abort-at-ip x86-32 ABI: stack pointer is decremented of
+                 * the pointer size (4 bytes).  The aborted address (abort-at-ip)
+                 * is stored at this updated stack pointer location (top of stack).
+                 */
+                regs->sp -= sizeof(u32);
+                return put_user(ip, (u32 __user *)regs->sp);
+        }
+}
+
+
+
+> 
+>> +}
+>> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+>> index 9a402fdb60e9..3130232e6d0c 100644
+>> --- a/include/uapi/linux/rseq.h
+>> +++ b/include/uapi/linux/rseq.h
+>> @@ -20,12 +20,14 @@ enum rseq_cpu_id_state {
+>>  
+>>  enum rseq_flags {
+>>  	RSEQ_FLAG_UNREGISTER = (1 << 0),
+>> +	RSEQ_FLAG_QUERY_ABORT_AT_IP = (1 << 1),
+>>  };
+>>  
+>>  enum rseq_cs_flags_bit {
+>>  	RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT	= 0,
+>>  	RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT	= 1,
+>>  	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT	= 2,
+>> +	RSEQ_CS_FLAG_ABORT_AT_IP_BIT		= 3,
+>>  };
+>>  
+>>  enum rseq_cs_flags {
+>> @@ -35,6 +37,8 @@ enum rseq_cs_flags {
+>>  		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
+>>  	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE	=
+>>  		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
+>> +	RSEQ_CS_FLAG_ABORT_AT_IP		=
+>> +		(1U << RSEQ_CS_FLAG_ABORT_AT_IP_BIT),
+>>  };
+>>  
+>>  /*
+>> diff --git a/kernel/rseq.c b/kernel/rseq.c
+>> index 6d45ac3dae7f..fb52f2d11b56 100644
+>> --- a/kernel/rseq.c
+>> +++ b/kernel/rseq.c
+>> @@ -21,6 +21,13 @@
+>>  #define RSEQ_CS_PREEMPT_MIGRATE_FLAGS (RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE | \
+>>  				       RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT)
+>>  
+>> +#ifdef RSEQ_ARCH_HAS_ABORT_AT_IP
+>> +static bool rseq_has_abort_at_ip(void) { return true; }
+>> +#else
+>> +static bool rseq_has_abort_at_ip(void) { return false; }
+>> +static int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip) { return 0;
+>> }
+>> +#endif
+>> +
+>>  /*
+>>   *
+>>   * Restartable sequences are a lightweight interface that allows
+>> @@ -79,6 +86,16 @@
+>>   *
+>>   *       [abort_ip]
+>>   *   F1. <failure>
+>> + *
+>> + * rseq critical sections defined with the RSEQ_CS_FLAG_ABORT_AT_IP flag
+>> + * have the following behavior on abort: when the stack grows down: the
+>> + * stack pointer is decremented to skip the redzone, and decremented of
+>> + * the pointer size.  The aborted address (abort-at-ip) is stored at
+>> + * this stack pointer location.  The user-space abort handler needs to
+>> + * pop the abort-at-ip address from the stack, and add the redzone size
+>> + * to the stack pointer.
+>> + *
+>> + * TODO: describe stack grows up.
+> 
+> Is this intentional or did you forget? :)
+
+Since I did not implement abort-at-ip on stack-grows-up architectures, I felt
+it would be too early to describe the algorithm. I can simply remove the TODO
+altogether and we'll take care of it when we get there ? If I had to try to
+wordsmith it, it would look like e.g.:
+
+ *                                    [...] When the stack grows up: the
+ * stack pointer is incremented to skip the redzone, and incremented of
+ * the pointer size.  The aborted address (abort-at-ip) is stored immediately
+ * under this stack pointer location.  The user-space abort handler needs to
+ * pop the abort-at-ip address from the stack, and subtract the redzone size
+ * from the stack pointer.
+
+[ Please let me know if I got somehow confused in my understanding of stack grows
+up architectures. ]
+
+I'm also unsure whether any of the stack grows up architecture have redzones ?
+From a quick grep for redzone in Linux arch/, only openrisc, powerpc64 and
+x86-64 appear to have redzones.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

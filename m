@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F3748AB55
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B4C48AB58
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbiAKK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:26:11 -0500
-Received: from mga17.intel.com ([192.55.52.151]:38374 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236960AbiAKK0K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:26:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641896770; x=1673432770;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=ARxasz8w9czeiodYacB+PZSOdJ2LfMsLx3EBjShtHfA=;
-  b=kGstgODMGNsMo1xqqDeP1XK6yusEiGT+XuhxhTy7vNItOfxw/CpoKn5K
-   hpLZPyaAOXxl6y0sUdbYFyRPRBWpF1Wf0fjwsyB7x7z9JkBzx4QN719xa
-   LuOATVPf1r5lHN430rqSB1afbAjx3qsQC7JnGjcnF3Ug0B6MbzXboKvXs
-   Xe7E7RI426yvhZxpLIpbzacawPBKit9CwPVBCkvNK2oyIMvKZZqLA7hYi
-   3zM/aNLaGBy6RIbnDSBUnp3meE+u6bTLmrb+6LawOjuP2zIcTrbor7JsN
-   X+Udkvh91sCYFtJash1i2dmHyEKPPc8aCMGXslp/LNT44S/Z234Ol7HqF
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="224149588"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="224149588"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 02:26:10 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="558318453"
-Received: from noblecat-mobl.ger.corp.intel.com (HELO [10.213.217.217]) ([10.213.217.217])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 02:26:07 -0800
-Message-ID: <c7d4c7b5-e100-7a26-6a92-06b2e2a4b276@linux.intel.com>
-Date:   Tue, 11 Jan 2022 10:26:05 +0000
+        id S1348522AbiAKK00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:26:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236960AbiAKK0Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 05:26:24 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1C5C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:26:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id x6so54554740lfa.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:26:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oxDy4AfZby7z8LawjYmWoPECv5wh3m5ItoNbPc6qdR8=;
+        b=FSClFJ4BfYN+77rYV5CMD22uLs3EJrNE5XMNfBpOEtZJMa6YYFgPqpvY0nNrqlkCc7
+         uZ1dHkmJ7hG+o0Z9/PKiusmeQo6PIzbB5Vk6Se4xTr3IAi1N2JwdwmJS6lkMd6tB1lS/
+         MO1+MfPNvnOEgh2bdrtGWWjM6CItlC5L7m8GQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oxDy4AfZby7z8LawjYmWoPECv5wh3m5ItoNbPc6qdR8=;
+        b=KxoEOyfMPucpsnCrIBHkuy17rfjGUOit2x1tB8UifpF8UDh1isW1x/x0bV0BxtxlVU
+         wueEQb1ToPq+RLfOaXzxeEmyYowgT2nXN+HRfbsGRtrw3dcZscMpgRKHEIoGGb4+0O0I
+         MAw8rySMBeMqEk81rwIpY0RA/hnYv+c9+u1cexqQkYf1UlWSgwGZrgI2/rb74Wi7fsuw
+         Se5ZIQrhVFoBn1foNmcakBZA3UQEM/6mHLgSa8k/WhMMwpIw0M11d/tEDCD2cBPJnj/i
+         jPe8nPy1ueEcB2GfKmzSmT80GbEoPZ2FvPY1TFbmMCoMmxz9bcC7Flz2CObbDfjwqVzh
+         pGuw==
+X-Gm-Message-State: AOAM531lHeCVXggclNlch7r3bxVENsZ7ooNfPpE9ROedecIQW7l0uUpI
+        n2y2Moy3CfODp23PZrCGqR6uKg==
+X-Google-Smtp-Source: ABdhPJxzEVHZAveN2IC75KEDOzvjD5PoV6F4haj9fivsKqLK5+eK68IpdqkWQSNN3fe7I0ck64Puew==
+X-Received: by 2002:a05:651c:1508:: with SMTP id e8mr2480253ljf.313.1641896782629;
+        Tue, 11 Jan 2022 02:26:22 -0800 (PST)
+Received: from [172.16.11.17] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id a6sm1291916lff.59.2022.01.11.02.26.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 02:26:22 -0800 (PST)
+Subject: Re: [PATCH v1 1/1] vsprintf: Move space out of string literals in
+ fourcc_string()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20220110205558.11876-1-andriy.shevchenko@linux.intel.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <308b7158-7c2a-cc98-6091-14dae2b2cbba@rasmusvillemoes.dk>
+Date:   Tue, 11 Jan 2022 11:26:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] i915: make array flex_regs static const
+In-Reply-To: <20220110205558.11876-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220109203152.51414-1-colin.i.king@gmail.com>
- <5da796b5-a19e-e07b-7cb5-7a30726bd2ff@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <5da796b5-a19e-e07b-7cb5-7a30726bd2ff@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/01/2022 21.55, Andy Shevchenko wrote:
+> The literals "big-endian" and "little-endian" may be potentially
+> occurred in other places. Dropping space allows compiler to
+> "compress" them by using only a single copy.
 
-On 11/01/2022 09:13, Tvrtko Ursulin wrote:
-> On 09/01/2022 20:31, Colin Ian King wrote:
->> Don't populate the read-only array flex_regs on the stack but
->> instead it static const. Also makes the object code a little smaller.
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->> ---
->>   drivers/gpu/drm/i915/i915_perf.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/i915/i915_perf.c 
->> b/drivers/gpu/drm/i915/i915_perf.c
->> index e27f3b7cf094..df698960fdc0 100644
->> --- a/drivers/gpu/drm/i915/i915_perf.c
->> +++ b/drivers/gpu/drm/i915/i915_perf.c
->> @@ -2114,7 +2114,7 @@ gen8_update_reg_state_unlocked(const struct 
->> intel_context *ce,
->>       u32 ctx_oactxctrl = stream->perf->ctx_oactxctrl_offset;
->>       u32 ctx_flexeu0 = stream->perf->ctx_flexeu0_offset;
->>       /* The MMIO offsets for Flex EU registers aren't contiguous */
->> -    i915_reg_t flex_regs[] = {
->> +    static const i915_reg_t flex_regs[] = {
->>           EU_PERF_CNTL0,
->>           EU_PERF_CNTL1,
->>           EU_PERF_CNTL2,
->>
-> 
-> Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-> 
-> And will merge shortly, thanks for the patch.
+Nit: it's not the compiler which does that, but the linker.
 
-Actually I couldn't merge it because you have a Author and Signed-off-by 
-mismatch due your entry in .mailmap. Is this something you can update or 
-send the patch from an address which matches it?
+> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+> index b02f01366acb..5818856d5626 100644
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -1780,7 +1780,8 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+>  		*p++ = isascii(c) && isprint(c) ? c : '.';
+>  	}
+>  
+> -	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
+> +	*p++ = ' ';
+> +	strcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
+>  	p += strlen(p);
 
-Regards,
-
-Tvrtko
+Hm, ok, those two strings do occur a lot with of_property_read_bool()
+and friends. But if you're micro-optimizing anyway, why not drop the
+strlen() and say p = stpcpy(...) instead?
+Rasmus

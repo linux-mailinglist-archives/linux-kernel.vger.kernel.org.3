@@ -2,118 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D99F948B618
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D1048B61A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350165AbiAKSst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S1350171AbiAKSuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243152AbiAKSsr (ORCPT
+        with ESMTP id S243152AbiAKSuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:48:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A5BC06173F;
-        Tue, 11 Jan 2022 10:48:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC7BBB81CBC;
-        Tue, 11 Jan 2022 18:48:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EBEC36AE3;
-        Tue, 11 Jan 2022 18:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641926924;
-        bh=5nGYIYBRmlX498OYXLYdWFITJZwpiQZZoetGM7GB/fE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wd7AZGPkge+6cI3FvoFCWSh82K8CVRceabYCdOCrTyvHKDLqB1Q9P2A2tba+RaQqw
-         POmUe9J82+/tMLueySgCXzzGAUtvrIwMxivx8KFmQCpZCdW+ViqxSNO8ghVbq7x7rk
-         9TZytphLIPVL5ayUv9kDm1o7LAoLdoPFw0ylo2ly+e6nR4IbrYxD1fVXSpGKRP9fGu
-         zZ1gsocbGXmFjqfEkfD41WGCEQQpmkzit5KYHDHmkGwTVOMZQDYhgSzMkrNaD9tO3m
-         g7Jkiij8SxNEBbWhKOmilIUU77Y3ES6H7fr7WvENO8Ux5hD+k2qYywSEZbtzAiYrW9
-         DPI6pWEz2c00w==
-Date:   Tue, 11 Jan 2022 10:48:42 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     hannes@cmpxchg.org, torvalds@linux-foundation.org, tj@kernel.org,
-        lizefan.x@bytedance.com, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, stable@vger.kernel.org,
-        kernel-team@android.com,
-        syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2 1/1] psi: Fix uaf issue when psi trigger is destroyed
- while being polled
-Message-ID: <Yd3RClhoz24rrU04@sol.localdomain>
-References: <20220111071212.1210124-1-surenb@google.com>
+        Tue, 11 Jan 2022 13:50:14 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0043C06173F;
+        Tue, 11 Jan 2022 10:50:13 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id h16so5116225qkp.3;
+        Tue, 11 Jan 2022 10:50:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=sn1JhLv3sDVH++En/Gju5fSNPX0ZThDoZa5taxT8mwI=;
+        b=aFDLA7ZikNOdyM5etGJRLIGzNBvGGz0Avjc4eXknutMEBm4Fd1GQS5wRhmo8lvPHbv
+         hClCKpCq2nic1AYYQ3/mD6iwCnAdd4ikIh3QGfh6Rw2mR8t92wo9TDdb9mIUjCNtE+20
+         3yyWgJZqP+eHOCrzcRFXE1oa+CGmmY+vrVzykgOJXxbxURVVw1lmxHqrc0SJ26Q8EXXn
+         6E/C4DhhvlXsP76zCr5VFV4LM9S6gf5j4baHILCn+jLddCtVmfYuYoYLn/tmzIzK9ApM
+         ViAmTp3wtUZZVPQW2iRFPgt5n7q9iImNlo0mVY/X5YT6/JMNVASWFWT950WE3wjf4UPV
+         Q4QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=sn1JhLv3sDVH++En/Gju5fSNPX0ZThDoZa5taxT8mwI=;
+        b=dNdx7TbVz3LLoU9EYVHH3Ms91rUJmtQTVvEHyEceemL9DI3ousjPOqMJfOYODRArS3
+         Myu6w4Is8LOhEISPf5iGuB4ovVqfELfUegJrL1xi4CNhSoz5s+dsGQUhfWzy2VB/Eqy6
+         J+ul7ZHcC8nvbH9N4pniGZNHuhKXFu/fRLXkArXvBiXPo3yCGrpEZ1+fBBlSSsZjYRhk
+         IT68JLLAXugwBZvcAKU8MG2lmh3VapLs6+IUmaXnDe/AtvF9pI3VZL9nQGXqtOt3I7Ex
+         ardO1DbBO6uATcCXLZlxjY+BL2IJG34kkFFCRpliN0ohDJSgL3p35ysO196r2imfz3qW
+         QhRQ==
+X-Gm-Message-State: AOAM533tphFSBcd3MkHO+EHA2x/vG8wtqSnIvjq2ZU8D60ju37yUbbPN
+        pr+wCLbFQZ8TsKtNMjU0pXI=
+X-Google-Smtp-Source: ABdhPJxPRkUsnWDgCU4mYdWe9q2fhtXRVpsE2D+P2U2u+w6agRumNP9dRPTAlJ/9ihuJb/p1QWb3Jg==
+X-Received: by 2002:a05:620a:2699:: with SMTP id c25mr3955731qkp.473.1641927013032;
+        Tue, 11 Jan 2022 10:50:13 -0800 (PST)
+Received: from [127.0.0.1] ([179.97.37.151])
+        by smtp.gmail.com with ESMTPSA id q7sm7045559qkl.72.2022.01.11.10.50.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 10:50:12 -0800 (PST)
+Date:   Tue, 11 Jan 2022 15:50:07 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Ian Rogers <irogers@google.com>, John Garry <john.garry@huawei.com>
+CC:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Subject: Re: [PATCH v4 05/48] perf stat: Switch to cpu version of cpu_map__get
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAP-5=fW2JzePV=rQG=Ww1Omub0_r2gi38FUVyaG+a3L=44R9XA@mail.gmail.com>
+References: <20220105061351.120843-1-irogers@google.com> <20220105061351.120843-6-irogers@google.com> <64d64526-7d3e-0c31-f43e-f03810f72ac2@huawei.com> <CAP-5=fW2JzePV=rQG=Ww1Omub0_r2gi38FUVyaG+a3L=44R9XA@mail.gmail.com>
+Message-ID: <F6E1C874-F64D-4563-915B-F6420F987264@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111071212.1210124-1-surenb@google.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 11:12:12PM -0800, Suren Baghdasaryan wrote:
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index cafb8c114a21..93b51a2104f7 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -3642,6 +3642,12 @@ static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
->  	cgroup_get(cgrp);
->  	cgroup_kn_unlock(of->kn);
->  
-> +	/* Allow only one trigger per file descriptor */
-> +	if (ctx->psi.trigger) {
-> +		cgroup_put(cgrp);
-> +		return -EBUSY;
-> +	}
-> +
->  	psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
->  	new = psi_trigger_create(psi, buf, nbytes, res);
->  	if (IS_ERR(new)) {
-> @@ -3649,8 +3655,7 @@ static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
->  		return PTR_ERR(new);
->  	}
->  
-> -	psi_trigger_replace(&ctx->psi.trigger, new);
-> -
-> +	ctx->psi.trigger = new;
->  	cgroup_put(cgrp);
 
-The write here needs to use smp_store_release(), since it is paired with the
-concurrent READ_ONCE() in psi_trigger_poll().
 
-> @@ -1305,14 +1287,24 @@ static ssize_t psi_write(struct file *file, const char __user *user_buf,
->  
->  	buf[buf_size - 1] = '\0';
->  
-> -	new = psi_trigger_create(&psi_system, buf, nbytes, res);
-> -	if (IS_ERR(new))
-> -		return PTR_ERR(new);
-> -
->  	seq = file->private_data;
-> +
->  	/* Take seq->lock to protect seq->private from concurrent writes */
->  	mutex_lock(&seq->lock);
-> -	psi_trigger_replace(&seq->private, new);
-> +
-> +	/* Allow only one trigger per file descriptor */
-> +	if (seq->private) {
-> +		mutex_unlock(&seq->lock);
-> +		return -EBUSY;
-> +	}
-> +
-> +	new = psi_trigger_create(&psi_system, buf, nbytes, res);
-> +	if (IS_ERR(new)) {
-> +		mutex_unlock(&seq->lock);
-> +		return PTR_ERR(new);
-> +	}
-> +
-> +	seq->private = new;
+On January 11, 2022 3:46:41 PM GMT-03:00, Ian Rogers <irogers@google=2Ecom=
+> wrote:
+>On Mon, Jan 10, 2022 at 11:04 AM John Garry <john=2Egarry@huawei=2Ecom> w=
+rote:
+>>
+>> On 05/01/2022 06:13, Ian Rogers wrote:
+>> > Avoid bugs where the wrong index is passed with the cpu_map=2E
+>>
+>> nit: Don't you mean possible bugs?
+>
+>You are right=2E I'll watch myself doing this in the future=2E
 
-Likewise here.
+I'll update the comment,
 
-- Eric
+I'm still testing it and giving more time for review, including to the adj=
+ustments I made=2E=2E
+
+- Arnaldo
+
+>
+>Thanks,
+>Ian
+>
+>> >
+>> > Reviewed-by: James Clark <james=2Eclark@arm=2Ecom>
+>> > Signed-off-by: Ian Rogers <irogers@google=2Ecom>

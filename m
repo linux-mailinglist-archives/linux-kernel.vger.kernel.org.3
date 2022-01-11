@@ -2,90 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7D148A6A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF4F48A6AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347380AbiAKEFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:05:47 -0500
-Received: from wtarreau.pck.nerim.net ([62.212.114.60]:50379 "EHLO 1wt.eu"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231165AbiAKEFr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:05:47 -0500
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 20B446pm026610;
-        Tue, 11 Jan 2022 05:04:06 +0100
-Date:   Tue, 11 Jan 2022 05:04:06 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Simo Sorce <simo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Message-ID: <20220111040406.GB26248@1wt.eu>
-References: <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
- <YdxCsI3atPILABYe@mit.edu>
- <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
- <Ydxu+KS5UkQ6hU9R@mit.edu>
- <Ydx7D3H0PS0Zs9/B@sol.localdomain>
- <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
- <YdyNxJzdBmSSEtDC@mit.edu>
- <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
- <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
- <Ydz1F/AqB1oO/qHF@mit.edu>
+        id S1347404AbiAKEGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:06:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57136 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231165AbiAKEGB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 23:06:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641873960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j57iOHdt0+hHkG5NMCwdg6XG2RVl9jKj5pe7d1y/oaY=;
+        b=eWUTpOzhGowD3o7g4MlK76uJIyrpFwOwch9NAivwWHIa9+iOCv/0YV8HT5NCVNpnDEQC0C
+        xZjFoZ0oo0/hNubHPBgTfMkKYwu5BGb8b+iJfrmNUyYqS/e3dT7CVZpuz4bcipKxqIcJkg
+        Irvf8urngaMR35AFiAltMfntPVn+KXI=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-376-HS9qypv7NFaa-t-2ZZqbvw-1; Mon, 10 Jan 2022 23:05:59 -0500
+X-MC-Unique: HS9qypv7NFaa-t-2ZZqbvw-1
+Received: by mail-pj1-f71.google.com with SMTP id k13-20020a17090a3ccd00b001b356efebd6so1435286pjd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 20:05:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j57iOHdt0+hHkG5NMCwdg6XG2RVl9jKj5pe7d1y/oaY=;
+        b=0RkxDf8K2k6N12tqL0iQTLcIFjwpJHG6lSSRB0zH3982B4v4KD45HCgYyPuLFwbX/h
+         2nxv9yG9CYmnyRFbOSQbFotRdNZ0EzKgUSmDxr6cOJgHpx7v+bSWQvm0L7eY7QCGKVdc
+         wDhmVWB9g3FfMwMoIf089vxHgKHVYGXSXmkeu1txwGv8YmdMXXV3ZGuOttrzXrD1lcVe
+         1fUkkE/sajrT7HP0TAZ1HUMyPKKF8hTuY0gHRk/FPQTefX8QfwDkzwT2YkpdnkS4w9yF
+         74wWB3lA+Myi8MaV96VNbcrIGRNBRsTuowBRDiqRaKbI4/8T35WmqXpxp/dAe0KttId/
+         Kehw==
+X-Gm-Message-State: AOAM530GqnNgJDKCvzpYdXexNqDsbuyHvOZHr5rI3I9/CuzyGhgGJMyE
+        /tSFdYoPE6cE/4w5nBCU0ksU8PLQmGfW9KrKJMbcFeIYz5VTY9dUWqvdc9/i//iVbO/eDdFCEBU
+        soIZWSdrHaozU5xE7v0tACCNy
+X-Received: by 2002:a17:90a:e610:: with SMTP id j16mr1108021pjy.139.1641873957963;
+        Mon, 10 Jan 2022 20:05:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyiyZ3FXmA3cDHJpzQKJdoRERQuq+I3vTjGX55+gVot2kVqfrz76/R4a7jnSeGoY38thvsbNQ==
+X-Received: by 2002:a17:90a:e610:: with SMTP id j16mr1107999pjy.139.1641873957633;
+        Mon, 10 Jan 2022 20:05:57 -0800 (PST)
+Received: from [10.72.13.222] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id d11sm8737373pfu.211.2022.01.10.20.05.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 20:05:57 -0800 (PST)
+Message-ID: <60f24351-1011-de84-b443-ff5a50c3ff7f@redhat.com>
+Date:   Tue, 11 Jan 2022 12:05:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydz1F/AqB1oO/qHF@mit.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH 3/4] drivers/net/virtio_net: Added RSS hash report.
+Content-Language: en-US
+To:     Andrew Melnychenko <andrew@daynix.com>, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        mst@redhat.com
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+References: <20220109210659.2866740-1-andrew@daynix.com>
+ <20220109210659.2866740-4-andrew@daynix.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220109210659.2866740-4-andrew@daynix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 10:10:15PM -0500, Theodore Ts'o wrote:
-> If we must support this in the upstream kernel, then configure it via
-> CONFIG_RANDOM_SECURITY_THEATRE which redirects getrandom(2) and
-> /dev/[u]random to DRBG.  I'd prefer that it be possible for someone to
-> put "random_security_theatre=0" on the boot command line which would
-> disable redirecting the interfaces to DRBG so if it turns out that
-> DRBG *is* less secure, we can give advice on how to turn it off
-> without requiring a patched kernel.  :-)
 
-In this case, why not do it the other way around ? Instead of having
-yet-another config option, just indicate that fips-like randoms are
-enabled at boot via "random_security_theatre=1". Distros have their
-solution which can even be documented for their customers and that's
-done. Nobody uses it by default, the name is discouraging enough, but
-for those who know they want it, it's easy to turn it on, and at the
-same time it delivers them the reminder about what all this really is.
+在 2022/1/10 上午5:06, Andrew Melnychenko 写道:
+> Added features for RSS hash report.
+> If hash is provided - it sets to skb.
+> Added checks if rss and/or hash are enabled together.
+>
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> ---
+>   drivers/net/virtio_net.c | 56 ++++++++++++++++++++++++++++++++++------
+>   1 file changed, 48 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 21794731fc75..6e7461b01f87 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -231,6 +231,7 @@ struct virtnet_info {
+>   
+>   	/* Host supports rss and/or hash report */
+>   	bool has_rss;
+> +	bool has_rss_hash_report;
+>   	u8 rss_key_size;
+>   	u16 rss_indir_table_size;
+>   	u32 rss_hash_types_supported;
+> @@ -424,7 +425,9 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>   	hdr_p = p;
+>   
+>   	hdr_len = vi->hdr_len;
+> -	if (vi->mergeable_rx_bufs)
+> +	if (vi->has_rss_hash_report)
+> +		hdr_padded_len = sizeof(struct virtio_net_hdr_v1_hash);
+> +	else if (vi->mergeable_rx_bufs)
+>   		hdr_padded_len = sizeof(*hdr);
+>   	else
+>   		hdr_padded_len = sizeof(struct padded_vnet_hdr);
+> @@ -1160,6 +1163,8 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+>   	struct net_device *dev = vi->dev;
+>   	struct sk_buff *skb;
+>   	struct virtio_net_hdr_mrg_rxbuf *hdr;
+> +	struct virtio_net_hdr_v1_hash *hdr_hash;
+> +	enum pkt_hash_types rss_hash_type;
+>   
+>   	if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
+>   		pr_debug("%s: short packet %i\n", dev->name, len);
+> @@ -1186,6 +1191,29 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+>   		return;
+>   
+>   	hdr = skb_vnet_hdr(skb);
+> +	if (dev->features & NETIF_F_RXHASH) {
+> +		hdr_hash = (struct virtio_net_hdr_v1_hash *)(hdr);
+> +
+> +		switch (hdr_hash->hash_report) {
+> +		case VIRTIO_NET_HASH_REPORT_TCPv4:
+> +		case VIRTIO_NET_HASH_REPORT_UDPv4:
+> +		case VIRTIO_NET_HASH_REPORT_TCPv6:
+> +		case VIRTIO_NET_HASH_REPORT_UDPv6:
+> +		case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
+> +		case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
+> +			rss_hash_type = PKT_HASH_TYPE_L4;
+> +			break;
+> +		case VIRTIO_NET_HASH_REPORT_IPv4:
+> +		case VIRTIO_NET_HASH_REPORT_IPv6:
+> +		case VIRTIO_NET_HASH_REPORT_IPv6_EX:
+> +			rss_hash_type = PKT_HASH_TYPE_L3;
+> +			break;
+> +		case VIRTIO_NET_HASH_REPORT_NONE:
+> +		default:
+> +			rss_hash_type = PKT_HASH_TYPE_NONE;
+> +		}
+> +		skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
+> +	}
+>   
+>   	if (hdr->hdr.flags & VIRTIO_NET_HDR_F_DATA_VALID)
+>   		skb->ip_summed = CHECKSUM_UNNECESSARY;
+> @@ -2233,7 +2261,8 @@ static bool virtnet_commit_rss_command(struct virtnet_info *vi)
+>   	sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
+>   
+>   	if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
+> -				  VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
+> +				  vi->has_rss ? VIRTIO_NET_CTRL_MQ_RSS_CONFIG
+> +				  : VIRTIO_NET_CTRL_MQ_HASH_CONFIG, sgs)) {
+>   		dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
+>   		return false;
+>   	}
+> @@ -3220,7 +3249,9 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
+>   	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_MQ, "VIRTIO_NET_F_CTRL_VQ") ||
+>   	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
+>   			     "VIRTIO_NET_F_CTRL_VQ") ||
+> -	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS, "VIRTIO_NET_F_RSS"))) {
+> +	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS, "VIRTIO_NET_F_RSS") ||
 
-Willy
+
+I think we should make RSS depend on CTRL_VQ.
+
+
+> +	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
+> +			     "VIRTIO_NET_F_HASH_REPORT"))) {
+
+
+Need to depend on CTRL_VQ here.
+
+
+>   		return false;
+>   	}
+>   
+> @@ -3355,6 +3386,12 @@ static int virtnet_probe(struct virtio_device *vdev)
+>   	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
+>   		vi->mergeable_rx_bufs = true;
+>   
+> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT)) {
+> +		vi->has_rss_hash_report = true;
+> +		vi->rss_indir_table_size = 1;
+> +		vi->rss_key_size = VIRTIO_NET_RSS_MAX_KEY_SIZE;
+
+
+Any reason to initialize RSS feature here not the init_default_rss()?
+
+Thanks
+
+
+> +	}
+> +
+>   	if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
+>   		vi->has_rss = true;
+>   		vi->rss_indir_table_size =
+> @@ -3364,7 +3401,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>   			virtio_cread8(vdev, offsetof(struct virtio_net_config, rss_max_key_size));
+>   	}
+>   
+> -	if (vi->has_rss) {
+> +	if (vi->has_rss || vi->has_rss_hash_report) {
+>   		vi->rss_hash_types_supported =
+>   		    virtio_cread32(vdev, offsetof(struct virtio_net_config, supported_hash_types));
+>   		vi->rss_hash_types_supported &=
+> @@ -3374,8 +3411,11 @@ static int virtnet_probe(struct virtio_device *vdev)
+>   
+>   		dev->hw_features |= NETIF_F_RXHASH;
+>   	}
+> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+> -	    virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> +
+> +	if (vi->has_rss_hash_report)
+> +		vi->hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
+> +	else if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+> +		 virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+>   		vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
+>   	else
+>   		vi->hdr_len = sizeof(struct virtio_net_hdr);
+> @@ -3442,7 +3482,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>   		}
+>   	}
+>   
+> -	if (vi->has_rss) {
+> +	if (vi->has_rss || vi->has_rss_hash_report) {
+>   		rtnl_lock();
+>   		virtnet_init_default_rss(vi);
+>   		rtnl_unlock();
+> @@ -3580,7 +3620,7 @@ static struct virtio_device_id id_table[] = {
+>   	VIRTIO_NET_F_CTRL_MAC_ADDR, \
+>   	VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
+>   	VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
+> -	VIRTIO_NET_F_RSS
+> +	VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT
+>   
+>   static unsigned int features[] = {
+>   	VIRTNET_FEATURES,
+

@@ -2,613 +2,487 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B4448A48A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB6648A48D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345970AbiAKAu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:50:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49704 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242961AbiAKAu4 (ORCPT
+        id S1345982AbiAKAvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345975AbiAKAvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:50:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55DC5B8182F;
-        Tue, 11 Jan 2022 00:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD64C36AE5;
-        Tue, 11 Jan 2022 00:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641862252;
-        bh=f46IaBl9vAmYtEb6C38HRknBDUHFcL2v2Bg3TnVdgFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mmcM8jGqm1ttVKIYU3SPV35aBjtakZvZsahPTzdski1ODTIjMyCtOvKmh08W+GdEj
-         ypY+BT62Rt6KI3OyB1Yd+ezfRw1s5mNn0Yho09XQfRAFX7cwuG1CP+6rtDNajnDoFz
-         tkQSUpD0CSjuw/GWfH4VJfhLmw3hbOpmDEKVvawyA2SBuCYawLfML4yy8Lp3Sh3zUp
-         iwrJd/Xj3bkqA4zkL/WTMnwJr2mJflUeEwDfOwzhgxUohGhLloOxzwC6ioZpBOeT6q
-         RIH5T09CipNMDO9ndHrnJ8VR5oFMNPFERG3GeB35mrIkywVjWI0Bzs2IVT+ZaVE4zw
-         AuZzRO7n5+M8g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1B22640714; Mon, 10 Jan 2022 21:50:50 -0300 (-03)
-Date:   Mon, 10 Jan 2022 21:50:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vineet Singh <vineet.singh@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
-        eranian@google.com
-Subject: Re: [PATCH v3 06/48] perf cpumap: Switch cpu_map__build_map to cpu
- function
-Message-ID: <YdzUah2LGrPDuKyR@kernel.org>
-References: <20211230072030.302559-1-irogers@google.com>
- <20211230072030.302559-8-irogers@google.com>
- <YdybPJKjqx6zb28/@kernel.org>
- <YdyfCN1/JWJtJHTO@kernel.org>
- <Ydyjvcma/wMTPwbn@kernel.org>
- <Ydymdm/PoB0hQVUT@kernel.org>
- <CAP-5=fVAa3JVbdzNZg0LrVfw__9U9Q8PkHcro+TJiFVyvTho+A@mail.gmail.com>
- <YdzSKOWJRC0dRnSn@kernel.org>
+        Mon, 10 Jan 2022 19:51:07 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1091BC061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:51:07 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id p187so385239ybc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Pmpqp91e6SvUNAONlQ36UiaL7+XaopqtxX6bbBDZAFw=;
+        b=OwmapPIMP2qKl+nRlrc/xDUIwFrqLB5DYd3AHOzmi8dZI+/U8mdA+6hG+XXxnjvz1f
+         mXdgss0CqlbyJjFSKz3dNvQ6b5fGwehILLezow9a6G2fctZvMhXRfPqV8BH0p/7wGvt6
+         9evYLpiFfihz+G+X9Ut1tO2I859ONevqSSUU00esXSHqmG2asaHo6RViszdXrgKXiKYc
+         2BqdzD2qFNGIrweQzHNZ5nEfSohvfkmUmoCvW83U1Dhs+CJC7/UHKkTbNE5OXHf8guyb
+         9ydwkYMICBKlMkxI2hVAjH0ETfFLH43xaEgKbE6uADcmHuu6yDrVhyj2tArT3kc1zNsL
+         dBhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pmpqp91e6SvUNAONlQ36UiaL7+XaopqtxX6bbBDZAFw=;
+        b=vYZ60WBruK6iqBXsYvezrc0k7w3hrqBevvEyX8Rr/4/LvsFgASpyq81A6ihNy6+QNX
+         7K+FvFYWVUnZX6r19grGaDJXL/vFzFz547AWBdai0oIONOmSSzFlqdYdw6QSepTp4f7F
+         PDs2Wauhx++Ku66VKElW8Z2sPPnIo2d8U0brWH5jIrtCVUklKYu25y3PN3ztzMjU1mVS
+         3BVEGDJdhBXGMIlVhJKWJXefCF6b/L0SijuU5q3u3ovdicgZ0Jberp7O3Of/Aj+ucVz1
+         KVy652xcB4OvNNMmaXSxpiwOyEMIIaCezaVByVt/FPIj0cPFzKl4kKQlUSVi1lBzjI+N
+         Eguw==
+X-Gm-Message-State: AOAM530UN11NLVipc8HnvKOqMOWswyFlztnZoxysUo5xggESVlDguVnB
+        IzVP6D3zUkDTuL7eRJiratizEeOtxzJMmcSMtv2Hpg==
+X-Google-Smtp-Source: ABdhPJxhivvY3ED9p2TAObQXTzuRRjN1B6OR494rM9cb+SNgIp3i5sbM+Eksa4+XqFmuiZIuMcQ3fjkINehk869GIG4=
+X-Received: by 2002:a25:d34b:: with SMTP id e72mr3105475ybf.497.1641862265914;
+ Mon, 10 Jan 2022 16:51:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdzSKOWJRC0dRnSn@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-5-rananta@google.com>
+ <CAAeT=FztkibSajKjnpRfObx+D1r8H1s_8-5MmqjemJTfmb2mpg@mail.gmail.com>
+In-Reply-To: <CAAeT=FztkibSajKjnpRfObx+D1r8H1s_8-5MmqjemJTfmb2mpg@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 10 Jan 2022 16:50:54 -0800
+Message-ID: <CAJHc60ywYgAPfG11Ljkj3qzLoUn9mZPKnPH0P-HYS-pfs+A__g@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 04/11] KVM: arm64: Setup a framework for hypercall
+ bitmap firmware registers
+To:     Reiji Watanabe <reijiw@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 10, 2022 at 09:41:12PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Jan 10, 2022 at 02:29:58PM -0800, Ian Rogers escreveu:
-> > On Mon, Jan 10, 2022 at 1:34 PM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> > >
-> > > Em Mon, Jan 10, 2022 at 06:23:09PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > Em Mon, Jan 10, 2022 at 06:03:04PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > Em Mon, Jan 10, 2022 at 05:46:52PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > > At this point we need to remove the now unused perf_env__get_cpu(), and
-> > > > > > then deal with the fallout in the following patches that needlessly
-> > > > > > modify this unused function.
-> > > > > >
-> > > > > > Doing that now.
-> > > > >
-> > > > > Done, force pushed to tmp.perf/perf_cpu, now it is going again thru the
-> > > > > build containers, a better start now:
-> > >
-> > > > So far so good:
-> > >
-> > > perf test ok, just that one that is failing, but before this series as
-> > > well:
-> > >
-> > >  89: perf all metricgroups test                                      : FAILED!
-> > 
-> > Could you add the verbose output? I suspect it is fixed by this:
-> > https://lore.kernel.org/lkml/20211223183948.3423989-1-irogers@google.com/
-> 
-> I'll try it.
+On Sun, Jan 9, 2022 at 10:29 PM Reiji Watanabe <reijiw@google.com> wrote:
+>
+> Hi Raghu,
+>
+> On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > KVM regularly introduces new hypercall services to the guests without
+> > any consent from the Virtual Machine Manager (VMM). This means, the
+> > guests can observe hypercall services in and out as they migrate
+> > across various host kernel versions. This could be a major problem
+> > if the guest discovered a hypercall, started using it, and after
+> > getting migrated to an older kernel realizes that it's no longer
+> > available. Depending on how the guest handles the change, there's
+> > a potential chance that the guest would just panic.
+> >
+> > As a result, there's a need for the VMM to elect the services that
+> > it wishes the guest to discover. VMM can elect these services based
+> > on the kernels spread across its (migration) fleet. To remedy this,
+> > extend the existing firmware psuedo-registers, such as
+> > KVM_REG_ARM_PSCI_VERSION, for all the hypercall services available.
+> >
+> > These firmware registers are categorized based on the service call
+> > owners, and unlike the existing firmware psuedo-registers, they hold
+> > the features supported in the form of a bitmap.
+> >
+> > The capability, KVM_CAP_ARM_HVC_FW_REG_BMAP, is used to announce
+> > this extension, which returns the number of psuedo-firmware
+> > registers supported. During the VM initialization, the registers
+> > holds an upper-limit of the features supported by the corresponding
+> > registers. It's expected that the VMMs discover the features
+> > provided by each register via GET_ONE_REG, and writeback the
+> > desired values using SET_ONE_REG. KVM allows this modification
+> > only until the VM has started.
+> >
+> > Older VMMs can simply ignore the capability and the hypercall services
+> > will be exposed unconditionally to the guests, thus ensuring backward
+> > compatibility.
+> >
+> > In this patch, the framework adds the register only for ARM's standard
+> > secure services (owner value 4). Currently, this includes support only
+> > for ARM True Random Number Generator (TRNG) service, with bit-0 of the
+> > register representing mandatory features of v1.0. Other services are
+> > momentarily added in the upcoming patches.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_host.h |  12 ++++
+> >  arch/arm64/include/uapi/asm/kvm.h |   4 ++
+> >  arch/arm64/kvm/arm.c              |   4 ++
+> >  arch/arm64/kvm/hypercalls.c       | 103 +++++++++++++++++++++++++++++-
+> >  arch/arm64/kvm/trng.c             |   8 +--
+> >  include/kvm/arm_hypercalls.h      |   6 ++
+> >  6 files changed, 129 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > index 2a5f7f38006f..a32cded0371b 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -102,6 +102,15 @@ struct kvm_s2_mmu {
+> >  struct kvm_arch_memory_slot {
+> >  };
+> >
+> > +/**
+> > + * struct kvm_hvc_desc: KVM ARM64 hypercall descriptor
+> > + *
+> > + * @hvc_std_bmap: Bitmap of standard secure service calls
+> > + */
+> > +struct kvm_hvc_desc {
+> > +       u64 hvc_std_bmap;
+> > +};
+> > +
+> >  struct kvm_arch {
+> >         struct kvm_s2_mmu mmu;
+> >
+> > @@ -137,6 +146,9 @@ struct kvm_arch {
+> >
+> >         /* Memory Tagging Extension enabled for the guest */
+> >         bool mte_enabled;
+> > +
+> > +       /* Hypercall firmware register' descriptor */
+> > +       struct kvm_hvc_desc hvc_desc;
+> >  };
+> >
+> >  struct kvm_vcpu_fault_info {
+> > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> > index b3edde68bc3e..0d6f29c58456 100644
+> > --- a/arch/arm64/include/uapi/asm/kvm.h
+> > +++ b/arch/arm64/include/uapi/asm/kvm.h
+> > @@ -281,6 +281,10 @@ struct kvm_arm_copy_mte_tags {
+> >  #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED       3
+> >  #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED            (1U << 4)
+> >
+> > +#define KVM_REG_ARM_STD_BMAP                   KVM_REG_ARM_FW_REG(3)
+> > +#define KVM_REG_ARM_STD_BIT_TRNG_V1_0          BIT(0)
+> > +#define KVM_REG_ARM_STD_BMAP_BIT_MAX           0       /* Last valid bit */
+> > +
+> >  /* SVE registers */
+> >  #define KVM_REG_ARM64_SVE              (0x15 << KVM_REG_ARM_COPROC_SHIFT)
+> >
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index e4727dc771bf..56fe81565235 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -156,6 +156,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+> >         kvm->arch.max_vcpus = kvm_arm_default_max_vcpus();
+> >
+> >         set_default_spectre(kvm);
+> > +       kvm_arm_init_hypercalls(kvm);
+> >
+> >         return ret;
+> >  out_free_stage2_pgd:
+> > @@ -283,6 +284,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> >         case KVM_CAP_ARM_PTRAUTH_GENERIC:
+> >                 r = system_has_full_ptr_auth();
+> >                 break;
+> > +       case KVM_CAP_ARM_HVC_FW_REG_BMAP:
+> > +               r = kvm_arm_num_fw_bmap_regs();
+> > +               break;
+>
+> Looking at the discussion for the v2 series,
+>
+>  https://lore.kernel.org/kvmarm/20211130101958.fcdqthphyhxzvzla@gator.home/
+>
+> I assume that the number of the pseudo-firmware bitmap registers
+> will be used to clear pseudo firmware bitmap registers that
+> userspace doesn't know.
+> I'm wondering how userspace can identify which pseudo-firmware
+> registers that KVM_GET_REG_LIST provides are the pseudo-firmware
+> bitmap registers that it doesn't know.
+> For instance, suppose pseudo-firmware registers that KVM_GET_REG_LIST
+> provides are KVM_REG_ARM_FW_REG(0) to KVM_REG_ARM_FW_REG(9), userspace
+> doesn't knows KVM_REG_ARM_FW_REG(6) to KVM_REG_ARM_FW_REG(9), and
+> KVM_CAP_ARM_HVC_FW_REG_BMAP returns 5, how can userspace identify
+> remaining two bitmap registers from those 4 (fw-reg #6 to #9)
+> firmware registers ?
+>
+In v3, we leave the decision upto the userspace. If the userspace
+encounters a register that it's unaware, it can choose either to clear
+it or let it get exposed to the guest as is (see the code snipped
+shared by Andrew in the link).
+Trying to understand the question better- are you asking how would
+userspace distinguish between bitmap and regular fw registers with
+intermixed sequence numbers?
+If yes, do you foresee a reason why they 'unaware' registers needed to
+be treated differently?
+>
+> >         default:
+> >                 r = 0;
+> >         }
+> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > index 3c2fcf31ad3d..06243e4670eb 100644
+> > --- a/arch/arm64/kvm/hypercalls.c
+> > +++ b/arch/arm64/kvm/hypercalls.c
+> > @@ -58,6 +58,29 @@ static void kvm_ptp_get_time(struct kvm_vcpu *vcpu, u64 *val)
+> >         val[3] = lower_32_bits(cycles);
+> >  }
+> >
+> > +static bool kvm_arm_fw_reg_feat_enabled(u64 reg_bmap, u64 feat_bit)
+> > +{
+> > +       return reg_bmap & feat_bit;
+> > +}
+> > +
+> > +bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
+> > +{
+> > +       struct kvm_hvc_desc *hvc_desc = &vcpu->kvm->arch.hvc_desc;
+> > +
+> > +       switch (func_id) {
+> > +       case ARM_SMCCC_TRNG_VERSION:
+> > +       case ARM_SMCCC_TRNG_FEATURES:
+> > +       case ARM_SMCCC_TRNG_GET_UUID:
+> > +       case ARM_SMCCC_TRNG_RND32:
+> > +       case ARM_SMCCC_TRNG_RND64:
+> > +               return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_bmap,
+> > +                                               KVM_REG_ARM_STD_BIT_TRNG_V1_0);
+> > +       default:
+> > +               /* By default, allow the services that aren't listed here */
+> > +               return true;
+> > +       }
+> > +}
+>
+> kvm_hvc_call_supported() could return true even for @func_id that
+> kvm_hvc_call_handler() returns -EINVAL for.  Is this behavior what
+> you really want ?
+Yes. My idea was to let kvm_hvc_call_supported() check for the
+support, while kvm_hvc_call_handler() does the real processing of the
+call.
 
-Yeah, stops failing, will review and apply tomorrow.
+> If so, IMHO the function name might be a bit mis-leading.
+> "kvm_hvc_call_disabled" (and flip the return value)
+> might be closer to what it does(?).
+>
+Sorry, I'm unclear how flipping is helping. Wouldn't we return 'false'
+if we don't have a case for the func_id, indicating it's NOT disabled,
+but kvm_hvc_call_handler() can still return SMCCC_RET_NOT_SUPPORTED?
+>
+> > +
+> >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >  {
+> >         u32 func_id = smccc_get_function(vcpu);
+> > @@ -65,6 +88,9 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >         u32 feature;
+> >         gpa_t gpa;
+> >
+> > +       if (!kvm_hvc_call_supported(vcpu, func_id))
+> > +               goto out;
+> > +
+> >         switch (func_id) {
+> >         case ARM_SMCCC_VERSION_FUNC_ID:
+> >                 val[0] = ARM_SMCCC_VERSION_1_1;
+> > @@ -143,6 +169,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >                 return kvm_psci_call(vcpu);
+> >         }
+> >
+> > +out:
+> >         smccc_set_retval(vcpu, val[0], val[1], val[2], val[3]);
+> >         return 1;
+> >  }
+> > @@ -153,9 +180,25 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+> >         KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> >  };
+> >
+> > +static const u64 kvm_arm_fw_reg_bmap_ids[] = {
+> > +       KVM_REG_ARM_STD_BMAP,
+> > +};
+> > +
+> > +void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > +{
+> > +       struct kvm_hvc_desc *hvc_desc = &kvm->arch.hvc_desc;
+> > +
+> > +       hvc_desc->hvc_std_bmap = ARM_SMCCC_STD_FEATURES;
+> > +}
+> > +
+> > +int kvm_arm_num_fw_bmap_regs(void)
+> > +{
+> > +       return ARRAY_SIZE(kvm_arm_fw_reg_bmap_ids);
+> > +}
+> > +
+> >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> >  {
+> > -       return ARRAY_SIZE(kvm_arm_fw_reg_ids);
+> > +       return ARRAY_SIZE(kvm_arm_fw_reg_ids) + kvm_arm_num_fw_bmap_regs();
+> >  }
+> >
+> >  int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
+> > @@ -167,6 +210,11 @@ int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
+> >                         return -EFAULT;
+> >         }
+> >
+> > +       for (i = 0; i < ARRAY_SIZE(kvm_arm_fw_reg_bmap_ids); i++) {
+> > +               if (put_user(kvm_arm_fw_reg_bmap_ids[i], uindices++))
+> > +                       return -EFAULT;
+> > +       }
+> > +
+> >         return 0;
+> >  }
+> >
+> > @@ -211,9 +259,20 @@ static int get_kernel_wa_level(u64 regid)
+> >         return -EINVAL;
+> >  }
+> >
+> > +static void
+> > +kvm_arm_get_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 fw_reg_bmap, u64 *val)
+> > +{
+> > +       struct kvm *kvm = vcpu->kvm;
+> > +
+> > +       mutex_lock(&kvm->lock);
+> > +       *val = fw_reg_bmap;
+> > +       mutex_unlock(&kvm->lock);
+>
+> Why does it need to hold the lock ? (Wouldn't READ_ONCE be enough ?)
+>
+I don't have much experience with READ_ONCE at this point, but do you
+think this read can be protected again the read/write in
+kvm_arm_set_fw_reg_bmap()?
+>
+> > +}
+> > +
+> >  int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >  {
+> >         void __user *uaddr = (void __user *)(long)reg->addr;
+> > +       struct kvm_hvc_desc *hvc_desc = &vcpu->kvm->arch.hvc_desc;
+> >         u64 val;
+> >
+> >         switch (reg->id) {
+> > @@ -224,6 +283,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >         case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
+> >                 val = get_kernel_wa_level(reg->id) & KVM_REG_FEATURE_LEVEL_MASK;
+> >                 break;
+> > +       case KVM_REG_ARM_STD_BMAP:
+> > +               kvm_arm_get_fw_reg_bmap(vcpu, hvc_desc->hvc_std_bmap, &val);
+> > +               break;
+> >         default:
+> >                 return -ENOENT;
+> >         }
+> > @@ -234,6 +296,43 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >         return 0;
+> >  }
+> >
+> > +static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+> > +{
+> > +       int ret = 0;
+> > +       struct kvm *kvm = vcpu->kvm;
+> > +       struct kvm_hvc_desc *hvc_desc = &kvm->arch.hvc_desc;
+> > +       u64 *fw_reg_bmap, fw_reg_features;
+> > +
+> > +       switch (reg_id) {
+> > +       case KVM_REG_ARM_STD_BMAP:
+> > +               fw_reg_bmap = &hvc_desc->hvc_std_bmap;
+> > +               fw_reg_features = ARM_SMCCC_STD_FEATURES;
+> > +               break;
+> > +       default:
+> > +               return -ENOENT;
+> > +       }
+> > +
+> > +       /* Check for unsupported bit */
+> > +       if (val & ~fw_reg_features)
+> > +               return -EINVAL;
+> > +
+> > +       mutex_lock(&kvm->lock);
+> > +
+> > +       /*
+> > +        * If the VM (any vCPU) has already started running, return success
+> > +        * if there's no change in the value. Else, return -EBUSY.
+> > +        */
+> > +       if (kvm_vm_has_started(kvm)) {
+> > +               ret = *fw_reg_bmap != val ? -EBUSY : 0;
+> > +               goto out;
+> > +       }
+> > +
+> > +       *fw_reg_bmap = val;
+> > +out:
+> > +       mutex_unlock(&kvm->lock);
+> > +       return ret;
+> > +}
+> > +
+> >  int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >  {
+> >         void __user *uaddr = (void __user *)(long)reg->addr;
+> > @@ -310,6 +409,8 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> >                         return -EINVAL;
+> >
+> >                 return 0;
+> > +       case KVM_REG_ARM_STD_BMAP:
+> > +               return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
+> >         default:
+> >                 return -ENOENT;
+> >         }
+> > diff --git a/arch/arm64/kvm/trng.c b/arch/arm64/kvm/trng.c
+> > index 99bdd7103c9c..23f912514b06 100644
+> > --- a/arch/arm64/kvm/trng.c
+> > +++ b/arch/arm64/kvm/trng.c
+> > @@ -60,14 +60,8 @@ int kvm_trng_call(struct kvm_vcpu *vcpu)
+> >                 val = ARM_SMCCC_TRNG_VERSION_1_0;
+> >                 break;
+> >         case ARM_SMCCC_TRNG_FEATURES:
+> > -               switch (smccc_get_arg1(vcpu)) {
+> > -               case ARM_SMCCC_TRNG_VERSION:
+> > -               case ARM_SMCCC_TRNG_FEATURES:
+> > -               case ARM_SMCCC_TRNG_GET_UUID:
+> > -               case ARM_SMCCC_TRNG_RND32:
+> > -               case ARM_SMCCC_TRNG_RND64:
+> > +               if (kvm_hvc_call_supported(vcpu, smccc_get_arg1(vcpu)))
+> >                         val = TRNG_SUCCESS;
+>
+> kvm_hvc_call_supported() returns true for any values that are
+> not explicitly listed in kvm_hvc_call_supported() (i.e. it returns
+> true even for @func_id that are not any of ARM_SMCCC_TRNG_*).
+> So, I don't think it can simply use the current kvm_hvc_call_supported.
+>
+You are right. Probably I should leave the case statements as is (or
+think of some better way).
 
- 80: build id cache operations                                       : Ok
- 81: daemon operations                                               : Ok
- 82: perf pipe recording and injection test                          : Ok
- 83: Add vfs_getname probe to get syscall args filenames             : Ok
- 84: probe libc's inet_pton & backtrace it with ping                 : Ok
- 85: Use vfs_getname probe to get syscall args filenames             : Ok
- 86: Zstd perf.data compression/decompression                        : Ok
- 87: perf stat csv summary test                                      : Ok
- 88: perf stat metrics (shadow stat) test                            : Ok
- 89: perf all metricgroups test                                      : Ok
- 90: perf all metrics test                                           : Ok
- 91: perf all PMU test                                               : Ok
- 92: perf stat --bpf-counters test                                   : Ok
- 93: Check Arm CoreSight trace data recording and synthesized samples: Skip
- 94: Check Arm SPE trace data recording and synthesized samples      : Skip
- 95: Check open filename arg using perf trace + vfs_getname          : Ok
-[root@quaco ~]#
+Thanks for the review and suggestions.
 
-
- 
-> BTW, here are the final tests, problems with arm 32 and 64-bit, I'll go thru
-> them tomorrow, to fix in the cset the problem appears, so that we keep it
-> bisectable, else you can get what I have in tmp.perf/perf_cpu, fix it and
-> tomorrow I'll retest.
-> 
->   27    85.67 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
->   28    98.65 debian:experimental           : Ok   gcc (Debian 11.2.0-13) 11.2.0 , Debian clang version 13.0.0-9+b2
->   29     8.69 debian:experimental-x-arm64   : FAIL gcc version 11.2.0 (Debian 11.2.0-9)
->     arch/arm64/util/pmu.c: In function 'pmu_events_map__find':
->     arch/arm64/util/pmu.c:18:35: error: invalid operands to binary != (have 'int' and 'struct perf_cpu')
->        18 |                 if (pmu->cpus->nr != cpu__max_cpu())
->           |                     ~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~
->           |                              |       |
->           |                              int     struct perf_cpu
->     make[5]: *** [/git/perf-5.16.0/tools/build/Makefile.build:139: util] Error 2
->     make[4]: *** [/git/perf-5.16.0/tools/build/Makefile.build:139: arm64] Error 2
->     make[3]: *** [/git/perf-5.16.0/tools/build/Makefile.build:139: arch] Error 2
->   30    19.15 debian:experimental-x-mips    : Ok   mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110
->   31    21.25 debian:experimental-x-mips64  : Ok   mips64-linux-gnuabi64-gcc (Debian 10.2.1-6) 10.2.1 20210110
->   32    22.45 debian:experimental-x-mipsel  : Ok   mipsel-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
->   33    21.86 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.5.0 (tags/RELEASE_350/final)
->   34    55.88 fedora:23                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.7.0 (tags/RELEASE_370/final)
->   35    67.12 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) , clang version 3.8.1 (tags/RELEASE_381/final)
->   36    17.53 fedora:24-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 7.1.1 20170710
->   37    68.11 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) , clang version 3.9.1 (tags/RELEASE_391/final)
->   38    80.15 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) , clang version 4.0.1 (tags/RELEASE_401/final)
->   39    80.54 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) , clang version 5.0.2 (tags/RELEASE_502/final)
->   40    91.48 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 6.0.1 (tags/RELEASE_601/final)
->   41    96.71 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 7.0.1 (Fedora 7.0.1-6.fc29)
->   42   100.71 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 8.0.0 (Fedora 8.0.0-3.fc30)
->   43    94.09 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
->   44    87.49 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
->   45    85.99 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
->   46    88.89 fedora:34                     : Ok   gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
->   47    19.84 fedora:34-x-ARC-glibc         : Ok   arc-linux-gcc (ARC HS GNU/Linux glibc toolchain 2019.03-rc1) 8.3.1 20190225
->   48    17.93 fedora:34-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCv2 ISA Linux uClibc toolchain 2019.03-rc1) 8.3.1 20190225
->   49    91.33 fedora:35                     : Ok   gcc (GCC) 11.2.1 20211203 (Red Hat 11.2.1-7) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
->   50    99.83 fedora:rawhide                : Ok   gcc (GCC) 11.2.1 20211203 (Red Hat 11.2.1-7) , clang version 13.0.0 (Fedora 13.0.0-5.fc36)
->   51    79.16 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
->   52    68.81 mageia:6                      : Ok   gcc (Mageia 5.5.0-1.mga6) 5.5.0 , clang version 3.9.1 (tags/RELEASE_391/final)
->   53    38.50 mageia:7                      : FAIL clang version 8.0.0 (Mageia 8.0.0-1.mga7)
->           yychar = yylex (&yylval, &yylloc, scanner);
->                    ^
->     #define yylex           parse_events_lex
->                             ^
->     1 error generated.
->     make[3]: *** [/git/perf-5.16.0/tools/build/Makefile.build:139: util] Error 2
->   54    89.20 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
->   55     6.18 openmandriva:cooker           : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC)
->     In file included from builtin-bench.c:22:
->     bench/bench.h:66:19: error: conflicting types for 'pthread_attr_setaffinity_np'; have 'int(pthread_attr_t *, size_t,  cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  cpu_set_t *)'}
->        66 | static inline int pthread_attr_setaffinity_np(pthread_attr_t *attr __maybe_unused,
->           |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->     In file included from bench/bench.h:64,
->                      from builtin-bench.c:22:
->     /usr/include/pthread.h:394:12: note: previous declaration of 'pthread_attr_setaffinity_np' with type 'int(pthread_attr_t *, size_t,  const cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  const cpu_set_t *)'}
->       394 | extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
->           |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
->     ld: warning: -r and --icf may not be used together, disabling --icf
->     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
->     ld: warning: -r and --icf may not be used together, disabling --icf
->     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
->     ld: warning: -r and --icf may not be used together, disabling --icf
->   56   100.50 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] , clang version 5.0.1 (tags/RELEASE_501/final 312548)
->   57   107.92 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 7.0.1 (tags/RELEASE_701/final 349238)
->   58   102.71 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1
->   59   113.86 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
->   60   114.75 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
->   61   129.42 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 11.2.1 20211124 [revision 7510c23c1ec53aa4a62705f0384079661342ff7b] , clang version 13.0.0
->   62    94.32 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
->   63    94.81 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module+el8.5.0+715+58f51d49)
->   64    71.11 ubuntu:16.04                  : Ok   gcc (Ubuntu 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609 , clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)
->   65     6.89 ubuntu:16.04-x-arm            : FAIL gcc version 5.4.0 20160609 (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9)
->     arch/arm/util/cs-etm.c: In function 'cs_etm_set_option':
->     arch/arm/util/cs-etm.c:206:16: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->       for (i = 0; i < cpu__max_cpu(); i++) {
->                     ^
->     arch/arm/util/cs-etm.c:207:38: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->        if (!perf_cpu_map__has(event_cpus, i) ||
->                                           ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c:208:39: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->            !perf_cpu_map__has(online_cpus, i))
->                                            ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c: In function 'cs_etm_info_priv_size':
->     arch/arm/util/cs-etm.c:525:17: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->        for (i = 0; i < cpu__max_cpu(); i++) {
->                      ^
->     arch/arm/util/cs-etm.c:526:39: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->         if (!perf_cpu_map__has(event_cpus, i) ||
->                                            ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c:527:40: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->             !perf_cpu_map__has(online_cpus, i))
->                                             ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c:539:17: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->        for (i = 0; i < cpu__max_cpu(); i++) {
->                      ^
->     arch/arm/util/cs-etm.c:540:40: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->         if (!perf_cpu_map__has(online_cpus, i))
->                                             ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c: In function 'cs_etm_info_fill':
->     arch/arm/util/cs-etm.c:725:38: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->         if (perf_cpu_map__has(event_cpus, i) &&
->                                           ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c:726:40: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->             !perf_cpu_map__has(online_cpus, i))
->                                             ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     arch/arm/util/cs-etm.c:746:16: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->       for (i = 0; i < cpu__max_cpu() && offset < priv_size; i++)
->                     ^
->     arch/arm/util/cs-etm.c:747:34: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->        if (perf_cpu_map__has(cpu_map, i))
->                                       ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'util' failed
->     make[5]: *** [util] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arm' failed
->     make[4]: *** [arm] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arch' failed
->     make[3]: *** [arch] Error 2
->   66     6.99 ubuntu:16.04-x-arm64          : FAIL gcc version 5.4.0 20160609 (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9)
->     arch/arm64/util/pmu.c: In function 'pmu_events_map__find':
->     arch/arm64/util/pmu.c:18:21: error: invalid operands to binary != (have 'int' and 'struct perf_cpu')
->        if (pmu->cpus->nr != cpu__max_cpu())
->                          ^
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'util' failed
->     make[5]: *** [util] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arm64' failed
->     make[4]: *** [arm64] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arch' failed
->     make[3]: *** [arch] Error 2
->   67    18.54 ubuntu:16.04-x-powerpc        : Ok   powerpc-linux-gnu-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
->   68    19.04 ubuntu:16.04-x-powerpc64      : Ok   powerpc64-linux-gnu-gcc (Ubuntu/IBM 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
->   69    18.93 ubuntu:16.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu/IBM 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
->   70    19.04 ubuntu:16.04-x-s390           : Ok   s390x-linux-gnu-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
->   71    76.32 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0 , clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
->   72     7.49 ubuntu:18.04-x-arm            : FAIL gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04)
->     arch/arm/util/cs-etm.c: In function 'cs_etm_set_option':
->     arch/arm/util/cs-etm.c:206:16: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->       for (i = 0; i < cpu__max_cpu(); i++) {
->                     ^ ~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:207:38: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->        if (!perf_cpu_map__has(event_cpus, i) ||
->                                           ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:208:39: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->            !perf_cpu_map__has(online_cpus, i))
->                                            ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c: In function 'cs_etm_info_priv_size':
->     arch/arm/util/cs-etm.c:525:17: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->        for (i = 0; i < cpu__max_cpu(); i++) {
->                      ^ ~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:526:39: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->         if (!perf_cpu_map__has(event_cpus, i) ||
->                                            ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:527:40: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->             !perf_cpu_map__has(online_cpus, i))
->                                             ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:539:17: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->        for (i = 0; i < cpu__max_cpu(); i++) {
->                      ^ ~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:540:40: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->         if (!perf_cpu_map__has(online_cpus, i))
->                                             ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c: In function 'cs_etm_info_fill':
->     arch/arm/util/cs-etm.c:725:38: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->         if (perf_cpu_map__has(event_cpus, i) &&
->                                           ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:726:40: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->             !perf_cpu_map__has(online_cpus, i))
->                                             ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:746:16: error: invalid operands to binary < (have 'int' and 'struct perf_cpu')
->       for (i = 0; i < cpu__max_cpu() && offset < priv_size; i++)
->                     ^ ~~~~~~~~~~~~~~
->     arch/arm/util/cs-etm.c:747:34: error: incompatible type for argument 2 of 'perf_cpu_map__has'
->        if (perf_cpu_map__has(cpu_map, i))
->                                       ^
->     In file included from arch/arm/util/../../../util/cpumap.h:8:0,
->                      from arch/arm/util/cs-etm.c:22:
->     /git/perf-5.16.0/tools/lib/perf/include/perf/cpumap.h:22:18: note: expected 'struct perf_cpu' but argument is of type 'int'
->      LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
->                       ^~~~~~~~~~~~~~~~~
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'util' failed
->     make[5]: *** [util] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arm' failed
->     make[4]: *** [arm] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arch' failed
->     make[3]: *** [arch] Error 2
->   73     7.49 ubuntu:18.04-x-arm64          : FAIL gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04)
->     arch/arm64/util/pmu.c: In function 'pmu_events_map__find':
->     arch/arm64/util/pmu.c:18:21: error: invalid operands to binary != (have 'int' and 'struct perf_cpu')
->        if (pmu->cpus->nr != cpu__max_cpu())
->            ~~~~~~~~~~~~~ ^~ ~~~~~~~~~~~~~~
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'util' failed
->     make[5]: *** [util] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arm64' failed
->     make[4]: *** [arm64] Error 2
->     /git/perf-5.16.0/tools/build/Makefile.build:139: recipe for target 'arch' failed
->     make[3]: *** [arch] Error 2
->   74    16.73 ubuntu:18.04-x-m68k           : Ok   m68k-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   75    19.94 ubuntu:18.04-x-powerpc        : Ok   powerpc-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   76    21.35 ubuntu:18.04-x-powerpc64      : Ok   powerpc64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   77    21.55 ubuntu:18.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   78    96.72 ubuntu:18.04-x-riscv64        : Ok   riscv64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   79    18.24 ubuntu:18.04-x-s390           : Ok   s390x-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   80    19.54 ubuntu:18.04-x-sh4            : Ok   sh4-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   81    18.34 ubuntu:18.04-x-sparc64        : Ok   sparc64-linux-gnu-gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
->   82    73.64 ubuntu:20.04                  : FAIL clang version 10.0.0-4ubuntu1
-> 
->   83    22.06 ubuntu:20.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0
->   84    73.74 ubuntu:20.10                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1~20.10) 10.3.0 , Ubuntu clang version 11.0.0-2
->   85    83.78 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
->   86    86.88 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
->   87   105.27 ubuntu:22.04                  : Ok   gcc (Ubuntu 11.2.0-13ubuntu1) 11.2.0 , Ubuntu clang version 13.0.0-9
-> BUILD_TARBALL_HEAD=16ed0580fb4d64bd59771ae7559dc307f04a0473
-> 88 5613.66
-> 
-> real	95m27.836s
-> user	1m24.038s
-> sys	0m50.044s
-> [perfbuilder@five ~]$
-> 
->  
-> > Thanks,
-> > Ian
-> > 
-> > > [acme@quaco perf]$ uname -a
-> > > Linux quaco 5.15.7-200.fc35.x86_64 #1 SMP Wed Dec 8 19:00:47 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-> > > [acme@quaco perf]$ git log --oneline -1
-> > > 16ed0580fb4d64bd (HEAD -> perf/core, seventh/perf/core, five/perf/core, acme.korg/tmp.perf/perf_cpu) perf cpumap: Give CPUs their own type
-> > > [acme@quaco perf]$ perf -v
-> > > perf version 5.16.g16ed0580fb4d
-> > > [acme@quaco perf]$ sudo su -
-> > > [sudo] password for acme:
-> > > [root@quaco ~]# perf -vv
-> > > perf version 5.16.g16ed0580fb4d
-> > >                  dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
-> > >     dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
-> > >                  glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
-> > >          syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
-> > >                 libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
-> > >                 libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
-> > >                libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-> > > numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-> > >                libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
-> > >              libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
-> > >               libslang: [ on  ]  # HAVE_SLANG_SUPPORT
-> > >              libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
-> > >              libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
-> > >     libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
-> > >                   zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
-> > >                   lzma: [ on  ]  # HAVE_LZMA_SUPPORT
-> > >              get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
-> > >                    bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
-> > >                    aio: [ on  ]  # HAVE_AIO_SUPPORT
-> > >                   zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
-> > >                libpfm4: [ OFF ]  # HAVE_LIBPFM
-> > > [root@quaco ~]# perf test
-> > >   1: vmlinux symtab matches kallsyms                                 : Ok
-> > >   2: Detect openat syscall event                                     : Ok
-> > >   3: Detect openat syscall event on all cpus                         : Ok
-> > >   4: Read samples using the mmap interface                           : Ok
-> > >   5: Test data source output                                         : Ok
-> > >   6: Parse event definition strings                                  : Ok
-> > >   7: Simple expression parser                                        : Ok
-> > >   8: PERF_RECORD_* events & perf_sample fields                       : Ok
-> > >   9: Parse perf pmu format                                           : Ok
-> > >  10: PMU events                                                      :
-> > >  10.1: PMU event table sanity                                        : Ok
-> > >  10.2: PMU event map aliases                                         : Ok
-> > >  10.3: Parsing of PMU event table metrics                            : Ok
-> > >  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-> > >  11: DSO data read                                                   : Ok
-> > >  12: DSO data cache                                                  : Ok
-> > >  13: DSO data reopen                                                 : Ok
-> > >  14: Roundtrip evsel->name                                           : Ok
-> > >  15: Parse sched tracepoints fields                                  : Ok
-> > >  16: syscalls:sys_enter_openat event fields                          : Ok
-> > >  17: Setup struct perf_event_attr                                    : Ok
-> > >  18: Match and link multiple hists                                   : Ok
-> > >  19: 'import perf' in python                                         : Ok
-> > >  20: Breakpoint overflow signal handler                              : Ok
-> > >  21: Breakpoint overflow sampling                                    : Ok
-> > >  22: Breakpoint accounting                                           : Ok
-> > >  23: Watchpoint                                                      :
-> > >  23.1: Read Only Watchpoint                                          : Skip (missing hardware support)
-> > >  23.2: Write Only Watchpoint                                         : Ok
-> > >  23.3: Read / Write Watchpoint                                       : Ok
-> > >  23.4: Modify Watchpoint                                             : Ok
-> > >  24: Number of exit events of a simple workload                      : Ok
-> > >  25: Software clock events period values                             : Ok
-> > >  26: Object code reading                                             : Ok
-> > >  27: Sample parsing                                                  : Ok
-> > >  28: Use a dummy software event to keep tracking                     : Ok
-> > >  29: Parse with no sample_id_all bit set                             : Ok
-> > >  30: Filter hist entries                                             : Ok
-> > >  31: Lookup mmap thread                                              : Ok
-> > >  32: Share thread maps                                               : Ok
-> > >  33: Sort output of hist entries                                     : Ok
-> > >  34: Cumulate child hist entries                                     : Ok
-> > >  35: Track with sched_switch                                         : Ok
-> > >  36: Filter fds with revents mask in a fdarray                       : Ok
-> > >  37: Add fd to a fdarray, making it autogrow                         : Ok
-> > >  38: kmod_path__parse                                                : Ok
-> > >  39: Thread map                                                      : Ok
-> > >  40: LLVM search and compile                                         :
-> > >  40.1: Basic BPF llvm compile                                        : Ok
-> > >  40.2: kbuild searching                                              : Ok
-> > >  40.3: Compile source for BPF prologue generation                    : Ok
-> > >  40.4: Compile source for BPF relocation                             : Ok
-> > >  41: Session topology                                                : Ok
-> > >  42: BPF filter                                                      :
-> > >  42.1: Basic BPF filtering                                           : Ok
-> > >  42.2: BPF pinning                                                   : Ok
-> > >  42.3: BPF prologue generation                                       : Ok
-> > >  43: Synthesize thread map                                           : Ok
-> > >  44: Remove thread map                                               : Ok
-> > >  45: Synthesize cpu map                                              : Ok
-> > >  46: Synthesize stat config                                          : Ok
-> > >  47: Synthesize stat                                                 : Ok
-> > >  48: Synthesize stat round                                           : Ok
-> > >  49: Synthesize attr update                                          : Ok
-> > >  50: Event times                                                     : Ok
-> > >  51: Read backward ring buffer                                       : Ok
-> > >  52: Print cpu map                                                   : Ok
-> > >  53: Merge cpu map                                                   : Ok
-> > >  54: Probe SDT events                                                : Ok
-> > >  55: is_printable_array                                              : Ok
-> > >  56: Print bitmap                                                    : Ok
-> > >  57: perf hooks                                                      : Ok
-> > >  58: builtin clang support                                           :
-> > >  58.1: builtin clang compile C source to IR                          : Skip (not compiled in)
-> > >  58.2: builtin clang compile C source to ELF object                  : Skip (not compiled in)
-> > >  59: unit_number__scnprintf                                          : Ok
-> > >  60: mem2node                                                        : Ok
-> > >  61: time utils                                                      : Ok
-> > >  62: Test jit_write_elf                                              : Ok
-> > >  63: Test libpfm4 support                                            :
-> > >  63.1: test of individual --pfm-events                               : Skip (not compiled in)
-> > >  63.2: test groups of --pfm-events                                   : Skip (not compiled in)
-> > >  64: Test api io                                                     : Ok
-> > >  65: maps__merge_in                                                  : Ok
-> > >  66: Demangle Java                                                   : Ok
-> > >  67: Demangle OCaml                                                  : Ok
-> > >  68: Parse and process metrics                                       : Ok
-> > >  69: PE file support                                                 : Ok
-> > >  70: Event expansion for cgroups                                     : Ok
-> > >  71: Convert perf time to TSC                                        : Ok
-> > >  72: dlfilter C API                                                  : Ok
-> > >  73: Sigtrap                                                         : Ok
-> > >  74: x86 rdpmc                                                       : Ok
-> > >  75: Test dwarf unwind                                               : Ok
-> > >  76: x86 instruction decoder - new instructions                      : Ok
-> > >  77: Intel PT packet decoder                                         : Ok
-> > >  78: x86 bp modify                                                   : Ok
-> > >  79: x86 Sample parsing                                              : Ok
-> > >  80: build id cache operations                                       : Ok
-> > >  81: daemon operations                                               : Ok
-> > >  82: perf pipe recording and injection test                          : Ok
-> > >  83: Add vfs_getname probe to get syscall args filenames             : Ok
-> > >  84: probe libc's inet_pton & backtrace it with ping                 : Ok
-> > >  85: Use vfs_getname probe to get syscall args filenames             : Ok
-> > >  86: Zstd perf.data compression/decompression                        : Ok
-> > >  87: perf stat csv summary test                                      : Ok
-> > >  88: perf stat metrics (shadow stat) test                            : Ok
-> > >  89: perf all metricgroups test                                      : FAILED!
-> > >  90: perf all metrics test                                           : Ok
-> > >  91: perf all PMU test                                               : Ok
-> > >  92: perf stat --bpf-counters test                                   : Ok
-> > >  93: Check Arm CoreSight trace data recording and synthesized samples: Skip
-> > >  94: Check Arm SPE trace data recording and synthesized samples      : Skip
-> > >  95: Check open filename arg using perf trace + vfs_getname          : Ok
-> > > [root@quaco ~]#
-> > >
-> > > And the containers are ok so far:
-> > >
-> > > [perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.100.2/perf/perf-5.16.0.tar.xz
-> > > [perfbuilder@five ~]$ time dm
-> > >    1    95.61 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
-> > >    2    56.18 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
-> > >    3    54.98 alpine:3.5                    : Ok   gcc (Alpine 6.2.1) 6.2.1 20160822 , clang version 3.8.1 (tags/RELEASE_381/final)
-> > >    4    57.69 alpine:3.6                    : Ok   gcc (Alpine 6.3.0) 6.3.0 , clang version 4.0.0 (tags/RELEASE_400/final)
-> > >    5    63.62 alpine:3.7                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.0 (tags/RELEASE_500/final) (based on LLVM 5.0.0)
-> > >    6    64.52 alpine:3.8                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.1 (tags/RELEASE_501/final) (based on LLVM 5.0.1)
-> > >    7    66.54 alpine:3.9                    : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 5.0.1 (tags/RELEASE_502/final) (based on LLVM 5.0.1)
-> > >    8    91.91 alpine:3.10                   : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
-> > >    9   104.93 alpine:3.11                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 9.0.0 (https://git.alpinelinux.org/aports f7f0d2c2b8bcd6a5843401a9a702029556492689) (based on LLVM 9.0.0)
-> > >   10   107.97 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
-> > >   11   115.98 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
-> > >   12   101.73 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
-> > >   13   103.35 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
-> > >   14   104.43 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128 , Alpine clang version 12.0.1
-> > >   15    51.06 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
-> > >   16    75.95 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
-> > >   17    75.26 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
-> > >   18    74.85 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20210911 (ALT Sisyphus 11.2.1-alt1) , ALT Linux Team clang version 12.0.1
-> > >   19    52.87 amazonlinux:1                 : Ok   gcc (GCC) 7.2.1 20170915 (Red Hat 7.2.1-2) , clang version 3.6.2 (tags/RELEASE_362/final)
-> > >   20    85.98 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
-> > >   21    79.77 archlinux:base                : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
-> > >   22    83.56 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
-> > >   23    98.02 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-3) , clang version 12.0.1 (Red Hat 12.0.1-2.module_el8.6.0+937+1cafe22c)
-> > >   24    27.67 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 11.2.1 20211228 releases/gcc-11.2.0-618-g3b2b18144c , clang version 11.1.0
-> > >   25    65.92 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 , clang version 3.8.1-24 (tags/RELEASE_381/final)
-> > >   26    62.20 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
-> > >   27: debian:11
-> > >
-> 
-> -- 
-> 
-> - Arnaldo
-
--- 
-
-- Arnaldo
+Regards,
+Raghavendra
+> Thanks,
+> Reiji
+>
+> > -               }
+> >                 break;
+> >         case ARM_SMCCC_TRNG_GET_UUID:
+> >                 smccc_set_retval(vcpu, le32_to_cpu(u[0]), le32_to_cpu(u[1]),
+> > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> > index 5d38628a8d04..8fe68d8d6d96 100644
+> > --- a/include/kvm/arm_hypercalls.h
+> > +++ b/include/kvm/arm_hypercalls.h
+> > @@ -6,6 +6,9 @@
+> >
+> >  #include <asm/kvm_emulate.h>
+> >
+> > +#define ARM_SMCCC_STD_FEATURES \
+> > +       GENMASK_ULL(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
+> > +
+> >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> >
+> >  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+> > @@ -42,9 +45,12 @@ static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
+> >
+> >  struct kvm_one_reg;
+> >
+> > +void kvm_arm_init_hypercalls(struct kvm *kvm);
+> > +int kvm_arm_num_fw_bmap_regs(void);
+> >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu);
+> >  int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices);
+> >  int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg);
+> >  int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg);
+> > +bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id);
+> >
+> >  #endif
+> > --
+> > 2.34.1.448.ga2b2bfdf31-goog
+> >

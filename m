@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE62048A969
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C12348A96C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348943AbiAKIex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:34:53 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:38996 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348936AbiAKIev (ORCPT
+        id S1348951AbiAKIfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:35:11 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16700 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348936AbiAKIfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 03:34:51 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A2095212B5;
-        Tue, 11 Jan 2022 08:34:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641890090; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lub5q1qgOvncD1Ba+apCc8E7PLbL4JMxqnJyN9TDEZU=;
-        b=jlOT/CFH0Og1QGmvac+XxAhfNJ90peYIrP6zUK+wIy3AU3T4xXvtkJWF1aO8E6onwjtT8N
-        4y7jvRl0PgWAhftDgmEnmUyjJzP+X49fE9YLBM2qdmDdRfD5JaA2DhD65RDsGbBqGBBkny
-        2x556g8VpcVU1Z/pkHYyaoqMsoU/ZlQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 62F7BA3B81;
-        Tue, 11 Jan 2022 08:34:50 +0000 (UTC)
-Date:   Tue, 11 Jan 2022 09:34:49 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Rafael Aquini <raquini@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH v2 0/4] mm, memory_hotplug: handle unitialized numa node
- gracefully
-Message-ID: <Yd1BKSU9y5miP2U5@dhcp22.suse.cz>
-References: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
- <20211214100732.26335-1-mhocko@kernel.org>
- <YdyiFq+A25Mg0odE@optiplex-lnx>
+        Tue, 11 Jan 2022 03:35:10 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JY3nd5JmvzZf5t;
+        Tue, 11 Jan 2022 16:31:33 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 11 Jan 2022 16:35:08 +0800
+Subject: Re: Questions about the patch 054aa8d439b9 ("fget: check that the fd
+ still exists after getting a ref to it")
+To:     Jann Horn <jannh@google.com>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        <mszeredi@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "zhangyi (F)" <yi.zhang@huawei.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <58644a55-561d-4a2e-6741-589d013837f1@huawei.com>
+ <CAG48ez0Xz=22u4tCwt9s8WqmOvtFB3ajbaiyt1MWkAtytu0wUQ@mail.gmail.com>
+From:   "libaokun (A)" <libaokun1@huawei.com>
+Message-ID: <6cefad75-9e7e-1cf8-22ad-bbee8a105933@huawei.com>
+Date:   Tue, 11 Jan 2022 16:35:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdyiFq+A25Mg0odE@optiplex-lnx>
+In-Reply-To: <CAG48ez0Xz=22u4tCwt9s8WqmOvtFB3ajbaiyt1MWkAtytu0wUQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 10-01-22 16:16:06, Rafael Aquini wrote:
-> On Tue, Dec 14, 2021 at 11:07:28AM +0100, Michal Hocko wrote:
-> > Hi,
-> > this should be the full bundle for now. I have ended up with 4 patches.
-> > The primary fix is patch 2 (should be reasonably easy to backport to
-> > older kernels if there is any need for that). Patches 3 and 4 are mere
-> > clean ups.
-> >
-> > I will repost once this can get some testing from Alexey. Shouldn't be
-> > too much different from http://lkml.kernel.org/r/YbHfBgPQMkjtuHYF@dhcp22.suse.cz
-> > with the follow up fix squashed in.
-> > 
-> > I would really appreciate to hear more about http://lkml.kernel.org/r/YbMZsczMGpChaWz0@dhcp22.suse.cz
-> > because I would like to add that information to the changelog as well.
-> > 
-> > Thanks for the review and testing.
-> > 
-> 
-> FWIW, you can add my Acked-by on your repost Michal.
-> 
-> I reviewed your patches and tested them against that PPC crash on boot 
-> described at https://lore.kernel.org/all/YdxoXhTqCmVrT0R5@optiplex-fbsd/
-> 
-> Everything has worked like a charm, AFAICT.
-> 
-> Thank you for letting me know about these patches, and thanks for
-> working on them as a follow-up to that problem reported by Nico.
+在 2022/1/10 17:09, Jann Horn 写道:
+> On Wed, Dec 22, 2021 at 11:32 AM libaokun (A) <libaokun1@huawei.com> wrote:
+>>> From: Linus Torvalds <torvalds@linux-foundation.org>
+>>> Date: Wed, 1 Dec 2021 10:06:14 -0800
+>>> Subject: fget: check that the fd still exists after getting a ref to it
+>>>
+>>> Jann Horn points out that there is another possible race wrt Unix domain
+>>> socket garbage collection, somewhat reminiscent of the one fixed in
+>>> commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
+>>>
+>>> See the extended comment about the garbage collection requirements added
+>>> to unix_peek_fds() by that commit for details.
+>>>
+>>> The race comes from how we can locklessly look up a file descriptor just
+>>> as it is in the process of being closed, and with the right artificial
+>>> timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
+>>> Unix domain socket garbage collector could see the reference count
+>>> decrement of the close() happen before fget() took its reference to the
+>>> file and the file was attached onto a new file descriptor.
+>> I analyzed this CVE and tried to reproduce it.
+>>
+>> I guess he triggered it like the stack below.
+>>
+>>
+>> close_fd                               |
+>>    pick_file                             |
+>>                                          | __fget_files
+>> file = files_lookup_fd_rcu(files, fd); |
+>>                                          |
+>> rcu_assign_pointer(fdt->fd[fd], NULL);
+>>    filp_close                            |
+>>     fput                                 |
+>>                                          | get_file_rcu_many // ned ref>=1
+>>      fput_many(file, 1);                 |
+>>       file_free(file);                   |
+>>                                          |  return file
+>>                                          |  // read-after-free
+> The race is more complicated than that; you also need to add unix_gc()
+> to the race. And if you want to get to memory corruption, you need one
+> or two more races involving unix_stream_read_generic() on top of that.
+>
+>> If you want to successfully execute the get_file_rcu_many function,
+>>
+>> the reference counting of the file is greater than or equal to 1 and
+>>
+>> is greater than or equal to 2 after the execution.
+>>
+>> However, close releases only one reference count and does not release
+>> the file,
+>>
+>> so read-after-free does not occur. So how is the race triggered here?
+> This bug does not lead to a UAF of the file, it leads to a locking
+> inconsistency between the unix stream read path and the GC.
+>
+>> The question has been pondered for a long time without any results.
+>>
+>> Could I get more details (e.g. reproduction methods or stacks) from you ?
+> See https://bugs.chromium.org/p/project-zero/issues/detail?id=2247 for
+> the original bug report. I'm also working on a more detailed blog
+> post, but that isn't finished yet.
+> .
 
-Thanks a lot for review and testing Rafael!
+Thank you very much for your reply!
+
+With your help, I have understood the problem and successfully 
+reproduced it.
+
+Thanks a million!
 
 -- 
-Michal Hocko
-SUSE Labs
+With Best Regards,
+Baokun Li
+

@@ -2,95 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D7F48AF21
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8242048AF2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240955AbiAKOHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:07:17 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:52410 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238129AbiAKOHQ (ORCPT
+        id S241187AbiAKOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:10:03 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:45176 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241015AbiAKOKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:07:16 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E9847340;
-        Tue, 11 Jan 2022 15:07:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641910035;
-        bh=g0YLAV52b9NcNAxgXdu6ezu7y1czJ/KZAXOlP8Y7GVI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sMjgJkR0Q85Xdph+L8A8oylQqk2SmpdtVU412Z+fcLTclsnw8AdmBcyAhxh1VfQLS
-         oLwdtg9Ie5xUBVxI7/Iz6RrlrgjNgqDFIwaW7pCccrsF4lJ0GJ5aFzESsB42j8+Vxj
-         6dJvpLip5cGdhsLaw0zA+G537Av0srlaVrep4mog=
-Date:   Tue, 11 Jan 2022 16:07:04 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     mchehab@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
-        geert@linux-m68k.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-binding: media: hynix,hi846: use
- $defs/port-base port description
-Message-ID: <Yd2PCHehf0O8WMVP@pendragon.ideasonboard.com>
-References: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
+        Tue, 11 Jan 2022 09:10:02 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 31FC51F37C;
+        Tue, 11 Jan 2022 14:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641910201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pEheax8cHUq+PpKPjpFMPLC2jVHfLP6R8ECbdm/214w=;
+        b=UusrhdrMkYLh5FAMpnWON1J/QUQoekCssXJOgQ1pmfsgXGaERozSRaR79VcuR3ZzgRcSRt
+        L9W4G4K4xRaJ07MmCPUhdtXFYQzt9drKAqXbeAK4XxLI/3VjiqDbGsf5mknLg3/38HtZpe
+        Xx0/8fk8uGRmu1Hn726DyKbvybNWoLY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641910201;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pEheax8cHUq+PpKPjpFMPLC2jVHfLP6R8ECbdm/214w=;
+        b=/p5XzLUxq7TMaydSPAajIcMkJU1LSeopPXWpqtFQEb0vPananL6OSrSLYQAavBlPrcCbkA
+        f+w5BNrVySfbanCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD8D713AB2;
+        Tue, 11 Jan 2022 14:10:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I3reNLiP3WH9XgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 11 Jan 2022 14:10:00 +0000
+Message-ID: <9486843d-bbef-f7e0-354c-2522ea3f896f@suse.de>
+Date:   Tue, 11 Jan 2022 15:10:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: Phyr Starter
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     nvdimm@lists.linux.dev, linux-rdma@vger.kernel.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, Jason Gunthorpe <jgg@nvidia.com>,
+        netdev@vger.kernel.org, Joao Martins <joao.m.martins@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
+ <f7bd672f-dfa8-93fa-e101-e57b90faeb1e@suse.de>
+ <Yd2MeMT6LXWxJIDd@casper.infradead.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <Yd2MeMT6LXWxJIDd@casper.infradead.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------q4YJa809K6MbWZkHsDkLnQxU"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------q4YJa809K6MbWZkHsDkLnQxU
+Content-Type: multipart/mixed; boundary="------------JQ28srt10RofHn0a758GsGXI";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: nvdimm@lists.linux.dev, linux-rdma@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Ming Lei <ming.lei@redhat.com>,
+ linux-block@vger.kernel.org, linux-mm@kvack.org,
+ Jason Gunthorpe <jgg@nvidia.com>, netdev@vger.kernel.org,
+ Joao Martins <joao.m.martins@oracle.com>,
+ Logan Gunthorpe <logang@deltatee.com>, Christoph Hellwig <hch@lst.de>
+Message-ID: <9486843d-bbef-f7e0-354c-2522ea3f896f@suse.de>
+Subject: Re: Phyr Starter
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
+ <f7bd672f-dfa8-93fa-e101-e57b90faeb1e@suse.de>
+ <Yd2MeMT6LXWxJIDd@casper.infradead.org>
+In-Reply-To: <Yd2MeMT6LXWxJIDd@casper.infradead.org>
 
-Thank you for the patch.
+--------------JQ28srt10RofHn0a758GsGXI
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Tue, Jan 11, 2022 at 02:39:36PM +0100, Martin Kepplinger wrote:
-> This is supposed to fix "make dt_binding_check":
+SGkNCg0KQW0gMTEuMDEuMjIgdW0gMTQ6NTYgc2NocmllYiBNYXR0aGV3IFdpbGNveDoNCj4g
+T24gVHVlLCBKYW4gMTEsIDIwMjIgYXQgMTI6NDA6MTBQTSArMDEwMCwgVGhvbWFzIFppbW1l
+cm1hbm4gd3JvdGU6DQo+PiBIaQ0KPj4NCj4+IEFtIDEwLjAxLjIyIHVtIDIwOjM0IHNjaHJp
+ZWIgTWF0dGhldyBXaWxjb3g6DQo+Pj4gVExEUjogSSB3YW50IHRvIGludHJvZHVjZSBhIG5l
+dyBkYXRhIHR5cGU6DQo+Pj4NCj4+PiBzdHJ1Y3QgcGh5ciB7DQo+Pj4gICAgICAgICAgIHBo
+eXNfYWRkcl90IGFkZHI7DQo+Pj4gICAgICAgICAgIHNpemVfdCBsZW47DQo+Pj4gfTsNCj4+
+DQo+PiBEaWQgeW91IGxvb2sgYXQgc3RydWN0IGRtYV9idWZfbWFwPyBbMV0NCj4gDQo+IFRo
+YW5rcy4gIEkgd2Fzbid0IGF3YXJlIG9mIHRoYXQuICBJdCBkb2Vzbid0IHNlZW0gdG8gYWN0
+dWFsbHkgc29sdmUgdGhlDQo+IHByb2JsZW0sIGluIHRoYXQgaXQgZG9lc24ndCBjYXJyeSBh
+bnkgbGVuZ3RoIGluZm9ybWF0aW9uLiAgRGlkIHlvdSBtZWFuDQo+IHRvIHBvaW50IG1lIGF0
+IGEgZGlmZmVyZW50IHN0cnVjdHVyZT8NCj4gDQoNCkl0J3MgdGhlIHN0cnVjdHVyZSBJIG1l
+YW50LiBJdCByZWZlcnMgdG8gYSBidWZmZXIsIHNvIHRoZSBsZW5ndGggY291bGQgDQpiZSBh
+ZGRlZC4gRm9yIHNvbWV0aGluZyBtb3JlIHNvcGhpc3RpY2F0ZWQsIGRtYV9idWZfbWFwIGNv
+dWxkIGJlIGNoYW5nZWQgDQp0byBkaXN0aW5ndWlzaCBiZXR3ZWVuIHRoZSBidWZmZXIgYW5k
+IGFuIGl0ZXJhdG9yIHBvaW50aW5nIGludG8gdGhlIGJ1ZmZlci4NCg0KQnV0IGlmIGl0J3Mg
+cmVhbGx5IGRpZmZlcmVudCwgdGhlbiBzbyBiZSBpdC4NCg0KQmVzdCByZWdhcmRzDQpUaG9t
+YXMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
+cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
+LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
+Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Maybe s/is supposed to fix/fixes/ ? :-) No need to post a new version
-just for that, I think it can be changed when applying the patch. Sakari
-?
+--------------JQ28srt10RofHn0a758GsGXI--
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+--------------q4YJa809K6MbWZkHsDkLnQxU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->     Documentation/devicetree/bindings/media/i2c/hynix,hi846.example.dt.yaml:
-> camera@20: port:endpoint: Unevaluated properties are not allowed
-> ('link-frequencies', 'data-lanes' were unexpected)
->     From schema: Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> 
-> Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
-> 
-> 
-> revision history
-> ----------------
-> v2: thank you, Laurent
->  * add unevaluatedProperties: false
-> v1:
-> https://lore.kernel.org/linux-media/20220110123804.377944-1-martin.kepplinger@puri.sm/
-> 
-> 
->  Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> index 85a8877c2f38..5d0fc18a2ea2 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> @@ -49,7 +49,8 @@ properties:
->      description: Definition of the regulator used for the VDDD power supply.
->  
->    port:
-> -    $ref: /schemas/graph.yaml#/properties/port
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    unevaluatedProperties: false
->  
->      properties:
->        endpoint:
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Regards,
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHdj7gFAwAAAAAACgkQlh/E3EQov+BS
+lRAAz+DTGAOsJc2UgiW04AClMKGGbLV3LKjkDNZAa+Hc0xHE/ZEHF83nn9E+5pRFGz+Cfo+CI9Q3
+tQc0EWE5IAMeyE+L/LsllOmSyhtSIyaAfYdrW2zTAuDRoSBZ8pCpO4lQwzmkXZ74LEUya5qbBPs/
+Py7h077aQI470Yz4IMEpoq+dISWarWoo9XdD7VniouUdWs60YdfGG4Bd9w0AiV1kUC+DMkIZzj1o
+qUjZ2R2KvvtSt0a/e52re1sTDbNTYTXYdcIiE3i2komeCBz6uH/pBxbOXdKlThAz2MOcC9PvyN9n
+hqNAcSk0m0RPmNI1cm/EiDsb+YJeGBZ/zschwco30nJZ2pE66Ri/b//qf1zCg4l1e8Tx+Py7j3fR
+a0opO6MHLSdxa1kodAEwrEhIrzEAyJPqN0tfBFA2h58Kq+vA0l0NwUGTy+tLPt1Po72XINe8Ohxj
+OOfFwE1vJbyshQ+YeUtxiJLHvOkyAb3hqjSC8o8rV/CgzheVg9tGHrGfodzOcItHoJ3iyc2zot4E
+Qi+zISV4nx2wPLPSjKlpMcbUx0BUeH0rLiOVdruQgLH/Ap63tmx/Ce3XXf+2qpH//vPvCZb22asY
+u2S5nzcMTO3X82nqaGF4PMhh5JYvpA9eQ1zoMHZv0l9PPxxC11431rRgJOwuKb0fgoKPuooRmj4r
+eoQ=
+=vOo8
+-----END PGP SIGNATURE-----
 
-Laurent Pinchart
+--------------q4YJa809K6MbWZkHsDkLnQxU--

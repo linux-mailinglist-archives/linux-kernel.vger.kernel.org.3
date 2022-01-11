@@ -2,138 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 482C048BA7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B7948BA81
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245634AbiAKWIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S1345742AbiAKWJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiAKWIK (ORCPT
+        with ESMTP id S1345466AbiAKWJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:08:10 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885B4C06173F;
-        Tue, 11 Jan 2022 14:08:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so7949656pjj.2;
-        Tue, 11 Jan 2022 14:08:10 -0800 (PST)
+        Tue, 11 Jan 2022 17:09:00 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B30C06173F;
+        Tue, 11 Jan 2022 14:09:00 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id k15so1813030edk.13;
+        Tue, 11 Jan 2022 14:09:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7W9wG6a0r9h7eh7Y/7gTmsEddpx4vXeMZh5gRfRyQq0=;
-        b=lqsd1muZWKNtM/4KRKzxNEh8aEaBd5mcI5R0gwCpoeJqYiJAAs5eTuqjujaGgGgSuR
-         HI5RtAlrnryMg7ksr2f4JOyDyLddfg4AIEdSWtIr5J0KCsd1VtOv2p+7RSZLpguPkgrp
-         WhsVitTUAsqJ4v/DhNkWkXgADvU3D110GZiNHlwdttla+nBKbTmDKzFhYAxVCRbPatyr
-         Haw0MObb1ZRboaCPFCMp32hO1JQX1dpkeEG/mYvFg8FH7edH6+MTuMig7MePcHTGuzxh
-         WjMFPEiMG5tzYrKJtt4FvWcZtYHQKUbUSzGBZHGwADZX1uh/CXziNPQPeBk/NXowILT9
-         4ZQw==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=AkrcGrVzJVeMi9QZ0GgFqv58rNqhQAkifpl96t3BMvs=;
+        b=pV+XY/w89E+g8m7FO1TZnIYkp/3uwM/PZXmKtlXP+fl4YSAZTOi0G8mP1VngeboXui
+         0oOgvwPrIU1m4FwnlRixybLpslH5fiqoXLXLFpW5dvyyvUELctHZTdn8mWn6ZnA8fays
+         4ATIg6oHiQlPNnt9wB+MYds97o+VGVcxd7scPIxFKjCZg6/yw3O763RfNjDG4tKBKAJ3
+         SAkPFUAfFBDCVsT5btspwfHjp9anVVNtQWIdyFSH/Wc6QOuTfsHtQpvC3ZUwnmcfADub
+         sT55l/DfFoT7l7Cn4y3WdKWa2SwOhYfaQ24lYuSEhYC1DjauYXdU8/M1/wVdNuYkyp+3
+         PiMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7W9wG6a0r9h7eh7Y/7gTmsEddpx4vXeMZh5gRfRyQq0=;
-        b=3Kbkk8V1C3AsoBKqPpazYT6yuWrZb1aWtM353VexvV1Ghcbugiea/I1v9FKR+DoY6h
-         d6C3K9tjkmHQqrsXc0vhE7lAnvaRB/PgJ38fPF1WZRV6xvdk5pwndsuLXQ2AEeiiJt1p
-         PnU1uqwQfzFIp/bs3e31tl/0u+ZbHajY8qOYhtHv2HtjxlzBs4a7nnoxuEuHHtk9B8Kc
-         hjOPq1feHuUaQ0qMNdiYA8tl5LLA9iWflab/pGUiVgyniAaYvkUt6JStJdV9uSnMApLf
-         qd1iLpXxyMYWShu4GY2918Bou5in+LNt3s4FANkGFQi6jFEU6NYXmzJJaWLksKMVKJNg
-         4xGw==
-X-Gm-Message-State: AOAM533fCT9zks+IryFaTqS4WVXK6gfI+dso5cehGWRL0mx5zx58EXXP
-        u75d7Tm/IaaePI7uHDO6JJo=
-X-Google-Smtp-Source: ABdhPJyBTijm2jOTPtlSr+F1WHmw3ZLTBS/FkX3bF7cWBldnBRWTgwprecoZw/DwGmk2UBs7Sjtbhw==
-X-Received: by 2002:a63:7c48:: with SMTP id l8mr5623231pgn.483.1641938889874;
-        Tue, 11 Jan 2022 14:08:09 -0800 (PST)
-Received: from [10.69.44.239] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id nn16sm3378762pjb.54.2022.01.11.14.08.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 14:08:09 -0800 (PST)
-Message-ID: <292c6bcd-8e6f-49d9-3356-4dc3906f3d05@gmail.com>
-Date:   Tue, 11 Jan 2022 14:08:08 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=AkrcGrVzJVeMi9QZ0GgFqv58rNqhQAkifpl96t3BMvs=;
+        b=2bz4ihqryfIDBrGWujvvuxhxJjd7pJWEkTTq4R62pYN8jsDkHJyE1RsW/xgH+vAKyu
+         rO+2CGtDpu+aDjrvd2njF5fEwJYmS4I5Vhkg562W0dCFaOXJf3hkLlrxxU1AZqkixF7k
+         C8XJn5XuDP8o7a32pI1s7TEIK+ai6/5golwW6jL1kR0uSGzB1LVuyZxUt8GKPQ5xCQXm
+         J/E4u5qAh5o1UelBFYH24xzJkPbCWNgHrAbUwJ40Bj/L2kV/in2HRHYm4UJUJ5hBcf/o
+         NWLFsU5UaR0n227etX7zPx4pb5l6mnoL8G7QyBdOwbC0gc6Pr0TD9XEO1O5tuzG3qrNz
+         l0Pw==
+X-Gm-Message-State: AOAM533mDVvIfnsc/cSc7pZMqf/oKGA4JqyuwsxN5mt8WCSDe8g9gsek
+        eklr7QgyG/u4te4wTqYCrnpEhpi+UxUL3EZqnbU=
+X-Google-Smtp-Source: ABdhPJw96nWtta56U5jXF0Jj5CzV+hWqwrSBw/zMsuEp4TY7D1Ufd4JRyPY3EwFhZ0w62p2FoCE/wf0xZJInqicSap4=
+X-Received: by 2002:a05:6402:3496:: with SMTP id v22mr6356889edc.347.1641938938837;
+ Tue, 11 Jan 2022 14:08:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] lpfc: Retry FLOGI if previous attempt was rejected with
- busy
-Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>, linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-References: <20220110145937.129224-1-dwagner@suse.de>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <20220110145937.129224-1-dwagner@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211222012105.3438916-1-rajatja@google.com> <20220111163916.GA148556@bhelgaas>
+In-Reply-To: <20220111163916.GA148556@bhelgaas>
+Reply-To: rajatxjain@gmail.com
+From:   Rajat Jain <rajatxjain@gmail.com>
+Date:   Tue, 11 Jan 2022 14:08:47 -0800
+Message-ID: <CAA93t1pkyQdZfWAQardP6bzw7Exsvd6nKqR2UPY4WPKKHVytaQ@mail.gmail.com>
+Subject: Re: [PATCH] pci: Make DWORD accesses while saving / restoring LTR state
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/2022 6:59 AM, Daniel Wagner wrote:
-> The login state machine stops at the first FLOGI attempt which fails
-> marked as busy:
-> 
-> lpfc 0000:58:00.0: 1:(0):2858 FLOGI failure Status:x9/x50000 TMO:x14 Data x19140820 x0
-> 
-> Add the FLOGI cmd to the list of commands which are allowed to retry.
-> 
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
-> ---
-> 
-> we observerd log below during failover operations. With this patch all
-> is good. FLOGI is retried and succeeds eventually.
-> 
-> lpfc 0000:58:00.0: 29: [  575.971250] 1:0392 Async Event: word0:x8010140, word1:x3204000, word2:x3, word3:xc0011000
-> lpfc 0000:58:00.0: 30: [  575.971260] 1:2896 Async FC event - Speed:8000GBaud Topology:x1 LA Type:x1 Port Type:1 Port Number:0 Logical speed:8000Mbps Fault:0
-> lpfc 0000:58:00.0: 31: [  575.971264] 1:(0):0354 Mbox cmd issue - Enqueue Data: x95 (x0/x0) x0 xc600 x2
-> lpfc 0000:58:00.0: 32: [  575.971266] 1:(0):0355 Mailbox cmd x95 (x0/x0) issue Data: x0 xc700
-> lpfc 0000:58:00.0: 33: [  575.971461] 1:(0):0307 Mailbox cmd x95 (x0/x0) Cmpl lpfc_mbx_cmpl_read_topology [lpfc] Data: x9500 x3 x2001 x1 x80 x277cd000 x44 x80002005 x200a x0 x76cf064 x0
-> lpfc 0000:58:00.0: 34: [  575.971472] 1:(0):0354 Mbox cmd issue - Enqueue Data: x8d (x0/x0) x0 xc600 x2
-> lpfc 0000:58:00.0: 35: [  575.971473] 1:(0):0354 Mbox cmd issue - Enqueue Data: x7 (x0/x0) x6 xc600 x2
-> lpfc 0000:58:00.0: 36: [  575.971475] 1:(0):0355 Mailbox cmd x8d (x0/x0) issue Data: x6 xc700
-> lpfc 0000:58:00.0: 37: [  575.971682] 1:(0):0355 Mailbox cmd x7 (x0/x0) issue Data: x6 xc700
-> lpfc 0000:58:00.0: 38: [  575.971689] 1:(0):0307 Mailbox cmd x8d (x0/x0) Cmpl lpfc_mbx_cmpl_read_sparam [lpfc] Data: x8d00 x0 x0 x70 x277cd800 x44 x1 x0 x0 x0 x0 x0
-> lpfc 0000:58:00.0: 39: [  575.971826] 1:(0):0307 Mailbox cmd x7 (x0/x0) Cmpl lpfc_mbx_cmpl_local_config_link [lpfc] Data: x700 x0 x0 x0 x7d0 x76c xa x0 xf x0 x1800 x0
-> lpfc 0000:58:00.0: 40: [  575.971827] 1:(0):0354 Mbox cmd issue - Enqueue Data: x8d (x0/x0) x6 xc600 x2
-> lpfc 0000:58:00.0: 41: [  575.971827] 1:(0):0355 Mailbox cmd x8d (x0/x0) issue Data: x6 xc700
-> lpfc 0000:58:00.0: 42: [  575.972048] 1:(0):0307 Mailbox cmd x8d (x0/x0) Cmpl lpfc_mbx_cmpl_read_sparam [lpfc] Data: x8d00 x0 x0 x70 x277cd800 x44 x1 x0 x0 x0 x0 x0
-> lpfc 0000:58:00.0: 43: [  575.972050] 1:(0):0247 Start Discovery Timer state x7 Data: x21 xffff8804c6b149e8 x0 x0
-> lpfc 0000:58:00.0: 44: [  575.972051] 1:(0):0932 FIND node did xfffffe NOT FOUND.
-> lpfc 0000:58:00.0: 45: [  575.972052] 1:0001 Allocated rpi:x0 max:x3000 lim:x3000
-> lpfc 0000:58:00.0: 46: [  575.972053] 1:(0):0007 Init New ndlp xffff8804c715d000, rpi:x0 DID:fffffe flg:x0 refcnt:1
-> lpfc 0000:58:00.0: 47: [  575.972055] 1:(0):0116 Xmit ELS command x4 to remote NPORT xfffffe I/O tag: x2fc0, port state:x7 rpi x0 fc_flag:x810114
-> lpfc 0000:58:00.0: 48: [  575.972055] 1:(0):0247 Start Discovery Timer state x7 Data: x21 xffff8804c6b149e8 x0 x0
-> lpfc 0000:58:00.0: 49: [  576.011558] 1:0357 ELS CQE error: status=x9: CQE: 2fc00900 00000000 00050000 80010000
-> lpfc 0000:58:00.0: 50: [  576.011566] 1:0328 Rsp Ring 2 error: IOCB Data: x40000000 x277cd400 x44 x0 x50000 xfffffe x12fc0 x14428a96 x0 x0 x0 x0 x0 x0 x0 x0
-> lpfc 0000:58:00.0: 1:(0):2858 FLOGI failure Status:x9/x50000 TMO:x14 Data x19140820 x0
-> 
-> 
->   drivers/scsi/lpfc/lpfc_els.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-> index db5ccae1b63d..1880e95cb785 100644
-> --- a/drivers/scsi/lpfc/lpfc_els.c
-> +++ b/drivers/scsi/lpfc/lpfc_els.c
-> @@ -4664,7 +4664,8 @@ lpfc_els_retry(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
->   			break;
->   
->   		case LSRJT_LOGICAL_BSY:
-> -			if ((cmd == ELS_CMD_PLOGI) ||
-> +			if ((cmd == ELS_CMD_FLOGI) ||
-> +			    (cmd == ELS_CMD_PLOGI) ||
->   			    (cmd == ELS_CMD_PRLI) ||
->   			    (cmd == ELS_CMD_NVMEPRLI)) {
->   				delay = 1000;
+Hello Bjorn,
 
-Daniel,
+On Tue, Jan 11, 2022 at 8:39 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Dec 21, 2021 at 05:21:05PM -0800, Rajat Jain wrote:
+> > Some devices have an errata such that they only support DWORD accesses
+> > to some registers.
+> >
+> > For e.g. this Bayhub O2 device ([VID:DID] = [0x1217:0x8621]) only
+> > supports DWORD accesses to LTR latency registers and L1 PM substates
+> > control registers:
+> > https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
+> >
+> > Since L1 PM substate control registers are DWORD sized, and hence their
+> > access in the kernel is already DWORD sized, so we don't need to do
+> > anything for them.
+> >
+> > However, the LTR registers being WORD sized, are in need of a solution.
+> > This patch converts the WORD sized accesses to these registers, into
+> > DWORD sized accesses, while saving and restoring them.
+> >
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+>
+> Applied to pci/enumeration for v5.17, thanks, Rajat!
 
-We want to look more closely at this. We do have FLOGI retry logic, but 
-perhaps not tied to lsrjt logical busy. We have had OEM requirements as 
-to how we do FLOGIs and respond to different status's. This change may 
-disrupt those requirements (works for this config, not others). I'll get 
-back to you shortly.
+Thank you.
 
--- james
+>
+> The app note suggests that this erratum only affects the registers at
+> 0x234, 0x248, and 0x24c, i.e., the LTR snoop registers and the L1 SS
+> control registers.
+>
+> Can you confirm that is true?  Byte and word accesses to other parts
+> of config space work correctly?
+>
+> I *assume* the other parts work correctly, because if byte and word
+> accesses were broken, all sorts of things would not work, like
+> PCI_COMMAND, PCI_STATUS, searching the capability list, etc.
 
+
+Yes, that is correct. The Bayhub SD controller works fine otherwise,
+so only these registers needed the quirk.
+
+Thanks & Best Regards,
+
+Rajat
+
+
+>
+> Bjorn
+>
+> > ---
+> >  drivers/pci/pci.c       | 24 ++++++++++++++++--------
+> >  drivers/pci/pcie/aspm.c |  1 +
+> >  2 files changed, 17 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 3d2fb394986a..efa8cd16827f 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -1556,7 +1556,7 @@ static void pci_save_ltr_state(struct pci_dev *dev)
+> >  {
+> >       int ltr;
+> >       struct pci_cap_saved_state *save_state;
+> > -     u16 *cap;
+> > +     u32 *cap;
+> >
+> >       if (!pci_is_pcie(dev))
+> >               return;
+> > @@ -1571,25 +1571,33 @@ static void pci_save_ltr_state(struct pci_dev *dev)
+> >               return;
+> >       }
+> >
+> > -     cap = (u16 *)&save_state->cap.data[0];
+> > -     pci_read_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap++);
+> > -     pci_read_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, cap++);
+> > +     /*
+> > +      * We deliberately do a dword access to save both PCI_LTR_MAX_SNOOP_LAT
+> > +      * and PCI_LTR_MAX_NOSNOOP_LAT together since some devices only support
+> > +      * dword accesses to these registers.
+> > +      */
+> > +     cap = &save_state->cap.data[0];
+> > +     pci_read_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap);
+> >  }
+> >
+> >  static void pci_restore_ltr_state(struct pci_dev *dev)
+> >  {
+> >       struct pci_cap_saved_state *save_state;
+> >       int ltr;
+> > -     u16 *cap;
+> > +     u32 *cap;
+> >
+> >       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
+> >       ltr = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_LTR);
+> >       if (!save_state || !ltr)
+> >               return;
+> >
+> > -     cap = (u16 *)&save_state->cap.data[0];
+> > -     pci_write_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap++);
+> > -     pci_write_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, *cap++);
+> > +     /*
+> > +      * We deliberately do a dword access to restore both
+> > +      * PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT together since
+> > +      * some devices only support dword accesses to these registers.
+> > +      */
+> > +     cap = &save_state->cap.data[0];
+> > +     pci_write_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap);
+> >  }
+> >
+> >  /**
+> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > index 52c74682601a..083f47a7b69b 100644
+> > --- a/drivers/pci/pcie/aspm.c
+> > +++ b/drivers/pci/pcie/aspm.c
+> > @@ -496,6 +496,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+> >       encode_l12_threshold(l1_2_threshold, &scale, &value);
+> >       ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+> >
+> > +     /* Always make DWORD sized accesses to these registers */
+> >       pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
+> >       pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, &pctl2);
+> >       pci_read_config_dword(child, child->l1ss + PCI_L1SS_CTL1, &cctl1);
+> > --
+> > 2.34.1.307.g9b7440fafd-goog
+> >

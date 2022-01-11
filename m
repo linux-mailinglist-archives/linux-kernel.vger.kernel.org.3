@@ -2,94 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B9948B07E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3361B48B080
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241305AbiAKPKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:10:43 -0500
-Received: from mga02.intel.com ([134.134.136.20]:16693 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231876AbiAKPKn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:10:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641913843; x=1673449843;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=raQ8l+bv6wdJlnIW7NpStfMFzzYdy0dFEY+CK/dN7yc=;
-  b=jPJyvjmeGYXGSrHHRWcHYCChQqKeqEweyxlhyzo+CvntIoMA29bAAwyQ
-   Fah/vCuLEPQBxOM/eiveYlk3CI2CiqetIxfoh3MLhj4Ilum9/PxMH2N3e
-   0nxjP2N/NdwY0M0NRvj9h6IW++8mbK/lrKUkIzsAiquhZuJfTMCSb1Xq3
-   Ah0nj8A/13+SAKAVU+PCpt63PnyJ3lBPSGktLljlPrYNpPgpi4LwGOzpq
-   Dwx+tRKChZV0dtxTbITDSGCMtc7jzVLR9PSzdOxGLRZh5Q3gm0nP96TGX
-   SKXiJKk/IfzA8m6NUFv9LpWpGqM0/EV567bFsfC8OsjUyhs6DWsBapAvq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="230845430"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="230845430"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 07:10:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="613243314"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 07:10:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7Ilp-009H3k-3J;
-        Tue, 11 Jan 2022 17:09:09 +0200
-Date:   Tue, 11 Jan 2022 17:09:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] vsprintf: Fix potential unaligned access
-Message-ID: <Yd2dlEMp0a8TAi9i@smile.fi.intel.com>
-References: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
- <Yd2a4MApVR8hexny@alley>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd2a4MApVR8hexny@alley>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S245681AbiAKPKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:10:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56196 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241778AbiAKPKp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:10:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 997EF61422;
+        Tue, 11 Jan 2022 15:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE4FC36AEB;
+        Tue, 11 Jan 2022 15:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641913844;
+        bh=McsMtOZ08KNWSnvYFOe9+6qopfWa4aTK73Luxx5P3hM=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=DNpfDhPldxCXoEMFoSG9T69ITKuzR7l5o1TUboM2eBnDVC96zyQuhCvY0FQk0uMFH
+         EsbPXYK0j1b+Mt6gFfEPSKY3lAvfotrXpk1sTIRSSyey5rm1M1EEEjzpK2eoVSws0l
+         9Gv3yIIcoFSorx6q2a9SVQsnx1ii0vso+OawPTcn0Er3nqNRBtIooGWaR+8uJKNMhO
+         5aOqYCeXnq0QoF3/t+ip3aRutJ1Eo4MNdWvdM6LmH6FTFaTbdCF1gurJhSAcmxfuie
+         6DiVRKddngeHnkcKM6eNIaAjs5tGoZpFzLH3MYhHzmIRBnHCb9IcICCCJiCJGm0mDZ
+         mRpbeQf+zihlQ==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9ACA627C005A;
+        Tue, 11 Jan 2022 10:10:41 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute5.internal (MEProxy); Tue, 11 Jan 2022 10:10:41 -0500
+X-ME-Sender: <xms:753dYTVHh6VdTqykd5DQwTFAgBibeMtuBBaBR9zg0-yIChjkuEZoBg>
+    <xme:753dYbkLZefzSqMVxjUkC0sfpinhDDcgClUxTUELPgQ6NeyIpJc21GK6yBVemQlUE
+    VsHApcD52PbKUqGxlA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudehfedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
+    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:753dYfaLeoIhK2mhrLaGTpCiiGufV2nw04A7qOyKvZlqhS0ah-HYRA>
+    <xmx:753dYeUHmEf-VDFD7Qi5UxWgz8w0qLH91okAyR91Ap2mUr2BXR9ZHw>
+    <xmx:753dYdneMiwtY0tj8wbyw8iiJYBq7x00KZgIlkh9VpUJ5DKYxE3dvA>
+    <xmx:8Z3dYReZHnH6x8hSQoRM46Bi7ny7wUMVACUbPEs-9XCK4EGYmp7-R_9lDcPRaoxT>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 44B3921E006E; Tue, 11 Jan 2022 10:10:39 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4569-g891f756243-fm-20220111.001-g891f7562
+Mime-Version: 1.0
+Message-Id: <fcd3a0f9-0228-4b4a-b425-a7438acef3b9@www.fastmail.com>
+In-Reply-To: <CAHmME9qw8hbbE2y56t7zygedofDDDLoPUxYWGZB_Kae0ipFARA@mail.gmail.com>
+References: <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
+ <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
+ <20211210014337.xmin2lu5rhhe3b3t@valinor>
+ <20220110132349.siplwka7yhe2tmwc@valinor>
+ <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
+ <YdxCsI3atPILABYe@mit.edu>
+ <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu> <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+ <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+ <YdyNxJzdBmSSEtDC@mit.edu>
+ <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
+ <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
+ <CAHmME9qw8hbbE2y56t7zygedofDDDLoPUxYWGZB_Kae0ipFARA@mail.gmail.com>
+Date:   Tue, 11 Jan 2022 07:10:18 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        "Marcelo Henrique Cerri" <marcelo.cerri@canonical.com>,
+        "Simo Sorce" <simo@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jeffrey Walton" <noloader@gmail.com>,
+        "Stephan Mueller" <smueller@chronox.de>,
+        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>,
+        "Willy Tarreau" <w@1wt.eu>, "Nicolai Stange" <nstange@suse.de>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        "Matthew Garrett" <mjg59@srcf.ucam.org>,
+        "Vito Caputo" <vcaputo@pengaru.com>,
+        "Andreas Dilger" <adilger.kernel@dilger.ca>,
+        "Jan Kara" <jack@suse.cz>, "Ray Strode" <rstrode@redhat.com>,
+        "William Jon McCann" <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        "Florian Weimer" <fweimer@redhat.com>,
+        "Lennart Poettering" <mzxreary@0pointer.de>,
+        "Peter Matthias" <matthias.peter@bsi.bund.de>,
+        "Neil Horman" <nhorman@redhat.com>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Julia Lawall" <julia.lawall@inria.fr>,
+        "Dan Carpenter" <dan.carpenter@oracle.com>,
+        "Andy Lavr" <andy.lavr@gmail.com>,
+        "Petr Tesarik" <ptesarik@suse.cz>,
+        "John Haxby" <john.haxby@oracle.com>,
+        "Alexander Lobakin" <alobakin@mailbox.org>,
+        "Jirka Hladky" <jhladky@redhat.com>,
+        "Eric Biggers" <ebiggers@kernel.org>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 03:57:36PM +0100, Petr Mladek wrote:
-> On Mon 2022-01-10 22:50:49, Andy Shevchenko wrote:
-> > The %p4cc specifier in some cases might get an unaligned pointer.
-> > Due to this we need to make copy to local variable once to avoid
-> > potential crashes on some architectures due to improper access.
-> > 
-> > Fixes: af612e43de6d ("lib/vsprintf: Add support for printing V4L2 and DRM fourccs")
-> > Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Looks good to me:
-> 
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> 
-> I have already sent pull request for 5.17. Could this wait
-> for 5.18 or would you prefer to get it into 5.17, please?
-
-It's not so critical.
-But would be nice to have.
-
-> My understanding of Sakari's reply is that the current callers
-> provide aligned pointers. In that case it would not be urgent.
-> But I might have gotten it wrong.
-
-Not really. There are potential unaligned callers, but Sakari
-has another patch that fixes that on the (one of *) caller side.
-
-*) I dunno how many other callers (probably none) in tree and
-   how many potentially can be with similar issue.
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
+On Tue, Jan 11, 2022, at 5:06 AM, Jason A. Donenfeld wrote:
+> Hi Andy,
+>
+> On Tue, Jan 11, 2022 at 2:44 AM Andy Lutomirski <luto@kernel.org> wrot=
+e:
+>> So let=E2=80=99s solve it for real.  Have a driver (in a module) that
+>
+> Um, let's not. This really isn't something the kernel needs to solve
+> here at all. There's a viable userspace solution. I see that the
+> discussion of something finally slightly technical (as opposed to just
+> compliance BS) has nerd sniped you a bit, but keep in mind what the
+> actual overall picture is. This isn't something that needs to be done.
+> My little CUSE thing (which I'm happy to develop out a bit more, even)
+> has the intent of fulfilling a compliance checkbox and nothing more.
+>
+
+
+Can you develop your CUSE thing enough that it=E2=80=99s credibly safe a=
+gainst side channels?  If so, fine.
+
+I admit this is all rather absurd. FIPS aware userspace can do whatever =
+it wants, and
+It should be aware that /dev/urandom IS NOT FIPS.  What=E2=80=99s the pr=
+oblem?  rand(3) isn=E2=80=99t FIPS either, but no one puts person-years =
+of effort into trying to paint it FIPS-colored

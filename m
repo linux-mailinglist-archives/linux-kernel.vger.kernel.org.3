@@ -2,59 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F3D48B0F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA9848B0FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343650AbiAKPgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:36:06 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:58141 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240480AbiAKPgF (ORCPT
+        id S1349616AbiAKPhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:37:01 -0500
+Received: from mail-qk1-f173.google.com ([209.85.222.173]:45037 "EHLO
+        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243782AbiAKPg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:36:05 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1afBHr_1641915362;
-Received: from 30.39.146.113(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1afBHr_1641915362)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 11 Jan 2022 23:36:03 +0800
-Message-ID: <ee973642-6bae-e748-cea9-ed18bca461f0@linux.alibaba.com>
-Date:   Tue, 11 Jan 2022 23:36:02 +0800
+        Tue, 11 Jan 2022 10:36:58 -0500
+Received: by mail-qk1-f173.google.com with SMTP id q192so3359579qke.11;
+        Tue, 11 Jan 2022 07:36:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TKbMPGSxsZYgRIJnEQcbNOJrCU9g0etr89yBb4AmgEU=;
+        b=qi6yziUIF+UGmsiMTZHD4ctUDVdooz2vOB/rma36r6ZlQWXlX7hIPQXd4in2YeTaie
+         RsTBYOA2A0TelOUQe/T/qI5rR1VS82Cw4poGG0R6XEwIOyWWwarg5w4JfBsCObT5ezb3
+         VlS6148q7GuLaEgIadXbtY6bxw5Wk9jMlFxoMwjtF5ZfDCxLBu/jauM5x7OWy//6KhGw
+         b4W9bPvP1qj4Ndkg1Q22hfFAP7Geiw4ekYW3xN2tNwKYT7X5fDgYeeF7mCBCqiVQqsaS
+         81ukhIeYhM7puiO1O3gp3OBHQqXx34+ZfVzvkRyfIrYpfZ886dDaV2NErrMDvWAyXWqK
+         S/pg==
+X-Gm-Message-State: AOAM533xKIyBXjDBbmdFBzEzEAGVoaZGV7x5xgRRKtBFk8nKMP47RDMa
+        MsdVBHjHXA+kywN18m4A01z8DlRyV4FSTu7Himo=
+X-Google-Smtp-Source: ABdhPJwANupgS7MNSWqY2eYVMNKeo+Ocyd4789CrYkao9qs8ATSZZtXuJkxq0CXenMAIhEzvvxhmBVh7prdrhV4szQU=
+X-Received: by 2002:a05:620a:1a97:: with SMTP id bl23mr3548929qkb.621.1641915418130;
+ Tue, 11 Jan 2022 07:36:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH net 1/3] net/smc: Resolve the race between link group
- access and termination
-To:     Karsten Graul <kgraul@linux.ibm.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641806784-93141-1-git-send-email-guwen@linux.alibaba.com>
- <1641806784-93141-2-git-send-email-guwen@linux.alibaba.com>
- <8b720956-c8fe-0fe2-b019-70518d5c60c8@linux.ibm.com>
-From:   Wen Gu <guwen@linux.alibaba.com>
-In-Reply-To: <8b720956-c8fe-0fe2-b019-70518d5c60c8@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220107033516.3611664-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220107033516.3611664-1-jiasheng@iscas.ac.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 11 Jan 2022 16:36:47 +0100
+Message-ID: <CAJZ5v0i8JgHk9R2_NsS=5joyhnng9g8eePZox7gsqC9yHpcvLA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: APD: Check for null pointer after calling devm_ioremap
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your review.
+On Fri, Jan 7, 2022 at 4:35 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+>
+> As the possible failure of the devres_alloc(), the devm_ioremap() may
+> return NULL pointer.
+> And then, the 'clk_data->base' will be assigned to clkdev->data->base in
+> platform_device_register_data().
+> And the PTR_ERR_OR_ZERO() can not detect the 'base'.
+> Therefore, it should be better to add the check in order to guarantee
+> the success of the setup.
+>
+> Fixes: 3f4ba94e3615 ("ACPI: APD: Add AMD misc clock handler support")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/acpi/acpi_apd.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+> index 6e02448d15d9..9db6409ecb47 100644
+> --- a/drivers/acpi/acpi_apd.c
+> +++ b/drivers/acpi/acpi_apd.c
+> @@ -95,6 +95,8 @@ static int fch_misc_setup(struct apd_private_data *pdata)
+>                                               resource_size(rentry->res));
+>                 break;
+>         }
+> +       if (!clk_data->base)
+> +               return -ENOMEM;
+>
+>         acpi_dev_free_resource_list(&resource_list);
+>
+> --
 
-On 2022/1/11 4:23 pm, Karsten Graul wrote:
-> On 10/01/2022 10:26, Wen Gu wrote:
->> We encountered some crashes caused by the race between the access
->> and the termination of link groups.
->>
-> 
-> These waiters (seaparate ones for smcd and smcr) are used to wait for all lgrs
-> to be deleted when a module unload or reboot was triggered, so it must only be
-> woken up when the lgr is actually freed.
-
-Thanks for your reminding, I will move the wake-up code to __smc_lgr_free().
-
-And maybe the vlan put and device put of smcd are also need to be moved
-to __smc_lgr_free()?, because it also seems to be more suitable to put these
-resources when lgr is actually freed. What do you think?
-
-Thanks,
-Wen Gu
+Applied as 5.17-rc material with a rewritten changelog, thanks!

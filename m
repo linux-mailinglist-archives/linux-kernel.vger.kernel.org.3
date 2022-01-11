@@ -2,115 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B90648AAFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1FE48AAFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348324AbiAKKCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbiAKKCU (ORCPT
+        id S237660AbiAKKEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:04:04 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1672 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234586AbiAKKEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:02:20 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8438FC06173F;
-        Tue, 11 Jan 2022 02:02:19 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id w22so11101483iov.3;
-        Tue, 11 Jan 2022 02:02:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YmlpQBVfySpCt/YYkAns1X1WN6EovAoYf8bIgONcDcg=;
-        b=UbBw4wf53T+Uo1yqOpzWKAyMUtWUAKi4Kw19l8W5Z/vlOUelClaC+MlKo+ZuWhb6ei
-         mqT6G9Xz5EMqcwEBnjT40s42YFdURzCnIth2t+ywuB8AvKV2XnFdc4EPTVmockGuJZiD
-         wDOdwAf/IuOocSMpM2Wvfpp7jpumg+G8oHf2fG3cQEfyrh/tDluNESdHlaFs9PJO+ZU1
-         /82wLNc50v9VRxZyr0alOiw6mGFte4/mV6N0f3rqOujXT5fiTsvcF9gKhBCXBb8m1Y3b
-         L+r/wq8AiXaktdqZbs8Cw+RTwQgqJiGDrDIcXYvSlZouqtGK81V4+VGojseKeBiW5DwQ
-         KPiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YmlpQBVfySpCt/YYkAns1X1WN6EovAoYf8bIgONcDcg=;
-        b=sNDVC8vQcAcrBzdAHni+wPrHdAUMLR/3bjFbGAWwJehuKhsa6TU+rnETHVmbrvpcns
-         Fs8jBkf19NCHkXlQ6g6f3KLQR9r1A6QqPKmA7Q/gjnrCThLSkywDpeUKUlvdxswdGEs/
-         fppZmCZ7M5krdlfjL4xdyNdUhKwNrD3xDIJHnpsXeik7SBUjEKrukuAXuSL0i64W7uSi
-         mbwoRdZP0aKxX7twI7Awq9baeWq9etr4i2NT2wId9Ii6Yi0pYI+4lYum0TQdyOvGw2bi
-         bSoAWkY5L41Dh4usl00/3QmCxh/h2gqJR3jrjo64ON84a4olA54kmiuqqSjt6PU4REqI
-         A0UQ==
-X-Gm-Message-State: AOAM53264oepa6sTVF+DgEQWYoUuj0h5x9tel7j9XTgLQLNvpFcof7Sb
-        Bjs1nh3dg1YbSMhiRYwOHi2/v5BqLV5JkrHs+0M=
-X-Google-Smtp-Source: ABdhPJyPov8/v7hiYlAGc60n72Zio2+eWIijGDHfzGsLcCrojJoeESesdRdL+54CVKalEgzaE0uQTZ74cpxlyVPkLGY=
-X-Received: by 2002:a05:6638:251:: with SMTP id w17mr1836768jaq.315.1641895338977;
- Tue, 11 Jan 2022 02:02:18 -0800 (PST)
+        Tue, 11 Jan 2022 05:04:02 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20B7cKTm015944;
+        Tue, 11 Jan 2022 10:03:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=5EBX0iufaeuC20EJe3BZZ7yAWIAZFPQsNZo3cADR32c=;
+ b=NnouLr/FKt3FvOZQidKTVYXvIDD9p9JfAfe4ghZFC9qHUoadfZ8OqD76OIwIExuRtilw
+ iorsEO5A3vbtmYoFW/NwNOdFVEyFCPoWBlh7MGwyN3MfhE9q79BsGwzDKJ0klZCEtL96
+ agnt2wJf1ImBSzl1LnPcv88Z3sdVYvBhOr91hzpjTJculWTVtIOyx/lAp16ZB0IpHsfp
+ /8hlXWfMn09X8OmWC2bCBfy6Ohpr95NaMXk31UYOJEDlct/Dr1kl6FAqJShLeDKntHiZ
+ lIsrAqx1lPtHtBb7Vfnw20rJrT7m610gDG0djo8pjbPA8mskjtk8pd1sPzDlt7zdKuij Hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh1b4r94g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 10:03:59 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20B9m8CV024690;
+        Tue, 11 Jan 2022 10:03:58 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh1b4r93e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 10:03:58 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20B9xuUx028812;
+        Tue, 11 Jan 2022 10:03:56 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3df1vhw7n7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 10:03:56 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BA3sXj47644964
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 10:03:54 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F03474C04E;
+        Tue, 11 Jan 2022 10:03:53 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A91304C05A;
+        Tue, 11 Jan 2022 10:03:53 +0000 (GMT)
+Received: from [9.145.30.70] (unknown [9.145.30.70])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jan 2022 10:03:53 +0000 (GMT)
+Message-ID: <ac977743-9696-9723-5682-97ebbcca6828@linux.ibm.com>
+Date:   Tue, 11 Jan 2022 11:03:55 +0100
 MIME-Version: 1.0
-References: <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
- <YdxCsI3atPILABYe@mit.edu> <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
- <Ydxu+KS5UkQ6hU9R@mit.edu> <Ydx7D3H0PS0Zs9/B@sol.localdomain>
- <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
- <YdyNxJzdBmSSEtDC@mit.edu> <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
- <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com> <Ydz1F/AqB1oO/qHF@mit.edu>
- <20220111041349.GA5542@srcf.ucam.org>
-In-Reply-To: <20220111041349.GA5542@srcf.ucam.org>
-From:   "Alexander E. Patrakov" <patrakov@gmail.com>
-Date:   Tue, 11 Jan 2022 15:01:42 +0500
-Message-ID: <CAN_LGv3x==7Mt2J4gis1L8xoNqUhSus0Sue1f92bU=aJDKDn0Q@mail.gmail.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Simo Sorce <simo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH net] net/smc: Avoid setting clcsock options after clcsock
+ released
+Content-Language: en-US
+To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641807505-54454-1-git-send-email-guwen@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <1641807505-54454-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: o4NAAuT755QcREWKbu0Yr3z7sP43NDTm
+X-Proofpoint-ORIG-GUID: lIp-rD-vBVU1p0y6TsXscFJqGOD0SsPx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_03,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
+ mlxscore=0 spamscore=0 phishscore=0 impostorscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201110059
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(resending without HTML this time, sorry for a possible duplicate)
-=D0=B2=D1=82, 11 =D1=8F=D0=BD=D0=B2. 2022 =D0=B3. =D0=B2 09:13, Matthew Gar=
-rett <mjg59@srcf.ucam.org>:
-> The goal is to identify a solution that avoids the enterprise kernels
-> needing to do their own thing. They're in a position to globally
-> LD_PRELOAD something to thunk getrandom() to improve compatibility if
-> they want to, and they're also able to define the expected level of
-> breakage if you enable FIPS mode. An approach that allows a single
-> kernel to provide different policies in different contexts (eg,
-> different namespaces could have different device nodes providing
-> /dev/random) makes it easier to configure that based on customer
-> requirements.
+On 10/01/2022 10:38, Wen Gu wrote:
+> We encountered a crash in smc_setsockopt() and it is caused by
+> accessing smc->clcsock after clcsock was released.
+> 
+>  BUG: kernel NULL pointer dereference, address: 0000000000000020
+>  #PF: supervisor read access in kernel mode
+>  #PF: error_code(0x0000) - not-present page
+>  PGD 0 P4D 0
+>  Oops: 0000 [#1] PREEMPT SMP PTI
+>  CPU: 1 PID: 50309 Comm: nginx Kdump: loaded Tainted: G E     5.16.0-rc4+ #53
+>  RIP: 0010:smc_setsockopt+0x59/0x280 [smc]
+>  Call Trace:
+>   <TASK>
+>   __sys_setsockopt+0xfc/0x190
+>   __x64_sys_setsockopt+0x20/0x30
+>   do_syscall_64+0x34/0x90
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>  RIP: 0033:0x7f16ba83918e
+>   </TASK>
+> 
+> This patch tries to fix it by holding clcsock_release_lock and
+> checking whether clcsock has already been released. In case that
+> a crash of the same reason happens in smc_getsockopt(), this patch
+> also checkes smc->clcsock in smc_getsockopt().
+> 
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> ---
+>  net/smc/af_smc.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+> index 1c9289f..af423f4 100644
+> --- a/net/smc/af_smc.c
+> +++ b/net/smc/af_smc.c
+> @@ -2441,6 +2441,11 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+>  	/* generic setsockopts reaching us here always apply to the
+>  	 * CLC socket
+>  	 */
+> +	mutex_lock(&smc->clcsock_release_lock);
+> +	if (!smc->clcsock) {
+> +		mutex_unlock(&smc->clcsock_release_lock);
+> +		return -EBADF;
+> +	}
+>  	if (unlikely(!smc->clcsock->ops->setsockopt))
+>  		rc = -EOPNOTSUPP;
+>  	else
+> @@ -2450,6 +2455,7 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+>  		sk->sk_err = smc->clcsock->sk->sk_err;
+>  		sk_error_report(sk);
+>  	}
+> +	mutex_unlock(&smc->clcsock_release_lock);
 
-LD_PRELOAD is not a solution because of containers (that need to be
-modified to make use of the preloadable library) and statically-linked
-binaries.
+In the switch() the function smc_switch_to_fallback() might be called which also
+accesses smc->clcsock without further checking. This should also be protected then?
+Also from all callers of smc_switch_to_fallback() ?
 
---=20
-Alexander E. Patrakov
+There are more uses of smc->clcsock (e.g. smc_bind(), ...), so why does this problem 
+happen in setsockopt() for you only? I suspect it depends on the test case.
+
+I wonder if it makes sense to check and protect smc->clcsock at all places in the code where 
+it is used... as of now we had no such races like you encountered. But I see that in theory 
+this problem could also happen in other code areas.
+
+>  
+>  	if (optlen < sizeof(int))
+>  		return -EINVAL;
+> @@ -2509,13 +2515,21 @@ static int smc_getsockopt(struct socket *sock, int level, int optname,
+>  			  char __user *optval, int __user *optlen)
+>  {
+>  	struct smc_sock *smc;
+> +	int rc;
+>  
+>  	smc = smc_sk(sock->sk);
+> +	mutex_lock(&smc->clcsock_release_lock);
+> +	if (!smc->clcsock) {
+> +		mutex_unlock(&smc->clcsock_release_lock);
+> +		return -EBADF;
+> +	}
+>  	/* socket options apply to the CLC socket */
+>  	if (unlikely(!smc->clcsock->ops->getsockopt))
+>  		return -EOPNOTSUPP;
+> -	return smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+> +	rc = smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+>  					     optval, optlen);
+> +	mutex_unlock(&smc->clcsock_release_lock);
+> +	return rc;
+>  }
+>  
+>  static int smc_ioctl(struct socket *sock, unsigned int cmd,
+
+-- 
+Karsten

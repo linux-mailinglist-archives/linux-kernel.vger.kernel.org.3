@@ -2,146 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A5E48ACF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A01448ACFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbiAKLtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 06:49:16 -0500
-Received: from mout.gmx.net ([212.227.15.19]:33691 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238583AbiAKLtP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 06:49:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641901740;
-        bh=vAQJgoSwF0R1ayJFG1oEsNhYDBTZXrjepkeB6W1xDLI=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=cHzttAeDG3ll7Dei6iCLnijkJeTyOAgI2VLBdXOBRSx5b4SQ/2xeIk/a8NgS1xz6Q
-         HPd8lm0MKmzYEfNZUarca56LPw8zgYhL/Vnw1HQ7Koz/8kFG3DfnN/qCzC2ussi5Sr
-         44Dt+w1K+5U98ZoBm/GQTt9eCypj+MGwiX8TKy/o=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.169.189]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5QJD-1n5sCX2Qdx-001Uww; Tue, 11
- Jan 2022 12:49:00 +0100
-Date:   Tue, 11 Jan 2022 12:48:55 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>,
-        Sven Schnelle <svens@stackframe.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [GIT PULL] parisc architecture updates v5.17-rc1
-Message-ID: <Yd1up5g3mSzj7eHL@ls3530>
+        id S239216AbiAKLvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 06:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238583AbiAKLvI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 06:51:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0962C06173F;
+        Tue, 11 Jan 2022 03:51:07 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JY8Cr15zsz4xPt;
+        Tue, 11 Jan 2022 22:51:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641901865;
+        bh=xDjZlYMiLXu8q5CtfBWHCjmo534mIx6Wl9CrCDrU79o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vBASu3WHDAcontgZ/V/uOFth2iflVKlKzxjBsTNiMVk6s/SYU3Jwy3k0v4pv8YChc
+         PREp8PU1CBmaSl5ztJnXkmvbCHjKh9eWCW8maKNMeCqQ1ubis6bLUQr5hQymmw/RTy
+         zlc64MWatbtq/mubO5byDJgEKMQa8qe1IU/o3j3eleMEUcQcIIPw1XDlDF0HLbn8/R
+         TI1YHxucL009acZ/c4/rmdxaErWQmv8MWoTdB/n0OyCqlbtBisd43gn0CBMRqB1VXu
+         6URohSy7WUCi1o5X7Qn0P6Q6OS2/yNdLYVcVjZyUF02jHKsnCAdYj9CmgzgR2lwUFU
+         RKYEcAxdDriqw==
+Date:   Tue, 11 Jan 2022 22:51:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Minchan Kim <minchan@kernel.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the slab
+ tree
+Message-ID: <20220111225101.114b655c@canb.auug.org.au>
+In-Reply-To: <20211203182255.3800a09a@canb.auug.org.au>
+References: <20211203182255.3800a09a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:FZpyUzG+Fz1YGuZQmJz7ehUdKnOcv2voVQso93lJ2uiviVoAAIf
- lAyHvVfbEINWmZg3PFoP06YrVR8aauX9adSD8PxKIW6Y1ThnF88ob9lCc1mdKkJeMm+eM9r
- 0R4HMBpxUY5o9kYy04c845FnrPSIekQGRy2OrDICXl4eJzW1iOJD4dREYXb72e+LbcayCRF
- y21qBGn1RPn8nwKpmtVBw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OaBGbX5pVnk=:yGnH66ENd9b6teLD1GTOBL
- s6q6qJnoKBbsQ4H4v7wSrJHMYhQTs8R/fgJ3Sl9yCWpU9QJM+v3QXT1SEAH5UzAlVXAqAK2qL
- iGO0HWK5RaoRlfmdA7pbbMBLM8uHsyc4TseVucGi/1gZs14bX4wWRYIUfVjCgfUON9Zg5HzoX
- 1ObWsdxXj5d+zYWWm3duF7k46XhFvL/LHXl/kuGAOOnplOcZ84u43DY+8cpvxRxY+EgpDkyCO
- I1M8RZUl1X4ZdVjhPM7jm4ar8pRaiatWNgFNg/d52EQbsRCK388MmrZl9iEIkaFXifvTi6TFI
- cg/A5B0XdEXsX22LxsghKGo4t3r9x4Ar66LtjUqEfyCvGkpN/UCs0BUtod6zxIVzI8g/MRQ7d
- /v6K+YpEgCbSXd6lEW+k+crlwxsA8LgKjmSqCW8nQzEjhMf5bjNFwKKzz7N3F2dhoJdqhHJch
- vaC2ajyY861mgHOBRf380al1obFdF6bvCgCLI27Bbn/T9umTaINUUyI0OICHoLw/ENfBDrchg
- QFENCK3EztAbJtBd5nvcHwHMiHI7vDKMUsYuZbM7mGKVi+4/l13vfF/RSvTqtoUfpUXgELSSv
- dJpGITtwfljWSLDzOZplsfxpXlnpbDMic7n+suQTsevar36JMymrjQ6k8mud2+ufO5hl5x3ou
- 8PYG+KxBj0FwlZDPdQzMB4hea/GmCOTz2Gy/GGoztf+ps1KWr6PbI8xBWYJJRG1Pk9QmNn0/4
- yPfT43EmfaiMuEgXoDcXFT+yRpw7bLRYAzSYwMLuoBJx73uyJg+INKQRhTpW3kGzxIqx8Np0u
- O9VMiczTQ2VnLPybmyXJsP/nZY3vPE/3Np08FT5B4J6pcLkQv4xnn2mSft3xl70XCjnyx/6c4
- WG/kMp6tPRkvNi/N9xXA6pv27ghcFtBOwlo4b0QdWSe16z3y9FeDlpaZ+mu9EET7j3lb9pyAo
- tgOdBHuLYJ2wjKP3bhzd8jBFD510TPzKDKPbAGBCDhSdDHHwhCz8CY27/2YnyB3MhNHIFGQrM
- hioIRh+yWIIIxWdYMJu9Q75h8bpFPLhCctmdejdyW0RYte1fRnAXAdmjdRJ8r4Qe3IeOOvQeh
- FP0hLuR2yL/xyA=
+Content-Type: multipart/signed; boundary="Sig_/eSKq44_cfWj5rQa6vMefqOa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+--Sig_/eSKq44_cfWj5rQa6vMefqOa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
+Hi all,
 
-are available in the Git repository at:
+On Fri, 3 Dec 2021 18:22:55 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the akpm-current tree got a conflict in:
+>=20
+>   mm/zsmalloc.c
+>=20
+> between commit:
+>=20
+>   5718b5cdd6e5 ("zsmalloc: Stop using slab fields in struct page")
+>=20
+> from the slab tree and commit:
+>=20
+>   efcc1718fe08 ("zsmalloc: move huge compressed obj from page to zspage")
+>=20
+> from the akpm-current tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc mm/zsmalloc.c
+> index 0d3b65939016,7e03cc9363bb..000000000000
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@@ -824,10 -820,12 +820,12 @@@ static struct zspage *get_zspage(struc
+>  =20
+>   static struct page *get_next_page(struct page *page)
+>   {
+> - 	if (unlikely(PageHugeObject(page)))
+> + 	struct zspage *zspage =3D get_zspage(page);
+> +=20
+> + 	if (unlikely(ZsHugePage(zspage)))
+>   		return NULL;
+>  =20
+>  -	return page->freelist;
+>  +	return (struct page *)page->index;
+>   }
+>  =20
+>   /**
+> @@@ -900,8 -893,7 +893,7 @@@ static void reset_page(struct page *pag
+>   	ClearPagePrivate(page);
+>   	set_page_private(page, 0);
+>   	page_mapcount_reset(page);
+> - 	ClearPageHugeObject(page);
+>  -	page->freelist =3D NULL;
+>  +	page->index =3D 0;
+>   }
+>  =20
+>   static int trylock_zspage(struct zspage *zspage)
+> @@@ -1042,9 -1039,9 +1039,9 @@@ static void create_page_chain(struct si
+>   			SetPagePrivate(page);
+>   			if (unlikely(class->objs_per_zspage =3D=3D 1 &&
+>   					class->pages_per_zspage =3D=3D 1))
+> - 				SetPageHugeObject(page);
+> + 				SetZsHugePage(zspage);
+>   		} else {
+>  -			prev_page->freelist =3D page;
+>  +			prev_page->index =3D (unsigned long)page;
+>   		}
+>   		prev_page =3D page;
+>   	}
 
-  http://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.17/parisc-1
+This is now a conflict between the akpm-current tree and Linus' tree -
+that slab tree commit is now commit ffedd09fa9b0 ("zsmalloc: Stop using
+slab fields in struct page") in Linus' tree.
 
-for you to fetch changes up to 68d247ad38b1ef46bd945a5220fa6d28c901c2f2:
+--=20
+Cheers,
+Stephen Rothwell
 
-  parisc: Default to 16 CPUs on 32-bit kernel (2022-01-11 11:57:38 +0100)
+--Sig_/eSKq44_cfWj5rQa6vMefqOa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-----------------------------------------------------------------
-parisc architecture updates for kernel v5.17-rc1
+-----BEGIN PGP SIGNATURE-----
 
-- Fix lpa and lpa_user defines (John David Anglin)
-- Fix symbol lookup of init functions with an __is_kernel() fix (Helge Deller)
-- Fix wrong pdc_toc_pim_11 and pdc_toc_pim_20 definitions (Helge Deller)
-- Add lws_atomic_xchg and lws_atomic_store syscalls (John David Anglin)
-- Rewrite light-weight syscall and futex code (John David Anglin)
-- Enable TOC (transfer of contents) feature unconditionally (Helge Deller)
-- Improve fault handler messages (John David Anglin)
-- Improve build process (Masahiro Yamada)
-- Reduce kernel code footprint of user access functions (Helge Deller)
-- Fix build error due to outX() macros (Bart Van Assche)
-- Ue default_groups in kobj_type in pdc_stable (Greg Kroah-Hartman)
-- Default to 16 CPUs on 32-bit kernel (Helge Deller)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHdbyUACgkQAVBC80lX
+0GwCnAf+Irjk9xiRjLpLDqR7Wbk4fcw+U3kSfLfieCw0jNpUI7Auo01FbueX4bWo
+2MEz5BfuSxJxeLNe2RLbaW1sAIV8XrsGUyheI+FUjR+NTVhJC8BO5/HmxZd6Nnz/
+LAL1+cSp3X9iY1SbE4W++emgFKp7GTpV1/VUzglimQYzCDrwdA9S9i130oIxqb3W
+tTIq/bd+ofxY+sytvnDRfydxzHM2xEokTFdCdUqcBv3kOltMCLvjZZPIkaiPZis3
++MfQPUmWnpHMmdOp+y7O47eWkxGgyF4W8gDgp3Q3MIoCj/B48D1FMvIkBXraJ+Ul
+of95sB2BP4c+y1dHA9ZAWmYNDlQ8tg==
+=pT3x
+-----END PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Bart Van Assche (1):
-      parisc: io: Improve the outb(), outw() and outl() macros
-
-Greg Kroah-Hartman (1):
-      parisc: pdc_stable: use default_groups in kobj_type
-
-Helge Deller (7):
-      parisc: Switch user access functions to signal errors in r29 instead of r8
-      parisc: Fix pdc_toc_pim_11 and pdc_toc_pim_20 definitions
-      parisc: Add kgdb io_module to read chars via PDC
-      parisc: Enable TOC (transfer of contents) feature unconditionally
-      parisc: Re-use toc_stack as hpmc_stack
-      sections: Fix __is_kernel() to include init ranges
-      parisc: Default to 16 CPUs on 32-bit kernel
-
-John David Anglin (7):
-      parisc: Define depi_safe macro
-      parisc: Fix lpa and lpa_user defines
-      parisc: Avoid calling faulthandler_disabled() twice
-      parisc: Don't call faulthandler_disabled() in do_page_fault()
-      parisc: Enhance page fault termination message
-      parisc: Rewrite light-weight syscall and futex code
-      parisc: Add lws_atomic_xchg and lws_atomic_store syscalls
-
-Masahiro Yamada (1):
-      parisc: decompressor: do not copy source files while building
-
- arch/parisc/Kconfig                     |  17 +-
- arch/parisc/boot/compressed/.gitignore  |   2 -
- arch/parisc/boot/compressed/Makefile    |   8 -
- arch/parisc/boot/compressed/firmware.c  |   2 +
- arch/parisc/boot/compressed/real2.S     |   2 +
- arch/parisc/include/asm/assembly.h      |  10 +
- arch/parisc/include/asm/futex.h         |  59 ++-
- arch/parisc/include/asm/io.h            |   6 +-
- arch/parisc/include/asm/special_insns.h |  44 +-
- arch/parisc/include/asm/uaccess.h       |  12 +-
- arch/parisc/include/uapi/asm/pdc.h      |  32 +-
- arch/parisc/kernel/Makefile             |   3 +-
- arch/parisc/kernel/asm-offsets.c        |   4 +
- arch/parisc/kernel/hpmc.S               |   6 +-
- arch/parisc/kernel/kgdb.c               |  21 +
- arch/parisc/kernel/syscall.S            | 774 ++++++++++++++++++++++++--------
- arch/parisc/kernel/toc.c                |  18 +-
- arch/parisc/kernel/toc_asm.S            |  33 +-
- arch/parisc/kernel/traps.c              |   2 +-
- arch/parisc/mm/fault.c                  |  23 +-
- drivers/parisc/pdc_stable.c             |   3 +-
- include/asm-generic/sections.h          |  10 +-
- scripts/remove-stale-files              |   5 +
- 23 files changed, 777 insertions(+), 319 deletions(-)
- create mode 100644 arch/parisc/boot/compressed/firmware.c
- create mode 100644 arch/parisc/boot/compressed/real2.S
+--Sig_/eSKq44_cfWj5rQa6vMefqOa--

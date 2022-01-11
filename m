@@ -2,95 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F47B48B1BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B456248B1C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349882AbiAKQOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S1349866AbiAKQPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:15:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349860AbiAKQOn (ORCPT
+        with ESMTP id S1349828AbiAKQPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:14:43 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9C7C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:14:43 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id u13so57997929lff.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CS4Jw/Xn06/wu//cyV8SWXzS8vbEuTMpgDVD2LPfy2w=;
-        b=dLREZhqAJmuhvauZUPkW/nmtPTHXnFlaAL4LZbiE2QxrSoX/zSo0kZrBwk34uQiUg0
-         w5nbMpCNesoJA2i4K2qpOllaXxXkQ23CBwLvxFdZ+e0+ZhGUZiQGq1kt7QR/Y5XL3yfA
-         mMKfHTQ+iyB6xhXpEAaFB5gXgoL71TmkuQlYc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CS4Jw/Xn06/wu//cyV8SWXzS8vbEuTMpgDVD2LPfy2w=;
-        b=5WXa+/osr3YIYW3l4EYAp0z4Kpxy8S86tUOGT9sbfYA0+jICDH8PV8Y89g2JYK/8bj
-         ikMz/h0GY3+21elQmFCMBdYFEW7YOxp32rn/heLNZXWW8AQA6JyrAyHVbyomZaCj8D4k
-         rozzTJW9dUktH8FeVpmVpOOY1YrDDiHXHt+eKWq5FPlUX1p4kaOF3nbdIPHp0Q4ogD7U
-         cxP1m2DJPrw/zk/pXKwD1fNUgXLLuOih03SrNira3phdcYS30X9B4GuLP+iRwdLqWmPp
-         vBTc1UBu1HeLURl95D9F2nNxYXcyHmEyV8eQ3IFGbEfSdorSs94UcniNavIZgx6o1MIA
-         7xag==
-X-Gm-Message-State: AOAM5316xR9YyMx82ZAtKCjj3DydLcoy2R2u2YMRHqn49NvybureZ1RP
-        dj5G8SUW7w1AF6oU6T7qX/LWZg==
-X-Google-Smtp-Source: ABdhPJxk35YAuB+f+0SX7NCfKoEy2/Xgwpp9AXBBoQ4wDR8h/dnxi8IHaYa+vPwThcKEtYYXKFaSpg==
-X-Received: by 2002:a2e:b0d7:: with SMTP id g23mr2292307ljl.486.1641917681433;
-        Tue, 11 Jan 2022 08:14:41 -0800 (PST)
-Received: from [172.16.11.17] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id e4sm1375708lfr.221.2022.01.11.08.14.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 08:14:40 -0800 (PST)
-Subject: Re: [PATCH v1 1/1] vsprintf: Move space out of string literals in
- fourcc_string()
-To:     Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <20220110205558.11876-1-andriy.shevchenko@linux.intel.com>
- <308b7158-7c2a-cc98-6091-14dae2b2cbba@rasmusvillemoes.dk>
- <Yd1p1XckKtdPyKSr@smile.fi.intel.com> <Yd2d4damgW2Xa8Sd@alley>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <01d4b250-77b7-2534-b350-e8d2ba9b58bd@rasmusvillemoes.dk>
-Date:   Tue, 11 Jan 2022 17:14:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 11 Jan 2022 11:15:00 -0500
+X-Greylist: delayed 115851 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jan 2022 08:15:00 PST
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D97C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:14:59 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 849BB20003;
+        Tue, 11 Jan 2022 16:14:52 +0000 (UTC)
+Message-ID: <aa05f467-efc2-ca66-3485-aa59ba72a730@ghiti.fr>
+Date:   Tue, 11 Jan 2022 17:14:52 +0100
 MIME-Version: 1.0
-In-Reply-To: <Yd2d4damgW2Xa8Sd@alley>
-Content-Type: text/plain; charset=windows-1252
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 02/12] RISC-V: MAXPHYSMEM_2GB doesn't depend on
+ CMODEL_MEDLOW
 Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup.patel@wdc.com>,
+        heinrich.schuchardt@canonical.com,
+        Atish Patra <atish.patra@wdc.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <20211119164413.29052-1-palmer@rivosinc.com>
+ <20211119164413.29052-3-palmer@rivosinc.com>
+ <CAMuHMdXQg942-DwDBJANsFiOCqyAwCt_GwW4HuC1nh0_DNmyEQ@mail.gmail.com>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <CAMuHMdXQg942-DwDBJANsFiOCqyAwCt_GwW4HuC1nh0_DNmyEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 16.10, Petr Mladek wrote:
-> On Tue 2022-01-11 13:28:21, Andy Shevchenko wrote:
+Hi Geert,
 
->>>> -	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
->>>> +	*p++ = ' ';
->>>> +	strcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
->>>>  	p += strlen(p);
->>>
->>> Hm, ok, those two strings do occur a lot with of_property_read_bool()
->>> and friends. But if you're micro-optimizing anyway, why not drop the
->>> strlen() and say p = stpcpy(...) instead?
+On 1/11/22 17:04, Geert Uytterhoeven wrote:
+> Hi Palmer,
+>
+> On Fri, Nov 19, 2021 at 5:47 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
 >>
->> Why not? I'll do it for v2.
-> 
-> It is safe here. I just hope that it will not trigger reports from
-> some tools looking for potential security issues ;-)
-> 
+>> For non-relocatable kernels we need to be able to link the kernel at
+>> approximately PAGE_OFFSET, thus requiring medany (as medlow requires the
+>> code to be linked within 2GiB of 0).  The inverse doesn't apply, though:
+>> since medany code can be linked anywhere it's fine to link it close to
+>> 0, so we can support the smaller memory config.
+>>
+>> Fixes: de5f4b8f634b ("RISC-V: Define MAXPHYSMEM_1GB only for RV32")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Thanks for your patch, which is now commit 9f36b96bc70f9707 ("RISC-V:
+> MAXPHYSMEM_2GB doesn't depend on CMODEL_MEDLOW").
+>
+>> I found this when going through the savedefconfig diffs for the K210
+>> defconfigs.  I'm not entirely sure they're doing the right thing here
+>> (they should probably be setting CMODEL_LOW to take advantage of the
+>> better code generation), but I don't have any way to test those
+>> platforms so I don't want to change too much.
+> I can confirm MAXPHYSMEM_2GB works on K210 with CMODEL_MEDANY.
+>
+> As the Icicle has 1760 MiB of RAM, I gave it a try with MAXPHYSMEM_2GB
+> (and CMODEL_MEDANY), too.  Unfortunately it crashes very early
+> (needs earlycon to see):
+>
+>      OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+>      Machine model: Microchip PolarFire-SoC Icicle Kit
+>      printk: debug: ignoring loglevel setting.
+>      earlycon: ns16550a0 at MMIO32 0x0000000020100000 (options '115200n8')
+>      printk: bootconsole [ns16550a0] enabled
+>      printk: debug: skip boot console de-registration.
+>      efi: UEFI not found.
+>      Unable to handle kernel paging request at virtual address ffffffff87e00001
+>      Oops [#1]
+>      Modules linked in:
+>      CPU: 0 PID: 0 Comm: swapper Not tainted 5.16.0-08771-g85515233477d #56
+>      Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+>      epc : fdt_check_header+0x14/0x208
+>       ra : early_init_dt_verify+0x16/0x94
+>      epc : ffffffff802ddacc ra : ffffffff8082415a sp : ffffffff81203ee0
+>       gp : ffffffff812ec3a8 tp : ffffffff8120cd80 t0 : 0000000000000005
+>       t1 : 0000001040000000 t2 : ffffffff80000000 s0 : ffffffff81203f00
+>       s1 : ffffffff87e00000 a0 : ffffffff87e00000 a1 : 000000040ffffce7
+>       a2 : 00000000000000e7 a3 : ffffffff8080394c a4 : 0000000000000000
+>       a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
+>       s2 : ffffffff81203f98 s3 : 8000000a00006800 s4 : fffffffffffffff3
+>       s5 : 0000000000000000 s6 : 0000000000000001 s7 : 0000000000000000
+>       s8 : 0000000020236c20 s9 : 0000000000000000 s10: 0000000000000000
+>       s11: 0000000000000000 t3 : 0000000000000018 t4 : 00ff000000000000
+>       t5 : 0000000000000000 t6 : 0000000000000010
+>      status: 0000000200000100 badaddr: ffffffff87e00001 cause: 000000000000000d
+>      [<ffffffff802ddacc>] fdt_check_header+0x14/0x208
+>      [<ffffffff8082415a>] early_init_dt_verify+0x16/0x94
+>      [<ffffffff80802dee>] setup_arch+0xec/0x4ec
+>      [<ffffffff80800700>] start_kernel+0x88/0x6d6
+>      random: get_random_bytes called from
+> print_oops_end_marker+0x22/0x44 with crng_init=0
+>      ---[ end trace 903df1a0ade0b876 ]---
+>      Kernel panic - not syncing: Attempted to kill the idle task!
+>      ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+>
+> So the FDT is at 0xffffffff87e00000, i.e. at 0x7e00000 from the start
+> of virtual memory (CONFIG_PAGE_OFFSET=0xffffffff80000000), and thus
+> within the 2 GiB range.
 
-strcpy() and stpcpy() have exactly the same preconditions and are safe
-in exactly the same circumstances, they only differ in their return
-value, so I don't see how any tool would warn about a use of (the
-only-recently-standardized) stpcpy if it didn't already warn about strcpy.
 
-Rasmus
+I think you have just encountered what I suspected and mentioned in [1]: 
+we recently moved the kernel to the PAGE_OFFSET address used with 
+MAXPHYSMEM_2GB.
+
+I would try to cherry-pick [1] and see if that works better :)
+
+Alex
+
+[1] 
+https://patchwork.kernel.org/project/linux-riscv/patch/20211206104657.433304-6-alexandre.ghiti@canonical.com/
+
+
+>
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -280,7 +280,7 @@ choice
+>>                  depends on 32BIT
+>>                  bool "1GiB"
+>>          config MAXPHYSMEM_2GB
+>> -               depends on 64BIT && CMODEL_MEDLOW
+>> +               depends on 64BIT
+>>                  bool "2GiB"
+>>          config MAXPHYSMEM_128GB
+>>                  depends on 64BIT && CMODEL_MEDANY
+> Gr{oetje,eeting}s,
+>
+>                          Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

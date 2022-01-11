@@ -2,186 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CBE48A67D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C6948A686
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244570AbiAKDjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 22:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiAKDjF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 22:39:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25ACC06173F;
-        Mon, 10 Jan 2022 19:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ts/n3siA3nMVMadT3uCIkpSxRREOFD9Q0gbm2aG02OE=; b=nBsDDkttTOd7ZQsB5LQnQnAN2X
-        57ss9ztEQtVysHd8qzJrjnjJcYIe8VsLj2IdJ/xXOoNwId1dU/Y/gvjCzuGx2dHhhL5K4SacQ0hdr
-        LV0AzxmU8/bjo6g5dQtbjkz4f7nsNOW0HtNXa4XOmxTM4Ooql8XcoQ5cO9/cl4HCV1hLXNrFRrzhM
-        UT71eRmc3bFnyIIc0G3CaWdFGxb1LBzqoiPbLMdj/ICCNB95ukDTwRp0IBlhApd6bgV848wsOwhh6
-        RSG6ifM9zdXSTp+sux/WGIq48EkT+myoLjN2W3uWkNe9lAj9Yxp7ozGAjDyLWNTiBTVk0QlrARvfD
-        hKO3Wj9Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n77zx-002wLj-H6; Tue, 11 Jan 2022 03:39:01 +0000
-Date:   Tue, 11 Jan 2022 03:39:01 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     cruise k <cruise4k@gmail.com>, Dmitry Vyukov <dvyukov@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sunhao.th@gmail.com, syzkaller@googlegroups.com
-Subject: Re: INFO: task hung in path_openat
-Message-ID: <Ydz71Ux9fCVB2bGB@casper.infradead.org>
-References: <CAKcFiNCg-hp7g-yBZFBB4D8yJ7uXyLvsZ_1P8804YgqLhWUt8w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKcFiNCg-hp7g-yBZFBB4D8yJ7uXyLvsZ_1P8804YgqLhWUt8w@mail.gmail.com>
+        id S1347300AbiAKDj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 22:39:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:41322 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347248AbiAKDj0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 22:39:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5021A6D;
+        Mon, 10 Jan 2022 19:39:25 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.72.238])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 664823F774;
+        Mon, 10 Jan 2022 19:39:22 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 3/7] arm64: errata: Add detection for TRBE invalid prohibited states
+Date:   Tue, 11 Jan 2022 09:09:02 +0530
+Message-Id: <1641872346-3270-4-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
+References: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry,
+TRBE implementations affected by Arm erratum #2038923 might get TRBE into
+an inconsistent view on whether trace is prohibited within the CPU. As a
+result, the trace buffer or trace buffer state might be corrupted. This
+happens after TRBE buffer has been enabled by setting TRBLIMITR_EL1.E,
+followed by just a single context synchronization event before execution
+changes from a context, in which trace is prohibited to one where it isn't,
+or vice versa. In these mentioned conditions, the view of whether trace is
+prohibited is inconsistent between parts of the CPU, and the trace buffer
+or the trace buffer state might be corrupted. This adds a new errata
+ARM64_ERRATUM_2038923 in arm64 errata framework.
 
-Please stop syzbot from playing with the SCHED_FIFO setting.
-We're being inundated with these useless bug reports.
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: coresight@lists.linaro.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ Documentation/arm64/silicon-errata.rst |  2 ++
+ arch/arm64/Kconfig                     | 23 +++++++++++++++++++++++
+ arch/arm64/kernel/cpu_errata.c         |  9 +++++++++
+ arch/arm64/tools/cpucaps               |  1 +
+ 4 files changed, 35 insertions(+)
 
-On Tue, Jan 11, 2022 at 10:15:26AM +0800, cruise k wrote:
-> Hi,
-> 
-> Syzkaller found the following issue:
-> 
-> HEAD commit: 75acfdb Linux 5.16-rc8
-> git tree: upstream
-> console output: https://pastebin.com/raw/7TSe1kGF
-> kernel config: https://pastebin.com/raw/XsnKfdRt
-> 
-> And hope the report log can help you.
-> 
-> INFO: task systemd-udevd:27429 blocked for more than 146 seconds.
->       Not tainted 5.16.0-rc8+ #10
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:systemd-udevd   state:D stack:26528 pid:27429 ppid:  3127 flags:0x00000000
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
->  __down_write_common kernel/locking/rwsem.c:1268 [inline]
->  __down_write_common kernel/locking/rwsem.c:1265 [inline]
->  __down_write kernel/locking/rwsem.c:1277 [inline]
->  down_write+0x135/0x150 kernel/locking/rwsem.c:1524
->  inode_lock include/linux/fs.h:783 [inline]
->  open_last_lookups fs/namei.c:3347 [inline]
->  path_openat+0xa66/0x26c0 fs/namei.c:3556
->  do_filp_open+0x1c1/0x290 fs/namei.c:3586
->  do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
->  do_sys_open+0xc3/0x140 fs/open.c:1228
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fde8feb06f0
-> RSP: 002b:00007ffdc8b61368 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-> RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8ca9880
-> RBP: 000000000003a2f8 R08: 000000000000fefe R09: 00007fde8ff03740
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8ca9895
-> R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
->  </TASK>
-> INFO: task systemd-udevd:27467 blocked for more than 148 seconds.
->       Not tainted 5.16.0-rc8+ #10
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:systemd-udevd   state:D stack:27072 pid:27467 ppid:  3127 flags:0x00000000
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
->  __down_write_common kernel/locking/rwsem.c:1268 [inline]
->  __down_write_common kernel/locking/rwsem.c:1265 [inline]
->  __down_write kernel/locking/rwsem.c:1277 [inline]
->  down_write+0x135/0x150 kernel/locking/rwsem.c:1524
->  inode_lock include/linux/fs.h:783 [inline]
->  open_last_lookups fs/namei.c:3347 [inline]
->  path_openat+0xa66/0x26c0 fs/namei.c:3556
->  do_filp_open+0x1c1/0x290 fs/namei.c:3586
->  do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
->  do_sys_open+0xc3/0x140 fs/open.c:1228
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fde8feb06f0
-> RSP: 002b:00007ffdc8b60d78 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-> RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8c989c0
-> RBP: 000000000003a2f8 R08: 000000000000fcfe R09: 00007fde8ff03740
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8c989d6
-> R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
->  </TASK>
-> INFO: task systemd-udevd:27515 blocked for more than 150 seconds.
->       Not tainted 5.16.0-rc8+ #10
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:systemd-udevd   state:D stack:27584 pid:27515 ppid:  3127 flags:0x00004000
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
->  __down_write_common kernel/locking/rwsem.c:1268 [inline]
->  __down_write_common kernel/locking/rwsem.c:1265 [inline]
->  __down_write kernel/locking/rwsem.c:1277 [inline]
->  down_write+0x135/0x150 kernel/locking/rwsem.c:1524
->  inode_lock include/linux/fs.h:783 [inline]
->  open_last_lookups fs/namei.c:3347 [inline]
->  path_openat+0xa66/0x26c0 fs/namei.c:3556
->  do_filp_open+0x1c1/0x290 fs/namei.c:3586
->  do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
->  do_sys_open+0xc3/0x140 fs/open.c:1228
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fde8feb06f0
-> RSP: 002b:00007ffdc8b60d78 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-> RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8cad110
-> RBP: 000000000003a2f8 R08: 000000000000fefe R09: 00007fde8ff03740
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8cad126
-> R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
->  </TASK>
-> INFO: task systemd-udevd:27530 blocked for more than 153 seconds.
->       Not tainted 5.16.0-rc8+ #10
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:systemd-udevd   state:D stack:26048 pid:27530 ppid:  3127 flags:0x00000000
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:4972 [inline]
->  __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
->  schedule+0xd2/0x260 kernel/sched/core.c:6326
->  rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
->  __down_write_common kernel/locking/rwsem.c:1268 [inline]
->  __down_write_common kernel/locking/rwsem.c:1265 [inline]
->  __down_write kernel/locking/rwsem.c:1277 [inline]
->  down_write+0x135/0x150 kernel/locking/rwsem.c:1524
->  inode_lock include/linux/fs.h:783 [inline]
->  open_last_lookups fs/namei.c:3347 [inline]
->  path_openat+0xa66/0x26c0 fs/namei.c:3556
->  do_filp_open+0x1c1/0x290 fs/namei.c:3586
->  do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
->  do_sys_open+0xc3/0x140 fs/open.c:1228
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fde8feb06f0
-> RSP: 002b:00007ffdc8b61368 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-> RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8ca9880
-> RBP: 000000000003a2f8 R08: 000000000000fefe R09: 00007fde8ff03740
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8ca9896
-> R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
->  </TASK>
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index c9b30e6c2b6c..e0ef3e9a4b8b 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -54,6 +54,8 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
+ +----------------+-----------------+-----------------+-----------------------------+
++| ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
+++----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A53      | #826319         | ARM64_ERRATUM_826319        |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A53      | #827319         | ARM64_ERRATUM_827319        |
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e27ccfe9fa9c..188eae6ef28d 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -796,6 +796,29 @@ config ARM64_ERRATUM_2064142
+ 
+ 	  If unsure, say Y.
+ 
++config ARM64_ERRATUM_2038923
++	bool "Cortex-A510: 2038923: workaround TRBE corruption with enable"
++	depends on COMPILE_TEST # Until the CoreSight TRBE driver changes are in
++	default y
++	help
++	  This option adds the workaround for ARM Cortex-A510 erratum 2038923.
++
++	  Affected Cortex-A510 core might cause an inconsistent view on whether trace is
++	  prohibited within the CPU. As a result, the trace buffer or trace buffer state
++	  might be corrupted. This happens after TRBE buffer has been enabled by setting
++	  TRBLIMITR_EL1.E, followed by just a single context synchronization event before
++	  execution changes from a context, in which trace is prohibited to one where it
++	  isn't, or vice versa. In these mentioned conditions, the view of whether trace
++	  is prohibited is inconsistent between parts of the CPU, and the trace buffer or
++	  the trace buffer state might be corrupted.
++
++	  Work around this in the driver by preventing an inconsistent view of whether the
++	  trace is prohibited or not based on TRBLIMITR_EL1.E by immediately following a
++	  change to TRBLIMITR_EL1.E with at least one ISB instruction before an ERET, or
++	  two ISB instructions if no ERET is to take place.
++
++	  If unsure, say Y.
++
+ config CAVIUM_ERRATUM_22375
+ 	bool "Cavium erratum 22375, 24313"
+ 	default y
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index cbb7d5a9aee7..60b0c1f1d912 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -607,6 +607,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+ 		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
+ 	},
+ #endif
++#ifdef CONFIG_ARM64_ERRATUM_2038923
++	{
++		.desc = "ARM erratum 2038923",
++		.capability = ARM64_WORKAROUND_2038923,
++
++		/* Cortex-A510 r0p0 - r0p2 */
++		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
++	},
++#endif
+ 	{
+ 	}
+ };
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index fca3cb329e1d..45a06d36d080 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -56,6 +56,7 @@ WORKAROUND_1463225
+ WORKAROUND_1508412
+ WORKAROUND_1542419
+ WORKAROUND_2064142
++WORKAROUND_2038923
+ WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+ WORKAROUND_TSB_FLUSH_FAILURE
+ WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+-- 
+2.25.1
+

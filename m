@@ -2,191 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E82848A57D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 03:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBCE48A57E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 03:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244058AbiAKCPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 21:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S1346552AbiAKCPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 21:15:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346248AbiAKCPi (ORCPT
+        with ESMTP id S1346248AbiAKCPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 21:15:38 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D077EC061748;
-        Mon, 10 Jan 2022 18:15:37 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id g14so14759783ybs.8;
-        Mon, 10 Jan 2022 18:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Bpbhj9chJ1cFWhe/L/TNeVRPVCjrK1BPCGK92a8982k=;
-        b=ApvR2fnsmJAmeBhPxVnn/v6O3rGWYJ5DREI2xFtlaIOafPUnziA2HzNnAvJKsgOBXX
-         HEuwD1EhgRX2rrj2XkC6EMWfrWL/qM2LP90AEgtSgCqDpNclILAIplQpttXnppLus1+Q
-         xmNvJh9irhvk1BLNS19/J0Hnw7UWHRv14oEAmFtkGwhgNU6ae63dnLdVDs5FbNmY4336
-         RSsFvtFl7pR6TXrbinGmVayK0syM5sRyKzlJm2T7LoztOFr2GODll6YX1W5vPQxKdjpj
-         eGtdz5EEwomR1iVsS6RLcfnkJa6GJX9amDVDTdlPANdhPepZnazzKHFJ3Le9GlTjnG57
-         Z86g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Bpbhj9chJ1cFWhe/L/TNeVRPVCjrK1BPCGK92a8982k=;
-        b=wq63VDK14yvLFlEizrdo74iv5WVzQ+QgRWt/33I+wkSozFAEwq7+7Kx2Cn9VcjQoCr
-         Hl6TMVTZnMF5cnq0Y/Gc+shsJ5qvmI93bOOL8WT0G3bVfqJoNkRPEVu5sYe7aaa1R021
-         5VJspVfgbEuFjpdhfFv0Y3cRFLl2OTv3uQyZip8Mua9aahyfAUkMkLIYelrGIs9pLGw9
-         h80/8g76eqFRiv7VfEvVeaCSaXMnH4FZqbcDhzmCYa+oI2MCCUj2bcAHis5CA3JXP7dk
-         SnaSMFRuL5zDxzvDrwRqWNqn9NkobF6tcsdHN1ZLMh1XVUwkI1hrxweZFLc8kN/CAfKm
-         ch3A==
-X-Gm-Message-State: AOAM532Q3GvVAkqXW5gUqsxNUILyOCbeI7pj3Varmkg/7qqufwWTzy7F
-        kfWHfkZ4rm2nlPOpny+dyRXVISfZcWLu+fhTd3U=
-X-Google-Smtp-Source: ABdhPJxyiQrIagKIeSB54QAVSTA7LZg3wom9rPtoeR3CWGVj4CR8Qfo3y+U9WefmBni6Sa4Z7KgVLKhXtNY4AIb0FFM=
-X-Received: by 2002:a25:348b:: with SMTP id b133mr3662054yba.21.1641867336713;
- Mon, 10 Jan 2022 18:15:36 -0800 (PST)
+        Mon, 10 Jan 2022 21:15:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3220CC06173F;
+        Mon, 10 Jan 2022 18:15:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3FA06149E;
+        Tue, 11 Jan 2022 02:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A805CC36AE9;
+        Tue, 11 Jan 2022 02:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641867339;
+        bh=sUbIUOCDZhI92yuv5FI8tKMMU7KnIXq6nXeens81ATw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HC6mVkxnUVGjfY0ARZsN5dYM0UyznvVRRdM1a5GEAK8GSpvCEJvQhBPZCCfVBJsAw
+         U5S+3jcsMue/ACK79DNkOJCyLlQuy81t1jUHwfaYQZch/dHq+jFPcrMSGvvo5Kohzf
+         pGZ3x3cS9U0RZh/9qcb7zyOlZ1Q+c9KNE0G/XW50p8J8uOLqq5RYhe7eafaZWfrjN5
+         WLF+/Rm1xCwWEzcCTTXTlVQyD/CwxmFyyaAuEJb+oCH1AqFJIy5AUrGMNeHNUxhUcO
+         iLLbjZ+VcKyYsxKGPflK5hdDaTK3S9ybbbGygeqQu7GjokpewO95wRMeMe6NXASDKt
+         SJZy/eA6VWSWA==
+Date:   Tue, 11 Jan 2022 04:15:28 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YdzoQJknQK5r6xLK@iki.fi>
+References: <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
+ <YdgvFTIRboHwTgRT@iki.fi>
+ <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdmxpTVM1JG8nxQ3@iki.fi>
+ <YdmzDy1BOHgh8CII@iki.fi>
+ <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdzjEzjF0YKn+pZ6@iki.fi>
+ <YdzjrIxrVfgrlzWH@iki.fi>
+ <YdzldMXO2LrssnER@iki.fi>
 MIME-Version: 1.0
-From:   cruise k <cruise4k@gmail.com>
-Date:   Tue, 11 Jan 2022 10:15:26 +0800
-Message-ID: <CAKcFiNCg-hp7g-yBZFBB4D8yJ7uXyLvsZ_1P8804YgqLhWUt8w@mail.gmail.com>
-Subject: INFO: task hung in path_openat
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     sunhao.th@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdzldMXO2LrssnER@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jan 11, 2022 at 04:03:32AM +0200, Jarkko Sakkinen wrote:
+> On Tue, Jan 11, 2022 at 03:55:59AM +0200, Jarkko Sakkinen wrote:
+> > On Tue, Jan 11, 2022 at 03:53:26AM +0200, Jarkko Sakkinen wrote:
+> > > On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> > > > On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> > > > wrote:
+> > > > 
+> > > > > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
+> > > > > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
+> > > > > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
+> > > > > > > > > > > OK, so the question is: do we need both or would a
+> > > > > > mechanism just
+> > > > > > > > > > to extend
+> > > > > > > > > > > permissions be sufficient?
+> > > > > > > > > >
+> > > > > > > > > > I do believe that we need both in order to support pages
+> > > > > > having only
+> > > > > > > > > > the permissions required to support their intended use
+> > > > > > during the
+> > > > > > > > > > time the
+> > > > > > > > > > particular access is required. While technically it is
+> > > > > > possible to grant
+> > > > > > > > > > pages all permissions they may need during their lifetime it
+> > > > > > is safer to
+> > > > > > > > > > remove permissions when no longer required.
+> > > > > > > > >
+> > > > > > > > > So if we imagine a run-time: how EMODPR would be useful, and
+> > > > > > how using it
+> > > > > > > > > would make things safer?
+> > > > > > > > >
+> > > > > > > > In scenarios of JIT compilers, once code is generated into RW pages,
+> > > > > > > > modifying both PTE and EPCM permissions to RX would be a good
+> > > > > > defensive
+> > > > > > > > measure. In that case, EMODPR is useful.
+> > > > > > >
+> > > > > > > What is the exact threat we are talking about?
+> > > > > > 
+> > > > > > To add: it should be *significantly* critical thread, given that not
+> > > > > > supporting only EAUG would leave us only one complex call pattern with
+> > > > > > EACCEPT involvement.
+> > > > > > 
+> > > > > > I'd even go to suggest to leave EMODPR out of the patch set, and
+> > > > > > introduce
+> > > > > > it when there is PoC code for any of the existing run-time that
+> > > > > > demonstrates the demand for it. Right now this way too speculative.
+> > > > > > 
+> > > > > > Supporting EMODPE is IMHO by factors more critical.
+> > > > > 
+> > > > > At least it does not protected against enclave code because an enclave
+> > > > > can
+> > > > > always choose not to EACCEPT any of the EMODPR requests. I'm not only
+> > > > > confused here about the actual threat but also the potential adversary
+> > > > > and
+> > > > > target.
+> > > > > 
+> > > > I'm not sure I follow your thoughts here. The sequence should be for enclave
+> > > > to request  EMODPR in the first place through runtime to kernel, then to
+> > > > verify with EACCEPT that the OS indeed has done EMODPR.
+> > > > If enclave does not verify with EACCEPT, then its own code has
+> > > > vulnerability. But this does not justify OS not providing the mechanism to
+> > > > request EMODPR.
+> > > 
+> > > The question is really simple: what is the threat scenario? In order to use
+> > > the word "vulnerability", you would need one.
+> > > 
+> > > Given the complexity of the whole dance with EMODPR it is mandatory to have
+> > > one, in order to ack it to the mainline.
+> > > 
+> > > > Similar to how we don't want have RWX code pages for normal Linux
+> > > > application, when an enclave loads code pages (either directly or JIT
+> > > > compiled from high level code ) into EAUG'd page (which has RW), we do not
+> > > > want leave pages to be RWX for code to be executable, hence the need of
+> > > > EMODPR request OS to reduce the permissions to RX once the code is ready to
+> > > > execute.
+> > > 
+> > > You cannot compare *enforced* permissions outside the enclave, and claim that
+> > > they would be equivalent to the permissions of the already sandboxed code
+> > > inside the enclave, with permissions that are not enforced but are based
+> > > on good will of the enclave code.
+> > 
+> > To add, you can already do "EMODPR" by simply adjusting VMA permissions to be
+> > more restrictive. How this would be worse than this collaboration based 
+> > thing?
+> 
+> ... or you could even make soft version of EMODPR without using that opcode
+> by writing an ioctl to update our xarray to allow lower permissions. That
+> ties the hands of the process who is doing the mmap() already. 
 
-Syzkaller found the following issue:
+E.g. why not just
 
-HEAD commit: 75acfdb Linux 5.16-rc8
-git tree: upstream
-console output: https://pastebin.com/raw/7TSe1kGF
-kernel config: https://pastebin.com/raw/XsnKfdRt
+#define SGX_IOC_ENCLAVE_RESTRICT_PAGE_PERMISSIONS \
+	_IOW(SGX_MAGIC, 0x05, struct sgx_enclave_modify_page_permissions)
+#define SGX_IOC_ENCLAVE_EXTEND_PAGE_PERMISSIONS \
+	_IOW(SGX_MAGIC, 0x06, struct sgx_enclave_modify_page_permissions)
 
-And hope the report log can help you.
+struct sgx_enclave_restrict_page_permissions {
+	__u64 src;
+	__u64 offset;
+	__u64 length;
+	__u64 secinfo;
+	__u64 count;
+};
+struct sgx_enclave_extend_page_permissions {
+	__u64 src;
+	__u64 offset;
+	__u64 length;
+	__u64 secinfo;
+	__u64 count;
+};
 
-INFO: task systemd-udevd:27429 blocked for more than 146 seconds.
-      Not tainted 5.16.0-rc8+ #10
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:systemd-udevd   state:D stack:26528 pid:27429 ppid:  3127 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- down_write+0x135/0x150 kernel/locking/rwsem.c:1524
- inode_lock include/linux/fs.h:783 [inline]
- open_last_lookups fs/namei.c:3347 [inline]
- path_openat+0xa66/0x26c0 fs/namei.c:3556
- do_filp_open+0x1c1/0x290 fs/namei.c:3586
- do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
- do_sys_open+0xc3/0x140 fs/open.c:1228
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fde8feb06f0
-RSP: 002b:00007ffdc8b61368 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8ca9880
-RBP: 000000000003a2f8 R08: 000000000000fefe R09: 00007fde8ff03740
-R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8ca9895
-R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
- </TASK>
-INFO: task systemd-udevd:27467 blocked for more than 148 seconds.
-      Not tainted 5.16.0-rc8+ #10
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:systemd-udevd   state:D stack:27072 pid:27467 ppid:  3127 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- down_write+0x135/0x150 kernel/locking/rwsem.c:1524
- inode_lock include/linux/fs.h:783 [inline]
- open_last_lookups fs/namei.c:3347 [inline]
- path_openat+0xa66/0x26c0 fs/namei.c:3556
- do_filp_open+0x1c1/0x290 fs/namei.c:3586
- do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
- do_sys_open+0xc3/0x140 fs/open.c:1228
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fde8feb06f0
-RSP: 002b:00007ffdc8b60d78 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8c989c0
-RBP: 000000000003a2f8 R08: 000000000000fcfe R09: 00007fde8ff03740
-R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8c989d6
-R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
- </TASK>
-INFO: task systemd-udevd:27515 blocked for more than 150 seconds.
-      Not tainted 5.16.0-rc8+ #10
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:systemd-udevd   state:D stack:27584 pid:27515 ppid:  3127 flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- down_write+0x135/0x150 kernel/locking/rwsem.c:1524
- inode_lock include/linux/fs.h:783 [inline]
- open_last_lookups fs/namei.c:3347 [inline]
- path_openat+0xa66/0x26c0 fs/namei.c:3556
- do_filp_open+0x1c1/0x290 fs/namei.c:3586
- do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
- do_sys_open+0xc3/0x140 fs/open.c:1228
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fde8feb06f0
-RSP: 002b:00007ffdc8b60d78 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8cad110
-RBP: 000000000003a2f8 R08: 000000000000fefe R09: 00007fde8ff03740
-R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8cad126
-R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
- </TASK>
-INFO: task systemd-udevd:27530 blocked for more than 153 seconds.
-      Not tainted 5.16.0-rc8+ #10
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:systemd-udevd   state:D stack:26048 pid:27530 ppid:  3127 flags:0x00000000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- rwsem_down_write_slowpath+0x664/0x1190 kernel/locking/rwsem.c:1151
- __down_write_common kernel/locking/rwsem.c:1268 [inline]
- __down_write_common kernel/locking/rwsem.c:1265 [inline]
- __down_write kernel/locking/rwsem.c:1277 [inline]
- down_write+0x135/0x150 kernel/locking/rwsem.c:1524
- inode_lock include/linux/fs.h:783 [inline]
- open_last_lookups fs/namei.c:3347 [inline]
- path_openat+0xa66/0x26c0 fs/namei.c:3556
- do_filp_open+0x1c1/0x290 fs/namei.c:3586
- do_sys_openat2+0x61b/0x9a0 fs/open.c:1212
- do_sys_open+0xc3/0x140 fs/open.c:1228
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fde8feb06f0
-RSP: 002b:00007ffdc8b61368 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fde8feb06f0
-RDX: 0000000000000180 RSI: 00000000000800c2 RDI: 00005624b8ca9880
-RBP: 000000000003a2f8 R08: 000000000000fefe R09: 00007fde8ff03740
-R10: 0000000000000000 R11: 0000000000000246 R12: 00005624b8ca9896
-R13: 8421084210842109 R14: 00000000000800c2 R15: 00007fde8ff3e540
- </TASK>
+These would simply update the xarray and nothing else. I'd go with two
+ioctls (with the necessary checks for secinfo) in order to provide hook
+up points in the future for LSMs.
+
+This leaves only EAUG and EMODT requiring the EACCEPT handshake.
+
+/Jarkko

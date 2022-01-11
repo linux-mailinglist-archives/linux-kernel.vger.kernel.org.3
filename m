@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8842948B581
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6614248B585
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244083AbiAKSN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:13:27 -0500
-Received: from foss.arm.com ([217.140.110.172]:50348 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243842AbiAKSN0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:13:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B059D6E;
-        Tue, 11 Jan 2022 10:13:26 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DC9F3F766;
-        Tue, 11 Jan 2022 10:13:24 -0800 (PST)
-Date:   Tue, 11 Jan 2022 18:13:21 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com
-Subject: Re: [PATCH v8 00/11] Introduce atomic support for SCMI transports
-Message-ID: <20220111181321.GC6113@e120937-lin>
-References: <20211220195646.44498-1-cristian.marussi@arm.com>
+        id S245411AbiAKSOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243947AbiAKSOW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 13:14:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB45BC061748;
+        Tue, 11 Jan 2022 10:14:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66C4DB81C29;
+        Tue, 11 Jan 2022 18:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DA2C36AE9;
+        Tue, 11 Jan 2022 18:14:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641924859;
+        bh=c5WJfVOY6Hdbl57bfmac8NzWCEU/nZ1dXMZn9S6Zdec=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YkNjFqr7Fe/JJoXULlk+4YmO8f2Hmd4gBduz+z11XRF6BDpTtKCVVbQI0yD2awn3/
+         YkDqS1IDpwjDsxFNDb41xLhrJS9fLtgdL0WUvySGbiolwKKpsjjCmL92st9lOuQjOU
+         +3BP7V7IqZ3hrIRF0QglRVitAoA3xES+tepYneQOqyFw2948u2qVkje8rC8QmBctpA
+         clJrdPDAuAOgFPSp7pcz7YsydYGImuXzbD1uJGOAeI8RFAckTxtQODq6uOilIGGhHK
+         /k6IXGiWAONNzcVvKZfTJWqSSBbsfp6GlDaIoB02fQ1HuCJBbfBxfd+QGiz7gxyc1m
+         T9gv8Eeoo8rAQ==
+Date:   Tue, 11 Jan 2022 10:14:17 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net/smc: Avoid setting clcsock options after
+ clcsock released
+Message-ID: <20220111101417.04402570@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <1641807505-54454-1-git-send-email-guwen@linux.alibaba.com>
+References: <1641807505-54454-1-git-send-email-guwen@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220195646.44498-1-cristian.marussi@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 07:56:35PM +0000, Cristian Marussi wrote:
-> Hi all,
-> 
+On Mon, 10 Jan 2022 17:38:25 +0800 Wen Gu wrote:
+> -	return smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+> +	rc = smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+>  					     optval, optlen);
 
-Hi
-
-this series has now been partially queued (01-->08), the remaining
-patches on virtio polling and SCMI CLK atomic support will be posted as
-a new small patchset in the next cycle.
-
-Thanks,
-Cristian
+Please do realign the continuation line when moving the opening bracket.

@@ -2,442 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D885F48A7E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ABD48A7C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiAKGne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 01:43:34 -0500
-Received: from mga09.intel.com ([134.134.136.24]:16144 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230516AbiAKGnd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 01:43:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641883413; x=1673419413;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=JC7uTHKkW5VTcbpX1uUCYsf2IvBEn/igMmqtR2ixWX0=;
-  b=VhxioM/O+1v3jaDiROVtp3mxgs0aCY2qaSFsoynmUu7atqcbLfBDzzl3
-   XPJ81Ffg6t9BDqX/Pk6eBn31SzQzc7Qyj1bX8ku7SD7Cmb9tMMbp2hQUS
-   zrySTaw16g99vJ7xSpoAEuD7x9uCQGWjgurrXi60znV34h6ZSmavQgINZ
-   EldapyHnW0DIfxNFMpikuADG03862Fbs5erpEl6TUNDWSUyUARNdAilqJ
-   pcW+i3pIfUgOK6tsdI8mNyOrNRwO67ERvIiVoDv/x/XlzC/VQP0Vo2k4Y
-   fof+uBAvGuCNj/JHkvVee4x4SR8uQMrTQ5uriMwKbmFn5gI2CGKpsIe8y
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="243212774"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="243212774"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 22:43:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="528613134"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jan 2022 22:43:29 -0800
-Date:   Tue, 11 Jan 2022 14:35:35 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, devicetree@vger.kernel.org, mdf@kernel.org,
-        robh@kernel.org, dwmw2@infradead.org,
-        Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V4 XRT Alveo Infrastructure 4/5] fpga: xrt: xrt-lib
- common  interfaces
-Message-ID: <20220111063535.GB979169@yilunxu-OptiPlex-7050>
-References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
- <20220105225013.1567871-5-lizhi.hou@xilinx.com>
- <c2e3b692-011b-0536-68db-a09a436b01ef@redhat.com>
+        id S1348191AbiAKGfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 01:35:53 -0500
+Received: from mail-sn1anam02on2085.outbound.protection.outlook.com ([40.107.96.85]:44230
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232940AbiAKGfw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 01:35:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fMjYzj+6jfFBJElBuBwvobv55nM7hIxU41+iIBnLQ/NZj4/fck3fiNECVYf3R94uMVlqAySLl8Wk8NeDRNGyUUF71OvIQjM1a9Bdwu8CmnYFqRRGJZ66BIJ0snyg1IewEpQR3thxMWACZpSX/A+PHmaaVCIXzlRJy2VEK+53O6l7BbLSey+Y+LBdDTaBTn6cpyzOi5U9X03LrU0jDnwhDC7v6Hr3KMAYXz2hN6I46W18i6Tg1gS1sRrUT7IpUBJbRMtv4bQb769/4jTAvgXaLzSdGqA3d8zzihBu6jFWScFMHev1p/Ux9l07dyWTnZ6Vo1yY5sG/nMgClZDVaRFF1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TU4bxud+tdKSrIy0sstenOTfJfTcJhclyFPs+oIlA0k=;
+ b=lQGEUbANPmMB4rKIuC0hQYGoRVJbV2MeA30ng+k++x13+CIGPaOkrU3MeLPDi6JkWsgAUr3NwFD9TyQ4AW52Y+upFjucnq7OFQI0SWWf/dlWYvqj0Us+iOxrxDACEzEfln8pk7tItXBPykZMMJcWQ2k3p+kxDfuT6WjNAWpKJn48OZce4lVamidiO102sbOcO1cao6x9A4RtCoK44ojkz6HkkBMHhDlpr5inVxC24awVojn+7+Xp07U1D6Gm/5MnTu2TnF5HqPKEoGW9Qu+nE0z8jmWvAYhfDoHBcCCxu4oKIfA3qcsmcr0GKLCWR30XU6ogKUNrdl+HnyK1NmqWEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TU4bxud+tdKSrIy0sstenOTfJfTcJhclyFPs+oIlA0k=;
+ b=A+vYY7mvfINdqlAZpdtVuAnqyZZmBJNZ9Lcqm/kotdSWVGtIAqtAfRH2/C3K+zHpRQ1koXubaeHIr6Ejq07e7fp/xiBp3io8Sj4FBsbG78FaHQi2tQ2MLT95kgc2HgMHx7nKDd/e4V/CkS0SnMFwMuJXIDx3gIfib3Y6mlCwL5bGIRnZkzxNgbQyqz5rbLklCHWzrU9JZRHp0d/ST0tJ0AnQGapAij7fCbN9nNr5eoRGEetHmzMsaaCT9S21SfPAk5LIJtrIxW/J4BOV5wJWtEZKk24nDqPLgzMZjtoyx+TiPM7r0m0mcTPXkonXUiNOc9LylBuYcVhr9VyfA8KuPg==
+Received: from DM6PR12MB3500.namprd12.prod.outlook.com (2603:10b6:5:11d::16)
+ by DM6PR12MB3033.namprd12.prod.outlook.com (2603:10b6:5:11e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
+ 2022 06:35:49 +0000
+Received: from DM6PR12MB3500.namprd12.prod.outlook.com
+ ([fe80::9031:757e:d174:3857]) by DM6PR12MB3500.namprd12.prod.outlook.com
+ ([fe80::9031:757e:d174:3857%7]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 06:35:49 +0000
+From:   Kechen Lu <kechenl@nvidia.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        Somdutta Roy <somduttar@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH v2 3/3] KVM: x86: add vCPU ioctl for HLT exits disable
+ capability
+Thread-Topic: [RFC PATCH v2 3/3] KVM: x86: add vCPU ioctl for HLT exits
+ disable capability
+Thread-Index: AQHX9koEtqUfpyHZkkeby8KEcdrzF6xc3GqAgABfkBA=
+Date:   Tue, 11 Jan 2022 06:35:49 +0000
+Message-ID: <DM6PR12MB3500F288EB2952476E2F2E61CA519@DM6PR12MB3500.namprd12.prod.outlook.com>
+References: <20211221090449.15337-1-kechenl@nvidia.com>
+ <20211221090449.15337-4-kechenl@nvidia.com> <Ydyda6K8FrFveZX7@google.com>
+In-Reply-To: <Ydyda6K8FrFveZX7@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d870772a-5c25-463e-3900-08d9d4cc9b9c
+x-ms-traffictypediagnostic: DM6PR12MB3033:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB3033D8E84F23B61AB6AB83EECA519@DM6PR12MB3033.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: f6JahrbTxuz+8s1SEOpSyE79FWUbOrXdfaFaAyMha+cAuKd/sy1p9rJPdvRKqdILIlX+3BIK+cSZdgRUiJe8e5n5Re1hgwAvniyF737/guPNQPakUk7GoOhS4waPpcLhR6FZIEzMFBBLaujTJ8wXwekir8i33k3elKqFi4aCTH9L5zqdY0y5lOeN1/RE0baTwcCEXDKwqHrKXJu49+cdakNSGRxki//t6dXpYMxhOiSpNP7IcwcyEi5On/y7yRPNq15t+96g3beoeoIV9HGFLMz7dMmuE/v3GaiAZlnE9YykywApxVJK3cr4+sy/jABxmVVCTK1pv47DGRIq0Y7AggpdsB/QV2MTRWKtUkfOFivB/WrwVL4/XojZujlM2FNmHL+Ixm0Bk9z1KGbmmOT4k3S1UydCQSj3doiqsZDmSo7rYJWTn3LQJe/yNLZ3Qlk8d2dsFYVuV2NwGAnSEXF0VcpoHAyNtrl3NbZSf1KKIZNf/9JzaUsGMCBvQQGmYPIjWl9HEXMpTAo0myz7cijxIycMl1PP727m+FhW2z3pbS2CTIe2EOKbyhXBcEWgohx/h+IaZjyxV5JkZCPYb5WsxgWtVlBuiMITChZf44D5oOdcn/NaFwlpsNrEryS+qb/fYatR+VFRV1c+jNTT3JgqW9/PzZgEYYAEaCaoFdZl/v5wXlEAO5NSqEFKS/dy8VWX4EwZx/pSDtcJx+U6ZB0L5w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(316002)(9686003)(6916009)(122000001)(66556008)(66446008)(64756008)(38070700005)(53546011)(8676002)(71200400001)(38100700002)(6506007)(66476007)(33656002)(83380400001)(2906002)(86362001)(66946007)(4326008)(8936002)(5660300002)(26005)(508600001)(7696005)(186003)(52536014)(55016003)(54906003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZB/JqFJI10OdCYGsIzrmTyr6PmFaxpnrdUl5f/tTCJBmKKh4ZDoTYn01sY0K?=
+ =?us-ascii?Q?aaPwzyelqdr0TAQQkTuyBzvOb0bHhzK/ogCbbdsPz3pKyFai8JjQP5+n+HWs?=
+ =?us-ascii?Q?QgNOTDdfvWj6A67X6ga0deVWx0mM2wKLIL7moNxgXq20i34rIdGQcGN0Wiot?=
+ =?us-ascii?Q?4/MiAOhgjHIJBBmaDe1XEtjy+PISF9l0vtmb7Tnd2DyKbtSQY73m9e5l9x27?=
+ =?us-ascii?Q?PNHACOXCJyfzdyzQcWGTpADXynLuTGsKItJcmfEiSdYrIEvrKaJPaMiH7eIO?=
+ =?us-ascii?Q?lzO8pd0FS6szvGoNyyE248boE9brB1tN4LCGyD6bZNI/3z4EtLQpRebK+JDF?=
+ =?us-ascii?Q?/EYbkVBUKs14QsKMgR+mVNf+mWfPxC5qYOm0q2cDKxTVVzFsG0SWXZTdteh0?=
+ =?us-ascii?Q?X1/Krv9ZCNhJw38rK3T2AbV0nknS9knoJmDkTosTBoW1rZypSdM8Ij/bnXOA?=
+ =?us-ascii?Q?/rXecqt7u2Q2MOcAGkXjZQU9zk+n5bE7m1+s1/zuVZ7VzV9NS3HSTl8qVrjl?=
+ =?us-ascii?Q?2bEgLQr48NLDBx98Zq8uqcGNnhbQyAigYaRE45+rQLZtzqQB/Kw7rQ6hrWzt?=
+ =?us-ascii?Q?1svURjF7rfHulQhFcwt0ev4EX942wDwVkq9Brt26cDLJgy7z6Wkir3jl+Arq?=
+ =?us-ascii?Q?saeCSlm80oKC9tDkGgSBoaSM1gIb5JekIlupeS/HRtULBHYTM8CWLKdkWVUO?=
+ =?us-ascii?Q?BKDL4H/y+/bHjdGUkgVa4IpTm8NzXFID0u7i5uMyxGxIdHPRITE26ZgZEtTN?=
+ =?us-ascii?Q?kPKFH1LoRsg7jXltFvvDB8drEIXt8XrupS4meyjr2fRkMd5RcO79W3K8UrBi?=
+ =?us-ascii?Q?Jsv/xZp1qhJ7zlraRbq4fPbBQMf5Zf7E+dcbt5FJ0mH93F0N5qQ1rIzhMh78?=
+ =?us-ascii?Q?6t+STKGdiZ0ZdL3cLUPpx7emQvxmSjnPkGCwrN39PYvPsXjFs4b6WwFxxdcS?=
+ =?us-ascii?Q?kSnsvQA6b/0h79/9CSW7aJMVsnhhagTO6y9f5JUKebOh61nzuw34uxISw4MV?=
+ =?us-ascii?Q?lOMbWlk7pkhcPK8iBZcsRYwiKfm0+63/s3SaNaqdaz2Ssu5x09pS5u4iNY6T?=
+ =?us-ascii?Q?SUY4R0QMUDDNZF0FbTZux3ThhXCweZsWWYWVSmkf9fzs5nMKzdU0v+MU2NWQ?=
+ =?us-ascii?Q?UGBNGim0saWSnoH+WKSFoClDTlg6KNaW0XdYO+CWU7u8bK7VNqWdev7AwP/W?=
+ =?us-ascii?Q?nJTEbSD/ASn7GhtU7kQ5qiGZVy316G0WYju5AgZFNSIiAVOW+9dj71YPyXIR?=
+ =?us-ascii?Q?iVPqqfMDae5VHEioGE3TCNxoOW7mIWUa3dGIs4a1g/xWblqb2U6u7dfzQehb?=
+ =?us-ascii?Q?D4j0bexV4f1++yDj0lrUgMAPhWh692gQ66pePgxeRpod9LyZqejWk6RxZQTM?=
+ =?us-ascii?Q?vJQVkC2XPSetva83SC5bLrdEdEhrcE1y0LCKP4Zpb39ozIPSx3Xb14hn2sll?=
+ =?us-ascii?Q?sCdgeYK8z+50yHbh78jmIXwF6L1FFrS5ui0YC9h4YqFVR21qkWLc3kSn2znU?=
+ =?us-ascii?Q?IvVZ1WLgstNvlCZVL8Cf0k3kmmi5IXXFs+2Wo1FcY3GQLjK2igMJ3ZBBUHi/?=
+ =?us-ascii?Q?b9PA7av7Yvr65ggLGEQ+6UzCTCe1LPcpBIGxoPr7dgrDtfdsJATC1BWmzUOI?=
+ =?us-ascii?Q?tUJaLpBgs3ILjXqQYqdCRGE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c2e3b692-011b-0536-68db-a09a436b01ef@redhat.com>
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3500.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d870772a-5c25-463e-3900-08d9d4cc9b9c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 06:35:49.8134
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QHAR/UrXfe318gFEmXI2nh7dkC+jaZdnESU+qJOxqg6AMl0l7rwCIzN3hjXUvQfjy63NixrBt+lD95bDAn0b3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3033
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 09, 2022 at 01:16:23PM -0800, Tom Rix wrote:
-> 
-> On 1/5/22 2:50 PM, Lizhi Hou wrote:
-> > The Alveo platform has to PCI fucntions. Each function has its own driver
-                           two
-> > attached. The common interfaces are created to support both drivers.
-> 
-> The commit log should be more descriptive since this introduces a new class
-> 
-> of drivers.  Reuse the cover letter content.
-> 
-> > 
-> > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> > ---
-> >   drivers/fpga/Kconfig                  |   3 +
-> >   drivers/fpga/Makefile                 |   3 +
-> >   drivers/fpga/xrt/Kconfig              |   6 +
-> >   drivers/fpga/xrt/include/xpartition.h |  28 ++++
-> >   drivers/fpga/xrt/lib/Kconfig          |  17 +++
-> >   drivers/fpga/xrt/lib/Makefile         |  15 +++
-> >   drivers/fpga/xrt/lib/lib-drv.c        | 178 ++++++++++++++++++++++++++
-> >   drivers/fpga/xrt/lib/lib-drv.h        |  15 +++
-> >   8 files changed, 265 insertions(+)
-> >   create mode 100644 drivers/fpga/xrt/Kconfig
-> >   create mode 100644 drivers/fpga/xrt/include/xpartition.h
-> >   create mode 100644 drivers/fpga/xrt/lib/Kconfig
-> >   create mode 100644 drivers/fpga/xrt/lib/Makefile
-> >   create mode 100644 drivers/fpga/xrt/lib/lib-drv.c
-> >   create mode 100644 drivers/fpga/xrt/lib/lib-drv.h
-> > 
-> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > index 991b3f361ec9..93ae387c97c5 100644
-> > --- a/drivers/fpga/Kconfig
-> > +++ b/drivers/fpga/Kconfig
-> > @@ -243,4 +243,7 @@ config FPGA_MGR_VERSAL_FPGA
-> >   	  configure the programmable logic(PL).
-> >   	  To compile this as a module, choose M here.
-> > +
-> > +source "drivers/fpga/xrt/Kconfig"
-> 
-> This patchset will have 2 new Kconfigs and only 2 config setting.
-> 
-> To simplify, add the 2 config settings directly to fpga/Kconfig
 
-Or have a xrt/Kconfig that records all config settings.
 
-> 
+> -----Original Message-----
+> From: Sean Christopherson <seanjc@google.com>
+> Sent: Monday, January 10, 2022 12:56 PM
+> To: Kechen Lu <kechenl@nvidia.com>
+> Cc: kvm@vger.kernel.org; pbonzini@redhat.com; wanpengli@tencent.com;
+> vkuznets@redhat.com; mst@redhat.com; Somdutta Roy
+> <somduttar@nvidia.com>; linux-kernel@vger.kernel.org
+> Subject: Re: [RFC PATCH v2 3/3] KVM: x86: add vCPU ioctl for HLT exits
+> disable capability
+>=20
+> External email: Use caution opening links or attachments
+>=20
+>=20
+> On Tue, Dec 21, 2021, Kechen Lu wrote:
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c index
+> > d5d0d99b584e..d7b4a3e360bb 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -5072,6 +5072,18 @@ static int kvm_vcpu_ioctl_enable_cap(struct
+> kvm_vcpu *vcpu,
+> >                       kvm_update_pv_runtime(vcpu);
+> >
+> >               return 0;
 > > +
-> >   endif # FPGA
-> > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> > index 0bff783d1b61..5bd41cf4c7ec 100644
-> > --- a/drivers/fpga/Makefile
-> > +++ b/drivers/fpga/Makefile
-> > @@ -49,3 +49,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
-> >   # Drivers for FPGAs which implement DFL
-> >   obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
-> > +
-> > +# XRT drivers for Alveo
-> > +obj-$(CONFIG_FPGA_XRT_LIB)		+= xrt/lib/
+> > +     case KVM_CAP_X86_DISABLE_EXITS:
+> > +             if (cap->args[0] && (cap->args[0] &
+> > +                             ~KVM_X86_DISABLE_VALID_EXITS))
+>=20
+> Bad alignment, but there's no need for the !0 in the first place, i.e.
+>=20
+>                 if (cap->args[0] & ~KVM_X86_DISABLE_VALID_EXITS)
+>=20
 
-Have a xrt/Makefile that records all makings?
+Ack.
 
-> > diff --git a/drivers/fpga/xrt/Kconfig b/drivers/fpga/xrt/Kconfig
-> > new file mode 100644
-> > index 000000000000..04c3bb5aaf4f
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/Kconfig
-> > @@ -0,0 +1,6 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +#
-> > +# Xilinx Alveo FPGA device configuration
-> > +#
-> > +
-> > +source "drivers/fpga/xrt/lib/Kconfig"
-> > diff --git a/drivers/fpga/xrt/include/xpartition.h b/drivers/fpga/xrt/include/xpartition.h
-> > new file mode 100644
-> > index 000000000000..d72090ddfbee
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/include/xpartition.h
-> > @@ -0,0 +1,28 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Xilinx, Inc.
-> > + *
-> > + * Authors:
-> > + *	Lizhi Hou <lizhih@xilinx.com>
-> > + */
-> > +
-> > +#ifndef _XRT_PARTITION_H_
-> > +#define _XRT_PARTITION_H_
-> > +
-> > +struct xrt_partition_range {
-> > +	u32 bar_idx;
-> > +	u64 base;
-> > +	u64 size;
-> > +};
-> > +
-> > +struct xrt_partition_info {
-> > +	int num_range;
-> > +	struct xrt_partition_range *ranges;
-> > +	void *fdt;
-> > +	u32 fdt_len;
-> > +};
-> > +
-> > +int xrt_partition_create(struct device *dev, struct xrt_partition_info *info, void **handle);
-> > +void xrt_partition_destroy(void *handle);
-> > +
-> > +#endif
-> > diff --git a/drivers/fpga/xrt/lib/Kconfig b/drivers/fpga/xrt/lib/Kconfig
-> > new file mode 100644
-> > index 000000000000..73de1f50d5c6
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/lib/Kconfig
-> > @@ -0,0 +1,17 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +#
-> > +# XRT Alveo FPGA device configuration
-> > +#
-> > +
-> > +config FPGA_XRT_LIB
-> > +	tristate "XRT Alveo Driver Library"
-> > +	depends on HWMON && PCI && HAS_IOMEM && OF
+> but that's also incomplete as this path only supports toggling HLT, yet a=
+llows
+> all flavors of KVM_X86_DISABLE_VALID_EXITS.  Unless there's a good reason
+> to not allow maniuplating the other exits, the proper fix is to just supp=
+ort
+> everything.
+>=20
 
-depends on HWMON & PCI?
+Makes sense. When I implement this patch version, only thinking about the u=
+se case of
+HLT intercept and want to see more comments if this framework looks good. W=
+ill complete
+this to support other exits.
 
-> > +	select REGMAP_MMIO
-> > +	select OF_OVERLAY
+> > +                     return -EINVAL;
+> > +
+> > +             vcpu->arch.hlt_in_guest =3D (cap->args[0] &
+> > +                     KVM_X86_DISABLE_EXITS_HLT) ? true : false;
+>=20
+> Hmm, this behavior diverges from the per-VM ioctl, which doesn't allow re=
+-
+> enabling a disabled exit.  We can't change the per-VM behavior without
+> breaking backwards compatibility, e.g. if userspace does:
+>=20
+>         if (allow_mwait)
+>                 kvm_vm_disable_exit(KVM_X86_DISABLE_EXITS_MWAIT)
+>         if (allow_hlt)
+>                 kvm_vm_disable_exit(KVM_X86_DISABLE_EXITS_HLT)
+>=20
+> then changing KVM behavior would result in MWAIT behavior intercepted
+> when previously it would have been allowed.  We have a userspace VMM
+> that operates like this...
+>=20
+> Does your use case require toggling intercepts?  Or is the configuration
+> static?
+> If it's static, then the easiest thing would be to follow the per-VM beha=
+vior so
+> that there are no suprises.  If toggling is required, then I think the be=
+st thing
+> would be to add a prep patch to add an override flag to the per-VM ioctl,=
+ and
+> then share code between the per-VM and per-vCPU paths for modifying the
+> flags (attached as patch 0003).
+>=20
 
-Same concern, add options when you really need them.
+Our use case for now is static configuration. But since the per-vcpu ioctl =
+is
+anyhow executed runtime after the vcpu creation, so it is the "toggling" an=
+d
+needs overrides on some vcpus. "OVERRIDE" flag makes much sense to me,
+the macro looks clean and neat for reducing redundant codes. Thanks a lot
+for the patch.
 
-> > +	help
-> > +	  Select this option to enable Xilinx XRT Alveo driver library. This
-> > +	  library is core infrastructure of XRT Alveo FPGA drivers which
-> > +	  provides functions for working with device nodes, iteration and
-> > +	  lookup of platform devices, common interfaces for platform devices,
-> > +	  plumbing of function call and ioctls between platform devices and
-> > +	  parent partitions.
-> > diff --git a/drivers/fpga/xrt/lib/Makefile b/drivers/fpga/xrt/lib/Makefile
-> > new file mode 100644
-> > index 000000000000..698877c39657
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/lib/Makefile
-> > @@ -0,0 +1,15 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Copyright (C) 2020-2022 Xilinx, Inc. All rights reserved.
-> > +#
-> > +# Authors: Sonal.Santan@xilinx.com
-> > +#
-> > +
-> > +FULL_XRT_PATH=$(srctree)/$(src)/..
-> > +
-> > +obj-$(CONFIG_FPGA_XRT_LIB) += xrt-lib.o
-> > +
-> > +xrt-lib-objs :=			\
-> > +	lib-drv.o
-> > +
-> > +ccflags-y := -I$(FULL_XRT_PATH)/include
-> > diff --git a/drivers/fpga/xrt/lib/lib-drv.c b/drivers/fpga/xrt/lib/lib-drv.c
-> > new file mode 100644
-> > index 000000000000..56334b2b9bec
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/lib/lib-drv.c
-> > @@ -0,0 +1,178 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2020-2022 Xilinx, Inc.
-> > + *
-> > + * Authors:
-> > + *	Cheng Zhen <maxz@xilinx.com>
-> > + *	Lizhi Hou <lizhi.hou@xilinx.com>
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/vmalloc.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_fdt.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/of_platform.h>
-> > +#include "xpartition.h"
-> > +#include "lib-drv.h"
-> > +
-> > +#define XRT_PARTITION_FDT_ALIGN		8
-> > +#define XRT_PARTITION_NAME_LEN		64
-> > +
-> > +struct xrt_partition {
-> > +	struct device *dev;
-> > +	u32 id;
-> > +	char name[XRT_PARTITION_NAME_LEN];
-> > +	void *fdt;
-> > +	struct property ranges;
-> > +	struct of_changeset chgset;
-> > +	bool chgset_applied;
-> > +	void *dn_mem;
-> > +};
-> > +
-> > +DEFINE_IDA(xrt_partition_id);
-> > +
-> > +static int xrt_partition_set_ranges(struct xrt_partition *xp, struct xrt_partition_range *ranges,
-> > +				    int num_range)
-> > +{
-> > +	__be64 *prop;
-> > +	u32 prop_len;
-> > +	int i;
-> > +
-> > +	prop_len = num_range * (sizeof(u64) * 3);
-> > +	prop = kzalloc(prop_len, GFP_KERNEL);
-> > +	if (!prop)
-> > +		return -ENOMEM;
-> > +
-> > +	xp->ranges.name = "ranges";
-> > +	xp->ranges.length = prop_len;
-> > +	xp->ranges.value = prop;
-> > +
-> > +	for (i = 0; i < num_range; i++) {
-> > +		*prop = cpu_to_be64((u64)ranges[i].bar_idx << 60);
-> > +		prop++;
-> > +		*prop = cpu_to_be64(ranges[i].base);
-> > +		prop++;
-> > +		*prop = cpu_to_be64(ranges[i].size);
-> > +		prop++;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +void xrt_partition_destroy(void *handle)
-> > +{
-> > +	struct xrt_partition *xp = handle;
-> > +
-> > +	if (xp->chgset_applied)
-> > +		of_changeset_revert(&xp->chgset);
-> > +	of_changeset_destroy(&xp->chgset);
-> > +
-> > +	ida_free(&xrt_partition_id, xp->id);
-> > +	kfree(xp->dn_mem);
-> > +	kfree(xp->fdt);
-> > +	kfree(xp->ranges.value);
-> > +	kfree(xp);
-> > +}
-> > +EXPORT_SYMBOL_GPL(xrt_partition_destroy);
-> > +
-> > +int xrt_partition_create(struct device *dev, struct xrt_partition_info *info, void **handle)
-> > +{
-> > +	struct device_node *parent_dn = NULL, *dn, *part_dn;
-> > +	struct xrt_partition *xp = NULL;
-> > +	void *fdt_aligned;
-> > +	int ret;
-> > +
-> > +	xp = kzalloc(sizeof(*xp), GFP_KERNEL);
-> > +	if (!xp)
-> > +		return -ENOMEM;
-> > +
-> > +	ret = ida_alloc(&xrt_partition_id, GFP_KERNEL);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "alloc id failed, ret %d", ret);
-> > +		kfree(xp);
-> > +		return ret;
-> > +	}
-> > +	xp->id = ret;
-> > +	of_changeset_init(&xp->chgset);
-> > +
-> > +	parent_dn = of_find_node_by_path("/");
-> > +	if (!parent_dn) {
-> > +		dev_err(dev, "did not find xrt node");
-> > +		ret = -EINVAL;
-> > +		goto failed;
-> > +	}
-> > +
-> > +	xp->dev = dev;
-> > +	snprintf(xp->name, XRT_PARTITION_NAME_LEN, "xrt-part@%x", xp->id);
-> > +	ret = xrt_partition_set_ranges(xp, info->ranges, info->num_range);
-> > +	if (ret)
-> > +		goto failed;
-> > +
-> > +	xp->fdt = kmalloc(info->fdt_len + XRT_PARTITION_FDT_ALIGN, GFP_KERNEL);
-> > +	if (!xp->fdt) {
-> > +		ret = -ENOMEM;
-> > +		goto failed;
-> > +	}
-> > +	fdt_aligned = PTR_ALIGN(xp->fdt, XRT_PARTITION_FDT_ALIGN);
-> > +	memcpy(fdt_aligned, info->fdt, info->fdt_len);
-> > +
-> > +	xp->dn_mem = of_fdt_unflatten_tree(fdt_aligned, NULL, &part_dn);
-> > +	if (!xp->dn_mem) {
-> > +		ret = -EINVAL;
-> > +		goto failed;
-> > +	}
-> > +
-> > +	of_node_get(part_dn);
-> > +	part_dn->full_name = xp->name;
-> > +	part_dn->parent = parent_dn;
-> > +	for (dn = part_dn; dn; dn = of_find_all_nodes(dn))
-> > +		of_changeset_attach_node(&xp->chgset, dn);
-> > +
-> > +	ret = of_changeset_add_property(&xp->chgset, part_dn, &xp->ranges);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to add property, ret %d", ret);
-> > +		goto failed;
-> > +	}
-> > +
-> > +	ret = of_changeset_apply(&xp->chgset);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to apply changeset, ret %d", ret);
-> > +		goto failed;
-> > +	}
-> > +	xp->chgset_applied = true;
-> > +	of_node_put(parent_dn);
-> > +
-> > +	ret = of_platform_populate(part_dn, NULL, NULL, dev);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to populate devices, ret %d", ret);
-> > +		goto failed;
-> > +	}
-> > +
-> > +	*handle = xp;
-> > +	return 0;
-> > +
-> > +failed:
-> > +	if (parent_dn)
-> > +		of_node_put(parent_dn);
-> > +	xrt_partition_destroy(xp);
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(xrt_partition_create);
+> Somewhat related, there's another bug of sorts that I think we can safely=
+ fix.
+> KVM doesn't reject disabling of MWAIT exits when MWAIT isn't allowed in
+> the guest, and instead ignores the bad input.  Not a big deal, but fixing=
+ that
+> means KVM doesn't need to check kvm_can_mwait_in_guest() when
+> processing the args to update flags.  If that breaks someone's userspace,=
+ the
+> alternative would be to tweak the attached patch 0003 to introduce the
+> OVERRIDE, e.g.
+>=20
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c index
+> f611a49ceba4..3bac756bab79 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5053,6 +5053,8 @@ static int kvm_vcpu_ioctl_device_attr(struct
+> kvm_vcpu *vcpu,
+>=20
+>  #define kvm_ioctl_disable_exits(a, mask)                                =
+    \
+>  ({                                                                      =
+    \
+> +       if (!kvm_can_mwait_in_guest())                                   =
+    \
+> +               (mask) &=3D KVM_X86_DISABLE_EXITS_MWAIT;                 =
+      \
 
-Maybe you could put the necessary lib functions and the callers in the
-same patch next time, for easier review.
+For some userspace's backward compatibility, adding this tweak to the attac=
+hed
+Patch 0003 makes sense. BTW, (mask) &=3D KVM_X86_DISABLE_EXITS_MWAIT
+seems should be (mask) &=3D ~KVM_X86_DISABLE_EXITS_MWAIT, I guess it's a=20
+typo :P. Will include the attached patch 0001 in the next as well. Thanks f=
+or
+all the help!
 
-> > +
-> > +static __init int xrt_lib_init(void)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static __exit void xrt_lib_fini(void)
-> > +{
-> > +}
-> > +
-> > +module_init(xrt_lib_init);
-> > +module_exit(xrt_lib_fini);
-> noops
-> > +
-> > +MODULE_AUTHOR("XRT Team <runtime@xilinx.com>");
-> > +MODULE_DESCRIPTION("Xilinx Alveo IP Lib driver");
-> > +MODULE_LICENSE("GPL v2");
-> > diff --git a/drivers/fpga/xrt/lib/lib-drv.h b/drivers/fpga/xrt/lib/lib-drv.h
-> > new file mode 100644
-> > index 000000000000..77ed5c399dcf
-> > --- /dev/null
-> > +++ b/drivers/fpga/xrt/lib/lib-drv.h
-> > @@ -0,0 +1,15 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Xilinx, Inc.
-> > + *
-> > + * Authors:
-> > + *	Cheng Zhen <maxz@xilinx.com>
-> > + */
-> > +
-> > +#ifndef _LIB_DRV_H_
-> > +#define _LIB_DRV_H_
-> header guards should have a consistent prefix and this one is a little
-> generic, append _XRT
-> > +
-> > +extern u8 __dtb_xrt_begin[];
-> > +extern u8 __dtb_xrt_end[];
-> 
-> I could not find where these were used in the patch.
-> 
-> Maybe consolidate all the xrt/lib/*.h to just this one file.
-> 
-> Tom
+Best Regards,
+Kechen
 
-Thanks,
-Yilun
-
-> 
-> > +
-> > +#endif	/* _LIB_DRV_H_ */
+>         if ((mask) & KVM_X86_DISABLE_EXITS_OVERRIDE) {                   =
+    \
+>                 (a).mwait_in_guest =3D (mask) & KVM_X86_DISABLE_EXITS_MWA=
+IT;
+> \
+>                 (a).hlt_in_guest =3D (mask) & KVM_X86_DISABLE_EXITS_HLT; =
+      \
+>=20
+>=20
+> If toggling is not required, then I still think it makes sense to add a m=
+acro to
+> handle propagating the capability args to the arch flags.

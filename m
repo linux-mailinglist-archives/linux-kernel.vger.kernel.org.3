@@ -2,96 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C0648B2B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEFD48B2C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242565AbiAKQ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S244041AbiAKRCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbiAKQ4y (ORCPT
+        with ESMTP id S240781AbiAKRCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:56:54 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467D7C061751;
-        Tue, 11 Jan 2022 08:56:54 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id u21so47149113edd.5;
-        Tue, 11 Jan 2022 08:56:54 -0800 (PST)
+        Tue, 11 Jan 2022 12:02:16 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE928C06173F;
+        Tue, 11 Jan 2022 09:02:15 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id h10so24036945wrb.1;
+        Tue, 11 Jan 2022 09:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WeChSL/PK3cTCR4nBb15abfCYrnb9MpWAs0c9CeMy0Y=;
-        b=FOtOUxrStn+T3pB/FldxGxcu84qkokN3ZWvfQOamdONMznMluOrdAWf0a43ARKaj7L
-         NrnemdZrnfDDC8uMCqxSxVXI1muNuKs/NXudn/nPCGvXKM7QTy2qORkREXaYdLPuLDoi
-         IS28szc9dH1z3O642gcwJUoDn2WTtgalSSC4tdZMn+CuXRV4kI5+LOvfGc6YpcMq1+xX
-         GFyFKWJcGRBjno0wxQJ0vDz0uDNz0fPOe88pTpnM2Y5jgaHmgS7Re0rcFfFdiQ+qI/BR
-         JNXptkV6nNb2V1q+66aicv+hAnlERTxnQhykrXs3YRV+CEhLXL25UR6ttQa/t4fM3YSD
-         M1Ww==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mXVQ1PbsGt6E7WnElgMdh7YxskWHKJ7cXGHBOHZ7Esg=;
+        b=NMl70OoyrtUbqH4c2Bqm742xUeygACYhczAcv/5uL8M0eFRgPdU7bRGW7Y/fUfah/v
+         S55faUvcSAN72EhNj50c0CrL/T4TYAdqYELi4oJKrWPEMVl6/1MjHa287HWFSowFnj5F
+         eVJ7wNv+d0G02h2zc+TAJQ4zMLkcK13WCGgHLV+xQh1GnVaMmLLPpLeyKVo+FiIn7upX
+         qcCmhnj98Jh6nfgQF4YmpXkAG+FW/MACbcWrVimHk+wmMWVNb1uwAKu/jlqX0jQJhkmq
+         UAehWKMyONaAmCLVDo3QqhTrAu1Bxcx1oYdIiCdwMIWKSeOPbByd1iuzy/8xMHqm1vbU
+         aoGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WeChSL/PK3cTCR4nBb15abfCYrnb9MpWAs0c9CeMy0Y=;
-        b=K53BLxB0Mofkjyt0JIeNWMuxJ28mPYoDEa2Dl1Cgr7NSQeEhq6j4a5k2yC1vYFa0+E
-         x/jb/rS2jxwYoNxa+zIFE2VOVrlNFTRklnUYnkJo6c4wkvaj6DNAmTIC7JzSOnioZxFE
-         ZXY4IyxoqhdV+7QMlyWARWJZAKOGrL1CiOQxKqcAjdhYRInig1bfQblJsWVgwJfwTyWM
-         D5wvAs4Tr7/1SN3/l5RLIjsQ0B+pNKcY6MP8aZwmwEIcZzfGhbFhDo62wOkHEAQKf7u5
-         WxmzCwpmrca1oY30eYX5hVJTUwQC8SKHGrV9woC3u+ypKWbOX2HSJZV1GIgeDHoPaglS
-         ZteA==
-X-Gm-Message-State: AOAM533nGVDqrWWVbU60bEbmj6I+aX9QRPvDTM1pfcQkp4QT2+uRL2oH
-        c0bLvEPVo7nOIw6IaUqMqxApuftIAobR6W7a
-X-Google-Smtp-Source: ABdhPJxIwNrmUBOvjf31nmz5yM7JajBXGSRI7bkJgWPa8HAhw4zxHi6tmMoo6t+ZJdxhlcWaF5c64A==
-X-Received: by 2002:a05:6402:d0a:: with SMTP id eb10mr5234814edb.48.1641920212829;
-        Tue, 11 Jan 2022 08:56:52 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f0b7c00c3a5ee4155775dd9.dip0.t-ipconnect.de. [2003:cf:9f0b:7c00:c3a5:ee41:5577:5dd9])
-        by smtp.googlemail.com with ESMTPSA id d14sm5220986edu.57.2022.01.11.08.56.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 08:56:52 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 3/3] hwmon: deprecate asis_wmi_ec_sensors driver
-Date:   Tue, 11 Jan 2022 17:56:27 +0100
-Message-Id: <20220111165630.1155135-4-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220111165630.1155135-1-eugene.shalygin@gmail.com>
-References: <20220111165630.1155135-1-eugene.shalygin@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mXVQ1PbsGt6E7WnElgMdh7YxskWHKJ7cXGHBOHZ7Esg=;
+        b=rgAyzgCCf3cPeGPJj3f5DlNefLwUPhbqxVje5xCXxzwVS5U9v+Gn6yRhADaLDEYPbl
+         DKyBTpBeiXUox9D0AfH4oH4w1qRtTDV9I1ZctyBhmNoCBhrcjOHZsjyAkP38x187k1Qe
+         tXwje+ed38ueVu9Tj64WtsVRc8rds7pHMB1OJVZT5sb25ZqixOLUE1v777zwi2pn8hIQ
+         hV73482DpH/mb2m9TLzAspdLei8MN6GyfYvcxRWnvguCq3mQWmLhBEV525xVyz+hmkpK
+         yTTcneGPvfoQOmzYkPAzH2agcf7COS5IbeI2BqA0z5EyDmhL9Guf0eMO4DRemNCtHhD0
+         1Rbg==
+X-Gm-Message-State: AOAM5313ETH6NLCNExvOBbkIVs2Yg0hQLhQpYW5X/aLaCl6O5uil/zQm
+        syfJdce11bCHOG+uZ17r2xs=
+X-Google-Smtp-Source: ABdhPJxhYLtku6q2EWXXe/rY01jj9HMQ9McdpVRef2XLXOOq/you036jaEvGHciimDoZa7etQwaeJg==
+X-Received: by 2002:adf:ab59:: with SMTP id r25mr4783092wrc.321.1641920534311;
+        Tue, 11 Jan 2022 09:02:14 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.73])
+        by smtp.gmail.com with ESMTPSA id i8sm12587171wry.108.2022.01.11.09.02.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 09:02:13 -0800 (PST)
+Message-ID: <25f5ba09-a54c-c386-e142-7b7454f1d8d4@gmail.com>
+Date:   Tue, 11 Jan 2022 16:59:00 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 13/14] net: inline part of skb_csum_hwoffload_help
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1641863490.git.asml.silence@gmail.com>
+ <0bc041d2d38a08064a642c05ca8cceb0ca165f88.1641863490.git.asml.silence@gmail.com>
+ <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
- drivers/hwmon/Kconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On 1/11/22 09:24, David Laight wrote:
+> From: Pavel Begunkov
+>> Sent: 11 January 2022 01:22
+>>
+>> Inline a HW csum'ed part of skb_csum_hwoffload_help().
+>>
+>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>> ---
+>>   include/linux/netdevice.h | 16 ++++++++++++++--
+>>   net/core/dev.c            | 13 +++----------
+>>   2 files changed, 17 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+>> index 3213c7227b59..fbe6c764ce57 100644
+>> --- a/include/linux/netdevice.h
+>> +++ b/include/linux/netdevice.h
+>> @@ -4596,8 +4596,20 @@ void netdev_rss_key_fill(void *buffer, size_t len);
+>>
+>>   int skb_checksum_help(struct sk_buff *skb);
+>>   int skb_crc32c_csum_help(struct sk_buff *skb);
+>> -int skb_csum_hwoffload_help(struct sk_buff *skb,
+>> -			    const netdev_features_t features);
+>> +int __skb_csum_hwoffload_help(struct sk_buff *skb,
+>> +			      const netdev_features_t features);
+>> +
+>> +static inline int skb_csum_hwoffload_help(struct sk_buff *skb,
+>> +					  const netdev_features_t features)
+>> +{
+>> +	if (unlikely(skb_csum_is_sctp(skb)))
+>> +		return !!(features & NETIF_F_SCTP_CRC) ? 0 :
+> 
+> If that !! doing anything? - doesn't look like it.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 2c16b19d2c03..5e693c93d43a 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
- 
- config SENSORS_ASUS_WMI_EC
- 	tristate "ASUS WMI B550/X570"
--	depends on ACPI_WMI
-+	depends on ACPI_WMI && !SENSORS_ASUS_EC
- 	help
- 	  If you say yes here you get support for the ACPI embedded controller
- 	  hardware monitoring interface found in B550/X570 ASUS motherboards.
- 	  This driver will provide readings of fans, voltages and temperatures
- 	  through the system firmware.
- 
-+	  This driver is deprecated in favor of the ASUS EC Sensors driver
-+	  which provides fully compatible output.
-+
- 	  This driver can also be built as a module. If so, the module
- 	  will be called asus_wmi_sensors_ec.
- 
+It doesn't, but left the original style
+
+
+>> +			skb_crc32c_csum_help(skb);
+>> +
+>> +	if (features & NETIF_F_HW_CSUM)
+>> +		return 0;
+>> +	return __skb_csum_hwoffload_help(skb, features);
+>> +}
+> 
+> Maybe you should remove some bloat by moving the sctp code
+> into the called function.
+> This probably needs something like?
+> 
+> {
+> 	if (features & NETIF_F_HW_CSUM && !skb_csum_is_sctp(skb))
+> 		return 0;
+> 	return __skb_csum_hw_offload(skb, features);
+> }
+
+I don't like inlining that sctp chunk myself. It seems your way would
+need another skb_csum_is_sctp() in __skb_csum_hw_offload(), if so I
+don't think it's worth it. Would've been great to put the
+NETIF_F_HW_CSUM check first and hide sctp, but don't think it's
+correct. Would be great to hear some ideas.
+
 -- 
-2.34.1
-
+Pavel Begunkov

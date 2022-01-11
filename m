@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBD448A90A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B07F148A90E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348798AbiAKIAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:00:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29395 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348800AbiAKIA2 (ORCPT
+        id S1348767AbiAKIC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:02:58 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:44266 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231561AbiAKIC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 03:00:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641888027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mUwFgZRxEbBys4hhtVi3XC+OOhBQXkgUrXq0SWKqfV4=;
-        b=A7EDEux1wAt4xrnZxTI3qw8aeuk52RFcSi7QlBbesBVUpmSS3YRY7HuGFMEmJ1tS/8/jd0
-        5xltgLp8NrHWdzrAnJKfiYbAacYHNGI7djhw7g+9osQTqcvFmDGfrsMXRnX92SGc3jCzd3
-        uTjE+VjpIbTfuQOQG+nNCDzAn/To6cM=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-e4Sc6KpqOpSKWXtqjq-06A-1; Tue, 11 Jan 2022 03:00:25 -0500
-X-MC-Unique: e4Sc6KpqOpSKWXtqjq-06A-1
-Received: by mail-ed1-f70.google.com with SMTP id m16-20020a056402431000b003fb60bbe0e2so9691329edc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 00:00:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mUwFgZRxEbBys4hhtVi3XC+OOhBQXkgUrXq0SWKqfV4=;
-        b=k923MmoeRHg02wSM2iadZ8Lh+Nc/IDXSfeOuIZorZ67+La+YKwloGP3OGcbLgQfthe
-         A54c28ebXGHCRx/lEhPD7azzaynpbRDqhO0uMQ0nDBpkW6gxoQsXNtoCx4tcgC8pyeXd
-         gIzb6mraHOZHOfU54Jil5NpRHZkVa1jFkSsI89XucOj2opdh///yaock6yVvmkrIdUdg
-         i+7/IAFUg+6tYvIt8xHR5N0v8h3de043FZuIy0aR8ECS/KMv4MUKrohNmVcUn2t2hPKL
-         Hz07etV1GkY6oFN9W9uFMOtiMpFOzhmLEb0TEdPy2UUCBN5dbKLhrvUpIzx5MH5BZCXg
-         Gusw==
-X-Gm-Message-State: AOAM530RDb89FLQx1i1ofL4OcDGxRnrlVv5/nszees6xu1conuwdxrp5
-        ZQWqZseZEPll8ZloNw9D52w2Q12IlTSmWajGpv8+pT3Fyj0DJwuoNR0rI4YSWR9+zWXsRquOQCy
-        Jh6MQboBysA1LCG0/U46mffBc
-X-Received: by 2002:a05:6402:27cf:: with SMTP id c15mr3238881ede.390.1641888024785;
-        Tue, 11 Jan 2022 00:00:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzqKWre77joDOe06fjv7Z8fAS1cCPD1ZbZaT/jVCVMGeddVETAE80TP8U4qVc80gmByfCibvA==
-X-Received: by 2002:a05:6402:27cf:: with SMTP id c15mr3238860ede.390.1641888024586;
-        Tue, 11 Jan 2022 00:00:24 -0800 (PST)
-Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id g17sm3304399eja.165.2022.01.11.00.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 00:00:23 -0800 (PST)
-Date:   Tue, 11 Jan 2022 09:00:22 +0100
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-Message-ID: <20220111090022.1125ffb5@redhat.com>
-In-Reply-To: <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
-References: <20211122175818.608220-1-vkuznets@redhat.com>
-        <20211122175818.608220-3-vkuznets@redhat.com>
-        <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
-        <20211227183253.45a03ca2@redhat.com>
-        <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
-        <87mtkdqm7m.fsf@redhat.com>
-        <20220103104057.4dcf7948@redhat.com>
-        <875yr1q8oa.fsf@redhat.com>
-        <ceb63787-b057-13db-4624-b430c51625f1@redhat.com>
-        <87o84qpk7d.fsf@redhat.com>
-        <877dbbq5om.fsf@redhat.com>
-        <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Tue, 11 Jan 2022 03:02:56 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id C3C03614E2CB;
+        Tue, 11 Jan 2022 09:02:55 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id wfkZJKRbZZQs; Tue, 11 Jan 2022 09:02:55 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 62121614E2CF;
+        Tue, 11 Jan 2022 09:02:55 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ixt6GZdbcyyU; Tue, 11 Jan 2022 09:02:55 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 392BC614E2CB;
+        Tue, 11 Jan 2022 09:02:55 +0100 (CET)
+Date:   Tue, 11 Jan 2022 09:02:55 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1617448966.248428.1641888175120.JavaMail.zimbra@nod.at>
+Subject: [GIT PULL] JFFS2, UBI and UBIFS changes for 5.17
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
+Thread-Index: fyrxjW5e9rHUHWYPDWEjg37yKpfbtw==
+Thread-Topic: JFFS2, UBI and UBIFS changes for 5.17
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Jan 2022 19:15:43 +0100
-Paolo Bonzini <pbonzini@redhat.com> wrote:
+Linus,
 
-> On 1/7/22 10:02, Vitaly Kuznetsov wrote:
-> > 
-> > I'm again leaning towards an allowlist and currently I see only two
-> > candidates:
-> > 
-> > CPUID.01H.EBX bits 31:24 (initial LAPIC id)
-> > CPUID.0BH.EDX (x2APIC id)
-> > 
-> > Anything else I'm missing?  
-> 
-> I would also ignore completely CPUID leaves 03H, 04H, 0BH, 80000005h, 
-> 80000006h, 8000001Dh, 8000001Eh (cache and processor topology), just to 
-> err on the safe side.
+The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
 
-on top of that,
+  Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
 
-1Fh
+are available in the Git repository at:
 
-> We could change kvm_find_cpuid_entry to WARN if any of those leaves are 
-> passed.
-> 
-> Paolo
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/for-linus-5.17-rc1
 
+for you to fetch changes up to aa39cc675799bc92da153af9a13d6f969c348e82:
+
+  jffs2: GC deadlock reading a page that is used in jffs2_write_begin() (2021-12-23 22:33:41 +0100)
+
+----------------------------------------------------------------
+This pull request contains the following changes for JFFS2, UBI and UBIFS:
+
+JFFS2:
+- Fix for a deadlock in jffs2_write_begin()
+
+UBI:
+- Fixes in comments
+
+UBIFS:
+- Expose error counters in sysfs
+- Many bugfixes found by Hulk Robot and others
+
+----------------------------------------------------------------
+Alexander Dahl (1):
+      ubifs: Fix spelling mistakes
+
+Baokun Li (3):
+      ubifs: fix slab-out-of-bounds in ubifs_change_lp
+      ubifs: fix double return leb in ubifs_garbage_collect
+      ubifs: read-only if LEB may always be taken in ubifs_garbage_collect
+
+Cai Huoqing (1):
+      ubifs: Make use of the helper macro kthread_run()
+
+Dan Carpenter (1):
+      ubifs: fix snprintf() length check
+
+Kai Song (1):
+      ubi: Fix a mistake in comment
+
+Kyeong Yoo (1):
+      jffs2: GC deadlock reading a page that is used in jffs2_write_begin()
+
+Petr Cvachoucek (1):
+      ubifs: Error path in ubifs_remount_rw() seems to wrongly free write buffers
+
+Stefan Schaeckeler (2):
+      ubifs: Export filesystem error counters
+      ubifs: Document sysfs nodes
+
+ Documentation/ABI/testing/sysfs-fs-ubifs |  35 +++++++
+ MAINTAINERS                              |   1 +
+ drivers/mtd/ubi/debug.c                  |   2 +-
+ fs/jffs2/file.c                          |  40 +++++---
+ fs/ubifs/Makefile                        |   2 +-
+ fs/ubifs/dir.c                           |   4 +-
+ fs/ubifs/gc.c                            |  19 +++-
+ fs/ubifs/io.c                            |  21 +++++
+ fs/ubifs/replay.c                        |   2 +-
+ fs/ubifs/super.c                         |  23 +++--
+ fs/ubifs/sysfs.c                         | 153 +++++++++++++++++++++++++++++++
+ fs/ubifs/ubifs.h                         |  35 +++++++
+ 12 files changed, 309 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-fs-ubifs
+ create mode 100644 fs/ubifs/sysfs.c

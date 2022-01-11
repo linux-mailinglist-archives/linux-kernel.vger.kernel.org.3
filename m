@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B64E948ADED
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29CA48ADEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240049AbiAKMwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238734AbiAKMwD (ORCPT
+        id S240036AbiAKMvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:51:51 -0500
+Received: from mail-vk1-f178.google.com ([209.85.221.178]:40449 "EHLO
+        mail-vk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239653AbiAKMvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:52:03 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ADCC06173F;
-        Tue, 11 Jan 2022 04:52:02 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id w22so11711749iov.3;
-        Tue, 11 Jan 2022 04:52:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=L07VkrmeA+z0Dq25akT1C/42p2m2KsG0KFfXsB65F+E=;
-        b=KVbAxv4hk7g44+wTW1FXgIN0jc3529uBPErLALVFTHJd/01uNK378q2TjZEr3L7q4x
-         hZF675Rd2Y2LYGZoNTyV1m0y9LAtsTq7J7BzCqkmSaf4vN8Hz72D6m3Rskhp31itYOpq
-         EFWya65EHqwjV8rzEOCceEiTvQuOTQc9Z1Rxpmg32LlMv0Wm8rWuGifeD/Ji+f2DYYvb
-         CYJT2T2GQvZXKoLcB7wnoXRd8FTaE9DKgRj8sGZybYwdlDk07L7oBO0j5KtEW0+dMMDT
-         sJ35kKjDxqP1BURI/2bjfINynG3WOVC2dQ61glqr/F+C4SiTJ6p60Rf0IewAZgLr9EEs
-         mJwg==
+        Tue, 11 Jan 2022 07:51:49 -0500
+Received: by mail-vk1-f178.google.com with SMTP id 78so10253519vkz.7;
+        Tue, 11 Jan 2022 04:51:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=L07VkrmeA+z0Dq25akT1C/42p2m2KsG0KFfXsB65F+E=;
-        b=p1Y7H8d3HQJUs3xqQAv8qShgqV5/1o8M9+M39JHKlMbDOVsJ/oN0aWjKqYh87aMrKR
-         rqfictauQEScc/pyWxbshFpZ5QTWPZOUMrpvk85FtMzcKXMs0gm50R3pkhB4LeOCuxtJ
-         4RGYZIpkpYsnVMloJCpeiBqOnvXqHflutL6IRju48MIB0EnHQhBQNeNJC7/G7akvYMM4
-         SMG0vg63Ih00fCI1jYTNjTU9PQ1hMD26nGxy3iLEZdrxwGyvpp3IhjxI3v0Z7Gr+nKVS
-         ZTx5pfV2HHSrCxziXgWlQgHR39mYaxPcV0IPeVRXiqVLNqLJO1u6NA2OfvaMdYBsr66E
-         jrXA==
-X-Gm-Message-State: AOAM532XiE7+Dli3O1RUIkuCZOMCKms+1P5iZWMDN2nsMp1rr92NHpRj
-        PgQzgpxsjNx25wTTm2pX7VFF0nzfUeqgj2nuoYI=
-X-Google-Smtp-Source: ABdhPJyxJfS2OANCnsOmhmWWIrzth6lFpAQfsgqnKXaXvlO0z7E1fpSrYnFTKTqgzVZmFvHTUGHckB3nRHSsYj2XP04=
-X-Received: by 2002:a5d:9496:: with SMTP id v22mr2066056ioj.36.1641905522150;
- Tue, 11 Jan 2022 04:52:02 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=ooKGf7RGEfbJN/l+F17gfotu+sbZFbeMAX/JFJAo0EQ=;
+        b=Lxdh9w0vleGQs/U4UYbeubaM4+WE8Yn3kK+FyxmRFP6uO8w1GyyzKrujrdflEOIvX3
+         2ofEwSJiz0P4eiuezh/dUD58xm6m293MHzytmsDbCQcRfRMQaTYwpRhT8fAtV2cECbVM
+         KzuIwQftBvi7y6H+HPpNiyT7jFx2VKk8ipe0OwEZgwyS3V8MMmAQU9pJzURjyL2vHr3R
+         fe8rJFZg3L8ROmAh8vk6dIfawG1iTVqEQZiQyz6RiXiyyKoIXpIxs/kJtzoMooW1X3mk
+         9AHNxaduMEarlBwAZM2kdQvCGPETQwme4OT1fysFAivRDTVKp5+tMIswUH8Et89O2+WG
+         oUGA==
+X-Gm-Message-State: AOAM530xsxbr/0VzNGN72iuCDV8gMBNRVi/SGXuHbTXChDTe40Gvn8ZJ
+        e+mOj6nEeTwFc5/Vhedg5bJDFpq0r5FdCw==
+X-Google-Smtp-Source: ABdhPJyR8U904KSrfsEa9jdjW9fTngvw5YpkTC9y/+eMa4iL4va6bRxrbN1d1JDwAOE9UWyiCc68Kw==
+X-Received: by 2002:a1f:3213:: with SMTP id y19mr1940708vky.7.1641905508697;
+        Tue, 11 Jan 2022 04:51:48 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id q11sm5823031uaj.4.2022.01.11.04.51.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 04:51:48 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id v12so29447222uar.7;
+        Tue, 11 Jan 2022 04:51:48 -0800 (PST)
+X-Received: by 2002:a05:6102:21dc:: with SMTP id r28mr1805314vsg.57.1641905507900;
+ Tue, 11 Jan 2022 04:51:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110122929.647573-1-xu.xin16@zte.com.cn> <20220110123256.647748-1-xu.xin16@zte.com.cn>
-In-Reply-To: <20220110123256.647748-1-xu.xin16@zte.com.cn>
-From:   Alex Shi <seakeel@gmail.com>
-Date:   Tue, 11 Jan 2022 20:51:26 +0800
-Message-ID: <CAJy-AmmhXGTctT050aqV4hvyx33pFb+sAMXRbm+wXxgv-XR5CQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] docs/zh_CN: Add zh_CN/vm/index.rst
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     Alex Shi <alexs@kernel.org>, xu.xin16@zte.com.cn,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+References: <20211223141113.1240679-1-Jason@zx2c4.com> <20211223141113.1240679-2-Jason@zx2c4.com>
+ <CAMuHMdU0spv9X_wErkBBWQ9kV9f1zE_YNcu5nPbTG_64Lh_h0w@mail.gmail.com> <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
+In-Reply-To: <CAHmME9pZu-UvCK=uP-sxXL127BmbjmrD2=M7cNd9vHdJEsverw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Jan 2022 13:51:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW+Od70XTNbnNxL3qXgetZ9QDLeett6u5vg9Wr6atxD=w@mail.gmail.com>
+Message-ID: <CAMuHMdW+Od70XTNbnNxL3qXgetZ9QDLeett6u5vg9Wr6atxD=w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] random: use BLAKE2s instead of SHA1 in extraction
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Theodore Tso <tytso@mit.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:33 PM <cgel.zte@gmail.com> wrote:
->
-> From: xu xin <xu.xin16@zte.com.cn>
->
-> This patch adds zh_CN/vm/index.rst.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->  Documentation/translations/zh_CN/vm/index.rst | 49 +++++++++++++++++++++=
-++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/translations/zh_CN/vm/index.rst
->
-> diff --git a/Documentation/translations/zh_CN/vm/index.rst b/Documentatio=
-n/translations/zh_CN/vm/index.rst
-> new file mode 100644
-> index 0000000..27f8405
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/vm/index.rst
-> @@ -0,0 +1,49 @@
-> +.. include:: ../disclaimer-zh_CN.rst
-> +
-> +:=E5=8E=9F=E6=96=87Original:    Documentation/vm/index.rst
-> +
-> +:=E8=AF=91=E8=80=85Translator:  =E5=BE=90=E9=91=AB xu xin <xu.xin16@zte.=
-com.cn>
-> +
-> +:=E6=A0=A1=E8=AF=91Proofreader: =E6=9D=A8=E6=B4=8B Yang Yang <yang.yang2=
-9@zte.com.cn>
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Linux=E5=86=85=E5=AD=98=E7=AE=A1=E7=90=86=E7=9A=84=E6=96=87=E6=A1=A3
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +=E8=BF=99=E6=98=AF=E4=B8=80=E4=B8=AA=E5=85=B3=E4=BA=8ELinux=E5=86=85=E5=
-=AD=98=E7=AE=A1=E7=90=86=EF=BC=88mm=EF=BC=89=E5=AD=90=E7=B3=BB=E7=BB=9F=E7=
-=9A=84=E6=96=87=E6=A1=A3=E9=9B=86=E5=90=88=EF=BC=8C=E5=85=B6=E5=86=85=E9=83=
-=A8=E5=85=B7=E6=9C=89=E4=B8=8D=E5=90=8C=E5=B1=82=E7=BA=A7=E7=9A=84=E8=AF=A6=
-=E7=BB=86=E4=BF=A1=E6=81=AF=EF=BC=8C
-> +=E5=8C=85=E6=8B=AC=E6=B3=A8=E9=87=8A=E5=92=8C=E9=82=AE=E4=BB=B6=E5=88=97=
-=E8=A1=A8=EF=BC=8C=E7=94=A8=E4=BA=8E=E8=AF=A6=E7=BB=86=E6=8F=8F=E8=BF=B0=E6=
-=95=B0=E6=8D=AE=E7=BB=93=E6=9E=84=E5=92=8C=E7=AE=97=E6=B3=95=E3=80=82=E5=A6=
-=82=E6=9E=9C=E6=82=A8=E6=AD=A3=E5=9C=A8=E5=AF=BB=E6=89=BE=E6=9C=89=E5=85=B3=
-=E7=AE=80=E5=8D=95=E5=86=85=E5=AD=98=E5=88=86
-> +=E9=85=8D=E7=9A=84=E5=BB=BA=E8=AE=AE=EF=BC=8C=E8=AF=B7=E5=8F=82=E9=98=85=
-:ref:`memory_allocation` =E3=80=82=E6=9C=89=E5=85=B3=E6=8E=A7=E5=88=B6=E5=
-=92=8C=E8=B0=83=E6=95=B4=E6=8C=87=E5=8D=97=EF=BC=8C=E8=AF=B7=E5=8F=82=E9=98=
-=85
-> +:doc: `admin guide <../admin-guide/mm/index>` =E3=80=82
+Hi Jason,
 
-You have a Chinese version mm/index, link to it. :)
+CC bpf, netdev
 
-Thanks
-Alex
+On Tue, Jan 11, 2022 at 1:28 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Tue, Jan 11, 2022 at 12:38 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > Unfortunately we cannot get rid of the sha1 code yet (lib/sha1.o is
+> > built-in unconditionally), as there are other users...
 
-> +
-> +.. toctree::
-> +   :maxdepth: 1
-> +
-> +   ksm
-> +
-> +Todolist:
-> +   active_mm
-> +   arch_pgtable_helpers
-> +   balance
-> +   damon/index
-> +   free_page_reporting
-> +   frontswap
-> +   highmem
-> +   hmm
-> +   hwpoison
-> +   hugetlbfs_reserv
-> +   memory-model
-> +   mmu_notifier
-> +   numa
-> +   overcommit-accounting
-> +   page_migration
-> +   page_frags
-> +   page_owner
-> +   page_table_check
-> +   remap_file_pages
-> +   slub
-> +   split_page_table_lock
-> +   transhuge
-> +   unevictable-lru
-> +   vmalloced-kernel-stacks
-> +   z3fold
-> +   zsmalloc
-> --
-> 2.15.2
+kernel/bpf/core.c and net/ipv6/addrconf.c
+Could they be switched to blake2s, too?
+
+> I think that's just how things go and a price for progress. We're not
+> going to stick with sha1, and blake2s has some nice properties that we
+> certainly want. In the future hopefully this can decrease in other
+> ways based on other future improvements. But that's where we are now.
 >
->
+> If you're really quite concerned about m68k code size, I can probably
+> do some things to reduce that. For example, blake2s256_hmac is only
+> used by wireguard and it could probably be made local there. And with
+> some trivial loop re-rolling, I can shave off another 2300 bytes. And
+> I bet I can find a few other things too. The question is: how
+> important is this to you?
+
+No problem, I just try to report all measurable impact on kernel size,
+so there is some record of it.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

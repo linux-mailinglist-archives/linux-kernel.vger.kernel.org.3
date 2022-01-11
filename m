@@ -2,159 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 551B248AA1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D63B48AA20
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349144AbiAKJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:06:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26089 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236605AbiAKJGF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:06:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641891964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=HaI/jWbysl58EI15Sr3zu9lR3dI5d3qUoMo2OpLk8Ok=;
-        b=eYbwKlao4umicT32VzOSRD7kBlwmSJVLrMOa2QaFHRUt64CDE3OnAmCqJE74l5WWHQ0sDY
-        7gLB2Wba53r+MJlkvEDxAFtl/Ae86WowkNOy3ziXxlTenb6rdY3ldJHehIZUyqVIC8VC5f
-        0ciJgFsSMKZ4d9BPU83zI7VhZjkq+U8=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-aHKdytIiOUK7Izoh_G5LJA-1; Tue, 11 Jan 2022 04:06:02 -0500
-X-MC-Unique: aHKdytIiOUK7Izoh_G5LJA-1
-Received: by mail-oo1-f70.google.com with SMTP id g2-20020a4a9242000000b002da7c459222so10355017ooh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 01:06:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=HaI/jWbysl58EI15Sr3zu9lR3dI5d3qUoMo2OpLk8Ok=;
-        b=V1gGipCHFe9eEh1MhFMSPkf3yW0i3XujbfmPei8BSX9xbqP//hO81NTEObOHwkilZg
-         u7venQeWQ4Kf90CzKhFQ2SIAqenJRAtUeBLhMbpawFB4HcfXEVkPgUttGZULDPkd51Z1
-         rM2zOj77IT9W1hYLjEfG4ZcF5oKzKMrLyKyO0UCWopqHjx38vbkG1QjoNPWe5yXKfHh+
-         r+B6Sggvpq69G2Ajmj8DW6cDJt5qSdMgdIjJ14xurExQ9hIIb1QIoMJMRtVtjbUEhhdO
-         nb14ZJau9Xn+ETvTw3aPBuNeVxn1Ehx+iH2l4pl9AEQc8yED6PHO4DhGaTidtVVgU9Ab
-         Is9w==
-X-Gm-Message-State: AOAM5313hEPysazHoliACgMFhaxu2w+ggXKVKmuUSQ+xlGvzhSC/DWz5
-        Z4R9OcbzH0nLOnYBC9TWlIGZ/O4MzulDerxIxWNM3Qrvdxh4JkMaZdWFaFmr60UZnW/K6LhH0/S
-        YJ/TK4pOURgfk6+FD8us0uUbEFiT8/PAxmRksep5M
-X-Received: by 2002:a4a:d5d5:: with SMTP id a21mr2504378oot.43.1641891960847;
-        Tue, 11 Jan 2022 01:06:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxj5mn+WcxzRnoeaX/CG7Pxpbr41rDUwEREnj+QXLjzAqfHG+ZL45o+6wiZUcZjbeLLkfxyBMhJk4pttOzyVg0=
-X-Received: by 2002:a4a:d5d5:: with SMTP id a21mr2504368oot.43.1641891960531;
- Tue, 11 Jan 2022 01:06:00 -0800 (PST)
+        id S1349152AbiAKJGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:06:51 -0500
+Received: from mail-mw2nam10on2130.outbound.protection.outlook.com ([40.107.94.130]:14689
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1349146AbiAKJGu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 04:06:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dtxXJ0ueb3iavIIBCD0N2qk14r0gbmEV1aXzmWrJ9kvrQus2j3id5m9LsYYbZBGsYrncALVi5bSlxitvTNNRI+OBrSE+P7KPeB2IreNq5vO9FI5PkZu/frYhOwdx1INlmMN+KEYl3ihYzE2Gmdnp1gnaFpKY1g9VV48xsiS/N230g1WvLxAqQUSFisBP5vXmPVhyL8sqDdolMqZcOFiFR3i1X1m2x27p6571n9oVgV6gy1FAc0UyvZc+XCs8+F6gRXSlYjBYeaTYNqasGArejqq0pNIYRGi5RHLjGJ7zGARx5JY7n32+diJMhF8iMoKx086U4phWuo8yVg6r50rutA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xcMS0B8eKW/mQO1Q4cBTJ11DpPBhClngCeI6odJ+Amk=;
+ b=h+XRFaSxXBdJ9qVkq32LYXEgT+4C1NB7iB3vvfXmJaKkblPtUfI3FJcsMQLBT1nvFkuj8Aw6zkFONNKmi7Lv2Mta0rhVvWqtIfhglIlB4Pc4un/qruAmx8wIzY9sKeIS6+iVgOwot3T611Dz9faCmiF+5oCdw9xvL02+8LWqhYrg3cTL1KqBnakFC8ffjvMz2SEnQQC79jyd9NJZ6kENe46/0gCCzCbxYiooLO6nQYODJAFKioBHTbhSZNka/Q5B/tkcH2xDNB/2JB7EN59Eg1hf+HjES7JQypBH6Bt3SQf29xYcC5T0EERFbPLXeh3Tmi76IcpoAKUejWE353+ilw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xcMS0B8eKW/mQO1Q4cBTJ11DpPBhClngCeI6odJ+Amk=;
+ b=hOFTy84bZqWKLsZYi748DKXzaXw4T3sKuRq77mbgqrzbrYfTspfTRCimmHPPlQouOqGmHg0ShZGZJkAKuWndd26Fu9+c9104Q8VpKNU39EjzC3gU0Uu4swiP9XO6Dtez1XhFC/CJoMeOZ3U60QLGZyYOoj7RyyHuXfgvUuFlk4U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BYAPR04MB5077.namprd04.prod.outlook.com (2603:10b6:a03:41::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 11 Jan
+ 2022 09:06:46 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::c25:c736:478a:b108]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::c25:c736:478a:b108%3]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 09:06:46 +0000
+Date:   Tue, 11 Jan 2022 17:06:40 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Robert Foss <robert.foss@linaro.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, Torsten Duwe <duwe@lst.de>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bernie Liang <bliang@analogixsemi.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH v3 1/1] drm/bridge: anx7625: send DPCD command to downstream
+Message-ID: <1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-ClientProxiedBy: HK2PR02CA0159.apcprd02.prod.outlook.com
+ (2603:1096:201:1f::19) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-From:   Bruno Goncalves <bgoncalv@redhat.com>
-Date:   Tue, 11 Jan 2022 10:05:49 +0100
-Message-ID: <CA+QYu4rt2VHWzbOt-SegA9yABqC-D36PoqTZmy6DscWvp+6ZMQ@mail.gmail.com>
-Subject: Boot issue on x86_64: kernel 5.16.0 - RIP: 0010:radeon_vm_fini+0x174/0x300
- [radeon]
-To:     linux-kernel@vger.kernel.org
-Cc:     CKI Project <cki-project@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5641bf6b-ffab-4a84-12db-08d9d4e1b18b
+X-MS-TrafficTypeDiagnostic: BYAPR04MB5077:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR04MB5077762D3BF009706CA71AEAC7519@BYAPR04MB5077.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:644;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b0FEmEaRHbZX1ApeyNjCzqCwpDHRVWkCJhZZHyJs/+qsfQDuXG3IRSwe4sCNkNVPQ0PoP72QGiYJWIkAZEt//nCA6Q594lNB9ouc758+LdYChvNfgPtzQdSMhU6cRDvoVbuCvfmznKAYXm+5Tss3DlVPnpYCotEETibrj04Kf16BaoUWJ5z2wXGl/xMaLcnPP1jk01JJ2PyVYfTLoe7amJ6vlUSM/YOAFJu0cz+Wsz7Uxc2rvkjNG1iYTJJOsajqV0MKRFLHowX/ehggw0vj/pln1wC/8BuLNE/qPZ2fDaR7P93x8T3jLQBm6TFklIksr7wwpS8784BFERGum50TzQLa9iLhmNyVS3KXaqVDWDy0aQZ1DhmI04logcP4/1abAbDbarvo7LnEfQ+VWrl7vL4eeZqqiH3csZ1BgfXi6cQaPm9mQc64AeezJrz/ugYsc2dMZiNJSJ8e5xapMDt72LdsGo4vDsUobKW0jp7FU4zniVfO2jP9Q9cgGVUbJklejdeE9+Z6pfeF1Hl4RigFOqW+UrACLefQAGh0/2jA7hGxoDwUwyR940fUf5flRKy4oV5i9qGHm5/jftTsxw60IuSQW73mC0jx8xjLRu82N/p3jsP2S/G7S9mDfPyKEPNW8d2sTVi7U8b/5CZIddchFuYCg9uTRqUIuCcOT9d6q/EtaRwz5klZzIhXVkirryjOkM36qXzwHYal5YZJ/zPMbA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(2906002)(36756003)(6512007)(38100700002)(38350700002)(86362001)(6666004)(66946007)(8676002)(83380400001)(6506007)(66476007)(55236004)(26005)(52116002)(186003)(5660300002)(66556008)(6486002)(8936002)(508600001)(110136005)(7416002)(54906003)(4326008)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?toG/hnpWILtQdH0gkOqTTN58db7geN1FfoXi1IuVJirjOWyCfoASr1jVjwLL?=
+ =?us-ascii?Q?ojHu5Ghlje1moSfap3nyt1xgvjRwBN6FWp0ItgTGRQTSEr3STzlTWD0RyVsR?=
+ =?us-ascii?Q?Tmvf1Z2J3X/WyaeXOLJM8yRFDTqkaJ1KyrC6ILxVudqbHxbzPMfHdHTFt7tp?=
+ =?us-ascii?Q?Ho7V7qbKJRrlZ7T4D/j2t76nge7ms8CFCuLnYxCsimiyqf5PwszcYL2rs7jl?=
+ =?us-ascii?Q?3EAU0cRBqz1kiJZ5GTlhMi9teHfyvskJNUGdjCkk0ZnQg9hdSzg7+TjIEOcm?=
+ =?us-ascii?Q?hfsWdX2vw08JnAq7iHNty8xbZGIKviBg0N0gY3sJxL8VJuUwpWjUl5XP9qMM?=
+ =?us-ascii?Q?F0Ar/pU3fese+upJGKpDZrGA0ue5phKOmTiADgfhO9U4K4/MtlQEL9vYsT1c?=
+ =?us-ascii?Q?gi7kykjG9TKkSJJIKXZYnQ//y+PQKd+QWgWu2QsI9TUDSPN4/wyfJoixnq2F?=
+ =?us-ascii?Q?TEGLydVqQlSqA6nnDvZ9LkW3G0eS/YPS2u9TanOpcvMPprWCpQlC9quRYU4d?=
+ =?us-ascii?Q?HMX/MsLivfHCW8wmAK9e6qh6emcK+m0M02yfSk3RgB5cODnIceDTbAlE8t06?=
+ =?us-ascii?Q?iX0Ji8OvayaloyHYjqMHTNmbqsKszzXi7bwe4trSPOqcwxFgUJp8XBxfvnEl?=
+ =?us-ascii?Q?0O2wcsNgdm4nXzF4hxmZ79zrNEv906OertMFcWKWGdPyxrw+tSBYjK8RSP40?=
+ =?us-ascii?Q?+avXwc/U+Cy60XCwINyTPJSnxNBcmuOTHVnO9P4r+wJbqpxb9l5nq19pHoNm?=
+ =?us-ascii?Q?htqTSzSUbAgAAa9XNRlHMSy6JNDTfsCQhdagMhxqyNRBdl+TA597lZZSNGPK?=
+ =?us-ascii?Q?BTu1Im7WCNhsvTvLZooJNj4OXSiA9SPNmdXbv3yxaP+33gJiWrBwkkxo7F0D?=
+ =?us-ascii?Q?sR64t6T2heDeilEtbbX1eUAwkmLXvBR0hA8pjan4n80SV0X6TQCP3AqxkNjS?=
+ =?us-ascii?Q?QJlLs333wD8D6cUkxyre1kx52LK8NP76PbkPIjeFD6A6SZg6HcDiziRa20pb?=
+ =?us-ascii?Q?+8hg5twpb+CMx+Yn9MeXqvsRAvOv4+fZ81BUlh4jDsj+mAkY7cs0FhORGvBY?=
+ =?us-ascii?Q?ixpYD5sHXiGK87QTF2S6wsF3jovKPULQAxTPeqPXv89Egx0XiDEjYgsmQ78t?=
+ =?us-ascii?Q?h1iW2jRT9cr5Bo+7iujl+MIe5fvUMKmh4zsXqzi5OxvwN/pl6CCocL1hOe8W?=
+ =?us-ascii?Q?urrgPjgcCSiBGAtZfb5m+ZHzUZllS0zr266vuI01lrO6A2uRPCuEQ2HxP5bd?=
+ =?us-ascii?Q?Sm5vhihHNeTaJfjuMy2at0y+FBnmxB+LbnTgXRzbbAg4fOELVz1LAi29XtIp?=
+ =?us-ascii?Q?XjIF+XQ47P8LCynLEI39P7YmsiGwxoOfTkBzEcsT54uMVN1m1NLr4fNb6jrC?=
+ =?us-ascii?Q?FQ/VE/Cxk7k9LGBtUDysvARu21IDur+SfcAMsRCdiwVsDrm44hAhv31ZkX4G?=
+ =?us-ascii?Q?i/LgeWe8TKiLc1t6HSUgHRx/+bjHj04bZBd9FsCBqm9U+8YI5isnA3gFzx52?=
+ =?us-ascii?Q?9/WlQ0CT2uotKGgeAhmj9EOfy3TKWGPLDekUS8yzxT7KanVG5MneUN2cS2WA?=
+ =?us-ascii?Q?nlkJPzrwy5Zx73t9wt/6iLZp3r8vCMpZMjQJTKZjBITwjR7+t0ATd7GoKZc+?=
+ =?us-ascii?Q?xbZxkMsUxShhTKzN2yocZHw=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5641bf6b-ffab-4a84-12db-08d9d4e1b18b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 09:06:46.4015
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wd2Zw3KsUVa3BhzXGRNpKwBG6EjabGTsZnSymVW19Eedy9MzdM3AiWbzUXBqmhRXBTyGv9TIbOfwHx5MT/5YhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5077
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Send DPCD command to downstream before anx7625 power down,
+let downstream monitor enter into standby mode.
 
-We've started to see the issue below when booting on x86_64 on recent
-kernel builds. The first occurrence we've hit was from commit:
-8d0749b4f83b - Merge tag 'drm-next-2022-01-07'. More logs can be found
-on [1] and CKI issue tracker [2].
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 42 +++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 7 deletions(-)
 
-[    5.270805] [drm] PCI GART of 512M enabled (table at 0x0000000002F00000).
-[    5.277630] radeon 0000:01:05.0: WB disabled
-[    5.281909] radeon 0000:01:05.0: fence driver on ring 0 use gpu
-addr 0x00000000b8000000
-[    5.290043] [drm] radeon: irq initialized.
-[    5.294169] [drm] Loading R100 Microcode
-[    5.299311] [drm] radeon: ring at 0x00000000B8001000
-[    5.304319] [drm] ring test succeeded in 0 usecs
-[    5.309412] [drm] ib test succeeded in 0 usecs
-[    5.314216] [drm] Radeon Display Connectors
-[    5.318409] [drm] Connector 0:
-[    5.321465] [drm]   VGA-1
-[    5.324090] [drm]   DDC: 0x60 0x60 0x60 0x60 0x60 0x60 0x60 0x60
-[    5.330097] [drm]   Encoders:
-[    5.333067] [drm]     CRT1: INTERNAL_DAC1
-[    5.337104] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[    5.344049] #PF: supervisor read access in kernel mode
-[    5.349182] #PF: error_code(0x0000) - not-present page
-[    5.354325] PGD 0 P4D 0
-[    5.356862] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[    5.361218] CPU: 0 PID: 89 Comm: kworker/0:2 Not tainted 5.16.0 #1
-[    5.367393] Hardware name: Dell Inc. PowerEdge R805/0GX122, BIOS
-4.2.1 04/14/2010
-[    5.374866] Workqueue: events work_for_cpu_fn
-[    5.379223] RIP: 0010:radeon_vm_fini+0x174/0x300 [radeon]
-[    5.384794] Code: e8 83 4c 88 d5 eb d1 4c 8b 24 24 4d 8d 74 24 48
-49 8b 5c 24 48 49 39 de 74 38 66 2e 0f 1f 84 00 00 00 00 00 66 90 4c
-8d 7b a8 <48> 8b 2b 48 8d 7b 18 e8 30 1e f4 ff 48 83 c3 c0 48 89 df e8
-34 f3
-[    5.403527] RSP: 0018:ffffb641c0c5bc48 EFLAGS: 00010286
-[    5.408740] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[    5.415866] RDX: 0000000000000001 RSI: ffff892ef3911730 RDI: ffff892ef3911750
-[    5.422993] RBP: 0000000000000001 R08: 0000000000200000 R09: 0000000000000000
-[    5.430121] R10: 0000000000000000 R11: ffffffffc0412810 R12: ffff892ef3911730
-[    5.437248] R13: ffff892ef41f2800 R14: ffff892ef3911778 R15: ffffffffffffffa8
-[    5.444385] FS:  0000000000000000(0000) GS:ffff892f3dc00000(0000)
-knlGS:0000000000000000
-[    5.452456] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    5.458196] CR2: 0000000000000000 CR3: 0000000033896000 CR4: 00000000000006f0
-[    5.465333] Call Trace:
-[    5.467784]  <TASK>
-[    5.469886]  radeon_driver_open_kms+0x118/0x180 [radeon]
-[    5.475271]  drm_file_alloc+0x1a8/0x230 [drm]
-[    5.479696]  drm_client_init+0x99/0x130 [drm]
-[    5.484086]  drm_fb_helper_init+0x32/0x50 [drm_kms_helper]
-[    5.489620]  radeon_fbdev_init+0xbc/0x110 [radeon]
-[    5.494474]  radeon_modeset_init+0x857/0x9e0 [radeon]
-[    5.499588]  radeon_driver_load_kms+0x19b/0x290 [radeon]
-[    5.504968]  drm_dev_register+0xf5/0x2d0 [drm]
-[    5.509452]  radeon_pci_probe+0xc3/0x120 [radeon]
-[    5.514223]  local_pci_probe+0x40/0x90
-[    5.517972]  work_for_cpu_fn+0x16/0x20
-[    5.521720]  process_one_work+0x1a4/0x350
-[    5.525729]  worker_thread+0x32c/0x440
-[    5.529477]  kthread+0x18d/0x1b0
-[    5.532706]  ? worker_clr_flags+0x50/0x50
-[    5.536705]  ? kthread_blkcg+0x30/0x30
-[    5.540460]  ret_from_fork+0x22/0x30
-[    5.544042]  </TASK>
-[    5.546219] Modules linked in: radeon(+) ata_generic drm_ttm_helper
-pata_acpi ttm i2c_algo_bit uas drm_kms_helper cec mptsas(+) mptscsih
-mptbase drm serio_raw sata_nv scsi_transport_sas usb_storage nv_tco
-[    5.564379] CR2: 0000000000000000
-[    5.567694] ---[ end trace 9b8d78916aa931d1 ]---
-[    5.571540] ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
-[    5.572307] RIP: 0010:radeon_vm_fini+0x174/0x300 [radeon]
-[    5.583875] Code: e8 83 4c 88 d5 eb d1 4c 8b 24 24 4d 8d 74 24 48
-49 8b 5c 24 48 49 39 de 74 38 66 2e 0f 1f 84 00 00 00 00 00 66 90 4c
-8d 7b a8 <48> 8b 2b 48 8d 7b 18 e8 30 1e f4 ff 48 83 c3 c0 48 89 df e8
-34 f3
-[    5.597666] ata1.00: ATAPI: TEAC DVD-ROM DV28SV, D.0E, max UDMA/100
-[    5.602614] RSP: 0018:ffffb641c0c5bc48 EFLAGS: 00010286
-[    5.602617] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[    5.602619] RDX: 0000000000000001 RSI: ffff892ef3911730 RDI: ffff892ef3911750
-[    5.628325] RBP: 0000000000000001 R08: 0000000000200000 R09: 0000000000000000
-[    5.635461] R10: 0000000000000000 R11: ffffffffc0412810 R12: ffff892ef3911730
-[    5.642578] R13: ffff892ef41f2800 R14: ffff892ef3911778 R15: ffffffffffffffa8
-[    5.647647] ata1.00: configured for UDMA/100
-[    5.649713] FS:  0000000000000000(0000) GS:ffff892f3dc00000(0000)
-knlGS:0000000000000000
-[    5.649715] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    5.649717] CR2: 0000000000000000 CR3: 0000000033896000 CR4: 00000000000006f0
-[    5.674914] Kernel panic - not syncing: Fatal exception
-[    5.680146] Kernel Offset: 0x14000000 from 0xffffffff81000000
-(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[    5.690915] ---[ end Kernel panic - not syncing: Fatal exception ]---
-
-[1] https://datawarehouse.cki-project.org/kcidb/tests/2231405
-[2] https://datawarehouse.cki-project.org/issue/885
-
-Thanks,
-Bruno
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 33383f83255d..0b858c78abe8 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -129,6 +129,23 @@ static int anx7625_reg_write(struct anx7625_data *ctx,
+ 	return ret;
+ }
+ 
++static int anx7625_reg_block_write(struct anx7625_data *ctx,
++				   struct i2c_client *client,
++				   u8 reg_addr, u8 len, u8 *buf)
++{
++	int ret;
++	struct device *dev = &client->dev;
++
++	i2c_access_workaround(ctx, client);
++
++	ret = i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
++	if (ret < 0)
++		dev_err(dev, "write i2c block failed id=%x\n:%x",
++			client->addr, reg_addr);
++
++	return ret;
++}
++
+ static int anx7625_write_or(struct anx7625_data *ctx,
+ 			    struct i2c_client *client,
+ 			    u8 offset, u8 mask)
+@@ -214,8 +231,8 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
+ 	return 0;
+ }
+ 
+-static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+-				 u32 address, u8 len, u8 *buf)
++static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
++				  u32 address, u8 len, u8 *buf)
+ {
+ 	struct device *dev = &ctx->client->dev;
+ 	int ret;
+@@ -231,8 +248,7 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 	addrm = (address >> 8) & 0xFF;
+ 	addrh = (address >> 16) & 0xFF;
+ 
+-	cmd = DPCD_CMD(len, DPCD_READ);
+-	cmd = ((len - 1) << 4) | 0x09;
++	cmd = DPCD_CMD(len, op);
+ 
+ 	/* Set command and length */
+ 	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+@@ -246,6 +262,9 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+ 				 AP_AUX_ADDR_19_16, addrh);
+ 
++	if (op == DPCD_WRITE)
++		ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
++					       AP_AUX_BUFF_START, len, buf);
+ 	/* Enable aux access */
+ 	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
+ 				AP_AUX_CTRL_STATUS, AP_AUX_CTRL_OP_EN);
+@@ -255,14 +274,17 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 		return -EIO;
+ 	}
+ 
+-	usleep_range(2000, 2100);
+-
+ 	ret = wait_aux_op_finish(ctx);
+ 	if (ret) {
+ 		dev_err(dev, "aux IO error: wait aux op finish.\n");
+ 		return ret;
+ 	}
+ 
++	/* Write done */
++	if (op == DPCD_WRITE)
++		return 0;
++
++	/* Read done, read out dpcd data */
+ 	ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
+ 				     AP_AUX_BUFF_START, len, buf);
+ 	if (ret < 0) {
+@@ -845,7 +867,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+ 	}
+ 
+ 	/* Read downstream capability */
+-	anx7625_aux_dpcd_read(ctx, 0x68028, 1, &bcap);
++	anx7625_aux_dpcd_trans(ctx, DPCD_READ, 0x68028, 1, &bcap);
+ 	if (!(bcap & 0x01)) {
+ 		pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+ 		return 0;
+@@ -918,6 +940,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+ {
+ 	struct device *dev = &ctx->client->dev;
+ 	int ret;
++	u8 data;
+ 
+ 	DRM_DEV_DEBUG_DRIVER(dev, "stop dp output\n");
+ 
+@@ -929,6 +952,11 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+ 	ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client, 0x08, 0x7f);
+ 
+ 	ret |= anx7625_video_mute_control(ctx, 1);
++
++	dev_dbg(dev, "notify downstream enter into standby\n");
++	/* Downstream monitor enter into standby mode */
++	data = 2;
++	ret |= anx7625_aux_dpcd_trans(ctx, DPCD_WRITE, 0x000600, 1, &data);
+ 	if (ret < 0)
+ 		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+ 
+-- 
+2.25.1
 

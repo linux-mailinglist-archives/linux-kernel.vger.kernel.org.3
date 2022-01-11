@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE3748AAFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B90648AAFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348380AbiAKKAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:00:36 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:39033 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbiAKKAf (ORCPT
+        id S1348324AbiAKKCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237046AbiAKKCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:00:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641895232;
-    s=strato-dkim-0002; d=mades.net;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=lyofxhP/zBVTJReIn3f+VXHtqr4OgCKN/QQINp+/bx8=;
-    b=X0MWPLscqqIMrs6tbPtT+Q9/3/smLjTN3FhqdEz2gOZN5toka1NCE+dOAHxILF0xdP
-    txzRT9FHLQv8gnrNvHUORP8Go9P+F05ncz5sPFJPIMuozLFSBK2GfhQ4YPKVPB4e5ZId
-    iw7Z+t/MPDN0skdcnSOQ7cfmZ789s6YrKANg+FN8nSprzlSYAoPdRV2xtA0HzyA18gwG
-    mvBYeoTzm1aotPa9l2C/A2eI4iPGDPBq5mOiQmOzhTGBfXBjkSp5OGQWvVX2UQo9tVFf
-    diunEotDevN/QSF2OAVSbv6EiZNzj/VDsSD7J7KjyXKFYH2H7YEEishsaC7BpP+1v1n7
-    WLCg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JmMHfUWmW/JCZ5q3rSbjoqaGiJoG2nOuw/BEppjnAC9QlFFS7UbO3fgyY5MDJqZr"
-X-RZG-CLASS-ID: mo00
-Received: from oxapp05-01.back.ox.d0m.de
-    by smtp.strato.de (RZmta 47.37.6 AUTH)
-    with ESMTPSA id Y49088y0BA0WEd2
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 11 Jan 2022 11:00:32 +0100 (CET)
-Date:   Tue, 11 Jan 2022 11:00:32 +0100 (CET)
-From:   Jochen Mades <jochen@mades.net>
-To:     Lukas Wunner <lukas@wunner.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     gregkh@linuxfoundation.org, Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-Message-ID: <27017560.2684465.1641895232612@webmail.strato.com>
-In-Reply-To: <20220102182801.GA22268@wunner.de>
-References: <20211231171516.18407-1-jochen@mades.net>
- <20220102100710.GA29858@wunner.de>
- <0e0e91b8-72f8-aa31-50e2-80090dd5613a@gmx.de>
- <20220102182801.GA22268@wunner.de>
-Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
- pl011_set_mctrl() function.
+        Tue, 11 Jan 2022 05:02:20 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8438FC06173F;
+        Tue, 11 Jan 2022 02:02:19 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id w22so11101483iov.3;
+        Tue, 11 Jan 2022 02:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YmlpQBVfySpCt/YYkAns1X1WN6EovAoYf8bIgONcDcg=;
+        b=UbBw4wf53T+Uo1yqOpzWKAyMUtWUAKi4Kw19l8W5Z/vlOUelClaC+MlKo+ZuWhb6ei
+         mqT6G9Xz5EMqcwEBnjT40s42YFdURzCnIth2t+ywuB8AvKV2XnFdc4EPTVmockGuJZiD
+         wDOdwAf/IuOocSMpM2Wvfpp7jpumg+G8oHf2fG3cQEfyrh/tDluNESdHlaFs9PJO+ZU1
+         /82wLNc50v9VRxZyr0alOiw6mGFte4/mV6N0f3rqOujXT5fiTsvcF9gKhBCXBb8m1Y3b
+         L+r/wq8AiXaktdqZbs8Cw+RTwQgqJiGDrDIcXYvSlZouqtGK81V4+VGojseKeBiW5DwQ
+         KPiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YmlpQBVfySpCt/YYkAns1X1WN6EovAoYf8bIgONcDcg=;
+        b=sNDVC8vQcAcrBzdAHni+wPrHdAUMLR/3bjFbGAWwJehuKhsa6TU+rnETHVmbrvpcns
+         Fs8jBkf19NCHkXlQ6g6f3KLQR9r1A6QqPKmA7Q/gjnrCThLSkywDpeUKUlvdxswdGEs/
+         fppZmCZ7M5krdlfjL4xdyNdUhKwNrD3xDIJHnpsXeik7SBUjEKrukuAXuSL0i64W7uSi
+         mbwoRdZP0aKxX7twI7Awq9baeWq9etr4i2NT2wId9Ii6Yi0pYI+4lYum0TQdyOvGw2bi
+         bSoAWkY5L41Dh4usl00/3QmCxh/h2gqJR3jrjo64ON84a4olA54kmiuqqSjt6PU4REqI
+         A0UQ==
+X-Gm-Message-State: AOAM53264oepa6sTVF+DgEQWYoUuj0h5x9tel7j9XTgLQLNvpFcof7Sb
+        Bjs1nh3dg1YbSMhiRYwOHi2/v5BqLV5JkrHs+0M=
+X-Google-Smtp-Source: ABdhPJyPov8/v7hiYlAGc60n72Zio2+eWIijGDHfzGsLcCrojJoeESesdRdL+54CVKalEgzaE0uQTZ74cpxlyVPkLGY=
+X-Received: by 2002:a05:6638:251:: with SMTP id w17mr1836768jaq.315.1641895338977;
+ Tue, 11 Jan 2022 02:02:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev33
-X-Originating-Client: open-xchange-appsuite
+References: <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
+ <YdxCsI3atPILABYe@mit.edu> <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu> <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+ <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+ <YdyNxJzdBmSSEtDC@mit.edu> <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
+ <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com> <Ydz1F/AqB1oO/qHF@mit.edu>
+ <20220111041349.GA5542@srcf.ucam.org>
+In-Reply-To: <20220111041349.GA5542@srcf.ucam.org>
+From:   "Alexander E. Patrakov" <patrakov@gmail.com>
+Date:   Tue, 11 Jan 2022 15:01:42 +0500
+Message-ID: <CAN_LGv3x==7Mt2J4gis1L8xoNqUhSus0Sue1f92bU=aJDKDn0Q@mail.gmail.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Simo Sorce <simo@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas, Lino,
+(resending without HTML this time, sorry for a possible duplicate)
+=D0=B2=D1=82, 11 =D1=8F=D0=BD=D0=B2. 2022 =D0=B3. =D0=B2 09:13, Matthew Gar=
+rett <mjg59@srcf.ucam.org>:
+> The goal is to identify a solution that avoids the enterprise kernels
+> needing to do their own thing. They're in a position to globally
+> LD_PRELOAD something to thunk getrandom() to improve compatibility if
+> they want to, and they're also able to define the expected level of
+> breakage if you enable FIPS mode. An approach that allows a single
+> kernel to provide different policies in different contexts (eg,
+> different namespaces could have different device nodes providing
+> /dev/random) makes it easier to configure that based on customer
+> requirements.
 
-please let me know when I could test again with an "official" linux kernel, instead of using my local patch.
+LD_PRELOAD is not a solution because of containers (that need to be
+modified to make use of the preloadable library) and statically-linked
+binaries.
 
-Bests
-Jochen
-
-> On 02/01/2022 19:28 Lukas Wunner <lukas@wunner.de> wrote:
-> 
->  
-> On Sun, Jan 02, 2022 at 04:06:53PM +0100, Lino Sanfilippo wrote:
-> > On 02.01.22 at 11:07, Lukas Wunner wrote:
-> > > On Fri, Dec 31, 2021 at 05:15:14PM +0000, jmades wrote:
-> > > > --- a/drivers/tty/serial/amba-pl011.c
-> > > > +++ b/drivers/tty/serial/amba-pl011.c
-> > > > @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
-> > > >  	    container_of(port, struct uart_amba_port, port);
-> > > >  	unsigned int cr;
-> > > >
-> > > > -	if (port->rs485.flags & SER_RS485_ENABLED)
-> > > > -		mctrl &= ~TIOCM_RTS;
-> > > > +	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > > > +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
-> > > > +			mctrl &= ~TIOCM_RTS;
-> > > > +		else
-> > > > +			mctrl |= TIOCM_RTS;
-> > > > +	}
-> > > >
-> > > >  	cr = pl011_read(uap, REG_CR);
-> > 
-> > Does this logic really have to be implemented in the driver?
-> 
-> No, it doesn't have to be and indeed I'm working towards consolidating
-> it in the serial core with this collection of patches:
-> 
-> https://git.kernel.org/gregkh/tty/c/d3b3404df318
-> https://lore.kernel.org/all/f49f945375f5ccb979893c49f1129f51651ac738.1641129062.git.lukas@wunner.de
-> https://lore.kernel.org/all/e22089ab49e6e78822c50c8c4db46bf3ee885623.1641129328.git.lukas@wunner.de
-> https://lore.kernel.org/all/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
-> https://github.com/l1k/linux/commit/532ef2ad757f
-> 
-> The last of these removes the rs485 logic from pl011_set_mctrl().
-> I'll post it once the others (and Jochen Mades' patch) have landed.
-> 
-> Even though the logic is eventually removed from pl011_set_mctrl(),
-> Jochen's patch makes sense as a backportable fix for v5.15.
-> 
-> 
-> > It looks as if the serial core already takes RS485 into account before
-> > calling set_mctrls(). At least I get the impression when looking
-> > at uart_tiocmset() and uart_port_dtr_rts(). Also other drivers like imx
-> > simply seem to ignore RTS in case of RS485.
-> 
-> The logic in uart_port_dtr_rts() is broken.  That's fixed by d3b3404df318,
-> which is queued up in tty-next for v5.17.
-> 
-> The pl011 driver papered over it with its own rs485-specific logic in
-> pl011_set_mctrl().  But as Jochen Mades correctly pointed out, that
-> only worked correctly if RTS is driven high on idle.
-> 
-> 
-> The logic in uart_tiocmset() is correct, but not sufficient because
-> uart_throttle(), uart_unthrottle and uart_set_termios() need to become
-> rs485-aware as well.  That's also addressed by the above-linked
-> GitHub commit.
-> 
-> Thanks,
-> 
-> Lukas
+--=20
+Alexander E. Patrakov

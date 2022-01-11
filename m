@@ -2,120 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 462E948BA88
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE1B48BA8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345888AbiAKWLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S1345940AbiAKWMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244521AbiAKWLt (ORCPT
+        with ESMTP id S1345894AbiAKWMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:11:49 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280B2C06173F;
-        Tue, 11 Jan 2022 14:11:49 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id d3so1430839lfv.13;
-        Tue, 11 Jan 2022 14:11:49 -0800 (PST)
+        Tue, 11 Jan 2022 17:12:08 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED36C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 14:12:07 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z22so1871242edd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 14:12:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ABpuuHXn/KSGqt8Q9356w3nXXxQ7pyPctr1HuJVZT2U=;
-        b=a2+4ko2r4QG7Xqfy6WgZsBf3aMwAHTa2+gMBuERyMgGhP7qNuZJl3w0715EzXMTTSI
-         fi8w9TMUK1tRJpkU+B7+K2YalE5m5m4GAiP98esCyLJHJ6IlN02FIRFCooeY96EGzvaI
-         Pf7KEYUnml/dBHp0z9SWI46aAkGAFu8PFg7HycNhoXojlNohccp+M231XsgYkMrp0m3K
-         kXqH9EtwrvspiggSNNfn/qxGZzuGqk04bAFEbP2+VfFs6P+1Stwl74apbbj/zq9z4If3
-         OK2ruGGOD9K6sUdxWemTacVc0VkmSNy4R1JQ3GUda0m2kQYgCTubCZ6gRmRAqxI2equc
-         r7pQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g9jKsI6flHn6QgxjTt9wcCOElswefPZzdjJrH9X4ttw=;
+        b=itkzypAh9mE004wXLI8L+ADCxGPhJ0bG8kU7h5dQ66dxhNTwjJhfFRZWCsd+JZ6rxj
+         KMv0sb4EDCe3b3Izwj3aZn/gWTxKl1INI13D1RilMdcHGwShx3yCop2UlwRMWnXVoFJ+
+         YraqaJYf/LGC7FKXocra/P91IpcMSOGsmmke632wgtrQs7So9zCzCVsYZwN+ZkCqW4Bi
+         fEvestousvXIZhUjXc5CDD30iSy8HjxWuA9z+3XnfI7uLztQjMz5OvtcDWApoTJrnhwh
+         bwNq4b128ZHIXql6YsjI8o5E3GQHDB4uNkPsHTzMkGALNr0PV8kUv2w85CCaLt6LCpUc
+         hMog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ABpuuHXn/KSGqt8Q9356w3nXXxQ7pyPctr1HuJVZT2U=;
-        b=NrLMB0mT+LDWGTC5jFniSh12rgLn4k+QhURRE9q+2be6lXA/e5W5eMmzrlCNSAn8Y5
-         nab7CPnQIArkBIdvgxIVGCbzRKMgexGRoD58gLF2vl4bEfdh3JpRf8Px/1ZutzrWYciJ
-         S192K6xZcWhWgFbptuwisRsdB5N+S1FuOcdhsJaqcgmkemh/aWYOU/4rlPBHGo6yHwmM
-         muGtIwB+u0gWjckYHhj0yMdElaqC1noJBQ0fYp5oGSbXCHlOATEkqK0G8x45b6YyU1uT
-         hmMVm/xiqZHP9aTE1vCZYYOlcaMaDZTlWqzes1+2sTfHhNucNZNSFDcpeO956dFFvMUH
-         /EyA==
-X-Gm-Message-State: AOAM531vRI8HkMfCtFgebrJjTJ59ie81MAjErGRKwnJ2WFP570DfQpp3
-        rzUbPBQlQifNTTc7pP7cgA3Hw/hCQQk=
-X-Google-Smtp-Source: ABdhPJyL3/IL7jI2fdxyGMRF3GlgNLwZAfS/A7//8SIMNrS5K0zvTxQnYvj+lV52PfoI+7iGViJQYQ==
-X-Received: by 2002:a05:6512:acc:: with SMTP id n12mr4674024lfu.196.1641939107228;
-        Tue, 11 Jan 2022 14:11:47 -0800 (PST)
-Received: from WBEC678.wbe.local (xt27d8.stansat.pl. [83.243.39.216])
-        by smtp.gmail.com with ESMTPSA id q10sm309678lfu.53.2022.01.11.14.11.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 14:11:46 -0800 (PST)
-From:   Pawel Dembicki <paweldembicki@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: qmi_wwan: add ZTE MF286D modem 19d2:1485
-Date:   Tue, 11 Jan 2022 23:11:32 +0100
-Message-Id: <20220111221132.14586-1-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g9jKsI6flHn6QgxjTt9wcCOElswefPZzdjJrH9X4ttw=;
+        b=Hw84XWyaalGL27kLrWhJ4azVH+q/EWcaHd03QFC5z1FM9lX1Z4mpHDw/c8GAbk0xpG
+         Xd//yKigEJUBGytDNgS65DHyYjrR/v+dzO4aEi73iliNk2zOxkUdO1CLErsBYUewOOk5
+         Qpo5A3tGh4bkvp2Pg032csZCOVFzpnHKt0ijUrfh6lsFDZmjftpB924kQAkKbgsIEc09
+         IBxKA/LN8U82hMzaf8VbJJLlCimy6k50cFgyPY+gNyOpFxI1h1QHWDhGEyY+sSFnYYXX
+         wFITUAJjX+R9ZRGHd9utk3O59E129F7JvoWHCP5sAyorzMNRs47ACjytaWNiTLscOglo
+         NgwQ==
+X-Gm-Message-State: AOAM533ZidxS6MPMUrO4oRXeTIw65eGpae08rOHyCAEO43STIulMlcVD
+        INrmUFD+YnzUX/bdChSBnZHbkABc9xEXh5tP8SPNDg==
+X-Google-Smtp-Source: ABdhPJyAczbZmI8pI7amJUyYqieaBtyn6wWHKsnF3ZDXkIh9bUuv9F5mKFgArF3+NGgEvpMbhBPnaSRC/njWvAbxnbE=
+X-Received: by 2002:a17:907:97ca:: with SMTP id js10mr5281690ejc.75.1641939126168;
+ Tue, 11 Jan 2022 14:12:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220111194231.1797841-1-dlatypov@google.com> <20220111194231.1797841-6-dlatypov@google.com>
+ <CAFd5g46bCr4DEqruLbtgcLOpuPQUgS32ePDicrezBwOXL_r5Hg@mail.gmail.com>
+ <CAGS_qxrNAuXUN2VftJ2e9k=zt+vp+7P-WuZM8FJOa98vsZtFHQ@mail.gmail.com> <CAFd5g46R9L+moE+wcv1HOHPpd4NJus8oJ=JwQgPP9MWOMGE4_A@mail.gmail.com>
+In-Reply-To: <CAFd5g46R9L+moE+wcv1HOHPpd4NJus8oJ=JwQgPP9MWOMGE4_A@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 11 Jan 2022 14:11:54 -0800
+Message-ID: <CAGS_qxqf93Z5X15_e+zho9rhxmgpk7dAkQmZfjuthnALus1-SA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] kunit: split out part of kunit_assert into a
+ static const
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
+On Tue, Jan 11, 2022 at 1:43 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Tue, Jan 11, 2022 at 4:41 PM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > On Tue, Jan 11, 2022 at 1:35 PM Brendan Higgins
+> > <brendanhiggins@google.com> wrote:
+> > >
+> > > On Tue, Jan 11, 2022 at 2:42 PM Daniel Latypov <dlatypov@google.com> wrote:
+> > > >
+> > > > This is per Linus's suggestion in [1].
+> > > >
+> > > > The issue there is that every KUNIT_EXPECT/KUNIT_ASSERT puts a
+> > > > kunit_assert object onto the stack. Normally we rely on compilers to
+> > > > elide this, but when that doesn't work out, this blows up the stack
+> > > > usage of kunit test functions.
+> > > >
+> > > > We can move some data off the stack by making it static.
+> > > > This change introduces a new `struct kunit_loc` to hold the file and
+> > > > line number and then just passing assert_type (EXPECT or ASSERT) as an
+> > > > argument.
+> > > >
+> > > > In [1], it was suggested to also move out the format string as well, but
+> > > > users could theoretically craft a format string at runtime, so we can't.
+> > > >
+> > > > This change leaves a copy of `assert_type` in kunit_assert for now
+> > > > because cleaning up all the macros to not pass it around is a bit more
+> > > > involved.
+> > > >
+> > > > Here's an example of the expanded code for KUNIT_FAIL():
+> > > > if (__builtin_expect(!!(!(false)), 0)) {
+> > > >   static const struct kunit_loc loc = { .file = ... };
+> > > >   struct kunit_fail_assert __assertion = { .assert = { .type ...  };
+> > > >   kunit_do_failed_assertion(test, &loc, KUNIT_EXPECTATION, &__assertion.assert, ...);
+> > > > };
+> > > >
+> > > > [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+> > > >
+> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > > Reviewed-by: David Gow <davidgow@google.com>
+> > >
+> > > One question below, but other than that,
+> > >
+> > > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> > >
+> > > > ---
+> > > >  include/kunit/assert.h | 25 ++++++++++++++++---------
+> > > >  include/kunit/test.h   | 12 +++++++++++-
+> > > >  lib/kunit/assert.c     |  9 +++++----
+> > > >  lib/kunit/test.c       | 15 +++++++++------
+> > > >  4 files changed, 41 insertions(+), 20 deletions(-)
+> > > >
+> > > > diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> > > > index 3da6c792496c..4f91dbdb886a 100644
+> > > > --- a/include/kunit/assert.h
+> > > > +++ b/include/kunit/assert.h
+> > > > @@ -28,11 +28,21 @@ enum kunit_assert_type {
+> > > >         KUNIT_EXPECTATION,
+> > > >  };
+> > > >
+> > > > +/**
+> > > > + * struct kunit_loc - Identifies the source location of a line of code.
+> > > > + * @line: the line number in the file.
+> > > > + * @file: the file name.
+> > > > + */
+> > > > +struct kunit_loc {
+> > > > +       int line;
+> > > > +       const char *file;
+> > > > +};
+> > > > +
+> > > > +#define KUNIT_CURRENT_LOC { .file = __FILE__, .line = __LINE__ }
+> > > > +
+> > > >  /**
+> > > >   * struct kunit_assert - Data for printing a failed assertion or expectation.
+> > > >   * @type: the type (either an expectation or an assertion) of this kunit_assert.
+> > > > - * @line: the source code line number that the expectation/assertion is at.
+> > > > - * @file: the file path of the source file that the expectation/assertion is in.
+> > > >   * @message: an optional message to provide additional context.
+> > > >   * @format: a function which formats the data in this kunit_assert to a string.
+> > > >   *
+> > > > @@ -40,9 +50,7 @@ enum kunit_assert_type {
+> > > >   * format a string to a user reporting the failure.
+> > > >   */
+> > > >  struct kunit_assert {
+> > > > -       enum kunit_assert_type type;
+> > > > -       int line;
+> > > > -       const char *file;
+> > > > +       enum kunit_assert_type type; // TODO(dlatypov@google.com): delete this
+> > >
+> > > Can you provide some context for this?
+> >
+> > This is what the commit desc is referring to.
+> > We leave in the type field in this change so we can clean that up and
+> > all the macros all at once.
+> >
+> > This TODO is addressed and removed in the next commit, so I was being
+> > a bit lazy with the TODO.
+> >  I was hoping people could check `git blame` and find the context they
+> > need, if people do somehow find their way to this intermediate commit.
+> >
+> > If you want, I can update the TODO message to be more fleshed out.
+> > Something like
+> >
+> > TODO(...): delete this unused field when we've updated all the related
+> > KUNIT_INIT_ASSERT macros.
+> >
+> > ?
+>
+> Yeah, I like that better.
 
-T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=19d2 ProdID=1485 Rev=52.87
-S:  Manufacturer=ZTE,Incorporated
-S:  Product=ZTE Technologies MSM
-S:  SerialNumber=MF286DZTED000000
-C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
-E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+Ack, applied this locally so now it looks like
 
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ struct kunit_assert {
++        // TODO(dlatypov@google.com): delete this unused field when we've
++        // updated all the related KUNIT_INIT_ASSERT* macros.
+        enum kunit_assert_type type;
+-       int line;
+-       const char *file;
+        struct va_format message;
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index f510e8219470..0d5bc26c9f2e 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1316,6 +1316,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x19d2, 0x1426, 2)},	/* ZTE MF91 */
- 	{QMI_FIXED_INTF(0x19d2, 0x1428, 2)},	/* Telewell TW-LTE 4G v2 */
- 	{QMI_FIXED_INTF(0x19d2, 0x1432, 3)},	/* ZTE ME3620 */
-+	{QMI_FIXED_INTF(0x19d2, 0x1485, 5)},	/* ZTE MF286D */
- 	{QMI_FIXED_INTF(0x19d2, 0x2002, 4)},	/* ZTE (Vodafone) K3765-Z */
- 	{QMI_FIXED_INTF(0x2001, 0x7e16, 3)},	/* D-Link DWM-221 */
- 	{QMI_FIXED_INTF(0x2001, 0x7e19, 4)},	/* D-Link DWM-221 B1 */
--- 
-2.25.1
+I'll wait to see if there's any other tweaks we want before sending out a v3.
 
+>
+> > >
+> > > >         struct va_format message;
+> > > >         void (*format)(const struct kunit_assert *assert,
+> > > >                        struct string_stream *stream);
+> > > > @@ -65,14 +73,13 @@ struct kunit_assert {
+> > > >   */
+> > > >  #define KUNIT_INIT_ASSERT_STRUCT(assert_type, fmt) {                          \
+> > > >         .type = assert_type,                                                   \
+> > > > -       .file = __FILE__,                                                      \
+> > > > -       .line = __LINE__,                                                      \
+> > > >         .message = KUNIT_INIT_VA_FMT_NULL,                                     \
+> > > >         .format = fmt                                                          \
+> > > >  }
+> > > >
+> > > > -void kunit_base_assert_format(const struct kunit_assert *assert,
+> > > > -                             struct string_stream *stream);
+> > > > +void kunit_assert_prologue(const struct kunit_loc *loc,
+> > > > +                          enum kunit_assert_type type,
+> > > > +                          struct string_stream *stream);
+> > > >
+> > > >  void kunit_assert_print_msg(const struct kunit_assert *assert,
+> > > >                             struct string_stream *stream);
+> > > > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > > > index 25ea3bce6663..7b752175e614 100644
+> > > > --- a/include/kunit/test.h
+> > > > +++ b/include/kunit/test.h

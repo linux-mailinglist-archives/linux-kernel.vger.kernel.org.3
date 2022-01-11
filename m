@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E75148B3DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377E648B3E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241736AbiAKR3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344251AbiAKR3b (ORCPT
+        id S1344241AbiAKRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:30:05 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58980 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241516AbiAKRaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:29:31 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6F3C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:29:31 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso82519pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0KOZZtBBHeRkDdzPa5q1c2gpML5kGszF4xNBuuJ1X9U=;
-        b=BY+u4bbQYNdmyC//Bv7GXEy44FwwMX1t8rhum6wd1C6taLrxSBJ8VnvLfUTJnhLyJc
-         zkEyjQdABPJozjs5FtWLufh9s2aO4dwtnYExrwqXs+hJJTnK5YlFQhjhsWkFbKtMrwnQ
-         hl5sUhV/kCsZLAmq1IMR7VyZvWX7/qOulYJL0ipcijr+6TfmxELjjtkxcW3L9/OcEjW0
-         fiKatqDE+DAJDX1tiNaHAZm/Vp7xNdxll0cDi1MXedP3l/FCC0AbKopQYeBue/Um2a5w
-         C1FEf9NdCrpehpHgC8xbGi6InBo4FYj91x8oFnAmiR1gRdpd/KpLHtKG3DbKJlznmVu6
-         T/Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=0KOZZtBBHeRkDdzPa5q1c2gpML5kGszF4xNBuuJ1X9U=;
-        b=rpRigpLO6qHHkDWKrEx2uYE82Fo1IoFbQSdTHi1lnf4DrXONjnmhhmONmXCoa+CXuH
-         LqUDz/k2cgeJNXcL2PCOicbZiCEbldkzYGltaKVus9zvVF97f7Jese2P6cm914vjeAyW
-         AKhtW3xxSj6fwUuhwIakn7xeR1trfV7aWKv/XHH3v9kTqUNubcB40GUhDF4DjEb4dWOG
-         LNm+XusKxk5LqY8vQVPtu15uNbEZyoWNkJLLv/ma1skZnCSPwwtrMDlx2acPrRhEsjTN
-         jHZ1UstT4aWBboOAkC2rU+f/pD1G17bjOlJ+oLWiH9JGB38KUq/dF7WkHSQqb5bU1VlH
-         G20Q==
-X-Gm-Message-State: AOAM5316dsd4T6m4cqO2Zv8j8/UugRJsziPVdpZNtaG2eKh23oWapxow
-        V5Jx0Hd54HTL4psvDVnJOisvhA==
-X-Google-Smtp-Source: ABdhPJyUE27xqXcOOzoFLUBZ4NAdrQAHxnQ+OXs+EEHJQJXAtXGuafe0Df391hbXvZogvp0dzrXr4Q==
-X-Received: by 2002:a65:5589:: with SMTP id j9mr4910464pgs.119.1641922170977;
-        Tue, 11 Jan 2022 09:29:30 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id k13sm11560322pfc.60.2022.01.11.09.29.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:29:30 -0800 (PST)
-Date:   Tue, 11 Jan 2022 09:29:30 -0800 (PST)
-X-Google-Original-Date: Tue, 11 Jan 2022 09:29:03 PST (-0800)
-Subject:     Re: [PATCH v2 2/5] riscv: mm: init: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
-In-Reply-To: <20211206160514.2000-3-jszhang@kernel.org>
-CC:     linux@armlinux.org.uk, catalin.marinas@arm.com,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, ebiederm@xmission.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kexec@lists.infradead.org,
-        alex@ghiti.fr
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jszhang@kernel.org
-Message-ID: <mhng-ef554c87-32d1-443f-805d-3f74b88cd1f0@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 11 Jan 2022 12:30:04 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BGA0Fh023333;
+        Tue, 11 Jan 2022 17:30:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=0pKoie7nQKiQsCsIxK/RQOJuHvRNFcldpzSGOsxu6vI=;
+ b=rXq5+wartYvUB5j0+v/fc3+M8PWD9gUg1VdgRbukO9gk9GsUG1rsu5moOtUe7f4Pi+gU
+ KUF/uQBySk6M3Oll3i9Znyc6V0CAqfFvUW+4DHPbvXeWZJ3KUKtbieBq9Oo3qlV720td
+ 9ly/k23h3snfLxrgKblQjL7BC3fdTI6IP1Lx529fGjc8UQCmnGWmKs29XaTSr4mK6l1F
+ W47i5NChLGRg34oNSS/C1/iHZxvA8cRyunYj/fE1cAmiq7kkjFXNsbdd+vP2GINO6dg7
+ J2mDvj3AUkG5Ix8UzgKSawD3khKPYgMVAmLTxgQzwj3fAkleijbxEasje5PkJYIBZcMJ 4w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh6u1byg7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 17:30:02 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BHU1w2014891;
+        Tue, 11 Jan 2022 17:30:01 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh6u1byfe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 17:30:01 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BHHivi024637;
+        Tue, 11 Jan 2022 17:30:00 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma02wdc.us.ibm.com with ESMTP id 3df28ahmxn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 17:30:00 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BHTwku19464702
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 17:29:58 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ADB7228074;
+        Tue, 11 Jan 2022 17:29:57 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 23E802808A;
+        Tue, 11 Jan 2022 17:29:56 +0000 (GMT)
+Received: from [9.65.85.237] (unknown [9.65.85.237])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jan 2022 17:29:55 +0000 (GMT)
+Message-ID: <2e26406f-0af8-af23-de7d-138ef81d3018@linux.ibm.com>
+Date:   Tue, 11 Jan 2022 12:29:55 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v17 01/15] s390/vfio-ap: Set pqap hook when vfio_ap module
+ is loaded
+Content-Language: en-US
+To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
+ <20211021152332.70455-2-akrowiak@linux.ibm.com>
+ <47dc7326-b802-6023-6144-7bf4309756b4@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <47dc7326-b802-6023-6144-7bf4309756b4@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tDApdIYhEyItG-HboJw-vdJt_P9tQqJX
+X-Proofpoint-ORIG-GUID: IXJrwwB3stb-d5AbezbaLPOQn9PMudTc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
+ bulkscore=0 impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201110094
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Dec 2021 08:05:11 PST (-0800), jszhang@kernel.org wrote:
-> Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE"
-> by a check for "IS_ENABLED(CONFIG_KEXEC_CORE)", to simplify the code
-> and increase compile coverage.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/mm/init.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index a15640eeb334..84879a5ce818 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -748,7 +748,6 @@ static inline void setup_vm_final(void)
->  }
->  #endif /* CONFIG_MMU */
->
-> -#ifdef CONFIG_KEXEC_CORE
->  /*
->   * reserve_crashkernel() - reserves memory for crash kernel
->   *
-> @@ -765,6 +764,8 @@ static void __init reserve_crashkernel(void)
->
->  	int ret = 0;
->
-> +	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
-> +		return;
->  	/*
->  	 * Don't reserve a region for a crash kernel on a crash kernel
->  	 * since it doesn't make much sense and we have limited memory
-> @@ -805,7 +806,6 @@ static void __init reserve_crashkernel(void)
->  	crashk_res.start = crash_base;
->  	crashk_res.end = crash_base + crash_size - 1;
->  }
-> -#endif /* CONFIG_KEXEC_CORE */
->
->  void __init paging_init(void)
->  {
-> @@ -819,9 +819,7 @@ void __init misc_mem_init(void)
->  	arch_numa_init();
->  	sparse_init();
->  	zone_sizes_init();
-> -#ifdef CONFIG_KEXEC_CORE
->  	reserve_crashkernel();
-> -#endif
->  	memblock_dump_all();
->  }
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-LMK if you wanted me to take this through the RISC-V tree, otherwise I'm 
-going to assume all these are going in together.
+On 1/4/22 11:22, Jason J. Herne wrote:
+> On 10/21/21 11:23, Tony Krowiak wrote:
+>
+>> diff --git a/arch/s390/include/asm/kvm_host.h 
+>> b/arch/s390/include/asm/kvm_host.h
+>> index a604d51acfc8..05569d077d7f 100644
+>> --- a/arch/s390/include/asm/kvm_host.h
+>> +++ b/arch/s390/include/asm/kvm_host.h
+>> @@ -799,16 +799,17 @@ struct kvm_s390_cpu_model {
+>>       unsigned short ibc;
+>>   };
+>>   -typedef int (*crypto_hook)(struct kvm_vcpu *vcpu);
+>> +struct kvm_s390_crypto_hook {
+>> +    int (*fcn)(struct kvm_vcpu *vcpu);
+>> +};
+>
+> Why are we storing a single function pointer inside a struct? Seems 
+> simpler to just use a function pointer. What was the problem with the 
+> typedef that you are replacing?
 
-Thanks!
+In case you didn't see my response to Halil, the point is now moot 
+because I'm eliminating this patch.
+
+

@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC1C48A71A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FA048A71C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbiAKFRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 00:17:31 -0500
-Received: from mail-4319.protonmail.ch ([185.70.43.19]:21215 "EHLO
-        mail-4319.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbiAKFRa (ORCPT
+        id S239805AbiAKFUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 00:20:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233798AbiAKFUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:17:30 -0500
-Date:   Tue, 11 Jan 2022 05:17:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1641878248;
-        bh=cYRvPsRTbr0F5Cm8cyAJ/mKD2RTDDw1A0v/DzkSatCQ=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=hfA0/CRWFAyhXB6BLEJDd9HBXjUactsFBPdCpKVcrjAIcVgNcJdyx23xz9Qnfgt32
-         xCpqb0/AG5DkIoQtsv5BKLz1FlHTRkEYAtH0Hv3eMq4VU/4bLd+g2nnEu0I1RVE4vV
-         eO9OhuE1P3k2YfmFADDyrSKNeJK++Udxr+rOXa8DVpQEgyeSRaqRBumIA5IP0yBxZP
-         iHvL1DmNDI5cnVCptXkqDgOqRDJLjOhpSGx5NoXXuhH+PsMGW6dZaciDjWLgw7Gp9E
-         fGFloNx5Ajo3dciUiAkv5oMv/n84HymBdIl6g41/EGrlgPREUuKARGxloPqzK2Z9Sc
-         rbxR5qC1VlJ2w==
-To:     Ard Biesheuvel <ardb@kernel.org>
-From:   Orlando Chamberlain <redecorating@protonmail.com>
-Cc:     Aditya Garg <gargaditya08@live.com>,
-        "jk@ozlabs.org" <jk@ozlabs.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Reply-To: Orlando Chamberlain <redecorating@protonmail.com>
-Subject: Re: [BUG][SEVERE] Enabling EFI runtime services causes panics in the T2 security chip on Macs equipped with it.
-Message-ID: <20220111051717.25b86946@localhost>
-In-Reply-To: <CAMj1kXEjmJxS-_r4HK_v_Qm85y2oeawk+bWUpSY7mV5NLFCm4g@mail.gmail.com>
-References: <6D757C75-65B1-468B-842D-10410081A8E4@live.com> <CAMj1kXETPO9iJoFm26v5gof2xpakHkvz3YV4ahet7BLjX5m5FQ@mail.gmail.com> <D3B9962F-F6F0-4622-9E0F-A3EABACAD471@live.com> <CAMj1kXGem3QB0rj-b57xrcDYkCv6Moi=RX1OUspj3s4vMtsdug@mail.gmail.com> <CAMj1kXEjmJxS-_r4HK_v_Qm85y2oeawk+bWUpSY7mV5NLFCm4g@mail.gmail.com>
+        Tue, 11 Jan 2022 00:20:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1343BC06173F;
+        Mon, 10 Jan 2022 21:20:41 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso3044947pje.0;
+        Mon, 10 Jan 2022 21:20:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rVTQrxq8gWwOCWfb8L3X/MWGyTwgjaV02YyDhdXm2CA=;
+        b=jMp9T8hhnAzNrk6T7C1TrJpjyOSjPUQBxFXgKmxqTT9SsSOa981JtEhFKMsbGlQ7Dg
+         HCmIHKhlC1u9QsJuYy6FaTBy3VB9k4fgViLTYBORZNNeTQe1XDJ7GMUcwjIEEb8c61vb
+         rPbeDib6FAAeDZP6DZzrF3H6HY4iYIm9Mra0aI3F6lU5Kgrg7WUhkiw37I3tdMHYgkP8
+         /CFtifrvopCybLm5SXX/PT/giTlgSseoqyn7j982tyWEHEpyVOj48RLWHQBNq91Dx1RU
+         J0FqZS4PWeuXswLV5RGLXneGiWF2OGbJD85fgHZWpViPOAMtoWKi5uQEbb95alPEr7RO
+         4i7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rVTQrxq8gWwOCWfb8L3X/MWGyTwgjaV02YyDhdXm2CA=;
+        b=6ksa0y5To7hjpj6nkk40G2YA3PMgAlcadjDoskLwvIyyYgo8GWMUePR3iim1MbGmSR
+         kPHzwLN2PoaThj0AJwch98nNRfLcCzZwT7ZXtLTDiglYKyD93sx62v58PkfuibY8tHub
+         3xXUzWL6GEJ0lZ4LwK4qzNBorsQOuQfCuwYjZKU02G83BAuYvWZYEMYz+r3yn3xNR5HH
+         7Y3mddtdhFGMKGRJFrgGf/YFbNTYIAmVUY1cIzmVwO5pPL+/83TfyEhLp/cz+1V0FueX
+         SXLUnT29YFcR2BTtFueOKliivZ1E776NCFEmFBCG/uN95DdWCS2izo1y7ui/6kWx/lEe
+         SDxw==
+X-Gm-Message-State: AOAM530qLorL6blDD+IZoALQ+3z6PVRuc0DAd1z5z6B2uYVfZpTkKLLK
+        NgMacpPOAxMsgCSN7S96aoF7weelOQyO3yVJ
+X-Google-Smtp-Source: ABdhPJxgrID7aYlmb57xT1LdjiDw7CEZjcdac6NPfDlWs2OHXy35NqiIWoARgFWVzqbV0ckqcjpOXw==
+X-Received: by 2002:a05:6a00:1990:b0:4bb:4cad:be3 with SMTP id d16-20020a056a00199000b004bb4cad0be3mr2981072pfl.58.1641878440218;
+        Mon, 10 Jan 2022 21:20:40 -0800 (PST)
+Received: from archlinux.localdomain ([140.121.198.213])
+        by smtp.gmail.com with ESMTPSA id w6sm6762251pga.25.2022.01.10.21.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 21:20:39 -0800 (PST)
+From:   Huichun Feng <foxhoundsk.tw@gmail.com>
+To:     corbet@lwn.net
+Cc:     rostedt@goodmis.org, mingo@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Huichun Feng <foxhoundsk.tw@gmail.com>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        Chun-Hung Tseng <henrybear327@gmail.com>
+Subject: [PATCH] docs: ftrace: fix ambiguous sentence
+Date:   Tue, 11 Jan 2022 13:20:01 +0800
+Message-Id: <20220111052000.2675944-1-foxhoundsk.tw@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 04:45:35 +1100
-"Ard Biesheuvel" <ardb@kernel.org> wrote:
+The sentence looks ambiguous, rephrase it by adding ", there".
 
-> On Mon, 10 Jan 2022 at 17:37, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Mon, 10 Jan 2022 at 17:28, Aditya Garg <gargaditya08@live.com>
-> > wrote: =20
-> ...
-> > > >>
-> > > >> This seems to be triggered by EFI_QUERY_VARIABLE_INFO here
-> > > >> =20
-> > > >
-> > > > This is interesting. QueryVariableInfo() was introduced in EFI
-> > > > 2.00, and for a very long time, Intel MACs would claim to
-> > > > implement EFI 1.10 only. This means Linux would never attempt
-> > > > to use QueryVariableInfo() on such platforms.
-> > > >
-> > > > Can you please check your boot log which revision it claims to
-> > > > implement now?
-> > > >
-> > > > Mine says
-> > > >
-> > > > efi: EFI v1.10 by Apple =20
-> > >
-> > > Mine says
-> > >
-> > > efi: EFI v2.40 by Apple
-> > > =20
->=20
-> Can you check whether things work as before after applying the change
-> below?
->=20
-> diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
-> index 147c30a81f15..d7203355cc69 100644
-> --- a/arch/x86/platform/efi/efi.c
-> +++ b/arch/x86/platform/efi/efi.c
-> @@ -399,7 +399,7 @@ static int __init efi_systab_init(unsigned long
-> phys) efi_nr_tables           =3D systab32->nr_tables;
->         }
->=20
-> -       efi.runtime_version =3D hdr->revision;
-> +       efi.runtime_version =3D EFI_1_10_SYSTEM_TABLE_REVISION;
->=20
->         efi_systab_report_header(hdr, efi_fw_vendor);
->         early_memunmap(p, size);
+Signed-off-by: Huichun Feng <foxhoundsk.tw@gmail.com>
+Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
+Signed-off-by: Chun-Hung Tseng <henrybear327@gmail.com>
+---
+ Documentation/trace/ftrace.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This patch works for me, I was able to use `efibootmgr -t 2` without
-panics and the change to the boot timeout value persisted after a
-reboot. (I don't think the Apple firmware would actually use this
-timeout value for a timeout time, but it is an nvram vairable that i
-was able to write to)
-
-efi: EFI v2.40 by Apple
-efi: ACPI=3D0x7affe000 ACPI 2.0=3D0x7affe014 SMBIOS=3D0x7aed0000 SMBIOS 3.0=
-=3D0x7aece000=20
-SMBIOS 3.1.1 present.
-DMI: Apple Inc. MacBookPro16,1/Mac-E1008331FDC96864, BIOS 1715.60.5.0.0 (iB=
-ridge: 19.16.10647.0.0,0) 11/16/2021
-
-("iBridge" might be something to use for a quirk, as it should cover
-all Macs with the T2 chip)
-
-
---=20
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index b3166c4a7..45b8c56af 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -3370,7 +3370,7 @@ one of the latency tracers, you will get the following results.
+ 
+ Instances
+ ---------
+-In the tracefs tracing directory is a directory called "instances".
++In the tracefs tracing directory, there is a directory called "instances".
+ This directory can have new directories created inside of it using
+ mkdir, and removing directories with rmdir. The directory created
+ with mkdir in this directory will already contain files and other
+-- 
+2.34.1
 

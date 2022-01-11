@@ -2,136 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 339D248A629
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0082748A62D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243826AbiAKDQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 22:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S231149AbiAKDTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 22:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiAKDQS (ORCPT
+        with ESMTP id S1346864AbiAKDTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 22:16:18 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEECBC06173F;
-        Mon, 10 Jan 2022 19:16:17 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m1so18276081lfq.4;
-        Mon, 10 Jan 2022 19:16:17 -0800 (PST)
+        Mon, 10 Jan 2022 22:19:42 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C8FC06175A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:19:41 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id j83so43661287ybg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:19:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tnWatjEgyJ9FaJC0eKyvOWSFHkKwoNBRdfNz32BOWbE=;
-        b=pvQgk6WPtiBTpIIyj88Tt/GisS81oFMofetcLKN3sOU6bPpnu0GDVyxIytbhDGZOkN
-         eRKNihQzDJUElKaZ4vTc+dQw6CLObT2uqdDjw5srFd7RMIe37sXcGDvjADJiCdi1oeOT
-         ssJqESC0Ww4m0+P+evVF5e3MVETSy/0TfrolckyYCiYVcT87vr6myAaFMvHFpL1LhZWh
-         NMEP3ja4iIVCAPAOSEZhi8hEtbZ4bvicmK4XxV6/U59gh+cLpmSOxHg3rU+yP8YJWzjM
-         T4gBySONopcqtbPh25Sa1xDlOOSbSs5MsuL5A3fKLEE0E4kPyVtf9wxNMkcS64L8bZzR
-         yZlQ==
+        bh=5EBf9IiwrsGpNW9Obfjl+AtKxYOGgprHkSqzFWQENdI=;
+        b=dc1lbQBKRWe5Q0/AtI77wPv/JJIVAuu74aEoXrpslvIEHtREn97kHGjxA39TizH+Bg
+         6n5A8oeZbZURuegDPdJ9wlP4V44PWU3m5ZCSurSGAwHBepBocZkve4mqJWEEXCv57wLl
+         FrwlOeJVEsmwP6MoyeO/qRsAzsDoE7D90Zl7zAvmnB1Vt+sHNnaVB2jxznVenQW8ZokG
+         jOjJBJIKZ4UDK1R1ou4vqzWv5R0Z3LKw5ft6/dtrTPyckj2Ikj/5WbbyM82fEvktvfl2
+         D9QV/7rIcPs8XIqVOe6fr8Xn3RqMGBio/EqH8we82eVwPh4ddMkrpE13UUFsv7Qq2vzE
+         cVzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tnWatjEgyJ9FaJC0eKyvOWSFHkKwoNBRdfNz32BOWbE=;
-        b=bK9fvm4b+xtf9wyurCf2BSA18FxgF2CHW04NaecH/eqZ752WPKCRa7rkacqEtGCWEM
-         yVJ4sAfv9KdI0ycaIV1UWqY8GlacKSBy9QvKEuXHwRz/4ChWdWYE4cTcp3y4LoXluohJ
-         91YkpT4+lNaNYR5Zf1QhXR2wDKHpyS05hB+3NsiiIifWUi4PrMo3eM3VM0LRKMJlG6tZ
-         caaBvlHDlC7qnowda2D4Lv7/kQpv2GAiFYKS0JPUvFfIHjnYUkVabK1llTQhDYedJpAQ
-         xiB+rRIkHXLc+YjsFKDigKhtgVKZAESM0hgc5/lOaPkHhFnFsgUkKlr2P1oXeih1QFx4
-         U4Dg==
-X-Gm-Message-State: AOAM533jCu6JAm5Zl1qsUjPe8CDHVv7AFPAbIvmVJyy+2mmbpEIpdj69
-        AO4hRN4R+xvjrq/BlCfaVONfb1lwteBnwCAKHK3jUibR
-X-Google-Smtp-Source: ABdhPJz0pfbIUNFY/jTTUD+wPeqdHZIzltUsCUeAh/QExyS0hTGeCDFj1To+Ow5RM7SA564uZgvAiNV97+dt9BvaT5w=
-X-Received: by 2002:a19:8c4a:: with SMTP id i10mr1885122lfj.537.1641870975462;
- Mon, 10 Jan 2022 19:16:15 -0800 (PST)
+        bh=5EBf9IiwrsGpNW9Obfjl+AtKxYOGgprHkSqzFWQENdI=;
+        b=LAYtJ5yv91cbkHK41lw7SBekQcxzp/wZamtHUVWNZoNl3FIcwjOMYRi2diTZmdNZM1
+         YuHfNANKncSkcWuPEFK8Qd7UxKfqgh9iMDtxToBPfTxkRF7Vdlb5Uzfv7ELfrVxRi6yX
+         3r6KaVlzY26nEo6d6ZJmzAPD77KNtOkUPRj3lbbarIpQXy7KOoHWxgLu3LX4sS0/iDDt
+         oeFSIJC8KVtClDqu1JkBXc4cJ+iOx4N6YxPkhgqQ1gHNrc0ew8Syz9yyIWthZRXHIQb6
+         kkNNaElNEfb80D20D6uGfzI5sO3VqAYLa0qFw2iQtnnP1JBRo0xpvvZdBFSbR0qpyENR
+         M04w==
+X-Gm-Message-State: AOAM533PMeWw/8kMS6u8kYjna/YlPxDgeXcuY0HdyVNxLH4PUs5gouiJ
+        rQeUruynBNCmm9tfpHgX2I2V2cD9lfho0N4kivp2bQ==
+X-Google-Smtp-Source: ABdhPJwVDZnN4qKaKZWU5xT65Jon7AIpUB45deglJ5jO2u724/5prxvNeb77GYV6EXBDZAeFqdTMs9sq4E9WfYe3S+k=
+X-Received: by 2002:a25:af4b:: with SMTP id c11mr3660515ybj.49.1641871180863;
+ Mon, 10 Jan 2022 19:19:40 -0800 (PST)
 MIME-Version: 1.0
-References: <D58238A4-F04E-458E-AB05-4A74235B2C65@getmailspring.com> <ff982786-4033-7450-c10c-8ce71c28d6eb@leemhuis.info>
-In-Reply-To: <ff982786-4033-7450-c10c-8ce71c28d6eb@leemhuis.info>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 10 Jan 2022 21:16:04 -0600
-Message-ID: <CAH2r5mtE-EjNbF3OhCLmbGQFMbJgRZphQHS+hHLBiWRJPEBqKA@mail.gmail.com>
-Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
- machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Davyd McColl <davydm@gmail.com>,
-        "lsahlber@redhat.com" <lsahlber@redhat.com>,
-        "stfrench@microsoft.com" <stfrench@microsoft.com>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20211220085649.8196-1-songmuchun@bytedance.com>
+ <20211220085649.8196-2-songmuchun@bytedance.com> <YdeDym9IUghnagrK@carbon.dhcp.thefacebook.com>
+ <CAMZfGtV2G=R9nTuSYGAeqv+RkJsCVVACc3h47OeWA7n3mWbqsA@mail.gmail.com> <Ydx+BWQp18hjdO32@carbon.dhcp.thefacebook.com>
+In-Reply-To: <Ydx+BWQp18hjdO32@carbon.dhcp.thefacebook.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 11 Jan 2022 11:19:04 +0800
+Message-ID: <CAMZfGtVDjtG2D3Ri4WROD5F1cSeA+V+t1W+TXmOQzJoJdPg+kQ@mail.gmail.com>
+Subject: Re: [PATCH v5 01/16] mm: list_lru: optimize memory consumption of
+ arrays of per cgroup lists
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We do still need a little more data from the users affected to ensure
-that it isn't something more subtle.  One user noted Windows 11 worked
-as a client, but not Linux which would imply that it is probably
-something other than NTLM (NTLM has been strongly discouraged if not
-disabled for more than 20 years).
-
-On Mon, Jan 10, 2022 at 9:07 PM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
+On Tue, Jan 11, 2022 at 2:42 AM Roman Gushchin <guro@fb.com> wrote:
 >
-> Hi, this is your Linux kernel regression tracker speaking.
->
-> On 10.01.22 06:53, Davyd McColl wrote:
+> On Sun, Jan 09, 2022 at 12:49:56PM +0800, Muchun Song wrote:
+> > On Fri, Jan 7, 2022 at 8:05 AM Roman Gushchin <guro@fb.com> wrote:
+> > >
+> > > On Mon, Dec 20, 2021 at 04:56:34PM +0800, Muchun Song wrote:
+> > > > The list_lru uses an array (list_lru_memcg->lru) to store pointers
+> > > > which point to the list_lru_one. And the array is per memcg per node.
+> > > > Therefore, the size of the arrays will be 10K * number_of_node * 8 (
+> > > > a pointer size on 64 bits system) when we run 10k containers in the
+> > > > system. The memory consumption of the arrays becomes significant. The
+> > > > more numa node, the more memory it consumes.
+> > > >
+> > > > I have done a simple test, which creates 10K memcg and mount point
+> > > > each in a two-node system. The memory consumption of the list_lru
+> > > > will be 24464MB. After converting the array from per memcg per node
+> > > > to per memcg, the memory consumption is going to be 21957MB. It is
+> > > > reduces by 2.5GB. In our AMD servers with 8 numa nodes in those
+> > > > sysuem, the memory consumption could be more significant. The savings
+> > > > come from the list_lru_one heads, that it also simplifies the
+> > > > alloc/dealloc path.
+> > > >
+> > > > The new scheme looks like the following.
+> > > >
+> > > >   +----------+   mlrus   +----------------+   mlru   +----------------------+
+> > > >   | list_lru +---------->| list_lru_memcg +--------->|  list_lru_per_memcg  |
+> > > >   +----------+           +----------------+          +----------------------+
+> > > >                                                      |  list_lru_per_memcg  |
+> > > >                                                      +----------------------+
+> > > >                                                      |          ...         |
+> > > >                           +--------------+   node    +----------------------+
+> > > >                           | list_lru_one |<----------+  list_lru_per_memcg  |
+> > > >                           +--------------+           +----------------------+
+> > > >                           | list_lru_one |
+> > > >                           +--------------+
+> > > >                           |      ...     |
+> > > >                           +--------------+
+> > > >                           | list_lru_one |
+> > > >                           +--------------+
+> > > >
+> > > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > > > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> > >
+> > > As much as I like the code changes (there is indeed a significant simplification!),
+> > > I don't like the commit message and title, because I wasn't able to understand
+> > > what the patch is doing and some parts look simply questionable. Overall it
+> > > sounds like you reduce the number of list_lru_one structures, which is not true.
+> > >
+> > > How about something like this?
+> > >
+> > > --
+> > > mm: list_lru: transpose the array of per-node per-memcg lru lists
+> > >
+> > > The current scheme of maintaining per-node per-memcg lru lists looks like:
+> > >   struct list_lru {
+> > >     struct list_lru_node *node;           (for each node)
+> > >       struct list_lru_memcg *memcg_lrus;
+> > >         struct list_lru_one *lru[];       (for each memcg)
+> > >   }
+> > >
+> > > By effectively transposing the two-dimension array of list_lru_one's structures
+> > > (per-node per-memcg => per-memcg per-node) it's possible to save some memory
+> > > and simplify alloc/dealloc paths. The new scheme looks like:
+> > >   struct list_lru {
+> > >     struct list_lru_memcg *mlrus;
+> > >       struct list_lru_per_memcg *mlru[];  (for each memcg)
+> > >         struct list_lru_one node[0];      (for each node)
+> > >   }
+> > >
+> > > Memory savings are coming from having fewer list_lru_memcg structures, which
+> > > contain an extra struct rcu_head to handle the destruction process.
 > >
-> > I'm following advice from the thread at
-> > https://bugzilla.kernel.org/show_bug.cgi?id=215375
-> > <https://bugzilla.kernel.org/show_bug.cgi?id=215375> as to how to report
-> > this, so please bear with me and redirect me as necessary.
+> > My bad English. Actually, the saving is coming from not only 'struct rcu_head'
+> > but also some pointer arrays used to store the pointer to 'struct list_lru_one'.
+> > The array is per node and its size is 8 (a pointer) * num_memcgs.
+>
+> Nice! Please, add this to the commit log.
+
+Will do.
+
+>
+> > So the total
+> > size of the arrays is  8 * num_nodes * memcg_nr_cache_ids. After this patch,
+> > the size becomes 8 * memcg_nr_cache_ids. So the saving is
 > >
-> > Since commit 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c,
->
-> FWIW, that is "cifs: remove support for NTLM and weaker authentication
-> algorithms"
->
-> > I'm unable to
-> > mount a CIFS 1.0 share ( from a media player: mede8er med600x3d, which
-> > runs some older linux). Apparently I'm not the only one, according to
-> > that thread, though the other affected party there is windows-based.
+> >    8 * (num_nodes - 1) * memcg_nr_cache_ids.
 > >
-> > I first logged this in the Gentoo bugtracker
-> > (https://bugs.gentoo.org/821895 <https://bugs.gentoo.org/821895>) and a
-> > reversion patch is available there for the time being.
+> > > --
+> > >
+> > > But what worries me is that memory savings numbers you posted don't do up.
+> > > In theory we can save
+> > > 16 (size of struct rcu_head) * 10000 (number of cgroups) * 2 (number of numa nodes) = 320k
+> > > per slab cache. Did you have a ton of mount points? Otherwise I don't understand
+> > > where these 2.5Gb are coming from.
 > >
-> > I understand that some of the encryption methods upon which the original
-> > feature relied are to be removed and, as such, the ability to mount
-> > these older shares was removed. This is sure to affect anyone running
-> > older Windows virtual machines (or older, internally-visible windows
-> > hosts) in addition to anyone attempting to connect to shares from
-> > esoteric devices like mine.
+> > memcg_nr_cache_ids is 12286 when creating 10k memcgs. So the saving
+> > of arrays of one list_lru is 8 * 1 (number of numa nodes - 1) * 12286 = 96k.
+> > There will be 2 * 10k list_lru when mounting 10k points. So the total
+> > saving is 96k * 2 * 10k = 1920 M.
 >
-> > Whilst I understand the desire to clean up code and remove dead
-> > branches, I'd really appreciate it if this particular feature remains
-> > available either by kernel configuration (which suits me fine, but is
-> > likely to be a hassle for anyone running a binary distribution) or via
-> > boot parameters. In the mean-time, I'm updating my own sync software to
-> > support this older device because if I can't sync media to the player,
-> > the device is not very useful to me.
->
-> From my point of view this afaics looks like one of those issues where
-> the "no regressions" rule gets tricky. But I told Davyd to bring it
-> forward here to get it discussed in the open. I also wonder if some
-> middle-ground solution could be found in this particular case -- e.g.
-> one where the commit stated above gets reverted and the code then
-> slightly changed to only allow weaker authentication if the user
-> manually requests in somehow, for example using a module parameter or
-> something in /proc or /sys.
->
-> Ciao, Thorsten
->
-> P.S.: Anyway, getting this tracked:
->
-> #regzbot ^introduced 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
-> #regzbot title cifs: unable to shares that require NTLM or weaker
-> authentication algorithms
-> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215375
+> So, there are 10k cgroups _and_ 10k mountpoints. Please, make it obvious from
+> the commit log. Most users don't have that many mount points (and likely cgroups),
+> so they shouldn't expect Gb's in savings.
 
+I'll add those infos into the commit log.
 
+>
+> Thanks!
+>
+> PS I hope to review the rest of the patchset till the end of this week.
 
--- 
-Thanks,
-
-Steve
+Thanks Roman.

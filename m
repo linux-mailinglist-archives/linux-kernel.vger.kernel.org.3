@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFF748BB6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2809B48BB59
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 00:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346820AbiAKX1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 18:27:21 -0500
-Received: from mailout.easymail.ca ([64.68.200.34]:49580 "EHLO
-        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiAKX1T (ORCPT
+        id S1346776AbiAKXVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 18:21:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36042 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233147AbiAKXVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 18:27:19 -0500
-X-Greylist: delayed 554 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Jan 2022 18:27:18 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mailout.easymail.ca (Postfix) with ESMTP id C7921731A6;
-        Tue, 11 Jan 2022 23:18:03 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at emo05-pco.easydns.vpn
-Received: from mailout.easymail.ca ([127.0.0.1])
-        by localhost (emo05-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id T9wjiQLbkDR3; Tue, 11 Jan 2022 23:18:03 +0000 (UTC)
-Received: from [10.90.1.74] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 11 Jan 2022 18:21:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailout.easymail.ca (Postfix) with ESMTPSA id BCA0B73191;
-        Tue, 11 Jan 2022 23:18:02 +0000 (UTC)
-Message-ID: <5cee9a36-b094-37a0-e961-d7404b3dafe2@gonehiking.org>
-Date:   Tue, 11 Jan 2022 16:17:32 -0700
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E89B61451
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8227C36AE9;
+        Tue, 11 Jan 2022 23:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641943262;
+        bh=rOCGhPadQvRT3ln3KwBxU4CiCad3Fl/1OvNtQ6RDExQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WuVBoHTDIjCwUqmZhAtGBYYvzPYS1SZp/VEgXM+8OcSM5nP1GWiDVADyL7sfNYgRA
+         CB+5VhE0IQBZGJ8yB/IfIiuZRPYtB4f/XRn8Q72ng53+C3RkpsyVjRh4bgL7BJlxnC
+         z6mCMumQSDtVndPwjzpJZDazdvSmRFRtqaFxSDaiOBKr3UsfqVt9cuidBlUT9RgH1d
+         KBxaYeq1ppT9k3LDt1DIOQ2+5Vmqdvdl+SiYtCw3tah9Ys1A3iCDcQ1siMkRyGSnPS
+         a0MRN0Ugb9Sc61fjvvZ7XAjpZpSHvrCRjk0Ns+tNc5cu9J4iW/ZD+L5yLq2LM6LTYC
+         33RlxxAzFtbcw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 88AC35C0DA1; Tue, 11 Jan 2022 15:21:02 -0800 (PST)
+Date:   Tue, 11 Jan 2022 15:21:02 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        caihuoqing@baidu.com,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH] drivers/pcmcia: Fix ifdef covering yenta_pm_ops
+Message-ID: <20220111232102.GI947480@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220111215431.GA2609427@paulmck-ThinkPad-P17-Gen-1>
+ <CAHk-=wi9_UKV6Dkroz5O11+P-=sw+gu5z2RJTmdGuRE4bBxBGw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Content-Language: en-US
-To:     nbd@nbd.name, lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-From:   Khalid Aziz <khalid@gonehiking.org>
-Subject: [Bug] mt7921e driver in 5.16 causes kernel panic
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi9_UKV6Dkroz5O11+P-=sw+gu5z2RJTmdGuRE4bBxBGw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am seeing an intermittent bug in mt7921e driver. When the driver module is loaded
-and is being initialized, almost every other time it seems to write to some wild
-memory location. This results in driver failing to initialize with message
-"Timeout for driver own" and at the same time I start to see "Bad page state" messages
-for random processes. Here is the relevant part of dmesg:
+On Tue, Jan 11, 2022 at 02:50:26PM -0800, Linus Torvalds wrote:
+> On Tue, Jan 11, 2022 at 1:54 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > Currently, yenta_dev_suspend_noirq(), yenta_dev_resume_noirq(),
+> > and yenta_pm_ops are covered by "#ifdef CONFIG_PM", which results in
+> > compiler warnings in kernels built with CONFIG_PM_SLEEP=n and CONFIG_PM=y:
+> 
+> Hmm. Wasn't the pcmcia tree in -next? Or how did this get missed?
 
-[OK] Found device SAMSUNG MZVLB1T0HBLR-000L7 6.
-[OK ]Found device SAMSUNG MZVLB1T0HBLR-000L7 SYSTEM.
-[OK] Listening on Load/Save RF Kill Switch Status /dev/rfkill Watch.
-Starting Cryptography Setup for nvme8n1p6_crypt...
-[  5.687489] mt7921e 0000:03:00.0: ASIC revision: 79610010
-Starting File System Check on /dev/disk/by-uuid/CCSA-8086...
-Please enter passphrase for disk SAMSUNG MZVLB1T0HBLR-000L7 (nvme8n1p6_crypt) on /home
-[  7.798962] mt7921e 0000:03:00.0: Timeout for driver own
-[  8.874863] mt7921e 0000:03:00.0: Timeout for driver own
-[  8.876266] BUG: Bad page state in process systemd-udevd  pfn:123848
-[  8.877953] BUG: Bad page state in process napi/phy8-8194  pfn:10a4a8
-[  9.958899] mt7921e 0000:03:00.0: Timeout for driver own
-[  9.961595] BUG: Bad page state in process systemd-udevd  pfn:1037e8
-[ 11.843129] mt7921e 0000:03:00.0: Timeout for driver own
-[ 11.845823] BUG: Bad page state in process systemd-udevd  pfn:104380
-[ 12.126922] mt7921e 0000:03:00.0: Timeout for driver own
-[ 12.128788] BUG: Bad page state in process systemd-udevd  pfn:10a050
-[ 13.287898] mt7921e 0000:03:00.0: Timeout for driver own
-[ 14.287827] mt7921e 0000:03:00.0: Timeout for driver own
-[ 14.288968] BUG: Bad page state in process systemd-udevd  pfn:109f51
-[ 14.298599] BUG: Bad page state in process systemd-udevd  pfn:105f60
-[ 14.292162] BUG: Bad page state in process systemd-udevd  pfn:10ac07
-[ 15.372501] mt7921e 0000:03:00.0: Timeout for driver own
-[ 16.454773] mt7921e 0000:03:00.0: Timeout for driver own
-[ 16.456238] BUG: Bad page state in process systemd-udevd pfn:1a0c00
-[ 16.515869) mt7921e 0000:03:00.0: hardware init failed
+This bug happens when running the rcuscale and refscale tests, not the
+usual rcu, lock, and scf torture tests.  So I would catch it only if
+I ran my overnight torture-everything test against -next during the
+critical time, which I failed to do this time.  :-/
 
-These "Bad page state" messages continue until kernel finally panics with a page
-fault in a seemingly random place:
+My guess is that others building such kernels don't often test against
+-next.
 
-[  17.544222] BUG: Bad page state in process apparmor_parser  pfn:1116f8
-[  OK  ] Finished Create Volatile Files and Directories
-          Starting Network Name Resolution...
-          Starting Network Time Synchronization...
-          Starting Update UTMP about System Boot/Shutdown...
-[  17.677144] BUG: unable to handle page fault for address: 0000396eb08090ec
-[  17.680395] #PF: supervisor read access in kernel mode
-[  17.681086] #PF: error code(0x0000) - not-present page
-[  17.681086] PGD 0 P4D 0
-[  17.681006] Opps: 0000 [#1] PREEMPT SMP NOPTI
-[  17.681006] CPU: 8 PID: 63 Con: ksoftirgd/8 Tainted: G  B  W        5.16.0 #3
-[  17.681606] Hardware name: LENOVO 20XF004WUS/20XF004WUS, BIOS R1NET44W (1.14) 11/08/2821
+For whatever it is worth, here is my overnight torture-everything test,
+which takes about 15 hours on a 16-CPU system:
 
-Rest of the kernel stack trace is in form of a picture which I can send if it helps. Kernel
-is compiled from git tag "v5.16". Details of mediatek controller:
+./tools/testing/selftests/rcutorture/bin/torture.sh --duration 10 --do-kcsan --kcsan-kmake-arg "CC=clang-11"
 
-$ lspci -v -s 03:00.0
-03:00.0 Network controller: MEDIATEK Corp. Device 7961
-	Subsystem: Lenovo Device e0bc
-	Physical Slot: 0
-	Flags: bus master, fast devsel, latency 0, IRQ 85, IOMMU group 11
-	Memory at 870200000 (64-bit, prefetchable) [size=1M]
-	Memory at 870300000 (64-bit, prefetchable) [size=16K]
-	Memory at 870304000 (64-bit, prefetchable) [size=4K]
-	Capabilities: [80] Express Endpoint, MSI 00
-	Capabilities: [e0] MSI: Enable+ Count=1/32 Maskable+ 64bit+
-	Capabilities: [f8] Power Management version 3
-	Capabilities: [100] Vendor Specific Information: ID=1556 Rev=1 Len=008 <?>
-	Capabilities: [108] Latency Tolerance Reporting
-	Capabilities: [110] L1 PM Substates
-	Capabilities: [200] Advanced Error Reporting
-	Kernel driver in use: mt7921e
-	Kernel modules: mt7921e
+> Anyway, applied directly. Thanks,
 
-This is an intermittent problem and I did not see this with 5.16-rc6 kernel.
-Please let me know if you need more information.
+Thank you!
 
-Thanks,
-Khalid
-
+							Thanx, Paul

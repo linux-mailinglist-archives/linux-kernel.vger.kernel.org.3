@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AE148A875
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D968B48A878
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235278AbiAKHdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348533AbiAKHdg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:33:36 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011E1C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:33:34 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id oa15so16102609pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:33:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oqXNJ2j7PHX7jdfHbj1OmcVM/6qrt9beU4Jr0UDdDBM=;
-        b=fu/inaHcA4oJJjld9ycVK20LK7Fg2v5+qOARz8NMPHrxEgyq+HcERWwpzWxs8HX5HO
-         Q+8MnCRDU/4gnwzlj2785YavsIE/rXNa7mIWqLgfiH5xtum0mYBHC2c3E8W04Zcxtziw
-         ERlgXvH3/iM+wpUA0uWVzKSYzl5Bo+xM4dvvs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oqXNJ2j7PHX7jdfHbj1OmcVM/6qrt9beU4Jr0UDdDBM=;
-        b=kkmp/SBrAvdMhumLKKzM5bpA1TtG/EwNcC/+SbIcuCZVQbhpiYEYdyABPjcdEqIk5z
-         lx3gr0qZTsO6DiWh1Lw2Wdq5sS/tCbk9aB08psY1ENQrq3kZ4OMifkdO+BuBkrUOg31W
-         wA1KXCIzfxZXu9mlCQwikBW2N+Gno/iQnyCIpoSUvRpGdmwTTRNgWI39E8y3DtQv6jKB
-         QaA9R9ZhIKbxWOxucT6qPW8qMfpuhFu9V9XatF+9Y2YoJdjolO7xDpb784vuXvxJXyw0
-         HEP3nbIiWlJskdf1aLQeRLXfUDAb2umbbeFXarccjr1gQDP6YirS+Kx5iLOH6XnUUgod
-         bVBQ==
-X-Gm-Message-State: AOAM531jP1QVy5pHwt8K8vbA0U9vJKu4P3ww1nahba0I5uk6EKaoJHVP
-        O6fhMQcrXEBKos/hMl6v+bxRuQ==
-X-Google-Smtp-Source: ABdhPJxQUzoSVu5Pe9hNadz6G9EwTi6SIfgszBUlDao6KSeiM4cUvomcNt/U+W4iDkqhItRBNmQlnQ==
-X-Received: by 2002:a17:902:7485:b0:14a:26a7:81e9 with SMTP id h5-20020a170902748500b0014a26a781e9mr3216253pll.88.1641886413451;
-        Mon, 10 Jan 2022 23:33:33 -0800 (PST)
-Received: from c7e15a8b922d ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id w9sm7270137pge.18.2022.01.10.23.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 23:33:32 -0800 (PST)
-Date:   Tue, 11 Jan 2022 07:33:24 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.14 000/169] 5.14.15-rc1 review
-Message-ID: <20220111073324.GA2799361@c7e15a8b922d>
-References: <20211025191017.756020307@linuxfoundation.org>
+        id S1348506AbiAKHen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:34:43 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:33538 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1348526AbiAKHej (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:34:39 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABXXlb0Mt1hJSIqBg--.35395S2;
+        Tue, 11 Jan 2022 15:34:12 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     jk@ozlabs.org, joel@jms.id.au, alistair@popple.id.au,
+        eajames@linux.ibm.com
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] fsi: core: Check error number after calling ida_simple_get
+Date:   Tue, 11 Jan 2022 15:34:11 +0800
+Message-Id: <20220111073411.614138-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211025191017.756020307@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowABXXlb0Mt1hJSIqBg--.35395S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFy3Xry7Cr1DJFyrWw4xtFb_yoWDGFgEkw
+        4kZr97XF45G3WxK3WjvFW3Z34jkFyqqF1fWFWqg3Zaq345ArW3Jr1jqFW5Ja1fGry7AFWU
+        ArnFgr4fZry7JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUBpB-UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 09:13:01PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.14.15 release.
-> There are 169 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+If allocation fails, the ida_simple_get() will return error number.
+So master->idx could be error number and be used in dev_set_name().
+Therefore, it should be better to check it and return error if fails,
+like the ida_simple_get() in __fsi_get_new_minor().
 
-Hi Greg,
+Fixes: 09aecfab93b8 ("drivers/fsi: Add fsi master definition")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/fsi/fsi-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Looking good.
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index 59ddc9fd5bca..92e6eebd1851 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -1309,6 +1309,9 @@ int fsi_master_register(struct fsi_master *master)
+ 
+ 	mutex_init(&master->scan_lock);
+ 	master->idx = ida_simple_get(&master_ida, 0, INT_MAX, GFP_KERNEL);
++	if (master->idx < 0)
++		return master->idx;
++
+ 	dev_set_name(&master->dev, "fsi%d", master->idx);
+ 	master->dev.class = &fsi_master_class;
+ 
+-- 
+2.25.1
 
-Run tested on:
-- SolidRun Cubox-i Dual/Quad - NXP iMX6 (Cubox-i4Pro) 
-
-In addition: build tested on:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- Intel x86_64
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi

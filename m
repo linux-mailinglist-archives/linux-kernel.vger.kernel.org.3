@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B688148A498
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B63148A49A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346028AbiAKA4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:56:39 -0500
-Received: from mga05.intel.com ([192.55.52.43]:62857 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229701AbiAKA4i (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:56:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641862598; x=1673398598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HFUd3/d50X45y8Ud4VwrANlmEf9WLntADXATJ1Z091Y=;
-  b=ELGGsFlEPHOL+TuqxgDtqoJANgUxs3qb7rdYN32a51JkpVCNiOS7hdHQ
-   Jjra1ohOZu+IGr2q9262gBi5oPct6oTra7CnuH+DYSvVNsUTuYBcwsLKI
-   DNttmdnqeeV0UYAKdOlyT+QmUzGBth/g7sjV+IcmTjwsHQS/x11fTOWgY
-   Hxg+ke0EUUMa7xPr46oa9XZuSznTRGXOD9cUqX1XRpG2bKEWuwBCGG12z
-   qHurW82ym+t/cqCrokM103jOzwzzU2ceguSxeuXft+8nLT75z4KnySCId
-   Q0jHnXY6cipYYa1A9Wa0/fj3WhihXtslSgs8B+wrUxUTsg6pfr8yZex4M
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="329713752"
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="329713752"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 16:56:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="622876040"
-Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.186])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 16:56:36 -0800
-Date:   Tue, 11 Jan 2022 08:56:02 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] ACPI: pfr_telemetry: Fix info leak in pfrt_log_ioctl()
-Message-ID: <20220111005602.GA987335@chenyu-desktop>
-References: <20220107073407.GG22086@kili>
- <20220107134617.GA895400@chenyu-desktop>
- <20220110061713.GA1951@kadam>
+        id S1346031AbiAKA5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346014AbiAKA5I (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 19:57:08 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9941EC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:57:08 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id pf13so7307288pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U+Wx73GN18nvNIxW83NvEPo0/N8UDKXuIJQiQCJDnlQ=;
+        b=W3uF1D/1TcPvfyCWEuQlCC/ZfqmxcCgVeUkXDF2tP0gUnoSZjf5vsm4z4RnSaC+VzG
+         9mCRsKcXyQ9qqbaEeyon8nAdKJkcbgXfLWa/My5hClQZV9DSLea+6U+mBDwA7aHFto01
+         kM/r6zJGX6DuGWYWcWGAUzJpBlpMSvRLSkwB/+o5VoxYqjFEZjq0fCuFFENKnlM2P3Or
+         oYZuf+4C5kuyIchn2HnbVjzxEgKkcXvlBYS6mzR9pohNotyLnPk/UKOvtqOyQOrmwbkB
+         JK7Jqul1MzLKItoxcEV28I22HO0VzyQ8iioEmV718/b+11ZrLMslwNCchDjygZeUZGp1
+         FS1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U+Wx73GN18nvNIxW83NvEPo0/N8UDKXuIJQiQCJDnlQ=;
+        b=cCAxtuVpBHSizTWleJaAJ+kyZJrDNiNKQLAWRfsvPsSTkxHvDd/5jj6suzeQqWzx7X
+         7HnRkMzqXUEboQENjnd7CxBN04LtQmmLVPO1VZgL2c75RtwdKPP6iJrdNVEmxJAUd6d7
+         1HUCbqY3/YhVLx1GoKs/WOrS3B/n/9ZQbBYqUkCQjfFWBsDkWwrkni02tFzPPtEPjiWk
+         7Px77KNHGoYsEIWUVHvB8PXhvXK/89A5E53kSQ3Erm5x9sOutQR5SM453s3QWwTyxsd7
+         fPiXzESFyCy/5AUWbOVJ0xPoavpEqtF4J18DGumeOB/C612VS/FzZBbDveBlBjYPtKFC
+         X+3g==
+X-Gm-Message-State: AOAM5302sKFo9hsDVu1istFxJoGWS9epBFzZ3p013OJEg84QaIdGBOHd
+        dGOBjIGH1lXenwM9xzMFJ5dbWg==
+X-Google-Smtp-Source: ABdhPJyaxEHTTqdck5k/nSmI+nCln5IHFkOM+cvXjeodmuDO+C5RFav2V+9vgqFil9ytGRtHWnCdlg==
+X-Received: by 2002:a63:68c6:: with SMTP id d189mr2056686pgc.32.1641862627949;
+        Mon, 10 Jan 2022 16:57:07 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id mq12sm218893pjb.48.2022.01.10.16.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 16:57:07 -0800 (PST)
+Date:   Tue, 11 Jan 2022 00:57:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
+Message-ID: <YdzV33X5w6+tCamI@google.com>
+References: <20220110034747.30498-1-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220110061713.GA1951@kadam>
+In-Reply-To: <20220110034747.30498-1-likexu@tencent.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 09:17:13AM +0300, Dan Carpenter wrote:
-> On Fri, Jan 07, 2022 at 09:46:17PM +0800, Chen Yu wrote:
-> > On Fri, Jan 07, 2022 at 10:34:07AM +0300, Dan Carpenter wrote:
-> > > The "data_info" struct is copied to the user.  It has a 4 byte struct
-> > > hole after the last struct member so we need to memset that to avoid
-> > > copying uninitialized stack data to the user.
-> > > 
-> > > Fixes: b0013e037a8b ("ACPI: Introduce Platform Firmware Runtime Telemetry driver")
-> > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > > ---
-> > > When you're adding a new driver to the kernel then please use the new
-> > > driver's prefix instead of just the subsystem prefix.
-> > > 
-> > >  Bad: ACPI: Introduce Platform Firmware Runtime Telemetry driver
-> > > Good: ACPI / pfr_telemetry: Introduce Platform Firmware Runtime Telemetry driver
-> > > 
-> > Thanks for pointing this out.
-> > > Otherwise it's just up to me to guess what prefix you wanted.
-> > > 
-> > >  drivers/acpi/pfr_telemetry.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/acpi/pfr_telemetry.c b/drivers/acpi/pfr_telemetry.c
-> > > index da50dd80192c..9abf350bd7a5 100644
-> > > --- a/drivers/acpi/pfr_telemetry.c
-> > > +++ b/drivers/acpi/pfr_telemetry.c
-> > > @@ -83,6 +83,7 @@ static int get_pfrt_log_data_info(struct pfrt_log_data_info *data_info,
-> > >  	union acpi_object *out_obj, in_obj, in_buf;
-> > >  	int ret = -EBUSY;
-> > >  
-> > > +	memset(data_info, 0, sizeof(*data_info));
-> > Just one minor question, how about moving above before:
-> > data_info->status = out_obj->package.elements[LOG_STATUS_IDX].integer.value;
-> > after the sanity check of the _DSM result?
+On Mon, Jan 10, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> I guess I wanted to keep all the memsets together.  I feel like if the
-> data is invalid, then it's going to be a slow path and it's not worth
-> optimizing that case.  If the data is invalid then a little slow down is
-> the least of our concerns.
->
-Ok, got it.
+> Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
+> Tracing, it exposes details about the asynchronous events, when they are
+> generated, and when their corresponding software event handler completes
+> execution) cannot be safely and fully emulated by the KVM, especially
+> emulating the simultaneous writing of guest PT packets generated by
+> the KVM to the guest PT buffer.
+> 
+> For KVM, it's better to advertise currently supported features based on
+> the "static struct pt_cap_desc" implemented in the host PT driver and
+> ignore _all_ unknown features before they have been investigated one by
+> one and supported in a safe manner, leaving the rest as system-wide-only
+> tracing capabilities.
+> 
+> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+> v1 -> v2 Changelog:
+> - Be safe and ignore _all_ unknown capabilities. (Paolo)
+> 
+> Previous:
+> https://lore.kernel.org/kvm/20220106085533.84356-1-likexu@tencent.com/
+> 
+>  arch/x86/kvm/cpuid.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 0b920e12bb6d..439b93359848 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>  			break;
+>  		}
+>  
+> +		/* It's better to be safe and ignore _all_ unknown capabilities. */
 
-thanks,
-Chenyu 
+No need to justify why unknown capabilities are hidden as that's very much (supposed
+to be) standard KVM behavior.
+
+> +		entry->ebx &= GENMASK(5, 0);
+
+Please add a #define somewhere so that this is self-documenting, e.g. see
+KVM_SUPPORTED_XCR0.
+
+And why just EBX?  ECX appears to enumerate features too, and EDX is presumably
+reserved to enumerate yet more features when EBX/ECX run out of bits.
+
+And is there any possibility of a malicious user/guest using features to cause
+problems in the host?  I.e. does KVM need to enforce that the guest can't enable
+any unsupported features?
+
+>  		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+>  			if (!do_host_cpuid(array, function, i))
+>  				goto out;
+> -- 
+> 2.33.1
 > 

@@ -2,66 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD08148A8CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ACB48A8D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348694AbiAKHth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:49:37 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:42753 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235837AbiAKHth (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:49:37 -0500
-Received: from [192.168.0.5] (ip5f5aed25.dynamic.kabel-deutschland.de [95.90.237.37])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S1348701AbiAKHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:50:22 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:32828 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235852AbiAKHuV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:50:21 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 936B761EA191E;
-        Tue, 11 Jan 2022 08:49:34 +0100 (CET)
-Message-ID: <94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de>
-Date:   Tue, 11 Jan 2022 08:49:34 +0100
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B7C6F1F3B6;
+        Tue, 11 Jan 2022 07:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641887419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f3gaq6Fpe5yLaoONtNRasnCAJt2YNbe9vyw0v/wh8RM=;
+        b=Cr1hVVSDkKm8OAexg5DDB+dGf2zC7om6VHZeb89mGfgZairV5/zYM6qqomXYu703GAn+c7
+        KsXGU7mMbwD8CSnLwifyQrQgR2LHnrd5PcFRQjNN04bq2Ca9tFnDzW3Yitt7jty2FqlJvT
+        kKDgGz2RJseZzFFy2+9/pkBFvyKWyFE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641887419;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f3gaq6Fpe5yLaoONtNRasnCAJt2YNbe9vyw0v/wh8RM=;
+        b=aM2phZ+2niAVTXvv0kG1thwWspUyZUJkS7JegG6g8PcnsEHUIelzKess/CCVQQbsg57Z0y
+        UV7XEbV7GitE6iCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 37DC313638;
+        Tue, 11 Jan 2022 07:50:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OXZVCbs23WHEfwAAMHmgww
+        (envelope-from <nstange@suse.de>); Tue, 11 Jan 2022 07:50:19 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Stephan Mueller <smueller@chronox.de>,
+        Nicolai Stange <nstange@suse.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
+        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
+Subject: Re: [PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)
+In-Reply-To: <Yd0gInht+V+Kcsw2@gondor.apana.org.au> (Herbert Xu's message of
+        "Tue, 11 Jan 2022 17:13:54 +1100")
+References: <20211209090358.28231-1-nstange@suse.de> <87r1a7thy0.fsf@suse.de>
+        <YcvEkfS4cONDXXB9@gondor.apana.org.au>
+        <2468270.qO8rWLYou6@tauon.chronox.de>
+        <YdepEhTI/LB9wdJr@gondor.apana.org.au>
+        <Yd0gInht+V+Kcsw2@gondor.apana.org.au>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+Date:   Tue, 11 Jan 2022 08:50:18 +0100
+Message-ID: <871r1eyamd.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: kmemleak detects leak in msr_build_context
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+Hi Herbert,
 
+Herbert Xu <herbert@gondor.apana.org.au> writes:
 
-Running Linux from commit bf4eebf8cfa2 (Merge tag 
-'linux-kselftest-kunit-5.17-rc1' of 
-git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest), 
-kmemleak reported the leak below:
+> On Fri, Jan 07, 2022 at 01:44:34PM +1100, Herbert Xu wrote:
+>>
+>> I'm already writing this up for sha1 anyway so let me polish it
+>> off and I'll post it soon which you can then reuse it for dh.
+>
+> Here is something that seems to work for sha1/hmac.  Please let
+> me know if you see any issues with this approach for dh.
+>
+> Thanks,
+>
+> ---8<---
+> Currently we do not distinguish between algorithms that fail on
+> the self-test vs. those which are disabled in FIPS mode (not allowed).
+> Both are marked as having failed the self-test.
+>
+> As it has been requested that we need to disable sha1 in FIPS
+> mode while still allowing hmac(sha1) this approach needs to change.
+>
+> This patch allows this scenario by adding a new flag FIPS_INTERNAL
+> to indicate those algorithms that have passed the self-test and are
+> not FIPS-allowed.  They can then be used for the self-testing of
+> other algorithms or by those that are explicitly allowed to use them
+> (currently just hmac).
 
-```
-unreferenced object 0xffff8914823de500 (size 64):
-   comm "swapper/0", pid 1, jiffies 4294667581 (age 1253.406s)
-   hex dump (first 32 bytes):
-     00 00 00 00 00 00 00 00 04 10 01 c0 00 00 00 00  ................
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-   backtrace:
-     [<000000007f3b05e9>] __kmalloc+0x177/0x330
-     [<0000000008104cca>] msr_build_context.constprop.0+0x32/0xbe
-     [<00000000012bab4e>] msr_save_cpuid_features+0x28/0x2f
-     [<00000000b7a2262e>] pm_check_save_msr+0x2e/0x40
-     [<00000000cbe9d92d>] do_one_initcall+0x44/0x200
-     [<0000000094deab7b>] kernel_init_freeable+0x1fc/0x273
-     [<00000000d3dbaa56>] kernel_init+0x16/0x160
-     [<0000000058c4a8b3>] ret_from_fork+0x22/0x30
-```
+I haven't tried, but wouldn't this allow the instantiation of e.g.
+hmac(blake2s-256) in FIPS mode?
 
+Thanks,
 
-Kind regards,
+Nicolai
 
-Paul
+>
+> Note that as a side-effect of this patch algorithms which are not
+> FIPS-allowed will now return ENOENT instead of ELIBBAD.  Hopefully
+> this is not an issue as some people were relying on this already.
+>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>
+
+--=20
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
+ermany
+(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev

@@ -2,218 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9981948B573
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1B748B57B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243714AbiAKSLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:11:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34576 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242957AbiAKSLE (ORCPT
+        id S243608AbiAKSMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:12:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23856 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233632AbiAKSL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:11:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA8B61618;
-        Tue, 11 Jan 2022 18:11:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53188C36AE9;
-        Tue, 11 Jan 2022 18:11:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dvzCGTvB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641924662;
+        Tue, 11 Jan 2022 13:11:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641924719;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y8yaQEJdWGKWQITH4vgPEpVGHGMGT1Gu/a6CeJDd8tQ=;
-        b=dvzCGTvB1Pg32mCHrz4E6Puayjl+0i4DqkMN4pZfMUNkE1XsZwpkTzbvp1fJ4gwTxW0Y6d
-        LgVIBkKoRzRNyoEJa6aL1HsauIIIWLRr/25GQo1GDBOvzlVdJytf4+gIJUkKuVElXDnFwn
-        kScQn3msxVxV8oT8h6AWUp//nGlev1Y=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 840ddccb (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 11 Jan 2022 18:11:01 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, geert@linux-m68k.org, tytso@mit.edu,
-        gregkh@linuxfoundation.org, jeanphilippe.aumasson@gmail.com,
-        ardb@kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH crypto v2 2/2] lib/crypto: sha1: re-roll loops to reduce code size
-Date:   Tue, 11 Jan 2022 19:10:37 +0100
-Message-Id: <20220111181037.632969-3-Jason@zx2c4.com>
-In-Reply-To: <20220111181037.632969-1-Jason@zx2c4.com>
-References: <20220111134934.324663-1-Jason@zx2c4.com>
- <20220111181037.632969-1-Jason@zx2c4.com>
+        bh=3hgp9TNlhmh2F8YJ1u7gu8AeVl0SpLbsYxPdRZu+7iA=;
+        b=JOw8EX1nJj3SXxjaOeMfLhS4IkDdhnMFtES6rIw4VgMK/Ew/uMSjgbX0SvSQcO6A+BYlJt
+        Cxfe4AI77S2mqVZa1gi0ko88ftAoPLCgYQHuMCVXIF6UH1tznWSQoYpeb2CRP4kF6gOo8w
+        LM2P02kqt+NMkFbPXJBH/CYcQ4ZQ+lw=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-x0cfN5niO8i4eSGvDiPtNg-1; Tue, 11 Jan 2022 13:11:58 -0500
+X-MC-Unique: x0cfN5niO8i4eSGvDiPtNg-1
+Received: by mail-qv1-f72.google.com with SMTP id ke27-20020a056214301b00b004178da03fd5so96546qvb.17
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:11:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=3hgp9TNlhmh2F8YJ1u7gu8AeVl0SpLbsYxPdRZu+7iA=;
+        b=NyQX4FquJiH2ktcOx+oqIKOYFr1lUZ1+cQuLaFDmXB5N7sck3n+dmog3CqaJwNBhQC
+         keeatg631DJmu9dWh3h7OKIfNf9i4HTvjZoN/g5siT6znmz5SQ0+SDKe61i7U10zgcoQ
+         KIF2/QvGW7qaTv3qoBwNGHU7SM7mV82g3ZWyF4jwxGoVR4g2n3WKPdRc+aWgT27l+2Xp
+         RGowPw6539jZ3JvydG7kKQSbqvZqqYaLh4vxCP5a7SePCqKUUz7y4cW5jMOvIjkdeCyK
+         qvO6D5aTR0CT4mmuGQ7bh040CjEUgweCgwAxbbSxJsBuBDLZ5jh3Q/5wPn+aPMmbm6k5
+         aHfQ==
+X-Gm-Message-State: AOAM533as4+MXHltjVuJ2lcZ8TLFu8bPUUGRZmoiDJdbFDAVX6/VAvlX
+        DuRVnDs+SEATzTbbm2BJVZ1+bbCX9HmosCahUOpLRJMktyK+Uzrcbss+nYWMXF7xw9LlXsNl6Np
+        xia7gQHvufB1qUlvFX+P6wKzp
+X-Received: by 2002:a37:ef17:: with SMTP id j23mr3846392qkk.400.1641924716777;
+        Tue, 11 Jan 2022 10:11:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyvsxA+do5OMy7/Gkj99hwDfSQMXE+E3UHnj4iMm90i8YoXCddk9cREEvoOwLscfzjDtZ8gfg==
+X-Received: by 2002:a37:ef17:: with SMTP id j23mr3846376qkk.400.1641924716545;
+        Tue, 11 Jan 2022 10:11:56 -0800 (PST)
+Received: from [192.168.8.138] (pool-98-118-105-43.bstnma.ftas.verizon.net. [98.118.105.43])
+        by smtp.gmail.com with ESMTPSA id o17sm7804481qtv.87.2022.01.11.10.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 10:11:56 -0800 (PST)
+Message-ID: <83a52893a963f37cb1c86f0b95c9a84091620361.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/core/object: Fix the uninitialized use of
+ "type"
+From:   Lyude Paul <lyude@redhat.com>
+To:     Yizhuo Zhai <yzhai003@ucr.edu>
+Cc:     stable@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 11 Jan 2022 13:11:54 -0500
+In-Reply-To: <20211218025632.2514288-1-yzhai003@ucr.edu>
+References: <20211218025632.2514288-1-yzhai003@ucr.edu>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With SHA-1 no longer being used for anything performance oriented, and
-also soon to be phased out entirely, we can make up for the space added
-by unrolled BLAKE2s by simply re-rolling SHA-1. Since SHA-1 is so much
-more complex, re-rolling it more or less takes care of the code size
-added by BLAKE2s. And eventually, hopefully we'll see SHA-1 removed
-entirely from most small kernel builds.
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- lib/sha1.c | 117 ++++++++++++-----------------------------------------
- 1 file changed, 25 insertions(+), 92 deletions(-)
+On Fri, 2021-12-17 at 18:56 -0800, Yizhuo Zhai wrote:
+> In function nvkm_ioctl_map(), the variable "type" could be
+> uninitialized if "nvkm_object_map()" returns error code, however,
+> it does not check the return value and directly use the "type" in
+> the if statement, which is potentially unsafe.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 01326050391c ("drm/nouveau/core/object: allow arguments to be passed
+> to map function")
+> Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/core/ioctl.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/core/ioctl.c
+> b/drivers/gpu/drm/nouveau/nvkm/core/ioctl.c
+> index 735cb6816f10..4264d9d79783 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/core/ioctl.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/core/ioctl.c
+> @@ -266,6 +266,8 @@ nvkm_ioctl_map(struct nvkm_client *client,
+>                 ret = nvkm_object_map(object, data, size, &type,
+>                                       &args->v0.handle,
+>                                       &args->v0.length);
+> +               if (ret)
+> +                       return ret;
+>                 if (type == NVKM_OBJECT_MAP_IO)
+>                         args->v0.type = NVIF_IOCTL_MAP_V0_IO;
+>                 else
 
-diff --git a/lib/sha1.c b/lib/sha1.c
-index 9bd1935a1472..f2acfa294e64 100644
---- a/lib/sha1.c
-+++ b/lib/sha1.c
-@@ -9,6 +9,7 @@
- #include <linux/kernel.h>
- #include <linux/export.h>
- #include <linux/bitops.h>
-+#include <linux/string.h>
- #include <crypto/sha1.h>
- #include <asm/unaligned.h>
- 
-@@ -83,109 +84,41 @@
-  */
- void sha1_transform(__u32 *digest, const char *data, __u32 *array)
- {
--	__u32 A, B, C, D, E;
-+	u32 d[5];
-+	unsigned int i = 0;
- 
--	A = digest[0];
--	B = digest[1];
--	C = digest[2];
--	D = digest[3];
--	E = digest[4];
-+	memcpy(d, digest, sizeof(d));
- 
- 	/* Round 1 - iterations 0-16 take their input from 'data' */
--	T_0_15( 0, A, B, C, D, E);
--	T_0_15( 1, E, A, B, C, D);
--	T_0_15( 2, D, E, A, B, C);
--	T_0_15( 3, C, D, E, A, B);
--	T_0_15( 4, B, C, D, E, A);
--	T_0_15( 5, A, B, C, D, E);
--	T_0_15( 6, E, A, B, C, D);
--	T_0_15( 7, D, E, A, B, C);
--	T_0_15( 8, C, D, E, A, B);
--	T_0_15( 9, B, C, D, E, A);
--	T_0_15(10, A, B, C, D, E);
--	T_0_15(11, E, A, B, C, D);
--	T_0_15(12, D, E, A, B, C);
--	T_0_15(13, C, D, E, A, B);
--	T_0_15(14, B, C, D, E, A);
--	T_0_15(15, A, B, C, D, E);
-+	for (; i < 16; ++i)
-+		T_0_15(i, d[(-6 - i) % 5], d[(-5 - i) % 5],
-+		       d[(-4 - i) % 5], d[(-3 - i) % 5], d[(-2 - i) % 5]);
- 
- 	/* Round 1 - tail. Input from 512-bit mixing array */
--	T_16_19(16, E, A, B, C, D);
--	T_16_19(17, D, E, A, B, C);
--	T_16_19(18, C, D, E, A, B);
--	T_16_19(19, B, C, D, E, A);
-+	for (; i < 20; ++i)
-+		T_16_19(i, d[(-6 - i) % 5], d[(-5 - i) % 5],
-+			d[(-4 - i) % 5], d[(-3 - i) % 5], d[(-2 - i) % 5]);
- 
- 	/* Round 2 */
--	T_20_39(20, A, B, C, D, E);
--	T_20_39(21, E, A, B, C, D);
--	T_20_39(22, D, E, A, B, C);
--	T_20_39(23, C, D, E, A, B);
--	T_20_39(24, B, C, D, E, A);
--	T_20_39(25, A, B, C, D, E);
--	T_20_39(26, E, A, B, C, D);
--	T_20_39(27, D, E, A, B, C);
--	T_20_39(28, C, D, E, A, B);
--	T_20_39(29, B, C, D, E, A);
--	T_20_39(30, A, B, C, D, E);
--	T_20_39(31, E, A, B, C, D);
--	T_20_39(32, D, E, A, B, C);
--	T_20_39(33, C, D, E, A, B);
--	T_20_39(34, B, C, D, E, A);
--	T_20_39(35, A, B, C, D, E);
--	T_20_39(36, E, A, B, C, D);
--	T_20_39(37, D, E, A, B, C);
--	T_20_39(38, C, D, E, A, B);
--	T_20_39(39, B, C, D, E, A);
-+	for (; i < 40; ++i)
-+		T_20_39(i, d[(-6 - i) % 5], d[(-5 - i) % 5],
-+			d[(-4 - i) % 5], d[(-3 - i) % 5], d[(-2 - i) % 5]);
- 
- 	/* Round 3 */
--	T_40_59(40, A, B, C, D, E);
--	T_40_59(41, E, A, B, C, D);
--	T_40_59(42, D, E, A, B, C);
--	T_40_59(43, C, D, E, A, B);
--	T_40_59(44, B, C, D, E, A);
--	T_40_59(45, A, B, C, D, E);
--	T_40_59(46, E, A, B, C, D);
--	T_40_59(47, D, E, A, B, C);
--	T_40_59(48, C, D, E, A, B);
--	T_40_59(49, B, C, D, E, A);
--	T_40_59(50, A, B, C, D, E);
--	T_40_59(51, E, A, B, C, D);
--	T_40_59(52, D, E, A, B, C);
--	T_40_59(53, C, D, E, A, B);
--	T_40_59(54, B, C, D, E, A);
--	T_40_59(55, A, B, C, D, E);
--	T_40_59(56, E, A, B, C, D);
--	T_40_59(57, D, E, A, B, C);
--	T_40_59(58, C, D, E, A, B);
--	T_40_59(59, B, C, D, E, A);
-+	for (; i < 60; ++i)
-+		T_40_59(i, d[(-6 - i) % 5], d[(-5 - i) % 5],
-+			d[(-4 - i) % 5], d[(-3 - i) % 5], d[(-2 - i) % 5]);
- 
- 	/* Round 4 */
--	T_60_79(60, A, B, C, D, E);
--	T_60_79(61, E, A, B, C, D);
--	T_60_79(62, D, E, A, B, C);
--	T_60_79(63, C, D, E, A, B);
--	T_60_79(64, B, C, D, E, A);
--	T_60_79(65, A, B, C, D, E);
--	T_60_79(66, E, A, B, C, D);
--	T_60_79(67, D, E, A, B, C);
--	T_60_79(68, C, D, E, A, B);
--	T_60_79(69, B, C, D, E, A);
--	T_60_79(70, A, B, C, D, E);
--	T_60_79(71, E, A, B, C, D);
--	T_60_79(72, D, E, A, B, C);
--	T_60_79(73, C, D, E, A, B);
--	T_60_79(74, B, C, D, E, A);
--	T_60_79(75, A, B, C, D, E);
--	T_60_79(76, E, A, B, C, D);
--	T_60_79(77, D, E, A, B, C);
--	T_60_79(78, C, D, E, A, B);
--	T_60_79(79, B, C, D, E, A);
--
--	digest[0] += A;
--	digest[1] += B;
--	digest[2] += C;
--	digest[3] += D;
--	digest[4] += E;
-+	for (; i < 80; ++i)
-+		T_60_79(i, d[(-6 - i) % 5], d[(-5 - i) % 5],
-+			d[(-4 - i) % 5], d[(-3 - i) % 5], d[(-2 - i) % 5]);
-+
-+	digest[0] += d[0];
-+	digest[1] += d[1];
-+	digest[2] += d[2];
-+	digest[3] += d[3];
-+	digest[4] += d[4];
- }
- EXPORT_SYMBOL(sha1_transform);
- 
 -- 
-2.34.1
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

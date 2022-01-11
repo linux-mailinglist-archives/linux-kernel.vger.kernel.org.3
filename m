@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE4548AB12
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC7448AB16
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348440AbiAKKKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:10:12 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58829 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237384AbiAKKKL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:10:11 -0500
-Received: from [77.244.183.192] (port=64326 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1n7E6T-000ER6-CL; Tue, 11 Jan 2022 11:10:09 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
- only)
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
-Message-ID: <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
-Date:   Tue, 11 Jan 2022 11:10:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1348494AbiAKKLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:11:53 -0500
+Received: from mga04.intel.com ([192.55.52.120]:5533 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237473AbiAKKLt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 05:11:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641895909; x=1673431909;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6/lDCyktziNUijHGvCdrqEFsA50vOCVpKeSqLtCdLxY=;
+  b=Ct6Yvz1fq6lEjYcfknickBIYUvYvmhVrD5nakPhjc+Wq2OUF4AJ/cGBv
+   o4wSj5QZR9eQX63y8J3YyuGn3jXUp5gKHgVCFomIrLf/Iad/9QRkU0VrU
+   ZqNPi17cBX1u+My11NNNBOoIdcz+yLps1g4mWfTmXfeI/eUzh5wwFR0Pi
+   z4HO2YRHqqLyWEB5aX2y6BOjYXDj4sQI6DKrNRmJjkfvlrFgFxLmuH8tQ
+   VUpDvwtnluZ6khPRG8e2dcyI+Jx+QX+FxTK9SpX8Bome0Njh0rjTiFwfy
+   vonelQ1PlRAd+wZivPd1W3W58OPks80CPpJHT7JM2VBrA2poQfmMLMKGH
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="242263851"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="242263851"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 02:11:44 -0800
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="474482561"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 02:11:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n7E6m-009BWQ-If;
+        Tue, 11 Jan 2022 12:10:28 +0200
+Date:   Tue, 11 Jan 2022 12:10:28 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v1 1/1] vsprintf: Fix potential unaligned access
+Message-ID: <Yd1XlN0e23GRF9i6@smile.fi.intel.com>
+References: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
+ <YdyvXq8D2jsiM47E@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211211175951.30763-1-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdyvXq8D2jsiM47E@paasikivi.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
-
-On 11/12/21 18:59, Luca Ceresoli wrote:
-> Hi,
+On Tue, Jan 11, 2022 at 12:12:46AM +0200, Sakari Ailus wrote:
+> On Mon, Jan 10, 2022 at 10:50:49PM +0200, Andy Shevchenko wrote:
+> > The %p4cc specifier in some cases might get an unaligned pointer.
+> > Due to this we need to make copy to local variable once to avoid
+> > potential crashes on some architectures due to improper access.
 > 
-> this series adds minimal drivers for the Maxim Semiconductor MAX77714
-> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
-> Only RTC and watchdog are implemented by these patches.
-> 
-> All implemented functionality is tested and working: RTC read/write,
-> watchdog start/stop/ping/set_timeout.
-> 
-> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
-> indentation and can probably be applied easily.
-> 
-> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
-> rtc driver.
+> I guess this problem exists virtually everywhere where pointers are being
+> handled: the pointer could be unaligned.
 
-A gentle ping about this series. It's at v5, all patches have at least
-one ack/review tag and most patches are unchanged since ~v2. It applies
-cleanly on current master.
+True. And my patch improves the situation.
+See, for example, 0f70fe605fad ("hexdump: fix for non-aligned buffers").
 
-Is there anything I should do to help making progress?
+> Does this even address the false
+> positive compiler warning?
 
-Regards,
+First of all, the warning is real and legit, it's not false positive.
+Second, no, this is another side of the fix.
+
 -- 
-Luca
+With Best Regards,
+Andy Shevchenko
+
+

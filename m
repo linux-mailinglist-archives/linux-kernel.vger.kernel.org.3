@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C7548BB0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B6548BB1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346290AbiAKWzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:55:47 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:46018 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244306AbiAKWzn (ORCPT
+        id S1346693AbiAKW5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:57:22 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:50484 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232788AbiAKW5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:55:43 -0500
-Received: by mail-oi1-f173.google.com with SMTP id t9so1058660oie.12;
-        Tue, 11 Jan 2022 14:55:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OpLEV/BBaHh9HARHCaSK6mtjMzAdJsBjFUIg/RQ2Zbo=;
-        b=bhAK8Y/8WFjirDxDJ5xHFngSDWfA4OoGKySZrUMQx+8++RMBUCi4t+AjJnb3XfB1Sk
-         Tc1dA2M+8bll5tVh23QUFKWL+V+75DYv/TPM5AwD/RHOj/8vgIwEuEAEsnnO6Zei5Uam
-         LpkSi+dTJGgUGAhsi16IQcDgxVfH4wEJvTmCN22XAZt7QyrpGFwgNwkwJuoPRj24qOB6
-         sT/7CpHxPKMALlCI55rgJINyutRPh8jwegFeLYQBA93BqgY3r6MJM+NjzG1uaCzO0038
-         G1ha/d9peHoviWmgDV5tqKOVs4G17sQR/jT+HuzHCyiZb4CnUsFIyg3E4zKDPCaJSX27
-         IzrQ==
-X-Gm-Message-State: AOAM5335Dk4NoGjGVddi11S84t3qFEbt6kUwgIFP7icZgWyyKtP7TEPB
-        WVunfs99qqZKmZjp4KhuaQ==
-X-Google-Smtp-Source: ABdhPJx62RzcEFMWgL9929SGMfCClfFDhsXGUcXn5ew/3DlwxonlMFAywDVb0NlUUr6JUR8sCXwuoA==
-X-Received: by 2002:a05:6808:658:: with SMTP id z24mr3290631oih.62.1641941741719;
-        Tue, 11 Jan 2022 14:55:41 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f18sm236620oop.9.2022.01.11.14.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 14:55:41 -0800 (PST)
-Received: (nullmailer pid 3660995 invoked by uid 1000);
-        Tue, 11 Jan 2022 22:55:40 -0000
-Date:   Tue, 11 Jan 2022 16:55:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Hewitt <christianshewitt@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Benoit Masson <yahoo@perenite.com>
-Subject: Re: [PATCH v2 5/9] dt-bindings: arm: amlogic: add A95XF3-AIR bindings
-Message-ID: <Yd4K7PqBM/qNLDkI@robh.at.kernel.org>
-References: <20220103163956.6581-1-christianshewitt@gmail.com>
- <20220103163956.6581-6-christianshewitt@gmail.com>
+        Tue, 11 Jan 2022 17:57:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=OQRrkSTzK0n2WDJnypN3nkxt91IMNAOuhsahp7OKxa8=; b=KASG806faBlkocf5OxJutxFfjt
+        Q2Rq0vzUYgks/O2fPyDrMfuizAeXHbGXh5Izvf03QMvn2B3RwpB35Esksrmjrv85a9insfOiANy7X
+        iy8Zrk7/owfI5HBic+G+Ixs2m099TRUxO/3SD23ZvKDo3KEkg0yAyV/iPgywJQiU89CeHexxMsYuf
+        d7as7kWdOJ+D2EqYesK1ndcMFIVPRUxJctobC7V0jle+U2OnvCkDi3yQaOL+NpGorTTtjQQ0D1oHs
+        EBseJaH5yao5ZC2TwuQYdDHy/OhZERMlK084dXpQB3hAka/ZxR1E3eWZrT/W5gl29sRcnbHcji1/Q
+        gg3A1BUQ==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1n7Q4i-009nqq-GT; Tue, 11 Jan 2022 15:57:09 -0700
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nvdimm@lists.linux.dev
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
+ <20220111004126.GJ2328285@nvidia.com> <Yd0IeK5s/E0fuWqn@casper.infradead.org>
+ <20220111150142.GL2328285@nvidia.com> <Yd3Nle3YN063ZFVY@casper.infradead.org>
+ <20220111202159.GO2328285@nvidia.com> <Yd311C45gpQ3LqaW@casper.infradead.org>
+ <20220111225306.GR2328285@nvidia.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <9fe2ada2-f406-778a-a5cd-264842906a31@deltatee.com>
+Date:   Tue, 11 Jan 2022 15:57:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103163956.6581-6-christianshewitt@gmail.com>
+In-Reply-To: <20220111225306.GR2328285@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: nvdimm@lists.linux.dev, dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org, linux-block@vger.kernel.org, ming.lei@redhat.com, jhubbard@nvidia.com, joao.m.martins@oracle.com, hch@lst.de, linux-kernel@vger.kernel.org, willy@infradead.org, jgg@nvidia.com
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: Phyr Starter
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 04:39:52PM +0000, Christian Hewitt wrote:
-> Add board bindings for the CYX A95XF3-AIR set-top box which ships
-> with model variants distiguished by Ethernet configuration: models
 
-typo: distinguished
 
-> using external Gigabit PHY have a -gbit suffix, while models using
-> an internal 10/100 PHY have no suffix.
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/amlogic.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+On 2022-01-11 3:53 p.m., Jason Gunthorpe wrote:
+> I just want to share the whole API that will have to exist to
+> reasonably support this flexible array of intervals data structure..
 
-Otherwise,
+Is that really worth it? I feel like type safety justifies replicating a
+bit of iteration and allocation infrastructure. Then there's no silly
+mistakes of thinking one array is one thing when it is not.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Logan

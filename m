@@ -2,232 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA21F48AD17
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EB648AD22
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239327AbiAKLzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 06:55:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33206 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239003AbiAKLy5 (ORCPT
+        id S239341AbiAKL5K convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jan 2022 06:57:10 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:47536 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239328AbiAKL5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 06:54:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641902097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L8tUAuU3sx4wnqm2mHqp+w//Djo25ItZNH0jpA9WCOg=;
-        b=fqSQLKMmsDReoL19xKfx3Z0fgdD+i0T9pAf5w+PSn4ZggUCSjTJsgxu6+AcTYWB2F3JJCv
-        17bOrlDey9RVXgA/xZGljfVF0NmtjCLxAt+SOZhgGwb+lo9W+5r+uu2E664yLkK6KaX3BL
-        cySAw/Eexd1NjpV84RLU81wbcXc03B0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-356-okqL-GjvNy-fJyVdzmWXBQ-1; Tue, 11 Jan 2022 06:54:55 -0500
-X-MC-Unique: okqL-GjvNy-fJyVdzmWXBQ-1
-Received: by mail-wm1-f69.google.com with SMTP id i81-20020a1c3b54000000b003467c58cbddso1411276wma.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 03:54:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=L8tUAuU3sx4wnqm2mHqp+w//Djo25ItZNH0jpA9WCOg=;
-        b=Lkp2HZXgKbAzRZPwIsTHsBVIAKlxQx5E+fVXqSbkfyz7Y5YqxiSXu5sDSl78l53FKs
-         AmCEdtivgsVlc5TqgPi+OkjFaDi2SCCyk5QmHpAxbP9HYlnBEegHVeJXQwG107auIz8E
-         pq7uHQONAjuTGOBTL7sLrwbnzIIjpjgXKtEnjzcuhol9uJuxJePkVYbQ3hjmeyNhV1OY
-         Bv8v4MrutUP1hGBxFmXHBnPgZ05/a8TqYPfW5dkYT56Ip4m8E2vO+p7Vs4DO21366UP9
-         V/e0jy6e1VcmMtzRIFdK5lNAwpIg5YSO8F2abDeScx+9isaItG3hA02v6HUF3K9sa8UI
-         zAKQ==
-X-Gm-Message-State: AOAM531A9i4rggeH+VwLBdlEOOUx4jSjDIqg6TTF5lSe+eC4K7WRgBTL
-        ibLxst038f98YEF32yHwpnjSMb45qDjLjQDS+LRcPUF6RfwdGUDvtsach5vdZrZlStknMKlSo2Y
-        qy+hl+6YueHbd3dbJWUHIV4Up
-X-Received: by 2002:a05:6000:184f:: with SMTP id c15mr3548868wri.73.1641902094694;
-        Tue, 11 Jan 2022 03:54:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxMB9cKDt3oBelm1sFftDwQwVLNcfaNRNRFFSf7NuXogZYA8px0qiu/L2gStlBR5LFyvB4wcw==
-X-Received: by 2002:a05:6000:184f:: with SMTP id c15mr3548846wri.73.1641902094469;
-        Tue, 11 Jan 2022 03:54:54 -0800 (PST)
-Received: from redhat.com ([2.55.5.100])
-        by smtp.gmail.com with ESMTPSA id f10sm1710595wmg.43.2022.01.11.03.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 03:54:53 -0800 (PST)
-Date:   Tue, 11 Jan 2022 06:54:48 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yongji Xie <xieyongji@bytedance.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christian Brauner <christian.brauner@canonical.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, bcrl@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mika =?iso-8859-1?Q?Penttil=E4?= <mika.penttila@nextfour.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>, joro@8bytes.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        He Zhe <zhe.he@windriver.com>,
-        Liu Xiaodong <xiaodong.liu@intel.com>,
-        Joe Perches <joe@perches.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        John Garry <john.garry@huawei.com>, songmuchun@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Netdev <netdev@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Tue, 11 Jan 2022 06:57:08 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id C077C62DA5F1;
+        Tue, 11 Jan 2022 12:57:06 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 8N8Bh8g4hSgT; Tue, 11 Jan 2022 12:57:05 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id AE98862DA607;
+        Tue, 11 Jan 2022 12:57:05 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id K3l-nBqFw9Lo; Tue, 11 Jan 2022 12:57:05 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 83EFC62DA5F1;
+        Tue, 11 Jan 2022 12:57:05 +0100 (CET)
+Date:   Tue, 11 Jan 2022 12:57:05 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     chengzhihao1 <chengzhihao1@huawei.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
+        kirill shutemov <kirill.shutemov@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v12 00/13] Introduce VDUSE - vDPA Device in Userspace
-Message-ID: <20220111065301-mutt-send-email-mst@kernel.org>
-References: <20210830141737.181-1-xieyongji@bytedance.com>
- <20220110075546-mutt-send-email-mst@kernel.org>
- <CACycT3v1aEViw7vV4x5qeGVPrSrO-BTDvQshEX35rx_X0Au2vw@mail.gmail.com>
- <20220110100911-mutt-send-email-mst@kernel.org>
- <CACycT3v6jo3-8ATWUzf659vV94a2oRrm-zQtGNDZd6OQr-MENA@mail.gmail.com>
- <20220110103938-mutt-send-email-mst@kernel.org>
- <CACycT3sbJC1Jn7NeWk_ccQ_2_YgKybjugfxmKpfgCP3Ayoju4w@mail.gmail.com>
+Message-ID: <11976804.249069.1641902225370.JavaMail.zimbra@nod.at>
+In-Reply-To: <420c7567-8926-2e8b-4da0-a9bfc8379642@huawei.com>
+References: <20211227032246.2886878-1-chengzhihao1@huawei.com> <20211227032246.2886878-13-chengzhihao1@huawei.com> <361758697.248157.1641857025490.JavaMail.zimbra@nod.at> <6f7df7ba-9557-58a3-7978-e5d14a72f234@huawei.com> <244238061.248369.1641886066066.JavaMail.zimbra@nod.at> <420c7567-8926-2e8b-4da0-a9bfc8379642@huawei.com>
+Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
+ 'ai->fastmap' when fm->used_blocks>=2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACycT3sbJC1Jn7NeWk_ccQ_2_YgKybjugfxmKpfgCP3Ayoju4w@mail.gmail.com>
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
+Thread-Topic: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
+Thread-Index: rCOpT4sWmQTdmQnL93nvG0YJPXMarw==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:31:37AM +0800, Yongji Xie wrote:
-> On Mon, Jan 10, 2022 at 11:44 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, Jan 10, 2022 at 11:24:40PM +0800, Yongji Xie wrote:
-> > > On Mon, Jan 10, 2022 at 11:10 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Mon, Jan 10, 2022 at 09:54:08PM +0800, Yongji Xie wrote:
-> > > > > On Mon, Jan 10, 2022 at 8:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Mon, Aug 30, 2021 at 10:17:24PM +0800, Xie Yongji wrote:
-> > > > > > > This series introduces a framework that makes it possible to implement
-> > > > > > > software-emulated vDPA devices in userspace. And to make the device
-> > > > > > > emulation more secure, the emulated vDPA device's control path is handled
-> > > > > > > in the kernel and only the data path is implemented in the userspace.
-> > > > > > >
-> > > > > > > Since the emuldated vDPA device's control path is handled in the kernel,
-> > > > > > > a message mechnism is introduced to make userspace be aware of the data
-> > > > > > > path related changes. Userspace can use read()/write() to receive/reply
-> > > > > > > the control messages.
-> > > > > > >
-> > > > > > > In the data path, the core is mapping dma buffer into VDUSE daemon's
-> > > > > > > address space, which can be implemented in different ways depending on
-> > > > > > > the vdpa bus to which the vDPA device is attached.
-> > > > > > >
-> > > > > > > In virtio-vdpa case, we implements a MMU-based software IOTLB with
-> > > > > > > bounce-buffering mechanism to achieve that. And in vhost-vdpa case, the dma
-> > > > > > > buffer is reside in a userspace memory region which can be shared to the
-> > > > > > > VDUSE userspace processs via transferring the shmfd.
-> > > > > > >
-> > > > > > > The details and our user case is shown below:
-> > > > > > >
-> > > > > > > ------------------------    -------------------------   ----------------------------------------------
-> > > > > > > |            Container |    |              QEMU(VM) |   |                               VDUSE daemon |
-> > > > > > > |       ---------      |    |  -------------------  |   | ------------------------- ---------------- |
-> > > > > > > |       |dev/vdx|      |    |  |/dev/vhost-vdpa-x|  |   | | vDPA device emulation | | block driver | |
-> > > > > > > ------------+-----------     -----------+------------   -------------+----------------------+---------
-> > > > > > >             |                           |                            |                      |
-> > > > > > >             |                           |                            |                      |
-> > > > > > > ------------+---------------------------+----------------------------+----------------------+---------
-> > > > > > > |    | block device |           |  vhost device |            | vduse driver |          | TCP/IP |    |
-> > > > > > > |    -------+--------           --------+--------            -------+--------          -----+----    |
-> > > > > > > |           |                           |                           |                       |        |
-> > > > > > > | ----------+----------       ----------+-----------         -------+-------                |        |
-> > > > > > > | | virtio-blk driver |       |  vhost-vdpa driver |         | vdpa device |                |        |
-> > > > > > > | ----------+----------       ----------+-----------         -------+-------                |        |
-> > > > > > > |           |      virtio bus           |                           |                       |        |
-> > > > > > > |   --------+----+-----------           |                           |                       |        |
-> > > > > > > |                |                      |                           |                       |        |
-> > > > > > > |      ----------+----------            |                           |                       |        |
-> > > > > > > |      | virtio-blk device |            |                           |                       |        |
-> > > > > > > |      ----------+----------            |                           |                       |        |
-> > > > > > > |                |                      |                           |                       |        |
-> > > > > > > |     -----------+-----------           |                           |                       |        |
-> > > > > > > |     |  virtio-vdpa driver |           |                           |                       |        |
-> > > > > > > |     -----------+-----------           |                           |                       |        |
-> > > > > > > |                |                      |                           |    vdpa bus           |        |
-> > > > > > > |     -----------+----------------------+---------------------------+------------           |        |
-> > > > > > > |                                                                                        ---+---     |
-> > > > > > > -----------------------------------------------------------------------------------------| NIC |------
-> > > > > > >                                                                                          ---+---
-> > > > > > >                                                                                             |
-> > > > > > >                                                                                    ---------+---------
-> > > > > > >                                                                                    | Remote Storages |
-> > > > > > >                                                                                    -------------------
-> > > > > > >
-> > > > > > > We make use of it to implement a block device connecting to
-> > > > > > > our distributed storage, which can be used both in containers and
-> > > > > > > VMs. Thus, we can have an unified technology stack in this two cases.
-> > > > > > >
-> > > > > > > To test it with null-blk:
-> > > > > > >
-> > > > > > >   $ qemu-storage-daemon \
-> > > > > > >       --chardev socket,id=charmonitor,path=/tmp/qmp.sock,server,nowait \
-> > > > > > >       --monitor chardev=charmonitor \
-> > > > > > >       --blockdev driver=host_device,cache.direct=on,aio=native,filename=/dev/nullb0,node-name=disk0 \
-> > > > > > >       --export type=vduse-blk,id=test,node-name=disk0,writable=on,name=vduse-null,num-queues=16,queue-size=128
-> > > > > > >
-> > > > > > > The qemu-storage-daemon can be found at https://github.com/bytedance/qemu/tree/vduse
-> > > > > >
-> > > > > > It's been half a year - any plans to upstream this?
-> > > > >
-> > > > > Yeah, this is on my to-do list this month.
-> > > > >
-> > > > > Sorry for taking so long... I've been working on another project
-> > > > > enabling userspace RDMA with VDUSE for the past few months. So I
-> > > > > didn't have much time for this. Anyway, I will submit the first
-> > > > > version as soon as possible.
-> > > > >
-> > > > > Thanks,
-> > > > > Yongji
-> > > >
-> > > > Oh fun. You mean like virtio-rdma? Or RDMA as a backend for regular
-> > > > virtio?
-> > > >
-> > >
-> > > Yes, like virtio-rdma. Then we can develop something like userspace
-> > > rxe、siw or custom protocol with VDUSE.
-> > >
-> > > Thanks,
-> > > Yongji
-> >
-> > Would be interesting to see the spec for that.
-> 
-> Will send it ASAP.
-> 
-> > The issues with RDMA revolved around the fact that current
-> > apps tend to either use non-standard propocols for connection
-> > establishment or use UD where there's IIRC no standard
-> > at all. So QP numbers are hard to virtualize.
-> > Similarly many use LIDs directly with the same effect.
-> > GUIDs might be virtualizeable but no one went to the effort.
-> >
-> 
-> Actually we aimed at emulating a soft RDMA with normal NIC (not use
-> RDMA capability) rather than virtualizing a physical RDMA NIC into
-> several vRDMA devices. If so, I think we won't have those issues,
-> right?
+----- Ursprüngliche Mail -----
+> Von: "chengzhihao1" <chengzhihao1@huawei.com>
+> An: "richard" <richard@nod.at>
+> CC: "Miquel Raynal" <miquel.raynal@bootlin.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "mcoquelin stm32"
+> <mcoquelin.stm32@gmail.com>, "kirill shutemov" <kirill.shutemov@linux.intel.com>, "Sascha Hauer"
+> <s.hauer@pengutronix.de>, "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
+> Gesendet: Dienstag, 11. Januar 2022 12:44:49
+> Betreff: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
 
-Right, maybe you won't.
+> Hi Richard,
+>> In ubi_wl_init() there is another corner case documented:
+>>                          /*
+>>                           * The fastmap update code might not find a free PEB for
+>>                           * writing the fastmap anchor to and then reuses the
+>>                           * current fastmap anchor PEB. When this PEB gets erased
+>>                           * and a power cut happens before it is written again we
+>>                           * must make sure that the fastmap attach code doesn't
+>>                           * find any outdated fastmap anchors, hence we erase the
+>>                           * outdated fastmap anchor PEBs synchronously here.
+>>                           */
+>>                          if (aeb->vol_id == UBI_FM_SB_VOLUME_ID)
+>>                                  sync = true;
+>> 
+>> So ubi_wl_init() makes sure that all old fastmap anchors get erased before UBI
+>> starts to operate. With your change this is no longer satisfied
+> I seem to understand the another case. But I'm still confused that why
+> outdated fastmap PEBs cannot be erased. When UBI comes to this point, it
+> means UBI is attached by **full scanning mode**, scan_fast() returns two
+> values:
+>   UBI_NO_FASTMAP: scan all pebs from pnum UBI_FM_MAX_START, ai is
+> assigned with scan_ai, at last, all fastmap pebs are added into
+> 'ai->fastmap'
+>   UBI_BAD_FASTMAP: scan all pebs from pnum 0, all fastmap pebs are
+> added into 'ai->fastmap'
 
-> > To say nothing about the interaction with memory overcommit.
-> >
-> 
-> I don't get you here. Could you give me more details?
-> 
-> Thanks,
-> Yongji
+I fear, I'm unable to follow your thoughts.
+ubi_wl_init() is called in both cases, with and without fastmap.
+And ai->fastmap contains all anchor PEBs that scan_fast() found.
+This can be the most recent but also outdated anchor PEBs.
 
-RDMA devices tend to want to pin the memory under DMA.
-
--- 
-MST
-
+Thanks,
+//richard

@@ -2,207 +2,1332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BFC48B0BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F2E48B0C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343543AbiAKPXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:23:07 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:55048 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244282AbiAKPXF (ORCPT
+        id S1343549AbiAKPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240435AbiAKPYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:23:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641914586; x=1673450586;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=mM6ZUR2Js9jheEl/8Is3wsiFghgU1V6sdxq9LFb3R54=;
-  b=HrrgnzLIt237ZgqMjkvQp+I1pUNXFj00Iskcbfm8sCsk/O+DOPCHKg2K
-   64jk9HE+b8+DnHZrNOsv2PfZbdCUoYK2cNiblmcyTnIS+n2dweWHaAbSF
-   1qLD33dVvBezFMPU7dPGSMyCvXEopbWGoxEPdTqDUCmCrxJJyLlfxjAc6
-   49SgrziPj/rS2n/GeuY3CCFvgUtS5lmRW+hIB277tf/BB3zMhTFMmtzM+
-   sbVKTcLAaKb3wMZ09haITVtB+sgwMOSJ8C1vHc2i81dCdbf54ZPYhjoA5
-   fvTdjOp5SRkQKUTSFwAKcLVX7+wmufIuaGRnOb8wRB2MnTRq3YDRpelyg
-   Q==;
-IronPort-SDR: hnxNKfZoC3r/R9DmTOPVkImn2mbL+92++3Ep4YFj91UppCsEJwzowXbVklCg2gSajsfEf2NgSV
- FnES2DyF1hN5fZHm3v4hq0n2ZUh8jFjvkuCl24UoJukKwVCbXT71dKBFSI70UOFbDqnX7zK+9J
- TRdJeATFzf3eDe+BmRr2uMfgBv53dLEZCxm1Bw7s/MW58S1a1mNw4uR3Oxa8he+fFXs5lVvmG7
- MMtDMtU0MdFSHMi/7boFHwioOdYZYCAiyHrwSFcqAF588a9mOsvmFCZ0ULGa/pnhzqyeAY24QH
- o5rNd0eU9fPGLnjOrdzhjPmk
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="149267391"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2022 08:23:05 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 11 Jan 2022 08:23:04 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 11 Jan 2022 08:23:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KA635JtJ7z3qB7rYunBZq8d9fV16QwnRqnDOu6tSo5jTNu6z6boqAM7dKx1U1wPThJ50Zd1WaNwabs1N0CnkJ5Wq6jnUKXZnPxaLmzM4JcRXb2IW7lQP+7P1n4l0WwJcy7OY1sf6Q4qIqOXfziIx89TZRW3ta1YahhcN4NibGcXYt09QrftAVw92jCkpc5TWgoMbY14PHVLUOp2DVGS/JHCZxq7LdCPMhpRi2AyWe8Ft+LeqnoUxd8NUZ8tVhHprljc735JFtnrvrJ5RQThd0wITjxsYSO/hO2zbyeLuSeHCo+BgHhOKORfD4XD4HK3vr12YMAVEtEMkq0+4WN2Wqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mM6ZUR2Js9jheEl/8Is3wsiFghgU1V6sdxq9LFb3R54=;
- b=dc7zLIG0PsGpjzxjKfJ8+/VJ3mARNUMlE/wyWtYDS5VGeZ3yNqMi4HxXk2v5VePewhTUsJQOF/nbQnmZxtsRSoY23PTIULTr1V4gLoyT+6LCCRd3vGpqQPB53BbcG8kE4u+6edZsyL7rz4k3lE6CeQS0UOjvzy0IYiCe/YHLhyGHY5pf6IXYlW0yYZP0UtWIwK8Rpqh1IVNl6kNCVY0HwKiw4hHOFz3lc20IIXNjuAqVYSr+H+QI3UDVhBj6J4UUUN7dRC0pmqejXVFdM0pVthq6zRWw+wbgslPfHx3hNQvue0kDbQtkwg6mwBYjxz4urRCOGq0PKCGRL3DS1u09Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Tue, 11 Jan 2022 10:24:38 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF85FC061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:24:37 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id br17so26413067lfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:24:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mM6ZUR2Js9jheEl/8Is3wsiFghgU1V6sdxq9LFb3R54=;
- b=jkFQ/5fUtrUlyZv7uetSqBJIS+PeaR5VaKSEV0DrYlI5whAb+yX4RQPMeIs2HCC/N1FJUOI4l++5OicN0BjakB6dm+Rh7ARu5bSnRCF5CL9men/wQszIjuX0QPQSCJxEY7a23BqPdzS9NkWtFY4h2Sc2pBezOGlFbetHFXXwwYw=
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
- by BN6PR11MB1939.namprd11.prod.outlook.com (2603:10b6:404:ff::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 11 Jan
- 2022 15:23:02 +0000
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::5cae:e802:4a48:bd0f]) by CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::5cae:e802:4a48:bd0f%6]) with mapi id 15.20.4888.009; Tue, 11 Jan 2022
- 15:23:02 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>
-CC:     <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <Ludovic.Desroches@microchip.com>, <robh+dt@kernel.org>,
-        <rdunlap@infradead.org>, <unixbhaskar@gmail.com>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] clk: at91: sama7g5: Allow MCK1 to be exported and
- referenced in DT
-Thread-Topic: [PATCH] clk: at91: sama7g5: Allow MCK1 to be exported and
- referenced in DT
-Thread-Index: AQHYBv8fEO+hcVN7qEibY31yRBQhkg==
-Date:   Tue, 11 Jan 2022 15:23:02 +0000
-Message-ID: <528f5d1b-aeeb-6c2a-42a5-e4e2f2fba2c5@microchip.com>
-References: <20220111125310.902856-1-tudor.ambarus@microchip.com>
-In-Reply-To: <20220111125310.902856-1-tudor.ambarus@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 94ef346c-7ef5-4882-f9da-08d9d5164207
-x-ms-traffictypediagnostic: BN6PR11MB1939:EE_
-x-microsoft-antispam-prvs: <BN6PR11MB1939AD91E18EB31281B982A387519@BN6PR11MB1939.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: y+EWxFV6ytGodts6q6/q7YgZu/58RBYzfHrWls+jwOlToyYdGlhDBT+FvV2R+d50rsiW82pm1xB/P4R+p66zfK33MdKev+YeABWPjW0IiGYWGZN9D25aoUCl+gr7fEYJXrk5zAfzpMXn8J0qmQ+W2J0ZRngBgRYiNesZivNEulR2NYC8arC5Fh76ww1RT0zRgr49Nd8rn9e5tbz+b2OU/Udt9PJhuCR0/rcgiT0+dCSXsgTEiJSmFgjYFYFrtQRCmNAvaEjBP+kryhQ8MCj/j4p+5mv+oOzBWTLNjmZbdJRcnh6jgxHWDFgEmgcm1i6fW9d9Y4MqtupKpzUusN2B//VggG5WI46snbcn/gaPKehz/ZLW7cK1dGjUbDvOSCbNnVfxemVJabT13WpJb+xrHhdQbbXSyYTQvKN5W0xRV1GQeLWsya8UPtnFQ8PbCXkZqXUHzKv5c594JZ7+Eo3GBjek654N3R72q6hB0TUhNgF3duTpUCJzW/TTp6Qramoa+FbDxBnlon4/D0GdH89faCbSRzaswZ2eQ4SYrHLvP7mATDcC7nwtdcZ+72rjqBTjFnPeVOvv53YG2rdwm9X9oIIATdEr1VfZJNj3SJW6/pTAHLLFPh1O5HT/CwSp9HJrSihAx91sKcKcmTlkkma1flhsDXvDP22DtwxhBVqM2iBH7jjbC5tFy7olczTlNiO3SML3Aq+8dufAEA8hQMnoAiBrWibFqUaSG4PMSkXUlvi4d6jIht+VXuc9S+gYb0DprItro81CCkXpRj3XfzrMig==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2906002)(54906003)(110136005)(66476007)(6486002)(5660300002)(508600001)(2616005)(66446008)(64756008)(66556008)(316002)(36756003)(38070700005)(4326008)(86362001)(91956017)(76116006)(38100700002)(31686004)(53546011)(31696002)(71200400001)(8936002)(26005)(7416002)(8676002)(122000001)(66946007)(83380400001)(6512007)(186003)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?djFwUDlGUTZmaEE1V1ZjRDduWWR0bTVoNGp5akRzWnFEYmVVL1BGUnI2V0I3?=
- =?utf-8?B?RDZjVHZlcWJYdk0vMjlLMldmSDZVclBoQ25FZ0h4ODJCK01jRUdpc0htNGV2?=
- =?utf-8?B?UERsSDhtRlVRL1UrSVNBMXc1SlZqWTIzNm02aS8yT0JIV09IeWdCTng1aXQv?=
- =?utf-8?B?OXhsTHR0ZzRLekFHUm84UjUrZTlaNDF4NyswZnJFenFLS1Y1N1BOVlo1MEV5?=
- =?utf-8?B?alYxMldSbXZTZ21WRWZFVVhET0hJZHZPL1ptNlZqdUtQckdYNnh4V1l3dUcz?=
- =?utf-8?B?aXpvaUQxLy91dVdLNDU3bjZRUXB3aHZoZm9wOW1MbFF4TkJYaEh6djhscFlX?=
- =?utf-8?B?TXhKZmw0MkJiMUNMOGZ4MTNkTGQ3Q2U1dnBBSXFTVGRFZC90ejlyVHprb0VF?=
- =?utf-8?B?NlNaNFh6eDJIU0hWQ1J3OVZ3MlB6SVppRVJ0YllJUjJmVGtTUnJTWkZyOXVo?=
- =?utf-8?B?bTd0b0JEMHgrTzNUazI0UEtBSU96dzBEUUFZSnRJU0R0ai9NTFB3SW40cnlO?=
- =?utf-8?B?UWcvdlhVUEdIdElMb3FDVzkxRmhsU2MrV3RLN2ZLMFYzNmYySHZPL3pyeGtE?=
- =?utf-8?B?dnZUNDdmaHh1RlpoL2pTTzR0MXpwUERzREVXUUhYcXpsVFlZcFVWOC9OdFZ6?=
- =?utf-8?B?RUZKTXZOZzkrc0N4L0xTSVRJWkhjSG5wYjVPMzlrY2pIckhXRTh5b01GMDA4?=
- =?utf-8?B?NWE0NDJxWEJNNVg5VmMvRjBmaVpkL0R6alVFMXBYZDZmTnU2U3NhQlpScVZ2?=
- =?utf-8?B?YjdnL3JGbGplVlczR0tsc1AxMzZURFJLQVlJWGNlRitZeWVJOFFuUFZ1RXEz?=
- =?utf-8?B?UHJJRzhNdGpvNVpnTDMwV1ZQSGQ5aVhManhiUGlrV2xJQWdUVkphckdnVUVJ?=
- =?utf-8?B?ZVBVLzlVZVNWdm0yNHRSWEVMV3kyYnQ2T3NhU2tTMG9XKzFMY2h4WkdlKzcw?=
- =?utf-8?B?a0VjdzkxcGRkUDhINUdCREI1aXl5WEh4S0hBT2M5RUNabVlib1NraGhhRU9B?=
- =?utf-8?B?WTNSNjZNWCs5a20xeFRseFVRK2F3ZytxM1VHRitMeVNMVTdSTUZ0d3k5Q1A5?=
- =?utf-8?B?b21oRmJlNC9XZVVINGcrVjYxaXJibUpYRElKWks0aDYxRnZYcUo1eW9Sb2pW?=
- =?utf-8?B?c085NzJsMmVJSUJvS0FnVVYyVnJJcFdtb0RDdmlTb0FqbEx4czU0ZkNXQmlm?=
- =?utf-8?B?L0xLZXZnR3laRVpzSXFPSDhqQ1M1L3hsaVYxMkpnNVJ2RE1WbUl2R0RvZGJj?=
- =?utf-8?B?QzBQU0JocFhoU2ZsUHhib1h0QlpKNE5JckNGUEdoNXNFclI4MmhyQ2hMRVE1?=
- =?utf-8?B?c1c0U01ERCs4bDFsQTdhbVdZaE9SelNzUzRMYXJyUkJ3enZGVnByUngxb3ZS?=
- =?utf-8?B?UXR5aS84TlRiWnJDUjBiUVljbmJSVkUxSmVVVmhLdklMMVBUdHR0ZnlTZnZ0?=
- =?utf-8?B?R2tuRG9LZTYrZ0FsenF4TzBlcU5kNDlZWTZ5QVErTFFkSjl5TFlBOERxanlB?=
- =?utf-8?B?NVRNSG5XdHNta1pmZElKeCtCM1JiVFRKRHhLVE1mb2IvZ0RJRU1nQ2d5R0Zi?=
- =?utf-8?B?dlhtSDBTZWtSNDhMUmNjZ3EycVptbThMMGQzS2prc1AyKzJhb0h0b2VuTmVU?=
- =?utf-8?B?ZHlrcFF5ekpobVI3VGpiRE95TE5JS2NBUjFKYXFmZTZDT0l6a0RQWG03ay91?=
- =?utf-8?B?SWFCTTNEUXZENEFrbDNvL2QvcXVPTGRqZnk1ajBQbDUxdjN2aHVrMXUxTTEy?=
- =?utf-8?B?UlRwTERKL3lRQWp4eG9HWDNmczNjNnc1REVXTDdGRFoycTRZZUFBRUpiUlR4?=
- =?utf-8?B?WUFPZUkxakFEajVMeU9FK1lxOFBMTmFiREhlUGZCUTlJVGtnSUxiL3h1L2lC?=
- =?utf-8?B?bHVjL2czaS9RN1l1aDNDT1hNSHFOT2hUZGdNeXIzLzl5RjlNdmEzZFYzZWE3?=
- =?utf-8?B?OFZ3V1g0bUd3bG0xUHBrbzI5Y2xQYmxoUmN6WnZmZDdMLzhwN29ZQUUyNnQz?=
- =?utf-8?B?cjVsVXI3dHlpQXhYU0pVK0RaVlllWkpZUWxXbmovbHpLVFczM3dlT2JkcG1h?=
- =?utf-8?B?azdCVWRGZGxBVWcxWlBLdTJEY0pmTGZkdThmZ2U2ZVF3WCtKWnB1MzlYTTB3?=
- =?utf-8?B?V3VtdjBqLzFuQzE1WEd1UHdKTFdrTkM3M1ppVmN2SFlzYm53K1B6QkM0cnBO?=
- =?utf-8?B?WEkzdVh1N3hnR3h3eXNZTGRZTXgyM29XcFlvRm1ENUU3R0wyZ2xWTDFYcFZG?=
- =?utf-8?B?SWtEMUwzczdodFlHVG1ya0xOdTlRPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2BF956F8BA01A24DBE16CB380ECFA603@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gZ+PQSDOWvHQmL5SaUTWlFRnATuo2D03+dxo0jd3ts4=;
+        b=dyfdy1VrXxTpeuxT9olwg0APOfIUbVnDKStZrFyR11TbtMVvSxJLe8QdV+WqTAWfMH
+         +zEfKMk8xMsBZBx8BuIvcq4EvaemnmTk7iLrjUYMrLuqtwKe9oOEekcNsZFW49hxMxZp
+         nyV9s1jxtVrUpujekZNEyX0s6NyRUFByLm0ddgWdWNxnVAGWp6SDr0gng8u5p5j+sPiQ
+         fCXACgLbD7BnWU/NucCQ4cIc13EYe9Vsa+ErQs0Ixo8TspnJrcGNGVTYVnQM/tQ9Ic+K
+         I9CKxl8S9eFaXtB8XCVgJRNxHuv1AV1yUQL5C0Hguzrgm9jbV0EvbQE7yNW6HzO4vDfb
+         2yZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gZ+PQSDOWvHQmL5SaUTWlFRnATuo2D03+dxo0jd3ts4=;
+        b=O1vxbv+gwN8CeZrFypX8FhR7IsCoCZtOqtKpz6KIZ7HQc0MlvCehs0FNI0xOaTiGs3
+         F9aiIVFmbJ5Qt7HPgTxQtBBiLn+0mlz44QfqEyKFvpymvX+/A3H/5ea1HBUZjOTWAc1Z
+         3HYjZCJQjQWLHuMDwiKUcgHG8vxKirO/oDzCIq3iRaGFrnSZrSAv7S1Cjja44hAYIDDO
+         x9VKAqjWkfpyov5O5mC9/b6MxqV/MXOXc/VPQhXQLZ4tT4TOR/toqk9SfY4MOh68+I2Z
+         8ibcU9CEY9H3nEr1lWwBqTvQQyiswLkTVbJsx2FU4adt9oTkmD9HF77xUmrFvMccJYXt
+         cXUg==
+X-Gm-Message-State: AOAM5336GrM0NkPKcy9mmKdDpr46XJHcxU3b0Ql3OBaKDVIjfschJ3Sa
+        i8DILHhUxYlbqSIhX6F9Ykmbbts5u1Ho3JfCypw3ig==
+X-Google-Smtp-Source: ABdhPJzsFOFvhHrnAYIV5eEGey8+LAsGbxIDiokZX+nQw6iMWnFuZLL674s4boFCanFiMEDm9ocKQPVnWcrLTfkxty8=
+X-Received: by 2002:a05:6512:400f:: with SMTP id br15mr2079614lfb.233.1641914675802;
+ Tue, 11 Jan 2022 07:24:35 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94ef346c-7ef5-4882-f9da-08d9d5164207
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 15:23:02.2501
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5N4BLW8MoXBy2rMJjYqVVmRvPIbw0MoF/7+6sbeHOIJkU/l3Fd3fkoGjvLhfTyG9BRQfnoWX6d2O/Gtt6J6RCJOXsmgj9lSKsiG55LfndUc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1939
+References: <cover.1641354285.git.tonyhuang.sunplus@gmail.com> <e49d7023d7e91aeaed13c0b17e9254d0afc97d54.1641354285.git.tonyhuang.sunplus@gmail.com>
+In-Reply-To: <e49d7023d7e91aeaed13c0b17e9254d0afc97d54.1641354285.git.tonyhuang.sunplus@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 11 Jan 2022 16:23:59 +0100
+Message-ID: <CAPDyKFp7Bc0pYkD9uURuD5tW7mLFYabibYB3Ph=cNauXLFhJfw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mmc: Add mmc driver for Sunplus SP7021
+To:     Tony Huang <tonyhuang.sunplus@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>, lh.kuo@sunplus.com
+Cc:     robh+dt@kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kerenl.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, tony.huang@sunplus.com,
+        wells.lu@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTEuMDEuMjAyMiAxNDo1MywgVHVkb3IgQW1iYXJ1cyB3cm90ZToNCj4gTUNLMSBmZWVkcyB0
-aGUgRXh0ZXJuYWwgQnVzIEludGVyZmFjZSAoRUJJKS4gRUJJJ3MgY2xvY2sgcmF0ZSBpcyB1c2Vk
-DQo+IHRvIHRyYW5zbGF0ZSBFQkkncyB0aW1taW5ncyB0byBTTUMgdGltaW5ncywgdGh1cyB3ZSBu
-ZWVkIHRvIGhhbmRsZSBNQ0sxDQo+IGluIHRoZSBFQkkgZHJpdmVyLiBBbGxvdyBNQ0sxIHRvIGJl
-IHJlZmVyZW5jZWQgYXMgYSBQTUNfVFlQRV9DT1JFIGNsb2NrDQo+IGZyb20gcGhhbmRsZSBpbiBE
-VC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFR1ZG9yIEFtYmFydXMgPHR1ZG9yLmFtYmFydXNAbWlj
-cm9jaGlwLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IENsYXVkaXUgQmV6bmVhIDxjbGF1ZGl1LmJlem5l
-YUBtaWNyb2NoaXAuY29tPg0KDQo+IC0tLQ0KPiAgZHJpdmVycy9jbGsvYXQ5MS9zYW1hN2c1LmMg
-ICAgICAgfCA4ICsrKysrKystDQo+ICBpbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL2F0OTEuaCB8
-IDEgKw0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkN
-Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Nsay9hdDkxL3NhbWE3ZzUuYyBiL2RyaXZlcnMv
-Y2xrL2F0OTEvc2FtYTdnNS5jDQo+IGluZGV4IDM2OWRmYWZhYmJjYS4uZTQzNDU4NjczYWZiIDEw
-MDY0NA0KPiAtLS0gYS9kcml2ZXJzL2Nsay9hdDkxL3NhbWE3ZzUuYw0KPiArKysgYi9kcml2ZXJz
-L2Nsay9hdDkxL3NhbWE3ZzUuYw0KPiBAQCAtMzAyLDYgKzMwMiw3IEBAIHN0YXRpYyBjb25zdCBz
-dHJ1Y3Qgew0KPiAgICogQGVwX2NvdW50OgkJZXh0cmEgcGFyZW50cyBjb3VudA0KPiAgICogQGVw
-X211eF90YWJsZToJbXV4IHRhYmxlIGZvciBleHRyYSBwYXJlbnRzDQo+ICAgKiBAaWQ6CQkJY2xv
-Y2sgaWQNCj4gKyAqIEBlaWQ6CQlleHBvcnQgaW5kZXggaW4gc2FtYTdnNS0+Y2h3c1tdIGFycmF5
-DQo+ICAgKiBAYzoJCQl0cnVlIGlmIGNsb2NrIGlzIGNyaXRpY2FsIGFuZCBjYW5ub3QgYmUgZGlz
-YWJsZWQNCj4gICAqLw0KPiAgc3RhdGljIGNvbnN0IHN0cnVjdCB7DQo+IEBAIC0zMTEsNiArMzEy
-LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB7DQo+ICAJdTggZXBfY291bnQ7DQo+ICAJdTggZXBf
-bXV4X3RhYmxlWzRdOw0KPiAgCXU4IGlkOw0KPiArCXU4IGVpZDsNCj4gIAl1OCBjOw0KPiAgfSBz
-YW1hN2c1X21ja3hbXSA9IHsNCj4gIAl7IC5uID0gIm1jazEiLA0KPiBAQCAtMzE5LDYgKzMyMSw3
-IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgew0KPiAgCSAgLmVwX211eF90YWJsZSA9IHsgNSwgfSwN
-Cj4gIAkgIC5lcF9jb3VudCA9IDEsDQo+ICAJICAuZXBfY2hnX2lkID0gSU5UX01JTiwNCj4gKwkg
-IC5laWQgPSBQTUNfTUNLMSwNCj4gIAkgIC5jID0gMSwgfSwNCj4gIA0KPiAgCXsgLm4gPSAibWNr
-MiIsDQo+IEBAIC05MTMsNyArOTE2LDcgQEAgc3RhdGljIHZvaWQgX19pbml0IHNhbWE3ZzVfcG1j
-X3NldHVwKHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnApDQo+ICAJaWYgKElTX0VSUihyZWdtYXApKQ0K
-PiAgCQlyZXR1cm47DQo+ICANCj4gLQlzYW1hN2c1X3BtYyA9IHBtY19kYXRhX2FsbG9jYXRlKFBN
-Q19DUFUgKyAxLA0KPiArCXNhbWE3ZzVfcG1jID0gcG1jX2RhdGFfYWxsb2NhdGUoUE1DX01DSzEg
-KyAxLA0KPiAgCQkJCQluY2soc2FtYTdnNV9zeXN0ZW1jayksDQo+ICAJCQkJCW5jayhzYW1hN2c1
-X3BlcmlwaGNrKSwNCj4gIAkJCQkJbmNrKHNhbWE3ZzVfZ2NrKSwgOCk7DQo+IEBAIC0xMDI3LDYg
-KzEwMzAsOSBAQCBzdGF0aWMgdm9pZCBfX2luaXQgc2FtYTdnNV9wbWNfc2V0dXAoc3RydWN0IGRl
-dmljZV9ub2RlICpucCkNCj4gIAkJCWdvdG8gZXJyX2ZyZWU7DQo+ICANCj4gIAkJYWxsb2NfbWVt
-W2FsbG9jX21lbV9zaXplKytdID0gbXV4X3RhYmxlOw0KPiArDQo+ICsJCWlmIChzYW1hN2c1X21j
-a3hbaV0uZWlkKQ0KPiArCQkJc2FtYTdnNV9wbWMtPmNod3Nbc2FtYTdnNV9tY2t4W2ldLmVpZF0g
-PSBodzsNCj4gIAl9DQo+ICANCj4gIAlodyA9IGF0OTFfY2xrX3NhbWE3ZzVfcmVnaXN0ZXJfdXRt
-aShyZWdtYXAsICJ1dG1pY2siLCAibWFpbl94dGFsIik7DQo+IGRpZmYgLS1naXQgYS9pbmNsdWRl
-L2R0LWJpbmRpbmdzL2Nsb2NrL2F0OTEuaCBiL2luY2x1ZGUvZHQtYmluZGluZ3MvY2xvY2svYXQ5
-MS5oDQo+IGluZGV4IDk4ZTFiMmFiNjQwMy4uODQ5OGMwY2Q5NWZlIDEwMDY0NA0KPiAtLS0gYS9p
-bmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL2F0OTEuaA0KPiArKysgYi9pbmNsdWRlL2R0LWJpbmRp
-bmdzL2Nsb2NrL2F0OTEuaA0KPiBAQCAtMzUsNiArMzUsNyBAQA0KPiAgI2RlZmluZSBQTUNfQVVE
-SU9JT1BMTAkJKFBNQ19NQUlOICsgNykNCj4gICNkZWZpbmUgUE1DX0VUSFBMTAkJKFBNQ19NQUlO
-ICsgOCkNCj4gICNkZWZpbmUgUE1DX0NQVQkJCShQTUNfTUFJTiArIDkpDQo+ICsjZGVmaW5lIFBN
-Q19NQ0sxCQkoUE1DX01BSU4gKyAxMCkNCj4gIA0KPiAgI2lmbmRlZiBBVDkxX1BNQ19NT1NDUw0K
-PiAgI2RlZmluZSBBVDkxX1BNQ19NT1NDUwkJMAkJLyogTU9TQ1MgRmxhZyAqLw0KDQo=
++ Li-hau Kuo,
+
+On Wed, 5 Jan 2022 at 06:20, Tony Huang <tonyhuang.sunplus@gmail.com> wrote:
+>
+> Add mmc driver for Sunplus SP7021
+>
+> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+
+There is another driver that has been posted for the eMMC/SD/SDIO
+controller for Sunplus SP7021 [1]. Without going into the details it
+looks like it's a very similar IP block - or at least it's just a
+slightly different version of it.
+
+Rather than using one separate driver per version of the IP block, I
+strongly suggest that we combine the drivers into one driver.
+
+I fully understand that we need to distinguish the variants in the
+driver, which should be done by using one compatible string per
+variant of the IP block. Moreover, we have existing common mmc DT
+bindings, thus allowing the block to be used for one of SD, SDIO or
+eMMC ("no-sd", "no-sdio" and "no-mmc"), which seem like it can be
+useful for this case.
+
+That said, before I start reviewing this, perhaps $subject patch is
+still a good starting point, then we can add support for the SD/SDIO
+part/variant on top to the same driver. Would that make sense or do
+you prefer another path forward?
+
+Kind regards
+Uffe
+
+[1]
+https://patchwork.kernel.org/project/linux-mmc/list/?series=601160
+
+> ---
+> Changes in v2:
+>  - Remove unused code.
+>  - Modify read/write register address.
+>
+>  MAINTAINERS                    |    1 +
+>  drivers/mmc/host/sunplus_mmc.c | 1204 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 1205 insertions(+)
+>  create mode 100644 drivers/mmc/host/sunplus_mmc.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 01ed57a..bf8c066 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18246,6 +18246,7 @@ SUNPLUS MMC DRIVER
+>  M:     Tony Huang <tonyhuang.sunplus@gmail.com>
+>  S:     Maintained
+>  F:     Documentation/devicetree/bindings/mmcc/sunplu-mmc.yaml
+> +F:     drivers/mmc/host/sunplus_mmc.c
+>
+>  SUPERH
+>  M:     Yoshinori Sato <ysato@users.sourceforge.jp>
+> diff --git a/drivers/mmc/host/sunplus_mmc.c b/drivers/mmc/host/sunplus_mmc.c
+> new file mode 100644
+> index 0000000..78716cf
+> --- /dev/null
+> +++ b/drivers/mmc/host/sunplus_mmc.c
+> @@ -0,0 +1,1204 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Tony Huang <tonyhuang.sunplus@gmail.com>
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/mmc/core.h>
+> +#include <linux/mmc/host.h>
+> +#include <linux/mmc/mmc.h>
+> +#include <linux/mmc/slot-gpio.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/reset.h>
+> +
+> +#define SPMMC_MIN_CLK                  400000
+> +#define SPMMC_MAX_CLK                  52000000
+> +#define SPMMC_MAX_BLK_COUNT            65536
+> +#define SPMMC_MAX_TUNABLE_DLY  7
+> +
+> +#define SPMMC_CARD_MEDIATYPE_SRCDST_REG 0x0000
+> +#define SPMMC_MEDIA_NONE       0
+> +#define SPMMC_MEDIA_SD         6
+> +#define SPMMC_MEDIA_MS         7
+> +
+> +#define SPMMC_SDRAM_SECTOR_0_SIZE_REG  0x0008
+> +#define SPMMC_DMA_BASE_ADDR_REG                        0x000C
+> +#define SPMMC_HW_DMA_CTRL_REG                  0x0010
+> +#define SPMMC_MAX_DMA_MEMORY_SECTORS   8
+> +
+> +#define SPMMC_SDRAM_SECTOR_1_ADDR_REG 0x0018
+> +
+> +#define SPMMC_SD_INT_REG       0x0088
+> +#define SPMMC_SDINT_SDCMPEN    BIT(0)
+> +#define SPMMC_SDINT_SDCMP      BIT(1)
+> +#define SPMMC_SDINT_SDIOEN     BIT(3)
+> +#define SPMMC_SDINT_SDIO       BIT(4)
+> +
+> +#define SPMMC_SD_PAGE_NUM_REG  0x008C
+> +#define SPMMC_SD_CONFIG0_REG   0x0090
+> +#define SPMMC_MODE_SD                  0
+> +#define SPMMC_MODE_EMMC                        1
+> +#define SPMMC_MODE_SDIO                        2
+> +
+> +#define SPMMC_SDIO_CTRL_REG            0x0094
+> +#define SPMMC_SD_RST_REG               0x0098
+> +#define SPMMC_SD_CTRL_REG              0x009C
+> +
+> +#define SPMMC_SD_STATUS_REG                                            0x00A0
+> +#define SPMMC_SDSTATUS_DUMMY_READY                             BIT(0)
+> +#define SPMMC_SDSTATUS_RSP_BUF_FULL                            BIT(1)
+> +#define SPMMC_SDSTATUS_TX_DATA_BUF_EMPTY               BIT(2)
+> +#define SPMMC_SDSTATUS_RX_DATA_BUF_FULL                        BIT(3)
+> +#define SPMMC_SDSTATUS_CMD_PIN_STATUS                  BIT(4)
+> +#define SPMMC_SDSTATUS_DAT0_PIN_STATUS                 BIT(5)
+> +#define SPMMC_SDSTATUS_RSP_TIMEOUT                             BIT(6)
+> +#define SPMMC_SDSTATUS_CARD_CRC_CHECK_TIMEOUT  BIT(7)
+> +#define SPMMC_SDSTATUS_STB_TIMEOUT                             BIT(8)
+> +#define SPMMC_SDSTATUS_RSP_CRC7_ERROR                  BIT(9)
+> +#define SPMMC_SDSTATUS_CRC_TOKEN_CHECK_ERROR   BIT(10)
+> +#define SPMMC_SDSTATUS_RDATA_CRC16_ERROR               BIT(11)
+> +#define SPMMC_SDSTATUS_SUSPEND_STATE_READY             BIT(12)
+> +#define SPMMC_SDSTATUS_BUSY_CYCLE                              BIT(13)
+> +#define SPMMC_SDSTATUS_DAT1_PIN_STATUS                 BIT(14)
+> +#define SPMMC_SDSTATUS_SD_SENSE_STATUS                 BIT(15)
+> +#define SPMMC_SDSTATUS_BOOT_ACK_TIMEOUT                        BIT(16)
+> +#define SPMMC_SDSTATUS_BOOT_DATA_TIMEOUT               BIT(17)
+> +#define SPMMC_SDSTATUS_BOOT_ACK_ERROR                  BIT(18)
+> +
+> +#define SPMMC_SD_STATE_REG             0x00A4
+> +#define SPMMC_SDSTATE_ERROR            BIT(13)
+> +#define SPMMC_SDSTATE_FINISH   BIT(14)
+> +
+> +#define SPMMC_SD_HW_STATE_REG          0x00A8
+> +#define SPMMC_SD_BLOCKSIZE_REG         0x00AC
+> +#define SPMMC_SD_CONFIG1_REG           0x00B0
+> +#define SPMMC_SD_TIMING_CONFIG0_REG 0x00B4
+> +#define SPMMC_SD_PIODATATX_REG         0x00BC
+> +#define SPMMC_SD_PIODATARX_REG         0x00C0
+> +#define SPMMC_SD_CMDBUF0_3_REG         0x00C4
+> +#define SPMMC_SD_CMDBUF4_REG           0x00C8
+> +#define SPMMC_SD_RSPBUF0_3_REG         0x00CC
+> +#define SPMMC_SD_RSPBUF4_5_REG         0x00D0
+> +
+> +struct spmmc_tuning_info {
+> +       int enable_tuning;
+> +       int need_tuning;
+> +#define SPMMC_MAX_RETRIES (8 * 8)
+> +       int retried; /* how many times has been retried */
+> +       u32 rd_crc_dly:3;
+> +       u32 rd_dat_dly:3;
+> +       u32 rd_rsp_dly:3;
+> +       u32 wr_cmd_dly:3;
+> +       u32 wr_dat_dly:3;
+> +       u32 clk_dly:3;
+> +};
+> +
+> +struct spmmc_host {
+> +       void __iomem *base;
+> +       struct clk *clk;
+> +       struct reset_control *rstc;
+> +       int mode; /* SD/SDIO/eMMC */
+> +       spinlock_t lock; /* controller lock */
+> +       struct mutex mrq_lock;
+> +       /* tasklet used to handle error then finish the request */
+> +       struct tasklet_struct tsklet_finish_req;
+> +       struct mmc_host *mmc;
+> +       struct mmc_request *mrq; /* current mrq */
+> +
+> +       int irq;
+> +       int use_int; /* should raise irq when done? */
+> +       int power_state; /* current power state: off/up/on */
+> +       int ddr_enabled;
+> +       int signal_voltage;
+> +#define SPMMC_DMA_MODE 0
+> +#define SPMMC_PIO_MODE 1
+> +       int dmapio_mode;
+> +       /* for purpose of reducing context switch, only when transfer data that*/
+> +       /* length is greater than `dma_int_threshold' should use interrupt */
+> +       int dma_int_threshold;
+> +       struct sg_mapping_iter sg_miter; /* for pio mode to access sglist */
+> +       int dma_use_int; /* should raise irq when dma done */
+> +       struct spmmc_tuning_info tuning_info;
+> +};
+> +
+> +static const u8 tuning_blk_pattern_4bit[] = {
+> +       0xff, 0x0f, 0xff, 0x00, 0xff, 0xcc, 0xc3, 0xcc,
+> +       0xc3, 0x3c, 0xcc, 0xff, 0xfe, 0xff, 0xfe, 0xef,
+> +       0xff, 0xdf, 0xff, 0xdd, 0xff, 0xfb, 0xff, 0xfb,
+> +       0xbf, 0xff, 0x7f, 0xff, 0x77, 0xf7, 0xbd, 0xef,
+> +       0xff, 0xf0, 0xff, 0xf0, 0x0f, 0xfc, 0xcc, 0x3c,
+> +       0xcc, 0x33, 0xcc, 0xcf, 0xff, 0xef, 0xff, 0xee,
+> +       0xff, 0xfd, 0xff, 0xfd, 0xdf, 0xff, 0xbf, 0xff,
+> +       0xbb, 0xff, 0xf7, 0xff, 0xf7, 0x7f, 0x7b, 0xde,
+> +};
+> +
+> +static const u8 tuning_blk_pattern_8bit[] = {
+> +       0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00, 0x00,
+> +       0xff, 0xff, 0xcc, 0xcc, 0xcc, 0x33, 0xcc, 0xcc,
+> +       0xcc, 0x33, 0x33, 0xcc, 0xcc, 0xcc, 0xff, 0xff,
+> +       0xff, 0xee, 0xff, 0xff, 0xff, 0xee, 0xee, 0xff,
+> +       0xff, 0xff, 0xdd, 0xff, 0xff, 0xff, 0xdd, 0xdd,
+> +       0xff, 0xff, 0xff, 0xbb, 0xff, 0xff, 0xff, 0xbb,
+> +       0xbb, 0xff, 0xff, 0xff, 0x77, 0xff, 0xff, 0xff,
+> +       0x77, 0x77, 0xff, 0x77, 0xbb, 0xdd, 0xee, 0xff,
+> +       0xff, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00,
+> +       0x00, 0xff, 0xff, 0xcc, 0xcc, 0xcc, 0x33, 0xcc,
+> +       0xcc, 0xcc, 0x33, 0x33, 0xcc, 0xcc, 0xcc, 0xff,
+> +       0xff, 0xff, 0xee, 0xff, 0xff, 0xff, 0xee, 0xee,
+> +       0xff, 0xff, 0xff, 0xdd, 0xff, 0xff, 0xff, 0xdd,
+> +       0xdd, 0xff, 0xff, 0xff, 0xbb, 0xff, 0xff, 0xff,
+> +       0xbb, 0xbb, 0xff, 0xff, 0xff, 0x77, 0xff, 0xff,
+> +       0xff, 0x77, 0x77, 0xff, 0x77, 0xbb, 0xdd, 0xee,
+> +};
+> +
+> +/* Produces a mask of set bits covering a range of a 32-bit value */
+> +static inline u32 bitfield_mask(u32 shift, u32 width)
+> +{
+> +       return ((1 << width) - 1) << shift;
+> +}
+> +
+> +/* Extract the value of a bitfield found within a given register value */
+> +static inline u32 bitfield_extract(u32 reg_val, u32 shift, u32 width)
+> +{
+> +       return (reg_val & bitfield_mask(shift, width)) >> shift;
+> +}
+> +
+> +/* Replace the value of a bitfield found within a given register value */
+> +static inline u32 bitfield_replace(u32 reg_val, u32 shift, u32 width, u32 val)
+> +{
+> +       u32 mask = bitfield_mask(shift, width);
+> +
+> +       return (reg_val & ~mask) | (val << shift);
+> +}
+> +
+> +/**
+> + * wait for transaction done, return -1 if error.
+> + */
+> +static inline int spmmc_wait_finish(struct spmmc_host *host)
+> +{
+> +       /* Wait for transaction finish */
+> +       unsigned long timeout = jiffies + msecs_to_jiffies(5000);
+> +
+> +       while (!time_after(jiffies, timeout)) {
+> +               if (readl(host->base + SPMMC_SD_STATE_REG) & SPMMC_SDSTATE_FINISH)
+> +                       return 0;
+> +               if (readl(host->base + SPMMC_SD_STATE_REG) & SPMMC_SDSTATE_ERROR)
+> +                       return -1;
+> +       }
+> +       return -1;
+> +}
+> +
+> +static inline int spmmc_wait_sdstatus(struct spmmc_host *host, unsigned int status_bit)
+> +{
+> +       unsigned long timeout = jiffies + msecs_to_jiffies(5000);
+> +
+> +       while (!time_after(jiffies, timeout)) {
+> +               if (readl(host->base + SPMMC_SD_STATUS_REG) & status_bit)
+> +                       return 0;
+> +               if (readl(host->base + SPMMC_SD_STATE_REG) & SPMMC_SDSTATE_ERROR)
+> +                       return -1;
+> +       }
+> +       return -1;
+> +}
+> +
+> +#define spmmc_wait_rspbuf_full(host) spmmc_wait_sdstatus(host, SPMMC_SDSTATUS_RSP_BUF_FULL)
+> +#define spmmc_wait_rxbuf_full(host) spmmc_wait_sdstatus(host, SPMMC_SDSTATUS_RX_DATA_BUF_FULL)
+> +#define spmmc_wait_txbuf_empty(host) spmmc_wait_sdstatus(host, SPMMC_SDSTATUS_TX_DATA_BUF_EMPTY)
+> +
+> +static void spmmc_get_rsp(struct spmmc_host *host, struct mmc_command *cmd)
+> +{
+> +       u32 value0_3, value4_5;
+> +
+> +       if (unlikely(!(cmd->flags & MMC_RSP_PRESENT)))
+> +               return;
+> +       if (unlikely(cmd->flags & MMC_RSP_136)) {
+> +               if (spmmc_wait_rspbuf_full(host))
+> +                       return;
+> +               value0_3 = readl(host->base + SPMMC_SD_RSPBUF0_3_REG);
+> +               value4_5 = readl(host->base + SPMMC_SD_RSPBUF4_5_REG) & 0xffff;
+> +               cmd->resp[0] = (value0_3 << 8) | (value4_5 >> 8);
+> +               cmd->resp[1] = value4_5 << 24;
+> +               value0_3 = readl(host->base + SPMMC_SD_RSPBUF0_3_REG);
+> +               value4_5 = readl(host->base + SPMMC_SD_RSPBUF4_5_REG) & 0xffff;
+> +               cmd->resp[1] |= value0_3 >> 8;
+> +               cmd->resp[2] = value0_3 << 24;
+> +               cmd->resp[2] |= value4_5 << 8;
+> +               value0_3 = readl(host->base + SPMMC_SD_RSPBUF0_3_REG);
+> +               value4_5 = readl(host->base + SPMMC_SD_RSPBUF4_5_REG) & 0xffff;
+> +               cmd->resp[2] |= value0_3 >> 24;
+> +               cmd->resp[3] = value0_3 << 8;
+> +               cmd->resp[3] |= value4_5 >> 8;
+> +       } else {
+> +               if (spmmc_wait_rspbuf_full(host))
+> +                       return;
+> +               value0_3 = readl(host->base + SPMMC_SD_RSPBUF0_3_REG);
+> +               value4_5 = readl(host->base + SPMMC_SD_RSPBUF4_5_REG) & 0xffff;
+> +               cmd->resp[0] = (value0_3 << 8) | (value4_5 >> 8);
+> +               cmd->resp[1] = value4_5 << 24;
+> +       }
+> +       //return;
+> +}
+> +
+> +static void spmmc_set_bus_clk(struct spmmc_host *host, int clk)
+> +{
+> +       unsigned int clkdiv;
+> +       int f_min = host->mmc->f_min;
+> +       int f_max = host->mmc->f_max;
+> +       u32 value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +
+> +       if (clk < f_min)
+> +               clk = f_min;
+> +       if (clk > f_max)
+> +               clk = f_max;
+> +
+> +       clkdiv = (clk_get_rate(host->clk) + clk) / clk - 1;
+> +       if (clkdiv > 0xfff)
+> +               clkdiv = 0xfff;
+> +
+> +       value = bitfield_replace(value, 20, 12, clkdiv);
+> +       writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +
+> +       /* In order to reduce the frequency of context switch,
+> +        * if it is high speed or upper, we do not use interrupt
+> +        * when send a command that without data transferring.
+> +        */
+> +       if (clk > 25000000)
+> +               host->use_int = 0;
+> +       else
+> +               host->use_int = 1;
+> +}
+> +
+> +static void spmmc_set_bus_timing(struct spmmc_host *host, unsigned int timing)
+> +{
+> +       u32 value = readl(host->base + SPMMC_SD_CONFIG1_REG);
+> +       int clkdiv = readl(host->base + SPMMC_SD_CONFIG0_REG) >> 20;
+> +       int delay = clkdiv / 2 < 7 ? clkdiv / 2 : 7;
+> +       int hs_en = 1;
+> +       char *timing_name;
+> +
+> +       host->ddr_enabled = 0;
+> +       switch (timing) {
+> +       case MMC_TIMING_LEGACY:
+> +               hs_en = 0;
+> +               timing_name = "legacy";
+> +               break;
+> +       case MMC_TIMING_MMC_HS:
+> +               timing_name = "mmc high-speed";
+> +               break;
+> +       case MMC_TIMING_SD_HS:
+> +               timing_name = "sd high-speed";
+> +               break;
+> +       case MMC_TIMING_UHS_SDR50:
+> +               timing_name = "sd uhs SDR50";
+> +               break;
+> +       case MMC_TIMING_UHS_SDR104:
+> +               timing_name = "sd uhs SDR104";
+> +               break;
+> +       case MMC_TIMING_UHS_DDR50:
+> +               host->ddr_enabled = 1;
+> +               timing_name = "sd uhs DDR50";
+> +               break;
+> +       case MMC_TIMING_MMC_DDR52:
+> +               host->ddr_enabled = 1;
+> +               timing_name = "mmc DDR52";
+> +               break;
+> +       case MMC_TIMING_MMC_HS200:
+> +               timing_name = "mmc HS200";
+> +               break;
+> +       default:
+> +               timing_name = "invalid";
+> +               hs_en = 0;
+> +               break;
+> +       }
+> +
+> +       if (hs_en) {
+> +               value = bitfield_replace(value, 31, 1, 1); /* sd_high_speed_en */
+> +               writel(value, host->base + SPMMC_SD_CONFIG1_REG);
+> +               value = readl(host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +               value = bitfield_replace(value, 4, 3, delay); /* sd_wr_dat_dly_sel */
+> +               value = bitfield_replace(value, 8, 3, delay); /* sd_wr_cmd_dly_sel */
+> +               writel(value, host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +       } else {
+> +               value = bitfield_replace(value, 31, 1, 0);
+> +               writel(value, host->base + SPMMC_SD_CONFIG1_REG);
+> +       }
+> +       if (host->ddr_enabled) {
+> +               value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +               value = bitfield_replace(value, 1, 1, 1); /* sdddrmode */
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +       } else {
+> +               value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +               value = bitfield_replace(value, 1, 1, 0);
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +       }
+> +}
+> +
+> +static void spmmc_set_bus_width(struct spmmc_host *host, int width)
+> +{
+> +       u32 value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +       int bus_width;
+> +
+> +       switch (width) {
+> +       case MMC_BUS_WIDTH_8:
+> +               value = bitfield_replace(value, 11, 1, 0);
+> +               value = bitfield_replace(value, 18, 1, 1);
+> +               bus_width = 8;
+> +               break;
+> +       case MMC_BUS_WIDTH_4:
+> +               value = bitfield_replace(value, 11, 1, 1);
+> +               value = bitfield_replace(value, 18, 1, 0);
+> +               bus_width = 4;
+> +               break;
+> +       default:
+> +               value = bitfield_replace(value, 11, 1, 0);
+> +               value = bitfield_replace(value, 18, 1, 0);
+> +               bus_width = 1;
+> +               break;
+> +       };
+> +       writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +}
+> +
+> +/**
+> + * select the working mode of controller: sd/sdio/emmc
+> + */
+> +static void spmmc_select_mode(struct spmmc_host *host, int mode)
+> +{
+> +       u32 value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +
+> +       host->mode = mode;
+> +       /* set `sdmmcmode', as it will sample data at fall edge */
+> +       /* of SD bus clock if `sdmmcmode' is not set when */
+> +       /* `sd_high_speed_en' is not set, which is not compliant */
+> +       /* with SD specification */
+> +       value = bitfield_replace(value, 10, 1, 1);
+> +       switch (mode) {
+> +       case SPMMC_MODE_EMMC:
+> +               value = bitfield_replace(value, 9, 1, 0);
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +               break;
+> +       case SPMMC_MODE_SDIO:
+> +               value = bitfield_replace(value, 9, 1, 1);
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +               value = readl(host->base + SPMMC_SDIO_CTRL_REG);
+> +               value = bitfield_replace(value, 6, 1, 1); /* int_multi_trig */
+> +               writel(value, host->base + SPMMC_SDIO_CTRL_REG);
+> +               break;
+> +       case SPMMC_MODE_SD:
+> +       default:
+> +               value = bitfield_replace(value, 9, 1, 0);
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +               break;
+> +       }
+> +}
+> +
+> +static void spmmc_sw_reset(struct spmmc_host *host)
+> +{
+> +       u32 value;
+> +
+> +       /* Must reset dma operation first, or it will*/
+> +       /* be stuck on sd_state == 0x1c00 because of*/
+> +       /* a controller software reset bug */
+> +       value = readl(host->base + SPMMC_HW_DMA_CTRL_REG);
+> +       value = bitfield_replace(value, 10, 1, 1);
+> +       writel(value, host->base + SPMMC_HW_DMA_CTRL_REG);
+> +       value = bitfield_replace(value, 10, 1, 0);
+> +       writel(value, host->base + SPMMC_HW_DMA_CTRL_REG);
+> +       value = readl(host->base + SPMMC_HW_DMA_CTRL_REG);
+> +       value = bitfield_replace(value, 9, 1, 1);
+> +       writel(value, host->base + SPMMC_HW_DMA_CTRL_REG);
+> +       writel(0x7, host->base + SPMMC_SD_RST_REG);
+> +       while (readl(host->base + SPMMC_SD_HW_STATE_REG) & BIT(6))
+> +               ;
+> +}
+> +
+> +static void spmmc_prepare_cmd(struct spmmc_host *host, struct mmc_command *cmd)
+> +{
+> +       u32 value;
+> +
+> +       /* add start bit, according to spec, command format */
+> +       value = ((cmd->opcode | 0x40) << 24) | (cmd->arg >> 8);
+> +       writel(value, host->base + SPMMC_SD_CMDBUF0_3_REG);
+> +       writeb(cmd->arg & 0xff, host->base + SPMMC_SD_CMDBUF4_REG);
+> +
+> +       /* disable interrupt if needed */
+> +       value = readl(host->base + SPMMC_SD_INT_REG);
+> +       value = bitfield_replace(value, 2, 1, 1); /* sd_cmp_clr */
+> +       if (likely(!host->use_int || cmd->flags & MMC_RSP_136))
+> +               value = bitfield_replace(value, 0, 1, 0); /* sdcmpen */
+> +       else
+> +               value = bitfield_replace(value, 0, 1, 1);
+> +       writel(value, host->base + SPMMC_SD_INT_REG);
+> +
+> +       value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +       value = bitfield_replace(value, 4, 2, 0); /* sd_trans_mode */
+> +       value = bitfield_replace(value, 7, 1, 1); /* sdcmddummy */
+> +       if (likely(cmd->flags & MMC_RSP_PRESENT)) {
+> +               value = bitfield_replace(value, 6, 1, 1); /* sdautorsp */
+> +       } else {
+> +               value = bitfield_replace(value, 6, 1, 0);
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +               return;
+> +       }
+> +       /*
+> +        * Currently, host is not capable of checking R2's CRC7,
+> +        * thus, enable crc7 check only for 48 bit response commands
+> +        */
+> +       if (likely(cmd->flags & MMC_RSP_CRC && !(cmd->flags & MMC_RSP_136)))
+> +               value = bitfield_replace(value, 8, 1, 1); /* sdrspchk_en */
+> +       else
+> +               value = bitfield_replace(value, 8, 1, 0);
+> +
+> +       if (unlikely(cmd->flags & MMC_RSP_136))
+> +               value = bitfield_replace(value, 15, 1, 1); /* sdrsptype */
+> +       else
+> +               value = bitfield_replace(value, 15, 1, 0);
+> +       writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +}
+> +
+> +static void spmmc_prepare_data(struct spmmc_host *host, struct mmc_data *data)
+> +{
+> +       u32 value, srcdst;
+> +       //struct mmc_command *cmd = data->mrq->cmd;
+> +
+> +       writel(data->blocks - 1, host->base + SPMMC_SD_PAGE_NUM_REG);
+> +       writel(data->blksz - 1, host->base + SPMMC_SD_BLOCKSIZE_REG);
+> +       value = readl(host->base + SPMMC_SD_CONFIG0_REG);
+> +       if (data->flags & MMC_DATA_READ) {
+> +               value = bitfield_replace(value, 4, 2, 2); /* sd_trans_mode */
+> +               value = bitfield_replace(value, 6, 1, 0); /* sdautorsp */
+> +               value = bitfield_replace(value, 7, 1, 0); /* sdcmddummy */
+> +               srcdst = readl(host->base + SPMMC_CARD_MEDIATYPE_SRCDST_REG);
+> +               srcdst = bitfield_replace(srcdst, 4, 7, 0x12);
+> +               writel(srcdst, host->base + SPMMC_CARD_MEDIATYPE_SRCDST_REG);
+> +       } else {
+> +               value = bitfield_replace(value, 4, 2, 1);
+> +               srcdst = readl(host->base + SPMMC_CARD_MEDIATYPE_SRCDST_REG);
+> +               srcdst = bitfield_replace(srcdst, 4, 7, 0x21);
+> +               writel(srcdst, host->base + SPMMC_CARD_MEDIATYPE_SRCDST_REG);
+> +       }
+> +       value = bitfield_replace(value, 2, 1, 1);
+> +       if (likely(host->dmapio_mode == SPMMC_DMA_MODE)) {
+> +               struct scatterlist *sg;
+> +               dma_addr_t dma_addr;
+> +               unsigned int dma_size;
+> +               u32 *reg_addr;
+> +               int dma_direction = data->flags & MMC_DATA_READ ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> +               int i, count = 1;
+> +
+> +               count = dma_map_sg(host->mmc->parent, data->sg, data->sg_len, dma_direction);
+> +               if (unlikely(!count || count > SPMMC_MAX_DMA_MEMORY_SECTORS)) {
+> +                       data->error = -EINVAL;
+> +                       return;
+> +               }
+> +               for_each_sg(data->sg, sg, count, i) {
+> +                       dma_addr = sg_dma_address(sg);
+> +                       dma_size = sg_dma_len(sg) / 512 - 1;
+> +                       if (i == 0) {
+> +                               writel(dma_addr, host->base + SPMMC_DMA_BASE_ADDR_REG);
+> +                               writel(dma_size, host->base + SPMMC_SDRAM_SECTOR_0_SIZE_REG);
+> +                       } else {
+> +                               reg_addr = host->base + SPMMC_SDRAM_SECTOR_1_ADDR_REG + (i - 1) * 2;
+> +                               writel(dma_addr, reg_addr);
+> +                               writel(dma_size, reg_addr + 1);
+> +                       }
+> +               }
+> +               value = bitfield_replace(value, 0, 1, 0); /* sdpiomode */
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +               /* enable interrupt if needed */
+> +               if (!host->use_int && data->blksz * data->blocks > host->dma_int_threshold) {
+> +                       host->dma_use_int = 1;
+> +                       value = readl(host->base + SPMMC_SD_INT_REG);
+> +                       value = bitfield_replace(value, 0, 1, 1); /* sdcmpen */
+> +                       writel(value, host->base + SPMMC_SD_INT_REG);
+> +               }
+> +       } else {
+> +               value = bitfield_replace(value, 0, 1, 1);
+> +               value = bitfield_replace(value, 14, 1, 1); /* rx4_en */
+> +               writel(value, host->base + SPMMC_SD_CONFIG0_REG);
+> +       }
+> +}
+> +
+> +static inline void spmmc_trigger_transaction(struct spmmc_host *host)
+> +{
+> +       u32 value = readl(host->base + SPMMC_SD_CTRL_REG);
+> +
+> +       value = bitfield_replace(value, 0, 1, 1); /* trigger transaction */
+> +       writel(value, host->base + SPMMC_SD_CTRL_REG);
+> +}
+> +
+> +static void __send_stop_cmd(struct spmmc_host *host)
+> +{
+> +       struct mmc_command stop = {};
+> +       u32 value;
+> +
+> +       stop.opcode = MMC_STOP_TRANSMISSION;
+> +       stop.arg = 0;
+> +       stop.flags = MMC_RSP_R1B;
+> +       spmmc_prepare_cmd(host, &stop);
+> +       value = readl(host->base + SPMMC_SD_INT_REG);
+> +       value = bitfield_replace(value, 0, 1, 0); /* sdcmpen */
+> +       writel(value, host->base + SPMMC_SD_INT_REG);
+> +       spmmc_trigger_transaction(host);
+> +       spmmc_wait_finish(host);
+> +}
+> +
+> +/**
+> + * check if error occurred during transaction.
+> + * @host -  host
+> + * @mrq - the mrq
+> + * @return 0 if no error otherwise the error number.
+> + */
+> +static int spmmc_check_error(struct spmmc_host *host, struct mmc_request *mrq)
+> +{
+> +       int ret = 0;
+> +       struct mmc_command *cmd = mrq->cmd;
+> +       struct mmc_data *data = mrq->data;
+> +
+> +       u32 value = readl(host->base + SPMMC_SD_STATE_REG);
+> +       u32 crc_token = bitfield_extract(value, 4, 3);
+> +
+> +       if (unlikely(value & SPMMC_SDSTATE_ERROR)) {
+> +               u32 timing_cfg0 = 0;
+> +
+> +               value = readl(host->base + SPMMC_SD_STATUS_REG);
+> +
+> +               if (host->tuning_info.enable_tuning) {
+> +                       timing_cfg0 = readl(host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +                       host->tuning_info.rd_crc_dly = bitfield_extract(timing_cfg0, 20, 3);
+> +                       host->tuning_info.rd_dat_dly = bitfield_extract(timing_cfg0, 16, 3);
+> +                       host->tuning_info.rd_rsp_dly = bitfield_extract(timing_cfg0, 12, 3);
+> +                       host->tuning_info.wr_cmd_dly = bitfield_extract(timing_cfg0, 8, 3);
+> +                       host->tuning_info.wr_dat_dly = bitfield_extract(timing_cfg0, 4, 3);
+> +               }
+> +
+> +               if (value & SPMMC_SDSTATUS_RSP_TIMEOUT) {
+> +                       ret = -ETIMEDOUT;
+> +                       host->tuning_info.wr_cmd_dly++;
+> +               } else if (value & SPMMC_SDSTATUS_RSP_CRC7_ERROR) {
+> +                       ret = -EILSEQ;
+> +                       host->tuning_info.rd_rsp_dly++;
+> +               } else if (data) {
+> +                       if ((value & SPMMC_SDSTATUS_STB_TIMEOUT)) {
+> +                               ret = -ETIMEDOUT;
+> +                               host->tuning_info.rd_dat_dly++;
+> +                       } else if (value & SPMMC_SDSTATUS_RDATA_CRC16_ERROR) {
+> +                               ret = -EILSEQ;
+> +                               host->tuning_info.rd_dat_dly++;
+> +                       } else if (value & SPMMC_SDSTATUS_CARD_CRC_CHECK_TIMEOUT) {
+> +                               ret = -ETIMEDOUT;
+> +                               host->tuning_info.rd_crc_dly++;
+> +                       } else if (value & SPMMC_SDSTATUS_CRC_TOKEN_CHECK_ERROR) {
+> +                               ret = -EILSEQ;
+> +                               if (crc_token == 0x5)
+> +                                       host->tuning_info.wr_dat_dly++;
+> +                               else
+> +                                       host->tuning_info.rd_crc_dly++;
+> +                       }
+> +               }
+> +               cmd->error = ret;
+> +               if (data) {
+> +                       data->error = ret;
+> +                       data->bytes_xfered = 0;
+> +               }
+> +               if (!host->tuning_info.need_tuning && host->tuning_info.enable_tuning)
+> +                       cmd->retries = SPMMC_MAX_RETRIES; /* retry it */
+> +               spmmc_sw_reset(host);
+> +               mdelay(5);
+> +
+> +               if (host->tuning_info.enable_tuning) {
+> +                       timing_cfg0 = bitfield_replace(timing_cfg0, 20, 3,
+> +                                                      host->tuning_info.rd_crc_dly);
+> +                       timing_cfg0 = bitfield_replace(timing_cfg0, 16, 3,
+> +                                                      host->tuning_info.rd_dat_dly);
+> +                       timing_cfg0 = bitfield_replace(timing_cfg0, 12, 3,
+> +                                                      host->tuning_info.rd_rsp_dly);
+> +                       timing_cfg0 = bitfield_replace(timing_cfg0, 8, 3,
+> +                                                      host->tuning_info.wr_cmd_dly);
+> +                       timing_cfg0 = bitfield_replace(timing_cfg0, 4, 3,
+> +                                                      host->tuning_info.wr_dat_dly);
+> +                       writel(timing_cfg0, host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +               }
+> +       } else if (data) {
+> +               data->error = 0;
+> +               data->bytes_xfered = data->blocks * data->blksz;
+> +       }
+> +       host->tuning_info.need_tuning = ret;
+> +    /* controller will not send cmd 12 automatically if error occurred */
+> +       if (cmd->opcode == MMC_READ_MULTIPLE_BLOCK ||
+> +           cmd->opcode == MMC_WRITE_MULTIPLE_BLOCK) {
+> +               __send_stop_cmd(host);
+> +               spmmc_sw_reset(host);
+> +       }
+> +       return ret;
+> +}
+> +
+> +/**
+> + * the strategy is:
+> + * 1. if several continuous delays are acceptable, we choose a middle one;
+> + * 2. otherwise, we choose the first one.
+> + */
+> +static inline int __find_best_delay(u8 candidate_dly)
+> +{
+> +       int f, w;
+> +
+> +       if (!candidate_dly)
+> +               return 0;
+> +       f = ffs(candidate_dly) - 1;
+> +       w = hweight8(candidate_dly);
+> +       if (0xff == (bitfield_mask(f, w) & ~candidate_dly))
+> +               return (f + w / 2);
+> +       else
+> +               return (f);
+> +}
+> +
+> +static inline __maybe_unused void spmmc_txdummy(struct spmmc_host *host, int count)
+> +{
+> +       u32 value;
+> +
+> +       count &= 0x1ff;
+> +       value = readl(host->base + SPMMC_SD_CONFIG1_REG);
+> +       value = bitfield_replace(value, 0, 9, count);
+> +       writel(value, host->base + SPMMC_SD_CONFIG1_REG);
+> +       value = readl(host->base + SPMMC_SD_CTRL_REG);
+> +       value = bitfield_replace(value, 1, 1, 1); /* trigger tx dummy */
+> +       writel(value, host->base + SPMMC_SD_CTRL_REG);
+> +}
+> +
+> +static void spmmc_xfer_data_pio(struct spmmc_host *host, struct mmc_data *data)
+> +{
+> +       u32 *buf; /* tx/rx 4 bytes one time in pio mode */
+> +       int data_left = data->blocks * data->blksz;
+> +       int consumed, remain;
+> +
+> +       struct sg_mapping_iter *sg_miter = &host->sg_miter;
+> +       unsigned int flags = 0;
+> +
+> +       if (data->flags & MMC_DATA_WRITE)
+> +               flags |= SG_MITER_FROM_SG;
+> +       else
+> +               flags |= SG_MITER_TO_SG;
+> +       sg_miter_start(&host->sg_miter, data->sg, data->sg_len, flags);
+> +       while (data_left > 0) {
+> +               consumed = 0;
+> +               if (!sg_miter_next(sg_miter))
+> +                       break;
+> +               buf = sg_miter->addr;
+> +               remain = sg_miter->length;
+> +               do {
+> +                       if (data->flags & MMC_DATA_WRITE) {
+> +                               if (spmmc_wait_txbuf_empty(host))
+> +                                       goto done;
+> +                               writel(*buf, host->base + SPMMC_SD_PIODATATX_REG);
+> +                       } else {
+> +                               if (spmmc_wait_rxbuf_full(host))
+> +                                       goto done;
+> +                               *buf = readl(host->base + SPMMC_SD_PIODATARX_REG);
+> +                       }
+> +                       buf++;
+> +                       consumed += 4;
+> +                       remain -= 4;
+> +               } while (remain);
+> +               sg_miter->consumed = consumed;
+> +               data_left -= consumed;
+> +       }
+> +done:
+> +       sg_miter_stop(sg_miter);
+> +}
+> +
+> +static void spmmc_controller_init(struct spmmc_host *host)
+> +{
+> +       u32 value;
+> +       int ret = reset_control_assert(host->rstc);
+> +
+> +       if (!ret) {
+> +               mdelay(1);
+> +               ret = reset_control_deassert(host->rstc);
+> +       }
+> +
+> +       value = readl(host->base + SPMMC_CARD_MEDIATYPE_SRCDST_REG);
+> +       value = bitfield_replace(value, 0, 3, SPMMC_MEDIA_SD);
+> +       writel(value, host->base + SPMMC_CARD_MEDIATYPE_SRCDST_REG);
+> +       host->signal_voltage = MMC_SIGNAL_VOLTAGE_330;
+> +}
+> +
+> +static void spmmc_set_power_mode(struct spmmc_host *host, struct mmc_ios *ios)
+> +{
+> +       if (host->power_state == ios->power_mode)
+> +               return;
+> +
+> +       switch (ios->power_mode) {
+> +               /* power off->up->on */
+> +       case MMC_POWER_ON:
+> +               spmmc_controller_init(host);
+> +               pm_runtime_get_sync(host->mmc->parent);
+> +               break;
+> +       case MMC_POWER_UP:
+> +               break;
+> +       case MMC_POWER_OFF:
+> +               pm_runtime_put(host->mmc->parent);
+> +               break;
+> +       }
+> +       host->power_state = ios->power_mode;
+> +}
+> +
+> +/**
+> + * 1. unmap scatterlist if needed;
+> + * 2. get response & check error conditions;
+> + * 3. unlock host->mrq_lock
+> + * 4. notify mmc layer the request is done
+> + */
+> +static void spmmc_finish_request(struct spmmc_host *host, struct mmc_request *mrq)
+> +{
+> +       struct mmc_command *cmd;
+> +       struct mmc_data *data;
+> +
+> +       if (!mrq)
+> +               return;
+> +
+> +       cmd = mrq->cmd;
+> +       data = mrq->data;
+> +
+> +       if (data && SPMMC_DMA_MODE == host->dmapio_mode) {
+> +               int dma_direction = data->flags & MMC_DATA_READ ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> +
+> +               dma_unmap_sg(host->mmc->parent, data->sg, data->sg_len, dma_direction);
+> +               host->dma_use_int = 0;
+> +       }
+> +       spmmc_get_rsp(host, cmd);
+> +       spmmc_check_error(host, mrq);
+> +       host->mrq = NULL;
+> +       mutex_unlock(&host->mrq_lock);
+> +       mmc_request_done(host->mmc, mrq);
+> +}
+> +
+> +/* Interrupt Service Routine */
+> +irqreturn_t spmmc_irq(int irq, void *dev_id)
+> +{
+> +       struct spmmc_host *host = dev_id;
+> +       u32 value = readl(host->base + SPMMC_SD_INT_REG);
+> +
+> +       spin_lock(&host->lock);
+> +       if ((value & SPMMC_SDINT_SDCMP) && (value & SPMMC_SDINT_SDCMPEN)) {
+> +               value = bitfield_replace(value, 0, 1, 0); /* disable sdcmp */
+> +               value = bitfield_replace(value, 2, 1, 1); /* sd_cmp_clr */
+> +               writel(value, host->base + SPMMC_SD_INT_REG);
+> +               /* if error occurred, we my need send cmd 12 to stop data transaction,*/
+> +               /* which is time consuming, so make use of tasklet to handle this.*/
+> +               if (unlikely(readl(host->base + SPMMC_SD_STATE_REG) & SPMMC_SDSTATE_ERROR))
+> +                       tasklet_schedule(&host->tsklet_finish_req);
+> +               else
+> +                       spmmc_finish_request(host, host->mrq);
+> +       }
+> +       if (value & SPMMC_SDINT_SDIO &&
+> +           (value & SPMMC_SDINT_SDIOEN)) {
+> +               mmc_signal_sdio_irq(host->mmc);
+> +       }
+> +       spin_unlock(&host->lock);
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static void spmmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
+> +{
+> +       struct spmmc_host *host = mmc_priv(mmc);
+> +       struct mmc_data *data;
+> +       struct mmc_command *cmd;
+> +       int ret;
+> +
+> +       ret = mutex_lock_interruptible(&host->mrq_lock);
+> +       if (ret)
+> +               return;
+> +
+> +       host->mrq = mrq;
+> +       data = mrq->data;
+> +       cmd = mrq->cmd;
+> +
+> +       spmmc_prepare_cmd(host, cmd);
+> +       /* we need manually read response R2. */
+> +       if (unlikely(cmd->flags & MMC_RSP_136)) {
+> +               spmmc_trigger_transaction(host);
+> +               spmmc_get_rsp(host, cmd);
+> +               spmmc_wait_finish(host);
+> +               spmmc_check_error(host, mrq);
+> +               host->mrq = NULL;
+> +               mutex_unlock(&host->mrq_lock);
+> +               mmc_request_done(host->mmc, mrq);
+> +       } else {
+> +               if (data)
+> +                       spmmc_prepare_data(host, data);
+> +
+> +               if (unlikely(host->dmapio_mode == SPMMC_PIO_MODE && data)) {
+> +                       u32 value;
+> +                       /* pio data transfer do not use interrupt */
+> +                       value = readl(host->base + SPMMC_SD_INT_REG);
+> +                       value = bitfield_replace(value, 0, 1, 0); /* sdcmpen */
+> +                       writel(value, host->base + SPMMC_SD_INT_REG);
+> +                       spmmc_trigger_transaction(host);
+> +                       spmmc_xfer_data_pio(host, data);
+> +                       spmmc_wait_finish(host);
+> +                       spmmc_finish_request(host, mrq);
+> +               } else {
+> +                       if (!(host->use_int || host->dma_use_int)) {
+> +                               spmmc_trigger_transaction(host);
+> +                               spmmc_wait_finish(host);
+> +                               spmmc_finish_request(host, mrq);
+> +                       } else {
+> +                               spmmc_trigger_transaction(host);
+> +                       }
+> +               }
+> +       }
+> +}
+> +
+> +static void spmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+> +{
+> +       struct spmmc_host *host = (struct spmmc_host *)mmc_priv(mmc);
+> +
+> +       mutex_lock(&host->mrq_lock);
+> +       spmmc_set_power_mode(host, ios);
+> +       spmmc_set_bus_clk(host, ios->clock);
+> +       spmmc_set_bus_timing(host, ios->timing);
+> +       spmmc_set_bus_width(host, ios->bus_width);
+> +       /* ensure mode is correct, because we might have hw reset the controller */
+> +       spmmc_select_mode(host, host->mode);
+> +       mutex_unlock(&host->mrq_lock);
+> +       //return;
+> +}
+> +
+> +/**
+> + * Return values for the get_cd callback should be:
+> + *   0 for a absent card
+> + *   1 for a present card
+> + *   -ENOSYS when not supported (equal to NULL callback)
+> + *   or a negative errno value when something bad happened
+> + */
+> +int spmmc_get_cd(struct mmc_host *mmc)
+> +{
+> +       int ret = 0;
+> +
+> +       if (mmc_can_gpio_cd(mmc))
+> +               ret = mmc_gpio_get_cd(mmc);
+> +
+> +       if (ret < 0)
+> +               ret = 0;
+> +
+> +       return ret;
+> +}
+> +
+> +static int spmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+> +{
+> +       struct spmmc_host *host = mmc_priv(mmc);
+> +       const u8 *blk_pattern;
+> +       u8 *blk_test;
+> +       int blksz;
+> +       u8 smpl_dly = 0, candidate_dly = 0;
+> +       u32 value;
+> +
+> +       if (mmc->ios.bus_width == MMC_BUS_WIDTH_8) {
+> +               blk_pattern = tuning_blk_pattern_8bit;
+> +               blksz = sizeof(tuning_blk_pattern_8bit);
+> +       } else if (mmc->ios.bus_width == MMC_BUS_WIDTH_4) {
+> +               blk_pattern = tuning_blk_pattern_4bit;
+> +               blksz = sizeof(tuning_blk_pattern_4bit);
+> +       } else {
+> +               return -EINVAL;
+> +       }
+> +
+> +       blk_test = kmalloc(blksz, GFP_KERNEL);
+> +       if (!blk_test)
+> +               return -ENOMEM;
+> +
+> +       host->tuning_info.enable_tuning = 0;
+> +       do {
+> +               struct mmc_request mrq = {NULL};
+> +               struct mmc_command cmd = {0};
+> +               struct mmc_command stop = {0};
+> +               struct mmc_data data = {0};
+> +               struct scatterlist sg;
+> +
+> +               cmd.opcode = opcode;
+> +               cmd.arg = 0;
+> +               cmd.flags = MMC_RSP_R1 | MMC_CMD_ADTC;
+> +
+> +               stop.opcode = MMC_STOP_TRANSMISSION;
+> +               stop.arg = 0;
+> +               stop.flags = MMC_RSP_R1B | MMC_CMD_AC;
+> +
+> +               data.blksz = blksz;
+> +               data.blocks = 1;
+> +               data.flags = MMC_DATA_READ;
+> +               data.sg = &sg;
+> +               data.sg_len = 1;
+> +
+> +               sg_init_one(&sg, blk_test, blksz);
+> +               mrq.cmd = &cmd;
+> +               mrq.stop = &stop;
+> +               mrq.data = &data;
+> +               host->mrq = &mrq;
+> +
+> +               value = readl(host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +               value = bitfield_replace(value, 12, 3, smpl_dly); /* sd_rd_rsp_dly_sel */
+> +               value = bitfield_replace(value, 16, 3, smpl_dly); /* sd_rd_dat_dly_sel */
+> +               value = bitfield_replace(value, 20, 3, smpl_dly); /* sd_rd_crc_dly_sel */
+> +               writel(value, host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +
+> +               mmc_wait_for_req(mmc, &mrq);
+> +               if (!cmd.error && !data.error) {
+> +                       if (!memcmp(blk_pattern, blk_test, blksz))
+> +                               candidate_dly |= (1 << smpl_dly);
+> +               }
+> +       } while (smpl_dly++ <= SPMMC_MAX_TUNABLE_DLY);
+> +       host->tuning_info.enable_tuning = 1;
+> +
+> +       if (candidate_dly) {
+> +               smpl_dly = __find_best_delay(candidate_dly);
+> +               value = readl(host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +               value = bitfield_replace(value, 12, 3, smpl_dly); /* sd_rd_rsp_dly_sel */
+> +               value = bitfield_replace(value, 16, 3, smpl_dly); /* sd_rd_dat_dly_sel */
+> +               value = bitfield_replace(value, 20, 3, smpl_dly); /* sd_rd_crc_dly_sel */
+> +               writel(value, host->base + SPMMC_SD_TIMING_CONFIG0_REG);
+> +               return 0;
+> +       }
+> +       return -EIO;
+> +}
+> +
+> +static void spmmc_enable_sdio_irq(struct mmc_host *mmc, int enable)
+> +{
+> +       struct spmmc_host *host = mmc_priv(mmc);
+> +       u32 value = readl(host->base + SPMMC_SD_INT_REG);
+> +
+> +       value = bitfield_replace(value, 5, 1, 1); /* sdio_int_clr */
+> +       if (enable)
+> +               value = bitfield_replace(value, 3, 1, 1);
+> +       else
+> +               value = bitfield_replace(value, 3, 1, 0);
+> +       writel(value, host->base + SPMMC_SD_INT_REG);
+> +}
+> +
+> +static const struct mmc_host_ops spmmc_ops = {
+> +       .request = spmmc_request,
+> +       .set_ios = spmmc_set_ios,
+> +       .get_cd = spmmc_get_cd,
+> +       .execute_tuning = spmmc_execute_tuning,
+> +       .enable_sdio_irq = spmmc_enable_sdio_irq,
+> +};
+> +
+> +static void tsklet_func_finish_req(unsigned long data)
+> +{
+> +       struct spmmc_host *host = (struct spmmc_host *)data;
+> +
+> +       spin_lock(&host->lock);
+> +       spmmc_finish_request(host, host->mrq);
+> +       spin_unlock(&host->lock);
+> +}
+> +
+> +static int spmmc_drv_probe(struct platform_device *pdev)
+> +{
+> +       int ret = 0;
+> +       struct mmc_host *mmc;
+> +       struct resource *res;
+> +       struct spmmc_host *host;
+> +       unsigned int mode;
+> +
+> +       mmc = mmc_alloc_host(sizeof(*host), &pdev->dev);
+> +       if (!mmc) {
+> +               ret = -ENOMEM;
+> +               goto probe_free_host;
+> +       }
+> +
+> +       host = mmc_priv(mmc);
+> +       host->mmc = mmc;
+> +       host->power_state = MMC_POWER_OFF;
+> +       host->dma_int_threshold = 1024;
+> +       host->dmapio_mode = SPMMC_DMA_MODE;
+> +
+> +       host->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +       if (IS_ERR(host->base))
+> +               return PTR_ERR(host->base);
+> +
+> +       host->clk = devm_clk_get(&pdev->dev, NULL);
+> +       if (IS_ERR(host->clk)) {
+> +               dev_err(&pdev->dev, "Can not find clock source\n");
+> +               ret = PTR_ERR(host->clk);
+> +               goto probe_free_host;
+> +       }
+> +
+> +       host->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> +       if (IS_ERR(host->rstc)) {
+> +               dev_err(&pdev->dev, "Can not find reset controller\n");
+> +               ret = PTR_ERR(host->rstc);
+> +               goto probe_free_host;
+> +       }
+> +
+> +       host->irq = platform_get_irq(pdev, 0);
+> +       if (host->irq <= 0) {
+> +               dev_err(&pdev->dev, "get sd irq resource fail\n");
+> +               ret = -EINVAL;
+> +               goto probe_free_host;
+> +       }
+> +       if (devm_request_irq(&pdev->dev, host->irq, spmmc_irq, IRQF_SHARED,
+> +                            dev_name(&pdev->dev), host)) {
+> +               dev_err(&pdev->dev, "Failed to request sd card interrupt.\n");
+> +               ret = -ENOENT;
+> +               goto probe_free_host;
+> +       }
+> +
+> +       ret = mmc_of_parse(mmc);
+> +       if (ret)
+> +               goto probe_free_host;
+> +
+> +       ret = clk_prepare(host->clk);
+> +       if (ret)
+> +               goto probe_free_host;
+> +       ret = clk_enable(host->clk);
+> +       if (ret)
+> +               goto probe_clk_unprepare;
+> +
+> +       spin_lock_init(&host->lock);
+> +       mutex_init(&host->mrq_lock);
+> +       tasklet_init(&host->tsklet_finish_req, tsklet_func_finish_req, (unsigned long)host);
+> +       mmc->ops = &spmmc_ops;
+> +       mmc->f_min = SPMMC_MIN_CLK;
+> +       if (mmc->f_max > SPMMC_MAX_CLK)
+> +               mmc->f_max = SPMMC_MAX_CLK;
+> +
+> +       mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
+> +       mmc->max_seg_size = SPMMC_MAX_BLK_COUNT * 512;
+> +       /* Host controller supports up to "SPMMC_MAX_DMA_MEMORY_SECTORS"*/
+> +       /* a.k.a. max scattered memory segments per request*/
+> +       mmc->max_segs = SPMMC_MAX_DMA_MEMORY_SECTORS;
+> +       mmc->max_req_size = SPMMC_MAX_BLK_COUNT * 512;
+> +       /* Limited by the max value of dma_size & data_length, set it to 512 bytes for now */
+> +       mmc->max_blk_size = 512;
+> +       mmc->max_blk_count = SPMMC_MAX_BLK_COUNT; /* Limited by sd_page_num */
+> +
+> +       dev_set_drvdata(&pdev->dev, host);
+> +       spmmc_controller_init(host);
+> +       mode = (int)of_device_get_match_data(&pdev->dev);
+> +       spmmc_select_mode(host, mode);
+> +       mmc_add_host(mmc);
+> +       host->tuning_info.enable_tuning = 1;
+> +       pm_runtime_set_active(&pdev->dev);
+> +       pm_runtime_enable(&pdev->dev);
+> +
+> +       return 0;
+> +
+> +probe_clk_unprepare:
+> +       dev_err(&pdev->dev, "unable to enable controller clock\n");
+> +       clk_unprepare(host->clk);
+> +probe_free_host:
+> +       if (mmc)
+> +               mmc_free_host(mmc);
+> +
+> +       return ret;
+> +}
+> +
+> +static int spmmc_drv_remove(struct platform_device *dev)
+> +{
+> +       struct spmmc_host *host = platform_get_drvdata(dev);
+> +
+> +       mmc_remove_host(host->mmc);
+> +       clk_disable(host->clk);
+> +       clk_unprepare(host->clk);
+> +       pm_runtime_disable(&dev->dev);
+> +       platform_set_drvdata(dev, NULL);
+> +       mmc_free_host(host->mmc);
+> +       return 0;
+> +}
+> +
+> +static int spmmc_drv_suspend(struct platform_device *dev, pm_message_t state)
+> +{
+> +       struct spmmc_host *host;
+> +
+> +       host = platform_get_drvdata(dev);
+> +       mutex_lock(&host->mrq_lock); /* Make sure that no one is holding the controller */
+> +       mutex_unlock(&host->mrq_lock);
+> +       clk_disable(host->clk);
+> +       return 0;
+> +}
+> +
+> +static int spmmc_drv_resume(struct platform_device *dev)
+> +{
+> +       struct spmmc_host *host;
+> +
+> +       host = platform_get_drvdata(dev);
+> +       return clk_enable(host->clk);
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +#ifdef CONFIG_PM_SLEEP
+> +static int spmmc_pm_suspend(struct device *dev)
+> +{
+> +       pm_runtime_force_suspend(dev);
+> +       return 0;
+> +}
+> +
+> +static int spmmc_pm_resume(struct device *dev)
+> +{
+> +       pm_runtime_force_resume(dev);
+> +       return 0;
+> +}
+> +#endif /* ifdef CONFIG_PM_SLEEP */
+> +
+> +#ifdef CONFIG_PM_RUNTIME
+> +static int spmmc_pm_runtime_suspend(struct device *dev)
+> +{
+> +       struct spmmc_host *host;
+> +
+> +       host = dev_get_drvdata(dev);
+> +       clk_disable(host->clk);
+> +       return 0;
+> +}
+> +
+> +static int spmmc_pm_runtime_resume(struct device *dev)
+> +{
+> +       struct spmmc_host *host;
+> +
+> +       host = dev_get_drvdata(dev);
+> +       return clk_enable(host->clk);
+> +}
+> +#endif /* ifdef CONFIG_PM_RUNTIME */
+> +
+> +static const struct dev_pm_ops spmmc_pm_ops = {
+> +       SET_SYSTEM_SLEEP_PM_OPS(spmmc_pm_suspend, spmmc_pm_resume)
+> +#ifdef CONFIG_PM_RUNTIME
+> +       SET_RUNTIME_PM_OPS(spmmc_pm_runtime_suspend, spmmc_pm_runtime_resume, NULL)
+> +#endif
+> +};
+> +#endif /* ifdef CONFIG_PM */
+> +
+> +static const struct of_device_id spmmc_of_table[] = {
+> +       {
+> +               .compatible = "sunplus,sp7021-emmc",
+> +               .data = (void *)SPMMC_MODE_EMMC,
+> +       },
+> +       {/* sentinel */}
+> +};
+> +MODULE_DEVICE_TABLE(of, spmmc_of_table);
+> +
+> +static struct platform_driver spmmc_driver = {
+> +       .probe = spmmc_drv_probe,
+> +       .remove = spmmc_drv_remove,
+> +       .suspend = spmmc_drv_suspend,
+> +       .resume = spmmc_drv_resume,
+> +       .driver = {
+> +               .name = "spmmc",
+> +               .owner = THIS_MODULE,
+> +#ifdef CONFIG_PM
+> +               .pm = &spmmc_pm_ops,
+> +#endif
+> +               .of_match_table = spmmc_of_table,
+> +       },
+> +};
+> +module_platform_driver(spmmc_driver);
+> +
+> +MODULE_AUTHOR("Tony Huang <tonyhuang.sunplus@gmail.com>");
+> +MODULE_DESCRIPTION("Sunplus MMC controller driver");
+> +MODULE_LICENSE("GPL v2");
+> --
+> 2.7.4
+>

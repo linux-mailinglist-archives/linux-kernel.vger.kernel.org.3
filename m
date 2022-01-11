@@ -2,82 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F195A48A7EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA6948A7F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348294AbiAKGtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 01:49:07 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:33005 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233997AbiAKGtF (ORCPT
+        id S1348307AbiAKGvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 01:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348300AbiAKGvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 01:49:05 -0500
+        Tue, 11 Jan 2022 01:51:05 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CDAC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:51:05 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so497502wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:51:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641883746; x=1673419746;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tKnoJzErsAHJm+nQCMMaPbpfpKiRq/oaK90dtIuEypY=;
-  b=Hp+plgT04CkEESb6D2vUwflGK5M302A4vj9KrvO/bwsAV4k1MVWcnjES
-   UDrFiofQ8r/f4pB7t79rmC+mqtPmV7N7mBqJqYim2O2hmhqJYb0SMdwjz
-   VLF5BJqnGgp9np+L3GhgQXk+iIc9N2TIAvtLMtVzQL/Y0DqH1Eh0MrxMw
-   g=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 10 Jan 2022 22:49:05 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 22:49:05 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 10 Jan 2022 22:49:05 -0800
-Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 10 Jan 2022 22:49:04 -0800
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH] usb: gadget: f_serial: Ensure gserial disconnected during unbind
-Date:   Mon, 10 Jan 2022 22:48:50 -0800
-Message-ID: <20220111064850.24311-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.33.1
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vT2k1n7N736WcMD+Y2JPRqDITvGAMoT7Xaf5u2iFGf0=;
+        b=qNPY9a2pfTc7Qf5oACfviMxwgFUfifitnksqKmJJ/0rUQhDkU19U2Qf6LFyiEk8QtF
+         y0eCW43nA3hvVRJbYLnWknpuAwVbmtdCT43jLLpMASCMJ7u0vLShTteK9xRolxD4e/tY
+         D5NJlvPtdw6Wq8dZFLN2ChUSt/LwVgHA3xiqxDQTEhRB94OiTJyV8UvHdoTAUPntgcp4
+         biub/6CI+xXQOnLRQqBq2KcDwD7t1HZavYvRbz9x79HiEJkxFN8RxU9tJ91Wxj4NejGT
+         tNKfFY37lzlDhVfKfSetR6XmQqjbp5ubi5hHuj7H+ZaPjWwpC+B00+8ryzCTA53kgHkk
+         S/qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vT2k1n7N736WcMD+Y2JPRqDITvGAMoT7Xaf5u2iFGf0=;
+        b=kP/ylj0Ixmr4Xz6NaNfA0jiy6/eKvmDdv79on9qpeu8tyFBSXEew6Bzwx8f8RsP4fe
+         NsXY+vQY8EjbHf1Ep/gOw2n2xTUE9AXzJ6nwmIqy6L8Nh4b0/RNuvGoi15Euo4gIuid9
+         /px9A7MG3gRlZnfc1sznLclgrlRdCECBwKA6G8/6yOSVb1R9Sv0LzLtSrGzB5RZnPSOe
+         3wkRVzu34AfbGhOKktENNO20C5kDusPe5GDE4tuPd0qGUgBCFnFi7xCD4KuVN9nGup65
+         wHXIkcDPVjDG/kywmAVLrQhB+kDT5xqlPiY6qVs6J5HfobTu2m5y12oib7+ql0GyYrd6
+         4XLw==
+X-Gm-Message-State: AOAM530RoMQ6flVb1XXDxtZisScSuA7HSUjNKXwbsHd0Yz2cqrqYfW/I
+        KThG7kLAk6y1G6n9y89rKoHHuXdHKGMhDdAlyfKr2A==
+X-Google-Smtp-Source: ABdhPJwwVF6RtYoCTBdDgDVgO6jwikF88PLjqTmQjVwQ9odoEaUPxzkSdhTfELkwMciHTvZzHLFxCW1oU4jNCMryW8g=
+X-Received: by 2002:a1c:721a:: with SMTP id n26mr1053701wmc.39.1641883863554;
+ Mon, 10 Jan 2022 22:51:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-2-dlatypov@google.com>
+In-Reply-To: <20220108012304.1049587-2-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 11 Jan 2022 14:50:51 +0800
+Message-ID: <CABVgOS=-KS8kdEsDFRuFM672KSvRGYEjtToA2J_-UeHLqcTH1Q@mail.gmail.com>
+Subject: Re: [PATCH 1/6] kunit: add example test case showing off all the
+ expect macros
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some UDCs may return an error during pullup disable as part of the
-unbind path for a USB configuration.  This will lead to a scenario
-where the disable() callback is skipped, whereas the unbind() still
-occurs.  If this happens, the u_serial driver will continue to fail
-subsequent binds, due to an already existing entry in the ports array.
-Ensure that gserial_disconnect() is called during the f_serial unbind,
-so the ports entry is properly cleared.
+On Sat, Jan 8, 2022 at 9:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Currently, these macros are only really documented near the bottom of
+> https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html#c.KUNIT_FAIL.
+>
+> E.g. it's likely someone might just not realize that
+> KUNIT_EXPECT_STREQ() exists and instead use KUNIT_EXPECT_FALSE(strcmp())
+> or similar.
+>
+> This can also serve as a basic smoketest that the KUnit assert machinery
+> still works for all the macros.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/gadget/function/f_serial.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I think this is a great idea. I will note that this definitely isn't a
+full test _of_ the assertion macros (in that it only exercises the
+success case), so keeping it as an example is probably best.
 
-diff --git a/drivers/usb/gadget/function/f_serial.c b/drivers/usb/gadget/function/f_serial.c
-index 1ed8ff0ac2d3..a9480b9e312e 100644
---- a/drivers/usb/gadget/function/f_serial.c
-+++ b/drivers/usb/gadget/function/f_serial.c
-@@ -345,6 +345,10 @@ static void gser_free(struct usb_function *f)
- 
- static void gser_unbind(struct usb_configuration *c, struct usb_function *f)
- {
-+	struct f_gser	*gser = func_to_gser(f);
-+
-+	/* Ensure port is disconnected before unbinding */
-+	gserial_disconnect(&gser->port);
- 	usb_free_all_descriptors(f);
- }
- 
+A few possible ideas below, but I'm happy enough with this as-is regardless.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+>  lib/kunit/kunit-example-test.c | 46 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+> index 51099b0ca29c..182a64c12541 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -69,6 +69,51 @@ static void example_mark_skipped_test(struct kunit *test)
+>         /* This line should run */
+>         kunit_info(test, "You should see this line.");
+>  }
+> +
+> +/*
+> + * This test shows off all the KUNIT_EXPECT macros.
+> + */
+> +static void example_all_expect_macros_test(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_TRUE(test, true);
+> +       KUNIT_EXPECT_FALSE(test, false);
+
+_Maybe_ it's worth having a comment for each of these groups ('boolean
+assertions', 'integer assertions', 'pointer assertions', etc)?
+
+> +
+> +       KUNIT_EXPECT_EQ(test, 1, 1);
+> +       KUNIT_EXPECT_GE(test, 1, 1);
+> +       KUNIT_EXPECT_LE(test, 1, 1);
+> +       KUNIT_EXPECT_NE(test, 1, 0);
+> +       KUNIT_EXPECT_GT(test, 1, 0);
+> +       KUNIT_EXPECT_LT(test, 0, 1);
+> +
+> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, test);
+> +       KUNIT_EXPECT_PTR_EQ(test, NULL, NULL);
+> +       KUNIT_EXPECT_PTR_NE(test, test, NULL);
+> +
+> +       KUNIT_EXPECT_STREQ(test, "hi", "hi");
+> +       KUNIT_EXPECT_STRNEQ(test, "hi", "bye");
+> +
+> +       /*
+> +        * There are also _MSG variants of all of the above that let you include
+> +        * additional text on failure.
+> +        */
+
+There are also the ASSERT vs EXPECT variations. While it may be
+excessive to also include all of these, particularly in an example, it
+might be worth mentioning them in a comment somewhere?
+
+Alternatively, if this is bloating the example too much, we could have
+only one example each of the ASSERT and _MSG variants.
+
+> +       KUNIT_EXPECT_TRUE_MSG(test, true, "msg");
+> +       KUNIT_EXPECT_FALSE_MSG(test, false, "msg");
+
+Part of me feels that a better message than "msg" would be nice to
+have here, but I can't think of a good one. Maybe (particularly for
+the less obvious integer/string/pointer macros below), having a
+description of what's being asserted?
+
+
+
+> +
+> +       KUNIT_EXPECT_EQ_MSG(test, 1, 1, "msg");
+> +       KUNIT_EXPECT_GE_MSG(test, 1, 1, "msg");
+> +       KUNIT_EXPECT_LE_MSG(test, 1, 1, "msg");
+> +       KUNIT_EXPECT_NE_MSG(test, 1, 0, "msg");
+> +       KUNIT_EXPECT_GT_MSG(test, 1, 0, "msg");
+> +       KUNIT_EXPECT_LT_MSG(test, 0, 1, "msg");
+> +
+> +       KUNIT_EXPECT_NOT_ERR_OR_NULL_MSG(test, test, "msg");
+> +       KUNIT_EXPECT_PTR_EQ_MSG(test, NULL, NULL, "msg");
+> +       KUNIT_EXPECT_PTR_NE_MSG(test, test, NULL, "msg");
+> +
+> +       KUNIT_EXPECT_STREQ_MSG(test, "hi", "hi", "msg");
+> +       KUNIT_EXPECT_STRNEQ_MSG(test, "hi", "bye", "msg");
+> +}
+> +
+>  /*
+>   * Here we make a list of all the test cases we want to add to the test suite
+>   * below.
+> @@ -83,6 +128,7 @@ static struct kunit_case example_test_cases[] = {
+>         KUNIT_CASE(example_simple_test),
+>         KUNIT_CASE(example_skip_test),
+>         KUNIT_CASE(example_mark_skipped_test),
+> +       KUNIT_CASE(example_all_expect_macros_test),
+>         {}
+>  };
+>
+> --
+> 2.34.1.575.g55b058a8bb-goog
+>

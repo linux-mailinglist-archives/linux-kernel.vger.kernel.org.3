@@ -2,146 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2511748B74A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7D448B74C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346554AbiAKTWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S235525AbiAKTWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244339AbiAKTV5 (ORCPT
+        with ESMTP id S229803AbiAKTWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:21:57 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328DBC061751
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:21:57 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id v1so223137ioj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:21:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zG6mc9R8T0VuQRaKqR7/UCbKIE1yA2lVDcf9Ztg1BPw=;
-        b=gBRFGEKQyVWTVpOHb0ZBdMzwB0eZcclVsmYYGFXiVzGc7ur6Q/unveTJlSIZDtGNye
-         Bwey6ax7smlPgoxENKvfeUTkXUqsDCnae6KaHOJ+fnmH4iQBKGepbEymAcAWDCi/v2Lv
-         HA1Hxt0IRq3c4TApg664Am2q1WKWazunoH+Io+eaFBgHQZV4tEu0gBC7xAMo3dvVrPvv
-         ftNfkmdZ7MR2hHv6kTugk7ftOl53INz/JHvvnbSUkyNNNswePWt7YZcWirumhuXONycN
-         Cs5ARCOMiIyOmadYZlOWnNPUwTdZ5jqUd6dOgeIgTnRqgiFMxb+yrYTzcswI4y3kuJzo
-         8j5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zG6mc9R8T0VuQRaKqR7/UCbKIE1yA2lVDcf9Ztg1BPw=;
-        b=w3QyIGaCKGb1DBNl7sf8ALk/f13n7xWY1kuql4qC4Bc0DwnL/K9g7QFoEN5ocDPMFc
-         KC//V6kLFvncx7+fvxX24hIX8oAzgH6F7G6kAOykMivkFhDUeRvyASJipiER2Q4SllMt
-         q8G3ZTdtvQ6XhhPoznUU5To4smJXu/N5TFtE3RMl+l9smT18WdgMLKALGz7AIG5CR7uv
-         PcKJuUp1PjnR9AbdmJrmZM1rfwfBfTqMGZUK0CqBpFyTwgiYDpa7+RA4ZkHo0VVGgCKF
-         ieV6qCzuEq3jmtkoKOwsSjF7fXV5SP/51ev1R0wz0lwPtVKCzk/qnxBWPLz0xOVO3Zcj
-         moDw==
-X-Gm-Message-State: AOAM530cQNrlaA6JhVUFnfyaniaMOxNgWmnlvoZtYeNZqM6vjP774OcM
-        q6S2v6i1cl9TOH9Cs5CT+gglhj/x+aNqGA==
-X-Google-Smtp-Source: ABdhPJwYaKcnyX6qsqEycE/nqRqkIxKSK9nGRQ6obnUE8Pj9wqslbCcNe1OOivkvsJDA+eENKbC+3Q==
-X-Received: by 2002:a05:6638:1348:: with SMTP id u8mr3068773jad.278.1641928916610;
-        Tue, 11 Jan 2022 11:21:56 -0800 (PST)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id e17sm6264544iow.30.2022.01.11.11.21.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 11:21:56 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     jponduru@codeaurora.org, avuyyuru@codeaurora.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        cpratapa@codeaurora.org, subashab@codeaurora.org,
-        evgreen@chromium.org, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/2] net: ipa: prevent concurrent replenish
-Date:   Tue, 11 Jan 2022 13:21:50 -0600
-Message-Id: <20220111192150.379274-3-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111192150.379274-1-elder@linaro.org>
-References: <20220111192150.379274-1-elder@linaro.org>
+        Tue, 11 Jan 2022 14:22:54 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993E6C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:22:54 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A24F61EC01B5;
+        Tue, 11 Jan 2022 20:22:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641928967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=W+1MqJDYCvC9MyBhfZw19OAYb1vL9THRUDtjVpG2xW0=;
+        b=A4orzNlRl+LHvlVe4OujKQmwIWtSbik9V0AaxdF69OSInqmH7TxLKskuCVPt+A8/8OoUea
+        hNBWad0DqhjsHMWZaB8dNzYdjmzz1g67svo522T8XYYGEF8Iwk6deSnp0Sg+/HQig4Qku9
+        KdL1ZMyyG/m5wCUIBk6i9ZNt4XkrWz0=
+Date:   Tue, 11 Jan 2022 20:22:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: remove old CONFIG_FW_LOADER_MODULE test
+Message-ID: <Yd3ZDNpOP6fMlfsp@zn.tnic>
+References: <20211230093932.2747587-1-gregkh@linuxfoundation.org>
+ <YdcAOL6hCck2jqXq@kroah.com>
+ <Yd3Twxj4FjYvBwuo@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yd3Twxj4FjYvBwuo@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have seen cases where an endpoint RX completion interrupt arrives
-while replenishing for the endpoint is underway.  This causes another
-instance of replenishing to begin as part of completing the receive
-transaction.  If this occurs it can lead to transaction corruption.
+On Tue, Jan 11, 2022 at 11:00:19AM -0800, Luis Chamberlain wrote:
+> Yeah I think this comes from the fact that modules get a respective
+> _MODULE define in the generated file
+> include/generated/autoconf.h 
+> 
+> For example:
+> 
+> vagrant@kdevops-dev /data/linux-next (git::20211203-umh-fix-exitcodes)$
+> grep CONFIG_CRC8 .config
+> CONFIG_CRC8=m
+> vagrant@kdevops-dev /data/linux-next (git::20211203-umh-fix-exitcodes)$
+> grep CONFIG_CRC8 include/generated/autoconf.h
+> #define CONFIG_CRC8_MODULE 1 
+> 
+> So I think the above was put in place to ask if its built-in or a
+> module.
 
-Use a new atomic variable to ensure only replenish instance for an
-endpoint executes at a time.
+Talk about magic:
 
-Fixes: 84f9bd12d46db ("soc: qcom: ipa: IPA endpoints")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_endpoint.c | 13 +++++++++++++
- drivers/net/ipa/ipa_endpoint.h |  2 ++
- 2 files changed, 15 insertions(+)
+$ grep FW_LOADER .config
+CONFIG_FW_LOADER=m
+$ grep FW_LOADER include/generated/autoconf.h 
+#define CONFIG_FW_LOADER_MODULE 1
 
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index 8b055885cf3cf..a1019f5fe1748 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -1088,15 +1088,27 @@ static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint, bool add_one)
- 		return;
- 	}
- 
-+	/* If already active, just update the backlog */
-+	if (atomic_xchg(&endpoint->replenish_active, 1)) {
-+		if (add_one)
-+			atomic_inc(&endpoint->replenish_backlog);
-+		return;
-+	}
-+
- 	while (atomic_dec_not_zero(&endpoint->replenish_backlog))
- 		if (ipa_endpoint_replenish_one(endpoint))
- 			goto try_again_later;
-+
-+	atomic_set(&endpoint->replenish_active, 0);
-+
- 	if (add_one)
- 		atomic_inc(&endpoint->replenish_backlog);
- 
- 	return;
- 
- try_again_later:
-+	atomic_set(&endpoint->replenish_active, 0);
-+
- 	/* The last one didn't succeed, so fix the backlog */
- 	delta = add_one ? 2 : 1;
- 	backlog = atomic_add_return(delta, &endpoint->replenish_backlog);
-@@ -1691,6 +1703,7 @@ static void ipa_endpoint_setup_one(struct ipa_endpoint *endpoint)
- 		 * backlog is the same as the maximum outstanding TREs.
- 		 */
- 		endpoint->replenish_enabled = false;
-+		atomic_set(&endpoint->replenish_active, 0);
- 		atomic_set(&endpoint->replenish_saved,
- 			   gsi_channel_tre_max(gsi, endpoint->channel_id));
- 		atomic_set(&endpoint->replenish_backlog, 0);
-diff --git a/drivers/net/ipa/ipa_endpoint.h b/drivers/net/ipa/ipa_endpoint.h
-index 0a859d10312dc..200f093214997 100644
---- a/drivers/net/ipa/ipa_endpoint.h
-+++ b/drivers/net/ipa/ipa_endpoint.h
-@@ -53,6 +53,7 @@ enum ipa_endpoint_name {
-  * @netdev:		Network device pointer, if endpoint uses one
-  * @replenish_enabled:	Whether receive buffer replenishing is enabled
-  * @replenish_ready:	Number of replenish transactions without doorbell
-+ * @replenish_active:	1 when replenishing is active, 0 otherwise
-  * @replenish_saved:	Replenish requests held while disabled
-  * @replenish_backlog:	Number of buffers needed to fill hardware queue
-  * @replenish_work:	Work item used for repeated replenish failures
-@@ -74,6 +75,7 @@ struct ipa_endpoint {
- 	/* Receive buffer replenishing for RX endpoints */
- 	bool replenish_enabled;
- 	u32 replenish_ready;
-+	atomic_t replenish_active;
- 	atomic_t replenish_saved;
- 	atomic_t replenish_backlog;
- 	struct delayed_work replenish_work;		/* global wq */
+It is probably even documented somewhere that the build generates
+CONFIG_%s_MODULE defines for testing in code...
+
 -- 
-2.32.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

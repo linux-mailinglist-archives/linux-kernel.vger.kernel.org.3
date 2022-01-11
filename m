@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF5F48AEC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489FB48AECB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240963AbiAKNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:46:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S241015AbiAKNrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240678AbiAKNqx (ORCPT
+        with ESMTP id S241007AbiAKNrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:46:53 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4413BC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5hmzL0ZLGqEvLhxt4LfKaZzEs7EYYCoq9RGBa9ZBDf0=; b=iSSJbfr12iqcifaqmPvqBXI3iL
-        5kAag8cDMh38bxMVKOwhSpmuLFIR/1BnQfvkDh8K9pgBT7qNzgAjchraqn76KTPT2yVs1AZMTyOGL
-        AuDhiV8jnIhZdA0DTatdCI387h3kX31CsYwLjNdB2J2bdtsndiBXKB296+PxnZ4B2ROqzs5nNTOH7
-        OsTSiVe9znqBqOaQsyGsaGaQEBbs5SWv30H6/dEA17m+89hy+/7Q1hpiPPbnMIKuGydnuNJz8ixXx
-        Gt8Q4YNf20p5p437drePynD/txDHkC3WMq5ln46XZnD4fFdhOZpg9R8touZZvNxMlq6g8R326hgsu
-        jgl6pc9w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7HU2-003IHp-1X; Tue, 11 Jan 2022 13:46:42 +0000
-Date:   Tue, 11 Jan 2022 13:46:42 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 09/28] gup: Turn hpage_pincount_add() into
- page_pincount_add()
-Message-ID: <Yd2KQmYXIs2ZTNDU@casper.infradead.org>
-References: <20220110042406.499429-1-willy@infradead.org>
- <20220110042406.499429-10-willy@infradead.org>
- <8ad9c4b4-19a6-b22d-91b8-72125bc710cd@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ad9c4b4-19a6-b22d-91b8-72125bc710cd@nvidia.com>
+        Tue, 11 Jan 2022 08:47:12 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A815C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:47:12 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id e5so11062903wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=V4Ho2IGZqdwoGMLvVsdbX6aJWa5uUyOQYVyaaJ3Cu3A=;
+        b=Y8pBngNL3RVTpt6ySKbEGjfxwfDwX5TRfmIkGODc0Adjwx6WF36hvDc2dLcL8O/9Eh
+         ygt8DWoVNwHOD8p9vzB2x+DWz3lPpxMhJzPuxtggsLtUc+pqfNAzSWChHvN30ifTglAe
+         qqsTALhmM7R+qElP426WOnmgqAcWNCbtwyGhFvYJpzdvfEDuGYnIRzKssr06/DKdb/pZ
+         0nKOZQOtmEGqEn2U2ym8/f1qiGGt+K8ztTjY9m84d3HeA4J+qRKKkqz4CfTTuXK9t7RF
+         BJmJ1B6+PcoSFW9GTJcypzRHDQYZXGjw7bPn5VokxZ5pq63p+rm3/bJJrx69ZEGXO0PV
+         JaBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=V4Ho2IGZqdwoGMLvVsdbX6aJWa5uUyOQYVyaaJ3Cu3A=;
+        b=FQP6vF5x5R2G+/Z+MPe33rVkpDNuW3So78IQScR048qRoj9Az+68iR4rU2VO/bL2Uu
+         fOmJqky1Edkx0Ls2o01/ZIhPL7JOIOBJwsigY5uNELLFutdI0oz8WRZ7XXBTZ6xTLiRv
+         yb1rLO06oqY5f1hAaZ1zQ6vzitt7H3+HfPJp0pokZiW4Ej1x3gsKrEuBFA2BC9Jl5q7l
+         iy5NfK7Z33uF5fm1I0A/OPP3ArJQIPp7x3ndj83wul4gQJ687MfbcE3Z9mstGUgajRmM
+         qvGgWc6lg0Tg7+x6+r5BP2TaCakZKyZHb06HY8IYxpa43TSUmyqQHvxTn9RrT5BeKE4I
+         Mm9Q==
+X-Gm-Message-State: AOAM5330XdLEcUu0tr2Snz7cjGQA7ttNo7mjJoZXPLlRDrJartNRNksv
+        24OuOrCJDkZT4ygXbEtXSRm5VQ==
+X-Google-Smtp-Source: ABdhPJz4VnDxBysmfgadlrJfN1QJJpAN7dF733aeL7CaJ0TZUhZhzxmZP9158C6uzDrG7nGBD4k46g==
+X-Received: by 2002:a1c:7517:: with SMTP id o23mr2564044wmc.120.1641908830813;
+        Tue, 11 Jan 2022 05:47:10 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e0a:f:6020:44fe:4c24:d946:283b])
+        by smtp.gmail.com with ESMTPSA id az1sm9618411wrb.104.2022.01.11.05.47.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 05:47:10 -0800 (PST)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        rickyiu@google.com, odin@uged.al
+Cc:     sachinp@linux.vnet.ibm.com, naresh.kamboju@linaro.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v3 0/4]   sched/pelt: Relax the sync of *_sum with *_avg
+Date:   Tue, 11 Jan 2022 14:46:55 +0100
+Message-Id: <20220111134659.24961-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 08:32:20PM -0800, John Hubbard wrote:
-> On 1/9/22 20:23, Matthew Wilcox (Oracle) wrote:
-> ...
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index dbb1b54d0def..3ed9907f3c8d 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -29,12 +29,23 @@ struct follow_page_context {
-> >   	unsigned int page_mask;
-> >   };
-> > -static void hpage_pincount_add(struct page *page, int refs)
-> > +/*
-> > + * When pinning a compound page of order > 1 (which is what
-> > + * hpage_pincount_available() checks for), use an exact count to track
-> > + * it, via page_pincount_add/_sub().
-> > + *
-> > + * However, be sure to *also* increment the normal page refcount field
-> > + * at least once, so that the page really is pinned.  That's why the
-> > + * refcount from the earlier try_get_compound_head() is left intact.
-> > + */
-> 
-> I just realized, after looking at this again in a later patch, that the
-> last paragraph, above, is now misplaced. It refers to the behavior of the
-> caller, not to this routine. So it needs to be airlifted back to the
-> caller.
+Rick reported performance regressions in bugzilla because of cpu
+frequency being lower than before:
+    https://bugzilla.kernel.org/show_bug.cgi?id=215045
 
-I really do think it fits better here.  The thing is there's just one
-caller, so it's a little hard to decide what "all callers" need when
-there's only one.  Maybe I can wordsmith this a bit to read better.
+He bisected the problem to:
+commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
 
-> > +static void page_pincount_add(struct page *page, int refs)
-> >   {
-> > -	VM_BUG_ON_PAGE(!hpage_pincount_available(page), page);
-> >   	VM_BUG_ON_PAGE(page != compound_head(page), page);
-> > -	atomic_add(refs, compound_pincount_ptr(page));
-> > +	if (hpage_pincount_available(page))
-> > +		atomic_add(refs, compound_pincount_ptr(page));
-> > +	else
-> > +		page_ref_add(page, refs * (GUP_PIN_COUNTING_BIAS - 1));
-> >   }
-> >   static void hpage_pincount_sub(struct page *page, int refs)
-> > @@ -150,21 +161,7 @@ struct page *try_grab_compound_head(struct page *page,
-> >   		if (!page)
-> >   			return NULL;
-> > -		/*
-> > -		 * When pinning a compound page of order > 1 (which is what
-> > -		 * hpage_pincount_available() checks for), use an exact count to
-> > -		 * track it, via hpage_pincount_add/_sub().
-> > -		 *
-> > -		 * However, be sure to *also* increment the normal page refcount
-> > -		 * field at least once, so that the page really is pinned.
-> > -		 * That's why the refcount from the earlier
-> > -		 * try_get_compound_head() is left intact.
-> > -		 */
-> 
-> ...here.
-> 
-> > -		if (hpage_pincount_available(page))
-> > -			hpage_pincount_add(page, refs);
-> > -		else
-> > -			page_ref_add(page, refs * (GUP_PIN_COUNTING_BIAS - 1));
-> > -
-> > +		page_pincount_add(page, refs);
-> >   		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED,
-> >   				    refs);
-> 
-> thanks,
-> -- 
-> John Hubbard
-> NVIDIA
+More details are available in commit message of patch 1.
+
+This patchset reverts the commit above and adds several checks when
+propagating the changes in the hierarchy to make sure that we still have
+coherent util_avg and util_sum.
+
+Dietmar found a simple way to reproduce the WARN fixed by 
+commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
+by looping on hackbench in several different sched group levels.
+
+This patchset as run on the reproducer with success but it probably needs
+more tests by people who faced the WARN before.
+
+The changes done on util_sum have been also applied to runnable_sum and
+load_sum which faces the same rounding problem although this has not been
+reflected in measurable performance impact.
+
+Changes for v3:
+- split patch 1 in 2 patches
+  - One to fix rick's regression
+  - One to apply same changes in other places
+- some typos
+- move main comment so it appears in the 1st patch 
+
+Changes for v2:
+- fix wrong update of load_sum
+- move a change from patch 3 to patch 2
+- update patch 3 commit message
+
+Vincent Guittot (4):
+  sched/pelt: Relax the sync of util_sum with util_avg
+  sched/pelt: Continue to relax the sync of util_sum with util_avg
+  sched/pelt: Relax the sync of runnable_sum with runnable_avg
+  sched/pelt: Relax the sync of load_sum with load_avg
+
+ kernel/sched/fair.c | 113 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 75 insertions(+), 38 deletions(-)
+
+-- 
+2.17.1
+

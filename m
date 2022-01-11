@@ -2,102 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F11FB48AA45
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D8848AA42
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349224AbiAKJOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:14:34 -0500
-Received: from mail.thorsis.com ([92.198.35.195]:47069 "EHLO mail.thorsis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236861AbiAKJO3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S236988AbiAKJO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 11 Jan 2022 04:14:29 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.thorsis.com (Postfix) with ESMTP id 9F60D294F;
-        Tue, 11 Jan 2022 10:14:27 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
-Received: from mail.thorsis.com ([127.0.0.1])
-        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MHkN11x4GrbN; Tue, 11 Jan 2022 10:14:27 +0100 (CET)
-Received: by mail.thorsis.com (Postfix, from userid 109)
-        id 381F768; Tue, 11 Jan 2022 10:14:27 +0100 (CET)
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.2
-X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: microchip.com]
-        * -0.0 NO_RECEIVED Informational: message has no Received headers
-Date:   Tue, 11 Jan 2022 10:14:12 +0100
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, robh+dt@kernel.org,
-        bbrezillon@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: at91: sama5d2: Fix PMERRLOC resource size
-Message-ID: <Yd1KZC+dg5GHruju@ada.ifak-system.com>
-Mail-Followup-To: Tudor Ambarus <tudor.ambarus@microchip.com>,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, robh+dt@kernel.org,
-        bbrezillon@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220111080933.800414-1-tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111080933.800414-1-tudor.ambarus@microchip.com>
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:47116 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234465AbiAKJO2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 04:14:28 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 406F31F41CF3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641892467;
+        bh=OpxYFNpUHYIuTIBv0HTc/nmFe9b8Qv/VGZti7c3+o2U=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=E36tFSyAwJ9yqEtW4Zcvc4HVc5FLPeXnQLYaUHLeifo11gu0nrFYC+KLoL1I5wQUc
+         S0gtJ6Wg+HcWrdQXzuQDhl2NIWOZrk5opIpPRITsMDsDkSi/XOTvWCzr0mJ1JwfN49
+         +X1aS8HgGRjr3ngm3mHvdVKIcGjWxBz13wCTl5Eqwqm43o7GXVdyQXuf48BK3xr5Nk
+         otD8S5HJwXMMl+A2AUoM/aWxIJb+fSeAy3rcEa9DkbfP5YempRDLYjmk4Mla6C1e5D
+         dbCv8ynX5pr2F12D3mVTfuXItQeE/PxnxUUcjyl582bHDOM2MdwgXYK7pwCW1yRASV
+         JiDoBJx+kpv3w==
+Subject: Re: [PATCH v2 5/6] memory: mtk-smi: Add sleep ctrl function
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
+        anthony.huang@mediatek.com
+References: <20220111063904.7583-1-yong.wu@mediatek.com>
+ <20220111063904.7583-6-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <e3815197-8963-99a6-e83d-b801de1725f3@collabora.com>
+Date:   Tue, 11 Jan 2022 10:14:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20220111063904.7583-6-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-Am Tue, Jan 11, 2022 at 10:09:33AM +0200 schrieb Tudor Ambarus:
-> PMERRLOC resource size has been shrunk to 0x100, 
-
-What do mean with "has been shrunk"? It was introduced like this for
-sama5d2, sama5d3, and sama5d4 in the first place with d9c41bf30cf8c.
-
-FWIW, I had a look in the sama5d2, sama5d3 and sama5d4 series
-datasheets, and it seems sama5d2 differs from the two others here.
-
-> which resulted in
-> HSMC_ERRLOCx register being truncated to offset x = 21, causing
-> error correction to fail if more than 22 bit errors where 24 or
-> 32 bit error correction was supported.
+Il 11/01/22 07:39, Yong Wu ha scritto:
+> Sleep control means that when the larb goes to sleep, we should wait a bit
+> until all the current commands are finished. Thus, when the larb runtime
+> suspends, we need to enable this function to wait until all the existed
+> commands are finished. When the larb resumes, just disable this function.
+> This function only improves the safety of bus. Add a new flag for this
+> function. Prepare for mt8186.
 > 
-> Fixes: d9c41bf30cf8 ("ARM: dts: at91: Declare EBI/NAND controllers")
+> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
-This landed in 4.13. Is this fix needed for stable then? That would be
-4.14, 4.19, 5.4, 5.10, and 5.15, right? Or is this covered by the
-fixes tag already?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Greets
-Alex
-
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  arch/arm/boot/dts/sama5d2.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
-> index 801969c113d6..de88eb484718 100644
-> --- a/arch/arm/boot/dts/sama5d2.dtsi
-> +++ b/arch/arm/boot/dts/sama5d2.dtsi
-> @@ -413,7 +413,7 @@ hsmc: hsmc@f8014000 {
->  				pmecc: ecc-engine@f8014070 {
->  					compatible = "atmel,sama5d2-pmecc";
->  					reg = <0xf8014070 0x490>,
-> -					      <0xf8014500 0x100>;
-> +					      <0xf8014500 0x200>;
->  				};
->  			};
->  
-> -- 
-> 2.25.1
-> 

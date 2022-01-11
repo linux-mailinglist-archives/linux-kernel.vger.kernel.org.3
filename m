@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB4548A893
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D3B48A897
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348595AbiAKHlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S1348605AbiAKHmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiAKHlu (ORCPT
+        with ESMTP id S235766AbiAKHms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:41:50 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A26C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:41:50 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id i3so44723113ybh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:41:50 -0800 (PST)
+        Tue, 11 Jan 2022 02:42:48 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B99BC06173F;
+        Mon, 10 Jan 2022 23:42:48 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id p5so37548027ybd.13;
+        Mon, 10 Jan 2022 23:42:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cwHw/NL6DwfU5mZ226xBfOsuZ8vgnjHLoJ6gB+S8aJo=;
-        b=cXFRNvZwDo9T30RSDAWPp6X2+CkF1YM0fbtS6weAJ5lsPP3IZsJh0CAe4YExQd5QRI
-         Gv7y4ufZPI5ZkiMTnZRhcYiEYmiDWD/yIGDAcRP/FU0+2Jw6BbuYz7UcbnrAS+25GvPm
-         NC9Rfj/eOB8ZUPjk6O+SbMDOt8W3bASCt0v2K53ep+l7RD6Roh+RBYRU7lo5ZBWp2rVB
-         fUZQTG3dvwZ43M2ox9EczRweA7SWhFq+LyCPfhQCJdqaayT2A4rtNBKZYBZIfCD6CWo7
-         yF6iJOLhx0FV8AVecHISfnJK8n9mFJl3zLpN/5lSeVHnWeAegfH8YDDtPw6++0UpIISd
-         UD0w==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Wk/qGtz26hTAu2Z0ry2fUvvnKiyHU/sS4gV9WX8tBw4=;
+        b=jI39erstFBgNIGGl+tQmwBiWrUIc9bgBj2bYOdDXTCO9Pd8IbRWtD9TS2r5MHOCHG+
+         bPQlZGT7uj2aIkyb6hA3i11qstvrr0xHAd+mOW0cY6G9+T/e3OHnqOnGnS4ZKsqH7DPJ
+         ofxAqXjCIf/xFi8OzWqkvjrvZASqHZSCrfRB8yQPQ7WPFCgdN1jNIKWyM1dC9AM9bXE4
+         iiL5R0dwuy7J1t4mzrqIkGQZyqBiTURI07s+gq5Q74CgbzHSNcJPVqFHnPg1g1wULvN+
+         1mb+7A8KVG/MiNByEUVrtLRl1jYB+Pdc+hp+0K4ZSuaspxApTgzOAwTppyf1/UFT22CX
+         H18Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cwHw/NL6DwfU5mZ226xBfOsuZ8vgnjHLoJ6gB+S8aJo=;
-        b=pwwyOjZi9+NhAU4mmleEk7lO4pItWB1KJGSyuLTgQ90Dnmw/eyAXwEMhZBjZ1pAazM
-         hGkCx++WjKXIaDndbq4ojE/C+bop0dvyfJdy2l6QoEJwGoyY9ng0anWGe+g/VDxbiIPE
-         3q7YLRH8dvqmxqztKil0W6JMXcA8l7Fu0UrmKF4JswR/CeCSyG0Lzpaol5zOE197bJl6
-         qI7mepUYBzswZ7omz/Q+FvFv8ubaFjsANWdCjkDtnw95vPZkXZyaykmHwLlDJzdeGsTz
-         ld5TEEoyVJHGOQASq5G1mTSs1cRMeNzBdSpAXeD1Nqtc+PHy/1lZlpraAzxUA1ZNxhIF
-         VZjg==
-X-Gm-Message-State: AOAM531ClJPVzNJnGE16VM/syK5TrpcrLi20q0W/jD89Vqo0FKrrFEj/
-        4vRPBIlbjnqGaG8by/6caYfZZn9P3CjyiRGhY+ASGHjjuts=
-X-Google-Smtp-Source: ABdhPJwHVKVQTxGeZWp5IVRcmqYFkdtu+KkoCuoD9z0nS8WwBjHqS7czCmxxy96YfHNRk1qFNslEXswNEy4yTTz5v4o=
-X-Received: by 2002:a25:287:: with SMTP id 129mr4433689ybc.670.1641886910010;
- Mon, 10 Jan 2022 23:41:50 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Wk/qGtz26hTAu2Z0ry2fUvvnKiyHU/sS4gV9WX8tBw4=;
+        b=UQYATRr7wqk8NTEs4mXDoyM81VXzV7H97g+iaJ6iOC65R2cihl4MsLtY/KBw6NkQs1
+         iUgADbS98lyRN5hCbuAsgNbMKWgNf4OMY9VRJMOiEnGexlNw4VAQaI+8NNgHAHOk+hPz
+         JdTKI3V3FAs+loL8DozuyIUKfuSL2a6qOg72yrBa82J+zibluVwYJJcL6hwOpjulTi+R
+         jJYfX8oU3wbU4/dlNrrYNJQLJ7JRnYj/bAv7TZTTxqmNkjDX3bbAXNnbSmAyupBLOrCP
+         GdEoqdfi1ZU5Hkzcaywdz3KoBapSIEO0FafvT9DtPbjnlDNyUwyxgrmSdy7bbt6wxmhk
+         N7Aw==
+X-Gm-Message-State: AOAM532etIgmVzUqUTfW2oru42EUnOtJ98RRQ1Ht/vY0I9Tqv+cbdQB+
+        pzF4RTRjsUWRMNINS++mZiKEdFnCCeMmSs67FeA=
+X-Google-Smtp-Source: ABdhPJyMRjDffGb4p4uOnDBwu0Qf279Fkk2F9HdUxM/rBqwFZ2JxNZsc3ES+DqcDwIb3BowdrEqXErSucCWsR0TnKvQ=
+X-Received: by 2002:a25:4aca:: with SMTP id x193mr4438918yba.149.1641886967694;
+ Mon, 10 Jan 2022 23:42:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211208192607.660787-1-ben.dooks@codethink.co.uk>
-In-Reply-To: <20211208192607.660787-1-ben.dooks@codethink.co.uk>
-From:   Bin Meng <bmeng.cn@gmail.com>
-Date:   Tue, 11 Jan 2022 15:41:38 +0800
-Message-ID: <CAEUhbmX6gh9KzLLWquJ9PKFiOg+Vehv_DZL27WpSEVTE-L_wRw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: add correct as-options for assembly in modules
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     linux-kernel@lists.codethink.co.uk,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
+From:   cruise k <cruise4k@gmail.com>
+Date:   Tue, 11 Jan 2022 15:42:37 +0800
+Message-ID: <CAKcFiNC1w87Of0ukV3oPHiAkKeVT7bbTqG3p1LgoUs0bGXk9CQ@mail.gmail.com>
+Subject: INFO: task hung in wg_noise_handshake_consume_initiation
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 3:26 AM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
->
-> When trying to load modules built for riscv which include assembly
-> the kernel loader errors with "unexpected relocation type 'R_RISCV_ALIGN'"
-> due to R_RISCV_ALIGN relocations being generated by the assembler.
->
-> In commit 7a8e7da42250138 ("RISC-V: Fixes to module loading") the
-> CFLAGS have -mno-relax added. This however does not get applied to
-> KBUILD_AFLAGS_MODULE so when a module builds a .S file, the -mno-relax
-> is not passed and the above error is seen. Fix it by adding the flags
-> '-Wa,-mno-relax' to KBUILD_AFLAGS_MODULE.
->
-> This may have been fixed in gcc, in:
->  https://github.com/gcc-mirror/gcc/commit/3b0a7d624e64eeb81e4d5e8c62c46d86ef521857
->
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-> --
-> Changes since v1:
-> - added Bin Meng's review of the original patch
+Hi,
 
-Looks like you forgot to include the RB tag? :)
+Syzkaller found the following issue:
 
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+HEAD commit: 75acfdb Linux 5.16-rc8
+git tree: upstream
+console output: https://pastebin.com/raw/E1a5ZGSt
+kernel config: https://pastebin.com/raw/XsnKfdRt
 
-> ---
->  arch/riscv/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
+And hope the report log can help you.
 
-Regards,
-Bin
+INFO: task kworker/6:1:78 blocked for more than 143 seconds.
+      Not tainted 5.16.0-rc8+ #10
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/6:1     state:D stack:26416 pid:   78 ppid:     2 flags:0x00004000
+Workqueue: wg-kex-wg1 wg_packet_handshake_receive_worker
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4972 [inline]
+ __schedule+0xcd9/0x2550 kernel/sched/core.c:6253
+ schedule+0xd2/0x260 kernel/sched/core.c:6326
+ rwsem_down_read_slowpath+0x59c/0xa90 kernel/locking/rwsem.c:1041
+ __down_read_common kernel/locking/rwsem.c:1223 [inline]
+ __down_read kernel/locking/rwsem.c:1232 [inline]
+ down_read+0xe2/0x440 kernel/locking/rwsem.c:1472
+ wg_noise_handshake_consume_initiation+0x271/0x5f0
+drivers/net/wireguard/noise.c:599
+ wg_receive_handshake_packet+0x589/0x9d0 drivers/net/wireguard/receive.c:151
+ wg_packet_handshake_receive_worker+0x18e/0x3d0
+drivers/net/wireguard/receive.c:220
+ process_one_work+0x9df/0x16a0 kernel/workqueue.c:2298
+ worker_thread+0x90/0xe20 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>

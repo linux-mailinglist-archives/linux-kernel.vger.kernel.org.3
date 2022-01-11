@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C3648A946
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF0148A949
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348881AbiAKIWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiAKIWm (ORCPT
+        id S1348889AbiAKIXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:23:14 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43504 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231130AbiAKIXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 03:22:42 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDC0C06173F;
-        Tue, 11 Jan 2022 00:22:42 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so4491230pjb.5;
-        Tue, 11 Jan 2022 00:22:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:cc:reply-to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=8s/ubBm4CMzoy773ZTaMXyvoXj9Suifczp18+PqTu/Y=;
-        b=nQdpHA+fTsW6/Matv1kTvyM0o0t/GciHubOzxYrt0P60VF5Sh4Ekps2nSoyTA7AANA
-         waUCVMOcluHfUdunRqaLnyXbxAfIt3ZOy1lGeCWcinSU5kJO0ZxjEJbU1210/OVFtkLU
-         3hN0KjarGxvUYFlqFvmUPgRixwXknGKy7yARmTlN0WiPM5fHX3+gTJtnCfvfRvY6Xrd8
-         M3xLj4bEV26JHWXoQezXegxn4FoeZPSJPo9YSZk0ZerpmnFVjsIyMEkQPa+j+aWpqzYF
-         EeNdDmq177m+fO3gbq4fgdtwWRCEHA1l/2QTu/6f2glnkQMiuE5PItKevSsgJxZRpgJ9
-         xjDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:reply-to:from:subject:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=8s/ubBm4CMzoy773ZTaMXyvoXj9Suifczp18+PqTu/Y=;
-        b=fJWsadFEaUxUa5VF0BQGjhbxCTlEHV3CQIl4Ca1xN6TGQM43HYHE/W5t1ALZhLlvnc
-         +yHMpd4fELYaKCxjpfAx5q+w84d5/kftqtsPjhu4lJzq9My6YDJ0Oby+mZdJDlV323kY
-         fzdqyu2EDhqub92QzOXaSqomhesXQWAVmFQLKZHdpOGvdooJpp9lE4Ryba7vMQmjCj6u
-         W/8/2RHTF1AUS/nGkwyDKNKwgXkt/0OtBLNcsA3lOum5jaH2iCmmMIEHDNyjaDYG/sOP
-         jdOvIyQucg5pQxunipcK79OYf+VKE6N3gUio0Z5nRH4JQbtx3sPpKZ37IKaME/5+4Rf4
-         rUjg==
-X-Gm-Message-State: AOAM530nmlMMmAwfc8Y3Tr/f3+Y7UALriBCthKk9FJF7IqPaXRBVQwqX
-        MyaFnZjVXftysxlrwFydP0M=
-X-Google-Smtp-Source: ABdhPJw1SZvgOJwJjhIAzsckFYxYtbdwTEnTvshufFf3hc5ZjORHdDxLQ99Q2bO6bxiPBO5PsO4OcQ==
-X-Received: by 2002:a05:6a00:216f:b0:49f:dcb7:2bf2 with SMTP id r15-20020a056a00216f00b0049fdcb72bf2mr3421948pff.19.1641889362075;
-        Tue, 11 Jan 2022 00:22:42 -0800 (PST)
-Received: from [192.168.1.7] ([124.123.173.144])
-        by smtp.gmail.com with ESMTPSA id e20sm9262184pfd.104.2022.01.11.00.22.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 00:22:41 -0800 (PST)
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Jacob Chen <jacob-chen@iotwrt.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Reply-To: 20200416115047.233720-1-paul.kocialkowski@bootlin.com
-From:   Suniel Mahesh <suniel.spartan@gmail.com>
-Subject: [PATCH 0/4] media: rockchip: rga: PX30 support and YUV2YUV fix
-Message-ID: <9e7aa8de-30cf-e3e0-4c5f-e4b989ea8b48@gmail.com>
-Date:   Tue, 11 Jan 2022 13:52:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 11 Jan 2022 03:23:13 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20B6M46N006394;
+        Tue, 11 Jan 2022 08:23:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ZCXiORw8q4kMLigaeWbCEr1ZbPrWij1oIpz06YA8rxA=;
+ b=S3f5OetpLok3Be2CnYgiKrtAE1kWYUG+VQ4nMJGvncSWPAdO/DsQXbLQYQ9pCG8WicW/
+ Xps6ZA+mN5l2nS0B9ozVqPPJ8fgqA0MkYTCuV51ePXLrfuIcGXGbFhtXU7DaJDUUrtc4
+ daI2VRPdeIUduquDVlIoOai9gPPAeVPSBXbfg9DAzp9OJ787VstVx0GvaI9FuU8pplqG
+ GXAexwgPXRDJel3i4KS5P/svW2FAcUS8dy/2xUnhFgwNW5qVYbnJZx6yARD+T8IPXLWi
+ YdUEi7Y12mb80VYoSSIOrQfI5WKpGLguoxSNFxfd1VN4jBwLEnM0sOMjHBQ1AcGpNyej kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh4jdasgp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 08:23:12 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20B7psTJ030195;
+        Tue, 11 Jan 2022 08:23:11 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh4jdasg3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 08:23:11 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20B8DgS5025268;
+        Tue, 11 Jan 2022 08:23:09 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3dfwhhx62b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 08:23:09 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20B8N6v138863202
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 08:23:06 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B499D4C05A;
+        Tue, 11 Jan 2022 08:23:06 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FA724C044;
+        Tue, 11 Jan 2022 08:23:06 +0000 (GMT)
+Received: from [9.145.30.70] (unknown [9.145.30.70])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jan 2022 08:23:06 +0000 (GMT)
+Message-ID: <8b720956-c8fe-0fe2-b019-70518d5c60c8@linux.ibm.com>
+Date:   Tue, 11 Jan 2022 09:23:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH net 1/3] net/smc: Resolve the race between link group
+ access and termination
 Content-Language: en-US
+To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641806784-93141-1-git-send-email-guwen@linux.alibaba.com>
+ <1641806784-93141-2-git-send-email-guwen@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <1641806784-93141-2-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3-XXLShBQ0Q4E7NQgLXScZgiyhhOrOrK
+X-Proofpoint-ORIG-GUID: oMbR3VimQlmhhihOmexF_qD8Y4fVweVl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_03,2022-01-10_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ mlxscore=0 adultscore=0 clxscore=1015 mlxlogscore=999 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201110044
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul/All,
+On 10/01/2022 10:26, Wen Gu wrote:
+> We encountered some crashes caused by the race between the access
+> and the termination of link groups.
+> 
 
-I have added this patch series onto linux-next and testing RGA on PX30.
+>  
+> +/* won't be freed until no one accesses to lgr anymore */
+> +static void __smc_lgr_free(struct smc_link_group *lgr)
+> +{
+> +	smc_lgr_free_bufs(lgr);
+> +	if (!lgr->is_smcd)
+> +		smc_wr_free_lgr_mem(lgr);
+> +	kfree(lgr);
+> +}
+> +
+>  /* remove a link group */
+>  static void smc_lgr_free(struct smc_link_group *lgr)
+>  {
+> @@ -1298,7 +1326,6 @@ static void smc_lgr_free(struct smc_link_group *lgr)
+>  		smc_llc_lgr_clear(lgr);
+>  	}
+>  
+> -	smc_lgr_free_bufs(lgr);
+>  	destroy_workqueue(lgr->tx_wq);
+>  	if (lgr->is_smcd) {
+>  		smc_ism_put_vlan(lgr->smcd, lgr->vlan_id);
+> @@ -1306,11 +1333,21 @@ static void smc_lgr_free(struct smc_link_group *lgr)
+>  		if (!atomic_dec_return(&lgr->smcd->lgr_cnt))
+>  			wake_up(&lgr->smcd->lgrs_deleted);
+>  	} else {
+> -		smc_wr_free_lgr_mem(lgr);
+>  		if (!atomic_dec_return(&lgr_cnt))
+>  			wake_up(&lgrs_deleted);
 
-Log Snippet:
-root@px30-engicam-px30-core-ctouch2:/# dmesg | grep rga
-rockchip-rga ff480000.rga: HW Version: 0x04.00
-rockchip-rga ff480000.rga: Registered rockchip-rga as /dev/video0
-
-How do I test this ? In the email you mentioned:
-
-I tested it with a standalone utility setting V4L2_PIX_FMT_YUV420 on 
-both output and capture. The issue should be pretty easy to reproduce.
-
-Can you please share more information/any procedure on how to test.
-
-Thanks and Regards
-Suniel Mahesh
+These waiters (seaparate ones for smcd and smcr) are used to wait for all lgrs 
+to be deleted when a module unload or reboot was triggered, so it must only be 
+woken up when the lgr is actually freed.

@@ -2,342 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D0B48AAF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE3748AAFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348238AbiAKKAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:00:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:3778 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237046AbiAKKAW (ORCPT
+        id S1348380AbiAKKAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:00:36 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:39033 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237046AbiAKKAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:00:22 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20B7aPlQ015796;
-        Tue, 11 Jan 2022 10:00:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=c9SdVrdxP+DbC5FpmnE055EG7CVEZXz93kVVeEWEeOA=;
- b=k1nmfwjQ+2STyo4uccbDONZZFNvAr+QKDJpsf7caH6dQYalib+Up7Up7h+ZZL76nfNV5
- zxvHPAJ7jeCH5I1T0UC/dqp3LJJRC7UooncVvNECdgZL0SwdAdvbSgqNNMr3VLCcjwjH
- w0PMqHuKhyQpYtj1kZ6rfu5RsiXI4n3fkPABhlQilPxn1gwmOSl5v63fTpB7OKiIFMiu
- LoC0WZA7GhCXm/Ji/GTT2Mk+1r6qQ02ejcelKM2VIdqHdlTLS/LALEOmFFwV0PekdKDE
- 0waqiCu0UFzuKLNAiA5X9xkEpbA2uvh7Gk/v+Kpw7oaowgsfd+/hGYpt14qzq62afahz qg== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm8k8mjw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 10:00:21 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20B9wXlu011653;
-        Tue, 11 Jan 2022 10:00:19 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3df1vjbyby-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 10:00:19 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BA0Gjl43712852
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 10:00:16 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1195242052;
-        Tue, 11 Jan 2022 10:00:16 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADA3E4204D;
-        Tue, 11 Jan 2022 10:00:15 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 10:00:15 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Subject: [PATCH] s390/uaccess: introduce bit field for OAC specifier
-Date:   Tue, 11 Jan 2022 11:00:03 +0100
-Message-Id: <20220111100003.743116-1-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 11 Jan 2022 05:00:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641895232;
+    s=strato-dkim-0002; d=mades.net;
+    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=lyofxhP/zBVTJReIn3f+VXHtqr4OgCKN/QQINp+/bx8=;
+    b=X0MWPLscqqIMrs6tbPtT+Q9/3/smLjTN3FhqdEz2gOZN5toka1NCE+dOAHxILF0xdP
+    txzRT9FHLQv8gnrNvHUORP8Go9P+F05ncz5sPFJPIMuozLFSBK2GfhQ4YPKVPB4e5ZId
+    iw7Z+t/MPDN0skdcnSOQ7cfmZ789s6YrKANg+FN8nSprzlSYAoPdRV2xtA0HzyA18gwG
+    mvBYeoTzm1aotPa9l2C/A2eI4iPGDPBq5mOiQmOzhTGBfXBjkSp5OGQWvVX2UQo9tVFf
+    diunEotDevN/QSF2OAVSbv6EiZNzj/VDsSD7J7KjyXKFYH2H7YEEishsaC7BpP+1v1n7
+    WLCg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JmMHfUWmW/JCZ5q3rSbjoqaGiJoG2nOuw/BEppjnAC9QlFFS7UbO3fgyY5MDJqZr"
+X-RZG-CLASS-ID: mo00
+Received: from oxapp05-01.back.ox.d0m.de
+    by smtp.strato.de (RZmta 47.37.6 AUTH)
+    with ESMTPSA id Y49088y0BA0WEd2
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 11 Jan 2022 11:00:32 +0100 (CET)
+Date:   Tue, 11 Jan 2022 11:00:32 +0100 (CET)
+From:   Jochen Mades <jochen@mades.net>
+To:     Lukas Wunner <lukas@wunner.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     gregkh@linuxfoundation.org, Russell King <linux@armlinux.org.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>
+Message-ID: <27017560.2684465.1641895232612@webmail.strato.com>
+In-Reply-To: <20220102182801.GA22268@wunner.de>
+References: <20211231171516.18407-1-jochen@mades.net>
+ <20220102100710.GA29858@wunner.de>
+ <0e0e91b8-72f8-aa31-50e2-80090dd5613a@gmx.de>
+ <20220102182801.GA22268@wunner.de>
+Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
+ pl011_set_mctrl() function.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aq3xNdY2ndN_A8V4m9s1v4p1Mv94bX9p
-X-Proofpoint-GUID: aq3xNdY2ndN_A8V4m9s1v4p1Mv94bX9p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_03,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- mlxscore=0 clxscore=1011 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- suspectscore=0 spamscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201110054
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.5-Rev33
+X-Originating-Client: open-xchange-appsuite
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nico Boehr <nrb@linux.ibm.com>
+Hi Lukas, Lino,
 
-Previously, we've used  magic values to specify the OAC
-(operand-access control) for mvcos.
+please let me know when I could test again with an "official" linux kernel, instead of using my local patch.
 
-Instead we introduce a bit field for it.
+Bests
+Jochen
 
-When using a bit field, we cannot use an immediate value with K
-constraint anymore, since GCC older than 10 doesn't recognize
-the bit field union as a compile time constant.
-To make things work with older compilers,
-load the OAC value through a register.
-
-Bloat-o-meter reports a slight increase in kernel size with this change:
-Total: Before=15692135, After=15693015, chg +0.01%
-
-Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
-Co-developed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- arch/s390/include/asm/uaccess.h | 120 ++++++++++++++++++++------------
- arch/s390/lib/uaccess.c         |  24 +++++--
- 2 files changed, 95 insertions(+), 49 deletions(-)
-
-diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
-index ce550d06abc3..02b467461163 100644
---- a/arch/s390/include/asm/uaccess.h
-+++ b/arch/s390/include/asm/uaccess.h
-@@ -49,51 +49,85 @@ int __get_user_bad(void) __attribute__((noreturn));
- 
- #ifdef CONFIG_HAVE_MARCH_Z10_FEATURES
- 
-+union oac {
-+	unsigned int val;
-+	struct {
-+		struct {
-+			unsigned short key : 4;
-+			unsigned short     : 4;
-+			unsigned short as  : 2;
-+			unsigned short     : 4;
-+			unsigned short k   : 1;
-+			unsigned short a   : 1;
-+		} oac1;
-+		struct {
-+			unsigned short key : 4;
-+			unsigned short     : 4;
-+			unsigned short as  : 2;
-+			unsigned short     : 4;
-+			unsigned short k   : 1;
-+			unsigned short a   : 1;
-+		} oac2;
-+	};
-+};
-+
--#define __put_get_user_asm(to, from, size, insn)		\
--({								\
--	int __rc;						\
--								\
--	asm volatile(						\
--		insn "		0,%[spec]\n"			\
--		"0:	mvcos	%[_to],%[_from],%[_size]\n"	\
--		"1:	xr	%[rc],%[rc]\n"			\
--		"2:\n"						\
--		".pushsection .fixup, \"ax\"\n"			\
--		"3:	lhi	%[rc],%[retval]\n"		\
--		"	jg	2b\n"				\
--		".popsection\n"					\
--		EX_TABLE(0b,3b) EX_TABLE(1b,3b)			\
--		: [rc] "=&d" (__rc), [_to] "+Q" (*(to))		\
--		: [_size] "d" (size), [_from] "Q" (*(from)),	\
--		  [retval] "K" (-EFAULT), [spec] "K" (0x81UL)	\
--		: "cc", "0");					\
--	__rc;							\
-+#define __put_get_user_asm(to, from, size, oac_spec)			\
-+({									\
-+	int __rc;							\
-+									\
-+	asm volatile(							\
-+		"lr	0,%[spec]\n"					\
-+		"0:	mvcos	%[_to],%[_from],%[_size]\n"		\
-+		"1:	xr	%[rc],%[rc]\n"				\
-+		"2:\n"							\
-+		".pushsection .fixup, \"ax\"\n"				\
-+		"3:	lhi	%[rc],%[retval]\n"			\
-+		"	jg	2b\n"					\
-+		".popsection\n"						\
-+		EX_TABLE(0b,3b) EX_TABLE(1b,3b)				\
-+		: [rc] "=&d" (__rc), [_to] "+Q" (*(to))			\
-+		: [_size] "d" (size), [_from] "Q" (*(from)),		\
-+		  [retval] "K" (-EFAULT), [spec] "d" (oac_spec.val)	\
-+		: "cc", "0");						\
-+	__rc;								\
- })
- 
-+#define __put_user_asm(to, from, size)				\
-+	__put_get_user_asm(to, from, size, ((union oac) {	\
-+		.oac1.as = PSW_BITS_AS_SECONDARY,		\
-+		.oac1.a = 1					\
-+	}))
-+
-+#define __get_user_asm(to, from, size)				\
-+	__put_get_user_asm(to, from, size, ((union oac) {	\
-+		.oac2.as = PSW_BITS_AS_SECONDARY,		\
-+		.oac2.a = 1					\
-+	}))							\
-+
- static __always_inline int __put_user_fn(void *x, void __user *ptr, unsigned long size)
- {
- 	int rc;
- 
- 	switch (size) {
- 	case 1:
--		rc = __put_get_user_asm((unsigned char __user *)ptr,
--					(unsigned char *)x,
--					size, "llilh");
-+		rc = __put_user_asm((unsigned char __user *)ptr,
-+				    (unsigned char *)x,
-+				    size);
- 		break;
- 	case 2:
--		rc = __put_get_user_asm((unsigned short __user *)ptr,
--					(unsigned short *)x,
--					size, "llilh");
-+		rc = __put_user_asm((unsigned short __user *)ptr,
-+				    (unsigned short *)x,
-+				    size);
- 		break;
- 	case 4:
--		rc = __put_get_user_asm((unsigned int __user *)ptr,
--					(unsigned int *)x,
--					size, "llilh");
-+		rc = __put_user_asm((unsigned int __user *)ptr,
-+				    (unsigned int *)x,
-+				    size);
- 		break;
- 	case 8:
--		rc = __put_get_user_asm((unsigned long __user *)ptr,
--					(unsigned long *)x,
--					size, "llilh");
-+		rc = __put_user_asm((unsigned long __user *)ptr,
-+				    (unsigned long *)x,
-+				    size);
- 		break;
- 	default:
- 		__put_user_bad();
-@@ -108,24 +142,24 @@ static __always_inline int __get_user_fn(void *x, const void __user *ptr, unsign
- 
- 	switch (size) {
- 	case 1:
--		rc = __put_get_user_asm((unsigned char *)x,
--					(unsigned char __user *)ptr,
--					size, "lghi");
-+		rc = __get_user_asm((unsigned char *)x,
-+				    (unsigned char __user *)ptr,
-+				    size);
- 		break;
- 	case 2:
--		rc = __put_get_user_asm((unsigned short *)x,
--					(unsigned short __user *)ptr,
--					size, "lghi");
-+		rc = __get_user_asm((unsigned short *)x,
-+				    (unsigned short __user *)ptr,
-+				    size);
- 		break;
- 	case 4:
--		rc = __put_get_user_asm((unsigned int *)x,
--					(unsigned int __user *)ptr,
--					size, "lghi");
-+		rc = __get_user_asm((unsigned int *)x,
-+				    (unsigned int __user *)ptr,
-+				    size);
- 		break;
- 	case 8:
--		rc = __put_get_user_asm((unsigned long *)x,
--					(unsigned long __user *)ptr,
--					size, "lghi");
-+		rc = __get_user_asm((unsigned long *)x,
-+				    (unsigned long __user *)ptr,
-+				    size);
- 		break;
- 	default:
- 		__get_user_bad();
-diff --git a/arch/s390/lib/uaccess.c b/arch/s390/lib/uaccess.c
-index a596e69d3c47..d3a700385875 100644
---- a/arch/s390/lib/uaccess.c
-+++ b/arch/s390/lib/uaccess.c
-@@ -62,10 +62,14 @@ static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr
- 						 unsigned long size)
- {
- 	unsigned long tmp1, tmp2;
-+	union oac spec = {
-+		.oac2.as = PSW_BITS_AS_SECONDARY,
-+		.oac2.a = 1,
-+	};
- 
- 	tmp1 = -4096UL;
- 	asm volatile(
--		"   lghi  0,%[spec]\n"
-+		"   lr   0,%[spec]\n"
- 		"0: .insn ss,0xc80000000000,0(%0,%2),0(%1),0\n"
- 		"6: jz    4f\n"
- 		"1: algr  %0,%3\n"
-@@ -84,7 +88,7 @@ static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr
- 		"5:\n"
- 		EX_TABLE(0b,2b) EX_TABLE(3b,5b) EX_TABLE(6b,2b) EX_TABLE(7b,5b)
- 		: "+a" (size), "+a" (ptr), "+a" (x), "+a" (tmp1), "=a" (tmp2)
--		: [spec] "K" (0x81UL)
-+		: [spec] "d" (spec.val)
- 		: "cc", "memory", "0");
- 	return size;
- }
-@@ -135,10 +139,14 @@ static inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
- 					       unsigned long size)
- {
- 	unsigned long tmp1, tmp2;
-+	union oac spec = {
-+		.oac1.as = PSW_BITS_AS_SECONDARY,
-+		.oac1.a = 1,
-+	};
- 
- 	tmp1 = -4096UL;
- 	asm volatile(
--		"   llilh 0,%[spec]\n"
-+		"   lr 0,%[spec]\n"
- 		"0: .insn ss,0xc80000000000,0(%0,%1),0(%2),0\n"
- 		"6: jz    4f\n"
- 		"1: algr  %0,%3\n"
-@@ -157,7 +165,7 @@ static inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
- 		"5:\n"
- 		EX_TABLE(0b,2b) EX_TABLE(3b,5b) EX_TABLE(6b,2b) EX_TABLE(7b,5b)
- 		: "+a" (size), "+a" (ptr), "+a" (x), "+a" (tmp1), "=a" (tmp2)
--		: [spec] "K" (0x81UL)
-+		: [spec] "d" (spec.val)
- 		: "cc", "memory", "0");
- 	return size;
- }
-@@ -207,10 +215,14 @@ EXPORT_SYMBOL(raw_copy_to_user);
- static inline unsigned long clear_user_mvcos(void __user *to, unsigned long size)
- {
- 	unsigned long tmp1, tmp2;
-+	union oac spec = {
-+		.oac1.as = PSW_BITS_AS_SECONDARY,
-+		.oac1.a = 1,
-+	};
- 
- 	tmp1 = -4096UL;
- 	asm volatile(
--		"   llilh 0,%[spec]\n"
-+		"   lr 0,%[spec]\n"
- 		"0: .insn ss,0xc80000000000,0(%0,%1),0(%4),0\n"
- 		"   jz	  4f\n"
- 		"1: algr  %0,%2\n"
-@@ -228,7 +240,7 @@ static inline unsigned long clear_user_mvcos(void __user *to, unsigned long size
- 		"5:\n"
- 		EX_TABLE(0b,2b) EX_TABLE(3b,5b)
- 		: "+a" (size), "+a" (to), "+a" (tmp1), "=a" (tmp2)
--		: "a" (empty_zero_page), [spec] "K" (0x81UL)
-+		: "a" (empty_zero_page), [spec] "d" (spec.val)
- 		: "cc", "memory", "0");
- 	return size;
- }
--- 
-2.32.0
-
+> On 02/01/2022 19:28 Lukas Wunner <lukas@wunner.de> wrote:
+> 
+>  
+> On Sun, Jan 02, 2022 at 04:06:53PM +0100, Lino Sanfilippo wrote:
+> > On 02.01.22 at 11:07, Lukas Wunner wrote:
+> > > On Fri, Dec 31, 2021 at 05:15:14PM +0000, jmades wrote:
+> > > > --- a/drivers/tty/serial/amba-pl011.c
+> > > > +++ b/drivers/tty/serial/amba-pl011.c
+> > > > @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
+> > > >  	    container_of(port, struct uart_amba_port, port);
+> > > >  	unsigned int cr;
+> > > >
+> > > > -	if (port->rs485.flags & SER_RS485_ENABLED)
+> > > > -		mctrl &= ~TIOCM_RTS;
+> > > > +	if (port->rs485.flags & SER_RS485_ENABLED) {
+> > > > +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
+> > > > +			mctrl &= ~TIOCM_RTS;
+> > > > +		else
+> > > > +			mctrl |= TIOCM_RTS;
+> > > > +	}
+> > > >
+> > > >  	cr = pl011_read(uap, REG_CR);
+> > 
+> > Does this logic really have to be implemented in the driver?
+> 
+> No, it doesn't have to be and indeed I'm working towards consolidating
+> it in the serial core with this collection of patches:
+> 
+> https://git.kernel.org/gregkh/tty/c/d3b3404df318
+> https://lore.kernel.org/all/f49f945375f5ccb979893c49f1129f51651ac738.1641129062.git.lukas@wunner.de
+> https://lore.kernel.org/all/e22089ab49e6e78822c50c8c4db46bf3ee885623.1641129328.git.lukas@wunner.de
+> https://lore.kernel.org/all/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
+> https://github.com/l1k/linux/commit/532ef2ad757f
+> 
+> The last of these removes the rs485 logic from pl011_set_mctrl().
+> I'll post it once the others (and Jochen Mades' patch) have landed.
+> 
+> Even though the logic is eventually removed from pl011_set_mctrl(),
+> Jochen's patch makes sense as a backportable fix for v5.15.
+> 
+> 
+> > It looks as if the serial core already takes RS485 into account before
+> > calling set_mctrls(). At least I get the impression when looking
+> > at uart_tiocmset() and uart_port_dtr_rts(). Also other drivers like imx
+> > simply seem to ignore RTS in case of RS485.
+> 
+> The logic in uart_port_dtr_rts() is broken.  That's fixed by d3b3404df318,
+> which is queued up in tty-next for v5.17.
+> 
+> The pl011 driver papered over it with its own rs485-specific logic in
+> pl011_set_mctrl().  But as Jochen Mades correctly pointed out, that
+> only worked correctly if RTS is driven high on idle.
+> 
+> 
+> The logic in uart_tiocmset() is correct, but not sufficient because
+> uart_throttle(), uart_unthrottle and uart_set_termios() need to become
+> rs485-aware as well.  That's also addressed by the above-linked
+> GitHub commit.
+> 
+> Thanks,
+> 
+> Lukas

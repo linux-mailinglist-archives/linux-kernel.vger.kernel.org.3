@@ -2,86 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6CE48B623
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB0048B626
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350212AbiAKSwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:52:46 -0500
-Received: from mga17.intel.com ([192.55.52.151]:20707 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350196AbiAKSwp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:52:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641927165; x=1673463165;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Sua0LrwqqZdGAfIsKVCvbngimpLDy6yy/a/Faw9JSso=;
-  b=U5+5cHThWF1WnuACgO++UtvT/QOUXtOShJcumMySq8LkURpxXjyZLXw/
-   D4TjY2VLpopg91KKhD9c8rPk9b33mkXhbtXfZmI+P5/Z9ajSLft1NSpbC
-   /4W2si5LwSf0EhtdY2LYCu1rkqhh5kWhO9EAWaPlXd1LQDtfYLG3+zbb+
-   XmzFCsGUToj1reu1oTvqVfgT/OH6rJmgmt80GPvoTVGp2USA3BC5vkMSK
-   DIE2bY0+Kdcp6/Q6CIrVRGy7ti9dJDhVGS7/msYBl7yrDzQZNaxRUe8AB
-   r3MFiHvZP22xiWQBkE7X7xxmOHlrjRA+2djzEeSfpeE8GGj4R/pAgBm81
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="224256273"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="224256273"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 10:52:45 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="528400339"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.36.204]) ([10.209.36.204])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 10:52:44 -0800
-Message-ID: <4b655bf8-ce56-ffe6-78b6-1f949b8df11f@linux.intel.com>
-Date:   Tue, 11 Jan 2022 10:52:35 -0800
+        id S1350222AbiAKSw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242645AbiAKSw5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 13:52:57 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6919C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:52:56 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id d7so17122221ybo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:52:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=17MefAb7Wq51LBItM83lwZITi4By/+6kifCdUczNHes=;
+        b=qe/vTFEQwfqq+6k74r7b8ljqbjo6ywjiHIZvlXWsbp5cgSwDmZeXP7KquwvmXWtxan
+         WIiTsy2bpJ3Edfi0fwgbn5KlEpxI2ct3pCgIQKEnBSsz9YU9mHCiLnH+HrlrvTEJAXQn
+         WVPTmLVQeydNcrhrRk3YLrFt9UfEKFk0/QkK/5QWu4sHXrkFZBC/aTcv04KZJzB5HBzx
+         OhyWzwxYcxgwBacEU0iNLa8PTrZ1sXHyo/H944RQ2AhQlHyUEVjKaDLxyotS/00b3/3A
+         fBQkmgyjGXxOEqWLhMJ/5pZN9YoOzuYeXLnoN+OS+gfAM+/oQhmnjHPWIna3AQU/mNw1
+         8hfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=17MefAb7Wq51LBItM83lwZITi4By/+6kifCdUczNHes=;
+        b=kXSaRbv4H82uj9LubDeif8YKYYJXyrHuHWmqxZWZbWI16ExRY8LVQfwNspYSYpVgYO
+         n2QRf414qu8QIZAjAyZ0C5sghs83MLj0eOg3XMgIdrMkR5rgc2U0MhvHgEHOQRGYOrPq
+         rUj19hzyv05hyWvUT4xUFZLwY79sIWN3mk0pEzb9hsR2fInZ3liF2ih87CnoXUW3XSn3
+         HZRYujWHdo7ER3jUq7dbX0Up+HMlSEIBx4G+XNo7PicBsF1l1AXgBbG1eV+TWCNhOIS2
+         Mj7HVtDxcdvIE1MKK3JDOut0cE98mlJSvUn6xBpy0ImkMCS4Nk12skTPBsORkLdBqb7G
+         sNEw==
+X-Gm-Message-State: AOAM530Pc1lhO/17+HlS3wHMgH3aTPpur6rXtQDLEmbx3MxacOZ8bLlD
+        qtPrGiW7F54NsPd7NTiXHVJDBHYLreLePmUjdPKklA==
+X-Google-Smtp-Source: ABdhPJyn0Wq/OnTFO+pZZsGiPNj88pyrxrt8LxfP010ZWFUMpcdrTES6feVX3nFLo0tTGlZ2e9VdGfMDeGrY622KE1E=
+X-Received: by 2002:a25:c841:: with SMTP id y62mr8486367ybf.196.1641927175898;
+ Tue, 11 Jan 2022 10:52:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [RFC PATCH 1/1] perf tools: Add 'm' event modifier for counting
- machine
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-riscv@lists.infradead.org,
-        linux@yadro.com, Nikita Shubin <n.shubin@yadro.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Song Liu <song@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111142054.18733-1-nikita.shubin@maquefel.me>
- <20220111142054.18733-2-nikita.shubin@maquefel.me>
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <20220111142054.18733-2-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+ <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+ <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+ <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+ <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com> <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
+In-Reply-To: <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 11 Jan 2022 10:52:45 -0800
+Message-ID: <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 10, 2022 at 3:57 PM Jim Mattson <jmattson@google.com> wrote:
+>
+> On Mon, Jan 10, 2022 at 3:07 PM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > On Fri, Jan 7, 2022 at 4:05 PM Jim Mattson <jmattson@google.com> wrote:
+> > >
+> > > On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
+> > > <rananta@google.com> wrote:
+> > > >
+> > > > Hi Reiji,
+> > > >
+> > > > On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
+> > > > >
+> > > > > Hi Raghu,
+> > > > >
+> > > > > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
+> > > > > <rananta@google.com> wrote:
+> > > > > >
+> > > > > > Capture the start of the KVM VM, which is basically the
+> > > > > > start of any vCPU run. This state of the VM is helpful
+> > > > > > in the upcoming patches to prevent user-space from
+> > > > > > configuring certain VM features after the VM has started
+> > > > > > running.
+> > >
+> > > What about live migration, where the VM has already technically been
+> > > started before the first call to KVM_RUN?
+> >
+> > My understanding is that a new 'struct kvm' is created on the target
+> > machine and this flag should be reset, which would allow the VMM to
+> > restore the firmware registers. However, we would be running KVM_RUN
+> > for the first time on the target machine, thus setting the flag.
+> > So, you are right; It's more of a resume operation from the guest's
+> > point of view. I guess the name of the variable is what's confusing
+> > here.
+>
+> I was actually thinking that live migration gives userspace an easy
+> way to circumvent your restriction. You said, "This state of the VM is
+> helpful in the upcoming patches to prevent user-space from configuring
+> certain VM features after the VM has started running." However, if you
+> don't ensure that these VM features are configured the same way on the
+> target machine as they were on the source machine, you have not
+> actually accomplished your stated goal.
+>
+Isn't that up to the VMM to save/restore and validate the registers
+across migrations?
+Perhaps I have to re-word my intentions for the patch- userspace
+should be able to configure the registers before issuing the first
+KVM_RUN.
 
->   
->    u - user-space counting
->    k - kernel counting
-> + m - machine counting
+Thanks,
+Raghavendra
 
-
-You really need to explain what "machine counting" actually is, as well 
-that is likely irrelevant for most CPUs.
-
-I also didn't see that anywhere in the commit logs.
-
--Andi
-
+> > Thanks,
+> > Raghavendra

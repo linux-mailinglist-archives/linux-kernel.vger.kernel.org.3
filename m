@@ -2,92 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9878548A8E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2369248A8F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348728AbiAKHwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:52:31 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:38615 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236041AbiAKHw3 (ORCPT
+        id S1348738AbiAKHxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:53:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42594 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236041AbiAKHw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:52:29 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V1YjgdZ_1641887545;
-Received: from 30.225.139.228(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V1YjgdZ_1641887545)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 11 Jan 2022 15:52:27 +0800
-Message-ID: <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
-Date:   Tue, 11 Jan 2022 15:52:25 +0800
+        Tue, 11 Jan 2022 02:52:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641887577;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s3Y1O09JG5ePpg5LAktUzWgPzg+txuTZh+F8MesPjNg=;
+        b=Ww++8u8Lfli4VrVXozb1uNVMciHqzSWPpaxWqwOG7UDAAxj1Nx5qonH/hHrCSD0Bh9LKEr
+        BSQH1ZazZjHMHQZkn+2mjCgEoVrZMgSngK2g8O7EVQ6CrFkLjBH7twLx/V8vmJVk1B+I4G
+        IzFOAZmRf+iMp07VSt18DV2l+C4+/20=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-KZHLwfp_MiyHbBdYkyg6hQ-1; Tue, 11 Jan 2022 02:52:54 -0500
+X-MC-Unique: KZHLwfp_MiyHbBdYkyg6hQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E3F2A85EE62;
+        Tue, 11 Jan 2022 07:52:52 +0000 (UTC)
+Received: from [10.72.14.32] (ovpn-14-32.pek2.redhat.com [10.72.14.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 95E207B9E2;
+        Tue, 11 Jan 2022 07:52:48 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 01/21] KVM: arm64: Introduce template for inline
+ functions
+To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-2-gshan@redhat.com>
+ <5112b3ba-d038-f622-c67f-e53695cbef37@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <8b7d3a75-dbf8-c8b9-bbb6-bd89d9429802@redhat.com>
+Date:   Tue, 11 Jan 2022 15:52:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after
- timeout
+In-Reply-To: <5112b3ba-d038-f622-c67f-e53695cbef37@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
-From:   Heyi Guo <guoheyi@linux.alibaba.com>
-In-Reply-To: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi Eric,
 
-Any comments?
+On 11/9/21 11:26 PM, Eric Auger wrote:
+> On 8/15/21 2:13 AM, Gavin Shan wrote:
+>> The inline functions used to get the SMCCC parameters have same
+>> layout. It means these functions can be presented by a template,
+>> to make the code simplified. Besides, this adds more similar inline
+>> functions like smccc_get_arg{4,5,6,7,8}() to visit more SMCCC arguments,
+>> which are needed by SDEI virtualization support.
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   include/kvm/arm_hypercalls.h | 34 +++++++++++++++-------------------
+>>   1 file changed, 15 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+>> index 0e2509d27910..ebecb6c68254 100644
+>> --- a/include/kvm/arm_hypercalls.h
+>> +++ b/include/kvm/arm_hypercalls.h
+>> @@ -6,27 +6,21 @@
+>>   
+>>   #include <asm/kvm_emulate.h>
+>>   
+>> -int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+>> -
+>> -static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+>> -{
+>> -	return vcpu_get_reg(vcpu, 0);
+>> +#define SMCCC_DECLARE_GET_FUNC(type, name, reg)			\
+>> +static inline type smccc_get_##name(struct kvm_vcpu *vcpu)	\
+>> +{								\
+>> +	return vcpu_get_reg(vcpu, reg);				\
+>>   }
+>>   
+>> -static inline unsigned long smccc_get_arg1(struct kvm_vcpu *vcpu)
+>> -{
+>> -	return vcpu_get_reg(vcpu, 1);
+>> -}
+>> -
+>> -static inline unsigned long smccc_get_arg2(struct kvm_vcpu *vcpu)
+>> -{
+>> -	return vcpu_get_reg(vcpu, 2);
+>> -}
+>> -
+>> -static inline unsigned long smccc_get_arg3(struct kvm_vcpu *vcpu)
+>> -{
+>> -	return vcpu_get_reg(vcpu, 3);
+>> -}
+>> +SMCCC_DECLARE_GET_FUNC(u32,           function, 0)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg1,     1)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg2,     2)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg3,     3)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg4,     4)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg5,     5)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg6,     6)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg7,     7)
+>> +SMCCC_DECLARE_GET_FUNC(unsigned long, arg8,     8)
+> I think I would keep smccc_get_function() and add macros to get the
+> 64-bit args. SMCCC_DECLARE_GET_FUNC is an odd macro name for a function
+> fetching an arg. I would suggest:
+> 
+
+I agree. The code will be changed accordingly in next respin.
+
+>> +#define SMCCC_DECLARE_GET_ARG(reg)			\
+>> +static inline unsigned long smccc_get_arg##reg(struct kvm_vcpu *vcpu)	\
+>> +{								\
+>> +	return vcpu_get_reg(vcpu, reg);				\
+>>   }
+>>   
+>>   static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
+>>   				    unsigned long a0,
+>> @@ -40,4 +34,6 @@ static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
+>>   	vcpu_set_reg(vcpu, 3, a3);
+>>   }
+>>   
+>> +int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+>> +
+> spurious change?
+
+I thought the inline function would come before the exposed ones. However,
+I don't think it's necessary. I will drop the changes in next respin.
+
+>>   #endif
+>>
 
 Thanks,
+Gavin
 
-Heyi
-
-在 2022/1/9 下午9:26, Heyi Guo 写道:
-> The memory will be freed by the caller if transfer timeout occurs,
-> then it would trigger kernel panic if the peer device responds with
-> something after timeout and triggers the interrupt handler of aspeed
-> i2c driver.
->
-> Set the msgs pointer to NULL to avoid invalid memory reference after
-> timeout to fix this potential kernel panic.
->
-> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
->
-> -------
->
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: openbmc@lists.ozlabs.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-aspeed@lists.ozlabs.org
-> ---
->   drivers/i2c/busses/i2c-aspeed.c | 5 +++++
->   1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index 67e8b97c0c950..3ab0396168680 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
->   		spin_lock_irqsave(&bus->lock, flags);
->   		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
->   			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
-> +		/*
-> +		 * All the buffers may be freed after returning to caller, so
-> +		 * set msgs to NULL to avoid memory reference after freeing.
-> +		 */
-> +		bus->msgs = NULL;
->   		spin_unlock_irqrestore(&bus->lock, flags);
->   
->   		return -ETIMEDOUT;

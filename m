@@ -2,101 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD4848A561
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9A448A564
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346480AbiAKB50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 20:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S1346491AbiAKB6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 20:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346471AbiAKB5Z (ORCPT
+        with ESMTP id S1346469AbiAKB6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 20:57:25 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E6CC06173F;
-        Mon, 10 Jan 2022 17:57:24 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id m2so17559848qkd.8;
-        Mon, 10 Jan 2022 17:57:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fnk3aKUU8TTDQJEelWsA5ELdK1ZLlLJyjUDJuNNEPts=;
-        b=CJ2RPnsKcrYl4nadUXD5HbYLYgSIR+tiBN+v4dWx7xzsISppty1LGsgwGhB2QwZ9Wm
-         22OqLkTLgq80wCrbuxFnfBuqVuuAEOZE/ZlKuL3dUxHk6xfIu8ChOJAJiSAwUzCgnCK5
-         rWsOXDLcdu5bLEz2pcogGaixpHluGd2xEjT651zwm53KJCNH5LZwiHV27pfeLtiCFetw
-         x6QRkGlMTsoqirVUmRowwn0Rk5MqAZWSAC5INhc+SEH6/xrlI424XPyF1/npUv1wyTFx
-         xpFZSmIrp5uyi/Wk5+leI0SqLyijJmda8+/axavfl8lli/l65EnW5p/U1cvG7bZrZ3K6
-         GZew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fnk3aKUU8TTDQJEelWsA5ELdK1ZLlLJyjUDJuNNEPts=;
-        b=x5FIm1VSoUa6lE3JewRgzjgBKBORfMNtJ6LJ3zGbBYOiVk5jKS+pY/ph9M930NwqcP
-         b/Ou0rluvckpvOGn+xNQJGiPQDxbgYeCnHbBUSABPa/spCl7cL5oqUdegDyu0obhTcIL
-         Hqi41wkK2j32udgpTrAhRn66Ls+3lKEalJGGmfc2aeojG1RVsx6beq+fOyRyDfhBfjzY
-         mLU2Io/CE3X4wxCBCi+n3GbNrlsJC1H1Qs5luvf+rvfigLzr4nVSeuz2Xn92c0BhE+Hq
-         w9KPN1xyw38Kzsagu+tH5hCvqaXlIlqd/BzPVUYZijxHGLC0e4ZgrHbOb9rVQDLBSaNs
-         ZrDQ==
-X-Gm-Message-State: AOAM530ztfGs6Rx5ejgo/mXoRgjQ6+GELMHOEQtEFXYUNn4OQk/rfW71
-        tYYtgW2B56OJnVe0ER8m76ZAHAkPNb0=
-X-Google-Smtp-Source: ABdhPJwvlVq/9hQvVVvzPFp41+ow+FcRFj2/Fg4wA2+lE7BaMzIhpwKS1P5C8QXUIQA/+k3PJF+tpQ==
-X-Received: by 2002:a05:620a:254f:: with SMTP id s15mr1830374qko.241.1641866244026;
-        Mon, 10 Jan 2022 17:57:24 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f33sm5926885qtb.56.2022.01.10.17.57.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 17:57:23 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] fs/btrfs: remove redundant ret variable
-Date:   Tue, 11 Jan 2022 01:57:16 +0000
-Message-Id: <20220111015716.649468-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Jan 2022 20:58:34 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A49DC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 17:58:34 -0800 (PST)
+Date:   Tue, 11 Jan 2022 10:58:22 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1641866312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lxxG13wyPIMXULYyBbekKKV3B1n8TjRlsPkH4qCA72U=;
+        b=T0uLAOXcFwUtewOpdyO5C8NHgAn1Nuz/dkaylacNrUuuba6X4nAGd/8KyQVj3uMvKzC0PQ
+        h4Or2N18Sm4RXXSPo/h80YLMp5mURBpbW6kOIV237xxrDThrXig8XMHyuHvaBgQSwLtbke
+        02oaqu8/NxPq+ZD1isk2x5+pcpQi36M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/migration: Add trace events for THP migrations
+Message-ID: <20220111015822.GA799985@u2004>
+References: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi Anshuman,
 
-Return value from fs_path_add_path() directly instead
-of taking this in another redundant variable.
+On Fri, Jan 07, 2022 at 10:29:35AM +0530, Anshuman Khandual wrote:
+> This adds two trace events for PMD based THP migration without split. These
+> events closely follow the implementation details like setting and removing
+> of PMD migration entries, which are essential operations for THP migration.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- fs/btrfs/send.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+I often want to check which individual pages are migrated to which places
+(or not migrated) for testing, so these new tracepoints could help me.
+Maybe these can be much greater if they can handle other types of page
+migration for raw pages and hugetlb pages.  Is it hard to cover all such
+page migration events?
 
-diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
-index 3fc144b8c0d8..4ed13461cb07 100644
---- a/fs/btrfs/send.c
-+++ b/fs/btrfs/send.c
-@@ -528,14 +528,10 @@ static int fs_path_add_from_extent_buffer(struct fs_path *p,
- 
- static int fs_path_copy(struct fs_path *p, struct fs_path *from)
- {
--	int ret;
--
- 	p->reversed = from->reversed;
- 	fs_path_reset(p);
- 
--	ret = fs_path_add_path(p, from);
--
--	return ret;
-+	return fs_path_add_path(p, from);
- }
- 
- 
--- 
-2.25.1
-
+Thanks,
+Naoya Horiguchi

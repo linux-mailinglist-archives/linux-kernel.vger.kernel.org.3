@@ -2,225 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB8348AF54
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B7148AF5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241568AbiAKOTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241424AbiAKOTM (ORCPT
+        id S241652AbiAKOUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:20:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29310 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241605AbiAKOUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:19:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913CEC06173F;
-        Tue, 11 Jan 2022 06:19:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50080B818B8;
-        Tue, 11 Jan 2022 14:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3E2C36AED;
-        Tue, 11 Jan 2022 14:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641910750;
-        bh=YGpfU0T5TMVEAJUhIJ8qeHRWWlDJCyc9jmkWB12IIak=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wo/bVdHRsgJTO46ku6p0Mh9xzxMddcZv7cdpKApShHXpJm/FU6GA7N0GAlvQeLI+q
-         S5UX1kJoeLLETSEGeeKnPmhhaOks4Q9RND1hwPjZxNCAsibfzcwHLV/yFLeLICpAIg
-         klsV/vxNmTEFqubIXgSYe96z10DLF+YQE4+3zvfj1MMTFyrVzGHMPwJi7eQ50AaKlz
-         HrnMxheWkyq9EwMHWDKuGrq7UXZ/y4HPqfOBih8d608GocPGeJbpeEHA9COf0p1+iJ
-         APiZW7088zymHOg5SS453dGCrGAEsxRDsvCyJIHBkpWGnxgEVDxTkYpLmpPA/wLZuR
-         u9AolW9m6v0lg==
-Date:   Tue, 11 Jan 2022 14:19:02 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 1/9] mm: x86, arm64: add arch_has_hw_pte_young()
-Message-ID: <20220111141901.GA10338@willie-the-truck>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-2-yuzhao@google.com>
- <20220105104526.GA3015@willie-the-truck>
- <YdYDzKvYbBwjfU3W@google.com>
- <20220106103009.GA4420@willie-the-truck>
- <Ydfq051mnCeZjG3G@google.com>
+        Tue, 11 Jan 2022 09:20:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641910829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DLeGoC7PaBq143VYr5AITMLTNpwAc7CdBxFfAI3CL8Y=;
+        b=GE03wYIH9CeIQ/fHh1/omOwjFNfa0wgiC+kotoQg9bZ2dFXU8vJspX9jY4zinpi2zCjy2n
+        SvWRo363kwk3NeGJLOHb7qnzfGiMqDkn8CGX0qNMKByeDwB0z3RpS1WFLjhuWC7j6wupaI
+        mLbSPjmPUANX/rsV1S103dTqXca0Pfg=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-449-DYLKKlJUNaCTOCc8dDE73A-1; Tue, 11 Jan 2022 09:20:28 -0500
+X-MC-Unique: DYLKKlJUNaCTOCc8dDE73A-1
+Received: by mail-ot1-f72.google.com with SMTP id v22-20020a0568301bd600b00590a8d65e0fso1903637ota.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 06:20:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=DLeGoC7PaBq143VYr5AITMLTNpwAc7CdBxFfAI3CL8Y=;
+        b=6tq35LASx5uwXv1AF3yOuO3fk5S2Uhk29c6phUEdh0UzWWFHnBxqyIez5zfXFDZm9h
+         fFRnm0hH3IYNzEjXQ7SaveZKc2EnYyMl7QZbEuhFZFnkWUT25bNz8elOkc/rxrKx4fHC
+         WasldMcRPDMKbIkbcR5+n+AnbRbRWVlSIs6bu6utDpA+CDYk1OIrbx4iVqG/rVuifSPI
+         G1+2cROERW28d8V1dHCVP7IcxDMF353Y9lHzP9Kib6BChxJvZg/8E6BItfef98D1sWAs
+         T/7ez+7XRhKmQGX08IT9itXW58JuwbAjA84bAZSezAD9rby8IUFy2ZVJ4n9s06fnzQ1L
+         DrVA==
+X-Gm-Message-State: AOAM532Pt3baXXMuerNqFEQ+j0iCO11AGLgfDEFHvoBpHs2XZlt2GMCP
+        purehCnePmqMaZDri+RMYYukTs3PGI/t3+BPBohkTAxtWWi3PMk5z4CCkM57L69/Eodl9v+0jIf
+        WTABN71k4+KkrTodFNbE5u02YjKQU+l3pYbKDd8vmsp5vo1+xNtHc0B9KiB3hmohPijRq3qQ=
+X-Received: by 2002:a05:6830:924:: with SMTP id v36mr3446338ott.223.1641910827182;
+        Tue, 11 Jan 2022 06:20:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy7WmC88LeKTxcunkdMEN5AxzKjcRCjyWscxMjkFN+ASB2E8PFbgPaKf27NYG4IXhxj5clvtg==
+X-Received: by 2002:a05:6830:924:: with SMTP id v36mr3446315ott.223.1641910826870;
+        Tue, 11 Jan 2022 06:20:26 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id g50sm1672559oic.25.2022.01.11.06.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 06:20:26 -0800 (PST)
+Subject: Re: [PATCH] netfilter: extend CONFIG_NF_CONNTRACK compile time checks
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211225173744.3318250-1-trix@redhat.com>
+ <Yd1SCbvjeXE+ceRo@salvia>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <c31ca0e7-2895-eae9-c52d-41c0f187443e@redhat.com>
+Date:   Tue, 11 Jan 2022 06:20:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydfq051mnCeZjG3G@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Yd1SCbvjeXE+ceRo@salvia>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 12:25:07AM -0700, Yu Zhao wrote:
-> On Thu, Jan 06, 2022 at 10:30:09AM +0000, Will Deacon wrote:
-> > On Wed, Jan 05, 2022 at 01:47:08PM -0700, Yu Zhao wrote:
-> > > On Wed, Jan 05, 2022 at 10:45:26AM +0000, Will Deacon wrote:
-> > > > On Tue, Jan 04, 2022 at 01:22:20PM -0700, Yu Zhao wrote:
-> > > > > diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> > > > > index 870c39537dd0..56e4ef5d95fa 100644
-> > > > > --- a/arch/arm64/tools/cpucaps
-> > > > > +++ b/arch/arm64/tools/cpucaps
-> > > > > @@ -36,6 +36,7 @@ HAS_STAGE2_FWB
-> > > > >  HAS_SYSREG_GIC_CPUIF
-> > > > >  HAS_TLB_RANGE
-> > > > >  HAS_VIRT_HOST_EXTN
-> > > > > +HW_AF
-> > > > >  HW_DBM
-> > > > >  KVM_PROTECTED_MODE
-> > > > >  MISMATCHED_CACHE_TYPE
-> > > > 
-> > > > As discussed in the previous threads, we really don't need the complexity
-> > > > of the additional cap for the arm64 part. Please can you just use the
-> > > > existing code instead? It's both simpler and, as you say, it's equivalent
-> > > > for existing hardware.
-> > > > 
-> > > > That way, this patch just ends up being a renaming exercise and we're all
-> > > > good.
-> > > 
-> > > No, renaming alone isn't enough. A caller needs to disable preemption
-> > > before calling system_has_hw_af(), and I don't think it's reasonable
-> > > to ask this caller to do it on x86 as well.
-> > > 
-> > > It seems you really prefer not to have HW_AF. So the best I can
-> > > accommodate, considering other potential archs, e.g., risc-v (I do
-> > > plan to provide benchmark results on risc-v, btw), is:
-> > > 
-> > >   static inline bool arch_has_hw_pte_young(bool local)
-> > >   {
-> > > 	bool hw_af;
-> > > 
-> > >   	if (local) {
-> > >   		WARN_ON(preemptible());
-> > >   		return cpu_has_hw_af();
-> > >   	}
-> > >   
-> > > 	preempt_disable();
-> > >   	hw_af = system_has_hw_af();
-> > > 	preempt_enable();
-> > > 
-> > > 	return hw_af;
-> > >   }
-> > > 
-> > > Or please give me something else I can call without disabling
-> > > preemption, sounds good?
-> > 
-> > Sure thing, let me take a look. Do you have your series on a public git
-> > tree someplace?
-> 
-> Thanks!
-> 
-> This patch (updated) on Gerrit:
-> https://linux-mm-review.googlesource.com/c/page-reclaim/+/1500/1
 
-How about folding in something like the diff below? I've basically removed
-that 'bool local' argument and dropped the preemptible() check from the
-arm64 code.
+On 1/11/22 1:46 AM, Pablo Neira Ayuso wrote:
+> Hi,
+>
+> On Sat, Dec 25, 2021 at 09:37:44AM -0800, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> Extends
+>> commit 83ace77f5117 ("netfilter: ctnetlink: remove get_ct indirection")
+>>
+>> Add some compile time checks by following the ct and ctinfo variables
+>> that are only set when CONFIG_NF_CONNTRACK is enabled.
+>>
+>> In nfulnl_log_packet(), ct is only set when CONFIG_NF_CONNTRACK
+>> is enabled. ct's later use in __build_packet_message() is only
+>> meaningful when CONFIG_NF_CONNTRACK is enabled, so add a check.
+>>
+>> In nfqnl_build_packet_message(), ct and ctinfo are only set when
+>> CONFIG_NF_CONNTRACK is enabled.  Add a check for their decl and use.
+>>
+>> nfqnl_ct_parse() is a static function, move the check to the whole
+>> function.
+>>
+>> In nfqa_parse_bridge(), ct and ctinfo are only set by the only
+>> call to nfqnl_ct_parse(), so add a check for their decl and use.
+>>
+>> Consistently initialize ctinfo to 0.
+> Are compile warning being trigger without this patch, maybe with
+> CONFIG_NF_CONNTRACK=n?
 
-Will
+No compiler warnings, this was found by visual inspection.
 
---->8
+Robot says to entend more, so I want to make sure a human is also 
+interested.
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 280123916fc2..990358eca359 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -998,27 +998,14 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
-  * the pte is old and cannot be marked young. So we always end up with zeroed
-  * page after fork() + CoW for pfn mappings. We don't always have a
-  * hardware-managed access flag on arm64.
-- *
-- * The system-wide support isn't used when involving correctness and therefore
-- * is allowed to be flaky.
-  */
--static inline bool arch_has_hw_pte_young(bool local)
--{
--	WARN_ON(local && preemptible());
--
--	return cpu_has_hw_af();
--}
--#define arch_has_hw_pte_young		arch_has_hw_pte_young
-+#define arch_has_hw_pte_young		cpu_has_hw_af
- 
- /*
-  * Experimentally, it's cheap to set the access flag in hardware and we
-  * benefit from prefaulting mappings as 'old' to start with.
-  */
--static inline bool arch_wants_old_prefaulted_pte(void)
--{
--	return arch_has_hw_pte_young(true);
--}
--#define arch_wants_old_prefaulted_pte	arch_wants_old_prefaulted_pte
-+#define arch_wants_old_prefaulted_pte	cpu_has_hw_af
- 
- static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
- {
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index c60b16f8b741..3908780fc408 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1398,7 +1398,7 @@ static inline bool arch_has_pfn_modify_check(void)
- }
- 
- #define arch_has_hw_pte_young arch_has_hw_pte_young
--static inline bool arch_has_hw_pte_young(bool local)
-+static inline bool arch_has_hw_pte_young(void)
- {
- 	return true;
- }
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 599cc232d5c4..0bd1beadb545 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -260,15 +260,12 @@ static inline int pmdp_clear_flush_young(struct vm_area_struct *vma,
- 
- #ifndef arch_has_hw_pte_young
- /*
-- * Return whether the accessed bit is supported by the local CPU or system-wide.
-+ * Return whether the accessed bit is supported by the local CPU.
-  *
-- * This stub assumes accessing thru an old PTE triggers a page fault.
-+ * This stub assumes accessing through an old PTE triggers a page fault.
-  * Architectures that automatically set the access bit should overwrite it.
-- *
-- * Note that the system-wide support can be flaky and therefore shouldn't be
-- * used when involving correctness.
-  */
--static inline bool arch_has_hw_pte_young(bool local)
-+static inline bool arch_has_hw_pte_young(void)
- {
- 	return false;
- }
-diff --git a/mm/memory.c b/mm/memory.c
-index ead6c7d4b9a1..1f02de6d51e4 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2743,7 +2743,7 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
- 	 * On architectures with software "accessed" bits, we would
- 	 * take a double page fault, so mark it accessed here.
- 	 */
--	if (!arch_has_hw_pte_young(true) && !pte_young(vmf->orig_pte)) {
-+	if (!arch_has_hw_pte_young() && !pte_young(vmf->orig_pte)) {
- 		pte_t entry;
- 
- 		vmf->pte = pte_offset_map_lock(mm, vmf->pmd, addr, &vmf->ptl);
+Tom
+
+>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   net/netfilter/nfnetlink_log.c   |  4 +++-
+>>   net/netfilter/nfnetlink_queue.c | 18 +++++++++++++-----
+>>   2 files changed, 16 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/net/netfilter/nfnetlink_log.c b/net/netfilter/nfnetlink_log.c
+>> index ae9c0756bba59..e79d152184b71 100644
+>> --- a/net/netfilter/nfnetlink_log.c
+>> +++ b/net/netfilter/nfnetlink_log.c
+>> @@ -627,9 +627,11 @@ __build_packet_message(struct nfnl_log_net *log,
+>>   			 htonl(atomic_inc_return(&log->global_seq))))
+>>   		goto nla_put_failure;
+>>   
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   	if (ct && nfnl_ct->build(inst->skb, ct, ctinfo,
+>>   				 NFULA_CT, NFULA_CT_INFO) < 0)
+>>   		goto nla_put_failure;
+>> +#endif
+>>   
+>>   	if ((pf == NFPROTO_NETDEV || pf == NFPROTO_BRIDGE) &&
+>>   	    nfulnl_put_bridge(inst, skb) < 0)
+>> @@ -689,7 +691,7 @@ nfulnl_log_packet(struct net *net,
+>>   	struct nfnl_log_net *log = nfnl_log_pernet(net);
+>>   	const struct nfnl_ct_hook *nfnl_ct = NULL;
+>>   	struct nf_conn *ct = NULL;
+>> -	enum ip_conntrack_info ctinfo;
+>> +	enum ip_conntrack_info ctinfo = 0;
+>>   
+>>   	if (li_user && li_user->type == NF_LOG_TYPE_ULOG)
+>>   		li = li_user;
+>> diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+>> index 44c3de176d186..d59cae7561bf8 100644
+>> --- a/net/netfilter/nfnetlink_queue.c
+>> +++ b/net/netfilter/nfnetlink_queue.c
+>> @@ -386,8 +386,10 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+>>   	struct sk_buff *entskb = entry->skb;
+>>   	struct net_device *indev;
+>>   	struct net_device *outdev;
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   	struct nf_conn *ct = NULL;
+>>   	enum ip_conntrack_info ctinfo = 0;
+>> +#endif
+>>   	struct nfnl_ct_hook *nfnl_ct;
+>>   	bool csum_verify;
+>>   	char *secdata = NULL;
+>> @@ -595,8 +597,10 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+>>   	if (seclen && nla_put(skb, NFQA_SECCTX, seclen, secdata))
+>>   		goto nla_put_failure;
+>>   
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   	if (ct && nfnl_ct->build(skb, ct, ctinfo, NFQA_CT, NFQA_CT_INFO) < 0)
+>>   		goto nla_put_failure;
+>> +#endif
+>>   
+>>   	if (cap_len > data_len &&
+>>   	    nla_put_be32(skb, NFQA_CAP_LEN, htonl(cap_len)))
+>> @@ -1104,13 +1108,13 @@ static int nfqnl_recv_verdict_batch(struct sk_buff *skb,
+>>   	return 0;
+>>   }
+>>   
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   static struct nf_conn *nfqnl_ct_parse(struct nfnl_ct_hook *nfnl_ct,
+>>   				      const struct nlmsghdr *nlh,
+>>   				      const struct nlattr * const nfqa[],
+>>   				      struct nf_queue_entry *entry,
+>>   				      enum ip_conntrack_info *ctinfo)
+>>   {
+>> -#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   	struct nf_conn *ct;
+>>   
+>>   	ct = nf_ct_get(entry->skb, ctinfo);
+>> @@ -1125,10 +1129,8 @@ static struct nf_conn *nfqnl_ct_parse(struct nfnl_ct_hook *nfnl_ct,
+>>   				      NETLINK_CB(entry->skb).portid,
+>>   				      nlmsg_report(nlh));
+>>   	return ct;
+>> -#else
+>> -	return NULL;
+>> -#endif
+>>   }
+>> +#endif
+>>   
+>>   static int nfqa_parse_bridge(struct nf_queue_entry *entry,
+>>   			     const struct nlattr * const nfqa[])
+>> @@ -1172,11 +1174,13 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
+>>   	struct nfnl_queue_net *q = nfnl_queue_pernet(info->net);
+>>   	u_int16_t queue_num = ntohs(info->nfmsg->res_id);
+>>   	struct nfqnl_msg_verdict_hdr *vhdr;
+>> -	enum ip_conntrack_info ctinfo;
+>>   	struct nfqnl_instance *queue;
+>>   	struct nf_queue_entry *entry;
+>>   	struct nfnl_ct_hook *nfnl_ct;
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   	struct nf_conn *ct = NULL;
+>> +	enum ip_conntrack_info ctinfo = 0;
+>> +#endif
+>>   	unsigned int verdict;
+>>   	int err;
+>>   
+>> @@ -1198,11 +1202,13 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
+>>   	/* rcu lock already held from nfnl->call_rcu. */
+>>   	nfnl_ct = rcu_dereference(nfnl_ct_hook);
+>>   
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   	if (nfqa[NFQA_CT]) {
+>>   		if (nfnl_ct != NULL)
+>>   			ct = nfqnl_ct_parse(nfnl_ct, info->nlh, nfqa, entry,
+>>   					    &ctinfo);
+>>   	}
+>> +#endif
+>>   
+>>   	if (entry->state.pf == PF_BRIDGE) {
+>>   		err = nfqa_parse_bridge(entry, nfqa);
+>> @@ -1218,8 +1224,10 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
+>>   				 payload_len, entry, diff) < 0)
+>>   			verdict = NF_DROP;
+>>   
+>> +#if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>>   		if (ct && diff)
+>>   			nfnl_ct->seq_adjust(entry->skb, ct, ctinfo, diff);
+>> +#endif
+>>   	}
+>>   
+>>   	if (nfqa[NFQA_MARK])
+>> -- 
+>> 2.26.3
+>>
+

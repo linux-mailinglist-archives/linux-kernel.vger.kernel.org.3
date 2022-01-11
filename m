@@ -2,115 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F05748A658
+	by mail.lfdr.de (Postfix) with ESMTP id 79D6F48A659
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346980AbiAKDbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 22:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S1346999AbiAKDby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 22:31:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346944AbiAKDbu (ORCPT
+        with ESMTP id S1346957AbiAKDbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Jan 2022 22:31:50 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C97C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:31:49 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id 30so60155056edv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:31:49 -0800 (PST)
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F579C061757
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:31:50 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id c4so13274297iln.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yEXDL2d5mW4dgNlrsV8b01CLHO2/qMkqM99n3xl1TPA=;
-        b=FyLvpJ1ZUoGF3g5uvFCwTOHKR079Hu87MuIs3DVN7fscUsk3tY2DUgp69HVHHHQIjU
-         XUFcHY9EZzK1MmE4mpTuhjOjaNxMOMXXCJ8e2hqbrcfjja8ztfJqy1UvHsRaKd/OdCR3
-         +Pdqz2jBu645swYVXmS34WWp8g8qMucxzfWhI=
+         :cc:content-transfer-encoding;
+        bh=WjJwUUWZ/BCy26tG6i0H8TGwk6V985nqQvOicOWTZ4M=;
+        b=Kt/SXme2spmF1Q4vRsvS4pG+rCHvAFzpHY6/g+ah9uXn8dEf8B+SiQy74uNTNlfzu+
+         fI86pnBPd36ytsLrsYVt+JYuMg4mD2Cbjr+zRIvUoEFk42um/CGgPgZzAJVesTcyceDW
+         1k2nbgWOrjiVu2NGqqueDgsqMN4JvUiPUeB/ILX3mxmPSGxrFW0bZhC7osF093nslXUD
+         dQcVO1MjKr7QrGgG6xYLmU9DOzNGYxeQhnk4tBkDGumVMH/auGCVkA/4RWUFHbCLqwcy
+         LfvGZ2RjfROO0lVZu8VzzhE+dY1i+pIfTo3kWazj3HlFXLJjk0xUNbsrRXnZytjoJ/tY
+         C1gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yEXDL2d5mW4dgNlrsV8b01CLHO2/qMkqM99n3xl1TPA=;
-        b=xnBlb36NkNqiZtpfi9NIp/iM0w870CQz/QJ4jiFNwQGE1QPWtvLnaYvzYmTp1PKJRQ
-         R3zdpXVx0xxGel63Wf9gru09V/iX+9Qwr44PuTaW2OPVBT6H9t7GEXoW0TnWXHGqyObQ
-         QJYdR2lzN4d0D6+uud03G4rVcSvP2caVeQkiBUMCiWfMICvPwPtO2CTZftGc6lzTkc3O
-         GKjbjKGlsqA5tf0JShEoKAH3r5I2C0uuYdPcjn8XbDXbEzSLY1Rcc+Ev3nW0yM2ZPi55
-         K6G/k/MdWGrMgG4jcqHJPXKs3jxXG/wPXnxajW0KMHIol3UAXlGl1AdLWKpswuDVPNcJ
-         OWrQ==
-X-Gm-Message-State: AOAM533hRlLQNpaoUdO/UYovgGPLxpRwRl0t5NydOcXpqqSs/7vlsWOj
-        UCez5FN3FtuacLAt8Q9jvtHZ47Oc245hUzHvE8I=
-X-Google-Smtp-Source: ABdhPJwuNcAGFnNUtrcUED94+k5RCpuBzrnxzcMRBMACHijFGkna0137176ye+yrTFq8J13etgv4yw==
-X-Received: by 2002:a17:907:6d1b:: with SMTP id sa27mr2120886ejc.182.1641871907525;
-        Mon, 10 Jan 2022 19:31:47 -0800 (PST)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
-        by smtp.gmail.com with ESMTPSA id j17sm3039267ejg.164.2022.01.10.19.31.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 19:31:47 -0800 (PST)
-Received: by mail-wm1-f50.google.com with SMTP id e5so10087205wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 19:31:46 -0800 (PST)
-X-Received: by 2002:a05:600c:4f49:: with SMTP id m9mr633357wmq.8.1641871906578;
- Mon, 10 Jan 2022 19:31:46 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WjJwUUWZ/BCy26tG6i0H8TGwk6V985nqQvOicOWTZ4M=;
+        b=mGcw7gCuJ3qWltadYyA0I3lMiQhr1v2+618FaO9Y2a0rI+wFPFQ6tyYjjg87nTbRdI
+         M0CBgpTM7U21tayH2teduU6D+eMx8tx3tyQt2X4ZVXQmFgtK1u10wirGS61Xfw+9gJOL
+         rIXfco1h7h12KF8ZGkk/5DStsj5BdJi9Nv9/ND5CeDCjSZz9+XZizvvJ2XLoyybgC/vz
+         +rP4+Zim81DXrYbmSjKdIhP7uX1JSpBQxQUpXYzzOiZd3RbbW2ZkkYmD/SUalds/Zg/9
+         dGzj1p79vjsNThyoG6ve5T7xgwXRCUiftJf7VWWDPzGBtpNuklh8kqq0aHjtfVDwqzvk
+         3lfw==
+X-Gm-Message-State: AOAM533czj/Ci4xMtvvhoP6F/blwy75oGpcyaMe18G8JwUg09WFDPaeh
+        H9YXwgvDwcnwAtxCa/45DVmjG6GC7zAButuW0glK
+X-Google-Smtp-Source: ABdhPJzAm1xFKAL/SDZlyq0Folm6Knaez8RQjNeQ6v1fXaBZB6Z4O8nf2/JHKKIjXLTJDZb9MJQc9tdaDTRaMZwQSZ4=
+X-Received: by 2002:a05:6e02:1e08:: with SMTP id g8mr1423993ila.270.1641871909341;
+ Mon, 10 Jan 2022 19:31:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110025203.2545903-1-kuba@kernel.org>
-In-Reply-To: <20220110025203.2545903-1-kuba@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 10 Jan 2022 19:31:30 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg-pW=bRuRUvhGmm0DgqZ45A0KaH85V5KkVoxGKX170Xg@mail.gmail.com>
-Message-ID: <CAHk-=wg-pW=bRuRUvhGmm0DgqZ45A0KaH85V5KkVoxGKX170Xg@mail.gmail.com>
-Subject: Re: [GIT PULL] Networking for 5.17
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     David Miller <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210830141737.181-1-xieyongji@bytedance.com> <20220110075546-mutt-send-email-mst@kernel.org>
+ <CACycT3v1aEViw7vV4x5qeGVPrSrO-BTDvQshEX35rx_X0Au2vw@mail.gmail.com>
+ <20220110100911-mutt-send-email-mst@kernel.org> <CACycT3v6jo3-8ATWUzf659vV94a2oRrm-zQtGNDZd6OQr-MENA@mail.gmail.com>
+ <20220110103938-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220110103938-mutt-send-email-mst@kernel.org>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Tue, 11 Jan 2022 11:31:37 +0800
+Message-ID: <CACycT3sbJC1Jn7NeWk_ccQ_2_YgKybjugfxmKpfgCP3Ayoju4w@mail.gmail.com>
+Subject: Re: [PATCH v12 00/13] Introduce VDUSE - vDPA Device in Userspace
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, bcrl@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mika.penttila@nextfour.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>, joro@8bytes.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        He Zhe <zhe.he@windriver.com>,
+        Liu Xiaodong <xiaodong.liu@intel.com>,
+        Joe Perches <joe@perches.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        John Garry <john.garry@huawei.com>, songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Netdev <netdev@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 9, 2022 at 6:52 PM Jakub Kicinski <kuba@kernel.org> wrote:
+On Mon, Jan 10, 2022 at 11:44 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> At the time of writing we have one known conflict (/build failure)
-> with tip, Stephen's resolution looks good:
+> On Mon, Jan 10, 2022 at 11:24:40PM +0800, Yongji Xie wrote:
+> > On Mon, Jan 10, 2022 at 11:10 PM Michael S. Tsirkin <mst@redhat.com> wr=
+ote:
+> > >
+> > > On Mon, Jan 10, 2022 at 09:54:08PM +0800, Yongji Xie wrote:
+> > > > On Mon, Jan 10, 2022 at 8:57 PM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
+> > > > >
+> > > > > On Mon, Aug 30, 2021 at 10:17:24PM +0800, Xie Yongji wrote:
+> > > > > > This series introduces a framework that makes it possible to im=
+plement
+> > > > > > software-emulated vDPA devices in userspace. And to make the de=
+vice
+> > > > > > emulation more secure, the emulated vDPA device's control path =
+is handled
+> > > > > > in the kernel and only the data path is implemented in the user=
+space.
+> > > > > >
+> > > > > > Since the emuldated vDPA device's control path is handled in th=
+e kernel,
+> > > > > > a message mechnism is introduced to make userspace be aware of =
+the data
+> > > > > > path related changes. Userspace can use read()/write() to recei=
+ve/reply
+> > > > > > the control messages.
+> > > > > >
+> > > > > > In the data path, the core is mapping dma buffer into VDUSE dae=
+mon's
+> > > > > > address space, which can be implemented in different ways depen=
+ding on
+> > > > > > the vdpa bus to which the vDPA device is attached.
+> > > > > >
+> > > > > > In virtio-vdpa case, we implements a MMU-based software IOTLB w=
+ith
+> > > > > > bounce-buffering mechanism to achieve that. And in vhost-vdpa c=
+ase, the dma
+> > > > > > buffer is reside in a userspace memory region which can be shar=
+ed to the
+> > > > > > VDUSE userspace processs via transferring the shmfd.
+> > > > > >
+> > > > > > The details and our user case is shown below:
+> > > > > >
+> > > > > > ------------------------    -------------------------   -------=
+---------------------------------------
+> > > > > > |            Container |    |              QEMU(VM) |   |      =
+                         VDUSE daemon |
+> > > > > > |       ---------      |    |  -------------------  |   | -----=
+-------------------- ---------------- |
+> > > > > > |       |dev/vdx|      |    |  |/dev/vhost-vdpa-x|  |   | | vDP=
+A device emulation | | block driver | |
+> > > > > > ------------+-----------     -----------+------------   -------=
+------+----------------------+---------
+> > > > > >             |                           |                      =
+      |                      |
+> > > > > >             |                           |                      =
+      |                      |
+> > > > > > ------------+---------------------------+----------------------=
+------+----------------------+---------
+> > > > > > |    | block device |           |  vhost device |            | =
+vduse driver |          | TCP/IP |    |
+> > > > > > |    -------+--------           --------+--------            --=
+-----+--------          -----+----    |
+> > > > > > |           |                           |                      =
+     |                       |        |
+> > > > > > | ----------+----------       ----------+-----------         --=
+-----+-------                |        |
+> > > > > > | | virtio-blk driver |       |  vhost-vdpa driver |         | =
+vdpa device |                |        |
+> > > > > > | ----------+----------       ----------+-----------         --=
+-----+-------                |        |
+> > > > > > |           |      virtio bus           |                      =
+     |                       |        |
+> > > > > > |   --------+----+-----------           |                      =
+     |                       |        |
+> > > > > > |                |                      |                      =
+     |                       |        |
+> > > > > > |      ----------+----------            |                      =
+     |                       |        |
+> > > > > > |      | virtio-blk device |            |                      =
+     |                       |        |
+> > > > > > |      ----------+----------            |                      =
+     |                       |        |
+> > > > > > |                |                      |                      =
+     |                       |        |
+> > > > > > |     -----------+-----------           |                      =
+     |                       |        |
+> > > > > > |     |  virtio-vdpa driver |           |                      =
+     |                       |        |
+> > > > > > |     -----------+-----------           |                      =
+     |                       |        |
+> > > > > > |                |                      |                      =
+     |    vdpa bus           |        |
+> > > > > > |     -----------+----------------------+----------------------=
+-----+------------           |        |
+> > > > > > |                                                              =
+                          ---+---     |
+> > > > > > ---------------------------------------------------------------=
+--------------------------| NIC |------
+> > > > > >                                                                =
+                          ---+---
+> > > > > >                                                                =
+                             |
+> > > > > >                                                                =
+                    ---------+---------
+> > > > > >                                                                =
+                    | Remote Storages |
+> > > > > >                                                                =
+                    -------------------
+> > > > > >
+> > > > > > We make use of it to implement a block device connecting to
+> > > > > > our distributed storage, which can be used both in containers a=
+nd
+> > > > > > VMs. Thus, we can have an unified technology stack in this two =
+cases.
+> > > > > >
+> > > > > > To test it with null-blk:
+> > > > > >
+> > > > > >   $ qemu-storage-daemon \
+> > > > > >       --chardev socket,id=3Dcharmonitor,path=3D/tmp/qmp.sock,se=
+rver,nowait \
+> > > > > >       --monitor chardev=3Dcharmonitor \
+> > > > > >       --blockdev driver=3Dhost_device,cache.direct=3Don,aio=3Dn=
+ative,filename=3D/dev/nullb0,node-name=3Ddisk0 \
+> > > > > >       --export type=3Dvduse-blk,id=3Dtest,node-name=3Ddisk0,wri=
+table=3Don,name=3Dvduse-null,num-queues=3D16,queue-size=3D128
+> > > > > >
+> > > > > > The qemu-storage-daemon can be found at https://github.com/byte=
+dance/qemu/tree/vduse
+> > > > >
+> > > > > It's been half a year - any plans to upstream this?
+> > > >
+> > > > Yeah, this is on my to-do list this month.
+> > > >
+> > > > Sorry for taking so long... I've been working on another project
+> > > > enabling userspace RDMA with VDUSE for the past few months. So I
+> > > > didn't have much time for this. Anyway, I will submit the first
+> > > > version as soon as possible.
+> > > >
+> > > > Thanks,
+> > > > Yongji
+> > >
+> > > Oh fun. You mean like virtio-rdma? Or RDMA as a backend for regular
+> > > virtio?
+> > >
+> >
+> > Yes, like virtio-rdma. Then we can develop something like userspace
+> > rxe=E3=80=81siw or custom protocol with VDUSE.
+> >
+> > Thanks,
+> > Yongji
+>
+> Would be interesting to see the spec for that.
 
-Ok, the trees that trigger the conflict haven't actually hit my tree
-yet, so I'll see that particular conflict later.
+Will send it ASAP.
 
-I assume I'll get the irq_set_affinity_and_hint() patches from Thomas
-at some point - Thomas, can  you make sure to remind me of this
-conflict, because this is exactly the kind of thing I would catch on
-my home machine due to doing full builds, but that I will probably
-miss if I'm on the road.
+> The issues with RDMA revolved around the fact that current
+> apps tend to either use non-standard propocols for connection
+> establishment or use UD where there's IIRC no standard
+> at all. So QP numbers are hard to virtualize.
+> Similarly many use LIDs directly with the same effect.
+> GUIDs might be virtualizeable but no one went to the effort.
+>
 
-I'm home for a couple more days and will try to do as much of the
-merge window heavy lifting as possible before my travels start, but
-we'll see..
+Actually we aimed at emulating a soft RDMA with normal NIC (not use
+RDMA capability) rather than virtualizing a physical RDMA NIC into
+several vRDMA devices. If so, I think we won't have those issues,
+right?
 
->   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git tags/5.17-net-next
+> To say nothing about the interaction with memory overcommit.
+>
 
-Merged. But I now note that this actually triggers an error when
-building with clang:
+I don't get you here. Could you give me more details?
 
-  net/netfilter/nf_tables_api.c:8278:4: error: variable 'data_size' is
-uninitialized when used here [-Werror,-Wuninitialized]
-                          data_size += sizeof(*prule) + rule->dlen;
-                          ^~~~~~~~~
-
-and I think clang is entirely right.
-
-Sadly, I didn't actually notice that before having done the merge, so
-I'll have to do the fixup as a separate commit.
-
-I really wish we had more automation doing clang builds. Yes, some
-parts of the kernel are still broken with clang, but a lot isn't, and
-this isn't the first time my clang build setup has found issues.
-
-I also notice that NET_VENDOR_VERTEXCOM defaults to 'n'. That's fine
-by me, but it seems unusual. Normally the 'enable vendor XYZ' tend to
-default to 'y'. But for unusual (and new) vendors, maybe that 'n' is
-the right thing to avoid unnecessary questions.
-
-And maybe that NET_VENDOR_xyz thing has happened many times before,
-and I just haven't happened to notice...
-
-               Linus
+Thanks,
+Yongji

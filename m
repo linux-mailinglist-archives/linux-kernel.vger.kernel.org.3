@@ -2,130 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2268448AA64
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0199C48AA5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349257AbiAKJXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349224AbiAKJXP (ORCPT
+        id S1349247AbiAKJWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:22:05 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.167]:18427 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349241AbiAKJWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:23:15 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A6EC06173F;
-        Tue, 11 Jan 2022 01:23:14 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id o6so64594813edc.4;
-        Tue, 11 Jan 2022 01:23:14 -0800 (PST)
+        Tue, 11 Jan 2022 04:22:04 -0500
+X-KPN-MessageId: d8a489b8-72bf-11ec-9a2e-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.37])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id d8a489b8-72bf-11ec-9a2e-005056abbe64;
+        Tue, 11 Jan 2022 10:21:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FdmddZoLPqnTqmjCQ4od3WcJNa5BhdUvuEmcIx7UK40=;
-        b=BBIkrzV9hu3XILNZw6ejZtSs4TWoRA23764jFCMQKfcQeTy5pE0W4KHtdmUOKHbqG4
-         ++KrEeS5dkXYmA1fB1QRfjDc3mhkDByTOLmAWA92B+zZ2E45CoZ4jQ0sm0xMsPDXOiuz
-         Hjp+AgPlYlFFbF0neRDeZEuJi67S9jFTkavKTrBqY9by5cJsKB6VfFfEKSFD5cK3C/Ky
-         DKpiGZhIsHEqqWKvILrG9YpGsLGy9c30RugN7tR0S9i181pugGPG2dI07kfR2gBKgqki
-         ZqDuG4QPZ9RyqRdPLHz1IW3rbTek96iG5ciZa8EqKoUNCDPzBmONiiygmPjLpEFjexv1
-         cWNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FdmddZoLPqnTqmjCQ4od3WcJNa5BhdUvuEmcIx7UK40=;
-        b=TU8sAPGf/oMuOxWCUVSVTCpsFk8uqsNMDDiFor7LdelCm7zD7VK22sKxtuO/0wqmTX
-         m7xD1ZoBbKRf5WpjdmWPSEWKV2lxCKfHuBMLsfG97FudCW3CISBmSEPlGFCO9eJG+gCy
-         LGwCRxM6Z7cUL/D0PphBgOZDfYCNMeFv4u43ypV8/TjVwSTfGFQAAO1i/+LgqF0MUSbS
-         cWjNa/wBNEIzGcaJotoAXZDjsW0hMKhT7u5cQZuG5K/YbJyz7QI827A1T8V8HU8G5XWg
-         mSJ7Y4qpqDWHuyfkIzahYKrBgLuOqh94G/RrdRjOXMRrxXH59D0KSLcN5y2kCLyrxPdo
-         MaQA==
-X-Gm-Message-State: AOAM531nvDSlbycx3dmS0OnQPWBwre72nGPHgWEgdphMO5u9RFaCVkFU
-        jq/DTp29D04RIO25vKmYCGEB5Ou3dE/ZKrJNEL4=
-X-Google-Smtp-Source: ABdhPJwpyWAE46cJUBpIFpUJdmN6NrsJkFYy8FePhQLt7goonuQk/AzaB1hCqVEHLFwriCPBnXLy58qJJ+O1++W3Ma4=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr2876393ejj.636.1641892993058;
- Tue, 11 Jan 2022 01:23:13 -0800 (PST)
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=5Sh28daInKdSrTtTbo1IllF4LAspOVNfmE0WTw8SsuY=;
+        b=k8Hwk2yhwyDOfys9oOd7vUMlstyMIPld0IcBSbmMe7hV0UWUtf8JKGDLFKCR17KQ88/J5MBZtvk5a
+         E8swFAcCwZ+iFGUDgrkF96S2WOQY6rcwR8xm/4OMttImPezRrj+NoAYaMhBnZL8B+G939SE43kjgux
+         t+cn0Nwh9WDCuCGR1fOm0BgrN6gY8yRfBZm1cLzYkBSq7eeTFYeyg7YM7uvI363HZThnEPodO87m0u
+         86oGj0+OE6CJCjd0MAuH++/sLVhmjOTHbMCXaAMmTAtmzUI8pVJfhTqhjlloFnpbYaSqqe33MD0fbf
+         Hr0FXllOnvg9DKcjtZ+fdwNpe6K9Klg==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|U8cdX9RsavCbkQ3kMX9Mu2MjmqZw1w5tLJ0A3sY+zAvKFHwpE0XEEUuu7hzPmlg
+ TYwqXS0jv+xJ2qM2JRoT2ng==
+X-Originating-IP: 193.91.129.219
+Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id ee04d578-72bf-11ec-83ab-005056ab1411;
+        Tue, 11 Jan 2022 10:22:00 +0100 (CET)
+Message-ID: <03dbdbe8-ea08-ef62-c09d-67b3baab6401@xs4all.nl>
+Date:   Tue, 11 Jan 2022 10:21:59 +0100
 MIME-Version: 1.0
-References: <20220111074703.3677392-1-cosmin.tanislav@analog.com> <20220111074703.3677392-2-cosmin.tanislav@analog.com>
-In-Reply-To: <20220111074703.3677392-2-cosmin.tanislav@analog.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 11 Jan 2022 11:21:25 +0200
-Message-ID: <CAHp75VeyJY3K+UgwXqkkRkPRHgbQhbFVRmjrzKb0-xwc=yC2NA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] iio: addac: ad74413r: correct comparator gpio
- getters mask usage
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v2] media: meson: vdec: potential dereference of null
+ pointer
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, narmstrong@baylibre.com,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, p.zabel@pengutronix.de
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211210015620.2143555-1-jiasheng@iscas.ac.cn>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20211210015620.2143555-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 9:47 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
->
-> The value of the GPIOs is currently altered using offsets rather
-> than masks. Make use of __assign_bit and the BIT macro to turn
-> the offsets into masks.
+On 10/12/2021 02:56, Jiasheng Jiang wrote:
+> The return value of kzalloc() needs to be checked.
+> To avoid use of null pointer in case of the failure of alloc.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Same issue as with Zhou's patch: this is almost identical to Neil's patch,
+but without any mention of his name.
 
-> Fixes: fea251b6a5db ("iio: addac: add AD74413R driver")
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+I very much prefer it if Neil just posts his patch so I can pick that up.
+
+Regards,
+
+	Hans
+
+> 
+> Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > ---
-> V1 -> V2
->  * add Fixes tag
->  * use __assign_bit
->  * remove bitmap_zero
->
-> V2 -> V3
->  * add back line between real_offset declaration and __assign_bit call
->  * move before patch 2
+> Changelog:
+> 
+> v1 -> v2
+> 
+> *Change 1. Change the return type of amvdec_add_ts from void to int.
+> *Change 2. Return -ENOMEN if alloc fail and return 0 if not.
+> *Change 3. Modify the caller to deal with the error.
 > ---
->  drivers/iio/addac/ad74413r.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-> index 6ea3cd933d05..b13cd5407df3 100644
-> --- a/drivers/iio/addac/ad74413r.c
-> +++ b/drivers/iio/addac/ad74413r.c
-> @@ -134,7 +134,6 @@ struct ad74413r_state {
->  #define AD74413R_CH_EN_MASK(x)         BIT(x)
->
->  #define AD74413R_REG_DIN_COMP_OUT              0x25
-> -#define AD74413R_DIN_COMP_OUT_SHIFT_X(x)       x
->
->  #define AD74413R_REG_ADC_RESULT_X(x)   (0x26 + (x))
->  #define AD74413R_ADC_RESULT_MAX                GENMASK(15, 0)
-> @@ -316,7 +315,7 @@ static int ad74413r_gpio_get(struct gpio_chip *chip, unsigned int offset)
->         if (ret)
->                 return ret;
->
-> -       status &= AD74413R_DIN_COMP_OUT_SHIFT_X(real_offset);
-> +       status &= BIT(real_offset);
->
->         return status ? 1 : 0;
+>  drivers/staging/media/meson/vdec/esparser.c     | 6 +++++-
+>  drivers/staging/media/meson/vdec/vdec_helpers.c | 5 ++++-
+>  drivers/staging/media/meson/vdec/vdec_helpers.h | 2 +-
+>  3 files changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+> index db7022707ff8..7e78288cc551 100644
+> --- a/drivers/staging/media/meson/vdec/esparser.c
+> +++ b/drivers/staging/media/meson/vdec/esparser.c
+> @@ -328,9 +328,13 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+>  
+>  	offset = esparser_get_offset(sess);
+>  
+> -	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
+> +	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
+>  	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
+>  		vb->timestamp, payload_size, offset, vbuf->flags);
+> +	if (ret) {
+> +		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
+> +		return ret;
+> +	}
+>  
+>  	vbuf->flags = 0;
+>  	vbuf->field = V4L2_FIELD_NONE;
+> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+> index 7f07a9175815..972a1d1a12a5 100644
+> --- a/drivers/staging/media/meson/vdec/vdec_helpers.c
+> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+> @@ -227,13 +227,15 @@ int amvdec_set_canvases(struct amvdec_session *sess,
 >  }
-> @@ -337,8 +336,7 @@ static int ad74413r_gpio_get_multiple(struct gpio_chip *chip,
->         for_each_set_bit_from(offset, mask, chip->ngpio) {
->                 unsigned int real_offset = st->comp_gpio_offsets[offset];
->
-> -               if (val & BIT(real_offset))
-> -                       *bits |= offset;
-> +               __assign_bit(offset, bits, val & BIT(real_offset));
->         }
->
->         return ret;
-> --
-> 2.34.1
->
+>  EXPORT_SYMBOL_GPL(amvdec_set_canvases);
+>  
+> -void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+> +int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+> +		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
+>  {
+>  	struct amvdec_timestamp *new_ts;
+>  	unsigned long flags;
+>  
+>  	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
+> +	if (!new_ts)
+> +		return -ENOMEM;
+>  	new_ts->ts = ts;
+>  	new_ts->tc = tc;
+>  	new_ts->offset = offset;
+> @@ -242,6 +244,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+>  	spin_lock_irqsave(&sess->ts_spinlock, flags);
+>  	list_add_tail(&new_ts->list, &sess->timestamps);
+>  	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
+> +	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(amvdec_add_ts);
+>  
+> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+> index cfaed52ab526..1bcb697290de 100644
+> --- a/drivers/staging/media/meson/vdec/vdec_helpers.h
+> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+> @@ -55,7 +55,7 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
+>   * @offset: offset in the VIFIFO where the associated packet was written
+>   * @flags the vb2_v4l2_buffer flags
+>   */
+> -void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+> +int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+> +		  struct v4l2_timecode tc, u32 offset, u32 flags);
+>  void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
+>  
 
-
--- 
-With Best Regards,
-Andy Shevchenko

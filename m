@@ -2,157 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D624B48A86A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790A748A86E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235421AbiAKH3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiAKH3S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:29:18 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87BCC06173F;
-        Mon, 10 Jan 2022 23:29:17 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id m4so21968557edb.10;
-        Mon, 10 Jan 2022 23:29:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=12jsSOU5ZNxy84ETQ5LSrudrwcQeLCeYfKiSaDp1ftY=;
-        b=hjbl3rn/DvVDqV9U+a5izOL62rKLOSaKxYvpUKendFVHeuuIfK0nSd0ebg7bffAEnL
-         f4Gh5h4GFaoaNlaWAMlM2rmOgVaEoxubrRsoZOwkvQSl01hmX3W5t6R1RJ6U68XLHMxK
-         YZkQK8j6PSHjZSMO00ixmcDx2Z/6/Iuox8WRAUXwn0xWClXpRYIbo7RoqD9pmigVcKBB
-         D6r3xUfWAEWS3UDxruurk38lYYr4yD80e0jljnCTnGwsRu/Yot/7zoRDndnXbyS4wRVt
-         c9SnFr2Wi1obbMTyGR8Rnay0TkXx6S059ewkHftkAkkMWlg84l+XU2bFJXZ5le5Abwa6
-         xRkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=12jsSOU5ZNxy84ETQ5LSrudrwcQeLCeYfKiSaDp1ftY=;
-        b=MR5GHwgvTFGFx5oqk5eDKrucRSMizuLx5+DO4tRGXOb2eAlWSsC1KRJK0XWdaRCX3a
-         YALQHli0CEKe18rXTFOPuCCl+7ZtzAxkHR3UCfrCeRG9Js0SykvuotogrVghf8pqk+me
-         RHzQo0nHqtdPZf6nQ85m7D7bpi/y2P9F1cfBfYHZd0MUsDCT2prdCRwoNbeAbr3stVNM
-         HlZxklK+qwCOIew2shL+pGWnuH4TCx+BKJ904bYtgBnu/wGMqGnzvlqNAJtdbZzg5GPS
-         le/i43bfwDUoF8dk1FbRP+EbpCXjzgCTSmZL3c1IQxKoIr7rnTmNW/KGa3CEs1yIk2P7
-         93zw==
-X-Gm-Message-State: AOAM5322T7pqDiebPc1UuV4dB/IOH3eKBHXzaWTc08c3ZVq9iz4xJzpm
-        e2It91crE6wFCbUeJs8J/s0=
-X-Google-Smtp-Source: ABdhPJzZAeYEy5k8zkJyHiJB7jbeV8xIKIsvwPQztjRd7ouQe7D3cvPQ5dk924wzjHCCdmVgAiBICw==
-X-Received: by 2002:a05:6402:160d:: with SMTP id f13mr3128349edv.247.1641886156356;
-        Mon, 10 Jan 2022 23:29:16 -0800 (PST)
-Received: from [192.168.0.182] ([79.119.107.253])
-        by smtp.gmail.com with ESMTPSA id v16sm4708637edc.4.2022.01.10.23.29.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 23:29:16 -0800 (PST)
-Message-ID: <9d98ad20-617d-b57f-3b87-e001b6999fba@gmail.com>
-Date:   Tue, 11 Jan 2022 09:29:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 3/3] iio: addac: ad74413r: correct comparator gpio
- getters mask usage
+        id S1348316AbiAKHa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:30:57 -0500
+Received: from mga12.intel.com ([192.55.52.136]:36865 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234583AbiAKHa4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:30:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641886256; x=1673422256;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Z2rLt1QXnRILZb5X4pSsAKDNElUMIb0XIV8w+65ogoM=;
+  b=mwgjKtuDiUsh+rxAxbq4OBcplVul3V40yF0UC4qU2bv5XAPOGloMqqIK
+   LpkII7C3tqOnKSjA7SmwmfNE8nkd/PgGF6bksw5n9Dy7YVc/kW4s+ZJ24
+   eYXH5SLyynwINzFXG7RPf4fTpUWoVdY27kWUhNaoeFxfrh1Pq2HEtt8jS
+   BiqwTSIAoywKVGjkxlGtDW+1UXaIl5WUs54Ocf+Qp1iwz/GguaIuXZg/e
+   g3sPmbxiUroP7h0nGNjSCB7+B5xl/2hppt9VT1Gcsym8r0S72So2CisY6
+   yCXonDWguxZ++J5GRkWYfi7JrZSX/xwRJMSb3FNWHLbWxSGyLFfl7p/Ud
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="223404988"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="223404988"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 23:30:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="619733295"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Jan 2022 23:30:55 -0800
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 10 Jan 2022 23:30:55 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 10 Jan 2022 23:30:55 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 10 Jan 2022 23:30:54 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cu+k05pB1pbzAWZkm7JuuKvK2CzWjQdkegCwQdLYsK5Wp/UtYTOjg672PTBM5+5gdn4yEL9FDz7RBQFJuAYs01G3wr8UOHMjZNSGBjTgae9cgp21lft0mbR5MjfgOvvtXu5j8lqy++/ajSQwSacnfl7TUaE470SAvcgc541tiL3eOmL/3LuR2kJeqpPOdMbeBfhgx4dpHhJa4ySPRzWrI0zrpdbfsnonC/eCvzvYehyZJYVCVXSG5roACnkk44yx6x781aHJ70TmPd7kQA72tl8WxGvjNYuCAj/tjbp5WLoYOSNPfMcgVoS6vOt8vYeV3porTJk5BtqKVX0rRI1bQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z2rLt1QXnRILZb5X4pSsAKDNElUMIb0XIV8w+65ogoM=;
+ b=FK8xDCbrezUsRtMvEC5GS7+vngIQCNFqTQmkkweqQHAKu3HfLXMh737QpIUATgZ1PnilykMI5EfqAvVcYTndEB7B3AY4uLcKRpyYi+GP57Vil3n+vkSQG2uO1uccKCQvk/RdS1FWfdymRIFPom4m7/27tIG0fkAsb5SnClRXW66kTpzLueCiuYL8zscBw+D++Q59W4SlmyEnNaCeKi7YpQI8FeVxxyDracKc2BB+il+OoIHGHFXeVdaFeal3s56GF7FPnjqL9LyvJeK8jyRG07jCqGH5xsHNuvAbE6cpYyZox/WYs2PU3HSLGYeutZbFZlLc0xsTAp2N8kkDzEkOdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW3PR11MB4554.namprd11.prod.outlook.com (2603:10b6:303:5d::7)
+ by MWHPR11MB0079.namprd11.prod.outlook.com (2603:10b6:301:6b::38) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
+ 2022 07:30:53 +0000
+Received: from MW3PR11MB4554.namprd11.prod.outlook.com
+ ([fe80::42f:73e3:ecb1:3b75]) by MW3PR11MB4554.namprd11.prod.outlook.com
+ ([fe80::42f:73e3:ecb1:3b75%8]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 07:30:53 +0000
+From:   "Penigalapati, Sandeep" <sandeep.penigalapati@intel.com>
+To:     "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>
+CC:     Song Liu <songliubraving@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "Jakub Kicinski" <kuba@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [Intel-wired-lan] [PATCH v4 net-next 7/9] ixgbe: pass bi->xdp to
+ ixgbe_construct_skb_zc() directly
+Thread-Topic: [Intel-wired-lan] [PATCH v4 net-next 7/9] ixgbe: pass bi->xdp to
+ ixgbe_construct_skb_zc() directly
+Thread-Index: AQHX7D0U0sdTJ+BkmU+w4HKt4HHRRKxdoaGw
+Date:   Tue, 11 Jan 2022 07:30:53 +0000
+Message-ID: <MW3PR11MB45549D6C03955849FC75BCF89C519@MW3PR11MB4554.namprd11.prod.outlook.com>
+References: <20211208140702.642741-1-alexandr.lobakin@intel.com>
+ <20211208140702.642741-8-alexandr.lobakin@intel.com>
+In-Reply-To: <20211208140702.642741-8-alexandr.lobakin@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "cosmin.tanislav@analog.com" <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-References: <20220110220509.3527402-1-cosmin.tanislav@analog.com>
- <20220110220509.3527402-3-cosmin.tanislav@analog.com>
- <CAHp75VckhARFUX3F0F7MLiHzpdqgKiVpDxoYNZVwSsB7ZK2=hQ@mail.gmail.com>
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-In-Reply-To: <CAHp75VckhARFUX3F0F7MLiHzpdqgKiVpDxoYNZVwSsB7ZK2=hQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2698caec-96aa-4710-38e5-08d9d4d44cd6
+x-ms-traffictypediagnostic: MWHPR11MB0079:EE_
+x-microsoft-antispam-prvs: <MWHPR11MB007932108E0EB565D8845FEE9C519@MWHPR11MB0079.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ggnwON3r8QgkZsI0Nu9yjAlPSWV1P2MNX5UplyGU3Q2zaUtbTzkRD5yCHP9qHzfnd0ubfd/ABRcnzHtFSVPYlUvygodB7GIEkFOj84UByw3O1tg0OMh/1J3JcPAldGcp2ot2NfRXIVFwNpp+2AWfhEPCmzXCS5g6ihGpPJ/C/F4kpO44XwnKrqXL8T7HpB2v0xy6AIZUYavO2yvwn+pUvRMyj3f5W0tOMpBOv/07GFYspCrZOMe5ypSNNqjq5nOlmUXKo9SmUA5oi0+CMswdE8bdhxcaxAkDBQC2glmUqP2CDgnbzEmslD4GRnKodAMNwV+VksEV6fS13Kpi081XY9gA1IjiqelOIFHrDWoE7O4sqMY+QB85mao4PzGZ7UMSQtqR0SF1p6Apndi1/79FI/eOyfAwKq36bp4DHjrhrZME6r4IXQFlsM5JjR+DJKUW0MTMpJoOEAFy6x2czYBodyAjNu83j1gubQkv7Z+oGShgU7f0rFRGRCotDCAQovBtGvYZgF19e17ZMfNLqRbIe483tjKrFr7tvV1PvKV6/RX+pbsJpYJp9a2x8MLzZXjCq+weUV5/hAtwlhMrcw70otPcm/tgQh5tMQPoWIH21xCWlaWw9ngsSBD693YWhfMVICSHf97U1GAUOopizTxkT2aGUnm8M5zm0QfUeiq2c3pVSUjLDcSrZpn8L7yBagQ3qlBc3mlqjrKKvqBNwBIunw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR11MB4554.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(54906003)(4326008)(316002)(26005)(66446008)(186003)(7416002)(64756008)(66946007)(66556008)(71200400001)(66476007)(2906002)(110136005)(508600001)(9686003)(7696005)(38070700005)(6506007)(83380400001)(52536014)(38100700002)(55016003)(5660300002)(8676002)(82960400001)(33656002)(86362001)(122000001)(8936002)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?dVl37AeqwjSQMKKzCCLNdWr2b1iAAE5plAn35Qh8jPsio01alxnVZAcET2?=
+ =?iso-8859-1?Q?0T/x2L/OXlGPIWC5uHQ1agd+Q+HXtUFuDuRsRlvmjMYFU7MJRZuS6st/LL?=
+ =?iso-8859-1?Q?4ZYSSQ8+eH5CsYeRdHE3by1l1jP+2rM2PUgS6+JORQQXBlYdcUISmiND9k?=
+ =?iso-8859-1?Q?t4+PyPrNir3SGKf7hTCUrLcEa72zbEhosmUGGTnr2FkmP7Tvzap/YT50dz?=
+ =?iso-8859-1?Q?pqmsqWUgjSl+49nv9Z2qS9fetX9Ai/N3rYg0DsCaLBcYEJKgQQbJzdn9rs?=
+ =?iso-8859-1?Q?8HaTQ2r2jrO/7ht6TVJgGb3aqONcP1pM8CDQr8cT2sTW9Myqq2lSgRuR0b?=
+ =?iso-8859-1?Q?WTc5erbNzDgXt50jw3ngEWcCsNfDiB2jRki8l2Ccj5jA26aer3Kel5HrXu?=
+ =?iso-8859-1?Q?B89frYF/MKw+dJTjR3wxDQOBNYD3a5AEmKHFTaGpvHN6EQUoD9Kb/cZIZq?=
+ =?iso-8859-1?Q?UDrcXp0RuGRqdHj/exxqUtZWVJDL1f2sAaXMSfUZScFpQ1PI2ILI4d8xW6?=
+ =?iso-8859-1?Q?r4uMqXsI0V80sjSw1jCqvgrAE8nIVRNyV0t6nrAk+A8kKNbxOHdO7+4THF?=
+ =?iso-8859-1?Q?VTVNw3D+1sj1cB2izgP7WtQ/SqW6byhj0m36npl0ux7KcMk8v6tTjHn/DV?=
+ =?iso-8859-1?Q?ubH6AynNlw4Ib64uPHVAaNUPXE+3wKyFAxLTMrcqaB4CDIStBjQixJn2fJ?=
+ =?iso-8859-1?Q?VrXThEcUBjyR1UGcwBQOi/H8d3XAFUEjyofA3kMx7oOEN7+Uci1C9oJeO2?=
+ =?iso-8859-1?Q?LD/qBNwZC/QQnws/+ew3/qee26ex8BOuntg3th9AnY36qUkcteR7A0K59K?=
+ =?iso-8859-1?Q?n6G6RyEMwB5YgSwnYVT0/oehLQg7b8lKrbnVjsF8OgtkiNvPubgWs+9MvN?=
+ =?iso-8859-1?Q?V8CRNdWMQoOAB9H1rx9Qq+ELdRp7hRl3aMsoPfSiH6f4DJeboZBhV45ZBt?=
+ =?iso-8859-1?Q?FUc6zri+/CcbstrC9vUU0ATmy6aiwPl8dBF0Igmu6QREpkGMjd/++O7Hyj?=
+ =?iso-8859-1?Q?TclruMeIUJyO0tSwnmuK8tGjZz/AUJqBIFyD/Zb2VpzdbwgTsPsKCJRsxG?=
+ =?iso-8859-1?Q?jte1vrnAOd3Il9uy1BErYU16PAkKwhlmRqgm0kgpJfOhBKX5pJSlx7ZJkd?=
+ =?iso-8859-1?Q?oXCRINdJqOjJiuzV0CxwaY7app3k0CkQDTTfHng2XPQi00VkxEaYwgMv2a?=
+ =?iso-8859-1?Q?SXujDqAN3lIg9OKtk8nncczemrZJViEuOhB5KfnGgCq9m4XWXnOmr4awnj?=
+ =?iso-8859-1?Q?7qnD7E0pYG94H2ttqHu82U+FZnvh4cO83oR78Pki/I7vo7We3elvSZjaBl?=
+ =?iso-8859-1?Q?hmlDFv0q/bAeNf+4DeopoUu56VvlOadwBnFUwR1Vc2lFIccQTPXBYeC8Zm?=
+ =?iso-8859-1?Q?awFf9b8ao0+UFof6tYdyfxcOvXTtjgqXW5S68T6qQ1XTLE8bg3/N7wjWWS?=
+ =?iso-8859-1?Q?v6q8T15CYaQ0UKuxng5ttcqoY84vsnWtW/AOfX7SAuv3Er+eeKPzeb+yNK?=
+ =?iso-8859-1?Q?TY8zaMMLVKfRRQzd7Vod9XZKDJigb/QzFtCS1bqTu9Le96iU//O6Vt3+74?=
+ =?iso-8859-1?Q?kke/OLM6oUAB99Y7EL7KEuVEskCs2trc3aUs9kizmM6BnwmDNeNzKTK/gY?=
+ =?iso-8859-1?Q?2K99KwF9OCCUxgGvCS3ibnhPNeaak/oud9taiSEIDtFtVsoMR9uEuvggm8?=
+ =?iso-8859-1?Q?AvCiF8tqXzToHMQz66fBOrktiOhE8GDjOYzvrvUTm+XPhfkc4XaMA1s3L5?=
+ =?iso-8859-1?Q?Vfow=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR11MB4554.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2698caec-96aa-4710-38e5-08d9d4d44cd6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 07:30:53.5805
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KSmSckwNltUTQJGlNaFeFVUc/n+5DWf7N+EsZCAQy3T3ZQIxSWrpf+GLbaK15lmLjuDhP8TXfZC17I3dChY2SorRdebnN1em6iCVtDWqXPQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB0079
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/11/22 01:14, Andy Shevchenko wrote:
-> 
-> 
-> On Tuesday, January 11, 2022, Cosmin Tanislav <demonsingur@gmail.com 
-> <mailto:demonsingur@gmail.com>> wrote:
-> 
->     The value of the GPIOs is currently altered using offsets rather
->     than masks. Make use of __assign_bit and the BIT macro to turn
->     the offsets into masks.
-> 
->     Fixes: fea251b6a5db ("iio: addac: add AD74413R driver")
->     Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com
->     <mailto:cosmin.tanislav@analog.com>>
->     ---
->     V1 -> V2
->       * add Fixes tag
->       * use __assign_bit
->       * remove bitmap_zero
->     ---
->       drivers/iio/addac/ad74413r.c | 7 ++-----
->       1 file changed, 2 insertions(+), 5 deletions(-)
-> 
->     diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
->     index 3d089c0b6f7a..8a8d60e592a8 100644
->     --- a/drivers/iio/addac/ad74413r.c
->     +++ b/drivers/iio/addac/ad74413r.c
->     @@ -134,7 +134,6 @@ struct ad74413r_state {
->       #define AD74413R_CH_EN_MASK(x)         BIT(x)
-> 
->       #define AD74413R_REG_DIN_COMP_OUT              0x25
->     -#define AD74413R_DIN_COMP_OUT_SHIFT_X(x)       x
-> 
->       #define AD74413R_REG_ADC_RESULT_X(x)   (0x26 + (x))
->       #define AD74413R_ADC_RESULT_MAX                GENMASK(15, 0)
->     @@ -316,7 +315,7 @@ static int ad74413r_gpio_get(struct gpio_chip
->     *chip, unsigned int offset)
->              if (ret)
->                      return ret;
-> 
->     -       status &= AD74413R_DIN_COMP_OUT_SHIFT_X(real_offset);
->     +       status &= BIT(real_offset);
-> 
->              return status ? 1 : 0;
->       }
->     @@ -336,9 +335,7 @@ static int ad74413r_gpio_get_multiple(struct
->     gpio_chip *chip,
-> 
->              for_each_set_bit(offset, mask, chip->ngpio) {
->                      unsigned int real_offset =
->     st->comp_gpio_offsets[offset];
-> 
->     -
-> 
-> 
-> This blank line should be kept. Isn’t checkpatch complaining about?
-
-Nope, doesn't seem to, even with the --strict option.
-
-> 
->     -               if (val & BIT(real_offset))
->     -                       *bits |= offset;
->     +               __assign_bit(offset, bits, val & BIT(real_offset));
->              }
-> 
->              return ret;
->     -- 
->     2.34.1
-> 
-> 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+>-----Original Message-----
+>From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
+>Alexander Lobakin
+>Sent: Wednesday, December 8, 2021 7:37 PM
+>To: intel-wired-lan@lists.osuosl.org
+>Cc: Song Liu <songliubraving@fb.com>; Jesper Dangaard Brouer
+><hawk@kernel.org>; Daniel Borkmann <daniel@iogearbox.net>; Yonghong
+>Song <yhs@fb.com>; Martin KaFai Lau <kafai@fb.com>; John Fastabend
+><john.fastabend@gmail.com>; Alexei Starovoitov <ast@kernel.org>; Andrii
+>Nakryiko <andrii@kernel.org>; Bj=F6rn T=F6pel <bjorn@kernel.org>;
+>netdev@vger.kernel.org; Jakub Kicinski <kuba@kernel.org>; KP Singh
+><kpsingh@kernel.org>; bpf@vger.kernel.org; David S. Miller
+><davem@davemloft.net>; linux-kernel@vger.kernel.org
+>Subject: [Intel-wired-lan] [PATCH v4 net-next 7/9] ixgbe: pass bi->xdp to
+>ixgbe_construct_skb_zc() directly
+>
+>To not dereference bi->xdp each time in ixgbe_construct_skb_zc(), pass bi-
+>>xdp as an argument instead of bi. We can also call
+>xsk_buff_free() outside of the function as well as assign bi->xdp to NULL,
+>which seems to make it closer to its name.
+>
+>Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+>Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+>---
+> drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 19 ++++++++++---------
+> 1 file changed, 10 insertions(+), 9 deletions(-)
+>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>

@@ -2,126 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5A348A91E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CA948A925
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348817AbiAKIMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:12:20 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:40555 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiAKIMS (ORCPT
+        id S1348826AbiAKIPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:15:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235106AbiAKIPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 03:12:18 -0500
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7FF712223E;
-        Tue, 11 Jan 2022 09:12:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1641888736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DCRA6S3WathlSGOsTrGujaxqrgIghgKZV9qdJ4CRuY8=;
-        b=Dt82kGkf9ZqxSe9AqxhJ/H/HMt8r8a3QkYOE2zaQz7SGxR99ym8XWKLiz+2A8iDfsBzrAM
-        k1QejW893jg7RRGwGVdBlTyFAl4lCrb47mKA8ut05Z1jD2M7bOVJEFM6WsjA69CaYMYQNh
-        BWi5TGuVqBLRrTGaDo9mICs9PePMEYQ=
-From:   Michael Walle <michael@walle.cc>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH net-next] Revert "of: net: support NVMEM cells with MAC in text format"
-Date:   Tue, 11 Jan 2022 09:12:06 +0100
-Message-Id: <20220111081206.2393560-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Tue, 11 Jan 2022 03:15:49 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB51C06173F;
+        Tue, 11 Jan 2022 00:15:46 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id l15so15974302pls.7;
+        Tue, 11 Jan 2022 00:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:organization:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=65e4pY8c6IKP5/BwWsThn09+viwP4Cyof2rq2OFXBLA=;
+        b=JLj76DTnuqGLWS3wL4xskV1uf4xVSbCIclOhGiKxT4Hc6rpcJ2AiCFloz539jmg1tB
+         gYw2AQWFbPKnqcRywJmHXil9qd1TZzxd9Uin5bgWv9cOIHVXIaCWQJxBmJ3J6dMwxnuD
+         RCCN3K2varbNOyS8dNBGUNpCvOyhnoTBuQl3mUGDDv7R4535j+zNflkkacYgjY+lVCfb
+         5yX+JJ1L4UCdyUZX800upmeHwDpO0iJo5XHvsYUVIiXhXjr6YGIh6+nBV4mV2RsymYYm
+         tCTflUZQ2cUsjrEwh0Xb0SfRYGqfbNZbDiSUzOHwqakXFavykXv9zQTcyqxugKzeqlG4
+         y88A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=65e4pY8c6IKP5/BwWsThn09+viwP4Cyof2rq2OFXBLA=;
+        b=e7+TSipJ6iA95JDrxnA6hcVb4kZYt/dSOK1aQlhZLwVhu9OzRbGcHlZLBiWnbmPJXz
+         I6RH/ks44rEk5PFWuehq2NOqywNtlTOBuWT7QgY7QpxP9ScKLZotRgnuuDQdhfYVlZQd
+         +FbeZRkCPKrELRo8eouAnk7k1Yln5mk/bfLYppHtJti+RzE6yWCeYDAAI0r+ftNQS2+I
+         PVLvs4aHZRlfwgIvn4bX8sC23UK2iYfsyaG6+Ds162AngpAghDhor3MpWAH3XD9ufjvT
+         ktr6F0MsN7xPG0mS1bc9IQFYN5myplu4ea8UE7VOef1cHqqZRVLHN/4QWbpBFZVWV7B1
+         TwyQ==
+X-Gm-Message-State: AOAM530UqBgVUP/DyF6Od9Xaj0A0FakWs0PPmvTWFgxZJEIKd7A1YZ34
+        D6ps8T/S0NsdtTOUNFPRk3Q=
+X-Google-Smtp-Source: ABdhPJwFGoWgo+kK/ZP3yeqM9tGaVtD51Vubm7aOGIatueuMYBzU5Sxlpw+VCc4s4DBYEVh0nCDXgQ==
+X-Received: by 2002:a17:90b:3ecc:: with SMTP id rm12mr1851434pjb.225.1641888946117;
+        Tue, 11 Jan 2022 00:15:46 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id g6sm7621531pgk.37.2022.01.11.00.15.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 00:15:45 -0800 (PST)
+Message-ID: <4afbaf27-04a9-91a6-f9fa-178e4624b482@gmail.com>
+Date:   Tue, 11 Jan 2022 16:15:36 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Content-Language: en-US
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+References: <20220110034747.30498-1-likexu@tencent.com>
+ <YdzV33X5w6+tCamI@google.com>
+ <80b40829-0d25-eb84-7bd7-f21685daeb20@gmail.com>
+ <8a6e5b96-1191-7693-314a-1714cb7c9c9c@intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+Subject: Re: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
+In-Reply-To: <8a6e5b96-1191-7693-314a-1714cb7c9c9c@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 9ed319e411915e882bb4ed99be3ae78667a70022.
+On 11/1/2022 3:59 pm, Xiaoyao Li wrote:
+>>
+>> +#define GUEST_SUPPORTED_CPUID_14_EBX    \
+>> +    (BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5))
+>> +
+>> +#define GUEST_SUPPORTED_CPUID_14_ECX    \
+>> +    (BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(31))
+>> +
+> 
+> I doubt BIT(3) of CPUID_14_ECX can be exposed to guest directly.
+> 
+> It means "output to Trace Transport Subsystem Supported". If I understand 
+> correctly, it at least needs passthrough of the said Transport Subsystem or 
+> emulation of it.
 
-We can already post process a nvmem cell value in a particular driver.
-Instead of having yet another place to convert the values, the post
-processing hook of the nvmem provider should be used in this case.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-
-As mentioned in [1] I think we should discuss this a bit more and revert
-the patch for now before there are any users of it.
-
-[1] https://lore.kernel.org/netdev/20211229124047.1286965-1-michael@walle.cc/
-
-btw, now with net-next closed, should this patch have net-next or net as
-the queue in the subject?
-
- net/core/of_net.c | 33 +++++++++++----------------------
- 1 file changed, 11 insertions(+), 22 deletions(-)
-
-diff --git a/net/core/of_net.c b/net/core/of_net.c
-index 95a64c813ae5..f1a9bf7578e7 100644
---- a/net/core/of_net.c
-+++ b/net/core/of_net.c
-@@ -61,7 +61,7 @@ static int of_get_mac_addr_nvmem(struct device_node *np, u8 *addr)
- {
- 	struct platform_device *pdev = of_find_device_by_node(np);
- 	struct nvmem_cell *cell;
--	const void *buf;
-+	const void *mac;
- 	size_t len;
- 	int ret;
- 
-@@ -78,32 +78,21 @@ static int of_get_mac_addr_nvmem(struct device_node *np, u8 *addr)
- 	if (IS_ERR(cell))
- 		return PTR_ERR(cell);
- 
--	buf = nvmem_cell_read(cell, &len);
-+	mac = nvmem_cell_read(cell, &len);
- 	nvmem_cell_put(cell);
- 
--	if (IS_ERR(buf))
--		return PTR_ERR(buf);
--
--	ret = 0;
--	if (len == ETH_ALEN) {
--		if (is_valid_ether_addr(buf))
--			memcpy(addr, buf, ETH_ALEN);
--		else
--			ret = -EINVAL;
--	} else if (len == 3 * ETH_ALEN - 1) {
--		u8 mac[ETH_ALEN];
--
--		if (mac_pton(buf, mac))
--			memcpy(addr, mac, ETH_ALEN);
--		else
--			ret = -EINVAL;
--	} else {
--		ret = -EINVAL;
-+	if (IS_ERR(mac))
-+		return PTR_ERR(mac);
-+
-+	if (len != ETH_ALEN || !is_valid_ether_addr(mac)) {
-+		kfree(mac);
-+		return -EINVAL;
- 	}
- 
--	kfree(buf);
-+	memcpy(addr, mac, ETH_ALEN);
-+	kfree(mac);
- 
--	return ret;
-+	return 0;
- }
- 
- /**
--- 
-2.30.2
-
+I'm not surprised that we can route Intel Guest PT output to a platform-specific
+trace endpoint (e.g., physical or emulated JTAG) as an MMIO debug port.

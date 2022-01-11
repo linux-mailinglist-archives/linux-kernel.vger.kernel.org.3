@@ -2,221 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21D848AB89
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229E648AB8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237828AbiAKKjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:39:02 -0500
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:12828 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237556AbiAKKjA (ORCPT
+        id S1349263AbiAKKjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:39:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33757 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348687AbiAKKjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:39:00 -0500
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20B7qql4017732;
-        Tue, 11 Jan 2022 02:38:55 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=ZdfyxTPs8eV0x42Gjp24kRxAwrDpXP/Dn35t9Rc0qA4=;
- b=aP7p0xC3Mc0zTO7mG7xkBuzncKxErU+aP2QAkBD+pPXACJc0KgsWiK73oC7hQgHU0+Gk
- gZomYliid41q/TkjNwkWb7VQIi1kv+SA5WFga6Pm3kzjSleF9BhSUfrmjgKIfV0Q37T2
- RwDo91IYm9aCUoOR3HXjZ8EQ1w48BJOSmGU3n9ss1CRYeIcmUOH616hfGSBcWZ1pbkXy
- IHbjvDaIJv6vysENL2wZnBBU8kQsFLTtNzzbGB1dgrPlkMrn4S4ljbrN2xpyEPlKI1sY
- QioQbPQ9RX446hg3EZQkrK0k0/lYzDP8fOdPW9k/mGoe09TOckcPaSECZwQJXTDahNkn zQ== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3dgkxpkq63-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 02:38:54 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MSnON9rvRiG/2zKGwT40H9QSsPublT7iBSstdcC8DMJD5kmRqDFn4SpsQfIJn8Jwy8Rgzd7uXZS1DcNYfRI4YVgbFMiECsd4emja1iHigVao4qBvES6jEYzma1M/V5K5O3YPcEKOHfZtoLRtvCXV62eyEDLnxkw0b6BYQn3WQvg8FMYQxwnQB5eOKqWA6EFBNq1WtmruNwEZC7Vv9A0azxuiWJtq/KWWvXXgd+Qo/qCNTMGpt4ATNONB6clN2KVuxu5cCnjyOJPlGaLlatvq0OmHR7kLXATqK8sl+WnwcMXcWx+5VAkYjE32xIPnRwGU5/BuFl+RoU5WycmCWS92/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZdfyxTPs8eV0x42Gjp24kRxAwrDpXP/Dn35t9Rc0qA4=;
- b=Mt5EjbOUa2TDDuHvoipxwPp6ttZqoA+qVjhjZm5Q8lGwTSWMkhM1I8/NQ8RBVJePDiAEC10Rvh8ypLL23mT8q/A10++axnowm49C0BGTB7xvEK00p0Y1sqRAaG0GfzQT05PdbzgjAMwTPe/4j4vffPiaNFcdVjLTj1D0NvLsNA0+TTBpjZ0iURHtO3mbH9cHVb+ldL+kSvquYX+auODU/aS7agPsO6EJgnT6yJROKJbjSwrEDQTx6YG0uS2uq61aTEl078sXLvuObnCtcjcNtan4YtZsd4Zmj4FOPZ1LUO3xF6F6wCq8brbcx98kn1JfhcudD9ZrOunn+TptMHp5JA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZdfyxTPs8eV0x42Gjp24kRxAwrDpXP/Dn35t9Rc0qA4=;
- b=0vcxj+66enRBxGQ+aPAdT50y6B7ZtGFRjCAAGFitIod7DlPaLg4NdDawHzX4havF90ibMysjLIdKNIA89AbPblGzjAR385eJj5XYD0iiJQ24Pt2AKny31X10uQdIwbLRlz4wBXT3JLlFTm0OMEnLz1A+V5LN2udkbo4r7T3559Q=
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by BY5PR07MB7125.namprd07.prod.outlook.com (2603:10b6:a03:1ee::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
- 2022 10:38:53 +0000
-Received: from BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::c0b7:f4e5:466b:e90a]) by BYAPR07MB5381.namprd07.prod.outlook.com
- ([fe80::c0b7:f4e5:466b:e90a%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 10:38:53 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdnsp: remove not used variables
-Thread-Topic: [PATCH] usb: cdnsp: remove not used variables
-Thread-Index: AQHYBsmd7ay/0pnSSk+3KxumqEbpjaxdiS4AgAASnDA=
-Date:   Tue, 11 Jan 2022 10:38:53 +0000
-Message-ID: <BYAPR07MB53811E109250D3D9C6447847DD519@BYAPR07MB5381.namprd07.prod.outlook.com>
-References: <20220111085934.44844-1-pawell@gli-login.cadence.com>
- <Yd1KBiRB/ByZ2Kx1@kroah.com>
-In-Reply-To: <Yd1KBiRB/ByZ2Kx1@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctYTlhZTYxMDAtNzJjYS0xMWVjLTg3YTgtYTQ0Y2M4MWIwYzU1XGFtZS10ZXN0XGE5YWU2MTAxLTcyY2EtMTFlYy04N2E4LWE0NGNjODFiMGM1NWJvZHkudHh0IiBzej0iMjg1NyIgdD0iMTMyODYzNzExMzA4MDM1MjUxIiBoPSJrSVRPczA2U3V6Z0xObmJzZVc2eVpoendSbDQ9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d33a059e-f78e-46cc-c604-08d9d4ee9012
-x-ms-traffictypediagnostic: BY5PR07MB7125:EE_
-x-microsoft-antispam-prvs: <BY5PR07MB7125FF66A1FAA59C3E89E531DD519@BY5PR07MB7125.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1728;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6MADCaxwvky2/GFI3EKo5lw+zglhQ+UAEVqFvlLpBk+CIiXqNQE2X2rLs1tB4YrP9ukurI3ZUH6G9Pflhkaia22OYRnEnjy41L494hEn6sUHbqx/DbspZO3zuRi0rzaaucHyzFJZrgBLChfrSk61d+IhwpfF1FBS/+MM461/0hGVSnu4ZVKHb021i1HwB5orUsOOzrgZsfSd2HRVKkiFs5D5WscOCZHs5KSjxxWz7fn7ak6iAsjVnFrN6RVUasZw5m2GgRzMg5LlX8TBHzNdKfdHMrl6dpazHGgg6+YsSgQsOkpXBbNk9Og7T6gGyDls2FOjTGkxcquR6xlbe5brxcm1ORxmhn47G0feDxr1MIlPk+l14+UecYCpbsD3/XZtu8KQ6T5LKHrFVx2IIp/bfeOvnqDnTb4sWVuQC++oNVOpXz5nV51r0o1oX/1X7phdw9E0L+RIJT036C4AwVw9O2NIJOCBCDfvanBqRqVFux4rCBiq2ccd0jN0vG2/wSlCrvuD5DWuu0EHyJ+6X5KnxMJIctBR4x2jhGQrC2gBYirPF3+dYrOI+Vqm1AaeQ4X5oxKbNHcqyOaBBPY/B1Vrv2N/NxbQSqApsMFd4RSpBZARMlt/UXQHHemaNoQwmEqe3G7k8mdGH3ekYbe2Uk9G7cStWrDt4L2Psx9WuFr4o+1EKhu4XYYxAH0LTjN+f4b9327DZ4TJqUiVG2gwXyJE86KtADcdT9OWQ0Njzufq2sDJ49jaZ3JUiHnaA068c2i3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36092001)(66476007)(4326008)(26005)(8936002)(83380400001)(316002)(76116006)(5660300002)(64756008)(38100700002)(66446008)(6916009)(122000001)(66946007)(54906003)(66556008)(71200400001)(186003)(9686003)(38070700005)(8676002)(86362001)(6506007)(7696005)(2906002)(33656002)(52536014)(55016003)(508600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mLyB5uguuLwW+xYxfF+KKEo6IwcefYG3jsyhaMG2XopTM6Of7JUPmUtTBqAL?=
- =?us-ascii?Q?d/o1w9sEJ85IbJZ7q/WMuppzSPmTGjKPi3dsJE98SyGcfBm6sMJe9TrVM9Ae?=
- =?us-ascii?Q?RoHTpM3nVqMLOWWjJ8h9nbT+ghTf98dHZbBPl6RtYG0nEAMWALLvQKfTuOiP?=
- =?us-ascii?Q?fLVypRy1cqOijNzD31FkRY6SBDCoEFTI6nc71a37oGfYu6+Uj1u72Pa4ZP67?=
- =?us-ascii?Q?Csheth11vGkwWPFyBscZNuED4JLNQ9yDBdG5S3N54DaE5Uo/HqEEkY/Uz5/n?=
- =?us-ascii?Q?b4rvkvoIbkabMnEKo4+bqdehPsXnY46MwOUX2gg8GrLsMLsCqb7h/hKUPpcn?=
- =?us-ascii?Q?mTZ8qdgwXBLtaqDwfYnPAddcc4EWtyWI9O9LkvKIdMWMJYbjYbXe8qA2FgCF?=
- =?us-ascii?Q?hhZcKVIJWC2SOvTu6myhld3RXEUsvqZQRRz66bQYRFwpmkTVYwl1VmIkyjrr?=
- =?us-ascii?Q?1jmflhd98ft9TSlwc2T/NVICpEQTLXpGqFMFMF2jiMN9BkmXAxuoFaXsFqWR?=
- =?us-ascii?Q?quyf0IiiqgX1rsstkaDdWPillSf9oIxTuKrA5kr6ntctp1rGN0vXzYKJYdPs?=
- =?us-ascii?Q?2twAw7mLA+LwncpyzPK5YdPpKoxWPZnbJy8ScxczaQ7GGJ5NXewN4OXpPPkY?=
- =?us-ascii?Q?NmCcEkSQI2Mr7aSRByCyVHuz3XfCeSxt6rZwE1tE/dxYqYhN+mNMdC+Ivz45?=
- =?us-ascii?Q?p1ODjPB3ZiIuiqwlnng+Tt0e9yKsa+vdvJ7lzutZv3MOF0TskMU2F3QusZ+J?=
- =?us-ascii?Q?cUPUcAFgvYznpYf+Tu+Jmi36BcG17ffKjT6oI1w0HNJ7P4UpOsRT/rYUzpVB?=
- =?us-ascii?Q?N7PzPK9hmxa8jcY3AC/hd86RsIIcQNLC/Ni72G4QbLh+LqipmOKEdVodkFkN?=
- =?us-ascii?Q?+QQoo0/6N+i1jPvjIqLpnx6yNjGTf39h2qmto04gE7C6jQQ46qILJfC4PXOw?=
- =?us-ascii?Q?k5J11rsJXj7nlKtodCum2QhyvSOSDF/zvI8waUA8b/Ks4uXL8uzdYi4LLONs?=
- =?us-ascii?Q?Oaiq0McYw80XD57flZYRRy8cMNmi7Po0ffinAQZ1o38P6+lL96MsClEmGsGd?=
- =?us-ascii?Q?2h/q+fXN1f7UIJbby2mlYs3Pv0P52Qh7wjy0TpZU18T/IIchEdmvUbjHUwyW?=
- =?us-ascii?Q?kIDFIO1/P39i409BQbEhs4PIr+40X65H10w4eta0KisJd8RL9I815UF58HRw?=
- =?us-ascii?Q?55nC27gRdEwTBmHWA5NQSlI+kmKB2d8IHO7ccxeAvnqYFkEMMHLJgW4Pk9fK?=
- =?us-ascii?Q?Qlq2Swag3jIQsmTT5VdLkD4pctXXYoQlj4/HDxiiIlYFFXhVqjNHaqyM89j1?=
- =?us-ascii?Q?6wfMFx6vnBUloUPNTG0oTdAZWM0sDP+7DbdjXiQuYjEcpUkvVQuRpaG5PY0w?=
- =?us-ascii?Q?Jm+53QosZuiuMKTHmG5vIfzLEeNW0jkR4jpCb5pZuhHuovhw0Iiq4vVdJ3p0?=
- =?us-ascii?Q?onQUF0SLfMR0+F/XX/TwaCOW0bkVnsyV5hoHclZPDqr85DKJcC1ruRZI9aNB?=
- =?us-ascii?Q?zHmApi+v9AGVVm7hBmpMdYwF/JSZhsrwH2eWrrjGGKM16f5Aym76ISpjpShd?=
- =?us-ascii?Q?FLLacM9g6wziRg9iPQKV/NhmvoHTgiezSzHIoDLHd/WACqZXooJOB0/3s/pN?=
- =?us-ascii?Q?RqQqMYCD3oL16EIa9Wtu7PW3WHPwYlXsO73r/MOTq/Q8EfMMtWWKIOd95rBU?=
- =?us-ascii?Q?um7/Fw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 11 Jan 2022 05:39:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641897562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xr73w+r1kljvIqPT6MwAMTI0Cl0hi1tsfX48ig8ePyk=;
+        b=DcIdmvm5UzhId3rC4ZbKSgiZLEKdAY00yQpmy9sffWF2qJUnzKFmHRlPZZ+rXLuXyT8zzX
+        bbwB8mtDpPifc/YRPWkLotG0izyogUo1AQhuKO2B2Ofy8iMDm2KTWC6/B6vMbRTOUvlKHD
+        lHivEnl4i/uUJhFTPMubhdN4mAnSp30=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-142-R1zOSmCNPu2rt5lJD7gdsQ-1; Tue, 11 Jan 2022 05:39:21 -0500
+X-MC-Unique: R1zOSmCNPu2rt5lJD7gdsQ-1
+Received: by mail-ed1-f69.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so12927174edd.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:39:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xr73w+r1kljvIqPT6MwAMTI0Cl0hi1tsfX48ig8ePyk=;
+        b=dnEkmJmizGRqXVUw+n/IeySpTIF49YknXK64pYxBjDHPZApq4h08AHqOSwcm0BlA+w
+         ssN/KPeDxL9PWWplJ1OcUPU6cCpO+fV32Vn4W7R9sy3aS3/6M9qJM1sNyO7sIO+knjdx
+         CLOx3mqetpdGx9moKl+WU69Afi2G6YxGKszcV9P4LLhrjStOtYWgZ3r2273rPFtDRYrv
+         8ZWHASGdWKYiXtNPz2fslWlBsfM8cmJ5KyLt30u0X8/KM8+qbrbnn62QhvxZbud/gMe8
+         fNxCZrKSCt4gxhZX71yYdlmqsW9j9RPJGdzOdamuTNZHV/PVXDW2giv5YuZEr7bkDTUj
+         7STA==
+X-Gm-Message-State: AOAM5335+RZp6Ykydyx++gfgZCOpHb0a+ru7KuhfB3TPIvCc5GUb0d0t
+        i/jxEeEVC7R/FTwgImFem+JF8QS9XLMkgt/gbVTqjiCKCuTaEnuHSE4XuDDabbL26MgZtGsExMk
+        KY259viLoS3b2Y4L7zbzsCB5I
+X-Received: by 2002:a17:907:c001:: with SMTP id ss1mr3201256ejc.265.1641897560148;
+        Tue, 11 Jan 2022 02:39:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzjq6Wl9IfzBSgkc9Gchd3CrWD4sn0Zi4jMLhtSosPUpcCgsiTOG/Sw4xcXnfKP0lENfux3YA==
+X-Received: by 2002:a17:907:c001:: with SMTP id ss1mr3201239ejc.265.1641897559873;
+        Tue, 11 Jan 2022 02:39:19 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id g9sm3435702ejo.222.2022.01.11.02.39.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 02:39:19 -0800 (PST)
+Message-ID: <9e5fd9f2-dda7-73ef-00a8-203da3827e9d@redhat.com>
+Date:   Tue, 11 Jan 2022 11:39:19 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d33a059e-f78e-46cc-c604-08d9d4ee9012
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 10:38:53.3309
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: w6wZ8ccDX6akH2NC56vYCdwgGVO3TPUAU7vF20GbL/K1ZnGZ/sVZbm+qP2Pyme6Pwn5dBpciOm6TiFKKI2qwnv56/Y4WUZwnHPc/U66ZhuQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR07MB7125
-X-Proofpoint-GUID: V4wyNwqygZbXLp9IzVAfLKB2OX1IOVwL
-X-Proofpoint-ORIG-GUID: V4wyNwqygZbXLp9IzVAfLKB2OX1IOVwL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
- suspectscore=0 clxscore=1015 priorityscore=1501 adultscore=0
- mlxlogscore=939 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110062
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] platform/x86: ISST: do not hold lock punit_misc_dev_lock
+ when register misc
+Content-Language: en-US
+To:     Liwei Song <liwei.song@windriver.com>,
+        SrinivasPandruvada <srinivas.pandruvada@linux.intel.com>,
+        MarkGross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220111103122.32362-1-liwei.song@windriver.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220111103122.32362-1-liwei.song@windriver.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
->On Tue, Jan 11, 2022 at 09:59:34AM +0100, Pawel Laszczak wrote:
->> From: Pawel Laszczak <pawell@cadence.com>
->>
->> Patch removes not used variables:
->>  - ret from cdnsp_decode_trb function
->>  - temp_64 from cdnsp_run function
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  drivers/usb/cdns3/cdnsp-debug.h  | 287 +++++++++++++++----------------
->>  drivers/usb/cdns3/cdnsp-gadget.c |   3 -
->>  2 files changed, 138 insertions(+), 152 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-d=
-ebug.h
->> index a8776df2d4e0..29f3cf7ddbaa 100644
->> --- a/drivers/usb/cdns3/cdnsp-debug.h
->> +++ b/drivers/usb/cdns3/cdnsp-debug.h
->> @@ -182,206 +182,195 @@ static inline const char *cdnsp_decode_trb(char =
-*str, size_t size, u32 field0,
->>  	int ep_id =3D TRB_TO_EP_INDEX(field3) - 1;
->>  	int type =3D TRB_FIELD_TO_TYPE(field3);
->>  	unsigned int ep_num;
->> -	int ret =3D 0;
->
->Please fix this function to properly handle the ret value, as I think it
->should be checked, right?
+Hi,
 
-I think that it is not needed. Function is used only in one place in trace =
-point in TP_printk. The buffer is
-big enough (500 bytes) to accommodate whole string.  In this form function =
-can be directly used in
-TP_printk. If we will use ret instead of string as return type, then driver=
- will need to format this string before
-calling trace point function and pass this ass parameter.  This solution wi=
-ll have impact for code size and
-performance even if we disable tracing
+On 1/11/22 11:31, Liwei Song wrote:
+> exist the below call sequences may cause deadlock:
+> 
+> isst_if_probe()
+>    --> isst_if_cdev_register()
+>       --> mutex_lock(&punit_misc_dev_lock)
+>    --> misc_register()
+>       --> mutex_lock(&misc_mtx)
+> 
+> misc_open()
+>    --> mutex_lock(&misc_mtx)
+>    --> isst_if_open()
+>       --> mutex_lock(&punit_misc_dev_lock)
+> 
+> to fix this do not hold punit_misc_dev_lock when call misc_register
+> since it has misc_mtx lock for sync.
 
->
->> --- a/drivers/usb/cdns3/cdnsp-gadget.c
->> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
->> @@ -1243,12 +1243,9 @@ static int cdnsp_run(struct cdnsp_device *pdev,
->>  		     enum usb_device_speed speed)
->>  {
->>  	u32 fs_speed =3D 0;
->> -	u64 temp_64;
->>  	u32 temp;
->>  	int ret;
->>
->> -	temp_64 =3D cdnsp_read_64(&pdev->ir_set->erst_dequeue);
->> -	temp_64 &=3D ~ERST_PTR_MASK;
->>  	temp =3D readl(&pdev->ir_set->irq_control);
->>  	temp &=3D ~IMOD_INTERVAL_MASK;
->>  	temp |=3D ((IMOD_DEFAULT_INTERVAL / 250) & IMOD_INTERVAL_MASK);
->> --
->> 2.25.1
->>
->
->A separate patch for this.
->
->Also, are you SURE this is ok to do?  Did you check it on the hardware
->that a read is not needed here for it to work properly?
->
->This type of "warning" is horrible for dealing with hardware devices,
->always treat it as incorrect unless you can prove otherwise.
->
+I agree that the punit_misc_dev_lock should not be hold during
+(un)registration, but this fix looks wrong with unlocking + relocking it.
 
-Yes, I've tested it. I think that it was used in some printk and by mistake=
- has not been removed.=20
+Normally things like this are done by setting up everything which needs
+to be setup before calling misc_register() and in that case the
+setup code does not need to lock the punit_misc_dev_lock at all since
+none of the misc_dev callbacks can be called before everything is
+setup (and the same in reverse for unregister, unregister the misc-dev
+before doing any teardown, then there is no need for the lock).
 
-The warning was reported by Intel kernel test robot and fix are very simple=
-. Patch is little bigger
-because some code had to be reformatted. =20
+Note the above assumes that the punit_misc_dev_lock is only used
+from misc-dev callbacks based on its name, I did not check this is true.
 
-Do I really need to send this as two separate patches
+Srinivas, can you take a look please ? And see if you can come up
+with a better fix ?
 
-thanks,
+Regards,
 
-Pawel Laszczak
+Hans
+
+
+
+
+> 
+> [  256.104522] ======================================================
+> [  256.113783] WARNING: possible circular locking dependency detected
+> [  256.120093] 5.16.0-rc6-yocto-standard+ #99 Not tainted
+> [  256.125362] ------------------------------------------------------
+> [  256.131673] intel-speed-sel/844 is trying to acquire lock:
+> [  256.137290] ffffffffc036f0d0 (punit_misc_dev_lock){+.+.}-{3:3}, at: isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.147171]
+> [  256.147171] but task is already holding lock:
+> [  256.153135] ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x2a/0x170
+> [  256.160407]
+> [  256.160407] which lock already depends on the new lock.
+> [  256.160407]
+> [  256.168712]
+> [  256.168712] the existing dependency chain (in reverse order) is:
+> [  256.176327]
+> [  256.176327] -> #1 (misc_mtx){+.+.}-{3:3}:
+> [  256.181946]        lock_acquire+0x1e6/0x330
+> [  256.186265]        __mutex_lock+0x9b/0x9b0
+> [  256.190497]        mutex_lock_nested+0x1b/0x20
+> [  256.195075]        misc_register+0x32/0x1a0
+> [  256.199390]        isst_if_cdev_register+0x65/0x180 [isst_if_common]
+> [  256.205878]        isst_if_probe+0x144/0x16e [isst_if_mmio]
+> [  256.209991] hrtimer: interrupt took 10370 ns
+> [  256.211582]        local_pci_probe+0x47/0xa0
+> [  256.220384]        work_for_cpu_fn+0x17/0x30
+> [  256.224790]        process_one_work+0x26a/0x650
+> [  256.229456]        worker_thread+0x1dd/0x3b0
+> [  256.233861]        kthread+0x191/0x1c0
+> [  256.237745]        ret_from_fork+0x1f/0x30
+> [  256.241976]
+> [  256.241976] -> #0 (punit_misc_dev_lock){+.+.}-{3:3}:
+> [  256.248552]        validate_chain+0xbc6/0x1750
+> [  256.253131]        __lock_acquire+0x88c/0xc10
+> [  256.257618]        lock_acquire+0x1e6/0x330
+> [  256.261933]        __mutex_lock+0x9b/0x9b0
+> [  256.266165]        mutex_lock_nested+0x1b/0x20
+> [  256.270739]        isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.276356]        misc_open+0x100/0x170
+> [  256.280409]        chrdev_open+0xa5/0x1e0
+> [  256.284550]        do_dentry_open+0x23d/0x3c0
+> [  256.289039]        vfs_open+0x2f/0x40
+> [  256.292836]        path_openat+0x87a/0x940
+> [  256.297064]        do_filp_open+0xc5/0x140
+> [  256.301295]        do_sys_openat2+0x23d/0x320
+> [  256.305782]        do_sys_open+0x59/0x80
+> [  256.309836]        __x64_sys_openat+0x20/0x30
+> [  256.314324]        do_syscall_64+0x3f/0x90
+> [  256.318552]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  256.324259]
+> [  256.324259] other info that might help us debug this:
+> [  256.324259]
+> [  256.332394]  Possible unsafe locking scenario:
+> [  256.332394]
+> [  256.338444]        CPU0                    CPU1
+> [  256.343105]        ----                    ----
+> [  256.347768]   lock(misc_mtx);
+> [  256.350870]                                lock(punit_misc_dev_lock);
+> [  256.357441]                                lock(misc_mtx);
+> [  256.363058]   lock(punit_misc_dev_lock);
+> [  256.367110]
+> [  256.367110]  *** DEADLOCK ***
+> [  256.367110]
+> [  256.373162] 1 lock held by intel-speed-sel/844:
+> [  256.377824]  #0: ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x2a/0x170
+> [  256.385531]
+> [  256.385531] stack backtrace:
+> [  256.390021] CPU: 12 PID: 844 Comm: intel-speed-sel Not tainted 5.16.0-rc6-yocto-standard+ #99
+> [  256.398678] Hardware name: ACCTON MOROCITY/MOROCITY, BIOS IDVLCRB1.86B.0021.D09.2111010103 11/01/2021
+> [  256.408028] Call Trace:
+> [  256.410605]  <TASK>
+> [  256.412837]  dump_stack_lvl+0x5b/0x82
+> [  256.416635]  dump_stack+0x10/0x12
+> [  256.420085]  print_circular_bug.isra.43+0x261/0x2c0
+> [  256.425095]  check_noncircular+0x126/0x140
+> [  256.429326]  ? __this_cpu_preempt_check+0x13/0x20
+> [  256.434167]  validate_chain+0xbc6/0x1750
+> [  256.438223]  ? validate_chain+0xbc6/0x1750
+> [  256.442451]  ? validate_chain+0x236/0x1750
+> [  256.446687]  __lock_acquire+0x88c/0xc10
+> [  256.450658]  lock_acquire+0x1e6/0x330
+> [  256.454452]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.459726]  ? __mutex_lock+0x79/0x9b0
+> [  256.463610]  ? __mutex_lock+0x79/0x9b0
+> [  256.467493]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.472764]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.478038]  __mutex_lock+0x9b/0x9b0
+> [  256.481748]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.487021]  ? __mutex_lock+0x102/0x9b0
+> [  256.490993]  ? __this_cpu_preempt_check+0x13/0x20
+> [  256.495837]  mutex_lock_nested+0x1b/0x20
+> [  256.499893]  ? mutex_lock_nested+0x1b/0x20
+> [  256.504121]  isst_if_open+0x18/0x90 [isst_if_common]
+> [  256.509222]  misc_open+0x100/0x170
+> [  256.512759]  chrdev_open+0xa5/0x1e0
+> [  256.516386]  ? cdev_put.part.1+0x20/0x20
+> [  256.520441]  do_dentry_open+0x23d/0x3c0
+> [  256.524414]  vfs_open+0x2f/0x40
+> [  256.527689]  path_openat+0x87a/0x940
+> [  256.531399]  do_filp_open+0xc5/0x140
+> [  256.535112]  ? trace_preempt_on+0x28/0xd0
+> [  256.539255]  ? alloc_fd+0x152/0x230
+> [  256.542880]  ? preempt_count_sub+0x9b/0x100
+> [  256.547200]  ? _raw_spin_unlock+0x2c/0x50
+> [  256.551348]  do_sys_openat2+0x23d/0x320
+> [  256.555320]  ? do_sys_openat2+0x23d/0x320
+> [  256.559467]  do_sys_open+0x59/0x80
+> [  256.563003]  __x64_sys_openat+0x20/0x30
+> [  256.566972]  do_syscall_64+0x3f/0x90
+> [  256.570680]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  256.575866] RIP: 0033:0x7f9be4b97c27
+> [  256.579576] Code: 25 00 00 41 00 3d 00 00 41 00 74 37 64 8b 04 25 18 00 00 00 85 c0 75 5b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 85 00 00 00 48 83 c4 68 5d 41 5c c3 0f 1f
+> [  256.598474] RSP: 002b:00007ffd8fc01b70 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+> [  256.606177] RAX: ffffffffffffffda RBX: 00005572f20332b0 RCX: 00007f9be4b97c27
+> [  256.613443] RDX: 0000000000000000 RSI: 00005572f202936a RDI: 00000000ffffff9c
+> [  256.620709] RBP: 00005572f202936a R08: 0000000000000008 R09: 0000000000000001
+> [  256.627974] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> [  256.635241] R13: 00005572f20332b0 R14: 0000000000000001 R15: 0000000000000000
+> [  256.642513]  </TASK>
+> 
+> Signed-off-by: Liwei Song <liwei.song@windriver.com>
+> ---
+>  drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> index c9a85eb2e860..bcbc0d508ec4 100644
+> --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> @@ -693,10 +693,12 @@ int isst_if_cdev_register(int device_type, struct isst_if_cmd_cb *cb)
+>  	if (!misc_usage_count) {
+>  		int ret;
+>  
+> +		mutex_unlock(&punit_misc_dev_lock);
+>  		misc_device_ret = misc_register(&isst_if_char_driver);
+>  		if (misc_device_ret)
+> -			goto unlock_exit;
+> +			return misc_device_ret;
+>  
+> +		mutex_lock(&punit_misc_dev_lock);
+>  		ret = isst_if_cpu_info_init();
+>  		if (ret) {
+>  			misc_deregister(&isst_if_char_driver);
+> @@ -731,7 +733,9 @@ void isst_if_cdev_unregister(int device_type)
+>  	if (device_type == ISST_IF_DEV_MBOX)
+>  		isst_delete_hash();
+>  	if (!misc_usage_count && !misc_device_ret) {
+> +		mutex_unlock(&punit_misc_dev_lock);
+>  		misc_deregister(&isst_if_char_driver);
+> +		mutex_lock(&punit_misc_dev_lock);
+>  		isst_if_cpu_info_exit();
+>  	}
+>  	mutex_unlock(&punit_misc_dev_lock);
+> 
+

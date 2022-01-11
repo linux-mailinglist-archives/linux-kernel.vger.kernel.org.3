@@ -2,372 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F58448B0D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E372A48B0DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343556AbiAKP3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:29:52 -0500
-Received: from mail-eopbgr70075.outbound.protection.outlook.com ([40.107.7.75]:52341
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        id S1343577AbiAKPdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:33:37 -0500
+Received: from mail-db8eur05on2117.outbound.protection.outlook.com ([40.107.20.117]:40673
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240435AbiAKP3v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:29:51 -0500
+        id S240480AbiAKPdf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:33:35 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZOtZzAkOuqUcl+a/HqE9y9A/6hyZe2Uu381pkhKR/Jz1kxlgBG/jEaI4sJZDfs5NHvXQUWEsxRDbsRzK31lmhl1HlkNSnTw0PAb8hpBymMylkrLj+zpuvDtPVGN6rqZ2/+0msJcHieH1PuYq7Ew/+wTM0w4zf32FhVWRosiFIHzXH9xnyf/xQgbC5nRUBnP8FGQVFqnbVH+sYMQKeTTw9bZ31QdVuNtXEIOPf+orptVdsj8lg8Mp23KGn43iMIS9j6yysZBA7/CGqh2+AuvArQGFwFg1tcfCrZrfndlQkIIOyh7vOhiyhH40QYrdInLL5QCgrX3sV0klMojHd4vGLQ==
+ b=lmhw5JqIeVtm7TcCw/NFFTqwjqTNQrh6THgSBnKOSzmnuPN55gaFpOjdd7H6OlxhDaQIyWc4ExOP6wUATZxvZcm+Qn0rFxmQDFt/9O+YV/7TXOBRo7D/m7gpPfhgxEjUUWXvxCEEmDJIBKlXVTwSmFjES2fcLP72ODgC3rhERZAcXvhdsXduKFkzo2pyBv84iCzuIz2qkQolTw6k3MtDIPB/tG6Gt7sARCxMuJgpSRSMbsbmm7Va4XuOvxN3P97dgF+mlcwZ4OToJ7pvoYPy1EGHvS+sJeMNIStPIuSEf/Kxhst91IO7fp2Ag8bAahDkPbi4d+yEnerPq8DOjUY12A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yY2LE4DpDTKTq5LT6LQx1P/3t4XcSPvUaKBV9aZ7cXU=;
- b=R/cNFl3VDBu4JZmE+tOHflpVXCJdY2fBe8i24twmHr7szm1cL0qy8D2k/bdUd1o6D2Gn+zgkwEYD3YeY7XLO/yMc7bljWr5t73pRF8OLFhKdP2bLIAKJHH5bRCOz7CuWdVMb5PrXgJZX6c7uoIp/aMiFigEvK1YhDSxpO89zN5V8jQskB1FjnYVWgdd6sqcErF2IC2QZr/Jt+ZDbT1hxjN9ECx6p0COzFcDEaLrwsvD4PY8AdHlKEkFLo5TwwMnVvjIGpGapzymlxY036XHeEgmZR/rnbFPIZUVk+Ww0yqNgUKLlzC+5qQjMrsuxdraUpPc75K/+MgHzJEtjIc0ZVQ==
+ bh=r/sdxbBLIh5lDw2dJWXc6zgqfsHLrwQJr75XU1gFZak=;
+ b=E9M4bev6FEKk4iqLAmkB7kQE5XK6l1xp5q1K3M0r8bfeDUPpC4nBWOpN8esLSlypANM0XnwRM7Xnk0UEwu774axm1zUb/rRjUF8Ts06eaFCCLJiZBp6Y/x/xwKaEpf8vjNk8AEUsNKTypP03ZNCtQZ1oLhTZcvYMmvEoSYzLlZ8cyLMERo6XHMx21W1xbXVXxTKGYJpSCDmtt6IFJ88xx1XmIwtbn5Nc+In80PmO5/GdXscQ5cLjiG8FBDoLpTjpcO0uVvJiOpUlb7Uohe6/ipdFnQLU3hGgbSan+CsRJzRBBiRAWKIoCS7BiI5tP+iAUp6/0c/3DkBMAtK1lCgIUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yY2LE4DpDTKTq5LT6LQx1P/3t4XcSPvUaKBV9aZ7cXU=;
- b=dVTVQqL8dNGbZokxpcu9zjDEwVv6Rb0u+J164ghyJv0KB7zmG2bQ6VvQGSiV53yKA4X2DSCtQbtpDtgGpJJ/lq7Yvkr5tUpj/cJ2BH1ZQpiHRDhc2rzRUSblHYdG11fBd9c0+NvAujyqNW3w1gkO02uExuuS77B5qalHsEOjXbg=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR0401MB2512.eurprd04.prod.outlook.com (2603:10a6:800:4e::12) with
+ bh=r/sdxbBLIh5lDw2dJWXc6zgqfsHLrwQJr75XU1gFZak=;
+ b=AIwtV4zSFRrUTr37zuusqN+Mx1iu0dNlwM3W+Z79M+tsq7HvvmIvVIdzgK6I6oFftlmld0f2Wgc+LZfyKE7OJB0bkC4yPNnp27Bz3xYL5zsJcLmQA7BttVNhrv/Vr35x1Wz58PnL4fzJP8LUJiIHU+/IQiawEWJ/p15VcfDrzAs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
+ by AM4PR1001MB1441.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:200:96::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
- 2022 15:29:48 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::c84:1f0b:cc79:9226]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::c84:1f0b:cc79:9226%3]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 15:29:48 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Maxim Kiselev <bigunclemax@gmail.com>
-CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "fido_max@inbox.ru" <fido_max@inbox.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: Re: [PATCH] powerpc: dts: add device tree for T1040RDB-REV-A
-Thread-Topic: [PATCH] powerpc: dts: add device tree for T1040RDB-REV-A
-Thread-Index: AQHYBv8LPgYCyvCS1UKB/8/tYVavPKxd8iOA
-Date:   Tue, 11 Jan 2022 15:29:47 +0000
-Message-ID: <20220111152947.6zvt7j7366wsg6o2@skbuf>
-References: <20220111131355.djuyn6bbirqtsama@skbuf>
- <20220111152204.3524442-1-bigunclemax@gmail.com>
-In-Reply-To: <20220111152204.3524442-1-bigunclemax@gmail.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
+ 2022 15:33:28 +0000
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b85e:6bff:84d3:e825]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b85e:6bff:84d3:e825%6]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 15:33:28 +0000
+Message-ID: <9af5a4ae-e919-a545-809d-451217cf40f5@kontron.de>
+Date:   Tue, 11 Jan 2022 16:33:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2 1/2] Fix corner case in bad block table handling.
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cb93121a-d58b-481b-1bb3-08d9d51733dd
-x-ms-traffictypediagnostic: VI1PR0401MB2512:EE_
-x-microsoft-antispam-prvs: <VI1PR0401MB2512ECF51446485475805F0FE0519@VI1PR0401MB2512.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BEptss5pCd+wL2Mteq1xbGqBCCvqNv3piopmOL61HmguN3Oxn6cA9nWgM7IMV9SySshoeWTz4iGgKLk2soKCqbw/nffctPw8gECCUKSPmdDCQ/fS+fcX/+xI9xuoqRgOBzoSUQ82udR6i99t6+u5PitoGxgWlSGr3zlM1BHA4DcSQjy66iuXtRlMAJbCu8BPvRQlKgaKoir5033MmN+tUhIxUbcaxwbzcP+5rELMJcqy+AHt+DLsmlX+enfe/3ra5P0xMngBMfsiWTfj+anRotBH0xyU3EoR9fwpK9RnPieCL5yzH2+5P/C5BKX1BjTBOiu+KvWtTROtiiJJeotWPWyUGnBgsNuB5/kJ9Bl3LEqyef2V+joDN/+BtUnoA+lryPZDuS8nVH0vhT06F7jBAJ2dv1LwlHWeB1wX8umtS1BQyW0W5SYthzGs7zZa/Y3wcsrA0d+RpRytQ8+wGr1vn4cLQQ+ZeBeCRcipEqc8Ccm+Knbgzz/G4OdzJLGPBND1rfuJpC5KasoZ2qbX6XAVp+5DRNfKjKeVz+TPCKOx4HrhPiU1gjWAtH8sShaRDEGOW6jmSb3ZuqekfQcB3jQMYdZi/f6iPMygx90+cHodlPht9jWAemMKV6o7wV7WvYGBLTCpn21SVgpJrJdeIRhsTKHupTpfwNNnr355O0FsMu84R44e46z2TfUK8yWol+48UkuUrX12qZ0curgmAD0KxqIIF67fEjCR4gjRcvMyRMU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(54906003)(7416002)(6506007)(1076003)(5660300002)(6486002)(6916009)(44832011)(9686003)(38100700002)(122000001)(6512007)(76116006)(91956017)(66476007)(66446008)(66556008)(66946007)(64756008)(71200400001)(86362001)(38070700005)(8936002)(508600001)(83380400001)(186003)(26005)(316002)(8676002)(33716001)(4326008)(2906002)(2004002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ji0mnNzsho3CC2wcl7OxNTiYLWSnkFmIKX/Lc4+G2qMESnjuAKfDUkMTXJYe?=
- =?us-ascii?Q?pXmx/nJh8eRdtj7lSNeySc/HmLCdO8Cy0AvuGWBel4M8utfjYaRfxoTX24qs?=
- =?us-ascii?Q?ERM6UebxcLKOzdElmm9UWprW0ZlJUR1BFV5fwC/Hnroklkf2WFNRpweQ4L9C?=
- =?us-ascii?Q?GBXjKgXRw9b6uqugI0Vh10wr8oxl7+FM9YD3fLo53KmDfF5kibmYoy5tq56I?=
- =?us-ascii?Q?KDY0uwd+XtqqdiOVCDXKGdJakBRN5/ByCKGS4tCJWExCt04Wd9wbNCKTVJWA?=
- =?us-ascii?Q?Az4paffYm2kjVppHyX9nMo7iWw0wmYaBBpswUsHSbRUi8wgCAbKIajNXswIT?=
- =?us-ascii?Q?bPYXRGDkDaAiLtSKY7aXA2+HiesA6dRY2oNB9sq8XJ00p6b1UneoKZOM2cNW?=
- =?us-ascii?Q?GNPiiB5OFBazzg+FEhlcQiC6TJyF+MzW5zmllH8HxBvQs6msQQlr1iTkyREo?=
- =?us-ascii?Q?HGtpdEOU6rMfkc+owzcHxhIMmQqlA6x8STLUK09n4dBxmo3kKMS9KArp31re?=
- =?us-ascii?Q?41hJDlTtFZs6H7C3fZMY9C2nODbMviDs5Nlxdgi6MKszPaw7fcoxW4tXtEMc?=
- =?us-ascii?Q?AsqtMfg5VZpLJ10287nw85+gWJ1l4HBFQBF/NxbesOeZ9nzZzboBpGMu5iOA?=
- =?us-ascii?Q?9zEFTuTGAPZX2Y0imtZ1vp23J/16tUCSiQDLfoh8lsZZ+A8s6qU3ac3BA5Un?=
- =?us-ascii?Q?1HK/hVKZoN6vqbMYh8oEmXQVrYl0SdA9POQppeOSDngdP1hKsdU6MYVCF2AM?=
- =?us-ascii?Q?gKGqgawpJ8bD1owgTx3+x/xJlXo/BO8YSvML5ojgceq0/oKkL9qPXikXWMAU?=
- =?us-ascii?Q?Ollb5UmbQGKbiNVcCWaePXmANNShQxRzgk5GNBxOFnP9B9tlWFf3AQHhx36u?=
- =?us-ascii?Q?Ps5jffeFldh5J0EygxwE31zQTVKgMk6/JVjsnfpstiyCUc9sG9dHTFuMwu/w?=
- =?us-ascii?Q?aGvJG0G+NFT/wCp71kcQR2+41ZTzmGKGx/2n2/RQWLiPbN4EZG6vbEjmk8Qd?=
- =?us-ascii?Q?4RoBuHIMah7NfyQ/GdS0WYpFckiuGBlMQFfqZqVHTWCb1992PBauvxoA8jcR?=
- =?us-ascii?Q?VtBt0tnBCyIUVz8buPy3d//K0EYDxGjHf4NJUIsjkQec9fj9vpUGzaqX03ec?=
- =?us-ascii?Q?9jgWQIh4Wc2d94jvskYGop4o7Y4svx9MBgDRtJhNR3AvyCJU/S4t+hVZ0jl+?=
- =?us-ascii?Q?UjJ4xvkamf2h7q5nWfSyDhXnwHITNXkUGP7nVTp6Kc/kgAlTnAPXwLbzRXYt?=
- =?us-ascii?Q?hQKAQ2tHrEnp7kj8g0Rn3lOnJqc/67t1j/clJjIbfdyFqCTHAFbtulrVhziO?=
- =?us-ascii?Q?RG2ZoaVQazRn6iwHmDw8Vy4KqxdVrxZPLgUxBAsgenZu7jSoKxPV3xohRV9w?=
- =?us-ascii?Q?ti83R1BAHzPW4mVuifX2t1Vu1vMoQh7n2fVeUBfpKTNd1T0DMx91OArOrwrK?=
- =?us-ascii?Q?m6Es212U+kSP2NhME+pYagu+11lz6IUBG1iCBz1szylOAcSNlMWqBezrKLIL?=
- =?us-ascii?Q?YrxN6cjUM4Dlw3SMakgEopP7vi/yXNutXNtA8HfK6uTgN6+aLerW5qRNmn5M?=
- =?us-ascii?Q?7aYfihbAgKnlnbT7aJkovnU5YDmT+/y56MlKhuz4ykr62Tr9ptcvUB+Fhr0y?=
- =?us-ascii?Q?gX4S8Fj0/SQWlA0d/1vOsYs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A494E902CB82CA4E8304ED21413EC020@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        vigneshr@ti.com, miquel.raynal@bootlin.com,
+        Yoshio Furuyama <ytc-mb-yfuruyama7@kioxia.com>, richard@nod.at,
+        Stoll Eberhard <Eberhard.Stoll@kontron.de>
+References: <cover.1616635406.git.ytc-mb-yfuruyama7@kioxia.com>
+ <774a92693f311e7de01e5935e720a179fb1b2468.1616635406.git.ytc-mb-yfuruyama7@kioxia.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+To:     "stable@vger.kernel.org" <stable@vger.kernel.org>
+In-Reply-To: <774a92693f311e7de01e5935e720a179fb1b2468.1616635406.git.ytc-mb-yfuruyama7@kioxia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS8PR04CA0072.eurprd04.prod.outlook.com
+ (2603:10a6:20b:313::17) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:157::14)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88b16c98-db3c-43ad-0f58-08d9d517b738
+X-MS-TrafficTypeDiagnostic: AM4PR1001MB1441:EE_
+X-Microsoft-Antispam-PRVS: <AM4PR1001MB1441641C6F7033062200DF48E9519@AM4PR1001MB1441.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wnJgHNvJaAOOvaNPLzaQwEN9+NesV0MFQ7WzhrVY4cICcMnM/8AQzS440rtkn36Lt/fqdSqFUlLdgZRt0gsRVxNJeXyPDpEk4WSzV+JcaeL0vft65/8jgD7rDadajWdmCdcwWW+tc2uSER6yXV4LfXbFK6045zsv0fDwfPg3vePnN5f9PuZAFc/+n/GSSjJdpVWaL3pBYA630YnLThJyu0ZKM9vkJcp/TGLwd712GcDyVnXOFjp3VpXjVt1OG5U8oSt3MdeXIvW8yB/fKWXPysGgcCyQ7eCDrtB3hPqrtQplECRZeHUW+7Rivp5lkZtnZ0W+PiC9YXvmYdjIEtNJiQ0sqR4ZxEjIMgdsykAi+FNKCD8iUtCwGrSEegGMh0Hn8yzlTJ3LRxbZJMufghCAvsl0bpcAcm4Gy8Sf1kZwDGzSPlyVHFGvkwDoYJEbfcH2PY95pZh87xIRv9Fd0JPznpWk5rlIMuUNZiVWTtZMDRJ590iw5wz/nxtZYsa8bNz3eIfqU05+pI1NiW8rh42/BsHkpntiAFcNngHLF2LWszl/bgD4zMAwpHD7AZl0m3emYty+Nygs7xR3qrwUc1IWTEpnwZV6k3+P2ESFxMii18z5kR9wLw1CFYySCI+zkwou2LTZ3j4/vP0rAB2CcV2VbpTSwxNeHz3LaRuaLmfKan9g3M+s8SBIJAC7K35LBHROAlG7LiU2NdsnioL+Xu5WGmQr8K6rSFnB9uJxC/B5HBI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(86362001)(8676002)(5660300002)(2616005)(107886003)(38100700002)(31696002)(53546011)(6506007)(4326008)(8936002)(44832011)(83380400001)(508600001)(26005)(6916009)(186003)(6512007)(31686004)(2906002)(66556008)(54906003)(66946007)(66476007)(36756003)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2VoeURWTXd6c3l4N0MwUCt1NkZRV283aGVzY0hSc1BWeEdSS3FHTTRWQ095?=
+ =?utf-8?B?WjdiMDA0MkpKTndDMEhGOFdhRHh3c1NGQXJ3REJxL2NGOXFJUjJtUHliR0hB?=
+ =?utf-8?B?YzhqRFpFcXNHL0U3dTErOGRER0NqWmgwVTR2Q1V2Y3MzRnkyTGVHcHBwSTJN?=
+ =?utf-8?B?anlHNEk3aDhmREk2R1RaT0tOVE9MaEZLWS9janZNY0pEVzJ4ZXJXZk9RTVVJ?=
+ =?utf-8?B?WTVrbXdIWWdQaGVwdkJhREVuZ2ZlRHdLWUhZMDNUSGRzMDg3S1o5S1BBTXVN?=
+ =?utf-8?B?dW1xaSszQTgxOWFzcDYvYmxmWXhWK3g1SXFTazBURXVucE4wcjJmZUFGenJP?=
+ =?utf-8?B?TGkwVTNqaTNlMUQ2QUlBNklYWkxsckpTM09odW13dk5CdWEycHMzL25NUk5o?=
+ =?utf-8?B?NWR2b2g3Q1FPS0tVMGZVMEFNQlcwSDJiZzhrOWwzSVZnWk5aUC9JWGZPUkY1?=
+ =?utf-8?B?bnZGNERmRkJBZHZ0Yk9wZzZRYXQwR3dWUGp4bjhQRGZsR0hXdEJXRUlSSVhT?=
+ =?utf-8?B?L1dGR1ZHN0l3dWxrVWdwblliQU85QkFsOTd3ZUY4c1k4dzRuYitKUTFYRUcx?=
+ =?utf-8?B?TmVLay9DQ3dkcTl1cFQ1SGFuS2RxbFQycCtnYVh0cGYrNSsydis3WVNIU2tW?=
+ =?utf-8?B?dW5jUFNjcDVJdVFDSjFRMlZnai8zL0F4elZHenFRM0FxbGlyWGRWRXRmN2lu?=
+ =?utf-8?B?cnA5Z3hIZFhYUWlWa2NyY3JZLzlucERmeFVSMFUvYWlaQ2hRbDFObVlYZzl6?=
+ =?utf-8?B?cmZiTkRZRXNvaWNTT2dLWitBOUZMY2R2Y2xNTTQ1SFF6VFVEa1QrNkp4aEU1?=
+ =?utf-8?B?MzJ5bERHdUNLVE1YamRwWTJCN05ESUlLVnRSNllUbEhMYmxTOTVpTFZyekhh?=
+ =?utf-8?B?MVZJMG1iMXRXUTZKWERWYlU2MjdVZTl6OEQyZWJnaU82c3VBOWZvY0d5citI?=
+ =?utf-8?B?djJWS0hhWWJLcE52dE54b2g4Y1QxeTJRL2IzekErV3F4MFA5NFQvMDVMaFI1?=
+ =?utf-8?B?SXdGNW0wSjJGWmRNUGs4NHdXSHQ4L1l2T0daQzZ1Tk13VHZjTHVUS09rTHNS?=
+ =?utf-8?B?ZjVBT09OTXBrU1VGdHdQZUl1Y1ViL1F5R3FBeUZIdUF6dU5kbWhReHpPUFJB?=
+ =?utf-8?B?TlRpOFh2bm1EK0hiMjRsek1FTTR6SmJ0N0EwR2FwWktXQXUyZmpFdGFNdGc4?=
+ =?utf-8?B?dHNmTHB3SkZkelhLaVBDVWhMWnRTdHg5VmV6TjRJTFhYMG5XS1hSQVpWeWhG?=
+ =?utf-8?B?WlM3bFR1dGNGbnZ0ckV5MThOZlBPTm83S3J3Tkt3MVZGUElKNnhzSk13Y0Zh?=
+ =?utf-8?B?ZlVhcHlkNTQ4cVByQU1HL0VnM1p3MUNFdklVK2JqR3FEZW0zelVTb1Fwb0lN?=
+ =?utf-8?B?RUdIQ3BDRms4enN6TTVURVUxZHdqV1RiODhTWXRJU0hwT29JbnMwY0tQYmJq?=
+ =?utf-8?B?K2MwQ1FoUlpzRUw3WmFuVzNiNlllWThGWS9EeVFuT0hWeUxzOHJ1L3ZpU1l2?=
+ =?utf-8?B?dngyMGxLZ1ZLYVpZMTlweGZURG1XV1FOMVVPaTVFMHIyTytXMHhTc2ovUHli?=
+ =?utf-8?B?cURGUnRDRHJ3M0hWM2taVXY5TzNWTDNKYStMOWpmaVFEcndlZjZDZmo0NXlt?=
+ =?utf-8?B?eTZieStYaGRwT2ZHT3ZxNnBnQkxDU1RHbjVybWpnWGdVc013WjVrcDkrQ0NU?=
+ =?utf-8?B?dHk4WHEzMllDUGh5MzdDQ2ZwYTQ1R2NnYjdyUmt4bHpUbW81M3IzZWFiWlNU?=
+ =?utf-8?B?Y0hMeEF3VmVxZVR3RGJEQlB2SXlPNTFmRi9EM2lMVDloY2VVYVBKYWZBNnZo?=
+ =?utf-8?B?TjJySUttTzBRbGNMaUNPZG12TzJ6aVE3NHhpVWViczVQRmx2dzA4cCtqbFZN?=
+ =?utf-8?B?KzZ1L2ZSdy8wdjE1R0hVQVBNQnRaVkxQQ0w1N05HS0g4cmxhVTZJaDdRNDBn?=
+ =?utf-8?B?QWk3aHpYVTdjNzh6bTZCR0NROS85b3ZHbGFJTy9DcnU0SlpPVkp2MWhNZGVW?=
+ =?utf-8?B?TTlxMTVrbEgvMG5ySVkvVTF5K2g1azgvWE40OVh1RWYvTVBPa2x4UE8zanFZ?=
+ =?utf-8?B?N2djd1VocWhZbDVJZ2FnS0VLNG9EdFJ6MFExZmhoL1Vsd3NiWkRrTzIycktH?=
+ =?utf-8?B?ZCtJUUhqMmhtMGdTRHEzZm0wRDF2em80VjNNeElIUi90cDRiZWVoQkxjd0Jm?=
+ =?utf-8?B?UnpUQUNBN21MQ2NSQURSUTRhU3pTenh3bUU5TUlkZ2hXQkFzczlxQ3p6QWVj?=
+ =?utf-8?B?ODBjRDZ1aldlTlp3WUFMWXZzTmxnPT0=?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88b16c98-db3c-43ad-0f58-08d9d517b738
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb93121a-d58b-481b-1bb3-08d9d51733dd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 15:29:47.9322
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 15:33:28.5598
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VLi46ibNpDbzYV8pc/xOyFkOUqmbIpaBEy4IuHx5NrhnqGX+O1kPzprusNstdCPWxVFI3wObV59ORX7sh/L2dQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2512
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3emPSmfpTqsGVxnqwW/XWlYHiwz8PxROv/+MVaRKOisYpVrxOaCM95ujFg1ZVo/oYK44/JEDVzCpPjeOmWGgsfDgdvX7OSyKbEzawhEU4uU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR1001MB1441
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxim,
+Hi stable maintainers,
 
-On Tue, Jan 11, 2022 at 06:22:04PM +0300, Maxim Kiselev wrote:
-> On board rev A, the network interface labels for the switch ports
-> written on the front panel are different than on rev B and later.
->=20
-> This patch introduces a separate device tree for rev A.
-> The main device tree is supposed to cover rev B and later.
->=20
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+On 06.04.21 03:47, Yoshio Furuyama wrote:
+> From: "Doyle, Patrick" <pdoyle@irobot.com>
+> 
+> In the unlikely event that both blocks 10 and 11 are marked as bad (on a
+> 32 bit machine), then the process of marking block 10 as bad stomps on
+> cached entry for block 11.  There are (of course) other examples.
+> 
+> Signed-off-by: Patrick Doyle <pdoyle@irobot.com>
+> Reviewed-by: Richard Weinberger <richard@nod.at>
+
+We have systems on which this patch fixes real failures. Could you
+please add the upstream patch fd0d8d85f723 ("mtd: nand: bbt: Fix corner
+case in bad block table handling") to the stable queues for 4.19, 5.4, 5.10?
+
+Thanks!
+
+Cc: stable@vger.kernel.org
+Fixes: 9c3736a3de21 ("mtd: nand: Add core infrastructure to deal with
+NAND devices")
+
 > ---
->  arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 185 +++++++++++++++++++
->  1 file changed, 185 insertions(+)
->  create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
->=20
-> diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/=
-boot/dts/fsl/t1040rdb-rev-a.dts
-> new file mode 100644
-> index 0000000000000..f74486ba1d45f
-> --- /dev/null
-> +++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-> @@ -0,0 +1,185 @@
-> +/*
-> + * T1040RDB Device Tree Source
-> + *
-> + * Copyright 2014 - 2015 Freescale Semiconductor Inc.
-> + *
-> + * Redistribution and use in source and binary forms, with or without
-> + * modification, are permitted provided that the following conditions ar=
-e met:
-> + *     * Redistributions of source code must retain the above copyright
-> + *	 notice, this list of conditions and the following disclaimer.
-> + *     * Redistributions in binary form must reproduce the above copyrig=
-ht
-> + *	 notice, this list of conditions and the following disclaimer in the
-> + *	 documentation and/or other materials provided with the distribution.
-> + *     * Neither the name of Freescale Semiconductor nor the
-> + *	 names of its contributors may be used to endorse or promote products
-> + *	 derived from this software without specific prior written permission=
-.
-> + *
-> + *
-> + * ALTERNATIVELY, this software may be distributed under the terms of th=
-e
-> + * GNU General Public License ("GPL") as published by the Free Software
-> + * Foundation, either version 2 of that License or (at your option) any
-> + * later version.
-> + *
-> + * THIS SOFTWARE IS PROVIDED BY Freescale Semiconductor "AS IS" AND ANY
-> + * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMP=
-LIED
-> + * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AR=
-E
-> + * DISCLAIMED. IN NO EVENT SHALL Freescale Semiconductor BE LIABLE FOR A=
-NY
-> + * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DA=
-MAGES
-> + * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SE=
-RVICES;
-> + * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUS=
-ED AND
-> + * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR=
- TORT
-> + * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE=
- OF THIS
-> + * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-> + */
-> +
-> +/include/ "t104xsi-pre.dtsi"
-> +/include/ "t104xrdb.dtsi"
-> +
-> +/ {
-> +	model =3D "fsl,T1040RDB-REV-A";
-> +	compatible =3D "fsl,T1040RDB-REV-A";
-> +
-> +	aliases {
-> +		phy_sgmii_2 =3D &phy_sgmii_2;
-> +	};
-> +
-> +	soc@ffe000000 {
-> +		fman@400000 {
-> +			ethernet@e0000 {
-> +				fixed-link =3D <0 1 1000 0 0>;
-> +				phy-connection-type =3D "sgmii";
-> +			};
-> +
-> +			ethernet@e2000 {
-> +				fixed-link =3D <1 1 1000 0 0>;
-> +				phy-connection-type =3D "sgmii";
-> +			};
-> +
-> +			ethernet@e4000 {
-> +				phy-handle =3D <&phy_sgmii_2>;
-> +				phy-connection-type =3D "sgmii";
-> +			};
-> +
-> +			mdio@fc000 {
-> +				phy_sgmii_2: ethernet-phy@3 {
-> +					reg =3D <0x03>;
-> +				};
-> +
-> +				/* VSC8514 QSGMII PHY */
-> +				phy_qsgmii_0: ethernet-phy@4 {
-> +					reg =3D <0x4>;
-> +				};
-> +
-> +				phy_qsgmii_1: ethernet-phy@5 {
-> +					reg =3D <0x5>;
-> +				};
-> +
-> +				phy_qsgmii_2: ethernet-phy@6 {
-> +					reg =3D <0x6>;
-> +				};
-> +
-> +				phy_qsgmii_3: ethernet-phy@7 {
-> +					reg =3D <0x7>;
-> +				};
-> +
-> +				/* VSC8514 QSGMII PHY */
-> +				phy_qsgmii_4: ethernet-phy@8 {
-> +					reg =3D <0x8>;
-> +				};
-> +
-> +				phy_qsgmii_5: ethernet-phy@9 {
-> +					reg =3D <0x9>;
-> +				};
-> +
-> +				phy_qsgmii_6: ethernet-phy@a {
-> +					reg =3D <0xa>;
-> +				};
-> +
-> +				phy_qsgmii_7: ethernet-phy@b {
-> +					reg =3D <0xb>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	ifc: localbus@ffe124000 {
-> +		cpld@3,0 {
-> +			compatible =3D "fsl,t1040rdb-cpld";
-> +		};
-> +	};
-> +};
-> +
-> +#include "t1040si-post.dtsi"
-> +
-> +&seville_switch {
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port0 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_0>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH5";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port1 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_1>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH4";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port2 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_2>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH7";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port3 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_3>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH6";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port4 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_4>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH9";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port5 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_5>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH8";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port6 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_6>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH11";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port7 {
-> +	managed =3D "in-band-status";
-> +	phy-handle =3D <&phy_qsgmii_7>;
-> +	phy-mode =3D "qsgmii";
-> +	label =3D "ETH10";
-> +	status =3D "okay";
-> +};
-> +
-> +&seville_port8 {
-> +	ethernet =3D <&enet0>;
-> +	status =3D "okay";
-> +};
-> --=20
-> 2.32.0
->
-
-This is pretty much not the patch I was expecting to see.
-I was expecting to see arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-containing only this:
-
-/include/ t1040rdb.dts
-
-/ {
-	model =3D "fsl,T1040RDB-REV-A";
-	compatible =3D "fsl,T1040RDB-REV-A";
-};
-
-&seville_port0 {
-	label =3D "ETH5";
-};
-
-&seville_port2 {
-	label =3D "ETH7";
-};
-
-&seville_port4 {
-	label =3D "ETH9";
-};
-
-&seville_port6 {
-	label =3D "ETH11";
-};
-
-Also, I don't see the changes from your original patch applied to the
-main t1040rdb.dts. Did you forget to include them?=
+>  drivers/mtd/nand/bbt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/nand/bbt.c b/drivers/mtd/nand/bbt.c
+> index 044adf913854..64af6898131d 100644
+> --- a/drivers/mtd/nand/bbt.c
+> +++ b/drivers/mtd/nand/bbt.c
+> @@ -123,7 +123,7 @@ int nanddev_bbt_set_block_status(struct nand_device *nand, unsigned int entry,
+>  		unsigned int rbits = bits_per_block + offs - BITS_PER_LONG;
+>  
+>  		pos[1] &= ~GENMASK(rbits - 1, 0);
+> -		pos[1] |= val >> rbits;
+> +		pos[1] |= val >> (bits_per_block - rbits);
+>  	}
+>  
+>  	return 0;

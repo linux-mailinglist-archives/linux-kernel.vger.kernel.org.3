@@ -2,148 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB65448B41F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB1E48B423
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344381AbiAKRgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S1344393AbiAKRif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242666AbiAKRgb (ORCPT
+        with ESMTP id S241633AbiAKRie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:36:31 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13945C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:36:31 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w7so18277687plp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:36:31 -0800 (PST)
+        Tue, 11 Jan 2022 12:38:34 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313F6C06173F;
+        Tue, 11 Jan 2022 09:38:34 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id m1so25788793lfq.4;
+        Tue, 11 Jan 2022 09:38:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kmqD567CtlmXllpc1rQayweyZNMIGqk+RZtPJBuYT90=;
-        b=sivzBEkWVy1S0pf5Z71owP5T4t13Zyykw7vqCCakVV0L1ZomD5pSrWWdeOgJuBAzWL
-         zFUHh31Ym7mqCNUa7K4JxPVQhFbPy4N3qrzqt5roRk7BcHeqGnIc2hOgv6DFtWK5tTy2
-         WdWZCAOQdakcQ38IpcuCVuoEK9rwgLOE50yRhvkZiFuadJGbVSlIPWXMc7yIFrHCMtIG
-         bTt98MWR4oDq6HIq7Y/sVn7MmFX9CS1xFwzTO6bvb1DR9JWIcoX/Hrrl/rCckOdh5LoP
-         mdC2nr6t5awVklH9vDGx4GBF7LvyiGNU3Chu6orbgSoWmiYl0jqTamZ/7yzMNKGRgmwF
-         24Ig==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XYYzoRrQ7r+3JpOotxz5TLZg5+kezFddh/tOm+gkJ/E=;
+        b=VO+7AUmH236AUGDb7AjgqyhmDVLKPqSpwlxOVzs7tsXwPK0P7VM9FLd1qgG/mw6h6+
+         J7n7iuaqOfOfcwJIvevHfCE+ByK0MLuvYslhG9hKA4IBnutDvHGxvwITCMHL9wnOxNR1
+         zMVviY+gBjfQpwbRiQ0BUCCcSabRs2aM+roE0RCBguqwYaKdu7PU3y3kj4cJrLqA3rYA
+         VTLr7GIJJJ4nOgOfrNdJDMGk0O3OSlkv3p39Z30mKPfkEMZsP9EYqD8nqinjD9eT39uG
+         TaOFlZjaryuJ7o8Hhfcauy7IhKk4FU3G0pRhxicgme/zZqHKSwzXS1zplqJUshQ+hQNb
+         JY/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kmqD567CtlmXllpc1rQayweyZNMIGqk+RZtPJBuYT90=;
-        b=ppuwfXxXyKJc2ffjkvBiJKvUpeynzOV3nJ3cct0CXGBs8w98avHiGzOYEYyQpb6F6h
-         P/supRUeNmnFznHRRJ6eRLN25IBE9ud/z7TMdlE51prwkPpaNzIFQ3L4cdEZKahDW6vU
-         o3rI1ts9DDENx3NnSe6CKqol7GHcFeySbPBCwMaZzspcIBolVgAmnawOwjH6PwKxYJVy
-         cGuLh2n4JvHw+vInP11Co43p01BrzFAq1d7DgQ+gUqbQxIotzslPqkHqpae9Czor0O9i
-         jmpUJKNHkYCcvmj/3dpJvAQ01647w+f2I9V999VhPBo7IR85JJa3LXzet2T9tsAu+UKs
-         oF8g==
-X-Gm-Message-State: AOAM532jKpdnx8Kxp931EZt5cHDf9+637btqxfTfhQP5agk+PUssl2C/
-        QNYylx7zKJ0+8THw58alPME3fw==
-X-Google-Smtp-Source: ABdhPJyi/ql3rEX/0G3ckRnHJKB6twfx7NB9W6on7gUjJywSRrz2rhGBuYgadAJVOgr9Cf/e9+m1Mg==
-X-Received: by 2002:a62:79c2:0:b0:4bd:e9da:c173 with SMTP id u185-20020a6279c2000000b004bde9dac173mr5462897pfc.65.1641922590326;
-        Tue, 11 Jan 2022 09:36:30 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id qe10sm3488021pjb.5.2022.01.11.09.36.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:36:29 -0800 (PST)
-Date:   Tue, 11 Jan 2022 17:36:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-Message-ID: <Yd3AGRtkBgWSmGf2@google.com>
-References: <20220104194918.373612-1-rananta@google.com>
- <20220104194918.373612-2-rananta@google.com>
- <Ydjje8qBOP3zDOZi@google.com>
- <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XYYzoRrQ7r+3JpOotxz5TLZg5+kezFddh/tOm+gkJ/E=;
+        b=B45XFhfjShovAqj9ILTqfruK4hZteYJs311YAS8wKZ4nKfaK6xkQ+SEnfPeyK1gbHp
+         m+LKdxJoKQE4vpOlXXxRju2Qwrnrq6ZSWxRZgKeMvV3yV3OGbVw9PbWaipVhKcWBnldM
+         DCOyEu1d2eKh96J3FU2KM/qSSRQyqGqsOt+u9rlFlRqVCVJiVOYRaH+grvzFWS8BALEc
+         23VnrioKFkD0lsK3eAcMZLFpyR3Suzn6zVw8Ro8Fs1IVmcZ7WcsMib+SMCt9SkjMb2tt
+         nQMhxFEmUk+aAV/YZDHdnC8wsnRsKZQDXX3ZoLTCiar5sXGJ2vflPHFTsGi85aNsgzrB
+         YHvg==
+X-Gm-Message-State: AOAM530Lo21vIGpHZh93EfhTctxCOv0Z3I0GippgflQINk0Sq1DGVI8K
+        tqCoqNadiROdZ8OzQNDOV9w=
+X-Google-Smtp-Source: ABdhPJz17YczZ1GSZFlOG63TSsg8uPrzH5rSR9XRjtlmomJwtUPUnyThDi8aUVXoV962SqM1aNic4Q==
+X-Received: by 2002:a19:2d0c:: with SMTP id k12mr4080549lfj.224.1641922712308;
+        Tue, 11 Jan 2022 09:38:32 -0800 (PST)
+Received: from localhost.localdomain (host-95-152-62-123.dsl.sura.ru. [95.152.62.123])
+        by smtp.gmail.com with ESMTPSA id m15sm1392428lfg.291.2022.01.11.09.38.30
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 11 Jan 2022 09:38:31 -0800 (PST)
+From:   Maxim <bigunclemax@gmail.com>
+To:     vladimir.oltean@nxp.com
+Cc:     andrew@lunn.ch, benh@kernel.crashing.org, bigunclemax@gmail.com,
+        davem@davemloft.net, devicetree@vger.kernel.org, fido_max@inbox.ru,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mpe@ellerman.id.au, paulus@samba.org, robh+dt@kernel.org
+Subject: [PATCH v2] powerpc: dts: t1040rdb: fix ports names for Seville Ethernet switch
+Date:   Tue, 11 Jan 2022 20:37:23 +0300
+Message-Id: <20220111173723.26212-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220111152947.6zvt7j7366wsg6o2@skbuf>
+References: <20220111152947.6zvt7j7366wsg6o2@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022, Raghavendra Rao Ananta wrote:
-> On Fri, Jan 7, 2022 at 5:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Tue, Jan 04, 2022, Raghavendra Rao Ananta wrote:
-> > > +#define kvm_vm_has_started(kvm) (kvm->vm_started)
-> >
-> > Needs parantheses around (kvm), but why bother with a macro?  This is the same
-> > header that defines struct kvm.
-> >
-> No specific reason for creating a macro as such. I can remove it if it
-> feels noisy.
+From: Maxim Kiselev <bigunclemax@gmail.com>
 
-Please do.  In the future, don't use a macro unless there's a good reason to do
-so.  Don't get me wrong, I love abusing macros, but for things like this they are
-completely inferior to
+On board rev A, the network interface labels for the switch ports
+written on the front panel are different than on rev B and later.
 
-  static inline bool kvm_vm_has_started(struct kvm *kvm)
-  {
-  	return kvm->vm_started;
-  }
+This patch fixes network interface names for the switch ports according
+to labels that are written on the front panel of the board rev B.
+They start from ETH3 and end at ETH10.
 
-because a helper function gives us type safety, doesn't suffer from concatenation
-of tokens potentially doing weird things, is easier to extend to a multi-line
-implementation, etc...
+This patch also introduces a separate device tree for rev A.
+The main device tree is supposed to cover rev B and later.
 
-An example of when it's ok to use a macro is x86's
+Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 30 ++++++++++++++++++++
+ arch/powerpc/boot/dts/fsl/t1040rdb.dts       |  8 +++---
+ 2 files changed, 34 insertions(+), 4 deletions(-)
+ create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
 
-  #define kvm_arch_vcpu_memslots_id(vcpu) ((vcpu)->arch.hflags & HF_SMM_MASK ? 1 : 0)
+diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+new file mode 100644
+index 00000000000..2203286b64b
+--- /dev/null
++++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * T1040RDB-REV-A Device Tree Source
++ *
++ * Copyright 2014 - 2015 Freescale Semiconductor Inc.
++ *
++ */
++
++/include/ "t1040rdb.dts"
++
++/ {
++	model = "fsl,T1040RDB-REV-A";
++	compatible = "fsl,T1040RDB-REV-A";
++};
++
++&seville_port0 {
++	label = "ETH5";
++};
++
++&seville_port2 {
++	label = "ETH7";
++};
++
++&seville_port4 {
++	label = "ETH9";
++};
++
++&seville_port6 {
++	label = "ETH11";
++};
+diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb.dts b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
+index af0c8a6f561..b6733e7e658 100644
+--- a/arch/powerpc/boot/dts/fsl/t1040rdb.dts
++++ b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
+@@ -119,7 +119,7 @@ &seville_port0 {
+ 	managed = "in-band-status";
+ 	phy-handle = <&phy_qsgmii_0>;
+ 	phy-mode = "qsgmii";
+-	label = "ETH5";
++	label = "ETH3";
+ 	status = "okay";
+ };
+ 
+@@ -135,7 +135,7 @@ &seville_port2 {
+ 	managed = "in-band-status";
+ 	phy-handle = <&phy_qsgmii_2>;
+ 	phy-mode = "qsgmii";
+-	label = "ETH7";
++	label = "ETH5";
+ 	status = "okay";
+ };
+ 
+@@ -151,7 +151,7 @@ &seville_port4 {
+ 	managed = "in-band-status";
+ 	phy-handle = <&phy_qsgmii_4>;
+ 	phy-mode = "qsgmii";
+-	label = "ETH9";
++	label = "ETH7";
+ 	status = "okay";
+ };
+ 
+@@ -167,7 +167,7 @@ &seville_port6 {
+ 	managed = "in-band-status";
+ 	phy-handle = <&phy_qsgmii_6>;
+ 	phy-mode = "qsgmii";
+-	label = "ETH11";
++	label = "ETH9";
+ 	status = "okay";
+ };
+ 
+-- 
+2.32.0 (Apple Git-132)
 
-which uses a macro instead of a proper function to avoid a circular dependency
-due to arch/x86/include/asm/kvm_host.h being included by include/linux/kvm_host.h
-and thus x86's implementation of kvm_arch_vcpu_memslots_id() coming before the
-definition of struct kvm_vcpu.  But that's very much an exception and done only
-because the alternatives suck more.
-
-> > > +                      */
-> > > +                     mutex_lock(&kvm->lock);
-> >
-> > This adds unnecessary lock contention when running vCPUs.  The naive solution
-> > would be:
-> >                         if (!kvm->vm_started) {
-> >                                 ...
-> >                         }
-> >
-> Not sure if I understood the solution..
-
-In your proposed patch, KVM_RUN will take kvm->lock _every_ time.  That introduces
-unnecessary contention as it will serialize this bit of code if multiple vCPUs
-are attempting KVM_RUN.  By checking !vm_started, only the "first" KVM_RUN for a
-VM will acquire kvm->lock and thus avoid contention once the VM is up and running.
-There's still a possibility that multiple vCPUs will contend for kvm->lock on their
-first KVM_RUN, hence the quotes.  I called it "naive" because it's possible there's
-a more elegant solution depending on the use case, e.g. a lockless approach might
-work (or it might not).
-
-> > > +                     kvm->vm_started = true;
-> > > +                     mutex_unlock(&kvm->lock);
-> >
-> > Lastly, why is this in generic KVM?
-> >
-> The v1 of the series originally had it in the arm specific code.
-> However, I was suggested to move it to the generic code since the book
-> keeping is not arch specific and could be helpful to others too [1].
-
-I'm definitely in favor of moving/adding thing to generic KVM when it makes sense,
-but I'm skeptical in this particular case.  The code _is_ arch specific in that
-arm64 apparently needs to acquire kvm->lock when checking if a vCPU has run, e.g.
-versus a hypothetical x86 use case that might be completely ok with a lockless
-implementation.  And it's not obvious that there's a plausible, safe use case
-outside of arm64, e.g. on x86, there is very, very little that is truly shared
-across the entire VM/system, most things are per-thread/core/package in some way,
-shape, or form.  In other words, I'm a wary of providing something like this for
-x86 because odds are good that any use will be functionally incorrect.

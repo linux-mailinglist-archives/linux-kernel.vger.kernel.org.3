@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F398C48B67F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1B048B693
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350328AbiAKTIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S1350425AbiAKTPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243166AbiAKTIf (ORCPT
+        with ESMTP id S1350417AbiAKTPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:08:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D70C06173F;
-        Tue, 11 Jan 2022 11:08:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C492B81D0D;
-        Tue, 11 Jan 2022 19:08:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26E3C36AE3;
-        Tue, 11 Jan 2022 19:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641928112;
-        bh=dy0dLXK/jHyplFwGggXfIGmjaaHPWjJoW2Ch06lbWYo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=twg7MIxF76JoxIXiMuGHZ3gwJ+FKFAN85pmsEsrcFZssN8URCI0dLZIVUxqvU1KMS
-         6099w54d7SSc2+PRtfeO3Zdjkmh3fzCPW4/BVlCUNFlD9XrXbZ+WbwwxGNqGjT4YVp
-         9KPmtxxmlk6qxyP0To1wH6SRYcPxnYugQ4hg/MD1F6Iwk7Utz9tgLJv198QYEoCkTW
-         J+DJUshJ1EFFG8Cxs2Lludt4AabfyC2O2LfnWG5OBCVnTE9dMOnz8qyvZtCiMcYsbz
-         JVpwyilVcX8uLH9v6Vb+aE03wPfTBHbYvJwiotyPm7ceqt1rqM/wZZMi31sPAl1U2h
-         SQ9xYf0UKN1Uw==
-Date:   Tue, 11 Jan 2022 13:14:56 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [GIT PULL] fallthrough fixes for Clang for 5.17-rc1
-Message-ID: <20220111191456.GA11976@embeddedor>
+        Tue, 11 Jan 2022 14:15:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBEBC06173F;
+        Tue, 11 Jan 2022 11:15:09 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 0A3BC1F447B6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641928508;
+        bh=GtBWQubh7MRSfsrJwouzQ1KZLx9kkRfXx1s3sYvQ1W8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FqgYA820nG/BheP0MtLycz0Xh86cW9CV7nbyfTgJaj+3HrenpVEcCXZ18TCqs/7qg
+         4W04n5wreMasp0sdnxAo6AmMlVk0IwAwR7Mk+IOrNPh35ATUdxiKA1RBDE3bfEsy9+
+         keW7SGu4QwoyuOesqaFH2qCvd9kXw6W86G1SEgAHP1urdkjUNsqdHxa8EnSMxPw1VR
+         2vHAITsjYtD29gbpqgQM6t8EhqnjuQFDdr9wWStY9uFWjfoN20RdTEeV4tZ37YR2OP
+         U3gcgc9tgoOuGp7xhLW/UijDulnXXnPPjsiIRg5JgHJaCREMloJN6lu67xGZIUs/Zs
+         KLcpWbJ1xvysQ==
+Date:   Tue, 11 Jan 2022 14:15:01 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        chun-jie.chen@mediatek.com, devicetree@vger.kernel.org,
+        drinkcat@chromium.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH v2 1/5] arm64: dts: mediatek: Correct uart clock of MT8192
+Message-ID: <20220111191501.dspzjabuuohinufz@notapiano>
+References: <20220106032420.11544-1-allen-kh.cheng@mediatek.com>
+ <20220106032420.11544-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220106032420.11544-2-allen-kh.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
+Hi Allen,
 
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
+thank you for improving the commit message! However, please see my comment
+below.
 
-are available in the Git repository at:
+On Thu, Jan 06, 2022 at 11:24:16AM +0800, allen-kh.cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> When the initial devicetree for mt8192 was added in 48489980e27e ("arm64:
+> dts: Add Mediatek SoC MT8192 and evaluation board dts and Makefile"), the
+> clock driver for mt8192 was not yet upstream, so the clock property nodes
+> were set to the clk26m clock as a placeholder.
+> 
+> Given that the clock driver has since been added through 710573dee31b ("clk:
+> mediatek: Add MT8192 basic clocks support"), as well as its dt-bindings
+> through f35f1a23e0e1 ("clk: mediatek: Add dt-bindings of MT8192 clocks") and
+> devicetree nodes through 5d2b897bc6f5 ("arm64: dts: mediatek: Add mt8192
+> clock controllers"), fix the uart clock property to point to the actual
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git tags/fallthrough-fixes-clang-5.17-rc1
+This sentence is incomplete. It is missing "clock." at the end. Could you please
+add it?
 
-for you to fetch changes up to ceec16f8fd660c7827e72aec74021f1acc1f7240:
+Same thing for all other patches in this series.
 
-  fbdev: sh7760fb: document fallthrough cases (2021-11-22 18:43:20 -0600)
+After fixing that typo in the commit message of all patches, please add my
+reviewed-by in all patches:
 
-----------------------------------------------------------------
-fallthrough fixes for Clang for 5.17-rc1
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Hi Linus,
-
-Please, pull the following patches that fix some fall-through warnings
-when building with Clang and -Wimplicit-fallthrough.
-
-Thanks!
---
-Gustavo
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (1):
-      MIPS: mm: tlbex: Fix fall-through warning for Clang
-
-Randy Dunlap (1):
-      fbdev: sh7760fb: document fallthrough cases
-
- arch/mips/mm/tlbex.c           | 1 +
- drivers/video/fbdev/sh7760fb.c | 2 ++
- 2 files changed, 3 insertions(+)
+Thanks,
+Nícolas

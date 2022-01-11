@@ -2,189 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FF348AE51
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3380E48AE5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240446AbiAKNSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240355AbiAKNSy (ORCPT
+        id S240416AbiAKNXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:23:07 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:51254 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231453AbiAKNXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:18:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A431C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:18:54 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n7H32-0003aP-TC; Tue, 11 Jan 2022 14:18:48 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n7H32-0004av-5M; Tue, 11 Jan 2022 14:18:48 +0100
-Date:   Tue, 11 Jan 2022 14:18:48 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: adc: tsc2046: add .read_raw support
-Message-ID: <20220111131848.GE3326@pengutronix.de>
-References: <20220107093527.3046331-1-o.rempel@pengutronix.de>
- <20220109155956.003167f1@jic23-huawei>
+        Tue, 11 Jan 2022 08:23:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641907386; x=1673443386;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c0boByf2BB5su6qOQGZkkDJXX/FAiLGM0LDe8xZdSoA=;
+  b=i/EDVvws0EmwxzVcE76Fkbb1g6vQMl1q8g9U4flGnLXerlel6Kx6PZf7
+   eZM0OWhUmy/n5aCnV6/SR0pvgTGxCx/flXQkHKj2oZkaJ2nVAO+VJizNZ
+   BMICmNUY52CW4+3P0+lEI2xMrZQBaE+h1LSAPq8IRHRu5zKc4cUr0xCgG
+   y1rWRhRPW0zFC2VarLyEqwaUA6gp6gxC87OuGcUbIR/MlJnGI7mStvqHc
+   EOvi+6wvX0vGp4OAkzp6r5xBaOIivtvGkFhZ8mVmR9SZBHoqdaT1C++qg
+   y1e5M18pdLqn2UKIr52CND1rEA8wQtK+QKr7ZnNkJng9QVYkjTPaceFhg
+   w==;
+IronPort-SDR: vPJ1CM6IMrd3wXAvL3swXFC266lt/x2UvZYeVLeteuTa8o1vdxTkJcmCk0zGptqrCUi/oCZ3w8
+ Um9ECGnp0K8PDr48EseF8s5bKknQMqW0DMBzll75rkv0MZJeklLn2egUDHA76+wMOtgsAiAwf4
+ mQ9MXJ0v6uYgxO8dIaZeBJsHnrSsLW/o+I32Vk1XVtcW4OktrVU05D6aaZ/UtEhKD1+P8NfhQI
+ pxdJbSq2Pwg+UMitU8LMzJXT4iAJLO4VkM9GN5z1jHZvkPpR5jJi5u80e3pLbvI/NTE82Fwa4n
+ TWpZCfO+6wCuZaGKrOvnFTwV
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="82119598"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2022 06:23:05 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 11 Jan 2022 06:23:05 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 11 Jan 2022 06:23:02 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <Nicolas.Ferre@microchip.com>, <ada@thorsis.com>
+CC:     <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <robh+dt@kernel.org>, <bbrezillon@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] ARM: dts: at91: sama5d2: Fix PMERRLOC resource size
+Date:   Tue, 11 Jan 2022 15:23:01 +0200
+Message-ID: <20220111132301.906712-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220109155956.003167f1@jic23-huawei>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:04:41 up 31 days, 21:50, 72 users,  load average: 0.07, 0.27,
- 0.27
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+PMERRLOC resource size was set to 0x100, which resulted in HSMC_ERRLOCx
+register being truncated to offset x = 21, causing error correction to
+fail if more than 22 bit errors and if 24 or 32 bit error correction
+was supported.
 
-On Sun, Jan 09, 2022 at 04:00:09PM +0000, Jonathan Cameron wrote:
-> On Fri,  7 Jan 2022 10:35:27 +0100
-> Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> 
-> > Add read_raw() support to make use of iio_hwmon and other iio clients.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Hi Oleksij
-> 
-> Main questions in here are around settling time and the interface used for that.
-> 
-> > ---
-> >  drivers/iio/adc/ti-tsc2046.c | 114 ++++++++++++++++++++++++++++++++---
-> >  1 file changed, 106 insertions(+), 8 deletions(-)
-> > 
-> > @@ -252,16 +266,47 @@ static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
-> >  static int tsc2046_adc_read_one(struct tsc2046_adc_priv *priv, int ch_idx,
-> >  				u32 *effective_speed_hz)
-> >  {
-> > +	struct tsc2046_adc_ch_cfg *ch = &priv->ch_cfg[ch_idx];
-> > +	struct tsc2046_adc_atom *rx_buf, *tx_buf;
-> > +	unsigned int val, val_normalized = 0;
-> > +	int ret, i, count_skip = 0, max_count;
-> >  	struct spi_transfer xfer;
-> >  	struct spi_message msg;
-> > -	int ret;
-> > +	u8 cmd;
-> > +
-> > +	if (!effective_speed_hz) {
-> > +		count_skip = tsc2046_adc_time_to_count(priv, ch->settling_time_us);
-> > +		max_count = count_skip + ch->oversampling_ratio;
-> > +	} else {
-> > +		max_count = 1;
-> > +	}
-> > +
-> > +	tx_buf = kcalloc(max_count, sizeof(*tx_buf), GFP_KERNEL);
-> > +	if (!tx_buf)
-> > +		return -ENOMEM;
-> > +
-> > +	rx_buf = kcalloc(max_count, sizeof(*rx_buf), GFP_KERNEL);
-> > +	if (!rx_buf) {
-> > +		ret = -ENOMEM;
-> > +		goto free_tx;
-> > +	}
-> 
-> I guess these are fine to do everytime because you expect this to be used in
-> paths which aren't called at a particularly high frequency?
+Fixes: d9c41bf30cf8 ("ARM: dts: at91: Declare EBI/NAND controllers")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc: <stable@vger.kernel.org> # 4.13.x
+---
+v2:
+- update commit description
+- Cc stable@vger.kernel.org
 
-Yes, this was my assumption as well. Instead of preallocating buffer of
-max size, I hope it is less ugly.
+ arch/arm/boot/dts/sama5d2.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> These buffers could get rather large so maybe you need a cap on settling time?
-
-What do you mean by "cap on settling"?
-
-> 
-> > +
-> > +	/*
-> > +	 * Do not enable automatic power down on working samples. Otherwise the
-> > +	 * plates will never be completely charged.
-> > +	 */
-> > +	cmd = tsc2046_adc_get_cmd(priv, ch_idx, true);
-> > +
-> > +	for (i = 0; i < max_count - 1; i++)
-> > +		tx_buf[i].cmd = cmd;
-> > +
-> > +	/* automatically power down on last sample */
-> > +	tx_buf[i].cmd = tsc2046_adc_get_cmd(priv, ch_idx, false);
-> >  
-> >  	memset(&xfer, 0, sizeof(xfer));
-> > -	priv->tx_one->cmd = tsc2046_adc_get_cmd(priv, ch_idx, false);
-> > -	priv->tx_one->data = 0;
-> > -	xfer.tx_buf = priv->tx_one;
-> > -	xfer.rx_buf = priv->rx_one;
-> 
-> Are these used for anything else?  If not probably need to drop them and
-> their allocation.
-
-done
-
-> > -	xfer.len = sizeof(*priv->tx_one);
-> > +	xfer.tx_buf = tx_buf;
-> > +	xfer.rx_buf = rx_buf;
-> > +	xfer.len = sizeof(*tx_buf) * max_count;
-> 
-> This could be very big and more than possible some spi controllers will fail
-> it (or does the SPI core handle splitting very large transfers?)  Maybe a loop
-> is needed with smaller fixed size transfers?
-
-I can't exclude possible issue with some of SPI drivers. But SPI level
-optimizations should be done on SPI driver or framework level.
-
-> >  	spi_message_init_with_transfers(&msg, &xfer, 1);
-> >  
-> >  	/*
-> > @@ -272,13 +317,25 @@ static int tsc2046_adc_read_one(struct tsc2046_adc_priv *priv, int ch_idx,
-> >  	if (ret) {
-> >  		dev_err_ratelimited(&priv->spi->dev, "SPI transfer failed %pe\n",
-> >  				    ERR_PTR(ret));
-> > +		*val2 = chan->scan_type.realbits;
-> > +		return IIO_VAL_FRACTIONAL_LOG2;
-> > +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> > +		*val = priv->ch_cfg[chan->channel].oversampling_ratio;
-> > +		return IIO_VAL_INT;
-> > +	case IIO_CHAN_INFO_DEBOUNCE_COUNT:
-> 
-> These are unusual. I think they've only been used for the more literal bounce suppression
-> of a human step counting algorithm.
-> 
-> I'd probably not expect to see the both even if we decide this is applicable.
-
-Ok, i do not need this information so far. I'll remove it
-
-> > +		*val = tsc2046_adc_time_to_count(priv,
-> > +				priv->ch_cfg[chan->channel].settling_time_us);
-> 
-> Setting time is often about external circuitry so it's a bit unusual to expose
-> it to userspace rather than making it a device tree property and just making
-> sure the driver doesn't provide a reading until appropriate debounce has passed.
-> Here is coming from DT anyway, so what benefit do these two read only channel
-> properties provide?
-
-No benefit. Will remove it.
-
-Regards,
-Oleksij
+diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+index 09c741e8ecb8..c700c3b19e4c 100644
+--- a/arch/arm/boot/dts/sama5d2.dtsi
++++ b/arch/arm/boot/dts/sama5d2.dtsi
+@@ -415,7 +415,7 @@ hsmc: hsmc@f8014000 {
+ 				pmecc: ecc-engine@f8014070 {
+ 					compatible = "atmel,sama5d2-pmecc";
+ 					reg = <0xf8014070 0x490>,
+-					      <0xf8014500 0x100>;
++					      <0xf8014500 0x200>;
+ 				};
+ 			};
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+

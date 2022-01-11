@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3472E48ADB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E9348ADBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239441AbiAKMhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiAKMhp (ORCPT
+        id S239422AbiAKMjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:39:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41902 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239392AbiAKMjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:37:45 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F574C06173F;
-        Tue, 11 Jan 2022 04:37:45 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id s1so32721866wra.6;
-        Tue, 11 Jan 2022 04:37:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GZ6DhshfDzm+ZB/T6CYQ9YGfiX4LXvWGMl8Vl+aQSiI=;
-        b=JIckljIl84PIGDwLhYEpm8wg7zvOyMYa/Zeon0dlGHuGfeFCoYFKfTw/jTdSgqs6+0
-         milCxxlzeFre7YdY/nwsgPNQKf8DjPmTvRu4xmsut332o2oPjZbJwm/Zjx04zZyUeXTp
-         jy4XhKYLz5OGOg3OFVPiI8kGiwq5Ffj9YzB1+ml3dIWy6agf9mQHwdPMgpBAh7QsCxLK
-         fVK75t/UXgr64UE57VF37sgar3PdqZXn/VZkp2dXD8vQ2QAUDAP9hSQX/Wyg/lO/uabn
-         LVApVqHL/4go+x/tk53FPeyQ9vFIBoA8RLG/LORar0V2wcguOCArtgdJHgkVW8k9PK7e
-         QETw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GZ6DhshfDzm+ZB/T6CYQ9YGfiX4LXvWGMl8Vl+aQSiI=;
-        b=DIEh6IB9xCqoz/gax56/suSRu8QxoMxUpcoFWZSW+6Hd4UmfDJwQ/7yDF4TX9uTBT7
-         +J8vo3mMTXcy4MqJK7IYmNHOW1IxVwLUKFlzAhvI4/mqzcUAxueOmsILFXcXpkXENLjo
-         WFZ5M2Py9dMdJ0oNYMy0APvoiurFN6Rx+oqVBzaxX0ZiOkfiNCJ5KAfEyN8Pum2Ub8YQ
-         0+X/qyc09ObTnU6JembhPvSo+3t1qGP3GWt/BgxsjQc5OQ5TyaPnlrL2OoxpwAcTzZGW
-         Nj+VDYlFku/Og+ntuXKBXtJDuca9qL+MrZ2QOoS7Sh8Hp6zc88dUX3ovd8XrgwYzGrJG
-         H3Dw==
-X-Gm-Message-State: AOAM530XA39RIwm9cDuyRDakKp1hIOEouZBzDztYnXCeBXB/qkcRkxqt
-        nq93JasgXrvnaXJNryEWch0=
-X-Google-Smtp-Source: ABdhPJxIq++kEHfVU5Hz8ktHP1Ce2fGCcBgZv51SzzkOUBxQvZU3SMbVGJ26GzyzWlh3CKVIeIm/hA==
-X-Received: by 2002:a5d:588c:: with SMTP id n12mr3640755wrf.363.1641904663886;
-        Tue, 11 Jan 2022 04:37:43 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id q206sm1619938wme.8.2022.01.11.04.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 04:37:43 -0800 (PST)
-Date:   Tue, 11 Jan 2022 12:37:41 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 00/43] 5.10.91-rc1 review
-Message-ID: <Yd16FeBzGLNLXHUA@debian>
-References: <20220110071817.337619922@linuxfoundation.org>
+        Tue, 11 Jan 2022 07:39:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C2C614B1;
+        Tue, 11 Jan 2022 12:39:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71962C36AEB;
+        Tue, 11 Jan 2022 12:39:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641904759;
+        bh=uimpmS7EpG9U7VOVIAPAv29+NVT2dj0HCG1jYmILb5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WThR+Ypr228/WkCU2V3LRlXln3yvPe7VXfVUgYBSFzJghl7sRgZpLXJIIasWH/Rc3
+         hg95/mWGhePEnDSecuR/Uv9f4sQZT+xNRuHwHkvoCiYuDK7bopROAV2MZ29+3eAjxK
+         XFwawOgYz9ezsDMWwewGxS6h0XrUtk33azefL3Wh9OFfrbgT966yIMs3Uaj99QDqwV
+         HTPENWjPAgnFoqLSI8rgeV2YmLj2A3h2B2jQfeKsxmphhQHBjVgAOlRehsgUVwTvob
+         Pyip8XkHvmJdl59Ey8YMC7DAsa6pQ5TXkW4QTamhVN4biC7Wzdd2/9dtXN3t5QDGO6
+         1kUDJtEqNsBkA==
+Date:   Tue, 11 Jan 2022 13:39:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Terry.Bowman@amd.com,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
+ io accesses with mmio accesses
+Message-ID: <Yd16cw0AaYcf7eSf@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>, Terry.Bowman@amd.com,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <20210715221828.244536-1-Terry.Bowman@amd.com>
+ <20210907183720.6e0be6b6@endymion>
+ <20211105170550.746443b9@endymion>
+ <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
+ <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
+ <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
+ <YdoG+en5Z/MaS/wu@ninjato>
+ <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pgNChH66zJmaFl9u"
 Content-Disposition: inline
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
+In-Reply-To: <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Mon, Jan 10, 2022 at 08:22:57AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.91 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
-> Anything received after that time might be too late.
-
-Build test:
-mips (gcc version 11.2.1 20220106): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220106): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20220106): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220106): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/611
-[2]. https://openqa.qa.codethink.co.uk/tests/612
+--pgNChH66zJmaFl9u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+> I have briefly read the discussion by the link you provided above in
+> this thread. I'm not sure I understand the issue and if Intel hardware
+> is affected. Is there any summary of the problem?
 
---
-Regards
-Sudip
+I guess the original patch description should explain it. You can find
+it here:
 
+http://patchwork.ozlabs.org/project/linux-i2c/patch/20210715221828.244536-1-Terry.Bowman@amd.com/
+
+If this is not sufficient, hopefully Terry can provide more information?
+
+
+--pgNChH66zJmaFl9u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHdenMACgkQFA3kzBSg
+KbZgvBAAkJhhT0pH8RdKpq/Kd4K8hMAOp3dIq+iW1R7KhstRHMvBtGBrSdKqg81t
+XVRSHjBhvN+2cOI5RmQ29S9KzmhXEQ4wqGvg4dUejlYQfTk5T3ecNfjsHBpqppNN
+t9x1qlxaseL5iKhjcHUoJQ39k0VtuvdH6t2pscdlZwLANLGHFzFTd2Zzx2GK7Bdd
+9YpO+1OOv3wGSJWoCl1Ujt2IADhjiR//sHYnN+Uto5ty8HY2oSNVHnek9NdUiK7G
+5QGbDh2sdeGiFHqjCUWkJt6uMtjc0aB3ZYKSQrUoStvJxzFbwEs0ivvSrNsfIsph
+mFqjE9paRbXa/tJfXvPxFiCp4JdCp4PGXjpzchb1yGp/7/2e+kjMpIGgkKjToP+k
+77bilj8JvGJr+Le6qK7pwdS3DTGBGyCBrF8KVt2zoJAZtWtpsRUh8MDpGM53P0Ek
+i0yrbAtCfthUQ8KJ7WVWt0oXcBrmCejIqmW/Qlf+JttGPenQ/FDB32k7TswcBsEe
+8mInlL6EW10seQ2mTgd2F7O63uBsoXu0BgXV6vDZu6SN9Y65AudlpyzHeNO1h08U
+WfDA0Tf58VmEcw2mFUOg+rgHJnIwOgujqD123bym0ax1BuEMXb07gKwC7WDlQS6k
+IIEzW8FKvXiUF5ld6SftAwGdN+BI3PcJK034bnOXYAFI0zi6lp0=
+=Jb4b
+-----END PGP SIGNATURE-----
+
+--pgNChH66zJmaFl9u--

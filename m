@@ -2,88 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CD448B0C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F58448B0D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343551AbiAKP0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:26:37 -0500
-Received: from mga07.intel.com ([134.134.136.100]:53936 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240435AbiAKP0f (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:26:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641914795; x=1673450795;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jOLbgfZSuQO/JXbSatBk3doMgFNqseXIhCh73KqcL5U=;
-  b=jrNNZq1mFWsboJLeTAKQflwFYxwwczGoXnwQYFELFHfYHqqifJwuJG/G
-   2eJcx/1rr1cXtanZLwT9fNIcIrpVYrag61DI5MEHLVJk5xI5pYOBzROrt
-   HeCsD3oeb66zXI8HhDvi4q7XpThXZgGyHLMmrVLlj02Y80zoPMaax+ucU
-   29EoKknwNygXt4I5zoG6JDiQpBiU2vPb4VUsjm8WqK67qF2jAefeW0CRb
-   hzLusSD10r6FJxurSR8zgXElI7vblgTVQDz5YhOthK6C5uoINEKJeUZII
-   FcLQ+Tpo/zxmvsvcfq4/bDsjagGPmi2NCkOOOex66qemsiutZccmq/NpG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="306861019"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="306861019"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 07:26:35 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="613249401"
-Received: from padhika1-mobl.amr.corp.intel.com (HELO [10.209.13.65]) ([10.209.13.65])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 07:26:34 -0800
-Message-ID: <cd46f836-7d81-2178-c5ab-64db0be17e0e@intel.com>
-Date:   Tue, 11 Jan 2022 07:26:31 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: kmemleak detects leak in msr_build_context
+        id S1343556AbiAKP3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:29:52 -0500
+Received: from mail-eopbgr70075.outbound.protection.outlook.com ([40.107.7.75]:52341
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240435AbiAKP3v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:29:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZOtZzAkOuqUcl+a/HqE9y9A/6hyZe2Uu381pkhKR/Jz1kxlgBG/jEaI4sJZDfs5NHvXQUWEsxRDbsRzK31lmhl1HlkNSnTw0PAb8hpBymMylkrLj+zpuvDtPVGN6rqZ2/+0msJcHieH1PuYq7Ew/+wTM0w4zf32FhVWRosiFIHzXH9xnyf/xQgbC5nRUBnP8FGQVFqnbVH+sYMQKeTTw9bZ31QdVuNtXEIOPf+orptVdsj8lg8Mp23KGn43iMIS9j6yysZBA7/CGqh2+AuvArQGFwFg1tcfCrZrfndlQkIIOyh7vOhiyhH40QYrdInLL5QCgrX3sV0klMojHd4vGLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yY2LE4DpDTKTq5LT6LQx1P/3t4XcSPvUaKBV9aZ7cXU=;
+ b=R/cNFl3VDBu4JZmE+tOHflpVXCJdY2fBe8i24twmHr7szm1cL0qy8D2k/bdUd1o6D2Gn+zgkwEYD3YeY7XLO/yMc7bljWr5t73pRF8OLFhKdP2bLIAKJHH5bRCOz7CuWdVMb5PrXgJZX6c7uoIp/aMiFigEvK1YhDSxpO89zN5V8jQskB1FjnYVWgdd6sqcErF2IC2QZr/Jt+ZDbT1hxjN9ECx6p0COzFcDEaLrwsvD4PY8AdHlKEkFLo5TwwMnVvjIGpGapzymlxY036XHeEgmZR/rnbFPIZUVk+Ww0yqNgUKLlzC+5qQjMrsuxdraUpPc75K/+MgHzJEtjIc0ZVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yY2LE4DpDTKTq5LT6LQx1P/3t4XcSPvUaKBV9aZ7cXU=;
+ b=dVTVQqL8dNGbZokxpcu9zjDEwVv6Rb0u+J164ghyJv0KB7zmG2bQ6VvQGSiV53yKA4X2DSCtQbtpDtgGpJJ/lq7Yvkr5tUpj/cJ2BH1ZQpiHRDhc2rzRUSblHYdG11fBd9c0+NvAujyqNW3w1gkO02uExuuS77B5qalHsEOjXbg=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR0401MB2512.eurprd04.prod.outlook.com (2603:10a6:800:4e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
+ 2022 15:29:48 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::c84:1f0b:cc79:9226]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::c84:1f0b:cc79:9226%3]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 15:29:48 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Maxim Kiselev <bigunclemax@gmail.com>
+CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "fido_max@inbox.ru" <fido_max@inbox.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: Re: [PATCH] powerpc: dts: add device tree for T1040RDB-REV-A
+Thread-Topic: [PATCH] powerpc: dts: add device tree for T1040RDB-REV-A
+Thread-Index: AQHYBv8LPgYCyvCS1UKB/8/tYVavPKxd8iOA
+Date:   Tue, 11 Jan 2022 15:29:47 +0000
+Message-ID: <20220111152947.6zvt7j7366wsg6o2@skbuf>
+References: <20220111131355.djuyn6bbirqtsama@skbuf>
+ <20220111152204.3524442-1-bigunclemax@gmail.com>
+In-Reply-To: <20220111152204.3524442-1-bigunclemax@gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cb93121a-d58b-481b-1bb3-08d9d51733dd
+x-ms-traffictypediagnostic: VI1PR0401MB2512:EE_
+x-microsoft-antispam-prvs: <VI1PR0401MB2512ECF51446485475805F0FE0519@VI1PR0401MB2512.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BEptss5pCd+wL2Mteq1xbGqBCCvqNv3piopmOL61HmguN3Oxn6cA9nWgM7IMV9SySshoeWTz4iGgKLk2soKCqbw/nffctPw8gECCUKSPmdDCQ/fS+fcX/+xI9xuoqRgOBzoSUQ82udR6i99t6+u5PitoGxgWlSGr3zlM1BHA4DcSQjy66iuXtRlMAJbCu8BPvRQlKgaKoir5033MmN+tUhIxUbcaxwbzcP+5rELMJcqy+AHt+DLsmlX+enfe/3ra5P0xMngBMfsiWTfj+anRotBH0xyU3EoR9fwpK9RnPieCL5yzH2+5P/C5BKX1BjTBOiu+KvWtTROtiiJJeotWPWyUGnBgsNuB5/kJ9Bl3LEqyef2V+joDN/+BtUnoA+lryPZDuS8nVH0vhT06F7jBAJ2dv1LwlHWeB1wX8umtS1BQyW0W5SYthzGs7zZa/Y3wcsrA0d+RpRytQ8+wGr1vn4cLQQ+ZeBeCRcipEqc8Ccm+Knbgzz/G4OdzJLGPBND1rfuJpC5KasoZ2qbX6XAVp+5DRNfKjKeVz+TPCKOx4HrhPiU1gjWAtH8sShaRDEGOW6jmSb3ZuqekfQcB3jQMYdZi/f6iPMygx90+cHodlPht9jWAemMKV6o7wV7WvYGBLTCpn21SVgpJrJdeIRhsTKHupTpfwNNnr355O0FsMu84R44e46z2TfUK8yWol+48UkuUrX12qZ0curgmAD0KxqIIF67fEjCR4gjRcvMyRMU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(54906003)(7416002)(6506007)(1076003)(5660300002)(6486002)(6916009)(44832011)(9686003)(38100700002)(122000001)(6512007)(76116006)(91956017)(66476007)(66446008)(66556008)(66946007)(64756008)(71200400001)(86362001)(38070700005)(8936002)(508600001)(83380400001)(186003)(26005)(316002)(8676002)(33716001)(4326008)(2906002)(2004002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ji0mnNzsho3CC2wcl7OxNTiYLWSnkFmIKX/Lc4+G2qMESnjuAKfDUkMTXJYe?=
+ =?us-ascii?Q?pXmx/nJh8eRdtj7lSNeySc/HmLCdO8Cy0AvuGWBel4M8utfjYaRfxoTX24qs?=
+ =?us-ascii?Q?ERM6UebxcLKOzdElmm9UWprW0ZlJUR1BFV5fwC/Hnroklkf2WFNRpweQ4L9C?=
+ =?us-ascii?Q?GBXjKgXRw9b6uqugI0Vh10wr8oxl7+FM9YD3fLo53KmDfF5kibmYoy5tq56I?=
+ =?us-ascii?Q?KDY0uwd+XtqqdiOVCDXKGdJakBRN5/ByCKGS4tCJWExCt04Wd9wbNCKTVJWA?=
+ =?us-ascii?Q?Az4paffYm2kjVppHyX9nMo7iWw0wmYaBBpswUsHSbRUi8wgCAbKIajNXswIT?=
+ =?us-ascii?Q?bPYXRGDkDaAiLtSKY7aXA2+HiesA6dRY2oNB9sq8XJ00p6b1UneoKZOM2cNW?=
+ =?us-ascii?Q?GNPiiB5OFBazzg+FEhlcQiC6TJyF+MzW5zmllH8HxBvQs6msQQlr1iTkyREo?=
+ =?us-ascii?Q?HGtpdEOU6rMfkc+owzcHxhIMmQqlA6x8STLUK09n4dBxmo3kKMS9KArp31re?=
+ =?us-ascii?Q?41hJDlTtFZs6H7C3fZMY9C2nODbMviDs5Nlxdgi6MKszPaw7fcoxW4tXtEMc?=
+ =?us-ascii?Q?AsqtMfg5VZpLJ10287nw85+gWJ1l4HBFQBF/NxbesOeZ9nzZzboBpGMu5iOA?=
+ =?us-ascii?Q?9zEFTuTGAPZX2Y0imtZ1vp23J/16tUCSiQDLfoh8lsZZ+A8s6qU3ac3BA5Un?=
+ =?us-ascii?Q?1HK/hVKZoN6vqbMYh8oEmXQVrYl0SdA9POQppeOSDngdP1hKsdU6MYVCF2AM?=
+ =?us-ascii?Q?gKGqgawpJ8bD1owgTx3+x/xJlXo/BO8YSvML5ojgceq0/oKkL9qPXikXWMAU?=
+ =?us-ascii?Q?Ollb5UmbQGKbiNVcCWaePXmANNShQxRzgk5GNBxOFnP9B9tlWFf3AQHhx36u?=
+ =?us-ascii?Q?Ps5jffeFldh5J0EygxwE31zQTVKgMk6/JVjsnfpstiyCUc9sG9dHTFuMwu/w?=
+ =?us-ascii?Q?aGvJG0G+NFT/wCp71kcQR2+41ZTzmGKGx/2n2/RQWLiPbN4EZG6vbEjmk8Qd?=
+ =?us-ascii?Q?4RoBuHIMah7NfyQ/GdS0WYpFckiuGBlMQFfqZqVHTWCb1992PBauvxoA8jcR?=
+ =?us-ascii?Q?VtBt0tnBCyIUVz8buPy3d//K0EYDxGjHf4NJUIsjkQec9fj9vpUGzaqX03ec?=
+ =?us-ascii?Q?9jgWQIh4Wc2d94jvskYGop4o7Y4svx9MBgDRtJhNR3AvyCJU/S4t+hVZ0jl+?=
+ =?us-ascii?Q?UjJ4xvkamf2h7q5nWfSyDhXnwHITNXkUGP7nVTp6Kc/kgAlTnAPXwLbzRXYt?=
+ =?us-ascii?Q?hQKAQ2tHrEnp7kj8g0Rn3lOnJqc/67t1j/clJjIbfdyFqCTHAFbtulrVhziO?=
+ =?us-ascii?Q?RG2ZoaVQazRn6iwHmDw8Vy4KqxdVrxZPLgUxBAsgenZu7jSoKxPV3xohRV9w?=
+ =?us-ascii?Q?ti83R1BAHzPW4mVuifX2t1Vu1vMoQh7n2fVeUBfpKTNd1T0DMx91OArOrwrK?=
+ =?us-ascii?Q?m6Es212U+kSP2NhME+pYagu+11lz6IUBG1iCBz1szylOAcSNlMWqBezrKLIL?=
+ =?us-ascii?Q?YrxN6cjUM4Dlw3SMakgEopP7vi/yXNutXNtA8HfK6uTgN6+aLerW5qRNmn5M?=
+ =?us-ascii?Q?7aYfihbAgKnlnbT7aJkovnU5YDmT+/y56MlKhuz4ykr62Tr9ptcvUB+Fhr0y?=
+ =?us-ascii?Q?gX4S8Fj0/SQWlA0d/1vOsYs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A494E902CB82CA4E8304ED21413EC020@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb93121a-d58b-481b-1bb3-08d9d51733dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 15:29:47.9322
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VLi46ibNpDbzYV8pc/xOyFkOUqmbIpaBEy4IuHx5NrhnqGX+O1kPzprusNstdCPWxVFI3wObV59ORX7sh/L2dQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2512
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/22 23:49, Paul Menzel wrote:
-> Running Linux from commit bf4eebf8cfa2 (Merge tag 
-> 'linux-kselftest-kunit-5.17-rc1' of 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest), 
-> kmemleak reported the leak below:
-> 
-> ```
-> unreferenced object 0xffff8914823de500 (size 64):
->    comm "swapper/0", pid 1, jiffies 4294667581 (age 1253.406s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 04 10 01 c0 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<000000007f3b05e9>] __kmalloc+0x177/0x330
->      [<0000000008104cca>] msr_build_context.constprop.0+0x32/0xbe
->      [<00000000012bab4e>] msr_save_cpuid_features+0x28/0x2f
->      [<00000000b7a2262e>] pm_check_save_msr+0x2e/0x40
->      [<00000000cbe9d92d>] do_one_initcall+0x44/0x200
->      [<0000000094deab7b>] kernel_init_freeable+0x1fc/0x273
->      [<00000000d3dbaa56>] kernel_init+0x16/0x160
->      [<0000000058c4a8b3>] ret_from_fork+0x22/0x30
+Hi Maxim,
 
-Thanks for the report.
+On Tue, Jan 11, 2022 at 06:22:04PM +0300, Maxim Kiselev wrote:
+> On board rev A, the network interface labels for the switch ports
+> written on the front panel are different than on rev B and later.
+>=20
+> This patch introduces a separate device tree for rev A.
+> The main device tree is supposed to cover rev B and later.
+>=20
+> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> ---
+>  arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 185 +++++++++++++++++++
+>  1 file changed, 185 insertions(+)
+>  create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+>=20
+> diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/=
+boot/dts/fsl/t1040rdb-rev-a.dts
+> new file mode 100644
+> index 0000000000000..f74486ba1d45f
+> --- /dev/null
+> +++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+> @@ -0,0 +1,185 @@
+> +/*
+> + * T1040RDB Device Tree Source
+> + *
+> + * Copyright 2014 - 2015 Freescale Semiconductor Inc.
+> + *
+> + * Redistribution and use in source and binary forms, with or without
+> + * modification, are permitted provided that the following conditions ar=
+e met:
+> + *     * Redistributions of source code must retain the above copyright
+> + *	 notice, this list of conditions and the following disclaimer.
+> + *     * Redistributions in binary form must reproduce the above copyrig=
+ht
+> + *	 notice, this list of conditions and the following disclaimer in the
+> + *	 documentation and/or other materials provided with the distribution.
+> + *     * Neither the name of Freescale Semiconductor nor the
+> + *	 names of its contributors may be used to endorse or promote products
+> + *	 derived from this software without specific prior written permission=
+.
+> + *
+> + *
+> + * ALTERNATIVELY, this software may be distributed under the terms of th=
+e
+> + * GNU General Public License ("GPL") as published by the Free Software
+> + * Foundation, either version 2 of that License or (at your option) any
+> + * later version.
+> + *
+> + * THIS SOFTWARE IS PROVIDED BY Freescale Semiconductor "AS IS" AND ANY
+> + * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMP=
+LIED
+> + * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AR=
+E
+> + * DISCLAIMED. IN NO EVENT SHALL Freescale Semiconductor BE LIABLE FOR A=
+NY
+> + * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DA=
+MAGES
+> + * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SE=
+RVICES;
+> + * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUS=
+ED AND
+> + * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR=
+ TORT
+> + * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE=
+ OF THIS
+> + * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> + */
+> +
+> +/include/ "t104xsi-pre.dtsi"
+> +/include/ "t104xrdb.dtsi"
+> +
+> +/ {
+> +	model =3D "fsl,T1040RDB-REV-A";
+> +	compatible =3D "fsl,T1040RDB-REV-A";
+> +
+> +	aliases {
+> +		phy_sgmii_2 =3D &phy_sgmii_2;
+> +	};
+> +
+> +	soc@ffe000000 {
+> +		fman@400000 {
+> +			ethernet@e0000 {
+> +				fixed-link =3D <0 1 1000 0 0>;
+> +				phy-connection-type =3D "sgmii";
+> +			};
+> +
+> +			ethernet@e2000 {
+> +				fixed-link =3D <1 1 1000 0 0>;
+> +				phy-connection-type =3D "sgmii";
+> +			};
+> +
+> +			ethernet@e4000 {
+> +				phy-handle =3D <&phy_sgmii_2>;
+> +				phy-connection-type =3D "sgmii";
+> +			};
+> +
+> +			mdio@fc000 {
+> +				phy_sgmii_2: ethernet-phy@3 {
+> +					reg =3D <0x03>;
+> +				};
+> +
+> +				/* VSC8514 QSGMII PHY */
+> +				phy_qsgmii_0: ethernet-phy@4 {
+> +					reg =3D <0x4>;
+> +				};
+> +
+> +				phy_qsgmii_1: ethernet-phy@5 {
+> +					reg =3D <0x5>;
+> +				};
+> +
+> +				phy_qsgmii_2: ethernet-phy@6 {
+> +					reg =3D <0x6>;
+> +				};
+> +
+> +				phy_qsgmii_3: ethernet-phy@7 {
+> +					reg =3D <0x7>;
+> +				};
+> +
+> +				/* VSC8514 QSGMII PHY */
+> +				phy_qsgmii_4: ethernet-phy@8 {
+> +					reg =3D <0x8>;
+> +				};
+> +
+> +				phy_qsgmii_5: ethernet-phy@9 {
+> +					reg =3D <0x9>;
+> +				};
+> +
+> +				phy_qsgmii_6: ethernet-phy@a {
+> +					reg =3D <0xa>;
+> +				};
+> +
+> +				phy_qsgmii_7: ethernet-phy@b {
+> +					reg =3D <0xb>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	ifc: localbus@ffe124000 {
+> +		cpld@3,0 {
+> +			compatible =3D "fsl,t1040rdb-cpld";
+> +		};
+> +	};
+> +};
+> +
+> +#include "t1040si-post.dtsi"
+> +
+> +&seville_switch {
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port0 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_0>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH5";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port1 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_1>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH4";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port2 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_2>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH7";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port3 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_3>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH6";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port4 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_4>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH9";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port5 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_5>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH8";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port6 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_6>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH11";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port7 {
+> +	managed =3D "in-band-status";
+> +	phy-handle =3D <&phy_qsgmii_7>;
+> +	phy-mode =3D "qsgmii";
+> +	label =3D "ETH10";
+> +	status =3D "okay";
+> +};
+> +
+> +&seville_port8 {
+> +	ethernet =3D <&enet0>;
+> +	status =3D "okay";
+> +};
+> --=20
+> 2.32.0
+>
 
-I've taken a look through arch/x86/power/cpu.c, and nothing obvious 
-jumped out at me.  msr_build_context() could probably be cleaned up by 
-using kvrealloc(), but it hasn't been touched recently in a way that I 
-would expect things to leak.
+This is pretty much not the patch I was expecting to see.
+I was expecting to see arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+containing only this:
 
-I suspect this is a false positive from kmemleak.
+/include/ t1040rdb.dts
 
-If you could share your full dmesg, it might help spot something.  But, 
-I didn't see anything.
+/ {
+	model =3D "fsl,T1040RDB-REV-A";
+	compatible =3D "fsl,T1040RDB-REV-A";
+};
+
+&seville_port0 {
+	label =3D "ETH5";
+};
+
+&seville_port2 {
+	label =3D "ETH7";
+};
+
+&seville_port4 {
+	label =3D "ETH9";
+};
+
+&seville_port6 {
+	label =3D "ETH11";
+};
+
+Also, I don't see the changes from your original patch applied to the
+main t1040rdb.dts. Did you forget to include them?=

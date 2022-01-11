@@ -2,283 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DBE48AEE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB1148AED6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241226AbiAKNuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:50:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45104 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241099AbiAKNt6 (ORCPT
+        id S241065AbiAKNtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240964AbiAKNts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:49:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA1AA61663;
-        Tue, 11 Jan 2022 13:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E00C36AFF;
-        Tue, 11 Jan 2022 13:49:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="h0D0rwlw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641908995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4NQLLaVMZ1wxVBx6BZZlCjSXtSr8OCneaUsHX0poeSo=;
-        b=h0D0rwlwzfUB3WK34y7X1Ool29oi0rEsel47I5+hCfrxg2usE8bMpABHxFWvUu0Q7ytH/B
-        P3RGFV0k2TOPQmEIBqV37RFPXA+W7H9/HwePvxDiETDlOjNyuZu6IJdSgaqCC1l6+H0yXz
-        yFyJt4JSbZnL+E5DvwK4OnYiCQ1MIK8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e5b03932 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 11 Jan 2022 13:49:54 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, geert@linux-m68k.org, tytso@mit.edu,
-        gregkh@linuxfoundation.org, jeanphilippe.aumasson@gmail.com,
-        ardb@kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH crypto 2/2] lib/crypto: blake2s: move hmac construction into wireguard
-Date:   Tue, 11 Jan 2022 14:49:34 +0100
-Message-Id: <20220111134934.324663-3-Jason@zx2c4.com>
-In-Reply-To: <20220111134934.324663-1-Jason@zx2c4.com>
-References: <CAHmME9qbnYmhvsuarButi6s=58=FPiti0Z-QnGMJ=OsMzy1eOg@mail.gmail.com>
- <20220111134934.324663-1-Jason@zx2c4.com>
+        Tue, 11 Jan 2022 08:49:48 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645E3C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:49:48 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so18572441oti.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:49:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QDUwveA5dHEQZ1l5uTM7cEGMK5pb6risDdnWd9gwlBA=;
+        b=nu+BSygT1+gveDpWfv4RgTgsKDxCywYuYcarFTdSSZTjwm5FZtMqP2To8BHbITPkJX
+         t49Ny5xdFRs6188dC5amfIVQPq9oC9eTpjYoFhF6tEejOLKZLf9qTk1tPZOUYo4VVeZH
+         zGZJ07ADlP4OyCiNd3+YairY42lbh6fGTcAYlgbMy9cUMjnTDxZeF10axZLnTEYLXKHt
+         LqAuy9ZsUWneMQe1aPiLmOCrqmmsjyh7E4MJ4bSBnzQDhLVMAbDil4lwiIHCksXYQz4V
+         PfhMWoWSNh2BEPOKYhc/dhtu34WFzZNiO4K7D4l9aUi2+w1E+ltIIkvDGfJ696tHuhVK
+         hJug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QDUwveA5dHEQZ1l5uTM7cEGMK5pb6risDdnWd9gwlBA=;
+        b=ZtWn2kwvzVexu4UJEa9tCdwY7947Emde9yri3+iizcIZTy5HUNSvvCWTH02jzMHmro
+         PYTjrK3kXcJY0X6ELC2aiMZGwkfTKi23wc31j+NO1Y/BxKAYmB1Gg0aI2vHbQ3TZjWbP
+         O6210r5SMkIbqAAvz4tkNqedtzYlQdczK+51iKEDkZI1ZhRZjAfZqMxxRf1FxIcYbpe3
+         /uyvmgtYmnVNDOR5gusMwm3NgVHCYUgCHQ2lfwyJLf085d782zldKOT4UxjqlNuhT/0W
+         TYMAkPiUxtfKKZT1we6OGbO2ef1GfSZXsZ7Zyr4qbsSVjwzU2EUEKsfoWgxA7K/reEWj
+         Xi5w==
+X-Gm-Message-State: AOAM533HBN3Q5bAl+jBETtkCNsNhh9pdjFAHY8qI3dxEpo5fVBjMJA3s
+        KPYnuzoHQdN7Qc0ZC5wD2x1aFuQtL2oiuDSmmzhmVWtVItjNyw==
+X-Google-Smtp-Source: ABdhPJz2tPBi2hwb/a6IofVO0x1IkYeBlBVRjXHQ8bme4omeHnAYcvlAvEPSd3g8ELgZ06SBcQeHMzf9B7sBqULwMHc=
+X-Received: by 2002:a9d:832:: with SMTP id 47mr3283325oty.196.1641908987499;
+ Tue, 11 Jan 2022 05:49:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CACDmwr_b0Z6JK2M6i6RZ4Qg3wb1uqG0NrybQ9mR2iw5QJT8XoA@mail.gmail.com>
+In-Reply-To: <CACDmwr_b0Z6JK2M6i6RZ4Qg3wb1uqG0NrybQ9mR2iw5QJT8XoA@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 11 Jan 2022 14:49:36 +0100
+Message-ID: <CACT4Y+ZxnG0sLhqn4uw6ueAUsA4cNZJh0_6eES6C45u9jW-4Pw@mail.gmail.com>
+Subject: Re: KCSAN: data-race in tick_nohz_stop_tick / tick_sched_timer
+To:     Kaia Yadira <hypericumperforatum4444@gmail.com>,
+        kvartet <xyru1999@gmail.com>
+Cc:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        sunhao.th@gmail.com, syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Basically nobody should use blake2s in an HMAC construction; it already
-has a keyed variant. But for unfortunately historical reasons, Noise,
-used by WireGuard, uses HKDF quite strictly, which means we have to use
-this. Because this really shouldn't be used by others, this commit moves
-it into wireguard's noise.c locally, so that kernels that aren't using
-WireGuard don't get this superfluous code baked in. On m68k systems,
-this shaves off ~314 bytes.
+On Tue, 11 Jan 2022 at 14:41, Kaia Yadira
+<hypericumperforatum4444@gmail.com> wrote:
+>
+> Hello,
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: wireguard@lists.zx2c4.com
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/net/wireguard/noise.c | 45 ++++++++++++++++++++++++++++++-----
- include/crypto/blake2s.h      |  3 ---
- lib/crypto/blake2s-selftest.c | 31 ------------------------
- lib/crypto/blake2s.c          | 37 ----------------------------
- 4 files changed, 39 insertions(+), 77 deletions(-)
+Hi Kaia, kvartet,
 
-diff --git a/drivers/net/wireguard/noise.c b/drivers/net/wireguard/noise.c
-index c0cfd9b36c0b..720952b92e78 100644
---- a/drivers/net/wireguard/noise.c
-+++ b/drivers/net/wireguard/noise.c
-@@ -302,6 +302,41 @@ void wg_noise_set_static_identity_private_key(
- 		static_identity->static_public, private_key);
- }
- 
-+static void hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen, const size_t keylen)
-+{
-+	struct blake2s_state state;
-+	u8 x_key[BLAKE2S_BLOCK_SIZE] __aligned(__alignof__(u32)) = { 0 };
-+	u8 i_hash[BLAKE2S_HASH_SIZE] __aligned(__alignof__(u32));
-+	int i;
-+
-+	if (keylen > BLAKE2S_BLOCK_SIZE) {
-+		blake2s_init(&state, BLAKE2S_HASH_SIZE);
-+		blake2s_update(&state, key, keylen);
-+		blake2s_final(&state, x_key);
-+	} else
-+		memcpy(x_key, key, keylen);
-+
-+	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
-+		x_key[i] ^= 0x36;
-+
-+	blake2s_init(&state, BLAKE2S_HASH_SIZE);
-+	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
-+	blake2s_update(&state, in, inlen);
-+	blake2s_final(&state, i_hash);
-+
-+	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
-+		x_key[i] ^= 0x5c ^ 0x36;
-+
-+	blake2s_init(&state, BLAKE2S_HASH_SIZE);
-+	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
-+	blake2s_update(&state, i_hash, BLAKE2S_HASH_SIZE);
-+	blake2s_final(&state, i_hash);
-+
-+	memcpy(out, i_hash, BLAKE2S_HASH_SIZE);
-+	memzero_explicit(x_key, BLAKE2S_BLOCK_SIZE);
-+	memzero_explicit(i_hash, BLAKE2S_HASH_SIZE);
-+}
-+
- /* This is Hugo Krawczyk's HKDF:
-  *  - https://eprint.iacr.org/2010/264.pdf
-  *  - https://tools.ietf.org/html/rfc5869
-@@ -322,14 +357,14 @@ static void kdf(u8 *first_dst, u8 *second_dst, u8 *third_dst, const u8 *data,
- 		 ((third_len || third_dst) && (!second_len || !second_dst))));
- 
- 	/* Extract entropy from data into secret */
--	blake2s256_hmac(secret, data, chaining_key, data_len, NOISE_HASH_LEN);
-+	hmac(secret, data, chaining_key, data_len, NOISE_HASH_LEN);
- 
- 	if (!first_dst || !first_len)
- 		goto out;
- 
- 	/* Expand first key: key = secret, data = 0x1 */
- 	output[0] = 1;
--	blake2s256_hmac(output, output, secret, 1, BLAKE2S_HASH_SIZE);
-+	hmac(output, output, secret, 1, BLAKE2S_HASH_SIZE);
- 	memcpy(first_dst, output, first_len);
- 
- 	if (!second_dst || !second_len)
-@@ -337,8 +372,7 @@ static void kdf(u8 *first_dst, u8 *second_dst, u8 *third_dst, const u8 *data,
- 
- 	/* Expand second key: key = secret, data = first-key || 0x2 */
- 	output[BLAKE2S_HASH_SIZE] = 2;
--	blake2s256_hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1,
--			BLAKE2S_HASH_SIZE);
-+	hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1, BLAKE2S_HASH_SIZE);
- 	memcpy(second_dst, output, second_len);
- 
- 	if (!third_dst || !third_len)
-@@ -346,8 +380,7 @@ static void kdf(u8 *first_dst, u8 *second_dst, u8 *third_dst, const u8 *data,
- 
- 	/* Expand third key: key = secret, data = second-key || 0x3 */
- 	output[BLAKE2S_HASH_SIZE] = 3;
--	blake2s256_hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1,
--			BLAKE2S_HASH_SIZE);
-+	hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1, BLAKE2S_HASH_SIZE);
- 	memcpy(third_dst, output, third_len);
- 
- out:
-diff --git a/include/crypto/blake2s.h b/include/crypto/blake2s.h
-index bc3fb59442ce..4e30e1799e61 100644
---- a/include/crypto/blake2s.h
-+++ b/include/crypto/blake2s.h
-@@ -101,7 +101,4 @@ static inline void blake2s(u8 *out, const u8 *in, const u8 *key,
- 	blake2s_final(&state, out);
- }
- 
--void blake2s256_hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen,
--		     const size_t keylen);
--
- #endif /* _CRYPTO_BLAKE2S_H */
-diff --git a/lib/crypto/blake2s-selftest.c b/lib/crypto/blake2s-selftest.c
-index 5d9ea53be973..409e4b728770 100644
---- a/lib/crypto/blake2s-selftest.c
-+++ b/lib/crypto/blake2s-selftest.c
-@@ -15,7 +15,6 @@
-  * #include <stdio.h>
-  *
-  * #include <openssl/evp.h>
-- * #include <openssl/hmac.h>
-  *
-  * #define BLAKE2S_TESTVEC_COUNT	256
-  *
-@@ -58,16 +57,6 @@
-  *	}
-  *	printf("};\n\n");
-  *
-- *	printf("static const u8 blake2s_hmac_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {\n");
-- *
-- *	HMAC(EVP_blake2s256(), key, sizeof(key), buf, sizeof(buf), hash, NULL);
-- *	print_vec(hash, BLAKE2S_OUTBYTES);
-- *
-- *	HMAC(EVP_blake2s256(), buf, sizeof(buf), key, sizeof(key), hash, NULL);
-- *	print_vec(hash, BLAKE2S_OUTBYTES);
-- *
-- *	printf("};\n");
-- *
-  *	return 0;
-  *}
-  */
-@@ -554,15 +543,6 @@ static const u8 blake2s_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {
-     0xd6, 0x98, 0x6b, 0x07, 0x10, 0x65, 0x52, 0x65, },
- };
- 
--static const u8 blake2s_hmac_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {
--  { 0xce, 0xe1, 0x57, 0x69, 0x82, 0xdc, 0xbf, 0x43, 0xad, 0x56, 0x4c, 0x70,
--    0xed, 0x68, 0x16, 0x96, 0xcf, 0xa4, 0x73, 0xe8, 0xe8, 0xfc, 0x32, 0x79,
--    0x08, 0x0a, 0x75, 0x82, 0xda, 0x3f, 0x05, 0x11, },
--  { 0x77, 0x2f, 0x0c, 0x71, 0x41, 0xf4, 0x4b, 0x2b, 0xb3, 0xc6, 0xb6, 0xf9,
--    0x60, 0xde, 0xe4, 0x52, 0x38, 0x66, 0xe8, 0xbf, 0x9b, 0x96, 0xc4, 0x9f,
--    0x60, 0xd9, 0x24, 0x37, 0x99, 0xd6, 0xec, 0x31, },
--};
--
- bool __init blake2s_selftest(void)
- {
- 	u8 key[BLAKE2S_KEY_SIZE];
-@@ -607,16 +587,5 @@ bool __init blake2s_selftest(void)
- 		}
- 	}
- 
--	if (success) {
--		blake2s256_hmac(hash, buf, key, sizeof(buf), sizeof(key));
--		success &= !memcmp(hash, blake2s_hmac_testvecs[0], BLAKE2S_HASH_SIZE);
--
--		blake2s256_hmac(hash, key, buf, sizeof(key), sizeof(buf));
--		success &= !memcmp(hash, blake2s_hmac_testvecs[1], BLAKE2S_HASH_SIZE);
--
--		if (!success)
--			pr_err("blake2s256_hmac self-test: FAIL\n");
--	}
--
- 	return success;
- }
-diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
-index 93f2ae051370..9364f79937b8 100644
---- a/lib/crypto/blake2s.c
-+++ b/lib/crypto/blake2s.c
-@@ -30,43 +30,6 @@ void blake2s_final(struct blake2s_state *state, u8 *out)
- }
- EXPORT_SYMBOL(blake2s_final);
- 
--void blake2s256_hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen,
--		     const size_t keylen)
--{
--	struct blake2s_state state;
--	u8 x_key[BLAKE2S_BLOCK_SIZE] __aligned(__alignof__(u32)) = { 0 };
--	u8 i_hash[BLAKE2S_HASH_SIZE] __aligned(__alignof__(u32));
--	int i;
--
--	if (keylen > BLAKE2S_BLOCK_SIZE) {
--		blake2s_init(&state, BLAKE2S_HASH_SIZE);
--		blake2s_update(&state, key, keylen);
--		blake2s_final(&state, x_key);
--	} else
--		memcpy(x_key, key, keylen);
--
--	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
--		x_key[i] ^= 0x36;
--
--	blake2s_init(&state, BLAKE2S_HASH_SIZE);
--	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
--	blake2s_update(&state, in, inlen);
--	blake2s_final(&state, i_hash);
--
--	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
--		x_key[i] ^= 0x5c ^ 0x36;
--
--	blake2s_init(&state, BLAKE2S_HASH_SIZE);
--	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
--	blake2s_update(&state, i_hash, BLAKE2S_HASH_SIZE);
--	blake2s_final(&state, i_hash);
--
--	memcpy(out, i_hash, BLAKE2S_HASH_SIZE);
--	memzero_explicit(x_key, BLAKE2S_BLOCK_SIZE);
--	memzero_explicit(i_hash, BLAKE2S_HASH_SIZE);
--}
--EXPORT_SYMBOL(blake2s256_hmac);
--
- static int __init blake2s_mod_init(void)
- {
- 	if (!IS_ENABLED(CONFIG_CRYPTO_MANAGER_DISABLE_TESTS) &&
--- 
-2.34.1
+You started sending similarly looking reports around the same time.
+Please share what you are doing/why and what's your goal? The issue is
+that some of these reports may need some pre-moderation before dumping
+onto kernel mailing lists.
 
+
+> When using Syzkaller to fuzz the latest Linux kernel, the following
+> crash was triggered.
+>
+> HEAD commit: a7904a538933 Linux 5.16-rc6
+> git tree: upstream
+> console output: KCSAN: data-race in tick_nohz_stop_tick / tick_nohz_stop_tick
+> kernel config: https://paste.ubuntu.com/p/QB39MJKWKb/plain/
+> Syzlang reproducer: https://paste.ubuntu.com/p/T25kYMrytM/plain/
+>
+> If you fix this issue, please add the following tag to the commit:
+>
+> Reported-by: Hypericum <hypericumperforatum4444@gmail.com>
+>
+> I think there are two threads visiting the variable tick_do_timer_cpu
+> at kernel/time/tick-sched.c:191 and 872 without locking.
+>
+> reproducer log: https://paste.ubuntu.com/p/942c3QpFDJ/plain/
+> report:
+> ==================================================================
+> BUG: KCSAN: data-race in tick_nohz_stop_tick / tick_sched_timer
+>
+> write to 0xffffffff85ebf1e0 of 4 bytes by task 0 on cpu 6:
+>  tick_nohz_stop_tick+0xa5/0x410 kernel/time/tick-sched.c:873
+>  __tick_nohz_idle_stop_tick kernel/time/tick-sched.c:1062 [inline]
+>  tick_nohz_idle_stop_tick+0xde/0x1a0 kernel/time/tick-sched.c:1083
+>  cpuidle_idle_call kernel/sched/idle.c:192 [inline]
+>  do_idle+0xe3/0x250 kernel/sched/idle.c:306
+>  cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:403
+>  secondary_startup_64_no_verify+0xb1/0xbb
+>
+> read to 0xffffffff85ebf1e0 of 4 bytes by interrupt on cpu 1:
+>  tick_sched_do_timer kernel/time/tick-sched.c:187 [inline]
+>  tick_sched_timer+0x41/0x210 kernel/time/tick-sched.c:1421
+>  __run_hrtimer+0x133/0x420 kernel/time/hrtimer.c:1685
+>  __hrtimer_run_queues kernel/time/hrtimer.c:1749 [inline]
+>  hrtimer_interrupt+0x36e/0xa80 kernel/time/hrtimer.c:1811
+>  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
+>  __sysvec_apic_timer_interrupt+0xa3/0x250 arch/x86/kernel/apic/apic.c:1103
+>  sysvec_apic_timer_interrupt+0x88/0xb0 arch/x86/kernel/apic/apic.c:1097
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20
+>  native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
+>  arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
+>  default_idle+0xb/0x10 arch/x86/kernel/process.c:733
+>  default_idle_call+0x28/0xd0 kernel/sched/idle.c:112
+>  cpuidle_idle_call kernel/sched/idle.c:194 [inline]
+>  do_idle+0xe8/0x250 kernel/sched/idle.c:306
+>  cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:403
+>  secondary_startup_64_no_verify+0xb1/0xbb
+>
+> value changed: 0x00000006 -> 0xffffffff
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.16.0-rc8+ #11
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> 1.13.0-1ubuntu1.1 04/01/2014
+> ==================================================================
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CACDmwr_b0Z6JK2M6i6RZ4Qg3wb1uqG0NrybQ9mR2iw5QJT8XoA%40mail.gmail.com.

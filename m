@@ -2,231 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E545B48A703
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469CF48A701
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiAKFLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 00:11:38 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:45280 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiAKFLh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:11:37 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4JXzLv4svMz9w5Lc
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:11:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id sLMF25W5OwQk for <linux-kernel@vger.kernel.org>;
-        Mon, 10 Jan 2022 23:11:35 -0600 (CST)
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4JXzLv30YTz9w5LT
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:11:35 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4JXzLv30YTz9w5LT
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4JXzLv30YTz9w5LT
-Received: by mail-pl1-f197.google.com with SMTP id u23-20020a170902a61700b0014a4dce9c91so2153715plq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OJq20ZDsbsCyRFb0aTI4IU3mCcY8cyPLYydnaATGypQ=;
-        b=ZW+OlbDxE47Q36VWP+qFHlEJZ3IFfFN/DVnUpz5b5GefXSfvAyo4GG/zDdLGOQLqf8
-         xu9Elc1Q49mlP4YkNQuahX9uQTGgnjsaXQcjuU86a9gXQL/q1IFQp4nWBE5cLYTeJ1Km
-         b9gp7yy4ndUKgXggc7yqDvLm9I/za74qUOJq+F0/QP3e7HI71WQjmf0Kis4tcfbxGgcr
-         CuNNQuoTn3jV6+/UoygspAYxXkoSAQesQ9ZyOm1bD8+w51imCc999xFwRNYx/RB5a96w
-         1sLjvn5vd3GwQYMVgH8QPh9NqaUbr6X9KYtrNz9TiV8rkPhBBXTyoERJtgpgXx7HuLM/
-         AjyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OJq20ZDsbsCyRFb0aTI4IU3mCcY8cyPLYydnaATGypQ=;
-        b=RADUx+l2chpPJKB9r7Xln6E2A7/CpCySeg528LOpQZamRPQeAGHVshP3XarWJaZgh2
-         MskHd6EaLRUc7NwBxCA1jDTf9OgR46s1ykvsmUwUpYpV6nW2OOjlcEsKvnO2AyDj37D2
-         tjLA2Esp1aEGVsGRcSeHpEr+HK6/pYUPsQu2mT++k1a+5hOmIrec3ovv60Q/CnEzTl5n
-         m5pSABojQ74LNgYgc3b2NcdpA8k5bbz3MbeD5taSrhcbh2v6KxNATOdvgoN4xAIn4ja3
-         rlSsGb6gSPqHEKwXFkjdQBO/qcOn/Dhuy7GZrU5snOEZGrp2RcPFl7NXTTsLZe/Fm+zP
-         qZGw==
-X-Gm-Message-State: AOAM531nUusC2CkQ3RFeqz/Fim4N1kOfiBeyGcmqXEtjjfxyDqOsHhEK
-        f/64omKdmA8u4iVl8kF02TE2G2lE3dVQjj9JeC7fBCCMNLlBrraaOX/Lo+fH+M+fekhlQPay8F1
-        gxuq1UQNBV65/av0iZb2GQLSG/g0b
-X-Received: by 2002:a62:8f87:0:b0:4ba:a2f0:5f88 with SMTP id n129-20020a628f87000000b004baa2f05f88mr3043830pfd.80.1641877894595;
-        Mon, 10 Jan 2022 21:11:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCutU1AIoI+xaBfL7oHa9AbLxukUT+2pXjQtjRTQlRwYiNcnlDJq+Mnp5TEOfrxx9OpuUF7g==
-X-Received: by 2002:a62:8f87:0:b0:4ba:a2f0:5f88 with SMTP id n129-20020a628f87000000b004baa2f05f88mr3043802pfd.80.1641877894198;
-        Mon, 10 Jan 2022 21:11:34 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.249])
-        by smtp.gmail.com with ESMTPSA id q19sm300034pfk.131.2022.01.10.21.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 21:11:33 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] clk: x86: Fix a wild pointer dereference in fch_clk_probe()
-Date:   Tue, 11 Jan 2022 13:10:21 +0800
-Message-Id: <20220111051022.98479-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S231602AbiAKFKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 00:10:48 -0500
+Received: from mail-dm6nam12on2068.outbound.protection.outlook.com ([40.107.243.68]:63298
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229436AbiAKFKr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 00:10:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dIm2+c8dIARPJVCK9nuCvmr87Heh3bzFOGqUSGeEooehs/4SwkAHrsYXj1+Yylc6B9w0CG+c7hX34Z9dOjHxt77cuvxI7vcCD/e3aFCYpPi5WQEncBS0rsZ9FJm++DJYzaLK35urAzvcXGDxPoTjYRUXm6QeDzU/5APe3BHPccR/jJIXJAmcN4xfPtVRw/WGdgxWCeJaQhVoznLuSjJjpU1tO156zi9dvzMaATGTiYMa80BTs45mfFxOvpePcfJoF8sLiIOS1fBV2KIWKONwRIb7Wm1iLhGuewg6XWesQuKgc43daKZ6UcVHMjHGA3tHwFKWQAhyqKN3YO4Tccj5MQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RuwA4KAk7rP+y7zSZeIwPPHUIGo8/nFzxYoQs/qbxy4=;
+ b=NYc5JtScCg9BH6PaO6oECYFzD7i2yIrhSFDJbCBz4ST60q0nExhqY3ntNc72WBd+mU10ZUcYgnMPSHLs8rvPwaUv68AvXexQWD/JnsVDVqwzOE4nue+9Kybn74oV7HR+VWdPxLGgzlgULhCTfmWYs83A3NRj2Uck3On2RiITfmfWH336X3A3JTqm9KnikZJX9Imk7JbcJGraRm9rLNtLWRgAmg74sqwkYszuVoAPzd1Yqo/omh3RTwqMOcBqqdMLOTPHSWyYDbhYMzhMQI3JwJYV8wy19udUSxnL9q+e5AXKPeJR81/JEnNKAI28Aq6I59cJdBH7Pt5CYD6FZTXTcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RuwA4KAk7rP+y7zSZeIwPPHUIGo8/nFzxYoQs/qbxy4=;
+ b=Yw+cL1d1k3cLcuyEjBfH7LfBJZX5m2ACGI2zGq8O12ZGeqZZRzjlOo4SWUzrLIGCJcBHTBP2Jy+82le6jeacBEwB/AwVSVOC87cZCSf5j4QRIQoF89R/3ZiyoPDvGjFoSOSQAnZJmjOxTewOB91cFDg+4gj+P3/KXr5p8HYe8GASx1LFllfXO4PrOgcng2KcBfgBxFqqLPLmiMKB89C1/EG6e+1Efp7gYbAzVhyz3BkHSMlaMAYt6KMUE7gKrrGo/vL7V1B08vsrik0UuUCVQWyKHV3fjjlpmsr3pdIk0CSjTW1IBAe0UYJC2JrfNUxHJqwb2AwvpneeHR9hNRr9aQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BYAPR12MB3382.namprd12.prod.outlook.com (2603:10b6:a03:a9::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
+ 2022 05:10:45 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 05:10:45 +0000
+Message-ID: <54a8aab9-c7f5-dedc-140f-8d91de1f5cf7@nvidia.com>
+Date:   Mon, 10 Jan 2022 21:10:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2 11/28] mm: Make compound_pincount always available
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20220110042406.499429-1-willy@infradead.org>
+ <20220110042406.499429-12-willy@infradead.org>
+ <279070af-4ac8-942f-5096-f7f61db9aeb6@nvidia.com>
+ <Yd0J3QgwgRadAZyp@casper.infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Yd0J3QgwgRadAZyp@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0086.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::31) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 90a0693f-ea7f-4c4e-8e56-08d9d4c0b8f2
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3382:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB33823F107EF1A099C48CE2C2A8519@BYAPR12MB3382.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YDfhdG2xe9Bv0R/l33Knyj5LE5kycFIu1JOU5mpeFE6bhQ03tiJO0uZLyYv/I1K+wVEtu13lFK4gxof6e7Yc2CH8PFOAT1v0JKvFY4ojuSjTbMgrk6OPIHvRqqkluraftn2sfmbVZS8xvFA7ovCVP+N5diiqWwccVuL+O/hd+TKMEoS5Yh8n9ncWZRJYzRooSaAtU7EL6pTtWS5wKRBHps0P+5hnZaQ1ypdtAZbQelqXTvgAxNLKyc3p6mtjOEy2EV3Fb9iTtOp8H5lYx+tpRR8AQjO4R6y/EOgx3Dwe9P/u341Af0HvHGuO1Gh/ttQvKbnom6ZBQy9yvfk6EZPY946qRVHSkhPxwPYj8KX1dG2hWO4ZgPYYnqeMHRYXzx5zwaIRHY650TnMceqywShc9AwWEzKxmi1tSnOvRMAh8KEUn0O2I2fLmHmcJu5atsBXFZqrknjmANJbWTVkmlnLEsi4GOzdaJgHTn7Q/WawobEfTOF+zAMnyL1SHSaZ+xBdl6qGn2BrJznn9i6Fna/uLZvKdVTGmGijFxlp3DQmgRLgt/ySaHoU5dnTrGAMLfKsqsZtVc76/3DiFX04QmiowfnIAETnBu66KfXAeEZTBFBIsH7gCaZYdXNgk/wyAdt7Man0liaWXr6IE3s2Mh54O//G3VPutjKvl/W1YfqiklGgkU3ai8z3os2W9qe1EdWcUF3m/LjGRSSDea88YyiEFt6l/6udpB1ClJ5DV4yQFzjxx7SvsLATl+9/wjpzvOoe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(31696002)(36756003)(31686004)(2906002)(83380400001)(186003)(5660300002)(2616005)(66946007)(26005)(66476007)(38100700002)(8936002)(86362001)(508600001)(53546011)(316002)(66556008)(6512007)(6916009)(6506007)(4326008)(8676002)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aENjbnNraDZNNFY5aVlXNnAwOWpBa0ZVa3c4K0cvTUxFMTNwSERCVmUyTm5x?=
+ =?utf-8?B?SEd1WUdMVUtha2pmWEE0ZlBrRGxBZTBLZ2JkMTBIK24xTUVTWEp2MzdrcTBi?=
+ =?utf-8?B?WEVxRFM1OUI0NnNlRHl3SkZ2bjY0SFhydkI2akFTUGhsMlFFaVdCbVVjS00w?=
+ =?utf-8?B?YTdXRUFzN2ZNeEthNkM4MHJ0ejhjcVRseFFQWUlxNjVrdjNMR0xCSUlzVkdl?=
+ =?utf-8?B?WmRaL3J5OUpWNUNocU9JOEdhU3p2RUYrdHNxM0R6cjVoVERKTzNrQWFkVnNG?=
+ =?utf-8?B?eEhNaGZvT09jUy9POVFReVlUWnNxWUFUU1FYamlIdy9OWk1IbjdPVTNrbHZ3?=
+ =?utf-8?B?RVd3L2t4bGxFcFV3R0NNOURzVFBuQTZvclVpTFRUQTBhUUVSdTRPTDQ5ZGdt?=
+ =?utf-8?B?ZUViZWlKUVdmQUhlNCtoZFNuaEdQN1lGTXdNUjVYWlR0a1VTSWwyWkdkRWh5?=
+ =?utf-8?B?K24zcG40N0JmRVBSMmovazhLWWYxcVUwTExMdXVKbTgvVmtqcnZyOUM1NHFq?=
+ =?utf-8?B?UGNEUTNkMjI0R2tkYk1iYktWd09VSmxJcysrUHpFUFM5cEZqaGdpQ1VaYlhF?=
+ =?utf-8?B?blhuQ3NwUVF5WVJhR1FJR2pBa0RsY0hUcmdkZWpkNW5oeUY0b291cVBoekJO?=
+ =?utf-8?B?YjNlYVBraC9YTWFLNXBwU2piSzVaQjZiTjAzWG5hVFhIVjVYd0RHZS9ITmQx?=
+ =?utf-8?B?Ri8zVFVEU1JiUlZ3TXpBK1V5bzJLMEZDSVVMbmR5TVZZV2VpYk12Tm5wMEtR?=
+ =?utf-8?B?WVBHaEhpSmlMbHRqK1h5NWEvaHEvcU92RXlobnlIWDhxR21KTm9YOWhqTVdU?=
+ =?utf-8?B?YzVwbGlrUkcrS1lBMHZFZVZRRS82Q0pvMHFlNW54MGVDaG9uQk1ZRUNHUUFw?=
+ =?utf-8?B?bjFFTTZqMVh2UHgvM2lqMWdta3BzQ2ZyaWpKNzJ0UzB2ekFKVEIzcVJzM0dT?=
+ =?utf-8?B?SkhuZG9OMFhtYWtWSCtqbjVqMzg3c0M0bDNUV2h4QjFFZTZKNythVUZ0VkJ0?=
+ =?utf-8?B?NjQ1TzZvMzdSMU1PeTc2bHVwSUxGS0gwV1BieDdNZTdDcEU5Q3JDS2lIaGJl?=
+ =?utf-8?B?UVpQSmlGZ2NnaW5xVExIL2tpU2VRcHB0Nzgrdm45T2RXcHkzY3FWOEtEQWVx?=
+ =?utf-8?B?OWtSSGFaa2tPRHZodm9NVDRVVkhLMndmKzcvNUtqNW1YYjZIU2d1UzcvbHV0?=
+ =?utf-8?B?R20rQ0lieHkrcUJGdVptZUkxdnVja1ZmT3RYSHpDTDhCaC84WE1Jc21yeDlK?=
+ =?utf-8?B?NXNMcnZ4UWNRbldvV3hIdnFBQVJsQ3E1aE5sTWpySjZYc0ozbmxlRENNa21Q?=
+ =?utf-8?B?K0k5aThWcnhTQ3RacUFBaXBKQzVrWVFXSEZYVjczYU5OalpwVDVSV2FieVdU?=
+ =?utf-8?B?SEVMUTkxNzcrZTlKUkJUM0NOYlZnM3dyZ0pER0ZEcC9HNDNFQ0p4S2s2YTZY?=
+ =?utf-8?B?emdDaTM3c2tNL2lDekxqMTZScXVnSVpMb1BUY21iY2QxZ2tSQWxkM201S3FX?=
+ =?utf-8?B?K016eWQzUDc0YXZvNDVJOTBFYUM3a1ZHSll6dWFuL2kxM2lLMG1UNXlsalNY?=
+ =?utf-8?B?VEV3YnlrZ21kc0dydlZNYzN6SGs3blBnZXRhdkV2OFhWY1hKK1J0YTZveDZm?=
+ =?utf-8?B?aEZPY0w2VDZVSkJTb2JGR1RITVlYTTJyY1BpcnpVTEFWQzBlMWFHZGdHck5F?=
+ =?utf-8?B?bmYyRkpVQXZSV0xlVU9NQVVvR0xuaHkyVFFKMlloMFJxeTJJdFl1UWRWcUsx?=
+ =?utf-8?B?eGVWUWZLT1Vma2FOZUFLMGhab1RnMTFDVmdxTDQzdVd6UzVuME9sNHhKZkRL?=
+ =?utf-8?B?c1Btakowb2liUGVPNWJURVpNOU9YYjBkNHpHM3NFZ1EvSHpWbzhDWG1zWEVi?=
+ =?utf-8?B?eTR0MlJJZG0ybmhPcXBySXA4QlZScnQ5NHkwNGViWHBVdXZ1UzdQT1pmalBS?=
+ =?utf-8?B?R25yWVpYU1A4WlJsOWJ4cWNneVZMMWw5VXZzNFBTUU5EYllDNk5hWVdQZHJN?=
+ =?utf-8?B?RUpoWmxZRTFxSzJMTUJzWFhJbjdxeG1JVm9wYlFWTDhOUFdQSEdURU9Mbmt5?=
+ =?utf-8?B?RnJwT2VGbHd2RldLMHlmdXI5NjhNRW1QS1cvcVkzRDBXeVB5eDJlZC9seE9s?=
+ =?utf-8?B?cEFQdlQ1aE9Ob1kzcVNxZUlVb2RhQ2tXMzk5MTlvV0lKR0JDV08vQ1YyYUg1?=
+ =?utf-8?Q?yv8ZJ4NUZBpE13qsCyXO7X0=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90a0693f-ea7f-4c4e-8e56-08d9d4c0b8f2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 05:10:45.2598
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6A+RRpGVeonbQi7NnPA/+shIA/oiZtHwKDREWvFPCuuXJvJWlEmQuZJXJvvOR0WlA9H6cF45CWmrSgzRtXWODg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3382
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In fch_clk_probe(), the return value of clk_hw_register_mux() is
-assigned to hws[ST_CLK_MUX] and there is a dereference of it in
-fch_clk_probe(), which could lead to a wild pointer dereference on
-failure of clk_hw_register_mux().
+On 1/10/22 20:38, Matthew Wilcox wrote:
+> On Mon, Jan 10, 2022 at 08:06:54PM -0800, John Hubbard wrote:
+>>> +#ifdef CONFIG_64BIT
+>>>    	return page[1].compound_nr;
+>>> +#else
+>>> +	return 1UL << compound_order(page);
+>>> +#endif
+>>
+>> Now that you are highlighting this, I have this persistent feeling (not
+>> yet confirmed by any testing) that compound_nr is a micro-optimization
+>> that is actually invisible at runtime--but is now slicing up our code
+>> with ifdefs, and using space in a fairly valuable location.
+>>
+>> Not for this patch or series, but maybe a separate patch or series
+>> should just remove the compound_nr field entirely, yes? It is
+>> surprising to carry around both compound_order and (1 <<
+>> compound_order), right next to each other. It would be different if this
+>> were an expensive calculation, but it's just a shift.
+>>
+>> Maybe testing would prove that that's a bad idea, and maybe someone has
+>> already looked into it, but I wanted to point it out.
+> 
+> It' probably worth looking at the patch which added it ... 1378a5ee451a
+> in August 2020.  I didn't provide any performance numbers, but code size
+> definitely went down.
 
-Fix this bug by adding a check of hws[ST_CLK_MUX].
+I looked at that, and the lore link for the conversation, but failed to learn
+anything additional. Of course if you recall that there was in fact a measurable
+performance improvement, then as of now, it's recorded somewhere. :)
 
-This bug was found by a static analyzer.
+It's far from clear whether we'll need or want this space in page[1] in the
+future anyway, just wanted to poke at it though.
 
-Builds with CONFIG_X86_AMD_PLATFORM_DEVICE=y show no new warnings, and
-our static analyzer no longer warns about this code.
+> 
+>>> @@ -52,7 +51,7 @@ static int page_pincount_sub(struct page *page, int refs)
+>>>    {
+>>>    	VM_BUG_ON_PAGE(page != compound_head(page), page);
+>>> -	if (hpage_pincount_available(page))
+>>> +	if (PageHead(page))
+>>
+>> OK, so we just verified (via VM_BUG_ON_PAGE(), which is not always active)
+>> that this is not a tail page. And so PageHead() effectively means PageCompound().
+>>
+>> I wonder if it would be better to just use PageCompound() here and in similar
+>> cases. Because that's what is logically being checked, after all. It seems
+>> slightly more accurate.
+> 
+> Well PageCompound() is defined as PageHead() || PageTail().  I don't
+> think the intent was for people to always ask "Is this a compound page",
+> more "This is a good shorthand to replace PageHead() || PageTail()".
+> It's kind of moot anyway because this gets replaced with
+> folio_test_large() further down the patch series.
+> 
 
-Fixes: 19fe87fd854a ("clk: x86: Support RV architecture")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths
-and confirms that the inconsistent operations are not recovered in 
-the current function or the callers, so they constitute bugs.
+OK.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Changes in v3:
-  -  Rebase this based on clk-next.
-
-Changes in v2:
-  -  Add error check to every register function calls.
-  -  Add error handling logic to every error path.
-  -  Turn clk_hw_register_mux to devm_clk_hw_register_mux.
-  -  Add error check of clk_set_parent().
-
- drivers/clk/x86/clk-fch.c | 69 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 61 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/clk/x86/clk-fch.c b/drivers/clk/x86/clk-fch.c
-index fdc060e75839..bb0ed6b2a126 100644
---- a/drivers/clk/x86/clk-fch.c
-+++ b/drivers/clk/x86/clk-fch.c
-@@ -46,6 +46,7 @@ static int fch_clk_probe(struct platform_device *pdev)
- {
- 	struct fch_clk_data *fch_data;
- 	struct pci_dev *rdev;
-+	int ret;
- 
- 	fch_data = dev_get_platdata(&pdev->dev);
- 	if (!fch_data || !fch_data->base)
-@@ -60,36 +61,88 @@ static int fch_clk_probe(struct platform_device *pdev)
- 	if (pci_match_id(fch_pci_ids, rdev)) {
- 		hws[ST_CLK_48M] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
- 			NULL, 0, 48000000);
-+		if (IS_ERR(hws[ST_CLK_48M])) {
-+			ret = PTR_ERR(hws[ST_CLK_48M]);
-+			goto err_st_clk_48m;
-+		}
-+
- 		hws[ST_CLK_25M] = clk_hw_register_fixed_rate(NULL, "clk25MHz",
- 			NULL, 0, 25000000);
-+		if (IS_ERR(hws[ST_CLK_25M])) {
-+			ret = PTR_ERR(hws[ST_CLK_25M]);
-+			goto err_st_clk_25m;
-+		}
- 
--		hws[ST_CLK_MUX] = clk_hw_register_mux(NULL, "oscout1_mux",
-+		hws[ST_CLK_MUX] = devm_clk_hw_register_mux(NULL, "oscout1_mux",
- 			clk_oscout1_parents, ARRAY_SIZE(clk_oscout1_parents),
- 			0, fch_data->base + CLKDRVSTR2, OSCOUT1CLK25MHZ, 3, 0,
- 			NULL);
-+		if (IS_ERR(hws[ST_CLK_MUX])) {
-+			ret = PTR_ERR(hws[ST_CLK_MUX]);
-+			goto err_st_clk_mux;
-+		}
- 
--		clk_set_parent(hws[ST_CLK_MUX]->clk, hws[ST_CLK_48M]->clk);
-+		ret = clk_set_parent(hws[ST_CLK_MUX]->clk, hws[ST_CLK_48M]->clk);
-+		if (ret)
-+			goto err_clk_set_parent;
- 
- 		hws[ST_CLK_GATE] = clk_hw_register_gate(NULL, "oscout1",
- 			"oscout1_mux", 0, fch_data->base + MISCCLKCNTL1,
- 			OSCCLKENB, CLK_GATE_SET_TO_DISABLE, NULL);
--
--		devm_clk_hw_register_clkdev(&pdev->dev, hws[ST_CLK_GATE],
--					    fch_data->name, NULL);
-+		if (IS_ERR(hws[ST_CLK_GATE])) {
-+			ret = PTR_ERR(hws[ST_CLK_GATE]);
-+			goto err_st_clk_gate;
-+		}
-+
-+		ret = devm_clk_hw_register_clkdev(&pdev->dev, hws[ST_CLK_GATE],
-+			fch_data->name, NULL);
-+		if (ret)
-+			goto err_register_st_clk_gate;
- 	} else {
- 		hws[CLK_48M_FIXED] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
- 			NULL, 0, 48000000);
-+		if (IS_ERR(hws[CLK_48M_FIXED])) {
-+			ret = PTR_ERR(hws[CLK_48M_FIXED]);
-+			goto err_clk_48m_fixed;
-+		}
- 
- 		hws[CLK_GATE_FIXED] = clk_hw_register_gate(NULL, "oscout1",
- 			"clk48MHz", 0, fch_data->base + MISCCLKCNTL1,
- 			OSCCLKENB, 0, NULL);
--
--		devm_clk_hw_register_clkdev(&pdev->dev, hws[CLK_GATE_FIXED],
--					    fch_data->name, NULL);
-+		if (IS_ERR(hws[CLK_GATE_FIXED])) {
-+			ret = PTR_ERR(hws[CLK_GATE_FIXED]);
-+			goto err_clk_gate_fixed;
-+		}
-+
-+		ret = devm_clk_hw_register_clkdev(&pdev->dev, hws[CLK_GATE_FIXED],
-+			fch_data->name, NULL);
-+		if (ret)
-+			goto err_register_gate_fixed;
- 	}
- 
- 	pci_dev_put(rdev);
- 	return 0;
-+
-+err_register_st_clk_gate:
-+	clk_hw_unregister_gate(hws[ST_CLK_GATE]);
-+err_st_clk_gate:
-+err_clk_set_parent:
-+	clk_hw_unregister_mux(hws[ST_CLK_MUX]);
-+err_st_clk_mux:
-+	clk_hw_unregister_fixed_rate(hws[ST_CLK_25M]);
-+err_st_clk_25m:
-+	clk_hw_unregister_fixed_rate(hws[ST_CLK_48M]);
-+err_st_clk_48m:
-+	pci_dev_put(rdev);
-+	return ret;
-+
-+err_register_gate_fixed:
-+	clk_hw_unregister_gate(hws[CLK_GATE_FIXED]);
-+err_clk_gate_fixed:
-+	clk_hw_unregister_fixed_rate(hws[CLK_48M_FIXED]);
-+err_clk_48m_fixed:
-+	pci_dev_put(rdev);
-+	return ret;
- }
- 
- static int fch_clk_remove(struct platform_device *pdev)
+thanks,
 -- 
-2.25.1
-
+John Hubbard
+NVIDIA

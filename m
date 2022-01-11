@@ -2,466 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B251D48B448
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE26248B433
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344736AbiAKRo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:44:59 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53556
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344552AbiAKRoY (ORCPT
+        id S1344540AbiAKRnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:43:52 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30912 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1344029AbiAKRnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:44:24 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0838B402FB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641923063;
-        bh=C5Z/5mmJVa86bbWXH7aWWh13a2BPlZ660A3xwFOIBp8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=XpO7DWHj4ev07CBvlViDhYwx/BVofZMBSLzncg6ifpu3QPx7rBT814ZV9l9+dh5Fg
-         XnQcgucEsfKskQmI/dkBLVKzmrscsjt9q29fEfNDLMnIHnSXE/zlZ6SD1UFehdi/Gj
-         qE4j5hZkAJTV96jpRY6XLfTvjx7OcHvbwdBnP+y7G7A/cqiHRZo2zyqe7OdCqcYcFu
-         kQ25y7BeiUqlVFCivHWPcc+RR11hnrjR/3yFcWy1UNlfs5lknGXtFlcaljNkXYgTk0
-         jyePJ9G77yKEJUSGA5n9//QvrBu9wZIvR0Ij0rSmULtKrMM4jQLRHb/ew8GEJ3G1MD
-         Lm/PjYxOeuXtg==
-Received: by mail-ed1-f70.google.com with SMTP id b8-20020a056402350800b003f8f42a883dso13973412edd.16
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:44:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=C5Z/5mmJVa86bbWXH7aWWh13a2BPlZ660A3xwFOIBp8=;
-        b=KFAdjETW1JDrL5cUYYGkFiHJjuBVnusNC0npBPyf0AJCpUXqAxGWIRXVEoYI4vKhHV
-         rGLSKgJfxB2hI+nZcTxrWbymxIbD4OE4lvrrVyICXoDt6MO+SNWpiW1YWulwtpM9d0jG
-         vJ+60fBsN0Uco3be/gIkx9EQtS89Ie0mUnQLv1CPR56pQmJ5gEO4v2O3gje8TEoHt0Dq
-         wOi+ftfPaVaP6aL1B7pEeaLY9Bg6I5JlZ0ABE8wt6A0eK+P3LvQalFna07HRQSFF9A/Q
-         6doUWpBmputCUW+Cw1yznrjXe/7QgXzdsXNnRNWtjxvqngaRxW4d5OnQrZAijwzmVnDw
-         eLEg==
-X-Gm-Message-State: AOAM53247xgJKOoEiDgM1s+aoyduwGl3o+OoHbUEKBenFw/ec4tQPXX2
-        FC1SQGayqzB8QGSyUfuFdiiCpPUWOBE1AP3ezLwQucEe89SRWqk/37/ymO6f+87b0eY3ednLi8y
-        5J8u8vQkyr4msgc5k5shqVF4rAzg+x50UNGG+JmbRaA==
-X-Received: by 2002:a50:c94b:: with SMTP id p11mr5652987edh.173.1641923062612;
-        Tue, 11 Jan 2022 09:44:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzT30conxvROmZ9oTCV0VED3rO0vjmmaSGHYvu65UkjARLbgyyqQLrWcuvYrKjDy6pm8a2ezw==
-X-Received: by 2002:a50:c94b:: with SMTP id p11mr5652966edh.173.1641923062398;
-        Tue, 11 Jan 2022 09:44:22 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id g9sm3758657ejo.222.2022.01.11.09.44.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:44:21 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 4/4] dt-bindings: mfd: maxim,max14577: convert to dtschema
-Date:   Tue, 11 Jan 2022 18:43:37 +0100
-Message-Id: <20220111174337.223320-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
-References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
+        Tue, 11 Jan 2022 12:43:51 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20BHRMHB013868;
+        Tue, 11 Jan 2022 09:43:50 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=xFbetSnZ+AefgGbTTtyYUT9+M5i9iJtEiABgOgQ+K+4=;
+ b=rsGhzvPKiZuuApAf+IK2gohWTL7hwkJIIABHdjOb3ZQFfBtycnYkFjvPxwMSs5GxbkUF
+ Mln8amEbelf+iFbQUMWHhJESo/48Yk8C8JBryIw93D5TEme10nQEa+ug6OBi9B8xgp4e
+ vblKl9g9qfi7x9SVDQCylEftLg0AdNRB+IA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3dh6cvug65-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 11 Jan 2022 09:43:50 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 11 Jan 2022 09:43:48 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SPuX5y78EiqSzX7xfrhTTNHp4q2CRv9RcxP1+00+s53gS5pgoEtDeEgxwoFARFikllubEc9+i6lZ+9ySGojU3ek2QgzkHfjre+NTzhDWpXo3mbZQ4zOXXfdv/jbCRs+MuGhHgu+V0PBRFEEqggVwFSvtORLW6EMc9aQrLfI2WxhN2U47ONBtBC2+I6hJ3Ov+vVf7bICPXiclap+eke0ZpubGO96xCX87D1ge8zPdiIlh0ypm5Mio+qUp7XwQwXIp9q1L3Z5Uq5EQiaGCiYUpNoTLyKbWS6OgFU0FrSNr23adM4L/3JAvRxOCFwZl4yqIeHlCBu+uQr0CP8NWqdOAlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xFbetSnZ+AefgGbTTtyYUT9+M5i9iJtEiABgOgQ+K+4=;
+ b=hgM74RLkV2xsB/eRzcPFpGf3CfSVovBLkCigA+YG9+0Vl/93oFEwI5ya5285FVrmVL/sx/VlcQp1s5+y7CE66/aQ9Iz2b7ZzvwE0x89kzcCGr8FJ3FtqaYfX7LXxS7IG1PKEnV5S+nZxpJlJ1mTKjlsNZrrdGmahaoaYXxmP/ahf3DHV3Cay1BnYbjD7uwVzJOznxHu1d/qEa8uh+uA/HdQcZzglwwIGtjyleIKNT5/YinLhm3RasvGwsEBId46Ai2U0owY/x5qRMrfd63jQri9bIUpZ4toREfk+8IH4qk9IsZzU7R+e0UQDbZAZqPy+4q9dtP5Ge2CYIjHqnxgxIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by SA1PR15MB5096.namprd15.prod.outlook.com (2603:10b6:806:1df::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
+ 2022 17:43:47 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::1d7e:c02b:ebe1:bf5e]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::1d7e:c02b:ebe1:bf5e%4]) with mapi id 15.20.4867.011; Tue, 11 Jan 2022
+ 17:43:47 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Song Liu <song@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 bpf-next 5/7] x86/alternative: introduce text_poke_jit
+Thread-Topic: [PATCH v3 bpf-next 5/7] x86/alternative: introduce text_poke_jit
+Thread-Index: AQHYAqTPOIWcijzdr0uhWm4W1NDGq6xdxCCAgABcKIA=
+Date:   Tue, 11 Jan 2022 17:43:47 +0000
+Message-ID: <48AD9DA0-5E09-4EBD-AFF0-DA63ADA5A247@fb.com>
+References: <20220106022533.2950016-1-song@kernel.org>
+ <20220106022533.2950016-6-song@kernel.org>
+ <Yd10heJVckednY07@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yd10heJVckednY07@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3693.40.0.1.81)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7a85994d-85dc-4d12-b1b5-08d9d529ebd0
+x-ms-traffictypediagnostic: SA1PR15MB5096:EE_
+x-microsoft-antispam-prvs: <SA1PR15MB5096168D819C780A71A2B7BDB3519@SA1PR15MB5096.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:2733;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L532mGyYMKzZjJ8Q3jYEE6AmIZGrsVxGzF7aiQFpaxOSCSjFcjHks+A6bUhBHX0PClrJGfQU1Hd0qQ1v5Yeu0CeCR9AsJyWYYKSrJYzyK6gyfZr40NO5VDoJO8CXtL+6poJKh0hD5v7o4FZmoeFL0NeO08+pwSeNXWA/PzX4LRuPdyJvnhHyaajiNNUtSiuPLM/v3N9d9M+jqHAn2X6AoHgylFYtlV3edi8SNkAS+r2svTx2f6cyf5+Fw1OV7WSYPVHiVsXGTMhh7Gw5o9/C748+c8eGU4YGUmPGjERw5kHHjWfnL7luDTwVSjSXHeYuutJKfVjowXRh7RnFYbB0PZ5sFIBHoW0f/l+WyoTOX6IC/E8oIn2dsG0R+n3TFmhWm/ta72gc/LQdgUdGDGJ4P5Ht6Q7G04x14ZpLznfPkFWSaT+sHoaJ9IW5sYm3xyLSFzWq0fyXgbaRmPIevVqHvocN1pcMyEWxrZUiZzpQCLHyGRqwsjQ4OuYlUr8hmiqrLCEZYmLtX7EcpbydmLW+UR1L30VAffBoJ+vENk5ZZJBcDmll7OEA8RdY93aNdWknYfy8ptNMIG97G0xScZ0YKGWly4O18EDhle8thJCnAx5QSb/HrOTf/2oSz2a7IRka5B3hGKc4uYj+XbZ0SDsuloWnNcA/eLTUg48ytIq86xx1hjXhoKfs0R1ziT+tbBVirAouttiemg82o5nX7/Ah0miZ99IGXhoSRy7T7jRGM1VO67VNR6BaqDBZolflaRXL
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(91956017)(66556008)(76116006)(36756003)(66946007)(186003)(66446008)(64756008)(38100700002)(66476007)(8676002)(6512007)(33656002)(8936002)(122000001)(6486002)(6506007)(54906003)(2906002)(83380400001)(316002)(53546011)(5660300002)(508600001)(86362001)(4326008)(6916009)(2616005)(71200400001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?R+YY9rN6ZbCoSejrb2sbKposzk2cuFl/C+Xr9Icgfi+ZOtaVleBHhIChnwTc?=
+ =?us-ascii?Q?9qkRaAFCUyLgVTTlr4u8JfI8L9Nu7UUdPW43eK/nJvgO9srJL46j5vAIoAi/?=
+ =?us-ascii?Q?sIelW0j2MySFS8ncOk4feU7pzshe2RejrEJDJUiMxlG6pmMEZ9eRjW/y/4gz?=
+ =?us-ascii?Q?uiJL9bNOWmDO7pzYGM6WmVT0kSK/p4JNjO3lQOeGcVMd8g+2SoFcgeqqtpYY?=
+ =?us-ascii?Q?awV/pbGaMatp5IZ8BBa8N00Ekb5b6n23pfvIQ9I6dRYW+WOIAQlqMcIx6Zh4?=
+ =?us-ascii?Q?fMoF83YlpnlBQfQ7xzXr4XKU2N7uSTxtEjYqbZnxQlrBWl1Ey0jA2NSIwcdm?=
+ =?us-ascii?Q?icrdqMVli0mNkp/8a1oAh5jqpx0hoqUxBtKadckwg0Oud2/Lx83Rv3eAZI2H?=
+ =?us-ascii?Q?1tEUI4CAtaipz5MG3XHDA4wwTr0g+IK0xVIYNUuSlrVPikiLhG3j5m66G/+L?=
+ =?us-ascii?Q?9SsxKX+/gYAifQ34IdFhV4Uw89W4uV3fKRa85bvp/yoYIdIE8rQ+5UU7DzGb?=
+ =?us-ascii?Q?oYfXUD6GH7SawpnVn1UxGoYErClyFqr0md/6SDfGE83Vqp87RT25m1cJhzS+?=
+ =?us-ascii?Q?JTzGkuy08ynCkvcMmf4x9rEAaWvKvXpiyCOhOMO3+kIC1V/hDeD/c4iIGF1M?=
+ =?us-ascii?Q?a5R+YjyRpDLDxKguO7sMNW5If5KFeO09+hSVhk1bM+BCwh3aFz0Unw2CVlwc?=
+ =?us-ascii?Q?JaH/YzIIG5+DoT/lrUyM+MqaCNsAikIlIimixaJVcH90aMqAWVyqgZNPWbak?=
+ =?us-ascii?Q?Y1qk0kER+5PrMPLJaDJvwKoyr0Zq73ao5jv7ojkNIQKJcW0ZzGk4tD5rbvp2?=
+ =?us-ascii?Q?1iLn2ndzyMxG2hdASChoTeLxTt8QvQ2pJqF77QVhz2O2/henoSjGUgwoFsBJ?=
+ =?us-ascii?Q?y+MxK6dWthSUa6OGyecbAesSHlxVYoKIAKIZHyRxtp+dJq0Qg0hq0EqTizQL?=
+ =?us-ascii?Q?7ls0ue708bx0D0qZAfgqor/SwQixLnpWMk6ksZPdAdvDxh7XYBKIbbYIMGpl?=
+ =?us-ascii?Q?I1jpYbJ70MDvxeZ1xbRfVCipfuTN8aAd7Pop9O/zASsU9OpFEYyJryCaMCt5?=
+ =?us-ascii?Q?51IELVyVQdZhNfNrW6LWA5k7WjoyQcrgmG20pcIzMZM//Npoyzr+Y+TAxBjz?=
+ =?us-ascii?Q?7yKXMzZFUqf4j9sPkjc9dtFRH0G28HhMzjzGsw1VaeiLKpfzddzjCLjA4yKv?=
+ =?us-ascii?Q?IcRhUOH7/e1CxXjsLA9aVoLGU3me2JmoMqjDNcwFTH4wb6yVuE76A2iFapsd?=
+ =?us-ascii?Q?7MWzIg8hO/OSNgFj8JX7zb3TGe3OS6KT2mV0c7Ayzj10eSfEhLh5w1DR1rBV?=
+ =?us-ascii?Q?IRQ26IubirKBB7mEAR82Jt4nLLncFkIxw+QEhaifBQ+YgynKL94NbwIofgW4?=
+ =?us-ascii?Q?ZQwxBOxKWlWy4yCO0EvBWTNhtV+ot2iVUJI4dZ5BM+t8sOvIVMEoiBuW/Jb6?=
+ =?us-ascii?Q?IsChuPuVV5ecsdEh6KNo5McQIoH8mwzGpSFX1TGalIYtZJrCAWUuxmv9ddf2?=
+ =?us-ascii?Q?U2PMRgs9XRSjBFgiPpstHj4Et8tOQfiFsoSf6we9ztp1gZwAvXrHnHAv/q35?=
+ =?us-ascii?Q?vWDIJRfxnhpsRE9N0jeSDRi0NQAN8RjOtHkmh0WZrmPF3VPMu7GQfZF6cjTv?=
+ =?us-ascii?Q?P+zAq6vk1p6qx5q9KFwPlWw9L0+1wHQO3LIS93+19zwwRV/DejwFmAdUIf5Z?=
+ =?us-ascii?Q?Xi+J+Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CC912B980F671C4487781726F62DE142@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a85994d-85dc-4d12-b1b5-08d9d529ebd0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 17:43:47.6021
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D0uBkqLhjgRwJbt6873x3ZBwru7OIW9i0iUSzI2XkR4QxajB90JXvkH+hLNa/U84KOx3zkAcZxWER9Lk9Lxtwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB5096
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: -h3TO3i9w8m53dirHpLREERAUuV8EoyL
+X-Proofpoint-ORIG-GUID: -h3TO3i9w8m53dirHpLREERAUuV8EoyL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxlogscore=865
+ spamscore=0 impostorscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ mlxscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201110097
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MFD part of Maxim MAX14577/MAX77836 MUIC to DT schema
-format.  The example DTS was copied from existing DTS
-(exynos3250-rinato.dts), so keep the license as GPL-2.0-only.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/mfd/max14577.txt      | 147 -------------
- .../bindings/mfd/maxim,max14577.yaml          | 195 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 196 insertions(+), 148 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/max14577.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max14577.yaml
 
-diff --git a/Documentation/devicetree/bindings/mfd/max14577.txt b/Documentation/devicetree/bindings/mfd/max14577.txt
-deleted file mode 100644
-index be11943a0560..000000000000
---- a/Documentation/devicetree/bindings/mfd/max14577.txt
-+++ /dev/null
-@@ -1,147 +0,0 @@
--Maxim MAX14577/77836 Multi-Function Device
--
--MAX14577 is a Multi-Function Device with Micro-USB Interface Circuit, Li+
--Battery Charger and SFOUT LDO output for powering USB devices. It is
--interfaced to host controller using I2C.
--
--MAX77836 additionally contains PMIC (with two LDO regulators) and Fuel Gauge.
--For the description of Fuel Gauge low SOC alert interrupt see:
--../power/supply/max17040_battery.txt
--
--
--Required properties:
--- compatible : Must be "maxim,max14577" or "maxim,max77836".
--- reg : I2C slave address for the max14577 chip (0x25 for max14577/max77836)
--- interrupts : IRQ line for the chip.
--
--
--Required nodes:
-- - charger :
--	Node for configuring the charger driver.
--	Required properties:
--		- compatible : "maxim,max14577-charger"
--			or "maxim,max77836-charger"
--		- maxim,fast-charge-uamp : Current in uA for Fast Charge;
--			Valid values:
--			- for max14577: 90000 - 950000;
--			- for max77836: 45000 - 475000;
--		- maxim,eoc-uamp : Current in uA for End-Of-Charge mode;
--			Valid values:
--			- for max14577: 50000 - 200000;
--			- for max77836: 5000 - 100000;
--		- maxim,ovp-uvolt : OverVoltage Protection Threshold in uV;
--			In an overvoltage condition, INT asserts and charging
--			stops. Valid values:
--			- 6000000, 6500000, 7000000, 7500000;
--		- maxim,constant-uvolt : Battery Constant Voltage in uV;
--			Valid values:
--			- 4000000 - 4280000 (step by 20000);
--			- 4350000;
--
--
--Optional nodes:
--- max14577-muic/max77836-muic :
--	Node used only by extcon consumers.
--	Required properties:
--		- compatible : "maxim,max14577-muic" or "maxim,max77836-muic"
--
--- regulators :
--	Required properties:
--		- compatible : "maxim,max14577-regulator"
--			or "maxim,max77836-regulator"
--
--	May contain a sub-node per regulator from the list below. Each
--	sub-node should contain the constraints and initialization information
--	for that regulator. See regulator.txt for a description of standard
--	properties for these sub-nodes.
--
--	List of valid regulator names:
--	- for max14577: CHARGER, SAFEOUT.
--	- for max77836: CHARGER, SAFEOUT, LDO1, LDO2.
--
--	The SAFEOUT is a fixed voltage regulator so there is no need to specify
--	voltages for it.
--
--
--Example:
--
--#include <dt-bindings/interrupt-controller/irq.h>
--
--max14577@25 {
--	compatible = "maxim,max14577";
--	reg = <0x25>;
--	interrupt-parent = <&gpx1>;
--	interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
--
--	muic: max14577-muic {
--		compatible = "maxim,max14577-muic";
--	};
--
--	regulators {
--		compatible = "maxim,max14577-regulator";
--
--		SAFEOUT {
--			regulator-name = "SAFEOUT";
--		};
--		CHARGER {
--			regulator-name = "CHARGER";
--			regulator-min-microamp = <90000>;
--			regulator-max-microamp = <950000>;
--			regulator-boot-on;
--		};
--	};
--
--	charger {
--		compatible = "maxim,max14577-charger";
--
--		maxim,constant-uvolt = <4350000>;
--		maxim,fast-charge-uamp = <450000>;
--		maxim,eoc-uamp = <50000>;
--		maxim,ovp-uvolt = <6500000>;
--	};
--};
--
--
--max77836@25 {
--	compatible = "maxim,max77836";
--	reg = <0x25>;
--	interrupt-parent = <&gpx1>;
--	interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
--
--	muic: max77836-muic {
--		compatible = "maxim,max77836-muic";
--	};
--
--	regulators {
--		compatible = "maxim,max77836-regulator";
--
--		SAFEOUT {
--			regulator-name = "SAFEOUT";
--		};
--		CHARGER {
--			regulator-name = "CHARGER";
--			regulator-min-microamp = <90000>;
--			regulator-max-microamp = <950000>;
--			regulator-boot-on;
--		};
--		LDO1 {
--			regulator-name = "LDO1";
--			regulator-min-microvolt = <2700000>;
--			regulator-max-microvolt = <2700000>;
--		};
--		LDO2 {
--			regulator-name = "LDO2";
--			regulator-min-microvolt = <800000>;
--			regulator-max-microvolt = <3950000>;
--		};
--	};
--
--	charger {
--		compatible = "maxim,max77836-charger";
--
--		maxim,constant-uvolt = <4350000>;
--		maxim,fast-charge-uamp = <225000>;
--		maxim,eoc-uamp = <7500>;
--		maxim,ovp-uvolt = <6500000>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max14577.yaml b/Documentation/devicetree/bindings/mfd/maxim,max14577.yaml
-new file mode 100644
-index 000000000000..55ab60750798
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max14577.yaml
-@@ -0,0 +1,195 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/maxim,max14577.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX14577/MAX77836 MicroUSB and Companion Power Management IC
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for Maxim MAX14577/MAX77836 MicroUSB
-+  Integrated Circuit (MUIC).
-+
-+  The Maxim MAX14577 is a MicroUSB and Companion Power Management IC which
-+  includes voltage safeout regulators, charger and MicroUSB management IC.
-+
-+  The Maxim MAX77836 is a MicroUSB and Companion Power Management IC which
-+  includes voltage safeout and LDO regulators, charger, fuel-gauge and MicroUSB
-+  management IC.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - maxim,max14577
-+      - maxim,max77836
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  charger:
-+    $ref: /schemas/power/supply/maxim,max14577.yaml
-+
-+  extcon:
-+    type: object
-+    properties:
-+      compatible:
-+        enum:
-+          - maxim,max14577-muic
-+          - maxim,max77836-muic
-+
-+    required:
-+      - compatible
-+
-+  regulators:
-+    $ref: /schemas/regulator/maxim,max14577.yaml
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - reg
-+  - charger
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: maxim,max14577
-+    then:
-+      properties:
-+        charger:
-+          properties:
-+            compatible:
-+              const: maxim,max14577-charger
-+        extcon:
-+          properties:
-+            compatible:
-+              const: maxim,max14577-muic
-+        regulator:
-+          properties:
-+            compatible:
-+              const: maxim,max14577-regulator
-+    else:
-+      properties:
-+        charger:
-+          properties:
-+            compatible:
-+              const: maxim,max77836-charger
-+        extcon:
-+          properties:
-+            compatible:
-+              const: maxim,max77836-muic
-+        regulator:
-+          properties:
-+            compatible:
-+              const: maxim,max77836-regulator
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@25 {
-+            compatible = "maxim,max14577";
-+            reg = <0x25>;
-+            interrupt-parent = <&gpx1>;
-+            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-+
-+            extcon {
-+                compatible = "maxim,max14577-muic";
-+            };
-+
-+            regulators {
-+                compatible = "maxim,max14577-regulator";
-+
-+                SAFEOUT {
-+                    regulator-name = "SAFEOUT";
-+                };
-+
-+                CHARGER {
-+                    regulator-name = "CHARGER";
-+                    regulator-min-microamp = <90000>;
-+                    regulator-max-microamp = <950000>;
-+                    regulator-boot-on;
-+                };
-+            };
-+
-+            charger {
-+                compatible = "maxim,max14577-charger";
-+
-+                maxim,constant-uvolt = <4350000>;
-+                maxim,fast-charge-uamp = <450000>;
-+                maxim,eoc-uamp = <50000>;
-+                maxim,ovp-uvolt = <6500000>;
-+            };
-+        };
-+    };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@25 {
-+            compatible = "maxim,max77836";
-+            interrupt-parent = <&gpx1>;
-+            interrupts = <5 IRQ_TYPE_NONE>;
-+            reg = <0x25>;
-+            wakeup-source;
-+
-+            extcon {
-+                compatible = "maxim,max77836-muic";
-+            };
-+
-+            regulators {
-+                compatible = "maxim,max77836-regulator";
-+
-+                SAFEOUT {
-+                  regulator-name = "SAFEOUT";
-+                };
-+
-+                CHARGER {
-+                  regulator-name = "CHARGER";
-+                  regulator-min-microamp = <45000>;
-+                  regulator-max-microamp = <475000>;
-+                  regulator-boot-on;
-+                };
-+
-+                LDO1 {
-+                  regulator-name = "MOT_2.7V";
-+                  regulator-min-microvolt = <1100000>;
-+                  regulator-max-microvolt = <2700000>;
-+                };
-+
-+                LDO2 {
-+                  regulator-name = "UNUSED_LDO2";
-+                  regulator-min-microvolt = <800000>;
-+                  regulator-max-microvolt = <3950000>;
-+                };
-+            };
-+
-+            charger {
-+                compatible = "maxim,max77836-charger";
-+
-+                maxim,constant-uvolt = <4350000>;
-+                maxim,fast-charge-uamp = <225000>;
-+                maxim,eoc-uamp = <7500>;
-+                maxim,ovp-uvolt = <6500000>;
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 13e21c229c5d..af392bd04874 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11692,11 +11692,11 @@ M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
- M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
-+F:	Documentation/devicetree/bindings/*/maxim,max14577.yaml
- F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
- F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
- F:	Documentation/devicetree/bindings/*/maxim,max77843.yaml
- F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
--F:	Documentation/devicetree/bindings/mfd/max14577.txt
- F:	drivers/*/*max77843.c
- F:	drivers/*/max14577*.c
- F:	drivers/*/max77686*.c
--- 
-2.32.0
+> On Jan 11, 2022, at 4:13 AM, Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> On Wed, Jan 05, 2022 at 06:25:31PM -0800, Song Liu wrote:
+> 
+>> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+>> index 23fb4d51a5da..02c35725cc62 100644
+>> --- a/arch/x86/kernel/alternative.c
+>> +++ b/arch/x86/kernel/alternative.c
+>> @@ -1102,6 +1102,34 @@ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
+>> 	return __text_poke(addr, opcode, len);
+>> }
+>> 
+>> +/**
+>> + * text_poke_jit - Update instructions on a live kernel by jit engine
+>> + * @addr: address to modify
+>> + * @opcode: source of the copy
+>> + * @len: length to copy, could be more than 2x PAGE_SIZE
+>> + *
+>> + * Only module memory taking jit text (e.g. for bpf) should be patched.
+>> + */
+> 
+> Maybe:
+> 
+> 	text_poke_copy() - Copy instructions into (an unused part of) RX memory
+> 	@args...
+> 
+> 	Not safe against concurrent execution; useful for JITs to dump
+> 	new code blocks into unused regions of RX memory. Can be used in
+> 	conjunction with synchronize_rcu_tasks() to wait for existing
+> 	execution to quiesce after having made sure no existing
+> 	functions pointers are life.
+> 
+> or something along those lines?
+
+This sounds good! Thanks!
+
+Song
 

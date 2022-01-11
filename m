@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B60FF48AFA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8590C48AFA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242164AbiAKOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S242201AbiAKOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240845AbiAKOgA (ORCPT
+        with ESMTP id S240845AbiAKOgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:36:00 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD17C06173F;
-        Tue, 11 Jan 2022 06:35:59 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id p12so18466970qvj.6;
-        Tue, 11 Jan 2022 06:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R6SbhLZXTE9y0s9o09Kjn99I+DjMQbJ+T5cmQ6a+52M=;
-        b=ZFff6+j1QVHHkEWKfORdsBwimZ67kiNyMYmTklHM0qo1IQV/zE8C1/NOQ6v78L8wLw
-         LMXGIkZKiScMSFTRLG+2UFAMCMO981HrUpJXEAnJBLy8lBMBzyM2ZWtbrCNzKFAh5FLx
-         UWr+MgHgviWf1o3NGtBYQvlCsXZtQYFxo7ePqkpnGLZZZTFh1QdzZjYZ5k2xG7sCOWLF
-         braFDCyPHKn16T3YqvCgnDl2UzhC71bykNxXRhdbHBGQC57ZBM5CujwgNVCqpmiW5m9k
-         tQO/5jt/k8McutDse48zKYJCSgn89e7EXJdnJOTbONUQvcQI8Y6kZGMxTqAYs9pnSD29
-         4VjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R6SbhLZXTE9y0s9o09Kjn99I+DjMQbJ+T5cmQ6a+52M=;
-        b=t8IMoY/saq4f1aXfmUXNj6eHATVvne5J8Lmm4uQwd/xACk1FT4dThA0u9R34rcEBDd
-         +AoN3VSps8ae8IRmV+N5nk7HUmeCp4VJWcQ0OTUGxyLhmX/bPBPvCTYe6HIwOQTC2wRu
-         aUx7LAD+E62LllOhznJ1sVuXX1EDZ6mxHsBCGxmwS3Jq/SaOio4LP4josWaLAVwBkrRf
-         Coj5QsFRj+v5+ZbPwPi1Rz/GeXzAxkBdYFh7S9dQp88LfpImKjHUAGXstu2/OGQTEPUf
-         FoHnz/QGWpJ1fwcle1VHsoydryLo1yQ4u3HXXz1QGKE24DA4AWv+zVmL5+1gifAs+9WZ
-         KWmA==
-X-Gm-Message-State: AOAM5317zkeOPSsBJSpzlHpNAFtIvdLIraUHzQ5HBaphKVKwGLvoC6q7
-        dOxWIG905ODfvlD/pPPjxOk=
-X-Google-Smtp-Source: ABdhPJzqPij37kVbCv9qrEOQ7BSX37ljJUP+rYaQs/1313I0RydKkHuo+xEBeLpaBMKJVjudhRw8Qw==
-X-Received: by 2002:a05:6214:d0e:: with SMTP id 14mr3932730qvh.20.1641911758476;
-        Tue, 11 Jan 2022 06:35:58 -0800 (PST)
-Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
-        by smtp.gmail.com with ESMTPSA id r23sm6444786qkk.24.2022.01.11.06.35.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 06:35:57 -0800 (PST)
-Date:   Tue, 11 Jan 2022 09:35:55 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v12 06/16] iio: afe: rescale: expose scale processing
- function
-Message-ID: <Yd2Vy459hVq20xjV@shaak>
-References: <20220108205319.2046348-1-liambeguin@gmail.com>
- <20220108205319.2046348-7-liambeguin@gmail.com>
- <CAHp75VdVBQPG0Qbo9H5Sro0-Uhr683WhWor9P2MXZ5a18HfRgA@mail.gmail.com>
+        Tue, 11 Jan 2022 09:36:37 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD09C06173F;
+        Tue, 11 Jan 2022 06:36:36 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 3D8661F44642
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641911794;
+        bh=WoCSfvWZ0RM1u1nDrNK6amswglzkJ65ayw9iZSom+UI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J4zrWziFsqvl8KXsnoBV6LHs6IhDf2sdQkFD5qfCiGZcEvjktFI1em79VvJ3mbZk2
+         D9NXIMXeaSmTbjNVBYRrxWZf17/77NQlKyWIxMb4ahMoFscUn2/UPEPl62h+zCDfOx
+         tDG+ph9eROPaNmRTQSWpyMN8o9Z3S7atpH9HbJwrt4dty740OdV2vfkxicTKnf0QLw
+         u8ZV1xdREf7okKEA5bRtC2zW5QJPEygX1uNwyPYG5Nf+G5Bj7HPihBRnu5S4v4cSEa
+         gv/H/c4DsTKxLOowC4Lc4LN5QmLj521/lA6/PLSgxROeZAKgS6RTxUFY1OUUESqJ0H
+         2H4QCpK1MMMzQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH 1/2] selftests/lkdtm: Remove dead config option
+Date:   Tue, 11 Jan 2022 19:36:13 +0500
+Message-Id: <20220111143614.629452-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdVBQPG0Qbo9H5Sro0-Uhr683WhWor9P2MXZ5a18HfRgA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 09, 2022 at 03:07:58PM +0200, Andy Shevchenko wrote:
-> On Sat, Jan 8, 2022 at 10:53 PM Liam Beguin <liambeguin@gmail.com> wrote:
-> >
-> > In preparation for the addition of kunit tests, expose the logic
-> > responsible for combining channel scales.
-> 
-> ...
-> 
-> > +/*
-> > + * Copyright (C) 2021 Liam Beguin <liambeguin@gmail.com>
-> > + */
-> 
-> Despite the Rb tag by the author of the code the above is wrong.
-> Please do not steal others work :-) (The smiley due to my believe that
-> you have done this undeliberately)
+CONFIG_HARDENED_USERCOPY_FALLBACK config option has been removed in
+commit 53944f171a89 ("mm: remove HARDENED_USERCOPY_FALLBACK"). Remove it
+from the lkdtm selftest config.
 
-Sorry about that was not my intention.
-I'll replace with Peter's original copyright.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/lkdtm/config | 1 -
+ 1 file changed, 1 deletion(-)
 
-Cheers,
-Liam
+diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+index a26a3fa9e925..a7a58f885f52 100644
+--- a/tools/testing/selftests/lkdtm/config
++++ b/tools/testing/selftests/lkdtm/config
+@@ -3,7 +3,6 @@ CONFIG_DEBUG_LIST=y
+ CONFIG_SLAB_FREELIST_HARDENED=y
+ CONFIG_FORTIFY_SOURCE=y
+ CONFIG_HARDENED_USERCOPY=y
+-# CONFIG_HARDENED_USERCOPY_FALLBACK is not set
+ CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
+ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+ CONFIG_UBSAN_BOUNDS=y
+-- 
+2.30.2
 
->  * IIO rescale driver
->  *
->  * Copyright (C) 2018 Axentia Technologies AB
->  *
->  * Author: Peter Rosin <peda@axentia.se>
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko

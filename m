@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9A548AE8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA2B48AE98
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbiAKNie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240616AbiAKNic (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:38:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84120C06173F;
-        Tue, 11 Jan 2022 05:38:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=H4sc0o/V8WhWPvaY+DPT4s85xLZBSsAiCEXQ91ENMtY=; b=H7Mgl0WQOtRKPuoFc0OqFv8q94
-        SK+7VQJQOsngr8poXByWN+kLc4rERvp44eT/PfQ6iDdC4Y/qVVGbfnKwBM6sE7Hw3kFDPDDwa+RUH
-        /VIbgUTXQ1eMKRa8jS0DYV9TPJKwdI1YkZmFUV17QrJM9fxZfT8xg/SgFNkzdACBMEJpOuGuQJ/yX
-        +QiB3qlMMIrV/1r/MtX4+/2SbBZrboSk2uvcApvMbpQTzfHCY6KPzhxi4orMpTel/KqmaEcuXQlz6
-        Hjxt6vftH9TGrVozhuZA8b0p1gPiEoJNQn7XzCQerRvkaaO+5QgVwtOx4gVW1MfMS9FMfMGiGqiR3
-        /h8zQTiA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7HM4-003I0S-Dh; Tue, 11 Jan 2022 13:38:28 +0000
-Date:   Tue, 11 Jan 2022 13:38:28 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     cruise k <cruise4k@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        sunhao.th@gmail.com, syzkaller <syzkaller@googlegroups.com>
-Subject: Re: INFO: task hung in path_openat
-Message-ID: <Yd2IVM1q2Mmck3fJ@casper.infradead.org>
-References: <CAKcFiNCg-hp7g-yBZFBB4D8yJ7uXyLvsZ_1P8804YgqLhWUt8w@mail.gmail.com>
- <Ydz71Ux9fCVB2bGB@casper.infradead.org>
- <CANp29Y5tjwYLk3WdfjmsQy3qXbk6V8vW1vERRSTHsAhpzzMGpg@mail.gmail.com>
+        id S240639AbiAKNkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:40:53 -0500
+Received: from comms.puri.sm ([159.203.221.185]:42594 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239487AbiAKNkx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 08:40:53 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 95C51E0114;
+        Tue, 11 Jan 2022 05:40:22 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IyqCxpHVHGDj; Tue, 11 Jan 2022 05:40:21 -0800 (PST)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        robh@kernel.org, sakari.ailus@linux.intel.com, geert@linux-m68k.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH v2 1/2] dt-binding: media: hynix,hi846: use $defs/port-base port description
+Date:   Tue, 11 Jan 2022 14:39:36 +0100
+Message-Id: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANp29Y5tjwYLk3WdfjmsQy3qXbk6V8vW1vERRSTHsAhpzzMGpg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:38:02AM +0100, Aleksandr Nogikh wrote:
-> Hi Matthew,
-> 
-> That report was not sent by syzbot, rather by someone else. syzbot tries to
-> be much more careful with the INFO: reports.
-> 
-> During the past couple of weeks there has been some outburst of similar
-> reports from various senders - this is the third different sender I see,
-> probably there are also much more.
+This is supposed to fix "make dt_binding_check":
 
-Right.  Perhaps syzcaller could *not* call sched_setscheduler() by
-default.  Require an --i-know-what-im-doing-and-wont-submit-bogus-reports
-flag to be specified by the user in order to call that syscall?
+    Documentation/devicetree/bindings/media/i2c/hynix,hi846.example.dt.yaml:
+camera@20: port:endpoint: Unevaluated properties are not allowed
+('link-frequencies', 'data-lanes' were unexpected)
+    From schema: Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+
+Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+
+
+revision history
+----------------
+v2: thank you, Laurent
+ * add unevaluatedProperties: false
+v1:
+https://lore.kernel.org/linux-media/20220110123804.377944-1-martin.kepplinger@puri.sm/
+
+
+ Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+index 85a8877c2f38..5d0fc18a2ea2 100644
+--- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+@@ -49,7 +49,8 @@ properties:
+     description: Definition of the regulator used for the VDDD power supply.
+ 
+   port:
+-    $ref: /schemas/graph.yaml#/properties/port
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
+ 
+     properties:
+       endpoint:
+-- 
+2.30.2
+

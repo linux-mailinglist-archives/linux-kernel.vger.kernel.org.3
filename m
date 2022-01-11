@@ -2,104 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75F948B610
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100B648B613
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346390AbiAKSrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S1350157AbiAKSrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350186AbiAKSrE (ORCPT
+        with ESMTP id S243152AbiAKSrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:47:04 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51857C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:47:04 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso6914816pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:47:04 -0800 (PST)
+        Tue, 11 Jan 2022 13:47:40 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F967C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:47:40 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso492389pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 10:47:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EBGPmf/4b8LtJ6IRDoixNp9baHgCn1IFhp/o+iuQRBU=;
-        b=paSVu7fL/cMC9s/i+J/cExD+hEW0YlScO5DY5d6qIamg46PLj01KzSDaYsEgIPj9bM
-         iMj1E59D9pH7RAY1xKwdJIuhdVy/SGwl0fHlIpTaKVZ0AURFU3Ygx20rb+ndC3LlxIAC
-         IfisQE9vpefbDBjUgG1oxovdaC/ByCzdd32zjZWfewOixPo5l5zDCIbSiRn5atwc2nJI
-         nGX3TqMrl289lw6D0XvWN1y8SYzk+KJtzHNpepbclb23sXmGmNH4ZEbvCTGNooan+I28
-         ymi7OZ8CDEjVF0LPYZqZ/6KnCKjtXl39XrFW5xWXFf0l8rE9rGShpZxEfpHv6WI4R9OI
-         PqzA==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yFm/72khGOzDGuFloPTXkx3ofKp3oHgAX0/2+vtRUTk=;
+        b=sn0bbmgBLIT8J2GNU/KU/vX4gMqD6KD09hpw9IfuryBzjMFsACaoyGKgcKxk7bNqCG
+         v9smN74s601Lc/u3FY91Ksm+/SmsZ6sToA+saQ9/vETOSDwF6oOKJi7+FpTDeQDWZ5RS
+         A8aFeaM5tjpqRaQpaLuD33zOJ9hNTwGcF2Tp/s1ss6dBGNSfUkIQpkjoFgNWXU38Lw6c
+         Vyq6Pe6GuwdzDM2F3LfabeZLQGBcbz35FWNdhDkkvi9PGCvtelJWPWOQ64HtHuc0cJgI
+         OrPiw/RSK3I/Mwoq64ZWGMKYdFmZ9jZ5A1AAJFsgHFUfIAhxrQbDQQfw6cBi03htD6Ww
+         ssRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EBGPmf/4b8LtJ6IRDoixNp9baHgCn1IFhp/o+iuQRBU=;
-        b=LaL008ZPFl0O8ZkS/mm7mOAIZ7cRzUkmNNGO2W5qyZn5dk7ze6jH8Pttus9LEj4F76
-         DsbbX7gsqYpXHxM07WYAgbDv7qbrw0a+4WxvxKoBT9Td0ea7L+RxP6UALm2ZNTURw5sv
-         jFJsseze3Qi8uqpIuSrV5L2ZGAFt7TAVR99d7GApwY4lo2Zq3E3xMeRI0irsPNaa9v6C
-         6nivZrikgkQXrCbQ0ZTKM5oRAOdskK2GtHzRW0P93b7LPkuDAfkWRD0ZZ+GX2+oUjzB6
-         g59djf2KuexVqS9KoYJpJ64fH1Tq7tv/S1ADX7W3vGJd7FfGyL91Um2gP9dchbe0GNOX
-         715A==
-X-Gm-Message-State: AOAM533zym20TGzo6BNaO6N8ob/FqGd7o+qF0pM7wl8g1/dzXvRs8I03
-        7LCjFhQdqN1nVnNyMzRYtEEFxg==
-X-Google-Smtp-Source: ABdhPJxnaXAlz26FFDOUJctx5xKwiFMkun3rvJ0Q1Mof/Urwu4EWmqRQOOvbSVmnouRM2uJkVIDd3A==
-X-Received: by 2002:a17:902:d503:b0:149:16ed:d15f with SMTP id b3-20020a170902d50300b0014916edd15fmr5893872plg.102.1641926823855;
-        Tue, 11 Jan 2022 10:47:03 -0800 (PST)
-Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id on9sm3256638pjb.35.2022.01.11.10.47.02
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=yFm/72khGOzDGuFloPTXkx3ofKp3oHgAX0/2+vtRUTk=;
+        b=i8Jp0Mm0hCFn3qP7l9fUQeT+QTBKOv/+rmdNP+OaaV8pYwWZ7EPA6ihs82LCISMHuw
+         HhWfP/k5Qz98oxlbkyg5h35lDeXF/Saez8O1GaJbF0mPpaDpRkg4SqEa0zdHKZ1l5VJe
+         9o0nxpoeWariXn/J9bXu/j7Ag8Y59+/KJZBLZHCrAiO0Wt2XYOL8c25LPoqBFFtDI3Mr
+         UgGXQ2dkTpnIba404EOZYH2bwB6rwb7a9YdD9FDGfm5X8Wb9bkCBIeu+inGAZWMyMzI5
+         v8zb2RQYYF8dmN0weqv9I/IKn0VwcgP+7bE7MAqHw2qpeKYPLFE9BaOoQNyyJGg8Y75w
+         dkUA==
+X-Gm-Message-State: AOAM531iMMlKnsGGXCaKBfKKMzIV3QDDcioMyx0aFmEAx2l+/rWnjdHY
+        2dlhh/136dm+sO1dWXe7yHJm6RbGP7LT526w
+X-Google-Smtp-Source: ABdhPJz7UuyllrZ02SpHg/7DvQ1A/J0L4kgnQ0XK5dFo0rLp5b7Q1yCW4dVjmvp/v/qtDn88L83//A==
+X-Received: by 2002:a05:6a00:2313:b0:4bb:8b68:3677 with SMTP id h19-20020a056a00231300b004bb8b683677mr6049563pfh.2.1641926859302;
+        Tue, 11 Jan 2022 10:47:39 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id u64sm6233199pfb.208.2022.01.11.10.47.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 10:47:03 -0800 (PST)
-Date:   Wed, 12 Jan 2022 07:47:00 +1300
-From:   Daniel Beer <daniel.beer@igorinstitute.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Liu <andy-liu@ti.com>,
-        Derek Simkowiak <derek.simkowiak@igorinstitute.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 2/2] ASoC: dt-bindings: add bindings for TI TAS5805M.
-Message-ID: <20220111184700.GA10070@nyquist.nev>
-References: <61dccc5c.1c69fb81.9af91.0df6@mx.google.com>
- <Yd29tk6ZJgDFDvVI@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd29tk6ZJgDFDvVI@sirena.org.uk>
+        Tue, 11 Jan 2022 10:47:38 -0800 (PST)
+Date:   Tue, 11 Jan 2022 10:47:38 -0800 (PST)
+X-Google-Original-Date: Tue, 11 Jan 2022 10:47:12 PST (-0800)
+Subject:     Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
+In-Reply-To: <20220111153539.2532246-1-mark.rutland@arm.com>
+CC:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup@brainfault.org,
+        aou@eecs.berkeley.edu, Atish Patra <atishp@rivosinc.com>,
+        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        mark.rutland@arm.com, Marc Zyngier <maz@kernel.org>,
+        mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com,
+        paulmck@kernel.org, paulus@samba.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, pbonzini@redhat.com,
+        seanjc@google.com, suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, Will Deacon <will@kernel.org>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     mark.rutland@arm.com
+Message-ID: <mhng-d83df857-7865-4514-a339-68439336974a@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 05:26:14PM +0000, Mark Brown wrote:
-> On Tue, Jan 11, 2022 at 01:00:09PM +1300, Daniel Beer wrote:
-> 
-> > +  ti,dsp-config: |
-> > +    description: |
-> > +      A byte sequence giving DSP configuration. Each pair of bytes, in
-> > +      sequence, gives a register address and a value to write. If you
-> > +      are taking this data from TI's PPC3 tool, this should contain only
-> > +      the register writes following the 5ms delay.
-> 
-> This doesn't look appropriate for DT, it looks more like it should be
-> loaded as firmware since systems might want to support multiple
-> configurations at runtime based on use casea.  It would also be good to
-> have code to validate that any supplied coefficeints/firmware don't
-> overwrite registers managed by the driver, just in case.
+On Tue, 11 Jan 2022 07:35:34 PST (-0800), mark.rutland@arm.com wrote:
+> Several architectures have latent bugs around guest entry/exit, most
+> notably:
+>
+> 1) Several architectures enable interrupts between guest_enter() and
+>    guest_exit(). As this period is an RCU extended quiescent state (EQS) this
+>    is unsound unless the irq entry code explicitly wakes RCU, which most
+>    architectures only do for entry from usersapce or idle.
+>
+>    I believe this affects: arm64, riscv, s390
+>
+>    I am not sure about powerpc.
+>
+> 2) Several architectures permit instrumentation of code between
+>    guest_enter() and guest_exit(), e.g. KASAN, KCOV, KCSAN, etc. As
+>    instrumentation may directly o indirectly use RCU, this has the same
+>    problems as with interrupts.
+>
+>    I believe this affects: arm64, mips, powerpc, riscv, s390
 
-Hi Mark,
+Moving to Atish and Anup's new email addresses, looks like MAINTAINERS 
+hasn't been updated yet.  I thought I remembering seeing patches getting 
+picked up for these, but LMK if you guys were expecting me to send them 
+along -- sorry if I misunderstood!
 
-That was my initial thought, but the problem is that different instances
-may have different configurations.
-
-We don't really have a way of validating the configuration here, since
-it's typically generated by TI's PPC3 tool.
-
-If you think it's still inappropriate to supply the configuration in the
-device-tree, do you have any suggestions?
-
-Cheers,
-Daniel
-
--- 
-Daniel Beer
-Firmware Engineer at Igor Institute
-daniel.beer@igorinstitute.com or +64-27-420-8101
-Offices in Seattle, San Francisco, and Vancouver BC or (206) 494-3312
+>
+> 3) Several architectures do not inform lockdep and tracing that
+>    interrupts are enabled during the execution of the guest, or do so in
+>    an incorrect order. Generally
+>    this means that logs will report IRQs being masked for much longer
+>    than is actually the case, which is not ideal for debugging. I don't
+>    know whether this affects the correctness of lockdep.
+>
+>    I believe this affects: arm64, mips, powerpc, riscv, s390
+>
+> This was previously fixed for x86 specifically in a series of commits:
+>
+>   87fa7f3e98a1310e ("x86/kvm: Move context tracking where it belongs")
+>   0642391e2139a2c1 ("x86/kvm/vmx: Add hardirq tracing to guest enter/exit")
+>   9fc975e9efd03e57 ("x86/kvm/svm: Add hardirq tracing on guest enter/exit")
+>   3ebccdf373c21d86 ("x86/kvm/vmx: Move guest enter/exit into .noinstr.text")
+>   135961e0a7d555fc ("x86/kvm/svm: Move guest enter/exit into .noinstr.text")
+>   160457140187c5fb ("KVM: x86: Defer vtime accounting 'til after IRQ handling")
+>   bc908e091b326467 ("KVM: x86: Consolidate guest enter/exit logic to common helpers")
+>
+> But other architectures were left broken, and the infrastructure for
+> handling this correctly is x86-specific.
+>
+> This series introduces generic helper functions which can be used to
+> handle the problems above, and migrates architectures over to these,
+> fixing the latent issues.
+>
+> I wasn't able to figure my way around powerpc and s390, so I have not
+> altered these. I'd appreciate if anyone could take a look at those
+> cases, and either have a go at patches or provide some feedback as to
+> any alternative approaches which work work better there.
+>
+> I have build-tested the arm64, mips, riscv, and x86 cases, but I don't
+> have a suitable HW setup to test these, so any review and/or testing
+> would be much appreciated.
+>
+> I've pushed the series (based on v5.16) to my kvm/entry-rework branch:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
+>
+> ... also tagged as kvm-entry-rework-20210111
+>
+> Thanks,
+> Mark.
+>
+> Mark Rutland (5):
+>   kvm: add exit_to_guest_mode() and enter_from_guest_mode()
+>   kvm/arm64: rework guest entry logic
+>   kvm/mips: rework guest entry logic
+>   kvm/riscv: rework guest entry logic
+>   kvm/x86: rework guest entry logic
+>
+>  arch/arm64/kvm/arm.c     |  51 +++++++++++-------
+>  arch/mips/kvm/mips.c     |  37 ++++++++++++--
+>  arch/riscv/kvm/vcpu.c    |  44 ++++++++++------
+>  arch/x86/kvm/svm/svm.c   |   4 +-
+>  arch/x86/kvm/vmx/vmx.c   |   4 +-
+>  arch/x86/kvm/x86.c       |   4 +-
+>  arch/x86/kvm/x86.h       |  45 ----------------
+>  include/linux/kvm_host.h | 108 +++++++++++++++++++++++++++++++++++++--
+>  8 files changed, 206 insertions(+), 91 deletions(-)

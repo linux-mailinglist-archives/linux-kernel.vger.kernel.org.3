@@ -2,226 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DC748AD84
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E187148AD88
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbiAKMW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:22:29 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:57176 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237953AbiAKMW1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:22:27 -0500
-X-UUID: ae5f11dfdfb24d4cb1b29dc2ab997c75-20220111
-X-UUID: ae5f11dfdfb24d4cb1b29dc2ab997c75-20220111
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 534519960; Tue, 11 Jan 2022 20:22:25 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 11 Jan 2022 20:22:24 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 11 Jan 2022 20:22:23 +0800
-Message-ID: <1a3b368eb891ca55c33265397cffab0b9f128737.camel@mediatek.com>
-Subject: Re: [PATCH v5 25/32] iommu/mtk: Migrate to aggregate driver
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        "Russell King" <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Tue, 11 Jan 2022 20:22:23 +0800
-In-Reply-To: <20220106214556.2461363-26-swboyd@chromium.org>
-References: <20220106214556.2461363-1-swboyd@chromium.org>
-         <20220106214556.2461363-26-swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S239846AbiAKMXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:23:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:45610 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237953AbiAKMXP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 07:23:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0AEE1FB;
+        Tue, 11 Jan 2022 04:23:14 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.1.156])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD14E3F774;
+        Tue, 11 Jan 2022 04:23:12 -0800 (PST)
+Date:   Tue, 11 Jan 2022 12:23:10 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, paulmck <paulmck@kernel.org>,
+        maz <maz@kernel.org>, frederic <frederic@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Anup Patel <Anup.Patel@wdc.com>
+Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
+Message-ID: <Yd12rvDxyIWzEXWc@FVFF77S0Q05N>
+References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
+ <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+ <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
+ <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
+ <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
+ <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
+ <399d8805ca09f7d3c905b8c653abf60dd7141574.camel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <399d8805ca09f7d3c905b8c653abf60dd7141574.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
-
-Thanks for helping update here.
-
-On Thu, 2022-01-06 at 13:45 -0800, Stephen Boyd wrote:
-> Use an aggregate driver instead of component ops so that we can get
-> proper driver probe ordering of the aggregate device with respect to
-> all
-> the component devices that make up the aggregate device.
+On Tue, Jan 11, 2022 at 12:32:38PM +0100, Nicolas Saenz Julienne wrote:
+> Hi Mark,
 > 
-> Cc: Yong Wu <yong.wu@mediatek.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-
-When I test this on mt8195 which have two IOMMU HWs(calling
-component_aggregate_regsiter twice), it will abort like this. Then what
-should we do if we have two instances?
-Thanks.
-
-[    2.652424] Error: Driver 'mtk_iommu_agg' is already registered,
-aborting...
-[    2.654033] mtk-iommu: probe of 1c01f000.iommu failed with error -16
-[    2.662034] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000020
-...
-[    2.672413] pc : aggregate_device_match+0xa8/0x1c8
-[    2.673027] lr : aggregate_device_match+0x68/0x1c8
-...
-[    2.683091] Call trace:
-[    2.683403]  aggregate_device_match+0xa8/0x1c8
-[    2.683970]  __device_attach_driver+0x38/0xd0
-[    2.684526]  bus_for_each_drv+0x68/0xd0
-[    2.685015]  __device_attach+0xec/0x148
-[    2.685503]  device_attach+0x14/0x20
-[    2.685960]  bus_rescan_devices_helper+0x50/0x90
-[    2.686545]  bus_for_each_dev+0x7c/0xd8
-[    2.687033]  bus_rescan_devices+0x20/0x30
-[    2.687542]  __component_add+0x7c/0xa0
-[    2.688022]  component_add+0x14/0x20
-[    2.688479]  mtk_smi_larb_probe+0xe0/0x120
-
-
-> ---
->  drivers/iommu/mtk_iommu.c    | 14 +++++++++-----
->  drivers/iommu/mtk_iommu.h    |  6 ++++--
->  drivers/iommu/mtk_iommu_v1.c | 14 +++++++++-----
->  3 files changed, 22 insertions(+), 12 deletions(-)
+> On Tue, 2022-01-04 at 16:39 +0000, Mark Rutland wrote:
+> > On Fri, Dec 17, 2021 at 04:54:22PM +0100, Paolo Bonzini wrote:
+> > > On 12/17/21 15:38, Mark Rutland wrote:
+> > > > For example kvm_guest_enter_irqoff() calls guest_enter_irq_off() which calls
+> > > > vtime_account_guest_enter(), but kvm_guest_exit_irqoff() doesn't call
+> > > > guest_exit_irq_off() and the call to vtime_account_guest_exit() is open-coded
+> > > > elsewhere. Also, guest_enter_irq_off() conditionally calls
+> > > > rcu_virt_note_context_switch(), but I can't immediately spot anything on the
+> > > > exit side that corresponded with that, which looks suspicious.
+> > > 
+> > > rcu_note_context_switch() is a point-in-time notification; it's not strictly
+> > > necessary, but it may improve performance a bit by avoiding unnecessary IPIs
+> > > from the RCU subsystem.
+> > > 
+> > > There's no benefit from doing it when you're back from the guest, because at
+> > > that point the CPU is just running normal kernel code.
+> > 
+> > I see.
+> > 
+> > My main issue here was just that it's really difficult to see how the
+> > entry/exit logic is balanced, and I reckon we can solve that by splitting
+> > guest_{enter,exit}_irqoff() into helper functions to handle the vtime
+> > accounting separately from the context tracking, so that arch code can do
+> > something like:
+> > 
+> >   guest_timing_enter_irqoff();
+> >   
+> >   guest_eqs_enter_irqoff();
+> >   < actually run vCPU here >
+> >   guest_eqs_exit_irqoff();
+> >   
+> >   < handle pending IRQs here >
+> >   
+> >   guest_timing_exit_irqoff();
+> > 
+> > ... which I hope should work for RISC-V too.
+> > 
+> > I've had a go, and I've pushed out a WIP to:
+> > 
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/kvm/rcu
 > 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 25b834104790..8e722898cbe2 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -752,9 +752,13 @@ static int mtk_iommu_hw_init(const struct
-> mtk_iommu_data *data)
->  	return 0;
->  }
->  
-> -static const struct component_master_ops mtk_iommu_com_ops = {
-> -	.bind		= mtk_iommu_bind,
-> -	.unbind		= mtk_iommu_unbind,
-> +static struct aggregate_driver mtk_iommu_aggregate_driver = {
-> +	.probe		= mtk_iommu_bind,
-> +	.remove		= mtk_iommu_unbind,
-> +	.driver		= {
-> +		.name	= "mtk_iommu_agg",
-> +		.owner	= THIS_MODULE,
-> +	},
->  };
->  
->  static int mtk_iommu_probe(struct platform_device *pdev)
-> @@ -895,7 +899,7 @@ static int mtk_iommu_probe(struct platform_device
-> *pdev)
->  			goto out_list_del;
->  	}
->  
-> -	ret = component_master_add_with_match(dev, &mtk_iommu_com_ops,
-> match);
-> +	ret = component_aggregate_register(dev,
-> &mtk_iommu_aggregate_driver, match);
->  	if (ret)
->  		goto out_bus_set_null;
->  	return ret;
-> @@ -928,7 +932,7 @@ static int mtk_iommu_remove(struct
-> platform_device *pdev)
->  	device_link_remove(data->smicomm_dev, &pdev->dev);
->  	pm_runtime_disable(&pdev->dev);
->  	devm_free_irq(&pdev->dev, data->irq, data);
-> -	component_master_del(&pdev->dev, &mtk_iommu_com_ops);
-> +	component_aggregate_unregister(&pdev->dev,
-> &mtk_iommu_aggregate_driver);
->  	return 0;
->  }
->  
-> diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
-> index f81fa8862ed0..064fd4f4eade 100644
-> --- a/drivers/iommu/mtk_iommu.h
-> +++ b/drivers/iommu/mtk_iommu.h
-> @@ -94,15 +94,17 @@ static inline void release_of(struct device *dev,
-> void *data)
->  	of_node_put(data);
->  }
->  
-> -static inline int mtk_iommu_bind(struct device *dev)
-> +static inline int mtk_iommu_bind(struct aggregate_device *adev)
->  {
-> +	struct device *dev = adev->parent;
->  	struct mtk_iommu_data *data = dev_get_drvdata(dev);
->  
->  	return component_bind_all(dev, &data->larb_imu);
->  }
->  
-> -static inline void mtk_iommu_unbind(struct device *dev)
-> +static inline void mtk_iommu_unbind(struct aggregate_device *adev)
->  {
-> +	struct device *dev = adev->parent;
->  	struct mtk_iommu_data *data = dev_get_drvdata(dev);
->  
->  	component_unbind_all(dev, &data->larb_imu);
-> diff --git a/drivers/iommu/mtk_iommu_v1.c
-> b/drivers/iommu/mtk_iommu_v1.c
-> index be22fcf988ce..5fb29058a165 100644
-> --- a/drivers/iommu/mtk_iommu_v1.c
-> +++ b/drivers/iommu/mtk_iommu_v1.c
-> @@ -534,9 +534,13 @@ static const struct of_device_id
-> mtk_iommu_of_ids[] = {
->  	{}
->  };
->  
-> -static const struct component_master_ops mtk_iommu_com_ops = {
-> -	.bind		= mtk_iommu_bind,
-> -	.unbind		= mtk_iommu_unbind,
-> +static struct aggregate_driver mtk_iommu_aggregate_driver = {
-> +	.probe		= mtk_iommu_bind,
-> +	.remove		= mtk_iommu_unbind,
-> +	.driver		= {
-> +		.name	= "mtk_iommu_agg",
-> +		.owner	= THIS_MODULE,
-> +	},
->  };
->  
->  static int mtk_iommu_probe(struct platform_device *pdev)
-> @@ -624,7 +628,7 @@ static int mtk_iommu_probe(struct platform_device
-> *pdev)
->  			goto out_dev_unreg;
->  	}
->  
-> -	ret = component_master_add_with_match(dev, &mtk_iommu_com_ops,
-> match);
-> +	ret = component_aggregate_register(dev,
-> &mtk_iommu_aggregate_driver, match);
->  	if (ret)
->  		goto out_bus_set_null;
->  	return ret;
-> @@ -650,7 +654,7 @@ static int mtk_iommu_remove(struct
-> platform_device *pdev)
->  
->  	clk_disable_unprepare(data->bclk);
->  	devm_free_irq(&pdev->dev, data->irq, data);
-> -	component_master_del(&pdev->dev, &mtk_iommu_com_ops);
-> +	component_aggregate_unregister(&pdev->dev,
-> &mtk_iommu_aggregate_driver);
->  	return 0;
->  }
->  
+> Had a look at the patches and they seeem OK to me.
+> 
+> Thanks!
 
+Cool.
+
+FWIW I have an updated version at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
+
+... which is largely the same approach, but the helpers got renamed, the
+lockdep/tracing bits got fixed, and I've aligned mips, riscv, and x86 on the
+same approach.
+
+Once I get a free hour or so I intend to rebase that atop v5.16 and post that
+out. I'll start a new thread with that, and rope in the relevant arch
+maintainers (since e.g. I'm not sure what to do for ppc and s390).
+
+Thanks,
+Mark.
+
+> 
+> -- 
+> Nicolás Sáenz
+> 

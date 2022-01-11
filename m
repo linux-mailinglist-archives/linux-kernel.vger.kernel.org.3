@@ -2,148 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0257548AA53
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1D248AA58
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349224AbiAKJUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:20:35 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:43834 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349213AbiAKJUe (ORCPT
+        id S1349236AbiAKJUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:20:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50537 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349230AbiAKJUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:20:34 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 556691F3B6;
-        Tue, 11 Jan 2022 09:20:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641892833; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 11 Jan 2022 04:20:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641892838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kMzRzmqcc943s+l8/kmgMkpO4A0WvCaVF1BG6MfAxQ0=;
-        b=eqNs7EYIJf3e7H5jewFT9HoeUztNBNos32dfgZeJ0U8Sj+4M0aYYB6yXMjJPc4CeU3EPJP
-        k7mRuIibiQ/fuJGMKa3WCcEuHAOyy1RCxQdhv6DyrJYkR9V+0dMc2FYSvwtG6k1Wtl7jEs
-        RWu8I8vBAY43G7aTRORn4ZObNPKOjIw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641892833;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kMzRzmqcc943s+l8/kmgMkpO4A0WvCaVF1BG6MfAxQ0=;
-        b=VTvQwXlnX0z3+ZenAgT+ztt5azu7D1Xtg1qDeaoz6YbU31Wj3s1rtPPLGcdBJM9G16cfQj
-        pp9O2qwVyV2HFhAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 044C913AC9;
-        Tue, 11 Jan 2022 09:20:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id v0OMO+BL3WHhMwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 11 Jan 2022 09:20:32 +0000
-Message-ID: <4fa36c87-7771-28bb-15b3-82b2cb249607@suse.de>
-Date:   Tue, 11 Jan 2022 10:20:32 +0100
+        bh=uJ1YqPO7Xit3OrTXhT/TYDES9bJJk2fXlWiLmQ/iCOQ=;
+        b=irrRj5IBTgFCw1FGWFFAsRdn+4KcNsPgfKkekt5xbxexi2V761sdKHmFuY+wy/FynwogEg
+        LYJck1MR9YSQ4VW423NYgx4ruef5ACM76JhJVOuwnCMw5HPkvznR0Qe8yxQ/yC/Z6OFYx6
+        m/PnRIxsBWWZWc2VxYy+aEfSkZsu+NY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-186-s1Xb8XxoPxagAzNVMQzj2A-1; Tue, 11 Jan 2022 04:20:37 -0500
+X-MC-Unique: s1Xb8XxoPxagAzNVMQzj2A-1
+Received: by mail-ed1-f70.google.com with SMTP id s7-20020a056402520700b003f841380832so12744883edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 01:20:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uJ1YqPO7Xit3OrTXhT/TYDES9bJJk2fXlWiLmQ/iCOQ=;
+        b=l1dsgYBqb5jyKu59zg9R7CZSxIBk2xSc3v38zLYk0/jlcrnsFqDWEvjjOgCf99dJnb
+         IIkxPyMvyknhk/5LHjlDyQhVQJ7zkV8UKtyQ/lm25Mum4EmIRfa0hZxz3wBCOWdmqjeG
+         sAen2mcL0vp/6gXqu2l8JJPmDs83cvacL1zseKkkHtPc7PnwUGbyDQR08g8er1+rD4MG
+         d8nPnhRxCeVmmEF8U9iBM5FGcswzgOCHbJAJY/9q1YkkbclqA9EJiopb9MV84gPV/5Jo
+         TR4HlodiUiNWechGACTjUuhC3wZL+mQ6dgwPl9p3gjJ9m6KdfwWHMjChGmKfDD+PdaEC
+         Pgfw==
+X-Gm-Message-State: AOAM530M2TwBRcpPZGKr/ATXKGyi15SmQNVT7lzNb7BX/sjMpTYLS/4Q
+        cA6l8La0b6/kxp+B+qP3fPtJAxCBCB+vEXzvH+gjq+iH+iDwLedACLB2StjTMhrQfIRmZwSGrkE
+        t7wcBt9APck2P+j8TFI9o5vfT
+X-Received: by 2002:a17:906:4fd6:: with SMTP id i22mr2843869ejw.70.1641892835805;
+        Tue, 11 Jan 2022 01:20:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwXuRWJ4cHHSS27BhJ/iVwz/12FvR8jmZfdmnIZZPxYco9NzHX7vZnxSjKW05qyZhnGf2vOKg==
+X-Received: by 2002:a17:906:4fd6:: with SMTP id i22mr2843853ejw.70.1641892835568;
+        Tue, 11 Jan 2022 01:20:35 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id kv11sm2255731ejc.156.2022.01.11.01.20.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 01:20:35 -0800 (PST)
+Message-ID: <a066f0bc-7b27-771c-544d-cacd15aa2374@redhat.com>
+Date:   Tue, 11 Jan 2022 10:20:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v1 1/2] drm/sprd: remove the selected DRM_KMS_CMA_HELPER
- in kconfig
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 6/6] ACPI: bus-multi-instantiate: Add SPI support
 Content-Language: en-US
-To:     Kevin Tang <kevin3.tang@gmail.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     devicetree@vger.kernel.org, zhang.lyra@gmail.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        lukas.bulwahn@gmail.com, orsonzhai@gmail.com, zou_wei@huawei.com,
-        pony1.wu@gmail.com, dan.carpenter@oracle.com
-References: <20211224141213.27612-1-kevin3.tang@gmail.com>
- <20211224141213.27612-2-kevin3.tang@gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211224141213.27612-2-kevin3.tang@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------4bsQbDkm3eazuMfseDLqtF8L"
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        'Mark Brown' <broonie@kernel.org>,
+        "'Rafael J . Wysocki'" <rafael@kernel.org>,
+        'Len Brown' <lenb@kernel.org>,
+        'Mark Gross' <markgross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20211210154050.3713-1-sbinding@opensource.cirrus.com>
+ <20211210154050.3713-7-sbinding@opensource.cirrus.com>
+ <c311642f-38ab-4914-cf92-852e6a20cfc9@redhat.com>
+ <00af01d8062f$75aed010$610c7030$@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <00af01d8062f$75aed010$610c7030$@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------4bsQbDkm3eazuMfseDLqtF8L
-Content-Type: multipart/mixed; boundary="------------lk4cjMBDm8TiJ0MrWqr5Pzq0";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Kevin Tang <kevin3.tang@gmail.com>, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
- robh+dt@kernel.org, mark.rutland@arm.com
-Cc: devicetree@vger.kernel.org, zhang.lyra@gmail.com,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- lukas.bulwahn@gmail.com, orsonzhai@gmail.com, zou_wei@huawei.com,
- pony1.wu@gmail.com, dan.carpenter@oracle.com
-Message-ID: <4fa36c87-7771-28bb-15b3-82b2cb249607@suse.de>
-Subject: Re: [PATCH v1 1/2] drm/sprd: remove the selected DRM_KMS_CMA_HELPER
- in kconfig
-References: <20211224141213.27612-1-kevin3.tang@gmail.com>
- <20211224141213.27612-2-kevin3.tang@gmail.com>
-In-Reply-To: <20211224141213.27612-2-kevin3.tang@gmail.com>
+Hi,
 
---------------lk4cjMBDm8TiJ0MrWqr5Pzq0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 1/10/22 15:36, Stefan Binding wrote:
+> Hi,
+> 
+>> -----Original Message-----
+>> From: Hans de Goede <hdegoede@redhat.com>
+>> Sent: 21 December 2021 18:32
+>> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
+>> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len Brown
+>> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>
+>> Cc: linux-kernel@vger.kernel.org; linux-spi@vger.kernel.org; linux-
+>> acpi@vger.kernel.org; platform-driver-x86@vger.kernel.org;
+>> patches@opensource.cirrus.com
+>> Subject: Re: [PATCH v2 6/6] ACPI: bus-multi-instantiate: Add SPI support
+> 
+>>> +	ret = bmi_spi_count_resources(adev);
+>>> +	if (ret <= 0)
+>>> +		return ret;
+>>> +	count = ret;
+>>
+>> Ok, so why not do the following here instead (and drop a whole bunch of
+>> functions above):
+>>
+>> 	ret = acpi_dev_get_resources(adev, &r, bmi_spi_count, &count);
+>> 	if (ret < 0)
+>> 		return ret;
+>>
+>> 	if (count <= 0) {
+>> 		acpi_dev_free_resource_list(&r);
+>> 		return count;
+>> 	}
+>>
+>> 	/* Note we are not freeing the resource list yet here !!! */
+>>
+>>> +
+>>> +	bmi->spi_devs = devm_kcalloc(dev, count, sizeof(*bmi->spi_devs),
+>> GFP_KERNEL);
+>>> +	if (!bmi->spi_devs)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	acpi_data = bmi_spi_get_resources(dev, adev, count);
+>>> +	if (!acpi_data)
+>>> +		return -ENOMEM;
+>>
+>> Remove the bmi_spi_get_resources() call here.
+>>
+>>> +
+>>> +	for (i = 0; i < count && inst_array[i].type; i++) {
+>>
+>> Write a new:
+>>
+>> int bmi_get_spi_resource_by_index(list_head *resource_list, struct
+>> acpi_resource_spi_serialbus *sb_ret, int index)
+>> {}
+>>
+>> Helper which walks the list and fills in *sb_ret with the Nth (matching index)
+>> SpiSerialBus resource found in the
+>> list.
+>>
+>> And then do:
+>>
+>> 		ret = bmi_get_spi_resource_by_index(&r, &sb, i);
+>> 		if (ret)
+>> 			return ret;
+>>
+>> 		ctrl =
+>> bmi_find_spi_controller(sb.resource_source.string_ptr);
+>>
+>>
+>>> +		ctlr = bmi_find_spi_controller(acpi_data-
+>>> acpi_data[i].resource_source);
+>>> +		if (!ctlr) {
+>>> +			ret = -EPROBE_DEFER;
+>>> +			goto error;
+>>> +		}
+>>> +
+>>> +		spi_dev = spi_alloc_device(ctlr);
+>>> +		if (!spi_dev) {
+>>> +			dev_err(&ctlr->dev, "failed to allocate SPI device for
+>> %s\n",
+>>> +				dev_name(&adev->dev));
+>>> +			ret = -ENOMEM;
+>>> +			goto error;
+>>> +		}
+>>> +
+>>> +		strscpy(spi_dev->modalias, inst_array[i].type,
+>> sizeof(spi_dev->modalias));
+>>> +
+>>
+>> And replace all the "acpi_data->acpi_data[i].sb." reference below with
+>> simple "sb.".
+>>
+>>
+>>> +		if (ctlr->fw_translate_cs) {
+>>> +			ret = ctlr->fw_translate_cs(ctlr,
+>>> +						    acpi_data-
+>>> acpi_data[i].sb.device_selection);
+>>> +			if (ret < 0) {
+>>> +				spi_dev_put(spi_dev);
+>>> +				goto error;
+>>> +			}
+>>> +			spi_dev->chip_select = ret;
+>>> +		} else {
+>>> +			spi_dev->chip_select = acpi_data-
+>>> acpi_data[i].sb.device_selection;
+>>> +		}
+>>> +
+>>> +		spi_dev->max_speed_hz = acpi_data-
+>>> acpi_data[i].sb.connection_speed;
+>>> +		spi_dev->bits_per_word = acpi_data-
+>>> acpi_data[i].sb.data_bit_length;
+>>> +
+>>> +		if (acpi_data->acpi_data[i].sb.clock_phase ==
+>> ACPI_SPI_SECOND_PHASE)
+>>> +			spi_dev->mode |= SPI_CPHA;
+>>> +		if (acpi_data->acpi_data[i].sb.clock_polarity ==
+>> ACPI_SPI_START_HIGH)
+>>> +			spi_dev->mode |= SPI_CPOL;
+>>> +		if (acpi_data->acpi_data[i].sb.device_polarity ==
+>> ACPI_SPI_ACTIVE_HIGH)
+>>> +			spi_dev->mode |= SPI_CS_HIGH;
+>>> +
+>>> +		ret = bmi_get_irq(pdev, adev, &inst_array[i]);
+>>> +		if (ret < 0) {
+>>> +			spi_dev_put(spi_dev);
+>>> +			goto error;
+>>> +		}
+>>> +		spi_dev->irq = ret;
+>>> +
+>>> +		snprintf(name, sizeof(name), "%s-%s-%s.%d",
+>> dev_name(&ctlr->dev), dev_name(dev),
+>>> +			 inst_array[i].type, i);
+>>> +		spi_dev->dev.init_name = name;
+>>> +
+>>> +		ret = spi_add_device(spi_dev);
+>>> +		if (ret) {
+>>> +			dev_err(&ctlr->dev, "failed to add SPI device %s from
+>> ACPI: %d\n",
+>>> +				dev_name(&adev->dev), ret);
+>>> +			spi_dev_put(spi_dev);
+>>> +			goto error;
+>>> +		}
+>>> +
+>>> +		dev_dbg(dev, "SPI device %s using chip select %u", name,
+>> spi_dev->chip_select);
+>>> +
+>>> +		bmi->spi_devs[i] = spi_dev;
+>>> +		bmi->spi_num++;
+>>> +	}
+>>> +
+>>> +	if (bmi->spi_num < count) {
+>>> +		dev_err(dev, "Error finding driver, idx %d\n", i);
+>>> +		ret = -ENODEV;
+>>> +		goto error;
+>>> +	}
+>>> +
+>>> +	dev_info(dev, "Instantiate %d SPI devices.\n", bmi->spi_num);
+>>
+>> And here replace the bmi_spi_res_free(acpi_data); call in both exit paths
+>> with:
+>> acpi_dev_free_resource_list(&r); .
+>>
+>> To me this way, simply using the already allocated resources from the list,
+>> rather then making a temp copy of them and throwing that away seems like
+>> a simpler solution ?
+>>
+>> If you go this route, please also remove the struct bmi_spi_acpi and
+>> struct bmi_spi_sb_acpi data types which you now no longer need.
+>>
+> 
+> I tried to implement this idea, and reuse the resource list, but I hit an issue. 
+> The resources saved in the list are not "struct acpi_resource", but instead the 
+> generic "struct resource".
+> We need the acpi_resource structure to pull the parameters from to be able to
+> create the spi devices.
+> As far as I know there is no way to convert the "struct resource" into a
+> "struct acpi_resource". Is there another way to do this?
 
-SGkNCg0KQW0gMjQuMTIuMjEgdW0gMTU6MTIgc2NocmllYiBLZXZpbiBUYW5nOg0KPiBPbiBs
-aW51eC1uZXh0LCBjb21taXQgNDM1MzFlZGQ1M2YwICgiZHJtL3NwcmQ6IGFkZCBVbmlzb2Mn
-cyBkcm0ga21zIG1hc3RlciIpIGFkZHMgdGhlIGNvbmZpZyBEUk1fU1BSRCwNCj4gd2hpY2gg
-c2VsZWN0cyBEUk1fS01TX0NNQV9IRUxQRVIuDQo+IA0KPiBIb3dldmVyLCBjb21taXQgMDk3
-MTdhZjdkMTNkICgiZHJtOiBSZW1vdmUgQ09ORklHX0RSTV9LTVNfQ01BX0hFTFBFUiBvcHRp
-b24iKSBqdXN0IHJlbW92ZWQgdGhlDQo+IERSTV9LTVNfQ01BX0hFTFBFUi4gU28sIHRoZSBz
-ZWxlY3QgRFJNX0tNU19DTUFfSEVMUEVSIHJlZmVycyB0byBhIG5vbi1leGlzdGluZyBrY29u
-ZmlnIHN5bWJvbC4NCg0KV2l0aCB0aGUgbG9uZyBsaW5lcyBmaXhlZCwgeW91IGNhbiBhZGQN
-Cg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0K
-DQpTZWxlY3RpbmcgRFJNX0dFTV9DTUFfSEVMUEVSIGFuZCBEUk1fS01TX0hFTFBFUiBhdCB0
-aGUgc2FtZSB0aW1lIGFjdHMgDQpsaWtlIERSTV9LTVNfQ01BX0hFTFBFUiBkaWQgYmVmb3Jl
-Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBDYzogT3Jzb24gWmhhaSA8b3Jz
-b256aGFpQGdtYWlsLmNvbT4NCj4gQ2M6IENodW55YW4gWmhhbmcgPHpoYW5nLmx5cmFAZ21h
-aWwuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBLZXZpbiBUYW5nIDxrZXZpbi50YW5nQHVuaXNv
-Yy5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9zcHJkL0tjb25maWcgfCAxIC0N
-Cj4gICAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvZ3B1L2RybS9zcHJkL0tjb25maWcgYi9kcml2ZXJzL2dwdS9kcm0vc3ByZC9L
-Y29uZmlnDQo+IGluZGV4IDNlZGVhZWNhMC4uOWE5YzdlYmZjIDEwMDY0NA0KPiAtLS0gYS9k
-cml2ZXJzL2dwdS9kcm0vc3ByZC9LY29uZmlnDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9z
-cHJkL0tjb25maWcNCj4gQEAgLTMsNyArMyw2IEBAIGNvbmZpZyBEUk1fU1BSRA0KPiAgIAlk
-ZXBlbmRzIG9uIEFSQ0hfU1BSRCB8fCBDT01QSUxFX1RFU1QNCj4gICAJZGVwZW5kcyBvbiBE
-Uk0gJiYgT0YNCj4gICAJc2VsZWN0IERSTV9HRU1fQ01BX0hFTFBFUg0KPiAtCXNlbGVjdCBE
-Uk1fS01TX0NNQV9IRUxQRVINCj4gICAJc2VsZWN0IERSTV9LTVNfSEVMUEVSDQo+ICAgCXNl
-bGVjdCBEUk1fTUlQSV9EU0kNCj4gICAJc2VsZWN0IFZJREVPTU9ERV9IRUxQRVJTDQoNCi0t
-IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
-U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
-TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
-ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+Ugh, you're right. Sorry about that. I still don't realy like the code
+from your original v2 patch for this.
 
---------------lk4cjMBDm8TiJ0MrWqr5Pzq0--
+So maybe this comment from my second reply on this patch can help
+clean things up:
 
---------------4bsQbDkm3eazuMfseDLqtF8L
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+"So thinking a bit more about this, then looking up the nth SpiSerialBus
+resource, and then turning that into a spi_client is something which
+the SPI core ACPI code should already be doing for index==0. So I think
+that you should be able to modify the SPI core ACPI code to take index
+as a parameter and then have it export a helper for this which you
+can use rather then duplicate the SPI core ACPI code  ? Note this is
+also what the I2C code is already doing.
 
------BEGIN PGP SIGNATURE-----
+And if you go that route you may also want to consider to add the SPI
+equivalent of the i2c_acpi_client_count() helper."
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHdS+AFAwAAAAAACgkQlh/E3EQov+Dd
-Lw/+OF0tgDgp/Jje9GChADeBtT4TROTV+1765Kafobgyr0ZX4qqkfl5/Sl1gGBq/W66enCI0iYri
-5oCRHx735DI6dGnAV3HBPUW+n/JytSUvG5+2hWX66S5Q/YvX5VUaltU8jM/1vS3ehLMfOswYn3EF
-9XzljgVJF2yfa2VWa6RLKJir6bVkt6dZlxQGYY0QmNBerhAEI6m5NYg4lMkJVWHjr4bdLqRCV8gI
-D6dlhaFVe4dItMCmqZuEviS51pC/f/K+wnpsND6aLB/aM2TKto8IffsNUJ6W9cc3o/sVmdIRuE5z
-OmttHSED6oc6VWXYa1KV4SLz7aDSKNXflYtB38VQzF0EZQ+ePkmBkAIYfIjQZ41Mn0PFJjhErQXx
-wwfRLgrONm0TtEndUuY4SnWGVqTTHaxDU8dHY+mDu5pgWDCvqQWQ8a5BJ6LiKI+wKrYUKGPUhCev
-Fm43nWFKXqcWOrJCTBSH8nUgr99G9yrQmwqhYqClsfh4hVE0IiEJaDSORzJL3w2fQluuM4EucfPp
-7uHVPmDdRrSiwFJJiBnpdYQHg1WWILHGvrVv3GJbEyh5zfeR/WI0ReIsnjtIdQLntHkA40WrR8j7
-Wg47dpzPHxelvrtgYjSkBUfgNvIPQrz38dEMOg1u91/YRI/NyWuG/pEADCkXlX6CnkbTNXPxSECt
-KJ8=
-=Wnv7
------END PGP SIGNATURE-----
+Maybe that is a possible route to go to clean this up?
 
---------------4bsQbDkm3eazuMfseDLqtF8L--
+Note there are also 2 other small remarks pending:
+
+1. My comment about adding the _t_ at the end of detect
+2. + Mark's remark about patch 3/6 missing your Signed-off-by.
+
+Regards,
+
+Hans
+

@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BB948B408
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F8848B3F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345043AbiAKRcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344369AbiAKRbT (ORCPT
+        id S241891AbiAKRbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:31:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45338 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344291AbiAKRbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Jan 2022 12:31:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52466C061757
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:31:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1F91B81C48
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF47C36AED;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDA33B81C4A;
+        Tue, 11 Jan 2022 17:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FD3C36AF2;
         Tue, 11 Jan 2022 17:31:16 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1n7KzL-0032B3-Jq;
+        id 1n7KzL-0032Bc-Pn;
         Tue, 11 Jan 2022 12:31:15 -0500
-Message-ID: <20220111173115.444531483@goodmis.org>
+Message-ID: <20220111173115.632312496@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 11 Jan 2022 12:30:43 -0500
+Date:   Tue, 11 Jan 2022 12:30:44 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Geliang Tang <geliang.tang@suse.com>
-Subject: [for-next][PATCH 12/31] tracing: Fix mismatched comment in __string_len
+        stable@vger.kernel.org, Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [for-next][PATCH 13/31] tracing: Have syscall trace events use
+ trace_event_buffer_lock_reserve()
 References: <20220111173030.999527342@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -43,33 +41,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Here __assign_str_len() should be used for the __string_len type, instead
-of __assign_str() in the comment.
+Currently, the syscall trace events call trace_buffer_lock_reserve()
+directly, which means that it misses out on some of the filtering
+optimizations provided by the helper function
+trace_event_buffer_lock_reserve(). Have the syscall trace events call that
+instead, as it was missed when adding the update to use the temp buffer
+when filtering.
 
-Link: https://lkml.kernel.org/r/5c012db463392d0e6d4f0636203d778962ad060a.1640170494.git.geliang.tang@suse.com
+Link: https://lkml.kernel.org/r/20220107225839.823118570@goodmis.org
 
+Cc: stable@vger.kernel.org
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tom Zanussi <zanussi@kernel.org>
 Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Fixes: 883b4aee4dec6 ("tracing: Add trace_event helper macros __string_len() and __assign_str_len()")
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+Fixes: 0fc1b09ff1ff4 ("tracing: Use temp buffer when filtering events")
 Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 ---
- samples/trace_events/trace-events-sample.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_syscalls.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 5ab74fc9a2df..cbbbb83beced 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -155,7 +155,7 @@
-  *
-  *         To assign this string, use the helper macro __assign_str_len().
-  *
-- *         __assign_str(foo, bar, len);
-+ *         __assign_str_len(foo, bar, len);
-  *
-  *         Then len + 1 is allocated to the ring buffer, and a nul terminating
-  *         byte is added. This is similar to:
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index 8bfcd3b09422..f755bde42fd0 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -323,8 +323,7 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 
+ 	trace_ctx = tracing_gen_ctx();
+ 
+-	buffer = tr->array_buffer.buffer;
+-	event = trace_buffer_lock_reserve(buffer,
++	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+ 			sys_data->enter_event->event.type, size, trace_ctx);
+ 	if (!event)
+ 		return;
+@@ -367,8 +366,7 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 
+ 	trace_ctx = tracing_gen_ctx();
+ 
+-	buffer = tr->array_buffer.buffer;
+-	event = trace_buffer_lock_reserve(buffer,
++	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+ 			sys_data->exit_event->event.type, sizeof(*entry),
+ 			trace_ctx);
+ 	if (!event)
 -- 
 2.33.0

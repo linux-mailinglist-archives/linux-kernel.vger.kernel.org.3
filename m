@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C33848AC75
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6B248AC77
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 12:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349477AbiAKL3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 06:29:38 -0500
-Received: from mga14.intel.com ([192.55.52.115]:22576 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349353AbiAKL3h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 06:29:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641900577; x=1673436577;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uEbhMD3CVozMIkV3oFhlvGU94pvzjb5tECx8GpK/Qg4=;
-  b=TS9krxXhNpQkgxNBei8ulxW9p7nB6cTZyZSEaafQlljriiYpT3n+X85m
-   3nf8+3EdtmYxHGwf1PYbSRtuUBeUi+2ldTjzGCPjsdODdoebIKdsM8J4s
-   kvNYdj1rMt08Swh3E6YCrlBakuc0AKwHyXh67HXJVXyU23Kzrz06IPQKS
-   MrM5nAWOFLJQWLlQsK4gz7ocaRa2jl/AyYOC7fM/Xq7AznoBq1REKz9DP
-   3HZhKvVjlCM3TRpmiPAA8Q6dzp4SOX9mYjXfA4H0+S2vAxP6pa/lxIM81
-   pJ7gr1TuFk6vNF1Eb5DaiifAUNIzA0UZIXXYQfJWZbHH2AU/WKinyviM8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="243663186"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="243663186"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 03:29:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="613190123"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 03:29:35 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7FKA-009CjI-1M;
-        Tue, 11 Jan 2022 13:28:22 +0200
-Date:   Tue, 11 Jan 2022 13:28:21 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] vsprintf: Move space out of string literals in
- fourcc_string()
-Message-ID: <Yd1p1XckKtdPyKSr@smile.fi.intel.com>
-References: <20220110205558.11876-1-andriy.shevchenko@linux.intel.com>
- <308b7158-7c2a-cc98-6091-14dae2b2cbba@rasmusvillemoes.dk>
+        id S1349495AbiAKLbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 06:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349484AbiAKLbJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 06:31:09 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DAEC06173F;
+        Tue, 11 Jan 2022 03:31:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7+j+AxKostCxVUtXLZt7JDj+KZ88UAuuQ1PDCxlP8hs=; b=dGAndzN2gj9PDgu88wWrGeBQ0K
+        p9d9PTKyO0my3R4SYNnYNovGZyA9hXogQzdIo0H7dfkVLJQcLF8tql5VgEmCCNTzujVad5+fRmDfl
+        GxCdFJ+fJDKkheapfviCTJPFXk2VUmZSSJPq/1N3I1fFl93H4NfNFZbHqERgjtrrZug70tSHCARjm
+        DKw75CfgLtjbV2+2uPSavB05qgp1J0c9Vl9twyiD0T8Pi2YYwKS9Eok0KevWd2oaKB6CxraMr+Ao2
+        PvSAeMbXM/qacraFN7mKhkqvTAVWA+TmqaPdaEXaGJF3uOkpUK59yRKm29gX26LGDtATQZq0qG5z4
+        4YeAIWiA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7FMR-000bDY-Mg; Tue, 11 Jan 2022 11:30:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 94D033000E6;
+        Tue, 11 Jan 2022 12:30:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6E8C2201BD824; Tue, 11 Jan 2022 12:30:42 +0100 (CET)
+Date:   Tue, 11 Jan 2022 12:30:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, gustavoars@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH -next, v2] sched: Use struct_size() helper in
+ task_numa_group()
+Message-ID: <Yd1qYsFcgcp/uHSa@hirez.programming.kicks-ass.net>
+References: <20220110012354.144394-1-xiujianfeng@huawei.com>
+ <Ydy3N577YD0JJr2N@hirez.programming.kicks-ass.net>
+ <20220110193158.31e1eaea@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <308b7158-7c2a-cc98-6091-14dae2b2cbba@rasmusvillemoes.dk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220110193158.31e1eaea@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:26:21AM +0100, Rasmus Villemoes wrote:
-> On 10/01/2022 21.55, Andy Shevchenko wrote:
-> > The literals "big-endian" and "little-endian" may be potentially
-> > occurred in other places. Dropping space allows compiler to
-> > "compress" them by using only a single copy.
+On Mon, Jan 10, 2022 at 07:31:58PM -0500, Steven Rostedt wrote:
+> On Mon, 10 Jan 2022 23:46:15 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
 > 
-> Nit: it's not the compiler which does that, but the linker.
-
-Ah, I stand corrected, thanks!
-
-> > -	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
-> > +	*p++ = ' ';
-> > +	strcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
-> >  	p += strlen(p);
+> > On Mon, Jan 10, 2022 at 09:23:54AM +0800, Xiu Jianfeng wrote:
+> > > Make use of struct_size() helper instead of an open-coded calculation.
+> > > There is no functional change in this patch.
+> > > 
+> > > Link: https://github.com/KSPP/linux/issues/160
+> > > Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> > > ---
+> > >  kernel/sched/fair.c | 5 ++---
+> > >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index 095b0aa378df..af933a7f9e5d 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -2437,9 +2437,8 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
+> > >  	int i;
+> > >  
+> > >  	if (unlikely(!deref_curr_numa_group(p))) {
+> > > -		unsigned int size = sizeof(struct numa_group) +
+> > > -				    NR_NUMA_HINT_FAULT_STATS *
+> > > -				    nr_node_ids * sizeof(unsigned long);
+> > > +		unsigned int size = struct_size(grp, faults,
+> > > +						NR_NUMA_HINT_FAULT_STATS * nr_node_ids);  
+> > 
+> > Again, why?! The old code was perfectly readable, this, not so much.
 > 
-> Hm, ok, those two strings do occur a lot with of_property_read_bool()
-> and friends. But if you're micro-optimizing anyway, why not drop the
-> strlen() and say p = stpcpy(...) instead?
+> Because it is unsafe,
 
-Why not? I'll do it for v2.
+Unsafe how? Changelog doesn't mention anything, nor do you. In fact,
+Changelog says there is no functional change, which makes me hate the
+thing for obscuring something that was simple.
 
-Any thoughts / comments on the
-https://lore.kernel.org/lkml/20220110205049.11696-1-andriy.shevchenko@linux.intel.com/T/#u?
-I'm asking since dependency and I would like to know if we still want that
-fix or not.
+> And to be honest, the new change is a lot easier to read than the original
+> code.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+I find it the other way around, because now I need to find and untangle
+the unholy mess that is struct_size(), whereas currently it is trivial
+C.

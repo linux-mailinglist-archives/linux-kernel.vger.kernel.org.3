@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE63648AE7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F8948AE80
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbiAKNem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:34:42 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:60434 "EHLO vps0.lunn.ch"
+        id S240572AbiAKNex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:34:53 -0500
+Received: from mail.thorsis.com ([92.198.35.195]:53992 "EHLO mail.thorsis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239562AbiAKNel (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:34:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mYE06D53hAPKwiitC0FFWhp9uSadto0ku0+zLX7Kh0I=; b=YHHyVPLprJjBuUTr1VyVMvsY5g
-        jpKogW1ywDs1aN+ephiG7yZ5kaxR3To5PWW8vI2CtA4OB9QegyBHueYZDleuVTDzDCrxYpw71AKqA
-        jQ00KoTT5e7/5UUGpKXH1TyAP/T3yBPpbOiAujqy9Jt1cAarIQ97mx/A8BbxaZyRyV78=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n7HI3-0015oP-39; Tue, 11 Jan 2022 14:34:19 +0100
-Date:   Tue, 11 Jan 2022 14:34:19 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Martin Schiller <ms@dev.tdt.de>
-Cc:     Tim Harvey <tharvey@gateworks.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
- delay configuration
-Message-ID: <Yd2HW2U2GDgqAkM9@lunn.ch>
-References: <20210719082756.15733-1-ms@dev.tdt.de>
- <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
- <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de>
+        id S239562AbiAKNex (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 08:34:53 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id DDD89F2A;
+        Tue, 11 Jan 2022 14:34:50 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lbCcM9HzLLSi; Tue, 11 Jan 2022 14:34:50 +0100 (CET)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id CB191357A; Tue, 11 Jan 2022 14:34:47 +0100 (CET)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: microchip.com]
+        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
+        * -0.0 NO_RECEIVED Informational: message has no Received headers
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, robh+dt@kernel.org,
+        bbrezillon@kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Alexander Dahl <ada@thorsis.com>
+Subject: Re: [PATCH v2] ARM: dts: at91: sama5d2: Fix PMERRLOC resource size
+Date:   Tue, 11 Jan 2022 14:34:41 +0100
+Message-ID: <2950776.PjgfHZTfyB@ada>
+In-Reply-To: <20220111132301.906712-1-tudor.ambarus@microchip.com>
+References: <20220111132301.906712-1-tudor.ambarus@microchip.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Martin,
-> > 
-> > I've got some boards with the GPY111 phy on them and I'm finding that
-> > modifying XWAY_MDIO_MIICTRL to change the skew has no effect unless I
-> > do a soft reset (BCMR_RESET) first. I don't see anything in the
-> > datasheet which specifies this to be the case so I'm interested it
-> > what you have found. Are you sure adjusting the skews like this
-> > without a soft (or hard pin based) reset actually works?
-> > 
-> > Best regards,
-> > 
-> > Tim
+Hei hei,
+
+Am Dienstag, 11. Januar 2022, 14:23:01 CET schrieb Tudor Ambarus:
+> PMERRLOC resource size was set to 0x100, which resulted in HSMC_ERRLOCx
+> register being truncated to offset x = 21, causing error correction to
+> fail if more than 22 bit errors and if 24 or 32 bit error correction
+> was supported.
 > 
-> Hello Tim,
+> Fixes: d9c41bf30cf8 ("ARM: dts: at91: Declare EBI/NAND controllers")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Cc: <stable@vger.kernel.org> # 4.13.x
+
+Acked-by: Alexander Dahl <ada@thorsis.com>
+
+Greets
+Alex
+
+> ---
+> v2:
+> - update commit description
+> - Cc stable@vger.kernel.org
 > 
-> yes, you are right. It is not applied immediately. The link needs to be
-> toggled to get this settings active. But my experience shows that this
-> would be done in the further boot process anyway e.g. by restarting the
-> autonegotiation etc.
+>  arch/arm/boot/dts/sama5d2.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+> index 09c741e8ecb8..c700c3b19e4c 100644
+> --- a/arch/arm/boot/dts/sama5d2.dtsi
+> +++ b/arch/arm/boot/dts/sama5d2.dtsi
+> @@ -415,7 +415,7 @@ hsmc: hsmc@f8014000 {
+>  				pmecc: ecc-engine@f8014070 {
+>  					compatible = "atmel,sama5d2-pmecc";
+>  					reg = <0xf8014070 0x490>,
+> -					      <0xf8014500 0x100>;
+> +					      <0xf8014500 0x200>;
+>  				};
+>  			};
 
-Hi Martin
 
-Have you verified this? Maybe try NFS root, so the kernel is the one
-up'ing the interface, before user space exists.
 
-       Andrew

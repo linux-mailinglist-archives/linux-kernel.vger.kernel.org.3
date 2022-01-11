@@ -2,163 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E372A48B0DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F9848B0E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343577AbiAKPdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:33:37 -0500
-Received: from mail-db8eur05on2117.outbound.protection.outlook.com ([40.107.20.117]:40673
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240480AbiAKPdf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:33:35 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lmhw5JqIeVtm7TcCw/NFFTqwjqTNQrh6THgSBnKOSzmnuPN55gaFpOjdd7H6OlxhDaQIyWc4ExOP6wUATZxvZcm+Qn0rFxmQDFt/9O+YV/7TXOBRo7D/m7gpPfhgxEjUUWXvxCEEmDJIBKlXVTwSmFjES2fcLP72ODgC3rhERZAcXvhdsXduKFkzo2pyBv84iCzuIz2qkQolTw6k3MtDIPB/tG6Gt7sARCxMuJgpSRSMbsbmm7Va4XuOvxN3P97dgF+mlcwZ4OToJ7pvoYPy1EGHvS+sJeMNIStPIuSEf/Kxhst91IO7fp2Ag8bAahDkPbi4d+yEnerPq8DOjUY12A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r/sdxbBLIh5lDw2dJWXc6zgqfsHLrwQJr75XU1gFZak=;
- b=E9M4bev6FEKk4iqLAmkB7kQE5XK6l1xp5q1K3M0r8bfeDUPpC4nBWOpN8esLSlypANM0XnwRM7Xnk0UEwu774axm1zUb/rRjUF8Ts06eaFCCLJiZBp6Y/x/xwKaEpf8vjNk8AEUsNKTypP03ZNCtQZ1oLhTZcvYMmvEoSYzLlZ8cyLMERo6XHMx21W1xbXVXxTKGYJpSCDmtt6IFJ88xx1XmIwtbn5Nc+In80PmO5/GdXscQ5cLjiG8FBDoLpTjpcO0uVvJiOpUlb7Uohe6/ipdFnQLU3hGgbSan+CsRJzRBBiRAWKIoCS7BiI5tP+iAUp6/0c/3DkBMAtK1lCgIUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r/sdxbBLIh5lDw2dJWXc6zgqfsHLrwQJr75XU1gFZak=;
- b=AIwtV4zSFRrUTr37zuusqN+Mx1iu0dNlwM3W+Z79M+tsq7HvvmIvVIdzgK6I6oFftlmld0f2Wgc+LZfyKE7OJB0bkC4yPNnp27Bz3xYL5zsJcLmQA7BttVNhrv/Vr35x1Wz58PnL4fzJP8LUJiIHU+/IQiawEWJ/p15VcfDrzAs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
- by AM4PR1001MB1441.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:200:96::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
- 2022 15:33:28 +0000
-Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b85e:6bff:84d3:e825]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b85e:6bff:84d3:e825%6]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 15:33:28 +0000
-Message-ID: <9af5a4ae-e919-a545-809d-451217cf40f5@kontron.de>
-Date:   Tue, 11 Jan 2022 16:33:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 1/2] Fix corner case in bad block table handling.
-Content-Language: en-US
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        vigneshr@ti.com, miquel.raynal@bootlin.com,
-        Yoshio Furuyama <ytc-mb-yfuruyama7@kioxia.com>, richard@nod.at,
-        Stoll Eberhard <Eberhard.Stoll@kontron.de>
-References: <cover.1616635406.git.ytc-mb-yfuruyama7@kioxia.com>
- <774a92693f311e7de01e5935e720a179fb1b2468.1616635406.git.ytc-mb-yfuruyama7@kioxia.com>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-To:     "stable@vger.kernel.org" <stable@vger.kernel.org>
-In-Reply-To: <774a92693f311e7de01e5935e720a179fb1b2468.1616635406.git.ytc-mb-yfuruyama7@kioxia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS8PR04CA0072.eurprd04.prod.outlook.com
- (2603:10a6:20b:313::17) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:157::14)
+        id S1343616AbiAKPdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:33:51 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:52235 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245121AbiAKPdu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:33:50 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MwQKp-1mF4TW2esX-00sQ6O; Tue, 11 Jan 2022 16:33:47 +0100
+Received: by mail-wm1-f51.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so913789wmb.1;
+        Tue, 11 Jan 2022 07:33:47 -0800 (PST)
+X-Gm-Message-State: AOAM5302PD/H/LL+Ue9VnmV6tsOAQS6wR6H1gkAhTQflzf2S8jBCBdX/
+        TjFu3Kr+PKZUKQiES9tUFYMuAH5ZQ7q/xgW8rZA=
+X-Google-Smtp-Source: ABdhPJyFFinYnz2sZBS9mJMA0LPDw6WfY7Va14XdJpsCQCV44OO8uJYaRTfqzAgePL4Snx4fHkOYLxmTt0Ze2tTLQxc=
+X-Received: by 2002:a05:600c:287:: with SMTP id 7mr2989838wmk.98.1641915227093;
+ Tue, 11 Jan 2022 07:33:47 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 88b16c98-db3c-43ad-0f58-08d9d517b738
-X-MS-TrafficTypeDiagnostic: AM4PR1001MB1441:EE_
-X-Microsoft-Antispam-PRVS: <AM4PR1001MB1441641C6F7033062200DF48E9519@AM4PR1001MB1441.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wnJgHNvJaAOOvaNPLzaQwEN9+NesV0MFQ7WzhrVY4cICcMnM/8AQzS440rtkn36Lt/fqdSqFUlLdgZRt0gsRVxNJeXyPDpEk4WSzV+JcaeL0vft65/8jgD7rDadajWdmCdcwWW+tc2uSER6yXV4LfXbFK6045zsv0fDwfPg3vePnN5f9PuZAFc/+n/GSSjJdpVWaL3pBYA630YnLThJyu0ZKM9vkJcp/TGLwd712GcDyVnXOFjp3VpXjVt1OG5U8oSt3MdeXIvW8yB/fKWXPysGgcCyQ7eCDrtB3hPqrtQplECRZeHUW+7Rivp5lkZtnZ0W+PiC9YXvmYdjIEtNJiQ0sqR4ZxEjIMgdsykAi+FNKCD8iUtCwGrSEegGMh0Hn8yzlTJ3LRxbZJMufghCAvsl0bpcAcm4Gy8Sf1kZwDGzSPlyVHFGvkwDoYJEbfcH2PY95pZh87xIRv9Fd0JPznpWk5rlIMuUNZiVWTtZMDRJ590iw5wz/nxtZYsa8bNz3eIfqU05+pI1NiW8rh42/BsHkpntiAFcNngHLF2LWszl/bgD4zMAwpHD7AZl0m3emYty+Nygs7xR3qrwUc1IWTEpnwZV6k3+P2ESFxMii18z5kR9wLw1CFYySCI+zkwou2LTZ3j4/vP0rAB2CcV2VbpTSwxNeHz3LaRuaLmfKan9g3M+s8SBIJAC7K35LBHROAlG7LiU2NdsnioL+Xu5WGmQr8K6rSFnB9uJxC/B5HBI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(86362001)(8676002)(5660300002)(2616005)(107886003)(38100700002)(31696002)(53546011)(6506007)(4326008)(8936002)(44832011)(83380400001)(508600001)(26005)(6916009)(186003)(6512007)(31686004)(2906002)(66556008)(54906003)(66946007)(66476007)(36756003)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2VoeURWTXd6c3l4N0MwUCt1NkZRV283aGVzY0hSc1BWeEdSS3FHTTRWQ095?=
- =?utf-8?B?WjdiMDA0MkpKTndDMEhGOFdhRHh3c1NGQXJ3REJxL2NGOXFJUjJtUHliR0hB?=
- =?utf-8?B?YzhqRFpFcXNHL0U3dTErOGRER0NqWmgwVTR2Q1V2Y3MzRnkyTGVHcHBwSTJN?=
- =?utf-8?B?anlHNEk3aDhmREk2R1RaT0tOVE9MaEZLWS9janZNY0pEVzJ4ZXJXZk9RTVVJ?=
- =?utf-8?B?WTVrbXdIWWdQaGVwdkJhREVuZ2ZlRHdLWUhZMDNUSGRzMDg3S1o5S1BBTXVN?=
- =?utf-8?B?dW1xaSszQTgxOWFzcDYvYmxmWXhWK3g1SXFTazBURXVucE4wcjJmZUFGenJP?=
- =?utf-8?B?TGkwVTNqaTNlMUQ2QUlBNklYWkxsckpTM09odW13dk5CdWEycHMzL25NUk5o?=
- =?utf-8?B?NWR2b2g3Q1FPS0tVMGZVMEFNQlcwSDJiZzhrOWwzSVZnWk5aUC9JWGZPUkY1?=
- =?utf-8?B?bnZGNERmRkJBZHZ0Yk9wZzZRYXQwR3dWUGp4bjhQRGZsR0hXdEJXRUlSSVhT?=
- =?utf-8?B?L1dGR1ZHN0l3dWxrVWdwblliQU85QkFsOTd3ZUY4c1k4dzRuYitKUTFYRUcx?=
- =?utf-8?B?TmVLay9DQ3dkcTl1cFQ1SGFuS2RxbFQycCtnYVh0cGYrNSsydis3WVNIU2tW?=
- =?utf-8?B?dW5jUFNjcDVJdVFDSjFRMlZnai8zL0F4elZHenFRM0FxbGlyWGRWRXRmN2lu?=
- =?utf-8?B?cnA5Z3hIZFhYUWlWa2NyY3JZLzlucERmeFVSMFUvYWlaQ2hRbDFObVlYZzl6?=
- =?utf-8?B?cmZiTkRZRXNvaWNTT2dLWitBOUZMY2R2Y2xNTTQ1SFF6VFVEa1QrNkp4aEU1?=
- =?utf-8?B?MzJ5bERHdUNLVE1YamRwWTJCN05ESUlLVnRSNllUbEhMYmxTOTVpTFZyekhh?=
- =?utf-8?B?MVZJMG1iMXRXUTZKWERWYlU2MjdVZTl6OEQyZWJnaU82c3VBOWZvY0d5citI?=
- =?utf-8?B?djJWS0hhWWJLcE52dE54b2g4Y1QxeTJRL2IzekErV3F4MFA5NFQvMDVMaFI1?=
- =?utf-8?B?SXdGNW0wSjJGWmRNUGs4NHdXSHQ4L1l2T0daQzZ1Tk13VHZjTHVUS09rTHNS?=
- =?utf-8?B?ZjVBT09OTXBrU1VGdHdQZUl1Y1ViL1F5R3FBeUZIdUF6dU5kbWhReHpPUFJB?=
- =?utf-8?B?TlRpOFh2bm1EK0hiMjRsek1FTTR6SmJ0N0EwR2FwWktXQXUyZmpFdGFNdGc4?=
- =?utf-8?B?dHNmTHB3SkZkelhLaVBDVWhMWnRTdHg5VmV6TjRJTFhYMG5XS1hSQVpWeWhG?=
- =?utf-8?B?WlM3bFR1dGNGbnZ0ckV5MThOZlBPTm83S3J3Tkt3MVZGUElKNnhzSk13Y0Zh?=
- =?utf-8?B?ZlVhcHlkNTQ4cVByQU1HL0VnM1p3MUNFdklVK2JqR3FEZW0zelVTb1Fwb0lN?=
- =?utf-8?B?RUdIQ3BDRms4enN6TTVURVUxZHdqV1RiODhTWXRJU0hwT29JbnMwY0tQYmJq?=
- =?utf-8?B?K2MwQ1FoUlpzRUw3WmFuVzNiNlllWThGWS9EeVFuT0hWeUxzOHJ1L3ZpU1l2?=
- =?utf-8?B?dngyMGxLZ1ZLYVpZMTlweGZURG1XV1FOMVVPaTVFMHIyTytXMHhTc2ovUHli?=
- =?utf-8?B?cURGUnRDRHJ3M0hWM2taVXY5TzNWTDNKYStMOWpmaVFEcndlZjZDZmo0NXlt?=
- =?utf-8?B?eTZieStYaGRwT2ZHT3ZxNnBnQkxDU1RHbjVybWpnWGdVc013WjVrcDkrQ0NU?=
- =?utf-8?B?dHk4WHEzMllDUGh5MzdDQ2ZwYTQ1R2NnYjdyUmt4bHpUbW81M3IzZWFiWlNU?=
- =?utf-8?B?Y0hMeEF3VmVxZVR3RGJEQlB2SXlPNTFmRi9EM2lMVDloY2VVYVBKYWZBNnZo?=
- =?utf-8?B?TjJySUttTzBRbGNMaUNPZG12TzJ6aVE3NHhpVWViczVQRmx2dzA4cCtqbFZN?=
- =?utf-8?B?KzZ1L2ZSdy8wdjE1R0hVQVBNQnRaVkxQQ0w1N05HS0g4cmxhVTZJaDdRNDBn?=
- =?utf-8?B?QWk3aHpYVTdjNzh6bTZCR0NROS85b3ZHbGFJTy9DcnU0SlpPVkp2MWhNZGVW?=
- =?utf-8?B?TTlxMTVrbEgvMG5ySVkvVTF5K2g1azgvWE40OVh1RWYvTVBPa2x4UE8zanFZ?=
- =?utf-8?B?N2djd1VocWhZbDVJZ2FnS0VLNG9EdFJ6MFExZmhoL1Vsd3NiWkRrTzIycktH?=
- =?utf-8?B?ZCtJUUhqMmhtMGdTRHEzZm0wRDF2em80VjNNeElIUi90cDRiZWVoQkxjd0Jm?=
- =?utf-8?B?UnpUQUNBN21MQ2NSQURSUTRhU3pTenh3bUU5TUlkZ2hXQkFzczlxQ3p6QWVj?=
- =?utf-8?B?ODBjRDZ1aldlTlp3WUFMWXZzTmxnPT0=?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88b16c98-db3c-43ad-0f58-08d9d517b738
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 15:33:28.5598
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3emPSmfpTqsGVxnqwW/XWlYHiwz8PxROv/+MVaRKOisYpVrxOaCM95ujFg1ZVo/oYK44/JEDVzCpPjeOmWGgsfDgdvX7OSyKbEzawhEU4uU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR1001MB1441
+References: <20220111083515.502308-1-hch@lst.de> <20220111083515.502308-5-hch@lst.de>
+In-Reply-To: <20220111083515.502308-5-hch@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 11 Jan 2022 16:33:30 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+Message-ID: <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:tx6IPv0ygRrFwEX45u6YGmYZF4q2tKY6A4+hu9TKlEe4uh5NsZa
+ QRpuFp+LN4kZi2zmoTXgxqnhWVQYJtpEcjdI7819zEKV7QSqF/1EleKbktsn+kKtfz0h2D0
+ tLBfeFGy7Ju2xSluoAuZaQyn/drX0z0lM1dy3iNgwLxVTUjmFpAuZnGhsD8+jj/Lf4d8KEa
+ yR/p9izO+KVN844fr1GEQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:k9mBvFF1K44=:R1UiRCxQjZewR+TumBOQJH
+ KHbMrEAVPoyOjTjnVznPLlAeTuUXJCMXPe91vVSV1VPlK+9sFORPHJaE9Oqb5vWsDxiuX/umF
+ 2eOAOArrgNLa8V2xYqVDDXcexEn44g0mwV6PYp5JTV8WJ86CioJ+4Zf1xDGTIwSFFfIwPcX1l
+ Xw60AAonM7sdk6FZ63DylMTYHZdmpD8t22aR0vK2nNI5Lkal88BdvGjWt8JjHI8pJP03ebaXA
+ 6u3RaakXFV7mu2hpWDNRWKH55q/3CRUFseB8WIpIEKP00a5CfJ4acF4ioav3DECnj3pDk41c9
+ kdnovlyq4iCquGzzMa0jieTckQfP7biyZNOboS01neuWhtp6VDdqXbFkfyOzx73482ytgi/WG
+ +xa34Xth2dhJMU+Q0p5TKCojpbBB8UteuAf2j1BDMBRytXvmv6dHmq5QzrpgckqY8Xl1orx7I
+ K4i8BN3pjYlX9r42OXQrmW0YcrXqE3rlRyir5KN1+rVzLqNgnO5tLAc85E822sS5M+o3L2IxO
+ frzlC3Dno3fP62wpk2clzxEWqw0lngxh7kmbhZ+aW6f+eVnFmGr6rkL+uYudCm2n2X21go2Zc
+ /Ne6oWu73KoGx4CvZeeWD/0Qkn21H9pYDD9UwU8zm8fHrl6tcA+Iqp/RC5VUeSXlf/6JDKeLS
+ IpgJdcZT71vKDGZGhA5srpwjumfNrgJIyzUPUXlqby2b2f9YcNpgT4jQWKlPn/mWBO/I=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi stable maintainers,
-
-On 06.04.21 03:47, Yoshio Furuyama wrote:
-> From: "Doyle, Patrick" <pdoyle@irobot.com>
-> 
-> In the unlikely event that both blocks 10 and 11 are marked as bad (on a
-> 32 bit machine), then the process of marking block 10 as bad stomps on
-> cached entry for block 11.  There are (of course) other examples.
-> 
-> Signed-off-by: Patrick Doyle <pdoyle@irobot.com>
-> Reviewed-by: Richard Weinberger <richard@nod.at>
-
-We have systems on which this patch fixes real failures. Could you
-please add the upstream patch fd0d8d85f723 ("mtd: nand: bbt: Fix corner
-case in bad block table handling") to the stable queues for 4.19, 5.4, 5.10?
-
-Thanks!
-
-Cc: stable@vger.kernel.org
-Fixes: 9c3736a3de21 ("mtd: nand: Add core infrastructure to deal with
-NAND devices")
-
+On Tue, Jan 11, 2022 at 9:35 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> The fcntl F_GETLK64/F_SETLK64/F_SETLKW64 are only implemented for the
+> 32-bit syscall APIs, but we also need them for compat handling on 64-bit
+> builds.  Redefining them is error prone (as shown by the example that
+> parisc gets it wrong currently), so we should use the same defines for
+> both case.  In theory we could try to hide them from userspace, but
+> given that only MIPS actually gets that right, while the asm-generic
+> version used by most architectures relies on a Kconfig symbol that can't
+> be relied on to be set properly by userspace is a clear indicator to not
+> bother.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  drivers/mtd/nand/bbt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/nand/bbt.c b/drivers/mtd/nand/bbt.c
-> index 044adf913854..64af6898131d 100644
-> --- a/drivers/mtd/nand/bbt.c
-> +++ b/drivers/mtd/nand/bbt.c
-> @@ -123,7 +123,7 @@ int nanddev_bbt_set_block_status(struct nand_device *nand, unsigned int entry,
->  		unsigned int rbits = bits_per_block + offs - BITS_PER_LONG;
->  
->  		pos[1] &= ~GENMASK(rbits - 1, 0);
-> -		pos[1] |= val >> rbits;
-> +		pos[1] |= val >> (bits_per_block - rbits);
->  	}
->  
->  	return 0;
+
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> index 98f4ff165b776..43d7c44031be0 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -116,13 +116,11 @@
+>  #define F_GETSIG       11      /* for sockets. */
+>  #endif
+>
+> -#ifndef CONFIG_64BIT
+>  #ifndef F_GETLK64
+>  #define F_GETLK64      12      /*  using 'struct flock64' */
+>  #define F_SETLK64      13
+>  #define F_SETLKW64     14
+>  #endif
+> -#endif
+>
+>  #ifndef F_SETOWN_EX
+>  #define F_SETOWN_EX    15
+
+This is a very subtle change to the exported UAPI header contents:
+On 64-bit architectures, the three unusable numbers are now always
+shown, rather than depending on a user-controlled symbol.
+
+This is probably what we want here for compatibility reasons, but I think
+it should be explained in the changelog text, and I'd like Jeff or Bruce
+to comment on it as well: the alternative here would be to make the
+uapi definition depend on __BITS_PER_LONG==32, which is
+technically the right thing to do but more a of a change.
+
+       Arnd

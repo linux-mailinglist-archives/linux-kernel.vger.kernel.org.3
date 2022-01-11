@@ -2,118 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C9348B955
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5C548B953
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244688AbiAKVXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:23:20 -0500
-Received: from ixit.cz ([94.230.151.217]:55930 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229775AbiAKVXS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S244543AbiAKVXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 11 Jan 2022 16:23:18 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44255 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbiAKVXP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 16:23:15 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 198F12243C;
-        Tue, 11 Jan 2022 22:23:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1641936194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZimlnBQpBEisj8Iz4EeSG9ExZsV338uX9MeSY0WUgrM=;
-        b=1qiy1xm9LL+9dZjjuZOdAgq0LGZZO49alk9ErLCK3alBYAa2PwExVq9VD9P+9TtGgjMSwv
-        smqFAVbCcJIaqANTsVIqjPMf+VBXsj3z8DgQxd40pWqC0PFeaXOAOtvYmIjWxwjY3qOJPM
-        +kXBEJl/6o7THqVVB/RQpgCVW5mBAk4=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: watchdog: improve QCOM compatible parsing for modern chips
-Date:   Tue, 11 Jan 2022 22:23:10 +0100
-Message-Id: <20220111212310.97566-1-david@ixit.cz>
-X-Mailer: git-send-email 2.34.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYNw11K1nz4y41;
+        Wed, 12 Jan 2022 08:23:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641936193;
+        bh=gH3vPl16f+LUWdP8Gm8iHygFw6tcFSVQIVS6kij8bv8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ng4iic4KtcAl0wQC+IlM6BjNQm3fM7z3BOxqE/gKNMk3Dg2djKKonP1D3lht2sOrD
+         6Z45clJxE1tIu2ozauvX2V/LIX/OBMy9Te2gY610AX3bSz36ipmkiMHAiTxVJHnDgW
+         OabP3tedQHaPlaVgRQoGmyWnCSCymwBoLu3bpYt1JcCJr0+gwn9bhIETGXTY7DKRb8
+         ucmJr66r1n5hni1qgoEc3MwXe3Oks2jZBDGCcexlo+RhcUGACk93glPm53VRStr2eA
+         GpKA4E8Dy0TrWeSGX3v/OyBxIIPZnAgF7eHqBCngZ4Q3zarCM5Nt9/rBAOGeOu2UjE
+         YIZRUaaMmEADg==
+Date:   Wed, 12 Jan 2022 08:23:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
+Message-ID: <20220112082312.70b99afb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/3oulqhfug7Mc.bGQUW_FIrF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parse compatible as expected for modern QCOMs.
+--Sig_/3oulqhfug7Mc.bGQUW_FIrF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes warnings as:
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
-        From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
-        From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+Hi all,
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
-v2:
- - updated compatible list as two compatibles has been added upstream
- -> resolve merge conflict
----
- .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
- 1 file changed, 21 insertions(+), 16 deletions(-)
+Commit
 
-diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-index 16c6f82a13ca..4ff8c59c59ab 100644
---- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-@@ -14,22 +14,27 @@ allOf:
- 
- properties:
-   compatible:
--    enum:
--      - qcom,apss-wdt-qcs404
--      - qcom,apss-wdt-sc7180
--      - qcom,apss-wdt-sc7280
--      - qcom,apss-wdt-sdm845
--      - qcom,apss-wdt-sdx55
--      - qcom,apss-wdt-sm6350
--      - qcom,apss-wdt-sm8150
--      - qcom,apss-wdt-sm8250
--      - qcom,kpss-timer
--      - qcom,kpss-wdt
--      - qcom,kpss-wdt-apq8064
--      - qcom,kpss-wdt-ipq4019
--      - qcom,kpss-wdt-ipq8064
--      - qcom,kpss-wdt-msm8960
--      - qcom,scss-timer
-+    oneOf:
-+      - items:
-+          - enum:
-+              - qcom,apss-wdt-qcs404
-+              - qcom,apss-wdt-sc7180
-+              - qcom,apss-wdt-sc7280
-+              - qcom,apss-wdt-sdm845
-+              - qcom,apss-wdt-sdx55
-+              - qcom,apss-wdt-sm6350
-+              - qcom,apss-wdt-sm8150
-+              - qcom,apss-wdt-sm8250
-+          - const: qcom,kpss-wdt
-+      - items:
-+          - enum:
-+              - qcom,kpss-wdt
-+              - qcom,kpss-timer
-+              - qcom,kpss-wdt-apq8064
-+              - qcom,kpss-wdt-ipq4019
-+              - qcom,kpss-wdt-ipq8064
-+              - qcom,kpss-wdt-msm8960
-+              - qcom,scss-timer
- 
-   reg:
-     maxItems: 1
--- 
-2.34.1
+  420e543b708d ("Revert "drm/amdgpu: stop scheduler when calling hw_fini (v=
+2)"")
 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/3oulqhfug7Mc.bGQUW_FIrF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHd9UAACgkQAVBC80lX
+0GznJgf7BWs3GghUehCsRvtjggUp7s32E3awmti1IFXUVtMApOr0WkEJzZJ/1Mob
+fFdO910yB1GA55fOS4qKUDFIrldPwdf/PQr+OwFCzGWQXh9GNTSlDCCJ3mKoQwy9
+SexKsfmBojZ3//vb7yJN1VhiWXLlnMeLpzmfUOvAbWbXWgFtduLN/jOcocnjaHMQ
+9pXrT3cBrC3cpBXlTPxJNo0K1rZLZtqnSfRBv0I2bzpc1zVPOn9wckuD1GfCXnr1
+f1bKXJ+5heqn0l1RcVqg36tPC1AY+DkigBZFoQ9zsczPEtMdorGVtXa8FuUCL0N+
+6WXzivfiBZ/Td5OWGJVfznIPMyZy5g==
+=dCyv
+-----END PGP SIGNATURE-----
+
+--Sig_/3oulqhfug7Mc.bGQUW_FIrF--

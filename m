@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C5E48BACC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D273A48BACF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346478AbiAKWa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:30:28 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:46877 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiAKWa1 (ORCPT
+        id S1346512AbiAKWbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:31:11 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:40912 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346488AbiAKWbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:30:27 -0500
-Received: by mail-oi1-f171.google.com with SMTP id w188so983433oiw.13;
-        Tue, 11 Jan 2022 14:30:26 -0800 (PST)
+        Tue, 11 Jan 2022 17:31:05 -0500
+Received: by mail-ot1-f52.google.com with SMTP id t6-20020a9d7746000000b005917e6b96ffso445515otl.7;
+        Tue, 11 Jan 2022 14:31:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=bCQdWu1p3SjT0066qYcPttp8iL07o6DnAH1kBwTjtiw=;
-        b=nYXpesEpYwjovhnMDk6KFjaZ01ujKTomNc1Fb2dYiVztg45NXYYbSyhT2+uQSD3I5I
-         GtlyGRCTeXbxSNTZqVnGZKU/58IKlmgOdG1dnLNgFUx6yVhfgX5GuwNuAdNkhLngZ5ov
-         2G+WInqEX1/Y3Z/u2Aj8eNXhtFjm1W+Qp18lt/b7APejj9SRzJyzg529BWn35PA+9r8F
-         IWyYY6rp1TUXmKCHGVq+xeBrsr9JXF5Fk9YbAu8SRHFduUrSaMnCffZWe/a37Nn3bE7F
-         87/IjvdGFVsGlyJTMefW1QFERL5WiIAsREsw+X9run+EJpsy07eI2N2bf0jNFpcZb9tf
-         N7ug==
-X-Gm-Message-State: AOAM530+VqlrXuT9RUBasqEDSWoJpgn0z12ZD+0WLf53n3C3ciKjVRxw
-        5pcNo1OTqoAwjrAfeUSWAni5ChbYiA==
-X-Google-Smtp-Source: ABdhPJz7CfQ9kgnMUuD5JF6svjJ5RmMkmSvyACdv/7vUvO1blHXyiDwty4gQaOKucHCt6iujWr1W9g==
-X-Received: by 2002:aca:646:: with SMTP id 67mr3249344oig.175.1641940226545;
-        Tue, 11 Jan 2022 14:30:26 -0800 (PST)
+        bh=Zf4Xaab9Mi6m66uXX6q8eD/bR0Wdt4o3dVUViFjX3dA=;
+        b=c68xlaAS1mO8rMh3+RxFDUsONxYsH6+M8sPY0M7MPa3pC1vPOtfKgxKDggfZFgPYSb
+         BZ1iDhsKpEN5kC4L3Arkh5Jnzm/uowaSZnlmkIErheeTYBHFJNs2FDC5sVpPjjsgqC/1
+         2tFVbzlR/X2SyjUlur0EZnDJLyo4OifZZVU9sGASiHPkSbBD/FdoW3dmOg9wIvrWxBfu
+         X8B+zDWQF2lk4ASe8EmYoLgwZvSOEfQU8VntFIW6wiKDyPRf0JS1yKRgWMsiRS9hQwmH
+         7SZLKWlMpEhyuytQMCJinJ4hefX/LMIQGwlABewb42vRhZH5+AkjlNUeYl3FnSQDXBhW
+         3/CQ==
+X-Gm-Message-State: AOAM531DM6fGAMrcaH/Jm887PB9beLM+kqT7MXd3D5a6XoHnJvgxnL9q
+        Zyt3tyzSQa6AQqYeTodP2w==
+X-Google-Smtp-Source: ABdhPJyzqeLADlS5QPsMnzpltt9vSaIKJtveLOoKhihdgWHr9uPJWC6xZwFnEGVD+sRNPYMBLOQ3TA==
+X-Received: by 2002:a05:6830:2008:: with SMTP id e8mr4565447otp.290.1641940264574;
+        Tue, 11 Jan 2022 14:31:04 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v41sm2142340ooi.0.2022.01.11.14.30.25
+        by smtp.gmail.com with ESMTPSA id j26sm24877oig.54.2022.01.11.14.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 14:30:25 -0800 (PST)
-Received: (nullmailer pid 3620050 invoked by uid 1000);
-        Tue, 11 Jan 2022 22:30:24 -0000
-Date:   Tue, 11 Jan 2022 16:30:24 -0600
+        Tue, 11 Jan 2022 14:31:03 -0800 (PST)
+Received: (nullmailer pid 3621000 invoked by uid 1000);
+        Tue, 11 Jan 2022 22:31:02 -0000
+Date:   Tue, 11 Jan 2022 16:31:02 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: maxim,max77693: convert
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-leds@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v2 1/3] regulator: dt-bindings: maxim,max77802: convert
  to dtschema
-Message-ID: <Yd4FAI2dqonI5lUw@robh.at.kernel.org>
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
- <20220111175017.223966-4-krzysztof.kozlowski@canonical.com>
+Message-ID: <Yd4FJnbKHsmREfN3@robh.at.kernel.org>
+References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
+ <20220111175430.224421-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111175017.223966-4-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220111175430.224421-2-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 18:50:16 +0100, Krzysztof Kozlowski wrote:
-> Convert the regulator bindings of Maxim MAX77693 MUIC to DT schema format.
-> The existing bindings were defined in ../bindings/mfd/max77693.txt.
+On Tue, 11 Jan 2022 18:54:28 +0100, Krzysztof Kozlowski wrote:
+> Convert the regulators of Maxim MAX77802 PMIC to DT schema format.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../bindings/regulator/maxim,max77693.yaml    | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>  .../bindings/regulator/max77802.txt           | 111 ------------------
+>  .../bindings/regulator/maxim,max77802.yaml    |  97 +++++++++++++++
+>  2 files changed, 97 insertions(+), 111 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/max77802.txt
+>  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

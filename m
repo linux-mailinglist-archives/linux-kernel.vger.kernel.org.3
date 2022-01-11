@@ -2,191 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B892B48A47E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBB948A486
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242925AbiAKAlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:41:31 -0500
-Received: from mail-co1nam11on2082.outbound.protection.outlook.com ([40.107.220.82]:48992
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1343871AbiAKAla (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:41:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U8Wl9jMqYHF+MRsXMd4l0LQ9Q/d4bffa+n+SG7r+yuS4vtvFPmeazX8uy+wRRNmnazzuiivKtls6d+W0XY/HEDJzrMcBZCH0vNwS1hpt9R3ZXuuCwgnqV+jA0y/hjRJsb/9qq6GCf165SvgB2shHfAUY0Dn5bnl+T+0RsqMfbuA6JeEOdaId1xWzKV+2PRMIwyMuMpEKhTeadkCoBEquz0yWIJEC3twx1y4fBniipExW26gcOrPbUkq6MFj8HdVTHhbQTiMa15cj1CR2mAMDZ1aGkJ9mIY5oeY1S2WkF8878+/L4YUnIDJWxTgdynylm6fqx/VV9zHltQWyYxLiXyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Zw7ioGBSR3dqnFaJfuZlqEQdCCR+ajfDuQMhi8m6Zc=;
- b=PNQfj3fQ5hyqvhm+P2yo8o68Z9F4tAzi3lT9COP15K6Lj7A9svu2zydHYZ1cDNGXwLD+t6x+0+TJgB67x3DoME0DgWIDNAVQ1AC87o6xpmqzHHaewEisHzgTY5g33Of1IhjFCzZdCuBxFNlSDsn6FJeL51XuaKPTRN1KaiDshm7tCa/VWGzg+fCHIszl7tdyOq0OqfpVU8QOwyUUhKrKhWLERaB9j/8Ei5WRghvhE4escnbEJLDEsRJuhbOG8xdoh8XdxGBC7i3MEw8rST+xy6S/0OGMYcDRwda7wN3K6X/UnGiTAj4XLxYDeRs8yUE0GQ70JpgJxmTmaFp6SRZcew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8Zw7ioGBSR3dqnFaJfuZlqEQdCCR+ajfDuQMhi8m6Zc=;
- b=m6jYzK6rXDdVK8/+QvgRtoHNNyVgpqLdsDQ0vf3Ufv5XsQWVMwZiy/G0rHeJNBATO+NdLsGzj+7i2uE0Nb77P3/VSaQdbCjfL1omEUfi7gUERQCKBLg3L8kOJN3tHgLd6ivQEUidrJUtSUCYelm583qeCMjwPVh9V42dXiYYotgjvUdfRi/QLsHpmdde56h61rfuT1Vt5rA7WHDBcs4UeUM9B3btIVytHoPkhUJEjVoQxhzpE5f6ACXxuuRyhVZMhLXvw18Pexz34zyUSkLCptmAOpbUW8qoJYBdqXO7fOoPHVM2ypmFRlMLGQ9h+13X2gGHitf2U8WDs/Up5XVc7Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5333.namprd12.prod.outlook.com (2603:10b6:208:31f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
- 2022 00:41:28 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 00:41:28 +0000
-Date:   Mon, 10 Jan 2022 20:41:26 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nvdimm@lists.linux.dev
-Subject: Re: Phyr Starter
-Message-ID: <20220111004126.GJ2328285@nvidia.com>
-References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
+        id S1345675AbiAKArB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242961AbiAKAq7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 19:46:59 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FC5C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:46:59 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id x15so14698694plg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:46:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SqPpCBaIJxWA66e99iweXS9Mhum0NmymuknlhbSSZ50=;
+        b=QZPDkrPqDAt2TUvijsCJoWEp8hBX3K7CoUbnIt2KAuwm2a+qT7x7YC0CVczxD0DKkF
+         Qvb3kng7kd6ytrqrglellMiWZ7wf/gNQRJAm7jxF9fjla49Kl70HCoFo1A78iD+VVzJX
+         q/ADkE+RHouE4kG5HQ8slXBGeaPrndX8VnQbRdP8qjjyA5betkwPk3deVNqXQ4uH5O6Y
+         eL05nU+EQH7kNcEMy1ENYBIMnHSGBD6SPKMrE4KZKVj7k8tVXN8kdiNCD9KgjwBD7XyZ
+         TojY4f3vH3s2tp4rRsnM0qkCG/Ecb0PwDfegKK2vfM6wXkrspik1OV2HlX8s/L/hHCVp
+         bjTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SqPpCBaIJxWA66e99iweXS9Mhum0NmymuknlhbSSZ50=;
+        b=6QlQLlfrlZ69A133+9aMp0SzmDrYw59eHTfPi5lPIp3m6xSzi88yY9jV7bhgEZXV8k
+         Q7UIwRsq+i3DiEOm8zFLgUPRvRDs1YanEYvzkbdHZg9ibD6yBUlg0vukhSvEimKMUS5K
+         k/A3/fkkt872MSwdSosNG96Mpr6SfqzQxHkQP1FzZLBUjmDZLgR3pKAR1S7gmssB5MkB
+         UMMpCrf7jNMBKqmPtrooEa2GbmRADUls3WGs2dRhY5onVd+7uF7wS1LDMvRkdsR5ArZP
+         nCdXMNp3+iEC/+7PAiWSfLGrqvjjE8x5yEXnTbsvvH2j2FrDZbM4/oMOTp2++4dEuMuU
+         ulWw==
+X-Gm-Message-State: AOAM5334vroshObgc/64fc70zccgHKSLqPsMKi5vmTCRwpTZizBLFoss
+        8oypidIAnuKFQoD4x8bxpC3IeQ==
+X-Google-Smtp-Source: ABdhPJwvMjX/WRnMp8L6dB0iTB31Veyj0mqliwtvWwJIsTSnplQyTL0JYXfytqmDiFdew4n9g9in3w==
+X-Received: by 2002:a17:90b:3b81:: with SMTP id pc1mr409953pjb.193.1641862016752;
+        Mon, 10 Jan 2022 16:46:56 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h8sm2269110pfv.4.2022.01.10.16.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 16:46:56 -0800 (PST)
+Date:   Tue, 11 Jan 2022 00:46:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
+        tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] KVM: Do compatibility checks on hotplugged CPUs
+Message-ID: <YdzTfIEZ727L4g2R@google.com>
+References: <20211227081515.2088920-1-chao.gao@intel.com>
+ <20211227081515.2088920-7-chao.gao@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdyKWeU0HTv8m7wD@casper.infradead.org>
-X-ClientProxiedBy: BL0PR0102CA0058.prod.exchangelabs.com
- (2603:10b6:208:25::35) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3588fbf7-61d0-4ca9-93cc-08d9d49b1aaa
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5333:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB53336BC94B275B27420F4385C2519@BL1PR12MB5333.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xSYGm/2TBefftNgpazkW8BldoJSx/O17DJlzWpOXrBx/wcQ2d9MvixB7bQ8XClEe8pSXhug7ljhB9Slwj/ne5o08if/DAp48WSuvGemYYONQKidH25KWyFNZJ7R9dYn5q8SnFatsmZ66yyjWH0+qxIy//4HiL/m3ZmfaXwhP41zw/Zk9ElXfabyCvo1xJHZy0FWKu0R75R+XDHXyYO+9QR1vlLidc3n6IzXO7aluqudxz9HdZEQEY3m12H6nk7G2CyJqmCBsTNH+WSkl3NY+x1wFg0uAZvAgXJTQaCE/lNhXtYfGrDedt9gWsO7T9ZMJNOuPYFi0ep4m9J6zQ+aHs+U2VpHwcFCiIVpv1zdYwuvwR/yZ6d2e79nW2+jlbEkIU0SgSNQ+TARIUXJkgLtMZJw62i1H4+h/5oMztlfCrZQqNfRm6jIB/p0629VhYMkClFvjGxIqqYT8mhEt5GDpK6rjzEDurmyk4f74Tl0cZXOl4NV1f5oj/Cg+Aze9c57SPK5E90eaNZkF2io21BODRIE8DF3PXlAb+DBPCGpkwTCrFZanTLgQk454wQ5JDw/H6B+TtYbYKFdtzMhBSFXu/7KR+B+lAKJpmGh6DvTHrICkJTIA2fcA8Ug4qkyPLH4Q/GcF7xZ0tz15FOs1TyBSdQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(6512007)(26005)(6486002)(508600001)(66946007)(38100700002)(186003)(6506007)(86362001)(33656002)(54906003)(66476007)(316002)(8676002)(3480700007)(7116003)(36756003)(7416002)(66556008)(8936002)(2616005)(83380400001)(5660300002)(1076003)(6916009)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ivumNZJV0QBeAhOOF2dDOWXLqY/LHU3EbQLyy7mYy51hI8t9n7LTjkyUK/Sq?=
- =?us-ascii?Q?THGaB1dWs4LLIZAEmTXNFbelixY84AcfAAF4Y8J9UoAj6CzAlZZPuGudAphB?=
- =?us-ascii?Q?ULKzwcO13twwPTl/HgLXmbxFYu5VuMphrAeuvQGd+DgDhyyCfyLwwelQserv?=
- =?us-ascii?Q?eLHH2mMYGmzgk79yidmLmLtEvbEGtS+O1IyOkfhgbacG4cLiMpn8vdYh/EIh?=
- =?us-ascii?Q?1/GbzqI3BXpNo76lKu8HCJernAesIlXWCGxPnyRj8biG/PqnXJ2OxyaNvHDe?=
- =?us-ascii?Q?2nVuohGDfLb5Ez9c4yfAOAyZ3XcYoXiS0aWS/7IpMICuiJOmul5X1rIoawX7?=
- =?us-ascii?Q?lii3Vk52wVRX89tBCAN506uyKzc4MYkgUZLT4v00TkTMqdDE0dlrgJ4kGgDH?=
- =?us-ascii?Q?r63Mw4NAyXMEd1p1p1x0yS7TVa+wZd4Yu35nS61RQthhElScEKxTAZOtJEZ0?=
- =?us-ascii?Q?eBmvvPPkQhfDboYt1epyGMYUh0AY+DaD27FCTJ7btllAm66BN6/tm4GTFeNe?=
- =?us-ascii?Q?AWqHjtqtCdzV1UyTOXryeH1KxKCpY4W3/+VevN2h6EOi0pZrdmnERgVnd7X+?=
- =?us-ascii?Q?aL4fKYo2x9+9xTIYtfBTQ+uoeLyF9XPRzgdrkoAV/5ggU2Q3aqdrvAm3zmRn?=
- =?us-ascii?Q?IT7Xuj6UTAVVxlXrcE5R6tGzeWxCkCRFcw3G7iMVyI7CLmIjUXpJ2rvn1+4x?=
- =?us-ascii?Q?0UWBU0DiTjsj81D3XUSFwis2GPdGm2aTqLvwT8/B+jjlGg6RjImRQ+tzJd/e?=
- =?us-ascii?Q?Q4pYhZJVHoQTZHDI8d791AIC9+KbTkl4bpJV818my76adnSRg6TjQ4Su/Ugw?=
- =?us-ascii?Q?UhSsyrR274rTdtKIJlTP+S9iFazyxn9qdD6QloF+G723EA1mOYjktUTy1Y21?=
- =?us-ascii?Q?37MRuCnjvPcznynSgD487PoCHt1sQp25cC6lCXqwbc2LBSbSDMvrn83Kguoy?=
- =?us-ascii?Q?n4fQDpwYxY4IH7PTIncPFd3s6BQAYpTxZ0VLcnEd7Lg+p2vo+cSC4axRWw7k?=
- =?us-ascii?Q?IVaRxW7yr+5c1B2yyHN7ZWlWnnlUtmNqYe/vkAcoi4/5pVnkePKLj6noOvI+?=
- =?us-ascii?Q?twZrJLB1vcWG3O4ARDea/1TebWlvHUxNxrRl36ccO1kgaJmCOLQ+Gp9BRzEq?=
- =?us-ascii?Q?jpmQA9H1O8iIAWLoeXey+Pc3dAU8zZ019juixe6xciYQJTVGCuJpdE6VB57i?=
- =?us-ascii?Q?Vi3z5sNyd3phRK3nd/dkOvRgU9N+ygX52/JKJLcFNmsJFF6Ur58akYjyNq3W?=
- =?us-ascii?Q?en6bvqCiYT6DP6uNGJASJ02dV4W6ZDCMNcf3kxGemGzrXBD3q/XEFpHy+uQo?=
- =?us-ascii?Q?e4MN1BN4lzyUUQM6YrbdIR2yXu9na54Yl+TrniesP+BiECgINQGDgPenikcW?=
- =?us-ascii?Q?R5QWA6r2pSJONSjijhIBUKTwqrAK8fyf5DvJYyDrHUZeSDbC97XVflakJzmV?=
- =?us-ascii?Q?lM3yEMGZVqbtLT5ujiCDY2TxxU1bOzdcAEEpSEZkZ0Zk1YRbhqpQfdNg9BJt?=
- =?us-ascii?Q?mNvZ7VzIYllMBNrHZnbiTw+cca7mw7s+o1xCpPPiFNNnL1mm4KdhzQ/v+Qg6?=
- =?us-ascii?Q?MlIsL0NH1ZBbEl4TwWA=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3588fbf7-61d0-4ca9-93cc-08d9d49b1aaa
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 00:41:28.3916
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qPbGD3m5Lb2HMHQGx5sqs/rDgFeQUbBbNYzcl5mAfVAYem/CAkSmjIOwAJYJXhVG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5333
+In-Reply-To: <20211227081515.2088920-7-chao.gao@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 07:34:49PM +0000, Matthew Wilcox wrote:
+On Mon, Dec 27, 2021, Chao Gao wrote:
+> At init time, KVM does compatibility checks to ensure that all online
+> CPUs support hardware virtualization and a common set of features. But
+> KVM uses hotplugged CPUs without such compatibility checks. On Intel
+> CPUs, this leads to #GP if the hotplugged CPU doesn't support VMX or
+> vmentry failure if the hotplugged CPU doesn't meet minimal feature
+> requirements.
+> 
+> Do compatibility checks when onlining a CPU. If any VM is running,
+> KVM hotplug callback returns an error to abort onlining incompatible
+> CPUs.
+> 
+> But if no VM is running, onlining incompatible CPUs is allowed. Instead,
+> KVM is prohibited from creating VMs similar to the policy for init-time
+> compatibility checks.
 
-> Finally, it may be possible to stop using scatterlist to describe the
-> input to the DMA-mapping operation.  We may be able to get struct
-> scatterlist down to just dma_address and dma_length, with chaining
-> handled through an enclosing struct.
+...
 
-Can you talk about this some more? IMHO one of the key properties of
-the scatterlist is that it can hold huge amounts of pages without
-having to do any kind of special allocation due to the chaining.
+> ---
+>  virt/kvm/kvm_main.c | 36 ++++++++++++++++++++++++++++++++++--
+>  1 file changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index c1054604d1e8..0ff80076d48d 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -106,6 +106,8 @@ LIST_HEAD(vm_list);
+>  static cpumask_var_t cpus_hardware_enabled;
+>  static int kvm_usage_count;
+>  static atomic_t hardware_enable_failed;
+> +/* Set if hardware becomes incompatible after CPU hotplug */
+> +static bool hardware_incompatible;
+>  
+>  static struct kmem_cache *kvm_vcpu_cache;
+>  
+> @@ -4855,20 +4857,32 @@ static void hardware_enable_nolock(void *junk)
+>  
+>  static int kvm_online_cpu(unsigned int cpu)
+>  {
+> -	int ret = 0;
+> +	int ret;
+>  
+> +	ret = kvm_arch_check_processor_compat();
+>  	raw_spin_lock(&kvm_count_lock);
+>  	/*
+>  	 * Abort the CPU online process if hardware virtualization cannot
+>  	 * be enabled. Otherwise running VMs would encounter unrecoverable
+>  	 * errors when scheduled to this CPU.
+>  	 */
+> -	if (kvm_usage_count) {
+> +	if (!ret && kvm_usage_count) {
+>  		hardware_enable_nolock(NULL);
+>  		if (atomic_read(&hardware_enable_failed)) {
+>  			ret = -EIO;
+>  			pr_info("kvm: abort onlining CPU%d", cpu);
+>  		}
+> +	} else if (ret && !kvm_usage_count) {
+> +		/*
+> +		 * Continue onlining an incompatible CPU if no VM is
+> +		 * running. KVM should reject creating any VM after this
+> +		 * point. Then this CPU can be still used to run non-VM
+> +		 * workload.
+> +		 */
+> +		ret = 0;
+> +		hardware_incompatible = true;
 
-The same will be true of the phyr idea right?
+This has a fairly big flaw in that it prevents KVM from creating VMs even if the
+offending CPU is offlined.  That seems like a very reasonable thing to do, e.g.
+admin sees that hotplugging a CPU broke KVM and removes the CPU to remedy the
+problem.  And if KVM is built-in, reloading KVM to wipe hardware_incompatible
+after offlining the CPU isn't an option.
 
-> I would like to see phyr replace bio_vec everywhere it's currently used.
-> I don't have time to do that work now because I'm busy with folios.
-> If someone else wants to take that on, I shall cheer from the sidelines.
-> What I do intend to do is:
+To make this approach work, I think kvm_offline_cpu() would have to reevaluate
+hardware_incompatible if the flag is set.
 
-I wonder if we mixed things though..
+And should there be a KVM module param to let the admin opt in/out of this
+behavior?  E.g. if the primary use case for a system is to run VMs, disabling
+KVM just to online a CPU isn't very helpful.
 
-IMHO there is a lot of optimization to be had by having a
-datastructure that is expressly 'the physical pages underlying a
-contiguous chunk of va'
+That said, I'm not convinced that continuing with the hotplug in this scenario
+is ever the right thing to do.  Either the CPU being hotplugged really is a different
+CPU, or it's literally broken.  In both cases, odds are very, very good that running
+on the dodgy CPU will hose the kernel sooner or later, i.e. KVM's compatibility checks
+are just the canary in the coal mine.
 
-If you limit to that scenario then we can be more optimal because
-things like byte granular offsets and size in the interior pages don't
-need to exist. Every interior chunk is always aligned to its order and
-we only need to record the order.
+TDX is a different beast as (a) that's purely a security restriction and (b) anyone
+trying to run TDX guests darn well better know that TDX doesn't allow hotplug.
+In other words, if TDX gets disabled due to hotplug, either someone majorly screwed
+up and is going to be unhappy no matter what, or there's no intention of using TDX
+and it's a complete don't care.
 
-An overall starting offset and total length allow computing the slice
-of the first/last entry.
+> +		pr_info("kvm: prohibit VM creation due to incompatible CPU%d",
 
-If the physical address is always aligned then we get 12 free bits
-from the min 4k alignment and also only need to store order, not an
-arbitary byte granular length.
+pr_info() is a bit weak, this should be at least pr_warn() and maybe even pr_err().
 
-The win is I think we can meaningfully cover most common cases using
-only 8 bytes per physical chunk. The 12 bits can be used to encode the
-common orders (4k, 2M, 1G, etc) and some smart mechanism to get
-another 16 bits to cover 'everything'.
+> +			cpu);
 
-IMHO storage density here is quite important, we end up having to keep
-this stuff around for a long time.
+Eh, I'd omit the newline and let that poke out.
 
-I say this here, because I've always though bio_vec/etc are more
-general than we actually need, being byte granular at every chunk.
+>  	}
+>  	raw_spin_unlock(&kvm_count_lock);
+>  	return ret;
+> @@ -4913,8 +4927,24 @@ static int hardware_enable_all(void)
+>  {
+>  	int r = 0;
+>  
+> +	/*
+> +	 * During onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
+> +	 * is called. on_each_cpu() between them includes the CPU. As a result,
+> +	 * hardware_enable_nolock() may get invoked before kvm_online_cpu().
+> +	 * This would enable hardware virtualization on that cpu without
+> +	 * compatibility checks, which can potentially crash system or break
+> +	 * running VMs.
+> +	 *
+> +	 * Disable CPU hotplug to prevent this case from happening.
+> +	 */
+> +	cpus_read_lock();
+>  	raw_spin_lock(&kvm_count_lock);
+>  
+> +	if (hardware_incompatible) {
 
->  - Add an interface to gup.c to pin/unpin N phyrs
->  - Add a sg_map_phyrs()
->    This will take an array of phyrs and allocate an sg for them
->  - Whatever else I need to do to make one RDMA driver happy with
->    this scheme
+Another error message would likely be helpful here.  Even better would be if KVM
+could provide some way for userspace to query which CPU(s) is bad.
 
-I spent alot of time already cleaning all the DMA code in RDMA - it is
-now nicely uniform and ready to do this sort of change. I was
-expecting to be a bio_vec, but this is fine too.
-
-What is needed is a full scatterlist replacement, including the IOMMU
-part.
-
-For the IOMMU I would expect the datastructure to be re-used, we start
-with a list of physical pages and then 'dma map' gives us a list of
-IOVA physical pages, in another allocation, but exactly the same
-datastructure.
-
-This 'dma map' could return a pointer to the first datastructure if
-there is no iommu, allocate a single entry list if the whole thing can
-be linearly mapped with the iommu, and other baroque cases (like pci
-offset/etc) will need to allocate full array. ie good HW runs fast and
-is memory efficient.
-
-It would be nice to see a patch sketching showing what this
-datastructure could look like.
-
-VFIO would like this structure as well as it currently is a very
-inefficient page at a time loop when it iommu maps things.
-
-Jason
+> +		r = -EIO;
+> +		goto unlock;
+> +	}
+> +
+>  	kvm_usage_count++;
+>  	if (kvm_usage_count == 1) {
+>  		atomic_set(&hardware_enable_failed, 0);
+> @@ -4926,7 +4956,9 @@ static int hardware_enable_all(void)
+>  		}
+>  	}
+>  
+> +unlock:
+>  	raw_spin_unlock(&kvm_count_lock);
+> +	cpus_read_unlock();
+>  
+>  	return r;
+>  }
+> -- 
+> 2.25.1
+> 

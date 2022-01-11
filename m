@@ -2,195 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E00EC48B7AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00CB48B7B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240988AbiAKTzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiAKTzk (ORCPT
+        id S241093AbiAKT4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:56:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49002 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234556AbiAKT4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:55:40 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22070C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:55:40 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id g2so49772qkp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:55:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=4UkALJo42zyNVJNxiAZxEL17ovop2sEjH0povRmnj1A=;
-        b=JlKqfCOeysMqlHnuqY++ZmDpdFM97icn5cmQu4EmLRpBUDXZOx+S08RK8aGzNsNcy5
-         pnf3ELRLIWxhIi1zMOdGfgjLavGmc3wEmSCJQihL1Yi6clc1Zu5EpfN3Y/JnRyAbl+Ns
-         sVoFNDKrWsd5gzlEr4lJn5eI5Yu5lwB3QEsB0VYD0/lRJtgyLY0pqeW8b1LeQK2t3YuR
-         CFVPUSaNbHQTPp+f9w6RzFKsXnZFaaNqzTa2fJRh9qyC1HZeNACl5lvo4GzT88+pbXnq
-         fi3Te4GcybtCQW+Fp7Uo9x5Xne9VLHIheYBq2qZkpmXtdr/T4pjOQK4enu5gipc7ZxLR
-         fBPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=4UkALJo42zyNVJNxiAZxEL17ovop2sEjH0povRmnj1A=;
-        b=3jDi17by3F3LO0PrxpGY+RueE2dzfzMnzKkmN+dcoosNCWS780gzKR7mWSwVnEGmuz
-         XMr288qAnD77n1a4B87dXGyZ/+V7BcKJgOh0WsHA0MRXq9foysfO+9PzDcK2224jcIVL
-         Azyq+oOzNvUCvWebkxV4HuSNkMpaKN11V7WmpudPykoSwsZQiwOVsOZSa7/btgmqtks0
-         Fn2l7GTE8vQ/K8mR3JDQxxKQ8L1Z+ScO7reVbQ8a9X+6IqYCmT5O/B6FMTcQnyPK/Pj3
-         X+t7iR+gGnjedfDTqTimY89qj+W9t9O0xzTIxpOygi3hbc5da6J6R8KPSI5jaaLuxTxI
-         spTA==
-X-Gm-Message-State: AOAM532wz/8b/C3UBHA4YoELQX8pt578WowX/hmUfkzlHncLQuUPEHNC
-        BYdx6s28VHKB8UPICNUxd2x42A==
-X-Google-Smtp-Source: ABdhPJw8dTHlooGde6P0GPheEh0aByt4tzNuOPVs95bnwX/Ye4l3dIP0O99YINdvrXfK851DNqYdPw==
-X-Received: by 2002:a05:620a:2702:: with SMTP id b2mr4221539qkp.299.1641930939261;
-        Tue, 11 Jan 2022 11:55:39 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
-        by smtp.gmail.com with ESMTPSA id g5sm7610395qtb.97.2022.01.11.11.55.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 11:55:38 -0800 (PST)
-Message-ID: <91a41f3a17f94d25f84054daa1854603d113ecaf.camel@ndufresne.ca>
-Subject: Re: [PATCH v4, 00/15] media: mtk-vcodec: support for MT8192 decoder
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Tue, 11 Jan 2022 14:55:35 -0500
-In-Reply-To: <20220110083442.32604-1-yunfei.dong@mediatek.com>
-References: <20220110083442.32604-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Tue, 11 Jan 2022 14:56:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFAAAB81D1D;
+        Tue, 11 Jan 2022 19:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16881C36AE3;
+        Tue, 11 Jan 2022 19:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641930994;
+        bh=jqZbce0EtAJ116e2OwrxBOTR+k1oNFPUwk0YeL3jN0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LV2IajxEL9lduMn6TkG717OxSoJKMc0ljJdOhnRvkrJfKZhbxPnXvLihq1vWKJlv+
+         rsLudkVazEeAJWPUlmx5CAtxHlembJxVMeAKoS4CtLKbHb8LOl6Vcp2jlLWtzxT0q7
+         JALhfiotBlFOW8BxPLga+GyX6N6mKjomTQvjvPmVgJoiRDyvaIu5u6EBO9e3kQSBqX
+         YBBrsSon1ptdPWxHl7UQzFBWc5CI1HVToZgelvRPuKFfEKOdCT0/C47c0cUfNoXx0S
+         6tVsT0Ls92FmUh6uS3vYFQY4ckuzjBfIppIJekl/UzzcJmjPOTfoRs+++82SNBxb3D
+         tXzCt2YoA2lVg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8BC1240714; Tue, 11 Jan 2022 16:56:31 -0300 (-03)
+Date:   Tue, 11 Jan 2022 16:56:31 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Subject: Re: [PATCH v4 02/48] perf stat: Add aggr creators that are passed a
+ cpu.
+Message-ID: <Yd3g7+y0ZeUHt+Rx@kernel.org>
+References: <20220105061351.120843-1-irogers@google.com>
+ <20220105061351.120843-3-irogers@google.com>
+ <Yd3bbelDA1qGPodk@kernel.org>
+ <CAP-5=fVSuF-BCKuv6dutwLaAEKOctNYPtHzGYYDzZ7cm0110GQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fVSuF-BCKuv6dutwLaAEKOctNYPtHzGYYDzZ7cm0110GQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yunfei,
+Em Tue, Jan 11, 2022 at 11:36:02AM -0800, Ian Rogers escreveu:
+> On Tue, Jan 11, 2022 at 11:33 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Tue, Jan 04, 2022 at 10:13:05PM -0800, Ian Rogers escreveu:
+> > > The cpu_map and index can get confused. Add variants of the cpu_map__get
+> > > routines that are passed a cpu. Make the existing cpu_map__get routines
+> > > use the new functions with a view to remove them when no longer used.
+> > >
+> > > Reviewed-by: James Clark <james.clark@arm.com>
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/util/cpumap.c | 79 +++++++++++++++++++++++-----------------
+> > >  tools/perf/util/cpumap.h |  6 ++-
+> > >  2 files changed, 51 insertions(+), 34 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+> > > index 87d3eca9b872..49fba2c53822 100644
+> > > --- a/tools/perf/util/cpumap.c
+> > > +++ b/tools/perf/util/cpumap.c
+> > > @@ -128,21 +128,23 @@ int cpu_map__get_socket_id(int cpu)
+> > >       return ret ?: value;
+> > >  }
+> > >
+> > > -struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
+> > > -                                     void *data __maybe_unused)
+> > > +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data __maybe_unused)
+> > >  {
+> > > -     int cpu;
+> > >       struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> > >
+> > > -     if (idx > map->nr)
+> > > -             return id;
+> > > -
+> > > -     cpu = map->map[idx];
+> > > -
+> > >       id.socket = cpu_map__get_socket_id(cpu);
+> > >       return id;
+> > >  }
+> > >
+> > > +struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx,
+> > > +                                    void *data)
+> > > +{
+> > > +     if (idx < 0 || idx > map->nr)
+> > > +             return cpu_map__empty_aggr_cpu_id();
+> > > +
+> > > +     return cpu_map__get_socket_aggr_by_cpu(map->map[idx], data);
+> > > +}
+> > > +
+> >
+> >
+> > This 'idx < 0' wasn't in the original code nor is described in the
+> > comment log message, please avoid doing this, this may be harmless or
+> > even a good hardening, but either way would be interesting to have it in
+> > a separate patch. This eases review as in the end this code is just a
+> > refactoring, moving things around but in the end should be equivalent code.
+> >
+> > There are a few more, please consider this and if you agree, to speed
+> > things up I can make the changes here, if I think this won't fallout in
+> > changes to subsequent patches touching this area.
+> >
+> > - Arnaldo
+> 
+> Fwiw, there's the same issue in cpu_map__get_die that's also in
+> cpu_map__get_core, but weirdly not copied into cpu_map__get_node. As
+> these functions are removed later I think doing nothing is best here.
 
-Le lundi 10 janvier 2022 à 16:34 +0800, Yunfei Dong a écrit :
-> This series adds support for mt8192 h264/vp8/vp9 decoder drivers. Firstly, refactor
-> power/clock/interrupt interfaces for mt8192 is lat and core architecture.
+Sure.
+ 
+> Thanks,
+> Ian
 > 
-> Secondly, add new functions to get frame buffer size and resolution according
-> to decoder capability from scp side. Then add callback function to get/put
-> capture buffer in order to enable lat and core decoder in parallel. 
-> 
-> Then add to support MT21C compressed mode and fix v4l2-compliance fail.
+> > >  static int cmp_aggr_cpu_id(const void *a_pointer, const void *b_pointer)
+> > >  {
+> > >       struct aggr_cpu_id *a = (struct aggr_cpu_id *)a_pointer;
+> > > @@ -200,15 +202,10 @@ int cpu_map__get_die_id(int cpu)
+> > >       return ret ?: value;
+> > >  }
+> > >
+> > > -struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data)
+> > > +struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data)
+> > >  {
+> > > -     int cpu, die;
+> > > -     struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> > > -
+> > > -     if (idx > map->nr)
+> > > -             return id;
+> > > -
+> > > -     cpu = map->map[idx];
+> > > +     struct aggr_cpu_id id;
+> > > +     int die;
+> > >
+> > >       die = cpu_map__get_die_id(cpu);
+> > >       /* There is no die_id on legacy system. */
+> > > @@ -220,7 +217,7 @@ struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *dat
+> > >        * with the socket ID and then add die to
+> > >        * make a unique ID.
+> > >        */
+> > > -     id = cpu_map__get_socket(map, idx, data);
+> > > +     id = cpu_map__get_socket_aggr_by_cpu(cpu, data);
+> > >       if (cpu_map__aggr_cpu_id_is_empty(id))
+> > >               return id;
+> > >
+> > > @@ -228,6 +225,15 @@ struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *dat
+> > >       return id;
+> > >  }
+> > >
+> > > +struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx,
+> > > +                                 void *data)
+> > > +{
+> > > +     if (idx < 0 || idx > map->nr)
+> > > +             return cpu_map__empty_aggr_cpu_id();
+> >
+> > Ditto
+> >
+> > > +
+> > > +     return cpu_map__get_die_aggr_by_cpu(map->map[idx], data);
+> > > +}
+> > > +
+> > >  int cpu_map__get_core_id(int cpu)
+> > >  {
+> > >       int value, ret = cpu__get_topology_int(cpu, "core_id", &value);
+> > > @@ -239,20 +245,13 @@ int cpu_map__get_node_id(int cpu)
+> > >       return cpu__get_node(cpu);
+> > >  }
+> > >
+> > > -struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data)
+> > > +struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data)
+> > >  {
+> > > -     int cpu;
+> > > -     struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> > > -
+> > > -     if (idx > map->nr)
+> > > -             return id;
+> > > -
+> > > -     cpu = map->map[idx];
+> > > -
+> > > -     cpu = cpu_map__get_core_id(cpu);
+> > > +     struct aggr_cpu_id id;
+> > > +     int core = cpu_map__get_core_id(cpu);
+> > >
+> > >       /* cpu_map__get_die returns a struct with socket and die set*/
+> > > -     id = cpu_map__get_die(map, idx, data);
+> > > +     id = cpu_map__get_die_aggr_by_cpu(cpu, data);
+> > >       if (cpu_map__aggr_cpu_id_is_empty(id))
+> > >               return id;
+> > >
+> > > @@ -260,19 +259,33 @@ struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *da
+> > >        * core_id is relative to socket and die, we need a global id.
+> > >        * So we combine the result from cpu_map__get_die with the core id
+> > >        */
+> > > -     id.core = cpu;
+> > > +     id.core = core;
+> > >       return id;
+> > > +
+> > >  }
+> > >
+> > > -struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data __maybe_unused)
+> > > +struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data)
+> > > +{
+> > > +     if (idx < 0 || idx > map->nr)
+> > > +             return cpu_map__empty_aggr_cpu_id();
+> >
+> > Ditto
+> >
+> > > +
+> > > +     return cpu_map__get_core_aggr_by_cpu(map->map[idx], data);
+> > > +}
+> > > +
+> > > +struct aggr_cpu_id cpu_map__get_node_aggr_by_cpu(int cpu, void *data __maybe_unused)
+> > >  {
+> > >       struct aggr_cpu_id id = cpu_map__empty_aggr_cpu_id();
+> > >
+> > > +     id.node = cpu_map__get_node_id(cpu);
+> > > +     return id;
+> > > +}
+> > > +
+> > > +struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data)
+> > > +{
+> > >       if (idx < 0 || idx >= map->nr)
+> > > -             return id;
+> > > +             return cpu_map__empty_aggr_cpu_id();
+> > >
+> > > -     id.node = cpu_map__get_node_id(map->map[idx]);
+> > > -     return id;
+> > > +     return cpu_map__get_node_aggr_by_cpu(map->map[idx], data);
+> > >  }
+> > >
+> > >  int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp)
+> > > diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+> > > index a27eeaf086e8..c62d67704425 100644
+> > > --- a/tools/perf/util/cpumap.h
+> > > +++ b/tools/perf/util/cpumap.h
+> > > @@ -31,13 +31,17 @@ size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size);
+> > >  size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size);
+> > >  size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp);
+> > >  int cpu_map__get_socket_id(int cpu);
+> > > +struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data);
+> > >  struct aggr_cpu_id cpu_map__get_socket(struct perf_cpu_map *map, int idx, void *data);
+> > >  int cpu_map__get_die_id(int cpu);
+> > > +struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data);
+> > >  struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data);
+> > >  int cpu_map__get_core_id(int cpu);
+> > > +struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data);
+> > >  struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data);
+> > >  int cpu_map__get_node_id(int cpu);
+> > > -struct aggr_cpu_id  cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data);
+> > > +struct aggr_cpu_id cpu_map__get_node_aggr_by_cpu(int cpu, void *data);
+> > > +struct aggr_cpu_id cpu_map__get_node(struct perf_cpu_map *map, int idx, void *data);
+> > >  int cpu_map__build_socket_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **sockp);
+> > >  int cpu_map__build_die_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **diep);
+> > >  int cpu_map__build_core_map(struct perf_cpu_map *cpus, struct cpu_aggr_map **corep);
+> > > --
+> > > 2.34.1.448.ga2b2bfdf31-goog
+> >
+> > --
+> >
+> > - Arnaldo
 
-Perhaps you wanted to append the referred v4l2-compliance output (fixed) ?
+-- 
 
-As we started doing with other codec driver submission (just did last month for
-NXP), can you state which software this driver was tested with ? I have started
-receiving feedback from third party that MTK driver support is not reproducible,
-I would like to work with you to fix the situation.
-
-regards,
-Nicolas
-
-> 
-> Next, extract H264 request api driver to let mt8183 and mt8192 use the same
-> code, and adds mt8192 frame based h264 driver for stateless decoder.
-> 
-> Lastly, add vp8 and vp9 stateless decoder drivers.
-> 
-> Patches 1 to refactor power/clock/interrupt interface.
-> Patches 2~4 get frame buffer size and resolution according to decoder capability.
-> Patches 5~6 enable lat and core decode in parallel.
-> Patch 7~10 add to support MT21C compressed mode and fix v4l2-compliance fail.
-> patch 11 record capture queue format type.
-> Patch 12~13 extract h264 driver and add mt8192 frame based driver for h264 decoder.
-> Patch 14~15 add vp8 and vp9 stateless decoder drivers.
-> ----
-> Dependents on "Support multi hardware decode using of_platform_populate"[1].
-> 
-> This patches are the second part used to add mt8192 h264 decoder. And the base part is [1].
-> 
-> [1]https://patchwork.linuxtv.org/project/linux-media/cover/20211215061552.8523-1-yunfei.dong@mediatek.com/
-> ---
-> changes compared with v3:
-> - remove enum mtk_chip for patch 2.
-> - add vp8 stateless decoder drivers for patch 14.
-> - add vp9 stateless decoder drivers for patch 15.
-> changes compared with v2:
-> - add new patch 11 to record capture queue format type.
-> - separate patch 4 according to tzung-bi's suggestion.
-> - re-write commit message for patch 5 according to tzung-bi's suggestion.
-> changes compared with v1:
-> - rewrite commit message for patch 12.
-> - rewrite cover-letter message.
-> ---
-> Yunfei Dong (15):
->   media: mtk-vcodec: Add vdec enable/disable hardware helpers
->   media: mtk-vcodec: Using firmware type to separate different firmware
->     architecture
->   media: mtk-vcodec: get capture queue buffer size from scp
->   media: mtk-vcodec: Read max resolution from dec_capability
->   media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer
->     buffered
->   media: mtk-vcodec: Refactor get and put capture buffer flow
->   media: mtk-vcodec: Refactor supported vdec formats and framesizes
->   media: mtk-vcodec: Add format to support MT21C
->   media: mtk-vcodec: disable vp8 4K capability
->   media: mtk-vcodec: Fix v4l2-compliance fail
->   media: mtk-vcodec: record capture queue format type
->   media: mtk-vcodec: Extract H264 common code
->   media: mtk-vcodec: Add h264 decoder driver for mt8192
->   media: mtk-vcodec: Add vp8 decoder driver for mt8192
->   media: mtk-vcodec: Add vp9 decoder driver for mt8192
-> 
->  drivers/media/platform/mtk-vcodec/Makefile    |    4 +
->  .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   49 +-
->  .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |    5 -
->  .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   |  168 +-
->  .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |    6 +-
->  .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |   14 +-
->  .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |  284 ++-
->  .../platform/mtk-vcodec/mtk_vcodec_drv.h      |   40 +-
->  .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |    5 -
->  .../media/platform/mtk-vcodec/mtk_vcodec_fw.c |    6 +
->  .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |    1 +
->  .../mtk-vcodec/vdec/vdec_h264_req_common.c    |  311 +++
->  .../mtk-vcodec/vdec/vdec_h264_req_common.h    |  254 ++
->  .../mtk-vcodec/vdec/vdec_h264_req_if.c        |  416 +---
->  .../mtk-vcodec/vdec/vdec_h264_req_multi_if.c  |  605 +++++
->  .../mtk-vcodec/vdec/vdec_vp8_req_if.c         |  445 ++++
->  .../mtk-vcodec/vdec/vdec_vp9_req_lat_if.c     | 2066 +++++++++++++++++
->  .../media/platform/mtk-vcodec/vdec_drv_if.c   |   36 +-
->  .../media/platform/mtk-vcodec/vdec_drv_if.h   |    3 +
->  .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |   37 +
->  .../platform/mtk-vcodec/vdec_msg_queue.c      |    2 +
->  .../media/platform/mtk-vcodec/vdec_vpu_if.c   |   54 +-
->  .../media/platform/mtk-vcodec/vdec_vpu_if.h   |   15 +
->  .../media/platform/mtk-vcodec/venc_vpu_if.c   |    2 +-
->  include/linux/remoteproc/mtk_scp.h            |    2 +
->  25 files changed, 4248 insertions(+), 582 deletions(-)
->  create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.c
->  create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.h
->  create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c
->  create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_req_if.c
->  create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
-> 
-
+- Arnaldo

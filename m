@@ -2,100 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1208348B3DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624DB48B3DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344215AbiAKR2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344256AbiAKR2M (ORCPT
+        id S1344235AbiAKR2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:28:52 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:36690 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344191AbiAKR2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:28:12 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A959C03400E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:28:07 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id pj2so58628pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=12+q0b6y6nH7kbDmn5mxOCkgQv+jyWWInPi8qR3sLk0=;
-        b=JXfN+aLUdx2zlu9qac6uYhla2U/n8TT6p+hrU2GGv0I6TKuQe+IPgh8G5lv5757keI
-         l5oDFnb4HpmzkMW6hgqDXu0R/FRYbjfs6AKjay71k5mZWDQkXNA3DAuMPbMBksXzp2xw
-         FQ9PWBH9Ry/ouH+0AL2n0zYCPZK0gjci88ohw3L1motWzX7XKg5CDN1c9ErNPgh95FV0
-         OX0dG4OBgbQjFk3zoxgez0BiFzqcJ5zVc4913i8lszMlKgwld3eJIGOYujLXcl1A9DDF
-         SyWXmN5lD7NIhnlESzVUqYLSOb0TClQ0V4cCz+2tVvRdVx6rFTQrYx0I+JIVLxzdQOoS
-         DHow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=12+q0b6y6nH7kbDmn5mxOCkgQv+jyWWInPi8qR3sLk0=;
-        b=0nZNh5TER4YYJL4U7yfPzSkj8rWWau21T8jInR7ns3zLDTn39QTlqi45lwfnf14FtP
-         pG8Bxjzv5O9hKzmMI8xpr6tlZplDI76Kv9hdLfBKALd4RykAVoIZihna3HhwktcHzujb
-         ur2mJCsRgu760U7OaBlhyI8VLAC/2apwNopshgzrZMmSWwRb9yw5iFD+wT+GmXX47Sea
-         yuUKjsSKl3eaX2bifQKZSCwbLPnOKaD0B7NLFLjRptc0jR/JsjWLARUdPT+qVAYtiwe9
-         6joTP3GF27e9fD0xbECMhTzycgFUmsK5umygdMnI5sD8OM03px/8W3I10T3tterasNTV
-         d/ow==
-X-Gm-Message-State: AOAM531MbTY8QtIEEljjaWbMyijN7uxeg6lMYjW7d6Mni7csfiYjwXuK
-        33FrFXRfX0+YWmy2QQk45noBCevebGXLQQ==
-X-Google-Smtp-Source: ABdhPJyMMLCfkog+/r5Po8vgFXuxtpWPcgiAhliF7cPIp8Sqws1L7o06MOk1nanJj51Y59PSWbbI3A==
-X-Received: by 2002:a05:6a00:1413:b0:4bf:a0d7:1f55 with SMTP id l19-20020a056a00141300b004bfa0d71f55mr5587142pfu.13.1641922086523;
-        Tue, 11 Jan 2022 09:28:06 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id b21sm11261590pfv.74.2022.01.11.09.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:28:05 -0800 (PST)
-Date:   Tue, 11 Jan 2022 09:28:05 -0800 (PST)
-X-Google-Original-Date: Tue, 11 Jan 2022 09:27:38 PST (-0800)
-Subject:     Re: [PATCH] riscv: mm: fix wrong phys_ram_base value for RV64
-In-Reply-To: <20211202153641.1961-1-jszhang@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        alex@ghiti.fr, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jszhang@kernel.org
-Message-ID: <mhng-662897d8-3b0a-4580-a607-f853c01263b5@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 11 Jan 2022 12:28:51 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 60B0421763;
+        Tue, 11 Jan 2022 17:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641922130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Jc+f3cdhEyzSdxRIqkk6GE0n+MAVJ8bj27A6pGukZ54=;
+        b=O2/NbSBftvI0XF+/PidP0B+6+dyWth8akJeFtzj/WJbO2nriyvufXpXRLLWrFAwNRC8Y5i
+        QrmUOW8UEYyE5IoQB5CjI7a31u5DttDrbDmVSrSkU2auUIHFj3nFa+sQk6nz7vhJ4tyjOL
+        rQUI6s2Ejr9QEfev6SN1qnVmdE2zNJY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641922130;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Jc+f3cdhEyzSdxRIqkk6GE0n+MAVJ8bj27A6pGukZ54=;
+        b=xUSdpmdx+gjvclnmlxYFspsY2CQKFF7BKdvM7+Y9dF3qsCsVqvF7jc6nedbrWV2B9kKXc1
+        b9mvfg8k0DVBjXDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 459EE13AE7;
+        Tue, 11 Jan 2022 17:28:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RwKMD1K+3WFTUQAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 11 Jan 2022 17:28:50 +0000
+Date:   Tue, 11 Jan 2022 18:28:58 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] perf/core for v5.17
+Message-ID: <Yd2+Wqrl0ax2JQjg@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 02 Dec 2021 07:36:41 PST (-0800), jszhang@kernel.org wrote:
-> Currently, if 64BIT and !XIP_KERNEL, the phys_ram_base is always 0,
-> no matter the real start of dram reported by memblock is. The original
-> patch[1] is correct, I believe it's not corrected merged due to lots
-> of #ifdef in arch/riscv/mm/init.c, I plan to send a clean up series
-> soon.
->
-> [1] http://lists.infradead.org/pipermail/linux-riscv/2021-July/007650.html
->
-> Fixes: 6d7f91d914bc ("riscv: Get rid of CONFIG_PHYS_RAM_BASE in kernel physical address conversion")
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Hi Linus,
 
-Thanks, this is on for-next.
+please pull the perf/core pile for v5.17 which deals with the perf <-> kvm
+side of things this time around.
 
-> ---
->  arch/riscv/mm/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 24b2b8044602..3c0649dba4ff 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -187,10 +187,10 @@ static void __init setup_bootmem(void)
->
->
->  	phys_ram_end = memblock_end_of_DRAM();
-> -#ifndef CONFIG_64BIT
->  #ifndef CONFIG_XIP_KERNEL
->  	phys_ram_base = memblock_start_of_DRAM();
->  #endif
-> +#ifndef CONFIG_64BIT
->  	/*
->  	 * memblock allocator is not aware of the fact that last 4K bytes of
->  	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+Thx.
+
+---
+
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_core_for_v5.17_rc1
+
+for you to fetch changes up to a9f4a6e92b3b319296fb078da2615f618f6cd80c:
+
+  perf: Drop guest callback (un)register stubs (2021-11-17 14:49:12 +0100)
+
+----------------------------------------------------------------
+Peter Zijlstra says:
+
+"Cleanup of the perf/kvm interaction."
+
+----------------------------------------------------------------
+Like Xu (1):
+      perf/core: Rework guest callbacks to prepare for static_call support
+
+Sean Christopherson (16):
+      perf: Protect perf_guest_cbs with RCU
+      KVM: x86: Register perf callbacks after calling vendor's hardware_setup()
+      KVM: x86: Register Processor Trace interrupt hook iff PT enabled in guest
+      perf: Stop pretending that perf can handle multiple guest callbacks
+      perf: Drop dead and useless guest "support" from arm, csky, nds32 and riscv
+      perf: Add wrappers for invoking guest callbacks
+      perf: Force architectures to opt-in to guest callbacks
+      perf/core: Use static_call to optimize perf_guest_info_callbacks
+      KVM: x86: Drop current_vcpu for kvm_running_vcpu + kvm_arch_vcpu variable
+      KVM: x86: More precisely identify NMI from guest when handling PMI
+      KVM: Move x86's perf guest info callbacks to generic KVM
+      KVM: x86: Move Intel Processor Trace interrupt handler to vmx.c
+      KVM: arm64: Convert to the generic perf callbacks
+      KVM: arm64: Hide kvm_arm_pmu_available behind CONFIG_HW_PERF_EVENTS=y
+      KVM: arm64: Drop perf.c and fold its tiny bits of code into arm.c
+      perf: Drop guest callback (un)register stubs
+
+ arch/arm/kernel/perf_callchain.c   | 28 +++---------------
+ arch/arm64/include/asm/kvm_host.h  | 11 +++++--
+ arch/arm64/kernel/image-vars.h     |  2 ++
+ arch/arm64/kernel/perf_callchain.c | 13 +++++----
+ arch/arm64/kvm/Kconfig             |  1 +
+ arch/arm64/kvm/Makefile            |  2 +-
+ arch/arm64/kvm/arm.c               | 10 +++++--
+ arch/arm64/kvm/perf.c              | 59 --------------------------------------
+ arch/arm64/kvm/pmu-emul.c          |  2 ++
+ arch/csky/kernel/perf_callchain.c  | 10 -------
+ arch/nds32/kernel/perf_event_cpu.c | 29 +++----------------
+ arch/riscv/kernel/perf_callchain.c | 10 -------
+ arch/x86/events/core.c             | 13 +++++----
+ arch/x86/events/intel/core.c       |  5 +---
+ arch/x86/include/asm/kvm_host.h    |  7 +++--
+ arch/x86/kvm/Kconfig               |  1 +
+ arch/x86/kvm/pmu.c                 |  2 +-
+ arch/x86/kvm/svm/svm.c             |  2 +-
+ arch/x86/kvm/vmx/vmx.c             | 25 +++++++++++++++-
+ arch/x86/kvm/x86.c                 | 58 +++++++------------------------------
+ arch/x86/kvm/x86.h                 | 17 ++++++++---
+ arch/x86/xen/Kconfig               |  1 +
+ arch/x86/xen/pmu.c                 | 32 +++++++++------------
+ include/kvm/arm_pmu.h              | 19 +++++++-----
+ include/linux/kvm_host.h           | 10 +++++++
+ include/linux/perf_event.h         | 44 ++++++++++++++++++++--------
+ init/Kconfig                       |  4 +++
+ kernel/events/core.c               | 41 ++++++++++++++++++--------
+ virt/kvm/kvm_main.c                | 44 ++++++++++++++++++++++++++++
+ 29 files changed, 246 insertions(+), 256 deletions(-)
+ delete mode 100644 arch/arm64/kvm/perf.c
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

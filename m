@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E402548B8EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF41648B8F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238488AbiAKUxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:53:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37866 "EHLO
+        id S238747AbiAKUxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:53:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38746 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236752AbiAKUw4 (ORCPT
+        with ESMTP id S238582AbiAKUxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:52:56 -0500
+        Tue, 11 Jan 2022 15:53:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4265B616AF
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E4FDC36AE3;
-        Tue, 11 Jan 2022 20:52:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4F0B616AF;
+        Tue, 11 Jan 2022 20:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 53D21C36AE3;
+        Tue, 11 Jan 2022 20:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641934375;
-        bh=cqmzXGmY26fCpJfBCR+5KtLFaAz7mhvvVOAShvyie6k=;
+        s=k20201202; t=1641934384;
+        bh=8mt+t//9rXJuVWeitw+BuRBoI1zf/b8vOc0N1N1IaRM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=pOqKeuc020waXr7mjS+l+HcyLEVMNmTFzjOktA9kEZLR+E5nD8+w6Tm8pYJ11PoMO
-         6xobLCfjmScMNF62PvfhvCpaCMsQPjzCloGidID5KbDuyFQkziMEy3y6iDolAzWqsU
-         Vzn/12MWevbhYYCg6SZeg8+WN+8cawrOS09k70GQaMXBzxmMdJD0XONfKDGP1IBw1n
-         Zgyd70kZcgf9TuFiPcyYp++slVYgj3SKKoeoyv/sxHiI9od2XHX3ziux6Oo48wFQIv
-         Mkk3rE5UbSe8csNCuDOc1fxWuxzSXhzPkJ8aaRklA4JI+Pz9AL4ceTwLFgHABpLs5J
-         QjrvVuYTEQO5A==
+        b=MT/FJIL6P4Ln/hBmek38k/gxQydmE+QdPMg7QSpU1R+tijvxapIH0lmPthFMDGbCr
+         HBHjPT1ENfYN7UpZj00eHKiyXhCL1CzyeLkp1qhaxqrz0lhckWPJF3kOaquPyP6OeN
+         xI0OP++KZ8iCCnowuh1T8+fc8c7imETQ+1ULSipMQkC946CT/TmuuHklYbOGvLCt49
+         AMiRJmkoDKX/4cv+dlxIOCfOaC4/XnNB3ADoMPDp9qeApSl1hGL44rvYaTTqDr8Ghb
+         3jHbhDL4xVdEGrmnRNzRUFPICQKxaTmmpez99MMmuCtAFHR9OfJnSEqflFFbEykpR5
+         FFpwiPIaKrFgg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8CC58F6078C;
-        Tue, 11 Jan 2022 20:52:55 +0000 (UTC)
-Subject: Re: [GIT PULL] mtd: Changes for 5.17
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41028F6078C;
+        Tue, 11 Jan 2022 20:53:04 +0000 (UTC)
+Subject: Re: [GIT PULL] MMC updates for v5.17
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220110114003.7f297088@xps13>
-References: <20220110114003.7f297088@xps13>
-X-PR-Tracked-List-Id: Linux MTD discussion mailing list <linux-mtd.lists.infradead.org>
-X-PR-Tracked-Message-Id: <20220110114003.7f297088@xps13>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/for-5.17
-X-PR-Tracked-Commit-Id: 9ce47e43a0f088653aa25ca465836a84114e0940
+In-Reply-To: <20220111142909.27773-1-ulf.hansson@linaro.org>
+References: <20220111142909.27773-1-ulf.hansson@linaro.org>
+X-PR-Tracked-List-Id: <linux-mmc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220111142909.27773-1-ulf.hansson@linaro.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.17
+X-PR-Tracked-Commit-Id: 356f3f2c5756bbb67a515760966a40fc7043cdda
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c01d85c2190bf694ccd041e7d19c36eacf005840
-Message-Id: <164193437556.11435.13753019786939678299.pr-tracker-bot@kernel.org>
-Date:   Tue, 11 Jan 2022 20:52:55 +0000
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
+X-PR-Merge-Commit-Id: 1151e3cd5a7375ebc839ad3e6c51d87700fe019e
+Message-Id: <164193438426.11435.10249200980991477507.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Jan 2022 20:53:04 +0000
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 10 Jan 2022 11:40:03 +0100:
+The pull request you sent on Tue, 11 Jan 2022 15:29:09 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/for-5.17
+> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.17
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c01d85c2190bf694ccd041e7d19c36eacf005840
+https://git.kernel.org/torvalds/c/1151e3cd5a7375ebc839ad3e6c51d87700fe019e
 
 Thank you!
 

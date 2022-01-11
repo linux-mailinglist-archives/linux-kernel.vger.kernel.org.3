@@ -2,136 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7468B48ADF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F38348ADF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239047AbiAKMxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:53:18 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:50956 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiAKMxR (ORCPT
+        id S240065AbiAKMze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239967AbiAKMzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:53:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641905597; x=1673441597;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GPP2NwXKguVvQqgSRdC4tryu6NqbYiCAp/eYy5ky3f4=;
-  b=kGDhSY0icPySHXB59YmTZBjjy9wBBvLk6U2ywfSWkBM+w1RNIBU/h3mR
-   G54DROBJPl4XgH8fwC+bTyHR/65beRUJNzLDNR44QulDyZ29/LHrGjHi6
-   xOkfQ7EYkodCdd6WH5rGqWiPBU772Ex7ANHb22eNV15gtVn1JsZRpRxDi
-   kkVJRq5y4wsZh7uA7qr35/ueCw239OjUlsZucTQ5nl7+Yi2Ffi5hrNNtV
-   6XZhprX4d0kZuh0GMxJ3M2BcBpMUBpTGEmaqoW+wdZwm+VNE85y/WikfA
-   X4hsQV6u1e71AIiZTOPBRGVWT+5yDBimvP+UQKmI1uqlGnBzdV7gPZ0SL
-   w==;
-IronPort-SDR: SQxFJ4aFg5UtQOLBuS2YHAJgSeBvTIon2ycxzjn1Ukw+3k6NDK/SHZ2ezG+FPILV93VB5hZaOa
- aeQcYYtwjBgO8HC6act/hAipfDK8cuYRT8FBntQHcjQgpHniHVDzWxjERPr9G4sZMZlJKYpRdA
- gGHpSsOzgrKEIiPJYeMPDV0cudZwZuX7URF8VNaQrk93JNOoeLfHT5yAgoqcslyYI724Ppz2ZU
- mWyZJ0hV44QfoXAY0I7/tmW4VGSajhQkKXD1MTr8lK/KIN1Fh+DewaU8sBo+cGcJzPrpIdD48y
- xrAK+5zBwLTvif54I8Lap8F/
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="142326214"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2022 05:53:16 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 11 Jan 2022 05:53:16 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 11 Jan 2022 05:53:12 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <claudiu.beznea@microchip.com>
-CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
-        <rdunlap@infradead.org>, <unixbhaskar@gmail.com>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] clk: at91: sama7g5: Allow MCK1 to be exported and referenced in DT
-Date:   Tue, 11 Jan 2022 14:53:10 +0200
-Message-ID: <20220111125310.902856-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jan 2022 07:55:32 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FA7C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 04:55:32 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d19so2275279wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 04:55:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=57Y0hIfgAIJ89OmSynFNgC5ocn5dJaAs87HGBZ8fZcw=;
+        b=jJqOP1MveCsbkZSgYuQHcNgO0q6oPiaR+7ThlUhpU2KMIoos6D4XEcRRxhEOP/vZPh
+         sUr9s9gNeJ3hbu0yb6PNdSGC5xF9DGc2Fx9dupds2L9uQbxKT9YgN4UakvVu3O9pz2KD
+         ZQmtn3y60ivSQp6seh2N5cHEYgHIuk2ZUEkS5YEVUPvMmZPTjrekW0I772K8hK+YAYuh
+         TbyWa7TlkDDP6sRG4bT7IAtboSFvz5Ukoe/743Cjh0eoqrhVoRcyIzy33XLfJZ4NQ2uZ
+         VgLkbpZcmr12+mXWFnpPQKxQZ9I4lJc2xI3OFFFurhU2m5p1lfY7bVL8xEAnpUkvbJsI
+         FRyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=57Y0hIfgAIJ89OmSynFNgC5ocn5dJaAs87HGBZ8fZcw=;
+        b=mUO2bngsf0IkjX87yVBuDu3C7ZDQCIsYKNgP5knFnsIZEIaPvvGE5mKWtPoythTi9i
+         jaC2JYdOgV6wEFW9X4dBCjGswpIHMsqqJHrb+/JgNXPAjIQJ+49r+ElygLZ3n+fJvnpr
+         9NMQn9csjolCPTRXDZ4OI8o14YOhgO5zXMDT0n0PvpefPtYHAKx0WxgJfjfm05+AV1mF
+         urY+qMfURWtc0v4tpevZYfHFTIlliKhTa383NSawmhtswaCo6pFP1o0MCXUm6VUnORgj
+         OjTqc+VA3IhBmSJ/V8AVHNggyd6jv3NmLczxmy7Ct1DMy8BbXCrFJOv4hbNmDsc5h4kG
+         ulGw==
+X-Gm-Message-State: AOAM531TT+GGYT49Yg4KPzQsDi+SjyAQhrUwTVvLBfuLggyZuEfRoHgx
+        wClR4Lt/u3swlCZzPOr+t8kvPh7vZT33SA==
+X-Google-Smtp-Source: ABdhPJzrCAcjmrbeyYbwcKChMCvz18TUjVmYfvNiqQHfKfZjBrQOmgdJSBnHOc1xR3mXTN2FdUz1Iw==
+X-Received: by 2002:a5d:5342:: with SMTP id t2mr2980555wrv.215.1641905730944;
+        Tue, 11 Jan 2022 04:55:30 -0800 (PST)
+Received: from google.com ([31.124.24.179])
+        by smtp.gmail.com with ESMTPSA id e12sm9816934wrg.110.2022.01.11.04.55.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 04:55:30 -0800 (PST)
+Date:   Tue, 11 Jan 2022 12:55:18 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] Backlight for v5.17
+Message-ID: <Yd1+NuCAGxhsFNR6@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MCK1 feeds the External Bus Interface (EBI). EBI's clock rate is used
-to translate EBI's timmings to SMC timings, thus we need to handle MCK1
-in the EBI driver. Allow MCK1 to be referenced as a PMC_TYPE_CORE clock
-from phandle in DT.
+Good afternoon Linus,
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/clk/at91/sama7g5.c       | 8 +++++++-
- include/dt-bindings/clock/at91.h | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index 369dfafabbca..e43458673afb 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -302,6 +302,7 @@ static const struct {
-  * @ep_count:		extra parents count
-  * @ep_mux_table:	mux table for extra parents
-  * @id:			clock id
-+ * @eid:		export index in sama7g5->chws[] array
-  * @c:			true if clock is critical and cannot be disabled
-  */
- static const struct {
-@@ -311,6 +312,7 @@ static const struct {
- 	u8 ep_count;
- 	u8 ep_mux_table[4];
- 	u8 id;
-+	u8 eid;
- 	u8 c;
- } sama7g5_mckx[] = {
- 	{ .n = "mck1",
-@@ -319,6 +321,7 @@ static const struct {
- 	  .ep_mux_table = { 5, },
- 	  .ep_count = 1,
- 	  .ep_chg_id = INT_MIN,
-+	  .eid = PMC_MCK1,
- 	  .c = 1, },
- 
- 	{ .n = "mck2",
-@@ -913,7 +916,7 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama7g5_pmc = pmc_data_allocate(PMC_CPU + 1,
-+	sama7g5_pmc = pmc_data_allocate(PMC_MCK1 + 1,
- 					nck(sama7g5_systemck),
- 					nck(sama7g5_periphck),
- 					nck(sama7g5_gck), 8);
-@@ -1027,6 +1030,9 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 			goto err_free;
- 
- 		alloc_mem[alloc_mem_size++] = mux_table;
-+
-+		if (sama7g5_mckx[i].eid)
-+			sama7g5_pmc->chws[sama7g5_mckx[i].eid] = hw;
- 	}
- 
- 	hw = at91_clk_sama7g5_register_utmi(regmap, "utmick", "main_xtal");
-diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-index 98e1b2ab6403..8498c0cd95fe 100644
---- a/include/dt-bindings/clock/at91.h
-+++ b/include/dt-bindings/clock/at91.h
-@@ -35,6 +35,7 @@
- #define PMC_AUDIOIOPLL		(PMC_MAIN + 7)
- #define PMC_ETHPLL		(PMC_MAIN + 8)
- #define PMC_CPU			(PMC_MAIN + 9)
-+#define PMC_MCK1		(PMC_MAIN + 10)
- 
- #ifndef AT91_PMC_MOSCS
- #define AT91_PMC_MOSCS		0		/* MOSCS Flag */
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git tags/backlight-next-5.17
+
+for you to fetch changes up to ec961cf3241153e0f27d850f1bf0f172e7d27a21:
+
+  backlight: qcom-wled: Respect enabled-strings in set_brightness (2021-12-22 11:18:46 +0000)
+
+----------------------------------------------------------------
+ - New Functionality
+   - Prepare and add support for ACPI enumeration; lp855x_bl
+
+ - Fix-ups
+   - Use Regmap API to conduct endianess conversions; qcom-wled
+   - Remove superfluous code; qcom-wled
+   - Fix formatting issues; qcom-wled
+
+ - Bug Fixes
+   - Provide error checking/validation of DT supplied strings; qcom-wled
+   - Request dynamic amount of values when reading from DT; qcom-wled
+   - Fix off-by-one issue when reading from DT; qcom-wled
+
+----------------------------------------------------------------
+Hans de Goede (3):
+      backlight: lp855x: Move device_config setting out of lp855x_configure()
+      backlight: lp855x: Add dev helper variable to lp855x_probe()
+      backlight: lp855x: Add support ACPI enumeration
+
+Marijn Suijten (9):
+      backlight: qcom-wled: Validate enabled string indices in DT
+      backlight: qcom-wled: Pass number of elements to read to read_u32_array
+      backlight: qcom-wled: Use cpu_to_le16 macro to perform conversion
+      backlight: qcom-wled: Fix off-by-one maximum with default num_strings
+      backlight: qcom-wled: Override default length with qcom,enabled-strings
+      backlight: qcom-wled: Remove unnecessary 4th default string in WLED3
+      backlight: qcom-wled: Provide enabled_strings default for WLED 4 and 5
+      backlight: qcom-wled: Remove unnecessary double whitespace
+      backlight: qcom-wled: Respect enabled-strings in set_brightness
+
+ drivers/video/backlight/lp855x_bl.c | 134 ++++++++++++++++++++++++------------
+ drivers/video/backlight/qcom-wled.c | 130 ++++++++++++++++++----------------
+ 2 files changed, 162 insertions(+), 102 deletions(-)
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

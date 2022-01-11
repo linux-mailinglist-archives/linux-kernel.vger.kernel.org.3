@@ -2,76 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A64FF48B736
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCA048B73B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346413AbiAKTUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S243848AbiAKTUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346557AbiAKTTt (ORCPT
+        with ESMTP id S1344749AbiAKTUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:19:49 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE8AC061201;
-        Tue, 11 Jan 2022 11:18:22 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id e8so36091ilm.13;
-        Tue, 11 Jan 2022 11:18:22 -0800 (PST)
+        Tue, 11 Jan 2022 14:20:03 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D09C06175D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:19:48 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id u25so409067edf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:19:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fjmViiIBre3Or1MpUA0C99w6YePtgf2gP2ZSnyWyE3o=;
-        b=AP1fc59Vkj1I/G06/1HC4PEXXUIDoxAWst8d2ysF1zSa34JQnuUPJJOTK8Eq8atiRb
-         ZFPGJcjtDRpNCLOwDM2vHnWI7E/5HreM3GwGSdQX+Lbp+JBOBM2E7oQ6gx1J7pOKdQ1B
-         1WRAIH4TS2FvYTuJPuk+suMxn3az2DWE5ZgHCvXCb+7peolxoiz8KCiVZX20mi735KxX
-         WK6AtqBV4wPQhUwj90mGDSII7nF4lTfgUrPjLE+kTfVliPqVT3HdDJaAJA1ca2J8zKCG
-         iFalmcMG5UfsyM0NgoIiv1V2OyJsa0QXkMdZo+kiTHXMmBSZ6NrsS+BXrqLQ0iZCOeph
-         4qWg==
+        bh=wPEufsiWRxBxFa3x05EyMO915zm/zBjp5MyFqHNhJt0=;
+        b=ERiX4Sa6hmrEflDwpKLYWFdH4eDxBQb8cmI+yn5DTykZAfrSCNR3ZM+K/1r1Hyz4WG
+         c9CpxvgXHLNO0t9dA5xzgQl2mgLMUDOCQlkAPquuslr7eILu6G/mtCEOgGFNw2k5h/eH
+         3cCRKxlYIYK2pE4hpJRpHpPUb0I91BhUci27U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fjmViiIBre3Or1MpUA0C99w6YePtgf2gP2ZSnyWyE3o=;
-        b=QiQSHdWceoGEne0TdbKel/hkE2Tb0ccCwykw1QBGM3H5BQUCdTKy8a1ZLdXSHsZLRx
-         zh1bkBH2ve6S1QHMW4MyCCJVUwFTnaj1lCU+ylkrL/lm515y+gzDgeMqYUnSKMH21rOk
-         s4M/yNRTynaowSFBoHAF7/YISIlJRTbAmcxIdQ5kosXJg9jGoeaId7VKrARSdBYABFUS
-         N8wp7TKEEmuUjzL2j+PrZu3dPFzGDvKlaCycZ0+Nn4eW0hlPoBL6epWQ7xuiuMeARCVo
-         FJKH3MckXMp7AILivW7wMP9/42zfiW2H324A38D8n/9sdcjOP0AfDPZ2J1vdqY6Rkd4q
-         l2dg==
-X-Gm-Message-State: AOAM5309hxqgZ4y3Exfykl7lnPXrm4AIwf2jKBxDvNOQPhO8o7F+akQO
-        Itu5fMtSUecj1Dk3c4ZKgSGKEHXYD6HVgfn+ICs=
-X-Google-Smtp-Source: ABdhPJwSdhQyKPvc4HjAwuZlim8TG/NSju7MtylKfE0hXQtQyfSKCwH86iWlgikX1Em8ozt+YEMiX9MRVdc3tXsAhhk=
-X-Received: by 2002:a05:6e02:1a08:: with SMTP id s8mr3277389ild.164.1641928701627;
- Tue, 11 Jan 2022 11:18:21 -0800 (PST)
+        bh=wPEufsiWRxBxFa3x05EyMO915zm/zBjp5MyFqHNhJt0=;
+        b=cD2salKc7WBikJ0iM+2wsMiqknkB9k68lUw4tlGl0aaSrqeQ0d+t0vnNDW8qOa5DK8
+         FY6ttY6oZ2VfBK5tT51O8zFihu5d+uTiKR2iUzxXsw/jWPwxu3sLSuU5IgQeM51+LRb9
+         4J0OznSPi22JGb/kJr/BL/l3deoAJkHRBEFlV1nNVPMejNY0Ljl0XvB2bbexwVEHJ6Ow
+         04P6eVKtWuZEU6P4wnIfreHbiamKmWi26fXU6D4lWjhR6sSGW+GHP4YEyOjfMFx5zacX
+         Mfx369zMCpmchftQ+uxrO6mzqz6cIxrXM+HvUT+HQSznIHSNDCceqN49PN8RY8Zt7E+O
+         vsEA==
+X-Gm-Message-State: AOAM5339FZsbKa/dk/cT4aJTE4RKfmcXg5W7yJKPWOnQLrFp8vdR5PEn
+        1n83Bye+YmKxn4lPGVLHT/zuSy8dwdT0KgJTWNI=
+X-Google-Smtp-Source: ABdhPJwg7c+fDer2O/ztK+gJR1rJV3SWLZjB//bOa9ltPOUwO1tIrsM4BpWyBkW/bxvSuHtW0uqBvw==
+X-Received: by 2002:aa7:d4d9:: with SMTP id t25mr5845531edr.298.1641928786614;
+        Tue, 11 Jan 2022 11:19:46 -0800 (PST)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id qa11sm3839232ejc.189.2022.01.11.11.19.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 11:19:44 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso2077701wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:19:41 -0800 (PST)
+X-Received: by 2002:a05:600c:4f49:: with SMTP id m9mr3682702wmq.8.1641928781521;
+ Tue, 11 Jan 2022 11:19:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220111160900.1150050-1-eugene.shalygin@gmail.com>
- <20220111160900.1150050-2-eugene.shalygin@gmail.com> <805dd382-262c-36f0-fcf5-5776223040c8@roeck-us.net>
- <CAB95QATsy2ACgyxWLy2PM2peqoYDEa_j96VNSHBG6GMd+x3LzQ@mail.gmail.com>
- <050ee3ed-4c30-afb9-d7ce-898d634284be@roeck-us.net> <CAB95QATb_En0KqXRktY99q8UXmosCftMrekpFiAKrAocwFEKmg@mail.gmail.com>
- <b5753e72-fe0d-1102-64cb-49de242184bb@roeck-us.net>
-In-Reply-To: <b5753e72-fe0d-1102-64cb-49de242184bb@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Tue, 11 Jan 2022 20:18:10 +0100
-Message-ID: <CAB95QAQk=fqVtqWGzoe57=G=sOvFXvjfo9s43z7grVTce8qyMQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211213225350.27481-1-ebiederm@xmission.com> <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+ <87sfu3b7wm.fsf@email.froward.int.ebiederm.org> <YdniQob7w5hTwB1v@osiris>
+ <87ilurwjju.fsf@email.froward.int.ebiederm.org> <87o84juwhg.fsf@email.froward.int.ebiederm.org>
+ <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
+ <87lezmrxlq.fsf@email.froward.int.ebiederm.org> <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 11 Jan 2022 11:19:25 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
+Message-ID: <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
+ special case
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Olivier Langlois <olivier@trillion01.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
+        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> No need to resend because of this; I can drop it myself. No,
-> I don't have any further comments at this point, but I would
-> like to see (test/review) feedback by others before applying
-> the series.
+On Tue, Jan 11, 2022 at 10:51 AM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
+>
+> +       while ((n == -ERESTARTSYS) && test_thread_flag(TIF_NOTIFY_SIGNAL)) {
+> +               tracehook_notify_signal();
+> +               n = __kernel_write(file, addr, nr, &pos);
+> +       }
 
-Great! Thank you!
+This reads horribly wrongly to me.
 
-Regards,
-Eugene
+That "tracehook_notify_signal()" thing *has* to be renamed before we
+have anything like this that otherwise looks like "this will just loop
+forever".
+
+I'm pretty sure we've discussed that "tracehook" thing before - the
+whole header file is misnamed, and most of the functions in theer are
+too.
+
+As an ugly alternative, open-code it, so that it's clear that "yup,
+that clears the TIF_NOTIFY_SIGNAL flag".
+
+             Linus

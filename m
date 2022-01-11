@@ -2,112 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB36448B5F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E42248B5FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345764AbiAKSo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346214AbiAKSo0 (ORCPT
+        id S1345746AbiAKSpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:45:21 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:41517 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241456AbiAKSpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:44:26 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D31C061751;
-        Tue, 11 Jan 2022 10:44:25 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id y18so6093172iln.3;
-        Tue, 11 Jan 2022 10:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:message-id:subject:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=tFQdNQtIewtBRmToXsBxMfMj4p5l4AEslzFqKCLLZoo=;
-        b=GdEjlM8FyzZ4u7cfUSmXq9/e8NZxUgid+VOT/R6BIHZ5aD7SFRsoNjIpkQaFGbcG8j
-         19fy/aHOQ0207AUuCGfdVh9WnvoV15WvgHQ5kbLmY1GF6ohyIxKSVKYoNrw9yMkYZQvK
-         B5Rr8jAOLYajqR8P6y6mDbDT7FtPCd7Klqo52FNrNvOodGHJ89nJnEdPZdFN2iK7Bgyd
-         JwvZQ907iFM0gO9kh//euTlVC5zoELSyW+vRET2zt/VXeD8JlB/R/3almX44YnAxV4mU
-         psuy8QJjYKcfPyBrx5wEYe93qU0nBZLt5PmidG3ScCW2LZ/+CYpTHfKsssHS12ZgoQK9
-         B9GQ==
+        Tue, 11 Jan 2022 13:45:20 -0500
+Received: by mail-ot1-f42.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso1583926otj.8;
+        Tue, 11 Jan 2022 10:45:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:subject:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=tFQdNQtIewtBRmToXsBxMfMj4p5l4AEslzFqKCLLZoo=;
-        b=JJlFppgoahnR3ZR5sOi//xPmmd56r0otXlJTdcU/h/dWFRVmTzXPyMc11ZKn39uxAJ
-         B2KhFMk3mlzLtFVgH5hoyVhudj8KDDQRuWCDOA021GxzSUudQPEx6HkbXkQveNluLNYS
-         jGm9ymwvQBRs7OcejcXHBzzSfHZyfHLchsWKd7lHd+D+6modo4owPI2ct3SpY2yKPPFg
-         pqOlkD7flUvpUgrNxEwRQprQLNbnBU3/zA5ZR9aDyXvPh9V0OdEM92ofZyUgTcav0+vZ
-         MGM5gx/1td38BBKZeBNycPxlK+Wy6ETth4r43VxMk2abuScxEWJxeTO4L5D1pPKgK365
-         7qIA==
-X-Gm-Message-State: AOAM533A0ckEMZn40ZD3J7LlmiXvj2Nxy17lvxVQ5jqQWzIfXYD6a+JA
-        oaEZr5YVs5sVXUHSmVxLO+4=
-X-Google-Smtp-Source: ABdhPJycIt+kcebpXTE6Q4i4yJqb8HjKebhXN8no1tlBBpnhYCUis/oMlIg+OSiYmNDyhc95tlcGyw==
-X-Received: by 2002:a05:6e02:1aad:: with SMTP id l13mr3290017ilv.4.1641926664781;
-        Tue, 11 Jan 2022 10:44:24 -0800 (PST)
-Received: from lat7420.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.googlemail.com with ESMTPSA id d11sm6381489ilv.6.2022.01.11.10.44.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F0e3m98RqwjSlzmyX1kOm+vOF2VQm1ViKY66pyPBG2s=;
+        b=8Dmj46V2KKz2ydt3O+/Lg7d+MJE8wawHM8m7YjDwcubdwFNRERbIPAeVe+OrnYZbyo
+         acmqkvv+heo45vQ4crT0PwXwsDu/qbiTHNvetPoWfYw2USc2Cde9mrOsfUCrII2OlQfH
+         bb8iFX6VXOAhoSnp4PTrExHTk4+hbshMVlxF7/qNUy20v+hItc/46MCsOUw7HzI9sO2/
+         /UMnug9MasAkZFfc+KDKBexCFj0RwSyCnwC0rhMpS5tzEOmXzDzWvsBWXcw2TeyGdy7d
+         5Xgkq7tmfaK3Kk/D+SfcHEj8NzBkO1q3Wr7cGgd2ltH6toofdMbIwPz59Obb98wdLnX2
+         wYUg==
+X-Gm-Message-State: AOAM5304PTya0mZAoJIBISGBNPcen1D/0L6dqIBpWN582SXVlq9bInzl
+        6XUoXT4KqtO86FruKB07rQ==
+X-Google-Smtp-Source: ABdhPJxy8a1EpLFMlB6hTOJMVu4IhrR2rQpyht3PAS0epH89Pr9U2ltlySSjVA6xxzQVEcZbuo4ZRg==
+X-Received: by 2002:a9d:6e91:: with SMTP id a17mr4265345otr.138.1641926719396;
+        Tue, 11 Jan 2022 10:45:19 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o12sm434552ooi.15.2022.01.11.10.45.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 10:44:24 -0800 (PST)
-From:   Khalid Aziz <gonehacking@gmail.com>
-X-Google-Original-From: Khalid Aziz <khalid.aziz@oracle.com>
-Message-ID: <fa014bc2ddc85363dd6b8d34e9db1301817cb33d.camel@oracle.com>
-Subject: Re: [PATCH] mm/pgtable: define pte_index so that preprocessor could
- recognize it
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christian Dietrich <stettberger@dokucode.de>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Date:   Tue, 11 Jan 2022 11:44:23 -0700
-In-Reply-To: <20220111145457.20748-1-rppt@kernel.org>
-References: <20220111145457.20748-1-rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4-1 
+        Tue, 11 Jan 2022 10:45:18 -0800 (PST)
+Received: (nullmailer pid 3304828 invoked by uid 1000);
+        Tue, 11 Jan 2022 18:45:16 -0000
+Date:   Tue, 11 Jan 2022 12:45:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        SHA-cyfmac-dev-list@infineon.com, Rob Herring <robh+dt@kernel.org>,
+        linux-acpi@vger.kernel.org,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com, Len Brown <lenb@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v2 01/35] dt-bindings: net: bcm4329-fmac: Add Apple
+ properties & chips
+Message-ID: <Yd3QPF0KxD3RFfXM@robh.at.kernel.org>
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-2-marcan@marcan.st>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104072658.69756-2-marcan@marcan.st>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-11 at 16:54 +0200, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Tue, 04 Jan 2022 16:26:24 +0900, Hector Martin wrote:
+> This binding is currently used for SDIO devices, but these chips are
+> also used as PCIe devices on DT platforms and may be represented in the
+> DT. Re-use the existing binding and add chip compatibles used by Apple
+> T2 and M1 platforms (the T2 ones are not known to be used in DT
+> platforms, but we might as well document them).
 > 
-> Since commit 974b9b2c68f3 ("mm: consolidate pte_index() and
-> pte_offset_*()
-> definitions") pte_index is a static inline and there is no define for
-> it
-> that can be recognized by the preprocessor. As the result,
-> vm_insert_pages() uses slower loop over vm_insert_page() instead of
-> insert_pages() that amortizes the cost of spinlock operations when
-> inserting multiple pages.
+> Then, add properties required for firmware selection and calibration on
+> M1 machines.
 > 
-> Fixes: 974b9b2c68f3 ("mm: consolidate pte_index() and pte_offset_*()
-> definitions")
-> Reported-by: Christian Dietrich <stettberger@dokucode.de>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Cc: stable@vger.kernel.org
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  include/linux/pgtable.h | 1 +
->  1 file changed, 1 insertion(+)
+>  .../net/wireless/brcm,bcm4329-fmac.yaml       | 37 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index e24d2c992b11..d468efcf48f4 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -62,6 +62,7 @@ static inline unsigned long pte_index(unsigned long
-> address)
->  {
->         return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
->  }
-> +#define pte_index pte_index
->  
->  #ifndef pmd_index
->  static inline unsigned long pmd_index(unsigned long address)
-> 
-> base-commit: 2585cf9dfaaddf00b069673f27bb3f8530e2039c
 
-This is a good fix with positive performance impact.
-
-Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

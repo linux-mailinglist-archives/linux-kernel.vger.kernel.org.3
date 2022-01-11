@@ -2,182 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403F748BA4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5B048BA53
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245630AbiAKV5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:57:20 -0500
-Received: from mail-bn8nam08on2071.outbound.protection.outlook.com ([40.107.100.71]:22436
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230508AbiAKV5T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:57:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S2INDhvuiPqrGktetBjS7nuEDiQLn0Wm1rGFPcYFkEuyxHskW1wCbsSIrp2+RL+9xQflFBtFT8YiaIPtrzR7CsrTyKM8vJIOXWo+azWb0IaVm2ypPkoOnlF9D291J3wAE+6mISJfiBvA7e7oBtufCIdkDPzOqVkzRRrn0obpo/KdXors48xRbadeMQtf9csPWW7mYDLVUbHoLzLBpXMSSNXscQQsssYpQuIPDTl0ngynlNKew3rqF2nYlAcBMMF7w//DFAy62ydinysE8ss1V5bE01tREff2dklWvQPET6k2u9tUbBESaut7yhjzgkAo2RB6UCOHS4Dxi5FQaIaZCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jXfxuPekyRAgiXo5r3pReWJw86tRcNE11pct1HiPRmI=;
- b=IHozKnMUrDi1G2AJu7afDGm+oCB0hZTz6qX3LausIKpdyztpFxyLMbVSwt5/mFkKb0+qCEP67HzyPCs7A39rOLWLdv9/RPTaUX1wEO7rE+jqiF4mDU5p5jv1uiG5paL1avDOVKzPIXp2jdv5GFoGlwpjdNClEnYiJy2c7jk77bHmXilFPh4qCurQHDaUIMu3mzoUVJx4ya7+QW8jp/vL55108XlrxdJl91uPGB0cHqX0BbUzEHLm4t0LROwav4FJvwRLBkHyar9gCwUZZU5Ub2Fv8dcOwNSnTIQhvsZs5epjdSlOWcYLeg1YbLeGt+3XiyV7UXYfL0NfGDpa6hiZMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jXfxuPekyRAgiXo5r3pReWJw86tRcNE11pct1HiPRmI=;
- b=SoNozr9KYS4SY4F+lcXVSbDrnMh72nsvCGLSGX3OrrIIhVhvsMZo7Cb+/T9khmZIS60TXTx7DszUfbTGsB0JHeKuTpUqFUgX/GDHxChclFqIrYfpjgsDzy9618UDEwjrnsL2/MEKffgTlIPXHhiNF9A6xLsa6GZ1GG5M7SbsZW4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2714.namprd12.prod.outlook.com (2603:10b6:5:42::18) by
- DM6PR12MB3324.namprd12.prod.outlook.com (2603:10b6:5:11e::26) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4867.11; Tue, 11 Jan 2022 21:57:17 +0000
-Received: from DM6PR12MB2714.namprd12.prod.outlook.com
- ([fe80::940f:16cc:4b7f:40]) by DM6PR12MB2714.namprd12.prod.outlook.com
- ([fe80::940f:16cc:4b7f:40%5]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 21:57:16 +0000
-Cc:     brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 12/40] x86/sev: Add helper for validating pages in
- early enc attribute changes
-To:     Venu Busireddy <venu.busireddy@oracle.com>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-13-brijesh.singh@amd.com> <YdOGk5b0vYSpP1Ws@dt>
- <7934f88f-8e2b-ea45-6110-202ea8c2ad64@amd.com> <Yd374d2+XdBD+vTM@dt>
-From:   Brijesh Singh <brijesh.singh@amd.com>
-Message-ID: <91194a7c-b363-6356-4148-5a5222b86a59@amd.com>
-Date:   Tue, 11 Jan 2022 15:57:13 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <Yd374d2+XdBD+vTM@dt>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0P220CA0030.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:610:ef::28) To DM6PR12MB2714.namprd12.prod.outlook.com
- (2603:10b6:5:42::18)
+        id S1343547AbiAKV5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 16:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230508AbiAKV5q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 16:57:46 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF443C06173F;
+        Tue, 11 Jan 2022 13:57:46 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id h16so406144qkp.3;
+        Tue, 11 Jan 2022 13:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tAICFwgK+5loeH6T2WZmu2JcAthYSYGSu13AnEoNjNo=;
+        b=fu4Ru7hpqv2MN1GE7X5Z3Yv5Iy511hZj7DD6BAf57927si2x3BZBW2nMIeOvUGbBUc
+         rGsNOTrsbFcKZaoopAV518MvWttifE9a7k43KazdqQeoWPpfs/oAE3tZoOrRnbya0QgT
+         CBrnkz08m0SVDhNBAVVepWaL6YOI7BHez6Y9I83lGBNT/+KPkSDzlHrcfLvK11OikIPy
+         1COTr9fJev3Ak4Afq+vFvAApjPWYn8HGdcGzxpBYXmHRjQicFA5rDUmgsS9pkieQubar
+         fO7DsnREFVGz2mKFKCxZiF2HU6JA/6bqKaByttjUC3IAtDs1R2Un9I4LmRd1PSfnQH+R
+         +E4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tAICFwgK+5loeH6T2WZmu2JcAthYSYGSu13AnEoNjNo=;
+        b=eJTtGYWPemRpS2jl8J256moWewny6zBYBhuw3rAuVd4KJ9Vg2aOkjwCWha8gIUIgdG
+         uvEAsMuj8FIpiS2fB+bv2jNpf6L4sVhTGqC3kkI4Vkdw/4MUJgF05yfdwUGnlAhNUAZc
+         MqoNUNFg+/JvCAAd48pLh3X4M+04CLjHfoJitRPFi8DiBr8ONdIJrSquodZFFhlFt+yu
+         4/WxEl/ZEiVgYd37iXtvkg5l/YUJkksbNgG3ZkkABwHjecEK4YXTinyWnrpPUTR+ezW9
+         WG3bBSjGjAb28wHGvT9jiTShqW7aDzGWXPkx+oN8eeYumxcbjbBP93vyMZcAfEUvcZU7
+         cuUw==
+X-Gm-Message-State: AOAM53090kinnDkjralEYghbcJbUnOZHkQiYnCIJIwkuobvE/RI4ItlE
+        FFMWkdSlm4zkiaZ26xcxakw=
+X-Google-Smtp-Source: ABdhPJxGF2boBf45RLlVY7W/rjQ/EenPnnKU3Yl1sJb7Tyb7flGCBD30h037BkXfrIZQB0I1TRKIMQ==
+X-Received: by 2002:a05:620a:1b:: with SMTP id j27mr4553408qki.308.1641938265879;
+        Tue, 11 Jan 2022 13:57:45 -0800 (PST)
+Received: from [10.4.10.38] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id n129sm7050881qkn.64.2022.01.11.13.57.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 13:57:45 -0800 (PST)
+Message-ID: <fc0169c3-eea7-e067-784b-eebeccee13b8@gmail.com>
+Date:   Tue, 11 Jan 2022 16:57:42 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7427f637-f148-4625-866f-08d9d54d5506
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3324:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB332481D26E4BFD0CBC9A2FB8E5519@DM6PR12MB3324.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fOLj4NEAxmRuCfw/iO6uKzkry5T57rpuEAwX+NbwE1X6Z/HK48/hzrEz1+FicNsUsg1ZNWF5OeqXS0jx3Dgt3f6tEOWmZHcnTzCyK7Az4Hq4LGzEG6PVXFmnanXGmbdhNVxFHCNXFtWcq1ytbpubj9Uxdqbw00rM4Cp01cleNrem+xVsKlXtBoCXVdclfCZAHwG/Ujarb3S4alVYzJnh6r6fjHgKo36zka0NtVDpXH4lsWPeZtdYJTu+P/RetJHaOC6U4Rb5TD+otW9egAHOJ0wyXPyIamY5zTXj9Lnr3jDPeYXx6RdJETk0mMBKGNJzhkeKhrZYa2q8wpJXslhkMYgs0wxYGhBQMKk1OP/u2VwRTZl0dEFjeqpWrjyti5jcqX47blkevDV2Qv3Pai4oEuky0jCWOyLwCvQjv2fSe22RAagf0o7fbE5sE/ALlD7orIKeiRAOCCTo49/w1cxnfYNURfLXEuOJ17QsbhBJq9773hnimBaalvHooUlzY6Urg2PUU0qavhy4a33rqNtbtz2gzKutZnhBvfucLL6SdDT/CCLbsLnLZriz8jTIzwajOGHHyllAAu1PB0mV15HFXAc+XxLzcds8PwFGaN9c5DpeDDUkwo+/7GW2pQhY7+eqtRBTab8UUZAVnfHDKp3PKyIUdDX/GgTQ0/Lr5kpDIF3z4Z+Ek5N4DDHytmk529+3c5obqYG36me251nuD95AM4IOhgApJUi7IRnC5fMMXdwS1gK6zCBg7molyyA4CMjHHmn0sUDNbJAalcrlnfzGdvL7FD902c1m9fV9kZDQ5PshmrcJBDLqHCFX1VD0t43T
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2714.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(316002)(31696002)(4744005)(83380400001)(2906002)(966005)(66476007)(54906003)(66946007)(66556008)(186003)(5660300002)(86362001)(6506007)(53546011)(8936002)(4326008)(8676002)(6916009)(36756003)(7406005)(31686004)(38100700002)(7416002)(6512007)(2616005)(26005)(508600001)(6486002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UW85Umw5QjhnNjd6TnBIQVl5cHQ2enN6ZTAyUmhURnQ4YnZibitUckc1SXE4?=
- =?utf-8?B?UGpzUVVCTWVreElITmVnaldyMlNsc3BYT2pCZ0tsbWJtY3R0clFvVnNjTEl1?=
- =?utf-8?B?YWN0WnF0NnBRSld6RDBBdlQ5eUZXUzZDVDFLdnNQR0V2RG5KdGVNQzgvYXQ0?=
- =?utf-8?B?dnJ5L2lkYTRTS2lidXVtR3ZxOFNFUjhnZ2ZXS3lXTGwwNmNzS0dYN1krM1ht?=
- =?utf-8?B?Y25BY3NwUHpXSUVqZjJOM2pTUEl0OVFoZEFHeHZSUFRGaVllN25wMmpMeEV2?=
- =?utf-8?B?cjBXeXZpeEc3dnU3ZlE0dXR5QWNIWFRNSWIxV1pBTThCTUFCOXRyQU1tNmNF?=
- =?utf-8?B?RHlGaTdxb3dlWngwWXRqTkQ4VG9tUHgzUmlvTi9wR1R6MHd0Wk9najRBeklv?=
- =?utf-8?B?RllWamZMdGtrWWQ0YlNGM0E4alhVbnB6ZnhZRS9qVHY2dVRXTnJrUmQrS3Np?=
- =?utf-8?B?Tnh5c0QySkNVSzkzTE43T0pQdjlSdjRoRmVSSFFwSlZDenNQZVF6bG14SFp0?=
- =?utf-8?B?OVI3blE2TEwvVkluc2pDSno5VkFKMkJ2MzAvWE93eDlwK3BjRlc0aE0xamVp?=
- =?utf-8?B?NkpSRWM1YTRHYUNvTmcxdXFOaS9ybGZqdEFuK3RaMU5ndzhtbXlGdTBtWlUr?=
- =?utf-8?B?TGxUVVR3L0Y4SmxOOEtsN0VMMzk4THRaVW0wOXplNjllbE5ETTNDUzRKTDdp?=
- =?utf-8?B?eUF4bkVjbVNjNnZxdllRWTVtTnUrQytOYVk5NFFuanNoMVRDSElGbUh0R1Z3?=
- =?utf-8?B?T2krWGFheHJsRXFicmlGTWU1cEJYTG9wL3o2UmdxWWdXek5PZklmNkYrZjFD?=
- =?utf-8?B?OHRpOHYvQXNPdGhhRHc4OURZNlNET0NYZllFSHZtV25jQXJCRmFkMktzb1Rp?=
- =?utf-8?B?bHIwUlQxOGNxblBmNmo4L3Awa20wcngzelc3OWpYbEhRdGc1a0Mzc0JQazd0?=
- =?utf-8?B?MllkRk9xOThOVE9oandRUFQwSmhmVnpzZld6N1gyZ3NQWmNnQzNsNnA4WnBD?=
- =?utf-8?B?VStqWXZUUkN2UTlGVGs1UVc1YUxBRTNtMmVIcHQ0aXRialpqYkNTUkNKNzFJ?=
- =?utf-8?B?RDlsQllLS05RUDg4WHlmVUVUdUgwbnJUcEFrczlKc2liSFN6b0xmWElsZHox?=
- =?utf-8?B?RG9UZTNZUzRjQWZkU3lRRUl6c2lCaW1mMm1PNkxwUjd0UUxPT2xxeUhlSWgy?=
- =?utf-8?B?ZlRvclBsdnVSZDBHU0tXNzg4MGVLQ2gzYW5XMVlKUXNFYmhKbjkwSkpKSDBE?=
- =?utf-8?B?cHlLcnozVzZjL0J0b09XWGRDLzc4cGpXTVFBRnp2OW1jR01LS3lKdTBBYkN5?=
- =?utf-8?B?VjRQTi9OVk5QY3FKMFhUTG56MU0zRjZWbTVFbzZqaUgyWWNLM0R1aVZUb2tO?=
- =?utf-8?B?azdzU2xMRDlmVk1NYjI3WEpBYzJid0Y1aFF1cUF3MGpTUk82RnYxc2ppYVVW?=
- =?utf-8?B?T2Z0T3BaSG81aVUzYy9qbzBkc0xmck4zNDFxUTdKSWRWSkYxM2xrV2F1ZFIw?=
- =?utf-8?B?WEpGUWVaZzM0Zy9Ib3FqdVJ4d2pmYkVWSHhaNTdISnMrYTFEcFdrUGFQZGhR?=
- =?utf-8?B?NnczWGVrWHFrVTE4M3lpT3R5dEk5V2ViV2hMeS85NkRIMEt1TlJEUWN0S1VW?=
- =?utf-8?B?N3BGK1JWSWpvQzk5YnRuMnRkakhFa05HYktCNFYxUDgwZjhDKy9nVkhDWGNF?=
- =?utf-8?B?RUpkMHU4UXBZeVFicGpkaTFMU3E4eWdYT3pVN3UzV3BOZzJBM29vamJtUUJI?=
- =?utf-8?B?eXlhd2E3V1BQNWNWamNLeDJ0TFB6WGZrZUNMU0NVNUFnWklidVplb2tDdWpH?=
- =?utf-8?B?RDFyZ1JhcStzWUNja2k2T1hFU2krdEhNclpBa3IxRGpxVXVZNTdNSlNOVzNQ?=
- =?utf-8?B?TDFMcENnU2JqNUxJSTFOeGlKLzFDV3JObE5OdENIL1R3bFhXcUxYMVg5ZVFL?=
- =?utf-8?B?U0lhZjlzWUpVeGxpeldkZWpobCt0VysrcW9yZUQ0VDlvSWs4V0FXRUZ5d1Zp?=
- =?utf-8?B?MHFub0pBWDU0dDB4eUc5LzdqdWZnWVpWalY2QWFPdEFnNzh3VFNFTTZPcS9F?=
- =?utf-8?B?Nm5KaTAweE11L2JRc0RWTUZpV0tzNDJaUFRDb0ViSldoRWcwb0hkbERiQ1Rv?=
- =?utf-8?B?NS9hd0FyeUtpZG5WUHF3WjF6ZjVhaFFZQ2hyUU5Ed0ltZ0ZNZmFJckhWUDdQ?=
- =?utf-8?Q?+KeXteSWeBjQg0cYBlE8nDo=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7427f637-f148-4625-866f-08d9d54d5506
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2714.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 21:57:16.7824
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YKV5xU1QKotWg3eClCsdPQ4L95f78/DXAHF7LC6l6tC1QYwpfSdWbIIfuC9l1Fn9+fQoWz60k3uYcCeilEsEkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3324
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v7 0/7] Add initial support for the i.MXRTxxxx SoC family
+ starting from i.IMXRT1050 SoC.
+Content-Language: en-US
+To:     linux-imx@nxp.com
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
+        stefan@agner.ch, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
+        adrian.hunter@intel.com, jirislaby@kernel.org,
+        giulio.benetti@benettiengineering.com,
+        nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20220111212606.2072669-1-Mr.Bossman075@gmail.com>
+From:   Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <20220111212606.2072669-1-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/11/22 3:51 PM, Venu Busireddy wrote:
-> On 2022-01-11 15:22:01 -0600, Brijesh Singh wrote:
->> Hi Venu,
->>
->>
->> On 1/3/22 5:28 PM, Venu Busireddy wrote:
->> ...
->>
->>>> +
->>>> +	 /*
->>>> +	  * Ask the hypervisor to mark the memory pages as private in the RMP
->>>> +	  * table.
->>>> +	  */
->>>
->>> Indentation is off. While at it, you may want to collapse it into a one
->>> line comment.
->>>
->>
->> Based on previous review feedback I tried to keep the comment to 80
->> character limit.
+On 1/11/22 16:25, Jesse Taube wrote:
+> This patchset contains:
+> - i.MXRT10xx family infrastructure
+> - i.MXRT1050 pinctrl driver adaption
+> - i.MXRT1050 clock driver adaption
+> - i.MXRT1050 sd-card driver adaption
+> - i.MXRT1050 uart driver adaption
+> - i.MXRT1050-evk basic support
 > 
-> Isn't the line length limit 100 now? Also, there are quite a few lines
-> that are longer than 80 characters in this file, and elsewhere.
+> The i.MXRTxxxx family that could have support by Linux actually spreads
+> from i.MXRT1020 to i.MXRT1170 with the first one supporting 1 USB OTG &
+> 100M ethernet with a cortex-M7@500Mhz up to the latter with i.MXRT1170
+> with cortex-M7@1Ghz and cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU,
+> 2x 1Gb and 1x 100Mb ENET. The i.MXRT family is NXP's answer to
+> STM32F7XX, as it uses only simple SDRAM, it gives the chance of a 4 or
+> less layer PCBs. Seeing that these chips are comparable to the
+> STM32F7XXs which have linux ported to them it seems reasonable to add
+> support for them.
 > 
-> But you can ignore my comment.
+> Giving Linux support to this family should ease the development process,
+> instead of using a RTOS they could use Embedded Linux allowing for more
+> portability, ease of design and will broaden the scope of people using
+> embedded linux.
+> 
+> The EVK has very little SDRAM, generally 32MB starting from
+> i.MXRT1020(the lowest P/N), although the i.MXRT1160/70 provide instead
+> 64MB of SDRAM for more functionality.
+> 
+> At the moment we do not support XIP for either u-boot or Linux but it
+> should be done in the future. XIP will also save SDRAM.
+> 
+> Another interesting fact is the amount of internal SRAM, as the P/N
+> increases the SRAM will reach up to 2MB(some could be for cache and
+> some would be for video).
+> 
+> Also, some parts have embed flash of 4MB that can be used for
+> u-boot/Linux, if both correctly sized it will leave the SDRAM free.
+> 
+> External flash can be Quad SPI and HyperFlash, so throughput would be
+> decent.
+> 
+> The i.MXRT11xx series supports MIPI interface too.
+> 
+> The family in general provide CAN bus, audio I/O, 1 or more
+> USB(otg/host), 1 or more 100Mb/1Gb ethernet, camera interface, sd-card.
+> 
+> All this can be used for simple GUIs, web-servers, point-of-sale
+> stations, etc.
+> 
+> 
+> Giulio Benetti (4):
+>    ARM: imx: Add initial support for i.MXRT10xx family
+>    dt-bindings: imx: Add clock binding for i.MXRT1050
+>    ARM: dts: imx: Add i.MXRT1050-EVK support
+>    ARM: imxrt_defconfig: Add i.MXRT family defconfig
+> 
+> Jesse Taube (3):
+>    ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
+>    dt-bindings: clock: imx: Add documentation for i.MXRT1050 clock
+>    clk: imx: Add initial support for i.MXRT1050 clock driver
+> 
+>   .../bindings/clock/imxrt1050-clock.yaml       |  67 ++
+>   arch/arm/boot/dts/Makefile                    |   2 +
+>   arch/arm/boot/dts/imxrt1050-evk.dts           |  72 ++
+>   arch/arm/boot/dts/imxrt1050-pinfunc.h         | 993 ++++++++++++++++++
+>   arch/arm/boot/dts/imxrt1050.dtsi              | 160 +++
+>   arch/arm/configs/imxrt_defconfig              |  35 +
+>   arch/arm/mach-imx/Kconfig                     |   7 +
+>   arch/arm/mach-imx/Makefile                    |   2 +
+>   arch/arm/mach-imx/mach-imxrt.c                |  19 +
+>   drivers/clk/imx/Kconfig                       |   7 +
+>   drivers/clk/imx/Makefile                      |   1 +
+>   drivers/clk/imx/clk-imxrt1050.c               | 168 +++
+>   include/dt-bindings/clock/imxrt1050-clock.h   |  72 ++
+>   13 files changed, 1605 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
+>   create mode 100644 arch/arm/boot/dts/imxrt1050-evk.dts
+>   create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
+>   create mode 100644 arch/arm/boot/dts/imxrt1050.dtsi
+>   create mode 100644 arch/arm/configs/imxrt_defconfig
+>   create mode 100644 arch/arm/mach-imx/mach-imxrt.c
+>   create mode 100644 drivers/clk/imx/clk-imxrt1050.c
+>   create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
 > 
 
-Yes, the actual line limit is 100, but I was asked to keep the comments 
-to 80 cols [1] to keep it consistent with other comments in this file.
+Oh No!
+I'm very sorry I sent v8 under the wrong version number. I sent it again...
 
-https://lore.kernel.org/lkml/f9a69ad8-54bb-70f1-d606-6497e5753bb0@amd.com/
+Sincerely,
+	Jesse Taube
 
-thanks

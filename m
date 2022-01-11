@@ -2,112 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B164648B3BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF05C48B3C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344018AbiAKRZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:25:40 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:23241 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343964AbiAKRZi (ORCPT
+        id S1344197AbiAKR0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:26:39 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:33882 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344168AbiAKR0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:25:38 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-242-dlMRcRXWOTyXkk0FIAdRLA-1; Tue, 11 Jan 2022 17:25:36 +0000
-X-MC-Unique: dlMRcRXWOTyXkk0FIAdRLA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Tue, 11 Jan 2022 17:25:36 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Tue, 11 Jan 2022 17:25:36 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Pavel Begunkov' <asml.silence@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>
-CC:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 13/14] net: inline part of skb_csum_hwoffload_help
-Thread-Topic: [PATCH 13/14] net: inline part of skb_csum_hwoffload_help
-Thread-Index: AQHYBooc+zd0TLCwI0SMx+giCPDt3axdi3LQgACAiACAAARzEA==
-Date:   Tue, 11 Jan 2022 17:25:35 +0000
-Message-ID: <f2e3693ec8d1498aa376f72ebd49e058@AcuMS.aculab.com>
-References: <cover.1641863490.git.asml.silence@gmail.com>
- <0bc041d2d38a08064a642c05ca8cceb0ca165f88.1641863490.git.asml.silence@gmail.com>
- <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
- <25f5ba09-a54c-c386-e142-7b7454f1d8d4@gmail.com>
-In-Reply-To: <25f5ba09-a54c-c386-e142-7b7454f1d8d4@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+        Tue, 11 Jan 2022 12:26:32 -0500
+Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id ADF4420B7179;
+        Tue, 11 Jan 2022 09:26:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ADF4420B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1641921991;
+        bh=rqPoO9wMXNdnkcK091uZWQ9GBBZdo9FiwEA0tTRsctc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z+9XqRGHrF630GzuUIDem48vB9Fm62rsPEFbD8tg5dPWf0R19rX7T6J+mhhm1FLyZ
+         rK3kCUVBgZyZxj3aSauvLhNLGrebI1sYoRvEkQ10ZzmbiPrV1srEov4cOo0bsg3/Ba
+         ILWhHtgqMw3IQAcar71NRuq81CDOhtQrcViyGnVM=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beaub@linux.microsoft.com
+Subject: [PATCH v9 00/12] user_events: Enable user processes to create and write to trace events
+Date:   Tue, 11 Jan 2022 09:25:50 -0800
+Message-Id: <20220111172602.2513-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUGF2ZWwgQmVndW5rb3YNCj4gU2VudDogMTEgSmFudWFyeSAyMDIyIDE2OjU5DQo+IA0K
-PiBPbiAxLzExLzIyIDA5OjI0LCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4gRnJvbTogUGF2ZWwg
-QmVndW5rb3YNCj4gPj4gU2VudDogMTEgSmFudWFyeSAyMDIyIDAxOjIyDQo+ID4+DQo+ID4+IElu
-bGluZSBhIEhXIGNzdW0nZWQgcGFydCBvZiBza2JfY3N1bV9od29mZmxvYWRfaGVscCgpLg0KPiA+
-Pg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBQYXZlbCBCZWd1bmtvdiA8YXNtbC5zaWxlbmNlQGdtYWls
-LmNvbT4NCj4gPj4gLS0tDQo+ID4+ICAgaW5jbHVkZS9saW51eC9uZXRkZXZpY2UuaCB8IDE2ICsr
-KysrKysrKysrKysrLS0NCj4gPj4gICBuZXQvY29yZS9kZXYuYyAgICAgICAgICAgIHwgMTMgKysr
-LS0tLS0tLS0tLQ0KPiA+PiAgIDIgZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgMTIg
-ZGVsZXRpb25zKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L25ldGRl
-dmljZS5oIGIvaW5jbHVkZS9saW51eC9uZXRkZXZpY2UuaA0KPiA+PiBpbmRleCAzMjEzYzcyMjdi
-NTkuLmZiZTZjNzY0Y2U1NyAxMDA2NDQNCj4gPj4gLS0tIGEvaW5jbHVkZS9saW51eC9uZXRkZXZp
-Y2UuaA0KPiA+PiArKysgYi9pbmNsdWRlL2xpbnV4L25ldGRldmljZS5oDQo+ID4+IEBAIC00NTk2
-LDggKzQ1OTYsMjAgQEAgdm9pZCBuZXRkZXZfcnNzX2tleV9maWxsKHZvaWQgKmJ1ZmZlciwgc2l6
-ZV90IGxlbik7DQo+ID4+DQo+ID4+ICAgaW50IHNrYl9jaGVja3N1bV9oZWxwKHN0cnVjdCBza19i
-dWZmICpza2IpOw0KPiA+PiAgIGludCBza2JfY3JjMzJjX2NzdW1faGVscChzdHJ1Y3Qgc2tfYnVm
-ZiAqc2tiKTsNCj4gPj4gLWludCBza2JfY3N1bV9od29mZmxvYWRfaGVscChzdHJ1Y3Qgc2tfYnVm
-ZiAqc2tiLA0KPiA+PiAtCQkJICAgIGNvbnN0IG5ldGRldl9mZWF0dXJlc190IGZlYXR1cmVzKTsN
-Cj4gPj4gK2ludCBfX3NrYl9jc3VtX2h3b2ZmbG9hZF9oZWxwKHN0cnVjdCBza19idWZmICpza2Is
-DQo+ID4+ICsJCQkgICAgICBjb25zdCBuZXRkZXZfZmVhdHVyZXNfdCBmZWF0dXJlcyk7DQo+ID4+
-ICsNCj4gPj4gK3N0YXRpYyBpbmxpbmUgaW50IHNrYl9jc3VtX2h3b2ZmbG9hZF9oZWxwKHN0cnVj
-dCBza19idWZmICpza2IsDQo+ID4+ICsJCQkJCSAgY29uc3QgbmV0ZGV2X2ZlYXR1cmVzX3QgZmVh
-dHVyZXMpDQo+ID4+ICt7DQo+ID4+ICsJaWYgKHVubGlrZWx5KHNrYl9jc3VtX2lzX3NjdHAoc2ti
-KSkpDQo+ID4+ICsJCXJldHVybiAhIShmZWF0dXJlcyAmIE5FVElGX0ZfU0NUUF9DUkMpID8gMCA6
-DQo+ID4NCj4gPiBJZiB0aGF0ICEhIGRvaW5nIGFueXRoaW5nPyAtIGRvZXNuJ3QgbG9vayBsaWtl
-IGl0Lg0KPiANCj4gSXQgZG9lc24ndCwgYnV0IGxlZnQgdGhlIG9yaWdpbmFsIHN0eWxlDQoNCkl0
-IGp1c3QgbWFrZXMgeW91IHRoaW5rIGl0IGlzIG5lZWRlZC4uLg0KDQo+ID4+ICsJCQlza2JfY3Jj
-MzJjX2NzdW1faGVscChza2IpOw0KPiA+PiArDQo+ID4+ICsJaWYgKGZlYXR1cmVzICYgTkVUSUZf
-Rl9IV19DU1VNKQ0KPiA+PiArCQlyZXR1cm4gMDsNCj4gPj4gKwlyZXR1cm4gX19za2JfY3N1bV9o
-d29mZmxvYWRfaGVscChza2IsIGZlYXR1cmVzKTsNCj4gPj4gK30NCj4gPg0KPiA+IE1heWJlIHlv
-dSBzaG91bGQgcmVtb3ZlIHNvbWUgYmxvYXQgYnkgbW92aW5nIHRoZSBzY3RwIGNvZGUNCj4gPiBp
-bnRvIHRoZSBjYWxsZWQgZnVuY3Rpb24uDQo+ID4gVGhpcyBwcm9iYWJseSBuZWVkcyBzb21ldGhp
-bmcgbGlrZT8NCj4gPg0KPiA+IHsNCj4gPiAJaWYgKGZlYXR1cmVzICYgTkVUSUZfRl9IV19DU1VN
-ICYmICFza2JfY3N1bV9pc19zY3RwKHNrYikpDQo+ID4gCQlyZXR1cm4gMDsNCj4gPiAJcmV0dXJu
-IF9fc2tiX2NzdW1faHdfb2ZmbG9hZChza2IsIGZlYXR1cmVzKTsNCj4gPiB9DQo+IA0KPiBJIGRv
-bid0IGxpa2UgaW5saW5pbmcgdGhhdCBzY3RwIGNodW5rIG15c2VsZi4gSXQgc2VlbXMgeW91ciB3
-YXkgd291bGQNCj4gbmVlZCBhbm90aGVyIHNrYl9jc3VtX2lzX3NjdHAoKSBpbiBfX3NrYl9jc3Vt
-X2h3X29mZmxvYWQoKSwgaWYgc28gSQ0KPiBkb24ndCB0aGluayBpdCdzIHdvcnRoIGl0LiBXb3Vs
-ZCd2ZSBiZWVuIGdyZWF0IHRvIHB1dCB0aGUNCj4gTkVUSUZfRl9IV19DU1VNIGNoZWNrIGZpcnN0
-IGFuZCBoaWRlIHNjdHAsIGJ1dCBkb24ndCB0aGluayBpdCdzDQo+IGNvcnJlY3QuIFdvdWxkIGJl
-IGdyZWF0IHRvIGhlYXIgc29tZSBpZGVhcy4NCg0KR2l2ZW4gdGhlIGRlZmluaXRpb246DQoNCnN0
-YXRpYyBpbmxpbmUgYm9vbCBza2JfY3N1bV9pc19zY3RwKHN0cnVjdCBza19idWZmICpza2IpDQp7
-DQoJcmV0dXJuIHNrYi0+Y3N1bV9ub3RfaW5ldDsNCn0NCg0KSSB3b3VsZG4ndCB3b3JyeSBhYm91
-dCBkb2luZyBpdCB0d2ljZS4NCg0KQWxzbyBza2JfY3JjMzJfY3N1bV9oZWxwKCkgaXMgb25seSBj
-YWxsZWQgb25lLg0KTWFrZSBpdCBzdGF0aWMgKHNvIGlubGluZWQpIGFuZCBwYXNzICdmZWF0dXJl
-cycgaW50byBpdC4NCg0KSW4gcmVhbGl0eSBzY3RwIGlzIHN1Y2ggYSBzbG93IGNyYXBweSBwcm90
-b2NvbCB0aGF0IGEgZmV3IGV4dHJhDQpmdW5jdGlvbiBjYWxscyB3aWxsIG1ha2UgZGlkZGx5LXNx
-dWl0IGRpZmZlcmVuY2UuDQooQW5kIHllcywgd2UgZG8gYWN0dWFsbHkgdXNlIHRoZSBzY3RwIHN0
-YWNrLikNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
-eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
-aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+User mode processes that wish to use trace events to get data into
+ftrace, perf, eBPF, etc are limited to uprobes today. The user events
+features enables an ABI for user mode processes to create and write to
+trace events that are isolated from kernel level trace events. This
+enables a faster path for tracing from user mode data as well as opens
+managed code to participate in trace events, where stub locations are
+dynamic.
+
+User processes often want to trace only when it's useful. To enable this
+a set of pages are mapped into the user process space that indicate the
+current state of the user events that have been registered. User
+processes can check if their event is hooked to a trace/probe, and if it
+is, emit the event data out via the write() syscall.
+
+Two new files are introduced into tracefs to accomplish this:
+user_events_status - This file is mmap'd into participating user mode
+processes to indicate event status.
+
+user_events_data - This file is opened and register/delete ioctl's are
+issued to create/open/delete trace events that can be used for tracing.
+
+The typical scenario is on process start to mmap user_events_status. Processes
+then register the events they plan to use via the REG ioctl. The ioctl reads
+and updates the passed in user_reg struct. The status_index of the struct is
+used to know the byte in the status page to check for that event. The
+write_index of the struct is used to describe that event when writing out to
+the fd that was used for the ioctl call. The data must always include this
+index first when writing out data for an event. Data can be written either by
+write() or by writev().
+
+For example, in memory:
+int index;
+char data[];
+
+Psuedo code example of typical usage:
+struct user_reg reg;
+
+int page_fd = open("user_events_status", O_RDWR);
+char *page_data = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, page_fd, 0);
+close(page_fd);
+
+int data_fd = open("user_events_data", O_RDWR);
+
+reg.size = sizeof(reg);
+reg.name_args = (__u64)"test";
+
+ioctl(data_fd, DIAG_IOCSREG, &reg);
+int status_id = reg.status_index;
+int write_id = reg.write_index;
+
+struct iovec io[2];
+io[0].iov_base = &write_id;
+io[0].iov_len = sizeof(write_id);
+io[1].iov_base = payload;
+io[1].iov_len = sizeof(payload);
+
+if (page_data[status_id])
+	writev(data_fd, io, 2);
+
+User events are also exposed via the dynamic_events tracefs file for
+both create and delete. Current status is exposed via the user_events_status
+tracefs file.
+
+Simple example to register a user event via dynamic_events:
+	echo u:test >> dynamic_events
+	cat dynamic_events
+	u:test
+
+If an event is hooked to a probe, the probe hooked shows up:
+	echo 1 > events/user_events/test/enable
+	cat user_events_status
+	1:test # Used by ftrace
+
+	Active: 1
+	Busy: 1
+	Max: 4096
+
+If an event is not hooked to a probe, no probe status shows up:
+	echo 0 > events/user_events/test/enable
+	cat user_events_status
+	1:test
+
+	Active: 1
+	Busy: 0
+	Max: 4096
+
+Users can describe the trace event format via the following format:
+	name[:FLAG1[,FLAG2...] [field1[;field2...]]
+
+Each field has the following format:
+	type name
+
+Example for char array with a size of 20 named msg:
+	echo 'u:detailed char[20] msg' >> dynamic_events
+	cat dynamic_events
+	u:detailed char[20] msg
+
+Data offsets are based on the data written out via write() and will be
+updated to reflect the correct offset in the trace_event fields. For dynamic
+data it is recommended to use the new __rel_loc data type. This type will be
+the same as __data_loc, but the offset is relative to this entry. This allows
+user_events to not worry about what common fields are being inserted before
+the data.
+
+The above format is valid for both the ioctl and the dynamic_events file.
+
+V2:
+Fixed kmalloc vs kzalloc for register_page.
+Renamed user_event_mmap to user_event_status.
+Renamed user_event prefix from ue to u.
+Added seq_* operations to user_event_status to enable cat output.
+Aligned field parsing to synth_events format (+ size specifier for
+custom/user types).
+Added uapi header user_events.h to align kernel and user ABI definitions.
+
+V3:
+Updated ABI to handle single FD into many events via an int header.
+Added iovec/writev support to enable int header without payload changes.
+Updated bpf context to describe if data is coming from user, kernel or
+raw iovec.
+Added flag support for registering event, allows forcing BPF to always
+recieve the direct iovecs for sensitive code paths that do not want
+copies.
+
+V4:
+Moved to struct user_reg for registering events via ioctl.
+Added unit tests for ftrace, dyn_events and perf integration.
+Added print_fmt generation and proper dyn_events matching statements.
+Reduced time in preemption disabled paths.
+Added documentation file.
+Pre-fault in data when preemption is enabled and use no-fault copy in probes.
+Fixed MIPs missing PAGE_READONLY define.
+
+V5:
+Rebase to linux-trace for-next branch.
+Added sample code into samples/user_events.
+Switched to str_has_prefix in various locations.
+Allow hex in array sizes and ensure reasonable sizes are used.
+Moved lifetime of name buffer when parsing to the caller for failure paths.
+Fixed documentation nits and index.
+Ensure event isn't busy before freeing through dyn_events.
+Properly handle failure case for ftrace and perf in fault cases for buffers.
+Ensure write data is over min size and null terminated for dynamic arrays.
+
+V6:
+Fixed endian issue with dyn loc decoding (use u32).
+Fixed size_t conversion warning on hexagon arch (min vs min_t).
+Handle cases for __get_str vs __get_rel_str in print_fmt generation.
+Add additional comments around various event member lifetimes.
+Reduced max field array size to 1K.
+
+V7:
+Acquire reg_mutex during release, ensure refs cannot change under any situation.
+Remove default n from Kconfig.
+Move from static 0644 mode to TRACE_MODE_WRITE.
+
+V8:
+Squashed UABI header into ftrace minimal patch thread.
+Moved pagefault_disable/enable into copy_nofault.
+Moved to strscpy vs custom copy when getting array size from type.
+Made patch bisect friendly by ensuring tests are split from kernel code.
+
+V9:
+Rebase to linux-trace ftrace/core branch.
+Added comments for user_reg and other structs in user_events.h.
+Moved from delayed seq_file to pre-created seq_file for status file.
+Added deleting events to documentation and expanded registering section.
+Reordered patches to make reviewing easier.
+Fixed nitpicks.
+
+Beau Belgrave (12):
+  user_events: Add minimal support for trace_event into ftrace
+  user_events: Add print_fmt generation support for basic types
+  user_events: Handle matching arguments from dyn_events
+  user_events: Add basic perf and eBPF support
+  user_events: Optimize writing events by only copying data once
+  user_events: Validate user payloads for size and null termination
+  user_events: Add self-test for ftrace integration
+  user_events: Add self-test for dynamic_events integration
+  user_events: Add self-test for perf_event integration
+  user_events: Add self-test for validator boundaries
+  user_events: Add sample code for typical usage
+  user_events: Add documentation file
+
+ Documentation/trace/index.rst                 |    1 +
+ Documentation/trace/user_events.rst           |  216 +++
+ include/uapi/linux/user_events.h              |  116 ++
+ kernel/trace/Kconfig                          |   14 +
+ kernel/trace/Makefile                         |    1 +
+ kernel/trace/trace_events_user.c              | 1609 +++++++++++++++++
+ samples/user_events/Makefile                  |    5 +
+ samples/user_events/example.c                 |   91 +
+ tools/testing/selftests/user_events/Makefile  |    9 +
+ .../testing/selftests/user_events/dyn_test.c  |  130 ++
+ .../selftests/user_events/ftrace_test.c       |  452 +++++
+ .../testing/selftests/user_events/perf_test.c |  168 ++
+ tools/testing/selftests/user_events/settings  |    1 +
+ 13 files changed, 2813 insertions(+)
+ create mode 100644 Documentation/trace/user_events.rst
+ create mode 100644 include/uapi/linux/user_events.h
+ create mode 100644 kernel/trace/trace_events_user.c
+ create mode 100644 samples/user_events/Makefile
+ create mode 100644 samples/user_events/example.c
+ create mode 100644 tools/testing/selftests/user_events/Makefile
+ create mode 100644 tools/testing/selftests/user_events/dyn_test.c
+ create mode 100644 tools/testing/selftests/user_events/ftrace_test.c
+ create mode 100644 tools/testing/selftests/user_events/perf_test.c
+ create mode 100644 tools/testing/selftests/user_events/settings
+
+
+base-commit: 85c62c8c3749eec02ba81217bdcac26867dc262e
+-- 
+2.17.1
 

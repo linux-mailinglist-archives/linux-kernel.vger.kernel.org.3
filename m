@@ -2,58 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9FA48A60F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E987F48A61A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 04:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239805AbiAKDIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 22:08:50 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:54992 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231326AbiAKDIt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 22:08:49 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABnbi6m9NxhbS1mBQ--.33478S2;
-        Tue, 11 Jan 2022 11:08:22 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     Naohiro.Aota@wdc.com
-Cc:     damien.lemoal@opensource.wdc.com, David.Laight@ACULAB.COM,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        stable@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH v3] ide: Check for null pointer after calling devm_ioremap
-Date:   Tue, 11 Jan 2022 11:08:18 +0800
-Message-Id: <20220111030818.525620-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S232622AbiAKDMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 22:12:02 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:53939 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229523AbiAKDMB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 22:12:01 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 20B3AFvn012506
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jan 2022 22:10:15 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 22C2415C00C8; Mon, 10 Jan 2022 22:10:15 -0500 (EST)
+Date:   Mon, 10 Jan 2022 22:10:15 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Simo Sorce <simo@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Message-ID: <Ydz1F/AqB1oO/qHF@mit.edu>
+References: <20220110132349.siplwka7yhe2tmwc@valinor>
+ <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
+ <YdxCsI3atPILABYe@mit.edu>
+ <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu>
+ <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+ <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+ <YdyNxJzdBmSSEtDC@mit.edu>
+ <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
+ <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABnbi6m9NxhbS1mBQ--.33478S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYF7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v
-        4I1lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-        xVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-        8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUb2g4DUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:23:29PM +0800, Naohiro Aota wrote:
-> The checkpatch.pl in 5.10.90 fails to parse the line as shown
-> above. That is fixed in commit fccaebf00e60 ("checkpatch: improve
-> email parsing") in the current tree.
+On Mon, Jan 10, 2022 at 05:44:03PM -0800, Andy Lutomirski wrote:
+> 
+> So let’s solve it for real.  Have a driver (in a module) that
+> exposes a /dev/urandom compatible interface to the CryptoAPI DRBG.
+> We can do a really nice job of it, and maybe it’ll be 100 lines of
+> code.  People can do whatever they like with it in their container
+> manager or boot scripts. And if it has a problem (where it’s *less*
+> secure than the real urandom), we can say “I told you so”.
+> 
+> We can go one step farther: add an LSM hook to getrandom().  Then
+> someone can hack up a fips_t policy for SELinux that turns off
+> getrandom.
 
-Thanks, I have sent a new v3 with the correct cc.
+These are both dangerous.  The first means creating a new device node
+which effectively is /dev/drbg-random which could be bind mounted or
+mknod'ed to be /dev/urandom.  But if the user boots a kernel that
+doesn't support this new device node, it will mean opening
+/dev/urandom will get ENODEV.
 
-Sincerely thanks,
-Jiang
+Similarly, getrandom(2) never fails.  By allowing a SELinux policy to
+force it to fail with ENOSYS, or some other error, it means exposing
+userspace code to a failure path that may not be as well tested.
+Sure, *sane* code might fall back to opening /dev/urandom; but the
+whole point of getrandom(2) was that it was a dumb, stupid interface
+interface that could be safely used by application programmers.  Not
+paranoid OS crypto engineers that carefully check the error returns of
+all system calls, with appropriate fallbacks and making sure that code
+always "fails safe".
 
+Right now, the enterprise distros are doing their own thing, and quite
+frankly, I don't see a problem with that.  If it turns out DRBG is
+less secure (and there are some things that fill me with disquiet),
+then let them take the economic consequences, since they are the ones
+who are doing this for the economic advantages of trying to claim FIPS
+compliance.
+
+If we must support this in the upstream kernel, then configure it via
+CONFIG_RANDOM_SECURITY_THEATRE which redirects getrandom(2) and
+/dev/[u]random to DRBG.  I'd prefer that it be possible for someone to
+put "random_security_theatre=0" on the boot command line which would
+disable redirecting the interfaces to DRBG so if it turns out that
+DRBG *is* less secure, we can give advice on how to turn it off
+without requiring a patched kernel.  :-)
+
+						- Ted

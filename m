@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C17A48A820
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B79648A822
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348408AbiAKHJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:09:02 -0500
-Received: from mail-ed1-f49.google.com ([209.85.208.49]:39898 "EHLO
-        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiAKHJB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:09:01 -0500
-Received: by mail-ed1-f49.google.com with SMTP id c71so51741266edf.6;
-        Mon, 10 Jan 2022 23:09:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tUOEL7PT1f3o+oRqmZZ4B0vpjJgHIeHOoPDC9Wj1Tzw=;
-        b=x0PQ3buLdCVkEh12HM/w42+DGqMoE/efmgRfUG/Y6CWR9bIxkerm4WZmiTuUF+TfYT
-         +n1YPUNijGA5kjfCS3dstiwQjkL34Vmzq3B+4PernhtqG8YGiSKZNfhldkpSl3fIZGe2
-         CMPm/Hk64dxpjJH/q7vF0/zIY/Q0WvH+azdYBzHxxzhITKviMC3Xrw3ziYWth1E3hsAp
-         XyS1G++KWH7OXpL62fiusOtIJuANBJmT6NYHkYPraMaxRkLg+vn9uC1em4F21o0zZLI2
-         gkSNOy3x+X0Hjtf9P1jK/p2H+Bxa++/JAHVkdTLrdhxUqMKNOaND72hVhBiBnBC43zA6
-         B0Sw==
-X-Gm-Message-State: AOAM531BvZiqOeMuwL8TulkqhyRw04hsjR4+Dbyx+9IId1eKQG+5wOMZ
-        0/saDoMnWhav+PkvSJMNxISnyMcOP3U=
-X-Google-Smtp-Source: ABdhPJylTRQ/giaGNkX5z1g00ZEFdgh3DZy3BoJ7klvQv7KICHjlG1p94+VF1waIIGAe6BWxxk9yEg==
-X-Received: by 2002:a17:906:9948:: with SMTP id zm8mr2527728ejb.396.1641884939743;
-        Mon, 10 Jan 2022 23:08:59 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id d9sm4550464edy.55.2022.01.10.23.08.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 23:08:59 -0800 (PST)
-Message-ID: <e6315e6b-78a6-0a8b-c693-9797a4519bd4@kernel.org>
-Date:   Tue, 11 Jan 2022 08:08:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] tty: serial: fsl_lpuart: count tty buffer overruns
-Content-Language: en-US
-To:     Sherry Sun <sherry.sun@nxp.com>, gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-References: <20220111061036.12638-1-sherry.sun@nxp.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220111061036.12638-1-sherry.sun@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S1348419AbiAKHJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:09:56 -0500
+Received: from mxhk.zte.com.cn ([63.216.63.35]:46472 "EHLO mxhk.zte.com.cn"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230147AbiAKHJz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:09:55 -0500
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4JY1zP3Nwmz83Lwn;
+        Tue, 11 Jan 2022 15:09:53 +0800 (CST)
+Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
+        by mse-fl1.zte.com.cn with SMTP id 20B79fBY066368;
+        Tue, 11 Jan 2022 15:09:41 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Tue, 11 Jan 2022 15:09:40 +0800 (CST)
+Date:   Tue, 11 Jan 2022 15:09:40 +0800 (CST)
+X-Zmail-TransId: 2b0461dd2d3495c83906
+X-Mailer: Zmail v1.0
+Message-ID: <202201111509409733901@zte.com.cn>
+In-Reply-To: <CACGkMEvdKATVvLVQtfPfSeev83Ajskg4gFoHDhWT7wrWEQ3FEA@mail.gmail.com>
+References: 20211224070404.54840-1-wang.yi59@zte.com.cn,CACGkMEvdKATVvLVQtfPfSeev83Ajskg4gFoHDhWT7wrWEQ3FEA@mail.gmail.com
+Mime-Version: 1.0
+From:   <wang.yi59@zte.com.cn>
+To:     <jasowang@redhat.com>
+Cc:     <mst@redhat.com>, <sgarzare@redhat.com>, <kvm@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xue.zhihong@zte.com.cn>, <wang.liang82@zte.com.cn>,
+        <zhang.min9@zte.com.cn>
+Subject: =?UTF-8?B?UmU6W1BBVENIIHYyXSB2ZHBhOiByZWdpc3Qgdmhvc3QtdmRwYSBkZXYgY2xhc3M=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 20B79fBY066368
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 61DD2D41.000 by FangMail milter!
+X-FangMail-Envelope: 1641884993/4JY1zP3Nwmz83Lwn/61DD2D41.000/10.30.14.238/[10.30.14.238]/mse-fl1.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 61DD2D41.000/4JY1zP3Nwmz83Lwn
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 01. 22, 7:10, Sherry Sun wrote:
-> Added support for counting the tty buffer overruns in fsl_lpuart driver
-> like other uart drivers.
-> 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->   drivers/tty/serial/fsl_lpuart.c | 19 +++++++++++++------
->   1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-> index ce3e26144689..1e6f924d8507 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-...
-> @@ -1117,6 +1119,7 @@ static void lpuart_copy_rx_to_tty(struct lpuart_port *sport)
->   	struct circ_buf *ring = &sport->rx_ring;
->   	unsigned long flags;
->   	int count = 0;
-> +	unsigned int copied = 0;
->   
->   	if (lpuart_is_32(sport)) {
->   		unsigned long sr = lpuart32_read(&sport->port, UARTSTAT);
-> @@ -1218,20 +1221,24 @@ static void lpuart_copy_rx_to_tty(struct lpuart_port *sport)
->   	if (ring->head < ring->tail) {
->   		count = sport->rx_sgl.length - ring->tail;
->   
-> -		tty_insert_flip_string(port, ring->buf + ring->tail, count);
-> +		copied = tty_insert_flip_string(port, ring->buf + ring->tail, count);
-> +		if (copied != count)
+Hi Jason,
+> On Fri, Dec 24, 2021 at 3:13 PM Yi Wangwrote:
+> >
+> > From: Zhang Min
+> >
+> > Some applications like kata-containers need to acquire MAJOR/MINOR/DEVNAME
+> > for devInfo [1], so regist vhost-vdpa dev class to expose uevent.
+>
+> Hi:
+>
+> I think we need to be more verbose here e.g:
+>
+> 1) why can't we get major/minor with the current interface
 
-Overall looks good, except tty_insert_flip_string returns an int and 
-count is also an int. Wouldn't it be more consistent to declare copied 
-as int too? This comparison would be without implicit conversion then.
+Although major/minor can be acquired in /sys/bus/vdpa/devices/vdpa0/vhost-vdpa/vhost-vdpa-0/dev,
+applications like kata-containers prefer and actually have tried to obtain them
+in /sys/class/vhost-vdpa/vhost-vdpa-0/uevent, such like [1].
 
-thanks,
--- 
-js
-suse labs
+> 2) what kind of the uevent is required and not supported currently
+
+The items needed show in uevent are MAJOR MINOR DEVNAME that vhost_vdpa_probe
+currently has registed, but dev_uevent_filter failed to pass and uevent show is
+empty now, so we regist dev class to let dev_uevent_filter pass and show them.
+
+1. https://github.com/kata-containers/kata-containers/blob/main/src/runtime/virtcontainers/device/config/config.go
+
+>
+> Thanks
+>
+> >
+> > 1. https://github.com/kata-containers/kata-containers/blob/main/src/runtime/virtcontainers/device/config/config.go
+> >
+> > Signed-off-by: Zhang Min

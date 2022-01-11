@@ -2,119 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FE348B163
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273AA48B166
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349746AbiAKPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:54:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33616 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349717AbiAKPyQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:54:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D14FB81BF8;
-        Tue, 11 Jan 2022 15:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE563C36AEB;
-        Tue, 11 Jan 2022 15:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641916454;
-        bh=T5c0P8FQreFRKifJE6e3VfdZbkyIrx9FCHWvF3HAhiI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rwbeq0Su4ZnZp2ul6F2k4DIsunfjn6CeEzBimEPwKjVYMlRM6nJZ8i/lcseyZRq01
-         hOsT1xxCdws9wKyLY6i7K8lt4RBwpZUuCdosDgMwKxx8sRsfdET0b+MyZ7u6fhVktB
-         gVhE7WzIruePUwNtqQdtp0bHmiBB5obNXMRY3F7XSI93JQVPj2OyMOR2sk+3JNFgUv
-         donNVu2a5vMyZle3x858i2iPLij2yL7sI5EqVlBH1OtkH36dpPqN9rNwthRuTbrCB/
-         Nq7mcEnsLoEi7dX2ZO9eRW6CDCXmpwmT5de/JXb0uQsAjZKOKAgg00y8Iw1XEymkEb
-         lmjrjZF8x49Pg==
-Date:   Tue, 11 Jan 2022 09:54:12 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>
-Subject: Re: [PATCH -next] PCI: hv: Unsigned comparison with less than zero
-Message-ID: <20220111155412.GA142851@bhelgaas>
+        id S1349749AbiAKPyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:54:43 -0500
+Received: from foss.arm.com ([217.140.110.172]:48650 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349717AbiAKPym (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:54:42 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21C826D;
+        Tue, 11 Jan 2022 07:54:42 -0800 (PST)
+Received: from e126645.arm.com (unknown [10.57.67.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 42BA23F774;
+        Tue, 11 Jan 2022 07:54:40 -0800 (PST)
+From:   Pierre Gondois <Pierre.Gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, Lukasz Luba <lukasz.luba@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2] cpufreq: CPPC: Fix performance/frequency conversion
+Date:   Tue, 11 Jan 2022 16:54:19 +0100
+Message-Id: <20220111155419.943980-1-Pierre.Gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111012622.19447-1-yang.lee@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Sunil]
+CPUfreq governors request CPU frequencies using information
+on current CPU usage. The CPPC driver converts them to
+performance requests. Frequency targets are computed as:
+	target_freq = (util / cpu_capacity) * max_freq
+target_freq is then clamped between [policy->min, policy->max].
 
-On Tue, Jan 11, 2022 at 09:26:22AM +0800, Yang Li wrote:
-> The return from the call to bitmap_find_free_region() is int, it can be
-> a negative error code, however this is being assigned to an unsigned
-> int variable 'index', so making 'index' an int.
-> 
-> Eliminate the following coccicheck warning:
-> ./drivers/pci/controller/pci-hyperv.c:712:5-10: WARNING: Unsigned
-> expression compared with zero: index < 0
+The CPPC driver converts performance values to frequencies
+(and vice-versa) using cppc_cpufreq_perf_to_khz() and
+cppc_cpufreq_khz_to_perf(). These functions both use two different
+factors depending on the range of the input value. For
+cppc_cpufreq_khz_to_perf():
+- (NOMINAL_PERF / NOMINAL_FREQ) or
+- (LOWEST_PERF / LOWEST_FREQ)
+and for cppc_cpufreq_perf_to_khz():
+- (NOMINAL_FREQ / NOMINAL_PERF) or
+- ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
 
-Definitely looks like a bug.  Thanks very much for catching it!
+This means:
+1- the functions are not inverse for some values:
+   (perf_to_khz(khz_to_perf(x)) != x)
+2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
+   a different value from LOWEST_FREQ due to integer approximation
+3- it is implied that performance and frequency are proportional
+   (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
 
-Minor things:
+This patch changes the conversion functions to an affine function.
+This fixes the 3 points above.
 
-  1) Can you make the subject and commit log talk about the *bug* this
-     fixes, which is that an error return from
-     bitmap_find_free_region() is currently ignored and we instead
-     return a completely bogus *hwirq from
-     hv_pci_vec_alloc_device_irq()?
+Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
+Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
+ 1 file changed, 21 insertions(+), 22 deletions(-)
 
-     The warning is only secondary.
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index db17196266e4..5024d9af2e6e 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -303,52 +303,48 @@ static u64 cppc_get_dmi_max_khz(void)
+ 
+ /*
+  * If CPPC lowest_freq and nominal_freq registers are exposed then we can
+- * use them to convert perf to freq and vice versa
+- *
+- * If the perf/freq point lies between Nominal and Lowest, we can treat
+- * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
+- * and extrapolate the rest
+- * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
++ * use them to convert perf to freq and vice versa. The conversion is
++ * extrapolated as an affine function passing by the 2 points:
++ *  - (Low perf, Low freq)
++ *  - (Nominal perf, Nominal perf)
+  */
+ static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
+ 					     unsigned int perf)
+ {
+ 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
++	s64 retval, offset = 0;
+ 	static u64 max_khz;
+ 	u64 mul, div;
+ 
+ 	if (caps->lowest_freq && caps->nominal_freq) {
+-		if (perf >= caps->nominal_perf) {
+-			mul = caps->nominal_freq;
+-			div = caps->nominal_perf;
+-		} else {
+-			mul = caps->nominal_freq - caps->lowest_freq;
+-			div = caps->nominal_perf - caps->lowest_perf;
+-		}
++		mul = caps->nominal_freq - caps->lowest_freq;
++		div = caps->nominal_perf - caps->lowest_perf;
++		offset = caps->nominal_freq - (u64)caps->nominal_perf * mul / div;
+ 	} else {
+ 		if (!max_khz)
+ 			max_khz = cppc_get_dmi_max_khz();
+ 		mul = max_khz;
+ 		div = caps->highest_perf;
+ 	}
+-	return (u64)perf * mul / div;
++
++	retval = offset + (u64)perf * mul / div;
++	if (retval >= 0)
++		return retval;
++	return 0;
+ }
+ 
+ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+ 					     unsigned int freq)
+ {
+ 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
++	s64 retval, offset = 0;
+ 	static u64 max_khz;
+ 	u64  mul, div;
+ 
+ 	if (caps->lowest_freq && caps->nominal_freq) {
+-		if (freq >= caps->nominal_freq) {
+-			mul = caps->nominal_perf;
+-			div = caps->nominal_freq;
+-		} else {
+-			mul = caps->lowest_perf;
+-			div = caps->lowest_freq;
+-		}
++		mul = caps->nominal_perf - caps->lowest_perf;
++		div = caps->nominal_freq - caps->lowest_freq;
++		offset = caps->nominal_perf - (u64)caps->nominal_freq * mul / div;
+ 	} else {
+ 		if (!max_khz)
+ 			max_khz = cppc_get_dmi_max_khz();
+@@ -356,7 +352,10 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+ 		div = max_khz;
+ 	}
+ 
+-	return (u64)freq * mul / div;
++	retval = offset + (u64)freq * mul / div;
++	if (retval >= 0)
++		return retval;
++	return 0;
+ }
+ 
+ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
+-- 
+2.25.1
 
-  2) When fixing a bug, can you also mention the commit that
-     *introduced* the bug, so we can figure out where the fix needs to
-     be backported?
-
-     It looks like c10bdb758ca4 ("PCI: hv: Add arm64 Hyper-V vPCI
-     support"), so we should have a line like this:
-
-     Fixes: c10bdb758ca4 ("PCI: hv: Add arm64 Hyper-V vPCI support")
-
-     In this case, c10bdb758ca4 is still pending for the current merge
-     window, so we'll probably squash this fix into the commit so
-     there's no bisection window between c10bdb758ca4 and the fix.
-
-  3) Please cc the author of the original commit in case there's
-     something we're missing (I added Sunil here).
-
-  4) Make the subject line start with a verb so it matches the style
-     in drivers/pci/, where I try to make the subject line a sentence
-     that makes sense all by itself and tells what the patch does.
-
-Thanks again for the fix!
-
-Bjorn
-
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/pci/controller/pci-hyperv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 26c9c8ec0989..20ea2ee330b8 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -701,7 +701,7 @@ static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
->  				       irq_hw_number_t *hwirq)
->  {
->  	struct hv_pci_chip_data *chip_data = domain->host_data;
-> -	unsigned int index;
-> +	int index;
->  
->  	/* Find and allocate region from the SPI bitmap */
->  	mutex_lock(&chip_data->map_lock);
-> -- 
-> 2.20.1.7.g153144c
-> 

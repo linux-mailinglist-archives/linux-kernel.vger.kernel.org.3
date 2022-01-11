@@ -2,239 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D63B48AA20
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124A548AA28
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349152AbiAKJGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:06:51 -0500
-Received: from mail-mw2nam10on2130.outbound.protection.outlook.com ([40.107.94.130]:14689
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1349146AbiAKJGu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:06:50 -0500
+        id S1349163AbiAKJJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:09:18 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:58770 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1349146AbiAKJJQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 04:09:16 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20B7LpFm017740;
+        Tue, 11 Jan 2022 01:09:09 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=OZ8BITtczWa1VeMH3Oxg7IrXdomuBywn0OtSlzXpYyI=;
+ b=UrlqZYEPkrWNG+7QpNWABR8GL8FwsBVQNBq+8/gsI1idfLJIQkK1BLKSizYs3hSLhyQk
+ 6XUF2kUtoJBuKBDfGPGQR/8iFbhXCGgfp7IB4bW+i0swWHMubu9yylf1y8halHFfuecZ
+ J0LEXcv9YpRn/xAecaCFVqxGsRKbc2JexK+kmA9vvu/nW41AMEP9LVtOiVVFNVMlMZFC
+ 19s1Eiwoce5SBSSIQ9oFpttfyT4UFOx9oGrgg3C0uAPeEtLU/uQA7CRRdRZFUcsRqXUo
+ M9IMzRobADEvip8LL3QBd5OqLVjdLSjgbgfh+pcg3VEAPgurc/dvWrnmSK1fPhTuIn4J oA== 
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2041.outbound.protection.outlook.com [104.47.51.41])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3dgkxpkebq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 01:09:07 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dtxXJ0ueb3iavIIBCD0N2qk14r0gbmEV1aXzmWrJ9kvrQus2j3id5m9LsYYbZBGsYrncALVi5bSlxitvTNNRI+OBrSE+P7KPeB2IreNq5vO9FI5PkZu/frYhOwdx1INlmMN+KEYl3ihYzE2Gmdnp1gnaFpKY1g9VV48xsiS/N230g1WvLxAqQUSFisBP5vXmPVhyL8sqDdolMqZcOFiFR3i1X1m2x27p6571n9oVgV6gy1FAc0UyvZc+XCs8+F6gRXSlYjBYeaTYNqasGArejqq0pNIYRGi5RHLjGJ7zGARx5JY7n32+diJMhF8iMoKx086U4phWuo8yVg6r50rutA==
+ b=ZIRC5JqlWQF7poIk555KlxRN/pS47Jlqo474FHlC9MeP6qzhaD5o4r3sMj0RPurQlsNyiN6NVZV0XX/oDQskxtF8Cg3qlL1hGexnjAZmyewr5sU77c8ZBZqPMvTHaX/TOzpW0JQvTcngdve+DtPfYL99UoQT/DSIMz/spLksG476Vp8QN2nu9dtSeBuGckqkPKWqddqe4BziIgw67/9/hH6jAh7Iq6G/Mz5qgJowE7DyO1Bjz+aWBtQnvfJIiCOF7Q8tI/XXtkz+2ip/Ak43YXJh1VraNeDzByOdQyUXV7d5dh5iyDbnGl4/6p6lAMXqZ3T9IeZWfmGk5thOpLhNpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xcMS0B8eKW/mQO1Q4cBTJ11DpPBhClngCeI6odJ+Amk=;
- b=h+XRFaSxXBdJ9qVkq32LYXEgT+4C1NB7iB3vvfXmJaKkblPtUfI3FJcsMQLBT1nvFkuj8Aw6zkFONNKmi7Lv2Mta0rhVvWqtIfhglIlB4Pc4un/qruAmx8wIzY9sKeIS6+iVgOwot3T611Dz9faCmiF+5oCdw9xvL02+8LWqhYrg3cTL1KqBnakFC8ffjvMz2SEnQQC79jyd9NJZ6kENe46/0gCCzCbxYiooLO6nQYODJAFKioBHTbhSZNka/Q5B/tkcH2xDNB/2JB7EN59Eg1hf+HjES7JQypBH6Bt3SQf29xYcC5T0EERFbPLXeh3Tmi76IcpoAKUejWE353+ilw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ bh=OZ8BITtczWa1VeMH3Oxg7IrXdomuBywn0OtSlzXpYyI=;
+ b=gZHTqM+G7v0PKdA3U0s0H5bmvS6zYVRZYza6JmIuU7ZLCmjseBHhkZYZnnztqKzdArtIPXxDb5+SKbpUrijke3eugvapo3Mm6mMaYGFLebLfJYC9rTu4FhpQW2a7prTmNVyHpUKjfsPq5tHeIUEk3v23QQs5qYJSJxuHEBT9TvUl+Pnw6zdH2S88E/VQ+lnIGwBmkBrUxw8Pfh85iPyQ3OWXgwRVmCIZZq/XMzEAgsnODHtfr4v9JmIJpSDWzblChxGiA9xcOf21lv5gV78yXEZzj8KELy9fm9wV0p/LL9xrnAfuBxdoZ1GX7AHX8xmmlTQNl9AviOHvKVUxs9bzQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.147) smtp.rcpttodomain=nxp.com smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xcMS0B8eKW/mQO1Q4cBTJ11DpPBhClngCeI6odJ+Amk=;
- b=hOFTy84bZqWKLsZYi748DKXzaXw4T3sKuRq77mbgqrzbrYfTspfTRCimmHPPlQouOqGmHg0ShZGZJkAKuWndd26Fu9+c9104Q8VpKNU39EjzC3gU0Uu4swiP9XO6Dtez1XhFC/CJoMeOZ3U60QLGZyYOoj7RyyHuXfgvUuFlk4U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by BYAPR04MB5077.namprd04.prod.outlook.com (2603:10b6:a03:41::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 11 Jan
- 2022 09:06:46 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::c25:c736:478a:b108]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::c25:c736:478a:b108%3]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 09:06:46 +0000
-Date:   Tue, 11 Jan 2022 17:06:40 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, Torsten Duwe <duwe@lst.de>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bernie Liang <bliang@analogixsemi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: [PATCH v3 1/1] drm/bridge: anx7625: send DPCD command to downstream
-Message-ID: <1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ClientProxiedBy: HK2PR02CA0159.apcprd02.prod.outlook.com
- (2603:1096:201:1f::19) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+ bh=OZ8BITtczWa1VeMH3Oxg7IrXdomuBywn0OtSlzXpYyI=;
+ b=lQNl4nvgOnP5OP+BK0Td8uh0TsyHVVPrDkQeNAzXqYkH6udAzSotuw0RvIxEFEBSF8lQTT1V77rs0nyszdkSgldBhcRY841pK4y3/7gUyFrseLIZh73OFAlnjSIDV6yzwryzlT/WCcSiAYCS0zDg7sF5GWa8sV0WXelY5sLu0cc=
+Received: from MWHPR01CA0045.prod.exchangelabs.com (2603:10b6:300:101::31) by
+ MWHPR07MB3054.namprd07.prod.outlook.com (2603:10b6:300:e8::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4867.11; Tue, 11 Jan 2022 09:08:45 +0000
+Received: from MW2NAM12FT036.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:300:101:cafe::8f) by MWHPR01CA0045.outlook.office365.com
+ (2603:10b6:300:101::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
+ Transport; Tue, 11 Jan 2022 09:08:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com;
+Received: from sjmaillnx1.cadence.com (158.140.1.147) by
+ MW2NAM12FT036.mail.protection.outlook.com (10.13.180.174) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.5 via Frontend Transport; Tue, 11 Jan 2022 09:08:45 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 20B98jrb029284
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 01:08:46 -0800
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu5.global.cadence.com (10.160.110.202) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 11 Jan 2022 10:08:44 +0100
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Tue, 11 Jan 2022 10:08:32 +0100
+Received: from gli-login.cadence.com (10.187.128.100) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Tue, 11 Jan 2022 10:08:31 +0100
+Received: from gli-login.cadence.com (localhost [127.0.0.1])
+        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 20B98Uqt011879;
+        Tue, 11 Jan 2022 10:08:30 +0100
+Received: (from pawell@localhost)
+        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 20B98Ulo011878;
+        Tue, 11 Jan 2022 10:08:30 +0100
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <a-govindraju@ti.com>, <frank.li@nxp.com>, <rogerq@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdnsp: Fix segmentation fault in cdns_lost_power function
+Date:   Tue, 11 Jan 2022 10:07:37 +0100
+Message-ID: <20220111090737.10345-1-pawell@gli-login.cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5641bf6b-ffab-4a84-12db-08d9d4e1b18b
-X-MS-TrafficTypeDiagnostic: BYAPR04MB5077:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR04MB5077762D3BF009706CA71AEAC7519@BYAPR04MB5077.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:644;
+X-MS-Office365-Filtering-Correlation-Id: 3670be1a-0b25-4dbf-fa90-08d9d4e1f89e
+X-MS-TrafficTypeDiagnostic: MWHPR07MB3054:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR07MB305438CDC8025D82057550E1DD519@MWHPR07MB3054.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b0FEmEaRHbZX1ApeyNjCzqCwpDHRVWkCJhZZHyJs/+qsfQDuXG3IRSwe4sCNkNVPQ0PoP72QGiYJWIkAZEt//nCA6Q594lNB9ouc758+LdYChvNfgPtzQdSMhU6cRDvoVbuCvfmznKAYXm+5Tss3DlVPnpYCotEETibrj04Kf16BaoUWJ5z2wXGl/xMaLcnPP1jk01JJ2PyVYfTLoe7amJ6vlUSM/YOAFJu0cz+Wsz7Uxc2rvkjNG1iYTJJOsajqV0MKRFLHowX/ehggw0vj/pln1wC/8BuLNE/qPZ2fDaR7P93x8T3jLQBm6TFklIksr7wwpS8784BFERGum50TzQLa9iLhmNyVS3KXaqVDWDy0aQZ1DhmI04logcP4/1abAbDbarvo7LnEfQ+VWrl7vL4eeZqqiH3csZ1BgfXi6cQaPm9mQc64AeezJrz/ugYsc2dMZiNJSJ8e5xapMDt72LdsGo4vDsUobKW0jp7FU4zniVfO2jP9Q9cgGVUbJklejdeE9+Z6pfeF1Hl4RigFOqW+UrACLefQAGh0/2jA7hGxoDwUwyR940fUf5flRKy4oV5i9qGHm5/jftTsxw60IuSQW73mC0jx8xjLRu82N/p3jsP2S/G7S9mDfPyKEPNW8d2sTVi7U8b/5CZIddchFuYCg9uTRqUIuCcOT9d6q/EtaRwz5klZzIhXVkirryjOkM36qXzwHYal5YZJ/zPMbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(2906002)(36756003)(6512007)(38100700002)(38350700002)(86362001)(6666004)(66946007)(8676002)(83380400001)(6506007)(66476007)(55236004)(26005)(52116002)(186003)(5660300002)(66556008)(6486002)(8936002)(508600001)(110136005)(7416002)(54906003)(4326008)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?toG/hnpWILtQdH0gkOqTTN58db7geN1FfoXi1IuVJirjOWyCfoASr1jVjwLL?=
- =?us-ascii?Q?ojHu5Ghlje1moSfap3nyt1xgvjRwBN6FWp0ItgTGRQTSEr3STzlTWD0RyVsR?=
- =?us-ascii?Q?Tmvf1Z2J3X/WyaeXOLJM8yRFDTqkaJ1KyrC6ILxVudqbHxbzPMfHdHTFt7tp?=
- =?us-ascii?Q?Ho7V7qbKJRrlZ7T4D/j2t76nge7ms8CFCuLnYxCsimiyqf5PwszcYL2rs7jl?=
- =?us-ascii?Q?3EAU0cRBqz1kiJZ5GTlhMi9teHfyvskJNUGdjCkk0ZnQg9hdSzg7+TjIEOcm?=
- =?us-ascii?Q?hfsWdX2vw08JnAq7iHNty8xbZGIKviBg0N0gY3sJxL8VJuUwpWjUl5XP9qMM?=
- =?us-ascii?Q?F0Ar/pU3fese+upJGKpDZrGA0ue5phKOmTiADgfhO9U4K4/MtlQEL9vYsT1c?=
- =?us-ascii?Q?gi7kykjG9TKkSJJIKXZYnQ//y+PQKd+QWgWu2QsI9TUDSPN4/wyfJoixnq2F?=
- =?us-ascii?Q?TEGLydVqQlSqA6nnDvZ9LkW3G0eS/YPS2u9TanOpcvMPprWCpQlC9quRYU4d?=
- =?us-ascii?Q?HMX/MsLivfHCW8wmAK9e6qh6emcK+m0M02yfSk3RgB5cODnIceDTbAlE8t06?=
- =?us-ascii?Q?iX0Ji8OvayaloyHYjqMHTNmbqsKszzXi7bwe4trSPOqcwxFgUJp8XBxfvnEl?=
- =?us-ascii?Q?0O2wcsNgdm4nXzF4hxmZ79zrNEv906OertMFcWKWGdPyxrw+tSBYjK8RSP40?=
- =?us-ascii?Q?+avXwc/U+Cy60XCwINyTPJSnxNBcmuOTHVnO9P4r+wJbqpxb9l5nq19pHoNm?=
- =?us-ascii?Q?htqTSzSUbAgAAa9XNRlHMSy6JNDTfsCQhdagMhxqyNRBdl+TA597lZZSNGPK?=
- =?us-ascii?Q?BTu1Im7WCNhsvTvLZooJNj4OXSiA9SPNmdXbv3yxaP+33gJiWrBwkkxo7F0D?=
- =?us-ascii?Q?sR64t6T2heDeilEtbbX1eUAwkmLXvBR0hA8pjan4n80SV0X6TQCP3AqxkNjS?=
- =?us-ascii?Q?QJlLs333wD8D6cUkxyre1kx52LK8NP76PbkPIjeFD6A6SZg6HcDiziRa20pb?=
- =?us-ascii?Q?+8hg5twpb+CMx+Yn9MeXqvsRAvOv4+fZ81BUlh4jDsj+mAkY7cs0FhORGvBY?=
- =?us-ascii?Q?ixpYD5sHXiGK87QTF2S6wsF3jovKPULQAxTPeqPXv89Egx0XiDEjYgsmQ78t?=
- =?us-ascii?Q?h1iW2jRT9cr5Bo+7iujl+MIe5fvUMKmh4zsXqzi5OxvwN/pl6CCocL1hOe8W?=
- =?us-ascii?Q?urrgPjgcCSiBGAtZfb5m+ZHzUZllS0zr266vuI01lrO6A2uRPCuEQ2HxP5bd?=
- =?us-ascii?Q?Sm5vhihHNeTaJfjuMy2at0y+FBnmxB+LbnTgXRzbbAg4fOELVz1LAi29XtIp?=
- =?us-ascii?Q?XjIF+XQ47P8LCynLEI39P7YmsiGwxoOfTkBzEcsT54uMVN1m1NLr4fNb6jrC?=
- =?us-ascii?Q?FQ/VE/Cxk7k9LGBtUDysvARu21IDur+SfcAMsRCdiwVsDrm44hAhv31ZkX4G?=
- =?us-ascii?Q?i/LgeWe8TKiLc1t6HSUgHRx/+bjHj04bZBd9FsCBqm9U+8YI5isnA3gFzx52?=
- =?us-ascii?Q?9/WlQ0CT2uotKGgeAhmj9EOfy3TKWGPLDekUS8yzxT7KanVG5MneUN2cS2WA?=
- =?us-ascii?Q?nlkJPzrwy5Zx73t9wt/6iLZp3r8vCMpZMjQJTKZjBITwjR7+t0ATd7GoKZc+?=
- =?us-ascii?Q?xbZxkMsUxShhTKzN2yocZHw=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5641bf6b-ffab-4a84-12db-08d9d4e1b18b
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 09:06:46.4015
+X-Microsoft-Antispam-Message-Info: 85KBoSU+kTYqEE7iTffAZshZ9qm5f2Tnen94d5YN722h0bTYLNUpjCrmlI69eke8WbD/u70wJr6KCdfCBCPVgKR97BDciSfbkcACrznInt3Hjd+OV85NGrMUPvY7rVv2KHttdjre4L2KJbV+3vaPJFZZJlz3ZY56h2MkNm3iBpcMU2CCs6CnF0wYt5Vkfjzy7MJQj734D+owzsHQHJetMSGpTNBBvV/h0utSWlw44uHcbB0ZamdgDRP52FQJRj+COpQTnS+6Vf4UOX0RWzQK/waG/3HrNBZtNYRXZGNHRylt2yRsj1LR63zMCqPbtTD6WRO9cIti1LwDxTtXsoNDT43IkkuTQy2Ghqkpjk4TLzdhpA6OFIdl1YDj4Fs9YRgNOMPXGzxs+5U7KkYPmfmkAnUZO8+EnsAIB0MUe0CYOfdpZwxlMxB809kCW/hzDEgRblMPxFkXrk0zFwYCqtDxSfbMahg/cLRCxcmcYa2rsYaIs+LDTZGF81rJ4WliEhvzYfoUYSarBX1iz8MaSMDVzfyDQTlD7SexxFjuA6ijZCG72lujdAd6HY8J3OIGq3z/LOcGd1TS/mHFe/zQ/6eA4FUxqakW3lIFjCdFSYiwIadil6bFFGr0n8Lzulc9E24YM67wN49oF1rfdCMqQ+byCethEXBjRlt8cTZE8fBuZXsvne+ol3WXgsHANMnfMNC81MQeDYF+bYY7pinrv7AJvGEmBx0of+uByOtQxYYLw3UoHMhYU+j5dN3x3u5z0+cltscj5knZbliDxG/aDzex6LnSqgMoNtl6Te2WJAuK5x8=
+X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(36092001)(46966006)(36840700001)(40470700002)(7636003)(4326008)(70206006)(70586007)(86362001)(2906002)(356005)(6916009)(40460700001)(426003)(82310400004)(508600001)(83380400001)(26005)(42186006)(54906003)(316002)(186003)(1076003)(336012)(5660300002)(47076005)(36860700001)(8676002)(8936002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 09:08:45.3065
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wd2Zw3KsUVa3BhzXGRNpKwBG6EjabGTsZnSymVW19Eedy9MzdM3AiWbzUXBqmhRXBTyGv9TIbOfwHx5MT/5YhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5077
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3670be1a-0b25-4dbf-fa90-08d9d4e1f89e
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT036.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR07MB3054
+X-Proofpoint-GUID: c6s7We3MKg7WDndgWGhVXBDPg0Zc_dFK
+X-Proofpoint-ORIG-GUID: c6s7We3MKg7WDndgWGhVXBDPg0Zc_dFK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_03,2022-01-10_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
+ suspectscore=0 clxscore=1011 priorityscore=1501 adultscore=0
+ mlxlogscore=335 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201110053
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Send DPCD command to downstream before anx7625 power down,
-let downstream monitor enter into standby mode.
+From: Pawel Laszczak <pawell@cadence.com>
 
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
+CDNSP driver read not initialized cdns->otg_v0_regs
+which lead to segmentation fault. Patch fixes this issue.
+
+Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
+cc: <stable@vger.kernel.org>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 42 +++++++++++++++++++----
- 1 file changed, 35 insertions(+), 7 deletions(-)
+ drivers/usb/cdns3/drd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 33383f83255d..0b858c78abe8 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -129,6 +129,23 @@ static int anx7625_reg_write(struct anx7625_data *ctx,
- 	return ret;
- }
- 
-+static int anx7625_reg_block_write(struct anx7625_data *ctx,
-+				   struct i2c_client *client,
-+				   u8 reg_addr, u8 len, u8 *buf)
-+{
-+	int ret;
-+	struct device *dev = &client->dev;
-+
-+	i2c_access_workaround(ctx, client);
-+
-+	ret = i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
-+	if (ret < 0)
-+		dev_err(dev, "write i2c block failed id=%x\n:%x",
-+			client->addr, reg_addr);
-+
-+	return ret;
-+}
-+
- static int anx7625_write_or(struct anx7625_data *ctx,
- 			    struct i2c_client *client,
- 			    u8 offset, u8 mask)
-@@ -214,8 +231,8 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
- 	return 0;
- }
- 
--static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
--				 u32 address, u8 len, u8 *buf)
-+static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
-+				  u32 address, u8 len, u8 *buf)
+diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+index 55c73b1d8704..d00ff98dffab 100644
+--- a/drivers/usb/cdns3/drd.c
++++ b/drivers/usb/cdns3/drd.c
+@@ -483,11 +483,11 @@ int cdns_drd_exit(struct cdns *cdns)
+ /* Indicate the cdns3 core was power lost before */
+ bool cdns_power_is_lost(struct cdns *cdns)
  {
- 	struct device *dev = &ctx->client->dev;
- 	int ret;
-@@ -231,8 +248,7 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
- 	addrm = (address >> 8) & 0xFF;
- 	addrh = (address >> 16) & 0xFF;
- 
--	cmd = DPCD_CMD(len, DPCD_READ);
--	cmd = ((len - 1) << 4) | 0x09;
-+	cmd = DPCD_CMD(len, op);
- 
- 	/* Set command and length */
- 	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
-@@ -246,6 +262,9 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
- 	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
- 				 AP_AUX_ADDR_19_16, addrh);
- 
-+	if (op == DPCD_WRITE)
-+		ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
-+					       AP_AUX_BUFF_START, len, buf);
- 	/* Enable aux access */
- 	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
- 				AP_AUX_CTRL_STATUS, AP_AUX_CTRL_OP_EN);
-@@ -255,14 +274,17 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
- 		return -EIO;
+-	if (cdns->version == CDNS3_CONTROLLER_V1) {
+-		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
++	if (cdns->version == CDNS3_CONTROLLER_V0) {
++		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+ 			return true;
+ 	} else {
+-		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
++		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
+ 			return true;
  	}
- 
--	usleep_range(2000, 2100);
--
- 	ret = wait_aux_op_finish(ctx);
- 	if (ret) {
- 		dev_err(dev, "aux IO error: wait aux op finish.\n");
- 		return ret;
- 	}
- 
-+	/* Write done */
-+	if (op == DPCD_WRITE)
-+		return 0;
-+
-+	/* Read done, read out dpcd data */
- 	ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
- 				     AP_AUX_BUFF_START, len, buf);
- 	if (ret < 0) {
-@@ -845,7 +867,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
- 	}
- 
- 	/* Read downstream capability */
--	anx7625_aux_dpcd_read(ctx, 0x68028, 1, &bcap);
-+	anx7625_aux_dpcd_trans(ctx, DPCD_READ, 0x68028, 1, &bcap);
- 	if (!(bcap & 0x01)) {
- 		pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
- 		return 0;
-@@ -918,6 +940,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
- {
- 	struct device *dev = &ctx->client->dev;
- 	int ret;
-+	u8 data;
- 
- 	DRM_DEV_DEBUG_DRIVER(dev, "stop dp output\n");
- 
-@@ -929,6 +952,11 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
- 	ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client, 0x08, 0x7f);
- 
- 	ret |= anx7625_video_mute_control(ctx, 1);
-+
-+	dev_dbg(dev, "notify downstream enter into standby\n");
-+	/* Downstream monitor enter into standby mode */
-+	data = 2;
-+	ret |= anx7625_aux_dpcd_trans(ctx, DPCD_WRITE, 0x000600, 1, &data);
- 	if (ret < 0)
- 		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
- 
+ 	return false;
 -- 
 2.25.1
 

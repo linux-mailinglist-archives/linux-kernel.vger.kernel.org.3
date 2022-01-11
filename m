@@ -2,67 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AE948A6B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0ED448A6B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiAKEJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:09:00 -0500
-Received: from smtpbg126.qq.com ([106.55.201.22]:27449 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1347448AbiAKEI5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:08:57 -0500
-X-QQ-mid: bizesmtp2t1641874129t0i3xrpx5
-Received: from localhost.localdomain (unknown [111.193.225.251])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 11 Jan 2022 12:08:42 +0800 (CST)
-X-QQ-SSF: 01000000002000B06000000A0000000
-X-QQ-FEAT: 835QeueZ15tztOVm6/bsUfNjyJ6gY/fZsz15qIb0Z3mmrNfg+V8Vx19fsnM1g
-        ui9IO0N3pojArQbqo7hfZd1Rp0HaEtTxuPhWDDSmuoVgDLn/qXLcC0tW8op/Q4g/vRLTDdK
-        +j2aGxgPdRyBf3pwX1zhpRiEQ9EpaKi94jBzlmUqvsKbD9PD7kDslqMHe5uoJ4o+B9qYpg7
-        T4TziNgnFghO3ecsSDkBJSvnMJ2T29yeDJ3X7CwvnWLuw/q59fsempaBuACe2SQIotlhcic
-        Q5D+gNEsdY+ceovSszwVh5VmCft3Qz9PJ28sHEukYsTFTaWN65J8iEyGpNh6HIe196aMQgo
-        R0wPrit9aDl2b6mBxYynWt11oWyaQ==
-X-QQ-GoodBg: 0
-From:   dongsheng li <lidongsheng@dayudpu.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        dongsheng li <lidongsheng@dayudpu.com>
-Subject: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa device
-Date:   Tue, 11 Jan 2022 12:08:31 +0800
-Message-Id: <20220111040831.5224-1-lidongsheng@dayudpu.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:dayudpu.com:qybgspam:qybgspam2
+        id S1347440AbiAKEIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:08:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232625AbiAKEIu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 23:08:50 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F62BC06173F;
+        Mon, 10 Jan 2022 20:08:50 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXxyR3L1Pz4y4c;
+        Tue, 11 Jan 2022 15:08:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641874128;
+        bh=AUuXzaLZAhyKaIShQ1tVhL+TJ7Ty1V/fGkqASMoF3GY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EGcjZr61k1SCAcptEzunnd2ky7oq39+ptpIEh0OvTjBVIHEP0Le3AidcyENPue5IC
+         maUZ23JZAAKl4AkqjTatzdLRKHb+wrApTANoZ4aL33I866wYXlCLOGTleTlykp25do
+         iS8jctowqf4Glx4OW6Oijown2qdhcm4Mo0ksIux79CfAJC4hQCLPM93NcS+/blwjkq
+         u6SOejj3jfXOnOloRgY80Sd2rePLQRJVyk5QWfAT+6AOIFiKkrlLY2k9ps6GvY7VW4
+         Y8/mPozRUv5DwZRQmeLFB3LgmroqTq1M2zTqviYA1skoHoQllBfQrfOu3h70gPTT4h
+         QhfWjfxsf0Jug==
+Date:   Tue, 11 Jan 2022 15:08:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Jiri Kosina <jkosina@suse.cz>, Joe Perches <joe@perches.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: linux-next: manual merge of the trivial tree with the jc_docs tree
+Message-ID: <20220111150846.563d051f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When virtio vdpa device removed, the abnormal damage of the device cannot be
-perceived normally, which will cause problems similar to:
+--Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Commit 43bb40c5b926 ("virtio_pci: Support surprise removal of
-virtio pci device")
+Hi all,
 
-Hence, add the ability to abort the command on surprise removal
+Today's linux-next merge of the trivial tree got a conflict in:
 
-Signed-off-by: dongsheng li <lidongsheng@dayudpu.com>
----
- drivers/virtio/virtio_vdpa.c | 1 +
- 1 file changed, 1 insertion(+)
+  Documentation/process/submitting-patches.rst
 
-diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-index 4a9ddb44b2a7..fd930409d190 100644
---- a/drivers/virtio/virtio_vdpa.c
-+++ b/drivers/virtio/virtio_vdpa.c
-@@ -374,6 +374,7 @@ static void virtio_vdpa_remove(struct vdpa_device *vdpa)
- {
- 	struct virtio_vdpa_device *vd_dev = vdpa_get_drvdata(vdpa);
- 
-+	virtio_break_device(vd_dev->vdev);
- 	unregister_virtio_device(&vd_dev->vdev);
- }
- 
--- 
-2.17.1
+between commit:
 
+  6c5ccd24ff17 ("Remove mentions of the Trivial Patch Monkey")
+
+from the jc_docs tree and commit:
+
+  081c8919b02b ("Documentation: remove trivial tree")
+
+from the trivial tree.
+
+I fixed it up (it was just an empty line difference, I used the latter)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHdAs4ACgkQAVBC80lX
+0Gzc7ggAphwnAjkzJ55fag9g5mOUbUI8JERKoIO4Ttm8kLjBBl3451v4xFyakr4v
+r3AI/XOijuFbCKQzHh91aJN7HJK4cKLjigyDPoe27n/80W4JPbHNXZlEKKDqiYrH
+miOMycni91DZVtc89CX8t6RVJBHMgZQ94FsGJbn3PxoyOOFINyZZovGvkmJecGo6
+SRQIbuIuZPAfV8gSI38VkXlRy/b/hDUTaC0Iwgg6K6LybQwOg4wOj8+Rqd/LhA2k
+L2gv5z1V+Guzp8OR90Gv4gucbSkh+wbtNsPdEVDrjghjWKOzKHrynKA17d43YTHF
+Vliw/7OZ+2k0CZWRWP4OD6ghZY5f3w==
+=DGOX
+-----END PGP SIGNATURE-----
+
+--Sig_/=0JOdCy1tHQ+jqPMkcyuvsQ--

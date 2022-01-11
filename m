@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 076E248ADB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3472E48ADB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236359AbiAKMhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:37:48 -0500
-Received: from foss.arm.com ([217.140.110.172]:45706 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229885AbiAKMhs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:37:48 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4AC11FB;
-        Tue, 11 Jan 2022 04:37:47 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB87E3F774;
+        id S239441AbiAKMhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229885AbiAKMhp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 07:37:45 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F574C06173F;
         Tue, 11 Jan 2022 04:37:45 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] sched/pelt: Don't sync hardly util_sum with
- uti_avg
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        rickyiu@google.com, odin@uged.al, sachinp@linux.vnet.ibm.com,
-        naresh.kamboju@linaro.org
-References: <20211222093802.22357-1-vincent.guittot@linaro.org>
- <20211222093802.22357-2-vincent.guittot@linaro.org>
- <9e526482-905c-e759-8aa6-1ff84bb5b2a3@arm.com>
- <CAKfTPtBR3BWCwEaJe0Cq6K5__zNxfU7FFo2f0bpOPkvzxKdiww@mail.gmail.com>
- <8f39d837-2589-4f7b-5232-1ed134fb1ad7@arm.com>
- <CAKfTPtCVD40GiDEG0pnU+k-nwMAh2PSu_OXq4w3k0A0zR4cLpw@mail.gmail.com>
- <f1549032-50f6-e9fc-a7ae-24373352576b@arm.com>
- <CAKfTPtAREuJtj8AuZPwfe_=W7v8J-UOXDWeyBL0-VcKGaTSr5Q@mail.gmail.com>
- <CAKfTPtCgxwK6tYxKK69nBuGwNjsFBbE+WuohmhWJRo++pPKqog@mail.gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <50253205-08d9-5ff4-98a9-3aa3bc669a75@arm.com>
-Date:   Tue, 11 Jan 2022 13:37:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: by mail-wr1-x42f.google.com with SMTP id s1so32721866wra.6;
+        Tue, 11 Jan 2022 04:37:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GZ6DhshfDzm+ZB/T6CYQ9YGfiX4LXvWGMl8Vl+aQSiI=;
+        b=JIckljIl84PIGDwLhYEpm8wg7zvOyMYa/Zeon0dlGHuGfeFCoYFKfTw/jTdSgqs6+0
+         milCxxlzeFre7YdY/nwsgPNQKf8DjPmTvRu4xmsut332o2oPjZbJwm/Zjx04zZyUeXTp
+         jy4XhKYLz5OGOg3OFVPiI8kGiwq5Ffj9YzB1+ml3dIWy6agf9mQHwdPMgpBAh7QsCxLK
+         fVK75t/UXgr64UE57VF37sgar3PdqZXn/VZkp2dXD8vQ2QAUDAP9hSQX/Wyg/lO/uabn
+         LVApVqHL/4go+x/tk53FPeyQ9vFIBoA8RLG/LORar0V2wcguOCArtgdJHgkVW8k9PK7e
+         QETw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GZ6DhshfDzm+ZB/T6CYQ9YGfiX4LXvWGMl8Vl+aQSiI=;
+        b=DIEh6IB9xCqoz/gax56/suSRu8QxoMxUpcoFWZSW+6Hd4UmfDJwQ/7yDF4TX9uTBT7
+         +J8vo3mMTXcy4MqJK7IYmNHOW1IxVwLUKFlzAhvI4/mqzcUAxueOmsILFXcXpkXENLjo
+         WFZ5M2Py9dMdJ0oNYMy0APvoiurFN6Rx+oqVBzaxX0ZiOkfiNCJ5KAfEyN8Pum2Ub8YQ
+         0+X/qyc09ObTnU6JembhPvSo+3t1qGP3GWt/BgxsjQc5OQ5TyaPnlrL2OoxpwAcTzZGW
+         Nj+VDYlFku/Og+ntuXKBXtJDuca9qL+MrZ2QOoS7Sh8Hp6zc88dUX3ovd8XrgwYzGrJG
+         H3Dw==
+X-Gm-Message-State: AOAM530XA39RIwm9cDuyRDakKp1hIOEouZBzDztYnXCeBXB/qkcRkxqt
+        nq93JasgXrvnaXJNryEWch0=
+X-Google-Smtp-Source: ABdhPJxIq++kEHfVU5Hz8ktHP1Ce2fGCcBgZv51SzzkOUBxQvZU3SMbVGJ26GzyzWlh3CKVIeIm/hA==
+X-Received: by 2002:a5d:588c:: with SMTP id n12mr3640755wrf.363.1641904663886;
+        Tue, 11 Jan 2022 04:37:43 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id q206sm1619938wme.8.2022.01.11.04.37.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 04:37:43 -0800 (PST)
+Date:   Tue, 11 Jan 2022 12:37:41 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 00/43] 5.10.91-rc1 review
+Message-ID: <Yd16FeBzGLNLXHUA@debian>
+References: <20220110071817.337619922@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <CAKfTPtCgxwK6tYxKK69nBuGwNjsFBbE+WuohmhWJRo++pPKqog@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 08:54, Vincent Guittot wrote:
-> On Fri, 7 Jan 2022 at 16:21, Vincent Guittot <vincent.guittot@linaro.org> wrote:
->>
->> On Fri, 7 Jan 2022 at 12:43, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>>
->>> On 05/01/2022 14:57, Vincent Guittot wrote:
->>>> On Wed, 5 Jan 2022 at 14:15, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>>>>
->>>>> On 04/01/2022 14:42, Vincent Guittot wrote:
->>>>>> On Tue, 4 Jan 2022 at 12:47, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>>>>>>
->>>>>>> On 22/12/2021 10:38, Vincent Guittot wrote:
+Hi Greg,
 
-[...]
-
->>>> Some of the changes done in PELT signal propagation that replace
->>>> subtracting util_sum  by using util_avg * divider instead, are related
->>>> to other problems with sched group hierarchy and
->>>> throttling/unthrottling. I'm not 100% confident that using fixes tag
->>>> to backport this on stables doesn't need to backport more patches on
->>>> other areas in order to not resurrect old problems. So I wonder if
->>>> it's worth  backporting this on stables
->>>
->>> OK, I see. So only 1c35b07e6d39 (i.e. the util _sum/_avg change in
->>> update_cfs_rq_load_avg() (1)) caused the CPU frequency regression. That
->>> was the reason why I initially suggested to split the patch-set
->>> differently. But you said that you saw the issue also when (1) is fixed.
->>
->> Ok, I think that we were not speaking about the same setup. I wrongly
->> read that you were saying that
->> sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
->> was only needed in update_cfs_rq_load_avg() but not in the other places.
->>
->> But what you said is that we only need the below to fix the perf
->> regression raised by rick ?
->>      r = removed_util;
->>      sub_positive(&sa->util_avg, r);
->>  -   sa->util_sum = sa->util_avg * divider;
->>  +   sub_positive(&sa->util_sum, r * divider);
->>  +   sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
+On Mon, Jan 10, 2022 at 08:22:57AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.91 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> The test with the code above doesn't trigger any SCHEd_WARN over the
-> weekend so it's probably ok to make a dedicated patch for this with
-> tag.
-> I'm going to prepare a v2
+> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
+> Anything received after that time might be too late.
 
-Yes, `sa->X_sum = max_t(u32, sa->X_sum, sa->X_avg * MIN_DIVIDER)` is
-needed for all 3 X = [load, runnable, util] in  update_cfs_rq_load_avg()
-to not hit the  SCHED_WARN_ON() in cfs_rq_is_decayed().
+Build test:
+mips (gcc version 11.2.1 20220106): 63 configs -> no new failure
+arm (gcc version 11.2.1 20220106): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20220106): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220106): 4 configs -> no failure
 
->> The WARN that I mentioned in my previous email was about not adding
->> the max_t in all 3 places. I rerun some test today and I triggered the
->> WARN after a detach without the max_t line.
->>
->> I can probably isolate the code above in a dedicated patch for the
->> regression raised by Rick and we could consider adding a fixes tag; I
->> will run more tests with only this part during the weekend.
->> That being said, we need to stay consistent in all 3 places where we
->> move or propagate some *_avg. In particular, using  "sa->util_sum =
->> sa->util_avg * divider" has the drawback of filtering the contribution
->> not already accounted for in util_avg and the impact is much larger
->> than expected. It means that  although fixing only
->> update_cfs_rq_load_avg() seems enough for rick's case, some other
->> cases could be impacted by the 2 other places and we need to fixed
->> them now that we have a better view of the root cause
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-Agreed.
+[1]. https://openqa.qa.codethink.co.uk/tests/611
+[2]. https://openqa.qa.codethink.co.uk/tests/612
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

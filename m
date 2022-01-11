@@ -2,138 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEFD48B2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2019D48B2BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244041AbiAKRCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
+        id S242565AbiAKQ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240781AbiAKRCQ (ORCPT
+        with ESMTP id S241075AbiAKQ7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:02:16 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE928C06173F;
-        Tue, 11 Jan 2022 09:02:15 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h10so24036945wrb.1;
-        Tue, 11 Jan 2022 09:02:15 -0800 (PST)
+        Tue, 11 Jan 2022 11:59:20 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BFDC06173F;
+        Tue, 11 Jan 2022 08:59:20 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id i82so1762139ioa.8;
+        Tue, 11 Jan 2022 08:59:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mXVQ1PbsGt6E7WnElgMdh7YxskWHKJ7cXGHBOHZ7Esg=;
-        b=NMl70OoyrtUbqH4c2Bqm742xUeygACYhczAcv/5uL8M0eFRgPdU7bRGW7Y/fUfah/v
-         S55faUvcSAN72EhNj50c0CrL/T4TYAdqYELi4oJKrWPEMVl6/1MjHa287HWFSowFnj5F
-         eVJ7wNv+d0G02h2zc+TAJQ4zMLkcK13WCGgHLV+xQh1GnVaMmLLPpLeyKVo+FiIn7upX
-         qcCmhnj98Jh6nfgQF4YmpXkAG+FW/MACbcWrVimHk+wmMWVNb1uwAKu/jlqX0jQJhkmq
-         UAehWKMyONaAmCLVDo3QqhTrAu1Bxcx1oYdIiCdwMIWKSeOPbByd1iuzy/8xMHqm1vbU
-         aoGQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jv0wunLbiwTtF+YiChPU+JCOCA9nvaovS2Do/J3M028=;
+        b=d0FBGryZs92aRe7WrvBGDeqfR/peyF39hb+xUNvHkCvZm4c+CxrD3FPL1GF2IZ0qHy
+         bbqSKy466sBkWJ8LWchk7HPEvA6yzi/BZvBbW7RVBifFNaZnR4+9O1S0++JIYG7Bb9RZ
+         YFHuPw+18ACtJuSFbciYYFUR84FZg4vBOVPuBV2/7WsN5wNeUMSUCXawjGgl3j1Yccdm
+         udl1uInUOkRxIxWv7wdearx8XoLbMLOsUmyYH5SrJ5rphhaQkekX3YHbdgj2i9a5i2AG
+         bFfB6124f6fS03EMcpoP6Lc761y8W6H0fdF9l2fNtTWy1/+l37Pc4Y6eR59V2loPTPt6
+         5aVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mXVQ1PbsGt6E7WnElgMdh7YxskWHKJ7cXGHBOHZ7Esg=;
-        b=rgAyzgCCf3cPeGPJj3f5DlNefLwUPhbqxVje5xCXxzwVS5U9v+Gn6yRhADaLDEYPbl
-         DKyBTpBeiXUox9D0AfH4oH4w1qRtTDV9I1ZctyBhmNoCBhrcjOHZsjyAkP38x187k1Qe
-         tXwje+ed38ueVu9Tj64WtsVRc8rds7pHMB1OJVZT5sb25ZqixOLUE1v777zwi2pn8hIQ
-         hV73482DpH/mb2m9TLzAspdLei8MN6GyfYvcxRWnvguCq3mQWmLhBEV525xVyz+hmkpK
-         yTTcneGPvfoQOmzYkPAzH2agcf7COS5IbeI2BqA0z5EyDmhL9Guf0eMO4DRemNCtHhD0
-         1Rbg==
-X-Gm-Message-State: AOAM5313ETH6NLCNExvOBbkIVs2Yg0hQLhQpYW5X/aLaCl6O5uil/zQm
-        syfJdce11bCHOG+uZ17r2xs=
-X-Google-Smtp-Source: ABdhPJxhYLtku6q2EWXXe/rY01jj9HMQ9McdpVRef2XLXOOq/you036jaEvGHciimDoZa7etQwaeJg==
-X-Received: by 2002:adf:ab59:: with SMTP id r25mr4783092wrc.321.1641920534311;
-        Tue, 11 Jan 2022 09:02:14 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.73])
-        by smtp.gmail.com with ESMTPSA id i8sm12587171wry.108.2022.01.11.09.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 09:02:13 -0800 (PST)
-Message-ID: <25f5ba09-a54c-c386-e142-7b7454f1d8d4@gmail.com>
-Date:   Tue, 11 Jan 2022 16:59:00 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jv0wunLbiwTtF+YiChPU+JCOCA9nvaovS2Do/J3M028=;
+        b=NMHyy37kZ7fUPBUE3brzocu9i7G1Sa3gmyGa7n9XYNcnltK51gskV92iUmPLNPDKw4
+         tYjuYk9t9NlUZd3rEYTH3ERglUX8q9lQyeUe7Ahhkxp6Nkl4RBjnu6PIHcDB59H8aGp3
+         JQO1BRgzBzVNSymtl2LkJJFJ0Le42pn4Qf2I3JcdvAHdM/n20HPS6/HJ+mzgoRa6qYFr
+         C+Q29dRTEkPp1ym4nMdXDIOISLFU5BtdP/cXsgV5Sgj7uZpX1TswfaCiPc52vq0TzLIQ
+         8yJoTBmaBYlBsw3fT9sBOkdFyyV8iP3nlxJF+ouEzfIKkrsCntML7ryeQ8DQxsH6xbvk
+         ijvg==
+X-Gm-Message-State: AOAM531vWh7C9QgZAbugqcLZoF8rGrfCf77ogpjUZe6dCWdZIcfLt1cf
+        HMPPHEfOWD2+qxN0V/irOeYOUMJ7ofawkd6Gx2aX/QvsZ90hmw==
+X-Google-Smtp-Source: ABdhPJyxXy/3yNyHwJKfhrQKD+tsvMIikupy4X1+xx37To2Tv+8dUXdwSWYA54RLwLP6pzgYNnPK3IizDX1yFRh25cg=
+X-Received: by 2002:a02:6d0b:: with SMTP id m11mr2846842jac.108.1641920359651;
+ Tue, 11 Jan 2022 08:59:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 13/14] net: inline part of skb_csum_hwoffload_help
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1641863490.git.asml.silence@gmail.com>
- <0bc041d2d38a08064a642c05ca8cceb0ca165f88.1641863490.git.asml.silence@gmail.com>
- <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220111160900.1150050-1-eugene.shalygin@gmail.com> <a520f11e-c495-b456-0216-e57ad21c4182@roeck-us.net>
+In-Reply-To: <a520f11e-c495-b456-0216-e57ad21c4182@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Tue, 11 Jan 2022 17:59:08 +0100
+Message-ID: <CAB95QAT6ii5L2SBcMUMEYFPV0PQr9x0=5w1jPzFhx_iDk9+nqQ@mail.gmail.com>
+Subject: Re: PATCH v3 ASUS EC Sensors
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 09:24, David Laight wrote:
-> From: Pavel Begunkov
->> Sent: 11 January 2022 01:22
->>
->> Inline a HW csum'ed part of skb_csum_hwoffload_help().
->>
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> ---
->>   include/linux/netdevice.h | 16 ++++++++++++++--
->>   net/core/dev.c            | 13 +++----------
->>   2 files changed, 17 insertions(+), 12 deletions(-)
->>
->> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->> index 3213c7227b59..fbe6c764ce57 100644
->> --- a/include/linux/netdevice.h
->> +++ b/include/linux/netdevice.h
->> @@ -4596,8 +4596,20 @@ void netdev_rss_key_fill(void *buffer, size_t len);
->>
->>   int skb_checksum_help(struct sk_buff *skb);
->>   int skb_crc32c_csum_help(struct sk_buff *skb);
->> -int skb_csum_hwoffload_help(struct sk_buff *skb,
->> -			    const netdev_features_t features);
->> +int __skb_csum_hwoffload_help(struct sk_buff *skb,
->> +			      const netdev_features_t features);
->> +
->> +static inline int skb_csum_hwoffload_help(struct sk_buff *skb,
->> +					  const netdev_features_t features)
->> +{
->> +	if (unlikely(skb_csum_is_sctp(skb)))
->> +		return !!(features & NETIF_F_SCTP_CRC) ? 0 :
-> 
-> If that !! doing anything? - doesn't look like it.
+> Subject should start with [PATCH v3 0/3], and there should be a proper introduction,
+> not just a brief change log for the last version.
 
-It doesn't, but left the original style
+Thank you, I hope v4 is properly done.
 
-
->> +			skb_crc32c_csum_help(skb);
->> +
->> +	if (features & NETIF_F_HW_CSUM)
->> +		return 0;
->> +	return __skb_csum_hwoffload_help(skb, features);
->> +}
-> 
-> Maybe you should remove some bloat by moving the sctp code
-> into the called function.
-> This probably needs something like?
-> 
-> {
-> 	if (features & NETIF_F_HW_CSUM && !skb_csum_is_sctp(skb))
-> 		return 0;
-> 	return __skb_csum_hw_offload(skb, features);
-> }
-
-I don't like inlining that sctp chunk myself. It seems your way would
-need another skb_csum_is_sctp() in __skb_csum_hw_offload(), if so I
-don't think it's worth it. Would've been great to put the
-NETIF_F_HW_CSUM check first and hide sctp, but don't think it's
-correct. Would be great to hear some ideas.
-
--- 
-Pavel Begunkov
+Eugene

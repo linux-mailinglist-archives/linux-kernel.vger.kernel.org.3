@@ -2,190 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B7948BA81
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FA548BA86
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345742AbiAKWJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345466AbiAKWJA (ORCPT
+        id S1345827AbiAKWJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:09:27 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:49446 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237002AbiAKWJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:09:00 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B30C06173F;
-        Tue, 11 Jan 2022 14:09:00 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id k15so1813030edk.13;
-        Tue, 11 Jan 2022 14:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=AkrcGrVzJVeMi9QZ0GgFqv58rNqhQAkifpl96t3BMvs=;
-        b=pV+XY/w89E+g8m7FO1TZnIYkp/3uwM/PZXmKtlXP+fl4YSAZTOi0G8mP1VngeboXui
-         0oOgvwPrIU1m4FwnlRixybLpslH5fiqoXLXLFpW5dvyyvUELctHZTdn8mWn6ZnA8fays
-         4ATIg6oHiQlPNnt9wB+MYds97o+VGVcxd7scPIxFKjCZg6/yw3O763RfNjDG4tKBKAJ3
-         SAkPFUAfFBDCVsT5btspwfHjp9anVVNtQWIdyFSH/Wc6QOuTfsHtQpvC3ZUwnmcfADub
-         sT55l/DfFoT7l7Cn4y3WdKWa2SwOhYfaQ24lYuSEhYC1DjauYXdU8/M1/wVdNuYkyp+3
-         PiMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=AkrcGrVzJVeMi9QZ0GgFqv58rNqhQAkifpl96t3BMvs=;
-        b=2bz4ihqryfIDBrGWujvvuxhxJjd7pJWEkTTq4R62pYN8jsDkHJyE1RsW/xgH+vAKyu
-         rO+2CGtDpu+aDjrvd2njF5fEwJYmS4I5Vhkg562W0dCFaOXJf3hkLlrxxU1AZqkixF7k
-         C8XJn5XuDP8o7a32pI1s7TEIK+ai6/5golwW6jL1kR0uSGzB1LVuyZxUt8GKPQ5xCQXm
-         J/E4u5qAh5o1UelBFYH24xzJkPbCWNgHrAbUwJ40Bj/L2kV/in2HRHYm4UJUJ5hBcf/o
-         NWLFsU5UaR0n227etX7zPx4pb5l6mnoL8G7QyBdOwbC0gc6Pr0TD9XEO1O5tuzG3qrNz
-         l0Pw==
-X-Gm-Message-State: AOAM533mDVvIfnsc/cSc7pZMqf/oKGA4JqyuwsxN5mt8WCSDe8g9gsek
-        eklr7QgyG/u4te4wTqYCrnpEhpi+UxUL3EZqnbU=
-X-Google-Smtp-Source: ABdhPJw96nWtta56U5jXF0Jj5CzV+hWqwrSBw/zMsuEp4TY7D1Ufd4JRyPY3EwFhZ0w62p2FoCE/wf0xZJInqicSap4=
-X-Received: by 2002:a05:6402:3496:: with SMTP id v22mr6356889edc.347.1641938938837;
- Tue, 11 Jan 2022 14:08:58 -0800 (PST)
+        Tue, 11 Jan 2022 17:09:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=Ea3/TfTxnBizgPzQyGep0ghYBk0hbGQaIDnneO+IVxM=; b=n28l4tU4hMcGmq66NzaaHE2bgM
+        DLtZM1k0CMmcynt95oE9h0HRhweiVxNXojoxFWf2yRWNJS9ZBjOqlWoQ2pd5h6x2Dja/MDMQxce4h
+        oC4wWWh7fyC2fM+VSsghTwbh9vsQKdiXBQ1gn4feOPPSodQaYZq+Qjf9nVlB6xdH7gUCyyIyA5SDB
+        kd+Jw0ZcrPVZTrek2/BUeREf/XC9z/tYBcWTs9Ss6gvRjyZX6HCf8rrhXu6Q3C/XPn/EfIrLxjRE3
+        AFLxscv0jUHFqxFFUr+MNIjLV+z4FrJWWTnywtnmhaO9c987fXwNpO2H8Afye56wVIxz2W0+ce2Ej
+        t7wlui9A==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1n7PKO-009nQW-1A; Tue, 11 Jan 2022 15:09:17 -0700
+To:     Matthew Wilcox <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nvdimm@lists.linux.dev
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org>
+ <20220111004126.GJ2328285@nvidia.com> <Yd0IeK5s/E0fuWqn@casper.infradead.org>
+ <20220111150142.GL2328285@nvidia.com> <Yd3Nle3YN063ZFVY@casper.infradead.org>
+ <20220111202159.GO2328285@nvidia.com> <Yd311C45gpQ3LqaW@casper.infradead.org>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <ef01ce7d-f1d3-0bbb-38ba-2de4d3f7e31a@deltatee.com>
+Date:   Tue, 11 Jan 2022 15:09:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211222012105.3438916-1-rajatja@google.com> <20220111163916.GA148556@bhelgaas>
-In-Reply-To: <20220111163916.GA148556@bhelgaas>
-Reply-To: rajatxjain@gmail.com
-From:   Rajat Jain <rajatxjain@gmail.com>
-Date:   Tue, 11 Jan 2022 14:08:47 -0800
-Message-ID: <CAA93t1pkyQdZfWAQardP6bzw7Exsvd6nKqR2UPY4WPKKHVytaQ@mail.gmail.com>
-Subject: Re: [PATCH] pci: Make DWORD accesses while saving / restoring LTR state
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Yd311C45gpQ3LqaW@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: nvdimm@lists.linux.dev, dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org, linux-block@vger.kernel.org, ming.lei@redhat.com, jhubbard@nvidia.com, joao.m.martins@oracle.com, hch@lst.de, linux-kernel@vger.kernel.org, jgg@nvidia.com, willy@infradead.org
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: Phyr Starter
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bjorn,
-
-On Tue, Jan 11, 2022 at 8:39 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Tue, Dec 21, 2021 at 05:21:05PM -0800, Rajat Jain wrote:
-> > Some devices have an errata such that they only support DWORD accesses
-> > to some registers.
-> >
-> > For e.g. this Bayhub O2 device ([VID:DID] = [0x1217:0x8621]) only
-> > supports DWORD accesses to LTR latency registers and L1 PM substates
-> > control registers:
-> > https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
-> >
-> > Since L1 PM substate control registers are DWORD sized, and hence their
-> > access in the kernel is already DWORD sized, so we don't need to do
-> > anything for them.
-> >
-> > However, the LTR registers being WORD sized, are in need of a solution.
-> > This patch converts the WORD sized accesses to these registers, into
-> > DWORD sized accesses, while saving and restoring them.
-> >
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
->
-> Applied to pci/enumeration for v5.17, thanks, Rajat!
-
-Thank you.
-
->
-> The app note suggests that this erratum only affects the registers at
-> 0x234, 0x248, and 0x24c, i.e., the LTR snoop registers and the L1 SS
-> control registers.
->
-> Can you confirm that is true?  Byte and word accesses to other parts
-> of config space work correctly?
->
-> I *assume* the other parts work correctly, because if byte and word
-> accesses were broken, all sorts of things would not work, like
-> PCI_COMMAND, PCI_STATUS, searching the capability list, etc.
 
 
-Yes, that is correct. The Bayhub SD controller works fine otherwise,
-so only these registers needed the quirk.
+On 2022-01-11 2:25 p.m., Matthew Wilcox wrote:
+> That's reproducing the bad decision of the scatterlist, only with
+> a different encoding.  You end up with something like:
+> 
+> struct neoscat {
+> 	dma_addr_t dma_addr;
+> 	phys_addr_t phys_addr;
+> 	size_t dma_len;
+> 	size_t phys_len;
+> };
+> 
+> and the dma_addr and dma_len are unused by all-but-the-first entry when
+> you have a competent IOMMU.  We want a different data structure in and
+> out, and we may as well keep using the scatterlist for the dma-map-out.
 
-Thanks & Best Regards,
+With my P2PDMA patchset, even with a competent IOMMU, we need to support
+multiple dma_addr/dma_len pairs (plus the flag bit). This is required to
+program IOVAs and multiple bus addresses into a single DMA transactions.
 
-Rajat
+I think using the scatter list for the DMA-out side is not ideal seeing
+we don't need the page pointers or multiple length fields and we won't
+be able to change the sgl substantially given the massive amount of
+existing use cases that won't go away over night.
 
+My hope would be along these lines:
 
->
-> Bjorn
->
-> > ---
-> >  drivers/pci/pci.c       | 24 ++++++++++++++++--------
-> >  drivers/pci/pcie/aspm.c |  1 +
-> >  2 files changed, 17 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 3d2fb394986a..efa8cd16827f 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -1556,7 +1556,7 @@ static void pci_save_ltr_state(struct pci_dev *dev)
-> >  {
-> >       int ltr;
-> >       struct pci_cap_saved_state *save_state;
-> > -     u16 *cap;
-> > +     u32 *cap;
-> >
-> >       if (!pci_is_pcie(dev))
-> >               return;
-> > @@ -1571,25 +1571,33 @@ static void pci_save_ltr_state(struct pci_dev *dev)
-> >               return;
-> >       }
-> >
-> > -     cap = (u16 *)&save_state->cap.data[0];
-> > -     pci_read_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap++);
-> > -     pci_read_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, cap++);
-> > +     /*
-> > +      * We deliberately do a dword access to save both PCI_LTR_MAX_SNOOP_LAT
-> > +      * and PCI_LTR_MAX_NOSNOOP_LAT together since some devices only support
-> > +      * dword accesses to these registers.
-> > +      */
-> > +     cap = &save_state->cap.data[0];
-> > +     pci_read_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, cap);
-> >  }
-> >
-> >  static void pci_restore_ltr_state(struct pci_dev *dev)
-> >  {
-> >       struct pci_cap_saved_state *save_state;
-> >       int ltr;
-> > -     u16 *cap;
-> > +     u32 *cap;
-> >
-> >       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
-> >       ltr = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_LTR);
-> >       if (!save_state || !ltr)
-> >               return;
-> >
-> > -     cap = (u16 *)&save_state->cap.data[0];
-> > -     pci_write_config_word(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap++);
-> > -     pci_write_config_word(dev, ltr + PCI_LTR_MAX_NOSNOOP_LAT, *cap++);
-> > +     /*
-> > +      * We deliberately do a dword access to restore both
-> > +      * PCI_LTR_MAX_SNOOP_LAT and PCI_LTR_MAX_NOSNOOP_LAT together since
-> > +      * some devices only support dword accesses to these registers.
-> > +      */
-> > +     cap = &save_state->cap.data[0];
-> > +     pci_write_config_dword(dev, ltr + PCI_LTR_MAX_SNOOP_LAT, *cap);
-> >  }
-> >
-> >  /**
-> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > index 52c74682601a..083f47a7b69b 100644
-> > --- a/drivers/pci/pcie/aspm.c
-> > +++ b/drivers/pci/pcie/aspm.c
-> > @@ -496,6 +496,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >       encode_l12_threshold(l1_2_threshold, &scale, &value);
-> >       ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
-> >
-> > +     /* Always make DWORD sized accesses to these registers */
-> >       pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
-> >       pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, &pctl2);
-> >       pci_read_config_dword(child, child->l1ss + PCI_L1SS_CTL1, &cctl1);
-> > --
-> > 2.34.1.307.g9b7440fafd-goog
-> >
+struct phy_range {
+    phys_addr_t phyr_addr;
+    u32 phyr_len;
+    u32 phyr_flags;
+};
+
+struct dma_range {
+    dma_addr_t dmar_addr;
+    u32 dmar_len;
+    u32 dmar_flags;
+};
+
+A new GUP helper would somehow return a list of phy_range structs and
+the new dma_map function would take that list and return a list of
+dma_range structs. Each element in the list could represent a segment up
+to 4GB, so any range longer than that would need multiple items in the
+list. (Alternatively, perhaps the length could be a 64bit value and we
+steal some of the top bits for flags or some such). The flags would not
+only be needed by some of the use cases mentioned (FOLL_PIN or
+DMA_BUS_ADDRESS) but could also support chaining these lists like SGLs
+so continuous vmallocs would not be necessary for longer lists.
+
+If there's an [phy|dma]_range_list struct (or some such) which contains
+these range structs (per some details of Jason's suggestions) that'd be
+fine by me too and would just depend on implementation details.
+
+However, the main problem I see is a chicken and egg problem. The new
+dma_map function would need to be implemented by every dma_map provider
+or any driver trying to use it would need a messy fallback. Either that,
+or we need a wrapper that allocates an appropriately sized SGL to pass
+to any dma_map implementation that doesn't support the new structures.
+
+Logan

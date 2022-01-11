@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B4448B2D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EF148B2D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244289AbiAKREz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244041AbiAKREx (ORCPT
+        id S244311AbiAKRGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:06:19 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59284
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241667AbiAKRGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:04:53 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EC2C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:04:53 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id x15so18179986plg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:04:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IziS1hAgKQadL69QXaViOT6DgmiHKAQc9euIWkGIoUI=;
-        b=tXTjGBpjm23u4JKksIcA/FWe9RSj4V1gYOjblXw2/F7rJAcNWZY+uNltp47DhhYtXz
-         T9EQznFCNmJvkYCQs1ecJRrC96c3ZdNzuvjYu8pFXM/olW3IEcHqDfVGDObETkomJiMC
-         /fucDD/OGNh3et5Ym6EABfQ7cRBUtqjNBwoDFwrg1QksxKf/A/v0kd7jllLVEsBzgCbc
-         KGOiGJ85zGDWWxtkGMl2e2856B6OpBoYIBaGzHvU3i9qfFElZJInHccWbFceCs7uHFvS
-         t7FTXT+1DboUTPlw5umhkXmLJpnXpGLH1eEUOjC8+8H6hLRRB1kMpDmGxp4/h5bOQuEa
-         u47A==
+        Tue, 11 Jan 2022 12:06:18 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 859B53F31F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641920777;
+        bh=yHM2E3K7PraAAJZW6vk3OPqoH3vFzda1D3jFgKg0Kxo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=EVyFf34v1Hhf/iam5SnOpiYtNuQ2u7NkGLT3rKuYZcBvpyb9V+XHwn1PHJ8dZQpzF
+         a5SQ6AwWFH4TjaG/NyH+Zkgv8EWG1iKOefU4quzSRTXkxyptsCUMdrUvg4vTibv9B9
+         DXlL2ROC0YykFm8d8WCabrZsLGvtDLvDPy9HMS1/aenUPhdtqRYTiDgiWqXjLkXpkY
+         KKB/sn3h2E5QSjRQdpdBtNFZr9igNWtEV+/zI03e7Wz6EgmQwQjHb/aFXgV7NEZnEl
+         FtY65v0qATDfEvJ23uCjW/GAame3mZEGcOw705TMCNbG1VGat2U3FifZhT4qcjMUIX
+         LchifHI/0lEIA==
+Received: by mail-ed1-f69.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so13873083edd.21
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:06:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IziS1hAgKQadL69QXaViOT6DgmiHKAQc9euIWkGIoUI=;
-        b=4xYfr6d8UIqmyTtKJ+48IR4L+8CxFJ3PwvjJ6p9UNEJP/UPJeer+aQVjcgxHzYVwC1
-         xzqnHqUTomSh+JN4sSzd/tFK3LlnLeeDMmaZIwEYXOIFZ99IV4zlSd+rVkJ7rM1LSvgi
-         /X1vWwOiUm5IDq0/9BiohAmt0S79tCFgTAqkTnzXUAbsmCF2OAIp5lovCcddLRK6Jfch
-         KwmX8qN12Gib/l/xC+CldBXuccdrN0HjzYU+1bZK0a3v0B9RMMiEX/dqsy9+OA+cGGWj
-         cBfQpX5kq6/mWiXW17WvuQDnC+gkukF5aprC0Mh7TXcqrjwZN7NAwWKlGSo2iK9ksZFd
-         +5Rg==
-X-Gm-Message-State: AOAM5337WUyVyBxwEdvPP/DajASsx1RrmU32/UZdI34c9tHl+MoK9e4i
-        irv6B6ez0bUtMzs5KaGeP3TYCQ==
-X-Google-Smtp-Source: ABdhPJzAx1kJLw7IS6bxzSsChfp8XuiGKEOaojsvTh/bAYFGbEDNFC6KdafroKRlXtsfWMeb4kcqXA==
-X-Received: by 2002:a17:90a:77c6:: with SMTP id e6mr4107555pjs.41.1641920692922;
-        Tue, 11 Jan 2022 09:04:52 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s8sm11449911pfk.165.2022.01.11.09.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:04:52 -0800 (PST)
-Date:   Tue, 11 Jan 2022 17:04:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Making the module parameter of vPMU more common
-Message-ID: <Yd24sNBwa6i/yEgZ@google.com>
-References: <20220111073823.21885-1-likexu@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yHM2E3K7PraAAJZW6vk3OPqoH3vFzda1D3jFgKg0Kxo=;
+        b=JfTVT420lH5V1uXTpa7pJaannOEd7BFK9PJGA5pTHYUfDWRuu5RXKwqts78FfdSyKm
+         RwuX5VxDjOAdK59NNMDc0egrqWd51AomUMmiKeJtTXB6Pv6FY2XUN3QC5BDUyRGfvJKT
+         uBI6+V9argNbFcbg6wMWmDys+KvrDyNCCbT+6dNUKKMRWFdUfCtimvZ1jc99jPl5cw/S
+         P7OfX+DDRmF4B+OraZnmMFhN5SRDK5kTRq1ksapAO+Ry89LAQ38Sc5Rw+Gj5OAVES3y1
+         NHiu5jz87eZxmxbEwd33OUKKb258UtIN8CHNNp2Fli6TkWJmhFEEVQ/9ifhrd54WPpMq
+         z/oA==
+X-Gm-Message-State: AOAM531aACpfFAyhRXmLywBe0LlTm55+sw3Ac2zrvAYsMf2J65HJQD6N
+        arYzwOxJ+OuHU2G8ztJSOSTVbZy0GHxfSlNvbZX/6AS5G1LQPR7lOMm/Ol1pHEu+z5hoFXoJZjF
+        bKCbHqde1dEuas7v0M0Qt8RUwH5BwYvAq0PGHRC62eA==
+X-Received: by 2002:a17:907:1b1f:: with SMTP id mp31mr4233121ejc.247.1641920777182;
+        Tue, 11 Jan 2022 09:06:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNQAYRkR8aH2kKGfF5rTf5NkddVy3w5dhxChqjTNsjXzjMNArOAj98x/iMiCtdSBgXLqHPyg==
+X-Received: by 2002:a17:907:1b1f:: with SMTP id mp31mr4233101ejc.247.1641920777033;
+        Tue, 11 Jan 2022 09:06:17 -0800 (PST)
+Received: from [192.168.0.25] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id ky5sm3688615ejc.204.2022.01.11.09.06.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 09:06:16 -0800 (PST)
+Message-ID: <dd6caaeb-f395-2109-b1a3-6076f8c41ad0@canonical.com>
+Date:   Tue, 11 Jan 2022 18:06:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111073823.21885-1-likexu@tencent.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 3/5] regulator: dt-bindings: maxim,max77843: add MAX77843
+ bindings
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Beomho Seo <beomho.seo@samsung.com>
+References: <20211229124631.21576-1-krzysztof.kozlowski@canonical.com>
+ <20211229124631.21576-4-krzysztof.kozlowski@canonical.com>
+ <YdRrWGry08M+h2IZ@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YdRrWGry08M+h2IZ@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit, s/Making/Make.
+On 04/01/2022 16:44, Rob Herring wrote:
+> On Wed, Dec 29, 2021 at 01:46:29PM +0100, Krzysztof Kozlowski wrote:
+>> Document the bindings for MAX77843 regulator driver.  The bindings are
+>> almost identical to MAX77693 bindings, except the actual names of
+>> regulators.
+> 
+> Same issues here as your other Maxim regulator conversions.
+> 
 
-On Tue, Jan 11, 2022, Like Xu wrote:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index c194a8cbd25f..bff2ff8cb35f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -187,6 +187,11 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
->  int __read_mostly pi_inject_timer = -1;
->  module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
->  
-> +/* Enable/disable PMU virtualization */
-> +bool __read_mostly enable_pmu = true;
-> +EXPORT_SYMBOL_GPL(enable_pmu);
-> +module_param(enable_pmu, bool, 0444);
+Thanks, all comments (also from extcon and mfd) applied.
 
-I'm definitely in favor of enable_pmu instead of pmu for the KVM, variable, but
-I'd prefer we keep "pmu" for the module param, e.g. same as ept, vpid, etc...
+
+Best regards,
+Krzysztof

@@ -2,93 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B88548B886
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C0848B7D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244059AbiAKUUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:20:37 -0500
-Received: from mx1.uni-rostock.de ([139.30.22.71]:52507 "EHLO
-        mx1.uni-rostock.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244023AbiAKUU3 (ORCPT
+        id S242349AbiAKUF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:05:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242072AbiAKUF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:20:29 -0500
-X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Jan 2022 15:20:28 EST
-DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmze; 
- t=1641931525; bh=OPxjOW0atC6RHt21qql+9YyX72sRWC3C1Nzom/FPpSo=; h=
- "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
- a=ed25519-sha256; b=
- C11c3jvrnqumCY9TY5fTNp9fBhRxWXTZOW3D8LF34qGRJLV/1aFJici35/m/Vhe/r4fCQy2n00UASwO5ouJADQ==
-DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmz; 
- t=1641931525; bh=OPxjOW0atC6RHt21qql+9YyX72sRWC3C1Nzom/FPpSo=; h=
- "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
- a=rsa-sha256; b=
- clmn9Si3rAjVgELAWU1mm8CcTPSx6ox7DaXbe4p2q5GRReTrLTbq0b0jszlagu+EWZydTOeZ63JvwcbLpR9CqzjGRYuWbwTyYp+B0TN1ftj2k4TT3/9WV7iv+rjoic/pTm9VzzqYg2/0n41Rrd9roXohSwYKVH7xewP3pVUbkSc=
-Received: from 139.30.22.81 by mx1.uni-rostock.de (Tls12, Aes256, Sha384,
- DiffieHellmanEllipticKey384); Tue, 11 Jan 2022 20:05:25 GMT
-Received: from meshdev.amd.e-technik.uni-rostock.de (139.30.202.104) by
- email1.uni-rostock.de (139.30.22.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 11 Jan 2022 21:05:24 +0100
-From:   Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>
-CC:     <johannes.berg@intel.com>,
-        Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
-        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] um: fix and optimize xor select template for CONFIG64 and timetravel mode
-Date:   Tue, 11 Jan 2022 20:05:06 +0000
-Message-ID: <20220111200507.1445489-1-benjamin.beichler@uni-rostock.de>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jan 2022 15:05:57 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB112C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:05:56 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id c3so485927pls.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:05:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9hZaYVxetTOKFm3W8BmKSbpebS86cpVcjY/qinSjNKU=;
+        b=LSH9sboz/KXLu5AMLIEQKgu1QnoomBvnkVpsJVhg4editFU9j3pX5/ebzeZhq5yWjz
+         cej+rTdyt+yuUIahecbur36HMHOvyuQw+bcJQ/vaedro6WxuPltc7UYOhrirsFaVlz2j
+         RNq1rJyL0MDOCH8ovpK6WJJOzOctavHiP9VRk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9hZaYVxetTOKFm3W8BmKSbpebS86cpVcjY/qinSjNKU=;
+        b=wKKbbfjTCQUzQhZuoWQkZHpWp1cuhL5GqSd7RdVdGscwD6rLmrgJBAlHQiyZRV3ith
+         WYLKzuA4uhqx38S8TBhGpZe4fvIeyqq8aJ2ICqW6Ndby5vQb09Wz5FjT5jiamq+UWLIt
+         MvjEb3Q7+DYksmdAR/F8ImGOsLHo0gyg21BsYXFoRFywAxIuyng7EFkPdQs3zMxuA/OX
+         3qvQwWQ3uiw6Gy6bjFYVAimadoIbcivitxaofdewCELJ9OdRxOrE/7JNwvH8533zehw9
+         Svyb3/veTm7rZwRrUZAzQyZHFZ/re6eenvafIE52EjJpuBjm/2RFHa/w7bmY39H2Krgr
+         fMVQ==
+X-Gm-Message-State: AOAM533vjQRS9l65yaSWzrYIM3uMu3mkemRYYbLcXuluqRg5cL5DKVtX
+        F0ZVORVCBe+Rci4MWs1007Bgbw==
+X-Google-Smtp-Source: ABdhPJxF3n9N29fXHARPSJTydOCw8/mBFf5dYlqq1iuCZj8RC1wxAANW8KVmU40KCKhEELx8tJp9/g==
+X-Received: by 2002:a63:a011:: with SMTP id r17mr2407440pge.300.1641931556311;
+        Tue, 11 Jan 2022 12:05:56 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:f0a7:d33a:2234:5687])
+        by smtp.gmail.com with UTF8SMTPSA id i13sm177211pgl.81.2022.01.11.12.05.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 12:05:55 -0800 (PST)
+Date:   Tue, 11 Jan 2022 12:05:52 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, jponduru@codeaurora.org,
+        avuyyuru@codeaurora.org, bjorn.andersson@linaro.org,
+        agross@kernel.org, cpratapa@codeaurora.org,
+        subashab@codeaurora.org, evgreen@chromium.org, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] net: ipa: fix atomic update in
+ ipa_endpoint_replenish()
+Message-ID: <Yd3jICMLqZn94YsR@google.com>
+References: <20220111192150.379274-1-elder@linaro.org>
+ <20220111192150.379274-2-elder@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.30.202.104]
-X-ClientProxiedBy: EMAIL2.uni-rostock.de (139.30.22.82) To
- email1.uni-rostock.de (139.30.22.81)
-X-TM-SNTS-SMTP: F7625958A8522718A05E822E7765CDE00A0B621576FDF67F90765AF6225E06382002:8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220111192150.379274-2-elder@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to dropped inclusion of asm-generic/xor.h, xor_block_8regs symbol is
-missing with CONFIG64 and break compilation, as the asm/xor_64.h also did
-not include it. The patch recreate the logic from arch/x86, which check
-whether AVX is available and add fallbacks for 32bit and 64bit config of
-um.
+On Tue, Jan 11, 2022 at 01:21:49PM -0600, Alex Elder wrote:
+> In ipa_endpoint_replenish(), if an error occurs when attempting to
+> replenish a receive buffer, we just quit and try again later.  In
+> that case we increment the backlog count to reflect that the attempt
+> was unsuccessful.  Then, if the add_one flag was true we increment
+> the backlog again.
+> 
+> This second increment is not included in the backlog local variable
+> though, and its value determines whether delayed work should be
+> scheduled.  This is a bug.
+> 
+> Fix this by determining whether 1 or 2 should be added to the
+> backlog before adding it in a atomic_add_return() call.
+> 
+> Fixes: 84f9bd12d46db ("soc: qcom: ipa: IPA endpoints")
+> Signed-off-by: Alex Elder <elder@linaro.org>
 
-A very minor additional "fix" is, the return of the macro parameter
-instead of NULL, as this is the original intent of the macro, but
-this does not change the actual behavior.
-
-Fixes: c0ecca6604b8 ("um: enable the use of optimized xor routines in UML")
-Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
----
- arch/um/include/asm/xor.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/um/include/asm/xor.h b/arch/um/include/asm/xor.h
-index f512704a9ec7..22b39de73c24 100644
---- a/arch/um/include/asm/xor.h
-+++ b/arch/um/include/asm/xor.h
-@@ -4,8 +4,10 @@
- 
- #ifdef CONFIG_64BIT
- #undef CONFIG_X86_32
-+#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_sse_pf64))
- #else
- #define CONFIG_X86_32 1
-+#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_8regs))
- #endif
- 
- #include <asm/cpufeature.h>
-@@ -16,7 +18,7 @@
- #undef XOR_SELECT_TEMPLATE
- /* pick an arbitrary one - measuring isn't possible with inf-cpu */
- #define XOR_SELECT_TEMPLATE(x)	\
--	(time_travel_mode == TT_MODE_INFCPU ? &xor_block_8regs : NULL)
-+	(time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
- #endif
- 
- #endif
--- 
-2.25.1
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

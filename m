@@ -2,288 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF5448B110
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025F148B116
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244583AbiAKPlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239797AbiAKPk6 (ORCPT
+        id S1343588AbiAKPld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:41:33 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:56030 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240342AbiAKPlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:40:58 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB868C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:58 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 2-20020a251302000000b006118f867dadso1120610ybt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:40:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=T42iHV28VeOQOSr6+/jPZLYHOPmxU90EiajYoOWkuKs=;
-        b=CXKrmFoMgA/idPVTdcgeKlKj97I4kSjTasFYbuJfvU0rRxnErMfkEWCGxaaLForzZ0
-         XD0jnj24uOAzP/cU4djQ4KSiZk0n7TN79KMPRxCB6FaRbX4BEk/Rklaggh0kzyPJ/1nS
-         VJOqmreHtxrx+85ZpjMO1csw4IhJvLpBDMFY1VSBkuQgDeNUS7Ru6n6aGxktaGbnithE
-         waFKcVc89ifkaMdq6kAu2mrI4chpPfpRS8XGw1nZsE+zQtjLzjhUZ6tOWsi+ljMQkWCs
-         807atYnm9TPYV3fEAOfABR1MpdLTWXNK/cTT2DjhiRXLdDXfrH5jDWVtUupDE3gsaZX9
-         HbJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=T42iHV28VeOQOSr6+/jPZLYHOPmxU90EiajYoOWkuKs=;
-        b=uejTHBkquymUb054TvS2lS1tl/4mlragde7dNTzmih+vhGm7oFT9RVdqLboG61kfYd
-         Q8Y6d3Y2kdccD5IBKTvnLXiNT1c064+ufGBqi/iGCiHoDATBKa/+TkX0Emam2p3lq41O
-         9OOYp5GhEabEafgYHP4YSMZzDFrQzm8X7CYHse5fY75fC1MJr05i4qH9+4RApJ5fi0xW
-         4G9DD1Etbf5i7lbmp7l6brniV6MNFLlG061vEAXgSVhQXpDRl9GZJ4CVN2z9KUQW7k4o
-         jw+VxtnaWEuFTRxA13tIhOPcWW7dcSFGbJFT1ktBLhXaC+1T65ZVY+v6M5NGIco9JVjn
-         sCdg==
-X-Gm-Message-State: AOAM533nCs6iDocXCXE3rhGtMxIpl3zYM9DJ5H89LlznryphfMZjchwn
-        iKiauzTMTfz+tJaCk+FsNTP47KdhDXI=
-X-Google-Smtp-Source: ABdhPJyxFwn9MvYTDU9n4J/DClDNTiWQjW15TZxBxG09HzMX1+Shm2icLskC2lCjrznUlV5XCw2DiSv9AT8=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:4f78:6ed1:42d2:b0a7])
- (user=pgonda job=sendgmr) by 2002:a25:680e:: with SMTP id d14mr2781511ybc.522.1641915657861;
- Tue, 11 Jan 2022 07:40:57 -0800 (PST)
-Date:   Tue, 11 Jan 2022 07:40:48 -0800
-Message-Id: <20220111154048.2108264-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
-Subject: [PATCH] KVM: SEV: Allow SEV intra-host migration of VM with mirrors
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 11 Jan 2022 10:41:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 46A01212C5;
+        Tue, 11 Jan 2022 15:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1641915690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uaeh72LNlQ3FJmzxxlOZxQSkNAPJwZlxowsmMRMGMVw=;
+        b=QkQUdB1pCGs/AozhrpVo4RO6hfCBm6mA+j0o8+QY4VPSLEad2gkLp9Z2Zi6FGKeVFOCFAB
+        1OIvfzfl9W3skPYEfJdcMqd6gu8dngI/GnVkd61ailOGuV+7R3wG1XeSD4fIBOsqatOtN6
+        1S/hNCI5G+xKbJnqrpraVfeuQ5F6Y5w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1641915690;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uaeh72LNlQ3FJmzxxlOZxQSkNAPJwZlxowsmMRMGMVw=;
+        b=yBs8AXrIO0pErgyQ4ypZm16jOB6JLTDyBoA6X3+KnQrptNo4hhneCtYwt/YVp/N8tTIYBx
+        ewwPgGirOQl+rMAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC9D913ADE;
+        Tue, 11 Jan 2022 15:41:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E8oVNSml3WHRFAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 11 Jan 2022 15:41:29 +0000
+Message-ID: <a72a4e3a-3af9-7a36-4583-6181f3579cfb@suse.cz>
+Date:   Tue, 11 Jan 2022 16:41:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     Roman Gushchin <guro@fb.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>
+References: <20211220085649.8196-1-songmuchun@bytedance.com>
+ <20211220085649.8196-3-songmuchun@bytedance.com>
+ <Ydet1XmiY8SZPLUx@carbon.dhcp.thefacebook.com>
+ <CAMZfGtWmwTLHdO6acx9_+nR68j-v9SKjMsq-0v4ZDeQORgaQ=w@mail.gmail.com>
+ <Ydx/MFK72xrsXE0l@carbon.dhcp.thefacebook.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v5 02/16] mm: introduce kmem_cache_alloc_lru
+In-Reply-To: <Ydx/MFK72xrsXE0l@carbon.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For SEV-ES VMs with mirrors to be intra-host migrated they need to be
-able to migrate with the mirror. This is due to that fact that all VMSAs
-need to be added into the VM with LAUNCH_UPDATE_VMSA before
-lAUNCH_FINISH. Allowing migration with mirrors allows users of SEV-ES to
-keep the mirror VMs VMSAs during migration.
+On 1/10/22 19:47, Roman Gushchin wrote:
+> On Sun, Jan 09, 2022 at 02:21:22PM +0800, Muchun Song wrote:
+>> On Fri, Jan 7, 2022 at 11:05 AM Roman Gushchin <guro@fb.com> wrote:
+>> >
+>> [...]
+>> > >  /*
+>> > >   * struct kmem_cache related prototypes
+>> > > @@ -425,6 +426,8 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
+>> > >
+>> > >  void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
+>> > >  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
+>> > > +void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+>> > > +                        gfp_t gfpflags) __assume_slab_alignment __malloc;
+>> >
+>> > I'm not a big fan of this patch: I don't see why preparing the lru
+>> > infrastructure has to be integrated that deep into the slab code.
+>> >
+>> > Why can't kmem_cache_alloc_lru() be a simple wrapper like (pseudo-code):
+>> >   void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+>> >                            gfp_t gfpflags) {
+>> >         if (necessarily)
+>> >            prepare_lru_infra();
+>> >         return kmem_cache_alloc();
+>> >   }
+>> 
+>> Hi Roman,
+>> 
+>> Actually, it can. But there is going to be some redundant code similar
+>> like memcg_slab_pre_alloc_hook() does to detect the necessity of
+>> prepare_lru_infra() in the new scheme of kmem_cache_alloc_lru().
+>> I just want to reduce the redundant overhead.
+> 
+> Is this about getting a memcg pointer?
+> I doubt it's a good reason to make changes all over the slab code.
+> Another option to consider adding a new gfp flag.
 
-Adds a list of mirror VMs for the original VM iterate through during its
-migration. During the iteration the owner pointers can be updated from
-the source to the destination. This fixes the ASID leaking issue which
-caused the blocking of migration of VMs with mirrors.
+I'm not sure how a flag would help as it seems we really need to pass a
+specific list_lru pointer and work with that. I was thinking if there was
+only one list_lru per class of object it could be part of struct kmem_cache,
+but investigating kmem_cache_alloc_lru() callers I see lru parameters:
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- arch/x86/kvm/svm/sev.c                        | 45 ++++++++++++-----
- arch/x86/kvm/svm/svm.h                        |  4 ++
- .../selftests/kvm/x86_64/sev_migrate_tests.c  | 48 +++++++++++++------
- 3 files changed, 70 insertions(+), 27 deletions(-)
+- &nfs4_xattr_cache_lru - this is fixed
+- xas->xa_lru potentially not fixed, although the only caller of
+xas_set_lru() passes &shadow_nodes so effectively fixed
+- &sb->s_dentry_lru - dynamic, boo
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 322553322202..e396ae04f891 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -258,6 +258,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 		goto e_free;
- 
- 	INIT_LIST_HEAD(&sev->regions_list);
-+	INIT_LIST_HEAD(&sev->mirror_vms);
- 
- 	return 0;
- 
-@@ -1623,22 +1624,41 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
- 	}
- }
- 
--static void sev_migrate_from(struct kvm_sev_info *dst,
--			      struct kvm_sev_info *src)
-+static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
- {
-+	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
-+	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
-+	struct kvm_sev_info *mirror, *tmp;
-+
- 	dst->active = true;
- 	dst->asid = src->asid;
- 	dst->handle = src->handle;
- 	dst->pages_locked = src->pages_locked;
- 	dst->enc_context_owner = src->enc_context_owner;
-+	dst->num_mirrored_vms = src->num_mirrored_vms;
- 
- 	src->asid = 0;
- 	src->active = false;
- 	src->handle = 0;
- 	src->pages_locked = 0;
- 	src->enc_context_owner = NULL;
-+	src->num_mirrored_vms = 0;
- 
- 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
-+	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
-+
-+	/*
-+	 * If this VM has mirrors we need to update the KVM refcounts from the
-+	 * source to the destination.
-+	 */
-+	if (dst->num_mirrored_vms > 0) {
-+		list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
-+					  mirror_entry) {
-+			kvm_get_kvm(dst_kvm);
-+			kvm_put_kvm(src_kvm);
-+			mirror->enc_context_owner = dst_kvm;
-+		}
-+	}
- }
- 
- static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
-@@ -1708,15 +1728,6 @@ int svm_vm_migrate_from(struct kvm *kvm, unsigned int source_fd)
- 
- 	src_sev = &to_kvm_svm(source_kvm)->sev_info;
- 
--	/*
--	 * VMs mirroring src's encryption context rely on it to keep the
--	 * ASID allocated, but below we are clearing src_sev->asid.
--	 */
--	if (src_sev->num_mirrored_vms) {
--		ret = -EBUSY;
--		goto out_unlock;
--	}
--
- 	dst_sev->misc_cg = get_current_misc_cg();
- 	cg_cleanup_sev = dst_sev;
- 	if (dst_sev->misc_cg != src_sev->misc_cg) {
-@@ -1738,7 +1749,7 @@ int svm_vm_migrate_from(struct kvm *kvm, unsigned int source_fd)
- 		if (ret)
- 			goto out_source_vcpu;
- 	}
--	sev_migrate_from(dst_sev, src_sev);
-+	sev_migrate_from(kvm, source_kvm);
- 	kvm_vm_dead(source_kvm);
- 	cg_cleanup_sev = src_sev;
- 	ret = 0;
-@@ -2009,9 +2020,10 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
- 	source_sev = &to_kvm_svm(source_kvm)->sev_info;
- 	kvm_get_kvm(source_kvm);
- 	source_sev->num_mirrored_vms++;
-+	mirror_sev = &to_kvm_svm(kvm)->sev_info;
-+	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
- 
- 	/* Set enc_context_owner and copy its encryption context over */
--	mirror_sev = &to_kvm_svm(kvm)->sev_info;
- 	mirror_sev->enc_context_owner = source_kvm;
- 	mirror_sev->active = true;
- 	mirror_sev->asid = source_sev->asid;
-@@ -2050,10 +2062,17 @@ void sev_vm_destroy(struct kvm *kvm)
- 	if (is_mirroring_enc_context(kvm)) {
- 		struct kvm *owner_kvm = sev->enc_context_owner;
- 		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
-+		struct kvm_sev_info *mirror, *tmp;
- 
- 		mutex_lock(&owner_kvm->lock);
- 		if (!WARN_ON(!owner_sev->num_mirrored_vms))
- 			owner_sev->num_mirrored_vms--;
-+
-+		list_for_each_entry_safe(mirror, tmp, &owner_sev->mirror_vms,
-+					  mirror_entry)
-+			if (mirror == sev)
-+				list_del(&mirror->mirror_entry);
-+
- 		mutex_unlock(&owner_kvm->lock);
- 		kvm_put_kvm(owner_kvm);
- 		return;
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index daa8ca84afcc..b9f5e33d5232 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -81,6 +81,10 @@ struct kvm_sev_info {
- 	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
- 	struct kvm *enc_context_owner; /* Owner of copied encryption context */
- 	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
-+	union {
-+		struct list_head mirror_vms; /* List of VMs mirroring */
-+		struct list_head mirror_entry; /* Use as a list entry of mirrors */
-+	};
- 	struct misc_cg *misc_cg; /* For misc cgroup accounting */
- 	atomic_t migration_in_progress;
- };
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-index 80056bbbb003..cb1962c89945 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-@@ -341,37 +341,57 @@ static void test_sev_mirror_parameters(void)
- 
- static void test_sev_move_copy(void)
- {
--	struct kvm_vm *dst_vm, *sev_vm, *mirror_vm, *dst_mirror_vm;
--	int ret;
-+	struct kvm_vm *dst_vm, *dst2_vm, *dst3_vm, *sev_vm, *mirror_vm,
-+		      *dst_mirror_vm, *dst2_mirror_vm, *dst3_mirror_vm;
- 
- 	sev_vm = sev_vm_create(/* es= */ false);
- 	dst_vm = aux_vm_create(true);
-+	dst2_vm = aux_vm_create(true);
-+	dst3_vm = aux_vm_create(true);
- 	mirror_vm = aux_vm_create(false);
- 	dst_mirror_vm = aux_vm_create(false);
-+	dst2_mirror_vm = aux_vm_create(false);
-+	dst3_mirror_vm = aux_vm_create(false);
- 
- 	sev_mirror_create(mirror_vm->fd, sev_vm->fd);
--	ret = __sev_migrate_from(dst_vm->fd, sev_vm->fd);
--	TEST_ASSERT(ret == -1 && errno == EBUSY,
--		    "Cannot migrate VM that has mirrors. ret %d, errno: %d\n", ret,
--		    errno);
- 
--	/* The mirror itself can be migrated.  */
- 	sev_migrate_from(dst_mirror_vm->fd, mirror_vm->fd);
--	ret = __sev_migrate_from(dst_vm->fd, sev_vm->fd);
--	TEST_ASSERT(ret == -1 && errno == EBUSY,
--		    "Cannot migrate VM that has mirrors. ret %d, errno: %d\n", ret,
--		    errno);
-+	sev_migrate_from(dst_vm->fd, sev_vm->fd);
-+
-+	sev_migrate_from(dst2_vm->fd, dst_vm->fd);
-+	sev_migrate_from(dst2_mirror_vm->fd, dst_mirror_vm->fd);
-+
-+	sev_migrate_from(dst3_mirror_vm->fd, dst2_mirror_vm->fd);
-+	sev_migrate_from(dst3_vm->fd, dst2_vm->fd);
-+
-+	kvm_vm_free(dst_vm);
-+	kvm_vm_free(sev_vm);
-+	kvm_vm_free(dst2_vm);
-+	kvm_vm_free(dst3_vm);
-+	kvm_vm_free(mirror_vm);
-+	kvm_vm_free(dst_mirror_vm);
-+	kvm_vm_free(dst2_mirror_vm);
-+	kvm_vm_free(dst3_mirror_vm);
- 
- 	/*
--	 * mirror_vm is not a mirror anymore, dst_mirror_vm is.  Thus,
--	 * the owner can be copied as soon as dst_mirror_vm is gone.
-+	 * Run similar test be destroy mirrors before mirrored VMs to ensure
-+	 * destruction is done safely.
- 	 */
--	kvm_vm_free(dst_mirror_vm);
-+	sev_vm = sev_vm_create(/* es= */ false);
-+	dst_vm = aux_vm_create(true);
-+	mirror_vm = aux_vm_create(false);
-+	dst_mirror_vm = aux_vm_create(false);
-+
-+	sev_mirror_create(mirror_vm->fd, sev_vm->fd);
-+
-+	sev_migrate_from(dst_mirror_vm->fd, mirror_vm->fd);
- 	sev_migrate_from(dst_vm->fd, sev_vm->fd);
- 
- 	kvm_vm_free(mirror_vm);
-+	kvm_vm_free(dst_mirror_vm);
- 	kvm_vm_free(dst_vm);
- 	kvm_vm_free(sev_vm);
-+
- }
- 
- int main(int argc, char *argv[])
--- 
-2.34.1.575.g55b058a8bb-goog
+> Vlastimil, what do you think?
+
+Memcg code is already quite intertwined with slab code, for better or worse,
+so I guess the extra lru parameter in a bunch of inline functions won't
+change much. I don't immediately see a better solution.
+
+> Thanks!
+> 
 

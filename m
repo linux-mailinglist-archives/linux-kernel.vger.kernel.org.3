@@ -2,322 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F300448A4DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3168548A4E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346167AbiAKBSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 20:18:23 -0500
-Received: from mga12.intel.com ([192.55.52.136]:20990 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243319AbiAKBSU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 20:18:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641863900; x=1673399900;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C5cHiGuW0bAg5BlNFMKHwoTsXilSzwzw7R4rBfqFS/8=;
-  b=HzvotJU3zhgHbQoz0Wc2a3ZJHMDYn4h8mHGwK5pOsznkp9CLcDZ3BaYM
-   M+qT0k5bftqtqE3cufoDWF3OfDhIpGnZvPDvZVFAfTAowERjCdb9inFJw
-   EzmRFFVKu1cCQbOiU5xaaElpyOSzSRehUQspUQ705EWVZ6jWg7kIUnxJR
-   DbJn/L+XP56+eKS/AarKkr/v7NzhN5mOBkOWRMH0kdoNaqLvEqHMKLUbZ
-   A6S99v6lP2YZbi6JwvUsjEcDc96N1zQY3ixgqQ5SIToN5w/WSDQVGQx5p
-   UFvcditirmG6T8SeyfFeVm7N+QhgBMGF40sbzLq58YoZlE7lgW4zv9Cjw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="223358264"
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="223358264"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 17:18:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
-   d="scan'208";a="690795429"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 17:18:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n75nm-0004AL-2Z; Tue, 11 Jan 2022 01:18:18 +0000
-Date:   Tue, 11 Jan 2022 09:17:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vladimir Stempen <vladimir.stempen@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:312:6:
- warning: no previous prototype for function 'optc2_align_vblanks'
-Message-ID: <202201110905.3Bccc77f-lkp@intel.com>
+        id S1346189AbiAKBS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 20:18:58 -0500
+Received: from mail-mw2nam10on2079.outbound.protection.outlook.com ([40.107.94.79]:21568
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243319AbiAKBS5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 20:18:57 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ChwTYF9n8xMfu1XsTdEkmrd5BJQlRr6aPgh78h/5sba1qPEcKH7mR0490CTyLEi6AfaqGzHg9rmIRHk7mQB+uXbV9Bau7Qxswy7mlcrW/X76D392WTXoQwOqjzThxN2iWZPxXJDv5wE91zUKfIf7WC31k6nHZefrQkAuXwqigQ+UYJcJ14gHRn6DlthQlYzLlJXXZLPQfnmbk2PeejzIBnNCfjusz+h2PF952IKSEK7bKzJ90NjoT9iwlqPCnKX1miE/4Z7BNsr3hg4AZvESfkIB7nqTLWMxFHpfSmMx6jTopSw97K7/WqyG5lFoqWI0n5USv9hdotgDKYn7hDYwlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5AkdqpZ3VyJSV4uvJ5+xn78kqP31DQ4/Rc7BF+84Vkk=;
+ b=HrNbr0yeVuoxiK8fNVabGGmLWP6EVd7qlg+9ve/OWIox+eZIh8/Ol3qCOwn0IXEDrzy7Z9oSAf0vHzbxol9EBJRB2X3p2FU3MUBKEvdcGS78WidK0V6qmkpThE5+1+5rRbMif6aParn5CCQyBRFVr8B2XswxpKTHo3OH2Lc+vch3T+eTC0/3ygiYOOtopcyIW/6bxtc/Q17zFZmYgj17HTNQD+6Rh5Wju0CNPr7uwLp7SLzbN0fhuT01hY2J51HqOmKaexVzORklXYscTxn+dZajZSb+eZP7qX72Tqsxg5VPcvaeVxk0zpYSB18ajs2EjnKiiFpLCaARzCmAIbl30g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5AkdqpZ3VyJSV4uvJ5+xn78kqP31DQ4/Rc7BF+84Vkk=;
+ b=ROc721Y7SLAAqHx7SZYabsjli6b1Q0yDZWg4umR+yWjN5ZDHHcMr+y/6dOAsjJF62xAtBmfoAK6hkq2Uv0Le+vVGMH30VvFf/59AKbYOzc6mVNCYF+jRb/cBDa7LmVE71F93smN7Q/EqD8hlt71BNn0VOl7IzCqAcebHtLHChO6A7ThnF/kU+moCgQcYP8CCHodty4VTo6dfT3zodaVeGZu3P2soaHWsfeSY+lTYG2KnbSzt6rWj1SbLzOSFwPBG/o9S0hYT9Nns0hWhi+gs6GQd/Q7rbjQ0W/C2Fb4fNooXahx0M1w8wjFmSkVRfjrAyD+/EcxhgXsP7U8WUyZIUg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BY5PR12MB3651.namprd12.prod.outlook.com (2603:10b6:a03:1a9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Tue, 11 Jan
+ 2022 01:18:55 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 01:18:55 +0000
+Message-ID: <3f2ed38f-e0ce-aa59-88a3-c2cfbb2f83a4@nvidia.com>
+Date:   Mon, 10 Jan 2022 17:18:53 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2 05/28] gup: Change the calling convention for
+ compound_next()
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20220110042406.499429-1-willy@infradead.org>
+ <20220110042406.499429-6-willy@infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220110042406.499429-6-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0015.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::20) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8c4cc474-4836-415a-51c1-08d9d4a0563f
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3651:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3651AD1D258B6ECC3219FA61A8519@BY5PR12MB3651.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:194;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B2PLkTI38W6aOiGZ3PEvOLMakWs7GnSPSf7BURM9nuyVlJfzQZnkiQza83BsDjps2TpNZ9JOIUvfE3BHPTDi421YD5A+Z88FUVu2PqVjzO7WTAmlWDU5kwJr6zuyUcFwnwNM3t0MBIj/n74lxLiufmxl/ujdTLpYZcgjPP5yD0W6ygKRg8dbhJPIRFeUmy96oDHb3M2IR/+/74o3OkAR51x32v7+94MY6UyqJ0HbREars7JA80vfsmsP5AAEG1ORsj+m8Ya0ZQSNKFwYs1hqAEo6FWSr9djoWExz2y3jwoMW1R8dROC3+rT+eGp5UpuC6kXlzwmBzUgyiIsBXAvCHJsJcNoZfruZHjrcr6ZKGOX3xO2LY8nuTgL5UP7YlaqTkWANsmYVSfOhFqvOoOCL13JMcUOasfVDAF9YMhG/1Jk01j1JwHonQtPlJTTxzGHbcweIRtzHm3TvpYfdchOT+gJLBmJ7bu5Yzj2JZc1ojOeac0pxQujiXuucCtUgy8CQsdIK5yrvzlQ29+YKoorY6W29hKV4vifeebTeSzZWH5tIh+iLZpeIVfWHelcMFYfmMUBj+K0KXoWOKrgsJpSYLG8PBiTpQi4UuK/0QA462uNFGsOO5WSAUCgva2t82cmjC06jg/jaai8BlKpUy7mwHnX48PtJmQmhANu0bl9gznEEst3XVjGabXN1dsO90BIwbhKZC7FxIWOtD159qE6mc0HCshqTS/Ui3A7hNX+PxA74TbrCp+yCQtrW0ckArIWo
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(38100700002)(6486002)(316002)(31686004)(86362001)(53546011)(8936002)(186003)(2906002)(66946007)(26005)(54906003)(36756003)(31696002)(66556008)(83380400001)(66476007)(6506007)(4326008)(6512007)(2616005)(5660300002)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDJqRVBEQ3NhKzJGcGJldXJlSVU2VEpvRmI4Z3NlSVc5SEFBQWZsYURjdXo0?=
+ =?utf-8?B?MHFDS1FacmlpcTFoUW5KRUhzTmkwWGxxck5OSGJqdWtLTUZIRXBodnVLL3pN?=
+ =?utf-8?B?M0tHRG5CZ3h1OENlS1ZHY3V2OEVxNS8wYnVEcytUTGswb3V4V25oTUFuSy9Q?=
+ =?utf-8?B?ZytUeWN6aUZnV1pOdXlCV0xtekhZTXdoT2ZMZTVaOG9UMHRKSzZpWkpqMHov?=
+ =?utf-8?B?cWF6OHdmeHFaMnRaZ3M3aFNrNGNZWXBxS1NDWjgrMzF0VENrSU5Sc09BMm9S?=
+ =?utf-8?B?L0pRcTg2SGdSS1d3c2FKTXdNNUpSYzYzbDhORjNjL0NySHpSZlZLb3pha1Jw?=
+ =?utf-8?B?bHAyVjJ5TmRwaC9WUC9kQnplMk4vQ3JuaDhMN1pWRHFiOTF6Nm51RFZPajhR?=
+ =?utf-8?B?dHJQSHBhaUZrOVF0QjdUellLeEl1YjNYaHBLcWVzWkJMSkFVSUtQUXhvNndT?=
+ =?utf-8?B?YW03OFNHSCtpc1VxMmpUN3JCWUN5RkRSMDlvSXd6VE81Ly9NREc0L1FUdXNL?=
+ =?utf-8?B?WW53R3psUTJDMVJ3MVpySldUbU41dWlvVXQrclBabWJJU08vU2grbWJqaGNF?=
+ =?utf-8?B?clRaaWwxeTROSDZ0T2lVTUVSWWNCQTNnNU9kVFFPb0JjYmk4akI5WStPRmp2?=
+ =?utf-8?B?NlZhd3FicXA1ZjA4ZkFSd2N5MkVlbTF0d1NoT0R6OWpLUTNkWUVtb25iVjdX?=
+ =?utf-8?B?UkhYTDZ0YmVjZUxqY3piSmRPcmJHNDVsOEVybW1sVFhVUzJRUklhSEtINXYx?=
+ =?utf-8?B?dk53TllmMlFvZTZyeUI2WnZISnc5QkhEUklYaWswaUlKR3J1c1l2UnVRNU9X?=
+ =?utf-8?B?LzU1clFrbUYrUmdvamlJTHcwWXpiK3RqOWZpRGc2MmtRRVROQlBQRnBjWTZF?=
+ =?utf-8?B?LzM1UjlIUWpNOWlqK1ZPaEFteExYZllKQWRndnZpZzVWMlFES1JUdjh6K0RW?=
+ =?utf-8?B?MHovWDJmcEFjclZVNHZmS0dKaFVUcVVyS3JqLzdJeStScEN4SytWVE9JVENk?=
+ =?utf-8?B?ZXVSZnA3R0t3QmZlaGY3UDJjdkplSVJiZW9QS3M3VnZTN2crb2lrcjJIYkd1?=
+ =?utf-8?B?alhva1dFaERIaUx5L0RlTzF3TEkrTEsvN3ZQRDFZbDBrNE5oWnE2WHBDYzlx?=
+ =?utf-8?B?YlBnYk5XOStLcmVDbHJMeHFPaEo2WEJxUWsydUJyMFQ0dWZ3NkVrVzJaU1Bz?=
+ =?utf-8?B?bEF3K296YVhGN1llWlBNTjZKZnFGSVYxU1VSQVJ0TUZ6VVpINEhYVklENmtl?=
+ =?utf-8?B?QkpPeTdQb2RFL3dIby9TSE1LRlEyaVY2N0MvYkFWQ2RwbVVzaUdraDlTL1Bo?=
+ =?utf-8?B?dWk1SWNycE1EeEVWdHFSS0laTktSSXUvSDFjNEwvS1UxVlNDVWpVY0NoWWFB?=
+ =?utf-8?B?VUQwY2twUWovUzJsWXphMzhJY0FSekJlcGQzcHZjK2l4S214L1d4SlJPa2dk?=
+ =?utf-8?B?UFVycERCelcvSDkvUlpUdUJOS3dwRldvQ2Z6WlVPNUJvV0pSbVZnbW5LTWds?=
+ =?utf-8?B?T2czTjBsTUdaQnBEWUFiaWJ2TEg2ZHB1dnNCWlM5MWtFd3AvQUZyZnNDWXc4?=
+ =?utf-8?B?VFlKNjZUYlRnVU9kQW9uNUUwMkxpWUdYVVJqZjRLdFZyUDFBNTVHN0N4SG5N?=
+ =?utf-8?B?cmhBWGMwSEhuVEhldzBlZkVPRURoL1dKZzZjUStneUE2RDJwU1lNa0l1WlZj?=
+ =?utf-8?B?MXFwdW9ZKzhNRE1jelMxdTU2czl2RzY0WG5sMlV6ZWxONTVDaEtCZXMxenIw?=
+ =?utf-8?B?NDRRVWVFTUszVXNnc2J0ZmNycEdyNVloM0FkWUY3NGtLMmxENmorVkhzR0ox?=
+ =?utf-8?B?aEI4K255THhMVmE5RW90Nmh2dUY5Yk05MHpEc1U3R2h1VnYyV0l0Y3M5K01y?=
+ =?utf-8?B?VU5GQ2lZNGl0VWxLSWhKYkpYZFZCSjdCREhoN0FSNjNOWHlBQVJISHBkL29Z?=
+ =?utf-8?B?YUx0NDc2VXR5eFBLUUYybUtWdk9peE1ySGFyWXEvdkF4YXoxQTlNVTBFSi9T?=
+ =?utf-8?B?Q1Y4OVFuZmN5ZEVyUVNvZ0IvajYxT3lQZzBhWmQ3MzQvSVZXMzdJcEdrRldG?=
+ =?utf-8?B?cXNWUFJMdHphQUkybmVTRGVqY2x1b0tubkNsOE1BVjM5Tis3cmYvS1Y4NHpr?=
+ =?utf-8?B?b1QvMXlBM0U5eG5NdWc1Y0duSlpGMnYvRjZDcFVIOUFQRXVJcFVYdit0MExh?=
+ =?utf-8?Q?S71dXUjFRxfverrRTLSzwhY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c4cc474-4836-415a-51c1-08d9d4a0563f
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 01:18:55.8357
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dkdvYuBPAa/NSSj2yxmYm14/STOKa8CgB+YN282eugTL0URsPoKaZ0G6L1xytJW+rF6Vq1OZo/VeuqAyb6QuZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3651
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8d0749b4f83bf4768ceae45ee6a79e6e7eddfc2a
-commit: 77a2b7265f20ee827e527eaa6f82b87e88388947 drm/amd/display: Synchronize displays with different timings
-date:   11 months ago
-config: i386-randconfig-a015-20210927 (https://download.01.org/0day-ci/archive/20220111/202201110905.3Bccc77f-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=77a2b7265f20ee827e527eaa6f82b87e88388947
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 77a2b7265f20ee827e527eaa6f82b87e88388947
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:80:6: warning: no previous prototype for function 'optc2_set_timing_db_mode' [-Wmissing-prototypes]
-   void optc2_set_timing_db_mode(struct timing_generator *optc, bool enable)
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:80:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_set_timing_db_mode(struct timing_generator *optc, bool enable)
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:114:6: warning: no previous prototype for function 'optc2_use_gsl_as_master_update_lock' [-Wmissing-prototypes]
-   void optc2_use_gsl_as_master_update_lock(struct timing_generator *optc,
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:114:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_use_gsl_as_master_update_lock(struct timing_generator *optc,
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:124:6: warning: no previous prototype for function 'optc2_set_gsl_window' [-Wmissing-prototypes]
-   void optc2_set_gsl_window(struct timing_generator *optc,
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:124:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_set_gsl_window(struct timing_generator *optc,
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:142:6: warning: no previous prototype for function 'optc2_set_vupdate_keepout' [-Wmissing-prototypes]
-   void optc2_set_vupdate_keepout(struct timing_generator *optc,
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:142:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_set_vupdate_keepout(struct timing_generator *optc,
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:176:6: warning: no previous prototype for function 'optc2_set_dsc_encoder_frame_start' [-Wmissing-prototypes]
-   void optc2_set_dsc_encoder_frame_start(struct timing_generator *optc,
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_set_dsc_encoder_frame_start(struct timing_generator *optc,
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:299:6: warning: no previous prototype for function 'optc2_set_dwb_source' [-Wmissing-prototypes]
-   void optc2_set_dwb_source(struct timing_generator *optc,
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:299:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_set_dwb_source(struct timing_generator *optc,
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:312:6: warning: no previous prototype for function 'optc2_align_vblanks' [-Wmissing-prototypes]
-   void optc2_align_vblanks(
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c:312:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void optc2_align_vblanks(
-   ^
-   static 
-   7 warnings generated.
---
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:74:6: warning: no previous prototype for function 'print_microsec' [-Wmissing-prototypes]
-   void print_microsec(struct dc_context *dc_ctx,
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:74:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void print_microsec(struct dc_context *dc_ctx,
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:129:6: warning: no previous prototype for function 'dcn10_log_hubbub_state' [-Wmissing-prototypes]
-   void dcn10_log_hubbub_state(struct dc *dc, struct dc_log_buffer_ctx *log_ctx)
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dcn10_log_hubbub_state(struct dc *dc, struct dc_log_buffer_ctx *log_ctx)
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1854:10: warning: no previous prototype for function 'reduceSizeAndFraction' [-Wmissing-prototypes]
-   uint64_t reduceSizeAndFraction(
-            ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1854:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   uint64_t reduceSizeAndFraction(
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1900:6: warning: no previous prototype for function 'is_low_refresh_rate' [-Wmissing-prototypes]
-   bool is_low_refresh_rate(struct pipe_ctx *pipe)
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1900:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool is_low_refresh_rate(struct pipe_ctx *pipe)
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1909:9: warning: no previous prototype for function 'get_clock_divider' [-Wmissing-prototypes]
-   uint8_t get_clock_divider(struct pipe_ctx *pipe, bool account_low_refresh_rate)
-           ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1909:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   uint8_t get_clock_divider(struct pipe_ctx *pipe, bool account_low_refresh_rate)
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1944:7: warning: variable 'clamshell_closed' set but not used [-Wunused-but-set-variable]
-           bool clamshell_closed = false;
-                ^
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1929:5: warning: no previous prototype for function 'dcn10_align_pixel_clocks' [-Wmissing-prototypes]
-   int dcn10_align_pixel_clocks(
-       ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1929:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dcn10_align_pixel_clocks(
-   ^
-   static 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2344:6: warning: no previous prototype for function 'dcn10_program_pte_vm' [-Wmissing-prototypes]
-   void dcn10_program_pte_vm(struct dce_hwseq *hws, struct hubp *hubp)
-        ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2344:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dcn10_program_pte_vm(struct dce_hwseq *hws, struct hubp *hubp)
-   ^
-   static 
-   8 warnings generated.
+On 1/9/22 20:23, Matthew Wilcox (Oracle) wrote:
+> Return the head page instead of storing it to a passed parameter.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>   mm/gup.c | 11 +++++------
+>   1 file changed, 5 insertions(+), 6 deletions(-)
 
 
-vim +/optc2_align_vblanks +312 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_optc.c
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-   298	
- > 299	void optc2_set_dwb_source(struct timing_generator *optc,
-   300			uint32_t dwb_pipe_inst)
-   301	{
-   302		struct optc *optc1 = DCN10TG_FROM_TG(optc);
-   303	
-   304		if (dwb_pipe_inst == 0)
-   305			REG_UPDATE(DWB_SOURCE_SELECT,
-   306					OPTC_DWB0_SOURCE_SELECT, optc->inst);
-   307		else if (dwb_pipe_inst == 1)
-   308			REG_UPDATE(DWB_SOURCE_SELECT,
-   309					OPTC_DWB1_SOURCE_SELECT, optc->inst);
-   310	}
-   311	
- > 312	void optc2_align_vblanks(
-   313		struct timing_generator *optc_master,
-   314		struct timing_generator *optc_slave,
-   315		uint32_t master_pixel_clock_100Hz,
-   316		uint32_t slave_pixel_clock_100Hz,
-   317		uint8_t master_clock_divider,
-   318		uint8_t slave_clock_divider)
-   319	{
-   320		/* accessing slave OTG registers */
-   321		struct optc *optc1 = DCN10TG_FROM_TG(optc_slave);
-   322	
-   323		uint32_t master_v_active = 0;
-   324		uint32_t master_h_total = 0;
-   325		uint32_t slave_h_total = 0;
-   326		uint64_t L, XY, p = 10000;
-   327		uint32_t X, Y;
-   328		uint32_t master_update_lock;
-   329	
-   330		/* disable slave OTG */
-   331		REG_UPDATE(OTG_CONTROL, OTG_MASTER_EN, 0);
-   332		/* wait until disabled */
-   333		REG_WAIT(OTG_CONTROL,
-   334				 OTG_CURRENT_MASTER_EN_STATE,
-   335				 0, 10, 5000);
-   336	
-   337		REG_GET(OTG_H_TOTAL, OTG_H_TOTAL, &slave_h_total);
-   338	
-   339		/* assign slave OTG to be controlled by master update lock */
-   340		REG_SET(OTG_GLOBAL_CONTROL0, 0,
-   341				OTG_MASTER_UPDATE_LOCK_SEL, optc_master->inst);
-   342	
-   343		/* accessing master OTG registers */
-   344		optc1 = DCN10TG_FROM_TG(optc_master);
-   345	
-   346		/* saving update lock state, not sure if it's needed */
-   347		REG_GET(OTG_MASTER_UPDATE_LOCK,
-   348				OTG_MASTER_UPDATE_LOCK, &master_update_lock);
-   349		/* unlocking master OTG */
-   350		REG_SET(OTG_MASTER_UPDATE_LOCK, 0,
-   351				OTG_MASTER_UPDATE_LOCK, 0);
-   352	
-   353		REG_GET(OTG_V_BLANK_START_END,
-   354				OTG_V_BLANK_START, &master_v_active);
-   355		REG_GET(OTG_H_TOTAL, OTG_H_TOTAL, &master_h_total);
-   356	
-   357		/* calculate when to enable slave OTG */
-   358		L = p * slave_h_total * master_pixel_clock_100Hz /
-   359			master_h_total / slave_pixel_clock_100Hz;
-   360		XY = L / p;
-   361		Y = master_v_active - XY - 1;
-   362		X = ((XY + 1) * p - L) * master_h_total / master_clock_divider / p;
-   363	
-   364		/*
-   365		 * set master OTG to unlock when V/H
-   366		 * counters reach calculated values
-   367		 */
-   368		REG_UPDATE(OTG_GLOBAL_CONTROL1,
-   369				   MASTER_UPDATE_LOCK_DB_EN, 1);
-   370		REG_UPDATE_2(OTG_GLOBAL_CONTROL1,
-   371					 MASTER_UPDATE_LOCK_DB_X,
-   372					 X,
-   373					 MASTER_UPDATE_LOCK_DB_Y,
-   374					 Y);
-   375	
-   376		/* lock master OTG */
-   377		REG_SET(OTG_MASTER_UPDATE_LOCK, 0,
-   378				OTG_MASTER_UPDATE_LOCK, 1);
-   379		REG_WAIT(OTG_MASTER_UPDATE_LOCK,
-   380				 UPDATE_LOCK_STATUS, 1, 1, 10);
-   381	
-   382		/* accessing slave OTG registers */
-   383		optc1 = DCN10TG_FROM_TG(optc_slave);
-   384	
-   385		/*
-   386		 * enable slave OTG, the OTG is locked with
-   387		 * master's update lock, so it will not run
-   388		 */
-   389		REG_UPDATE(OTG_CONTROL,
-   390				   OTG_MASTER_EN, 1);
-   391	
-   392		/* accessing master OTG registers */
-   393		optc1 = DCN10TG_FROM_TG(optc_master);
-   394	
-   395		/*
-   396		 * unlock master OTG. When master H/V counters reach
-   397		 * DB_XY point, slave OTG will start
-   398		 */
-   399		REG_SET(OTG_MASTER_UPDATE_LOCK, 0,
-   400				OTG_MASTER_UPDATE_LOCK, 0);
-   401	
-   402		/* accessing slave OTG registers */
-   403		optc1 = DCN10TG_FROM_TG(optc_slave);
-   404	
-   405		/* wait for slave OTG to start running*/
-   406		REG_WAIT(OTG_CONTROL,
-   407				 OTG_CURRENT_MASTER_EN_STATE,
-   408				 1, 10, 5000);
-   409	
-   410		/* accessing master OTG registers */
-   411		optc1 = DCN10TG_FROM_TG(optc_master);
-   412	
-   413		/* disable the XY point*/
-   414		REG_UPDATE(OTG_GLOBAL_CONTROL1,
-   415				   MASTER_UPDATE_LOCK_DB_EN, 0);
-   416		REG_UPDATE_2(OTG_GLOBAL_CONTROL1,
-   417					 MASTER_UPDATE_LOCK_DB_X,
-   418					 0,
-   419					 MASTER_UPDATE_LOCK_DB_Y,
-   420					 0);
-   421	
-   422		/*restore master update lock*/
-   423		REG_SET(OTG_MASTER_UPDATE_LOCK, 0,
-   424				OTG_MASTER_UPDATE_LOCK, master_update_lock);
-   425	
-   426		/* accessing slave OTG registers */
-   427		optc1 = DCN10TG_FROM_TG(optc_slave);
-   428		/* restore slave to be controlled by it's own */
-   429		REG_SET(OTG_GLOBAL_CONTROL0, 0,
-   430				OTG_MASTER_UPDATE_LOCK_SEL, optc_slave->inst);
-   431	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 6eedca605b3d..8a0ea220ced1 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -245,9 +245,8 @@ static inline struct page *compound_range_next(unsigned long i,
+>   	return page;
+>   }
+>   
+> -static inline void compound_next(unsigned long i, unsigned long npages,
+> -				 struct page **list, struct page **head,
+> -				 unsigned int *ntails)
+> +static inline struct page *compound_next(unsigned long i,
+> +		unsigned long npages, struct page **list, unsigned int *ntails)
+>   {
+>   	struct page *page;
+>   	unsigned int nr;
+> @@ -258,8 +257,8 @@ static inline void compound_next(unsigned long i, unsigned long npages,
+>   			break;
+>   	}
+>   
+> -	*head = page;
+>   	*ntails = nr - i;
+> +	return page;
+>   }
+>   
+>   /**
+> @@ -297,7 +296,7 @@ void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
+>   	}
+>   
+>   	for (index = 0; index < npages; index += ntails) {
+> -		compound_next(index, npages, pages, &head, &ntails);
+> +		head = compound_next(index, npages, pages, &ntails);
+>   		/*
+>   		 * Checking PageDirty at this point may race with
+>   		 * clear_page_dirty_for_io(), but that's OK. Two key
+> @@ -386,7 +385,7 @@ void unpin_user_pages(struct page **pages, unsigned long npages)
+>   		return;
+>   
+>   	for (index = 0; index < npages; index += ntails) {
+> -		compound_next(index, npages, pages, &head, &ntails);
+> +		head = compound_next(index, npages, pages, &ntails);
+>   		put_compound_head(head, ntails, FOLL_PIN);
+>   	}
+>   }
+

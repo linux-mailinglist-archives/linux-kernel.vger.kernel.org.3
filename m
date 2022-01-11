@@ -2,37 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E3648A44C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A6348A44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345874AbiAKAX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:23:28 -0500
+        id S1345877AbiAKAXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:23:31 -0500
 Received: from relmlor2.renesas.com ([210.160.252.172]:4418 "EHLO
         relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238204AbiAKAX0 (ORCPT
+        by vger.kernel.org with ESMTP id S238204AbiAKAXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:23:26 -0500
+        Mon, 10 Jan 2022 19:23:30 -0500
 X-IronPort-AV: E=Sophos;i="5.88,278,1635174000"; 
-   d="scan'208";a="106595501"
+   d="scan'208";a="106595510"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 11 Jan 2022 09:23:25 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 11 Jan 2022 09:23:29 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 382904157D12;
-        Tue, 11 Jan 2022 09:23:23 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id BD5E14157D0D;
+        Tue, 11 Jan 2022 09:23:26 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+        Robert Foss <robert.foss@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/13] media: vsp1: Use platform_get_irq() to get the interrupt
-Date:   Tue, 11 Jan 2022 00:23:02 +0000
-Message-Id: <20220111002314.15213-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 02/13] media: camss: Use platform_get_irq_byname() to get the interrupt
+Date:   Tue, 11 Jan 2022 00:23:03 +0000
+Message-Id: <20220111002314.15213-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -40,60 +42,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+platform_get_resource_byname(pdev, IORESOURCE_IRQ, ..) relies on static
 allocation of IRQ resources in DT core code, this causes an issue
 when using hierarchical interrupt domains using "interrupts" property
 in the node as this bypasses the hierarchical setup and messes up the
 irq chaining.
 
 In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+code use platform_get_irq_byname().
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
 v1->v2
-* Used a local variable irq.
-* Included Ack from Laurent
+* No change.
 ---
- drivers/media/platform/vsp1/vsp1_drv.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid.c   | 12 ++++--------
+ drivers/media/platform/qcom/camss/camss-csiphy.c | 12 ++++--------
+ drivers/media/platform/qcom/camss/camss-ispif.c  | 12 ++++--------
+ drivers/media/platform/qcom/camss/camss-vfe.c    | 12 ++++--------
+ 4 files changed, 16 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
-index c9044785b903..e5b865dca111 100644
---- a/drivers/media/platform/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/vsp1/vsp1_drv.c
-@@ -794,9 +794,9 @@ static int vsp1_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index a1637b78568b..ac3504e98668 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -544,7 +544,6 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
  {
- 	struct vsp1_device *vsp1;
- 	struct device_node *fcp_node;
--	struct resource *irq;
- 	unsigned int i;
+ 	struct device *dev = camss->dev;
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	struct resource *r;
+ 	int i, j;
  	int ret;
-+	int irq;
  
- 	vsp1 = devm_kzalloc(&pdev->dev, sizeof(*vsp1), GFP_KERNEL);
- 	if (vsp1 == NULL)
-@@ -813,14 +813,12 @@ static int vsp1_probe(struct platform_device *pdev)
- 	if (IS_ERR(vsp1->mmio))
- 		return PTR_ERR(vsp1->mmio);
+@@ -571,14 +570,11 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
  
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!irq) {
--		dev_err(&pdev->dev, "missing IRQ\n");
+ 	/* Interrupt */
+ 
+-	r = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
+-					 res->interrupt[0]);
+-	if (!r) {
+-		dev_err(dev, "missing IRQ\n");
 -		return -EINVAL;
 -	}
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
++	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
++	if (ret < 0)
++		return ret;
  
--	ret = devm_request_irq(&pdev->dev, irq->start, vsp1_irq_handler,
--			      IRQF_SHARED, dev_name(&pdev->dev), vsp1);
-+	ret = devm_request_irq(&pdev->dev, irq, vsp1_irq_handler,
-+			       IRQF_SHARED, dev_name(&pdev->dev), vsp1);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to request IRQ\n");
- 		return ret;
+-	csid->irq = r->start;
++	csid->irq = ret;
+ 	snprintf(csid->irq_name, sizeof(csid->irq_name), "%s_%s%d",
+ 		 dev_name(dev), MSM_CSID_NAME, csid->id);
+ 	ret = devm_request_irq(dev, csid->irq, csid->ops->isr,
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index 24eec16197e7..6b225d06f35a 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -568,7 +568,6 @@ int msm_csiphy_subdev_init(struct camss *camss,
+ {
+ 	struct device *dev = camss->dev;
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	struct resource *r;
+ 	int i, j;
+ 	int ret;
+ 
+@@ -611,14 +610,11 @@ int msm_csiphy_subdev_init(struct camss *camss,
+ 
+ 	/* Interrupt */
+ 
+-	r = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
+-					 res->interrupt[0]);
+-	if (!r) {
+-		dev_err(dev, "missing IRQ\n");
+-		return -EINVAL;
+-	}
++	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
++	if (ret < 0)
++		return ret;
+ 
+-	csiphy->irq = r->start;
++	csiphy->irq = ret;
+ 	snprintf(csiphy->irq_name, sizeof(csiphy->irq_name), "%s_%s%d",
+ 		 dev_name(dev), MSM_CSIPHY_NAME, csiphy->id);
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-ispif.c b/drivers/media/platform/qcom/camss/camss-ispif.c
+index ba5d65f6ef34..4ee11bb979cd 100644
+--- a/drivers/media/platform/qcom/camss/camss-ispif.c
++++ b/drivers/media/platform/qcom/camss/camss-ispif.c
+@@ -1100,7 +1100,6 @@ int msm_ispif_subdev_init(struct camss *camss,
+ 	struct device *dev = camss->dev;
+ 	struct ispif_device *ispif = camss->ispif;
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	struct resource *r;
+ 	int i;
+ 	int ret;
+ 
+@@ -1153,14 +1152,11 @@ int msm_ispif_subdev_init(struct camss *camss,
+ 
+ 	/* Interrupt */
+ 
+-	r = platform_get_resource_byname(pdev, IORESOURCE_IRQ, res->interrupt);
+-
+-	if (!r) {
+-		dev_err(dev, "missing IRQ\n");
+-		return -EINVAL;
+-	}
++	ret = platform_get_irq_byname(pdev, res->interrupt);
++	if (ret < 0)
++		return ret;
+ 
+-	ispif->irq = r->start;
++	ispif->irq = ret;
+ 	snprintf(ispif->irq_name, sizeof(ispif->irq_name), "%s_%s",
+ 		 dev_name(dev), MSM_ISPIF_NAME);
+ 	if (camss->version == CAMSS_8x16)
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 71f78b40e7f5..7c2311d70546 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -1279,7 +1279,6 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ {
+ 	struct device *dev = camss->dev;
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	struct resource *r;
+ 	int i, j;
+ 	int ret;
+ 
+@@ -1312,14 +1311,11 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ 
+ 	/* Interrupt */
+ 
+-	r = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
+-					 res->interrupt[0]);
+-	if (!r) {
+-		dev_err(dev, "missing IRQ\n");
+-		return -EINVAL;
+-	}
++	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
++	if (ret < 0)
++		return ret;
+ 
+-	vfe->irq = r->start;
++	vfe->irq = ret;
+ 	snprintf(vfe->irq_name, sizeof(vfe->irq_name), "%s_%s%d",
+ 		 dev_name(dev), MSM_VFE_NAME, vfe->id);
+ 	ret = devm_request_irq(dev, vfe->irq, vfe->ops->isr,
 -- 
 2.17.1
 

@@ -2,237 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCEA48A752
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F94148A71E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343770AbiAKF1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 00:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244570AbiAKF1A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:27:00 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C21C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:27:00 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id i3so44065085ybh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=R1bERSQCaqkwr4Ier9XvdFqneg9JYofIHhE7gfGWTaM=;
-        b=lzax8mQ17EiCCj1+UXKW1WimqNztElqWeuJ0aJqQwrZg7UOBOQ4J0Low5yhm1NNEFG
-         l4QFpbgS4Ess8CJMYHfgh3o+eJU0jgpoccqnLB/RJWUeqcgk+ELov5WF/KLNIc7uS8V6
-         Dnn+G8gm9FJPdJQTRWV/NB0UOpCC8OAsyBUnkBP+mUWdoTCxwCa2BUbnbdwwtA6hDr4g
-         X6WdtGMLDEskYcBrIBRwg22ywWsAVDUy6Y35a2nK9JUs9vfeDcEBJOR5owW9OPDM/+Ar
-         p3fARHGb30MwUsLHbVqsvlEzJMrpHirMDbYs4dgaatozwXAA1iJCiByTg5m+rAwzAgvH
-         r+Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=R1bERSQCaqkwr4Ier9XvdFqneg9JYofIHhE7gfGWTaM=;
-        b=6FmR1TJFLobKHw91W2K+uHw7IBgtdo4uUMUn5hIJtcj2x18wv3q4Zk5YdOxVczmtM0
-         cCIO48Qk//uBRlAqsPIZLU64OvOaF1dCKYFl2Pjtd6/85xTTROY0hIFyfbAkveMwW+95
-         imqu8tvpJi501QOW7q+xN3pluDnWg2IPxsU3qzGwevlY1pBqqulGhDv1hbx3i5zhAHPo
-         XOB85BVj1uQw9xrGWqoeESgGjwq2nRiCDeajxIoaIqd45eeRc9AG4B8oazsbqRiyNfas
-         F0fBK1sg6Bty9ZUR+zvVgvG8u70U28Sw8vRzptcU137FlCbPgSIpNkMRSYKzOiVgSxFd
-         DnKw==
-X-Gm-Message-State: AOAM530t3R3fuTioy9VaH+aU8dyYkDwj+jXevvdYBt287rN+vvO7VhrD
-        dA1CUw6U/O9jjzUANvXzWSmLeb21gw5x8GQkodVAnw==
-X-Google-Smtp-Source: ABdhPJw9cNwxDEP5Q3LctsGL5fl3poAUrM2xtvkA18XjpkcqDuNeDzo/EB7m5i26BeO52IOHvy7SfpCg06c43zrV1Iw=
-X-Received: by 2002:a25:4b85:: with SMTP id y127mr3838777yba.181.1641878819258;
- Mon, 10 Jan 2022 21:26:59 -0800 (PST)
+        id S244570AbiAKFVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 00:21:19 -0500
+Received: from mga09.intel.com ([134.134.136.24]:10946 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241556AbiAKFVP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 00:21:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641878475; x=1673414475;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SeBpGHW2Awj9fCFruQbs0jysOX1WgLyM8SQ0XPcSawQ=;
+  b=iJxKJ5mvbHeW1mtzxeNeMR46qSAbhK+VpSzkI1QBBw78v5k3tr7o8Ii/
+   TP7drDAdsGNcPLb3am1XiOCYQ9LP98xuu/f2ZHr8Bl/3s3SS6wiEwrV9N
+   8g5OSy/cFr3ZNtNk+E7XRMQYdz+AW8pMgp4UL7vPfKX/wZ5kfnOlAu0Cr
+   eFXhlhVaxHNjgaGN/jOEErNWTYW6QuqvXomtQDOlgwF8tCpwcEmk+dnPw
+   J2luymyB2MOE4zXyiml3ZHFjrZMAYpu68qaP7gKxuhKjI6JKrN1ql5VAJ
+   tHIMWohrMp2cMxaOkAUsVldwhYMLB3VbNQDhljZQtWlICN6s5mAEmqHeM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="243201507"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="243201507"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 21:21:14 -0800
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="690859624"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 21:21:12 -0800
+Date:   Tue, 11 Jan 2022 13:32:06 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
+        tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] KVM: Do compatibility checks on hotplugged CPUs
+Message-ID: <20220111053205.GD2175@gao-cwp>
+References: <20211227081515.2088920-1-chao.gao@intel.com>
+ <20211227081515.2088920-7-chao.gao@intel.com>
+ <YdzTfIEZ727L4g2R@google.com>
 MIME-Version: 1.0
-References: <20220110071817.337619922@linuxfoundation.org>
-In-Reply-To: <20220110071817.337619922@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Jan 2022 10:56:48 +0530
-Message-ID: <CA+G9fYtGyJT9pxtLW7WOuKbxwB_Eznnv-9R2+_-+=HfKbtJ6Rw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/43] 5.10.91-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdzTfIEZ727L4g2R@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 at 13:00, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Jan 11, 2022 at 12:46:52AM +0000, Sean Christopherson wrote:
+>On Mon, Dec 27, 2021, Chao Gao wrote:
+>> At init time, KVM does compatibility checks to ensure that all online
+>> CPUs support hardware virtualization and a common set of features. But
+>> KVM uses hotplugged CPUs without such compatibility checks. On Intel
+>> CPUs, this leads to #GP if the hotplugged CPU doesn't support VMX or
+>> vmentry failure if the hotplugged CPU doesn't meet minimal feature
+>> requirements.
+>> 
+>> Do compatibility checks when onlining a CPU. If any VM is running,
+>> KVM hotplug callback returns an error to abort onlining incompatible
+>> CPUs.
+>> 
+>> But if no VM is running, onlining incompatible CPUs is allowed. Instead,
+>> KVM is prohibited from creating VMs similar to the policy for init-time
+>> compatibility checks.
 >
-> This is the start of the stable review cycle for the 5.10.91 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>...
 >
-> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
-> Anything received after that time might be too late.
+>> ---
+>>  virt/kvm/kvm_main.c | 36 ++++++++++++++++++++++++++++++++++--
+>>  1 file changed, 34 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>> index c1054604d1e8..0ff80076d48d 100644
+>> --- a/virt/kvm/kvm_main.c
+>> +++ b/virt/kvm/kvm_main.c
+>> @@ -106,6 +106,8 @@ LIST_HEAD(vm_list);
+>>  static cpumask_var_t cpus_hardware_enabled;
+>>  static int kvm_usage_count;
+>>  static atomic_t hardware_enable_failed;
+>> +/* Set if hardware becomes incompatible after CPU hotplug */
+>> +static bool hardware_incompatible;
+>>  
+>>  static struct kmem_cache *kvm_vcpu_cache;
+>>  
+>> @@ -4855,20 +4857,32 @@ static void hardware_enable_nolock(void *junk)
+>>  
+>>  static int kvm_online_cpu(unsigned int cpu)
+>>  {
+>> -	int ret = 0;
+>> +	int ret;
+>>  
+>> +	ret = kvm_arch_check_processor_compat();
+>>  	raw_spin_lock(&kvm_count_lock);
+>>  	/*
+>>  	 * Abort the CPU online process if hardware virtualization cannot
+>>  	 * be enabled. Otherwise running VMs would encounter unrecoverable
+>>  	 * errors when scheduled to this CPU.
+>>  	 */
+>> -	if (kvm_usage_count) {
+>> +	if (!ret && kvm_usage_count) {
+>>  		hardware_enable_nolock(NULL);
+>>  		if (atomic_read(&hardware_enable_failed)) {
+>>  			ret = -EIO;
+>>  			pr_info("kvm: abort onlining CPU%d", cpu);
+>>  		}
+>> +	} else if (ret && !kvm_usage_count) {
+>> +		/*
+>> +		 * Continue onlining an incompatible CPU if no VM is
+>> +		 * running. KVM should reject creating any VM after this
+>> +		 * point. Then this CPU can be still used to run non-VM
+>> +		 * workload.
+>> +		 */
+>> +		ret = 0;
+>> +		hardware_incompatible = true;
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.91-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
+>This has a fairly big flaw in that it prevents KVM from creating VMs even if the
+>offending CPU is offlined.  That seems like a very reasonable thing to do, e.g.
+>admin sees that hotplugging a CPU broke KVM and removes the CPU to remedy the
+>problem.  And if KVM is built-in, reloading KVM to wipe hardware_incompatible
+>after offlining the CPU isn't an option.
+
+Ideally, yes, creation VMs should be allowed after offending CPUs are offlined.
+But the problem is kind of foundamental: 
+
+After kernel tries to online a CPU without VMX, boot_cpu_has(X86_FEATURE_VMX)
+returns false. So, the current behavior is reloading KVM would fail if
+kernel *tried* to bring up a CPU without VMX. So, it looks to me that
+boot_cpu_has() doesn't do feature re-evalution either. Given that, I doubt
+the value of making KVM able to create VM in this case.
+
 >
-> thanks,
+>To make this approach work, I think kvm_offline_cpu() would have to reevaluate
+>hardware_incompatible if the flag is set.
 >
-> greg k-h
+>And should there be a KVM module param to let the admin opt in/out of this
+>behavior?  E.g. if the primary use case for a system is to run VMs, disabling
+>KVM just to online a CPU isn't very helpful.
+>
+>That said, I'm not convinced that continuing with the hotplug in this scenario
+>is ever the right thing to do.  Either the CPU being hotplugged really is a different
+>CPU, or it's literally broken.  In both cases, odds are very, very good that running
+>on the dodgy CPU will hose the kernel sooner or later, i.e. KVM's compatibility checks
+>are just the canary in the coal mine.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Ok. Then here are two options:
+1. KVM always prevents incompatible CPUs from being brought up regardless of running VMs
+2. make "disabling KVM on incompatible CPUs" an opt-in feature.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Which one do you think is better?
 
-## Build
-* kernel: 5.10.91-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 83e826769db74cb48cb7063c726e75555a0e241f
-* git describe: v5.10.90-44-g83e826769db7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.90-44-g83e826769db7
+And as said above, even with option 1, KVM reloading would fail due to
+boot_cpu_has(X86_FEATURE_VMX). I suppose it isn't necessary to be fixed in this series.
 
-## Test Regressions (compared to v5.10.88-77-g44b3abecd41b)
-No test regressions found.
+>
+>TDX is a different beast as (a) that's purely a security restriction and (b) anyone
+>trying to run TDX guests darn well better know that TDX doesn't allow hotplug.
+>In other words, if TDX gets disabled due to hotplug, either someone majorly screwed
+>up and is going to be unhappy no matter what, or there's no intention of using TDX
+>and it's a complete don't care.
+>
+>> +		pr_info("kvm: prohibit VM creation due to incompatible CPU%d",
+>
+>pr_info() is a bit weak, this should be at least pr_warn() and maybe even pr_err().
+>
+>> +			cpu);
+>
+>Eh, I'd omit the newline and let that poke out.
 
-## Metric Regressions (compared to v5.10.88-77-g44b3abecd41b)
-No metric regressions found.
+Will do.
 
-## Test Fixes (compared to v5.10.88-77-g44b3abecd41b)
-No test fixes found.
+>
+>>  	}
+>>  	raw_spin_unlock(&kvm_count_lock);
+>>  	return ret;
+>> @@ -4913,8 +4927,24 @@ static int hardware_enable_all(void)
+>>  {
+>>  	int r = 0;
+>>  
+>> +	/*
+>> +	 * During onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
+>> +	 * is called. on_each_cpu() between them includes the CPU. As a result,
+>> +	 * hardware_enable_nolock() may get invoked before kvm_online_cpu().
+>> +	 * This would enable hardware virtualization on that cpu without
+>> +	 * compatibility checks, which can potentially crash system or break
+>> +	 * running VMs.
+>> +	 *
+>> +	 * Disable CPU hotplug to prevent this case from happening.
+>> +	 */
+>> +	cpus_read_lock();
+>>  	raw_spin_lock(&kvm_count_lock);
+>>  
+>> +	if (hardware_incompatible) {
+>
+>Another error message would likely be helpful here.  Even better would be if KVM
+>could provide some way for userspace to query which CPU(s) is bad.
 
-## Metric Fixes (compared to v5.10.88-77-g44b3abecd41b)
-No metric fixes found.
+If option 1 is chosen, this check will be removed.
 
-## Test result summary
-total: 90181, pass: 77272, fail: 575, skip: 11411, xfail: 923
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 255 passed, 4 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 22 passed, 2 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+For option 2, will add an error message. And how about a debugfs tunable to provide
+the list of bad CPUs?

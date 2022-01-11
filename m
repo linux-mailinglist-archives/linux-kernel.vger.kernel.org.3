@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 920DD48B622
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6CE48B623
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350183AbiAKSwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242645AbiAKSwk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:52:40 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C646C06173F;
-        Tue, 11 Jan 2022 10:52:40 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id o7so116625ioo.9;
-        Tue, 11 Jan 2022 10:52:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+d1ZeXXq1xWjZdp0a/kklqkhFu5pCumiIP9r3pU07RA=;
-        b=ixZToSTvKWyoKi8kROyeDiMw1wQ5IFcOJPJFNnsQO6K8WwoM5oXR0oWJXfkGYb186y
-         5bNbeamb22HD3vx58AzgbhDhBpxcfMJf7cpa4/8WyF1wZ24A9+K66PNGVl0Oha0RwMB7
-         lRWgRlPVgLizHDrAC6wdz6k9AXA7BljTWN2uYfmNceRx2hTmVnCCip+5a57UwxWCob7B
-         KVKrfohOqQJ2v9c5mcEqMpMj3Or5LIbJQYkjGD0PERi+6dK6IW9JUPBizq3/M0XHLUES
-         KfGBxf32JZ5yJmwfhAi/sKdYsK80P1Nu0Pa3bbHTUl3rhWVqwNoU/NEQGt12w7USeqpb
-         8b3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+d1ZeXXq1xWjZdp0a/kklqkhFu5pCumiIP9r3pU07RA=;
-        b=TViz4g30zlzYMSVrSH6YJkSoE5TisJQzOtNDp3THbmspf+VW/brUeMk0WQNtGbqD5V
-         sWUVp0oQ/WcnaMrtshvQ6c3DoC4wnibqHNzS265jxwG/15h9LrB1dL+dNvIVaqTOy/bi
-         Nev0POBclDdimsiPUM3Uba2RiK8mQNR/iHTTPcVhrlgGb9px0NdgD7A1mC7NejnmEGTO
-         i9dVYVZ2X4SZ1w6anBwfxQz0VeeZPoS99vL0iH/UKpSkKWFG9Lwsak1dT2W4SvnKJyuq
-         yWVfVf4sLGLLuZXw1kS6EtiPVDvuuYWAW/pBMsBMXSSI8DBbsq7EfFLa6PlG816fsoIJ
-         uTrw==
-X-Gm-Message-State: AOAM530upPYEIH86zp2/EErvwSHzjwHp7ZVZm1NCEz9zBRe2kL0+bAIP
-        oKeuAiYUq7Dc2Cx2lnhY8Y7oRhyzawkhqEfaB/s=
-X-Google-Smtp-Source: ABdhPJwivP9fRDpKvRLUdMR7csDsvPZRq6oOhKSUxm/dEZywlXLCLZJwMUYNdFdp1I4bVmWcYuMlJNVE0mavGO+LgbA=
-X-Received: by 2002:a05:6638:4090:: with SMTP id m16mr3291604jam.67.1641927160095;
- Tue, 11 Jan 2022 10:52:40 -0800 (PST)
+        id S1350212AbiAKSwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:52:46 -0500
+Received: from mga17.intel.com ([192.55.52.151]:20707 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350196AbiAKSwp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 13:52:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641927165; x=1673463165;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Sua0LrwqqZdGAfIsKVCvbngimpLDy6yy/a/Faw9JSso=;
+  b=U5+5cHThWF1WnuACgO++UtvT/QOUXtOShJcumMySq8LkURpxXjyZLXw/
+   D4TjY2VLpopg91KKhD9c8rPk9b33mkXhbtXfZmI+P5/Z9ajSLft1NSpbC
+   /4W2si5LwSf0EhtdY2LYCu1rkqhh5kWhO9EAWaPlXd1LQDtfYLG3+zbb+
+   XmzFCsGUToj1reu1oTvqVfgT/OH6rJmgmt80GPvoTVGp2USA3BC5vkMSK
+   DIE2bY0+Kdcp6/Q6CIrVRGy7ti9dJDhVGS7/msYBl7yrDzQZNaxRUe8AB
+   r3MFiHvZP22xiWQBkE7X7xxmOHlrjRA+2djzEeSfpeE8GGj4R/pAgBm81
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="224256273"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="224256273"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 10:52:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="528400339"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.36.204]) ([10.209.36.204])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 10:52:44 -0800
+Message-ID: <4b655bf8-ce56-ffe6-78b6-1f949b8df11f@linux.intel.com>
+Date:   Tue, 11 Jan 2022 10:52:35 -0800
 MIME-Version: 1.0
-References: <20220111160900.1150050-1-eugene.shalygin@gmail.com>
- <20220111160900.1150050-2-eugene.shalygin@gmail.com> <805dd382-262c-36f0-fcf5-5776223040c8@roeck-us.net>
- <CAB95QATsy2ACgyxWLy2PM2peqoYDEa_j96VNSHBG6GMd+x3LzQ@mail.gmail.com> <050ee3ed-4c30-afb9-d7ce-898d634284be@roeck-us.net>
-In-Reply-To: <050ee3ed-4c30-afb9-d7ce-898d634284be@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Tue, 11 Jan 2022 19:52:29 +0100
-Message-ID: <CAB95QATb_En0KqXRktY99q8UXmosCftMrekpFiAKrAocwFEKmg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH 1/1] perf tools: Add 'm' event modifier for counting
+ machine
+Content-Language: en-US
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-riscv@lists.infradead.org,
+        linux@yadro.com, Nikita Shubin <n.shubin@yadro.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Song Liu <song@kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220111142054.18733-1-nikita.shubin@maquefel.me>
+ <20220111142054.18733-2-nikita.shubin@maquefel.me>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20220111142054.18733-2-nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Just drop it.
 
-OK.
-Are there any other edits (want to generate as few new emails as possible)?
+>   
+>    u - user-space counting
+>    k - kernel counting
+> + m - machine counting
 
-Regards,
-Eugene
+
+You really need to explain what "machine counting" actually is, as well 
+that is likely irrelevant for most CPUs.
+
+I also didn't see that anywhere in the commit logs.
+
+-Andi
+

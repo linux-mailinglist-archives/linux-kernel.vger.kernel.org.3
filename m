@@ -2,31 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A7348ABF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C6348ABFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238096AbiAKK6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:58:02 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48566 "EHLO
+        id S238174AbiAKK6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:58:04 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48594 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349412AbiAKK5w (ORCPT
+        with ESMTP id S1349419AbiAKK5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:57:52 -0500
+        Tue, 11 Jan 2022 05:57:53 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 790DD1F43A3B
+        with ESMTPSA id 53B6C1F43A3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641898671;
-        bh=KxdiyTxbtyGUISJQVKvbV00ATKClSLfkB7WwAzdixIk=;
+        s=mail; t=1641898672;
+        bh=aSvQDDZiVNuGLK0+g5pmKJt4zz1QTtvk8bu0eYABcYE=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GHv2Q9Hw9O1BbymA6bPBFesiEoq1kePtT66PJ1DjL9T0Lyuw7pmEQejYX27zrEz4u
-         KhuGOzv6vfpDCj5CFrlLnkHBLvzkie3LTBvtrB16YGEWmRcK/Bb2hzvlZVkXsnrFML
-         iNuniQCr123u7ZPxvdmcegl9TU+3TZrthSVp7dxcsRMQ/9BZl2LREPItzri5GxaZkm
-         /WHSAxGZI10qwOxlOJSRyKR/BAco+r212N+f+NrpdwlLsuvMd58CuxENW+9OLhpIjG
-         Rd277bNW5X4zdn5WskZtet5CNVidobI8eHXVog2CXJQkuYeC57x3eV1/JA61Xbmop0
-         jQiPE2Mahk5rQ==
-Subject: Re: [PATCH v9 05/15] iommu/mediatek: Add device_link between the
- consumer and the larb devices
+        b=RRn+gK/K6Oe8djLMwl7E0Zru4jSSkxXRUnWQAAfuLZ0AiA2fLNRpLyLimSJNIhMtu
+         GbCmYibe3IdiVyevThwQNpRh3KXcNGbfn7j01ofTIwJnEZPN+qORhigdQ1iVcg8nuS
+         ZON68CYWhNbbK5oABT+8xs7E9Oa1MWcR2JGP5Ca0LTcwd+YSk54BB4Kg+Jvof5vkRI
+         KzK0frlA9SUROFZNEy2aduPWb5c4FqbSQVdv4RPrj69rUl14uTz3hOMqtH/l+MnsL2
+         j7/wUm/JmNhovDWBm9IYHFOnL+5nul/9tnRNeWUnNgejZYTwTHVe0t2PjmYKrTa4Vh
+         NmwUYMSMA4pBg==
+Subject: Re: [PATCH v9 04/15] iommu/mediatek: Add probe_defer for smi-larb
 To:     Yong Wu <yong.wu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Joerg Roedel <joro@8bytes.org>,
@@ -53,15 +52,15 @@ Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         iommu@lists.linux-foundation.org, Daniel Vetter <daniel@ffwll.ch>,
         Robin Murphy <robin.murphy@arm.com>
 References: <20211112105509.12010-1-yong.wu@mediatek.com>
- <20211112105509.12010-6-yong.wu@mediatek.com>
+ <20211112105509.12010-5-yong.wu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <cb4054ae-4646-ee61-162f-96112ef6dbcf@collabora.com>
-Date:   Tue, 11 Jan 2022 11:57:47 +0100
+Message-ID: <eaf59017-49d2-6579-a106-44bd2a21e5af@collabora.com>
+Date:   Tue, 11 Jan 2022 11:57:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211112105509.12010-6-yong.wu@mediatek.com>
+In-Reply-To: <20211112105509.12010-5-yong.wu@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -70,51 +69,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 12/11/21 11:54, Yong Wu ha scritto:
-> MediaTek IOMMU-SMI diagram is like below. all the consumer connect with
-> smi-larb, then connect with smi-common.
+> Prepare for adding device_link.
 > 
->          M4U
->           |
->      smi-common
->           |
->    -------------
->    |         |    ...
->    |         |
-> larb1     larb2
->    |         |
-> vdec       venc
+> The iommu consumer should use device_link to connect with the
+> smi-larb(supplier). then the smi-larb should run before the iommu
+> consumer. Here we delay the iommu driver until the smi driver is ready,
+> then all the iommu consumers always are after the smi driver.
 > 
-> When the consumer works, it should enable the smi-larb's power which
-> also need enable the smi-common's power firstly.
+> When there is no this patch, if some consumer drivers run before
+> smi-larb, the supplier link_status is DL_DEV_NO_DRIVER(0) in the
+> device_link_add, then device_links_driver_bound will use WARN_ON
+> to complain that the link_status of supplier is not right.
 > 
-> Thus, First of all, use the device link connect the consumer and the
-> smi-larbs. then add device link between the smi-larb and smi-common.
+> device_is_bound may be more elegant here. but it is not allowed to
+> EXPORT from https://lore.kernel.org/patchwork/patch/1334670/.
 > 
-> This patch adds device_link between the consumer and the larbs.
-> 
-> When device_link_add, I add the flag DL_FLAG_STATELESS to avoid calling
-> pm_runtime_xx to keep the original status of clocks. It can avoid two
-> issues:
-> 1) Display HW show fastlogo abnormally reported in [1]. At the beggining,
-> all the clocks are enabled before entering kernel, but the clocks for
-> display HW(always in larb0) will be gated after clk_enable and clk_disable
-> called from device_link_add(->pm_runtime_resume) and rpm_idle. The clock
-> operation happened before display driver probe. At that time, the display
-> HW will be abnormal.
-> 
-> 2) A deadlock issue reported in [2]. Use DL_FLAG_STATELESS to skip
-> pm_runtime_xx to avoid the deadlock.
-> 
-> Corresponding, DL_FLAG_AUTOREMOVE_CONSUMER can't be added, then
-> device_link_removed should be added explicitly.
-> 
-> Meanwhile, Currently we don't have a device connect with 2 larbs at the
-> same time. Disallow this case, print the error log.
-> 
-> [1] https://lore.kernel.org/linux-mediatek/1564213888.22908.4.camel@mhfsdcap03/
-> [2] https://lore.kernel.org/patchwork/patch/1086569/
-> 
-> Suggested-by: Tomasz Figa <tfiga@chromium.org>
 > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 > Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
 

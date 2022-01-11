@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A3648AF19
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D7F48AF21
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239746AbiAKOEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:04:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39494 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238129AbiAKOED (ORCPT
+        id S240955AbiAKOHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:07:17 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:52410 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238129AbiAKOHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:04:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CEA4B81A8F;
-        Tue, 11 Jan 2022 14:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCDBC36AEB;
-        Tue, 11 Jan 2022 14:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641909841;
-        bh=FrQdq7kDAd3poov/GMla0fYLMlQNl/bvSE4ucXW91a0=;
+        Tue, 11 Jan 2022 09:07:16 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E9847340;
+        Tue, 11 Jan 2022 15:07:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1641910035;
+        bh=g0YLAV52b9NcNAxgXdu6ezu7y1czJ/KZAXOlP8Y7GVI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k4Czh3u2R0rZ8fmSyF/Xg9q8v0Qw+GuJiorDJzflXigGbZEZgZ+kSmK8ipEOjugJj
-         9xFAaBuFfwsblCFMqDfgXyQPHFxQ+0gO8VXguUvIFwkurBOADt5JmB/Gvinw4pLsjT
-         ANQamPP/H4ItT3X5Lcj+vtgxI0lO+Ysu+fvWXOOE=
-Date:   Tue, 11 Jan 2022 15:03:57 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, singhanc@nvidia.com
-Subject: Re: [PATCH v2 1/1] ucsi_ccg: Check DEV_INT bit only when starting
- CCG4
-Message-ID: <Yd2OTRrtP1XgxmHA@kroah.com>
-References: <20220111133643.589346-1-waynec@nvidia.com>
+        b=sMjgJkR0Q85Xdph+L8A8oylQqk2SmpdtVU412Z+fcLTclsnw8AdmBcyAhxh1VfQLS
+         oLwdtg9Ie5xUBVxI7/Iz6RrlrgjNgqDFIwaW7pCccrsF4lJ0GJ5aFzESsB42j8+Vxj
+         6dJvpLip5cGdhsLaw0zA+G537Av0srlaVrep4mog=
+Date:   Tue, 11 Jan 2022 16:07:04 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
+        geert@linux-m68k.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-binding: media: hynix,hi846: use
+ $defs/port-base port description
+Message-ID: <Yd2PCHehf0O8WMVP@pendragon.ideasonboard.com>
+References: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220111133643.589346-1-waynec@nvidia.com>
+In-Reply-To: <20220111133937.1099917-1-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 09:36:43PM +0800, Wayne Chang wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
+Hi Martin,
+
+Thank you for the patch.
+
+On Tue, Jan 11, 2022 at 02:39:36PM +0100, Martin Kepplinger wrote:
+> This is supposed to fix "make dt_binding_check":
+
+Maybe s/is supposed to fix/fixes/ ? :-) No need to post a new version
+just for that, I think it can be changed when applying the patch. Sakari
+?
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>     Documentation/devicetree/bindings/media/i2c/hynix,hi846.example.dt.yaml:
+> camera@20: port:endpoint: Unevaluated properties are not allowed
+> ('link-frequencies', 'data-lanes' were unexpected)
+>     From schema: Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
 > 
-> after driver sending the UCSI_START cmd, CCGx would
-> clear Bit 0:Device Interrupt in the INTR_REG if CCGX
-> reset successfully.
-> 
-> however, there might be a chance that other bits in
-> INTR_REG are not cleared due to internal data queued
-> in PPM and cause the driver thinks CCGx reset failed.
-> 
-> the commit checks bit 0 in INTR_REG and ignore other
-> bits. ucsi driver would reset PPM later.
-> 
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 > ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> 
+> revision history
+> ----------------
+> v2: thank you, Laurent
+>  * add unevaluatedProperties: false
+> v1:
+> https://lore.kernel.org/linux-media/20220110123804.377944-1-martin.kepplinger@puri.sm/
+> 
+> 
+>  Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> index 85a8877c2f38..5d0fc18a2ea2 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> @@ -49,7 +49,8 @@ properties:
+>      description: Definition of the regulator used for the VDDD power supply.
+>  
+>    port:
+> -    $ref: /schemas/graph.yaml#/properties/port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    unevaluatedProperties: false
+>  
+>      properties:
+>        endpoint:
 
-What commit id does this fix?
+-- 
+Regards,
 
-thanks,
-
-greg k-h
+Laurent Pinchart

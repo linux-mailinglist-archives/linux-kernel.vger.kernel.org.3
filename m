@@ -2,154 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E20448B54B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925A248B4D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345928AbiAKSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:06:48 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4402 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345411AbiAKSEC (ORCPT
+        id S1345403AbiAKSDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:03:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345156AbiAKSDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:04:02 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JYJQ13qZMz688Bk;
-        Wed, 12 Jan 2022 02:00:25 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 11 Jan 2022 19:03:58 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <dhowells@redhat.com>, <dwmw2@infradead.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zohar@linux.ibm.com>,
-        <ebiggers@kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 14/14] KEYS: Introduce load_pgp_public_keyring()
-Date:   Tue, 11 Jan 2022 19:03:18 +0100
-Message-ID: <20220111180318.591029-15-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111180318.591029-1-roberto.sassu@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+        Tue, 11 Jan 2022 13:03:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551AFC061751;
+        Tue, 11 Jan 2022 10:03:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11D4DB81CB6;
+        Tue, 11 Jan 2022 18:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D25B0C36AE3;
+        Tue, 11 Jan 2022 18:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641924207;
+        bh=05lhGuQ61qjKfc4Ul1uwx6BDCffTNP4xWGZ86fqYfB8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=tvXrT0y0nKGnOcCqOITtjA6YKc4KQTch07cGdSn5U+zcJ6Mf5A2sSpqarhIA9mIDD
+         S1RwPtx0b6ZU3EyLyO0gZefIHUxsr5qIyLLwPlVI4QsNWTEZ0Bfkuy6NelVKqRGLvb
+         /nK/aNRln0QNvnb71CWMyD1iRe74sxqfhckd2spi9k3oeutXEC4kDISbFXeakN56dn
+         pI2T9IrIul8bUANOumMqZbO4CJkKRiH1n8XGEDrpWd4aNg2g3pzBEstCF3cVoniuLv
+         sreuNoZSbJaTJS85DooIM+6l6qiCNpt0eeUkVRflWj7V97uyrcGd56WETK4NPL9KNx
+         JNOViCF9eWrPg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B825DF6078E;
+        Tue, 11 Jan 2022 18:03:27 +0000 (UTC)
+Subject: Re: [GIT PULL] LKMM changes for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220110184748.GA1012883@paulmck-ThinkPad-P17-Gen-1>
+References: <20220110184748.GA1012883@paulmck-ThinkPad-P17-Gen-1>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220110184748.GA1012883@paulmck-ThinkPad-P17-Gen-1>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2022.01.09a
+X-PR-Tracked-Commit-Id: c438b7d860b4c1acb4ebff6d8d946d593ca5fe1e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1c824bf768d69fce36de748c60c7197a2b838944
+Message-Id: <164192420767.4972.2339136732603982789.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Jan 2022 18:03:27 +0000
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, boqun.feng@gmail.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Preload PGP keys from 'pubring.gpg', placed in certs/ of the kernel source
-directory.
+The pull request you sent on Mon, 10 Jan 2022 10:47:48 -0800:
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- certs/Kconfig               | 11 +++++++++++
- certs/Makefile              |  7 +++++++
- certs/system_certificates.S | 18 ++++++++++++++++++
- certs/system_keyring.c      | 21 +++++++++++++++++++++
- 4 files changed, 57 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2022.01.09a
 
-diff --git a/certs/Kconfig b/certs/Kconfig
-index ae7f2e876a31..2f7fa68cd958 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -126,4 +126,15 @@ config SYSTEM_REVOCATION_KEYS
- 	  containing X.509 certificates to be included in the default blacklist
- 	  keyring.
- 
-+config PGP_PRELOAD_PUBLIC_KEYS
-+	bool "Preload PGP public keys"
-+	depends on SYSTEM_TRUSTED_KEYRING
-+	select PGP_PRELOAD
-+	default n
-+	help
-+	  Load at boot time the PGP public keys from a reserved area (populated
-+	  with the content of 'certs/pubring.gpg' provided at kernel build
-+	  time), and add them to the built-in keyring. Invalid keys are ignored
-+	  and the loading continues.
-+
- endmenu
-diff --git a/certs/Makefile b/certs/Makefile
-index 279433783b10..c85e0ff560ca 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -22,6 +22,13 @@ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
- # Cope with signing_key.x509 existing in $(srctree) not $(objtree)
- AFLAGS_system_certificates.o := -I$(srctree)
- 
-+ifdef CONFIG_PGP_PRELOAD_PUBLIC_KEYS
-+ifeq ($(shell ls $(srctree)/certs/pubring.gpg 2> /dev/null), $(srctree)/certs/pubring.gpg)
-+AFLAGS_system_certificates.o += -DHAVE_PUBRING_GPG
-+$(obj)/system_certificates.o: $(srctree)/certs/pubring.gpg
-+endif
-+endif
-+
- quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
-       cmd_extract_certs  = scripts/extract-cert $(2) $@
- 
-diff --git a/certs/system_certificates.S b/certs/system_certificates.S
-index e1645e6f4d97..03b361bec758 100644
---- a/certs/system_certificates.S
-+++ b/certs/system_certificates.S
-@@ -47,3 +47,21 @@ module_cert_size:
- #else
- 	.long __module_cert_end - __module_cert_start
- #endif
-+
-+	.align 8
-+	.globl pgp_public_keys
-+pgp_public_keys:
-+__pgp_key_list_start:
-+#ifdef HAVE_PUBRING_GPG
-+	.incbin "certs/pubring.gpg"
-+#endif
-+__pgp_key_list_end:
-+
-+	.align 8
-+	.globl pgp_public_keys_size
-+pgp_public_keys_size:
-+#ifdef CONFIG_64BIT
-+	.quad __pgp_key_list_end - __pgp_key_list_start
-+#else
-+	.long __pgp_key_list_end - __pgp_key_list_start
-+#endif
-diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-index 26a11b1dcd59..1612fb97a652 100644
---- a/certs/system_keyring.c
-+++ b/certs/system_keyring.c
-@@ -167,6 +167,27 @@ static __init int load_system_certificate_list(void)
- }
- late_initcall(load_system_certificate_list);
- 
-+#ifdef CONFIG_PGP_PRELOAD_PUBLIC_KEYS
-+extern __initconst const u8 pgp_public_keys[];
-+extern __initconst const unsigned long pgp_public_keys_size;
-+
-+/*
-+ * Load a list of PGP keys.
-+ */
-+static __init int load_pgp_public_keyring(void)
-+{
-+	pr_notice("Load PGP public keys\n");
-+
-+	if (preload_pgp_keys(pgp_public_keys,
-+			     pgp_public_keys_size,
-+			     builtin_trusted_keys) < 0)
-+		pr_err("Can't load PGP public keys\n");
-+
-+	return 0;
-+}
-+late_initcall(load_pgp_public_keyring);
-+#endif /* CONFIG_PGP_PRELOAD_PUBLIC_KEYS */
-+
- #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
- 
- /**
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1c824bf768d69fce36de748c60c7197a2b838944
+
+Thank you!
+
 -- 
-2.32.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

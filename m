@@ -2,85 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEAC48B23D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8309B48B23F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350020AbiAKQb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:31:26 -0500
-Received: from mail-ua1-f44.google.com ([209.85.222.44]:35401 "EHLO
-        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350003AbiAKQbS (ORCPT
+        id S1350028AbiAKQcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343735AbiAKQcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:31:18 -0500
-Received: by mail-ua1-f44.google.com with SMTP id m90so15579958uam.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:31:17 -0800 (PST)
+        Tue, 11 Jan 2022 11:32:15 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD268C06173F;
+        Tue, 11 Jan 2022 08:32:14 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q8so33921137wra.12;
+        Tue, 11 Jan 2022 08:32:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=cm0/vlrbVoHC8EKntPoP9arLSNzILpHsWLdE6JegkyY=;
+        b=jUbFR8ADouExloAaglVvAmTKIPFozbCj6sCWHnkNmAlyTr6RGgjABvacC2dI1LyJG4
+         9VWoI2mQZ12atYTWkoocdpRJko/+3ntMBQ287jUbDDY6Cr+lynAvNn7lSTydlclKg0UI
+         6Y0cHUM6+UGM5aXwGMFu08/wyscIcHkcc+op8aM8xAz1BiuvEFXy5vGjjz9AXQAdFk2s
+         JaQCbA2Jxg7Qo4ggZgyF7WWXCsSf40RCLSjUXdqnFDZ74XvJ8x68q5eqpx1VV8ksWVlI
+         x4AEiL48+s7vFr75bGudz/4uRjn1pHdo6diVtlBs7oaVQomzTa98RksHhTPRVnG7tbBZ
+         mojQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hBzsLucjMFLkRGvL8/pcBHCnf2yMJj7gUBN+DOgV7i4=;
-        b=bC8WlnsYQT7QeJxQoSmTvY7Ej/YI3CdyaGVr/kBsHe889fRsARGC6MEby9pXn/8jJ/
-         dv5InMoldSpHgPZ4tH00zX6R/AM1nfBU24ehCv++5RY8Ybg+heAruGdcOxZMTSk6V50A
-         wN+ExNcRoDhP3vtbB7pKaFC1YSGv0ykHZhNPsxAYkyZp0w2bfo3U1Q4i3uv+ixdmfNzw
-         xSse4x6V8QPbgZooLXGJayCWn9putyexa96hbVtE/JrKqm+9MKF3ADnjCoWTSaPOakSX
-         FzwMG/O5/FuLU/HHPIBPVdgBIvEJbUyerNH4PWLUjQLnca3WhivXeEB50aeoC7mROfpY
-         DodA==
-X-Gm-Message-State: AOAM532jCqB+8x1DEz6hEuOD3b4ujjOIu0wW8ICR6Bz6IhPNfRLEvOOE
-        NhBvvdYOFfCIffsG4CSph1lwYPV+SJHuUA==
-X-Google-Smtp-Source: ABdhPJycBhLRq7RMzxU0yFadXKIfSiZxhNi35oVYdYJF2ItyuH12ggPdIaHEWln6JzkORntVjR6E6w==
-X-Received: by 2002:a67:ce0b:: with SMTP id s11mr2641931vsl.38.1641918677427;
-        Tue, 11 Jan 2022 08:31:17 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id m8sm5580691uae.8.2022.01.11.08.31.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 08:31:17 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id u6so30936213uaq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:31:16 -0800 (PST)
-X-Received: by 2002:a9f:3e01:: with SMTP id o1mr2359918uai.89.1641918676624;
- Tue, 11 Jan 2022 08:31:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cm0/vlrbVoHC8EKntPoP9arLSNzILpHsWLdE6JegkyY=;
+        b=ARWF3SRTQ19vDQxrOhzsxAHlMa7g31f4aoYOUrWJiueSqa+i7tOMvRSneYiKbvH/Sc
+         Pq+I3ORSH9r2CsFus6d6bTUrSKi/0mMXtghQBA81Xk3HvFi+/YE4j4W+roI9Ke5VnydL
+         2WnHoSD9kf6QXk+l9VwMrs08fs1fywZu4K2dM4QJc9R7iVmDedXJ4jMyZJ2tI1WlVmF6
+         4uXQw9dbs0aN3BiI2A33IfkBWdTq0eMXZtLorzSaQhC3K5uKoshtRAc+o/FAEJvtzblX
+         ftfjkDrNjc6yVktxo52ZnUMGheON8QaaXTMzZTy0Z1+ka5mBhjevv+VGzeVV9oMJh17/
+         WL5w==
+X-Gm-Message-State: AOAM530LcMdf8xhLeVjkcAzRuWYeAhLUTQdITQ73oyGv61slAfXcF7YD
+        b8NJgJOylF8521U8hidNXlCCRePhLWg=
+X-Google-Smtp-Source: ABdhPJwQVDP7EBAc5a0jP9RNVlfv4J3f+CkCGmmtRWzBRPAtxpItgSsAP0A0637uTt6tXPhrN7OB9A==
+X-Received: by 2002:a05:6000:1e15:: with SMTP id bj21mr4679919wrb.118.1641918733315;
+        Tue, 11 Jan 2022 08:32:13 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id m35sm4432736wms.1.2022.01.11.08.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 08:32:12 -0800 (PST)
+Date:   Tue, 11 Jan 2022 17:32:11 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Conley Lee <conleylee@foxmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
+        wens@csie.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] net: ethernet: sun4i-emac: replace magic number with
+ macro
+Message-ID: <Yd2xC7ZaHrTAXcZd@Red>
+References: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
+ <tencent_71466C2135CD1780B19D7844BE3F167C940A@qq.com>
 MIME-Version: 1.0
-References: <20220111030055.2043568-1-shorne@gmail.com>
-In-Reply-To: <20220111030055.2043568-1-shorne@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Jan 2022 17:31:05 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUUShmJfRWUCS+CQ_OUW9cUHuZQS3aTPznt-i+TT0Tgtw@mail.gmail.com>
-Message-ID: <CAMuHMdUUShmJfRWUCS+CQ_OUW9cUHuZQS3aTPznt-i+TT0Tgtw@mail.gmail.com>
-Subject: Re: [PATCH] openrisc: init: Add support for common clk
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Openrisc <openrisc@lists.librecores.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_71466C2135CD1780B19D7844BE3F167C940A@qq.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stafford,
+Le Tue, Jan 11, 2022 at 11:05:53AM +0800, Conley Lee a écrit :
+> This patch remove magic numbers in sun4i-emac.c and replace with macros
+> defined in sun4i-emac.h
+> 
+> Signed-off-by: Conley Lee <conleylee@foxmail.com>
 
-On Tue, Jan 11, 2022 at 4:01 AM Stafford Horne <shorne@gmail.com> wrote:
-> When testing the new litex_mmc driver it was found to not work on
-> OpenRISC due to missing support for common clk.  This patch does the
-> basic initialization to allow OpenRISC to use the common clk framework.
->
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
+Hello
 
-Thanks for your patch!
+I sent a CI job witch next-20220107+yourpatch and saw no regression.
 
-This matches what other architectures are doing, and is IMHO the way
-forward for sharing FPGA drivers among architectures.
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Tested-on: sun4i-a10-olinuxino-lime
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks!
+Regards

@@ -2,368 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E7548AFEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC05648AFEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 15:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242867AbiAKOxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 09:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S242313AbiAKOy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 09:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240075AbiAKOxH (ORCPT
+        with ESMTP id S238388AbiAKOy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:53:07 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5C7C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 06:53:07 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id u25so68247277edf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 06:53:07 -0800 (PST)
+        Tue, 11 Jan 2022 09:54:56 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861D4C06173F;
+        Tue, 11 Jan 2022 06:54:55 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id w16so68184831edc.11;
+        Tue, 11 Jan 2022 06:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+BSTvDaR8q9ZbGFHEWnz5GWg0gMLRTM+z4m8NSdoTRA=;
-        b=sl7x7P/h2rPgH/FwoISYVQ03Or+RjPrP7BIJmflNZlnl03ZXtmytOvEe7eDb1vxLRh
-         EXrV5/bxfYy8U+kUoiRWyBgDoQVal0TQfjP0yAkd/C46SSuTSPVh5T6WD7v/7+l1DczZ
-         HuW4veT/YDEm9Q4yku2lOa2A3XRCaOo42FJ7c=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DsftVpiiLy5tn1or+I629aO5vhZlItB0FnzbHU6s5Q0=;
+        b=eM9LIcZLimoyOydSpONy6t/WruyrxrqgmL7viDRM1w15wJqysOw55I5BIjgm4Ni8qk
+         nkBXmTmoPsjG/UylKiR4ECDXBQjXBmr707yD1yjJwocD3dBgOUFwKswef7vbkMoqdOZ1
+         ++XOQBRnuQL6h8HaGKrAaxW4ctvDzKvRm/Pu9tq3gHfH8mKaX4NCHx77ldPuvk3m1k+G
+         Vy98B7dfqGn1kaxyDxyqVIOOIQzaWnpeEsrRZVnsU4NoZYwjbY1xqJYYce9rwTpgq8MM
+         8AG/6SuhBNxXXKbodkiTwCd9DP/R8yjbEyBlk9zKFZOB7LavW5QzCSq4qHALU+9mf67U
+         kchw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+BSTvDaR8q9ZbGFHEWnz5GWg0gMLRTM+z4m8NSdoTRA=;
-        b=xk+iGcsQTlJrZAUtVPj6XwqRhoWFaq+xLZqPVU+C28dwguJsvQVjA3goY2bFZriMSM
-         Jp/IoZjbRZ1dtFMIjxz+sVgw4dxJrGfBfsvVn8kqP27XbKWTbMqCE4jVNY2Up+PQiavL
-         aVITui0pb/wtb/IkG8okh44HGdclnvofSs2crw310BLceyWZyXEZMO6SdieOTmC16pke
-         Gckas8QipNAVo+UEna7uvEDbmgBbQ5v4+LI4RBPJ/je13NwSm/TMx/HxOYR4R03h92uF
-         0fKxNRkdmw3McpK4I2TkKV7Yiy2BozQdjJ/TJnn8Ht09CJf3yNDClGN3bAsY9xsPOriA
-         hMFw==
-X-Gm-Message-State: AOAM531ZSbMfayxnQWTK3Ce1Vw4FdW02YI7RUxUwlU8EIVQWD/mAuMJZ
-        nhJhwqS7DrSC8RJOQhMlykwJMA==
-X-Google-Smtp-Source: ABdhPJyvrsSs3ZBg/p3T6F2rc40/Y0GON6AFeQMR3l0bTiTgRsqeWZzMwUGc8zgEY9p7JiYe0QB8Ig==
-X-Received: by 2002:aa7:d859:: with SMTP id f25mr4667368eds.292.1641912785691;
-        Tue, 11 Jan 2022 06:53:05 -0800 (PST)
-Received: from localhost ([2620:10d:c093:400::5:36c0])
-        by smtp.gmail.com with ESMTPSA id 24sm3608683eje.158.2022.01.11.06.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 06:53:05 -0800 (PST)
-Date:   Tue, 11 Jan 2022 14:53:04 +0000
-From:   Chris Down <chris@chrisdown.name>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Scull <ascull@google.com>,
-        Will Deacon <will@kernel.org>, Jason Baron <jbaron@akamai.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [RFC 1/2] printk/dynamic_debug: Remove cyclic dependency between
- printk.h and dynamic_debug.h
-Message-ID: <Yd2Z0NrG1+Yhmseg@chrisdown.name>
-References: <20220111143046.14680-1-pmladek@suse.com>
- <20220111143046.14680-2-pmladek@suse.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DsftVpiiLy5tn1or+I629aO5vhZlItB0FnzbHU6s5Q0=;
+        b=jnVeXwGpPyMP1Lt3Ih7OURDQG+XbQfP/sSvUKtbkF4Vy4zkiZnH85Iom2qQ3vwDJyb
+         WiL5Xb077qanSfGFFZrPggr4U6BRrvjSdeHTzNRyZ1R3rmH95UG2TXLwc3Jpn7mDMP3M
+         lyzIulgoMbiuTb7K2JZP1nBCWhj2U5iHbTbntHXo9pVpJE909n6Qs55zF4zRrgc8Bukd
+         dJavc2n6E1B9UKCT/BqI1J4d3+RjjErLnX3XLTORsPxiUnfOFpIBm2GoZKfa+ztiHpVU
+         a8Cqokti3Ku3vR/zxdsuJ8pWV1yCI1FMISnoZHTB96C9WA218KwO1Y1SNjSZIPtmiZUG
+         p+ZQ==
+X-Gm-Message-State: AOAM533zEqU76fAJbH8gG+06M8/kP22xMbmHDhwt1sFe/XcIchjlgBmo
+        IOAqHHsRfV60iLWP8dqrStqPojihw6SCuozd1IM=
+X-Google-Smtp-Source: ABdhPJxUgg2DqpJHXp3IrGxMRYBeBJ2bTDpJn9FVkLngZeH3qNP/6woBL0LmHA6ij1o5OVEwHwGXB8eUAJinQ6VWrrQ=
+X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr3886426ejc.639.1641912894091;
+ Tue, 11 Jan 2022 06:54:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220111143046.14680-2-pmladek@suse.com>
-User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
+References: <20210715221828.244536-1-Terry.Bowman@amd.com> <20210907183720.6e0be6b6@endymion>
+ <20211105170550.746443b9@endymion> <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
+ <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com> <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
+ <YdoG+en5Z/MaS/wu@ninjato> <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
+ <Yd16cw0AaYcf7eSf@kunai> <811d6ec7-7eac-dfd3-5927-4adcc2251fab@amd.com>
+In-Reply-To: <811d6ec7-7eac-dfd3-5927-4adcc2251fab@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 11 Jan 2022 16:53:06 +0200
+Message-ID: <CAHp75Vfv9kgxu5u1YfjEuRmwj=jSybmZ92bpt30jB8MX4LFHaQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
+ io accesses with mmio accesses
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Robert Richter <rrichter@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Petr,
+On Tue, Jan 11, 2022 at 4:13 PM Terry Bowman <Terry.Bowman@amd.com> wrote:
+> The cd6h/cd7h port I/O can be disabled on recent AMD processors and these
+> changes replace the cd6h/cd7h port I/O accesses with with MMIO accesses.
+> I can provide more details or answer questions.
 
-Petr Mladek writes:
->`make headerdep` reports many circular dependencies with the same
->pattern:
->
->In file included from linux/printk.h,
->                 from linux/dynamic_debug.h:188
->                 from linux/printk.h:559 <-- here
->
->It looks like false positive:
->
->   + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
->   + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
->
->Anyway, it would be great to get rid of this dependency because it is
->tricky and it might hit us in the future. Also it might hide another
->more complicated cyclic dependencies.
+AFAIU the issue the list of questions looks like this (correct me, if
+I'm wrong):
+- some chips switched from I/O to MMIO
+- the bus driver has shared resources with another (TCO) driver
 
-Sounds reasonable.
+Now, technically what you are trying is to find a way to keep the
+original functionality on old machines and support new ones without
+much trouble.
 
->One solution would be to move the inlined ddebug_dyndbg_module_param_cb()
->and dynamic_debug_exec_queries() from 'dynamic_debug.h' into some .c so
->that it will not be needed to inline printk() in 'dynamic_debug.h'.
->
->The obvious location would be 'lib/dynamic_debug.c'. But it is built
->only when CONFIG_DYNAMIC_DEBUG_CORE is set. And the problematic
->inline variants are used only when this config option is _not_ set.
->So that it is not that easy.
->
->Instead, this patch adds 'include/linux/printk_core.h' and moves some
->lowlevel printk API there. Then the raw _printk() can be called from
->the inlined code in 'dynamic_debug.h'.
->
->Note that it is not enough to declare _printk() in 'dynamic_debug.h'.
->It would break build with CONFIG_PRINTK where it is an inlined nope.
+From what I see, the silver bullet may be the switch to regmap as we
+have done in I2C DesignWare driver implementation.
 
-s/nope/nop/, and you mean !CONFIG_PRINTK instead of CONFIG_PRINTK. Or did I 
-misunderstand?
+Yes, it's a much more invasive solution, but at the same time it's
+much cleaner from my p.o.v. And you may easily split it to logical
+parts (prepare drivers, switch to regmap, add a new functionality).
 
->
->The drawback of this approach is that _printk() does not add metadata for
->printk indexing and the message is not listed in <debugfs>/printk/index/.
->But it should be acceptable here. The strings are used only for debugging.
+I might be missing something and above not gonna work, please tell me
+what I miss in that case.
 
-Agreed that these are fine to omit from a printk indexing perspective.
+> On 1/11/22 6:39 AM, Wolfram Sang wrote:
+> >
+> >> I have briefly read the discussion by the link you provided above in
+> >> this thread. I'm not sure I understand the issue and if Intel hardware
+> >> is affected. Is there any summary of the problem?
+> >
+> > I guess the original patch description should explain it. You can find
+> > it here:
+> >
+> > http://patchwork.ozlabs.org/project/linux-i2c/patch/20210715221828.244536-1-Terry.Bowman@amd.com/
+> >
+> > If this is not sufficient, hopefully Terry can provide more information?
 
->The advantage is that this approach might be used to solve other cyclic
->dependencies, for example in bug.h.
->
->Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->Signed-off-by: Petr Mladek <pmladek@suse.com>
 
-Thanks! Looks good to me with changelog fixes.
-
-Acked-by: Chris Down <chris@chrisdown.name>
-
->---
-> MAINTAINERS                   |  1 +
-> include/linux/dynamic_debug.h | 10 ++---
-> include/linux/printk.h        | 57 +-------------------------
-> include/linux/printk_core.h   | 76 +++++++++++++++++++++++++++++++++++
-> 4 files changed, 83 insertions(+), 61 deletions(-)
-> create mode 100644 include/linux/printk_core.h
->
->diff --git a/MAINTAINERS b/MAINTAINERS
->index fb18ce7168aa..eadb77da01db 100644
->--- a/MAINTAINERS
->+++ b/MAINTAINERS
->@@ -15340,6 +15340,7 @@ R:	Steven Rostedt <rostedt@goodmis.org>
-> R:	John Ogness <john.ogness@linutronix.de>
-> S:	Maintained
-> F:	include/linux/printk.h
->+F:	include/linux/printk_core.h
-> F:	kernel/printk/
->
-> PRINTK INDEXING
->diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
->index dce631e678dd..63f6ebd6a14c 100644
->--- a/include/linux/dynamic_debug.h
->+++ b/include/linux/dynamic_debug.h
->@@ -185,7 +185,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
->
-> #include <linux/string.h>
-> #include <linux/errno.h>
->-#include <linux/printk.h>
->+#include <linux/printk_core.h>
->
-> static inline int ddebug_add_module(struct _ddebug *tab, unsigned int n,
-> 				    const char *modname)
->@@ -202,9 +202,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
-> 						const char *modname)
-> {
-> 	if (strstr(param, "dyndbg")) {
->-		/* avoid pr_warn(), which wants pr_fmt() fully defined */
->-		printk(KERN_WARNING "dyndbg param is supported only in "
->-			"CONFIG_DYNAMIC_DEBUG builds\n");
->+		/* Use raw _printk() to avoid cyclic dependency. */
->+		_printk(KERN_WARNING "dyndbg param is supported only in CONFIG_DYNAMIC_DEBUG builds\n");
-> 		return 0; /* allow and ignore */
-> 	}
-> 	return -EINVAL;
->@@ -223,7 +222,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
->
-> static inline int dynamic_debug_exec_queries(const char *query, const char *modname)
-> {
->-	pr_warn("kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
->+	/* Use raw _printk() to avoid cyclic dependency. */
->+	_printk(KERN_WARNING "kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
-> 	return 0;
-> }
->
->diff --git a/include/linux/printk.h b/include/linux/printk.h
->index 9497f6b98339..c20f55df7fa6 100644
->--- a/include/linux/printk.h
->+++ b/include/linux/printk.h
->@@ -5,6 +5,7 @@
-> #include <linux/stdarg.h>
-> #include <linux/init.h>
-> #include <linux/kern_levels.h>
->+#include <linux/printk_core.h>
-> #include <linux/linkage.h>
-> #include <linux/cache.h>
-> #include <linux/ratelimit_types.h>
->@@ -144,32 +145,6 @@ void early_printk(const char *s, ...) { }
-> struct dev_printk_info;
->
-> #ifdef CONFIG_PRINTK
->-asmlinkage __printf(4, 0)
->-int vprintk_emit(int facility, int level,
->-		 const struct dev_printk_info *dev_info,
->-		 const char *fmt, va_list args);
->-
->-asmlinkage __printf(1, 0)
->-int vprintk(const char *fmt, va_list args);
->-
->-asmlinkage __printf(1, 2) __cold
->-int _printk(const char *fmt, ...);
->-
->-/*
->- * Special printk facility for scheduler/timekeeping use only, _DO_NOT_USE_ !
->- */
->-__printf(1, 2) __cold int _printk_deferred(const char *fmt, ...);
->-
->-extern void __printk_safe_enter(void);
->-extern void __printk_safe_exit(void);
->-/*
->- * The printk_deferred_enter/exit macros are available only as a hack for
->- * some code paths that need to defer all printk console printing. Interrupts
->- * must be disabled for the deferred duration.
->- */
->-#define printk_deferred_enter __printk_safe_enter
->-#define printk_deferred_exit __printk_safe_exit
->-
-> /*
->  * Please don't use printk_ratelimit(), because it shares ratelimiting state
->  * with all other unrelated printk_ratelimit() callsites.  Instead use
->@@ -189,7 +164,6 @@ devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write, void *buf,
->
-> extern void wake_up_klogd(void);
->
->-char *log_buf_addr_get(void);
-> u32 log_buf_len_get(void);
-> void log_buf_vmcoreinfo_setup(void);
-> void __init setup_log_buf(int early);
->@@ -200,30 +174,6 @@ extern asmlinkage void dump_stack_lvl(const char *log_lvl) __cold;
-> extern asmlinkage void dump_stack(void) __cold;
-> void printk_trigger_flush(void);
-> #else
->-static inline __printf(1, 0)
->-int vprintk(const char *s, va_list args)
->-{
->-	return 0;
->-}
->-static inline __printf(1, 2) __cold
->-int _printk(const char *s, ...)
->-{
->-	return 0;
->-}
->-static inline __printf(1, 2) __cold
->-int _printk_deferred(const char *s, ...)
->-{
->-	return 0;
->-}
->-
->-static inline void printk_deferred_enter(void)
->-{
->-}
->-
->-static inline void printk_deferred_exit(void)
->-{
->-}
->-
-> static inline int printk_ratelimit(void)
-> {
-> 	return 0;
->@@ -238,11 +188,6 @@ static inline void wake_up_klogd(void)
-> {
-> }
->
->-static inline char *log_buf_addr_get(void)
->-{
->-	return NULL;
->-}
->-
-> static inline u32 log_buf_len_get(void)
-> {
-> 	return 0;
->diff --git a/include/linux/printk_core.h b/include/linux/printk_core.h
->new file mode 100644
->index 000000000000..a2b8727a2873
->--- /dev/null
->+++ b/include/linux/printk_core.h
->@@ -0,0 +1,76 @@
->+/* SPDX-License-Identifier: GPL-2.0 */
->+#ifndef __KERNEL_PRINTK_CORE__
->+#define __KERNEL_PRINTK_CORE__
->+
->+#include <linux/stdarg.h>
->+#include <linux/kern_levels.h>
->+#include <linux/linkage.h>
->+
->+/* Low level printk API. Use carefully! */
->+
->+#ifdef CONFIG_PRINTK
->+
->+struct dev_printk_info;
->+
->+asmlinkage __printf(4, 0)
->+int vprintk_emit(int facility, int level,
->+		 const struct dev_printk_info *dev_info,
->+		 const char *fmt, va_list args);
->+
->+asmlinkage __printf(1, 0)
->+int vprintk(const char *fmt, va_list args);
->+
->+asmlinkage __printf(1, 2) __cold
->+int _printk(const char *fmt, ...);
->+
->+/*
->+ * Special printk facility for scheduler/timekeeping use only, _DO_NOT_USE_ !
->+ */
->+__printf(1, 2) __cold int _printk_deferred(const char *fmt, ...);
->+
->+extern void __printk_safe_enter(void);
->+extern void __printk_safe_exit(void);
->+/*
->+ * The printk_deferred_enter/exit macros are available only as a hack for
->+ * some code paths that need to defer all printk console printing. Interrupts
->+ * must be disabled for the deferred duration.
->+ */
->+#define printk_deferred_enter __printk_safe_enter
->+#define printk_deferred_exit __printk_safe_exit
->+
->+char *log_buf_addr_get(void);
->+
->+#else /* CONFIG_PRINTK */
->+
->+static inline __printf(1, 0)
->+int vprintk(const char *s, va_list args)
->+{
->+	return 0;
->+}
->+static inline __printf(1, 2) __cold
->+int _printk(const char *s, ...)
->+{
->+	return 0;
->+}
->+static inline __printf(1, 2) __cold
->+int _printk_deferred(const char *s, ...)
->+{
->+	return 0;
->+}
->+
->+static inline void printk_deferred_enter(void)
->+{
->+}
->+
->+static inline void printk_deferred_exit(void)
->+{
->+}
->+
->+static inline char *log_buf_addr_get(void)
->+{
->+	return NULL;
->+}
->+
->+#endif /* CONFING_PRINTK */
->+
->+#endif
->-- 
->2.26.2
->
+-- 
+With Best Regards,
+Andy Shevchenko

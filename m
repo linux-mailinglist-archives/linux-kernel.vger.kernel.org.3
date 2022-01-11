@@ -2,164 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8336548B8E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169A748B8D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiAKUwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S244365AbiAKUsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235228AbiAKUwE (ORCPT
+        with ESMTP id S244133AbiAKUs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:52:04 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321DEC028BEF;
-        Tue, 11 Jan 2022 12:51:43 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id o3so436905wrh.10;
-        Tue, 11 Jan 2022 12:51:43 -0800 (PST)
+        Tue, 11 Jan 2022 15:48:28 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F83C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:48:28 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id g21so505771qtk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:48:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XsmDxnCmqgTxDyNS30YCzdo9ghvlXMe30S1Vu2XW6pA=;
-        b=XmLwRH8rQDlvIfMWQoNeqlHsHbJr3QflEMhvJzmk49sfMHRl7UM9dVu+NbrQS+NG+o
-         YuMiG/nFJ2sl/N4IwwprPSpZ5dY/NkFAyWhEKVVDfe8cg8y/ENddcsyusXIU8jHUTCOw
-         iqNSeGvW9sPeU69+8PH1NpLftafibuh74nHyuTOvHnnnQD9ve21dYznDCXZAcgqKIGHx
-         /hq501ZyX/u1kkWqUBQSkjTEa/Om45Mxaz/t4jaUzmRg6iyX0QUJ5rZgbPkRe+z6elsQ
-         iNNwUSRfl/sdApnW+hnIbYn/cMKKAi1ghOAbxlc73XTHecDhGnbTEr8nbjKuYwc3UtAx
-         w7BQ==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/CWoufOVy2cXdjaEmGa+laP4GrgKDj14h+owfIQdMZs=;
+        b=T4p447Ky43yc0e6jqjZUTLxWwyMD+RifYTHXhQWthxwJdkkY3/heOrpcVKpDozJwfy
+         0s6LnNiG9QSQWuKrkZHYrQCarAvlrnbL8KQi/Pob7jxRzbJbQakhOsYij1DlQ5+Tz5ZV
+         CtZwXWLfGz9mMRXM/KGlBgHSASh8oQ7xX1MquqvW1+98zciLXskpDQhrer5wWNzpYor4
+         ZRE6THCiZRtzs/eWgSiFpXANg44Cj/dJQjWLZQTQf/jTO5woLuqpyQ5bsBa1po8Oapql
+         t/7rSvqwvaAn/nqO4BZip78+Upu2OOPZAzLIIMWfolpbEe2nj1vlHiIzHy9XVyXrcvNf
+         +N8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XsmDxnCmqgTxDyNS30YCzdo9ghvlXMe30S1Vu2XW6pA=;
-        b=ZI/Fob+NjqCRg+9pPcgRjstym2CRRKmqDbNqYgRsnKlNq5ULo3VnmpmJmbrng9S0sr
-         66t4wh7peoRCPIXhGIse2cvxB68Ftv59HZ3qZDyqIotfB77b1Bwix6p6+JLnNrIUOtMq
-         zWz/HsI0ElH7duqt+T94gBZve1r9n3v6bOPiIVqn07Qp/FmsI7iAeECLOi93ABb3QYkK
-         hvdYO3Nn60woFvZadINxY2oAhi4sCiCYuk1w3JFD/Qxj0Kulm84QIfu2WWQKdwjyPAmB
-         EYit58UmQ+Z/SAym/HyqHp4aB8OsADQl6hKg0vFTrBl5bFqu+t/SNVAgkOESc2/lvH5k
-         REww==
-X-Gm-Message-State: AOAM532ac7BssfzMwLsDDJ86TKc78bG8T0SpfYyLY9pwf+yTakS3Z5cM
-        NyKXSeHXwwGWkseysOqwJis=
-X-Google-Smtp-Source: ABdhPJyc1m4l/BAJ5VYwYFruoGf1pbhMkcAMYjttL7V832KUi/rbuA0MyhIG35kSGQS4gVl5uRXbGA==
-X-Received: by 2002:a5d:64c3:: with SMTP id f3mr5224559wri.155.1641934301765;
-        Tue, 11 Jan 2022 12:51:41 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.73])
-        by smtp.gmail.com with ESMTPSA id j11sm3921394wmq.23.2022.01.11.12.51.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 12:51:41 -0800 (PST)
-Message-ID: <d9714712-075f-17af-b4f0-67f82178abae@gmail.com>
-Date:   Tue, 11 Jan 2022 20:48:12 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/CWoufOVy2cXdjaEmGa+laP4GrgKDj14h+owfIQdMZs=;
+        b=sxSGAUaqSUpk4MJtuh9E49k34P1xuNwqo6xQCXIe1lhXNi49kD0XImRjGEtkZauWh6
+         BTPPADxWJI92DINkoxDASI1YXPp8RWqNep8j3LrXKwR4Eb1uTUgkAWvwhF+g35ulVLZg
+         LcsL5rXh4Dkcfg9vYIsL7I/IF+O9x33PGWbJUC9Scx+eq9Yc/ia6ZCF9ZGQ5i5jShBSF
+         DTwZjcg3rRhXd8Ht3XVLqGTqhqZSTbvuWS2wR8pA5zMWpB8huIXK8mqgNIeJhIiU8jeR
+         APsshDv7jr8veYJun7+Unul2mcPJeYoZUgiGpHSfCItcxYLmLUrgTst/IRejyRSwNYEP
+         +sGw==
+X-Gm-Message-State: AOAM533pM0UtQM36MA3Ab0y9UTnik1wDIZBIVzQuc+rM+8dToqNzFj0o
+        Gu8aTbMgwlLba7NFjstbHHDoFKRseZGHhQ==
+X-Google-Smtp-Source: ABdhPJzMRa844YMkoSJ5ymgGCoG9qKD53haefRWdKjKnzzPIHIlzH6vALyHzGbci6gn/HDSZys3VIw==
+X-Received: by 2002:a05:622a:13c8:: with SMTP id p8mr2879249qtk.506.1641934107744;
+        Tue, 11 Jan 2022 12:48:27 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id ay18sm2615665qkb.40.2022.01.11.12.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 12:48:27 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1n7O4A-00EZLA-4l; Tue, 11 Jan 2022 16:48:26 -0400
+Date:   Tue, 11 Jan 2022 16:48:26 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
+ in responder side
+Message-ID: <20220111204826.GK6467@ziepe.ca>
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
+ <20220106002804.GS6467@ziepe.ca>
+ <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
+ <20220106173346.GU6467@ziepe.ca>
+ <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
+ <20220110143419.GF6467@ziepe.ca>
+ <56234596-cb7d-bdb2-fcfd-f1fe0f25c3e3@fujitsu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 13/14] net: inline part of skb_csum_hwoffload_help
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1641863490.git.asml.silence@gmail.com>
- <0bc041d2d38a08064a642c05ca8cceb0ca165f88.1641863490.git.asml.silence@gmail.com>
- <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
- <25f5ba09-a54c-c386-e142-7b7454f1d8d4@gmail.com>
- <f2e3693ec8d1498aa376f72ebd49e058@AcuMS.aculab.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <f2e3693ec8d1498aa376f72ebd49e058@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56234596-cb7d-bdb2-fcfd-f1fe0f25c3e3@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 17:25, David Laight wrote:
-> From: Pavel Begunkov
->> Sent: 11 January 2022 16:59
->>
->> On 1/11/22 09:24, David Laight wrote:
->>> From: Pavel Begunkov
->>>> Sent: 11 January 2022 01:22
->>>>
->>>> Inline a HW csum'ed part of skb_csum_hwoffload_help().
->>>>
->>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>>> ---
->>>>    include/linux/netdevice.h | 16 ++++++++++++++--
->>>>    net/core/dev.c            | 13 +++----------
->>>>    2 files changed, 17 insertions(+), 12 deletions(-)
->>>>
->>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->>>> index 3213c7227b59..fbe6c764ce57 100644
->>>> --- a/include/linux/netdevice.h
->>>> +++ b/include/linux/netdevice.h
->>>> @@ -4596,8 +4596,20 @@ void netdev_rss_key_fill(void *buffer, size_t len);
->>>>
->>>>    int skb_checksum_help(struct sk_buff *skb);
->>>>    int skb_crc32c_csum_help(struct sk_buff *skb);
->>>> -int skb_csum_hwoffload_help(struct sk_buff *skb,
->>>> -			    const netdev_features_t features);
->>>> +int __skb_csum_hwoffload_help(struct sk_buff *skb,
->>>> +			      const netdev_features_t features);
->>>> +
->>>> +static inline int skb_csum_hwoffload_help(struct sk_buff *skb,
->>>> +					  const netdev_features_t features)
->>>> +{
->>>> +	if (unlikely(skb_csum_is_sctp(skb)))
->>>> +		return !!(features & NETIF_F_SCTP_CRC) ? 0 :
->>>
->>> If that !! doing anything? - doesn't look like it.
->>
->> It doesn't, but left the original style
-> 
-> It just makes you think it is needed...
-> 
->>>> +			skb_crc32c_csum_help(skb);
->>>> +
->>>> +	if (features & NETIF_F_HW_CSUM)
->>>> +		return 0;
->>>> +	return __skb_csum_hwoffload_help(skb, features);
->>>> +}
->>>
->>> Maybe you should remove some bloat by moving the sctp code
->>> into the called function.
->>> This probably needs something like?
->>>
->>> {
->>> 	if (features & NETIF_F_HW_CSUM && !skb_csum_is_sctp(skb))
->>> 		return 0;
->>> 	return __skb_csum_hw_offload(skb, features);
->>> }
->>
->> I don't like inlining that sctp chunk myself. It seems your way would
->> need another skb_csum_is_sctp() in __skb_csum_hw_offload(), if so I
->> don't think it's worth it. Would've been great to put the
->> NETIF_F_HW_CSUM check first and hide sctp, but don't think it's
->> correct. Would be great to hear some ideas.
-> 
-> Given the definition:
-> 
-> static inline bool skb_csum_is_sctp(struct sk_buff *skb)
-> {
-> 	return skb->csum_not_inet;
-> }
-> 
-> I wouldn't worry about doing it twice.
-> 
-> Also skb_crc32_csum_help() is only called one.
-> Make it static (so inlined) and pass 'features' into it.
-> 
-> In reality sctp is such a slow crappy protocol that a few extra
-> function calls will make diddly-squit difference.
-> (And yes, we do actually use the sctp stack.)
+On Tue, Jan 11, 2022 at 05:34:36AM +0000, lizhijian@fujitsu.com wrote:
 
-I was more thinking about non-sctp path without NETIF_F_HW_CSUM
+> Yes, that's true. that's because only pmem has ability to persist data.
+> So do you mean we don't need to prevent user to create/register a persistent
+> access flag to a non-pmem MR? it would be a bit confusing if so.
 
+Since these extensions seem to have a mode that is unrelated to
+persistent memory, I'm not sure it makes sense to link the two things.
 
--- 
-Pavel Begunkov
+Jason

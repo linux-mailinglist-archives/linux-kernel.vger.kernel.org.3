@@ -2,93 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B4C48AB58
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB62A48AB62
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348522AbiAKK00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S1348876AbiAKK32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236960AbiAKK0Y (ORCPT
+        with ESMTP id S236960AbiAKK30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:26:24 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1C5C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:26:24 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x6so54554740lfa.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:26:24 -0800 (PST)
+        Tue, 11 Jan 2022 05:29:26 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00CDC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:29:25 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id s1so32059765wra.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:29:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oxDy4AfZby7z8LawjYmWoPECv5wh3m5ItoNbPc6qdR8=;
-        b=FSClFJ4BfYN+77rYV5CMD22uLs3EJrNE5XMNfBpOEtZJMa6YYFgPqpvY0nNrqlkCc7
-         uZ1dHkmJ7hG+o0Z9/PKiusmeQo6PIzbB5Vk6Se4xTr3IAi1N2JwdwmJS6lkMd6tB1lS/
-         MO1+MfPNvnOEgh2bdrtGWWjM6CItlC5L7m8GQ=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OT2ScgAHFZvFT9FK0xgI4roqBQX72wkwsPKNNrCL1mE=;
+        b=Sl1kCLBtavBFmZkLlGQA2unqA1WjEwN+5kgHuphnPLsQPTT32sjcnIu9w3medLtNP1
+         xkW6HJ9jFmcXNigXAG53jVjy5TdTzV51muyVQEjSvhKa/96tTwimsKo5CPOXPUMIhOs2
+         dltdKgxRiiDn6KPBsOgba1i77Jx5TtWE2ReK09dajsbPn82yYKtBdWotvmJMF3ckq8YB
+         AQZTMH3VAByY3Zh5rZ96bg1DCLhglk+kr06V2nu/ZdNoWBRi6jQAnW6O5C8JWB/mRnJm
+         K6ocsEcTAXfEQuIrqss7fEsUITDhMW1sVhcXraX9uPYrQFxIxwx8LaleMDlP/4g4a5X1
+         APuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=oxDy4AfZby7z8LawjYmWoPECv5wh3m5ItoNbPc6qdR8=;
-        b=KxoEOyfMPucpsnCrIBHkuy17rfjGUOit2x1tB8UifpF8UDh1isW1x/x0bV0BxtxlVU
-         wueEQb1ToPq+RLfOaXzxeEmyYowgT2nXN+HRfbsGRtrw3dcZscMpgRKHEIoGGb4+0O0I
-         MAw8rySMBeMqEk81rwIpY0RA/hnYv+c9+u1cexqQkYf1UlWSgwGZrgI2/rb74Wi7fsuw
-         Se5ZIQrhVFoBn1foNmcakBZA3UQEM/6mHLgSa8k/WhMMwpIw0M11d/tEDCD2cBPJnj/i
-         jPe8nPy1ueEcB2GfKmzSmT80GbEoPZ2FvPY1TFbmMCoMmxz9bcC7Flz2CObbDfjwqVzh
-         pGuw==
-X-Gm-Message-State: AOAM531lHeCVXggclNlch7r3bxVENsZ7ooNfPpE9ROedecIQW7l0uUpI
-        n2y2Moy3CfODp23PZrCGqR6uKg==
-X-Google-Smtp-Source: ABdhPJxzEVHZAveN2IC75KEDOzvjD5PoV6F4haj9fivsKqLK5+eK68IpdqkWQSNN3fe7I0ck64Puew==
-X-Received: by 2002:a05:651c:1508:: with SMTP id e8mr2480253ljf.313.1641896782629;
-        Tue, 11 Jan 2022 02:26:22 -0800 (PST)
-Received: from [172.16.11.17] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id a6sm1291916lff.59.2022.01.11.02.26.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 02:26:22 -0800 (PST)
-Subject: Re: [PATCH v1 1/1] vsprintf: Move space out of string literals in
- fourcc_string()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <20220110205558.11876-1-andriy.shevchenko@linux.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <308b7158-7c2a-cc98-6091-14dae2b2cbba@rasmusvillemoes.dk>
-Date:   Tue, 11 Jan 2022 11:26:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=OT2ScgAHFZvFT9FK0xgI4roqBQX72wkwsPKNNrCL1mE=;
+        b=g3nEVb4ZGVdHUtUpeM0M/C5/wvBRUyw1JMBXBkeqlumhQbtdhMdgETfssRcdmukLtf
+         jiM1j1ZCnT0cy4smjfGu/mKdS3Cz3T3tkAolRydbmM+IgxpV4d1lv54o9EqpuYMlY5C9
+         k3aeN5rnpWENYBJKnuMuXSgkfWeaqt+WBTryODLBfgD8m8V24tfOHp6ESvWGimjhiqAr
+         CcneF/cP48hpdyw+nF06i1yjEUyodfbefm2upFVPca92b2YGLzkvrfaOjnuPFKZ04Yzr
+         oLrz3lp7nXErq/732tsFHWY1351vIb1+nVFP/04myhjdqQxxDSq6G9Z+raxlYK3AU/8e
+         pi2A==
+X-Gm-Message-State: AOAM5326SQN9sxld9zqLHsaEaOeuTF8WkFQVLa3ejBT69/rEzZMHoWoi
+        RI3koHikPXQ7QzbFPXpCv6gY7R9X7tQ=
+X-Google-Smtp-Source: ABdhPJzWvOgTMnu2BMP+Br7/QmKsrfqpp32RVS2Onj6KiBwrz14yAEvHltQZls1CU5HavNeqyZQDbQ==
+X-Received: by 2002:a5d:4d50:: with SMTP id a16mr1605630wru.264.1641896964154;
+        Tue, 11 Jan 2022 02:29:24 -0800 (PST)
+Received: from localhost.localdomain ([2a01:4b00:f411:e700:fdaa:e573:6067:6ef5])
+        by smtp.gmail.com with ESMTPSA id r11sm9739748wrz.78.2022.01.11.02.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 02:29:23 -0800 (PST)
+From:   Karolina Drobnik <karolinadrobnik@gmail.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org, rppt@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Karolina Drobnik <karolinadrobnik@gmail.com>
+Subject: [PATCH] memblock: Remove #ifdef __KERNEL__ from memblock.h
+Date:   Tue, 11 Jan 2022 10:28:47 +0000
+Message-Id: <20220111102847.673746-1-karolinadrobnik@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220110205558.11876-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2022 21.55, Andy Shevchenko wrote:
-> The literals "big-endian" and "little-endian" may be potentially
-> occurred in other places. Dropping space allows compiler to
-> "compress" them by using only a single copy.
+memblock.h is not a uAPI header, so __KERNEL__ guard can be deleted
 
-Nit: it's not the compiler which does that, but the linker.
+Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
+---
+ include/linux/memblock.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index b02f01366acb..5818856d5626 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -1780,7 +1780,8 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
->  		*p++ = isascii(c) && isprint(c) ? c : '.';
->  	}
->  
-> -	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
-> +	*p++ = ' ';
-> +	strcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
->  	p += strlen(p);
+diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+index 9dc7cb239d21..50ad19662a32 100644
+--- a/include/linux/memblock.h
++++ b/include/linux/memblock.h
+@@ -1,7 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ #ifndef _LINUX_MEMBLOCK_H
+ #define _LINUX_MEMBLOCK_H
+-#ifdef __KERNEL__
+ 
+ /*
+  * Logical memory blocks.
+@@ -605,6 +604,5 @@ static inline void early_memtest(phys_addr_t start, phys_addr_t end)
+ }
+ #endif
+ 
+-#endif /* __KERNEL__ */
+ 
+ #endif /* _LINUX_MEMBLOCK_H */
+-- 
+2.30.2
 
-Hm, ok, those two strings do occur a lot with of_property_read_bool()
-and friends. But if you're micro-optimizing anyway, why not drop the
-strlen() and say p = stpcpy(...) instead?
-Rasmus

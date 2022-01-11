@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB40D48B0AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAAA48B0D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242234AbiAKPTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:19:11 -0500
-Received: from elvis.franken.de ([193.175.24.41]:42587 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231986AbiAKPTJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:19:09 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1n7IvR-0004j6-01; Tue, 11 Jan 2022 16:19:05 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1FA0DC0E68; Tue, 11 Jan 2022 16:18:41 +0100 (CET)
-Date:   Tue, 11 Jan 2022 16:18:41 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>,
-        Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Augment driver for MIPs SOCs
-Message-ID: <20220111151841.GB11006@alpha.franken.de>
-References: <20211209204726.6676-1-jim2101024@gmail.com>
+        id S1343566AbiAKPaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343559AbiAKPaJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:30:09 -0500
+X-Greylist: delayed 568 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Jan 2022 07:30:08 PST
+Received: from smtp1.rz.tu-harburg.de (smtp1.rz.tu-harburg.de [IPv6:2001:638:702:20aa::205:38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED4BC06173F;
+        Tue, 11 Jan 2022 07:30:08 -0800 (PST)
+Received: from mail.tu-harburg.de (mail4.rz.tu-harburg.de [134.28.202.83])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.tuhh.de", Issuer "DFN-Verein Global Issuing CA" (verified OK))
+        by smtp1.rz.tu-harburg.de (Postfix) with ESMTPS id 4JYDsb1h8QzxQq;
+        Tue, 11 Jan 2022 16:20:35 +0100 (CET)
+Received: from mailspring.rz.tuhh.de (mailspring.rz.tuhh.de [134.28.202.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ccd5802@KERBEROS.TU-HARBURG.DE)
+        by mail.tu-harburg.de (Postfix) with ESMTPSA id 4JYDsZ6RY3zJrCR;
+        Tue, 11 Jan 2022 16:20:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuhh.de; s=x2022-02;
+        t=1641914435; bh=8GuvIwBs7ovGVIvnquMsGzYMmOCEN4T5kbsYciLAS+Y=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+         MIME-Version:Content-Type:Content-Transfer-Encoding;
+        b=FuAOuSwmlnwrXKTVZo/bcKXWg+sx55PM/WLJR9Gwr6qyfThnjjH0or3k/B+/caxXE
+         wvJD54juVxJ1dRfrkeF5MxzsZ4XWWmYeKIM2rR1swA6LrccbryUYXDGIP8wBNtEHrZ
+         k6EJ63Z3TA5Uh8iarOJRvNPHvQYyTQblDW8n+TaI=
+From:   Christian Dietrich <christian.dietrich@tuhh.de>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/pgtable: define pte_index so that preprocessor could
+ recognize it
+In-Reply-To: <20220111145457.20748-1-rppt@kernel.org>
+Organization: Technische =?utf-8?Q?Universit=C3=A4t?= Hamburg
+References: <20220111145457.20748-1-rppt@kernel.org>
+X-Commit-Hash-org: be34895d941bc0bcda2c4fd2ee2635b1dff29854
+X-Commit-Hash-Maildir: 1f1ade09091bf6c540fef308030f9f5940906d6f
+Date:   Tue, 11 Jan 2022 16:20:34 +0100
+Message-ID: <s7bzgo2cn99.fsf@dokucode.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209204726.6676-1-jim2101024@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 03:47:21PM -0500, Jim Quinlan wrote:
-> With this patchset, the Broadcom STB PCIe controller driver 
-> supports Arm, Arm64, and now MIPs.
-> 
-> Jim Quinlan (4):
->   dt-bindings: PCI: Add compatible string for Brcmstb 74[23]5 MIPs SOCs
->   MIPS: bmips: Add support PCIe controller device nodes
->   MIPS: bmips: Remove obsolete DMA mapping support
->   PCI: brcmstb: Augment driver for MIPs SOCs
-> 
->  .../bindings/pci/brcm,stb-pcie.yaml           |   2 +
->  arch/mips/Kconfig                             |   1 -
->  arch/mips/bmips/dma.c                         | 106 +-----------------
->  arch/mips/boot/dts/brcm/bcm7425.dtsi          |  30 +++++
->  arch/mips/boot/dts/brcm/bcm7435.dtsi          |  30 +++++
->  arch/mips/boot/dts/brcm/bcm97425svmb.dts      |   9 ++
->  arch/mips/boot/dts/brcm/bcm97435svmb.dts      |   9 ++
->  drivers/pci/controller/Kconfig                |   2 +-
->  drivers/pci/controller/pcie-brcmstb.c         |  82 +++++++++++++-
->  9 files changed, 161 insertions(+), 110 deletions(-)
+Hello Mike!
 
-series applied to mips-next.
+Mike Rapoport <rppt@kernel.org> [11. Januar 2022]:
 
-Thomas.
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index e24d2c992b11..d468efcf48f4 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -62,6 +62,7 @@ static inline unsigned long pte_index(unsigned long add=
+ress)
+>  {
+>  	return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
+>  }
+> +#define pte_index pte_index
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Wouldn't it make sense to remove the dead CPP blocks (#ifdef pte_index)
+from mm/memory.c? Or is there a case were pte_index is not defined for
+an architecture?
+
+chris
+--=20
+Prof. Dr.-Ing. Christian Dietrich
+Operating System Group (E-EXK4)
+Technische Universit=C3=A4t Hamburg
+Am Schwarzenberg-Campus 3 (E), 4.092
+21073 Hamburg
+
+eMail:  christian.dietrich@tuhh.de
+Tel:    +49 40 42878 2188
+WWW:    https://osg.tuhh.de/
